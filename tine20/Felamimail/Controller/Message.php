@@ -202,7 +202,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 
             } else {
                 try {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Moving message '" . $_record->subject . "' to $trashFolder.");
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Moving message '" . $_record->messageuid . "' to $trashFolder.");
                     
                     // move to trash folder
                     $imapBackend->moveMessage($_record->messageuid, $trashFolder);
@@ -244,7 +244,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = parent::get($_id);
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting message ' . $message->subject);
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting message ' . $message->messageuid . (($_withAttachments) ? ' (with attachments)' : ''));
         
         // increase timeout to 1 minute
         Tinebase_Core::setExecutionLifeTime(120);
@@ -283,7 +283,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             // set \Seen flag
             if ($_setSeen && preg_match('/\\Seen/', $message->flags) === 0) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add \Seen flag to msg uid ' . $message->messageuid);
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Add \Seen flag to msg uid ' . $message->messageuid);
                 $this->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN), $folder);
             }
         }
@@ -358,7 +358,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
             
             $messages = $this->_backend->getMultiple($_ids);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
                 ' Moving ' . count($messages) . ' messages to folder ' . $folder->globalname);
             
             $folderBackend  = new Felamimail_Backend_Folder();
@@ -470,27 +470,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $this->_addEmailNote($nonPrivateRecipients, $_message->subject, $mailBodyText);
             }
         
-            // save in sent folder (account id is in from property)
-            try {
-                $mailAsString = $transport->getHeaders() . Zend_Mime::LINEEND . $transport->getBody();
-                $sentFolder = ($account->sent_folder && ! empty($account->sent_folder)) ? $account->sent_folder : 'Sent';
-                Felamimail_Backend_ImapFactory::factory($_message->from)->appendMessage($mailAsString, $sentFolder);
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' Saved sent message in "' . $sentFolder . '".'
-                );
-            } catch (Zend_Mail_Protocol_Exception $zmpe) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                    . ' Could not save sent message in "' . $sentFolder . '".'
-                    . ' Please check if a folder with this name exists.'
-                    . '(' . $zmpe->getMessage() . ')'
-                );
-            } catch (Zend_Mail_Storage_Exception $zmse) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                    . ' Could not save sent message in "' . $sentFolder . '".'
-                    . ' Please check if a folder with this name exists.'
-                    . '(' . $zmse->getMessage() . ')'
-                );
-            }
+            // append mail to sent folder 
+            $this->_saveInSent($transport, $account);
             
             // add reply/forward flags if set
             if (! empty($_message->flags) 
@@ -527,7 +508,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $headers = $result->getHeaders();
                 $partId = array_shift($parts);
                 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                     . ' getting part ' . $partId . ' of ' . $headers['content-type']
                     //. print_r($headers, true)
                 );                
@@ -553,8 +534,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $_partId [optional]
      * @return array
      * 
-     * @todo save images as tempfiles to show them inline the mail body?
-     * @todo check display_format setting from account (for rfc822 mails)
+     * @todo    save images as tempfiles to show them inline the mail body?
+     * @todo    check display_format setting from account (for rfc822 mails)
+     * @todo    refactor this
      */
     public function getAttachments(Felamimail_Message $_imapMessage, Felamimail_Model_Message $_message, $_folder = NULL, $_partId = NULL)
     {
@@ -567,9 +549,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $attachments = array();
         $messageParts = $_imapMessage->countParts();
-        $partNumber = 2;
+        $partNumber = 1;
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Message has ' . $messageParts . ' parts.');
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Message has ' . $messageParts . ' parts.');
         
         if ($_imapMessage->isMultipart()) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get ' 
@@ -587,24 +569,20 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 // get next part and headers
                 $part = $_imapMessage->getPart($partNumber);
                 $partHeaders = $part->getHeaders();
-                    
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Attachment content-type: ' . $partHeaders['content-type']);
+                
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Attachment content-type: ' . $partHeaders['content-type']);
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($partHeaders, true));
 
                 if (preg_match('/message\/rfc822/', $partHeaders['content-type'])) {
                     
                     /**************** split message/rfc822 attachment **********************/
                     
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding message/rfc822 attachment with part id ' . $partId);
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding message/rfc822 attachment with part id ' . $partId);
                     
-                    $content = $this->_decodePartContent($part, $partHeaders);
-                    $rfcMessage = new Felamimail_Message(array('raw' => $content));
-                    
-                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . substr($content, 0, 4096));
-                    
-                    // add body
+                    $rfcMessage = new Felamimail_Message(array('raw' => $this->_decodePartContent($part, $partHeaders)));
+                    // add body to our message
                     $_message->body = $_message->body . '<br/><hr/><br/>' . $this->_getBody($rfcMessage, $partHeaders['content-type']);
-        
+                    
                     // add attachments
                     $attachments = array_merge($attachments, $this->getAttachments($rfcMessage, $_message, $_folder, $partId));
                                          
@@ -613,9 +591,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     /**************** split multipart/mixed again **************************/
                     
                     $messageSubParts = $part->countParts();
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                        . ' Getting ' . $messageSubParts .' parts of multipart/mixed message.'
-                    );
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting ' . $messageSubParts .' parts of multipart/mixed message.');
                     
                     $content = '';
                     for ($i = 1; $i <= $messageSubParts; $i++) {
@@ -633,14 +609,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                         }
                     }
                     
-                } else if (isset($partHeaders['content-disposition'])) {
+                } else if (isset($partHeaders['content-disposition']) || preg_match('/application\/pgp\-signature/', $partHeaders['content-type'])) {
                     
                     /**************** add attachment part ***********************************/
                     
                     $attachments[] = $this->_getAttachmentDataFromPart($part, $partId, $accountId, $_message->getId(), $partHeaders);
                    
                 } else {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Don\'t get attachment of content-type: ' . $partHeaders['content-type']);
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Don\'t get attachment of content-type: ' . $partHeaders['content-type']);
                 }
                 
                 $partNumber++;
@@ -748,7 +724,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _getBody($_message, $_contentType, $_replaceUriAndEmails = TRUE)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting mail body with content type: ' . $_contentType);
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting mail body with content type: ' . $_contentType);
         
         // get html body part if multipart/alternative
         if (! preg_match('/text\/plain/', $_contentType)) {
@@ -800,7 +776,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         $purifierFilename = 'HTMLPurifier' . DIRECTORY_SEPARATOR . 'HTMLPurifier.auto.php'; 
         if (! file_exists(dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . $purifierFilename) ) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' HTML purifier not found. Mail body could not be purified. Proceed at your own risk!');
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' HTML purifier not found. Mail body could not be purified. Proceed at your own risk!');
             return $_content;
         }
         
@@ -808,7 +784,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $path = ($config->caching && $config->caching->active && $config->caching->path) 
             ? $config->caching->path : Tinebase_Core::getTempDir();
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Purifying html body. (cache path: ' . $path .')');
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Purifying html body. (cache path: ' . $path .')');
         
         require_once $purifierFilename;
         $config = HTMLPurifier_Config::createDefault();
@@ -861,7 +837,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     $rawContent = $headers . Zend_Mime::LINEEND . $originalMessage->message->getContent();
                     $part = new Zend_Mime_Part($rawContent);
                     
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $rawContent);
+                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $rawContent);
                     
                     $part->disposition = 'attachment; filename="' . $attachment['name'] . '"';
                     $part->encoding = Zend_Mime::ENCODING_7BIT;
@@ -990,9 +966,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $result = array();
         
+        if (! isset($_headers['content-disposition'])) {
+            $_headers['content-disposition'] = $_headers['content-type'];
+        }
         preg_match(Felamimail_Model_Message::ATTACHMENT_FILENAME_REGEXP, $_headers['content-disposition'], $matches);
+
         $result = $_headers;
-        $result['filename']     = $matches[1];
+        $result['filename']     = (isset($matches[1])) ? $matches[1] : $_partId . '.txt';
         
         $result['partId']       = $_partId;
         $result['messageId']    = $_messageId;
@@ -1025,7 +1005,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
             $translate = Tinebase_Translation::getTranslation($this->_applicationName);
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding email notes to ' . count($contacts) . ' contacts.');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding email notes to ' . count($contacts) . ' contacts.');
             
             $noteText = $translate->_('Subject') . ':' . $_subject . "\n\n" . $translate->_('Body') . ':' . substr($_body, 0, 4096);
             
@@ -1039,6 +1019,38 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 
                 Tinebase_Notes::getInstance()->addNote($note);
             }
+        }
+    }
+    
+    /**
+     * append mail to send folder
+     * @param Felamimail_Transport $_transport
+     * @param Felamimail_Model_Account $_account
+     * @return void
+     */
+    protected function _saveInSent(Felamimail_Transport $_transport, Felamimail_Model_Account $_account)
+    {
+        try {
+            $mailAsString = $_transport->getHeaders() . Zend_Mime::LINEEND . $_transport->getBody();
+            
+            $sentFolder = ($_account->sent_folder && ! empty($_account->sent_folder)) ? $_account->sent_folder : 'Sent';
+            Felamimail_Backend_ImapFactory::factory($_account)->appendMessage($mailAsString, $sentFolder);
+            
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' Saved sent message in "' . $sentFolder . '".'
+            );
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                . ' Could not save sent message in "' . $sentFolder . '".'
+                . ' Please check if a folder with this name exists.'
+                . '(' . $zmpe->getMessage() . ')'
+            );
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                . ' Could not save sent message in "' . $sentFolder . '".'
+                . ' Please check if a folder with this name exists.'
+                . '(' . $zmse->getMessage() . ')'
+            );
         }
     }
 }
