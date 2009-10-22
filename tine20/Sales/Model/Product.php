@@ -33,17 +33,6 @@ class Sales_Model_Product extends Tinebase_Record_Abstract
     protected $_application = 'Sales';
     
     /**
-     * list of zend inputfilter
-     * 
-     * this filter get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    protected $_filters = array(
-        '*'                     => 'StringTrim'
-    );
-    
-    /**
      * list of zend validator
      * 
      * this validators get used when validating user generated content with Zend_Input_Filter
@@ -54,6 +43,29 @@ class Sales_Model_Product extends Tinebase_Record_Abstract
         'id'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'name'              => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
         'description'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'price'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required')        
+        'price'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+    // modlog information
+        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // linked objects
+        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),    
+        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+    );
+    
+    /**
+     * name of fields containing datetime or an array of datetime information
+     *
+     * @var array list of datetime fields
+     */    
+    protected $_datetimeFields = array(
+        'creation_time',
+        'last_modified_time',
+        'deleted_time'
     );
 }
