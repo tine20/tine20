@@ -223,6 +223,9 @@ class Tinebase_Relations
         } else {
             $method = 'update';
         }
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . ucfirst($method) . ' ' . $_relation->related_model . 'record.');
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_relation->toArray(), TRUE));
         
         $record = $appController->$method($_relation->related_record);
         $_relation->related_id = $record->getId();
