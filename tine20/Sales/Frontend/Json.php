@@ -111,7 +111,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteContracts($ids)
     {
-        $this->_delete($ids, $this->_contractController);
+        return $this->_delete($ids, $this->_contractController);
     }
     
     /*************************** products functions *****************************/
@@ -158,6 +158,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteProducts($ids)
     {
-        $this->_delete($ids, $this->_productController);
+        return $this->_delete($ids, $this->_productController);
     }
 }
