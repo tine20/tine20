@@ -104,7 +104,24 @@ class Tinebase_Relations
             $current = $currentRelations[$currentRelations->getIndexById($relationId)];
             $update = $relations[$relations->getIndexById($relationId)];
             
-            if (! $current->related_record->isEqual($update->related_record, array('jpegphoto'))) {
+            // @todo do we need to ommit so many fields?
+            if (! $current->related_record->isEqual(
+                $update->related_record, 
+                array(
+                    'jpegphoto', 
+                    'creation_time', 
+                    'last_modified_time',
+                    'created_by',
+                    'last_modified_by',
+                    'is_deleted',
+                    'deleted_by',
+                    'deleted_time',
+                    'tags',
+                    'notes',
+                )
+            )) {
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($current->related_record->toArray(), true));
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($update->related_record->toArray(), true));
                 $this->_setAppRecord($update);
             }
             
