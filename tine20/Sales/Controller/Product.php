@@ -71,10 +71,6 @@ class Sales_Controller_Product extends Tinebase_Controller_Record_Abstract
      */
     protected function _checkRight($_action)
     {
-        if (! $this->_doRightChecks) {
-            return;
-        }
-        
         switch ($_action) {
             case 'create':
             case 'update':
