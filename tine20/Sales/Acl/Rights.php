@@ -83,8 +83,7 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array ( 
-            self::MANAGE_LEADS,
-            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
+            self::MANAGE_PRODUCTS,
         );
         $allRights = array_merge($allRights, $addRights);
         
