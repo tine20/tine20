@@ -23,6 +23,7 @@ Ext.namespace('Tine.Crm');
  * TODO         add 'add task' action again
  * TODO         add manage crm right again
  * TODO         add preview panel
+ * TODO         add products to grid?
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
