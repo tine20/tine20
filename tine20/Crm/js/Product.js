@@ -150,6 +150,7 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 editor: new Ext.form.NumberField({
                     allowBlank: false,
                     allowNegative: false,
+                    // TODO hardcode separator or get it from locale?
                     decimalSeparator: ','
                 }),
                 renderer: Ext.util.Format.euMoney
@@ -209,7 +210,9 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                                 price: record.data.price,
                                 remark_price: record.data.price,
                                 name: record.data.name,
-                                relation_type: 'product'
+                                relation_type: 'product',
+                                related_id: record.id,
+                                id: record.id
                             }, record.id);
                             this.productsStore.insert(0, newRecord);
                         }
