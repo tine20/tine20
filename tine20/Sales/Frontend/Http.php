@@ -18,6 +18,11 @@
  */
 class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
+    /**
+     * application name
+     * 
+     * @var string
+     */
     protected $_applicationName = 'Sales';
     
     /**
@@ -32,6 +37,8 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Sales/js/Sales.js',
             'Sales/js/ContractGridPanel.js',
             'Sales/js/ContractEditDialog.js',
+            'Sales/js/ProductGridPanel.js',
+            'Sales/js/ProductEditDialog.js',
         );
     }
 }

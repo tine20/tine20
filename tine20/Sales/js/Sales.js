@@ -104,3 +104,16 @@ Tine.Sales.JsonBackend = new Tine.Tinebase.data.RecordProxy({
     modelName: 'Contract',
     recordClass: Tine.Sales.Contract
 });
+
+/**
+ * @namespace Tine.Sales
+ * @class Tine.Sales.productBackend
+ * @extends Tine.Tinebase.data.RecordProxy
+ * 
+ * Product Backend
+ */ 
+Tine.Sales.productBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Sales',
+    modelName: 'Product',
+    recordClass: Tine.Sales.Model.Product
+});
