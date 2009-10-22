@@ -223,17 +223,9 @@ Ext.namespace('Tine.Crm.Admin');
  * 
  * admin config option quickadd grid panel
  * 
- * <p>
  * TODO         move that to tinebase widgets?
- * </p>
- * 
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 Tine.Crm.Admin.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
-    
     /**
      * @property recordClass
      */
@@ -241,7 +233,6 @@ Tine.Crm.Admin.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
     
     /**
      * @private
-     * @cfg
      */
     clicksToEdit:'auto',
     frame: true,
@@ -309,4 +300,3 @@ Tine.Crm.Admin.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         }
     }
 });
-

@@ -77,7 +77,6 @@ Tine.Crm.LeadSource.GridPanel = Ext.extend(Tine.Crm.Admin.QuickaddGridPanel, {
     
     /**
      * @private
-     * @cfg
      */
     autoExpandColumn:'leadsource',
     quickaddMandatory: 'leadsource',

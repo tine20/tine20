@@ -75,7 +75,6 @@ Tine.Crm.LeadType.GridPanel = Ext.extend(Tine.Crm.Admin.QuickaddGridPanel, {
     
     /**
      * @private
-     * @cfg
      */
     autoExpandColumn:'leadtype',
     quickaddMandatory: 'leadtype',

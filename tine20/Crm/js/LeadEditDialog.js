@@ -453,15 +453,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     } // end of getFormItems
     
     // obsolete code
-    /*
-        exportLead: function(_button, _event) {         
-            
-            var leadId = Ext.util.JSON.encode([_button.leadId]);
-            
-            Tine.Tinebase.common.openWindow('exportWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadIds=' + leadId, 768, 1024);
-        }
+//        exportLead: function(_button, _event) {         
+//            
+//            var leadId = Ext.util.JSON.encode([_button.leadId]);
+//            
+//            Tine.Tinebase.common.openWindow('exportWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadIds=' + leadId, 768, 1024);
+//        }
     
-     */
 });
 
 /**

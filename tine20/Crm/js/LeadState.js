@@ -96,7 +96,6 @@ Tine.Crm.LeadState.GridPanel = Ext.extend(Tine.Crm.Admin.QuickaddGridPanel, {
     
     /**
      * @private
-     * @cfg
      */
     autoExpandColumn:'leadstate',
     quickaddMandatory: 'leadstate',

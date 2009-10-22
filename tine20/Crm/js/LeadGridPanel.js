@@ -225,59 +225,56 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     }    
     
     /// obsolete code follows
-    /*
-        // admin menu
-    updateMainToolbar : function() 
-    {
-        var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
-        menu.removeAll();
-        menu.add(
-            // @todo    replace with standard popup windows
-            {text: this.translation._('Lead states'), handler: Tine.Crm.LeadState.EditDialog},
-            {text: this.translation._('Lead sources'), handler: Tine.Crm.LeadSource.EditDialog},
-            {text: this.translation._('Lead types'), handler: Tine.Crm.LeadType.EditDialog},
-            {text: this.translation._('Products'), handler: Tine.Crm.Product.EditDialog}
-        );
-
-        var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
-        adminButton.setIconClass('crmThumbnailApplication');
-        if(Tine.Tinebase.common.hasRight('admin', 'Crm')) {
-            adminButton.setDisabled(false);
-        } else {
-            adminButton.setDisabled(true);
-        }
-    },        
-        // detailed contact renderer
-        detailedContact: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
-            if(typeof(_data) == 'object' && !Ext.isEmpty(_data)) {
-                var contactDetails = '', style = '';
-                for(var i=0; i < _data.length; i++){
-                    var org_name           = Ext.isEmpty(_data[i].org_name) === false ? _data[i].org_name : ' ';
-                    var n_fileas           = Ext.isEmpty(_data[i].n_fileas) === false ? _data[i].n_fileas : ' ';
-                    var adr_one_street     = Ext.isEmpty(_data[i].adr_one_street) === false ? _data[i].adr_one_street : ' ';
-                    var adr_one_postalcode = Ext.isEmpty(_data[i].adr_one_postalcode) === false ? _data[i].adr_one_postalcode : ' ';
-                    var adr_one_locality   = Ext.isEmpty(_data[i].adr_one_locality) === false ? _data[i].adr_one_locality : ' ';
-                    var tel_work           = Ext.isEmpty(_data[i].tel_work) === false ? _data[i].tel_work : ' ';
-                    var tel_cell           = Ext.isEmpty(_data[i].tel_cell) === false ? _data[i].tel_cell : ' ';
-                    
-                    if(i > 0) {
-                        style = 'borderTop';
-                    }
-                    
-                    contactDetails = contactDetails + '<table width="100%" height="100%" class="' + style + '">' +
-                                         '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(org_name) + '</td></tr>' +
-                                         '<tr><td colspan="2"><b>' + Ext.util.Format.htmlEncode(n_fileas) + '</b></td></tr>' +
-                                         '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_street) + '</td></tr>' +
-                                         '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_postalcode) + ' ' + adr_one_locality + '</td></tr>' +
-                                         '<tr><td width="50%">' + Tine.Crm.Main.translation._('Phone') + ': </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_work) + '</td></tr>' +
-                                         '<tr><td width="50%">' + Tine.Crm.Main.translation._('Cellphone') + ': </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_cell) + '</td></tr>' +
-                                         '</table> <br />';
-                }
-                
-                return contactDetails;
-            }
-        }
-     */
+//    updateMainToolbar : function() 
+//    {
+//        var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
+//        menu.removeAll();
+//        menu.add(
+//            // @todo    replace with standard popup windows
+//            {text: this.translation._('Lead states'), handler: Tine.Crm.LeadState.EditDialog},
+//            {text: this.translation._('Lead sources'), handler: Tine.Crm.LeadSource.EditDialog},
+//            {text: this.translation._('Lead types'), handler: Tine.Crm.LeadType.EditDialog},
+//            {text: this.translation._('Products'), handler: Tine.Crm.Product.EditDialog}
+//        );
+//
+//        var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
+//        adminButton.setIconClass('crmThumbnailApplication');
+//        if(Tine.Tinebase.common.hasRight('admin', 'Crm')) {
+//            adminButton.setDisabled(false);
+//        } else {
+//            adminButton.setDisabled(true);
+//        }
+//    },        
+//        // detailed contact renderer
+//        detailedContact: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
+//            if(typeof(_data) == 'object' && !Ext.isEmpty(_data)) {
+//                var contactDetails = '', style = '';
+//                for(var i=0; i < _data.length; i++){
+//                    var org_name           = Ext.isEmpty(_data[i].org_name) === false ? _data[i].org_name : ' ';
+//                    var n_fileas           = Ext.isEmpty(_data[i].n_fileas) === false ? _data[i].n_fileas : ' ';
+//                    var adr_one_street     = Ext.isEmpty(_data[i].adr_one_street) === false ? _data[i].adr_one_street : ' ';
+//                    var adr_one_postalcode = Ext.isEmpty(_data[i].adr_one_postalcode) === false ? _data[i].adr_one_postalcode : ' ';
+//                    var adr_one_locality   = Ext.isEmpty(_data[i].adr_one_locality) === false ? _data[i].adr_one_locality : ' ';
+//                    var tel_work           = Ext.isEmpty(_data[i].tel_work) === false ? _data[i].tel_work : ' ';
+//                    var tel_cell           = Ext.isEmpty(_data[i].tel_cell) === false ? _data[i].tel_cell : ' ';
+//                    
+//                    if(i > 0) {
+//                        style = 'borderTop';
+//                    }
+//                    
+//                    contactDetails = contactDetails + '<table width="100%" height="100%" class="' + style + '">' +
+//                                         '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(org_name) + '</td></tr>' +
+//                                         '<tr><td colspan="2"><b>' + Ext.util.Format.htmlEncode(n_fileas) + '</b></td></tr>' +
+//                                         '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_street) + '</td></tr>' +
+//                                         '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_postalcode) + ' ' + adr_one_locality + '</td></tr>' +
+//                                         '<tr><td width="50%">' + Tine.Crm.Main.translation._('Phone') + ': </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_work) + '</td></tr>' +
+//                                         '<tr><td width="50%">' + Tine.Crm.Main.translation._('Cellphone') + ': </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_cell) + '</td></tr>' +
+//                                         '</table> <br />';
+//                }
+//                
+//                return contactDetails;
+//            }
+//        }
 });
 
 /**
