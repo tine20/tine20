@@ -20,6 +20,7 @@ Ext.namespace('Tine.Sales');
  * 
  * <p>Product Grid Panel</p>
  * <p><pre>
+ * TODO         use MANAGE_PRODUCTS right to enable/disable buttons 
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3

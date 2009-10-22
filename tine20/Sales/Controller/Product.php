@@ -60,5 +60,31 @@ class Sales_Controller_Product extends Tinebase_Controller_Record_Abstract
         }
         
         return self::$_instance;
-    }        
+    }
+    
+    /**
+     * check if user has the right to manage Products
+     * 
+     * @param string $_action {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        if (! $this->_doRightChecks) {
+            return;
+        }
+        
+        switch ($_action) {
+            case 'create':
+            case 'update':
+            case 'delete':
+                if (! Tinebase_Core::getUser()->hasRight('Felamimail', Sales_Acl_Rights::MANAGE_PRODUCTS)) {
+                    throw new Tinebase_Exception_AccessDenied("You don't have the right to manage products!");
+                }
+                break;
+            default;
+               break;
+        }
+    }
 }
