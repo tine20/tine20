@@ -425,6 +425,8 @@ class Tinebase_Tags
      */
     public function attachTagToMultipleRecords($_filter, $_tag)
     {
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), TRUE));
+        
         // check/create tag on the fly
         $tags = $this->_createTagsOnTheFly(array($_tag));
         if (empty($tags)) {
@@ -458,6 +460,8 @@ class Tinebase_Tags
         }
         
         $toAttachIds = array_diff($recordIds, $allreadyAttachedIds);
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Attaching 1 Tag to ' . count($toAttachIds) . ' records.');
         foreach ($toAttachIds as $recordId) {
             $this->_db->insert(SQL_TABLE_PREFIX . 'tagging', array(
                 'tag_id'         => $tagId,
