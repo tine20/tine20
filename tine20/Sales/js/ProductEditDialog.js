@@ -41,6 +41,7 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Sales.Model.Product,
     recordProxy: Tine.Sales.productBackend,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    evalGrants: false,
     
     /**
      * returns dialog
@@ -78,11 +79,19 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         allowBlank: false
                     }], [{
                         columnWidth: 1,
+                        xtype: 'numberfield',
+                        fieldLabel: this.app.i18n._('Price'),
+                        name: 'price',
+                        allowNegative: false,
+                        allowBlank: false
+                        //decimalSeparator: ','
+                    }], [{
+                        columnWidth: 1,
                         fieldLabel: this.app.i18n._('Description'),
                         emptyText: this.app.i18n._('Enter description...'),
                         name: 'description',
                         xtype: 'textarea',
-                        height: 200
+                        height: 170
                     }]] 
                 }, {
                     // activities and tags
