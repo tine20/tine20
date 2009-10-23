@@ -75,7 +75,7 @@ class Sales_Controller_Product extends Tinebase_Controller_Record_Abstract
             case 'create':
             case 'update':
             case 'delete':
-                if (! Tinebase_Core::getUser()->hasRight('Felamimail', Sales_Acl_Rights::MANAGE_PRODUCTS)) {
+                if (! Tinebase_Core::getUser()->hasRight('Sales', Sales_Acl_Rights::MANAGE_PRODUCTS)) {
                     throw new Tinebase_Exception_AccessDenied("You don't have the right to manage products!");
                 }
                 break;
