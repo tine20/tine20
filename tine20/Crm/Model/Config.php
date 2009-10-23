@@ -81,7 +81,7 @@ class Crm_Model_Config extends Tinebase_Record_Abstract
     {
         if ($this->has($_property) && isset($this->$_property) && is_array($this->$_property)) {
             foreach ($this->$_property as $sub) {
-                if ($sub[$_idProperty] == $_id) {
+                if (array_key_exists($_idProperty, $sub) && $sub[$_idProperty] == $_id) {
                     return $sub;
                 }
             }
