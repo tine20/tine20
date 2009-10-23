@@ -317,11 +317,21 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 recordClass: Tine.Addressbook.Model.Contact,
                 disabled: (Tine.Addressbook.registry.get('customfields').length == 0),
                 quickHack: {record: this.record}
-            })]
+            }), this.linkPanel
+            ]
         };
     },
     
     initComponent: function() {
+        
+        this.linkPanel = new Tine.widgets.dialog.LinkPanel({
+            relatedRecords: {
+                Crm_Model_Lead: {
+                    recordClass: Tine.Crm.Model.Lead,
+                    dlgOpener: Tine.Crm.LeadEditDialog.openWindow
+                }
+            }
+        });
         
         // export lead handler for edit contact dialog
         var exportContactButton = new Ext.Action({
@@ -396,6 +406,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         }
         
         this.supr().onRecordLoad.apply(this, arguments);
+        
+        this.linkPanel.onRecordLoad(this.record);
     }
 });
 
