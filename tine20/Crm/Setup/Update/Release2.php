@@ -71,7 +71,11 @@ class Crm_Setup_Update_Release2 extends Setup_Update_Abstract
             Tinebase_Config::getInstance()->setConfigForApplication($config['cfgId'], Zend_Json::encode($queryResult), 'Crm');
             
             // remove tables and constraints
-            $this->_backend->dropForeignKey('metacrm_lead', $config['fkName']);
+            try {
+                $this->_backend->dropForeignKey('metacrm_lead', $config['fkName']);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' error dropping fk for ' . $config['table'] . ': ' . $zdse->__toString());
+            }
             $this->_backend->dropTable($config['table']);
         }
         
