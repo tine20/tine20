@@ -80,7 +80,9 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
     onRecordLoad: function(record) {
         this.record = record;
         
-        this.store.loadData(record.get('relations'), true);
+        if (record.get('relations')) {
+            this.store.loadData(record.get('relations'), true);
+        }
     },
     
     /**
@@ -91,16 +93,14 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
         var linksTpl = new Ext.XTemplate(
             '<tpl for=".">',
                '<div class="x-widget-links-linkitem" id="{id}">',
-                    '<div class="x-widget-links-linkitem-text" ext:qtip="{related_model}">',
+                    '<div class="x-widget-links-linkitem-text"',
+                        //' ext:qtip="{related_model}"',
+                    '>',
                         '{[this.render(values.related_record, values.related_model, values.type, values.id)]}<br/>',
                     '</div>',
                 '</div>',
             '</tpl>' ,{
                 relatedRecords: this.relatedRecords,
-                encode: function(value, ellipsis) {
-                    var result = Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(value)); 
-                    return (ellipsis) ? Ext.util.Format.ellipsis(result, 300) : result;
-                },
                 render: function(value, model, type, id) {
                     var record = new this.relatedRecords[model].recordClass(value);
                     
@@ -118,8 +118,8 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
             tpl: linksTpl,       
             id: 'grid_links_limited',
             store: this.store,
-            overClass: 'x-view-over',
-            itemSelector: 'activities-item-small'
+            overClass: 'x-view-over'
+            //itemSelector: 'activities-item-small'
         }); 
     },
     
