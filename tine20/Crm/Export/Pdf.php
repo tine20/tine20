@@ -172,6 +172,8 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
 	
         // check relations
         if ($_lead->relations instanceof Tinebase_Record_RecordSet) {
+            
+            $_lead->relations->addIndices(array('type'));
 
             /********************** contacts ******************/
             
@@ -251,39 +253,42 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                         
                     } catch (Exception $e) {
                         // do nothing so far
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' exception caught: ' . $e->__toString());
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' exception caught: ' . $e->__toString());
                     }
                 }
             }
-        }
-
-        /********************** products ******************/
-
-        if (count($_lead->products) > 0) {
             
-            $linkedObjects[] = array ( $_translate->_('Products'), 'headline');
+            /********************** products ******************/
+
+            $productRelations = $_lead->relations->filter('type', strtoupper('product'));
             
-            foreach ($_lead->products as $product) {
-                try {
-                    $sourceProduct = Crm_Controller_LeadProducts::getInstance()->getProduct($product->product_id);
+            if (!empty($productRelations)) {
+            
+                $linkedObjects[] = array ( $_translate->_('Products'), 'headline');
+                
+                foreach ($productRelations as $relation) {
+                    try {
+                        $product = $relation->related_record;
+                        
+                        $price = (isset($relation['remark']['price'])) ? $relation['remark']['price'] : $product->price;
+                        // @todo set precision for the price ?
+                        $price = Zend_Locale_Format::toNumber($price, array('locale' => $_locale)/*, array('precision' => 2)*/) . " €";
+                        $description = (isset($relation['remark']['description'])) ? $relation['remark']['description'] : $product->description;
+                        
+                        $linkedObjects[] = array (
+                            $product->name . ' - ' . $description . ' (' . $price . ')', 
+                            'separator'
+                        );
                     
-                    // @todo set precision for the price ?
-                    $price = Zend_Locale_Format::toNumber($product->product_price, array('locale' => $_locale)/*, array('precision' => 2)*/) . " €";
-                    
-                    $linkedObjects[] = array (
-                        $sourceProduct->productsource . ' - ' . $product->product_desc . ' (' . $price . ')', 
-                        'separator'
-                    );
-                    
-                } catch (Exception $e) {
-                    // do nothing so far
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' exception caught: ' . $e->__toString());
+                    } catch (Exception $e) {
+                        // do nothing so far
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' exception caught: ' . $e->__toString());
+                    }
                 }
-            }
+            }                        
         }
         
         return  $linkedObjects;
-       
     }
     
     /**
