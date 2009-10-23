@@ -35,7 +35,7 @@ class Setup_Server_Json extends Setup_Server_Abstract
             $method  = $request->getMethod();
             $jsonKey = $_SERVER['HTTP_X_TINE20_JSONKEY'];
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
             
             $anonymnousMethods = array(
                 'Setup.getAllRegistryData',
