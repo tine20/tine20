@@ -248,3 +248,29 @@ Tine.Tinebase.Model.Credentials = Tine.Tinebase.data.Record.create([
     containerProperty: null
 });
 
+/**
+ * @namespace Tine.Tinebase.Model
+ * @class     Tine.Tinebase.Model.Relation
+ * @extends   Tine.Tinebase.data.Record
+ * 
+ * Model of a Relation
+ */
+Tine.Tinebase.Model.Relation = Tine.Tinebase.data.Record.create([
+    {name: 'id'},
+    {name: 'own_model'},
+    {name: 'own_id'},
+    {name: 'related_model'},
+    {name: 'related_id'},
+    {name: 'type'},
+    {name: 'remark'},
+    {name: 'related_record'}
+], {
+    appName: 'Tinebase',
+    modelName: 'Relation',
+    idProperty: 'id',
+    titleProperty: 'related_model',
+    // ngettext('Relation', 'Relations', n); gettext('Relation');
+    recordName: 'Relation',
+    recordsName: 'Relations',
+    containerProperty: null
+});
