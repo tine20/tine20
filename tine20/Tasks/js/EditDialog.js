@@ -64,10 +64,12 @@ Ext.namespace('Tine.Tasks');
         // init tabpanels
         this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});
         this.linkPanel = new Tine.widgets.dialog.LinkPanel({
-            /*
-            app: this.appName,
-            record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            */
+            relatedRecords: {
+                Crm_Model_Lead: {
+                    recordClass: Tine.Crm.Model.Lead,
+                    dlgOpener: Tine.Crm.LeadEditDialog.openWindow
+                }
+            }
         });
         
         Tine.Tasks.EditDialog.superclass.initComponent.call(this);
