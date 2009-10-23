@@ -20,8 +20,6 @@ Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
  * <p>Link Panel</p>
  * <p>to be used as tab panel in edit dialogs
  * <pre>
- * TODO         add anchor/button to jump to related object
- * TODO         improve display of linked objects (show correct title / more information)
  * </pre>
  * </p>
  * 
@@ -40,6 +38,8 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
     frame: true,
     border: true,
     autoScroll: true,
+    
+    relatedRecords: null,
     
     /**
      * @private
@@ -64,13 +64,21 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
     },
     
     /**
+     * add on click event after render
+     * @private
+     */
+    afterRender: function() {
+        Tine.widgets.dialog.LinkPanel.superclass.afterRender.apply(this, arguments);
+        
+        this.body.on('click', this.onClick, this);
+    },
+    
+    /**
      * 
      * @param {Object} record
      */
     onRecordLoad: function(record) {
         this.record = record;
-        
-        //console.log(record.get('relations'));
         
         this.store.loadData(record.get('relations'), true);
     },
@@ -84,50 +92,23 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
             '<tpl for=".">',
                '<div class="x-widget-links-linkitem" id="{id}">',
                     '<div class="x-widget-links-linkitem-text" ext:qtip="{related_model}">',
-                        '{[this.render(values.related_record)]}<br/>',
-                    //    'ext:qtip="{[this.render(values.related_model)]}>',
-                    //    '{[this.encode(values.related_id)]}<hr color="#aaaaaa">',
-                    /*
-                    '   ext:qtip="{[this.encode(values.note)]} - {[this.render(values.creation_time, "timefull")]} - {[this.render(values.created_by, "user")]}" >', 
-                        '{[this.render(values.note_type_id, "icon")]}&nbsp;{[this.render(values.creation_time, "timefull")]}<br/>',
-                        '{[this.encode(values.note, true)]}<hr color="#aaaaaa">',
-                    */
+                        '{[this.render(values.related_record, values.related_model, values.type, values.id)]}<br/>',
                     '</div>',
                 '</div>',
             '</tpl>' ,{
+                relatedRecords: this.relatedRecords,
                 encode: function(value, ellipsis) {
                     var result = Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(value)); 
                     return (ellipsis) ? Ext.util.Format.ellipsis(result, 300) : result;
                 },
-                render: function(value, type) {
-                    //console.log(value);
+                render: function(value, model, type, id) {
+                    var record = new this.relatedRecords[model].recordClass(value);
                     
-                    // TODO use related record here and getTitle/title property
+                    var result = record.modelName 
+                        + ' ( <i>' + type + '</i> ): <a class="tinebase-relation-link" href="#" id="' + id + ':' + model + '">' 
+                        + record.getTitle() + '</a>';
                     
-                    /*
-                    switch (type) {
-                        case 'icon':
-                            return Tine.widgets.activities.getTypeIcon(value);
-                        case 'user':
-                            if (!value) {
-                                value = Tine.Tinebase.registry.map.currentAccount.accountDisplayName;
-                            }
-                            var username = value;
-                            return '<i>' + username + '</i>';
-                        case 'time':
-                            if (!value) {
-                                return '';
-                            }
-                            return value.format(Locale.getTranslationData('Date', 'medium'));
-                        case 'timefull':
-                            if (!value) {
-                                return '';
-                            }
-                            return value.format(Locale.getTranslationData('Date', 'medium')) + ' ' +
-                                value.format(Locale.getTranslationData('Time', 'medium'));
-                    }
-                                */
-                    return value.lead_name;
+                    return result;
                 }
             }
         );
@@ -140,5 +121,24 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
             overClass: 'x-view-over',
             itemSelector: 'activities-item-small'
         }); 
+    },
+    
+    /**
+     * on click for opening edit related object dlg
+     * 
+     * @param {} e
+     * @private
+     */
+    onClick: function(e) {
+        
+        target = e.getTarget('a[class=tinebase-relation-link]');
+        if (target) {
+            var idParts = target.id.split(':');
+            var record = this.store.getById(idParts[0]).get('related_record');
+            
+            var popupWindow = this.relatedRecords[idParts[1]].dlgOpener({
+                record: new this.relatedRecords[idParts[1]].recordClass(record)
+            });
+        }
     }
 });
