@@ -119,14 +119,14 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($queryResult, TRUE));
             
             // insert values into products table
-            $productsController = Sales_Controller_Product::getInstance();
+            $productsBackend = new Tinebase_Backend_Sql('Sales_Model_Product', 'sales_products');
             foreach ($queryResult as $row) {
                 $products = new Sales_Model_Product(array(
                     'id'    => $row['id'],
                     'name'  => $row['productsource'],
                     'price' => $row['price'],
                 ));
-                $productsController->create($products);
+                $productsBackend->create($products);
             }
         }
             
@@ -148,7 +148,7 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
             $stmt = $this->_db->query($select);
             $queryResult = $stmt->fetchAll();
     
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($queryResult, TRUE));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($queryResult, TRUE));
             
             // insert values into relations table
             $relationsBackend = new Tinebase_Relation_Backend_Sql();
@@ -164,10 +164,28 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
                     'related_id'             => $row['product_id'],
                     'remark'                => Zend_Json::encode(array(
                         'description'   => $row['product_desc'],
-                        'price'         => $row['product_price']
+                        'price'         => $row['product_price'],
+                        'quantity'      => 1,
                     ))
                 ));
-                $relationsBackend->addRelation($relation);
+                try {
+                    $relationsBackend->addRelation($relation);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                        . ' Found duplicate, increasing quantity (' . $zdse->getMessage() . ')');
+                    
+                    // increase quantity
+                    $updateRelation = $relationsBackend->search(new Tinebase_Model_RelationFilter(array(
+                        array('field' => 'own_id',           'operator' => 'equals',       'value' => $relation->own_id),
+                        array('field' => 'related_id',       'operator' => 'equals',       'value' => $relation->related_id),
+                        array('field' => 'related_model',    'operator' => 'equals',       'value' => 'Sales_Model_Product'),
+                    )))->getFirstRecord();
+                    $remark = $updateRelation->remark;
+                    $remark['quantity']++;
+                    $updateRelation->remark = $remark;
+                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($updateRelation->toArray(), TRUE));
+                    $relationsBackend->updateRelation($updateRelation);
+                }
             }
             
             // drop table metacrm_leadsproducts and metacrm_products 

@@ -270,13 +270,14 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                     try {
                         $product = $relation->related_record;
                         
+                        $quantity = (isset($relation['remark']['quantity'])) ? $relation['remark']['quantity'] : 1;
                         $price = (isset($relation['remark']['price'])) ? $relation['remark']['price'] : $product->price;
                         // @todo set precision for the price ?
                         $price = Zend_Locale_Format::toNumber($price, array('locale' => $_locale)/*, array('precision' => 2)*/) . " €";
                         $description = (isset($relation['remark']['description'])) ? $relation['remark']['description'] : $product->description;
                         
                         $linkedObjects[] = array (
-                            $product->name . ' - ' . $description . ' (' . $price . ')', 
+                            $product->name . ' - ' . $description . ' (' . $price . ') x ' . $quantity, 
                             'separator'
                         );
                     

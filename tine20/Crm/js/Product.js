@@ -94,6 +94,7 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.storeFields.push({name: 'relation_type'});
         this.storeFields.push({name: 'remark_price'});
         this.storeFields.push({name: 'remark_description'});
+        this.storeFields.push({name: 'remark_quantity'});
         
         // create delegates
         this.initStore = Tine.Crm.LinkGridPanel.initStore.createDelegate(this);
@@ -155,6 +156,15 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     decimalSeparator: ','
                 }),
                 renderer: Ext.util.Format.euMoney
+            }, {
+                header: this.app.i18n._("Quantity"),
+                id: 'remark_quantity',
+                dataIndex: 'remark_quantity',
+                width: 50,
+                editor: new Ext.form.NumberField({
+                    allowBlank: false,
+                    allowNegative: false
+                })
             }]
         });
     },
@@ -210,6 +220,7 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                             var newRecord = new Ext.data.Record({
                                 price: record.data.price,
                                 remark_price: record.data.price,
+                                remark_quantity: 1,
                                 name: record.data.name,
                                 relation_type: 'product',
                                 related_id: record.id,
