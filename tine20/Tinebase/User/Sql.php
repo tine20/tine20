@@ -50,6 +50,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         'accountEmailAddress'   => 'email',
         'accountHomeDirectory'  => 'home_dir',
         'accountLoginShell'     => 'login_shell',
+        'openid'                => 'openid'
     );
     
     /**
@@ -96,75 +97,52 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         return $result;
     }
-    
+        
     /**
-     * get user by login name
+     * get user by property
      *
-     * @param string $_loginName the loginname of the user
-     * @return Tinebase_Model_User the user object
-     *
-     * @throws Tinebase_Exception_NotFound when row is empty
-     */
-    public function getUserByLoginName($_loginName, $_accountClass = 'Tinebase_Model_User')
-    {
-        $select = $this->_getUserSelectObject()
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.login_name') . ' = ?', $_loginName));
-
-        $stmt = $select->query();
-
-        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
-        
-        // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
-        // because of the wrong type that is not catched by the block below)
-        if ( $row === false ) {
-            throw new Tinebase_Exception_NotFound("User $_loginName not found.");
-        }
-        
-        try {
-            $account = new $_accountClass();
-            $account->setFromArray($row);
-        } catch (Exception $e) {
-            $validation_errors = $account->getValidationErrors();
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage() . "\n" .
-                "Tinebase_Model_User::validation_errors: \n" .
-                print_r($validation_errors,true));
-            throw ($e);
-        }
-        
-        return $account;
-    }
-    
-    /**
-     * get user by userId
-     *
-     * @param   int $_accountId the user id
+     * @param   string  $_property      the key to filter
+     * @param   string  $_value         the value to search for
+     * @param   string  $_accountClass  type of model to return
+     * 
      * @return  Tinebase_Model_User the user object
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function getUserById($_accountId, $_accountClass = 'Tinebase_Model_User')
+    public function getUserByProperty($_property, $_value, $_accountClass = 'Tinebase_Model_User')
     {
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        if(!array_key_exists($_property, $this->rowNameMapping)) {
+            throw new Tinebase_Exception_InvalidArgument("invalid property $_property requested");
+        }
+        
+        switch($_property) {
+            case 'accountId':
+                $value = Tinebase_Model_User::convertUserIdToInt($_value);
+                break;
+            default:
+                $value = $_value;
+                break;
+        }
         
         $select = $this->_getUserSelectObject()
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier( SQL_TABLE_PREFIX . 'accounts.id') . ' = ?', $accountId));
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier( SQL_TABLE_PREFIX . 'accounts.' . $this->rowNameMapping[$_property]) . ' = ?', $value));
         
         $stmt = $select->query();
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         if ($row === false) {
             throw new Tinebase_Exception_NotFound('User with id ' . $accountId . ' not found.');           
-        } else {
-            try {
-                $account = new $_accountClass();
-                $account->setFromArray($row);
-            } catch (Tinebase_Exception_Record_Validation $e) {
-                $validation_errors = $account->getValidationErrors();
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage() . "\n" .
-                    "Tinebase_Model_User::validation_errors: \n" .
-                    print_r($validation_errors,true));
-                throw ($e);
-            }
+        }
+        
+        try {
+            $account = new $_accountClass();
+            $account->setFromArray($row);
+        } catch (Tinebase_Exception_Record_Validation $e) {
+            $validation_errors = $account->getValidationErrors();
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage() . "\n" .
+                "Tinebase_Model_User::validation_errors: \n" .
+                print_r($validation_errors,true));
+            throw ($e);
         }
         
         return $account;
@@ -200,7 +178,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     'accountExpires'        => $this->rowNameMapping['accountExpires'],
                     'accountPrimaryGroup'   => $this->rowNameMapping['accountPrimaryGroup'],
                     'accountHomeDirectory'  => $this->rowNameMapping['accountHomeDirectory'],
-                    'accountLoginShell'     => $this->rowNameMapping['accountLoginShell']
+                    'accountLoginShell'     => $this->rowNameMapping['accountLoginShell'],
+                    'openid'
                 )
             )
             ->join(
@@ -390,6 +369,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'primary_group_id'  => $_account->accountPrimaryGroup,
             'home_dir'          => $_account->accountHomeDirectory,
             'login_shell'       => $_account->accountLoginShell,
+            'openid'            => $_account->openid 
         );
         
         $contactData = array(
@@ -457,6 +437,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'primary_group_id'  => $_account->accountPrimaryGroup,
             'home_dir'          => $_account->accountHomeDirectory,
             'login_shell'       => $_account->accountLoginShell,
+            'openid'            => $_account->openid 
         );
         
         $contact = new Addressbook_Model_Contact(array(
