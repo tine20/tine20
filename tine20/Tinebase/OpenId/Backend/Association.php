@@ -3,7 +3,7 @@
  * Tine 2.0
  *
  * @package     Tinebase
- * @subpackage  OpenId
+ * @subpackage  OpenID
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -15,7 +15,7 @@
  * sql backend class to store OpenID associations
  *
  * @package     Tinebase
- * @subpackage  OpenId
+ * @subpackage  OpenID
  */
 class Tinebase_OpenId_Backend_Association extends Tinebase_Backend_Sql_Abstract
 {
