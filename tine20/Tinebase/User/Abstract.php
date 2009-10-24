@@ -74,6 +74,11 @@ abstract class Tinebase_User_Abstract
     const ENCRYPT_PLAIN = 'plain';
     
     /**
+     * user property for openid
+     */
+    const PROPERTY_OPENID = 'openid';
+    
+    /**
      * returns all supported password encryptions types
      *
      * @return array
@@ -395,18 +400,36 @@ abstract class Tinebase_User_Abstract
     /**
      * get user by login name
      *
-     * @param   string      $_loginName
+     * @param   string  $_loginName
+     * @param   string  $_accountClass  type of model to return
      * @return  Tinebase_Model_User full user
      */
-    abstract public function getUserByLoginName($_loginName);
-
+    public function getUserByLoginName($_loginName, $_accountClass = 'Tinebase_Model_User')
+    {
+        return $this->getUserByProperty('accountLoginName', $_loginName, $_accountClass);
+    }
+    
     /**
      * get user by id
      *
-     * @param   int         $_accountId
+     * @param   string  $_accountId
+     * @param   string  $_accountClass  type of model to return
      * @return  Tinebase_Model_User user
      */
-    abstract public function getUserById($_accountId);
+    public function getUserById($_accountId, $_accountClass = 'Tinebase_Model_User') 
+    {
+        return $this->getUserByProperty('accountId', $_accountId, $_accountClass);
+    }
+    
+    /**
+     * get user by property
+     *
+     * @param   string  $_property
+     * @param   string  $_accountId
+     * @param   string  $_accountClass  type of model to return
+     * @return  Tinebase_Model_User user
+     */
+    abstract public function getUserByProperty($_property, $_accountId, $_accountClass = 'Tinebase_Model_User');
     
     /**
      * setPassword() - sets / updates the password in the account backend
