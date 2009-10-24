@@ -21,33 +21,25 @@
     <body>
         <form method="post">
             <fieldset>
-                <legend>OpenID Login</legend>
+                <legend>OpenID Login for <?php echo $this->escape($this->openIdIdentity);?></legend>
                 <table border=0>
                     <tr>
-                        <td>OpenID:</td>
+                        <td>Tine 2.0 login name:</td>
                         <td>
-                            <?php echo $this->escape($this->openIdIdentity);?>
+                            <input type="text" name="username">
                         </td>
                     </tr>
                     <tr>
-                        <td>Loginname:</td>
+                        <td>Tine 2.0 password:</td>
                         <td>
-                            <input type="text"
-                                   name="openid_identifier"
-                                   size="50"
-                                   value="<?php echo $this->escape($this->loginName);?>">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Password:</td>
-                        <td>
-                            <input type="password" name="openid_password" value="">
+                            <input type="password" name="password">
                         </td>
                     </tr>
                     <tr>
                         <td>&nbsp;</td>
                         <td>
                             <input type="hidden" name="openid_action" value="login">
+                            <input type="hidden" name="openid_identifier" value="<?php echo $this->escape($this->openIdIdentity);?>">
                             <input type="submit" value="Login">
                         </td>
                     </tr>
