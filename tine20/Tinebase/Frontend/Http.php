@@ -60,7 +60,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function getXRDS() 
     {
-        // http://servername/pathtotine20/users/loginname
+        // selfUrl == http://servername/pathtotine20/users/loginname
         $url = dirname(dirname(Zend_OpenId::selfUrl())) . '/index.php?method=Tinebase.openId';
         
         header('Content-type: application/xrds+xml');
@@ -96,7 +96,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function userInfoPage($username)
     {
-        // http://servername/pathtotine20/users/loginname
+        // selfUrl == http://servername/pathtotine20/users/loginname
         $openIdUrl = dirname(dirname(Zend_OpenId::selfUrl())) . '/index.php?method=Tinebase.openId';
         
         $view = new Zend_View();
@@ -116,7 +116,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function openId()
     {
-        $server = new Zend_OpenId_Provider(
+        $server = new Tinebase_OpenId_Provider(
             null,
             null,
             null,
@@ -126,7 +126,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         // handle openId login form
         if (isset($_POST['openid_action']) && $_POST['openid_action'] === 'login') {
-            $server->login($_POST['openid_identifier'], $_POST['openid_password']);
+            $server->login($_POST['openid_identifier'], $_POST['password'], $_POST['username']);
             unset($_GET['openid_action']);
             Zend_OpenId::redirect(dirname(Zend_OpenId::selfUrl()) . '/index.php', $_GET);
 
