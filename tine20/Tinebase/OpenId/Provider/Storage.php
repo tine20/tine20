@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  OpenId
+ * @subpackage  OpenID
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -20,7 +20,7 @@ require_once "Zend/OpenId/Provider/Storage.php";
  * External storage implemmentation using sql table
  *
  * @package     Tinebase
- * @subpackage  OpenId
+ * @subpackage  OpenID
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -28,20 +28,6 @@ require_once "Zend/OpenId/Provider/Storage.php";
  */
 class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
 {
-    /**
-     * the constructor
-     */
-    public function __construct() {
-        $this->_db = Tinebase_Core::getDb();
-    }
-    
-    /**
-     * copy of Tinebase_Core::get('dbAdapter')
-     *
-     * @var Zend_Db_Adapter_Abstract
-     */
-    private $_db;
-    
     /**
      * Stores information about session identified by $handle
      *
@@ -53,16 +39,19 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
      */
     public function addAssociation($handle, $macFunc, $secret, $expires)
     {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " ");
+        
         $backend = new Tinebase_OpenId_Backend_Association();
         
         $association = new Tinebase_Model_OpenId_Association(array(
             'id'        => $handle,
             'macfunc'   => $macFunc,
-            'secret'    => $secret,
+            'secret'    => base64_encode($secret),
             'expires'   => $expires
         ));
 
         $backend->create($association);
+        
     }
     
     /**
@@ -78,6 +67,8 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
      */
     public function getAssociation($handle, &$macFunc, &$secret, &$expires)
     {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " ");
+        
         $backend = new Tinebase_OpenId_Backend_Association();
 
         $result = false;
@@ -86,7 +77,7 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
             $association = $backend->get($handle);
             
             $macFunc    = $association->macfunc;
-            $secret     = $association->secret;
+            $secret     = base64_decode($association->secret);
             $expires    = $association->expires;
             
             if($expires > time()) {
@@ -107,6 +98,7 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
      */
     public function delAssociation($handle)
     {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " ");
         $backend = new Tinebase_OpenId_Backend_Association();
         
         $backend->delete($handle);
@@ -125,7 +117,8 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
      */
     public function addUser($id, $password)
     {
-        // we don't allow to register over OpenId currently
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " method not implemented");
+        // we don't allow to register from OpenId currently
         return false;
     }
     
@@ -137,9 +130,20 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
      */
     public function hasUser($id)
     {
+        // strip of everything before last /
+        $localPart = substr(strrchr($id, '/'), 1);
+        
+        if(empty($localPart)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " invalid id: $id supplied");
+            return $false;
+        }
+                
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
+        
         try {
-            $userBackend = Tinebase_User::getInstance()->getUserByLoginName($id);
+            Tinebase_User::getInstance()->getUserByProperty(Tinebase_User_Abstract::PROPERTY_OPENID, $localPart);
         } catch(Tinebase_Exception_NotFound $e) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " OpenID: $id not found");
             return false;
         }
         
@@ -147,37 +151,65 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
     }
     
     /**
-     * Verify if user with given $id exists and has specified $password
+     * Verify if OpenID with given $id exists and has specified $password
      *
-     * @param string $id user identity URL
-     * @param string $password user password
+     * @param  string  $id        user identity URL
+     * @param  string  $password  the Tine 2.0 password
+     * @param  string  $username  the Tine 2.0 username
      * @return bool
      */
-    public function checkUser($id, $password)
+    public function checkUser($id, $password, $username = null)
     {
-        $authResult = Tinebase_Auth::getInstance()->authenticate($id, $password);
+        // strip of everything before last /
+        $localPart = substr(strrchr($id, '/'), 1);
         
-        if ($authResult->isValid()) {
-            return true;
+        if(empty($localPart)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " invalid id: $id supplied");
+            return $false;
         }
         
-        return false;
+        if(empty($username)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " \$username can not be empty");
+            return $false;
+        }
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
+                
+        $authResult = Tinebase_Auth::getInstance()->authenticate($username, $password);
+
+        if ($authResult->isValid() !== true) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " authentication for $id({$account->accountLoginName}) failed");
+            return false;
+        }
+        
+        // we can't destroy the whole session, only the Zend_Auth stuff must get removed
+        unset($_SESSION['Zend_Auth']);
+
+        $account = Tinebase_User::getInstance()->getUserByLoginName($username, 'Tinebase_Model_FullUser');
+        
+        if($account->openid != $localPart) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " localPart: $localPart does not match for authenticated account");
+            return false;
+        }
+        
+        return true;
     }
     
     /**
-     * Removes information about specified user
+     * Removes information about specified OpenID
      *
      * @param string $id user identity URL
      * @return bool
      */
     public function delUser($id)
     {
-        // you can't delete user over OpenId currently
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " method not implemented");
+        // we don't allow to delete accounts from OpenID
         return false;
     }
     
     /**
-     * Returns array of all trusted/untrusted sites for given user identified
+     * Returns array of all trusted/untrusted sites for given OpenID identified
      * by $id
      *
      * @param string $id user identity URL
@@ -185,13 +217,23 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
      */
     public function getTrustedSites($id)
     {
-        $backend = new Tinebase_OpenId_Backend_TrustedSite();
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " ");
         
-        $trustedSites = $backend->getMultipleByProperty($id, 'user_identity');
-
-        if(count($sites) == 0) {
+        try {
+            $account = $this->_getAccountForId($id);
+        } catch(Tinebase_Exception_InvalidArgument $e) {
+            return false;
+        } catch(Tinebase_Exception_NotFound $e) {
             return false;
         }
+        
+        $backend = new Tinebase_OpenId_Backend_TrustedSite();
+        
+        $trustedSites = $backend->getMultipleByProperty($account->accountId, 'account_id');
+
+        #if(count($trustedSites) == 0) {
+        #    return false;
+        #}
         
         $result = array();
         
@@ -204,7 +246,7 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
     }
 
     /**
-     * Stores information about trusted/untrusted site for given user
+     * Stores information about trusted/untrusted site for given OpenID
      *
      * @param string $id user identity URL
      * @param string $site site URL
@@ -213,13 +255,23 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
      */
     public function addSite($id, $site, $trusted)
     {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " ");
+        
+        try {
+            $account = $this->_getAccountForId($id);
+        } catch(Tinebase_Exception_InvalidArgument $e) {
+            return false;
+        } catch(Tinebase_Exception_NotFound $e) {
+            return false;
+        }
+                
         $backend = new Tinebase_OpenId_Backend_TrustedSite();
         
         if($trusted !== NULL) {
             // add site
             $newSite = new Tinebase_Model_OpenId_TrustedSite(array(
                 'id'            => Tinebase_Model_OpenId_TrustedSite::generateUID(),
-                'user_identity' => $id,
+                'account_id'    => $account->accountId,
                 'site'          => $site,
                 'trusted'       => serialize($trusted)
             ));
@@ -228,8 +280,8 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
         } else {
             // remove site
             $filter = new Tinebase_Model_OpenId_TrustedSitesFilter(array(
-                array('field' => 'user_identity', 'operator' => 'equals', 'value' => $id),
-                array('field' => 'site',          'operator' => 'equals', 'value' => $site)
+                array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->accountId),
+                array('field' => 'site',       'operator' => 'equals', 'value' => $site)
             ));
             $sitesToRemove = $backend->search($filter, null, true);
             
@@ -240,5 +292,30 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
         
         return true;        
     }
-    
+
+    /**
+     * retrieve account object for given OpenID
+     * 
+     * @param $_id
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _getAccountForId($_id)
+    {
+        $localPart = substr(strrchr($_id, '/'), 1);
+        
+        if(empty($localPart)) {
+            throw new Tinebase_Exception_InvalidArgument("invalid id: $id supplied");
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
+        
+        try {
+            $account = Tinebase_User::getInstance()->getUserByProperty(Tinebase_User_Abstract::PROPERTY_OPENID, $localPart, 'Tinebase_Model_FullUser');
+        } catch(Tinebase_Exception_NotFound $e) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " OpenID: $_id not found");
+            throw $e;
+        }
+
+        return $account;
+    }
 }
