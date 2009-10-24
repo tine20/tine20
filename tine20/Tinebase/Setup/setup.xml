@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>2.11</version>
+    <version>2.12</version>
     <tables>
         <table>
             <name>applications</name>
@@ -2431,9 +2431,9 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>user_identity</name>
+                    <name>account_id</name>
                     <type>text</type>
-                    <length>254</length>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -2454,14 +2454,25 @@
                     </field>
                 </index>
                 <index>
-                    <name>user_idenity-site</name>
+                    <name>account_id-site</name>
                     <unique>true</unique>
                     <field>
-                        <name>user_identity</name>
+                        <name>account_id</name>
                     </field>
                     <field>
                         <name>site</name>
                     </field>
+                </index>
+                <index>
+                    <name>openid_sites::account_id--accounts::id</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                    </reference>
                 </index>
             </declaration>
         </table>        

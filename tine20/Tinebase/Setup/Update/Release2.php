@@ -410,4 +410,75 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '2.11');
     }
+    
+    /**
+     * update to 2.12
+     * - modify openid_sites
+     */    
+    public function update_11()
+    {
+        $this->_backend->dropTable('openid_sites');
+        
+        $declaration = new Setup_Backend_Schema_Table_Xml('
+            <table>
+                <name>openid_sites</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>site</name>
+                        <type>text</type>
+                        <length>254</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>trusted</name>
+                        <type>text</type>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>account_id-site</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>account_id</name>
+                        </field>
+                        <field>
+                            <name>site</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>openid_sites::account_id--accounts::id</name>
+                        <field>
+                            <name>account_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>accounts</table>
+                            <field>id</field>
+                        </reference>
+                    </index>
+                </declaration>
+            </table>        
+        ');
+        $this->_backend->createTable($declaration);
+                
+        $this->setApplicationVersion('Tinebase', '2.12');
+    }
 }
