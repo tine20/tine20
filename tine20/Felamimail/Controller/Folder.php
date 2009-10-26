@@ -120,7 +120,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         if (count($result) == 0) {
             // try to get folders from imap server
-            $result = $this->getSubFolders($filterValues['globalname'], $filterValues['account_id']);
+            $result = Felamimail_Controller_Cache::getInstance()->updateFolders($filterValues['globalname'], $filterValues['account_id']);
         }             
         
         $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['account_id']] = count($result);
