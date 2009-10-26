@@ -610,7 +610,7 @@ abstract class Tinebase_Controller_Record_Abstract
     public function checkFilterACL(/*Tinebase_Model_Filter_FilterGroup */$_filter, $_action = 'get')
     {
         if (! $this->_doContainerACLChecks) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Container ACL disabled for ' . $_filter->getModelName() . '.');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Container ACL disabled for ' . $_filter->getModelName() . '.');
             return TRUE;
         }
         
