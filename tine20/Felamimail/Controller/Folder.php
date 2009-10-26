@@ -109,6 +109,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param bool $_getRelations
      * @return Tinebase_Record_RecordSet
      * 
+     * @todo    get folders directly from backend (skip getSubFolders/updateFolderStatus) 
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
@@ -244,6 +245,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param string $_folderName
      * @param string $_accountId [optional]
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
+     * 
+     * @todo    move this to Felamimail_Controller_Cache
      */
     public function getSubFolders($_folderName = '', $_accountId = 'default')
     {
@@ -356,7 +359,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @return Tinebase_Record_RecordSet with updated folder status
      * @throws Felamimail_Exception
      * 
-     * @todo update folders in db?
+     * @todo    update folders in db?
+     * @todo    move this to Felamimail_Controller_Cache
      */
     public function updateFolderStatus($_accountId, $_folders = NULL, $_folderId = NULL)
     {

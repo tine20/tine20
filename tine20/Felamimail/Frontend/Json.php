@@ -136,10 +136,16 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $filter
      * @param string $paging
      * @return array
+     * 
+     * @todo remove obsolete code when updateCache() works
      */
     public function searchMessages($filter, $paging)
     {
         $result = $this->_search($filter, $paging, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter');
+        
+        //return $result;
+        
+        // obsolete code begins:
         
         // no paging -> don't do initial cache import
         if (empty($paging) || $result['totalcount'] == 0) {
@@ -189,6 +195,74 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // don't output anything else ('null' or something like that)
         die();
+    }
+    
+    /**
+     * update cache
+     * - use output buffer mechanism to update incomplete cache
+     *
+     * @param string $folders
+     * @param string $activeFolder
+     * @return array
+     */
+    public function updateCache($folders, $activeFolder)
+    {
+        //-- update visible folders and return new folder data
+        
+        //-- if recent mails are in active folder: update and reload that after some seconds
+        
+        //-- update message cache of active folder (in background)
+        
+        /*
+        // no paging -> don't do initial cache import
+        if (empty($paging) || $result['totalcount'] == 0) {
+            return $result;
+        }
+        
+        // use output buffer
+        ignore_user_abort();
+        header("Connection: close");
+        
+        ob_start();
+
+        // output here (kind of hack to get request id and build response)
+        $request = new Zend_Json_Server_Request_Http();
+        $response = new Zend_Json_Server_Response_Http();
+        if (null !== ($id = $request->getId())) {
+            $response->setId($id);
+        }
+        if (null !== ($version = $request->getVersion())) {
+            $response->setVersion($version);
+        }
+        $response->setResult($result);
+        echo $response;
+        //echo Zend_Json::encode($result);
+        
+        $size = ob_get_length();
+        header("Content-Length: $size");
+        ob_end_flush(); // Strange behaviour, will not work
+        flush();        
+        Zend_Session::writeClose(true);
+
+        // update rest of cache here
+        if ($result['totalcount'] > 0) {
+            // get folder id from filter
+            $folderId = '';
+            foreach ($result['filter'] as $filterSetting) {
+                if ($filterSetting['field'] == 'folder_id') {
+                    $folderId = $filterSetting['value'];
+                    break;
+                }
+            }
+            if (! empty($folderId)) {
+                Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
+                Felamimail_Controller_Cache::getInstance()->initialImport($folderId);
+            }
+        }
+        
+        // don't output anything else ('null' or something like that)
+        die();
+        */
     }
     
     /**
