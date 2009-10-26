@@ -156,7 +156,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @todo update visible folders and return new folder data -> move this to another function?
      */
-    public function updateFolderCache($folderId)
+    public function updateMessageCache($folderId)
     {
         $cacheController = Felamimail_Controller_Cache::getInstance();
         

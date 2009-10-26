@@ -494,7 +494,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         if (node.id && node.id != '/') {
             //console.log(node);
-            this.updateFolderCache(node);
+            this.updateMessageCache(node);
             
             this.filterPlugin.onFilterChange();
         }
@@ -506,14 +506,14 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * TODO add accountId?
      */
-    updateFolderCache: function(node)
+    updateMessageCache: function(node)
     {
         var folderId = node.attributes.folder_id;
         
         if (folderId && node.attributes.cache_status != 'complete' /* && accountId*/) {
             Ext.Ajax.request({
                 params: {
-                    method: 'Felamimail.updateFolderCache',
+                    method: 'Felamimail.updateMessageCache',
                     folderId: folderId
                     //accountId: accountId
                 },
