@@ -198,6 +198,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         // define additional actions
         
+        // TODO show loading... icon next to folder
         var updateCacheConfigAction = {
             text: this.app.i18n._('Update Cache'),
             iconCls: 'action_update_cache',
@@ -210,19 +211,24 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     },
                     scope: this,
                     success: function(_result, _request){
-                        // update grid
-                        this.filterPlugin.onFilterChange();
+                        if (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id) {
+                            // update grid
+                            this.updateMessageCache(this.ctxNode, true);
+                            this.filterPlugin.onFilterChange();
+                        } else {
+                            this.ctxNode.attributes.cache_status = 'pending';
+                        }
                     }
                 });
             }
         };
 
+        // TODO show loading... icon next to folder
         var emptyFolderAction = {
             text: this.app.i18n._('Empty Folder'),
             iconCls: 'action_folder_emptytrash',
             scope: this,
             handler: function() {
-                this.app.mainScreen.gridPanel.grid.loadMask.show();
                 Ext.Ajax.request({
                     params: {
                         method: 'Felamimail.emptyFolder',
@@ -230,9 +236,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     },
                     scope: this,
                     success: function(_result, _request){
-                        // update grid
-                        this.filterPlugin.onFilterChange();
-                        this.updateUnreadCount(null, 0, this.ctxNode);
+                        if (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id) {
+                            // update grid
+                            this.updateMessageCache(this.ctxNode, true);
+                            this.filterPlugin.onFilterChange();
+                        } else {
+                            this.ctxNode.attributes.cache_status = 'pending';
+                        }
                     },
                     timeout: 120000 // 2 minutes
                 });
@@ -309,6 +319,23 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 });        
             }
         };
+        
+        var reloadFolderAction = {
+            text: String.format(_('Reload {0}'), this.app.i18n._('Folder')),
+            iconCls: 'x-tbar-loading',
+            scope: this,
+            handler: function() {
+                if (this.ctxNode) {
+                    // trigger updateFolderCache
+                    this.updateFolderCache(this.ctxNode);
+                    
+                    this.ctxNode.reload(function(node) {
+                        node.expand();
+                        node.select();
+                    });
+                }
+            }
+        };
 
         // mutual config options
         
@@ -317,21 +344,21 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             scope: this,
             backend: 'Felamimail',
             backendModel: 'Folder'
-        };        
+        };
         
         // system folder ctx menu
 
-        config.actions = ['add', updateCacheConfigAction, 'reload'];
+        config.actions = ['add', updateCacheConfigAction, reloadFolderAction];
         this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
         
         // user folder ctx menu
 
-        config.actions = ['add', 'rename', updateCacheConfigAction, 'reload', 'delete'];
+        config.actions = ['add', 'rename', updateCacheConfigAction, reloadFolderAction, 'delete'];
         this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
         
         // trash ctx menu
         
-        config.actions = ['add', emptyFolderAction, 'reload'];
+        config.actions = ['add', emptyFolderAction, reloadFolderAction];
         this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
         
         // account ctx menu
@@ -501,16 +528,17 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     },
     
     /**
-     * update folder cache (and trigger reload store)
+     * update message cache (and trigger reload store)
      * @param {Ext.tree.AsyncTreeNode} node
      * 
      * TODO add accountId?
      */
-    updateMessageCache: function(node)
+    updateMessageCache: function(node, force)
     {
         var folderId = node.attributes.folder_id;
+        //var accountId = node.attributes.account_id;
         
-        if (folderId && node.attributes.cache_status != 'complete' /* && accountId*/) {
+        if (folderId && (node.attributes.cache_status != 'complete' || force) /* && accountId*/) {
             Ext.Ajax.request({
                 params: {
                     method: 'Felamimail.updateMessageCache',
@@ -534,6 +562,30 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     }
 
                     node.attributes.cache_status = folderData.cache_status;
+                }
+            });
+        }        
+    },
+
+    /**
+     * update folder cache
+     * @param {Ext.tree.AsyncTreeNode} node
+     * 
+     */
+    updateFolderCache: function(node)
+    {
+        var globalname = node.attributes.globalname;
+        var accountId = node.attributes.account_id;
+        
+        if (globalname && accountId) {
+            Ext.Ajax.request({
+                params: {
+                    method: 'Felamimail.updateFolderCache',
+                    folderNames: globalname,
+                    accountId: accountId
+                },
+                scope: this,
+                success: function(_result, _request) {
                 }
             });
         }        

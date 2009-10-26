@@ -134,16 +134,22 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * - use output buffer mechanism to update incomplete cache
      *
      * @param string $accountId
-     * @param string $parentFolderIds id of parent folder(s)
+     * @param string $folderNames of parent folder(s)
      * @return array
      * 
-     * @todo    implement
      * @todo    call this every x minutes from gui
      * @todo    make it update folders from imap as well?
-     * @todo    use search filter as param?
      */
-    public function updateFolderCache($accountId, $parentFolderIds)
+    public function updateFolderCache($accountId, $folderNames)
     {
+        $decodedFolderNames = Zend_Json::decode($folderNames);
+        foreach ((array)$decodedFolderNames as $folderName) {
+            Felamimail_Controller_Cache::getInstance()->updateFolders($folderName, $accountId);
+        }
+        
+        return array(
+            'status' => 'success'
+        );
     }
     
     /***************************** messages funcs *******************************/
