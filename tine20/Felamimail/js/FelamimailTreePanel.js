@@ -19,12 +19,16 @@ Ext.namespace('Tine.Felamimail');
  * <p>Account/Folder Tree Panel</p>
  * <p>Tree of Accounts with folders</p>
  * <pre>
- * TODO         add unread count to intelligent folders?
- * TODO         reload folder status (and number of unread messages) every x minutes 
- *              -> via ping or ext.util.delayedtask ?
- * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
- * TODO         make inbox/drafts/templates configurable in account
+ * TODO         reload folder status / folder cache (and number of unread messages) every x minutes 
+ *              -> via ext.util.delayedtask
+ *              -> what should we do when folders changed (deleted/renamed/new folders)? reload tree?
+ * TODO         suppress searchMessages ajax request when account is selected/clicked
+ * 
+ * low priority:
  * TODO         only allow nodes as drop target (not 'between')
+ * TODO         make inbox/drafts/templates configurable in account
+ * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
+ * TODO         add unread count to intelligent folders
  * </pre>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -478,7 +482,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * - expand + select node
      * - update filter toolbar of grid
      * 
-     * @param {} node
+     * @param {Ext.tree.AsyncTreeNode} node
      * @private
      */
     onClick: function(node) {
@@ -489,10 +493,50 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         node.select();
         
         if (node.id && node.id != '/') {
-            this.filterPlugin.onFilterChange();
+            //console.log(node);
+            this.updateFolderCache(node);
             
-            //this.loader.load(node.parentNode, null);
+            this.filterPlugin.onFilterChange();
         }
+    },
+    
+    /**
+     * update folder cache (and trigger reload store)
+     * @param {Ext.tree.AsyncTreeNode} node
+     * 
+     * TODO add accountId?
+     */
+    updateFolderCache: function(node)
+    {
+        var folderId = node.attributes.folder_id;
+        
+        if (folderId && node.attributes.cache_status != 'complete' /* && accountId*/) {
+            Ext.Ajax.request({
+                params: {
+                    method: 'Felamimail.updateFolderCache',
+                    folderId: folderId
+                    //accountId: accountId
+                },
+                scope: this,
+                success: function(_result, _request) {
+                    // update folder counters / class
+                    var folderData = Ext.util.JSON.decode(_result.responseText);
+                    
+                    //console.log(node.attributes);
+                    //console.log(folderData);
+                    
+                    if (node.attributes.unreadcount != folderData.unreadcount || node.attributes.totalcount != folderData.totalcount) {
+                        //console.log('counts changed!');
+                        
+                        // update node values
+                        node.attributes.totalcount = folderData.totalcount;
+                        this.updateUnreadCount(null, folderData.unreadcount);
+                    }
+
+                    node.attributes.cache_status = folderData.cache_status;
+                }
+            });
+        }        
     },
     
     /**
@@ -617,6 +661,8 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         
     /**
      * @private
+     * 
+     * TODO     add qtip again (problem: it can't be changed later)?
      */
     createNode: function(attr) {
         
@@ -629,8 +675,8 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             && account.get('has_children_support') == '1'
         ) ? attr.has_children : true;
         
-        var qtiptext = this.app.i18n._('Totalcount') + ': ' + attr.totalcount 
-            + ' / ' + this.app.i18n._('Cache') + ': ' + attr.cache_status;
+        //var qtiptext = this.app.i18n._('Totalcount') + ': ' + attr.totalcount 
+        //    + ' / ' + this.app.i18n._('Cache') + ': ' + attr.cache_status;
 
         var node = {
     		id: attr.id,
@@ -642,9 +688,11 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             folder_id: attr.id,
     		folderNode: true,
             allowDrop: true,
-            qtip: qtiptext,
+            //qtip: qtiptext,
             systemFolder: (attr.system_folder == '1'),
             unreadcount: attr.unreadcount,
+            totalcount: attr.totalcount,
+            cache_status: attr.cache_status,
             
             // if it has no children, it shouldn't have an expand icon 
             expandable: attr.has_children,

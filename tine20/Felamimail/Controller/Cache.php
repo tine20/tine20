@@ -292,16 +292,16 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
                     );
                 } else {
                     // do nothing
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Caching of folder ' . $folder->globalname . ' is still running.');
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Caching of folder ' . $folder->globalname . ' is still running.');
                     return TRUE;
                 }
             } else {
                 // do nothing
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Caching of folder ' . $folder->globalname . ' is already complete.');
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Caching of folder ' . $folder->globalname . ' is already complete.');
                 return TRUE;
             }
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Finishing Initial import for folder ' . $folder->globalname . ' ... ');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Finishing Initial import for folder ' . $folder->globalname . ' ... ');
         }
         
         try {

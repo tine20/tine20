@@ -108,31 +108,25 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param Tinebase_Model_Pagination|optional $_pagination
      * @param bool $_getRelations
      * @return Tinebase_Record_RecordSet
-     * 
-     * @todo    get folders directly from backend (skip getSubFolders/updateFolderStatus) 
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
         $filterValues = $this->_extractFilter($_filter);
         
-        try {
-            // try to get folders from imap backend
-            $result = $this->getSubFolders($filterValues['globalname'], $filterValues['account_id']);    
-            
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
-            
-            // get folders from db
-            $filter = new Felamimail_Model_FolderFilter(array(
-                array('field' => 'parent',      'operator' => 'equals', 'value' => $filterValues['globalname']),
-                array('field' => 'account_id',  'operator' => 'equals', 'value' => $filterValues['account_id'])
-            ));
-            $result = $this->_folderBackend->search($filter);
-        }
+        // get folders from db
+        $filter = new Felamimail_Model_FolderFilter(array(
+            array('field' => 'parent',      'operator' => 'equals', 'value' => $filterValues['globalname']),
+            array('field' => 'account_id',  'operator' => 'equals', 'value' => $filterValues['account_id'])
+        ));
+        $result = $this->_folderBackend->search($filter);
         
-        $result = $this->updateFolderStatus($filterValues['account_id'], $result);
+        if (count($result) == 0) {
+            // try to get folders from imap server
+            $result = $this->getSubFolders($filterValues['globalname'], $filterValues['account_id']);
+        }             
         
         $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['account_id']] = count($result);
+        $result->cache_status = Felamimail_Model_Folder::CACHE_STATUS_PENDING;
         
         return $result;
     }

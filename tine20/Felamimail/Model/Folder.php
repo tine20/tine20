@@ -25,6 +25,12 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
     const CACHE_STATUS_EMPTY = 'empty';
     
     /**
+     * cache status: pending
+     *
+     */
+    const CACHE_STATUS_PENDING = 'pending';
+    
+    /**
      * cache status: complete
      *
      */
@@ -86,7 +92,8 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => self::CACHE_STATUS_EMPTY, 
             'InArray' => array(
-                self::CACHE_STATUS_EMPTY, 
+                self::CACHE_STATUS_EMPTY,
+                self::CACHE_STATUS_PENDING,
                 self::CACHE_STATUS_COMPLETE, 
                 self::CACHE_STATUS_INCOMPLETE, 
                 self::CACHE_STATUS_UPDATING

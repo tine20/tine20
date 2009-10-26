@@ -117,9 +117,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @return Tinebase_Record_RecordSet
      * 
      * @todo    skip cache handling here / get messages directly from cache db -> move this to json frontend / cache controller
+     * @todo    remove this function afterwards
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
+        return parent::search($_filter, $_pagination);
+        
+        /*
         // get folder_id from filter (has to be set)
         $filterValues = $this->_extractFilter($_filter);
         $folderId = $filterValues['folder_id'];
@@ -144,6 +148,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         return $result;
+        */
     }
     
     /**
@@ -151,9 +156,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return int
+     * 
+     * @todo    skip cache handling here
+     * @todo    remove this function afterwards
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {
+        return parent::searchCount($_filter);
+        
+        /*
         // get folder_id from filter (has to be set)
         $filterValues = $this->_extractFilter($_filter);
         
@@ -169,6 +180,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         return $result;
+        
+        */
     }
     
     /**

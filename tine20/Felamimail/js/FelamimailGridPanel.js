@@ -724,18 +724,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @return {Void}
      */
     onStoreLoad: function(store, records, options) {
-        var regexp = new RegExp('\\Recent');
-        var recentCount = 0;
-        store.each(function(record){
-            if (record.get('flags') && record.get('flags').match(regexp)) {
-                recentCount++;
-            }
-        }, this);
-        
-        if (recentCount > 0) {
-            //this.app.getMainScreen().getTreePanel().updateUnreadCount(recentCount);
-            this.app.getMainScreen().getTreePanel().updateFolderStatus(false);
-        }
     },
         
     /**
