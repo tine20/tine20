@@ -118,8 +118,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $folderId
      * @return array
      * 
-     * @todo call this every x minutes from gui
-     * @todo make it update folders from imap as well?
+     * @todo replace this with updateFolderCache
      */
     public function updateFolderStatus($accountId, $folderId)
     {
@@ -128,6 +127,23 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = Felamimail_Controller_Folder::getInstance()->updateFolderStatus($accountId, NULL, $folderId);
         
         return $result->toArray();
+    }
+    
+    /**
+     * update folder cache
+     * - use output buffer mechanism to update incomplete cache
+     *
+     * @param string $accountId
+     * @param string $parentFolderIds id of parent folder(s)
+     * @return array
+     * 
+     * @todo    implement
+     * @todo    call this every x minutes from gui
+     * @todo    make it update folders from imap as well?
+     * @todo    use search filter as param?
+     */
+    public function updateFolderCache($accountId, $parentFolderIds)
+    {
     }
     
     /***************************** messages funcs *******************************/
