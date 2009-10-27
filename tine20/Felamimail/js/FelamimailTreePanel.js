@@ -522,8 +522,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         if (node.id && node.id != '/') {
             //console.log(node);
             this.updateMessageCache(node);
-            
-            this.filterPlugin.onFilterChange();
         }
     },
     
@@ -539,6 +537,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         //var accountId = node.attributes.account_id;
         
         if (folderId && (node.attributes.cache_status != 'complete' || force) /* && accountId*/) {
+            // add loadmask to grid
+            var cacheMask = new Ext.LoadMask(this.app.mainScreen.gridPanel.grid.getEl(), {
+                msg:        this.app.i18n._('Please wait... Updating cache.'),
+                removeMask: true
+            });
+            cacheMask.show();
+            
             Ext.Ajax.request({
                 params: {
                     method: 'Felamimail.updateMessageCache',
@@ -553,18 +558,23 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     //console.log(node.attributes);
                     //console.log(folderData);
                     
+                    // update node values
                     if (node.attributes.unreadcount != folderData.unreadcount || node.attributes.totalcount != folderData.totalcount) {
                         //console.log('counts changed!');
                         
-                        // update node values
                         node.attributes.totalcount = folderData.totalcount;
                         this.updateUnreadCount(null, folderData.unreadcount);
                     }
-
                     node.attributes.cache_status = folderData.cache_status;
+                    
+                    // update grid and remove load mask
+                    this.filterPlugin.onFilterChange();
+                    cacheMask.hide();
                 }
             });
-        }        
+        } else {
+            this.filterPlugin.onFilterChange();
+        }
     },
 
     /**
