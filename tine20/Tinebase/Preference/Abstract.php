@@ -12,6 +12,7 @@
  * @todo        make this a real controller + singleton (create extra sql backend)
  * @todo        add getAllprefsForApp (similar to config) to get all prefs for the registry in one request
  * @todo        add getPreference function that returns the complete record 
+ * @todo        allow free-form preferences
  */
 
 
