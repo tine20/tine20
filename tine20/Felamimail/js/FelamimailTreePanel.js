@@ -61,6 +61,16 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     updateFoldersTask: null,
     
     /**
+     * refresh time in milliseconds
+     * 
+     * @property updateFolderRefreshTime
+     * @type Number
+     * 
+     * TODO get this from preferences
+     */
+    updateFolderRefreshTime: 60000, // 1 min
+    
+    /**
      * @cfg {String} containerName
      */
     containerName: 'Folder',
@@ -154,9 +164,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             listeners: {
                 scope: this,
                 load: function(node) {
-                    
-                    // start delayed task
-                    //this.updateFoldersTask.delay(10000);
                     
                     // add 'intelligent' folders
                     if (node.attributes.intelligent_folders == 1/* || node.attributes.intelligent_folders == '1'*/) {
@@ -390,6 +397,9 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
 
         var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
         this.expandPath('/root/' + defaultAccount + '/');
+        
+        // start delayed task
+        this.updateFoldersTask.delay(this.updateFolderRefreshTime);
     },
     
    /**
@@ -485,7 +495,12 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * TODO call updateFolderStatus?
      */
     updateFolders: function() {
-        console.log('update');
+        var node = this.getSelectionModel().getSelectedNode();
+        //console.log(node);
+        if (node) {
+            this.updateMessageCache(node, false, true);
+        }
+        this.updateFoldersTask.delay(this.updateFolderRefreshTime);
     },
     
     /**
@@ -570,18 +585,20 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * TODO add accountId?
      */
-    updateMessageCache: function(node, force)
+    updateMessageCache: function(node, force, delayedTask)
     {
         var folderId = node.attributes.folder_id;
         //var accountId = node.attributes.account_id;
         
-        if (folderId && (node.attributes.cache_status != 'complete' || force) /* && accountId*/) {
+        if (folderId && (node.attributes.cache_status != 'complete' || force || delayedTask) /* && accountId*/) {
             // add loadmask to grid
-            var cacheMask = new Ext.LoadMask(this.app.mainScreen.gridPanel.grid.getEl(), {
-                msg:        this.app.i18n._('Please wait... Updating cache.'),
-                removeMask: true
-            });
-            cacheMask.show();
+            if (! delayedTask) {
+                var cacheMask = new Ext.LoadMask(this.app.mainScreen.gridPanel.grid.getEl(), {
+                    msg:        this.app.i18n._('Initializing folder cache ...'),
+                    removeMask: true
+                });
+                cacheMask.show();
+            }
             
             Ext.Ajax.request({
                 params: {
@@ -603,12 +620,19 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                         
                         node.attributes.totalcount = folderData.totalcount;
                         this.updateUnreadCount(null, folderData.unreadcount);
+
+                        if (delayedTask) {
+                            // update only if something changed
+                            this.filterPlugin.onFilterChange();
+                        }
                     }
                     node.attributes.cache_status = folderData.cache_status;
                     
                     // update grid and remove load mask
-                    this.filterPlugin.onFilterChange();
-                    cacheMask.hide();
+                    if (! delayedTask) {
+                        this.filterPlugin.onFilterChange();
+                        cacheMask.hide();
+                    }
                 }
             });
         } else {
