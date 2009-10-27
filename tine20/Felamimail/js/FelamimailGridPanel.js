@@ -20,6 +20,7 @@ Ext.namespace('Tine.Felamimail');
  * 
  * <p>Message Grid Panel</p>
  * <p><pre>
+ * TODO         mark to delete / to move messages
  * TODO         add flagged/'starred' filter
  * TODO         add show source code function
  * TODO         make doubleclick work again: show mail in new window (no edit dialog)
@@ -62,7 +63,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      */
     defaultSortInfo: {field: 'received', direction: 'DESC'},
     gridConfig: {
-        loadMask: true,
+        //loadMask: true,
         autoExpandColumn: 'subject',
         // drag n drop
         enableDragDrop: true,
