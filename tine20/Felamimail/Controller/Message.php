@@ -42,13 +42,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                                             '\Flagged'  => Zend_Mail_Storage::FLAG_FLAGGED);
     
     /**
-     * totalcount of messages in folder
-     *
-     * @var integer
-     */
-    protected $_totalcount = 0;
-    
-    /**
      * application name (is needed in checkRight())
      *
      * @var string
@@ -107,82 +100,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /************************* overwritten funcs *************************/
-    
-    /**
-     * get list of records
-     *
-     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
-     * @param Tinebase_Model_Pagination|optional $_pagination
-     * @param bool $_getRelations
-     * @return Tinebase_Record_RecordSet
-     * 
-     * @todo    skip cache handling here / get messages directly from cache db -> move this to json frontend / cache controller
-     * @todo    remove this function afterwards
-     */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
-    {
-        return parent::search($_filter, $_pagination);
-        
-        /*
-        // get folder_id from filter (has to be set)
-        $filterValues = $this->_extractFilter($_filter);
-        $folderId = $filterValues['folder_id'];
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filterValues, true));
-        
-        if (empty($filterValues['flags']) && (empty($folderId) || $folderId == '/')) {
-            $result = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
-        } else {
-            // update cache -> set totalcount > 0 (only if cache is incomplete?)
-            if (! empty($folderId)) {
-                $folder = $this->_cacheController->update($folderId);
-                if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE
-                    || $folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING
-                ) {
-                    $this->_totalcount = $folder->totalcount;
-                }
-            }
-        
-            $result = parent::search($_filter, $_pagination);
-        }
-        
-        return $result;
-        */
-    }
-    
-    /**
-     * Gets total count of search with $_filter
-     * 
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @return int
-     * 
-     * @todo    skip cache handling here
-     * @todo    remove this function afterwards
-     */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
-    {
-        return parent::searchCount($_filter);
-        
-        /*
-        // get folder_id from filter (has to be set)
-        $filterValues = $this->_extractFilter($_filter);
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filterValues, true));
-        
-        if (empty($filterValues['folder_id']) && empty($filterValues['flags'])) {
-            $result = 0;
-        } elseif (! empty($this->_totalcount) && count($filterValues) == 2) {
-            // cache is incomplete but we want to show the total number of messages in mailbox folder (only if no filter is set)
-            $result = $this->_totalcount;
-        } else {
-            $result = parent::searchCount($_filter);
-        }
-        
-        return $result;
-        
-        */
-    }
     
     /**
      * delete one record
