@@ -225,6 +225,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/Percentage.js',
             'Tinebase/js/ux/PopupWindow.js',
             'Tinebase/js/ux/PopupWindowManager.js',
+            'Tinebase/js/ux/Notification.js',
             'Tinebase/js/ux/WindowFactory.js',
             'Tinebase/js/ux/SliderTip.js',
             'Tinebase/js/ux/Wizard.js',
