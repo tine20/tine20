@@ -61,11 +61,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * @property updateFolderRefreshTime
      * @type Number
-     * 
-     * TODO get this from preferences
      */
     updateFolderRefreshTime: 60000, // 1 min
-    //updateFolderRefreshTime: 10000, // 1/6 min
     
     /**
      * @cfg {String} containerName
@@ -109,6 +106,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         // add account nodes and context menu
         this.initAccounts();
         this.initContextMenus();
+        
+        // get folder update interval from preferences
+        var updateInterval = Tine.Felamimail.registry.get('preferences').get('updateInterval');
+        if (! isNaN(updateInterval)) {
+            // convert to milliseconds
+            this.updateFolderRefreshTime = 60000*updateInterval;
+        }
         
         this.updateFoldersTask = new Ext.util.DelayedTask(this.updateFolders, this);
         

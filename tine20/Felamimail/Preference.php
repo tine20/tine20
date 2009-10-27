@@ -10,6 +10,7 @@
  * @version     $Id:Preference.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
  * @todo        add default account settings ?
+ * @todo        make UPDATEINTERVAL a free form preference
  */
 
 
@@ -36,6 +37,12 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     const DEFAULTACCOUNT = 'defaultEmailAccount';
 
     /**
+     * email folder update interval
+     *
+     */
+    const UPDATEINTERVAL = 'updateInterval';
+
+    /**
      * application
      *
      * @var string
@@ -54,6 +61,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
         $allPrefs = array(
             self::USERACCOUNT,
             self::DEFAULTACCOUNT,
+            self::UPDATEINTERVAL,
         );
             
         return $allPrefs;
@@ -76,6 +84,10 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTACCOUNT  => array(
                 'label'         => $translate->_('Default Email Account'),
                 'description'   => $translate->_('The default email account to use when sending mails.'),
+            ),
+            self::UPDATEINTERVAL  => array(
+                'label'         => $translate->_('Email Update Interval'),
+                'description'   => $translate->_('How often should Felamimail check for new Emails (in minutes) .'),
             ),
         );
         
@@ -102,6 +114,18 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::DEFAULTACCOUNT:
                 $preference->value      = 'default';
+                break;
+            case self::UPDATEINTERVAL:
+                $preference->value      = 5;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>';
+                for ($i = 1; $i < 21; $i++) {
+                    $preference->options .= '<option>
+                            <label>'. $i . '</label>
+                            <value>'. $i . '</value>
+                        </option>';
+                }
+                $preference->options    .= '</options>';
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
