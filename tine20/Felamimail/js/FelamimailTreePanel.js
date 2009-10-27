@@ -22,7 +22,6 @@ Ext.namespace('Tine.Felamimail');
  * TODO         reload folder status / folder cache (and number of unread messages) every x minutes 
  *              -> via ext.util.delayedtask
  *              -> what should we do when folders changed (deleted/renamed/new folders)? reload tree?
- * TODO         suppress searchMessages ajax request when account is selected/clicked
  * 
  * low priority:
  * TODO         only allow nodes as drop target (not 'between')
@@ -54,6 +53,12 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @type Ext.data.JsonStore
      */
     accountStore: null,
+    
+    /**
+     * @property updateFoldersTask
+     * @type Ext.util.DelayedTask
+     */
+    updateFoldersTask: null,
     
     /**
      * @cfg {String} containerName
@@ -97,6 +102,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         // add account nodes and context menu
         this.initAccounts();
         this.initContextMenus();
+        
+        this.updateFoldersTask = new Ext.util.DelayedTask(this.updateFolders, this);
         
     	Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
 
@@ -147,6 +154,9 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             listeners: {
                 scope: this,
                 load: function(node) {
+                    
+                    // start delayed task
+                    //this.updateFoldersTask.delay(10000);
                     
                     // add 'intelligent' folders
                     if (node.attributes.intelligent_folders == 1/* || node.attributes.intelligent_folders == '1'*/) {
@@ -392,6 +402,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
                 getValue: function() {
                 	var node = scope.getSelectionModel().getSelectedNode();
+                    
                     if (node && node.attributes.globalname == 'marked') {
                         return [
                             {field: 'flags',        operator: 'equals', value: '\\Flagged' },
@@ -406,6 +417,26 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                         return [
                             {field: 'folder_id',    operator: 'equals', value: (node && node.attributes.folder_id) ? node.attributes.folder_id : '' }
                         ];
+                    }
+                },
+                // TODO use createSequence?
+                onBeforeLoad: function(store, options) {
+                    
+                    options = options || {};
+                    options.params = options.params || {};
+                    options.params.filter = options.params.filter ? options.params.filter : [];
+
+                    var value = this.getValue();
+                    if (value && Ext.isArray(options.params.filter)) {
+                        value = Ext.isArray(value) ? value : [value];
+                        for (var i=0; i<value.length; i++) {
+                            options.params.filter.push(value[i]);
+                        }
+                    }                
+                    
+                    // stop request if folder_id is empty in filter
+                    if (options.params.filter[0] && options.params.filter[0].field == 'folder_id' && options.params.filter[0].value == '') {
+                        return false;
                     }
                 }
             });
@@ -446,6 +477,15 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 node.getUI().removeClass('felamimail-node-unread');
             }
         }
+    },
+    
+    /**
+     * delayed task function
+     * 
+     * TODO call updateFolderStatus?
+     */
+    updateFolders: function() {
+        console.log('update');
     },
     
     /**
@@ -520,7 +560,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         node.select();
         
         if (node.id && node.id != '/') {
-            //console.log(node);
             this.updateMessageCache(node);
         }
     },
@@ -712,6 +751,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      * @private
      */
     requestData: function(node, callback){
+        
     	// add globalname to filter
     	this.filter = [
             {field: 'account_id', operator: 'equals', value: node.attributes.account_id},
