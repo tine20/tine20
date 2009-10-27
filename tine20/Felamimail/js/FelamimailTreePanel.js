@@ -19,10 +19,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>Account/Folder Tree Panel</p>
  * <p>Tree of Accounts with folders</p>
  * <pre>
- * TODO         reload folder status / folder cache (and number of unread messages) every x minutes 
- *              -> via ext.util.delayedtask
- *              -> what should we do when folders changed (deleted/renamed/new folders)? reload tree?
- * 
  * low priority:
  * TODO         only allow nodes as drop target (not 'between')
  * TODO         make inbox/drafts/templates configurable in account
@@ -69,6 +65,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * TODO get this from preferences
      */
     updateFolderRefreshTime: 60000, // 1 min
+    //updateFolderRefreshTime: 10000, // 1/6 min
     
     /**
      * @cfg {String} containerName
@@ -496,7 +493,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     updateFolders: function() {
         var node = this.getSelectionModel().getSelectedNode();
-        //console.log(node);
         if (node) {
             this.updateMessageCache(node, false, true);
         }
@@ -611,20 +607,26 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     // update folder counters / class
                     var folderData = Ext.util.JSON.decode(_result.responseText);
                     
-                    //console.log(node.attributes);
-                    //console.log(folderData);
-                    
                     // update node values
                     if (node.attributes.unreadcount != folderData.unreadcount || node.attributes.totalcount != folderData.totalcount) {
-                        //console.log('counts changed!');
-                        
-                        node.attributes.totalcount = folderData.totalcount;
-                        this.updateUnreadCount(null, folderData.unreadcount);
 
                         if (delayedTask) {
+                            if (node.attributes.unreadcount < folderData.unreadcount) {
+                                // show toast window on new mail
+                                Ext.ux.Notification.show(
+                                    this.app.i18n._('New mails'), 
+                                    String.format(this.app.i18n._('You got {0} new mail(s) in Folder '), 
+                                        folderData.unreadcount - node.attributes.unreadcount) 
+                                        + node.attributes.localname
+                                ); 
+                            }
+                            
                             // update only if something changed
                             this.filterPlugin.onFilterChange();
                         }
+                        
+                        node.attributes.totalcount = folderData.totalcount;
+                        this.updateUnreadCount(null, folderData.unreadcount);
                     }
                     node.attributes.cache_status = folderData.cache_status;
                     
