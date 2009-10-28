@@ -50,7 +50,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         'accountEmailAddress'   => 'email',
         'accountHomeDirectory'  => 'home_dir',
         'accountLoginShell'     => 'login_shell',
-        'openid'                => 'openid'
+        'openid'                => 'openid',
+        'visibility'            => 'visibility'
     );
     
     /**
@@ -174,12 +175,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     'accountLastLogin'      => $this->rowNameMapping['accountLastLogin'],
                     'accountLastLoginfrom'  => $this->rowNameMapping['accountLastLoginfrom'],
                     'accountLastPasswordChange' => $this->rowNameMapping['accountLastPasswordChange'],
-                    'accountStatus'         => $this->rowNameMapping['accountStatus'],
+                    'accountStatus'         => 'if(NOW() > ' . $this->rowNameMapping['accountExpires']. ', \'expired\', status)',
                     'accountExpires'        => $this->rowNameMapping['accountExpires'],
                     'accountPrimaryGroup'   => $this->rowNameMapping['accountPrimaryGroup'],
                     'accountHomeDirectory'  => $this->rowNameMapping['accountHomeDirectory'],
                     'accountLoginShell'     => $this->rowNameMapping['accountLoginShell'],
-                    'openid'
+                    'openid',
+                    'visibility'
                 )
             )
             ->join(
@@ -369,7 +371,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'primary_group_id'  => $_account->accountPrimaryGroup,
             'home_dir'          => $_account->accountHomeDirectory,
             'login_shell'       => $_account->accountLoginShell,
-            'openid'            => $_account->openid 
+            'openid'            => $_account->openid,
+            'visibility'        => $_account->visibility,
         );
         
         $contactData = array(
