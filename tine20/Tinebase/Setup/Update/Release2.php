@@ -481,4 +481,36 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
                 
         $this->setApplicationVersion('Tinebase', '2.12');
     }
+    
+    /**
+     * update to 2.13
+     * - add visibility column
+     */    
+    public function update_12()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>visibility</name>
+                <type>enum</type>
+                <value>hidden</value>
+                <value>displayed</value>
+                <default>displayed</default>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('accounts', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>visibility</name>
+                <field>
+                    <name>visibility</name>
+                </field>
+            </index>
+        ');
+        $this->_backend->addIndex('accounts', $declaration);
+        
+        $this->setApplicationVersion('Tinebase', '2.13');
+    }
+    
 }

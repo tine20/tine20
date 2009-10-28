@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>2.12</version>
+    <version>2.13</version>
     <tables>
         <table>
             <name>applications</name>
@@ -256,6 +256,14 @@
                     <type>text</type>
                     <length>254</length>
                 </field>
+                <field>
+                    <name>visibility</name>
+                    <type>enum</type>
+                    <value>hidden</value>
+                    <value>displayed</value>
+                    <default>displayed</default>
+                    <notnull>true</notnull>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -275,6 +283,12 @@
                     <unique>true</unique>
                     <field>
                         <name>openid</name>
+                    </field>
+                </index>
+                <index>
+                    <name>visibility</name>
+                    <field>
+                        <name>visibility</name>
                     </field>
                 </index>
                 <index>
