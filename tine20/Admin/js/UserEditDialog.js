@@ -95,6 +95,13 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function() {
+        
+        var displayFieldStyle = {
+            border: 'silver 1px solid',
+            padding: '3px',
+            height: '11px'
+        };
+        
         return {
             xtype: 'tabpanel',
             deferredRender: false,
@@ -205,11 +212,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	                        anchor: '100%',
 	                        labelSeparator: '',
 	                        columnWidth: .333,
-                    		style: {
-	                            border: 'silver 1px solid',
-	                            padding: '3px',
-                                height: '12px'
-	                        }
+                    		style: displayFieldStyle
 	                    },
 	                    items: [[{
 		                        fieldLabel: this.app.i18n._('Last login at'),
@@ -276,34 +279,31 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             name: 'homeDrive',
                             columnWidth: .666
                         }, {
-                            xtype: 'datetimefield',
+                            xtype: 'displayfield',
                             fieldLabel: this.app.i18n._('Logon Time'),
                             name: 'logonTime',
                             emptyText: this.app.i18n._('never logged in'),
-                            hideTrigger: true,
-                            readOnly: true
+                            style: displayFieldStyle
                         }], [{
                             fieldLabel: this.app.i18n._('Home Path'),
                             name: 'homePath',
                             columnWidth: .666
                         }, {
-                            xtype: 'datetimefield',
+                            xtype: 'displayfield',
                             fieldLabel: this.app.i18n._('Logoff Time'),
                             name: 'logoffTime',
                             emptyText: this.app.i18n._('never logged off'),
-                            hideTrigger: true,
-                            readOnly: true
+                            style: displayFieldStyle
                         }], [{
                             fieldLabel: this.app.i18n._('Profile Path'),
                             name: 'profilePath',
                             columnWidth: .666
                         }, {
-                            xtype: 'datetimefield',
+                            xtype: 'displayfield',
                             fieldLabel: this.app.i18n._('Password Last Set'),
                             name: 'pwdLastSet',
                             emptyText: this.app.i18n._('never'),
-                            hideTrigger: true,
-                            readOnly: true
+                            style: displayFieldStyle
                         }], [{
                             fieldLabel: this.app.i18n._('Logon Script'),
                             name: 'logonScript',
