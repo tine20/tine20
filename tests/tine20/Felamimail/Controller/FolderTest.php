@@ -68,7 +68,7 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFolders()
     {
-        $result = $this->_controller->getSubFolders();
+        $result = $this->_controller->search($this->_getFolderFilter(''));
         
         $this->assertGreaterThan(0, count($result));
         
@@ -101,7 +101,7 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('INBOX/test', $newFolder->globalname);
         
         // search for subfolders
-        $resultInboxSub = $this->_controller->getSubFolders('INBOX');
+        $resultInboxSub = $this->_controller->search($this->_getFolderFilter());
         
         $this->assertGreaterThan(0, count($resultInboxSub), 'No subfolders found.');
         $testFolder = $resultInboxSub->filter('localname', 'test')->getFirstRecord();
@@ -124,7 +124,7 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('test_renamed', $renamedFolder->localname);
         
-        $resultInboxSub = $this->_controller->getSubFolders('INBOX');
+        $resultInboxSub = $this->_controller->search($this->_getFolderFilter());
         $this->assertGreaterThan(0, count($resultInboxSub), 'No subfolders found.');
         $testFolder = $resultInboxSub->filter('localname', 'test_renamed')->getFirstRecord();
         
@@ -133,4 +133,17 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         
         $this->_controller->delete('INBOX/test_renamed');
     }
+    
+    /**
+     * get folder filter
+     *
+     * @return Felamimail_Model_FolderFilter
+     */
+    protected function _getFolderFilter($_globalname = 'INBOX')
+    {
+        return new Felamimail_Model_FolderFilter(array(array(
+            'field' => 'globalname', 'operator' => 'equals', 'value' => $_globalname
+        )));
+    }
+    
 }
