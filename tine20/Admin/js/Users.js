@@ -305,6 +305,7 @@ Tine.Admin.Users.Main = function() {
                     { header: this.translation.gettext('Last name'), id: 'accountLastName', dataIndex: 'accountLastName', hidden: true},
                     { header: this.translation.gettext('First name'), id: 'accountFirstName', dataIndex: 'accountFirstName', hidden: true},
                     { header: this.translation.gettext('Email'), id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200},
+                    { header: this.translation.gettext('OpenID'), id: 'openid', dataIndex: 'openid', width: 200, hidden: true},
                     { header: this.translation.gettext('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', hidden: ldapBackend, width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
                     { header: this.translation.gettext('Last login from'), id: 'accountLastLoginfrom', hidden: ldapBackend, dataIndex: 'accountLastLoginfrom'},
                     { header: this.translation.gettext('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
@@ -471,7 +472,6 @@ Tine.Admin.Model.UserArray = [
     { name: 'accountLastName' },
     { name: 'accountLoginName' },
     { name: 'accountPassword' },
-    { name: 'accountPassword2' },
     { name: 'accountDisplayName' },
     { name: 'accountFullName' },
     { name: 'accountStatus' },
@@ -483,6 +483,8 @@ Tine.Admin.Model.UserArray = [
     { name: 'accountEmailAddress' },
     { name: 'accountHomeDirectory' },
     { name: 'accountLoginShell' },
+    { name: 'openid'},
+    { name: 'visibility'},
     { name: 'sambaSAM' },
     { name: 'emailUser' }
 ];
