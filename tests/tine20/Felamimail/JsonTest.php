@@ -218,6 +218,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // check if message is in sent folder
         $sent = $this->_getFolder('Sent');
         $filter = $this->_getMessageFilter($sent->getId());
+        Felamimail_Controller_Cache::getInstance()->updateMessages($sent);
         $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
         //print_r($result);
         
@@ -318,6 +319,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $inbox = $this->_getFolder();
         $filter = $this->_getMessageFilter($inbox->getId());
+        Felamimail_Controller_Cache::getInstance()->updateMessages($inbox);
         $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
         $replyMessageFound = array();
         $originalMessage = array();
@@ -352,6 +354,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->moveMessages($message['id'], $drafts->getId());
         
         $filter = $this->_getMessageFilter($drafts->getId());
+        Felamimail_Controller_Cache::getInstance()->updateMessages($drafts);
         $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
         $movedMessage = array();
         foreach ($result['results'] as $mail) {
@@ -400,7 +403,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _getFolder($_name = 'INBOX')
     {
-        Felamimail_Controller_Folder::getInstance()->getSubFolders();
+        Felamimail_Controller_Cache::getInstance()->updateFolders();
         $folderBackend = new Felamimail_Backend_Folder();
         $folder = $folderBackend->getByBackendAndGlobalName('default', $_name);
         
@@ -467,6 +470,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $inbox = $this->_getFolder();
         $filter = $this->_getMessageFilter($inbox->getId());
+        // update cache
+        Felamimail_Controller_Cache::getInstance()->updateMessages($inbox);
         $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
         
         $message = array(); 
