@@ -132,7 +132,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         if ($row === false) {
-            throw new Tinebase_Exception_NotFound('User with id ' . $accountId . ' not found.');           
+            throw new Tinebase_Exception_NotFound('User with ' . $_property . ' =  ' . $value . ' not found.');           
         }
         
         try {
