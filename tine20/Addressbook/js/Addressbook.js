@@ -236,6 +236,9 @@ Tine.Addressbook.Model.Contact.getDefaultData = function() {
 
 Tine.Addressbook.Model.Contact.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Addressbook');
+    
+    var typeStore = [['contact', app.i18n._('Contact')], ['user', app.i18n._('User Account')]];
+    
     return [
         {label: app.i18n.n_('Contact', 'Contacts', 1),                                  field: 'query',              operators: ['contains']},
         {label: app.i18n._('First Name'),                                               field: 'n_given' },
@@ -252,7 +255,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
         {label: app.i18n._('Street') + ' (' + app.i18n._('Private Address') + ')',      field: 'adr_two_street',     defaultOperator: 'equals'},
         {label: app.i18n._('Postal Code') + ' (' + app.i18n._('Private Address') + ')', field: 'adr_two_postalcode', defaultOperator: 'equals'},
         {label: app.i18n._('City') + ' (' + app.i18n._('Private Address') + ')',        field: 'adr_two_locality'},
-        {label: app.i18n._('Type'),                                                     field: 'type',               defaultOperator: 'equals'},
+        {label: app.i18n._('Type'), defaultValue: 'contact', valueType: 'combo',        field: 'type',               store: typeStore}
     ];
 };
     
