@@ -259,7 +259,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $decodedAccountData = Zend_Json::decode($recordData);
         $password = $decodedAccountData['accountPassword'];
-        $passwordRepeat = $decodedAccountData['accountPassword2'];
         
         $account = new Tinebase_Model_FullUser();
         
@@ -294,9 +293,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 return $result;
             }
             
-            $account = Admin_Controller_User::getInstance()->create($account, $password, $passwordRepeat);
+            $account = Admin_Controller_User::getInstance()->create($account, $password, $password);
         } else {
-            $account = Admin_Controller_User::getInstance()->update($account, $password, $passwordRepeat);
+            $account = Admin_Controller_User::getInstance()->update($account, $password, $password);
         }
         
         $account->accountPrimaryGroup = Tinebase_Group::getInstance()->getGroupById($account->accountPrimaryGroup);
