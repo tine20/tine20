@@ -40,7 +40,7 @@ class Tinebase_Model_OpenId_TrustedSiteFilter extends Tinebase_Model_Filter_Filt
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'user_identity' => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'account_id'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'site'          => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }

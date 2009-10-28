@@ -42,7 +42,7 @@ class Tinebase_Model_OpenId_TrustedSite extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'            => array('presence' => 'required'),
-        'user_identity' => array('presence' => 'required'),
+        'account_id'    => array('presence' => 'required'),
         'site'          => array('presence' => 'required'),
         'trusted'       => array('presence' => 'required')
     );    
