@@ -134,6 +134,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
+        'lon'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lat'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'type'                  => array('presence' => 'required', 'InArray' => array('contact', 'account'))
     );
     
     /**
