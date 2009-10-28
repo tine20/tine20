@@ -214,7 +214,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	                    items: [[{
 		                        fieldLabel: this.app.i18n._('Last login at'),
 		                        name: 'accountLastLogin',
-		                        emptyText: this.ldapBackend ? this.app.i18n._("don't know") : this.app.i18n._('never logged in'),
+		                        emptyText: this.ldapBackend ? this.app.i18n._("don't know") : this.app.i18n._('never logged in')
 		                    }, {
 		                        fieldLabel: this.app.i18n._('Last login from'),
 		                        name: 'accountLastLoginfrom',
@@ -232,71 +232,97 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 disabled: !this.ldapBackend,
                 border: false,
                 frame: true,
-                xtype: 'columnform',
-                labelAlign: 'top',
-                formDefaults: {
-                    xtype:'textfield',
-                    anchor: '100%',
-                    labelSeparator: '',
-                    columnWidth: .333
-                },
-                items: [[{
-                    fieldLabel: this.app.i18n._('Home Directory'),
-                    name: 'accountHomeDirectory',
-                    columnWidth: .666
+                items: [{
+                    title: this.app.i18n._('Unix'),
+                    autoHeight: true,
+                    xtype: 'fieldset',
+                    checkboxToggle: false,
+                    layout: 'hfit',
+                    items: [{
+                        xtype: 'columnform',
+                        labelAlign: 'top',
+                        formDefaults: {
+                            xtype:'textfield',
+                            anchor: '100%',
+                            labelSeparator: '',
+                            columnWidth: .333
+                        },
+                        items: [[{
+                            fieldLabel: this.app.i18n._('Home Directory'),
+                            name: 'accountHomeDirectory',
+                            columnWidth: .666
+                        }, {
+                            fieldLabel: this.app.i18n._('Login Shell'),
+                            name: 'accountLoginShell'
+                        }]]
+                    }]
                 }, {
-                    fieldLabel: this.app.i18n._('Login Shell'),
-                    name: 'accountLoginShell'
-                }], [{
-                    fieldLabel: this.app.i18n._('Home Drive'),
-                    name: 'homeDrive',
-                    columnWidth: .666
-                }, {
-                    xtype: 'datetimefield',
-                    fieldLabel: this.app.i18n._('Logon Time'),
-                    name: 'logonTime',
-                    emptyText: this.app.i18n._('never logged in'),
-                    hideTrigger: true,
-                    readOnly: true
-                }], [{
-                    fieldLabel: this.app.i18n._('Home Path'),
-                    name: 'homePath',
-                    columnWidth: .666
-                }, {
-                    xtype: 'datetimefield',
-                    fieldLabel: this.app.i18n._('Logoff Time'),
-                    name: 'logoffTime',
-                    emptyText: this.app.i18n._('never logged off'),
-                    hideTrigger: true,
-                    readOnly: true
-                }], [{
-                    fieldLabel: this.app.i18n._('Profile Path'),
-                    name: 'profilePath',
-                    columnWidth: .666
-                }, {
-                    xtype: 'datetimefield',
-                    fieldLabel: this.app.i18n._('Password Last Set'),
-                    name: 'pwdLastSet',
-                    emptyText: this.app.i18n._('never'),
-                    hideTrigger: true,
-                    readOnly: true
-                }], [{
-                    fieldLabel: this.app.i18n._('Logon Script'),
-                    name: 'logonScript',
-                    columnWidth: .666
-                }], [new Ext.ux.form.ClearableDateField({ 
-                    fieldLabel: this.app.i18n._('Password Can Change'),
-                    name: 'pwdCanChange',
-                    emptyText: this.app.i18n._('not set')
-                }), new Ext.ux.form.ClearableDateField({ 
-                    fieldLabel: this.app.i18n._('Password Must Change'),
-                    name: 'pwdMustChange',
-                    emptyText: this.app.i18n._('not set')
-                }), new Ext.ux.form.ClearableDateField({ 
-                    fieldLabel: this.app.i18n._('Kick Off Time'),
-                    name: 'kickoffTime',
-                    emptyText: this.app.i18n._('not set')
-                })]]
+                    title: this.app.i18n._('Windows'),
+                    autoHeight: true,
+                    xtype: 'fieldset',
+                    checkboxToggle: false,
+                    layout: 'hfit',
+                    items: [{
+                        xtype: 'columnform',
+                        labelAlign: 'top',
+                        formDefaults: {
+                            xtype:'textfield',
+                            anchor: '100%',
+                            labelSeparator: '',
+                            columnWidth: .333
+                        },
+                        items: [[{
+                            fieldLabel: this.app.i18n._('Home Drive'),
+                            name: 'homeDrive',
+                            columnWidth: .666
+                        }, {
+                            xtype: 'datetimefield',
+                            fieldLabel: this.app.i18n._('Logon Time'),
+                            name: 'logonTime',
+                            emptyText: this.app.i18n._('never logged in'),
+                            hideTrigger: true,
+                            readOnly: true
+                        }], [{
+                            fieldLabel: this.app.i18n._('Home Path'),
+                            name: 'homePath',
+                            columnWidth: .666
+                        }, {
+                            xtype: 'datetimefield',
+                            fieldLabel: this.app.i18n._('Logoff Time'),
+                            name: 'logoffTime',
+                            emptyText: this.app.i18n._('never logged off'),
+                            hideTrigger: true,
+                            readOnly: true
+                        }], [{
+                            fieldLabel: this.app.i18n._('Profile Path'),
+                            name: 'profilePath',
+                            columnWidth: .666
+                        }, {
+                            xtype: 'datetimefield',
+                            fieldLabel: this.app.i18n._('Password Last Set'),
+                            name: 'pwdLastSet',
+                            emptyText: this.app.i18n._('never'),
+                            hideTrigger: true,
+                            readOnly: true
+                        }], [{
+                            fieldLabel: this.app.i18n._('Logon Script'),
+                            name: 'logonScript',
+                            columnWidth: .666
+                        }], [new Ext.ux.form.ClearableDateField({ 
+                            fieldLabel: this.app.i18n._('Password Can Change'),
+                            name: 'pwdCanChange',
+                            emptyText: this.app.i18n._('not set')
+                        }), new Ext.ux.form.ClearableDateField({ 
+                            fieldLabel: this.app.i18n._('Password Must Change'),
+                            name: 'pwdMustChange',
+                            emptyText: this.app.i18n._('not set')
+                        }), new Ext.ux.form.ClearableDateField({ 
+                            fieldLabel: this.app.i18n._('Kick Off Time'),
+                            name: 'kickoffTime',
+                            emptyText: this.app.i18n._('not set')
+                        })]]
+                    }]
+                }]
             }, {
                 title: this.app.i18n._('IMAP'),
                 disabled: ! Tine.Admin.registry.get('manageImapEmailUser'),
