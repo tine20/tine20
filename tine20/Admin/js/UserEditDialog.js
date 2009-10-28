@@ -192,7 +192,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ]
                     ] 
                 }, {
-                    title: this.app.i18n._('infos'),
+                    title: this.app.i18n._('Information'),
                     autoHeight: true,
                     xtype: 'fieldset',
                     checkboxToggle: false,
@@ -207,13 +207,14 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	                        columnWidth: .333,
                     		style: {
 	                            border: 'silver 1px solid',
-	                            padding: '3px'
+	                            padding: '3px',
+                                height: '12px'
 	                        }
 	                    },
 	                    items: [[{
 		                        fieldLabel: this.app.i18n._('Last login at'),
 		                        name: 'accountLastLogin',
-		                        emptyText: this.ldapBackend ? this.app.i18n._("don't know") : this.app.i18n._('never logged in')
+		                        emptyText: this.ldapBackend ? this.app.i18n._("don't know") : this.app.i18n._('never logged in'),
 		                    }, {
 		                        fieldLabel: this.app.i18n._('Last login from'),
 		                        name: 'accountLastLoginfrom',
