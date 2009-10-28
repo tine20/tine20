@@ -1072,14 +1072,21 @@ class Setup_Controller
                 
                 try {
                     $this->_backend->dropTable($table);
-                    if($_application != 'Tinebase') {
+                    if ($_application != 'Tinebase') {
                         Tinebase_Application::getInstance()->removeApplicationTable($_application, $table);
                     }
                     unset($applicationTables[$key]);
                 } catch(Zend_Db_Statement_Exception $e) {
                     // we need to catch exceptions here, as we don't want to break here, as a table
                     // might still have some foreign keys
-                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . "could not drop table $table - " . $e->getMessage());
+                    $message = $e->getMessage();
+                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " Could not drop table $table - " . $message);
+                    
+                    // remove app table if table not found in db
+                    if (preg_match('/SQLSTATE\[42S02\]: Base table or view not found/', $message) && $_application != 'Tinebase') {
+                        Tinebase_Application::getInstance()->removeApplicationTable($_application, $table);
+                        unset($applicationTables[$key]);
+                    }
                 }
                 
             }
