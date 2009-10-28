@@ -367,10 +367,16 @@ Tine.Tinebase.tineInit = {
             // decode JSONRPC response
             var rpcData = response ? Ext.util.JSON.decode(response.responseText) : null;
             
-            // server did not responde anything
+            // server did not respond anything
             if (! rpcData) {
-                alert(_('The server did not respond to your request. Please check your network or contact your administrator.'));
-                return false;
+                //alert(_('The server did not respond to your request. Please check your network or contact your administrator.'));
+                Ext.MessageBox.show({
+                    title: _('No response'), 
+                    msg: _('We did not receive a response from the server. Your network could be down or a timeout occurred.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.ERROR
+                });
+                return true;
             }
             
             // error data
