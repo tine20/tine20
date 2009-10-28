@@ -179,7 +179,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $cacheController = Felamimail_Controller_Cache::getInstance();
         
         // update message cache of active folder and reload store (without loadmask)
-        $folder = $cacheController->update($folderId);
+        $folder = $cacheController->updateMessages($folderId);
         
         // return folder data
         $result = $folder->toArray();

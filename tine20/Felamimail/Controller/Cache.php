@@ -103,12 +103,12 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
      * @param boolean $_recursive try it again if something goes wrong
      * @return Felamimail_Model_Folder
      * 
-     * @todo write tests for cache handling
-     * @todo check if more than $_initialNumber new messages arrived even if cache 
-     *       is already complete (-> do initial import again?)
-     * @todo    rename: updateMessages
+     * @todo    write tests for cache handling
+     * @todo    check if more than $_initialNumber new messages arrived even if cache 
+     *          is already complete (-> do initial import again?)
+     * @todo    split this into smaller parts
      */
-    public function update($_folder, $_recursive = TRUE)
+    public function updateMessages($_folder, $_recursive = TRUE)
     {
         $result = 0;
         
@@ -223,7 +223,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             // update folder and cache messages again
             if ($_recursive) {
                 $folder = $this->clear($folder);
-                return $this->update($folder, FALSE);
+                return $this->updateMessages($folder, FALSE);
             } /* else {
                 return $folder;
             } */
@@ -245,7 +245,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             // update folder and cache messages again (try it only once)
             if ($_recursive) {
                 $folder = $this->clear($folder);
-                return $this->update($folder, FALSE);
+                return $this->updateMessages($folder, FALSE);
             } /* else {
                 return $folder;
             } */
