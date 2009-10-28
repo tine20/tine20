@@ -20,6 +20,20 @@
 class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 {
     /**
+     * contact type: contact
+     * 
+     * @var string
+     */
+    const CONTACTTYPE_CONTACT = 'contact';
+    
+    /**
+     * contact type: account
+     * 
+     * @var string
+     */
+    const CONTACTTYPE_ACCOUNT = 'account';
+    
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
@@ -136,7 +150,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
         'lon'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'lat'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'type'                  => array('presence' => 'required', 'InArray' => array('contact', 'account'))
+        'type'                  => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true, 
+            'InArray' => array(self::CONTACTTYPE_ACCOUNT, self::CONTACTTYPE_CONTACT)
+        )
     );
     
     /**
