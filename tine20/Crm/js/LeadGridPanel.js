@@ -95,7 +95,8 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             filterModels: [
                 {label: this.app.i18n._('Lead'),        field: 'query',    operators: ['contains']},
                 {label: this.app.i18n._('Lead name'),   field: 'lead_name' },
-                new Tine.Crm.LeadState.Filter({}),
+                {label: this.app.i18n._('Leadstate'),   field: 'leadstate_id', valueType: 'combo',
+                    displayField: 'leadstate', valueField: 'id', store: Tine.Crm.LeadState.getStore()},
                 {label: this.app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
                 {label: this.app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
                 {filtertype: 'tinebase.tag', app: this.app},
