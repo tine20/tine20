@@ -27,11 +27,11 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     const CONTACTTYPE_CONTACT = 'contact';
     
     /**
-     * contact type: account
+     * contact type: user
      * 
      * @var string
      */
-    const CONTACTTYPE_ACCOUNT = 'account';
+    const CONTACTTYPE_USER = 'user';
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -152,7 +152,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'lat'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'                  => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
-            'InArray' => array(self::CONTACTTYPE_ACCOUNT, self::CONTACTTYPE_CONTACT)
+            'InArray' => array(self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT)
         )
     );
     
