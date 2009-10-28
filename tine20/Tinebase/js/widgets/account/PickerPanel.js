@@ -91,28 +91,48 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
             if (this.requestParams && this.requestParams.filter == searchString && this.requestParams.accountType == accountType) {
                 return;
             }
-            this.requestParams = { filter: searchString, accountType: accountType, dir: 'asc', start: 0, limit: 50 };
+            this.requestParams = { 
+        		paging: {
+            		dir: 'asc', 
+            		start: 0, 
+            		limit: 50 
+        		}
+            };
             
             Ext.getCmp('Tinebase_Accounts_Grid').getStore().removeAll();
-            if (this.requestParams.filter.length < 1) {
-                return;
-            }
             
             switch (accountType){
                 case 'user':
-                    this.requestParams.method = 'Tinebase.getUsers';
-                    this.requestParams.sort   = 'accountDisplayName';
+                    this.requestParams.method = 'Addressbook.searchContacts';
+                    this.requestParams.paging.sort   = 'n_fileas';
+                    this.requestParams.filter = 
+                    	[{
+        		        	 field: 'query',
+        		        	 operator: 'contains',
+        		        	 value: searchString
+    		        	 }, {
+        		        	 field: 'type',
+        		        	 operator: 'equals',
+        		        	 value: 'user'
+    		        	 }, {
+        		        	 field: 'user_status',
+        		        	 operator: 'equals',
+        		        	 value: 'enabled'
+    		        	 }];
+                    
+                    
                     Ext.Ajax.request({
                         params: this.requestParams,
                         success: function(response, options){
                             var data = Ext.util.JSON.decode(response.responseText);
+                            
                             var toLoad = [];
                             for (var i=0; i<data.results.length; i++){
                                 var item = (data.results[i]);
                                 toLoad.push( new Tine.Tinebase.Model.Account({
-                                    id: item.accountId,
+                                    id: item.account_id,
                                     type: 'user',
-                                    name: item.accountDisplayName,
+                                    name: item.n_fileas,
                                     data: item
                                 }));
                             }
@@ -130,6 +150,7 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
                 case 'group':
                     this.requestParams.method = 'Tinebase.getGroups';
                     this.requestParams.sort   = 'name';
+                    this.requestParams.filter = searchString;
                     Ext.Ajax.request({
                         params: this.requestParams,
                         success: function(response, options){
