@@ -85,6 +85,40 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Addressbook')),
+        'type'                 => array('custom' => true),
+        'user_status'          => array('custom' => true)
     );
     
+    /**
+     * appends custom filters to a given select object
+     *
+     * @param  Zend_Db_Select                       $_select
+     * @param  Felamimail_Backend_Cache_Sql_Message $_backend
+     * @return void
+     *
+     * @todo use group of Tinebase_Model_Filter_Text with OR?
+     */
+    public function appendFilterSql($_select, $_backend)
+    {
+        $db = $_backend->getAdapter();
+        
+        foreach ($this->_customData as $customData) {
+            switch($customData['field']) {
+                case 'type':
+                    $_select->where(
+                        $db->quoteInto("IF(ISNULL(account_id),'contact', 'user') = ?", $customData['value'])
+                    );
+                    break;
+                case 'user_status':
+                    $statues = explode(' ', $customData['value']);
+                    $_select->where(
+                        $db->quoteInto("IF(`status` = 'enabled' AND NOW() > `expires_at`, 'expired', status) IN (?)", $statues)
+                    );
+                    break;
+            }
+        }
+        $_select->where(
+            $db->quoteInto("ISNULL(account_id) OR (NOT ISNULL(account_id) AND visibility='displayed')")
+        );
+    }
 }
