@@ -47,14 +47,13 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function getByUserId($_userId)
     {
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . $this->_tableName)
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $_userId));
-        $row = $this->_db->fetchRow($select);
-        if (! $row) {
+        try {
+            $contact = $this->getByProperty($_userId, 'account_id');
+        } catch (Tinebase_Exception_NotFound $e) {
             throw new Addressbook_Exception_NotFound('Contact with user id ' . $_userId . ' not found.');
         }
-        $result = new Addressbook_Model_Contact($row);
-        return $result;
+        
+        return $contact;
     }
     
     /**
@@ -122,7 +121,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $this->_db->delete($this->_tablePrefix . 'addressbook_image', $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $_contactId, Zend_Db::INT_TYPE));
         if (! empty($imageData)) {
             $this->_db->insert($this->_tablePrefix . 'addressbook_image', array(
-                'contact_id'    =>$_contactId,
+                'contact_id'    => $_contactId,
                 'image'         => base64_encode($imageData)
             ));
         }
@@ -141,13 +140,38 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         $select = parent::_getSelect($_cols, $_getDeleted);
         
-        if (! array_key_exists('count', (array)$_cols)) {
+        if (!array_key_exists('count', (array)$_cols)) {
             $select->joinLeft(
                 /* table  */ array('image' => $this->_tablePrefix . 'addressbook_image'), 
                 /* on     */ $this->_db->quoteIdentifier('image.contact_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
-                /* select */ array('jpegphoto' => 'IF(ISNULL('. $this->_db->quoteIdentifier('image.image') .'), 0, 1)'));
+                /* select */ array('jpegphoto' => 'IF(ISNULL('. $this->_db->quoteIdentifier('image.image') .'), 0, 1)')
+            );
         }
+        
+        // return contact type
+        $select->joinLeft(
+            /* table  */ array('account' => $this->_tablePrefix . 'accounts'), 
+            /* on     */ $this->_db->quoteIdentifier('account.id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.account_id'),
+            /* select */ array('type' => "IF(ISNULL(account_id),'contact', 'user')")
+        );
         
         return $select;
     }
+    
+    /**
+     * converts record into raw data for adapter
+     *
+     * @param  Tinebase_Record_Abstract $_record
+     * @return array
+     */
+    protected function _recordToRawData($_record)
+    {
+        $result = parent::_recordToRawData($_record);
+
+        // some columns got joined from another table and can't be written
+        unset($result['type']);
+
+        return $result;
+    }
+    
 }
