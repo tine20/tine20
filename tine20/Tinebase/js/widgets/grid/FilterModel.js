@@ -43,12 +43,12 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
     field: '',
     
     /**
-     * @cfg {string} type of value
+     * @cfg {String} type of value
      */
     valueType: 'string',
     
     /**
-     * @cfg {string} default value
+     * @cfg {String} default value
      */
     defaultValue: null,
     
@@ -63,9 +63,19 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
     defaultOperator: null,
 
     /**
-     * @cfg {Ext.data.Store|Array}
+     * @cfg {Ext.data.Store|Array} (used by combo valueType)
      */
     store: null,
+    
+    /**
+     * @cfg {String} displayField (used by combo valueType)
+     */
+    displayField: null,
+    
+    /**
+     * @cfg {String} valueField (used by combo valueType)
+     */
+    valueField: null,
     
     /**
      * @private
@@ -295,7 +305,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 });
                 break;
             case 'combo':
-                value = new Ext.form.ComboBox({
+                var comboConfig = {
                     filter: filter,
                     width: fieldWidth,
                     id: 'tw-ftb-frow-valuefield-' + filter.id,
@@ -304,8 +314,22 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                     mode: 'local',
                     forceSelection: true,
                     triggerAction: 'all',
-                    store: this.store
-                });
+                    store: this.store,
+                    listeners: {
+                        'specialkey': function(field, e) {
+                             if(e.getKey() == e.ENTER){
+                                 this.onFiltertrigger();
+                             }
+                        },
+                        'select': this.onFiltertrigger,
+                        scope: this
+                    }
+                };
+                if (this.displayField !== null && this.valueField !== null) {
+                    comboConfig.displayField = this.displayField;
+                    comboConfig.valueField = this.valueField;
+                }
+                value = new Ext.form.ComboBox(comboConfig);
                 break;
             case 'string':
             case 'number':
