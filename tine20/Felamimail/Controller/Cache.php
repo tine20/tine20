@@ -253,21 +253,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         
         /***************** update folder ************************************/
         
-        // save nextuid/validity in folder
-        if ($folder->uidnext != $backendFolderValues['uidnext']) {
-            $folder->uidnext = $backendFolderValues['uidnext'];
-            $folder->timestamp = Zend_Date::now();
-        }
-        
-        // get unread count
-        $seenCount = $this->_messageCacheBackend->seenCountByFolderId($folderId);
-        $folder->unreadcount = $messageCount - $seenCount;
-        if ($folder->unreadcount < 0 || $folderCount < $messageCount) {
-            $folder->unreadcount = 0;
-        }
-        $folder->totalcount = $messageCount;
-        
-        $folder = $this->_folderBackend->update($folder);        
+        $folder = $this->_updateFolderValues($folder, $backendFolderValues, $messageCount, $folderCount);
         
         return $folder;
     }
@@ -701,6 +687,49 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             
             $result = $_messageCount;
         }
+        
+        return $result;
+    }
+    
+    /**
+     * update folder values and save it in db (cache)
+     * 
+     * @param Felamimail_Model_Folder $_folder
+     * @param array $_backendFolderValues
+     * @param integer $_messageCount
+     * @param integer $_folderCount
+     * @return Felamimail_Model_Folder
+     * 
+     * @todo    make 'recent' persistent?
+     */
+    protected function _updateFolderValues(Felamimail_Model_Folder $_folder, array $_backendFolderValues, $_messageCount, $_folderCount)
+    {
+        // save nextuid/validity in folder
+        if ($_folder->uidnext != $_backendFolderValues['uidnext']) {
+            $_folder->uidnext = $_backendFolderValues['uidnext'];
+            $_folder->timestamp = Zend_Date::now();
+        }
+        
+        // get unread count
+        $oldUnreadCount = $_folder->unreadcount;
+        $seenCount = $this->_messageCacheBackend->seenCountByFolderId($_folder->getId());
+        $_folder->unreadcount = $_messageCount - $seenCount;
+        if ($_folder->unreadcount < 0 || $_folderCount < $_messageCount) {
+            $_folder->unreadcount = 0;
+        }
+        
+        $_folder->totalcount = $_messageCount;
+        
+        $result = $this->_folderBackend->update($_folder);
+        
+        // add recent after the update
+        if (isset($_backendFolderValues['recent'])) {
+            $result->recent = $_backendFolderValues['recent'];
+        } else {
+            $result->recent = ($oldUnreadCount < $_folder->unreadcount) ? 1 : 0;
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result->toArray(), TRUE));
         
         return $result;
     }

@@ -60,4 +60,26 @@ class Felamimail_Setup_Update_Release2 extends Setup_Update_Abstract
         $this->setApplicationVersion('Felamimail', '2.2');
         $this->setTableVersion('felamimail_account', '8');
     }
+    
+    /**
+     * - add recent field to folders?
+     * - add options field to accounts?
+     */    
+    /*
+    public function update_2()
+    {
+        $field = '<field>
+                    <name>display_format</name>
+                    <type>enum</type>
+                    <default>html</default>
+                    <value>html</value>
+                    <value>plain</value>
+                </field>';
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('felamimail_account', $declaration);
+        
+        $this->setApplicationVersion('Felamimail', '2.3');
+        $this->setTableVersion('felamimail_account', 6);
+    }
+    */
 }

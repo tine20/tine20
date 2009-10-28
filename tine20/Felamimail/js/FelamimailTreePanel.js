@@ -615,8 +615,9 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     if (node.attributes.unreadcount != folderData.unreadcount || node.attributes.totalcount != folderData.totalcount) {
 
                         if (delayedTask) {
-                            if (node.attributes.unreadcount < folderData.unreadcount) {
-                                // show toast window on new mail
+                            //if (node.attributes.unreadcount < folderData.unreadcount) {
+                            if (folderData.recent) {
+                                // show toast window on new mails
                                 Ext.ux.Notification.show(
                                     this.app.i18n._('New mails'), 
                                     String.format(this.app.i18n._('You got {0} new mail(s) in Folder '), 
