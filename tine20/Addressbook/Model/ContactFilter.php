@@ -117,8 +117,6 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
                     break;
             }
         }
-        $_select->where(
-            $db->quoteInto("ISNULL(account_id) OR (NOT ISNULL(account_id) AND visibility='displayed')")
-        );
+        $_select->where("ISNULL(account_id) OR (NOT ISNULL(account_id) AND visibility='displayed')");
     }
 }
