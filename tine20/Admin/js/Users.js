@@ -51,6 +51,10 @@ Tine.Admin.Users.Main = function() {
               gridValue = "<img src='images/oxygen/16x16/actions/dialog-cancel.png' width='12' height='12'/>";
               break;
               
+            case 'expired':
+              gridValue = "<img src='images/oxygen/16x16/status/user-away.png' width='12' height='12'/>";
+              break;
+
             default:
               gridValue = _value;
               break;
