@@ -72,7 +72,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testSearchWithCache()
     {
         // get inbox folder id
-        Felamimail_Controller_Folder::getInstance()->getSubFolders();
+        Felamimail_Controller_Cache::getInstance()->updateFolders();
         $folderBackend = new Felamimail_Backend_Folder();
         $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
         
@@ -84,6 +84,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->_appendMessage('text_plain.eml', 'INBOX');
         
         // search messages in inbox
+        Felamimail_Controller_Cache::getInstance()->updateMessages($folder);
         $result = $this->_controller->search($this->_getFilter($folder->getId()));
         
         //print_r($result->toArray());
@@ -175,7 +176,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             'attachments not found'
         );
         $this->assertEquals('multipart/mixed; boundary="0F1p//8PRICkK4MWrobbat28989323553773"', $completeMessage->headers['content-type']);
-        $this->assertEquals('add-removals.1239580800.log', $attachments[0]['filename']);
+        $this->assertEquals('add-removals.1239580800.log', $attachments[1]['filename']);
 
         // delete message
         $this->_controller->delete($message->getId());
@@ -229,18 +230,19 @@ Christian Hoffmann
     protected function _messageTestHelper($_filename)
     {
         // get inbox folder id
-        Felamimail_Controller_Folder::getInstance()->getSubFolders();
+        Felamimail_Controller_Cache::getInstance()->updateFolders();
         $folderBackend = new Felamimail_Backend_Folder();
         $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
                 
         $this->_appendMessage($_filename, 'INBOX');
         
         // get inbox folder id
-        Felamimail_Controller_Folder::getInstance()->getSubFolders();
+        Felamimail_Controller_Cache::getInstance()->updateFolders();
         $folderBackend = new Felamimail_Backend_Folder();
         $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
         
         // search messages in inbox
+        Felamimail_Controller_Cache::getInstance()->updateMessages($folder);
         $result = $this->_controller->search($this->_getFilter($folder->getId()));
         
         //print_r($result->toArray());
