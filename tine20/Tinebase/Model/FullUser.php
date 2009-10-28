@@ -37,6 +37,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         'accountFirstName'      => 'StringTrim',
         'accountFullName'       => 'StringTrim',
         'accountEmailAddress'   => array('StringTrim', 'StringToLower'),
+        'openid'                => array(array('Empty', null))
     ); // _/-\_
     
     /**
@@ -72,7 +73,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'accountLastLogin'      => array('allowEmpty' => true),
             'accountLastLoginfrom'  => array('allowEmpty' => true),
             'accountLastPasswordChange' => array('allowEmpty' => true),
-            'accountStatus'         => array(new Zend_Validate_InArray(array('enabled', 'disabled')), Zend_Filter_Input::DEFAULT_VALUE => 'enabled'),
+            'accountStatus'         => array(new Zend_Validate_InArray(array('enabled', 'disabled', 'expired')), Zend_Filter_Input::DEFAULT_VALUE => 'enabled'),
             'accountExpires'        => array('allowEmpty' => true),
             'accountPrimaryGroup'   => array('presence' => 'required'),
             'accountDisplayName'    => array('presence' => 'required'),
@@ -83,8 +84,11 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'accountHomeDirectory'  => array('allowEmpty' => true),
             'accountLoginShell'     => array('allowEmpty' => true),
             'sambaSAM'              => array('allowEmpty' => true),
+            'openid'                => array('allowEmpty' => true),
             'contact_id'            => array('allowEmpty' => true),
             'emailUser'             => array('allowEmpty' => true),
+            'visibility'            => array(new Zend_Validate_InArray(array('hidden', 'displayed')), Zend_Filter_Input::DEFAULT_VALUE => 'displayed'),
+            
         );
         
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
