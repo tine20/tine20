@@ -118,7 +118,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $folderId
      * @return array
      * 
-     * @todo replace this with updateFolderCache
+     * @todo replace this with updateFolderCache?
      */
     public function updateFolderStatus($accountId, $folderId)
     {
@@ -131,14 +131,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /**
      * update folder cache
-     * - use output buffer mechanism to update incomplete cache
      *
      * @param string $accountId
      * @param string $folderNames of parent folder(s)
      * @return array
      * 
-     * @todo    call this every x minutes from gui
-     * @todo    make it update folders from imap as well?
+     * @todo update visible folders and return new folder data -> move this to another function?
      */
     public function updateFolderCache($accountId, $folderNames)
     {
@@ -175,8 +173,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param string $folderId id of active folder
      * @return array
-     * 
-     * @todo update visible folders and return new folder data -> move this to another function?
      */
     public function updateMessageCache($folderId)
     {
@@ -192,10 +188,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 || $folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING
         ) {
             $this->_backgroundCacheImport($result);
-                
-        } else {
-            return $result;
+            // dies
         }
+        
+        return $result;
     }
     
     /**
@@ -229,6 +225,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param string $filter
      * @return array
+     * 
+     * @todo    do this in background process?
      */
     public function deleteMessagesByFilter($filter)
     {
