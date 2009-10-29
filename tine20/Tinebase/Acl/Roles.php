@@ -464,8 +464,8 @@ class Tinebase_Acl_Roles
         $this->_roleMembersTable->delete($where);
               
         $validTypes = array( Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
-        foreach ( $_roleMembers as $member ) {
-            if ( !in_array($member['account_type'], $validTypes) ) {
+        foreach ($_roleMembers as $member) {
+            if (!in_array($member['type'], $validTypes)) {
                 throw new Tinebase_Exception_InvalidArgument('account_type must be one of ' . 
                     implode(', ', $validTypes) . ' (values given: ' . 
                     print_r($member, true) . ')');
@@ -473,8 +473,8 @@ class Tinebase_Acl_Roles
             
             $data = array(
                 'role_id'       => $roleId,
-                'account_type'  => $member['account_type'],
-                'account_id'    => $member['account_id'],
+                'account_type'  => $member['type'],
+                'account_id'    => $member['id'],
             );
             $this->_roleMembersTable->insert($data); 
         }
@@ -588,8 +588,8 @@ class Tinebase_Acl_Roles
         $adminRole = $this->createRole($adminRole);
         $this->setRoleMembers($adminRole->getId(), array(
             array(
-                'account_id'    => $adminGroup->getId(),
-                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 
+                'id'    => $adminGroup->getId(),
+                'type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 
             )
         ));
         
@@ -600,8 +600,8 @@ class Tinebase_Acl_Roles
         $userRole = $this->createRole($userRole);
         $this->setRoleMembers($userRole->getId(), array(
             array(
-                'account_id'    => $userGroup->getId(),
-                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 
+                'id'    => $userGroup->getId(),
+                'type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 
             )
         ));
     }

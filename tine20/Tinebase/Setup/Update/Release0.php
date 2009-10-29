@@ -374,8 +374,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $adminRole = Tinebase_Acl_Roles::getInstance()->createRole($adminRole);
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($adminRole->getId(), array(
             array(
-                'account_id'    => $adminGroup->getId(),
-                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 
+                'id'    => $adminGroup->getId(),
+                'type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 
             )
         ));
         
@@ -386,8 +386,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $userRole = Tinebase_Acl_Roles::getInstance()->createRole($userRole);
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($userRole->getId(), array(
             array(
-                'account_id'    => $userGroup->getId(),
-                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 
+                'id'    => $userGroup->getId(),
+                'type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 
             )
         ));
         

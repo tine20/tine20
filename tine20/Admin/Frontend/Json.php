@@ -377,16 +377,19 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param  array  &$_items array of arrays which contain a type and id property
      * @param  bool   $_hasAccountPrefix
+     * @param  bool   $_removePrefix
      * @return array  items with appended name 
-     * @throws UnexpectedValueException 
+     * @throws UnexpectedValueException
+     * 
+     * @todo    remove all this prefix stuff? why did we add this?
+     * @todo    use a resolveMultiple function here
      */
-    public static function resolveAccountName(array $_items, $_hasAccountPrefix=false)
+    public static function resolveAccountName(array $_items, $_hasAccountPrefix = FALSE, $_removePrefix = FALSE)
     {
         $prefix = $_hasAccountPrefix ? 'account_' : '';
         
         $return = array();
         foreach ($_items as $num => $item) {
-            
             switch ($item[$prefix . 'type']) {
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                     $item[$prefix . 'name'] = Tinebase_User::getInstance()->getUserById($item[$prefix . 'id'])->accountDisplayName;
@@ -401,7 +404,15 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     throw new UnexpectedValueException('Unsupported accountType: ' . $item[$prefix . 'type']);
                     break;
             }
-            $return[$num] = $item;
+            if ($_removePrefix) {
+                $return[$num] = array(
+                    'id'    => $item[$prefix . 'id'],
+                    'name'  => $item[$prefix . 'name'], 
+                    'type'  => $item[$prefix . 'type'],
+                );
+            } else {
+                $return[$num] = $item;
+            }
         }
         return $return;
     }
@@ -815,7 +826,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (!empty($roleId)) {
             $members = Admin_Controller_Role::getInstance()->getRoleMembers($roleId);
     
-            $result['results'] = self::resolveAccountName($members, true);
+            $result['results'] = self::resolveAccountName($members, TRUE, TRUE);
             $result['totalcount'] = count($result['results']);
         }
         return $result;

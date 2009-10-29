@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        refactor this (don't use Ext.getCmp, etc.)
+ * TODO         refactor this (don't use Ext.getCmp, etc.)
  */
  
 Ext.ns('Tine.Admin.Roles');
@@ -36,28 +36,6 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     labelAlign: 'top',
     
     /**
-     * returns index of record in the store
-     * @private
-     */
-    getRecordIndex: function(account, dataStore) {
-        var id = false;
-        dataStore.each(function(item){
-            //console.log (item);
-            if ((item.data.type == 'user' || item.data.type == 'account') &&
-                    account.data.type == 'user' &&
-                    item.data.id == account.data.id) {
-                id = item.id;
-            } else if (item.data.account_type == 'group' &&
-                    account.data.type == 'group' &&
-                    item.data.id == account.data.id) {
-                id = item.id;
-            }
-        });
-        
-        return id ? dataStore.indexOfId(id) : false;
-    },  
-
-    /**
      * check if right is set for application and get the record id
      * @private
      */
@@ -69,7 +47,6 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.rightsDataStore.each(function(item){
             if (item.data.application_id == applicationId && item.data.right == right ) {
                 result = item.id;
-                //console.log ("hit");
                 return;
             }
         });
@@ -77,42 +54,6 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         return result;
     },  
     
-    /**
-     * var handlers
-     */
-     handlers: {
-        removeAccount: function(_button, _event) { 
-            var roleGrid = Ext.getCmp('roleMembersGrid');
-            var selectedRows = roleGrid.getSelectionModel().getSelections();
-            
-            var roleMembersStore = this.membersDataStore;
-            for (var i = 0; i < selectedRows.length; ++i) {
-                roleMembersStore.remove(selectedRows[i]);
-            }
-                
-        },
-        
-        addAccount: function(account) {
-            var roleGrid = Ext.getCmp('roleMembersGrid');
-            
-            var dataStore = roleGrid.getStore();
-            var selectionModel = roleGrid.getSelectionModel();
-            
-            // check if exists
-            var recordIndex = Tine.Admin.Roles.EditDialog.getRecordIndex(account, dataStore);
-            
-            if (recordIndex === false) {
-                var record = new Ext.data.Record({
-                    id: account.data.id,
-                    type: account.data.type,
-                    name: account.data.name
-                }, account.data.id);
-                dataStore.addSorted(record);
-            }
-            selectionModel.selectRow(dataStore.indexOfId(account.data.id));            
-        }
-     },
-     
      handlerApplyChanges: function(_button, _event, _closeWindow) {
         var form = this.getForm();
         
@@ -123,8 +64,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             Ext.MessageBox.wait(this.translation.gettext('Please wait'), this.translation.gettext('Updating Memberships'));
             
             var roleMembers = [];
-            var membersStore = Ext.StoreMgr.lookup('RoleMembersStore');
-            membersStore.each(function(_record){
+            this.membersStore.each(function(_record){
                 roleMembers.push(_record.data);
             });
 
@@ -204,7 +144,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }
         this.role = new Tine.Tinebase.Model.Role(_roleData, _roleData.id ? _roleData.id : 0);
         
-        this.membersDataStore.loadData(this.role.get('roleMembers'));
+        this.membersStore.loadData(this.role.get('roleMembers'));
         this.rightsDataStore.loadData(this.role.get('roleRights'));
         this.allRights = this.role.get('allRights');
         this.createRightsTreeNodes();
@@ -242,13 +182,15 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             toRemove.push(node);
         });
         
+        var expandNode = (this.allRights.length > 5) ? false : true;
+        
         // add nodes to tree        
         for(var i=0; i<this.allRights.length; i++) {
             // don't duplicate tree nodes on 'apply changes'
             toRemove[i] ? toRemove[i].remove() : null;
             var node = new Ext.tree.TreeNode(this.allRights[i]);
             node.attributes.application_id = this.allRights[i].application_id;
-            node.expanded = true;
+            node.expanded = expandNode;
             treeRoot.appendChild(node);
             
             // append children          
@@ -305,32 +247,15 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      */
     getFormContents: function() {
         
-        /******* account picker + members grid panel ********/
- 
-        var membersPanel = new Tine.widgets.account.ConfigGrid({
-            //height: 300,
-            accountPickerType: 'both',
-            accountPickerTypeDefault: 'group', 
-            accountListTitle: this.translation.gettext('Role members'),
-            configStore: this.membersDataStore,
-            hasAccountPrefix: true,
-            configColumns: []
-        });        
-
-        /******* tab panels ********/
         this.initRightsTree();
         
-        var tabPanelMembers = {
-            title:this.translation.gettext('Members'),
-            //layout:'column',
-            layout:'form',
-            layoutOnTabChange:true,            
-            deferredRender:false,
-            border:false,
-            items:[
-                membersPanel
-            ]
-        };
+        this.accountPickerGridPanel = new Tine.widgets.account.PickerGridPanel({
+            title: this.translation.gettext('Members'),
+            store: this.membersStore,
+            anchor: '100% 100%',
+            recordClass: Tine.Tinebase.Model.Account,
+            selectType: 'both'
+        });
         
         var tabPanelRights = {
             title:this.translation.gettext('Rights'),
@@ -386,7 +311,8 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     id: 'editMainTabPanel',
                     layoutOnTabChange:true,  
                     items:[
-                        tabPanelMembers, 
+                        //tabPanelMembers,
+                        this.accountPickerGridPanel,
                         tabPanelRights
                     ]
                 })
@@ -415,15 +341,14 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         });
         
         // init role members store
-        this.membersDataStore = new Ext.data.JsonStore({
+        this.membersStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
-            //id: 'id',
-            //fields: Tine.Tinebase.Model.Account
-            fields: [ 'account_name', 'account_id', 'account_type' ]
+            id: 'id',
+            fields: Tine.Tinebase.Model.Account
+            //fields: [ 'account_name', 'account_id', 'account_type' ]
         });
-        Ext.StoreMgr.add('RoleMembersStore', this.membersDataStore);        
-        // this.membersDataStore.setDefaultSort('account_name', 'asc');
+        //Ext.StoreMgr.add('RoleMembersStore', this.membersStore);        
         
         // init rights store
         this.rightsDataStore = new Ext.data.JsonStore({
@@ -461,7 +386,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 Tine.Admin.Roles.EditDialog.openWindow = function (config) {
     config.role = config.role ? config.role : new Tine.Tinebase.Model.Role({}, 0);
     var window = Tine.WindowFactory.getWindow({
-        width: 650,
+        width: 400,
         height: 600,
         name: Tine.Admin.Roles.EditDialog.prototype.windowNamePrefix + config.role.id,
         layout: Tine.Admin.Roles.EditDialog.prototype.windowLayout,
