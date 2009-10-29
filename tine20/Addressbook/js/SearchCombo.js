@@ -96,9 +96,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
         ];
         
         if (this.internalContactsOnly) {
-            filter.push({field: 'container_id', operator: 'specialNode', value: 'internal' });
-        } else {
-            filter.push({field: 'container_id', operator: 'specialNode', value: 'all' });
+            filter.push({field: 'type', operator: 'equals', value: 'user'});
         }
         
         if (this.additionalFilters !== null && this.additionalFilters.length > 0) {
