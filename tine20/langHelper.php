@@ -568,6 +568,7 @@ function getPluralForm($_languageName)
         case 'Faroese' :
         case 'German' :
         case 'Norwegian' :
+        case 'Norwegian Bokmål' :
         case 'Swedish' :
         // Finno-Ugric family
         case 'Estonian' :
