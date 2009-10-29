@@ -185,6 +185,14 @@ Tine.Tinebase.common = {
     },
     
     /**
+     * Returns account type icon
+     */
+    accountTypeRenderer: function(type) {
+        iconCls = (type) == 'user' ? 'renderer_accountUserIcon' : 'renderer_accountGroupIcon';
+        return '<div style="background-position: 0px" class="' + iconCls  + '">&#160;</div>'; 
+    },
+    
+    /**
      * return yes or no in the selected language for a boolean value
      * 
      * @param {string} value
