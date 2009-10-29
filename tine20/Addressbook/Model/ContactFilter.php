@@ -97,6 +97,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
      * @return void
      *
      * @todo use group of Tinebase_Model_Filter_Text with OR?
+     * @todo user_status: allow array as value and use 'in' operator
      */
     public function appendFilterSql($_select, $_backend)
     {
@@ -110,9 +111,9 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
                     );
                     break;
                 case 'user_status':
-                    $statues = explode(' ', $customData['value']);
+                    $status = explode(' ', $customData['value']);
                     $_select->where(
-                        $db->quoteInto("IF(`status` = 'enabled' AND NOW() > `expires_at`, 'expired', status) IN (?)", $statues)
+                        $db->quoteInto("IF(`status` = 'enabled' AND NOW() > `expires_at`, 'expired', status) IN (?)", $status)
                     );
                     break;
             }
