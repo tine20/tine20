@@ -6,7 +6,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        make sort by name work in config grid panel 
+ * TODO         use new Tine.widgets.account.PickerGridPanel
+ * TODO         make sort by name work in config grid panel 
  */
  
 Ext.namespace('Tine.widgets', 'Tine.widgets.account');

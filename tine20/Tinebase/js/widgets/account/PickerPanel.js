@@ -1,3 +1,17 @@
+/*
+ * Tine 2.0
+ * 
+ * @package     Tinebase
+ * @subpackage  widgets
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
+
+Ext.namespace('Tine.widgets.account');
+
 /**
  * Account picker panel
  * 
@@ -7,9 +21,10 @@
  * @extends Ext.TabPanel
  * 
  * <p> This widget supplies a account picker panel to be used in related widgets.</p>
+ * 
+ * TODO         replace this with new account picker / search combo (Tine.widgets.account.PickerGridPanel)
+ * @deprecated
  */
- 
-Ext.namespace('Tine.widgets', 'Tine.widgets.account');
 Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
     /**
      * @cfg {String} one of 'user', 'group', 'both'
