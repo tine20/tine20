@@ -21,6 +21,8 @@ Ext.namespace('Tine.Addressbook');
  * 
  * <p>Contact Search Combobox</p>
  * <p><pre>
+ * TODO         replace internalContactsOnly with usersOnly (and update needed filter)
+ * TODO         add switch to filter for expired/enabled/disabled user accounts
  * TODO         extend Tine.Tinebase.widgets.form.RecordPickerComboBox
  * </pre></p>
  * 
