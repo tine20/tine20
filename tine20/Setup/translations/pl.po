@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-09-13 13:54+0100\n"
+"PO-Revision-Date: 2009-10-16 05:37+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -54,9 +54,8 @@ msgid "Update application"
 msgstr "Aktualizuj aplikację"
 
 #: js/ApplicationGridPanel.js:109
-#, fuzzy
 msgid "Go to {0} login"
-msgstr "Przejdź do strony logowania"
+msgstr "Przejdź do logowania {0}"
 
 #: js/ApplicationGridPanel.js:172
 msgid "uninstall"
@@ -153,9 +152,8 @@ msgid "Default admin group name"
 msgstr "Domyślna nazwa grupy administratora"
 
 #: js/AuthenticationPanel.js:319
-#, fuzzy
 msgid "User can change password"
-msgstr "Czy zezwolić użytkownikowi na zmianę hasła?"
+msgstr "Użytkownik może zmienić hasło"
 
 #: js/AuthenticationPanel.js:358
 msgid "User DN"
@@ -287,19 +285,19 @@ msgstr "Czas życia (sekundy)"
 
 #: js/ConfigManagerPanel.js:144
 msgid "Temporary files"
-msgstr ""
+msgstr "Pliki tymczasowe"
 
 #: js/ConfigManagerPanel.js:149
 msgid "Temporary Files Path"
-msgstr ""
+msgstr "Ścieżka do plików tymczasowych"
 
 #: js/ConfigManagerPanel.js:152
 msgid "Session files"
-msgstr ""
+msgstr "Pliki sesji"
 
 #: js/ConfigManagerPanel.js:157
 msgid "Session Files Path"
-msgstr ""
+msgstr "Ścieżka do plików sesji"
 
 #: js/ConfigManagerPanel.js:180
 msgid "Download config file"
@@ -370,27 +368,24 @@ msgid "Plain"
 msgstr "Czysty tekst"
 
 #: js/EmailPanel.js:377
-#, fuzzy
 msgid "MySql Hostname"
-msgstr "Komputer"
+msgstr "Nazwa hosta dla MySQL"
 
 #: js/EmailPanel.js:380
-#, fuzzy
 msgid "MySql Database"
-msgstr "Baza danych"
+msgstr "Baza danych MySQL"
 
 #: js/EmailPanel.js:383
 msgid "MySql User"
-msgstr ""
+msgstr "Użytkownik MySQL"
 
 #: js/EmailPanel.js:386
-#, fuzzy
 msgid "MySql Password"
-msgstr "Hasło"
+msgstr "Hasło dla MySQL"
 
 #: js/EmailPanel.js:390
 msgid "MySql Port"
-msgstr ""
+msgstr "Port MySQL"
 
 #: js/EnvCheckGridPanel.js:92
 msgid "Performing Environment Checks..."
@@ -449,22 +444,21 @@ msgstr[0] "Aplikacje"
 msgstr[1] "aplikacje"
 msgstr[2] "aplikacji"
 
-#~ msgid "Invalid configuration"
-#~ msgstr "Nieprawidłowa konfiguracja"
+msgid "Invalid configuration"
+msgstr "Nieprawidłowa konfiguracja"
 
-#~ msgid ""
-#~ "You need to correct the red marked fields before config could be saved"
-#~ msgstr ""
-#~ "Przed zapisaniem konfiguracji, musisz poprawić pola zaznaczone na czerwono"
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr ""
+"Przed zapisaniem konfiguracji, musisz poprawić pola zaznaczone na czerwono"
 
-#~ msgid "Transfering Configuration..."
-#~ msgstr "Przesyłanie konfiguracji..."
+msgid "Transfering Configuration..."
+msgstr "Przesyłanie konfiguracji..."
 
-#~ msgid "Check config"
-#~ msgstr "Sprawdź konfigurację"
+msgid "Check config"
+msgstr "Sprawdź konfigurację"
 
-#~ msgid "Apply changes"
-#~ msgstr "Akceptuj zmiany"
+msgid "Apply changes"
+msgstr "Akceptuj zmiany"
 
-#~ msgid "Go to Tine 2.0 login"
-#~ msgstr "Przejdź do strony logowania"
+msgid "Go to Tine 2.0 login"
+msgstr "Przejdź do strony logowania"

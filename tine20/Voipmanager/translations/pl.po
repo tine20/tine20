@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-10-03 17:06+0100\n"
+"PO-Revision-Date: 2009-10-16 05:46+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -102,7 +102,6 @@ msgid "Callgroup"
 msgstr "Grupa rozmówców"
 
 #: js/Asterisk/SipPeerEditDialog.js:111
-#, fuzzy
 msgid "Pickup group"
 msgstr "Grupa odbiorców"
 
@@ -244,7 +243,6 @@ msgid "mask"
 msgstr "maskuj"
 
 #: js/Asterisk/SipPeerGridPanel.js:220
-#, fuzzy
 msgid "pickup group"
 msgstr "grupa odbiorców"
 
@@ -277,9 +275,8 @@ msgid "type"
 msgstr "typ"
 
 #: js/Asterisk/SipPeerGridPanel.js:274
-#, fuzzy
 msgid "defaultuser"
-msgstr "autoryzuj użytkownika"
+msgstr "domyślny użytkownik"
 
 #: js/Asterisk/SipPeerGridPanel.js:281
 msgid "disallow"
@@ -317,7 +314,6 @@ msgid "set var"
 msgstr "ustaw zmienną"
 
 #: js/Asterisk/SipPeerGridPanel.js:337
-#, fuzzy
 msgid "notify ringing"
 msgstr "powiadom o próbie połączenia"
 
@@ -370,7 +366,6 @@ msgstr "Oddzwanianie"
 
 #: js/Asterisk/VoicemailEditDialog.js:138
 #: js/Asterisk/VoicemailGridPanel.js:162
-#, fuzzy
 msgid "sayduration"
 msgstr "czas rozmowy"
 
@@ -387,6 +382,7 @@ msgstr "czas rozmowy m."
 msgid "attach"
 msgstr "załącznik"
 
+# I think, CID is a caller id, so the whole phrase could be translated as "ID rozmówcy"
 #: js/Asterisk/VoicemailEditDialog.js:151
 #: js/Asterisk/VoicemailGridPanel.js:120
 #, fuzzy
@@ -687,17 +683,14 @@ msgid "Admin Mode"
 msgstr "Tryb administratora"
 
 #: js/Snom/LocationGridPanel.js:143
-#, fuzzy
 msgid "Filter Registrar"
 msgstr "Filtruj archiwariusz"
 
 #: js/Snom/LocationGridPanel.js:150
-#, fuzzy
 msgid "CP Dialoginfo"
 msgstr "Informacja o stronie kodowej"
 
 #: js/Snom/LocationGridPanel.js:157
-#, fuzzy
 msgid "Pickup Indic."
 msgstr "Spis odebranych połączeń"
 
@@ -1003,26 +996,26 @@ msgstr "Telefony"
 msgid "Templates"
 msgstr "Szablony"
 
-#~ msgid "username"
-#~ msgstr "użytkownik"
+msgid "username"
+msgstr "użytkownik"
 
-#~ msgid "edit myphone"
-#~ msgstr "Edytuj mój numer"
+msgid "edit myphone"
+msgstr "Edytuj mój numer"
 
-#~ msgid "Search: "
-#~ msgstr "Znajdź:"
+msgid "Search: "
+msgstr "Znajdź:"
 
-#~ msgid "Displaying myphones {0} - {1} of {2}"
-#~ msgstr "Wyświetl moje numery  {0} - {1} z {2}"
+msgid "Displaying myphones {0} - {1} of {2}"
+msgstr "Wyświetl moje numery  {0} - {1} z {2}"
 
-#~ msgid "No myphones to display"
-#~ msgstr "Brak numerów"
+msgid "No myphones to display"
+msgstr "Brak numerów"
 
-#~ msgid "add context"
-#~ msgstr "Dodaj kontekst"
+msgid "add context"
+msgstr "Dodaj kontekst"
 
-#~ msgid "delete context"
-#~ msgstr "Usuń kontekst"
+msgid "delete context"
+msgstr "Usuń kontekst"
 
-#~ msgid "Context: "
-#~ msgstr "Kontekst:"
+msgid "Context: "
+msgstr "Kontekst:"

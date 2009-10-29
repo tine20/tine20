@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-09-20 16:12+0100\n"
+"PO-Revision-Date: 2009-10-16 05:40+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -208,7 +208,6 @@ msgid "Please wait"
 msgstr "Proszę czekać"
 
 #: js/Login.js:139
-#, fuzzy
 msgid "Login successful. Loading {0}..."
 msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
 
@@ -253,9 +252,8 @@ msgstr ""
 "administratorem."
 
 #: js/MainScreen.js:208
-#, fuzzy
 msgid "About {0}"
-msgstr "Dodaj {0}"
+msgstr "O {0}"
 
 #: js/MainScreen.js:214
 msgid "Change password"
@@ -270,9 +268,8 @@ msgid "Logout"
 msgstr "Wyloguj"
 
 #: js/MainScreen.js:238
-#, fuzzy
 msgid "Logout from {0}"
-msgstr "Wylogowanie z Tine 2.0"
+msgstr "Wyloguj z {0}"
 
 #: js/MainScreen.js:382 js/MainScreen.js:397
 msgid "About Tine 2.0"
@@ -1469,14 +1466,14 @@ msgstr "zmieniony"
 msgid "record changed"
 msgstr "wiersz zmieniony"
 
-#~ msgid "loading new language..."
-#~ msgstr "ładowanie nowego języka..."
+msgid "loading new language..."
+msgstr "ładowanie nowego języka..."
 
-#~ msgid "Export Date"
-#~ msgstr "Data eksportu"
+msgid "Export Date"
+msgstr "Data eksportu"
 
-#~ msgid "Login successful. Loading Tine 2.0..."
-#~ msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
+msgid "Login successful. Loading Tine 2.0..."
+msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
 
-#~ msgid "Logout from Tine 2.0"
-#~ msgstr "Wylogowanie z Tine 2.0"
+msgid "Logout from Tine 2.0"
+msgstr "Wylogowanie z Tine 2.0"

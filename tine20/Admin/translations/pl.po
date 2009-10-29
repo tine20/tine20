@@ -845,38 +845,38 @@ msgstr[0] "E-mail użytkownika"
 msgstr[1] "E-maile użytkowników"
 msgstr[2] "E-maile użytkowników"
 
-#~ msgid "Password again"
-#~ msgstr "Powtórz hasło"
+msgid "Password again"
+msgstr "Powtórz hasło"
 
-#~ msgid "Passwords don't match"
-#~ msgstr "Nieprawidłowe hasło"
+msgid "Passwords don't match"
+msgstr "Nieprawidłowe hasło"
 
-#~ msgid "Deleting tag..."
-#~ msgstr "Usuwanie znacznika..."
+msgid "Deleting tag..."
+msgstr "Usuwanie znacznika..."
 
-#~ msgid "name"
-#~ msgstr "nazwa"
+msgid "name"
+msgstr "nazwa"
 
-#~ msgid "status"
-#~ msgstr "status"
+msgid "status"
+msgstr "status"
 
-#~ msgid "Deleting account..."
-#~ msgstr "Usuwanie konta …"
+msgid "Deleting account..."
+msgstr "Usuwanie konta …"
 
-#~ msgid "Some error occurred while trying to delete the account."
-#~ msgstr "Podczas próby usunięcia konta wystąpił błąd."
+msgid "Some error occurred while trying to delete the account."
+msgstr "Podczas próby usunięcia konta wystąpił błąd."
 
-#~ msgid "Saving User Account"
-#~ msgstr "Zapisywanie konta użytkownika"
+msgid "Saving User Account"
+msgstr "Zapisywanie konta użytkownika"
 
-#~ msgid "Could not save user account."
-#~ msgstr "Zapisanie konta użytkownika było niemożliwe."
+msgid "Could not save user account."
+msgstr "Zapisanie konta użytkownika było niemożliwe."
 
-#~ msgid "Add New User Account"
-#~ msgstr "Utwórz nowego użytkownika"
+msgid "Add New User Account"
+msgstr "Utwórz nowego użytkownika"
 
-#~ msgid "Edit User Account \"{0}\""
-#~ msgstr "Edytuj konto użytkownika \"{0}\""
+msgid "Edit User Account \"{0}\""
+msgstr "Edytuj konto użytkownika \"{0}\""
 
-#~ msgid "Forward"
-#~ msgstr "Prześlij dalej"
+msgid "Forward"
+msgstr "Prześlij dalej"

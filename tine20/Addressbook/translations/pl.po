@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-09-20 16:25+0100\n"
+"PO-Revision-Date: 2009-10-16 05:19+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -43,8 +43,6 @@ msgstr "Organizacja / Jednostka"
 msgid "Business Address"
 msgstr "Adres frimowy"
 
-# Prüfen
-# Ist schon richtig ;)
 #: Export/Pdf.php:53 js/ContactGrid.js:135
 msgid "Email"
 msgstr "E-mail"
@@ -390,9 +388,8 @@ msgid "Geo"
 msgstr "Położenie geograficzne"
 
 #: js/ContactGrid.js:160
-#, fuzzy
 msgid "Export Contact"
-msgstr "Kontakt"
+msgstr "Eksportuj kontakt"
 
 # I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
 # Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht verwenden. Dies waere nicht richtig im Polnischen.
@@ -549,38 +546,38 @@ msgstr "Pani"
 
 # I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
 # Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht verwenden. Dies waere nicht richtig im Polnischen.
-#~ msgid "Export"
-#~ msgstr "Eksportuj"
+msgid "Export"
+msgstr "Eksportuj"
 
-#~ msgid "Are you Sure?"
-#~ msgstr "Czy na pewno?"
+msgid "Are you Sure?"
+msgstr "Czy na pewno?"
 
-#~ msgid "Do you really want to delete the selected contact?"
-#~ msgid_plural "Do you really want to delete the selected contacts?"
-#~ msgstr[0] "Czy na pewno chcesz usunąć zaznaczony kontakt?"
-#~ msgstr[1] "Czy na pewno chcesz usunąć zaznaczone kontakty?"
-#~ msgstr[2] "Czy na pewno chcesz usunąć zaznaczone kontakty?"
+msgid "Do you really want to delete the selected contact?"
+msgid_plural "Do you really want to delete the selected contacts?"
+msgstr[0] "Czy na pewno chcesz usunąć zaznaczony kontakt?"
+msgstr[1] "Czy na pewno chcesz usunąć zaznaczone kontakty?"
+msgstr[2] "Czy na pewno chcesz usunąć zaznaczone kontakty?"
 
-#~ msgid "add contact"
-#~ msgstr "Dodaj kontakt"
+msgid "add contact"
+msgstr "Dodaj kontakt"
 
-#~ msgid "edit contact"
-#~ msgstr "Edytuj kontakt"
+msgid "edit contact"
+msgstr "Edytuj kontakt"
 
-#~ msgid "delete contact"
-#~ msgid_plural "delete contacts"
-#~ msgstr[0] "Usuń kontakt"
-#~ msgstr[1] "Usuń kontakty"
-#~ msgstr[2] "Usuń kontakty"
+msgid "delete contact"
+msgid_plural "delete contacts"
+msgstr[0] "Usuń kontakt"
+msgstr[1] "Usuń kontakty"
+msgstr[2] "Usuń kontakty"
 
-#~ msgid "Displaying contacts {0} - {1} of {2}"
-#~ msgstr "Wyświetlane kontaków {0} - {1} z {2}"
+msgid "Displaying contacts {0} - {1} of {2}"
+msgstr "Wyświetlane kontaków {0} - {1} z {2}"
 
-#~ msgid "No contacts to display"
-#~ msgstr "Brak kontaktów"
+msgid "No contacts to display"
+msgstr "Brak kontaktów"
 
-#~ msgid "Some error occured while trying to delete the conctact."
-#~ msgstr "Podczas próby usunięcia kontaktu wystąpił błąd."
+msgid "Some error occured while trying to delete the conctact."
+msgstr "Podczas próby usunięcia kontaktu wystąpił błąd."
 
-#~ msgid "call contact"
-#~ msgstr "Wywołaj kontakt"
+msgid "call contact"
+msgstr "Wywołaj kontakt"

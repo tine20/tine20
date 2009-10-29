@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-09-05 14:18+0100\n"
+"PO-Revision-Date: 2009-10-16 05:31+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -211,9 +211,8 @@ msgid "Add contact to addressbook"
 msgstr "Dodaj kontakt do książki adresowej"
 
 #: js/FelamimailGridDetailsPanel.js:127
-#, fuzzy
 msgid "Date"
-msgstr "Usuń"
+msgstr "Data"
 
 #: js/FelamimailGridDetailsPanel.js:129 js/FelamimailGridDetailsPanel.js:348
 msgid "Show or hide header information"
@@ -386,7 +385,7 @@ msgstr "UDW:"
 
 #: js/FelamimailRecipientGrid.js:195
 msgid "Remove"
-msgstr ""
+msgstr "Usuń"
 
 #: js/FelamimailTreePanel.js:173 js/FelamimailTreePanel.js:178
 #: js/FelamimailTreePanel.js:189
@@ -524,8 +523,8 @@ msgstr ""
 msgid "How often should Felamimail check for new Emails (in minutes) ."
 msgstr ""
 
-#~ msgid "Port"
-#~ msgstr "Port"
+msgid "Port"
+msgstr "Port"
 
-#~ msgid "Mark Unread"
-#~ msgstr "Oznacz jako nieprzeczytane"
+msgid "Mark Unread"
+msgstr "Oznacz jako nieprzeczytane"

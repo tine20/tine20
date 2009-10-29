@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-09-20 16:18+0100\n"
+"PO-Revision-Date: 2009-10-16 05:39+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -231,7 +231,7 @@ msgstr "Uprawnienia"
 
 #: js/TimeaccountGridPanel.js:91 js/TimesheetGridPanel.js:243
 msgid "Tags"
-msgstr ""
+msgstr "Znaczniki"
 
 #: js/TimeaccountGridPanel.js:116 js/TimesheetGridPanel.js:83
 #: js/TimesheetGridPanel.js:258
