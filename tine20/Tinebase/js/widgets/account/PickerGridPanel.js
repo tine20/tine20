@@ -22,6 +22,7 @@ Ext.namespace('Tine.widgets.account');
  * <p>Account Picker GridPanel</p>
  * <p><pre>
  * TODO         add group search combo
+ * TODO         make it possible to switch between the comboboxes in 'both' mode and show only one combo at the time 
  * TODO         use selectAction/enableBbar configs?
  * </pre></p>
  * 
@@ -44,7 +45,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
     /**
      * @cfg{String} selectTypeDefault 'user' or 'group' defines which accountType is selected when  {selectType} is true
      */
-    selectTypeDefault: 'user',
+    //selectTypeDefault: 'user',
     
     /**
      * @cfg {Ext.Action}
@@ -144,33 +145,67 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             items: [this.actionRemove]
         });
         
+        this.accountsSearchCombo = new Tine.Addressbook.SearchCombo({
+            accountsStore: this.store,
+            emptyText: _('Search for users ...'),
+            internalContactsOnly: true,
+            additionalFilters: [{field: 'user_status', operator: 'equals', value: this.userStatus}],
+            onSelect: function(contactRecord){
+                var record = new Tine.Tinebase.Model.Account({
+                    id: contactRecord.data.account_id,
+                    type: 'user',
+                    name: contactRecord.data.n_fileas,
+                    data: contactRecord.data
+                }, contactRecord.data.account_id);
+                
+                // check if already in
+                if (! this.accountsStore.getById(record.id)) {
+                    this.accountsStore.add([record]);
+                }
+                this.collapse();
+                this.clearValue();
+            }    
+        })
+
+        this.groupSearchCombo = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+            accountsStore: this.store,
+            blurOnSelect: true,
+            recordClass: Tine.Tinebase.Model.Group,
+            emptyText: _('Search for groups ...'),
+            onSelect: function(groupRecord){
+                var record = new Tine.Tinebase.Model.Account({
+                    id: groupRecord.id,
+                    type: 'group',
+                    name: groupRecord.data.name,
+                    data: groupRecord.data
+                }, groupRecord.id);
+                
+                // check if already in
+                if (! this.accountsStore.getById(record.id)) {
+                    this.accountsStore.add([record]);
+                }
+                this.collapse();
+                this.clearValue();
+            }    
+        });
+        
+        switch (this.selectType) {
+            case 'both':
+                var combos = [this.accountsSearchCombo, this.groupSearchCombo];
+                break;
+            case 'user':
+                var combos = [this.accountsSearchCombo];
+                break;
+            case 'group':
+                var combos = [this.groupSearchCombo];
+                break;
+        }
+        
         this.tbar = new Ext.Panel({
-            layout: 'fit',
+            layout: 'hfit',
             border: false,
             width: '100%',
-            items: [
-                new Tine.Addressbook.SearchCombo({
-                    accountsStore: this.store,
-                    emptyText: _('Search for user accounts to add ...'),
-                    internalContactsOnly: true,
-                    additionalFilters: [{field: 'user_status', operator: 'equals', value: this.userStatus}],
-                    onSelect: function(contactRecord){
-                        var record = new Tine.Tinebase.Model.Account({
-                            id: contactRecord.data.account_id,
-                            type: 'user',
-                            name: contactRecord.data.n_fileas,
-                            data: contactRecord.data
-                        }, contactRecord.data.account_id);
-                        
-                        // check if already in
-                        if (! this.accountsStore.getById(record.id)) {
-                            this.accountsStore.add([record]);
-                        }
-                        this.collapse();
-                        this.clearValue();
-                    }    
-                })
-            ]
+            items: combos
         });
         
         this.bbar = new Ext.Toolbar({
@@ -216,6 +251,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 sortable: true
             },
             columns: [
+                {id: 'type', header: _(''), dataIndex: 'type', width: 35, renderer: Tine.Tinebase.common.accountTypeRenderer},
                 {id: 'name', header: _('Name'), dataIndex: 'name'}
             ]
         });
@@ -232,5 +268,27 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
         for (var i = 0; i < selectedRows.length; ++i) {
             this.store.remove(selectedRows[i]);
         }           
+    },
+    
+    /**
+     * key down handler
+     * @private
+     */
+    onKeyDown: function(e){
+        if (e.ctrlKey) {
+            switch (e.getKey()) {
+                case e.A:
+                    // select only current page
+                    this.getSelectionModel().selectAll(true);
+                    e.preventDefault();
+                    break;
+            }
+        } else {
+            switch (e.getKey()) {
+                case e.DELETE:
+                    this.onRemove();
+                    break;
+            }
+        }
     }
 });
