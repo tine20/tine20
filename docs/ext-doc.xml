@@ -55,6 +55,7 @@
         <source src="../tine20/Tinebase/js/data/Record.js"/>
         <source src="../tine20/Tinebase/js/data/RecordStore.js"/>
         <source src="../tine20/Tinebase/js/data/RecordProxy.js"/>
+        <source src="../tine20/Tinebase/js/widgets/account/PickerPanel.js"/>
         <source src="../tine20/Tinebase/js/widgets/app/GridPanel.js"/>
         <source src="../tine20/Tinebase/js/widgets/customfields/CustomfieldsPanel.js"/>
         <source src="../tine20/Tinebase/js/widgets/dialog/LinkPanel.js"/>
