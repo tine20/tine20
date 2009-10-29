@@ -8,7 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        refactor this (don't use Ext.getCmp, etc.)
+ * TODO         split this into two files (grid + edit dlg)
+ * TODO         refactor this (don't use Ext.getCmp, etc.)
  */
 
 Ext.namespace('Tine.Admin.Groups');
