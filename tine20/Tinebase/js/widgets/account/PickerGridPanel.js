@@ -115,7 +115,6 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             });
         }
         
-        /*
         // focus+select new record
         this.store.on('add', function(store, records, index) {
             (function() {
@@ -125,7 +124,6 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 }
             }).defer(300, this);
         }, this);
-        */
     },
 
     /**
@@ -151,6 +149,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             internalContactsOnly: true,
             additionalFilters: [{field: 'user_status', operator: 'equals', value: this.userStatus}],
             onSelect: function(contactRecord){
+                // user account record
                 var record = new Tine.Tinebase.Model.Account({
                     id: contactRecord.data.account_id,
                     type: 'user',
@@ -173,6 +172,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             recordClass: Tine.Tinebase.Model.Group,
             emptyText: _('Search for groups ...'),
             onSelect: function(groupRecord){
+                // group account record
                 var record = new Tine.Tinebase.Model.Account({
                     id: groupRecord.id,
                     type: 'group',
@@ -278,7 +278,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
         if (e.ctrlKey) {
             switch (e.getKey()) {
                 case e.A:
-                    // select only current page
+                    // select all records
                     this.getSelectionModel().selectAll(true);
                     e.preventDefault();
                     break;
@@ -286,6 +286,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
         } else {
             switch (e.getKey()) {
                 case e.DELETE:
+                    // delete selected record(s)
                     this.onRemove();
                     break;
             }
