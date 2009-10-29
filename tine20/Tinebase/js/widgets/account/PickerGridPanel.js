@@ -21,7 +21,8 @@ Ext.namespace('Tine.widgets.account');
  * 
  * <p>Account Picker GridPanel</p>
  * <p><pre>
- * TODO         finish implementation
+ * TODO         add group search combo
+ * TODO         use selectAction/enableBbar configs?
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -84,21 +85,13 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
      * @type Ext.Menu
      * @property contextMenu
      */
-    //contextMenu: null,
+    contextMenu: null,
 
     /**
      * grid config
      * @private
      */
     autoExpandColumn: 'name',
-    
-    /*
-    defaults:{autoScroll:true},
-    border: false,
-    split: true,
-    width: 300,
-    collapsible: false,
-    */
     
     //private
     initComponent: function() {
@@ -171,7 +164,6 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
                         
                         // check if already in
                         if (! this.accountsStore.getById(record.id)) {
-                            console.log(record);
                             this.accountsStore.add([record]);
                         }
                         this.collapse();
@@ -224,7 +216,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 sortable: true
             },
             columns: [
-                {id: 'name', header: _('Name'), dataIndex: 'name', width: 200}
+                {id: 'name', header: _('Name'), dataIndex: 'name'}
             ]
         });
     },
