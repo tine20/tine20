@@ -38,16 +38,19 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
      * @cfg {String} one of 'user', 'group', 'both'
      * selectType
      */
-    //selectType: 'user',
+    selectType: 'user',
+    
     /**
      * @cfg{String} selectTypeDefault 'user' or 'group' defines which accountType is selected when  {selectType} is true
      */
-    //selectTypeDefault: 'user',
+    selectTypeDefault: 'user',
+    
     /**
      * @cfg {Ext.Action}
      * selectAction
      */
     //selectAction: false,
+    
     /**
      * @cfg {bool}
      * enable bottom toolbar
@@ -67,6 +70,15 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
      * @cfg {} recordClass
      */
     recordClass: null,
+    
+    /**
+     * get only users with defined status (enabled, disabled, expired)
+     * get all -> 'enabled expired disabled'
+     * 
+     * @type String
+     * @property userStatus
+     */
+    userStatus: 'enabled',
     
     /**
      * @type Ext.Menu
@@ -144,6 +156,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
                     accountsStore: this.store,
                     emptyText: _('Search for user accounts to add ...'),
                     internalContactsOnly: true,
+                    additionalFilters: [{field: 'user_status', operator: 'equals', value: this.userStatus}],
                     onSelect: function(contactRecord){
                         var record = new Tine.Tinebase.Model.Account({
                             id: contactRecord.data.account_id,
