@@ -320,7 +320,6 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * var group
      */
     group: null,
-    
 
     windowNamePrefix: 'groupEditWindow_',
     
@@ -329,38 +328,6 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     labelWidth: 120,
     labelAlign: 'top',
     
-    /**
-     * var handlers
-     */
-     handlers: {
-        removeAccount: function(_button, _event) { 
-            var groupGrid = Ext.getCmp('groupMembersGrid');
-            var selectedRows = groupGrid.getSelectionModel().getSelections();
-            
-            var groupMembersStore = this.dataStore;
-            for (var i = 0; i < selectedRows.length; ++i) {
-                groupMembersStore.remove(selectedRows[i]);
-            }
-                
-        },
-        
-        addAccount: function(account) {
-        	var groupGrid = Ext.getCmp('groupMembersGrid');
-            
-            var dataStore = groupGrid.getStore();
-            var selectionModel = groupGrid.getSelectionModel();
-            
-            if (dataStore.getById(account.data.data.accountId) === undefined) {
-                var record = new Tine.Tinebase.Model.User({
-                    accountId: account.data.data.accountId,
-                    accountDisplayName: account.data.data.accountDisplayName
-                }, account.data.data.accountId);
-                dataStore.addSorted(record);
-            }
-            selectionModel.selectRow(dataStore.indexOfId(account.data.data.accountId));            
-        }
-     },
-     
     handlerApplyChanges: function(_button, _event, _closeWindow) {
         var form = this.getForm();
         
@@ -368,13 +335,9 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             Ext.MessageBox.wait(this.translation.gettext('Please wait'), this.translation.gettext('Updating Memberships'));
             
             // get group members
-            var groupGrid = Ext.getCmp('groupMembersGrid');
-            
             var groupMembers = [];
-            var dataStore = groupGrid.getStore();
-            
-            dataStore.each(function(_record){
-                groupMembers.push(_record.data.accountId);
+            this.membersStore.each(function(record){
+                groupMembers.push(record.id);
             });
             
             // update record with form data               
@@ -448,22 +411,14 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.group = new Tine.Tinebase.Model.Group(_groupData, _groupData.id ? _groupData.id : 0);
         
         // tweak, as group members are not in standard form cycle yet
-        this.dataStore.loadData(this.group.get('groupMembers'));
+        this.membersStore.loadData(this.group.get('groupMembers'));
     },
 
     /**
      * function updateToolbarButtons
+     * 
      */
     updateToolbarButtons: function(_rights) {        
-       /* if(_rights.editGrant === true) {
-            Ext.getCmp('groupDialog').action_saveAndClose.enable();
-            Ext.getCmp('groupDialog').action_applyChanges.enable();
-        }
-
-        if(_rights.deleteGrant === true) {
-            Ext.getCmp('groupDialog').action_delete.enable();
-        }*/
-        Ext.getCmp('groupDialog').action_delete.enable();
     },
     
     /**
@@ -471,95 +426,20 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * 
      */
     getFormContents: function() {
-
-        /******* account picker panel ********/
-        
-        var accountPicker =  new Tine.widgets.account.PickerPanel ({            
-            enableBbar: true,
-            region: 'west',
-            height: 200,
-            //bbar: this.userSelectionBottomToolBar,
-            selectAction: function() {            	
-                this.account = account;
-                this.handlers.addAccount(account);
-            }  
-        });
-                
-        accountPicker.on('accountdblclick', function(account){
-            this.account = account;
-            this.handlers.addAccount(account);
-        }, this);
-        
-
-        /******* load data store ********/
-
-        this.dataStore = new Ext.data.JsonStore({
+        this.membersStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'accountId',
-            fields: Tine.Tinebase.Model.User
+            id: 'id',
+            fields: Tine.Tinebase.Model.Account
         });
 
-        Ext.StoreMgr.add('GroupMembersStore', this.dataStore);
-        
-        this.dataStore.setDefaultSort('accountDisplayName', 'asc');        
-        
-        var groupMembers = this.group.get('groupMembers');
-        if (!groupMembers || groupMembers.length === 0) {
-        	this.dataStore.removeAll();
-        } else {
-            this.dataStore.loadData(groupMembers);
-        }
-
-        /******* column model ********/
-
-        var columnModel = new Ext.grid.ColumnModel([{ 
-        	resizable: true, id: 'accountDisplayName', header: this.translation.gettext('Name'), dataIndex: 'accountDisplayName', width: 30 
-        }]);
-
-        /******* row selection model ********/
-
-        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-
-        rowSelectionModel.on('selectionchange', function(_selectionModel) {
-            var rowCount = _selectionModel.getCount();
-
-            if(rowCount < 1) {
-                // no row selected
-                this.actions.removeAccount.setDisabled(true);
-            } else {
-                // only one row selected
-                this.actions.removeAccount.setDisabled(false);
-            }
-        }, this);
-       
-        /******* bottom toolbar ********/
-
-        var membersBottomToolbar = new Ext.Toolbar({
-            items: [
-                this.actions.removeAccount
-            ]
-        });
-
-        /******* group members grid ********/
-        
-        var groupMembersGridPanel = new Ext.grid.EditorGridPanel({
-        	id: 'groupMembersGrid',
-            region: 'center',
+        var accountPickerGridPanel = new Tine.widgets.account.PickerGridPanel({
             title: this.translation.gettext('Group Members'),
-            store: this.dataStore,
-            cm: columnModel,
-            autoSizeColumns: false,
-            selModel: rowSelectionModel,
-            enableColLock:false,
-            loadMask: true,
-            //autoExpandColumn: 'accountLoginName',
-            autoExpandColumn: 'accountDisplayName',
-            bbar: membersBottomToolbar,
-            border: true
-        }); 
-        
-        /******* THE edit dialog ********/
+            store: this.membersStore,
+            region: 'center',
+            anchor: '100% 100%',
+            recordClass: Tine.Tinebase.Model.Account
+        });
         
         var editGroupDialog = {
             layout:'border',
@@ -592,8 +472,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 	                    }]        
 	                }]
 	            },
-	            accountPicker, 
-	            groupMembersGridPanel
+                accountPickerGridPanel
             ]
         };
         
@@ -616,24 +495,6 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
-        
-        /******* actions ********/
-        this.actions = {
-            addAccount: new Ext.Action({
-                text: this.translation.gettext('add account'),
-                disabled: true,
-                scope: this,
-                handler: this.handlers.addAccount,
-                iconCls: 'action_addContact'
-            }),
-            removeAccount: new Ext.Action({
-                text: this.translation.gettext('remove account'),
-                disabled: true,
-                scope: this,
-                handler: this.handlers.removeAccount,
-                iconCls: 'action_deleteContact'
-            })
-        };
         
         this.items = this.getFormContents();
         Tine.Admin.Groups.EditDialog.superclass.initComponent.call(this);
@@ -663,7 +524,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 Tine.Admin.Groups.EditDialog.openWindow = function (config) {
     config.group = config.group ? config.group : new Tine.Tinebase.Model.Group({}, 0);
     var window = Tine.WindowFactory.getWindow({
-        width: 650,
+        width: 400,
         height: 600,
         name: Tine.Admin.Groups.EditDialog.prototype.windowNamePrefix + config.group.id,
         layout: Tine.Admin.Groups.EditDialog.prototype.windowLayout,

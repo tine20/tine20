@@ -453,6 +453,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param int $groupId
      * @return array with results / totalcount
+     * 
+     * @todo use Account Model?
      */
     public function getGroupMembers($groupId)
     {
@@ -464,9 +466,14 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ($groupId) {
             $accountIds = Admin_Controller_Group::getInstance()->getGroupMembers($groupId);
     
-            $result['results'] = array ();
-            foreach ( $accountIds as $accountId ) {
-                $result['results'][] = Tinebase_User::getInstance()->getUserById($accountId)->toArray();
+            $result['results'] = array();
+            foreach ($accountIds as $accountId) {
+                $account = Tinebase_User::getInstance()->getUserById($accountId);
+                $result['results'][] = array(
+                    'id'        => $accountId,
+                    'type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                    'name'      => $account->accountDisplayName,
+                ); 
             }
                     
             $result['totalcount'] = count($result['results']);
