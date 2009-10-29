@@ -6,14 +6,16 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         make sliding in of notifications work correctly
- * TODO         beautify notfications / 
+ * 
  * TODO         play sound
+ * TODO         add googlegears support
+ * TODO         activate default notifications?
  */    
  
 Ext.namespace('Ext.ux.Notification');
     
 Ext.ux.Notification = function(){
+    /*
     var msgDiv;
 
     function createBox(t, s){
@@ -23,15 +25,34 @@ Ext.ux.Notification = function(){
                 '<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>',
                 '</div>'].join('');
     }
+    */
+    
     return {
         show: function(title, text){
-            if (window.callout !== undefined) {
-                // support for callout firefox plugin (@see http://github.com/lackac/callout)
+            
+            // define icon url
+            var iconUrl = document.location.href + '/images/tine_logo.gif';
+            
+            // JETPACK firefox extension (@link https://jetpack.mozillalabs.com/)
+            if (window.jetpack !== undefined) {
+                jetpack.notifications.show({
+                    title: title, 
+                    body: text, 
+                    icon: iconUrl
+                });
+                
+            // CALLOUT firefox extension (@link http://github.com/lackac/callout)
+            } else if (window.callout !== undefined) {
                 callout.notify(title, text, {
-                    icon: document.location.href + '/images/tine_logo.gif',
+                    icon: iconUrl,
                     href: document.location.href
                 });
+                
+            // default behaviour
             } else {
+                
+                // TODO     make sliding in of notifications work correctly / beautify notfications
+                
                 /*
                 if(! msgDiv){
                     msgDiv = Ext.DomHelper.insertBefore(document.body, {id:'msg-div'}, true);
@@ -41,19 +62,14 @@ Ext.ux.Notification = function(){
                 box.slideIn('t').pause(4).ghost("t", {remove:true});
                 */
                 
-                //var msgDiv = Ext.DomQuery.selectNode('div[id=msg-div]');
-
                 /*
-                var box = Ext.DomHelper.insertAfter(document.body, {html:createBox(title, text)}, true);
-                box.slideIn('b').pause(2).ghost("b", {remove:true});
-                */
-                
                 if(! msgDiv){
                     msgDiv = Ext.DomHelper.insertAfter(document.body, {id:'msg-div'}, true);
                 }
                 msgDiv.alignTo(document, 'b-b');
                 var box = Ext.DomHelper.append(msgDiv, {html:createBox(title, text)}, true);
                 box.slideIn('b').pause(2).ghost("b", {remove:true});
+                */
             }
         }
     };
