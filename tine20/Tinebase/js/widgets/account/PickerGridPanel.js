@@ -146,7 +146,11 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             handler: this.onRemove,
             iconCls: 'action_deleteContact'
         })
-
+        
+        this.contextMenu = new Ext.menu.Menu({
+            items: [this.actionRemove]
+        });
+        
         this.tbar = new Ext.Panel({
             layout: 'fit',
             border: false,
@@ -196,27 +200,9 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
         this.selModel.on('selectionchange', function(sm) {
             var rowCount = sm.getCount();
             this.actionRemove.setDisabled(rowCount == 0);
-            
-            /*
-            var selectedRows = this.getSelectionModel().getSelections();
-            if (selectedRows.length > 0) {
-                var selectedRecord = selectedRows[0];
-            }
-            if (this.record && (this.record.get('container_id') && this.record.get('container_id').account_grants)) {
-                for (var i=0; i < this.actions.length; i++) {
-                    this.actions[i].setDisabled(
-                        ! this.record.get('container_id').account_grants.editGrant 
-                        || (this.actions[i].initialConfig.onlySingle && rowCount != 1)
-                        || (this.actions[i] == this.actionEdit && selectedRecord && selectedRecord.phantom == true)
-                    );
-                }
-            }
-            */
-            
         }, this);
         
         // on rowcontextmenu handler
-        /*
         this.on('rowcontextmenu', function(grid, row, e) {
             e.stopEvent();
             var selModel = grid.getSelectionModel();
@@ -226,7 +212,6 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             
             this.contextMenu.showAt(e.getXY());
         }, this);
-        */
     },
     
     /**
