@@ -12,48 +12,97 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: js/ContractEditDialog.js:86
-#: js/ContractGridPanel.js:93
+#: Acl/Rights.php:104
+msgid "manage products"
+msgstr ""
+
+#: Acl/Rights.php:105
+msgid "add, edit and delete products"
+msgstr ""
+
+#: js/ContractEditDialog.js:103 js/ContractGridPanel.js:113
 msgid "Title"
 msgstr "Titre"
 
-#: js/ContractEditDialog.js:92
+#: js/ContractEditDialog.js:109 js/ProductEditDialog.js:90
+#: js/ProductGridPanel.js:130
 msgid "Description"
 msgstr "Description"
 
-#: js/ContractEditDialog.js:93
+#: js/ContractEditDialog.js:110 js/ProductEditDialog.js:91
 msgid "Enter description..."
 msgstr "Saisissez une description..."
 
-#: js/ContractGridPanel.js:47
+#: js/ContractGridPanel.js:64
 msgid "Summary"
 msgstr "Résumé"
 
-#: js/ContractGridPanel.js:87
+#: js/ContractGridPanel.js:107
 msgid "Contract number"
 msgstr "Numéro de contrat"
 
-#: js/ContractGridPanel.js:99
+#: js/ContractGridPanel.js:119
 msgid "Status"
 msgstr "Statut"
 
-#: js/Erp.js:50
-msgid "Contracts"
-msgstr "Contrats"
+#: js/Models.js:36 js/ProductGridPanel.js:104
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] ""
+msgstr[1] ""
 
-#: js/Erp.js:84
+#: js/Models.js:40
+#, fuzzy
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "liste de contrats"
+msgstr[1] "listes de contrats"
+
+#: js/Models.js:89
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "Contrat"
 msgstr[1] "Contrats"
 
-#: js/Erp.js:88
+#: js/Models.js:93
 msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] "liste de contrats"
 msgstr[1] "listes de contrats"
 
-#: Setup/setup.xml:164
+#: js/ProductEditDialog.js:77 js/ProductGridPanel.js:129
+msgid "Name"
+msgstr ""
+
+#: js/ProductEditDialog.js:83 js/ProductGridPanel.js:131
+msgid "Price"
+msgstr ""
+
+#: js/ProductGridPanel.js:105
+msgid "Product name"
+msgstr ""
+
+#: js/ProductGridPanel.js:128
+msgid "Tags"
+msgstr ""
+
+#: js/Sales.js:94
+msgid "Products"
+msgstr ""
+
+#: js/Sales.js:99
+msgid "All Products"
+msgstr ""
+
+#: js/Sales.js:104
+msgid "Contracts"
+msgstr "Contrats"
+
+#: js/Sales.js:109
+#, fuzzy
+msgid "All Contracts"
+msgstr "Contrats"
+
+#: Setup/setup.xml:231
 msgid "Shared Contracts"
 msgstr "Contrats partagés"
-

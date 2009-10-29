@@ -29,39 +29,39 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%s のパーソナルタスク"
 
-#: js/EditDialog.js:153 js/GridPanel.js:91 js/GridPanel.js:164
+#: js/EditDialog.js:169 js/GridPanel.js:91 js/GridPanel.js:167
 msgid "Summary"
 msgstr "サマリー"
 
-#: js/EditDialog.js:158
+#: js/EditDialog.js:174
 msgid "Due date"
 msgstr "期日"
 
-#: js/EditDialog.js:161 js/GridPanel.js:183 Model/Task.php:180
+#: js/EditDialog.js:177 js/GridPanel.js:186 Model/Task.php:181
 msgid "Priority"
 msgstr "重要度"
 
-#: js/EditDialog.js:164 js/GridPanel.js:93 js/GridPanel.js:231
+#: js/EditDialog.js:180 js/GridPanel.js:93 js/GridPanel.js:234
 msgid "Responsible"
 msgstr "責任担当"
 
-#: js/EditDialog.js:168
+#: js/EditDialog.js:184
 msgid "Notes"
 msgstr "ノート"
 
-#: js/EditDialog.js:169
+#: js/EditDialog.js:185
 msgid "Enter description..."
 msgstr "説明を入力してください..."
 
-#: js/EditDialog.js:174
+#: js/EditDialog.js:190
 msgid "Percentage"
 msgstr "割合"
 
-#: js/EditDialog.js:178 js/GridPanel.js:210 Model/Task.php:181
+#: js/EditDialog.js:194 js/GridPanel.js:213 Model/Task.php:182
 msgid "Status"
 msgstr "ステータス"
 
-#: js/EditDialog.js:182
+#: js/EditDialog.js:198
 msgid "Completed"
 msgstr "完了"
 
@@ -70,36 +70,36 @@ msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "選択されたタスクを本当に削除しますか？"
 
-#: js/GridPanel.js:92 js/GridPanel.js:175
+#: js/GridPanel.js:92 js/GridPanel.js:178
 msgid "Due Date"
 msgstr "期日"
 
-#: js/GridPanel.js:114
+#: js/GridPanel.js:117
 msgid "Failed"
 msgstr "失敗"
 
-#: js/GridPanel.js:114
+#: js/GridPanel.js:117
 msgid "Could not save task."
 msgstr "タスクの保存に失敗しました"
 
-#: js/GridPanel.js:161
+#: js/GridPanel.js:164
 #, fuzzy
 msgid "Tags"
 msgstr "タスク"
 
-#: js/GridPanel.js:171
+#: js/GridPanel.js:174
 msgid "Add a task..."
 msgstr "タスクを追加しています..."
 
-#: js/GridPanel.js:197 Model/Task.php:182
+#: js/GridPanel.js:200 Model/Task.php:183
 msgid "Percent"
 msgstr "パーセント"
 
-#: js/GridPanel.js:224
+#: js/GridPanel.js:227
 msgid "Creation Time"
 msgstr "作成時間"
 
-#: js/GridPanel.js:257
+#: js/GridPanel.js:260
 msgid "Show closed"
 msgstr "クローズされたものの表示"
 
@@ -107,33 +107,33 @@ msgstr "クローズされたものの表示"
 msgid "IN-PROCESS"
 msgstr "進行中"
 
-#: js/Tasks.js:85
+#: js/Tasks.js:87
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "タスク"
 
-#: js/Tasks.js:85
+#: js/Tasks.js:87
 msgid "Tasks"
 msgstr "タスク"
 
-#: js/Tasks.js:89
+#: js/Tasks.js:91
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "ToDoリスト"
 
-#: js/Tasks.js:89
+#: js/Tasks.js:91
 msgid "to do lists"
 msgstr "ToDoリスト"
 
-#: Model/Task.php:177
+#: Model/Task.php:178
 msgid "Due"
 msgstr ""
 
-#: Model/Task.php:178
+#: Model/Task.php:179
 msgid "Organizer"
 msgstr ""
 
-#: Model/Task.php:179
+#: Model/Task.php:180
 #, fuzzy
 msgid "Description"
 msgstr "説明を入力してください..."

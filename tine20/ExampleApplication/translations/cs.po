@@ -28,11 +28,11 @@ msgstr[0] "Ukázkový záznam"
 msgstr[1] "Ukázkové záznamy"
 msgstr[2] "Ukázkových záznamů"
 
-#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:116
+#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:119
 msgid "Number"
 msgstr "Počet"
 
-#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:122
+#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:125
 msgid "Title"
 msgstr "Název"
 
@@ -44,7 +44,7 @@ msgstr "Jednotka"
 msgid "Unit Price"
 msgstr "Jednotková cena"
 
-#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:135
+#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:138
 msgid "Budget"
 msgstr "Rozpočet"
 
@@ -52,7 +52,7 @@ msgstr "Rozpočet"
 msgid "Timesheets are billable"
 msgstr "Pracovní výkazy lze účtovat"
 
-#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:128
+#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:131
 msgid "Status"
 msgstr "Stav"
 
@@ -84,7 +84,7 @@ msgstr "účtovaný"
 msgid "Description"
 msgstr "Popis"
 
-#: js/ExampleRecordGridPanel.js:159
+#: js/ExampleRecordGridPanel.js:162
 msgid "Show closed"
 msgstr "Zobrazit uzavřené"
 

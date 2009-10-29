@@ -21,34 +21,34 @@ msgstr "Edytuj konta godzin"
 msgid "Add, edit and delete timeaccounts"
 msgstr "Dodaj, edytuj i usuń konta godzin"
 
-#: Export/Ods.php:89 js/Timetracker.js:29
+#: Export/Ods.php:110 js/Timetracker.js:30
 msgid "Timesheets"
 msgstr "Karty godzin"
 
-#: Export/Ods.php:116
+#: Export/Ods.php:137
 msgid "Total Sum"
 msgstr "Suma"
 
-#: Export/Ods.php:133
+#: Export/Ods.php:154
 msgid "Not billable"
 msgstr "Nie gotowe do przeliczenia"
 
-#: Export/Ods.php:141 Export/Ods.php:212 Export/Ods.php:264
+#: Export/Ods.php:162 Export/Ods.php:235 Export/Ods.php:287
 #: js/TimesheetEditDialog.js:189 js/TimesheetGridPanel.js:73
 #: js/TimesheetGridPanel.js:217 js/TimesheetGridPanel.js:254
 msgid "Billable"
 msgstr "Gotowe do przeliczenia"
 
-#: Export/Ods.php:149
+#: Export/Ods.php:170
 msgid "Total"
 msgstr "Ogółem"
 
-#: Export/Ods.php:176 js/TimesheetEditDialog.js:151
+#: Export/Ods.php:199 js/TimesheetEditDialog.js:151
 #: js/TimesheetGridPanel.js:215 js/TimesheetGridPanel.js:245
 msgid "Date"
 msgstr "Data"
 
-#: Export/Ods.php:181 Export/Ods.php:242 js/Models.js:130
+#: Export/Ods.php:204 Export/Ods.php:265 js/Models.js:130
 #: js/TimeaccountEditDialog.js:156 js/TimesheetEditDialog.js:173
 #: js/TimesheetGridPanel.js:216 js/TimesheetGridPanel.js:253
 #: js/TimesheetGridPanel.js:393
@@ -57,58 +57,58 @@ msgstr "Opis"
 
 # I think, the word Number stands for a counter. Perhaps I am wrong.
 # I denke, das Wort Nummer steht fuer einen Zaehler. Vielleicht bin ich da falsch.
-#: Export/Ods.php:186
+#: Export/Ods.php:209
 msgid "Timeaccount Number"
 msgstr "Ilość kont godzin"
 
-#: Export/Ods.php:192
+#: Export/Ods.php:215
 msgid "Timeaccount"
 msgstr "Konto godzin"
 
-#: Export/Ods.php:199
+#: Export/Ods.php:222
 msgid "Staff Member"
 msgstr "Współpracownicy"
 
-#: Export/Ods.php:205 js/TimesheetEditDialog.js:146
+#: Export/Ods.php:228 js/TimesheetEditDialog.js:146
 #: js/TimesheetGridPanel.js:261
 msgid "Duration"
 msgstr "Czas"
 
-#: Export/Ods.php:217 js/TimesheetEditDialog.js:196
+#: Export/Ods.php:240 js/TimesheetEditDialog.js:196
 #: js/TimesheetGridPanel.js:78 js/TimesheetGridPanel.js:218
 #: js/TimesheetGridPanel.js:256
 msgid "Cleared"
 msgstr "Przeliczone"
 
-#: Export/Ods.php:232 js/TimeaccountEditDialog.js:85
-#: js/TimeaccountGridPanel.js:91
+#: Export/Ods.php:255 js/TimeaccountEditDialog.js:85
+#: js/TimeaccountGridPanel.js:94
 msgid "Number"
 msgstr "Numer"
 
-#: Export/Ods.php:237 js/TimeaccountEditDialog.js:90
-#: js/TimeaccountGridPanel.js:96
+#: Export/Ods.php:260 js/TimeaccountEditDialog.js:90
+#: js/TimeaccountGridPanel.js:99
 msgid "Title"
 msgstr "Tytuł"
 
-#: Export/Ods.php:247 js/Models.js:131
+#: Export/Ods.php:270 js/Models.js:131
 msgid "Created By"
 msgstr "Utworzone przez"
 
-#: Export/Ods.php:253
+#: Export/Ods.php:276
 msgid "Creation Date"
 msgstr "Data utworzenia"
 
-#: Export/Ods.php:258 js/Models.js:132 js/TimeaccountEditDialog.js:111
-#: js/TimeaccountGridPanel.js:101
+#: Export/Ods.php:281 js/Models.js:132 js/TimeaccountEditDialog.js:111
+#: js/TimeaccountGridPanel.js:104
 msgid "Status"
 msgstr "Status"
 
-#: Export/Ods.php:269 js/TimeaccountEditDialog.js:134
+#: Export/Ods.php:292 js/TimeaccountEditDialog.js:134
 #: js/TimesheetEditDialog.js:207
 msgid "Cleared In"
 msgstr "Przeliczone w"
 
-#: Export/Ods.php:274
+#: Export/Ods.php:297
 msgid "Open"
 msgstr "Otwarte"
 
@@ -158,7 +158,7 @@ msgstr "Jednostka"
 msgid "Unit Price"
 msgstr "Cena jednostkowa"
 
-#: js/TimeaccountEditDialog.js:108 js/TimeaccountGridPanel.js:107
+#: js/TimeaccountEditDialog.js:108 js/TimeaccountGridPanel.js:110
 msgid "Budget"
 msgstr "Budżet"
 
@@ -229,28 +229,28 @@ msgstr "Edytuj wszystkie"
 msgid "Permissions"
 msgstr "Uprawnienia"
 
-#: js/TimeaccountGridPanel.js:88 js/TimesheetGridPanel.js:243
+#: js/TimeaccountGridPanel.js:91 js/TimesheetGridPanel.js:243
 msgid "Tags"
 msgstr ""
 
-#: js/TimeaccountGridPanel.js:113 js/TimesheetGridPanel.js:83
+#: js/TimeaccountGridPanel.js:116 js/TimesheetGridPanel.js:83
 #: js/TimesheetGridPanel.js:258
 msgid "Cleared in"
 msgstr "Przeliczone w"
 
-#: js/TimeaccountGridPanel.js:134 js/TimesheetGridPanel.js:462
+#: js/TimeaccountGridPanel.js:137 js/TimesheetGridPanel.js:462
 msgid "Export"
 msgstr "Eksportuj"
 
-#: js/TimeaccountGridPanel.js:143 js/TimesheetGridPanel.js:471
+#: js/TimeaccountGridPanel.js:146 js/TimesheetGridPanel.js:471
 msgid "Export as ODS"
 msgstr "Eksportuj jako ODS"
 
-#: js/TimeaccountGridPanel.js:150 js/TimesheetGridPanel.js:477
+#: js/TimeaccountGridPanel.js:153 js/TimesheetGridPanel.js:477
 msgid "Export as CSV"
 msgstr "Eksportuj jako CSV"
 
-#: js/TimeaccountGridPanel.js:161
+#: js/TimeaccountGridPanel.js:164
 msgid "Show closed"
 msgstr "Pokaż zakończone"
 
@@ -351,15 +351,15 @@ msgstr "Łączny czas z przeliczalnych kart godzin"
 msgid "Detail"
 msgstr "Szczegół"
 
-#: js/Timetracker.js:34
+#: js/Timetracker.js:35
 msgid "All Timesheets"
 msgstr "Wszystkie karty godzin"
 
-#: js/Timetracker.js:39
+#: js/Timetracker.js:40
 msgid "Timeaccounts"
 msgstr "Konta godzin"
 
-#: js/Timetracker.js:44
+#: js/Timetracker.js:45
 msgid "All Timeaccounts"
 msgstr "Wszystkie konta godzin"
 

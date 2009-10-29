@@ -28,11 +28,11 @@ msgid_plural "ExampleRecords"
 msgstr[0] "ExampleRecord"
 msgstr[1] "ExampleRecords"
 
-#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:116
+#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:119
 msgid "Number"
 msgstr "Number"
 
-#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:122
+#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:125
 msgid "Title"
 msgstr "Title"
 
@@ -44,7 +44,7 @@ msgstr "Unit"
 msgid "Unit Price"
 msgstr "Unit Price"
 
-#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:135
+#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:138
 msgid "Budget"
 msgstr "Budget"
 
@@ -52,7 +52,7 @@ msgstr "Budget"
 msgid "Timesheets are billable"
 msgstr "Timesheets are billable"
 
-#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:128
+#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:131
 msgid "Status"
 msgstr "Status"
 
@@ -84,7 +84,7 @@ msgstr "billed"
 msgid "Description"
 msgstr "Description"
 
-#: js/ExampleRecordGridPanel.js:159
+#: js/ExampleRecordGridPanel.js:162
 msgid "Show closed"
 msgstr "Show closed"
 

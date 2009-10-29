@@ -306,46 +306,46 @@ msgstr "Émetteur ou Destinataire"
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Affichage des appels {0} - {1} de {2}"
 
-#: js/Phone.js:648 js/Phone.js:686
+#: js/Phone.js:648 js/Phone.js:692
 msgid "No calls to display"
 msgstr "Pas d'appel à afficher"
 
-#: js/Phone.js:653
+#: js/Phone.js:658
 msgid "Direction"
 msgstr "Direction"
 
-#: js/Phone.js:654
+#: js/Phone.js:659
 msgid "Source"
 msgstr "Source"
 
-#: js/Phone.js:655
+#: js/Phone.js:660
 msgid "Caller Id"
 msgstr "Identité de l'appelant"
 
-#: js/Phone.js:656
+#: js/Phone.js:661
 msgid "Destination"
 msgstr "Destination"
 
-#: js/Phone.js:657
+#: js/Phone.js:662
 msgid "Start"
 msgstr "Début"
 
-#: js/Phone.js:658
+#: js/Phone.js:663
 msgid "Connected"
 msgstr "Connecté"
 
-#: js/Phone.js:659
+#: js/Phone.js:664
 msgid "Disconnected"
 msgstr "Déconnecté"
 
-#: js/Phone.js:660
+#: js/Phone.js:665
 msgid "Duration"
 msgstr "Durée"
 
-#: js/Phone.js:661
+#: js/Phone.js:666
 msgid "Ringing"
 msgstr "Appel"
 
-#: js/Phone.js:662
+#: js/Phone.js:667
 msgid "Call ID"
 msgstr "ID d'appel"

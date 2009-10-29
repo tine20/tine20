@@ -29,11 +29,11 @@ msgstr[0] "ЗаписьПример"
 msgstr[1] "ЗаписиПримеры"
 msgstr[2] "ЗаписейПримеров"
 
-#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:116
+#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:119
 msgid "Number"
 msgstr "Номер"
 
-#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:122
+#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:125
 msgid "Title"
 msgstr "Заголовок"
 
@@ -45,7 +45,7 @@ msgstr "Единица"
 msgid "Unit Price"
 msgstr "Цена за единицу"
 
-#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:135
+#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:138
 msgid "Budget"
 msgstr "Бюджет"
 
@@ -53,7 +53,7 @@ msgstr "Бюджет"
 msgid "Timesheets are billable"
 msgstr "Табели оплачиваемы"
 
-#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:128
+#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:131
 msgid "Status"
 msgstr "Статус"
 
@@ -85,7 +85,7 @@ msgstr "оплачен"
 msgid "Description"
 msgstr "Описание"
 
-#: js/ExampleRecordGridPanel.js:159
+#: js/ExampleRecordGridPanel.js:162
 msgid "Show closed"
 msgstr "Показать закрытые"
 

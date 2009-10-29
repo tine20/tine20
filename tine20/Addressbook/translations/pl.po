@@ -45,7 +45,7 @@ msgstr "Adres frimowy"
 
 # Prüfen
 # Ist schon richtig ;)
-#: Export/Pdf.php:53 js/ContactGrid.js:128
+#: Export/Pdf.php:53 js/ContactGrid.js:135
 msgid "Email"
 msgstr "E-mail"
 
@@ -81,7 +81,7 @@ msgstr "URL"
 msgid "Role"
 msgstr "Funkcja"
 
-#: Export/Pdf.php:77 js/ContactEditDialog.js:142 js/ContactGrid.js:117
+#: Export/Pdf.php:77 js/ContactEditDialog.js:142 js/ContactGrid.js:124
 #: js/EditDialog.js:329 js/EditDialog.js:447
 msgid "Room"
 msgstr "Pokój"
@@ -98,8 +98,8 @@ msgstr "Telefon sekretarki"
 msgid "Private Contact Data"
 msgstr "Prywatne dane kontaktowe"
 
-#: Export/Pdf.php:89 js/Addressbook.js:250 js/Addressbook.js:251
-#: js/Addressbook.js:252 js/ContactEditDialog.js:240 js/EditDialog.js:613
+#: Export/Pdf.php:89 js/Addressbook.js:255 js/Addressbook.js:256
+#: js/Addressbook.js:257 js/ContactEditDialog.js:240 js/EditDialog.js:613
 msgid "Private Address"
 msgstr "Adres prywatny"
 
@@ -127,13 +127,13 @@ msgstr "Prywatny URL"
 msgid "Other Data"
 msgstr "Inne dane"
 
-#: Export/Pdf.php:115 js/Addressbook.js:246 js/ContactEditDialog.js:126
-#: js/ContactGrid.js:143 js/EditDialog.js:429
+#: Export/Pdf.php:115 js/Addressbook.js:251 js/ContactEditDialog.js:126
+#: js/ContactGrid.js:150 js/EditDialog.js:429
 msgid "Birthday"
 msgstr "Urodziny"
 
-#: Export/Pdf.php:118 js/Addressbook.js:243 js/ContactEditDialog.js:121
-#: js/ContactGrid.js:115 js/EditDialog.js:424
+#: Export/Pdf.php:118 js/Addressbook.js:248 js/ContactEditDialog.js:121
+#: js/ContactGrid.js:122 js/EditDialog.js:424
 msgid "Job Title"
 msgstr "Stanowisko"
 
@@ -141,80 +141,88 @@ msgstr "Stanowisko"
 msgid "Addressbook"
 msgstr "Książka adresowa"
 
-#: js/Addressbook.js:67 js/ContactGrid.js:345 Setup/setup.xml:538
+#: js/Addressbook.js:67 Setup/setup.xml:546
 msgid "Internal Contacts"
 msgstr "Kontakty wewnętrzne"
 
-#: js/Addressbook.js:208
+#: js/Addressbook.js:210 js/Addressbook.js:240
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "kontakt"
 msgstr[1] "kontakty"
 msgstr[2] "kontaktów"
 
-#: js/Addressbook.js:208 js/ContactGridDetailsPanel.js:67
+#: js/Addressbook.js:210 js/ContactGridDetailsPanel.js:67
 msgid "Contacts"
 msgstr "Kontakty"
 
-#: js/Addressbook.js:212 js/EditDialog.js:52
+#: js/Addressbook.js:214 js/EditDialog.js:52
 msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] "Książka adresowa"
 msgstr[1] "książki adresowe"
 msgstr[2] "książki adresowe"
 
-#: js/Addressbook.js:212
+#: js/Addressbook.js:214
 msgid "addressbooks"
 msgstr "książki adresowe"
 
-#: js/Addressbook.js:239 js/ContactEditDialog.js:86 js/ContactGrid.js:110
+#: js/Addressbook.js:240
+msgid "User Account"
+msgstr ""
+
+#: js/Addressbook.js:244 js/ContactEditDialog.js:86 js/ContactGrid.js:117
 #: js/EditDialog.js:389
 msgid "First Name"
 msgstr "Imię"
 
-#: js/Addressbook.js:240 js/ContactEditDialog.js:94
-#: js/ContactEditDialog.js:354 js/ContactGrid.js:109 js/EditDialog.js:397
+#: js/Addressbook.js:245 js/ContactEditDialog.js:94
+#: js/ContactEditDialog.js:364 js/ContactGrid.js:116 js/EditDialog.js:397
 msgid "Last Name"
 msgstr "Nazwisko"
 
-#: js/Addressbook.js:241 js/ContactEditDialog.js:102
-#: js/ContactEditDialog.js:354 js/ContactGrid.js:113
-#: js/ContactGridDetailsPanel.js:136 js/EditDialog.js:405 Setup/setup.xml:600
+#: js/Addressbook.js:246 js/ContactEditDialog.js:102
+#: js/ContactEditDialog.js:364 js/ContactGrid.js:120
+#: js/ContactGridDetailsPanel.js:136 js/EditDialog.js:405 Setup/setup.xml:608
 msgid "Company"
 msgstr "Firma"
 
-#: js/Addressbook.js:242 js/ContactEditDialog.js:152 js/ContactGrid.js:129
+#: js/Addressbook.js:247 js/ContactEditDialog.js:152 js/ContactGrid.js:136
 #: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
 #: js/EditDialog.js:465
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/Addressbook.js:244 js/ContactEditDialog.js:138 js/ContactGrid.js:116
+#: js/Addressbook.js:249 js/ContactEditDialog.js:138 js/ContactGrid.js:123
 #: js/EditDialog.js:324 js/EditDialog.js:442
 msgid "Job Role"
 msgstr "Pełniona funkcja"
 
-#: js/Addressbook.js:247 js/Addressbook.js:250 js/ContactEditDialog.js:220
-#: js/ContactEditDialog.js:243 js/ContactGrid.js:118 js/EditDialog.js:582
+#: js/Addressbook.js:252 js/Addressbook.js:255 js/ContactEditDialog.js:220
+#: js/ContactEditDialog.js:243 js/ContactGrid.js:125 js/EditDialog.js:582
 #: js/EditDialog.js:625
 msgid "Street"
 msgstr "Ulica"
 
-#: js/Addressbook.js:247 js/Addressbook.js:248 js/Addressbook.js:249
+#: js/Addressbook.js:252 js/Addressbook.js:253 js/Addressbook.js:254
 #: js/ContactEditDialog.js:217 js/EditDialog.js:566
 msgid "Company Address"
 msgstr "Adres firmy"
 
-#: js/Addressbook.js:248 js/Addressbook.js:251 js/ContactEditDialog.js:229
+#: js/Addressbook.js:253 js/Addressbook.js:256 js/ContactEditDialog.js:229
 #: js/ContactEditDialog.js:252 js/EditDialog.js:596 js/EditDialog.js:639
 msgid "Postal Code"
 msgstr "Kod pocztowy"
 
-#: js/Addressbook.js:249 js/Addressbook.js:252 js/ContactEditDialog.js:232
-#: js/ContactEditDialog.js:255 js/ContactGrid.js:119 js/EditDialog.js:600
+#: js/Addressbook.js:254 js/Addressbook.js:257 js/ContactEditDialog.js:232
+#: js/ContactEditDialog.js:255 js/ContactGrid.js:126 js/EditDialog.js:600
 #: js/EditDialog.js:643
 msgid "City"
 msgstr "Miasto"
+
+#: js/Addressbook.js:258 js/ContactGrid.js:114
+msgid "Type"
+msgstr "Ikona"
 
 #: js/ContactEditDialog.js:49 js/EditDialog.js:337
 msgid "Personal Information"
@@ -232,11 +240,11 @@ msgstr "Tytuł"
 msgid "Middle Name"
 msgstr "Drugie imię"
 
-#: js/ContactEditDialog.js:107 js/ContactGrid.js:114 js/EditDialog.js:410
+#: js/ContactEditDialog.js:107 js/ContactGrid.js:121 js/EditDialog.js:410
 msgid "Unit"
 msgstr "Jednostka"
 
-#: js/ContactEditDialog.js:116 js/ContactGrid.js:112 js/EditDialog.js:306
+#: js/ContactEditDialog.js:116 js/ContactGrid.js:119 js/EditDialog.js:306
 #: js/EditDialog.js:419
 msgid "Display Name"
 msgstr "Wyświetlana nazwa"
@@ -251,27 +259,27 @@ msgstr "Dopełnienie nazwiska (Sufix)"
 msgid "Contact Information"
 msgstr "Informacje o kontakcie"
 
-#: js/ContactEditDialog.js:156 js/ContactGrid.js:130
+#: js/ContactEditDialog.js:156 js/ContactGrid.js:137
 #: js/ContactGridDetailsPanel.js:145 js/ContactGridDetailsPanel.js:169
 #: js/EditDialog.js:470
 msgid "Mobile"
 msgstr "Komórka"
 
-#: js/ContactEditDialog.js:160 js/ContactGrid.js:131
+#: js/ContactEditDialog.js:160 js/ContactGrid.js:138
 #: js/ContactGridDetailsPanel.js:146 js/ContactGridDetailsPanel.js:170
 #: js/EditDialog.js:475
 msgid "Fax"
 msgstr "Faks"
 
-#: js/ContactEditDialog.js:164 js/ContactGrid.js:134 js/EditDialog.js:482
+#: js/ContactEditDialog.js:164 js/ContactGrid.js:141 js/EditDialog.js:482
 msgid "Phone (private)"
 msgstr "Telefon (prywatny)"
 
-#: js/ContactEditDialog.js:168 js/ContactGrid.js:136 js/EditDialog.js:487
+#: js/ContactEditDialog.js:168 js/ContactGrid.js:143 js/EditDialog.js:487
 msgid "Mobile (private)"
 msgstr "Komórka (prywatna)"
 
-#: js/ContactEditDialog.js:172 js/ContactGrid.js:135 js/EditDialog.js:492
+#: js/ContactEditDialog.js:172 js/ContactGrid.js:142 js/EditDialog.js:492
 msgid "Fax (private)"
 msgstr "Faks (prywatny)"
 
@@ -284,7 +292,7 @@ msgstr "E-mail"
 msgid "E-Mail (private)"
 msgstr "E-mail (prywatny)"
 
-#: js/ContactEditDialog.js:187 js/ContactGrid.js:138
+#: js/ContactEditDialog.js:187 js/ContactGrid.js:145
 #: js/ContactGridDetailsPanel.js:149 js/ContactGridDetailsPanel.js:173
 #: js/EditDialog.js:512
 msgid "Web"
@@ -296,12 +304,12 @@ msgid "Street 2"
 msgstr "Ulica 2"
 
 #: js/ContactEditDialog.js:226 js/ContactEditDialog.js:249
-#: js/ContactGrid.js:120 js/EditDialog.js:590 js/EditDialog.js:633
+#: js/ContactGrid.js:127 js/EditDialog.js:590 js/EditDialog.js:633
 msgid "Region"
 msgstr "Województwo"
 
 #: js/ContactEditDialog.js:236 js/ContactEditDialog.js:259
-#: js/ContactGrid.js:122 js/EditDialog.js:605 js/EditDialog.js:648
+#: js/ContactGrid.js:129 js/EditDialog.js:605 js/EditDialog.js:648
 msgid "Country"
 msgstr "Kraj"
 
@@ -313,120 +321,121 @@ msgstr "Opis"
 msgid "Enter description"
 msgstr "Wprowadź opis"
 
-#: js/ContactEditDialog.js:329 js/EditDialog.js:58
+#: js/ContactEditDialog.js:339 js/EditDialog.js:58
 msgid "export as pdf"
 msgstr "eksportuj jako pdf"
 
-#: js/ContactEditDialog.js:354
+#: js/ContactEditDialog.js:364
 msgid "Either {0} or {1} must be given"
 msgstr "Należy wprowadzić {0} albo {1}"
 
-#: js/ContactGrid.js:107
-msgid "Type"
-msgstr "Ikona"
-
-#: js/ContactGrid.js:108
+#: js/ContactGrid.js:115
 msgid "Tags"
 msgstr "Znaczniki"
 
-#: js/ContactGrid.js:111
+#: js/ContactGrid.js:118
 msgid "Full Name"
 msgstr "Imię i nazwisko"
 
-#: js/ContactGrid.js:121
+#: js/ContactGrid.js:128
 msgid "Postalcode"
 msgstr "Kod pocztowy"
 
-#: js/ContactGrid.js:123
+#: js/ContactGrid.js:130
 msgid "Street (private)"
 msgstr "Ulica (adres prywatny)"
 
-#: js/ContactGrid.js:124
+#: js/ContactGrid.js:131
 msgid "City (private)"
 msgstr "Miasto (adres prywatny)"
 
-#: js/ContactGrid.js:125
+#: js/ContactGrid.js:132
 msgid "Region (private)"
 msgstr "Województwo (adres prywatny)"
 
-#: js/ContactGrid.js:126
+#: js/ContactGrid.js:133
 msgid "Postalcode (private)"
 msgstr "Kod pocztowy (adres prywatny)"
 
-#: js/ContactGrid.js:127
+#: js/ContactGrid.js:134
 msgid "Country (private)"
 msgstr "Kraj (adres prywatny)"
 
-#: js/ContactGrid.js:132
+#: js/ContactGrid.js:139
 msgid "Car phone"
 msgstr "Telefon (samochód)"
 
-#: js/ContactGrid.js:133
+#: js/ContactGrid.js:140
 msgid "Pager"
 msgstr "Pager"
 
-#: js/ContactGrid.js:137
+#: js/ContactGrid.js:144
 msgid "Email (private)"
 msgstr "E-mail (prywatny)"
 
-#: js/ContactGrid.js:139
+#: js/ContactGrid.js:146
 msgid "URL (private)"
 msgstr "URL (prywatny)"
 
-#: js/ContactGrid.js:140
+#: js/ContactGrid.js:147
 msgid "Note"
 msgstr "Notatka"
 
-#: js/ContactGrid.js:141
+#: js/ContactGrid.js:148
 msgid "Timezone"
 msgstr "Strefa czasowa"
 
-#: js/ContactGrid.js:142
+#: js/ContactGrid.js:149
 msgid "Geo"
 msgstr "Położenie geograficzne"
 
-#: js/ContactGrid.js:153
+#: js/ContactGrid.js:160
 #, fuzzy
 msgid "Export Contact"
 msgstr "Kontakt"
 
 # I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
 # Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht verwenden. Dies waere nicht richtig im Polnischen.
-#: js/ContactGrid.js:162
+#: js/ContactGrid.js:169
 msgid "Export as PDF"
 msgstr "Eksportuj jako PDF"
 
 # I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
 # Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht benutzen. Dies waere nicht richtig im Polnischen.
-#: js/ContactGrid.js:169
+#: js/ContactGrid.js:176
 msgid "Export as CSV"
 msgstr "Eksportuj jako CSV"
 
-#: js/ContactGrid.js:181
+#: js/ContactGrid.js:188
 msgid "Call contact"
 msgstr "Wywołaj kontakt"
 
-#: js/ContactGrid.js:193
+#: js/ContactGrid.js:200
 msgid "Compose email"
 msgstr "Nowa wiadomość"
 
 # The other possibility could be: "Służbowo", see the german translation.
 # Die andere moeglichkeit waere: "Służbowo", siehe die deutsche Uebersetzung.
-#: js/ContactGrid.js:233
+#: js/ContactGrid.js:240
 msgid "Work"
 msgstr "Praca"
 
-#: js/ContactGrid.js:242
+#: js/ContactGrid.js:249
 msgid "Home"
 msgstr "Prywatnie"
 
-#: js/ContactGrid.js:251
+#: js/ContactGrid.js:258
 msgid "Cell"
 msgstr "Komórka"
 
-#: js/ContactGrid.js:260
+#: js/ContactGrid.js:267
 msgid "Cell private"
 msgstr "Komórka prywatna"
+
+#: js/ContactGrid.js:357
+#, fuzzy
+msgid "Internal Contact"
+msgstr "Kontakty wewnętrzne"
 
 #: js/ContactGridDetailsPanel.js:70
 msgid "Select contact"
@@ -518,7 +527,7 @@ msgstr[0] "Link"
 msgstr[1] "[%d] linki"
 msgstr[2] "[%d] linków"
 
-#: js/SearchCombo.js:74
+#: js/SearchCombo.js:76
 msgid "Searching..."
 msgstr "Wyszukiwanie..."
 
@@ -530,48 +539,48 @@ msgstr "Domyślna książka adresowa"
 msgid "The defualt addressbook for new contacts"
 msgstr "Domyślna książka adresowa dla nowych kontaktów"
 
-#: Setup/setup.xml:564
+#: Setup/setup.xml:572
 msgid "Mr"
 msgstr "Pan"
 
-#: Setup/setup.xml:582
+#: Setup/setup.xml:590
 msgid "Ms"
 msgstr "Pani"
 
 # I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
 # Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht verwenden. Dies waere nicht richtig im Polnischen.
-msgid "Export"
-msgstr "Eksportuj"
+#~ msgid "Export"
+#~ msgstr "Eksportuj"
 
-msgid "Are you Sure?"
-msgstr "Czy na pewno?"
+#~ msgid "Are you Sure?"
+#~ msgstr "Czy na pewno?"
 
-msgid "Do you really want to delete the selected contact?"
-msgid_plural "Do you really want to delete the selected contacts?"
-msgstr[0] "Czy na pewno chcesz usunąć zaznaczony kontakt?"
-msgstr[1] "Czy na pewno chcesz usunąć zaznaczone kontakty?"
-msgstr[2] "Czy na pewno chcesz usunąć zaznaczone kontakty?"
+#~ msgid "Do you really want to delete the selected contact?"
+#~ msgid_plural "Do you really want to delete the selected contacts?"
+#~ msgstr[0] "Czy na pewno chcesz usunąć zaznaczony kontakt?"
+#~ msgstr[1] "Czy na pewno chcesz usunąć zaznaczone kontakty?"
+#~ msgstr[2] "Czy na pewno chcesz usunąć zaznaczone kontakty?"
 
-msgid "add contact"
-msgstr "Dodaj kontakt"
+#~ msgid "add contact"
+#~ msgstr "Dodaj kontakt"
 
-msgid "edit contact"
-msgstr "Edytuj kontakt"
+#~ msgid "edit contact"
+#~ msgstr "Edytuj kontakt"
 
-msgid "delete contact"
-msgid_plural "delete contacts"
-msgstr[0] "Usuń kontakt"
-msgstr[1] "Usuń kontakty"
-msgstr[2] "Usuń kontakty"
+#~ msgid "delete contact"
+#~ msgid_plural "delete contacts"
+#~ msgstr[0] "Usuń kontakt"
+#~ msgstr[1] "Usuń kontakty"
+#~ msgstr[2] "Usuń kontakty"
 
-msgid "Displaying contacts {0} - {1} of {2}"
-msgstr "Wyświetlane kontaków {0} - {1} z {2}"
+#~ msgid "Displaying contacts {0} - {1} of {2}"
+#~ msgstr "Wyświetlane kontaków {0} - {1} z {2}"
 
-msgid "No contacts to display"
-msgstr "Brak kontaktów"
+#~ msgid "No contacts to display"
+#~ msgstr "Brak kontaktów"
 
-msgid "Some error occured while trying to delete the conctact."
-msgstr "Podczas próby usunięcia kontaktu wystąpił błąd."
+#~ msgid "Some error occured while trying to delete the conctact."
+#~ msgstr "Podczas próby usunięcia kontaktu wystąpił błąd."
 
-msgid "call contact"
-msgstr "Wywołaj kontakt"
+#~ msgid "call contact"
+#~ msgstr "Wywołaj kontakt"

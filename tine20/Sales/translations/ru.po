@@ -10,52 +10,104 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Russian\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/ContractEditDialog.js:86
-#: js/ContractGridPanel.js:93
+#: Acl/Rights.php:104
+msgid "manage products"
+msgstr ""
+
+#: Acl/Rights.php:105
+msgid "add, edit and delete products"
+msgstr ""
+
+#: js/ContractEditDialog.js:103 js/ContractGridPanel.js:113
 msgid "Title"
 msgstr "Заголовок"
 
-#: js/ContractEditDialog.js:92
+#: js/ContractEditDialog.js:109 js/ProductEditDialog.js:90
+#: js/ProductGridPanel.js:130
 msgid "Description"
 msgstr "Описание"
 
-#: js/ContractEditDialog.js:93
+#: js/ContractEditDialog.js:110 js/ProductEditDialog.js:91
 msgid "Enter description..."
 msgstr "Ввести описание..."
 
-#: js/ContractGridPanel.js:47
+#: js/ContractGridPanel.js:64
 msgid "Summary"
 msgstr "Краткое изложение"
 
-#: js/ContractGridPanel.js:87
+#: js/ContractGridPanel.js:107
 msgid "Contract number"
 msgstr "Номер договора"
 
-#: js/ContractGridPanel.js:99
+#: js/ContractGridPanel.js:119
 msgid "Status"
 msgstr "Статус"
 
-#: js/Erp.js:50
-msgid "Contracts"
-msgstr "Договоры"
+#: js/Models.js:36 js/ProductGridPanel.js:104
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-#: js/Erp.js:84
+#: js/Models.js:40
+#, fuzzy
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "список договоров"
+msgstr[1] "списка договоров"
+msgstr[2] "списков договоров"
+
+#: js/Models.js:89
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "Договор"
 msgstr[1] "Договора"
 msgstr[2] "Договоров"
 
-#: js/Erp.js:88
+#: js/Models.js:93
 msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] "список договоров"
 msgstr[1] "списка договоров"
 msgstr[2] "списков договоров"
 
-#: Setup/setup.xml:164
+#: js/ProductEditDialog.js:77 js/ProductGridPanel.js:129
+msgid "Name"
+msgstr ""
+
+#: js/ProductEditDialog.js:83 js/ProductGridPanel.js:131
+msgid "Price"
+msgstr ""
+
+#: js/ProductGridPanel.js:105
+msgid "Product name"
+msgstr ""
+
+#: js/ProductGridPanel.js:128
+msgid "Tags"
+msgstr ""
+
+#: js/Sales.js:94
+msgid "Products"
+msgstr ""
+
+#: js/Sales.js:99
+msgid "All Products"
+msgstr ""
+
+#: js/Sales.js:104
+msgid "Contracts"
+msgstr "Договоры"
+
+#: js/Sales.js:109
+#, fuzzy
+msgid "All Contracts"
+msgstr "Договоры"
+
+#: Setup/setup.xml:231
 msgid "Shared Contracts"
 msgstr "Общие договоры"
-

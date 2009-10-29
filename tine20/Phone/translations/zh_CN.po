@@ -317,46 +317,46 @@ msgstr "源或者目的"
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "显示呼叫 {0} - {1} of {2}"
 
-#: js/Phone.js:648 js/Phone.js:686
+#: js/Phone.js:648 js/Phone.js:692
 msgid "No calls to display"
 msgstr "没有呼叫要显示"
 
-#: js/Phone.js:653
+#: js/Phone.js:658
 msgid "Direction"
 msgstr "方向"
 
-#: js/Phone.js:654
+#: js/Phone.js:659
 msgid "Source"
 msgstr "源"
 
-#: js/Phone.js:655
+#: js/Phone.js:660
 msgid "Caller Id"
 msgstr "来电号码"
 
-#: js/Phone.js:656
+#: js/Phone.js:661
 msgid "Destination"
 msgstr "目的"
 
-#: js/Phone.js:657
+#: js/Phone.js:662
 msgid "Start"
 msgstr "开始"
 
-#: js/Phone.js:658
+#: js/Phone.js:663
 msgid "Connected"
 msgstr "已连接"
 
-#: js/Phone.js:659
+#: js/Phone.js:664
 msgid "Disconnected"
 msgstr "已断开"
 
-#: js/Phone.js:660
+#: js/Phone.js:665
 msgid "Duration"
 msgstr "持续时间"
 
-#: js/Phone.js:661
+#: js/Phone.js:666
 msgid "Ringing"
 msgstr "振铃"
 
-#: js/Phone.js:662
+#: js/Phone.js:667
 msgid "Call ID"
 msgstr "来电号码"

@@ -47,11 +47,11 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: js/CourseEditDialog.js:179 js/CourseGridPanel.js:78
+#: js/CourseEditDialog.js:179 js/CourseGridPanel.js:81
 msgid "Internet Access"
 msgstr ""
 
-#: js/CourseEditDialog.js:185 js/CourseGridPanel.js:85
+#: js/CourseEditDialog.js:185 js/CourseGridPanel.js:88
 msgid "Fileserver Access"
 msgstr ""
 
@@ -75,35 +75,35 @@ msgstr ""
 msgid "Please enter the new password:"
 msgstr ""
 
-#: js/CourseGridPanel.js:65
+#: js/CourseGridPanel.js:68
 msgid "Name"
 msgstr ""
 
-#: js/CourseGridPanel.js:71
+#: js/CourseGridPanel.js:74
 msgid "Type"
 msgstr ""
 
-#: js/CourseGridPanel.js:110
+#: js/CourseGridPanel.js:113
 msgid "Internet Access On"
 msgstr ""
 
-#: js/CourseGridPanel.js:121
+#: js/CourseGridPanel.js:124
 msgid "Internet Access Off"
 msgstr ""
 
-#: js/CourseGridPanel.js:132
+#: js/CourseGridPanel.js:135
 msgid "Fileserver Access On"
 msgstr ""
 
-#: js/CourseGridPanel.js:143
+#: js/CourseGridPanel.js:146
 msgid "Fileserver Access Off"
 msgstr ""
 
-#: js/CourseGridPanel.js:185
+#: js/CourseGridPanel.js:188
 msgid "Failed"
 msgstr ""
 
-#: js/CourseGridPanel.js:186
+#: js/CourseGridPanel.js:189
 msgid "Some error occured while trying to update the courses."
 msgstr ""
 

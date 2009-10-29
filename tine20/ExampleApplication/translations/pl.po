@@ -29,11 +29,11 @@ msgstr[0] "Przykładowy wiersz"
 msgstr[1] "przykładowe wiersze"
 msgstr[2] "przykładowych wierszy"
 
-#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:116
+#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:119
 msgid "Number"
 msgstr "Ilość"
 
-#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:122
+#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:125
 msgid "Title"
 msgstr "Tytuł"
 
@@ -45,7 +45,7 @@ msgstr "Jednostka"
 msgid "Unit Price"
 msgstr "Cena jednostkowa"
 
-#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:135
+#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:138
 msgid "Budget"
 msgstr "Budżet"
 
@@ -53,7 +53,7 @@ msgstr "Budżet"
 msgid "Timesheets are billable"
 msgstr "Karty godzin gotowe do przeliczenia"
 
-#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:128
+#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:131
 msgid "Status"
 msgstr "Status"
 
@@ -85,7 +85,7 @@ msgstr "przeliczone"
 msgid "Description"
 msgstr "Opis"
 
-#: js/ExampleRecordGridPanel.js:159
+#: js/ExampleRecordGridPanel.js:162
 msgid "Show closed"
 msgstr "Pokaż zakończone"
 

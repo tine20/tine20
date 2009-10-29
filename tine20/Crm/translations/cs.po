@@ -32,194 +32,283 @@ msgstr "spravovat leady"
 msgid "Create new shared lead folders"
 msgstr ""
 
-#: Controller/Lead.php:185
+#: Controller/Lead.php:149
 msgid "State"
 msgstr "Status"
 
-#: Controller/Lead.php:186 js/ContactGridPanel.js:210
+#: Controller/Lead.php:150 js/Contact.js:260
 msgid "Type"
 msgstr "Typ"
 
-#: Controller/Lead.php:187
+#: Controller/Lead.php:151
 msgid "Source"
 msgstr "Zdroj"
 
-#: Controller/Lead.php:188 Export/Pdf.php:93 js/LeadEditDialog.js:350
+#: Controller/Lead.php:152 Export/Pdf.php:94 js/LeadEditDialog.js:384
 msgid "Start"
 msgstr "Začátek"
 
-#: Controller/Lead.php:189
+#: Controller/Lead.php:153
 msgid "Scheduled end"
 msgstr "Plánovaný konec"
 
-#: Controller/Lead.php:190 Export/Pdf.php:96 js/LeadEditDialog.js:213
+#: Controller/Lead.php:154 Export/Pdf.php:97 js/LeadEditDialog.js:235
 msgid "End"
 msgstr "Konec"
 
-#: Controller/Lead.php:191 Export/Pdf.php:87 js/LeadGridPanel.js:100
-#: js/LeadGridPanel.js:128
+#: Controller/Lead.php:155 Export/Ods.php:89 Export/Pdf.php:88
+#: js/LeadGridPanel.js:101 js/LeadGridPanel.js:132
 msgid "Turnover"
 msgstr "Obrat"
 
-#: Controller/Lead.php:192 Export/Pdf.php:90 js/LeadEditDialog.js:206
-#: js/LeadGridPanel.js:99 js/LeadGridPanel.js:127
+#: Controller/Lead.php:156 Export/Ods.php:94 Export/Pdf.php:91
+#: js/LeadEditDialog.js:228 js/LeadGridPanel.js:100 js/LeadGridPanel.js:131
 msgid "Probability"
 msgstr "Pravděpodobnost"
 
-#: Controller/Lead.php:193
+#: Controller/Lead.php:157
 msgid "Folder"
 msgstr "Složka"
 
-#: Controller/Lead.php:194
+#: Controller/Lead.php:158
 msgid "Updated by"
 msgstr "Aktualizoval(a)"
 
-#: Controller/Lead.php:195
+#: Controller/Lead.php:159
 msgid "Updated Fields:"
 msgstr "Aktualizované položky:"
 
-#: Controller/Lead.php:196
+#: Controller/Lead.php:160
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr "%s změněn z %s na %s."
 
-#: Controller/Lead.php:202
+#: Controller/Lead.php:166
 #, python-format
 msgid "Lead %s has been changed"
 msgstr "Lead %s byl změněn"
 
-#: Controller/Lead.php:204
+#: Controller/Lead.php:168
 #, python-format
 msgid "Lead %s has been creaded"
 msgstr "Lead %s byl vytvořen"
 
-#: Controller.php:100
+#: Controller.php:113
 #, python-format
 msgid "%s's personal leads"
 msgstr "osobní leady uživatele %s"
 
-#: Export/Pdf.php:75
-msgid "Lead Data"
-msgstr "Data leadu"
-
-#: Export/Pdf.php:78 js/LeadEditDialog.js:292 js/LeadGridPanel.js:126
-#: js/LeadState.js:231
-msgid "Leadstate"
-msgstr "Stav leadu"
-
-#: Export/Pdf.php:81 js/LeadEditDialog.js:312
-msgid "Leadtype"
-msgstr "Typ leadu"
-
-#: Export/Pdf.php:84 js/LeadEditDialog.js:319
-msgid "Leadsource"
-msgstr "Zdroj leadu"
-
-#: Export/Pdf.php:99
-msgid "End Scheduled"
-msgstr "Plánovaný konec"
-
-#: Export/Pdf.php:177
-msgid "Contacts"
-msgstr "Kontakty"
-
-#: Export/Pdf.php:204 js/ContactGridPanel.js:189
-msgid "Address"
-msgstr "Adresa"
-
-#: Export/Pdf.php:211
-msgid "Telephone"
-msgstr "Telefon"
-
-#: Export/Pdf.php:212
-msgid "Email"
-msgstr "Email"
-
-#: Export/Pdf.php:225 js/TaskGridPanel.js:87
-msgid "Tasks"
-msgstr "Úkoly"
-
-#: Export/Pdf.php:244 js/TaskGridPanel.js:170
-msgid "Due Date"
-msgstr "Termín dokončení"
-
-#: Export/Pdf.php:249 js/TaskGridPanel.js:183
-msgid "Priority"
-msgstr "Priorita"
-
-#: Export/Pdf.php:263 js/LeadGridPanel.js:238 js/ProductGridPanel.js:88
-msgid "Products"
-msgstr "Produkty"
-
-#: Export/Pdf.php:301
-msgid "low"
-msgstr "nízká"
-
-#: Export/Pdf.php:302
-msgid "normal"
-msgstr "normální"
-
-#: Export/Pdf.php:303
-msgid "high"
-msgstr "vysoká"
-
-#: Export/Pdf.php:304
-msgid "urgent"
-msgstr "urgentní"
-
-#: js/ContactGridPanel.js:118 js/ContactGridPanel.js:300
-#: js/ContactGridPanel.js:341 js/LeadGridPanel.js:125
+#: Controller.php:152 js/Contact.js:168 js/Contact.js:357 js/Contact.js:397
+#: js/LeadGridPanel.js:129
 msgid "Customer"
 msgstr "Zákazník"
 
-#: js/ContactGridPanel.js:119
-msgid "Change type to Customer"
-msgstr "Změnit typ na Zákazník"
-
-#: js/ContactGridPanel.js:128 js/ContactGridPanel.js:299
-#: js/ContactGridPanel.js:337
-msgid "Responsible"
-msgstr "Odpovědná osoba"
-
-#: js/ContactGridPanel.js:129
-msgid "Change type to Responsible"
-msgstr "Změnit typ na Odpovědná osoba"
-
-#: js/ContactGridPanel.js:138 js/ContactGridPanel.js:301
-#: js/ContactGridPanel.js:345 js/LeadGridPanel.js:124
+#: Controller.php:153 js/Contact.js:188 js/Contact.js:358 js/Contact.js:401
+#: js/LeadGridPanel.js:128
 msgid "Partner"
 msgstr "Partner"
 
-#: js/ContactGridPanel.js:139
+#: Controller.php:154
+#, fuzzy
+msgid "Reseller"
+msgstr "dealer"
+
+#: Controller.php:157
+msgid "open"
+msgstr "otevřený"
+
+#: Controller.php:158
+msgid "contacted"
+msgstr "kontaktovaný"
+
+#: Controller.php:159
+msgid "waiting for feedback"
+msgstr "čeká se na odezvu"
+
+#: Controller.php:160
+msgid "quote sent"
+msgstr "odeslána nabídka"
+
+#: Controller.php:161
+msgid "accepted"
+msgstr "přijatý"
+
+#: Controller.php:162
+msgid "lost"
+msgstr "ztracený"
+
+#: Controller.php:165
+msgid "Market"
+msgstr ""
+
+#: Controller.php:166 Export/Pdf.php:215
+msgid "Email"
+msgstr "Email"
+
+#: Controller.php:167 Export/Pdf.php:214
+msgid "Telephone"
+msgstr "Telefon"
+
+#: Controller.php:168
+#, fuzzy
+msgid "Website"
+msgstr "web"
+
+#: Export/Ods.php:79
+#, fuzzy
+msgid "Lead Name"
+msgstr "Jméno leadu"
+
+#: Export/Ods.php:84 js/LeadEditDialog.js:421 js/Product.js:141
+msgid "Description"
+msgstr "Popis"
+
+#: Export/Ods.php:99
+#, fuzzy
+msgid "Date Start"
+msgstr "Začátek"
+
+#: Export/Ods.php:104
+msgid "Date End"
+msgstr ""
+
+#: Export/Ods.php:109
+#, fuzzy
+msgid "Date End Scheduled"
+msgstr "Plánovaný konec"
+
+#: Export/Ods.php:114
+#, fuzzy
+msgid "Created By"
+msgstr "Aktualizoval(a)"
+
+#: Export/Pdf.php:76
+msgid "Lead Data"
+msgstr "Data leadu"
+
+#: Export/Pdf.php:79 js/AdminPanel.js:169 js/LeadEditDialog.js:327
+#: js/LeadGridPanel.js:98 js/LeadGridPanel.js:130
+msgid "Leadstate"
+msgstr "Stav leadu"
+
+#: Export/Pdf.php:82 js/AdminPanel.js:183 js/LeadEditDialog.js:346
+msgid "Leadtype"
+msgstr "Typ leadu"
+
+#: Export/Pdf.php:85 js/AdminPanel.js:176 js/LeadEditDialog.js:353
+msgid "Leadsource"
+msgstr "Zdroj leadu"
+
+#: Export/Pdf.php:100
+msgid "End Scheduled"
+msgstr "Plánovaný konec"
+
+#: Export/Pdf.php:180
+msgid "Contacts"
+msgstr "Kontakty"
+
+#: Export/Pdf.php:207 js/Contact.js:239
+msgid "Address"
+msgstr "Adresa"
+
+#: Export/Pdf.php:228 js/Task.js:87
+msgid "Tasks"
+msgstr "Úkoly"
+
+#: Export/Pdf.php:247 js/Task.js:170
+msgid "Due Date"
+msgstr "Termín dokončení"
+
+#: Export/Pdf.php:252 js/Task.js:183
+msgid "Priority"
+msgstr "Priorita"
+
+#: Export/Pdf.php:267 js/LeadGridPanel.js:239 js/Product.js:87
+msgid "Products"
+msgstr "Produkty"
+
+#: Export/Pdf.php:308
+msgid "low"
+msgstr "nízká"
+
+#: Export/Pdf.php:309
+msgid "normal"
+msgstr "normální"
+
+#: Export/Pdf.php:310
+msgid "high"
+msgstr "vysoká"
+
+#: Export/Pdf.php:311
+msgid "urgent"
+msgstr "urgentní"
+
+#: js/AdminPanel.js:134
+#, fuzzy
+msgid "Leadstates"
+msgstr "Status leadů"
+
+#: js/AdminPanel.js:138
+#, fuzzy
+msgid "Leadtypes"
+msgstr "Typy leadů"
+
+#: js/AdminPanel.js:142
+#, fuzzy
+msgid "Leadsources"
+msgstr "Zroje leadů"
+
+#: js/AdminPanel.js:150
+msgid "Defaults"
+msgstr ""
+
+#: js/AdminPanel.js:266
+#, fuzzy
+msgid "Remove Option"
+msgstr "Odstranit produkty"
+
+#: js/Contact.js:169
+msgid "Change type to Customer"
+msgstr "Změnit typ na Zákazník"
+
+#: js/Contact.js:178 js/Contact.js:356 js/Contact.js:393
+msgid "Responsible"
+msgstr "Odpovědná osoba"
+
+#: js/Contact.js:179
+msgid "Change type to Responsible"
+msgstr "Změnit typ na Odpovědná osoba"
+
+#: js/Contact.js:189
 msgid "Change type to Partner"
 msgstr "Změnit typ na Partner"
 
-#: js/ContactGridPanel.js:150
+#: js/Contact.js:200
 msgid "Change contact type"
 msgstr "Změnit typ kontaktu"
 
-#: js/ContactGridPanel.js:163
+#: js/Contact.js:213
 msgid "Search for Contacts to add ..."
 msgstr "Hledat kontakty pro přidání"
 
-#: js/ContactGridPanel.js:180
+#: js/Contact.js:230
 msgid "Name"
 msgstr "Jméno"
 
-#: js/ContactGridPanel.js:200
+#: js/Contact.js:250
 #, fuzzy
 msgid "Data"
 msgstr "Data leadu"
 
-#: js/ContactGridPanel.js:203 js/LeadGridPanel.js:271
+#: js/Contact.js:253 js/LeadGridPanel.js:272
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/ContactGridPanel.js:204 js/LeadGridPanel.js:272
+#: js/Contact.js:254 js/LeadGridPanel.js:273
 msgid "Cellphone"
 msgstr "Mobilní telefon"
 
-#: js/LeadEditDialog.js:240 js/LeadGridPanel.js:96 js/Models.js:56
+#: js/LeadEditDialog.js:262 js/LeadGridPanel.js:96 js/Models.js:56
 #, fuzzy
 msgid "Lead"
 msgid_plural "Leads"
@@ -227,23 +316,19 @@ msgstr[0] "Lead"
 msgstr[1] "Lead"
 msgstr[2] "Lead"
 
-#: js/LeadEditDialog.js:264
+#: js/LeadEditDialog.js:289
 msgid "Enter short name"
 msgstr "Zadejte stručný název"
 
-#: js/LeadEditDialog.js:335
+#: js/LeadEditDialog.js:369
 msgid "Expected turnover"
 msgstr "Očekávaný obrat"
 
-#: js/LeadEditDialog.js:356
+#: js/LeadEditDialog.js:390
 msgid "Estimated end"
 msgstr "Odhadovaný konec"
 
-#: js/LeadEditDialog.js:386 js/ProductGridPanel.js:150
-msgid "Description"
-msgstr "Popis"
-
-#: js/LeadEditDialog.js:400
+#: js/LeadEditDialog.js:435
 msgid "Enter description"
 msgstr "Zadejte popis"
 
@@ -252,73 +337,88 @@ msgstr "Zadejte popis"
 msgid "Contact"
 msgstr "Kontakty"
 
-#: js/LeadGridPanel.js:97 js/LeadGridPanel.js:123
+#: js/LeadGridPanel.js:97 js/LeadGridPanel.js:127
 msgid "Lead name"
 msgstr "Jméno leadu"
 
-#: js/LeadGridPanel.js:121
+#: js/LeadGridPanel.js:125
 msgid "Lead id"
 msgstr "ID Leadu"
 
-#: js/LeadGridPanel.js:122
+#: js/LeadGridPanel.js:126
 #, fuzzy
 msgid "Tags"
 msgstr "Úkoly"
 
-#: js/LeadGridPanel.js:168
+#: js/LeadGridPanel.js:172
 msgid "Add task"
 msgstr "Přidat úkol"
 
-#: js/LeadGridPanel.js:169
+#: js/LeadGridPanel.js:173
 msgid "Add task for selected lead"
 msgstr "Přiat úkol pro vybraný lead"
 
-#: js/LeadGridPanel.js:179
+#: js/LeadGridPanel.js:183
 #, fuzzy
 msgid "Export Lead"
 msgstr "Exportovat do PDF"
 
-#: js/LeadGridPanel.js:188
+#: js/LeadGridPanel.js:192
 msgid "Export as PDF"
 msgstr "Exportovat do PDF"
 
-#: js/LeadGridPanel.js:195
+#: js/LeadGridPanel.js:199
 #, fuzzy
 msgid "Export as CSV"
 msgstr "Exportovat do PDF"
 
-#: js/LeadGridPanel.js:202
+#: js/LeadGridPanel.js:206
 #, fuzzy
 msgid "Export as ODS"
 msgstr "Exportovat do PDF"
 
-#: js/LeadGridPanel.js:214
+#: js/LeadGridPanel.js:217
 #, fuzzy
 msgid "Show closed"
 msgstr "Zobrazit uzavřené leady"
 
-#: js/LeadGridPanel.js:235
+#: js/LeadGridPanel.js:236
 msgid "Lead states"
 msgstr "Status leadů"
 
-#: js/LeadGridPanel.js:236
+#: js/LeadGridPanel.js:237
 msgid "Lead sources"
 msgstr "Zroje leadů"
 
-#: js/LeadGridPanel.js:237
+#: js/LeadGridPanel.js:238
 msgid "Lead types"
 msgstr "Typy leadů"
+
+#: js/LeadSource.js:113
+#, fuzzy
+msgid "Add a Leadsource..."
+msgstr "Zdroj leadu"
+
+#: js/LeadState.js:132
+#, fuzzy
+msgid "Add a Leadstate..."
+msgstr "Přidat úkol..."
+
+#: js/LeadType.js:111
+#, fuzzy
+msgid "Add a Leadtype..."
+msgstr "Přidat produkt..."
 
 #: js/LinkGridPanel.js:25 js/LinkGridPanel.js:26
 #, fuzzy
 msgid "Add new {0}"
 msgstr "Přidat nový lead"
 
-#: js/LinkGridPanel.js:42
+#: js/LinkGridPanel.js:42 js/Product.js:179
 msgid "Unlink {0}"
 msgstr ""
 
-#: js/LinkGridPanel.js:43
+#: js/LinkGridPanel.js:43 js/Product.js:180
 #, fuzzy
 msgid "Unlink selected {0}"
 msgstr "Zrušit odkazy na vybrané kontakty"
@@ -333,100 +433,72 @@ msgstr "Editovat lead \"{0}\""
 msgid "Edit selected {0}"
 msgstr "Editovat vybraný lead"
 
-#: js/Models.js:60 js/Models.js:130
+#: js/Models.js:60 js/Models.js:136
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Models.js:127 js/ProductGridPanel.js:133
+#: js/Models.js:132
+msgid "Settings"
+msgid_plural "Settings"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Product.js:136
 #, fuzzy
 msgid "Product"
-msgid_plural "Products"
-msgstr[0] "Produkt"
-msgstr[1] "Produkt"
-msgstr[2] "Produkt"
+msgstr "Produkt"
 
-#: js/ProductGridPanel.js:142
-msgid "Add a product..."
-msgstr "Přidat produkt..."
-
-#: js/ProductGridPanel.js:162
+#: js/Product.js:148
 msgid "Price"
 msgstr "Cena"
 
-#: js/TaskGridPanel.js:113
+#: js/Product.js:160
+msgid "Quantity"
+msgstr ""
+
+#: js/Product.js:210
+#, fuzzy
+msgid "Search for Products to add ..."
+msgstr "Hledat kontakty pro přidání"
+
+#: js/Task.js:113
 msgid "No Tasks to display"
 msgstr "Žádné úkoly ke zobrazení"
 
-#: js/TaskGridPanel.js:162
+#: js/Task.js:162
 msgid "Summary"
 msgstr "Přehled"
 
-#: js/TaskGridPanel.js:166
+#: js/Task.js:166
 msgid "Add a task..."
 msgstr "Přidat úkol..."
 
-#: js/TaskGridPanel.js:197
+#: js/Task.js:197
 msgid "Percent"
 msgstr "Procent"
 
-#: js/TaskGridPanel.js:210
+#: js/Task.js:210
 msgid "Status"
 msgstr "Status"
 
-#: Setup/setup.xml:372
-msgid "telephone"
-msgstr "telefon"
+#~ msgid "telephone"
+#~ msgstr "telefon"
 
-#: Setup/setup.xml:386
-msgid "email"
-msgstr "email"
+#~ msgid "email"
+#~ msgstr "email"
 
-#: Setup/setup.xml:400
-msgid "website"
-msgstr "web"
+#~ msgid "fair"
+#~ msgstr "veletrh"
 
-#: Setup/setup.xml:414
-msgid "fair"
-msgstr "veletrh"
+#~ msgid "customer"
+#~ msgstr "zákazník"
 
-#: Setup/setup.xml:428
-msgid "customer"
-msgstr "zákazník"
-
-#: Setup/setup.xml:442
-msgid "partner"
-msgstr "partner"
-
-#: Setup/setup.xml:456
-msgid "reseller"
-msgstr "dealer"
-
-#: Setup/setup.xml:470
-msgid "open"
-msgstr "otevřený"
-
-#: Setup/setup.xml:488
-msgid "contacted"
-msgstr "kontaktovaný"
-
-#: Setup/setup.xml:506
-msgid "waiting for feedback"
-msgstr "čeká se na odezvu"
-
-#: Setup/setup.xml:524
-msgid "quote sent"
-msgstr "odeslána nabídka"
-
-#: Setup/setup.xml:542
-msgid "accepted"
-msgstr "přijatý"
-
-#: Setup/setup.xml:564
-msgid "lost"
-msgstr "ztracený"
+#~ msgid "partner"
+#~ msgstr "partner"
 
 #~ msgid "Are you sure you want to delete this lead?"
 #~ msgstr "Určitě chcete smazat tento lead?"
@@ -514,9 +586,6 @@ msgstr "ztracený"
 
 #~ msgid "Remove selected tasks"
 #~ msgstr "Odstranit vybrané úkoly"
-
-#~ msgid "Remove products"
-#~ msgstr "Odstranit produkty"
 
 #~ msgid "Remove selected products"
 #~ msgstr "Odstranit vybrané produkty"

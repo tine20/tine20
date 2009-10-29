@@ -63,19 +63,19 @@ msgstr "创建者"
 msgid "Activities"
 msgstr "活动"
 
-#: Frontend/Http.php:377 js/tineInit.js:386
+#: Frontend/Http.php:535 js/tineInit.js:392
 msgid "Authorisation Required"
 msgstr "需要授权"
 
-#: Frontend/Http.php:378
+#: Frontend/Http.php:536
 msgid "Your session is not valid. You need to login again."
 msgstr "会话无效，需要重新登录"
 
-#: Frontend/Http.php:404 js/ExceptionDialog.js:46
+#: Frontend/Http.php:562 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "非正常结束"
 
-#: Frontend/Http.php:405 js/ExceptionDialog.js:71
+#: Frontend/Http.php:563 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "有错误发生，程序非正常终止"
 
@@ -320,7 +320,7 @@ msgid ""
 "needed files locally on this computer."
 msgstr "安装 Gears 可以通过缓存所有需要的文件到本地电脑来提高 Tine 2.0 的性能"
 
-#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:640
+#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:648
 #: js/widgets/dialog/EditDialog.js:451
 #: js/widgets/grid/PersistentFilterPicker.js:124
 #: js/widgets/tree/ContextMenu.js:84
@@ -349,6 +349,12 @@ msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] ""
 
+#: js/Models.js:272
+#, fuzzy
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] "正加载"
+
 #: js/tineInit.js:363
 msgid "Connection lost, please check your network!"
 msgstr "失去连接，请检查网络"
@@ -359,41 +365,51 @@ msgid ""
 "contact your administrator."
 msgstr "服务器没有响应你的请求，请检查网络或联系管理员。"
 
-#: js/tineInit.js:387
+#: js/tineInit.js:374
+msgid "No response"
+msgstr ""
+
+#: js/tineInit.js:375
+msgid ""
+"We did not receive a response from the server. Your network could be down or "
+"a timeout occurred."
+msgstr ""
+
+#: js/tineInit.js:393
 msgid "Your session timed out. You need to login again."
 msgstr "会话超时，需要重新登录"
 
-#: js/tineInit.js:400
+#: js/tineInit.js:406
 msgid "Insufficient Rights"
 msgstr "权限不够"
 
-#: js/tineInit.js:401
+#: js/tineInit.js:407
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "对不起，你不允许执行该动作"
 
-#: js/tineInit.js:410
+#: js/tineInit.js:416
 #, fuzzy
 msgid "Not Found"
 msgstr "不允许"
 
-#: js/tineInit.js:411
+#: js/tineInit.js:417
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr ""
 
-#: js/tineInit.js:420
+#: js/tineInit.js:426
 msgid "Concurrent Updates"
 msgstr "同时更新"
 
-#: js/tineInit.js:421
+#: js/tineInit.js:427
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
 msgstr "当你编辑时，有人保存了这条记录。你 ..."
 
-#: js/tineInit.js:680
+#: js/tineInit.js:686
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
@@ -437,8 +453,8 @@ msgstr "在线"
 msgid "offline"
 msgstr "离线"
 
-#: js/ux/ConnectionStatus.js:54 User/Abstract.php:242 User/Abstract.php:243
-#: User/Abstract.php:244 User/Abstract.php:245 User/Abstract.php:246
+#: js/ux/ConnectionStatus.js:54 User/Abstract.php:247 User/Abstract.php:248
+#: User/Abstract.php:249 User/Abstract.php:250 User/Abstract.php:251
 msgid "unknown"
 msgstr "未知"
 
@@ -519,7 +535,7 @@ msgstr "切换选择"
 msgid "Remove account"
 msgstr "删除帐户"
 
-#: js/widgets/account/ConfigGrid.js:85 js/widgets/account/PickerPanel.js:166
+#: js/widgets/account/ConfigGrid.js:85 js/widgets/account/PickerPanel.js:187
 msgid "Name"
 msgstr "名子"
 
@@ -527,15 +543,15 @@ msgstr "名子"
 msgid "add account"
 msgstr "添加帐户"
 
-#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:389
+#: js/widgets/account/PickerPanel.js:198 js/widgets/GridPicker.js:389
 msgid "enter searchfilter"
 msgstr "输入搜索过滤器"
 
-#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:410
+#: js/widgets/account/PickerPanel.js:242 js/widgets/GridPicker.js:410
 msgid "Search"
 msgstr "搜索"
 
-#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
+#: js/widgets/account/PickerPanel.js:278 js/widgets/account/PickerPanel.js:279
 #: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
 msgid "Browse"
 msgstr "浏览"
@@ -548,133 +564,133 @@ msgstr "没有人"
 msgid "please select an account"
 msgstr "请选择帐户"
 
-#: js/widgets/ActivitiesPanel.js:138
+#: js/widgets/ActivitiesPanel.js:141
 msgid "Add a Note..."
 msgstr "添加一个注释..."
 
-#: js/widgets/ActivitiesPanel.js:153 js/widgets/ActivitiesPanel.js:165
+#: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:168
 #: js/widgets/container/GrantsDialog.js:92
 msgid "Add"
 msgstr "添加"
 
-#: js/widgets/ActivitiesPanel.js:153 js/widgets/ActivitiesPanel.js:393
-#: js/widgets/ActivitiesPanel.js:520
+#: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:396
+#: js/widgets/ActivitiesPanel.js:523
 msgid "Note"
 msgstr "注释"
 
-#: js/widgets/ActivitiesPanel.js:166 js/widgets/ActivitiesPanel.js:319
+#: js/widgets/ActivitiesPanel.js:169 js/widgets/ActivitiesPanel.js:322
 msgid "Add new note"
 msgstr "添加新注释"
 
-#: js/widgets/ActivitiesPanel.js:197
+#: js/widgets/ActivitiesPanel.js:200
 msgid "Notes"
 msgstr "注释"
 
-#: js/widgets/ActivitiesPanel.js:261 js/widgets/ActivitiesPanel.js:318
+#: js/widgets/ActivitiesPanel.js:264 js/widgets/ActivitiesPanel.js:321
 msgid "Add Note"
 msgstr "添加注释"
 
-#: js/widgets/ActivitiesPanel.js:262
+#: js/widgets/ActivitiesPanel.js:265
 msgid "Enter new note:"
 msgstr "输入新注释："
 
-#: js/widgets/ActivitiesPanel.js:305
+#: js/widgets/ActivitiesPanel.js:308
 msgid "Add a {0} Note"
 msgstr "添加一个 {0} 注释"
 
-#: js/widgets/ActivitiesPanel.js:391 js/widgets/ActivitiesPanel.js:526
+#: js/widgets/ActivitiesPanel.js:394 js/widgets/ActivitiesPanel.js:529
 msgid "Type"
 msgstr "类型"
 
-#: js/widgets/ActivitiesPanel.js:394
+#: js/widgets/ActivitiesPanel.js:397
 msgid "Created By"
 msgstr "创建者"
 
-#: js/widgets/ActivitiesPanel.js:395
+#: js/widgets/ActivitiesPanel.js:398
 msgid "Timestamp"
 msgstr "时间戳"
 
-#: js/widgets/ActivitiesPanel.js:409
+#: js/widgets/ActivitiesPanel.js:412
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr "显示历史记录 {0} - {1} of {2}"
 
-#: js/widgets/ActivitiesPanel.js:410
+#: js/widgets/ActivitiesPanel.js:413
 msgid "No history to display"
 msgstr "没有历史要显示"
 
-#: js/widgets/ActivitiesPanel.js:508
+#: js/widgets/ActivitiesPanel.js:511
 msgid "History"
 msgstr "历史"
 
-#: js/widgets/ActivitiesPanel.js:521 js/widgets/ActivitiesPanel.js:522
+#: js/widgets/ActivitiesPanel.js:524 js/widgets/ActivitiesPanel.js:525
 msgid "Time"
 msgstr "时间"
 
-#: js/widgets/ActivitiesPanel.js:524
+#: js/widgets/ActivitiesPanel.js:527
 msgid "User"
 msgstr "用户"
 
-#: js/widgets/app/GridPanel.js:254
+#: js/widgets/app/GridPanel.js:256
 msgid "Edit {0}"
 msgstr "编辑{0}"
 
-#: js/widgets/app/GridPanel.js:265 js/widgets/tree/ContextMenu.js:214
+#: js/widgets/app/GridPanel.js:267 js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
 msgstr "添加{0}"
 
-#: js/widgets/app/GridPanel.js:275 js/widgets/app/GridPanel.js:276
-#: js/widgets/app/GridPanel.js:278
+#: js/widgets/app/GridPanel.js:277 js/widgets/app/GridPanel.js:278
+#: js/widgets/app/GridPanel.js:280
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "删除"
 
-#: js/widgets/app/GridPanel.js:298
+#: js/widgets/app/GridPanel.js:300
 #, fuzzy
 msgid "Tagging"
 msgstr "标签"
 
-#: js/widgets/app/GridPanel.js:368
+#: js/widgets/app/GridPanel.js:376
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "显示记录 {0} - {1} of {2}"
 
-#: js/widgets/app/GridPanel.js:369
+#: js/widgets/app/GridPanel.js:377
 msgid "No {0} to display"
 msgstr "没有{0}要显示"
 
-#: js/widgets/app/GridPanel.js:390
+#: js/widgets/app/GridPanel.js:398
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr "没有找到 {0}，请修改过滤条件，视图选项或搜索词 {1}"
 
-#: js/widgets/app/GridPanel.js:625
+#: js/widgets/app/GridPanel.js:633
 msgid "Not Allowed"
 msgstr "不允许"
 
-#: js/widgets/app/GridPanel.js:626
+#: js/widgets/app/GridPanel.js:634
 msgid "You are not allowed to delete all pages at once"
 msgstr "你不允许一次地删除所有页面"
 
-#: js/widgets/app/GridPanel.js:638
+#: js/widgets/app/GridPanel.js:646
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "真的想删除选中的记录？"
 
-#: js/widgets/app/GridPanel.js:644 js/widgets/dialog/EditDialog.js:453
+#: js/widgets/app/GridPanel.js:652 js/widgets/dialog/EditDialog.js:453
 msgid "Deleting {0}"
 msgstr "正删除{0}"
 
-#: js/widgets/app/GridPanel.js:646
+#: js/widgets/app/GridPanel.js:654
 msgid " ... This may take a long time!"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:660 js/widgets/dialog/EditDialog.js:425
+#: js/widgets/app/GridPanel.js:668 js/widgets/dialog/EditDialog.js:425
 #: js/widgets/dialog/EditDialog.js:463 js/widgets/tags/TagsPanel.js:287
 #: js/widgets/tags/TagsPanel.js:397 js/widgets/tags/TagsPanel.js:430
 msgid "Failed"
 msgstr "失败"
 
-#: js/widgets/app/GridPanel.js:660 js/widgets/dialog/EditDialog.js:463
+#: js/widgets/app/GridPanel.js:668 js/widgets/dialog/EditDialog.js:463
 msgid "Could not delete {0}."
 msgstr "不能删除{0}"
 
@@ -855,6 +871,11 @@ msgstr "不能保存{0}。"
 msgid "Do you really want to delete this {0}?"
 msgstr "真的想删除这个{0}？"
 
+#: js/widgets/dialog/LinkPanel.js:48
+#, fuzzy
+msgid "Links"
+msgstr "登录"
+
 #: js/widgets/dialog/PreferencesDialog.js:137
 #, fuzzy
 msgid "Admin Mode"
@@ -907,115 +928,124 @@ msgstr "正传递{0}..."
 msgid "Save config"
 msgstr "保存到"
 
-#: js/widgets/grid/FilterModel.js:129
+#: js/widgets/form/RecordPickerComboBox.js:59 js/widgets/tags/TagsPanel.js:465
+msgid "Searching..."
+msgstr "搜索..."
+
+#: js/widgets/grid/FilterModel.js:146
 msgid "contains"
 msgstr "包含"
 
-#: js/widgets/grid/FilterModel.js:130
+#: js/widgets/grid/FilterModel.js:147
 msgid "is equal to"
 msgstr "等于"
 
-#: js/widgets/grid/FilterModel.js:131
+#: js/widgets/grid/FilterModel.js:148
 msgid "is greater than"
 msgstr "大于"
 
-#: js/widgets/grid/FilterModel.js:132
+#: js/widgets/grid/FilterModel.js:149
 msgid "is less than"
 msgstr "小于"
 
-#: js/widgets/grid/FilterModel.js:133
+#: js/widgets/grid/FilterModel.js:150
 msgid "is not"
 msgstr "不是"
 
-#: js/widgets/grid/FilterModel.js:134
+#: js/widgets/grid/FilterModel.js:151
 msgid "is in"
 msgstr "在其中"
 
-#: js/widgets/grid/FilterModel.js:135
+#: js/widgets/grid/FilterModel.js:152
 msgid "is before"
 msgstr "是以前"
 
-#: js/widgets/grid/FilterModel.js:136
+#: js/widgets/grid/FilterModel.js:153
 msgid "is after"
 msgstr "寻找"
 
-#: js/widgets/grid/FilterModel.js:137
+#: js/widgets/grid/FilterModel.js:154
 msgid "is within"
 msgstr "在其中"
 
-#: js/widgets/grid/FilterModel.js:138
+#: js/widgets/grid/FilterModel.js:155
+#, fuzzy
+msgid "is in week #"
+msgstr "本周"
+
+#: js/widgets/grid/FilterModel.js:156
 msgid "starts with"
 msgstr "开始"
 
-#: js/widgets/grid/FilterModel.js:139
+#: js/widgets/grid/FilterModel.js:157
 msgid "ends with"
 msgstr "结束"
 
-#: js/widgets/grid/FilterModel.js:177
+#: js/widgets/grid/FilterModel.js:195
 msgid "select a operator"
 msgstr "选择一个操作者"
 
-#: js/widgets/grid/FilterModel.js:345
+#: js/widgets/grid/FilterModel.js:386
 msgid "today"
 msgstr "今天"
 
-#: js/widgets/grid/FilterModel.js:346
+#: js/widgets/grid/FilterModel.js:387
 msgid "yesterday"
 msgstr "昨天"
 
-#: js/widgets/grid/FilterModel.js:347
+#: js/widgets/grid/FilterModel.js:388
 msgid "this week"
 msgstr "本周"
 
-#: js/widgets/grid/FilterModel.js:348
+#: js/widgets/grid/FilterModel.js:389
 msgid "last week"
 msgstr "上周"
 
-#: js/widgets/grid/FilterModel.js:349
+#: js/widgets/grid/FilterModel.js:390
 msgid "the week before last"
 msgstr "上上周"
 
-#: js/widgets/grid/FilterModel.js:350
+#: js/widgets/grid/FilterModel.js:391
 msgid "this month"
 msgstr "本月"
 
-#: js/widgets/grid/FilterModel.js:351
+#: js/widgets/grid/FilterModel.js:392
 msgid "last month"
 msgstr "上个月"
 
-#: js/widgets/grid/FilterModel.js:352
+#: js/widgets/grid/FilterModel.js:393
 msgid "this quarter"
 msgstr "本季度"
 
-#: js/widgets/grid/FilterModel.js:353
+#: js/widgets/grid/FilterModel.js:394
 msgid "last quarter"
 msgstr "上个季度"
 
-#: js/widgets/grid/FilterModel.js:354
+#: js/widgets/grid/FilterModel.js:395
 msgid "this year"
 msgstr "今年"
 
-#: js/widgets/grid/FilterModel.js:355
+#: js/widgets/grid/FilterModel.js:396
 msgid "last year"
 msgstr "去年"
 
-#: js/widgets/grid/FilterModel.js:359
+#: js/widgets/grid/FilterModel.js:400
 msgid "tomorrow"
 msgstr "明天"
 
-#: js/widgets/grid/FilterModel.js:360
+#: js/widgets/grid/FilterModel.js:401
 msgid "next week"
 msgstr "下周"
 
-#: js/widgets/grid/FilterModel.js:361
+#: js/widgets/grid/FilterModel.js:402
 msgid "next month"
 msgstr "下个月"
 
-#: js/widgets/grid/FilterModel.js:362
+#: js/widgets/grid/FilterModel.js:403
 msgid "next quarter"
 msgstr "下个季度"
 
-#: js/widgets/grid/FilterModel.js:363
+#: js/widgets/grid/FilterModel.js:404
 msgid "next year"
 msgstr "明年"
 
@@ -1031,7 +1061,7 @@ msgstr "重置所有的过滤器"
 msgid "start search"
 msgstr "开始搜索"
 
-#: js/widgets/grid/FilterToolbar.js:146 js/widgets/grid/FilterToolbar.js:611
+#: js/widgets/grid/FilterToolbar.js:146 js/widgets/grid/FilterToolbar.js:631
 msgid "save filter"
 msgstr "保存过滤器"
 
@@ -1051,30 +1081,30 @@ msgstr "和"
 msgid "Show"
 msgstr "显示"
 
-#: js/widgets/grid/FilterToolbar.js:611
+#: js/widgets/grid/FilterToolbar.js:631
 msgid "Please enter a name for the filter"
 msgstr "请输入过滤器的名称"
 
-#: js/widgets/grid/FilterToolbar.js:614 js/widgets/grid/FilterToolbar.js:617
+#: js/widgets/grid/FilterToolbar.js:634 js/widgets/grid/FilterToolbar.js:637
 msgid "Filter not Saved"
 msgstr "过滤器没有保存"
 
-#: js/widgets/grid/FilterToolbar.js:614
+#: js/widgets/grid/FilterToolbar.js:634
 msgid "You have to supply a name for the filter!"
 msgstr "你需要提供过滤器的名称！"
 
-#: js/widgets/grid/FilterToolbar.js:617
+#: js/widgets/grid/FilterToolbar.js:637
 msgid ""
 "You have to supply a shorter name! Names of saved filters can only be up to "
 "40 characters long."
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:620 js/widgets/LangChooser.js:64
+#: js/widgets/grid/FilterToolbar.js:640 js/widgets/LangChooser.js:64
 #: js/widgets/TimezoneChooser.js:74
 msgid "Please Wait"
 msgstr "请等待"
 
-#: js/widgets/grid/FilterToolbar.js:620
+#: js/widgets/grid/FilterToolbar.js:640
 msgid "Saving filter"
 msgstr "正保存过滤器"
 
@@ -1126,7 +1156,7 @@ msgstr "高"
 msgid "urgent"
 msgstr "紧急"
 
-#: js/widgets/tags/TagCombo.js:38
+#: js/widgets/tags/TagCombo.js:40
 msgid "tag name"
 msgstr "标签名"
 
@@ -1249,10 +1279,6 @@ msgstr "不能更新标签"
 msgid "Enter tag name"
 msgstr "输入标签名"
 
-#: js/widgets/tags/TagsPanel.js:465
-msgid "Searching..."
-msgstr "搜索..."
-
 #: js/widgets/tags/TagsPanel.js:599
 msgid "Color"
 msgstr "颜色"
@@ -1338,11 +1364,11 @@ msgstr "这是重要的更新，必需尽快安装！"
 msgid "Please consider updating!"
 msgstr "请考虑更新！"
 
-#: Notes.php:370
+#: Notes.php:375
 msgid "by"
 msgstr "由"
 
-#: Notes.php:377
+#: Notes.php:382
 msgid "Changed fields:"
 msgstr "已修改的字段："
 
@@ -1372,43 +1398,43 @@ msgid ""
 "You can choose between ExtJs style windows or normal Browser popup windows."
 msgstr ""
 
-#: Setup/setup.xml:2390
+#: Setup/setup.xml:2506
 msgid "note"
 msgstr "注释"
 
-#: Setup/setup.xml:2395
+#: Setup/setup.xml:2511
 msgid "default note type"
 msgstr "缺省注释类型"
 
-#: Setup/setup.xml:2421
+#: Setup/setup.xml:2537
 msgid "telephone"
 msgstr "电话"
 
-#: Setup/setup.xml:2426
+#: Setup/setup.xml:2542
 msgid "telephone call"
 msgstr "电话呼叫"
 
-#: Setup/setup.xml:2452
+#: Setup/setup.xml:2568
 msgid "email"
 msgstr "电子邮件"
 
-#: Setup/setup.xml:2457
+#: Setup/setup.xml:2573
 msgid "email contact"
 msgstr "电子邮件联系"
 
-#: Setup/setup.xml:2483
+#: Setup/setup.xml:2599
 msgid "created"
 msgstr "生成的"
 
-#: Setup/setup.xml:2488
+#: Setup/setup.xml:2604
 msgid "record created"
 msgstr "记录已生成"
 
-#: Setup/setup.xml:2514
+#: Setup/setup.xml:2630
 msgid "changed"
 msgstr "已修改"
 
-#: Setup/setup.xml:2519
+#: Setup/setup.xml:2635
 msgid "record changed"
 msgstr "记录已修改"
 

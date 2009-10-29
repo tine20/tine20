@@ -309,46 +309,46 @@ msgstr "Zdroj nebo cíl"
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Zobrazuji "
 
-#: js/Phone.js:648 js/Phone.js:686
+#: js/Phone.js:648 js/Phone.js:692
 msgid "No calls to display"
 msgstr "Žádné hovory ke zobrazení"
 
-#: js/Phone.js:653
+#: js/Phone.js:658
 msgid "Direction"
 msgstr "Směr"
 
-#: js/Phone.js:654
+#: js/Phone.js:659
 msgid "Source"
 msgstr "Zdroj"
 
-#: js/Phone.js:655
+#: js/Phone.js:660
 msgid "Caller Id"
 msgstr "ID volajícího"
 
-#: js/Phone.js:656
+#: js/Phone.js:661
 msgid "Destination"
 msgstr "Cíl"
 
-#: js/Phone.js:657
+#: js/Phone.js:662
 msgid "Start"
 msgstr "Začátek"
 
-#: js/Phone.js:658
+#: js/Phone.js:663
 msgid "Connected"
 msgstr "Spojený"
 
-#: js/Phone.js:659
+#: js/Phone.js:664
 msgid "Disconnected"
 msgstr "Odpojený"
 
-#: js/Phone.js:660
+#: js/Phone.js:665
 msgid "Duration"
 msgstr "Trvání"
 
-#: js/Phone.js:661
+#: js/Phone.js:666
 msgid "Ringing"
 msgstr "Vyzvání"
 
-#: js/Phone.js:662
+#: js/Phone.js:667
 msgid "Call ID"
 msgstr "ID hovoru"
