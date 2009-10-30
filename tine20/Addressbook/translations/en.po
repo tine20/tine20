@@ -497,7 +497,7 @@ msgid_plural "Links [%d]"
 msgstr[0] "Link"
 msgstr[1] "Links [%d]"
 
-#: js/SearchCombo.js:76
+#: js/SearchCombo.js:78
 msgid "Searching..."
 msgstr "Searching..."
 

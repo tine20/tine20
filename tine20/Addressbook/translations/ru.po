@@ -510,7 +510,7 @@ msgstr[0] "Ссылка"
 msgstr[1] "Ссылки [%d]"
 msgstr[2] "Ссылок [%d]"
 
-#: js/SearchCombo.js:76
+#: js/SearchCombo.js:78
 msgid "Searching..."
 msgstr "Поиск..."
 

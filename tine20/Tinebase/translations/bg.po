@@ -64,19 +64,19 @@ msgstr "Обработен/създаден от "
 msgid "Activities"
 msgstr "Операции"
 
-#: Frontend/Http.php:535 js/tineInit.js:392
+#: Frontend/Http.php:536 js/tineInit.js:392
 msgid "Authorisation Required"
 msgstr "Изискано упълномощаване"
 
-#: Frontend/Http.php:536
+#: Frontend/Http.php:537
 msgid "Your session is not valid. You need to login again."
 msgstr "Лимита на сесията е преминат. Трябва да се регистрирате наново."
 
-#: Frontend/Http.php:562 js/ExceptionDialog.js:46
+#: Frontend/Http.php:563 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Програмен срив"
 
-#: Frontend/Http.php:563 js/ExceptionDialog.js:71
+#: Frontend/Http.php:564 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "Грешка, водеща до рограмен срив."
 
@@ -111,7 +111,7 @@ msgstr[0] "списък със задачи"
 msgstr[1] "списъка със задачи"
 
 #: js/ExceptionDialog.js:54 js/MainScreen.js:449
-#: js/widgets/AccountpickerPanel.js:164
+#: js/widgets/AccountpickerPanel.js:166
 #: js/widgets/container/ContainerSelect.js:373
 #: js/widgets/dialog/EditDialog.js:193
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
@@ -291,7 +291,7 @@ msgstr "Нова парола"
 msgid "Repeat new Password"
 msgstr "Повтори новата парола"
 
-#: js/MainScreen.js:455 js/widgets/AccountpickerPanel.js:156
+#: js/MainScreen.js:455 js/widgets/AccountpickerPanel.js:158
 #: js/widgets/container/ContainerSelect.js:382
 #: js/widgets/dialog/EditDialog.js:176
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
@@ -555,37 +555,49 @@ msgstr "Селектирай всички страници ({0} записи)"
 msgid "Toggle selection"
 msgstr "Обърни селекцията"
 
-#: js/widgets/account/ConfigGrid.js:61
+#: js/widgets/account/ConfigGrid.js:62
+#: js/widgets/account/PickerGridPanel.js:135
 #, fuzzy
 msgid "Remove account"
 msgstr "Изтрий достъп"
 
-#: js/widgets/account/ConfigGrid.js:85 js/widgets/account/PickerPanel.js:187
+#: js/widgets/account/ConfigGrid.js:86
+#: js/widgets/account/PickerGridPanel.js:255
+#: js/widgets/account/PickerPanel.js:202
 msgid "Name"
 msgstr "Име"
 
-#: js/widgets/account/PickerPanel.js:70
+#: js/widgets/account/PickerGridPanel.js:148
+msgid "Search for users ..."
+msgstr ""
+
+#: js/widgets/account/PickerGridPanel.js:173
+#, fuzzy
+msgid "Search for groups ..."
+msgstr "Търси..."
+
+#: js/widgets/account/PickerPanel.js:85
 msgid "add account"
 msgstr "Вкарай достъп"
 
-#: js/widgets/account/PickerPanel.js:198 js/widgets/GridPicker.js:389
+#: js/widgets/account/PickerPanel.js:213 js/widgets/GridPicker.js:389
 msgid "enter searchfilter"
 msgstr "задай филтър на търсене"
 
-#: js/widgets/account/PickerPanel.js:242 js/widgets/GridPicker.js:410
+#: js/widgets/account/PickerPanel.js:257 js/widgets/GridPicker.js:410
 msgid "Search"
 msgstr "Търси"
 
-#: js/widgets/account/PickerPanel.js:278 js/widgets/account/PickerPanel.js:279
+#: js/widgets/account/PickerPanel.js:293 js/widgets/account/PickerPanel.js:294
 #: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
 msgid "Browse"
 msgstr "Разлисти"
 
-#: js/widgets/AccountpickerPanel.js:55
+#: js/widgets/AccountpickerPanel.js:57
 msgid "nobody"
 msgstr "никой"
 
-#: js/widgets/AccountpickerPanel.js:150
+#: js/widgets/AccountpickerPanel.js:152
 msgid "please select an account"
 msgstr "Моля избери достъп"
 
@@ -999,7 +1011,7 @@ msgstr "вътре"
 
 #: js/widgets/grid/FilterModel.js:155
 #, fuzzy
-msgid "is in week #"
+msgid "is in week no."
 msgstr "тази седмица"
 
 #: js/widgets/grid/FilterModel.js:156

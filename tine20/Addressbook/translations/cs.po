@@ -510,7 +510,7 @@ msgstr[0] "Odkaz"
 msgstr[1] "Odkazy [%d]"
 msgstr[2] "Odkazů [%d]"
 
-#: js/SearchCombo.js:76
+#: js/SearchCombo.js:78
 msgid "Searching..."
 msgstr "Hledám..."
 

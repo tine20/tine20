@@ -60,19 +60,19 @@ msgstr "作成者"
 msgid "Activities"
 msgstr "アクティビティ"
 
-#: Frontend/Http.php:535 js/tineInit.js:392
+#: Frontend/Http.php:536 js/tineInit.js:392
 msgid "Authorisation Required"
 msgstr "要認証"
 
-#: Frontend/Http.php:536
+#: Frontend/Http.php:537
 msgid "Your session is not valid. You need to login again."
 msgstr "セッションが正しくありません。もう一度ログインしてください"
 
-#: Frontend/Http.php:562 js/ExceptionDialog.js:46
+#: Frontend/Http.php:563 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "以上終了"
 
-#: Frontend/Http.php:563 js/ExceptionDialog.js:71
+#: Frontend/Http.php:564 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "エラーが発生し、プログラムが異常終了しました"
 
@@ -102,7 +102,7 @@ msgid_plural "to do lists"
 msgstr[0] "ＴｏＤｏリスト"
 
 #: js/ExceptionDialog.js:54 js/MainScreen.js:449
-#: js/widgets/AccountpickerPanel.js:164
+#: js/widgets/AccountpickerPanel.js:166
 #: js/widgets/container/ContainerSelect.js:373
 #: js/widgets/dialog/EditDialog.js:193
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
@@ -277,7 +277,7 @@ msgstr "新しいパスワード"
 msgid "Repeat new Password"
 msgstr "もう一度パスワードを入力してください"
 
-#: js/MainScreen.js:455 js/widgets/AccountpickerPanel.js:156
+#: js/MainScreen.js:455 js/widgets/AccountpickerPanel.js:158
 #: js/widgets/container/ContainerSelect.js:382
 #: js/widgets/dialog/EditDialog.js:176
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
@@ -532,36 +532,48 @@ msgstr "全ページ選択 ({0} 件)"
 msgid "Toggle selection"
 msgstr "トグル選択"
 
-#: js/widgets/account/ConfigGrid.js:61
+#: js/widgets/account/ConfigGrid.js:62
+#: js/widgets/account/PickerGridPanel.js:135
 msgid "Remove account"
 msgstr ""
 
-#: js/widgets/account/ConfigGrid.js:85 js/widgets/account/PickerPanel.js:187
+#: js/widgets/account/ConfigGrid.js:86
+#: js/widgets/account/PickerGridPanel.js:255
+#: js/widgets/account/PickerPanel.js:202
 msgid "Name"
 msgstr "名前"
 
-#: js/widgets/account/PickerPanel.js:70
+#: js/widgets/account/PickerGridPanel.js:148
+msgid "Search for users ..."
+msgstr ""
+
+#: js/widgets/account/PickerGridPanel.js:173
+#, fuzzy
+msgid "Search for groups ..."
+msgstr "検索しています。"
+
+#: js/widgets/account/PickerPanel.js:85
 msgid "add account"
 msgstr "アカウントの追加"
 
-#: js/widgets/account/PickerPanel.js:198 js/widgets/GridPicker.js:389
+#: js/widgets/account/PickerPanel.js:213 js/widgets/GridPicker.js:389
 msgid "enter searchfilter"
 msgstr "サーチフィルタの入力"
 
-#: js/widgets/account/PickerPanel.js:242 js/widgets/GridPicker.js:410
+#: js/widgets/account/PickerPanel.js:257 js/widgets/GridPicker.js:410
 msgid "Search"
 msgstr "検索"
 
-#: js/widgets/account/PickerPanel.js:278 js/widgets/account/PickerPanel.js:279
+#: js/widgets/account/PickerPanel.js:293 js/widgets/account/PickerPanel.js:294
 #: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
 msgid "Browse"
 msgstr "閲覧"
 
-#: js/widgets/AccountpickerPanel.js:55
+#: js/widgets/AccountpickerPanel.js:57
 msgid "nobody"
 msgstr "だれもいない"
 
-#: js/widgets/AccountpickerPanel.js:150
+#: js/widgets/AccountpickerPanel.js:152
 msgid "please select an account"
 msgstr "アカウントを設定してください"
 
@@ -967,7 +979,7 @@ msgstr "の中に"
 
 #: js/widgets/grid/FilterModel.js:155
 #, fuzzy
-msgid "is in week #"
+msgid "is in week no."
 msgstr "今週"
 
 #: js/widgets/grid/FilterModel.js:156

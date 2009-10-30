@@ -523,8 +523,8 @@ msgstr ""
 msgid "How often should Felamimail check for new Emails (in minutes) ."
 msgstr ""
 
-msgid "Port"
-msgstr "Port"
+#~ msgid "Port"
+#~ msgstr "Port"
 
-msgid "Mark Unread"
-msgstr "Oznacz jako nieprzeczytane"
+#~ msgid "Mark Unread"
+#~ msgstr "Oznacz jako nieprzeczytane"

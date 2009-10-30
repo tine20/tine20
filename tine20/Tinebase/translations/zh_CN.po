@@ -63,19 +63,19 @@ msgstr "创建者"
 msgid "Activities"
 msgstr "活动"
 
-#: Frontend/Http.php:535 js/tineInit.js:392
+#: Frontend/Http.php:536 js/tineInit.js:392
 msgid "Authorisation Required"
 msgstr "需要授权"
 
-#: Frontend/Http.php:536
+#: Frontend/Http.php:537
 msgid "Your session is not valid. You need to login again."
 msgstr "会话无效，需要重新登录"
 
-#: Frontend/Http.php:562 js/ExceptionDialog.js:46
+#: Frontend/Http.php:563 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "非正常结束"
 
-#: Frontend/Http.php:563 js/ExceptionDialog.js:71
+#: Frontend/Http.php:564 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "有错误发生，程序非正常终止"
 
@@ -105,7 +105,7 @@ msgid_plural "to do lists"
 msgstr[0] "要做的事项列表"
 
 #: js/ExceptionDialog.js:54 js/MainScreen.js:449
-#: js/widgets/AccountpickerPanel.js:164
+#: js/widgets/AccountpickerPanel.js:166
 #: js/widgets/container/ContainerSelect.js:373
 #: js/widgets/dialog/EditDialog.js:193
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
@@ -282,7 +282,7 @@ msgstr "新密码"
 msgid "Repeat new Password"
 msgstr "重复新密码"
 
-#: js/MainScreen.js:455 js/widgets/AccountpickerPanel.js:156
+#: js/MainScreen.js:455 js/widgets/AccountpickerPanel.js:158
 #: js/widgets/container/ContainerSelect.js:382
 #: js/widgets/dialog/EditDialog.js:176
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
@@ -530,37 +530,49 @@ msgstr "选择所有页面({0} 记录)"
 msgid "Toggle selection"
 msgstr "切换选择"
 
-#: js/widgets/account/ConfigGrid.js:61
+#: js/widgets/account/ConfigGrid.js:62
+#: js/widgets/account/PickerGridPanel.js:135
 #, fuzzy
 msgid "Remove account"
 msgstr "删除帐户"
 
-#: js/widgets/account/ConfigGrid.js:85 js/widgets/account/PickerPanel.js:187
+#: js/widgets/account/ConfigGrid.js:86
+#: js/widgets/account/PickerGridPanel.js:255
+#: js/widgets/account/PickerPanel.js:202
 msgid "Name"
 msgstr "名子"
 
-#: js/widgets/account/PickerPanel.js:70
+#: js/widgets/account/PickerGridPanel.js:148
+msgid "Search for users ..."
+msgstr ""
+
+#: js/widgets/account/PickerGridPanel.js:173
+#, fuzzy
+msgid "Search for groups ..."
+msgstr "搜索..."
+
+#: js/widgets/account/PickerPanel.js:85
 msgid "add account"
 msgstr "添加帐户"
 
-#: js/widgets/account/PickerPanel.js:198 js/widgets/GridPicker.js:389
+#: js/widgets/account/PickerPanel.js:213 js/widgets/GridPicker.js:389
 msgid "enter searchfilter"
 msgstr "输入搜索过滤器"
 
-#: js/widgets/account/PickerPanel.js:242 js/widgets/GridPicker.js:410
+#: js/widgets/account/PickerPanel.js:257 js/widgets/GridPicker.js:410
 msgid "Search"
 msgstr "搜索"
 
-#: js/widgets/account/PickerPanel.js:278 js/widgets/account/PickerPanel.js:279
+#: js/widgets/account/PickerPanel.js:293 js/widgets/account/PickerPanel.js:294
 #: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
 msgid "Browse"
 msgstr "浏览"
 
-#: js/widgets/AccountpickerPanel.js:55
+#: js/widgets/AccountpickerPanel.js:57
 msgid "nobody"
 msgstr "没有人"
 
-#: js/widgets/AccountpickerPanel.js:150
+#: js/widgets/AccountpickerPanel.js:152
 msgid "please select an account"
 msgstr "请选择帐户"
 
@@ -970,7 +982,7 @@ msgstr "在其中"
 
 #: js/widgets/grid/FilterModel.js:155
 #, fuzzy
-msgid "is in week #"
+msgid "is in week no."
 msgstr "本周"
 
 #: js/widgets/grid/FilterModel.js:156

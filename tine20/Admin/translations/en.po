@@ -138,7 +138,7 @@ msgstr "Roles"
 msgid "Admin"
 msgstr "Admin"
 
-#: js/Admin.js:284 js/Groups.js:50 js/Roles.js:45 js/Tags.js:56
+#: js/Admin.js:284 js/Groups.js:51 js/Roles.js:45 js/Tags.js:56
 #: js/Users.js:186
 msgid "Confirm"
 msgstr "Confirm"
@@ -155,7 +155,7 @@ msgstr "delete entry"
 msgid "select all"
 msgstr "select all"
 
-#: js/Admin.js:405 js/Applications.js:129 js/Groups.js:131 js/Roles.js:129
+#: js/Admin.js:405 js/Applications.js:129 js/Groups.js:132 js/Roles.js:129
 #: js/Tags.js:118 js/Users.js:225
 msgid "enter searchfilter"
 msgstr "enter searchfilter"
@@ -168,7 +168,7 @@ msgstr "Display from:"
 msgid "to:"
 msgstr "to:"
 
-#: js/Admin.js:444 js/Applications.js:145 js/Groups.js:151 js/Roles.js:149
+#: js/Admin.js:444 js/Applications.js:145 js/Groups.js:152 js/Roles.js:149
 #: js/Tags.js:138 js/Users.js:246
 msgid "Search:"
 msgstr "Search:"
@@ -209,8 +209,8 @@ msgstr "Session ID"
 msgid "Login Name"
 msgstr "Login Name"
 
-#: js/Admin.js:566 js/Applications.js:220 js/Groups.js:201 js/Groups.js:517
-#: js/Roles.js:201 js/SambaMachineGrid.js:90 js/Tags.js:185
+#: js/Admin.js:566 js/Applications.js:220 js/Groups.js:202 js/Roles.js:201
+#: js/SambaMachineGrid.js:90 js/Tags.js:185
 msgid "Name"
 msgstr "Name"
 
@@ -282,142 +282,130 @@ msgstr "Status"
 msgid "Version"
 msgstr "Version"
 
-#: js/Groups.js:50
+#: js/Groups.js:51
 msgid "Do you really want to delete the selected groups?"
 msgstr "Do you really want to delete the selected groups?"
 
-#: js/Groups.js:67
+#: js/Groups.js:68
 msgid "Deleting group(s)..."
 msgstr "Deleting group(s)..."
 
-#: js/Groups.js:72 js/Groups.js:407 js/Groups.js:435 js/RoleEditDialog.js:161
-#: js/RoleEditDialog.js:189 js/Roles.js:67 js/Tags.js:369 js/Users.js:206
+#: js/Groups.js:73 js/Groups.js:371 js/Groups.js:399 js/RoleEditDialog.js:101
+#: js/RoleEditDialog.js:129 js/Roles.js:67 js/Tags.js:369 js/Users.js:206
 msgid "Failed"
 msgstr "Failed"
 
-#: js/Groups.js:72 js/Groups.js:435
+#: js/Groups.js:73 js/Groups.js:399
 msgid "Some error occurred while trying to delete the group."
 msgstr "Some error occurred while trying to delete the group."
 
-#: js/Groups.js:102
+#: js/Groups.js:103
 msgid "add group"
 msgstr "add group"
 
-#: js/Groups.js:110
+#: js/Groups.js:111
 msgid "edit group"
 msgstr "edit group"
 
-#: js/Groups.js:118
+#: js/Groups.js:119
 msgid "delete group"
 msgstr "delete group"
 
-#: js/Groups.js:189
+#: js/Groups.js:190
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "Displaying groups {0} - {1} of {2}"
 
-#: js/Groups.js:190 js/Groups.js:245
+#: js/Groups.js:191 js/Groups.js:246
 msgid "No groups to display"
 msgstr "No groups to display"
 
-#: js/Groups.js:200 js/Roles.js:200 js/SambaMachineGrid.js:83 js/Users.js:305
+#: js/Groups.js:201 js/Roles.js:200 js/SambaMachineGrid.js:83 js/Users.js:305
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:202 js/Groups.js:587 js/RoleEditDialog.js:374 js/Roles.js:202
+#: js/Groups.js:203 js/Groups.js:468 js/RoleEditDialog.js:299 js/Roles.js:202
 #: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:96 js/Tags.js:186
 #: js/Tags.js:506
 msgid "Description"
 msgstr "Description"
 
-#: js/Groups.js:368 js/RoleEditDialog.js:123 js/Tags.js:324
+#: js/Groups.js:336 js/RoleEditDialog.js:64 js/Tags.js:324
 msgid "Please wait"
 msgstr "Please wait"
 
-#: js/Groups.js:368 js/RoleEditDialog.js:123
+#: js/Groups.js:336 js/RoleEditDialog.js:64
 msgid "Updating Memberships"
 msgstr "Updating Memberships"
 
-#: js/Groups.js:407
+#: js/Groups.js:371
 msgid "Could not save group."
 msgstr "Could not save group."
 
-#: js/Groups.js:414 js/RoleEditDialog.js:168 js/Tags.js:374
+#: js/Groups.js:378 js/RoleEditDialog.js:108 js/Tags.js:374
 msgid "Errors"
 msgstr "Errors"
 
-#: js/Groups.js:414 js/RoleEditDialog.js:168 js/Tags.js:374
+#: js/Groups.js:378 js/RoleEditDialog.js:108 js/Tags.js:374
 msgid "Please fix the errors noted."
 msgstr "Please fix the errors noted."
 
-#: js/Groups.js:427
+#: js/Groups.js:391
 msgid "Deleting group..."
 msgstr "Deleting group..."
 
-#: js/Groups.js:549
+#: js/Groups.js:438
 msgid "Group Members"
 msgstr "Group Members"
 
-#: js/Groups.js:580
+#: js/Groups.js:461
 msgid "Group Name"
 msgstr "Group Name"
 
-#: js/Groups.js:623 js/Users.js:404
-msgid "add account"
-msgstr "add account"
-
-#: js/Groups.js:630
-msgid "remove account"
-msgstr "remove account"
-
-#: js/Groups.js:648
+#: js/Groups.js:510
 msgid "Add new group"
 msgstr "Add new group"
 
-#: js/Groups.js:650
+#: js/Groups.js:512
 msgid "Edit Group \"{0}\""
 msgstr "Edit Group \"{0}\""
 
-#: js/RoleEditDialog.js:161
+#: js/RoleEditDialog.js:101
 msgid "Could not save role."
 msgstr "Could not save role."
 
-#: js/RoleEditDialog.js:181
+#: js/RoleEditDialog.js:121
 msgid "Deleting role..."
 msgstr "Deleting role..."
 
-#: js/RoleEditDialog.js:189 js/Roles.js:67
+#: js/RoleEditDialog.js:129 js/Roles.js:67
 msgid "Some error occurred while trying to delete the role."
 msgstr "Some error occurred while trying to delete the role."
 
-#: js/RoleEditDialog.js:314
-msgid "Role members"
-msgstr "Role members"
-
-#: js/RoleEditDialog.js:324
+#: js/RoleEditDialog.js:253
 msgid "Members"
 msgstr "Members"
 
-#: js/RoleEditDialog.js:336 js/Tags.js:527
+#: js/RoleEditDialog.js:261 js/Tags.js:527
 msgid "Rights"
 msgstr "Rights"
 
-#: js/RoleEditDialog.js:366
+#: js/RoleEditDialog.js:291
 msgid "Role Name"
 msgstr "Role Name"
 
-#: js/RoleEditDialog.js:407
+#: js/RoleEditDialog.js:333
 msgid "Loading Role..."
 msgstr "Loading Role..."
 
-#: js/RoleEditDialog.js:407 js/Tags.js:548
+#: js/RoleEditDialog.js:333 js/Tags.js:548
 msgid "Please Wait"
 msgstr "Please Wait"
 
-#: js/RoleEditDialog.js:447
+#: js/RoleEditDialog.js:372
 msgid "Add New Role"
 msgstr "Add New Role"
 
-#: js/RoleEditDialog.js:449
+#: js/RoleEditDialog.js:374
 msgid "Edit Role \"{0}\""
 msgstr "Edit Role \"{0}\""
 
@@ -786,6 +774,10 @@ msgstr "Email"
 #: js/Users.js:315
 msgid "Password changed"
 msgstr "Password changed"
+
+#: js/Users.js:404
+msgid "add account"
+msgstr "add account"
 
 #: js/Users.js:412
 msgid "edit account"

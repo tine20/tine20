@@ -61,19 +61,19 @@ msgstr "Created by"
 msgid "Activities"
 msgstr "Activities"
 
-#: Frontend/Http.php:535 js/tineInit.js:392
+#: Frontend/Http.php:536 js/tineInit.js:392
 msgid "Authorisation Required"
 msgstr "Authorisation Required"
 
-#: Frontend/Http.php:536
+#: Frontend/Http.php:537
 msgid "Your session is not valid. You need to login again."
 msgstr "Your session is not valid. You need to login again."
 
-#: Frontend/Http.php:562 js/ExceptionDialog.js:46
+#: Frontend/Http.php:563 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Abnormal End"
 
-#: Frontend/Http.php:563 js/ExceptionDialog.js:71
+#: Frontend/Http.php:564 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "An error occurred, the program ended abnormal."
 
@@ -108,7 +108,7 @@ msgstr[0] "to do list"
 msgstr[1] "to do lists"
 
 #: js/ExceptionDialog.js:54 js/MainScreen.js:449
-#: js/widgets/AccountpickerPanel.js:164
+#: js/widgets/AccountpickerPanel.js:166
 #: js/widgets/container/ContainerSelect.js:373
 #: js/widgets/dialog/EditDialog.js:193
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
@@ -278,7 +278,7 @@ msgstr "New Password"
 msgid "Repeat new Password"
 msgstr "Repeat new Password"
 
-#: js/MainScreen.js:455 js/widgets/AccountpickerPanel.js:156
+#: js/MainScreen.js:455 js/widgets/AccountpickerPanel.js:158
 #: js/widgets/container/ContainerSelect.js:382
 #: js/widgets/dialog/EditDialog.js:176
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
@@ -542,36 +542,47 @@ msgstr "Select all pages ({0} records)"
 msgid "Toggle selection"
 msgstr "Toggle selection"
 
-#: js/widgets/account/ConfigGrid.js:61
+#: js/widgets/account/ConfigGrid.js:62
+#: js/widgets/account/PickerGridPanel.js:135
 msgid "Remove account"
 msgstr "Remove account"
 
-#: js/widgets/account/ConfigGrid.js:85 js/widgets/account/PickerPanel.js:187
+#: js/widgets/account/ConfigGrid.js:86
+#: js/widgets/account/PickerGridPanel.js:255
+#: js/widgets/account/PickerPanel.js:202
 msgid "Name"
 msgstr "Name"
 
-#: js/widgets/account/PickerPanel.js:70
+#: js/widgets/account/PickerGridPanel.js:148
+msgid "Search for users ..."
+msgstr "Search for users ..."
+
+#: js/widgets/account/PickerGridPanel.js:173
+msgid "Search for groups ..."
+msgstr "Search for groups ..."
+
+#: js/widgets/account/PickerPanel.js:85
 msgid "add account"
 msgstr "add account"
 
-#: js/widgets/account/PickerPanel.js:198 js/widgets/GridPicker.js:389
+#: js/widgets/account/PickerPanel.js:213 js/widgets/GridPicker.js:389
 msgid "enter searchfilter"
 msgstr "enter searchfilter"
 
-#: js/widgets/account/PickerPanel.js:242 js/widgets/GridPicker.js:410
+#: js/widgets/account/PickerPanel.js:257 js/widgets/GridPicker.js:410
 msgid "Search"
 msgstr "Search"
 
-#: js/widgets/account/PickerPanel.js:278 js/widgets/account/PickerPanel.js:279
+#: js/widgets/account/PickerPanel.js:293 js/widgets/account/PickerPanel.js:294
 #: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
 msgid "Browse"
 msgstr "Browse"
 
-#: js/widgets/AccountpickerPanel.js:55
+#: js/widgets/AccountpickerPanel.js:57
 msgid "nobody"
 msgstr "nobody"
 
-#: js/widgets/AccountpickerPanel.js:150
+#: js/widgets/AccountpickerPanel.js:152
 msgid "please select an account"
 msgstr "please select an account"
 
@@ -964,8 +975,8 @@ msgid "is within"
 msgstr "is within"
 
 #: js/widgets/grid/FilterModel.js:155
-msgid "is in week #"
-msgstr "is in week #"
+msgid "is in week no."
+msgstr "is in week no."
 
 #: js/widgets/grid/FilterModel.js:156
 msgid "starts with"

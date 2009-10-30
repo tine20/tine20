@@ -140,7 +140,7 @@ msgstr "角色"
 msgid "Admin"
 msgstr "管理"
 
-#: js/Admin.js:284 js/Groups.js:50 js/Roles.js:45 js/Tags.js:56
+#: js/Admin.js:284 js/Groups.js:51 js/Roles.js:45 js/Tags.js:56
 #: js/Users.js:186
 msgid "Confirm"
 msgstr "确认"
@@ -157,7 +157,7 @@ msgstr "删除条目"
 msgid "select all"
 msgstr "全选"
 
-#: js/Admin.js:405 js/Applications.js:129 js/Groups.js:131 js/Roles.js:129
+#: js/Admin.js:405 js/Applications.js:129 js/Groups.js:132 js/Roles.js:129
 #: js/Tags.js:118 js/Users.js:225
 msgid "enter searchfilter"
 msgstr "输入搜索过滤器"
@@ -170,7 +170,7 @@ msgstr "显示从："
 msgid "to:"
 msgstr "到："
 
-#: js/Admin.js:444 js/Applications.js:145 js/Groups.js:151 js/Roles.js:149
+#: js/Admin.js:444 js/Applications.js:145 js/Groups.js:152 js/Roles.js:149
 #: js/Tags.js:138 js/Users.js:246
 msgid "Search:"
 msgstr "搜索："
@@ -211,8 +211,8 @@ msgstr "会话 ID"
 msgid "Login Name"
 msgstr "登录名"
 
-#: js/Admin.js:566 js/Applications.js:220 js/Groups.js:201 js/Groups.js:517
-#: js/Roles.js:201 js/SambaMachineGrid.js:90 js/Tags.js:185
+#: js/Admin.js:566 js/Applications.js:220 js/Groups.js:202 js/Roles.js:201
+#: js/SambaMachineGrid.js:90 js/Tags.js:185
 msgid "Name"
 msgstr "名字"
 
@@ -287,142 +287,130 @@ msgstr "状态"
 msgid "Version"
 msgstr "版本"
 
-#: js/Groups.js:50
+#: js/Groups.js:51
 msgid "Do you really want to delete the selected groups?"
 msgstr "真的要删除选中的组？"
 
-#: js/Groups.js:67
+#: js/Groups.js:68
 msgid "Deleting group(s)..."
 msgstr "删除组..."
 
-#: js/Groups.js:72 js/Groups.js:407 js/Groups.js:435 js/RoleEditDialog.js:161
-#: js/RoleEditDialog.js:189 js/Roles.js:67 js/Tags.js:369 js/Users.js:206
+#: js/Groups.js:73 js/Groups.js:371 js/Groups.js:399 js/RoleEditDialog.js:101
+#: js/RoleEditDialog.js:129 js/Roles.js:67 js/Tags.js:369 js/Users.js:206
 msgid "Failed"
 msgstr "失败"
 
-#: js/Groups.js:72 js/Groups.js:435
+#: js/Groups.js:73 js/Groups.js:399
 msgid "Some error occurred while trying to delete the group."
 msgstr "当试图删除组时发生错误"
 
-#: js/Groups.js:102
+#: js/Groups.js:103
 msgid "add group"
 msgstr "添加组"
 
-#: js/Groups.js:110
+#: js/Groups.js:111
 msgid "edit group"
 msgstr "编辑组"
 
-#: js/Groups.js:118
+#: js/Groups.js:119
 msgid "delete group"
 msgstr "删除组"
 
-#: js/Groups.js:189
+#: js/Groups.js:190
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "显示组 {0} - {1} of {2}"
 
-#: js/Groups.js:190 js/Groups.js:245
+#: js/Groups.js:191 js/Groups.js:246
 msgid "No groups to display"
 msgstr "没有组要显示"
 
-#: js/Groups.js:200 js/Roles.js:200 js/SambaMachineGrid.js:83 js/Users.js:305
+#: js/Groups.js:201 js/Roles.js:200 js/SambaMachineGrid.js:83 js/Users.js:305
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:202 js/Groups.js:587 js/RoleEditDialog.js:374 js/Roles.js:202
+#: js/Groups.js:203 js/Groups.js:468 js/RoleEditDialog.js:299 js/Roles.js:202
 #: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:96 js/Tags.js:186
 #: js/Tags.js:506
 msgid "Description"
 msgstr "描述"
 
-#: js/Groups.js:368 js/RoleEditDialog.js:123 js/Tags.js:324
+#: js/Groups.js:336 js/RoleEditDialog.js:64 js/Tags.js:324
 msgid "Please wait"
 msgstr "请稍等"
 
-#: js/Groups.js:368 js/RoleEditDialog.js:123
+#: js/Groups.js:336 js/RoleEditDialog.js:64
 msgid "Updating Memberships"
 msgstr "更新会员身份"
 
-#: js/Groups.js:407
+#: js/Groups.js:371
 msgid "Could not save group."
 msgstr "不能保存组"
 
-#: js/Groups.js:414 js/RoleEditDialog.js:168 js/Tags.js:374
+#: js/Groups.js:378 js/RoleEditDialog.js:108 js/Tags.js:374
 msgid "Errors"
 msgstr "错误"
 
-#: js/Groups.js:414 js/RoleEditDialog.js:168 js/Tags.js:374
+#: js/Groups.js:378 js/RoleEditDialog.js:108 js/Tags.js:374
 msgid "Please fix the errors noted."
 msgstr "请修复标明的错误"
 
-#: js/Groups.js:427
+#: js/Groups.js:391
 msgid "Deleting group..."
 msgstr "删除组 ..."
 
-#: js/Groups.js:549
+#: js/Groups.js:438
 msgid "Group Members"
 msgstr "组成员"
 
-#: js/Groups.js:580
+#: js/Groups.js:461
 msgid "Group Name"
 msgstr "组名"
 
-#: js/Groups.js:623 js/Users.js:404
-msgid "add account"
-msgstr "添加账户"
-
-#: js/Groups.js:630
-msgid "remove account"
-msgstr "删除账户"
-
-#: js/Groups.js:648
+#: js/Groups.js:510
 msgid "Add new group"
 msgstr "添加新组"
 
-#: js/Groups.js:650
+#: js/Groups.js:512
 msgid "Edit Group \"{0}\""
 msgstr "编辑组\"{0}\""
 
-#: js/RoleEditDialog.js:161
+#: js/RoleEditDialog.js:101
 msgid "Could not save role."
 msgstr "不能保存角色"
 
-#: js/RoleEditDialog.js:181
+#: js/RoleEditDialog.js:121
 msgid "Deleting role..."
 msgstr "删除角色..."
 
-#: js/RoleEditDialog.js:189 js/Roles.js:67
+#: js/RoleEditDialog.js:129 js/Roles.js:67
 msgid "Some error occurred while trying to delete the role."
 msgstr "当试图删除角色是发生错误"
 
-#: js/RoleEditDialog.js:314
-msgid "Role members"
-msgstr "角色成员"
-
-#: js/RoleEditDialog.js:324
+#: js/RoleEditDialog.js:253
 msgid "Members"
 msgstr "成员"
 
-#: js/RoleEditDialog.js:336 js/Tags.js:527
+#: js/RoleEditDialog.js:261 js/Tags.js:527
 msgid "Rights"
 msgstr "权限"
 
-#: js/RoleEditDialog.js:366
+#: js/RoleEditDialog.js:291
 msgid "Role Name"
 msgstr "角色名"
 
-#: js/RoleEditDialog.js:407
+#: js/RoleEditDialog.js:333
 msgid "Loading Role..."
 msgstr "加载角色"
 
-#: js/RoleEditDialog.js:407 js/Tags.js:548
+#: js/RoleEditDialog.js:333 js/Tags.js:548
 msgid "Please Wait"
 msgstr "请稍等"
 
-#: js/RoleEditDialog.js:447
+#: js/RoleEditDialog.js:372
 msgid "Add New Role"
 msgstr "添加新角色"
 
-#: js/RoleEditDialog.js:449
+#: js/RoleEditDialog.js:374
 msgid "Edit Role \"{0}\""
 msgstr "编辑角色 \"{0}\""
 
@@ -807,6 +795,10 @@ msgstr "电子邮件"
 msgid "Password changed"
 msgstr "密码已修改"
 
+#: js/Users.js:404
+msgid "add account"
+msgstr "添加账户"
+
 #: js/Users.js:412
 msgid "edit account"
 msgstr "编辑账户"
@@ -837,6 +829,12 @@ msgstr[0] ""
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "电子邮件"
+
+#~ msgid "remove account"
+#~ msgstr "删除账户"
+
+#~ msgid "Role members"
+#~ msgstr "角色成员"
 
 #~ msgid "Password again"
 #~ msgstr "再输入密码"

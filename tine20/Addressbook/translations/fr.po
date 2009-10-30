@@ -501,7 +501,7 @@ msgid_plural "Links [%d]"
 msgstr[0] "lien"
 msgstr[1] "liens [%d]"
 
-#: js/SearchCombo.js:76
+#: js/SearchCombo.js:78
 msgid "Searching..."
 msgstr "Recherche en cours..."
 
