@@ -122,4 +122,36 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
         
     }
     
+    /**
+     * sends notifications for an event
+     * 
+     * @param array  $_eventData
+     * @param array  $_updaterData
+     * @param string $_action
+     * @param array  $_oldEventData
+     * @return void
+     *
+    public function sendEventNotifications($_eventData, $_updaterData, $_action, $_oldEventData=NULL)
+    {
+        $event = new Calendar_Model_Event($_eventData);
+        $updater = new Tinebase_Model_FullUser($_updaterData);
+        $oldEvent = new Calendar_Model_Event($_oldEventData);
+        
+        Calendar_Controller_EventNotifications::getInstance()->sendNotifications($event, $updater, $_action, $oldEvent);
+    }
+    */
+    
+    /**
+     * send notifications 
+     * 
+     * @param Calendar_Model_Event       $_event
+     * @param Tinebase_Model_FullAccount $_updater
+     * @param Sting                      $_action
+     * @param Calendar_Model_Event       $_oldEvent
+     * @return void
+     */
+    public function sendEventNotifications($_event, $_updater, $_action, $_oldEvent=NULL)
+    {
+        Calendar_Controller_EventNotifications::getInstance()->sendNotifications($_event, $_updater, $_action, $_oldEvent);
+    }
 }
