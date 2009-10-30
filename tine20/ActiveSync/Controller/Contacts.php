@@ -127,7 +127,11 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
             if(!empty($data->$value)) {
                 switch($value) {
                     case 'bday':
-                        $nodeContent = $data->bday->toString('yyyy-MM-ddT12:00:00') . '.000Z';
+                        if(strtolower($this->_device->devicetype) == 'iphone') {
+                            $data->bday->addHour(12);
+                        }
+                        
+                        $nodeContent = $data->bday->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z';
                         break;
                         
                     case 'jpegphoto':
@@ -251,9 +255,11 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                     if(isset($xmlData->$fieldName)) {
                         $timeStamp = $this->_convertISOToTs((string)$xmlData->$fieldName);
                         $contact->bday = new Zend_Date($timeStamp, NULL);
-                        $contact->bday->set(0, Zend_Date::HOUR);
-                        $contact->bday->set(0, Zend_Date::MINUTE);
-                        $contact->bday->set(0, Zend_Date::SECOND);
+                        
+                        if(strtolower($this->_device->devicetype) == 'iphone') {
+                            $contact->bday->subHour(12);
+                        }
+                        
                     } else {
                         $contact->bday = null;
                     }
