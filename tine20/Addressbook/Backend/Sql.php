@@ -140,7 +140,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         $select = parent::_getSelect($_cols, $_getDeleted);
         
-        if (!array_key_exists('count', (array)$_cols)) {
+        if ($_cols == '*' || array_key_exists('jpegphoto', (array)$_cols)) {
             $select->joinLeft(
                 /* table  */ array('image' => $this->_tablePrefix . 'addressbook_image'), 
                 /* on     */ $this->_db->quoteIdentifier('image.contact_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
@@ -149,11 +149,13 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
         
         // return contact type
-        $select->joinLeft(
-            /* table  */ array('account' => $this->_tablePrefix . 'accounts'), 
-            /* on     */ $this->_db->quoteIdentifier('account.id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.account_id'),
-            /* select */ array('type' => "IF(ISNULL(account_id),'contact', 'user')")
-        );
+        if ($_cols == '*' || array_key_exists('type', (array)$_cols)) {
+            $select->joinLeft(
+                /* table  */ array('account' => $this->_tablePrefix . 'accounts'), 
+                /* on     */ $this->_db->quoteIdentifier('account.id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.account_id'),
+                /* select */ array('type' => "IF(ISNULL(account_id),'contact', 'user')")
+            );
+        }
         
         return $select;
     }
