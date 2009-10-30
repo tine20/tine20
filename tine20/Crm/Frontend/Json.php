@@ -108,7 +108,6 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         )->toArray();
         $defaults['container_id'] = $defaultContainerArray;
         
-        $salesJson = new Sales_Frontend_Json();
         $registryData = array(
             'leadtypes'     => array(
                 'results' => $settings[Crm_Model_Config::LEADTYPES], 
