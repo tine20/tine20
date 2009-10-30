@@ -230,7 +230,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', $key, $date));
                         break;
                     default:
-                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', $key, $data->$value));
+                        $node = $_xmlDocument->createElementNS('uri:Calendar', $key);
+                        $node->appendChild(new DOMText($data->$value));
+                        
+                        $_xmlNode->appendChild($node);
                         break;
                 }
             }

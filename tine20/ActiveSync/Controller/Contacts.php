@@ -127,7 +127,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
             if(!empty($data->$value)) {
                 switch($value) {
                     case 'bday':
-                    	$nodeContent = $data->bday->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z';;                       
+                        $nodeContent = $data->bday->toString('yyyy-MM-ddT12:00:00') . '.000Z';
                         break;
                         
                     case 'jpegphoto':
@@ -154,7 +154,10 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         $nodeContent = $data->$value;
                         break;
                 }
-                $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $nodeContent));
+                $node = $_xmlDocument->createElementNS('uri:Contacts', $key);
+                $node->appendChild(new DOMText($nodeContent));
+                
+                $_xmlNode->appendChild($node);
             }
         }        
     }
@@ -247,9 +250,12 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                 case 'bday':
                     if(isset($xmlData->$fieldName)) {
                         $timeStamp = $this->_convertISOToTs((string)$xmlData->$fieldName);
-                        $contact->$value = new Zend_Date($timeStamp, NULL);
+                        $contact->bday = new Zend_Date($timeStamp, NULL);
+                        $contact->bday->set(0, Zend_Date::HOUR);
+                        $contact->bday->set(0, Zend_Date::MINUTE);
+                        $contact->bday->set(0, Zend_Date::SECOND);
                     } else {
-                        $contact->$value = null;
+                        $contact->bday = null;
                     }
                     break;
                     

@@ -147,6 +147,18 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         return array();
     }
     
+    /**
+     *
+     * @todo proper entity handling
+     * 
+     * $node = $_xmlDocument->createElementNS('uri:Contacts', $key);
+     * $node->appendChild(new DOMText($nodeContent));
+     *         
+     * $_xmlNode->appendChild($node);
+     *
+     * (non-PHPdoc)
+     * @see ActiveSync/Controller/ActiveSync_Controller_Abstract#appendXML($_xmlDocument, $_xmlNode, $_folderId, $_serverId)
+     */
     public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_folderId, $_serverId)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " serverId " . $_serverId);

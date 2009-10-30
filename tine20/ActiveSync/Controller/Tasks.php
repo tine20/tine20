@@ -105,7 +105,10 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                         break;
                         
                     default:
-                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', $key, $data->$value));
+                        $node = $_xmlDocument->createElementNS('uri:Tasks', $key);
+                        $node->appendChild(new DOMText($data->$value));
+                        
+                        $_xmlNode->appendChild($node);
                         break;
                 }
             }
