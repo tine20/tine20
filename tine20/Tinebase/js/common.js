@@ -275,7 +275,9 @@ Tine.Tinebase.common = {
         var userRights = [];
         
         if (!(Tine && Tine[_application] && Tine[_application].registry && Tine[_application].registry.get('rights'))) {
-            if (Tine.Tinebase.appMgr.get(_application)) {
+            if (! Tine.Tinebase.appMgr) {
+                console.error('Tine.Tinebase.appMgr not yet available');
+            } else if (Tine.Tinebase.appMgr.get(_application)) {
                 console.error('Tine.' + _application + '.rights is not available, initialisation Error!');
             }
             return false;
