@@ -152,7 +152,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 {operator: 'before',     label: _('is before')},
                 {operator: 'after',      label: _('is after')},
                 {operator: 'within',     label: _('is within')},
-                {operator: 'inweek',     label: _('is in week #')},
+                {operator: 'inweek',     label: _('is in week no.')},
                 {operator: 'startswith', label: _('starts with')},
                 {operator: 'endswith',   label: _('ends with')}
             ]
