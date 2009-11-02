@@ -50,7 +50,7 @@ class Tinebase_Notification
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_Notification;
+            self::$_instance = new Tinebase_Notification();
         }
         
         return self::$_instance;
