@@ -76,6 +76,11 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Abstract
         #    return;
         #}
         
+        // Nokia phones set the devicetype to their IMEI, all other devices to a generic identifier for their platform
+        if($_deviceId == $_deviceType && strtolower(substr($_SERVER['HTTP_USER_AGENT'], 0, 5)) == 'nokia') {
+            $_deviceType = 'Nokia';
+        }
+        
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         $asVersion = $_SERVER['HTTP_MS_ASPROTOCOLVERSION'];
         $policyKey = (int)$_SERVER['HTTP_X_MS_POLICYKEY']; 
