@@ -99,6 +99,11 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
      */
     autoExpandColumn: 'name',
     
+    /**
+     * @cfg {Array} Array of column's config objects where the config options are in
+     */
+    configColumns: [],
+    
     //private
     initComponent: function() {
         
@@ -234,6 +239,20 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
         this.cm = this.getColumnModel();
         
         this.selModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+        
+        /*
+        // remove non-plugin config columns
+        var nonPluginColumns = [];
+        for (var i=0; i < this.configColumns.length; i++) {
+            if (!this.configColumns[i].init || typeof(this.configColumns[i].init) != 'function') {
+                nonPluginColumns.push(this.configColumns[i]);
+            }
+        }
+        for (var i=0; i < nonPluginColumns.length; i++) {
+            this.configColumns.remove(nonPluginColumns[i]);
+        }
+        */
+        this.plugins = this.configColumns;
     
         // on selectionchange handler
         this.selModel.on('selectionchange', function(sm) {
@@ -262,10 +281,10 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             defaults: {
                 sortable: true
             },
-            columns: [
+            columns:  [
                 {id: 'type', header: '', dataIndex: 'type', width: 35, renderer: Tine.Tinebase.common.accountTypeRenderer},
                 {id: 'name', header: _('Name'), dataIndex: 'name'}
-            ]//.concat(this.configColumns)
+            ].concat(this.configColumns)
         });
     },
     
