@@ -59,7 +59,7 @@
     }
     
     /**
-     * get updates of human interst
+     * get updates of human interest
      * 
      * @param  Calendar_Model_Event $_event
      * @param  Calendar_Model_Event $_oldEvent
@@ -78,22 +78,33 @@
         
         // check attendee updates
         $attendeeMigration = $_oldEvent->attendee->getMigration($_event->attendee->getArrayOfIds());
-        
         foreach ($attendeeMigration['toUpdateIds'] as $key => $attenderId) {
             $currAttender = $_event->attendee[$_event->attendee->getIndexById($attenderId)];
             $oldAttender  = $_oldEvent->attendee[$_oldEvent->attendee->getIndexById($attenderId)];
-            if ($currAttender->status == $oldAttender->status) {
+            if ($currAttender->status != $oldAttender->status) {
+                $attendeeMigration['toUpdateIds'][$key] = $currAttender;
+            } else {
                 unset($attendeeMigration['toUpdateIds'][$key]);
             }
         }
+        foreach ($attendeeMigration['toCreateIds'] as $key => $attenderId) {
+            $attender = $_event->attendee[$_event->attendee->getIndexById($attenderId)];
+            $attendeeMigration['toCreateIds'][$key] = $attender;
+        }
+        foreach ($attendeeMigration['toDeleteIds'] as $key => $attenderId) {
+            $attender = $_oldEvent->attendee[$_event->attendee->getIndexById($attenderId)];
+            $attendeeMigration['toDeleteIds'][$key] = $attender;
+        }
+        
+        $attendeeUpdates = array();
         foreach(array('toCreateIds', 'toDeleteIds', 'toUpdateIds') as $action) {
-            if (empty($attendeeMigration[$action])) {
-                unset($attendeeMigration[$action]);
+            if (! empty($attendeeMigration[$action])) {
+                $attendeeUpdates[substr($action, 0, -3)] = array_values($attendeeMigration[$action]);
             }
         }
         
-        if (! empty($attendeeMigration)) {
-            $updates['attendee'] = $attendeeMigration;
+        if (! empty($attendeeUpdates)) {
+            $updates['attendee'] = $attendeeUpdates;
         }
         
         return $updates;
@@ -143,11 +154,11 @@
                         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " empty update, nothing to notify about");
                         return;
                     }
-                        
+                    
                     // compute change type
                     if (count(array_intersect(array('dtstart', 'dtend'), array_keys($updates))) > 0) {
                         $updateLevel = self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
-                    } else if (count(array_diff_key($updates, array('attendee'))) > 0) {
+                    } else if (count(array_diff(array_keys($updates), array('attendee'))) > 0) {
                         $updateLevel = self::NOTIFICATION_LEVEL_EVENT_UPDATE;
                     } else {
                         $updateLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
@@ -210,29 +221,69 @@
         
         switch ($_action) {
             case 'alarm':
-                $messageSubject = sprintf($translate->_('Alarm for event "%s" at %s'), $_event->summary, $startDateString);
+                $messageSubject = sprintf($translate->_('Alarm for event "%1$s" at %2$s'), $_event->summary, $startDateString);
                 $messageBody = $translate->_('Here is your requested alarm for to following event:') . "\n\n";
                 break;
             case 'created':
-                $messageSubject = sprintf($translate->_('Event invitation "%s" at %s'), $_event->summary, $startDateString);
+                $messageSubject = sprintf($translate->_('Event invitation "%1$s" at %2$s'), $_event->summary, $startDateString);
                 $messageBody = $translate->_('You have been invited to the following event:') . "\n\n";
                 break;
             case 'deleted':
-                $messageSubject = sprintf($translate->_('Event "%s" at %s has been canceled' ), $_event->summary, $startDateString);
+                $messageSubject = sprintf($translate->_('Event "%1$s" at %s has been canceled' ), $_event->summary, $startDateString);
                 $messageBody = $translate->_('The following event has been canceled:') . "\n\n";
                 break;
             case 'changed':
-                if (count(array_intersect(array('dtstart', 'dtend'), array_keys($_updates))) > 0) {
-                    $messageSubject = sprintf($translate->_('Event "%s" at %s has been rescheduled' ), $_event->summary, $startDateString);
-                    $messageBody  = $translate->_('The following event has been rescheduled:') . "\n";
-                    $messageBody .= $translate->_('From') . ': ' . 
-                        (array_key_exists('dtstart', $_updates) ? Tinebase_Translation::dateToStringInTzAndLocaleFormat($_updates['dtstart'], $timezone, $locale) : $startDateString) . " - " .
-                        (array_key_exists('dtstart', $_updates) ? Tinebase_Translation::dateToStringInTzAndLocaleFormat($_updates['dtend'], $timezone, $locale) : $endDateString) . "\n";
-                    $messageBody .= $translate->_('To') . ': ' . $startDateString . ' - ' . $endDateString . "\n\n";
-                } else {
-                    $messageSubject = sprintf($translate->_('Event "%s" at %s has been updated' ), $_event->summary, $startDateString);
-                    $messageBody = $translate->_('The following event has been updated:') . "\n\n";
+                $messageBody = "\n";
+                
+                switch ($_updateLevel) {
+                    case self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE:
+                        $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been rescheduled' ), $_event->summary, $startDateString);
+                        $messageBody .= $translate->_('From') . ': ' . 
+                            (array_key_exists('dtstart', $_updates) ? Tinebase_Translation::dateToStringInTzAndLocaleFormat($_updates['dtstart'], $timezone, $locale) : $startDateString) . " - " .
+                            (array_key_exists('dtend', $_updates) ? Tinebase_Translation::dateToStringInTzAndLocaleFormat($_updates['dtend'], $timezone, $locale) : $endDateString) . "\n";
+                        $messageBody .= $translate->_('To') . ': ' . $startDateString . ' - ' . $endDateString . "\n\n";
+                        break;
+                        
+                    case self::NOTIFICATION_LEVEL_EVENT_UPDATE:
+                        $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been updated' ), $_event->summary, $startDateString);
+                        break;
+                        
+                    case self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE:
+                        if(! empty($_updates['attendee']) && ! empty($_updates['attendee']['toUpdate']) && count($_updates['attendee']['toUpdate']) == 1) {
+                            // single attendee status update
+                            $attender = $_updates['attendee']['toUpdate'][0];
+                            $attenderName = $attender->getName();
+                            
+                            switch ($attender->status) {
+                                case Calendar_Model_Attender::STATUS_ACCEPTED:
+                                    $messageSubject = sprintf($translate->_('%1$s accepted event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    break;
+                                    
+                                case Calendar_Model_Attender::STATUS_DECLINED:
+                                    $messageSubject = sprintf($translate->_('%1$s declined event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    break;
+                                    
+                                case Calendar_Model_Attender::STATUS_TENTATIVE:
+                                    $messageSubject = sprintf($translate->_('Tentative response from %1$s for event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    break;
+                                    
+                                case Calendar_Model_Attender::STATUS_NEEDSACTION:
+                                    $messageSubject = sprintf($translate->_('No response from %1$s for event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    break;
+                            }
+                        } else {
+                            $messageSubject = sprintf($translate->_('Attendee changes for event "%1$s" at %2$s' ), $_event->summary, $startDateString);
+                        }
+                        break;
                 }
+                
+                // add updates
+                $messageBody .= $translate->_('Changes:') . "\n";
+                foreach($_updates as $field => $update) {
+                    
+                }              
+                $messageBody .= $translate->_('Event details:') . "\n";
+
                 break;
             default:
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
