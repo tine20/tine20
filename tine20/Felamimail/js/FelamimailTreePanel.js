@@ -808,10 +808,11 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             && account.get('has_children_support') 
             && account.get('has_children_support') == '1'
         ) ? attr.has_children : true;
+        attr.has_children = (attr.has_children == '0') ? false : attr.has_children;
         
         //var qtiptext = this.app.i18n._('Totalcount') + ': ' + attr.totalcount 
         //    + ' / ' + this.app.i18n._('Cache') + ': ' + attr.cache_status;
-
+        
         var node = {
     		id: attr.id,
     		leaf: false,
