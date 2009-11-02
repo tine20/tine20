@@ -97,6 +97,8 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
     //private
     initComponent: function() {
         
+        this.recordClass = (this.recordClass !== null) ? this.recordClass : Tine.Tinebase.Model.Account;
+        
         this.initStore();
         this.initActionsAndToolbars();
         this.initGrid();
@@ -111,7 +113,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
         
         if (this.store === null) {
             this.store = new Ext.data.SimpleStore({
-                fields: Tine.Tinebase.Model.Account
+                fields: this.recordClass
             });
         }
         
@@ -146,11 +148,12 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
         this.accountsSearchCombo = new Tine.Addressbook.SearchCombo({
             accountsStore: this.store,
             emptyText: _('Search for users ...'),
+            newRecordClass: this.recordClass,
             internalContactsOnly: true,
             additionalFilters: [{field: 'user_status', operator: 'equals', value: this.userStatus}],
             onSelect: function(contactRecord){
                 // user account record
-                var record = new Tine.Tinebase.Model.Account({
+                var record = new this.newRecordClass({
                     id: contactRecord.data.account_id,
                     type: 'user',
                     name: contactRecord.data.n_fileas,
@@ -170,10 +173,11 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             accountsStore: this.store,
             blurOnSelect: true,
             recordClass: Tine.Tinebase.Model.Group,
+            newRecordClass: this.recordClass,
             emptyText: _('Search for groups ...'),
             onSelect: function(groupRecord){
                 // group account record
-                var record = new Tine.Tinebase.Model.Account({
+                var record = new this.newRecordClass({
                     id: groupRecord.id,
                     type: 'group',
                     name: groupRecord.data.name,
