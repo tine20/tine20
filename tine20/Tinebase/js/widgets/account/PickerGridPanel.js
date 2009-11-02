@@ -21,9 +21,9 @@ Ext.namespace('Tine.widgets.account');
  * 
  * <p>Account Picker GridPanel</p>
  * <p><pre>
- * TODO         add group search combo
  * TODO         make it possible to switch between the comboboxes in 'both' mode and show only one combo at the time 
  * TODO         use selectAction/enableBbar configs?
+ * TODO         add 'Anyone' to user selection
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -87,6 +87,11 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
      * @property contextMenu
      */
     contextMenu: null,
+    
+    /**
+     * @cfg {String} recordPrefix
+     */
+    recordPrefix: '',
 
     /**
      * grid config
@@ -98,6 +103,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
     initComponent: function() {
         
         this.recordClass = (this.recordClass !== null) ? this.recordClass : Tine.Tinebase.Model.Account;
+        this.configColumns = (this.configColumns !== null) ? this.configColumns : [];
         
         this.initStore();
         this.initActionsAndToolbars();
@@ -149,16 +155,17 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             accountsStore: this.store,
             emptyText: _('Search for users ...'),
             newRecordClass: this.recordClass,
+            recordPrefix: this.recordPrefix,
             internalContactsOnly: true,
             additionalFilters: [{field: 'user_status', operator: 'equals', value: this.userStatus}],
             onSelect: function(contactRecord){
                 // user account record
-                var record = new this.newRecordClass({
-                    id: contactRecord.data.account_id,
-                    type: 'user',
-                    name: contactRecord.data.n_fileas,
-                    data: contactRecord.data
-                }, contactRecord.data.account_id);
+                var recordData = {};
+                recordData[this.recordPrefix + 'id'] = contactRecord.data.account_id;
+                recordData[this.recordPrefix + 'type'] = 'user';
+                recordData[this.recordPrefix + 'name'] = contactRecord.data.n_fileas;
+                recordData[this.recordPrefix + 'data'] = contactRecord.data;
+                var record = new this.newRecordClass(recordData, contactRecord.data.account_id);
                 
                 // check if already in
                 if (! this.accountsStore.getById(record.id)) {
@@ -174,15 +181,16 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             blurOnSelect: true,
             recordClass: Tine.Tinebase.Model.Group,
             newRecordClass: this.recordClass,
+            recordPrefix: this.recordPrefix,
             emptyText: _('Search for groups ...'),
             onSelect: function(groupRecord){
                 // group account record
-                var record = new this.newRecordClass({
-                    id: groupRecord.id,
-                    type: 'group',
-                    name: groupRecord.data.name,
-                    data: groupRecord.data
-                }, groupRecord.id);
+                var recordData = {};
+                recordData[this.recordPrefix + 'id'] = groupRecord.id;
+                recordData[this.recordPrefix + 'type'] = 'group';
+                recordData[this.recordPrefix + 'name'] = groupRecord.data.name;
+                recordData[this.recordPrefix + 'data'] = groupRecord.data;
+                var record = new this.newRecordClass(recordData, groupRecord.id);
                 
                 // check if already in
                 if (! this.accountsStore.getById(record.id)) {
@@ -257,7 +265,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             columns: [
                 {id: 'type', header: '', dataIndex: 'type', width: 35, renderer: Tine.Tinebase.common.accountTypeRenderer},
                 {id: 'name', header: _('Name'), dataIndex: 'name'}
-            ]
+            ]//.concat(this.configColumns)
         });
     },
     
