@@ -567,6 +567,9 @@ class Tinebase_Tags
     public function setRights($_rights)
     {
         $rights = $_rights instanceof Tinebase_Model_TagRight ? array($_rights) : $_rights;
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting ' . count($rights) . ' tag right(s).');
+        
         foreach ($rights as $right) {
             if (! ($right instanceof Tinebase_Model_TagRight && $right->isValid())) {
                 throw new Tinebase_Exception_Record_Validation('The given right is not valid!');
