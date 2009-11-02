@@ -19,6 +19,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>Account/Folder Tree Panel</p>
  * <p>Tree of Accounts with folders</p>
  * <pre>
+ * TODO         somehow we still get timeout errors when creating cache / selecting folders with lots of messages ... fix that
  * low priority:
  * TODO         only allow nodes as drop target (not 'between')
  * TODO         make inbox/drafts/templates configurable in account
@@ -606,6 +607,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     //accountId: accountId
                 },
                 scope: this,
+                timeout: 60000, // 1 minute
                 success: function(_result, _request) {
                     // update folder counters / class
                     var folderData = Ext.util.JSON.decode(_result.responseText);
