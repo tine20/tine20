@@ -89,6 +89,11 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
     contextMenu: null,
     
     /**
+     * @cfg {bool} have the record account properties an account prefix?
+     */
+    hasAccountPrefix: false,
+    
+    /**
      * @cfg {String} recordPrefix
      */
     recordPrefix: '',
@@ -106,7 +111,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
     
     //private
     initComponent: function() {
-        
+        this.recordPrefix = (this.hasAccountPrefix) ? 'account_' : '';
         this.recordClass = (this.recordClass !== null) ? this.recordClass : Tine.Tinebase.Model.Account;
         this.configColumns = (this.configColumns !== null) ? this.configColumns : [];
         
@@ -282,8 +287,8 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 sortable: true
             },
             columns:  [
-                {id: 'type', header: '',        dataIndex: this.recordPrefix + 'type', width: 35, renderer: Tine.Tinebase.common.accountTypeRenderer},
-                {id: 'name', header: _('Name'), dataIndex: this.recordPrefix + 'name'}
+                //{id: 'type', header: '',        dataIndex: this.recordPrefix + 'type', width: 35, renderer: Tine.Tinebase.common.accountTypeRenderer},
+                {id: 'name', header: _('Name'), dataIndex: this.recordPrefix + 'name', renderer: Tine.Tinebase.common.accountRenderer}
             ].concat(this.configColumns)
         });
     },
