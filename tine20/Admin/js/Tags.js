@@ -471,7 +471,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             store: this.rightsStore,
             height: '100%',
             recordClass: Tine.Admin.Model.TagRight,
-            recordPrefix: 'account_',
+            hasAccountPrefix: true,
             selectType: 'both',
             configColumns: [
                 new Ext.ux.grid.CheckColumn({
