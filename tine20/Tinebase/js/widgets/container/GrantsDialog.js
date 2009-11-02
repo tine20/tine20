@@ -61,7 +61,9 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
             },
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'id',
+            //id: 'id',
+            // use account_id here because that simplifies the adding of new records with the search comboboxes
+            id: 'account_id',
             fields: Tine.Tinebase.Model.Grant
         });
         this.grantsStore.load();
@@ -113,19 +115,22 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
             }));
         }
         
+        this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
+            selectType: 'both',
+            title: _('Permissions'),
+            store: this.grantsStore,
+            hasAccountPrefix: true,
+            configColumns: columns,
+            recordClass: Tine.Tinebase.Model.Grant
+        }); 
+        
         return {
             bodyStyle: 'padding:5px;',
             buttonAlign: 'right',
             labelAlign: 'top',
             border: false,
             layout: 'fit',
-            items: new Tine.widgets.account.ConfigGrid({
-                accountPickerType: 'both',
-                accountListTitle: _('Permissions'),
-                configStore: this.grantsStore,
-                hasAccountPrefix: true,
-                configColumns: columns
-            })
+            items: this.grantsGrid
         };
     },
     
