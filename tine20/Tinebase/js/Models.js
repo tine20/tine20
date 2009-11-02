@@ -145,6 +145,8 @@ Tine.Tinebase.Model.Tag = Ext.data.Record.create([
  * Model of a PickerRecord
  * 
  * @constructor {Ext.data.Record}
+ * 
+ * @deprecated
  */
 Tine.Tinebase.PickerRecord = Ext.data.Record.create([
     {name: 'id'}, 
