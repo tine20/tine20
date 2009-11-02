@@ -345,9 +345,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             totalProperty: 'totalcount',
             id: 'id',
             fields: Tine.Tinebase.Model.Account
-            //fields: [ 'account_name', 'account_id', 'account_type' ]
         });
-        //Ext.StoreMgr.add('RoleMembersStore', this.membersStore);        
         
         // init rights store
         this.rightsDataStore = new Ext.data.JsonStore({

@@ -427,13 +427,6 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * 
      */
     getFormContents: function() {
-        this.membersStore = new Ext.data.JsonStore({
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'id',
-            fields: Tine.Tinebase.Model.Account
-        });
-
         var accountPickerGridPanel = new Tine.widgets.account.PickerGridPanel({
             title: this.translation.gettext('Group Members'),
             store: this.membersStore,
@@ -491,6 +484,13 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 method: 'Admin.getGroup',
                 groupId: this.group.id
             }
+        });
+        
+        this.membersStore = new Ext.data.JsonStore({
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            fields: Tine.Tinebase.Model.Account
         });
         
         this.translation = new Locale.Gettext();
