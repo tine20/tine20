@@ -438,8 +438,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             title: this.translation.gettext('Group Members'),
             store: this.membersStore,
             region: 'center',
-            anchor: '100% 100%',
-            recordClass: Tine.Tinebase.Model.Account
+            anchor: '100% 100%'
         });
         
         var editGroupDialog = {
