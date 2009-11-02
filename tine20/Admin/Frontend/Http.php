@@ -32,6 +32,7 @@ class Admin_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function getJsFilesToInclude() {
         return array(
             'Admin/js/Admin.js',
+            'Admin/js/Models.js',
             'Admin/js/Applications.js',
             'Admin/js/Users.js',
             'Admin/js/UserEditDialog.js',
