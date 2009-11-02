@@ -16,6 +16,12 @@
  */
  class Calendar_Controller_EventNotifications
  {
+     const NOTIFICATION_LEVEL_NONE                      =  0;
+     const NOTIFICATION_LEVEL_INVITE_CANCLE             = 10;
+     const NOTIFICATION_LEVEL_EVENT_RESCHEDULE          = 20;
+     const NOTIFICATION_LEVEL_EVENT_UPDATE              = 30;
+     const NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE    = 40;
+     
     /**
      * @var Calendar_Controller_EventNotifications
      */
@@ -50,6 +56,47 @@
     private function __construct()
     {
         
+    }
+    
+    /**
+     * get updates of human interst
+     * 
+     * @param  Calendar_Model_Event $_event
+     * @param  Calendar_Model_Event $_oldEvent
+     * @return array
+     */
+    protected function _getUpdates($_event, $_oldEvent)
+    {
+        // check event details
+        $diff = $_event->diff($_oldEvent);
+        
+        $updates = array_intersect_key($diff, array_flip(array(
+            'dtstart', 'dtend', 'transp', 'class_id', 'description', 'geo', 'location',
+            'organizer', 'priority', 'status_id', 'summary', 'url', /*'tags', 'notes',*/
+            'rrule', 'is_all_day_event', 'originator_tz'
+        )));
+        
+        // check attendee updates
+        $attendeeMigration = $_oldEvent->attendee->getMigration($_event->attendee->getArrayOfIds());
+        
+        foreach ($attendeeMigration['toUpdateIds'] as $key => $attenderId) {
+            $currAttender = $_event->attendee[$_event->attendee->getIndexById($attenderId)];
+            $oldAttender  = $_oldEvent->attendee[$_oldEvent->attendee->getIndexById($attenderId)];
+            if ($currAttender->status == $oldAttender->status) {
+                unset($attendeeMigration['toUpdateIds'][$key]);
+            }
+        }
+        foreach(array('toCreateIds', 'toDeleteIds', 'toUpdateIds') as $action) {
+            if (empty($attendeeMigration[$action])) {
+                unset($attendeeMigration[$action]);
+            }
+        }
+        
+        if (! empty($attendeeMigration)) {
+            $updates['attendee'] = $attendeeMigration;
+        }
+        
+        return $updates;
     }
     
     /**
@@ -88,12 +135,28 @@
                     $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted');
                 }
                 
+                // NOTE: toUpdateIds are all attendee to be notified
                 if (! empty($attendeeMigration['toUpdateIds'])) {
-                    $updates = $_event->diff($_oldEvent);
+                    $updates = $this->_getUpdates($_event, $_oldEvent);
                     
+                    if (empty($updates)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " empty update, nothing to notify about");
+                        return;
+                    }
+                        
+                    // compute change type
+                    if (count(array_intersect(array('dtstart', 'dtend'), array_keys($updates))) > 0) {
+                        $updateLevel = self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
+                    } else if (count(array_diff_key($updates, array('attendee'))) > 0) {
+                        $updateLevel = self::NOTIFICATION_LEVEL_EVENT_UPDATE;
+                    } else {
+                        $updateLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
+                    }
+                    
+                    // send notifications
                     foreach ($attendeeMigration['toUpdateIds'] as $attenderId) {
                         $attender = $_event->attendee[$_event->attendee->getIndexById($attenderId)];
-                        $this->sendNotificationToAttender($attender, $_event, $_updater, 'changed', $updates);
+                        $this->sendNotificationToAttender($attender, $_event, $_updater, 'changed', $updates, $updateLevel);
                     }
                 }
                 
@@ -116,7 +179,7 @@
      * @param array                      $_updates
      * @return void
      */
-    public function sendNotificationToAttender($_attender, $_event, $_updater, $_action, $_updates=NULL)
+    public function sendNotificationToAttender($_attender, $_event, $_updater, $_action, $_updates=NULL, $_updateLevel=NULL)
     {
         if (! in_array($_attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
             // don't send notifications to non persons
@@ -132,7 +195,7 @@
             $organizer = Tinebase_User::getInstance()->getFullUserById($_event->created_by);
         }
         
-        // get prefered language and timezone
+        // get prefered language, timezone and notification level
         $prefUser = $_attender->getUserAccountId();
         if (! $prefUser) {
             $prefUser = $organizer;
