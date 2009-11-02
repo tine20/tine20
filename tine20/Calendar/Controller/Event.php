@@ -726,8 +726,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     
     /**
      * touches (sets seq and last_modified_time) given event
-     * @param $_event
-     * @return unknown_type
+     * 
+     * @param  $_event
+     * @return void
      */
     protected function _touch($_event, $_setModifier = FALSE) {
         $_event->last_modified_time = Zend_Date::now();
