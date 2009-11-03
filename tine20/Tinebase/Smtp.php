@@ -32,9 +32,9 @@ class Tinebase_Smtp
     /**
      * the default smtp transport
      *
-     * @var Zend_Mail_Transport_Smtp
+     * @var Zend_Mail_Transport_Abstract
      */
-    protected $_defaultTransport;
+    protected static $_defaultTransport = NULL;
     
     /**
      * the constructor
@@ -52,7 +52,10 @@ class Tinebase_Smtp
             ));
         }
         
-        $this->_defaultTransport = new Zend_Mail_Transport_Smtp($config->hostname, $config->toArray());
+        // set default transport none is set yet
+        if (! self::getDefaultTransport()) {
+            self::setDefaultTransport(new Zend_Mail_Transport_Smtp($config->hostname, $config->toArray()));
+        }
     }
     
     /**
@@ -78,6 +81,26 @@ class Tinebase_Smtp
     }
 
     /**
+     * sets default transport
+     * @param  Zend_Mail_Transport_Abstract $_transport
+     * @return void
+     */
+    public static function setDefaultTransport($_transport)
+    {
+        self::$_defaultTransport = $_transport;
+    }
+    
+    /**
+     * returns default transport
+     * 
+     * @return Zend_Mail_Transport_Abstract
+     */
+    public static function getDefaultTransport()
+    {
+        return self::$_defaultTransport;
+    }
+    
+    /**
      * send message using default transport or an instance of Zend_Mail_Transport_Abstract
      *
      * @param Zend_Mail $_mail
@@ -86,7 +109,7 @@ class Tinebase_Smtp
      */
     public function sendMessage(Zend_Mail $_mail, $_transport = NULL)
     {
-        $transport = $_transport instanceof Zend_Mail_Transport_Abstract ? $_transport : $this->_defaultTransport;
+        $transport = $_transport instanceof Zend_Mail_Transport_Abstract ? $_transport : self::getDefaultTransport();
         
         $_mail->addHeader('X-MailGenerator', 'Tine 2.0');
         
