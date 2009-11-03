@@ -181,27 +181,7 @@ Ext.namespace('Tine.Tasks');
                             internalContactsOnly: true,
                             name: 'organizer',
                             nameField: 'n_fileas',
-                            // TODO generalize this?
-                            getValue: function() {
-                                if (this.selectedRecord) {
-                                    return this.selectedRecord.get('account_id');
-                                }
-                            },
-                            // TODO generalize this?
-                            setValue: function (value) {
-                                if (value) {
-                                    if(value.accountId) {
-                                        // account object
-                                        this.accountId = value.accountId;
-                                        value = value.accountDisplayName;
-                                    } else if (typeof(value.get) == 'function') {
-                                        // account record
-                                        this.accountId = value.get('id');
-                                        value = value.get('name');
-                                    }
-                                }
-                                Tine.Addressbook.SearchCombo.superclass.setValue.call(this, value);
-                            }
+                            useAccountRecord: true
                     })], [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Notes'),
