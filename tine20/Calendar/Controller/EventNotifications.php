@@ -99,7 +99,7 @@
             $attendeeMigration['toCreateIds'][$key] = $attender;
         }
         foreach ($attendeeMigration['toDeleteIds'] as $key => $attenderId) {
-            $attender = $_oldEvent->attendee[$_event->attendee->getIndexById($attenderId)];
+            $attender = $_oldEvent->attendee[$_oldEvent->attendee->getIndexById($attenderId)];
             $attendeeMigration['toDeleteIds'][$key] = $attender;
         }
         
