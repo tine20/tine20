@@ -110,7 +110,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $event->attendee = $this->_getAttendee();
         $persitentEvent = $this->_eventController->create($event);
         
-        $persitentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $persitentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
         
         $updatedEvent = $this->_eventController->update($persitentEvent);
     }
