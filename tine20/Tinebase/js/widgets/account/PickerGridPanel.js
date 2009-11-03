@@ -185,10 +185,10 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 }
                 break;
             case 'user':
-                items = items.concat([this.contactSearchCombo]);
+                items = this.contactSearchCombo;
                 break;
             case 'group':
-                items = items.concat([this.groupSearchCombo]);
+                items = this.groupSearchCombo;
                 break;
         }
         
@@ -319,7 +319,6 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
         
         this.selModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         
-        /*
         // remove non-plugin config columns
         var nonPluginColumns = [];
         for (var i=0; i < this.configColumns.length; i++) {
@@ -330,7 +329,6 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
         for (var i=0; i < nonPluginColumns.length; i++) {
             this.configColumns.remove(nonPluginColumns[i]);
         }
-        */
         this.plugins = this.configColumns;
     
         // on selectionchange handler
@@ -366,13 +364,6 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             ].concat(this.configColumns)
         });
     },
-    
-    // private
-    /*
-    afterRender: function() {
-        Tine.widgets.account.PickerGridPanel.superclass.afterRender.call(this);
-    },
-    */
     
     /**
      * remove handler
