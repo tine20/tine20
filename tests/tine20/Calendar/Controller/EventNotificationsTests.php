@@ -131,6 +131,36 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_assertMail('rwright', 'decline');
     }
     
+    public function testOrganizerNotificationSupress()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf');
+        $event->organizer = $this->_personasContacts['jsmith']->getId();
+        $persitentEvent = $this->_eventController->create($event);
+        
+        $persitentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
+        
+        $this->_mailer->flush();
+        $updatedEvent = $this->_eventController->update($persitentEvent);
+        $this->_assertMail('jsmith, pwulf', NULL);
+    }
+    
+    public function testOrganizerNotificationSend()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf');
+        $event->organizer = $this->_personasContacts['pwulf']->getId();
+        $persitentEvent = $this->_eventController->create($event);
+        
+        $persitentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
+        
+        $this->_mailer->flush();
+        $updatedEvent = $this->_eventController->update($persitentEvent);
+        $this->_assertMail('jsmith', NULL);
+        $this->_assertMail('pwulf', 'decline');
+    }
+    
+    
     /**
      * checks if mail for persona got send
      * 
@@ -150,11 +180,10 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                 }
             }
             
-            $this->assertTrue(count($mailsForPersona) < 2, 'maximum one notification per action should be send!');
-            
             if (! $_assertString) {
                 $this->assertEquals(0, count($mailsForPersona), 'No mail should be send for '. $personaName);
             } else {
+                $this->assertEquals(1, count($mailsForPersona), 'One mail should be send for '. $personaName);
                 $subject = $mailsForPersona[0]->getSubject();
                 $this->assertTrue((bool) strpos($subject, $_assertString), 'Mail subject for ' . $personaName . ' should contain "' . $_assertString . '" but '. $subject . ' is given');
             }
