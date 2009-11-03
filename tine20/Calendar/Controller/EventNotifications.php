@@ -227,6 +227,20 @@
         $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $prefUser);
         $translate = Tinebase_Translation::getTranslation('Calendar', $locale);
         
+        // check if user wants this notification
+        $sendLevel          = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::NOTIFICATION_LEVEL, $prefUser);
+        $sendOnOwnActions   = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $prefUser);
+        if ($prefUser == $_updater->getId() && ! $sendOnOwnActions) {
+            return;
+        }
+        if ($sendLevel < $_notificationLevel) {
+            if($prefUser != $organizer) {
+                return;
+            } else if ($sendLevel == self::NOTIFICATION_LEVEL_NONE) {
+                return;
+            }
+        }
+        
         // get date strings
         $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtstart, $timezone, $locale);
         $endDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtend, $timezone, $locale);
