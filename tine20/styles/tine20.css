@@ -583,6 +583,11 @@ td.x-date-mp-sel a {
 .x-form-invalid-tip .x-tip-body {
     background-image:url(images/tine20/form/exclamation.gif);
 }
+.x-form-invalid, textarea.x-form-invalid{
+    background-color:#fff;
+    background-image:url(images/tine20/grid/invalid_line.gif);
+    border-color:#c30;
+}
 .x-tip-anchor {
     background-image:url(images/tine20/qtip/tip-anchor-sprite.gif);
 }
