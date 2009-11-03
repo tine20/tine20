@@ -65,7 +65,10 @@ if(file_exists(dirname(__FILE__) . '/config.inc.php')) {
 
 Zend_Registry::set('testConfig', $config);
 
-$_SERVER['DOCUMENT_ROOT'] = $config->docroot;    
+$_SERVER['DOCUMENT_ROOT'] = $config->docroot;
+
+// set default test mailer
+Tinebase_Smtp::setDefaultTransport(new Zend_Mail_Transport_Array());
 
 TestServer::getInstance()->initFramework();
 
