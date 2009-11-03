@@ -134,10 +134,14 @@
         
         switch ($_action) {
             case 'alarm':
+                foreach($_event->attendee as $attender) {
+                    $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_NONE);
+                }
+                break;
             case 'created':
             case 'deleted':
                 foreach($_event->attendee as $attender) {
-                    $this->sendNotificationToAttender($attender, $_event, $_updater, $_action);
+                    $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_INVITE_CANCLE);
                 }
                 break;
             case 'changed':
@@ -145,12 +149,12 @@
                 
                 foreach ($attendeeMigration['toCreateIds'] as $attenderId) {
                     $attender = $_event->attendee[$_event->attendee->getIndexById($attenderId)];
-                    $this->sendNotificationToAttender($attender, $_event, $_updater, 'created');
+                    $this->sendNotificationToAttender($attender, $_event, $_updater, 'created', self::NOTIFICATION_LEVEL_INVITE_CANCLE);
                 }
                 
                 foreach ($attendeeMigration['toDeleteIds'] as $attenderId) {
                     $attender = $_oldEvent->attendee[$_oldEvent->attendee->getIndexById($attenderId)];
-                    $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted');
+                    $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted', self::NOTIFICATION_LEVEL_INVITE_CANCLE);
                 }
                 
                 // NOTE: toUpdateIds are all attendee to be notified
@@ -164,17 +168,17 @@
                     
                     // compute change type
                     if (count(array_intersect(array('dtstart', 'dtend'), array_keys($updates))) > 0) {
-                        $updateLevel = self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
+                        $notificationLevel = self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
                     } else if (count(array_diff(array_keys($updates), array('attendee'))) > 0) {
-                        $updateLevel = self::NOTIFICATION_LEVEL_EVENT_UPDATE;
+                        $notificationLevel = self::NOTIFICATION_LEVEL_EVENT_UPDATE;
                     } else {
-                        $updateLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
+                        $notificationLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
                     }
                     
                     // send notifications
                     foreach ($attendeeMigration['toUpdateIds'] as $attenderId) {
                         $attender = $_event->attendee[$_event->attendee->getIndexById($attenderId)];
-                        $this->sendNotificationToAttender($attender, $_event, $_updater, 'changed', $updates, $updateLevel);
+                        $this->sendNotificationToAttender($attender, $_event, $_updater, 'changed', $notificationLevel, $updates);
                     }
                 }
                 
@@ -194,10 +198,11 @@
      * @param Calendar_Model_Event       $_event
      * @param Tinebase_Model_FullAccount $_updater
      * @param Sting                      $_action
+     * @param String                     $_notificationLevel
      * @param array                      $_updates
      * @return void
      */
-    public function sendNotificationToAttender($_attender, $_event, $_updater, $_action, $_updates=NULL, $_updateLevel=NULL)
+    public function sendNotificationToAttender($_attender, $_event, $_updater, $_action, $_notificationLevel, $_updates=NULL)
     {
         if (! in_array($_attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
             // don't send notifications to non persons
@@ -237,8 +242,7 @@
                 $messageSubject = sprintf($translate->_('Event "%1$s" at %s has been canceled' ), $_event->summary, $startDateString);
                 break;
             case 'changed':
-                
-                switch ($_updateLevel) {
+                switch ($_notificationLevel) {
                     case self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE:
                         $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been rescheduled' ), $_event->summary, $startDateString);
                         break;
