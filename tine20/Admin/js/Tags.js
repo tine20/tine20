@@ -397,8 +397,6 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             }];
         }
         
-        console.log(_tagData.rights);
-        
         this.rightsStore.loadData({
             results:    _tagData.rights,
             totalcount: _tagData.rights.length
@@ -436,7 +434,6 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             if (app.name == 'Tinebase' /*|| app.status == 'disabled'*/) {
                 continue;
             }
-            //console.log(app);
             
             this.rootNode.appendChild(new Ext.tree.TreeNode({
                 text: app.name,
