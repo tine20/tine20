@@ -176,10 +176,12 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         allowBlank: false,
                         xtype: 'textarea',
                         height: 150
-                    }], [new Tine.widgets.AccountpickerField({
+                    }], [new Tine.Addressbook.SearchCombo({
                         allowBlank: false,
                         columnWidth: 1,
                         disabled: true,
+                        useAccountRecord: true,
+                        nameField: 'n_fileas',
                         fieldLabel: this.app.i18n._('Account'),
                         name: 'account_id'
                     }), {
