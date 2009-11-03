@@ -296,7 +296,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
 	        $event = $this->get($_record->getId());
 	        if ($event->editGrant) {
-	            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating event: {$_record->id} ");
+	            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " updating event: {$_record->id} ");
 		        
 	            // we need to resolve groupmembers before free/busy checking
 	            Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
@@ -897,6 +897,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         $attendee->cal_event_id = $_event->getId();
         
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " About to save attendee for event {$_event->id} ");
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " About to save attendee for event {$_event->id} " .  print_r($attendee->toArray(), true));
         
         $currentEvent = $this->get($_event->getId());
@@ -967,7 +968,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     
     /**
      * updates an attender
-     * @todo add support for resources
      * 
      * @param Calendar_Model_Attender  $_attender
      * @param Calendar_Model_Attender  $_currentAttender
@@ -977,11 +977,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
     	$userAccountId = $_currentAttender->getUserAccountId();
     	
-        // reset status if attender != currentuser
+        // reset status if attender != currentuser and wrong authkey
         if ($_attender->user_type == Calendar_Model_Attender::USERTYPE_GROUP
                 || $userAccountId != Tinebase_Core::getUser()->getId()) {
             
-            $_attender->status = $_currentAttender->status;
+            if ($_attender->status_authkey != $_currentAttender->status_authkey) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " wrong authkey -> resetting status ");
+                $_attender->status = $_currentAttender->status;
+            }
         }
         
         // preserv old authkey
