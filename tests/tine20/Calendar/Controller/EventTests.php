@@ -261,6 +261,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $persistendEvent->attendee[0]->status, 'creation of other attedee must not set status');
         
         $persistendEvent->attendee[0]->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $persistendEvent->attendee[0]->status_authkey = NULL;
         $updatedEvent = $this->_controller->update($persistendEvent);
         $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee[0]->status, 'updateing of other attedee must not set status');
     }
