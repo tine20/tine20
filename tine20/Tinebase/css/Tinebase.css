@@ -162,6 +162,10 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
 }
 
+.tinebase-accounttype-addanyone {
+    background-image:url(../../images/oxygen/16x16/actions/add-users.png) !important;
+}
+
 /* ----- notes ------------------------------------------------------------*/
 .notes_noteIcon {
    background-image:url(../../images/oxygen/16x16/actions/note.png) !important;

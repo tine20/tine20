@@ -22,7 +22,6 @@ Ext.namespace('Tine.widgets.account');
  * <p>Account Picker GridPanel</p>
  * <p><pre>
  * TODO         use selectAction config?
- * TODO         add 'Anyone' to user selection
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -122,7 +121,8 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
     },
 
     /**
-     * TODO do we need this?
+     * init store
+     * @private
      */
     initStore: function() {
         
@@ -209,31 +209,42 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             iconCls: (this.selectTypeDefault) ? 'tinebase-accounttype-user' : 'tinebase-accounttype-group',
             menu: new Ext.menu.Menu({
                 items: [{
-                   text: _('Search User'),
-                   scope: this,
-                   iconCls: 'tinebase-accounttype-user',
-                   handler: function() {
+                    text: _('Search User'),
+                    scope: this,
+                    iconCls: 'tinebase-accounttype-user',
+                    handler: function() {
                         this.contactSearchCombo.show();
                         this.groupSearchCombo.hide();
                         this.accountTypeSelector.setIconClass('tinebase-accounttype-user');
-                   }
+                    }
                 }, {
-                   text: _('Search Group'),
-                   scope: this,
-                   iconCls: 'tinebase-accounttype-group',
-                   handler: function() {
+                    text: _('Search Group'),
+                    scope: this,
+                    iconCls: 'tinebase-accounttype-group',
+                    handler: function() {
                         this.contactSearchCombo.hide();
                         this.groupSearchCombo.show();
                         this.accountTypeSelector.setIconClass('tinebase-accounttype-group');
-                   }
-                }/*, {
-                   text: _('Add Anyone'),
-                   scope: this,
-                   iconCls: 'tinebase-accounttype-group',
-                   handler: function() {
-                        console.log('special'); 
-                   }
-                }*/]
+                    }
+                }, {
+                    text: _('Add Anyone'),
+                    scope: this,
+                    newRecordClass: this.recordClass,
+                    iconCls: 'tinebase-accounttype-addanyone',
+                    handler: function() {
+                        // add anyone
+                        var recordData = {};
+                        recordData[this.recordPrefix + 'type'] = 'anyone';
+                        recordData[this.recordPrefix + 'name'] = _('Anyone');
+                        recordData[this.recordPrefix + 'id'] = 0;
+                        var record = new this.recordClass(recordData, 0);
+                        
+                        // check if already in
+                        if (! this.store.getById(record.id)) {
+                            this.store.add([record]);
+                        }
+                    }
+                }]
             }),
             scope: this
         });
@@ -251,22 +262,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             recordPrefix: this.recordPrefix,
             internalContactsOnly: true,
             additionalFilters: [{field: 'user_status', operator: 'equals', value: this.userStatus}],
-            onSelect: function(contactRecord){
-                // user account record
-                var recordData = {};
-                recordData[this.recordPrefix + 'id'] = contactRecord.data.account_id;
-                recordData[this.recordPrefix + 'type'] = 'user';
-                recordData[this.recordPrefix + 'name'] = contactRecord.data.n_fileas;
-                recordData[this.recordPrefix + 'data'] = contactRecord.data;
-                var record = new this.newRecordClass(recordData, contactRecord.data.account_id);
-                
-                // check if already in
-                if (! this.accountsStore.getById(record.id)) {
-                    this.accountsStore.add([record]);
-                }
-                this.collapse();
-                this.clearValue();
-            }    
+            onSelect: this.onAddRecordFromCombo
         })
     },
     
@@ -282,22 +278,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             newRecordClass: this.recordClass,
             recordPrefix: this.recordPrefix,
             emptyText: _('Search for groups ...'),
-            onSelect: function(groupRecord){
-                // group account record
-                var recordData = {};
-                recordData[this.recordPrefix + 'id'] = groupRecord.id;
-                recordData[this.recordPrefix + 'type'] = 'group';
-                recordData[this.recordPrefix + 'name'] = groupRecord.data.name;
-                recordData[this.recordPrefix + 'data'] = groupRecord.data;
-                var record = new this.newRecordClass(recordData, groupRecord.id);
-                
-                // check if already in
-                if (! this.accountsStore.getById(record.id)) {
-                    this.accountsStore.add([record]);
-                }
-                this.collapse();
-                this.clearValue();
-            }    
+            onSelect: this.onAddRecordFromCombo
         });        
     },
     
@@ -391,5 +372,37 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
                     break;
             }
         }
+    },
+    
+    /**
+     * @param {Record} recordToAdd
+     */
+    onAddRecordFromCombo: function(recordToAdd) {
+        var recordData = {};
+        
+        if (recordToAdd.data.account_id) {
+            // user account record
+            recordData[this.recordPrefix + 'id'] = recordToAdd.data.account_id;
+            recordData[this.recordPrefix + 'type'] = 'user';
+            recordData[this.recordPrefix + 'name'] = recordToAdd.data.n_fileas;
+            recordData[this.recordPrefix + 'data'] = recordToAdd.data;
+            var record = new this.newRecordClass(recordData, recordToAdd.data.account_id);
+            
+        } else if (recordToAdd.data.name) {
+            // group account
+            recordData[this.recordPrefix + 'id'] = recordToAdd.id;
+            recordData[this.recordPrefix + 'type'] = 'group';
+            recordData[this.recordPrefix + 'name'] = recordToAdd.data.name;
+            recordData[this.recordPrefix + 'data'] = recordToAdd.data;
+            var record = new this.newRecordClass(recordData, recordToAdd.id);
+        } 
+        
+        // check if already in
+        if (! this.accountsStore.getById(record.id)) {
+            this.accountsStore.add([record]);
+        }
+        this.collapse();
+        this.clearValue();
     }
 });
+
