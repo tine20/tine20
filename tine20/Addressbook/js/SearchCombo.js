@@ -72,6 +72,11 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
      */
     selectedRecord: null,
     
+    /**
+     * @cfg {String} nameField
+     */
+    nameField: 'n_fn',
+    
     //private
     initComponent: function(){
         
@@ -116,7 +121,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
      */
     onSelect: function(record){
         this.selectedRecord = record;
-        this.setValue(record.get('n_fn'));
+        this.setValue(record.get(this.nameField));
         this.collapse();
         
         this.fireEvent('select', this, record);
