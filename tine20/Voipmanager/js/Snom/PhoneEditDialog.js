@@ -714,12 +714,10 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         return {
             title: this.app.i18n._('Users'),
             layout: 'fit',
-            items: new Tine.widgets.account.ConfigGrid({
+            items: new Tine.widgets.account.PickerGridPanel({
                 accountPickerType: 'both',
-                accountListTitle: this.app.i18n._('Rights'),
-                configStore: this.rightsStore,
+                store: this.rightsStore,
                 hasAccountPrefix: true
-                //configColumns: columns
             })
         };
     }
