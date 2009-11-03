@@ -248,7 +248,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 scope: this,
                 handler: function(_button, _event) {
                 	this.loadMask.show();
-                	var accountObject = Ext.getCmp('CoursesMembersGrid').configGridPanel.getSelectionModel().getSelected().data;
+                	var accountObject = this.membersGrid.getSelectionModel().getSelected().data;
                     Ext.Ajax.request( {
                         params : {
                             method    : 'Courses.resetPassword',
@@ -269,13 +269,10 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 iconCls: 'action_password'
             });
             
-            this.membersGrid = new Tine.widgets.account.ConfigGrid({
-            	id: 'CoursesMembersGrid',
-                accountPickerType: 'user',
-                accountListTitle: this.app.i18n._('Members'),
-                configStore: this.membersStore,
-                configColumns: columns,
-                contextMenuItems: [action_resetPwd]
+            this.membersGrid = new Tine.widgets.account.PickerGridPanel({
+                store: this.membersStore,
+                contextMenuItems: [action_resetPwd],
+                configColumns: columns
             });
         }
         return this.membersGrid;
