@@ -21,6 +21,7 @@ Ext.namespace('Tine.Addressbook');
  * 
  * <p>Contact Search Combobox</p>
  * <p><pre>
+ * TODO         make this a twin trigger field with 'clear' button?
  * TODO         replace internalContactsOnly with usersOnly (and update needed filter)
  * TODO         add switch to filter for expired/enabled/disabled user accounts
  * TODO         extend Tine.Tinebase.widgets.form.RecordPickerComboBox
@@ -190,14 +191,19 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     },
     
     getValue: function() {
-        if (this.useAccountRecord && this.selectedRecord) {
-            return this.selectedRecord.get('account_id');
+        if (this.useAccountRecord) {
+            if (this.selectedRecord) {
+                return this.selectedRecord.get('account_id');
+            } else {
+                return null;
+            }
         } else {
             Tine.Addressbook.SearchCombo.superclass.getValue.call(this);
         }
     },
 
     setValue: function (value) {
+        
         if (this.useAccountRecord && value) {
             if(value.accountId) {
                 // account object
