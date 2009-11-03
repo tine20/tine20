@@ -36,6 +36,11 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     protected $_notificationController;
     
     /**
+     * @var Zend_Mail_Transport_Array
+     */
+    protected $_mailer = NULL;
+    
+    /**
      * @var Tinebase_Model_Container
      */
     protected $_testCalendar;
@@ -45,6 +50,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         parent::setUp();
         $this->_eventController = Calendar_Controller_Event::getInstance();
         $this->_notificationController = Calendar_Controller_EventNotifications::getInstance();
+        
+        $this->_mailer = Tinebase_Smtp::getDefaultTransport();
 
     }
     
@@ -53,12 +60,15 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $event = $this->_getEvent();
         $event->attendee = $this->_getAttendee();
         
+        $this->_mailer->flush();
         $persitentEvent = $this->_eventController->create($event);
+        $subject = array_value(0, $this->_mailer->getMessages())->getSubject();
+        $this->assertTrue((bool) strpos($subject, 'invit'), 'Mail subject should contain "invit" but '. $subject . ' is given');
+        
+        $this->_mailer->flush();
         $persitentEvent = $this->_eventController->delete($persitentEvent);
-        
-        
-        // assert 'you have been invited'
-        // assert 'event has been canceled'
+        $subject = array_value(0, $this->_mailer->getMessages())->getSubject();
+        $this->assertTrue((bool) strpos($subject, 'cancel'), 'Mail subject should contain "cancel" but '. $subject . ' is given');
     }
     
     public function testUpdateEmpty()
