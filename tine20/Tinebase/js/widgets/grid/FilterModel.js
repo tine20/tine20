@@ -280,12 +280,26 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 });
                 break;
             case 'user':
-                value = new Tine.widgets.AccountpickerField({
-                    filter: filter,
+                value = new Tine.Addressbook.SearchCombo({
                     width: fieldWidth,
                     id: 'tw-ftb-frow-valuefield-' + filter.id,
                     value: filter.data.value ? filter.data.value : this.defaultValue,
-                    renderTo: el
+                    emptyText: _('Search Account ...'),
+                    internalContactsOnly: true,
+                    name: 'organizer',
+                    nameField: 'n_fileas',
+                    useAccountRecord: true,
+                    filter: filter,
+                    renderTo: el,
+                    listeners: {
+                        'specialkey': function(field, e) {
+                             if(e.getKey() == e.ENTER){
+                                 this.onFiltertrigger();
+                             }
+                        },
+                        'select': this.onFiltertrigger,
+                        scope: this
+                    }
                 });
                 break;
             case 'bool':
