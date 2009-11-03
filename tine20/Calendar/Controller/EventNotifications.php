@@ -70,11 +70,18 @@
         // check event details
         $diff = $_event->diff($_oldEvent);
         
-        $updates = array_intersect_key($diff, array_flip(array(
-            'dtstart', 'dtend', 'transp', 'class_id', 'description', 'geo', 'location',
-            'organizer', 'priority', 'status_id', 'summary', 'url', /*'tags', 'notes',*/
-            'rrule', 'is_all_day_event', 'originator_tz'
-        )));
+        $orderedUpdateFieldOfInterest = array(
+            'dtstart', 'dtend', 'summary', 'location', 'description',
+            'organizer', 'transp', 'priority', 'status_id', 'class_id',
+            'url', 'rrule', 'is_all_day_event', 'originator_tz', /*'tags', 'notes',*/
+        );
+        
+        $updates = array();
+        foreach ($orderedUpdateFieldOfInterest as $field) {
+            if (array_key_exists($field, $diff)) {
+                $updates[$field] = $diff[$field];
+            }
+        }
         
         // check attendee updates
         $attendeeMigration = $_oldEvent->attendee->getMigration($_event->attendee->getArrayOfIds());
@@ -214,7 +221,7 @@
         $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $prefUser));
         $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $prefUser);
         $translate = Tinebase_Translation::getTranslation('Calendar', $locale);
-
+        
         // get date strings
         $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtstart, $timezone, $locale);
         $endDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtend, $timezone, $locale);
@@ -222,26 +229,18 @@
         switch ($_action) {
             case 'alarm':
                 $messageSubject = sprintf($translate->_('Alarm for event "%1$s" at %2$s'), $_event->summary, $startDateString);
-                $messageBody = $translate->_('Here is your requested alarm for to following event:') . "\n\n";
                 break;
             case 'created':
                 $messageSubject = sprintf($translate->_('Event invitation "%1$s" at %2$s'), $_event->summary, $startDateString);
-                $messageBody = $translate->_('You have been invited to the following event:') . "\n\n";
                 break;
             case 'deleted':
                 $messageSubject = sprintf($translate->_('Event "%1$s" at %s has been canceled' ), $_event->summary, $startDateString);
-                $messageBody = $translate->_('The following event has been canceled:') . "\n\n";
                 break;
             case 'changed':
-                $messageBody = "\n";
                 
                 switch ($_updateLevel) {
                     case self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE:
                         $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been rescheduled' ), $_event->summary, $startDateString);
-                        $messageBody .= $translate->_('From') . ': ' . 
-                            (array_key_exists('dtstart', $_updates) ? Tinebase_Translation::dateToStringInTzAndLocaleFormat($_updates['dtstart'], $timezone, $locale) : $startDateString) . " - " .
-                            (array_key_exists('dtend', $_updates) ? Tinebase_Translation::dateToStringInTzAndLocaleFormat($_updates['dtend'], $timezone, $locale) : $endDateString) . "\n";
-                        $messageBody .= $translate->_('To') . ': ' . $startDateString . ' - ' . $endDateString . "\n\n";
                         break;
                         
                     case self::NOTIFICATION_LEVEL_EVENT_UPDATE:
@@ -252,7 +251,6 @@
                         if(! empty($_updates['attendee']) && ! empty($_updates['attendee']['toUpdate']) && count($_updates['attendee']['toUpdate']) == 1) {
                             // single attendee status update
                             $attender = $_updates['attendee']['toUpdate'][0];
-                            $attenderName = $attender->getName();
                             
                             switch ($attender->status) {
                                 case Calendar_Model_Attender::STATUS_ACCEPTED:
@@ -276,35 +274,23 @@
                         }
                         break;
                 }
-                
-                // add updates
-                $messageBody .= $translate->_('Changes:') . "\n";
-                foreach($_updates as $field => $update) {
-                    
-                }              
-                $messageBody .= $translate->_('Event details:') . "\n";
-
                 break;
             default:
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
                 break;
         }
         
-        // add values to text
-        $messageBody .= $_event->summary . "\n\n" 
-            . $translate->_('Start')        . ': ' . $startDateString   . "\n" 
-            . $translate->_('End')          . ': ' . $endDateString     . "\n"
-            //. $translate->_('Organizer')    . ': ' . $_event->organizer   . "\n" 
-            . $translate->_('Location')     . ': ' . $_event->location    . "\n"
-            . $translate->_('Description')  . ': ' . $_event->description . "\n\n"
-            
-            . $translate->plural('Attender', 'Attendee', count($_event->attendee)). ":\n";
+        $view = new Zend_View();
+        $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views');
         
-        foreach ($_event->attendee as $attender) {
-            $status = $translate->translate($attender->getStatusString());
-            
-            $messageBody .= "{$attender->getName()} ($status) \n";
-        }
+        $view->translate    = $translate;
+        $view->timezone     = $timezone;
+        
+        $view->event        = $_event;
+        $view->updater      = $_updater;
+        $view->updates      = $_updates;
+        
+        $messageBody = $view->render('eventNotification.php');
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " receiver: '{$_attender->getEmail()}'");
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " subject: '$messageSubject'");
