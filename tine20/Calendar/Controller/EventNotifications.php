@@ -220,9 +220,6 @@
         
         // get prefered language, timezone and notification level
         $prefUser = $_attender->getUserAccountId();
-        if (! $prefUser) {
-            $prefUser = $organizer;
-        }
         $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $prefUser));
         $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $prefUser);
         $translate = Tinebase_Translation::getTranslation('Calendar', $locale);
@@ -234,13 +231,13 @@
             return;
         }
         if ($sendLevel < $_notificationLevel) {
-            if($prefUser != $organizer) {
+            if($prefUser != $organizer->getId()) {
                 return;
             } else if ($sendLevel == self::NOTIFICATION_LEVEL_NONE) {
                 return;
             }
         }
-        
+
         // get date strings
         $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtstart, $timezone, $locale);
         $endDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtend, $timezone, $locale);
