@@ -202,11 +202,7 @@ Ext.namespace('Tine.Tasks');
                                 }
                                 Tine.Addressbook.SearchCombo.superclass.setValue.call(this, value);
                             }
-                        }) 
-                    /*, new Tine.widgets.AccountpickerField({
-                        fieldLabel: this.app.i18n._('Responsible'),
-                        name: 'organizer'
-                    })*/], [{
+                    })], [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Notes'),
                         emptyText: this.app.i18n._('Enter description...'),
