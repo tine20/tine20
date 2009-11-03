@@ -220,32 +220,12 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
                     text: _('Search User'),
                     scope: this,
                     iconCls: 'tinebase-accounttype-user',
-                    handler: function() {
-                        if (! this.contactSearchCombo.isVisible()) {
-                            var width = this.groupSearchCombo.getWidth();
-                            this.groupSearchCombo.hide();
-                            this.contactSearchCombo.show();
-                            // TODO fix this hack (extjs bug?) / generalize this
-                            this.contactSearchCombo.setWidth(width - 1);
-                            this.contactSearchCombo.setWidth(this.contactSearchCombo.getWidth() + 1);
-                            this.accountTypeSelector.setIconClass('tinebase-accounttype-user');
-                        }
-                    }
+                    handler: this.onSwitchCombo.createDelegate(this, ['contact', 'tinebase-accounttype-user'])
                 }, {
                     text: _('Search Group'),
                     scope: this,
                     iconCls: 'tinebase-accounttype-group',
-                    handler: function() {
-                        if (! this.groupSearchCombo.isVisible()) {
-                            var width = this.contactSearchCombo.getWidth();
-                            this.contactSearchCombo.hide();
-                            this.groupSearchCombo.show();
-                            // TODO fix this hack (extjs bug?) / generalize this
-                            this.groupSearchCombo.setWidth(width - 1);
-                            this.groupSearchCombo.setWidth(this.groupSearchCombo.getWidth() + 1);
-                            this.accountTypeSelector.setIconClass('tinebase-accounttype-group');
-                        }
-                    }
+                    handler: this.onSwitchCombo.createDelegate(this, ['group', 'tinebase-accounttype-group'])
                 }, {
                     text: _('Add Anyone'),
                     scope: this,
@@ -402,6 +382,8 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
     
     /**
      * @param {Record} recordToAdd
+     * 
+     * TODO make reset work correctly -> show emptyText again
      */
     onAddRecordFromCombo: function(recordToAdd) {
         var recordData = {};
@@ -430,6 +412,31 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
         this.collapse();
         this.clearValue();
         this.reset();
+    },
+    
+    /**
+     * 
+     * @param {String} show
+     * @param {String} iconCls
+     * 
+     * TODO fix width hack (extjs bug?)
+     */
+    onSwitchCombo: function(show, iconCls) {
+        var showCombo = (show == 'contact') ? this.contactSearchCombo : this.groupSearchCombo;
+        var hideCombo = (show == 'contact') ? this.groupSearchCombo : this.contactSearchCombo;
+        
+        if (! showCombo.isVisible()) {
+            var width = hideCombo.getWidth();
+            
+            hideCombo.hide();
+            showCombo.show();
+            
+            // adjust width
+            showCombo.setWidth(width - 1);
+            showCombo.setWidth(showCombo.getWidth() + 1);
+            
+            this.accountTypeSelector.setIconClass(iconCls);
+        }
     }
 });
 
