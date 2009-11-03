@@ -182,14 +182,21 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 break;
         }
         
-        // TODO try to make hfit work correctly for search combos
-        this.tbar = [this.accountTypeSelector,
-            new Ext.Panel({
-                layout: 'hfit',
-                border: false,
-                items: items
-        })];
+        this.comboPanel = new Ext.Panel({
+            layout: 'hfit',
+            border: false,
+            items: items,
+            columnWidth: 1
+        });
         
+        this.tbar = new Ext.Toolbar({
+            items: [
+                this.accountTypeSelector,
+                this.comboPanel
+            ],
+            layout: 'column'
+        });
+
         if (this.enableBbar) {
             this.bbar = new Ext.Toolbar({
                 items: [
@@ -204,6 +211,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
      */
     getAccountTypeSelector: function() {
         return new Ext.Action({
+            width: 20,
             text: '',
             disabled: false,
             iconCls: (this.selectTypeDefault) ? 'tinebase-accounttype-user' : 'tinebase-accounttype-group',
@@ -213,18 +221,30 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
                     scope: this,
                     iconCls: 'tinebase-accounttype-user',
                     handler: function() {
-                        this.contactSearchCombo.show();
-                        this.groupSearchCombo.hide();
-                        this.accountTypeSelector.setIconClass('tinebase-accounttype-user');
+                        if (! this.contactSearchCombo.isVisible()) {
+                            var width = this.groupSearchCombo.getWidth();
+                            this.groupSearchCombo.hide();
+                            this.contactSearchCombo.show();
+                            // TODO fix this hack (extjs bug?) / generalize this
+                            this.contactSearchCombo.setWidth(width - 1);
+                            this.contactSearchCombo.setWidth(this.contactSearchCombo.getWidth() + 1);
+                            this.accountTypeSelector.setIconClass('tinebase-accounttype-user');
+                        }
                     }
                 }, {
                     text: _('Search Group'),
                     scope: this,
                     iconCls: 'tinebase-accounttype-group',
                     handler: function() {
-                        this.contactSearchCombo.hide();
-                        this.groupSearchCombo.show();
-                        this.accountTypeSelector.setIconClass('tinebase-accounttype-group');
+                        if (! this.groupSearchCombo.isVisible()) {
+                            var width = this.contactSearchCombo.getWidth();
+                            this.contactSearchCombo.hide();
+                            this.groupSearchCombo.show();
+                            // TODO fix this hack (extjs bug?) / generalize this
+                            this.groupSearchCombo.setWidth(width - 1);
+                            this.groupSearchCombo.setWidth(this.groupSearchCombo.getWidth() + 1);
+                            this.accountTypeSelector.setIconClass('tinebase-accounttype-group');
+                        }
                     }
                 }, {
                     text: _('Add Anyone'),
@@ -255,7 +275,6 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
      */
     getContactSearchCombo: function() {
         return new Tine.Addressbook.SearchCombo({
-            width: 300,
             accountsStore: this.store,
             emptyText: _('Search for users ...'),
             newRecordClass: this.recordClass,
@@ -271,7 +290,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
      */
     getGroupSearchCombo: function() {
         return new Tine.Tinebase.widgets.form.RecordPickerComboBox({
-            width: 300,
+            //anchor: '100%',
             accountsStore: this.store,
             blurOnSelect: true,
             recordClass: Tine.Tinebase.Model.Group,
@@ -338,6 +357,13 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
         });
     },
     
+    // private
+    /*
+    afterRender: function() {
+        Tine.widgets.account.PickerGridPanel.superclass.afterRender.call(this);
+    },
+    */
+    
     /**
      * remove handler
      * 
@@ -403,6 +429,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
         }
         this.collapse();
         this.clearValue();
+        this.reset();
     }
 });
 
