@@ -7,8 +7,8 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        make it work again
- * @todo        perhaps we should load the settings only if settings tab is clicked
+ * TODO         make it work again
+ * TODO         perhaps we should load the settings only if settings tab is clicked
  */
  
 Ext.namespace('Tine.Voipmanager');
@@ -716,12 +716,11 @@ Tine.Phone.MyPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return {
             title: this.app.i18n._('Users'),
             layout: 'fit',
-            items: new Tine.widgets.account.ConfigGrid({
-                accountPickerType: 'both',
-                accountListTitle: this.app.i18n._('Rights'),
-                configStore: this.rightsStore,
+            items: new Tine.widgets.account.PickerGridPanel({
+                selectType: 'both',
+                //title: this.app.i18n._('Rights'),
+                store: this.rightsStore,
                 hasAccountPrefix: true
-                //configColumns: columns
             })
         };
     }
