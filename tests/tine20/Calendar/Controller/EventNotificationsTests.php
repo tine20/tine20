@@ -64,12 +64,12 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $this->_mailer->flush();
         $persitentEvent = $this->_eventController->create($event);
-        //$this->_assertMail('jsmith', NULL);
+        $this->_assertMail('jsmith', NULL);
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'invit');
         
         $this->_mailer->flush();
         $persitentEvent = $this->_eventController->delete($persitentEvent);
-        //$this->_assertMail('jsmith', NULL);
+        $this->_assertMail('jsmith', NULL);
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'cancel');
     }
     
@@ -97,7 +97,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $this->_mailer->flush();
         $updatedEvent = $this->_eventController->update($persitentEvent);
-        //$this->_assertMail('jsmith, pwulf', NULL);
+        $this->_assertMail('jsmith, pwulf', NULL);
         $this->_assertMail('sclever, jmcblack, rwright', 'reschedul');
     }
     
@@ -113,7 +113,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $this->_mailer->flush();
         $updatedEvent = $this->_eventController->update($persitentEvent);
-        //$this->_assertMail('jsmith, pwulf, sclever', NULL);
+        $this->_assertMail('jsmith, pwulf, sclever', NULL);
         $this->_assertMail('jmcblack, rwright', 'update');
     }
         
@@ -127,7 +127,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $this->_mailer->flush();
         $updatedEvent = $this->_eventController->update($persitentEvent);
-        //$this->_assertMail('jsmith, pwulf, sclever, jmcblack', NULL);
+        $this->_assertMail('jsmith, pwulf, sclever, jmcblack', NULL);
         $this->_assertMail('rwright', 'decline');
     }
     
