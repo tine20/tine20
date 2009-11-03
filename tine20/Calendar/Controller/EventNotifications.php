@@ -313,6 +313,7 @@
         
         // NOTE: this is a contact as we only support users and groupmembers
         $contact = $_attender->getResolvedUser();
-        Tinebase_Notification::getInstance()->send($organizer, array($contact), $messageSubject, $messageBody);
+        $sender = $_action == 'alarm' ? $organizer : $_updater;
+        Tinebase_Notification::getInstance()->send($sender, array($contact), $messageSubject, $messageBody);
     }
  }
