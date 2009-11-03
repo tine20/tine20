@@ -161,6 +161,64 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     }
     
     /**
+     * gets translated field name
+     * 
+     * NOTE: this has to be done explicitly as our field names are technically 
+     *       and have no translations
+     *       
+     * @param string         $_field
+     * @param Zend_Translate $_translation
+     * @return string
+     */
+    public static function getTranslatedFieldName($_field, $_translation)
+    {
+        $t = $_translation;
+        switch ($_field) {
+            case 'dtstart':           return $t->_('Start');
+            case 'dtend':             return $t->_('End');
+            case 'transp':            return $t->_('Blocking');
+            case 'class_id':          return $t->_('Classification');
+            case 'description':       return $t->_('Description');
+            case 'location':          return $t->_('Location');
+            case 'organizer':         return $t->_('Organizer');
+            case 'priority':          return $t->_('Priority');
+            case 'status_id':         return $t->_('Status');
+            case 'summary':           return $t->_('Summary');
+            case 'url':               return $t->_('Url');
+            case 'rrule':             return $t->_('Recurrance rule');
+            case 'is_all_day_event':  return $t->_('Is all day event');
+            case 'originator_tz':     return $t->_('Organizer timezone');
+            default:                  return $_field;
+        }
+    }
+    
+    /**
+     * gets translated value
+     * 
+     * NOTE: This is needed for values like Yes/No, Datetimes, etc.
+     * 
+     * @param  string           $_field
+     * @param  mixed            $_value
+     * @param  Zend_Translate   $_translation
+     * @param  string           $_timezone
+     * @return string
+     */
+    public static function getTranslatedValue($_field, $_value, $_translation, $_timezone)
+    {
+        if ($_value instanceof Zend_Date) {
+            $locale = new Zend_Locale($_translation->getAdapter()->getLocale());
+            return Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, $_timezone, $locale);
+        }
+        
+        switch ($_field) {
+            case 'transp':
+                return $_value ? $_translation->_('Yes') : $_translation->_('No');
+            default:
+                return $_value;
+        }
+    }
+    
+    /**
      * sets recurId of this model
      * 
      * @return string recurid which was set
