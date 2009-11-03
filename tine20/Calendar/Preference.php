@@ -28,8 +28,18 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      * default calendar all newly created/invited events are placed in
      */
     const DEFAULTCALENDAR = 'defaultCalendar';
-
-
+    
+    /**
+     * general notification level
+     */
+    const NOTIFICATION_LEVEL = 'notificationLevel';
+    
+    /**
+     * send notifications of own updates
+     */
+    const SEND_NOTIFICATION_OF_OWN_ACTIONS = 'sendnotificationsofownactions';
+    
+    
     /**
      * @var string application
      */
@@ -46,7 +56,9 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     {
         $allPrefs = array(
             self::FREEBUSY,
-            self::DEFAULTCALENDAR
+            self::DEFAULTCALENDAR,
+            self::NOTIFICATION_LEVEL,
+            self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
         );
             
         return $allPrefs;
@@ -69,6 +81,14 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTCALENDAR  => array(
                 'label'         => $translate->_('Default Calendar'),
                 'description'   => $translate->_('The defualt calendar for invitations and new events'),
+            ),
+            self::NOTIFICATION_LEVEL => array(
+                'label'         => $translate->_('Get Notification Emails'),
+                'description'   => $translate->_('The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to "Never"'),
+            ),
+            self::SEND_NOTIFICATION_OF_OWN_ACTIONS => array(
+                'label'         => $translate->_('Send Notifications Emails of own Actions'),
+                'description'   => $translate->_('Get notifications emails for actions you did yourself'),
             ),
         );
         
@@ -97,7 +117,41 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 $accountId = $_accountId ? $_accountId : Tinebase_Core::getUser()->getId();
                 $calendars          = Tinebase_Container::getInstance()->getPersonalContainer($accountId, 'Calendar', $accountId, 0, true);
                 $preference->value  = $calendars->getFirstRecord()->getId();
+                break;
+            case self::NOTIFICATION_LEVEL:
+                $translate = Tinebase_Translation::getTranslation($this->_application);
                 
+                $preference->value      = Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_INVITE_CANCLE;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <value>'. Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_NONE . '</value>
+                            <label>'. $translate->_('Never') . '</label>
+                        </option>
+                        <option>
+                            <value>'. Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_INVITE_CANCLE . '</value>
+                            <label>'. $translate->_('On invitaion and cancelation only') . '</label>
+                        </option>
+                        <option>
+                            <value>'. Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_EVENT_RESCHEDULE . '</value>
+                            <label>'. $translate->_('On time changes') . '</label>
+                        </option>
+                        <option>
+                            <value>'. Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_EVENT_UPDATE . '</value>
+                            <label>'. $translate->_('On all updates but attendee responses') . '</label>
+                        </option>
+                        <option>
+                            <value>'. Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE . '</value>
+                            <label>'. $translate->_('On attendee responses too') . '</label>
+                        </option>
+                    </options>';
+                break;
+            case self::SEND_NOTIFICATION_OF_OWN_ACTIONS:
+                $preference->value      = 0;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
