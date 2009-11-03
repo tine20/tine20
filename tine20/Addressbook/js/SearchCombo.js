@@ -76,6 +76,16 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
      * @cfg {String} nameField
      */
     nameField: 'n_fn',
+
+    /**
+     * use account objects/records in get/setValue
+     * 
+     * @cfg {Boolean} legacy
+     * @legacy
+     * 
+     * TODO remove this later
+     */
+    useAccountRecord: false,
     
     //private
     initComponent: function(){
@@ -177,6 +187,29 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
                 }
             );
         }
+    },
+    
+    getValue: function() {
+        if (this.useAccountRecord && this.selectedRecord) {
+            return this.selectedRecord.get('account_id');
+        } else {
+            Tine.Addressbook.SearchCombo.superclass.getValue.call(this);
+        }
+    },
+
+    setValue: function (value) {
+        if (this.useAccountRecord && value) {
+            if(value.accountId) {
+                // account object
+                this.accountId = value.accountId;
+                value = value.accountDisplayName;
+            } else if (typeof(value.get) == 'function') {
+                // account record
+                this.accountId = value.get('id');
+                value = value.get('name');
+            }
+        }
+        Tine.Addressbook.SearchCombo.superclass.setValue.call(this, value);
     },
     
     /**
