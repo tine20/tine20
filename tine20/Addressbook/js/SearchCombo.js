@@ -195,7 +195,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
             if (this.selectedRecord) {
                 return this.selectedRecord.get('account_id');
             } else {
-                return null;
+                return this.accountId;
             }
         } else {
             Tine.Addressbook.SearchCombo.superclass.getValue.call(this);
@@ -204,15 +204,19 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
 
     setValue: function (value) {
         
-        if (this.useAccountRecord && value) {
-            if(value.accountId) {
-                // account object
-                this.accountId = value.accountId;
-                value = value.accountDisplayName;
-            } else if (typeof(value.get) == 'function') {
-                // account record
-                this.accountId = value.get('id');
-                value = value.get('name');
+        if (this.useAccountRecord) {
+            if (value) {
+                if(value.accountId) {
+                    // account object
+                    this.accountId = value.accountId;
+                    value = value.accountDisplayName;
+                } else if (typeof(value.get) == 'function') {
+                    // account record
+                    this.accountId = value.get('id');
+                    value = value.get('name');
+                }
+            } else {
+                this.accountId = null;
             }
         }
         Tine.Addressbook.SearchCombo.superclass.setValue.call(this, value);
