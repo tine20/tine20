@@ -135,11 +135,11 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach ($members['results'] as $member) {
             
             // get full user for login name
-            $fullUser = Tinebase_User::getInstance()->getFullUserById($member['accountId']);
+            $fullUser = Tinebase_User::getInstance()->getFullUserById($member['id']);
             
             $result[] = array(
-                'id'    => $member['accountId'],
-                'name'  => $member['accountDisplayName'],
+                'id'    => $member['id'],
+                'name'  => $member['name'],
                 'data'  => $fullUser->accountLoginName,
                 'type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
             );
