@@ -105,13 +105,22 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
     /**
      * @cfg {Array} Array of column's config objects where the config options are in
      */
-    configColumns: [],
+    configColumns: null,
     
-    //private
+    /**
+     * @cfg {Array} contextMenuItems
+     * additional items for contextMenu
+     */
+    contextMenuItems: null,
+    
+    /**
+     * @private
+     */
     initComponent: function() {
         this.recordPrefix = (this.hasAccountPrefix) ? 'account_' : '';
         this.recordClass = (this.recordClass !== null) ? this.recordClass : Tine.Tinebase.Model.Account;
         this.configColumns = (this.configColumns !== null) ? this.configColumns : [];
+        this.contextMenuItems = (this.contextMenuItems !== null) ? this.contextMenuItems : [];
         
         this.initStore();
         this.initActionsAndToolbars();
@@ -156,8 +165,9 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             iconCls: 'action_deleteContact'
         })
         
+        var contextItems = [this.actionRemove];
         this.contextMenu = new Ext.menu.Menu({
-            items: [this.actionRemove]
+            items: contextItems.concat(this.contextMenuItems)
         });
         
         this.accountTypeSelector = this.getAccountTypeSelector();
@@ -210,41 +220,61 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
      * @return {Ext.Action}
      */
     getAccountTypeSelector: function() {
+        // define actions
+        var userActionCfg = {
+            text: _('Search User'),
+            scope: this,
+            iconCls: 'tinebase-accounttype-user',
+            handler: this.onSwitchCombo.createDelegate(this, ['contact', 'tinebase-accounttype-user'])
+        };
+        var groupActionCfg = {
+            text: _('Search Group'),
+            scope: this,
+            iconCls: 'tinebase-accounttype-group',
+            handler: this.onSwitchCombo.createDelegate(this, ['group', 'tinebase-accounttype-group'])
+        };
+        var anyoneActionCfg = {
+            text: _('Add Anyone'),
+            scope: this,
+            newRecordClass: this.recordClass,
+            iconCls: 'tinebase-accounttype-addanyone',
+            handler: function() {
+                // add anyone
+                var recordData = {};
+                recordData[this.recordPrefix + 'type'] = 'anyone';
+                recordData[this.recordPrefix + 'name'] = _('Anyone');
+                recordData[this.recordPrefix + 'id'] = 0;
+                var record = new this.recordClass(recordData, 0);
+                
+                // check if already in
+                if (! this.store.getById(record.id)) {
+                    this.store.add([record]);
+                }
+            }
+        };
+        
+        // set items
+        var items = [];
+        switch (this.selectType) {
+            case 'both':
+                items = items.concat([userActionCfg, groupActionCfg, anyoneActionCfg]);
+                break;
+            case 'user':
+                items = userActionCfg;
+                break;
+            case 'group':
+                items = groupActionCfg;
+                break;
+        }
+        
+        // create action
         return new Ext.Action({
             width: 20,
             text: '',
             disabled: false,
             iconCls: (this.selectTypeDefault) ? 'tinebase-accounttype-user' : 'tinebase-accounttype-group',
             menu: new Ext.menu.Menu({
-                items: [{
-                    text: _('Search User'),
-                    scope: this,
-                    iconCls: 'tinebase-accounttype-user',
-                    handler: this.onSwitchCombo.createDelegate(this, ['contact', 'tinebase-accounttype-user'])
-                }, {
-                    text: _('Search Group'),
-                    scope: this,
-                    iconCls: 'tinebase-accounttype-group',
-                    handler: this.onSwitchCombo.createDelegate(this, ['group', 'tinebase-accounttype-group'])
-                }, {
-                    text: _('Add Anyone'),
-                    scope: this,
-                    newRecordClass: this.recordClass,
-                    iconCls: 'tinebase-accounttype-addanyone',
-                    handler: function() {
-                        // add anyone
-                        var recordData = {};
-                        recordData[this.recordPrefix + 'type'] = 'anyone';
-                        recordData[this.recordPrefix + 'name'] = _('Anyone');
-                        recordData[this.recordPrefix + 'id'] = 0;
-                        var record = new this.recordClass(recordData, 0);
-                        
-                        // check if already in
-                        if (! this.store.getById(record.id)) {
-                            this.store.add([record]);
-                        }
-                    }
-                }]
+                items: items
             }),
             scope: this
         });
