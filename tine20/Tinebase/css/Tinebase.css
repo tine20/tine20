@@ -123,7 +123,7 @@ html, body {
     margin-top: 50px;
 }
 
-/* ----- renderer ------------------------------------------------------------*/
+/* ----- account renderer ------------------------------------------------------------*/
 .renderer {
     width: 12px;
     float: left;
@@ -152,6 +152,14 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
     background-repeat: no-repeat;
     background-position: 2px 2px;
+}
+
+.tinebase-accounttype-user {
+    background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
+}
+
+.tinebase-accounttype-group {
+    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
 }
 
 /* ----- notes ------------------------------------------------------------*/

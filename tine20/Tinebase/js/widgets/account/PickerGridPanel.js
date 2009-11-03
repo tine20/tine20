@@ -21,8 +21,7 @@ Ext.namespace('Tine.widgets.account');
  * 
  * <p>Account Picker GridPanel</p>
  * <p><pre>
- * TODO         make it possible to switch between the comboboxes in 'both' mode and show only one combo at the time 
- * TODO         use selectAction/enableBbar configs?
+ * TODO         use selectAction config?
  * TODO         add 'Anyone' to user selection
  * </pre></p>
  * 
@@ -45,7 +44,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
     /**
      * @cfg{String} selectTypeDefault 'user' or 'group' defines which accountType is selected when  {selectType} is true
      */
-    //selectTypeDefault: 'user',
+    selectTypeDefault: 'user',
     
     /**
      * @cfg {Ext.Action}
@@ -57,7 +56,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
      * @cfg {bool}
      * enable bottom toolbar
      */
-    //enableBbar: false,
+    enableBbar: true,
 
     /**
      * store to hold all accounts
@@ -161,7 +160,91 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
             items: [this.actionRemove]
         });
         
-        this.accountsSearchCombo = new Tine.Addressbook.SearchCombo({
+        this.accountTypeSelector = this.getAccountTypeSelector();
+        this.contactSearchCombo = this.getContactSearchCombo();
+        this.groupSearchCombo = this.getGroupSearchCombo();
+        
+        var items = [];
+        switch (this.selectType) {
+            case 'both':
+                items = items.concat([this.contactSearchCombo, this.groupSearchCombo]);
+                if (this.selectTypeDefault == 'user') {
+                    this.groupSearchCombo.hide();
+                } else {
+                    this.contactSearchCombo.hide();
+                }
+                break;
+            case 'user':
+                items = items.concat([this.contactSearchCombo]);
+                break;
+            case 'group':
+                items = items.concat([this.groupSearchCombo]);
+                break;
+        }
+        
+        // TODO try to make hfit work correctly for search combos
+        this.tbar = [this.accountTypeSelector,
+            new Ext.Panel({
+                layout: 'hfit',
+                border: false,
+                items: items
+        })];
+        
+        if (this.enableBbar) {
+            this.bbar = new Ext.Toolbar({
+                items: [
+                    this.actionRemove
+                ]
+            });
+        }
+    },
+    
+    /**
+     * @return {Ext.Action}
+     */
+    getAccountTypeSelector: function() {
+        return new Ext.Action({
+            text: '',
+            disabled: false,
+            iconCls: (this.selectTypeDefault) ? 'tinebase-accounttype-user' : 'tinebase-accounttype-group',
+            menu: new Ext.menu.Menu({
+                items: [{
+                   text: _('Search User'),
+                   scope: this,
+                   iconCls: 'tinebase-accounttype-user',
+                   handler: function() {
+                        this.contactSearchCombo.show();
+                        this.groupSearchCombo.hide();
+                        this.accountTypeSelector.setIconClass('tinebase-accounttype-user');
+                   }
+                }, {
+                   text: _('Search Group'),
+                   scope: this,
+                   iconCls: 'tinebase-accounttype-group',
+                   handler: function() {
+                        this.contactSearchCombo.hide();
+                        this.groupSearchCombo.show();
+                        this.accountTypeSelector.setIconClass('tinebase-accounttype-group');
+                   }
+                }/*, {
+                   text: _('Add Anyone'),
+                   scope: this,
+                   iconCls: 'tinebase-accounttype-group',
+                   handler: function() {
+                        console.log('special'); 
+                   }
+                }*/]
+            }),
+            scope: this
+        });
+    },
+
+    /**
+     * @return {Tine.Addressbook.SearchCombo}
+     */
+    getContactSearchCombo: function() {
+        return new Tine.Addressbook.SearchCombo({
+            width: 300,
             accountsStore: this.store,
             emptyText: _('Search for users ...'),
             newRecordClass: this.recordClass,
@@ -185,8 +268,14 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 this.clearValue();
             }    
         })
-
-        this.groupSearchCombo = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+    },
+    
+    /**
+     * @return {Tine.Tinebase.widgets.form.RecordPickerComboBox}
+     */
+    getGroupSearchCombo: function() {
+        return new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+            width: 300,
             accountsStore: this.store,
             blurOnSelect: true,
             recordClass: Tine.Tinebase.Model.Group,
@@ -209,34 +298,9 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 this.collapse();
                 this.clearValue();
             }    
-        });
-        
-        switch (this.selectType) {
-            case 'both':
-                var combos = [this.accountsSearchCombo, this.groupSearchCombo];
-                break;
-            case 'user':
-                var combos = [this.accountsSearchCombo];
-                break;
-            case 'group':
-                var combos = [this.groupSearchCombo];
-                break;
-        }
-        
-        this.tbar = new Ext.Panel({
-            layout: 'hfit',
-            border: false,
-            width: '100%',
-            items: combos
-        });
-        
-        this.bbar = new Ext.Toolbar({
-            items: [
-                this.actionRemove
-            ]
-        });
+        });        
     },
-
+    
     /**
      * init grid (column/selection model, ctx menu, ...)
      */
