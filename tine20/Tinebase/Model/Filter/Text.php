@@ -31,7 +31,8 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         4 => 'not',
         5 => 'in',
         6 => 'isnull',
-        7 => 'notnull'
+        7 => 'notnull',
+        8 => 'oneof'
     );
     
     /**
@@ -46,6 +47,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         'in'         => array('sqlop' => ' IN (?)',      'wildcards' => '?'  ),
         'isnull'     => array('sqlop' => ' IS NULL',     'wildcards' => '?'  ),
         'notnull'    => array('sqlop' => ' IS NOT NULL', 'wildcards' => '?'  ),
+        'oneof'      => array('sqlop' => ' LIKE ?',      'wildcards' => '?'  ),
     );
     
     /**
@@ -55,28 +57,44 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
      * @param  Tinebase_Backend_Sql_Abstract $_backend
      * @throws Tinebase_Exception_NotFound
      */
-     public function appendFilterSql($_select, $_backend)
-     {
-         $action = $this->_opSqlMap[$this->_operator];
+    public function appendFilterSql($_select, $_backend)
+    {
+        $action = $this->_opSqlMap[$this->_operator];
          
-         // quote field identifier
-         $field = $this->_getQuotedFieldName($_backend);
+        // quote field identifier
+        $field = $this->_getQuotedFieldName($_backend);
          
-         // replace wildcards from user
-         $value = str_replace(array('*', '_'), array('%', '\_'), $this->_value);
+        // replace wildcards from user
+        $value = str_replace(array('*', '_'), array('%', '\_'), $this->_value);
          
-         // add wildcard to value according to operator
-         if ($this->_operator != 'in') {
+        // add wildcard to value according to operator
+        if ($this->_operator != 'in') {
             $value = str_replace('?', $value, $action['wildcards']);
-         }
+        }
+        
+        // oneof operator (multiple values / OR) 
+        if ($this->_operator == 'oneof') {
+            if (empty($this->_value)) {
+                $_select->where('1=1/* empty query */');
+                return;
+            }
+            $parts = explode(' ', $value);
+            $whereParts = array();
+            foreach ($parts as $part) {
+                $whereParts[] = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $part);
+            }
+            $where = implode(' OR ', $whereParts);
+            
+        // single value
+        } else {
+            $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
+        }
          
-         $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
+        if ($this->_operator == 'not') {
+            $where = "( $where OR $field IS NULL)";
+        }
          
-         if ($this->_operator == 'not') {
-             $where = "( $where OR $field IS NULL)";
-         }
-         
-         // finally append query to select object
-         $_select->where($where);
-     }
+        // finally append query to select object
+        $_select->where($where);
+    }
 }
