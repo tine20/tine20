@@ -57,7 +57,6 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
         });
 
         this.initLinksDataView();
-        
         this.items = [this.linksDataView];
         
         Tine.widgets.dialog.LinkPanel.superclass.initComponent.call(this);
@@ -93,9 +92,8 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
         var linksTpl = new Ext.XTemplate(
             '<tpl for=".">',
                '<div class="x-widget-links-linkitem" id="{id}">',
-                    '<div class="x-widget-links-linkitem-text"',
-                        //' ext:qtip="{related_model}"',
-                    '>',
+                    '<div class="x-widget-links-linkitem-text">',
+                        //' ext:qtip="{related_model}">',
                         '{[this.render(values.related_record, values.related_model, values.type, values.id)]}<br/>',
                     '</div>',
                 '</div>',
@@ -116,10 +114,10 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
         this.linksDataView = new Ext.DataView({
             anchor: '100% 100%',
             tpl: linksTpl,       
-            id: 'grid_links_limited',
+            //id: 'grid_links_limited',
             store: this.store,
-            overClass: 'x-view-over'
-            //itemSelector: 'activities-item-small'
+            overClass: 'x-view-over',
+            itemSelector: 'activities-item-small' // don't forget that
         }); 
     },
     
@@ -130,7 +128,6 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     onClick: function(e) {
-        
         target = e.getTarget('a[class=tinebase-relation-link]');
         if (target) {
             var idParts = target.id.split(':');
