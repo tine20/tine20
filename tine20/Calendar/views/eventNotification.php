@@ -23,8 +23,8 @@ foreach ($this->updates as $field => $update) {
 }
 
 if (array_key_exists('attendee', $this->updates)) {
-    if (array_key_exists('toAdd', $this->updates['attendee'])) {
-        foreach ($this->updates['attendee']['toAdd'] as $attender) {
+    if (array_key_exists('toCreate', $this->updates['attendee'])) {
+        foreach ($this->updates['attendee']['toCreate'] as $attender) {
             echo sprintf($this->translate->_('%1$s has been invited'), $attender->getName()) . "\n";
         }
     }
