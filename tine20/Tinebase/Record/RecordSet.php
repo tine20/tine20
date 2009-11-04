@@ -448,7 +448,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *
      * @param string $_field
      * @param string $_value
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_Abstract
      */
     public function find($_field, $_value, $_valueIsRegExp = FALSE)
     {
