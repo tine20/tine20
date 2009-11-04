@@ -95,7 +95,11 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persitentEvent->attendee->removeRecord(
             $persitentEvent->attendee->find('user_id', $this->_personasContacts['pwulf']->getId())
         );
-        
+        $persitentEvent->attendee->find('user_id', $this->_personasContacts['rwright']->getId())->status =
+            Calendar_Model_Attender::STATUS_ACCEPTED;
+        $persitentEvent->attendee->find('user_id', $this->_personasContacts['jmcblack']->getId())->status =
+            Calendar_Model_Attender::STATUS_DECLINED;
+            
         $this->_mailer->flush();
         $updatedEvent = $this->_eventController->update($persitentEvent);
         $this->_assertMail('jsmith, jmcblack', NULL);
