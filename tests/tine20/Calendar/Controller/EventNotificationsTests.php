@@ -85,6 +85,25 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_assertMail('jsmith, pwulf, sclever, jmcblack, rwright', NULL);
     }
     
+    public function testUpdateChangeAttendee()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getPersonaAttendee('pwulf, jmcblack, rwright');
+        $persitentEvent = $this->_eventController->create($event);
+        
+        $persitentEvent->attendee->merge($this->_getPersonaAttendee('jsmith, sclever'));
+        $persitentEvent->attendee->removeRecord(
+            $persitentEvent->attendee->find('user_id', $this->_personasContacts['pwulf']->getId())
+        );
+        
+        $this->_mailer->flush();
+        $updatedEvent = $this->_eventController->update($persitentEvent);
+        $this->_assertMail('jsmith, jmcblack', NULL);
+        $this->_assertMail('sclever', 'invit');
+        $this->_assertMail('pwulf', 'cancel');
+        $this->_assertMail('rwright', 'Attendee');
+    }
+    
     public function testUpdateReschedule()
     {
         $event = $this->_getEvent();
@@ -185,7 +204,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
             } else {
                 $this->assertEquals(1, count($mailsForPersona), 'One mail should be send for '. $personaName);
                 $subject = $mailsForPersona[0]->getSubject();
-                $this->assertTrue((bool) strpos($subject, $_assertString), 'Mail subject for ' . $personaName . ' should contain "' . $_assertString . '" but '. $subject . ' is given');
+                $this->assertTrue(FALSE !== strpos($subject, $_assertString), 'Mail subject for ' . $personaName . ' should contain "' . $_assertString . '" but '. $subject . ' is given');
             }
         }
     }
