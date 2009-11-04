@@ -42,9 +42,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
      * combobox cfg
      * @private
      */
-	id: 'contactSearchCombo',
     typeAhead: false,
-    //hideTrigger: true, // IE7 doesn't like that!
     triggerAction: 'all',
     pageSize: 10,
     itemSelector: 'div.search-item',
@@ -198,12 +196,12 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
                 return this.accountId;
             }
         } else {
-            Tine.Addressbook.SearchCombo.superclass.getValue.call(this);
+            return Tine.Addressbook.SearchCombo.superclass.getValue.call(this);
         }
     },
 
     setValue: function (value) {
-        
+    	
         if (this.useAccountRecord) {
             if (value) {
                 if(value.accountId) {
