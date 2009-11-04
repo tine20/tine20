@@ -140,7 +140,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
     {
         foreach ($this->relations as $num => $relation) {
             foreach ($this->relationData[$num] as $key => $value) {
-                $this->assertEquals($value, $relation[$key]);
+                $this->assertEquals($value, $relation[$key], 'wrong value for ' . $key);
             }
         }
     }
