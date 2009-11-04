@@ -3,7 +3,7 @@
     <name>Sales</name>
     <version>2.3</version>
     <order>50</order>
-    <status>disabled</status>
+    <status>enabled</status>
     <tables>
         <table>
             <name>sales_numbers</name>
