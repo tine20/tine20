@@ -220,6 +220,10 @@
         
         // get prefered language, timezone and notification level
         $prefUser = $_attender->getUserAccountId();
+        // e.g. contacts
+        if (! $prefUser) {
+            $prefUser = $organizer->getId();
+        }
         $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $prefUser));
         $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $prefUser);
         $translate = Tinebase_Translation::getTranslation('Calendar', $locale);
