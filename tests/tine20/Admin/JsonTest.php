@@ -311,8 +311,10 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         // get group members with json
         $getGroupMembersArray = $this->_backend->getGroupMembers($group->getId());
         
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->objects['user']->accountId);
+        
         $this->assertTrue(isset($getGroupMembersArray['results'][0]));
-        $this->assertEquals($this->objects['user']->accountFirstName, $getGroupMembersArray['results'][0]['accountFirstName']);
+        $this->assertEquals($contact->n_fileas, $getGroupMembersArray['results'][0]['name']);
         $this->assertGreaterThan(0, $getGroupMembersArray['totalcount']);
     }       
     
@@ -465,8 +467,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $encodedData = Zend_Json::encode($this->objects['role']->toArray());
         $encodedRoleMembers = Zend_Json::encode(array(
             array(
-                "account_id"    => $account->getId(),
-                "account_type"  => "user",
+                "id"    => $account->getId(),
+                "type"  => "user",
                 "name"  => $account->accountDisplayName,
             )
         ));
