@@ -189,9 +189,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         ) {
             $this->_backgroundCacheImport($result);
             // dies
+        } else {
+            return $result;
         }
-        
-        return $result;
     }
     
     /**
@@ -350,6 +350,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param array $_result
      * @return unknown_type
+     * 
+     * @todo    generalize this
      */
     protected function _backgroundCacheImport(array $_result)
     {
@@ -373,6 +375,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $size = ob_get_length();
         header("Content-Length: $size");
+        // need to set content type because the response should not be compressed by (apache) webserver
+        // -> there has been an issue with mod_deflate / content-type text/html here
+        header("Content-Type: application/json");
         ob_end_flush(); // Strange behaviour, will not work
         flush();        
         Zend_Session::writeClose(true);
