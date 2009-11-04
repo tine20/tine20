@@ -104,12 +104,14 @@ class Tinebase_Acl_Roles
     {        
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         if ($application->status != 'enabled') {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Application ' . $_application . ' is disabled!');
             return false;
         }
         
         $roleMemberships = $this->getRoleMemberships($_accountId);
         
-        if ( empty($roleMemberships) ) {
+        if (empty($roleMemberships)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $_accountId . ' has no role memberships!');
             return false;
         }
 
@@ -119,13 +121,13 @@ class Tinebase_Acl_Roles
                      . ' OR ' . $this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?', Tinebase_Acl_Rights::ADMIN) . ')')
                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $application->getId()));
                
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+
         if (!$row = $this->_roleRightsTable->fetchRow($select)) {
             $result = false;
         } else {
             $result = true;
         }
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         return $result;
     }
