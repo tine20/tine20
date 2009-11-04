@@ -152,7 +152,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 items: this.detailsPanel
                 
             });
-            this.detailsPanel.doBind(this.grid);
+            //this.detailsPanel.doBind(this.activeView);
         }
         
         // add filter toolbar
@@ -515,6 +515,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var selection = panel.getSelectionModel().getSelectedEvents();
         
         this.actionUpdater.updateActions(selection);
+        if (this.detailsPanel) {
+            this.detailsPanel.onDetailsUpdate(panel.getSelectionModel());
+        }
     },
     
     updateView: function(which) {
