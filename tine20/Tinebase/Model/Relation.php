@@ -91,13 +91,13 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
      *
      * @param array $_data            the new data to set
      * 
-     * @todo    always json::encode remarks?
+     * @todo    always json::encode remarks? / add options field that is always json encoded
      */
     public function setFromArray(array $_data)
     {
         parent::setFromArray($_data);
         
-        if ($this->remark && is_string($this->remark) && strpos('{', $this->remark) == 0) {
+        if ($this->remark && is_string($this->remark) && strpos('{', $this->remark) === 0) {
             $this->remark = Zend_Json::decode($this->remark);
         }
     }
