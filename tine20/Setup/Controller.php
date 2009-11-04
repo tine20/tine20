@@ -1054,7 +1054,7 @@ class Setup_Controller
      */
     protected function _uninstallApplication(Tinebase_Model_Application $_application)
     {
-        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "Uninstall $_application");
+        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Uninstall $_application");
         $applicationTables = Tinebase_Application::getInstance()->getApplicationTables($_application);
         
         do {
@@ -1068,7 +1068,7 @@ class Setup_Controller
             }
 
             foreach ($applicationTables as $key => $table) {
-                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "Remove table: $table");
+                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Remove table: $table");
                 
                 try {
                     $this->_backend->dropTable($table);
@@ -1109,7 +1109,7 @@ class Setup_Controller
                     
             Tinebase_Application::getInstance()->deleteApplication($_application);
         }
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "Removed app: " . $_application->name);
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Removed app: " . $_application->name);
     }
 
     /**
