@@ -114,8 +114,8 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
     {
         $member = array(
             array(
-                "account_type"  => 'user',
-                "account_id"    => $this->objects['user']->getId(),
+                "type"  => 'user',
+                "id"    => $this->objects['user']->getId(),
             )
         );
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($this->objects['role']->getId(), $member);
