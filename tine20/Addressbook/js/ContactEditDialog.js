@@ -336,7 +336,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         // export lead handler for edit contact dialog
         var exportContactButton = new Ext.Action({
             id: 'exportButton',
-            text: Tine.Tinebase.appMgr.get('Calendar').i18n._('export as pdf'),
+            text: Tine.Tinebase.appMgr.get('Addressbook').i18n._('Export as pdf'),
             handler: this.onExportContact,
             iconCls: 'action_exportAsPdf',
             disabled: false,
