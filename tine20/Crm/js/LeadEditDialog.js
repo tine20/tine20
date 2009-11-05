@@ -145,7 +145,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             relation.remark.description = record.data.remark_description;
         }
         if (record.data.remark_quantity) {
-            relation.remark.quanity = record.data.remark_quantity;
+            relation.remark.quantity = record.data.remark_quantity;
         }
         
         return relation;
