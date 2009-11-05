@@ -92,6 +92,26 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     /**
+     * 'ok' handler for passwordConfirmWindow
+     */
+    onPasswordConfirm: function() {
+        var confirmForm = this.passwordConfirmWindow.items.first().getForm();
+        var confirmValues = confirmForm.getValues();
+        var passwordField = this.getForm().findField('accountPassword');
+        
+        if (confirmValues.passwordRepeat != passwordField.getValue()) {
+            passwordField.markInvalid(this.app.i18n._('Passwords do not match!'));
+            passwordField.passwordsMatch = false;
+        } else {
+            passwordField.passwordsMatch = true;
+            passwordField.clearInvalid();
+        }
+        
+        this.passwordConfirmWindow.hide();
+        confirmForm.reset();
+    },
+    
+    /**
      * @private
      */
     getFormItems: function() {
@@ -101,6 +121,62 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
             padding: '3px',
             height: '11px'
         };
+        
+        this.passwordConfirmWindow = new Ext.Window({
+            title: this.app.i18n._('Password confirmation'),
+            id: 'confirmPasswordWindow',
+            closeAction: 'close',
+            modal: true,
+            width: 300,
+            height: 130,
+            layout: 'fit',
+            plain: true,
+            items: new Ext.FormPanel({
+                id: 'confirmPasswordPanel',
+                bodyStyle: 'padding:5px;',
+                buttonAlign: 'right',
+                labelAlign: 'top',
+                anchor:'100%',
+                items: [{
+                    xtype: 'textfield',
+                    inputType: 'password',
+                    anchor: '100%',
+                    //allowBlank: false,
+                    id: 'passwordRepeat',
+                    fieldLabel: this.app.i18n._('Repeat password'), 
+                    name:'passwordRepeat',
+                    listeners: {
+                        scope: this,
+                        specialkey: function(field, event){
+                            if(event.getKey() == event.ENTER){
+                                this.onPasswordConfirm();
+                            }
+                        }
+                    }
+                }],
+                buttons: [{
+                    text: this.app.i18n._('Cancel'),
+                    iconCls: 'action_cancel',
+                    handler: function() {
+                        this.passwordConfirmWindow.hide();
+                    },
+                    scope: this
+                }, {
+                    text: this.app.i18n._('Ok'),
+                    iconCls: 'action_saveAndClose',
+                    handler: this.onPasswordConfirm,
+                    scope: this
+                }]
+                // TODO make this work correctly
+                /*
+                listeners: {
+                    render: function() {
+                        this.findById('passwordRepeat').focus(false, 50);
+                    }
+                }
+                */
+            })
+        });
         
         return {
             xtype: 'tabpanel',
@@ -147,6 +223,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 		                        columnWidth: .5
 		                    }, {
 		                        fieldLabel: this.app.i18n._('Password'),
+                                id: 'accountPassword',
 		                        name: 'accountPassword',
 		                        inputType: 'password',
 		                        emptyText: this.app.i18n._('no password set'),
@@ -155,20 +232,13 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 listeners: {
                                     scope: this,
                                     blur: function(field) {
-                                        var value = field.getValue();
-                                        if (value != '') {
+                                        var fieldValue = field.getValue();
+                                        if (fieldValue != '') {
                                             // show password confirmation
-                                            // TODO use password field here
-                                            Ext.Msg.prompt(this.app.i18n._('Password confirmation'), this.app.i18n._('Please repeat the password:'), function(btn, text){
-                                                if (btn == 'ok'){
-                                                    if (text != value) {
-                                                        field.markInvalid(this.app.i18n._('Passwords do not match!'));
-                                                        field.passwordsMatch = false;
-                                                    } else {
-                                                        field.passwordsMatch = true;
-                                                    }
-                                                }
-                                            }, this);
+                                            // NOTE: we can't use Ext.Msg.prompt because field has to be of inputType: 'password'
+                                            this.passwordConfirmWindow.show();
+                                            // TODO make this work correctly
+                                            this.passwordConfirmWindow.items.first().getForm().findField('passwordRepeat').focus();
                                         }
                                     }
                                 },
