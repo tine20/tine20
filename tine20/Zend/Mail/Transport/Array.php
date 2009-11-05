@@ -32,7 +32,7 @@ require_once 'Zend/Mime.php';
 require_once 'Zend/Mail/Transport/Abstract.php';
 
 /**
- * Mail Array Transprot (for testing)
+ * Mail Array Transport (for testing)
  *
  * @category   Zend
  * @package    Zend_Mail
