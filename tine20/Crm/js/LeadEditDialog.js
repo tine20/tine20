@@ -289,7 +289,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             emptyText: this.app.i18n._('Enter short name'),
                             name:'lead_name',
                             allowBlank: false,
-                            selectOnFocus: true
+                            selectOnFocus: true,
+                            // TODO make this work
+                            listeners: {render: function(field){field.focus(false, 250);}}
                         }]
                     }, {
                         region: 'center',
