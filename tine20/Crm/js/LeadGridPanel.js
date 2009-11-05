@@ -77,6 +77,10 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.plugins = this.plugins || [];
         this.plugins.push(this.action_showClosedToggle, this.filterToolbar);
         
+        this.detailsPanel = new Tine.Crm.ContactGridDetailsPanel({
+            il8n: this.app.i18n
+        });
+        
         Tine.Crm.GridPanel.superclass.initComponent.call(this);
         
         //this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Crm', 'records'));

@@ -180,3 +180,31 @@
 .contact-grid {
 	border: 1px solid #cccccc;
 }
+
+/** details panel **/
+.crm-leadgrid-detailspanel-status {
+	margin: 5px 2px 5px 5px;
+    width: 20%;
+}
+
+.crm-leadgrid-detailspanel-contacts {
+    margin: 5px 2px 5px 5px;
+    width: 36%;
+}
+
+.crm-leadgrid-detailspanel .preview-panel-description {
+    margin: 5px 2px 5px 5px;
+    width: 36%;
+    overflow: hidden;
+}
+
+.crm-leadgrid-detailspanel-status .preview-panel-symbolcompare{
+    width: 90px;    
+}
+
+.crm-leadgrid-detailspanel-contact {
+    width: 50%;
+    float:right;
+	height:108px;
+	position:relative;
+}

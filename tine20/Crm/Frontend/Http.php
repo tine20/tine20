@@ -40,6 +40,7 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Crm/js/LinkGridPanel.js',
             'Crm/js/LeadGridContactFilter.js',
             'Crm/js/LeadGridPanel.js',
+            'Crm/js/LeadGridDetailsPanel.js',
             'Crm/js/LeadEditDialog.js',
         // admin settings panel
             'Crm/js/AdminPanel.js',
