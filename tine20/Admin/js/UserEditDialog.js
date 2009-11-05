@@ -151,7 +151,9 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             if(event.getKey() == event.ENTER){
                                 this.onPasswordConfirm();
                             }
-                        }
+                        },
+                        // TODO make this work correctly on show as well
+                        render: function(field){field.focus(true, 250);}
                     }
                 }],
                 buttons: [{
@@ -167,14 +169,6 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     handler: this.onPasswordConfirm,
                     scope: this
                 }]
-                // TODO make this work correctly
-                /*
-                listeners: {
-                    render: function() {
-                        this.findById('passwordRepeat').focus(false, 50);
-                    }
-                }
-                */
             })
         });
         
@@ -237,8 +231,6 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                             // show password confirmation
                                             // NOTE: we can't use Ext.Msg.prompt because field has to be of inputType: 'password'
                                             this.passwordConfirmWindow.show();
-                                            // TODO make this work correctly
-                                            this.passwordConfirmWindow.items.first().getForm().findField('passwordRepeat').focus();
                                         }
                                     }
                                 },
