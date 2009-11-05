@@ -97,7 +97,7 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
     {
         parent::setFromArray($_data);
         
-        if ($this->remark && is_string($this->remark) && strpos('{', $this->remark) === 0) {
+        if ($this->remark && is_string($this->remark) && strpos($this->remark, '{') === 0) {
             $this->remark = Zend_Json::decode($this->remark);
         }
     }
