@@ -150,7 +150,31 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 		                        name: 'accountPassword',
 		                        inputType: 'password',
 		                        emptyText: this.app.i18n._('no password set'),
-		                        columnWidth: .5
+		                        columnWidth: .5,
+                                passwordsMatch: true,
+                                listeners: {
+                                    scope: this,
+                                    blur: function(field) {
+                                        var value = field.getValue();
+                                        if (value != '') {
+                                            // show password confirmation
+                                            // TODO use password field here
+                                            Ext.Msg.prompt(this.app.i18n._('Password confirmation'), this.app.i18n._('Please repeat the password:'), function(btn, text){
+                                                if (btn == 'ok'){
+                                                    if (text != value) {
+                                                        field.markInvalid(this.app.i18n._('Passwords do not match!'));
+                                                        field.passwordsMatch = false;
+                                                    } else {
+                                                        field.passwordsMatch = true;
+                                                    }
+                                                }
+                                            }, this);
+                                        }
+                                    }
+                                },
+                                validateValue : function(value){
+                                    return this.passwordsMatch;
+                                }
 		                    }
 	                    ], [
 	                     	{
