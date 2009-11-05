@@ -17,7 +17,7 @@
  class Calendar_Controller_EventNotifications
  {
      const NOTIFICATION_LEVEL_NONE                      =  0;
-     const NOTIFICATION_LEVEL_INVITE_CANCLE             = 10;
+     const NOTIFICATION_LEVEL_INVITE_CANCEL             = 10;
      const NOTIFICATION_LEVEL_EVENT_RESCHEDULE          = 20;
      const NOTIFICATION_LEVEL_EVENT_UPDATE              = 30;
      const NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE    = 40;
@@ -141,7 +141,7 @@
             case 'created':
             case 'deleted':
                 foreach($_event->attendee as $attender) {
-                    $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_INVITE_CANCLE);
+                    $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_INVITE_CANCEL);
                 }
                 break;
             case 'changed':
@@ -149,12 +149,12 @@
                 
                 foreach ($attendeeMigration['toCreateIds'] as $attenderId) {
                     $attender = $_event->attendee[$_event->attendee->getIndexById($attenderId)];
-                    $this->sendNotificationToAttender($attender, $_event, $_updater, 'created', self::NOTIFICATION_LEVEL_INVITE_CANCLE);
+                    $this->sendNotificationToAttender($attender, $_event, $_updater, 'created', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
                 }
                 
                 foreach ($attendeeMigration['toDeleteIds'] as $attenderId) {
                     $attender = $_oldEvent->attendee[$_oldEvent->attendee->getIndexById($attenderId)];
-                    $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted', self::NOTIFICATION_LEVEL_INVITE_CANCLE);
+                    $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
                 }
                 
                 // NOTE: toUpdateIds are all attendee to be notified

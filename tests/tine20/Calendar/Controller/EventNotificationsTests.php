@@ -250,7 +250,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         );
         $calPreferences->setValueForUser(
             Calendar_Preference::NOTIFICATION_LEVEL, 
-            Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_INVITE_CANCLE,
+            Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_INVITE_CANCEL,
             $this->_personas['pwulf']->getId(), TRUE
         );
         $calPreferences->setValueForUser(
