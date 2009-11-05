@@ -181,7 +181,7 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
                         array('field' => 'related_model',    'operator' => 'equals',       'value' => 'Sales_Model_Product'),
                     )))->getFirstRecord();
                     $remark = $updateRelation->remark;
-                    $remark['quantity']++;
+                    $remark['quantity'] = $remark['quantity'] + 1;
                     $updateRelation->remark = $remark;
                     //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($updateRelation->toArray(), TRUE));
                     $relationsBackend->updateRelation($updateRelation);
