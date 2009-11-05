@@ -17,6 +17,40 @@ Ext.ns('Tine.Calendar');
  * @version $Id$
  */
 Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPanel, {
+    
+    initComponent: function() {
+        this.items = [{
+            layout: 'hbox',
+            layoutConfig: {
+                padding:'5',
+                align:'stretch'
+            },
+            defaults:{margins:'0 5 0 0'},
+            items: [{
+                flex: 2,
+                layout: 'details',
+                items: [{
+                    xtype: 'datetime',
+                    name: 'dtstart',
+                    label: this.app.i18n._('Start')
+                }, {
+                    xtype: 'datetime',
+                    name: 'dtend',
+                    label: this.app.i18n._('End')
+                }]
+                //html: 'event'
+            }, {
+                flex: 2,
+                html: 'attendee'
+            }, {
+                flex: 3,
+                html: 'descr.'
+            }]
+        }];
+        
+        this.supr().initComponent.call(this);
+    },
+    
     /**
      * update template
      * 
@@ -24,7 +58,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
      * @param {Mixed} body
      */
     updateDetails: function(record, body) {
-        body.update(record.get('summary'));
+        //body.update(record.get('summary'));
         //this.tpl.overwrite(body, record.data);
     },
     
@@ -49,5 +83,5 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
         //if (this.multiTpl) {
         //    this.multiTpl.overwrite(body);
         //}
-    },
+    }
 });

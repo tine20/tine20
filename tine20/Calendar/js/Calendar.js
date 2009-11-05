@@ -65,7 +65,7 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
     setContentPanel: function() {
         if (! this.contentPanel) {
             this.contentPanel = new Tine.Calendar.MainScreenCenterPanel({
-                detailsPanel: new Tine.Calendar.EventDetailsPanel()
+                //detailsPanel: new Tine.Calendar.EventDetailsPanel()
             });
         }
         
