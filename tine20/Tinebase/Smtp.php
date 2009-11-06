@@ -43,18 +43,14 @@ class Tinebase_Smtp
      */
     private function __construct() 
     {
-        if(isset(Tinebase_Core::getConfig()->smtp)) {
-            $config = Tinebase_Core::getConfig()->smtp;
-        } else {
-            $config = new Zend_Config(array(
-                'hostname' => 'localhost', 
-                'port' => 25
-            ));
-        }
+        $config = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP, 'Tinebase', array(
+            'hostname' => 'localhost', 
+            'port' => 25
+        ));
         
         // set default transport none is set yet
         if (! self::getDefaultTransport()) {
-            self::setDefaultTransport(new Zend_Mail_Transport_Smtp($config->hostname, $config->toArray()));
+            self::setDefaultTransport(new Zend_Mail_Transport_Smtp($config['hostname'], $config));
         }
     }
     
