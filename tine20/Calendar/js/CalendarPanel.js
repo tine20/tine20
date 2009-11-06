@@ -173,11 +173,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             // get names of busy attendee
             // TODO refactore name handling of attendee
             //      -> attender model needs knowlege of how to get names!
-            var attendeeStore = new Ext.data.Store();
-            Ext.each(event.get('attendee'), function(attender) {
-                var record = new Tine.Calendar.Model.Attender(attender, attender.id);
-                attendeeStore.add(record);
-            });
+            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(event.get('attendee'));
             
             var busyAttendee = [];
             var names = [];
