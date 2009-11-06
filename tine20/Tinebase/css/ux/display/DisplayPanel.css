@@ -1,0 +1,22 @@
+.x-ux-display .x-form-item {
+    overflow: hidden;
+}
+
+.x-ux-display .x-form-item-label {
+    color:#A0A0A0;
+	padding-right:5px;
+	text-align:right;
+	font-size:11px;
+	padding: 0;
+}
+
+.x-ux-display .x-form-element {
+    color:#404040;
+	font-family:verdana;
+	font-size:11px;
+}
+
+.x-ux-display textarea.x-ux-display-textarea {
+    background: none;
+    border: none;
+}
