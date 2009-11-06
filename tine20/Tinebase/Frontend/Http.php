@@ -263,6 +263,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/tree/CheckboxSelectionModel.js',
             'Tinebase/js/ux/OpenLayers/Map.js',
             'Tinebase/js/ux/OpenLayers/MapPanel.js',
+            'Tinebase/js/ux/display/DisplayPanel.js',
+            'Tinebase/js/ux/display/DisplayField.js',
+            'Tinebase/js/ux/layout/Display.js',
             // Tine 2.0 specific widgets
             'Tinebase/js/widgets/LangChooser.js',
             'Tinebase/js/widgets/ActionUpdater.js',
@@ -357,6 +360,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     	   'Tinebase/css/ux/form/ExpandFieldSet.css',
     	   'Tinebase/css/ux/form/ImageField.css',
     	   'Tinebase/css/ux/form/Spinner.css',
+    	   'Tinebase/css/ux/display/DisplayPanel.css',
     	   'Tinebase/css/ux/LockCombo.css',
     	   'Tinebase/css/ux/Menu.css',
     	   'Tinebase/css/widgets/EditRecord.css',
