@@ -80,7 +80,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             ),
             self::DEFAULTCALENDAR  => array(
                 'label'         => $translate->_('Default Calendar'),
-                'description'   => $translate->_('The defualt calendar for invitations and new events'),
+                'description'   => $translate->_('The default calendar for invitations and new events'),
             ),
             self::NOTIFICATION_LEVEL => array(
                 'label'         => $translate->_('Get Notification Emails'),

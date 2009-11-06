@@ -30,7 +30,7 @@ Ext.extend(Tine.widgets.grid.FilterButton, Ext.Button, {
      */
     field: null,
     /**
-     * @cfg {String} operator operator of filter (defualts 'equals')
+     * @cfg {String} operator operator of filter (defaults 'equals')
      */
     operator: 'equals',
     /**

@@ -58,7 +58,7 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
         $prefDescriptions = array(
             self::DEFAULTADDRESSBOOK  => array(
                 'label'         => $translate->_('Default Addressbook'),
-                'description'   => $translate->_('The defualt addressbook for new contacts'),
+                'description'   => $translate->_('The default addressbook for new contacts'),
             ),
         );
         
