@@ -109,14 +109,12 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(array_key_exists('minutes_before', $loadedTaskData['alarms'][0]), 'minutes_before is missing');
         
         // try to send alarm
-        if (isset(Tinebase_Core::getConfig()->smtp)) {
-            $event = new Tinebase_Event_Async_Minutely();
-            Tinebase_Event::fireEvent($event);
-            
-            // check alarm status
-            $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
-            $this->assertEquals(Tinebase_Model_Alarm::STATUS_SUCCESS, $loadedTaskData['alarms'][0]['sent_status']);
-        }
+        $event = new Tinebase_Event_Async_Minutely();
+        Tinebase_Event::fireEvent($event);
+        
+        // check alarm status
+        $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
+        $this->assertEquals(Tinebase_Model_Alarm::STATUS_SUCCESS, $loadedTaskData['alarms'][0]['sent_status']);
 
         // try to save task without due (alarm should be removed)
         unset($task->due);
