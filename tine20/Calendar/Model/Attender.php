@@ -133,6 +133,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     public function getEmail()
     {
         $resolvedUser = $this->getResolvedUser();
+        if (! $resolvedUser instanceof Tinebase_Record_Abstract) {
+            return '';
+        }
         
         switch ($this->user_type) {
             case self::USERTYPE_USER:
@@ -159,6 +162,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     public function getName()
     {
         $resolvedUser = $this->getResolvedUser();
+        if (! $resolvedUser instanceof Tinebase_Record_Abstract) {
+            Tinebase_Translation::getTranslation('Calendar');
+            return Tinebase_Translation::getTranslation('Calendar')->_('unknown');
+        }
         
         switch ($this->user_type) {
             case self::USERTYPE_USER:
