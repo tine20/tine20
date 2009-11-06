@@ -204,8 +204,11 @@
      */
     public function sendNotificationToAttender($_attender, $_event, $_updater, $_action, $_notificationLevel, $_updates=NULL)
     {
-        if (! in_array($_attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
+        if (! in_array($_attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))
+                || ! $_attender->getResolvedUser() instanceof Addressbook_Model_Contact
+        ) {
             // don't send notifications to non persons
+            //   OR non resolvable attendee
             return;
         }
         
