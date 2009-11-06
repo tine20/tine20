@@ -8,6 +8,14 @@
  * @version     $Id$
  *
  */
+Ext.override(Ext.tree.TreeNodeUI, {
+    setIconCls : function(iconCls) {
+        if(this.iconNode){
+            Ext.fly(this.iconNode).replaceClass(this.node.attributes.iconCls, iconCls);
+        }
+        this.node.attributes.iconCls = iconCls;
+    }
+});
  
 Ext.namespace('Tine.Felamimail');
 
@@ -19,7 +27,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>Account/Folder Tree Panel</p>
  * <p>Tree of Accounts with folders</p>
  * <pre>
- * TODO         somehow we still get timeout errors when creating cache / selecting folders with lots of messages ... fix that
  * low priority:
  * TODO         only allow nodes as drop target (not 'between')
  * TODO         make inbox/drafts/templates configurable in account
@@ -593,11 +600,15 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         if (folderId && (node.attributes.cache_status != 'complete' || force || delayedTask) /* && accountId*/) {
             // add loadmask to grid
             if (! delayedTask) {
+                /*
                 var cacheMask = new Ext.LoadMask(this.app.mainScreen.gridPanel.grid.getEl(), {
                     msg:        this.app.i18n._('Initializing folder cache ...'),
                     removeMask: true
                 });
                 cacheMask.show();
+                */
+                
+                node.getUI().addClass("x-tree-node-loading");
             }
             
             Ext.Ajax.request({
@@ -607,7 +618,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     //accountId: accountId
                 },
                 scope: this,
-                timeout: 60000, // 1 minute
+                //timeout: 60000, // 1 minute
+                timeout: 600000, // 10 minutes
                 success: function(_result, _request) {
                     // update folder counters / class
                     var folderData = Ext.util.JSON.decode(_result.responseText);
@@ -636,10 +648,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     }
                     node.attributes.cache_status = folderData.cache_status;
                     
-                    // update grid and remove load mask
+                    // update grid and remove load mask / style
                     if (! delayedTask) {
                         this.filterPlugin.onFilterChange();
-                        cacheMask.hide();
+                        //cacheMask.hide();
+                        if (folderData.cache_status == 'complete') {
+                            node.getUI().removeClass("x-tree-node-loading");
+                        }
                     }
                 }
             });

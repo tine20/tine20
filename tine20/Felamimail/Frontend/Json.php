@@ -173,11 +173,35 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param string $folderId id of active folder
      * @return array
+     * 
+     * @todo rewrite initial import to allow partial imports / only import 1000? mails at once (and return the progress) / add progress bar in client?
      */
     public function updateMessageCache($folderId)
     {
         $cacheController = Felamimail_Controller_Cache::getInstance();
         
+        // update message cache of active folder and reload store (without loadmask)
+        $folder = $cacheController->updateMessages($folderId);
+        
+        if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE
+                || $folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING
+        ) {
+            // close session to allow other requests
+            Zend_Session::writeClose(true);
+            
+            // update rest of cache here
+            Tinebase_Core::setExecutionLifeTime(600); // 10 minutes
+            Felamimail_Controller_Cache::getInstance()->initialImport($folderId);
+            
+            $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
+        }
+        
+        // return folder data
+        $result = $folder->toArray();
+        
+        return $result;
+        
+        /*
         // update message cache of active folder and reload store (without loadmask)
         $folder = $cacheController->updateMessages($folderId);
         
@@ -192,6 +216,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             return $result;
         }
+        */
     }
     
     /**
@@ -352,6 +377,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return unknown_type
      * 
      * @todo    generalize this
+     * @todo    do we need this?
      */
     protected function _backgroundCacheImport(array $_result)
     {
