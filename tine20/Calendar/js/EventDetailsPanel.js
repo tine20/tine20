@@ -19,36 +19,62 @@ Ext.ns('Tine.Calendar');
 Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPanel, {
     
     initComponent: function() {
-        this.items = [{
-            layout: 'hbox',
-            layoutConfig: {
-                padding:'5',
-                align:'stretch'
-            },
-            defaults:{margins:'0 5 0 0'},
-            items: [{
-                flex: 2,
-                layout: 'details',
-                items: [{
-                    xtype: 'datetime',
-                    name: 'dtstart',
-                    label: this.app.i18n._('Start')
-                }, {
-                    xtype: 'datetime',
-                    name: 'dtend',
-                    label: this.app.i18n._('End')
-                }]
-                //html: 'event'
-            }, {
-                flex: 2,
-                html: 'attendee'
-            }, {
-                flex: 3,
-                html: 'descr.'
-            }]
-        }];
+        this.app = Tine.Tinebase.appMgr.get('Calendar');
+        
+        this.eventDetailsPanel = this.getEventDetailsPanel();
+        
+        this.items = [
+            this.eventDetailsPanel
+        ];
         
         this.supr().initComponent.call(this);
+    },
+    
+    getEventDetailsPanel: function() {
+        return new Ext.ux.display.DisplayPanel ({
+            //xtype: 'displaypanel',
+            layout: 'fit',
+            items: [{
+                layout: 'hbox',
+                layoutConfig: {
+                    padding:'5',
+                    align:'stretch'
+                },
+                defaults:{margins:'0 5 0 0'},
+                items: [{
+                    flex: 2,
+                    layout: 'ux.display',
+                    layoutConfig: {
+                        background: 'solid'
+                    },
+                    items: [{
+                        xtype: 'ux.displayfield',
+                        name: 'location',
+                        fieldLabel: this.app.i18n._('Location')
+                    }, {
+                        xtype: 'ux.displayfield',
+                        name: 'dtstart',
+                        fieldLabel: this.app.i18n._('Start Time'),
+                        renderer: Tine.Tinebase.common.dateTimeRenderer
+                    }, {
+                        xtype: 'ux.displayfield',
+                        name: 'dtend',
+                        fieldLabel: this.app.i18n._('End Time'),
+                        renderer: Tine.Tinebase.common.dateTimeRenderer
+                    }]
+                }, {
+                    flex: 2,
+                    html: 'attendee'
+                }, {
+                    flex: 3,
+                    layout: 'fit',
+                    items: [{
+                        xtype: 'ux.displaytextarea',
+                        name: 'description'
+                    }]
+                }]
+            }]
+        });
     },
     
     /**
@@ -58,6 +84,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
      * @param {Mixed} body
      */
     updateDetails: function(record, body) {
+        this.eventDetailsPanel.loadRecord(record);
         //body.update(record.get('summary'));
         //this.tpl.overwrite(body, record.data);
     },
@@ -85,3 +112,4 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
         //}
     }
 });
+
