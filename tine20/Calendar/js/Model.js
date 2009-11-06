@@ -371,6 +371,25 @@ Tine.Calendar.Model.Attender.getDefaultData = function() {
 
 /**
  * @namespace Tine.Calendar.Model
+ * 
+ * creates store of attender objects
+ * 
+ * @param  {Array} attendeeData
+ * @return {Ext.data.Store}
+ * @static
+ */ 
+Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
+    var attendeeStore = new Ext.data.Store();
+    Ext.each(attendeeData, function(attender) {
+        var record = new Tine.Calendar.Model.Attender(attender, attender.id);
+        attendeeStore.add(record);
+    });
+    
+    return attendeeStore;
+};
+
+/**
+ * @namespace Tine.Calendar.Model
  * @class Tine.Calendar.Model.Resource
  * @extends Tine.Tinebase.data.Record
  * Resource Record Definition
