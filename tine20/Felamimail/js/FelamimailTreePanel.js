@@ -8,14 +8,6 @@
  * @version     $Id$
  *
  */
-Ext.override(Ext.tree.TreeNodeUI, {
-    setIconCls : function(iconCls) {
-        if(this.iconNode){
-            Ext.fly(this.iconNode).replaceClass(this.node.attributes.iconCls, iconCls);
-        }
-        this.node.attributes.iconCls = iconCls;
-    }
-});
  
 Ext.namespace('Tine.Felamimail');
 
@@ -590,6 +582,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * update message cache (and trigger reload store)
      * @param {Ext.tree.AsyncTreeNode} node
      * 
+     * TODO add custom exception / on failure handler -> this should never show errors to the user
      * TODO add accountId?
      */
     updateMessageCache: function(node, force, delayedTask)
@@ -598,18 +591,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         //var accountId = node.attributes.account_id;
         
         if (folderId && (node.attributes.cache_status != 'complete' || force || delayedTask) /* && accountId*/) {
-            // add loadmask to grid
-            if (! delayedTask) {
-                /*
-                var cacheMask = new Ext.LoadMask(this.app.mainScreen.gridPanel.grid.getEl(), {
-                    msg:        this.app.i18n._('Initializing folder cache ...'),
-                    removeMask: true
-                });
-                cacheMask.show();
-                */
-                
-                node.getUI().addClass("x-tree-node-loading");
-            }
+            node.getUI().addClass("x-tree-node-loading");
             
             Ext.Ajax.request({
                 params: {
@@ -619,7 +601,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 },
                 scope: this,
                 //timeout: 60000, // 1 minute
-                timeout: 600000, // 10 minutes
+                timeout: 600000, // 10 minutes -> TODO lower timeout when caching is resumable
                 success: function(_result, _request) {
                     // update folder counters / class
                     var folderData = Ext.util.JSON.decode(_result.responseText);
@@ -651,10 +633,9 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     // update grid and remove load mask / style
                     if (! delayedTask) {
                         this.filterPlugin.onFilterChange();
-                        //cacheMask.hide();
-                        if (folderData.cache_status == 'complete') {
-                            node.getUI().removeClass("x-tree-node-loading");
-                        }
+                    }
+                    if (folderData.cache_status == 'complete') {
+                        node.getUI().removeClass("x-tree-node-loading");
                     }
                 }
             });
@@ -764,175 +745,5 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         });
         
         return true;
-    }
-});
-
-/**
- * @namespace   Tine.Felamimail
- * @class       Tine.Felamimail.TreeLoader
- * @extends     Tine.widgets.tree.Loader
- * 
- * <p>Felamimail Account/Folder Tree Loader</p>
- * <p></p>
- * 
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
- * 
- * @param       {Object} config
- * @constructor
- * Create a new Tine.Felamimail.TreeLoader
- * 
- */
-Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
-	
-    // private
-    method: 'Felamimail.searchFolders',
-
-    /**
-     * request data
-     * 
-     * @param {} node
-     * @param {} callback
-     * @private
-     */
-    requestData: function(node, callback){
-        
-    	// add globalname to filter
-    	this.filter = [
-            {field: 'account_id', operator: 'equals', value: node.attributes.account_id},
-            {field: 'globalname', operator: 'equals', value: node.attributes.globalname}
-        ];
-    	
-    	Tine.Felamimail.TreeLoader.superclass.requestData.call(this, node, callback);
-    },
-        
-    /**
-     * @private
-     * 
-     * TODO     add qtip again (problem: it can't be changed later)?
-     */
-    createNode: function(attr) {
-        
-        var account = Tine.Felamimail.loadAccountStore().getById(attr.account_id);
-        
-        // check for account setting
-        attr.has_children = (
-            account 
-            && account.get('has_children_support') 
-            && account.get('has_children_support') == '1'
-        ) ? attr.has_children : true;
-        attr.has_children = (attr.has_children == '0') ? false : attr.has_children;
-        
-        //var qtiptext = this.app.i18n._('Totalcount') + ': ' + attr.totalcount 
-        //    + ' / ' + this.app.i18n._('Cache') + ': ' + attr.cache_status;
-        
-        var node = {
-    		id: attr.id,
-    		leaf: false,
-    		text: attr.localname,
-            localname: attr.localname,
-    		globalname: attr.globalname,
-    		account_id: attr.account_id,
-            folder_id: attr.id,
-    		folderNode: true,
-            allowDrop: true,
-            //qtip: qtiptext,
-            systemFolder: (attr.system_folder == '1'),
-            unreadcount: attr.unreadcount,
-            totalcount: attr.totalcount,
-            cache_status: attr.cache_status,
-            
-            // if it has no children, it shouldn't have an expand icon 
-            expandable: attr.has_children,
-            expanded: ! attr.has_children
-    	};
-        
-        // if it has no children, it shouldn't have an expand icon 
-        if (! attr.has_children) {
-            node.children = [];
-            node.cls = 'x-tree-node-collapsed';
-        }
-
-        // show standard folders icons 
-        if (account) {
-            if (account.get('trash_folder') == attr.globalname) {
-                if (attr.totalcount > 0) {
-                    node.cls = 'felamimail-node-trash-full';
-                } else {
-                    node.cls = 'felamimail-node-trash';
-                }
-            }
-            if (account.get('sent_folder') == attr.globalname) {
-                node.cls = 'felamimail-node-sent';
-            }
-        }
-        if ('INBOX' == attr.globalname) {
-            node.cls = 'felamimail-node-inbox';
-        }
-        if ('Drafts' == attr.globalname) {
-            node.cls = 'felamimail-node-drafts';
-        }
-        if ('Templates' == attr.globalname) {
-            node.cls = 'felamimail-node-templates';
-        }
-        if ('Junk' == attr.globalname) {
-            node.cls = 'felamimail-node-junk';
-        }
-
-        // add unread class to node
-        if (attr.unreadcount > 0) {
-            node.text = node.text + ' (' + attr.unreadcount + ')';
-            node.cls = node.cls + ' felamimail-node-unread'; // x-tree-node-collapsed';
-        }
-        
-        return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);
-    },
-    
-    /**
-     * handle failure to show credentials dialog if imap login failed
-     * 
-     * @param {String} response
-     * @param {Object} options
-     */
-    handleFailure: function(response, options) {
-        var responseText = Ext.util.JSON.decode(response.responseText);
-        
-        if (responseText.message == 'cannot login, user or password wrong' ||
-            responseText.message == 'need at least user in params') {
-            
-            // get account id and update username/password
-            var accountNode = options.argument.node;
-            var accountId = accountNode.attributes.account_id;
-            
-            // remove intelligent folders
-            accountNode.attributes.intelligent_folders = 0;
-            
-            // cancel loading
-            accountNode.loading = false;
-            accountNode.ui.afterLoad(accountNode);
-                        
-            var credentialsWindow = Tine.widgets.dialog.CredentialsDialog.openWindow({
-                windowTitle: String.format(this.app.i18n._('IMAP Credentials for {0}'), accountNode.text),
-                appName: 'Felamimail',
-                credentialsId: accountId,
-                i18nRecordName: this.app.i18n._('Credentials'),
-                recordClass: Tine.Tinebase.Model.Credentials,
-                listeners: {
-                    scope: this,
-                    'update': function(data) {
-                        // update account node
-                        var account = Tine.Felamimail.loadAccountStore().getById(accountId);
-                        accountNode.attributes.intelligent_folders = account.get('intelligent_folders');
-                        accountNode.reload(function(callback) {
-                        }, this);
-                    }
-                }
-            });
-            
-        } else {
-            Ext.Ajax.fireEvent('requestexception', Ext.Ajax, response, options);
-        }
     }
 });
