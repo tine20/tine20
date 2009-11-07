@@ -491,30 +491,30 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     
     /**
      * delayed task function
-     * 
-     * TODO call updateFolderStatus?
+     * - calls updateFolderStatus and updateMessageCache
      */
     updateFolders: function() {
         var node = this.getSelectionModel().getSelectedNode();
         if (node) {
             this.updateMessageCache(node, false, true);
         }
+        this.updateFolderStatus(true);
         this.updateFoldersTask.delay(this.updateFolderRefreshTime);
     },
     
     /**
-     * update folder status of all visible (?) folders
+     * update folder status of all visible or one folder(s)
      * 
-     * @param {Boolean} recursive
+     * @param {Boolean} visible
      * @param {Ext.tree.AsyncTreeNode} node [optional]
      * 
      * TODO make this work for multiple accounts
-     * TODO make recursive work for delayed task or ping update
+     * TODO make 'visible' work for delayed task or ping update
      */
-    updateFolderStatus: function(recursive, node) {
+    updateFolderStatus: function(visible, node) {
         
-        if (recursive) {
-            Ext.Msg.alert('not implemented yet');
+        if (visible) {
+            //Ext.Msg.alert('not implemented yet');
             return;
         }
         
@@ -611,7 +611,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
 
                         if (delayedTask) {
                             //if (node.attributes.unreadcount < folderData.unreadcount) {
-                            if (folderData.recent && folderData.unreadcount > 0) {
+                            if (folderData.recent && (folderData.unreadcount - node.attributes.unreadcount) > 0) {
                                 // show toast window on new mails
                                 Ext.ux.Notification.show(
                                     this.app.i18n._('New mails'), 
@@ -622,7 +622,9 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                             }
                             
                             // update only if something changed
-                            this.filterPlugin.onFilterChange();
+                            if (this.getSelectionModel().getSelectedNode().id = node.id) {
+                                this.filterPlugin.onFilterChange();
+                            }
                         }
                         
                         node.attributes.totalcount = folderData.totalcount;
@@ -630,9 +632,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     }
                     node.attributes.cache_status = folderData.cache_status;
                     
-                    // update grid and remove load mask / style
+                    // update grid and remove style
                     if (! delayedTask) {
-                        this.filterPlugin.onFilterChange();
+                        if (this.getSelectionModel().getSelectedNode().id = node.id) {
+                            this.filterPlugin.onFilterChange();
+                        }
                     }
                     if (folderData.cache_status == 'complete') {
                         node.getUI().removeClass("x-tree-node-loading");
