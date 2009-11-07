@@ -175,6 +175,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array
      * 
      * @todo rewrite initial import to allow partial imports / only import 1000? mails at once (and return the progress) / add progress bar in client?
+     * @todo message caching should be resumable if it ended and wasn't finished 
      */
     public function updateMessageCache($folderId)
     {
@@ -374,10 +375,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * do initial import (as background process)
      * 
      * @param array $_result
-     * @return unknown_type
+     * @return void
      * 
-     * @todo    generalize this
-     * @todo    do we need this?
+     * @deprecated but keep it as a proof of concept, perhaps we need it again sometime
      */
     protected function _backgroundCacheImport(array $_result)
     {
