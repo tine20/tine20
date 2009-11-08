@@ -20,3 +20,26 @@
     background: none;
     border: none;
 }
+
+.x-ux-display .x-ux-display-background-border textarea.x-ux-display-textarea {
+    background: none;
+    border: 1px solid #99BBE8;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -khtml-border-radius: 8px;
+}
+
+.x-ux-display .x-ux-display-background-solid {
+    border: 1px solid #e5e6fe;
+    background-color: #e5e6fe;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -khtml-border-radius: 8px;
+}
+
+.x-ux-display .x-ux-display-background-border {
+    border: 1px solid #99BBE8;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -khtml-border-radius: 8px;
+}
