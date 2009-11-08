@@ -280,6 +280,21 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
     containersName: 'Events',
     
     /**
+     * gets name of attender
+     * 
+     * @return {String}
+     *
+    getName: function() {
+        var user_id = this.get('user_id');
+        if (! user_id) {
+            return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
+        }
+        
+        var userData = (typeof user_id.get == 'function') ? user_id.data : user_id;
+    },
+    */
+    
+    /**
      * returns account_id if attender is/has a user account
      * 
      * @return {String}
