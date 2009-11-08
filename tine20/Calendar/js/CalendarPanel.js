@@ -185,6 +185,9 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                     if (a.get('user_type') == user_type && a.getUserId() == user_id) {
                         if (busyAttendee.indexOf(a) < 0) {
                             busyAttendee.push(a);
+                            //var attenderName = a.getName();
+                            //names.push(attenderName);
+                            
                             names.push(Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, a.get('user_id'), false, a));
                         }
                     }

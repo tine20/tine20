@@ -17,6 +17,22 @@ Ext.ns('Tine.Calendar');
  * @version $Id$
  */
 Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPanel, {
+    border: false,
+    
+    attendeeRenderer: function(attendeeData) {
+        var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(attendeeData);
+        
+        var a = [];
+        attendeeStore.each(function(attender) {
+            a.push(Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, attender.get('user_id'), false, attender));
+        });
+        
+        return a.join("\n");
+    },
+    
+    datetimeRenderer: function(dt) {
+        return String.format(this.app.i18n._("{0} {1} o'clock"), Tine.Tinebase.common.dateRenderer(dt), dt.format('H:i'));
+    },
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
@@ -34,8 +50,10 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
         return new Ext.ux.display.DisplayPanel ({
             //xtype: 'displaypanel',
             layout: 'fit',
+            border: false,
             items: [{
                 layout: 'hbox',
+                border: false,
                 layoutConfig: {
                     padding:'5',
                     align:'stretch'
@@ -44,10 +62,15 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
                 items: [{
                     flex: 2,
                     layout: 'ux.display',
+                    labelWidth: 60,
                     layoutConfig: {
                         background: 'solid'
                     },
                     items: [{
+                        xtype: 'ux.displayfield',
+                        name: 'summary',
+                        fieldLabel: this.app.i18n._('Summary')
+                    }, {
                         xtype: 'ux.displayfield',
                         name: 'location',
                         fieldLabel: this.app.i18n._('Location')
@@ -55,20 +78,34 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
                         xtype: 'ux.displayfield',
                         name: 'dtstart',
                         fieldLabel: this.app.i18n._('Start Time'),
-                        renderer: Tine.Tinebase.common.dateTimeRenderer
+                        renderer: this.datetimeRenderer.createDelegate(this)
                     }, {
                         xtype: 'ux.displayfield',
                         name: 'dtend',
                         fieldLabel: this.app.i18n._('End Time'),
-                        renderer: Tine.Tinebase.common.dateTimeRenderer
+                        renderer: this.datetimeRenderer.createDelegate(this)
                     }]
                 }, {
                     flex: 2,
-                    html: 'attendee'
+                    layout: 'ux.display',
+                    labelAlign: 'top',
+                    layoutConfig: {
+                        background: 'solid'
+                    },
+                    items: [{
+                        xtype: 'ux.displayfield',
+                        name: 'attendee',
+                        nl2br: true,
+                        fieldLabel: this.app.i18n._('Attendee'),
+                        renderer: this.attendeeRenderer
+                    }]
                 }, {
                     flex: 3,
                     layout: 'fit',
+                    
+                    border: false,
                     items: [{
+                        cls: 'x-ux-display-background-border',
                         xtype: 'ux.displaytextarea',
                         name: 'description'
                     }]
