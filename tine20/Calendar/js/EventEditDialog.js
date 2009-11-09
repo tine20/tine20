@@ -339,7 +339,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  * @return {Ext.ux.Window}
  */
 Tine.Calendar.EventEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
+    // record is JSON encoded here...
+    var id = config.recordId ? config.recordId : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 470,
