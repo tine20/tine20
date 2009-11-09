@@ -35,6 +35,7 @@
     -moz-border-radius: 8px;
     -webkit-border-radius: 8px;
     -khtml-border-radius: 8px;
+    padding-left: 2px;
 }
 
 .x-ux-display .x-ux-display-background-border {
