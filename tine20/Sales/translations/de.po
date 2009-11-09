@@ -107,20 +107,3 @@ msgstr "Verträge"
 msgid "Shared Contracts"
 msgstr "Gemeinsame Verträge"
 
-#~ msgid "Due date"
-#~ msgstr "Fälligkeitsdatum"
-
-#~ msgid "Priority"
-#~ msgstr "Priorität"
-
-#~ msgid "Responsible"
-#~ msgstr "Verantwortlicher"
-
-#~ msgid "Notes"
-#~ msgstr "Notiz"
-
-#~ msgid "Percentage"
-#~ msgstr "Prozentsatz"
-
-#~ msgid "Completed"
-#~ msgstr "Fertig"
