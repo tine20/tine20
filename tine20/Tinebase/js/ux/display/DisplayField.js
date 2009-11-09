@@ -4,15 +4,24 @@ Ext.ns('Ext.ux.display');
 
 Ext.ux.display.DisplayField = Ext.extend(Ext.form.DisplayField, {
     htmlEncode: true,
+    nl2br: false,
     
     renderer: function(v) {
         return v;
     },
     
     setRawValue : function(value) {
-        var renderedValue = this.renderer(value);
+        var v = this.renderer(value);
         
-        return this.supr().setRawValue.call(this, renderedValue);
+        if(this.htmlEncode){
+            v = Ext.util.Format.htmlEncode(v);
+        }
+        
+        if (this.nl2br) {
+            v = Ext.util.Format.nl2br(v);
+        }
+        
+        return this.rendered ? (this.el.dom.innerHTML = (Ext.isEmpty(v) ? '' : v)) : (this.value = v);
     }
 
 });
