@@ -386,6 +386,22 @@ msgstr "Bcc:"
 msgid "Remove"
 msgstr ""
 
+#: js/FelamimailTreeLoader.js:70
+msgid "Totalcount"
+msgstr "Общий счёт"
+
+#: js/FelamimailTreeLoader.js:71
+msgid "Cache"
+msgstr "Кэш"
+
+#: js/FelamimailTreeLoader.js:159
+msgid "IMAP Credentials for {0}"
+msgstr "Учётные данные IMAP для {0}"
+
+#: js/FelamimailTreeLoader.js:162
+msgid "Credentials"
+msgstr "Учётные данные"
+
 #: js/FelamimailTreePanel.js:173 js/FelamimailTreePanel.js:178
 #: js/FelamimailTreePanel.js:189
 msgid "Marked"
@@ -453,34 +469,14 @@ msgstr "Изменить учетную запись"
 msgid "Reload {0}"
 msgstr ""
 
-#: js/FelamimailTreePanel.js:596
-msgid "Initializing folder cache ..."
-msgstr ""
-
-#: js/FelamimailTreePanel.js:621
+#: js/FelamimailTreePanel.js:617
 #, fuzzy
 msgid "New mails"
 msgstr "Электронная почта пользователя"
 
-#: js/FelamimailTreePanel.js:622
+#: js/FelamimailTreePanel.js:618
 msgid "You got {0} new mail(s) in Folder "
 msgstr ""
-
-#: js/FelamimailTreePanel.js:810
-msgid "Totalcount"
-msgstr "Общий счёт"
-
-#: js/FelamimailTreePanel.js:811
-msgid "Cache"
-msgstr "Кэш"
-
-#: js/FelamimailTreePanel.js:899
-msgid "IMAP Credentials for {0}"
-msgstr "Учётные данные IMAP для {0}"
-
-#: js/FelamimailTreePanel.js:902
-msgid "Credentials"
-msgstr "Учётные данные"
 
 #: js/Models.js:43
 msgid "Message"

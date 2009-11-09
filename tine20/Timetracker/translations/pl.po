@@ -34,7 +34,7 @@ msgid "Not billable"
 msgstr "Nie gotowe do przeliczenia"
 
 #: Export/Ods.php:162 Export/Ods.php:235 Export/Ods.php:287
-#: js/TimesheetEditDialog.js:189 js/TimesheetGridPanel.js:73
+#: js/TimesheetEditDialog.js:191 js/TimesheetGridPanel.js:73
 #: js/TimesheetGridPanel.js:217 js/TimesheetGridPanel.js:254
 msgid "Billable"
 msgstr "Gotowe do przeliczenia"
@@ -49,7 +49,7 @@ msgid "Date"
 msgstr "Data"
 
 #: Export/Ods.php:204 Export/Ods.php:265 js/Models.js:130
-#: js/TimeaccountEditDialog.js:156 js/TimesheetEditDialog.js:173
+#: js/TimeaccountEditDialog.js:155 js/TimesheetEditDialog.js:173
 #: js/TimesheetGridPanel.js:216 js/TimesheetGridPanel.js:253
 #: js/TimesheetGridPanel.js:393
 msgid "Description"
@@ -74,18 +74,18 @@ msgstr "Współpracownicy"
 msgid "Duration"
 msgstr "Czas"
 
-#: Export/Ods.php:240 js/TimesheetEditDialog.js:196
+#: Export/Ods.php:240 js/TimesheetEditDialog.js:198
 #: js/TimesheetGridPanel.js:78 js/TimesheetGridPanel.js:218
 #: js/TimesheetGridPanel.js:256
 msgid "Cleared"
 msgstr "Przeliczone"
 
-#: Export/Ods.php:255 js/TimeaccountEditDialog.js:85
+#: Export/Ods.php:255 js/TimeaccountEditDialog.js:84
 #: js/TimeaccountGridPanel.js:94
 msgid "Number"
 msgstr "Numer"
 
-#: Export/Ods.php:260 js/TimeaccountEditDialog.js:90
+#: Export/Ods.php:260 js/TimeaccountEditDialog.js:89
 #: js/TimeaccountGridPanel.js:99
 msgid "Title"
 msgstr "Tytuł"
@@ -98,13 +98,13 @@ msgstr "Utworzone przez"
 msgid "Creation Date"
 msgstr "Data utworzenia"
 
-#: Export/Ods.php:281 js/Models.js:132 js/TimeaccountEditDialog.js:111
+#: Export/Ods.php:281 js/Models.js:132 js/TimeaccountEditDialog.js:110
 #: js/TimeaccountGridPanel.js:104
 msgid "Status"
 msgstr "Status"
 
-#: Export/Ods.php:292 js/TimeaccountEditDialog.js:134
-#: js/TimesheetEditDialog.js:207
+#: Export/Ods.php:292 js/TimeaccountEditDialog.js:133
+#: js/TimesheetEditDialog.js:209
 msgid "Cleared In"
 msgstr "Przeliczone w"
 
@@ -134,7 +134,7 @@ msgstr[0] "lista kart godzin"
 msgstr[1] "listy kart godzin"
 msgstr[2] "listy kart godzin"
 
-#: js/Models.js:107 js/Models.js:129 js/TimeaccountEditDialog.js:69
+#: js/Models.js:107 js/Models.js:129 js/TimeaccountEditDialog.js:68
 #: js/TimeaccountSelect.js:169 js/TimesheetEditDialog.js:136
 #: js/TimesheetGridPanel.js:249
 msgid "Time Account"
@@ -150,82 +150,82 @@ msgstr[0] "lista kont godzin"
 msgstr[1] "listy kont godzin"
 msgstr[2] "listy kont godzin"
 
-#: js/TimeaccountEditDialog.js:99
+#: js/TimeaccountEditDialog.js:98
 msgid "Unit"
 msgstr "Jednostka"
 
-#: js/TimeaccountEditDialog.js:103
+#: js/TimeaccountEditDialog.js:102
 msgid "Unit Price"
 msgstr "Cena jednostkowa"
 
-#: js/TimeaccountEditDialog.js:108 js/TimeaccountGridPanel.js:110
+#: js/TimeaccountEditDialog.js:107 js/TimeaccountGridPanel.js:110
 msgid "Budget"
 msgstr "Budżet"
 
-#: js/TimeaccountEditDialog.js:117 js/TimeaccountSelect.js:79
+#: js/TimeaccountEditDialog.js:116 js/TimeaccountSelect.js:79
 msgid "closed"
 msgstr "zakończone"
 
-#: js/TimeaccountEditDialog.js:117
+#: js/TimeaccountEditDialog.js:116
 msgid "open"
 msgstr "otwarte"
 
-#: js/TimeaccountEditDialog.js:119
+#: js/TimeaccountEditDialog.js:118
 msgid "Billed"
 msgstr "Przeliczone"
 
-#: js/TimeaccountEditDialog.js:127 js/TimeaccountSelect.js:250
+#: js/TimeaccountEditDialog.js:126 js/TimeaccountSelect.js:250
 #: Setup/setup.xml:80
 msgid "not yet billed"
 msgstr "jeszcze nieprzeliczone"
 
-#: js/TimeaccountEditDialog.js:128 js/TimeaccountSelect.js:251
+#: js/TimeaccountEditDialog.js:127 js/TimeaccountSelect.js:251
 #: Setup/setup.xml:82
 msgid "to bill"
 msgstr "przelicz"
 
-#: js/TimeaccountEditDialog.js:129 js/TimeaccountSelect.js:252
+#: js/TimeaccountEditDialog.js:128 js/TimeaccountSelect.js:252
 #: Setup/setup.xml:84
 msgid "billed"
 msgstr "przeliczone"
 
-#: js/TimeaccountEditDialog.js:133 js/TimesheetEditDialog.js:206
+#: js/TimeaccountEditDialog.js:132 js/TimesheetEditDialog.js:208
 msgid "not cleared yet..."
 msgstr "jeszcze nieprzeliczone..."
 
-#: js/TimeaccountEditDialog.js:139
+#: js/TimeaccountEditDialog.js:138
 msgid "Timesheets are billable"
 msgstr "Karty godzin gotowe do przeliczenia"
 
-#: js/TimeaccountEditDialog.js:170
+#: js/TimeaccountEditDialog.js:169
 msgid "Enter description"
 msgstr "Wprowadź opis"
 
-#: js/TimeaccountEditDialog.js:186
+#: js/TimeaccountEditDialog.js:185
 msgid "Access"
 msgstr "Dostępność"
 
-#: js/TimeaccountEditDialog.js:210
+#: js/TimeaccountEditDialog.js:209
 msgid "Book Own"
 msgstr "Zarezerwuj własne"
 
-#: js/TimeaccountEditDialog.js:215
+#: js/TimeaccountEditDialog.js:214
 msgid "View All"
 msgstr "Wyświetl wszystkie"
 
-#: js/TimeaccountEditDialog.js:220
+#: js/TimeaccountEditDialog.js:219
 msgid "Book All"
 msgstr "Zarezerwuj wszystkie"
 
-#: js/TimeaccountEditDialog.js:225
+#: js/TimeaccountEditDialog.js:224
 msgid "Manage Clearing"
 msgstr "Edytuj przeliczanie"
 
-#: js/TimeaccountEditDialog.js:230
+#: js/TimeaccountEditDialog.js:229
 msgid "Manage All"
 msgstr "Edytuj wszystkie"
 
-#: js/TimeaccountEditDialog.js:238
+#: js/TimeaccountEditDialog.js:237
 msgid "Permissions"
 msgstr "Uprawnienia"
 
@@ -282,7 +282,7 @@ msgstr "nieustawiony"
 msgid "Enter description..."
 msgstr "Wprowadź opis..."
 
-#: js/TimesheetEditDialog.js:183 js/TimesheetGridPanel.js:214
+#: js/TimesheetEditDialog.js:185 js/TimesheetGridPanel.js:214
 #: js/TimesheetGridPanel.js:259
 msgid "Account"
 msgstr "Konto"

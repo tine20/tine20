@@ -60,19 +60,19 @@ msgstr "作成者"
 msgid "Activities"
 msgstr "アクティビティ"
 
-#: Frontend/Http.php:536 js/tineInit.js:392
+#: Frontend/Http.php:537 js/tineInit.js:392
 msgid "Authorisation Required"
 msgstr "要認証"
 
-#: Frontend/Http.php:537
+#: Frontend/Http.php:538
 msgid "Your session is not valid. You need to login again."
 msgstr "セッションが正しくありません。もう一度ログインしてください"
 
-#: Frontend/Http.php:563 js/ExceptionDialog.js:46
+#: Frontend/Http.php:564 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "以上終了"
 
-#: Frontend/Http.php:564 js/ExceptionDialog.js:71
+#: Frontend/Http.php:565 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "エラーが発生し、プログラムが異常終了しました"
 
@@ -102,7 +102,6 @@ msgid_plural "to do lists"
 msgstr[0] "ＴｏＤｏリスト"
 
 #: js/ExceptionDialog.js:54 js/MainScreen.js:449
-#: js/widgets/AccountpickerPanel.js:166
 #: js/widgets/container/ContainerSelect.js:373
 #: js/widgets/dialog/EditDialog.js:193
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
@@ -182,7 +181,7 @@ msgstr "パスワード"
 msgid "Logging you in..."
 msgstr "ログインしています..."
 
-#: js/Login.js:127 js/widgets/container/GrantsDialog.js:136
+#: js/Login.js:127 js/widgets/container/GrantsDialog.js:141
 #: js/widgets/grid/PersistentFilterPicker.js:126
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:140
@@ -210,7 +209,7 @@ msgstr "ユーザ名またはパスワードが違います"
 msgid "Debug Console (Ctrl + F11)"
 msgstr ""
 
-#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:110
+#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:112
 msgid "Admin"
 msgstr "管理者"
 
@@ -277,8 +276,7 @@ msgstr "新しいパスワード"
 msgid "Repeat new Password"
 msgstr "もう一度パスワードを入力してください"
 
-#: js/MainScreen.js:455 js/widgets/AccountpickerPanel.js:158
-#: js/widgets/container/ContainerSelect.js:382
+#: js/MainScreen.js:455 js/widgets/container/ContainerSelect.js:382
 #: js/widgets/dialog/EditDialog.js:176
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 #: js/widgets/tags/TagsMassAttachAction.js:76
@@ -341,12 +339,12 @@ msgstr[0] ""
 msgid "Groups"
 msgstr ""
 
-#: js/Models.js:245
+#: js/Models.js:247
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] ""
 
-#: js/Models.js:272
+#: js/Models.js:274
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] ""
@@ -532,57 +530,49 @@ msgstr "全ページ選択 ({0} 件)"
 msgid "Toggle selection"
 msgstr "トグル選択"
 
-#: js/widgets/account/ConfigGrid.js:62
-#: js/widgets/account/PickerGridPanel.js:135
+#: js/widgets/account/PickerGridPanel.js:161
 msgid "Remove account"
 msgstr ""
 
-#: js/widgets/account/ConfigGrid.js:86
-#: js/widgets/account/PickerGridPanel.js:255
-#: js/widgets/account/PickerPanel.js:202
-msgid "Name"
-msgstr "名前"
+#: js/widgets/account/PickerGridPanel.js:225
+#, fuzzy
+msgid "Search User"
+msgstr "検索"
 
-#: js/widgets/account/PickerGridPanel.js:148
+#: js/widgets/account/PickerGridPanel.js:231
+#, fuzzy
+msgid "Search Group"
+msgstr "検索しています。"
+
+#: js/widgets/account/PickerGridPanel.js:237
+#, fuzzy
+msgid "Add Anyone"
+msgstr "ノートの追加"
+
+#: js/widgets/account/PickerGridPanel.js:245
+#, fuzzy
+msgid "Anyone"
+msgstr "ノート"
+
+#: js/widgets/account/PickerGridPanel.js:289
 msgid "Search for users ..."
 msgstr ""
 
-#: js/widgets/account/PickerGridPanel.js:173
+#: js/widgets/account/PickerGridPanel.js:309
 #, fuzzy
 msgid "Search for groups ..."
 msgstr "検索しています。"
 
-#: js/widgets/account/PickerPanel.js:85
-msgid "add account"
-msgstr "アカウントの追加"
-
-#: js/widgets/account/PickerPanel.js:213 js/widgets/GridPicker.js:389
-msgid "enter searchfilter"
-msgstr "サーチフィルタの入力"
-
-#: js/widgets/account/PickerPanel.js:257 js/widgets/GridPicker.js:410
-msgid "Search"
-msgstr "検索"
-
-#: js/widgets/account/PickerPanel.js:293 js/widgets/account/PickerPanel.js:294
-#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
-msgid "Browse"
-msgstr "閲覧"
-
-#: js/widgets/AccountpickerPanel.js:57
-msgid "nobody"
-msgstr "だれもいない"
-
-#: js/widgets/AccountpickerPanel.js:152
-msgid "please select an account"
-msgstr "アカウントを設定してください"
+#: js/widgets/account/PickerGridPanel.js:363
+msgid "Name"
+msgstr "名前"
 
 #: js/widgets/ActivitiesPanel.js:141
 msgid "Add a Note..."
 msgstr "ノートの追加"
 
 #: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:168
-#: js/widgets/container/GrantsDialog.js:92
+#: js/widgets/container/GrantsDialog.js:94
 msgid "Add"
 msgstr "追加"
 
@@ -766,23 +756,23 @@ msgstr "本当に削除しますか？ {0}?"
 msgid "Folder"
 msgstr "フォルダー"
 
-#: js/widgets/container/GrantsDialog.js:87
+#: js/widgets/container/GrantsDialog.js:89
 msgid "Read"
 msgstr "読込"
 
-#: js/widgets/container/GrantsDialog.js:97
+#: js/widgets/container/GrantsDialog.js:99
 msgid "Edit"
 msgstr "編集"
 
-#: js/widgets/container/GrantsDialog.js:102
+#: js/widgets/container/GrantsDialog.js:104
 msgid "Delete"
 msgstr "削除"
 
-#: js/widgets/container/GrantsDialog.js:124
+#: js/widgets/container/GrantsDialog.js:120
 msgid "Permissions"
 msgstr "権限"
 
-#: js/widgets/container/GrantsDialog.js:136
+#: js/widgets/container/GrantsDialog.js:141
 msgid "Updating Grants"
 msgstr "Grantsのアップデート"
 
@@ -990,71 +980,81 @@ msgstr "から始まる"
 msgid "ends with"
 msgstr "で終る"
 
-#: js/widgets/grid/FilterModel.js:195
+#: js/widgets/grid/FilterModel.js:158
+#, fuzzy
+msgid "one of"
+msgstr "ノート"
+
+#: js/widgets/grid/FilterModel.js:196
 msgid "select a operator"
 msgstr "オペレータの選択"
 
-#: js/widgets/grid/FilterModel.js:386
+#: js/widgets/grid/FilterModel.js:288
+#, fuzzy
+msgid "Search Account ..."
+msgstr "検索しています。"
+
+#: js/widgets/grid/FilterModel.js:401
 msgid "today"
 msgstr "今日"
 
-#: js/widgets/grid/FilterModel.js:387
+#: js/widgets/grid/FilterModel.js:402
 msgid "yesterday"
 msgstr "昨日"
 
-#: js/widgets/grid/FilterModel.js:388
+#: js/widgets/grid/FilterModel.js:403
 msgid "this week"
 msgstr "今週"
 
-#: js/widgets/grid/FilterModel.js:389
+#: js/widgets/grid/FilterModel.js:404
 msgid "last week"
 msgstr "先週"
 
-#: js/widgets/grid/FilterModel.js:390
+#: js/widgets/grid/FilterModel.js:405
 msgid "the week before last"
 msgstr "先々週"
 
-#: js/widgets/grid/FilterModel.js:391
+#: js/widgets/grid/FilterModel.js:406
 msgid "this month"
 msgstr "今月"
 
-#: js/widgets/grid/FilterModel.js:392
+#: js/widgets/grid/FilterModel.js:407
 msgid "last month"
 msgstr "先月"
 
-#: js/widgets/grid/FilterModel.js:393
+#: js/widgets/grid/FilterModel.js:408
 msgid "this quarter"
 msgstr "今四半期"
 
-#: js/widgets/grid/FilterModel.js:394
+#: js/widgets/grid/FilterModel.js:409
 msgid "last quarter"
 msgstr "前四半期"
 
-#: js/widgets/grid/FilterModel.js:395
+#: js/widgets/grid/FilterModel.js:410
 msgid "this year"
 msgstr "今年"
 
-#: js/widgets/grid/FilterModel.js:396
+#: js/widgets/grid/FilterModel.js:411
 msgid "last year"
 msgstr "去年"
 
-#: js/widgets/grid/FilterModel.js:400
+#: js/widgets/grid/FilterModel.js:415
 msgid "tomorrow"
 msgstr "明日"
 
-#: js/widgets/grid/FilterModel.js:401
+#: js/widgets/grid/FilterModel.js:416
 msgid "next week"
 msgstr "来週"
 
-#: js/widgets/grid/FilterModel.js:402
+#: js/widgets/grid/FilterModel.js:417
 msgid "next month"
 msgstr "今月"
 
-#: js/widgets/grid/FilterModel.js:403
+#: js/widgets/grid/FilterModel.js:418
 msgid "next quarter"
 msgstr "来四半期"
 
-#: js/widgets/grid/FilterModel.js:404
+#: js/widgets/grid/FilterModel.js:419
 msgid "next year"
 msgstr "来年"
 
@@ -1136,6 +1136,18 @@ msgstr "フィルターを削除しています \"{0}\""
 #: js/widgets/GridPicker.js:78
 msgid "remove record"
 msgstr "レコードの削除"
+
+#: js/widgets/GridPicker.js:389
+msgid "enter searchfilter"
+msgstr "サーチフィルタの入力"
+
+#: js/widgets/GridPicker.js:410
+msgid "Search"
+msgstr "検索"
+
+#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
+msgid "Browse"
+msgstr "閲覧"
 
 #: js/widgets/GroupSelect.js:99
 msgid "Please Select a Group"
@@ -1445,6 +1457,15 @@ msgstr "変更されました"
 #: Setup/setup.xml:2635
 msgid "record changed"
 msgstr "レコードが変更されました"
+
+#~ msgid "add account"
+#~ msgstr "アカウントの追加"
+
+#~ msgid "nobody"
+#~ msgstr "だれもいない"
+
+#~ msgid "please select an account"
+#~ msgstr "アカウントを設定してください"
 
 #~ msgid "loading new language..."
 #~ msgstr "新しい言語を読み込んでいます..."

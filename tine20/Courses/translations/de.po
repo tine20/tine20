@@ -55,7 +55,7 @@ msgstr "Internet freigegeben"
 msgid "Fileserver Access"
 msgstr "Zugriff auf Fileserver gesperrt"
 
-#: js/CourseEditDialog.js:215 js/CourseEditDialog.js:275
+#: js/CourseEditDialog.js:215
 msgid "Members"
 msgstr "Mitglieder"
 

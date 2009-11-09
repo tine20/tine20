@@ -42,7 +42,8 @@ msgstr "类型"
 msgid "Source"
 msgstr "源"
 
-#: Controller/Lead.php:152 Export/Pdf.php:94 js/LeadEditDialog.js:384
+#: Controller/Lead.php:152 Export/Pdf.php:94 js/LeadEditDialog.js:386
+#: js/LeadGridDetailsPanel.js:169
 msgid "Start"
 msgstr "开始"
 
@@ -55,12 +56,12 @@ msgid "End"
 msgstr "结束"
 
 #: Controller/Lead.php:155 Export/Ods.php:89 Export/Pdf.php:88
-#: js/LeadGridPanel.js:101 js/LeadGridPanel.js:132
+#: js/LeadGridPanel.js:105 js/LeadGridPanel.js:136
 msgid "Turnover"
 msgstr "周转"
 
 #: Controller/Lead.php:156 Export/Ods.php:94 Export/Pdf.php:91
-#: js/LeadEditDialog.js:228 js/LeadGridPanel.js:100 js/LeadGridPanel.js:131
+#: js/LeadEditDialog.js:228 js/LeadGridPanel.js:104 js/LeadGridPanel.js:135
 msgid "Probability"
 msgstr "可能性"
 
@@ -97,12 +98,12 @@ msgid "%s's personal leads"
 msgstr "%s 的个人线索"
 
 #: Controller.php:152 js/Contact.js:168 js/Contact.js:357 js/Contact.js:397
-#: js/LeadGridPanel.js:129
+#: js/LeadGridDetailsPanel.js:188 js/LeadGridPanel.js:133
 msgid "Customer"
 msgstr "客户"
 
 #: Controller.php:153 js/Contact.js:188 js/Contact.js:358 js/Contact.js:401
-#: js/LeadGridPanel.js:128
+#: js/LeadGridDetailsPanel.js:197 js/LeadGridPanel.js:132
 msgid "Partner"
 msgstr "伙伴"
 
@@ -157,7 +158,8 @@ msgstr "网址"
 msgid "Lead Name"
 msgstr "线索名"
 
-#: Export/Ods.php:84 js/LeadEditDialog.js:421 js/Product.js:141
+#: Export/Ods.php:84 js/LeadEditDialog.js:423 js/LeadGridDetailsPanel.js:213
+#: js/Product.js:141
 msgid "Description"
 msgstr "描述"
 
@@ -184,16 +186,18 @@ msgstr "更新者"
 msgid "Lead Data"
 msgstr "线索数据"
 
-#: Export/Pdf.php:79 js/AdminPanel.js:169 js/LeadEditDialog.js:327
-#: js/LeadGridPanel.js:98 js/LeadGridPanel.js:130
+#: Export/Pdf.php:79 js/AdminPanel.js:169 js/LeadEditDialog.js:329
+#: js/LeadGridPanel.js:102 js/LeadGridPanel.js:134
 msgid "Leadstate"
 msgstr "线索状态"
 
-#: Export/Pdf.php:82 js/AdminPanel.js:183 js/LeadEditDialog.js:346
+#: Export/Pdf.php:82 js/AdminPanel.js:183 js/LeadEditDialog.js:348
+#: js/LeadGridDetailsPanel.js:171
 msgid "Leadtype"
 msgstr "线索类型"
 
-#: Export/Pdf.php:85 js/AdminPanel.js:176 js/LeadEditDialog.js:353
+#: Export/Pdf.php:85 js/AdminPanel.js:176 js/LeadEditDialog.js:355
+#: js/LeadGridDetailsPanel.js:172
 msgid "Leadsource"
 msgstr "线索源"
 
@@ -221,7 +225,7 @@ msgstr "过期日期"
 msgid "Priority"
 msgstr "优先"
 
-#: Export/Pdf.php:267 js/LeadGridPanel.js:239 js/Product.js:87
+#: Export/Pdf.php:267 js/LeadGridPanel.js:243 js/Product.js:87
 msgid "Products"
 msgstr "产品"
 
@@ -298,15 +302,16 @@ msgstr "姓名"
 msgid "Data"
 msgstr "线索数据"
 
-#: js/Contact.js:253 js/LeadGridPanel.js:272
+#: js/Contact.js:253 js/LeadGridDetailsPanel.js:189
+#: js/LeadGridDetailsPanel.js:198 js/LeadGridPanel.js:276
 msgid "Phone"
 msgstr "电话"
 
-#: js/Contact.js:254 js/LeadGridPanel.js:273
+#: js/Contact.js:254 js/LeadGridPanel.js:277
 msgid "Cellphone"
 msgstr "手机"
 
-#: js/LeadEditDialog.js:262 js/LeadGridPanel.js:96 js/Models.js:56
+#: js/LeadEditDialog.js:262 js/LeadGridPanel.js:100 js/Models.js:56
 #, fuzzy
 msgid "Lead"
 msgid_plural "Leads"
@@ -316,15 +321,15 @@ msgstr[0] "线索"
 msgid "Enter short name"
 msgstr "输入短名"
 
-#: js/LeadEditDialog.js:369
+#: js/LeadEditDialog.js:371
 msgid "Expected turnover"
 msgstr "期望的周转"
 
-#: js/LeadEditDialog.js:390
+#: js/LeadEditDialog.js:392 js/LeadGridDetailsPanel.js:170
 msgid "Estimated end"
 msgstr "估计结束"
 
-#: js/LeadEditDialog.js:435
+#: js/LeadEditDialog.js:437
 msgid "Enter description"
 msgstr "输入描述"
 
@@ -333,60 +338,93 @@ msgstr "输入描述"
 msgid "Contact"
 msgstr "联系人"
 
-#: js/LeadGridPanel.js:97 js/LeadGridPanel.js:127
+#: js/LeadGridDetailsPanel.js:113
+#, fuzzy
+msgid "Select lead"
+msgstr "删除线索"
+
+#: js/LeadGridDetailsPanel.js:175
+#, fuzzy
+msgid "Open tasks"
+msgstr "删除任务"
+
+#: js/LeadGridDetailsPanel.js:176
+#, fuzzy
+msgid "Tasks status"
+msgstr "线索状态"
+
+#: js/LeadGridDetailsPanel.js:190 js/LeadGridDetailsPanel.js:199
+msgid "Mobile"
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:191 js/LeadGridDetailsPanel.js:200
+msgid "Fax"
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:192 js/LeadGridDetailsPanel.js:201
+#, fuzzy
+msgid "E-Mail"
+msgstr "电子邮件"
+
+#: js/LeadGridDetailsPanel.js:194 js/LeadGridDetailsPanel.js:203
+#, fuzzy
+msgid "Web"
+msgstr "网址"
+
+#: js/LeadGridPanel.js:101 js/LeadGridPanel.js:131
 msgid "Lead name"
 msgstr "线索名"
 
-#: js/LeadGridPanel.js:125
+#: js/LeadGridPanel.js:129
 msgid "Lead id"
 msgstr "线索标识符"
 
-#: js/LeadGridPanel.js:126
+#: js/LeadGridPanel.js:130
 #, fuzzy
 msgid "Tags"
 msgstr "任务"
 
-#: js/LeadGridPanel.js:172
+#: js/LeadGridPanel.js:176
 msgid "Add task"
 msgstr "添加任务"
 
-#: js/LeadGridPanel.js:173
+#: js/LeadGridPanel.js:177
 msgid "Add task for selected lead"
 msgstr "为选中的线索添加任务"
 
-#: js/LeadGridPanel.js:183
+#: js/LeadGridPanel.js:187
 #, fuzzy
 msgid "Export Lead"
 msgstr "输出PDF文件"
 
-#: js/LeadGridPanel.js:192
+#: js/LeadGridPanel.js:196
 msgid "Export as PDF"
 msgstr "输出PDF文件"
 
-#: js/LeadGridPanel.js:199
+#: js/LeadGridPanel.js:203
 #, fuzzy
 msgid "Export as CSV"
 msgstr "输出PDF文件"
 
-#: js/LeadGridPanel.js:206
+#: js/LeadGridPanel.js:210
 #, fuzzy
 msgid "Export as ODS"
 msgstr "输出PDF文件"
 
-#: js/LeadGridPanel.js:217
+#: js/LeadGridPanel.js:221
 #, fuzzy
 msgid "Show closed"
 msgstr "显示关闭的线索"
 
-#: js/LeadGridPanel.js:236
+#: js/LeadGridPanel.js:240
 msgid "Lead states"
 msgstr "线索状态"
 
-#: js/LeadGridPanel.js:237
+#: js/LeadGridPanel.js:241
 msgid "Lead sources"
 msgstr "线索源"
 
-#: js/LeadGridPanel.js:238
+#: js/LeadGridPanel.js:242
 msgid "Lead types"
 msgstr "线索类型"
 
@@ -516,10 +554,6 @@ msgstr "状态"
 #~ msgid "Edit lead"
 #~ msgstr "编辑线索"
 
-#~ msgid "Delete lead"
-#~ msgid_plural "Delete leads"
-#~ msgstr[0] "删除线索"
-
 #~ msgid "Delete selected leads"
 #~ msgstr "删除选中的线索"
 
@@ -570,9 +604,6 @@ msgstr "状态"
 
 #~ msgid "Add existing task to lead"
 #~ msgstr "给线索添加已存在的任务"
-
-#~ msgid "Remove tasks"
-#~ msgstr "删除任务"
 
 #~ msgid "Remove selected tasks"
 #~ msgstr "删除选中的任务"

@@ -837,10 +837,6 @@ msgstr "线"
 msgid "Users"
 msgstr "用户"
 
-#: js/Snom/PhoneEditDialog.js:719
-msgid "Rights"
-msgstr "权限"
-
 #: js/Snom/PhoneGridPanel.js:43
 msgid "reset phones HTTP authentication"
 msgstr "重置电话 HTTP 授权"
@@ -928,6 +924,9 @@ msgstr "电话"
 #: js/Voipmanager.js:126
 msgid "Templates"
 msgstr "模板"
+
+#~ msgid "Rights"
+#~ msgstr "权限"
 
 #~ msgid "username"
 #~ msgstr "用户名"

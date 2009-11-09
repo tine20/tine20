@@ -836,10 +836,6 @@ msgstr "ライン"
 msgid "Users"
 msgstr "ユーザ"
 
-#: js/Snom/PhoneEditDialog.js:719
-msgid "Rights"
-msgstr "権限"
-
 #: js/Snom/PhoneGridPanel.js:43
 msgid "reset phones HTTP authentication"
 msgstr ""
@@ -927,6 +923,9 @@ msgstr "電話"
 #: js/Voipmanager.js:126
 msgid "Templates"
 msgstr "テンプレート"
+
+#~ msgid "Rights"
+#~ msgstr "権限"
 
 #~ msgid "username"
 #~ msgstr "ユーザ名"

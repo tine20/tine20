@@ -319,8 +319,9 @@ msgstr "Opis"
 msgid "Enter description"
 msgstr "Wprowadź opis"
 
-#: js/ContactEditDialog.js:339 js/EditDialog.js:58
-msgid "export as pdf"
+#: js/ContactEditDialog.js:339
+#, fuzzy
+msgid "Export as pdf"
 msgstr "eksportuj jako pdf"
 
 #: js/ContactEditDialog.js:364
@@ -450,6 +451,10 @@ msgstr "Informacja"
 msgid "contacts"
 msgstr "kontakty"
 
+#: js/EditDialog.js:58
+msgid "export as pdf"
+msgstr "eksportuj jako pdf"
+
 # > Großes el fehlt
 # Nicht mehr :)
 #: js/EditDialog.js:83
@@ -524,7 +529,7 @@ msgstr[0] "Link"
 msgstr[1] "[%d] linki"
 msgstr[2] "[%d] linków"
 
-#: js/SearchCombo.js:78
+#: js/SearchCombo.js:92
 msgid "Searching..."
 msgstr "Wyszukiwanie..."
 
@@ -533,7 +538,8 @@ msgid "Default Addressbook"
 msgstr "Domyślna książka adresowa"
 
 #: Preference.php:61
-msgid "The defualt addressbook for new contacts"
+#, fuzzy
+msgid "The default addressbook for new contacts"
 msgstr "Domyślna książka adresowa dla nowych kontaktów"
 
 #: Setup/setup.xml:572

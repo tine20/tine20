@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 Voipmanager\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
+"Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -275,9 +275,8 @@ msgid "type"
 msgstr "typ"
 
 #: js/Asterisk/SipPeerGridPanel.js:274
-#, fuzzy
 msgid "defaultuser"
-msgstr "autentikace uživatele"
+msgstr "výchozí uživatel"
 
 #: js/Asterisk/SipPeerGridPanel.js:281
 msgid "disallow"
@@ -888,10 +887,6 @@ msgstr "Linky"
 msgid "Users"
 msgstr "Uživatelé"
 
-#: js/Snom/PhoneEditDialog.js:719
-msgid "Rights"
-msgstr "Práva"
-
 #: js/Snom/PhoneGridPanel.js:43
 msgid "reset phones HTTP authentication"
 msgstr "Resetovat HTTP autentikaci telefonu"
@@ -980,260 +975,263 @@ msgstr "Telefony"
 msgid "Templates"
 msgstr "Šablony"
 
-#~ msgid "username"
-#~ msgstr "uživatelské jméno"
+msgid "Rights"
+msgstr "Práva"
 
-#~ msgid "edit myphone"
-#~ msgstr "editovat myphone"
+msgid "username"
+msgstr "uživatelské jméno"
 
-#~ msgid "Search: "
-#~ msgstr "Hledat:"
+msgid "edit myphone"
+msgstr "editovat myphone"
 
-#~ msgid "Displaying myphones {0} - {1} of {2}"
-#~ msgstr "Zobrazuji myphone {0} - {1} z {2}"
+msgid "Search: "
+msgstr "Hledat:"
 
-#~ msgid "No myphones to display"
-#~ msgstr "Žádné myphone ke zobrazení"
+msgid "Displaying myphones {0} - {1} of {2}"
+msgstr "Zobrazuji myphone {0} - {1} z {2}"
 
-#~ msgid "add context"
-#~ msgstr "přidat kontext"
+msgid "No myphones to display"
+msgstr "Žádné myphone ke zobrazení"
 
-#~ msgid "edit context"
-#~ msgstr "editovat kontext"
+msgid "add context"
+msgstr "přidat kontext"
 
-#~ msgid "delete context"
-#~ msgstr "smazat kontext"
+msgid "edit context"
+msgstr "editovat kontext"
 
-#~ msgid "Displaying context {0} - {1} of {2}"
-#~ msgstr "Zobrazuji kontext {0} - {1} z {2}"
+msgid "delete context"
+msgstr "smazat kontext"
 
-#~ msgid "No context to display"
-#~ msgstr "Žádný kontext ke zobrazení"
+msgid "Displaying context {0} - {1} of {2}"
+msgstr "Zobrazuji kontext {0} - {1} z {2}"
 
-#~ msgid "add meetme"
-#~ msgstr "přidat konferenci"
+msgid "No context to display"
+msgstr "Žádný kontext ke zobrazení"
 
-#~ msgid "edit meetme"
-#~ msgstr "editovat konferenci"
+msgid "add meetme"
+msgstr "přidat konferenci"
 
-#~ msgid "delete meetme"
-#~ msgstr "smazat konferenci"
+msgid "edit meetme"
+msgstr "editovat konferenci"
 
-#~ msgid "Displaying meetme {0} - {1} of {2}"
-#~ msgstr "Zobrazuji konferenci {0} - {1} z {2}"
+msgid "delete meetme"
+msgstr "smazat konferenci"
 
-#~ msgid "No meetme to display"
-#~ msgstr "Žádná konference ke zobrazení"
+msgid "Displaying meetme {0} - {1} of {2}"
+msgstr "Zobrazuji konferenci {0} - {1} z {2}"
 
-#~ msgid "edit sipPeer"
-#~ msgstr "editovat SIP peer"
+msgid "No meetme to display"
+msgstr "Žádná konference ke zobrazení"
 
-#~ msgid "delete sipPeer"
-#~ msgstr "smazat SIP peer"
+msgid "edit sipPeer"
+msgstr "editovat SIP peer"
 
-#~ msgid "Context: "
-#~ msgstr "Kontext:"
+msgid "delete sipPeer"
+msgstr "smazat SIP peer"
 
-#~ msgid "Displaying sipPeers {0} - {1} of {2}"
-#~ msgstr "Zobrazuji SIP peer {0} - {1} of {2}"
+msgid "Context: "
+msgstr "Kontext:"
 
-#~ msgid "Amaflags"
-#~ msgstr "AMA příznaky"
+msgid "Displaying sipPeers {0} - {1} of {2}"
+msgstr "Zobrazuji SIP peer {0} - {1} of {2}"
 
-#~ msgid "Can reinvite"
-#~ msgstr "Smí provést SIP reinvite"
+msgid "Amaflags"
+msgstr "AMA příznaky"
 
-#~ msgid "Default IP"
-#~ msgstr "Výchozí IP"
+msgid "Can reinvite"
+msgstr "Smí provést SIP reinvite"
 
-#~ msgid "DTMF mode"
-#~ msgstr "DTMF režim"
+msgid "Default IP"
+msgstr "Výchozí IP"
 
-#~ msgid "From User"
-#~ msgstr "Od uživatele"
+msgid "DTMF mode"
+msgstr "DTMF režim"
 
-#~ msgid "From Domain"
-#~ msgstr "Z domény"
+msgid "From User"
+msgstr "Od uživatele"
 
-#~ msgid "Full Contact"
-#~ msgstr "Celý kontakt"
+msgid "From Domain"
+msgstr "Z domény"
 
-#~ msgid "Host"
-#~ msgstr "Host"
+msgid "Full Contact"
+msgstr "Celý kontakt"
 
-#~ msgid "Insecure"
-#~ msgstr "Nezabezpečený"
+msgid "Host"
+msgstr "Host"
 
-#~ msgid "MD5 Secret"
-#~ msgstr "MD5 kód"
+msgid "Insecure"
+msgstr "Nezabezpečený"
 
-#~ msgid "Deny"
-#~ msgstr "Zamítnout"
+msgid "MD5 Secret"
+msgstr "MD5 kód"
 
-#~ msgid "Permit"
-#~ msgstr "Povolit"
+msgid "Deny"
+msgstr "Zamítnout"
 
-#~ msgid "Mask"
-#~ msgstr "Maska"
+msgid "Permit"
+msgstr "Povolit"
 
-#~ msgid "Port"
-#~ msgstr "Port"
+msgid "Mask"
+msgstr "Maska"
 
-#~ msgid "Restrict CID"
-#~ msgstr "Potlačit identifikaci volajícího"
+msgid "Port"
+msgstr "Port"
 
-#~ msgid "RTP Timeout"
-#~ msgstr "Časový limit RTP"
+msgid "Restrict CID"
+msgstr "Potlačit identifikaci volajícího"
 
-#~ msgid "RTP Hold Timeout"
-#~ msgstr "Časový limit RTP při zaparkovaném hovoru"
+msgid "RTP Timeout"
+msgstr "Časový limit RTP"
 
-#~ msgid "Username"
-#~ msgstr "Uživatelské jméno"
+msgid "RTP Hold Timeout"
+msgstr "Časový limit RTP při zaparkovaném hovoru"
 
-#~ msgid "Allow"
-#~ msgstr "Povolit"
+msgid "Username"
+msgstr "Uživatelské jméno"
 
-#~ msgid "Music on hold"
-#~ msgstr "Hudba při čekání"
+msgid "Allow"
+msgstr "Povolit"
 
-#~ msgid "Reg Seconds"
-#~ msgstr "Registrace v sekundách"
+msgid "Music on hold"
+msgstr "Hudba při čekání"
 
-#~ msgid "Reg Exten"
-#~ msgstr "Registrace linky"
+msgid "Reg Seconds"
+msgstr "Registrace v sekundách"
 
-#~ msgid "Can forward call"
-#~ msgstr "Smí přesměrovat hovor"
+msgid "Reg Exten"
+msgstr "Registrace linky"
 
-#~ msgid "Set Var"
-#~ msgstr "Nastavení proměnné"
+msgid "Can forward call"
+msgstr "Smí přesměrovat hovor"
 
-#~ msgid "Notify Ringing"
-#~ msgstr "Upozornit na vyzvánění"
+msgid "Set Var"
+msgstr "Nastavení proměnné"
 
-#~ msgid "Use Client Code"
-#~ msgstr "Použít kód klienta"
+msgid "Notify Ringing"
+msgstr "Upozornit na vyzvánění"
 
-#~ msgid "Auth User"
-#~ msgstr "Autentikace uživatele"
+msgid "Use Client Code"
+msgstr "Použít kód klienta"
 
-#~ msgid "Call Limit"
-#~ msgstr "Limit volání"
+msgid "Auth User"
+msgstr "Autentikace uživatele"
 
-#~ msgid "Busy Level"
-#~ msgstr "Počet souběžných hovorů než je obsazeno"
+msgid "Call Limit"
+msgstr "Limit volání"
 
-#~ msgid "edit voicemail"
-#~ msgstr "editovat hlasovou poštu"
+msgid "Busy Level"
+msgstr "Počet souběžných hovorů než je obsazeno"
 
-#~ msgid "delete voicemail"
-#~ msgstr "smazat hlasovou poštu"
+msgid "edit voicemail"
+msgstr "editovat hlasovou poštu"
 
-#~ msgid "Displaying voicemail {0} - {1} of {2}"
-#~ msgstr "Zobrazuji hlasovou poštu {0} - {1} z {2}"
+msgid "delete voicemail"
+msgstr "smazat hlasovou poštu"
 
-#~ msgid "No voicemail to display"
-#~ msgstr "Žádná hlasová pošta ke zobrazení"
+msgid "Displaying voicemail {0} - {1} of {2}"
+msgstr "Zobrazuji hlasovou poštu {0} - {1} z {2}"
 
-#~ msgid "add location"
-#~ msgstr "přidat umístění"
+msgid "No voicemail to display"
+msgstr "Žádná hlasová pošta ke zobrazení"
 
-#~ msgid "edit location"
-#~ msgstr "editovat umístění"
+msgid "add location"
+msgstr "přidat umístění"
 
-#~ msgid "delete location"
-#~ msgstr "smazat umístění"
+msgid "edit location"
+msgstr "editovat umístění"
 
-#~ msgid "Displaying location {0} - {1} of {2}"
-#~ msgstr "Zobrazují umístění {0} - {1} z {2}"
+msgid "delete location"
+msgstr "smazat umístění"
 
-#~ msgid "No location to display"
-#~ msgstr "Žádná umístění ke zobrazení"
+msgid "Displaying location {0} - {1} of {2}"
+msgstr "Zobrazují umístění {0} - {1} z {2}"
 
-#~ msgid "add phone"
-#~ msgstr "přidat telefon"
+msgid "No location to display"
+msgstr "Žádná umístění ke zobrazení"
 
-#~ msgid "edit phone"
-#~ msgstr "editovat telefon"
+msgid "add phone"
+msgstr "přidat telefon"
 
-#~ msgid "delete phone"
-#~ msgstr "smazat telefon"
+msgid "edit phone"
+msgstr "editovat telefon"
 
-#~ msgid "Displaying phones {0} - {1} of {2}"
-#~ msgstr "Zobrazuji telefony {0} - {1} z {2}"
+msgid "delete phone"
+msgstr "smazat telefon"
 
-#~ msgid "No phones to display"
-#~ msgstr "Žádné telefony ke zobrazení"
+msgid "Displaying phones {0} - {1} of {2}"
+msgstr "Zobrazuji telefony {0} - {1} z {2}"
 
-#~ msgid "add account"
-#~ msgstr "přidat účet"
+msgid "No phones to display"
+msgstr "Žádné telefony ke zobrazení"
 
-#~ msgid "remove account"
-#~ msgstr "odstranit účet"
+msgid "add account"
+msgstr "přidat účet"
 
-#~ msgid "add setting"
-#~ msgstr "přidat nastavení"
+msgid "remove account"
+msgstr "odstranit účet"
 
-#~ msgid "edit setting"
-#~ msgstr "editovat nastavení"
+msgid "add setting"
+msgstr "přidat nastavení"
 
-#~ msgid "delete setting"
-#~ msgstr "smazat nastavení"
+msgid "edit setting"
+msgstr "editovat nastavení"
 
-#~ msgid "Displaying settings {0} - {1} of {2}"
-#~ msgstr "Zobrazuji nastavení {0} - {1} z {2}"
+msgid "delete setting"
+msgstr "smazat nastavení"
 
-#~ msgid "No settings to display"
-#~ msgstr "Žádná nastavení ke zobrazení"
+msgid "Displaying settings {0} - {1} of {2}"
+msgstr "Zobrazuji nastavení {0} - {1} z {2}"
 
-#~ msgid "SettingsMain"
-#~ msgstr "Hlavní nastavení"
+msgid "No settings to display"
+msgstr "Žádná nastavení ke zobrazení"
 
-#~ msgid "add software"
-#~ msgstr "přidat software"
+msgid "SettingsMain"
+msgstr "Hlavní nastavení"
 
-#~ msgid "edit software"
-#~ msgstr "editovat software"
+msgid "add software"
+msgstr "přidat software"
 
-#~ msgid "delete software"
-#~ msgstr "smazat software"
+msgid "edit software"
+msgstr "editovat software"
 
-#~ msgid "Displaying software {0} - {1} of {2}"
-#~ msgstr "Zobrazuji software {0} - {1} z {2}"
+msgid "delete software"
+msgstr "smazat software"
 
-#~ msgid "No software to display"
-#~ msgstr "Žádný software je zobrazení"
+msgid "Displaying software {0} - {1} of {2}"
+msgstr "Zobrazuji software {0} - {1} z {2}"
 
-#~ msgid "add template"
-#~ msgstr "přidat šablonu"
+msgid "No software to display"
+msgstr "Žádný software je zobrazení"
 
-#~ msgid "edit template"
-#~ msgstr "editovat šablonu"
+msgid "add template"
+msgstr "přidat šablonu"
 
-#~ msgid "delete template"
-#~ msgstr "smazat šablonu"
+msgid "edit template"
+msgstr "editovat šablonu"
 
-#~ msgid "Displaying template {0} - {1} of {2}"
-#~ msgstr "Zobrazuji šablony {0} - {1} z {2}"
+msgid "delete template"
+msgstr "smazat šablonu"
 
-#~ msgid "No template to display"
-#~ msgstr "Žádné šablony ke zobrazení"
+msgid "Displaying template {0} - {1} of {2}"
+msgstr "Zobrazuji šablony {0} - {1} z {2}"
 
-#~ msgid "send HTTP Client Info"
-#~ msgstr "poslat HTTP Client Info"
+msgid "No template to display"
+msgstr "Žádné šablony ke zobrazení"
 
-#~ msgid "Model"
-#~ msgstr "Model"
+msgid "send HTTP Client Info"
+msgstr "poslat HTTP Client Info"
 
-#~ msgid "FW Status"
-#~ msgstr "URL konfiguračního souboru pro firmware"
+msgid "Model"
+msgstr "Model"
 
-#~ msgid "Server Setting"
-#~ msgstr "Nastavení serveru"
+msgid "FW Status"
+msgstr "URL konfiguračního souboru pro firmware"
 
-#~ msgid "Settings URL"
-#~ msgstr "URL pro konfigurační souobry"
+msgid "Server Setting"
+msgstr "Nastavení serveru"
 
-#~ msgid "Firmware URL"
-#~ msgstr "URL pro firmware"
+msgid "Settings URL"
+msgstr "URL pro konfigurační souobry"
+
+msgid "Firmware URL"
+msgstr "URL pro firmware"

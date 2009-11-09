@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Erp\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-02-21 08:56+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2009-10-31 13:38+0100\n"
+"Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,22 +14,25 @@ msgstr ""
 
 #: Acl/Rights.php:104
 msgid "manage products"
-msgstr ""
+msgstr "spravovat produkty"
 
 #: Acl/Rights.php:105
 msgid "add, edit and delete products"
-msgstr ""
+msgstr "vytvořit, editovat a mazat produkty"
 
-#: js/ContractEditDialog.js:103 js/ContractGridPanel.js:113
+#: js/ContractEditDialog.js:103
+#: js/ContractGridPanel.js:113
 msgid "Title"
 msgstr "Název"
 
-#: js/ContractEditDialog.js:109 js/ProductEditDialog.js:90
+#: js/ContractEditDialog.js:109
+#: js/ProductEditDialog.js:90
 #: js/ProductGridPanel.js:130
 msgid "Description"
 msgstr "Popis"
 
-#: js/ContractEditDialog.js:110 js/ProductEditDialog.js:91
+#: js/ContractEditDialog.js:110
+#: js/ProductEditDialog.js:91
 msgid "Enter description..."
 msgstr "Vložte popis..."
 
@@ -45,20 +48,20 @@ msgstr "Číslo kontraktu"
 msgid "Status"
 msgstr "Stav"
 
-#: js/Models.js:36 js/ProductGridPanel.js:104
+#: js/Models.js:36
+#: js/ProductGridPanel.js:104
 msgid "Product"
 msgid_plural "Products"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Produkt"
+msgstr[1] "Produkty"
+msgstr[2] "Produktů"
 
 #: js/Models.js:40
-#, fuzzy
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] "seznam kontraktů"
-msgstr[1] "seznamy kontraktů"
-msgstr[2] "seznamů kontraktů"
+msgstr[0] "seznam záznamů"
+msgstr[1] "seznamy záznamů"
+msgstr[2] "seznamů záznamů"
 
 #: js/Models.js:89
 msgid "Contract"
@@ -74,39 +77,41 @@ msgstr[0] "seznam kontraktů"
 msgstr[1] "seznamy kontraktů"
 msgstr[2] "seznamů kontraktů"
 
-#: js/ProductEditDialog.js:77 js/ProductGridPanel.js:129
+#: js/ProductEditDialog.js:77
+#: js/ProductGridPanel.js:129
 msgid "Name"
-msgstr ""
+msgstr "Název"
 
-#: js/ProductEditDialog.js:83 js/ProductGridPanel.js:131
+#: js/ProductEditDialog.js:83
+#: js/ProductGridPanel.js:131
 msgid "Price"
-msgstr ""
+msgstr "Cena"
 
 #: js/ProductGridPanel.js:105
 msgid "Product name"
-msgstr ""
+msgstr "Název produktu"
 
 #: js/ProductGridPanel.js:128
 msgid "Tags"
-msgstr ""
+msgstr "Štítky"
 
 #: js/Sales.js:94
 msgid "Products"
-msgstr ""
+msgstr "Produkty"
 
 #: js/Sales.js:99
 msgid "All Products"
-msgstr ""
+msgstr "Všechny produkty"
 
 #: js/Sales.js:104
 msgid "Contracts"
 msgstr "Kontrakty"
 
 #: js/Sales.js:109
-#, fuzzy
 msgid "All Contracts"
-msgstr "Kontrakty"
+msgstr "Všechny kontrakty"
 
 #: Setup/setup.xml:231
 msgid "Shared Contracts"
 msgstr "Sdílené kontrakty"
+

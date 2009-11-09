@@ -304,8 +304,9 @@ msgstr "説明"
 msgid "Enter description"
 msgstr "説明を入力してください"
 
-#: js/ContactEditDialog.js:339 js/EditDialog.js:58
-msgid "export as pdf"
+#: js/ContactEditDialog.js:339
+#, fuzzy
+msgid "Export as pdf"
 msgstr "PDFにエキスポートする"
 
 #: js/ContactEditDialog.js:364
@@ -432,6 +433,10 @@ msgstr ""
 msgid "contacts"
 msgstr "コンタクト"
 
+#: js/EditDialog.js:58
+msgid "export as pdf"
+msgstr "PDFにエキスポートする"
+
 #: js/EditDialog.js:83
 msgid "Loading Contact..."
 msgstr "コンタクトのロード中..."
@@ -498,7 +503,7 @@ msgid "Link"
 msgid_plural "Links [%d]"
 msgstr[0] "リンク[%d]"
 
-#: js/SearchCombo.js:78
+#: js/SearchCombo.js:92
 msgid "Searching..."
 msgstr ""
 
@@ -508,7 +513,7 @@ msgid "Default Addressbook"
 msgstr "アドレス帳"
 
 #: Preference.php:61
-msgid "The defualt addressbook for new contacts"
+msgid "The default addressbook for new contacts"
 msgstr ""
 
 #: Setup/setup.xml:572

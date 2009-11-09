@@ -42,27 +42,28 @@ msgstr "过期日期"
 msgid "Priority"
 msgstr "优先"
 
-#: js/EditDialog.js:180 js/GridPanel.js:93 js/GridPanel.js:234
-msgid "Responsible"
+#: js/EditDialog.js:180
+#, fuzzy
+msgid "Add Responsible ..."
 msgstr "有责任的"
 
-#: js/EditDialog.js:184
+#: js/EditDialog.js:187
 msgid "Notes"
 msgstr "注释"
 
-#: js/EditDialog.js:185
+#: js/EditDialog.js:188
 msgid "Enter description..."
 msgstr "输入描述"
 
-#: js/EditDialog.js:190
+#: js/EditDialog.js:193
 msgid "Percentage"
 msgstr "百分比"
 
-#: js/EditDialog.js:194 js/GridPanel.js:213 Model/Task.php:182
+#: js/EditDialog.js:197 js/GridPanel.js:213 Model/Task.php:182
 msgid "Status"
 msgstr "状态"
 
-#: js/EditDialog.js:198
+#: js/EditDialog.js:201
 msgid "Completed"
 msgstr "完成的"
 
@@ -74,6 +75,10 @@ msgstr[0] "你确实想删除选中的任务？"
 #: js/GridPanel.js:92 js/GridPanel.js:178
 msgid "Due Date"
 msgstr "过期日期"
+
+#: js/GridPanel.js:93 js/GridPanel.js:234
+msgid "Responsible"
+msgstr "有责任的"
 
 #: js/GridPanel.js:117
 msgid "Failed"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
+"Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,13 +24,12 @@ msgid "add, edit and delete leads"
 msgstr "přidat, editovat a smazat leady"
 
 #: Acl/Rights.php:110
-#, fuzzy
 msgid "manage shared lead folders"
-msgstr "spravovat leady"
+msgstr "spravovat sdílené složky leadů"
 
 #: Acl/Rights.php:111
 msgid "Create new shared lead folders"
-msgstr ""
+msgstr "Vytvořit novou sdílenou složku leadů"
 
 #: Controller/Lead.php:149
 msgid "State"
@@ -44,7 +43,8 @@ msgstr "Typ"
 msgid "Source"
 msgstr "Zdroj"
 
-#: Controller/Lead.php:152 Export/Pdf.php:94 js/LeadEditDialog.js:384
+#: Controller/Lead.php:152 Export/Pdf.php:94 js/LeadEditDialog.js:386
+#: js/LeadGridDetailsPanel.js:169
 msgid "Start"
 msgstr "Začátek"
 
@@ -57,12 +57,12 @@ msgid "End"
 msgstr "Konec"
 
 #: Controller/Lead.php:155 Export/Ods.php:89 Export/Pdf.php:88
-#: js/LeadGridPanel.js:101 js/LeadGridPanel.js:132
+#: js/LeadGridPanel.js:105 js/LeadGridPanel.js:136
 msgid "Turnover"
 msgstr "Obrat"
 
 #: Controller/Lead.php:156 Export/Ods.php:94 Export/Pdf.php:91
-#: js/LeadEditDialog.js:228 js/LeadGridPanel.js:100 js/LeadGridPanel.js:131
+#: js/LeadEditDialog.js:228 js/LeadGridPanel.js:104 js/LeadGridPanel.js:135
 msgid "Probability"
 msgstr "Pravděpodobnost"
 
@@ -99,19 +99,18 @@ msgid "%s's personal leads"
 msgstr "osobní leady uživatele %s"
 
 #: Controller.php:152 js/Contact.js:168 js/Contact.js:357 js/Contact.js:397
-#: js/LeadGridPanel.js:129
+#: js/LeadGridDetailsPanel.js:188 js/LeadGridPanel.js:133
 msgid "Customer"
 msgstr "Zákazník"
 
 #: Controller.php:153 js/Contact.js:188 js/Contact.js:358 js/Contact.js:401
-#: js/LeadGridPanel.js:128
+#: js/LeadGridDetailsPanel.js:197 js/LeadGridPanel.js:132
 msgid "Partner"
 msgstr "Partner"
 
 #: Controller.php:154
-#, fuzzy
 msgid "Reseller"
-msgstr "dealer"
+msgstr "Dealer"
 
 #: Controller.php:157
 msgid "open"
@@ -139,7 +138,7 @@ msgstr "ztracený"
 
 #: Controller.php:165
 msgid "Market"
-msgstr ""
+msgstr "Trh"
 
 #: Controller.php:166 Export/Pdf.php:215
 msgid "Email"
@@ -150,52 +149,50 @@ msgid "Telephone"
 msgstr "Telefon"
 
 #: Controller.php:168
-#, fuzzy
 msgid "Website"
-msgstr "web"
+msgstr "Web"
 
 #: Export/Ods.php:79
-#, fuzzy
 msgid "Lead Name"
 msgstr "Jméno leadu"
 
-#: Export/Ods.php:84 js/LeadEditDialog.js:421 js/Product.js:141
+#: Export/Ods.php:84 js/LeadEditDialog.js:423 js/LeadGridDetailsPanel.js:213
+#: js/Product.js:141
 msgid "Description"
 msgstr "Popis"
 
 #: Export/Ods.php:99
-#, fuzzy
 msgid "Date Start"
 msgstr "Začátek"
 
 #: Export/Ods.php:104
 msgid "Date End"
-msgstr ""
+msgstr "Konec"
 
 #: Export/Ods.php:109
-#, fuzzy
 msgid "Date End Scheduled"
 msgstr "Plánovaný konec"
 
 #: Export/Ods.php:114
-#, fuzzy
 msgid "Created By"
-msgstr "Aktualizoval(a)"
+msgstr "Vytvořil(a)"
 
 #: Export/Pdf.php:76
 msgid "Lead Data"
 msgstr "Data leadu"
 
-#: Export/Pdf.php:79 js/AdminPanel.js:169 js/LeadEditDialog.js:327
-#: js/LeadGridPanel.js:98 js/LeadGridPanel.js:130
+#: Export/Pdf.php:79 js/AdminPanel.js:169 js/LeadEditDialog.js:329
+#: js/LeadGridPanel.js:102 js/LeadGridPanel.js:134
 msgid "Leadstate"
 msgstr "Stav leadu"
 
-#: Export/Pdf.php:82 js/AdminPanel.js:183 js/LeadEditDialog.js:346
+#: Export/Pdf.php:82 js/AdminPanel.js:183 js/LeadEditDialog.js:348
+#: js/LeadGridDetailsPanel.js:171
 msgid "Leadtype"
 msgstr "Typ leadu"
 
-#: Export/Pdf.php:85 js/AdminPanel.js:176 js/LeadEditDialog.js:353
+#: Export/Pdf.php:85 js/AdminPanel.js:176 js/LeadEditDialog.js:355
+#: js/LeadGridDetailsPanel.js:172
 msgid "Leadsource"
 msgstr "Zdroj leadu"
 
@@ -223,7 +220,7 @@ msgstr "Termín dokončení"
 msgid "Priority"
 msgstr "Priorita"
 
-#: Export/Pdf.php:267 js/LeadGridPanel.js:239 js/Product.js:87
+#: Export/Pdf.php:267 js/LeadGridPanel.js:243 js/Product.js:87
 msgid "Products"
 msgstr "Produkty"
 
@@ -244,28 +241,24 @@ msgid "urgent"
 msgstr "urgentní"
 
 #: js/AdminPanel.js:134
-#, fuzzy
 msgid "Leadstates"
 msgstr "Status leadů"
 
 #: js/AdminPanel.js:138
-#, fuzzy
 msgid "Leadtypes"
 msgstr "Typy leadů"
 
 #: js/AdminPanel.js:142
-#, fuzzy
 msgid "Leadsources"
 msgstr "Zroje leadů"
 
 #: js/AdminPanel.js:150
 msgid "Defaults"
-msgstr ""
+msgstr "Výchozí"
 
 #: js/AdminPanel.js:266
-#, fuzzy
 msgid "Remove Option"
-msgstr "Odstranit produkty"
+msgstr "Odstranit volbu"
 
 #: js/Contact.js:169
 msgid "Change type to Customer"
@@ -296,159 +289,177 @@ msgid "Name"
 msgstr "Jméno"
 
 #: js/Contact.js:250
-#, fuzzy
 msgid "Data"
-msgstr "Data leadu"
+msgstr "Data"
 
-#: js/Contact.js:253 js/LeadGridPanel.js:272
+#: js/Contact.js:253 js/LeadGridDetailsPanel.js:189
+#: js/LeadGridDetailsPanel.js:198 js/LeadGridPanel.js:276
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/Contact.js:254 js/LeadGridPanel.js:273
+#: js/Contact.js:254 js/LeadGridPanel.js:277
 msgid "Cellphone"
 msgstr "Mobilní telefon"
 
-#: js/LeadEditDialog.js:262 js/LeadGridPanel.js:96 js/Models.js:56
-#, fuzzy
+#: js/LeadEditDialog.js:262 js/LeadGridPanel.js:100 js/Models.js:56
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] "Lead"
-msgstr[1] "Lead"
-msgstr[2] "Lead"
+msgstr[1] "Leady"
+msgstr[2] "Leadů"
 
 #: js/LeadEditDialog.js:289
 msgid "Enter short name"
 msgstr "Zadejte stručný název"
 
-#: js/LeadEditDialog.js:369
+#: js/LeadEditDialog.js:371
 msgid "Expected turnover"
 msgstr "Očekávaný obrat"
 
-#: js/LeadEditDialog.js:390
+#: js/LeadEditDialog.js:392 js/LeadGridDetailsPanel.js:170
 msgid "Estimated end"
 msgstr "Odhadovaný konec"
 
-#: js/LeadEditDialog.js:435
+#: js/LeadEditDialog.js:437
 msgid "Enter description"
 msgstr "Zadejte popis"
 
 #: js/LeadGridContactFilter.js:46
-#, fuzzy
 msgid "Contact"
-msgstr "Kontakty"
+msgstr "Kontakt"
 
-#: js/LeadGridPanel.js:97 js/LeadGridPanel.js:127
+#: js/LeadGridDetailsPanel.js:113
+#, fuzzy
+msgid "Select lead"
+msgstr "Smazat lead"
+
+#: js/LeadGridDetailsPanel.js:175
+#, fuzzy
+msgid "Open tasks"
+msgstr "Odstranit úkoly"
+
+#: js/LeadGridDetailsPanel.js:176
+#, fuzzy
+msgid "Tasks status"
+msgstr "Status leadů"
+
+#: js/LeadGridDetailsPanel.js:190 js/LeadGridDetailsPanel.js:199
+msgid "Mobile"
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:191 js/LeadGridDetailsPanel.js:200
+msgid "Fax"
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:192 js/LeadGridDetailsPanel.js:201
+#, fuzzy
+msgid "E-Mail"
+msgstr "Email"
+
+#: js/LeadGridDetailsPanel.js:194 js/LeadGridDetailsPanel.js:203
+#, fuzzy
+msgid "Web"
+msgstr "web"
+
+#: js/LeadGridPanel.js:101 js/LeadGridPanel.js:131
 msgid "Lead name"
 msgstr "Jméno leadu"
 
-#: js/LeadGridPanel.js:125
+#: js/LeadGridPanel.js:129
 msgid "Lead id"
 msgstr "ID Leadu"
 
-#: js/LeadGridPanel.js:126
-#, fuzzy
+#: js/LeadGridPanel.js:130
 msgid "Tags"
-msgstr "Úkoly"
+msgstr "Štítky"
 
-#: js/LeadGridPanel.js:172
+#: js/LeadGridPanel.js:176
 msgid "Add task"
 msgstr "Přidat úkol"
 
-#: js/LeadGridPanel.js:173
+#: js/LeadGridPanel.js:177
 msgid "Add task for selected lead"
 msgstr "Přiat úkol pro vybraný lead"
 
-#: js/LeadGridPanel.js:183
-#, fuzzy
+#: js/LeadGridPanel.js:187
 msgid "Export Lead"
-msgstr "Exportovat do PDF"
+msgstr "Exportovat lead"
 
-#: js/LeadGridPanel.js:192
+#: js/LeadGridPanel.js:196
 msgid "Export as PDF"
 msgstr "Exportovat do PDF"
 
-#: js/LeadGridPanel.js:199
-#, fuzzy
+#: js/LeadGridPanel.js:203
 msgid "Export as CSV"
-msgstr "Exportovat do PDF"
+msgstr "Exportovat do CSV"
 
-#: js/LeadGridPanel.js:206
-#, fuzzy
+#: js/LeadGridPanel.js:210
 msgid "Export as ODS"
-msgstr "Exportovat do PDF"
+msgstr "Exportovat do ODS"
 
-#: js/LeadGridPanel.js:217
-#, fuzzy
+#: js/LeadGridPanel.js:221
 msgid "Show closed"
-msgstr "Zobrazit uzavřené leady"
+msgstr "Zobrazit uzavřené"
 
-#: js/LeadGridPanel.js:236
+#: js/LeadGridPanel.js:240
 msgid "Lead states"
 msgstr "Status leadů"
 
-#: js/LeadGridPanel.js:237
+#: js/LeadGridPanel.js:241
 msgid "Lead sources"
 msgstr "Zroje leadů"
 
-#: js/LeadGridPanel.js:238
+#: js/LeadGridPanel.js:242
 msgid "Lead types"
 msgstr "Typy leadů"
 
 #: js/LeadSource.js:113
-#, fuzzy
 msgid "Add a Leadsource..."
-msgstr "Zdroj leadu"
+msgstr "Přidat zdroj leadu"
 
 #: js/LeadState.js:132
-#, fuzzy
 msgid "Add a Leadstate..."
-msgstr "Přidat úkol..."
+msgstr "Přidat stav leadu"
 
 #: js/LeadType.js:111
-#, fuzzy
 msgid "Add a Leadtype..."
-msgstr "Přidat produkt..."
+msgstr "Přidat typ leadu"
 
 #: js/LinkGridPanel.js:25 js/LinkGridPanel.js:26
-#, fuzzy
 msgid "Add new {0}"
-msgstr "Přidat nový lead"
+msgstr "Přidat nový {0}"
 
 #: js/LinkGridPanel.js:42 js/Product.js:179
 msgid "Unlink {0}"
-msgstr ""
+msgstr "Zrušit odkaz {0}"
 
 #: js/LinkGridPanel.js:43 js/Product.js:180
-#, fuzzy
 msgid "Unlink selected {0}"
-msgstr "Zrušit odkazy na vybrané kontakty"
+msgstr "Zrušit odkaz(y) na vybraný/é {0}"
 
 #: js/LinkGridPanel.js:58
-#, fuzzy
 msgid "Edit {0}"
-msgstr "Editovat lead \"{0}\""
+msgstr "Editovat {0}"
 
 #: js/LinkGridPanel.js:59
-#, fuzzy
 msgid "Edit selected {0}"
-msgstr "Editovat vybraný lead"
+msgstr "Editovat vybraný/é {0}"
 
 #: js/Models.js:60 js/Models.js:136
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "seznam záznamů"
+msgstr[1] "seznamy záznamů"
+msgstr[2] "seznamů záznamů"
 
 #: js/Models.js:132
 msgid "Settings"
 msgid_plural "Settings"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Nastavení"
+msgstr[1] "Nastavení"
+msgstr[2] "Nastavení"
 
 #: js/Product.js:136
-#, fuzzy
 msgid "Product"
 msgstr "Produkt"
 
@@ -458,12 +469,11 @@ msgstr "Cena"
 
 #: js/Product.js:160
 msgid "Quantity"
-msgstr ""
+msgstr "Množství"
 
 #: js/Product.js:210
-#, fuzzy
 msgid "Search for Products to add ..."
-msgstr "Hledat kontakty pro přidání"
+msgstr "Hledat produkty pro přidání ..."
 
 #: js/Task.js:113
 msgid "No Tasks to display"
@@ -485,164 +495,167 @@ msgstr "Procent"
 msgid "Status"
 msgstr "Status"
 
-#~ msgid "telephone"
-#~ msgstr "telefon"
+msgid "telephone"
+msgstr "telefon"
 
-#~ msgid "email"
-#~ msgstr "email"
+msgid "email"
+msgstr "email"
 
-#~ msgid "fair"
-#~ msgstr "veletrh"
+msgid "fair"
+msgstr "veletrh"
 
-#~ msgid "customer"
-#~ msgstr "zákazník"
+msgid "customer"
+msgstr "zákazník"
 
-#~ msgid "partner"
-#~ msgstr "partner"
+msgid "partner"
+msgstr "partner"
 
-#~ msgid "Are you sure you want to delete this lead?"
-#~ msgstr "Určitě chcete smazat tento lead?"
+msgid "Are you sure you want to delete this lead?"
+msgstr "Určitě chcete smazat tento lead?"
 
-#~ msgid "Deleting lead"
-#~ msgstr "Mažu lead"
+msgid "Deleting lead"
+msgstr "Mažu lead"
 
-#~ msgid "Some error occured while trying to delete the lead."
-#~ msgstr "Při pokusu o smazání tohoto leadu došlo k chybě."
+msgid "Some error occured while trying to delete the lead."
+msgstr "Při pokusu o smazání tohoto leadu došlo k chybě."
 
-#~ msgid "Show details"
-#~ msgstr "Zobrazit detaily"
+msgid "Show details"
+msgstr "Zobrazit detaily"
 
-#~ msgid "Displaying leads {0} - {1} of {2}"
-#~ msgstr "Zobrazuji leady {0} - {1} z {2}"
+msgid "Displaying leads {0} - {1} of {2}"
+msgstr "Zobrazuji leady {0} - {1} z {2}"
 
-#~ msgid "No leads found."
-#~ msgstr "Žádné leady nebyly nalezeny."
+msgid "No leads found."
+msgstr "Žádné leady nebyly nalezeny."
 
-#~ msgid "Add lead"
-#~ msgstr "Přidat lead"
+msgid "Add lead"
+msgstr "Přidat lead"
 
-#~ msgid "Edit lead"
-#~ msgstr "Editovat lead"
+msgid "Edit lead"
+msgstr "Editovat lead"
 
-#~ msgid "Delete lead"
-#~ msgid_plural "Delete leads"
-#~ msgstr[0] "Smazat lead"
-#~ msgstr[1] "Smazat leady"
-#~ msgstr[2] "Smazat leady"
+msgid "Delete selected leads"
+msgstr "Smazat vybrané leady"
 
-#~ msgid "Delete selected leads"
-#~ msgstr "Smazat vybrané leady"
+msgid "Export selected lead as PDF"
+msgstr "Exportovat vybrané leady do PDF"
 
-#~ msgid "Export selected lead as PDF"
-#~ msgstr "Exportovat vybrané leady do PDF"
+msgid "Please wait"
+msgstr "Čekejte prosím"
 
-#~ msgid "Please wait"
-#~ msgstr "Čekejte prosím"
+msgid "Saving lead"
+msgstr "Ukládám lead"
 
-#~ msgid "Saving lead"
-#~ msgstr "Ukládám lead"
+msgid "Failed"
+msgstr "Nepodařilo se"
 
-#~ msgid "Failed"
-#~ msgstr "Nepodařilo se"
+msgid "Could not save lead."
+msgstr "Nepodařilo se uložit lead."
 
-#~ msgid "Could not save lead."
-#~ msgstr "Nepodařilo se uložit lead."
+msgid "Please fix the errors noted."
+msgstr "Opravte prosím vyznačené chyby."
 
-#~ msgid "Please fix the errors noted."
-#~ msgstr "Opravte prosím vyznačené chyby."
+msgid "Contactdata"
+msgstr "Kontaktní údaje"
 
-#~ msgid "Contactdata"
-#~ msgstr "Kontaktní údaje"
+msgid "Add new contact"
+msgstr "Přidat nový kontakt"
 
-#~ msgid "Add new contact"
-#~ msgstr "Přidat nový kontakt"
+msgid "Add new customer contact"
+msgstr "Přidat nový kontakt na zákazníka"
 
-#~ msgid "Add new customer contact"
-#~ msgstr "Přidat nový kontakt na zákazníka"
+msgid "Edit contact"
+msgstr "Editovat kontakt"
 
-#~ msgid "Edit contact"
-#~ msgstr "Editovat kontakt"
+msgid "Edit selected contact"
+msgstr "Editovat vybraný kontakt"
 
-#~ msgid "Edit selected contact"
-#~ msgstr "Editovat vybraný kontakt"
+msgid "Unlink contact"
+msgstr "Zrušit odkaz na kontakt"
 
-#~ msgid "Unlink contact"
-#~ msgstr "Zrušit odkaz na kontakt"
+msgid "Add new task"
+msgstr "Přidat nový úkol"
 
-#~ msgid "Add new task"
-#~ msgstr "Přidat nový úkol"
+msgid "Edit task"
+msgstr "Editovat úkol"
 
-#~ msgid "Edit task"
-#~ msgstr "Editovat úkol"
+msgid "Edit selected task"
+msgstr "Editovat vybraný úkol"
 
-#~ msgid "Edit selected task"
-#~ msgstr "Editovat vybraný úkol"
+msgid "Add existing task to lead"
+msgstr "Přidat k leadu existující úkol"
 
-#~ msgid "Add existing task to lead"
-#~ msgstr "Přidat k leadu existující úkol"
+msgid "Remove selected tasks"
+msgstr "Odstranit vybrané úkoly"
 
-#~ msgid "Remove tasks"
-#~ msgstr "Odstranit úkoly"
+msgid "Remove selected products"
+msgstr "Odstranit vybrané produkty"
 
-#~ msgid "Remove selected tasks"
-#~ msgstr "Odstranit vybrané úkoly"
+msgid "Leads"
+msgstr "Leady"
 
-#~ msgid "Remove selected products"
-#~ msgstr "Odstranit vybrané produkty"
+msgid "Loading Lead..."
+msgstr "Načítám lead..."
 
-#~ msgid "Leads"
-#~ msgstr "Leady"
+msgid "Please Wait"
+msgstr "Čekejte prosím"
 
-#~ msgid "Loading Lead..."
-#~ msgstr "Načítám lead..."
+msgid "Add New Lead"
+msgstr "Přidat nový lead"
 
-#~ msgid "Please Wait"
-#~ msgstr "Čekejte prosím"
+msgid "Overview"
+msgstr "Přehled"
 
-#~ msgid "Add New Lead"
-#~ msgstr "Přidat nový lead"
+msgid "folder"
+msgstr "složka"
 
-#~ msgid "Overview"
-#~ msgstr "Přehled"
+msgid "Enter searchfilter"
+msgstr "Zadejte hledaný výraz"
 
-#~ msgid "folder"
-#~ msgstr "složka"
+msgid "leadstate"
+msgstr "stav leadu"
 
-#~ msgid "Enter searchfilter"
-#~ msgstr "Zadejte hledaný výraz"
+msgid "Search Contacts"
+msgstr "Hledat kontakty"
 
-#~ msgid "leadstate"
-#~ msgstr "stav leadu"
+msgid "Add existing contact"
+msgstr "Přidat existující kontakt"
 
-#~ msgid "Search Contacts"
-#~ msgstr "Hledat kontakty"
+msgid "Add existing contact to lead"
+msgstr "Přidat k leadu existující kontakt"
 
-#~ msgid "Add existing contact"
-#~ msgstr "Přidat existující kontakt"
+msgid "Organisation"
+msgstr "Organizace"
 
-#~ msgid "Add existing contact to lead"
-#~ msgstr "Přidat k leadu existující kontakt"
+msgid "Lead updated"
+msgstr "Lead zaktualizován"
 
-#~ msgid "Organisation"
-#~ msgstr "Organizace"
+msgid "Lead added"
+msgstr "Lead přidán"
 
-#~ msgid "Lead updated"
-#~ msgstr "Lead zaktualizován"
+msgid "Add responsible"
+msgstr "Přidat zodpovědnou osobu"
 
-#~ msgid "Lead added"
-#~ msgstr "Lead přidán"
+msgid "Add new responsible contact"
+msgstr "Přidat nový kontakt na zodpovědnou osobu"
 
-#~ msgid "Add responsible"
-#~ msgstr "Přidat zodpovědnou osobu"
+msgid "Add customer"
+msgstr "Přidat zákazníka"
 
-#~ msgid "Add new responsible contact"
-#~ msgstr "Přidat nový kontakt na zodpovědnou osobu"
+msgid "Add partner"
+msgstr "Přidat partnera"
 
-#~ msgid "Add customer"
-#~ msgstr "Přidat zákazníka"
+msgid "Add new partner contact"
+msgstr "Přidat nový kontakt na partnera"
 
-#~ msgid "Add partner"
-#~ msgstr "Přidat partnera"
+msgid "Delete lead"
+msgid_plural "Delete leads"
+msgstr[0] "Smazat lead"
+msgstr[1] "Smazat leady"
+msgstr[2] "Smazat leady"
 
-#~ msgid "Add new partner contact"
-#~ msgstr "Přidat nový kontakt na partnera"
+msgid "Add a product..."
+msgstr "Přidat produkt..."
+
+msgid "Remove tasks"
+msgstr "Odstranit úkoly"

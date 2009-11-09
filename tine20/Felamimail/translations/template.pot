@@ -362,6 +362,22 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
+#: js/FelamimailTreeLoader.js:70
+msgid "Totalcount"
+msgstr ""
+
+#: js/FelamimailTreeLoader.js:71
+msgid "Cache"
+msgstr ""
+
+#: js/FelamimailTreeLoader.js:159
+msgid "IMAP Credentials for {0}"
+msgstr ""
+
+#: js/FelamimailTreeLoader.js:162
+msgid "Credentials"
+msgstr ""
+
 #: js/FelamimailTreePanel.js:173 js/FelamimailTreePanel.js:178
 #: js/FelamimailTreePanel.js:189
 msgid "Marked"
@@ -429,32 +445,12 @@ msgstr ""
 msgid "Reload {0}"
 msgstr ""
 
-#: js/FelamimailTreePanel.js:596
-msgid "Initializing folder cache ..."
-msgstr ""
-
-#: js/FelamimailTreePanel.js:621
+#: js/FelamimailTreePanel.js:617
 msgid "New mails"
 msgstr ""
 
-#: js/FelamimailTreePanel.js:622
+#: js/FelamimailTreePanel.js:618
 msgid "You got {0} new mail(s) in Folder "
-msgstr ""
-
-#: js/FelamimailTreePanel.js:810
-msgid "Totalcount"
-msgstr ""
-
-#: js/FelamimailTreePanel.js:811
-msgid "Cache"
-msgstr ""
-
-#: js/FelamimailTreePanel.js:899
-msgid "IMAP Credentials for {0}"
-msgstr ""
-
-#: js/FelamimailTreePanel.js:902
-msgid "Credentials"
 msgstr ""
 
 #: js/Models.js:43

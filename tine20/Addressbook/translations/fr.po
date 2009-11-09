@@ -306,8 +306,9 @@ msgstr "Description"
 msgid "Enter description"
 msgstr "Saisir une description"
 
-#: js/ContactEditDialog.js:339 js/EditDialog.js:58
-msgid "export as pdf"
+#: js/ContactEditDialog.js:339
+#, fuzzy
+msgid "Export as pdf"
 msgstr "exporter en pdf"
 
 #: js/ContactEditDialog.js:364
@@ -434,6 +435,10 @@ msgstr ""
 msgid "contacts"
 msgstr "contacts"
 
+#: js/EditDialog.js:58
+msgid "export as pdf"
+msgstr "exporter en pdf"
+
 #: js/EditDialog.js:83
 msgid "Loading Contact..."
 msgstr "Chargement du contact..."
@@ -501,7 +506,7 @@ msgid_plural "Links [%d]"
 msgstr[0] "lien"
 msgstr[1] "liens [%d]"
 
-#: js/SearchCombo.js:78
+#: js/SearchCombo.js:92
 msgid "Searching..."
 msgstr "Recherche en cours..."
 
@@ -511,7 +516,7 @@ msgid "Default Addressbook"
 msgstr "Carnet d'adresses"
 
 #: Preference.php:61
-msgid "The defualt addressbook for new contacts"
+msgid "The default addressbook for new contacts"
 msgstr ""
 
 #: Setup/setup.xml:572

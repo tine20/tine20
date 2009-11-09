@@ -57,7 +57,7 @@ msgstr "Доступ в интернет"
 msgid "Fileserver Access"
 msgstr "Доступ к файловому серверу"
 
-#: js/CourseEditDialog.js:215 js/CourseEditDialog.js:275
+#: js/CourseEditDialog.js:215
 msgid "Members"
 msgstr "Члены"
 

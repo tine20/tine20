@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
+"Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,15 +17,15 @@ msgstr ""
 
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
-msgstr ""
+msgstr "spravovat sdílené seznamy úkolů"
 
 #: Acl/Rights.php:90
 msgid "Create new shared tasks lists"
-msgstr ""
+msgstr "Vytvořit nové sdílené seznamy úkolů"
 
 #: Controller/Task.php:157
 msgid "Notification for Task "
-msgstr ""
+msgstr "Upozornění na úkol"
 
 #: Controller.php:97
 #, python-format
@@ -44,27 +44,28 @@ msgstr "Termín dokončení"
 msgid "Priority"
 msgstr "Priorita"
 
-#: js/EditDialog.js:180 js/GridPanel.js:93 js/GridPanel.js:234
-msgid "Responsible"
+#: js/EditDialog.js:180
+#, fuzzy
+msgid "Add Responsible ..."
 msgstr "Zodpovídá"
 
-#: js/EditDialog.js:184
+#: js/EditDialog.js:187
 msgid "Notes"
 msgstr "Poznámky"
 
-#: js/EditDialog.js:185
+#: js/EditDialog.js:188
 msgid "Enter description..."
 msgstr "Zadejte popis..."
 
-#: js/EditDialog.js:190
+#: js/EditDialog.js:193
 msgid "Percentage"
 msgstr "Procenta"
 
-#: js/EditDialog.js:194 js/GridPanel.js:213 Model/Task.php:182
+#: js/EditDialog.js:197 js/GridPanel.js:213 Model/Task.php:182
 msgid "Status"
 msgstr "Status"
 
-#: js/EditDialog.js:198
+#: js/EditDialog.js:201
 msgid "Completed"
 msgstr "Dokončený"
 
@@ -79,6 +80,10 @@ msgstr[2] "Opravdu chcete smazat vybrané úkoly?"
 msgid "Due Date"
 msgstr "Termín dokončení"
 
+#: js/GridPanel.js:93 js/GridPanel.js:234
+msgid "Responsible"
+msgstr "Zodpovídá"
+
 #: js/GridPanel.js:117
 msgid "Failed"
 msgstr "Nepodařilo se"
@@ -88,9 +93,8 @@ msgid "Could not save task."
 msgstr "Nepodařilo se uložit úkol."
 
 #: js/GridPanel.js:164
-#, fuzzy
 msgid "Tags"
-msgstr "Úkol"
+msgstr "Štítky"
 
 #: js/GridPanel.js:174
 msgid "Add a task..."
@@ -136,16 +140,15 @@ msgstr "seznamy úkolů"
 
 #: Model/Task.php:178
 msgid "Due"
-msgstr ""
+msgstr "Do"
 
 #: Model/Task.php:179
 msgid "Organizer"
-msgstr ""
+msgstr "Organizátor"
 
 #: Model/Task.php:180
-#, fuzzy
 msgid "Description"
-msgstr "Zadejte popis..."
+msgstr "Popis"
 
 #: Setup/setup.xml:405
 msgid "NEEDS-ACTION"
@@ -160,84 +163,84 @@ msgid "CANCELLED"
 msgstr "ZRUŠENÝ"
 
 #, fuzzy
-#~ msgid "to to list"
-#~ msgstr "seznam úkolů"
+msgid "to to list"
+msgstr "seznam úkolů"
 
 #, fuzzy
-#~ msgid "Tasks) "
-#~ msgstr "Úkoly"
+msgid "Tasks) "
+msgstr "Úkoly"
 
-#~ msgid "Could not delete task(s)."
-#~ msgstr "Nepodařilo se smazat úkol(y)."
+msgid "Could not delete task(s)."
+msgstr "Nepodařilo se smazat úkol(y)."
 
-#~ msgid "Edit task"
-#~ msgstr "Editovat úkol"
+msgid "Edit task"
+msgstr "Editovat úkol"
 
-#~ msgid "Add task"
-#~ msgstr "Přidat úkol"
+msgid "Add task"
+msgstr "Přidat úkol"
 
-#~ msgid "Delete task"
-#~ msgid_plural "Delete tasks"
-#~ msgstr[0] "Smazat úkol"
-#~ msgstr[1] "Smazat úkoly"
-#~ msgstr[2] "Smazat úkoly"
+msgid "Delete task"
+msgid_plural "Delete tasks"
+msgstr[0] "Smazat úkol"
+msgstr[1] "Smazat úkoly"
+msgstr[2] "Smazat úkoly"
 
-#~ msgid "Enter searchfilter"
-#~ msgstr "Zadejte hledaný výraz"
+msgid "Enter searchfilter"
+msgstr "Zadejte hledaný výraz"
 
-#~ msgid "Search:"
-#~ msgstr "Hledat:"
+msgid "Search:"
+msgstr "Hledat:"
 
-#~ msgid "Displaying tasks {0} - {1} of {2}"
-#~ msgstr "Zobrazuji úkoly {0} - {1} z {2}"
+msgid "Displaying tasks {0} - {1} of {2}"
+msgstr "Zobrazuji úkoly {0} - {1} z {2}"
 
-#~ msgid "No tasks to display"
-#~ msgstr "Žádné úkoly ke zobrazení"
+msgid "No tasks to display"
+msgstr "Žádné úkoly ke zobrazení"
 
-#~ msgid "No Tasks to display"
-#~ msgstr "Žádné úkoly ke zobrazení"
+msgid "No Tasks to display"
+msgstr "Žádné úkoly ke zobrazení"
 
-#~ msgid "Loading Task..."
-#~ msgstr "Načítám úkol..."
+msgid "Loading Task..."
+msgstr "Načítám úkol..."
 
-#~ msgid "Please Wait"
-#~ msgstr "Čekejte prosím"
+msgid "Please Wait"
+msgstr "Čekejte prosím"
 
-#~ msgid "Add New Task"
-#~ msgstr "Přidat nový úkol"
+msgid "Add New Task"
+msgstr "Přidat nový úkol"
 
-#~ msgid "Edit Task \"{0}\""
-#~ msgstr "Editovat úkol \"{0}\""
+msgid "Edit Task \"{0}\""
+msgstr "Editovat úkol \"{0}\""
 
-#~ msgid "Please wait"
-#~ msgstr "Čekejte prosím"
+msgid "Please wait"
+msgstr "Čekejte prosím"
 
-#~ msgid "Saving Task"
-#~ msgstr "Ukládám úkol"
+msgid "Saving Task"
+msgstr "Ukládám úkol"
 
-#~ msgid "Errors"
-#~ msgstr "Chyby"
+msgid "Errors"
+msgstr "Chyby"
 
-#~ msgid "Please fix the errors noted."
-#~ msgstr "Opravte prosím vyznačené chyby."
+msgid "Please fix the errors noted."
+msgstr "Opravte prosím vyznačené chyby."
 
-#~ msgid "Confirm"
-#~ msgstr "Povrdit"
+msgid "Confirm"
+msgstr "Povrdit"
 
-#~ msgid "Do you really want to delete this task?"
-#~ msgstr "Opravdu chcete smazat tento úkol?"
+msgid "Do you really want to delete this task?"
+msgstr "Opravdu chcete smazat tento úkol?"
 
-#~ msgid "Please wait a moment..."
-#~ msgstr "Počkejte prosím okmažik..."
+msgid "Please wait a moment..."
+msgstr "Počkejte prosím okmažik..."
 
-#~ msgid "Enter short name..."
-#~ msgstr "Zadejte stručný název..."
+msgid "Enter short name..."
+msgstr "Zadejte stručný název..."
 
-#~ msgid "Saved in"
-#~ msgstr "Uloženo v"
+msgid "Saved in"
+msgstr "Uloženo v"
 
-#~ msgid "Folder"
-#~ msgstr "Složka"
+msgid "Folder"
+msgstr "Složka"
 
-#~ msgid "Edit Task \"%s\""
-#~ msgstr "Editovat úkol \"%s\""
+msgid "Edit Task \"%s\""
+msgstr "Editovat úkol \"%s\""

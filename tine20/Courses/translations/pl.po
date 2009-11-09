@@ -57,7 +57,7 @@ msgstr "Internet"
 msgid "Fileserver Access"
 msgstr "Serwer plików"
 
-#: js/CourseEditDialog.js:215 js/CourseEditDialog.js:275
+#: js/CourseEditDialog.js:215
 msgid "Members"
 msgstr "Uczestnicy"
 

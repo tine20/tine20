@@ -142,7 +142,7 @@ msgstr "Роли"
 msgid "Admin"
 msgstr "Администратор"
 
-#: js/Admin.js:284 js/Groups.js:51 js/Roles.js:45 js/Tags.js:56
+#: js/Admin.js:284 js/Groups.js:51 js/Roles.js:45 js/Tags.js:58
 #: js/Users.js:186
 msgid "Confirm"
 msgstr "Подтвердить"
@@ -160,7 +160,7 @@ msgid "select all"
 msgstr "выбрать все"
 
 #: js/Admin.js:405 js/Applications.js:129 js/Groups.js:132 js/Roles.js:129
-#: js/Tags.js:118 js/Users.js:225
+#: js/Tags.js:120 js/Users.js:225
 msgid "enter searchfilter"
 msgstr "Введите поисковый фильтр"
 
@@ -173,7 +173,7 @@ msgid "to:"
 msgstr "до:"
 
 #: js/Admin.js:444 js/Applications.js:145 js/Groups.js:152 js/Roles.js:149
-#: js/Tags.js:138 js/Users.js:246
+#: js/Tags.js:140 js/Users.js:246
 msgid "Search:"
 msgstr "Поиск:"
 
@@ -209,12 +209,12 @@ msgstr "Нет записей лога доступа"
 msgid "Session ID"
 msgstr "ID сессии"
 
-#: js/Admin.js:565 js/UserEditDialog.js:144
+#: js/Admin.js:565 js/UserEditDialog.js:214
 msgid "Login Name"
 msgstr "Имя для регистрации"
 
 #: js/Admin.js:566 js/Applications.js:220 js/Groups.js:202 js/Roles.js:201
-#: js/SambaMachineGrid.js:90 js/Tags.js:185
+#: js/SambaMachineGrid.js:90 js/Tags.js:187
 msgid "Name"
 msgstr "Имя"
 
@@ -255,11 +255,11 @@ msgstr "Деактивировать приложение"
 msgid "settings"
 msgstr "настройки"
 
-#: js/Applications.js:174 js/UserEditDialog.js:181
+#: js/Applications.js:174 js/UserEditDialog.js:267
 msgid "disabled"
 msgstr "отключено"
 
-#: js/Applications.js:177 js/UserEditDialog.js:181
+#: js/Applications.js:177 js/UserEditDialog.js:267
 msgid "enabled"
 msgstr "включено"
 
@@ -279,7 +279,7 @@ msgstr "Нет приложений"
 msgid "Order"
 msgstr "Порядок"
 
-#: js/Applications.js:221 js/UserEditDialog.js:175 js/Users.js:306
+#: js/Applications.js:221 js/UserEditDialog.js:261 js/Users.js:306
 msgid "Status"
 msgstr "Статус"
 
@@ -296,7 +296,7 @@ msgid "Deleting group(s)..."
 msgstr "Удаление групп(ы)..."
 
 #: js/Groups.js:73 js/Groups.js:371 js/Groups.js:399 js/RoleEditDialog.js:101
-#: js/RoleEditDialog.js:129 js/Roles.js:67 js/Tags.js:369 js/Users.js:206
+#: js/RoleEditDialog.js:129 js/Roles.js:67 js/Tags.js:370 js/Users.js:206
 msgid "Failed"
 msgstr "Неудача"
 
@@ -328,13 +328,13 @@ msgstr "Нет групп"
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:203 js/Groups.js:468 js/RoleEditDialog.js:299 js/Roles.js:202
-#: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:96 js/Tags.js:186
+#: js/Groups.js:203 js/Groups.js:460 js/RoleEditDialog.js:298 js/Roles.js:202
+#: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:96 js/Tags.js:188
 #: js/Tags.js:506
 msgid "Description"
 msgstr "Описание"
 
-#: js/Groups.js:336 js/RoleEditDialog.js:64 js/Tags.js:324
+#: js/Groups.js:336 js/RoleEditDialog.js:64 js/Tags.js:325
 msgid "Please wait"
 msgstr "Пожалуйста, подождите"
 
@@ -346,11 +346,11 @@ msgstr "Обновить членство"
 msgid "Could not save group."
 msgstr "Не удалось сохранить группу."
 
-#: js/Groups.js:378 js/RoleEditDialog.js:108 js/Tags.js:374
+#: js/Groups.js:378 js/RoleEditDialog.js:108 js/Tags.js:375
 msgid "Errors"
 msgstr "Ошибки"
 
-#: js/Groups.js:378 js/RoleEditDialog.js:108 js/Tags.js:374
+#: js/Groups.js:378 js/RoleEditDialog.js:108 js/Tags.js:375
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, устраните отмеченные ошибки."
 
@@ -358,19 +358,19 @@ msgstr "Пожалуйста, устраните отмеченные ошибк
 msgid "Deleting group..."
 msgstr "Удаление группы..."
 
-#: js/Groups.js:438
+#: js/Groups.js:431
 msgid "Group Members"
 msgstr "Члены группы"
 
-#: js/Groups.js:461
+#: js/Groups.js:453
 msgid "Group Name"
 msgstr "Название группы"
 
-#: js/Groups.js:510
+#: js/Groups.js:509
 msgid "Add new group"
 msgstr "Добавить новую группу"
 
-#: js/Groups.js:512
+#: js/Groups.js:511
 msgid "Edit Group \"{0}\""
 msgstr "Изменить группу \"{0}\""
 
@@ -390,27 +390,27 @@ msgstr "При удаление роли произошла ошибка."
 msgid "Members"
 msgstr "Участники"
 
-#: js/RoleEditDialog.js:261 js/Tags.js:527
+#: js/RoleEditDialog.js:260
 msgid "Rights"
 msgstr "Права"
 
-#: js/RoleEditDialog.js:291
+#: js/RoleEditDialog.js:290
 msgid "Role Name"
 msgstr "Название роли"
 
-#: js/RoleEditDialog.js:333
+#: js/RoleEditDialog.js:332
 msgid "Loading Role..."
 msgstr "Загрузка роли..."
 
-#: js/RoleEditDialog.js:333 js/Tags.js:548
+#: js/RoleEditDialog.js:332 js/Tags.js:545
 msgid "Please Wait"
 msgstr "Пожалуйста, подождите"
 
-#: js/RoleEditDialog.js:372
+#: js/RoleEditDialog.js:369
 msgid "Add New Role"
 msgstr "Добавьте новую роль"
 
-#: js/RoleEditDialog.js:374
+#: js/RoleEditDialog.js:371
 msgid "Edit Role \"{0}\""
 msgstr "Изменить роль \"{0}\""
 
@@ -453,60 +453,64 @@ msgstr[0] "Компьютер"
 msgstr[1] "Компьютера"
 msgstr[2] "Компьютеров"
 
-#: js/Tags.js:56
+#: js/Tags.js:58
 msgid "Do you really want to delete the selected tags?"
 msgstr "Вы действительно хотите удалить выбранные тэги?"
 
-#: js/Tags.js:73
+#: js/Tags.js:75
 msgid "Deleting tag(s)..."
 msgstr "Удаление тэга(ов)..."
 
-#: js/Tags.js:88
+#: js/Tags.js:90
 msgid "add tag"
 msgstr "добавить тэг"
 
-#: js/Tags.js:96
+#: js/Tags.js:98
 msgid "edit tag"
 msgstr "изменить тэг"
 
-#: js/Tags.js:104
+#: js/Tags.js:106
 msgid "delete tag"
 msgstr "удалить тэг"
 
-#: js/Tags.js:173
+#: js/Tags.js:175
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "Показаны тэги {0} - {1} из {2}"
 
-#: js/Tags.js:174 js/Tags.js:229
+#: js/Tags.js:176 js/Tags.js:231
 msgid "No tags to display"
 msgstr "Нет тэгов"
 
-#: js/Tags.js:184 js/Tags.js:512
+#: js/Tags.js:186 js/Tags.js:512
 msgid "Color"
 msgstr "Цвет"
 
-#: js/Tags.js:324
+#: js/Tags.js:325
 #, fuzzy
 msgid "Updating Tag"
 msgstr "Загрузка тэга..."
 
-#: js/Tags.js:369
+#: js/Tags.js:370
 msgid "Could not save tag."
 msgstr "Не удалось сохранить тэг."
 
-#: js/Tags.js:454
+#: js/Tags.js:453
 msgid "Allowed Contexts"
 msgstr "Разрешённый контекст"
 
-#: js/Tags.js:469
+#: js/Tags.js:459
+msgid "Context"
+msgstr "Контекст"
+
+#: js/Tags.js:467
 msgid "Account Rights"
 msgstr "Права учётной записи"
 
-#: js/Tags.js:474
+#: js/Tags.js:475
 msgid "View"
 msgstr "Представление"
 
-#: js/Tags.js:479
+#: js/Tags.js:480
 msgid "Use"
 msgstr "Использовать"
 
@@ -514,226 +518,245 @@ msgstr "Использовать"
 msgid "Tag Name"
 msgstr "Название тэга"
 
-#: js/Tags.js:530
-msgid "Context"
-msgstr "Контекст"
-
-#: js/Tags.js:548
+#: js/Tags.js:545
 msgid "Loading Tag..."
 msgstr "Загрузка тэга..."
 
-#: js/Tags.js:579
+#: js/Tags.js:572
 msgid "Add New Tag"
 msgstr "Добавить новый тэг"
 
-#: js/Tags.js:581
+#: js/Tags.js:574
 msgid "Edit Tag \"{0}\""
 msgstr "Изменить тэг \"{0}\""
 
-#: js/UserEditDialog.js:113
+#: js/UserEditDialog.js:103
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "никакого пароля не выло установлено"
+
+#: js/UserEditDialog.js:126
+#, fuzzy
+msgid "Password confirmation"
+msgstr "Повторите пароль"
+
+#: js/UserEditDialog.js:146
+#, fuzzy
+msgid "Repeat password"
+msgstr "сбросить пароль "
+
+#: js/UserEditDialog.js:160
+msgid "Cancel"
+msgstr ""
+
+#: js/UserEditDialog.js:167
+msgid "Ok"
+msgstr ""
+
+#: js/UserEditDialog.js:183
 msgid "Account"
 msgstr "Учётная запись"
 
-#: js/UserEditDialog.js:128
+#: js/UserEditDialog.js:198
 msgid "First Name"
 msgstr "Имя"
 
-#: js/UserEditDialog.js:138
+#: js/UserEditDialog.js:208
 msgid "Last Name"
 msgstr "Фамилия"
 
-#: js/UserEditDialog.js:149
+#: js/UserEditDialog.js:219
 msgid "Password"
 msgstr "Пароль"
 
-#: js/UserEditDialog.js:152
+#: js/UserEditDialog.js:223
 msgid "no password set"
 msgstr "пароль не задан"
 
-#: js/UserEditDialog.js:158
+#: js/UserEditDialog.js:244
 msgid "Emailaddress"
 msgstr "Адрес электронной почты"
 
-#: js/UserEditDialog.js:163 js/Users.js:312
+#: js/UserEditDialog.js:249 js/Users.js:312
 msgid "OpenID"
 msgstr ""
 
-#: js/UserEditDialog.js:169
+#: js/UserEditDialog.js:255
 msgid "Primary group"
 msgstr "Основная группа"
 
-#: js/UserEditDialog.js:181
+#: js/UserEditDialog.js:267
 #, fuzzy
 msgid "expired"
 msgstr "Истекает"
 
-#: js/UserEditDialog.js:184 js/Users.js:316
+#: js/UserEditDialog.js:270 js/Users.js:316
 msgid "Expires"
 msgstr "Истекает"
 
-#: js/UserEditDialog.js:186 js/UserEditDialog.js:228 js/UserEditDialog.js:305
+#: js/UserEditDialog.js:272 js/UserEditDialog.js:314 js/UserEditDialog.js:391
 msgid "never"
 msgstr "никогда"
 
-#: js/UserEditDialog.js:191
+#: js/UserEditDialog.js:277
 msgid "Visibility"
 msgstr ""
 
-#: js/UserEditDialog.js:197
+#: js/UserEditDialog.js:283
 #, fuzzy
 msgid "Display in addressbook"
 msgstr "Экранное имя"
 
-#: js/UserEditDialog.js:197
+#: js/UserEditDialog.js:283
 msgid "Hide from addressbook"
 msgstr ""
 
-#: js/UserEditDialog.js:202
+#: js/UserEditDialog.js:288
 msgid "Information"
 msgstr ""
 
-#: js/UserEditDialog.js:218 js/Users.js:313
+#: js/UserEditDialog.js:304 js/Users.js:313
 msgid "Last login at"
 msgstr "Последний регистрировался в"
 
-#: js/UserEditDialog.js:220 js/UserEditDialog.js:224
+#: js/UserEditDialog.js:306 js/UserEditDialog.js:310
 msgid "don't know"
 msgstr "неизвестно"
 
-#: js/UserEditDialog.js:220 js/UserEditDialog.js:224 js/UserEditDialog.js:285
+#: js/UserEditDialog.js:306 js/UserEditDialog.js:310 js/UserEditDialog.js:371
 msgid "never logged in"
 msgstr "никогда не регистрировался"
 
-#: js/UserEditDialog.js:222 js/Users.js:314
+#: js/UserEditDialog.js:308 js/Users.js:314
 msgid "Last login from"
 msgstr "Последняя регистрация от"
 
-#: js/UserEditDialog.js:226
+#: js/UserEditDialog.js:312
 msgid "Password set"
 msgstr "Пароль установлен"
 
-#: js/UserEditDialog.js:234
+#: js/UserEditDialog.js:320
 msgid "Fileserver"
 msgstr "Файловый сервер"
 
-#: js/UserEditDialog.js:239
+#: js/UserEditDialog.js:325
 msgid "Unix"
 msgstr ""
 
-#: js/UserEditDialog.js:254
+#: js/UserEditDialog.js:340
 msgid "Home Directory"
 msgstr "Домашний каталог"
 
-#: js/UserEditDialog.js:258
+#: js/UserEditDialog.js:344
 msgid "Login Shell"
 msgstr "Оболочка"
 
-#: js/UserEditDialog.js:263
+#: js/UserEditDialog.js:349
 msgid "Windows"
 msgstr ""
 
-#: js/UserEditDialog.js:278
+#: js/UserEditDialog.js:364
 msgid "Home Drive"
 msgstr "Домашний диск"
 
-#: js/UserEditDialog.js:283
+#: js/UserEditDialog.js:369
 msgid "Logon Time"
 msgstr "Время выхода"
 
-#: js/UserEditDialog.js:288
+#: js/UserEditDialog.js:374
 msgid "Home Path"
 msgstr "Домашний путь"
 
-#: js/UserEditDialog.js:293
+#: js/UserEditDialog.js:379
 msgid "Logoff Time"
 msgstr "Время выхода из системы"
 
-#: js/UserEditDialog.js:295
+#: js/UserEditDialog.js:381
 msgid "never logged off"
 msgstr "никогда не регистрировался"
 
-#: js/UserEditDialog.js:298
+#: js/UserEditDialog.js:384
 msgid "Profile Path"
 msgstr "Путь профиля"
 
-#: js/UserEditDialog.js:303
+#: js/UserEditDialog.js:389
 msgid "Password Last Set"
 msgstr "Последняя установка пароля"
 
-#: js/UserEditDialog.js:308
+#: js/UserEditDialog.js:394
 msgid "Logon Script"
 msgstr "Скрипт входа"
 
-#: js/UserEditDialog.js:312
+#: js/UserEditDialog.js:398
 msgid "Password Can Change"
 msgstr "Пароль может быть изменен"
 
-#: js/UserEditDialog.js:314 js/UserEditDialog.js:318 js/UserEditDialog.js:322
+#: js/UserEditDialog.js:400 js/UserEditDialog.js:404 js/UserEditDialog.js:408
 msgid "not set"
 msgstr "не задан"
 
-#: js/UserEditDialog.js:316
+#: js/UserEditDialog.js:402
 msgid "Password Must Change"
 msgstr "Пароль должен быть изменен"
 
-#: js/UserEditDialog.js:320
+#: js/UserEditDialog.js:406
 #, fuzzy
 msgid "Kick Off Time"
 msgstr "Время начала"
 
-#: js/UserEditDialog.js:327
+#: js/UserEditDialog.js:413
 msgid "IMAP"
 msgstr ""
 
-#: js/UserEditDialog.js:341
+#: js/UserEditDialog.js:427
 #, fuzzy
 msgid "Email UID"
 msgstr "Электронная почта"
 
-#: js/UserEditDialog.js:345
+#: js/UserEditDialog.js:431
 #, fuzzy
 msgid "Email GID"
 msgstr "Электронная почта"
 
-#: js/UserEditDialog.js:349 js/UserEditDialog.js:393
+#: js/UserEditDialog.js:435 js/UserEditDialog.js:479
 #, fuzzy
 msgid "Email Username"
 msgstr "Пользователь Samba"
 
-#: js/UserEditDialog.js:353
+#: js/UserEditDialog.js:439
 msgid "Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:359
+#: js/UserEditDialog.js:445
 msgid "Current Mail Size"
 msgstr ""
 
-#: js/UserEditDialog.js:364
+#: js/UserEditDialog.js:450
 msgid "Sieve Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:369
+#: js/UserEditDialog.js:455
 msgid "Current Sieve Size"
 msgstr ""
 
-#: js/UserEditDialog.js:374
+#: js/UserEditDialog.js:460
 #, fuzzy
 msgid "Last Login"
 msgstr "Последний регистрировался в"
 
-#: js/UserEditDialog.js:379
+#: js/UserEditDialog.js:465
 msgid "SMTP"
 msgstr ""
 
-#: js/UserEditDialog.js:397
+#: js/UserEditDialog.js:483
 msgid "Aliases"
 msgstr ""
 
-#: js/UserEditDialog.js:402
+#: js/UserEditDialog.js:488
 msgid "Forwards"
 msgstr ""
 
-#: js/UserEditDialog.js:407
+#: js/UserEditDialog.js:493
 msgid "Forward Only"
 msgstr ""
 
@@ -833,13 +856,6 @@ msgstr[2] "Пользователей Samba"
 
 #~ msgid "Role members"
 #~ msgstr "Участники роли"
-
-#~ msgid "Password again"
-#~ msgstr "Повторите пароль"
-
-#, fuzzy
-#~ msgid "Passwords don't match"
-#~ msgstr "никакого пароля не выло установлено"
 
 #~ msgid "Deleting tag..."
 #~ msgstr "Удаление тэга..."

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-02 17:58+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2009-10-31 13:36+0100\n"
+"Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,13 +13,12 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: Acl/Rights.php:99
-#, fuzzy
 msgid "manage email accounts"
-msgstr "Poštovní účet uživatele"
+msgstr "spravovat emailové účty"
 
 #: Acl/Rights.php:100
 msgid "Create and edit email accounts"
-msgstr ""
+msgstr "Vytvořit a editovat emailové účty"
 
 #: Controller/Message.php:942 js/FelamimailGridDetailsPanel.js:123
 #: js/FelamimailGridPanel.js:258 js/FelamimailGridPanel.js:313
@@ -73,7 +72,7 @@ msgstr "Server"
 
 #: js/FelamimailAccountEditDialog.js:116
 msgid "Port (Default: 143 / SSL: 993)"
-msgstr ""
+msgstr "Port (Výchozí: 143 / SSL: 993)"
 
 #: js/FelamimailAccountEditDialog.js:122 js/FelamimailAccountEditDialog.js:170
 msgid "Secure Connection"
@@ -106,7 +105,7 @@ msgstr "SMTP"
 
 #: js/FelamimailAccountEditDialog.js:164
 msgid "Port (Default: 25)"
-msgstr ""
+msgstr "Port (Výchozí: 25)"
 
 #: js/FelamimailAccountEditDialog.js:185
 msgid "Authentication"
@@ -160,20 +159,19 @@ msgstr "Podporuje \"has_children\""
 
 #: js/FelamimailAccountEditDialog.js:260
 msgid "Display Format"
-msgstr ""
+msgstr "Formát zobrazení"
 
 #: js/FelamimailAccountEditDialog.js:271
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: js/FelamimailAccountEditDialog.js:272
-#, fuzzy
 msgid "Plain Text"
-msgstr "Plain"
+msgstr "Prostý text"
 
 #: js/FelamimailAccountEditDialog.js:275
 msgid "Sort Folders (experimental)"
-msgstr ""
+msgstr "Řadit složky (experimentální)"
 
 #: js/FelamimailAttachmentGrid.js:127
 msgid "Upload Failed"
@@ -209,9 +207,8 @@ msgid "Add contact to addressbook"
 msgstr "Přidat kontakt do adresáře"
 
 #: js/FelamimailGridDetailsPanel.js:127
-#, fuzzy
 msgid "Date"
-msgstr "Smazat"
+msgstr "Datum"
 
 #: js/FelamimailGridDetailsPanel.js:129 js/FelamimailGridDetailsPanel.js:348
 msgid "Show or hide header information"
@@ -242,9 +239,8 @@ msgid "Toggle Flag"
 msgstr "Překlopit příznak"
 
 #: js/FelamimailGridPanel.js:179
-#, fuzzy
 msgid "Mark read/unread"
-msgstr "Označit jako nepřečtené"
+msgstr "Označit jako (ne)přečtené"
 
 #: js/FelamimailGridPanel.js:191 js/FelamimailGridPanel.js:192
 #: js/FelamimailGridPanel.js:194
@@ -256,9 +252,8 @@ msgid "Add Account"
 msgstr "Přidat účet"
 
 #: js/FelamimailGridPanel.js:257
-#, fuzzy
 msgid "Subject/From"
-msgstr "Předmět"
+msgstr "Předmět/Od"
 
 #: js/FelamimailGridPanel.js:260 js/FelamimailGridPanel.js:325
 msgid "To"
@@ -345,13 +340,12 @@ msgid "Compose email:"
 msgstr "Napsat e-mail:"
 
 #: js/FelamimailMessageEditDialog.js:133
-#, fuzzy
 msgid "Add Note"
-msgstr "Přidat složku"
+msgstr "Přidat poznámku"
 
 #: js/FelamimailMessageEditDialog.js:134
 msgid "Edit Email Note Text:"
-msgstr ""
+msgstr "Editovat text emailové poznámky:"
 
 #: js/FelamimailMessageEditDialog.js:163
 msgid "Could not send {0}."
@@ -367,7 +361,7 @@ msgstr "Příjemci"
 
 #: js/FelamimailMessageEditDialog.js:315
 msgid "Save contact note"
-msgstr ""
+msgstr "Uložit poznámku kontaktu"
 
 #: js/FelamimailRecipientGrid.js:151 js/FelamimailRecipientGrid.js:172
 msgid "To:"
@@ -383,7 +377,23 @@ msgstr "Skrytá kopie:"
 
 #: js/FelamimailRecipientGrid.js:195
 msgid "Remove"
-msgstr ""
+msgstr "Odstranit"
+
+#: js/FelamimailTreeLoader.js:70
+msgid "Totalcount"
+msgstr "Celkem"
+
+#: js/FelamimailTreeLoader.js:71
+msgid "Cache"
+msgstr "Cache"
+
+#: js/FelamimailTreeLoader.js:159
+msgid "IMAP Credentials for {0}"
+msgstr "IMAP přihlášovací údaje pro {0}"
+
+#: js/FelamimailTreeLoader.js:162
+msgid "Credentials"
+msgstr "Přihlašovací údaje"
 
 #: js/FelamimailTreePanel.js:173 js/FelamimailTreePanel.js:178
 #: js/FelamimailTreePanel.js:189
@@ -450,36 +460,15 @@ msgstr "Editovat účet"
 
 #: js/FelamimailTreePanel.js:342
 msgid "Reload {0}"
-msgstr ""
+msgstr "Znovu načíst {0}"
 
-#: js/FelamimailTreePanel.js:596
-msgid "Initializing folder cache ..."
-msgstr ""
-
-#: js/FelamimailTreePanel.js:621
-#, fuzzy
+#: js/FelamimailTreePanel.js:617
 msgid "New mails"
-msgstr "E-mail uživatele"
+msgstr "Nové zprávy"
 
-#: js/FelamimailTreePanel.js:622
+#: js/FelamimailTreePanel.js:618
 msgid "You got {0} new mail(s) in Folder "
-msgstr ""
-
-#: js/FelamimailTreePanel.js:810
-msgid "Totalcount"
-msgstr "Celkem"
-
-#: js/FelamimailTreePanel.js:811
-msgid "Cache"
-msgstr "Cache"
-
-#: js/FelamimailTreePanel.js:899
-msgid "IMAP Credentials for {0}"
-msgstr "IMAP přihlášovací údaje pro {0}"
-
-#: js/FelamimailTreePanel.js:902
-msgid "Credentials"
-msgstr "Přihlašovací údaje"
+msgstr "Máte {0} nových zrpáv ve složce"
 
 #: js/Models.js:43
 msgid "Message"
@@ -491,9 +480,9 @@ msgstr[2] "Zpráv"
 #: js/Models.js:47 js/Models.js:115
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] "výpis záznamů"
-msgstr[1] "výpisy záznamů"
-msgstr[2] "výpisů záznamů"
+msgstr[0] "seznam záznamů"
+msgstr[1] "seznamy záznamů"
+msgstr[2] "seznamů záznamů"
 
 #: Preference.php:81
 msgid "User Email Account"
@@ -513,23 +502,26 @@ msgstr "Výchozí poštovní účet pro odesílání e-mailů."
 
 #: Preference.php:89
 msgid "Email Update Interval"
-msgstr ""
+msgstr "Interval aktualizace emailu"
 
 #: Preference.php:90
 msgid "How often should Felamimail check for new Emails (in minutes) ."
-msgstr ""
+msgstr "Jak často má Felamimail kontrolovat nové zprávy (v minutách)."
 
-#~ msgid "Port"
-#~ msgstr "Port"
+msgid "Port"
+msgstr "Port"
 
-#~ msgid "Felamimail"
-#~ msgstr "Pošta"
+msgid "Felamimail"
+msgstr "Pošta"
 
-#~ msgid "Write New Mail"
-#~ msgstr "Napsat novou zprávu"
+msgid "Write New Mail"
+msgstr "Napsat novou zprávu"
 
-#~ msgid "Failed to connect"
-#~ msgstr "Spojení se nezdařilo"
+msgid "Failed to connect"
+msgstr "Spojení se nezdařilo"
 
-#~ msgid "Could not connect to account."
-#~ msgstr "Připojení k účtu se nezdařilo."
+msgid "Could not connect to account."
+msgstr "Připojení k účtu se nezdařilo."
+
+#~ msgid "Initializing folder cache ..."
+#~ msgstr "Inicializuji vyrovnávací paměť složek..."

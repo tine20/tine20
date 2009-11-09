@@ -42,27 +42,27 @@ msgstr "Due date"
 msgid "Priority"
 msgstr "Priority"
 
-#: js/EditDialog.js:180 js/GridPanel.js:93 js/GridPanel.js:234
-msgid "Responsible"
-msgstr "Responsible"
+#: js/EditDialog.js:180
+msgid "Add Responsible ..."
+msgstr "Add Responsible ..."
 
-#: js/EditDialog.js:184
+#: js/EditDialog.js:187
 msgid "Notes"
 msgstr "Notes"
 
-#: js/EditDialog.js:185
+#: js/EditDialog.js:188
 msgid "Enter description..."
 msgstr "Enter description..."
 
-#: js/EditDialog.js:190
+#: js/EditDialog.js:193
 msgid "Percentage"
 msgstr "Percentage"
 
-#: js/EditDialog.js:194 js/GridPanel.js:213 Model/Task.php:182
+#: js/EditDialog.js:197 js/GridPanel.js:213 Model/Task.php:182
 msgid "Status"
 msgstr "Status"
 
-#: js/EditDialog.js:198
+#: js/EditDialog.js:201
 msgid "Completed"
 msgstr "Completed"
 
@@ -75,6 +75,10 @@ msgstr[1] "Do you really want to delete the selected tasks?"
 #: js/GridPanel.js:92 js/GridPanel.js:178
 msgid "Due Date"
 msgstr "Due Date"
+
+#: js/GridPanel.js:93 js/GridPanel.js:234
+msgid "Responsible"
+msgstr "Responsible"
 
 #: js/GridPanel.js:117
 msgid "Failed"

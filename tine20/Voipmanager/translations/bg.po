@@ -861,10 +861,6 @@ msgstr "Линии"
 msgid "Users"
 msgstr "Потребители"
 
-#: js/Snom/PhoneEditDialog.js:719
-msgid "Rights"
-msgstr "Права"
-
 #: js/Snom/PhoneGridPanel.js:43
 msgid "reset phones HTTP authentication"
 msgstr "върни телефонната HTTP-автентичност"
@@ -952,6 +948,9 @@ msgstr "Phones"
 #: js/Voipmanager.js:126
 msgid "Templates"
 msgstr "Темплейтс"
+
+#~ msgid "Rights"
+#~ msgstr "Права"
 
 #~ msgid "username"
 #~ msgstr "име на потребител"

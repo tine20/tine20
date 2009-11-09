@@ -61,19 +61,19 @@ msgstr "Auteur"
 msgid "Activities"
 msgstr "Activités"
 
-#: Frontend/Http.php:536 js/tineInit.js:392
+#: Frontend/Http.php:537 js/tineInit.js:392
 msgid "Authorisation Required"
 msgstr "Authentification requise"
 
-#: Frontend/Http.php:537
+#: Frontend/Http.php:538
 msgid "Your session is not valid. You need to login again."
 msgstr "Votre session n'est pas valide, veuillez vous reconnecter."
 
-#: Frontend/Http.php:563 js/ExceptionDialog.js:46
+#: Frontend/Http.php:564 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Fin anormale"
 
-#: Frontend/Http.php:564 js/ExceptionDialog.js:71
+#: Frontend/Http.php:565 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr ""
 "Une erreur s'est produite, le programme s'est terminé de façon inattendue"
@@ -109,7 +109,6 @@ msgstr[0] "liste \"à faire\""
 msgstr[1] "listes \"à faire\""
 
 #: js/ExceptionDialog.js:54 js/MainScreen.js:449
-#: js/widgets/AccountpickerPanel.js:166
 #: js/widgets/container/ContainerSelect.js:373
 #: js/widgets/dialog/EditDialog.js:193
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
@@ -190,7 +189,7 @@ msgstr "Mot de passe"
 msgid "Logging you in..."
 msgstr "Connexion..."
 
-#: js/Login.js:127 js/widgets/container/GrantsDialog.js:136
+#: js/Login.js:127 js/widgets/container/GrantsDialog.js:141
 #: js/widgets/grid/PersistentFilterPicker.js:126
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:140
@@ -218,7 +217,7 @@ msgstr "Erreur de nom d'utilisateur et/ou mot de passe!!!"
 msgid "Debug Console (Ctrl + F11)"
 msgstr ""
 
-#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:110
+#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:112
 msgid "Admin"
 msgstr "Admin"
 
@@ -282,8 +281,7 @@ msgstr "Nouveau mot de passe"
 msgid "Repeat new Password"
 msgstr "Confirmer le nouveau mot de passe"
 
-#: js/MainScreen.js:455 js/widgets/AccountpickerPanel.js:158
-#: js/widgets/container/ContainerSelect.js:382
+#: js/MainScreen.js:455 js/widgets/container/ContainerSelect.js:382
 #: js/widgets/dialog/EditDialog.js:176
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 #: js/widgets/tags/TagsMassAttachAction.js:76
@@ -347,13 +345,13 @@ msgstr[1] ""
 msgid "Groups"
 msgstr ""
 
-#: js/Models.js:245
+#: js/Models.js:247
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:272
+#: js/Models.js:274
 #, fuzzy
 msgid "Relation"
 msgid_plural "Relations"
@@ -545,57 +543,49 @@ msgstr "Sélectionner toutes les pages ({0} sélectionnés)"
 msgid "Toggle selection"
 msgstr "Inverser la sélection"
 
-#: js/widgets/account/ConfigGrid.js:62
-#: js/widgets/account/PickerGridPanel.js:135
+#: js/widgets/account/PickerGridPanel.js:161
 msgid "Remove account"
 msgstr "Supprimer le compte"
 
-#: js/widgets/account/ConfigGrid.js:86
-#: js/widgets/account/PickerGridPanel.js:255
-#: js/widgets/account/PickerPanel.js:202
-msgid "Name"
-msgstr "Nom"
+#: js/widgets/account/PickerGridPanel.js:225
+#, fuzzy
+msgid "Search User"
+msgstr "Recherche"
 
-#: js/widgets/account/PickerGridPanel.js:148
+#: js/widgets/account/PickerGridPanel.js:231
+#, fuzzy
+msgid "Search Group"
+msgstr "Recherche"
+
+#: js/widgets/account/PickerGridPanel.js:237
+#, fuzzy
+msgid "Add Anyone"
+msgstr "Ajouter une note"
+
+#: js/widgets/account/PickerGridPanel.js:245
+#, fuzzy
+msgid "Anyone"
+msgstr "Aucun"
+
+#: js/widgets/account/PickerGridPanel.js:289
 msgid "Search for users ..."
 msgstr ""
 
-#: js/widgets/account/PickerGridPanel.js:173
+#: js/widgets/account/PickerGridPanel.js:309
 #, fuzzy
 msgid "Search for groups ..."
 msgstr "Recherche"
 
-#: js/widgets/account/PickerPanel.js:85
-msgid "add account"
-msgstr "ajouter"
-
-#: js/widgets/account/PickerPanel.js:213 js/widgets/GridPicker.js:389
-msgid "enter searchfilter"
-msgstr "saisir un filtre de recherche"
-
-#: js/widgets/account/PickerPanel.js:257 js/widgets/GridPicker.js:410
-msgid "Search"
-msgstr "Recherche"
-
-#: js/widgets/account/PickerPanel.js:293 js/widgets/account/PickerPanel.js:294
-#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
-msgid "Browse"
-msgstr "Explorer"
-
-#: js/widgets/AccountpickerPanel.js:57
-msgid "nobody"
-msgstr "personne"
-
-#: js/widgets/AccountpickerPanel.js:152
-msgid "please select an account"
-msgstr "veuillez sélectionner un compte"
+#: js/widgets/account/PickerGridPanel.js:363
+msgid "Name"
+msgstr "Nom"
 
 #: js/widgets/ActivitiesPanel.js:141
 msgid "Add a Note..."
 msgstr "Ajouter une note..."
 
 #: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:168
-#: js/widgets/container/GrantsDialog.js:92
+#: js/widgets/container/GrantsDialog.js:94
 msgid "Add"
 msgstr "Ajouter"
 
@@ -781,23 +771,23 @@ msgstr "Êtes-vous sûr de vouloir supprimer {0}?"
 msgid "Folder"
 msgstr "Dossier"
 
-#: js/widgets/container/GrantsDialog.js:87
+#: js/widgets/container/GrantsDialog.js:89
 msgid "Read"
 msgstr "Lire"
 
-#: js/widgets/container/GrantsDialog.js:97
+#: js/widgets/container/GrantsDialog.js:99
 msgid "Edit"
 msgstr "Éditer"
 
-#: js/widgets/container/GrantsDialog.js:102
+#: js/widgets/container/GrantsDialog.js:104
 msgid "Delete"
 msgstr "Supprimer"
 
-#: js/widgets/container/GrantsDialog.js:124
+#: js/widgets/container/GrantsDialog.js:120
 msgid "Permissions"
 msgstr "Permissions"
 
-#: js/widgets/container/GrantsDialog.js:136
+#: js/widgets/container/GrantsDialog.js:141
 msgid "Updating Grants"
 msgstr "Mise à jour des droits"
 
@@ -998,71 +988,81 @@ msgstr "commence par"
 msgid "ends with"
 msgstr "se termine par"
 
-#: js/widgets/grid/FilterModel.js:195
+#: js/widgets/grid/FilterModel.js:158
+#, fuzzy
+msgid "one of"
+msgstr "Aucun"
+
+#: js/widgets/grid/FilterModel.js:196
 msgid "select a operator"
 msgstr "sélectionnez un opérateur"
 
-#: js/widgets/grid/FilterModel.js:386
+#: js/widgets/grid/FilterModel.js:288
+#, fuzzy
+msgid "Search Account ..."
+msgstr "Recherche"
+
+#: js/widgets/grid/FilterModel.js:401
 msgid "today"
 msgstr "aujourd'hui"
 
-#: js/widgets/grid/FilterModel.js:387
+#: js/widgets/grid/FilterModel.js:402
 msgid "yesterday"
 msgstr "hier"
 
-#: js/widgets/grid/FilterModel.js:388
+#: js/widgets/grid/FilterModel.js:403
 msgid "this week"
 msgstr "cette semaine"
 
-#: js/widgets/grid/FilterModel.js:389
+#: js/widgets/grid/FilterModel.js:404
 msgid "last week"
 msgstr "la semaine dernière"
 
-#: js/widgets/grid/FilterModel.js:390
+#: js/widgets/grid/FilterModel.js:405
 msgid "the week before last"
 msgstr "il y a 2 semaines"
 
-#: js/widgets/grid/FilterModel.js:391
+#: js/widgets/grid/FilterModel.js:406
 msgid "this month"
 msgstr "mois en cours"
 
-#: js/widgets/grid/FilterModel.js:392
+#: js/widgets/grid/FilterModel.js:407
 msgid "last month"
 msgstr "mois dernier"
 
-#: js/widgets/grid/FilterModel.js:393
+#: js/widgets/grid/FilterModel.js:408
 msgid "this quarter"
 msgstr "ce trimeste"
 
-#: js/widgets/grid/FilterModel.js:394
+#: js/widgets/grid/FilterModel.js:409
 msgid "last quarter"
 msgstr "le trimestre dernier"
 
-#: js/widgets/grid/FilterModel.js:395
+#: js/widgets/grid/FilterModel.js:410
 msgid "this year"
 msgstr "cette année"
 
-#: js/widgets/grid/FilterModel.js:396
+#: js/widgets/grid/FilterModel.js:411
 msgid "last year"
 msgstr "l'année dernière"
 
-#: js/widgets/grid/FilterModel.js:400
+#: js/widgets/grid/FilterModel.js:415
 msgid "tomorrow"
 msgstr "demain"
 
-#: js/widgets/grid/FilterModel.js:401
+#: js/widgets/grid/FilterModel.js:416
 msgid "next week"
 msgstr "la semaine prochaine"
 
-#: js/widgets/grid/FilterModel.js:402
+#: js/widgets/grid/FilterModel.js:417
 msgid "next month"
 msgstr "le mois prochain"
 
-#: js/widgets/grid/FilterModel.js:403
+#: js/widgets/grid/FilterModel.js:418
 msgid "next quarter"
 msgstr "le trimestre prochain"
 
-#: js/widgets/grid/FilterModel.js:404
+#: js/widgets/grid/FilterModel.js:419
 msgid "next year"
 msgstr "l'année prochaine"
 
@@ -1146,6 +1146,18 @@ msgstr "Suppression du filtre \"{0}\""
 #: js/widgets/GridPicker.js:78
 msgid "remove record"
 msgstr "supprimer l'enregistrement "
+
+#: js/widgets/GridPicker.js:389
+msgid "enter searchfilter"
+msgstr "saisir un filtre de recherche"
+
+#: js/widgets/GridPicker.js:410
+msgid "Search"
+msgstr "Recherche"
+
+#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
+msgid "Browse"
+msgstr "Explorer"
 
 #: js/widgets/GroupSelect.js:99
 msgid "Please Select a Group"
@@ -1462,6 +1474,15 @@ msgstr "mis à jour"
 #: Setup/setup.xml:2635
 msgid "record changed"
 msgstr "enregistrement mis à jour"
+
+#~ msgid "add account"
+#~ msgstr "ajouter"
+
+#~ msgid "nobody"
+#~ msgstr "personne"
+
+#~ msgid "please select an account"
+#~ msgstr "veuillez sélectionner un compte"
 
 #~ msgid "loading new language..."
 #~ msgstr "Chargement de la langue..."

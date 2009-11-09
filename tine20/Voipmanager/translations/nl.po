@@ -860,10 +860,6 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
-#: js/Snom/PhoneEditDialog.js:719
-msgid "Rights"
-msgstr ""
-
 #: js/Snom/PhoneGridPanel.js:43
 msgid "reset phones HTTP authentication"
 msgstr ""

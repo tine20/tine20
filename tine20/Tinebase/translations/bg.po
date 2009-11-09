@@ -64,19 +64,19 @@ msgstr "Обработен/създаден от "
 msgid "Activities"
 msgstr "Операции"
 
-#: Frontend/Http.php:536 js/tineInit.js:392
+#: Frontend/Http.php:537 js/tineInit.js:392
 msgid "Authorisation Required"
 msgstr "Изискано упълномощаване"
 
-#: Frontend/Http.php:537
+#: Frontend/Http.php:538
 msgid "Your session is not valid. You need to login again."
 msgstr "Лимита на сесията е преминат. Трябва да се регистрирате наново."
 
-#: Frontend/Http.php:563 js/ExceptionDialog.js:46
+#: Frontend/Http.php:564 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Програмен срив"
 
-#: Frontend/Http.php:564 js/ExceptionDialog.js:71
+#: Frontend/Http.php:565 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "Грешка, водеща до рограмен срив."
 
@@ -111,7 +111,6 @@ msgstr[0] "списък със задачи"
 msgstr[1] "списъка със задачи"
 
 #: js/ExceptionDialog.js:54 js/MainScreen.js:449
-#: js/widgets/AccountpickerPanel.js:166
 #: js/widgets/container/ContainerSelect.js:373
 #: js/widgets/dialog/EditDialog.js:193
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
@@ -194,7 +193,7 @@ msgstr "Парола"
 msgid "Logging you in..."
 msgstr "Вашите входни данни се обработват..."
 
-#: js/Login.js:127 js/widgets/container/GrantsDialog.js:136
+#: js/Login.js:127 js/widgets/container/GrantsDialog.js:141
 #: js/widgets/grid/PersistentFilterPicker.js:126
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:140
@@ -222,7 +221,7 @@ msgstr "Вашето(-ите) потребителско име или(и) па�
 msgid "Debug Console (Ctrl + F11)"
 msgstr ""
 
-#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:110
+#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:112
 msgid "Admin"
 msgstr "Администратор"
 
@@ -291,8 +290,7 @@ msgstr "Нова парола"
 msgid "Repeat new Password"
 msgstr "Повтори новата парола"
 
-#: js/MainScreen.js:455 js/widgets/AccountpickerPanel.js:158
-#: js/widgets/container/ContainerSelect.js:382
+#: js/MainScreen.js:455 js/widgets/container/ContainerSelect.js:382
 #: js/widgets/dialog/EditDialog.js:176
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 #: js/widgets/tags/TagsMassAttachAction.js:76
@@ -356,13 +354,13 @@ msgstr[1] ""
 msgid "Groups"
 msgstr ""
 
-#: js/Models.js:245
+#: js/Models.js:247
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:272
+#: js/Models.js:274
 #, fuzzy
 msgid "Relation"
 msgid_plural "Relations"
@@ -555,58 +553,50 @@ msgstr "Селектирай всички страници ({0} записи)"
 msgid "Toggle selection"
 msgstr "Обърни селекцията"
 
-#: js/widgets/account/ConfigGrid.js:62
-#: js/widgets/account/PickerGridPanel.js:135
+#: js/widgets/account/PickerGridPanel.js:161
 #, fuzzy
 msgid "Remove account"
 msgstr "Изтрий достъп"
 
-#: js/widgets/account/ConfigGrid.js:86
-#: js/widgets/account/PickerGridPanel.js:255
-#: js/widgets/account/PickerPanel.js:202
-msgid "Name"
-msgstr "Име"
+#: js/widgets/account/PickerGridPanel.js:225
+#, fuzzy
+msgid "Search User"
+msgstr "Търси"
 
-#: js/widgets/account/PickerGridPanel.js:148
+#: js/widgets/account/PickerGridPanel.js:231
+#, fuzzy
+msgid "Search Group"
+msgstr "Търси..."
+
+#: js/widgets/account/PickerGridPanel.js:237
+#, fuzzy
+msgid "Add Anyone"
+msgstr "Добави записка"
+
+#: js/widgets/account/PickerGridPanel.js:245
+#, fuzzy
+msgid "Anyone"
+msgstr "Записка"
+
+#: js/widgets/account/PickerGridPanel.js:289
 msgid "Search for users ..."
 msgstr ""
 
-#: js/widgets/account/PickerGridPanel.js:173
+#: js/widgets/account/PickerGridPanel.js:309
 #, fuzzy
 msgid "Search for groups ..."
 msgstr "Търси..."
 
-#: js/widgets/account/PickerPanel.js:85
-msgid "add account"
-msgstr "Вкарай достъп"
-
-#: js/widgets/account/PickerPanel.js:213 js/widgets/GridPicker.js:389
-msgid "enter searchfilter"
-msgstr "задай филтър на търсене"
-
-#: js/widgets/account/PickerPanel.js:257 js/widgets/GridPicker.js:410
-msgid "Search"
-msgstr "Търси"
-
-#: js/widgets/account/PickerPanel.js:293 js/widgets/account/PickerPanel.js:294
-#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
-msgid "Browse"
-msgstr "Разлисти"
-
-#: js/widgets/AccountpickerPanel.js:57
-msgid "nobody"
-msgstr "никой"
-
-#: js/widgets/AccountpickerPanel.js:152
-msgid "please select an account"
-msgstr "Моля избери достъп"
+#: js/widgets/account/PickerGridPanel.js:363
+msgid "Name"
+msgstr "Име"
 
 #: js/widgets/ActivitiesPanel.js:141
 msgid "Add a Note..."
 msgstr "Добави записка"
 
 #: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:168
-#: js/widgets/container/GrantsDialog.js:92
+#: js/widgets/container/GrantsDialog.js:94
 msgid "Add"
 msgstr "Добави "
 
@@ -792,23 +782,23 @@ msgstr "Наистина ли желаете да изтриете тези {0}?
 msgid "Folder"
 msgstr "Папка"
 
-#: js/widgets/container/GrantsDialog.js:87
+#: js/widgets/container/GrantsDialog.js:89
 msgid "Read"
 msgstr "Четене"
 
-#: js/widgets/container/GrantsDialog.js:97
+#: js/widgets/container/GrantsDialog.js:99
 msgid "Edit"
 msgstr "Редакция"
 
-#: js/widgets/container/GrantsDialog.js:102
+#: js/widgets/container/GrantsDialog.js:104
 msgid "Delete"
 msgstr "Изтриване"
 
-#: js/widgets/container/GrantsDialog.js:124
+#: js/widgets/container/GrantsDialog.js:120
 msgid "Permissions"
 msgstr "Права"
 
-#: js/widgets/container/GrantsDialog.js:136
+#: js/widgets/container/GrantsDialog.js:141
 msgid "Updating Grants"
 msgstr "Актуализира права"
 
@@ -1022,71 +1012,81 @@ msgstr "започва с"
 msgid "ends with"
 msgstr "завършва на"
 
-#: js/widgets/grid/FilterModel.js:195
+#: js/widgets/grid/FilterModel.js:158
+#, fuzzy
+msgid "one of"
+msgstr "Записка"
+
+#: js/widgets/grid/FilterModel.js:196
 msgid "select a operator"
 msgstr "Селектирай оператор"
 
-#: js/widgets/grid/FilterModel.js:386
+#: js/widgets/grid/FilterModel.js:288
+#, fuzzy
+msgid "Search Account ..."
+msgstr "Търси..."
+
+#: js/widgets/grid/FilterModel.js:401
 msgid "today"
 msgstr "днес"
 
-#: js/widgets/grid/FilterModel.js:387
+#: js/widgets/grid/FilterModel.js:402
 msgid "yesterday"
 msgstr "вчера"
 
-#: js/widgets/grid/FilterModel.js:388
+#: js/widgets/grid/FilterModel.js:403
 msgid "this week"
 msgstr "тази седмица"
 
-#: js/widgets/grid/FilterModel.js:389
+#: js/widgets/grid/FilterModel.js:404
 msgid "last week"
 msgstr "предишната седмица"
 
-#: js/widgets/grid/FilterModel.js:390
+#: js/widgets/grid/FilterModel.js:405
 msgid "the week before last"
 msgstr "предпоследната седмица"
 
-#: js/widgets/grid/FilterModel.js:391
+#: js/widgets/grid/FilterModel.js:406
 msgid "this month"
 msgstr "този месец"
 
-#: js/widgets/grid/FilterModel.js:392
+#: js/widgets/grid/FilterModel.js:407
 msgid "last month"
 msgstr "предишният месец"
 
-#: js/widgets/grid/FilterModel.js:393
+#: js/widgets/grid/FilterModel.js:408
 msgid "this quarter"
 msgstr "това четиримесичие"
 
-#: js/widgets/grid/FilterModel.js:394
+#: js/widgets/grid/FilterModel.js:409
 msgid "last quarter"
 msgstr "предишното четиримесичие"
 
-#: js/widgets/grid/FilterModel.js:395
+#: js/widgets/grid/FilterModel.js:410
 msgid "this year"
 msgstr "тази година"
 
-#: js/widgets/grid/FilterModel.js:396
+#: js/widgets/grid/FilterModel.js:411
 msgid "last year"
 msgstr "предишната година"
 
-#: js/widgets/grid/FilterModel.js:400
+#: js/widgets/grid/FilterModel.js:415
 msgid "tomorrow"
 msgstr "утре"
 
-#: js/widgets/grid/FilterModel.js:401
+#: js/widgets/grid/FilterModel.js:416
 msgid "next week"
 msgstr "следващата седмица"
 
-#: js/widgets/grid/FilterModel.js:402
+#: js/widgets/grid/FilterModel.js:417
 msgid "next month"
 msgstr "следващият месец"
 
-#: js/widgets/grid/FilterModel.js:403
+#: js/widgets/grid/FilterModel.js:418
 msgid "next quarter"
 msgstr "следващото четиримесичие"
 
-#: js/widgets/grid/FilterModel.js:404
+#: js/widgets/grid/FilterModel.js:419
 msgid "next year"
 msgstr "следващата година"
 
@@ -1168,6 +1168,18 @@ msgstr "Изтрива филтър \"{0}\"?"
 #: js/widgets/GridPicker.js:78
 msgid "remove record"
 msgstr "изтрий запис"
+
+#: js/widgets/GridPicker.js:389
+msgid "enter searchfilter"
+msgstr "задай филтър на търсене"
+
+#: js/widgets/GridPicker.js:410
+msgid "Search"
+msgstr "Търси"
+
+#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
+msgid "Browse"
+msgstr "Разлисти"
 
 #: js/widgets/GroupSelect.js:99
 msgid "Please Select a Group"
@@ -1486,6 +1498,15 @@ msgstr "променен"
 #: Setup/setup.xml:2635
 msgid "record changed"
 msgstr "променена документация"
+
+#~ msgid "add account"
+#~ msgstr "Вкарай достъп"
+
+#~ msgid "nobody"
+#~ msgstr "никой"
+
+#~ msgid "please select an account"
+#~ msgstr "Моля избери достъп"
 
 #~ msgid "loading new language..."
 #~ msgstr "зарежда нов език..."

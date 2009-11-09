@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
+"Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,9 +18,8 @@ msgstr ""
 "X-Poedit-SearchPath-0: Addressbook\n"
 
 #: Acl/Rights.php:98
-#, fuzzy
 msgid "manage shared addressbooks"
-msgstr "Vytvořit nové sdílené složky adresáře"
+msgstr "spravovat sdílené adresáře"
 
 #: Acl/Rights.php:99
 msgid "Create new shared addressbook folders"
@@ -163,7 +162,7 @@ msgstr "adresáře"
 
 #: js/Addressbook.js:240
 msgid "User Account"
-msgstr ""
+msgstr "Uživatelský účet"
 
 #: js/Addressbook.js:244 js/ContactEditDialog.js:86 js/ContactGrid.js:117
 #: js/EditDialog.js:389
@@ -313,13 +312,14 @@ msgstr "Popis"
 msgid "Enter description"
 msgstr "Vložit popis"
 
-#: js/ContactEditDialog.js:339 js/EditDialog.js:58
-msgid "export as pdf"
+#: js/ContactEditDialog.js:339
+#, fuzzy
+msgid "Export as pdf"
 msgstr "exportovat do pdf"
 
 #: js/ContactEditDialog.js:364
 msgid "Either {0} or {1} must be given"
-msgstr ""
+msgstr "Musíte zadat buď {0} nebo {1}"
 
 #: js/ContactGrid.js:115
 msgid "Tags"
@@ -382,9 +382,8 @@ msgid "Geo"
 msgstr "GPS souřadnice"
 
 #: js/ContactGrid.js:160
-#, fuzzy
 msgid "Export Contact"
-msgstr "Kontakt"
+msgstr "Exportovat kontakt"
 
 #: js/ContactGrid.js:169
 msgid "Export as PDF"
@@ -395,13 +394,12 @@ msgid "Export as CSV"
 msgstr "Exportovat do CSV"
 
 #: js/ContactGrid.js:188
-#, fuzzy
 msgid "Call contact"
-msgstr "volat kontakt"
+msgstr "Volat kontakt"
 
 #: js/ContactGrid.js:200
 msgid "Compose email"
-msgstr ""
+msgstr "Napsat email"
 
 #: js/ContactGrid.js:240
 msgid "Work"
@@ -420,26 +418,28 @@ msgid "Cell private"
 msgstr "Privátní mobil"
 
 #: js/ContactGrid.js:357
-#, fuzzy
 msgid "Internal Contact"
-msgstr "Interní kontakty"
+msgstr "Interní kontakt"
 
 #: js/ContactGridDetailsPanel.js:70
 msgid "Select contact"
 msgstr "Vybrat kontakt"
 
 #: js/ContactGridDetailsPanel.js:160
-#, fuzzy
 msgid "Private"
-msgstr "Soukromá adresa"
+msgstr "Soukromé"
 
 #: js/ContactGridDetailsPanel.js:183
 msgid "Info"
-msgstr ""
+msgstr "Informace"
 
 #: js/EditDialog.js:51 js/EditDialog.js:53
 msgid "contacts"
 msgstr "kontakty"
+
+#: js/EditDialog.js:58
+msgid "export as pdf"
+msgstr "exportovat do pdf"
 
 #: js/EditDialog.js:83
 msgid "Loading Contact..."
@@ -474,13 +474,12 @@ msgid "Could not save contact."
 msgstr "Nepodařilo se uložit kontakt."
 
 #: js/EditDialog.js:182
-#, fuzzy
 msgid "Either "
-msgstr "Filtr:"
+msgstr "Buď"
 
 #: js/EditDialog.js:183
 msgid "Start date is not valid"
-msgstr ""
+msgstr "Počáteční datum je neplatné"
 
 #: js/EditDialog.js:184
 msgid "Errors"
@@ -510,17 +509,16 @@ msgstr[0] "Odkaz"
 msgstr[1] "Odkazy [%d]"
 msgstr[2] "Odkazů [%d]"
 
-#: js/SearchCombo.js:78
+#: js/SearchCombo.js:92
 msgid "Searching..."
 msgstr "Hledám..."
 
 #: Preference.php:60
-#, fuzzy
 msgid "Default Addressbook"
-msgstr "Adresář"
+msgstr "Výchozí adresář"
 
 #: Preference.php:61
-msgid "The defualt addressbook for new contacts"
+msgid "The default addressbook for new contacts"
 msgstr ""
 
 #: Setup/setup.xml:572
@@ -531,47 +529,50 @@ msgstr "Pan"
 msgid "Ms"
 msgstr "Paní"
 
-#~ msgid "Export"
-#~ msgstr "Exportovat"
+msgid "Export"
+msgstr "Exportovat"
 
-#~ msgid "manage shared folders"
-#~ msgstr "spravovat sdílené složky"
+msgid "manage shared folders"
+msgstr "spravovat sdílené složky"
 
-#~ msgid "Are you Sure?"
-#~ msgstr "Jste si jistý(á)?"
+msgid "Are you Sure?"
+msgstr "Jste si jistý(á)?"
 
-#~ msgid "Do you really want to delete the selected contact?"
-#~ msgid_plural "Do you really want to delete the selected contacts?"
-#~ msgstr[0] "Určitě chcete smazat vybraný kontakt?"
-#~ msgstr[1] "Určitě chcete smazat vybrané kontakty?"
-#~ msgstr[2] "Určitě chcete smazat vybrané kontakty?"
+msgid "Do you really want to delete the selected contact?"
+msgid_plural "Do you really want to delete the selected contacts?"
+msgstr[0] "Určitě chcete smazat vybraný kontakt?"
+msgstr[1] "Určitě chcete smazat vybrané kontakty?"
+msgstr[2] "Určitě chcete smazat vybrané kontakty?"
 
-#~ msgid "add contact"
-#~ msgstr "přidat kontakt"
+msgid "add contact"
+msgstr "přidat kontakt"
 
-#~ msgid "edit contact"
-#~ msgstr "editovat kontakt"
+msgid "edit contact"
+msgstr "editovat kontakt"
 
-#~ msgid "delete contact"
-#~ msgid_plural "delete contacts"
-#~ msgstr[0] "smazat kontakt"
-#~ msgstr[1] "smazat kontakty"
-#~ msgstr[2] "smazat kontakty"
+msgid "delete contact"
+msgid_plural "delete contacts"
+msgstr[0] "smazat kontakt"
+msgstr[1] "smazat kontakty"
+msgstr[2] "smazat kontakty"
 
-#~ msgid "Displaying contacts {0} - {1} of {2}"
-#~ msgstr "Zobrazuji kontakty {0} - {1} z {2}"
+msgid "Displaying contacts {0} - {1} of {2}"
+msgstr "Zobrazuji kontakty {0} - {1} z {2}"
 
-#~ msgid "No contacts to display"
-#~ msgstr "Žádné kontakty ke zobrazení"
+msgid "No contacts to display"
+msgstr "Žádné kontakty ke zobrazení"
 
-#~ msgid "Saved in"
-#~ msgstr "Uloženo v"
+msgid "Saved in"
+msgstr "Uloženo v"
 
-#~ msgid "Map"
-#~ msgstr "Mapa"
+msgid "Map"
+msgstr "Mapa"
 
-#~ msgid "History"
-#~ msgstr "Historie"
+msgid "History"
+msgstr "Historie"
 
-#~ msgid "Notes"
-#~ msgstr "Poznámky"
+msgid "Notes"
+msgstr "Poznámky"
+
+msgid "The defualt addressbook for new contacts"
+msgstr "Výchozí adresář pro nové kontakty"

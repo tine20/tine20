@@ -63,19 +63,19 @@ msgstr "创建者"
 msgid "Activities"
 msgstr "活动"
 
-#: Frontend/Http.php:536 js/tineInit.js:392
+#: Frontend/Http.php:537 js/tineInit.js:392
 msgid "Authorisation Required"
 msgstr "需要授权"
 
-#: Frontend/Http.php:537
+#: Frontend/Http.php:538
 msgid "Your session is not valid. You need to login again."
 msgstr "会话无效，需要重新登录"
 
-#: Frontend/Http.php:563 js/ExceptionDialog.js:46
+#: Frontend/Http.php:564 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "非正常结束"
 
-#: Frontend/Http.php:564 js/ExceptionDialog.js:71
+#: Frontend/Http.php:565 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "有错误发生，程序非正常终止"
 
@@ -105,7 +105,6 @@ msgid_plural "to do lists"
 msgstr[0] "要做的事项列表"
 
 #: js/ExceptionDialog.js:54 js/MainScreen.js:449
-#: js/widgets/AccountpickerPanel.js:166
 #: js/widgets/container/ContainerSelect.js:373
 #: js/widgets/dialog/EditDialog.js:193
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
@@ -188,7 +187,7 @@ msgstr "密码"
 msgid "Logging you in..."
 msgstr "正在登录 ..."
 
-#: js/Login.js:127 js/widgets/container/GrantsDialog.js:136
+#: js/Login.js:127 js/widgets/container/GrantsDialog.js:141
 #: js/widgets/grid/PersistentFilterPicker.js:126
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:140
@@ -216,7 +215,7 @@ msgstr "你的用户名或者密码有误！！！"
 msgid "Debug Console (Ctrl + F11)"
 msgstr ""
 
-#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:110
+#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:112
 msgid "Admin"
 msgstr "管理"
 
@@ -282,8 +281,7 @@ msgstr "新密码"
 msgid "Repeat new Password"
 msgstr "重复新密码"
 
-#: js/MainScreen.js:455 js/widgets/AccountpickerPanel.js:158
-#: js/widgets/container/ContainerSelect.js:382
+#: js/MainScreen.js:455 js/widgets/container/ContainerSelect.js:382
 #: js/widgets/dialog/EditDialog.js:176
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 #: js/widgets/tags/TagsMassAttachAction.js:76
@@ -344,12 +342,12 @@ msgstr[0] ""
 msgid "Groups"
 msgstr ""
 
-#: js/Models.js:245
+#: js/Models.js:247
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] ""
 
-#: js/Models.js:272
+#: js/Models.js:274
 #, fuzzy
 msgid "Relation"
 msgid_plural "Relations"
@@ -530,58 +528,50 @@ msgstr "选择所有页面({0} 记录)"
 msgid "Toggle selection"
 msgstr "切换选择"
 
-#: js/widgets/account/ConfigGrid.js:62
-#: js/widgets/account/PickerGridPanel.js:135
+#: js/widgets/account/PickerGridPanel.js:161
 #, fuzzy
 msgid "Remove account"
 msgstr "删除帐户"
 
-#: js/widgets/account/ConfigGrid.js:86
-#: js/widgets/account/PickerGridPanel.js:255
-#: js/widgets/account/PickerPanel.js:202
-msgid "Name"
-msgstr "名子"
+#: js/widgets/account/PickerGridPanel.js:225
+#, fuzzy
+msgid "Search User"
+msgstr "搜索"
 
-#: js/widgets/account/PickerGridPanel.js:148
+#: js/widgets/account/PickerGridPanel.js:231
+#, fuzzy
+msgid "Search Group"
+msgstr "搜索..."
+
+#: js/widgets/account/PickerGridPanel.js:237
+#, fuzzy
+msgid "Add Anyone"
+msgstr "添加注释"
+
+#: js/widgets/account/PickerGridPanel.js:245
+#, fuzzy
+msgid "Anyone"
+msgstr "注释"
+
+#: js/widgets/account/PickerGridPanel.js:289
 msgid "Search for users ..."
 msgstr ""
 
-#: js/widgets/account/PickerGridPanel.js:173
+#: js/widgets/account/PickerGridPanel.js:309
 #, fuzzy
 msgid "Search for groups ..."
 msgstr "搜索..."
 
-#: js/widgets/account/PickerPanel.js:85
-msgid "add account"
-msgstr "添加帐户"
-
-#: js/widgets/account/PickerPanel.js:213 js/widgets/GridPicker.js:389
-msgid "enter searchfilter"
-msgstr "输入搜索过滤器"
-
-#: js/widgets/account/PickerPanel.js:257 js/widgets/GridPicker.js:410
-msgid "Search"
-msgstr "搜索"
-
-#: js/widgets/account/PickerPanel.js:293 js/widgets/account/PickerPanel.js:294
-#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
-msgid "Browse"
-msgstr "浏览"
-
-#: js/widgets/AccountpickerPanel.js:57
-msgid "nobody"
-msgstr "没有人"
-
-#: js/widgets/AccountpickerPanel.js:152
-msgid "please select an account"
-msgstr "请选择帐户"
+#: js/widgets/account/PickerGridPanel.js:363
+msgid "Name"
+msgstr "名子"
 
 #: js/widgets/ActivitiesPanel.js:141
 msgid "Add a Note..."
 msgstr "添加一个注释..."
 
 #: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:168
-#: js/widgets/container/GrantsDialog.js:92
+#: js/widgets/container/GrantsDialog.js:94
 msgid "Add"
 msgstr "添加"
 
@@ -763,23 +753,23 @@ msgstr "真的想删除这个{0}？"
 msgid "Folder"
 msgstr "文件夹"
 
-#: js/widgets/container/GrantsDialog.js:87
+#: js/widgets/container/GrantsDialog.js:89
 msgid "Read"
 msgstr "读"
 
-#: js/widgets/container/GrantsDialog.js:97
+#: js/widgets/container/GrantsDialog.js:99
 msgid "Edit"
 msgstr "编辑"
 
-#: js/widgets/container/GrantsDialog.js:102
+#: js/widgets/container/GrantsDialog.js:104
 msgid "Delete"
 msgstr "删除"
 
-#: js/widgets/container/GrantsDialog.js:124
+#: js/widgets/container/GrantsDialog.js:120
 msgid "Permissions"
 msgstr "许可"
 
-#: js/widgets/container/GrantsDialog.js:136
+#: js/widgets/container/GrantsDialog.js:141
 msgid "Updating Grants"
 msgstr "正在更新权限"
 
@@ -993,71 +983,81 @@ msgstr "开始"
 msgid "ends with"
 msgstr "结束"
 
-#: js/widgets/grid/FilterModel.js:195
+#: js/widgets/grid/FilterModel.js:158
+#, fuzzy
+msgid "one of"
+msgstr "注释"
+
+#: js/widgets/grid/FilterModel.js:196
 msgid "select a operator"
 msgstr "选择一个操作者"
 
-#: js/widgets/grid/FilterModel.js:386
+#: js/widgets/grid/FilterModel.js:288
+#, fuzzy
+msgid "Search Account ..."
+msgstr "搜索..."
+
+#: js/widgets/grid/FilterModel.js:401
 msgid "today"
 msgstr "今天"
 
-#: js/widgets/grid/FilterModel.js:387
+#: js/widgets/grid/FilterModel.js:402
 msgid "yesterday"
 msgstr "昨天"
 
-#: js/widgets/grid/FilterModel.js:388
+#: js/widgets/grid/FilterModel.js:403
 msgid "this week"
 msgstr "本周"
 
-#: js/widgets/grid/FilterModel.js:389
+#: js/widgets/grid/FilterModel.js:404
 msgid "last week"
 msgstr "上周"
 
-#: js/widgets/grid/FilterModel.js:390
+#: js/widgets/grid/FilterModel.js:405
 msgid "the week before last"
 msgstr "上上周"
 
-#: js/widgets/grid/FilterModel.js:391
+#: js/widgets/grid/FilterModel.js:406
 msgid "this month"
 msgstr "本月"
 
-#: js/widgets/grid/FilterModel.js:392
+#: js/widgets/grid/FilterModel.js:407
 msgid "last month"
 msgstr "上个月"
 
-#: js/widgets/grid/FilterModel.js:393
+#: js/widgets/grid/FilterModel.js:408
 msgid "this quarter"
 msgstr "本季度"
 
-#: js/widgets/grid/FilterModel.js:394
+#: js/widgets/grid/FilterModel.js:409
 msgid "last quarter"
 msgstr "上个季度"
 
-#: js/widgets/grid/FilterModel.js:395
+#: js/widgets/grid/FilterModel.js:410
 msgid "this year"
 msgstr "今年"
 
-#: js/widgets/grid/FilterModel.js:396
+#: js/widgets/grid/FilterModel.js:411
 msgid "last year"
 msgstr "去年"
 
-#: js/widgets/grid/FilterModel.js:400
+#: js/widgets/grid/FilterModel.js:415
 msgid "tomorrow"
 msgstr "明天"
 
-#: js/widgets/grid/FilterModel.js:401
+#: js/widgets/grid/FilterModel.js:416
 msgid "next week"
 msgstr "下周"
 
-#: js/widgets/grid/FilterModel.js:402
+#: js/widgets/grid/FilterModel.js:417
 msgid "next month"
 msgstr "下个月"
 
-#: js/widgets/grid/FilterModel.js:403
+#: js/widgets/grid/FilterModel.js:418
 msgid "next quarter"
 msgstr "下个季度"
 
-#: js/widgets/grid/FilterModel.js:404
+#: js/widgets/grid/FilterModel.js:419
 msgid "next year"
 msgstr "明年"
 
@@ -1139,6 +1139,18 @@ msgstr "正删除过滤器\"{0}\""
 #: js/widgets/GridPicker.js:78
 msgid "remove record"
 msgstr "删除记录"
+
+#: js/widgets/GridPicker.js:389
+msgid "enter searchfilter"
+msgstr "输入搜索过滤器"
+
+#: js/widgets/GridPicker.js:410
+msgid "Search"
+msgstr "搜索"
+
+#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
+msgid "Browse"
+msgstr "浏览"
 
 #: js/widgets/GroupSelect.js:99
 msgid "Please Select a Group"
@@ -1449,6 +1461,15 @@ msgstr "已修改"
 #: Setup/setup.xml:2635
 msgid "record changed"
 msgstr "记录已修改"
+
+#~ msgid "add account"
+#~ msgstr "添加帐户"
+
+#~ msgid "nobody"
+#~ msgstr "没有人"
+
+#~ msgid "please select an account"
+#~ msgstr "请选择帐户"
 
 #~ msgid "loading new language..."
 #~ msgstr "正加载新语言..."

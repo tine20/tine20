@@ -903,10 +903,6 @@ msgstr "Łącza"
 msgid "Users"
 msgstr "Użytkownicy"
 
-#: js/Snom/PhoneEditDialog.js:719
-msgid "Rights"
-msgstr "Uprawnienia"
-
 #: js/Snom/PhoneGridPanel.js:43
 msgid "reset phones HTTP authentication"
 msgstr "resetuj uwierzytelnianie telefonu przez HTTP"
@@ -995,6 +991,9 @@ msgstr "Telefony"
 #: js/Voipmanager.js:126
 msgid "Templates"
 msgstr "Szablony"
+
+#~ msgid "Rights"
+#~ msgstr "Uprawnienia"
 
 #~ msgid "username"
 #~ msgstr "użytkownik"

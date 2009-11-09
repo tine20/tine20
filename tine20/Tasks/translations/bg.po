@@ -42,27 +42,28 @@ msgstr "Краен срок"
 msgid "Priority"
 msgstr "Приоритет"
 
-#: js/EditDialog.js:180 js/GridPanel.js:93 js/GridPanel.js:234
-msgid "Responsible"
+#: js/EditDialog.js:180
+#, fuzzy
+msgid "Add Responsible ..."
 msgstr "Отговорник"
 
-#: js/EditDialog.js:184
+#: js/EditDialog.js:187
 msgid "Notes"
 msgstr "Бележки"
 
-#: js/EditDialog.js:185
+#: js/EditDialog.js:188
 msgid "Enter description..."
 msgstr "Напиши описание"
 
-#: js/EditDialog.js:190
+#: js/EditDialog.js:193
 msgid "Percentage"
 msgstr "Процент"
 
-#: js/EditDialog.js:194 js/GridPanel.js:213 Model/Task.php:182
+#: js/EditDialog.js:197 js/GridPanel.js:213 Model/Task.php:182
 msgid "Status"
 msgstr "Статус"
 
-#: js/EditDialog.js:198
+#: js/EditDialog.js:201
 msgid "Completed"
 msgstr "Завършен"
 
@@ -75,6 +76,10 @@ msgstr[1] "Наистина ли желаете да изтриете селек
 #: js/GridPanel.js:92 js/GridPanel.js:178
 msgid "Due Date"
 msgstr "Краен срок"
+
+#: js/GridPanel.js:93 js/GridPanel.js:234
+msgid "Responsible"
+msgstr "Отговорник"
 
 #: js/GridPanel.js:117
 msgid "Failed"

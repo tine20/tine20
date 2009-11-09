@@ -30,9 +30,7 @@ msgstr "Benachrichtigung für Aufgabe"
 msgid "%s's personal tasks"
 msgstr "%ss persönliche Aufgaben"
 
-#: js/EditDialog.js:169
-#: js/GridPanel.js:91
-#: js/GridPanel.js:167
+#: js/EditDialog.js:169 js/GridPanel.js:91 js/GridPanel.js:167
 msgid "Summary"
 msgstr "Beschreibung"
 
@@ -40,37 +38,32 @@ msgstr "Beschreibung"
 msgid "Due date"
 msgstr "Fälligkeitsdatum"
 
-#: js/EditDialog.js:177
-#: js/GridPanel.js:186
-#: Model/Task.php:181
+#: js/EditDialog.js:177 js/GridPanel.js:186 Model/Task.php:181
 msgid "Priority"
 msgstr "Priorität"
 
 #: js/EditDialog.js:180
-#: js/GridPanel.js:93
-#: js/GridPanel.js:234
-msgid "Responsible"
+#, fuzzy
+msgid "Add Responsible ..."
 msgstr "Verantwortlich"
 
-#: js/EditDialog.js:184
+#: js/EditDialog.js:187
 msgid "Notes"
 msgstr "Anmerkungen"
 
-#: js/EditDialog.js:185
+#: js/EditDialog.js:188
 msgid "Enter description..."
 msgstr "Beschreibung eingeben..."
 
-#: js/EditDialog.js:190
+#: js/EditDialog.js:193
 msgid "Percentage"
 msgstr "Prozent"
 
-#: js/EditDialog.js:194
-#: js/GridPanel.js:213
-#: Model/Task.php:182
+#: js/EditDialog.js:197 js/GridPanel.js:213 Model/Task.php:182
 msgid "Status"
 msgstr "Status"
 
-#: js/EditDialog.js:198
+#: js/EditDialog.js:201
 msgid "Completed"
 msgstr "Abgeschlossen"
 
@@ -80,10 +73,13 @@ msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 
-#: js/GridPanel.js:92
-#: js/GridPanel.js:178
+#: js/GridPanel.js:92 js/GridPanel.js:178
 msgid "Due Date"
 msgstr "Fällig am"
+
+#: js/GridPanel.js:93 js/GridPanel.js:234
+msgid "Responsible"
+msgstr "Verantwortlich"
 
 #: js/GridPanel.js:117
 msgid "Failed"
@@ -101,8 +97,7 @@ msgstr "Tags"
 msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
-#: js/GridPanel.js:200
-#: Model/Task.php:183
+#: js/GridPanel.js:200 Model/Task.php:183
 msgid "Percent"
 msgstr "Prozent"
 
@@ -114,8 +109,7 @@ msgstr "Angelegt am"
 msgid "Show closed"
 msgstr "Geschlossene Aufgaben anzeigen"
 
-#: js/Status.js:45
-#: Setup/setup.xml:449
+#: js/Status.js:45 Setup/setup.xml:449
 msgid "IN-PROCESS"
 msgstr "IN BEARBEITUNG"
 
@@ -162,4 +156,3 @@ msgstr "ERLEDIGT"
 #: Setup/setup.xml:471
 msgid "CANCELLED"
 msgstr "ZURÜCKGESTELLT"
-

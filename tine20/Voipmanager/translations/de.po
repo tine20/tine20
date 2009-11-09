@@ -863,10 +863,6 @@ msgstr "Lines"
 msgid "Users"
 msgstr "Besitzer"
 
-#: js/Snom/PhoneEditDialog.js:719
-msgid "Rights"
-msgstr "Rechte"
-
 #: js/Snom/PhoneGridPanel.js:43
 msgid "reset phones HTTP authentication"
 msgstr "HTTP-Authentifizierung des Telefons zurücksetzen"
@@ -955,3 +951,5 @@ msgstr "Telefone"
 msgid "Templates"
 msgstr "Vorlagen"
 
+#~ msgid "Rights"
+#~ msgstr "Rechte"
