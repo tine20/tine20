@@ -516,17 +516,3 @@ msgstr ""
 msgid "How often should Felamimail check for new Emails (in minutes) ."
 msgstr ""
 
-#~ msgid "Port"
-#~ msgstr "Port"
-
-#~ msgid "Failed to connect"
-#~ msgstr "Verbindung fehlgeschlagen"
-
-#~ msgid "Could not connect to account."
-#~ msgstr "Konnte keine Verbindung zum Email Konto aufbauen."
-
-#~ msgid "Felamimail"
-#~ msgstr "Email"
-
-#~ msgid "Write New Mail"
-#~ msgstr "Neue EMail verfassen"
