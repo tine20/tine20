@@ -26,9 +26,17 @@ Ext.ux.layout.DisplayLayout = Ext.extend(Ext.layout.FormLayout, {
         
         target.addClass('x-ux-display-background-' + this.background);
         
-        //if (this.declaration) {
-        //    var declEl = target.createChild({dom: 'div', html: this.declaration, class: 'x-ux-display-background-declaration'});
-        //}
+        if (this.declaration && ! this.declEl) {
+            this.declEl = target.createChild({dom: 'div', html: this.declaration, class: 'x-ux-display-declaration x-ux-display-background-declaration'});
+        }
+    },
+    
+    destroy: function() {
+        if (this.declEl) {
+            this.declEl.remove();
+        }
+        
+        Ext.ux.layout.DisplayLayout.superclass.destroy.call(this);
     }
 });
 

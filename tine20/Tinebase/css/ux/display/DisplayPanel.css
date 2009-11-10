@@ -44,3 +44,15 @@
     -webkit-border-radius: 8px;
     -khtml-border-radius: 8px;
 }
+
+.x-ux-display .x-ux-display-declaration {
+	color:#A0A0A0;
+	font-size:18px;
+	font-weight:bold;
+}
+
+.x-ux-display .x-ux-display-background-declaration {
+    position: absolute;
+    left:5px;
+    bottom:6px;
+}
