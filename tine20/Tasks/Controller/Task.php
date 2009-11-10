@@ -85,7 +85,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
         if(empty($_task->class_id)) {
             $_task->class_id = NULL;
         }
-        $this->_handleCompletedDate($_task);
+        $this->_handleCompleted($_task);
         $_task->originator_tz = $_task->originator_tz ? $_task->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         
         $task = parent::create($_task);
@@ -105,16 +105,16 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      */
     public function update(Tinebase_Record_Interface $_task)
     {
-        $this->_handleCompletedDate($_task);
+        $this->_handleCompleted($_task);
         return parent::update($_task);
     }
     
     /**
-     * handles completed date
+     * handles completed date and sets task to 100%
      * 
      * @param Tasks_Model_Task $_task
      */
-    protected function _handleCompletedDate($_task)
+    protected function _handleCompleted($_task)
     {
         $allStatus = Tasks_Controller_Status::getInstance()->getAllStatus();
         
@@ -127,6 +127,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
                 $_task->completed = NULL;
             } elseif (! $_task->completed instanceof Zend_Date) {
                 $_task->completed = Zend_Date::now();
+                $_task->percent = 100;
             }
         }
     }
