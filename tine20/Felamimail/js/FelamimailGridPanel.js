@@ -757,11 +757,20 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             }
         });        
     },
-    
+
     /**
      * get update folder status after delete
+     * 
+     * TODO make marking of deleted messages work (how? use onDeleteRecords?)
      */
     onAfterDelete: function() {
+        /*
+        var selectedRows = this.grid.getSelectionModel().getSelections();
+        for (var i = 0; i < selectedRows.length; i++) {
+            Ext.get(this.grid.getView().getRow(i)).addClass('flag_deleted');
+        }
+        */
+        
         // get update folder status
         this.app.getMainScreen().getTreePanel().updateFolderStatus(false);
         this.store.load({});
