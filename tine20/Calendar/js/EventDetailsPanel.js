@@ -116,7 +116,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
                     layout: 'ux.display',
                     layoutConfig: {
                         background: 'solid',
-                        declaration: this.app.i18n._('Event', 'Events', 50)
+                        declaration: this.app.i18n.n_('Event', 'Events', 50)
                     }
                 }, {
                     flex: 1,
