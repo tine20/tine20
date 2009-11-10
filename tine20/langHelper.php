@@ -239,7 +239,7 @@ function potmerge($_verbose)
                echo $poFile . ": ";
             }
             `cd $translationPath
-             msgmerge --update $poFile template.pot $msgDebug`;
+             msgmerge --no-fuzzy-matching --update $poFile template.pot $msgDebug`;
         }
     }
 }
