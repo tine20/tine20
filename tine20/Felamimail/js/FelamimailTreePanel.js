@@ -523,7 +523,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             
             var folderIds = [];
             parent.eachChild(function(child) {
-                if (child.id != node.id && localname != 'unread' && localname != 'marked') {
+                if (child.id != node.id && child.attributes.localname != 'unread' && child.attributes.localname != 'marked') {
                     folderIds.push(child.id);
                 }
             }, this);
