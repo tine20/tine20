@@ -421,7 +421,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
                 
                 // try again without delimiter
                 try {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . $this->_delimiter);
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName);
                     $folders = $imap->getFolders($_folderName, '%');
                     
                 } catch (Zend_Mail_Storage_Exception $zmse) {
