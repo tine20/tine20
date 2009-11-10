@@ -298,8 +298,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 	            Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
 		        
 	            if ($_checkBusyConficts) {
-	                // ensure that all attendee are free
-	                $this->checkBusyConficts($_record);
+	                // only do free/busy check if start/endtime changed
+	                if (! $event->dtstart->equals($_record->dtstart) || ! $event->dtend->equals($_record->dtend)) {
+    	                // ensure that all attendee are free
+    	                $this->checkBusyConficts($_record);
+	                }
 	            }
                 
 	            $sendNotifications = $this->_sendNotifications;
