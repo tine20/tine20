@@ -934,6 +934,8 @@ class Setup_Controller
      */
     public function uninstallApplications($_applications)
     {
+        $this->_clearCache();
+        
         // deactivate foreign key check if all installed apps should be uninstalled
         $installedApps = Tinebase_Application::getInstance()->getApplications();
         if (count($installedApps) == count($_applications) && get_class($this->_backend) == 'Setup_Backend_Mysql') {
@@ -1273,5 +1275,20 @@ class Setup_Controller
         }
         
         return $result;
+    }
+    
+    /**
+     * clear cache
+     * 
+     * @return void
+     */
+    protected function _clearCache()
+    {
+        // setup cache (via tinebase because it is disabled in setup per default)
+        Tinebase_Core::setupCache(TRUE);
+        
+        // clear cache
+        $cache = Setup_Core::get(Setup_Core::CACHE);
+        $cache->clean(Zend_Cache::CLEANING_MODE_ALL);
     }
 }
