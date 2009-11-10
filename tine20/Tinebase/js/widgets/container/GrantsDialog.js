@@ -117,21 +117,13 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
         
         this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
             selectType: 'both',
-            title: _('Permissions'),
             store: this.grantsStore,
             hasAccountPrefix: true,
             configColumns: columns,
             recordClass: Tine.Tinebase.Model.Grant
         }); 
         
-        return {
-            bodyStyle: 'padding:5px;',
-            buttonAlign: 'right',
-            labelAlign: 'top',
-            border: false,
-            layout: 'fit',
-            items: this.grantsGrid
-        };
+        return this.grantsGrid;
     },
     
     /**
