@@ -19,6 +19,12 @@ Ext.ns('Tine.Calendar');
 Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPanel, {
     border: false,
     
+    /**
+     * renders attendee names
+     * 
+     * @param {Array} attendeeData
+     * @return {String}
+     */
     attendeeRenderer: function(attendeeData) {
         var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(attendeeData);
         
@@ -30,6 +36,12 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
         return a.join("\n");
     },
     
+    /**
+     * renders container name + color
+     * 
+     * @param {Array} container
+     * @return {String} html
+     */
     containerRenderer: function(container) {
         return this.containerTpl.apply({
             color: Tine.Calendar.colorMgr.getColor(this.record).color,
@@ -37,17 +49,37 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
         });
     },
     
+    /**
+     * renders datetime
+     * 
+     * @param {Date} dt
+     * @return {String}
+     */
     datetimeRenderer: function(dt) {
         return String.format(this.app.i18n._("{0} {1} o'clock"), Tine.Tinebase.common.dateRenderer(dt), dt.format('H:i'));
     },
     
+    /**
+     * inits this component
+     */
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
+        this.defaultPanel = this.getDefaultPanel();
         this.eventDetailsPanel = this.getEventDetailsPanel();
         
+        this.cardPanel = new Ext.Panel({
+            layout: 'card',
+            border: false,
+            activeItem: 0,
+            items: [
+                this.defaultPanel,
+                this.eventDetailsPanel
+            ]
+        });
+        
         this.items = [
-            this.eventDetailsPanel
+            this.cardPanel
         ];
         
         this.containerTpl = new Ext.XTemplate(
@@ -61,6 +93,48 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
         this.supr().initComponent.call(this);
     },
     
+    /**
+     * default panel w.o. data
+     * 
+     * @return {Ext.ux.display.DisplayPanel}
+     */
+    getDefaultPanel: function() {
+        return new Ext.ux.display.DisplayPanel ({
+            layout: 'fit',
+            border: false,
+            items: [{
+                layout: 'hbox',
+                border: false,
+                defaults:{margins:'0 5 0 0'},
+                layoutConfig: {
+                    padding:'5',
+                    align:'stretch'
+                },
+                items: [{
+                    flex: 1,
+                    border: false,
+                    layout: 'ux.display',
+                    layoutConfig: {
+                        background: 'solid',
+                        declaration: this.app.i18n._('Event', 'Events', 50)
+                    }
+                }, {
+                    flex: 1,
+                    border: false,
+                    layout: 'ux.display',
+                    layoutConfig: {
+                        background: 'border'
+                    }
+                }]
+            }]
+        });
+    },
+    
+    /**
+     * main event details panel
+     * 
+     * @return {Ext.ux.display.DisplayPanel}
+     */
     getEventDetailsPanel: function() {
         return new Ext.ux.display.DisplayPanel ({
             //xtype: 'displaypanel',
@@ -157,26 +231,24 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
     },
     
     /**
-     * update template
+     * update event details panel
      * 
      * @param {Tine.Tinebase.data.Record} record
      * @param {Mixed} body
      */
     updateDetails: function(record, body) {
+        this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.eventDetailsPanel));
+        
         this.eventDetailsPanel.loadRecord(record);
-        //body.update(record.get('summary'));
-        //this.tpl.overwrite(body, record.data);
     },
     
     /**
-     * show default template
+     * show default panel
      * 
      * @param {Mixed} body
      */
     showDefault: function(body) {
-        //if (this.defaultTpl) {
-        //    this.defaultTpl.overwrite(body);
-        //}
+        this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.defaultPanel));
     },
     
     /**
@@ -191,4 +263,3 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
         //}
     }
 });
-
