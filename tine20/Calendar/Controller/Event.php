@@ -12,16 +12,12 @@
 /**
  * Calendar Event Controller
  * 
+ * @todo add handling to fetch all exceptions of a given event set (ActiveSync Frontend)
+ * 
  * @package Calendar
  */
 class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract implements Tinebase_Controller_Alarm_Interface
 {
-    // todo in this controller:
-    //
-    // add free time search
-    // add group attendee handling
-    // add handling to fetch all exceptions of a given event set (ActiveSync Frontend)
-    
 	/**
      * @var boolean
      * 
