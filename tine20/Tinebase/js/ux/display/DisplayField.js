@@ -1,7 +1,23 @@
-
-
+/* 
+ * Tine 2.0
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ */
+ 
 Ext.ns('Ext.ux.display');
 
+/**
+ * @class Ext.ux.display.DisplayField
+ * @namespace Ext.ux.display
+ * @extends Ext.form.DisplayField
+ * @author Cornelius Weiss <c.weiss@metaways.de>
+ * @version $Id$
+ * 
+ * <b>Field for displaying information in a displaypanel</b>
+ */
 Ext.ux.display.DisplayField = Ext.extend(Ext.form.DisplayField, {
     htmlEncode: true,
     nl2br: false,
@@ -29,7 +45,15 @@ Ext.ux.display.DisplayField = Ext.extend(Ext.form.DisplayField, {
 Ext.reg('ux.displayfield', Ext.ux.display.DisplayField);
 
 
-
+/**
+ * @class Ext.ux.display.DisplayTextArea
+ * @namespace Ext.ux.display
+ * @extends Ext.form.TextArea
+ * @author Cornelius Weiss <c.weiss@metaways.de>
+ * @version $Id$
+ * 
+ * <b>Textarea for displaying a text in a displaypanel</b>
+ */
 Ext.ux.display.DisplayTextArea = Ext.extend(Ext.form.TextArea, {
     readOnly: true,
     cls: 'x-ux-display-textarea'
