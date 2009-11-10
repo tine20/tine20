@@ -98,8 +98,6 @@ Tine.Tinebase.tineInit = {
     },
     
     initWindow: function() {
-        // disable browsers native context menu globaly
-        Ext.getBody().on('contextmenu', Ext.emptyFn, this, {preventDefault: true});
         // disable the native 'select all'
         Ext.getBody().on('keydown', function(e) {
             if(e.ctrlKey && e.getKey() == e.A){
