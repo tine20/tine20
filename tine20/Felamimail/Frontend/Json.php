@@ -253,9 +253,14 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $ids  message ids
      * @return string
      * @return array
+     * 
+     * @todo only add flag to messages that should be deleted and delete them on server when updating cache
      */
     public function deleteMessages($ids)
     {
+        // close session to allow other requests ?
+        //Zend_Session::writeClose(true);
+            
         return $this->_delete($ids, Felamimail_Controller_Message::getInstance());
     }
 
