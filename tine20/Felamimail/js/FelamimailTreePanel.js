@@ -497,51 +497,71 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var node = this.getSelectionModel().getSelectedNode();
         if (node) {
             this.updateMessageCache(node, false, true);
+            this.updateFolderStatus(true, node);
         }
-        this.updateFolderStatus(true);
         this.updateFoldersTask.delay(this.updateFolderRefreshTime);
     },
     
     /**
-     * update folder status of all visible or one folder(s)
+     * update folder status of all visible / all node in one level or one folder(s)
      * 
-     * @param {Boolean} visible
+     * @param {Boolean} multiple
      * @param {Ext.tree.AsyncTreeNode} node [optional]
      * 
-     * TODO make this work for multiple accounts
-     * TODO make 'visible' work for delayed task or ping update
+     * TODO make this work for multiple accounts ?
+     * TODO get all visible nodes of active account ?
      */
-    updateFolderStatus: function(visible, node) {
+    updateFolderStatus: function(multiple, node) {
         
-        if (visible) {
-            //Ext.Msg.alert('not implemented yet');
-            return;
-        }
-        
-        // get account and folder id
-        if (! node) {
-            node = this.getSelectionModel().getSelectedNode();
-        }
-        
-        var folderId = node.attributes.folder_id;
-        var accountId = node.attributes.account_id;
-        
-        // update folder status
-        if (folderId && accountId) {
-            Ext.Ajax.request({
-                params: {
-                    method: 'Felamimail.updateFolderStatus',
-                    folderId: folderId,
-                    accountId: accountId
-                },
-                scope: this,
-                success: function(_result, _request) {
-                    // update folder counters / class
-                    var folderData = Ext.util.JSON.decode(_result.responseText);
-                    this.updateUnreadCount(null, folderData[0].unreadcount, node);
+        if (multiple) {
+            // get all nodes on the same level with the active node
+            var parent = node.parentNode;
+            var folderIds = [];
+            parent.eachChild(function(child) {
+                if (child.id != node.id) {
+                    folderIds.push(child.id);
                 }
-            });
+            }, this);
+            
+        } else {
+            // single node
+            if (! node) {
+                node = this.getSelectionModel().getSelectedNode();
+            }
+            
+            var folderIds = [node.attributes.folder_id];
         }
+        
+        Ext.Ajax.request({
+            params: {
+                method: 'Felamimail.updateFolderStatus',
+                folderIds: Ext.util.JSON.encode(folderIds),
+                accountId: node.attributes.account_id
+            },
+            scope: this,
+            success: function(_result, _request) {
+                var folderData = Ext.util.JSON.decode(_result.responseText);
+                
+                // update folders
+                if (multiple) {
+                    // update cache of one extra folder
+                    var updating = false;
+                    for (var i = 0; i < folderData.length; i++) {
+                        var updateNode = this.getNodeById(folderData[i][0].id);
+                        
+                        // trigger updateMessageCache if needed (only if not already updating / cache pedning or different unreadcounts)
+                        if (! updating && (updateNode.attributes.cache_status == 'pending' || updateNode.attributes.unreadcount != folderData[i][0].unreadcount)) {
+                            this.updateMessageCache(updateNode);
+                            updating = true;
+                        }
+
+                        this.updateUnreadCount(null, folderData[i][0].unreadcount, updateNode);
+                    }
+                } else {
+                    this.updateUnreadCount(null, folderData[0][0].unreadcount, node);
+                }
+            }
+        });
     },
     
     /**

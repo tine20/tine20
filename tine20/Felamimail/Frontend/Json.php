@@ -112,21 +112,25 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * update folder status
+     * update folder status (unreadcount/totalcount/cache status?)
      *
      * @param string $accountId
      * @param string $folderId
      * @return array
-     * 
-     * @todo replace this with updateFolderCache?
      */
-    public function updateFolderStatus($accountId, $folderId)
+    public function updateFolderStatus($accountId, $folderIds)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $accountId . '/' . $folderId);
+        $decodedFolderIds = Zend_Json::decode($folderIds);
+
+        // close session to allow other requests
+        Zend_Session::writeClose(true);
         
-        $result = Felamimail_Controller_Folder::getInstance()->updateFolderStatus($accountId, NULL, $folderId);
+        $result = array();
+        foreach ((array)$decodedFolderIds as $folderId) {
+            $result[] = Felamimail_Controller_Folder::getInstance()->updateFolderStatus($accountId, NULL, $folderId)->toArray();
+        }
         
-        return $result->toArray();
+        return $result;
     }
     
     /**
@@ -135,18 +139,26 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $accountId
      * @param string $folderNames of parent folder(s)
      * @return array
-     * 
-     * @todo update visible folders and return new folder data -> move this to another function?
      */
     public function updateFolderCache($accountId, $folderNames)
     {
         $decodedFolderNames = Zend_Json::decode($folderNames);
-        foreach ((array)$decodedFolderNames as $folderName) {
-            Felamimail_Controller_Cache::getInstance()->updateFolders($folderName, $accountId);
+        
+        // close session to allow other requests
+        Zend_Session::writeClose(true);
+            
+        $result = array();
+        if (empty($decodedFolderNames)) {
+            $result = Felamimail_Controller_Cache::getInstance()->updateFolders($folderName, $accountId);
+        } else {
+            foreach ((array)$decodedFolderNames as $folderName) {
+                $result[$folderName] = Felamimail_Controller_Cache::getInstance()->updateFolders($folderName, $accountId);
+            }
         }
         
         return array(
-            'status' => 'success'
+            'status'    => 'success',
+            'results'   => $result,
         );
     }
     
@@ -174,8 +186,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $folderId id of active folder
      * @return array
      * 
-     * @todo rewrite initial import to allow partial imports / only import 1000? mails at once (and return the progress) / add progress bar in client?
-     * @todo message caching should be resumable if it ended and wasn't finished 
+     * @todo    rewrite initial import to allow partial imports / only import 1000? mails at once (and return the progress) / add progress bar in client?
+     * @todo    message caching should be resumable if it ended and wasn't finished 
+     * @todo    add counter to update only X folders at once?
      */
     public function updateMessageCache($folderId)
     {
