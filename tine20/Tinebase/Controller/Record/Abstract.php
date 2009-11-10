@@ -461,7 +461,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
-        $ids = $this->search($_filter, NULL, FALSE, TRUE)->getArrayOfIds();
+        $ids = $this->search($_filter, NULL, FALSE, TRUE);
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($ids) . ' records ...');
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($ids, true));
