@@ -508,6 +508,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {Boolean} multiple
      * @param {Ext.tree.AsyncTreeNode} node [optional]
      * 
+     * TODO add custom exception / on failure / on timeout handler -> this should never show errors to the user
      * TODO make this work for multiple accounts ?
      * TODO get all visible nodes of active account ?
      */
@@ -544,6 +545,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 accountId: node.attributes.account_id
             },
             scope: this,
+            timeout: 60000, // 1 minute
             success: function(_result, _request) {
                 var folderData = Ext.util.JSON.decode(_result.responseText);
                 
@@ -607,7 +609,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * update message cache (and trigger reload store)
      * @param {Ext.tree.AsyncTreeNode} node
      * 
-     * TODO add custom exception / on failure handler -> this should never show errors to the user
+     * TODO add custom exception / on failure / on timeout handler -> this should never show errors to the user
      * TODO add accountId?
      */
     updateMessageCache: function(node, force, delayedTask)
