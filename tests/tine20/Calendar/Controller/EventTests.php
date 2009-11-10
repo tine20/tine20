@@ -203,12 +203,16 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         ));
         
         try {
+            $exectionRaised = FALSE;
         	$this->_controller->create($conflictEvent, TRUE);
         } catch (Calendar_Exception_AttendeeBusy $busyException) {
             $fbData = $busyException->toArray();
             $this->assertGreaterThanOrEqual(2, count($fbData['freebusyinfo']));
+            $exectionRaised = TRUE;
         }
-        
+        if (! $exectionRaised) {
+            $this->fail('An expected exception has not been raised.');
+        }
         $persitentConflictEvent = $this->_controller->create($conflictEvent, FALSE);
         
         return $persitentConflictEvent;
@@ -232,8 +236,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         } catch (Calendar_Exception_AttendeeBusy $busyException) {
             $fbData = $busyException->toArray();
             $this->assertGreaterThanOrEqual(2, count($fbData['freebusyinfo']));
+            return;
         }
         
+        $this->fail('An expected exception has not been raised.');
     }
     
     public function testUpdateWithConflictNoTimechange()
