@@ -33,7 +33,7 @@ class Setup_Server_Json extends Setup_Server_Abstract
             $request = new Zend_Json_Server_Request_Http();
             
             $method  = $request->getMethod();
-            $jsonKey = $_SERVER['HTTP_X_TINE20_JSONKEY'];
+            $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
             
