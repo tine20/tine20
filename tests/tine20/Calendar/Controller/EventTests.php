@@ -210,6 +210,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         }
         
         $persitentConflictEvent = $this->_controller->create($conflictEvent, FALSE);
+        
+        return $persitentConflictEvent;
     }
     
     public function testCreateEventWithConfictFromGroupMember()
@@ -232,6 +234,24 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             $this->assertGreaterThanOrEqual(2, count($fbData['freebusyinfo']));
         }
         
+    }
+    
+    public function testUpdateWithConflictNoTimechange()
+    {
+        $persitentConflictEvent = $this->testCreateEventWithConfict();
+        $persitentConflictEvent->summary = 'only time updates should recheck free/busy';
+        
+        $this->_controller->update($persitentConflictEvent, TRUE);
+    }
+    
+    public function testUpdateWithConflictWithTimechange()
+    {
+        $persitentConflictEvent = $this->testCreateEventWithConfict();
+        $persitentConflictEvent->summary = 'time updates should recheck free/busy';
+        $persitentConflictEvent->dtend->addHour(1);
+        
+        $this->setExpectedException('Calendar_Exception_AttendeeBusy');
+        $this->_controller->update($persitentConflictEvent, TRUE);
     }
     
     public function testAttendeeAuthKeyPreserv()
