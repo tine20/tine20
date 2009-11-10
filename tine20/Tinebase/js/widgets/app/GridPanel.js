@@ -146,6 +146,12 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
     updateOnSelectionChange: true,
 
     /**
+     * @type Bool
+     * @property showDeleteMask
+     */
+    showDeleteMask: true,
+
+    /**
      * @type Ext.Toolbar
      * @property actionToolbar
      */
@@ -648,23 +654,29 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         Ext.MessageBox.confirm(_('Confirm'), i18nQuestion, function(btn) {
             if(btn == 'yes') {
                 if (this.recordProxy) {
-                    if (! this.deleteMask) {
-                        var message = String.format(_('Deleting {0}'), i18nItems)
-                        if (sm.isFilterSelect) {
-                            message = message + _(' ... This may take a long time!');
-                        } 
-                        this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {msg: message});
+                    if (this.showDeleteMask) {
+                        if (! this.deleteMask) {
+                            var message = String.format(_('Deleting {0}'), i18nItems)
+                            if (sm.isFilterSelect) {
+                                message = message + _(' ... This may take a long time!');
+                            } 
+                            this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {msg: message});
+                        }
+                        this.deleteMask.show();
                     }
-                    this.deleteMask.show();
                     
                     var options = {
                         scope: this,
                         success: function() {
-                            this.deleteMask.hide();
+                            if (this.showDeleteMask) {
+                                this.deleteMask.hide();
+                            }
                             this.onAfterDelete();
                         },
                         failure: function () {
-                            this.deleteMask.hide();
+                            if (this.showDeleteMask) {
+                                this.deleteMask.hide();
+                            }
                             Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), i18nItems)); 
                         }
                     };
