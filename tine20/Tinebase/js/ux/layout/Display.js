@@ -27,7 +27,7 @@ Ext.ux.layout.DisplayLayout = Ext.extend(Ext.layout.FormLayout, {
         target.addClass('x-ux-display-background-' + this.background);
         
         if (this.declaration && ! this.declEl) {
-            this.declEl = target.createChild({dom: 'div', html: this.declaration, class: 'x-ux-display-declaration x-ux-display-background-declaration'});
+            this.declEl = target.createChild({dom: 'div', html: this.declaration, 'class': 'x-ux-display-declaration x-ux-display-background-declaration'});
         }
     },
     
