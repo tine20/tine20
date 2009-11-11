@@ -558,11 +558,12 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                         
                         // trigger updateMessageCache if needed (only if not already updating / cache pedning or different unreadcounts)
                         if (! updating && (updateNode.attributes.cache_status == 'pending' || updateNode.attributes.unreadcount != folderData[i][0].unreadcount)) {
-                            this.updateMessageCache(updateNode);
+                            // calls updateUnreadCount if spomething changed
+                            this.updateMessageCache(updateNode, false, true);
                             updating = true;
+                        } else {
+                            this.updateUnreadCount(null, folderData[i][0].unreadcount, updateNode);
                         }
-
-                        this.updateUnreadCount(null, folderData[i][0].unreadcount, updateNode);
                     }
                 } else {
                     this.updateUnreadCount(null, folderData[0][0].unreadcount, node);
@@ -655,7 +656,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                         }
                         
                         node.attributes.totalcount = folderData.totalcount;
-                        this.updateUnreadCount(null, folderData.unreadcount);
+                        this.updateUnreadCount(null, folderData.unreadcount, node);
                     }
                     node.attributes.cache_status = folderData.cache_status;
                     
