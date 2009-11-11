@@ -18,7 +18,6 @@ Ext.onReady(function() {
     Tine.Tinebase.tineInit.initBootSplash();
     Tine.Tinebase.tineInit.initLocale();
     Tine.Tinebase.tineInit.initAjax();
-    Tine.Tinebase.tineInit.initErrorHandler();
     Tine.Tinebase.tineInit.initRegistry();
     var waitForInits = function() {
         if (! Tine.Tinebase.tineInit.initList.initRegistry) {
@@ -460,101 +459,6 @@ Tine.Tinebase.tineInit = {
             }
             
         });
-    },
-    
-        
-    /**
-     * init a global error handler
-     */
-    initErrorHandler: function() {
-        window.onerror = !window.onerror ? Tine.Tinebase.tineInit.globalErrorHandler : window.onerror.createSequence(Tine.Tinebase.tineInit.globalErrorHandler);
-    },
-    
-    /**
-     * @todo   make this working in safari
-     * @return {string}
-     */
-    getNormalisedError: function() {
-        var error = {
-            name       : 'unknown error',
-            message    : 'unknown',
-            number     : 'unknown',
-            description: 'unknown',
-            url        : 'unknown',
-            line       : 'unknown'
-        };
-        
-        // NOTE: Arguments is not always a real Array
-        var args = [];
-        for (var i=0; i<arguments.length; i++) {
-            args[i] = arguments[i];
-        }
-        
-        //var lines = ["The following JS error has occured:"];
-        if (args[0] instanceof Error) { // Error object thrown in try...catch
-            error.name        = args[0].name;
-            error.message     = args[0].message;
-            error.number      = args[0].number & 0xFFFF; //Apply binary arithmetic for IE number, firefox returns message string in element array element 0
-            error.description = args[0].description;
-            
-        } else if ((args.length == 3) && (typeof(args[2]) == "number")) { // Check the signature for a match with an unhandled exception
-            error.name    = 'catchable exception'
-            error.message = args[0];
-            error.url     = args[1];
-            error.line    = args[2];
-        } else {
-            error.message     = "An unknown JS error has occured.";
-            error.description = 'The following information may be useful:' + "\n";
-            for (var x = 0; x < args.length; x++) {
-                error.description += (Ext.encode(args[x]) + "\n");
-            }
-        }
-        return error;
-    },
-    
-    globalErrorHandler: function() {
-        var error = Tine.Tinebase.tineInit.getNormalisedError.apply(this, arguments);
-        
-        var traceHtml = '<table>';
-        for (p in error) {
-            if (error.hasOwnProperty(p)) {
-                traceHtml += '<tr><td><b>' + p + '</b></td><td>' + error[p] + '</td></tr>'
-            }
-        }
-        traceHtml += '</table>'
-        
-        // check for spechial cases we don't want to handle
-        if (traceHtml.match(/versioncheck/)) {
-            return true;
-        }
-        // we don't wanna know fancy FF3.5 crom bugs
-        if (traceHtml.match(/chrome/)) {
-            return true;
-        }
-        
-        var data = {
-            msg: 'js exception: ' + error.message,
-            traceHTML: traceHtml
-        };
-        
-        var windowHeight = 400;
-        if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
-            windowHeight = Ext.getBody().getHeight(true) * 0.7;
-        }
-        
-        if (! Tine.Tinebase.exceptionDlg) {
-            Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
-                height: windowHeight,
-                exceptionInfo: data,
-                listeners: {
-                    close: function() {
-                        Tine.Tinebase.exceptionDlg = null;
-                    }
-                }
-            });
-            Tine.Tinebase.exceptionDlg.show(Tine.Tinebase.exceptionDlg);
-        }
-        return true;
     },
     
     /**
