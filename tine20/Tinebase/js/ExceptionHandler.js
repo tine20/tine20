@@ -13,7 +13,8 @@ Ext.namespace('Tine', 'Tine.Tinebase');
 Tine.Tinebase.ExceptionHandler = function() {
     
     var onWindowError = function() {
-        var error = getNormalisedError(arguments);
+        
+        var error = getNormalisedError.apply(this, arguments);
         
         var traceHtml = '<table>';
         for (p in error) {
@@ -99,14 +100,87 @@ Tine.Tinebase.ExceptionHandler = function() {
         return error;
     };
     
-    var handleRequestException = function() {
-        
+    var handleRequestException = function(exception) {
+        switch(exception.code) {
+            // not authorised
+            case 401:
+                Ext.MessageBox.show({
+                    title: _('Authorisation Required'), 
+                    msg: _('Your session timed out. You need to login again.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.WARNING,
+                    fn: function() {
+                        window.location.href = window.location.href;
+                    }
+                });
+                break;
+            
+            // insufficient rights
+            case 403:
+                Ext.MessageBox.show({
+                    title: _('Insufficient Rights'), 
+                    msg: _('Sorry, you are not permitted to perform this action'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.ERROR
+                });
+                break;
+            
+            // not found
+            case 404:
+                Ext.MessageBox.show({
+                    title: _('Not Found'), 
+                    msg: _('Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.ERROR
+                });
+                break;
+            
+            // concurrency conflict
+            case 409:
+                Ext.MessageBox.show({
+                    title: _('Concurrent Updates'), 
+                    msg: _('Someone else saved this record while you where editing the data. You need to reload and make your changes again.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.WARNING
+                });
+                break;
+            
+            // generic failure -> notify developers / only if no custom exception handler has been defined in options
+            default:
+            
+            // NOTE: exceptionHandler is depricated use the failure function of the request or listen to the exception events
+            //       of the Ext.Direct framework
+            if (typeof options.exceptionHandler !== 'function' || 
+                false === options.exceptionHandler.call(options.scope, response, options)) {
+                var windowHeight = 400;
+                if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
+                    windowHeight = Ext.getBody().getHeight(true) * 0.7;
+                }
+                
+                if (! Tine.Tinebase.exceptionDlg) {
+                    Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
+                        height: windowHeight,
+                        exceptionInfo: {
+                            msg   : data.message,
+                            trace : data.trace
+                        },
+                        listeners: {
+                            close: function() {
+                                Tine.Tinebase.exceptionDlg = null;
+                            }
+                        }
+                    });
+                    Tine.Tinebase.exceptionDlg.show();
+                }
+            }
+            break;
+        }
     }
     
     // init window error handler
-    window.onerror = window.onerror ? 
-        window.onerror.createSequence(onWindowError) :
-        onWindowError;
+    window.onerror = !window.onerror ? 
+        onWindowError :
+        window.onerror.createSequence(onWindowError);
         
     return {
         handleRequestException: this.handleRequestException
