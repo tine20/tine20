@@ -92,7 +92,7 @@ abstract class Tinebase_EmailUser_Abstract
         return $result;
     }
     
-        /**
+    /**
      * converts raw data from adapter into a single record / do mapping
      *
      * @param  array $_data
