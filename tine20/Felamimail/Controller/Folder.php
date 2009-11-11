@@ -291,7 +291,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @return Tinebase_Record_RecordSet with updated folder status
      * @throws Felamimail_Exception
      * 
-     * @deprecated
      * @todo    update folders in db?
      * @todo    move this to Felamimail_Controller_Cache
      */
@@ -310,6 +309,9 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
                     'Felamimail_Model_Folder', 
                     array($this->_folderBackend->get($_folderId))
                 );
+                
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating folder ' . $folders->getFirstRecord()->globalname);
+                
             } else if ($_folders !== NULL && $_folders instanceof Tinebase_Record_RecordSet) {
                 // recordset was given
                 $folders = $_folders;
