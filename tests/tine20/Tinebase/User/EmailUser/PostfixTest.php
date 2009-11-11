@@ -56,6 +56,11 @@ class Tinebase_User_EmailUser_PostfixTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        // clear table
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        $db = Zend_Db::factory('Pdo_Mysql', $smtpConfig['postfix']);
+        $db->query('TRUNCATE TABLE `smtp_users`');
+        
         $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::SMTP);
         
         $personas = Zend_Registry::get('personas');
