@@ -9,7 +9,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        add extra aliases table
+ * @todo        add validation of email addresses?
  * @todo        check domain handling
  * @todo        remove verbose debug output
  */
@@ -322,12 +322,18 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
             return;
         }
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Setting aliases for ' . $_emailUser->emailAddress . ': ' 
+            . print_r($_emailUser->emailAliases, TRUE));
+        
         foreach ($_emailUser->emailAliases as $aliasAddress) {
-            $aliasArray = array(
-                'email' => $_emailUser->emailAddress,
-                'alias' => $aliasAddress
-            );
-            $this->_db->insert($this->_config['prefix'] . $this->_config['aliasTable'], $aliasArray);
+            if (! empty($aliasAddress)) {
+                $aliasArray = array(
+                    'email' => $_emailUser->emailAddress,
+                    'alias' => $aliasAddress
+                );
+                $this->_db->insert($this->_config['prefix'] . $this->_config['aliasTable'], $aliasArray);
+            }
         }
     }
     
@@ -340,7 +346,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
     protected function _deleteAliases($_emailAddress)
     {
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('email') . ' != ?', $_emailAddress),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('email') . ' = ?', $_emailAddress),
         );
         
         $this->_db->delete($this->_config['prefix'] . $this->_config['aliasTable'], $where);
@@ -364,11 +370,13 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         }
         
         foreach ($_emailUser->emailForwards as $forwardAddress) {
-            $forwardArray = array(
-                'source'        => $_emailUser->emailAddress,
-                'destination'   => $forwardAddress,
-            );
-            $this->_db->insert($this->_config['prefix'] . $this->_config['forwardTable'], $forwardArray);
+            if (! empty($forwardAddress)) {
+                $forwardArray = array(
+                    'source'        => $_emailUser->emailAddress,
+                    'destination'   => $forwardAddress,
+                );
+                $this->_db->insert($this->_config['prefix'] . $this->_config['forwardTable'], $forwardArray);
+            }
         }
     }
     
