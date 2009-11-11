@@ -126,8 +126,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Zend_Session::writeClose(true);
         
         $result = array();
-        foreach ((array)$decodedFolderIds as $folderId) {
-            $result[] = Felamimail_Controller_Folder::getInstance()->updateFolderStatus($accountId, NULL, $folderId)->toArray();
+        if (empty($decodedFolderNames)) {
+            $result = Felamimail_Controller_Folder::getInstance()->updateFolderStatus($accountId)->toArray();
+        } else {
+            foreach ((array)$decodedFolderIds as $folderId) {
+                $result[] = Felamimail_Controller_Folder::getInstance()->updateFolderStatus($accountId, NULL, $folderId)->toArray();
+            }
         }
         
         return $result;
