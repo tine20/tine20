@@ -290,8 +290,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
             
             $messages = $this->_backend->getMultiple($_ids);
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
-                ' Moving ' . count($messages) . ' messages to folder ' . $folder->globalname);
+            if (count($messages) == 0) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
+                    ' Messages not found: ' . print_r($_ids, TRUE));
+            } else {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
+                    ' Moving ' . count($messages) . ' messages to folder ' . $folder->globalname);
+            }
             
             $folderBackend  = new Felamimail_Backend_Folder();
             foreach ($messages as $message) {
