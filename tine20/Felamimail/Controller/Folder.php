@@ -195,7 +195,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $folder = $this->_folderBackend->getByBackendAndGlobalName($_accountId, $_folderName);
             $this->_folderBackend->delete($folder->getId());
         } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Trying to delete non-existant folder.');
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Trying to delete non-existant folder.');
         }
     }
     
@@ -230,7 +230,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $folder = $this->_folderBackend->update($folder);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Trying to rename non-existant folder.');
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Trying to rename non-existant folder.');
             throw $tenf;
         }
         
@@ -310,7 +310,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
                     array($this->_folderBackend->get($_folderId))
                 );
                 
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating folder ' . $folders->getFirstRecord()->globalname);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating folder ' . $folders->getFirstRecord()->globalname);
                 
             } else if ($_folders !== NULL && $_folders instanceof Tinebase_Record_RecordSet) {
                 // recordset was given
