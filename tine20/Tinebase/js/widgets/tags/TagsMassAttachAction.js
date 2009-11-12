@@ -45,7 +45,8 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     getFormItems: function() {
         this.tagSelect = new Tine.widgets.tags.TagCombo({
             hideLabel: true,
-            anchor: '100%'
+            anchor: '100%',
+            onlyUsableTags: true
         });
         
         return [{

@@ -21,6 +21,11 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
      * @cfg {Bool} findGlobalTags true to find global tags during search (default: true)
      */
     findGlobalTags: true,
+
+    /**
+     * @cfg {Bool} onlyUsableTags true to find only usable flags for the user (default: true)
+     */
+    onlyUsableTags: false,
     
     id: 'TagCombo',
     emptyText: null,
@@ -69,7 +74,8 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     onBeforeQuery: function(qevent){
         var filter = {
             name: (qevent.query && qevent.query != '') ? '%' + qevent.query + '%' : '',
-            application: this.app ? this.app.appName : ''
+            application: this.app ? this.app.appName : '',
+            grant: (this.onlyUsableTags) ? 'use' : 'view' 
         };
         
         this.store.baseParams.filter = Ext.util.JSON.encode(filter);
