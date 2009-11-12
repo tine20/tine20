@@ -568,6 +568,9 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 } else {
                     this.updateUnreadCount(null, folderData[0][0].unreadcount, node);
                 }
+            },
+            failure: function() {
+                // do nothing
             }
         });
     },
@@ -669,6 +672,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     if (folderData.cache_status == 'complete') {
                         node.getUI().removeClass("x-tree-node-loading");
                     }
+                },
+                failure: function(response, options) {
+                    // call handle failure in tree loader and show credentials dialog / reload account afterwards
+                    this.loader.handleFailure(response, options, node.parentNode, false);
+                    node.getUI().removeClass("x-tree-node-loading");
                 }
             });
         } else {

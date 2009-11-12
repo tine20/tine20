@@ -70,10 +70,9 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
 
         if (!isset($params->user)) {
             /**
-             * @see Zend_Mail_Storage_Exception
+             * @see Felamimail_Exception_InvalidCredentials
              */
-            require_once 'Zend/Mail/Storage/Exception.php';
-            throw new Zend_Mail_Storage_Exception('need at least user in params');
+            throw new Felamimail_Exception_InvalidCredentials('Need at least user in params.');
         }
 
         $this->_messageClass = 'Felamimail_Message';
@@ -88,10 +87,9 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $this->_protocol->connect($host, $port, $ssl);
         if (!$this->_protocol->login($params->user, $password)) {
             /**
-             * @see Zend_Mail_Storage_Exception
+             * @see Felamimail_Exception_InvalidCredentials
              */
-            require_once 'Zend/Mail/Storage/Exception.php';
-            throw new Zend_Mail_Storage_Exception('cannot login, user or password wrong');
+            throw new Felamimail_Exception_InvalidCredentials('Cannot login, user or password wrong.');
         }
         $this->selectFolder(isset($params->folder) ? $params->folder : 'INBOX');
     }

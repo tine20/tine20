@@ -135,17 +135,17 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     /**
      * handle failure to show credentials dialog if imap login failed
      * 
-     * @param {String} response
-     * @param {Object} options
+     * @param {String}  response
+     * @param {Object}  options
+     * @param {Node}    node optional account node
+     * @param {Boolean} handleException
      */
-    handleFailure: function(response, options) {
+    handleFailure: function(response, options, node, handleException) {
         var responseText = Ext.util.JSON.decode(response.responseText);
-        
-        if (responseText.message == 'cannot login, user or password wrong' ||
-            responseText.message == 'need at least user in params') {
+        if (responseText.data.code == 902) {
             
             // get account id and update username/password
-            var accountNode = options.argument.node;
+            var accountNode = (options.argument) ? options.argument.node : node;
             var accountId = accountNode.attributes.account_id;
             
             // remove intelligent folders
@@ -173,7 +173,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
                 }
             });
             
-        } else {
+        } else if (handleException !== false) {
             var exception = responseText.data ? responseText.data : responseText;
             Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
         }

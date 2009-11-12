@@ -218,23 +218,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = $folder->toArray();
         
         return $result;
-        
-        /*
-        // update message cache of active folder and reload store (without loadmask)
-        $folder = $cacheController->updateMessages($folderId);
-        
-        // return folder data
-        $result = $folder->toArray();
-        
-        if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE
-                || $folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING
-        ) {
-            $this->_backgroundCacheImport($result);
-            // dies
-        } else {
-            return $result;
-        }
-        */
     }
     
     /**
