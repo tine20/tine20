@@ -553,7 +553,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     $attachments[] = $this->_getAttachmentDataFromPart($part, $partId, $accountId, $_message->getId(), $partHeaders);
                    
                 } else {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Don\'t get attachment of content-type: ' . $partHeaders['content-type']);
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                        . ' Don\'t get attachment of content-type: ' 
+                        . ((isset($partHeaders['content-type'])) ? $partHeaders['content-type'] : 'unknown')
+                    );
                 }
                 
                 $partNumber++;

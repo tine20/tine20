@@ -153,7 +153,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
         $result = array();
         if (empty($decodedFolderNames)) {
-            $result = Felamimail_Controller_Cache::getInstance()->updateFolders($folderName, $accountId);
+            $result = Felamimail_Controller_Cache::getInstance()->updateFolders('', $accountId);
         } else {
             foreach ((array)$decodedFolderNames as $folderName) {
                 $result[$folderName] = Felamimail_Controller_Cache::getInstance()->updateFolders($folderName, $accountId);
