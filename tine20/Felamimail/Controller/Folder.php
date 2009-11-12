@@ -234,6 +234,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             throw $tenf;
         }
         
+        // TODO loop subfolders (recursive) and replace new localname in globalname path
+        
         return $folder;
     }
 
