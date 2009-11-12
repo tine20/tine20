@@ -169,6 +169,8 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     },
     
     onProxyFail: function(error, event) {
+        this.setLoading(false);
+        
         if (error.code == 901) {
             // get names of busy attendee
             // TODO refactore name handling of attendee
@@ -243,6 +245,8 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 }, this
             );
             */
+        } else {
+            Tine.Tinebase.ExceptionHandler.handleRequestException(error);
         }
     },
     
