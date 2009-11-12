@@ -160,10 +160,12 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             });
         }
 	    
-	    this.loader = new Tine.widgets.container.TreeLoader({
-            appName: this.appName,
-            displayLength: this.displayLength
-	    });
+        if (! this.loader) {
+    	    this.loader = new Tine.widgets.container.TreeLoader({
+                appName: this.appName,
+                displayLength: this.displayLength
+    	    });
+        }
 		
 		this.initContextMenu();
 		
@@ -471,26 +473,7 @@ Ext.extend(Tine.widgets.container.TreeLoader, Ext.tree.TreeLoader, {
         attr.qtip = Ext.util.Format.htmlEncode(attr.text);
         attr.text = Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(attr.text, this.displayLength));
         
-        // cruide calendar hack (one day before beta release ;-) )
-        if (this.appName == 'Calendar') {
-            attr.listeners = {
-                append: function(tree, node, appendedNode, index) {
-                    if (appendedNode.attributes.containerType == 'singleContainer') {
-                        var container = appendedNode.attributes.container;
-                        // dynamically initialize colorMgr if needed
-                        if (! Tine.Calendar.colorMgr) {
-                            Tine.Calendar.colorMgr = new Tine.Calendar.ColorManager({});
-                        }
-                        var colorSet = Tine.Calendar.colorMgr.getColor(container);
-                        appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
-                            //Ext.DomHelper.insertAfter(this.iconNode, {tag: 'span', html: '&nbsp;&bull;&nbsp', style: {color: colorSet.color}})
-                            Ext.DomHelper.insertAfter(this.iconNode, {tag: 'span', html: '&nbsp;&#9673;&nbsp', style: {color: colorSet.color}})
-                            //Ext.DomHelper.insertAfter(this.iconNode, {tag: 'span', html: '&nbsp;&#x2b24;&nbsp', style: {color: colorSet.color}})
-                        }, appendedNode.ui);
-                    }
-                }
-            }
-        }
+        this.inspectCreateNode(attr);
         
 		// apply baseAttrs, nice idea Corey!
         if(this.baseAttrs){
@@ -505,5 +488,7 @@ Ext.extend(Tine.widgets.container.TreeLoader, Ext.tree.TreeLoader, {
         return(attr.leaf ?
                         new Ext.tree.TreeNode(attr) :
                         new Ext.tree.AsyncTreeNode(attr));
-    }
+    },
+    
+    inspectCreateNode: Ext.emptyFn
  });
