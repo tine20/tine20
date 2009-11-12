@@ -220,116 +220,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
-            var scope = this;
-            this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
-                
-                /**
-                 * gets value of this container filter
-                 */
-                getValue: function() {
-                    var sm = scope.getSelectionModel();
-                    var selection =  typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
-                    
-                    var filters = [];
-                    Ext.each(selection, function(node) {
-                        filters.push(this.node2Filter(node));
-                    }, this);
-                    
-                    if (filters.length == 0) {
-                        return {field: 'container_id', operator: 'equals', value: ''};
-                    } else if (filters.length == 1) {
-                        return filters[0];
-                    } else  {
-                        return {condition: 'OR', filters: filters};
-                    }
-                },
-                
-                node2Filter: function(node) {
-                    var filter = {field: 'container_id'};
-                    
-                    switch (node.attributes.containerType) {
-                        case 'singleContainer':
-                            filter.operator = 'equals';
-                            filter.value = node.attributes.container.id;
-                            break;
-                        case 'personal':
-                            filter.operator = 'personalNode';
-                            filter.value = node.attributes.owner.accountId;
-                            break;
-                        default:
-                            filter.operator = 'specialNode'
-                            filter.value = node.attributes.containerType;
-                            break;
-                    }
-                    
-                    return filter;
-                },
-                
-                /**
-                 * sets the selected container (node) of this tree
-                 * 
-                 * @param {Array} all filters
-                 */
-                setValue: function(filters) {
-                    for (var i=0; i<filters.length; i++) {
-                        if (filters[i].field == 'container_id') {
-                            switch (filters[i].operator) {
-                                case 'equals':
-                                    var parts = filters[i].value.path.replace(/^\//, '').split('/');
-                                    var userId, containerId;
-                                    switch (parts[0]) {
-                                        case 'personal':
-                                            userId = parts[1];
-                                            containerId = parts[2];
-                                            
-                                            if (userId == Tine.Tinebase.registry.get('currentAccount').accountId) {
-                                                scope.selectPath('/root/all/user/' + containerId);
-                                            } else {
-                                                scope.selectPath('/root/all/otherUsers/' + containerId);
-                                            }
-                                            break;
-                                        case 'shared':
-                                            containerId = parts[1];
-                                            scope.selectPath('/root/all/shared/' + containerId);
-                                            break;
-                                        default:
-                                            console.error('no such container type');
-                                            break;
-                                            
-                                    }
-                                    break;
-                                case 'specialNode':
-                                    switch (filters[i].value) {
-                                        case 'all':
-                                            scope.selectPath('/root/all');
-                                            break;
-                                        case 'shared':
-                                        case 'otherUsers':
-                                        case 'internal':
-                                            scope.selectPath('/root/all' + filters[i].value);
-                                            break;
-                                        default:
-                                            //throw new 
-                                            console.error('no such container_id spechial node');
-                                            break;
-                                    }
-                                    break;
-                                case 'personalNode':
-                                    if (filters[i].value == Tine.Tinebase.registry.get('currentAccount').accountId) {
-                                        scope.selectPath('/root/all/user');
-                                    } else {
-                                        //scope.expandPath('/root/all/otherUsers');
-                                        scope.selectPath('/root/all/otherUsers/' + filters[i].value);
-                                    }
-                                    break;
-                                default:
-                                    console.error('no such container_id filter operator');
-                                    break;
-                            }
-                        }
-                    }
-                    //console.log(filters);
-                }
+            //var scope = this;
+            this.filterPlugin = new Tine.widgets.container.TreeFilterPlugin({
+                scope: this
             });
             
             this.getSelectionModel().on('selectionchange', function(sm, node){
@@ -389,6 +282,126 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     }
 });
 
+Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
+    
+    /**
+     * gets value of this container filter
+     */
+    getValue: function() {
+        var sm = this.scope.getSelectionModel();
+        var selection =  typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
+        
+        var filters = [];
+        Ext.each(selection, function(node) {
+            filters.push(this.node2Filter(node));
+        }, this);
+        
+        if (filters.length == 0) {
+            return {field: 'container_id', operator: 'equals', value: ''};
+        } else if (filters.length == 1) {
+            return filters[0];
+        } else  {
+            return {condition: 'OR', filters: filters};
+        }
+    },
+    
+    node2Filter: function(node) {
+        var filter = {field: 'container_id'};
+        
+        switch (node.attributes.containerType) {
+            case 'singleContainer':
+                filter.operator = 'equals';
+                filter.value = node.attributes.container.id;
+                break;
+            case 'personal':
+                filter.operator = 'personalNode';
+                filter.value = node.attributes.owner.accountId;
+                break;
+            default:
+                filter.operator = 'specialNode'
+                filter.value = node.attributes.containerType;
+                break;
+        }
+        
+        return filter;
+    },
+    
+    /**
+     * sets the selected container (node) of this tree
+     * 
+     * @param {Array} all filters
+     */
+    setValue: function(filters) {
+        for (var i=0; i<filters.length; i++) {
+            if (filters[i].field == 'container_id') {
+                switch (filters[i].operator) {
+                    case 'equals':
+                        var parts = filters[i].value.path.replace(/^\//, '').split('/');
+                        var userId, containerId;
+                        switch (parts[0]) {
+                            case 'personal':
+                                userId = parts[1];
+                                containerId = parts[2];
+                                
+                                if (userId == Tine.Tinebase.registry.get('currentAccount').accountId) {
+                                    this.scope.selectPath('/root/all/user/' + containerId);
+                                } else {
+                                    this.scope.selectPath('/root/all/otherUsers/' + containerId);
+                                }
+                                break;
+                            case 'shared':
+                                containerId = parts[1];
+                                this.scope.selectPath('/root/all/shared/' + containerId);
+                                break;
+                            default:
+                                console.error('no such container type');
+                                break;
+                                
+                        }
+                        break;
+                    case 'specialNode':
+                        switch (filters[i].value) {
+                            case 'all':
+                                this.scope.selectPath('/root/all');
+                                break;
+                            case 'shared':
+                            case 'otherUsers':
+                            case 'internal':
+                                this.scope.selectPath('/root/all' + filters[i].value);
+                                break;
+                            default:
+                                //throw new 
+                                console.error('no such container_id spechial node');
+                                break;
+                        }
+                        break;
+                    case 'personalNode':
+                        if (filters[i].value == Tine.Tinebase.registry.get('currentAccount').accountId) {
+                            this.scope.selectPath('/root/all/user');
+                        } else {
+                            //scope.expandPath('/root/all/otherUsers');
+                            this.scope.selectPath('/root/all/otherUsers/' + filters[i].value);
+                        }
+                        break;
+                    default:
+                        console.error('no such container_id filter operator');
+                        break;
+                }
+            }
+        }
+        //console.log(filters);
+    }
+});
+
+/**
+ * Tree loader for {Tine.widgets.container.TreePanel}
+ * 
+ * @namespace Tine.widgets.container
+ * @class     Tine.widgets.container.TreeLoader
+ * @extends   Ext.tree.TreeLoader
+ * @constructor
+ * @param {Object} config
+ */
 Tine.widgets.container.TreeLoader = function(config) {
     
     Tine.widgets.container.TreeLoader.superclass.constructor.call(this, config);
@@ -399,14 +412,8 @@ Tine.widgets.container.TreeLoader = function(config) {
         loader.baseParams.containerType = node.attributes.containerType;
         loader.baseParams.owner = node.attributes.owner ? node.attributes.owner.accountId : null;
     }, this);
-}
+};
 
-/**
- * Helper class for {Tine.widgets.container.TreePanel}
- * 
- * @extends {Ext.tree.TreeLoader}
- * @param {Object} attr
- */
 Ext.extend(Tine.widgets.container.TreeLoader, Ext.tree.TreeLoader, {
     /**
      * @cfg {Number} how many chars of the containername to display
