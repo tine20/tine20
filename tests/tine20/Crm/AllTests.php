@@ -34,6 +34,7 @@ class Crm_AllTests
         $suite->addTestSuite('Crm_Export_PdfTest');
         $suite->addTestSuite('Crm_Export_CsvTest');
         $suite->addTestSuite('Crm_Export_OdsTest');
+        $suite->addTestSuite('Crm_Export_XlsTest');
         return $suite;
     }
 }

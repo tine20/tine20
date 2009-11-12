@@ -13,6 +13,9 @@
  * @todo        allow templates
  */
 
+// set include path for phpexcel
+set_include_path(dirname(dirname(dirname(__FILE__))) . '/library/PHPExcel' . PATH_SEPARATOR . get_include_path() );
+
 /**
  * Tinebase xls generation class
  * 
@@ -20,7 +23,7 @@
  * @subpackage  Export
  * 
  */
-class Tinebase_Export_Xls /* extends PHPExcel_XXX */
+class Tinebase_Export_Xls extends PHPExcel
 {
     /**
      * @var string $_applicationName
@@ -33,6 +36,7 @@ class Tinebase_Export_Xls /* extends PHPExcel_XXX */
      */
     public function __construct()
     {
+        parent::__construct();
     }
     
     /**
@@ -41,6 +45,7 @@ class Tinebase_Export_Xls /* extends PHPExcel_XXX */
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return void
      */
-    public function generate(Tinebase_Model_Filter_FilterGroup $_filter) {
+    public function generate(Tinebase_Model_Filter_FilterGroup $_filter)
+    {
     }
 }

@@ -26,14 +26,6 @@ class Crm_Export_Xls extends Tinebase_Export_Xls
     protected $_applicationName = 'Crm';
     
     /**
-     * the constructor
-     *
-     */
-    public function __construct()
-    {
-    }
-    
-    /**
      * export records to Xls file
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
