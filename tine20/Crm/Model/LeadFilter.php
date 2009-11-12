@@ -47,10 +47,15 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
         'leadstate_id'   => array('filter' => 'Tinebase_Model_Filter_Int'),
         'container_id'   => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Crm')),
         'showClosed'     => array('custom' => true),
-    
+        
+    // relation filters
         'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
             'related_model'     => 'Addressbook_Model_Contact',
             'related_filter'    => 'Addressbook_Model_ContactFilter'
+        )),
+        'product'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
+            'related_model'     => 'Sales_Model_Product',
+            'related_filter'    => 'Sales_Model_ProductFilter'
         )),
     );
 

@@ -49,7 +49,7 @@ Tine.Crm.LeadGridContactFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     
     getSubFilters: function() {
         var filterConfigs = Tine.Addressbook.Model.Contact.getFilterModel();
-        // todo: add some 'type' filter
+        // TODO add some 'type' filter
         
         Ext.each(filterConfigs, function(config) {
             //if (config.field != 'query') {
