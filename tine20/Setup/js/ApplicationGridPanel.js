@@ -254,12 +254,8 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
                 this.store.load();
                 longLoadMask.hide();
             },
-            fail: function() {
-                Ext.Msg.alert(this.app.i18n._('Shit'), this.app.i18n._('Where are the backup tapes'));
-            },
-            exceptionHandler: function(response){
-                var data = response ? Ext.util.JSON.decode(response.responseText) : null;
-                switch(data.code) {
+            failure: function(exception) {
+                switch(exception.code) {
                     //Dependency Exception
                     case 501:
                     Ext.MessageBox.show({
