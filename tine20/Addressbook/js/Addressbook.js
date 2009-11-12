@@ -240,7 +240,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
     var typeStore = [['contact', app.i18n._('Contact')], ['user', app.i18n._('User Account')]];
     
     return [
-        {label: app.i18n.n_('Contact', 'Contacts', 1),                                  field: 'query',              operators: ['contains']},
+        {label: _('Quick search'),                                                      field: 'query',              operators: ['contains']},
         {label: app.i18n._('First Name'),                                               field: 'n_given' },
         {label: app.i18n._('Last Name'),                                                field: 'n_family'},
         {label: app.i18n._('Company'),                                                  field: 'org_name'},

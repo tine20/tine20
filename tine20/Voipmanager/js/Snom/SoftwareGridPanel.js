@@ -48,7 +48,7 @@ Tine.Voipmanager.SnomSoftwareGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gr
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n._('Software'),    field: 'query',    operators: ['contains']}
+                {label: _('Quick search'),    field: 'query',    operators: ['contains']}
             ],
             defaultFilter: 'query',
             filters: [],

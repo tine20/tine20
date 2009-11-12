@@ -520,7 +520,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         var filterToolbar = new Tine.widgets.grid.FilterToolbar({
             id : 'activitiesFilterToolbar',
             filterModels: [
-                {label: this.translation._('Note'), field: 'query',         operators: ['contains']},
+                {label: _('Quick search'), field: 'query',         operators: ['contains']},
                 //{label: this.translation._('Time'), field: 'creation_time', operators: ['contains']}
                 {label: this.translation._('Time'), field: 'creation_time', valueType: 'date', pastOnly: true}
                 // user search is note working yet -> see NoteFilter.php

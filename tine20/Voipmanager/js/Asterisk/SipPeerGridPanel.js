@@ -47,7 +47,7 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
         	filterModels: [
-        	    {label: this.app.i18n._('Sip Peer'),    field: 'query',    operators: ['contains']},
+        	    {label: _('Quick search'),    field: 'query',    operators: ['contains']},
         	    {label: this.app.i18n._('Name'), field: 'name' }
         	],
             defaultFilter: 'query',

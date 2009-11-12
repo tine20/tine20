@@ -48,7 +48,7 @@ Tine.Voipmanager.AsteriskContextGridPanel = Ext.extend(Tine.Tinebase.widgets.app
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n._('Context'),    field: 'query',    operators: ['contains']}
+                {label: _('Quick search'),    field: 'query',    operators: ['contains']}
             ],
             defaultFilter: 'query',
             filters: [],

@@ -60,7 +60,7 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n.n_('Contract', 'Contract', 1),    field: 'query',    operators: ['contains']}
+                {label: _('Quick search'),    field: 'query',    operators: ['contains']}
                 //{label: this.app.i18n._('Summary'), field: 'summary' }
             ],
             defaultFilter: 'query',

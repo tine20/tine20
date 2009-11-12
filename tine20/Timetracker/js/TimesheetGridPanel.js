@@ -210,7 +210,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             allowSaving: true,
             filterModels: [
-                //{label: this.app.i18n._('Timesheet'),    field: 'query',    operators: ['contains']}, // query only searches description
+                //{label: _('Quick search'),    field: 'query',    operators: ['contains']}, // query only searches description
                 {label: this.app.i18n._('Account'),      field: 'account_id', valueType: 'user'},
                 {label: this.app.i18n._('Date'),         field: 'start_date', valueType: 'date', pastOnly: true},
                 {label: this.app.i18n._('Description'),  field: 'description', defaultOperator: 'contains'},

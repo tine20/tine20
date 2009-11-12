@@ -101,7 +101,7 @@ Tine.Sales.ProductGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     getFilterToolbar: function() {
         return new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n._('Product'),        field: 'query',    operators: ['contains']},
+                {label: _('Quick search'), field: 'query',    operators: ['contains']},
                 {label: this.app.i18n._('Product name'),   field: 'name' },
                 {filtertype: 'tinebase.tag', app: this.app}
             ],

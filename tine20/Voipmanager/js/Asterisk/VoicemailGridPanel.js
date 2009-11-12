@@ -48,7 +48,7 @@ Tine.Voipmanager.AsteriskVoicemailGridPanel = Ext.extend(Tine.Tinebase.widgets.a
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n._('Voicemail'),    field: 'query',    operators: ['contains']}
+                {label: _('Quick search'),    field: 'query',    operators: ['contains']}
             ],
             defaultFilter: 'query',
             filters: [],

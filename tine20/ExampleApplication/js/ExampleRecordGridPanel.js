@@ -84,7 +84,7 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widget
             filterModels: [
                 // @todo add filtes
                 /*
-                {label: this.app.i18n._('ExampleRecord'),    field: 'query',       operators: ['contains']},
+                {label: _('Quick search'),    field: 'query',       operators: ['contains']},
                 {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
                 new Tine.ExampleApplication.TimeAccountStatusGridFilter({
                     field: 'status'
