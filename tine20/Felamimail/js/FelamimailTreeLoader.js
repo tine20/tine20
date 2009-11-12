@@ -174,7 +174,8 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             });
             
         } else {
-            Ext.Ajax.fireEvent('requestexception', Ext.Ajax, response, options);
+            var exception = responseText.data ? responseText.data : responseText;
+            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
         }
     }
 });
