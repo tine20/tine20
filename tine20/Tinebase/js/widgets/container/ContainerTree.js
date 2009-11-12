@@ -220,7 +220,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
-            //var scope = this;
             this.filterPlugin = new Tine.widgets.container.TreeFilterPlugin({
                 scope: this
             });
@@ -282,6 +281,14 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     }
 });
 
+
+/**
+ * filter plugin for container tree
+ * 
+ * @namespace Tine.widgets.container
+ * @class     Tine.widgets.container.TreeFilterPlugin
+ * @extends   Tine.widgets.grid.FilterPlugin
+ */
 Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
     
     /**
