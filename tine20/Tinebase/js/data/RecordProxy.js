@@ -363,19 +363,16 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                 
                     options.failure.apply(options.scope, args);
                 } else {
-                    Ext.Ajax.fireEvent('requestexception', Ext.Ajax, response, options);
+                    var responseData = Ext.decode(response.responseText)
+                    var exception = responseData.data ? responseData.data : responseData;
+                    
+                    Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
                 }
             }
         };
         
         if (options.timeout) {
             requestOptions.timeout = options.timeout;
-        }
-        
-        if (typeof options.exceptionHandler == 'function') {
-            requestOptions.exceptionHandler = function(response) {
-                return options.exceptionHandler.call(options.scope, response, options);
-            };
         }
         
         return Ext.Ajax.request(requestOptions);
