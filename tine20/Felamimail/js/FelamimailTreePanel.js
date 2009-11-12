@@ -649,12 +649,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                                     String.format(this.app.i18n._('You got {0} new mail(s) in Folder '), 
                                         folderData.unreadcount - node.attributes.unreadcount) 
                                         + node.attributes.localname
-                                ); 
-                            }
-                            
-                            // update only if something changed
-                            if (this.getSelectionModel().getSelectedNode().id = node.id) {
-                                this.filterPlugin.onFilterChange();
+                                );
+                                // update only if something changed
+                                if (this.getSelectionModel().getSelectedNode().id = node.id) {
+                                    this.filterPlugin.onFilterChange();
+                                }
                             }
                         }
                         
