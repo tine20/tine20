@@ -9,7 +9,14 @@
  */
  
 Ext.namespace('Tine', 'Tine.Tinebase');
- 
+
+/**
+ * @namespace Tine.Tinebase
+ * @class Tine.Tinebase.ExceptionHandler
+ * @sigleton
+ * 
+ * central class for exception handling
+ */
 Tine.Tinebase.ExceptionHandler = function() {
     
     var onWindowError = function() {
@@ -102,6 +109,11 @@ Tine.Tinebase.ExceptionHandler = function() {
     
     var handleRequestException = function(exception) {
         switch(exception.code) {
+            case 0:
+                // if communication is lost, we can't create a nice ext window.
+                alert(_('Connection lost, please check your network!'));
+                break;
+                
             // not authorised
             case 401:
                 Ext.MessageBox.show({
@@ -110,7 +122,12 @@ Tine.Tinebase.ExceptionHandler = function() {
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.WARNING,
                     fn: function() {
-                        window.location.href = window.location.href;
+                        var redirect = (Tine.Tinebase.registry.get('redirectUrl'));
+                        if (redirect && redirect != '') {
+                            window.location = Tine.Tinebase.registry.get('redirectUrl');
+                        } else {
+                            window.location = window.location.href.replace(/#+.*/, '');
+                        }
                     }
                 });
                 break;
@@ -145,33 +162,28 @@ Tine.Tinebase.ExceptionHandler = function() {
                 });
                 break;
             
-            // generic failure -> notify developers / only if no custom exception handler has been defined in options
+            // generic failure -> notify developers
             default:
             
-            // NOTE: exceptionHandler is depricated use the failure function of the request or listen to the exception events
-            //       of the Ext.Direct framework
-            if (typeof options.exceptionHandler !== 'function' || 
-                false === options.exceptionHandler.call(options.scope, response, options)) {
-                var windowHeight = 400;
-                if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
-                    windowHeight = Ext.getBody().getHeight(true) * 0.7;
-                }
-                
-                if (! Tine.Tinebase.exceptionDlg) {
-                    Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
-                        height: windowHeight,
-                        exceptionInfo: {
-                            msg   : data.message,
-                            trace : data.trace
-                        },
-                        listeners: {
-                            close: function() {
-                                Tine.Tinebase.exceptionDlg = null;
-                            }
+            var windowHeight = 400;
+            if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
+                windowHeight = Ext.getBody().getHeight(true) * 0.7;
+            }
+            
+            if (! Tine.Tinebase.exceptionDlg) {
+                Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
+                    height: windowHeight,
+                    exceptionInfo: {
+                        msg   : exception.message,
+                        trace : exception.trace
+                    },
+                    listeners: {
+                        close: function() {
+                            Tine.Tinebase.exceptionDlg = null;
                         }
-                    });
-                    Tine.Tinebase.exceptionDlg.show();
-                }
+                    }
+                });
+                Tine.Tinebase.exceptionDlg.show();
             }
             break;
         }
@@ -183,6 +195,6 @@ Tine.Tinebase.ExceptionHandler = function() {
         window.onerror.createSequence(onWindowError);
         
     return {
-        handleRequestException: this.handleRequestException
+        handleRequestException: handleRequestException
     };
 }();

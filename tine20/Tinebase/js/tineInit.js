@@ -254,9 +254,14 @@ Tine.Tinebase.tineInit = {
         Ext.Ajax.requestId = 0;
         
         /**
-         * send custom headers and json key on Ext.Ajax.requests
+         * inspect all requests done via the ajax singleton
          * 
-         * @legacy implicitly transform requests for JSONRPC
+         * - send custom headers
+         * - send json key 
+         * - implicitly transform non jsonrpc requests
+         * 
+         * NOTE: implicitly transformed reqeusts get their callback fn's proxied 
+         *       through generic response inspectors as defined below
          */
         Ext.Ajax.on('beforerequest', function(connection, options){
             options.headers = options.headers || {};
@@ -304,20 +309,40 @@ Tine.Tinebase.tineInit = {
         });
         
         /**
-         * detect resoponse errors (e.g. html from xdebug)
+         * inspect completed responses => staus code == 200
          * 
-         * @legacy implicitly transform requests from JSONRPC
+         * - detect resoponse errors (e.g. html from xdebug) and convert to exceptional states
+         * - implicitly transform requests from JSONRPC
+         * 
+         *  NOTE: All programatically catchable exceptions lead to successfull requests
+         *        with the jsonprc protocol. For implicitly converted jsonprc requests we 
+         *        transform error states here and route them to the error methods defined 
+         *        in the request options
          */
         Ext.Ajax.on('requestcomplete', function(connection, response, options){
-            // detect resoponse errors (e.g. html from xdebug)
+            
+            // detect resoponse errors (e.g. html from xdebug) and convert into error response
             if (! options.isUpload && ! response.responseText.match(/^([{\[])|(<\?xml)+/)) {
-                var htmlText = response.responseText;
-                response.responseText = Ext.util.JSON.encode({
-                    msg: htmlText,
-                    trace: []
-                });
+                var exception = {
+                    code: 1, // @todo : find usefull error code here
+                    message: 'illegal json data in response',
+                    trace: [],
+                    traceHTML: options.responseText,
+                    request: options.jsonData,
+                    response: options.responseText
+                };
                 
-                connection.fireEvent('requestexception', connection, response, options);
+                // encapsulate as jsonrpc response
+                var requestOptions = Ext.decode(options.jsonData);
+                response.responseText = Ext.encode({
+                    jsonrpc: requestOptions.jsonrpc,
+                    id: requestOptions.id,
+                    error: {
+                        code: -32000,
+                        message: exception.message,
+                        data: exception
+                    }
+                });
             }
             
             // strip jsonrpc fragments for non Ext.Direct requests
@@ -341,123 +366,69 @@ Tine.Tinebase.tineInit = {
                     } else if(options.cbs.callback){
                         options.cbs.callback.call(options.scope, options, false, response);
                     } else {
-                        // generic error handling
-                        connection.fireEvent('requestexception', connection, response, options);
+                        var responseData = Ext.decode(response.responseText)
+                        var exception = responseData.data ? responseData.data : responseData;
+                        
+                        Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
                     }
                 }
             }
         });
         
         /**
-         * generic error handling
-         * 
-         * executed on requestexceptions and error states which are not handled by failure/callback functions
+         * inspect request exceptions
+         *  - convert to jsonrpc compatiple exceptional states
+         *  - call generic exception handler if no handler is defined in request options
+         *  
+         * NOTE: Request exceptions are exceptional state from web-server:
+         *       -> status codes != 200 : This kind of exceptions are not part of the jsonrpc protocol
+         *       -> timeouts: status code -1 @rethink?
          */
-        Ext.Ajax.on('requestexception', function(connection, response, options){
+        Ext.Ajax.on('requestexception', function(connection, response, options) {
             
-            // if communication is lost, we can't create a nice ext window.
-            if (response.status === 0) {
-                alert(_('Connection lost, please check your network!'));
-                return false;
-            }
-            
-            // decode JSONRPC response
-            var rpcData = response ? Ext.util.JSON.decode(response.responseText) : null;
-            
-            // server did not respond anything
-            if (! rpcData) {
-                //alert(_('The server did not respond to your request. Please check your network or contact your administrator.'));
-                Ext.MessageBox.show({
-                    title: _('No response'), 
-                    msg: _('We did not receive a response from the server. Your network could be down or a timeout occurred.'),
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.ERROR
-                });
-                return true;
-            }
-            
-            // error data
-            var data = (rpcData.data) 
-                ? rpcData.data 
-                : {code: 0, message: (rpcData.msg) ? rpcData.msg : rpcData.message};
-            
-            switch(data.code) {
-                // not authorised
-                case 401:
-                if (! options.params || options.params.method != 'Tinebase.logout') {
-                    Ext.MessageBox.show({
-                        title: _('Authorisation Required'), 
-                        msg: _('Your session timed out. You need to login again.'),
-                        buttons: Ext.Msg.OK,
-                        icon: Ext.MessageBox.WARNING,
-                        fn: function() {
-                            window.location.href = window.location.href;
-                        }
-                    });
-                }
-                break;
+            // convert into error response
+            if (! options.isUpload) {
+                var exception = {
+                    code: response.status,
+                    message: 'request exception: ' + response.statusText,
+                    trace: [],
+                    traceHTML: options.responseText,
+                    request: options.jsonData,
+                    response: options.responseText
+                };
                 
-                // insufficient rights
-                case 403:
-                Ext.MessageBox.show({
-                    title: _('Insufficient Rights'), 
-                    msg: _('Sorry, you are not permitted to perform this action'),
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.ERROR
-                });
-                break;
-                
-                // not found
-                case 404:
-                Ext.MessageBox.show({
-                    title: _('Not Found'), 
-                    msg: _('Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view.'),
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.ERROR
-                });
-                break;
-                
-                // concurrency conflict
-                case 409:
-                Ext.MessageBox.show({
-                    title: _('Concurrent Updates'), 
-                    msg: _('Someone else saved this record while you where editing the data. You need to reload and make your changes again.'),
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.WARNING
-                });
-                break;
-                
-                // generic failure -> notify developers / only if no custom exception handler has been defined in options
-                default:
-                
-                // NOTE: exceptionHandler is depricated use the failure function of the request or listen to the exception events
-                //       of the Ext.Direct framework
-                if (typeof options.exceptionHandler !== 'function' || 
-                    false === options.exceptionHandler.call(options.scope, response, options)) {
-                    var windowHeight = 400;
-                    if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
-                        windowHeight = Ext.getBody().getHeight(true) * 0.7;
+                // encapsulate as jsonrpc response
+                var requestOptions = Ext.decode(options.jsonData);
+                response.responseText = Ext.encode({
+                    jsonrpc: requestOptions.jsonrpc,
+                    id: requestOptions.id,
+                    error: {
+                        code: -32000,
+                        message: exception.message,
+                        data: exception
                     }
+                });
+            }
+            
+            if (options.isImplicitJsonRpc) {
+                var jsonrpc = Ext.decode(response.responseText);
+                
+                response.responseText = Ext.encode(jsonrpc.error);
                     
-                    if (! Tine.Tinebase.exceptionDlg) {
-                        Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
-                            height: windowHeight,
-                            exceptionInfo: {
-                                msg   : data.message,
-                                trace : data.trace
-                            },
-                            listeners: {
-                                close: function() {
-                                    Tine.Tinebase.exceptionDlg = null;
-                                }
-                            }
-                        });
-                        Tine.Tinebase.exceptionDlg.show();
-                    }
+                if(options.cbs.failure){
+                    options.cbs.failure.call(options.scope, response, options);
+                } else if(options.cbs.callback){
+                    options.cbs.callback.call(options.scope, options, false, response);
+                } else {
+                    var responseData = Ext.decode(response.responseText)
+                    var exception = responseData.data ? responseData.data : responseData;
+                    
+                    Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
                 }
-                break;
+                
+            } else if (! options.failure && ! options.callback) {
+                Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
             }
-            
         });
     },
     
