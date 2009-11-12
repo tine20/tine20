@@ -19,6 +19,9 @@ Ext.namespace('Tine', 'Tine.Tinebase');
  */
 Tine.Tinebase.ExceptionHandler = function() {
     
+    /**
+     * handle window errors
+     */
     var onWindowError = function() {
         
         var error = getNormalisedError.apply(this, arguments);
@@ -107,6 +110,11 @@ Tine.Tinebase.ExceptionHandler = function() {
         return error;
     };
     
+    /**
+     * generic request exception handling
+     * 
+     * NOTE: status codes 9xx are reserverd for applications and must not be handled here! 
+     */
     var handleRequestException = function(exception) {
         switch(exception.code) {
             case 510:
