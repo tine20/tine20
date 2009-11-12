@@ -382,14 +382,17 @@ Tine.Tinebase.tineInit = {
          *  
          * NOTE: Request exceptions are exceptional state from web-server:
          *       -> status codes != 200 : This kind of exceptions are not part of the jsonrpc protocol
-         *       -> timeouts: status code -1 @rethink?
+         *       -> timeouts: status code 520
          */
         Ext.Ajax.on('requestexception', function(connection, response, options) {
-            
+            // map connection errors to errorcode 510 and timeouts to 520
+            var errorCode = response.status > 0 ? response.status :
+                            (response.status == 0 ? 510 : 520);
+                            
             // convert into error response
             if (! options.isUpload) {
                 var exception = {
-                    code: response.status,
+                    code: errorCode,
                     message: 'request exception: ' + response.statusText,
                     trace: [],
                     traceHTML: options.responseText,

@@ -109,7 +109,7 @@ Tine.Tinebase.ExceptionHandler = function() {
     
     var handleRequestException = function(exception) {
         switch(exception.code) {
-            case 0:
+            case 510:
                 // if communication is lost, we can't create a nice ext window.
                 alert(_('Connection lost, please check your network!'));
                 break;
