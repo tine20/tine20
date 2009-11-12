@@ -59,6 +59,25 @@ Tine.Sales.Model.Product.getDefaultData = function() {
     return data;
 };
 
+/**
+ * @namespace Tine.Sales.Model
+ * 
+ * get product filter
+ *  
+ * @return {Array} filter objects
+ * @static
+ */ 
+Tine.Sales.Model.Product.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('Sales');
+    
+    return [
+        {label: _('Quick search'), field: 'query',    operators: ['contains']},
+        {label: app.i18n._('Product name'),   field: 'name' },
+        {filtertype: 'tinebase.tag', app: app}
+    ];
+};
+
+
 // Contract model fields
 Tine.Sales.Model.ContractArray = Tine.Tinebase.Model.genericFields.concat([
     // contract only fields
