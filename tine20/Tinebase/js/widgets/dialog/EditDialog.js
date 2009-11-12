@@ -419,12 +419,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             this.window.close();
                         }
                     },
-                    // NOTE: we don't have a failure handler in the generic edit dialog any more (always open exception dialog on fail)
-                    //       -> use the method 'onRequestFailed' for custom handling in child class
-                    /*failure:  function (result, request) {
-                        Ext.MessageBox.alert(_('Failed'), String.format(_('Could not save {0}.'), this.i18nRecordName)); 
-                    },*/
-                    exceptionHandler: this.onRequestFailed,
+                    failure: this.onRequestFailed,
                     timeout: 150000 // 3 minutes
                 });
             } else {
@@ -466,5 +461,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 });
             }
         });
+    },
+    
+    /**
+     * generic request exception handler
+     * 
+     * @param {Object} exception
+     */
+    onRequestFailed: function(exception) {
+        Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
     }
 });
