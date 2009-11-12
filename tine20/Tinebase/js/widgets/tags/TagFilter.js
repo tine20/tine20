@@ -17,6 +17,7 @@ Tine.widgets.tags.TagFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     app: null,
     
     field: 'tag',
+    defaultOperator: 'equals',
     
     /**
      * @private
@@ -24,11 +25,10 @@ Tine.widgets.tags.TagFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     initComponent: function() {
         Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
         
+        this.operators = ['equals', 'not'];
         this.label = _('Tag');
-        this.operators = ['equals'];
-        
-        
     },
+    
     /**
      * value renderer
      * 
