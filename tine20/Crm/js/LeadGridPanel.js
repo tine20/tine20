@@ -212,6 +212,13 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                         format: 'ods',
                         exportFunction: 'Crm.exportLead',
                         gridPanel: this
+                    }),
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as XLS'),
+                        iconCls: 'tinebase-action-export-xls',
+                        format: 'xls',
+                        exportFunction: 'Crm.exportLead',
+                        gridPanel: this
                     })
                 ]
             }

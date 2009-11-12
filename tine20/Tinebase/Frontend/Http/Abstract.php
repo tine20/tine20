@@ -120,6 +120,17 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 $result = $export->generate($_filter);
                 $contentType = 'application/vnd.oasis.opendocument.spreadsheet';
                 break;
+
+            case 'xls':
+                $export->generate($_filter);
+                // @todo support older excel formats? add config option?
+                
+                // Excel 2007 content type
+                //$contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+                
+                // Excel 5 content type
+                $contentType = 'application/vnd.ms-excel';
+                break;
                 
             default:
                 throw new Tinebase_Exception_UnexpectedValue('Format ' . $_format . ' not supported.');
@@ -134,11 +145,19 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         header("Content-type: $contentType");
         
         // output export file
-        if ($_format == 'pdf') {
-            echo $pdfOutput;
-        } else {
-            readfile($result);
-            unlink($result);
+        switch ($_format) {
+            case 'pdf':
+                echo $pdfOutput;
+                break;
+            case 'xls':
+                // redirect output to client browser
+                //$xlswriter = PHPExcel_IOFactory::createWriter($export, 'Excel2007');
+                $xlswriter = PHPExcel_IOFactory::createWriter($export, 'Excel5');
+                $xlswriter->save('php://output');
+                break;
+            default:
+                readfile($result);
+                unlink($result);
         }
     }        
     

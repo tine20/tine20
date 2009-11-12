@@ -89,7 +89,8 @@ html, body {
 }
 .action_export {
     background-image:url(../../images/oxygen/16x16/actions/file-export.png) !important;
-}	
+}
+
 .action_import {
     background-image:url(../../images/oxygen/16x16/actions/view-sort-ascending.png) !important;
 }   
@@ -106,6 +107,10 @@ html, body {
 
 .action_composeEmail {
     background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
+}
+
+.tinebase-action-export-xls{
+    background-image:url(../../images/oxygen/16x16/mimetypes/application-vnd.ms-excel.png) !important;
 }
 
 /* ----- about dialog --------------------------------------------------------*/
