@@ -230,7 +230,7 @@ class Tinebase_Export_Ods extends OpenDocument_Document
             $recordBackend = new Timetracker_Backend_Timesheet();
         }
         
-        $locale = Tinebase_Core::get('locale');
+        $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
         
         // add timesheet rows
         $i = 0;
