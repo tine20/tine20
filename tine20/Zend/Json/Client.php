@@ -22,48 +22,34 @@
 
 
 /**
- * For handling the HTTP connection to the XML-RPC service
+ * For handling the HTTP connection to the JSON-RPC service
  * @see Zend_Http_Client
  */
 require_once 'Zend/Http/Client.php';
 
 /**
- * Enables object chaining for calling namespaced XML-RPC methods.
- * @see Zend_XmlRpc_Client_ServerProxy
+ * Enables object chaining for calling namespaced JSON-RPC methods.
+ * @see Zend_Json_Client_ServerProxy
  */
-require_once 'Zend/XmlRpc/Client/ServerProxy.php';
+require_once 'Zend/Json/Client/ServerProxy.php';
 
 /**
- * Introspects remote servers using the XML-RPC de facto system.* methods
- * @see Zend_XmlRpc_Client_ServerIntrospection
+ * Introspects remote servers using the JSON-RPC de facto system.* methods
+ * @see Zend_Json_Client_ServerIntrospection
  */
-require_once 'Zend/XmlRpc/Client/ServerIntrospection.php';
+require_once 'Zend/Json/Client/ServerIntrospection.php';
 
 /**
- * Represent a native XML-RPC value, used both in sending parameters
- * to methods and as the parameters retrieve from method calls
- * @see Zend_XmlRpc_Value
+ * Json-RPC Request
+ * @see Zend_Json_Server_Request
  */
-require_once 'Zend/XmlRpc/Value.php';
+require_once 'Zend/Json/Server/Request.php';
 
 /**
- * XML-RPC Request
- * @see Zend_XmlRpc_Request
+ * Json-RPC Response
+ * @see Zend_Json_Client_Response
  */
-require_once 'Zend/XmlRpc/Request.php';
-
-/**
- * XML-RPC Response
- * @see Zend_XmlRpc_Response
- */
-require_once 'Zend/XmlRpc/Response.php';
-
-/**
- * XML-RPC Fault
- * @see Zend_XmlRpc_Fault
- */
-require_once 'Zend/XmlRpc/Fault.php';
-
+require_once 'Zend/Json/Client/Response.php';
 
 /**
  * An JSON-RPC client implementation
