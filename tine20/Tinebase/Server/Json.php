@@ -62,14 +62,17 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             $method  = $request->getMethod();
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
             
+            if(!empty($method)) {
+                $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
+                $this->_checkJsonKey($method, $jsonKey);
+            }
+            
             // add json apis which require no auth
             $server->setClass('Tinebase_Frontend_Json', 'Tinebase');
             $server->setClass('Tinebase_Frontend_Json_UserRegistration', 'Tinebase_UserRegistration');
             
             // register additional Json apis only available for authorised users
             if (Zend_Auth::getInstance()->hasIdentity()) {
-                $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
-                $this->_checkJsonKey($method, $jsonKey);
                 
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user data: " . print_r(Tinebase_Core::getUser()->toArray(), true));
                 
