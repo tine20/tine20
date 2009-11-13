@@ -96,13 +96,10 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
         
         this.addFill();
         
-        /*
-        if(this.dsLoaded){
-            this.onLoad.apply(this, this.dsLoaded);
+        if(this.isLoading){
+            this.loading.disable();
         }
-        //this.loading.disable();
-        */
-
+        
     },
     
     /**
@@ -133,6 +130,8 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
     
     // private
     beforeLoad : function(){
+        this.isLoading = true;
+        
         if(this.rendered && this.loading) {
             this.loading.disable();
         }
@@ -140,6 +139,8 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
     
     // private
     onLoad : function(store, r, o){
+        this.isLoading = false;
+        
         if(this.rendered && this.loading) {
             this.loading.enable();
         }
