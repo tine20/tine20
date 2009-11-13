@@ -185,7 +185,6 @@ Ext.ux.tree.CheckboxSelectionModel = Ext.extend(Ext.ux.tree.CheckboxSelectionMod
         // recursivly unselect parent nodes
         while(node = node.parentNode) {
             if (this.isSelected(node)) {
-                console.log(node);
                 node.unselect();
             }
         }
