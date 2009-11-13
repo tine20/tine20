@@ -224,14 +224,14 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param  string                     $_backend   backend of record
      * @return void
      */
-    public function getMultipleNotesOfRecords($_records, $_notesProperty = 'notes', $_backend = 'Sql')
+    public function getMultipleNotesOfRecords($_records, $_notesProperty = 'notes', $_backend = 'Sql', $_onlyNonSystemNotes = TRUE)
     {
         if (count($_records) == 0) {
             return;
         }
         
         $modelName = $_records->getRecordClassName();
-        $filter = $this->_getNotesFilter($_records->getArrayOfIds(), $modelName, $_backend);
+        $filter = $this->_getNotesFilter($_records->getArrayOfIds(), $modelName, $_backend, $_onlyNonSystemNotes);
         
         // search and add index
         $notesOfRecords = $this->searchNotes($filter);
