@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Ods.php 10912 2009-10-12 14:40:25Z p.schuele@metaways.de $
  * 
- * @todo        set metadata
  * @todo        allow templates
  */
 
@@ -45,6 +44,13 @@ class Tinebase_Export_Xls extends PHPExcel
     protected $_translate;
 
     /**
+     * locale object
+     *
+     * @var Zend_Locale
+     */
+    protected $_locale;
+
+    /**
      * current row number
      * 
      * @var integer
@@ -65,6 +71,19 @@ class Tinebase_Export_Xls extends PHPExcel
             $this->_applicationName, 
             $this->_getDefaultConfig()
         );
+        $this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
+        
+        // set metadata/properties
+        $this->getProperties()
+            ->setCreator(Tinebase_Core::getUser()->accountDisplayName)
+            ->setLastModifiedBy(Tinebase_Core::getUser()->accountDisplayName)
+            ->setTitle('Tine 2.0 ' . $this->_applicationName . ' Export')
+            ->setSubject('Office 2007 XLSX Test Document')
+            ->setDescription('Export for ' . $this->_applicationName . ', generated using PHP classes.')
+            ->setKeywords("tine20 openxml php")
+            ->setCreated(Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale));
+            
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->getProperties(), true));
         
         $this->_currentRowIndex = 1;
     }
