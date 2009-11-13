@@ -415,12 +415,7 @@ Tine.widgets.container.TreeLoader = function(config) {
     
     Tine.widgets.container.TreeLoader.superclass.constructor.call(this, config);
     
-    this.on("beforeload", function(loader, node) {
-        loader.baseParams.method = 'Tinebase_Container.getContainer';
-        loader.baseParams.application = this.appName;
-        loader.baseParams.containerType = node.attributes.containerType;
-        loader.baseParams.owner = node.attributes.owner ? node.attributes.owner.accountId : null;
-    }, this);
+    this.on("beforeload", this.onBeforeLoad, this);
 };
 
 Ext.extend(Tine.widgets.container.TreeLoader, Ext.tree.TreeLoader, {
@@ -490,5 +485,18 @@ Ext.extend(Tine.widgets.container.TreeLoader, Ext.tree.TreeLoader, {
                         new Ext.tree.AsyncTreeNode(attr));
     },
     
-    inspectCreateNode: Ext.emptyFn
+    inspectCreateNode: Ext.emptyFn,
+    
+    /**
+     * inspect load action
+     * 
+     * @param {TreeLoader} loader
+     * @param {node} node
+     */
+    onBeforeLoad: function(loader, node) {
+        loader.baseParams.method = 'Tinebase_Container.getContainer';
+        loader.baseParams.application = this.appName;
+        loader.baseParams.containerType = node.attributes.containerType;
+        loader.baseParams.owner = node.attributes.owner ? node.attributes.owner.accountId : null;
+    }
  });
