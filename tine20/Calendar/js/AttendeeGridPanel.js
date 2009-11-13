@@ -288,6 +288,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     
     // NOTE: Ext docu seems to be wrong on arguments here
     onContextMenu: function(e, target) {
+        e.preventDefault();
         var row = this.getView().findRowIndex(target);
         var attender = this.store.getAt(row);
         if (attender) {
