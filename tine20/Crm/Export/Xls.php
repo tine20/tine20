@@ -142,7 +142,6 @@ class Crm_Export_Xls extends Tinebase_Export_Xls
                 'notes' => array(
                     'header'    => $this->_translate->_('History'),
                     'type'      => 'notes',
-                    'field'     => 'note',
                 ),            
             ),
             //'template' => 'lead_test_template.xls'

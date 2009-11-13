@@ -46,20 +46,6 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
 
 
     /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-        
-        // remove test config
-        Tinebase_Config::getInstance()->deleteConfigForApplication(Tinebase_Model_Config::XLSEXPORTCONFIG, 'Crm');
-    }
-    
-    /**
      * test xls export
      * 
      * @return void
@@ -69,7 +55,6 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
      */
     public function testExportXls()
     {
-        $this->_setTestConfig();
         $this->_instance = new Crm_Export_Xls();
         $translate = Tinebase_Translation::getTranslation('Crm');
         
@@ -104,8 +89,7 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
      */
     public function testExportXlsWithTemplate()
     {
-        $this->_setTestConfig(TRUE);
-        $this->_instance = new Crm_Export_Xls();
+        $this->_instance = new Crm_Export_Xls(array('template' => 'lead_test_template.xls'));
         $excelObj = $this->_instance->generate(new Crm_Model_LeadFilter($this->_getLeadFilter()));
         
         // output as csv
@@ -122,100 +106,6 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         $this->assertEquals(1, preg_match("/Description/", $export), 'no description');
         
         unlink($csvFilename);
-    }
-    
-    /**
-     * set test config for xls export
-     * 
-     * @param boolean $template
-     * @return void
-     */
-    public function _setTestConfig($template = FALSE)
-    {
-        $translate = Tinebase_Translation::getTranslation('Crm');
-        $config = array('fields' => array(
-                'lead_name' => array(
-                    'header'    => $translate->_('Lead Name'),
-                ),
-                'description' => array(
-                    'header'    => $translate->_('Description'),
-                ),
-                'turnover' => array(
-                    'header'    => $translate->_('Turnover'),
-                ),
-                'probability' => array(
-                    'header'    => $translate->_('Probability'),
-                ),
-                'start' => array(
-                    'header'    => $translate->_('Date Start'),
-                    'type'      => 'datetime', 
-                ),
-                'end' => array(
-                    'header'    => $translate->_('Date End'),
-                    'type'      => 'datetime', 
-                ),
-                'end_scheduled' => array(
-                    'header'    => $translate->_('Date End Scheduled'),
-                    'type'      => 'datetime', 
-                ),
-                'created_by' => array(
-                    'header'    => $translate->_('Created By'),
-                    'type'      => 'user', 
-                ),
-                'leadstate' => array(
-                    'header'    => $translate->_('Leadstate'),
-                    'type'      => 'config', 
-                ),
-                'leadsource' => array(
-                    'header'    => $translate->_('Leadsource'),
-                    'type'      => 'config', 
-                ),
-                'leadtype' => array(
-                    'header'    => $translate->_('Leadtype'),
-                    'type'      => 'config', 
-                ),
-                'PARTNER' => array(
-                    'header'    => $translate->_('Partner'),
-                    'type'      => 'relation',
-                    'field'     => 'n_fileas',
-                ),
-                'CUSTOMER' => array(
-                    'header'    => $translate->_('Customer'),
-                    'type'      => 'relation',
-                    'field'     => 'n_fileas',
-                ),
-                'RESPONSIBLE' => array(
-                    'header'    => $translate->_('Responsible'),
-                    'type'      => 'relation',
-                    'field'     => 'n_fileas',
-                ),
-                'TASK' => array(
-                    'header'    => $translate->_('Task'),
-                    'type'      => 'relation',
-                    'field'     => 'summary',
-                ),
-                'PRODUCT' => array(
-                    'header'    => $translate->_('Product'),
-                    'type'      => 'relation',
-                    'field'     => 'name',
-                ),
-                'notes' => array(
-                    'header'    => $translate->_('History'),
-                    'type'      => 'notes',
-                    'field'     => 'note',
-                ), 
-            )
-        );
-        
-        if ($template) {
-            $config['template'] = 'lead_test_template.xls';
-        }
-        
-        Tinebase_Config::getInstance()->setConfigForApplication(
-            Tinebase_Model_Config::XLSEXPORTCONFIG, 
-            Zend_Json::encode($config), 
-            'Crm'
-        );
     }
 }       
 

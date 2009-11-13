@@ -74,7 +74,7 @@ class Tinebase_Export_Xls
      * the constructor
      *
      */
-    public function __construct()
+    public function __construct($_additionalConfig = array())
     {
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_config = Tinebase_Config::getInstance()->getConfigAsArray(
@@ -82,6 +82,7 @@ class Tinebase_Export_Xls
             $this->_applicationName, 
             $this->_getDefaultConfig()
         );
+        $this->_config = array_merge($this->_config, $_additionalConfig);
         $this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_config, TRUE));
@@ -147,11 +148,17 @@ class Tinebase_Export_Xls
         ));
         $records = $_controller->search($_filter, $pagination, $_getRelations);
         
+        // resolve users
         foreach ($this->_userFields as $field) {
             if (in_array($field, array_keys($this->_config['fields']))) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resolving users for ' . $field);
                 Tinebase_User::getInstance()->resolveMultipleUsers($records, $field, TRUE);
             }
+        }
+        
+        // add notes
+        if (in_array('notes', array_keys($this->_config['fields']))) {
+            Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($records, 'notes', 'Sql', FALSE);
         }
 
         $this->_addHead();
@@ -185,8 +192,6 @@ class Tinebase_Export_Xls
      */
     protected function _addBody($_records)
     {
-        $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
-        
         // add record rows
         $i = 0;
         foreach ($_records as $record) {
@@ -201,7 +206,7 @@ class Tinebase_Export_Xls
                 
                 switch($params['type']) {
                     case 'datetime':
-                        $value = ($record->$key) ? $record->$key->toString(Zend_Locale_Format::getDateFormat($locale), $locale) : '';
+                        $value = ($record->$key) ? $record->$key->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale) : '';
                         break;
                     case 'user':
                         $value = ($record->$key) ? $record->$key->accountDisplayName : '';
@@ -213,7 +218,7 @@ class Tinebase_Export_Xls
                         $value = $this->_addRelations($record, $key, $params['field']);
                         break;
                     case 'notes':
-                        $value = $this->_addNotes($record, $params['field']);
+                        $value = $this->_addNotes($record);
                         break;
                     default:
                         $value = $record->$key;
@@ -270,15 +275,16 @@ class Tinebase_Export_Xls
      * @param string $_recordField
      * @return string
      * 
+     * @todo use get multiple notes of records
      */
-    protected function _addNotes(Tinebase_Record_Abstract $_record, $_recordField)
+    protected function _addNotes(Tinebase_Record_Abstract $_record)
     {
-        $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(get_class($_record), $_record->getId(), 'Sql', FALSE);
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($notes->toArray(), true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->notes->toArray(), true));
         
         $resultArray = array();
-        foreach ($notes as $note) {
-            $resultArray[] = $note->{$_recordField};
+        foreach ($_record->notes as $note) {
+            $date = $note->creation_time->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale);
+            $resultArray[] = $date . ' - ' . $note->note;
         }
         
         $result = implode(';', $resultArray);
