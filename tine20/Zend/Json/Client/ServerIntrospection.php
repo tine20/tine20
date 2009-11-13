@@ -21,6 +21,12 @@
  */
 
 /**
+ * Json SMD Response
+ * @see Zend_Json_Client_SMD
+ */
+require_once 'Zend/Json/Client/SMD.php';
+
+/**
  * Wraps the JSON-RPC system.* introspection methods
  *
  * @category   Zend

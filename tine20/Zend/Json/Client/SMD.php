@@ -39,6 +39,11 @@ class Zend_Json_Client_SMD
     public function getMethodSignature($method)
     {
         if(!array_key_exists($method, $this->_smd['services'])) {
+            /**
+             * Exception thrown when method not found
+             * @see Zend_Json_Client_IntrospectException
+             */
+            require_once 'Zend/Json/Client/IntrospectException.php';
             throw new Zend_Json_Client_IntrospectException("method $method not found in smd");
         }
         

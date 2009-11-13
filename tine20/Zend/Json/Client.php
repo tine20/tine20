@@ -52,6 +52,24 @@ require_once 'Zend/Json/Server/Request.php';
 require_once 'Zend/Json/Client/Response.php';
 
 /**
+ * Zend Version
+ * @see Zend_Version
+ */
+require_once 'Zend/Json/Decoder.php';
+
+/**
+ * Zend Version
+ * @see Zend_Version
+ */
+require_once 'Zend/Json/Encoder.php';
+
+/**
+ * Zend Version
+ * @see Zend_Version
+ */
+require_once 'Zend/Version.php';
+
+/**
  * An JSON-RPC client implementation
  *
  * @category   Zend
