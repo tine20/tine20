@@ -152,7 +152,9 @@ class Tinebase_Relations
      */
     public function getRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_ignoreAcl=false)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' backend: '$_backend' ids:" . print_r((array)$_id, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' backend: '$_backend' " 
+            // . 'ids: ' . print_r((array)$_id, true)
+        );
     
         $result = $this->_backend->getAllRelations($_model, $_backend, $_id, $_degree, $_type);
         $this->resolveAppRecords($result);
