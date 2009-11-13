@@ -62,15 +62,15 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             $method  = $request->getMethod();
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
             
-            $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
-            $this->_checkJsonKey($method, $jsonKey);
-            
             // add json apis which require no auth
             $server->setClass('Tinebase_Frontend_Json', 'Tinebase');
             $server->setClass('Tinebase_Frontend_Json_UserRegistration', 'Tinebase_UserRegistration');
             
             // register additional Json apis only available for authorised users
             if (Zend_Auth::getInstance()->hasIdentity()) {
+                $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
+                $this->_checkJsonKey($method, $jsonKey);
+                
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user data: " . print_r(Tinebase_Core::getUser()->toArray(), true));
                 
                 $applicationParts = explode('.', $method);
@@ -97,7 +97,18 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                 }
             }
             
-            return $server->handle($request);
+            if(!empty($method)) {
+                // handle response
+                return $server->handle($request);
+            } else {
+                // return smd
+                $server->setTarget('index.php')
+                       ->setEnvelope(Zend_Json_Server_Smd::ENV_JSONRPC_2);
+                    
+                $smd = $server->getServiceMap();
+                
+                return $smd;
+            }
             
         } catch (Exception $exception) {
             
