@@ -260,7 +260,9 @@ class Tinebase_Config
         $settings = $controller->getSettings();
         $idField = $_label . '_id';
         
-        $result = $settings->getOptionById($_record->{$idField}, $_label . 's');
-        return $result[$_label];
+        $option = $settings->getOptionById($_record->{$idField}, $_label . 's');
+        
+        $result = (isset($option[$_label])) ? $option[$_label] : '';
+        return $result;
     }    
 }
