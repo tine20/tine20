@@ -95,8 +95,20 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             
             this.quickFilter.on('keyup', this.syncField, this);
             this.quickFilter.on('change', this.syncField, this);
+            
+            this.alwaysBtn = new Ext.Button({
+                xtype: 'button',
+                enableToggle: true,
+                text: '...',
+                tooltip: _('Always show advanced filters'),
+                handler: this.ftb.onFilterRowsChange.createDelegate(this.ftb)
+            });
         }
-        return this.quickFilter;
+        
+        return [
+            this.quickFilter,
+            this.alwaysBtn
+        ];
     },
     
     /**
@@ -167,7 +179,8 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         
         if (this.ftb.filterStore.getCount() <= 1 
             && this.ftb.filterStore.getAt(0).get('field') == this.quickFilterField
-            && !this.ftb.filterStore.getAt(0).formFields.value.getValue()) {
+            && !this.ftb.filterStore.getAt(0).formFields.value.getValue()
+            && !this.alwaysBtn.pressed) {
                 
             this.ftb.el.dom.style.display = 'none';
         } else {
@@ -176,6 +189,8 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             // fix strange FF layout problem
             this.ftb.filterStore.getAt(0).formFields.value.syncSize();
         }
+        
+        
     },
     
     /**
@@ -226,6 +241,14 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         } else {
             this.quickFilter.setValue(this.quickFilterRow.formFields.value.getValue());
         }
+    },
+    
+    /**
+     * show advanced filter regardless of quickfilter contents
+     */
+    toggleShowAdvancedFilter: function(btn) {
+        //console.log(btn.pressed);
+        //this.ftb.el.dom.style.display = '';
     },
     
     /**
