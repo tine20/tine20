@@ -77,10 +77,10 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
                     
                     if (id.match(/resource/i)) {
                         if (id == 'allResources') {
-                            return {field: 'resource', operator: 'specialNode', value: 'all'};
+                            return {field: 'attender', operator: 'specialNode', value: 'allResources'};
                         } else {
                             var rid = node.attributes.id.split('_')[1];
-                            return {field: 'resource', operator: 'equals', value: rid};
+                            return {field: 'attender', operator: 'equals', value: {user_type: 'resource', user_id: rid}};
                         }
                         
                     } else {
