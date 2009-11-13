@@ -10,7 +10,6 @@
  * @version     $Id: Ods.php 10912 2009-10-12 14:40:25Z p.schuele@metaways.de $
  * 
  * @todo        add relations, notes/history, formulas (?)
- * @todo        use template
  */
 
 /**
@@ -31,10 +30,12 @@ class Crm_Export_Xls extends Tinebase_Export_Xls
      *
      * @param Crm_Model_LeadFilter $_filter
      * @return PHPExcel
+     * 
+     * @todo    add more values (like in the csv export)
      */
     public function generate(Crm_Model_LeadFilter $_filter)
     {
-        return $this->_generate($_filter, Crm_Controller_Lead::getInstance());
+        return $this->_generate($_filter, Crm_Controller_Lead::getInstance(), 'lead_name', TRUE);
     }
     
     /**
@@ -49,47 +50,50 @@ class Crm_Export_Xls extends Tinebase_Export_Xls
                 'lead_name' => array(
                     'header'    => $this->_translate->_('Lead Name'),
                     'type'      => 'string', 
-                    'width'     => '5cm',
+                //    'width'     => '5cm',
                 ),
                 'description' => array(
                     'header'    => $this->_translate->_('Description'),
                     'type'      => 'string', 
-                    'width'     => '10cm'
+                //    'width'     => '10cm'
                 ),
                 'turnover' => array(
                     'header'    => $this->_translate->_('Turnover'),
                     'type'      => 'string', 
-                    'width'     => '2cm'
+                //    'width'     => '2cm'
                 ),
                 'probability' => array(
                     'header'    => $this->_translate->_('Probability'),
                     'type'      => 'string', 
-                    'width'     => '2cm'
+                //    'width'     => '2cm'
                 ),
                 'start' => array(
                     'header'    => $this->_translate->_('Date Start'),
                     'type'      => 'datetime', 
-                    'width'     => '2,5cm'
+                //    'width'     => '2,5cm'
                 ),
                 'end' => array(
                     'header'    => $this->_translate->_('Date End'),
                     'type'      => 'datetime', 
-                    'width'     => '2,5cm'
+                //    'width'     => '2,5cm'
                 ),
                 'end_scheduled' => array(
                     'header'    => $this->_translate->_('Date End Scheduled'),
                     'type'      => 'datetime', 
-                    'width'     => '2,5cm'
+                //    'width'     => '2,5cm'
                 ),
-                /*
                 'created_by' => array(
                     'header'    => $this->_translate->_('Created By'),
-                    'type'      => 'created_by', 
-                    'field'     => 'accountDisplayName', 
-                    'width'     => '4cm'
+                    'type'      => 'user', 
+                //    'width'     => '4cm'
                 ),
-                */
-            )
+                'last_modified_by' => array(
+                    'header'    => $this->_translate->_('Last modified By'),
+                    'type'      => 'user', 
+                //    'width'     => '4cm'
+                ),
+            ),
+            //'template' => 'lead_test_template.xls'
         );
     }
 }

@@ -76,15 +76,16 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         
         // output as csv
         $xlswriter = new PHPExcel_Writer_CSV($excelObj);
-        // $xlswriter->save('php://output');
+        //$xlswriter->save('php://output');
         
         $csvFilename = 'test.csv';
         $xlswriter->save($csvFilename);
         
         $this->assertTrue(file_exists($csvFilename));
         $export = file_get_contents($csvFilename);
-        $this->assertEquals(1, preg_match("/PHPUnit/", $export), 'no name'); 
-        $this->assertEquals(1, preg_match("/Description/", $export), 'no description');
+        $this->assertEquals(1, preg_match("/PHPUnit/",                  $export), 'no name'); 
+        $this->assertEquals(1, preg_match("/Description/",              $export), 'no description');
+        $this->assertEquals(1, preg_match('/Admin Account, Tine 2.0/',  $export), 'no creator');
         
         unlink($csvFilename);
     }
@@ -130,47 +131,32 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         $config = array('fields' => array(
                 'lead_name' => array(
                     'header'    => $translate->_('Lead Name'),
-                    'type'      => 'string', 
-                    'width'     => '5cm',
                 ),
                 'description' => array(
                     'header'    => $translate->_('Description'),
-                    'type'      => 'string', 
-                    'width'     => '10cm'
                 ),
                 'turnover' => array(
                     'header'    => $translate->_('Turnover'),
-                    'type'      => 'string', 
-                    'width'     => '2cm'
                 ),
                 'probability' => array(
                     'header'    => $translate->_('Probability'),
-                    'type'      => 'string', 
-                    'width'     => '2cm'
                 ),
                 'start' => array(
                     'header'    => $translate->_('Date Start'),
                     'type'      => 'datetime', 
-                    'width'     => '2,5cm'
                 ),
                 'end' => array(
                     'header'    => $translate->_('Date End'),
                     'type'      => 'datetime', 
-                    'width'     => '2,5cm'
                 ),
                 'end_scheduled' => array(
                     'header'    => $translate->_('Date End Scheduled'),
                     'type'      => 'datetime', 
-                    'width'     => '2,5cm'
                 ),
-                /*
                 'created_by' => array(
                     'header'    => $translate->_('Created By'),
-                    'type'      => 'created_by', 
-                    'field'     => 'accountDisplayName', 
-                    'width'     => '4cm'
+                    'type'      => 'user', 
                 ),
-                */
             )
         );
         

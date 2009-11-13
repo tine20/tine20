@@ -64,6 +64,13 @@ class Tinebase_Export_Xls
     protected $_excelObject = NULL;
     
     /**
+     * user fields to resolve
+     * 
+     * @var array
+     */
+    protected $_userFields = array('created_by', 'last_modified_by');
+    
+    /**
      * the constructor
      *
      */
@@ -85,9 +92,11 @@ class Tinebase_Export_Xls
                 . DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $this->_config['template'];
                 
             if (file_exists($templateFilename)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using template file ' . $templateFilename);
+                
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Using template file ' . $templateFilename);
                 $this->_excelObject = PHPExcel_IOFactory::load($templateFilename);
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_excelObject->getProperties(), true));
+                
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_excelObject->getProperties(), true));
                 
                 $this->_excelObject->setActiveSheetIndex(1);
                 
@@ -95,6 +104,8 @@ class Tinebase_Export_Xls
                 throw new Tinebase_Exception_NotFound('Template file ' . $templateFilename . ' not found');
             }
         } else {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new PHPExcel object.');
+            
             $this->_excelObject = new PHPExcel();
         }
         
@@ -129,11 +140,21 @@ class Tinebase_Export_Xls
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return PHPExcel
      */
-    protected function _generate(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_SearchInterface $_controller)
+    protected function _generate(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_SearchInterface $_controller, $_sortBy = 'id', $_getRelations = FALSE)
     {
-        $this->_addHead();
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort' => $_sortBy,
+        ));
+        $records = $_controller->search($_filter, $pagination, $_getRelations);
         
-        $records = $_controller->search($_filter);
+        foreach ($this->_userFields as $field) {
+            if (in_array($field, array_keys($this->_config['fields']))) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resolving users for ' . $field);
+                Tinebase_User::getInstance()->resolveMultipleUsers($records, $field, TRUE);
+            }
+        }
+
+        $this->_addHead();
         $this->_addBody($records);
         
         return $this->getExcelObject();
@@ -174,9 +195,16 @@ class Tinebase_Export_Xls
             
             $columnId = 0;
             foreach ($this->_config['fields'] as $key => $params) {
+                
+                // string is default type
+                $params['type'] = (isset($params['type'])) ? $params['type'] : 'string';
+                
                 switch($params['type']) {
                     case 'datetime':
                         $value = ($record->$key) ? $record->$key->toString(Zend_Locale_Format::getDateFormat($locale), $locale) : '';
+                        break;
+                    case 'user':
+                        $value = ($record->$key) ? $record->$key->accountDisplayName : '';
                         break;
                     default:
                         $value = $record->$key;
