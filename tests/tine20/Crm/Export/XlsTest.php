@@ -71,21 +71,26 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
     {
         $this->_setTestConfig();
         $this->_instance = new Crm_Export_Xls();
+        $translate = Tinebase_Translation::getTranslation('Crm');
         
         $excelObj = $this->_instance->generate(new Crm_Model_LeadFilter($this->_getLeadFilter()));
         
         // output as csv
         $xlswriter = new PHPExcel_Writer_CSV($excelObj);
-        //$xlswriter->save('php://output');
+        $xlswriter->save('php://output');
         
         $csvFilename = 'test.csv';
         $xlswriter->save($csvFilename);
+        $noteString = Tinebase_Translation::getTranslation('Tinebase')->_('created') . ' ' . Tinebase_Translation::getTranslation('Tinebase')->_('by');
         
         $this->assertTrue(file_exists($csvFilename));
         $export = file_get_contents($csvFilename);
-        $this->assertEquals(1, preg_match("/PHPUnit/",                  $export), 'no name'); 
-        $this->assertEquals(1, preg_match("/Description/",              $export), 'no description');
-        $this->assertEquals(1, preg_match('/Admin Account, Tine 2.0/',  $export), 'no creator');
+        $this->assertEquals(1, preg_match("/PHPUnit/",                          $export), 'no name'); 
+        $this->assertEquals(1, preg_match("/Description/",                      $export), 'no description');
+        $this->assertEquals(1, preg_match('/Admin Account, Tine 2.0/',          $export), 'no creator');
+        $this->assertEquals(1, preg_match('/' . $translate->_('open') . '/',    $export), 'no leadstate');
+        $this->assertEquals(1, preg_match('/Kneschke/',                         $export), 'no partner');
+        $this->assertEquals(1, preg_match('/' . $noteString . '/',              $export), 'no note');
         
         unlink($csvFilename);
     }
@@ -157,6 +162,48 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
                     'header'    => $translate->_('Created By'),
                     'type'      => 'user', 
                 ),
+                'leadstate' => array(
+                    'header'    => $translate->_('Leadstate'),
+                    'type'      => 'config', 
+                ),
+                'leadsource' => array(
+                    'header'    => $translate->_('Leadsource'),
+                    'type'      => 'config', 
+                ),
+                'leadtype' => array(
+                    'header'    => $translate->_('Leadtype'),
+                    'type'      => 'config', 
+                ),
+                'PARTNER' => array(
+                    'header'    => $translate->_('Partner'),
+                    'type'      => 'relation',
+                    'field'     => 'n_fileas',
+                ),
+                'CUSTOMER' => array(
+                    'header'    => $translate->_('Customer'),
+                    'type'      => 'relation',
+                    'field'     => 'n_fileas',
+                ),
+                'RESPONSIBLE' => array(
+                    'header'    => $translate->_('Responsible'),
+                    'type'      => 'relation',
+                    'field'     => 'n_fileas',
+                ),
+                'TASK' => array(
+                    'header'    => $translate->_('Task'),
+                    'type'      => 'relation',
+                    'field'     => 'summary',
+                ),
+                'PRODUCT' => array(
+                    'header'    => $translate->_('Product'),
+                    'type'      => 'relation',
+                    'field'     => 'name',
+                ),
+                'notes' => array(
+                    'header'    => $translate->_('History'),
+                    'type'      => 'notes',
+                    'field'     => 'note',
+                ), 
             )
         );
         

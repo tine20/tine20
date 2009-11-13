@@ -206,6 +206,15 @@ class Tinebase_Export_Xls
                     case 'user':
                         $value = ($record->$key) ? $record->$key->accountDisplayName : '';
                         break;
+                    case 'config':
+                        $value = Tinebase_Config::getOptionString($record, $key);
+                        break;
+                    case 'relation':
+                        $value = $this->_addRelations($record, $key, $params['field']);
+                        break;
+                    case 'notes':
+                        $value = $this->_addNotes($record, $params['field']);
+                        break;
                     default:
                         $value = $record->$key;
                 }
@@ -226,5 +235,53 @@ class Tinebase_Export_Xls
     protected function _getDefaultConfig()
     {
         return array();
+    }
+    
+    /**
+     * add relation values from related records
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_fieldName
+     * @param string $_recordField
+     * @return string
+     * 
+     * @todo    add _getSummary()?
+     */
+    protected function _addRelations(Tinebase_Record_Abstract $_record, $_fieldName, $_recordField)
+    {
+        $_record->relations->addIndices(array('type'));
+        $matchingRelations = $_record->relations->filter('type', $_fieldName);
+        
+        $resultArray = array();
+        foreach ($matchingRelations as $relation) {
+            $resultArray[] = $relation->related_record->{$_recordField};
+        }
+        
+        $result = implode(';', $resultArray);
+        
+        return $result;
+    }
+
+    /**
+     * add relation values from related records
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_fieldName
+     * @param string $_recordField
+     * @return string
+     * 
+     */
+    protected function _addNotes(Tinebase_Record_Abstract $_record, $_recordField)
+    {
+        $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(get_class($_record), $_record->getId(), 'Sql', FALSE);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($notes->toArray(), true));
+        
+        $resultArray = array();
+        foreach ($notes as $note) {
+            $resultArray[] = $note->{$_recordField};
+        }
+        
+        $result = implode(';', $resultArray);
+        return $result;
     }
 }
