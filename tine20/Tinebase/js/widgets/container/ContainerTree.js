@@ -87,6 +87,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	initComponent: function(){
         var translation = new Locale.Gettext();
         translation.textdomain('Tinebase');
+        
+        if (! this.loader) {
+            this.loader = new Tine.widgets.container.TreeLoader({
+                appName: this.appName,
+                displayLength: this.displayLength
+            });
+        }
 		
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
 		this.addEvents(
@@ -160,13 +167,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             });
         }
 	    
-        if (! this.loader) {
-    	    this.loader = new Tine.widgets.container.TreeLoader({
-                appName: this.appName,
-                displayLength: this.displayLength
-    	    });
-        }
-		
 		this.initContextMenu();
 		
         // permit selection of nodes with missing required grant
