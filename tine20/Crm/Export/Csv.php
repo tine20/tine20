@@ -78,27 +78,11 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
      * @param Tinebase_Record_Abstract $_record
      * @param string $_fieldName
      * @return string
+     * 
+     * @todo generalize this
      */
     protected function _addSpecialValue(Tinebase_Record_Abstract $_record, $_fieldName)
     {
-        $result = '';
-        $settings = Crm_Controller::getInstance()->getSettings();
-        
-        switch ($_fieldName) {
-            case 'leadstate_id':
-                $state = $settings->getOptionById($_record->leadstate_id, 'leadstates');
-                $result = $state['leadstate'];
-                break;
-            case 'leadtype_id':
-                $type = $settings->getOptionById($_record->leadtype_id, 'leadtypes');
-                $result = $type['leadtype'];
-                break;
-            case 'leadsource_id':
-                $source = $settings->getOptionById($_record->leadsource_id, 'leadsources');
-                $result = $source['leadsource'];
-                break;
-        }
-        
-        return $result;
+        return Tinebase_Config::getOptionString($_record, preg_replace('/_id/', '', $_fieldName));
     }
 }
