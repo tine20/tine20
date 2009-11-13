@@ -78,8 +78,6 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
      * @param Tinebase_Record_Abstract $_record
      * @param string $_fieldName
      * @return string
-     * 
-     * @todo generalize this
      */
     protected function _addSpecialValue(Tinebase_Record_Abstract $_record, $_fieldName)
     {
