@@ -122,7 +122,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 break;
 
             case 'xls':
-                $export->generate($_filter);
+                $result = $export->generate($_filter);
                 // @todo support older excel formats? add config option?
                 
                 // Excel 2007 content type
@@ -151,8 +151,8 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 break;
             case 'xls':
                 // redirect output to client browser
-                //$xlswriter = PHPExcel_IOFactory::createWriter($export, 'Excel2007');
-                $xlswriter = PHPExcel_IOFactory::createWriter($export, 'Excel5');
+                //$xlswriter = PHPExcel_IOFactory::createWriter($result, 'Excel2007');
+                $xlswriter = PHPExcel_IOFactory::createWriter($result, 'Excel5');
                 $xlswriter->save('php://output');
                 break;
             default:

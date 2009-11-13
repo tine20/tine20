@@ -30,11 +30,11 @@ class Crm_Export_Xls extends Tinebase_Export_Xls
      * export records to Xls file
      *
      * @param Crm_Model_LeadFilter $_filter
-     * @return void
+     * @return PHPExcel
      */
     public function generate(Crm_Model_LeadFilter $_filter)
     {
-        $this->_generate($_filter, Crm_Controller_Lead::getInstance());
+        return $this->_generate($_filter, Crm_Controller_Lead::getInstance());
     }
     
     /**

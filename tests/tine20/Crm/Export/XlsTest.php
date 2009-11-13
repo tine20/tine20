@@ -57,18 +57,34 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
     }
 
     /**
-     * test ods export
+     * Tears down the fixture
+     * This method is called after a test is executed.
+     *
+     * @access protected
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        
+        // remove test config
+        Tinebase_Config::getInstance()->deleteConfigForApplication(Tinebase_Model_Config::XLSEXPORTCONFIG, 'Crm');
+    }
+    
+    /**
+     * test xls export
      * 
      * @return void
      * 
      * @todo save and test xls file (with xls reader)
+     * @todo check metadata
      */
     public function testExportXls()
     {
-        $this->_instance->generate(new Crm_Model_LeadFilter($this->_getLeadFilter()));
+        $this->_setTestConfig();
+        $excelObj = $this->_instance->generate(new Crm_Model_LeadFilter($this->_getLeadFilter()));
         
         // output as csv
-        $xlswriter = new PHPExcel_Writer_CSV($this->_instance);
+        $xlswriter = new PHPExcel_Writer_CSV($excelObj);
         // $xlswriter->save('php://output');
         
         $csvFilename = 'test.csv';
@@ -80,6 +96,103 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         $this->assertEquals(1, preg_match("/Description/", $export), 'no description');
         
         unlink($csvFilename);
+    }
+
+    /**
+     * test xls export
+     * 
+     * @return void
+     * 
+     * @todo save and test xls file (with xls reader)
+     */
+    public function testExportXlsWithTemplate()
+    {
+        /*
+        $this->_setTestConfig(TRUE);
+        $excelObj = $this->_instance->generate(new Crm_Model_LeadFilter($this->_getLeadFilter()));
+        
+        // output as csv
+        $excelObj->setActiveSheetIndex(1);
+        $xlswriter = new PHPExcel_Writer_CSV($excelObj);
+        // $xlswriter->save('php://output');
+        
+        $csvFilename = 'test.csv';
+        $xlswriter->save($csvFilename);
+        
+        $this->assertTrue(file_exists($csvFilename));
+        $export = file_get_contents($csvFilename);
+        $this->assertEquals(1, preg_match("/PHPUnit/", $export), 'no name'); 
+        $this->assertEquals(1, preg_match("/Description/", $export), 'no description');
+        
+        unlink($csvFilename);
+        */
+    }
+    
+    /**
+     * set test config for xls export
+     * 
+     * @param boolean $template
+     * @return void
+     */
+    public function _setTestConfig($template = FALSE)
+    {
+        $translate = Tinebase_Translation::getTranslation('Crm');
+        $config = array('fields' => array(
+                'lead_name' => array(
+                    'header'    => $translate->_('Lead Name'),
+                    'type'      => 'string', 
+                    'width'     => '5cm',
+                ),
+                'description' => array(
+                    'header'    => $translate->_('Description'),
+                    'type'      => 'string', 
+                    'width'     => '10cm'
+                ),
+                'turnover' => array(
+                    'header'    => $translate->_('Turnover'),
+                    'type'      => 'string', 
+                    'width'     => '2cm'
+                ),
+                'probability' => array(
+                    'header'    => $translate->_('Probability'),
+                    'type'      => 'string', 
+                    'width'     => '2cm'
+                ),
+                'start' => array(
+                    'header'    => $translate->_('Date Start'),
+                    'type'      => 'datetime', 
+                    'width'     => '2,5cm'
+                ),
+                'end' => array(
+                    'header'    => $translate->_('Date End'),
+                    'type'      => 'datetime', 
+                    'width'     => '2,5cm'
+                ),
+                'end_scheduled' => array(
+                    'header'    => $translate->_('Date End Scheduled'),
+                    'type'      => 'datetime', 
+                    'width'     => '2,5cm'
+                ),
+                /*
+                'created_by' => array(
+                    'header'    => $translate->_('Created By'),
+                    'type'      => 'created_by', 
+                    'field'     => 'accountDisplayName', 
+                    'width'     => '4cm'
+                ),
+                */
+            )
+        );
+        
+        if ($template) {
+            $config['template'] = 'lead_test_template.xls';
+        }
+        
+        Tinebase_Config::getInstance()->setConfigForApplication(
+            Tinebase_Model_Config::XLSEXPORTCONFIG, 
+            Zend_Json::encode($config), 
+            'Crm'
+        );
     }
 }       
 

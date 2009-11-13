@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Ods.php 10912 2009-10-12 14:40:25Z p.schuele@metaways.de $
  * 
- * @todo        allow templates
  */
 
 // set include path for phpexcel
@@ -22,7 +21,7 @@ set_include_path(dirname(dirname(dirname(__FILE__))) . '/library/PHPExcel' . PAT
  * @subpackage  Export
  * 
  */
-class Tinebase_Export_Xls extends PHPExcel
+class Tinebase_Export_Xls
 {
     /**
      * @var string $_applicationName
@@ -58,13 +57,18 @@ class Tinebase_Export_Xls extends PHPExcel
     protected $_currentRowIndex = 0;
     
     /**
+     * the phpexcel object
+     * 
+     * @var PHPExcel
+     */
+    protected $_excelObject = NULL;
+    
+    /**
      * the constructor
      *
      */
     public function __construct()
     {
-        parent::__construct();
-        
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_config = Tinebase_Config::getInstance()->getConfigAsArray(
             Tinebase_Model_Config::XLSEXPORTCONFIG, 
@@ -73,8 +77,25 @@ class Tinebase_Export_Xls extends PHPExcel
         );
         $this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
         
+        // check if we need to open template file
+        if (isset($this->_config['template'])) {
+            $templateFilename = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . $this->_applicationName 
+                . DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates';
+                
+            if (file_exists($templateFilename)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using template file ' . $templateFilename);
+                $this->_excelObject = PHPExcel_IOFactory::load($templateFilename);
+                $this->_excelObject->setActiveSheetIndex(1);
+                
+            } else {
+                throw new Tinebase_Exception_NotFound('Template file ' . $templateFilename . ' not found');
+            }
+        } else {
+            $this->_excelObject = new PHPExcel();
+        }
+        
         // set metadata/properties
-        $this->getProperties()
+        $this->_excelObject->getProperties()
             ->setCreator(Tinebase_Core::getUser()->accountDisplayName)
             ->setLastModifiedBy(Tinebase_Core::getUser()->accountDisplayName)
             ->setTitle('Tine 2.0 ' . $this->_applicationName . ' Export')
@@ -83,16 +104,26 @@ class Tinebase_Export_Xls extends PHPExcel
             ->setKeywords("tine20 openxml php")
             ->setCreated(Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale));
             
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->getProperties(), true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->getProperties(), true));
         
         $this->_currentRowIndex = 1;
+    }
+    
+    /**
+     * get excel object
+     * 
+     * @return PHPExcel
+     */
+    public function getExcelObject()
+    {
+        return $this->_excelObject;
     }
     
     /**
      * export records to Xls file
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @return void
+     * @return PHPExcel
      */
     protected function _generate(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_SearchInterface $_controller)
     {
@@ -100,6 +131,8 @@ class Tinebase_Export_Xls extends PHPExcel
         
         $records = $_controller->search($_filter);
         $this->_addBody($records);
+        
+        return $this->getExcelObject();
     }
     
     /**
@@ -109,7 +142,7 @@ class Tinebase_Export_Xls extends PHPExcel
     {
         $columnId = 0;
         foreach($this->_config['fields'] as $field) {
-            $this->getActiveSheet()->setCellValueByColumnAndRow($columnId++, $this->_currentRowIndex, $field['header']);
+            $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow($columnId++, $this->_currentRowIndex, $field['header']);
         }
         
         $this->_currentRowIndex++;
@@ -145,7 +178,7 @@ class Tinebase_Export_Xls extends PHPExcel
                         $value = $record->$key;
                 }
                 
-                $this->getActiveSheet()->setCellValueByColumnAndRow($columnId++, $this->_currentRowIndex, $value);
+                $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow($columnId++, $this->_currentRowIndex, $value);
             }
             
             $i++;
