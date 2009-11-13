@@ -196,10 +196,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param  string $_model     model of record
      * @param  string $_id        id of record
      * @param  string $_backend   backend of record
+     * @param  boolean $_onlyNonSystemNotes get only non-system notes per default
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Note
-     * 
      */
-    public function getNotesOfRecord($_model, $_id, $_backend = 'Sql', $_onlyNonSystemNotes = FALSE)
+    public function getNotesOfRecord($_model, $_id, $_backend = 'Sql', $_onlyNonSystemNotes = TRUE)
     {
         $backend = ucfirst(strtolower($_backend));
 
