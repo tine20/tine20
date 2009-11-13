@@ -77,14 +77,18 @@ class Tinebase_Export_Xls
         );
         $this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_config, TRUE));
+        
         // check if we need to open template file
         if (isset($this->_config['template'])) {
-            $templateFilename = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . $this->_applicationName 
-                . DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates';
+            $templateFilename = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName 
+                . DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $this->_config['template'];
                 
             if (file_exists($templateFilename)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using template file ' . $templateFilename);
                 $this->_excelObject = PHPExcel_IOFactory::load($templateFilename);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_excelObject->getProperties(), true));
+                
                 $this->_excelObject->setActiveSheetIndex(1);
                 
             } else {
@@ -104,7 +108,7 @@ class Tinebase_Export_Xls
             ->setKeywords("tine20 openxml php")
             ->setCreated(Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale));
             
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->getProperties(), true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_excelObject->getProperties(), true));
         
         $this->_currentRowIndex = 1;
     }

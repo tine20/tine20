@@ -44,17 +44,6 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        $this->_instance = new Crm_Export_Xls();
-        parent::setUp();
-    }
 
     /**
      * Tears down the fixture
@@ -81,6 +70,8 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
     public function testExportXls()
     {
         $this->_setTestConfig();
+        $this->_instance = new Crm_Export_Xls();
+        
         $excelObj = $this->_instance->generate(new Crm_Model_LeadFilter($this->_getLeadFilter()));
         
         // output as csv
@@ -107,14 +98,14 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
      */
     public function testExportXlsWithTemplate()
     {
-        /*
         $this->_setTestConfig(TRUE);
+        $this->_instance = new Crm_Export_Xls();
         $excelObj = $this->_instance->generate(new Crm_Model_LeadFilter($this->_getLeadFilter()));
         
         // output as csv
-        $excelObj->setActiveSheetIndex(1);
         $xlswriter = new PHPExcel_Writer_CSV($excelObj);
-        // $xlswriter->save('php://output');
+        $xlswriter->setSheetIndex(1);
+        //$xlswriter->save('php://output');
         
         $csvFilename = 'test.csv';
         $xlswriter->save($csvFilename);
@@ -125,7 +116,6 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         $this->assertEquals(1, preg_match("/Description/", $export), 'no description');
         
         unlink($csvFilename);
-        */
     }
     
     /**
