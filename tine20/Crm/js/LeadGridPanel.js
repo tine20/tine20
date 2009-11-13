@@ -205,14 +205,14 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     }),
                     new Tine.widgets.grid.ExportButton({
                         text: this.app.i18n._('Export as CSV'),
-                        iconCls: 'action_export',
+                        iconCls: 'tinebase-action-export-csv',
                         format: 'csv',
                         exportFunction: 'Crm.exportLead',
                         gridPanel: this
                     }),
                     new Tine.widgets.grid.ExportButton({
                         text: this.app.i18n._('Export as ODS'),
-                        iconCls: 'action_export',
+                        iconCls: 'tinebase-action-export-ods',
                         format: 'ods',
                         exportFunction: 'Crm.exportLead',
                         gridPanel: this

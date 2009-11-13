@@ -109,8 +109,16 @@ html, body {
     background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
 }
 
-.tinebase-action-export-xls{
+.tinebase-action-export-xls {
     background-image:url(../../images/oxygen/16x16/mimetypes/application-vnd.ms-excel.png) !important;
+}
+
+.tinebase-action-export-ods {
+    background-image:url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.spreadsheet.png) !important;
+}
+
+.tinebase-action-export-csv {
+    background-image:url(../../images/oxygen/16x16/mimetypes/text-csv.png) !important;
 }
 
 /* ----- about dialog --------------------------------------------------------*/

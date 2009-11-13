@@ -174,7 +174,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                     }),
                     new Tine.widgets.grid.ExportButton({
                         text: this.app.i18n._('Export as CSV'),
-                        iconCls: 'action_export',
+                        iconCls: 'tinebase-action-export-csv',
                         format: 'csv',
                         exportFunction: 'Addressbook.exportContacts',
                         gridPanel: this
