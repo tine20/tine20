@@ -198,30 +198,21 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param  string $_backend   backend of record
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Note
      * 
-     * @todo remove caching?
      */
-    public function getNotesOfRecord($_model, $_id, $_backend = 'Sql')
+    public function getNotesOfRecord($_model, $_id, $_backend = 'Sql', $_onlyNonSystemNotes = FALSE)
     {
         $backend = ucfirst(strtolower($_backend));
 
-        $cache = Tinebase_Core::get('cache');
-        $cacheId = 'getNotesOfRecord' . $_model . $_id . $backend;
-        $result = $cache->load($cacheId);
+        $filter = $this->_getNotesFilter($_id, $_model, $backend, $_onlyNonSystemNotes);
         
-        if (!$result) {
-            $filter = $this->_getNotesFilter($_id, $_model, $backend);
-            
-            $pagination = new Tinebase_Model_Pagination(array(
-                'limit' => Tinebase_Notes::NUMBER_RECORD_NOTES,
-                'sort'  => 'creation_time',
-                'dir'   => 'DESC'
-            ));
-            
-            $result = $this->searchNotes($filter, $pagination);
-            
-            $cache->save($result, $cacheId, array('notes'));
-        }        
+        $pagination = new Tinebase_Model_Pagination(array(
+            'limit' => Tinebase_Notes::NUMBER_RECORD_NOTES,
+            'sort'  => 'creation_time',
+            'dir'   => 'DESC'
+        ));
         
+        $result = $this->searchNotes($filter, $pagination);
+            
         return $result;          
     }
     
@@ -327,9 +318,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                 $this->addNote($note);
             }
         }
-        
-        // invalidate cache
-        Tinebase_Core::get('cache')->remove('getNotesOfRecord' . $model . $_record->getId() . $backend);
     }
     
     /**
@@ -427,9 +415,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $notes = $this->getNotesOfRecord($_model, $_id, $backend);
         
         $this->deleteNotes($notes->getArrayOfIds());
-        
-        // invalidate cache
-        Tinebase_Core::get('cache')->remove('getNotesOfRecord' . $_model . $_id . $backend);
     }
     
     /**
@@ -441,7 +426,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param boolean|optional $onlyNonSystemNotes
      * @return Tinebase_Model_NoteFilter
      */
-    protected function _getNotesFilter($_id, $_model, $_backend, $onlyNonSystemNotes = TRUE)
+    protected function _getNotesFilter($_id, $_model, $_backend, $_onlyNonSystemNotes = TRUE)
     {
         $backend = ucfirst(strtolower($_backend));
         
@@ -464,7 +449,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             array(
                 'field' => 'note_type_id',
                 'operator' => 'in',
-                'value' => $this->getNoteTypes($onlyNonSystemNotes)->getArrayOfIds()
+                'value' => $this->getNoteTypes($_onlyNonSystemNotes)->getArrayOfIds()
             )
         ));
         
