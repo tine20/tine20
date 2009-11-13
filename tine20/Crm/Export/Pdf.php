@@ -117,7 +117,10 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                     }
                     foreach ( $keys as $key ) {
                         if ( $_lead->$key instanceof Zend_Date ) {
-                            $content[] = $_lead->$key->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')), Tinebase_Core::get('locale') );
+                            $content[] = $_lead->$key->toString(
+                                Zend_Locale_Format::getDateFormat(Tinebase_Core::get(Tinebase_Core::LOCALE)), 
+                                Tinebase_Core::get(Tinebase_Core::LOCALE)
+                            );
                         } elseif (!empty($_lead->$key) ) {
                             if ( $key === 'turnover' ) {
                                 $content[] = Zend_Locale_Format::toNumber($_lead->$key, array('locale' => $_locale)) . " €";
