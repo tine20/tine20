@@ -23,7 +23,8 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
      */
     protected $_operators = array(
         0 => 'equals',
-        1 => 'in'
+        1 => 'in',
+        3 => 'specialNode' // one of {allResources}
     );
 
     /**
@@ -33,11 +34,29 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
      */
     public function setValue($_value)
     {
-        if ($this->_operator == 'equals') {
-            $this->_value = array($_value);
-        } else {
-            $this->_value = $_value;
+        switch ($this->_operator) {
+            case 'equals':
+                $this->_value = array($_value);
+                break;
+            case 'in':
+                $this->_value = $_value;
+                break;
+            case 'specialNode' :
+                // only allResource support yet
+                if ($_value !== 'allResources') {
+                    throw new Tinebase_Exception_UnexpectedValue('specialNode not supported.');
+                }
+                
+                $this->_value = array();
+                $resources = Calendar_Controller_Resource::getInstance()->getAll();
+                foreach ($resources as $resource) {
+                    $this->_value[] = array(
+                        'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                        'user_id'   => $resource->getId()
+                    );
+                }
         }
+
     }
     
     /**
