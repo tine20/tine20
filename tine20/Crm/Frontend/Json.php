@@ -48,7 +48,16 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchLeads($filter, $paging)
     {
-        return $this->_search($filter, $paging, $this->_controller, 'Crm_Model_LeadFilter', TRUE);
+        $result = $this->_search($filter, $paging, $this->_controller, 'Crm_Model_LeadFilter', TRUE);
+        
+        // add totalcounts of leadstates/leadsources/leadtypes
+        $result['totalleadstates'] = $result['totalcount']['leadstates'];
+        $result['totalleadsources'] = $result['totalcount']['leadsources'];
+        $result['totalleadtypes'] = $result['totalcount']['leadtypes'];
+        
+        $result['totalcount'] = $result['totalcount']['totalcount'];
+                
+        return $result;
     }     
     
     /**

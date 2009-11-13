@@ -95,6 +95,25 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         return $leads;
     }
     
+/**
+     * Gets total count of search with $_filter
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return array
+     */
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
+    {
+        $this->checkFilterACL($_filter);
+
+        $result['totalcount'] = $this->_backend->searchCount($_filter);
+        
+        // add counts for leadstates/sources/types
+        $result['leadstates'] = $this->_backend->getGroupCountForField($_filter, 'leadstate_id');
+        $result['leadsources'] = $this->_backend->getGroupCountForField($_filter, 'leadsource_id');
+        $result['leadtypes'] = $this->_backend->getGroupCountForField($_filter, 'leadstate_id');
+        
+        return $result;
+    }            
     
     /********************* notifications ***************************/
     

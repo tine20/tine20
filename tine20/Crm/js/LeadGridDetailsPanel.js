@@ -3,8 +3,8 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  */
@@ -12,51 +12,375 @@
 Ext.namespace('Tine.Crm');
 
 /**
- * the details panel (shows lead details)
+ * @namespace   Tine.Crm
+ * @class       Tine.Crm.LeadGridDetailsPanel
+ * @extends     Tine.Tinebase.widgets.grid.DetailsPanel
  * 
- * @class Tine.Felamimail.GridDetailsPanel
- * @extends Tine.Tinebase.widgets.grid.DetailsPanel
+ * <p>Lead Grid Details Panel</p>
+ * <p>
+ * TODO         make it work for single leads
+ * TODO         fix charts: show them correctly and don't throw error if rows are selected (this.swf.setDataProvider is not a function)
+ *              -> it seems that showDefault() is called even when a single line is selected (!?) 
+ * TODO         add charts for multiple selected leads
+ * TODO         remove obsolete code
+ * </p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  */
-Tine.Crm.ContactGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPanel, {
+Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPanel, {
     
-    il8n: null,
-    felamimail: false,
+    border: false,
     
     /**
-     * init
+     * renders contact names
+     * 
+     * @param {Array} contactData
+     * @return {String}
+     */
+        /*
+    contactRenderer: function(contactData) {
+        var contactStore = Tine.Crm.Model.Attender.getAttendeeStore(contactData);
+        
+        var a = [];
+        contactStore.each(function(attender) {
+            a.push(Tine.Crm.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Crm.AttendeeGridPanel.prototype, attender.get('user_id'), false, attender));
+        });
+        
+        return a.join("\n");
+    },
+        */
+    
+    /**
+     * renders container name + color
+     * 
+     * @param {Array} container
+     * @return {String} html
+     */
+    /*
+    containerRenderer: function(container) {
+        return this.containerTpl.apply({
+            color: Tine.Crm.colorMgr.getColor(this.record).color,
+            name: Ext.util.Format.htmlEncode(container && container.name ? container.name : '')
+        });
+    },
+    */
+    
+    /**
+     * renders datetime
+     * 
+     * @param {Date} dt
+     * @return {String}
+     */
+    /*
+    datetimeRenderer: function(dt) {
+        return String.format(this.app.i18n._("{0} {1} o'clock"), Tine.Tinebase.common.dateRenderer(dt), dt.format('H:i'));
+    },
+    */
+    
+    /**
+     * inits this component
      */
     initComponent: function() {
-
-        // check if felamimail is installed and user has run right
-        if (Tine.Felamimail && Tine.Tinebase.common.hasRight('run', 'Felamimail')) {
-            this.felamimail = true;
-        }
-
-        // init templates
-        this.initTemplate();
-        this.initDefaultTemplate();
+        this.app = Tine.Tinebase.appMgr.get('Crm');
+        
+        // define piechart stores
+        this.leadstatePiechartStore = new Ext.data.JsonStore({
+            fields: ['id', 'label', 'total'],
+            id: 'id'
+        });
+        this.leadsourcePiechartStore = new Ext.data.JsonStore({
+            fields: ['id', 'label', 'total'],
+            id: 'id'
+        });
+        this.leadtypePiechartStore = new Ext.data.JsonStore({
+            fields: ['id', 'label', 'total'],
+            id: 'id'
+        });
+        
+        this.defaultPanel = this.getDefaultPanel();
+        this.leadDetailsPanel = this.getLeadGridDetailsPanel();
+        
+        this.cardPanel = new Ext.Panel({
+            layout: 'card',
+            border: false,
+            activeItem: 0,
+            items: [
+                this.defaultPanel,
+                this.leadDetailsPanel
+            ]
+        });
+        
+        this.items = [
+            this.cardPanel
+        ];
+        
+        this.containerTpl = new Ext.XTemplate(
+            '<div class="x-tree-node-el x-tree-node-leaf x-unselectable file">',
+                '<img class="x-tree-node-icon" unselectable="on" src="', Ext.BLANK_IMAGE_URL, '">',
+                '<span style="color: {color};">&nbsp;&#9673;&nbsp</span>',
+                '<span>{name}</span>',
+            '</div>'
+        ).compile();
         
         this.supr().initComponent.call(this);
     },
-
+    
     /**
-     * add on click event after render
+     * default panel w.o. data
+     * 
+     * @return {Ext.ux.display.DisplayPanel}
+     * 
+     * TODO do some styling (borders of first section, font sizes, legends (?), alignments)
      */
-    afterRender: function() {
-        this.supr().afterRender.apply(this, arguments);
+    getDefaultPanel: function() {
         
-        if (this.felamimail) {
-            this.body.on('click', this.onClick, this);
+        return new Ext.ux.display.DisplayPanel({
+            layout: 'hbox',
+            border: false,
+            defaults:{
+                margins:'0 5 0 0',
+                flex: 1,
+                layout: 'ux.display',
+                border: false
+            },
+            layoutConfig: {
+                padding:'5',
+                align:'stretch'
+            },
+            items: [{
+                layoutConfig: {
+                    background: 'border',
+                    declaration: this.app.i18n._('Leadstates')
+                },
+                items: [{
+                    // TODO: align: 'right', ?
+                    store: this.leadstatePiechartStore,
+                    xtype: 'piechart',
+                    dataField: 'total',
+                    categoryField: 'label'
+                }]
+            }, {
+                layoutConfig: {
+                    background: 'border',
+                    declaration: this.app.i18n._('Leadsources')
+                },
+                items: [{
+                    store: this.leadsourcePiechartStore,
+                    xtype: 'piechart',
+                    dataField: 'total',
+                    categoryField: 'label'
+                }]
+            }, {
+                layoutConfig: {
+                    background: 'border',
+                    declaration: this.app.i18n._('Leadtypes')
+                },
+                items: [{
+                    store: this.leadtypePiechartStore,
+                    xtype: 'piechart',
+                    dataField: 'total',
+                    categoryField: 'label'
+                }]
+            }]
+            /*
+                fieldLabel: this.app.i18n._('Leadstates'), // ??
+                xtype: 'piechart',
+                store: this.leadstatePiechartStore,
+                dataField: 'total',
+                categoryField: 'label',
+                backgroundColor: '#eeeeee' // ??
+                //extra styles get applied to the chart defaults
+                extraStyle: {
+                    legend: {
+                        //display: 'right',
+                        display: 'top',
+                        padding: 5,
+                        font: {
+                            family: 'Tahoma',
+                            size: 8
+                        }
+                    }
+                } 
+            */               
+        });
+    },
+    
+    /**
+     * fill the piechart stores
+     */
+    setPiechartStores: function() {
+        
+        var storesConfig = [{
+            store: this.leadstatePiechartStore,
+            jsonData: this.grid.store.proxy.jsonReader.jsonData.totalleadstates,
+            definitionsStore: Tine.Crm.LeadState.getStore(),
+            definitionsLabel: 'leadstate'
+        }, {
+            store: this.leadsourcePiechartStore,
+            jsonData: this.grid.store.proxy.jsonReader.jsonData.totalleadsources,
+            definitionsStore: Tine.Crm.LeadSource.getStore(),
+            definitionsLabel: 'leadsource'
+        }, {
+            store: this.leadtypePiechartStore,
+            jsonData: this.grid.store.proxy.jsonReader.jsonData.totalleadtypes,
+            definitionsStore: Tine.Crm.LeadType.getStore(),
+            definitionsLabel: 'leadtype'
+        }];
+        
+        for (var i = 0; i < storesConfig.length; i++) {
+            // TODO remove that when we fixed the problem with the (this.swf.setDataProvider is not a function) error
+            if (storesConfig[i].store.getCount() != 0) {
+                continue;
+            }
+            
+            //console.log('set store for ' + storesConfig[i].definitionsLabel);
+            // TODO add that again: empty piechart stores
+            /*
+            if (storesConfig[i].store.getCount() > 0) {
+                storesConfig[i].store.removeAll();
+            }
+            */
+            
+            // get records from defintion / grid store request
+            var records = []; 
+            if (storesConfig[i].jsonData) {
+                storesConfig[i].definitionsStore.each(function(definition) {
+                    //console.log(definition);
+                    //console.log(storesConfig[i].jsonData[definition.id]);
+                    if (storesConfig[i].jsonData[definition.id]) {
+                        records.push(new storesConfig[i].store.recordType({
+                            id: definition.id,
+                            label: definition.get(storesConfig[i].definitionsLabel),
+                            total: storesConfig[i].jsonData[definition.id]
+                        }, definition.id));
+                    }
+                }, this);
+            }
+            
+            // add new records
+            if (records.length > 0) {
+                //console.log(records);
+                storesConfig[i].store.add(records);
+            }
         }
     },
     
     /**
-     * update template
+     * main lead details panel
+     * 
+     * @return {Ext.ux.display.DisplayPanel}
+     */
+    getLeadGridDetailsPanel: function() {
+        return new Ext.ux.display.DisplayPanel ({
+            //xtype: 'displaypanel',
+            layout: 'fit',
+            border: false,
+            items: [{
+                layout: 'vbox',
+                border: false,
+                layoutConfig: {
+                    align:'stretch'
+                },
+                items: [
+                    /*{
+                    layout: 'hbox',
+                    flex: 0,
+                    height: 16,
+                    border: false,
+                    style: 'padding-left: 5px; padding-right: 5px',
+                    layoutConfig: {
+                        align:'stretch'
+                    },
+                    items: [{
+                        flex: 1,
+                        xtype: 'ux.displayfield',
+                        name: 'summary'
+                        //fieldLabel: this.app.i18n._('Summary')
+                    }, {
+                        flex: 1,
+                        xtype: 'ux.displayfield',
+                        style: 'text-align: right;',
+                        name: 'container_id',
+                        htmlEncode: false,
+                        renderer: this.containerRenderer.createDelegate(this)
+                    }]
+                }, {
+                    layout: 'hbox',
+                    flex: 1,
+                    border: false,
+                    layoutConfig: {
+                        padding:'5',
+                        align:'stretch'
+                    },
+                    defaults:{margins:'0 5 0 0'},
+                    items: [{
+                        flex: 2,
+                        layout: 'ux.display',
+                        labelWidth: 60,
+                        layoutConfig: {
+                            background: 'solid'
+                        },
+                        items: [{
+                            xtype: 'ux.displayfield',
+                            name: 'dtstart',
+                            fieldLabel: this.app.i18n._('Start Time'),
+                            renderer: this.datetimeRenderer.createDelegate(this)
+                        }, {
+                            xtype: 'ux.displayfield',
+                            name: 'dtend',
+                            fieldLabel: this.app.i18n._('End Time'),
+                            renderer: this.datetimeRenderer.createDelegate(this)
+                        }, {
+                            xtype: 'ux.displayfield',
+                            name: 'location',
+                            fieldLabel: this.app.i18n._('Location')
+                        }]
+                    }, {
+                        flex: 2,
+                        layout: 'ux.display',
+                        labelAlign: 'top',
+                        autoScroll: true,
+                        layoutConfig: {
+                            background: 'solid'
+                        },
+                        items: [{
+                            xtype: 'ux.displayfield',
+                            name: 'contact',
+                            nl2br: true,
+                            fieldLabel: this.app.i18n._('Attendee'),
+                            renderer: this.contactRenderer
+                        }]
+                    }, {
+                        flex: 3,
+                        layout: 'fit',
+                        
+                        border: false,
+                        items: [{
+                            cls: 'x-ux-display-background-border',
+                            xtype: 'ux.displaytextarea',
+                            name: 'description'
+                        }]
+                    }]
+                }*/]
+            }]
+        });
+    },
+    
+    /**
+     * update lead details panel
      * 
      * @param {Tine.Tinebase.data.Record} record
      * @param {Mixed} body
      */
     updateDetails: function(record, body) {
+        this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.leadDetailsPanel));
+        
+        this.leadDetailsPanel.loadRecord(record);
+        
+        /*
         // don't mess up record
         var data = {};
         Ext.apply(data, record.data);
@@ -71,13 +395,44 @@ Tine.Crm.ContactGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.Details
         data.leadsource = leadsource ? leadsource.get('leadsource') : '';
         
         this.tpl.overwrite(body, data);
+         */
     },
     
     /**
+     * show default panel
      * 
-     * @param       {Record} lead
-     * @param       {String} type (CUSTOMER|PARTNER)
+     * @param {Mixed} body
      */
+    showDefault: function(body) {
+        
+        //console.log('show default');
+        this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.defaultPanel));
+        
+        // fill piechart stores
+        if (this.defaultPanel.isVisible()) {
+            this.setPiechartStores();
+        }
+
+        //console.log(this.leadstatePiechartStore);
+    },
+    
+    /**
+     * show template for multiple rows
+     * 
+     * @param {Ext.grid.RowSelectionModel} sm
+     * @param {Mixed} body
+     * 
+     * TODO add charts here
+     */
+    showMulti: function(sm, body) {
+        //if (this.multiTpl) {
+        //    this.multiTpl.overwrite(body);
+        //}
+    }
+    
+    // old functions follow
+    
+    /*
     getContactData: function(lead, type) {
         var data = lead.get('relations');
         
@@ -93,69 +448,7 @@ Tine.Crm.ContactGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.Details
             }
         }
     },
-    
-    /**
-     * init default template
-     */
-    initDefaultTemplate: function() {
-        
-        this.defaultTpl = new Ext.XTemplate(
-            '<div class="preview-panel-timesheet-nobreak">',    
-                '<!-- Preview leads -->',
-                '<div class="preview-panel preview-panel-timesheet-left">',
-                    '<div class="bordercorner_1"></div>',
-                    '<div class="bordercorner_2"></div>',
-                    '<div class="bordercorner_3"></div>',
-                    '<div class="bordercorner_4"></div>',
-                    '<div class="preview-panel-declaration">' + this.il8n.n_('Lead', 'Leads', 50) + '</div>',
-                    '<div class="preview-panel-timesheet-leftside preview-panel-left">',
-                        '<span class="preview-panel-bold">',
-                            this.il8n._('Select lead') + '<br/>',
-                            '<br/>',
-                            '<br/>',
-                            '<br/>',
-                        '</span>',
-                    '</div>',
-                    '<div class="preview-panel-timesheet-rightside preview-panel-left">',
-                        '<span class="preview-panel-nonbold">',
-                            '<br/>',
-                            '<br/>',
-                            '<br/>',
-                            '<br/>',
-                        '</span>',
-                    '</div>',
-                '</div>',
-                '<!-- Preview xxx -->',
-                '<div class="preview-panel-timesheet-right">',
-                    '<div class="bordercorner_gray_1"></div>',
-                    '<div class="bordercorner_gray_2"></div>',
-                    '<div class="bordercorner_gray_3"></div>',
-                    '<div class="bordercorner_gray_4"></div>',
-                    '<div class="preview-panel-declaration"></div>',
-                    '<div class="preview-panel-timesheet-leftside preview-panel-left">',
-                        '<span class="preview-panel-bold">',
-                            '<br/>',
-                            '<br/>',
-                            '<br/>',
-                            '<br/>',
-                        '</span>',
-                    '</div>',
-                    '<div class="preview-panel-timesheet-rightside preview-panel-left">',
-                        '<span class="preview-panel-nonbold">',
-                            '<br/>',
-                            '<br/>',
-                            '<br/>',
-                            '<br/>',
-                        '</span>',
-                    '</div>',
-                '</div>',
-            '</div>'        
-        );
-    },
-    
-    /**
-     * init single lead template (this.tpl)
-     */
+
     initTemplate: function() {
         this.tpl = new Ext.XTemplate(
             '<div class="crm-leadgrid-detailspanel">',
@@ -216,9 +509,6 @@ Tine.Crm.ContactGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.Details
                 '</div>',
                 //  '{[this.getTags(values.tags)]}',
             {
-                /**
-                 * encode
-                 */
                 encode: function(value, type, prefix) {
                     //var metrics = Ext.util.TextMetrics.createInstance('previewPanel');
                     if (value) {
@@ -256,9 +546,6 @@ Tine.Crm.ContactGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.Details
                     }
                 },
 
-                /**
-                 * get email link
-                 */
                 getMailLink: function(email, felamimail) {
                     if (! email) {
                         return '';
@@ -274,14 +561,6 @@ Tine.Crm.ContactGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.Details
         );
     },
     
-    /**
-     * on click for compose mail
-     * 
-     * @param {} e
-     * 
-     * TODO check if account is configured?
-     * TODO generalize that
-     */
     onClick: function(e) {
         var target = e.getTarget('a[class=tinebase-email-link]');
         if (target) {
@@ -296,4 +575,5 @@ Tine.Crm.ContactGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.Details
             });
         }
     }
+    */
 });

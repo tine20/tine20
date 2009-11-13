@@ -178,6 +178,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertEquals($getLead, $savedLead);
         $this->assertEquals($getLead['notes'][0]['note'], $note['note']);
         $this->assertTrue($searchLeads['totalcount'] > 0);
+        $this->assertTrue(isset($searchLeads['totalleadstates']) && count($searchLeads['totalleadstates']) > 0);
         $this->assertEquals($lead->description, $searchLeads['results'][0]['description']);
         $this->assertTrue(count($searchLeads['results'][0]['relations']) == 3, 'did not get all relations');     
 
