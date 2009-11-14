@@ -38,11 +38,6 @@ require_once 'Zend/Json/Client/SMD.php';
 class Zend_Json_Client_ServerIntrospection
 {
     /**
-     * @var Zend_Json_Client_ServerProxy
-     */
-    private $_system = null;
-
-    /**
      * @var Zend_Json_Client
      */
     private $_client = null;
@@ -53,99 +48,9 @@ class Zend_Json_Client_ServerIntrospection
      */
     public function __construct(Zend_Json_Client $client)
     {
-        //$this->_system = $client->getProxy('system');
         $this->_client = $client;
     }
 
-    /**
-     * Returns the signature for each method on the server,
-     * autodetecting whether system.multicall() is supported and
-     * using it if so.
-     *
-     * @return array
-     */
-    public function getSignatureForEachMethod()
-    {
-        $methods = $this->listMethods();
-
-        require_once 'Zend/XmlRpc/Client/FaultException.php';
-        try {
-            $signatures = $this->getSignatureForEachMethodByMulticall($methods);
-        } catch (Zend_XmlRpc_Client_FaultException $e) {
-            // degrade to looping
-        }
-
-        if (empty($signatures)) {
-            $signatures = $this->getSignatureForEachMethodByLooping($methods);
-        }
-
-        return $signatures;
-    }
-
-    /**
-     * Attempt to get the method signatures in one request via system.multicall().
-     * This is a boxcar feature of XML-RPC and is found on fewer servers.  However,
-     * can significantly improve performance if present.
-     *
-     * @param  array $methods
-     * @return array array(array(return, param, param, param...))
-     */
-    public function getSignatureForEachMethodByMulticall($methods = null)
-    {
-        if ($methods === null) {
-            $methods = $this->listMethods();
-        }
-
-        $multicallParams = array();
-        foreach ($methods as $method) {
-            $multicallParams[] = array('methodName' => 'system.methodSignature',
-                                       'params'     => array($method));
-        }
-
-        $serverSignatures = $this->_system->multicall($multicallParams);
-
-        if (! is_array($serverSignatures)) {
-            $type = gettype($serverSignatures);
-            $error = "Multicall return is malformed.  Expected array, got $type";
-            require_once 'Zend/XmlRpc/Client/IntrospectException.php';
-            throw new Zend_XmlRpc_Client_IntrospectException($error);
-        }
-
-        if (count($serverSignatures) != count($methods)) {
-            $error = 'Bad number of signatures received from multicall';
-            require_once 'Zend/XmlRpc/Client/IntrospectException.php';
-            throw new Zend_XmlRpc_Client_IntrospectException($error);
-        }
-
-        // Create a new signatures array with the methods name as keys and the signature as value
-        $signatures = array();
-        foreach ($serverSignatures as $i => $signature) {
-            $signatures[$methods[$i]] = $signature;
-        }
-
-        return $signatures;
-    }
-
-    /**
-     * Get the method signatures for every method by
-     * successively calling system.methodSignature
-     *
-     * @param array $methods
-     * @return array
-     */
-    public function getSignatureForEachMethodByLooping($methods = null)
-    {
-        if ($methods === null) {
-            $methods = $this->listMethods();
-        }
-
-        $signatures = array();
-        foreach ($methods as $method) {
-            $signatures[$method] = $this->getMethodSignature($method);
-        }
-
-        return $signatures;
-    }
 
     /**
      * Call system.methodSignature() for the given method
@@ -158,7 +63,6 @@ class Zend_Json_Client_ServerIntrospection
         if($this->_smd === null) {
             $this->fetchSMD();
         }
-        
         $signature = $this->_smd->getMethodSignature($method);
         
         return $signature;
@@ -177,8 +81,6 @@ class Zend_Json_Client_ServerIntrospection
         $request->setId(1);
         
         $this->_smd = new Zend_Json_Client_SMD();
-        
         $this->_client->doRequest($request, $this->_smd);
     }
-
 }
