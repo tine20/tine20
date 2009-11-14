@@ -266,10 +266,8 @@ class Zend_Json_Client
         #iconv_set_encoding('internal_encoding', 'UTF-8');
 
         $http = $this->getHttpClient();
-        if($http->getUri() === null) {
-            $http->setUri($this->_serverAddress);
-        }
 
+        $http->setUri($this->_serverAddress);
         $http->setHeaders(array(
             'Content-Type: application/json-rpc; charset=utf-8',
             'User-Agent: Zend_Json_Client/' . Zend_Version::VERSION,
@@ -277,6 +275,7 @@ class Zend_Json_Client
         ));
 
         $json = $this->_lastRequest->__toString();
+        
         $http->setRawData($json);
         $httpResponse = $http->request(Zend_Http_Client::POST);
 
@@ -293,6 +292,7 @@ class Zend_Json_Client
             $response = new Zend_Json_Client_Response();
         }
         $this->_lastResponse = $response;
+        
         $this->_lastResponse->loadJson($httpResponse->getBody());
     }
 
