@@ -19,8 +19,6 @@ Ext.namespace('Tine.Crm');
  * <p>Lead Grid Details Panel</p>
  * <p>
  * TODO         make it work for single leads
- * TODO         fix charts: show them correctly and don't throw error if rows are selected (this.swf.setDataProvider is not a function)
- *              -> it seems that showDefault() is called even when a single line is selected (!?) 
  * TODO         add charts for multiple selected leads
  * TODO         remove obsolete code
  * </p>
@@ -209,9 +207,13 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
     },
     
     /**
-     * fill the piechart stores
+     * fill the piechart stores (calls loadPiechartStore() for all piecharts)
      */
     setPiechartStores: function() {
+        
+        if (! this.defaultPanel.isVisible()) {
+            return;
+        }
         
         var storesConfig = [{
             store: this.leadstatePiechartStore,
@@ -231,30 +233,30 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
         }];
         
         for (var i = 0; i < storesConfig.length; i++) {
-            // TODO remove that when we fixed the problem with the (this.swf.setDataProvider is not a function) error
-            if (storesConfig[i].store.getCount() != 0) {
-                continue;
+            this.loadPiechartStore(storesConfig[i]);
+        }
+    },
+    
+    /**
+     * load data into piechart store
+     * 
+     * @param {} config
+     */
+    loadPiechartStore: function(config) {
+        try {
+            if (config.store.getCount() > 0) {
+                config.store.removeAll();
             }
-            
-            //console.log('set store for ' + storesConfig[i].definitionsLabel);
-            // TODO add that again: empty piechart stores
-            /*
-            if (storesConfig[i].store.getCount() > 0) {
-                storesConfig[i].store.removeAll();
-            }
-            */
             
             // get records from defintion / grid store request
             var records = []; 
-            if (storesConfig[i].jsonData) {
-                storesConfig[i].definitionsStore.each(function(definition) {
-                    //console.log(definition);
-                    //console.log(storesConfig[i].jsonData[definition.id]);
-                    if (storesConfig[i].jsonData[definition.id]) {
-                        records.push(new storesConfig[i].store.recordType({
+            if (config.jsonData) {
+                config.definitionsStore.each(function(definition) {
+                    if (config.jsonData[definition.id]) {
+                        records.push(new config.store.recordType({
                             id: definition.id,
-                            label: definition.get(storesConfig[i].definitionsLabel),
-                            total: storesConfig[i].jsonData[definition.id]
+                            label: definition.get(config.definitionsLabel),
+                            total: config.jsonData[definition.id]
                         }, definition.id));
                     }
                 }, this);
@@ -262,9 +264,14 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
             
             // add new records
             if (records.length > 0) {
-                //console.log(records);
-                storesConfig[i].store.add(records);
+                config.store.add(records);
             }
+        } catch (e) {
+            //console.log('error while setting ' + config.definitionsLabel + ' piechart data');
+            //console.log(e);
+            
+            // some error with the piechart occurred, try it again ...
+            this.loadPiechartStore.defer(500, this, [config]);
         }
     },
     
@@ -409,9 +416,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
         this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.defaultPanel));
         
         // fill piechart stores
-        if (this.defaultPanel.isVisible()) {
-            this.setPiechartStores();
-        }
+        this.setPiechartStores.defer(500, this);
 
         //console.log(this.leadstatePiechartStore);
     },
