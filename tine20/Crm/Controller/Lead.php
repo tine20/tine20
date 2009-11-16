@@ -110,7 +110,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         // add counts for leadstates/sources/types
         $result['leadstates'] = $this->_backend->getGroupCountForField($_filter, 'leadstate_id');
         $result['leadsources'] = $this->_backend->getGroupCountForField($_filter, 'leadsource_id');
-        $result['leadtypes'] = $this->_backend->getGroupCountForField($_filter, 'leadstate_id');
+        $result['leadtypes'] = $this->_backend->getGroupCountForField($_filter, 'leadtype_id');
         
         return $result;
     }            
