@@ -157,77 +157,77 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     {
         $decodedLead = Zend_Json::decode($_data);
         
-        /************* add new relations *******************/
-        
-        foreach ((array)$decodedLead['relations'] as $key => $relation) {
-            
-            if (!isset($relation['id'])) {
-                $data = array(
-                    'own_model'              => 'Crm_Model_Lead',
-                    'own_backend'            => 'Sql',
-                    'own_id'                 => (isset($decodedLead['id'])) ? $decodedLead['id'] : 0,
-                    'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-                    'type'                   => $relation['type'],
-                    'related_record'         => (isset($relation['related_record'])) ? $relation['related_record'] : array(),
-                    'related_id'             => (isset($relation['related_id'])) ? $relation['related_id'] : NULL,
-                    'remark'                 => (isset($relation['remark'])) ? $relation['remark'] : NULL,
-                );
+        if (isset($decodedLead['relations'])) {
+            // add new relations
+            foreach ((array)$decodedLead['relations'] as $key => $relation) {
                 
-                // set id from related record (if it didn't got set in javascript frontend)
-                if ($data['related_id'] === NULL && !empty($relation['related_record']['id'])) {
-                    $data['related_id'] = $relation['related_record']['id'];
-                }                
-                
-                $relation['type'] = strtoupper($relation['type']);
-                switch ($relation['type']) {
-                    case 'RESPONSIBLE':                        
-                        $data['related_model'] = 'Addressbook_Model_Contact';
-                        $data['related_backend'] = Addressbook_Backend_Factory::SQL;
-                        break;                    
-                    case 'CUSTOMER':
-                        $data['related_model'] = 'Addressbook_Model_Contact';
-                        $data['related_backend'] = Addressbook_Backend_Factory::SQL;
-                        break;                    
-                    case 'PARTNER':
-                        $data['related_model'] = 'Addressbook_Model_Contact';
-                        $data['related_backend'] = Addressbook_Backend_Factory::SQL;
-                        break;
-                    case 'TASK':
-                        $data['related_model'] = 'Tasks_Model_Task';
-                        $data['related_backend'] = Tasks_Backend_Factory::SQL;
-                        break;                    
-                    case 'PRODUCT':
-                        $data['related_model'] = 'Sales_Model_Product';
-                        $data['related_backend'] = 'Sql';
-                        break;                    
-                    default:
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, TRUE)); 
-                        throw new Crm_Exception_UnexpectedValue('Relation type ' . $relation['type'] . ' not supported.');
-                }
-
-                // sanitize container id
-                if (isset($relation['related_record']) && $relation['type'] != 'PRODUCT') {
-                    if (! isset($relation['related_record']['container_id'])) {
-                        // use default container for app
-                        $data['related_record']['container_id'] = Tinebase_Container::getInstance()->getDefaultContainer(
-                            Tinebase_Core::getUser()->getId(),
-                            ($relation['type'] == 'TASK') ? 'Tasks' : 'Addressbook'
-                        )->getId();
-                    } elseif (is_array($relation['related_record']['container_id'])) {
-                        $data['related_record']['container_id'] = $relation['related_record']['container_id']['id'];
+                if (!isset($relation['id'])) {
+                    $data = array(
+                        'own_model'              => 'Crm_Model_Lead',
+                        'own_backend'            => 'Sql',
+                        'own_id'                 => (isset($decodedLead['id'])) ? $decodedLead['id'] : 0,
+                        'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                        'type'                   => $relation['type'],
+                        'related_record'         => (isset($relation['related_record'])) ? $relation['related_record'] : array(),
+                        'related_id'             => (isset($relation['related_id'])) ? $relation['related_id'] : NULL,
+                        'remark'                 => (isset($relation['remark'])) ? $relation['remark'] : NULL,
+                    );
+                    
+                    // set id from related record (if it didn't got set in javascript frontend)
+                    if ($data['related_id'] === NULL && !empty($relation['related_record']['id'])) {
+                        $data['related_id'] = $relation['related_record']['id'];
+                    }                
+                    
+                    $relation['type'] = strtoupper($relation['type']);
+                    switch ($relation['type']) {
+                        case 'RESPONSIBLE':                        
+                            $data['related_model'] = 'Addressbook_Model_Contact';
+                            $data['related_backend'] = Addressbook_Backend_Factory::SQL;
+                            break;                    
+                        case 'CUSTOMER':
+                            $data['related_model'] = 'Addressbook_Model_Contact';
+                            $data['related_backend'] = Addressbook_Backend_Factory::SQL;
+                            break;                    
+                        case 'PARTNER':
+                            $data['related_model'] = 'Addressbook_Model_Contact';
+                            $data['related_backend'] = Addressbook_Backend_Factory::SQL;
+                            break;
+                        case 'TASK':
+                            $data['related_model'] = 'Tasks_Model_Task';
+                            $data['related_backend'] = Tasks_Backend_Factory::SQL;
+                            break;                    
+                        case 'PRODUCT':
+                            $data['related_model'] = 'Sales_Model_Product';
+                            $data['related_backend'] = 'Sql';
+                            break;                    
+                        default:
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, TRUE)); 
+                            throw new Crm_Exception_UnexpectedValue('Relation type ' . $relation['type'] . ' not supported.');
+                    }
+    
+                    // sanitize container id
+                    if (isset($relation['related_record']) && $relation['type'] != 'PRODUCT') {
+                        if (! isset($relation['related_record']['container_id'])) {
+                            // use default container for app
+                            $data['related_record']['container_id'] = Tinebase_Container::getInstance()->getDefaultContainer(
+                                Tinebase_Core::getUser()->getId(),
+                                ($relation['type'] == 'TASK') ? 'Tasks' : 'Addressbook'
+                            )->getId();
+                        } elseif (is_array($relation['related_record']['container_id'])) {
+                            $data['related_record']['container_id'] = $relation['related_record']['container_id']['id'];
+                        }
+                    }
+                        
+                    $decodedLead['relations'][$key] = $data;
+                } else {
+                    // update relation type                
+                    if (isset($relation['related_record']['relation_type']) && $relation['type'] !== strtoupper($relation['related_record']['relation_type'])) {
+                        $decodedLead['relations'][$key]['type'] = strtoupper($relation['related_record']['relation_type']);
                     }
                 }
-                    
-                $decodedLead['relations'][$key] = $data;
-            } else {
-                // update relation type                
-                if (isset($relation['related_record']['relation_type']) && $relation['type'] !== strtoupper($relation['related_record']['relation_type'])) {
-                    $decodedLead['relations'][$key]['type'] = strtoupper($relation['related_record']['relation_type']);
-                }
             }
-        }        
+        }
         
-        /********************** create record ***********************/
         
         $this->setFromArray($decodedLead);
     }            
