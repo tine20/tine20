@@ -490,21 +490,22 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             metadata.css = 'x-form-empty-field';
         }
         
+        var il8n = Tine.Tinebase.appMgr.get('Calendar').i18n;
         switch (status) {
             case 'NEEDS-ACTION':
-                return this.app.i18n._('No response');
+                return il8n._('No response');
                 break;
             case 'ACCEPTED':
-                return this.app.i18n._('Accepted');
+                return il8n._('Accepted');
                 break;
             case 'DECLINED':
-                return this.app.i18n._('Declined');
+                return il8n._('Declined');
                 break;
             case 'TENTATIVE':
-                return this.app.i18n._('Tentative');
+                return il8n._('Tentative');
                 break;
             default:
-                return Ext.util.Format.htmlEncode(this.app.i18n._hidden(status));
+                return Ext.util.Format.htmlEncode(il8n._hidden(status));
                 break;
         }
     },
