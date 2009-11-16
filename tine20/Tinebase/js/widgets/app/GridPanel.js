@@ -298,9 +298,9 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
 
         if (this.recordClass.getField('tags')) {
             this.action_tagsMassAttach = new Tine.widgets.tags.TagsMassAttachAction({
-                store:          this.store,
                 selectionModel: this.grid.getSelectionModel(),
-                recordClass:    this.recordClass
+                recordClass:    this.recordClass,
+                updateHandler:  this.loadData.createDelegate(this, [true])
             });
             
             this.contextMenuItems.push('-'/*, {xtype: 'menutextitem', text: _('Tagging')}*/, this.action_tagsMassAttach);
@@ -460,6 +460,18 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             this.updateOnSelectionChange = true;
         }, this);
         
+    },
+    
+    loadData: function(preserveCursor/*, preserveSelection*/) {
+        var opts = {};
+        
+        if (preserveCursor) {
+            opts.params = {
+                start: this.pagingToolbar.cursor
+            }
+        }
+        
+        this.store.load(opts);
     },
     
     /**
@@ -622,7 +634,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             listeners: {
                 scope: this,
                 'update': function(record) {
-                    this.store.load({});
+                    this.loadData(true)
                 }
             }
         });
@@ -700,6 +712,6 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
      * - reload the store
      */
     onAfterDelete: function() {
-        this.store.load({});
+        this.loadData(true);
     }
 });
