@@ -130,8 +130,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
      * default panel w.o. data
      * 
      * @return {Ext.ux.display.DisplayPanel}
-     * 
-     * TODO do some styling (borders of first section, font sizes, legends (?), alignments)
      */
     getDefaultPanel: function() {
         
@@ -141,6 +139,9 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
             defaults:{
                 margins:'0 5 0 0',
                 padding: 2,
+                style: {
+                    cursor: 'crosshair'
+                },
                 flex: 1,
                 layout: 'ux.display',
                 border: false
