@@ -162,12 +162,15 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
                     items: [{
                         flex: 1,
                         xtype: 'ux.displayfield',
-                        name: 'summary'
+                        name: 'summary',
+                        style: 'padding-top: 2px',
+                        cls: 'x-ux-display-header'
                         //fieldLabel: this.app.i18n._('Summary')
                     }, {
                         flex: 1,
                         xtype: 'ux.displayfield',
                         style: 'text-align: right;',
+                        cls: 'x-ux-display-header',
                         name: 'container_id',
                         htmlEncode: false,
                         renderer: this.containerRenderer.createDelegate(this)
@@ -180,7 +183,9 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
                         padding:'5',
                         align:'stretch'
                     },
-                    defaults:{margins:'0 5 0 0'},
+                    defaults:{
+                        margins:'0 5 0 0'
+                    },
                     items: [{
                         flex: 2,
                         layout: 'ux.display',
@@ -189,6 +194,11 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
                             background: 'solid'
                         },
                         items: [{
+                            // TODO try to increase padding/margin of first element
+                            /*
+                            style: 'margin-top: 4px',
+                            labelStyle: 'margin-top: 4px',
+                            */
                             xtype: 'ux.displayfield',
                             name: 'dtstart',
                             fieldLabel: this.app.i18n._('Start Time'),

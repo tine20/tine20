@@ -51,6 +51,12 @@
 	font-weight:bold;
 }
 
+.x-ux-display .x-ux-display-header {
+    color:#505050;
+    font-size:10px;
+    font-weight:bold;
+}
+
 .x-ux-display .x-ux-display-background-declaration {
     position: absolute;
     left:5px;
