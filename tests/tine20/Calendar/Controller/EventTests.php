@@ -341,6 +341,31 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
     }
     
+    public function testAttendeeStatusFilter()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        unset($event->attendee[1]);
+        
+        $persitentEvent = $this->_controller->create($event);
+        
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'uid',             'operator' => 'equals', 'value' => $persitentEvent->uid),
+            array('field' => 'attender_status', 'operator' => 'not',    'value' => Calendar_Model_Attender::STATUS_DECLINED),
+        ));
+        
+        $events = $this->_controller->search($filter);
+        $this->assertEquals(1, count($events));
+        
+        $attender = $persitentEvent->attendee[0];
+        $attender->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $updatedPersistentEvent = $this->_controller->update($persitentEvent);
+        
+        $events = $this->_controller->search($filter);
+        $this->assertEquals(0, count($events));
+        
+    }
+    
     public function testAttendeeDisplaycontainerContact()
     {
         $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
