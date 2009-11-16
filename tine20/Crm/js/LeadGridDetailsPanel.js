@@ -140,6 +140,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
             border: false,
             defaults:{
                 margins:'0 5 0 0',
+                padding: 2,
                 flex: 1,
                 layout: 'ux.display',
                 border: false
