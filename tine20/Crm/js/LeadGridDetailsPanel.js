@@ -18,7 +18,6 @@ Ext.namespace('Tine.Crm');
  * 
  * <p>Lead Grid Details Panel</p>
  * <p>
- * TODO         add charts for multiple selected leads
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -87,6 +86,20 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
         }
         
         return a.join("\n");
+        
+        /*
+        getMailLink: function(email, felamimail) {
+                    if (! email) {
+                        return '';
+                    }
+                    
+                    var link = (felamimail) ? '#' : 'mailto:' + email;
+                    var id = Ext.id() + ':' + email;
+                    
+                    return '<a href="' + link + '" class="tinebase-email-link" id="' + id + '">'
+                        + Ext.util.Format.ellipsis(email, 18); + '</a>';
+                }
+         */
     },
     
     /**
@@ -96,6 +109,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
      * @return {String} html
      * 
      * TODO generalize this?
+     * TODO add button/link to switch to container?
      */
     containerRenderer: function(container) {
         return this.containerTpl.apply({
@@ -172,6 +186,8 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
      * default panel w.o. data
      * 
      * @return {Ext.ux.display.DisplayPanel}
+     * 
+     * TODO add legend?
      */
     getDefaultPanel: function() {
         
@@ -198,7 +214,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
                     declaration: this.app.i18n._('Leadstates')
                 },
                 items: [{
-                    // TODO: align: 'right', ?
                     store: this.leadstatePiechartStore,
                     xtype: 'piechart',
                     dataField: 'total',
@@ -253,25 +268,37 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
     /**
      * fill the piechart stores (calls loadPiechartStore() for all piecharts)
      */
-    setPiechartStores: function() {
+    setPiechartStores: function(getFromRequest) {
         
         if (! this.defaultPanel.isVisible()) {
             return;
         }
         
+        if (getFromRequest === false) {
+            var data = this.getCountFromSelection();
+        } else {
+            var data = {
+                leadstate: this.grid.store.proxy.jsonReader.jsonData.totalleadstates,
+                leadsource: this.grid.store.proxy.jsonReader.jsonData.totalleadsources,
+                leadtype: this.grid.store.proxy.jsonReader.jsonData.totalleadtypes
+            };
+        }
+        
+        //console.log(data);
+        
         var storesConfig = [{
             store: this.leadstatePiechartStore,
-            jsonData: this.grid.store.proxy.jsonReader.jsonData.totalleadstates,
+            data: data.leadstate,
             definitionsStore: Tine.Crm.LeadState.getStore(),
             definitionsLabel: 'leadstate'
         }, {
             store: this.leadsourcePiechartStore,
-            jsonData: this.grid.store.proxy.jsonReader.jsonData.totalleadsources,
+            data: data.leadsource,
             definitionsStore: Tine.Crm.LeadSource.getStore(),
             definitionsLabel: 'leadsource'
         }, {
             store: this.leadtypePiechartStore,
-            jsonData: this.grid.store.proxy.jsonReader.jsonData.totalleadtypes,
+            data: data.leadtype,
             definitionsStore: Tine.Crm.LeadType.getStore(),
             definitionsLabel: 'leadtype'
         }];
@@ -279,6 +306,44 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
         for (var i = 0; i < storesConfig.length; i++) {
             this.loadPiechartStore(storesConfig[i]);
         }
+    },
+    
+    /**
+     * get leadstzate/source/type count for charts from selection
+     * 
+     * @return {}
+     */
+    getCountFromSelection: function() {
+      
+        var result = {
+            leadstate: {},
+            leadsource: {},
+            leadtype: {}
+        };
+        
+        var selectedRows = this.grid.getSelectionModel().getSelections();
+        for (var i = 0; i < selectedRows.length; ++i) {
+            //console.log(selectedRows[i]);
+            if (! result.leadstate[selectedRows[i].get('leadstate_id')]) {
+                result.leadstate[selectedRows[i].get('leadstate_id')] = 1;
+            } else {
+                result.leadstate[selectedRows[i].get('leadstate_id')]++;
+            }
+
+            if (! result.leadsource[selectedRows[i].get('leadsource_id')]) {
+                result.leadsource[selectedRows[i].get('leadsource_id')] = 1;
+            } else {
+                result.leadsource[selectedRows[i].get('leadsource_id')]++;
+            }
+
+            if (! result.leadtype[selectedRows[i].get('leadtype_id')]) {
+                result.leadtype[selectedRows[i].get('leadtype_id')] = 1;
+            } else {
+                result.leadtype[selectedRows[i].get('leadtype_id')]++;
+            }
+        }
+        
+        return result;
     },
     
     /**
@@ -294,13 +359,13 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
             
             // get records from defintion / grid store request
             var records = []; 
-            if (config.jsonData) {
+            if (config.data) {
                 config.definitionsStore.each(function(definition) {
-                    if (config.jsonData[definition.id]) {
+                    if (config.data[definition.id]) {
                         records.push(new config.store.recordType({
                             id: definition.id,
                             label: definition.get(config.definitionsLabel),
-                            total: config.jsonData[definition.id]
+                            total: config.data[definition.id]
                         }, definition.id));
                     }
                 }, this);
@@ -465,12 +530,10 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
      * @param {Mixed} body
      */
     showDefault: function(body) {
-        
-        //console.log('show default');
         this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.defaultPanel));
         
-        // fill piechart stores
-        this.setPiechartStores.defer(500, this);
+        // fill piechart stores from json data
+        this.setPiechartStores.defer(500, this, [true]);
     },
     
     /**
@@ -478,28 +541,16 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
      * 
      * @param {Ext.grid.RowSelectionModel} sm
      * @param {Mixed} body
-     * 
-     * TODO add charts here
      */
     showMulti: function(sm, body) {
-        //if (this.multiTpl) {
-        //    this.multiTpl.overwrite(body);
-        //}
+        this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.defaultPanel));
+
+        // fill piechart stores from selection
+        this.setPiechartStores.defer(1000, this, [false]);
     }
     
     /*
-    getMailLink: function(email, felamimail) {
-                    if (! email) {
-                        return '';
-                    }
-                    
-                    var link = (felamimail) ? '#' : 'mailto:' + email;
-                    var id = Ext.id() + ':' + email;
-                    
-                    return '<a href="' + link + '" class="tinebase-email-link" id="' + id + '">'
-                        + Ext.util.Format.ellipsis(email, 18); + '</a>';
-                }
-                
+    TODO move this to generic grid panel?
     onClick: function(e) {
         var target = e.getTarget('a[class=tinebase-email-link]');
         if (target) {
