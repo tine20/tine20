@@ -241,14 +241,15 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return string
      * @return array
      * 
-     * @todo only add flag to messages that should be deleted and delete them on server when updating cache
+     * @todo only add flag to messages that should be deleted and delete them on server when updating cache?
      */
     public function deleteMessages($ids)
     {
-        // close session to allow other requests
-        Zend_Session::writeClose(true);
-            
-        return $this->_delete($ids, Felamimail_Controller_Message::getInstance());
+        if (strpos($ids, '[') !== false) {
+            $ids = Zend_Json::decode($ids);
+        }
+        $deletedRecords = Felamimail_Controller_Message::getInstance()->delete($ids);
+        $this->_backgroundDelete($deletedRecords);
     }
 
     /**
@@ -256,12 +257,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param string $filter
      * @return array
-     * 
-     * @todo    do this in background process?
      */
     public function deleteMessagesByFilter($filter)
     {
-        return $this->_deleteByFilter($filter, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter');
+        $filter = new Felamimail_Model_MessageFilter(Zend_Json::decode($filter));
+        $deletedRecords = Felamimail_Controller_Message::getInstance()->deleteByFilter($filter);
+        $this->_backgroundDelete($deletedRecords);
     }
 
     /**
@@ -377,14 +378,15 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * do initial import (as background process)
+     * delete messages (as background process)
      * 
      * @param array $_result
+     * @param Tinebase_Record_RecordSet $_messagesToDelete
      * @return void
      * 
-     * @deprecated but keep it as a proof of concept, perhaps we need it again sometime
+     * @todo    generalize this?
      */
-    protected function _backgroundCacheImport(array $_result)
+    protected function _backgroundDelete(Tinebase_Record_RecordSet $_messagesToDelete)
     {
         // use output buffer
         ignore_user_abort();
@@ -401,7 +403,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (null !== ($version = $request->getVersion())) {
             $response->setVersion($version);
         }
-        $response->setResult($_result);
+        $result = array(
+            'status'    => 'success'
+        );
+        $response->setResult($result);
         echo $response;
         
         $size = ob_get_length();
@@ -410,12 +415,13 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // -> there has been an issue with mod_deflate / content-type text/html here
         header("Content-Type: application/json");
         ob_end_flush(); // Strange behaviour, will not work
-        flush();        
+        flush();
         Zend_Session::writeClose(true);
 
         // update rest of cache here
-        Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
-        Felamimail_Controller_Cache::getInstance()->initialImport($_result['id']);
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting background delete of ' . count($_messagesToDelete) . ' messages ...');
+        Tinebase_Core::setExecutionLifeTime(600); // 10 minutes
+        Felamimail_Controller_Message::getInstance()->deleteMessagesFromImapServer($_messagesToDelete);
 
         // don't output anything else ('null' or something like that)
         die();
