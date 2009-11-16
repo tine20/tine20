@@ -9,6 +9,14 @@
  * @version     $Id$
  *
  */
+
+/**
+ * increase depth of cell selector depth for event delegation (defaults to 4) 
+ */
+if (Ext.grid.GridView.prototype.cellSelectorDepth < 6) {
+    Ext.grid.GridView.prototype.cellSelectorDepth = 6;
+}
+
 Ext.namespace('Ext.ux');
 
 /**
