@@ -622,7 +622,12 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var folderId = node.attributes.folder_id;
         //var accountId = node.attributes.account_id;
         
-        if (folderId && (node.attributes.cache_status != 'complete' || force || delayedTask) /* && accountId*/) {
+        if (
+            folderId 
+            && (node.attributes.cache_status != 'complete' || force || delayedTask)
+            && node.attributes.localname != 'unread' && node.attributes.localname != 'marked'
+            /* && accountId*/
+        ) {
             node.getUI().addClass("x-tree-node-loading");
             
             Ext.Ajax.request({
@@ -679,7 +684,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     node.getUI().removeClass("x-tree-node-loading");
                 }
             });
-        } else {
+        } else if (! delayedTask) {
             this.filterPlugin.onFilterChange();
         }
     },
