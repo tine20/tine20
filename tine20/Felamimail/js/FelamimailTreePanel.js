@@ -109,12 +109,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         // get folder update interval from preferences
         var updateInterval = Tine.Felamimail.registry.get('preferences').get('updateInterval');
-        if (! isNaN(updateInterval)) {
+        if (! isNaN(updateInterval) && updateInterval > 0) {
             // convert to milliseconds
             this.updateFolderRefreshTime = 60000*updateInterval;
+            this.updateFoldersTask = new Ext.util.DelayedTask(this.updateFolders, this);
         }
-        
-        this.updateFoldersTask = new Ext.util.DelayedTask(this.updateFolders, this);
         
     	Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
 
@@ -400,7 +399,9 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.expandPath('/root/' + defaultAccount + '/');
         
         // start delayed task
-        this.updateFoldersTask.delay(this.updateFolderRefreshTime);
+        if (this.updateFoldersTask !== null) {
+            this.updateFoldersTask.delay(this.updateFolderRefreshTime);
+        }
     },
     
    /**

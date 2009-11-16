@@ -87,7 +87,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             ),
             self::UPDATEINTERVAL  => array(
                 'label'         => $translate->_('Email Update Interval'),
-                'description'   => $translate->_('How often should Felamimail check for new Emails (in minutes) .'),
+                'description'   => $translate->_('How often should Felamimail check for new Emails (in minutes). "0" means never.'),
             ),
         );
         
@@ -103,6 +103,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     public function getPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
         $preference = $this->_getDefaultBasePreference($_preferenceName);
+        $translate = Tinebase_Translation::getTranslation($this->_application);
         
         switch($_preferenceName) {
             case self::USERACCOUNT:
@@ -116,14 +117,14 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                 $preference->value      = 'default';
                 break;
             case self::UPDATEINTERVAL:
-                $preference->value      = 5;
+                $preference->value      = 0;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>';
-                for ($i = 1; $i < 21; $i++) {
+                for ($i = 0; $i < 21; $i++) {
                     $preference->options .= '<option>
-                            <label>'. $i . '</label>
-                            <value>'. $i . '</value>
-                        </option>';
+                        <label>'. $i . '</label>
+                        <value>'. $i . '</value>
+                    </option>';
                 }
                 $preference->options    .= '</options>';
                 break;
