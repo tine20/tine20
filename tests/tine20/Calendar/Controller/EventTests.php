@@ -242,6 +242,38 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->fail('An expected exception has not been raised.');
     }
     
+    public function testCreateTransparentEventNoConflict()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        $persistentEvent = $this->_controller->create($event);
+        
+        $nonConflictEvent = $this->_getEvent();
+        $nonConflictEvent->transp = Calendar_Model_Event::TRANSP_TRANSP;
+        $nonConflictEvent->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+        ));
+        
+        $this->_controller->create($nonConflictEvent, TRUE);
+    }
+    
+    public function testCreateNoConflictParallelTrasparentEvent()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        $event->transp = Calendar_Model_Event::TRANSP_TRANSP;
+        $persistentEvent = $this->_controller->create($event);
+        
+        $nonConflictEvent = $this->_getEvent();
+        $nonConflictEvent->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+        ));
+        
+        $this->_controller->create($nonConflictEvent, TRUE);
+    }
+    
     public function testUpdateWithConflictNoTimechange()
     {
         $persitentConflictEvent = $this->testCreateEventWithConfict();
