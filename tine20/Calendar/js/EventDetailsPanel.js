@@ -59,6 +59,10 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
         return String.format(this.app.i18n._("{0} {1} o'clock"), Tine.Tinebase.common.dateRenderer(dt), dt.format('H:i'));
     },
     
+    transpRenderer: function(transp) {
+        return Tine.Tinebase.common.booleanRenderer(transp == 'OPAQUE');
+    },
+    
     /**
      * inits this component
      */
@@ -194,6 +198,11 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
                             name: 'dtend',
                             fieldLabel: this.app.i18n._('End Time'),
                             renderer: this.datetimeRenderer.createDelegate(this)
+                        }, {
+                            xtype: 'ux.displayfield',
+                            name: 'transp',
+                            fieldLabel: this.app.i18n._('Blocking'),
+                            renderer: this.transpRenderer.createDelegate(this)
                         }, {
                             xtype: 'ux.displayfield',
                             name: 'location',
