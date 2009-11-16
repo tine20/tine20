@@ -87,6 +87,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
     	$ignoreUIDs = !empty($_event->uid) ? array($_event->uid) : array();
     	
+    	// don't check if event is trasparent
+    	if ($_event->transp == Calendar_Model_Event::TRANSP_TRANSP) {
+    	    return;
+    	}
+    	
         $fbInfo = $this->getFreeBusyInfo($_event->dtstart, $_event->dtend, $_event->attendee, $ignoreUIDs);
         //Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($fbInfo->toArray(), true));
         
@@ -189,7 +194,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $filter = new Calendar_Model_EventFilter(array(
             array('field' => 'period',   'operator' => 'within', 'value' => array('from' => $_from, 'until' => $_until)),
-            array('field' => 'attender', 'operator' => 'in',     'value' => $_attendee)
+            array('field' => 'attender', 'operator' => 'in',     'value' => $_attendee),
+            array('field' => 'transp',   'operator' => 'equals', 'value' => Calendar_Model_Event::TRANSP_OPAQUE)
         ));
         
         $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
