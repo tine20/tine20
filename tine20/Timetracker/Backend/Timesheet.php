@@ -41,6 +41,29 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
     protected $_modlogActive = TRUE;
     
     /**
+    * Search for records matching given filter
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     * @param boolean $_onlyIds
+     * @return Tinebase_Record_RecordSet|array
+     */
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)    
+    {
+        if ($_pagination === NULL) {
+            $_pagination = new Tinebase_Model_Pagination();
+        }
+        
+        // always add creation time as second sort criteria
+        if (! empty($_pagination->sort) && ! is_array($_pagination->sort)) {
+            $_pagination->sort = array($_pagination->sort, 'creation_time');
+        }
+        //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_pagination->toArray(), TRUE));
+        
+        return parent::search($_filter, $_pagination, $_onlyIds);
+    }
+        
+    /**
      * Gets total count and sum of duration of search with $_filter
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
