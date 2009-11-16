@@ -69,6 +69,40 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             scope: this
         });
         
+        this.filter_showDeclined = new Tine.widgets.grid.FilterButton({
+            text: this.app.i18n._('Show declined events'),
+            //iconCls: 'action_showArchived',
+            field: 'attender_status',
+            /**
+             * @private
+             */
+            getValue: function() {
+                if (this.pressed) {
+                    return null;
+                } else {
+                    return {field: this.field, operator: 'not', value: 'DECLINED'};
+                }
+            },
+            
+            /**
+             * @private
+             */
+            setValue: function(filters) {
+                for (var i=0; i<filters.length; i++) {
+                    if (filters[i].field == this.field) {
+                        this.toggle(true);
+                        break;
+                    }
+                }
+            },
+            
+            scope: this,
+            handler: function() {
+                var panel = this.getCalendarPanel(this.activeView);
+                panel.getStore().load({});
+            }
+        });
+        
         this.showDayView = new Ext.Toolbar.Button({
             pressed: this.activeView == 'day',
             text: this.app.i18n._('Day'),
@@ -106,7 +140,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         this.actionToolbarActions = [
             this.action_addInNewWindow,
             this.action_editInNewWindow,
-            this.action_deleteRecord
+            this.action_deleteRecord,
+            '-',
+            this.filter_showDeclined
         ];
         
         this.recordActions = [
@@ -499,9 +535,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         // this is important for paging and sort header!
         options.params.filter = [];
         
-        // note, we can't use ne 'normal' plugin approach here, cause we have to deal with n stores
+        // note, we can't use the 'normal' plugin approach here, cause we have to deal with n stores
         var calendarSelectionPlugin = this.app.getMainScreen().getTreePanel().getCalSelector().getFilterPlugin();
-        calendarSelectionPlugin.onBeforeLoad.call(calendarSelectionPlugin, store, options)
+        calendarSelectionPlugin.onBeforeLoad.call(calendarSelectionPlugin, store, options);
+        
+        this.filter_showDeclined.onBeforeLoad.call(this.filter_showDeclined, store, options);
     },
     
     refresh: function(refresh) {
