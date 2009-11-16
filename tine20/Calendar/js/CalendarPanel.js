@@ -228,23 +228,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 }]
             });
             this.conflictConfirmWin.show();
-            /*
-            Ext.MessageBox.confirm(
-                this.app.i18n._('Scheduling Conflict'),
-                String.format(this.app.i18n.n_('{0} is busy at the requested time', 'The follwing attendee are busy at the requested time: "{0}"', names.length) + "<br />"  +
-                this.app.i18n._('Ignore Scheduling Conflict?'), names.join(', ')),
-                function(btn) {
-                    if(btn == 'yes') {
-                        this.onAddEvent(event, false)
-                    } else {
-                        this.setLoading(false);
-                        this.store.remove(event);
-                        //this.loadMask.show();
-                        //this.store.load({refresh: true});
-                    }
-                }, this
-            );
-            */
+            
         } else {
             Tine.Tinebase.ExceptionHandler.handleRequestException(error);
         }
