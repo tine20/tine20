@@ -147,7 +147,9 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             { id: 'note', header: this.app.i18n._('Note'), dataIndex: 'note' },
             { id: 'tz', header: this.app.i18n._('Timezone'), dataIndex: 'tz' },
             { id: 'geo', header: this.app.i18n._('Geo'), dataIndex: 'geo' },
-            { id: 'bday', header: this.app.i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer }
+            { id: 'bday', header: this.app.i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer },
+            { id: 'creation_time', header: _('Creation Time'), dataIndex: 'creation_time', renderer: Tine.Tinebase.common.dateRenderer },
+            { id: 'last_modified_time', header: _('Last Modified Time'), dataIndex: 'last_modified_time', renderer: Tine.Tinebase.common.dateRenderer }
         ]});
     },
     
