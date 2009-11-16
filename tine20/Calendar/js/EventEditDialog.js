@@ -122,13 +122,29 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 name: 'dtend',
                                 requiredGrant: 'editGrant'
                             }, {
-                                columnWidth: .4,
+                                columnWidth: .2,
                                 xtype: 'checkbox',
                                 hideLabel: true,
                                 boxLabel: this.app.i18n._('whole day'),
                                 listeners: {scope: this, check: this.onAllDayChange},
                                 name: 'is_all_day_event',
                                 requiredGrant: 'editGrant'
+                            }, {
+                                columnWidth: .2,
+                                xtype: 'checkbox',
+                                hideLabel: true,
+                                boxLabel: this.app.i18n._('non blocking'),
+                                name: 'transp',
+                                requiredGrant: 'editGrant',
+                                id: 'mycheckid',
+                                getValue: function() {
+                                    var bool = Ext.form.Checkbox.prototype.getValue.call(this);
+                                    return bool ? 'TRANSPARENT' : 'OPAQUE';
+                                },
+                                setValue: function(value) {
+                                    var bool = (value == 'TRANSPARENT' || value === true);
+                                    return Ext.form.Checkbox.prototype.setValue.call(this, bool);
+                                }
                             }]]
                         }]
                     }, {
