@@ -245,8 +245,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteMessages($ids)
     {
-        // close session to allow other requests ?
-        //Zend_Session::writeClose(true);
+        // close session to allow other requests
+        Zend_Session::writeClose(true);
             
         return $this->_delete($ids, Felamimail_Controller_Message::getInstance());
     }
