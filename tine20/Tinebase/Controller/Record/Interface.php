@@ -83,7 +83,7 @@ interface Tinebase_Controller_Record_Interface
      * If one of the records could not be deleted, no record is deleted
      * 
      * @param   array array of record identifiers
-     * @return  void
+     * @return  Tinebase_Record_RecordSet
      */
     public function delete($_ids);
     

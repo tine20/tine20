@@ -406,7 +406,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * If one of the records could not be deleted, no record is deleted
      * 
      * @param   array array of record identifiers
-     * @return  void
+     * @return  Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_NotFound|Tinebase_Exception
      */
     public function delete($_ids)
@@ -448,14 +448,17 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getMessage(), true));
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getTraceAsString(), true));
             throw $e;
-        }                        
+        }
+        
+        // returns deleted records
+        return $records;
     }
     
     /**
      * delete records by filter
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @return  void
+     * @return  Tinebase_Record_RecordSet
      */
     public function deleteByFilter(Tinebase_Model_Filter_FilterGroup $_filter)
     {
@@ -466,7 +469,7 @@ abstract class Tinebase_Controller_Record_Abstract
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($ids) . ' records ...');
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($ids, true));
         
-        $this->delete($ids);
+        return $this->delete($ids);
     }
     
     /**
