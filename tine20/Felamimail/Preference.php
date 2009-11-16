@@ -103,7 +103,6 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     public function getPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
         $preference = $this->_getDefaultBasePreference($_preferenceName);
-        $translate = Tinebase_Translation::getTranslation($this->_application);
         
         switch($_preferenceName) {
             case self::USERACCOUNT:
