@@ -407,22 +407,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
                         autoScroll: true,
                         layoutConfig: {
                             background: 'solid'
-                            //declaration: this.app.i18n._('Customer')
-                        },
-                        items: [{
-                            xtype: 'ux.displayfield',
-                            name: 'customer',
-                            nl2br: true,
-                            htmlEncode: false,
-                            renderer: this.contactRenderer.createDelegate(this, ['CUSTOMER'])
-                        }]
-                    }, {
-                        flex: 1,
-                        layout: 'ux.display',
-                        labelAlign: 'top',
-                        autoScroll: true,
-                        layoutConfig: {
-                            background: 'solid'
                             //declaration: this.app.i18n._('Partner')
                         },
                         items: [{
@@ -431,6 +415,22 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
                             nl2br: true,
                             htmlEncode: false,
                             renderer: this.contactRenderer.createDelegate(this, ['PARTNER'])
+                        }]
+                    }, {
+                        flex: 1,
+                        layout: 'ux.display',
+                        labelAlign: 'top',
+                        autoScroll: true,
+                        layoutConfig: {
+                            background: 'solid'
+                            //declaration: this.app.i18n._('Customer')
+                        },
+                        items: [{
+                            xtype: 'ux.displayfield',
+                            name: 'customer',
+                            nl2br: true,
+                            htmlEncode: false,
+                            renderer: this.contactRenderer.createDelegate(this, ['CUSTOMER'])
                         }]
                     }, {
                         flex: 1,
