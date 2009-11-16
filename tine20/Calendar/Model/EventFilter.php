@@ -52,6 +52,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         //      you need to use the period filter to filter for events in a given period
         'dtstart'               => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'dtend'                 => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'transp'                => array('filter' => 'Tinebase_Model_Filter_Text'),
         'rrule'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'recurid'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'rrule_until'           => array('filter' => 'Tinebase_Model_Filter_DateTime'),
