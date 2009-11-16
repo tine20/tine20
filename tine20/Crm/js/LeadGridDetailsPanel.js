@@ -18,9 +18,7 @@ Ext.namespace('Tine.Crm');
  * 
  * <p>Lead Grid Details Panel</p>
  * <p>
- * TODO         make it work for single leads
  * TODO         add charts for multiple selected leads
- * TODO         remove obsolete code
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -35,48 +33,92 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
     /**
      * renders contact names
      * 
-     * @param {Array} contactData
+     * @param {String} type
      * @return {String}
+     * 
+     * TODO add mail link
+     * TODO all labels should have the same width
      */
-        /*
-    contactRenderer: function(contactData) {
-        var contactStore = Tine.Crm.Model.Attender.getAttendeeStore(contactData);
+    contactRenderer: function(type) {
+        
+        var relations = this.record.get('relations');
         
         var a = [];
-        contactStore.each(function(attender) {
-            a.push(Tine.Crm.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Crm.AttendeeGridPanel.prototype, attender.get('user_id'), false, attender));
-        });
+        var fields = [{
+            label: (type == 'CUSTOMER') ? this.app.i18n._('Customer') : this.app.i18n._('Partner'),
+            dataField: 'n_fileas'
+        }, {
+            label: this.app.i18n._('Phone'),
+            dataField: 'tel_work'
+        }, {
+            label: this.app.i18n._('Mobile'),
+            dataField: 'tel_cell'
+        }, {
+            label: this.app.i18n._('Fax'),
+            dataField: 'tel_fax'
+        }, {
+            label: this.app.i18n._('E-Mail'),
+            dataField: 'email'
+        }, {
+            label: this.app.i18n._('Web'),
+            dataField: 'url'
+        }];
+        var labelMarkup = '<label class="x-form-item x-form-item-label">';
+        
+        if (Ext.isArray(relations) && relations.length > 0) {
+            // get correct relation type from relations (contact) array
+            for (var i = 0; i < relations.length; i++) {
+                if (relations[i].type == type) {
+                    var data = relations[i].related_record;
+                    for (var j=0; j < fields.length; j++) {
+                        if (data[fields[j].dataField]) {
+                            if (fields[j].dataField == 'url') {
+                                a.push(labelMarkup + fields[j].label + ':</label> '
+                                    + '<a href="' + Ext.util.Format.htmlEncode(data[fields[j].dataField]) + '" target="_blank">' 
+                                    + Ext.util.Format.htmlEncode(data[fields[j].dataField]) + '</a>');
+                            } else {
+                                a.push(labelMarkup + fields[j].label + ':</label> '  + Ext.util.Format.htmlEncode(data[fields[j].dataField]));
+                            }
+                        }
+                    }
+                    a.push('');
+                }
+            }
+        }
         
         return a.join("\n");
     },
-        */
     
     /**
-     * renders container name + color
+     * renders container name
      * 
      * @param {Array} container
      * @return {String} html
+     * 
+     * TODO generalize this?
      */
-    /*
     containerRenderer: function(container) {
         return this.containerTpl.apply({
-            color: Tine.Crm.colorMgr.getColor(this.record).color,
             name: Ext.util.Format.htmlEncode(container && container.name ? container.name : '')
         });
     },
-    */
     
     /**
-     * renders datetime
+     * lead state renderer
      * 
-     * @param {Date} dt
-     * @return {String}
+     * @param   {Number} id
+     * @param   {Store} store
+     * @return  {String} label
+     * @return  {String} label
      */
-    /*
-    datetimeRenderer: function(dt) {
-        return String.format(this.app.i18n._("{0} {1} o'clock"), Tine.Tinebase.common.dateRenderer(dt), dt.format('H:i'));
+    sourceTypeRenderer: function(id, store, definitionsLabel) {
+        record = store.getById(id);
+        if (record) {
+            return record.data[definitionsLabel];
+        } else {
+            return 'undefined';
+        }
     },
-    */
     
     /**
      * inits this component
@@ -281,6 +323,8 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
      * main lead details panel
      * 
      * @return {Ext.ux.display.DisplayPanel}
+     * 
+     * TODO add tasks / products?
      */
     getLeadGridDetailsPanel: function() {
         return new Ext.ux.display.DisplayPanel ({
@@ -294,7 +338,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
                     align:'stretch'
                 },
                 items: [
-                    /*{
+                    {
                     layout: 'hbox',
                     flex: 0,
                     height: 16,
@@ -306,13 +350,15 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
                     items: [{
                         flex: 1,
                         xtype: 'ux.displayfield',
-                        name: 'summary'
-                        //fieldLabel: this.app.i18n._('Summary')
+                        cls: 'x-ux-display-header',
+                        //style: 'padding-top: 2px',
+                        name: 'lead_name'
                     }, {
                         flex: 1,
                         xtype: 'ux.displayfield',
                         style: 'text-align: right;',
                         name: 'container_id',
+                        cls: 'x-ux-display-header',
                         htmlEncode: false,
                         renderer: this.containerRenderer.createDelegate(this)
                     }]
@@ -326,46 +372,69 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
                     },
                     defaults:{margins:'0 5 0 0'},
                     items: [{
-                        flex: 2,
+                        flex: 1,
                         layout: 'ux.display',
-                        labelWidth: 60,
+                        labelWidth: 90,
                         layoutConfig: {
-                            background: 'solid'
+                            background: 'solid',
+                            declaration: this.app.i18n._('Status')
                         },
                         items: [{
                             xtype: 'ux.displayfield',
-                            name: 'dtstart',
-                            fieldLabel: this.app.i18n._('Start Time'),
-                            renderer: this.datetimeRenderer.createDelegate(this)
+                            name: 'start',
+                            fieldLabel: this.app.i18n._('Start'),
+                            renderer: Tine.Tinebase.common.dateRenderer
                         }, {
                             xtype: 'ux.displayfield',
-                            name: 'dtend',
-                            fieldLabel: this.app.i18n._('End Time'),
-                            renderer: this.datetimeRenderer.createDelegate(this)
+                            name: 'end_scheduled',
+                            fieldLabel: this.app.i18n._('Estimated end'),
+                            renderer: Tine.Tinebase.common.dateRenderer
                         }, {
                             xtype: 'ux.displayfield',
-                            name: 'location',
-                            fieldLabel: this.app.i18n._('Location')
+                            name: 'leadtype_id',
+                            fieldLabel: this.app.i18n._('Leadtype'),
+                            renderer: this.sourceTypeRenderer.createDelegate(this, [Tine.Crm.LeadType.getStore(), 'leadtype'], true)
+                        }, {
+                            xtype: 'ux.displayfield',
+                            name: 'leadsource_id',
+                            fieldLabel: this.app.i18n._('Leadsource'),
+                            renderer: this.sourceTypeRenderer.createDelegate(this, [Tine.Crm.LeadSource.getStore(), 'leadsource'], true)
                         }]
                     }, {
-                        flex: 2,
+                        flex: 1,
                         layout: 'ux.display',
                         labelAlign: 'top',
                         autoScroll: true,
                         layoutConfig: {
                             background: 'solid'
+                            //declaration: this.app.i18n._('Customer')
                         },
                         items: [{
                             xtype: 'ux.displayfield',
-                            name: 'contact',
+                            name: 'customer',
                             nl2br: true,
-                            fieldLabel: this.app.i18n._('Attendee'),
-                            renderer: this.contactRenderer
+                            htmlEncode: false,
+                            renderer: this.contactRenderer.createDelegate(this, ['CUSTOMER'])
                         }]
                     }, {
-                        flex: 3,
+                        flex: 1,
+                        layout: 'ux.display',
+                        labelAlign: 'top',
+                        autoScroll: true,
+                        layoutConfig: {
+                            background: 'solid'
+                            //declaration: this.app.i18n._('Partner')
+                        },
+                        items: [{
+                            xtype: 'ux.displayfield',
+                            name: 'partner',
+                            nl2br: true,
+                            htmlEncode: false,
+                            renderer: this.contactRenderer.createDelegate(this, ['PARTNER'])
+                        }]
+                    }, {
+                        flex: 1,
                         layout: 'fit',
-                        
                         border: false,
                         items: [{
                             cls: 'x-ux-display-background-border',
@@ -373,7 +442,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
                             name: 'description'
                         }]
                     }]
-                }*/]
+                }]
             }]
         });
     },
@@ -388,23 +457,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
         this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.leadDetailsPanel));
         
         this.leadDetailsPanel.loadRecord(record);
-        
-        /*
-        // don't mess up record
-        var data = {};
-        Ext.apply(data, record.data);
-        
-        data.customer = this.getContactData(record, 'CUSTOMER') || {};
-        data.partner = this.getContactData(record, 'PARTNER') || {};
-        
-        var leadtype = Tine.Crm.LeadType.getStore().getById(data.leadtype_id);
-        data.leadtype = leadtype ? leadtype.get('leadtype') : '';
-        
-        var leadsource = Tine.Crm.LeadSource.getStore().getById(data.leadsource_id);
-        data.leadsource = leadsource ? leadsource.get('leadsource') : '';
-        
-        this.tpl.overwrite(body, data);
-         */
     },
     
     /**
@@ -419,8 +471,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
         
         // fill piechart stores
         this.setPiechartStores.defer(500, this);
-
-        //console.log(this.leadstatePiechartStore);
     },
     
     /**
@@ -437,123 +487,8 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
         //}
     }
     
-    // old functions follow
-    
     /*
-    getContactData: function(lead, type) {
-        var data = lead.get('relations');
-        
-        if( Ext.isArray(data) && data.length > 0) {
-            var index = 0;
-            
-            // get correct relation type from data (contact) array
-            while (index < data.length && data[index].type != type) {
-                index++;
-            }
-            if (data[index]) {
-                return data[index].related_record;
-            }
-        }
-    },
-
-    initTemplate: function() {
-        this.tpl = new Ext.XTemplate(
-            '<div class="crm-leadgrid-detailspanel">',
-                '<!-- status details -->',
-                '<div class="preview-panel preview-panel-left crm-leadgrid-detailspanel-status">',
-                    '<div class="bordercorner_1"></div>',
-                    '<div class="bordercorner_2"></div>',
-                    '<div class="bordercorner_3"></div>',
-                    '<div class="bordercorner_4"></div>',
-                    '<div class="crm-leadgrid-detailspanel-status-inner preview-panel-left">',
-                        '<span class="preview-panel-symbolcompare">', this.il8n._('Start'), '</span>{[this.encode(values.start, "date")]}<br/>',
-                        '<span class="preview-panel-symbolcompare">', this.il8n._('Estimated end'), '</span>{[this.encode(values.end_scheduled, "date")]}<br/>',
-                        '<span class="preview-panel-symbolcompare">', this.il8n._('Leadtype'), '</span>{[this.encode(values.leadtype)]}<br/>',
-                        '<span class="preview-panel-symbolcompare">', this.il8n._('Leadsource'), '</span>{[this.encode(values.leadsource)]}<br/>',
-                        '<!-- ',
-                        '<br />',
-                        '<span class="preview-panel-symbolcompare">', this.il8n._('Open tasks'), '</span>{values.numtasks}<br/>',
-                        '<span class="preview-panel-symbolcompare">', this.il8n._('Tasks status'), '</span>{values.tasksstatushtml}<br/>',
-                        '-->',
-                    '</div>',
-                '</div>',
-            
-                '<!-- contact details -->',
-                '<div class="preview-panel preview-panel-left crm-leadgrid-detailspanel-contacts">',                
-                    '<div class="bordercorner_1"></div>',
-                    '<div class="bordercorner_2"></div>',
-                    '<div class="bordercorner_3"></div>',
-                    '<div class="bordercorner_4"></div>',
-                    '<div class="crm-leadgrid-detailspanel-contact">',
-                        '<div class="preview-panel-declaration">', this.il8n._('Customer'), '</div>',
-                        '<span class="preview-panel-symbolcompare">', this.il8n._('Phone'), '</span>{[this.encode(values.customer.tel_work)]}<br/>',
-                        '<span class="preview-panel-symbolcompare">', this.il8n._('Mobile'), '</span>{[this.encode(values.customer.tel_cell)]}<br/>',
-                        '<span class="preview-panel-symbolcompare">', this.il8n._('Fax'), '</span>{[this.encode(values.customer.tel_fax)]}<br/>',
-                        '<span class="preview-panel-symbolcompare">', this.il8n._('E-Mail'), 
-                            '</span>{[this.getMailLink(values.customer.email, ', this.felamimail, ')]}<br/>',
-                        '<span class="preview-panel-symbolcompare">', this.il8n._('Web') + '</span><a href="{[this.encode(values.customer.url)]}" target="_blank">{[this.encode(values.customer.url, "shorttext")]}</a><br/>',
-                    '</div>',
-                    '<div class="crm-leadgrid-detailspanel-contact">',
-                        '<div class="preview-panel-declaration">' + this.il8n._('Partner') + '</div>',
-                        '<span class="preview-panel-symbolcompare">' + this.il8n._('Phone') + '</span>{[this.encode(values.partner.tel_work)]}<br/>',
-                        '<span class="preview-panel-symbolcompare">' + this.il8n._('Mobile') + '</span>{[this.encode(values.partner.tel_cell)]}<br/>',
-                        '<span class="preview-panel-symbolcompare">' + this.il8n._('Fax') + '</span>{[this.encode(values.partner.tel_fax)]}<br/>',
-                        '<span class="preview-panel-symbolcompare">' + this.il8n._('E-Mail'), 
-                            '</span>{[this.getMailLink(values.partner.email, ' + this.felamimail + ')]}<br/>',
-                        '<span class="preview-panel-symbolcompare">' + this.il8n._('Web') + '</span><a href="{[this.encode(values.partner.url)]}" target="_blank">{[this.encode(values.partner.url, "shorttext")]}</a><br/>',
-                    '</div>',
-                '</div>',
-
-                '<!-- description -->',
-                '<div class="preview-panel-description preview-panel-left" ext:qtip="{[this.encode(values.description)]}">',
-                    '<div class="bordercorner_gray_1"></div>',
-                    '<div class="bordercorner_gray_2"></div>',
-                    '<div class="bordercorner_gray_3"></div>',
-                    '<div class="bordercorner_gray_4"></div>',
-                    '<div class="preview-panel-declaration">' + this.il8n._('Description') + '</div>',
-                    '{[this.encode(values.description)]}',
-                '</div>',
-                '</div>',
-                //  '{[this.getTags(values.tags)]}',
-            {
-                encode: function(value, type, prefix) {
-                    //var metrics = Ext.util.TextMetrics.createInstance('previewPanel');
-                    if (value) {
-                        if (type) {
-                            switch (type) {
-                                case 'country':
-                                    value = Locale.getTranslationData('CountryList', value);
-                                    break;
-                                case 'longtext':
-                                    value = Ext.util.Format.ellipsis(value, 135);
-                                    break;
-                                case 'mediumtext':
-                                    value = Ext.util.Format.ellipsis(value, 30);
-                                    break;
-                                case 'shorttext':
-                                    //console.log(metrics.getWidth(value));
-                                    value = Ext.util.Format.ellipsis(value, 18);
-                                    break;
-                                case 'date' :
-                                    value = Tine.Tinebase.common.dateRenderer(value);
-                                    break;
-                                case 'prefix':
-                                    if (prefix) {
-                                        value = prefix + value;
-                                    }
-                                    break;
-                                default:
-                                    value += type;
-                            }                           
-                        }
-                        value = Ext.util.Format.htmlEncode(value);
-                        return Ext.util.Format.nl2br(value);
-                    } else {
-                        return '';
-                    }
-                },
-
-                getMailLink: function(email, felamimail) {
+    getMailLink: function(email, felamimail) {
                     if (! email) {
                         return '';
                     }
@@ -564,10 +499,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
                     return '<a href="' + link + '" class="tinebase-email-link" id="' + id + '">'
                         + Ext.util.Format.ellipsis(email, 18); + '</a>';
                 }
-            }
-        );
-    },
-    
+                
     onClick: function(e) {
         var target = e.getTarget('a[class=tinebase-email-link]');
         if (target) {
