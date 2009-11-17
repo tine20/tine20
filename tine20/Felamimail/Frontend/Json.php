@@ -388,43 +388,50 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _backgroundDelete(Tinebase_Record_RecordSet $_messagesToDelete)
     {
-        // use output buffer
-        ignore_user_abort();
-        header("Connection: close");
-        
-        ob_start();
-
-        // output here (kind of hack to get request id and build response)
-        $request = new Zend_Json_Server_Request_Http();
-        $response = new Zend_Json_Server_Response_Http();
-        if (null !== ($id = $request->getId())) {
-            $response->setId($id);
-        }
-        if (null !== ($version = $request->getVersion())) {
-            $response->setVersion($version);
-        }
+        Tinebase_Core::setExecutionLifeTime(600); // 10 minutes
         $result = array(
             'status'    => 'success'
         );
-        $response->setResult($result);
-        echo $response;
         
-        $size = ob_get_length();
-        header("Content-Length: $size");
-        // need to set content type because the response should not be compressed by (apache) webserver
-        // -> there has been an issue with mod_deflate / content-type text/html here
-        header("Content-Type: application/json");
-        ob_end_flush(); // Strange behaviour, will not work
-        flush();
-        Zend_Session::writeClose(true);
-
-        // update rest of cache here
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting background delete of ' . count($_messagesToDelete) . ' messages ...');
-        Tinebase_Core::setExecutionLifeTime(600); // 10 minutes
-        Felamimail_Controller_Message::getInstance()->deleteMessagesFromImapServer($_messagesToDelete);
-
-        // don't output anything else ('null' or something like that)
-        die();
+        if (headers_sent()) {
+            // don't do background processing if headers were already sent
+            Felamimail_Controller_Message::getInstance()->deleteMessagesFromImapServer($_messagesToDelete);
+            return $result;
+        } else {
+        
+            // use output buffer
+            ignore_user_abort();
+            header("Connection: close");
+            
+            ob_start();
+    
+            // output here (kind of hack to get request id and build response)
+            $request = new Zend_Json_Server_Request_Http();
+            $response = new Zend_Json_Server_Response_Http();
+            if (null !== ($id = $request->getId())) {
+                $response->setId($id);
+            }
+            if (null !== ($version = $request->getVersion())) {
+                $response->setVersion($version);
+            }
+            $response->setResult($result);
+            echo $response;
+            
+            $size = ob_get_length();
+            header("Content-Length: $size");
+            // need to set content type because the response should not be compressed by (apache) webserver
+            // -> there has been an issue with mod_deflate / content-type text/html here
+            header("Content-Type: application/json");
+            ob_end_flush(); // Strange behaviour, will not work
+            flush();
+            Zend_Session::writeClose(true);
+    
+            // update rest of cache here
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting background delete of ' . count($_messagesToDelete) . ' messages ...');
+    
+            // don't output anything else ('null' or something like that)
+            die();
+        }
     }
     
     /***************************** accounts funcs *******************************/
