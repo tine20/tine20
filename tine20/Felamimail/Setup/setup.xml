@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>2.2</version>
+    <version>2.3</version>
     <order>30</order>
     <status>enabled</status>
     <depends>
@@ -205,7 +205,7 @@
         </table>
         <table>
             <name>felamimail_folder</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -283,6 +283,7 @@
                     <value>complete</value>
                     <value>incomplete</value>
                     <value>updating</value>
+                    <value>deleting</value>
                 </field>
                 <field>
                     <name>cache_lowest_uid</name>

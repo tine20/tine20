@@ -49,8 +49,8 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
     const CACHE_STATUS_INCOMPLETE = 'incomplete';
     
     /**
-     * cache status: incomplete
-     *
+     * cache status: deleting
+     * - is set by Felamimail_Controller_Message::deleteMessagesFromImapServer()
      */
     const CACHE_STATUS_DELETING = 'deleting';
     
