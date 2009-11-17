@@ -31,6 +31,15 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     protected $_json = array();
     
     /**
+     * timesheet/timeaccounts to delete
+     * @var array
+     */
+    protected $_toDeleteIds = array(
+        'ts'    => array(),
+        'ta'    => array(),
+    );
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -58,9 +67,12 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      * This method is called after a test is executed.
      *
      * @access protected
+     * 
+     * @todo use this for all ts/ta that are created in the tests
      */
     protected function tearDown()
-    {        
+    {
+        $this->_json->deleteTimeaccounts(Zend_Json::encode($this->_toDeleteIds['ts']));
     }
     
     /**
@@ -588,22 +600,21 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         );
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        $this->_toDeleteIds['ts'][] = $timesheetData['timeaccount_id']['id'];
         
         // search persistent filter
         $persistentFilters = $persistentFiltersJson->search(Zend_Json::encode($this->_getPersistentFilterFilter($filterName)));
-        
         //check
-        $search = $this->_json->searchTimesheets($persistentFilters['results'][0]['id'], Zend_Json::encode($this->_getPaging()));
+        $search = $this->_json->searchTimesheets(Zend_Json::encode($persistentFilters['results'][0]['id']), Zend_Json::encode($this->_getPaging()));
         $this->assertEquals($timesheet->description, $search['results'][0]['description']);
         $this->assertType('array', $search['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
         $this->assertType('array', $search['results'][0]['account_id'], 'account_id is not resolved');
         $this->assertEquals(1, $search['totalcount']);
         $this->assertEquals(30, $search['totalsum']);
-        $this->assertEquals($tsFilter, $search['filter']);
+        $this->assertEquals($tsFilter, $search['filter'], 'filters do not match');
         
         // cleanup / delete file
         $persistentFiltersJson->delete($persistentFilters['results'][0]['id']);
-        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);        
     }
     
     /************ protected helper funcs *************/
