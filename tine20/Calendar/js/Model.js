@@ -148,6 +148,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         container_id: app.getMainScreen().getTreePanel().getAddCalendar(),
         transp: 'OPAQUE',
         editGrant: true,
+        organizer: Tine.Tinebase.registry.get('userContact'),
         attendee: [
             Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
                 user_type: 'user',
