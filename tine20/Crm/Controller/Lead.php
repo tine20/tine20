@@ -166,7 +166,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         }
         
         $view->lang_state = $translate->_('State');
-        $view->lang_type = $translate->_('Type');
+        $view->lang_type = $translate->_('Role');
         $view->lang_source = $translate->_('Source');
         $view->lang_start = $translate->_('Start');
         $view->lang_scheduledEnd = $translate->_('Scheduled end');
