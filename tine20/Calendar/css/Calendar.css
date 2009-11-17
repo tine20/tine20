@@ -93,3 +93,16 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 	background-repeat:no-repeat;
 	padding: 2px 0px 2px 26px;
 }
+
+/**** conflict window ****/
+.cal-conflict-heading {
+    height: 32px;
+}
+
+.cal-conflict-attendername {
+    font-weight: bold;
+}
+
+.cal-conflict-eventinfos {
+    margin-left: 15px;
+}
