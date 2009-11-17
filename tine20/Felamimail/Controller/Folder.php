@@ -181,6 +181,17 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     }
     
     /**
+     * update single folder
+     * 
+     * @param Felamimail_Model_Folder $_folder
+     * @return Felamimail_Model_Folder
+     */
+    public function update(Felamimail_Model_Folder $_folder)
+    {
+        return $this->_folderBackend->update($_folder);
+    }
+    
+    /**
      * remove folder
      *
      * @param string $_folderName globalName (complete path) of folder to delete
@@ -227,7 +238,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $folder = $this->_folderBackend->getByBackendAndGlobalName($_accountId, $_oldGlobalName);
             $folder->globalname = $newGlobalName;
             $folder->localname = $_newLocalName;
-            $folder = $this->_folderBackend->update($folder);
+            $folder = $this->update($folder);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Trying to rename non-existant folder.');

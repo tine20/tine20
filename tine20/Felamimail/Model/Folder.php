@@ -49,6 +49,12 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
     const CACHE_STATUS_INCOMPLETE = 'incomplete';
     
     /**
+     * cache status: incomplete
+     *
+     */
+    const CACHE_STATUS_DELETING = 'deleting';
+    
+    /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 
@@ -97,7 +103,8 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
                 self::CACHE_STATUS_PENDING,
                 self::CACHE_STATUS_COMPLETE, 
                 self::CACHE_STATUS_INCOMPLETE, 
-                self::CACHE_STATUS_UPDATING
+                self::CACHE_STATUS_UPDATING,
+                self::CACHE_STATUS_DELETING
             )
         ),
         'cache_lowest_uid'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),

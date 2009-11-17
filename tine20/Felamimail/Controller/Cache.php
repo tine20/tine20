@@ -238,7 +238,10 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         
         /***************** compare message counts ***************************/
         
-        if ($folderCount < $messageCount && $folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
+        if ($folderCount < $messageCount 
+            && $folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE 
+            && $folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_DELETING
+        ) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
                 ' foldercount is lower than (server)messagecount: ' . $folderCount . ' < ' . $messageCount
             );

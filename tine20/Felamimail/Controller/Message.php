@@ -107,8 +107,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Record_RecordSet $_messagesToDelete
      * @return void
      * 
-     * @todo    don't update cache if this is running
      * @todo    allow to configure if messages should be moved to trash
+     * @todo    move this to cache controller?
      */
     public function deleteMessagesFromImapServer(Tinebase_Record_RecordSet $_messagesToDelete)
     {
@@ -118,10 +118,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // sort messages by folder id
         $_messagesToDelete->sort('folder_id');
-
+        
         // loop messages / only get imap backend and account in the first iteration of the loop
         $imapBackend = NULL;
         $folder = NULL;
+        $updatedFolder = NULL;
         foreach($_messagesToDelete as $message) {
             if ($imapBackend = $this->_getBackendAndSelectFolder($message->folder_id, $folder, $imapBackend)) {
                 
@@ -129,6 +130,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 if (! isset($account)) {
                     $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
                     $trashFolder = ($account->trash_folder && ! empty($account->trash_folder)) ? $account->trash_folder : 'Trash';
+                }
+                
+                // don't update cache while deleting in a single folder / @todo do this for all folders with messages to delete?
+                if (! isset($updatedFolder)) {
+                    $oldCacheStatus = $folder->cache_status;
+                    $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_DELETING;
+                    $updatedFolder = Felamimail_Controller_Folder::getInstance()->update($folder);
                 }
                 
                 if ($folder->globalname == $trashFolder) {
@@ -170,6 +178,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
+        
+        // reset old cache status
+        $updatedFolder->cache_status = $oldCacheStatus;
+        Felamimail_Controller_Folder::getInstance()->update($updatedFolder);
     }
     
     /************************* other public funcs *************************/
