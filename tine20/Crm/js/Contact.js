@@ -257,7 +257,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     }
                 }, {
                     id:'relation_type', 
-                    header: this.app.i18n._("Type"), 
+                    header: this.app.i18n._("Role"), 
                     dataIndex: 'relation_type', 
                     width: 60, 
                     sortable: true,
