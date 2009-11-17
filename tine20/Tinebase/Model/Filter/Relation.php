@@ -42,9 +42,17 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
+        $value = $this->_value;
+        $relationTypeFilter = NULL;
+        foreach($value as $idx => $filterData) {
+            if ($filterData['field'] == 'relation_type') {
+                $relationTypeFilter = $value[$idx];
+                unset($value[$idx]);
+            }
+        }
         
         $relatedFilterConstructor = $this->_options['related_filter'];
-        $relatedFilter = new $relatedFilterConstructor($this->_value);
+        $relatedFilter = new $relatedFilterConstructor($value);
         
         $relatedRecordController = Tinebase_Controller_Record_Abstract::getController($this->_options['related_model']);
         $relatedIds = $relatedRecordController->search($relatedFilter, NULL, FALSE, TRUE);
@@ -54,6 +62,11 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
             array('field' => 'related_model', 'operator' => 'equals', 'value' => $this->_options['related_model']),
             array('field' => 'related_id',    'operator' => 'in'    , 'value' => $relatedIds)
         ));
+        
+        if ($relationTypeFilter) {
+            $relationFilter->addFilter($relationFilter->createFilter('type', $relationTypeFilter['operator'], $relationTypeFilter['value']));
+        }
+        
         $ownIds = Tinebase_Relations::getInstance()->search($relationFilter, NULL)->own_id;
         
         $idField = array_key_exists('idProperty', $this->_options) ? $this->_options['idProperty'] : 'id';
