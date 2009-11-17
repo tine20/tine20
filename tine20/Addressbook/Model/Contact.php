@@ -236,38 +236,28 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * fills a contact from json data
      *
      * @todo timezone conversion for birthdays?
-     * @param string $_data json encoded data
+     * @param array $_data record data
      * @return void
      * 
      * @todo check in calling functions where these tags/notes/container arrays are coming from and get down to the root of the trouble    
      */
-    public function setFromJson($_data)
+    protected function _setFromJson(array &$_data)
     {
-        $contactData = Zend_Json::decode($_data);
-        
-        if (isset($contactData['jpegphoto'])) {
-            if ($contactData['jpegphoto'] != '') {
-                $imageParams = Tinebase_ImageHelper::parseImageLink($contactData['jpegphoto']);
+        if (isset($_data['jpegphoto'])) {
+            if ($_data['jpegphoto'] != '') {
+                $imageParams = Tinebase_ImageHelper::parseImageLink($_data['jpegphoto']);
                 if ($imageParams['isNewImage']) {
-                    $contactData['jpegphoto'] = Tinebase_ImageHelper::getImageData($imageParams);
+                    $_data['jpegphoto'] = Tinebase_ImageHelper::getImageData($imageParams);
                 } else {
-                    unset($contactData['jpegphoto']);
+                    unset($_data['jpegphoto']);
                 }
             }
         }
         
         // unset if empty
-        if (empty($contactData['id'])) {
-            unset($contactData['id']);
+        if (empty($_data['id'])) {
+            unset($_data['id']);
         }
-        
-        // sanitize container id / container_id
-        if (isset($contactData['container_id']) && is_array($contactData['container_id'])) {
-            $contactData['container_id'] = $contactData['container_id']['id'];
-        }        
-        
-        $this->setFromArray($contactData);
-        return;
     }
     
 }
