@@ -15,7 +15,8 @@
  * @category   Zend
  * @package    Zend_Json
  * @subpackage Server
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @author     Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright  Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -24,18 +25,35 @@
  * @category   Zend
  * @package    Zend_Json
  * @subpackage Server
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @author     Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright  Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Json_Client_SMD
 {
+    /**
+     * @var array json decoded SMD response
+     */
     protected $_smd = null;
     
+    /**
+     * load and decode json encoded SMD response
+     * 
+     * @param string $json json encoded SMD response
+     * @return void
+     */
     public function loadJson($json)
     {
         $this->_smd = Zend_Json_Decoder::decode($json);
     }
     
+    /**
+     * return method signature for requested method
+     * 
+     * @param string $method name of the method
+     * @return array method signature
+     * @throws Zend_Json_Client_IntrospectException
+     */
     public function getMethodSignature($method)
     {
         if(!array_key_exists($method, $this->_smd['services'])) {

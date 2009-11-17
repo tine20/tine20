@@ -15,7 +15,8 @@
  * @category   Zend
  * @package    Zend_Json
  * @subpackage Server
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @author     Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright  Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -30,16 +31,20 @@ require_once 'Zend/Json/Server/Response.php';
  * @category   Zend
  * @package    Zend_Json
  * @subpackage Server
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @author     Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright  Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Json_Client_Response extends Zend_Json_Server_Response
 {
+    /**
+     * initialize JSON-RPC object with JSON response from server
+     * @param string $json the json encoded response
+     * @return void
+     */
     public function loadJson($json)
     {
-        #echo "JSON: $json" . PHP_EOL;
-        $response = Zend_Json_Decoder::decode($json);
-        #var_dump($response);
+        $response = Zend_Json::decode($json);
         
         if(array_key_exists('error', $response)) {
             $this->setError(new Zend_Json_Server_Error(

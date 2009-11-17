@@ -15,6 +15,8 @@
  * @category   Zend
  * @package    Zend_XmlRpc
  * @subpackage Client
+ * @author     Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright  Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
@@ -75,6 +77,8 @@ require_once 'Zend/Version.php';
  * @category   Zend
  * @package    Zend_Json
  * @subpackage Client
+ * @author     Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright  Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -126,9 +130,9 @@ class Zend_Json_Client
     /**
      * Create a new XML-RPC client to a remote server
      *
-     * @param  string $server      Full address of the XML-RPC service
-     *                             (e.g. http://json.example.com/index.php)
-     * @param  Zend_Http_Client $httpClient HTTP Client to use for requests
+     * @param  string            $server      Full address of the XML-RPC service
+     *                                        (e.g. http://json.example.com/index.php)
+     * @param  Zend_Http_Client  $httpClient  HTTP Client to use for requests
      * @return void
      */
     public function __construct($server, Zend_Http_Client $httpClient = null)
@@ -145,7 +149,7 @@ class Zend_Json_Client
 
 
     /**
-     * Sets the HTTP client object to use for connecting the XML-RPC server.
+     * Sets the HTTP client object to use for connecting the JSON-RPC server.
      *
      * @param  Zend_Http_Client $httpClient
      * @return Zend_Http_Client
@@ -312,6 +316,7 @@ class Zend_Json_Client
             foreach ($params as $key => $param) {
                 if(is_int($key)) {
                     // positional parameters
+                    // can't validate them
                     continue;
                 }
                 

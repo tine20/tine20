@@ -15,24 +15,20 @@
  * @category   Zend
  * @package    Zend_Json
  * @subpackage Client
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @author     Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright  Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
 
 /**
- * Json SMD Response
- * @see Zend_Json_Client_SMD
- */
-require_once 'Zend/Json/Client/SMD.php';
-
-/**
- * Wraps the JSON-RPC system.* introspection methods
+ * Wraps the JSON-RPC SMD introspection methods
  *
  * @category   Zend
  * @package    Zend_Json
  * @subpackage Client
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @author     Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright  Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Json_Client_ServerIntrospection
@@ -42,7 +38,11 @@ class Zend_Json_Client_ServerIntrospection
      */
     private $_client = null;
 
+    /**
+     * @var Zend_Json_Client_SMD
+     */
     private $_smd = null;
+    
     /**
      * @param Zend_Json_Client $client
      */
@@ -50,7 +50,6 @@ class Zend_Json_Client_ServerIntrospection
     {
         $this->_client = $client;
     }
-
 
     /**
      * Call system.methodSignature() for the given method
