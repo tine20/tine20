@@ -219,6 +219,13 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
                             xtype: 'ux.displayfield',
                             name: 'location',
                             fieldLabel: this.app.i18n._('Location')
+                        }, {
+                            xtype: 'ux.displayfield',
+                            name: 'organizer',
+                            fieldLabel: this.app.i18n._('Organizer'),
+                            renderer: function(organizer) {
+                                return organizer && organizer.n_fn ? organizer.n_fn : '';
+                            }
                         }]
                     }, {
                         flex: 2,
