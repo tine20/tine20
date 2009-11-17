@@ -236,13 +236,22 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
                 
                 if (array_key_exists($attender->user_type, $typeMap) && array_key_exists($attender->user_id, $typeMap[$attender->user_type])) {
-                    $typeMap[$attender->user_type][$attender->user_id][] = new Calendar_Model_FreeBusy(array(
+                    $fbInfo = new Calendar_Model_FreeBusy(array(
                         'user_type' => $attender->user_type,
-				        'user_id'   => $attender->user_id,
-				        'dtstart'   => clone $event->dtstart,
-				        'dtend'     => clone $event->dtend,
-				        'type'      => Calendar_Model_FreeBusy::FREEBUSY_BUSY
+                        'user_id'   => $attender->user_id,
+                        'dtstart'   => clone $event->dtstart,
+                        'dtend'     => clone $event->dtend,
+                        'type'      => Calendar_Model_FreeBusy::FREEBUSY_BUSY,
                     ), true);
+                    
+                    if ($event->{Tinebase_Model_Container::READGRANT}) {
+                        $fbInfo->event = clone $event;
+                        unset($fbInfo->event->attendee);
+                    }
+                    
+                    $typeMap[$attender->user_type][$attender->user_id][] = $fbInfo;
+                    
+                    
                 }
             }
         }
