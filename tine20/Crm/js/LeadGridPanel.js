@@ -107,8 +107,12 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 {label: this.app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
                 {label: this.app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
                 {filtertype: 'tinebase.tag', app: this.app},
-                {filtertype: 'crm.contact'}
-                //{filtertype: 'crm.product'}
+                {filtertype: 'crm.contact'},
+                {filtertype: 'foreignrecord', 
+                    app: this.app,
+                    foreignRecordClass: Tine.Sales.Model.Product,
+                    ownField: 'product'
+                }
             ],
             defaultFilter: 'query',
             filters: [],
