@@ -255,7 +255,8 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $count = Crm_Controller_Lead::getInstance()->searchCount($filter);
                 
         $this->assertEquals(1, count($leads));
-        $this->assertEquals($count, count($leads));
+        $this->assertEquals($count['totalcount'], count($leads));
+        $this->assertEquals(1, $count['leadstates'][1]);
         $this->assertType('Tinebase_Record_RecordSet', $leads);
     }
     
