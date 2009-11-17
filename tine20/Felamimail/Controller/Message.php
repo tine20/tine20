@@ -961,6 +961,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _addEmailNote($_recipients, $_subject, $_body)
     {
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recipients, TRUE));
+        
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'email', 'operator' => 'in', 'value' => $_recipients)
             // OR: array('field' => 'email_home', 'operator' => 'in', 'value' => $_recipients)
@@ -985,6 +987,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 
                 Tinebase_Notes::getInstance()->addNote($note);
             }
+        } else {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no contacts to add notes to.');
         }
     }
     
