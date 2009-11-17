@@ -172,29 +172,43 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         this.setLoading(false);
         
         if (error.code == 901) {
-            // get names of busy attendee
-            // TODO refactore name handling of attendee
-            //      -> attender model needs knowlege of how to get names!
-            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(event.get('attendee'));
             
+            // resort fbInfo to combine all events of a attender
             var busyAttendee = [];
-            var names = [];
+            var confictEvents = {};
+            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(event.get('attendee'));
             Ext.each(error.freebusyinfo, function(fbinfo) {
-                var user_id = fbinfo.user_id;
-                var user_type = fbinfo.user_type;
-                
                 attendeeStore.each(function(a) {
-                    if (a.get('user_type') == user_type && a.getUserId() == user_id) {
+                    if (a.get('user_type') == fbinfo.user_type && a.getUserId() == fbinfo.user_id) {
                         if (busyAttendee.indexOf(a) < 0) {
                             busyAttendee.push(a);
-                            //var attenderName = a.getName();
-                            //names.push(attenderName);
-                            
-                            names.push(Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, a.get('user_id'), false, a));
+                            confictEvents[a.id] = [];
                         }
+                        confictEvents[a.id].push(fbinfo);
                     }
-                })
+                });
             }, this);
+            
+            // generate html for each busy attender
+            var busyAttendeeHTML = '';
+            Ext.each(busyAttendee, function(busyAttender) {
+                // TODO refactore name handling of attendee
+                //      -> attender model needs knowlege of how to get names!
+                //var attenderName = a.getName();
+                var attenderName = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, busyAttender.get('user_id'), false, busyAttender);
+                busyAttendeeHTML += '<div class="cal-conflict-attendername">' + attenderName + '</div>';
+                
+                var eventInfos = [];
+                Ext.each(confictEvents[busyAttender.id], function(fbInfo) {
+                    var eventInfo = Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format('H:i') + ' - ' + Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format('H:i');
+                    if (fbInfo.event && fbInfo.event.summary) {
+                        eventInfo += ' : ' + fbInfo.event.summary;
+                    }
+                    eventInfos.push(eventInfo);
+                }, this);
+                busyAttendeeHTML += '<div class="cal-conflict-eventinfos">' + eventInfos.join(', <br />') + '</div>';
+                
+            });
             
             this.conflictConfirmWin = new Ext.Window({
                 modal: true,
@@ -203,12 +217,10 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 title: this.app.i18n._('Scheduling Conflict'),
                 html: '<div class="ext-mb-icon ext-mb-question"></div>' +
                       '<div class="ext-mb-content"><span class="ext-mb-text"></span>' +
-                          String.format(
-                            this.app.i18n.n_(
-                                '{0} is busy at the requested time', 
-                                'The follwing attendee are busy at the requested time: "{0}"',
-                                names.length) + "<br />", 
-                           names.join(', ')) +
+                            '<div class = "cal-conflict-heading">' +
+                                this.app.i18n._('The follwing attendee are busy at the requested time:') + 
+                            '</div>' +
+                            busyAttendeeHTML +
                       '<br /><div class="ext-mb-fix-cursor"></div></div>',
                 buttons: [{
                     text: this.app.i18n._('Ignore Conflict'),
