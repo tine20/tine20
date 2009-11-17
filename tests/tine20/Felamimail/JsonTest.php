@@ -209,6 +209,16 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSendMessage()
     {
+        // set email to unittest@tine20.org
+        $contactFilter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'n_family', 'operator' => 'equals', 'value' => 'Clever')
+        ));
+        $contactIds = Addressbook_Controller_Contact::getInstance()->search($contactFilter, NULL, FALSE, TRUE);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($contactIds[0]);
+        $contact->email = 'unittest@tine20.org';
+        $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
+
+        // send email
         $messageToSend = $this->_getMessageData();
         $messageToSend['note'] = 1;
         $returned = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
@@ -238,11 +248,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_deleteMessage($messageToSend['subject']);
 
         // check if email note has been added to contact(s)
-        $contactFilter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'n_family', 'operator' => 'equals', 'value' => 'Clever')
-        ));
-        $contactIds = Addressbook_Controller_Contact::getInstance()->search($contactFilter, NULL, FALSE, TRUE);
-        $contact = Addressbook_Controller_Contact::getInstance()->get($contactIds[0]);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
         $emailNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('email');
         
         // check / delete notes
