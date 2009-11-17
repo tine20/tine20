@@ -42,6 +42,17 @@ class Calendar_Model_FreeBusy extends Tinebase_Record_Abstract
         'user_id'              => array('allowEmpty' => true,         ),
         'dtstart'              => array('allowEmpty' => true,         ),
         'dtend'                => array('allowEmpty' => true,         ),
+        'event'                => array('allowEmpty' => true,         ),
         'type'                 => array('allowEmpty' => true,  'InArray' => array(self::FREEBUSY_FREE, self::FREEBUSY_BUSY, self::FREEBUSY_BUSY_UNAVAILABLE, self::FREEBUSY_BUSY_TENTATIVE)),
+    );
+    
+    /**
+     * datetime fields
+     *
+     * @var array
+     */
+    protected $_datetimeFields = array(
+        'dtstart', 
+        'dtend', 
     );
 } 
