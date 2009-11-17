@@ -88,8 +88,9 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
             this.cardPanel
         ];
         
+        // TODO generalize this
         this.containerTpl = new Ext.XTemplate(
-            '<div class="x-tree-node-el x-tree-node-leaf x-unselectable file">',
+            '<div class="x-tree-node-leaf x-unselectable file">',
                 '<img class="x-tree-node-icon" unselectable="on" src="', Ext.BLANK_IMAGE_URL, '">',
                 '<span style="color: {color};">&nbsp;&#9673;&nbsp</span>',
                 '<span>{name}</span>',
