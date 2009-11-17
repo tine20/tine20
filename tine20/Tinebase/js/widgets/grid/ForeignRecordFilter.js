@@ -58,8 +58,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             this.foreignRecordClass.getMeta('recordName'), this.foreignRecordClass.getMeta('recordsName'), 1
         );
         
-        console.log(this.foreignRecordClass.getMeta('recordName'));
-        console.log(this.foreignRecordClass.getMeta('recordsName'));
         this.subFilterModels = [];
         this.operators = ['equals'];
         
