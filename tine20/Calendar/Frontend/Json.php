@@ -223,6 +223,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     	if ($_record instanceof Calendar_Model_Event) {
 	    	Calendar_Model_Attender::resolveAttendee($_record->attendee);
 	        $this->_resolveRrule($_record);
+	        $this->_resolveOrganizer($_record);
     	}
 	        
         $recordData = parent::_recordToJson($_record);
@@ -245,6 +246,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	
 	        Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
 	        Calendar_Model_Attender::resolveAttendee($_records->attendee);
+	        $this->_resolveOrganizer($_records);
 	        $this->_resolveRrule($_records);
 	        
             // get/resolve alarms
@@ -261,6 +263,32 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
           
         //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
         return parent::_multipleRecordsToJson($_records);
+    }
+    
+    /**
+     * resolves organizer of given event
+     *
+     * @param Tinebase_Record_RecordSet|Calendar_Model_Event $_events
+     */
+    protected function _resolveOrganizer($_events)
+    {
+        $events = $_events instanceof Tinebase_Record_RecordSet ? $_events : array($_events);
+        
+        $organizerIds = array();
+        foreach ($events as $event) {
+            if ($event->organizer) {
+                $organizerIds[] = $event->organizer;
+            }
+        }
+
+        $organizers = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($organizerIds), TRUE);
+        
+        foreach ($events as $event) {
+            if ($event->organizer) {
+                $idx = $organizers->getIndexById($event->organizer);
+                $event->organizer = $organizers[$idx];
+            }
+        }
     }
     
     /**
