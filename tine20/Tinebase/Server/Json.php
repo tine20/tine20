@@ -38,7 +38,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
         	$isBatchedRequest = false;
         	$requests = array(Zend_Json::decode($json));
         }
-        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is JSON request. rawdata: ' . print_r($requests, true));
         $response = array();
         foreach ($requests as $requestOptions) {
         	$request = new Zend_Json_Server_Request();
@@ -62,7 +62,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             $method  = $request->getMethod();
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
             
-            if(!empty($method)) {
+            if (Zend_Auth::getInstance()->hasIdentity()) {
                 $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
                 $this->_checkJsonKey($method, $jsonKey);
             }
@@ -71,46 +71,57 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             $server->setClass('Tinebase_Frontend_Json', 'Tinebase');
             $server->setClass('Tinebase_Frontend_Json_UserRegistration', 'Tinebase_UserRegistration');
             
-            // register additional Json apis only available for authorised users
-            if (Zend_Auth::getInstance()->hasIdentity()) {
-                
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user data: " . print_r(Tinebase_Core::getUser()->toArray(), true));
-                
-                $applicationParts = explode('.', $method);
-                $applicationName = ucfirst($applicationParts[0]);
-                
-                switch($applicationName) {
-                    // additional Tinebase json apis
-                    case 'Tinebase_Container':
-                        $server->setClass('Tinebase_Frontend_Json_Container', 'Tinebase_Container');                
-                        break;
-                    case 'Tinebase_PersistentFilter':
-                        $server->setClass('Tinebase_Frontend_Json_PersistentFilter', 'Tinebase_PersistentFilter');                
-                        break;
-                        
-                    default;
-                        if(Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
-                            try {
-                                $server->setClass($applicationName.'_Frontend_Json', $applicationName);
-                            } catch (Exception $e) {
-                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Failed to add JSON API for application '$applicationName' Exception: \n". $e);
-                            }
-                        }
-                        break;
-                }
-            }
-            
-            if(!empty($method)) {
-                // handle response
-                return $server->handle($request);
-            } else {
+            if(empty($method)) {
                 // return smd
+                if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) { 
+                    $server->setClass('Tinebase_Frontend_Json_Container', 'Tinebase_Container');
+                    $server->setClass('Tinebase_Frontend_Json_PersistentFilter', 'Tinebase_PersistentFilter');
+                    
+                    $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
+                    foreach($userApplications as $application) {
+                        $jsonAppName = $application->name . '_Frontend_Json';
+                        $server->setClass($jsonAppName, $application->name);
+                    }
+                }
                 $server->setTarget('index.php')
                        ->setEnvelope(Zend_Json_Server_Smd::ENV_JSONRPC_2);
                     
                 $smd = $server->getServiceMap();
                 
                 return $smd;
+            } else {
+            
+                // register additional Json apis only available for authorised users
+                if (Zend_Auth::getInstance()->hasIdentity()) {
+                    
+                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user data: " . print_r(Tinebase_Core::getUser()->toArray(), true));
+                    
+                    $applicationParts = explode('.', $method);
+                    $applicationName = ucfirst($applicationParts[0]);
+                    
+                    switch($applicationName) {
+                        // additional Tinebase json apis
+                        case 'Tinebase_Container':
+                            $server->setClass('Tinebase_Frontend_Json_Container', 'Tinebase_Container');                
+                            break;
+                        case 'Tinebase_PersistentFilter':
+                            $server->setClass('Tinebase_Frontend_Json_PersistentFilter', 'Tinebase_PersistentFilter');                
+                            break;
+                            
+                        default;
+                            if(Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
+                                try {
+                                    $server->setClass($applicationName.'_Frontend_Json', $applicationName);
+                                } catch (Exception $e) {
+                                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Failed to add JSON API for application '$applicationName' Exception: \n". $e);
+                                }
+                            }
+                            break;
+                    }
+                }
+
+                // handle response
+                return $server->handle($request);
             }
             
         } catch (Exception $exception) {
