@@ -775,7 +775,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
                 $folder->is_selectable = ($folderData['isSelectable'] == '1');
                 $folder->has_children = ($folderData['hasChildren'] == '1');
                 
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding cached folder ' . $folderData['globalName']);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding cached folder ' . $folderData['globalName']);
                 
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // create new folder
