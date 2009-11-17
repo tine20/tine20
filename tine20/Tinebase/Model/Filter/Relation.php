@@ -46,7 +46,8 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
         $relatedFilterConstructor = $this->_options['related_filter'];
         $relatedFilter = new $relatedFilterConstructor($this->_value);
         
-        $relatedIds = Addressbook_Controller_Contact::getInstance()->search($relatedFilter, NULL, FALSE, TRUE);
+        $relatedRecordController = Tinebase_Controller_Record_Abstract::getController($this->_options['related_model']);
+        $relatedIds = $relatedRecordController->search($relatedFilter, NULL, FALSE, TRUE);
         
         $relationFilter = new Tinebase_Model_RelationFilter(array(
             array('field' => 'own_model',     'operator' => 'equals', 'value' => $_backend->getModelName()),
