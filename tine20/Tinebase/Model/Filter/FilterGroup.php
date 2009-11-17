@@ -342,6 +342,24 @@ class Tinebase_Model_Filter_FilterGroup
     }
     
     /**
+     * removes a filter
+     * 
+     * @param string|Tinebase_Model_Filter_Abstract $_field
+     * @return void
+     */
+    public function removeFilter($_field)
+    {
+        if ($_field instanceof Tinebase_Model_Filter_Abstract) {
+            $idx = array_search($_field, $this->_filterObjects, TRUE);
+            if ($idx !== FALSE) {
+                unset($this->_filterObjects[$idx]);
+            }
+        } else {
+            $this->_removeFilter($_field);
+        }
+    }
+    
+    /**
      * returns array with the filter settings of this filter group 
      *
      * @param  bool $_valueToJson resolve value for json api?
