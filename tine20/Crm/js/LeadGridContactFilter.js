@@ -49,19 +49,34 @@ Tine.Crm.LeadGridContactFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     
     getSubFilters: function() {
         var filterConfigs = Tine.Addressbook.Model.Contact.getFilterModel();
-        // TODO add some 'type' filter
+        
         var contactRoleFilter = new Tine.widgets.grid.FilterModel({
-            label: 'Contact Role',
+            label: this.app.i18n._("Role"),
             field: 'relation_type',
-            operators: ['equals']
+            operators: ['equals'],
+            valueRenderer: function(filter, el) {
+                var value = new Tine.Crm.Contact.TypeComboBox({
+                    filter: filter,
+                    blurOnSelect: true,
+                    width: 200,
+                    listAlign: 'tr-br',
+                    id: 'tw-ftb-frow-valuefield-' + filter.id,
+                    value: filter.data.value ? filter.data.value : this.defaultValue,
+                    renderTo: el
+                });
+                value.on('specialkey', function(field, e){
+                     if(e.getKey() == e.ENTER){
+                         this.onFiltertrigger();
+                     }
+                }, this);
+                return value;
+            }
         });
         
         this.subFilterModels.push(contactRoleFilter);
         
         Ext.each(filterConfigs, function(config) {
-            //if (config.field != 'query') {
-                this.subFilterModels.push(Tine.widgets.grid.FilterToolbar.prototype.createFilterModel.call(this, config));
-            //}
+            this.subFilterModels.push(Tine.widgets.grid.FilterToolbar.prototype.createFilterModel.call(this, config));
         }, this);
         
         return this.subFilterModels;
