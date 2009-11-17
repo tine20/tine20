@@ -148,24 +148,22 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     }
     
     /**
-     * fills record from json data
+     * modify values during setFromJson
      *
-     * @param   string $_data json encoded data
+     * @param   array $_data the json decoded values
      * @throws  UnexpectedValueException
      */
-    public function setFromJson($_data)
+    protected function _setFromJson(array &$_data)
     {
-        $decodedLead = Zend_Json::decode($_data);
-        
-        if (isset($decodedLead['relations'])) {
+        if (isset($_data['relations'])) {
             // add new relations
-            foreach ((array)$decodedLead['relations'] as $key => $relation) {
+            foreach ((array)$_data['relations'] as $key => $relation) {
                 
                 if (!isset($relation['id'])) {
                     $data = array(
                         'own_model'              => 'Crm_Model_Lead',
                         'own_backend'            => 'Sql',
-                        'own_id'                 => (isset($decodedLead['id'])) ? $decodedLead['id'] : 0,
+                        'own_id'                 => (isset($_data['id'])) ? $_data['id'] : 0,
                         'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
                         'type'                   => $relation['type'],
                         'related_record'         => (isset($relation['related_record'])) ? $relation['related_record'] : array(),
@@ -218,17 +216,14 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                         }
                     }
                         
-                    $decodedLead['relations'][$key] = $data;
+                    $_data['relations'][$key] = $data;
                 } else {
                     // update relation type                
                     if (isset($relation['related_record']['relation_type']) && $relation['type'] !== strtoupper($relation['related_record']['relation_type'])) {
-                        $decodedLead['relations'][$key]['type'] = strtoupper($relation['related_record']['relation_type']);
+                        $_data['relations'][$key]['type'] = strtoupper($relation['related_record']['relation_type']);
                     }
                 }
             }
         }
-        
-        
-        $this->setFromArray($decodedLead);
     }            
 }
