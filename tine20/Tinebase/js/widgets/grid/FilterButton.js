@@ -69,3 +69,5 @@ Ext.extend(Tine.widgets.grid.FilterButton, Ext.Button, {
         this.onFilterChange();
     }
 });
+
+Ext.reg('wdgt.filterbutton', Tine.widgets.grid.FilterButton);
