@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Dialer.js 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
  *
- * @todo        enable myphone edit dialog again
+ * TODO         refactor this
  */
  
 Ext.namespace('Tine.Phone');
@@ -28,20 +28,19 @@ Tine.Phone.getPanel = function(){
         text: translation._('Edit phone settings'),
         iconCls: 'PhoneIconCls',
         handler: function() {
-        	Ext.Msg.alert('Sorry, this function is disabled at the moment');
-        	/*
             var popupWindow = Tine.Phone.MyPhoneEditDialog.openWindow({
-                record: this.ctxNode.record,
+                record: this.ctxNode.attributes.record,
                 listeners: {
                     scope: this,
-                    'update': function(record) {
-                        this.store.load({});
+                    'update': function(encodedRecord) {
+                        // TODO update registry?
+                        var store = Ext.StoreMgr.get('UserPhonesStore');
+                        var record = new Tine.Voipmanager.Model.SnomPhone(Ext.util.JSON.decode(encodedRecord));
+                        store.add([record]);
+                        Tine.Phone.updatePhoneTree(store);
                     }
                 }
             });
-            */
-        	
-        	//Tine.Tinebase.common.openWindow('myPhonesWindow', 'index.php?method=Phone.editMyPhone&phoneId=' + this.ctxNode.id, 700, 300);
         },
         scope: this
     });
@@ -104,9 +103,7 @@ Tine.Phone.getPanel = function(){
     treePanel.getSelectionModel().on('selectionchange', function(_selectionModel) {
     	var node = _selectionModel.getSelectedNode();
 
-        // TODO reactivate that
         // update toolbar
-        /*
         var settingsButton = Ext.getCmp('phone-settings-button');
         if (settingsButton) {
             if(node && node.id != 'root') {
@@ -115,7 +112,6 @@ Tine.Phone.getPanel = function(){
                 settingsButton.setDisabled(true);
             }
         }
-        */
 
         //node.getOwnerTree().selectPath(node.getPath());
         Tine.Phone.Main.show(node);
@@ -468,13 +464,22 @@ Tine.Phone.Main = {
         	text: this.translation._('Edit phone settings'),
             iconCls: 'PhoneIconCls',
             handler: function() {
-                Ext.Msg.alert('Sorry, this function is disabled at the moment');
-                /*
             	// get selected node id
             	var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode();
-            	
-                Tine.Tinebase.common.openWindow('myPhonesWindow', 'index.php?method=Phone.editMyPhone&phoneId=' + node.id, 700, 300);
-                */
+                
+                var popupWindow = Tine.Phone.MyPhoneEditDialog.openWindow({
+                    record: node.attributes.record,
+                    listeners: {
+                        scope: this,
+                        'update': function(encodedRecord) {
+                            // TODO update registry?
+                            var store = Ext.StoreMgr.get('UserPhonesStore');
+                            var record = new Tine.Voipmanager.Model.SnomPhone(Ext.util.JSON.decode(encodedRecord));
+                            store.add([record]);
+                            Tine.Phone.updatePhoneTree(store);
+                        }
+                    }
+                });
             },
             scope: this,
             disabled: true

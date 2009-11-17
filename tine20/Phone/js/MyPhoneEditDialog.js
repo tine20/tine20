@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         make it work again
+ * TODO         refactor this
  * TODO         perhaps we should load the settings only if settings tab is clicked
  */
  
@@ -55,7 +55,6 @@ Tine.Phone.MyPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initComponent: function() {
         
         // why the hack is this a jsonStore???
-    	/*
         this.rightsStore =  new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
@@ -70,7 +69,6 @@ Tine.Phone.MyPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             id: 'id',
             fields: Tine.Voipmanager.Model.SnomLine
         });
-        */
         this.recordClass = Tine.Voipmanager.Model.SnomPhone;
         this.recordProxy = Tine.Voipmanager.SnomPhoneBackend;
         Tine.Phone.MyPhoneEditDialog.superclass.initComponent.call(this);
@@ -80,7 +78,7 @@ Tine.Phone.MyPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * record load (get rights and put them into the store)
      */
     onRecordLoad: function() {
-    	
+        
         var rights = this.record.get('rights') || [];
         this.rightsStore.loadData({results: rights});
         
