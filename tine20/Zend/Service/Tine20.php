@@ -14,7 +14,8 @@
  *
  * @category   Zend
  * @package    Zend_Service
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @author     Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright  Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -28,13 +29,35 @@ require_once 'Zend/Json/Client.php';
 /**
  * @category   Zend
  * @package    Zend_Service
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @author     Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright  Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Service_Tine20 extends Zend_Json_Client
 {
+    /**
+     * @var string json key required to send with any request
+     */
     protected $_jsonKey;
     
+    /**
+     * the url of the Tine 2.0 installation
+     * 
+     * @var string (for example http://demo.tine20.org/index.php)
+     */
+    protected $_url;
+    
+    /**
+     * @var array stores information about the account logged in
+     */
+    protected $_account;
+    
+    /**
+     * constructor for Zend_Service_Tine20
+     * @param string           $url         the url of the Tine 2.0 installation
+     * @param Zend_Http_Client $httpClient
+     * @return void
+     */
     public function __construct($url, $httpClient = null)
     {
         $this->_url = $url;
@@ -49,7 +72,15 @@ class Zend_Service_Tine20 extends Zend_Json_Client
         
         parent::__construct($url, $httpClient);        
     }    
-    
+
+    /**
+     * login to Tine 2.0 installation 
+     * 
+     * @param string $loginname
+     * @param string $password
+     * @return array decoded JSON responce
+     * @thorws Zend_Service_Exception
+     */
     public function login($loginname, $password)
     {
         $response = $this->call('Tinebase.login', array(
@@ -62,19 +93,30 @@ class Zend_Service_Tine20 extends Zend_Json_Client
         }
         
         $this->_jsonKey = $response['jsonKey'];
+        $this->_account = $response['account'];
         $this->getHttpClient()->setHeaders('X-Tine20-JsonKey', $this->_jsonKey);
         
         $this->getIntrospector()->fetchSMD();
         
         return $response;
     }
-    
+
+    /**
+     * logout from Tine 2.0 installation
+     * 
+     * @return array decoded JSON responce
+     */
     public function logout()
     {
         $response = $this->call('Tinebase.logout');
+        
+        $this->_jsonKey = null;
+        $this->_account = null
+        ;
+        // unset header
+        $this->getHttpClient()->setHeaders('X-Tine20-JsonKey');
         
         return $response;
     }
     
 }
-
