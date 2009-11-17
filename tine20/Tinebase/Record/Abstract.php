@@ -877,14 +877,30 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function setFromJson($_data)
     {
-        $recordData = Zend_Json::decode($_data);
+        if(is_array($_data)) {
+            $recordData = $_data;
+        } else {
+            $recordData = Zend_Json::decode($_data);
+        }
         
         // sanitize container id if it is an array
         if ($this->has('container_id') && isset($recordData['container_id']) && is_array($recordData['container_id'])) {
             $recordData['container_id'] = $recordData['container_id']['id'];
         }
         
+        $this->_setFromJson($recordData);
+        
         $this->setFromArray($recordData);
+    }
+    
+    /**
+     * can be reimplemented by subclasses to modify values during setFromJson
+     * @param array $_data the json decoded values
+     * @return void
+     */
+    protected function _setFromJson(array &$_data)
+    {
+        
     }
 
     /**
