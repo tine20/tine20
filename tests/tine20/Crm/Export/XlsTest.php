@@ -62,7 +62,7 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         
         // output as csv
         $xlswriter = new PHPExcel_Writer_CSV($excelObj);
-        $xlswriter->save('php://output');
+        //$xlswriter->save('php://output');
         
         $csvFilename = 'test.csv';
         $xlswriter->save($csvFilename);
