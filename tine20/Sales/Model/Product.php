@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        get categories from settings/config
  */
 
 /**
@@ -44,6 +45,8 @@ class Sales_Model_Product extends Tinebase_Record_Abstract
         'name'              => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
         'description'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'price'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'manufacturer'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'category'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),

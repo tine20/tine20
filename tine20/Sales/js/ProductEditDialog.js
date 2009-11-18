@@ -20,7 +20,7 @@ Ext.namespace('Tine.Sales');
  * 
  * <p>Product Edit Dialog</p>
  * <p><pre>
- * TODO         add more inputs
+ * TODO         make category a combobox + get data from settings
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -115,11 +115,19 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         //decimalSeparator: ','
                     }], [{
                         columnWidth: 1,
+                        fieldLabel: this.app.i18n._('Manufacturer'),
+                        name: 'manufacturer'
+                    }], [{
+                        columnWidth: 1,
+                        fieldLabel: this.app.i18n._('Category'),
+                        name: 'category'
+                    }], [{
+                        columnWidth: 1,
                         fieldLabel: this.app.i18n._('Description'),
                         emptyText: this.app.i18n._('Enter description...'),
                         name: 'description',
                         xtype: 'textarea',
-                        height: 170
+                        height: 150
                     }]] 
                 }, {
                     // activities and tags
@@ -163,7 +171,7 @@ Tine.Sales.ProductEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 600,
-        height: 400,
+        height: 500,
         name: Tine.Sales.ProductEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Sales.ProductEditDialog',
         contentPanelConstructorConfig: config

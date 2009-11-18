@@ -40,7 +40,7 @@ class Sales_Model_ProductFilter extends Tinebase_Model_Filter_FilterGroup
         'id'                    => array('filter' => 'Tinebase_Model_Filter_Id'),
         'query'                 => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
-            'options' => array('fields' => array('description', 'name'))
+            'options' => array('fields' => array('description', 'name', 'manufacturer', 'category'))
         ),
         'description'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'name'                  => array('filter' => 'Tinebase_Model_Filter_Text'),

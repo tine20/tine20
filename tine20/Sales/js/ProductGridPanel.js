@@ -123,7 +123,9 @@ Tine.Sales.ProductGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             columns: [
                 {header: this.app.i18n._('Tags'), id: 'tags', dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false},
                 {header: this.app.i18n._('Name'), id: 'name', dataIndex: 'name', width: 200},
-                {header: this.app.i18n._('Description'), id: 'description', dataIndex: 'description', width: 200, sortable: false},
+                {header: this.app.i18n._('Manufacturer'), id: 'manufacturer', dataIndex: 'manufacturer', width: 100},
+                {header: this.app.i18n._('Category'), id: 'category', dataIndex: 'category', width: 100},
+                {header: this.app.i18n._('Description'), id: 'description', dataIndex: 'description', width: 150, sortable: false, hidden: true},
                 {header: this.app.i18n._('Price'), id: 'price', dataIndex: 'price', width: 75, renderer: Ext.util.Format.euMoney}
             ]
         });

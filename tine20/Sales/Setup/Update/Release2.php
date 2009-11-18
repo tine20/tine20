@@ -195,4 +195,28 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Sales', '2.3');
     }
+    
+    /**
+     * add manufacturer and category to products
+     * 
+     * @return void
+     */
+    public function update_3()
+    {
+        $newFields = array('manufacturer', 'category');
+        
+        foreach ($newFields as $fieldName) {
+            $field = '<field>
+                        <name>' . $fieldName . '</name>
+                        <type>text</type>
+                        <length>255</length>
+                        <notnull>false</notnull>
+                    </field>';
+            $declaration = new Setup_Backend_Schema_Field_Xml($field);
+            $this->_backend->addCol('sales_products', $declaration);
+        }
+        
+        $this->setApplicationVersion('Sales', '2.4');
+        $this->setTableVersion('sales_products', '2');
+    }
 }
