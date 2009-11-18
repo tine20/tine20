@@ -145,7 +145,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             }),
             reader: new Ext.data.JsonReader({
                 root: 'survey'
-            }, ['title', 'subtitle', 'duration', 'link', 'enddate', 'htmlmessage'])
+            }, ['title', 'subtitle', 'duration', 'langs', 'link', 'enddate', 'htmlmessage'])
         });
         
         ds.on('load', function(store, records) {
@@ -153,7 +153,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             
             cb.call(this, survey);
         }, this);
-        ds.load();
+        ds.load({params: {lang: Tine.Tinebase.registry.get('locale').locale}});
     },
     
     getSurveyPanel: function() {
@@ -166,14 +166,13 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 items: []
             });
             
-            if (true /* allow survey*/) {
+            if (! Tine.Tinebase.registry.get('denySurveys')) {
                 this.getSurveyData(function(survey) {
                     if (typeof survey.get == 'function') {
                         var enddate = Date.parseDate(survey.get('enddate'), Date.patterns.ISO8601Long);
                         
                         if (Ext.isDate(enddate) && enddate.getTime() > new Date().getTime()) {
                             survey.data.lang_duration = String.format(_('about {0} minutes'), survey.data.duration);
-                            survey.data.avail_languages = 'German, English';
                             survey.data.link = 'https://versioncheck.officespot20.com/surveyCheck/surveyCheck.php?participate';
                             
                             this.surveyPanel.add([{
@@ -208,7 +207,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 '<p><b>{title}</b></p>',
                 '<p><a target="_blank" href="{link}" border="0">{subtitle}</a></p>',
                 '<br/>',
-                '<p>', _('Languages'), ': {avail_languages}</p>',
+                '<p>', _('Languages'), ': {langs}</p>',
                 '<p>', _('Duration'), ': {lang_duration}</p>',
                 '<br/>'
                 

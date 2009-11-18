@@ -149,16 +149,22 @@ html, body {
 	padding-right: 50px;
 }
 
-.tb-login-tinepanel {
+.tb-login-infosection {
     color: gray;
     line-height:17px;
+    margin-top:-12px;
 }
 
-.tb-login-tinepanel a {
+.tb-login-infosection a {
 	text-decoration: none;
     font-style: normal;
     color: #1E78AD;
 }
+
+.tb-login-infosection .tb-login-surveypanel {
+    padding-top: 20px;
+}
+
 /* ----- about dialog --------------------------------------------------------*/
 .tb-about-dlg {
     text-align: center;
