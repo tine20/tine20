@@ -280,8 +280,8 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
-            singularText: this.i18nDeleteActionText ? i18nDeleteActionText[0] : String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
-            pluralText: this.i18nDeleteActionText ? i18nDeleteActionText[1] : String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordsName),
+            singularText: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
+            pluralText: this.i18nDeleteActionText ? this.i18nDeleteActionText[1] : String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordsName),
             translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.tranlation,
             text: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
             handler: this.onDeleteRecords,
@@ -430,7 +430,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         this.gridConfig.enableHdMenu = false;
         
         if (this.stateful) {
-            this.gridConfig.stateful = true,
+            this.gridConfig.stateful = true;
             this.gridConfig.stateId  = this.stateId + '-Grid';
         }
         
@@ -468,7 +468,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         if (preserveCursor) {
             opts.params = {
                 start: this.pagingToolbar.cursor
-            }
+            };
         }
         
         this.store.load(opts);
@@ -560,12 +560,10 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
                 
             }
         } else {
-            switch (e.getKey()) {
-                case e.DELETE:
-                    if (!this.grid.editing && !this.grid.adding && !this.action_deleteRecord.isDisabled()) {
-                        this.onDeleteRecords.call(this);
-                    }
-                    break;
+            if (e.getKey() == e.DELETE) {
+                if (!this.grid.editing && !this.grid.adding && !this.action_deleteRecord.isDisabled()) {
+                    this.onDeleteRecords.call(this);
+                }
             }
         }
     },
@@ -634,7 +632,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             listeners: {
                 scope: this,
                 'update': function(record) {
-                    this.loadData(true)
+                    this.loadData(true);
                 }
             }
         });
@@ -668,7 +666,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
                 if (this.recordProxy) {
                     if (this.showDeleteMask) {
                         if (! this.deleteMask) {
-                            var message = String.format(_('Deleting {0}'), i18nItems)
+                            var message = String.format(_('Deleting {0}'), i18nItems);
                             if (sm.isFilterSelect) {
                                 message = message + _(' ... This may take a long time!');
                             } 
