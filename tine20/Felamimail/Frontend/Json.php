@@ -428,6 +428,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
             // update rest of cache here
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting background delete of ' . count($_messagesToDelete) . ' messages ...');
+            Felamimail_Controller_Message::getInstance()->deleteMessagesFromImapServer($_messagesToDelete);
     
             // don't output anything else ('null' or something like that)
             die();
