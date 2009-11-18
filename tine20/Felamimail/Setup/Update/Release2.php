@@ -64,11 +64,12 @@ class Felamimail_Setup_Update_Release2 extends Setup_Update_Abstract
     /**
      * - added cache status 'deleting'
      */    
-    public function update_2()
+    public function update_3()
     {
         $field = '<field>
                     <name>cache_status</name>
                     <type>enum</type>
+                    <value>pending</value>
                     <value>empty</value>
                     <value>complete</value>
                     <value>incomplete</value>
@@ -79,8 +80,8 @@ class Felamimail_Setup_Update_Release2 extends Setup_Update_Abstract
         $declaration = new Setup_Backend_Schema_Field_Xml($field);
         $this->_backend->alterCol('felamimail_folder', $declaration, 'cache_status');
         
-        $this->setApplicationVersion('Felamimail', '2.3');
-        $this->setTableVersion('felamimail_account', '3');        
+        $this->setApplicationVersion('Felamimail', '2.4');
+        $this->setTableVersion('felamimail_account', '4');        
     }
     
     /**
