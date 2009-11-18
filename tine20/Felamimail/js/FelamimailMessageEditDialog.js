@@ -157,11 +157,10 @@ Ext.namespace('Tine.Felamimail');
      * TODO add exception dialog on critical errors?
      */
     onRequestFailed: function(response, request) {
-        var responseText = Ext.util.JSON.decode(response.responseText);
         Ext.MessageBox.alert(
             this.app.i18n._('Failed'), 
             String.format(this.app.i18n._('Could not send {0}.'), this.i18nRecordName) 
-                + ' ( ' + this.app.i18n._('Error:') + ' ' + responseText.msg + ')'
+                + ' ( ' + this.app.i18n._('Error:') + ' ' + response.message + ')'
         ); 
         this.loadMask.hide();
     },
