@@ -58,13 +58,13 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
         }
         
         // return if no rows are selected
-        if (this.sm.getCount() == 0) {
+        if (this.sm.getCount() === 0) {
             return false;
         }
         
-    	var filterSettings = this.sm.getSelectionFilter();
+        var filterSettings = this.sm.getSelectionFilter();
         
-        new Ext.ux.file.Download({
+        var downloader = new Ext.ux.file.Download({
             params: {
                 method: this.exportFunction,
                 requestType: 'HTTP',
