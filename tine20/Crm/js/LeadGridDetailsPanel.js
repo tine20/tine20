@@ -391,6 +391,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
      * @return {Ext.ux.display.DisplayPanel}
      * 
      * TODO add tasks / products?
+     * TODO add contact icons?
      */
     getLeadGridDetailsPanel: function() {
         return new Ext.ux.display.DisplayPanel ({
@@ -471,6 +472,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
                         layout: 'ux.display',
                         labelAlign: 'top',
                         autoScroll: true,
+                        //cls: 'contactIconPartner',
                         layoutConfig: {
                             background: 'solid'
                             //declaration: this.app.i18n._('Partner')
@@ -487,6 +489,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
                         layout: 'ux.display',
                         labelAlign: 'top',
                         autoScroll: true,
+                        //cls: 'contactIconCustomer',
                         layoutConfig: {
                             background: 'solid'
                             //declaration: this.app.i18n._('Customer')

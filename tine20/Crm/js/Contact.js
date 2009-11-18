@@ -47,9 +47,10 @@ Tine.Crm.Contact.Combo = Ext.extend(Tine.Addressbook.SearchCombo, {
     /**
      * override default onSelect
      * 
+     * TODO add some logic to determine if contact is customer or partner
      */
-    onSelect: function(record){  
-        record.data.relation_type = 'customer';            
+    onSelect: function(record) {
+        record.data.relation_type = (record.get('type') == 'user') ? 'responsible' : 'customer';
         
         // check if already in
         if (! this.contactsStore.getById(record.id)) {
