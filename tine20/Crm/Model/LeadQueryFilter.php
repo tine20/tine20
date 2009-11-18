@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        add tasks / products
  */
 
 /**
