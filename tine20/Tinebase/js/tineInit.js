@@ -446,6 +446,7 @@ Tine.Tinebase.tineInit = {
      * init registry
      */
     initRegistry: function() {
+        Ext.namespace('Tine.Tinebase.registry');
         if (window.isMainWindow) {
             Ext.Ajax.request({
                 params: {
