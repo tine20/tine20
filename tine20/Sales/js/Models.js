@@ -17,8 +17,11 @@ Tine.Sales.Model.ProductArray = [
     {name: 'name',          type: 'string'},
     {name: 'description',   type: 'string'},
     {name: 'price',         type: 'float'},
+    // tine 2.0 tags and notes
     {name: 'tags'},
-    {name: 'notes'}
+    {name: 'notes'},
+    // relations with other objects
+    { name: 'relations'}
 ];
 
 /**

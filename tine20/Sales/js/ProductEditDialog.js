@@ -44,6 +44,34 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: false,
     
     /**
+     * @private
+     */
+    initComponent: function() {
+        // init tabpanels
+        this.linkPanel = new Tine.widgets.dialog.LinkPanel({
+            relatedRecords: {
+                Crm_Model_Lead: {
+                    recordClass: Tine.Crm.Model.Lead,
+                    dlgOpener: Tine.Crm.LeadEditDialog.openWindow
+                }
+            }
+        });
+        
+        Tine.Sales.ProductEditDialog.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * executed when record is loaded
+     * @private
+     */
+    onRecordLoad: function() {
+        Tine.Sales.ProductEditDialog.superclass.onRecordLoad.call(this);
+        
+        // update tabpanels
+        this.linkPanel.onRecordLoad(this.record);
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
@@ -122,7 +150,8 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 app: this.appName,
                 record_id: this.record.id,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            })]
+            }), this.linkPanel
+            ]
         };
     }
 });
