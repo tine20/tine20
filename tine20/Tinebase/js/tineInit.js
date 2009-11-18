@@ -176,25 +176,33 @@ Tine.Tinebase.tineInit = {
     renderWindow: function(){
         // check if user is already loged in        
         if (!Tine.Tinebase.registry.get('currentAccount')) {
-            Tine.Login.showLoginDialog({
-                defaultUsername: Tine.Tinebase.registry.get('defaultUsername'),
-                defaultPassword: Tine.Tinebase.registry.get('defaultPassword'),
-                scope: this,
-                onLogin: function(response) {
-                    Tine.Tinebase.tineInit.initList.initRegistry = false;
-                    Tine.Tinebase.tineInit.initRegistry();
-                    var waitForRegistry = function() {
-                        if (Tine.Tinebase.tineInit.initList.initRegistry) {
-                            Ext.MessageBox.hide();
-                            Tine.Tinebase.tineInit.initExtDirect();
-                            Tine.Tinebase.tineInit.renderWindow();
-                        } else {
-                            waitForRegistry.defer(100);
-                        }
-                    };
-                    waitForRegistry();
-                }
-            });
+            if (! Tine.loginPanel) {
+                Tine.loginPanel = new Tine.Tinebase.LoginPanel({
+                    defaultUsername: Tine.Tinebase.registry.get('defaultUsername'),
+                    defaultPassword: Tine.Tinebase.registry.get('defaultPassword'),
+                    scope: this,
+                    onLogin: function(response) {
+                        Tine.Tinebase.tineInit.initList.initRegistry = false;
+                        Tine.Tinebase.tineInit.initRegistry();
+                        var waitForRegistry = function() {
+                            if (Tine.Tinebase.tineInit.initList.initRegistry) {
+                                Ext.MessageBox.hide();
+                                Tine.Tinebase.tineInit.initExtDirect();
+                                Tine.Tinebase.tineInit.renderWindow();
+                            } else {
+                                waitForRegistry.defer(100);
+                            }
+                        };
+                        waitForRegistry();
+                    }
+                });
+                
+                var mainCardPanel = Ext.getCmp('tine-viewport-maincardpanel');
+                mainCardPanel.layout.container.add(Tine.loginPanel);
+            }
+            mainCardPanel.layout.setActiveItem(Tine.loginPanel.id);
+            Tine.loginPanel.doLayout();
+            
             return;
         }
         
