@@ -134,10 +134,7 @@ html, body {
     font-size: 16px;
     font-weight: bold;
     color: gray;
-}
-
-.tb-login-big-label-spacer {
-    height: 10px;
+    line-height: 35px;
 }
 
 .tb-login-logo {
@@ -147,6 +144,21 @@ html, body {
 	height: 30px;
 }
 
+.tb-login-infosection {
+	padding-left: 20px;
+	padding-right: 50px;
+}
+
+.tb-login-tinepanel {
+    color: gray;
+    line-height:17px;
+}
+
+.tb-login-tinepanel a {
+	text-decoration: none;
+    font-style: normal;
+    color: #1E78AD;
+}
 /* ----- about dialog --------------------------------------------------------*/
 .tb-about-dlg {
     text-align: center;

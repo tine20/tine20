@@ -70,10 +70,6 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     xtype: 'label',
                     cls: 'tb-login-big-label',
                     text: _('Login')
-                },{
-                    cls: 'tb-login-big-label-spacer',
-                    border: false,
-                    html: ''
                 }, new Tine.widgets.LangChooser({
                     width: 170,
                     tabindex: 1
@@ -115,11 +111,35 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         return this.loginPanel;
     },
     
+    getTinePanel: function() {
+        if (! this.tinePanel) {
+            this.tinePanel = new Ext.Panel({
+                layout: 'fit',
+                cls: 'tb-login-tinepanel',
+                border: false,
+                defaults: {xtype: 'label'},
+                items:[{
+                    cls: 'tb-login-big-label',
+                    html: _('Tine 2.0 is made for you')
+                }, {
+                    html: '<p>' + _('Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with, bring in ideas and get help.') + '</p>'
+                }, {
+                    cls: 'tb-login-big-label-spacer',
+                    html: '&nbsp;'
+                }, {
+                    html: '<p><a target="_blank" href="http://www.tine20.org/" border="0">' + _('Tine 2.0 Homepage') + '</a></p>'
+                }, {
+                    html: '<p><a target="_blank" href="http://www.tine20.org/forum/" border="0">' + _('Our Forum for questions and ideas') + '</a></p>'
+                }
+                ]
+            });
+        }
+        
+        return this.tinePanel;
+    },
+    
     initComponent: function() {
-        this.tinePanel = new Ext.Panel({
-            border: false
-            //html: 'links'
-        });
+
         this.surveyPanel = new Ext.Panel({
             border: false
             //html: 'surveys'
@@ -170,10 +190,14 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     }]
                 }, {
                     layout: 'vbox',
+                    cls: 'tb-login-infosection',
+                    layoutConfig: {
+                        align: 'stretch'
+                    },
                     border: false,
                     flex: 3,
                     items: [
-                        this.tinePanel,
+                        this.getTinePanel(),
                         this.surveyPanel
                     ]
                 }]
