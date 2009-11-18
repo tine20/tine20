@@ -74,10 +74,10 @@ Tine.Addressbook.TreePanel = function(config) {
         }];
     //}
     
-    this.id = 'Addressbook_Tree',
+    this.id = 'Addressbook_Tree';
     this.recordClass = Tine.Addressbook.Model.Contact;
     Tine.Addressbook.TreePanel.superclass.constructor.call(this);
-}
+};
 Ext.extend(Tine.Addressbook.TreePanel , Tine.widgets.container.TreePanel);
 
 Tine.Addressbook.FilterPanel = function(config) {
