@@ -366,7 +366,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     onKeyDown: function(e) {
         switch(e.getKey()) {
             
-            case e.DELETE: {
+            case e.DELETE: 
                 if (this.record.get('editGrant')) {
                     var selection = this.getSelectionModel().getSelectedCell();
                     
@@ -382,7 +382,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         this.store.removeAt(row);
                     }
                 }
-            }
+                break;
         }
     },
     
