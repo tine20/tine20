@@ -120,6 +120,32 @@ html, body {
 .tinebase-action-export-csv {
     background-image:url(../../images/oxygen/16x16/mimetypes/text-csv.png) !important;
 }
+/* ----- login dialog --------------------------------------------------------*/
+.tb-login-panel form {
+    padding: 20px 10px 20px 20px;
+}
+
+.tb-login-lobobox {
+	text-align:right;
+    height: 60px;
+}
+
+.tb-login-big-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: gray;
+}
+
+.tb-login-big-label-spacer {
+    height: 10px;
+}
+
+.tb-login-logo {
+ }
+
+.tb-login-button-spacer {
+	height: 30px;
+}
 
 /* ----- about dialog --------------------------------------------------------*/
 .tb-about-dlg {
