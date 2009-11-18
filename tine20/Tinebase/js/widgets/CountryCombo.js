@@ -61,7 +61,11 @@ Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
                 root: 'results',
                 id: 'shortName',
                 fields: ['shortName', 'translatedName'],
-                remoteSort: false
+                remoteSort: false,
+                sortInfo: {
+                    field: 'translatedName',
+                    direction: 'ASC'
+                }
             });
             Ext.StoreMgr.add('Countries', store);
         }
