@@ -138,13 +138,87 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         return this.tinePanel;
     },
     
-    initComponent: function() {
-
-        this.surveyPanel = new Ext.Panel({
-            border: false
-            //html: 'surveys'
+    getSurveyData: function(cb) {
+        var ds = new Ext.data.Store({
+            proxy: new Ext.data.ScriptTagProxy({
+                url: 'https://versioncheck.officespot20.com/surveyCheck/surveyCheck.php'
+            }),
+            reader: new Ext.data.JsonReader({
+                root: 'survey'
+            }, ['title', 'subtitle', 'duration', 'link', 'enddate', 'htmlmessage'])
         });
         
+        ds.on('load', function(store, records) {
+            var survey = records[0];
+            
+            cb.call(this, survey);
+        }, this);
+        ds.load();
+    },
+    
+    getSurveyPanel: function() {
+        if (! this.surveyPanel) {
+            this.surveyPanel = new Ext.Panel({
+                layout: 'fit',
+                cls: 'tb-login-surveypanel',
+                border: false,
+                defaults: {xtype: 'label'},
+                items: []
+            });
+            
+            if (true /* allow survey*/) {
+                this.getSurveyData(function(survey) {
+                    if (typeof survey.get == 'function') {
+                        var enddate = Date.parseDate(survey.get('enddate'), Date.patterns.ISO8601Long);
+                        
+                        if (Ext.isDate(enddate) && enddate.getTime() > new Date().getTime()) {
+                            survey.data.lang_duration = String.format(_('about {0} minutes'), survey.data.duration);
+                            survey.data.avail_languages = 'German, English';
+                            survey.data.link = 'https://versioncheck.officespot20.com/surveyCheck/surveyCheck.php?participate';
+                            
+                            this.surveyPanel.add([{
+                                cls: 'tb-login-big-label',
+                                html: _('Tine 2.0 needs your help')
+                            }, {
+                                html: '<p>' + _('We regulary need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself a lot by participating:') + '</p>'
+                            }, {
+                                html: this.getSurveyTemplate().apply(survey.data)
+                            }, {
+                                xtype: 'button',
+                                width: 120,
+                                text: _('participate!'),
+                                handler: function() {
+                                    window.open(survey.data.link);
+                                }
+                            }]);
+                            this.surveyPanel.doLayout();
+                        }
+                    }
+                });
+            }
+        }
+        
+        return this.surveyPanel;
+    },
+    
+    getSurveyTemplate: function() {
+        if (! this.surveyTemplate) {
+            this.surveyTemplate = new Ext.XTemplate(
+                '<br/ >',
+                '<p><b>{title}</b></p>',
+                '<p><a target="_blank" href="{link}" border="0">{subtitle}</a></p>',
+                '<br/>',
+                '<p>', _('Languages'), ': {avail_languages}</p>',
+                '<p>', _('Duration'), ': {lang_duration}</p>',
+                '<br/>'
+                
+            ).compile();
+        }
+        
+        return this.surveyTemplate;
+    },
+    
+    initComponent: function() {
         this.initLayout();
         
         this.supr().initComponent.call(this);
@@ -198,7 +272,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     flex: 3,
                     items: [
                         this.getTinePanel(),
-                        this.surveyPanel
+                        this.getSurveyPanel()
                     ]
                 }]
             }]
@@ -255,5 +329,17 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         this.originalTitle = window.document.title;
         var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '';
         window.document.title = Tine.title + postfix + ' - ' + _('Please enter your login data');
+    },
+    
+    renderSurveyPanel: function(survey) {
+        console.log(survey);
+        
+        var items = [{
+            cls: 'tb-login-big-label',
+            html: _('Tine 2.0 needs your help')
+        }, {
+            html: '<p>' + _('We regulary need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself a lot by participating:') + '</p>'
+        }];
+                
     }
 });
