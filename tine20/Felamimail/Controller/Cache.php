@@ -103,6 +103,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
      * @param boolean $_recursive try it again if something goes wrong
      * @return Felamimail_Model_Folder
      * 
+     * @todo    only try to get the uncached mails instead of clearing the whole cache when count mismatched
      * @todo    write tests for cache handling
      * @todo    check if more than $_initialNumber new messages arrived even if cache 
      *          is already complete (-> do initial import again?)
