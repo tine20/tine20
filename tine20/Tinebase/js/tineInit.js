@@ -174,6 +174,8 @@ Tine.Tinebase.tineInit = {
     },
     
     renderWindow: function(){
+        var mainCardPanel = Ext.getCmp('tine-viewport-maincardpanel');
+        
         // check if user is already loged in        
         if (!Tine.Tinebase.registry.get('currentAccount')) {
             if (! Tine.loginPanel) {
@@ -196,8 +198,6 @@ Tine.Tinebase.tineInit = {
                         waitForRegistry();
                     }
                 });
-                
-                var mainCardPanel = Ext.getCmp('tine-viewport-maincardpanel');
                 mainCardPanel.layout.container.add(Tine.loginPanel);
             }
             mainCardPanel.layout.setActiveItem(Tine.loginPanel.id);
@@ -241,7 +241,6 @@ Tine.Tinebase.tineInit = {
         window.document.title = c.title ? c.title : window.document.title;
         
         // finaly render the window contentes in a new card  
-        var mainCardPanel = Ext.getCmp('tine-viewport-maincardpanel');
         var card = Tine.WindowFactory.getContentPanel(c);
         mainCardPanel.layout.container.add(card);
         mainCardPanel.layout.setActiveItem(card.id);
