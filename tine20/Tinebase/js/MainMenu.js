@@ -14,7 +14,7 @@ Tine.Tinebase.MainMenu = function(config) {
         var sub = this.menu.addSubmenu('mytest', 'mytest');
         sub.addMenuItem('test', 'test', function() {alert('test');});
         
-    } else*/ {
+    } else { */
         this.menu = new Ext.Toolbar({
             id: this.id, 
             height: this.height,
@@ -22,7 +22,7 @@ Tine.Tinebase.MainMenu = function(config) {
         });
         
         return this.menu;
-    }
+    //}
 };
 
 
