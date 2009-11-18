@@ -39,6 +39,12 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     const ATTACHMENT_FILENAME_REGEXP = "/name=\"*([a-zA-Z0-9\-\._ ]+)\"*/";
     
     /**
+     * email address regexp
+     */
+    // '/(?<!mailto:)([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i';
+    const EMAIL_ADDRESS_REGEXP = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i'; 
+    
+    /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 
@@ -101,7 +107,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      *
      * @param string $_data json encoded data
      * 
-     * @todo    get delimiter from row? could be ';' or ','
+     * @todo    get/detect delimiter from row? could be ';' or ','
      * @todo    add recipient names
      */
     public function setFromJson($_data)
@@ -109,27 +115,33 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         $recordData = Zend_Json::decode($_data);
         $this->setFromArray($recordData);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, true));
-        
         // explode email addresses if multiple
-        $toExplode = array('to', 'cc', 'bcc');
-        $delimiter = ',';
-        foreach ($toExplode as $field) {
+        $recipientType = array('to', 'cc', 'bcc');
+        $delimiter = ';';
+        foreach ($recipientType as $field) {
             if (!empty($recordData[$field])) {
-                $exploded = array();
+                $recipients = array();
                 foreach($recordData[$field] as $addresses) {
-                    $exploded = array_merge($exploded, explode($delimiter, $addresses));
-                }
-                
-                foreach ($exploded as &$recipient) {
-                    // get address 
-                    // @todo get name here
-                    if (preg_match("/<([a-zA-Z@_\-0-9\.]+)>/", $recipient, $matches) > 0) {
-                        $recipient = $matches[1];
+                    if (substr_count($addresses, '@') > 1) {
+                        $recipients = array_merge($recipients, explode($delimiter, $addresses));
+                    } else {
+                        // single recipient
+                        $recipients[] = $addresses;
                     }
                 }
                 
-                $this->{$field} = $exploded;
+                foreach ($recipients as &$recipient) {
+                    // get address 
+                    // @todo get name here
+                    //<*([a-zA-Z@_\-0-9\.]+)>*/
+                    if (preg_match(self::EMAIL_ADDRESS_REGEXP, $recipient, $matches) > 0) {
+                        $recipient = $matches[1];
+                    }
+                }
+
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recipients, true));
+                
+                $this->{$field} = $recipients;
             }
         }
     }
