@@ -122,7 +122,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     cls: 'tb-login-big-label',
                     html: _('Tine 2.0 is made for you')
                 }, {
-                    html: '<p>' + _('Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with, bring in ideas and get help.') + '</p>'
+                    html: '<p>' + _('Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help.') + '</p>'
                 }, {
                     cls: 'tb-login-big-label-spacer',
                     html: '&nbsp;'
@@ -179,7 +179,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                                 cls: 'tb-login-big-label',
                                 html: _('Tine 2.0 needs your help')
                             }, {
-                                html: '<p>' + _('We regulary need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself a lot by participating:') + '</p>'
+                                html: '<p>' + _('We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:') + '</p>'
                             }, {
                                 html: this.getSurveyTemplate().apply(survey.data)
                             }, {
@@ -337,7 +337,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             cls: 'tb-login-big-label',
             html: _('Tine 2.0 needs your help')
         }, {
-            html: '<p>' + _('We regulary need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself a lot by participating:') + '</p>'
+            html: '<p>' + _('We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:') + '</p>'
         }];
                 
     }
