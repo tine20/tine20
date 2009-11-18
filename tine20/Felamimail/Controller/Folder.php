@@ -196,17 +196,27 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      *
      * @param string $_folderName globalName (complete path) of folder to delete
      * @param string $_accountId
+     * 
+     * @todo check if folders has subfolders
      */
     public function delete($_folderName, $_accountId = 'default')
     {
-        $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
-        $imap->removeFolder($_folderName);
+        try {
+            $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
+            $imap->removeFolder($_folderName);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' IMAP Error: ' . $zmse->getMessage() 
+                . '. Folder name: ' . $_folderName . ' - Did you delete the subfolders first?'
+            );
+            
+            //-- check if folders has subfolders and throw exception if that is the case
+        }
         
         try {
             $folder = $this->_folderBackend->getByBackendAndGlobalName($_accountId, $_folderName);
             $this->_folderBackend->delete($folder->getId());
         } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Trying to delete non-existant folder.');
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Trying to delete non-existant folder ' . $_folderName);
         }
     }
     
@@ -245,7 +255,17 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             throw $tenf;
         }
         
-        // TODO loop subfolders (recursive) and replace new localname in globalname path
+        // loop subfolders (recursive) and replace new localname in globalname path
+        $filter = new Felamimail_Model_FolderFilter(array(array(
+            'field' => 'globalname', 'operator' => 'startswith', 'value' => $_oldGlobalName
+        )));
+        $subfolders = $this->search($filter);
+        foreach ($subfolders as $subfolder) {
+            $newSubfolderGlobalname = str_replace($_oldGlobalName, $newGlobalName, $subfolder->globalname);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $subfolder->globalname . ' -> ' . $newSubfolderGlobalname);
+            $subfolder->globalname = $newSubfolderGlobalname;
+            $this->update($subfolder);
+        }
         
         return $folder;
     }
