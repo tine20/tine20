@@ -51,7 +51,7 @@ Tine.Crm.LeadGridContactFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
         var filterConfigs = Tine.Addressbook.Model.Contact.getFilterModel();
         
         var contactRoleFilter = new Tine.widgets.grid.FilterModel({
-            label: this.app.i18n._("Role"),
+            label: this.app.i18n._('CRM Role'),
             field: 'relation_type',
             operators: ['equals'],
             valueRenderer: function(filter, el) {
