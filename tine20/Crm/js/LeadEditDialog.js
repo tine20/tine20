@@ -244,13 +244,11 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.tasksGrid = new Tine.Crm.Task.GridPanel({
             record: this.record,
-            height: '100%',
             disabled: ! (Tine.Tasks && Tine.Tinebase.common.hasRight('run', 'Tasks'))
         });
         
         this.productsGrid = new Tine.Crm.Product.GridPanel({
             record: this.record,
-            height: '100%',
             disabled: ! (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales'))
         });
         
