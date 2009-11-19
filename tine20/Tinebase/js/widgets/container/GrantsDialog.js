@@ -71,6 +71,11 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
         Tine.widgets.container.GrantsDialog.superclass.initComponent.call(this);
     },
     
+    onRender: function() {
+        this.supr().onRender.apply(this, arguments);
+        this.window.setTitle(this.windowTitle);
+    },
+    
     /**
      * init record to edit
      * 
