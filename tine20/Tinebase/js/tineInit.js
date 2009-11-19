@@ -262,7 +262,7 @@ Tine.Tinebase.tineInit = {
             if (options.params && !options.isUpload) {
                 var params = {};
                 
-                var def = typeof Tine.Tinebase.registry.get == 'function' ? Tine.Tinebase.registry.get('serviceMap').services[options.params.method] : false;
+                var def = Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('serviceMap').services[options.params.method] : false;
                 if (def) {
                     // sort parms according to def
                     for (var i=0, p; i<def.parameters.length; i++) {
