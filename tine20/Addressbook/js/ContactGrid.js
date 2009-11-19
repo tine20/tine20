@@ -236,6 +236,11 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             this.actions_callContact.setDisabled(true);
             
             var contact = sm.getSelected();
+            
+            if (! contact) {
+                return false;
+            }
+            
             if(!Ext.isEmpty(contact.data.tel_work)) {
                 callMenu.add({
                    id: 'Addressbook_Contacts_CallContact_Work', 
