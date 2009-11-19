@@ -22,7 +22,6 @@ Ext.namespace('Tine.Crm');
  * <p><pre>
  * TODO         add 'add task' action again
  * TODO         add manage crm right again
- * TODO         add preview panel
  * TODO         add products to grid?
  * </pre></p>
  * 
@@ -93,27 +92,29 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * 
      * @return Tine.widgets.grid.FilterToolbar
      * @private
-     * 
-     * TODO add (contact) relation type filter
-     * TODO add products filter
      */
     getFilterToolbar: function() {
+        var filters = [
+            {label: _('Quick search'),  field: 'query',    operators: ['contains']},
+            {label: this.app.i18n._('Lead name'),   field: 'lead_name' },
+            {label: this.app.i18n._('Leadstate'),   field: 'leadstate_id', valueType: 'combo',
+                displayField: 'leadstate', valueField: 'id', store: Tine.Crm.LeadState.getStore()},
+            {label: this.app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
+            {label: this.app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
+            {filtertype: 'tinebase.tag', app: this.app},
+            {filtertype: 'crm.contact'}
+        ];
+        
+        if (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales')) {
+            filters.push({filtertype: 'foreignrecord', 
+                app: this.app,
+                foreignRecordClass: Tine.Sales.Model.Product,
+                ownField: 'product'
+            });
+        }
+        
         return new Tine.widgets.grid.FilterToolbar({
-            filterModels: [
-                {label: _('Quick search'),  field: 'query',    operators: ['contains']},
-                {label: this.app.i18n._('Lead name'),   field: 'lead_name' },
-                {label: this.app.i18n._('Leadstate'),   field: 'leadstate_id', valueType: 'combo',
-                    displayField: 'leadstate', valueField: 'id', store: Tine.Crm.LeadState.getStore()},
-                {label: this.app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
-                {label: this.app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
-                {filtertype: 'tinebase.tag', app: this.app},
-                {filtertype: 'crm.contact'},
-                {filtertype: 'foreignrecord', 
-                    app: this.app,
-                    foreignRecordClass: Tine.Sales.Model.Product,
-                    ownField: 'product'
-                }
-            ],
+            filterModels: filters,
             defaultFilter: 'query',
             filters: [],
             plugins: [
