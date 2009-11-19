@@ -79,12 +79,15 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
             )->where($db->quoteInto($db->quoteIdentifier('context.application_id') . ' IN (0, ?)', $applicationId));
         }
         
+        $orWhere = array();
         if (!empty($this->name)) {
-            $select->where($db->quoteInto($db->quoteIdentifier('tags.name') . ' LIKE ?', $this->name));
+            $orWhere[] = $db->quoteInto($db->quoteIdentifier('tags.name') . ' LIKE ?', $this->name);
         }
-        
         if (!empty($this->description)) {
-            $select->where($db->quoteInto($db->quoteIdentifier('tags.description') . ' LIKE ?', $this->description));
+            $orWhere[] = $db->quoteInto($db->quoteIdentifier('tags.description') . ' LIKE ?', $this->description);
+        }
+        if (! empty($orWhere)) {
+            $select->where(implode(' OR ', $orWhere));
         }
         
         if ($this->type) {

@@ -62,11 +62,15 @@ class Tinebase_Model_RoleFilter extends Tinebase_Record_Abstract
         $select = $db->select()
             ->from(array('roles' => SQL_TABLE_PREFIX . 'roles'));
         
+        $orWhere = array();
         if (!empty($this->name)) {
-            $select->where($db->quoteInto($db->quoteIdentifier('roles.name') . ' LIKE ?', $this->name));
+            $orWhere[] = $db->quoteInto($db->quoteIdentifier('roles.name') . ' LIKE ?', $this->name);
         }
         if (!empty($this->description)) {
-            $select->where($db->quoteInto($db->quoteIdentifier('roles.description') . ' LIKE ?', $this->description));
+            $orWhere[] = $db->quoteInto($db->quoteIdentifier('roles.description') . ' LIKE ?', $this->description);
+        }
+        if (! empty($orWhere)) {
+            $select->where(implode(' OR ', $orWhere));
         }
         return $select;
     }
