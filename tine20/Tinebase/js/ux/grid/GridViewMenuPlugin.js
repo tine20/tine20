@@ -230,7 +230,10 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
      * sets the buttons size
      */
     _onLayout: function() {
-        this.menuBtn.dom.style.height = (this._view.mainHd.dom.offsetHeight-1)+'px';
+        // Note: if hidden, IE returns no offsetHeight and also can not set it
+        if (this._view.mainHd.dom.offsetHeight > 1) {
+            this.menuBtn.dom.style.height = (this._view.mainHd.dom.offsetHeight-1)+'px';
+        }
     },
     
     /**
