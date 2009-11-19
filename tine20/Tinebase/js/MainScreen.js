@@ -382,7 +382,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             title: _('About Tine 2.0'),
             msg: 
                 '<div class="tb-about-dlg">' +
-                    '<div class="tb-about-img"><a href="http://www.tine20.org" target="_blank"><img src="' + Tine.Login.loginLogo + '" /></a></div>' +
+                    '<div class="tb-about-img"><a href="http://www.tine20.org" target="_blank"><img src="' + Tine.Tinebase.LoginPanel.prototype.loginLogo + '" /></a></div>' +
                     '<div class="tb-about-version">Version: ' + version.codeName + '</div>' +
                     '<div class="tb-about-build">( ' + version.packageString + ' )</div>' +
                     '<div class="tb-about-copyright">Copyright: 2007-' + new Date().getFullYear() + '&nbsp;<a href="http://www.metaways.de" target="_blank">Metaways Infosystems GmbH</a></div>' +
