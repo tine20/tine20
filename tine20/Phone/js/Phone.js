@@ -362,7 +362,10 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
             // update line store again (we need this, because it is changed when dlg is opened the second time)
             this.setLineStore(phoneCombo.getValue());
         }
-        this.getForm().findField('lineId').setValue(this.linesStore.getAt(0).id);
+        var firstLine = this.linesStore.getAt(0);
+        if (firstLine) {
+            this.getForm().findField('lineId').setValue(firstLine.id);
+        }
     },
     
     /**
