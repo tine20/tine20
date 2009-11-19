@@ -772,7 +772,7 @@ class Tinebase_Core
      */
     public static function getUser()
     {
-        return self::get(self::USER);
+        $result = (self::isRegistered(self::USER)) ? self::get(self::USER) : NULL;
     }
 
     /**
