@@ -9,26 +9,7 @@
 Ext.namespace('Ext.ux.file');
 
 /**
- * @class Ext.ux.file.BrowseAction
- * Reusable action that provides a customizable file browse button.
- * Clicking this button, pops up a file dialog box for a user to select the file to upload.
- * This is accomplished by having a transparent <input type="file"> box above the Ext.Button.
- * When a user thinks he or she is clicking the Ext.Button, they're actually clicking the hidden input "Browse..." box.
- * Note: this class can be instantiated explicitly or with xtypes anywhere a regular Ext.Button can be except in 2 scenarios:
- * - Panel.addButton method both as an instantiated object or as an xtype config object.
- * - Panel.buttons config object as an xtype config object.
- * These scenarios fail because Ext explicitly creates an Ext.Button in these cases.
- * Browser compatibility:
- * Internet Explorer 6:
- * - no issues
- * Internet Explorer 7:
- * - no issues
- * Firefox 2 - Windows:
- * - pointer cursor doesn't display when hovering over the button.
- * Safari 3 - Windows:
- * - no issues.
- * @constructor
- * Create a new BrowseButton.
+ * @class Ext.ux.file.BrowsePlugin
  * @param {Object} config Configuration options
  */
 Ext.ux.file.BrowsePlugin = function(config) {
@@ -42,75 +23,12 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     inputFileName: 'file',
     /**
-     * @cfg {Boolean} debug
-     * Toggle for turning on debug mode.
-     * Debug mode doesn't make clipEl transparent so that one can see how effectively it covers the Ext.Button.
-     * In addition, clipEl is given a green background and floatEl a red background to see how well they are positioned.
-     */
-    debug: false,
-    
-    
-    /*
-     * Private constants:
-     */
-    /**
-     * @property FLOAT_EL_WIDTH
-     * @type Number
-     * The width (in pixels) of floatEl.
-     * It should be less than the width of the IE "Browse" button's width (65 pixels), since IE doesn't let you resize it.
-     * We define this width so we can quickly center floatEl at the mouse cursor without having to make any function calls.
-     * @private
-     */
-    FLOAT_EL_WIDTH: 60,
-    
-    /**
-     * @property FLOAT_EL_HEIGHT
-     * @type Number
-     * The heigh (in pixels) of floatEl.
-     * It should be less than the height of the "Browse" button's height.
-     * We define this height so we can quickly center floatEl at the mouse cursor without having to make any function calls.
-     * @private
-     */
-    FLOAT_EL_HEIGHT: 18,
-    
-    
-    /*
-     * Private properties:
-     */
-    /**
-     * @property buttonCt
-     * @type Ext.Element
-     * Element that contains the actual Button DOM element.
-     * We store a reference to it, so we can easily grab its size for sizing the clipEl.
-     * @private
-     */
-    buttonCt: null,
-    /**
-     * @property clipEl
-     * @type Ext.Element
-     * Element that contains the floatEl.
-     * This element is positioned to fill the area of Ext.Button and has overflow turned off.
-     * This keeps floadEl tight to the Ext.Button, and prevents it from masking surrounding elements.
-     * @private
-     */
-    clipEl: null,
-    /**
-     * @property floatEl
-     * @type Ext.Element
-     * Element that contains the inputFileEl.
-     * This element is size to be less than or equal to the size of the input file "Browse" button.
-     * It is then positioned wherever the user moves the cursor, so that their click always clicks the input file "Browse" button.
-     * Overflow is turned off to preven inputFileEl from masking surrounding elements.
-     * @private
-     */
-    floatEl: null,
-    /**
      * @property inputFileEl
      * @type Ext.Element
      * Element for the hiden file input.
      * @private
      */
-    inputFileEl: null,
+    input_file: null,
     /**
      * @property originalHandler
      * @type Function
@@ -135,11 +53,6 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * @see Ext.Button.initComponent
      */
     init: function(cmp){
-        //Ext.ux.file.BrowseAction.superclass.initComponent.call(this);
-        // Store references to the original handler and scope before nulling them.
-        // This is done so that this class can control when the handler is called.
-        // There are some cases where the hidden file input browse button doesn't completely cover the Ext.Button.
-        // The handler shouldn't be called in these cases.  It should only be called if a new file is selected on the file system.
         this.originalHandler = cmp.handler || null;
         this.originalScope = cmp.scope || window;
         this.handler = null;
@@ -149,189 +62,88 @@ Ext.ux.file.BrowsePlugin.prototype = {
         
         cmp.on('render', this.onRender, this);
         
-        // chain enable/disable fns
+        // chain fns
         if (typeof cmp.setDisabled == 'function') {
             cmp.setDisabled = cmp.setDisabled.createSequence(function(disabled) {
-                if (this.inputFileEl) {
-                    this.inputFileEl.dom.disabled = disabled;
+                if (this.input_file) {
+                    this.input_file.dom.disabled = disabled;
                 }
             }, this);
         }
         
         if (typeof cmp.enable == 'function') {
             cmp.enable = cmp.enable.createSequence(function() {
-                if (this.inputFileEl) {
-                    this.inputFileEl.dom.disabled = false;
+                if (this.input_file) {
+                    this.input_file.dom.disabled = false;
                 }
             }, this);
         }
         
         if (typeof cmp.disable == 'function') {
             cmp.disable = cmp.disable.createSequence(function() {
-                if (this.inputFileEl) {
-                    this.inputFileEl.dom.disabled = true;
+                if (this.input_file) {
+                    this.input_file.dom.disabled = true;
                 }
             }, this);
         }
         
+        if (typeof cmp.destroy == 'function') {
+            cmp.destroy = cmp.destroy.createSequence(function() {
+                var input_file = this.detachInputFile(true);
+                input_file.remove();
+                input_file = null;
+            }, this);
+        }
     },
     
     /**
      * @see Ext.Button.onRender
      */
-    onRender: function(){
-        
-        this.buttonCt = this.buttonCt || this.component.el.child('.x-btn-center em') || this.component.el;
-        this.buttonCt.position('relative'); // this is important!
-        var styleCfg = {
-            position: 'absolute',
-            overflow: 'hidden',
-            top: '0px', // default
-            left: '0px' // default
-        };
-        // browser specifics for better overlay tightness
-        if (Ext.isIE) {
-            Ext.apply(styleCfg, {
-                left: '-3px',
-                top: '-3px'
-            });
-        } else if (Ext.isGecko) {
-            Ext.apply(styleCfg, {
-                left: '-3px',
-                top: '-3px'
-            });
-        } else if (Ext.isSafari) {
-            Ext.apply(styleCfg, {
-                left: '-4px',
-                top: '-2px'
-            });
-        }
-        this.clipEl = this.buttonCt.createChild({
-            tag: 'div',
-            style: styleCfg
-        });
-        this.setClipSize();
-        this.clipEl.on({
-            'mousemove': this.onButtonMouseMove,
-            'mouseover': this.onButtonMouseMove,
-            scope: this
-        });
-        
-        this.floatEl = this.clipEl.createChild({
-            tag: 'div',
-            style: {
-                position: 'absolute',
-                width: this.FLOAT_EL_WIDTH + 'px',
-                height: this.FLOAT_EL_HEIGHT + 'px',
-                overflow: 'hidden'
-            }
-        });
-        
-        // set the styles, is IE has problems to follow the mouse
-        // when no styles are set
-        this.clipEl.applyStyles({
-            'background-color': 'green'
-        });
-        this.floatEl.applyStyles({
-            'background-color': 'red'
-        });
-            
-        if (! this.debug) {
-            this.clipEl.setOpacity(0.0);
-        }
-        
+    onRender: function() {
+        this.button_container = this.buttonCt || this.component.el.child('tbody') || this.component.el;
+        this.button_container.position('relative');
+        this.wrap = this.component.el.wrap({cls:'tbody'});
         this.createInputFile();
     },
     
-    
-    /*
-     * Private helper methods:
-     */
-    /**
-     * Sets the size of clipEl so that is covering as much of the button as possible.
-     * @private
-     */
-    setClipSize: function(){
-        if (this.clipEl) {
-            var width = this.buttonCt.getWidth();
-            var height = this.buttonCt.getHeight();
-            if (Ext.isIE) {
-                width = width + 5;
-                height = height + 5;
-            } else if (Ext.isGecko) {
-                width = width + 6;
-                height = height + 6;
-            } else if (Ext.isSafari) {
-                width = width + 6;
-                height = height + 6;
-            }
-            this.clipEl.setSize(width, height);
-        }
-    },
-    
-    /**
-     * Creates the input file element and adds it to inputFileCt.
-     * The created input file elementis sized, positioned, and styled appropriately.
-     * Event handlers for the element are set up, and a tooltip is applied if defined in the original config.
-     * @private
-     */
-    createInputFile: function(){
-    
-        this.inputFileEl = this.floatEl.createChild({
+    createInputFile: function() {
+        this.input_file = this.wrap.createChild({
             tag: 'input',
             type: 'file',
-            size: 1, // must be > 0. It's value doesn't really matter due to our masking div (inputFileCt).  
-            name: this.inputFileName || Ext.id(this.el),
-            // Use the same pointer as an Ext.Button would use.  This doesn't work in Firefox.
-            // This positioning right-aligns the input file to ensure that the "Browse" button is visible.
-            style: {
-                position: 'absolute',
-                cursor: 'pointer',
-                right: '0px',
-                top: '0px'
-            }
-        });
-        this.inputFileEl = this.inputFileEl.child('input') || this.inputFileEl;
-        
-        // setup events
-        this.inputFileEl.on({
-            'click': this.onInputFileClick,
-            'change': this.onInputFileChange,
-            scope: this
+            size: 1,
+            name: this.inputFileName || Ext.id(this.component.el),
+            style: "position: absolute; display: block; border: none; cursor: pointer"
         });
         
-        // add a tooltip
-        if (this.tooltip) {
-            if (typeof this.tooltip == 'object') {
-                Ext.QuickTips.register(Ext.apply({
-                    target: this.inputFileEl
-                }, this.tooltip));
-            } else {
-                this.inputFileEl.dom[this.tooltipType] = this.tooltip;
+        var button_box = this.button_container.getBox();
+        this.input_file.setStyle('font-size', Math.max(button_box.height, button_box.width) + 'px');
+        
+        var input_box = this.input_file.getBox();
+        var adj = {x: 3, y: 3}
+        if (Ext.isIE) {
+            adj = {x: 0, y: 3}
+        }
+        
+        this.input_file.setLeft(button_box.width - input_box.width + adj.x + 'px');
+        this.input_file.setTop(button_box.height - input_box.height + adj.y + 'px');
+        this.input_file.setOpacity(0.0);
+            
+        if (this.component.handleMouseEvents) {
+            this.input_file.on('mouseover', this.component.onMouseOver, this.component);
+            this.input_file.on('mousedown', this.component.onMouseDown, this.component);
+        }
+        
+        if(this.component.tooltip){
+            if(typeof this.component.tooltip == 'object'){
+                Ext.QuickTips.register(Ext.apply({target: this.input_file}, this.component.tooltip));
+            } 
+            else {
+                this.input_file.dom[this.component.tooltipType] = this.component.tooltip;
             }
         }
-    },
-    
-    /**
-     * Handler when the cursor moves over the clipEl.
-     * The floatEl gets centered to the cursor location.
-     * @param {Event} e mouse event.
-     * @private
-     */
-    onButtonMouseMove: function(e){
-        var xy = e.getXY();
-        xy[0] -= this.FLOAT_EL_WIDTH / 2;
-        xy[1] -= this.FLOAT_EL_HEIGHT / 2;
-        this.floatEl.setXY(xy);
-    },
-    
-    /**
-     * Handler when inputFileEl's "Browse..." button is clicked.
-     * @param {Event} e click event.
-     * @private
-     */
-    onInputFileClick: function(e){
-        e.stopPropagation();
+        
+        this.input_file.on('change', this.onInputFileChange, this);
+        this.input_file.on('click', function(e) { e.stopPropagation(); });
     },
     
     /**
@@ -344,10 +156,6 @@ Ext.ux.file.BrowsePlugin.prototype = {
         }
     },
     
-    
-    /*
-     * Public methods:
-     */
     /**
      * Detaches the input file associated with this BrowseButton so that it can be used for other purposed (e.g. uplaoding).
      * The returned input file has all listeners and tooltips applied to it by this class removed.
@@ -355,43 +163,30 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * True will prevent creation.  Defaults to false.
      * @return {Ext.Element} the detached input file element.
      */
-    detachInputFile: function(noCreate){
-        var result = this.inputFileEl;
+    detachInputFile : function(no_create) {
+        var result = this.input_file;
         
-        if (typeof this.tooltip == 'object') {
-            Ext.QuickTips.unregister(this.inputFileEl);
-        } else {
-            this.inputFileEl.dom[this.tooltipType] = null;
+        no_create = no_create || false;
+        
+        if (typeof this.component.tooltip == 'object') {
+            Ext.QuickTips.unregister(this.input_file);
         }
-        this.inputFileEl.removeAllListeners();
-        this.inputFileEl = null;
+        else {
+            this.input_file.dom[this.component.tooltipType] = null;
+        }
+        this.input_file.removeAllListeners();
+        this.input_file = null;
         
-        if (!noCreate) {
+        if (!no_create) {
             this.createInputFile();
         }
         return result;
     },
     
     /**
-     * @return {Ext.Element} the input file element attached to this BrowseButton.
+     * @return {Ext.Element} the input file element
      */
     getInputFile: function(){
-        return this.inputFileEl;
-    },
-    
-    /**
-     * @see Ext.Button.disable
-     */
-    disable: function(){
-        Ext.ux.file.BrowseAction.superclass.disable.call(this);
-        this.inputFileEl.dom.disabled = true;
-    },
-    
-    /**
-     * @see Ext.Button.enable
-     */
-    enable: function(){
-        Ext.ux.file.BrowseAction.superclass.enable.call(this);
-        this.inputFileEl.dom.disabled = false;
+        return this.input_file;
     }
 };
