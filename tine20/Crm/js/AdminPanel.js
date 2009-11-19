@@ -285,7 +285,8 @@ Tine.Crm.Admin.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
      */
     onNewentry: function(recordData) {
         // add new option to store
-        var newOption = new this.recordClass(recordData, this.store.getCount() + 1);
+        recordData.id = this.getNextId();
+        var newOption = new this.recordClass(recordData);
         this.store.insert(0,newOption);
         return true;
     },
@@ -298,5 +299,19 @@ Tine.Crm.Admin.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         for (var i = 0; i < selectedRows.length; ++i) {
             this.store.remove(selectedRows[i]);
         }
+    },
+    
+    /**
+     * get next available id
+     * @return {Number}
+     */
+    getNextId: function() {
+        var newid = this.store.getCount() + 1;
+        
+        while (this.store.getById(newid)) {
+            newid++;
+        }
+        
+        return newid;
     }
 });
