@@ -19,11 +19,15 @@ Ext.ns('Tine.Crm.LinkGridPanel');
  * TODO         move change contact type functions
  */
 Tine.Crm.LinkGridPanel.initActions = function() {
+    
+    var recordName = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')).i18n.n_(
+        this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1
+    );
 
     this.actionAdd = new Ext.Action({
         requiredGrant: 'editGrant',
-        text: String.format(this.app.i18n._('Add new {0}'), this.recordClass.getMeta('recordName')),
-        tooltip: String.format(this.app.i18n._('Add new {0}'), this.recordClass.getMeta('recordName')),
+        text: String.format(this.app.i18n._('Add new {0}'), recordName),
+        tooltip: String.format(this.app.i18n._('Add new {0}'), recordName),
         iconCls: 'actionAdd',
         disabled: true,
         scope: this,
@@ -39,8 +43,8 @@ Tine.Crm.LinkGridPanel.initActions = function() {
     
     this.actionUnlink = new Ext.Action({
         requiredGrant: 'editGrant',
-        text: String.format(this.app.i18n._('Unlink {0}'), this.recordClass.getMeta('recordName')),
-        tooltip: String.format(this.app.i18n._('Unlink selected {0}'), this.recordClass.getMeta('recordName')),
+        text: String.format(this.app.i18n._('Unlink {0}'), recordName),
+        tooltip: String.format(this.app.i18n._('Unlink selected {0}'), recordName),
         disabled: true,
         iconCls: 'actionRemove',
         onlySingle: true,
@@ -55,8 +59,8 @@ Tine.Crm.LinkGridPanel.initActions = function() {
     
     this.actionEdit = new Ext.Action({
         requiredGrant: 'editGrant',
-        text: String.format(this.app.i18n._('Edit {0}'), this.recordClass.getMeta('recordName')),
-        tooltip: String.format(this.app.i18n._('Edit selected {0}'), this.recordClass.getMeta('recordName')),
+        text: String.format(this.app.i18n._('Edit {0}'), recordName),
+        tooltip: String.format(this.app.i18n._('Edit selected {0}'), recordName),
         disabled: true,
         iconCls: 'actionEdit',
         onlySingle: true,
