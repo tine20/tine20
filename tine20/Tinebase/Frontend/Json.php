@@ -486,7 +486,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $registryData = array();
         
-        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) { 
+        if (Tinebase_Core::getUser()) { 
             $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
             
             foreach($userApplications as $application) {

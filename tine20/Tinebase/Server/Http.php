@@ -45,11 +45,11 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract
                 $applicationParts = explode('.', $_REQUEST['method']);
                 $applicationName = ucfirst($applicationParts[0]);
                 
-                if(Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
+                if(Tinebase_Core::getUser() && Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
                     try {
                         $server->setClass($applicationName.'_Frontend_Http', $applicationName);
                     } catch (Exception $e) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ ." Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ ." Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
                     }
                 }
             }
