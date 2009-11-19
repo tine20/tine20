@@ -193,7 +193,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         */
         
         this.actions_exportLead = new Ext.Action({
-            text: _('Export Lead'),
+            text: this.app.i18n._('Export Lead'),
             iconCls: 'action_export',
             scope: this,
             requiredGrant: 'readGrant',
