@@ -55,12 +55,17 @@ Tine.Tinebase.common = {
     
     showDebugConsole: function() {
         if (! Ext.debug) {
-            var head = Ext.getDoc().first().first();
-            var scriptTag = head.insertFirst({tag: 'script', type: 'text/javascript', src: 'library/ExtJS/src/debug.js'});
-            scriptTag.on('load', function() {
+            var head = document.getElementsByTagName("head")[0];
+            var scriptTag = document.createElement("script");
+            scriptTag.setAttribute("src", 'library/ExtJS/src/debug.js');
+            scriptTag.setAttribute("type", "text/javascript");
+            head.appendChild(scriptTag);
+            
+            var scriptEl = Ext.get(scriptTag);
+            scriptEl.on('load', function() {
                 Ext.log('debug console initialised');
             });
-            scriptTag.on('fail', function() {
+            scriptEl.on('fail', function() {
                 Ext.msg.alert('could not activate debug console');
             });
         } else {
