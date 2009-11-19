@@ -57,12 +57,26 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     updateFoldersTask: null,
     
     /**
+     * @property updateMessagesTask
+     * @type Ext.util.DelayedTask
+     */
+    updateMessagesTask: null,
+    
+    /**
      * refresh time in milliseconds
      * 
      * @property updateFolderRefreshTime
      * @type Number
      */
     updateFolderRefreshTime: 60000, // 1 min
+    
+    /**
+     * refresh time in milliseconds
+     * 
+     * @property updateMessageRefreshTime
+     * @type Number
+     */
+    updateMessageRefreshTime: 60000, // 1 min
     
     /**
      * @cfg {String} containerName
@@ -111,9 +125,10 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var updateInterval = Tine.Felamimail.registry.get('preferences').get('updateInterval');
         if (! isNaN(updateInterval) && updateInterval > 0) {
             // convert to milliseconds
-            this.updateFolderRefreshTime = 60000*updateInterval;
-            this.updateFoldersTask = new Ext.util.DelayedTask(this.updateFolders, this);
+            this.updateMessageRefreshTime = 60000*updateInterval;
+            this.updateMessagesTask = new Ext.util.DelayedTask(this.updateMessages, this);
         }
+        this.updateFoldersTask = new Ext.util.DelayedTask(this.updateFolders, this);
         
     	Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
 
@@ -343,8 +358,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             scope: this,
             handler: function() {
                 if (this.ctxNode) {
-                    // trigger updateFolderCache
-                    this.updateFolderCache(this.ctxNode);
+                    // trigger updateMessageCache
+                    this.updateMessageCache(this.ctxNode);
                     
                     this.ctxNode.reload(function(node) {
                         node.expand();
@@ -398,7 +413,10 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
         this.expandPath('/root/' + defaultAccount + '/');
         
-        // start delayed task
+        // start delayed tasks
+        if (this.updateMessagesTask !== null) {
+            this.updateMessagesTask.delay(this.updateMessageRefreshTime);
+        }
         if (this.updateFoldersTask !== null) {
             this.updateFoldersTask.delay(this.updateFolderRefreshTime);
         }
@@ -494,11 +512,23 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * delayed task function
      * - calls updateFolderStatus and updateMessageCache
      */
-    updateFolders: function() {
+    updateMessages: function() {
         var node = this.getSelectionModel().getSelectedNode();
         if (node) {
             this.updateMessageCache(node, false, true);
-            this.updateFolderStatus(true, node);
+            this.updateFolderStatus(true, node, true);
+        }
+        this.updateMessagesTask.delay(this.updateMessageRefreshTime);
+    },
+
+    /**
+     * delayed task function
+     * - calls updateFolderStatus
+     */
+    updateFolders: function() {
+        var node = this.getSelectionModel().getSelectedNode();
+        if (node) {
+            this.updateFolderStatus(true, node, false);
         }
         this.updateFoldersTask.delay(this.updateFolderRefreshTime);
     },
@@ -508,12 +538,12 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * @param {Boolean} multiple
      * @param {Ext.tree.AsyncTreeNode} node [optional]
+     * @param {Boolean} updateMessageCache
      * 
-     * TODO add custom exception / on failure / on timeout handler -> this should never show errors to the user
      * TODO make this work for multiple accounts ?
      * TODO get all visible nodes of active account ?
      */
-    updateFolderStatus: function(multiple, node) {
+    updateFolderStatus: function(multiple, node, updateMessageCache) {
         
         if (multiple) {
             // get all nodes on the same level with the active node
@@ -558,7 +588,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                         var updateNode = this.getNodeById(folderData[i][0].id);
                         
                         // trigger updateMessageCache if needed (only if not already updating / cache pedning or different unreadcounts)
-                        if (! updating && (updateNode.attributes.cache_status == 'pending' || updateNode.attributes.unreadcount != folderData[i][0].unreadcount)) {
+                        if (updateMessageCache && ! updating && (updateNode.attributes.cache_status == 'pending' || updateNode.attributes.unreadcount != folderData[i][0].unreadcount)) {
                             // calls updateUnreadCount if spomething changed
                             this.updateMessageCache(updateNode, false, true);
                             updating = true;
