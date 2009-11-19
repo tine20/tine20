@@ -206,24 +206,6 @@ Tine.Tinebase.tineInit = {
             return;
         }
         
-        // temporary handling for server side exceptions of http (html) window requests
-        if (window.exception) {
-            switch (exception.code) {
-                // autorisation required
-                case 401:
-                    Tine.Login.showLoginDialog(onLogin, Tine.Tinebase.registry.get('defaultUsername'), Tine.Tinebase.registry.get('defaultPassword'));
-                    return;
-                    break;
-                
-                // generic exception
-                default:
-                    // we need to wait to grab initialData from mainscreen
-                    //var win = new Tine.Tinebase.ExceptionDialog({});
-                    //win.show();
-                    return;
-                    break;
-            }
-        }
         // todo: find a better place for stuff to do after successfull login
         Tine.Tinebase.tineInit.initAppMgr();
         
