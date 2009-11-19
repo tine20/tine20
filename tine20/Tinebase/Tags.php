@@ -429,8 +429,8 @@ class Tinebase_Tags
         
         // check/create tag on the fly
         $tags = $this->_createTagsOnTheFly(array($_tag));
-        if (empty($tags)) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No tags created.');
+        if (empty($tags) || count($tags) == 0) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No tags created.');
             return;
         }
         $tagId = $tags->getFirstRecord()->getId();
