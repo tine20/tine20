@@ -18,7 +18,9 @@ Ext.namespace('Tine.Admin', 'Tine.Admin.Users');
  * @extends     Tine.widgets.dialog.EditDialog
  * 
  * <p>User Edit Dialog</p>
- * <p></p>
+ * <p>
+ * TODO         fix focus/tabs when password confirmation window is shown
+ * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -98,6 +100,11 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var confirmForm = this.passwordConfirmWindow.items.first().getForm();
         var confirmValues = confirmForm.getValues();
         var passwordField = this.getForm().findField('accountPassword');
+        
+        if (! passwordField) {
+            // oops: something went wrong, this should not happen
+            return;
+        }
         
         if (confirmValues.passwordRepeat != passwordField.getValue()) {
             passwordField.markInvalid(this.app.i18n._('Passwords do not match!'));
