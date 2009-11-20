@@ -259,6 +259,10 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             return;
         }
         
+        $eventBefore = new Admin_Event_BeforeDeleteGroup();
+        $eventBefore->groupIds = $_groupIds;
+        Tinebase_Event::fireEvent($eventBefore);
+        
         Tinebase_Group::getInstance()->deleteGroups($_groupIds);
         
         if ($this->_manageSAM) {
@@ -268,7 +272,6 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         $event = new Admin_Event_DeleteGroup();
         $event->groupIds = $_groupIds;
         Tinebase_Event::fireEvent($event);
-        
     }    
     
     /**

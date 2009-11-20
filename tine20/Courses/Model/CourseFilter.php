@@ -31,6 +31,7 @@ class Courses_Model_CourseFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'group_id'       => array('filter' => 'Tinebase_Model_Filter_Id'),
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', 'type'))),
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'courses.id')),
