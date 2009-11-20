@@ -17,7 +17,9 @@ Ext.namespace('Tine.Felamimail');
  * @extends     Ext.grid.GridPanel
  * 
  * <p>Attachment grid for compose dialog</p>
- * <p></p>
+ * <p>
+ * TODO         remove handlers / replace with onXXX
+ * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
