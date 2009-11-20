@@ -132,6 +132,12 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
      * specialised strings for delete action button
      */
     i18nDeleteActionText: null,
+    
+    /**
+     * @cfg {String} newRecordIcon 
+     * icon for adding new records button
+     */
+    newRecordIcon: null,
 
     /**
      * @cfg {Bool} i18nDeleteRecordAction 
@@ -279,7 +285,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(_('Add {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow,
-            iconCls: this.app.appName + 'IconCls',
+            iconCls: (this.newRecordIcon !== null) ? this.newRecordIcon : this.app.appName + 'IconCls',
             scope: this
         });
         
