@@ -65,6 +65,7 @@ Tine.Admin.Groups.Main = {
                             method: 'Admin.deleteGroups',
                             groupIds: groupIds
                         },
+                        scope: this,
                         text: this.translation.gettext('Deleting group(s)...'),
                         success: function(_result, _request){
                             Ext.getCmp('AdminGroupsGrid').getStore().reload();
