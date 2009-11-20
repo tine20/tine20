@@ -181,16 +181,11 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             && this.ftb.filterStore.getAt(0).get('field') == this.quickFilterField
             && !this.ftb.filterStore.getAt(0).formFields.value.getValue()
             && !this.alwaysBtn.pressed) {
-                
-            this.ftb.el.dom.style.display = 'none';
-        } else {
-            this.ftb.el.dom.style.display = '';
             
-            // fix strange FF layout problem
-            this.ftb.filterStore.getAt(0).formFields.value.syncSize();
+            this.ftb.hide();
+        } else {
+            this.ftb.show();
         }
-        
-        
     },
     
     /**
@@ -241,14 +236,6 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         } else {
             this.quickFilter.setValue(this.quickFilterRow.formFields.value.getValue());
         }
-    },
-    
-    /**
-     * show advanced filter regardless of quickfilter contents
-     */
-    toggleShowAdvancedFilter: function(btn) {
-        //console.log(btn.pressed);
-        //this.ftb.el.dom.style.display = '';
     },
     
     /**
