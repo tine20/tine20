@@ -114,7 +114,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
             passwordField.clearInvalid();
             
             // focus email field
-            this.getForm().findField('accountEmailAddress').focus(true, 500);
+            this.getForm().findField('accountEmailAddress').focus(true, 100);
         }
         
         this.passwordConfirmWindow.hide();
@@ -134,15 +134,13 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.passwordConfirmWindow = new Ext.Window({
             title: this.app.i18n._('Password confirmation'),
-            id: 'confirmPasswordWindow',
-            closeAction: 'close',
+            closeAction: 'hide',
             modal: true,
             width: 300,
             height: 130,
             layout: 'fit',
             plain: true,
             items: new Ext.FormPanel({
-                id: 'confirmPasswordPanel',
                 bodyStyle: 'padding:5px;',
                 buttonAlign: 'right',
                 labelAlign: 'top',
@@ -161,9 +159,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             if(event.getKey() == event.ENTER){
                                 this.onPasswordConfirm();
                             }
-                        },
-                        // TODO make this work correctly on show as well
-                        render: function(field){field.focus(true, 500);}
+                        }
                     }
                 }],
                 buttons: [{
@@ -179,8 +175,18 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     handler: this.onPasswordConfirm,
                     scope: this
                 }]
-            })
+            }),
+            listeners: {
+                scope: this,
+                show: function(win) {
+                    var confirmForm = this.passwordConfirmWindow.items.first().getForm();
+                    var confirmField = confirmForm.findField('passwordRepeat');
+                    
+                    confirmField.focus(true, 500);
+                }
+            }
         });
+        this.passwordConfirmWindow.render(document.body);
         
         return {
             xtype: 'tabpanel',
@@ -240,7 +246,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         if (fieldValue != '') {
                                             // show password confirmation
                                             // NOTE: we can't use Ext.Msg.prompt because field has to be of inputType: 'password'
-                                            this.passwordConfirmWindow.show();
+                                            this.passwordConfirmWindow.show.defer(100, this.passwordConfirmWindow);
                                         }
                                     }
                                 },
