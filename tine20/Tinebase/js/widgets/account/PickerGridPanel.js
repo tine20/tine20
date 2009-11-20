@@ -53,6 +53,12 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
     
     /**
      * @cfg {bool}
+     * add 'anyone' selection if selectType == 'both'
+     */
+    selectAnyone: true,
+
+    /**
+     * @cfg {bool}
      * enable bottom toolbar
      */
     enableBbar: true,
@@ -257,7 +263,10 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
         var items = [];
         switch (this.selectType) {
             case 'both':
-                items = items.concat([userActionCfg, groupActionCfg, anyoneActionCfg]);
+                items = items.concat([userActionCfg, groupActionCfg]);
+                if (this.selectAnyone) {
+                    items.push(anyoneActionCfg);
+                }
                 break;
             case 'user':
                 items = userActionCfg;
