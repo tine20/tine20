@@ -56,14 +56,14 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                         this.action_logout
                     ]                
                 }
-            }, {
+            }/*, {
                 text: _('Admin'),
                 id: 'Tinebase_System_AdminButton',
                 disabled: true,
                 menu: {
                     id: 'Tinebase_System_AdminMenu'
                 }     
-            },{
+            }*/,{
                 text: _('Preferences'),
                 id: 'Tinebase_System_PreferencesButton',
                 disabled: false,

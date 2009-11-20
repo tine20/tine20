@@ -742,17 +742,10 @@ Tine.Phone.Main = {
     /**
      * update main toolbar
      * 
-     * @todo what about the admin button?
-     * @todo adopt to new application pattern (see addressbook, tasks, ...)
+     * @deprecated
      */
     updateMainToolbar : function() 
     {
-        var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
-        menu.removeAll();
-
-        var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
-        adminButton.setIconClass('PhoneTreePanel');
-        adminButton.setDisabled(true);
     },
     
 	show: function(_node) 

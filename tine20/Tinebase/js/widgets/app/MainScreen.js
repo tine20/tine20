@@ -162,15 +162,9 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
     
     /**
      * updates main toolbar
+     * 
+     * @deprecated
      */
     updateMainToolbar : function() {
-        //if (! 'platform' in window) { // waits for more prism
-            var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
-            menu.removeAll();
-    
-            var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
-            adminButton.setDisabled(true);
-        //}
     }
-    
 });
