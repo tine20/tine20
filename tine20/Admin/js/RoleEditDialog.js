@@ -253,7 +253,8 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             title: this.translation.gettext('Members'),
             store: this.membersStore,
             anchor: '100% 100%',
-            selectType: 'both'
+            selectType: 'both',
+            selectAnyone: false
         });
         
         var tabPanelRights = {
