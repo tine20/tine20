@@ -94,7 +94,9 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
         this.idPrefix                   = Ext.id();
         this.authProviderIdPrefix       = this.idPrefix + '-authProvider-',
         this.accountsStorageIdPrefix    = this.idPrefix + '-accountsStorage-',
-        this.originalAccountsStorage    = Tine.Setup.registry.get(this.registryKey).accounts.backend;
+        this.originalAccountsStorage    = (Tine.Setup.registry.get(this.registryKey).accounts) 
+            ? Tine.Setup.registry.get(this.registryKey).accounts.backend
+            : 'Sql';
         
         Tine.Setup.AuthenticationPanel.superclass.initComponent.call(this);
     },
