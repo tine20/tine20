@@ -134,6 +134,9 @@ Tine.Crm.LinkGridPanel.initGrid = function() {
     this.cm = this.getColumnModel();
     
     this.selModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+    this.enableHdMenu = false;
+    this.plugins = this.plugins || [];
+    this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
 
     // on selectionchange handler
     this.selModel.on('selectionchange', function(sm) {
