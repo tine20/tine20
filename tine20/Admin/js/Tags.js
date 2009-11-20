@@ -466,7 +466,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.rightsPanel = new Tine.widgets.account.PickerGridPanel({
             title: this.translation.gettext('Account Rights'),
             store: this.rightsStore,
-            height: '100%',
+            //height: '100%',
             recordClass: Tine.Admin.Model.TagRight,
             hasAccountPrefix: true,
             selectType: 'both',
