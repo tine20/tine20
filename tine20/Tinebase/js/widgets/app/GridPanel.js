@@ -249,7 +249,6 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
                 listeners: {
                     scope: this,
                     afterlayout: function(ct) {
-                        console.log(ct);
                         ct.setHeight(this.filterToolbar.getHeight());
                         ct.ownerCt.layout.layout();
                     }
