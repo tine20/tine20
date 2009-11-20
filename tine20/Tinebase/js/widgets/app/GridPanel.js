@@ -242,7 +242,19 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         
         // add filter toolbar
         if (this.filterToolbar) {
-            this.items.push(this.filterToolbar);
+            this.items.push({
+                region: 'north',
+                border: false,
+                items: this.filterToolbar,
+                listeners: {
+                    scope: this,
+                    afterlayout: function(ct) {
+                        console.log(ct);
+                        ct.setHeight(this.filterToolbar.getHeight());
+                        ct.ownerCt.layout.layout();
+                    }
+                }
+            });
         }
 
     },
