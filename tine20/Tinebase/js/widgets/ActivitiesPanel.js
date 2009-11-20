@@ -538,9 +538,25 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
                                                 
         this.items = [        
             new Ext.Panel({
-                layout: 'fit',
-                tbar: filterToolbar,
-                items: this.activitiesGrid
+                layout: 'border',
+                items: [{
+                    region: 'center',
+                    xtype: 'panel',
+                    layout: 'fit',
+                    border: false,
+                    items: this.activitiesGrid
+                }, {
+                    region: 'north',
+                    border: false,
+                    items: filterToolbar,
+                    listeners: {
+                        scope: this,
+                        afterlayout: function(ct) {
+                            ct.setHeight(filterToolbar.getHeight());
+                            ct.ownerCt.layout.layout();
+                        }
+                    }
+                }]
             })
         ];
                 
