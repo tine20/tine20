@@ -62,6 +62,14 @@ class Felamimail_Setup_Update_Release2 extends Setup_Update_Abstract
     }
     
     /**
+     * 
+     */    
+    public function update_2()
+    {
+        // does nothing
+    }
+    
+    /**
      * - added cache status 'deleting'
      */    
     public function update_3()
