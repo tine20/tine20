@@ -538,7 +538,8 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
     onStoreLoad: function(store, records, options) {
         // we always focus the first row so that keynav starts in the grid
         if (this.store.getCount() > 0) {
-            this.grid.getView().focusRow(0);
+            // this resets scroller ;-(
+            //this.grid.getView().focusRow(0);
         }
     },
     
