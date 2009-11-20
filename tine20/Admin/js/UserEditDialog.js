@@ -112,6 +112,9 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         } else {
             passwordField.passwordsMatch = true;
             passwordField.clearInvalid();
+            
+            // focus email field
+            this.getForm().findField('accountEmailAddress').focus(true, 500);
         }
         
         this.passwordConfirmWindow.hide();
@@ -160,18 +163,18 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }
                         },
                         // TODO make this work correctly on show as well
-                        render: function(field){field.focus(true, 250);}
+                        render: function(field){field.focus(true, 500);}
                     }
                 }],
                 buttons: [{
-                    text: this.app.i18n._('Cancel'),
+                    text: _('Cancel'),
                     iconCls: 'action_cancel',
                     handler: function() {
                         this.passwordConfirmWindow.hide();
                     },
                     scope: this
                 }, {
-                    text: this.app.i18n._('Ok'),
+                    text: _('Ok'),
                     iconCls: 'action_saveAndClose',
                     handler: this.onPasswordConfirm,
                     scope: this
@@ -250,6 +253,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 		                        vtype: 'email',
 		                        fieldLabel: this.app.i18n._('Emailaddress'),
 		                        name: 'accountEmailAddress',
+                                id: 'accountEmailAddress',
 		                        columnWidth: .5
 		                    }, {
 		                        //vtype: 'email',
