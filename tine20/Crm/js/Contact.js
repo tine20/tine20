@@ -206,7 +206,6 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.tbar = new Ext.Panel({
             layout: 'fit',
-            width: '100%',
             items: [
                 // TODO perhaps we could add an icon/button (i.e. edit-find.png) here
                 new Tine.Crm.Contact.Combo({
