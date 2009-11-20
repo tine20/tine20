@@ -532,10 +532,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $part = $_imapMessage->getPart($partNumber);
                 $partHeaders = $part->getHeaders();
                 
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Attachment content-type: ' . $partHeaders['content-type']);
+                $contentType = (isset($partHeaders['content-type'])) ? $partHeaders['content-type'] : 'unknown';
+                
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Attachment content-type: ' . $contentType);
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($partHeaders, true));
 
-                if (preg_match('/message\/rfc822/', $partHeaders['content-type'])) {
+                if (preg_match('/message\/rfc822/', $contentType)) {
                     
                     /**************** split message/rfc822 attachment **********************/
                     
@@ -543,12 +545,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     
                     $rfcMessage = new Felamimail_Message(array('raw' => $this->_decodePartContent($part, $partHeaders)));
                     // add body to our message
-                    $_message->body = $_message->body . '<br/><hr/><br/>' . $this->_getBody($rfcMessage, $partHeaders['content-type']);
+                    $_message->body = $_message->body . '<br/><hr/><br/>' . $this->_getBody($rfcMessage, $contentType);
                     
                     // add attachments
                     $attachments = array_merge($attachments, $this->getAttachments($rfcMessage, $_message, $_folder, $partId));
                                          
-                } else if (preg_match('/multipart\/mixed/', $partHeaders['content-type'])) {
+                } else if (preg_match('/multipart\/mixed/', $contentType)) {
                     
                     /**************** split multipart/mixed again **************************/
                     
@@ -571,7 +573,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                         }
                     }
                     
-                } else if (isset($partHeaders['content-disposition']) || preg_match('/application\/pgp\-signature/', $partHeaders['content-type'])) {
+                } else if (isset($partHeaders['content-disposition']) || preg_match('/application\/pgp\-signature/', $contentType)) {
                     
                     /**************** add attachment part ***********************************/
                     
@@ -579,8 +581,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                    
                 } else {
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                        . ' Don\'t get attachment of content-type: ' 
-                        . ((isset($partHeaders['content-type'])) ? $partHeaders['content-type'] : 'unknown')
+                        . ' Don\'t get attachment of content-type: ' . $contentType
                     );
                 }
                 
