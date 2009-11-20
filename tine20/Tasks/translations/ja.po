@@ -20,7 +20,7 @@ msgstr ""
 msgid "Create new shared tasks lists"
 msgstr ""
 
-#: Controller/Task.php:157
+#: Controller/Task.php:158
 msgid "Notification for Task "
 msgstr ""
 
@@ -70,6 +70,10 @@ msgstr "完了"
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "選択されたタスクを本当に削除しますか？"
+
+#: js/GridPanel.js:90
+msgid "Quick search"
+msgstr ""
 
 #: js/GridPanel.js:92 js/GridPanel.js:178
 msgid "Due Date"

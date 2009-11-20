@@ -21,7 +21,7 @@ msgstr "gérer les listes de tâches partagées"
 msgid "Create new shared tasks lists"
 msgstr "Ajouter une liste de tâches partagées"
 
-#: Controller/Task.php:157
+#: Controller/Task.php:158
 msgid "Notification for Task "
 msgstr ""
 
@@ -72,6 +72,10 @@ msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Êtes-vous sûr de vouloir supprimer la tâche sélectionnée?"
 msgstr[1] "Êtes-vous sûr de vouloir supprimer les tâches sélectionnées?"
+
+#: js/GridPanel.js:90
+msgid "Quick search"
+msgstr ""
 
 #: js/GridPanel.js:92 js/GridPanel.js:178
 msgid "Due Date"

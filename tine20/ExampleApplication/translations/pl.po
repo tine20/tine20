@@ -21,8 +21,7 @@ msgstr "Przykładowe wiersze"
 msgid "All ExampleRecords"
 msgstr "Wszystkie przykładowe wiersze"
 
-#: js/ExampleRecordEditDialog.js:91 js/ExampleRecordGridPanel.js:87
-#: js/Models.js:50
+#: js/ExampleRecordEditDialog.js:91 js/Models.js:50
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
 msgstr[0] "Przykładowy wiersz"
@@ -80,6 +79,10 @@ msgstr "przelicz"
 #: js/ExampleRecordEditDialog.js:156
 msgid "billed"
 msgstr "przeliczone"
+
+#: js/ExampleRecordGridPanel.js:87
+msgid "Quick search"
+msgstr ""
 
 #: js/ExampleRecordGridPanel.js:88
 msgid "Description"

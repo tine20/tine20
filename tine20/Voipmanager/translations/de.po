@@ -31,12 +31,13 @@ msgstr "Name"
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/Asterisk/ContextGridPanel.js:51 js/Asterisk/SipPeerEditDialog.js:56
-#: js/Asterisk/VoicemailEditDialog.js:56 js/Models.js:497 js/Voipmanager.js:53
-msgid "Context"
-msgid_plural "Contexts"
-msgstr[0] "Kontext"
-msgstr[1] "Kontext"
+#: js/Asterisk/ContextGridPanel.js:51 js/Asterisk/MeetmeGridPanel.js:51
+#: js/Asterisk/SipPeerGridPanel.js:50 js/Asterisk/VoicemailGridPanel.js:51
+#: js/Snom/LocationGridPanel.js:50 js/Snom/PhoneGridPanel.js:67
+#: js/Snom/SettingGridPanel.js:51 js/Snom/SoftwareGridPanel.js:51
+#: js/Snom/TemplateGridPanel.js:51
+msgid "Quick search"
+msgstr ""
 
 #: js/Asterisk/ContextGridPanel.js:69 js/Asterisk/MeetmeGridPanel.js:69
 #: js/Asterisk/VoicemailGridPanel.js:69 js/Snom/LocationGridPanel.js:124
@@ -56,15 +57,16 @@ msgstr "Pin"
 msgid "adminpin"
 msgstr "Admin-Pin"
 
-#: js/Asterisk/MeetmeGridPanel.js:51 js/Models.js:588 js/Voipmanager.js:73
-msgid "Meetme"
-msgid_plural "Meetmes"
-msgstr[0] "Meetme"
-msgstr[1] "Meetmes"
-
 #: js/Asterisk/SipPeerEditDialog.js:41 js/Asterisk/VoicemailEditDialog.js:42
 msgid "General"
 msgstr "Allgemeines"
+
+#: js/Asterisk/SipPeerEditDialog.js:56 js/Asterisk/VoicemailEditDialog.js:56
+#: js/Models.js:497 js/Voipmanager.js:53
+msgid "Context"
+msgid_plural "Contexts"
+msgstr[0] "Kontext"
+msgstr[1] "Kontext"
 
 #: js/Asterisk/SipPeerEditDialog.js:68
 msgid "Type"
@@ -141,10 +143,6 @@ msgstr "ein"
 #: js/Asterisk/SipPeerEditDialog.js:143
 msgid "Qualify"
 msgstr "Qualify"
-
-#: js/Asterisk/SipPeerGridPanel.js:50
-msgid "Sip Peer"
-msgstr "Sip Peer"
 
 #: js/Asterisk/SipPeerGridPanel.js:70 js/Snom/PhoneGridPanel.js:85
 #: js/Snom/SettingGridPanel.js:69
@@ -424,17 +422,11 @@ msgstr "Force Greetings"
 msgid "hidefromdir"
 msgstr "Hide From Dir"
 
-#: js/Asterisk/VoicemailGridPanel.js:51 js/Models.js:553 js/Voipmanager.js:63
-msgid "Voicemail"
-msgid_plural "Voicemails"
-msgstr[0] "Voicemail"
-msgstr[1] "Voicemail"
-
 #: js/Asterisk/VoicemailGridPanel.js:88
 msgid "fullname"
 msgstr "Name"
 
-#: js/Models.js:82 js/Snom/PhoneEditDialog.js:270 js/Snom/PhoneGridPanel.js:67
+#: js/Models.js:82 js/Snom/PhoneEditDialog.js:270
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
@@ -446,8 +438,7 @@ msgid_plural "phones lists"
 msgstr[0] "Telefonliste"
 msgstr[1] "Telefonlisten"
 
-#: js/Models.js:133 js/Snom/LocationGridPanel.js:50
-#: js/Snom/PhoneGridPanel.js:103 js/Voipmanager.js:116
+#: js/Models.js:133 js/Snom/PhoneGridPanel.js:103 js/Voipmanager.js:116
 msgid "Location"
 msgid_plural "Locations"
 msgstr[0] "Standort"
@@ -460,7 +451,6 @@ msgstr[0] "Standortliste"
 msgstr[1] "Standortlisten"
 
 #: js/Models.js:170 js/Snom/PhoneGridPanel.js:112
-#: js/Snom/TemplateGridPanel.js:51
 msgid "Template"
 msgid_plural "Templates"
 msgstr[0] "Vorlage"
@@ -472,8 +462,7 @@ msgid_plural "templates lists"
 msgstr[0] "Vorlagenliste"
 msgstr[1] "Vorlagenlisten"
 
-#: js/Models.js:208 js/Snom/PhoneGridPanel.js:127
-#: js/Snom/SoftwareGridPanel.js:51 js/Voipmanager.js:157
+#: js/Models.js:208 js/Snom/PhoneGridPanel.js:127 js/Voipmanager.js:157
 msgid "Software"
 msgid_plural "Softwares"
 msgstr[0] "Software"
@@ -509,7 +498,7 @@ msgid_plural "lines lists"
 msgstr[0] "lines list"
 msgstr[1] "lines lists"
 
-#: js/Models.js:336 js/Snom/SettingGridPanel.js:51 js/Voipmanager.js:147
+#: js/Models.js:336 js/Voipmanager.js:147
 msgid "Setting"
 msgid_plural "Settings"
 msgstr[0] "Einstellung"
@@ -551,11 +540,23 @@ msgid_plural "contexts lists"
 msgstr[0] "Kontext Liste"
 msgstr[1] "Kontext Listen"
 
+#: js/Models.js:553 js/Voipmanager.js:63
+msgid "Voicemail"
+msgid_plural "Voicemails"
+msgstr[0] "Voicemail"
+msgstr[1] "Voicemail"
+
 #: js/Models.js:557
 msgid "voicemails list"
 msgid_plural "voicemails lists"
 msgstr[0] "Voicemail Liste"
 msgstr[1] "Voicemail Listen"
+
+#: js/Models.js:588 js/Voipmanager.js:73
+msgid "Meetme"
+msgid_plural "Meetmes"
+msgstr[0] "Meetme"
+msgstr[1] "Meetmes"
 
 #: js/Models.js:592
 msgid "meetmes list"
@@ -950,6 +951,9 @@ msgstr "Telefone"
 #: js/Voipmanager.js:126
 msgid "Templates"
 msgstr "Vorlagen"
+
+#~ msgid "Sip Peer"
+#~ msgstr "Sip Peer"
 
 #~ msgid "Rights"
 #~ msgstr "Rechte"

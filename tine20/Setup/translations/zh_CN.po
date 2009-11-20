@@ -69,157 +69,149 @@ msgstr ""
 msgid "This may take a while"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:258
-msgid "Shit"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:258
-msgid "Where are the backup tapes"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:266
+#: js/ApplicationGridPanel.js:262
 msgid "Dependency Violation"
 msgstr ""
 
-#: js/AuthenticationPanel.js:119
+#: js/AuthenticationPanel.js:121
 msgid "Delete all existing users and groups"
 msgstr ""
 
-#: js/AuthenticationPanel.js:119
+#: js/AuthenticationPanel.js:121
 msgid ""
 "Switching from SQL to LDAP will delete all existing User Accounts, Groups "
 "and Roles. Do you really want to switch the accounts storage backend to "
 "LDAP ?"
 msgstr ""
 
-#: js/AuthenticationPanel.js:169 js/AuthenticationPanel.js:189
+#: js/AuthenticationPanel.js:171 js/AuthenticationPanel.js:191
 #: js/EmailPanel.js:156
 msgid "Backend"
 msgstr ""
 
-#: js/AuthenticationPanel.js:202
+#: js/AuthenticationPanel.js:204
 msgid "Authentication provider"
 msgstr ""
 
-#: js/AuthenticationPanel.js:225
+#: js/AuthenticationPanel.js:227
 msgid "Initial admin login name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:229
+#: js/AuthenticationPanel.js:231
 msgid "Initial admin Password"
 msgstr ""
 
-#: js/AuthenticationPanel.js:233
+#: js/AuthenticationPanel.js:235
 msgid "Password confirmation"
 msgstr ""
 
-#: js/AuthenticationPanel.js:247 js/AuthenticationPanel.js:333
+#: js/AuthenticationPanel.js:249 js/AuthenticationPanel.js:335
 msgid "Host"
 msgstr ""
 
-#: js/AuthenticationPanel.js:252 js/AuthenticationPanel.js:338
+#: js/AuthenticationPanel.js:254 js/AuthenticationPanel.js:340
 msgid "Login name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:255 js/AuthenticationPanel.js:341
+#: js/AuthenticationPanel.js:257 js/AuthenticationPanel.js:343
 #: js/ConfigManagerPanel.js:69 js/ConfigManagerPanel.js:100
 #: js/EmailPanel.js:196 js/EmailPanel.js:287
 msgid "Password"
 msgstr ""
 
-#: js/AuthenticationPanel.js:268 js/AuthenticationPanel.js:354
+#: js/AuthenticationPanel.js:270 js/AuthenticationPanel.js:356
 msgid "Bind requires DN"
 msgstr ""
 
-#: js/AuthenticationPanel.js:272
+#: js/AuthenticationPanel.js:274
 msgid "Base DN"
 msgstr ""
 
-#: js/AuthenticationPanel.js:275
+#: js/AuthenticationPanel.js:277
 msgid "Account canonical form"
 msgstr ""
 
-#: js/AuthenticationPanel.js:283
+#: js/AuthenticationPanel.js:285
 msgid "Accounts storage"
 msgstr ""
 
-#: js/AuthenticationPanel.js:304 js/AuthenticationPanel.js:408
+#: js/AuthenticationPanel.js:306 js/AuthenticationPanel.js:410
 msgid "Default user group name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:307 js/AuthenticationPanel.js:411
+#: js/AuthenticationPanel.js:309 js/AuthenticationPanel.js:413
 msgid "Default admin group name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:319
+#: js/AuthenticationPanel.js:321
 msgid "User can change password"
 msgstr ""
 
-#: js/AuthenticationPanel.js:358
+#: js/AuthenticationPanel.js:360
 msgid "User DN"
 msgstr ""
 
-#: js/AuthenticationPanel.js:361
+#: js/AuthenticationPanel.js:363
 msgid "Groups DN"
 msgstr ""
 
-#: js/AuthenticationPanel.js:373
+#: js/AuthenticationPanel.js:375
 msgid "Password encoding"
 msgstr ""
 
-#: js/AuthenticationPanel.js:386
+#: js/AuthenticationPanel.js:388
 msgid "Use Rfc 2307 bis"
 msgstr ""
 
-#: js/AuthenticationPanel.js:390
+#: js/AuthenticationPanel.js:392
 msgid "Min User Id"
 msgstr ""
 
-#: js/AuthenticationPanel.js:393
+#: js/AuthenticationPanel.js:395
 msgid "Max User Id"
 msgstr ""
 
-#: js/AuthenticationPanel.js:396
+#: js/AuthenticationPanel.js:398
 msgid "Min Group Id"
 msgstr ""
 
-#: js/AuthenticationPanel.js:399
+#: js/AuthenticationPanel.js:401
 msgid "Max Group Id"
 msgstr ""
 
-#: js/AuthenticationPanel.js:402
+#: js/AuthenticationPanel.js:404
 msgid "Group UUID Attribute name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:405
+#: js/AuthenticationPanel.js:407
 msgid "User UUID Attribute name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:423
+#: js/AuthenticationPanel.js:425
 msgid "Allow user to change her password?"
 msgstr ""
 
-#: js/AuthenticationPanel.js:432
+#: js/AuthenticationPanel.js:434
 msgid "Redirect Settings"
 msgstr ""
 
-#: js/AuthenticationPanel.js:440
+#: js/AuthenticationPanel.js:442
 msgid "Redirect Url (after Logout, redirect to login screen if empty)"
 msgstr ""
 
-#: js/AuthenticationPanel.js:451
+#: js/AuthenticationPanel.js:453
 msgid "Redirect to referring site, if exists"
 msgstr ""
 
-#: js/AuthenticationPanel.js:464
+#: js/AuthenticationPanel.js:466
 msgid "Save config and install"
 msgstr ""
 
-#: js/AuthenticationPanel.js:466
+#: js/AuthenticationPanel.js:468
 msgid "Save config"
 msgstr ""
 
-#: js/AuthenticationPanel.js:487
+#: js/AuthenticationPanel.js:489
 msgid "Passwords don't match"
 msgstr ""
 

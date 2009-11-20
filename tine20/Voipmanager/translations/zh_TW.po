@@ -29,11 +29,13 @@ msgstr "姓名"
 msgid "Description"
 msgstr "說明"
 
-#: js/Asterisk/ContextGridPanel.js:51 js/Asterisk/SipPeerEditDialog.js:56
-#: js/Asterisk/VoicemailEditDialog.js:56 js/Models.js:497 js/Voipmanager.js:53
-msgid "Context"
-msgid_plural "Contexts"
-msgstr[0] "內文"
+#: js/Asterisk/ContextGridPanel.js:51 js/Asterisk/MeetmeGridPanel.js:51
+#: js/Asterisk/SipPeerGridPanel.js:50 js/Asterisk/VoicemailGridPanel.js:51
+#: js/Snom/LocationGridPanel.js:50 js/Snom/PhoneGridPanel.js:67
+#: js/Snom/SettingGridPanel.js:51 js/Snom/SoftwareGridPanel.js:51
+#: js/Snom/TemplateGridPanel.js:51
+msgid "Quick search"
+msgstr ""
 
 #: js/Asterisk/ContextGridPanel.js:69 js/Asterisk/MeetmeGridPanel.js:69
 #: js/Asterisk/VoicemailGridPanel.js:69 js/Snom/LocationGridPanel.js:124
@@ -53,14 +55,15 @@ msgstr "識別碼"
 msgid "adminpin"
 msgstr "管理者識別碼"
 
-#: js/Asterisk/MeetmeGridPanel.js:51 js/Models.js:588 js/Voipmanager.js:73
-msgid "Meetme"
-msgid_plural "Meetmes"
-msgstr[0] ""
-
 #: js/Asterisk/SipPeerEditDialog.js:41 js/Asterisk/VoicemailEditDialog.js:42
 msgid "General"
 msgstr "一般"
+
+#: js/Asterisk/SipPeerEditDialog.js:56 js/Asterisk/VoicemailEditDialog.js:56
+#: js/Models.js:497 js/Voipmanager.js:53
+msgid "Context"
+msgid_plural "Contexts"
+msgstr[0] "內文"
 
 #: js/Asterisk/SipPeerEditDialog.js:68
 msgid "Type"
@@ -137,10 +140,6 @@ msgstr "開"
 #: js/Asterisk/SipPeerEditDialog.js:143
 msgid "Qualify"
 msgstr "品質"
-
-#: js/Asterisk/SipPeerGridPanel.js:50
-msgid "Sip Peer"
-msgstr ""
 
 #: js/Asterisk/SipPeerGridPanel.js:70 js/Snom/PhoneGridPanel.js:85
 #: js/Snom/SettingGridPanel.js:69
@@ -420,16 +419,11 @@ msgstr ""
 msgid "hidefromdir"
 msgstr ""
 
-#: js/Asterisk/VoicemailGridPanel.js:51 js/Models.js:553 js/Voipmanager.js:63
-msgid "Voicemail"
-msgid_plural "Voicemails"
-msgstr[0] "語音郵件"
-
 #: js/Asterisk/VoicemailGridPanel.js:88
 msgid "fullname"
 msgstr "全名"
 
-#: js/Models.js:82 js/Snom/PhoneEditDialog.js:270 js/Snom/PhoneGridPanel.js:67
+#: js/Models.js:82 js/Snom/PhoneEditDialog.js:270
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "電話"
@@ -439,8 +433,7 @@ msgid "phones list"
 msgid_plural "phones lists"
 msgstr[0] ""
 
-#: js/Models.js:133 js/Snom/LocationGridPanel.js:50
-#: js/Snom/PhoneGridPanel.js:103 js/Voipmanager.js:116
+#: js/Models.js:133 js/Snom/PhoneGridPanel.js:103 js/Voipmanager.js:116
 msgid "Location"
 msgid_plural "Locations"
 msgstr[0] "地點"
@@ -451,7 +444,6 @@ msgid_plural "locations lists"
 msgstr[0] "地點清單"
 
 #: js/Models.js:170 js/Snom/PhoneGridPanel.js:112
-#: js/Snom/TemplateGridPanel.js:51
 msgid "Template"
 msgid_plural "Templates"
 msgstr[0] "樣板"
@@ -461,8 +453,7 @@ msgid "templates list"
 msgid_plural "templates lists"
 msgstr[0] "樣板清單"
 
-#: js/Models.js:208 js/Snom/PhoneGridPanel.js:127
-#: js/Snom/SoftwareGridPanel.js:51 js/Voipmanager.js:157
+#: js/Models.js:208 js/Snom/PhoneGridPanel.js:127 js/Voipmanager.js:157
 msgid "Software"
 msgid_plural "Softwares"
 msgstr[0] "軟體"
@@ -492,7 +483,7 @@ msgid "lines list"
 msgid_plural "lines lists"
 msgstr[0] ""
 
-#: js/Models.js:336 js/Snom/SettingGridPanel.js:51 js/Voipmanager.js:147
+#: js/Models.js:336 js/Voipmanager.js:147
 msgid "Setting"
 msgid_plural "Settings"
 msgstr[0] "設定"
@@ -527,9 +518,19 @@ msgid "contexts list"
 msgid_plural "contexts lists"
 msgstr[0] ""
 
+#: js/Models.js:553 js/Voipmanager.js:63
+msgid "Voicemail"
+msgid_plural "Voicemails"
+msgstr[0] "語音郵件"
+
 #: js/Models.js:557
 msgid "voicemails list"
 msgid_plural "voicemails lists"
+msgstr[0] ""
+
+#: js/Models.js:588 js/Voipmanager.js:73
+msgid "Meetme"
+msgid_plural "Meetmes"
 msgstr[0] ""
 
 #: js/Models.js:592

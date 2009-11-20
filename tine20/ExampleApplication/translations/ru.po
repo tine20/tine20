@@ -21,8 +21,7 @@ msgstr "ЗаписиПримеры"
 msgid "All ExampleRecords"
 msgstr "Все ЗаписиПримеры"
 
-#: js/ExampleRecordEditDialog.js:91 js/ExampleRecordGridPanel.js:87
-#: js/Models.js:50
+#: js/ExampleRecordEditDialog.js:91 js/Models.js:50
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
 msgstr[0] "ЗаписьПример"
@@ -80,6 +79,10 @@ msgstr "к оплате"
 #: js/ExampleRecordEditDialog.js:156
 msgid "billed"
 msgstr "оплачен"
+
+#: js/ExampleRecordGridPanel.js:87
+msgid "Quick search"
+msgstr ""
 
 #: js/ExampleRecordGridPanel.js:88
 msgid "Description"

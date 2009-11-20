@@ -64,37 +64,37 @@ msgstr "Vytvořil(a)"
 msgid "Activities"
 msgstr "Činnosti"
 
-#: Frontend/Http.php:537 js/tineInit.js:392
+#: Frontend/Http.php:539 js/ExceptionHandler.js:132
 msgid "Authorisation Required"
 msgstr "Je vyžadována autorizace"
 
-#: Frontend/Http.php:538
+#: Frontend/Http.php:540
 msgid "Your session is not valid. You need to login again."
 msgstr "Vaše relace je neplatná. Musíte se přihlásit znovu."
 
-#: Frontend/Http.php:564 js/ExceptionDialog.js:46
+#: Frontend/Http.php:566 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Abnormální ukončení"
 
-#: Frontend/Http.php:565 js/ExceptionDialog.js:71
+#: Frontend/Http.php:567 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo k chybě, program se neukončil korektně."
 
-#: js/common.js:139
+#: js/common.js:144
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} minuta"
 msgstr[1] "{0} minuty"
 msgstr[2] "{0} minut"
 
-#: js/common.js:140
+#: js/common.js:145
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} hodina"
 msgstr[1] "{0} hodiny"
 msgstr[2] "{0} hodin"
 
-#: js/common.js:141
+#: js/common.js:146
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} pracovní den"
@@ -119,7 +119,7 @@ msgstr[2] "seznamů úkolů"
 #: js/widgets/container/ContainerSelect.js:373
 #: js/widgets/dialog/EditDialog.js:193
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
-#: js/widgets/tags/TagsMassAttachAction.js:70
+#: js/widgets/tags/TagsMassAttachAction.js:79
 msgid "Cancel"
 msgstr "Storno"
 
@@ -172,58 +172,142 @@ msgstr "Vaše hlášení bylo odesláno. Děkujeme za Vaši spolupráci."
 msgid "Please restart your browser now!"
 msgstr "Nyní prosím zrestartujte svůj prohlížeč!"
 
-#: js/Login.js:40
+#: js/ExceptionHandler.js:126
+msgid "Connection lost, please check your network!"
+msgstr "Spojení přerušeno, zkontrolujte prosím Vaší síť."
+
+#: js/ExceptionHandler.js:133
+msgid "Your session timed out. You need to login again."
+msgstr "Vaše relace vypršela. Musíte se přihlásit znovu."
+
+#: js/ExceptionHandler.js:150
+msgid "Insufficient Rights"
+msgstr "Nedostatečná oprávnění"
+
+#: js/ExceptionHandler.js:151
+msgid "Sorry, you are not permitted to perform this action"
+msgstr "Lituji, nemáte oprávnění k této akci."
+
+#: js/ExceptionHandler.js:160
+msgid "Not Found"
+msgstr "Nebylo nalezeno"
+
+#: js/ExceptionHandler.js:161
+msgid ""
+"Sorry, your request could not be completed because the required data could "
+"not be found. In most cases this means that someone already deleted the "
+"data. Please refresh your current view."
+msgstr ""
+"Lituji, Váš požadavek nemohl být dokončen protože požadovaná data nebyla "
+"nalezena. Ve většině případů to znamená, že je někdo již smazal. Obnovte "
+"prosím aktuální zobrazení."
+
+#: js/ExceptionHandler.js:170
+msgid "Concurrent Updates"
+msgstr "Kolidující aktualizace"
+
+#: js/ExceptionHandler.js:171
+msgid ""
+"Someone else saved this record while you where editing the data. You need to "
+"reload and make your changes again."
+msgstr ""
+"Někdo jiný záznam uložil v době, kdy jste editoval(a) údaje. Musíte záznam "
+"znovu načíst a opětovně provést Vaše změny."
+
+#: js/LoginPanel.js:72 js/LoginPanel.js:104
 msgid "Login"
 msgstr "Přihlásit"
 
-#: js/Login.js:47
-msgid "Register"
-msgstr "Registrovat"
-
-#: js/Login.js:61 js/Login.js:99
-msgid "Please enter your login data"
-msgstr "Zadejte prosím Vaše přihlašovací údaje"
-
-#: js/Login.js:79 js/widgets/dialog/CredentialsDialog.js:76
+#: js/LoginPanel.js:80 js/widgets/dialog/CredentialsDialog.js:76
 msgid "Username"
 msgstr "Uživatelské jméno"
 
-#: js/Login.js:86 js/widgets/dialog/CredentialsDialog.js:80
+#: js/LoginPanel.js:91 js/widgets/dialog/CredentialsDialog.js:80
 msgid "Password"
 msgstr "Heslo"
 
-#: js/Login.js:127
+#: js/LoginPanel.js:123
+msgid "Tine 2.0 is made for you"
+msgstr ""
+
+#: js/LoginPanel.js:125
+msgid ""
+"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
+"for your needs! So you are warmly welcome to discuss with us, bring in ideas "
+"and get help."
+msgstr ""
+
+#: js/LoginPanel.js:130
+msgid "Tine 2.0 Homepage"
+msgstr ""
+
+#: js/LoginPanel.js:132
+msgid "Our Forum for questions and ideas"
+msgstr ""
+
+#: js/LoginPanel.js:175
+msgid "about {0} minutes"
+msgstr ""
+
+#: js/LoginPanel.js:180 js/LoginPanel.js:374
+msgid "Tine 2.0 needs your help"
+msgstr ""
+
+#: js/LoginPanel.js:182 js/LoginPanel.js:376
+msgid ""
+"We regularly need your feedback to make the next Tine 2.0 releases fit your "
+"needs even better. Help us and yourself by participating:"
+msgstr ""
+
+#: js/LoginPanel.js:188
+msgid "participate!"
+msgstr ""
+
+#: js/LoginPanel.js:210
+msgid "Languages"
+msgstr ""
+
+#: js/LoginPanel.js:211
+#, fuzzy
+msgid "Duration"
+msgstr "Popis"
+
+#: js/LoginPanel.js:324
 msgid "Logging you in..."
 msgstr "Přihlašuji Vás..."
 
-#: js/Login.js:127 js/widgets/container/GrantsDialog.js:141
+#: js/LoginPanel.js:324 js/widgets/container/GrantsDialog.js:138
 #: js/widgets/grid/PersistentFilterPicker.js:126
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:140
 msgid "Please wait"
 msgstr "Čekejte prosím"
 
-#: js/Login.js:139
+#: js/LoginPanel.js:336
 msgid "Login successful. Loading {0}..."
 msgstr "Přihlášení bylo úspěšné. Načítám {0}..."
 
-#: js/Login.js:139 js/MainScreen.js:534
+#: js/LoginPanel.js:336 js/MainScreen.js:534
 msgid "Please wait!"
 msgstr "Čekejte prosím!"
 
-#: js/Login.js:145
+#: js/LoginPanel.js:341
 msgid "Login failure"
 msgstr "Chybné přihlášení"
 
-#: js/Login.js:146
+#: js/LoginPanel.js:342
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Vaše uživatelské jméno a/nebo heslo je chybné!!!"
+
+#: js/LoginPanel.js:366
+msgid "Please enter your login data"
+msgstr "Zadejte prosím Vaše přihlašovací údaje"
 
 #: js/MainScreen.js:52
 msgid "Debug Console (Ctrl + F11)"
 msgstr "Ladící konzole (Ctrl + F11)"
 
-#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:112
+#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:117
 msgid "Admin"
 msgstr "Administrace"
 
@@ -288,7 +372,7 @@ msgstr "Zopakujte nové heslo"
 #: js/MainScreen.js:455 js/widgets/container/ContainerSelect.js:382
 #: js/widgets/dialog/EditDialog.js:176
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
-#: js/widgets/tags/TagsMassAttachAction.js:76
+#: js/widgets/tags/TagsMassAttachAction.js:85
 msgid "Ok"
 msgstr "OK"
 
@@ -324,8 +408,8 @@ msgstr ""
 "Instalace Google Gears zvýší výkon Tine 2.0 diky lokálnímu kešování všech "
 "potřebných souborů na tomto počítači."
 
-#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:648
-#: js/widgets/dialog/EditDialog.js:451
+#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:678
+#: js/widgets/dialog/EditDialog.js:446
 #: js/widgets/grid/PersistentFilterPicker.js:124
 #: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
@@ -364,69 +448,7 @@ msgstr[0] "Vztah"
 msgstr[1] "Vztahy"
 msgstr[2] "Vztahů"
 
-#: js/tineInit.js:363
-msgid "Connection lost, please check your network!"
-msgstr "Spojení přerušeno, zkontrolujte prosím Vaší síť."
-
-#: js/tineInit.js:372
-msgid ""
-"The server did not respond to your request. Please check your network or "
-"contact your administrator."
-msgstr ""
-"Server neodpověděl na Váš požadavek. Zkontrolujte prosím své síťové "
-"připojení nebo kontaktujte administrátora."
-
-#: js/tineInit.js:374
-msgid "No response"
-msgstr "Žádná odpověď"
-
-#: js/tineInit.js:375
-msgid ""
-"We did not receive a response from the server. Your network could be down or "
-"a timeout occurred."
-msgstr ""
-"Neobdrželi jsme žádnou odpověď ze serveru. Můžete mít problém na síti nebo "
-"byl překročen časový limit."
-
-#: js/tineInit.js:393
-msgid "Your session timed out. You need to login again."
-msgstr "Vaše relace vypršela. Musíte se přihlásit znovu."
-
-#: js/tineInit.js:406
-msgid "Insufficient Rights"
-msgstr "Nedostatečná oprávnění"
-
-#: js/tineInit.js:407
-msgid "Sorry, you are not permitted to perform this action"
-msgstr "Lituji, nemáte oprávnění k této akci."
-
-#: js/tineInit.js:416
-msgid "Not Found"
-msgstr "Nebylo nalezeno"
-
-#: js/tineInit.js:417
-msgid ""
-"Sorry, your request could not be completed because the required data could "
-"not be found. In most cases this means that someone already deleted the "
-"data. Please refresh your current view."
-msgstr ""
-"Lituji, Váš požadavek nemohl být dokončen protože požadovaná data nebyla "
-"nalezena. Ve většině případů to znamená, že je někdo již smazal. Obnovte "
-"prosím aktuální zobrazení."
-
-#: js/tineInit.js:426
-msgid "Concurrent Updates"
-msgstr "Kolidující aktualizace"
-
-#: js/tineInit.js:427
-msgid ""
-"Someone else saved this record while you where editing the data. You need to "
-"reload and make your changes again."
-msgstr ""
-"Někdo jiný záznam uložil v době, kdy jste editoval(a) údaje. Musíte záznam "
-"znovu načíst a opětovně provést Vaše změny."
-
-#: js/tineInit.js:686
+#: js/tineInit.js:552
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
@@ -551,39 +573,39 @@ msgstr "Vybrat všechny stránky  ({0} záznamů)"
 msgid "Toggle selection"
 msgstr "Invertovat výběr"
 
-#: js/widgets/account/PickerGridPanel.js:161
+#: js/widgets/account/PickerGridPanel.js:167
 msgid "Remove account"
 msgstr "Odstranit účet"
 
-#: js/widgets/account/PickerGridPanel.js:225
+#: js/widgets/account/PickerGridPanel.js:231
 #, fuzzy
 msgid "Search User"
 msgstr "Hledat"
 
-#: js/widgets/account/PickerGridPanel.js:231
+#: js/widgets/account/PickerGridPanel.js:237
 #, fuzzy
 msgid "Search Group"
 msgstr "Hledat"
 
-#: js/widgets/account/PickerGridPanel.js:237
+#: js/widgets/account/PickerGridPanel.js:243
 #, fuzzy
 msgid "Add Anyone"
 msgstr "Přidat poznámku"
 
-#: js/widgets/account/PickerGridPanel.js:245
+#: js/widgets/account/PickerGridPanel.js:251
 #, fuzzy
 msgid "Anyone"
 msgstr "poznámka"
 
-#: js/widgets/account/PickerGridPanel.js:289
+#: js/widgets/account/PickerGridPanel.js:298
 msgid "Search for users ..."
 msgstr "Hledat uživatele..."
 
-#: js/widgets/account/PickerGridPanel.js:309
+#: js/widgets/account/PickerGridPanel.js:318
 msgid "Search for groups ..."
 msgstr "Hledat skupiny..."
 
-#: js/widgets/account/PickerGridPanel.js:363
+#: js/widgets/account/PickerGridPanel.js:372
 msgid "Name"
 msgstr "Jméno"
 
@@ -592,12 +614,11 @@ msgid "Add a Note..."
 msgstr "Přidat poznámku..."
 
 #: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:168
-#: js/widgets/container/GrantsDialog.js:94
+#: js/widgets/container/GrantsDialog.js:99
 msgid "Add"
 msgstr "Přidat"
 
 #: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:396
-#: js/widgets/ActivitiesPanel.js:523
 msgid "Note"
 msgstr "Poznámka"
 
@@ -645,6 +666,10 @@ msgstr "Žádná historie ke zobrazení"
 msgid "History"
 msgstr "Historie"
 
+#: js/widgets/ActivitiesPanel.js:523
+msgid "Quick search"
+msgstr ""
+
 #: js/widgets/ActivitiesPanel.js:524 js/widgets/ActivitiesPanel.js:525
 msgid "Time"
 msgstr "Čas"
@@ -653,35 +678,35 @@ msgstr "Čas"
 msgid "User"
 msgstr "Uživatel"
 
-#: js/widgets/app/GridPanel.js:256
+#: js/widgets/app/GridPanel.js:275
 msgid "Edit {0}"
 msgstr "Editovat {0}"
 
-#: js/widgets/app/GridPanel.js:267 js/widgets/tree/ContextMenu.js:214
+#: js/widgets/app/GridPanel.js:286 js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
 msgstr "Přidat {0}"
 
-#: js/widgets/app/GridPanel.js:277 js/widgets/app/GridPanel.js:278
-#: js/widgets/app/GridPanel.js:280
+#: js/widgets/app/GridPanel.js:296 js/widgets/app/GridPanel.js:297
+#: js/widgets/app/GridPanel.js:299
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Smazat {0}"
 msgstr[1] "Smazat {0}"
 msgstr[2] "Smazat {0}"
 
-#: js/widgets/app/GridPanel.js:300
+#: js/widgets/app/GridPanel.js:319
 msgid "Tagging"
 msgstr "Štítkování"
 
-#: js/widgets/app/GridPanel.js:376
+#: js/widgets/app/GridPanel.js:395
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Zobrazuji záznamy {0} - {1} z {2}"
 
-#: js/widgets/app/GridPanel.js:377
+#: js/widgets/app/GridPanel.js:396
 msgid "No {0} to display"
 msgstr "Žádné {0} ke zobrazení"
 
-#: js/widgets/app/GridPanel.js:398
+#: js/widgets/app/GridPanel.js:417
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -689,36 +714,36 @@ msgstr ""
 "Nebyly nalezeny žádné {0}. Zkuste prosím změnit kritéria filtru, volby "
 "zobrazování nebo {1} ve kterém hledáte."
 
-#: js/widgets/app/GridPanel.js:633
+#: js/widgets/app/GridPanel.js:663
 msgid "Not Allowed"
 msgstr "Není povoleno"
 
-#: js/widgets/app/GridPanel.js:634
+#: js/widgets/app/GridPanel.js:664
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nemáte oprávnění smazat všechny stránky najednou."
 
-#: js/widgets/app/GridPanel.js:646
+#: js/widgets/app/GridPanel.js:676
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Opravdu chcete smazat vybraný záznam"
 msgstr[1] "Opravdu chcete smazat vybrané záznamy"
 msgstr[2] "Opravdu chcete smazat vybrané záznamy"
 
-#: js/widgets/app/GridPanel.js:652 js/widgets/dialog/EditDialog.js:453
+#: js/widgets/app/GridPanel.js:683 js/widgets/dialog/EditDialog.js:448
 msgid "Deleting {0}"
 msgstr "Mažu {0}"
 
-#: js/widgets/app/GridPanel.js:654
+#: js/widgets/app/GridPanel.js:685
 msgid " ... This may take a long time!"
 msgstr "... Toto může trvat dlouho!"
 
-#: js/widgets/app/GridPanel.js:668 js/widgets/dialog/EditDialog.js:425
-#: js/widgets/dialog/EditDialog.js:463 js/widgets/tags/TagsPanel.js:287
-#: js/widgets/tags/TagsPanel.js:397 js/widgets/tags/TagsPanel.js:430
+#: js/widgets/app/GridPanel.js:704 js/widgets/dialog/EditDialog.js:458
+#: js/widgets/tags/TagsPanel.js:287 js/widgets/tags/TagsPanel.js:397
+#: js/widgets/tags/TagsPanel.js:430
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/widgets/app/GridPanel.js:668 js/widgets/dialog/EditDialog.js:463
+#: js/widgets/app/GridPanel.js:704 js/widgets/dialog/EditDialog.js:458
 msgid "Could not delete {0}."
 msgstr "Nepodařilo se smazat {0}."
 
@@ -749,27 +774,27 @@ msgstr "sdílené"
 msgid "please select a {0}"
 msgstr "vyberte prosím  {0}"
 
-#: js/widgets/container/ContainerTree.js:127
+#: js/widgets/container/ContainerTree.js:134
 msgid "All {0}"
 msgstr "Všechny {0}"
 
-#: js/widgets/container/ContainerTree.js:132
+#: js/widgets/container/ContainerTree.js:139
 msgid "My {0}"
 msgstr "Moje {0}"
 
-#: js/widgets/container/ContainerTree.js:139
+#: js/widgets/container/ContainerTree.js:146
 msgid "Shared {0}"
 msgstr "Sdílené {0}"
 
-#: js/widgets/container/ContainerTree.js:147
+#: js/widgets/container/ContainerTree.js:154
 msgid "Other Users {0}"
 msgstr "{0} ostatních uživatelů"
 
-#: js/widgets/container/ContainerTree.js:175
+#: js/widgets/container/ContainerTree.js:177
 msgid "Permission Denied"
 msgstr "Přístup zamítnut"
 
-#: js/widgets/container/ContainerTree.js:175
+#: js/widgets/container/ContainerTree.js:177
 msgid "You don't have the required grant to select this {0}"
 msgstr "Nemáte oprávnění požadovaná pro výběr {0}"
 
@@ -777,23 +802,19 @@ msgstr "Nemáte oprávnění požadovaná pro výběr {0}"
 msgid "Folder"
 msgstr "Složka"
 
-#: js/widgets/container/GrantsDialog.js:89
+#: js/widgets/container/GrantsDialog.js:94
 msgid "Read"
 msgstr "Číst"
 
-#: js/widgets/container/GrantsDialog.js:99
+#: js/widgets/container/GrantsDialog.js:104
 msgid "Edit"
 msgstr "Editovat"
 
-#: js/widgets/container/GrantsDialog.js:104
+#: js/widgets/container/GrantsDialog.js:109
 msgid "Delete"
 msgstr "Smazat"
 
-#: js/widgets/container/GrantsDialog.js:120
-msgid "Permissions"
-msgstr "Oprávnění"
-
-#: js/widgets/container/GrantsDialog.js:141
+#: js/widgets/container/GrantsDialog.js:138
 msgid "Updating Grants"
 msgstr "Aktualizuji oprávnění"
 
@@ -847,13 +868,13 @@ msgid "1 day before"
 msgstr "1 den před"
 
 #: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:443
+#: js/widgets/dialog/EditDialog.js:438
 #: js/widgets/dialog/PreferencesDialog.js:284
 msgid "Errors"
 msgstr "Chyby"
 
 #: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:443
+#: js/widgets/dialog/EditDialog.js:438
 msgid "Please fix the errors noted."
 msgstr "Opravte prosím uvedené chyby."
 
@@ -881,11 +902,7 @@ msgstr "Uloženo v"
 msgid "Transfering {0}..."
 msgstr "Přesouvám {0}..."
 
-#: js/widgets/dialog/EditDialog.js:425
-msgid "Could not save {0}."
-msgstr "Nepodařilo se uložit {0}."
-
-#: js/widgets/dialog/EditDialog.js:451
+#: js/widgets/dialog/EditDialog.js:446
 msgid "Do you really want to delete this {0}?"
 msgstr "Opravdu chcete smazat {0}?"
 
@@ -1067,51 +1084,51 @@ msgstr "příští čtvrtletí"
 msgid "next year"
 msgstr "příští rok"
 
-#: js/widgets/grid/FilterToolbar.js:126
+#: js/widgets/grid/FilterToolbar.js:128
 msgid "add new filter"
 msgstr "zadat nový filtr"
 
-#: js/widgets/grid/FilterToolbar.js:132
+#: js/widgets/grid/FilterToolbar.js:134
 msgid "reset all filters"
 msgstr "resetovat všechny filtry"
 
-#: js/widgets/grid/FilterToolbar.js:138
+#: js/widgets/grid/FilterToolbar.js:140
 msgid "start search"
 msgstr "zahájit hledání"
 
-#: js/widgets/grid/FilterToolbar.js:146 js/widgets/grid/FilterToolbar.js:631
+#: js/widgets/grid/FilterToolbar.js:148 js/widgets/grid/FilterToolbar.js:632
 msgid "save filter"
 msgstr "uložit filtr"
 
-#: js/widgets/grid/FilterToolbar.js:229
+#: js/widgets/grid/FilterToolbar.js:231
 msgid "select a field"
 msgstr "vybrat pole"
 
-#: js/widgets/grid/FilterToolbar.js:254
+#: js/widgets/grid/FilterToolbar.js:256
 msgid "Delete this filter"
 msgstr "Smazat filtr"
 
-#: js/widgets/grid/FilterToolbar.js:285
+#: js/widgets/grid/FilterToolbar.js:287
 msgid "and"
 msgstr "a"
 
-#: js/widgets/grid/FilterToolbar.js:304
+#: js/widgets/grid/FilterToolbar.js:306
 msgid "Show"
 msgstr "Zobrazit"
 
-#: js/widgets/grid/FilterToolbar.js:631
+#: js/widgets/grid/FilterToolbar.js:632
 msgid "Please enter a name for the filter"
 msgstr "Zadejte prosím název filtru"
 
-#: js/widgets/grid/FilterToolbar.js:634 js/widgets/grid/FilterToolbar.js:637
+#: js/widgets/grid/FilterToolbar.js:635 js/widgets/grid/FilterToolbar.js:638
 msgid "Filter not Saved"
 msgstr "Filtr nebyl uložen"
 
-#: js/widgets/grid/FilterToolbar.js:634
+#: js/widgets/grid/FilterToolbar.js:635
 msgid "You have to supply a name for the filter!"
 msgstr "Musíte zadat název filtru!"
 
-#: js/widgets/grid/FilterToolbar.js:637
+#: js/widgets/grid/FilterToolbar.js:638
 msgid ""
 "You have to supply a shorter name! Names of saved filters can only be up to "
 "40 characters long."
@@ -1119,14 +1136,18 @@ msgstr ""
 "Musíte zadat kratší název! Názvy uložených filtrů smí být nejvýše 40 znaků "
 "dlouhé."
 
-#: js/widgets/grid/FilterToolbar.js:640 js/widgets/LangChooser.js:64
+#: js/widgets/grid/FilterToolbar.js:641 js/widgets/LangChooser.js:64
 #: js/widgets/TimezoneChooser.js:74
 msgid "Please Wait"
 msgstr "Čekejte prosím"
 
-#: js/widgets/grid/FilterToolbar.js:640
+#: js/widgets/grid/FilterToolbar.js:641
 msgid "Saving filter"
 msgstr "Ukládám filtr"
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:103
+msgid "Always show advanced filters"
+msgstr ""
 
 #: js/widgets/grid/PersistentFilterPicker.js:79
 msgid "My saved filters"
@@ -1188,11 +1209,11 @@ msgstr "vysoká"
 msgid "urgent"
 msgstr "urgentní"
 
-#: js/widgets/tags/TagCombo.js:40
+#: js/widgets/tags/TagCombo.js:45
 msgid "tag name"
 msgstr "název štítku"
 
-#: js/widgets/tags/TagFilter.js:27
+#: js/widgets/tags/TagFilter.js:29
 msgid "Tag"
 msgstr "Štítek"
 
@@ -1200,11 +1221,11 @@ msgstr "Štítek"
 msgid "Add Tag"
 msgstr "Přídat štítek"
 
-#: js/widgets/tags/TagsMassAttachAction.js:53
+#: js/widgets/tags/TagsMassAttachAction.js:62
 msgid "Attach the following tag to all selected items:"
 msgstr "Připojit následující štítek ke všem vybraným položkám:"
 
-#: js/widgets/tags/TagsMassAttachAction.js:64
+#: js/widgets/tags/TagsMassAttachAction.js:73
 msgid "Select Tag"
 msgstr "Vybrat štítek"
 
@@ -1403,11 +1424,11 @@ msgstr "Jedná se o kritickou aktualizaci a musí být nainstalována co nejdř�
 msgid "Please consider updating!"
 msgstr "Zvažte prosím aktualizaci!"
 
-#: Notes.php:375
+#: Notes.php:363
 msgid "by"
 msgstr "(kým)"
 
-#: Notes.php:382
+#: Notes.php:370
 msgid "Changed fields:"
 msgstr "Změněné položky"
 
@@ -1478,830 +1499,852 @@ msgstr "změněno"
 msgid "record changed"
 msgstr "záznam byl změněn"
 
-msgid "add account"
-msgstr "přidat účet"
+#~ msgid "Register"
+#~ msgstr "Registrovat"
 
-msgid "nobody"
-msgstr "nikdo"
+#~ msgid ""
+#~ "The server did not respond to your request. Please check your network or "
+#~ "contact your administrator."
+#~ msgstr ""
+#~ "Server neodpověděl na Váš požadavek. Zkontrolujte prosím své síťové "
+#~ "připojení nebo kontaktujte administrátora."
 
-msgid "please select an account"
-msgstr "vyberte prosím účet"
+#~ msgid "No response"
+#~ msgstr "Žádná odpověď"
 
-msgid "loading new language..."
-msgstr "nahrávám nový jazyk..."
+#~ msgid ""
+#~ "We did not receive a response from the server. Your network could be down "
+#~ "or a timeout occurred."
+#~ msgstr ""
+#~ "Neobdrželi jsme žádnou odpověď ze serveru. Můžete mít problém na síti "
+#~ "nebo byl překročen časový limit."
 
-msgid "Export Date"
-msgstr "Datum exportu"
+#~ msgid "Permissions"
+#~ msgstr "Oprávnění"
 
-#, fuzzy
-msgid "Preference description"
-msgstr "Editovat popis"
+#~ msgid "Could not save {0}."
+#~ msgstr "Nepodařilo se uložit {0}."
 
-msgid "Timezone: {0}"
-msgstr "Časové pásmo: {0}"
+#~ msgid "add account"
+#~ msgstr "přidat účet"
 
-msgid "Recent Activities"
-msgstr "Poslední činnosti"
+#~ msgid "nobody"
+#~ msgstr "nikdo"
 
-msgid "Displaying notes {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "please select an account"
+#~ msgstr "vyberte prosím účet"
 
-msgid "No notes to display"
-msgstr "Žádné poznámky ke zobrazení"
+#~ msgid "loading new language..."
+#~ msgstr "nahrávám nový jazyk..."
 
+#~ msgid "Export Date"
+#~ msgstr "Datum exportu"
+
 #, fuzzy
-msgid "Do you really want to delete the selected {0}"
-msgid_plural "Do you really want to delete the selected {0}"
-msgstr[0] "Opravdu chcete smazat"
-msgstr[1] "Opravdu chcete smazat"
-msgstr[2] "Opravdu chcete smazat"
+#~ msgid "Preference description"
+#~ msgstr "Editovat popis"
+
+#~ msgid "Timezone: {0}"
+#~ msgstr "Časové pásmo: {0}"
+
+#~ msgid "Recent Activities"
+#~ msgstr "Poslední činnosti"
+
+#~ msgid "Displaying notes {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+
+#~ msgid "No notes to display"
+#~ msgstr "Žádné poznámky ke zobrazení"
 
 #, fuzzy
-msgid "contacts"
-msgstr "obsahuje"
+#~ msgid "Do you really want to delete the selected {0}"
+#~ msgid_plural "Do you really want to delete the selected {0}"
+#~ msgstr[0] "Opravdu chcete smazat"
+#~ msgstr[1] "Opravdu chcete smazat"
+#~ msgstr[2] "Opravdu chcete smazat"
 
 #, fuzzy
-msgid "Do you really want to delete the selected contact?"
-msgid_plural "Do you really want to delete the selected contacts?"
-msgstr[0] "Opravdu chcete smazat"
-msgstr[1] "Opravdu chcete smazat"
-msgstr[2] "Opravdu chcete smazat"
+#~ msgid "contacts"
+#~ msgstr "obsahuje"
 
 #, fuzzy
-msgid "Deleting contact..."
-msgid_plural "Deleting contacts..."
-msgstr[0] "Mažu štítek"
-msgstr[1] "Mažu štítky"
-msgstr[2] "Mažu štítky"
+#~ msgid "Do you really want to delete the selected contact?"
+#~ msgid_plural "Do you really want to delete the selected contacts?"
+#~ msgstr[0] "Opravdu chcete smazat"
+#~ msgstr[1] "Opravdu chcete smazat"
+#~ msgstr[2] "Opravdu chcete smazat"
 
 #, fuzzy
-msgid "add contact"
-msgstr "přidat účet"
+#~ msgid "Deleting contact..."
+#~ msgid_plural "Deleting contacts..."
+#~ msgstr[0] "Mažu štítek"
+#~ msgstr[1] "Mažu štítky"
+#~ msgstr[2] "Mažu štítky"
 
 #, fuzzy
-msgid "edit contact"
-msgstr "Editovat štítek"
+#~ msgid "add contact"
+#~ msgstr "přidat účet"
 
 #, fuzzy
-msgid "delete contact"
-msgid_plural "delete contacts"
-msgstr[0] "smazat"
-msgstr[1] "smazat"
-msgstr[2] "smazat"
+#~ msgid "edit contact"
+#~ msgstr "Editovat štítek"
 
 #, fuzzy
-msgid "Last Name"
-msgstr "Jméno"
+#~ msgid "delete contact"
+#~ msgid_plural "delete contacts"
+#~ msgstr[0] "smazat"
+#~ msgstr[1] "smazat"
+#~ msgstr[2] "smazat"
 
 #, fuzzy
-msgid "Displaying contacts {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Last Name"
+#~ msgstr "Jméno"
 
 #, fuzzy
-msgid "No contacts to display"
-msgstr "Žádné poznámky ke zobrazení"
+#~ msgid "Displaying contacts {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "Full Name"
-msgstr "Jméno"
+#~ msgid "No contacts to display"
+#~ msgstr "Žádné poznámky ke zobrazení"
 
 #, fuzzy
-msgid "Display Name"
-msgstr "Příjmení"
+#~ msgid "Full Name"
+#~ msgstr "Jméno"
 
 #, fuzzy
-msgid "addressbook"
-msgstr "Emailová adresa"
+#~ msgid "Display Name"
+#~ msgstr "Příjmení"
 
 #, fuzzy
-msgid "Loading Contact..."
-msgstr "Přihlašuji Vás..."
+#~ msgid "addressbook"
+#~ msgstr "Emailová adresa"
 
 #, fuzzy
-msgid "Add new contact"
-msgstr "Přidat novou poznámku"
+#~ msgid "Loading Contact..."
+#~ msgstr "Přihlašuji Vás..."
 
 #, fuzzy
-msgid "Could not save contact."
-msgstr "Nepodařilo se vytvořit štítek."
+#~ msgid "Add new contact"
+#~ msgstr "Přidat novou poznámku"
 
 #, fuzzy
-msgid "Title"
-msgstr "Čas"
+#~ msgid "Could not save contact."
+#~ msgstr "Nepodařilo se vytvořit štítek."
 
 #, fuzzy
-msgid "Shared Tags"
-msgstr "Sdílené"
+#~ msgid "Title"
+#~ msgstr "Čas"
 
 #, fuzzy
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Opravdu chcete smazat"
+#~ msgid "Shared Tags"
+#~ msgstr "Sdílené"
 
 #, fuzzy
-msgid "delete entry"
-msgstr "smazat"
+#~ msgid "Do you really want to delete the selected access log entries?"
+#~ msgstr "Opravdu chcete smazat"
 
 #, fuzzy
-msgid "Search:"
-msgstr "Hledat"
+#~ msgid "delete entry"
+#~ msgstr "smazat"
 
 #, fuzzy
-msgid "invalid password"
-msgstr "Staré heslo"
+#~ msgid "Search:"
+#~ msgstr "Hledat"
 
 #, fuzzy
-msgid "failure"
-msgstr "Došlo k chybě"
+#~ msgid "invalid password"
+#~ msgstr "Staré heslo"
 
 #, fuzzy
-msgid "success"
-msgstr "Podařilo se"
+#~ msgid "failure"
+#~ msgstr "Došlo k chybě"
 
 #, fuzzy
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "success"
+#~ msgstr "Podařilo se"
 
 #, fuzzy
-msgid "No access log entries to display"
-msgstr "Žádné poznámky ke zobrazení"
+#~ msgid "Displaying access log entries {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "Login Name"
-msgstr "Přihlašovací jméno"
+#~ msgid "No access log entries to display"
+#~ msgstr "Žádné poznámky ke zobrazení"
 
 #, fuzzy
-msgid "Login Time"
-msgstr "Přihlašovací jméno"
+#~ msgid "Login Name"
+#~ msgstr "Přihlašovací jméno"
 
 #, fuzzy
-msgid "Logout Time"
-msgstr "Odhlásit"
+#~ msgid "Login Time"
+#~ msgstr "Přihlašovací jméno"
 
 #, fuzzy
-msgid "settings"
-msgstr "Vytvářím"
+#~ msgid "Logout Time"
+#~ msgstr "Odhlásit"
 
 #, fuzzy
-msgid "enabled"
-msgstr "Nepodařilo se"
+#~ msgid "settings"
+#~ msgstr "Vytvářím"
 
 #, fuzzy
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "enabled"
+#~ msgstr "Nepodařilo se"
 
 #, fuzzy
-msgid "No applications to display"
-msgstr "Žádné štítky ke zobrazení"
+#~ msgid "Displaying application {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "name"
-msgstr "Přejmenovat"
+#~ msgid "No applications to display"
+#~ msgstr "Žádné štítky ke zobrazení"
 
 #, fuzzy
-msgid "version"
-msgstr "Oprávnění"
+#~ msgid "name"
+#~ msgstr "Přejmenovat"
 
 #, fuzzy
-msgid "Set new password"
-msgstr "Zopakujte nové heslo"
+#~ msgid "version"
+#~ msgstr "Oprávnění"
 
 #, fuzzy
-msgid "Please enter the new password:"
-msgstr "Zadejte prosím nový název pro"
+#~ msgid "Set new password"
+#~ msgstr "Zopakujte nové heslo"
 
 #, fuzzy
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "Opravdu chcete smazat"
+#~ msgid "Please enter the new password:"
+#~ msgstr "Zadejte prosím nový název pro"
 
 #, fuzzy
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Do you really want to delete the selected account(s)?"
+#~ msgstr "Opravdu chcete smazat"
 
 #, fuzzy
-msgid "No accounts to display"
-msgstr "Žádné poznámky ke zobrazení"
+#~ msgid "Displaying accounts {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "Displayname"
-msgstr "Příjmení"
+#~ msgid "No accounts to display"
+#~ msgstr "Žádné poznámky ke zobrazení"
 
 #, fuzzy
-msgid "Loginname"
-msgstr "Přihlašovací jméno"
+#~ msgid "Displayname"
+#~ msgstr "Příjmení"
 
 #, fuzzy
-msgid "Last name"
-msgstr "název štítku"
+#~ msgid "Loginname"
+#~ msgstr "Přihlašovací jméno"
 
 #, fuzzy
-msgid "First name"
-msgstr "Příjmení"
+#~ msgid "Last name"
+#~ msgstr "název štítku"
 
 #, fuzzy
-msgid "Password changed"
-msgstr "Heslo"
+#~ msgid "First name"
+#~ msgstr "Příjmení"
 
 #, fuzzy
-msgid "edit account"
-msgstr "přidat účet"
+#~ msgid "Password changed"
+#~ msgstr "Heslo"
 
 #, fuzzy
-msgid "delete account"
-msgstr "přidat účet"
+#~ msgid "edit account"
+#~ msgstr "přidat účet"
 
 #, fuzzy
-msgid "enable account"
-msgstr "přidat účet"
+#~ msgid "delete account"
+#~ msgstr "přidat účet"
 
 #, fuzzy
-msgid "disable account"
-msgstr "přidat účet"
+#~ msgid "enable account"
+#~ msgstr "přidat účet"
 
 #, fuzzy
-msgid "reset password"
-msgstr "Nové heslo"
+#~ msgid "disable account"
+#~ msgstr "přidat účet"
 
 #, fuzzy
-msgid "Deleting account..."
-msgstr "Mažu štítek"
+#~ msgid "reset password"
+#~ msgstr "Nové heslo"
 
 #, fuzzy
-msgid "Could not save user account."
-msgstr "Nepodařilo se vytvořit štítek."
+#~ msgid "Deleting account..."
+#~ msgstr "Mažu štítek"
 
 #, fuzzy
-msgid "no password set"
-msgstr "Změnit heslo"
+#~ msgid "Could not save user account."
+#~ msgstr "Nepodařilo se vytvořit štítek."
 
 #, fuzzy
-msgid "Password again"
-msgstr "Heslo"
+#~ msgid "no password set"
+#~ msgstr "Změnit heslo"
 
 #, fuzzy
-msgid "Password set"
-msgstr "Heslo"
+#~ msgid "Password again"
+#~ msgstr "Heslo"
 
 #, fuzzy
-msgid "Add New User Account"
-msgstr "Přidat nový osobní štítek"
+#~ msgid "Password set"
+#~ msgstr "Heslo"
 
 #, fuzzy
-msgid "Do you really want to delete the selected groups?"
-msgstr "Opravdu chcete smazat"
+#~ msgid "Add New User Account"
+#~ msgstr "Přidat nový osobní štítek"
 
 #, fuzzy
-msgid "Deleting group(s)..."
-msgstr "Mažu štítek"
+#~ msgid "Do you really want to delete the selected groups?"
+#~ msgstr "Opravdu chcete smazat"
 
 #, fuzzy
-msgid "add group"
-msgstr "přidat účet"
+#~ msgid "Deleting group(s)..."
+#~ msgstr "Mažu štítek"
 
 #, fuzzy
-msgid "delete group"
-msgstr "smazat"
+#~ msgid "add group"
+#~ msgstr "přidat účet"
 
 #, fuzzy
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "delete group"
+#~ msgstr "smazat"
 
 #, fuzzy
-msgid "No groups to display"
-msgstr "Žádné štítky ke zobrazení"
+#~ msgid "Displaying groups {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "Updating Memberships"
-msgstr "Aktualizuji oprávnění"
+#~ msgid "No groups to display"
+#~ msgstr "Žádné štítky ke zobrazení"
 
 #, fuzzy
-msgid "Could not save group."
-msgstr "Nepodařilo se vytvořit štítek."
+#~ msgid "Updating Memberships"
+#~ msgstr "Aktualizuji oprávnění"
 
 #, fuzzy
-msgid "Deleting group..."
-msgstr "Mažu štítek"
+#~ msgid "Could not save group."
+#~ msgstr "Nepodařilo se vytvořit štítek."
 
 #, fuzzy
-msgid "Add new group"
-msgstr "Přidat novou poznámku"
+#~ msgid "Deleting group..."
+#~ msgstr "Mažu štítek"
 
 #, fuzzy
-msgid "Do you really want to delete the selected tags?"
-msgstr "Opravdu chcete smazat"
+#~ msgid "Add new group"
+#~ msgstr "Přidat novou poznámku"
 
 #, fuzzy
-msgid "Deleting tag(s)..."
-msgstr "Mažu štítek"
+#~ msgid "Do you really want to delete the selected tags?"
+#~ msgstr "Opravdu chcete smazat"
 
 #, fuzzy
-msgid "edit tag"
-msgstr "Editovat štítek"
+#~ msgid "Deleting tag(s)..."
+#~ msgstr "Mažu štítek"
 
 #, fuzzy
-msgid "delete tag"
-msgstr "Smazat štítek"
+#~ msgid "edit tag"
+#~ msgstr "Editovat štítek"
 
 #, fuzzy
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "delete tag"
+#~ msgstr "Smazat štítek"
 
 #, fuzzy
-msgid "No tags to display"
-msgstr "Žádné štítky ke zobrazení"
+#~ msgid "Displaying tags {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "Deleting tag..."
-msgstr "Mažu štítek"
+#~ msgid "No tags to display"
+#~ msgstr "Žádné štítky ke zobrazení"
 
 #, fuzzy
-msgid "Use"
-msgstr "Uživatel"
+#~ msgid "Deleting tag..."
+#~ msgstr "Mažu štítek"
 
 #, fuzzy
-msgid "Tag Name"
-msgstr "název štítku"
+#~ msgid "Use"
+#~ msgstr "Uživatel"
 
 #, fuzzy
-msgid "Edit Tag \"{0}\""
-msgstr "Editovat štítek"
+#~ msgid "Tag Name"
+#~ msgstr "název štítku"
 
 #, fuzzy
-msgid "add role"
-msgstr "Přidat poznámku"
+#~ msgid "Edit Tag \"{0}\""
+#~ msgstr "Editovat štítek"
 
 #, fuzzy
-msgid "delete role"
-msgstr "smazat"
+#~ msgid "add role"
+#~ msgstr "Přidat poznámku"
 
 #, fuzzy
-msgid "No roles to display"
-msgstr "Žádné poznámky ke zobrazení"
+#~ msgid "delete role"
+#~ msgstr "smazat"
 
 #, fuzzy
-msgid "Could not save role."
-msgstr "Nepodařilo se vytvořit štítek."
+#~ msgid "No roles to display"
+#~ msgstr "Žádné poznámky ke zobrazení"
 
 #, fuzzy
-msgid "Deleting role..."
-msgstr "Mažu"
+#~ msgid "Could not save role."
+#~ msgstr "Nepodařilo se vytvořit štítek."
 
 #, fuzzy
-msgid "Role Name"
-msgstr "Přejmenovat"
+#~ msgid "Deleting role..."
+#~ msgstr "Mažu"
 
 #, fuzzy
-msgid "Loading Role..."
-msgstr "nahrávám nový jazyk..."
+#~ msgid "Role Name"
+#~ msgstr "Přejmenovat"
 
 #, fuzzy
-msgid "Add New Role"
-msgstr "Přidat novou poznámku"
+#~ msgid "Loading Role..."
+#~ msgstr "nahrávám nový jazyk..."
 
 #, fuzzy
-msgid "Are you sure you want to delete this lead?"
-msgstr "Určitě se chcete odhlásit?"
+#~ msgid "Add New Role"
+#~ msgstr "Přidat novou poznámku"
 
 #, fuzzy
-msgid "Deleting lead"
-msgstr "Mažu štítek"
+#~ msgid "Are you sure you want to delete this lead?"
+#~ msgstr "Určitě se chcete odhlásit?"
 
 #, fuzzy
-msgid "Enter searchfilter"
-msgstr "zadejte hledaný výraz"
+#~ msgid "Deleting lead"
+#~ msgstr "Mažu štítek"
 
 #, fuzzy
-msgid "Show details"
-msgstr "Zobrazit detaily:"
+#~ msgid "Enter searchfilter"
+#~ msgstr "zadejte hledaný výraz"
 
 #, fuzzy
-msgid "Displaying leads {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Show details"
+#~ msgstr "Zobrazit detaily:"
 
 #, fuzzy
-msgid "Lead name"
-msgstr "název štítku"
+#~ msgid "Displaying leads {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "Add lead"
-msgstr "Přidat poznámku"
+#~ msgid "Lead name"
+#~ msgstr "název štítku"
 
 #, fuzzy
-msgid "Add new lead"
-msgstr "Přidat novou poznámku"
+#~ msgid "Add lead"
+#~ msgstr "Přidat poznámku"
 
 #, fuzzy
-msgid "Edit lead"
-msgstr "Editovat štítek"
+#~ msgid "Add new lead"
+#~ msgstr "Přidat novou poznámku"
 
 #, fuzzy
-msgid "Delete lead"
-msgid_plural "Delete leads"
-msgstr[0] "Smazat štítek"
-msgstr[1] "Smazat štítky"
-msgstr[2] "Smazat štítky"
+#~ msgid "Edit lead"
+#~ msgstr "Editovat štítek"
 
 #, fuzzy
-msgid "Delete selected leads"
-msgstr "Opravdu chcete smazat vybraný štítek?"
+#~ msgid "Delete lead"
+#~ msgid_plural "Delete leads"
+#~ msgstr[0] "Smazat štítek"
+#~ msgstr[1] "Smazat štítky"
+#~ msgstr[2] "Smazat štítky"
 
 #, fuzzy
-msgid "Export as PDF"
-msgstr "Datum exportu"
+#~ msgid "Delete selected leads"
+#~ msgstr "Opravdu chcete smazat vybraný štítek?"
 
 #, fuzzy
-msgid "Add task"
-msgstr "Přidat poznámku"
+#~ msgid "Export as PDF"
+#~ msgstr "Datum exportu"
 
 #, fuzzy
-msgid "Could not save lead."
-msgstr "Nepodařilo se vytvořit štítek."
+#~ msgid "Add task"
+#~ msgstr "Přidat poznámku"
 
 #, fuzzy
-msgid "Address"
-msgstr "Emailová adresa"
+#~ msgid "Could not save lead."
+#~ msgstr "Nepodařilo se vytvořit štítek."
 
 #, fuzzy
-msgid "Add a task..."
-msgstr "Přidat poznámku..."
+#~ msgid "Address"
+#~ msgstr "Emailová adresa"
 
 #, fuzzy
-msgid "Add a product..."
-msgstr "Přidat poznámku..."
+#~ msgid "Add a task..."
+#~ msgstr "Přidat poznámku..."
 
 #, fuzzy
-msgid "No Tasks to display"
-msgstr "Žádné štítky ke zobrazení"
+#~ msgid "Add a product..."
+#~ msgstr "Přidat poznámku..."
 
 #, fuzzy
-msgid "Add new customer contact"
-msgstr "Přidat nový osobní štítek"
+#~ msgid "No Tasks to display"
+#~ msgstr "Žádné štítky ke zobrazení"
 
 #, fuzzy
-msgid "Add contact"
-msgstr "přidat účet"
+#~ msgid "Add new customer contact"
+#~ msgstr "Přidat nový osobní štítek"
 
 #, fuzzy
-msgid "Edit contact"
-msgstr "Editovat štítek"
+#~ msgid "Add contact"
+#~ msgstr "přidat účet"
 
 #, fuzzy
-msgid "Add new task"
-msgstr "Přidat novou poznámku"
+#~ msgid "Edit contact"
+#~ msgstr "Editovat štítek"
 
 #, fuzzy
-msgid "Edit task"
-msgstr "Editovat štítek"
+#~ msgid "Add new task"
+#~ msgstr "Přidat novou poznámku"
 
 #, fuzzy
-msgid "Remove products"
-msgstr "odstranit záznam"
+#~ msgid "Edit task"
+#~ msgstr "Editovat štítek"
 
 #, fuzzy
-msgid "Leads"
-msgstr "Číst"
+#~ msgid "Remove products"
+#~ msgstr "odstranit záznam"
 
 #, fuzzy
-msgid "Contacts"
-msgstr "obsahuje"
+#~ msgid "Leads"
+#~ msgstr "Číst"
 
 #, fuzzy
-msgid "Loading Lead..."
-msgstr "nahrávám nový jazyk..."
+#~ msgid "Contacts"
+#~ msgstr "obsahuje"
 
 #, fuzzy
-msgid "Add New Lead"
-msgstr "Přidat novou poznámku"
+#~ msgid "Loading Lead..."
+#~ msgstr "nahrávám nový jazyk..."
 
 #, fuzzy
-msgid "Enter short name"
-msgstr "Zadejte název štítku"
+#~ msgid "Add New Lead"
+#~ msgstr "Přidat novou poznámku"
 
 #, fuzzy
-msgid "End"
-msgstr "a"
+#~ msgid "Enter short name"
+#~ msgstr "Zadejte název štítku"
 
 #, fuzzy
-msgid "folder"
-msgstr "Složka"
+#~ msgid "End"
+#~ msgstr "a"
 
 #, fuzzy
-msgid "Number"
-msgstr "Jméno"
+#~ msgid "folder"
+#~ msgstr "Složka"
 
 #, fuzzy
-msgid "Line"
-msgstr "Přihlásit"
+#~ msgid "Number"
+#~ msgstr "Jméno"
 
 #, fuzzy
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Line"
+#~ msgstr "Přihlásit"
 
 #, fuzzy
-msgid "No calls to display"
-msgstr "Žádné štítky ke zobrazení"
+#~ msgid "Displaying calls {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "Duration"
-msgstr "Popis"
+#~ msgid "No calls to display"
+#~ msgstr "Žádné štítky ke zobrazení"
 
 #, fuzzy
-msgid "Direction"
-msgstr "Popis"
+#~ msgid "Direction"
+#~ msgstr "Popis"
 
 #, fuzzy
-msgid "Source"
-msgstr "Podařilo se"
+#~ msgid "Source"
+#~ msgstr "Podařilo se"
 
 #, fuzzy
-msgid "Destination"
-msgstr "Popis"
+#~ msgid "Destination"
+#~ msgstr "Popis"
 
 #, fuzzy
-msgid "Could not delete task(s)."
-msgstr "Nepodařilo se smazat štítek/štítky."
+#~ msgid "Could not delete task(s)."
+#~ msgstr "Nepodařilo se smazat štítek/štítky."
 
 #, fuzzy
-msgid "Delete task"
-msgid_plural "Delete tasks"
-msgstr[0] "Smazat štítek"
-msgstr[1] "Smazat štítky"
-msgstr[2] "Smazat štítky"
+#~ msgid "Delete task"
+#~ msgid_plural "Delete tasks"
+#~ msgstr[0] "Smazat štítek"
+#~ msgstr[1] "Smazat štítky"
+#~ msgstr[2] "Smazat štítky"
 
 #, fuzzy
-msgid "Could not save task."
-msgstr "Nepodařilo se vytvořit štítek."
+#~ msgid "Could not save task."
+#~ msgstr "Nepodařilo se vytvořit štítek."
 
 #, fuzzy
-msgid "Displaying tasks {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Displaying tasks {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "No tasks to display"
-msgstr "Žádné štítky ke zobrazení"
+#~ msgid "No tasks to display"
+#~ msgstr "Žádné štítky ke zobrazení"
 
 #, fuzzy
-msgid "Add New Task"
-msgstr "Přidat nový osobní štítek"
+#~ msgid "Add New Task"
+#~ msgstr "Přidat nový osobní štítek"
 
 #, fuzzy
-msgid "Enter short name..."
-msgstr "Zadejte název štítku"
+#~ msgid "Enter short name..."
+#~ msgstr "Zadejte název štítku"
 
 #, fuzzy
-msgid "Enter description..."
-msgstr "Editovat popis"
+#~ msgid "Enter description..."
+#~ msgstr "Editovat popis"
 
 #, fuzzy
-msgid "add software"
-msgstr "Přidat poznámku"
+#~ msgid "add software"
+#~ msgstr "Přidat poznámku"
 
 #, fuzzy
-msgid "delete software"
-msgstr "Smazat filtr"
+#~ msgid "delete software"
+#~ msgstr "Smazat filtr"
 
 #, fuzzy
-msgid "Displaying software {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Displaying software {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "add template"
-msgstr "zadat nový filtr"
+#~ msgid "add template"
+#~ msgstr "zadat nový filtr"
 
 #, fuzzy
-msgid "delete template"
-msgstr "Smazat filtr"
+#~ msgid "delete template"
+#~ msgstr "Smazat filtr"
 
 #, fuzzy
-msgid "Displaying template {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Displaying template {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "No template to display"
-msgstr "Žádné poznámky ke zobrazení"
+#~ msgid "No template to display"
+#~ msgstr "Žádné poznámky ke zobrazení"
 
 #, fuzzy
-msgid "Settings"
-msgstr "Vytvářím"
+#~ msgid "Settings"
+#~ msgstr "Vytvářím"
 
 #, fuzzy
-msgid "add phone"
-msgstr "přidat účet"
+#~ msgid "add phone"
+#~ msgstr "přidat účet"
 
 #, fuzzy
-msgid "delete phone"
-msgstr "smazat"
+#~ msgid "delete phone"
+#~ msgstr "smazat"
 
 #, fuzzy
-msgid "Displaying phones {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Displaying phones {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "No phones to display"
-msgstr "Žádné poznámky ke zobrazení"
+#~ msgid "No phones to display"
+#~ msgstr "Žádné poznámky ke zobrazení"
 
 #, fuzzy
-msgid "MAC address"
-msgstr "Emailová adresa"
+#~ msgid "MAC address"
+#~ msgstr "Emailová adresa"
 
 #, fuzzy
-msgid "description"
-msgstr "Popis"
+#~ msgid "description"
+#~ msgstr "Popis"
 
 #, fuzzy
-msgid "all"
-msgstr "Všechny"
+#~ msgid "all"
+#~ msgstr "Všechny"
 
 #, fuzzy
-msgid "time"
-msgstr "Čas"
+#~ msgid "time"
+#~ msgstr "Čas"
 
 #, fuzzy
-msgid "Users"
-msgstr "Uživatel"
+#~ msgid "Users"
+#~ msgstr "Uživatel"
 
 #, fuzzy
-msgid "web_language"
-msgstr "Jazyk"
+#~ msgid "web_language"
+#~ msgstr "Jazyk"
 
 #, fuzzy
-msgid "language"
-msgstr "Jazyk"
+#~ msgid "language"
+#~ msgstr "Jazyk"
 
 #, fuzzy
-msgid "number + name"
-msgstr "Zadejte název štítku"
+#~ msgid "number + name"
+#~ msgstr "Zadejte název štítku"
 
 #, fuzzy
-msgid "add location"
-msgstr "přidat účet"
+#~ msgid "add location"
+#~ msgstr "přidat účet"
 
 #, fuzzy
-msgid "Displaying location {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Displaying location {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "No location to display"
-msgstr "Žádné poznámky ke zobrazení"
+#~ msgid "No location to display"
+#~ msgstr "Žádné poznámky ke zobrazení"
 
 #, fuzzy
-msgid "Update Policy"
-msgstr "Aktualizuji"
+#~ msgid "Update Policy"
+#~ msgstr "Aktualizuji"
 
 #, fuzzy
-msgid "HTTP User"
-msgstr "Uživatel"
+#~ msgid "HTTP User"
+#~ msgstr "Uživatel"
 
 #, fuzzy
-msgid "Admin Mode Password"
-msgstr "Staré heslo"
+#~ msgid "Admin Mode Password"
+#~ msgstr "Staré heslo"
 
 #, fuzzy
-msgid "HTTP Password"
-msgstr "Heslo"
+#~ msgid "HTTP Password"
+#~ msgstr "Heslo"
 
 #, fuzzy
-msgid "edit setting"
-msgstr "Editovat štítek"
+#~ msgid "edit setting"
+#~ msgstr "Editovat štítek"
 
 #, fuzzy
-msgid "delete setting"
-msgstr "Mažu"
+#~ msgid "delete setting"
+#~ msgstr "Mažu"
 
 #, fuzzy
-msgid "Displaying settings {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Displaying settings {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "No settings to display"
-msgstr "Žádné štítky ke zobrazení"
+#~ msgid "No settings to display"
+#~ msgstr "Žádné štítky ke zobrazení"
 
 #, fuzzy
-msgid "delete sipPeer"
-msgstr "Smazat filtr"
+#~ msgid "delete sipPeer"
+#~ msgstr "Smazat filtr"
 
 #, fuzzy
-msgid "Displaying sipPeers {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Displaying sipPeers {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "No sipPeers to display"
-msgstr "Žádné poznámky ke zobrazení"
+#~ msgid "No sipPeers to display"
+#~ msgstr "Žádné poznámky ke zobrazení"
 
 #, fuzzy
-msgid "account code"
-msgstr "přidat účet"
+#~ msgid "account code"
+#~ msgstr "přidat účet"
 
 #, fuzzy
-msgid "secret"
-msgstr "Uživatel"
+#~ msgid "secret"
+#~ msgstr "Uživatel"
 
 #, fuzzy
-msgid "type"
-msgstr "Typ"
+#~ msgid "type"
+#~ msgstr "Typ"
 
 #, fuzzy
-msgid "username"
-msgstr "Uživatelské jméno"
+#~ msgid "username"
+#~ msgstr "Uživatelské jméno"
 
 #, fuzzy
-msgid "ip address"
-msgstr "Emailová adresa"
+#~ msgid "ip address"
+#~ msgstr "Emailová adresa"
 
 #, fuzzy
-msgid "auth user"
-msgstr "Ostatní uživatelé"
+#~ msgid "auth user"
+#~ msgstr "Ostatní uživatelé"
 
 #, fuzzy
-msgid "From User"
-msgstr "Uživatel"
+#~ msgid "From User"
+#~ msgstr "Uživatel"
 
 #, fuzzy
-msgid "Auth User"
-msgstr "Ostatní uživatelé"
+#~ msgid "Auth User"
+#~ msgstr "Ostatní uživatelé"
 
 #, fuzzy
-msgid "add context"
-msgstr "přidat účet"
+#~ msgid "add context"
+#~ msgstr "přidat účet"
 
 #, fuzzy
-msgid "delete context"
-msgstr "smazat"
+#~ msgid "delete context"
+#~ msgstr "smazat"
 
 #, fuzzy
-msgid "Displaying context {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Displaying context {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "No context to display"
-msgstr "Žádné poznámky ke zobrazení"
+#~ msgid "No context to display"
+#~ msgstr "Žádné poznámky ke zobrazení"
 
 #, fuzzy
-msgid "Displaying voicemail {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Displaying voicemail {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "No voicemail to display"
-msgstr "Žádné poznámky ke zobrazení"
+#~ msgid "No voicemail to display"
+#~ msgstr "Žádné poznámky ke zobrazení"
 
 #, fuzzy
-msgid "operator"
-msgstr "vyberte operátor"
+#~ msgid "operator"
+#~ msgstr "vyberte operátor"
 
 #, fuzzy
-msgid "forcename"
-msgstr "Přejmenovat"
+#~ msgid "forcename"
+#~ msgstr "Přejmenovat"
 
 #, fuzzy
-msgid "add meetme"
-msgstr "smazat"
+#~ msgid "add meetme"
+#~ msgstr "smazat"
 
 #, fuzzy
-msgid "delete meetme"
-msgstr "smazat"
+#~ msgid "delete meetme"
+#~ msgstr "smazat"
 
 #, fuzzy
-msgid "Displaying meetme {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Displaying meetme {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "No meetme to display"
-msgstr "Žádné poznámky ke zobrazení"
+#~ msgid "No meetme to display"
+#~ msgstr "Žádné poznámky ke zobrazení"
 
 #, fuzzy
-msgid "adminpin"
-msgstr "administrovat"
+#~ msgid "adminpin"
+#~ msgstr "administrovat"
 
 #, fuzzy
-msgid "Displaying myphones {0} - {1} of {2}"
-msgstr "Zobrazuji poznámky {0} - {1} z {2}"
+#~ msgid "Displaying myphones {0} - {1} of {2}"
+#~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
-msgid "No myphones to display"
-msgstr "Žádné poznámky ke zobrazení"
+#~ msgid "No myphones to display"
+#~ msgstr "Žádné poznámky ke zobrazení"
 
-msgid "please select a container"
-msgstr "vyberte prosím zásobník"
+#~ msgid "please select a container"
+#~ msgstr "vyberte prosím zásobník"
 
-msgid "There Where Errors"
-msgstr "Došlo k chybám."
+#~ msgid "There Where Errors"
+#~ msgstr "Došlo k chybám."
 
-msgid "New"
-msgstr "Nový"
+#~ msgid "New"
+#~ msgstr "Nový"
 
-msgid "Save"
-msgstr "Uložit"
+#~ msgid "Save"
+#~ msgstr "Uložit"
 
-msgid "Close"
-msgstr "Zavřít"
+#~ msgid "Close"
+#~ msgstr "Zavřít"
 
-msgid "My"
-msgstr "Moje"
+#~ msgid "My"
+#~ msgstr "Moje"
 
-msgid "My %s"
-msgstr "Moje %s"
+#~ msgid "My %s"
+#~ msgstr "Moje %s"
 
-msgid "Delete %s"
-msgstr "Smazat %s"
+#~ msgid "Delete %s"
+#~ msgstr "Smazat %s"
 
 #, fuzzy
 #~ msgid "none"

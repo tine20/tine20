@@ -73,7 +73,11 @@ msgstr ""
 msgid "%s's personal calendar"
 msgstr "Osobní kalendář uživatele %s"
 
-#: js/AttendeeGridPanel.js:62 js/EventDetailsPanel.js:99 js/Model.js:274
+#: js/AdminPanel.js:46
+msgid "Manage Resources"
+msgstr "Spravovat zdroje"
+
+#: js/AttendeeGridPanel.js:62 js/EventDetailsPanel.js:243 js/Model.js:275
 msgid "Attendee"
 msgstr "Účastníci"
 
@@ -101,7 +105,7 @@ msgstr "Uživatel"
 msgid "Group"
 msgstr "Skupina"
 
-#: js/AttendeeGridPanel.js:154 js/Model.js:425
+#: js/AttendeeGridPanel.js:154 js/Model.js:426
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Zdroj"
@@ -109,7 +113,7 @@ msgstr[1] "Zdroje"
 msgstr[2] "Zdrojů"
 
 #: js/AttendeeGridPanel.js:162 js/ResourceEditDialog.js:58
-#: js/ResourcesGridPanel.js:41
+#: js/ResourcesGridPanel.js:43
 msgid "Name"
 msgstr "Název"
 
@@ -117,48 +121,48 @@ msgstr "Název"
 msgid "Status"
 msgstr "Stav"
 
-#: js/AttendeeGridPanel.js:199 js/AttendeeGridPanel.js:494
+#: js/AttendeeGridPanel.js:199 js/AttendeeGridPanel.js:496
 #: Model/Attender.php:45
 msgid "No response"
 msgstr "Bez odpovědi"
 
-#: js/AttendeeGridPanel.js:200 js/AttendeeGridPanel.js:497
+#: js/AttendeeGridPanel.js:200 js/AttendeeGridPanel.js:499
 #: Model/Attender.php:46
 msgid "Accepted"
 msgstr "Přijatá"
 
-#: js/AttendeeGridPanel.js:201 js/AttendeeGridPanel.js:500
+#: js/AttendeeGridPanel.js:201 js/AttendeeGridPanel.js:502
 #: Model/Attender.php:47
 msgid "Declined"
 msgstr "Odmítnutá"
 
-#: js/AttendeeGridPanel.js:202 js/AttendeeGridPanel.js:503
+#: js/AttendeeGridPanel.js:202 js/AttendeeGridPanel.js:505
 #: Model/Attender.php:48
 msgid "Tentative"
 msgstr "Předběžná"
 
-#: js/AttendeeGridPanel.js:302
+#: js/AttendeeGridPanel.js:303
 msgid "Remove Attender"
 msgstr "Odebrat účastníka"
 
-#: js/AttendeeGridPanel.js:397
+#: js/AttendeeGridPanel.js:398
 msgid "Click here to invite another attender..."
 msgstr "Klikněte sem pro pozvání dalšího účastníka"
 
-#: js/AttendeeGridPanel.js:415 js/AttendeeGridPanel.js:433
-#: js/AttendeeGridPanel.js:446 js/AttendeeGridPanel.js:458 js/Model.js:290
+#: js/AttendeeGridPanel.js:416 js/AttendeeGridPanel.js:434
+#: js/AttendeeGridPanel.js:447 js/AttendeeGridPanel.js:459 js/Model.js:291
 msgid "No Information"
 msgstr "Žádné informace"
 
-#: js/AttendeeGridPanel.js:420
+#: js/AttendeeGridPanel.js:421
 msgid "(as a group member)"
 msgstr "(jako člen skupiny)"
 
-#: js/AttendeeGridPanel.js:470
+#: js/AttendeeGridPanel.js:471
 msgid "Required"
 msgstr "Povinné"
 
-#: js/AttendeeGridPanel.js:473
+#: js/AttendeeGridPanel.js:474
 msgid "Optional"
 msgstr "Volitelné"
 
@@ -169,33 +173,25 @@ msgstr[0] "Kalendář"
 msgstr[1] "Kalendáře"
 msgstr[2] "Kalendářů"
 
-#: js/Calendar.js:105
-msgid "Manage Resources"
-msgstr "Spravovat zdroje"
-
-#: js/Calendar.js:202 js/MonthView.js:87
-msgid "WK"
-msgstr "Týd"
-
 #: js/CalendarPanel.js:41
 msgid "Loading events, please wait..."
 msgstr "Nahrávám události, prosím čekejte..."
 
-#: js/CalendarPanel.js:201 js/CalendarPanel.js:231
+#: js/CalendarPanel.js:217
 msgid "Scheduling Conflict"
 msgstr "Konflikt plánování"
 
-#: js/CalendarPanel.js:212
+#: js/CalendarPanel.js:221
+msgid "The follwing attendee are busy at the requested time:"
+msgstr ""
+
+#: js/CalendarPanel.js:226
 msgid "Ignore Conflict"
 msgstr "Ingorovat konflikt"
 
-#: js/CalendarPanel.js:219
+#: js/CalendarPanel.js:233
 msgid "Edit Event"
 msgstr "Editovat událost"
-
-#: js/CalendarPanel.js:233
-msgid "Ignore Scheduling Conflict?"
-msgstr "Ignorovat konflikt plánování?"
 
 #: js/CalendarPanel.js:258
 msgid "Confirm Update of Series"
@@ -235,6 +231,10 @@ msgstr "Aktualizovat jen tuto událost"
 msgid "Failed not update event"
 msgstr "Pokus neaktualizovat událost se nezdařil"
 
+#: js/CalendarSelectTreePanel.js:43
+msgid "Resouces {0}"
+msgstr ""
+
 #: js/CalendarSelectWidget.js:158
 msgid "Originally"
 msgstr "Původně"
@@ -247,68 +247,88 @@ msgstr "Nová událost"
 msgid "{0}, the {1}. of {2}"
 msgstr "{0}, {1}. {2}"
 
-#: js/EventDetailsPanel.js:34
+#: js/EventDetailsPanel.js:50
+msgid "Unknown calendar"
+msgstr ""
+
+#: js/EventDetailsPanel.js:61
 msgid "{0} {1} o'clock"
 msgstr ""
 
-#: js/EventDetailsPanel.js:72 js/EventEditDialog.js:93 Model/Event.php:186
+#: js/EventDetailsPanel.js:171 js/EventEditDialog.js:93 Model/Event.php:186
 msgid "Summary"
 msgstr "Přehled"
 
-#: js/EventDetailsPanel.js:76 js/EventEditDialog.js:100
-#: js/ResourcesGridPanel.js:52 Model/Event.php:182
-msgid "Location"
-msgstr "Umístění"
-
-#: js/EventDetailsPanel.js:80 js/EventEditDialog.js:105
+#: js/EventDetailsPanel.js:207 js/EventEditDialog.js:105
 msgid "Start Time"
 msgstr "Počáteční čas"
 
-#: js/EventDetailsPanel.js:85 js/EventEditDialog.js:120
+#: js/EventDetailsPanel.js:212 js/EventEditDialog.js:120
 msgid "End Time"
 msgstr "Čas ukončení"
+
+#: js/EventDetailsPanel.js:217 Model/Event.php:179
+msgid "Blocking"
+msgstr ""
+
+#: js/EventDetailsPanel.js:222 js/EventEditDialog.js:100
+#: js/ResourcesGridPanel.js:54 Model/Event.php:182
+msgid "Location"
+msgstr "Umístění"
+
+#: js/EventDetailsPanel.js:226 Model/Event.php:183
+msgid "Organizer"
+msgstr "Organizátor"
 
 #: js/EventEditDialog.js:128
 msgid "whole day"
 msgstr "celý den"
 
-#: js/EventEditDialog.js:161 js/ResourceEditDialog.js:74 Model/Event.php:181
+#: js/EventEditDialog.js:136
+msgid "non-blocking"
+msgstr ""
+
+#: js/EventEditDialog.js:177 js/ResourceEditDialog.js:74 Model/Event.php:181
 msgid "Description"
 msgstr "Popis"
 
-#: js/EventEditDialog.js:175
+#: js/EventEditDialog.js:191
 msgid "Enter description"
 msgstr "Zadejte popis"
 
-#: js/EventEditDialog.js:310
+#: js/EventEditDialog.js:326
 msgid "End date is not valid"
 msgstr "Datum ukončení je neplatné"
 
-#: js/EventEditDialog.js:313
+#: js/EventEditDialog.js:329
 msgid "End date must be after start date"
 msgstr "Datum ukončení musí být po počátečním datu"
 
-#: js/EventEditDialog.js:326
+#: js/EventEditDialog.js:342
 msgid "Start date is not valid"
 msgstr "Počáteční datum je neplatné"
 
-#: js/MainScreenCenterPanel.js:74
+#: js/MainScreenCenterPanel.js:73
+msgid "Show declined events"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:108
 msgid "Day"
 msgstr "Den"
 
-#: js/MainScreenCenterPanel.js:83 js/PagingToolbar.js:275
+#: js/MainScreenCenterPanel.js:117 js/PagingToolbar.js:276
 msgid "Week"
 msgstr "Týden"
 
-#: js/MainScreenCenterPanel.js:92
+#: js/MainScreenCenterPanel.js:126
 msgid "Month"
 msgstr "Měsíc"
 
-#: js/MainScreenCenterPanel.js:257
+#: js/MainScreenCenterPanel.js:293
 msgid "Please Change Selection"
 msgstr "Změňte prosím výběr"
 
-#: js/MainScreenCenterPanel.js:258
+#: js/MainScreenCenterPanel.js:294
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
@@ -316,19 +336,19 @@ msgstr ""
 "Vás výběr obsahuje opakované události. Opakované události je nutné smazat "
 "zvlášť!"
 
-#: js/MainScreenCenterPanel.js:272
+#: js/MainScreenCenterPanel.js:308
 msgid "Confirm Deletion of Series"
 msgstr "Potvrdit smazání řady"
 
-#: js/MainScreenCenterPanel.js:273
+#: js/MainScreenCenterPanel.js:309
 msgid "Do you really want to delete all events of this recurring event series?"
 msgstr "Opravdu chcete smazat všechny události této řady opakovaných událostí?"
 
-#: js/MainScreenCenterPanel.js:289
+#: js/MainScreenCenterPanel.js:325
 msgid "Delete Event"
 msgstr "Smazat událost"
 
-#: js/MainScreenCenterPanel.js:292 js/MainScreenCenterPanel.js:294
+#: js/MainScreenCenterPanel.js:328 js/MainScreenCenterPanel.js:330
 msgid ""
 "Do you want to delete the whole series, this and all future events of this "
 "series, or just this event"
@@ -336,37 +356,41 @@ msgstr ""
 "Chcete smazat celou řadu, tuto a všechny budoucí události této řady, nebo "
 "jen tuto událost"
 
-#: js/MainScreenCenterPanel.js:296
+#: js/MainScreenCenterPanel.js:332
 msgid "Delete nothing"
 msgstr "Nic nemazat"
 
-#: js/MainScreenCenterPanel.js:303
+#: js/MainScreenCenterPanel.js:339
 msgid "Delete whole series"
 msgstr "Smazat celou řadu"
 
-#: js/MainScreenCenterPanel.js:324
+#: js/MainScreenCenterPanel.js:360
 msgid "Delete this and all future events"
 msgstr "Smazat tuto a všechny budoucí události"
 
-#: js/MainScreenCenterPanel.js:345
+#: js/MainScreenCenterPanel.js:381
 msgid "Delete this event only"
 msgstr "Smazat jen tuto událost"
 
-#: js/MainScreenCenterPanel.js:375
+#: js/MainScreenCenterPanel.js:411
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Opravdu chcete smazat tuto událost?"
 msgstr[1] "Opravdu chcete smazat tyto události?"
 msgstr[2] "Opravdu chcete smazat tyto události?"
 
-#: js/Model.js:64 js/Model.js:278
+#: js/MainScreenLeftPanel.js:64 js/MonthView.js:87
+msgid "WK"
+msgstr "Týd"
+
+#: js/Model.js:64 js/Model.js:279
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Událost"
 msgstr[1] "Události"
 msgstr[2] "Událostí"
 
-#: js/Model.js:64 js/Model.js:278
+#: js/Model.js:64 js/Model.js:279
 msgid "Events"
 msgstr "Události"
 
@@ -374,14 +398,14 @@ msgstr "Události"
 msgid "Calendars"
 msgstr "Kalendáře"
 
-#: js/Model.js:274
+#: js/Model.js:275
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Účastník"
 msgstr[1] "Účástníci"
 msgstr[2] "Účastníků"
 
-#: js/Model.js:425
+#: js/Model.js:426
 msgid "Resources"
 msgstr "Zdroje"
 
@@ -389,7 +413,7 @@ msgstr "Zdroje"
 msgid "{0} more..."
 msgstr "{0} více..."
 
-#: js/ResourceEditDialog.js:63 js/ResourcesGridPanel.js:47
+#: js/ResourceEditDialog.js:63 js/ResourcesGridPanel.js:49
 msgid "Email"
 msgstr "Email"
 
@@ -515,17 +539,9 @@ msgstr "Začátek"
 msgid "End"
 msgstr "Konec"
 
-#: Model/Event.php:179
-msgid "Blocking"
-msgstr ""
-
 #: Model/Event.php:180
 msgid "Classification"
 msgstr ""
-
-#: Model/Event.php:183
-msgid "Organizer"
-msgstr "Organizátor"
 
 #: Model/Event.php:184
 msgid "Priority"
@@ -633,75 +649,81 @@ msgstr "Bez odpovědi"
 msgid "Event details"
 msgstr "Události"
 
-msgid "Event description:<br/>"
-msgstr "Popis události:<br/>"
+#~ msgid "Ignore Scheduling Conflict?"
+#~ msgstr "Ignorovat konflikt plánování?"
+
+#~ msgid "Event description:<br/>"
+#~ msgstr "Popis události:<br/>"
 
 #, fuzzy
-msgid "calendar"
-msgid_plural "calendars"
-msgstr[0] "kalendáře"
-msgstr[1] "kalendáře"
-msgstr[2] "kalendáře"
+#~ msgid "calendar"
+#~ msgid_plural "calendars"
+#~ msgstr[0] "kalendáře"
+#~ msgstr[1] "kalendáře"
+#~ msgstr[2] "kalendáře"
 
-msgid "calendars"
-msgstr "kalendáře"
+#~ msgid "calendars"
+#~ msgstr "kalendáře"
 
-msgid "Do you realy want to update all events of this recuring event series?"
-msgstr ""
-"Opravdu chcete aktualizovat všechny události z této řady opakovaných "
-"událostí?"
+#~ msgid ""
+#~ "Do you realy want to update all events of this recuring event series?"
+#~ msgstr ""
+#~ "Opravdu chcete aktualizovat všechny události z této řady opakovaných "
+#~ "událostí?"
 
-msgid ""
-"Your selection contains recuring events. Recuring events must be deleted "
-"seperatly!"
-msgstr ""
-"Vás výběr obsahuje opakované události. Opakované události je nutné smazat "
-"zvlášť."
+#~ msgid ""
+#~ "Your selection contains recuring events. Recuring events must be deleted "
+#~ "seperatly!"
+#~ msgstr ""
+#~ "Vás výběr obsahuje opakované události. Opakované události je nutné smazat "
+#~ "zvlášť."
 
-msgid "Do you realy want to delete all events of this recuring event series?"
-msgstr "Opravdu chcete smazat všechny události této řady opakovaných událostí?"
+#~ msgid ""
+#~ "Do you realy want to delete all events of this recuring event series?"
+#~ msgstr ""
+#~ "Opravdu chcete smazat všechny události této řady opakovaných událostí?"
 
-msgid "No recuring rule defined"
-msgstr "Žádné pravidlo opakování není definováno"
+#~ msgid "No recuring rule defined"
+#~ msgstr "Žádné pravidlo opakování není definováno"
 
-msgid "Alarm for event \"%s\" at %s"
-msgstr "Alarm pro událost  \"%s\" v %s"
+#~ msgid "Alarm for event \"%s\" at %s"
+#~ msgstr "Alarm pro událost  \"%s\" v %s"
 
-msgid "Here is your requested alarm for to following event:"
-msgstr "Zde je Váš požadovaný alarm pro následující událost:"
+#~ msgid "Here is your requested alarm for to following event:"
+#~ msgstr "Zde je Váš požadovaný alarm pro následující událost:"
 
-msgid "Event invitation \"%s\" at %s"
-msgstr "Pozvánka na událost \"%s\" v %s"
+#~ msgid "Event invitation \"%s\" at %s"
+#~ msgstr "Pozvánka na událost \"%s\" v %s"
 
-msgid "You have been invited to the following event:"
-msgstr "Byl(a) jste pozván(a) na následující událost:"
+#~ msgid "You have been invited to the following event:"
+#~ msgstr "Byl(a) jste pozván(a) na následující událost:"
 
-msgid "Event \"%s\" at %s has been canceled"
-msgstr "Událost \"%s\" v %s byla zrušena"
+#~ msgid "Event \"%s\" at %s has been canceled"
+#~ msgstr "Událost \"%s\" v %s byla zrušena"
 
-msgid "The following event has been canceled:"
-msgstr "Následující událost byla zrušena:"
+#~ msgid "The following event has been canceled:"
+#~ msgstr "Následující událost byla zrušena:"
 
-msgid "Event \"%s\" at %s has been rescheduled"
-msgstr "Událost \"%s\" v %s byla přeplánována"
+#~ msgid "Event \"%s\" at %s has been rescheduled"
+#~ msgstr "Událost \"%s\" v %s byla přeplánována"
 
-msgid "The following event has been rescheduled:"
-msgstr "Následující událost byla přeplánována:"
+#~ msgid "The following event has been rescheduled:"
+#~ msgstr "Následující událost byla přeplánována:"
 
-msgid "From"
-msgstr "Od"
+#~ msgid "From"
+#~ msgstr "Od"
 
-msgid "To"
-msgstr "Do"
+#~ msgid "To"
+#~ msgstr "Do"
 
-msgid "Event \"%s\" at %s has been updated"
-msgstr "Událost \"%s\" v %s byla zaktualizována"
+#~ msgid "Event \"%s\" at %s has been updated"
+#~ msgstr "Událost \"%s\" v %s byla zaktualizována"
 
-msgid "The following event has been updated:"
-msgstr "Následující událost byla zaktualizována:"
+#~ msgid "The following event has been updated:"
+#~ msgstr "Následující událost byla zaktualizována:"
 
-msgid "The defualt calendar for invitations and new events"
-msgstr "Výchozí kalendář pro pozvání a nové události"
+#~ msgid "The defualt calendar for invitations and new events"
+#~ msgstr "Výchozí kalendář pro pozvání a nové události"
 
-msgid "Notification for Event "
-msgstr "Upozornění na událost"
+#~ msgid "Notification for Event "
+#~ msgstr "Upozornění na událost"

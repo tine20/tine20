@@ -21,8 +21,7 @@ msgstr ""
 msgid "All ExampleRecords"
 msgstr ""
 
-#: js/ExampleRecordEditDialog.js:91 js/ExampleRecordGridPanel.js:87
-#: js/Models.js:50
+#: js/ExampleRecordEditDialog.js:91 js/Models.js:50
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
 msgstr[0] ""
@@ -77,6 +76,10 @@ msgstr ""
 
 #: js/ExampleRecordEditDialog.js:156
 msgid "billed"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:87
+msgid "Quick search"
 msgstr ""
 
 #: js/ExampleRecordGridPanel.js:88

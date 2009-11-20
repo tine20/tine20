@@ -30,13 +30,13 @@ msgstr "Имя"
 msgid "Description"
 msgstr "Описание"
 
-#: js/Asterisk/ContextGridPanel.js:51 js/Asterisk/SipPeerEditDialog.js:56
-#: js/Asterisk/VoicemailEditDialog.js:56 js/Models.js:497 js/Voipmanager.js:53
-msgid "Context"
-msgid_plural "Contexts"
-msgstr[0] "Контекст"
-msgstr[1] "Контекста"
-msgstr[2] "Контекстов"
+#: js/Asterisk/ContextGridPanel.js:51 js/Asterisk/MeetmeGridPanel.js:51
+#: js/Asterisk/SipPeerGridPanel.js:50 js/Asterisk/VoicemailGridPanel.js:51
+#: js/Snom/LocationGridPanel.js:50 js/Snom/PhoneGridPanel.js:67
+#: js/Snom/SettingGridPanel.js:51 js/Snom/SoftwareGridPanel.js:51
+#: js/Snom/TemplateGridPanel.js:51
+msgid "Quick search"
+msgstr ""
 
 #: js/Asterisk/ContextGridPanel.js:69 js/Asterisk/MeetmeGridPanel.js:69
 #: js/Asterisk/VoicemailGridPanel.js:69 js/Snom/LocationGridPanel.js:124
@@ -56,17 +56,17 @@ msgstr "пин"
 msgid "adminpin"
 msgstr ""
 
-#: js/Asterisk/MeetmeGridPanel.js:51 js/Models.js:588 js/Voipmanager.js:73
-#, fuzzy
-msgid "Meetme"
-msgid_plural "Meetmes"
-msgstr[0] "Удолить"
-msgstr[1] "Удолить"
-msgstr[2] "Удолить"
-
 #: js/Asterisk/SipPeerEditDialog.js:41 js/Asterisk/VoicemailEditDialog.js:42
 msgid "General"
 msgstr "Общее"
+
+#: js/Asterisk/SipPeerEditDialog.js:56 js/Asterisk/VoicemailEditDialog.js:56
+#: js/Models.js:497 js/Voipmanager.js:53
+msgid "Context"
+msgid_plural "Contexts"
+msgstr[0] "Контекст"
+msgstr[1] "Контекста"
+msgstr[2] "Контекстов"
 
 #: js/Asterisk/SipPeerEditDialog.js:68
 msgid "Type"
@@ -143,10 +143,6 @@ msgstr "Включено"
 
 #: js/Asterisk/SipPeerEditDialog.js:143
 msgid "Qualify"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:50
-msgid "Sip Peer"
 msgstr ""
 
 #: js/Asterisk/SipPeerGridPanel.js:70 js/Snom/PhoneGridPanel.js:85
@@ -427,18 +423,11 @@ msgstr ""
 msgid "hidefromdir"
 msgstr ""
 
-#: js/Asterisk/VoicemailGridPanel.js:51 js/Models.js:553 js/Voipmanager.js:63
-msgid "Voicemail"
-msgid_plural "Voicemails"
-msgstr[0] "Голосовая почта"
-msgstr[1] "Голосовые почты"
-msgstr[2] "Голосовые почты"
-
 #: js/Asterisk/VoicemailGridPanel.js:88
 msgid "fullname"
 msgstr "Полное Имя"
 
-#: js/Models.js:82 js/Snom/PhoneEditDialog.js:270 js/Snom/PhoneGridPanel.js:67
+#: js/Models.js:82 js/Snom/PhoneEditDialog.js:270
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Телефон"
@@ -452,8 +441,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Models.js:133 js/Snom/LocationGridPanel.js:50
-#: js/Snom/PhoneGridPanel.js:103 js/Voipmanager.js:116
+#: js/Models.js:133 js/Snom/PhoneGridPanel.js:103 js/Voipmanager.js:116
 msgid "Location"
 msgid_plural "Locations"
 msgstr[0] "Местоположение"
@@ -469,7 +457,6 @@ msgstr[1] "Местоположение"
 msgstr[2] "Местоположение"
 
 #: js/Models.js:170 js/Snom/PhoneGridPanel.js:112
-#: js/Snom/TemplateGridPanel.js:51
 msgid "Template"
 msgid_plural "Templates"
 msgstr[0] "Шаблон"
@@ -484,8 +471,7 @@ msgstr[0] "Добавить темплейт (template)"
 msgstr[1] "Добавить темплейт (template)"
 msgstr[2] "Добавить темплейт (template)"
 
-#: js/Models.js:208 js/Snom/PhoneGridPanel.js:127
-#: js/Snom/SoftwareGridPanel.js:51 js/Voipmanager.js:157
+#: js/Models.js:208 js/Snom/PhoneGridPanel.js:127 js/Voipmanager.js:157
 #, fuzzy
 msgid "Software"
 msgid_plural "Softwares"
@@ -530,7 +516,7 @@ msgstr[0] "список линий"
 msgstr[1] "списка линий"
 msgstr[2] "списков линий"
 
-#: js/Models.js:336 js/Snom/SettingGridPanel.js:51 js/Voipmanager.js:147
+#: js/Models.js:336 js/Voipmanager.js:147
 #, fuzzy
 msgid "Setting"
 msgid_plural "Settings"
@@ -582,6 +568,13 @@ msgstr[0] "Контекст"
 msgstr[1] "Контекст"
 msgstr[2] "Контекст"
 
+#: js/Models.js:553 js/Voipmanager.js:63
+msgid "Voicemail"
+msgid_plural "Voicemails"
+msgstr[0] "Голосовая почта"
+msgstr[1] "Голосовые почты"
+msgstr[2] "Голосовые почты"
+
 #: js/Models.js:557
 #, fuzzy
 msgid "voicemails list"
@@ -589,6 +582,14 @@ msgid_plural "voicemails lists"
 msgstr[0] "Добавьте речевую почту"
 msgstr[1] "Добавьте речевую почту"
 msgstr[2] "Добавьте речевую почту"
+
+#: js/Models.js:588 js/Voipmanager.js:73
+#, fuzzy
+msgid "Meetme"
+msgid_plural "Meetmes"
+msgstr[0] "Удолить"
+msgstr[1] "Удолить"
+msgstr[2] "Удолить"
 
 #: js/Models.js:592
 msgid "meetmes list"

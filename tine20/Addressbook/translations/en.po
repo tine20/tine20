@@ -158,6 +158,10 @@ msgstr "addressbooks"
 msgid "User Account"
 msgstr "User Account"
 
+#: js/Addressbook.js:243
+msgid "Quick search"
+msgstr "Quick search"
+
 #: js/Addressbook.js:244 js/ContactEditDialog.js:86 js/ContactGrid.js:117
 #: js/EditDialog.js:389
 msgid "First Name"
@@ -374,43 +378,51 @@ msgstr "Timezone"
 msgid "Geo"
 msgstr "Geo"
 
-#: js/ContactGrid.js:160
+#: js/ContactGrid.js:151
+msgid "Creation Time"
+msgstr "Creation Time"
+
+#: js/ContactGrid.js:152
+msgid "Last Modified Time"
+msgstr "Last Modified Time"
+
+#: js/ContactGrid.js:162
 msgid "Export Contact"
 msgstr "Export Contact"
 
-#: js/ContactGrid.js:169
+#: js/ContactGrid.js:171
 msgid "Export as PDF"
 msgstr "Export as PDF"
 
-#: js/ContactGrid.js:176
+#: js/ContactGrid.js:178
 msgid "Export as CSV"
 msgstr "Export as CSV"
 
-#: js/ContactGrid.js:188
+#: js/ContactGrid.js:190
 msgid "Call contact"
 msgstr "Call contact"
 
-#: js/ContactGrid.js:200
+#: js/ContactGrid.js:202
 msgid "Compose email"
 msgstr "Compose email"
 
-#: js/ContactGrid.js:240
+#: js/ContactGrid.js:247
 msgid "Work"
 msgstr "Work"
 
-#: js/ContactGrid.js:249
+#: js/ContactGrid.js:256
 msgid "Home"
 msgstr "Home"
 
-#: js/ContactGrid.js:258
+#: js/ContactGrid.js:265
 msgid "Cell"
 msgstr "Cell"
 
-#: js/ContactGrid.js:267
+#: js/ContactGrid.js:274
 msgid "Cell private"
 msgstr "Cell private"
 
-#: js/ContactGrid.js:357
+#: js/ContactGrid.js:364
 msgid "Internal Contact"
 msgstr "Internal Contact"
 

@@ -169,6 +169,10 @@ msgstr "książki adresowe"
 msgid "User Account"
 msgstr ""
 
+#: js/Addressbook.js:243
+msgid "Quick search"
+msgstr ""
+
 #: js/Addressbook.js:244 js/ContactEditDialog.js:86 js/ContactGrid.js:117
 #: js/EditDialog.js:389
 msgid "First Name"
@@ -388,49 +392,57 @@ msgstr "Strefa czasowa"
 msgid "Geo"
 msgstr "Położenie geograficzne"
 
-#: js/ContactGrid.js:160
+#: js/ContactGrid.js:151
+msgid "Creation Time"
+msgstr ""
+
+#: js/ContactGrid.js:152
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/ContactGrid.js:162
 msgid "Export Contact"
 msgstr "Eksportuj kontakt"
 
 # I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
 # Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht verwenden. Dies waere nicht richtig im Polnischen.
-#: js/ContactGrid.js:169
+#: js/ContactGrid.js:171
 msgid "Export as PDF"
 msgstr "Eksportuj jako PDF"
 
 # I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
 # Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht benutzen. Dies waere nicht richtig im Polnischen.
-#: js/ContactGrid.js:176
+#: js/ContactGrid.js:178
 msgid "Export as CSV"
 msgstr "Eksportuj jako CSV"
 
-#: js/ContactGrid.js:188
+#: js/ContactGrid.js:190
 msgid "Call contact"
 msgstr "Wywołaj kontakt"
 
-#: js/ContactGrid.js:200
+#: js/ContactGrid.js:202
 msgid "Compose email"
 msgstr "Nowa wiadomość"
 
 # The other possibility could be: "Służbowo", see the german translation.
 # Die andere moeglichkeit waere: "Służbowo", siehe die deutsche Uebersetzung.
-#: js/ContactGrid.js:240
+#: js/ContactGrid.js:247
 msgid "Work"
 msgstr "Praca"
 
-#: js/ContactGrid.js:249
+#: js/ContactGrid.js:256
 msgid "Home"
 msgstr "Prywatnie"
 
-#: js/ContactGrid.js:258
+#: js/ContactGrid.js:265
 msgid "Cell"
 msgstr "Komórka"
 
-#: js/ContactGrid.js:267
+#: js/ContactGrid.js:274
 msgid "Cell private"
 msgstr "Komórka prywatna"
 
-#: js/ContactGrid.js:357
+#: js/ContactGrid.js:364
 #, fuzzy
 msgid "Internal Contact"
 msgstr "Kontakty wewnętrzne"

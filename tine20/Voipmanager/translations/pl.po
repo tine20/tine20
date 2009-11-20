@@ -30,13 +30,13 @@ msgstr "Nazwa"
 msgid "Description"
 msgstr "Opis"
 
-#: js/Asterisk/ContextGridPanel.js:51 js/Asterisk/SipPeerEditDialog.js:56
-#: js/Asterisk/VoicemailEditDialog.js:56 js/Models.js:497 js/Voipmanager.js:53
-msgid "Context"
-msgid_plural "Contexts"
-msgstr[0] "Kontekst"
-msgstr[1] "konteksty"
-msgstr[2] "kontekstów"
+#: js/Asterisk/ContextGridPanel.js:51 js/Asterisk/MeetmeGridPanel.js:51
+#: js/Asterisk/SipPeerGridPanel.js:50 js/Asterisk/VoicemailGridPanel.js:51
+#: js/Snom/LocationGridPanel.js:50 js/Snom/PhoneGridPanel.js:67
+#: js/Snom/SettingGridPanel.js:51 js/Snom/SoftwareGridPanel.js:51
+#: js/Snom/TemplateGridPanel.js:51
+msgid "Quick search"
+msgstr ""
 
 #: js/Asterisk/ContextGridPanel.js:69 js/Asterisk/MeetmeGridPanel.js:69
 #: js/Asterisk/VoicemailGridPanel.js:69 js/Snom/LocationGridPanel.js:124
@@ -56,17 +56,18 @@ msgstr "Pin"
 msgid "adminpin"
 msgstr "Pin administratora"
 
-#: js/Asterisk/MeetmeGridPanel.js:51 js/Models.js:588 js/Voipmanager.js:73
-msgid "Meetme"
-msgid_plural "Meetmes"
-msgstr[0] "Spotkanie"
-msgstr[1] "spotkania"
-msgstr[2] "spotkania"
-
 #: js/Asterisk/SipPeerEditDialog.js:41 js/Asterisk/VoicemailEditDialog.js:42
 #, fuzzy
 msgid "General"
 msgstr "Uwagi ogólne"
+
+#: js/Asterisk/SipPeerEditDialog.js:56 js/Asterisk/VoicemailEditDialog.js:56
+#: js/Models.js:497 js/Voipmanager.js:53
+msgid "Context"
+msgid_plural "Contexts"
+msgstr[0] "Kontekst"
+msgstr[1] "konteksty"
+msgstr[2] "kontekstów"
 
 #: js/Asterisk/SipPeerEditDialog.js:68
 msgid "Type"
@@ -144,10 +145,6 @@ msgstr "wł."
 #: js/Asterisk/SipPeerEditDialog.js:143
 msgid "Qualify"
 msgstr "Jakość"
-
-#: js/Asterisk/SipPeerGridPanel.js:50
-msgid "Sip Peer"
-msgstr "Komputer SIP"
 
 #: js/Asterisk/SipPeerGridPanel.js:70 js/Snom/PhoneGridPanel.js:85
 #: js/Snom/SettingGridPanel.js:69
@@ -435,18 +432,11 @@ msgstr "wymuś powitanie"
 msgid "hidefromdir"
 msgstr "ukryj katalog pochodzenia"
 
-#: js/Asterisk/VoicemailGridPanel.js:51 js/Models.js:553 js/Voipmanager.js:63
-msgid "Voicemail"
-msgid_plural "Voicemails"
-msgstr[0] "Wiadomość głosowa jako e-mail"
-msgstr[1] "wiadomości głosowe jako e-mail"
-msgstr[2] "wiadomości głosowych jako e-mail"
-
 #: js/Asterisk/VoicemailGridPanel.js:88
 msgid "fullname"
 msgstr "Imię i nazwisko"
 
-#: js/Models.js:82 js/Snom/PhoneEditDialog.js:270 js/Snom/PhoneGridPanel.js:67
+#: js/Models.js:82 js/Snom/PhoneEditDialog.js:270
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
@@ -460,8 +450,7 @@ msgstr[0] "lista telefonów"
 msgstr[1] "listy telefonów"
 msgstr[2] "listy telefonów"
 
-#: js/Models.js:133 js/Snom/LocationGridPanel.js:50
-#: js/Snom/PhoneGridPanel.js:103 js/Voipmanager.js:116
+#: js/Models.js:133 js/Snom/PhoneGridPanel.js:103 js/Voipmanager.js:116
 msgid "Location"
 msgid_plural "Locations"
 msgstr[0] "Lokalizacja"
@@ -476,7 +465,6 @@ msgstr[1] "listy lokalizacji"
 msgstr[2] "listy lokalizacji"
 
 #: js/Models.js:170 js/Snom/PhoneGridPanel.js:112
-#: js/Snom/TemplateGridPanel.js:51
 msgid "Template"
 msgid_plural "Templates"
 msgstr[0] "Szablon"
@@ -490,8 +478,7 @@ msgstr[0] "Lista szablonów"
 msgstr[1] "listy szablonów"
 msgstr[2] "listy szablonów"
 
-#: js/Models.js:208 js/Snom/PhoneGridPanel.js:127
-#: js/Snom/SoftwareGridPanel.js:51 js/Voipmanager.js:157
+#: js/Models.js:208 js/Snom/PhoneGridPanel.js:127 js/Voipmanager.js:157
 msgid "Software"
 msgid_plural "Softwares"
 msgstr[0] "Oprogramowanie"
@@ -533,7 +520,7 @@ msgstr[0] "lista łączy"
 msgstr[1] "listy łączy"
 msgstr[2] "listy łączy"
 
-#: js/Models.js:336 js/Snom/SettingGridPanel.js:51 js/Voipmanager.js:147
+#: js/Models.js:336 js/Voipmanager.js:147
 msgid "Setting"
 msgid_plural "Settings"
 msgstr[0] "Ustawienie"
@@ -582,12 +569,26 @@ msgstr[0] "lista kontekstów"
 msgstr[1] "listy kontekstów"
 msgstr[2] "listy kontekstów"
 
+#: js/Models.js:553 js/Voipmanager.js:63
+msgid "Voicemail"
+msgid_plural "Voicemails"
+msgstr[0] "Wiadomość głosowa jako e-mail"
+msgstr[1] "wiadomości głosowe jako e-mail"
+msgstr[2] "wiadomości głosowych jako e-mail"
+
 #: js/Models.js:557
 msgid "voicemails list"
 msgid_plural "voicemails lists"
 msgstr[0] "lista wiadomości głosowych jako e-mail"
 msgstr[1] "listy wiadomości głosowych jako e-mail"
 msgstr[2] "list wiadomości głosowych jako e-mail"
+
+#: js/Models.js:588 js/Voipmanager.js:73
+msgid "Meetme"
+msgid_plural "Meetmes"
+msgstr[0] "Spotkanie"
+msgstr[1] "spotkania"
+msgstr[2] "spotkania"
 
 #: js/Models.js:592
 msgid "meetmes list"
@@ -991,6 +992,9 @@ msgstr "Telefony"
 #: js/Voipmanager.js:126
 msgid "Templates"
 msgstr "Szablony"
+
+#~ msgid "Sip Peer"
+#~ msgstr "Komputer SIP"
 
 #~ msgid "Rights"
 #~ msgstr "Uprawnienia"

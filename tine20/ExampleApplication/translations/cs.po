@@ -20,8 +20,7 @@ msgstr "Ukázkové záznamy"
 msgid "All ExampleRecords"
 msgstr "Všechny ukázkové záznamy"
 
-#: js/ExampleRecordEditDialog.js:91 js/ExampleRecordGridPanel.js:87
-#: js/Models.js:50
+#: js/ExampleRecordEditDialog.js:91 js/Models.js:50
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
 msgstr[0] "Ukázkový záznam"
@@ -79,6 +78,10 @@ msgstr "k účtování"
 #: js/ExampleRecordEditDialog.js:156
 msgid "billed"
 msgstr "účtovaný"
+
+#: js/ExampleRecordGridPanel.js:87
+msgid "Quick search"
+msgstr ""
 
 #: js/ExampleRecordGridPanel.js:88
 msgid "Description"

@@ -25,14 +25,18 @@ msgstr ""
 msgid "Title"
 msgstr "標題"
 
-#: js/ContractEditDialog.js:109 js/ProductEditDialog.js:90
-#: js/ProductGridPanel.js:130
+#: js/ContractEditDialog.js:109 js/ProductEditDialog.js:126
+#: js/ProductGridPanel.js:128
 msgid "Description"
 msgstr "說明"
 
-#: js/ContractEditDialog.js:110 js/ProductEditDialog.js:91
+#: js/ContractEditDialog.js:110 js/ProductEditDialog.js:127
 msgid "Enter description..."
 msgstr "輸入說明"
+
+#: js/ContractGridPanel.js:63 js/Models.js:79
+msgid "Quick search"
+msgstr ""
 
 #: js/ContractGridPanel.js:64
 msgid "Summary"
@@ -46,40 +50,48 @@ msgstr "合約編號"
 msgid "Status"
 msgstr "狀態"
 
-#: js/Models.js:36 js/ProductGridPanel.js:104
+#: js/Models.js:41
 msgid "Product"
 msgid_plural "Products"
 msgstr[0] ""
 
-#: js/Models.js:40
+#: js/Models.js:45
 #, fuzzy
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "合約清單"
 
-#: js/Models.js:89
+#: js/Models.js:80
+msgid "Product name"
+msgstr ""
+
+#: js/Models.js:113
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "合約"
 
-#: js/Models.js:93
+#: js/Models.js:117
 msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] "合約清單"
 
-#: js/ProductEditDialog.js:77 js/ProductGridPanel.js:129
+#: js/ProductEditDialog.js:105 js/ProductGridPanel.js:125
 msgid "Name"
 msgstr ""
 
-#: js/ProductEditDialog.js:83 js/ProductGridPanel.js:131
+#: js/ProductEditDialog.js:111 js/ProductGridPanel.js:129
 msgid "Price"
 msgstr ""
 
-#: js/ProductGridPanel.js:105
-msgid "Product name"
+#: js/ProductEditDialog.js:118 js/ProductGridPanel.js:126
+msgid "Manufacturer"
 msgstr ""
 
-#: js/ProductGridPanel.js:128
+#: js/ProductEditDialog.js:122 js/ProductGridPanel.js:127
+msgid "Category"
+msgstr ""
+
+#: js/ProductGridPanel.js:124
 msgid "Tags"
 msgstr ""
 
@@ -100,6 +112,6 @@ msgstr "合約"
 msgid "All Contracts"
 msgstr "合約"
 
-#: Setup/setup.xml:231
+#: Setup/setup.xml:243
 msgid "Shared Contracts"
 msgstr "已分享的合約"

@@ -25,8 +25,7 @@ msgstr ""
 msgid "Teacher Account"
 msgstr ""
 
-#: Frontend/Json.php:240 js/CourseEditDialog.js:135 js/CourseGridPanel.js:51
-#: js/Models.js:42
+#: Frontend/Json.php:240 js/CourseEditDialog.js:135 js/Models.js:42
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] ""
@@ -73,6 +72,10 @@ msgstr ""
 
 #: js/CourseEditDialog.js:265
 msgid "Please enter the new password:"
+msgstr ""
+
+#: js/CourseGridPanel.js:51
+msgid "Quick search"
 msgstr ""
 
 #: js/CourseGridPanel.js:68

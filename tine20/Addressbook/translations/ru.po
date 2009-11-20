@@ -165,6 +165,10 @@ msgstr "адресные книги"
 msgid "User Account"
 msgstr ""
 
+#: js/Addressbook.js:243
+msgid "Quick search"
+msgstr ""
+
 #: js/Addressbook.js:244 js/ContactEditDialog.js:86 js/ContactGrid.js:117
 #: js/EditDialog.js:389
 msgid "First Name"
@@ -382,45 +386,53 @@ msgstr "Часовой пояс"
 msgid "Geo"
 msgstr "Координаты"
 
-#: js/ContactGrid.js:160
+#: js/ContactGrid.js:151
+msgid "Creation Time"
+msgstr ""
+
+#: js/ContactGrid.js:152
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/ContactGrid.js:162
 #, fuzzy
 msgid "Export Contact"
 msgstr "Контакт"
 
-#: js/ContactGrid.js:169
+#: js/ContactGrid.js:171
 msgid "Export as PDF"
 msgstr "Экспортировать как PDF"
 
-#: js/ContactGrid.js:176
+#: js/ContactGrid.js:178
 msgid "Export as CSV"
 msgstr "Экспортировать как CSV"
 
-#: js/ContactGrid.js:188
+#: js/ContactGrid.js:190
 #, fuzzy
 msgid "Call contact"
 msgstr "позвонить контакту"
 
-#: js/ContactGrid.js:200
+#: js/ContactGrid.js:202
 msgid "Compose email"
 msgstr ""
 
-#: js/ContactGrid.js:240
+#: js/ContactGrid.js:247
 msgid "Work"
 msgstr "Работа "
 
-#: js/ContactGrid.js:249
+#: js/ContactGrid.js:256
 msgid "Home"
 msgstr "Домашний URL"
 
-#: js/ContactGrid.js:258
+#: js/ContactGrid.js:265
 msgid "Cell"
 msgstr "Сотовый"
 
-#: js/ContactGrid.js:267
+#: js/ContactGrid.js:274
 msgid "Cell private"
 msgstr "Мобильный телефон (личный)"
 
-#: js/ContactGrid.js:357
+#: js/ContactGrid.js:364
 #, fuzzy
 msgid "Internal Contact"
 msgstr "Внутренние контакты"

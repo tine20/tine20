@@ -157,6 +157,10 @@ msgstr "通訊錄"
 msgid "User Account"
 msgstr ""
 
+#: js/Addressbook.js:243
+msgid "Quick search"
+msgstr ""
+
 #: js/Addressbook.js:244 js/ContactEditDialog.js:86 js/ContactGrid.js:117
 #: js/EditDialog.js:389
 msgid "First Name"
@@ -374,45 +378,53 @@ msgstr "時區"
 msgid "Geo"
 msgstr ""
 
-#: js/ContactGrid.js:160
+#: js/ContactGrid.js:151
+msgid "Creation Time"
+msgstr ""
+
+#: js/ContactGrid.js:152
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/ContactGrid.js:162
 #, fuzzy
 msgid "Export Contact"
 msgstr "聯絡人"
 
-#: js/ContactGrid.js:169
+#: js/ContactGrid.js:171
 msgid "Export as PDF"
 msgstr "匯出成 PDF"
 
-#: js/ContactGrid.js:176
+#: js/ContactGrid.js:178
 msgid "Export as CSV"
 msgstr "匯出成 CSV"
 
-#: js/ContactGrid.js:188
+#: js/ContactGrid.js:190
 #, fuzzy
 msgid "Call contact"
 msgstr "撥打聯絡人"
 
-#: js/ContactGrid.js:200
+#: js/ContactGrid.js:202
 msgid "Compose email"
 msgstr ""
 
-#: js/ContactGrid.js:240
+#: js/ContactGrid.js:247
 msgid "Work"
 msgstr "工作"
 
-#: js/ContactGrid.js:249
+#: js/ContactGrid.js:256
 msgid "Home"
 msgstr "家裡"
 
-#: js/ContactGrid.js:258
+#: js/ContactGrid.js:265
 msgid "Cell"
 msgstr "手機號碼"
 
-#: js/ContactGrid.js:267
+#: js/ContactGrid.js:274
 msgid "Cell private"
 msgstr "個人手機號碼"
 
-#: js/ContactGrid.js:357
+#: js/ContactGrid.js:364
 #, fuzzy
 msgid "Internal Contact"
 msgstr "分機號碼"

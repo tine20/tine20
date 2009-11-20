@@ -110,7 +110,7 @@ msgstr "показва потребителски конта"
 msgid "view computers list and details"
 msgstr "показва листа на потребителските конта и детайли"
 
-#: js/Admin.js:20 js/Users.js:501
+#: js/Admin.js:20 js/Users.js:489
 #, fuzzy
 msgid "User"
 msgid_plural "Users"
@@ -146,7 +146,7 @@ msgid "Admin"
 msgstr "Администратор"
 
 #: js/Admin.js:284 js/Groups.js:51 js/Roles.js:45 js/Tags.js:58
-#: js/Users.js:186
+#: js/Users.js:174
 msgid "Confirm"
 msgstr "Потвърждение"
 
@@ -162,8 +162,8 @@ msgstr "изтрий влизане"
 msgid "select all"
 msgstr "селектирай всичко"
 
-#: js/Admin.js:405 js/Applications.js:129 js/Groups.js:132 js/Roles.js:129
-#: js/Tags.js:120 js/Users.js:225
+#: js/Admin.js:405 js/Applications.js:129 js/Groups.js:133 js/Roles.js:129
+#: js/Tags.js:120 js/Users.js:213
 msgid "enter searchfilter"
 msgstr "вкарай филтър за търсене"
 
@@ -175,8 +175,8 @@ msgstr "Покажи от:"
 msgid "to:"
 msgstr "до:"
 
-#: js/Admin.js:444 js/Applications.js:145 js/Groups.js:152 js/Roles.js:149
-#: js/Tags.js:140 js/Users.js:246
+#: js/Admin.js:444 js/Applications.js:145 js/Groups.js:153 js/Roles.js:149
+#: js/Tags.js:140 js/Users.js:234
 msgid "Search:"
 msgstr "Търси:"
 
@@ -212,11 +212,11 @@ msgstr "Няма регистрирани усрешни влизания"
 msgid "Session ID"
 msgstr "ID на сесия"
 
-#: js/Admin.js:565 js/UserEditDialog.js:214
+#: js/Admin.js:565 js/UserEditDialog.js:230
 msgid "Login Name"
 msgstr "Потребителско име"
 
-#: js/Admin.js:566 js/Applications.js:220 js/Groups.js:202 js/Roles.js:201
+#: js/Admin.js:566 js/Applications.js:220 js/Groups.js:203 js/Roles.js:201
 #: js/SambaMachineGrid.js:90 js/Tags.js:187
 msgid "Name"
 msgstr "Име"
@@ -258,11 +258,11 @@ msgstr "деактивира арликация"
 msgid "settings"
 msgstr "настройки"
 
-#: js/Applications.js:174 js/UserEditDialog.js:267
+#: js/Applications.js:174 js/UserEditDialog.js:284
 msgid "disabled"
 msgstr "деактивиран"
 
-#: js/Applications.js:177 js/UserEditDialog.js:267
+#: js/Applications.js:177 js/UserEditDialog.js:284
 msgid "enabled"
 msgstr "активиран"
 
@@ -283,7 +283,7 @@ msgstr "Няма намерени апликации"
 msgid "Order"
 msgstr "последователност"
 
-#: js/Applications.js:221 js/UserEditDialog.js:261 js/Users.js:306
+#: js/Applications.js:221 js/UserEditDialog.js:278 js/Users.js:294
 msgid "Status"
 msgstr "Статус"
 
@@ -296,86 +296,86 @@ msgstr "версия"
 msgid "Do you really want to delete the selected groups?"
 msgstr "Наистина ли желаете да изтриете селектираните групи?"
 
-#: js/Groups.js:68
+#: js/Groups.js:69
 msgid "Deleting group(s)..."
 msgstr "Изтрива група(и)..."
 
-#: js/Groups.js:73 js/Groups.js:371 js/Groups.js:399 js/RoleEditDialog.js:101
-#: js/RoleEditDialog.js:129 js/Roles.js:67 js/Tags.js:370 js/Users.js:206
+#: js/Groups.js:74 js/Groups.js:372 js/Groups.js:400 js/RoleEditDialog.js:101
+#: js/RoleEditDialog.js:129 js/Roles.js:67 js/Tags.js:370 js/Users.js:194
 msgid "Failed"
 msgstr "Неуспех"
 
-#: js/Groups.js:73 js/Groups.js:399
+#: js/Groups.js:74 js/Groups.js:400
 msgid "Some error occurred while trying to delete the group."
 msgstr "Настъпила е грешка при опит за изтриване на групата."
 
-#: js/Groups.js:103
+#: js/Groups.js:104
 msgid "add group"
 msgstr "добави група"
 
-#: js/Groups.js:111
+#: js/Groups.js:112
 msgid "edit group"
 msgstr "обработи група"
 
-#: js/Groups.js:119
+#: js/Groups.js:120
 msgid "delete group"
 msgstr "изтрий група"
 
-#: js/Groups.js:190
+#: js/Groups.js:191
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "Намерени групи {0} - {1} от {2}"
 
-#: js/Groups.js:191 js/Groups.js:246
+#: js/Groups.js:192 js/Groups.js:247
 msgid "No groups to display"
 msgstr "Няма намерени групи"
 
-#: js/Groups.js:201 js/Roles.js:200 js/SambaMachineGrid.js:83 js/Users.js:305
+#: js/Groups.js:202 js/Roles.js:200 js/SambaMachineGrid.js:83 js/Users.js:293
 msgid "ID"
 msgstr "ID (идентификационен номер)"
 
-#: js/Groups.js:203 js/Groups.js:460 js/RoleEditDialog.js:298 js/Roles.js:202
+#: js/Groups.js:204 js/Groups.js:461 js/RoleEditDialog.js:299 js/Roles.js:202
 #: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:96 js/Tags.js:188
-#: js/Tags.js:506
+#: js/Tags.js:505
 msgid "Description"
 msgstr "Описание"
 
-#: js/Groups.js:336 js/RoleEditDialog.js:64 js/Tags.js:325
+#: js/Groups.js:337 js/RoleEditDialog.js:64 js/Tags.js:325
 msgid "Please wait"
 msgstr "Моля изчакайте"
 
-#: js/Groups.js:336 js/RoleEditDialog.js:64
+#: js/Groups.js:337 js/RoleEditDialog.js:64
 msgid "Updating Memberships"
 msgstr "Актуализира членство "
 
-#: js/Groups.js:371
+#: js/Groups.js:372
 msgid "Could not save group."
 msgstr "Групата не можа да бъде съхранена"
 
-#: js/Groups.js:378 js/RoleEditDialog.js:108 js/Tags.js:375
+#: js/Groups.js:379 js/RoleEditDialog.js:108 js/Tags.js:375
 msgid "Errors"
 msgstr "Грешки"
 
-#: js/Groups.js:378 js/RoleEditDialog.js:108 js/Tags.js:375
+#: js/Groups.js:379 js/RoleEditDialog.js:108 js/Tags.js:375
 msgid "Please fix the errors noted."
 msgstr "Моля коригирайте грешките."
 
-#: js/Groups.js:391
+#: js/Groups.js:392
 msgid "Deleting group..."
 msgstr "Изтрива група..."
 
-#: js/Groups.js:431
+#: js/Groups.js:432
 msgid "Group Members"
 msgstr "Членове на група"
 
-#: js/Groups.js:453
+#: js/Groups.js:454
 msgid "Group Name"
 msgstr "Име на група"
 
-#: js/Groups.js:509
+#: js/Groups.js:510
 msgid "Add new group"
 msgstr "Добави нова група"
 
-#: js/Groups.js:511
+#: js/Groups.js:512
 msgid "Edit Group \"{0}\""
 msgstr "Редактира група \"{0}\""
 
@@ -395,27 +395,27 @@ msgstr "Настъпила е грешка при опит за изтриван
 msgid "Members"
 msgstr "Членове"
 
-#: js/RoleEditDialog.js:260
+#: js/RoleEditDialog.js:261
 msgid "Rights"
 msgstr "Права"
 
-#: js/RoleEditDialog.js:290
+#: js/RoleEditDialog.js:291
 msgid "Role Name"
 msgstr "Име на роля"
 
-#: js/RoleEditDialog.js:332
+#: js/RoleEditDialog.js:333
 msgid "Loading Role..."
 msgstr "Зарежда роля..."
 
-#: js/RoleEditDialog.js:332 js/Tags.js:545
+#: js/RoleEditDialog.js:333 js/Tags.js:544
 msgid "Please Wait"
 msgstr "Моля изчакайте"
 
-#: js/RoleEditDialog.js:369
+#: js/RoleEditDialog.js:370
 msgid "Add New Role"
 msgstr "Добави нова роля"
 
-#: js/RoleEditDialog.js:371
+#: js/RoleEditDialog.js:372
 msgid "Edit Role \"{0}\""
 msgstr "Редактира роля \"{0}\""
 
@@ -486,7 +486,7 @@ msgstr "Намерени категории {0} - {1} от {2}"
 msgid "No tags to display"
 msgstr "Няма намерени категории"
 
-#: js/Tags.js:186 js/Tags.js:512
+#: js/Tags.js:186 js/Tags.js:511
 msgid "Color"
 msgstr "Цвят"
 
@@ -511,350 +511,350 @@ msgstr "Контекст"
 msgid "Account Rights"
 msgstr "Права на конто"
 
-#: js/Tags.js:475
+#: js/Tags.js:474
 msgid "View"
 msgstr "Преглед"
 
-#: js/Tags.js:480
+#: js/Tags.js:479
 msgid "Use"
 msgstr "Употреба"
 
-#: js/Tags.js:499
+#: js/Tags.js:498
 msgid "Tag Name"
 msgstr "Име на таг"
 
-#: js/Tags.js:545
+#: js/Tags.js:544
 msgid "Loading Tag..."
 msgstr "Зареждо таг..."
 
-#: js/Tags.js:572
+#: js/Tags.js:571
 msgid "Add New Tag"
 msgstr "Добавя нов таг"
 
-#: js/Tags.js:574
+#: js/Tags.js:573
 msgid "Edit Tag \"{0}\""
 msgstr "Обработи таг \"{0}\""
 
-#: js/UserEditDialog.js:103
+#: js/UserEditDialog.js:110
 #, fuzzy
 msgid "Passwords do not match!"
 msgstr "Паролата не съответства"
 
-#: js/UserEditDialog.js:126
+#: js/UserEditDialog.js:136
 #, fuzzy
 msgid "Password confirmation"
 msgstr "Задай отново парола"
 
-#: js/UserEditDialog.js:146
+#: js/UserEditDialog.js:154
 #, fuzzy
 msgid "Repeat password"
 msgstr "изтрий парола"
 
-#: js/UserEditDialog.js:160
+#: js/UserEditDialog.js:166
 msgid "Cancel"
 msgstr ""
 
-#: js/UserEditDialog.js:167
+#: js/UserEditDialog.js:173
 msgid "Ok"
 msgstr ""
 
-#: js/UserEditDialog.js:183
+#: js/UserEditDialog.js:199
 #, fuzzy
 msgid "Account"
 msgstr "Конто  ID"
 
-#: js/UserEditDialog.js:198
+#: js/UserEditDialog.js:214
 msgid "First Name"
 msgstr "Име"
 
-#: js/UserEditDialog.js:208
+#: js/UserEditDialog.js:224
 msgid "Last Name"
 msgstr "Фамилия"
 
-#: js/UserEditDialog.js:219
+#: js/UserEditDialog.js:235
 msgid "Password"
 msgstr "Парола"
 
-#: js/UserEditDialog.js:223
+#: js/UserEditDialog.js:239
 msgid "no password set"
 msgstr "Няма зададена парола"
 
-#: js/UserEditDialog.js:244
+#: js/UserEditDialog.js:260
 msgid "Emailaddress"
 msgstr "Имейл адрес"
 
-#: js/UserEditDialog.js:249 js/Users.js:312
+#: js/UserEditDialog.js:266 js/Users.js:300
 msgid "OpenID"
 msgstr ""
 
-#: js/UserEditDialog.js:255
+#: js/UserEditDialog.js:272
 msgid "Primary group"
 msgstr "Основна група"
 
-#: js/UserEditDialog.js:267
+#: js/UserEditDialog.js:284
 #, fuzzy
 msgid "expired"
 msgstr "Краен срок"
 
-#: js/UserEditDialog.js:270 js/Users.js:316
+#: js/UserEditDialog.js:287 js/Users.js:304
 msgid "Expires"
 msgstr "Краен срок"
 
-#: js/UserEditDialog.js:272 js/UserEditDialog.js:314 js/UserEditDialog.js:391
+#: js/UserEditDialog.js:289 js/UserEditDialog.js:331 js/UserEditDialog.js:408
 msgid "never"
 msgstr "никога"
 
-#: js/UserEditDialog.js:277
+#: js/UserEditDialog.js:294
 msgid "Visibility"
 msgstr ""
 
-#: js/UserEditDialog.js:283
+#: js/UserEditDialog.js:300
 #, fuzzy
 msgid "Display in addressbook"
 msgstr "Покажи име"
 
-#: js/UserEditDialog.js:283
+#: js/UserEditDialog.js:300
 msgid "Hide from addressbook"
 msgstr ""
 
-#: js/UserEditDialog.js:288
+#: js/UserEditDialog.js:305
 msgid "Information"
 msgstr ""
 
-#: js/UserEditDialog.js:304 js/Users.js:313
+#: js/UserEditDialog.js:321 js/Users.js:301
 msgid "Last login at"
 msgstr "Последно регистрирано влизане"
 
-#: js/UserEditDialog.js:306 js/UserEditDialog.js:310
+#: js/UserEditDialog.js:323 js/UserEditDialog.js:327
 msgid "don't know"
 msgstr ""
 
-#: js/UserEditDialog.js:306 js/UserEditDialog.js:310 js/UserEditDialog.js:371
+#: js/UserEditDialog.js:323 js/UserEditDialog.js:327 js/UserEditDialog.js:388
 msgid "never logged in"
 msgstr "До този момент няма регистрирано влизане."
 
-#: js/UserEditDialog.js:308 js/Users.js:314
+#: js/UserEditDialog.js:325 js/Users.js:302
 msgid "Last login from"
 msgstr "Последното регистрирано влизане е от"
 
-#: js/UserEditDialog.js:312
+#: js/UserEditDialog.js:329
 msgid "Password set"
 msgstr "Задава парола"
 
-#: js/UserEditDialog.js:320
+#: js/UserEditDialog.js:337
 msgid "Fileserver"
 msgstr ""
 
-#: js/UserEditDialog.js:325
+#: js/UserEditDialog.js:342
 msgid "Unix"
 msgstr ""
 
-#: js/UserEditDialog.js:340
+#: js/UserEditDialog.js:357
 msgid "Home Directory"
 msgstr ""
 
-#: js/UserEditDialog.js:344
+#: js/UserEditDialog.js:361
 #, fuzzy
 msgid "Login Shell"
 msgstr "Потребителско име"
 
-#: js/UserEditDialog.js:349
+#: js/UserEditDialog.js:366
 msgid "Windows"
 msgstr ""
 
-#: js/UserEditDialog.js:364
+#: js/UserEditDialog.js:381
 msgid "Home Drive"
 msgstr ""
 
-#: js/UserEditDialog.js:369
+#: js/UserEditDialog.js:386
 #, fuzzy
 msgid "Logon Time"
 msgstr "Време на влизане"
 
-#: js/UserEditDialog.js:374
+#: js/UserEditDialog.js:391
 msgid "Home Path"
 msgstr ""
 
-#: js/UserEditDialog.js:379
+#: js/UserEditDialog.js:396
 #, fuzzy
 msgid "Logoff Time"
 msgstr "Време на излизане"
 
-#: js/UserEditDialog.js:381
+#: js/UserEditDialog.js:398
 #, fuzzy
 msgid "never logged off"
 msgstr "До този момент няма регистрирано влизане."
 
-#: js/UserEditDialog.js:384
+#: js/UserEditDialog.js:401
 msgid "Profile Path"
 msgstr ""
 
-#: js/UserEditDialog.js:389
+#: js/UserEditDialog.js:406
 #, fuzzy
 msgid "Password Last Set"
 msgstr "Задава парола"
 
-#: js/UserEditDialog.js:394
+#: js/UserEditDialog.js:411
 msgid "Logon Script"
 msgstr ""
 
-#: js/UserEditDialog.js:398
+#: js/UserEditDialog.js:415
 #, fuzzy
 msgid "Password Can Change"
 msgstr "Паролата е сменена"
 
-#: js/UserEditDialog.js:400 js/UserEditDialog.js:404 js/UserEditDialog.js:408
+#: js/UserEditDialog.js:417 js/UserEditDialog.js:421 js/UserEditDialog.js:425
 msgid "not set"
 msgstr ""
 
-#: js/UserEditDialog.js:402
+#: js/UserEditDialog.js:419
 #, fuzzy
 msgid "Password Must Change"
 msgstr "Паролата е сменена"
 
-#: js/UserEditDialog.js:406
+#: js/UserEditDialog.js:423
 msgid "Kick Off Time"
 msgstr ""
 
-#: js/UserEditDialog.js:413
+#: js/UserEditDialog.js:430
 msgid "IMAP"
 msgstr ""
 
-#: js/UserEditDialog.js:427
+#: js/UserEditDialog.js:444
 #, fuzzy
 msgid "Email UID"
 msgstr "Имейл"
 
-#: js/UserEditDialog.js:431
+#: js/UserEditDialog.js:448
 #, fuzzy
 msgid "Email GID"
 msgstr "Имейл"
 
-#: js/UserEditDialog.js:435 js/UserEditDialog.js:479
+#: js/UserEditDialog.js:452 js/UserEditDialog.js:496
 #, fuzzy
 msgid "Email Username"
 msgstr "Имейл"
 
-#: js/UserEditDialog.js:439
+#: js/UserEditDialog.js:456
 msgid "Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:445
+#: js/UserEditDialog.js:462
 msgid "Current Mail Size"
 msgstr ""
 
-#: js/UserEditDialog.js:450
+#: js/UserEditDialog.js:467
 msgid "Sieve Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:455
+#: js/UserEditDialog.js:472
 msgid "Current Sieve Size"
 msgstr ""
 
-#: js/UserEditDialog.js:460
+#: js/UserEditDialog.js:477
 #, fuzzy
 msgid "Last Login"
 msgstr "Последно регистрирано влизане"
 
-#: js/UserEditDialog.js:465
+#: js/UserEditDialog.js:482
 msgid "SMTP"
 msgstr ""
 
-#: js/UserEditDialog.js:483
+#: js/UserEditDialog.js:500
 msgid "Aliases"
 msgstr ""
 
-#: js/UserEditDialog.js:488
+#: js/UserEditDialog.js:505
 msgid "Forwards"
 msgstr ""
 
-#: js/UserEditDialog.js:493
+#: js/UserEditDialog.js:510
 msgid "Forward Only"
 msgstr ""
 
-#: js/Users.js:161
+#: js/Users.js:149
 msgid "Set new password"
 msgstr "Създаване на нова рарола"
 
-#: js/Users.js:161
+#: js/Users.js:149
 msgid "Please enter the new password:"
 msgstr "Моля вкарайте новата парола:"
 
-#: js/Users.js:186
+#: js/Users.js:174
 msgid "Do you really want to delete the selected account(s)?"
 msgstr "Наистина ли желаете да изтриете селектираното(-ите) конто(-а)?"
 
-#: js/Users.js:201
+#: js/Users.js:189
 msgid "Deleting account(s)..."
 msgstr "Изтрива конто(-а)..."
 
-#: js/Users.js:206
+#: js/Users.js:194
 msgid "Some error occurred while trying to delete the account(s)."
 msgstr "Настъпила е грешка при опит за изтриване на конто(-а)."
 
-#: js/Users.js:292
+#: js/Users.js:280
 msgid "Displaying accounts {0} - {1} of {2}"
 msgstr "Намерени конта {0} - {1} от {2}"
 
-#: js/Users.js:293
+#: js/Users.js:281
 msgid "No accounts to display"
 msgstr "Няма намерени конта"
 
-#: js/Users.js:307
+#: js/Users.js:295
 msgid "Displayname"
 msgstr "Покажи име"
 
-#: js/Users.js:308
+#: js/Users.js:296
 msgid "Loginname"
 msgstr "Потребителско име"
 
-#: js/Users.js:309
+#: js/Users.js:297
 msgid "Last name"
 msgstr "Фамилия"
 
-#: js/Users.js:310
+#: js/Users.js:298
 msgid "First name"
 msgstr "Име"
 
-#: js/Users.js:311
+#: js/Users.js:299
 msgid "Email"
 msgstr "Имейл"
 
-#: js/Users.js:315
+#: js/Users.js:303
 msgid "Password changed"
 msgstr "Паролата е сменена"
 
-#: js/Users.js:404
+#: js/Users.js:392
 msgid "add account"
 msgstr "добави потребителско конто"
 
-#: js/Users.js:412
+#: js/Users.js:400
 msgid "edit account"
 msgstr "обработи достъп"
 
-#: js/Users.js:420
+#: js/Users.js:408
 msgid "delete account"
 msgstr "изтрий достъп"
 
-#: js/Users.js:428
+#: js/Users.js:416
 msgid "enable account"
 msgstr "активирай достъп"
 
-#: js/Users.js:437
+#: js/Users.js:425
 msgid "disable account"
 msgstr "деактивирай достъп"
 
-#: js/Users.js:446
+#: js/Users.js:434
 msgid "reset password"
 msgstr "изтрий парола"
 
-#: js/Users.js:527
+#: js/Users.js:515
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Users.js:552
+#: js/Users.js:540
 #, fuzzy
 msgid "Email User"
 msgid_plural "Email Users"
