@@ -715,6 +715,12 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 }
             });
         } else if (! delayedTask) {
+            // update message cache again if no delayed task is set
+            if (this.updateMessagesTask === null) {
+                node.attributes.cache_status = 'pending';
+                this.updateMessageCache.defer(2000, this, [node]);
+            }
+            
             this.filterPlugin.onFilterChange();
         }
     },
