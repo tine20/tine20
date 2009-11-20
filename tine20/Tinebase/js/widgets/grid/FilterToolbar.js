@@ -97,9 +97,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     '<td class="tw-ftb-frow-pbutton"></td>',
                     '<td class="tw-ftb-frow-mbutton"></td>',
                     '<td class="tw-ftb-frow-prefix">{prefix}</td>',
-                    '<td class="tw-ftb-frow-field">{field}</td>',
+                    '<td class="tw-ftb-frow-field" width="240px">{field}</td>',
                     '<td class="tw-ftb-frow-operator" width="90px" >{operator}</td>',
-                    '<td class="tw-ftb-frow-value">{value}</td>',
+                    '<td class="tw-ftb-frow-value" width="200px">{value}</td>',
                     '<td class="tw-ftb-frow-searchbutton"></td>',
                     //'<td class="tw-ftb-frow-deleteallfilters"></td>',
                     //'<td class="tw-ftb-frow-savefilterbutton"></td>',
@@ -476,6 +476,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             });
         }
         this.filterStore.add(filter);
+        
+        // NOTE: adding filter rows and contents in hidden state leads to layouting problems
+        this.show();
         
         var fRow = this.templates.filterrow.insertAfter(this.el.child('tr[class=fw-ftb-frow]:last'),{
             id: 'tw-ftb-frowid-' + filter.id
