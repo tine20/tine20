@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-30 11:06+0100\n"
-"PO-Revision-Date: 2009-11-20 11:41+0100\n"
+"PO-Revision-Date: 2009-11-20 12:16+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -573,7 +573,7 @@ msgstr "Tag \"{0}\" bearbeiten"
 
 #: js/UserEditDialog.js:103
 msgid "Passwords do not match!"
-msgstr "Passworter ungleich!"
+msgstr "Passwörter ungleich!"
 
 #: js/UserEditDialog.js:126
 msgid "Password confirmation"
