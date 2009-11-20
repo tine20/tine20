@@ -133,7 +133,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 columnWidth: .2,
                                 xtype: 'checkbox',
                                 hideLabel: true,
-                                boxLabel: this.app.i18n._('non blocking'),
+                                boxLabel: this.app.i18n._('non-blocking'),
                                 name: 'transp',
                                 requiredGrant: 'editGrant',
                                 id: 'mycheckid',
