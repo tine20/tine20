@@ -243,12 +243,8 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         // add filter toolbar
         if (this.filterToolbar) {
             this.items.push(this.filterToolbar);
-            this.filterToolbar.on('bodyresize', function(ftb, w, h) {
-                if (this.filterToolbar.rendered && this.layout.rendered) {
-                    this.layout.layout();
-                }
-            }, this);
         }
+
     },
     
     /**
