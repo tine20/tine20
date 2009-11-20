@@ -15,6 +15,10 @@ Ext.namespace('Tine', 'Tine.Tinebase');
  * @class Tine.Tinebase.ExceptionHandler
  * @sigleton
  * 
+ * IE NOTE: http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnscrpt/html/WebErrors2.asp
+ *    "A common problem that bites many developers occurs when their onerror handler is not 
+ *     called because they have script debugging enabled for Internet Explorer."
+ *
  * central class for exception handling
  */
 Tine.Tinebase.ExceptionHandler = function() {
