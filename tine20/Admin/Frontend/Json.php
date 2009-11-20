@@ -215,7 +215,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             // add primary group to account for the group selection combo box
             $group = Tinebase_Group::getInstance()->getGroupById($user->accountPrimaryGroup);
         } else {
-            $userArray = array('accountStatus' => 'enabled');
+            $userArray = array('accountStatus' => 'enabled', 'visibility' => 'displayed');
             
             // get default primary group for the group selection combo box
             $group = Tinebase_Group::getInstance()->getDefaultGroup();
