@@ -236,11 +236,11 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             },
             items: [{
                 border: false,
-                flex: 0,
+                flex: 3,
                 height: 140
             }, {
                 layout: 'hbox',
-                flex: 1,
+                flex: 7,
                 border: false,
                 layoutConfig: {
                     align: 'stretch'
@@ -276,6 +276,42 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 }]
             }]
         }]; 
+        
+        /*
+        this.items = [{
+            layout: 'vbox',
+            border: false,
+            layoutConfig: {
+                align:'stretch'
+            },
+            items: [{
+                border: false,
+                flex: 1
+            }, {
+                flex: 1,
+                border: false,
+                layout: 'hbox',
+                layoutConfig: {
+                    align:'stretch'
+                },
+                items: [{
+                    border: false,
+                    flex: 1
+                }, {
+                    border: false,
+                    flex: 0,
+                    width: 460,
+                    items: this.getLoginPanel()
+                }, {
+                    border: false,
+                    flex: 1
+                }]
+            }, {
+                border: false,
+                flex: 1
+            }]
+        }];
+        */
     },
     
     /**
