@@ -101,32 +101,6 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
         }
         
         Tine.Tinebase.MainScreen.setActiveToolbar(this.actionToolbar, true);
-    },
-    
-    /**
-     * updates main toolbar
-     */
-    updateMainToolbar : function() {
-        //if (! 'platform' in window) { // waits for more prism
-            var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
-            menu.removeAll();
-            menu.add({
-                text: this.app.i18n._('Manage Resources'),
-                iconCls: 'cal-attendee-type-resource',
-                handler: function() {
-                    var window = Tine.WindowFactory.getWindow({
-                        width: 500,
-                        height: 470,
-                        name: 'cal-mange-resources',
-                        contentPanelConstructor: 'Tine.Calendar.ResourcesGridPanel'
-                    }); 
-                }, 
-                disabled: !Tine.Tinebase.common.hasRight('manage_resources', 'Calendar')
-            });
-    
-            var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
-            adminButton.setDisabled(false);
-        //}
     }
 });
 
