@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `smtp_forwardings` (
   `source` varchar(80) NOT NULL,
   `destination` text NOT NULL,
   KEY `source` (`source`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=Innodb DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `smtp_aliases` (
   `email` varchar(80) NOT NULL,
   `alias` varchar(80) NULL,
   KEY `emailalias` (`email`, `alias`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=Innodb DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `smtp_users` (
   `client_idnr` bigint(20) NOT NULL,
   `forward_only` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=Innodb DEFAULT CHARSET=utf8;
 
  */
 class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
