@@ -160,6 +160,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         
         $select->where($this->_db->quoteIdentifier('userid') . ' = ?', $user->accountLoginName)
                ->where($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
+               ->group('userid')
                ->joinLeft(
             /* table  */ array('aliases' => $this->_config['prefix'] . $this->_config['aliasTable']), 
             /* on     */ $this->_db->quoteIdentifier('aliases.email') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.email'),
