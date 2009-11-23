@@ -549,7 +549,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             // get all nodes on the same level with the active node
             var parent = node.parentNode;
             
-            if (parent.id == 'root') {
+            if (! parent || parent.id == 'root') {
                 return;
             }
             
