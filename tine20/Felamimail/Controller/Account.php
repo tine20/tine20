@@ -444,6 +444,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $result = $_account;
         } else {
             $this->_setRightChecks(FALSE);
+            if ($_account->delimiter) {
+                $_account->delimiter = substr($_account->delimiter, 0, 1);
+            }
             $result = $this->update($_account);
             $this->_setRightChecks(TRUE);
         }
