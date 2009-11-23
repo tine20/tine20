@@ -44,7 +44,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      *
      * @param  array $params mail reader specific parameters
      * @throws Zend_Mail_Storage_Exception
-     * @throws Zend_Mail_Protocol_Exception
+     * @throws Felamimail_Exception_InvalidCredentials
      */
     public function __construct($params)
     {
