@@ -40,7 +40,10 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         this.NONEcard.fillDefaults = Ext.emptyFn;
         this.NONEcard.getRule = function() {
             return null;
-        }
+        };
+        this.NONEcard.isValid = function() {
+            return true;
+        };
         
         this.DAILYcard = new Tine.Calendar.RrulePanel.DAILYcard({});
         this.WEEKLYcard = new Tine.Calendar.RrulePanel.WEEKLYcard({});
@@ -113,6 +116,10 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         }];
         
         Tine.Calendar.RrulePanel.superclass.initComponent.call(this);
+    },
+    
+    isValid: function() {
+        return this.activeRuleCard.isValid(this.record);
     },
     
     onFreqChange: function(freq) {
@@ -280,6 +287,18 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         });
         
         Tine.Calendar.RrulePanel.AbstractCard.superclass.initComponent.call(this);
+    },
+    
+    isValid: function(record) {
+        var until = this.until.getValue();
+        if (Ext.isDate(until) && Ext.isDate(record.get('dtstart'))) {
+            if (until.getTime() < record.get('dtstart').getTime()) {
+                this.until.markInvalid(this.app.i18n._('Until has to be after event start'));
+                return false;
+            }
+        }
+        
+        return true;
     },
     
     renderUntil: function() {
