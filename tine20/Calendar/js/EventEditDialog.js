@@ -232,6 +232,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     isValid: function() {
         var isValid = this.validateDtStart() && this.validateDtEnd();
         
+        if (! this.rrulePanel.isValid()) {
+            isValid = false;
+            
+            this.rrulePanel.ownerCt.setActiveTab(this.rrulePanel);
+        }
+        
         return isValid && Tine.Calendar.EventEditDialog.superclass.isValid.apply(this, arguments);
     },
     
