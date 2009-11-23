@@ -159,16 +159,17 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * deletes existing records
      *
-     * @param array $_ids 
+     * @param array|string $_ids 
      * @param Tinebase_Controller_Record_Interface $_controller the record controller
      * @return array
      */
     protected function _delete($_ids, Tinebase_Controller_Record_Interface $_controller)
     {
-        if (strpos($_ids, '[') !== false) {
+        if (! is_array($_ids) && strpos($_ids, '[') !== false) {
             $_ids = Zend_Json::decode($_ids);
         }
         $_controller->delete($_ids);
+        
         return array(
             'status'    => 'success'
         );  
