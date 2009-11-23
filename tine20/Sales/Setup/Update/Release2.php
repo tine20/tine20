@@ -219,4 +219,17 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
         $this->setApplicationVersion('Sales', '2.4');
         $this->setTableVersion('sales_products', '2');
     }
+    
+    /**
+     * erp was renamed to sales -> update models in relations
+     * 
+     * @return void
+     */
+    public function update_4()
+    {
+        $this->_db->query("update tine20_relations set own_model='Sales_Model_Contract' where own_model='Erp_Model_Contract'");
+        $this->_db->query("update tine20_relations set related_model='Sales_Model_Contract' where related_model='Erp_Model_Contract'");
+        
+        $this->setApplicationVersion('Sales', '2.5');
+    }
 }
