@@ -117,8 +117,13 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($timeaccounts, Tinebase_Core::get('currentAccount'));
                 
                 foreach ($_records as $record) {
-                    $record->timeaccount_id = $timeaccounts[$timeaccounts->getIndexById($record->timeaccount_id)];
-                    $record->timeaccount_id->account_grants = $this->_resolveTimesheetGrantsByTimeaccountGrants($record->timeaccount_id->account_grants, $record->account_id);
+                    $idx = $timeaccounts->getIndexById($record->timeaccount_id);
+                    if ($idx !== FALSE) {
+                        $record->timeaccount_id = $timeaccounts[$idx];
+                        $record->timeaccount_id->account_grants = $this->_resolveTimesheetGrantsByTimeaccountGrants($record->timeaccount_id->account_grants, $record->account_id);
+                    } else {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not resolve timeaccount (id: ' . $record->timeaccount_id . '). No permission?');
+                    }
                 }
                 
                 // resolve user afterwards because we compare ids in _resolveTimesheetGrantsByTimeaccountGrants()

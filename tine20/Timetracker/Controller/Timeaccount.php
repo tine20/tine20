@@ -109,6 +109,31 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
     }    
     
     /**
+     * Returns a set of leads identified by their id's
+     * - overwritten because we use different grants here (MANAGE_TIMEACCOUNTS)
+     * 
+     * @param   array $_ids       array of record identifiers
+     * @param   bool  $_ignoreACL don't check acl grants
+     * @return  Tinebase_Record_RecordSet of $this->_modelName
+     * 
+     * @todo    try to get this with one sql statement (@see Tinebase_Controller_Record_Abstract::getMultiple())
+     */
+    public function getMultiple($_ids, $_ignoreACL = FALSE)
+    {
+        $this->_checkRight('get');
+        
+        $records = $this->_backend->getMultiple($_ids);
+        
+        foreach ($records as $record) {
+            if ($_ignoreACL !== TRUE && !$this->_checkGrant($record, 'get', FALSE)) {
+                $index = $records->getIndexById($record->getId());
+                unset($records[$index]);
+            } 
+        }
+        return $records;
+    }
+    
+    /**
      * update one record
      * - save timeaccount grants
      *
