@@ -213,6 +213,19 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     }
     
     /**
+     * get user by property / comply to abstract parent class / needs to be implemented
+     *
+     * @param   string  $_property
+     * @param   string  $_accountId
+     * @param   string  $_accountClass  type of model to return
+     * @return  Tinebase_Model_User user
+     */
+    public function getUserByProperty($_property, $_accountId, $_accountClass = 'Tinebase_Model_User')
+    {
+        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Not implemented.');
+    }
+        
+    /**
      * get user by userId
      *
      * @param int $_accountId the account id
