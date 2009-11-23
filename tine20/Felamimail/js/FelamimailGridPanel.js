@@ -200,7 +200,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         });
         
         this.action_addAccount = new Ext.Action({
-            requiredGrant: 'readGrant',
             text: this.app.i18n._('Add Account'),
             handler: this.onAddAccount,
             iconCls: 'action_add',
