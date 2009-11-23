@@ -72,7 +72,7 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
      * Calmap record definition
      * 
      * @type Function 
-     * @propertycalMapRecord
+     * @property calMapRecord
      */
     calMapRecord: Ext.data.Record.create([
         {name: 'attender'}, {name: 'calendar'}, {name: 'user'}, {name: 'userAccountId'}, {name: 'calendarName'}, {name: 'userName'}, {name: 'editGrant'}, {name: 'isOriginal'}

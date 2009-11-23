@@ -78,11 +78,14 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
         var displayContainer = this.get('container_id');
         var currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
         
-        Ext.each(this.get('attendee'), function(attender) {
-            var user_id = attender.user_id ? attender.user_id.accountId ? attender.user_id.accountId : attender.user_id : null;
-            if (attender.user_type && attender.user_type == 'user' && user_id == currentAccountId) {
-                if (attender.displaycontainer_id) {
-                    displayContainer = attender.displaycontainer_id;
+        var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(this.get('attendee'));
+        
+        attendeeStore.each(function(attender) {
+            var userAccountId = attender.getUserAccountId();
+            if (userAccountId == currentAccountId) {
+                var container = attender.get('displaycontainer_id');
+                if (container) {
+                    displayContainer = container;
                 }
                 return false;
             }
