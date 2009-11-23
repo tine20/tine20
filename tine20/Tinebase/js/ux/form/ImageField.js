@@ -35,6 +35,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     defaultImage: 'images/empty_photo.png',
     
     defaultAutoCreate : {tag:'input', type:'hidden'},
+    handleMouseEvents: true,
     
     initComponent: function() {
         this.plugins = this.plugins || [];
@@ -60,7 +61,6 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             border: this.border === true ? '1px solid #B5B8C8' : '0'
         });
         this.buttonCt.setSize(this.width, this.height);
-        this.buttonCt.on('contextmenu', this.onContextMenu, this);
         
         this.loadMask = new Ext.LoadMask(this.buttonCt, {msg: _('Loading'), msgCls: 'x-mask-loading'});
         

@@ -127,10 +127,11 @@ Ext.ux.file.BrowsePlugin.prototype = {
         this.input_file.setLeft(button_box.width - input_box.width + adj.x + 'px');
         this.input_file.setTop(button_box.height - input_box.height + adj.y + 'px');
         this.input_file.setOpacity(0.0);
-            
+        
         if (this.component.handleMouseEvents) {
-            this.input_file.on('mouseover', this.component.onMouseOver, this.component);
-            this.input_file.on('mousedown', this.component.onMouseDown, this.component);
+            this.input_file.on('mouseover', this.component.onMouseOver || Ext.emptyFn, this.component);
+            this.input_file.on('mousedown', this.component.onMouseDown || Ext.emptyFn, this.component);
+            this.input_file.on('contextmenu', this.component.onContextMenu || Ext.emptyFn, this.component);
         }
         
         if(this.component.tooltip){
