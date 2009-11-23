@@ -36,7 +36,9 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * attachment filename regexp 
      *
      */
-    const ATTACHMENT_FILENAME_REGEXP = "/name=\"*([a-zA-Z0-9\-\._ ]+)\"*/";
+    //const ATTACHMENT_FILENAME_REGEXP = "/name=\"*([a-zA-Z0-9\-\._ ]+)\"*/";
+    //const ATTACHMENT_FILENAME_REGEXP = "/name=\"*([\wäÄöÖüÜß\-\._ ]+)\"*/";
+    const ATTACHMENT_FILENAME_REGEXP = "/name=\"*([\w\-\._ ]+)\"*/u";
     
     /**
      * email address regexp
