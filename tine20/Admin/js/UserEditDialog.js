@@ -73,6 +73,11 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('accountLastLogin', Tine.Tinebase.common.dateTimeRenderer(this.record.get('accountLastLogin')));
         this.record.set('accountLastPasswordChange', Tine.Tinebase.common.dateTimeRenderer(this.record.get('accountLastPasswordChange')));
         
+        if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
+            this.aliasesGrid.setStoreFromArray(this.emailRecord.get('emailAliases'));
+            this.forwardsGrid.setStoreFromArray(this.emailRecord.get('emailForwards'));
+        }
+        
         Tine.Admin.Users.EditDialog.superclass.onRecordLoad.call(this);
     },
     
@@ -89,6 +94,11 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('sambaSAM', this.samRecord.data);
 
         form.updateRecord(this.emailRecord);
+        // get aliases / forwards
+        if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
+            this.emailRecord.set('emailAliases', this.aliasesGrid.getFromStoreAsArray());
+            this.emailRecord.set('emailForwards', this.forwardsGrid.getFromStoreAsArray());
+        }
         this.record.set('emailUser', '');
         this.record.set('emailUser', this.emailRecord.data);
     },
@@ -124,6 +134,62 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @private
      */
+    initEmailGrids: function() {
+        
+        var commonConfig = {
+            autoExpandColumn:'email',
+            quickaddMandatory: 'email',
+            // border: false,
+            dataField: 'email',
+            height: 200,
+            columnWidth: .5,
+            recordClass: Ext.data.Record.create([
+                { name: 'email' }
+            ])
+        };
+        
+        this.aliasesGrid = new Tine.Tinebase.widgets.grid.QuickaddGridPanel(
+            Ext.apply(commonConfig, {
+                title:this.app.i18n._('Aliases'),
+                cm: new Ext.grid.ColumnModel([{ 
+                    id:'email', 
+                    header: this.app.i18n._('Email Alias'), 
+                    dataIndex: 'email', 
+                    width: 300, 
+                    hideable: false, 
+                    sortable: true,
+                    quickaddField: new Ext.form.TextField({
+                        emptyText: this.app.i18n._('Add an alias address...'),
+                        vtype: 'email'
+                    }),
+                    editor: new Ext.form.TextField({allowBlank: false}) 
+                }])
+            })
+        );
+
+        this.forwardsGrid = new Tine.Tinebase.widgets.grid.QuickaddGridPanel(
+            Ext.apply(commonConfig, {
+                title:this.app.i18n._('Forwards'),
+                cm: new Ext.grid.ColumnModel([{ 
+                    id:'email', 
+                    header: this.app.i18n._('Email Forward'), 
+                    dataIndex: 'email', 
+                    width: 300, 
+                    hideable: false, 
+                    sortable: true,
+                    quickaddField: new Ext.form.TextField({
+                        emptyText: this.app.i18n._('Add a forward address...'),
+                        vtype: 'email'
+                    }),
+                    editor: new Ext.form.TextField({allowBlank: false}) 
+                }])
+            })
+        );
+    },
+    
+    /**
+     * @private
+     */
     getFormItems: function() {
         
         var displayFieldStyle = {
@@ -131,6 +197,8 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
             padding: '3px',
             height: '11px'
         };
+        
+        this.initEmailGrids();
         
         this.passwordConfirmWindow = new Ext.Window({
             title: this.app.i18n._('Password confirmation'),
@@ -492,21 +560,9 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     columnWidth: .333,
                     readOnly: true
                 },
-                items: [[{
-                    fieldLabel: this.app.i18n._('Email Username'),
-                    name: 'emailUserId',
-                    columnWidth: .666
-                }], [{
-                    fieldLabel: this.app.i18n._('Aliases'),
-                    name: 'emailAliases',
-                    columnWidth: .666,
-                    readOnly: false
-                }], [{
-                    fieldLabel: this.app.i18n._('Forwards'),
-                    name: 'emailForwards',
-                    columnWidth: .666,
-                    readOnly: false
-                }], [{
+                items: [
+                    [this.aliasesGrid, this.forwardsGrid],
+                [{
                     fieldLabel: this.app.i18n._('Forward Only'),
                     name: 'emailForwardOnly',
                     xtype:'checkbox',
