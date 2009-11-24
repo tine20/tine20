@@ -19,8 +19,9 @@ Ext.namespace('Tine.Tinebase.widgets', 'Tine.Tinebase.widgets.grid');
  * 
  * <p>Grid Details Panel</p>
  * <p>
- * Details Panel with toolbar/ctx menu
+ * Details Panel with toolbar menu
  * <pre>
+ * TODO         add ctx menu
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -37,6 +38,7 @@ Tine.Tinebase.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGr
      * @property recordClass
      */
     recordClass: null,
+    dataField: null,
     
     /**
      * @private
@@ -50,6 +52,18 @@ Tine.Tinebase.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGr
     initComponent: function() {
         this.initGrid();
         this.initActions();
+        
+        if (! this.store) {
+            // create basic store
+            this.store = new Ext.data.Store({
+                // explicitly create reader
+                reader: new Ext.data.ArrayReader({
+                        idIndex: 0  // id for each record will be the first element
+                    },
+                    this.recordClass
+                )
+            });
+        }
 
         Tine.Tinebase.widgets.grid.QuickaddGridPanel.superclass.initComponent.call(this);
         
@@ -133,5 +147,40 @@ Tine.Tinebase.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGr
         }
         
         return newid;
-    }    
+    },
+
+    /**
+     * get values from store (as array)
+     * 
+     * @param {Array}
+     * 
+     * TODO improve this
+     */
+    setStoreFromArray: function(data) {
+        for (var i = 0; i < data.length; ++i) {
+            if (this.dataField === null) {
+                var recordData = data[i];
+            } else {
+                var recordData = {};
+                recordData[this.dataField] = data[i];
+            }
+            
+            this.store.insert(0, new this.recordClass(recordData));
+        }        
+    },
+    
+    /**
+     * get values from store (as array)
+     * 
+     * @return {Array}
+     */
+    getFromStoreAsArray: function() {
+        var result = [];
+        this.store.each(function(record) {                     
+            result.push((this.dataField === null) ? record.data : record.get(this.dataField));
+        }, this);
+        //store.commitChanges();
+        
+        return result;
+    }
 });
