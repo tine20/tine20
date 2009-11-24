@@ -82,6 +82,12 @@ Tine.Tinebase.tineInit = {
      * @cfg {String} getAllRegistryDataMethod
      */
     getAllRegistryDataMethod: 'Tinebase.getAllRegistryData',
+
+    /**
+     * @cfg {Boolean} stateful
+     */
+    stateful: true,
+
     /**
      * @cfg {String} requestUrl
      */
@@ -472,7 +478,9 @@ Tine.Tinebase.tineInit = {
                     }
                     
                     // init state with data from reg
-                    Tine.Tinebase.tineInit.initState();
+                    if (Tine.Tinebase.tineInit.stateful === true) {
+                        Tine.Tinebase.tineInit.initState();
+                    }
                     
                     Tine.Tinebase.tineInit.initList.initRegistry = true;
                 }
