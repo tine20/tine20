@@ -90,6 +90,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         allowBlank: false
                         }], [{
                         columnWidth: 1,
+                        fieldLabel: this.app.i18n._('Description'),
                         xtype: 'textarea',
                         name: 'description',
                         height: 150
