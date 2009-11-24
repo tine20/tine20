@@ -672,9 +672,16 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     //accountId: accountId
                 },
                 scope: this,
-                //timeout: 60000, // 1 minute
                 timeout: 600000, // 10 minutes -> TODO lower timeout when caching is resumable
                 success: function(_result, _request) {
+                    
+                    // always remove loading icon
+                    node.getUI().removeClass("x-tree-node-loading");
+                    
+                    if (! node.attributes) {
+                        return;
+                    }
+                    
                     // update folder counters / class
                     var folderData = Ext.util.JSON.decode(_result.responseText);
                     
@@ -709,14 +716,14 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                             this.filterPlugin.onFilterChange();
                         }
                     }
-                    if (folderData.cache_status == 'complete') {
-                        node.getUI().removeClass("x-tree-node-loading");
-                    }
                 },
                 failure: function(response, options) {
-                    // call handle failure in tree loader and show credentials dialog / reload account afterwards
-                    this.loader.handleFailure(response, options, node.parentNode, false);
                     node.getUI().removeClass("x-tree-node-loading");
+                    
+                    // call handle failure in tree loader and show credentials dialog / reload account afterwards
+                    if (node.parentNode) {
+                        this.loader.handleFailure(response, options, node.parentNode, false);
+                    }
                 }
             });
         } else if (! delayedTask) {
