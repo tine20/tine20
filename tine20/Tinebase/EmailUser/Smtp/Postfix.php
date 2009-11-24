@@ -10,7 +10,7 @@
  * @version     $Id$
  * 
  * @todo        add validation of email addresses?
- * @todo        check domain handling
+ * @todo        check domains when creating aliases
  * @todo        remove verbose debug output
  */
 
@@ -60,14 +60,16 @@ CREATE TABLE IF NOT EXISTS `smtp_aliases` (
 
 CREATE TABLE IF NOT EXISTS `smtp_users` (
   `email` varchar(80) NOT NULL,
-  `passwd` varchar(34) default NULL,
-  `quota` int(10) default '10485760',
-  `userid` varchar(100) NOT NULL,
-  `encryption_type` varchar(20) NOT NULL default 'md5',
+  `passwd` varchar(34) DEFAULT NULL,
+  `quota` int(10) DEFAULT '10485760',
+  `userid` varchar(40) NOT NULL,
+  `encryption_type` varchar(20) NOT NULL DEFAULT 'md5',
   `client_idnr` bigint(20) NOT NULL,
-  `forward_only` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`email`)
-) ENGINE=Innodb DEFAULT CHARSET=utf8;
+  `forward_only` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`userid`,`client_idnr`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
  */
 class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
@@ -136,7 +138,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
     {
         $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
         $this->_config = array_merge($smtpConfig['postfix'], $this->_config);
-        $this->_config['domain'] = (isset($smtpConfig['domain'])) ? $smtpConfig['domain'] : '';
+        //$this->_config['domain'] = (isset($smtpConfig['domain'])) ? $smtpConfig['domain'] : '';
         $this->_tableName = $this->_config['prefix'] . $this->_config['userTable'];
         
         $this->_db = Zend_Db::factory('Pdo_Mysql', $this->_config);
@@ -153,12 +155,10 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      */
     public function getUserById($_userId) 
     {
-        $user = Tinebase_User::getInstance()->getFullUserById($_userId);
-        
         $select = $this->_db->select();
         $select->from($this->_tableName);
         
-        $select->where($this->_db->quoteIdentifier('userid') . ' = ?', $user->accountLoginName)
+        $select->where($this->_db->quoteIdentifier('userid') . ' = ?', $_userId)
                ->where($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
                ->group('userid')
                ->joinLeft(
@@ -206,11 +206,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
             return $_emailUser;
 	    }
 	    
-	    $userId = $_user->accountLoginName;
-	    if (isset($this->_config['domain']) && ! empty($this->_config['domain'])) {
-            $userId .= '@' . $this->_config['domain'];
-        }
-	    $_emailUser->emailUserId = $userId;
+	    $_emailUser->emailUserId = $_user->getId();
 	    $_emailUser->emailAddress = $_user->accountEmailAddress;
 	    
 	    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding new postfix user ' . $_emailUser->emailUserId);
@@ -296,8 +292,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Delete postfix settings for user ' . $user->accountLoginName);
         
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('userid') . ' = ?', $user->accountLoginName),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('userid') .       ' = ?', $_userId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('client_idnr') .  ' = ?', $this->_clientId)
         );
         
         $this->_db->delete($this->_tableName, $where);
