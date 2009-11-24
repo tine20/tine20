@@ -227,22 +227,21 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     onUpdateStore: function(store, record, operation)
     {
-        if (operation == 'edit') {
-            this.record.data.to = [];
-            this.record.data.cc = [];
-            this.record.data.bcc = [];
-            
-            store.each(function(recipient){
-                if (recipient.data.address != '') {
-                    this.record.data[recipient.data.type].push(recipient.data.address);
-                }
-            }, this);
+        // update record recipient fields
+        this.record.data.to = [];
+        this.record.data.cc = [];
+        this.record.data.bcc = [];
+        store.each(function(recipient){
+            if (recipient.data.address != '') {
+                this.record.data[recipient.data.type].push(recipient.data.address);
+            }
+        }, this);
 
+        if (operation == 'edit') {
             // add additional row if new address has been added
             if (record.modified.address == '') {
                 store.add(new Ext.data.Record({type: 'to', 'address': ''}));
             }
-            
             store.commitChanges();
         }
     },
