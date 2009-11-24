@@ -144,11 +144,25 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         foreach($this->_mapping as $fieldName => $value) {
             switch($value) {
                 case 'completed':
-                    if((int)$_data->$fieldName === 1) {
-                        $task->status_id = 2;
-                        $task->completed = (string)$_data->DateCompleted;
+                    
+                    // get status COMPLETED/IN-PROCESS
+                    $allStatus = Tasks_Controller_Status::getInstance()->getAllStatus();
+                    foreach ($allStatus as $status) {
+                        switch ($status->status_name) {
+                            case  'COMPLETED':
+                                $completedStatus = $status;
+                                break;
+                            case  'IN-PROCESS':
+                                $inprocessStatus = $status;
+                                break;
+                        }
+                    }
+                    
+                    if((int)$xmlData->$fieldName === 1) {
+                        $task->status_id = (isset($completedStatus)) ? $completedStatus->getId() : 2;
+                        $task->completed = (string)$xmlData->DateCompleted;
                     } else {
-                        $task->status_id = 3; 
+                        $task->status_id = (isset($inprocessStatus)) ? $inprocessStatus->getId() : 3;
                         $task->completed = NULL;
                     }
                     break;
@@ -188,11 +202,14 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     {
         $xmlData = $_data->children('Tasks');
                 
-        $filterArray[] = array(
+        $filterArray = array(array(
             'field'     => 'containerType',
             'operator'  => 'equals',
             'value'     => 'all'
-        ); 
+        ), array(
+            'field'     => 'showClosed',
+            'value'     => TRUE
+        )); 
         
         foreach($this->_mapping as $fieldName => $value) {
             if(isset($xmlData->$fieldName)) {
@@ -209,6 +226,55 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filter, true));
         
         return $filter;
+    }
+    
+    /**
+     * return contentfilter array
+     * 
+     * @param $_filterType
+     * @return Tinebase_Model_Filter_FilterGroup
+     * 
+     * @todo include period filter?
+     */
+    protected function _getContentFilter($_filterType)
+    {
+        // calendar content filter:
+        // exclude recur exceptions
+        /*
+        $filterArray[] = array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL);
+        
+        if(in_array($_filterType, $this->_filterArray)) {
+            switch($_filterType) {
+                case self::FILTER_2_WEEKS_BACK:
+                    $from = Zend_Date::now()->subWeek(2);
+                    break;
+                case self::FILTER_1_MONTH_BACK:
+                    $from = Zend_Date::now()->subMonth(2);
+                    break;
+                case self::FILTER_3_MONTHS_BACK:
+                    $from = Zend_Date::now()->subMonth(3);
+                    break;
+                case self::FILTER_6_MONTHS_BACK:
+                    $from = Zend_Date::now()->subMonth(6);
+                    break;
+            }
+            // next 10 years
+            $to = Zend_Date::now()->addYear(10);
+            // add period filter
+            $filterArray[] = array(
+                'field'    => 'period',
+                'operator' => 'within',
+                'value'    => array(
+                    'from'  => $from,
+                    'until' => $to
+            ));
+        }
+        */
+        
+        // always get closed tasks
+        $filterArray[] = array('field' => 'showClosed', 'value' => TRUE);
+        
+        return $filterArray;
     }
     
     /**
