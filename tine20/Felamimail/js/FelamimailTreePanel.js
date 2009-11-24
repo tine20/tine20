@@ -585,6 +585,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     // update cache of one extra folder
                     var updating = false;
                     for (var i = 0; i < folderData.length; i++) {
+                        if (! folderData[i][0]) {
+                            // goto next folder
+                            continue;
+                        }
+                        
                         var updateNode = this.getNodeById(folderData[i][0].id);
                         
                         // trigger updateMessageCache if needed (only if not already updating / cache pedning or different unreadcounts)
