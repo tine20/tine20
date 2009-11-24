@@ -60,6 +60,7 @@
         <source src="../tine20/Tinebase/js/widgets/customfields/CustomfieldsPanel.js"/>
         <source src="../tine20/Tinebase/js/widgets/dialog/LinkPanel.js"/>
         <source src="../tine20/Tinebase/js/widgets/grid/DetailsPanel.js"/>
+        <source src="../tine20/Tinebase/js/widgets/grid/QuickaddGridPanel.js"/>
         <source src="../tine20/Tinebase/js/widgets/form/" match="*.js"/>
         <source src="../tine20/Addressbook/js/ContactGrid.js"/>
         <source src="../tine20/Addressbook/js/SearchCombo.js"/>

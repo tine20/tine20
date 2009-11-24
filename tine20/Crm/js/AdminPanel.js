@@ -218,100 +218,19 @@ Ext.namespace('Tine.Crm.Admin');
 
 /**
  * @namespace   Tine.Crm.Admin
- * @class       Tine.Crm.AdminPanel.Grid
- * @extends     Tine.Crm.Admin.QuickaddGridPanel
+ * @class       Tine.Crm.Admin.QuickaddGridPanel
+ * @extends     Tine.Tinebase.widgets.grid.QuickaddGridPanel
  * 
  * admin config option quickadd grid panel
- * 
- * TODO         move that to tinebase widgets?
  */
-Tine.Crm.Admin.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
-    /**
-     * @property recordClass
-     */
-    recordClass: null,
-    
-    /**
-     * @private
-     */
-    clicksToEdit:'auto',
-    frame: true,
+Tine.Crm.Admin.QuickaddGridPanel = Ext.extend(Tine.Tinebase.widgets.grid.QuickaddGridPanel, {
 
     /**
      * @private
      */
     initComponent: function() {
         this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Crm');
-        
-        this.sm = new Ext.grid.RowSelectionModel({multiSelect:true});
-        this.sm.on('selectionchange', function(sm) {
-            var rowCount = sm.getCount();
-            this.deleteAction.setDisabled(rowCount == 0);
-        }, this);
-        
-        this.cm = this.getColumnModel();
-        
-        this.initActions();
 
         Tine.Crm.Admin.QuickaddGridPanel.superclass.initComponent.call(this);
-        
-        this.on('newentry', this.onNewentry, this);
-    },
-
-    /**
-     * @private
-     */
-    initActions: function() {
-        this.deleteAction = new Ext.Action({
-            text: this.app.i18n._('Remove Option'),
-            iconCls: 'actionDelete',
-            handler : this.onDelete,
-            scope: this,
-            disabled: true
-        });
-        
-        this.tbar = [this.deleteAction];        
-    },
-    
-    getColumnModel: function() {
-        return new Ext.grid.ColumnModel([]);
-    },
-    
-    /**
-     * new entry event
-     * 
-     * @param {Object} recordData
-     * @return {Boolean}
-     */
-    onNewentry: function(recordData) {
-        // add new option to store
-        recordData.id = this.getNextId();
-        var newOption = new this.recordClass(recordData);
-        this.store.insert(0,newOption);
-        return true;
-    },
-    
-    /**
-     * delete event
-     */
-    onDelete: function() {
-        var selectedRows = this.getSelectionModel().getSelections();
-        for (var i = 0; i < selectedRows.length; ++i) {
-            this.store.remove(selectedRows[i]);
-        }
-    },
-    
-    /**
-     * get next available id
-     * @return {Number}
-     */
-    getNextId: function() {
-        var newid = this.store.getCount() + 1;
-        
-        while (this.store.getById(newid)) {
-            newid++;
-        }
-        
-        return newid;
     }
 });
