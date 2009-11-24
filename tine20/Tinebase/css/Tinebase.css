@@ -146,13 +146,12 @@ html, body {
 
 .tb-login-infosection {
 	padding-left: 20px;
-	padding-right: 50px;
 }
 
 .tb-login-infosection {
     color: gray;
     line-height:17px;
-    margin-top:-12px;
+    /*margin-top:-12px;*/
 }
 
 .tb-login-infosection a {

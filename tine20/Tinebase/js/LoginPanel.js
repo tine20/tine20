@@ -59,6 +59,8 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     getLoginPanel: function() {
         if (! this.loginPanel) {
             this.loginPanel = new Ext.FormPanel({
+                width: 460,
+                height: 270,
                 frame:true,
                 labelWidth: 90,
                 cls: 'tb-login-panel',
@@ -127,9 +129,10 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     cls: 'tb-login-big-label-spacer',
                     html: '&nbsp;'
                 }, {
-                    html: '<p><a target="_blank" href="http://www.tine20.org/" border="0">' + _('Tine 2.0 Homepage') + '</a></p>'
-                }, {
-                    html: '<p><a target="_blank" href="http://www.tine20.org/forum/" border="0">' + _('Our Forum for questions and ideas') + '</a></p>'
+                    html: '<ul>' + 
+                        '<li><a target="_blank" href="http://www.tine20.org/" border="0">' + _('Tine 2.0 Homepage') + '</a></li>' +
+                        '<li><a target="_blank" href="http://www.tine20.org/forum/" border="0">' + _('Tine 2.0 Forum') + '</a></li>' +
+                    '</ul>'
                 }
                 ]
             });
@@ -227,91 +230,33 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
      * initialize base layout
      */
     initLayout: function() {
-        
-        this.items = [{
-            layout: 'vbox',
+        this.infoPanel = new Ext.Panel({
+            layout: 'fit',
+            cls: 'tb-login-infosection',
             border: false,
+            width: 300,
+            height: 460,
+            layout: 'vbox',
             layoutConfig: {
                 align:'stretch'
             },
-            items: [{
-                border: false,
-                flex: 3,
-                height: 140
-            }, {
-                layout: 'hbox',
-                flex: 7,
-                border: false,
-                layoutConfig: {
-                    align: 'stretch'
-                },
-                items: [{
-                    flex: 7,
-                    border: false,
-                    layout: 'hbox',
-                    layoutConfig: {
-                        align: 'stretch'
-                    },
-                    items: [{
-                        flex: 1,
-                        border: false
-                    }, {
-                        flex: 0,
-                        border: false,
-                        width: 460,
-                        items: this.getLoginPanel()
-                    }]
-                }, {
-                    layout: 'vbox',
-                    cls: 'tb-login-infosection',
-                    layoutConfig: {
-                        align: 'stretch'
-                    },
-                    border: false,
-                    flex: 3,
-                    items: [
-                        this.getTinePanel(),
-                        this.getSurveyPanel()
-                    ]
-                }]
-            }]
-        }]; 
+            items: [
+                this.getTinePanel(),
+                this.getSurveyPanel()
+            ]
+        });
         
-        /*
         this.items = [{
-            layout: 'vbox',
+            layout: 'absolute',
             border: false,
-            layoutConfig: {
-                align:'stretch'
-            },
             items: [{
                 border: false,
-                flex: 1
-            }, {
-                flex: 1,
-                border: false,
-                layout: 'hbox',
-                layoutConfig: {
-                    align:'stretch'
-                },
-                items: [{
-                    border: false,
-                    flex: 1
-                }, {
-                    border: false,
-                    flex: 0,
-                    width: 460,
-                    items: this.getLoginPanel()
-                }, {
-                    border: false,
-                    flex: 1
-                }]
+                items: this.getLoginPanel()
             }, {
                 border: false,
-                flex: 1
+                items: this.infoPanel
             }]
         }];
-        */
     },
     
     /**
@@ -364,6 +309,30 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         this.originalTitle = window.document.title;
         var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '';
         window.document.title = Tine.title + postfix + ' - ' + _('Please enter your login data');
+    },
+    
+    onResize: function() {
+        this.supr().onResize.apply(this, arguments);
+        
+        
+        var box = this.getBox();
+        
+        var loginBox = this.getLoginPanel().getBox();
+        var infoBox = this.infoPanel.getBox();
+        
+        var top = (box.height - loginBox.height)/2;
+        if (box.height - top < infoBox.height) {
+            top = box.height - infoBox.height;
+        }
+        
+        
+        var loginLeft = (box.width - loginBox.width)/2;
+        if(loginLeft + loginBox.width + infoBox.width > box.width) {
+            loginLeft = box.width - loginBox.width - infoBox.width;
+        }
+        
+        this.getLoginPanel().ownerCt.setPosition(loginLeft, top);
+        this.infoPanel.ownerCt.setPosition(loginLeft + loginBox.width, top);
     },
     
     renderSurveyPanel: function(survey) {
