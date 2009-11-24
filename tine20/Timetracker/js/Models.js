@@ -126,10 +126,12 @@ Tine.Timetracker.Model.Timeaccount.getDefaultData = function() {
 Tine.Timetracker.Model.Timeaccount.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Timetracker');
     return [
-        {label: _('Quick search'),   field: 'query',       operators: ['contains']},
-        {label: app.i18n._('Description'),    field: 'description', operators: ['contains']},
-        {label: app.i18n._('Created By'),     field: 'created_by',  valueType: 'user'},
-        {label: app.i18n._('Status'),         field: 'status',      filtertype: 'timetracker.timeaccountstatus'},
+        {label: _('Quick search'),          field: 'query',       operators: ['contains']},
+        {label: app.i18n._('Number'),       field: 'number'       },
+        {label: app.i18n._('Title'),        field: 'title'        },
+        {label: app.i18n._('Description'),  field: 'description', operators: ['contains']},
+        {label: app.i18n._('Created By'),   field: 'created_by',  valueType: 'user'},
+        {label: app.i18n._('Status'),       field: 'status',      filtertype: 'timetracker.timeaccountstatus'},
         {filtertype: 'tinebase.tag', app: app}
     ];
 }
