@@ -22,7 +22,7 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
     /**
      * timeout in seconds for initiating session (parent: 30)
      */
-    const TIMEOUT_CONNECTION = 10;
+    const TIMEOUT_CONNECTION = 20;
     
     /**
      * fetch one or more items of one or more messages
