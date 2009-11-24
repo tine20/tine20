@@ -77,7 +77,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             Zend_Filter_Input::DEFAULT_VALUE => 'tls',
             'InArray' => array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)
         ),
-        'credentials_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'credentials_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'user'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'password'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // other settings (add single JSON encoded field for that?)
@@ -110,7 +110,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             Zend_Filter_Input::DEFAULT_VALUE => 'tls',
             'InArray' => array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)
         ),
-        'smtp_credentials_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'smtp_credentials_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'smtp_user'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'smtp_password'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information
