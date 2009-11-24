@@ -227,8 +227,8 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
      */
     public function update_4()
     {
-        $this->_db->query("update tine20_relations set own_model='Sales_Model_Contract' where own_model='Erp_Model_Contract'");
-        $this->_db->query("update tine20_relations set related_model='Sales_Model_Contract' where related_model='Erp_Model_Contract'");
+        $this->_db->query("update " . SQL_TABLE_PREFIX . "relations set own_model='Sales_Model_Contract' where own_model='Erp_Model_Contract'");
+        $this->_db->query("update " . SQL_TABLE_PREFIX . "relations set related_model='Sales_Model_Contract' where related_model='Erp_Model_Contract'");
         
         $this->setApplicationVersion('Sales', '2.5');
     }
