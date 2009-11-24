@@ -11,7 +11,6 @@
  * 
  * @todo        add validation of email addresses?
  * @todo        check domains when creating aliases
- * @todo        remove verbose debug output
  */
 
 /**
@@ -171,7 +170,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
             /* select */ array('emailForwards' => 'GROUP_CONCAT( DISTINCT ' . $this->_db->quoteIdentifier('forwards.destination') . ')'))
                ->order('email');
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
@@ -181,7 +180,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         }
         
         $result = $this->_rawDataToRecord($queryResult);
-
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result->toArray(), TRUE));
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
         
         return $result;
@@ -209,7 +209,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
 	    $_emailUser->emailUserId = $_user->getId();
 	    $_emailUser->emailAddress = $_user->accountEmailAddress;
 	    
-	    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding new postfix user ' . $_emailUser->emailUserId);
+	    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding new postfix user ' . $_emailUser->emailUserId);
+	    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_emailUser->toArray(), TRUE));
 	    
         $recordArray = $this->_recordToRawData($_emailUser);
         $this->_db->insert($this->_tableName, $recordArray);
@@ -240,15 +241,15 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
             return $_emailUser;
         }
 	    
-        $_emailUser->emailUserId = $_user->accountLoginName;
+        $_emailUser->emailUserId = $_user->getId();
 	    
         $recordArray = $this->_recordToRawData($_emailUser);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordArray, TRUE));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordArray, TRUE));
         
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('email') . ' = ?', $_user->accountEmailAddress),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('userid') .       ' = ?', $_user->getId()),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('client_idnr') .  ' = ?', $this->_clientId)
         );
         
         $this->_db->update($this->_tableName, $recordArray, $where);
@@ -271,7 +272,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
 	{
 	    $user = Tinebase_User::getInstance()->getFullUserById($_userId);
 	    
-	    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set postfix password for user ' . $user->accountLoginName);
+	    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Set postfix password for user ' . $user->accountLoginName);
 	    
 	    $emailUser = $this->getUserById($user->getId());
 	    $emailUser->emailPassword = $_password;
@@ -289,7 +290,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
     {
         $user = Tinebase_User::getInstance()->getFullUserById($_userId);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Delete postfix settings for user ' . $user->accountLoginName);
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete postfix settings for user ' . $user->accountLoginName);
         
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('userid') .       ' = ?', $_userId),
@@ -404,6 +405,14 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         
         $result->emailAliases = explode(',', $_rawdata['emailAliases']);
         $result->emailForwards = explode(',', $_rawdata['emailForwards']);
+
+        // sanitize aliases & forwards
+        if (count($result->emailAliases) == 1 && empty($result->emailAliases[0])) {
+            $result->emailAliases = array();
+        }
+        if (count($result->emailForwards) == 1  && empty($result->emailForwards[0])) {
+            $result->emailForwards = array();
+        } 
         
         return $result;
     }
