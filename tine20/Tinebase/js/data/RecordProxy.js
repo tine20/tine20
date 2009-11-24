@@ -351,20 +351,22 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                     options.success.apply(options.scope, args);
                 }
             },
-            failure: function (response) {
+            failure: function (response, options) {
                 if (typeof options.failure == 'function') {
                     var args = [];
                     if (typeof options.beforeFailure == 'function') {
                         args = options.beforeFailure.call(this, response);
                     } else {
-                        var responseData = Ext.decode(response.responseText)
+                        var responseData = Ext.decode(response.responseText);
                         args = [responseData.data ? responseData.data : responseData];
                     }
                 
                     options.failure.apply(options.scope, args);
                 } else {
-                    var responseData = Ext.decode(response.responseText)
+                    var responseData = Ext.decode(response.responseText);
                     var exception = responseData.data ? responseData.data : responseData;
+                    exception.request = options.jsonData;
+                    exception.response = response.responseText;
                     
                     Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
                 }

@@ -31,16 +31,16 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
             this.width = 800;
         }
         var trace = '';
-        if (this.exceptionInfo.trace) {
-            for (var i=0,j=this.exceptionInfo.trace.length; i<j; i++) {
-                trace += (this.exceptionInfo.trace[i].file ? this.exceptionInfo.trace[i].file : '[internal function]') +
-                         (this.exceptionInfo.trace[i].line ? '(' + this.exceptionInfo.trace[i].line + ')' : '') + ': ' +
-                         (this.exceptionInfo.trace[i]['class'] ? '<b>' + this.exceptionInfo.trace[i]['class'] + this.exceptionInfo.trace[i].type + '</b>' : '') +
-                         '<b>' + this.exceptionInfo.trace[i]['function'] + '</b>' +
-                        '(' + ((this.exceptionInfo.trace[i].args && this.exceptionInfo.trace[i].args[0]) ? this.exceptionInfo.trace[i].args[0] : '') + ')<br/>';
+        if (Ext.isArray(this.exception.trace)) {
+            for (var i=0,j=this.exception.trace.length; i<j; i++) {
+                trace += (this.exception.trace[i].file ? this.exception.trace[i].file : '[internal function]') +
+                         (this.exception.trace[i].line ? '(' + this.exception.trace[i].line + ')' : '') + ': ' +
+                         (this.exception.trace[i]['class'] ? '<b>' + this.exception.trace[i]['class'] + this.exception.trace[i].type + '</b>' : '') +
+                         '<b>' + this.exception.trace[i]['function'] + '</b>' +
+                        '(' + ((this.exception.trace[i].args && this.exception.trace[i].args[0]) ? this.exception.trace[i].args[0] : '') + ')<br/>';
             }
             
-            this.exceptionInfo.traceHTML = trace;
+            this.exception.traceHTML = trace;
         }
         
         this.title = _('Abnormal End');
@@ -108,8 +108,8 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                         anchor: '95%'
                     },
                     html:  '<div class="tb-exceptiondialog-details">' +
-                                '<p class="tb-exceptiondialog-msg">' + this.exceptionInfo.msg + '</p>' +
-                                '<p class="tb-exceptiondialog-trace">' + this.exceptionInfo.traceHTML + '</p>' +
+                                '<p class="tb-exceptiondialog-msg">' + this.exception.message + '</p>' +
+                                '<p class="tb-exceptiondialog-trace">' + this.exception.traceHTML + '</p>' +
                            '</div>'
                 }]
         });
@@ -127,31 +127,29 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         Ext.MessageBox.wait(_('Sending report...'), _('Please wait a moment'));
         var baseUrl = 'http://www.tine20.org/bugreport.php';
         var hash = this.generateHash();
-
-        var info = {
-           msg: this.exceptionInfo,
-           description: Ext.getCmp('tb-exceptiondialog-description').getValue(),
-           clientVersion: Tine.clientVersion,
-           serverVersion: (Tine.Tinebase.registry.get('version')) ? Tine.Tinebase.registry.get('version') : {}
-        };
+        
+        this.exception.msg           = this.exception.message;
+        this.exception.description   = Ext.getCmp('tb-exceptiondialog-description').getValue();
+        this.exception.clientVersion = Tine.clientVersion;
+        this.exception.serverVersion = (Tine.Tinebase.registry.get('version')) ? Tine.Tinebase.registry.get('version') : {};
         
         // tinebase version
         Ext.each(Tine.Tinebase.registry.get('userApplications'), function(app) {
             if (app.name == 'Tinebase') {
-                info.tinebaseVersion = app;
+                this.exception.tinebaseVersion = app;
                 return false;
             }
         }, this);
         
         // append contact?
         if (! Ext.getCmp('tb-exceptiondialog-send-contact').collapsed) {
-            info.contact = Ext.getCmp('tb-exceptiondialog-contact').getValue();
+            this.exception.contact = Ext.getCmp('tb-exceptiondialog-contact').getValue();
         }
         
         // NOTE:  - we have about 80 chars overhead (url, paramnames etc) in each request
         //        - 1024 chars are expected to be pass client/server limits savely => 940
         //        - base64 means about 30% overhead => 600 
-        var chunks = this.strChunk(Ext.util.JSON.encode(info), 600);
+        var chunks = this.strChunk(Ext.util.JSON.encode(this.exception), 600);
         
         var img = [];
         for (var i=0;i<chunks.length;i++) {

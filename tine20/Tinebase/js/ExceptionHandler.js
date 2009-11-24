@@ -54,7 +54,8 @@ Tine.Tinebase.ExceptionHandler = function() {
         }
         
         var data = {
-            msg: 'js exception: ' + error.message,
+            message: 'js exception: ' + error.message,
+            code:   error.number,
             traceHTML: traceHtml
         };
         
@@ -191,10 +192,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             if (! Tine.Tinebase.exceptionDlg) {
                 Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
                     height: windowHeight,
-                    exceptionInfo: {
-                        msg   : exception.message,
-                        trace : exception.trace
-                    },
+                    exception: exception,
                     listeners: {
                         close: function() {
                             Tine.Tinebase.exceptionDlg = null;

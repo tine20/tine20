@@ -321,10 +321,9 @@ Tine.Tinebase.tineInit = {
                 var exception = {
                     code: 1, // @todo : find usefull error code here
                     message: 'illegal json data in response',
-                    trace: [],
-                    traceHTML: options.responseText,
+                    traceHTML: response.responseText,
                     request: options.jsonData,
-                    response: options.responseText
+                    response: response.responseText
                 };
                 
                 // encapsulate as jsonrpc response
@@ -363,6 +362,8 @@ Tine.Tinebase.tineInit = {
                     } else {
                         var responseData = Ext.decode(response.responseText)
                         var exception = responseData.data ? responseData.data : responseData;
+                        exception.request = options.jsonData;
+                        exception.response = response.responseText;
                         
                         Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
                     }
@@ -389,10 +390,9 @@ Tine.Tinebase.tineInit = {
                 var exception = {
                     code: errorCode,
                     message: 'request exception: ' + response.statusText,
-                    trace: [],
-                    traceHTML: options.responseText,
+                    traceHTML: response.responseText,
                     request: options.jsonData,
-                    response: options.responseText
+                    response: response.responseText
                 };
                 
                 // encapsulate as jsonrpc response
