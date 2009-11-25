@@ -25,26 +25,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
 	public static function getServiceMap()
 	{
-		$server = new Zend_Json_Server();
-		
-		$server->setClass('Tinebase_Frontend_Json', 'Tinebase');
-		$server->setClass('Tinebase_Frontend_Json_UserRegistration', 'Tinebase_UserRegistration');
-		
-		if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) { 
-			$server->setClass('Tinebase_Frontend_Json_Container', 'Tinebase_Container');
-            $server->setClass('Tinebase_Frontend_Json_PersistentFilter', 'Tinebase_PersistentFilter');
-            
-            $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
-            foreach($userApplications as $application) {
-                $jsonAppName = $application->name . '_Frontend_Json';
-                $server->setClass($jsonAppName, $application->name);
-            }
-		}
-        
-        $server->setTarget('index.php')
-               ->setEnvelope(Zend_Json_Server_Smd::ENV_JSONRPC_2);
-            
-        $smd = $server->getServiceMap();
+        $smd = Tinebase_Server_Json::getServiceMap();
         
         $smdArray = $smd->toArray();
         unset($smdArray['methods']);
