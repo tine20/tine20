@@ -286,10 +286,6 @@ msgstr "Leadsources"
 msgid "Defaults"
 msgstr "Defaults"
 
-#: js/AdminPanel.js:266
-msgid "Remove Option"
-msgstr "Remove Option"
-
 #: js/Contact.js:170
 msgid "Change type to Customer"
 msgstr "Change type to Customer"

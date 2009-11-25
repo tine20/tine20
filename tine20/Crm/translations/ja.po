@@ -296,11 +296,6 @@ msgstr "リードソース"
 msgid "Defaults"
 msgstr ""
 
-#: js/AdminPanel.js:266
-#, fuzzy
-msgid "Remove Option"
-msgstr "プロダクトの削除"
-
 #: js/Contact.js:170
 msgid "Change type to Customer"
 msgstr "顧客タイプの変更"
@@ -533,6 +528,10 @@ msgstr "タスクを追加しています..."
 #: js/Task.js:197
 msgid "Percent"
 msgstr "パーセント"
+
+#, fuzzy
+#~ msgid "Remove Option"
+#~ msgstr "プロダクトの削除"
 
 #~ msgid "Type"
 #~ msgstr "タイプ"

@@ -299,11 +299,6 @@ msgstr "Źródła zapytań"
 msgid "Defaults"
 msgstr ""
 
-#: js/AdminPanel.js:266
-#, fuzzy
-msgid "Remove Option"
-msgstr "Usuń produkty"
-
 #: js/Contact.js:170
 msgid "Change type to Customer"
 msgstr "Zmień typ na wartość: Klient"
@@ -530,6 +525,10 @@ msgstr "Dodaj zadanie…"
 #: js/Task.js:197
 msgid "Percent"
 msgstr "W procentach"
+
+#, fuzzy
+#~ msgid "Remove Option"
+#~ msgstr "Usuń produkty"
 
 #~ msgid "Type"
 #~ msgstr "Ikona"

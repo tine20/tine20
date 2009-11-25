@@ -297,11 +297,6 @@ msgstr "线索源"
 msgid "Defaults"
 msgstr ""
 
-#: js/AdminPanel.js:266
-#, fuzzy
-msgid "Remove Option"
-msgstr "删除产品"
-
 #: js/Contact.js:170
 msgid "Change type to Customer"
 msgstr "修改客户类型"
@@ -534,6 +529,10 @@ msgstr "添加任务..."
 #: js/Task.js:197
 msgid "Percent"
 msgstr "百分比"
+
+#, fuzzy
+#~ msgid "Remove Option"
+#~ msgstr "删除产品"
 
 #~ msgid "Type"
 #~ msgstr "类型"

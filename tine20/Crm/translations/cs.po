@@ -288,10 +288,6 @@ msgstr "Zroje leadů"
 msgid "Defaults"
 msgstr "Výchozí"
 
-#: js/AdminPanel.js:266
-msgid "Remove Option"
-msgstr "Odstranit volbu"
-
 #: js/Contact.js:170
 msgid "Change type to Customer"
 msgstr "Změnit typ na Zákazník"
@@ -514,6 +510,9 @@ msgstr "Přidat úkol..."
 #: js/Task.js:197
 msgid "Percent"
 msgstr "Procent"
+
+#~ msgid "Remove Option"
+#~ msgstr "Odstranit volbu"
 
 #~ msgid "Type"
 #~ msgstr "Typ"

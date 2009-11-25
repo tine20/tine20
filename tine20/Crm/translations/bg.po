@@ -297,11 +297,6 @@ msgstr "Източник на предложение"
 msgid "Defaults"
 msgstr ""
 
-#: js/AdminPanel.js:266
-#, fuzzy
-msgid "Remove Option"
-msgstr "Изтрий продукти"
-
 #: js/Contact.js:170
 msgid "Change type to Customer"
 msgstr "Сменя типа контакт с Клиент"
@@ -537,6 +532,10 @@ msgstr "Добави задача"
 #: js/Task.js:197
 msgid "Percent"
 msgstr "Процент"
+
+#, fuzzy
+#~ msgid "Remove Option"
+#~ msgstr "Изтрий продукти"
 
 #~ msgid "Type"
 #~ msgstr "Тип"

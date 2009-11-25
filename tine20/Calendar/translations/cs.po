@@ -77,7 +77,7 @@ msgstr "Osobní kalendář uživatele %s"
 msgid "Manage Resources"
 msgstr "Spravovat zdroje"
 
-#: js/AttendeeGridPanel.js:62 js/EventDetailsPanel.js:243 js/Model.js:275
+#: js/AttendeeGridPanel.js:62 js/EventDetailsPanel.js:244 js/Model.js:278
 msgid "Attendee"
 msgstr "Účastníci"
 
@@ -105,7 +105,7 @@ msgstr "Uživatel"
 msgid "Group"
 msgstr "Skupina"
 
-#: js/AttendeeGridPanel.js:154 js/Model.js:426
+#: js/AttendeeGridPanel.js:154 js/Model.js:429
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Zdroj"
@@ -150,7 +150,7 @@ msgid "Click here to invite another attender..."
 msgstr "Klikněte sem pro pozvání dalšího účastníka"
 
 #: js/AttendeeGridPanel.js:416 js/AttendeeGridPanel.js:434
-#: js/AttendeeGridPanel.js:447 js/AttendeeGridPanel.js:459 js/Model.js:291
+#: js/AttendeeGridPanel.js:447 js/AttendeeGridPanel.js:459 js/Model.js:294
 msgid "No Information"
 msgstr "Žádné informace"
 
@@ -177,57 +177,57 @@ msgstr[2] "Kalendářů"
 msgid "Loading events, please wait..."
 msgstr "Nahrávám události, prosím čekejte..."
 
-#: js/CalendarPanel.js:217
+#: js/CalendarPanel.js:225
 msgid "Scheduling Conflict"
 msgstr "Konflikt plánování"
 
-#: js/CalendarPanel.js:221
+#: js/CalendarPanel.js:229
 msgid "The follwing attendee are busy at the requested time:"
 msgstr ""
 
-#: js/CalendarPanel.js:226
+#: js/CalendarPanel.js:234
 msgid "Ignore Conflict"
 msgstr "Ingorovat konflikt"
 
-#: js/CalendarPanel.js:233
+#: js/CalendarPanel.js:241
 msgid "Edit Event"
 msgstr "Editovat událost"
 
-#: js/CalendarPanel.js:258
+#: js/CalendarPanel.js:266
 msgid "Confirm Update of Series"
 msgstr "Potvrdit aktualizaci řady"
 
-#: js/CalendarPanel.js:259
+#: js/CalendarPanel.js:267
 msgid "Do you really want to update all events of this recurring event series?"
 msgstr ""
 "Opravdu chcete aktualizovat všechny události z této řady opakovaných "
 "událostí?"
 
-#: js/CalendarPanel.js:276
+#: js/CalendarPanel.js:284
 msgid "Update Event"
 msgstr "Aktualizovat událost"
 
-#: js/CalendarPanel.js:279 js/CalendarPanel.js:281
+#: js/CalendarPanel.js:287 js/CalendarPanel.js:289
 msgid "Do you want to update the whole series, or just this event"
 msgstr "Chete aktuaklizovat celou řadu nebo jen tuto událost"
 
-#: js/CalendarPanel.js:283
+#: js/CalendarPanel.js:291
 msgid "Update nothing"
 msgstr "Nic neaktualizovat"
 
-#: js/CalendarPanel.js:291
+#: js/CalendarPanel.js:299
 msgid "Update whole series"
 msgstr "Aktualizovat celou řadu"
 
-#: js/CalendarPanel.js:303
+#: js/CalendarPanel.js:311
 msgid "Failed not update recurring event series"
 msgstr "Pokus neaktualizovat řadu opakovaných událostí se nezdařil"
 
-#: js/CalendarPanel.js:311
+#: js/CalendarPanel.js:319
 msgid "Update this event only"
 msgstr "Aktualizovat jen tuto událost"
 
-#: js/CalendarPanel.js:325
+#: js/CalendarPanel.js:333
 msgid "Failed not update event"
 msgstr "Pokus neaktualizovat událost se nezdařil"
 
@@ -247,36 +247,36 @@ msgstr "Nová událost"
 msgid "{0}, the {1}. of {2}"
 msgstr "{0}, {1}. {2}"
 
-#: js/EventDetailsPanel.js:50
+#: js/EventDetailsPanel.js:51
 msgid "Unknown calendar"
 msgstr ""
 
-#: js/EventDetailsPanel.js:61
+#: js/EventDetailsPanel.js:62
 msgid "{0} {1} o'clock"
 msgstr ""
 
-#: js/EventDetailsPanel.js:171 js/EventEditDialog.js:93 Model/Event.php:186
+#: js/EventDetailsPanel.js:172 js/EventEditDialog.js:93 Model/Event.php:186
 msgid "Summary"
 msgstr "Přehled"
 
-#: js/EventDetailsPanel.js:207 js/EventEditDialog.js:105
+#: js/EventDetailsPanel.js:208 js/EventEditDialog.js:105
 msgid "Start Time"
 msgstr "Počáteční čas"
 
-#: js/EventDetailsPanel.js:212 js/EventEditDialog.js:120
+#: js/EventDetailsPanel.js:213 js/EventEditDialog.js:120
 msgid "End Time"
 msgstr "Čas ukončení"
 
-#: js/EventDetailsPanel.js:217 Model/Event.php:179
+#: js/EventDetailsPanel.js:218 Model/Event.php:179
 msgid "Blocking"
 msgstr ""
 
-#: js/EventDetailsPanel.js:222 js/EventEditDialog.js:100
+#: js/EventDetailsPanel.js:223 js/EventEditDialog.js:100
 #: js/ResourcesGridPanel.js:54 Model/Event.php:182
 msgid "Location"
 msgstr "Umístění"
 
-#: js/EventDetailsPanel.js:226 Model/Event.php:183
+#: js/EventDetailsPanel.js:227 Model/Event.php:183
 msgid "Organizer"
 msgstr "Organizátor"
 
@@ -296,15 +296,15 @@ msgstr "Popis"
 msgid "Enter description"
 msgstr "Zadejte popis"
 
-#: js/EventEditDialog.js:326
+#: js/EventEditDialog.js:332
 msgid "End date is not valid"
 msgstr "Datum ukončení je neplatné"
 
-#: js/EventEditDialog.js:329
+#: js/EventEditDialog.js:335
 msgid "End date must be after start date"
 msgstr "Datum ukončení musí být po počátečním datu"
 
-#: js/EventEditDialog.js:342
+#: js/EventEditDialog.js:348
 msgid "Start date is not valid"
 msgstr "Počáteční datum je neplatné"
 
@@ -383,14 +383,14 @@ msgstr[2] "Opravdu chcete smazat tyto události?"
 msgid "WK"
 msgstr "Týd"
 
-#: js/Model.js:64 js/Model.js:279
+#: js/Model.js:64 js/Model.js:282
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Událost"
 msgstr[1] "Události"
 msgstr[2] "Událostí"
 
-#: js/Model.js:64 js/Model.js:279
+#: js/Model.js:64 js/Model.js:282
 msgid "Events"
 msgstr "Události"
 
@@ -398,14 +398,14 @@ msgstr "Události"
 msgid "Calendars"
 msgstr "Kalendáře"
 
-#: js/Model.js:275
+#: js/Model.js:278
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Účastník"
 msgstr[1] "Účástníci"
 msgstr[2] "Účastníků"
 
-#: js/Model.js:426
+#: js/Model.js:429
 msgid "Resources"
 msgstr "Zdroje"
 
@@ -433,88 +433,92 @@ msgstr "Opakování"
 msgid "No recurring rule defined"
 msgstr "Žádné pravidlo opakování není definováno"
 
-#: js/RrulePanel.js:74
+#: js/RrulePanel.js:77
 msgid "None"
 msgstr "Žádný"
 
-#: js/RrulePanel.js:81
+#: js/RrulePanel.js:84
 msgid "Daily"
 msgstr "Denně"
 
-#: js/RrulePanel.js:88
+#: js/RrulePanel.js:91
 msgid "Weekly"
 msgstr "Týdně"
 
-#: js/RrulePanel.js:95
+#: js/RrulePanel.js:98
 msgid "Monthly"
 msgstr "Měsíčně"
 
-#: js/RrulePanel.js:102
+#: js/RrulePanel.js:105
 msgid "Yearly"
 msgstr "Ročně"
 
-#: js/RrulePanel.js:221
+#: js/RrulePanel.js:228
 msgid "forever"
 msgstr "navždy"
 
-#: js/RrulePanel.js:233
+#: js/RrulePanel.js:240
 msgid "Forever"
 msgstr "Navždy"
 
-#: js/RrulePanel.js:234
+#: js/RrulePanel.js:241
 msgid "at"
 msgstr "v"
 
-#: js/RrulePanel.js:240
+#: js/RrulePanel.js:247
 msgid "Every"
 msgstr "Každý"
 
-#: js/RrulePanel.js:275
+#: js/RrulePanel.js:282
 msgid "Until"
 msgstr "Do"
 
-#: js/RrulePanel.js:310
+#: js/RrulePanel.js:296
+msgid "Until has to be after event start"
+msgstr ""
+
+#: js/RrulePanel.js:329
 msgid ". Day"
 msgstr ". den"
 
-#: js/RrulePanel.js:340
+#: js/RrulePanel.js:359
 msgid ". Week at"
 msgstr ". týden"
 
-#: js/RrulePanel.js:398
+#: js/RrulePanel.js:417
 msgid ". Month"
 msgstr ". měsíc"
 
-#: js/RrulePanel.js:404 js/RrulePanel.js:453 js/RrulePanel.js:584
-#: js/RrulePanel.js:634
+#: js/RrulePanel.js:423 js/RrulePanel.js:472 js/RrulePanel.js:603
+#: js/RrulePanel.js:653
 msgid "at the"
 msgstr "(kdy)"
 
-#: js/RrulePanel.js:423 js/RrulePanel.js:603
+#: js/RrulePanel.js:442 js/RrulePanel.js:622
 msgid "first"
 msgstr "první"
 
-#: js/RrulePanel.js:424 js/RrulePanel.js:604
+#: js/RrulePanel.js:443 js/RrulePanel.js:623
 msgid "second"
 msgstr "druhý"
 
-#: js/RrulePanel.js:425 js/RrulePanel.js:605
+#: js/RrulePanel.js:444 js/RrulePanel.js:624
 msgid "third"
 msgstr "třetí"
 
-#: js/RrulePanel.js:426 js/RrulePanel.js:606
+#: js/RrulePanel.js:445 js/RrulePanel.js:625
 msgid "fourth"
 msgstr "čtvrtý"
 
-#: js/RrulePanel.js:427 js/RrulePanel.js:607
+#: js/RrulePanel.js:446 js/RrulePanel.js:626
 msgid "last"
 msgstr "poslední"
 
-#: js/RrulePanel.js:577
+#: js/RrulePanel.js:596
 msgid ". Year"
 msgstr ". rok"
 
-#: js/RrulePanel.js:674 js/RrulePanel.js:686
+#: js/RrulePanel.js:693 js/RrulePanel.js:705
 msgid "of"
 msgstr "z"
 

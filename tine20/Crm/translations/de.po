@@ -287,10 +287,6 @@ msgstr "Lead-Quellen"
 msgid "Defaults"
 msgstr "Standardeinstellungen"
 
-#: js/AdminPanel.js:266
-msgid "Remove Option"
-msgstr "Option entfernen"
-
 #: js/Contact.js:170
 msgid "Change type to Customer"
 msgstr "Kontakttyp auf Kunde setzen"
@@ -508,6 +504,9 @@ msgstr "Aufgabe hinzufügen..."
 #: js/Task.js:197
 msgid "Percent"
 msgstr "Prozent"
+
+#~ msgid "Remove Option"
+#~ msgstr "Option entfernen"
 
 #~ msgid "Type"
 #~ msgstr "Typ"

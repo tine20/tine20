@@ -289,11 +289,6 @@ msgstr ""
 msgid "Defaults"
 msgstr ""
 
-#: js/AdminPanel.js:266
-#, fuzzy
-msgid "Remove Option"
-msgstr "移除產品"
-
 #: js/Contact.js:170
 msgid "Change type to Customer"
 msgstr ""
@@ -513,6 +508,10 @@ msgstr ""
 #: js/Task.js:197
 msgid "Percent"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Remove Option"
+#~ msgstr "移除產品"
 
 #, fuzzy
 #~ msgid "Open tasks"

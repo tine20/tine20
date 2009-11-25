@@ -63,19 +63,19 @@ msgstr "Angelegt von"
 msgid "Activities"
 msgstr "Aktivitäten"
 
-#: Frontend/Http.php:539 js/ExceptionHandler.js:132
+#: Frontend/Http.php:540 js/ExceptionHandler.js:139
 msgid "Authorisation Required"
 msgstr "Anmeldung erforderlich"
 
-#: Frontend/Http.php:540
+#: Frontend/Http.php:541
 msgid "Your session is not valid. You need to login again."
 msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
 
-#: Frontend/Http.php:566 js/ExceptionDialog.js:46
+#: Frontend/Http.php:567 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Programmabbruch"
 
-#: Frontend/Http.php:567 js/ExceptionDialog.js:71
+#: Frontend/Http.php:568 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "Ein Fehler ist aufgetreten, dass Programm wurde unerwartet beendet."
 
@@ -154,39 +154,39 @@ msgstr "Bericht wird gesendet..."
 msgid "Please wait a moment"
 msgstr "Bitte warten Sie einen Moment"
 
-#: js/ExceptionDialog.js:171
+#: js/ExceptionDialog.js:169
 msgid "Transmission Completed"
 msgstr "Übermittlung beendet"
 
-#: js/ExceptionDialog.js:172
+#: js/ExceptionDialog.js:170
 msgid "Your report has been sent. Thanks for your contribution"
 msgstr "Ihr Bericht wurde gesendet. Vielen Dank für ihre Mithilfe!"
 
-#: js/ExceptionDialog.js:172
+#: js/ExceptionDialog.js:170
 msgid "Please restart your browser now!"
 msgstr "Bitte starten Sie Ihren Browser neu!"
 
-#: js/ExceptionHandler.js:126
+#: js/ExceptionHandler.js:133
 msgid "Connection lost, please check your network!"
 msgstr "Verbindungsabbruch, bitte überprüfen Sie ihre Netzwerkeinstellungen!"
 
-#: js/ExceptionHandler.js:133
+#: js/ExceptionHandler.js:140
 msgid "Your session timed out. You need to login again."
 msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
 
-#: js/ExceptionHandler.js:150
+#: js/ExceptionHandler.js:157
 msgid "Insufficient Rights"
 msgstr "Fehlende Berechtigungen"
 
-#: js/ExceptionHandler.js:151
+#: js/ExceptionHandler.js:158
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Sie sind nicht berechtigt diese Aktion auszuführen"
 
-#: js/ExceptionHandler.js:160
+#: js/ExceptionHandler.js:167
 msgid "Not Found"
 msgstr "Nicht gefunden"
 
-#: js/ExceptionHandler.js:161
+#: js/ExceptionHandler.js:168
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
@@ -196,11 +196,11 @@ msgstr ""
 "In den meisten Fällen wurden diese Daten von einem anderen Benutzer "
 "gelöscht. Bitte aktualisieren Sie Ihre momentane Ansicht."
 
-#: js/ExceptionHandler.js:170
+#: js/ExceptionHandler.js:177
 msgid "Concurrent Updates"
 msgstr "Passende Updates"
 
-#: js/ExceptionHandler.js:171
+#: js/ExceptionHandler.js:178
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -208,91 +208,91 @@ msgstr ""
 "Der Eintrag wurde von jemand anderem geändert während Sie daran arbeiteten. "
 "Sie müssen aktualisieren und die Änderungen erneut durchführen."
 
-#: js/LoginPanel.js:72 js/LoginPanel.js:104
+#: js/LoginPanel.js:74 js/LoginPanel.js:106
 msgid "Login"
 msgstr "Anmelden"
 
-#: js/LoginPanel.js:80 js/widgets/dialog/CredentialsDialog.js:76
+#: js/LoginPanel.js:82 js/widgets/dialog/CredentialsDialog.js:76
 msgid "Username"
 msgstr "Benutzername"
 
-#: js/LoginPanel.js:91 js/widgets/dialog/CredentialsDialog.js:80
+#: js/LoginPanel.js:93 js/widgets/dialog/CredentialsDialog.js:80
 msgid "Password"
 msgstr "Passwort"
 
-#: js/LoginPanel.js:123
+#: js/LoginPanel.js:125
 msgid "Tine 2.0 is made for you"
 msgstr ""
 
-#: js/LoginPanel.js:125
+#: js/LoginPanel.js:127
 msgid ""
 "Tine 2.0 wants to make business collaboration easier and more enjoyable - "
 "for your needs! So you are warmly welcome to discuss with us, bring in ideas "
 "and get help."
 msgstr ""
 
-#: js/LoginPanel.js:130
+#: js/LoginPanel.js:133
 msgid "Tine 2.0 Homepage"
 msgstr ""
 
-#: js/LoginPanel.js:132
-msgid "Our Forum for questions and ideas"
+#: js/LoginPanel.js:134
+msgid "Tine 2.0 Forum"
 msgstr ""
 
-#: js/LoginPanel.js:175
+#: js/LoginPanel.js:178
 msgid "about {0} minutes"
 msgstr ""
 
-#: js/LoginPanel.js:180 js/LoginPanel.js:374
+#: js/LoginPanel.js:183 js/LoginPanel.js:343
 msgid "Tine 2.0 needs your help"
 msgstr ""
 
-#: js/LoginPanel.js:182 js/LoginPanel.js:376
+#: js/LoginPanel.js:185 js/LoginPanel.js:345
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
 msgstr ""
 
-#: js/LoginPanel.js:188
+#: js/LoginPanel.js:191
 msgid "participate!"
 msgstr ""
 
-#: js/LoginPanel.js:210
+#: js/LoginPanel.js:213
 msgid "Languages"
 msgstr ""
 
-#: js/LoginPanel.js:211
+#: js/LoginPanel.js:214
 msgid "Duration"
 msgstr ""
 
-#: js/LoginPanel.js:324
+#: js/LoginPanel.js:269
 msgid "Logging you in..."
 msgstr "Sie werden angemeldet..."
 
-#: js/LoginPanel.js:324 js/widgets/container/GrantsDialog.js:138
+#: js/LoginPanel.js:269 js/widgets/container/GrantsDialog.js:138
 #: js/widgets/grid/PersistentFilterPicker.js:126
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:140
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/LoginPanel.js:336
+#: js/LoginPanel.js:281
 msgid "Login successful. Loading {0}..."
 msgstr "Anmeldung erfolgreich. {0} wird geladen..."
 
-#: js/LoginPanel.js:336 js/MainScreen.js:534
+#: js/LoginPanel.js:281 js/MainScreen.js:534
 msgid "Please wait!"
 msgstr "Bitte warten!"
 
-#: js/LoginPanel.js:341
+#: js/LoginPanel.js:286
 msgid "Login failure"
 msgstr "Anmeldung fehlgeschlagen"
 
-#: js/LoginPanel.js:342
+#: js/LoginPanel.js:287
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ihre Benutzername und Passwort Kombination ist falsch!"
 
-#: js/LoginPanel.js:366
+#: js/LoginPanel.js:311
 msgid "Please enter your login data"
 msgstr "Bitte geben Sie ihre Anmeldedaten ein"
 
@@ -442,7 +442,7 @@ msgid_plural "Relations"
 msgstr[0] "Verknüpfung"
 msgstr[1] "Anwendungen"
 
-#: js/tineInit.js:552
+#: js/tineInit.js:560
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
@@ -495,53 +495,53 @@ msgstr "offline"
 msgid "unknown"
 msgstr "unbekannt"
 
-#: js/ux/form/ImageField.js:66
-msgid "click to edit"
-msgstr "Zum Ändern hier Klicken"
-
-#: js/ux/form/ImageField.js:122
-msgid "Not An Image"
-msgstr "Keine Bild-Datei"
-
-#: js/ux/form/ImageField.js:122
-msgid "Plase select an image file (gif/png/jpeg)"
-msgstr "Bitte wählen Sie eine gültige Bild-Datei (gif/png/jpeg)"
-
-#: js/ux/form/ImageField.js:139
+#: js/ux/form/ImageField.js:65
 msgid "Loading"
 msgstr "Laden"
 
-#: js/ux/form/ImageField.js:150
+#: js/ux/form/ImageField.js:68
+msgid "click to edit"
+msgstr "Zum Ändern hier Klicken"
+
+#: js/ux/form/ImageField.js:114
+msgid "Not An Image"
+msgstr "Keine Bild-Datei"
+
+#: js/ux/form/ImageField.js:114
+msgid "Plase select an image file (gif/png/jpeg)"
+msgstr "Bitte wählen Sie eine gültige Bild-Datei (gif/png/jpeg)"
+
+#: js/ux/form/ImageField.js:141
 msgid "Upload Failed"
 msgstr "Fehler beim Hochladen"
 
-#: js/ux/form/ImageField.js:150
+#: js/ux/form/ImageField.js:141
 msgid "Could not upload image. Please notify your Administrator"
 msgstr ""
 "Das Bild konnte nicht Hochgeladen werden. Bitte informieren Sie ihren "
 "Administrator"
 
-#: js/ux/form/ImageField.js:162
+#: js/ux/form/ImageField.js:153
 msgid "Change Image"
 msgstr "Bild ändern"
 
-#: js/ux/form/ImageField.js:188 js/ux/form/ImageField.js:206
+#: js/ux/form/ImageField.js:164 js/ux/form/ImageField.js:182
 msgid "Crop Image"
 msgstr "Bild zuschneiden"
 
-#: js/ux/form/ImageField.js:214
+#: js/ux/form/ImageField.js:190
 msgid "Delete Image"
 msgstr "Bild löschen"
 
-#: js/ux/form/ImageField.js:223
+#: js/ux/form/ImageField.js:199
 msgid "Show Original Image"
 msgstr "Zeige Originalbild"
 
-#: js/ux/form/ImageField.js:257
+#: js/ux/form/ImageField.js:233
 msgid "Image Failed"
 msgstr "Fehler bei Bildverarbeitung"
 
-#: js/ux/form/ImageField.js:257
+#: js/ux/form/ImageField.js:233
 msgid "Could not load image. Please notify your Administrator"
 msgstr ""
 "Das Bild konnte nicht geladen werden. Bitte informieren Sie ihren "
@@ -1156,6 +1156,10 @@ msgstr "Möchten Sie den Filter \"{0}\" wirklich löschen?"
 #: js/widgets/grid/PersistentFilterPicker.js:126
 msgid "Deleting Filter \"{0}\""
 msgstr "Lösche Filter {0}"
+
+#: js/widgets/grid/QuickaddGridPanel.js:95
+msgid "Remove"
+msgstr ""
 
 #: js/widgets/GridPicker.js:78
 msgid "remove record"

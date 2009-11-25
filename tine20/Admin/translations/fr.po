@@ -208,7 +208,7 @@ msgstr "Pas d'entrées à afficher"
 msgid "Session ID"
 msgstr "ID de session"
 
-#: js/Admin.js:565 js/UserEditDialog.js:230
+#: js/Admin.js:565 js/UserEditDialog.js:298
 msgid "Login Name"
 msgstr "Login"
 
@@ -254,11 +254,11 @@ msgstr "désactiver"
 msgid "settings"
 msgstr "paramètres"
 
-#: js/Applications.js:174 js/UserEditDialog.js:284
+#: js/Applications.js:174 js/UserEditDialog.js:352
 msgid "disabled"
 msgstr "désactivé"
 
-#: js/Applications.js:177 js/UserEditDialog.js:284
+#: js/Applications.js:177 js/UserEditDialog.js:352
 msgid "enabled"
 msgstr "activé"
 
@@ -278,7 +278,7 @@ msgstr "Pas d'application à afficher"
 msgid "Order"
 msgstr "Ordre"
 
-#: js/Applications.js:221 js/UserEditDialog.js:278 js/Users.js:294
+#: js/Applications.js:221 js/UserEditDialog.js:346 js/Users.js:294
 msgid "Status"
 msgstr "Statut"
 
@@ -527,235 +527,251 @@ msgstr "Ajouter"
 msgid "Edit Tag \"{0}\""
 msgstr "Éditer \"{0}\""
 
-#: js/UserEditDialog.js:110
+#: js/UserEditDialog.js:120
 #, fuzzy
 msgid "Passwords do not match!"
 msgstr "Les mots de passes ne correspondent pas!"
 
-#: js/UserEditDialog.js:136
+#: js/UserEditDialog.js:153
+msgid "Aliases"
+msgstr ""
+
+#: js/UserEditDialog.js:156
+msgid "Email Alias"
+msgstr ""
+
+#: js/UserEditDialog.js:162
+msgid "Add an alias address..."
+msgstr ""
+
+#: js/UserEditDialog.js:172
+msgid "Forwards"
+msgstr ""
+
+#: js/UserEditDialog.js:175
+msgid "Email Forward"
+msgstr ""
+
+#: js/UserEditDialog.js:181
+msgid "Add a forward address..."
+msgstr ""
+
+#: js/UserEditDialog.js:204
 #, fuzzy
 msgid "Password confirmation"
 msgstr "Confirmer mot de passe"
 
-#: js/UserEditDialog.js:154
+#: js/UserEditDialog.js:222
 #, fuzzy
 msgid "Repeat password"
 msgstr "réinitialiser le mot de passe"
 
-#: js/UserEditDialog.js:166
+#: js/UserEditDialog.js:234
 msgid "Cancel"
 msgstr ""
 
-#: js/UserEditDialog.js:173
+#: js/UserEditDialog.js:241
 msgid "Ok"
 msgstr ""
 
-#: js/UserEditDialog.js:199
+#: js/UserEditDialog.js:267
 msgid "Account"
 msgstr "Compte"
 
-#: js/UserEditDialog.js:214
+#: js/UserEditDialog.js:282
 msgid "First Name"
 msgstr "Prénom"
 
-#: js/UserEditDialog.js:224
+#: js/UserEditDialog.js:292
 msgid "Last Name"
 msgstr "Nom"
 
-#: js/UserEditDialog.js:235
+#: js/UserEditDialog.js:303
 msgid "Password"
 msgstr "Mot de passe"
 
-#: js/UserEditDialog.js:239
+#: js/UserEditDialog.js:307
 msgid "no password set"
 msgstr "Pas de mot de passe défini"
 
-#: js/UserEditDialog.js:260
+#: js/UserEditDialog.js:328
 msgid "Emailaddress"
 msgstr "Adresse Email"
 
-#: js/UserEditDialog.js:266 js/Users.js:300
+#: js/UserEditDialog.js:334 js/Users.js:300
 msgid "OpenID"
 msgstr ""
 
-#: js/UserEditDialog.js:272
+#: js/UserEditDialog.js:340
 msgid "Primary group"
 msgstr "Groupe principal"
 
-#: js/UserEditDialog.js:284
+#: js/UserEditDialog.js:352
 #, fuzzy
 msgid "expired"
 msgstr "Expiration"
 
-#: js/UserEditDialog.js:287 js/Users.js:304
+#: js/UserEditDialog.js:355 js/Users.js:304
 msgid "Expires"
 msgstr "Expiration"
 
-#: js/UserEditDialog.js:289 js/UserEditDialog.js:331 js/UserEditDialog.js:408
+#: js/UserEditDialog.js:357 js/UserEditDialog.js:399 js/UserEditDialog.js:476
 msgid "never"
 msgstr "jamais"
 
-#: js/UserEditDialog.js:294
+#: js/UserEditDialog.js:362
 msgid "Visibility"
 msgstr ""
 
-#: js/UserEditDialog.js:300
+#: js/UserEditDialog.js:368
 #, fuzzy
 msgid "Display in addressbook"
 msgstr "Nom affiché"
 
-#: js/UserEditDialog.js:300
+#: js/UserEditDialog.js:368
 msgid "Hide from addressbook"
 msgstr ""
 
-#: js/UserEditDialog.js:305
+#: js/UserEditDialog.js:373
 msgid "Information"
 msgstr ""
 
-#: js/UserEditDialog.js:321 js/Users.js:301
+#: js/UserEditDialog.js:389 js/Users.js:301
 msgid "Last login at"
 msgstr "Dernier login à"
 
-#: js/UserEditDialog.js:323 js/UserEditDialog.js:327
+#: js/UserEditDialog.js:391 js/UserEditDialog.js:395
 #, fuzzy
 msgid "don't know"
 msgstr "je ne sais pas!"
 
-#: js/UserEditDialog.js:323 js/UserEditDialog.js:327 js/UserEditDialog.js:388
+#: js/UserEditDialog.js:391 js/UserEditDialog.js:395 js/UserEditDialog.js:456
 msgid "never logged in"
 msgstr "jamais connecté"
 
-#: js/UserEditDialog.js:325 js/Users.js:302
+#: js/UserEditDialog.js:393 js/Users.js:302
 msgid "Last login from"
 msgstr "Dernier login depuis"
 
-#: js/UserEditDialog.js:329
+#: js/UserEditDialog.js:397
 msgid "Password set"
 msgstr "Mot de passe défini"
 
-#: js/UserEditDialog.js:337
+#: js/UserEditDialog.js:405
 msgid "Fileserver"
 msgstr "Serveur de fichier"
 
-#: js/UserEditDialog.js:342
+#: js/UserEditDialog.js:410
 msgid "Unix"
 msgstr ""
 
-#: js/UserEditDialog.js:357
+#: js/UserEditDialog.js:425
 msgid "Home Directory"
 msgstr "Répertoire personnel"
 
-#: js/UserEditDialog.js:361
+#: js/UserEditDialog.js:429
 msgid "Login Shell"
 msgstr "Login Shell"
 
-#: js/UserEditDialog.js:366
+#: js/UserEditDialog.js:434
 msgid "Windows"
 msgstr ""
 
-#: js/UserEditDialog.js:381
+#: js/UserEditDialog.js:449
 msgid "Home Drive"
 msgstr "Lecteur personnel"
 
-#: js/UserEditDialog.js:386
+#: js/UserEditDialog.js:454
 msgid "Logon Time"
 msgstr "Heure de connexion"
 
-#: js/UserEditDialog.js:391
+#: js/UserEditDialog.js:459
 #, fuzzy
 msgid "Home Path"
 msgstr "Home Path"
 
-#: js/UserEditDialog.js:396
+#: js/UserEditDialog.js:464
 msgid "Logoff Time"
 msgstr "Heure de déconnexion"
 
-#: js/UserEditDialog.js:398
+#: js/UserEditDialog.js:466
 msgid "never logged off"
 msgstr "jamais déconnecté"
 
-#: js/UserEditDialog.js:401
+#: js/UserEditDialog.js:469
 msgid "Profile Path"
 msgstr "Chemin du profil"
 
-#: js/UserEditDialog.js:406
+#: js/UserEditDialog.js:474
 #, fuzzy
 msgid "Password Last Set"
 msgstr "Mot de passe défini"
 
-#: js/UserEditDialog.js:411
+#: js/UserEditDialog.js:479
 msgid "Logon Script"
 msgstr "Script d'ouverture de session"
 
-#: js/UserEditDialog.js:415
+#: js/UserEditDialog.js:483
 msgid "Password Can Change"
 msgstr "le mot de passe peut être mis à jour"
 
-#: js/UserEditDialog.js:417 js/UserEditDialog.js:421 js/UserEditDialog.js:425
+#: js/UserEditDialog.js:485 js/UserEditDialog.js:489 js/UserEditDialog.js:493
 msgid "not set"
 msgstr "non défini"
 
-#: js/UserEditDialog.js:419
+#: js/UserEditDialog.js:487
 msgid "Password Must Change"
 msgstr "le mot de passe doit être mis à jour"
 
-#: js/UserEditDialog.js:423
+#: js/UserEditDialog.js:491
 msgid "Kick Off Time"
 msgstr "Durée de bannissement"
 
-#: js/UserEditDialog.js:430
+#: js/UserEditDialog.js:498
 msgid "IMAP"
 msgstr ""
 
-#: js/UserEditDialog.js:444
+#: js/UserEditDialog.js:512
 #, fuzzy
 msgid "Email UID"
 msgstr "Email"
 
-#: js/UserEditDialog.js:448
+#: js/UserEditDialog.js:516
 #, fuzzy
 msgid "Email GID"
 msgstr "Email"
 
-#: js/UserEditDialog.js:452 js/UserEditDialog.js:496
+#: js/UserEditDialog.js:520
 #, fuzzy
 msgid "Email Username"
 msgstr "Utilisateur Samba"
 
-#: js/UserEditDialog.js:456
+#: js/UserEditDialog.js:524
 msgid "Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:462
+#: js/UserEditDialog.js:530
 msgid "Current Mail Size"
 msgstr ""
 
-#: js/UserEditDialog.js:467
+#: js/UserEditDialog.js:535
 msgid "Sieve Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:472
+#: js/UserEditDialog.js:540
 msgid "Current Sieve Size"
 msgstr ""
 
-#: js/UserEditDialog.js:477
+#: js/UserEditDialog.js:545
 #, fuzzy
 msgid "Last Login"
 msgstr "Dernier login à"
 
-#: js/UserEditDialog.js:482
+#: js/UserEditDialog.js:550
 msgid "SMTP"
 msgstr ""
 
-#: js/UserEditDialog.js:500
-msgid "Aliases"
-msgstr ""
-
-#: js/UserEditDialog.js:505
-msgid "Forwards"
-msgstr ""
-
-#: js/UserEditDialog.js:510
+#: js/UserEditDialog.js:566
 msgid "Forward Only"
 msgstr ""
 

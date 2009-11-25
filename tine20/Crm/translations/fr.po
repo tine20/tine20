@@ -286,10 +286,6 @@ msgstr ""
 msgid "Defaults"
 msgstr ""
 
-#: js/AdminPanel.js:266
-msgid "Remove Option"
-msgstr ""
-
 #: js/Contact.js:170
 msgid "Change type to Customer"
 msgstr ""
