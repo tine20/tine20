@@ -12,7 +12,7 @@
  * @todo        add generic mechanism for value pre/postfixes? (see accountLoginNamePrefix in Admin_User_Import)
  * @todo        add more conversions e.g. date/accounts
  * @todo        add tests for tags + notes
- * 
+ * @todo        add more documentation
  */
 
 /**
@@ -20,6 +20,17 @@
  * 
  * @package     Tinebase
  * @subpackage  Import
+ * 
+ * some documentation for the xml import definition:
+ * 
+ * <config> main tags
+ * <container_id>34</container_id>:     container id for imported records (required)
+ * <encoding>UTF-8</encoding>:          encoding of input file
+ * 
+ * <mapping><field> special tags:
+ * <append>glue</append>:               value is appended to destination field with 'glue' as glue
+ * <replace>\n</replace>:               replace \r\n with \n
+ * <fixed>fixed</fixed>:                the field has a fixed value ('fixed' in this example)
  * 
  */
 abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
@@ -263,6 +274,8 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                     $data[$field['destination']] = explode($field['separator'], $_data_indexed[$field['source']]);
                 } else if (isset($field['fixed'])) {
                     $data[$field['destination']] = $field['fixed'];
+                } else if (isset($field['append'])) {
+                    $data[$field['destination']] .= $field['append'] . $_data_indexed[$field['source']];
                 } else {
                     $data[$field['destination']] = $_data_indexed[$field['source']];
                 }
