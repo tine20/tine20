@@ -282,7 +282,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             selectedRows[i].data.relation_type = _button.contactType;
         }
         
-        store.fireEvent('dataChanged', this.store);
+        this.store.fireEvent('dataChanged', this.store);
     },
     
     /**
