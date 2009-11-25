@@ -67,7 +67,7 @@ Tine.Tinebase.ExceptionHandler = function() {
         if (! Tine.Tinebase.exceptionDlg) {
             Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
                 height: windowHeight,
-                exceptionInfo: data,
+                exception: data,
                 listeners: {
                     close: function() {
                         Tine.Tinebase.exceptionDlg = null;
