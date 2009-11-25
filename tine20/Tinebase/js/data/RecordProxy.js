@@ -351,7 +351,8 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                     options.success.apply(options.scope, args);
                 }
             },
-            failure: function (response, options) {
+            // note incoming options are implicitly jsonprc converted
+            failure: function (response, jsonrpcoptions) {
                 if (typeof options.failure == 'function') {
                     var args = [];
                     if (typeof options.beforeFailure == 'function') {
@@ -365,7 +366,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                 } else {
                     var responseData = Ext.decode(response.responseText);
                     var exception = responseData.data ? responseData.data : responseData;
-                    exception.request = options.jsonData;
+                    exception.request = jsonrpcoptions.jsonData;
                     exception.response = response.responseText;
                     
                     Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
