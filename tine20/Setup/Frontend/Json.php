@@ -306,7 +306,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
 	            'setupChecks'          => $this->envCheck(),
 	            'configData'           => $this->loadConfig(),
         	    'authenticationData'   => empty($registryData['checkDB']) ? array() : $this->loadAuthenticationData(),
-        	    'emailData'            => $this->_controller->isInstalled('Tinebase') ? $this->getEmailConfig() : array(),
+        	    'emailData'            => (! empty($registryData['checkDB']) && $this->_controller->isInstalled('Tinebase')) ? $this->getEmailConfig() : array(),
 	        ));
         }
         

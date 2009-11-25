@@ -425,14 +425,16 @@ class Setup_ExtCheck
                     break;
                 case 'MySQL':
                     // get setup controller for database connection
-                    $dbConfig = Tinebase_Core::getConfig()->database;
-                    $hostnameWithPort = (isset($dbConfig->port)) ? $dbConfig->host . ':' . $dbConfig->port : $dbConfig->host;
-                    $link = @mysql_connect($hostnameWithPort, $dbConfig->username, $dbConfig->password);
-                    if (!$link) {
-                        //die('Could not connect to mysql database: ' . mysql_error());
-                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'Could not connect to mysql database: ' . mysql_error()); 
-                        Setup_Core::set(Setup_Core::CHECKDB, FALSE);
-                    }                    
+                    if (Setup_Core::configFileExists()) {
+                        $dbConfig = Tinebase_Core::getConfig()->database;
+                        $hostnameWithPort = (isset($dbConfig->port)) ? $dbConfig->host . ':' . $dbConfig->port : $dbConfig->host;
+                        $link = @mysql_connect($hostnameWithPort, $dbConfig->username, $dbConfig->password);
+                        if (!$link) {
+                            //die('Could not connect to mysql database: ' . mysql_error());
+                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'Could not connect to mysql database: ' . mysql_error()); 
+                            Setup_Core::set(Setup_Core::CHECKDB, FALSE);
+                        }
+                    }
                     //echo "mysql version: " . mysql_get_server_info();
                     if (version_compare($value['attributes']['VERSION'], @mysql_get_server_info(), '<')) {
                         $data[] = array($value['attributes']['NAME'], 'SUCCESS');
