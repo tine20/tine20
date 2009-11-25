@@ -124,7 +124,13 @@ class Setup_Controller
         if (!isset($config->logger) || !$config->logger->active) {
             return true;
         } else {
-            return (isset($config->logger->filename) && is_writable($config->logger->filename));
+            return (
+                isset($config->logger->filename) 
+                && (
+                    file_exists($config->logger->filename) && is_writable($config->logger->filename)
+                    || is_writable(dirname($config->logger->filename))
+                )
+            );
         }
     }
     
