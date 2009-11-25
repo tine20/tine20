@@ -171,11 +171,11 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      */
     public function loadConfig()
     {
-        $result = (!Setup_Core::configFileExists()) 
+        $result = (! Setup_Core::configFileExists()) 
                 ? Setup_Controller::getInstance()->getConfigDefaults()
-                : Setup_Controller::getInstance()->getConfigData();
+                : ((Setup_Core::isRegistered(Setup_Core::USER)) ? Setup_Controller::getInstance()->getConfigData() : array());
 
-        return Setup_Core::isRegistered(Setup_Core::USER) ? $result : array();
+        return $result;
     }
     
     /**
