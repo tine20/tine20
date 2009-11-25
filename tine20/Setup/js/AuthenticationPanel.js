@@ -174,7 +174,8 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                     scope: this,
                     change: this.onChangeAuthProvider,
                     select: this.onChangeAuthProvider
-                }
+                },
+                tabIndex: 1
             });
             
        this.accountsStorageCombo = new Ext.form.ComboBox({
@@ -225,15 +226,18 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         inputType: 'text',
                         name: 'authentication_Sql_adminLoginName',
                         fieldLabel: this.app.i18n._('Initial admin login name'),
-                        disabled: !setupRequired
+                        disabled: !setupRequired,
+                        tabIndex: 2
                     }, {
                         name: 'authentication_Sql_adminPassword',
                         fieldLabel: this.app.i18n._('Initial admin Password'),
-                        disabled: !setupRequired
+                        disabled: !setupRequired,
+                        tabIndex: 3
                     }, {
                         name: 'authentication_Sql_adminPasswordConfirmation',
                         fieldLabel: this.app.i18n._('Password confirmation'),
-                        disabled: !setupRequired
+                        disabled: !setupRequired,
+                        tabIndex: 4
                     } ]
                 }, {
                     id: this.authProviderIdPrefix + 'Ldap',
