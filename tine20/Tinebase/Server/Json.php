@@ -22,8 +22,18 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
 	
 	public function handle()
 	{
-	    $this->_initFramework();
+	    try {
+    	    $this->_initFramework();
+    	    $exception = FALSE;
+	    } catch (Exception $exception) {
+	        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' initFramework exception: ' . $exception);
             
+	        // handle all kind of session exceptions as 'Not Authorised'
+	        if ($exception instanceof Zend_Session_Exception) {
+                $exception = new Tinebase_Exception_AccessDenied('Not Authorised', 401);
+            }
+        }
+        
         $server = new Zend_Json_Server();
         $server->setAutoEmitResponse(false);
         $server->setAutoHandleExceptions(false);
@@ -44,10 +54,13 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
         	$request = new Zend_Json_Server_Request();
         	$request->setOptions($requestOptions);
         	
-        	$response[] = $this->_handle($server, $request);
+        	$response[] = $exception ? 
+        	   $this->_handleException($server, $request, $exception) :
+        	   $this->_handle($server, $request);
         }
         
         echo $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
+            
 	}
 	
     /**
@@ -62,10 +75,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             $method  = $request->getMethod();
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
             
-            if (Zend_Auth::getInstance()->hasIdentity()) {
-                $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
-                $this->_checkJsonKey($method, $jsonKey);
-            }
+            $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
+            $this->_checkJsonKey($method, $jsonKey);
             
             // add json apis which require no auth
             $server->setClass('Tinebase_Frontend_Json', 'Tinebase');
@@ -125,38 +136,30 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             }
             
         } catch (Exception $exception) {
-            
-            // handle all kind of session exceptions as 'Not Authorised'
-            if ($exception instanceof Zend_Session_Exception) {
-                $exception = new Tinebase_Exception_AccessDenied('Not Authorised', 401);
-            }
-            
-            if (! $server) {
-            	// exception from initFramework
-            	error_log($exception);
-            	$server = new Zend_Json_Server();
-            	$request = new Zend_Json_Server_Request_Http();
-            }
-            
-            $exceptionData = method_exists($exception, 'toArray')? $exception->toArray() : array();
-            $exceptionData['message'] = $exception->getMessage();
-            $exceptionData['code']    = $exception->getCode();
-            $exceptionData['trace']   = $exception->getTrace();
-            
-            $server->fault($exceptionData['message'], $exceptionData['code'], $exceptionData);
-            
-            $response = $server->getResponse();
-	        if (null !== ($id = $request->getId())) {
-	            $response->setId($id);
-	        }
-	        if (null !== ($version = $request->getVersion())) {
-	            $response->setVersion($version);
-	        }
-        
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $exception);
-            return $response;
-            //exit;
+            return $this->_handleException($server, $request, $exception);
         }
+    }
+    
+    protected function _handleException($server, $request, $exception)
+    {
+        $exceptionData = method_exists($exception, 'toArray')? $exception->toArray() : array();
+        $exceptionData['message'] = $exception->getMessage();
+        $exceptionData['code']    = $exception->getCode();
+        $exceptionData['trace']   = $exception->getTrace();
+        
+        $server->fault($exceptionData['message'], $exceptionData['code'], $exceptionData);
+        
+        $response = $server->getResponse();
+        if (null !== ($id = $request->getId())) {
+            $response->setId($id);
+        }
+        if (null !== ($version = $request->getVersion())) {
+            $response->setVersion($version);
+        }
+    
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $exception);
+        
+        return $response;
     }
     
     /**
