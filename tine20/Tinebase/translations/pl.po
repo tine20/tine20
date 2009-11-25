@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-10-16 05:40+0100\n"
+"PO-Revision-Date: 2009-11-22 16:40+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -231,7 +231,7 @@ msgstr "Hasło"
 
 #: js/LoginPanel.js:125
 msgid "Tine 2.0 is made for you"
-msgstr ""
+msgstr "To dla Ciebie rozwijamy Tine 2.0"
 
 #: js/LoginPanel.js:127
 msgid ""
@@ -239,10 +239,13 @@ msgid ""
 "for your needs! So you are warmly welcome to discuss with us, bring in ideas "
 "and get help."
 msgstr ""
+"Tine 2.0 ma ułatwić prowadzenie biznesu i przybliżyć realizację procesów "
+"biznesowych Twoim potrzebom! Dlatego chętnie zapraszamy do dyskusji z nami, "
+"prezentacji własnych sugestii, a w razie potrzeby, oferujemy pomoc."
 
 #: js/LoginPanel.js:133
 msgid "Tine 2.0 Homepage"
-msgstr ""
+msgstr "Strona domowa Tine 2.0"
 
 #: js/LoginPanel.js:134
 msgid "Tine 2.0 Forum"
@@ -250,29 +253,31 @@ msgstr ""
 
 #: js/LoginPanel.js:178
 msgid "about {0} minutes"
-msgstr ""
+msgstr "około {0} minut"
 
 #: js/LoginPanel.js:183 js/LoginPanel.js:343
 msgid "Tine 2.0 needs your help"
-msgstr ""
+msgstr "Tine 2.0 liczy na Twoją pomoc"
 
 #: js/LoginPanel.js:185 js/LoginPanel.js:345
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
 msgstr ""
+"Nieprzerwanie potrzebujemy odzewu na nasz produkt, aby następne wydania Tine "
+"2.0 coraz lepiej spełniały Twoje potrzeby. Współpracując, pomóż nam i sobie."
 
 #: js/LoginPanel.js:191
 msgid "participate!"
-msgstr ""
+msgstr "współpracuj"
 
 #: js/LoginPanel.js:213
 msgid "Languages"
-msgstr ""
+msgstr "Języki"
 
 #: js/LoginPanel.js:214
 msgid "Duration"
-msgstr ""
+msgstr "Czas trwania"
 
 #: js/LoginPanel.js:269
 msgid "Logging you in..."
@@ -446,12 +451,11 @@ msgstr[1] "dane uwierzytelniające"
 msgstr[2] "dane uwierzytelniające"
 
 #: js/Models.js:274
-#, fuzzy
 msgid "Relation"
 msgid_plural "Relations"
-msgstr[0] "Aplikacje"
-msgstr[1] "Aplikacje"
-msgstr[2] "Aplikacje"
+msgstr[0] "Relacja"
+msgstr[1] "Relacje"
+msgstr[2] "Relacji"
 
 #: js/tineInit.js:560
 msgid ""
@@ -586,33 +590,28 @@ msgid "Remove account"
 msgstr "usuń konto"
 
 #: js/widgets/account/PickerGridPanel.js:231
-#, fuzzy
 msgid "Search User"
-msgstr "Znajdź"
+msgstr "Znajdź użytkownika"
 
 #: js/widgets/account/PickerGridPanel.js:237
-#, fuzzy
 msgid "Search Group"
-msgstr "Wyszukiwanie..."
+msgstr "Znajdź grupę"
 
 #: js/widgets/account/PickerGridPanel.js:243
-#, fuzzy
 msgid "Add Anyone"
-msgstr "Dodaj notatkę"
+msgstr "Dodaj kogokolwiek"
 
 #: js/widgets/account/PickerGridPanel.js:251
-#, fuzzy
 msgid "Anyone"
-msgstr "Brak"
+msgstr "Ktokolwiek"
 
 #: js/widgets/account/PickerGridPanel.js:298
 msgid "Search for users ..."
-msgstr ""
+msgstr "Znajdź użytkowników..."
 
 #: js/widgets/account/PickerGridPanel.js:318
-#, fuzzy
 msgid "Search for groups ..."
-msgstr "Wyszukiwanie..."
+msgstr "Znajdź grupy..."
 
 #: js/widgets/account/PickerGridPanel.js:372
 msgid "Name"
@@ -677,7 +676,7 @@ msgstr "Historia"
 
 #: js/widgets/ActivitiesPanel.js:523
 msgid "Quick search"
-msgstr ""
+msgstr "Szybkie wyszukiwanie"
 
 #: js/widgets/ActivitiesPanel.js:524 js/widgets/ActivitiesPanel.js:525
 msgid "Time"
@@ -916,9 +915,8 @@ msgid "Do you really want to delete this {0}?"
 msgstr "Czy na pewno chcesz usunąć ten {0}?"
 
 #: js/widgets/dialog/LinkPanel.js:48
-#, fuzzy
 msgid "Links"
-msgstr "Zaloguj"
+msgstr "Linki"
 
 #: js/widgets/dialog/PreferencesDialog.js:137
 msgid "Admin Mode"
@@ -1005,9 +1003,8 @@ msgid "is within"
 msgstr "przypada na"
 
 #: js/widgets/grid/FilterModel.js:155
-#, fuzzy
 msgid "is in week no."
-msgstr "bieżący tydzień"
+msgstr "jest w tygodniu"
 
 #: js/widgets/grid/FilterModel.js:156
 msgid "starts with"
@@ -1018,18 +1015,16 @@ msgid "ends with"
 msgstr "kończy się na"
 
 #: js/widgets/grid/FilterModel.js:158
-#, fuzzy
 msgid "one of"
-msgstr "Brak"
+msgstr "jeden z"
 
 #: js/widgets/grid/FilterModel.js:196
 msgid "select a operator"
 msgstr "wybierz operator"
 
 #: js/widgets/grid/FilterModel.js:288
-#, fuzzy
 msgid "Search Account ..."
-msgstr "Wyszukiwanie..."
+msgstr "Znajdź konto ..."
 
 #: js/widgets/grid/FilterModel.js:401
 msgid "today"
@@ -1158,7 +1153,7 @@ msgstr "Zapisywanie filtra"
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:103
 msgid "Always show advanced filters"
-msgstr ""
+msgstr "Zawsze pokazuj zaawansowane filtry"
 
 #: js/widgets/grid/PersistentFilterPicker.js:79
 msgid "My saved filters"
@@ -1516,39 +1511,42 @@ msgstr "zmieniony"
 msgid "record changed"
 msgstr "wiersz zmieniony"
 
-#~ msgid "Register"
-#~ msgstr "Zarejestruj się"
+msgid "Register"
+msgstr "Zarejestruj się"
 
-#~ msgid ""
-#~ "The server did not respond to your request. Please check your network or "
-#~ "contact your administrator."
-#~ msgstr ""
-#~ "Serwer nie odpowiedział na Twoje zapytanie. Proszę sprawdzić połączenie "
-#~ "sieciowe albo skontaktować się ze swoim administratorem."
+msgid ""
+"The server did not respond to your request. Please check your network or "
+"contact your administrator."
+msgstr ""
+"Serwer nie odpowiedział na Twoje zapytanie. Proszę sprawdzić połączenie "
+"sieciowe albo skontaktować się ze swoim administratorem."
 
-#~ msgid "Permissions"
-#~ msgstr "Uprawnienia"
+msgid "Permissions"
+msgstr "Uprawnienia"
 
-#~ msgid "Could not save {0}."
-#~ msgstr "Zapisanie było niemożliwe {0}."
+msgid "Could not save {0}."
+msgstr "Zapisanie było niemożliwe {0}."
 
-#~ msgid "add account"
-#~ msgstr "dodaj konto"
+msgid "add account"
+msgstr "dodaj konto"
 
-#~ msgid "nobody"
-#~ msgstr "brak"
+msgid "nobody"
+msgstr "brak"
 
-#~ msgid "please select an account"
-#~ msgstr "Proszę zaznaczyć konto"
+msgid "please select an account"
+msgstr "Proszę zaznaczyć konto"
 
-#~ msgid "loading new language..."
-#~ msgstr "ładowanie nowego języka..."
+msgid "loading new language..."
+msgstr "ładowanie nowego języka..."
 
-#~ msgid "Export Date"
-#~ msgstr "Data eksportu"
+msgid "Export Date"
+msgstr "Data eksportu"
 
-#~ msgid "Login successful. Loading Tine 2.0..."
-#~ msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
+msgid "Login successful. Loading Tine 2.0..."
+msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
 
-#~ msgid "Logout from Tine 2.0"
-#~ msgstr "Wylogowanie z Tine 2.0"
+msgid "Logout from Tine 2.0"
+msgstr "Wylogowanie z Tine 2.0"
+
+#~ msgid "Our Forum for questions and ideas"
+#~ msgstr "Nasze forum do zadawania pytań i wpisywania sugestii"

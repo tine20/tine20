@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-09-05 14:12+0100\n"
+"PO-Revision-Date: 2009-11-22 15:57+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -10,8 +10,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: Controller/Course.php:79
 msgid "teacher"
@@ -25,7 +24,9 @@ msgstr "Nauczyciel"
 msgid "Teacher Account"
 msgstr "Konto nauczyciela"
 
-#: Frontend/Json.php:240 js/CourseEditDialog.js:135 js/Models.js:42
+#: Frontend/Json.php:240
+#: js/CourseEditDialog.js:135
+#: js/Models.js:42
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurs"
@@ -40,7 +41,8 @@ msgstr "Importuj uczestników kursu"
 msgid "Course Name"
 msgstr "Nazwa kursu"
 
-#: js/CourseEditDialog.js:155 js/CourseEditDialog.js:162
+#: js/CourseEditDialog.js:155
+#: js/CourseEditDialog.js:162
 msgid "Course / School Type"
 msgstr "Kurs / Typ szkoły"
 
@@ -48,11 +50,13 @@ msgstr "Kurs / Typ szkoły"
 msgid "Description"
 msgstr "Opis"
 
-#: js/CourseEditDialog.js:179 js/CourseGridPanel.js:81
+#: js/CourseEditDialog.js:179
+#: js/CourseGridPanel.js:81
 msgid "Internet Access"
 msgstr "Internet"
 
-#: js/CourseEditDialog.js:185 js/CourseGridPanel.js:88
+#: js/CourseEditDialog.js:185
+#: js/CourseGridPanel.js:88
 msgid "Fileserver Access"
 msgstr "Serwer plików"
 
@@ -78,7 +82,7 @@ msgstr "Proszę wprowadzić nowe hasło:"
 
 #: js/CourseGridPanel.js:51
 msgid "Quick search"
-msgstr ""
+msgstr "Szybkie wyszukiwanie"
 
 #: js/CourseGridPanel.js:68
 msgid "Name"
@@ -112,7 +116,8 @@ msgstr "Błąd"
 msgid "Some error occured while trying to update the courses."
 msgstr "Podczas próby aktualizacji kursów wystąpił błąd."
 
-#: js/Courses.js:29 Setup/setup.xml:4
+#: js/Courses.js:29
+#: Setup/setup.xml:4
 msgid "Courses"
 msgstr "Kursy"
 
@@ -133,3 +138,4 @@ msgid_plural "Course Types"
 msgstr[0] "Rodzaj kursu"
 msgstr[1] "rodzaje kursu"
 msgstr[2] "rodzajów kursu"
+

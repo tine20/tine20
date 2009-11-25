@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-10-16 05:19+0100\n"
+"PO-Revision-Date: 2009-11-22 15:13+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -167,11 +167,11 @@ msgstr "książki adresowe"
 
 #: js/Addressbook.js:240
 msgid "User Account"
-msgstr ""
+msgstr "Konto użytkownika"
 
 #: js/Addressbook.js:243
 msgid "Quick search"
-msgstr ""
+msgstr "Szybkie wyszukiwanie"
 
 #: js/Addressbook.js:244 js/ContactEditDialog.js:86 js/ContactGrid.js:117
 #: js/EditDialog.js:389
@@ -324,9 +324,8 @@ msgid "Enter description"
 msgstr "Wprowadź opis"
 
 #: js/ContactEditDialog.js:339
-#, fuzzy
 msgid "Export as pdf"
-msgstr "eksportuj jako pdf"
+msgstr "Eksportuj jako PDF"
 
 #: js/ContactEditDialog.js:364
 msgid "Either {0} or {1} must be given"
@@ -394,11 +393,11 @@ msgstr "Położenie geograficzne"
 
 #: js/ContactGrid.js:151
 msgid "Creation Time"
-msgstr ""
+msgstr "Utworzono"
 
 #: js/ContactGrid.js:152
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Ostatnio zmieniano"
 
 #: js/ContactGrid.js:162
 msgid "Export Contact"
@@ -443,7 +442,6 @@ msgid "Cell private"
 msgstr "Komórka prywatna"
 
 #: js/ContactGrid.js:364
-#, fuzzy
 msgid "Internal Contact"
 msgstr "Kontakty wewnętrzne"
 
@@ -550,7 +548,6 @@ msgid "Default Addressbook"
 msgstr "Domyślna książka adresowa"
 
 #: Preference.php:61
-#, fuzzy
 msgid "The default addressbook for new contacts"
 msgstr "Domyślna książka adresowa dla nowych kontaktów"
 
@@ -564,38 +561,38 @@ msgstr "Pani"
 
 # I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
 # Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht verwenden. Dies waere nicht richtig im Polnischen.
-#~ msgid "Export"
-#~ msgstr "Eksportuj"
+msgid "Export"
+msgstr "Eksportuj"
 
-#~ msgid "Are you Sure?"
-#~ msgstr "Czy na pewno?"
+msgid "Are you Sure?"
+msgstr "Czy na pewno?"
 
-#~ msgid "Do you really want to delete the selected contact?"
-#~ msgid_plural "Do you really want to delete the selected contacts?"
-#~ msgstr[0] "Czy na pewno chcesz usunąć zaznaczony kontakt?"
-#~ msgstr[1] "Czy na pewno chcesz usunąć zaznaczone kontakty?"
-#~ msgstr[2] "Czy na pewno chcesz usunąć zaznaczone kontakty?"
+msgid "Do you really want to delete the selected contact?"
+msgid_plural "Do you really want to delete the selected contacts?"
+msgstr[0] "Czy na pewno chcesz usunąć zaznaczony kontakt?"
+msgstr[1] "Czy na pewno chcesz usunąć zaznaczone kontakty?"
+msgstr[2] "Czy na pewno chcesz usunąć zaznaczone kontakty?"
 
-#~ msgid "add contact"
-#~ msgstr "Dodaj kontakt"
+msgid "add contact"
+msgstr "Dodaj kontakt"
 
-#~ msgid "edit contact"
-#~ msgstr "Edytuj kontakt"
+msgid "edit contact"
+msgstr "Edytuj kontakt"
 
-#~ msgid "delete contact"
-#~ msgid_plural "delete contacts"
-#~ msgstr[0] "Usuń kontakt"
-#~ msgstr[1] "Usuń kontakty"
-#~ msgstr[2] "Usuń kontakty"
+msgid "delete contact"
+msgid_plural "delete contacts"
+msgstr[0] "Usuń kontakt"
+msgstr[1] "Usuń kontakty"
+msgstr[2] "Usuń kontakty"
 
-#~ msgid "Displaying contacts {0} - {1} of {2}"
-#~ msgstr "Wyświetlane kontaków {0} - {1} z {2}"
+msgid "Displaying contacts {0} - {1} of {2}"
+msgstr "Wyświetlane kontaków {0} - {1} z {2}"
 
-#~ msgid "No contacts to display"
-#~ msgstr "Brak kontaktów"
+msgid "No contacts to display"
+msgstr "Brak kontaktów"
 
-#~ msgid "Some error occured while trying to delete the conctact."
-#~ msgstr "Podczas próby usunięcia kontaktu wystąpił błąd."
+msgid "Some error occured while trying to delete the conctact."
+msgstr "Podczas próby usunięcia kontaktu wystąpił błąd."
 
-#~ msgid "call contact"
-#~ msgstr "Wywołaj kontakt"
+msgid "call contact"
+msgstr "Wywołaj kontakt"

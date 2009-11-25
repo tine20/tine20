@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-10-16 05:20+0100\n"
+"PO-Revision-Date: 2009-11-22 15:56+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -30,54 +30,44 @@ msgid "All Rights to administrate resources"
 msgstr "Wszelkie uprawnienia do zarządzania zasobami"
 
 #: Controller/EventNotifications.php:254
-#, fuzzy
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Przypomnienie o terminie \"%s\" o %s"
 
 #: Controller/EventNotifications.php:257
-#, fuzzy
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "Zaproszenie na \"%s\" o %s"
 
 #: Controller/EventNotifications.php:260
-#, fuzzy
 msgid "Event \"%1$s\" at %s has been canceled"
 msgstr "Termin \"%s\" at %s został odwołany"
 
 #: Controller/EventNotifications.php:265
-#, fuzzy
 msgid "Event \"%1$s\" at %2$s has been rescheduled"
 msgstr "Termin \"%s\" at %s został przełożony"
 
 #: Controller/EventNotifications.php:269
-#, fuzzy
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "Termin \"%s\" at %s został zaktualizowany"
 
 #: Controller/EventNotifications.php:279
-#, fuzzy
 msgid "%1$s accepted event \"%2$s\" at %3$s"
-msgstr "Przypomnienie o terminie \"%s\" o %s"
+msgstr "%1$s zaakceptowany termin \"%s\" o %s"
 
 #: Controller/EventNotifications.php:283
-#, fuzzy
 msgid "%1$s declined event \"%2$s\" at %3$s"
-msgstr "Przypomnienie o terminie \"%s\" o %s"
+msgstr "%1$s odwołany termin \"%s\" o %s"
 
 #: Controller/EventNotifications.php:287
-#, fuzzy
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Przypomnienie o terminie \"%s\" o %s"
+msgstr "Niezobowiązująca odpowiedź od %1$s dotycząca terminu \"%2$s\" o %3$s"
 
 #: Controller/EventNotifications.php:291
-#, fuzzy
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Przypomnienie o terminie \"%s\" o %s"
+msgstr "Brak odpowiedzi od %1$s dotyczącej terminu \"%2$s\" o %3$s"
 
 #: Controller/EventNotifications.php:295
-#, fuzzy
 msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr "Przypomnienie o terminie \"%s\" o %s"
+msgstr "Zmiana składu uczestników dotycząca terminu \"%s\" o %s"
 
 #: Controller.php:100
 #, python-format
@@ -196,7 +186,7 @@ msgstr "Przełożenie terminu powoduje konflikt terminów"
 
 #: js/CalendarPanel.js:229
 msgid "The follwing attendee are busy at the requested time:"
-msgstr ""
+msgstr "Następujący uczestnicy są zajęci w zaproponowanym czasie:"
 
 #: js/CalendarPanel.js:234
 msgid "Ignore Conflict"
@@ -245,7 +235,7 @@ msgstr "Aktualizacja terminu nie powiodła się"
 
 #: js/CalendarSelectTreePanel.js:43
 msgid "Resouces {0}"
-msgstr ""
+msgstr "Zasoby {0}"
 
 #: js/CalendarSelectWidget.js:158
 msgid "Originally"
@@ -261,11 +251,11 @@ msgstr "{0}, {1}. {2}"
 
 #: js/EventDetailsPanel.js:51
 msgid "Unknown calendar"
-msgstr ""
+msgstr "Nieznany kalendarz"
 
 #: js/EventDetailsPanel.js:62
 msgid "{0} {1} o'clock"
-msgstr ""
+msgstr "godzina {0} {1}"
 
 #: js/EventDetailsPanel.js:172 js/EventEditDialog.js:93 Model/Event.php:186
 msgid "Summary"
@@ -280,8 +270,9 @@ msgid "End Time"
 msgstr "Koniec"
 
 #: js/EventDetailsPanel.js:218 Model/Event.php:179
+#, fuzzy
 msgid "Blocking"
-msgstr ""
+msgstr "Blokowanie"
 
 #: js/EventDetailsPanel.js:223 js/EventEditDialog.js:100
 #: js/ResourcesGridPanel.js:54 Model/Event.php:182
@@ -297,8 +288,9 @@ msgid "whole day"
 msgstr "cały dzień"
 
 #: js/EventEditDialog.js:136
+#, fuzzy
 msgid "non-blocking"
-msgstr ""
+msgstr "bez blokowania"
 
 #: js/EventEditDialog.js:177 js/ResourceEditDialog.js:74 Model/Event.php:181
 msgid "Description"
@@ -322,7 +314,7 @@ msgstr "Nieprawidłowa data rozpoczęcia"
 
 #: js/MainScreenCenterPanel.js:73
 msgid "Show declined events"
-msgstr ""
+msgstr "Pokaż zatarte terminy"
 
 #: js/MainScreenCenterPanel.js:108
 msgid "Day"
@@ -537,9 +529,8 @@ msgid "of"
 msgstr " "
 
 #: Model/Attender.php:167
-#, fuzzy
 msgid "unknown"
-msgstr "nieznane)"
+msgstr "nieznany"
 
 #: Model/Attender.php:313
 msgid ""
@@ -561,36 +552,33 @@ msgstr "Koniec"
 
 #: Model/Event.php:180
 msgid "Classification"
-msgstr ""
+msgstr "Klasyfikacja"
 
 #: Model/Event.php:184
 msgid "Priority"
-msgstr ""
+msgstr "Priorytet"
 
 #: Model/Event.php:187
 msgid "Url"
-msgstr ""
+msgstr "URL"
 
 #: Model/Event.php:188
-#, fuzzy
 msgid "Recurrance rule"
-msgstr "Powtarzalność"
+msgstr "Reguły powtarzalności"
 
 #: Model/Event.php:189
 msgid "Is all day event"
-msgstr ""
+msgstr "Termin codzienny"
 
 #: Model/Event.php:190
-#, fuzzy
 msgid "Organizer timezone"
-msgstr "Notes elektroniczny"
+msgstr "Notatnik - strefa czasowa"
 
 #: Model/Event.php:215
 msgid "Yes"
-msgstr ""
+msgstr "Tak"
 
 #: Model/Event.php:215
-#, fuzzy
 msgid "No"
 msgstr "Brak"
 
@@ -608,14 +596,12 @@ msgid "Default Calendar"
 msgstr "Domyślny kalendarz"
 
 #: Preference.php:83
-#, fuzzy
 msgid "The default calendar for invitations and new events"
 msgstr "Domyślny kalendarz dla zaproszeń i nowych terminów"
 
 #: Preference.php:86
-#, fuzzy
 msgid "Get Notification Emails"
-msgstr "Powiadom o terminach"
+msgstr "Powiadomienie e-mail o terminach"
 
 #: Preference.php:87
 msgid ""
@@ -623,178 +609,177 @@ msgid ""
 "organizers will get notifications for all updates including attendee answers "
 "unless this preference is set to \"Never\""
 msgstr ""
+"Wybierz poziom szczegółowości powiadomień o wykonywanych akcjach. Zauważ "
+"proszę, że organizatorzy otrzymują powiadomienia o każdej aktualizacji, "
+"łącznie z odpowiedziami uczestników, o ile niniejsza opcja nie zostanie "
+"ustawiona na wartość \"Never\""
 
 #: Preference.php:90
 msgid "Send Notifications Emails of own Actions"
-msgstr ""
+msgstr "Przesyłanie powiadomienia e-mail z własnymi akcjami"
 
 #: Preference.php:91
 msgid "Get notifications emails for actions you did yourself"
-msgstr ""
+msgstr "Otrzymywanie powiadomienia e-maila z własnymi akcjami"
 
 #: views/eventNotification.php:13
-#, fuzzy
 msgid "Updates"
-msgstr "Aktualizuj termin"
+msgstr "Aktualizacje"
 
 #: views/eventNotification.php:21
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr ""
+msgstr "%1$s został zmieniony z \"%2$\" na \"%3$\""
 
 #: views/eventNotification.php:28
 msgid "%1$s has been invited"
-msgstr ""
+msgstr "%1$s został zaproszony"
 
 #: views/eventNotification.php:33
 msgid "%1$s has been removed"
-msgstr ""
+msgstr "%1$s został usunięty"
 
 #: views/eventNotification.php:40
 msgid "%1$s accepted invitation"
-msgstr ""
+msgstr "%1$s przyjęte zaproszenie"
 
 #: views/eventNotification.php:44
 msgid "%1$s declined invitation"
-msgstr ""
+msgstr "%1$s odwołane zaproszenie"
 
 #: views/eventNotification.php:48
 msgid "Tentative response from %1$s"
-msgstr ""
+msgstr "Wstępna akceptacja %1$s"
 
 #: views/eventNotification.php:52
-#, fuzzy
 msgid "No response from %1$s"
-msgstr "Brak odpowiedzi"
+msgstr "Brak odpowiedzi od %1$s"
 
 #: views/eventNotification.php:61
-#, fuzzy
 msgid "Event details"
-msgstr "Terminy"
+msgstr "Szczegóły terminów"
 
-#~ msgid "Ignore Scheduling Conflict?"
-#~ msgstr "Czy zignorować konflikt terminów?"
+msgid "Ignore Scheduling Conflict?"
+msgstr "Czy zignorować konflikt terminów?"
 
-#~ msgid "Here is your requested alarm for to following event:"
-#~ msgstr "To jest przypomnienie ustawione dla następującego terminu:"
+msgid "Here is your requested alarm for to following event:"
+msgstr "To jest przypomnienie ustawione dla następującego terminu:"
 
-#~ msgid "You have been invited to the following event:"
-#~ msgstr "Zaproszono Cię do udziału w następującym zdarzeniu:"
+msgid "You have been invited to the following event:"
+msgstr "Zaproszono Cię do udziału w następującym zdarzeniu:"
 
-#~ msgid "The following event has been canceled:"
-#~ msgstr "Następujący termin został odwołany:"
+msgid "The following event has been canceled:"
+msgstr "Następujący termin został odwołany:"
 
-#~ msgid "The following event has been rescheduled:"
-#~ msgstr "Następujący termin został przełożony"
+msgid "The following event has been rescheduled:"
+msgstr "Następujący termin został przełożony"
 
-#~ msgid "From"
-#~ msgstr "Od"
+msgid "From"
+msgstr "Od"
 
-#~ msgid "To"
-#~ msgstr "Do"
+msgid "To"
+msgstr "Do"
 
-#~ msgid "The following event has been updated:"
-#~ msgstr "Następujący termin został zaktualizowany:"
+msgid "The following event has been updated:"
+msgstr "Następujący termin został zaktualizowany:"
 
-#~ msgid "Resouce"
-#~ msgstr "Zasób"
+msgid "Resouce"
+msgstr "Zasób"
 
-#~ msgid "Event description:<br/>"
-#~ msgstr "Opis terminu:<br/>"
+msgid "Event description:<br/>"
+msgstr "Opis terminu:<br/>"
 
-#~ msgid ""
-#~ "Do you realy want to update all events of this recuring event series?"
-#~ msgstr "Czy na pewno chcesz zaktualizować wszystkie terminy z tej serii?"
+msgid "Do you realy want to update all events of this recuring event series?"
+msgstr "Czy na pewno chcesz zaktualizować wszystkie terminy z tej serii?"
 
-#~ msgid ""
-#~ "Your selection contains recuring events. Recuring events must be deleted "
-#~ "seperatly!"
-#~ msgstr ""
-#~ "Twój wybór zawiera powtarzające się terminy. Należy je usunąć pojedynczo!"
+msgid ""
+"Your selection contains recuring events. Recuring events must be deleted "
+"seperatly!"
+msgstr ""
+"Twój wybór zawiera powtarzające się terminy. Należy je usunąć pojedynczo!"
 
-#~ msgid ""
-#~ "Do you realy want to delete all events of this recuring event series?"
-#~ msgstr "Czy na pewno chcesz usunąć wszystkie terminy z tej serii?"
+msgid "Do you realy want to delete all events of this recuring event series?"
+msgstr "Czy na pewno chcesz usunąć wszystkie terminy z tej serii?"
 
-#~ msgid "No recuring rule defined"
-#~ msgstr "Termin się nie powtarza"
+msgid "No recuring rule defined"
+msgstr "Termin się nie powtarza"
 
-#~ msgid "teacher"
-#~ msgstr "nauczyciel"
+msgid "teacher"
+msgstr "nauczyciel"
 
-#~ msgid "Teacher"
-#~ msgstr "Nauczyciel"
+msgid "Teacher"
+msgstr "Nauczyciel"
 
-#~ msgid "Teacher Account"
-#~ msgstr "Konto nauczyciela"
+msgid "Teacher Account"
+msgstr "Konto nauczyciela"
 
-#~ msgid "Course"
-#~ msgid_plural "Courses"
-#~ msgstr[0] "Kurs"
-#~ msgstr[1] "kursy"
-#~ msgstr[2] "kursów"
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Kurs"
+msgstr[1] "kursy"
+msgstr[2] "kursów"
 
-#~ msgid "Import course members"
-#~ msgstr "Importuj uczestników kursu"
+msgid "Import course members"
+msgstr "Importuj uczestników kursu"
 
-#~ msgid "Course Name"
-#~ msgstr "Nazwa kursu"
+msgid "Course Name"
+msgstr "Nazwa kursu"
 
-#~ msgid "Course / School Type"
-#~ msgstr "Kurs / Typ szkoły"
+msgid "Course / School Type"
+msgstr "Kurs / Typ szkoły"
 
-#~ msgid "Internet Access"
-#~ msgstr "Internet"
+msgid "Internet Access"
+msgstr "Internet"
 
-#~ msgid "Fileserver Access"
-#~ msgstr "Serwer plików"
+msgid "Fileserver Access"
+msgstr "Serwer plików"
 
-#~ msgid "Members"
-#~ msgstr "Uczestnicy"
+msgid "Members"
+msgstr "Uczestnicy"
 
-#~ msgid "Login"
-#~ msgstr "Login"
+msgid "Login"
+msgstr "Login"
 
-#~ msgid "Reset Password"
-#~ msgstr "Zresetuj hasło"
+msgid "Reset Password"
+msgstr "Zresetuj hasło"
 
-#~ msgid "Set new password"
-#~ msgstr "Ustaw nowe hasło"
+msgid "Set new password"
+msgstr "Ustaw nowe hasło"
 
-#~ msgid "Please enter the new password:"
-#~ msgstr "Proszę wprowadzić nowe hasło:"
+msgid "Please enter the new password:"
+msgstr "Proszę wprowadzić nowe hasło:"
 
-#~ msgid "Internet Access On"
-#~ msgstr "Internet włączony"
+msgid "Internet Access On"
+msgstr "Internet włączony"
 
-#~ msgid "Internet Access Off"
-#~ msgstr "Internet wyłączony"
+msgid "Internet Access Off"
+msgstr "Internet wyłączony"
 
-#~ msgid "Fileserver Access On"
-#~ msgstr "Serwer plików włączony"
+msgid "Fileserver Access On"
+msgstr "Serwer plików włączony"
 
-#~ msgid "Fileserver Access Off"
-#~ msgstr "Serwer plików wyłączony"
+msgid "Fileserver Access Off"
+msgstr "Serwer plików wyłączony"
 
-#~ msgid "Failed"
-#~ msgstr "Błąd"
+msgid "Failed"
+msgstr "Błąd"
 
-#~ msgid "Some error occured while trying to update the courses."
-#~ msgstr "Podczas próby aktualizacji kursów wystąpił błąd."
+msgid "Some error occured while trying to update the courses."
+msgstr "Podczas próby aktualizacji kursów wystąpił błąd."
 
-#~ msgid "Courses"
-#~ msgstr "Kursy"
+msgid "Courses"
+msgstr "Kursy"
 
-#~ msgid "All Courses"
-#~ msgstr "Wszystkie kursy"
+msgid "All Courses"
+msgstr "Wszystkie kursy"
 
-#~ msgid "record list"
-#~ msgid_plural "record lists"
-#~ msgstr[0] "lista kursów"
-#~ msgstr[1] "listy kursów"
-#~ msgstr[2] "list kursów"
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "lista kursów"
+msgstr[1] "listy kursów"
+msgstr[2] "list kursów"
 
-#~ msgid "Course Type"
-#~ msgid_plural "Course Types"
-#~ msgstr[0] "Rodzaj kursu"
-#~ msgstr[1] "rodzaje kursu"
-#~ msgstr[2] "rodzajów kursu"
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Rodzaj kursu"
+msgstr[1] "rodzaje kursu"
+msgstr[2] "rodzajów kursu"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-10-16 05:31+0100\n"
+"PO-Revision-Date: 2009-11-22 16:15+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -73,7 +73,7 @@ msgstr "Host"
 
 #: js/FelamimailAccountEditDialog.js:116
 msgid "Port (Default: 143 / SSL: 993)"
-msgstr ""
+msgstr "Port (domyślnie 143 / SSL: 993)"
 
 #: js/FelamimailAccountEditDialog.js:122 js/FelamimailAccountEditDialog.js:170
 msgid "Secure Connection"
@@ -104,9 +104,11 @@ msgstr "Hasło"
 msgid "SMTP"
 msgstr "SMTP"
 
+# Note that in might be port 587 in Poland, i.e. for SMTP.WP.PL
+# Beachte, dass die Portnummer in Poland anders sein koenne, z.B. 587 fuer SMTP.WP.PL
 #: js/FelamimailAccountEditDialog.js:164
 msgid "Port (Default: 25)"
-msgstr ""
+msgstr "Port (domyślnie: 25)"
 
 #: js/FelamimailAccountEditDialog.js:185
 msgid "Authentication"
@@ -256,9 +258,8 @@ msgid "Add Account"
 msgstr "Dodaj konto"
 
 #: js/FelamimailGridPanel.js:257
-#, fuzzy
 msgid "Subject/From"
-msgstr "Temat"
+msgstr "Temat/Od"
 
 #: js/FelamimailGridPanel.js:260 js/FelamimailGridPanel.js:325
 msgid "To"
@@ -347,13 +348,12 @@ msgid "Compose email:"
 msgstr "Redaguj wiadomość:"
 
 #: js/FelamimailMessageEditDialog.js:133
-#, fuzzy
 msgid "Add Note"
-msgstr "Dodaj katalog"
+msgstr "Dodaj notatkę"
 
 #: js/FelamimailMessageEditDialog.js:134
 msgid "Edit Email Note Text:"
-msgstr ""
+msgstr "Edytuj tekst wiadomości:"
 
 #: js/FelamimailMessageEditDialog.js:162
 msgid "Could not send {0}."
@@ -468,16 +468,15 @@ msgstr "Edytuj konto"
 
 #: js/FelamimailTreePanel.js:356
 msgid "Reload {0}"
-msgstr ""
+msgstr "Odśwież {0}"
 
 #: js/FelamimailTreePanel.js:696
-#, fuzzy
 msgid "New mails"
-msgstr "E-mail użytkownika"
+msgstr "Nowe e-maile"
 
 #: js/FelamimailTreePanel.js:697
 msgid "You got {0} new mail(s) in Folder "
-msgstr ""
+msgstr "W katalogu masz {0} nowych/ą wiadomości/ć"
 
 #: js/Models.js:43
 msgid "Message"
@@ -513,16 +512,17 @@ msgstr "Domyślne konto e-mail dla wysyłanych wiadomości"
 
 #: Preference.php:89
 msgid "Email Update Interval"
-msgstr ""
+msgstr "Częstotliwość aktualicacji poczty"
 
 #: Preference.php:90
 msgid ""
 "How often should Felamimail check for new Emails (in minutes). \"0\" means "
 "never."
 msgstr ""
+"Jak często Felamimail ma sprawdzać pocztę (w minutach). \"0\" oznacza nigdy."
 
-#~ msgid "Port"
-#~ msgstr "Port"
+msgid "Port"
+msgstr "Port"
 
-#~ msgid "Mark Unread"
-#~ msgstr "Oznacz jako nieprzeczytane"
+msgid "Mark Unread"
+msgstr "Oznacz jako nieprzeczytane"

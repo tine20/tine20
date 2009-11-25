@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-10-16 05:46+0100\n"
+"PO-Revision-Date: 2009-11-22 16:41+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -36,7 +36,7 @@ msgstr "Opis"
 #: js/Snom/SettingGridPanel.js:51 js/Snom/SoftwareGridPanel.js:51
 #: js/Snom/TemplateGridPanel.js:51
 msgid "Quick search"
-msgstr ""
+msgstr "Szybkie wyszukiwanie"
 
 #: js/Asterisk/ContextGridPanel.js:69 js/Asterisk/MeetmeGridPanel.js:69
 #: js/Asterisk/VoicemailGridPanel.js:69 js/Snom/LocationGridPanel.js:124
@@ -993,32 +993,32 @@ msgstr "Telefony"
 msgid "Templates"
 msgstr "Szablony"
 
-#~ msgid "Sip Peer"
-#~ msgstr "Komputer SIP"
+msgid "Sip Peer"
+msgstr "Komputer SIP"
 
-#~ msgid "Rights"
-#~ msgstr "Uprawnienia"
+msgid "Rights"
+msgstr "Uprawnienia"
 
-#~ msgid "username"
-#~ msgstr "użytkownik"
+msgid "username"
+msgstr "użytkownik"
 
-#~ msgid "edit myphone"
-#~ msgstr "Edytuj mój numer"
+msgid "edit myphone"
+msgstr "Edytuj mój numer"
 
-#~ msgid "Search: "
-#~ msgstr "Znajdź:"
+msgid "Search: "
+msgstr "Znajdź:"
 
-#~ msgid "Displaying myphones {0} - {1} of {2}"
-#~ msgstr "Wyświetl moje numery  {0} - {1} z {2}"
+msgid "Displaying myphones {0} - {1} of {2}"
+msgstr "Wyświetl moje numery  {0} - {1} z {2}"
 
-#~ msgid "No myphones to display"
-#~ msgstr "Brak numerów"
+msgid "No myphones to display"
+msgstr "Brak numerów"
 
-#~ msgid "add context"
-#~ msgstr "Dodaj kontekst"
+msgid "add context"
+msgstr "Dodaj kontekst"
 
-#~ msgid "delete context"
-#~ msgstr "Usuń kontekst"
+msgid "delete context"
+msgstr "Usuń kontekst"
 
-#~ msgid "Context: "
-#~ msgstr "Kontekst:"
+msgid "Context: "
+msgstr "Kontekst:"

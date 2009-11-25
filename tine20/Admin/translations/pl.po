@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-09-20 15:44+0100\n"
+"PO-Revision-Date: 2009-11-22 15:19+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -249,9 +249,8 @@ msgid "Result"
 msgstr "Wynik"
 
 #: js/Applications.js:29
-#, fuzzy
 msgid "{0} Settings"
-msgstr "ustawienia"
+msgstr "Ustawienia {0}"
 
 #: js/Applications.js:122
 msgid "enable application"
@@ -546,7 +545,6 @@ msgid "Edit Tag \"{0}\""
 msgstr "Edytuj znacznik \"{0}\""
 
 #: js/UserEditDialog.js:120
-#, fuzzy
 msgid "Passwords do not match!"
 msgstr "Nieprawidłowe hasło"
 
@@ -575,22 +573,20 @@ msgid "Add a forward address..."
 msgstr ""
 
 #: js/UserEditDialog.js:204
-#, fuzzy
 msgid "Password confirmation"
 msgstr "Powtórz hasło"
 
 #: js/UserEditDialog.js:222
-#, fuzzy
 msgid "Repeat password"
 msgstr "Zresetuj hasło"
 
 #: js/UserEditDialog.js:234
 msgid "Cancel"
-msgstr ""
+msgstr "Anuluj"
 
 #: js/UserEditDialog.js:241
 msgid "Ok"
-msgstr ""
+msgstr "OK"
 
 #: js/UserEditDialog.js:267
 msgid "Account"
@@ -617,8 +613,9 @@ msgid "Emailaddress"
 msgstr "Adres e-mail"
 
 #: js/UserEditDialog.js:334 js/Users.js:300
+#, fuzzy
 msgid "OpenID"
-msgstr ""
+msgstr "OpenID"
 
 #: js/UserEditDialog.js:340
 msgid "Primary group"
@@ -627,7 +624,7 @@ msgstr "Grupa nadrzędna"
 #: js/UserEditDialog.js:352
 #, fuzzy
 msgid "expired"
-msgstr "Wygasa"
+msgstr "wygasa"
 
 #: js/UserEditDialog.js:355 js/Users.js:304
 msgid "Expires"
@@ -639,20 +636,19 @@ msgstr "nigdy"
 
 #: js/UserEditDialog.js:362
 msgid "Visibility"
-msgstr ""
+msgstr "Widoczny"
 
 #: js/UserEditDialog.js:368
-#, fuzzy
 msgid "Display in addressbook"
-msgstr "Wyświetlana nazwa"
+msgstr "Wyświetlaj w książce adresowej"
 
 #: js/UserEditDialog.js:368
 msgid "Hide from addressbook"
-msgstr ""
+msgstr "Ukryj w książce adresowej"
 
 #: js/UserEditDialog.js:373
 msgid "Information"
-msgstr ""
+msgstr "Informacja"
 
 #: js/UserEditDialog.js:389 js/Users.js:301
 msgid "Last login at"
@@ -680,7 +676,7 @@ msgstr "Serwer plików"
 
 #: js/UserEditDialog.js:410
 msgid "Unix"
-msgstr ""
+msgstr "Unix"
 
 #: js/UserEditDialog.js:425
 msgid "Home Directory"
@@ -692,7 +688,7 @@ msgstr "Powłoka logowania"
 
 #: js/UserEditDialog.js:434
 msgid "Windows"
-msgstr ""
+msgstr "Windows"
 
 #: js/UserEditDialog.js:449
 msgid "Home Drive"
@@ -767,12 +763,14 @@ msgid "Current Mail Size"
 msgstr "Rozmiar wiadomości"
 
 #: js/UserEditDialog.js:535
+#, fuzzy
 msgid "Sieve Quota"
-msgstr ""
+msgstr "Kwota Sieve"
 
 #: js/UserEditDialog.js:540
+#, fuzzy
 msgid "Current Sieve Size"
-msgstr ""
+msgstr "Obecny rozmiar Sieve"
 
 #: js/UserEditDialog.js:545
 msgid "Last Login"
@@ -876,38 +874,38 @@ msgstr[0] "E-mail użytkownika"
 msgstr[1] "E-maile użytkowników"
 msgstr[2] "E-maile użytkowników"
 
-#~ msgid "remove account"
-#~ msgstr "Usuń konto"
+msgid "remove account"
+msgstr "Usuń konto"
 
-#~ msgid "Role members"
-#~ msgstr "Przypisani do funkcji"
+msgid "Role members"
+msgstr "Przypisani do funkcji"
 
-#~ msgid "Deleting tag..."
-#~ msgstr "Usuwanie znacznika..."
+msgid "Deleting tag..."
+msgstr "Usuwanie znacznika..."
 
-#~ msgid "name"
-#~ msgstr "nazwa"
+msgid "name"
+msgstr "nazwa"
 
-#~ msgid "status"
-#~ msgstr "status"
+msgid "status"
+msgstr "status"
 
-#~ msgid "Deleting account..."
-#~ msgstr "Usuwanie konta …"
+msgid "Deleting account..."
+msgstr "Usuwanie konta …"
 
-#~ msgid "Some error occurred while trying to delete the account."
-#~ msgstr "Podczas próby usunięcia konta wystąpił błąd."
+msgid "Some error occurred while trying to delete the account."
+msgstr "Podczas próby usunięcia konta wystąpił błąd."
 
-#~ msgid "Saving User Account"
-#~ msgstr "Zapisywanie konta użytkownika"
+msgid "Saving User Account"
+msgstr "Zapisywanie konta użytkownika"
 
-#~ msgid "Could not save user account."
-#~ msgstr "Zapisanie konta użytkownika było niemożliwe."
+msgid "Could not save user account."
+msgstr "Zapisanie konta użytkownika było niemożliwe."
 
-#~ msgid "Add New User Account"
-#~ msgstr "Utwórz nowego użytkownika"
+msgid "Add New User Account"
+msgstr "Utwórz nowego użytkownika"
 
-#~ msgid "Edit User Account \"{0}\""
-#~ msgstr "Edytuj konto użytkownika \"{0}\""
+msgid "Edit User Account \"{0}\""
+msgstr "Edytuj konto użytkownika \"{0}\""
 
-#~ msgid "Forward"
-#~ msgstr "Prześlij dalej"
+msgid "Forward"
+msgstr "Prześlij dalej"

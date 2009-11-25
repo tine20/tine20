@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-09-04 23:23+0100\n"
+"PO-Revision-Date: 2009-11-22 16:05+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -10,8 +10,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: js/ExampleApplication.js:29
 msgid "ExampleRecords"
@@ -21,18 +20,21 @@ msgstr "Przykładowe wiersze"
 msgid "All ExampleRecords"
 msgstr "Wszystkie przykładowe wiersze"
 
-#: js/ExampleRecordEditDialog.js:91 js/Models.js:50
+#: js/ExampleRecordEditDialog.js:91
+#: js/Models.js:50
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
 msgstr[0] "Przykładowy wiersz"
 msgstr[1] "przykładowe wiersze"
 msgstr[2] "przykładowych wierszy"
 
-#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:119
+#: js/ExampleRecordEditDialog.js:107
+#: js/ExampleRecordGridPanel.js:119
 msgid "Number"
 msgstr "Ilość"
 
-#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:125
+#: js/ExampleRecordEditDialog.js:112
+#: js/ExampleRecordGridPanel.js:125
 msgid "Title"
 msgstr "Tytuł"
 
@@ -44,7 +46,8 @@ msgstr "Jednostka"
 msgid "Unit Price"
 msgstr "Cena jednostkowa"
 
-#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:138
+#: js/ExampleRecordEditDialog.js:130
+#: js/ExampleRecordGridPanel.js:138
 msgid "Budget"
 msgstr "Budżet"
 
@@ -52,7 +55,8 @@ msgstr "Budżet"
 msgid "Timesheets are billable"
 msgstr "Karty godzin gotowe do przeliczenia"
 
-#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:131
+#: js/ExampleRecordEditDialog.js:138
+#: js/ExampleRecordGridPanel.js:131
 msgid "Status"
 msgstr "Status"
 
@@ -82,7 +86,7 @@ msgstr "przeliczone"
 
 #: js/ExampleRecordGridPanel.js:87
 msgid "Quick search"
-msgstr ""
+msgstr "Szybkie wyszukiwanie"
 
 #: js/ExampleRecordGridPanel.js:88
 msgid "Description"
@@ -102,3 +106,4 @@ msgstr[2] "list aplikacji"
 #: Setup/setup.xml:10
 msgid "ExampleApplication"
 msgstr "Przykładowa aplikacja"
+

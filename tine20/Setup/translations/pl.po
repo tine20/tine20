@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-10-16 05:37+0100\n"
+"PO-Revision-Date: 2009-11-22 16:25+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -75,7 +75,7 @@ msgstr "Niespełnione zależności"
 
 #: js/AuthenticationPanel.js:121
 msgid "Delete all existing users and groups"
-msgstr ""
+msgstr "Usuń wszystkich, istniejących użytkowników i grupy"
 
 #: js/AuthenticationPanel.js:121
 msgid ""
@@ -83,6 +83,8 @@ msgid ""
 "and Roles. Do you really want to switch the accounts storage backend to "
 "LDAP ?"
 msgstr ""
+"Przejście z SQL na LDAP usunie wszystkie, istniejące konta użytkowników, "
+"grupy oraz funkcje. Czy na pewno chcesz przełączyć konta na LDAP?"
 
 #: js/AuthenticationPanel.js:171 js/AuthenticationPanel.js:191
 #: js/EmailPanel.js:156
@@ -193,15 +195,16 @@ msgstr "Czy zezwolić użytkownikowi na zmianę hasła?"
 
 #: js/AuthenticationPanel.js:434
 msgid "Redirect Settings"
-msgstr ""
+msgstr "Ustawienia przekierowania"
 
 #: js/AuthenticationPanel.js:442
 msgid "Redirect Url (after Logout, redirect to login screen if empty)"
 msgstr ""
+"Przekieruj URL (po wylogowaniu przekieruj do strony logowania, jeśli pusta)"
 
 #: js/AuthenticationPanel.js:453
 msgid "Redirect to referring site, if exists"
-msgstr ""
+msgstr "Przekieruj do powiązanej strony, jeśli istnieje"
 
 #: js/AuthenticationPanel.js:466
 msgid "Save config and install"
@@ -436,28 +439,27 @@ msgstr[0] "Aplikacje"
 msgstr[1] "aplikacje"
 msgstr[2] "aplikacji"
 
-#~ msgid "Shit"
-#~ msgstr "Niedobrze"
+msgid "Shit"
+msgstr "Niedobrze"
 
-#~ msgid "Where are the backup tapes"
-#~ msgstr "Gdzie są taśmy archiwalne?"
+msgid "Where are the backup tapes"
+msgstr "Gdzie są taśmy archiwalne?"
 
-#~ msgid "Invalid configuration"
-#~ msgstr "Nieprawidłowa konfiguracja"
+msgid "Invalid configuration"
+msgstr "Nieprawidłowa konfiguracja"
 
-#~ msgid ""
-#~ "You need to correct the red marked fields before config could be saved"
-#~ msgstr ""
-#~ "Przed zapisaniem konfiguracji, musisz poprawić pola zaznaczone na czerwono"
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr ""
+"Przed zapisaniem konfiguracji, musisz poprawić pola zaznaczone na czerwono"
 
-#~ msgid "Transfering Configuration..."
-#~ msgstr "Przesyłanie konfiguracji..."
+msgid "Transfering Configuration..."
+msgstr "Przesyłanie konfiguracji..."
 
-#~ msgid "Check config"
-#~ msgstr "Sprawdź konfigurację"
+msgid "Check config"
+msgstr "Sprawdź konfigurację"
 
-#~ msgid "Apply changes"
-#~ msgstr "Akceptuj zmiany"
+msgid "Apply changes"
+msgstr "Akceptuj zmiany"
 
-#~ msgid "Go to Tine 2.0 login"
-#~ msgstr "Przejdź do strony logowania"
+msgid "Go to Tine 2.0 login"
+msgstr "Przejdź do strony logowania"
