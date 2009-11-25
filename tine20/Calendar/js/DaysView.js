@@ -754,7 +754,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @private
      */
     onEventResize: function(rz, width, height) {
-        console.log(rz);
         var event = rz.event;
         
         var originalDuration = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE;
