@@ -200,7 +200,15 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 
                 var eventInfos = [];
                 Ext.each(confictEvents[busyAttender.id], function(fbInfo) {
-                    var eventInfo = Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format('H:i') + ' - ' + Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format('H:i');
+                    var format = 'H:i';
+                    var dateFormat = Ext.form.DateField.prototype.format;
+                    if (event.get('dtstart').format(dateFormat) != event.get('dtend').format(dateFormat) ||
+                        Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format(dateFormat) != Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format(dateFormat))
+                    {
+                        format = dateFormat + ' ' + format;
+                    }
+                    
+                    var eventInfo = Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format(format) + ' - ' + Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format(format);
                     if (fbInfo.event && fbInfo.event.summary) {
                         eventInfo += ' : ' + fbInfo.event.summary;
                     }
