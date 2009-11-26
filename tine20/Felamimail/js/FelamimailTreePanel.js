@@ -809,8 +809,17 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * @param {Object} dropEvent
      * @private
+     * 
+     * TODO allow moving messages to another account
      */
     onBeforenodedrop: function(dropEvent) {
+        
+        // check if node has the same account_id like the active node
+        var selectedNode = this.getSelectionModel().getSelectedNode();
+        if (! dropEvent.target.attributes.account_id || ! selectedNode || dropEvent.target.attributes.account_id != selectedNode.attributes.account_id) {
+            Ext.Msg.alert(this.app.i18n._('Invalid drop target'), this.app.i18n._('Could not move message(s).'));
+            return false;
+        }
         
         var targetFolderId = dropEvent.target.attributes.folder_id;
         var ids = [];
