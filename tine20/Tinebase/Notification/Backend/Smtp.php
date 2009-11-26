@@ -38,7 +38,13 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
      */
     public function __construct()
     {
-        $this->_fromAddress = 'webmaster@tine20.org';
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP, 'Tinebase', array());
+        $this->_fromAddress = (isset($smtpConfig['from']) && ! empty($smtpConfig['from'])) ? $smtpConfig['from'] : '';
+        
+        // try to sanitize sender address
+        if (empty($this->_fromAddress) && isset($smtpConfig['domain']) && ! empty($smtpConfig['domain'])) {
+            $this->_fromAddress = 'noreply@' . $smtpConfig['domain'];
+        }
     }
     
     /**
@@ -63,6 +69,11 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         }
         
         $mail->addHeader('X-MailGenerator', 'Tine 2.0');
+
+        if (empty($this->_fromAddress)) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No notification service address set. Could not send notification.');
+            return;
+        }
         
         if($_updater !== NULL && ! empty($_updater->accountEmailAddress)) {
             $mail->setFrom($_updater->accountEmailAddress, $_updater->accountDisplayName);

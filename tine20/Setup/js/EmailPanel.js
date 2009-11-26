@@ -328,6 +328,10 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 fieldLabel: this.app.i18n._('Domain'),
                 xtype: 'textfield'
             }, {
+                name: 'smtp_from',
+                fieldLabel: this.app.i18n._('Notifications service address'),
+                xtype: 'textfield'
+            }, {
                 id: this.smtpBackendIdPrefix + 'CardLayout',
                 layout: 'card',
                 activeItem: this.smtpBackendIdPrefix + 'standard',
