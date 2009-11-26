@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-31 20:42+0100\n"
-"PO-Revision-Date: 2009-11-26 15:52+0100\n"
+"PO-Revision-Date: 2009-11-26 17:00+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -216,7 +216,7 @@ msgstr "Passwort"
 
 #: js/LoginPanel.js:125
 msgid "Tine 2.0 is made for you"
-msgstr "Wir haben Tine 2.0 für Euch gemacht"
+msgstr "Tine 2.0 ist für Euch"
 
 #: js/LoginPanel.js:127
 msgid "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
