@@ -435,11 +435,12 @@ class Setup_ExtCheck
                             Setup_Core::set(Setup_Core::CHECKDB, FALSE);
                         }
                     }
+                    $text = $value['attributes']['NAME'] . ' > ' . $value['attributes']['VERSION'];
                     //echo "mysql version: " . mysql_get_server_info();
                     if (version_compare($value['attributes']['VERSION'], @mysql_get_server_info(), '<')) {
-                        $data[] = array($value['attributes']['NAME'], 'SUCCESS');
+                        $data[] = array($text, 'SUCCESS');
                     } else {
-                        $data[] = array($value['attributes']['NAME'], 'FAILURE');
+                        $data[] = array($text, 'FAILURE');
                     }
                     break;
                 default:
