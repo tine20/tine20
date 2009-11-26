@@ -602,7 +602,9 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                         }
                     }
                 } else {
-                    this.updateUnreadCount(null, folderData[0][0].unreadcount, node);
+                    if (folderData[0] && folderData[0][0]) {
+                        this.updateUnreadCount(null, folderData[0][0].unreadcount, node);
+                    }
                 }
             },
             failure: function() {
