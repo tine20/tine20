@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-11-20 12:42+0100\n"
+"PO-Revision-Date: 2009-11-26 15:39+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -77,7 +77,9 @@ msgstr "%ss persönlicher Kalender"
 msgid "Manage Resources"
 msgstr "Verwalte Ressourcen"
 
-#: js/AttendeeGridPanel.js:62 js/EventDetailsPanel.js:244 js/Model.js:278
+#: js/AttendeeGridPanel.js:62
+#: js/EventDetailsPanel.js:244
+#: js/Model.js:278
 msgid "Attendee"
 msgstr "Teilnehmer"
 
@@ -105,37 +107,44 @@ msgstr "Benutzer"
 msgid "Group"
 msgstr "Gruppe"
 
-#: js/AttendeeGridPanel.js:154 js/Model.js:429
+#: js/AttendeeGridPanel.js:154
+#: js/Model.js:429
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Ressource"
 msgstr[1] "Ressourcen"
 
-#: js/AttendeeGridPanel.js:162 js/ResourceEditDialog.js:58
+#: js/AttendeeGridPanel.js:162
+#: js/ResourceEditDialog.js:58
 #: js/ResourcesGridPanel.js:43
 msgid "Name"
 msgstr "Name"
 
-#: js/AttendeeGridPanel.js:192 Model/Event.php:185
+#: js/AttendeeGridPanel.js:192
+#: Model/Event.php:185
 msgid "Status"
 msgstr "Status"
 
-#: js/AttendeeGridPanel.js:199 js/AttendeeGridPanel.js:496
+#: js/AttendeeGridPanel.js:199
+#: js/AttendeeGridPanel.js:496
 #: Model/Attender.php:45
 msgid "No response"
 msgstr "Keine Antwort"
 
-#: js/AttendeeGridPanel.js:200 js/AttendeeGridPanel.js:499
+#: js/AttendeeGridPanel.js:200
+#: js/AttendeeGridPanel.js:499
 #: Model/Attender.php:46
 msgid "Accepted"
 msgstr "Zugesagt"
 
-#: js/AttendeeGridPanel.js:201 js/AttendeeGridPanel.js:502
+#: js/AttendeeGridPanel.js:201
+#: js/AttendeeGridPanel.js:502
 #: Model/Attender.php:47
 msgid "Declined"
 msgstr "Abgesagt"
 
-#: js/AttendeeGridPanel.js:202 js/AttendeeGridPanel.js:505
+#: js/AttendeeGridPanel.js:202
+#: js/AttendeeGridPanel.js:505
 #: Model/Attender.php:48
 msgid "Tentative"
 msgstr "Vielleicht"
@@ -148,8 +157,11 @@ msgstr "Teilnehmer/in entfernen"
 msgid "Click here to invite another attender..."
 msgstr "Klicken Sie hier, um neue Teilnehmer einzuladen..."
 
-#: js/AttendeeGridPanel.js:416 js/AttendeeGridPanel.js:434
-#: js/AttendeeGridPanel.js:447 js/AttendeeGridPanel.js:459 js/Model.js:294
+#: js/AttendeeGridPanel.js:416
+#: js/AttendeeGridPanel.js:434
+#: js/AttendeeGridPanel.js:447
+#: js/AttendeeGridPanel.js:459
+#: js/Model.js:294
 msgid "No Information"
 msgstr "Keine Angabe"
 
@@ -165,7 +177,9 @@ msgstr "Erforderlich"
 msgid "Optional"
 msgstr "Freiwillig"
 
-#: js/Calendar.js:36 js/Model.js:68 Setup/setup.xml:4
+#: js/Calendar.js:36
+#: js/Model.js:68
+#: Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "Kalender"
@@ -203,7 +217,8 @@ msgstr "Möchten Sie wirklich alle Termine dieser Reihe aktualisieren?"
 msgid "Update Event"
 msgstr "Termin aktualisieren"
 
-#: js/CalendarPanel.js:287 js/CalendarPanel.js:289
+#: js/CalendarPanel.js:287
+#: js/CalendarPanel.js:289
 msgid "Do you want to update the whole series, or just this event"
 msgstr "Möchten Sie die ganze Reihe oder nur diesen Termin aktualisieren?"
 
@@ -235,7 +250,8 @@ msgstr ""
 msgid "Originally"
 msgstr "Ursprungskalender"
 
-#: js/DaysView.js:90 js/MonthView.js:82
+#: js/DaysView.js:90
+#: js/MonthView.js:82
 msgid "New Event"
 msgstr "Neuer Termin"
 
@@ -245,34 +261,42 @@ msgstr "{0}, der {1}. {2}"
 
 #: js/EventDetailsPanel.js:51
 msgid "Unknown calendar"
-msgstr ""
+msgstr "Unbekannter Kalender"
 
 #: js/EventDetailsPanel.js:62
 msgid "{0} {1} o'clock"
 msgstr "{0} {1} Uhr"
 
-#: js/EventDetailsPanel.js:172 js/EventEditDialog.js:93 Model/Event.php:186
+#: js/EventDetailsPanel.js:172
+#: js/EventEditDialog.js:93
+#: Model/Event.php:186
 msgid "Summary"
 msgstr "Thema"
 
-#: js/EventDetailsPanel.js:208 js/EventEditDialog.js:105
+#: js/EventDetailsPanel.js:208
+#: js/EventEditDialog.js:105
 msgid "Start Time"
 msgstr "Beginn"
 
-#: js/EventDetailsPanel.js:213 js/EventEditDialog.js:120
+#: js/EventDetailsPanel.js:213
+#: js/EventEditDialog.js:120
 msgid "End Time"
 msgstr "Ende"
 
-#: js/EventDetailsPanel.js:218 Model/Event.php:179
+#: js/EventDetailsPanel.js:218
+#: Model/Event.php:179
 msgid "Blocking"
 msgstr "Blockierend"
 
-#: js/EventDetailsPanel.js:223 js/EventEditDialog.js:100
-#: js/ResourcesGridPanel.js:54 Model/Event.php:182
+#: js/EventDetailsPanel.js:223
+#: js/EventEditDialog.js:100
+#: js/ResourcesGridPanel.js:54
+#: Model/Event.php:182
 msgid "Location"
 msgstr "Ort"
 
-#: js/EventDetailsPanel.js:227 Model/Event.php:183
+#: js/EventDetailsPanel.js:227
+#: Model/Event.php:183
 msgid "Organizer"
 msgstr "Organisator"
 
@@ -282,9 +306,11 @@ msgstr "ganztägig"
 
 #: js/EventEditDialog.js:136
 msgid "non-blocking"
-msgstr ""
+msgstr "nicht-blockierend"
 
-#: js/EventEditDialog.js:177 js/ResourceEditDialog.js:74 Model/Event.php:181
+#: js/EventEditDialog.js:177
+#: js/ResourceEditDialog.js:74
+#: Model/Event.php:181
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -306,13 +332,14 @@ msgstr "Zeitpunkt den Beginns ist ungültig."
 
 #: js/MainScreenCenterPanel.js:73
 msgid "Show declined events"
-msgstr ""
+msgstr "Abgelehnte Termine anzeigen"
 
 #: js/MainScreenCenterPanel.js:108
 msgid "Day"
 msgstr "Tag"
 
-#: js/MainScreenCenterPanel.js:117 js/PagingToolbar.js:276
+#: js/MainScreenCenterPanel.js:117
+#: js/PagingToolbar.js:276
 msgid "Week"
 msgstr "Woche"
 
@@ -325,12 +352,8 @@ msgid "Please Change Selection"
 msgstr "Bitte ändern Sie Ihre Auswahl."
 
 #: js/MainScreenCenterPanel.js:294
-msgid ""
-"Your selection contains recurring events. Recuring events must be deleted "
-"seperatly!"
-msgstr ""
-"Ihre Auswahl enthält auch Wiederholungstermine. Diese müssen extra gelöscht "
-"werden!"
+msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
+msgstr "Ihre Auswahl enthält auch Wiederholungstermine. Diese müssen extra gelöscht werden!"
 
 #: js/MainScreenCenterPanel.js:308
 msgid "Confirm Deletion of Series"
@@ -344,13 +367,10 @@ msgstr "Möchten Sie wirklich alle Termine dieser Reihe löschen?"
 msgid "Delete Event"
 msgstr "Termin löschen"
 
-#: js/MainScreenCenterPanel.js:328 js/MainScreenCenterPanel.js:330
-msgid ""
-"Do you want to delete the whole series, this and all future events of this "
-"series, or just this event"
-msgstr ""
-"Möchten Sie die komplette Reihe, nur diesen und alle zukünftigen Termine, "
-"oder nur diesen Termin löschen?"
+#: js/MainScreenCenterPanel.js:328
+#: js/MainScreenCenterPanel.js:330
+msgid "Do you want to delete the whole series, this and all future events of this series, or just this event"
+msgstr "Möchten Sie die komplette Reihe, nur diesen und alle zukünftigen Termine, oder nur diesen Termin löschen?"
 
 #: js/MainScreenCenterPanel.js:332
 msgid "Delete nothing"
@@ -374,17 +394,20 @@ msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Möchten Sie diesen Termin wirklich löschen?"
 msgstr[1] "Möchten Sie die ausgewählten Termine wirklich löschen?"
 
-#: js/MainScreenLeftPanel.js:64 js/MonthView.js:87
+#: js/MainScreenLeftPanel.js:64
+#: js/MonthView.js:87
 msgid "WK"
 msgstr "KW"
 
-#: js/Model.js:64 js/Model.js:282
+#: js/Model.js:64
+#: js/Model.js:282
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Termin"
 msgstr[1] "Termine"
 
-#: js/Model.js:64 js/Model.js:282
+#: js/Model.js:64
+#: js/Model.js:282
 msgid "Events"
 msgstr "Termine"
 
@@ -406,11 +429,13 @@ msgstr "Ressourcen"
 msgid "{0} more..."
 msgstr "{0} weitere..."
 
-#: js/ResourceEditDialog.js:63 js/ResourcesGridPanel.js:49
+#: js/ResourceEditDialog.js:63
+#: js/ResourcesGridPanel.js:49
 msgid "Email"
 msgstr "Email"
 
-#: js/ResourceEditDialog.js:69 js/ResourceEditDialog.js:70
+#: js/ResourceEditDialog.js:69
+#: js/ResourceEditDialog.js:70
 msgid "Is a location"
 msgstr "Ist ein Ort"
 
@@ -468,7 +493,7 @@ msgstr "Bis"
 
 #: js/RrulePanel.js:296
 msgid "Until has to be after event start"
-msgstr ""
+msgstr "Terminende muss nach dem Terminanfang liegen"
 
 #: js/RrulePanel.js:329
 msgid ". Day"
@@ -482,28 +507,35 @@ msgstr ". Woche am"
 msgid ". Month"
 msgstr ". Monat"
 
-#: js/RrulePanel.js:423 js/RrulePanel.js:472 js/RrulePanel.js:603
+#: js/RrulePanel.js:423
+#: js/RrulePanel.js:472
+#: js/RrulePanel.js:603
 #: js/RrulePanel.js:653
 msgid "at the"
 msgstr "am"
 
-#: js/RrulePanel.js:442 js/RrulePanel.js:622
+#: js/RrulePanel.js:442
+#: js/RrulePanel.js:622
 msgid "first"
 msgstr "ersten"
 
-#: js/RrulePanel.js:443 js/RrulePanel.js:623
+#: js/RrulePanel.js:443
+#: js/RrulePanel.js:623
 msgid "second"
 msgstr "zweiten"
 
-#: js/RrulePanel.js:444 js/RrulePanel.js:624
+#: js/RrulePanel.js:444
+#: js/RrulePanel.js:624
 msgid "third"
 msgstr "dritten"
 
-#: js/RrulePanel.js:445 js/RrulePanel.js:625
+#: js/RrulePanel.js:445
+#: js/RrulePanel.js:625
 msgid "fourth"
 msgstr "vierten"
 
-#: js/RrulePanel.js:446 js/RrulePanel.js:626
+#: js/RrulePanel.js:446
+#: js/RrulePanel.js:626
 msgid "last"
 msgstr "letzten"
 
@@ -511,7 +543,8 @@ msgstr "letzten"
 msgid ". Year"
 msgstr ". Jahr"
 
-#: js/RrulePanel.js:693 js/RrulePanel.js:705
+#: js/RrulePanel.js:693
+#: js/RrulePanel.js:705
 msgid "of"
 msgstr " "
 
@@ -520,13 +553,12 @@ msgid "unknown"
 msgstr "unbekannt"
 
 #: Model/Attender.php:313
-msgid ""
-"This contact has been automatically added by the system as an event attender"
+msgid "This contact has been automatically added by the system as an event attender"
 msgstr "Dieser Kontakt wurde automatisch bei der Syncronisation angelegt"
 
 #: Model/Attender.php:203
 msgid "unknown)"
-msgstr ""
+msgstr "unbekannt)"
 
 #: Model/Event.php:177
 msgid "Start"
@@ -589,15 +621,8 @@ msgid "Get Notification Emails"
 msgstr "Empfangen von Benachrichtigungs-Emails"
 
 #: Preference.php:87
-msgid ""
-"The level of actions you want to be notified about. Please note that "
-"organizers will get notifications for all updates including attendee answers "
-"unless this preference is set to \"Never\""
-msgstr ""
-"Der Grad an Aktionen über die Sie benachrichtigt werden wollen. Bitte "
-"beachten Sie, dass Organisatoren eines Termins über alle Änderungen "
-"einschließlich der Antworten von Teilnehmern benachrichtigt werden, so lange "
-"diese Option nicht auf \"Niemals\" gestellt ist."
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgstr "Der Grad an Aktionen über die Sie benachrichtigt werden wollen. Bitte beachten Sie, dass Organisatoren eines Termins über alle Änderungen einschließlich der Antworten von Teilnehmern benachrichtigt werden, so lange diese Option nicht auf \"Niemals\" gestellt ist."
 
 #: Preference.php:90
 msgid "Send Notifications Emails of own Actions"
@@ -605,8 +630,7 @@ msgstr "Sende Benachrichtigungen über  eigene Änderungen"
 
 #: Preference.php:91
 msgid "Get notifications emails for actions you did yourself"
-msgstr ""
-"Empfangen von Benachrichtigungen über  Änderungen die selbst getätigt wurden"
+msgstr "Empfangen von Benachrichtigungen über  Änderungen die selbst getätigt wurden"
 
 #: views/eventNotification.php:13
 msgid "Updates"
@@ -646,3 +670,4 @@ msgstr "Termin Details"
 
 #~ msgid "Ignore Scheduling Conflict?"
 #~ msgstr "Überschneidung Ignoieren?"
+

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-05-15 12:54+0100\n"
+"PO-Revision-Date: 2009-11-26 15:40+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,9 @@ msgstr "Lehrer"
 msgid "Teacher Account"
 msgstr "Lehrer Zugang"
 
-#: Frontend/Json.php:240 js/CourseEditDialog.js:135 js/Models.js:42
+#: Frontend/Json.php:240
+#: js/CourseEditDialog.js:135
+#: js/Models.js:42
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Klasse"
@@ -38,7 +40,8 @@ msgstr "Klassenmitglieder importieren"
 msgid "Course Name"
 msgstr "Klassenname"
 
-#: js/CourseEditDialog.js:155 js/CourseEditDialog.js:162
+#: js/CourseEditDialog.js:155
+#: js/CourseEditDialog.js:162
 msgid "Course / School Type"
 msgstr "Schultyp"
 
@@ -46,11 +49,13 @@ msgstr "Schultyp"
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/CourseEditDialog.js:179 js/CourseGridPanel.js:81
+#: js/CourseEditDialog.js:179
+#: js/CourseGridPanel.js:81
 msgid "Internet Access"
 msgstr "Internet freigegeben"
 
-#: js/CourseEditDialog.js:185 js/CourseGridPanel.js:88
+#: js/CourseEditDialog.js:185
+#: js/CourseGridPanel.js:88
 msgid "Fileserver Access"
 msgstr "Zugriff auf Fileserver gesperrt"
 
@@ -76,7 +81,7 @@ msgstr "Bitte das neue Passwort eingeben:"
 
 #: js/CourseGridPanel.js:51
 msgid "Quick search"
-msgstr ""
+msgstr "Schnellsuche"
 
 #: js/CourseGridPanel.js:68
 msgid "Name"
@@ -110,7 +115,8 @@ msgstr "Fehlgeschlagen"
 msgid "Some error occured while trying to update the courses."
 msgstr "Beim aktualisieren der Klasse(n) trat ein Fehler auf."
 
-#: js/Courses.js:29 Setup/setup.xml:4
+#: js/Courses.js:29
+#: Setup/setup.xml:4
 msgid "Courses"
 msgstr "Klassen"
 
@@ -129,3 +135,4 @@ msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Klassentyp"
 msgstr[1] "Klassentypen"
+
