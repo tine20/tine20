@@ -540,6 +540,7 @@ class Setup_ExtCheck
             if ($value != 'SUCCESS') {
                 if ($key === 'PHP') {
                     $message = 'PHP version too low: ' . phpversion();
+                    $result['success'] = FALSE;
                 } else {
                     if ($key === 'MySQL') {
                         $message = 'Could not connect to MySQL DB, version incompatible (' . @mysql_get_server_info() . ') or ';
