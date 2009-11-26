@@ -142,18 +142,19 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      */
     handleFailure: function(response, options, node, handleException) {
         var responseText = Ext.util.JSON.decode(response.responseText);
+        var accountNode = (options.argument) ? options.argument.node : node;
+
+        // cancel loading
+        accountNode.loading = false;
+        accountNode.ui.afterLoad(accountNode);
+        
         if (responseText.data.code == 902) {
             
             // get account id and update username/password
-            var accountNode = (options.argument) ? options.argument.node : node;
             var accountId = accountNode.attributes.account_id;
             
             // remove intelligent folders
             accountNode.attributes.intelligent_folders = 0;
-            
-            // cancel loading
-            accountNode.loading = false;
-            accountNode.ui.afterLoad(accountNode);
                         
             var credentialsWindow = Tine.widgets.dialog.CredentialsDialog.openWindow({
                 windowTitle: String.format(this.app.i18n._('IMAP Credentials for {0}'), accountNode.text),
@@ -174,8 +175,16 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             });
             
         } else if (handleException !== false) {
-            var exception = responseText.data ? responseText.data : responseText;
-            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+            Ext.Msg.show({
+               title:   this.app.i18n._('Error'),
+               msg:     (responseText.data.message) ? responseText.data.message : this.app.i18n._('No connection to IMAP server.'),
+               icon:    Ext.MessageBox.ERROR,
+               buttons: Ext.Msg.OK
+            });
+
+            // TODO call default exception handler on specific exceptions?
+            //var exception = responseText.data ? responseText.data : responseText;
+            //Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
         }
     }
 });
