@@ -48,7 +48,6 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     itemSelector: 'div.search-item',
     store: null,
     minChars: 3,
-    listWidth: 300,
     
     /**
      * @cfg {Boolean} blurOnSelect

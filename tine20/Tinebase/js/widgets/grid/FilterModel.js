@@ -283,6 +283,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             case 'user':
                 value = new Tine.Addressbook.SearchCombo({
                     width: fieldWidth,
+                    listWidth: 350,
                     id: 'tw-ftb-frow-valuefield-' + filter.id,
                     value: filter.data.value ? filter.data.value : this.defaultValue,
                     emptyText: _('Search Account ...'),
