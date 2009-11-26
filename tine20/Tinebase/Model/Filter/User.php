@@ -20,7 +20,7 @@
  * 
  * adds a inGroup operator
  */
-class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Int
+class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
 {
     protected $_userOperator = NULL;
     protected $_userValue = NULL;
