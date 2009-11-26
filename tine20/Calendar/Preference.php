@@ -121,7 +121,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             case self::NOTIFICATION_LEVEL:
                 $translate = Tinebase_Translation::getTranslation($this->_application);
                 
-                $preference->value      = Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_INVITE_CANCEL;
+                $preference->value      = Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <option>
