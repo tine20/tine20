@@ -40,7 +40,7 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         
         // inject resources tree node
         this.extraItems = [{
-            text: String.format(this.app.i18n._('Resouces {0}'), this.containersName),
+            text: String.format(this.app.i18n._('Resources {0}'), this.containersName),
             cls: 'file',
             id: 'allResources',
             children: null,

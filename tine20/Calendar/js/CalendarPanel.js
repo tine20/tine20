@@ -226,7 +226,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 html: '<div class="ext-mb-icon ext-mb-question"></div>' +
                       '<div class="ext-mb-content"><span class="ext-mb-text"></span>' +
                             '<div class = "cal-conflict-heading">' +
-                                this.app.i18n._('The follwing attendee are busy at the requested time:') + 
+                                this.app.i18n._('The following attendee are busy at the requested time:') + 
                             '</div>' +
                             busyAttendeeHTML +
                       '<br /><div class="ext-mb-fix-cursor"></div></div>',
