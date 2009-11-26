@@ -264,7 +264,15 @@ if (Tine.Tinebase.widgets) {
 Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
     {name: 'id'},
     {name: 'cal_event_id'},
-    {name: 'user_id'},
+    {name: 'user_id', sortType:  function(user_id) {
+        if (user_id && user_id.n_fn) {
+            return user_id.n_fn;
+        } else if (user_id && user_id.name) {
+            return user_id.name;
+        } else {
+            return user_id;
+        }
+    }},
     {name: 'user_type'},
     {name: 'role'},
     {name: 'quantity'},
@@ -398,10 +406,14 @@ Tine.Calendar.Model.Attender.getDefaultData = function() {
  * @static
  */ 
 Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
-    var attendeeStore = new Ext.data.Store();
+    var attendeeStore = new Ext.data.SimpleStore({
+        fields: Tine.Calendar.Model.Attender.getFieldDefinitions(),
+        sortInfo: {field: 'user_id', direction: 'ASC'}
+    });
+    
     Ext.each(attendeeData, function(attender) {
         var record = new Tine.Calendar.Model.Attender(attender, attender.id);
-        attendeeStore.add(record);
+        attendeeStore.addSorted(record);
     });
     
     return attendeeStore;
