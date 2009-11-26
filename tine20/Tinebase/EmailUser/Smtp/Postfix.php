@@ -192,7 +192,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * 
      * @param  Tinebase_Model_FullUser $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
-     * @return Tinebase_Model_EmailUser
+     * @return Tinebase_Model_EmailUser|NULL
      * //@throws Tinebase_Exception_UnexpectedValue
      * 
      * @todo    throw exception or not?
@@ -213,13 +213,26 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
 	    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_emailUser->toArray(), TRUE));
 	    
         $recordArray = $this->_recordToRawData($_emailUser);
-        $this->_db->insert($this->_tableName, $recordArray);
+        try {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+            
+            $this->_db->insert($this->_tableName, $recordArray);
+            
+            // add forwards and aliases
+            $this->_setAliases($_emailUser);
+            $this->_setForwards($_emailUser);
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            
+            $result = $this->getUserById($_user->getId());
+            
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while creating email user: ' . $zdse->getMessage());
+            $result = NULL;
+        }
         
-        // add forwards and aliases
-        $this->_setAliases($_emailUser);
-        $this->_setForwards($_emailUser);
-        
-        return $this->getUserById($_user->getId());
+        return $result;
 	}
 	
 	/**
@@ -227,7 +240,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * 
      * @param  Tinebase_Model_FullUser $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
-     * @return Tinebase_Model_EmailUser
+     * @return Tinebase_Model_EmailUser|NULL
      * //@throws Tinebase_Exception_UnexpectedValue
      * 
      * @todo    throw exception or not?
@@ -252,13 +265,24 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
             $this->_db->quoteInto($this->_db->quoteIdentifier('client_idnr') .  ' = ?', $this->_clientId)
         );
         
-        $this->_db->update($this->_tableName, $recordArray, $where);
+        try {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+
+            $this->_db->update($this->_tableName, $recordArray, $where);
         
-        // add forwards and aliases
-        $this->_setAliases($_emailUser, TRUE);
-        $this->_setForwards($_emailUser, TRUE);
+            // add forwards and aliases
+            $this->_setAliases($_emailUser, TRUE);
+            $this->_setForwards($_emailUser, TRUE);
+            
+            $result = $this->getUserById($_user->getId());
+            
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while updating email user: ' . $zdse->getMessage());
+            $result = NULL;
+        }            
         
-        return $this->getUserById($_user->getId());
+        return $result;
 	}
 	
 	/**
