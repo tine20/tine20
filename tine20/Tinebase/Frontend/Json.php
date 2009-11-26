@@ -170,7 +170,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
         
         // old fn style yet
-        $groups = Tinebase_Group::getInstance()->getGroups($filterData[0]['value'], $pagingData['sort'], $pagingData['dir'], $pagingData['start'], $pagingData['limit']);
+        $sort = (isset($pagingData['sort']))    ? $pagingData['sort']   : 'name';
+        $dir  = (isset($pagingData['dir']))     ? $pagingData['dir']    : 'ASC';
+        $groups = Tinebase_Group::getInstance()->getGroups($filterData[0]['value'], $sort, $dir, $pagingData['start'], $pagingData['limit']);
 
         $result['results'] = $groups->toArray();
         $result['totalcount'] = count($groups);
