@@ -36,6 +36,7 @@ Tine.Setup.TermsPanel = Ext.extend(Ext.Panel, {
             autoScroll: true,
             layout: 'fit',
             title: this.app.i18n._('License Agreement'),
+            bwrapCfg: {tag: 'pre'},
             autoLoad: {
                 url: 'LICENSE',
                 isUpload: true,
@@ -60,6 +61,7 @@ Tine.Setup.TermsPanel = Ext.extend(Ext.Panel, {
             autoScroll: true,
             layout: 'fit',
             title: this.app.i18n._('Privacy Agreement'),
+            bwrapCfg: {tag: 'pre'},
             autoLoad: {
                 url: 'PRIVACY',
                 isUpload: true,
