@@ -356,6 +356,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
 
+        // increase execution time (sending message with attachments can take a long time)
+        Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
+        
         // get account
         $account = Felamimail_Controller_Account::getInstance()->get($_message->from);
         
@@ -425,7 +428,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
             
             // send message via smtp
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to send message via SMTP ...');
             Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' successful.');
             
             // add email notes to contacts (only to/cc)
             if ($_message->note) {
@@ -1004,6 +1009,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $mailAsString = $_transport->getHeaders() . Zend_Mime::LINEEND . $_transport->getBody();
             
             $sentFolder = ($_account->sent_folder && ! empty($_account->sent_folder)) ? $_account->sent_folder : 'Sent';
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to save message in sent folder ...');
             Felamimail_Backend_ImapFactory::factory($_account)->appendMessage($mailAsString, $sentFolder);
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 

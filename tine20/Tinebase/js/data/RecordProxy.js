@@ -149,6 +149,9 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
             Ext.apply(p, additionalArguments);
         }
         
+        // increase timeout as this can take a longer (5 minutes)
+        options.timeout = 300000;
+        
         return this.doXHTTPRequest(options);
     },
     
