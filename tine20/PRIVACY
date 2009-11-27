@@ -1,35 +1,94 @@
 Last Update: 2009-11-27
 
-Tine 2.0 takes privacy seriously.  According to our key principles of openness, freedom, transparency and quality, privacy is in fact a core component and motivation behind the Tine 2.0 software. 
+Tine 2.0 takes privacy seriously.  According to our key principles of
+openness, freedom, transparency and quality, privacy is in fact a core
+component and motivation behind the Tine 2.0 software. 
 
-In Contrast to many other web services where using the software is paid by the disposal of personal information and the abundance of privacy the Tine 2.0 open source software gives back freedom and privacy to its users.
+In Contrast to many other web services where using the software is paid
+by the disposal of personal information and the abundance of privacy the
+Tine 2.0 open source software gives back freedom and privacy to its
+users.
 
-In the following privacy policy we explain how Tine 2.0 may impact its users privacy and discuss topics to consider from administrative side to ensure and enhance the users privacy. 
+In the following privacy policy we explain how Tine 2.0 may impact its
+users privacy and discuss topics to consider from administrative side to
+ensure and enhance the users privacy. 
 
-(a) Related Software Products
-Tine 2.0 is a software which runs in conjunction with various related software products such as Web-Servers, Database-Servers, Directory-Servers, SMTP- and IMAP-Servers and others. All these related software products may impact the privacy of Tine 2.0 users in various ways. In first place the log-files of these related  software products must be considered, as they may contain personal or confidential data. For further impacts on the users privacy the user manuals of the related software products have to be consulted.
+(a) Related Software Products Tine 2.0 is a software which runs in
+conjunction with various related software products such as Web-Servers,
+Database-Servers, Directory-Servers, SMTP- and IMAP-Servers and others.
+All these related software products may impact the privacy of Tine 2.0
+users in various ways. In first place the log-files of these related
+software products must be considered, as they may contain personal or
+confidential data.  For further impacts on the users privacy the user
+manuals of the related software products have to be consulted.
 
-(b) Database
-Tine 2.0 stores almost any information in the configured databases. These databases contain personal and confidential data. As such these databases are to be protected against any form of unauthorized access. More details about securing the database could be found in the vendors users manual.
+(b) Database Tine 2.0 stores almost any information in the configured
+databases.  These databases contain personal and confidential data. As
+such these databases are to be protected against any form of
+unauthorized access.  More details about securing the database could be
+found in the vendors users manual.
 
-(c) Session Files
-Tine 2.0 stores personal information about the user (username, fullname, connection IP-Address etc.) in the users session file of the web-server. These session files have to be protected against any form of unauthorized access. In the Tine 2.0 setup process the path where this session files are saved could be configured.
+(c) Session Files Tine 2.0 stores personal information about the user
+(username, fullname, connection IP-Address etc.) in the users session
+file of the web-server. These session files have to be protected against
+any form of unauthorized access. In the Tine 2.0 setup process the path
+where this session files are saved could be configured.
 
-(d) Caches
-Tine 2.0 maintains caches to improve the performance of the software. These caches may contain sensitive or personal data. Therefore the caches have to be protected against unauthorized access in any form. In the Tine 2.0 setup process the path where cache files are saved could be configured.
+(d) Caches Tine 2.0 maintains caches to improve the performance of the
+software.  These caches may contain sensitive or personal data.
+Therefore the caches have to be protected against unauthorized access in
+any form. In the Tine 2.0 setup process the path where cache files are
+saved could be configured.
 
-(e) Log Files
-Tine 2.0 is capable to write log files containing information of operation in different levels. Depending on the level this information may contain sensitive or personal data. This is particularly the case for the log levels DEBUG and INFO. Therefore the log files have to be protected against unauthorized access in any form. In the Tine 2.0 setup process the path where log files are saved and the log level could be configured.
+(e) Log Files Tine 2.0 is capable to write log files containing
+information of operation in different levels. Depending on the level
+this information may contain sensitive or personal data.  This is
+particularly the case for the log levels DEBUG and INFO.  Therefore the
+log files have to be protected against unauthorized access in any form.
+In the Tine 2.0 setup process the path where log files are saved and the
+log level could be configured.
 
-(f) Error Messages
-If Tine 2.0 detects an exceptional state of the software, informations about the exceptional state are reported in the log-files and to the user. This information contain a so called 'stack trace' of the point where the exceptional state got detected. This stack traces are extremely useful to track the source of the exceptional state, e.g. bugs or  misconfigurations of the system, but also may contain sensitive or personal data of the current user. To suppress the stack traces in the error messages the configuration 'suppressExceptionTraces' could be set in the installations config.inc.php.
+(f) Error Messages If Tine 2.0 detects an exceptional state of the
+software, informations about the exceptional state are reported in the
+log-files and to the user. This information contain a so called 'stack
+trace' of the point where the exceptional state got detected. This stack
+traces are extremely useful to track the source of the exceptional
+state, e.g. bugs or misconfigurations of the system, but also may
+contain sensitive or personal data of the current user.  To suppress the
+stack traces in the error messages the configuration
+'suppressExceptionTraces' could be set in the installations
+config.inc.php.
 
-(g) Bug Reports
-If Tine 2.0 detects an exceptional state of the software, informations about the exceptional state are reported to the user containing a "Bug Reporting Form". In this form the user could add a description of what he did when the error occurred and moreover add contact information for further inquires. Submissions of this form are send as 'Bug Reports' to the software vendor and are extremely useful to find bugs and exception sources within the software. The permission to send Bug-Reports can be set as a 'Role Right' in the Tine 2.0 Role Administration module. Additionally to the description and optional contact information, these Bug-Reports contain the version of the Tine 2.0 installation and, if configured, the stack trace of the exceptional state as well as informations about the request and response of the transaction which lead to the exceptional state. Due to the nature of data transmission also the referrer, user-agent and IP-Adress of the user are included in the submission.
+(g) Bug Reports If Tine 2.0 detects an exceptional state of the
+software, informations about the exceptional state are reported to the
+user containing a "Bug Reporting Form". In this form the user could add
+a description of what he did when the error occurred and moreover add
+contact information for further inquires. Submissions of this form are
+send as 'Bug Reports' to the software vendor and are extremely useful to
+find bugs and exception sources within the software. The permission to
+send Bug-Reports can be set as a 'Role Right' in the Tine 2.0 Role
+Administration module. Additionally to the description and optional
+contact information, these Bug-Reports contain the version of the Tine
+2.0 installation and, if configured, the stack trace of the exceptional
+state as well as informations about the request and response of the
+transaction which lead to the exceptional state. Due to the nature of
+data transmission also the referrer, user-agent and IP-Adress of the
+user are included in the submission.
 
-(h) Version Checks
-Tine 2.0 offers the possibility to check for updates and inform the user if new versions or critical updates of the software are available. The permission to check for new versions can be set as 'Role Right' in the Tine 2.0 Role Administration module. The request for new versions contain the current version of the Tine 2.0 installation. Due to the nature of data transmission also the referrer, user-agent and IP-Adress of the user are included in the request.
+(h) Version Checks Tine 2.0 offers the possibility to check for updates
+and inform the user if new versions or critical updates of the software
+are available. The permission to check for new versions can be set as
+'Role Right' in the Tine 2.0 Role Administration module. The request for
+new versions contain the current version of the Tine 2.0 installation.
+Due to the nature of data transmission also the referrer, user-agent and
+IP-Adress of the user are included in the request.
 
-(i) Survey Offerings
-To consequently improve the usability of the Tine 2.0 the software vendor offers user surveys where users directly can give feedback and help to improve the software to their own needs. To check if a new survey for participation is available a request to a foreign web-site has to be made. To suppress this request the the configuration 'denySurveys' could be set in the installations config.inc.php. Due to the nature of data transmission the referrer, user-agent and IP-Adress of the user are included in the request.
+(i) Survey Offerings To consequently improve the usability of the Tine
+2.0 the software vendor offers user surveys where users directly can
+give feedback and help to improve the software to their own needs. To
+check if a new survey for participation is available a request to a
+foreign web-site has to be made. To suppress this request the the
+configuration 'denySurveys' could be set in the installations
+config.inc.php. Due to the nature of data transmission the referrer,
+user-agent and IP-Adress of the user are included in the request.
 
