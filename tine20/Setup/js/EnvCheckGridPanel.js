@@ -193,6 +193,7 @@ Ext.ns('Tine', 'Tine.Setup');
             // we are not ready for this button yet:
             //    setup only works with mysql version check ok
             disabled: true,
+            iconCls: 'setup_checks_success',
             scope: this,
             handler: function() {
                 var checks = Tine.Setup.registry.get('setupChecks');
