@@ -164,7 +164,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $_paging json encoded
      * @return array
      * 
-     * @todo replace this by Admin.searchGroups / getGroups
+     * @todo replace this by Admin.searchGroups / getGroups (without acl check)? or add getGroupCount to Tinebase_Group
      */
     public function searchGroups($filter, $paging)
     {

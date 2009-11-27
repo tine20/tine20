@@ -100,10 +100,12 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      *
      * @param string $_filter string to search groups for
      * @return int total group count
+     * 
+     * @todo add checkRight again / but first fix Tinebase_Frontend_Json::searchGroups
      */
     public function searchCount($_filter)
     {
-        $this->checkRight('VIEW_ACCOUNTS');
+        //$this->checkRight('VIEW_ACCOUNTS');
         
         $groups = Tinebase_Group::getInstance()->getGroups($_filter);
         $result = count($groups);
