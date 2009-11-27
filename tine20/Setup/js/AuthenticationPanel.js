@@ -149,6 +149,19 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
         this.onChangeAccountsStorage.defer(250, this);
     },
     
+        
+    /**
+     * transforms form data into a config object
+     * 
+     * @hack   smuggle termsAccept in 
+     * @return {Object} configData
+     */
+    form2config: function() {
+        configData = this.supr().form2config.call(this);
+        configData.AcceptedTermsVersion = Tine.Setup.registry.get('AcceptedTermsVersion');
+        return configData;
+    },
+    
    /**
      * returns config manager form
      * 
