@@ -135,9 +135,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param int $_start
      * @param int $_limit
      * @return array with results array & totalcount (int)
+     * 
+     * @deprecated
+     * @todo    remove this if it isn't used anymore
      */
     public function getGroups($filter, $sort, $dir, $start, $limit)
     {
+        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Calling deprecated function.");
+        
         $filter = array(
             array('field' => 'query', 'operator' => 'contains', 'value' => $filter),
         );
@@ -158,6 +163,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $_filter json encoded
      * @param string $_paging json encoded
      * @return array
+     * 
+     * @todo replace this by Admin.searchGroups / getGroups
      */
     public function searchGroups($filter, $paging)
     {
@@ -175,7 +182,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $groups = Tinebase_Group::getInstance()->getGroups($filterData[0]['value'], $sort, $dir, $pagingData['start'], $pagingData['limit']);
 
         $result['results'] = $groups->toArray();
-        $result['totalcount'] = count($groups);
+        $result['totalcount'] = Admin_Controller_Group::getInstance()->searchCount($filterData[0]['value']);
         
         return $result;
     }
