@@ -195,6 +195,7 @@ Ext.ns('Tine', 'Tine.Setup');
                 var checks = Tine.Setup.registry.get('setupChecks');
                 checks.success = true;
                 Tine.Setup.registry.replace('setupChecks', checks);
+                Tine.Setup.registry.replace('checkDB', true);
             }
         });
     	/*
