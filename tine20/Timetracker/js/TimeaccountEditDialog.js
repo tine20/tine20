@@ -238,6 +238,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 store: this.grantsStore,
                 hasAccountPrefix: true,
                 configColumns: columns,
+                selectAnyone: false,
                 recordClass: Tine.Tinebase.Model.Grant
             }); 
         }
