@@ -190,6 +190,9 @@ Ext.ns('Tine', 'Tine.Setup');
         
         this.action_ignoreTests = new Ext.Action({
             text: this.app.i18n._('Ignore setup tests'),
+            // we are not ready for this button yet:
+            //    setup only works with mysql version check ok
+            disabled: true,
             scope: this,
             handler: function() {
                 var checks = Tine.Setup.registry.get('setupChecks');
