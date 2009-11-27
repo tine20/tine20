@@ -513,4 +513,15 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '2.13');
     }
     
+    /**
+     * update to 2.14
+     * - accept terms and conditions
+     */    
+    public function update_13()
+    {
+        // NOTE: this update can only be applied if user accepted terms
+        Setup_Controller::getInstance()->saveAcceptedTerms(1);
+        
+        $this->setApplicationVersion('Tinebase', '2.14');
+    }
 }
