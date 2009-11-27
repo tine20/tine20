@@ -187,6 +187,16 @@ Ext.ns('Tine', 'Tine.Setup');
             iconCls: 'x-tbar-loading',
             scope: this
         });
+        
+        this.action_ignoreTests = new Ext.Action({
+            text: this.app.i18n._('Ignore setup tests'),
+            scope: this,
+            handler: function() {
+                var checks = Tine.Setup.registry.get('setupChecks');
+                checks.success = true;
+                Tine.Setup.registry.replace('setupChecks', checks);
+            }
+        });
     	/*
         this.action_installApplications = new Ext.Action({
             text: this.app.i18n._('Install application'),
@@ -204,7 +214,8 @@ Ext.ns('Tine', 'Tine.Setup');
         
         this.actionToolbar = new Ext.Toolbar({
             items: [
-                this.action_reCheck
+                this.action_reCheck,
+                this.action_ignoreTests
             ]
         });
     },
