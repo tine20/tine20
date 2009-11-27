@@ -650,8 +650,10 @@ class Setup_Controller
      * @return bool
      */
     public function saveAuthentication($_authenticationData)
-    {    
+    {
         if ($this->isInstalled('Tinebase')) {
+            // NOTE: Tinebase_Setup_Initialiser calls this functino again so
+            //       we come to this point on initial installation _and_ update
             $this->_updateAuthentication($_authenticationData);
         } else {
             $installationOptions = array('authenticationData' => $_authenticationData);
@@ -678,7 +680,11 @@ class Setup_Controller
         
         if (isset($_authenticationData['redirectSettings'])) {
           $this->_updateRedirectSettings($_authenticationData['redirectSettings']);
-        }        
+        }
+        
+        if (isset($_authenticationData['acceptedTermsVersion'])) {
+          $this->saveAcceptedTerms($_authenticationData['acceptedTermsVersion']);
+        } 
     }
     
     /**
@@ -836,6 +842,22 @@ class Setup_Controller
 
         Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::IMAP, Zend_Json::encode($_data['imap']));
         Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::SMTP, Zend_Json::encode($_data['smtp']));
+    }
+    
+    public function getAcceptedTerms()
+    {
+        return Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::ACCEPTEDTERMSVERSION, 'Tinebase', 0);
+    }
+    
+    /**
+     * save acceptedTermsVersion
+     * 
+     * @param $_data
+     * @return void
+     */
+    public function saveAcceptedTerms($_data)
+    {
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::ACCEPTEDTERMSVERSION, Zend_Json::encode($_data));
     }
     
     /**

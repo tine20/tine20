@@ -117,6 +117,12 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
     const REDIRECTTOREFERRER = 'redirectToReferrer';
     
     /**
+     * Config key for acceptedTermsVersion
+     * @var string
+     */
+    const ACCEPTEDTERMSVERSION = 'acceptedTermsVersion';
+    
+    /**
      * identifier
      * 
      * @var string

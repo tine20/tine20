@@ -24,12 +24,12 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
      * @see tine20/Setup/Setup_Initialize#_initialize($_application)
      */
     public function _initialize(Tinebase_Model_Application $_application, $_options = null)
-    {     
+    {
         $authenticationData = empty($_options['authenticationData']) ? Setup_Controller::getInstance()->loadAuthenticationData() : $_options['authenticationData'];
         $defaultGroupNames = $this->_parseDefaultGroupNameOptions($_options);
         $authenticationData['accounts'][Tinebase_User::getConfiguredBackend()] = array_merge($authenticationData['accounts'][Tinebase_User::getConfiguredBackend()], $defaultGroupNames);
-        Setup_Controller::getInstance()->saveAuthentication($authenticationData);       
-
+        Setup_Controller::getInstance()->saveAuthentication($authenticationData);
+        
         if (isset($_options['imap']) || isset($_options['smtp'])) {
             $data = $this->_parseEmailOptions($_options);
             Setup_Controller::getInstance()->saveEmailConfig($data);
