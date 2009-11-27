@@ -13,290 +13,127 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 
-#: js/ApplicationGridPanel.js:67
-msgid "Name"
-msgstr "Aplikacja"
-
-#: js/ApplicationGridPanel.js:68
-msgid "Enabled"
-msgstr "Włączona"
-
-#: js/ApplicationGridPanel.js:69
-msgid "Order"
-msgstr "Kolejność"
-
-#: js/ApplicationGridPanel.js:70
-msgid "Installed Version"
-msgstr "Zainstalowana wersja"
-
-#: js/ApplicationGridPanel.js:71
-msgid "Available Version"
-msgstr "Dostępna wersja"
-
-#: js/ApplicationGridPanel.js:72
-msgid "Status"
-msgstr "Status"
-
-#: js/ApplicationGridPanel.js:73
-msgid "Depends on"
-msgstr "Zależy od"
-
-#: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:192
-msgid "Install application"
-msgstr "Zainstaluj aplikację"
-
-#: js/ApplicationGridPanel.js:91
-msgid "Uninstall application"
-msgstr "Odinstaluj aplikację"
-
-#: js/ApplicationGridPanel.js:100
-msgid "Update application"
-msgstr "Aktualizuj aplikację"
-
-#: js/ApplicationGridPanel.js:109
-msgid "Go to {0} login"
-msgstr "Przejdź do logowania {0}"
-
-#: js/ApplicationGridPanel.js:172
-msgid "uninstall"
-msgstr "Odinstaluj"
-
-#: js/ApplicationGridPanel.js:172
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Czy na pewno chcesz odinstalować aplikację?"
-
-#: js/ApplicationGridPanel.js:232
-msgid "This may take a while"
-msgstr "To może chwilę potrwać"
-
-#: js/ApplicationGridPanel.js:262
-msgid "Dependency Violation"
-msgstr "Niespełnione zależności"
-
-#: js/AuthenticationPanel.js:121
-msgid "Delete all existing users and groups"
-msgstr "Usuń wszystkich, istniejących użytkowników i grupy"
-
-#: js/AuthenticationPanel.js:121
-msgid ""
-"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to "
-"LDAP ?"
+#: js/Setup.js:55
+msgid "Terms and Conditions"
 msgstr ""
-"Przejście z SQL na LDAP usunie wszystkie, istniejące konta użytkowników, "
-"grupy oraz funkcje. Czy na pewno chcesz przełączyć konta na LDAP?"
 
-#: js/AuthenticationPanel.js:171 js/AuthenticationPanel.js:191
-#: js/EmailPanel.js:156
-msgid "Backend"
-msgstr "W tle"
+#: js/Setup.js:60
+msgid "Setup Checks"
+msgstr "Testy konfiguracji"
 
-#: js/AuthenticationPanel.js:204
-msgid "Authentication provider"
-msgstr "Uwierzytelnienie"
+#: js/Setup.js:66
+msgid "Config Manager"
+msgstr "Konfigurator ustawień"
 
-#: js/AuthenticationPanel.js:227
-msgid "Initial admin login name"
-msgstr "Początkowy login administratora"
+#: js/Setup.js:72
+msgid "Authentication/Accounts"
+msgstr "Uwierzytelnienie / Konta"
 
-#: js/AuthenticationPanel.js:231
-msgid "Initial admin Password"
-msgstr "Początkowe hasło administratora"
+#: js/Setup.js:78
+msgid "Email"
+msgstr "E-mail"
 
-#: js/AuthenticationPanel.js:235
-msgid "Password confirmation"
-msgstr "Potwierdzenie hasła"
+#: js/Setup.js:84
+msgid "Application Manager"
+msgstr "Konfigurator aplikacji"
 
-#: js/AuthenticationPanel.js:249 js/AuthenticationPanel.js:335
-msgid "Host"
-msgstr "Komputer"
+#: js/Setup.js:187
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Aplikacje"
+msgstr[1] "aplikacje"
+msgstr[2] "aplikacji"
 
-#: js/AuthenticationPanel.js:254 js/AuthenticationPanel.js:340
-msgid "Login name"
-msgstr "Login"
-
-#: js/AuthenticationPanel.js:257 js/AuthenticationPanel.js:343
-#: js/ConfigManagerPanel.js:69 js/ConfigManagerPanel.js:100
-#: js/EmailPanel.js:196 js/EmailPanel.js:287
-msgid "Password"
-msgstr "Hasło"
-
-#: js/AuthenticationPanel.js:270 js/AuthenticationPanel.js:356
-msgid "Bind requires DN"
-msgstr "Bind wymaga nazwy domeny"
-
-#: js/AuthenticationPanel.js:274
-msgid "Base DN"
-msgstr "Podstawowa domena"
-
-#: js/AuthenticationPanel.js:277
-msgid "Account canonical form"
-msgstr "Konto standardowe"
-
-#: js/AuthenticationPanel.js:285
-msgid "Accounts storage"
-msgstr "Konta"
-
-#: js/AuthenticationPanel.js:306 js/AuthenticationPanel.js:410
-msgid "Default user group name"
-msgstr "Domyślna nazwa grupy użytkownika"
-
-#: js/AuthenticationPanel.js:309 js/AuthenticationPanel.js:413
-msgid "Default admin group name"
-msgstr "Domyślna nazwa grupy administratora"
-
-#: js/AuthenticationPanel.js:321
-msgid "User can change password"
-msgstr "Użytkownik może zmienić hasło"
-
-#: js/AuthenticationPanel.js:360
-msgid "User DN"
-msgstr "Domena użytkownika"
-
-#: js/AuthenticationPanel.js:363
-msgid "Groups DN"
-msgstr "Domena grupy"
-
-#: js/AuthenticationPanel.js:375
-msgid "Password encoding"
-msgstr "Metoda kodowania hasła"
-
-#: js/AuthenticationPanel.js:388
-msgid "Use Rfc 2307 bis"
-msgstr "Stosuj RFC 2307 aż do"
-
-#: js/AuthenticationPanel.js:392
-msgid "Min User Id"
-msgstr "Min. id użytkownika"
-
-#: js/AuthenticationPanel.js:395
-msgid "Max User Id"
-msgstr "Maks. id użytkownika"
-
-#: js/AuthenticationPanel.js:398
-msgid "Min Group Id"
-msgstr "Min. id grupy"
-
-#: js/AuthenticationPanel.js:401
-msgid "Max Group Id"
-msgstr "Maks. id grupy"
-
-#: js/AuthenticationPanel.js:404
-msgid "Group UUID Attribute name"
-msgstr "Unikalny atrybut grupy"
-
-#: js/AuthenticationPanel.js:407
-msgid "User UUID Attribute name"
-msgstr "Unikalny atrybut użytkownika"
-
-#: js/AuthenticationPanel.js:425
-msgid "Allow user to change her password?"
-msgstr "Czy zezwolić użytkownikowi na zmianę hasła?"
-
-#: js/AuthenticationPanel.js:434
-msgid "Redirect Settings"
-msgstr "Ustawienia przekierowania"
-
-#: js/AuthenticationPanel.js:442
-msgid "Redirect Url (after Logout, redirect to login screen if empty)"
-msgstr ""
-"Przekieruj URL (po wylogowaniu przekieruj do strony logowania, jeśli pusta)"
-
-#: js/AuthenticationPanel.js:453
-msgid "Redirect to referring site, if exists"
-msgstr "Przekieruj do powiązanej strony, jeśli istnieje"
-
-#: js/AuthenticationPanel.js:466
-msgid "Save config and install"
-msgstr "Zapisz konfigurację i zainstaluj"
-
-#: js/AuthenticationPanel.js:468
-msgid "Save config"
-msgstr "Zapisz konfigurację"
-
-#: js/AuthenticationPanel.js:489
-msgid "Passwords don't match"
-msgstr "Hasła nie są takie same"
-
-#: js/ConfigManagerPanel.js:58
+#: js/ConfigManagerPanel.js:59
 msgid "Informations"
 msgstr "Informacje"
 
-#: js/ConfigManagerPanel.js:62
+#: js/ConfigManagerPanel.js:63
 msgid "Setup Authentication"
 msgstr "Konfiguruj uwierzytelnianie"
 
-#: js/ConfigManagerPanel.js:65 js/EmailPanel.js:192 js/EmailPanel.js:283
+#: js/ConfigManagerPanel.js:66 js/EmailPanel.js:192 js/EmailPanel.js:283
 msgid "Username"
 msgstr "Użytkownik"
 
-#: js/ConfigManagerPanel.js:74 js/ConfigManagerPanel.js:92
+#: js/ConfigManagerPanel.js:76 js/ConfigManagerPanel.js:112
+#: js/EmailPanel.js:196 js/EmailPanel.js:287 js/AuthenticationPanel.js:274
+#: js/AuthenticationPanel.js:360
+msgid "Password"
+msgstr "Hasło"
+
+#: js/ConfigManagerPanel.js:82 js/ConfigManagerPanel.js:102
 msgid "Database"
 msgstr "Baza danych"
 
-#: js/ConfigManagerPanel.js:78
+#: js/ConfigManagerPanel.js:86
 msgid "Adapter"
 msgstr "Adapter"
 
-#: js/ConfigManagerPanel.js:83 js/EmailPanel.js:188 js/EmailPanel.js:279
+#: js/ConfigManagerPanel.js:91 js/EmailPanel.js:188 js/EmailPanel.js:279
 msgid "Hostname"
 msgstr "Komputer"
 
-#: js/ConfigManagerPanel.js:87 js/EmailPanel.js:201 js/EmailPanel.js:292
+#: js/ConfigManagerPanel.js:96 js/EmailPanel.js:201 js/EmailPanel.js:292
 msgid "Port"
 msgstr "Port"
 
-#: js/ConfigManagerPanel.js:96
+#: js/ConfigManagerPanel.js:107
 msgid "User"
 msgstr "Użytkownik"
 
-#: js/ConfigManagerPanel.js:104
+#: js/ConfigManagerPanel.js:117
 msgid "Prefix"
 msgstr "Przedrostek"
 
-#: js/ConfigManagerPanel.js:107
+#: js/ConfigManagerPanel.js:121
 msgid "Logging"
 msgstr "Logi"
 
-#: js/ConfigManagerPanel.js:113
+#: js/ConfigManagerPanel.js:127
 msgid "Filename"
 msgstr "Zapisuj do pliku"
 
-#: js/ConfigManagerPanel.js:125
+#: js/ConfigManagerPanel.js:140
 msgid "Priority"
 msgstr "Tryb zapisu"
 
-#: js/ConfigManagerPanel.js:129
+#: js/ConfigManagerPanel.js:145
 msgid "Caching"
 msgstr "Włącz pamięć podręczną"
 
-#: js/ConfigManagerPanel.js:135
+#: js/ConfigManagerPanel.js:151
 msgid "Path"
 msgstr "Ścieżka"
 
-#: js/ConfigManagerPanel.js:138
+#: js/ConfigManagerPanel.js:155
 msgid "Lifetime (seconds)"
 msgstr "Czas życia (sekundy)"
 
-#: js/ConfigManagerPanel.js:144
+#: js/ConfigManagerPanel.js:162
 msgid "Temporary files"
 msgstr "Pliki tymczasowe"
 
-#: js/ConfigManagerPanel.js:149
+#: js/ConfigManagerPanel.js:167
 msgid "Temporary Files Path"
 msgstr "Ścieżka do plików tymczasowych"
 
-#: js/ConfigManagerPanel.js:152
+#: js/ConfigManagerPanel.js:171
 msgid "Session files"
 msgstr "Pliki sesji"
 
-#: js/ConfigManagerPanel.js:157
+#: js/ConfigManagerPanel.js:176
 msgid "Session Files Path"
 msgstr "Ścieżka do plików sesji"
 
-#: js/ConfigManagerPanel.js:180
+#: js/ConfigManagerPanel.js:200
 msgid "Download config file"
 msgstr "Pobierz plik konfiguracyjny"
+
+#: js/EmailPanel.js:156 js/AuthenticationPanel.js:184
+#: js/AuthenticationPanel.js:205
+msgid "Backend"
+msgstr "W tle"
 
 #: js/EmailPanel.js:160
 msgid "Standard IMAP"
@@ -362,25 +199,223 @@ msgstr "Login"
 msgid "Plain"
 msgstr "Czysty tekst"
 
-#: js/EmailPanel.js:377
+#: js/EmailPanel.js:332
+msgid "Notifications service address"
+msgstr ""
+
+#: js/EmailPanel.js:381
 msgid "MySql Hostname"
 msgstr "Nazwa hosta dla MySQL"
 
-#: js/EmailPanel.js:380
+#: js/EmailPanel.js:384
 msgid "MySql Database"
 msgstr "Baza danych MySQL"
 
-#: js/EmailPanel.js:383
+#: js/EmailPanel.js:387
 msgid "MySql User"
 msgstr "Użytkownik MySQL"
 
-#: js/EmailPanel.js:386
+#: js/EmailPanel.js:390
 msgid "MySql Password"
 msgstr "Hasło dla MySQL"
 
-#: js/EmailPanel.js:390
+#: js/EmailPanel.js:394
 msgid "MySql Port"
 msgstr "Port MySQL"
+
+#: js/ApplicationGridPanel.js:67
+msgid "Name"
+msgstr "Aplikacja"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Enabled"
+msgstr "Włączona"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Order"
+msgstr "Kolejność"
+
+#: js/ApplicationGridPanel.js:70
+msgid "Installed Version"
+msgstr "Zainstalowana wersja"
+
+#: js/ApplicationGridPanel.js:71
+msgid "Available Version"
+msgstr "Dostępna wersja"
+
+#: js/ApplicationGridPanel.js:72
+msgid "Status"
+msgstr "Status"
+
+#: js/ApplicationGridPanel.js:73
+msgid "Depends on"
+msgstr "Zależy od"
+
+#: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:206
+msgid "Install application"
+msgstr "Zainstaluj aplikację"
+
+#: js/ApplicationGridPanel.js:91
+msgid "Uninstall application"
+msgstr "Odinstaluj aplikację"
+
+#: js/ApplicationGridPanel.js:100
+msgid "Update application"
+msgstr "Aktualizuj aplikację"
+
+#: js/ApplicationGridPanel.js:109
+msgid "Go to {0} login"
+msgstr "Przejdź do logowania {0}"
+
+#: js/ApplicationGridPanel.js:172
+msgid "uninstall"
+msgstr "Odinstaluj"
+
+#: js/ApplicationGridPanel.js:172
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Czy na pewno chcesz odinstalować aplikację?"
+
+#: js/ApplicationGridPanel.js:232
+msgid "This may take a while"
+msgstr "To może chwilę potrwać"
+
+#: js/ApplicationGridPanel.js:262
+msgid "Dependency Violation"
+msgstr "Niespełnione zależności"
+
+#: js/AuthenticationPanel.js:121
+msgid "Delete all existing users and groups"
+msgstr "Usuń wszystkich, istniejących użytkowników i grupy"
+
+#: js/AuthenticationPanel.js:121
+msgid ""
+"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
+"and Roles. Do you really want to switch the accounts storage backend to "
+"LDAP ?"
+msgstr ""
+"Przejście z SQL na LDAP usunie wszystkie, istniejące konta użytkowników, "
+"grupy oraz funkcje. Czy na pewno chcesz przełączyć konta na LDAP?"
+
+#: js/AuthenticationPanel.js:218
+msgid "Authentication provider"
+msgstr "Uwierzytelnienie"
+
+#: js/AuthenticationPanel.js:241
+msgid "Initial admin login name"
+msgstr "Początkowy login administratora"
+
+#: js/AuthenticationPanel.js:246
+msgid "Initial admin Password"
+msgstr "Początkowe hasło administratora"
+
+#: js/AuthenticationPanel.js:251
+msgid "Password confirmation"
+msgstr "Potwierdzenie hasła"
+
+#: js/AuthenticationPanel.js:266 js/AuthenticationPanel.js:352
+msgid "Host"
+msgstr "Komputer"
+
+#: js/AuthenticationPanel.js:271 js/AuthenticationPanel.js:357
+msgid "Login name"
+msgstr "Login"
+
+#: js/AuthenticationPanel.js:287 js/AuthenticationPanel.js:373
+msgid "Bind requires DN"
+msgstr "Bind wymaga nazwy domeny"
+
+#: js/AuthenticationPanel.js:291
+msgid "Base DN"
+msgstr "Podstawowa domena"
+
+#: js/AuthenticationPanel.js:294
+msgid "Account canonical form"
+msgstr "Konto standardowe"
+
+#: js/AuthenticationPanel.js:302
+msgid "Accounts storage"
+msgstr "Konta"
+
+#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:427
+msgid "Default user group name"
+msgstr "Domyślna nazwa grupy użytkownika"
+
+#: js/AuthenticationPanel.js:326 js/AuthenticationPanel.js:430
+msgid "Default admin group name"
+msgstr "Domyślna nazwa grupy administratora"
+
+#: js/AuthenticationPanel.js:338
+msgid "User can change password"
+msgstr "Użytkownik może zmienić hasło"
+
+#: js/AuthenticationPanel.js:377
+msgid "User DN"
+msgstr "Domena użytkownika"
+
+#: js/AuthenticationPanel.js:380
+msgid "Groups DN"
+msgstr "Domena grupy"
+
+#: js/AuthenticationPanel.js:392
+msgid "Password encoding"
+msgstr "Metoda kodowania hasła"
+
+#: js/AuthenticationPanel.js:405
+msgid "Use Rfc 2307 bis"
+msgstr "Stosuj RFC 2307 aż do"
+
+#: js/AuthenticationPanel.js:409
+msgid "Min User Id"
+msgstr "Min. id użytkownika"
+
+#: js/AuthenticationPanel.js:412
+msgid "Max User Id"
+msgstr "Maks. id użytkownika"
+
+#: js/AuthenticationPanel.js:415
+msgid "Min Group Id"
+msgstr "Min. id grupy"
+
+#: js/AuthenticationPanel.js:418
+msgid "Max Group Id"
+msgstr "Maks. id grupy"
+
+#: js/AuthenticationPanel.js:421
+msgid "Group UUID Attribute name"
+msgstr "Unikalny atrybut grupy"
+
+#: js/AuthenticationPanel.js:424
+msgid "User UUID Attribute name"
+msgstr "Unikalny atrybut użytkownika"
+
+#: js/AuthenticationPanel.js:442
+msgid "Allow user to change her password?"
+msgstr "Czy zezwolić użytkownikowi na zmianę hasła?"
+
+#: js/AuthenticationPanel.js:451
+msgid "Redirect Settings"
+msgstr "Ustawienia przekierowania"
+
+#: js/AuthenticationPanel.js:459
+msgid "Redirect Url (after Logout, redirect to login screen if empty)"
+msgstr ""
+"Przekieruj URL (po wylogowaniu przekieruj do strony logowania, jeśli pusta)"
+
+#: js/AuthenticationPanel.js:470
+msgid "Redirect to referring site, if exists"
+msgstr "Przekieruj do powiązanej strony, jeśli istnieje"
+
+#: js/AuthenticationPanel.js:483
+msgid "Save config and install"
+msgstr "Zapisz konfigurację i zainstaluj"
+
+#: js/AuthenticationPanel.js:485
+msgid "Save config"
+msgstr "Zapisz konfigurację"
+
+#: js/AuthenticationPanel.js:506
+msgid "Passwords don't match"
+msgstr "Hasła nie są takie same"
 
 #: js/EnvCheckGridPanel.js:92
 msgid "Performing Environment Checks..."
@@ -412,54 +447,52 @@ msgstr "Błąd"
 msgid "Run setup tests"
 msgstr "Uruchom testy konfiguracji"
 
-#: js/Setup.js:54
-msgid "Setup Checks"
-msgstr "Testy konfiguracji"
-
-#: js/Setup.js:59
-msgid "Config Manager"
-msgstr "Konfigurator ustawień"
-
-#: js/Setup.js:65
-msgid "Authentication/Accounts"
-msgstr "Uwierzytelnienie / Konta"
-
-#: js/Setup.js:71
-msgid "Email"
-msgstr "E-mail"
-
-#: js/Setup.js:77
-msgid "Application Manager"
-msgstr "Konfigurator aplikacji"
-
-#: js/Setup.js:173
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Aplikacje"
-msgstr[1] "aplikacje"
-msgstr[2] "aplikacji"
-
-msgid "Shit"
-msgstr "Niedobrze"
-
-msgid "Where are the backup tapes"
-msgstr "Gdzie są taśmy archiwalne?"
-
-msgid "Invalid configuration"
-msgstr "Nieprawidłowa konfiguracja"
-
-msgid "You need to correct the red marked fields before config could be saved"
+#: js/EnvCheckGridPanel.js:192
+msgid "Ignore setup tests"
 msgstr ""
-"Przed zapisaniem konfiguracji, musisz poprawić pola zaznaczone na czerwono"
 
-msgid "Transfering Configuration..."
-msgstr "Przesyłanie konfiguracji..."
+#: js/TermsPanel.js:31
+msgid "I have read the license agreement and accept it"
+msgstr ""
 
-msgid "Check config"
-msgstr "Sprawdź konfigurację"
+#: js/TermsPanel.js:38
+msgid "License Agreement"
+msgstr ""
 
-msgid "Apply changes"
-msgstr "Akceptuj zmiany"
+#: js/TermsPanel.js:55
+msgid "I have read the privacy agreement and accept it"
+msgstr ""
 
-msgid "Go to Tine 2.0 login"
-msgstr "Przejdź do strony logowania"
+#: js/TermsPanel.js:62
+msgid "Privacy Agreement"
+msgstr ""
+
+#: js/TermsPanel.js:77
+msgid "Accept Terms and Conditions"
+msgstr ""
+
+#~ msgid "Shit"
+#~ msgstr "Niedobrze"
+
+#~ msgid "Where are the backup tapes"
+#~ msgstr "Gdzie są taśmy archiwalne?"
+
+#~ msgid "Invalid configuration"
+#~ msgstr "Nieprawidłowa konfiguracja"
+
+#~ msgid ""
+#~ "You need to correct the red marked fields before config could be saved"
+#~ msgstr ""
+#~ "Przed zapisaniem konfiguracji, musisz poprawić pola zaznaczone na czerwono"
+
+#~ msgid "Transfering Configuration..."
+#~ msgstr "Przesyłanie konfiguracji..."
+
+#~ msgid "Check config"
+#~ msgstr "Sprawdź konfigurację"
+
+#~ msgid "Apply changes"
+#~ msgstr "Akceptuj zmiany"
+
+#~ msgid "Go to Tine 2.0 login"
+#~ msgstr "Przejdź do strony logowania"
