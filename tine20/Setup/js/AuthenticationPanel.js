@@ -158,7 +158,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
      */
     form2config: function() {
         configData = this.supr().form2config.call(this);
-        configData.AcceptedTermsVersion = Tine.Setup.registry.get('AcceptedTermsVersion');
+        configData.acceptedTermsVersion = Tine.Setup.registry.get('acceptedTermsVersion');
         return configData;
     },
     

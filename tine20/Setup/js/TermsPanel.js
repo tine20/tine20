@@ -121,7 +121,7 @@ Tine.Setup.TermsPanel = Ext.extend(Ext.Panel, {
         }, this);
         
         if (isValid) {
-            Tine.Setup.registry.replace('AcceptedTermsVersion', Tine.Setup.CurrentTermsVersion);
+            Tine.Setup.registry.replace('acceptedTermsVersion', Tine.Setup.CurrentTermsVersion);
         }
     }
 });

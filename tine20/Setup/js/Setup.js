@@ -43,7 +43,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Setup');
         
-        var termsFailed   = !Tine.Setup.registry.get('AcceptedTermsVersion') || Tine.Setup.registry.get('AcceptedTermsVersion') < Tine.Setup.CurrentTermsVersion;
+        var termsFailed   = !Tine.Setup.registry.get('acceptedTermsVersion') || Tine.Setup.registry.get('acceptedTermsVersion') < Tine.Setup.CurrentTermsVersion;
         var testsFailed   = !Tine.Setup.registry.get('setupChecks').success;
         var configMissing = !Tine.Setup.registry.get('configExists');
         var dbMissing     = !Tine.Setup.registry.get('checkDB');
@@ -131,7 +131,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * apply registry state
      */
     applyRegistryState: function() {
-        var termsChecks  = Tine.Setup.registry.get('AcceptedTermsVersion') >= Tine.Setup.CurrentTermsVersion;
+        var termsChecks  = Tine.Setup.registry.get('acceptedTermsVersion') >= Tine.Setup.CurrentTermsVersion;
         var setupChecks  = Tine.Setup.registry.get('setupChecks').success;
         var configExists = Tine.Setup.registry.get('configExists');
         var checkDB      = Tine.Setup.registry.get('checkDB');
