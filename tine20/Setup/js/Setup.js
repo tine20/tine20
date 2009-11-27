@@ -43,6 +43,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Setup');
         
+        var termsFailed   = !Tine.Setup.registry.get('AcceptedTermsVersion') || Tine.Setup.registry.get('AcceptedTermsVersion') < Tine.Setup.CurrentTermsVersion;
         var testsFailed   = !Tine.Setup.registry.get('setupChecks').success;
         var configMissing = !Tine.Setup.registry.get('configExists');
         var dbMissing     = !Tine.Setup.registry.get('checkDB');
@@ -51,32 +52,38 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.root = {
             id: '/',
             children: [{
+                text: this.app.i18n._('Terms and Conditions'),
+                iconCls: termsFailed ? 'setup_checks_fail' : 'setup_checks_success',
+                id: 'TermsPanel',
+                leaf: true
+            }, {
                 text: this.app.i18n._('Setup Checks'),
                 iconCls: testsFailed ? 'setup_checks_fail' : 'setup_checks_success',
+                disabled: termsFailed,
                 id: 'EnvCheckGridPanel',
                 leaf: true
             }, {
                 text: this.app.i18n._('Config Manager'),
                 iconCls: 'setup_config_manager',
-                disabled: testsFailed,
+                disabled: termsFailed || testsFailed,
                 id: 'ConfigManagerPanel',
                 leaf: true
             }, {
                 text: this.app.i18n._('Authentication/Accounts'),
                 iconCls: 'setup_authentication_manager',
-                disabled: testsFailed || configMissing || dbMissing,
+                disabled: termsFailed || testsFailed || configMissing || dbMissing,
                 id: 'AuthenticationPanel',
                 leaf: true
             }, {
                 text: this.app.i18n._('Email'),
                 iconCls: 'action_composeEmail',
-                disabled: testsFailed || configMissing || dbMissing || setupRequired,
+                disabled: termsFailed || testsFailed || configMissing || dbMissing || setupRequired,
                 id: 'EmailPanel',
                 leaf: true
             }, {
                 text: this.app.i18n._('Application Manager'),
                 iconCls: 'setup_application_manager',
-                disabled: testsFailed || configMissing || dbMissing || setupRequired,
+                disabled: termsFailed || testsFailed || configMissing || dbMissing || setupRequired,
                 id: 'ApplicationGridPanel',
                 leaf: true
             }]
@@ -124,26 +131,33 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * apply registry state
      */
     applyRegistryState: function() {
+        var termsChecks  = Tine.Setup.registry.get('AcceptedTermsVersion') >= Tine.Setup.CurrentTermsVersion;
         var setupChecks  = Tine.Setup.registry.get('setupChecks').success;
         var configExists = Tine.Setup.registry.get('configExists');
         var checkDB      = Tine.Setup.registry.get('checkDB');
         var setupRequired = Tine.Setup.registry.get('setupRequired');
         
-        var envNode = this.getNodeById('EnvCheckGridPanel');
-        var envIconCls = setupChecks ? 'setup_checks_success' : 'setup_checks_fail';
-        if (envNode.rendered) {
-            var envIconEl = Ext.get(envNode.ui.iconNode);
-            envIconEl.removeClass('setup_checks_success');
-            envIconEl.removeClass('setup_checks_fail');
-            envIconEl.addClass(envIconCls);
-        } else {
-            envNode.iconCls = envIconCls;
-        }
+        this.setNodeIcon('TermsPanel', termsChecks);
+        this.setNodeIcon('EnvCheckGridPanel', setupChecks);
         
-        this.getNodeById('ConfigManagerPanel')[setupChecks ? 'enable': 'disable']();
-        this.getNodeById('AuthenticationPanel')[setupChecks && configExists && checkDB ? 'enable': 'disable']();
-        this.getNodeById('ApplicationGridPanel')[setupChecks && configExists && checkDB && !setupRequired ? 'enable': 'disable']();
-        this.getNodeById('EmailPanel')[setupChecks && configExists && checkDB && !setupRequired ? 'enable': 'disable']();
+        this.getNodeById('EnvCheckGridPanel')[termsChecks ? 'enable': 'disable']();
+        this.getNodeById('ConfigManagerPanel')[termsChecks && setupChecks ? 'enable': 'disable']();
+        this.getNodeById('AuthenticationPanel')[termsChecks && setupChecks && configExists && checkDB ? 'enable': 'disable']();
+        this.getNodeById('ApplicationGridPanel')[termsChecks && setupChecks && configExists && checkDB && !setupRequired ? 'enable': 'disable']();
+        this.getNodeById('EmailPanel')[termsChecks && setupChecks && configExists && checkDB && !setupRequired ? 'enable': 'disable']();
+    },
+    
+    setNodeIcon: function (nodeId, success) {
+        var node = this.getNodeById(nodeId);
+        var iconCls = success ? 'setup_checks_success' : 'setup_checks_fail';
+        if (node.rendered) {
+            var iconEl = Ext.get(node.ui.iconNode);
+            iconEl.removeClass('setup_checks_success');
+            iconEl.removeClass('setup_checks_fail');
+            iconEl.addClass(iconCls);
+        } else {
+            envNode.iconCls = iconCls;
+        }
     }
 });
 
