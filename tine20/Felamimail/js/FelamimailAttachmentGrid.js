@@ -127,7 +127,8 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
     onUploadFail: function() {
         Ext.MessageBox.alert(
             this.i18n._('Upload Failed'), 
-            this.i18n._('Could not upload attachment. Filesize could be too big. Please notify your Administrator.')
+            this.i18n._('Could not upload attachment. Filesize could be too big. Please notify your Administrator. Max upload size: ') 
+                + Tine.Felamimail.registry.get('maxAttachmentSize')
         ).setIcon(Ext.MessageBox.ERROR);
         this.loadMask.hide();
     },
