@@ -3,7 +3,7 @@
 
 
                       TINE 2.0 PRIVACY POLICY
-                    Version 1, 27 November 2009
+                    Version 2, 28 November 2009
          
           
 Tine 2.0 takes privacy seriously.  According to our key principles of
@@ -19,15 +19,19 @@ In the following privacy policy we explain how Tine 2.0 may impact its
 users privacy and discuss topics to consider from administrative side to
 ensure and enhance the users privacy. 
 
+
+SECTION I: DATA STORAGE
+
 (a) Related Software Products
  Tine 2.0 is a software which runs in conjunction with various related
-software products such as Web-Servers, Database-Servers,
-Directory-Servers, SMTP- and IMAP-Servers and others.  All these related
-software products may impact the privacy of Tine 2.0 users in various
-ways. In first place the logfiles of these related software products
-must be considered, as they may contain personal or confidential data.
-For further impacts on the users privacy the user manuals of the related
-software products have to be consulted.
+software products such as Web-Servers, Database-Servers, Directory-
+Servers, SMTP- and IMAP-Servers and others.  All these related software
+products may store personal and sensitive data which could impact the
+privacy of Tine 2.0 users in various ways. In first place the logfiles
+of these related software products must be considered, as they may
+contain personal or confidential data. For further impacts on the users
+privacy the user manuals of the related software products have to be
+consulted.
 
 (b) Database
  Tine 2.0 stores almost any information in the configured databases.
@@ -70,7 +74,20 @@ personal data of the current user.  To suppress the stack traces in the
 error messages the configuration 'suppressExceptionTraces' can be set in
 the installations config.inc.php.
 
-(g) Bug Reports
+(g) User Client Session Data
+ The Tine 2.0 client software is a javascript software which runs in the
+browser of the user. During a users session, this client holds various
+caches and local stores of data objects which may contain personal or
+sensitive data. Therefore the computer system the client software runs
+on is to be protected against unauthorized access in any form.
+Destruction of these client side data should take place at quitting time
+of the user agent. Details of this destruction process are subject of
+the particular privacy policies of the clients user agent. 
+
+
+SECTION II: DATA TRANSFER WITH VENDORS SERVICES
+
+(a) Bug Reports
  If Tine 2.0 detects an exceptional state of the software, informations
 about the exceptional state are reported to the user containing a "Bug
 Reporting Form". In this form the user can add a description of what he
@@ -87,7 +104,7 @@ lead to the exceptional state. Due to the nature of data transmission,
 the referrer, user agent and IP address of the user are included in the
 submission.
 
-(h) Version Checks
+(b) Version Checks
  Tine 2.0 offers the possibility to check for updates and inform the
 user if new versions or critical updates of the software are available.
 The permission to check for new versions can be set as 'Role Right' in
@@ -96,7 +113,7 @@ contain the current version of the Tine 2.0 installation.  Due to the
 nature of data transmission, the referrer, user agent and IP address of
 the user are included in the request.
 
-(i) Survey Offerings
+(c) Survey Offerings
  To consequently improve the usability of the Tine 2.0 the software
 vendor offers user surveys where users directly can give feedback and
 help to improve the software to their own needs. To check if a new
@@ -105,4 +122,53 @@ to be made. To suppress this request, the configuration 'denySurveys'
 can be set in the  config.inc.php config file. Due to the nature of data
 transmission, the referrer, user agent and IP address of the user are
 included in the request.
+
+(d) Usage of Transfered Data
+ The Tine 2.0 software vendor process and stores transmitted data
+exclusively for the purpose of analyzing and resolving technical
+problems as well as gaining statistical data about the propagation of
+the Tine 2.0 software suite. In rare cases transmitted bug reports might
+contain personal or sensitive data according to paragraph (a). The
+software vendor guarantees to handle such data with absolute discretion
+and never to systematically collect, analyze or publish such data. Bug
+reports data are kept in an access controlled and private database and
+deleted as soon as the technical problem is resolved. 
+
+
+SECTION III: DATA TRANSFER WITH THRID PARTY SERVICES
+
+(a) Third Party Mail Systems
+ The Tine 2.0 email client can be configured to access mail systems of
+third party providers. Tine 2.0 has no influence of the data handling
+and privacy implications related to the policies of the third party
+service vendors. In addition to the personal or sensitive data stored
+and exchanged with the third party service connections to third party
+mail services also contain the IP-Address of the Tine 2.0 server system
+or upstream security system due to the nature of data transmission. The
+permission for users to define their own mail services, including third
+party services, can be set as a 'Role Right' in the Tine 2.0 Role
+Administration module. Considerations about the permission to connect
+third party mail systems should imply administrative tasks to ensure
+encrypted network communication to these systems.
+
+(b) Using of ActiveSync services
+ Tine 2.0 offers an ActiveSync module for data synchronization with
+mobile devices. The ActiveSync module respects access rights and user
+data grants of the user the device authenticates for. Tine 2.0 has no
+influence of the data handling and privacy implications of the
+ActiveSync clients. The permission to use the ActiveSync service can be
+set as a 'Role Right' in the Tine 2.0 Role Administration module.
+Considerations about the permission to synchronize data using the
+ActiveSync service should imply administrative tasks to ensure encrypted
+network communication between the related systems.
+
+(c) Third Party Service Consumers
+ Tine 2.0 comes with a variety of interfaces and API's, allowing the
+exchange of data with authenticated users. Those interfaces and API's
+respects access rights and user data grants of the user the service
+consumer is authenticated for. Tine 2.0 has no influence of the data
+handling and privacy implications of third party service consumers.
+Considerations about offering the Tine 2.0 service in a public network
+should imply administrative tasks to ensure encrypted network
+communication between all related systems.
 
