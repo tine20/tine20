@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <essential>
-	<enviroment name="PHP" version="5.2.0"/>
+	<enviroment name="PHP" version="5.2.1"/>
 	<enviroment name="Zend" version="1.9.0" operator="biggerThan" />
 	<enviroment name="Zend" version="1.9.2" operator="lessThan" />
 	<enviroment name="MySQL" version="5.0.52"/>
