@@ -756,6 +756,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     onEventResize: function(rz, width, height) {
         var event = rz.event;
         
+        if (! event) {
+            //event already gone -> late event / busy brower?
+            return;
+        }
+        
         var originalDuration = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE;
         
         if(event.get('is_all_day_event')) {
