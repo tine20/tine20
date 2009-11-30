@@ -80,7 +80,7 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
     var defaults = Tine.Crm.registry.get('defaults');
     
     var data = {
-        start: new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1)),
+        start: new Date().clearTime(),
         leadstate_id: defaults.leadstate_id,
         leadtype_id: defaults.leadtype_id,
         leadsource_id: defaults.leadsource_id,
