@@ -438,7 +438,7 @@ class Setup_ExtCheck
                     } else {
                         $mysqlVersion = @mysql_get_client_info();
                     }
-                    $text = $value['attributes']['NAME'] . ' (>= ' . $value['attributes']['VERSION'] . ')';
+                    $text = $value['attributes']['NAME'] . ' (> ' . $value['attributes']['VERSION'] . ')';
                     //echo "mysql version: " . mysql_get_server_info();
                     if (version_compare($value['attributes']['VERSION'], $mysqlVersion, '<')) {
                         $data[] = array($text, 'SUCCESS');
