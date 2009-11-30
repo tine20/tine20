@@ -60,19 +60,19 @@ msgstr "作成者"
 msgid "Activities"
 msgstr "アクティビティ"
 
-#: Frontend/Http.php:540 js/ExceptionHandler.js:139
+#: Frontend/Http.php:521 js/ExceptionHandler.js:139
 msgid "Authorisation Required"
 msgstr "要認証"
 
-#: Frontend/Http.php:541
+#: Frontend/Http.php:522
 msgid "Your session is not valid. You need to login again."
 msgstr "セッションが正しくありません。もう一度ログインしてください"
 
-#: Frontend/Http.php:567 js/ExceptionDialog.js:46
+#: Frontend/Http.php:548 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "以上終了"
 
-#: Frontend/Http.php:568 js/ExceptionDialog.js:71
+#: Frontend/Http.php:549 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "エラーが発生し、プログラムが異常終了しました"
 
@@ -1007,72 +1007,72 @@ msgstr "ノート"
 msgid "select a operator"
 msgstr "オペレータの選択"
 
-#: js/widgets/grid/FilterModel.js:288
+#: js/widgets/grid/FilterModel.js:289
 #, fuzzy
 msgid "Search Account ..."
 msgstr "検索しています。"
 
-#: js/widgets/grid/FilterModel.js:401
+#: js/widgets/grid/FilterModel.js:402
 msgid "today"
 msgstr "今日"
 
-#: js/widgets/grid/FilterModel.js:402
+#: js/widgets/grid/FilterModel.js:403
 msgid "yesterday"
 msgstr "昨日"
 
-#: js/widgets/grid/FilterModel.js:403
+#: js/widgets/grid/FilterModel.js:404
 msgid "this week"
 msgstr "今週"
 
-#: js/widgets/grid/FilterModel.js:404
+#: js/widgets/grid/FilterModel.js:405
 msgid "last week"
 msgstr "先週"
 
-#: js/widgets/grid/FilterModel.js:405
+#: js/widgets/grid/FilterModel.js:406
 msgid "the week before last"
 msgstr "先々週"
 
-#: js/widgets/grid/FilterModel.js:406
+#: js/widgets/grid/FilterModel.js:407
 msgid "this month"
 msgstr "今月"
 
-#: js/widgets/grid/FilterModel.js:407
+#: js/widgets/grid/FilterModel.js:408
 msgid "last month"
 msgstr "先月"
 
-#: js/widgets/grid/FilterModel.js:408
+#: js/widgets/grid/FilterModel.js:409
 msgid "this quarter"
 msgstr "今四半期"
 
-#: js/widgets/grid/FilterModel.js:409
+#: js/widgets/grid/FilterModel.js:410
 msgid "last quarter"
 msgstr "前四半期"
 
-#: js/widgets/grid/FilterModel.js:410
+#: js/widgets/grid/FilterModel.js:411
 msgid "this year"
 msgstr "今年"
 
-#: js/widgets/grid/FilterModel.js:411
+#: js/widgets/grid/FilterModel.js:412
 msgid "last year"
 msgstr "去年"
 
-#: js/widgets/grid/FilterModel.js:415
+#: js/widgets/grid/FilterModel.js:416
 msgid "tomorrow"
 msgstr "明日"
 
-#: js/widgets/grid/FilterModel.js:416
+#: js/widgets/grid/FilterModel.js:417
 msgid "next week"
 msgstr "来週"
 
-#: js/widgets/grid/FilterModel.js:417
+#: js/widgets/grid/FilterModel.js:418
 msgid "next month"
 msgstr "今月"
 
-#: js/widgets/grid/FilterModel.js:418
+#: js/widgets/grid/FilterModel.js:419
 msgid "next quarter"
 msgstr "来四半期"
 
-#: js/widgets/grid/FilterModel.js:419
+#: js/widgets/grid/FilterModel.js:420
 msgid "next year"
 msgstr "来年"
 

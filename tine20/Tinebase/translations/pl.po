@@ -67,19 +67,19 @@ msgstr "Utworzone przez"
 msgid "Activities"
 msgstr "Aktywności"
 
-#: Frontend/Http.php:540 js/ExceptionHandler.js:139
+#: Frontend/Http.php:521 js/ExceptionHandler.js:139
 msgid "Authorisation Required"
 msgstr "Konieczne uwierzytelnienie"
 
-#: Frontend/Http.php:541
+#: Frontend/Http.php:522
 msgid "Your session is not valid. You need to login again."
 msgstr "Twoja sesja wygasła. Musisz się ponownie zalogować."
 
-#: Frontend/Http.php:567 js/ExceptionDialog.js:46
+#: Frontend/Http.php:548 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Zakończenie awaryjne"
 
-#: Frontend/Http.php:568 js/ExceptionDialog.js:71
+#: Frontend/Http.php:549 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "Wystąpił błąd. Praca programu została zakończona awaryjnie."
 
@@ -1022,71 +1022,71 @@ msgstr "jeden z"
 msgid "select a operator"
 msgstr "wybierz operator"
 
-#: js/widgets/grid/FilterModel.js:288
+#: js/widgets/grid/FilterModel.js:289
 msgid "Search Account ..."
 msgstr "Znajdź konto ..."
 
-#: js/widgets/grid/FilterModel.js:401
+#: js/widgets/grid/FilterModel.js:402
 msgid "today"
 msgstr "dzisiaj"
 
-#: js/widgets/grid/FilterModel.js:402
+#: js/widgets/grid/FilterModel.js:403
 msgid "yesterday"
 msgstr "wczoraj"
 
-#: js/widgets/grid/FilterModel.js:403
+#: js/widgets/grid/FilterModel.js:404
 msgid "this week"
 msgstr "bieżący tydzień"
 
-#: js/widgets/grid/FilterModel.js:404
+#: js/widgets/grid/FilterModel.js:405
 msgid "last week"
 msgstr "ubiegły tydzień"
 
-#: js/widgets/grid/FilterModel.js:405
+#: js/widgets/grid/FilterModel.js:406
 msgid "the week before last"
 msgstr "przedostatni tydzień"
 
-#: js/widgets/grid/FilterModel.js:406
+#: js/widgets/grid/FilterModel.js:407
 msgid "this month"
 msgstr "bieżący miesiąc"
 
-#: js/widgets/grid/FilterModel.js:407
+#: js/widgets/grid/FilterModel.js:408
 msgid "last month"
 msgstr "ubiegły miesiąc"
 
-#: js/widgets/grid/FilterModel.js:408
+#: js/widgets/grid/FilterModel.js:409
 msgid "this quarter"
 msgstr "bieżący kwartał"
 
-#: js/widgets/grid/FilterModel.js:409
+#: js/widgets/grid/FilterModel.js:410
 msgid "last quarter"
 msgstr "ubiegły kwartał"
 
-#: js/widgets/grid/FilterModel.js:410
+#: js/widgets/grid/FilterModel.js:411
 msgid "this year"
 msgstr "bieżący rok"
 
-#: js/widgets/grid/FilterModel.js:411
+#: js/widgets/grid/FilterModel.js:412
 msgid "last year"
 msgstr "ubiegły rok"
 
-#: js/widgets/grid/FilterModel.js:415
+#: js/widgets/grid/FilterModel.js:416
 msgid "tomorrow"
 msgstr "jutro"
 
-#: js/widgets/grid/FilterModel.js:416
+#: js/widgets/grid/FilterModel.js:417
 msgid "next week"
 msgstr "przyszły tydzień"
 
-#: js/widgets/grid/FilterModel.js:417
+#: js/widgets/grid/FilterModel.js:418
 msgid "next month"
 msgstr "przyszły miesiąc"
 
-#: js/widgets/grid/FilterModel.js:418
+#: js/widgets/grid/FilterModel.js:419
 msgid "next quarter"
 msgstr "przyszły kwartał"
 
-#: js/widgets/grid/FilterModel.js:419
+#: js/widgets/grid/FilterModel.js:420
 msgid "next year"
 msgstr "przyszły rok"
 
@@ -1511,42 +1511,42 @@ msgstr "zmieniony"
 msgid "record changed"
 msgstr "wiersz zmieniony"
 
-msgid "Register"
-msgstr "Zarejestruj się"
+#~ msgid "Register"
+#~ msgstr "Zarejestruj się"
 
-msgid ""
-"The server did not respond to your request. Please check your network or "
-"contact your administrator."
-msgstr ""
-"Serwer nie odpowiedział na Twoje zapytanie. Proszę sprawdzić połączenie "
-"sieciowe albo skontaktować się ze swoim administratorem."
+#~ msgid ""
+#~ "The server did not respond to your request. Please check your network or "
+#~ "contact your administrator."
+#~ msgstr ""
+#~ "Serwer nie odpowiedział na Twoje zapytanie. Proszę sprawdzić połączenie "
+#~ "sieciowe albo skontaktować się ze swoim administratorem."
 
-msgid "Permissions"
-msgstr "Uprawnienia"
+#~ msgid "Permissions"
+#~ msgstr "Uprawnienia"
 
-msgid "Could not save {0}."
-msgstr "Zapisanie było niemożliwe {0}."
+#~ msgid "Could not save {0}."
+#~ msgstr "Zapisanie było niemożliwe {0}."
 
-msgid "add account"
-msgstr "dodaj konto"
+#~ msgid "add account"
+#~ msgstr "dodaj konto"
 
-msgid "nobody"
-msgstr "brak"
+#~ msgid "nobody"
+#~ msgstr "brak"
 
-msgid "please select an account"
-msgstr "Proszę zaznaczyć konto"
+#~ msgid "please select an account"
+#~ msgstr "Proszę zaznaczyć konto"
 
-msgid "loading new language..."
-msgstr "ładowanie nowego języka..."
+#~ msgid "loading new language..."
+#~ msgstr "ładowanie nowego języka..."
 
-msgid "Export Date"
-msgstr "Data eksportu"
+#~ msgid "Export Date"
+#~ msgstr "Data eksportu"
 
-msgid "Login successful. Loading Tine 2.0..."
-msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
+#~ msgid "Login successful. Loading Tine 2.0..."
+#~ msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
 
-msgid "Logout from Tine 2.0"
-msgstr "Wylogowanie z Tine 2.0"
+#~ msgid "Logout from Tine 2.0"
+#~ msgstr "Wylogowanie z Tine 2.0"
 
 #~ msgid "Our Forum for questions and ideas"
 #~ msgstr "Nasze forum do zadawania pytań i wpisywania sugestii"

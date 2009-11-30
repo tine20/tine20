@@ -511,200 +511,200 @@ msgstr "Dodaj zadanie…"
 msgid "Percent"
 msgstr "W procentach"
 
-msgid "Remove Option"
-msgstr "Usuń opcję"
+#~ msgid "Remove Option"
+#~ msgstr "Usuń opcję"
 
-msgid "Type"
-msgstr "Ikona"
-
-#, fuzzy
-msgid "Select lead"
-msgstr "Usuń zapytanie"
+#~ msgid "Type"
+#~ msgstr "Ikona"
 
 #, fuzzy
-msgid "Open tasks"
-msgstr "Usuń zadania"
+#~ msgid "Select lead"
+#~ msgstr "Usuń zapytanie"
 
 #, fuzzy
-msgid "Tasks status"
-msgstr "Status zapytania"
-
-msgid "telephone"
-msgstr "telefon"
-
-msgid "email"
-msgstr "e-mail"
+#~ msgid "Open tasks"
+#~ msgstr "Usuń zadania"
 
 #, fuzzy
-msgid "fair"
-msgstr "rynek"
+#~ msgid "Tasks status"
+#~ msgstr "Status zapytania"
 
-msgid "customer"
-msgstr "klient"
+#~ msgid "telephone"
+#~ msgstr "telefon"
 
-msgid "partner"
-msgstr "wspólnik"
+#~ msgid "email"
+#~ msgstr "e-mail"
 
-msgid "Are you sure you want to delete this lead?"
-msgstr "Czy na pewno chcesz usunąć to zapytanie?"
+#, fuzzy
+#~ msgid "fair"
+#~ msgstr "rynek"
 
-msgid "Deleting lead"
-msgstr "Usuwanie zapytania"
+#~ msgid "customer"
+#~ msgstr "klient"
 
-msgid "Some error occured while trying to delete the lead."
-msgstr "Podczas próby usunięcia zapytania wystąpił błąd."
+#~ msgid "partner"
+#~ msgstr "wspólnik"
 
-msgid "Show details"
-msgstr "Pokaż szczegóły"
+#~ msgid "Are you sure you want to delete this lead?"
+#~ msgstr "Czy na pewno chcesz usunąć to zapytanie?"
 
-msgid "Displaying leads {0} - {1} of {2}"
-msgstr "Wyświetlane zapytania {0} - {1} z {2}"
+#~ msgid "Deleting lead"
+#~ msgstr "Usuwanie zapytania"
 
-msgid "No leads found."
-msgstr "Nie znaleziono zapytań."
+#~ msgid "Some error occured while trying to delete the lead."
+#~ msgstr "Podczas próby usunięcia zapytania wystąpił błąd."
 
-msgid "Add lead"
-msgstr "Dodaj zapytanie"
+#~ msgid "Show details"
+#~ msgstr "Pokaż szczegóły"
 
-msgid "Edit lead"
-msgstr "Edytuj zapytanie"
+#~ msgid "Displaying leads {0} - {1} of {2}"
+#~ msgstr "Wyświetlane zapytania {0} - {1} z {2}"
 
-msgid "Delete selected leads"
-msgstr "Usuń zaznaczone zapytania"
+#~ msgid "No leads found."
+#~ msgstr "Nie znaleziono zapytań."
 
-msgid "Export selected lead as PDF"
-msgstr "Eksportuj zaznaczone zapytania jako PDF"
+#~ msgid "Add lead"
+#~ msgstr "Dodaj zapytanie"
 
-msgid "Please wait"
-msgstr "Proszę czekać"
+#~ msgid "Edit lead"
+#~ msgstr "Edytuj zapytanie"
 
-msgid "Saving lead"
-msgstr "Zapisywanie zapytania"
+#~ msgid "Delete selected leads"
+#~ msgstr "Usuń zaznaczone zapytania"
+
+#~ msgid "Export selected lead as PDF"
+#~ msgstr "Eksportuj zaznaczone zapytania jako PDF"
+
+#~ msgid "Please wait"
+#~ msgstr "Proszę czekać"
+
+#~ msgid "Saving lead"
+#~ msgstr "Zapisywanie zapytania"
 
 # The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
 # Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
-msgid "Failed"
-msgstr "Próba nieudana"
+#~ msgid "Failed"
+#~ msgstr "Próba nieudana"
 
-msgid "Could not save lead."
-msgstr "Zapisanie zapytania było niemożliwe."
+#~ msgid "Could not save lead."
+#~ msgstr "Zapisanie zapytania było niemożliwe."
 
-msgid "Please fix the errors noted."
-msgstr "Proszę poprawić wskazane błędy."
+#~ msgid "Please fix the errors noted."
+#~ msgstr "Proszę poprawić wskazane błędy."
 
-msgid "Contactdata"
-msgstr "Kontakty"
+#~ msgid "Contactdata"
+#~ msgstr "Kontakty"
 
-msgid "Add new contact"
-msgstr "Dodaj nowy kontakt"
+#~ msgid "Add new contact"
+#~ msgstr "Dodaj nowy kontakt"
 
-msgid "Add new customer contact"
-msgstr "Dodaj nowego klienta"
+#~ msgid "Add new customer contact"
+#~ msgstr "Dodaj nowego klienta"
 
-msgid "Edit contact"
-msgstr "Edytuj kontakt"
+#~ msgid "Edit contact"
+#~ msgstr "Edytuj kontakt"
 
-msgid "Edit selected contact"
-msgstr "Edytuj zaznaczony kontakt"
+#~ msgid "Edit selected contact"
+#~ msgstr "Edytuj zaznaczony kontakt"
 
-msgid "Unlink contact"
-msgstr "Usuń kontakt"
+#~ msgid "Unlink contact"
+#~ msgstr "Usuń kontakt"
 
-msgid "Add new task"
-msgstr "Dodaj nowe zadanie"
+#~ msgid "Add new task"
+#~ msgstr "Dodaj nowe zadanie"
 
-msgid "Edit task"
-msgstr "Edytuj zadanie"
+#~ msgid "Edit task"
+#~ msgstr "Edytuj zadanie"
 
-msgid "Edit selected task"
-msgstr "Edytuj zaznaczone zadanie"
+#~ msgid "Edit selected task"
+#~ msgstr "Edytuj zaznaczone zadanie"
 
-msgid "Add existing task to lead"
-msgstr "Dodaj istniejące zadanie do zapytania"
+#~ msgid "Add existing task to lead"
+#~ msgstr "Dodaj istniejące zadanie do zapytania"
 
-msgid "Remove selected tasks"
-msgstr "Usuń zaznaczone zadania"
+#~ msgid "Remove selected tasks"
+#~ msgstr "Usuń zaznaczone zadania"
 
-msgid "Remove selected products"
-msgstr "Usuń wybrane produkty"
+#~ msgid "Remove selected products"
+#~ msgstr "Usuń wybrane produkty"
 
-msgid "Leads"
-msgstr "Zapytania wstępne"
+#~ msgid "Leads"
+#~ msgstr "Zapytania wstępne"
 
-msgid "Loading Lead..."
-msgstr "Ładowanie wstępnego zapytania..."
+#~ msgid "Loading Lead..."
+#~ msgstr "Ładowanie wstępnego zapytania..."
 
-msgid "Please Wait"
-msgstr "Proszę czekać"
+#~ msgid "Please Wait"
+#~ msgstr "Proszę czekać"
 
-msgid "Add New Lead"
-msgstr "Dodaj nowe zapytanie"
+#~ msgid "Add New Lead"
+#~ msgstr "Dodaj nowe zapytanie"
 
-msgid "Overview"
-msgstr "Przegląd"
+#~ msgid "Overview"
+#~ msgstr "Przegląd"
 
-msgid "folder"
-msgstr "katalog"
+#~ msgid "folder"
+#~ msgstr "katalog"
 
-msgid "Enter searchfilter"
-msgstr "wpisz szukaną frazę"
+#~ msgid "Enter searchfilter"
+#~ msgstr "wpisz szukaną frazę"
 
-msgid "Search Contacts"
-msgstr "Znajdź kontakty"
+#~ msgid "Search Contacts"
+#~ msgstr "Znajdź kontakty"
 
-msgid "Add existing contact"
-msgstr "Utwórz istniejący kontakt"
+#~ msgid "Add existing contact"
+#~ msgstr "Utwórz istniejący kontakt"
 
-msgid "Add existing contact to lead"
-msgstr "Dodaj istniejący kontakt do zapytania"
+#~ msgid "Add existing contact to lead"
+#~ msgstr "Dodaj istniejący kontakt do zapytania"
 
-msgid "Organisation"
-msgstr "Organizacja"
+#~ msgid "Organisation"
+#~ msgstr "Organizacja"
 
-msgid "Lead updated"
-msgstr "Zapytanie zaktualizowane"
+#~ msgid "Lead updated"
+#~ msgstr "Zapytanie zaktualizowane"
 
-msgid "Lead added"
-msgstr "Zapytanie dodane"
+#~ msgid "Lead added"
+#~ msgstr "Zapytanie dodane"
 
-msgid "Add responsible"
-msgstr "Dodaj osobę odpowiedzialną"
+#~ msgid "Add responsible"
+#~ msgstr "Dodaj osobę odpowiedzialną"
 
-msgid "Add new responsible contact"
-msgstr "Dodaj nowy kontakt jako osobę odpowiedzialną"
+#~ msgid "Add new responsible contact"
+#~ msgstr "Dodaj nowy kontakt jako osobę odpowiedzialną"
 
-msgid "Add customer"
-msgstr "Dodaj klienta"
+#~ msgid "Add customer"
+#~ msgstr "Dodaj klienta"
 
-msgid "Add partner"
-msgstr "Dodaj wspólnika"
+#~ msgid "Add partner"
+#~ msgstr "Dodaj wspólnika"
 
-msgid "Add new partner contact"
-msgstr "Dodaj nowy kontakt jako wspólnika"
+#~ msgid "Add new partner contact"
+#~ msgstr "Dodaj nowy kontakt jako wspólnika"
 
-msgid "Show closed leads"
-msgstr "Pokaż zrealizowane zapytania"
+#~ msgid "Show closed leads"
+#~ msgstr "Pokaż zrealizowane zapytania"
 
-msgid "Add new lead"
-msgstr "Dodaj nowe zapytanie"
+#~ msgid "Add new lead"
+#~ msgstr "Dodaj nowe zapytanie"
 
-msgid "Edit selected lead"
-msgstr "Edytuj zaznaczone zapytanie"
+#~ msgid "Edit selected lead"
+#~ msgstr "Edytuj zaznaczone zapytanie"
 
-msgid "Unlink selected contacts"
-msgstr "Usuń zaznaczone kontakty"
+#~ msgid "Unlink selected contacts"
+#~ msgstr "Usuń zaznaczone kontakty"
 
-msgid "Edit Lead \"{0}\""
-msgstr "Edytuj zapytanie \"{0}\""
+#~ msgid "Edit Lead \"{0}\""
+#~ msgstr "Edytuj zapytanie \"{0}\""
 
-msgid "Add a product..."
-msgstr "Dodaj produkt"
+#~ msgid "Add a product..."
+#~ msgstr "Dodaj produkt"
 
-msgid "website"
-msgstr "strona WWW"
+#~ msgid "website"
+#~ msgstr "strona WWW"
 
-msgid "reseller"
-msgstr "dystrybutor"
+#~ msgid "reseller"
+#~ msgstr "dystrybutor"
 
-msgid "Remove products"
-msgstr "Usuń produkty"
+#~ msgid "Remove products"
+#~ msgstr "Usuń produkty"

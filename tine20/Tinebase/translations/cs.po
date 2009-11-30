@@ -64,19 +64,19 @@ msgstr "Vytvořil(a)"
 msgid "Activities"
 msgstr "Činnosti"
 
-#: Frontend/Http.php:540 js/ExceptionHandler.js:139
+#: Frontend/Http.php:521 js/ExceptionHandler.js:139
 msgid "Authorisation Required"
 msgstr "Je vyžadována autorizace"
 
-#: Frontend/Http.php:541
+#: Frontend/Http.php:522
 msgid "Your session is not valid. You need to login again."
 msgstr "Vaše relace je neplatná. Musíte se přihlásit znovu."
 
-#: Frontend/Http.php:567 js/ExceptionDialog.js:46
+#: Frontend/Http.php:548 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Abnormální ukončení"
 
-#: Frontend/Http.php:568 js/ExceptionDialog.js:71
+#: Frontend/Http.php:549 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo k chybě, program se neukončil korektně."
 
@@ -1015,72 +1015,72 @@ msgstr "Žádný"
 msgid "select a operator"
 msgstr "vyberte operátor"
 
-#: js/widgets/grid/FilterModel.js:288
+#: js/widgets/grid/FilterModel.js:289
 #, fuzzy
 msgid "Search Account ..."
 msgstr "Vyhledávám..."
 
-#: js/widgets/grid/FilterModel.js:401
+#: js/widgets/grid/FilterModel.js:402
 msgid "today"
 msgstr "dnes"
 
-#: js/widgets/grid/FilterModel.js:402
+#: js/widgets/grid/FilterModel.js:403
 msgid "yesterday"
 msgstr "včera"
 
-#: js/widgets/grid/FilterModel.js:403
+#: js/widgets/grid/FilterModel.js:404
 msgid "this week"
 msgstr "tento týden"
 
-#: js/widgets/grid/FilterModel.js:404
+#: js/widgets/grid/FilterModel.js:405
 msgid "last week"
 msgstr "minulý týden"
 
-#: js/widgets/grid/FilterModel.js:405
+#: js/widgets/grid/FilterModel.js:406
 msgid "the week before last"
 msgstr "předminulý týden"
 
-#: js/widgets/grid/FilterModel.js:406
+#: js/widgets/grid/FilterModel.js:407
 msgid "this month"
 msgstr "tento měsíc"
 
-#: js/widgets/grid/FilterModel.js:407
+#: js/widgets/grid/FilterModel.js:408
 msgid "last month"
 msgstr "minulý měsíc"
 
-#: js/widgets/grid/FilterModel.js:408
+#: js/widgets/grid/FilterModel.js:409
 msgid "this quarter"
 msgstr "toto čtvrtletí"
 
-#: js/widgets/grid/FilterModel.js:409
+#: js/widgets/grid/FilterModel.js:410
 msgid "last quarter"
 msgstr "minulé čtvrtletí"
 
-#: js/widgets/grid/FilterModel.js:410
+#: js/widgets/grid/FilterModel.js:411
 msgid "this year"
 msgstr "letos"
 
-#: js/widgets/grid/FilterModel.js:411
+#: js/widgets/grid/FilterModel.js:412
 msgid "last year"
 msgstr "loni"
 
-#: js/widgets/grid/FilterModel.js:415
+#: js/widgets/grid/FilterModel.js:416
 msgid "tomorrow"
 msgstr "zítra"
 
-#: js/widgets/grid/FilterModel.js:416
+#: js/widgets/grid/FilterModel.js:417
 msgid "next week"
 msgstr "příští týden"
 
-#: js/widgets/grid/FilterModel.js:417
+#: js/widgets/grid/FilterModel.js:418
 msgid "next month"
 msgstr "příští měsíc"
 
-#: js/widgets/grid/FilterModel.js:418
+#: js/widgets/grid/FilterModel.js:419
 msgid "next quarter"
 msgstr "příští čtvrtletí"
 
-#: js/widgets/grid/FilterModel.js:419
+#: js/widgets/grid/FilterModel.js:420
 msgid "next year"
 msgstr "příští rok"
 
