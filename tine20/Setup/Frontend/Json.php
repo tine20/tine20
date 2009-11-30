@@ -297,6 +297,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
                 'packageString' => TINE20_PACKAGESTRING,
                 'releaseTime'   => TINE20_RELEASETIME
             ),
+            'authenticationData'   => $this->loadAuthenticationData(),
         );
         
         // authenticated or non existent config
@@ -306,7 +307,6 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         	    'acceptedTermsVersion' => (! empty($registryData['checkDB']) && $this->_controller->isInstalled('Tinebase')) ? Setup_Controller::getInstance()->getAcceptedTerms() : 0,
 	            'setupChecks'          => $this->envCheck(),
 	            'configData'           => $this->loadConfig(),
-        	    'authenticationData'   => empty($registryData['checkDB']) ? array() : $this->loadAuthenticationData(),
         	    'emailData'            => (! empty($registryData['checkDB']) && $this->_controller->isInstalled('Tinebase')) ? $this->getEmailConfig() : array(),
 	        ));
         }

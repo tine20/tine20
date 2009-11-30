@@ -789,16 +789,21 @@ class Setup_Controller
      */
     protected function _getAuthProviderData()
     {
-        $result = Tinebase_Auth::getBackendConfigurationWithDefaults();
-        $result['backend'] = Tinebase_Auth::getConfiguredBackend();
+        $result = Tinebase_Auth::getBackendConfigurationWithDefaults(Setup_Core::get(Setup_Core::CHECKDB));
+        $result['backend'] = (Setup_Core::get(Setup_Core::CHECKDB)) ? Tinebase_Auth::getConfiguredBackend() : Tinebase_Auth::SQL;
 
         return $result;
     }
     
+    /**
+     * get Accounts storage data
+     * 
+     * @return array
+     */
     protected function _getAccountsStorageData()
     {
-        $result = Tinebase_User::getBackendConfigurationWithDefaults();
-        $result['backend'] = Tinebase_User::getConfiguredBackend();
+        $result = Tinebase_User::getBackendConfigurationWithDefaults(Setup_Core::get(Setup_Core::CHECKDB));
+        $result['backend'] = (Setup_Core::get(Setup_Core::CHECKDB)) ? Tinebase_User::getConfiguredBackend() : Tinebase_User::SQL;
 
         return $result;
     }
@@ -811,15 +816,15 @@ class Setup_Controller
      */
     protected function _getRedirectSettings()
     {
-      $return = array(
+        $return = array(
               Tinebase_Model_Config::REDIRECTURL => '',
               Tinebase_Model_Config::REDIRECTTOREFERRER => '0'
         );       
-      if ($this->isInstalled('Tinebase')) {
-          $return[Tinebase_Model_Config::REDIRECTURL] = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value;
-          $return[Tinebase_Model_Config::REDIRECTTOREFERRER] = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTTOREFERRER, NULL, '')->value;      
-      }
-      return $return;
+        if (Setup_Core::get(Setup_Core::CHECKDB) && $this->isInstalled('Tinebase')) {
+            $return[Tinebase_Model_Config::REDIRECTURL] = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value;
+            $return[Tinebase_Model_Config::REDIRECTTOREFERRER] = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTTOREFERRER, NULL, '')->value;      
+        }
+        return $return;
     }
 
     
