@@ -210,7 +210,7 @@ Tine.Admin.Users.Main = function() {
             var UserAdminQuickSearchField = new Ext.ux.SearchField({
                 id: 'UserAdminQuickSearchField',
                 width:240,
-                emptyText: this.translation.gettext('enter searchfilter')
+                emptyText: _('enter searchfilter')
             }); 
             UserAdminQuickSearchField.on('change', function() {
                 Ext.getCmp('AdminUserGrid').getStore().load({params:{start:0, limit:50}});

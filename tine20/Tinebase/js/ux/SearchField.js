@@ -25,7 +25,7 @@ Ext.ux.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     /**
      * @cfg {String} emptyText
      */
-    emptyText: 'enter searchfilter',
+    emptyText: '',
     
     validationEvent:false,
     validateOnBlur:false,
@@ -38,6 +38,8 @@ Ext.ux.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
      * @private
      */
     initComponent : function(){
+        this.emptyText = _('enter searchfilter');
+        
         Ext.ux.SearchField.superclass.initComponent.call(this);
         this.on('specialkey', function(f, e){
             if(e.getKey() == e.ENTER){

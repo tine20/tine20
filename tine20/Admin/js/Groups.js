@@ -130,7 +130,7 @@ Tine.Admin.Groups.Main = {
         var GroupsAdminQuickSearchField = new Ext.ux.SearchField({
             id: 'GroupsAdminQuickSearchField',
             width:240,
-            emptyText: this.translation.gettext('enter searchfilter')
+            emptyText: _('enter searchfilter')
         }); 
         GroupsAdminQuickSearchField.on('change', function(){
             Ext.getCmp('AdminGroupsGrid').getStore().load({

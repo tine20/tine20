@@ -117,7 +117,7 @@ Tine.Admin.Tags.Main = {
         var TagsQuickSearchField = new Ext.ux.SearchField({
             id: 'TagsQuickSearchField',
             width:240,
-            emptyText: this.translation.gettext('enter searchfilter')
+            emptyText: _('enter searchfilter')
         }); 
         TagsQuickSearchField.on('change', function(){
             Ext.getCmp('AdminTagsGrid').getStore().load({

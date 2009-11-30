@@ -537,7 +537,7 @@ Tine.Phone.Main = {
         var quickSearchField = new Ext.ux.SearchField({
             id: 'callhistoryQuickSearchField',
             width:240,
-            emptyText: this.translation._('enter searchfilter')
+            emptyText: _('enter searchfilter')
         }); 
         quickSearchField.on('change', function(){
             this.store.load({});
