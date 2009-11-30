@@ -597,9 +597,9 @@ class Setup_Controller
      */
     public function saveConfigData($_data, $_merge = TRUE)
     {
-        
         if (!empty($_data['setupuser']['password']) && !Setup_Auth::isMd5($_data['setupuser']['password'])) {
-          $_data['setupuser']['password'] = md5($_data['setupuser']['password']);
+            $password = $_data['setupuser']['password'];
+            $_data['setupuser']['password'] = md5($_data['setupuser']['password']);
         }
         if (Setup_Core::configFileExists() && !Setup_Core::configFileWritable()) {
             throw new Setup_Exception('Config File is not writeable.');
@@ -614,7 +614,10 @@ class Setup_Controller
             $config = new Zend_Config($_data);
         }
         
+        $doLogin = (! Setup_Core::configFileExists());
+        
         // write to file
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating config.inc.php');
         $writer = new Zend_Config_Writer_Array(array(
             'config'   => $config,
             'filename' => dirname(__FILE__) . '/../config.inc.php'
@@ -623,6 +626,14 @@ class Setup_Controller
         
         // set as active config
         Setup_Core::set(Setup_Core::CONFIG, $config);
+        
+        // init logger
+        Setup_Core::setupLogger();
+        
+        if ($doLogin && isset($password)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create session for setup user ' . $_data['setupuser']['username']);
+            $this->login($_data['setupuser']['username'], $password);
+        }
     }
     
     /**
@@ -886,6 +897,7 @@ class Setup_Controller
         $authResult = Zend_Auth::getInstance()->authenticate($setupAuth);
         
         if ($authResult->isValid()) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Valid credentials, setting username in session and registry.');
             //Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
             Zend_Session::regenerateId();
             
@@ -894,6 +906,7 @@ class Setup_Controller
             return true;
             
         } else {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Invalid credentials! ' . print_r($authResult->getMessages(), TRUE));
             Zend_Session::destroy();
             sleep(2);
             return false;
