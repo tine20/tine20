@@ -288,7 +288,7 @@ class Tinebase_Auth
     /**
      * Getter for {@see $_backendConfiguration}
      * 
-     * @param String | optional $_key
+     * @param boolean $_getConfiguredBackend
      * @return mixed [If {@param $_key} is set then only the specified option is returned, otherwise the whole options hash]
      */
     public static function getBackendConfiguration($_key = null, $_default = null)
@@ -317,12 +317,12 @@ class Tinebase_Auth
      * @param String | optional $_key
      * @return mixed [If {@param $_key} is set then only the specified option is returned, otherwise the whole options hash]
      */
-    public static function getBackendConfigurationWithDefaults()
+    public static function getBackendConfigurationWithDefaults($_getConfiguredBackend = TRUE)
     {
         $config = array();
         $defaultConfig = self::getBackendConfigurationDefaults();
         foreach ($defaultConfig as $backendType => $backendConfig) {
-            $config[$backendType] = ($backendType == self::getConfiguredBackend() ? self::getBackendConfiguration() : array());
+            $config[$backendType] = ($_getConfiguredBackend && $backendType == self::getConfiguredBackend() ? self::getBackendConfiguration() : array());
             if (is_array($config[$backendType])) {
                 foreach ($backendConfig as $key => $value) {
                     if (! array_key_exists($key, $config[$backendType])) {
