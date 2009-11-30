@@ -228,8 +228,8 @@ function potmerge($_verbose)
                 list ($language, $region) = explode('_', $langCode);
     
                 $locale = new Zend_Locale('en');
-                $languageName = $locale->getLanguageTranslation($language);
-                $regionName = $locale->getCountryTranslation($region);
+                $languageName = $locale->getTranslation($language, 'language');
+                $regionName = $locale->getTranslation($region, 'country');
                 $pluralForm = getPluralForm($languageName);
                 
                 generateNewTranslationFile($languageName, $regionName, $appName, $pluralForm, $poFile, $_verbose);
@@ -507,8 +507,8 @@ function generateNewTranslationFiles($_locale, $_verbose=false, $_overwrite=fals
     list ($language, $region) = explode('_', $_locale);
     
     $locale = new Zend_Locale('en');
-    $languageName = $locale->getLanguageTranslation($language);
-    $regionName = $locale->getCountryTranslation($region);
+    $languageName = $locale->getTranslation($language, 'language');
+    $regionName = $locale->getTranslation($region, 'country');
     
     if (!$languageName) {
         die("Language '$language' is not valid / known \n");
