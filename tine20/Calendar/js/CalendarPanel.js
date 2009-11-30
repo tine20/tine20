@@ -220,6 +220,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             
             this.conflictConfirmWin = new Ext.Window({
                 modal: true,
+                width: Ext.isIE ? 350 : 'auto',
                 cls: 'x-window-dlg',
                 closable: false,
                 title: this.app.i18n._('Scheduling Conflict'),
