@@ -434,10 +434,13 @@ class Setup_ExtCheck
                             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'Could not connect to mysql database: ' . mysql_error()); 
                             Setup_Core::set(Setup_Core::CHECKDB, FALSE);
                         }
+                        $mysqlVersion = @mysql_get_server_info();
+                    } else {
+                        $mysqlVersion = @mysql_get_client_info();
                     }
                     $text = $value['attributes']['NAME'] . ' (>= ' . $value['attributes']['VERSION'] . ')';
                     //echo "mysql version: " . mysql_get_server_info();
-                    if (version_compare($value['attributes']['VERSION'], @mysql_get_server_info(), '<')) {
+                    if (version_compare($value['attributes']['VERSION'], $mysqlVersion, '<')) {
                         $data[] = array($text, 'SUCCESS');
                     } else {
                         $data[] = array($text, 'FAILURE');
