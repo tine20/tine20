@@ -115,7 +115,8 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             }, {
                 name: 'database_tableprefix',
                 fieldLabel: this.app.i18n._('Prefix'),
-                tabIndex: 8
+                tabIndex: 8,
+                maxLength: 9
             }]
         }, {
             title: this.app.i18n._('Logging'),
