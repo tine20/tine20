@@ -40,6 +40,7 @@ Tine.Setup.TermsPanel = Ext.extend(Ext.Panel, {
             autoLoad: {
                 url: 'LICENSE',
                 isUpload: true,
+                method: 'GET',
                 callback: function(el, s, response) {
                     el.update(Ext.util.Format.nl2br(response.responseText));
                 }
@@ -65,6 +66,7 @@ Tine.Setup.TermsPanel = Ext.extend(Ext.Panel, {
             autoLoad: {
                 url: 'PRIVACY',
                 isUpload: true,
+                method: 'GET',
                 callback: function(el, s, response) {
                     el.update(Ext.util.Format.nl2br(response.responseText));
                 }
