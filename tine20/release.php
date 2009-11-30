@@ -162,6 +162,7 @@ function concatCss(array $_files, $_filename)
     global $tine20path;
     
     $cssDebug = fopen("$tine20path/$_filename", 'w+');
+    fwrite($cssDebug, getCopyrightHeader());
     
     foreach ($_files as $file) {
         list($filename) = explode('?', $file);
@@ -190,6 +191,7 @@ function concatJs(array $_files, $_filename)
     $revisionInfo = getDevelopmentRevision();
     
     $jsDebug = fopen("$tine20path/$_filename", 'w+');
+    fwrite($jsDebug, getCopyrightHeader());
     
     foreach ($_files as $file) {
         list($filename) = explode('?', $file);
@@ -231,6 +233,21 @@ if (file_exists($yuiCompressorPath)) {
     } else {
         copy("$tine20path/$_infile","$tine20path/$_outfile");
     }
+}
+
+function getCopyrightHeader()
+{
+    $year = date('Y');
+    
+    return "/*!
+ * Tine 2.0 USER CLIENT
+ * 
+ * license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * copyright   Copyright (c) 2007-{$year} Metaways Infosystems GmbH (http://www.metaways.de)
+ *
+ * FOR MORE DETAILED LICENSE AND COPYRIGHT INFORMATION PLEASE CONSULT THE LICENSE FILE 
+ * LOCATED AT: <YOUR TINE 2.0 URL>/LICENSE OR VISIT THE TINE 2.0 HOMEPAGE AT http://www.tine20.org
+ */";
 }
 
 /*
