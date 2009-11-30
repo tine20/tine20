@@ -141,9 +141,9 @@ Tine.Tinebase.common = {
         var H = Math.floor(minutes/60);//%(24);
         //var d = Math.floor(minutes/(60*24));
         
-        var s = String.format(Tine.Tinebase.tranlation.ngettext('{0} minute', '{0} minutes', i), i);
-        var Hs = String.format(Tine.Tinebase.tranlation.ngettext('{0} hour', '{0} hours', H), H);
-        //var ds = String.format(Tine.Tinebase.tranlation.ngettext('{0} workday', '{0} workdays', d), d);
+        var s = String.format(Tine.Tinebase.translation.ngettext('{0} minute', '{0} minutes', i), i);
+        var Hs = String.format(Tine.Tinebase.translation.ngettext('{0} hour', '{0} hours', H), H);
+        //var ds = String.format(Tine.Tinebase.translation.ngettext('{0} workday', '{0} workdays', d), d);
         
         if (i == 0) {
         	s = Hs;

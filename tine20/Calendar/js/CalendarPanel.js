@@ -308,7 +308,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                             },
                             failure: this.onProxyFail.createDelegate(this, [event], true) /*function () {
                                 this.loadMask.hide();;
-                                Ext.MessageBox.alert(Tine.Tinebase.tranlation._hidden('Failed'), this.app.i18n._('Failed not update recurring event series')); 
+                                Ext.MessageBox.alert(Tine.Tinebase.translation._hidden('Failed'), this.app.i18n._('Failed not update recurring event series')); 
                             }*/
                         };
                         
@@ -330,7 +330,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                                 this.view.getSelectionModel().select(updatedEvent);
                             },
                             failure: this.onProxyFail.createDelegate(this, [event], true) /* function () {
-                                Ext.MessageBox.alert(Tine.Tinebase.tranlation._hidden('Failed'), this.app.i18n._('Failed not update event')); 
+                                Ext.MessageBox.alert(Tine.Tinebase.translation._hidden('Failed'), this.app.i18n._('Failed not update event')); 
                             }*/
                         };
                         

@@ -126,7 +126,7 @@ Tine.Admin.Applications.Main = function() {
         var ApplicationsAdminQuickSearchField = new Ext.ux.SearchField({
             id: 'ApplicationsAdminQuickSearchField',
             width:240,
-            emptyText: _('enter searchfilter')
+            emptyText: Tine.Tinebase.translation._hidden('enter searchfilter')
         }); 
         ApplicationsAdminQuickSearchField.on('change', function() {
             Ext.getCmp('gridAdminApplications').getStore().load({params:{start:0, limit:50}});

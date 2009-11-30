@@ -191,7 +191,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             allowMultiple: true,
             singularText: this.app.i18n._('Delete'),
             pluralText: this.app.i18n._('Delete'),
-            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.tranlation,
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
             text: this.app.i18n._('Delete'),
             handler: this.onDeleteRecords,
             disabled: true,

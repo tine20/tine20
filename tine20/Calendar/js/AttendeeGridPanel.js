@@ -100,7 +100,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             width: 200,
             sortable: false,
             hidden: true,
-            header: Tine.Tinebase.tranlation._hidden('Saved in'),
+            header: Tine.Tinebase.translation._hidden('Saved in'),
             tooltip: this.app.i18n._('This is the calendar where the attender has saved this event in'),
             renderer: this.renderAttenderDispContainer.createDelegate(this),
             // disable for the moment, as updating calendarSelectWidget is not working in both directions

@@ -402,7 +402,7 @@ Tine.Admin.AccessLog.Main = function() {
         var AccessLogQuickSearchField = new Ext.ux.SearchField({
             id:        'AccessLogQuickSearchField',
             width:     200,
-            emptyText: _('enter searchfilter')
+            emptyText: Tine.Tinebase.translation._hidden('enter searchfilter')
         }); 
         AccessLogQuickSearchField.on('change', function() {
             Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});

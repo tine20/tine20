@@ -650,10 +650,10 @@ Tine.Tinebase.tineInit = {
      */
     initLocale: function() {
         //Locale.setlocale(Locale.LC_ALL, '');
-        Tine.Tinebase.tranlation = new Locale.Gettext();
-        Tine.Tinebase.tranlation.textdomain('Tinebase');
+        Tine.Tinebase.translation = new Locale.Gettext();
+        Tine.Tinebase.translation.textdomain('Tinebase');
         window._ = function(msgid) {
-            return Tine.Tinebase.tranlation.dgettext('Tinebase', msgid);
+            return Tine.Tinebase.translation.dgettext('Tinebase', msgid);
         };
     },
     

@@ -293,10 +293,10 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
-            singularText: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
-            pluralText: this.i18nDeleteActionText ? this.i18nDeleteActionText[1] : String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordsName),
-            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.tranlation,
-            text: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
+            singularText: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
+            pluralText: this.i18nDeleteActionText ? this.i18nDeleteActionText[1] : String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordsName),
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
+            text: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
             handler: this.onDeleteRecords,
             disabled: true,
             iconCls: 'action_delete',
@@ -392,8 +392,8 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             pageSize: 50,
             store: this.store,
             displayInfo: true,
-            displayMsg: Tine.Tinebase.tranlation._('Displaying records {0} - {1} of {2}').replace(/records/, this.i18nRecordsName),
-            emptyMsg: String.format(Tine.Tinebase.tranlation._("No {0} to display"), this.i18nRecordsName),
+            displayMsg: Tine.Tinebase.translation._('Displaying records {0} - {1} of {2}').replace(/records/, this.i18nRecordsName),
+            emptyMsg: String.format(Tine.Tinebase.translation._("No {0} to display"), this.i18nRecordsName),
             displaySelectionHelper: true,
             sm: this.selectionModel
         });
@@ -414,7 +414,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             autoFill: true,
             forceFit:true,
             ignoreAdd: true,
-            emptyText: String.format(Tine.Tinebase.tranlation._("No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName),
+            emptyText: String.format(Tine.Tinebase.translation._("No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName),
             onLoad: Ext.emptyFn,
             listeners: {
                 beforerefresh: function(v) {
@@ -673,7 +673,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         var i18nItems    = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length);
         var i18nQuestion = this.i18nDeleteQuestion ?
             this.app.i18n.n_hidden(this.i18nDeleteQuestion[0], this.i18nDeleteQuestion[1], records.length) :
-            Tine.Tinebase.tranlation.ngettext('Do you really want to delete the selected record', 'Do you really want to delete the selected records', records.length);
+            Tine.Tinebase.translation.ngettext('Do you really want to delete the selected record', 'Do you really want to delete the selected records', records.length);
             
         Ext.MessageBox.confirm(_('Confirm'), i18nQuestion, function(btn) {
             if(btn == 'yes') {

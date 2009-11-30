@@ -130,7 +130,7 @@ Ext.ns('Tine', 'Tine.Setup');
             autoFill: true,
             forceFit:true,
             ignoreAdd: true
-            //emptyText: String.format(Tine.Tinebase.tranlation._("No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName),
+            //emptyText: String.format(Tine.Tinebase.translation._("No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName),
             /*
             onLoad: Ext.emptyFn,
             listeners: {
