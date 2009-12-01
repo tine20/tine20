@@ -379,7 +379,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         };
         
         Ext.Msg.show({
-            title: _('About Tine 2.0'),
+            title: String.format(_('About {0}'), Tine.title),
             msg: 
                 '<div class="tb-about-dlg">' +
                     '<div class="tb-about-img"><a href="http://www.tine20.org" target="_blank"><img src="' + Tine.Tinebase.LoginPanel.prototype.loginLogo + '" /></a></div>' +
