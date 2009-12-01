@@ -371,7 +371,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         fieldLabel: this.app.i18n._('Expected turnover'), 
                                         name: 'turnover',
                                         selectOnFocus: true,
-                                        anchor: '95%'
+                                        anchor: '95%',
+                                        minValue: 0
                                     },  
                                         this.combo_probability
                                     ]
