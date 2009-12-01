@@ -64,6 +64,29 @@ Tine20.login = {
         return config;
     },
     
+    getLoginTemplate: function () {
+        if (! this.loginTemplate) {
+            this.loginTemplate = new Ext.Template (
+                '<form name="{formId}" id="{formId}" method="POST">',
+                    '<fieldset>',
+                        '<label>{loginname}:</label><br>',
+                        '<input type="text" name="username"><br>',
+                        '<label>{password}:</label><br>',
+                        '<input type="password" name="password"><br>',
+                        '<input type="hidden" name="method" value="{method}">',
+                    
+                        
+                        '<div class="tine20loginmessage">&#160;</div>',
+                        '<br>',
+                        '<div class="tine20loginbutton">{login}</div>',
+                    '</fieldset>',
+                '</form>'
+            ).compile();
+        }
+        
+        return this.loginTemplate;
+    },
+    
     checkAuth: function(config, username, password, cb) {
         var conn = new Ext.ux.data.jsonp({});
         
@@ -76,6 +99,80 @@ Tine20.login = {
             },
             success: cb
         });
+    },
+    
+    onLoginResponse: function(data) {
+        var config = this.getConfig();
+        
+        if (data.status == 'success') {
+            // show success message
+            this.messageBoxEl.update(String.format('{0} <img src="{1}">', 
+                this.translations[config.userLanguage].authsuccess,
+                config.tine20Url.replace('index.php', 'images/wait.gif'))
+            );
+            
+            // post data
+            this.loginBoxEl.dom.action = data.loginUrl || config.tine20Url;
+            this.loginBoxEl.dom.submit();
+        } else {
+            // show fail message
+            var msg = this.translations[config.userLanguage].authfailed;
+            this.messageBoxEl.update(msg);
+            
+            this.usernameEl.focus(100);
+        }
+    },
+    
+    onLoginPress: function() {
+        var config = this.getConfig();
+        
+        var username = this.usernameEl.dom.value;
+        var password = this.passwordEl.dom.value;
+        
+        this.messageBoxEl.update(String.format('{0} <img src="{1}">', 
+            this.translations[config.userLanguage].authwait,
+            config.tine20Url.replace('index.php', 'images/wait.gif'))
+        );
+        
+        this.checkAuth(config, username, password, this.onLoginResponse.createDelegate(this));
+    },
+    
+    renderLoginForm: function() {
+        var t = this.getLoginTemplate();
+        var config = this.getConfig();
+        
+        // render template
+        this.loginBoxEl = t.append('tine20-login', {
+            formId: 'tine20loginform',
+            method: 'Tinebase.loginFromPost',
+            loginname: Tine20.login.translations[config.userLanguage].loginname,
+            password: Tine20.login.translations[config.userLanguage].password,
+            login: Tine20.login.translations[config.userLanguage].login
+        }, true);
+        
+        // init Elements
+        var E = Ext.Element;
+        this.usernameEl = new E(Ext.DomQuery.selectNode('input[name=username]', this.loginBoxEl.dom));
+        this.passwordEl = new E(Ext.DomQuery.selectNode('input[name=password]', this.loginBoxEl.dom));
+        this.buttonEl   = new E(Ext.DomQuery.selectNode('div[class=tine20loginbutton]', this.loginBoxEl.dom));
+        this.messageBoxEl = this.loginBoxEl.child('div[class=tine20loginmessage]');
+        
+        // init listeners
+        this.buttonEl.on('click', this.onLoginPress, this);
+        this.passwordEl.on('keydown', function(e, target) {
+            switch(e.getKey()) {
+                case 10:
+                case 13:
+                    this.onLoginPress();
+                    break;
+                default:
+                    // nothing
+                    break;
+            }
+        }, this);
+        
+        // focus username field
+        this.usernameEl.focus(500);
     },
     
     translations: {
@@ -98,64 +195,8 @@ Tine20.login = {
     }
 }
 
-Ext.onReady(function(){
-    var config = Tine20.login.getConfig();
-    
-    var t = new Ext.Template (
-        '<form name="{formId}" id="{formId}" method="POST">',
-            '<fieldset>',
-                '<label>{loginname}:</label><br>',
-                '<input type="text" name="username"><br>',
-                '<label>{password}:</label><br>',
-                '<input type="password" name="password"><br>',
-                '<input type="hidden" name="method" value="{method}">',
-            
-                
-                '<div class="tine20loginmessage">&#160;</div>',
-                '<br>',
-                '<div class="tine20loginbutton">{login}</div>',
-            '</fieldset>',
-        '</form>'
-    );
-    
-    var loginBoxEl = t.append('tine20-login', {
-        formId: 'tine20loginform',
-        method: 'Tinebase.loginFromPost',
-        loginname: Tine20.login.translations[config.userLanguage].loginname,
-        password: Tine20.login.translations[config.userLanguage].password,
-        login: Tine20.login.translations[config.userLanguage].login
-    }, true);
-    
-    Ext.get(Ext.DomQuery.selectNode('div[class=tine20loginbutton]'), loginBoxEl).on('click', function(e, target) {
-        var form = Ext.get(target).parent('form');
-        var messageBox = form.child('div[class=tine20loginmessage]');
-        
-        var username = Ext.DomQuery.selectNode('input[name=username]', form.dom).value;
-        var password = Ext.DomQuery.selectNode('input[name=password]', form.dom).value;
-        
-        messageBox.update(String.format('{0} <img src="{1}">', 
-            Tine20.login.translations[config.userLanguage].authwait,
-            config.tine20Url.replace('index.php', 'images/wait.gif'))
-        );
-        
-        Tine20.login.checkAuth(config, username, password, function(data) {
-            if (data.status == 'success') {
-                // post data
-                messageBox.update(String.format('{0} <img src="{1}">', 
-                    Tine20.login.translations[config.userLanguage].authsuccess,
-                    config.tine20Url.replace('index.php', 'images/wait.gif'))
-                );
-                
-                form.dom.action = data.loginUrl || config.tine20Url;
-                form.dom.submit();
-            } else {
-                // show fail message
-                var msg = Tine20.login.translations[config.userLanguage].authfailed;
-                messageBox.update(msg);
-            }
-        });
-    });
-});
+Ext.onReady(Tine20.login.renderLoginForm, Tine20.login);
+
 
 Ext.ns('Ext.ux.data');
 
