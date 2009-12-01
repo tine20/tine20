@@ -24,7 +24,20 @@ Example html code to include Tine 2.0 login box on an external webpage
 
 Ext.namespace('Tine20.login');
 
+/**
+ * @namespace   Tine20
+ * @class       Tine20.login
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
+ * 
+ * Simple login form for remote Tine 2.0 logins
+ */
 Tine20.login = {
+    /**
+     * detect users language (fallback en)
+     * 
+     * @return {String} language code
+     */
     detectBrowserLanguage : function () {
         var result = 'en';
         var userLanguage;
@@ -35,6 +48,7 @@ Tine20.login = {
             userLanguage = navigator.language;
         }
         
+        // some browser have a locale string as language
         if(Tine20.login.translations[userLanguage]) {
             result = userLanguage;
         } else if (userLanguage.match('-')) {
@@ -48,25 +62,36 @@ Tine20.login = {
     },
     
     /**
-     * figures out the host to send our auth request 
+     * gets config for this login-box
+     * 
+     * @return {Object}
      */
     getConfig: function() {
-        var src = Ext.DomQuery.selectNode('script[src*=tine20-loginbox.js]').src;
+        if (! this.config) {
+            var src = Ext.DomQuery.selectNode('script[src*=tine20-loginbox.js]').src;
+            
+            var config = {
+                userLanguage: Tine20.login.detectBrowserLanguage(),
+                tine20Url: src.substring(0, src.indexOf('Tinebase'))  + 'index.php'
+            };
+            
+            /* parse additional params here */
+            var parts = src.split('?');
+            
+            this.config = config;
+        }
         
-        var config = {
-            userLanguage: Tine20.login.detectBrowserLanguage(),
-            tine20Url: src.substring(0, src.indexOf('Tinebase'))  + 'index.php'
-        };
-        
-        /* parse additional params here */
-        var parts = src.split('?');
-        
-        return config;
+        return this.config;
     },
     
+    /**
+     * gets template for login form
+     * 
+     * @return {Ext.Template}
+     */
     getLoginTemplate: function () {
         if (! this.loginTemplate) {
-            this.loginTemplate = new Ext.Template (
+            this.loginTemplate = new Ext.Template(
                 '<form name="{formId}" id="{formId}" method="POST">',
                     '<fieldset>',
                         '<label>{loginname}:</label><br>',
@@ -87,6 +112,15 @@ Tine20.login = {
         return this.loginTemplate;
     },
     
+    /**
+     * checks authentication from server
+     * 
+     * @param  {Object}   config
+     * @param  {String}   username
+     * @param  {String}   password
+     * @param  {Function} cb       callback function
+     * @return void
+     */
     checkAuth: function(config, username, password, cb) {
         var conn = new Ext.ux.data.jsonp({});
         
@@ -101,6 +135,14 @@ Tine20.login = {
         });
     },
     
+    /**
+     * processes login response data
+     *  - updates message box
+     *  - posts form for login on success
+     * 
+     * @param  {Object} data
+     * @return void
+     */
     onLoginResponse: function(data) {
         var config = this.getConfig();
         
@@ -123,6 +165,11 @@ Tine20.login = {
         }
     },
     
+    /**
+     * login button handler
+     * 
+     * @return void
+     */
     onLoginPress: function() {
         var config = this.getConfig();
         
@@ -137,6 +184,11 @@ Tine20.login = {
         this.checkAuth(config, username, password, this.onLoginResponse.createDelegate(this));
     },
     
+    /**
+     * renders login form and initializes elements and listeners
+     * 
+     * @return void
+     */
     renderLoginForm: function() {
         var t = this.getLoginTemplate();
         var config = this.getConfig();
@@ -175,6 +227,11 @@ Tine20.login = {
         this.usernameEl.focus(500);
     },
     
+    /**
+     * static translations array
+     * 
+     * @type Object
+     */
     translations: {
         'en' : {
             'loginname'   : 'Username',
@@ -195,6 +252,7 @@ Tine20.login = {
     }
 }
 
+// register onReady listener
 Ext.onReady(Tine20.login.renderLoginForm, Tine20.login);
 
 
