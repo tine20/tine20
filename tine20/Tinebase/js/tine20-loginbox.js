@@ -37,6 +37,11 @@ Tine20.login = {
         
         if(Tine20.login.translations[userLanguage]) {
             result = userLanguage;
+        } else if (userLanguage.match('-')) {
+            userLanguage = userLanguage.split('-')[0];
+            if(Tine20.login.translations[userLanguage]) {
+                result = userLanguage;
+            }
         }
 
         return result;
