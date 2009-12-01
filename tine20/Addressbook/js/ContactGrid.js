@@ -50,6 +50,14 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     },
     
     /**
+     * phoneMenu
+     * @type Ext.menu.Menu 
+     * 
+     * TODO try to disable 'activation' of toolbar button when ctx menu button is selected
+     */
+    phoneMenu: null,
+    
+    /**
      * inits this cmp
      * @private
      */
@@ -72,8 +80,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         if (Tine.Felamimail && Tine.Tinebase.common.hasRight('run', 'Felamimail')) {
             this.contextMenuItems.push(this.actions_composeEmail);
         }
-        
-        
         
         Tine.Addressbook.ContactGridPanel.superclass.initComponent.call(this);
         
@@ -185,15 +191,15 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             }
         });
         
+        this.phoneMenu = new Ext.menu.Menu({
+        });
         this.actions_callContact = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Call contact'),
             disabled: true,
             //handler: this.onCallContact,
             iconCls: 'PhoneIconCls',
-            menu: new Ext.menu.Menu({
-                id: 'Addressbook_Contacts_CallContact_Menu'
-            }),
+            menu: this.phoneMenu,
             scope: this
         });
         
@@ -230,8 +236,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     onSelectionchange: function(sm) {
         var rowCount = sm.getCount();
         if (rowCount == 1 && Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')) {
-            var callMenu = Ext.menu.MenuMgr.get('Addressbook_Contacts_CallContact_Menu');
-            callMenu.removeAll();
+            this.phoneMenu.removeAll();
             
             this.actions_callContact.setDisabled(true);
             
@@ -242,7 +247,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             }
             
             if(!Ext.isEmpty(contact.data.tel_work)) {
-                callMenu.add({
+                this.phoneMenu.add({
                    text: this.app.i18n._('Work') + ' ' + contact.data.tel_work + '',
                    scope: this,
                    handler: this.onCallContact,
@@ -251,7 +256,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                 this.actions_callContact.setDisabled(false);
             }
             if(!Ext.isEmpty(contact.data.tel_home)) {
-                callMenu.add({
+                this.phoneMenu.add({
                    text: this.app.i18n._('Home') + ' ' + contact.data.tel_home + '',
                    scope: this,
                    handler: this.onCallContact,
@@ -260,7 +265,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                 this.actions_callContact.setDisabled(false);
             }
             if(!Ext.isEmpty(contact.data.tel_cell)) {
-                callMenu.add({
+                this.phoneMenu.add({
                    text: this.app.i18n._('Cell') + ' ' + contact.data.tel_cell + '',
                    scope: this,
                    handler: this.onCallContact,
@@ -269,7 +274,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                 this.actions_callContact.setDisabled(false);
             }
             if(!Ext.isEmpty(contact.data.tel_cell_private)) {
-                callMenu.add({
+                this.phoneMenu.add({
                    text: this.app.i18n._('Cell private') + ' ' + contact.data.tel_cell_private + '',
                    scope: this,
                    handler: this.onCallContact,
