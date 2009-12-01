@@ -213,14 +213,14 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         this.action_changePassword = new Ext.Action({
             text: _('Change password'),
             handler: this.onChangePassword,
-            disabled: !Tine.Tinebase.registry.get('changepw'),
+            disabled: (Tine.Tinebase.registry.get('changepw') == '0'),
             iconCls: 'action_password'
         });
         
         this.action_installGoogleGears = new Ext.Action({
             text: _('Install Google Gears'),
             handler: this.onInstallGoogleGears,
-            disabled: (window.google && google.gears) ? true : false
+            disabled: (window.google && google.gears)
         });
         
         /*
