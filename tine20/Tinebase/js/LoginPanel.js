@@ -44,6 +44,11 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     onLogin: Ext.emptyFn,
     
     /**
+     * @cfg {Boolean} show infobox (survey, links, text)
+     */
+    showInfoBox: true,
+    
+    /**
      * @cfg {String} scope scope of login callback
      */
     scope: null,
@@ -230,6 +235,11 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
      * initialize base layout
      */
     initLayout: function() {
+        var infoPanelItems = (this.showInfoBox) ? [
+            this.getTinePanel(),
+            this.getSurveyPanel()
+        ] : [];
+        
         this.infoPanel = new Ext.Panel({
             layout: 'fit',
             cls: 'tb-login-infosection',
@@ -240,10 +250,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             layoutConfig: {
                 align:'stretch'
             },
-            items: [
-                this.getTinePanel(),
-                this.getSurveyPanel()
-            ]
+            items: infoPanelItems
         });
         
         this.items = [{
