@@ -80,14 +80,20 @@ Tine20.login = {
     
     translations: {
         'en' : {
-            'loginname' : 'Username',
-            'password'  : 'Password',
-            'login'     : 'Login'
+            'loginname'   : 'Username',
+            'password'    : 'Password',
+            'login'       : 'Login',
+            'authwait'    : 'Authenticating...',
+            'authfailed'  : 'Username or password wrong',
+            'authsuccess' : 'Successful authentication, login in now...'
         },
         'de' : {
-            'loginname' : 'Benutzername',
-            'password'  : 'Passwort',
-            'login'     : 'Anmelden'
+            'loginname'   : 'Benutzername',
+            'password'    : 'Passwort',
+            'login'       : 'Anmelden',
+            'authwait'    : 'Authentifizierung...',
+            'authfailed'  : 'Benutzername oder Passwort falsch',
+            'authsuccess' : 'Authentifizierung erfolgreich, anmeldung erfolgt...'
         }
     }
 }
@@ -128,18 +134,24 @@ Ext.onReady(function(){
         var password = Ext.DomQuery.selectNode('input[name=password]', form.dom).value;
         
         messageBox.update(String.format('{0} <img src="{1}">', 
-            Tine20.login.translations[config.userLanguage].login,
+            Tine20.login.translations[config.userLanguage].authwait,
             config.tine20Url.replace('index.php', 'images/wait.gif'))
         );
         
         Tine20.login.checkAuth(config, username, password, function(data) {
             if (data.status == 'success') {
                 // post data
+                messageBox.update(String.format('{0} <img src="{1}">', 
+                    Tine20.login.translations[config.userLanguage].authsuccess,
+                    config.tine20Url.replace('index.php', 'images/wait.gif'))
+                );
+                
                 form.dom.action = data.loginUrl || config.tine20Url;
                 form.dom.submit();
             } else {
                 // show fail message
-                messageBox.update(data.msg);
+                var msg = Tine20.login.translations[config.userLanguage].authfailed;
+                messageBox.update(msg);
             }
         });
     });
