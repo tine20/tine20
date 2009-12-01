@@ -45,7 +45,7 @@ Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.create
         if (! Tine.loginPanel) {
             Tine.loginPanel = new Tine.Tinebase.LoginPanel({
                 loginMethod: 'Setup.login',
-                loginLogo: 'images/tine_logo_enjoy_setup.gif',
+                loginLogo: 'images/tine_logo_setup.png',
                 scope: this,
                 onLogin: function(response) {
                     Tine.Tinebase.tineInit.initList.initRegistry = false;

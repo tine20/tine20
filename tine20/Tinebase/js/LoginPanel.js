@@ -36,7 +36,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     /**
      * @cfg {String} loginLogo logo to show
      */
-    loginLogo: 'images/tine_logo.gif',
+    loginLogo: 'images/tine_logo.png',
     
     /**
      * @cfg {String} onLogin callback after successfull login

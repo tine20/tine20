@@ -32,7 +32,7 @@ Ext.ux.Notification = function(){
             
             // define icon url
             // TODO use relative path here
-            var iconUrl = window.location.href.replace(/#+.*/, '') + '/images/tine_logo.gif';
+            var iconUrl = window.location.href.replace(/#+.*/, '') + '/images/tine_logo.png';
             
             // JETPACK firefox extension (@link https://jetpack.mozillalabs.com/)
             if (window.jetpack !== undefined) {
