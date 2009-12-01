@@ -243,37 +243,37 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             
             if(!Ext.isEmpty(contact.data.tel_work)) {
                 callMenu.add({
-                   id: 'Addressbook_Contacts_CallContact_Work', 
                    text: this.app.i18n._('Work') + ' ' + contact.data.tel_work + '',
                    scope: this,
-                   handler: this.onCallContact
+                   handler: this.onCallContact,
+                   field: 'tel_work'
                 });
                 this.actions_callContact.setDisabled(false);
             }
             if(!Ext.isEmpty(contact.data.tel_home)) {
                 callMenu.add({
-                   id: 'Addressbook_Contacts_CallContact_Home', 
                    text: this.app.i18n._('Home') + ' ' + contact.data.tel_home + '',
                    scope: this,
-                   handler: this.onCallContact
+                   handler: this.onCallContact,
+                   field: 'tel_home'
                 });
                 this.actions_callContact.setDisabled(false);
             }
             if(!Ext.isEmpty(contact.data.tel_cell)) {
                 callMenu.add({
-                   id: 'Addressbook_Contacts_CallContact_Cell', 
                    text: this.app.i18n._('Cell') + ' ' + contact.data.tel_cell + '',
                    scope: this,
-                   handler: this.onCallContact
+                   handler: this.onCallContact,
+                   field: 'tel_cell'
                 });
                 this.actions_callContact.setDisabled(false);
             }
             if(!Ext.isEmpty(contact.data.tel_cell_private)) {
                 callMenu.add({
-                   id: 'Addressbook_Contacts_CallContact_CellPrivate', 
                    text: this.app.i18n._('Cell private') + ' ' + contact.data.tel_cell_private + '',
                    scope: this,
-                   handler: this.onCallContact
+                   handler: this.onCallContact,
+                   field: 'tel_cell'
                 });
                 this.actions_callContact.setDisabled(false);
             }
@@ -292,31 +292,17 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         if (! contact) {
             return;
         }
-
-        switch(btn.getId()) {
-            case 'Addressbook_Contacts_CallContact_Work':
-                number = contact.data.tel_work;
-                break;
-            case 'Addressbook_Contacts_CallContact_Home':
-                number = contact.data.tel_home;
-                break;
-            case 'Addressbook_Contacts_CallContact_Cell':
-                number = contact.data.tel_cell;
-                break;
-            case 'Addressbook_Contacts_CallContact_CellPrivate':
-                number = contact.data.tel_cell_private;
-                break;
-            default:
-                if(!Ext.isEmpty(contact.data.tel_work)) {
-                    number = contact.data.tel_work;
-                } else if (!Ext.isEmpty(contact.data.tel_cell)) {
-                    number = contact.data.tel_cell;
-                } else if (!Ext.isEmpty(contact.data.tel_cell_private)) {
-                    number = contact.data.tel_cell_private;
-                } else if (!Ext.isEmpty(contact.data.tel_home)) {
-                    number = contact.data.tel_work;
-                }
-                break;
+        
+        if (!Ext.isEmpty(contact.get(btn.field))) {
+            number = contact.get(btn.field);
+        } else if(!Ext.isEmpty(contact.data.tel_work)) {
+            number = contact.data.tel_work;
+        } else if (!Ext.isEmpty(contact.data.tel_cell)) {
+            number = contact.data.tel_cell;
+        } else if (!Ext.isEmpty(contact.data.tel_cell_private)) {
+            number = contact.data.tel_cell_private;
+        } else if (!Ext.isEmpty(contact.data.tel_home)) {
+            number = contact.data.tel_work;
         }
 
         Tine.Phone.dialPhoneNumber(number);
