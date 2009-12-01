@@ -1034,7 +1034,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             array('field' => 'attender', 'operator' => 'equals', 'value' => array(
                 'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
                 'user_id'   => $_groupId
-            ))
+            )),
+            array('field' => 'dtstart', 'operator' => 'after', 'value' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG))
         ));
         
         $doContainerACLChecks = $this->_doContainerACLChecks;
