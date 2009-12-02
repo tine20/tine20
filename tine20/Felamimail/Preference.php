@@ -116,7 +116,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                 $preference->value      = 'default';
                 break;
             case self::UPDATEINTERVAL:
-                $preference->value      = 0;
+                $preference->value      = 5;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>';
                 for ($i = 0; $i < 21; $i++) {
