@@ -22,33 +22,18 @@
                     <length>40</length>
                     <notnull>true</notnull>
                 </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
                 <!-- add more fields here -->
-                <field>
-                    <name>reason</name>
-                    <type>text</type>
-                    <length>250</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>label</name>
-                    <type>text</type>
-                    <length>250</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>description</name>
-                    <type>clob</type>
-                </field>
-                <field>
-                    <name>information</name>
-                    <type>text</type>
-                    <length>150</length>
-                    <notnull>true</notnull>
-                </field>
                 <!-- defaults for tine system -->
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -56,7 +41,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -69,7 +55,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>deleted_time</name>

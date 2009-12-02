@@ -103,59 +103,13 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
                         labelSeparator: '',
                         columnWidth: .333
                     },
-                    items: [/*[{
-                        fieldLabel: this.app.i18n._('Number'),
-                        name: 'number',
-                        allowBlank: false
-                        }, {
-                        columnWidth: .666,
-                        fieldLabel: this.app.i18n._('Title'),
-                        name: 'title',
-                        allowBlank: false
-                        }], [{
+                    items: [[{
                         columnWidth: 1,
-                        xtype: 'textarea',
-                        name: 'description',
-                        height: 150
-                        }], [{
-                            fieldLabel: this.app.i18n._('Unit'),
-                            name: 'price_unit'
-                        }, {
-                        	xtype: 'numberfield',
-                            fieldLabel: this.app.i18n._('Unit Price'),
-                            name: 'price',
-                            allowNegative: false
-                            //decimalSeparator: ','
-                        }, {
-                            fieldLabel: this.app.i18n._('Budget'),
-                            name: 'budget'
-                        }, {
-                            hideLabel: true,
-                            boxLabel: this.app.i18n._('Timesheets are billable'),
-                            name: 'is_billable',
-                            xtype: 'checkbox'
-                        }, {
-                            fieldLabel: this.app.i18n._('Status'),
-                            name: 'is_open',
-                            xtype: 'combo',
-                            mode: 'local',
-                            forceSelection: true,
-                            triggerAction: 'all',
-                            store: [[0, this.app.i18n._('closed')], [1, this.app.i18n._('open')]]
-                        }, {
-                            fieldLabel: this.app.i18n._('Billed'),
-                            name: 'status',
-                            xtype: 'combo',
-                            mode: 'local',
-                            forceSelection: true,
-                            triggerAction: 'all',
-                            value: 'not yet billed',
-                            store: [
-                                ['not yet billed', this.app.i18n._('not yet billed')], 
-                                ['to bill', this.app.i18n._('to bill')],
-                                ['billed', this.app.i18n._('billed')]
-                            ]
-                        }]*/] 
+                        fieldLabel: this.app.i18n._('Name'),
+                        name: 'name',
+                        allowBlank: false
+                        }]
+                    ] 
                 }, {
                     // activities and tags
                     layout: 'accordion',

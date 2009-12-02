@@ -17,22 +17,8 @@ Ext.ns('Tine.ExampleApplication', 'Tine.ExampleApplication.Model');
  */
 Tine.ExampleApplication.Model.ExampleRecordArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
-    /*
-    // add record fields here
-    { name: 'container_id' },
-    { name: 'title' },
-    { name: 'number' },
-    { name: 'description' },
-    { name: 'budget' },
-    { name: 'budget_unit' },
-    { name: 'price' },
-    { name: 'price_unit' },
-    { name: 'is_open' },
-    { name: 'is_billable' },
-    { name: 'status' },
-    { name: 'account_grants'},
-    { name: 'grants'},
-    */
+    { name: 'name' },
+    // TODO add more record fields here
     // tine 2.0 notes + tags
     { name: 'notes'},
     { name: 'tags' }

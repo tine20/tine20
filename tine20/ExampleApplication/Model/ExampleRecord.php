@@ -41,20 +41,8 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        /*
-        'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'account_grants'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'number'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'budget'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'budget_unit'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
-        'price'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'price_unit'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
-        'is_open'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
-        'is_billable'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),    
-        'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'not yet billed'),
-        */    
+    // @todo add more fields
+        'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),

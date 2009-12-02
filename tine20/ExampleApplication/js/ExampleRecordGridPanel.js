@@ -51,7 +51,7 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widget
     defaultSortInfo: {field: 'creation_time', direction: 'DESC'},
     gridConfig: {
         loadMask: true,
-        autoExpandColumn: 'title'
+        autoExpandColumn: 'name'
     },
      
     /**
@@ -114,13 +114,13 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widget
                 sortable: true,
                 resizable: true
             },
-            columns: [/*{
-                id: 'number',
-                header: this.app.i18n._("Number"),
+            columns: [{
+                id: 'name',
+                header: this.app.i18n._("Name"),
                 width: 100,
                 sortable: true,
-                dataIndex: 'number'
-            },{
+                dataIndex: 'name'
+            }/*,{
                 id: 'title',
                 header: this.app.i18n._("Title"),
                 width: 350,
