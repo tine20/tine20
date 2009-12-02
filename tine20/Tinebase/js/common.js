@@ -29,6 +29,7 @@ Tine.Tinebase.common = {
             _height = _height + 20;
         }
         
+        var windowName = _windowName.replace(/[^a-zA-Z0-9_]/, '');
         var w,h,x,y,leftPos,topPos,popup;
 
         if (document.all) {
@@ -47,7 +48,7 @@ Tine.Tinebase.common = {
         leftPos = ((w - _width) / 2) + y;
         topPos = ((h - _height) / 2) + x;
         
-        popup = window.open(_url, _windowName, 'width=' + _width + ',height=' + _height + ',top=' + topPos + ',left=' + leftPos +
+        popup = window.open(_url, windowName, 'width=' + _width + ',height=' + _height + ',top=' + topPos + ',left=' + leftPos +
         ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
         
         return popup;
