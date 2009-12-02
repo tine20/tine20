@@ -115,7 +115,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
             $folderWithChanges = array();
             
             do {
-                foreach($folders as $folder) {
+                foreach((array) $folders as $folder) {
                     $dataController = ActiveSync_Controller::dataFactory($folder['folderType'], $this->_device, $this->_syncTimeStamp);
                     #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($folder, true));
                     try {
@@ -145,7 +145,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                 }
                 
                 // another process synchronized data already
-                if($syncState->lastsync > $this->_syncTimeStamp) {
+                if(isset($syncState) && $syncState->lastsync > $this->_syncTimeStamp) {
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " terminate ping process. Some other process updated data already.");
                     break;
                 }
