@@ -15,18 +15,33 @@ Ext.ns('Ext.ux.data');
 Ext.ux.data.windowNameConnection = function(config) {
     Ext.ux.data.windowNameConnection.superclass.constructor.call(this, config);
     
-    this.extraParams = config.extraParams || {};
+    if (! this.blankUrl) {
+        this.blankUrl = window.location.href.replace(window.location.pathname, '') + '/blank.html';
+    }
+    
+    if (! this.proxyUrl) {
+        var src = Ext.DomQuery.selectNode('script[src*=windowNameConnection.js]').src;
+        this.proxyUrl = src.substring(0, src.length -2) + 'html'
+    }
 };
 Ext.ux.data.windowNameConnection.TRANSACTIONID = 1000;
 
-/**
- * @type String PROXY_URL
- * 
- * location of the proxy HTML file of the foreign domain
- */
-Ext.ux.data.windowNameConnection.PROXY_URL = 'http://foreignhost/tt/tine20/Tinebase/js/ux/data/windowNameConnection.html';
-
 Ext.extend(Ext.ux.data.windowNameConnection, Ext.util.Observable, {
+    
+    /**
+     * @cfg {String} url (Optional) The default URL to be used for requests to the server. Defaults to undefined.
+     * The url config may be a function which returns the URL to use for the Ajax request. The scope
+     * (this reference) of the function is the scope option passed to the {@link #request} method.
+     */
+    
+    /**
+     * @cfg {String} blankUrl The default URL to a blank page on the page of the same origin (SOP) defaults to
+     * blank.html on the SOP server.
+     */
+    
+    /**
+     * @cfg {String} proxyUrl The default URL to the external proxy html (windowNameConnection.html)
+     */
     
     /**
      * create callback fn
@@ -37,42 +52,93 @@ Ext.extend(Ext.ux.data.windowNameConnection, Ext.util.Observable, {
      */
     createCallback : function(transaction) {
         var self = this;
-        return function(res) {
-            self.destroyTransaction(transaction, true);
-            self.onData.call(self, transaction, res);
+        return function() {
+            try {
+                var frame = transaction.frame;
+                if (frame.contentWindow.location.href === transaction.blankUrl) {
+                    self.onData.call(self, transaction, frame.contentWindow.name);
+                    self.destroyTransaction(transaction, true);
+                }
+            } catch(e){}
         };
     },
     
+    /**
+     * cleanup 
+     * 
+     * @private
+     * @param {Object} transaction
+     */
+    destroyTransaction: function(transaction) {
+        transaction.frame.contentWindow.onload = null;
+        Ext.fly(transaction.frame).remove();
+        delete transaction.frame;
+        
+        window[transaction.cb] = undefined;
+        try{
+            delete Ext.ux.data.windowNameConnection[transaction.id];
+        }catch(e){}
+    },
+    
+    /**
+     * called when data arrived
+     * 
+     * @private
+     * @param {Object} transaction
+     * @param {mixed} res
+     */
+    onData: function(transaction, res) {
+        var resultData = Ext.decode(res);
+        if (transaction.options.callback) {
+            transaction.options.callback.call(transaction.scope, transaction.options, resultData.success, resultData.response);
+        } else {
+            var fn = resultData.success ? 'success' : 'fail';
+            if (transaction.options[fn]) {
+                transaction.options[fn].call(transaction.scope, resultData.response, transaction.options);
+            }
+        }
+    },
+    
+    /**
+     * performs request
+     * 
+     * @param {} options
+     */
     request: function(options) {
         var transactionId = 'Ext.ux.data.windowNameConnection' + (++Ext.ux.data.windowNameConnection.TRANSACTIONID);
         var doc = document;
-        // TODO: make this a parameter
-        var sameDomainUrl = window.location.href.replace(window.location.pathname, '') + '/blank.html';
+        
+        var blankUrl = options.blankUrl || this.blankUrl;
+        
+        var url = options.url || this.url;
+        if (Ext.isFunction(url)) {
+            url = url.call(options.scope || WINDOW, options);
+        }
         
         var requestData = Ext.encode({
-            method:   options.method,
-            params:   options.params,
-            timeout:  options.timeout,
-            headers:  options.headers,
-            xmlData:  options.xmlData,
-            jsonData: options.jsonData,
-            
-            sameDomainUrl: sameDomainUrl
+            blankUrl: blankUrl,
+            options: { // just a subset and ext-core has no copyTo :-(
+                url:      url,
+                method:   options.method,
+                params:   options.params,
+                timeout:  options.timeout,
+                headers:  options.headers,
+                xmlData:  options.xmlData,
+                jsonData: options.jsonData
+            }
         });
         
         var frame = doc.createElement(Ext.isIE ? "<iframe name='" + requestData + "' onload='Ext.ux.data.windowNameConnection[\"" + transactionId + "\"]()'>" : 'iframe');
-        Ext.ux.data.windowNameConnection[transactionId] = frame.onload = function() {
-            try {
-                if (frame.contentWindow.location.href.match('blank.html') && frame.contentWindow.name === requestData) {
-                    frame.contentWindow.location.href = Ext.ux.data.windowNameConnection.PROXY_URL + '?' + new Date().getTime();
-                } else if (frame.contentWindow.location.href.match('blank.html')) {
-                    
-                    alert(frame.contentWindow.name);
-                }
-            } catch(e) {
-                
-            }
+        
+        var transaction = {
+            id         : transactionId,
+            options    : options,
+            scope      : options.scope || window,
+            frame      : frame,
+            blankUrl   : blankUrl
         };
+        
+        Ext.ux.data.windowNameConnection[transactionId] = frame.onload = this.createCallback(transaction);
         
         frame.id = transactionId;
         frame.name = requestData;
@@ -80,84 +146,38 @@ Ext.extend(Ext.ux.data.windowNameConnection, Ext.util.Observable, {
         frame.style.top = '-10000px'; 
         frame.style.left = '-10000px'; 
         frame.style.visability = 'hidden';
-        frame.src = sameDomainUrl;
+        frame.src = this.proxyUrl + '?' + new Date().getTime();
         
         doc.body.appendChild(frame);
-    },
-    
-    /**
-     * do window name proxy request
-     * 
-     * @private
-     * @param {String} url
-     * @param {Object} params
-     * @param {Function} callback
-     * @param {Object} scope
-     * @param {Object} arg
-     */
-    doRequest: function(url, params, callback, scope, arg) {
-        /*
-        var transactionId = 'Ext.ux.data.windowNameConnection' + (++Ext.ux.data.windowNameConnection.TRANSACTIONID);
-            doc = document,
-            frame = doc.createElement('iframe');
-        
-        frame.id = transactionId;
-        frame.style.position = 'absolute';
-        frame.style.top = '-10000px'; 
-        frame.style.left = '-10000px'; 
-        frame.style.visability = 'hidden';
-        frame.src = Ext.ux.data.windowNameConnection.PROXY_URL;
-        
-        frame.name = Ext.encode({
-            params: {
-                method: 'Tinebase.authenticate',
-                username: 'user',
-                password: 'pass'
-            }
-        
-        });
-        
-        doc.body.appendChild(frame);
-        
-        
-        //if ()
-        if(this.nocache){
-            params['_dc'] = new Date().getTime();
-        }
-        var src = url + '?' + Ext.urlEncode(Ext.apply(params, this.extraParams));
-        
-        var transaction = {
-            id: transactionId,
-            cb: 'jsonpcb' + transactionId,
-            params: params,
-            callback: callback, 
-            scope: scope,
-            arg: arg
-        };
-        */
-        //window[transaction.cb] = this.createCallback(transaction);
-        //src += '&' + this.callbackParam + '=' + transaction.cb;
-        
-        //transaction.scriptTag = Ext.DomHelper.append(Ext.DomQuery.selectNode('head'), {tag: 'script', type: 'text/javascript', src: src, id: transactionId}, true);
     }
 });
 
+/**
+ * proxy request
+ * - reads request data from window.name
+ * - performs ajax request with proxy domain
+ * - writes respponse to window.name
+ * - navigates window back to same domain (blankUrl) of requestors page
+ * 
+ */
 Ext.ux.data.windowNameConnection.doProxyRequest = function() {
     var requestOptions = Ext.decode(window.name);
-    var sameDomainUrl = requestOptions.sameDomainUrl;
-    delete requestOptions.sameDomainUrl;
     
-    Ext.Ajax.request(Ext.apply(requestOptions, {
+    Ext.Ajax.request(Ext.apply(requestOptions.options, {
         url: 'http://foreignhost/tt/tine20/index.php',
-        callback: function() {
+        callback: function(options, success, response) {
             window.name = Ext.encode({
-                sucess: true,
-                msg: 'welcome to Tine 2.0'
+                success: success,
+                response: {
+                    status:       response.status || 200,
+                    statusText:   response.statusText,
+                    responseText: response.responseText/*,
+                    responseXML:  response.responseXML crahes in IE???*/
+                }
             });
             
-            window.location.href = sameDomainUrl;
+            window.location.href = requestOptions.blankUrl;
         }
     }));
     
-    //window.history.back();
 }
