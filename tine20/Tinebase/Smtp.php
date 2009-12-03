@@ -50,6 +50,10 @@ class Tinebase_Smtp
         
         // set default transport none is set yet
         if (! self::getDefaultTransport()) {
+            // don't try to login if no username is given
+            if (empty($config['username'])) {
+                unset($config['auth']);
+            }
             self::setDefaultTransport(new Zend_Mail_Transport_Smtp($config['hostname'], $config));
         }
     }
