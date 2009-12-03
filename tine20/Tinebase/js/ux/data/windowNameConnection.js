@@ -21,7 +21,7 @@ Ext.ux.data.windowNameConnection = function(config) {
     
     if (! this.proxyUrl) {
         var src = Ext.DomQuery.selectNode('script[src*=windowNameConnection.js]').src;
-        this.proxyUrl = src.substring(0, src.length -2) + 'html'
+        this.proxyUrl = src.replace('windowNameConnection.js', 'windowNameConnection.html');
     }
 };
 Ext.ux.data.windowNameConnection.TRANSACTIONID = 1000;
