@@ -15,13 +15,15 @@ Ext.ns('Ext.ux.data');
 Ext.ux.data.windowNameConnection = function(config) {
     Ext.ux.data.windowNameConnection.superclass.constructor.call(this, config);
     
+    Ext.apply(this, config);
+    
     if (! this.blankUrl) {
-        this.blankUrl = window.location.href.replace(window.location.pathname, '') + '/blank.html';
+        this.blankUrl = window.location.href.replace(window.location.pathname.substring(1, window.location.pathname.length), '') + 'blank.html';
     }
     
     if (! this.proxyUrl) {
         var src = Ext.DomQuery.selectNode('script[src*=windowNameConnection.js]').src;
-        this.proxyUrl = src.replace('windowNameConnection.js', 'windowNameConnection.html');
+        this.proxyUrl = src.substring(0, src.length -2) + 'html';
     }
 };
 Ext.ux.data.windowNameConnection.TRANSACTIONID = 1000;
@@ -171,7 +173,6 @@ Ext.ux.data.windowNameConnection.doProxyRequest = function() {
     var requestOptions = Ext.decode(window.name);
     
     Ext.Ajax.request(Ext.apply(requestOptions.options, {
-        url: 'http://foreignhost/tt/tine20/index.php',
         callback: function(options, success, response) {
             window.name = Ext.encode({
                 success: success,
@@ -187,4 +188,4 @@ Ext.ux.data.windowNameConnection.doProxyRequest = function() {
         }
     }));
     
-}
+};
