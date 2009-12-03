@@ -71,6 +71,13 @@ Ext.extend(Ext.ux.data.windowNameConnection, Ext.util.Observable, {
      */
     destroyTransaction: function(transaction) {
         transaction.frame.contentWindow.onload = null;
+        try {
+            // we have to do this to stop the wait cursor in FF 
+            var innerDoc = transaction.frame.contentWindow.document;
+            innerDoc.write(" ");
+            innerDoc.close();
+        }catch(e){}
+        
         Ext.fly(transaction.frame).remove();
         delete transaction.frame;
         
