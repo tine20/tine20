@@ -69,10 +69,16 @@ Tine20.login = {
     getConfig: function() {
         if (! this.config) {
             var src = Ext.DomQuery.selectNode('script[src*=tine20-loginbox.js]').src;
+            var tine20Url = src.match('Tinebase') ? 
+                    src.substring(0, src.indexOf('Tinebase'))  + 'index.php' :
+                    src.substring(0, src.indexOf('tine20-loginbox.js')) + 'index.php';
             
+            var tine20ProxyUrl = src.substring(0, src.indexOf('tine20-loginbox.js')) + 'windowNameConnection.html';
+                    
             var config = {
                 userLanguage: Tine20.login.detectBrowserLanguage(),
-                tine20Url: src.substring(0, src.indexOf('Tinebase'))  + 'index.php'
+                tine20Url: tine20Url,
+                tine20ProxyUrl: tine20ProxyUrl
             };
             
             /* parse additional params here */
@@ -93,18 +99,20 @@ Tine20.login = {
         if (! this.loginTemplate) {
             this.loginTemplate = new Ext.Template(
                 '<form name="{formId}" id="{formId}" method="POST">',
-                    '<fieldset>',
-                        '<label>{loginname}:</label><br>',
-                        '<input type="text" name="username"><br>',
-                        '<label>{password}:</label><br>',
-                        '<input type="password" name="password"><br>',
+                    '<div class="tine20login-fields">',
+                        '<div class="tine20login-field-username">',
+                            '<label>{loginname}:</label>',
+                            '<input type="text" name="username">',
+                        '</div>',
+                        '<div class="tine20login-field-password">',
+                            '<label>{password}:</label>',
+                            '<input type="password" name="password">',
+                        '</div>',
                         '<input type="hidden" name="method" value="{method}">',
-                    
-                        
-                        '<div class="tine20loginmessage">&#160;</div>',
-                        '<br>',
-                        '<div class="tine20loginbutton">{login}</div>',
-                    '</fieldset>',
+                    '</div>',
+                    '<div class="tine20login-progess"></div>',
+                    '<div class="tine20login-message"></div>',
+                    '<div class="tine20login-button">{login}</div>',
                 '</form>'
             ).compile();
         }
@@ -122,7 +130,9 @@ Tine20.login = {
      * @return void
      */
     checkAuth: function(config, username, password, cb) {
-        var conn = new Ext.ux.data.jsonp({});
+        var conn = new Ext.ux.data.windowNameConnection({
+            proxyUrl: config.tine20ProxyUrl
+        });
         
         conn.request({
             url: config.tine20Url,
@@ -148,18 +158,16 @@ Tine20.login = {
         
         if (data.status == 'success') {
             // show success message
-            this.messageBoxEl.update(String.format('{0} <img src="{1}">', 
-                this.translations[config.userLanguage].authsuccess,
-                config.tine20Url.replace('index.php', 'images/wait.gif'))
-            );
+            this.messageBoxEl.update(this.translations[config.userLanguage].authsuccess);
+            this.setCssClass('loginSuccess');
             
             // post data
             this.loginBoxEl.dom.action = data.loginUrl || config.tine20Url;
             this.loginBoxEl.dom.submit();
         } else {
             // show fail message
-            var msg = this.translations[config.userLanguage].authfailed;
-            this.messageBoxEl.update(msg);
+            this.messageBoxEl.update(this.translations[config.userLanguage].authfailed);
+            this.setCssClass('loginFaild');
             
             this.usernameEl.focus(100);
         }
@@ -176,10 +184,8 @@ Tine20.login = {
         var username = this.usernameEl.dom.value;
         var password = this.passwordEl.dom.value;
         
-        this.messageBoxEl.update(String.format('{0} <img src="{1}">', 
-            this.translations[config.userLanguage].authwait,
-            config.tine20Url.replace('index.php', 'images/wait.gif'))
-        );
+        this.messageBoxEl.update(this.translations[config.userLanguage].authwait);
+        this.setCssClass('onLogin');
         
         this.checkAuth(config, username, password, this.onLoginResponse.createDelegate(this));
     },
@@ -204,10 +210,11 @@ Tine20.login = {
         
         // init Elements
         var E = Ext.Element;
-        this.usernameEl = new E(Ext.DomQuery.selectNode('input[name=username]', this.loginBoxEl.dom));
-        this.passwordEl = new E(Ext.DomQuery.selectNode('input[name=password]', this.loginBoxEl.dom));
-        this.buttonEl   = new E(Ext.DomQuery.selectNode('div[class=tine20loginbutton]', this.loginBoxEl.dom));
-        this.messageBoxEl = this.loginBoxEl.child('div[class=tine20loginmessage]');
+        this.usernameEl   = new E(Ext.DomQuery.selectNode('input[name=username]', this.loginBoxEl.dom));
+        this.passwordEl   = new E(Ext.DomQuery.selectNode('input[name=password]', this.loginBoxEl.dom));
+        this.buttonEl     = new E(Ext.DomQuery.selectNode('div[class=tine20login-button]', this.loginBoxEl.dom));
+        this.messageBoxEl = this.loginBoxEl.child('div[class=tine20login-message]');
+        //this.progressEl   = this.loginBoxEl.child('div[class=tine20loginmessage]');
         
         // init listeners
         this.buttonEl.on('click', this.onLoginPress, this);
@@ -225,6 +232,25 @@ Tine20.login = {
         
         // focus username field
         this.usernameEl.focus(500);
+    },
+    
+    /**
+     * sets css class of outer form el according to 
+     * login state
+     * 
+     * @param {string} state
+     */
+    setCssClass: function(state) {
+        var allStates = [
+            'onLogin',
+            'loginFaild',
+            'loginSuccess'
+        ];
+        Ext.each(allStates, function(s){
+            var method = s === state ? 'addClass' : 'removeClass';
+            this.loginBoxEl[method]('tine20login-' + s);
+        }, this);
+        
     },
     
     /**
@@ -260,43 +286,48 @@ Ext.ns('Ext.ux.data');
 
 /**
  * @namespace   Ext.ux.data
- * @class       Ext.ux.data.jsonp
+ * @class       Ext.ux.data.windowNameConnection
  * @extends     Ext.util.Observable
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  * 
  * @param {Object} config
  * 
- * Simple jsonp communication class
+ * window name communication class
  * 
  */
-Ext.ux.data.jsonp = function(config) {
-    Ext.ux.data.jsonp.superclass.constructor.call(this, config);
+Ext.ux.data.windowNameConnection = function(config) {
+    Ext.ux.data.windowNameConnection.superclass.constructor.call(this, config);
     
-    this.extraParams = config.extraParams || {};
+    Ext.apply(this, config);
+    
+    if (! this.blankUrl) {
+        this.blankUrl = window.location.href.replace(window.location.pathname.substring(1, window.location.pathname.length), '') + 'blank.html';
+    }
+    
+    if (! this.proxyUrl) {
+        var src = Ext.DomQuery.selectNode('script[src*=windowNameConnection.js]').src;
+        this.proxyUrl = src.substring(0, src.length -2) + 'html';
+    }
 };
-Ext.ux.data.jsonp.TRANSACTIONID = 1000;
+Ext.ux.data.windowNameConnection.TRANSACTIONID = 1000;
 
-Ext.extend(Ext.ux.data.jsonp, Ext.util.Observable, {
+Ext.extend(Ext.ux.data.windowNameConnection, Ext.util.Observable, {
     
     /**
-     * @cfg {String} callbackParam
+     * @cfg {String} url (Optional) The default URL to be used for requests to the server. Defaults to undefined.
+     * The url config may be a function which returns the URL to use for the Ajax request. The scope
+     * (this reference) of the function is the scope option passed to the {@link #request} method.
      */
-    callbackParam : "jsonp",
     
     /**
-     * @cfg {Object} extraParams
+     * @cfg {String} blankUrl The default URL to a blank page on the page of the same origin (SOP) defaults to
+     * blank.html on the SOP server.
      */
-    extraParams: null,
     
     /**
-     * request
-     * 
-     * @param {Object} options
+     * @cfg {String} proxyUrl The default URL to the external proxy html (windowNameConnection.html)
      */
-    request: function(options) {
-        this.doRequest(options.url, options.params, options.success || options.callback, options.scope, {})
-    },
     
     /**
      * create callback fn
@@ -307,58 +338,39 @@ Ext.extend(Ext.ux.data.jsonp, Ext.util.Observable, {
      */
     createCallback : function(transaction) {
         var self = this;
-        return function(res) {
-            self.destroyTransaction(transaction, true);
-            self.onData.call(self, transaction, res);
+        return function() {
+            try {
+                var frame = transaction.frame;
+                if (frame.contentWindow.location.href === transaction.blankUrl) {
+                    self.onData.call(self, transaction, frame.contentWindow.name);
+                    self.destroyTransaction(transaction, true);
+                }
+            } catch(e){}
         };
     },
     
     /**
-     * cleanup scripttag and callback
+     * cleanup 
      * 
      * @private
      * @param {Object} transaction
      */
     destroyTransaction: function(transaction) {
-        transaction.scriptTag.remove();
-        delete transaction.scriptTag;
+        transaction.frame.contentWindow.onload = null;
+        try {
+            // we have to do this to stop the wait cursor in FF 
+            var innerDoc = transaction.frame.contentWindow.document;
+            innerDoc.write(" ");
+            innerDoc.close();
+        }catch(e){}
+        
+        Ext.fly(transaction.frame).remove();
+        delete transaction.frame;
         
         window[transaction.cb] = undefined;
         try{
-            delete window[transaction.cb];
+            delete Ext.ux.data.windowNameConnection[transaction.id];
         }catch(e){}
-    },
-    
-    /**
-     * do jsonp request
-     * 
-     * @private
-     * @param {String} url
-     * @param {Object} params
-     * @param {Function} callback
-     * @param {Object} scope
-     * @param {Object} arg
-     */
-    doRequest: function(url, params, callback, scope, arg) {
-        var transactionId = 'jsonp' + (++Ext.ux.data.jsonp.TRANSACTIONID);
-        if(this.nocache){
-            params['_dc'] = new Date().getTime();
-        }
-        var src = url + '?' + Ext.urlEncode(Ext.apply(params, this.extraParams));
-        
-        var transaction = {
-            id: transactionId,
-            cb: 'jsonpcb' + transactionId,
-            params: params,
-            callback: callback, 
-            scope: scope,
-            arg: arg
-        };
-        
-        window[transaction.cb] = this.createCallback(transaction);
-        src += '&' + this.callbackParam + '=' + transaction.cb;
-        
-        transaction.scriptTag = Ext.DomHelper.append(Ext.DomQuery.selectNode('head'), {tag: 'script', type: 'text/javascript', src: src, id: transactionId}, true);
     },
     
     /**
@@ -369,8 +381,95 @@ Ext.extend(Ext.ux.data.jsonp, Ext.util.Observable, {
      * @param {mixed} res
      */
     onData: function(transaction, res) {
-        var args = Ext.isArray(transaction.arg) ? [res].concat(transaction.arg) : [res];
+        var resultData = Ext.decode(res);
+        if (transaction.options.callback) {
+            transaction.options.callback.call(transaction.scope, transaction.options, resultData.success, resultData.response);
+        } else {
+            var fn = resultData.success ? 'success' : 'fail';
+            if (transaction.options[fn]) {
+                transaction.options[fn].call(transaction.scope, resultData.response, transaction.options);
+            }
+        }
+    },
+    
+    /**
+     * performs request
+     * 
+     * @param {} options
+     */
+    request: function(options) {
+        var transactionId = 'Ext.ux.data.windowNameConnection' + (++Ext.ux.data.windowNameConnection.TRANSACTIONID);
+        var doc = document;
         
-        transaction.callback.apply(transaction.scope || window, args);
+        var blankUrl = options.blankUrl || this.blankUrl;
+        
+        var url = options.url || this.url;
+        if (Ext.isFunction(url)) {
+            url = url.call(options.scope || WINDOW, options);
+        }
+        
+        var requestData = Ext.encode({
+            blankUrl: blankUrl,
+            options: { // just a subset and ext-core has no copyTo :-(
+                url:      url,
+                method:   options.method,
+                params:   options.params,
+                timeout:  options.timeout,
+                headers:  options.headers,
+                xmlData:  options.xmlData,
+                jsonData: options.jsonData
+            }
+        });
+        
+        var frame = doc.createElement(Ext.isIE ? "<iframe name='" + requestData + "' onload='Ext.ux.data.windowNameConnection[\"" + transactionId + "\"]()'>" : 'iframe');
+        
+        var transaction = {
+            id         : transactionId,
+            options    : options,
+            scope      : options.scope || window,
+            frame      : frame,
+            blankUrl   : blankUrl
+        };
+        
+        Ext.ux.data.windowNameConnection[transactionId] = frame.onload = this.createCallback(transaction);
+        
+        frame.id = transactionId;
+        frame.name = requestData;
+        frame.style.position = 'absolute';
+        frame.style.top = '-10000px'; 
+        frame.style.left = '-10000px'; 
+        frame.style.visability = 'hidden';
+        frame.src = this.proxyUrl + '?' + new Date().getTime();
+        
+        doc.body.appendChild(frame);
     }
 });
+
+/**
+ * proxy request
+ * - reads request data from window.name
+ * - performs ajax request with proxy domain
+ * - writes respponse to window.name
+ * - navigates window back to same domain (blankUrl) of requestors page
+ * 
+ */
+Ext.ux.data.windowNameConnection.doProxyRequest = function() {
+    var requestOptions = Ext.decode(window.name);
+    
+    Ext.Ajax.request(Ext.apply(requestOptions.options, {
+        callback: function(options, success, response) {
+            window.name = Ext.encode({
+                success: success,
+                response: {
+                    status:       response.status || 200,
+                    statusText:   response.statusText,
+                    responseText: response.responseText/*,
+                    responseXML:  response.responseXML crahes in IE???*/
+                }
+            });
+            
+            window.location.href = requestOptions.blankUrl;
+        }
+    }));
+    
+};
