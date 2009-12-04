@@ -345,7 +345,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
         // map Timetracker_Model_TimeaccountGrants to Tinebase_Model_Grants
         $grants = self::doMapping($_grants);
         
-        Tinebase_Container::getInstance()->setGrants($_timeaccount->container_id, $grants, TRUE);
+        Tinebase_Container::getInstance()->setGrants($_timeaccount->container_id, $grants, TRUE, FALSE);
         
         // invalidate cache (no memcached support yet)
         Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('timeaccountGrants'));
