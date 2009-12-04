@@ -19,4 +19,7 @@
  */
 class Tinebase_Exception_UnexpectedValue extends UnexpectedValueException // extends Tinebase_Exception
 {
+    public function __construct($_message, $_code=505) {
+        parent::__construct($_message, $_code);
+    }    
 }
