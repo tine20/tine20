@@ -351,7 +351,11 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " skipped changed entry: " . $serverId);
                                         unset($serverChanges[$id]);
                                     }
-                                }                                
+                                }
+                                
+                                // entries comeing in scope are already in $serverAdds and do not need to
+                                // be send with $serverCanges
+                                $serverChanges = array_diff($serverChanges, $serverAdds);
                             }                        
                         }
                         
