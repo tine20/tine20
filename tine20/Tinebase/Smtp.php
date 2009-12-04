@@ -9,7 +9,6 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
- * @todo        don't use config.inc.php here -> use Tinebase_Config
  */
 
 /**
@@ -120,38 +119,5 @@ class Tinebase_Smtp
         $_mail->addHeader('X-MailGenerator', 'Tine 2.0');
         
         $_mail->send($transport); 
-    }
-    
-    public function sendRawMessage($_mail, $_transport = NULL)
-    {
-        $transport = $_transport instanceof Zend_Mail_Transport_Abstract ? $_transport : $this->_defaultTransport;
-        $connection = $transport->getConnection();
-        
-        if (!($connection instanceof Zend_Mail_Protocol_Smtp)) {
-            // Check if authentication is required and determine required class
-            $connectionClass = 'Zend_Mail_Protocol_Smtp';
-            if ($this->_auth) {
-                $connectionClass .= '_Auth_' . ucwords($this->_auth);
-            }
-            Zend_Loader::loadClass($connectionClass);
-            $this->setConnection(new $connectionClass($this->_host, $this->_port, $this->_config));
-            $connection->connect();
-            $connection->helo($this->_name);
-        } else {
-            // Reset connection to ensure reliable transaction
-            $connection->rset();
-        }
-        
-        // Set mail return path from sender email address
-        $connection->mail($this->_mail->getReturnPath());
-        
-        // Set recipient forward paths
-        foreach ($this->_mail->getRecipients() as $recipient) {
-            $connection->rcpt($recipient);
-        }
-        
-        // Issue DATA command to client
-        $connection->data($_mail);
-        
     }
 }
