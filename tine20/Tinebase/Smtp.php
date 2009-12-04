@@ -56,6 +56,10 @@ class Tinebase_Smtp
                 unset($config['auth']);
             }
             
+            if ($config['ssl'] == 'none') {
+                unset($config['ssl']);
+            }
+            
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting SMTP transport. Hostname: ' . $config['hostname']);
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($config, TRUE));
             
