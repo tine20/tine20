@@ -614,7 +614,11 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             )); 
 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' add group: ' . print_r($groupObject->toArray(), TRUE));
-            $this->_sql->addGroup($groupObject, $group[strtolower($this->_groupUUIDAttribute)][0]);
+            try {
+                $this->_sql->addGroup($groupObject, $group[strtolower($this->_groupUUIDAttribute)][0]);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .' Could not add group: ' . $groupObject->name . ' Error message: ' . $e->getMessage());
+            }
         }
     }
     
