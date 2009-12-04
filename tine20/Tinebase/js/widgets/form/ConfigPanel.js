@@ -27,6 +27,7 @@ Ext.namespace('Tine.Tinebase.widgets.form');
  *   to the checkboxToggle enabled fieldset
  *   
  * TODO         make TABS work
+ * TODO         add reload button
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -223,7 +224,7 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
     /**
      * @private
      */
-    initActions: function() {       
+    initActions: function() {
         this.action_saveConfig = new Ext.Action({
             text: this.app.i18n._('Save config'),
             iconCls: 'setup_action_save_config',
@@ -232,8 +233,22 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
             disabled: true
         });
         
+        // TODO add this to reload registry and update form / button
+        /*
+        this.action_reloadConfig = new Ext.Action({
+            text: this.app.i18n._('Reload config'),
+            handler: function() {
+                Tine.Setup.registry.get(this.registryKey).on('replace', this.config2form, this, [Tine.Setup.registry.get(this.registryKey)]);
+                Tine.Tinebase.tineInit.initRegistry();
+            },
+            iconCls: 'x-tbar-loading',
+            scope: this
+        });
+        */
+
         this.actions = [
             this.action_saveConfig
+            //this.action_reloadConfig
         ];
         
         this.actionToolbar = new Ext.Toolbar({
