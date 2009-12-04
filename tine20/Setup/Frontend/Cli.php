@@ -91,6 +91,13 @@ class Setup_Frontend_Cli
         }
         
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        if (! isset($options['adminLoginName'])) {
+            $options['adminLoginName'] = Tinebase_Server_Cli::promptInput('Inital Admin Users Username');
+        }
+        if (! isset($options['adminPassword'])) {
+            $options['adminPassword'] = Tinebase_Server_Cli::promptInput('Inital Admin Users Password', TRUE);
+        }
+        
         $controller->installApplications($applications, $options);
         
         echo "Successfully installed " . count($applications) . " applications.\n";        
