@@ -632,26 +632,24 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function importUsers($_options = null)
     {
-        $_loginName    = empty($_options['adminLoginName']) ? 'tine20admin' : $_options['adminLoginName'];
-        $_password     = empty($_options['adminPassword']) ? 'lars' : $_options['adminPassword'];
-        $_firstname    = empty($_options['adminFirstName']) ? 'Tine 2.0' : $_options['adminFirstName'];
-        $_lastname     = empty($_options['adminLastName']) ? 'Admin Account' : $_options['adminLastName'];
+        $_options['adminFirstName'] = isset($_options['adminFirstName']) ? $_options['adminFirstName'] : 'Tine 2.0';
+        $_options['adminLastName']  = isset($_options['adminLastName'])  ? $_options['adminLastName']  : 'Admin Account';
 
         // get admin & user groups
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
         $adminGroup = $groupsBackend->getDefaultAdminGroup();
         $userGroup  = $groupsBackend->getDefaultGroup();
         
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial admin user(' . $_loginName . ')');
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial admin user(' . $_options['adminLoginName'] . ')');
 
 
         $account = new Tinebase_Model_FullUser(array(
-            'accountLoginName'      => $_loginName,
+            'accountLoginName'      => $_options['adminLoginName'],
             'accountStatus'         => 'enabled',
             'accountPrimaryGroup'   => $userGroup->getId(),
-            'accountLastName'       => $_lastname,
-            'accountDisplayName'    => $_lastname . ', ' . $_firstname,
-            'accountFirstName'      => $_firstname,
+            'accountLastName'       => $_options['adminLastName'],
+            'accountDisplayName'    => $_options['adminLastName'] . ', ' . $_options['adminFirstName'],
+            'accountFirstName'      => $_options['adminFirstName'],
             'accountExpires'        => NULL,
             'accountEmailAddress'   => NULL,
         ));
@@ -659,7 +657,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $this->addOrUpdateUser($account);
         Tinebase_Core::set('currentAccount', $account);
         // set the password for the account
-        Tinebase_User::getInstance()->setPassword($_loginName, $_password);
+        Tinebase_User::getInstance()->setPassword($_options['adminLoginName'], $_options['adminPassword']);
 
         // add the admin account to all groups
         Tinebase_Group::getInstance()->addGroupMember($adminGroup, $account);
