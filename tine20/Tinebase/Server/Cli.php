@@ -81,4 +81,30 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract
         
         return $result;
     }
+    
+    /**
+     * promts user for input
+     * 
+     * @param  string $_promtText   promt text to dipslay
+     * @param  bool   $_isPassword  is prompt a password?
+     * @return string
+     */
+    public static function promptInput($_promptText, $_isPassword) {
+        fwrite(STDOUT, PHP_EOL . "$_promptText> ");
+        
+        if ($_isPassword) {
+            if (preg_match('/^win/i', PHP_OS)) {
+                $pwObj = new Com('ScriptPW.Password');
+                $input = $pwObj->getPassword();
+            } else {
+                system('stty -echo');
+                $input = fgets(STDIN);
+                system('stty echo');
+            }
+        } else {
+            $input = fgets(STDIN);
+        }
+        
+        return rtrim($input);
+    }
 }
