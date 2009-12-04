@@ -91,18 +91,68 @@ class Setup_Frontend_Cli
         }
         
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
-        if (! isset($options['adminLoginName'])) {
-            $options['adminLoginName'] = Tinebase_Server_Cli::promptInput('Inital Admin Users Username');
-        }
-        if (! isset($options['adminPassword'])) {
-            $options['adminPassword'] = Tinebase_Server_Cli::promptInput('Inital Admin Users Password', TRUE);
-        }
+        $this->_promptRemainingOptions($applications, &$options);
         
         $controller->installApplications($applications, $options);
         
         echo "Successfully installed " . count($applications) . " applications.\n";        
     }
 
+    /**
+     * 
+     * @todo add requird version server side
+     * 
+     * @param $_applications
+     * @param $_options
+     * @return unknown_type
+     */
+    protected function _promptRemainingOptions($_applications, $_options) {
+        if (in_array('Tinebase', $_applications)) {
+            
+            if (! isset($_options['acceptedTermsVersion'])) {
+                fwrite(STDOUT, PHP_EOL . file_get_contents(dirname(dirname(dirname(__FILE__))) . '/LICENSE' ));
+                $licenseAnswer = Tinebase_Server_Cli::promptInput('I have read the license agreement and accept it (type "yes" to accept)');
+                
+                
+                fwrite(STDOUT, PHP_EOL . file_get_contents(dirname(dirname(dirname(__FILE__))) . '/PRIVACY' ));
+                $privacyAnswer = Tinebase_Server_Cli::promptInput('I have read the privacy agreement and accept it (type "yes" to accept)');
+            
+                if (! (strtoupper($licenseAnswer) == 'YES' && strtoupper($privacyAnswer) == 'YES')) { 
+                    echo "error: you need to accept the terms! exiting \n";
+                    exit (1);
+                }
+                
+                $_options['acceptedTermsVersion'] = 1;
+            }
+            
+            
+            // initial username
+            if (! isset($_options['adminLoginName'])) {
+                $_options['adminLoginName'] = Tinebase_Server_Cli::promptInput('Inital Admin Users Username');
+                if (! $_options['adminLoginName']) {
+                    echo "error: username must be given! exiting \n";
+                    exit (1);
+                }
+            }
+            
+            // initial password
+            if (! isset($_options['adminPassword'])) {
+                $password1 = Tinebase_Server_Cli::promptInput('Inital Admin Users Password', TRUE);
+                if (! $password1) {
+                    echo "error: password must not be empty! exiting \n";
+                    exit (1);
+                }
+                $password2 = Tinebase_Server_Cli::promptInput('Confirm Password', TRUE);
+                if ($password1 == $password2) {
+                    $_options['adminPassword'] = $password1;
+                } else {
+                    echo "error: passwords do not match! exiting \n";
+                    exit (1);
+                }
+            }
+        }
+    }
+    
     /**
      * update existing applications
      *
