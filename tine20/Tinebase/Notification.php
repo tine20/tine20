@@ -77,7 +77,8 @@ class Tinebase_Notification
                 }
                 $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachements);
             } catch (Exception $e) {
-                // do nothing
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Failed to send notification message");
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $e");
             }
         }
     }
