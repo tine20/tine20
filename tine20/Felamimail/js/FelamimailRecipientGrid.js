@@ -110,6 +110,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             }
             this.contextMenu.showAt(e.getXY());
         }, this);
+
+        this.on('afteredit', this.onAfterEdit, this);
     },
     
     /**
@@ -225,8 +227,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} operation
      * @private
      */
-    onUpdateStore: function(store, record, operation)
-    {
+    onUpdateStore: function(store, record, operation, options) {
         // update record recipient fields
         this.record.data.to = [];
         this.record.data.cc = [];
@@ -236,15 +237,22 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.record.data[recipient.data.type].push(recipient.data.address);
             }
         }, this);
-
-        if (operation == 'edit') {
-            // add additional row if new address has been added
-            if (record.modified.address == '') {
-                store.add(new Ext.data.Record({type: 'to', 'address': ''}));
-            }
-            store.commitChanges();
-        }
     },
+    
+    /**
+     * after edit
+     * 
+     * @param {} o
+     */
+    onAfterEdit: function(o) {
+        if (o.field == 'address') {
+            if (o.originalValue == '') {
+                this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
+                this.store.commitChanges();
+                this.startEditing(o.row +1, o.column);
+            }            
+        }
+    },    
     
     /**
      * delete handler
