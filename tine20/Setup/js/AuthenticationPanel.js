@@ -477,7 +477,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
      * applies registry state to this cmp
      */
     applyRegistryState: function() {
-        this.action_saveConfig.setDisabled(!this.isValid());
+        this.action_saveConfig.setDisabled(false);
         
         if (Tine.Setup.registry.get('setupRequired')) {
             this.action_saveConfig.setText(this.app.i18n._('Save config and install'));
@@ -498,6 +498,9 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
     isValid: function() {
         var form = this.getForm();
 
+        var result = form.isValid();
+        
+        // check if passwords match
         if (form.findField('authentication_Sql_adminPassword') 
             && form.findField('authentication_Sql_adminPassword').getValue() != form.findField('authentication_Sql_adminPasswordConfirmation').getValue()) 
         {
@@ -505,9 +508,31 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 id: 'authentication_Sql_adminPasswordConfirmation',
                 msg: this.app.i18n._("Passwords don't match")
             }]);
-            return false;
+            result = false;
         }
         
-        return form.isValid();
+        // check if initial username/passwords are set
+        if(Tine.Setup.registry.get('setupRequired') && form.findField('authentication_Sql_adminLoginName')) {
+            if (form.findField('authentication_Sql_adminLoginName').getValue() == '') {
+                form.markInvalid([{
+                    id: 'authentication_Sql_adminLoginName',
+                    msg: this.app.i18n._("Should not be empty")
+                }]);
+                result = false;
+            }
+            if (form.findField('authentication_Sql_adminPassword').getValue() == '') {
+                form.markInvalid([{
+                    id: 'authentication_Sql_adminPassword',
+                    msg: this.app.i18n._("Should not be empty")
+                }]);
+                form.markInvalid([{
+                    id: 'authentication_Sql_adminPasswordConfirmation',
+                    msg: this.app.i18n._("Should not be empty")
+                }]);
+                result = false;
+            }
+        }
+        
+        return result;
     }
 });
