@@ -456,6 +456,11 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         // create event and invite admin group
         $event = $this->_getEvent();
+        
+        // only events in future will be changed!
+        $event->dtstart = Zend_Date::now()->addHour(1);
+        $event->dtend = Zend_Date::now()->addHour(2);
+        
         $event->attendee = $this->_getAttendee();
         $event->attendee[1] = new Calendar_Model_Attender(array(
             'user_id'   => $defaultAdminGroup->getId(),
