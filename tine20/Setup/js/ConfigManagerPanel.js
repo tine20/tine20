@@ -184,7 +184,12 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
      * applies registry state to this cmp
      */
     applyRegistryState: function() {
-        this.action_saveConfig.setDisabled(!Tine.Setup.registry.get('configWritable'));
+        this.action_saveConfig.setDisabled(! Tine.Setup.registry.get('configWritable'));
+        if (! Tine.Setup.registry.get('configWritable')) {
+            this.action_saveConfig.setText(this.app.i18n._('Config file is not writable'));
+        } else {
+            this.action_saveConfig.setText(this.app.i18n._('Save config'));
+        }
         Ext.getCmp('setup-database-group').setIconClass(Tine.Setup.registry.get('checkDB') ? 'setup_checks_success' : 'setup_checks_fail');
         Ext.getCmp('setup-logger-group').setIconClass(Tine.Setup.registry.get('checkLogger') ? 'setup_checks_success' : 'setup_checks_fail');
         Ext.getCmp('setup-caching-group').setIconClass(Tine.Setup.registry.get('checkCaching') ? 'setup_checks_success' : 'setup_checks_fail');
