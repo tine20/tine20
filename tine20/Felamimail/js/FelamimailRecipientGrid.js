@@ -227,7 +227,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} operation
      * @private
      */
-    onUpdateStore: function(store, record, operation, options) {
+    onUpdateStore: function(store, record, operation) {
         // update record recipient fields
         this.record.data.to = [];
         this.record.data.cc = [];
