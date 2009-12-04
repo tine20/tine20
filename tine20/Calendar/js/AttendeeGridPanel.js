@@ -317,7 +317,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     onRecordLoad: function(record) {
         this.record = record;
-        this.store.removeAll(attendee);
+        this.store.removeAll();
         var attendee = record.get('attendee');
         Ext.each(attendee, function(attender) {
             var record = new Tine.Calendar.Model.Attender(attender, attender.id);
