@@ -428,6 +428,11 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
         }
         
+        // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in AS
+        if(isset($xmlData->AllDayEvent) && $xmlData->AllDayEvent == 1) {
+            $event->dtend->subSecond(1);
+        }
+        
         if(isset($xmlData->Reminder)) {
             $alarm = clone $event->dtstart;
             
