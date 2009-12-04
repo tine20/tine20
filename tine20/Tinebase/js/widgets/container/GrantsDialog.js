@@ -158,6 +158,23 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
                     this.purgeListeners();
                     this.window.close();
                 }
+            },
+            failure: function(response, options) {
+                var responseText = Ext.util.JSON.decode(response.responseText);
+                
+                if (responseText.data.code == 505) {
+                    Ext.Msg.show({
+                       title:   _('Error'),
+                       msg:     _('You are not allowed to remove all admins for this container!'),
+                       icon:    Ext.MessageBox.ERROR,
+                       buttons: Ext.Msg.OK
+                    });
+                    
+                } else {
+                    // call default exception handler
+                    var exception = responseText.data ? responseText.data : responseText;
+                    Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+                }                
             }
         });
     }

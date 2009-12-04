@@ -1053,11 +1053,14 @@ class Tinebase_Container
      *
      * @param   int|Tinebase_Model_Container $_containerId
      * @param   Tinebase_Record_RecordSet $_grants
+     * @param   boolean $_ignoreAcl
+     * @param   boolean $_failSafe don't allow to remove all admin grants for container
      * @return  Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Backend
+     * @throws  Tinebase_Exception_Record_NotAllowed
      */
-    public function setGrants($_containerId, Tinebase_Record_RecordSet $_grants, $_ignoreAcl = FALSE) 
+    public function setGrants($_containerId, Tinebase_Record_RecordSet $_grants, $_ignoreAcl = FALSE, $_failSafe = TRUE) 
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
@@ -1066,6 +1069,19 @@ class Tinebase_Container
             if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
                 throw new Tinebase_Exception_AccessDenied('Permission to set grants of container denied.');
             }            
+        }
+        
+        // do failsafe check
+        if ($_failSafe) {
+            $adminGrant = FALSE;
+            foreach ($_grants as $recordGrants) {
+                if ($recordGrants->{Tinebase_Model_Container::ADMINGRANT}) {
+                    $adminGrant = TRUE;
+                }
+            }
+            if (count($_grants) == 0 || ! $adminGrant) {
+                throw new Tinebase_Exception_UnexpectedValue('You are not allowed to remove all (admin) grants for this container.');
+            }
         }
         
         $container = $this->getContainerById($containerId);
