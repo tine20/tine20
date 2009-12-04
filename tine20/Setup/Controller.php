@@ -835,8 +835,15 @@ class Setup_Controller
      */
     public function getEmailConfig()
     {
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP, 'Tinebase', array());
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP, 'Tinebase', array());
+        
+        if (! empty($imapConfig) && ! isset($imapConfig['active'])) {
+            $imapConfig['active'] = TRUE;
+        }
+        if (! empty($smtpConfig) && ! isset($smtpConfig['active'])) {
+            $smtpConfig['active'] = TRUE;
+        }
         
         $result = array(
             'imap' => $imapConfig,
