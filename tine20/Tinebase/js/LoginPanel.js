@@ -295,7 +295,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                             buttons: Ext.MessageBox.OK,
                             icon: Ext.MessageBox.ERROR,
                             fn: function() {
-                                this.getLoginPanel().getForm().findField('username').focus(true);
+                                this.getLoginPanel().getForm().findField('password').focus(true);
                             }.createDelegate(this)
                         });
                     }
