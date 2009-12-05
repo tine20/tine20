@@ -143,13 +143,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'tel_pager'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tz'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lon'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lat'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // tine 2.0 generic fields
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
-        'lon'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'lat'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'                  => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             'InArray' => array(self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT)
