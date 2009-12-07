@@ -111,6 +111,11 @@ class Zend_Service_Nominatim
         return $this;
     }
 
+    /**
+     * search for places
+     * 
+     * @return Zend_Service_Nominatim_ResultSet
+     */
     public function search()
     {
         $this->_httpClient->resetParameters();
@@ -118,28 +123,30 @@ class Zend_Service_Nominatim
         $url = $this->_url . 'search';
         
         if(!empty($this->_country)) {
-            $url .= '/' . urlencode($this->_country);
+            $url .= '/' . rawurlencode($this->_country);
         }
         
         if(!empty($this->_postcode)) {
-            $url .= '/' . urlencode($this->_postcode);
+            $url .= '/' . rawurlencode($this->_postcode);
         }
         
         if(!empty($this->_village)) {
-            $url .= '/' . urlencode($this->_village);
+            $url .= '/' . rawurlencode($this->_village);
         }
         
         if(!empty($this->_street)) {
-            $url .= '/' . urlencode($this->_street);
+            $url .= '/' . rawurlencode($this->_street);
         }
         
         if(!empty($this->_number)) {
-            $url .= '/' . urlencode($this->_number);
+            $url .= '/' . rawurlencode($this->_number);
         }
 
         $this->_httpClient->setUri($url);
         $this->_httpClient->setParameterGet('format', 'xml');
         $this->_httpClient->setParameterGet('addressdetails', 1);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Connecting to Nominating with uri ' . $url);
         
         $response = $this->_httpClient->request();
         
