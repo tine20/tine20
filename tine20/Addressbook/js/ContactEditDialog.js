@@ -33,7 +33,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         this.mapPanel = new Tine.widgets.MapPanel({
             layout: 'fit',
             title: this.app.i18n._('Map'),
-            disabled: (this.record.get('lon') === null) && (this.record.get('lat') === null),
+            disabled: (! this.record.get('lon') || this.record.get('lon') === null) && (! this.record.get('lat') || this.record.get('lat') === null),
             zoom: 15        
         });
         
@@ -413,7 +413,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 this.record.set('container_id', container);
             }
             
-            if(this.record.get('lon') !== null && this.record.get('lat') !== null) {
+            if (this.record.get('lon') && this.record.get('lon') !== null && this.record.get('lat') && this.record.get('lat') !== null) {
                 this.mapPanel.setCenter(this.record.get('lon'),this.record.get('lat'));
             }
         }
