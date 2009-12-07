@@ -15,13 +15,16 @@ Ext.namespace('Tine.widgets');
  */
 Tine.widgets.MapPanel = Ext.extend(GeoExt.MapPanel, {
 	zoom: 4,
-	map: new OpenLayers.Map(),
-	layers: [new OpenLayers.Layer.OSM()],
+	map: null,
+	layers: null,
 	
     /**
      * @private
      */
     initComponent: function() {
+        this.map =  new OpenLayers.Map();
+        this.layers = [new OpenLayers.Layer.OSM()];
+        
 		if(this.center instanceof Array) {
 	        this.center = new OpenLayers.LonLat(this.center[0], this.center[1]).transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
 	    }
