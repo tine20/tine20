@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         activate map panel again
  */
  
 Ext.ns('Tine.Addressbook');
@@ -29,7 +28,15 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     showContainerSelector: true,
     //recordProxy: Tine.Calendar.backend,
     
-    getFormItems: function() { 
+    getFormItems: function() {
+        
+        this.mapPanel = new Tine.widgets.MapPanel({
+            layout: 'fit',
+            title: this.app.i18n._('Map'),
+            disabled: (this.record.get('lon') === null) && (this.record.get('lat') === null),
+            zoom: 15        
+        });
+        
         return {
             xtype: 'tabpanel',
             border: false,
@@ -306,22 +313,13 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         })
                     ]
                 }]
-            },
-            {
-				layout: 'fit',
-				id: 'addressbook-map',
-				title: this.app.i18n._('Map'),
-				disabled: (this.record.get('lon') === null) && (this.record.get('lat') === null),
-				xtype: "widget-mappanel",
-				zoom: 15
-            }, 
+            }, this.mapPanel,
             new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: (this.record) ? this.record.id : '',
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             }),
             new Tine.Tinebase.widgets.customfields.CustomfieldsPanel({
-                //id: 'adbEditDialogCfPanel',
                 recordClass: Tine.Addressbook.Model.Contact,
                 disabled: (Tine.Addressbook.registry.get('customfields').length === 0),
                 quickHack: {record: this.record}
@@ -330,6 +328,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         };
     },
     
+    /**
+     * init component
+     */
     initComponent: function() {
         
         this.linkPanel = new Tine.widgets.dialog.LinkPanel({
@@ -411,15 +412,15 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 this.record.set('container_id', '');
                 this.record.set('container_id', container);
             }
+            
+            if(this.record.get('lon') !== null && this.record.get('lat') !== null) {
+                this.mapPanel.setCenter(this.record.get('lon'),this.record.get('lat'));
+            }
         }
         
         this.supr().onRecordLoad.apply(this, arguments);
         
         this.linkPanel.onRecordLoad(this.record);
-
-        if(this.record.get('lon') !== null && this.record.get('lat') !== null) {
-        	Ext.getCmp('addressbook-map').setCenter(this.record.get('lon'),this.record.get('lat'));
-        }
     }
 });
 
