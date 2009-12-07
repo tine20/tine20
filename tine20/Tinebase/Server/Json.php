@@ -19,7 +19,11 @@
  */
 class Tinebase_Server_Json extends Tinebase_Server_Abstract
 {
-	
+    /**
+     * handle request
+     * 
+     * @return void
+     */	
 	public function handle()
 	{
 	    try {
@@ -60,7 +64,6 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
         }
         
         echo $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
-            
 	}
 	
     /**
@@ -124,6 +127,14 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
         }
     }
     
+    /**
+     * handle exceptions
+     * 
+     * @param Zend_Json_Server $server
+     * @param Zend_Json_Server_Request_Http $request
+     * @param Exception $exception
+     * @return string json data
+     */
     protected function _handleException($server, $request, $exception)
     {
         $exceptionData = method_exists($exception, 'toArray')? $exception->toArray() : array();
@@ -148,6 +159,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
         return $response;
     }
     
+    /**
+     * return service map
+     * 
+     * @return Zend_Json_Server_Smd
+     */
     public static function getServiceMap()
     {
         $server = new Zend_Json_Server();
@@ -173,6 +189,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
         
         return $smd;
     }
+    
     /**
      * check json key
      *
