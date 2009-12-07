@@ -46,8 +46,13 @@ Tine.Tinebase.ExceptionHandler = function() {
         if (traceHtml.match(/chrome/)) {
             return true;
         }
+        // don't show openlayers error (occurs if window with contact is closed too fast)
+        // TODO better fix this error ...
+        if (traceHtml.match(/OpenLayers\.js/) && traceHtml.match(/element is null/)) {
+            return true;
+        }
         
-        // realy bad thing: fix exists only in close source version
+        // really bad thing: fix exists only in close source version
         // http://www.extjs.com/forum/showthread.php?t=76860
         if (traceHtml.match(/swf\.setDataProvider/)) {
             return true;
