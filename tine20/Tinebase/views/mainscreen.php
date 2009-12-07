@@ -13,11 +13,10 @@
  */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html manifest="tine20.manifest">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title><?php echo $this->escape($this->title) ?></title>
 
     <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
 
@@ -25,13 +24,16 @@
     <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/ext-all.css" />
     
     <!--  http://extjs.com/forum/showthread.php?t=65694
-    <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/xtheme-gray.css" /> --><?php /*
-    <!-- <script type="text/javascript" src="library/ExtJS/adapter/yui/yui-utilities.js"></script> -->
-    <!-- <script type="text/javascript" src="library/ExtJS/adapter/yui/ext-yui-adapter.js"></script> --> */?>
+    <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/xtheme-gray.css" /> -->
     
     <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="library/ExtJS/ext-all<?php echo TINE20_BUILDTYPE != 'RELEASE' ? '-debug' : '' ?>.js"></script>
-
+    
+    <script type="text/javascript" src="library/OpenLayers/OpenLayers.js"></script>
+    
+    <script type="text/javascript" src="library/GeoExt/script/GeoExt.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="library/GeoExt/resources/css/geoext-all.css"></link>
+    
     <!-- Tine 2.0 static files --><?php
         /**
          * this variable gets replaced by the buildscript
