@@ -207,7 +207,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function getMultiple($_id, $_containerIds = NULL) 
     {
-        
         if (empty($_id)) {
             return new Tinebase_Record_RecordSet($this->_modelName);
         }
@@ -216,7 +215,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_identifier) . ' in (?)', (array) $_id);
         
         if ($_containerIds !== NULL && isset($this->_schema['container_id'])) {
-            $select->where($this->_db->quoteIdentifier($this->_tableName . '.container_id') . ' in (?) /* add acl in getMultiple */', (array) $_containerIds);
+            if (empty($_containerIds)) {
+                $select->where('1=0 /* insufficient grants */');
+            } else {
+                $select->where($this->_db->quoteIdentifier($this->_tableName . '.container_id') . ' in (?) /* add acl in getMultiple */', (array) $_containerIds);
+            }
         }
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
