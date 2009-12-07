@@ -29,7 +29,7 @@ Tine.Tinebase.common = {
             _height = _height + 20;
         }
         
-        var windowName = Ext.isString(_windowName) ? _windowName.replace(/[^a-zA-Z0-9_]/, '') : _windowName;
+        var windowName = Ext.isString(_windowName) ? _windowName.replace(/[^a-zA-Z0-9_]/g, '') : _windowName;
         var w,h,x,y,leftPos,topPos,popup;
 
         if (document.all) {
