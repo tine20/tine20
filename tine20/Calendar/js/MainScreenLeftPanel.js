@@ -63,7 +63,7 @@ Tine.Calendar.MainScreenLeftPanel = Ext.extend(Ext.Panel, {
                 plugins: [new Ext.ux.DatePickerWeekPlugin({
                     weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._('WK'),
                     inspectMonthPickerClick: function(btn, e) {
-                        if (e.getTarget().id) {
+                        if (e.getTarget('button')) {
                             var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
                             contentPanel.changeView('month', this.activeDate);
                             
