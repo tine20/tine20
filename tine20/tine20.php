@@ -61,6 +61,11 @@ if (! in_array($opts->method, $anonymousMethods)) {
     if (empty($opts->username)) {
         $opts->username = Tinebase_Server_Cli::promptInput('username');
     }
+    if (empty($opts->username)) {
+        echo "error: username must be given! exiting \n";
+        exit (1);
+    }
+    
     if (empty($opts->password)) {
         $opts->password = Tinebase_Server_Cli::promptInput('password', TRUE);
     }
