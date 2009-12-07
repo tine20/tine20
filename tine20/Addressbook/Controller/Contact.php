@@ -131,5 +131,62 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             throw new Addressbook_Exception_AccessDenied('read access to contact denied');
         }            
         return $contact;            
-    }    
+    }
+
+    /**
+     * inspect creation of one record
+     * 
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectCreate(Tinebase_Record_Interface $_record)
+    {
+        if(!empty($_record->adr_one_locality)) {
+            $nomination = new Zend_Service_Nominatim();
+            
+            $nomination->setVillage($_record->adr_one_locality);
+            
+            try {
+                $geoData = $nomination->search();
+                $_record->lon = $geoData['lon'];
+                $_record->lat = $geoData['lat'];
+            } catch (Exception $e) {
+            }
+        }
+    }
+    
+    /**
+     * inspect update of one record
+     * 
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectUpdate($_record, $_oldRecord)
+    {
+        if(!empty($_record->adr_one_locality)) {
+            $nomination = new Zend_Service_Nominatim();
+            
+            $nomination->setVillage($_record->adr_one_locality);
+            
+            if(!empty($_record->adr_one_postalcode)) {
+                $nomination->setPostcode($_record->adr_one_postalcode);
+            }
+            
+            if(!empty($_record->adr_one_street)) {
+                $nomination->setStreet($_record->adr_one_street);
+            }
+            
+            if(!empty($_record->adr_one_countryname)) {
+                $nomination->setCountry($_record->adr_one_countryname);
+            }
+            
+            $places = $nomination->search();
+            
+            if(count($places) > 0) {
+                $_record->lon = $places->current()->lon;
+                $_record->lat = $places->current()->lat;
+            }
+        }
+    }
 }
