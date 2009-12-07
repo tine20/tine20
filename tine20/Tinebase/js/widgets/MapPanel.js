@@ -22,7 +22,6 @@ Tine.widgets.MapPanel = Ext.extend(GeoExt.MapPanel, {
      * @private
      */
     initComponent: function() {
-        //this.store = this.getCountryStore();
 		if(this.center instanceof Array) {
 	        this.center = new OpenLayers.LonLat(this.center[0], this.center[1]).transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
 	    }
