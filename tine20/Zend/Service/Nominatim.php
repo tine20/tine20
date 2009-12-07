@@ -147,10 +147,6 @@ class Zend_Service_Nominatim
 
         $result = new Zend_Service_Nominatim_ResultSet($xml);
 
-        if(count($result) == 0) {
-            throw new Exception('not found');
-        }
-        
         return $result;
     }    
 
