@@ -97,26 +97,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         return $defaultAddressbook;
     }
     
-    /****************************** overwritten functions ************************/
-    
-    /**
-     * delete one record
-     * - don't delete if it belongs to an user account
-     *
-     * @param Tinebase_Record_Interface $_record
-     * @throws Addressbook_Exception_AccessDenied
-     */
-    protected function _deleteRecord(Tinebase_Record_Interface $_record)
-    {
-        if (!empty($_record->account_id)) {
-            throw new Addressbook_Exception_AccessDenied('It is not allowed to delete a contact linked to an user account!');
-        }
-        
-        parent::_deleteRecord($_record);
-    }
-    
-    /****************************** public functions ************************/
-            
     /**
      * fetch one contact identified by $_userId
      *
@@ -134,6 +114,22 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * delete one record
+     * - don't delete if it belongs to an user account
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws Addressbook_Exception_AccessDenied
+     */
+    protected function _deleteRecord(Tinebase_Record_Interface $_record)
+    {
+        if (!empty($_record->account_id)) {
+            throw new Addressbook_Exception_AccessDenied('It is not allowed to delete a contact linked to an user account!');
+        }
+        
+        parent::_deleteRecord($_record);
+    }
+    
+    /**
      * inspect creation of one record
      * 
      * @param   Tinebase_Record_Interface $_record
@@ -141,21 +137,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectCreate(Tinebase_Record_Interface $_record)
     {
-        if(!empty($_record->adr_one_locality)) {
-            $nomination = new Zend_Service_Nominatim();
-            
-            $nomination->setVillage($_record->adr_one_locality);
-            
-            try {
-                $geoData = $nomination->search();
-                $_record->lon = $geoData['lon'];
-                $_record->lat = $geoData['lat'];
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Place found: lon/lat ' . $_record->lon . ' / ' . $_record->lat);
-                
-            } catch (Exception $e) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-            }
-        }
+        $this->_setGeoData($_record);
     }
     
     /**
@@ -164,10 +146,23 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
+     * 
+     * @todo    check if address changes before setting new geodata
      */
     protected function _inspectUpdate($_record, $_oldRecord)
     {
-        if(!empty($_record->adr_one_locality)) {
+        $this->_setGeoData($_record);
+    }
+    
+    /**
+     * set geodata of record
+     * 
+     * @param $_record
+     * @return void
+     */
+    protected function _setGeoData($_record)
+    {
+        if(! empty($_record->adr_one_locality)) {
             $nomination = new Zend_Service_Nominatim();
             
             $nomination->setVillage($_record->adr_one_locality);
@@ -184,18 +179,24 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 $nomination->setCountry($_record->adr_one_countryname);
             }
             
-            $places = $nomination->search();
-            
-            if(count($places) > 0) {
-                $_record->lon = $places->current()->lon;
-                $_record->lat = $places->current()->lat;
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Place found: lon/lat ' . $_record->lon . ' / ' . $_record->lat);
-            } else {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find place.');
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_record->adr_one_street . ', ' 
-                    . $_record->adr_one_postalcode . ', ' . $_record->adr_one_locality . ', ' . $_record->adr_one_countryname
-                );
+            try {            
+                $places = $nomination->search();
+                
+                if(count($places) > 0) {
+                    $_record->lon = $places->current()->lon;
+                    $_record->lat = $places->current()->lat;
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Place found: lon/lat ' . $_record->lon . ' / ' . $_record->lat);
+                } else {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find place.');
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_record->adr_one_street . ', ' 
+                        . $_record->adr_one_postalcode . ', ' . $_record->adr_one_locality . ', ' . $_record->adr_one_countryname
+                    );
+                }
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
             }
+        } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No locality given: Do not search for geodata.');
         }
     }
 }
