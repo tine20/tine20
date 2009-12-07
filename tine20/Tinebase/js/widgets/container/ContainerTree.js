@@ -68,10 +68,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @cfg {array} extraItems additional items to display under all
      */
     extraItems: null,
-    /**
-     * @cfg {Number} how many chars of the containername to display
-     */
-    displayLength: 23,
     
 	// presets
 	iconCls: 'x-new-application',
@@ -90,8 +86,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         
         if (! this.loader) {
             this.loader = new Tine.widgets.container.TreeLoader({
-                appName: this.appName,
-                displayLength: this.displayLength
+                appName: this.appName
             });
         }
 		
@@ -419,10 +414,6 @@ Tine.widgets.container.TreeLoader = function(config) {
 };
 
 Ext.extend(Tine.widgets.container.TreeLoader, Ext.tree.TreeLoader, {
-    /**
-     * @cfg {Number} how many chars of the containername to display
-     */
-    displayLength: 25,
     
     paramsAsHash: true,
     //paramOrder: ['application', 'containerType', 'owner'],
@@ -466,7 +457,7 @@ Ext.extend(Tine.widgets.container.TreeLoader, Ext.tree.TreeLoader, {
         }
                 
         attr.qtip = Ext.util.Format.htmlEncode(attr.text);
-        attr.text = Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(attr.text, this.displayLength));
+        attr.text = Ext.util.Format.htmlEncode(attr.text);
         
         this.inspectCreateNode(attr);
         

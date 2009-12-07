@@ -34,8 +34,7 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         });
         
         this.loader = new Tine.Calendar.CalendarSelectTreeLoader({
-            appName: this.appName,
-            displayLength: this.displayLength
+            appName: this.appName
         });
         
         // inject resources tree node
