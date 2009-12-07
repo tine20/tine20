@@ -305,7 +305,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         })
                     ]
                 }]
-            },
+            }/*,
             {
 				layout: 'fit',
 				id: 'addressbook-map',
@@ -313,7 +313,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
 				disabled: (this.record.get('lon') === null) && (this.record.get('lat') === null),
 				xtype: "widget-mappanel",
 				zoom: 14
-            }, 
+            }*/, 
             new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: (this.record) ? this.record.id : '',
