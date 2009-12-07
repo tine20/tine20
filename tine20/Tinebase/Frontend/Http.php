@@ -242,8 +242,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/GMapPanel.js',
             'Tinebase/js/ux/DatepickerRange.js',
             'Tinebase/js/ux/tree/CheckboxSelectionModel.js',
-            'Tinebase/js/ux/OpenLayers/Map.js',
-            'Tinebase/js/ux/OpenLayers/MapPanel.js',
             'Tinebase/js/ux/display/DisplayPanel.js',
             'Tinebase/js/ux/display/DisplayField.js',
             'Tinebase/js/ux/layout/Display.js',
@@ -291,6 +289,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/ActivitiesPanel.js',        
             'Tinebase/js/widgets/form/RecordPickerComboBox.js',
             'Tinebase/js/widgets/form/ConfigPanel.js',
+            'Tinebase/js/widgets/MapPanel.js',
             // yui stuff
             //'../yui/build/dragdrop/dragdrop-min.js',
             //'../yui/build/resize/resize-beta-min.js',
