@@ -156,7 +156,6 @@ Ext.ux.WindowFactory.prototype = {
         
         // Names are only allowed to be alnum
         config.name = Ext.isString(config.name) ? config.name.replace(/[^a-zA-Z0-9_]/g, '') : config.name;
-        console.log(config.name);
         
         switch (windowType) {
             case 'Browser' :
