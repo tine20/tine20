@@ -7,6 +7,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * TODO         activate map panel again
  */
  
 Ext.ns('Tine.Addressbook');
@@ -416,9 +417,11 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         
         this.linkPanel.onRecordLoad(this.record);
 
+        /*
         if(this.record.get('lon') !== null && this.record.get('lat') !== null) {
         	Ext.getCmp('addressbook-map').setCenter(this.record.get('lon'),this.record.get('lat'));
         }
+        */
     }
 });
 
