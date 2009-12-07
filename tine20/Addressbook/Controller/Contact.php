@@ -150,7 +150,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 $geoData = $nomination->search();
                 $_record->lon = $geoData['lon'];
                 $_record->lat = $geoData['lat'];
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Place found: lon/lat ' . $_record->lon . ' / ' . $_record->lat);
+                
             } catch (Exception $e) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
             }
         }
     }
@@ -186,6 +189,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             if(count($places) > 0) {
                 $_record->lon = $places->current()->lon;
                 $_record->lat = $places->current()->lat;
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Place found: lon/lat ' . $_record->lon . ' / ' . $_record->lat);
+            } else {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find place.');
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_record->adr_one_street . ', ' 
+                    . $_record->adr_one_postalcode . ', ' . $_record->adr_one_locality . ', ' . $_record->adr_one_countryname
+                );
             }
         }
     }
