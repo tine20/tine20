@@ -101,10 +101,12 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract
                 $input = fgets(STDIN);
                 system('stty echo');
             }
+            fwrite(STDOUT, PHP_EOL);
         } else {
             $input = fgets(STDIN);
         }
         
         return rtrim($input);
     }
+    
 }
