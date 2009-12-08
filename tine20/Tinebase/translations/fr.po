@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-06 16:14+0100\n"
+"PO-Revision-Date: 2009-12-08 19:02+0100\n"
 "Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 
 #: Acl/Rights/Abstract.php:65
 msgid "admin"
-msgstr "administrer"
+msgstr "admin"
 
 #: Acl/Rights/Abstract.php:66
 msgid "admin right description"
@@ -51,7 +51,7 @@ msgstr "Filtrer"
 
 #: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:54
 msgid "Tags"
-msgstr "Tags"
+msgstr "Marqueurs"
 
 #: Export/Pdf.php:403
 msgid "Created by"
@@ -231,7 +231,7 @@ msgstr "Mot de passe"
 
 #: js/LoginPanel.js:130
 msgid "Tine 2.0 is made for you"
-msgstr ""
+msgstr "Tine 2.0 est fait pour vous"
 
 #: js/LoginPanel.js:132
 msgid ""
@@ -239,40 +239,46 @@ msgid ""
 "for your needs! So you are warmly welcome to discuss with us, bring in ideas "
 "and get help."
 msgstr ""
+"Tine 2.0 veut rendre le travail collaboratif pour facile et plus sympathique "
+"- pour vos besoins! Alors vous êtes les bienvenus pour discuter avec nous. "
+"Apportez vos idées, et obtenez de l'aide."
 
 #: js/LoginPanel.js:138
 msgid "Tine 2.0 Homepage"
-msgstr ""
+msgstr "Tine 2.0. Site web"
 
 #: js/LoginPanel.js:139
 msgid "Tine 2.0 Forum"
-msgstr ""
+msgstr "Tine 2.0. Forum"
 
 #: js/LoginPanel.js:183
 msgid "about {0} minutes"
-msgstr ""
+msgstr "environ {0} minutes"
 
 #: js/LoginPanel.js:188 js/LoginPanel.js:350
 msgid "Tine 2.0 needs your help"
-msgstr ""
+msgstr "Tine 2.0 a besoin de vous."
 
 #: js/LoginPanel.js:190 js/LoginPanel.js:352
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
 msgstr ""
+"Nous avons régulièrement besoin de votre retour d'opinion pour rendre les "
+"futures versions de Tine 2.0 encore plus proches de vos attentes. Aidez nous "
+"et vous-mêmes en participant:"
 
 #: js/LoginPanel.js:196
 msgid "participate!"
-msgstr ""
+msgstr "participez!"
 
 #: js/LoginPanel.js:218
 msgid "Languages"
-msgstr ""
+msgstr "Langues"
 
 #: js/LoginPanel.js:219
 msgid "Duration"
-msgstr ""
+msgstr "Durée"
 
 #: js/LoginPanel.js:276
 msgid "Logging you in..."
@@ -286,9 +292,8 @@ msgid "Please wait"
 msgstr "Veuillez patienter"
 
 #: js/LoginPanel.js:288
-#, fuzzy
 msgid "Login successful. Loading {0}..."
-msgstr "Connexion réussie. Chargement de Tine 2.0..."
+msgstr "Connexion réussie. Chargement de {0}..."
 
 #: js/LoginPanel.js:288 js/MainScreen.js:534
 msgid "Please wait!"
@@ -308,7 +313,7 @@ msgstr "Saisissez votre login"
 
 #: js/MainScreen.js:52
 msgid "Debug Console (Ctrl + F11)"
-msgstr ""
+msgstr "Console de debug (Ctrl + F11)"
 
 #: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:117
 msgid "Admin"
@@ -333,9 +338,8 @@ msgid ""
 msgstr "Vous n'avez pas d'application, veuillez contacter l'administrateur."
 
 #: js/MainScreen.js:208 js/MainScreen.js:382
-#, fuzzy
 msgid "About {0}"
-msgstr "Ajouter {0}"
+msgstr "A propos de {0}"
 
 #: js/MainScreen.js:214
 msgid "Change password"
@@ -350,9 +354,8 @@ msgid "Logout"
 msgstr "Déconnexion"
 
 #: js/MainScreen.js:238
-#, fuzzy
 msgid "Logout from {0}"
-msgstr "Déconnexion de tine2.0"
+msgstr "Déconnexion de {0}"
 
 #: js/MainScreen.js:397
 msgid "About Tine 2.0"
@@ -387,7 +390,7 @@ msgstr "Veuillez patienter!"
 
 #: js/MainScreen.js:465
 msgid "changing password..."
-msgstr "Changement de mot de passe..."
+msgstr "Changement du mot de passe..."
 
 #: js/MainScreen.js:476
 msgid "Success"
@@ -403,7 +406,7 @@ msgstr "Erreur"
 
 #: js/MainScreen.js:494
 msgid "The new passwords mismatch, please correct them."
-msgstr "Les nouveau mots de correspondent pas, veuillez corriger."
+msgstr "Les nouveaux mots de passe ne correspondent pas, veuillez corriger."
 
 #: js/MainScreen.js:512
 msgid ""
@@ -431,25 +434,24 @@ msgstr "Déconnexion..."
 #: js/Models.js:74
 msgid "Group"
 msgid_plural "Groups"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Groupe"
+msgstr[1] "Groupes"
 
 #: js/Models.js:74
 msgid "Groups"
-msgstr ""
+msgstr "Groups"
 
 #: js/Models.js:247
 msgid "Credentials"
 msgid_plural "Credentials"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Identifiant"
+msgstr[1] "Identifiants"
 
 #: js/Models.js:274
-#, fuzzy
 msgid "Relation"
 msgid_plural "Relations"
-msgstr[0] "Applications"
-msgstr[1] "Applications"
+msgstr[0] "Relation"
+msgstr[1] "Relations"
 
 #: js/tineInit.js:560
 msgid ""
@@ -582,36 +584,31 @@ msgstr "saisir un filtre de recherche"
 
 #: js/widgets/account/PickerGridPanel.js:167
 msgid "Remove account"
-msgstr "Supprimer le compte"
+msgstr "Enlever le compte"
 
 #: js/widgets/account/PickerGridPanel.js:231
-#, fuzzy
 msgid "Search User"
-msgstr "Recherche"
+msgstr "Rechercher un utilisateur"
 
 #: js/widgets/account/PickerGridPanel.js:237
-#, fuzzy
 msgid "Search Group"
-msgstr "Recherche"
+msgstr "Rechercher un groupe"
 
 #: js/widgets/account/PickerGridPanel.js:243
-#, fuzzy
 msgid "Add Anyone"
-msgstr "Ajouter une note"
+msgstr "Ajouter tout le monde"
 
 #: js/widgets/account/PickerGridPanel.js:251
-#, fuzzy
 msgid "Anyone"
-msgstr "Aucun"
+msgstr "Tout le monde"
 
 #: js/widgets/account/PickerGridPanel.js:298
 msgid "Search for users ..."
-msgstr ""
+msgstr "Rechercher un utilisateur..."
 
 #: js/widgets/account/PickerGridPanel.js:318
-#, fuzzy
 msgid "Search for groups ..."
-msgstr "Recherche"
+msgstr "Rechercher un groupe..."
 
 #: js/widgets/account/PickerGridPanel.js:372
 msgid "Name"
@@ -648,7 +645,7 @@ msgstr "Saisie de la nouvelle note:"
 
 #: js/widgets/ActivitiesPanel.js:308
 msgid "Add a {0} Note"
-msgstr "Ajouter une {0} note"
+msgstr "{0}"
 
 #: js/widgets/ActivitiesPanel.js:394 js/widgets/ActivitiesPanel.js:529
 msgid "Type"
@@ -676,15 +673,15 @@ msgstr "Historique"
 
 #: js/widgets/ActivitiesPanel.js:523
 msgid "Quick search"
-msgstr ""
+msgstr "Recherche rapide"
 
 #: js/widgets/ActivitiesPanel.js:524 js/widgets/ActivitiesPanel.js:525
 msgid "Time"
-msgstr "Heure"
+msgstr "Date"
 
 #: js/widgets/ActivitiesPanel.js:527
 msgid "User"
-msgstr "Utilistateur"
+msgstr "Utilisateur"
 
 #: js/widgets/app/GridPanel.js:275
 msgid "Edit {0}"
@@ -702,13 +699,12 @@ msgstr[0] "Supprimer {0}"
 msgstr[1] "Supprimer {0}"
 
 #: js/widgets/app/GridPanel.js:319
-#, fuzzy
 msgid "Tagging"
-msgstr "Tag"
+msgstr "Marquer"
 
 #: js/widgets/app/GridPanel.js:395
 msgid "Displaying records {0} - {1} of {2}"
-msgstr "Afficher enregistrement {0} - {1} de {2}"
+msgstr "Affiche les enregistrements {0} - {1} sur {2}"
 
 #: js/widgets/app/GridPanel.js:396
 msgid "No {0} to display"
@@ -761,7 +757,7 @@ msgstr "Filtre sauvegardé"
 #: js/widgets/container/ContainerSelect.js:123
 #: js/widgets/container/ContainerSelect.js:221
 msgid "choose other {0}..."
-msgstr "Choisir autre {0}..."
+msgstr "Veuillez choisir un(e) autre {0}..."
 
 #: js/widgets/container/ContainerSelect.js:124
 msgid "Recently used {0}:"
@@ -779,7 +775,7 @@ msgstr "Partagé"
 
 #: js/widgets/container/ContainerSelect.js:370
 msgid "please select a {0}"
-msgstr "Veuillez choisir {0}"
+msgstr "Veuillez choisir un {0}"
 
 #: js/widgets/container/ContainerTree.js:129
 msgid "All {0}"
@@ -795,17 +791,15 @@ msgstr "{0} partagé(e)s"
 
 #: js/widgets/container/ContainerTree.js:149
 msgid "Other Users {0}"
-msgstr "Autres utilisateurs {0}"
+msgstr "{0} des autres utilisateurs"
 
 #: js/widgets/container/ContainerTree.js:172
-#, fuzzy
 msgid "Permission Denied"
-msgstr "Permissions"
+msgstr "Permission refusée"
 
 #: js/widgets/container/ContainerTree.js:172
-#, fuzzy
 msgid "You don't have the required grant to select this {0}"
-msgstr "Êtes-vous sûr de vouloir supprimer {0}?"
+msgstr "Vous n'avez pas les droits requis pour sélectionner l'objet {0}"
 
 #: js/widgets/container/GrantsDialog.js:55
 msgid "Folder"
@@ -841,9 +835,8 @@ msgstr "Champs personnalisés"
 
 #: js/widgets/customfields/CustomfieldsPanel.js:71
 #: js/widgets/customfields/CustomfieldsPanel.js:85
-#, fuzzy
 msgid "General"
-msgstr "normale"
+msgstr "Général"
 
 #: js/widgets/customfields/CustomfieldsPanel.js:107
 msgid "There are no custom fields yet"
@@ -918,16 +911,15 @@ msgstr "Sauvegardé"
 
 #: js/widgets/dialog/EditDialog.js:339
 msgid "Transfering {0}..."
-msgstr "Transfert de {0}..."
+msgstr "Chargement de: {0}..."
 
 #: js/widgets/dialog/EditDialog.js:446
 msgid "Do you really want to delete this {0}?"
 msgstr "Êtes-vous sûr de vouloir supprimer {0}?"
 
 #: js/widgets/dialog/LinkPanel.js:48
-#, fuzzy
 msgid "Links"
-msgstr "Login"
+msgstr "Liens"
 
 #: js/widgets/dialog/PreferencesDialog.js:137
 msgid "Admin Mode"
@@ -939,7 +931,7 @@ msgstr "Applications"
 
 #: js/widgets/dialog/PreferencesDialog.js:200
 msgid "Edit Preferences"
-msgstr "Préférences"
+msgstr "Éditer les préférences"
 
 #: js/widgets/dialog/PreferencesDialog.js:201
 msgid "Loading ..."
@@ -951,7 +943,7 @@ msgstr "Erreur d'enregistrement des préférences."
 
 #: js/widgets/dialog/PreferencesPanel.js:150
 msgid "There are no preferences for this application."
-msgstr "Pas de préférences pour cette application."
+msgstr "Pas de préférence pour cette application."
 
 #: js/widgets/dialog/PreferencesTreePanel.js:60
 msgid "General Preferences"
@@ -959,21 +951,21 @@ msgstr "Préférences générales"
 
 #: js/widgets/form/ConfigPanel.js:108
 msgid "Invalid configuration"
-msgstr ""
+msgstr "Configuration non valide"
 
 #: js/widgets/form/ConfigPanel.js:108
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr ""
+"Vous devez corriger les champs marqués en rouge avant de pouvoir sauvegarder "
+"la configuration."
 
 #: js/widgets/form/ConfigPanel.js:133
-#, fuzzy
 msgid "Transfering Configuration..."
-msgstr "Transfert de {0}..."
+msgstr "Transfert de la configuration..."
 
 #: js/widgets/form/ConfigPanel.js:229
-#, fuzzy
 msgid "Save config"
-msgstr "Sauvegardé"
+msgstr "Sauvegarder la configuration"
 
 #: js/widgets/form/ConfigPanel.js:239
 msgid "Reload config"
@@ -981,7 +973,7 @@ msgstr ""
 
 #: js/widgets/form/RecordPickerComboBox.js:59 js/widgets/tags/TagsPanel.js:465
 msgid "Searching..."
-msgstr "Recherche"
+msgstr "Recherche en cours..."
 
 #: js/widgets/grid/FilterModel.js:146
 msgid "contains"
@@ -989,19 +981,19 @@ msgstr "contient"
 
 #: js/widgets/grid/FilterModel.js:147
 msgid "is equal to"
-msgstr "égal à"
+msgstr "égal(e) à"
 
 #: js/widgets/grid/FilterModel.js:148
 msgid "is greater than"
-msgstr "supérieur à"
+msgstr "supérieur(e) à"
 
 #: js/widgets/grid/FilterModel.js:149
 msgid "is less than"
-msgstr "inférieur à"
+msgstr "inférieur(e) à"
 
 #: js/widgets/grid/FilterModel.js:150
 msgid "is not"
-msgstr "différent de"
+msgstr "différent(e) de"
 
 #: js/widgets/grid/FilterModel.js:151
 msgid "is in"
@@ -1017,12 +1009,11 @@ msgstr "après"
 
 #: js/widgets/grid/FilterModel.js:154
 msgid "is within"
-msgstr "est contenu dans"
+msgstr "dans"
 
 #: js/widgets/grid/FilterModel.js:155
-#, fuzzy
 msgid "is in week no."
-msgstr "cette semaine"
+msgstr "semaine n°"
 
 #: js/widgets/grid/FilterModel.js:156
 msgid "starts with"
@@ -1033,18 +1024,16 @@ msgid "ends with"
 msgstr "se termine par"
 
 #: js/widgets/grid/FilterModel.js:158
-#, fuzzy
 msgid "one of"
-msgstr "Aucun"
+msgstr "l'un des"
 
 #: js/widgets/grid/FilterModel.js:196
 msgid "select a operator"
 msgstr "sélectionnez un opérateur"
 
 #: js/widgets/grid/FilterModel.js:289
-#, fuzzy
 msgid "Search Account ..."
-msgstr "Recherche"
+msgstr "Rechercher un compte..."
 
 #: js/widgets/grid/FilterModel.js:402
 msgid "today"
@@ -1173,7 +1162,7 @@ msgstr "Enregistrement du filtre"
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:103
 msgid "Always show advanced filters"
-msgstr ""
+msgstr "Toujours afficher les filtres avancés"
 
 #: js/widgets/grid/PersistentFilterPicker.js:79
 msgid "My saved filters"
@@ -1193,7 +1182,7 @@ msgstr "Suppression du filtre \"{0}\""
 
 #: js/widgets/grid/QuickaddGridPanel.js:95
 msgid "Remove"
-msgstr ""
+msgstr "Supprimer"
 
 #: js/widgets/GridPicker.js:78
 msgid "remove record"
@@ -1237,51 +1226,50 @@ msgstr "urgent"
 
 #: js/widgets/tags/TagCombo.js:45
 msgid "tag name"
-msgstr "nom du tag"
+msgstr "nom du marqueur"
 
 #: js/widgets/tags/TagFilter.js:29
 msgid "Tag"
-msgstr "Tag"
+msgstr "Marqueur"
 
 #: js/widgets/tags/TagsMassAttachAction.js:15
-#, fuzzy
 msgid "Add Tag"
-msgstr "Ajouter"
+msgstr "Ajouter un marqueur"
 
 #: js/widgets/tags/TagsMassAttachAction.js:62
 msgid "Attach the following tag to all selected items:"
-msgstr ""
+msgstr "Attacher le marqueur à tous les éléments séléctionnés:"
 
 #: js/widgets/tags/TagsMassAttachAction.js:73
-#, fuzzy
 msgid "Select Tag"
-msgstr "Supprimer le tag"
+msgstr "Sélectionner un marqueur"
 
 #: js/widgets/tags/TagsPanel.js:89 js/widgets/tags/TagsPanel.js:114
 msgid "Add a new personal tag"
-msgstr "Créer un tag personnel"
+msgstr "Créer un marqueur personnel"
 
 #: js/widgets/tags/TagsPanel.js:92 js/widgets/tags/TagsPanel.js:117
 msgid "Add New Personal Tag"
-msgstr "Créer un tag personnel"
+msgstr "Créer un marqueur personnel"
 
 #: js/widgets/tags/TagsPanel.js:93 js/widgets/tags/TagsPanel.js:118
 msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr "Information: Vous créez un tag personnel, vous seul pourrez le voir!"
+msgstr ""
+"Information: Vous créez un marqueur personnel, vous seul pourrez le voir!"
 
 #: js/widgets/tags/TagsPanel.js:93 js/widgets/tags/TagsPanel.js:118
 msgid "Enter tag name:"
-msgstr "Saisissez le nom du tag:"
+msgstr "Saisissez le nom du marqueur:"
 
 #: js/widgets/tags/TagsPanel.js:159
 msgid "No Tags to display"
-msgstr "Aucun tag à afficher"
+msgstr "Aucun marqueur à afficher"
 
 #: js/widgets/tags/TagsPanel.js:182
 msgid "Detach tag"
 msgid_plural "Detach tags"
-msgstr[0] "Enlever le tag"
-msgstr[1] "Enlever les tags"
+msgstr[0] "Enlever le marqueur"
+msgstr[1] "Enlever les marqueurs"
 
 #: js/widgets/tags/TagsPanel.js:192
 msgid "Edit tag"
@@ -1297,11 +1285,11 @@ msgstr "Veuillez saisir un nouveau nom:"
 
 #: js/widgets/tags/TagsPanel.js:211
 msgid "Edit Description"
-msgstr "Éditer description"
+msgstr "Éditer la description"
 
 #: js/widgets/tags/TagsPanel.js:216
 msgid "Description for tag"
-msgstr "Description du tag"
+msgstr "Description du marqueur"
 
 #: js/widgets/tags/TagsPanel.js:216
 msgid "Please enter new description:"
@@ -1314,22 +1302,23 @@ msgstr "Changer de couleur"
 #: js/widgets/tags/TagsPanel.js:253
 msgid "Delete Tag"
 msgid_plural "Delete Tags"
-msgstr[0] "Supprimer le tag"
-msgstr[1] "Supprimer les tags"
+msgstr[0] "Supprimer le marqueur"
+msgstr[1] "Supprimer les marqueurs"
 
 #: js/widgets/tags/TagsPanel.js:266
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
-msgstr[0] "Supprimer définitivement le tag?"
-msgstr[1] "Supprimer définitivement les tags?"
+msgstr[0] "Supprimer définitivement le marqueur?"
+msgstr[1] "Supprimer définitivement les marqueurs?"
 
 #: js/widgets/tags/TagsPanel.js:267
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] ""
-"le tag sélectionné sera supprimé et enlevé de toutes les entrées associées"
+"le marqueur sélectionné sera supprimé et enlevé de toutes les entrées "
+"associées"
 msgstr[1] ""
-"les tags sélectionnés seront supprimés et enlevés de toutes les entrées "
+"les marqueur sélectionnés seront supprimés et enlevés de toutes les entrées "
 "associées"
 
 #: js/widgets/tags/TagsPanel.js:271
@@ -1339,8 +1328,8 @@ msgstr "Veuillez patienter..."
 #: js/widgets/tags/TagsPanel.js:271
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
-msgstr[0] "Suppression du tag"
-msgstr[1] "Suppression des tags"
+msgstr[0] "Suppression du marqueur"
+msgstr[1] "Suppression des marqueurs"
 
 #: js/widgets/tags/TagsPanel.js:287
 msgid "Could not delete Tag(s)."
@@ -1356,15 +1345,15 @@ msgstr "La longueur minimum est de 3 caractères."
 
 #: js/widgets/tags/TagsPanel.js:397
 msgid "Could not create tag."
-msgstr "Impossible de créer le tag."
+msgstr "Impossible de créer le marqueur."
 
 #: js/widgets/tags/TagsPanel.js:430
 msgid "Could not update tag."
-msgstr "Impossible de mettre à jour le tag."
+msgstr "Impossible de mettre à jour le marqueur."
 
 #: js/widgets/tags/TagsPanel.js:464 js/widgets/tags/TagsPanel.js:522
 msgid "Enter tag name"
-msgstr "Saisissez le nom du tag"
+msgstr "Saisissez le nom du marqueur"
 
 #: js/widgets/tags/TagsPanel.js:599
 msgid "Color"
@@ -1523,6 +1512,9 @@ msgstr "mis à jour"
 msgid "record changed"
 msgstr "enregistrement mis à jour"
 
+#~ msgid "Permissions"
+#~ msgstr "Permissions"
+
 #~ msgid "Register"
 #~ msgstr "S'enregistrer"
 
@@ -1532,9 +1524,6 @@ msgstr "enregistrement mis à jour"
 #~ msgstr ""
 #~ "Le serveur n'a pas répondu à votre requête. Vérifiez la connexion réseau "
 #~ "ou contactez votre administrateur."
-
-#~ msgid "Permissions"
-#~ msgstr "Permissions"
 
 #~ msgid "Could not save {0}."
 #~ msgstr "Échec de sauvegarde de {0}."
@@ -1556,3 +1545,6 @@ msgstr "enregistrement mis à jour"
 
 #~ msgid "Timezone: {0}"
 #~ msgstr "Fuseau horaire: {0}"
+
+#~ msgid "Our Forum for questions and ideas"
+#~ msgstr "Notre forum pour vos questions et vos idées."

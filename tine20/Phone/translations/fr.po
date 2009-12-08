@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-08-07 14:15+0100\n"
+"PO-Revision-Date: 2009-12-07 16:00+0100\n"
 "Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -53,8 +53,9 @@ msgid "redirection"
 msgstr "renvoi"
 
 #: js/MyPhoneEditDialog.js:400 js/MyPhoneEditDialog.js:857
+#, fuzzy
 msgid "redirect_event"
-msgstr ""
+msgstr "Supprimer"
 
 #: js/MyPhoneEditDialog.js:419 js/MyPhoneEditDialog.js:882
 msgid "all"
@@ -87,7 +88,7 @@ msgstr "paramètres"
 
 #: js/MyPhoneEditDialog.js:466 js/MyPhoneEditDialog.js:964
 msgid "web_language"
-msgstr ""
+msgstr "Langage_web"
 
 #: js/MyPhoneEditDialog.js:470 js/MyPhoneEditDialog.js:488
 #: js/MyPhoneEditDialog.js:512 js/MyPhoneEditDialog.js:524
@@ -110,7 +111,7 @@ msgstr "Langue"
 
 #: js/MyPhoneEditDialog.js:508 js/MyPhoneEditDialog.js:1044
 msgid "display_method"
-msgstr ""
+msgstr "Méthode d'affichage"
 
 #: js/MyPhoneEditDialog.js:513 js/MyPhoneEditDialog.js:1060
 msgid "whole url"
@@ -134,7 +135,7 @@ msgstr "numéro + nom"
 
 #: js/MyPhoneEditDialog.js:520 js/MyPhoneEditDialog.js:1080
 msgid "call_waiting"
-msgstr ""
+msgstr "Appel en attente"
 
 #: js/MyPhoneEditDialog.js:525 js/MyPhoneEditDialog.js:564
 #: js/MyPhoneEditDialog.js:573 js/MyPhoneEditDialog.js:582
@@ -143,7 +144,7 @@ msgstr ""
 #: js/MyPhoneEditDialog.js:1244 js/MyPhoneEditDialog.js:1277
 #: js/MyPhoneEditDialog.js:1305 js/MyPhoneEditDialog.js:1333
 msgid "on"
-msgstr ""
+msgstr "Allumé"
 
 #: js/MyPhoneEditDialog.js:526 js/MyPhoneEditDialog.js:1097
 msgid "visual"
@@ -160,11 +161,12 @@ msgstr ""
 #: js/MyPhoneEditDialog.js:1245 js/MyPhoneEditDialog.js:1278
 #: js/MyPhoneEditDialog.js:1306 js/MyPhoneEditDialog.js:1334
 msgid "off"
-msgstr ""
+msgstr "Éteint"
 
 #: js/MyPhoneEditDialog.js:531 js/MyPhoneEditDialog.js:1110
+#, fuzzy
 msgid "mwi_notification"
-msgstr ""
+msgstr "Notification de tâche"
 
 #: js/MyPhoneEditDialog.js:536 js/MyPhoneEditDialog.js:1126
 msgid "silent"
@@ -192,11 +194,12 @@ msgstr ""
 
 #: js/MyPhoneEditDialog.js:550 js/MyPhoneEditDialog.js:1172
 msgid "headset_device"
-msgstr ""
+msgstr "Casque"
 
 #: js/MyPhoneEditDialog.js:556 js/MyPhoneEditDialog.js:1189
+#, fuzzy
 msgid "headset_rj"
-msgstr ""
+msgstr "Casque"
 
 #: js/MyPhoneEditDialog.js:559 js/MyPhoneEditDialog.js:1200
 msgid "message_led_other"
@@ -207,28 +210,31 @@ msgid "global_missed_counter"
 msgstr ""
 
 #: js/MyPhoneEditDialog.js:577 js/MyPhoneEditDialog.js:1261
+#, fuzzy
 msgid "scroll_outgoing"
-msgstr ""
+msgstr "Appel sortant"
 
 #: js/MyPhoneEditDialog.js:586 js/MyPhoneEditDialog.js:1289
+#, fuzzy
 msgid "show_local_line"
-msgstr ""
+msgstr "afficher les dossiers intelligents"
 
 #: js/MyPhoneEditDialog.js:595 js/MyPhoneEditDialog.js:1317
 msgid "show_call_status"
-msgstr ""
+msgstr "Afficher l'état d'appel"
 
 #: js/MyPhoneEditDialog.js:620
 msgid "lineactive"
-msgstr ""
+msgstr "Ligne active"
 
 #: js/MyPhoneEditDialog.js:648
 msgid "sipCombo"
 msgstr ""
 
 #: js/MyPhoneEditDialog.js:667
+#, fuzzy
 msgid "Idle Text"
-msgstr ""
+msgstr "Texte simple"
 
 #: js/MyPhoneEditDialog.js:700
 msgid "Lines"
