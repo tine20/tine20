@@ -397,35 +397,7 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
     }
 });
 
-/**
- * Tree loader for {Tine.widgets.container.TreePanel}
- * 
- * @namespace Tine.widgets.container
- * @class     Tine.widgets.container.TreeLoader
- * @extends   Ext.tree.TreeLoader
- * @constructor
- * @param {Object} config
- */
-Tine.widgets.container.TreeLoader = function(config) {
-    
-    Tine.widgets.container.TreeLoader.superclass.constructor.call(this, config);
-    
-    this.on("beforeload", this.onBeforeLoad, this);
-};
-
-Ext.extend(Tine.widgets.container.TreeLoader, Ext.tree.TreeLoader, {
-    
-    paramsAsHash: true,
-    //paramOrder: ['application', 'containerType', 'owner'],
-    
-    directFn: function(nodeId, params, cb) {
-        Ext.Ajax.request({
-            params: params,
-            success: function(response) {
-                cb(response.responseText, response);
-            }
-        })
-    },
+Tine.widgets.container.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     
 	/**
      * @private
@@ -479,15 +451,60 @@ Ext.extend(Tine.widgets.container.TreeLoader, Ext.tree.TreeLoader, {
     inspectCreateNode: Ext.emptyFn,
     
     /**
-     * inspect load action
+     * request data
      * 
-     * @param {TreeLoader} loader
-     * @param {node} node
+     * @param {} node
+     * @param {} callback
+     * @private
      */
-    onBeforeLoad: function(loader, node) {
-        loader.baseParams.method = 'Tinebase_Container.getContainer';
-        loader.baseParams.application = this.appName;
-        loader.baseParams.containerType = node.attributes.containerType;
-        loader.baseParams.owner = node.attributes.owner ? node.attributes.owner.accountId : null;
+    requestData: function(node, callback, scope){
+        if(this.fireEvent("beforeload", this, node, callback) !== false){
+            
+            this.transId = Ext.Ajax.request({
+                params: {
+                    method: 'Tinebase_Container.getContainer',
+                    application: this.appName,
+                    containerType: node.attributes.containerType,
+                    owner: node.attributes.owner ? node.attributes.owner.accountId : null
+                },
+                success: this.handleResponse,
+                failure: this.handleFailure,
+                scope: this,
+                argument: {callback: callback, node: node, scope: scope}
+            });
+        } else {
+            // if the load is cancelled, make sure we notify
+            // the node that we are done
+            this.runCallback(callback, scope || node, []);
+        }
+    },
+    
+    /**
+     * process response
+     * 
+     * @param {} response
+     * @param {} node
+     * @param {} callback
+     */
+    processResponse : function(response, node, callback){
+        var data = Ext.util.JSON.decode(response.responseText);
+        var o = data;
+        
+        try {
+            node.beginUpdate();
+            for(var i = 0, len = o.length; i < len; i++){
+                var n = this.createNode(o[i]);
+                if(n){
+                    node.appendChild(n);
+                }
+            }
+            node.endUpdate();
+            if(typeof callback == "function"){
+                callback(this, node);
+            }
+        }catch(e){
+            this.handleFailure(response);
+        }
     }
+
  });
