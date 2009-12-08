@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-06 15:02+0100\n"
+"PO-Revision-Date: 2009-12-08 17:42+0100\n"
 "Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -15,11 +15,11 @@ msgstr ""
 
 #: Acl/Rights.php:98
 msgid "manage shared addressbooks"
-msgstr "gérer"
+msgstr "gérer les carnets d'adresse partagés"
 
 #: Acl/Rights.php:99
 msgid "Create new shared addressbook folders"
-msgstr "Nouveau dossier"
+msgstr "Créer un nouveau dossier de carnets d'adresses partagés"
 
 #: Controller.php:96
 #, python-format
@@ -156,11 +156,11 @@ msgstr "carnets d'adresses"
 
 #: js/Addressbook.js:241
 msgid "User Account"
-msgstr ""
+msgstr "Compte d'utilisateur"
 
 #: js/Addressbook.js:244
 msgid "Quick search"
-msgstr ""
+msgstr "Recherche rapide"
 
 #: js/Addressbook.js:245 js/ContactEditDialog.js:93 js/ContactGrid.js:123
 #: js/EditDialog.js:389
@@ -315,17 +315,16 @@ msgid "Enter description"
 msgstr "Saisir une description"
 
 #: js/ContactEditDialog.js:348
-#, fuzzy
 msgid "Export as pdf"
-msgstr "exporter en pdf"
+msgstr "Exporter en pdf"
 
 #: js/ContactEditDialog.js:373
 msgid "Either {0} or {1} must be given"
-msgstr ""
+msgstr "il faut renseigner soit {0} soit {1}"
 
 #: js/ContactGrid.js:121
 msgid "Tags"
-msgstr ""
+msgstr "Marqueurs"
 
 #: js/ContactGrid.js:124
 msgid "Full Name"
@@ -385,16 +384,15 @@ msgstr "Localisation géographique"
 
 #: js/ContactGrid.js:157
 msgid "Creation Time"
-msgstr ""
+msgstr "Date de création"
 
 #: js/ContactGrid.js:158
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Modifié le"
 
 #: js/ContactGrid.js:168
-#, fuzzy
 msgid "Export Contact"
-msgstr "Contact"
+msgstr "Exporter"
 
 #: js/ContactGrid.js:177
 msgid "Export as PDF"
@@ -405,13 +403,12 @@ msgid "Export as CSV"
 msgstr "Exporter en CSV"
 
 #: js/ContactGrid.js:198
-#, fuzzy
 msgid "Call contact"
-msgstr "Appeler contact"
+msgstr "Appeler"
 
 #: js/ContactGrid.js:208
 msgid "Compose email"
-msgstr ""
+msgstr "Écrire"
 
 #: js/ContactGrid.js:251
 msgid "Work"
@@ -430,22 +427,20 @@ msgid "Cell private"
 msgstr "Portable personnel"
 
 #: js/ContactGrid.js:355
-#, fuzzy
 msgid "Internal Contact"
-msgstr "Contacts internes"
+msgstr "Contact"
 
 #: js/ContactGridDetailsPanel.js:70
 msgid "Select contact"
-msgstr "Sélectionner contact"
+msgstr "Sélectionner"
 
 #: js/ContactGridDetailsPanel.js:160
-#, fuzzy
 msgid "Private"
-msgstr "Adresse personnelle"
+msgstr "Privé"
 
 #: js/ContactGridDetailsPanel.js:183
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: js/EditDialog.js:51 js/EditDialog.js:53
 msgid "contacts"
@@ -489,11 +484,11 @@ msgstr "Erreur d'enregistrement du contact."
 
 #: js/EditDialog.js:182
 msgid "Either "
-msgstr ""
+msgstr "soit"
 
 #: js/EditDialog.js:183
 msgid "Start date is not valid"
-msgstr ""
+msgstr "Date de début non valide"
 
 #: js/EditDialog.js:184
 msgid "Errors"
@@ -524,16 +519,15 @@ msgstr[1] "liens [%d]"
 
 #: js/SearchCombo.js:92
 msgid "Searching..."
-msgstr "Recherche en cours..."
+msgstr "Recherche..."
 
 #: Preference.php:60
-#, fuzzy
 msgid "Default Addressbook"
-msgstr "Carnet d'adresses"
+msgstr "Carnet d'adresses (défaut)"
 
 #: Preference.php:61
 msgid "The default addressbook for new contacts"
-msgstr ""
+msgstr "Carnet d'adresses par défaut pour les nouveau contacts"
 
 #: Setup/setup.xml:572
 msgid "Mr"

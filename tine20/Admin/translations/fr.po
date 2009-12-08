@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-06 15:18+0100\n"
+"PO-Revision-Date: 2009-12-08 18:53+0100\n"
 "Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr "gérer les comptes"
 msgid "add and edit users and groups, add group members, change user passwords"
 msgstr ""
 "ajouter et éditer les utilisateurs et les groupes, ajouter des membres de "
-"groupes, changer les mots de passes utilisateur"
+"groupes, changer les mots de passe utilisateur"
 
 #: Acl/Rights.php:182
 msgid "manage applications"
@@ -41,22 +41,22 @@ msgstr "activer ou désactiver les applications, éditer les paramètres"
 
 #: Acl/Rights.php:186
 msgid "manage roles"
-msgstr "gérer les profils"
+msgstr "gérer les rôles"
 
 #: Acl/Rights.php:187
 msgid ""
 "add and edit roles, add new members to roles, add application rights to roles"
 msgstr ""
-"ajouter et éditer les profils, ajouter des membres aux profils, ajouter des "
-"droits d'applications"
+"ajouter et éditer les rôles, ajouter des membres aux rôles, ajouter des "
+"droits pour les applications"
 
 #: Acl/Rights.php:190
 msgid "manage shared tags"
-msgstr "gérer les tags partagés"
+msgstr "gérer les marqueurs partagés"
 
 #: Acl/Rights.php:191
 msgid "add, delete and edit shared tags"
-msgstr "ajouter, supprimer ou éditer un tag partagé"
+msgstr "ajouter, supprimer ou éditer un marqueur partagé"
 
 #: Acl/Rights.php:194
 msgid "manage computers"
@@ -92,11 +92,11 @@ msgstr "afficher la liste et le détail des applications"
 
 #: Acl/Rights.php:210
 msgid "view roles"
-msgstr "afficher les profils"
+msgstr "afficher les rôles"
 
 #: Acl/Rights.php:211
 msgid "view roles list and details"
-msgstr "afficher la liste et le détail des profils"
+msgstr "afficher la liste et le détail des rôles"
 
 #: Acl/Rights.php:214
 msgid "view computers"
@@ -110,7 +110,7 @@ msgstr "afficher la liste et le détail des ordinateurs"
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "Utilisateur"
-msgstr[1] "Utilisateur"
+msgstr[1] "Utilisateurs"
 
 #: js/Admin.js:33
 msgid "Groups"
@@ -130,11 +130,11 @@ msgstr "Journal d'accès"
 
 #: js/Admin.js:85
 msgid "Shared Tags"
-msgstr "Tags partagés"
+msgstr "Marqueurs partagés"
 
 #: js/Admin.js:98
 msgid "Roles"
-msgstr "Profils"
+msgstr "Rôles"
 
 #: js/Admin.js:133
 msgid "Admin"
@@ -197,7 +197,7 @@ msgstr "Affichage des entrées {0} - {1} de {2}"
 
 #: js/Admin.js:555
 msgid "No access log entries to display"
-msgstr "Pas d'entrées à afficher"
+msgstr "Pas d'entrée à afficher"
 
 #: js/Admin.js:564
 msgid "Session ID"
@@ -233,9 +233,8 @@ msgid "Result"
 msgstr "Résultat"
 
 #: js/Applications.js:29
-#, fuzzy
 msgid "{0} Settings"
-msgstr "paramètres"
+msgstr "{0} paramètres"
 
 #: js/Applications.js:122
 msgid "enable application"
@@ -287,7 +286,7 @@ msgstr "Êtes-vous sûr de vouloir supprimer les groupes sélectionnés?"
 
 #: js/Groups.js:69
 msgid "Deleting group(s)..."
-msgstr "Supression de groupe(s)..."
+msgstr "Suppression de(s) groupe(s)..."
 
 #: js/Groups.js:74 js/Groups.js:372 js/Groups.js:400 js/RoleEditDialog.js:101
 #: js/RoleEditDialog.js:129 js/Roles.js:67 js/Tags.js:370 js/Users.js:194
@@ -414,7 +413,7 @@ msgstr "Êtes-vous sûr de vouloir supprimer les rôles sélectionnés?"
 
 #: js/Roles.js:62
 msgid "Deleting role(s)..."
-msgstr "Suppression de rôle(s)..."
+msgstr "Suppression de(s) rôle(s)..."
 
 #: js/Roles.js:100
 msgid "add role"
@@ -434,7 +433,7 @@ msgstr "Affichage des rôles {0} - {1} de {2}"
 
 #: js/Roles.js:190 js/Roles.js:245
 msgid "No roles to display"
-msgstr "Pas de rôles à afficher"
+msgstr "Pas de rôle à afficher"
 
 #: js/SambaMachineEditDialog.js:38 js/SambaMachineGrid.js:65
 msgid "Computer Name"
@@ -448,11 +447,11 @@ msgstr[1] "Ordinateurs"
 
 #: js/Tags.js:58
 msgid "Do you really want to delete the selected tags?"
-msgstr "Êtes-vous sûr de vouloir supprimer  les tags sélectionnés?"
+msgstr "Êtes-vous sûr de vouloir supprimer  les marqueurs sélectionnés?"
 
 #: js/Tags.js:75
 msgid "Deleting tag(s)..."
-msgstr "Suppression de tag(s)..."
+msgstr "Suppression..."
 
 #: js/Tags.js:90
 msgid "add tag"
@@ -468,11 +467,11 @@ msgstr "supprimer"
 
 #: js/Tags.js:175
 msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Affichage des tags {0} - {1} de {2}"
+msgstr "Affichage des marqueurs {0} - {1} de {2}"
 
 #: js/Tags.js:176 js/Tags.js:231
 msgid "No tags to display"
-msgstr "Pas de tag à afficher"
+msgstr "Pas de marqueur à afficher"
 
 #: js/Tags.js:186 js/Tags.js:511
 msgid "Color"
@@ -480,11 +479,11 @@ msgstr "couleur"
 
 #: js/Tags.js:325
 msgid "Updating Tag"
-msgstr "Mise à jour du Tag"
+msgstr "Mise à jour du marqueur"
 
 #: js/Tags.js:370
 msgid "Could not save tag."
-msgstr "Echec de sauvegarde."
+msgstr "Échec de sauvegarde."
 
 #: js/Tags.js:453
 msgid "Allowed Contexts"
@@ -496,7 +495,7 @@ msgstr "Contexte"
 
 #: js/Tags.js:467
 msgid "Account Rights"
-msgstr "Droits de compte"
+msgstr "Droits"
 
 #: js/Tags.js:474
 msgid "View"
@@ -523,51 +522,48 @@ msgid "Edit Tag \"{0}\""
 msgstr "Éditer \"{0}\""
 
 #: js/UserEditDialog.js:120
-#, fuzzy
 msgid "Passwords do not match!"
 msgstr "Les mots de passes ne correspondent pas!"
 
 #: js/UserEditDialog.js:153
 msgid "Aliases"
-msgstr ""
+msgstr "Aliases"
 
 #: js/UserEditDialog.js:156
 msgid "Email Alias"
-msgstr ""
+msgstr "Alias email"
 
 #: js/UserEditDialog.js:162
 msgid "Add an alias address..."
-msgstr ""
+msgstr "Ajouter un alias..."
 
 #: js/UserEditDialog.js:172
 msgid "Forwards"
-msgstr ""
+msgstr "Transferts"
 
 #: js/UserEditDialog.js:175
 msgid "Email Forward"
-msgstr ""
+msgstr "Transfert de message"
 
 #: js/UserEditDialog.js:181
 msgid "Add a forward address..."
-msgstr ""
+msgstr "Ajouter une adresse de transfert..."
 
 #: js/UserEditDialog.js:204
-#, fuzzy
 msgid "Password confirmation"
-msgstr "Confirmer mot de passe"
+msgstr "Confirmation du mot de passe"
 
 #: js/UserEditDialog.js:222
-#, fuzzy
 msgid "Repeat password"
-msgstr "réinitialiser le mot de passe"
+msgstr "Ressaisir le mot de passe"
 
 #: js/UserEditDialog.js:234
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 #: js/UserEditDialog.js:241
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: js/UserEditDialog.js:267
 msgid "Account"
@@ -595,16 +591,15 @@ msgstr "Adresse Email"
 
 #: js/UserEditDialog.js:334 js/Users.js:300
 msgid "OpenID"
-msgstr ""
+msgstr "OpenID"
 
 #: js/UserEditDialog.js:340
 msgid "Primary group"
 msgstr "Groupe principal"
 
 #: js/UserEditDialog.js:352
-#, fuzzy
 msgid "expired"
-msgstr "Expiration"
+msgstr "Expiré"
 
 #: js/UserEditDialog.js:355 js/Users.js:304
 msgid "Expires"
@@ -616,27 +611,25 @@ msgstr "jamais"
 
 #: js/UserEditDialog.js:362
 msgid "Visibility"
-msgstr ""
+msgstr "Visibilité"
 
 #: js/UserEditDialog.js:368
-#, fuzzy
 msgid "Display in addressbook"
-msgstr "Nom affiché"
+msgstr "Afficher dans le carnet d'adresses"
 
 #: js/UserEditDialog.js:368
 msgid "Hide from addressbook"
-msgstr ""
+msgstr "Masquer dans le carnet d'adresses"
 
 #: js/UserEditDialog.js:373
 msgid "Information"
-msgstr ""
+msgstr "Information"
 
 #: js/UserEditDialog.js:389 js/Users.js:301
 msgid "Last login at"
 msgstr "Dernier login à"
 
 #: js/UserEditDialog.js:391 js/UserEditDialog.js:395
-#, fuzzy
 msgid "don't know"
 msgstr "je ne sais pas!"
 
@@ -658,7 +651,7 @@ msgstr "Serveur de fichier"
 
 #: js/UserEditDialog.js:410
 msgid "Unix"
-msgstr ""
+msgstr "Unix"
 
 #: js/UserEditDialog.js:425
 msgid "Home Directory"
@@ -670,7 +663,7 @@ msgstr "Login Shell"
 
 #: js/UserEditDialog.js:434
 msgid "Windows"
-msgstr ""
+msgstr "Windows"
 
 #: js/UserEditDialog.js:449
 msgid "Home Drive"
@@ -681,9 +674,8 @@ msgid "Logon Time"
 msgstr "Heure de connexion"
 
 #: js/UserEditDialog.js:459
-#, fuzzy
 msgid "Home Path"
-msgstr "Home Path"
+msgstr "Chemin du Home"
 
 #: js/UserEditDialog.js:464
 msgid "Logoff Time"
@@ -698,9 +690,8 @@ msgid "Profile Path"
 msgstr "Chemin du profil"
 
 #: js/UserEditDialog.js:474
-#, fuzzy
 msgid "Password Last Set"
-msgstr "Mot de passe défini"
+msgstr "Mot de passe défini le"
 
 #: js/UserEditDialog.js:479
 msgid "Logon Script"
@@ -724,51 +715,48 @@ msgstr "Durée de bannissement"
 
 #: js/UserEditDialog.js:498
 msgid "IMAP"
-msgstr ""
+msgstr "IMAP"
 
 #: js/UserEditDialog.js:512
-#, fuzzy
 msgid "Email UID"
-msgstr "Email"
+msgstr "Email UID"
 
 #: js/UserEditDialog.js:516
-#, fuzzy
 msgid "Email GID"
-msgstr "Email"
+msgstr "Email GID"
 
 #: js/UserEditDialog.js:520
-#, fuzzy
 msgid "Email Username"
-msgstr "Utilisateur Samba"
+msgstr "Nom affiché"
 
 #: js/UserEditDialog.js:524
 msgid "Quota"
-msgstr ""
+msgstr "Quota"
 
 #: js/UserEditDialog.js:530
 msgid "Current Mail Size"
-msgstr ""
+msgstr "Taille actuelle (Mail)"
 
 #: js/UserEditDialog.js:535
 msgid "Sieve Quota"
-msgstr ""
+msgstr "Quota Sieve"
 
 #: js/UserEditDialog.js:540
 msgid "Current Sieve Size"
-msgstr ""
+msgstr "Taille actuelle (Sieve)"
 
 #: js/UserEditDialog.js:545
-#, fuzzy
 msgid "Last Login"
 msgstr "Dernier login à"
 
 #: js/UserEditDialog.js:550
 msgid "SMTP"
-msgstr ""
+msgstr "SMTP"
 
 #: js/UserEditDialog.js:566
+#, fuzzy
 msgid "Forward Only"
-msgstr ""
+msgstr "Transfert seulement"
 
 #: js/Users.js:149
 msgid "Set new password"
@@ -853,11 +841,10 @@ msgstr[0] "Utilisateur Samba"
 msgstr[1] "Utilisateurs Samba"
 
 #: js/Users.js:540
-#, fuzzy
 msgid "Email User"
 msgid_plural "Email Users"
-msgstr[0] "Utilisateur Samba"
-msgstr[1] "Utilisateurs Samba"
+msgstr[0] "Utilisateur Email"
+msgstr[1] "Utilisateurs Email"
 
 #~ msgid "enter searchfilter"
 #~ msgstr "saisir un filtre de recherche"
