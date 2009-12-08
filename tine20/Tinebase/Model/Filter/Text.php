@@ -30,9 +30,10 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         3 => 'endswith',
         4 => 'not',
         5 => 'in',
-        6 => 'isnull',
-        7 => 'notnull',
-        8 => 'oneof'
+        //6 => 'notin',
+        7 => 'isnull',
+        8 => 'notnull',
+        9 => 'oneof'
     );
     
     /**
@@ -45,6 +46,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         'endswith'   => array('sqlop' => ' LIKE ?',      'wildcards' => '%?' ),
         'not'        => array('sqlop' => ' NOT LIKE ?',  'wildcards' => '?'  ),
         'in'         => array('sqlop' => ' IN (?)',      'wildcards' => '?'  ),
+        //'notin'      => array('sqlop' => ' NOT IN (?)',  'wildcards' => '?'  ),
         'isnull'     => array('sqlop' => ' IS NULL',     'wildcards' => '?'  ),
         'notnull'    => array('sqlop' => ' IS NOT NULL', 'wildcards' => '?'  ),
         'oneof'      => array('sqlop' => ' LIKE ?',      'wildcards' => '?'  ),
@@ -68,7 +70,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         $value = str_replace(array('*', '_'), array('%', '\_'), $this->_value);
          
         // add wildcard to value according to operator
-        if ($this->_operator != 'in') {
+        if ($this->_operator != 'in' && $this->_operator != 'notin') {
             $value = str_replace('?', $value, $action['wildcards']);
         }
         
@@ -87,10 +89,14 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
             
         // single value
         } else {
+            if (is_array($value) && empty($value)) {
+                 // prevent sql error
+                 $value = array(' ');
+            }
             $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
         }
-         
-        if ($this->_operator == 'not') {
+        
+        if ($this->_operator == 'not' || $this->_operator == 'notin') {
             $where = "( $where OR $field IS NULL)";
         }
          
