@@ -709,6 +709,54 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(1, count($events));
     }
     
+    /**
+     * NOTE: virtual exdates are persistent exceptions -> non persistent exdates 
+     *       which might occour due to scopeing or attendee status filtering
+     */
+    public function testGetVirtualExdates()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
+        $persitentEvent = $this->_controller->create($event);
+        
+        // create 'usual' exception
+        $exception = clone $persitentEvent;
+        $exception->dtstart->addDay(2);
+        $exception->dtend->addDay(2);
+        $exception->summary = 'Abendbrot';
+        $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $persitentException = $this->_controller->createRecurException($exception);
+        
+        // create virtual exception for test users calendar
+        $exception = clone $persitentEvent;
+        $exception->dtstart->addDay(3);
+        $exception->dtend->addDay(3);
+        $exception->summary = 'Mitternachtssnack';
+        // decline test user on persistent exception -> virtual exdate for test users calendar
+        $exception->attendee->find('user_id', Tinebase_Core::getUser()->contact_id)->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $persitentException = $this->_controller->createRecurException($exception);
+        
+        // search by attendee
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'uid',             'operator' => 'equals', 'value' => $persitentEvent->uid),
+            array('field' => 'attender',        'operator' => 'equals', 'value' => array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'   => Tinebase_Core::getUser()->contact_id
+            )),
+            array('field' => 'attender_status', 'operator' => 'not',    'value' => Calendar_Model_Attender::STATUS_DECLINED),
+        )));
+        
+        // assert 'usual' exception but no virtual exception
+        $this->assertEquals(2, count($events));
+        $this->assertTrue($events->find('summary', 'Abendbrot') instanceof Calendar_Model_Event);
+        
+        $virtualExdates = $this->_controller->getRecurVirtualExdates($events);
+        $this->assertEquals(1, count($virtualExdates));
+        $this->assertTrue($virtualExdates->find('summary', 'Mitternachtssnack') instanceof Calendar_Model_Event);
+    }
+    
     public function testSetAlarm()
     {
         $event = $this->_getEvent();
