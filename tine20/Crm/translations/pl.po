@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-11-22 16:04+0100\n"
+"PO-Revision-Date: 2009-12-06 15:23+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -511,76 +511,6 @@ msgstr "Dodaj zadanie…"
 msgid "Percent"
 msgstr "W procentach"
 
-#~ msgid "Remove Option"
-#~ msgstr "Usuń opcję"
-
-#~ msgid "Type"
-#~ msgstr "Ikona"
-
-#, fuzzy
-#~ msgid "Select lead"
-#~ msgstr "Usuń zapytanie"
-
-#, fuzzy
-#~ msgid "Open tasks"
-#~ msgstr "Usuń zadania"
-
-#, fuzzy
-#~ msgid "Tasks status"
-#~ msgstr "Status zapytania"
-
-#~ msgid "telephone"
-#~ msgstr "telefon"
-
-#~ msgid "email"
-#~ msgstr "e-mail"
-
-#, fuzzy
-#~ msgid "fair"
-#~ msgstr "rynek"
-
-#~ msgid "customer"
-#~ msgstr "klient"
-
-#~ msgid "partner"
-#~ msgstr "wspólnik"
-
-#~ msgid "Are you sure you want to delete this lead?"
-#~ msgstr "Czy na pewno chcesz usunąć to zapytanie?"
-
-#~ msgid "Deleting lead"
-#~ msgstr "Usuwanie zapytania"
-
-#~ msgid "Some error occured while trying to delete the lead."
-#~ msgstr "Podczas próby usunięcia zapytania wystąpił błąd."
-
-#~ msgid "Show details"
-#~ msgstr "Pokaż szczegóły"
-
-#~ msgid "Displaying leads {0} - {1} of {2}"
-#~ msgstr "Wyświetlane zapytania {0} - {1} z {2}"
-
-#~ msgid "No leads found."
-#~ msgstr "Nie znaleziono zapytań."
-
-#~ msgid "Add lead"
-#~ msgstr "Dodaj zapytanie"
-
-#~ msgid "Edit lead"
-#~ msgstr "Edytuj zapytanie"
-
-#~ msgid "Delete selected leads"
-#~ msgstr "Usuń zaznaczone zapytania"
-
-#~ msgid "Export selected lead as PDF"
-#~ msgstr "Eksportuj zaznaczone zapytania jako PDF"
-
-#~ msgid "Please wait"
-#~ msgstr "Proszę czekać"
-
-#~ msgid "Saving lead"
-#~ msgstr "Zapisywanie zapytania"
-
 # The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
 # Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
 #~ msgid "Failed"
@@ -708,3 +638,73 @@ msgstr "W procentach"
 
 #~ msgid "Remove products"
 #~ msgstr "Usuń produkty"
+
+#~ msgid "Remove Option"
+#~ msgstr "Usuń opcję"
+
+#~ msgid "Type"
+#~ msgstr "Ikona"
+
+#, fuzzy
+#~ msgid "Select lead"
+#~ msgstr "Usuń zapytanie"
+
+#, fuzzy
+#~ msgid "Open tasks"
+#~ msgstr "Usuń zadania"
+
+#, fuzzy
+#~ msgid "Tasks status"
+#~ msgstr "Status zapytania"
+
+#~ msgid "telephone"
+#~ msgstr "telefon"
+
+#~ msgid "email"
+#~ msgstr "e-mail"
+
+#, fuzzy
+#~ msgid "fair"
+#~ msgstr "rynek"
+
+#~ msgid "customer"
+#~ msgstr "klient"
+
+#~ msgid "partner"
+#~ msgstr "wspólnik"
+
+#~ msgid "Are you sure you want to delete this lead?"
+#~ msgstr "Czy na pewno chcesz usunąć to zapytanie?"
+
+#~ msgid "Deleting lead"
+#~ msgstr "Usuwanie zapytania"
+
+#~ msgid "Some error occured while trying to delete the lead."
+#~ msgstr "Podczas próby usunięcia zapytania wystąpił błąd."
+
+#~ msgid "Show details"
+#~ msgstr "Pokaż szczegóły"
+
+#~ msgid "Displaying leads {0} - {1} of {2}"
+#~ msgstr "Wyświetlane zapytania {0} - {1} z {2}"
+
+#~ msgid "No leads found."
+#~ msgstr "Nie znaleziono zapytań."
+
+#~ msgid "Add lead"
+#~ msgstr "Dodaj zapytanie"
+
+#~ msgid "Edit lead"
+#~ msgstr "Edytuj zapytanie"
+
+#~ msgid "Delete selected leads"
+#~ msgstr "Usuń zaznaczone zapytania"
+
+#~ msgid "Export selected lead as PDF"
+#~ msgstr "Eksportuj zaznaczone zapytania jako PDF"
+
+#~ msgid "Please wait"
+#~ msgstr "Proszę czekać"
+
+#~ msgid "Saving lead"
+#~ msgstr "Zapisywanie zapytania"

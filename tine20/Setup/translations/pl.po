@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-11-22 16:25+0100\n"
+"PO-Revision-Date: 2009-12-06 16:35+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -373,7 +373,7 @@ msgstr "Czysty tekst"
 
 #: js/EmailPanel.js:332
 msgid "Notifications service address"
-msgstr ""
+msgstr "Adres e-mail usługi powiadamiania"
 
 #: js/EmailPanel.js:381
 msgid "MySql Hostname"
@@ -427,11 +427,11 @@ msgstr "Uruchom testy konfiguracji"
 
 #: js/EnvCheckGridPanel.js:192
 msgid "Ignore setup tests"
-msgstr ""
+msgstr "Ignoruj testy ustawień"
 
 #: js/Setup.js:55
 msgid "Terms and Conditions"
-msgstr ""
+msgstr "Warunki i postanowienia"
 
 #: js/Setup.js:60
 msgid "Setup Checks"
@@ -462,23 +462,23 @@ msgstr[2] "aplikacji"
 
 #: js/TermsPanel.js:31
 msgid "I have read the license agreement and accept it"
-msgstr ""
+msgstr "Przeczytałem postanowienia licencji i je akceptuję"
 
 #: js/TermsPanel.js:38
 msgid "License Agreement"
-msgstr ""
+msgstr "Warunki udzielenia licencji"
 
 #: js/TermsPanel.js:57
 msgid "I have read the privacy agreement and accept it"
-msgstr ""
+msgstr "Przeczytałem postanowienia poufności i je akceptuję"
 
 #: js/TermsPanel.js:64
 msgid "Privacy Agreement"
-msgstr ""
+msgstr "Postanowienia poufności"
 
 #: js/TermsPanel.js:81
 msgid "Accept Terms and Conditions"
-msgstr ""
+msgstr "Akceptuję warunki i postanowienia."
 
 #~ msgid "Shit"
 #~ msgstr "Niedobrze"

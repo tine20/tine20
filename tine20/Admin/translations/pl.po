@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-11-22 15:19+0100\n"
+"PO-Revision-Date: 2009-12-06 15:15+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -549,11 +549,11 @@ msgstr "Aliasy"
 
 #: js/UserEditDialog.js:156
 msgid "Email Alias"
-msgstr ""
+msgstr "Alias adresu e-mail"
 
 #: js/UserEditDialog.js:162
 msgid "Add an alias address..."
-msgstr ""
+msgstr "Dodaj alias dla adresu e-mail..."
 
 #: js/UserEditDialog.js:172
 msgid "Forwards"
@@ -561,11 +561,11 @@ msgstr "Przesłane dalej"
 
 #: js/UserEditDialog.js:175
 msgid "Email Forward"
-msgstr ""
+msgstr "Przekaż e-mail"
 
 #: js/UserEditDialog.js:181
 msgid "Add a forward address..."
-msgstr ""
+msgstr "Dodaj adres dla przekazywanych wiadomości..."
 
 #: js/UserEditDialog.js:204
 msgid "Password confirmation"
@@ -608,18 +608,16 @@ msgid "Emailaddress"
 msgstr "Adres e-mail"
 
 #: js/UserEditDialog.js:334 js/Users.js:300
-#, fuzzy
 msgid "OpenID"
-msgstr "OpenID"
+msgstr "ID uwierzytelnienia"
 
 #: js/UserEditDialog.js:340
 msgid "Primary group"
 msgstr "Grupa nadrzędna"
 
 #: js/UserEditDialog.js:352
-#, fuzzy
 msgid "expired"
-msgstr "wygasa"
+msgstr "wygasło"
 
 #: js/UserEditDialog.js:355 js/Users.js:304
 msgid "Expires"

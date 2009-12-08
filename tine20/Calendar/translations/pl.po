@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-11-22 15:56+0100\n"
+"PO-Revision-Date: 2009-12-06 15:20+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -186,7 +186,7 @@ msgstr "Przełożenie terminu powoduje konflikt terminów"
 
 #: js/CalendarPanel.js:230
 msgid "The following attendee are busy at the requested time:"
-msgstr ""
+msgstr "W żądanym czasie następujący uczestnicy są zajęci:"
 
 #: js/CalendarPanel.js:235
 msgid "Ignore Conflict"
@@ -235,7 +235,7 @@ msgstr "Aktualizacja terminu nie powiodła się"
 
 #: js/CalendarSelectTreePanel.js:42
 msgid "Resources {0}"
-msgstr ""
+msgstr "Zasoby {0}"
 
 #: js/CalendarSelectWidget.js:158
 msgid "Originally"
@@ -272,7 +272,7 @@ msgstr "Koniec"
 #: js/EventDetailsPanel.js:218 Model/Event.php:179
 #, fuzzy
 msgid "Blocking"
-msgstr "Blokowanie"
+msgstr "Blokuje"
 
 #: js/EventDetailsPanel.js:223 js/EventEditDialog.js:100
 #: js/ResourcesGridPanel.js:54 Model/Event.php:182
@@ -423,9 +423,8 @@ msgid "Email"
 msgstr "E-mail"
 
 #: js/ResourceEditDialog.js:69 js/ResourceEditDialog.js:70
-#, fuzzy
 msgid "Is a location"
-msgstr "Miejsce"
+msgstr "Jest miejscem"
 
 #: js/ResourceEditDialog.js:75
 msgid "Enter description..."
@@ -481,7 +480,7 @@ msgstr "Do"
 
 #: js/RrulePanel.js:296
 msgid "Until has to be after event start"
-msgstr ""
+msgstr "Termin zakończenia musi przypadać po terminie rozpoczęcia"
 
 #: js/RrulePanel.js:329
 msgid ". Day"

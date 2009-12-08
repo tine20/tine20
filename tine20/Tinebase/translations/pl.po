@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-11-22 16:40+0100\n"
+"PO-Revision-Date: 2009-12-06 16:43+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -249,7 +249,7 @@ msgstr "Strona domowa Tine 2.0"
 
 #: js/LoginPanel.js:139
 msgid "Tine 2.0 Forum"
-msgstr ""
+msgstr "Forum Tine 2.0"
 
 #: js/LoginPanel.js:183
 msgid "about {0} minutes"
@@ -1189,7 +1189,7 @@ msgstr "Usuwanie filtra \"{0}\""
 
 #: js/widgets/grid/QuickaddGridPanel.js:95
 msgid "Remove"
-msgstr ""
+msgstr "Usuń"
 
 #: js/widgets/GridPicker.js:78
 msgid "remove record"

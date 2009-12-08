@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-11-22 16:15+0100\n"
+"PO-Revision-Date: 2009-12-06 15:30+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -143,7 +143,6 @@ msgid "Trash Folder Name"
 msgstr "Katalog: Kosz"
 
 #: js/FelamimailAccountEditDialog.js:230
-#, fuzzy
 msgid "Show Intelligent Folders"
 msgstr "Pokaż inteligentne katalogi"
 
@@ -188,6 +187,8 @@ msgid ""
 "Could not upload attachment. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr ""
+"Przesłanie załącznika było niemożliwe. Prawdopodobnie rozmiar pliku jest za "
+"duży. Prosimy powiadomić swojego administratora. Maks. rozmiar pliku wynosi:"
 
 #: js/FelamimailAttachmentGrid.js:142
 msgid "Add Attachment"
@@ -403,7 +404,7 @@ msgstr "Dane dostępowe"
 
 #: js/FelamimailTreeLoader.js:180
 msgid "No connection to IMAP server."
-msgstr ""
+msgstr "Brak połączenia z serwerem IMAP."
 
 #: js/FelamimailTreePanel.js:187 js/FelamimailTreePanel.js:192
 #: js/FelamimailTreePanel.js:203
@@ -482,11 +483,11 @@ msgstr "W katalogu masz {0} nowych/ą wiadomości/ć"
 
 #: js/FelamimailTreePanel.js:822
 msgid "Invalid drop target"
-msgstr ""
+msgstr "Nieprawidłowy katalog docelowy"
 
 #: js/FelamimailTreePanel.js:822
 msgid "Could not move message(s)."
-msgstr ""
+msgstr "Przeniesienie wiadomości było niemożliwe."
 
 #: js/Models.js:43
 msgid "Message"
