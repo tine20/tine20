@@ -16,6 +16,8 @@
  * @package     Tinebase
  * @subpackage  Filter
  * 
+ * @todo why don't we extend the textfilter? / what for do we need a seperate idfilter?
+ * 
  * filters one or more ids
  */
 class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
@@ -26,6 +28,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
     protected $_operators = array(
         0 => 'equals',
         1 => 'in',
+        2 => 'notin',
     );
     
     /**
@@ -34,6 +37,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
     protected $_opSqlMap = array(
         'equals'     => array('sqlop' => ' = ?'   ),
         'in'         => array('sqlop' => ' IN (?)'),
+        'notin'      => array('sqlop' => ' NOT IN (?)'),
     );
     
     /**
@@ -51,9 +55,11 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
          
          //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_value, TRUE));
          
-         if (/*$this->_operator == 'in' && */empty($this->_value)) {
+         if (empty($this->_value)) {
              // prevent sql error
-             $_select->where('1=0');
+             if ($this->_operator == 'in') {
+                $_select->where('1=0');
+             }
          } else {
              // finally append query to select object
              $_select->where($field . $action['sqlop'], $this->_value);
