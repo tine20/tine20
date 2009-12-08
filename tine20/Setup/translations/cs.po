@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-10-31 13:23+0100\n"
+"PO-Revision-Date: 2009-12-07 20:25+0100\n"
 "Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -373,7 +373,7 @@ msgstr "Prosté"
 
 #: js/EmailPanel.js:332
 msgid "Notifications service address"
-msgstr ""
+msgstr "Adresa služby pro zasílání upozornění"
 
 #: js/EmailPanel.js:381
 msgid "MySql Hostname"
@@ -425,11 +425,11 @@ msgstr "Spustit instalační testy"
 
 #: js/EnvCheckGridPanel.js:192
 msgid "Ignore setup tests"
-msgstr ""
+msgstr "Ignorovat instalační testy"
 
 #: js/Setup.js:55
 msgid "Terms and Conditions"
-msgstr ""
+msgstr "Podmínky a ujednání"
 
 #: js/Setup.js:60
 msgid "Setup Checks"
@@ -460,32 +460,32 @@ msgstr[2] "Aplikací"
 
 #: js/TermsPanel.js:31
 msgid "I have read the license agreement and accept it"
-msgstr ""
+msgstr "Přečetl(a) jsem si licenční ujednání a souhlasím"
 
 #: js/TermsPanel.js:38
 msgid "License Agreement"
-msgstr ""
+msgstr "Licenční ujednání"
 
 #: js/TermsPanel.js:57
 msgid "I have read the privacy agreement and accept it"
-msgstr ""
+msgstr "Přečetl(a) jsem si ujednání o ochraně soukromí a souhlasím"
 
 #: js/TermsPanel.js:64
 msgid "Privacy Agreement"
-msgstr ""
+msgstr "Ujednání o ochraně soukromí"
 
 #: js/TermsPanel.js:81
 msgid "Accept Terms and Conditions"
-msgstr ""
+msgstr "Přijmout podmínky"
+
+#~ msgid "Invalid configuration"
+#~ msgstr "Neplatná konfigurace"
 
 #~ msgid "Shit"
 #~ msgstr "Zatraceně"
 
 #~ msgid "Where are the backup tapes"
 #~ msgstr "Kde jsou zálohovací pásky"
-
-#~ msgid "Invalid configuration"
-#~ msgstr "Neplatná konfigurace"
 
 #~ msgid ""
 #~ "You need to correct the red marked fields before config could be saved"

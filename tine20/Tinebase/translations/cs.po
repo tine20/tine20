@@ -228,7 +228,7 @@ msgstr "Heslo"
 
 #: js/LoginPanel.js:130
 msgid "Tine 2.0 is made for you"
-msgstr ""
+msgstr "Tine 2.0 byl vytvořen pro Vás"
 
 #: js/LoginPanel.js:132
 msgid ""
@@ -236,41 +236,46 @@ msgid ""
 "for your needs! So you are warmly welcome to discuss with us, bring in ideas "
 "and get help."
 msgstr ""
+"Tine 2.0 se snaží udělat pracovní spolupráci jednodušší a zábavnější - "
+"takovou jakou potřebujete! Budeme rádi, když nám sdělíte své připomínky, "
+"podělíte se s námi o nápady na zlepšení a pomůžete nám."
 
 #: js/LoginPanel.js:138
 msgid "Tine 2.0 Homepage"
-msgstr ""
+msgstr "Domovská stránka Tine 2.0"
 
 #: js/LoginPanel.js:139
 msgid "Tine 2.0 Forum"
-msgstr ""
+msgstr "Diskusní fórum Tine 2.0"
 
 #: js/LoginPanel.js:183
 msgid "about {0} minutes"
-msgstr ""
+msgstr "asi {0} minut"
 
 #: js/LoginPanel.js:188 js/LoginPanel.js:350
 msgid "Tine 2.0 needs your help"
-msgstr ""
+msgstr "Tine 2.0 potřebuje Vaši pomoc"
 
 #: js/LoginPanel.js:190 js/LoginPanel.js:352
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
 msgstr ""
+"Aby mohla další vydání Tine 2.0 ještě lépe splňovat Vaše požadavky, "
+"potřebujeme od Vás pravidelně dostávat zpětnou vazbu. Pomůžete sobě i nám, "
+"když se zapojíte:"
 
 #: js/LoginPanel.js:196
 msgid "participate!"
-msgstr ""
+msgstr "zapojte se!"
 
 #: js/LoginPanel.js:218
 msgid "Languages"
-msgstr ""
+msgstr "Jazyky"
 
 #: js/LoginPanel.js:219
-#, fuzzy
 msgid "Duration"
-msgstr "Popis"
+msgstr "Trvání"
 
 #: js/LoginPanel.js:276
 msgid "Logging you in..."
@@ -582,24 +587,20 @@ msgid "Remove account"
 msgstr "Odstranit účet"
 
 #: js/widgets/account/PickerGridPanel.js:231
-#, fuzzy
 msgid "Search User"
-msgstr "Hledat"
+msgstr "Hledat uživatele"
 
 #: js/widgets/account/PickerGridPanel.js:237
-#, fuzzy
 msgid "Search Group"
-msgstr "Hledat"
+msgstr "Hledat skupinu"
 
 #: js/widgets/account/PickerGridPanel.js:243
-#, fuzzy
 msgid "Add Anyone"
-msgstr "Přidat poznámku"
+msgstr "Přidat kohokoli"
 
 #: js/widgets/account/PickerGridPanel.js:251
-#, fuzzy
 msgid "Anyone"
-msgstr "poznámka"
+msgstr "Kdokoli"
 
 #: js/widgets/account/PickerGridPanel.js:298
 msgid "Search for users ..."
@@ -672,7 +673,7 @@ msgstr "Historie"
 
 #: js/widgets/ActivitiesPanel.js:523
 msgid "Quick search"
-msgstr ""
+msgstr "Rychlé hledání"
 
 #: js/widgets/ActivitiesPanel.js:524 js/widgets/ActivitiesPanel.js:525
 msgid "Time"
@@ -1023,18 +1024,16 @@ msgid "ends with"
 msgstr "končí s"
 
 #: js/widgets/grid/FilterModel.js:158
-#, fuzzy
 msgid "one of"
-msgstr "Žádný"
+msgstr "jeden z"
 
 #: js/widgets/grid/FilterModel.js:196
 msgid "select a operator"
 msgstr "vyberte operátor"
 
 #: js/widgets/grid/FilterModel.js:289
-#, fuzzy
 msgid "Search Account ..."
-msgstr "Vyhledávám..."
+msgstr "Hledat účet ..."
 
 #: js/widgets/grid/FilterModel.js:402
 msgid "today"
@@ -1163,7 +1162,7 @@ msgstr "Ukládám filtr"
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:103
 msgid "Always show advanced filters"
-msgstr ""
+msgstr "Vždy zobrazovat rozšířené filtry"
 
 #: js/widgets/grid/PersistentFilterPicker.js:79
 msgid "My saved filters"
@@ -1183,7 +1182,7 @@ msgstr "Mažu filtr \"{0}\""
 
 #: js/widgets/grid/QuickaddGridPanel.js:95
 msgid "Remove"
-msgstr ""
+msgstr "Odstranit"
 
 #: js/widgets/GridPicker.js:78
 msgid "remove record"
@@ -1514,6 +1513,14 @@ msgstr "změněno"
 #: Setup/setup.xml:2635
 msgid "record changed"
 msgstr "záznam byl změněn"
+
+#, fuzzy
+#~ msgid "none"
+#~ msgstr "poznámka"
+
+#, fuzzy
+#~ msgid "Search: "
+#~ msgstr "Hledat"
 
 #~ msgid "Register"
 #~ msgstr "Registrovat"
@@ -2361,11 +2368,3 @@ msgstr "záznam byl změněn"
 
 #~ msgid "Delete %s"
 #~ msgstr "Smazat %s"
-
-#, fuzzy
-#~ msgid "none"
-#~ msgstr "poznámka"
-
-#, fuzzy
-#~ msgid "Search: "
-#~ msgstr "Hledat"

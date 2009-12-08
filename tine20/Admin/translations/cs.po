@@ -535,11 +535,11 @@ msgstr "Aliasy"
 
 #: js/UserEditDialog.js:156
 msgid "Email Alias"
-msgstr ""
+msgstr "Alias"
 
 #: js/UserEditDialog.js:162
 msgid "Add an alias address..."
-msgstr ""
+msgstr "Přidat alias..."
 
 #: js/UserEditDialog.js:172
 msgid "Forwards"
@@ -547,29 +547,27 @@ msgstr "Přesměrování"
 
 #: js/UserEditDialog.js:175
 msgid "Email Forward"
-msgstr ""
+msgstr "Přeposílání pošty"
 
 #: js/UserEditDialog.js:181
 msgid "Add a forward address..."
-msgstr ""
+msgstr "Přidat adresu pro přeposílání..."
 
 #: js/UserEditDialog.js:204
-#, fuzzy
 msgid "Password confirmation"
-msgstr "Zopakovat heslo"
+msgstr "Potvrzení hesla"
 
 #: js/UserEditDialog.js:222
-#, fuzzy
 msgid "Repeat password"
-msgstr "resetovat heslo"
+msgstr "Zopakujte heslo"
 
 #: js/UserEditDialog.js:234
 msgid "Cancel"
-msgstr ""
+msgstr "Storno"
 
 #: js/UserEditDialog.js:241
 msgid "Ok"
-msgstr ""
+msgstr "OK"
 
 #: js/UserEditDialog.js:267
 msgid "Account"
@@ -853,6 +851,13 @@ msgstr[0] "Uživatel emailu"
 msgstr[1] "Uživatelé emailu"
 msgstr[2] "Uživatelů emailu"
 
+#, fuzzy
+#~ msgid "Passwords don't match"
+#~ msgstr "Hesla se neshodují!"
+
+#~ msgid "Password again"
+#~ msgstr "Zopakovat heslo"
+
 #~ msgid "enter searchfilter"
 #~ msgstr "zadejte hledaný výraz"
 
@@ -861,10 +866,6 @@ msgstr[2] "Uživatelů emailu"
 
 #~ msgid "Role members"
 #~ msgstr "Členové role"
-
-#, fuzzy
-#~ msgid "Passwords don't match"
-#~ msgstr "Hesla se neshodují!"
 
 #~ msgid "Deleting tag..."
 #~ msgstr "Mažu štítek..."
@@ -892,6 +893,3 @@ msgstr[2] "Uživatelů emailu"
 
 #~ msgid "Edit User Account \"{0}\""
 #~ msgstr "Editovat uživatelský účet \"{0}\""
-
-#~ msgid "Password again"
-#~ msgstr "Zopakovat heslo"

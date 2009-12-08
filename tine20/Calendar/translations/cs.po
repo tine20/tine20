@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-10-31 12:36+0100\n"
+"PO-Revision-Date: 2009-12-07 21:56+0100\n"
 "Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -30,43 +30,43 @@ msgstr "Všechna oprávnění k administraci zdrojů"
 
 #: Controller/EventNotifications.php:254
 msgid "Alarm for event \"%1$s\" at %2$s"
-msgstr ""
+msgstr "Alarm pro událost \"%1$s\" v %2$s"
 
 #: Controller/EventNotifications.php:257
 msgid "Event invitation \"%1$s\" at %2$s"
-msgstr ""
+msgstr "Pozvánka na událost \"%1$s\" v %2$s"
 
 #: Controller/EventNotifications.php:260
 msgid "Event \"%1$s\" at %s has been canceled"
-msgstr ""
+msgstr "Událost \"%1$s\" v %s byla zrušena"
 
 #: Controller/EventNotifications.php:265
 msgid "Event \"%1$s\" at %2$s has been rescheduled"
-msgstr ""
+msgstr "Událost \"%1$s\" v %2$s byla přeplánována"
 
 #: Controller/EventNotifications.php:269
 msgid "Event \"%1$s\" at %2$s has been updated"
-msgstr ""
+msgstr "Událost \"%1$s\" v %2$s byla zaktualizována"
 
 #: Controller/EventNotifications.php:279
 msgid "%1$s accepted event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "%1$s přijal(a) událost \"%2$s\" v %3$s"
 
 #: Controller/EventNotifications.php:283
 msgid "%1$s declined event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "%1$s odmítnul(a) událost \"%2$s\" v %3$s"
 
 #: Controller/EventNotifications.php:287
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "Předběžná odpověď od %1$s na událost \"%2$s\" v %3$s"
 
 #: Controller/EventNotifications.php:291
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "Žádná odpověď od %1$s na událost \"%2$s\" v %3$s"
 
 #: Controller/EventNotifications.php:295
 msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr ""
+msgstr "Změna účastníků pro událost \"%1$s\" v %2$s"
 
 #: Controller.php:100
 #, python-format
@@ -183,7 +183,7 @@ msgstr "Konflikt plánování"
 
 #: js/CalendarPanel.js:230
 msgid "The following attendee are busy at the requested time:"
-msgstr ""
+msgstr "Následující účastníci jsou v požadovaný čas zaneprázdněni:"
 
 #: js/CalendarPanel.js:235
 msgid "Ignore Conflict"
@@ -233,7 +233,7 @@ msgstr "Pokus neaktualizovat událost se nezdařil"
 
 #: js/CalendarSelectTreePanel.js:42
 msgid "Resources {0}"
-msgstr ""
+msgstr "Zdroje {0}"
 
 #: js/CalendarSelectWidget.js:158
 msgid "Originally"
@@ -249,15 +249,15 @@ msgstr "{0}, {1}. {2}"
 
 #: js/EventDetailsPanel.js:51
 msgid "Unknown calendar"
-msgstr ""
+msgstr "Neznámý kalendář"
 
 #: js/EventDetailsPanel.js:62
 msgid "{0} {1} o'clock"
-msgstr ""
+msgstr "{0} {1}"
 
 #: js/EventDetailsPanel.js:172 js/EventEditDialog.js:93 Model/Event.php:186
 msgid "Summary"
-msgstr "Přehled"
+msgstr "Shrnutí"
 
 #: js/EventDetailsPanel.js:208 js/EventEditDialog.js:105
 msgid "Start Time"
@@ -269,7 +269,7 @@ msgstr "Čas ukončení"
 
 #: js/EventDetailsPanel.js:218 Model/Event.php:179
 msgid "Blocking"
-msgstr ""
+msgstr "Blokující"
 
 #: js/EventDetailsPanel.js:223 js/EventEditDialog.js:100
 #: js/ResourcesGridPanel.js:54 Model/Event.php:182
@@ -286,7 +286,7 @@ msgstr "celý den"
 
 #: js/EventEditDialog.js:136
 msgid "non-blocking"
-msgstr ""
+msgstr "neblokující"
 
 #: js/EventEditDialog.js:177 js/ResourceEditDialog.js:74 Model/Event.php:181
 msgid "Description"
@@ -310,7 +310,7 @@ msgstr "Počáteční datum je neplatné"
 
 #: js/MainScreenCenterPanel.js:73
 msgid "Show declined events"
-msgstr ""
+msgstr "Zobrazit odmítnuté události"
 
 #: js/MainScreenCenterPanel.js:108
 msgid "Day"
@@ -475,7 +475,7 @@ msgstr "Do"
 
 #: js/RrulePanel.js:296
 msgid "Until has to be after event start"
-msgstr ""
+msgstr "Datum ukončení musí být po počátečním datu"
 
 #: js/RrulePanel.js:329
 msgid ". Day"
@@ -524,7 +524,7 @@ msgstr "z"
 
 #: Model/Attender.php:167
 msgid "unknown"
-msgstr ""
+msgstr "neznámý"
 
 #: Model/Attender.php:313
 msgid ""
@@ -545,37 +545,35 @@ msgstr "Konec"
 
 #: Model/Event.php:180
 msgid "Classification"
-msgstr ""
+msgstr "Kategorie"
 
 #: Model/Event.php:184
 msgid "Priority"
-msgstr ""
+msgstr "Priorita"
 
 #: Model/Event.php:187
 msgid "Url"
-msgstr ""
+msgstr "URL"
 
 #: Model/Event.php:188
-#, fuzzy
 msgid "Recurrance rule"
-msgstr "Opakování"
+msgstr "Pravidlo opakování"
 
 #: Model/Event.php:189
 msgid "Is all day event"
-msgstr ""
+msgstr "Celodenní událost"
 
 #: Model/Event.php:190
 msgid "Organizer timezone"
-msgstr ""
+msgstr "Časové pásmo organizátora"
 
 #: Model/Event.php:215
 msgid "Yes"
-msgstr ""
+msgstr "Ano"
 
 #: Model/Event.php:215
-#, fuzzy
 msgid "No"
-msgstr "Žádný"
+msgstr "Ne"
 
 #: Preference.php:78
 msgid "Publish Free/Busy Information"
@@ -590,14 +588,12 @@ msgid "Default Calendar"
 msgstr "Výchozí kalendář"
 
 #: Preference.php:83
-#, fuzzy
 msgid "The default calendar for invitations and new events"
 msgstr "Výchozí kalendář pro pozvání a nové události"
 
 #: Preference.php:86
-#, fuzzy
 msgid "Get Notification Emails"
-msgstr "Upozornění na událost"
+msgstr "Dostávat e-maily s upozorněním"
 
 #: Preference.php:87
 msgid ""
@@ -605,59 +601,53 @@ msgid ""
 "organizers will get notifications for all updates including attendee answers "
 "unless this preference is set to \"Never\""
 msgstr ""
+"Úroveň (re)akcí o nichž chcete být informován(a). Pamatujte prosím, že "
+"organizátoři dostávají upozornění na všechny změny, včetně odpovědí "
+"účastníků, pokud tato volba není nastavena na \"Nikdy\""
 
 #: Preference.php:90
 msgid "Send Notifications Emails of own Actions"
-msgstr ""
+msgstr "Zasílat e-maily s upozorněním na vlastní akce"
 
 #: Preference.php:91
 msgid "Get notifications emails for actions you did yourself"
-msgstr ""
+msgstr "Dostávat e-maily s upozorněním na akce, které pořádám"
 
 #: views/eventNotification.php:13
-#, fuzzy
 msgid "Updates"
-msgstr "Aktualizovat událost"
+msgstr "Aktualizace"
 
 #: views/eventNotification.php:21
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr ""
+msgstr "%1$s bylo změněno z \"%2$s\" na \"%3$s\""
 
 #: views/eventNotification.php:28
 msgid "%1$s has been invited"
-msgstr ""
+msgstr "%1$s byl(a) pozván(a)"
 
 #: views/eventNotification.php:33
 msgid "%1$s has been removed"
-msgstr ""
+msgstr "%1$s bylo odstraněno"
 
 #: views/eventNotification.php:40
 msgid "%1$s accepted invitation"
-msgstr ""
+msgstr "%1$s přijal(a) pozvání"
 
 #: views/eventNotification.php:44
 msgid "%1$s declined invitation"
-msgstr ""
+msgstr "%1$s odmíntul(a) pozvání"
 
 #: views/eventNotification.php:48
 msgid "Tentative response from %1$s"
-msgstr ""
+msgstr "Předběžná odpověď od %1$s"
 
 #: views/eventNotification.php:52
-#, fuzzy
 msgid "No response from %1$s"
-msgstr "Bez odpovědi"
+msgstr "Žádná odpověď od %1$s"
 
 #: views/eventNotification.php:61
-#, fuzzy
 msgid "Event details"
-msgstr "Události"
-
-#~ msgid "Ignore Scheduling Conflict?"
-#~ msgstr "Ignorovat konflikt plánování?"
-
-#~ msgid "Event description:<br/>"
-#~ msgstr "Popis události:<br/>"
+msgstr "Detaily události"
 
 #, fuzzy
 #~ msgid "calendar"
@@ -693,20 +683,11 @@ msgstr "Události"
 #~ msgid "Alarm for event \"%s\" at %s"
 #~ msgstr "Alarm pro událost  \"%s\" v %s"
 
-#~ msgid "Here is your requested alarm for to following event:"
-#~ msgstr "Zde je Váš požadovaný alarm pro následující událost:"
-
 #~ msgid "Event invitation \"%s\" at %s"
 #~ msgstr "Pozvánka na událost \"%s\" v %s"
 
-#~ msgid "You have been invited to the following event:"
-#~ msgstr "Byl(a) jste pozván(a) na následující událost:"
-
 #~ msgid "Event \"%s\" at %s has been canceled"
 #~ msgstr "Událost \"%s\" v %s byla zrušena"
-
-#~ msgid "The following event has been canceled:"
-#~ msgstr "Následující událost byla zrušena:"
 
 #~ msgid "Event \"%s\" at %s has been rescheduled"
 #~ msgstr "Událost \"%s\" v %s byla přeplánována"
@@ -714,20 +695,35 @@ msgstr "Události"
 #~ msgid "The following event has been rescheduled:"
 #~ msgstr "Následující událost byla přeplánována:"
 
-#~ msgid "From"
-#~ msgstr "Od"
-
-#~ msgid "To"
-#~ msgstr "Do"
-
 #~ msgid "Event \"%s\" at %s has been updated"
 #~ msgstr "Událost \"%s\" v %s byla zaktualizována"
-
-#~ msgid "The following event has been updated:"
-#~ msgstr "Následující událost byla zaktualizována:"
 
 #~ msgid "The defualt calendar for invitations and new events"
 #~ msgstr "Výchozí kalendář pro pozvání a nové události"
 
 #~ msgid "Notification for Event "
 #~ msgstr "Upozornění na událost"
+
+#~ msgid "Ignore Scheduling Conflict?"
+#~ msgstr "Ignorovat konflikt plánování?"
+
+#~ msgid "Event description:<br/>"
+#~ msgstr "Popis události:<br/>"
+
+#~ msgid "Here is your requested alarm for to following event:"
+#~ msgstr "Zde je Váš požadovaný alarm pro následující událost:"
+
+#~ msgid "You have been invited to the following event:"
+#~ msgstr "Byl(a) jste pozván(a) na následující událost:"
+
+#~ msgid "The following event has been canceled:"
+#~ msgstr "Následující událost byla zrušena:"
+
+#~ msgid "From"
+#~ msgstr "Od"
+
+#~ msgid "To"
+#~ msgstr "Do"
+
+#~ msgid "The following event has been updated:"
+#~ msgstr "Následující událost byla zaktualizována:"

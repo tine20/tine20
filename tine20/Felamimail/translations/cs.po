@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-10-31 13:36+0100\n"
+"PO-Revision-Date: 2009-12-07 20:12+0100\n"
 "Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -182,6 +182,8 @@ msgid ""
 "Could not upload attachment. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr ""
+"Nepodařilo se uploadovat přílohu. Možná je soubor příliš velký. Kontaktujte "
+"prosím svého administrátora."
 
 #: js/FelamimailAttachmentGrid.js:142
 msgid "Add Attachment"
@@ -395,7 +397,7 @@ msgstr "Přihlašovací údaje"
 
 #: js/FelamimailTreeLoader.js:180
 msgid "No connection to IMAP server."
-msgstr ""
+msgstr "Není spojení na IMAP server."
 
 #: js/FelamimailTreePanel.js:187 js/FelamimailTreePanel.js:192
 #: js/FelamimailTreePanel.js:203
@@ -474,11 +476,11 @@ msgstr "Máte {0} nových zrpáv ve složce"
 
 #: js/FelamimailTreePanel.js:822
 msgid "Invalid drop target"
-msgstr ""
+msgstr "Neplatný cíl pro přesun"
 
 #: js/FelamimailTreePanel.js:822
 msgid "Could not move message(s)."
-msgstr ""
+msgstr "Nepodařilo se přesunout zprávy."
 
 #: js/Models.js:43
 msgid "Message"
@@ -519,6 +521,8 @@ msgid ""
 "How often should Felamimail check for new Emails (in minutes). \"0\" means "
 "never."
 msgstr ""
+"Jak často má Felamimail kontrolovat nové zprávy (v minutách). \"0\" znamená "
+"nikdy."
 
 #~ msgid ""
 #~ "Could not upload attachment. Filesize could be too big. Please notify "

@@ -44,7 +44,7 @@ msgstr "Firemní adresa"
 
 #: Export/Pdf.php:53 js/ContactGrid.js:141
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #: Export/Pdf.php:56
 msgid "Telephone Work"
@@ -154,7 +154,7 @@ msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] "adresář"
 msgstr[1] "adresáře"
-msgstr[2] "adresářů"
+msgstr[2] "adresáře"
 
 #: js/Addressbook.js:215
 msgid "addressbooks"
@@ -166,7 +166,7 @@ msgstr "Uživatelský účet"
 
 #: js/Addressbook.js:244
 msgid "Quick search"
-msgstr ""
+msgstr "Rychlé hledání"
 
 #: js/Addressbook.js:245 js/ContactEditDialog.js:93 js/ContactGrid.js:123
 #: js/EditDialog.js:389
@@ -321,9 +321,8 @@ msgid "Enter description"
 msgstr "Vložit popis"
 
 #: js/ContactEditDialog.js:348
-#, fuzzy
 msgid "Export as pdf"
-msgstr "exportovat do pdf"
+msgstr "Exportovat do pdf"
 
 #: js/ContactEditDialog.js:373
 msgid "Either {0} or {1} must be given"
@@ -391,11 +390,11 @@ msgstr "GPS souřadnice"
 
 #: js/ContactGrid.js:157
 msgid "Creation Time"
-msgstr ""
+msgstr "Vytvořeno"
 
 #: js/ContactGrid.js:158
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Naposledy změněno"
 
 #: js/ContactGrid.js:168
 msgid "Export Contact"
@@ -439,7 +438,7 @@ msgstr "Interní kontakt"
 
 #: js/ContactGridDetailsPanel.js:70
 msgid "Select contact"
-msgstr "Vybrat kontakt"
+msgstr "Vyberte kontakt"
 
 #: js/ContactGridDetailsPanel.js:160
 msgid "Private"
@@ -535,7 +534,7 @@ msgstr "Výchozí adresář"
 
 #: Preference.php:61
 msgid "The default addressbook for new contacts"
-msgstr ""
+msgstr "Výchozí adresář pro nové kontakty"
 
 #: Setup/setup.xml:572
 msgid "Mr"
@@ -544,6 +543,9 @@ msgstr "Pan"
 #: Setup/setup.xml:590
 msgid "Ms"
 msgstr "Paní"
+
+#~ msgid "The defualt addressbook for new contacts"
+#~ msgstr "Výchozí adresář pro nové kontakty"
 
 #~ msgid "Export"
 #~ msgstr "Exportovat"
@@ -586,6 +588,3 @@ msgstr "Paní"
 
 #~ msgid "Notes"
 #~ msgstr "Poznámky"
-
-#~ msgid "The defualt addressbook for new contacts"
-#~ msgstr "Výchozí adresář pro nové kontakty"

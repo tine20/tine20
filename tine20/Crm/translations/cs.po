@@ -37,7 +37,7 @@ msgstr "Status"
 
 #: Controller/Lead.php:169 js/Contact.js:260
 msgid "Role"
-msgstr ""
+msgstr "Role"
 
 #: Controller/Lead.php:170
 msgid "Source"
@@ -245,15 +245,15 @@ msgstr "urgentní"
 
 #: Export/Xls.php:91
 msgid "Creation Time"
-msgstr ""
+msgstr "Vytvořeno"
 
 #: Export/Xls.php:96
 msgid "Last modified By"
-msgstr ""
+msgstr "Naposledy změnil(a)"
 
 #: Export/Xls.php:101
 msgid "Last modified"
-msgstr ""
+msgstr "Naposledy změněno"
 
 #: Export/Xls.php:128 js/Contact.js:179 js/Contact.js:356 js/Contact.js:393
 msgid "Responsible"
@@ -261,7 +261,7 @@ msgstr "Odpovědná osoba"
 
 #: Export/Xls.php:133
 msgid "Task"
-msgstr ""
+msgstr "Úkol"
 
 #: Export/Xls.php:138 js/Product.js:136
 msgid "Product"
@@ -269,7 +269,7 @@ msgstr "Produkt"
 
 #: Export/Xls.php:143
 msgid "History"
-msgstr ""
+msgstr "Historie"
 
 #: js/AdminPanel.js:134 js/LeadGridDetailsPanel.js:218
 #: js/LeadGridDetailsPanel.js:250
@@ -353,25 +353,23 @@ msgstr "Kontakt"
 
 #: js/LeadGridContactFilter.js:54
 msgid "CRM Role"
-msgstr ""
+msgstr "CRM role"
 
 #: js/LeadGridDetailsPanel.js:53
 msgid "Mobile"
-msgstr ""
+msgstr "Mobil"
 
 #: js/LeadGridDetailsPanel.js:56
 msgid "Fax"
-msgstr ""
+msgstr "Fax"
 
 #: js/LeadGridDetailsPanel.js:59
-#, fuzzy
 msgid "E-Mail"
-msgstr "Email"
+msgstr "E-mail"
 
 #: js/LeadGridDetailsPanel.js:62
-#, fuzzy
 msgid "Web"
-msgstr "web"
+msgstr "Web"
 
 #: js/LeadGridDetailsPanel.js:450 js/Task.js:210
 msgid "Status"
@@ -379,7 +377,7 @@ msgstr "Status"
 
 #: js/LeadGridPanel.js:98
 msgid "Quick search"
-msgstr ""
+msgstr "Rychlé hledání"
 
 #: js/LeadGridPanel.js:99 js/LeadGridPanel.js:140
 msgid "Lead name"
@@ -419,7 +417,7 @@ msgstr "Exportovat do ODS"
 
 #: js/LeadGridPanel.js:226
 msgid "Export as XLS"
-msgstr ""
+msgstr "Exportovat do XLS"
 
 #: js/LeadGridPanel.js:237
 msgid "Show closed"
@@ -511,12 +509,6 @@ msgstr "Přidat úkol..."
 msgid "Percent"
 msgstr "Procent"
 
-#~ msgid "Remove Option"
-#~ msgstr "Odstranit volbu"
-
-#~ msgid "Type"
-#~ msgstr "Typ"
-
 #, fuzzy
 #~ msgid "Select lead"
 #~ msgstr "Smazat lead"
@@ -528,6 +520,12 @@ msgstr "Procent"
 #, fuzzy
 #~ msgid "Tasks status"
 #~ msgstr "Status leadů"
+
+#~ msgid "Remove Option"
+#~ msgstr "Odstranit volbu"
+
+#~ msgid "Type"
+#~ msgstr "Typ"
 
 #~ msgid "telephone"
 #~ msgstr "telefon"

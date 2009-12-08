@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-10-31 13:35+0100\n"
+"PO-Revision-Date: 2009-12-07 20:09+0100\n"
 "Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr ""
 
 #: js/ExampleRecordGridPanel.js:87
 msgid "Quick search"
-msgstr ""
+msgstr "Rychlé hledání"
 
 #: js/ExampleRecordGridPanel.js:88
 msgid "Description"
