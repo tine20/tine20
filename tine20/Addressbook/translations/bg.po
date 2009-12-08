@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-03-01 21:27+0100\n"
+"PO-Revision-Date: 2009-09-02 11:29+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -15,13 +15,12 @@ msgstr ""
 "X-Poedit-Bookmarks: 23,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: Acl/Rights.php:98
-#, fuzzy
 msgid "manage shared addressbooks"
-msgstr "Списъци на адреси"
+msgstr "Споделени списъци на адреси"
 
 #: Acl/Rights.php:99
 msgid "Create new shared addressbook folders"
-msgstr ""
+msgstr "Създай нови папки за споделени адресни списъци"
 
 #: Controller.php:96
 #, python-format
@@ -526,7 +525,7 @@ msgstr[1] "Линкове"
 
 #: js/SearchCombo.js:92
 msgid "Searching..."
-msgstr ""
+msgstr "Търси..."
 
 #: Preference.php:60
 #, fuzzy
@@ -579,3 +578,6 @@ msgstr "Госпожа"
 
 #~ msgid "Saved in"
 #~ msgstr "Запаметен в"
+
+#~ msgid "call contact"
+#~ msgstr "Отвори контакт"

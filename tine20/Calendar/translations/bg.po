@@ -2,24 +2,23 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-09-10 20:09+0100\n"
+"Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Bulgarian\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: Acl/Rights.php:96
 msgid "manage shared calendars"
-msgstr ""
+msgstr "организирай споделени календари"
 
 #: Acl/Rights.php:97
 msgid "Create new shared calendars"
-msgstr ""
+msgstr "Създай нов споделен календар"
 
 #: Acl/Rights.php:100
 msgid "manage resources"
@@ -72,7 +71,7 @@ msgstr ""
 #: Controller.php:100
 #, python-format
 msgid "%s's personal calendar"
-msgstr ""
+msgstr "%s's личен календар"
 
 #: js/AdminPanel.js:46
 msgid "Manage Resources"
@@ -80,23 +79,24 @@ msgstr ""
 
 #: js/AttendeeGridPanel.js:62 js/EventDetailsPanel.js:244 js/Model.js:286
 msgid "Attendee"
-msgstr ""
+msgstr "Бележки за напомняне"
 
 #: js/AttendeeGridPanel.js:86
 msgid "Role"
-msgstr ""
+msgstr "Роля"
 
 #: js/AttendeeGridPanel.js:95
 msgid "Quantity"
-msgstr ""
+msgstr "Множество"
 
 #: js/AttendeeGridPanel.js:104
 msgid "This is the calendar where the attender has saved this event in"
 msgstr ""
+"Това е календара, в който събитията са съхранени с бележки за напомняне"
 
 #: js/AttendeeGridPanel.js:140
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 #: js/AttendeeGridPanel.js:147
 msgid "User"
@@ -115,21 +115,21 @@ msgstr[1] ""
 #: js/AttendeeGridPanel.js:157 js/ResourceEditDialog.js:58
 #: js/ResourcesGridPanel.js:43
 msgid "Name"
-msgstr ""
+msgstr "Име"
 
 #: js/AttendeeGridPanel.js:187 Model/Event.php:185
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
 #: js/AttendeeGridPanel.js:194 js/AttendeeGridPanel.js:491
 #: Model/Attender.php:45
 msgid "No response"
-msgstr ""
+msgstr "Няма отговор"
 
 #: js/AttendeeGridPanel.js:195 js/AttendeeGridPanel.js:494
 #: Model/Attender.php:46
 msgid "Accepted"
-msgstr ""
+msgstr "Прието"
 
 #: js/AttendeeGridPanel.js:196 js/AttendeeGridPanel.js:497
 #: Model/Attender.php:47
@@ -143,16 +143,16 @@ msgstr ""
 
 #: js/AttendeeGridPanel.js:298
 msgid "Remove Attender"
-msgstr ""
+msgstr "Отстрани бележка за напомняне"
 
 #: js/AttendeeGridPanel.js:393
 msgid "Click here to invite another attender..."
-msgstr ""
+msgstr "Кликнете тук за да включите още една бележка за напомняне"
 
 #: js/AttendeeGridPanel.js:411 js/AttendeeGridPanel.js:429
 #: js/AttendeeGridPanel.js:442 js/AttendeeGridPanel.js:454 js/Model.js:302
 msgid "No Information"
-msgstr ""
+msgstr "Няма информация"
 
 #: js/AttendeeGridPanel.js:416
 msgid "(as a group member)"
@@ -160,21 +160,21 @@ msgstr ""
 
 #: js/AttendeeGridPanel.js:466
 msgid "Required"
-msgstr ""
+msgstr "Запитани"
 
 #: js/AttendeeGridPanel.js:469
 msgid "Optional"
-msgstr ""
+msgstr "ро избор"
 
 #: js/Calendar.js:36 js/Model.js:68 Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Календар"
+msgstr[1] "Календара"
 
 #: js/CalendarPanel.js:41
 msgid "Loading events, please wait..."
-msgstr ""
+msgstr "Зарежда събития, моля почакайте..."
 
 #: js/CalendarPanel.js:226
 msgid "Scheduling Conflict"
@@ -194,7 +194,7 @@ msgstr ""
 
 #: js/CalendarPanel.js:267
 msgid "Confirm Update of Series"
-msgstr ""
+msgstr "Потвърди актуализирането на серии"
 
 #: js/CalendarPanel.js:268
 msgid "Do you really want to update all events of this recurring event series?"
@@ -202,31 +202,31 @@ msgstr ""
 
 #: js/CalendarPanel.js:285
 msgid "Update Event"
-msgstr ""
+msgstr "Актуализирай събитие"
 
 #: js/CalendarPanel.js:288 js/CalendarPanel.js:290
 msgid "Do you want to update the whole series, or just this event"
-msgstr ""
+msgstr "Желаете ли да актуализирате цялата серия или само това събитие?"
 
 #: js/CalendarPanel.js:292
 msgid "Update nothing"
-msgstr ""
+msgstr "Не актуализирай нищо"
 
 #: js/CalendarPanel.js:300
 msgid "Update whole series"
-msgstr ""
+msgstr "Актуализирай цялата серия"
 
 #: js/CalendarPanel.js:312
 msgid "Failed not update recurring event series"
-msgstr ""
+msgstr "Неуспешно актуализиране на избраните серии събития"
 
 #: js/CalendarPanel.js:320
 msgid "Update this event only"
-msgstr ""
+msgstr "Актуализирай само това събитие"
 
 #: js/CalendarPanel.js:334
 msgid "Failed not update event"
-msgstr ""
+msgstr "Неуспешно актуализиране на събитието"
 
 #: js/CalendarSelectTreePanel.js:42
 msgid "Resources {0}"
@@ -234,15 +234,15 @@ msgstr ""
 
 #: js/CalendarSelectWidget.js:158
 msgid "Originally"
-msgstr ""
+msgstr "Първоначално"
 
 #: js/DaysView.js:90 js/MonthView.js:82
 msgid "New Event"
-msgstr ""
+msgstr "Ново събитие"
 
 #: js/DaysView.js:95
 msgid "{0}, the {1}. of {2}"
-msgstr ""
+msgstr "{0}, {1}. от {2}"
 
 #: js/EventDetailsPanel.js:51
 msgid "Unknown calendar"
@@ -254,15 +254,15 @@ msgstr ""
 
 #: js/EventDetailsPanel.js:172 js/EventEditDialog.js:93 Model/Event.php:186
 msgid "Summary"
-msgstr ""
+msgstr "Общо"
 
 #: js/EventDetailsPanel.js:208 js/EventEditDialog.js:105
 msgid "Start Time"
-msgstr ""
+msgstr "Време на стартиране"
 
 #: js/EventDetailsPanel.js:213 js/EventEditDialog.js:120
 msgid "End Time"
-msgstr ""
+msgstr "Време на приключване"
 
 #: js/EventDetailsPanel.js:218 Model/Event.php:179
 msgid "Blocking"
@@ -271,7 +271,7 @@ msgstr ""
 #: js/EventDetailsPanel.js:223 js/EventEditDialog.js:100
 #: js/ResourcesGridPanel.js:54 Model/Event.php:182
 msgid "Location"
-msgstr ""
+msgstr "Местонахождение"
 
 #: js/EventDetailsPanel.js:227 Model/Event.php:183
 msgid "Organizer"
@@ -279,7 +279,7 @@ msgstr ""
 
 #: js/EventEditDialog.js:128
 msgid "whole day"
-msgstr ""
+msgstr "цял ден"
 
 #: js/EventEditDialog.js:136
 msgid "non-blocking"
@@ -287,23 +287,23 @@ msgstr ""
 
 #: js/EventEditDialog.js:177 js/ResourceEditDialog.js:74 Model/Event.php:181
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #: js/EventEditDialog.js:191
 msgid "Enter description"
-msgstr ""
+msgstr "Приеми описание"
 
 #: js/EventEditDialog.js:332
 msgid "End date is not valid"
-msgstr ""
+msgstr "Приключващата дата е нелалидна"
 
 #: js/EventEditDialog.js:335
 msgid "End date must be after start date"
-msgstr ""
+msgstr "Приключващата дата трябва да е по-късна от стартовата"
 
 #: js/EventEditDialog.js:348
 msgid "Start date is not valid"
-msgstr ""
+msgstr "Невалидна стартова дата"
 
 #: js/MainScreenCenterPanel.js:73
 msgid "Show declined events"
@@ -311,19 +311,19 @@ msgstr ""
 
 #: js/MainScreenCenterPanel.js:108
 msgid "Day"
-msgstr ""
+msgstr "Ден"
 
 #: js/MainScreenCenterPanel.js:117 js/PagingToolbar.js:276
 msgid "Week"
-msgstr ""
+msgstr "Седмица"
 
 #: js/MainScreenCenterPanel.js:126
 msgid "Month"
-msgstr ""
+msgstr "Месец"
 
 #: js/MainScreenCenterPanel.js:293
 msgid "Please Change Selection"
-msgstr ""
+msgstr "Моля сменете селекциятата"
 
 #: js/MainScreenCenterPanel.js:294
 msgid ""
@@ -333,7 +333,7 @@ msgstr ""
 
 #: js/MainScreenCenterPanel.js:308
 msgid "Confirm Deletion of Series"
-msgstr ""
+msgstr "Потвърди изтриването  на серии"
 
 #: js/MainScreenCenterPanel.js:309
 msgid "Do you really want to delete all events of this recurring event series?"
@@ -341,59 +341,61 @@ msgstr ""
 
 #: js/MainScreenCenterPanel.js:325
 msgid "Delete Event"
-msgstr ""
+msgstr "Изтрий събитие"
 
 #: js/MainScreenCenterPanel.js:328 js/MainScreenCenterPanel.js:330
 msgid ""
 "Do you want to delete the whole series, this and all future events of this "
 "series, or just this event"
 msgstr ""
+"Желаете да изтриете цялата серия, това и всички събитя напред в тази серия, "
+"или само това събитие?"
 
 #: js/MainScreenCenterPanel.js:332
 msgid "Delete nothing"
-msgstr ""
+msgstr "Не изтривай "
 
 #: js/MainScreenCenterPanel.js:339
 msgid "Delete whole series"
-msgstr ""
+msgstr "Изтрий цялата серия"
 
 #: js/MainScreenCenterPanel.js:360
 msgid "Delete this and all future events"
-msgstr ""
+msgstr " Изтрий това и всички събитя напред"
 
 #: js/MainScreenCenterPanel.js:381
 msgid "Delete this event only"
-msgstr ""
+msgstr " Изтрий само това събитие"
 
 #: js/MainScreenCenterPanel.js:411
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Наистина ли желаете да изтриете събитието?"
+msgstr[1] "Наистина ли желаете да изтриете {0} събитие?"
 
 #: js/MainScreenLeftPanel.js:64 js/MonthView.js:87
 msgid "WK"
-msgstr ""
+msgstr "WK"
 
 #: js/Model.js:64 js/Model.js:290
 msgid "Event"
 msgid_plural "Events"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Събитие"
+msgstr[1] "Събитие"
 
 #: js/Model.js:64 js/Model.js:290
 msgid "Events"
-msgstr ""
+msgstr "Събития"
 
 #: js/Model.js:68
 msgid "Calendars"
-msgstr ""
+msgstr "Календари"
 
 #: js/Model.js:286
 msgid "Attender"
 msgid_plural "Attendee"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Бележка за напомняне"
+msgstr[1] "Бележка за напомняне"
 
 #: js/Model.js:441
 msgid "Resources"
@@ -401,7 +403,7 @@ msgstr ""
 
 #: js/MonthView.js:92
 msgid "{0} more..."
-msgstr ""
+msgstr "{0} повече..."
 
 #: js/ResourceEditDialog.js:63 js/ResourcesGridPanel.js:49
 msgid "Email"
@@ -417,7 +419,7 @@ msgstr ""
 
 #: js/RrulePanel.js:29
 msgid "Recurrances"
-msgstr ""
+msgstr "Избрано"
 
 #: js/RrulePanel.js:37
 msgid "No recurring rule defined"
@@ -425,43 +427,43 @@ msgstr ""
 
 #: js/RrulePanel.js:77
 msgid "None"
-msgstr ""
+msgstr "None"
 
 #: js/RrulePanel.js:84
 msgid "Daily"
-msgstr ""
+msgstr "Дневно"
 
 #: js/RrulePanel.js:91
 msgid "Weekly"
-msgstr ""
+msgstr "Седмично"
 
 #: js/RrulePanel.js:98
 msgid "Monthly"
-msgstr ""
+msgstr "Месечно"
 
 #: js/RrulePanel.js:105
 msgid "Yearly"
-msgstr ""
+msgstr "Годишно"
 
 #: js/RrulePanel.js:228
 msgid "forever"
-msgstr ""
+msgstr "завинаги"
 
 #: js/RrulePanel.js:240
 msgid "Forever"
-msgstr ""
+msgstr "Завинаги"
 
 #: js/RrulePanel.js:241
 msgid "at"
-msgstr ""
+msgstr "на"
 
 #: js/RrulePanel.js:247
 msgid "Every"
-msgstr ""
+msgstr "Всеки"
 
 #: js/RrulePanel.js:282
 msgid "Until"
-msgstr ""
+msgstr "До"
 
 #: js/RrulePanel.js:296
 msgid "Until has to be after event start"
@@ -469,48 +471,48 @@ msgstr ""
 
 #: js/RrulePanel.js:329
 msgid ". Day"
-msgstr ""
+msgstr ". Ден"
 
 #: js/RrulePanel.js:359
 msgid ". Week at"
-msgstr ""
+msgstr ". Седмица на"
 
 #: js/RrulePanel.js:417
 msgid ". Month"
-msgstr ""
+msgstr ". Месец"
 
 #: js/RrulePanel.js:423 js/RrulePanel.js:472 js/RrulePanel.js:603
 #: js/RrulePanel.js:653
 msgid "at the"
-msgstr ""
+msgstr "на"
 
 #: js/RrulePanel.js:442 js/RrulePanel.js:622
 msgid "first"
-msgstr ""
+msgstr "първи"
 
 #: js/RrulePanel.js:443 js/RrulePanel.js:623
 msgid "second"
-msgstr ""
+msgstr "втори"
 
 #: js/RrulePanel.js:444 js/RrulePanel.js:624
 msgid "third"
-msgstr ""
+msgstr "трети"
 
 #: js/RrulePanel.js:445 js/RrulePanel.js:625
 msgid "fourth"
-msgstr ""
+msgstr "предишен"
 
 #: js/RrulePanel.js:446 js/RrulePanel.js:626
 msgid "last"
-msgstr ""
+msgstr "последен"
 
 #: js/RrulePanel.js:596
 msgid ". Year"
-msgstr ""
+msgstr ". Година"
 
 #: js/RrulePanel.js:693 js/RrulePanel.js:705
 msgid "of"
-msgstr ""
+msgstr "от"
 
 #: Model/Attender.php:167
 msgid "unknown"
@@ -520,6 +522,7 @@ msgstr ""
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr ""
+"Този контакт бе добавен автоматично от системата като събитие с напомняне"
 
 #: Model/Attender.php:203
 msgid "unknown)"
@@ -567,15 +570,17 @@ msgstr ""
 
 #: Preference.php:78
 msgid "Publish Free/Busy Information"
-msgstr ""
+msgstr "Публикува свободна/собствена информация"
 
 #: Preference.php:79
 msgid "Allow all users to view your free/busy information"
 msgstr ""
+"Позволява на всички потребители да виждат Вашата свободна/собствена "
+"информация"
 
 #: Preference.php:82
 msgid "Default Calendar"
-msgstr ""
+msgstr "Календар по настройки"
 
 #: Preference.php:83
 msgid "The default calendar for invitations and new events"
@@ -635,3 +640,30 @@ msgstr ""
 #: views/eventNotification.php:61
 msgid "Event details"
 msgstr ""
+
+#~ msgid "Event description:<br/>"
+#~ msgstr "Описание на събитието:<br/>"
+
+#~ msgid ""
+#~ "Do you realy want to update all events of this recuring event series?"
+#~ msgstr ""
+#~ "Желаете ли наистина да актуализирате всички събития на избраните "
+#~ "събитийни серии?"
+
+#~ msgid ""
+#~ "Your selection contains recuring events. Recuring events must be deleted "
+#~ "seperatly!"
+#~ msgstr ""
+#~ "Вашата селекция съдържа избрани събитя. Избрани събитя трябва да бъдат "
+#~ "изтривани поотделно!"
+
+#~ msgid ""
+#~ "Do you realy want to delete all events of this recuring event series?"
+#~ msgstr "Желаете ли наистина да изтриете всички събитя от избраната серия?"
+
+#, fuzzy
+#~ msgid "No recuring rule defined"
+#~ msgstr "Недефинирано запитване"
+
+#~ msgid "The defualt calendar for invitations and new events"
+#~ msgstr "Календар за покани и нови събития по настройки"

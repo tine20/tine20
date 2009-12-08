@@ -2,56 +2,55 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-09-15 08:40+0100\n"
+"Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Bulgarian\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: js/ApplicationGridPanel.js:67
 msgid "Name"
-msgstr ""
+msgstr "Име"
 
 #: js/ApplicationGridPanel.js:68
 msgid "Enabled"
-msgstr ""
+msgstr "Активирани"
 
 #: js/ApplicationGridPanel.js:69
 msgid "Order"
-msgstr ""
+msgstr "Поредност"
 
 #: js/ApplicationGridPanel.js:70
 msgid "Installed Version"
-msgstr ""
+msgstr "Инсталирана версия"
 
 #: js/ApplicationGridPanel.js:71
 msgid "Available Version"
-msgstr ""
+msgstr "Версия на разположение"
 
 #: js/ApplicationGridPanel.js:72
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
 #: js/ApplicationGridPanel.js:73
 msgid "Depends on"
-msgstr ""
+msgstr "Зависи от"
 
 #: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:207
 msgid "Install application"
-msgstr ""
+msgstr "Програмно инсталиране"
 
 #: js/ApplicationGridPanel.js:91
 msgid "Uninstall application"
-msgstr ""
+msgstr "Програмно деинсталиране"
 
 #: js/ApplicationGridPanel.js:100
 msgid "Update application"
-msgstr ""
+msgstr "Актуализира програма"
 
 #: js/ApplicationGridPanel.js:109
 msgid "Go to {0} login"
@@ -59,15 +58,15 @@ msgstr ""
 
 #: js/ApplicationGridPanel.js:172
 msgid "uninstall"
-msgstr ""
+msgstr "деинсталиране"
 
 #: js/ApplicationGridPanel.js:172
 msgid "Do you really want to uninstall the application(s)?"
-msgstr ""
+msgstr "Наистина ли желаете да деинсталирате ррограмата (-те)?"
 
 #: js/ApplicationGridPanel.js:232
 msgid "This may take a while"
-msgstr ""
+msgstr "Този процес може да отнеме известно време"
 
 #: js/ApplicationGridPanel.js:262
 msgid "Dependency Violation"
@@ -117,7 +116,7 @@ msgstr ""
 #: js/ConfigManagerPanel.js:76 js/ConfigManagerPanel.js:112
 #: js/EmailPanel.js:196 js/EmailPanel.js:287
 msgid "Password"
-msgstr ""
+msgstr "Парола"
 
 #: js/AuthenticationPanel.js:287 js/AuthenticationPanel.js:373
 msgid "Bind requires DN"
@@ -209,7 +208,7 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:485 js/ConfigManagerPanel.js:191
 msgid "Save config"
-msgstr ""
+msgstr "Запаметяване на конфигурацията"
 
 #: js/AuthenticationPanel.js:509
 msgid "Passwords don't match"
@@ -222,27 +221,27 @@ msgstr ""
 
 #: js/ConfigManagerPanel.js:59
 msgid "Informations"
-msgstr ""
+msgstr "Информации"
 
 #: js/ConfigManagerPanel.js:63
 msgid "Setup Authentication"
-msgstr ""
+msgstr "Идентификация на настройките"
 
 #: js/ConfigManagerPanel.js:66 js/EmailPanel.js:192 js/EmailPanel.js:283
 msgid "Username"
-msgstr ""
+msgstr "Потребителско име"
 
 #: js/ConfigManagerPanel.js:82 js/ConfigManagerPanel.js:102
 msgid "Database"
-msgstr ""
+msgstr "Банка данни"
 
 #: js/ConfigManagerPanel.js:86
 msgid "Adapter"
-msgstr ""
+msgstr "Адаптор"
 
 #: js/ConfigManagerPanel.js:91 js/EmailPanel.js:188 js/EmailPanel.js:279
 msgid "Hostname"
-msgstr ""
+msgstr "Име на Host"
 
 #: js/ConfigManagerPanel.js:96 js/EmailPanel.js:201 js/EmailPanel.js:292
 msgid "Port"
@@ -250,35 +249,35 @@ msgstr ""
 
 #: js/ConfigManagerPanel.js:107
 msgid "User"
-msgstr ""
+msgstr "Потрибител"
 
 #: js/ConfigManagerPanel.js:117
 msgid "Prefix"
-msgstr ""
+msgstr "Prefix"
 
 #: js/ConfigManagerPanel.js:122
 msgid "Logging"
-msgstr ""
+msgstr "Logging"
 
 #: js/ConfigManagerPanel.js:128
 msgid "Filename"
-msgstr ""
+msgstr "Име на файла"
 
 #: js/ConfigManagerPanel.js:141
 msgid "Priority"
-msgstr ""
+msgstr "Приоритет"
 
 #: js/ConfigManagerPanel.js:146
 msgid "Caching"
-msgstr ""
+msgstr "Caching"
 
 #: js/ConfigManagerPanel.js:152
 msgid "Path"
-msgstr ""
+msgstr "Директория"
 
 #: js/ConfigManagerPanel.js:156
 msgid "Lifetime (seconds)"
-msgstr ""
+msgstr "Lifetime (секунди)"
 
 #: js/ConfigManagerPanel.js:163
 msgid "Temporary files"
@@ -302,7 +301,7 @@ msgstr ""
 
 #: js/ConfigManagerPanel.js:206
 msgid "Download config file"
-msgstr ""
+msgstr "Сваляне на конфигурационният файл"
 
 #: js/EmailPanel.js:160
 msgid "Standard IMAP"
@@ -394,29 +393,31 @@ msgstr ""
 
 #: js/EnvCheckGridPanel.js:92
 msgid "Performing Environment Checks..."
-msgstr ""
+msgstr "Изпълнява проверка на работната среда"
 
 #: js/EnvCheckGridPanel.js:133
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr ""
+"Няма намерени {0}. Моля опитайте отново с променен филтър за търсене, опции "
+"за предстовяне или {1} на търсенето."
 
 #: js/EnvCheckGridPanel.js:163
 msgid "Check"
-msgstr ""
+msgstr "Провери"
 
 #: js/EnvCheckGridPanel.js:164
 msgid "Result"
-msgstr ""
+msgstr "Резултат"
 
 #: js/EnvCheckGridPanel.js:165
 msgid "Error"
-msgstr ""
+msgstr "Грешка"
 
 #: js/EnvCheckGridPanel.js:183
 msgid "Run setup tests"
-msgstr ""
+msgstr "Изпълнява проверка на настройки"
 
 #: js/EnvCheckGridPanel.js:192
 msgid "Ignore setup tests"
@@ -428,11 +429,11 @@ msgstr ""
 
 #: js/Setup.js:60
 msgid "Setup Checks"
-msgstr ""
+msgstr "Проверка на настройки"
 
 #: js/Setup.js:66
 msgid "Config Manager"
-msgstr ""
+msgstr "Менажер на конфигурация"
 
 #: js/Setup.js:72
 msgid "Authentication/Accounts"
@@ -444,13 +445,13 @@ msgstr ""
 
 #: js/Setup.js:84
 msgid "Application Manager"
-msgstr ""
+msgstr "Програмен менаджер"
 
 #: js/Setup.js:187
 msgid "Application"
 msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Програма"
+msgstr[1] "Програми"
 
 #: js/TermsPanel.js:31
 msgid "I have read the license agreement and accept it"
@@ -471,3 +472,24 @@ msgstr ""
 #: js/TermsPanel.js:81
 msgid "Accept Terms and Conditions"
 msgstr ""
+
+#~ msgid "Shit"
+#~ msgstr "По дяволите"
+
+#~ msgid "Where are the backup tapes"
+#~ msgstr "Къде са запаметените записи"
+
+#~ msgid "Invalid configuration"
+#~ msgstr "Невалидна конфигурация"
+
+#~ msgid ""
+#~ "You need to correct the red marked fields before config could be saved"
+#~ msgstr ""
+#~ "Трябва да коригирате в червено маркираните полета, преди конфигурацията "
+#~ "да може да бъде запаметена."
+
+#~ msgid "Transfering Configuration..."
+#~ msgstr "Трансферира конфигурация"
+
+#~ msgid "Check config"
+#~ msgstr "Тествоне на конфигурацията"

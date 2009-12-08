@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-03-01 22:15+0100\n"
+"PO-Revision-Date: 2009-09-15 08:44+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -15,11 +15,11 @@ msgstr ""
 
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
-msgstr ""
+msgstr "организира списък на задачи"
 
 #: Acl/Rights.php:90
 msgid "Create new shared tasks lists"
-msgstr ""
+msgstr "Състави нов списък на споделени задачи"
 
 #: Controller/Task.php:158
 msgid "Notification for Task "

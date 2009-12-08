@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-03-01 22:10+0100\n"
+"PO-Revision-Date: 2009-09-10 20:14+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -22,13 +22,12 @@ msgid "add, edit and delete leads"
 msgstr "Създаване, редактиране и изтриване на предложенията"
 
 #: Acl/Rights.php:110
-#, fuzzy
 msgid "manage shared lead folders"
-msgstr "управление на предложенията"
+msgstr "управление на споделените предложения"
 
 #: Acl/Rights.php:111
 msgid "Create new shared lead folders"
-msgstr ""
+msgstr "Създай нова папка за споделени предложения"
 
 #: Controller/Lead.php:168
 msgid "State"
@@ -269,7 +268,6 @@ msgid "Task"
 msgstr ""
 
 #: Export/Xls.php:138 js/Product.js:136
-#, fuzzy
 msgid "Product"
 msgstr "Продукт"
 
@@ -537,9 +535,6 @@ msgstr "Процент"
 #~ msgid "Remove Option"
 #~ msgstr "Изтрий продукти"
 
-#~ msgid "Type"
-#~ msgstr "Тип"
-
 #, fuzzy
 #~ msgid "Select lead"
 #~ msgstr "Изтрий предложение"
@@ -551,6 +546,9 @@ msgstr "Процент"
 #, fuzzy
 #~ msgid "Tasks status"
 #~ msgstr "Статус на предложението"
+
+#~ msgid "Type"
+#~ msgstr "Тип"
 
 #~ msgid "telephone"
 #~ msgstr "телефон"
@@ -707,3 +705,38 @@ msgstr "Процент"
 
 #~ msgid "Add new partner contact"
 #~ msgstr "Добави нов партньорски контакт"
+
+#~ msgid "Show closed leads"
+#~ msgstr "Покажи вече приключени предложения"
+
+#~ msgid "Add new lead"
+#~ msgstr "Добави ново предложение"
+
+#~ msgid "Edit selected lead"
+#~ msgstr "Редактирай селектирано предложение"
+
+#~ msgid "Delete lead"
+#~ msgid_plural "Delete leads"
+#~ msgstr[0] "Изтрий предложение"
+#~ msgstr[1] "Изтрий осъществените контакти (предложения)"
+
+#~ msgid "Add a product..."
+#~ msgstr "Добави продукт"
+
+#~ msgid "Unlink selected contacts"
+#~ msgstr "Прекъсни връзката към селектираните контакти"
+
+#~ msgid "Remove tasks"
+#~ msgstr "Изтрий задачи"
+
+#~ msgid "Remove products"
+#~ msgstr "Изтрий продукти"
+
+#~ msgid "Edit Lead \"{0}\""
+#~ msgstr "Редактира предложение \"{0}\""
+
+#~ msgid "website"
+#~ msgstr "вебсайт"
+
+#~ msgid "reseller"
+#~ msgstr "препродажба"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-03-01 22:36+0100\n"
+"PO-Revision-Date: 2009-09-15 08:46+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -88,13 +88,12 @@ msgid "Title"
 msgstr "Име"
 
 #: Export/Ods.php:270 js/Models.js:133
-#, fuzzy
 msgid "Created By"
-msgstr "Пресметнат (нанесен) в"
+msgstr "Създаден от"
 
 #: Export/Ods.php:276
 msgid "Creation Date"
-msgstr ""
+msgstr "Лата на създаване"
 
 #: Export/Ods.php:281 js/Models.js:134 js/TimeaccountEditDialog.js:110
 #: js/TimeaccountGridPanel.js:104
@@ -107,9 +106,8 @@ msgid "Cleared In"
 msgstr "Пресметнат (нанесен) в"
 
 #: Export/Ods.php:297
-#, fuzzy
 msgid "Open"
-msgstr "отворено"
+msgstr "Отворено"
 
 #: js/DurationSlider.js:95
 msgid "{0}"
@@ -347,7 +345,7 @@ msgstr "Обща сума на платимите часове "
 
 #: js/TimesheetGridPanel.js:407
 msgid "Detail"
-msgstr ""
+msgstr "Детайл"
 
 #: js/Timetracker.js:35
 msgid "All Timesheets"

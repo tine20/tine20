@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-02-25 10:14+0100\n"
+"PO-Revision-Date: 2009-09-13 18:22+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -17,82 +17,77 @@ msgid "Phone"
 msgstr "Телефон"
 
 #: js/MyPhoneEditDialog.js:285
-#, fuzzy
 msgid "Name"
-msgstr "Номер"
+msgstr "Име"
 
 #: js/MyPhoneEditDialog.js:289
-#, fuzzy
 msgid "Phone Model"
-msgstr "Телефон"
+msgstr "Модел Телефон"
 
 #: js/MyPhoneEditDialog.js:304
 msgid "MAC Address"
-msgstr ""
+msgstr "MAC адрес"
 
 #: js/MyPhoneEditDialog.js:338
 msgid "infos"
-msgstr ""
+msgstr "информации"
 
 #: js/MyPhoneEditDialog.js:353
 msgid "Current IP Address"
-msgstr ""
+msgstr "Актуален IP адрес"
 
 #: js/MyPhoneEditDialog.js:360
 msgid "Firmware last checked at"
-msgstr ""
+msgstr "Последна проверка на фирменният продукт"
 
 #: js/MyPhoneEditDialog.js:368
 msgid "Current Software Version"
-msgstr ""
+msgstr "Актуална програмна версия"
 
 #: js/MyPhoneEditDialog.js:375
 msgid "Settings Loaded at"
-msgstr ""
+msgstr "Качени настройки"
 
 #: js/MyPhoneEditDialog.js:385 js/MyPhoneEditDialog.js:840
-#, fuzzy
 msgid "redirection"
-msgstr "Направление"
+msgstr "прехвърлена връзка"
 
 #: js/MyPhoneEditDialog.js:400 js/MyPhoneEditDialog.js:857
 msgid "redirect_event"
-msgstr ""
+msgstr "причина за прехвърляне на връзка"
 
 #: js/MyPhoneEditDialog.js:419 js/MyPhoneEditDialog.js:882
-#, fuzzy
 msgid "all"
-msgstr "Идентификатор (ID) на обаждането"
+msgstr "всички"
 
 #: js/MyPhoneEditDialog.js:420 js/MyPhoneEditDialog.js:883
 msgid "busy"
-msgstr ""
+msgstr "заето"
 
 #: js/MyPhoneEditDialog.js:421 js/MyPhoneEditDialog.js:555
 #: js/MyPhoneEditDialog.js:884 js/MyPhoneEditDialog.js:1188
-#, fuzzy
 msgid "none"
-msgstr "Телефон"
+msgstr "нищо"
 
 #: js/MyPhoneEditDialog.js:422 js/MyPhoneEditDialog.js:885
 msgid "time"
-msgstr ""
+msgstr "време"
 
 #: js/MyPhoneEditDialog.js:426 js/MyPhoneEditDialog.js:896
 msgid "redirect_number"
-msgstr ""
+msgstr "номер на прехвърляне"
 
 #: js/MyPhoneEditDialog.js:430 js/MyPhoneEditDialog.js:908
 msgid "redirect_time"
-msgstr ""
+msgstr "време на прехвърляне"
 
 #: js/MyPhoneEditDialog.js:448 js/MyPhoneEditDialog.js:932
 msgid "Settings"
-msgstr ""
+msgstr "Настройки"
 
 #: js/MyPhoneEditDialog.js:466 js/MyPhoneEditDialog.js:964
 msgid "web_language"
-msgstr ""
+msgstr "език на програмната маска"
 
 #: js/MyPhoneEditDialog.js:470 js/MyPhoneEditDialog.js:488
 #: js/MyPhoneEditDialog.js:512 js/MyPhoneEditDialog.js:524
@@ -107,41 +102,39 @@ msgstr ""
 #: js/MyPhoneEditDialog.js:1243 js/MyPhoneEditDialog.js:1276
 #: js/MyPhoneEditDialog.js:1304 js/MyPhoneEditDialog.js:1332
 msgid "- factory default -"
-msgstr ""
+msgstr "- фирмени настройки -"
 
 #: js/MyPhoneEditDialog.js:484 js/MyPhoneEditDialog.js:1001
 msgid "language"
-msgstr ""
+msgstr "език"
 
 #: js/MyPhoneEditDialog.js:508 js/MyPhoneEditDialog.js:1044
 msgid "display_method"
-msgstr ""
+msgstr "метод на показване"
 
 #: js/MyPhoneEditDialog.js:513 js/MyPhoneEditDialog.js:1060
 msgid "whole url"
-msgstr ""
+msgstr "пълен адрес (url)"
 
 #: js/MyPhoneEditDialog.js:514 js/MyPhoneEditDialog.js:1061
 msgid "name"
-msgstr ""
+msgstr "име"
 
 #: js/MyPhoneEditDialog.js:515 js/MyPhoneEditDialog.js:1062
-#, fuzzy
 msgid "number"
-msgstr "Номер"
+msgstr "номер"
 
 #: js/MyPhoneEditDialog.js:516 js/MyPhoneEditDialog.js:1063
-#, fuzzy
 msgid "name + number"
-msgstr "Набран номер"
+msgstr "име + номер"
 
 #: js/MyPhoneEditDialog.js:517 js/MyPhoneEditDialog.js:1064
 msgid "number + name"
-msgstr ""
+msgstr "номер + име"
 
 #: js/MyPhoneEditDialog.js:520 js/MyPhoneEditDialog.js:1080
 msgid "call_waiting"
-msgstr ""
+msgstr "изчакващо обаждане"
 
 #: js/MyPhoneEditDialog.js:525 js/MyPhoneEditDialog.js:564
 #: js/MyPhoneEditDialog.js:573 js/MyPhoneEditDialog.js:582
@@ -150,17 +143,15 @@ msgstr ""
 #: js/MyPhoneEditDialog.js:1244 js/MyPhoneEditDialog.js:1277
 #: js/MyPhoneEditDialog.js:1305 js/MyPhoneEditDialog.js:1333
 msgid "on"
-msgstr ""
+msgstr "включено"
 
 #: js/MyPhoneEditDialog.js:526 js/MyPhoneEditDialog.js:1097
-#, fuzzy
 msgid "visual"
-msgstr "Набиране"
+msgstr "показва"
 
 #: js/MyPhoneEditDialog.js:527 js/MyPhoneEditDialog.js:1098
-#, fuzzy
 msgid "ringer"
-msgstr "Линия"
+msgstr "линия"
 
 #: js/MyPhoneEditDialog.js:528 js/MyPhoneEditDialog.js:565
 #: js/MyPhoneEditDialog.js:574 js/MyPhoneEditDialog.js:583
@@ -169,89 +160,87 @@ msgstr "Линия"
 #: js/MyPhoneEditDialog.js:1245 js/MyPhoneEditDialog.js:1278
 #: js/MyPhoneEditDialog.js:1306 js/MyPhoneEditDialog.js:1334
 msgid "off"
-msgstr ""
+msgstr "изключено"
 
 #: js/MyPhoneEditDialog.js:531 js/MyPhoneEditDialog.js:1110
 msgid "mwi_notification"
-msgstr ""
+msgstr "MWI осведомяване"
 
 #: js/MyPhoneEditDialog.js:536 js/MyPhoneEditDialog.js:1126
 msgid "silent"
-msgstr ""
+msgstr "без звук"
 
 #: js/MyPhoneEditDialog.js:537 js/MyPhoneEditDialog.js:1127
 msgid "beep"
-msgstr ""
+msgstr "сигнален тон"
 
 #: js/MyPhoneEditDialog.js:538 js/MyPhoneEditDialog.js:1128
 msgid "reminder"
-msgstr ""
+msgstr "напомняне"
 
 #: js/MyPhoneEditDialog.js:541 js/MyPhoneEditDialog.js:1139
 msgid "mwi_dialtone"
-msgstr ""
+msgstr "MWI сигнал"
 
 #: js/MyPhoneEditDialog.js:546 js/MyPhoneEditDialog.js:1155
 msgid "normal"
-msgstr ""
+msgstr "нормално"
 
 #: js/MyPhoneEditDialog.js:547 js/MyPhoneEditDialog.js:1156
 msgid "stutter"
-msgstr ""
+msgstr "прекъсвач"
 
 #: js/MyPhoneEditDialog.js:550 js/MyPhoneEditDialog.js:1172
 msgid "headset_device"
-msgstr ""
+msgstr "headset уред"
 
 #: js/MyPhoneEditDialog.js:556 js/MyPhoneEditDialog.js:1189
 msgid "headset_rj"
-msgstr ""
+msgstr "Headset RJ"
 
 #: js/MyPhoneEditDialog.js:559 js/MyPhoneEditDialog.js:1200
 msgid "message_led_other"
-msgstr ""
+msgstr "други LED"
 
 #: js/MyPhoneEditDialog.js:568 js/MyPhoneEditDialog.js:1228
 msgid "global_missed_counter"
-msgstr ""
+msgstr "Брояч пропуснати"
 
 #: js/MyPhoneEditDialog.js:577 js/MyPhoneEditDialog.js:1261
-#, fuzzy
 msgid "scroll_outgoing"
-msgstr "Изходящ"
+msgstr "прелиства изходящи"
 
 #: js/MyPhoneEditDialog.js:586 js/MyPhoneEditDialog.js:1289
 msgid "show_local_line"
-msgstr ""
+msgstr "собствен номер"
 
 #: js/MyPhoneEditDialog.js:595 js/MyPhoneEditDialog.js:1317
 msgid "show_call_status"
-msgstr ""
+msgstr "показва статус на повиквания"
 
 #: js/MyPhoneEditDialog.js:620
 msgid "lineactive"
-msgstr ""
+msgstr "активна линия"
 
 #: js/MyPhoneEditDialog.js:648
 msgid "sipCombo"
-msgstr ""
+msgstr "SIP Избор"
 
 #: js/MyPhoneEditDialog.js:667
 msgid "Idle Text"
-msgstr ""
+msgstr "Текст при ненабрано състояние"
 
 #: js/MyPhoneEditDialog.js:700
-#, fuzzy
 msgid "Lines"
-msgstr "Линия"
+msgstr "Линии"
 
 #: js/MyPhoneEditDialog.js:715
 msgid "Users"
-msgstr ""
+msgstr "Потребитили"
 
 #: js/MyPhoneEditDialog.js:719
 msgid "Rights"
-msgstr ""
+msgstr "Права"
 
 #: js/Phone.js:28 js/Phone.js:466 js/Phone.js:467
 msgid "Edit phone settings"
