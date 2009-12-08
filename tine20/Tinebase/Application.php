@@ -122,6 +122,7 @@ class Tinebase_Application
         $rows = $this->_applicationTable->fetchAll($where)->toArray();
         
         if (empty($rows)) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Application not found. Id: ' . $applicationId);
             throw new Tinebase_Exception_NotFound('Application not found.');
         }
         
