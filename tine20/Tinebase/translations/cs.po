@@ -214,6 +214,16 @@ msgstr ""
 "Někdo jiný záznam uložil v době, kdy jste editoval(a) údaje. Musíte záznam "
 "znovu načíst a opětovně provést Vaše změny."
 
+#: js/ExceptionHandler.js:192
+msgid "Timeout"
+msgstr ""
+
+#: js/ExceptionHandler.js:193
+msgid ""
+"Sorry, some timeout occured while processing your request. Please reload "
+"your browser, try again or contact your administrator."
+msgstr ""
+
 #: js/LoginPanel.js:79 js/LoginPanel.js:111
 msgid "Login"
 msgstr "Přihlásit"

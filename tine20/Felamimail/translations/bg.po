@@ -20,13 +20,13 @@ msgstr ""
 msgid "Create and edit email accounts"
 msgstr ""
 
-#: Controller/Message.php:983 js/FelamimailGridDetailsPanel.js:123
+#: Controller/Message.php:989 js/FelamimailGridDetailsPanel.js:123
 #: js/FelamimailGridPanel.js:258 js/FelamimailGridPanel.js:313
 #: js/FelamimailMessageEditDialog.js:280
 msgid "Subject"
 msgstr "Subject"
 
-#: Controller/Message.php:983 js/FelamimailMessageEditDialog.js:197
+#: Controller/Message.php:989 js/FelamimailMessageEditDialog.js:197
 msgid "Body"
 msgstr "Съобщение"
 

@@ -205,6 +205,18 @@ msgstr ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
 
+#: js/ExceptionHandler.js:192
+msgid "Timeout"
+msgstr "Timeout"
+
+#: js/ExceptionHandler.js:193
+msgid ""
+"Sorry, some timeout occured while processing your request. Please reload "
+"your browser, try again or contact your administrator."
+msgstr ""
+"Sorry, some timeout occured while processing your request. Please reload "
+"your browser, try again or contact your administrator."
+
 #: js/LoginPanel.js:79 js/LoginPanel.js:111
 msgid "Login"
 msgstr "Login"

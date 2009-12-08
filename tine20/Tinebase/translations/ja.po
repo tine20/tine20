@@ -197,6 +197,16 @@ msgstr ""
 "レコード編集中に誰かが同じレコードを編集したようです。画面を再ロードしてもう"
 "一度編集しなおしてください。"
 
+#: js/ExceptionHandler.js:192
+msgid "Timeout"
+msgstr ""
+
+#: js/ExceptionHandler.js:193
+msgid ""
+"Sorry, some timeout occured while processing your request. Please reload "
+"your browser, try again or contact your administrator."
+msgstr ""
+
 #: js/LoginPanel.js:79 js/LoginPanel.js:111
 msgid "Login"
 msgstr "ログイン"
