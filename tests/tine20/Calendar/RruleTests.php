@@ -479,6 +479,16 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(5, count($recurSet), 'yearlybyday failed');
     }
     
+    /**
+     * NOTE: virtual exdates are persistent exceptions -> non persistent exdates 
+     *       which might occour due to scopeing or attendee status filtering
+     */
+    //public function testCalcWithVirtualExdate()
+    //{
+        // mhh hard to test as we don't deal with persistent stuff in this test class
+        // -> move to controller tests
+    //}
+    
     public function testMultipleTimezonesOriginatingInSeatle()
     {
         date_default_timezone_set('US/Pacific');
