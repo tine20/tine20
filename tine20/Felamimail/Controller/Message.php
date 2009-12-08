@@ -119,12 +119,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // sort messages by folder id
         $_messagesToDelete->sort('folder_id');
         
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($_messagesToDelete) . ' messages.');
+        
         // loop messages / only get imap backend and account in the first iteration of the loop
         $imapBackend = NULL;
         $folder = NULL;
         $updatedFolder = NULL;
         foreach($_messagesToDelete as $message) {
-            if ($imapBackend = $this->_getBackendAndSelectFolder($message->folder_id, $folder, $imapBackend)) {
+            if ($imapBackend = $this->_getBackendAndSelectFolder($message->folder_id, $folder, TRUE, $imapBackend)) {
                 
                 // get account and trash folder name (only the first time)
                 if (! isset($account)) {
@@ -143,6 +145,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     
                     // only delete if in Trash
                     try {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Removing message " . $message->messageuid . ' from ' . $folder->globalname);
+                        
                         $imapBackend->removeMessage($message->messageuid);
                     } catch (Zend_Mail_Storage_Exception $zmse) {
                         Tinebase_Core::getLogger()->warn(
@@ -154,7 +158,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     
                 } else {
                     try {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Moving message '" . $message->messageuid . "' to $trashFolder.");
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Moving message '" 
+                            . $message->messageuid . "' from " . $folder->globalname . " to $trashFolder."
+                        );
                         
                         // move to trash folder
                         $imapBackend->moveMessage($message->messageuid, $trashFolder);
