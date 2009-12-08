@@ -290,10 +290,6 @@ msgstr "Appel sortant"
 msgid "unknown number"
 msgstr "numéro inconnu"
 
-#: js/Phone.js:540
-msgid "enter searchfilter"
-msgstr "saisir un filtre de recherche"
-
 #: js/Phone.js:554
 msgid "Search:"
 msgstr "Recherche:"
@@ -349,3 +345,6 @@ msgstr "Appel"
 #: js/Phone.js:675
 msgid "Call ID"
 msgstr "ID d'appel"
+
+#~ msgid "enter searchfilter"
+#~ msgstr "saisir un filtre de recherche"

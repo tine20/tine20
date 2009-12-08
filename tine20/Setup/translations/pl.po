@@ -210,13 +210,18 @@ msgstr "Przekieruj do powiązanej strony, jeśli istnieje"
 msgid "Save config and install"
 msgstr "Zapisz konfigurację i zainstaluj"
 
-#: js/AuthenticationPanel.js:485
+#: js/AuthenticationPanel.js:485 js/ConfigManagerPanel.js:191
 msgid "Save config"
 msgstr "Zapisz konfigurację"
 
-#: js/AuthenticationPanel.js:506
+#: js/AuthenticationPanel.js:509
 msgid "Passwords don't match"
 msgstr "Hasła nie są takie same"
+
+#: js/AuthenticationPanel.js:519 js/AuthenticationPanel.js:526
+#: js/AuthenticationPanel.js:530
+msgid "Should not be empty"
+msgstr ""
 
 #: js/ConfigManagerPanel.js:59
 msgid "Informations"
@@ -254,47 +259,51 @@ msgstr "Użytkownik"
 msgid "Prefix"
 msgstr "Przedrostek"
 
-#: js/ConfigManagerPanel.js:121
+#: js/ConfigManagerPanel.js:122
 msgid "Logging"
 msgstr "Logi"
 
-#: js/ConfigManagerPanel.js:127
+#: js/ConfigManagerPanel.js:128
 msgid "Filename"
 msgstr "Zapisuj do pliku"
 
-#: js/ConfigManagerPanel.js:140
+#: js/ConfigManagerPanel.js:141
 msgid "Priority"
 msgstr "Tryb zapisu"
 
-#: js/ConfigManagerPanel.js:145
+#: js/ConfigManagerPanel.js:146
 msgid "Caching"
 msgstr "Włącz pamięć podręczną"
 
-#: js/ConfigManagerPanel.js:151
+#: js/ConfigManagerPanel.js:152
 msgid "Path"
 msgstr "Ścieżka"
 
-#: js/ConfigManagerPanel.js:155
+#: js/ConfigManagerPanel.js:156
 msgid "Lifetime (seconds)"
 msgstr "Czas życia (sekundy)"
 
-#: js/ConfigManagerPanel.js:162
+#: js/ConfigManagerPanel.js:163
 msgid "Temporary files"
 msgstr "Pliki tymczasowe"
 
-#: js/ConfigManagerPanel.js:167
+#: js/ConfigManagerPanel.js:168
 msgid "Temporary Files Path"
 msgstr "Ścieżka do plików tymczasowych"
 
-#: js/ConfigManagerPanel.js:171
+#: js/ConfigManagerPanel.js:172
 msgid "Session files"
 msgstr "Pliki sesji"
 
-#: js/ConfigManagerPanel.js:176
+#: js/ConfigManagerPanel.js:177
 msgid "Session Files Path"
 msgstr "Ścieżka do plików sesji"
 
-#: js/ConfigManagerPanel.js:200
+#: js/ConfigManagerPanel.js:189
+msgid "Config file is not writable"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:206
 msgid "Download config file"
 msgstr "Pobierz plik konfiguracyjny"
 
@@ -459,15 +468,15 @@ msgstr ""
 msgid "License Agreement"
 msgstr ""
 
-#: js/TermsPanel.js:56
+#: js/TermsPanel.js:57
 msgid "I have read the privacy agreement and accept it"
 msgstr ""
 
-#: js/TermsPanel.js:63
+#: js/TermsPanel.js:64
 msgid "Privacy Agreement"
 msgstr ""
 
-#: js/TermsPanel.js:79
+#: js/TermsPanel.js:81
 msgid "Accept Terms and Conditions"
 msgstr ""
 

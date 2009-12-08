@@ -21,62 +21,14 @@ msgstr ""
 msgid "All ExampleRecords"
 msgstr ""
 
-#: js/ExampleRecordEditDialog.js:91 js/Models.js:50
+#: js/ExampleRecordEditDialog.js:91 js/Models.js:36
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:119
-msgid "Number"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:125
-msgid "Title"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:121
-msgid "Unit"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:125
-msgid "Unit Price"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:138
-msgid "Budget"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:134
-msgid "Timesheets are billable"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:131
-msgid "Status"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:144
-msgid "closed"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:144
-msgid "open"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:146
-msgid "Billed"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:154
-msgid "not yet billed"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:155
-msgid "to bill"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:156
-msgid "billed"
+#: js/ExampleRecordEditDialog.js:108 js/ExampleRecordGridPanel.js:119
+msgid "Name"
 msgstr ""
 
 #: js/ExampleRecordGridPanel.js:87
@@ -87,11 +39,23 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
+#: js/ExampleRecordGridPanel.js:125
+msgid "Title"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:131
+msgid "Status"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:138
+msgid "Budget"
+msgstr ""
+
 #: js/ExampleRecordGridPanel.js:162
 msgid "Show closed"
 msgstr ""
 
-#: js/Models.js:54
+#: js/Models.js:40
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] ""

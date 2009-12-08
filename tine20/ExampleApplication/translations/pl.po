@@ -10,7 +10,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
 
 #: js/ExampleApplication.js:29
 msgid "ExampleRecords"
@@ -20,69 +21,16 @@ msgstr "Przykładowe wiersze"
 msgid "All ExampleRecords"
 msgstr "Wszystkie przykładowe wiersze"
 
-#: js/ExampleRecordEditDialog.js:91
-#: js/Models.js:50
+#: js/ExampleRecordEditDialog.js:91 js/Models.js:36
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
 msgstr[0] "Przykładowy wiersz"
 msgstr[1] "przykładowe wiersze"
 msgstr[2] "przykładowych wierszy"
 
-#: js/ExampleRecordEditDialog.js:107
-#: js/ExampleRecordGridPanel.js:119
-msgid "Number"
-msgstr "Ilość"
-
-#: js/ExampleRecordEditDialog.js:112
-#: js/ExampleRecordGridPanel.js:125
-msgid "Title"
-msgstr "Tytuł"
-
-#: js/ExampleRecordEditDialog.js:121
-msgid "Unit"
-msgstr "Jednostka"
-
-#: js/ExampleRecordEditDialog.js:125
-msgid "Unit Price"
-msgstr "Cena jednostkowa"
-
-#: js/ExampleRecordEditDialog.js:130
-#: js/ExampleRecordGridPanel.js:138
-msgid "Budget"
-msgstr "Budżet"
-
-#: js/ExampleRecordEditDialog.js:134
-msgid "Timesheets are billable"
-msgstr "Karty godzin gotowe do przeliczenia"
-
-#: js/ExampleRecordEditDialog.js:138
-#: js/ExampleRecordGridPanel.js:131
-msgid "Status"
-msgstr "Status"
-
-#: js/ExampleRecordEditDialog.js:144
-msgid "closed"
-msgstr "zakończone"
-
-#: js/ExampleRecordEditDialog.js:144
-msgid "open"
-msgstr "otwarte"
-
-#: js/ExampleRecordEditDialog.js:146
-msgid "Billed"
-msgstr "Przeliczone"
-
-#: js/ExampleRecordEditDialog.js:154
-msgid "not yet billed"
-msgstr "jeszcze nie przeliczone"
-
-#: js/ExampleRecordEditDialog.js:155
-msgid "to bill"
-msgstr "przelicz"
-
-#: js/ExampleRecordEditDialog.js:156
-msgid "billed"
-msgstr "przeliczone"
+#: js/ExampleRecordEditDialog.js:108 js/ExampleRecordGridPanel.js:119
+msgid "Name"
+msgstr ""
 
 #: js/ExampleRecordGridPanel.js:87
 msgid "Quick search"
@@ -92,11 +40,23 @@ msgstr "Szybkie wyszukiwanie"
 msgid "Description"
 msgstr "Opis"
 
+#: js/ExampleRecordGridPanel.js:125
+msgid "Title"
+msgstr "Tytuł"
+
+#: js/ExampleRecordGridPanel.js:131
+msgid "Status"
+msgstr "Status"
+
+#: js/ExampleRecordGridPanel.js:138
+msgid "Budget"
+msgstr "Budżet"
+
 #: js/ExampleRecordGridPanel.js:162
 msgid "Show closed"
 msgstr "Pokaż zakończone"
 
-#: js/Models.js:54
+#: js/Models.js:40
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "lista aplikacji"
@@ -107,3 +67,32 @@ msgstr[2] "list aplikacji"
 msgid "ExampleApplication"
 msgstr "Przykładowa aplikacja"
 
+#~ msgid "Number"
+#~ msgstr "Ilość"
+
+#~ msgid "Unit"
+#~ msgstr "Jednostka"
+
+#~ msgid "Unit Price"
+#~ msgstr "Cena jednostkowa"
+
+#~ msgid "Timesheets are billable"
+#~ msgstr "Karty godzin gotowe do przeliczenia"
+
+#~ msgid "closed"
+#~ msgstr "zakończone"
+
+#~ msgid "open"
+#~ msgstr "otwarte"
+
+#~ msgid "Billed"
+#~ msgstr "Przeliczone"
+
+#~ msgid "not yet billed"
+#~ msgstr "jeszcze nie przeliczone"
+
+#~ msgid "to bill"
+#~ msgstr "przelicz"
+
+#~ msgid "billed"
+#~ msgstr "przeliczone"

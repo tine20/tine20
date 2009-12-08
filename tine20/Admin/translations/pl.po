@@ -169,11 +169,6 @@ msgstr "usuń wpis"
 msgid "select all"
 msgstr "zaznacz wszystko"
 
-#: js/Admin.js:405 js/Applications.js:129 js/Groups.js:133 js/Roles.js:129
-#: js/Tags.js:120 js/Users.js:213
-msgid "enter searchfilter"
-msgstr "wpisz szukaną frazę"
-
 #: js/Admin.js:435
 msgid "Display from:"
 msgstr "Wyświetl od:"
@@ -873,6 +868,9 @@ msgid_plural "Email Users"
 msgstr[0] "E-mail użytkownika"
 msgstr[1] "E-maile użytkowników"
 msgstr[2] "E-maile użytkowników"
+
+#~ msgid "enter searchfilter"
+#~ msgstr "wpisz szukaną frazę"
 
 #~ msgid "remove account"
 #~ msgstr "Usuń konto"

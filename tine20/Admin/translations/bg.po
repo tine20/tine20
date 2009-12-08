@@ -162,11 +162,6 @@ msgstr "изтрий влизане"
 msgid "select all"
 msgstr "селектирай всичко"
 
-#: js/Admin.js:405 js/Applications.js:129 js/Groups.js:133 js/Roles.js:129
-#: js/Tags.js:120 js/Users.js:213
-msgid "enter searchfilter"
-msgstr "вкарай филтър за търсене"
-
 #: js/Admin.js:435
 msgid "Display from:"
 msgstr "Покажи от:"
@@ -876,6 +871,9 @@ msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "Имейл"
 msgstr[1] "Имейл"
+
+#~ msgid "enter searchfilter"
+#~ msgstr "вкарай филтър за търсене"
 
 #~ msgid "remove account"
 #~ msgstr "изтрий потребителско конто"

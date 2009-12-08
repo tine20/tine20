@@ -192,12 +192,17 @@ msgstr ""
 msgid "Save config and install"
 msgstr ""
 
-#: js/AuthenticationPanel.js:485
+#: js/AuthenticationPanel.js:485 js/ConfigManagerPanel.js:191
 msgid "Save config"
 msgstr ""
 
-#: js/AuthenticationPanel.js:506
+#: js/AuthenticationPanel.js:509
 msgid "Passwords don't match"
+msgstr ""
+
+#: js/AuthenticationPanel.js:519 js/AuthenticationPanel.js:526
+#: js/AuthenticationPanel.js:530
+msgid "Should not be empty"
 msgstr ""
 
 #: js/ConfigManagerPanel.js:59
@@ -236,47 +241,51 @@ msgstr ""
 msgid "Prefix"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:121
+#: js/ConfigManagerPanel.js:122
 msgid "Logging"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:127
+#: js/ConfigManagerPanel.js:128
 msgid "Filename"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:140
+#: js/ConfigManagerPanel.js:141
 msgid "Priority"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:145
+#: js/ConfigManagerPanel.js:146
 msgid "Caching"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:151
+#: js/ConfigManagerPanel.js:152
 msgid "Path"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:155
+#: js/ConfigManagerPanel.js:156
 msgid "Lifetime (seconds)"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:162
+#: js/ConfigManagerPanel.js:163
 msgid "Temporary files"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:167
+#: js/ConfigManagerPanel.js:168
 msgid "Temporary Files Path"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:171
+#: js/ConfigManagerPanel.js:172
 msgid "Session files"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:176
+#: js/ConfigManagerPanel.js:177
 msgid "Session Files Path"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:200
+#: js/ConfigManagerPanel.js:189
+msgid "Config file is not writable"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:206
 msgid "Download config file"
 msgstr ""
 
@@ -436,14 +445,14 @@ msgstr ""
 msgid "License Agreement"
 msgstr ""
 
-#: js/TermsPanel.js:56
+#: js/TermsPanel.js:57
 msgid "I have read the privacy agreement and accept it"
 msgstr ""
 
-#: js/TermsPanel.js:63
+#: js/TermsPanel.js:64
 msgid "Privacy Agreement"
 msgstr ""
 
-#: js/TermsPanel.js:79
+#: js/TermsPanel.js:81
 msgid "Accept Terms and Conditions"
 msgstr ""

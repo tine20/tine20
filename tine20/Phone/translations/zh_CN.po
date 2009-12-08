@@ -301,10 +301,6 @@ msgstr "打出的电话"
 msgid "unknown number"
 msgstr "未知号码"
 
-#: js/Phone.js:540
-msgid "enter searchfilter"
-msgstr "输入搜索过滤器"
-
 #: js/Phone.js:554
 msgid "Search:"
 msgstr "搜索："
@@ -360,3 +356,6 @@ msgstr "振铃"
 #: js/Phone.js:675
 msgid "Call ID"
 msgstr "来电号码"
+
+#~ msgid "enter searchfilter"
+#~ msgstr "输入搜索过滤器"

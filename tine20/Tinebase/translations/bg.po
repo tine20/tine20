@@ -64,35 +64,35 @@ msgstr "Обработен/създаден от "
 msgid "Activities"
 msgstr "Операции"
 
-#: Frontend/Http.php:521 js/ExceptionHandler.js:139
+#: Frontend/Http.php:520 js/ExceptionHandler.js:144
 msgid "Authorisation Required"
 msgstr "Изискано упълномощаване"
 
-#: Frontend/Http.php:522
+#: Frontend/Http.php:521
 msgid "Your session is not valid. You need to login again."
 msgstr "Лимита на сесията е преминат. Трябва да се регистрирате наново."
 
-#: Frontend/Http.php:548 js/ExceptionDialog.js:46
+#: Frontend/Http.php:547 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Програмен срив"
 
-#: Frontend/Http.php:549 js/ExceptionDialog.js:71
+#: Frontend/Http.php:548 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "Грешка, водеща до рограмен срив."
 
-#: js/common.js:144
+#: js/common.js:145
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} минута"
 msgstr[1] "{0} минути"
 
-#: js/common.js:145
+#: js/common.js:146
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} час"
 msgstr[1] "{0} часа"
 
-#: js/common.js:146
+#: js/common.js:147
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} работен ден"
@@ -169,40 +169,40 @@ msgstr "Вашият протокол е изпратен. Блегодарим 
 msgid "Please restart your browser now!"
 msgstr "Моля задайте Вашите входни данни."
 
-#: js/ExceptionHandler.js:133
+#: js/ExceptionHandler.js:138
 msgid "Connection lost, please check your network!"
 msgstr "Връзка е прекъсната. Моля проверете връзката Ви с интернет!"
 
-#: js/ExceptionHandler.js:140
+#: js/ExceptionHandler.js:145
 msgid "Your session timed out. You need to login again."
 msgstr ""
 "Времевият лимит на сесията е преминат. Трявва да се регистрирате наново."
 
-#: js/ExceptionHandler.js:157
+#: js/ExceptionHandler.js:162
 msgid "Insufficient Rights"
 msgstr "Липса на права"
 
-#: js/ExceptionHandler.js:158
+#: js/ExceptionHandler.js:163
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "За съжаление Вие нямате необходимите за това права."
 
-#: js/ExceptionHandler.js:167
+#: js/ExceptionHandler.js:172
 #, fuzzy
 msgid "Not Found"
 msgstr "Непозволено"
 
-#: js/ExceptionHandler.js:168
+#: js/ExceptionHandler.js:173
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr ""
 
-#: js/ExceptionHandler.js:177
+#: js/ExceptionHandler.js:182
 msgid "Concurrent Updates"
 msgstr "Конкурентно актуализиране"
 
-#: js/ExceptionHandler.js:178
+#: js/ExceptionHandler.js:183
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -210,92 +210,92 @@ msgstr ""
 "Някой друг е запаметил документацията докато Вие сте редактирали данните. "
 "Трябва да заредите и наново да направите промяната."
 
-#: js/LoginPanel.js:74 js/LoginPanel.js:106
+#: js/LoginPanel.js:79 js/LoginPanel.js:111
 msgid "Login"
 msgstr "Вход"
 
-#: js/LoginPanel.js:82 js/widgets/dialog/CredentialsDialog.js:76
+#: js/LoginPanel.js:87 js/widgets/dialog/CredentialsDialog.js:76
 msgid "Username"
 msgstr "Потребителско име"
 
-#: js/LoginPanel.js:93 js/widgets/dialog/CredentialsDialog.js:80
+#: js/LoginPanel.js:98 js/widgets/dialog/CredentialsDialog.js:80
 msgid "Password"
 msgstr "Парола"
 
-#: js/LoginPanel.js:125
+#: js/LoginPanel.js:130
 msgid "Tine 2.0 is made for you"
 msgstr ""
 
-#: js/LoginPanel.js:127
+#: js/LoginPanel.js:132
 msgid ""
 "Tine 2.0 wants to make business collaboration easier and more enjoyable - "
 "for your needs! So you are warmly welcome to discuss with us, bring in ideas "
 "and get help."
 msgstr ""
 
-#: js/LoginPanel.js:133
+#: js/LoginPanel.js:138
 msgid "Tine 2.0 Homepage"
 msgstr ""
 
-#: js/LoginPanel.js:134
+#: js/LoginPanel.js:139
 msgid "Tine 2.0 Forum"
 msgstr ""
 
-#: js/LoginPanel.js:178
+#: js/LoginPanel.js:183
 msgid "about {0} minutes"
 msgstr ""
 
-#: js/LoginPanel.js:183 js/LoginPanel.js:343
+#: js/LoginPanel.js:188 js/LoginPanel.js:350
 msgid "Tine 2.0 needs your help"
 msgstr ""
 
-#: js/LoginPanel.js:185 js/LoginPanel.js:345
+#: js/LoginPanel.js:190 js/LoginPanel.js:352
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
 msgstr ""
 
-#: js/LoginPanel.js:191
+#: js/LoginPanel.js:196
 msgid "participate!"
 msgstr ""
 
-#: js/LoginPanel.js:213
+#: js/LoginPanel.js:218
 msgid "Languages"
 msgstr ""
 
-#: js/LoginPanel.js:214
+#: js/LoginPanel.js:219
 msgid "Duration"
 msgstr ""
 
-#: js/LoginPanel.js:269
+#: js/LoginPanel.js:276
 msgid "Logging you in..."
 msgstr "Вашите входни данни се обработват..."
 
-#: js/LoginPanel.js:269 js/widgets/container/GrantsDialog.js:138
+#: js/LoginPanel.js:276 js/widgets/container/GrantsDialog.js:138
 #: js/widgets/grid/PersistentFilterPicker.js:126
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:140
 msgid "Please wait"
 msgstr "Моля изчакайте"
 
-#: js/LoginPanel.js:281
+#: js/LoginPanel.js:288
 #, fuzzy
 msgid "Login successful. Loading {0}..."
 msgstr "Влизането е успешно. Tine 2.0 ще бъде заредена..."
 
-#: js/LoginPanel.js:281 js/MainScreen.js:534
+#: js/LoginPanel.js:288 js/MainScreen.js:534
 msgid "Please wait!"
 msgstr "Моля изчакайте!"
 
-#: js/LoginPanel.js:286
+#: js/LoginPanel.js:293
 msgid "Login failure"
 msgstr "Неуспешен вход"
 
-#: js/LoginPanel.js:287
+#: js/LoginPanel.js:294
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Вашето(-ите) потребителско име или(и) парола е (са) грешни!!!"
 
-#: js/LoginPanel.js:311
+#: js/LoginPanel.js:318
 msgid "Please enter your login data"
 msgstr "Моля задайте Вашите входни данни."
 
@@ -328,7 +328,7 @@ msgstr ""
 "За съжаление сървъра не може да отговори на Вашето запитване. Моля проверете "
 "Вашата мрежа или се свържете с Вашият администратор."
 
-#: js/MainScreen.js:208
+#: js/MainScreen.js:208 js/MainScreen.js:382
 #, fuzzy
 msgid "About {0}"
 msgstr "Добавяне {0}"
@@ -351,7 +351,7 @@ msgstr "Изход"
 msgid "Logout from {0}"
 msgstr "Излизане от Tine 2.0"
 
-#: js/MainScreen.js:382 js/MainScreen.js:397
+#: js/MainScreen.js:397
 #, fuzzy
 msgid "About Tine 2.0"
 msgstr "Излизане от Tine 2.0"
@@ -576,6 +576,10 @@ msgstr "Селектирай всички страници ({0} записи)"
 msgid "Toggle selection"
 msgstr "Обърни селекцията"
 
+#: js/ux/SearchField.js:41 js/widgets/GridPicker.js:389
+msgid "enter searchfilter"
+msgstr "задай филтър на търсене"
+
 #: js/widgets/account/PickerGridPanel.js:167
 #, fuzzy
 msgid "Remove account"
@@ -778,28 +782,28 @@ msgstr "Отворен за общо ползване"
 msgid "please select a {0}"
 msgstr "моля селектирайте {0}"
 
-#: js/widgets/container/ContainerTree.js:134
+#: js/widgets/container/ContainerTree.js:129
 msgid "All {0}"
 msgstr "Всички {0}"
 
-#: js/widgets/container/ContainerTree.js:139
+#: js/widgets/container/ContainerTree.js:134
 msgid "My {0}"
 msgstr "Моите {0}"
 
-#: js/widgets/container/ContainerTree.js:146
+#: js/widgets/container/ContainerTree.js:141
 msgid "Shared {0}"
 msgstr "Общи  {0}"
 
-#: js/widgets/container/ContainerTree.js:154
+#: js/widgets/container/ContainerTree.js:149
 msgid "Other Users {0}"
 msgstr "Други потребители {0}"
 
-#: js/widgets/container/ContainerTree.js:177
+#: js/widgets/container/ContainerTree.js:172
 #, fuzzy
 msgid "Permission Denied"
 msgstr "Права"
 
-#: js/widgets/container/ContainerTree.js:177
+#: js/widgets/container/ContainerTree.js:172
 #, fuzzy
 msgid "You don't have the required grant to select this {0}"
 msgstr "Наистина ли желаете да изтриете тези {0}?"
@@ -823,6 +827,14 @@ msgstr "Изтриване"
 #: js/widgets/container/GrantsDialog.js:138
 msgid "Updating Grants"
 msgstr "Актуализира права"
+
+#: js/widgets/container/GrantsDialog.js:167
+msgid "Error"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:168
+msgid "You are not allowed to remove all admins for this container!"
+msgstr ""
 
 #: js/widgets/customfields/CustomfieldsPanel.js:64
 msgid "Custom Fields"
@@ -959,23 +971,27 @@ msgstr "За сега няма дорълнителни полета"
 msgid "General Preferences"
 msgstr "Настройки"
 
-#: js/widgets/form/ConfigPanel.js:107
+#: js/widgets/form/ConfigPanel.js:108
 msgid "Invalid configuration"
 msgstr ""
 
-#: js/widgets/form/ConfigPanel.js:107
+#: js/widgets/form/ConfigPanel.js:108
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr ""
 
-#: js/widgets/form/ConfigPanel.js:132
+#: js/widgets/form/ConfigPanel.js:133
 #, fuzzy
 msgid "Transfering Configuration..."
 msgstr "Трансферира {0}..."
 
-#: js/widgets/form/ConfigPanel.js:228
+#: js/widgets/form/ConfigPanel.js:229
 #, fuzzy
 msgid "Save config"
 msgstr "Съхранен в"
+
+#: js/widgets/form/ConfigPanel.js:239
+msgid "Reload config"
+msgstr ""
 
 #: js/widgets/form/RecordPickerComboBox.js:59 js/widgets/tags/TagsPanel.js:465
 msgid "Searching..."
@@ -1194,10 +1210,6 @@ msgstr ""
 #: js/widgets/GridPicker.js:78
 msgid "remove record"
 msgstr "изтрий запис"
-
-#: js/widgets/GridPicker.js:389
-msgid "enter searchfilter"
-msgstr "задай филтър на търсене"
 
 #: js/widgets/GridPicker.js:410
 msgid "Search"

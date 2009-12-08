@@ -61,35 +61,35 @@ msgstr "Created by"
 msgid "Activities"
 msgstr "Activities"
 
-#: Frontend/Http.php:521 js/ExceptionHandler.js:139
+#: Frontend/Http.php:520 js/ExceptionHandler.js:144
 msgid "Authorisation Required"
 msgstr "Authorisation Required"
 
-#: Frontend/Http.php:522
+#: Frontend/Http.php:521
 msgid "Your session is not valid. You need to login again."
 msgstr "Your session is not valid. You need to login again."
 
-#: Frontend/Http.php:548 js/ExceptionDialog.js:46
+#: Frontend/Http.php:547 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Abnormal End"
 
-#: Frontend/Http.php:549 js/ExceptionDialog.js:71
+#: Frontend/Http.php:548 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "An error occurred, the program ended abnormal."
 
-#: js/common.js:144
+#: js/common.js:145
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} minute"
 msgstr[1] "{0} minutes"
 
-#: js/common.js:145
+#: js/common.js:146
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} hour"
 msgstr[1] "{0} hours"
 
-#: js/common.js:146
+#: js/common.js:147
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} workday"
@@ -163,27 +163,27 @@ msgstr "Your report has been sent. Thanks for your contribution"
 msgid "Please restart your browser now!"
 msgstr "Please restart your browser now!"
 
-#: js/ExceptionHandler.js:133
+#: js/ExceptionHandler.js:138
 msgid "Connection lost, please check your network!"
 msgstr "Connection lost, please check your network!"
 
-#: js/ExceptionHandler.js:140
+#: js/ExceptionHandler.js:145
 msgid "Your session timed out. You need to login again."
 msgstr "Your session timed out. You need to login again."
 
-#: js/ExceptionHandler.js:157
+#: js/ExceptionHandler.js:162
 msgid "Insufficient Rights"
 msgstr "Insufficient Rights"
 
-#: js/ExceptionHandler.js:158
+#: js/ExceptionHandler.js:163
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Sorry, you are not permitted to perform this action"
 
-#: js/ExceptionHandler.js:167
+#: js/ExceptionHandler.js:172
 msgid "Not Found"
 msgstr "Not Found"
 
-#: js/ExceptionHandler.js:168
+#: js/ExceptionHandler.js:173
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
@@ -193,11 +193,11 @@ msgstr ""
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 
-#: js/ExceptionHandler.js:177
+#: js/ExceptionHandler.js:182
 msgid "Concurrent Updates"
 msgstr "Concurrent Updates"
 
-#: js/ExceptionHandler.js:178
+#: js/ExceptionHandler.js:183
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -205,23 +205,23 @@ msgstr ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
 
-#: js/LoginPanel.js:74 js/LoginPanel.js:106
+#: js/LoginPanel.js:79 js/LoginPanel.js:111
 msgid "Login"
 msgstr "Login"
 
-#: js/LoginPanel.js:82 js/widgets/dialog/CredentialsDialog.js:76
+#: js/LoginPanel.js:87 js/widgets/dialog/CredentialsDialog.js:76
 msgid "Username"
 msgstr "Username"
 
-#: js/LoginPanel.js:93 js/widgets/dialog/CredentialsDialog.js:80
+#: js/LoginPanel.js:98 js/widgets/dialog/CredentialsDialog.js:80
 msgid "Password"
 msgstr "Password"
 
-#: js/LoginPanel.js:125
+#: js/LoginPanel.js:130
 msgid "Tine 2.0 is made for you"
 msgstr "Tine 2.0 is made for you"
 
-#: js/LoginPanel.js:127
+#: js/LoginPanel.js:132
 msgid ""
 "Tine 2.0 wants to make business collaboration easier and more enjoyable - "
 "for your needs! So you are warmly welcome to discuss with us, bring in ideas "
@@ -231,23 +231,23 @@ msgstr ""
 "for your needs! So you are warmly welcome to discuss with us, bring in ideas "
 "and get help."
 
-#: js/LoginPanel.js:133
+#: js/LoginPanel.js:138
 msgid "Tine 2.0 Homepage"
 msgstr "Tine 2.0 Homepage"
 
-#: js/LoginPanel.js:134
+#: js/LoginPanel.js:139
 msgid "Tine 2.0 Forum"
 msgstr "Tine 2.0 Forum"
 
-#: js/LoginPanel.js:178
+#: js/LoginPanel.js:183
 msgid "about {0} minutes"
 msgstr "about {0} minutes"
 
-#: js/LoginPanel.js:183 js/LoginPanel.js:343
+#: js/LoginPanel.js:188 js/LoginPanel.js:350
 msgid "Tine 2.0 needs your help"
 msgstr "Tine 2.0 needs your help"
 
-#: js/LoginPanel.js:185 js/LoginPanel.js:345
+#: js/LoginPanel.js:190 js/LoginPanel.js:352
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
@@ -255,46 +255,46 @@ msgstr ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
 
-#: js/LoginPanel.js:191
+#: js/LoginPanel.js:196
 msgid "participate!"
 msgstr "participate!"
 
-#: js/LoginPanel.js:213
+#: js/LoginPanel.js:218
 msgid "Languages"
 msgstr "Languages"
 
-#: js/LoginPanel.js:214
+#: js/LoginPanel.js:219
 msgid "Duration"
 msgstr "Duration"
 
-#: js/LoginPanel.js:269
+#: js/LoginPanel.js:276
 msgid "Logging you in..."
 msgstr "Logging you in..."
 
-#: js/LoginPanel.js:269 js/widgets/container/GrantsDialog.js:138
+#: js/LoginPanel.js:276 js/widgets/container/GrantsDialog.js:138
 #: js/widgets/grid/PersistentFilterPicker.js:126
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:140
 msgid "Please wait"
 msgstr "Please wait"
 
-#: js/LoginPanel.js:281
+#: js/LoginPanel.js:288
 msgid "Login successful. Loading {0}..."
 msgstr "Login successful. Loading {0}..."
 
-#: js/LoginPanel.js:281 js/MainScreen.js:534
+#: js/LoginPanel.js:288 js/MainScreen.js:534
 msgid "Please wait!"
 msgstr "Please wait!"
 
-#: js/LoginPanel.js:286
+#: js/LoginPanel.js:293
 msgid "Login failure"
 msgstr "Login failure"
 
-#: js/LoginPanel.js:287
+#: js/LoginPanel.js:294
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Your username and/or your password are wrong!!!"
 
-#: js/LoginPanel.js:311
+#: js/LoginPanel.js:318
 msgid "Please enter your login data"
 msgstr "Please enter your login data"
 
@@ -325,7 +325,7 @@ msgid ""
 msgstr ""
 "There are no applications enabled for you. Please contact your administrator."
 
-#: js/MainScreen.js:208
+#: js/MainScreen.js:208 js/MainScreen.js:382
 msgid "About {0}"
 msgstr "About {0}"
 
@@ -345,7 +345,7 @@ msgstr "Logout"
 msgid "Logout from {0}"
 msgstr "Logout from {0}"
 
-#: js/MainScreen.js:382 js/MainScreen.js:397
+#: js/MainScreen.js:397
 msgid "About Tine 2.0"
 msgstr "About Tine 2.0"
 
@@ -566,6 +566,10 @@ msgstr "Select all pages ({0} records)"
 msgid "Toggle selection"
 msgstr "Toggle selection"
 
+#: js/ux/SearchField.js:41 js/widgets/GridPicker.js:389
+msgid "enter searchfilter"
+msgstr "enter searchfilter"
+
 #: js/widgets/account/PickerGridPanel.js:167
 msgid "Remove account"
 msgstr "Remove account"
@@ -761,27 +765,27 @@ msgstr "shared"
 msgid "please select a {0}"
 msgstr "please select a {0}"
 
-#: js/widgets/container/ContainerTree.js:134
+#: js/widgets/container/ContainerTree.js:129
 msgid "All {0}"
 msgstr "All {0}"
 
-#: js/widgets/container/ContainerTree.js:139
+#: js/widgets/container/ContainerTree.js:134
 msgid "My {0}"
 msgstr "My {0}"
 
-#: js/widgets/container/ContainerTree.js:146
+#: js/widgets/container/ContainerTree.js:141
 msgid "Shared {0}"
 msgstr "Shared {0}"
 
-#: js/widgets/container/ContainerTree.js:154
+#: js/widgets/container/ContainerTree.js:149
 msgid "Other Users {0}"
 msgstr "Other Users {0}"
 
-#: js/widgets/container/ContainerTree.js:177
+#: js/widgets/container/ContainerTree.js:172
 msgid "Permission Denied"
 msgstr "Permission Denied"
 
-#: js/widgets/container/ContainerTree.js:177
+#: js/widgets/container/ContainerTree.js:172
 msgid "You don't have the required grant to select this {0}"
 msgstr "You don't have the required grant to select this {0}"
 
@@ -804,6 +808,14 @@ msgstr "Delete"
 #: js/widgets/container/GrantsDialog.js:138
 msgid "Updating Grants"
 msgstr "Updating Grants"
+
+#: js/widgets/container/GrantsDialog.js:167
+msgid "Error"
+msgstr "Error"
+
+#: js/widgets/container/GrantsDialog.js:168
+msgid "You are not allowed to remove all admins for this container!"
+msgstr "You are not allowed to remove all admins for this container!"
 
 #: js/widgets/customfields/CustomfieldsPanel.js:64
 msgid "Custom Fields"
@@ -925,21 +937,25 @@ msgstr "There are no preferences for this application."
 msgid "General Preferences"
 msgstr "General Preferences"
 
-#: js/widgets/form/ConfigPanel.js:107
+#: js/widgets/form/ConfigPanel.js:108
 msgid "Invalid configuration"
 msgstr "Invalid configuration"
 
-#: js/widgets/form/ConfigPanel.js:107
+#: js/widgets/form/ConfigPanel.js:108
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr "You need to correct the red marked fields before config could be saved"
 
-#: js/widgets/form/ConfigPanel.js:132
+#: js/widgets/form/ConfigPanel.js:133
 msgid "Transfering Configuration..."
 msgstr "Transfering Configuration..."
 
-#: js/widgets/form/ConfigPanel.js:228
+#: js/widgets/form/ConfigPanel.js:229
 msgid "Save config"
 msgstr "Save config"
+
+#: js/widgets/form/ConfigPanel.js:239
+msgid "Reload config"
+msgstr "Reload config"
 
 #: js/widgets/form/RecordPickerComboBox.js:59 js/widgets/tags/TagsPanel.js:465
 msgid "Searching..."
@@ -1157,10 +1173,6 @@ msgstr "Remove"
 #: js/widgets/GridPicker.js:78
 msgid "remove record"
 msgstr "remove record"
-
-#: js/widgets/GridPicker.js:389
-msgid "enter searchfilter"
-msgstr "enter searchfilter"
 
 #: js/widgets/GridPicker.js:410
 msgid "Search"

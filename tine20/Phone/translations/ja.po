@@ -291,10 +291,6 @@ msgstr ""
 msgid "unknown number"
 msgstr ""
 
-#: js/Phone.js:540
-msgid "enter searchfilter"
-msgstr ""
-
 #: js/Phone.js:554
 msgid "Search:"
 msgstr ""

@@ -210,13 +210,18 @@ msgstr "Redirect to referring site, if exists"
 msgid "Save config and install"
 msgstr "Save config and install"
 
-#: js/AuthenticationPanel.js:485
+#: js/AuthenticationPanel.js:485 js/ConfigManagerPanel.js:191
 msgid "Save config"
 msgstr "Save config"
 
-#: js/AuthenticationPanel.js:506
+#: js/AuthenticationPanel.js:509
 msgid "Passwords don't match"
 msgstr "Passwords don't match"
+
+#: js/AuthenticationPanel.js:519 js/AuthenticationPanel.js:526
+#: js/AuthenticationPanel.js:530
+msgid "Should not be empty"
+msgstr "Should not be empty"
 
 #: js/ConfigManagerPanel.js:59
 msgid "Informations"
@@ -254,47 +259,51 @@ msgstr "User"
 msgid "Prefix"
 msgstr "Prefix"
 
-#: js/ConfigManagerPanel.js:121
+#: js/ConfigManagerPanel.js:122
 msgid "Logging"
 msgstr "Logging"
 
-#: js/ConfigManagerPanel.js:127
+#: js/ConfigManagerPanel.js:128
 msgid "Filename"
 msgstr "Filename"
 
-#: js/ConfigManagerPanel.js:140
+#: js/ConfigManagerPanel.js:141
 msgid "Priority"
 msgstr "Priority"
 
-#: js/ConfigManagerPanel.js:145
+#: js/ConfigManagerPanel.js:146
 msgid "Caching"
 msgstr "Caching"
 
-#: js/ConfigManagerPanel.js:151
+#: js/ConfigManagerPanel.js:152
 msgid "Path"
 msgstr "Path"
 
-#: js/ConfigManagerPanel.js:155
+#: js/ConfigManagerPanel.js:156
 msgid "Lifetime (seconds)"
 msgstr "Lifetime (seconds)"
 
-#: js/ConfigManagerPanel.js:162
+#: js/ConfigManagerPanel.js:163
 msgid "Temporary files"
 msgstr "Temporary files"
 
-#: js/ConfigManagerPanel.js:167
+#: js/ConfigManagerPanel.js:168
 msgid "Temporary Files Path"
 msgstr "Temporary Files Path"
 
-#: js/ConfigManagerPanel.js:171
+#: js/ConfigManagerPanel.js:172
 msgid "Session files"
 msgstr "Session files"
 
-#: js/ConfigManagerPanel.js:176
+#: js/ConfigManagerPanel.js:177
 msgid "Session Files Path"
 msgstr "Session Files Path"
 
-#: js/ConfigManagerPanel.js:200
+#: js/ConfigManagerPanel.js:189
+msgid "Config file is not writable"
+msgstr "Config file is not writable"
+
+#: js/ConfigManagerPanel.js:206
 msgid "Download config file"
 msgstr "Download config file"
 
@@ -456,14 +465,14 @@ msgstr "I have read the license agreement and accept it"
 msgid "License Agreement"
 msgstr "License Agreement"
 
-#: js/TermsPanel.js:56
+#: js/TermsPanel.js:57
 msgid "I have read the privacy agreement and accept it"
 msgstr "I have read the privacy agreement and accept it"
 
-#: js/TermsPanel.js:63
+#: js/TermsPanel.js:64
 msgid "Privacy Agreement"
 msgstr "Privacy Agreement"
 
-#: js/TermsPanel.js:79
+#: js/TermsPanel.js:81
 msgid "Accept Terms and Conditions"
 msgstr "Accept Terms and Conditions"

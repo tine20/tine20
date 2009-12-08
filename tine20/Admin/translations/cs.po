@@ -161,11 +161,6 @@ msgstr "smazat záznam"
 msgid "select all"
 msgstr "vybrat vše"
 
-#: js/Admin.js:405 js/Applications.js:129 js/Groups.js:133 js/Roles.js:129
-#: js/Tags.js:120 js/Users.js:213
-msgid "enter searchfilter"
-msgstr "zadejte hledaný výraz"
-
 #: js/Admin.js:435
 msgid "Display from:"
 msgstr "Zobrazit od:"
@@ -857,6 +852,9 @@ msgid_plural "Email Users"
 msgstr[0] "Uživatel emailu"
 msgstr[1] "Uživatelé emailu"
 msgstr[2] "Uživatelů emailu"
+
+#~ msgid "enter searchfilter"
+#~ msgstr "zadejte hledaný výraz"
 
 #~ msgid "remove account"
 #~ msgstr "odstranit účet"

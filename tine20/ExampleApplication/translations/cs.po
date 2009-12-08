@@ -20,64 +20,16 @@ msgstr "Ukázkové záznamy"
 msgid "All ExampleRecords"
 msgstr "Všechny ukázkové záznamy"
 
-#: js/ExampleRecordEditDialog.js:91 js/Models.js:50
+#: js/ExampleRecordEditDialog.js:91 js/Models.js:36
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
 msgstr[0] "Ukázkový záznam"
 msgstr[1] "Ukázkové záznamy"
 msgstr[2] "Ukázkových záznamů"
 
-#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:119
-msgid "Number"
-msgstr "Počet"
-
-#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:125
-msgid "Title"
-msgstr "Název"
-
-#: js/ExampleRecordEditDialog.js:121
-msgid "Unit"
-msgstr "Jednotka"
-
-#: js/ExampleRecordEditDialog.js:125
-msgid "Unit Price"
-msgstr "Jednotková cena"
-
-#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:138
-msgid "Budget"
-msgstr "Rozpočet"
-
-#: js/ExampleRecordEditDialog.js:134
-msgid "Timesheets are billable"
-msgstr "Pracovní výkazy lze účtovat"
-
-#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:131
-msgid "Status"
-msgstr "Stav"
-
-#: js/ExampleRecordEditDialog.js:144
-msgid "closed"
-msgstr "uzavřený"
-
-#: js/ExampleRecordEditDialog.js:144
-msgid "open"
-msgstr "otevřený"
-
-#: js/ExampleRecordEditDialog.js:146
-msgid "Billed"
-msgstr "Účtovaný"
-
-#: js/ExampleRecordEditDialog.js:154
-msgid "not yet billed"
-msgstr "zatím neúčtovaný"
-
-#: js/ExampleRecordEditDialog.js:155
-msgid "to bill"
-msgstr "k účtování"
-
-#: js/ExampleRecordEditDialog.js:156
-msgid "billed"
-msgstr "účtovaný"
+#: js/ExampleRecordEditDialog.js:108 js/ExampleRecordGridPanel.js:119
+msgid "Name"
+msgstr ""
 
 #: js/ExampleRecordGridPanel.js:87
 msgid "Quick search"
@@ -87,11 +39,23 @@ msgstr ""
 msgid "Description"
 msgstr "Popis"
 
+#: js/ExampleRecordGridPanel.js:125
+msgid "Title"
+msgstr "Název"
+
+#: js/ExampleRecordGridPanel.js:131
+msgid "Status"
+msgstr "Stav"
+
+#: js/ExampleRecordGridPanel.js:138
+msgid "Budget"
+msgstr "Rozpočet"
+
 #: js/ExampleRecordGridPanel.js:162
 msgid "Show closed"
 msgstr "Zobrazit uzavřené"
 
-#: js/Models.js:54
+#: js/Models.js:40
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "seznam záznamů"
@@ -101,3 +65,33 @@ msgstr[2] "seznamů záznamů"
 #: Setup/setup.xml:10
 msgid "ExampleApplication"
 msgstr "Ukázková aplikace"
+
+#~ msgid "Number"
+#~ msgstr "Počet"
+
+#~ msgid "Unit"
+#~ msgstr "Jednotka"
+
+#~ msgid "Unit Price"
+#~ msgstr "Jednotková cena"
+
+#~ msgid "Timesheets are billable"
+#~ msgstr "Pracovní výkazy lze účtovat"
+
+#~ msgid "closed"
+#~ msgstr "uzavřený"
+
+#~ msgid "open"
+#~ msgstr "otevřený"
+
+#~ msgid "Billed"
+#~ msgstr "Účtovaný"
+
+#~ msgid "not yet billed"
+#~ msgstr "zatím neúčtovaný"
+
+#~ msgid "to bill"
+#~ msgstr "k účtování"
+
+#~ msgid "billed"
+#~ msgstr "účtovaný"

@@ -44,7 +44,7 @@ msgstr "Funkcja"
 msgid "Source"
 msgstr "Źródło"
 
-#: Controller/Lead.php:171 Export/Pdf.php:94 js/LeadEditDialog.js:386
+#: Controller/Lead.php:171 Export/Pdf.php:94 js/LeadEditDialog.js:387
 #: js/LeadGridDetailsPanel.js:455
 msgid "Start"
 msgstr "Start"
@@ -160,7 +160,7 @@ msgstr "strona WWW"
 msgid "Lead Name"
 msgstr "Nazwa zapytania"
 
-#: Export/Ods.php:84 Export/Xls.php:56 js/LeadEditDialog.js:423
+#: Export/Ods.php:84 Export/Xls.php:56 js/LeadEditDialog.js:424
 #: js/Product.js:141
 msgid "Description"
 msgstr "Opis"
@@ -340,11 +340,11 @@ msgstr "wpisz skróconą nazwę"
 msgid "Expected turnover"
 msgstr "Oczekiwany obrót"
 
-#: js/LeadEditDialog.js:392 js/LeadGridDetailsPanel.js:460
+#: js/LeadEditDialog.js:393 js/LeadGridDetailsPanel.js:460
 msgid "Estimated end"
 msgstr "Szacowane zakończenie"
 
-#: js/LeadEditDialog.js:437
+#: js/LeadEditDialog.js:438
 msgid "Enter description"
 msgstr "Wprowadź opis"
 

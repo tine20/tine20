@@ -21,64 +21,16 @@ msgstr "ЗаписиПримеры"
 msgid "All ExampleRecords"
 msgstr "Все ЗаписиПримеры"
 
-#: js/ExampleRecordEditDialog.js:91 js/Models.js:50
+#: js/ExampleRecordEditDialog.js:91 js/Models.js:36
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
 msgstr[0] "ЗаписьПример"
 msgstr[1] "ЗаписиПримеры"
 msgstr[2] "ЗаписейПримеров"
 
-#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:119
-msgid "Number"
-msgstr "Номер"
-
-#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:125
-msgid "Title"
-msgstr "Заголовок"
-
-#: js/ExampleRecordEditDialog.js:121
-msgid "Unit"
-msgstr "Единица"
-
-#: js/ExampleRecordEditDialog.js:125
-msgid "Unit Price"
-msgstr "Цена за единицу"
-
-#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:138
-msgid "Budget"
-msgstr "Бюджет"
-
-#: js/ExampleRecordEditDialog.js:134
-msgid "Timesheets are billable"
-msgstr "Табели оплачиваемы"
-
-#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:131
-msgid "Status"
-msgstr "Статус"
-
-#: js/ExampleRecordEditDialog.js:144
-msgid "closed"
-msgstr "закрыт"
-
-#: js/ExampleRecordEditDialog.js:144
-msgid "open"
-msgstr "открыт"
-
-#: js/ExampleRecordEditDialog.js:146
-msgid "Billed"
-msgstr "Оплачен"
-
-#: js/ExampleRecordEditDialog.js:154
-msgid "not yet billed"
-msgstr "ещё не оплачен"
-
-#: js/ExampleRecordEditDialog.js:155
-msgid "to bill"
-msgstr "к оплате"
-
-#: js/ExampleRecordEditDialog.js:156
-msgid "billed"
-msgstr "оплачен"
+#: js/ExampleRecordEditDialog.js:108 js/ExampleRecordGridPanel.js:119
+msgid "Name"
+msgstr ""
 
 #: js/ExampleRecordGridPanel.js:87
 msgid "Quick search"
@@ -88,11 +40,23 @@ msgstr ""
 msgid "Description"
 msgstr "Описание"
 
+#: js/ExampleRecordGridPanel.js:125
+msgid "Title"
+msgstr "Заголовок"
+
+#: js/ExampleRecordGridPanel.js:131
+msgid "Status"
+msgstr "Статус"
+
+#: js/ExampleRecordGridPanel.js:138
+msgid "Budget"
+msgstr "Бюджет"
+
 #: js/ExampleRecordGridPanel.js:162
 msgid "Show closed"
 msgstr "Показать закрытые"
 
-#: js/Models.js:54
+#: js/Models.js:40
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "список записей"
@@ -102,3 +66,33 @@ msgstr[2] "списков записей"
 #: Setup/setup.xml:10
 msgid "ExampleApplication"
 msgstr "ПриложениеПример"
+
+#~ msgid "Number"
+#~ msgstr "Номер"
+
+#~ msgid "Unit"
+#~ msgstr "Единица"
+
+#~ msgid "Unit Price"
+#~ msgstr "Цена за единицу"
+
+#~ msgid "Timesheets are billable"
+#~ msgstr "Табели оплачиваемы"
+
+#~ msgid "closed"
+#~ msgstr "закрыт"
+
+#~ msgid "open"
+#~ msgstr "открыт"
+
+#~ msgid "Billed"
+#~ msgstr "Оплачен"
+
+#~ msgid "not yet billed"
+#~ msgstr "ещё не оплачен"
+
+#~ msgid "to bill"
+#~ msgstr "к оплате"
+
+#~ msgid "billed"
+#~ msgstr "оплачен"

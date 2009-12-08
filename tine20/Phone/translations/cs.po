@@ -293,10 +293,6 @@ msgstr "Odchozí hovor"
 msgid "unknown number"
 msgstr "neznámé číslo"
 
-#: js/Phone.js:540
-msgid "enter searchfilter"
-msgstr "zadejte hledaný výraz"
-
 #: js/Phone.js:554
 msgid "Search:"
 msgstr "Hledat:"
@@ -352,3 +348,6 @@ msgstr "Vyzvání"
 #: js/Phone.js:675
 msgid "Call ID"
 msgstr "ID hovoru"
+
+#~ msgid "enter searchfilter"
+#~ msgstr "zadejte hledaný výraz"

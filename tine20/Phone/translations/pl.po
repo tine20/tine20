@@ -296,10 +296,6 @@ msgstr "Połączenie wychodzące"
 msgid "unknown number"
 msgstr "nieznany numer"
 
-#: js/Phone.js:540
-msgid "enter searchfilter"
-msgstr "wpisz szukaną frazę"
-
 #: js/Phone.js:554
 msgid "Search:"
 msgstr "Znajdź:"
@@ -355,3 +351,6 @@ msgstr "Dzwoni"
 #: js/Phone.js:675
 msgid "Call ID"
 msgstr "ID połączenia"
+
+#~ msgid "enter searchfilter"
+#~ msgstr "wpisz szukaną frazę"

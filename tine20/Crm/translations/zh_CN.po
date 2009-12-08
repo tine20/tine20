@@ -42,7 +42,7 @@ msgstr ""
 msgid "Source"
 msgstr "源"
 
-#: Controller/Lead.php:171 Export/Pdf.php:94 js/LeadEditDialog.js:386
+#: Controller/Lead.php:171 Export/Pdf.php:94 js/LeadEditDialog.js:387
 #: js/LeadGridDetailsPanel.js:455
 msgid "Start"
 msgstr "开始"
@@ -161,7 +161,7 @@ msgstr "网址"
 msgid "Lead Name"
 msgstr "线索名"
 
-#: Export/Ods.php:84 Export/Xls.php:56 js/LeadEditDialog.js:423
+#: Export/Ods.php:84 Export/Xls.php:56 js/LeadEditDialog.js:424
 #: js/Product.js:141
 msgid "Description"
 msgstr "描述"
@@ -348,11 +348,11 @@ msgstr "输入短名"
 msgid "Expected turnover"
 msgstr "期望的周转"
 
-#: js/LeadEditDialog.js:392 js/LeadGridDetailsPanel.js:460
+#: js/LeadEditDialog.js:393 js/LeadGridDetailsPanel.js:460
 msgid "Estimated end"
 msgstr "估计结束"
 
-#: js/LeadEditDialog.js:437
+#: js/LeadEditDialog.js:438
 msgid "Enter description"
 msgstr "输入描述"
 

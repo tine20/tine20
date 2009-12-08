@@ -21,63 +21,15 @@ msgstr "ExampleRecords"
 msgid "All ExampleRecords"
 msgstr "All ExampleRecords"
 
-#: js/ExampleRecordEditDialog.js:91 js/Models.js:50
+#: js/ExampleRecordEditDialog.js:91 js/Models.js:36
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
 msgstr[0] "ExampleRecord"
 msgstr[1] "ExampleRecords"
 
-#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:119
-msgid "Number"
-msgstr "Number"
-
-#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:125
-msgid "Title"
-msgstr "Title"
-
-#: js/ExampleRecordEditDialog.js:121
-msgid "Unit"
-msgstr "Unit"
-
-#: js/ExampleRecordEditDialog.js:125
-msgid "Unit Price"
-msgstr "Unit Price"
-
-#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:138
-msgid "Budget"
-msgstr "Budget"
-
-#: js/ExampleRecordEditDialog.js:134
-msgid "Timesheets are billable"
-msgstr "Timesheets are billable"
-
-#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:131
-msgid "Status"
-msgstr "Status"
-
-#: js/ExampleRecordEditDialog.js:144
-msgid "closed"
-msgstr "closed"
-
-#: js/ExampleRecordEditDialog.js:144
-msgid "open"
-msgstr "open"
-
-#: js/ExampleRecordEditDialog.js:146
-msgid "Billed"
-msgstr "Billed"
-
-#: js/ExampleRecordEditDialog.js:154
-msgid "not yet billed"
-msgstr "not yet billed"
-
-#: js/ExampleRecordEditDialog.js:155
-msgid "to bill"
-msgstr "to bill"
-
-#: js/ExampleRecordEditDialog.js:156
-msgid "billed"
-msgstr "billed"
+#: js/ExampleRecordEditDialog.js:108 js/ExampleRecordGridPanel.js:119
+msgid "Name"
+msgstr "Name"
 
 #: js/ExampleRecordGridPanel.js:87
 msgid "Quick search"
@@ -87,11 +39,23 @@ msgstr "Quick search"
 msgid "Description"
 msgstr "Description"
 
+#: js/ExampleRecordGridPanel.js:125
+msgid "Title"
+msgstr "Title"
+
+#: js/ExampleRecordGridPanel.js:131
+msgid "Status"
+msgstr "Status"
+
+#: js/ExampleRecordGridPanel.js:138
+msgid "Budget"
+msgstr "Budget"
+
 #: js/ExampleRecordGridPanel.js:162
 msgid "Show closed"
 msgstr "Show closed"
 
-#: js/Models.js:54
+#: js/Models.js:40
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "record list"

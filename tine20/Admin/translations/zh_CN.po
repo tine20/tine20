@@ -42,7 +42,8 @@ msgid "manage roles"
 msgstr "管理角色"
 
 #: Acl/Rights.php:187
-msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
 msgstr "添加并编辑角色，给角色添加新成员，给角色添加应用程序权限"
 
 #: Acl/Rights.php:190
@@ -101,8 +102,7 @@ msgstr "浏览电脑"
 msgid "view computers list and details"
 msgstr "浏览电脑列表和细节"
 
-#: js/Admin.js:20
-#: js/Users.js:489
+#: js/Admin.js:20 js/Users.js:489
 #, fuzzy
 msgid "User"
 msgid_plural "Users"
@@ -136,10 +136,7 @@ msgstr "角色"
 msgid "Admin"
 msgstr "管理"
 
-#: js/Admin.js:284
-#: js/Groups.js:51
-#: js/Roles.js:45
-#: js/Tags.js:58
+#: js/Admin.js:284 js/Groups.js:51 js/Roles.js:45 js/Tags.js:58
 #: js/Users.js:174
 msgid "Confirm"
 msgstr "确认"
@@ -156,15 +153,6 @@ msgstr "删除条目"
 msgid "select all"
 msgstr "全选"
 
-#: js/Admin.js:405
-#: js/Applications.js:129
-#: js/Groups.js:133
-#: js/Roles.js:129
-#: js/Tags.js:120
-#: js/Users.js:213
-msgid "enter searchfilter"
-msgstr "输入搜索过滤器"
-
 #: js/Admin.js:435
 msgid "Display from:"
 msgstr "显示从："
@@ -173,12 +161,8 @@ msgstr "显示从："
 msgid "to:"
 msgstr "到："
 
-#: js/Admin.js:444
-#: js/Applications.js:145
-#: js/Groups.js:153
-#: js/Roles.js:149
-#: js/Tags.js:140
-#: js/Users.js:234
+#: js/Admin.js:444 js/Applications.js:145 js/Groups.js:153 js/Roles.js:149
+#: js/Tags.js:140 js/Users.js:234
 msgid "Search:"
 msgstr "搜索："
 
@@ -214,17 +198,12 @@ msgstr "没有访问日志条目要显示"
 msgid "Session ID"
 msgstr "会话 ID"
 
-#: js/Admin.js:565
-#: js/UserEditDialog.js:298
+#: js/Admin.js:565 js/UserEditDialog.js:298
 msgid "Login Name"
 msgstr "登录名"
 
-#: js/Admin.js:566
-#: js/Applications.js:220
-#: js/Groups.js:203
-#: js/Roles.js:201
-#: js/SambaMachineGrid.js:90
-#: js/Tags.js:187
+#: js/Admin.js:566 js/Applications.js:220 js/Groups.js:203 js/Roles.js:201
+#: js/SambaMachineGrid.js:90 js/Tags.js:187
 msgid "Name"
 msgstr "名字"
 
@@ -264,13 +243,11 @@ msgstr "关闭程序"
 msgid "settings"
 msgstr "设置"
 
-#: js/Applications.js:174
-#: js/UserEditDialog.js:352
+#: js/Applications.js:174 js/UserEditDialog.js:352
 msgid "disabled"
 msgstr "关闭的"
 
-#: js/Applications.js:177
-#: js/UserEditDialog.js:352
+#: js/Applications.js:177 js/UserEditDialog.js:352
 msgid "enabled"
 msgstr "启用的"
 
@@ -291,9 +268,7 @@ msgstr "没有程序要显示"
 msgid "Order"
 msgstr "顺序"
 
-#: js/Applications.js:221
-#: js/UserEditDialog.js:346
-#: js/Users.js:294
+#: js/Applications.js:221 js/UserEditDialog.js:346 js/Users.js:294
 msgid "Status"
 msgstr "状态"
 
@@ -310,19 +285,12 @@ msgstr "真的要删除选中的组？"
 msgid "Deleting group(s)..."
 msgstr "删除组..."
 
-#: js/Groups.js:74
-#: js/Groups.js:372
-#: js/Groups.js:400
-#: js/RoleEditDialog.js:101
-#: js/RoleEditDialog.js:129
-#: js/Roles.js:67
-#: js/Tags.js:370
-#: js/Users.js:194
+#: js/Groups.js:74 js/Groups.js:372 js/Groups.js:400 js/RoleEditDialog.js:101
+#: js/RoleEditDialog.js:129 js/Roles.js:67 js/Tags.js:370 js/Users.js:194
 msgid "Failed"
 msgstr "失败"
 
-#: js/Groups.js:74
-#: js/Groups.js:400
+#: js/Groups.js:74 js/Groups.js:400
 msgid "Some error occurred while trying to delete the group."
 msgstr "当试图删除组时发生错误"
 
@@ -342,37 +310,25 @@ msgstr "删除组"
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "显示组 {0} - {1} of {2}"
 
-#: js/Groups.js:192
-#: js/Groups.js:247
+#: js/Groups.js:192 js/Groups.js:247
 msgid "No groups to display"
 msgstr "没有组要显示"
 
-#: js/Groups.js:202
-#: js/Roles.js:200
-#: js/SambaMachineGrid.js:83
-#: js/Users.js:293
+#: js/Groups.js:202 js/Roles.js:200 js/SambaMachineGrid.js:83 js/Users.js:293
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:204
-#: js/Groups.js:461
-#: js/RoleEditDialog.js:299
-#: js/Roles.js:202
-#: js/SambaMachineGrid.js:66
-#: js/SambaMachineGrid.js:96
-#: js/Tags.js:188
+#: js/Groups.js:204 js/Groups.js:461 js/RoleEditDialog.js:299 js/Roles.js:202
+#: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:96 js/Tags.js:188
 #: js/Tags.js:505
 msgid "Description"
 msgstr "描述"
 
-#: js/Groups.js:337
-#: js/RoleEditDialog.js:64
-#: js/Tags.js:325
+#: js/Groups.js:337 js/RoleEditDialog.js:64 js/Tags.js:325
 msgid "Please wait"
 msgstr "请稍等"
 
-#: js/Groups.js:337
-#: js/RoleEditDialog.js:64
+#: js/Groups.js:337 js/RoleEditDialog.js:64
 msgid "Updating Memberships"
 msgstr "更新会员身份"
 
@@ -380,15 +336,11 @@ msgstr "更新会员身份"
 msgid "Could not save group."
 msgstr "不能保存组"
 
-#: js/Groups.js:379
-#: js/RoleEditDialog.js:108
-#: js/Tags.js:375
+#: js/Groups.js:379 js/RoleEditDialog.js:108 js/Tags.js:375
 msgid "Errors"
 msgstr "错误"
 
-#: js/Groups.js:379
-#: js/RoleEditDialog.js:108
-#: js/Tags.js:375
+#: js/Groups.js:379 js/RoleEditDialog.js:108 js/Tags.js:375
 msgid "Please fix the errors noted."
 msgstr "请修复标明的错误"
 
@@ -420,8 +372,7 @@ msgstr "不能保存角色"
 msgid "Deleting role..."
 msgstr "删除角色..."
 
-#: js/RoleEditDialog.js:129
-#: js/Roles.js:67
+#: js/RoleEditDialog.js:129 js/Roles.js:67
 msgid "Some error occurred while trying to delete the role."
 msgstr "当试图删除角色是发生错误"
 
@@ -441,8 +392,7 @@ msgstr "角色名"
 msgid "Loading Role..."
 msgstr "加载角色"
 
-#: js/RoleEditDialog.js:333
-#: js/Tags.js:544
+#: js/RoleEditDialog.js:333 js/Tags.js:544
 msgid "Please Wait"
 msgstr "请稍等"
 
@@ -478,13 +428,11 @@ msgstr "删除角色"
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr "显示角色{0} - {1} of {2}"
 
-#: js/Roles.js:190
-#: js/Roles.js:245
+#: js/Roles.js:190 js/Roles.js:245
 msgid "No roles to display"
 msgstr "没有角色要显示"
 
-#: js/SambaMachineEditDialog.js:38
-#: js/SambaMachineGrid.js:65
+#: js/SambaMachineEditDialog.js:38 js/SambaMachineGrid.js:65
 msgid "Computer Name"
 msgstr "电脑名"
 
@@ -517,13 +465,11 @@ msgstr "删除标签"
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "显示标签{0} - {1} of {2}"
 
-#: js/Tags.js:176
-#: js/Tags.js:231
+#: js/Tags.js:176 js/Tags.js:231
 msgid "No tags to display"
 msgstr "没有标签要显示"
 
-#: js/Tags.js:186
-#: js/Tags.js:511
+#: js/Tags.js:186 js/Tags.js:511
 msgid "Color"
 msgstr "颜色"
 
@@ -640,8 +586,7 @@ msgstr "没有设置密码"
 msgid "Emailaddress"
 msgstr "电子邮件地址"
 
-#: js/UserEditDialog.js:334
-#: js/Users.js:300
+#: js/UserEditDialog.js:334 js/Users.js:300
 msgid "OpenID"
 msgstr "开放 ID"
 
@@ -654,14 +599,11 @@ msgstr "基本组"
 msgid "expired"
 msgstr "过期"
 
-#: js/UserEditDialog.js:355
-#: js/Users.js:304
+#: js/UserEditDialog.js:355 js/Users.js:304
 msgid "Expires"
 msgstr "过期"
 
-#: js/UserEditDialog.js:357
-#: js/UserEditDialog.js:399
-#: js/UserEditDialog.js:476
+#: js/UserEditDialog.js:357 js/UserEditDialog.js:399 js/UserEditDialog.js:476
 msgid "never"
 msgstr "从不"
 
@@ -681,24 +623,19 @@ msgstr "从地址本中隐藏"
 msgid "Information"
 msgstr "信息"
 
-#: js/UserEditDialog.js:389
-#: js/Users.js:301
+#: js/UserEditDialog.js:389 js/Users.js:301
 msgid "Last login at"
 msgstr "上次登录时间"
 
-#: js/UserEditDialog.js:391
-#: js/UserEditDialog.js:395
+#: js/UserEditDialog.js:391 js/UserEditDialog.js:395
 msgid "don't know"
 msgstr "不知道"
 
-#: js/UserEditDialog.js:391
-#: js/UserEditDialog.js:395
-#: js/UserEditDialog.js:456
+#: js/UserEditDialog.js:391 js/UserEditDialog.js:395 js/UserEditDialog.js:456
 msgid "never logged in"
 msgstr "从未登录"
 
-#: js/UserEditDialog.js:393
-#: js/Users.js:302
+#: js/UserEditDialog.js:393 js/Users.js:302
 msgid "Last login from"
 msgstr "上次登录于"
 
@@ -764,9 +701,7 @@ msgstr "登录脚本"
 msgid "Password Can Change"
 msgstr "密码可以修改"
 
-#: js/UserEditDialog.js:485
-#: js/UserEditDialog.js:489
-#: js/UserEditDialog.js:493
+#: js/UserEditDialog.js:485 js/UserEditDialog.js:489 js/UserEditDialog.js:493
 msgid "not set"
 msgstr "没设置"
 
@@ -908,26 +843,38 @@ msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "电子邮件用户"
 
+#~ msgid "enter searchfilter"
+#~ msgstr "输入搜索过滤器"
+
 #~ msgid "remove account"
 #~ msgstr "删除账户"
+
 #~ msgid "Role members"
 #~ msgstr "角色成员"
+
 #~ msgid "Deleting tag..."
 #~ msgstr "删除标签..."
+
 #~ msgid "name"
 #~ msgstr "名字"
+
 #~ msgid "status"
 #~ msgstr "状态"
+
 #~ msgid "Deleting account..."
 #~ msgstr "删除账户 ..."
+
 #~ msgid "Some error occurred while trying to delete the account."
 #~ msgstr "当试图删除账户时有错误发生"
+
 #~ msgid "Saving User Account"
 #~ msgstr "保存用户账户"
+
 #~ msgid "Could not save user account."
 #~ msgstr "不能保存用户账户"
+
 #~ msgid "Add New User Account"
 #~ msgstr "添加新用户账户"
+
 #~ msgid "Edit User Account \"{0}\""
 #~ msgstr "编辑用户账户 \"{0}\""
-

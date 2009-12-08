@@ -20,68 +20,15 @@ msgstr "BeispielEinträge"
 msgid "All ExampleRecords"
 msgstr "Alle BeispielEinträge"
 
-#: js/ExampleRecordEditDialog.js:91
-#: js/Models.js:50
+#: js/ExampleRecordEditDialog.js:91 js/Models.js:36
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
 msgstr[0] "BeispielEintrag"
 msgstr[1] "BeispielEinträge"
 
-#: js/ExampleRecordEditDialog.js:107
-#: js/ExampleRecordGridPanel.js:119
-msgid "Number"
-msgstr "Zahl"
-
-#: js/ExampleRecordEditDialog.js:112
-#: js/ExampleRecordGridPanel.js:125
-msgid "Title"
-msgstr "Titel"
-
-#: js/ExampleRecordEditDialog.js:121
-msgid "Unit"
-msgstr "Einheit"
-
-#: js/ExampleRecordEditDialog.js:125
-msgid "Unit Price"
-msgstr "Preis pro Einheit"
-
-#: js/ExampleRecordEditDialog.js:130
-#: js/ExampleRecordGridPanel.js:138
-msgid "Budget"
-msgstr "Budget"
-
-#: js/ExampleRecordEditDialog.js:134
-msgid "Timesheets are billable"
-msgstr "Stundenzettel sind abrechenbar"
-
-#: js/ExampleRecordEditDialog.js:138
-#: js/ExampleRecordGridPanel.js:131
-msgid "Status"
-msgstr "Status"
-
-#: js/ExampleRecordEditDialog.js:144
-msgid "closed"
-msgstr "geschlossen"
-
-#: js/ExampleRecordEditDialog.js:144
-msgid "open"
-msgstr "offen"
-
-#: js/ExampleRecordEditDialog.js:146
-msgid "Billed"
-msgstr "Berechnet"
-
-#: js/ExampleRecordEditDialog.js:154
-msgid "not yet billed"
-msgstr "noch nicht berechnet"
-
-#: js/ExampleRecordEditDialog.js:155
-msgid "to bill"
-msgstr "zu berechnen"
-
-#: js/ExampleRecordEditDialog.js:156
-msgid "billed"
-msgstr "berechnet"
+#: js/ExampleRecordEditDialog.js:108 js/ExampleRecordGridPanel.js:119
+msgid "Name"
+msgstr ""
 
 #: js/ExampleRecordGridPanel.js:87
 msgid "Quick search"
@@ -91,11 +38,23 @@ msgstr "Schnellsuche"
 msgid "Description"
 msgstr "Beschreibung"
 
+#: js/ExampleRecordGridPanel.js:125
+msgid "Title"
+msgstr "Titel"
+
+#: js/ExampleRecordGridPanel.js:131
+msgid "Status"
+msgstr "Status"
+
+#: js/ExampleRecordGridPanel.js:138
+msgid "Budget"
+msgstr "Budget"
+
 #: js/ExampleRecordGridPanel.js:162
 msgid "Show closed"
 msgstr "Zeige geschlossene"
 
-#: js/Models.js:54
+#: js/Models.js:40
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "Eintrags Liste"
@@ -105,3 +64,32 @@ msgstr[1] "Eintrags Listen"
 msgid "ExampleApplication"
 msgstr "BeispielAnwendung"
 
+#~ msgid "Number"
+#~ msgstr "Zahl"
+
+#~ msgid "Unit"
+#~ msgstr "Einheit"
+
+#~ msgid "Unit Price"
+#~ msgstr "Preis pro Einheit"
+
+#~ msgid "Timesheets are billable"
+#~ msgstr "Stundenzettel sind abrechenbar"
+
+#~ msgid "closed"
+#~ msgstr "geschlossen"
+
+#~ msgid "open"
+#~ msgstr "offen"
+
+#~ msgid "Billed"
+#~ msgstr "Berechnet"
+
+#~ msgid "not yet billed"
+#~ msgstr "noch nicht berechnet"
+
+#~ msgid "to bill"
+#~ msgstr "zu berechnen"
+
+#~ msgid "billed"
+#~ msgstr "berechnet"

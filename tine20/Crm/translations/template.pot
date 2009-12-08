@@ -26,7 +26,7 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-#: Controller/Lead.php:171 Export/Pdf.php:94 js/LeadEditDialog.js:386
+#: Controller/Lead.php:171 Export/Pdf.php:94 js/LeadEditDialog.js:387
 #: js/LeadGridDetailsPanel.js:455
 msgid "Start"
 msgstr ""
@@ -142,7 +142,7 @@ msgstr ""
 msgid "Lead Name"
 msgstr ""
 
-#: Export/Ods.php:84 Export/Xls.php:56 js/LeadEditDialog.js:423
+#: Export/Ods.php:84 Export/Xls.php:56 js/LeadEditDialog.js:424
 #: js/Product.js:141
 msgid "Description"
 msgstr ""
@@ -321,11 +321,11 @@ msgstr ""
 msgid "Expected turnover"
 msgstr ""
 
-#: js/LeadEditDialog.js:392 js/LeadGridDetailsPanel.js:460
+#: js/LeadEditDialog.js:393 js/LeadGridDetailsPanel.js:460
 msgid "Estimated end"
 msgstr ""
 
-#: js/LeadEditDialog.js:437
+#: js/LeadEditDialog.js:438
 msgid "Enter description"
 msgstr ""
 

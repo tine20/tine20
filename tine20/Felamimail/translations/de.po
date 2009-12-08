@@ -362,19 +362,19 @@ msgstr "Empfänger"
 msgid "Save contact note"
 msgstr "Emailnotiz bei Kontakt speichern"
 
-#: js/FelamimailRecipientGrid.js:151 js/FelamimailRecipientGrid.js:172
+#: js/FelamimailRecipientGrid.js:153 js/FelamimailRecipientGrid.js:174
 msgid "To:"
 msgstr "To:"
 
-#: js/FelamimailRecipientGrid.js:154 js/FelamimailRecipientGrid.js:173
+#: js/FelamimailRecipientGrid.js:156 js/FelamimailRecipientGrid.js:175
 msgid "Cc:"
 msgstr "Cc:"
 
-#: js/FelamimailRecipientGrid.js:157 js/FelamimailRecipientGrid.js:174
+#: js/FelamimailRecipientGrid.js:159 js/FelamimailRecipientGrid.js:176
 msgid "Bcc:"
 msgstr "Bcc:"
 
-#: js/FelamimailRecipientGrid.js:195
+#: js/FelamimailRecipientGrid.js:197
 msgid "Remove"
 msgstr "Entfernen"
 

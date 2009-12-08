@@ -175,59 +175,59 @@ msgstr[1] "Kalender"
 msgid "Loading events, please wait..."
 msgstr "Bitte warten, Termine werden übertragen...."
 
-#: js/CalendarPanel.js:225
+#: js/CalendarPanel.js:226
 msgid "Scheduling Conflict"
 msgstr "Terminüberschneidung"
 
-#: js/CalendarPanel.js:229
+#: js/CalendarPanel.js:230
 msgid "The following attendee are busy at the requested time:"
 msgstr "Die folgenden Teilnehmer sind zur angegebenen Zeit beschäftigt:"
 
-#: js/CalendarPanel.js:234
+#: js/CalendarPanel.js:235
 msgid "Ignore Conflict"
 msgstr "Überschneidung ignorieren"
 
-#: js/CalendarPanel.js:241
+#: js/CalendarPanel.js:242
 msgid "Edit Event"
 msgstr "Termin bearbeiten"
 
-#: js/CalendarPanel.js:266
+#: js/CalendarPanel.js:267
 msgid "Confirm Update of Series"
 msgstr "Bestätigung der Terminreihe"
 
-#: js/CalendarPanel.js:267
+#: js/CalendarPanel.js:268
 msgid "Do you really want to update all events of this recurring event series?"
 msgstr "Möchten Sie wirklich alle Termine dieser Reihe aktualisieren?"
 
-#: js/CalendarPanel.js:284
+#: js/CalendarPanel.js:285
 msgid "Update Event"
 msgstr "Termin aktualisieren"
 
-#: js/CalendarPanel.js:287 js/CalendarPanel.js:289
+#: js/CalendarPanel.js:288 js/CalendarPanel.js:290
 msgid "Do you want to update the whole series, or just this event"
 msgstr "Möchten Sie die ganze Reihe oder nur diesen Termin aktualisieren?"
 
-#: js/CalendarPanel.js:291
+#: js/CalendarPanel.js:292
 msgid "Update nothing"
 msgstr "Nichts aktualisieren"
 
-#: js/CalendarPanel.js:299
+#: js/CalendarPanel.js:300
 msgid "Update whole series"
 msgstr "Die ganze Reihe aktualisieren"
 
-#: js/CalendarPanel.js:311
+#: js/CalendarPanel.js:312
 msgid "Failed not update recurring event series"
 msgstr "Aktualisierung der Terminreihe ist fehlgeschlagen."
 
-#: js/CalendarPanel.js:319
+#: js/CalendarPanel.js:320
 msgid "Update this event only"
 msgstr "Nur diesen Termin aktualisieren"
 
-#: js/CalendarPanel.js:333
+#: js/CalendarPanel.js:334
 msgid "Failed not update event"
 msgstr "Aktualisierung des Termins ist fehlgeschlagen"
 
-#: js/CalendarSelectTreePanel.js:43
+#: js/CalendarSelectTreePanel.js:42
 msgid "Resources {0}"
 msgstr "Ressourcen {0}"
 

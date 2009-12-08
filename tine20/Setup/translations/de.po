@@ -210,13 +210,18 @@ msgstr "Weiterleitung an die Herkunftsseite, falls eine existiert"
 msgid "Save config and install"
 msgstr "Konfiguration speichern und installieren"
 
-#: js/AuthenticationPanel.js:485
+#: js/AuthenticationPanel.js:485 js/ConfigManagerPanel.js:191
 msgid "Save config"
 msgstr "Konfiguration speichern"
 
-#: js/AuthenticationPanel.js:506
+#: js/AuthenticationPanel.js:509
 msgid "Passwords don't match"
 msgstr "Die Passwörter stimmen nicht überein"
+
+#: js/AuthenticationPanel.js:519 js/AuthenticationPanel.js:526
+#: js/AuthenticationPanel.js:530
+msgid "Should not be empty"
+msgstr ""
 
 #: js/ConfigManagerPanel.js:59
 msgid "Informations"
@@ -254,47 +259,51 @@ msgstr "Benutzer"
 msgid "Prefix"
 msgstr "Prefix"
 
-#: js/ConfigManagerPanel.js:121
+#: js/ConfigManagerPanel.js:122
 msgid "Logging"
 msgstr "Logging"
 
-#: js/ConfigManagerPanel.js:127
+#: js/ConfigManagerPanel.js:128
 msgid "Filename"
 msgstr "Dateiname"
 
-#: js/ConfigManagerPanel.js:140
+#: js/ConfigManagerPanel.js:141
 msgid "Priority"
 msgstr "Priorität"
 
-#: js/ConfigManagerPanel.js:145
+#: js/ConfigManagerPanel.js:146
 msgid "Caching"
 msgstr "Caching"
 
-#: js/ConfigManagerPanel.js:151
+#: js/ConfigManagerPanel.js:152
 msgid "Path"
 msgstr "Pfad"
 
-#: js/ConfigManagerPanel.js:155
+#: js/ConfigManagerPanel.js:156
 msgid "Lifetime (seconds)"
 msgstr "Lifetime (sekunden)"
 
-#: js/ConfigManagerPanel.js:162
+#: js/ConfigManagerPanel.js:163
 msgid "Temporary files"
 msgstr "Flüchtige Dateien"
 
-#: js/ConfigManagerPanel.js:167
+#: js/ConfigManagerPanel.js:168
 msgid "Temporary Files Path"
 msgstr "Pfad für flüchtige Dateien"
 
-#: js/ConfigManagerPanel.js:171
+#: js/ConfigManagerPanel.js:172
 msgid "Session files"
 msgstr "Sitzungs-Dateien"
 
-#: js/ConfigManagerPanel.js:176
+#: js/ConfigManagerPanel.js:177
 msgid "Session Files Path"
 msgstr "Pfad für Sitzungs-Dateien"
 
-#: js/ConfigManagerPanel.js:200
+#: js/ConfigManagerPanel.js:189
+msgid "Config file is not writable"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:206
 msgid "Download config file"
 msgstr "Konfigurationsdatei herunterladen"
 
@@ -454,15 +463,15 @@ msgstr "Ich habe die Lizenzvereinbarung gelesen und akzeptiere sie"
 msgid "License Agreement"
 msgstr "Lizenzvereinbarung"
 
-#: js/TermsPanel.js:56
+#: js/TermsPanel.js:57
 msgid "I have read the privacy agreement and accept it"
 msgstr "Ich habe die Datenschutzvereinbarung gelesen und akzeptiere sie"
 
-#: js/TermsPanel.js:63
+#: js/TermsPanel.js:64
 msgid "Privacy Agreement"
 msgstr "Datenschutzvereinbarung"
 
-#: js/TermsPanel.js:79
+#: js/TermsPanel.js:81
 msgid "Accept Terms and Conditions"
 msgstr "Bedingungen und Konditionen akzeptieren"
 

@@ -138,11 +138,6 @@ msgstr ""
 msgid "select all"
 msgstr ""
 
-#: js/Admin.js:405 js/Applications.js:129 js/Groups.js:133 js/Roles.js:129
-#: js/Tags.js:120 js/Users.js:213
-msgid "enter searchfilter"
-msgstr ""
-
 #: js/Admin.js:435
 msgid "Display from:"
 msgstr ""

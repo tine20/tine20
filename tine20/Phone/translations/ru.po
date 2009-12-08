@@ -294,10 +294,6 @@ msgstr "Исходящий звонок"
 msgid "unknown number"
 msgstr "неизвестный номер"
 
-#: js/Phone.js:540
-msgid "enter searchfilter"
-msgstr "ввести поисковый фильтр"
-
 #: js/Phone.js:554
 msgid "Search:"
 msgstr "Поиск:"
@@ -353,6 +349,9 @@ msgstr "Звонок"
 #: js/Phone.js:675
 msgid "Call ID"
 msgstr "ID звонка"
+
+#~ msgid "enter searchfilter"
+#~ msgstr "ввести поисковый фильтр"
 
 #~ msgid "Incoming"
 #~ msgstr "Входящий"

@@ -301,10 +301,6 @@ msgstr "Излизащи позвънявания"
 msgid "unknown number"
 msgstr "непознат номер"
 
-#: js/Phone.js:540
-msgid "enter searchfilter"
-msgstr "включи филтър за търсене"
-
 #: js/Phone.js:554
 msgid "Search:"
 msgstr "Търси:"
@@ -360,6 +356,9 @@ msgstr "Позвъняване"
 #: js/Phone.js:675
 msgid "Call ID"
 msgstr "Идентификатор (ID) на обаждането"
+
+#~ msgid "enter searchfilter"
+#~ msgstr "включи филтър за търсене"
 
 #~ msgid "Incoming"
 #~ msgstr "Входящ"

@@ -291,10 +291,6 @@ msgstr "撥出號碼"
 msgid "unknown number"
 msgstr "未知號碼"
 
-#: js/Phone.js:540
-msgid "enter searchfilter"
-msgstr "輸入搜尋條件"
-
 #: js/Phone.js:554
 msgid "Search:"
 msgstr "搜尋 :"
@@ -350,3 +346,6 @@ msgstr "響鈴中"
 #: js/Phone.js:675
 msgid "Call ID"
 msgstr "來電ID"
+
+#~ msgid "enter searchfilter"
+#~ msgstr "輸入搜尋條件"

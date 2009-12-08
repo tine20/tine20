@@ -159,11 +159,6 @@ msgstr "удалить элемент"
 msgid "select all"
 msgstr "выбрать все"
 
-#: js/Admin.js:405 js/Applications.js:129 js/Groups.js:133 js/Roles.js:129
-#: js/Tags.js:120 js/Users.js:213
-msgid "enter searchfilter"
-msgstr "Введите поисковый фильтр"
-
 #: js/Admin.js:435
 msgid "Display from:"
 msgstr "Показаны с:"
@@ -866,6 +861,9 @@ msgid_plural "Email Users"
 msgstr[0] "Пользователь Samba"
 msgstr[1] "Пользователя Samba"
 msgstr[2] "Пользователей Samba"
+
+#~ msgid "enter searchfilter"
+#~ msgstr "Введите поисковый фильтр"
 
 #~ msgid "remove account"
 #~ msgstr "удалить учётную запись"
