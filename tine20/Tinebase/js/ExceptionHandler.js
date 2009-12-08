@@ -186,6 +186,16 @@ Tine.Tinebase.ExceptionHandler = function() {
                 });
                 break;
             
+            // transaction aborted / timeout
+            case 520:
+                Ext.MessageBox.show({
+                    title: _('Timeout'), 
+                    msg: _('Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.WARNING
+                });
+                break;
+
             // generic failure -> notify developers
             default:
             
