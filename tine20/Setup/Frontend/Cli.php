@@ -91,7 +91,7 @@ class Setup_Frontend_Cli
         }
         
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
-        $this->_promptRemainingOptions($applications, &$options);
+        $this->_promptRemainingOptions($applications, $options);
         
         $controller->installApplications($applications, $options);
         
@@ -106,7 +106,7 @@ class Setup_Frontend_Cli
      * @param $_options
      * @return unknown_type
      */
-    protected function _promptRemainingOptions($_applications, $_options) {
+    protected function _promptRemainingOptions($_applications, &$_options) {
         if (in_array('Tinebase', $_applications)) {
             
             if (! isset($_options['acceptedTermsVersion'])) {
