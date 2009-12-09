@@ -153,7 +153,8 @@ Tine20.login = {
      * @param  {Object} data
      * @return void
      */
-    onLoginResponse: function(data) {
+    onLoginResponse: function(response) {
+        var data = Ext.decode(response.responseText);
         var config = this.getConfig();
         
         if (data.status == 'success') {
