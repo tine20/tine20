@@ -386,7 +386,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         // refetch user from ldap backend
         $user = $this->_getUserById($_account, 'Tinebase_Model_FullUser');
         
-        // update user in sql backend too
+        // update user in sql backend too (and add visibility info)
+        $user->visibility = $_account->visibility;
         $user = $this->_sql->updateUser($user);
         
         return $user;
