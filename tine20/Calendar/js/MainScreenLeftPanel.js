@@ -57,8 +57,17 @@ Tine.Calendar.MainScreenLeftPanel = Ext.extend(Ext.Panel, {
             collapsible: true,
             collapseMode: 'mini',
             height: 190,
-            width: 200,
-            items: new Ext.DatePicker({
+            cls: 'cal-datepicker-background',
+            layout: 'hbox',
+            layoutConfig: {
+                align:'middle'
+            },
+            defaults: {border: false},
+            items: [{
+                flex: 1
+            }, new Ext.DatePicker({
+                flex: 0,
+                width: 200,
                 id :'cal-mainscreen-minical',
                 plugins: [new Ext.ux.DatePickerWeekPlugin({
                     weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._('WK'),
@@ -84,7 +93,7 @@ Tine.Calendar.MainScreenLeftPanel = Ext.extend(Ext.Panel, {
                         layout.layout();
                     }
                 }
-            })
+            }), {flex: 1}]
         }];   
         Tine.Calendar.MainScreenLeftPanel.superclass.initComponent.call(this);
     },

@@ -90,7 +90,11 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 .cal-tree .x-date-picker {
     border: 0;
 }
-	
+
+.cal-datepicker-background .x-panel-body {
+    background-color: #EEEEEF;
+}
+
 .cal-event-icon {
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-list.png) !important;
     background-position: 8px;
