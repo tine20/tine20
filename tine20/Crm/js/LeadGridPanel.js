@@ -54,7 +54,10 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     defaultSortInfo: {field: 'lead_name', direction: 'DESC'},
     gridConfig: {
         loadMask: true,
-        autoExpandColumn: 'title'
+        autoExpandColumn: 'title',
+        // drag n drop
+        enableDragDrop: true,
+        ddGroup: 'containerDDGroup'
     },
      
     /**

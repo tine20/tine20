@@ -46,7 +46,10 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         clicksToEdit: 'auto',
         loadMask: true,
         quickaddMandatory: 'summary',
-        autoExpandColumn: 'summary'
+        autoExpandColumn: 'summary',
+        // drag n drop
+        enableDragDrop: true,
+        ddGroup: 'containerDDGroup'
     },
     
     // specialised translations
