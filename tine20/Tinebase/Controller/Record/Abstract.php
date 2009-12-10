@@ -54,6 +54,13 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_purgeRecords = TRUE;
     
     /**
+     * resolve customfields in search()
+     *
+     * @var boolean
+     */
+    protected $_resolveCustomFields = FALSE;
+    
+    /**
      * send notifications?
      * - the controller has to define a sendNotifications() function
      *
@@ -106,8 +113,13 @@ abstract class Tinebase_Controller_Record_Abstract
         
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
         
-        if ($_getRelations) {
-            $result->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_backend->getType(), $result->getId()));
+        if (! $_onlyIds) {
+            if ($_getRelations) {
+                $result->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_backend->getType(), $result->getId()));
+            }
+            if ($this->_resolveCustomFields) {
+                Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($result);
+            }
         }
         
         return $result;    
@@ -136,7 +148,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @return Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * 
-     * @todo    add get relations ?
+     * @todo    add get customfields ?
      */
     public function get($_id, $_containerId = NULL)
     {

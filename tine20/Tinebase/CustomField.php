@@ -10,6 +10,8 @@
  * @version     $Id$
  * 
  * @todo        add join to cf config to value backend to get name
+ * @todo        use recordset instead of array to store cfs of record
+ * @todo        move custom field handling from sql backend to abstract record controller
  */
 
 /**
@@ -182,15 +184,13 @@ class Tinebase_CustomField
      * save custom fields of record in its custom fields table
      *
      * @param Tinebase_Record_Interface $_record
-     * 
-     * @todo use recordset instead of array?
      */
     public function saveRecordCustomFields(Tinebase_Record_Interface $_record)
     {
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
         $appCustomFields = $this->getCustomFieldsForApplication($applicationId, get_class($_record));
         
-        $existingCustomFields = $this->_getRecordCustomFields($_record->getId());
+        $existingCustomFields = $this->_getCustomFields($_record->getId());
         $existingCustomFields->addIndices(array('customfield_id'));
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
@@ -222,14 +222,7 @@ class Tinebase_CustomField
                     'value'             => $value
                 ));
                 $this->_backendValue->create($cf);
-                
-                /*
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' Created new custom field value: '
-                    . print_r($cf->toArray(), TRUE)
-                );
-                */
-                
+
             } else {
                 throw new Tinebase_Exception_UnexpectedValue('Oops, there should be only one custom field value here!');
             }
@@ -240,39 +233,54 @@ class Tinebase_CustomField
      * get custom fields and add them to $_record->customfields arraay
      *
      * @param Tinebase_Record_Interface $_record
-     * 
-     * @todo use recordset instead of array?
+     * @param Tinebase_Record_RecordSet $_customFields
+     * @param Tinebase_Record_RecordSet $configs
      */
-    public function resolveRecordCustomFields(Tinebase_Record_Interface $_record)
+    public function resolveRecordCustomFields(Tinebase_Record_Interface $_record, $_customFields = NULL, $_configs = NULL)
     {
-        $customFields = $this->_getRecordCustomFields($_record->getId());
-
-        $configs = $this->_backendConfig->getMultiple($customFields->customfield_id);
+        $customFields = ($_customFields === NULL) ? $this->_getCustomFields($_record->getId()) : $_customFields;
+        if ($_configs === NULL) {
+            $_configs = $this->_backendConfig->getMultiple($customFields->customfield_id);  
+        };
             
         $result = array();
         foreach ($customFields as $customField) {            
-            $config = $configs[$configs->getIndexById($customField->customfield_id)];
+            $config = $_configs[$_configs->getIndexById($customField->customfield_id)];
             $result[$config->name] = $customField->value;
         }
         $_record->customfields = $result;
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Resolved custom fields for record of class ' . get_class($_record)
-        );
     }
     
     /**
-     * get custom fields of record
+     * get all customfields of all given records
+     * 
+     * @param  Tinebase_Record_RecordSet $_records     records to get customfields for
+     */
+    public function resolveMultipleCustomfields(Tinebase_Record_RecordSet $_records)
+    {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Resolving custom fields for ' . count($_records) . ' records');
+        
+        $customFields = $this->_getCustomFields($_records->getArrayOfIds());
+        $customFields->addIndices(array('record_id'));
+        
+        $config = NULL;
+        foreach ($_records as $record) {
+            $this->resolveRecordCustomFields($record, $customFields->filter('record_id', $record->getId()), $config);
+        }
+    }
+    
+    /**
+     * get custom fields of record(s)
      *
-     * @param string $_recordId
+     * @param string|array $_recordId
      * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField_Value
      */
-    protected function _getRecordCustomFields($_recordId)
+    protected function _getCustomFields($_recordId)
     {
         $filterValues = array(array(
             'field'     => 'record_id', 
-            'operator'  => 'equals', 
-            'value'     => $_recordId
+            'operator'  => 'in', 
+            'value'     => (array) $_recordId
         ));
         $filter = new Tinebase_Model_CustomField_ValueFilter($filterValues);
         
