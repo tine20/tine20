@@ -156,8 +156,7 @@ Ext.namespace('Tine.Felamimail');
                 if (email) {
                     var id = Ext.id() + ':' + email;
                     
-                    //var name = value.match(/^"*([a-z\-0-9\._]+)(,*) *([a-z\-0-9\._]+)/i);
-                    var name = value.match(/^"*([^,^ ]+)(,*) *([^"]+)/i);
+                    var name = value.match(/^"*([^,^ ]+)(,*) *([^"^<]+)/i);
                     
                     var firstname = (name && name[1]) ? name[1] : '';
                     var lastname = (name && name[3]) ? name[3] : '';
@@ -167,7 +166,7 @@ Ext.namespace('Tine.Felamimail');
                         lastname = name[1];
                     }
                     
-                    id += Ext.util.Format.htmlEncode(':' + firstname + ':' + lastname);
+                    id += Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(firstname) + ':' + Ext.util.Format.trim(lastname));
                     
                     
                     result += ' <span ext:qtip="' + qtip + '" id="' + id + '" class="tinebase-addtocontacts-link">[+]</span>';
