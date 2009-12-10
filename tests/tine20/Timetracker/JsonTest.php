@@ -35,8 +35,8 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_toDeleteIds = array(
-        'ts'    => array(),
         'ta'    => array(),
+        'cf'    => array(),
     );
     
     /**
@@ -72,7 +72,10 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->_json->deleteTimeaccounts(Zend_Json::encode($this->_toDeleteIds['ts']));
+        $this->_json->deleteTimeaccounts(Zend_Json::encode($this->_toDeleteIds['ta']));
+        foreach ($this->_toDeleteIds['cf'] as $cf) {
+            Tinebase_CustomField::getInstance()->deleteCustomField($cf);
+        }
     }
     
     /**
@@ -208,7 +211,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to add a Timesheet
+     * try to add a Timesheet with custom fields
      *
      */
     public function testAddTimesheetWithCustomFields()
@@ -224,15 +227,21 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheetArray));
         
+        // tearDown setting
+        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
+        $this->_toDeleteIds['cf'] = array($customField1->getId(), $customField2->getId());
+        
         // checks
         $this->assertGreaterThan(0, count($timesheetData['customfields']));
         $this->assertEquals($timesheetArray[$customField1->name], $timesheetData['customfields'][$customField1->name]);
         $this->assertEquals($timesheetArray[$customField2->name], $timesheetData['customfields'][$customField2->name]);
         
-        // cleanup
-        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
-        Tinebase_CustomField::getInstance()->deleteCustomField($customField1);
-        Tinebase_CustomField::getInstance()->deleteCustomField($customField2);
+        // check if custom fields are returned with search
+        $searchResult = $this->_json->searchTimesheets(Zend_Json::encode($this->_getTimesheetFilter()), Zend_Json::encode($this->_getPaging()));
+        
+        $this->assertGreaterThan(0, count($timesheetData['customfields']));
+        $this->assertEquals($timesheetArray[$customField1->name], $searchResult['results'][0]['customfields'][$customField1->name]);
+        $this->assertEquals($timesheetArray[$customField2->name], $searchResult['results'][0]['customfields'][$customField2->name]);
     }
     
     /**
@@ -600,7 +609,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         );
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
-        $this->_toDeleteIds['ts'][] = $timesheetData['timeaccount_id']['id'];
+        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
         
         // search persistent filter
         $persistentFilters = $persistentFiltersJson->search(Zend_Json::encode($this->_getPersistentFilterFilter($filterName)));
