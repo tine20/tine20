@@ -193,7 +193,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: js/FelamimailGridDetailsPanel.js:129 js/FelamimailGridDetailsPanel.js:348
+#: js/FelamimailGridDetailsPanel.js:129 js/FelamimailGridDetailsPanel.js:347
 msgid "Show or hide header information"
 msgstr ""
 

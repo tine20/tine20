@@ -209,7 +209,7 @@ msgstr "Kontakt zum Adressbuch hinzufügen"
 msgid "Date"
 msgstr "Datum"
 
-#: js/FelamimailGridDetailsPanel.js:129 js/FelamimailGridDetailsPanel.js:348
+#: js/FelamimailGridDetailsPanel.js:129 js/FelamimailGridDetailsPanel.js:347
 msgid "Show or hide header information"
 msgstr "Ein/Ausblenden der Header"
 

@@ -212,7 +212,7 @@ msgstr "Добавить контакт в адресную книгу"
 msgid "Date"
 msgstr "Удалить"
 
-#: js/FelamimailGridDetailsPanel.js:129 js/FelamimailGridDetailsPanel.js:348
+#: js/FelamimailGridDetailsPanel.js:129 js/FelamimailGridDetailsPanel.js:347
 msgid "Show or hide header information"
 msgstr "Показать или скрыть заголовки"
 
