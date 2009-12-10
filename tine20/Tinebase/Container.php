@@ -1176,5 +1176,57 @@ class Tinebase_Container
         $grants = new Tinebase_Model_Grants($grantsFields);
 
         return $grants;
-    } 
+    }
+    
+    /**
+     * move records to container
+     * 
+     * @param string $_targetContainerId
+     * @param array $_recordIds
+     * @param string $_applicationName
+     * @param string $_modelName
+     * @param string $_containerProperty
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied|Tinebase_Exception_NotFound
+     */
+    public function moveRecordsToContainer($_targetContainerId, $_recordIds, $_applicationName, $_modelName, $_containerProperty = 'container_id')
+    {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Moving ' 
+            . count($_recordIds) . ' records to ' . $_applicationName . ' / ' . $_modelName . ' container ' . $_targetContainerId
+        );
+        
+        $userId = Tinebase_Core::getUser()->getId();
+        
+        // check add grant in target container
+        if (! $this->hasGrant($userId, $_targetContainerId, Tinebase_Model_Container::GRANT_ADD)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Permission denied to add records to container.');
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to move records to this container');
+        }
+        
+        // get records
+        $recordController = Tinebase_Core::getApplicationInstance($_applicationName, $_modelName);
+        $records = $recordController->getMultiple($_recordIds);
+        
+        // check delete grant in source container
+        $containerIdsWithDeleteGrant = $this->getContainerByACL($userId, $_applicationName, Tinebase_Model_Container::GRANT_DELETE, TRUE);
+        foreach ($records as $index => $record) {
+            if (! in_array($record->{$_containerProperty}, $containerIdsWithDeleteGrant)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                    . ' Permission denied to remove record ' . $record->getId() . ' from container ' . $record->{$_containerProperty}
+                ); 
+                unset($records[$index]);
+            }
+        }
+        
+        // move (update container id)
+        $filterClass = $_applicationName . '_Model_' . $_modelName . 'Filter';
+        if (! class_exists($filterClass)) {
+            throw new Tinebase_Exception_NotFound('Filter class ' . $filterClass . ' not found!');
+        }
+        $filter = new $filterClass(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => $records->getArrayOfIds())
+        ));
+        $data[$_containerProperty] = $_targetContainerId;
+        $recordController->updateMultiple($filter, $data);
+    }
 }

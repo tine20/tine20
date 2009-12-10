@@ -197,18 +197,18 @@ class Tinebase_Frontend_Json_Container
     /**
      * move records to container
      * 
-     * @param string $containerId
+     * @param string $targetContainerId
      * @param string $recordIds
      * @param string $applicationName
      * @param string $model
      * @return array
-     * 
-     * @todo finish implementation
      */
     public function moveRecordsToContainer($targetContainerId, $recordIds, $applicationName, $model)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $targetContainerId . ' - ' . $recordIds . ' - ' . $applicationName . ' - ' . $model);
+        Tinebase_Container::getInstance()->moveRecordsToContainer($targetContainerId, Zend_Json::decode($recordIds), $applicationName, $model);
         
-        return array();
+        return array(
+            'status'    => 'success'
+        );
     }
 }
