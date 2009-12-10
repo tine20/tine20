@@ -27,6 +27,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     recordClass: Tine.Addressbook.Model.Contact,
     showContainerSelector: true,
     //recordProxy: Tine.Calendar.backend,
+    getDefaultsAgain: false,
     
     getFormItems: function() {
         
