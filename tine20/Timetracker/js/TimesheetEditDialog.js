@@ -257,7 +257,7 @@ Tine.Timetracker.TimesheetEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
-        height: 470,
+        height: 500,
         name: Tine.Timetracker.TimesheetEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Timetracker.TimesheetEditDialog',
         contentPanelConstructorConfig: config
