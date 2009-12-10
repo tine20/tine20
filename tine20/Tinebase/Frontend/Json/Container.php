@@ -205,9 +205,9 @@ class Tinebase_Frontend_Json_Container
      * 
      * @todo finish implementation
      */
-    public function moveRecordsToContainer($containerId, $recordIds, $applicationName, $model)
+    public function moveRecordsToContainer($targetContainerId, $recordIds, $applicationName, $model)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $containerId . ' - ' . $recordIds . ' - ' . $applicationName . ' - ' . $model);
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $targetContainerId . ' - ' . $recordIds . ' - ' . $applicationName . ' - ' . $model);
         
         return array();
     }

@@ -299,7 +299,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     onBeforenodedrop: function(dropEvent) {
         
-        var containerId = dropEvent.target.id;
+        var targetContainerId = dropEvent.target.id;
         var recordIds = [];
         
         for (var i=0; i < dropEvent.data.selections.length; i++) {
@@ -310,7 +310,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         Ext.Ajax.request({
             params: {
                 method: 'Tinebase_Container.moveRecordsToContainer',
-                containerId: containerId,
+                targetContainerId: targetContainerId,
                 recordIds: Ext.util.JSON.encode(recordIds),
                 model: this.recordClass.getMeta('modelName'),
                 applicationName: this.recordClass.getMeta('appName')
@@ -479,7 +479,6 @@ Tine.widgets.container.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         }
         
         attr.allowDrop = (attr.containerType && attr.containerType == 'singleContainer');
-        console.log(attr);
                 
         attr.qtip = Ext.util.Format.htmlEncode(attr.text);
         attr.text = Ext.util.Format.htmlEncode(attr.text);
