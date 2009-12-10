@@ -140,6 +140,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param  bool   $_getDeleted
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotFound
+     * 
+     * @todo move resolveRecordCustomFields to abstract record controller get() fn
      */
     public function getByProperty($_value, $_property = 'name', $_getDeleted = FALSE) 
     {
