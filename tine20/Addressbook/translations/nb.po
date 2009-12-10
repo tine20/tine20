@@ -1,0 +1,538 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Addressbook\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Norwegian Bokmål\n"
+"X-Poedit-Country: NOT SPECIFIED / ANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Acl/Rights.php:98
+msgid "manage shared addressbooks"
+msgstr ""
+
+#: Acl/Rights.php:99
+msgid "Create new shared addressbook folders"
+msgstr ""
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal addressbook"
+msgstr ""
+
+#: Export/Pdf.php:38
+msgid "Business Contact Data"
+msgstr ""
+
+#: Export/Pdf.php:40
+msgid "Organisation / Unit"
+msgstr ""
+
+#: Export/Pdf.php:45
+msgid "Business Address"
+msgstr ""
+
+#: Export/Pdf.php:53 js/ContactGrid.js:141
+msgid "Email"
+msgstr ""
+
+#: Export/Pdf.php:56
+msgid "Telephone Work"
+msgstr ""
+
+#: Export/Pdf.php:59
+msgid "Telephone Cellphone"
+msgstr ""
+
+#: Export/Pdf.php:62
+msgid "Telephone Car"
+msgstr ""
+
+#: Export/Pdf.php:65
+msgid "Telephone Fax"
+msgstr ""
+
+#: Export/Pdf.php:68
+msgid "Telephone Page"
+msgstr ""
+
+#: Export/Pdf.php:71
+msgid "URL"
+msgstr ""
+
+#: Export/Pdf.php:74
+msgid "Role"
+msgstr ""
+
+#: Export/Pdf.php:77 js/ContactEditDialog.js:149 js/ContactGrid.js:130
+#: js/EditDialog.js:329 js/EditDialog.js:447
+msgid "Room"
+msgstr ""
+
+#: Export/Pdf.php:80
+msgid "Assistant"
+msgstr ""
+
+#: Export/Pdf.php:83
+msgid "Assistant Telephone"
+msgstr ""
+
+#: Export/Pdf.php:87
+msgid "Private Contact Data"
+msgstr ""
+
+#: Export/Pdf.php:89 js/Addressbook.js:256 js/Addressbook.js:257
+#: js/Addressbook.js:258 js/ContactEditDialog.js:247 js/EditDialog.js:613
+msgid "Private Address"
+msgstr ""
+
+#: Export/Pdf.php:97
+msgid "Email Home"
+msgstr ""
+
+#: Export/Pdf.php:100
+msgid "Telephone Home"
+msgstr ""
+
+#: Export/Pdf.php:103
+msgid "Telephone Cellphone Private"
+msgstr ""
+
+#: Export/Pdf.php:106
+msgid "Telephone Fax Home"
+msgstr ""
+
+#: Export/Pdf.php:109
+msgid "URL Home"
+msgstr ""
+
+#: Export/Pdf.php:113
+msgid "Other Data"
+msgstr ""
+
+#: Export/Pdf.php:115 js/Addressbook.js:252 js/ContactEditDialog.js:133
+#: js/ContactGrid.js:156 js/EditDialog.js:429
+msgid "Birthday"
+msgstr ""
+
+#: Export/Pdf.php:118 js/Addressbook.js:249 js/ContactEditDialog.js:128
+#: js/ContactGrid.js:128 js/EditDialog.js:424
+msgid "Job Title"
+msgstr ""
+
+#: js/Addressbook.js:12
+msgid "Addressbook"
+msgstr ""
+
+#: js/Addressbook.js:67 Setup/setup.xml:546
+msgid "Internal Contacts"
+msgstr ""
+
+#: js/Addressbook.js:211 js/Addressbook.js:241
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Addressbook.js:211 js/ContactGridDetailsPanel.js:67
+msgid "Contacts"
+msgstr ""
+
+#: js/Addressbook.js:215 js/EditDialog.js:52
+msgid "addressbook"
+msgid_plural "addressbooks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Addressbook.js:215
+msgid "addressbooks"
+msgstr ""
+
+#: js/Addressbook.js:241
+msgid "User Account"
+msgstr ""
+
+#: js/Addressbook.js:244
+msgid "Quick search"
+msgstr ""
+
+#: js/Addressbook.js:245 js/ContactEditDialog.js:93 js/ContactGrid.js:123
+#: js/EditDialog.js:389
+msgid "First Name"
+msgstr ""
+
+#: js/Addressbook.js:246 js/ContactEditDialog.js:101
+#: js/ContactEditDialog.js:373 js/ContactGrid.js:122 js/EditDialog.js:397
+msgid "Last Name"
+msgstr ""
+
+#: js/Addressbook.js:247 js/ContactEditDialog.js:109
+#: js/ContactEditDialog.js:373 js/ContactGrid.js:126
+#: js/ContactGridDetailsPanel.js:136 js/EditDialog.js:405 Setup/setup.xml:608
+msgid "Company"
+msgstr ""
+
+#: js/Addressbook.js:248 js/ContactEditDialog.js:159 js/ContactGrid.js:142
+#: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
+#: js/EditDialog.js:465
+msgid "Phone"
+msgstr ""
+
+#: js/Addressbook.js:250 js/ContactEditDialog.js:145 js/ContactGrid.js:129
+#: js/EditDialog.js:324 js/EditDialog.js:442
+msgid "Job Role"
+msgstr ""
+
+#: js/Addressbook.js:253 js/Addressbook.js:256 js/ContactEditDialog.js:227
+#: js/ContactEditDialog.js:250 js/ContactGrid.js:131 js/EditDialog.js:582
+#: js/EditDialog.js:625
+msgid "Street"
+msgstr ""
+
+#: js/Addressbook.js:253 js/Addressbook.js:254 js/Addressbook.js:255
+#: js/ContactEditDialog.js:224 js/EditDialog.js:566
+msgid "Company Address"
+msgstr ""
+
+#: js/Addressbook.js:254 js/Addressbook.js:257 js/ContactEditDialog.js:236
+#: js/ContactEditDialog.js:259 js/EditDialog.js:596 js/EditDialog.js:639
+msgid "Postal Code"
+msgstr ""
+
+#: js/Addressbook.js:255 js/Addressbook.js:258 js/ContactEditDialog.js:239
+#: js/ContactEditDialog.js:262 js/ContactGrid.js:132 js/EditDialog.js:600
+#: js/EditDialog.js:643
+msgid "City"
+msgstr ""
+
+#: js/Addressbook.js:259 js/ContactGrid.js:120
+msgid "Type"
+msgstr ""
+
+#: js/ContactEditDialog.js:35
+msgid "Map"
+msgstr ""
+
+#: js/ContactEditDialog.js:56 js/EditDialog.js:337
+msgid "Personal Information"
+msgstr ""
+
+#: js/ContactEditDialog.js:76 js/EditDialog.js:370
+msgid "Salutation"
+msgstr ""
+
+#: js/ContactEditDialog.js:86 js/EditDialog.js:381
+msgid "Title"
+msgstr ""
+
+#: js/ContactEditDialog.js:97 js/EditDialog.js:393
+msgid "Middle Name"
+msgstr ""
+
+#: js/ContactEditDialog.js:114 js/ContactGrid.js:127 js/EditDialog.js:410
+msgid "Unit"
+msgstr ""
+
+#: js/ContactEditDialog.js:123 js/ContactGrid.js:125 js/EditDialog.js:306
+#: js/EditDialog.js:419
+msgid "Display Name"
+msgstr ""
+
+#: js/ContactEditDialog.js:141 js/EditDialog.js:319 js/EditDialog.js:437
+msgid "Suffix"
+msgstr ""
+
+#: js/ContactEditDialog.js:155 js/EditDialog.js:536
+msgid "Contact Information"
+msgstr ""
+
+#: js/ContactEditDialog.js:163 js/ContactGrid.js:143
+#: js/ContactGridDetailsPanel.js:145 js/ContactGridDetailsPanel.js:169
+#: js/EditDialog.js:470
+msgid "Mobile"
+msgstr ""
+
+#: js/ContactEditDialog.js:167 js/ContactGrid.js:144
+#: js/ContactGridDetailsPanel.js:146 js/ContactGridDetailsPanel.js:170
+#: js/EditDialog.js:475
+msgid "Fax"
+msgstr ""
+
+#: js/ContactEditDialog.js:171 js/ContactGrid.js:147 js/EditDialog.js:482
+msgid "Phone (private)"
+msgstr ""
+
+#: js/ContactEditDialog.js:175 js/ContactGrid.js:149 js/EditDialog.js:487
+msgid "Mobile (private)"
+msgstr ""
+
+#: js/ContactEditDialog.js:179 js/ContactGrid.js:148 js/EditDialog.js:492
+msgid "Fax (private)"
+msgstr ""
+
+#: js/ContactEditDialog.js:183 js/ContactGridDetailsPanel.js:147
+#: js/ContactGridDetailsPanel.js:171 js/EditDialog.js:499
+msgid "E-Mail"
+msgstr ""
+
+#: js/ContactEditDialog.js:188 js/EditDialog.js:505
+msgid "E-Mail (private)"
+msgstr ""
+
+#: js/ContactEditDialog.js:194 js/ContactGrid.js:151
+#: js/ContactGridDetailsPanel.js:149 js/ContactGridDetailsPanel.js:173
+#: js/EditDialog.js:512
+msgid "Web"
+msgstr ""
+
+#: js/ContactEditDialog.js:230 js/ContactEditDialog.js:253
+#: js/EditDialog.js:586 js/EditDialog.js:629
+msgid "Street 2"
+msgstr ""
+
+#: js/ContactEditDialog.js:233 js/ContactEditDialog.js:256
+#: js/ContactGrid.js:133 js/EditDialog.js:590 js/EditDialog.js:633
+msgid "Region"
+msgstr ""
+
+#: js/ContactEditDialog.js:243 js/ContactEditDialog.js:266
+#: js/ContactGrid.js:135 js/EditDialog.js:605 js/EditDialog.js:648
+msgid "Country"
+msgstr ""
+
+#: js/ContactEditDialog.js:285 js/EditDialog.js:696
+msgid "Description"
+msgstr ""
+
+#: js/ContactEditDialog.js:299 js/EditDialog.js:710
+msgid "Enter description"
+msgstr ""
+
+#: js/ContactEditDialog.js:348
+msgid "Export as pdf"
+msgstr ""
+
+#: js/ContactEditDialog.js:373
+msgid "Either {0} or {1} must be given"
+msgstr ""
+
+#: js/ContactGrid.js:121
+msgid "Tags"
+msgstr ""
+
+#: js/ContactGrid.js:124
+msgid "Full Name"
+msgstr ""
+
+#: js/ContactGrid.js:134
+msgid "Postalcode"
+msgstr ""
+
+#: js/ContactGrid.js:136
+msgid "Street (private)"
+msgstr ""
+
+#: js/ContactGrid.js:137
+msgid "City (private)"
+msgstr ""
+
+#: js/ContactGrid.js:138
+msgid "Region (private)"
+msgstr ""
+
+#: js/ContactGrid.js:139
+msgid "Postalcode (private)"
+msgstr ""
+
+#: js/ContactGrid.js:140
+msgid "Country (private)"
+msgstr ""
+
+#: js/ContactGrid.js:145
+msgid "Car phone"
+msgstr ""
+
+#: js/ContactGrid.js:146
+msgid "Pager"
+msgstr ""
+
+#: js/ContactGrid.js:150
+msgid "Email (private)"
+msgstr ""
+
+#: js/ContactGrid.js:152
+msgid "URL (private)"
+msgstr ""
+
+#: js/ContactGrid.js:153
+msgid "Note"
+msgstr ""
+
+#: js/ContactGrid.js:154
+msgid "Timezone"
+msgstr ""
+
+#: js/ContactGrid.js:155
+msgid "Geo"
+msgstr ""
+
+#: js/ContactGrid.js:157
+msgid "Creation Time"
+msgstr ""
+
+#: js/ContactGrid.js:158
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/ContactGrid.js:168
+msgid "Export Contact"
+msgstr ""
+
+#: js/ContactGrid.js:177
+msgid "Export as PDF"
+msgstr ""
+
+#: js/ContactGrid.js:184
+msgid "Export as CSV"
+msgstr ""
+
+#: js/ContactGrid.js:198
+msgid "Call contact"
+msgstr ""
+
+#: js/ContactGrid.js:208
+msgid "Compose email"
+msgstr ""
+
+#: js/ContactGrid.js:251
+msgid "Work"
+msgstr ""
+
+#: js/ContactGrid.js:260
+msgid "Home"
+msgstr ""
+
+#: js/ContactGrid.js:269
+msgid "Cell"
+msgstr ""
+
+#: js/ContactGrid.js:278
+msgid "Cell private"
+msgstr ""
+
+#: js/ContactGrid.js:355
+msgid "Internal Contact"
+msgstr ""
+
+#: js/ContactGridDetailsPanel.js:70
+msgid "Select contact"
+msgstr ""
+
+#: js/ContactGridDetailsPanel.js:160
+msgid "Private"
+msgstr ""
+
+#: js/ContactGridDetailsPanel.js:183
+msgid "Info"
+msgstr ""
+
+#: js/EditDialog.js:51 js/EditDialog.js:53
+msgid "contacts"
+msgstr ""
+
+#: js/EditDialog.js:58
+msgid "export as pdf"
+msgstr ""
+
+#: js/EditDialog.js:83
+msgid "Loading Contact..."
+msgstr ""
+
+#: js/EditDialog.js:83
+msgid "Please Wait"
+msgstr ""
+
+#: js/EditDialog.js:121
+msgid "Add new contact"
+msgstr ""
+
+#: js/EditDialog.js:123
+msgid "Edit Contact \"{0}\""
+msgstr ""
+
+#: js/EditDialog.js:153
+msgid "Please wait a moment..."
+msgstr ""
+
+#: js/EditDialog.js:153
+msgid "Saving Contact"
+msgstr ""
+
+#: js/EditDialog.js:178 js/EditDialog.js:203
+msgid "Failed"
+msgstr ""
+
+#: js/EditDialog.js:178
+msgid "Could not save contact."
+msgstr ""
+
+#: js/EditDialog.js:182
+msgid "Either "
+msgstr ""
+
+#: js/EditDialog.js:183
+msgid "Start date is not valid"
+msgstr ""
+
+#: js/EditDialog.js:184
+msgid "Errors"
+msgstr ""
+
+#: js/EditDialog.js:184
+msgid "Please fix the errors noted."
+msgstr ""
+
+#: js/EditDialog.js:197
+msgid "Deleting contact..."
+msgstr ""
+
+#: js/EditDialog.js:203
+msgid "Some error occured while trying to delete the contact."
+msgstr ""
+
+#: js/EditDialog.js:656
+msgid "Custom Fields"
+msgstr ""
+
+#: js/EditDialog.js:751
+#, python-format
+msgid "Link"
+msgid_plural "Links [%d]"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/SearchCombo.js:92
+msgid "Searching..."
+msgstr ""
+
+#: Preference.php:60
+msgid "Default Addressbook"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default addressbook for new contacts"
+msgstr ""
+
+#: Setup/setup.xml:572
+msgid "Mr"
+msgstr ""
+
+#: Setup/setup.xml:590
+msgid "Ms"
+msgstr ""
