@@ -290,7 +290,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         
         this.action_editCopyInNewWindow = new Ext.Action({
             requiredGrant: 'readGrant',
-            text: String.format(_('Copy and edit {0}'), this.i18nRecordName),
+            text: String.format(_('Copy {0}'), this.i18nRecordName),
             disabled: true,
             actionType: 'copy',
             handler: this.onEditInNewWindow,
