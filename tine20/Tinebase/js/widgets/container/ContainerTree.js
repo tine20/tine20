@@ -78,6 +78,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	
 	// holds treenode which got a contextmenu
 	ctxNode: null,
+    
+    // drag n drop
+    // TODO make this configurable?
+    enableDrop: true,
+    ddGroup: 'containerDDGroup',
 	
 	// private
 	initComponent: function(){
@@ -130,13 +135,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	        cls: "treemain",
 	        containerType: 'all',
 	        id: 'all',
+            allowDrop:false,
 	        children: [{
 	            text: String.format(translation._('My {0}'), this.containersName),
 	            cls: 'file',
 	            containerType: Tine.Tinebase.container.TYPE_PERSONAL,
 	            id: 'user',
 	            leaf: null,
-	            owner: Tine.Tinebase.registry.get('currentAccount')
+	            owner: Tine.Tinebase.registry.get('currentAccount'),
+                allowDrop:false
 	        }, {
 	            text: String.format(translation._('Shared {0}'), this.containersName),
 	            cls: 'file',
@@ -144,7 +151,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 id: 'shared',
 	            children: null,
 	            leaf: null,
-				owner: null
+				owner: null,
+                allowDrop:false
 	        }, {
 	            text: String.format(translation._('Other Users {0}'), this.containersName),
 	            cls: 'file',
@@ -152,7 +160,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 id: 'otherUsers',
 	            children: null,
 	            leaf: null,
-				owner: null
+				owner: null,
+                allowDrop:false
 	        }]
 	    }];
         
@@ -204,6 +213,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 					break;
 			}
 		}, this);
+        
+        // define d&d drop function
+        this.on('beforenodedrop', this.onBeforenodedrop, this);
 		
 		this.setRootNode(treeRoot);
 	   
@@ -275,7 +287,44 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     hasGrant: function(node, grant) {
         var attr = node.attributes;
         return (attr.containerType == "singleContainer" && attr.container.account_grants[grant]);
+    },
+    
+    /**
+     * record got dropped on container node
+     * 
+     * @param {Object} dropEvent
+     * @private
+     * 
+     * TODO use Ext.Direct
+     */
+    onBeforenodedrop: function(dropEvent) {
+        
+        var containerId = dropEvent.target.id;
+        var recordIds = [];
+        
+        for (var i=0; i < dropEvent.data.selections.length; i++) {
+            recordIds.push(dropEvent.data.selections[i].id);
+        };
+        
+        // move messages to folder
+        Ext.Ajax.request({
+            params: {
+                method: 'Tinebase_Container.moveRecordsToContainer',
+                containerId: containerId,
+                recordIds: Ext.util.JSON.encode(recordIds),
+                model: this.recordClass.getMeta('modelName'),
+                applicationName: this.recordClass.getMeta('appName')
+            },
+            scope: this,
+            success: function(_result, _request){
+                // update grid
+                this.filterPlugin.onFilterChange();
+            }
+        });
+        
+        return true;
     }
+    
 });
 
 
@@ -415,7 +464,8 @@ Tine.widgets.container.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
                 text: attr.name,
                 id: attr.id,
                 cls: 'file',
-                leaf: true
+                leaf: false,
+                expanded: true
             };
         } else if (attr.accountDisplayName) {
             attr = {
@@ -427,6 +477,9 @@ Tine.widgets.container.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
                 owner: attr
             };
         }
+        
+        attr.allowDrop = (attr.containerType && attr.containerType == 'singleContainer');
+        console.log(attr);
                 
         attr.qtip = Ext.util.Format.htmlEncode(attr.text);
         attr.text = Ext.util.Format.htmlEncode(attr.text);

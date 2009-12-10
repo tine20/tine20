@@ -194,4 +194,21 @@ class Tinebase_Frontend_Json_Container
         return $this->getContainerGrants($containerId);
     }
     
+    /**
+     * move records to container
+     * 
+     * @param string $containerId
+     * @param string $recordIds
+     * @param string $applicationName
+     * @param string $model
+     * @return array
+     * 
+     * @todo finish implementation
+     */
+    public function moveRecordsToContainer($containerId, $recordIds, $applicationName, $model)
+    {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $containerId . ' - ' . $recordIds . ' - ' . $applicationName . ' - ' . $model);
+        
+        return array();
+    }
 }
