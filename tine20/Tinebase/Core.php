@@ -199,7 +199,7 @@ class Tinebase_Core
      *
      * @param   string $_applicationName
      * @param   string $_modelName
-     * @return  object the controller of the application
+     * @return  Tinebase_Controller_Abstract|Tinebase_Controller_Record_Abstract the controller of the application
      * @throws  Tinebase_Exception_NotFound
      */
     public static function getApplicationInstance($_applicationName, $_modelName = '')
