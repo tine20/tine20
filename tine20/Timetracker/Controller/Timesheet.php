@@ -24,10 +24,13 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      * don't use the constructor. use the singleton 
      */
     private function __construct() {        
+        
+        // config
         $this->_applicationName = 'Timetracker';
         $this->_backend = new Timetracker_Backend_Timesheet();
         $this->_modelName = 'Timetracker_Model_Timesheet';
-        $this->_currentAccount = Tinebase_Core::getUser();   
+        $this->_currentAccount = Tinebase_Core::getUser();
+        $this->_resolveCustomFields = TRUE;
         
         // disable container ACL checks as we don't init the 'Shared Timesheets' grants in the setup
         $this->_doContainerACLChecks = FALSE; 

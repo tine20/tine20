@@ -30,6 +30,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $this->_backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         $this->_currentAccount = Tinebase_Core::getUser();
         $this->_purgeRecords = FALSE;
+        $this->_resolveCustomFields = TRUE;
     }
     
     /**
