@@ -12,6 +12,10 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
 }
 
+.action_editcopy {
+    background-image:url(../../images/oxygen/16x16/actions/edit-copy) !important;
+}
+
 .action_rename {
     background-image:url(../../images/oxygen/16x16/actions/document-properties.png) !important;
 }

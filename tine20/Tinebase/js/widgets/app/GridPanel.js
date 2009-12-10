@@ -153,6 +153,14 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
 
     /**
      * @type Bool
+     * @property copyEditAction
+     * 
+     * TODO activate this per default
+     */
+    copyEditAction: false,
+
+    /**
+     * @type Bool
      * @property showDeleteMask
      */
     showDeleteMask: true,
@@ -280,6 +288,16 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             scope: this
         });
         
+        this.action_editCopyInNewWindow = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: String.format(_('Copy and edit {0}'), this.i18nRecordName),
+            disabled: true,
+            actionType: 'copy',
+            handler: this.onEditInNewWindow,
+            iconCls: 'action_editcopy',
+            scope: this
+        });
+        
         this.action_addInNewWindow = new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'add',
@@ -303,11 +321,20 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             scope: this
         });
         
-        this.actions = [
-            this.action_addInNewWindow,
-            this.action_editInNewWindow,
-            this.action_deleteRecord
-        ];
+        if (this.copyEditAction) {
+            this.actions = [
+                this.action_addInNewWindow,
+                this.action_editInNewWindow,
+                this.action_editCopyInNewWindow,
+                this.action_deleteRecord
+            ];
+        } else {
+            this.actions = [
+                this.action_addInNewWindow,
+                this.action_editInNewWindow,
+                this.action_deleteRecord
+            ];
+        }
 
         if (this.recordClass.getField('tags')) {
             this.action_tagsMassAttach = new Tine.widgets.tags.TagsMassAttachAction({
@@ -637,6 +664,11 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             }
             var selectedRows = this.grid.getSelectionModel().getSelections();
             record = selectedRows[0];
+            
+        } else if (button.actionType == 'copy') {
+            var selectedRows = this.grid.getSelectionModel().getSelections();
+            record = this.copyRecord(selectedRows[0].data);
+
         } else {
             record = new this.recordClass(this.recordClass.getDefaultData(), 0);
         }
@@ -650,6 +682,17 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
                 }
             }
         });
+    },
+    
+    /**
+     * copy record
+     * 
+     * @param {Object} recordData
+     * @return Record
+     */
+    copyRecord: function (recordData) {
+        delete recordData.id;
+        return new this.recordClass(recordData, 0);
     },
     
     /**
