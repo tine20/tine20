@@ -211,7 +211,7 @@ Ext.namespace('Tine.Felamimail');
                         + '} '
                         + '.felamimail-body-signature {'
                             + 'font-size: 9px;'
-                            + 'color: #aaaaaa;'
+                            + 'color: #888888;'
                         + '} '
                     + '</style>'
                     + '</head>'
