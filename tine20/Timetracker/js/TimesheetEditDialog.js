@@ -26,6 +26,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     recordProxy: Tine.Timetracker.timesheetBackend,
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    getDefaultsAgain: false,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
