@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-12-09 17:29+0100\n"
+"Last-Translator: Ronny Gonzales <gonzito@online.no>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,19 +15,19 @@ msgstr ""
 
 #: Acl/Rights.php:106
 msgid "manage leads"
-msgstr ""
+msgstr "behandle muligheter"
 
 #: Acl/Rights.php:107
 msgid "add, edit and delete leads"
-msgstr ""
+msgstr "legg til, rediger og slett muligheter"
 
 #: Acl/Rights.php:110
 msgid "manage shared lead folders"
-msgstr ""
+msgstr "behandle delte muligheter mapper"
 
 #: Acl/Rights.php:111
 msgid "Create new shared lead folders"
-msgstr ""
+msgstr "Opprett ny delt mulighet mappe"
 
 #: Controller/Lead.php:168
 msgid "State"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-12-09 17:11+0100\n"
+"Last-Translator: Ronny Gonzales <gonzito@online.no>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,827 +15,838 @@ msgstr ""
 
 #: Acl/Rights.php:174
 msgid "manage access log"
-msgstr ""
+msgstr "behandle tilgangs logg"
 
 #: Acl/Rights.php:175
 msgid "delete access log entries"
-msgstr ""
+msgstr "slett tilgangs logg poster"
 
 #: Acl/Rights.php:178
 msgid "manage accounts"
-msgstr ""
+msgstr "behandle kontoer"
 
 #: Acl/Rights.php:179
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
+msgstr "legg til og rediger brukere og grupper, "
 
 #: Acl/Rights.php:182
 msgid "manage applications"
-msgstr ""
+msgstr "behandle programmer"
 
 #: Acl/Rights.php:183
 msgid "enable and disable applications, edit application settings"
-msgstr ""
+msgstr "aktiver og deaktiver programmer, rediger program instillinger"
 
 #: Acl/Rights.php:186
 msgid "manage roles"
-msgstr ""
+msgstr "behandle roller"
 
 #: Acl/Rights.php:187
 msgid ""
 "add and edit roles, add new members to roles, add application rights to roles"
 msgstr ""
+"legg til og redgier roller, legg til nye medlemmer til roller, legg til "
+"program rettigheter til roller"
 
 #: Acl/Rights.php:190
 msgid "manage shared tags"
-msgstr ""
+msgstr "behandle delte emner"
 
 #: Acl/Rights.php:191
 msgid "add, delete and edit shared tags"
-msgstr ""
+msgstr "legg til, slett og rediger delte emner"
 
 #: Acl/Rights.php:194
 msgid "manage computers"
-msgstr ""
+msgstr "behandle datamaskiner"
 
 #: Acl/Rights.php:195
 msgid "add, delete and edit (samba) computers"
-msgstr ""
+msgstr "legg til, slett og rediger (samba) datamaskiner"
 
 #: Acl/Rights.php:198
 msgid "view access log"
-msgstr ""
+msgstr "vis tilgangs logg"
 
 #: Acl/Rights.php:199
 msgid "view access log list"
-msgstr ""
+msgstr "vis tilgangs logg liste"
 
 #: Acl/Rights.php:202
 msgid "view accounts"
-msgstr ""
+msgstr "vis kontoer"
 
 #: Acl/Rights.php:203
 msgid "view accounts list and details"
-msgstr ""
+msgstr "vis konto lister og detaljer"
 
 #: Acl/Rights.php:206
 msgid "view applications"
-msgstr ""
+msgstr "vis program"
 
 #: Acl/Rights.php:207
 msgid "view applications list and details"
-msgstr ""
+msgstr "vis program liste og detaljer"
 
 #: Acl/Rights.php:210
 msgid "view roles"
-msgstr ""
+msgstr "vis roller"
 
 #: Acl/Rights.php:211
 msgid "view roles list and details"
-msgstr ""
+msgstr "vis rolle lister og detaljer"
 
 #: Acl/Rights.php:214
 msgid "view computers"
-msgstr ""
+msgstr "vis datamaskiner"
 
 #: Acl/Rights.php:215
 msgid "view computers list and details"
-msgstr ""
+msgstr "vis datamaskin lister og detaljer"
 
 #: js/Admin.js:20 js/Users.js:489
 msgid "User"
 msgid_plural "Users"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bruker"
+msgstr[1] "Brukere"
 
 #: js/Admin.js:33
 msgid "Groups"
-msgstr ""
+msgstr "Grupper"
 
 #: js/Admin.js:46
 msgid "Computers"
-msgstr ""
+msgstr "Datamaskiner"
 
 #: js/Admin.js:59
 msgid "Applications"
-msgstr ""
+msgstr "Programmer"
 
 #: js/Admin.js:72
 msgid "Access Log"
-msgstr ""
+msgstr "Tilgangs Logg"
 
 #: js/Admin.js:85
 msgid "Shared Tags"
-msgstr ""
+msgstr "Delte Emner"
 
 #: js/Admin.js:98
 msgid "Roles"
-msgstr ""
+msgstr "Roller"
 
 #: js/Admin.js:133
 msgid "Admin"
-msgstr ""
+msgstr "Administrator"
 
 #: js/Admin.js:284 js/Groups.js:51 js/Roles.js:45 js/Tags.js:58
 #: js/Users.js:174
 msgid "Confirm"
-msgstr ""
+msgstr "Bekreft"
 
 #: js/Admin.js:284
 msgid "Do you really want to delete the selected access log entries?"
-msgstr ""
+msgstr "Vil du virkelig slette valgte tilgangs logg poster?"
 
 #: js/Admin.js:399
 msgid "delete entry"
-msgstr ""
+msgstr "slett post"
 
 #: js/Admin.js:400
 msgid "select all"
-msgstr ""
+msgstr "velg alle"
 
 #: js/Admin.js:435
 msgid "Display from:"
-msgstr ""
+msgstr "Vis fra:"
 
 #: js/Admin.js:439
 msgid "to:"
-msgstr ""
+msgstr "til:"
 
 #: js/Admin.js:444 js/Applications.js:145 js/Groups.js:153 js/Roles.js:149
 #: js/Tags.js:140 js/Users.js:234
 msgid "Search:"
-msgstr ""
+msgstr "Søk:"
 
 #: js/Admin.js:517
 msgid "invalid password"
-msgstr ""
+msgstr "ugyldig passord"
 
 #: js/Admin.js:521
 msgid "ambiguous username"
-msgstr ""
+msgstr "tvetydig brukernavn"
 
 #: js/Admin.js:525
 msgid "user not found"
-msgstr ""
+msgstr "bruker ikke funnet"
 
 #: js/Admin.js:529
 msgid "failure"
-msgstr ""
+msgstr "feil"
 
 #: js/Admin.js:533
 msgid "success"
-msgstr ""
+msgstr "vellykket"
 
 #: js/Admin.js:554
 msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr ""
+msgstr "Viser tilgangs logg poster {0} - {1} of {2}"
 
 #: js/Admin.js:555
 msgid "No access log entries to display"
-msgstr ""
+msgstr "Ingen tilgangs logg poster å vise"
 
 #: js/Admin.js:564
 msgid "Session ID"
-msgstr ""
+msgstr "Sessjons ID"
 
 #: js/Admin.js:565 js/UserEditDialog.js:298
 msgid "Login Name"
-msgstr ""
+msgstr "Logg inn Navn"
 
 #: js/Admin.js:566 js/Applications.js:220 js/Groups.js:203 js/Roles.js:201
 #: js/SambaMachineGrid.js:90 js/Tags.js:187
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 #: js/Admin.js:567
 msgid "IP Address"
-msgstr ""
+msgstr "IP Adresse"
 
 #: js/Admin.js:568
 msgid "Login Time"
-msgstr ""
+msgstr "Logg inn Tid"
 
 #: js/Admin.js:569
 msgid "Logout Time"
-msgstr ""
+msgstr "Logg ut Tid"
 
 #: js/Admin.js:570
 msgid "Account ID"
-msgstr ""
+msgstr "Konto ID"
 
 #: js/Admin.js:571
 msgid "Result"
-msgstr ""
+msgstr "Resultat"
 
 #: js/Applications.js:29
 msgid "{0} Settings"
-msgstr ""
+msgstr "{0} Instillinger"
 
 #: js/Applications.js:122
 msgid "enable application"
-msgstr ""
+msgstr "aktiver program"
 
 #: js/Applications.js:123
 msgid "disable application"
-msgstr ""
+msgstr "deaktiver program"
 
 #: js/Applications.js:124
 msgid "settings"
-msgstr ""
+msgstr "instillinger"
 
 #: js/Applications.js:174 js/UserEditDialog.js:352
 msgid "disabled"
-msgstr ""
+msgstr "deaktivert"
 
 #: js/Applications.js:177 js/UserEditDialog.js:352
 msgid "enabled"
-msgstr ""
+msgstr "aktivert"
 
 #: js/Applications.js:181
 msgid "unknown status ({0})"
-msgstr ""
+msgstr "ukjent status ({0})"
 
 #: js/Applications.js:209
 msgid "Displaying application {0} - {1} of {2}"
-msgstr ""
+msgstr "Viser program {0} - {1} of {2}"
 
 #: js/Applications.js:210
 msgid "No applications to display"
-msgstr ""
+msgstr "Ingen program å vise"
 
 #: js/Applications.js:219
 msgid "Order"
-msgstr ""
+msgstr "Ordre"
 
 #: js/Applications.js:221 js/UserEditDialog.js:346 js/Users.js:294
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/Applications.js:222
 msgid "Version"
-msgstr ""
+msgstr "Versjon"
 
 #: js/Groups.js:51
 msgid "Do you really want to delete the selected groups?"
-msgstr ""
+msgstr "Vil du virkelig slette valgte grupper?"
 
 #: js/Groups.js:69
 msgid "Deleting group(s)..."
-msgstr ""
+msgstr "Sletter gruppe(r)"
 
 #: js/Groups.js:74 js/Groups.js:372 js/Groups.js:400 js/RoleEditDialog.js:101
 #: js/RoleEditDialog.js:129 js/Roles.js:67 js/Tags.js:370 js/Users.js:194
 msgid "Failed"
-msgstr ""
+msgstr "Feilet"
 
 #: js/Groups.js:74 js/Groups.js:400
 msgid "Some error occurred while trying to delete the group."
-msgstr ""
+msgstr "En feil oppsto ved forsøk på å slette gruppen."
 
 #: js/Groups.js:104
 msgid "add group"
-msgstr ""
+msgstr "legg til gruppe"
 
 #: js/Groups.js:112
 msgid "edit group"
-msgstr ""
+msgstr "rediger gruppe"
 
 #: js/Groups.js:120
 msgid "delete group"
-msgstr ""
+msgstr "slette gruppe"
 
 #: js/Groups.js:191
 msgid "Displaying groups {0} - {1} of {2}"
-msgstr ""
+msgstr "Viser grupper  {0} - {1} of {2}"
 
 #: js/Groups.js:192 js/Groups.js:247
 msgid "No groups to display"
-msgstr ""
+msgstr "Ingen grupper å vise"
 
 #: js/Groups.js:202 js/Roles.js:200 js/SambaMachineGrid.js:83 js/Users.js:293
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: js/Groups.js:204 js/Groups.js:461 js/RoleEditDialog.js:299 js/Roles.js:202
 #: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:96 js/Tags.js:188
 #: js/Tags.js:505
 msgid "Description"
-msgstr ""
+msgstr "Beskrivelse"
 
 #: js/Groups.js:337 js/RoleEditDialog.js:64 js/Tags.js:325
 msgid "Please wait"
-msgstr ""
+msgstr "Vennligst vent"
 
 #: js/Groups.js:337 js/RoleEditDialog.js:64
 msgid "Updating Memberships"
-msgstr ""
+msgstr "Oppdaterer Medlemskap"
 
 #: js/Groups.js:372
 msgid "Could not save group."
-msgstr ""
+msgstr "Klarte ikke å lagre gruppen."
 
 #: js/Groups.js:379 js/RoleEditDialog.js:108 js/Tags.js:375
 msgid "Errors"
-msgstr ""
+msgstr "Feil"
 
 #: js/Groups.js:379 js/RoleEditDialog.js:108 js/Tags.js:375
 msgid "Please fix the errors noted."
-msgstr ""
+msgstr "Vennligst rett felene listet."
 
 #: js/Groups.js:392
 msgid "Deleting group..."
-msgstr ""
+msgstr "Sletter gruppe..."
 
 #: js/Groups.js:432
 msgid "Group Members"
-msgstr ""
+msgstr "Gruppe Medlemmer"
 
 #: js/Groups.js:454
 msgid "Group Name"
-msgstr ""
+msgstr "Gruppe Navn"
 
 #: js/Groups.js:510
 msgid "Add new group"
-msgstr ""
+msgstr "Legg til gruppe"
 
 #: js/Groups.js:512
 msgid "Edit Group \"{0}\""
-msgstr ""
+msgstr "Rediger Gruppe  \"{0}\""
 
 #: js/RoleEditDialog.js:101
 msgid "Could not save role."
-msgstr ""
+msgstr "Klarte ikke å lagre rolle."
 
 #: js/RoleEditDialog.js:121
 msgid "Deleting role..."
-msgstr ""
+msgstr "Sletter rolle..."
 
 #: js/RoleEditDialog.js:129 js/Roles.js:67
 msgid "Some error occurred while trying to delete the role."
-msgstr ""
+msgstr "En feil har oppstått ved forsøk på å slette rollen."
 
 #: js/RoleEditDialog.js:253
 msgid "Members"
-msgstr ""
+msgstr "Medlemmer"
 
 #: js/RoleEditDialog.js:261
 msgid "Rights"
-msgstr ""
+msgstr "Rettigheter"
 
 #: js/RoleEditDialog.js:291
 msgid "Role Name"
-msgstr ""
+msgstr "Rolle Navn"
 
 #: js/RoleEditDialog.js:333
 msgid "Loading Role..."
-msgstr ""
+msgstr "Laster Rolle..."
 
 #: js/RoleEditDialog.js:333 js/Tags.js:544
 msgid "Please Wait"
-msgstr ""
+msgstr "Vennligst Vent"
 
 #: js/RoleEditDialog.js:370
 msgid "Add New Role"
-msgstr ""
+msgstr "Legg til Ny Rolle"
 
 #: js/RoleEditDialog.js:372
 msgid "Edit Role \"{0}\""
-msgstr ""
+msgstr "Rediger Rolle \"{0}\""
 
 #: js/Roles.js:45
 msgid "Do you really want to delete the selected roles?"
-msgstr ""
+msgstr "Vil du virkelig slette valgte roller?"
 
 #: js/Roles.js:62
 msgid "Deleting role(s)..."
-msgstr ""
+msgstr "Sletter rolle(r)..."
 
 #: js/Roles.js:100
 msgid "add role"
-msgstr ""
+msgstr "legg til rolle"
 
 #: js/Roles.js:108
 msgid "edit role"
-msgstr ""
+msgstr "rediger rolle"
 
 #: js/Roles.js:116
 msgid "delete role"
-msgstr ""
+msgstr "slett rolle"
 
 #: js/Roles.js:189
 msgid "Displaying roles {0} - {1} of {2}"
-msgstr ""
+msgstr "Viser roller {0} - {1} of {2}"
 
 #: js/Roles.js:190 js/Roles.js:245
 msgid "No roles to display"
-msgstr ""
+msgstr "Ingen roller å vise"
 
 #: js/SambaMachineEditDialog.js:38 js/SambaMachineGrid.js:65
 msgid "Computer Name"
-msgstr ""
+msgstr "PC Navn"
 
 #: js/SambaMachineModel.js:40
 msgid "Computer"
 msgid_plural "Computers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "PC"
+msgstr[1] "PC'er"
 
 #: js/Tags.js:58
 msgid "Do you really want to delete the selected tags?"
-msgstr ""
+msgstr "Vil du virkelig slette valgte overskrifter?"
 
 #: js/Tags.js:75
 msgid "Deleting tag(s)..."
-msgstr ""
+msgstr "Sletter overskrift(er)..."
 
 #: js/Tags.js:90
 msgid "add tag"
-msgstr ""
+msgstr "legg til overskrift"
 
 #: js/Tags.js:98
 msgid "edit tag"
-msgstr ""
+msgstr "rediger overskrift"
 
 #: js/Tags.js:106
 msgid "delete tag"
-msgstr ""
+msgstr "slett overskrift"
 
 #: js/Tags.js:175
 msgid "Displaying tags {0} - {1} of {2}"
-msgstr ""
+msgstr "Viser overskrifter {0} - {1} of {2}"
 
 #: js/Tags.js:176 js/Tags.js:231
 msgid "No tags to display"
-msgstr ""
+msgstr "Ingen overskrifter å vise"
 
 #: js/Tags.js:186 js/Tags.js:511
 msgid "Color"
-msgstr ""
+msgstr "Farge"
 
 #: js/Tags.js:325
 msgid "Updating Tag"
-msgstr ""
+msgstr "Oppdaterer Overskrift"
 
 #: js/Tags.js:370
 msgid "Could not save tag."
-msgstr ""
+msgstr "Klarte ikke å lagre overskrift."
 
 #: js/Tags.js:453
 msgid "Allowed Contexts"
-msgstr ""
+msgstr "Tillatte Contekster"
 
 #: js/Tags.js:459
 msgid "Context"
-msgstr ""
+msgstr "Contekst"
 
 #: js/Tags.js:467
 msgid "Account Rights"
-msgstr ""
+msgstr "Konto Rettigheter"
 
 #: js/Tags.js:474
 msgid "View"
-msgstr ""
+msgstr "Vis"
 
 #: js/Tags.js:479
 msgid "Use"
-msgstr ""
+msgstr "Bruk"
 
 #: js/Tags.js:498
 msgid "Tag Name"
-msgstr ""
+msgstr "Overskrift Navn"
 
 #: js/Tags.js:544
 msgid "Loading Tag..."
-msgstr ""
+msgstr "Laster Overskrift..."
 
 #: js/Tags.js:571
 msgid "Add New Tag"
-msgstr ""
+msgstr "Legg til Ny Overskrift"
 
 #: js/Tags.js:573
 msgid "Edit Tag \"{0}\""
-msgstr ""
+msgstr "Rediger Overskrift \"{0}\""
 
 #: js/UserEditDialog.js:120
 msgid "Passwords do not match!"
-msgstr ""
+msgstr "Passordene stemmer ikke!"
 
 #: js/UserEditDialog.js:153
 msgid "Aliases"
-msgstr ""
+msgstr "Aliaser"
 
 #: js/UserEditDialog.js:156
 msgid "Email Alias"
-msgstr ""
+msgstr "E-post Alias"
 
 #: js/UserEditDialog.js:162
 msgid "Add an alias address..."
-msgstr ""
+msgstr "Legg til en alias adresse..."
 
 #: js/UserEditDialog.js:172
 msgid "Forwards"
-msgstr ""
+msgstr "Vidresendinger"
 
 #: js/UserEditDialog.js:175
 msgid "Email Forward"
-msgstr ""
+msgstr "E-post Videresending"
 
 #: js/UserEditDialog.js:181
 msgid "Add a forward address..."
-msgstr ""
+msgstr "Legg til en videresendings adresse..."
 
 #: js/UserEditDialog.js:204
 msgid "Password confirmation"
-msgstr ""
+msgstr "Passord bekreftelse"
 
 #: js/UserEditDialog.js:222
 msgid "Repeat password"
-msgstr ""
+msgstr "Gjenta passord"
 
 #: js/UserEditDialog.js:234
 msgid "Cancel"
-msgstr ""
+msgstr "Avbryt"
 
 #: js/UserEditDialog.js:241
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: js/UserEditDialog.js:267
 msgid "Account"
-msgstr ""
+msgstr "Konto"
 
 #: js/UserEditDialog.js:282
 msgid "First Name"
-msgstr ""
+msgstr "Fornavn"
 
 #: js/UserEditDialog.js:292
 msgid "Last Name"
-msgstr ""
+msgstr "Etter Navn"
 
 #: js/UserEditDialog.js:303
 msgid "Password"
-msgstr ""
+msgstr "Passord"
 
 #: js/UserEditDialog.js:307
 msgid "no password set"
-msgstr ""
+msgstr "ingen passord er satt"
 
 #: js/UserEditDialog.js:328
 msgid "Emailaddress"
-msgstr ""
+msgstr "Epost adresse"
 
 #: js/UserEditDialog.js:334 js/Users.js:300
 msgid "OpenID"
-msgstr ""
+msgstr "ÅpenID"
 
 #: js/UserEditDialog.js:340
 msgid "Primary group"
-msgstr ""
+msgstr "Primær gruppe"
 
 #: js/UserEditDialog.js:352
 msgid "expired"
-msgstr ""
+msgstr "Utgått"
 
 #: js/UserEditDialog.js:355 js/Users.js:304
 msgid "Expires"
-msgstr ""
+msgstr "Utgår"
 
 #: js/UserEditDialog.js:357 js/UserEditDialog.js:399 js/UserEditDialog.js:476
 msgid "never"
-msgstr ""
+msgstr "aldri"
 
 #: js/UserEditDialog.js:362
 msgid "Visibility"
-msgstr ""
+msgstr "Synlighet"
 
 #: js/UserEditDialog.js:368
 msgid "Display in addressbook"
-msgstr ""
+msgstr "Vis i adressebok"
 
 #: js/UserEditDialog.js:368
 msgid "Hide from addressbook"
-msgstr ""
+msgstr "Skjul fra adressebok"
 
 #: js/UserEditDialog.js:373
 msgid "Information"
-msgstr ""
+msgstr "Informasjon"
 
 #: js/UserEditDialog.js:389 js/Users.js:301
 msgid "Last login at"
-msgstr ""
+msgstr "Siste logg inn kl"
 
 #: js/UserEditDialog.js:391 js/UserEditDialog.js:395
 msgid "don't know"
-msgstr ""
+msgstr "vet ikke"
 
 #: js/UserEditDialog.js:391 js/UserEditDialog.js:395 js/UserEditDialog.js:456
 msgid "never logged in"
-msgstr ""
+msgstr "aldri logget på"
 
 #: js/UserEditDialog.js:393 js/Users.js:302
 msgid "Last login from"
-msgstr ""
+msgstr "Siste logg inn fra"
 
 #: js/UserEditDialog.js:397
 msgid "Password set"
-msgstr ""
+msgstr "Passord satt"
 
 #: js/UserEditDialog.js:405
 msgid "Fileserver"
-msgstr ""
+msgstr "Fil server"
 
 #: js/UserEditDialog.js:410
 msgid "Unix"
-msgstr ""
+msgstr "Unix"
 
 #: js/UserEditDialog.js:425
 msgid "Home Directory"
-msgstr ""
+msgstr "Hjemme Mappe"
 
 #: js/UserEditDialog.js:429
 msgid "Login Shell"
-msgstr ""
+msgstr "Logg inn skall"
 
 #: js/UserEditDialog.js:434
 msgid "Windows"
-msgstr ""
+msgstr "Windows"
 
 #: js/UserEditDialog.js:449
 msgid "Home Drive"
-msgstr ""
+msgstr "Hjemme Stasjon"
 
 #: js/UserEditDialog.js:454
 msgid "Logon Time"
-msgstr ""
+msgstr "Logg in Tid"
 
 #: js/UserEditDialog.js:459
 msgid "Home Path"
-msgstr ""
+msgstr "Hjemme Sti"
 
 #: js/UserEditDialog.js:464
 msgid "Logoff Time"
-msgstr ""
+msgstr "Logg av Tid"
 
 #: js/UserEditDialog.js:466
 msgid "never logged off"
-msgstr ""
+msgstr "aldri logget av"
 
 #: js/UserEditDialog.js:469
 msgid "Profile Path"
-msgstr ""
+msgstr "Profil Sti"
 
 #: js/UserEditDialog.js:474
 msgid "Password Last Set"
-msgstr ""
+msgstr "Passord Sist Satt"
 
 #: js/UserEditDialog.js:479
 msgid "Logon Script"
-msgstr ""
+msgstr "Logg inn Skript"
 
 #: js/UserEditDialog.js:483
 msgid "Password Can Change"
-msgstr ""
+msgstr "Passord Kan Endres"
 
 #: js/UserEditDialog.js:485 js/UserEditDialog.js:489 js/UserEditDialog.js:493
 msgid "not set"
-msgstr ""
+msgstr "ikke satt"
 
 #: js/UserEditDialog.js:487
 msgid "Password Must Change"
-msgstr ""
+msgstr "Passord Må Endres"
 
 #: js/UserEditDialog.js:491
 msgid "Kick Off Time"
-msgstr ""
+msgstr "Utkastelses Tid"
 
 #: js/UserEditDialog.js:498
 msgid "IMAP"
-msgstr ""
+msgstr "IMAP"
 
 #: js/UserEditDialog.js:512
 msgid "Email UID"
-msgstr ""
+msgstr "E-post UID"
 
 #: js/UserEditDialog.js:516
 msgid "Email GID"
-msgstr ""
+msgstr "E-post GID"
 
 #: js/UserEditDialog.js:520
 msgid "Email Username"
-msgstr ""
+msgstr "E-post Brukernavn"
 
 #: js/UserEditDialog.js:524
 msgid "Quota"
-msgstr ""
+msgstr "Kvote"
 
 #: js/UserEditDialog.js:530
 msgid "Current Mail Size"
-msgstr ""
+msgstr "Gjeldende E-post Størrelse"
 
 #: js/UserEditDialog.js:535
 msgid "Sieve Quota"
-msgstr ""
+msgstr "Sieve Kvote"
 
 #: js/UserEditDialog.js:540
 msgid "Current Sieve Size"
-msgstr ""
+msgstr "Gjeldende Sieve Størrelse"
 
 #: js/UserEditDialog.js:545
 msgid "Last Login"
-msgstr ""
+msgstr "Siste logg inn"
 
 #: js/UserEditDialog.js:550
 msgid "SMTP"
-msgstr ""
+msgstr "SMTP"
 
 #: js/UserEditDialog.js:566
 msgid "Forward Only"
-msgstr ""
+msgstr "Kun Videresending"
 
 #: js/Users.js:149
 msgid "Set new password"
-msgstr ""
+msgstr "Sett nytt passord"
 
 #: js/Users.js:149
 msgid "Please enter the new password:"
-msgstr ""
+msgstr "Vennligst skriv det nye passordet:"
 
 #: js/Users.js:174
 msgid "Do you really want to delete the selected account(s)?"
-msgstr ""
+msgstr "Vil du virkelig slette den valgte kontoen(e)?"
 
 #: js/Users.js:189
 msgid "Deleting account(s)..."
-msgstr ""
+msgstr "Sletter konto(er)..."
 
 #: js/Users.js:194
 msgid "Some error occurred while trying to delete the account(s)."
-msgstr ""
+msgstr "En feil oppstå ved forsøk på å slette kontoen(e)."
 
 #: js/Users.js:280
 msgid "Displaying accounts {0} - {1} of {2}"
-msgstr ""
+msgstr "Viser konto {0} - {1} of {2}"
 
 #: js/Users.js:281
 msgid "No accounts to display"
-msgstr ""
+msgstr "Ingen kontoer å vise"
 
 #: js/Users.js:295
 msgid "Displayname"
-msgstr ""
+msgstr "Visnings navn"
 
 #: js/Users.js:296
 msgid "Loginname"
-msgstr ""
+msgstr "Logg inn navn"
 
 #: js/Users.js:297
 msgid "Last name"
-msgstr ""
+msgstr "Etter navn"
 
 #: js/Users.js:298
 msgid "First name"
-msgstr ""
+msgstr "For navn"
 
 #: js/Users.js:299
 msgid "Email"
-msgstr ""
+msgstr "E-post"
 
 #: js/Users.js:303
 msgid "Password changed"
-msgstr ""
+msgstr "Passord endret"
 
 #: js/Users.js:392
 msgid "add account"
-msgstr ""
+msgstr "legg til konto"
 
 #: js/Users.js:400
 msgid "edit account"
-msgstr ""
+msgstr "redigere konto"
 
 #: js/Users.js:408
 msgid "delete account"
-msgstr ""
+msgstr "slette konto"
 
 #: js/Users.js:416
 msgid "enable account"
-msgstr ""
+msgstr "aktivere konto"
 
 #: js/Users.js:425
 msgid "disable account"
-msgstr ""
+msgstr "deaktivere konto"
 
 #: js/Users.js:434
 msgid "reset password"
-msgstr ""
+msgstr "nulstille passord"
 
 #: js/Users.js:515
 msgid "Samba User"
 msgid_plural "Samba Users"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Samba Bruker"
+msgstr[1] "Samba Brukere"
 
 #: js/Users.js:540
 msgid "Email User"
 msgid_plural "Email Users"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "E-post Bruker"
+msgstr[1] "E-Post Brukere"
+
+#~ msgid "enter searchfilter"
+#~ msgstr "skriv inn søkefilter"
+
+#~ msgid "remove account"
+#~ msgstr "fjern konto"
+
+#~ msgid "Role members"
+#~ msgstr "Rolle medlemmer"

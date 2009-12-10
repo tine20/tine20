@@ -2,218 +2,221 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-12-09 17:30+0100\n"
+"Last-Translator: Ronny Gonzales <gonzito@online.no>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Norwegian Bokmål\n"
-"X-Poedit-Country: NOT SPECIFIED / ANY\n"
+"X-Poedit-Country: NORWAY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Poedit-SearchPath-0: Addressbook\n"
 
 #: Acl/Rights.php:98
 msgid "manage shared addressbooks"
-msgstr ""
+msgstr "organisere delte adressebøker"
 
 #: Acl/Rights.php:99
 msgid "Create new shared addressbook folders"
-msgstr ""
+msgstr "Opprett nye delte adressebok mapper"
 
 #: Controller.php:96
 #, python-format
 msgid "%s's personal addressbook"
-msgstr ""
+msgstr "%s's personlige adressebok"
 
 #: Export/Pdf.php:38
 msgid "Business Contact Data"
-msgstr ""
+msgstr "Firma Kontakt Informasjon"
 
 #: Export/Pdf.php:40
 msgid "Organisation / Unit"
-msgstr ""
+msgstr "Organisasjon / Enhet"
 
 #: Export/Pdf.php:45
 msgid "Business Address"
-msgstr ""
+msgstr "Firma Adresse"
 
 #: Export/Pdf.php:53 js/ContactGrid.js:141
 msgid "Email"
-msgstr ""
+msgstr "E-Post"
 
 #: Export/Pdf.php:56
 msgid "Telephone Work"
-msgstr ""
+msgstr "Telefon Jobb"
 
 #: Export/Pdf.php:59
 msgid "Telephone Cellphone"
-msgstr ""
+msgstr "Telefon Mobil"
 
 #: Export/Pdf.php:62
 msgid "Telephone Car"
-msgstr ""
+msgstr "Telefon Bil"
 
 #: Export/Pdf.php:65
 msgid "Telephone Fax"
-msgstr ""
+msgstr "Telefon Fax"
 
 #: Export/Pdf.php:68
 msgid "Telephone Page"
-msgstr ""
+msgstr "Telefon Side"
 
 #: Export/Pdf.php:71
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: Export/Pdf.php:74
 msgid "Role"
-msgstr ""
+msgstr "Rolle"
 
 #: Export/Pdf.php:77 js/ContactEditDialog.js:149 js/ContactGrid.js:130
 #: js/EditDialog.js:329 js/EditDialog.js:447
 msgid "Room"
-msgstr ""
+msgstr "Rom"
 
 #: Export/Pdf.php:80
 msgid "Assistant"
-msgstr ""
+msgstr "Assistent"
 
 #: Export/Pdf.php:83
 msgid "Assistant Telephone"
-msgstr ""
+msgstr "Assistent Telefon"
 
 #: Export/Pdf.php:87
 msgid "Private Contact Data"
-msgstr ""
+msgstr "Private Kontakt Detaljer"
 
 #: Export/Pdf.php:89 js/Addressbook.js:256 js/Addressbook.js:257
 #: js/Addressbook.js:258 js/ContactEditDialog.js:247 js/EditDialog.js:613
 msgid "Private Address"
-msgstr ""
+msgstr "Privat Adresse"
 
 #: Export/Pdf.php:97
 msgid "Email Home"
-msgstr ""
+msgstr "E-Post Hjem"
 
 #: Export/Pdf.php:100
 msgid "Telephone Home"
-msgstr ""
+msgstr "Telefon Hjem"
 
 #: Export/Pdf.php:103
 msgid "Telephone Cellphone Private"
-msgstr ""
+msgstr "Telefon Privat Mobil"
 
 #: Export/Pdf.php:106
 msgid "Telephone Fax Home"
-msgstr ""
+msgstr "Telefon Fax Hjem"
 
 #: Export/Pdf.php:109
 msgid "URL Home"
-msgstr ""
+msgstr "URL Hjemme"
 
 #: Export/Pdf.php:113
 msgid "Other Data"
-msgstr ""
+msgstr "Andre Data"
 
 #: Export/Pdf.php:115 js/Addressbook.js:252 js/ContactEditDialog.js:133
 #: js/ContactGrid.js:156 js/EditDialog.js:429
 msgid "Birthday"
-msgstr ""
+msgstr "Bursdag"
 
 #: Export/Pdf.php:118 js/Addressbook.js:249 js/ContactEditDialog.js:128
 #: js/ContactGrid.js:128 js/EditDialog.js:424
 msgid "Job Title"
-msgstr ""
+msgstr "Jobb Tittel"
 
 #: js/Addressbook.js:12
 msgid "Addressbook"
-msgstr ""
+msgstr "Adressebok"
 
 #: js/Addressbook.js:67 Setup/setup.xml:546
 msgid "Internal Contacts"
-msgstr ""
+msgstr "Interne Kontakter"
 
 #: js/Addressbook.js:211 js/Addressbook.js:241
 msgid "Contact"
 msgid_plural "Contacts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kontakt"
+msgstr[1] "Kontakter"
 
 #: js/Addressbook.js:211 js/ContactGridDetailsPanel.js:67
 msgid "Contacts"
-msgstr ""
+msgstr "Kontakter"
 
 #: js/Addressbook.js:215 js/EditDialog.js:52
 msgid "addressbook"
 msgid_plural "addressbooks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "adressebok"
+msgstr[1] "adressebøker"
 
 #: js/Addressbook.js:215
 msgid "addressbooks"
-msgstr ""
+msgstr "adressebøker"
 
 #: js/Addressbook.js:241
 msgid "User Account"
-msgstr ""
+msgstr "Bruker Konto"
 
 #: js/Addressbook.js:244
 msgid "Quick search"
-msgstr ""
+msgstr "Hurtig Søk"
 
 #: js/Addressbook.js:245 js/ContactEditDialog.js:93 js/ContactGrid.js:123
 #: js/EditDialog.js:389
 msgid "First Name"
-msgstr ""
+msgstr "Fornavn"
 
 #: js/Addressbook.js:246 js/ContactEditDialog.js:101
 #: js/ContactEditDialog.js:373 js/ContactGrid.js:122 js/EditDialog.js:397
 msgid "Last Name"
-msgstr ""
+msgstr "Etternavn"
 
 #: js/Addressbook.js:247 js/ContactEditDialog.js:109
 #: js/ContactEditDialog.js:373 js/ContactGrid.js:126
 #: js/ContactGridDetailsPanel.js:136 js/EditDialog.js:405 Setup/setup.xml:608
 msgid "Company"
-msgstr ""
+msgstr "Firma"
 
 #: js/Addressbook.js:248 js/ContactEditDialog.js:159 js/ContactGrid.js:142
 #: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
 #: js/EditDialog.js:465
 msgid "Phone"
-msgstr ""
+msgstr "Telefon"
 
 #: js/Addressbook.js:250 js/ContactEditDialog.js:145 js/ContactGrid.js:129
 #: js/EditDialog.js:324 js/EditDialog.js:442
 msgid "Job Role"
-msgstr ""
+msgstr "Stilling"
 
 #: js/Addressbook.js:253 js/Addressbook.js:256 js/ContactEditDialog.js:227
 #: js/ContactEditDialog.js:250 js/ContactGrid.js:131 js/EditDialog.js:582
 #: js/EditDialog.js:625
 msgid "Street"
-msgstr ""
+msgstr "Gate"
 
 #: js/Addressbook.js:253 js/Addressbook.js:254 js/Addressbook.js:255
 #: js/ContactEditDialog.js:224 js/EditDialog.js:566
 msgid "Company Address"
-msgstr ""
+msgstr "Firma Adresse"
 
 #: js/Addressbook.js:254 js/Addressbook.js:257 js/ContactEditDialog.js:236
 #: js/ContactEditDialog.js:259 js/EditDialog.js:596 js/EditDialog.js:639
 msgid "Postal Code"
-msgstr ""
+msgstr "Post Nummer"
 
 #: js/Addressbook.js:255 js/Addressbook.js:258 js/ContactEditDialog.js:239
 #: js/ContactEditDialog.js:262 js/ContactGrid.js:132 js/EditDialog.js:600
 #: js/EditDialog.js:643
 msgid "City"
-msgstr ""
+msgstr "By"
 
 #: js/Addressbook.js:259 js/ContactGrid.js:120
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: js/ContactEditDialog.js:35
 msgid "Map"
@@ -221,318 +224,321 @@ msgstr ""
 
 #: js/ContactEditDialog.js:56 js/EditDialog.js:337
 msgid "Personal Information"
-msgstr ""
+msgstr "Personlig Informasjon"
 
 #: js/ContactEditDialog.js:76 js/EditDialog.js:370
 msgid "Salutation"
-msgstr ""
+msgstr "Hilsen"
 
 #: js/ContactEditDialog.js:86 js/EditDialog.js:381
 msgid "Title"
-msgstr ""
+msgstr "Tittel"
 
 #: js/ContactEditDialog.js:97 js/EditDialog.js:393
 msgid "Middle Name"
-msgstr ""
+msgstr "Mellom Navn"
 
 #: js/ContactEditDialog.js:114 js/ContactGrid.js:127 js/EditDialog.js:410
 msgid "Unit"
-msgstr ""
+msgstr "Enhet"
 
 #: js/ContactEditDialog.js:123 js/ContactGrid.js:125 js/EditDialog.js:306
 #: js/EditDialog.js:419
 msgid "Display Name"
-msgstr ""
+msgstr "Visnings Navn"
 
 #: js/ContactEditDialog.js:141 js/EditDialog.js:319 js/EditDialog.js:437
 msgid "Suffix"
-msgstr ""
+msgstr "Etternavn"
 
 #: js/ContactEditDialog.js:155 js/EditDialog.js:536
 msgid "Contact Information"
-msgstr ""
+msgstr "Kontakt Informasjon"
 
 #: js/ContactEditDialog.js:163 js/ContactGrid.js:143
 #: js/ContactGridDetailsPanel.js:145 js/ContactGridDetailsPanel.js:169
 #: js/EditDialog.js:470
 msgid "Mobile"
-msgstr ""
+msgstr "Mobil"
 
 #: js/ContactEditDialog.js:167 js/ContactGrid.js:144
 #: js/ContactGridDetailsPanel.js:146 js/ContactGridDetailsPanel.js:170
 #: js/EditDialog.js:475
 msgid "Fax"
-msgstr ""
+msgstr "Fax"
 
 #: js/ContactEditDialog.js:171 js/ContactGrid.js:147 js/EditDialog.js:482
 msgid "Phone (private)"
-msgstr ""
+msgstr "Telefon (privat)"
 
 #: js/ContactEditDialog.js:175 js/ContactGrid.js:149 js/EditDialog.js:487
 msgid "Mobile (private)"
-msgstr ""
+msgstr "Mobil (privat)"
 
 #: js/ContactEditDialog.js:179 js/ContactGrid.js:148 js/EditDialog.js:492
 msgid "Fax (private)"
-msgstr ""
+msgstr "Fax (privat)"
 
 #: js/ContactEditDialog.js:183 js/ContactGridDetailsPanel.js:147
 #: js/ContactGridDetailsPanel.js:171 js/EditDialog.js:499
 msgid "E-Mail"
-msgstr ""
+msgstr "E-Post"
 
 #: js/ContactEditDialog.js:188 js/EditDialog.js:505
 msgid "E-Mail (private)"
-msgstr ""
+msgstr "E-Post (privat)"
 
 #: js/ContactEditDialog.js:194 js/ContactGrid.js:151
 #: js/ContactGridDetailsPanel.js:149 js/ContactGridDetailsPanel.js:173
 #: js/EditDialog.js:512
 msgid "Web"
-msgstr ""
+msgstr "Internett"
 
 #: js/ContactEditDialog.js:230 js/ContactEditDialog.js:253
 #: js/EditDialog.js:586 js/EditDialog.js:629
 msgid "Street 2"
-msgstr ""
+msgstr "Gate 2"
 
 #: js/ContactEditDialog.js:233 js/ContactEditDialog.js:256
 #: js/ContactGrid.js:133 js/EditDialog.js:590 js/EditDialog.js:633
 msgid "Region"
-msgstr ""
+msgstr "Sted"
 
 #: js/ContactEditDialog.js:243 js/ContactEditDialog.js:266
 #: js/ContactGrid.js:135 js/EditDialog.js:605 js/EditDialog.js:648
 msgid "Country"
-msgstr ""
+msgstr "Land"
 
 #: js/ContactEditDialog.js:285 js/EditDialog.js:696
 msgid "Description"
-msgstr ""
+msgstr "Beskrivelse"
 
 #: js/ContactEditDialog.js:299 js/EditDialog.js:710
 msgid "Enter description"
-msgstr ""
+msgstr "Skriv en beskrivelse"
 
 #: js/ContactEditDialog.js:348
 msgid "Export as pdf"
-msgstr ""
+msgstr "Eksporter som pdf"
 
 #: js/ContactEditDialog.js:373
 msgid "Either {0} or {1} must be given"
-msgstr ""
+msgstr "Enten {0} eller {1} må oppgis"
 
 #: js/ContactGrid.js:121
 msgid "Tags"
-msgstr ""
+msgstr "Overskrifter"
 
 #: js/ContactGrid.js:124
 msgid "Full Name"
-msgstr ""
+msgstr "Fullt Navn"
 
 #: js/ContactGrid.js:134
 msgid "Postalcode"
-msgstr ""
+msgstr "Postnummer"
 
 #: js/ContactGrid.js:136
 msgid "Street (private)"
-msgstr ""
+msgstr "Gate (privat)"
 
 #: js/ContactGrid.js:137
 msgid "City (private)"
-msgstr ""
+msgstr "By (privat)"
 
 #: js/ContactGrid.js:138
 msgid "Region (private)"
-msgstr ""
+msgstr "Sted (privat)"
 
 #: js/ContactGrid.js:139
 msgid "Postalcode (private)"
-msgstr ""
+msgstr "Postnummer (privat)"
 
 #: js/ContactGrid.js:140
 msgid "Country (private)"
-msgstr ""
+msgstr "Land (privat)"
 
 #: js/ContactGrid.js:145
 msgid "Car phone"
-msgstr ""
+msgstr "Bil Telefon"
 
 #: js/ContactGrid.js:146
 msgid "Pager"
-msgstr ""
+msgstr "Personsøker"
 
 #: js/ContactGrid.js:150
 msgid "Email (private)"
-msgstr ""
+msgstr "E-Post (Privat)"
 
 #: js/ContactGrid.js:152
 msgid "URL (private)"
-msgstr ""
+msgstr "URL (privat)"
 
 #: js/ContactGrid.js:153
 msgid "Note"
-msgstr ""
+msgstr "Notat"
 
 #: js/ContactGrid.js:154
 msgid "Timezone"
-msgstr ""
+msgstr "Tids sone"
 
 #: js/ContactGrid.js:155
 msgid "Geo"
-msgstr ""
+msgstr "Geo"
 
 #: js/ContactGrid.js:157
 msgid "Creation Time"
-msgstr ""
+msgstr "Opprettelses dato"
 
 #: js/ContactGrid.js:158
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Sist Endret Dato"
 
 #: js/ContactGrid.js:168
 msgid "Export Contact"
-msgstr ""
+msgstr "Eksporter Kontakt"
 
 #: js/ContactGrid.js:177
 msgid "Export as PDF"
-msgstr ""
+msgstr "Eksporter som PDF"
 
 #: js/ContactGrid.js:184
 msgid "Export as CSV"
-msgstr ""
+msgstr "Eksporter som CSV"
 
 #: js/ContactGrid.js:198
 msgid "Call contact"
-msgstr ""
+msgstr "Ring kontakt"
 
 #: js/ContactGrid.js:208
 msgid "Compose email"
-msgstr ""
+msgstr "Ny e-post"
 
 #: js/ContactGrid.js:251
 msgid "Work"
-msgstr ""
+msgstr "Jobb"
 
 #: js/ContactGrid.js:260
 msgid "Home"
-msgstr ""
+msgstr "Hjem"
 
 #: js/ContactGrid.js:269
 msgid "Cell"
-msgstr ""
+msgstr "Mobil"
 
 #: js/ContactGrid.js:278
 msgid "Cell private"
-msgstr ""
+msgstr "Mobil privat"
 
 #: js/ContactGrid.js:355
 msgid "Internal Contact"
-msgstr ""
+msgstr "Intern Kontakt"
 
 #: js/ContactGridDetailsPanel.js:70
 msgid "Select contact"
-msgstr ""
+msgstr "Velg kontakt"
 
 #: js/ContactGridDetailsPanel.js:160
 msgid "Private"
-msgstr ""
+msgstr "Privat"
 
 #: js/ContactGridDetailsPanel.js:183
 msgid "Info"
-msgstr ""
+msgstr "Informasjon"
 
 #: js/EditDialog.js:51 js/EditDialog.js:53
 msgid "contacts"
-msgstr ""
+msgstr "kontakter"
 
 #: js/EditDialog.js:58
 msgid "export as pdf"
-msgstr ""
+msgstr "eksporter som pdf"
 
 #: js/EditDialog.js:83
 msgid "Loading Contact..."
-msgstr ""
+msgstr "Laster Kontakt..."
 
 #: js/EditDialog.js:83
 msgid "Please Wait"
-msgstr ""
+msgstr "Vennligst Vent"
 
 #: js/EditDialog.js:121
 msgid "Add new contact"
-msgstr ""
+msgstr "Legg til ny kontakt"
 
 #: js/EditDialog.js:123
 msgid "Edit Contact \"{0}\""
-msgstr ""
+msgstr "Rediger Kontakt \"{0}\""
 
 #: js/EditDialog.js:153
 msgid "Please wait a moment..."
-msgstr ""
+msgstr "Lagrer vennligst vent..."
 
 #: js/EditDialog.js:153
 msgid "Saving Contact"
-msgstr ""
+msgstr "Lagrer Kontakt"
 
 #: js/EditDialog.js:178 js/EditDialog.js:203
 msgid "Failed"
-msgstr ""
+msgstr "Feilet"
 
 #: js/EditDialog.js:178
 msgid "Could not save contact."
-msgstr ""
+msgstr "Kunne ikke lagre kontakt."
 
 #: js/EditDialog.js:182
 msgid "Either "
-msgstr ""
+msgstr "Enten"
 
 #: js/EditDialog.js:183
 msgid "Start date is not valid"
-msgstr ""
+msgstr "Start dato er ikke gyldig"
 
 #: js/EditDialog.js:184
 msgid "Errors"
-msgstr ""
+msgstr "Feil"
 
 #: js/EditDialog.js:184
 msgid "Please fix the errors noted."
-msgstr ""
+msgstr "Vennligst rett feilene listet."
 
 #: js/EditDialog.js:197
 msgid "Deleting contact..."
-msgstr ""
+msgstr "Sletter kontakt..."
 
 #: js/EditDialog.js:203
 msgid "Some error occured while trying to delete the contact."
-msgstr ""
+msgstr "En feil oppsto ved forsøk på å slette kontakten."
 
 #: js/EditDialog.js:656
 msgid "Custom Fields"
-msgstr ""
+msgstr "Egendefinerte Felter"
 
 #: js/EditDialog.js:751
 #, python-format
 msgid "Link"
 msgid_plural "Links [%d]"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Link"
+msgstr[1] "Linker [%d]"
 
 #: js/SearchCombo.js:92
 msgid "Searching..."
-msgstr ""
+msgstr "Søker..."
 
 #: Preference.php:60
 msgid "Default Addressbook"
-msgstr ""
+msgstr "Standard Adressebok"
 
 #: Preference.php:61
 msgid "The default addressbook for new contacts"
-msgstr ""
+msgstr "Standard adressebok for nye kontakter"
 
 #: Setup/setup.xml:572
 msgid "Mr"
-msgstr ""
+msgstr "Herr"
 
 #: Setup/setup.xml:590
 msgid "Ms"
-msgstr ""
+msgstr "Fru"
+
+#~ msgid "Export"
+#~ msgstr "Eksporter"

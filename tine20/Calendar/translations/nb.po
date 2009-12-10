@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-12-09 17:28+0100\n"
+"Last-Translator: Ronny Gonzales <gonzito@online.no>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,575 +15,584 @@ msgstr ""
 
 #: Acl/Rights.php:96
 msgid "manage shared calendars"
-msgstr ""
+msgstr "behandle delte kalendere"
 
 #: Acl/Rights.php:97
 msgid "Create new shared calendars"
-msgstr ""
+msgstr "Opprett ny delt kalender"
 
 #: Acl/Rights.php:100
 msgid "manage resources"
-msgstr ""
+msgstr "behandle resurser"
 
 #: Acl/Rights.php:101
 msgid "All Rights to administrate resources"
-msgstr ""
+msgstr "Alle Rettigheter til Administrative resurser"
 
 #: Controller/EventNotifications.php:254
 msgid "Alarm for event \"%1$s\" at %2$s"
-msgstr ""
+msgstr "Alarm for hendelse \"%1$s\" på %2$s"
 
 #: Controller/EventNotifications.php:257
 msgid "Event invitation \"%1$s\" at %2$s"
-msgstr ""
+msgstr "Hendelse invitasjon  \"%1$s\" på %2$s"
 
 #: Controller/EventNotifications.php:260
 msgid "Event \"%1$s\" at %s has been canceled"
-msgstr ""
+msgstr "Hendelse  \"%1$s\" på %2$s har blitt avlyst"
 
 #: Controller/EventNotifications.php:265
 msgid "Event \"%1$s\" at %2$s has been rescheduled"
-msgstr ""
+msgstr "Hendelse  \"%1$s\" på %2$s har blitt flyttet"
 
 #: Controller/EventNotifications.php:269
 msgid "Event \"%1$s\" at %2$s has been updated"
-msgstr ""
+msgstr "Hendelse  \"%1$s\" på %2$s har blitt oppdatert"
 
 #: Controller/EventNotifications.php:279
 msgid "%1$s accepted event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "%1$s godkjent hendelse \"%2$s\" på %3$s"
 
 #: Controller/EventNotifications.php:283
 msgid "%1$s declined event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "%1$s avvist hendelse \"%2$s\" på %3$s"
 
 #: Controller/EventNotifications.php:287
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "Foreløbig svar fra %1$s for hendelse \"%2$s\" at %3$s"
 
 #: Controller/EventNotifications.php:291
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "Ingen svar fra %1$s for hendelse \"%2$s\" at %3$s"
 
 #: Controller/EventNotifications.php:295
 msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr ""
+msgstr "Deltager endringer for hendelse \"%1$s\" på %2$s"
 
 #: Controller.php:100
 #, python-format
 msgid "%s's personal calendar"
-msgstr ""
+msgstr "%s' personlige kalender"
 
 #: js/AdminPanel.js:46
 msgid "Manage Resources"
-msgstr ""
+msgstr "Behandle Resurser"
 
 #: js/AttendeeGridPanel.js:62 js/EventDetailsPanel.js:244 js/Model.js:286
 msgid "Attendee"
-msgstr ""
+msgstr "Deltager"
 
 #: js/AttendeeGridPanel.js:86
 msgid "Role"
-msgstr ""
+msgstr "Rolle"
 
 #: js/AttendeeGridPanel.js:95
 msgid "Quantity"
-msgstr ""
+msgstr "Mengde"
 
 #: js/AttendeeGridPanel.js:104
 msgid "This is the calendar where the attender has saved this event in"
-msgstr ""
+msgstr "Dette er kalenderen hvor deltager har lagret denne hendelsen i"
 
 #: js/AttendeeGridPanel.js:140
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: js/AttendeeGridPanel.js:147
 msgid "User"
-msgstr ""
+msgstr "Bruker"
 
 #: js/AttendeeGridPanel.js:148
 msgid "Group"
-msgstr ""
+msgstr "Gruppe"
 
 #: js/AttendeeGridPanel.js:149 js/Model.js:441
 msgid "Resource"
 msgid_plural "Resources"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Resurs"
+msgstr[1] "Resurser"
 
 #: js/AttendeeGridPanel.js:157 js/ResourceEditDialog.js:58
 #: js/ResourcesGridPanel.js:43
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 #: js/AttendeeGridPanel.js:187 Model/Event.php:185
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/AttendeeGridPanel.js:194 js/AttendeeGridPanel.js:491
 #: Model/Attender.php:45
 msgid "No response"
-msgstr ""
+msgstr "Ingen svar"
 
 #: js/AttendeeGridPanel.js:195 js/AttendeeGridPanel.js:494
 #: Model/Attender.php:46
 msgid "Accepted"
-msgstr ""
+msgstr "Godkjent"
 
 #: js/AttendeeGridPanel.js:196 js/AttendeeGridPanel.js:497
 #: Model/Attender.php:47
 msgid "Declined"
-msgstr ""
+msgstr "Avvist"
 
 #: js/AttendeeGridPanel.js:197 js/AttendeeGridPanel.js:500
 #: Model/Attender.php:48
 msgid "Tentative"
-msgstr ""
+msgstr "Foreløpig"
 
 #: js/AttendeeGridPanel.js:298
 msgid "Remove Attender"
-msgstr ""
+msgstr "Fjern Deltaker"
 
 #: js/AttendeeGridPanel.js:393
 msgid "Click here to invite another attender..."
-msgstr ""
+msgstr "Trykk her for å invitere en annen deltager..."
 
 #: js/AttendeeGridPanel.js:411 js/AttendeeGridPanel.js:429
 #: js/AttendeeGridPanel.js:442 js/AttendeeGridPanel.js:454 js/Model.js:302
 msgid "No Information"
-msgstr ""
+msgstr "Ingen Informasjon"
 
 #: js/AttendeeGridPanel.js:416
 msgid "(as a group member)"
-msgstr ""
+msgstr "(som et gruppe medlem)"
 
 #: js/AttendeeGridPanel.js:466
 msgid "Required"
-msgstr ""
+msgstr "Påkrevd"
 
 #: js/AttendeeGridPanel.js:469
 msgid "Optional"
-msgstr ""
+msgstr "Valgfri"
 
 #: js/Calendar.js:36 js/Model.js:68 Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kalender"
+msgstr[1] "Kalendere"
 
 #: js/CalendarPanel.js:41
 msgid "Loading events, please wait..."
-msgstr ""
+msgstr "Laster hendelser, vennligst vent..."
 
 #: js/CalendarPanel.js:226
 msgid "Scheduling Conflict"
-msgstr ""
+msgstr "Avtale Konflikt"
 
 #: js/CalendarPanel.js:230
 msgid "The following attendee are busy at the requested time:"
-msgstr ""
+msgstr "Følgende deltagere er opptatt på ønsket tid:"
 
 #: js/CalendarPanel.js:235
 msgid "Ignore Conflict"
-msgstr ""
+msgstr "Ignorer Konflikt"
 
 #: js/CalendarPanel.js:242
 msgid "Edit Event"
-msgstr ""
+msgstr "Rediger Hendelse"
 
 #: js/CalendarPanel.js:267
 msgid "Confirm Update of Series"
-msgstr ""
+msgstr "Bekreft Oppdatering av Serie"
 
 #: js/CalendarPanel.js:268
 msgid "Do you really want to update all events of this recurring event series?"
 msgstr ""
+"Vil du virkelig oppdatere alle hendelser for denne gjentagende hendelses "
+"serien?"
 
 #: js/CalendarPanel.js:285
 msgid "Update Event"
-msgstr ""
+msgstr "Oppdater Hendelse"
 
 #: js/CalendarPanel.js:288 js/CalendarPanel.js:290
 msgid "Do you want to update the whole series, or just this event"
-msgstr ""
+msgstr "Vil du oppdatere hele serien, eller bare denne hendelsen"
 
 #: js/CalendarPanel.js:292
 msgid "Update nothing"
-msgstr ""
+msgstr "Oppdater ingenting"
 
 #: js/CalendarPanel.js:300
 msgid "Update whole series"
-msgstr ""
+msgstr "Oppdater hele serien"
 
 #: js/CalendarPanel.js:312
 msgid "Failed not update recurring event series"
-msgstr ""
+msgstr "Feilet, ikke oppdater gjentagende hendelses serie"
 
 #: js/CalendarPanel.js:320
 msgid "Update this event only"
-msgstr ""
+msgstr "Oppdater kun denne hendelsen"
 
 #: js/CalendarPanel.js:334
 msgid "Failed not update event"
-msgstr ""
+msgstr "Feilet, ikke oppdatert hendelse"
 
 #: js/CalendarSelectTreePanel.js:42
 msgid "Resources {0}"
-msgstr ""
+msgstr "Resurser {0}"
 
 #: js/CalendarSelectWidget.js:158
 msgid "Originally"
-msgstr ""
+msgstr "Orginalt"
 
 #: js/DaysView.js:90 js/MonthView.js:82
 msgid "New Event"
-msgstr ""
+msgstr "Ny Hendelse"
 
 #: js/DaysView.js:95
 msgid "{0}, the {1}. of {2}"
-msgstr ""
+msgstr "{0}, den {1}. av {2}"
 
 #: js/EventDetailsPanel.js:51
 msgid "Unknown calendar"
-msgstr ""
+msgstr "Ukjent kalender"
 
 #: js/EventDetailsPanel.js:62
 msgid "{0} {1} o'clock"
-msgstr ""
+msgstr "{0} {1} klokken"
 
 #: js/EventDetailsPanel.js:172 js/EventEditDialog.js:93 Model/Event.php:186
 msgid "Summary"
-msgstr ""
+msgstr "Oppsumering"
 
 #: js/EventDetailsPanel.js:208 js/EventEditDialog.js:105
 msgid "Start Time"
-msgstr ""
+msgstr "Start Tid"
 
 #: js/EventDetailsPanel.js:213 js/EventEditDialog.js:120
 msgid "End Time"
-msgstr ""
+msgstr "Slutt Tid"
 
 #: js/EventDetailsPanel.js:218 Model/Event.php:179
 msgid "Blocking"
-msgstr ""
+msgstr "Blokkerer"
 
 #: js/EventDetailsPanel.js:223 js/EventEditDialog.js:100
 #: js/ResourcesGridPanel.js:54 Model/Event.php:182
 msgid "Location"
-msgstr ""
+msgstr "Sted"
 
 #: js/EventDetailsPanel.js:227 Model/Event.php:183
 msgid "Organizer"
-msgstr ""
+msgstr "Organiserer"
 
 #: js/EventEditDialog.js:128
 msgid "whole day"
-msgstr ""
+msgstr "hele dagen"
 
 #: js/EventEditDialog.js:136
 msgid "non-blocking"
-msgstr ""
+msgstr "ikke-blokert"
 
 #: js/EventEditDialog.js:177 js/ResourceEditDialog.js:74 Model/Event.php:181
 msgid "Description"
-msgstr ""
+msgstr "Beskrivelse"
 
 #: js/EventEditDialog.js:191
 msgid "Enter description"
-msgstr ""
+msgstr "Tast inn beskrivelse"
 
 #: js/EventEditDialog.js:332
 msgid "End date is not valid"
-msgstr ""
+msgstr "Slutt dato er ikke gyldig"
 
 #: js/EventEditDialog.js:335
 msgid "End date must be after start date"
-msgstr ""
+msgstr "Slutt dato må være etter start dato"
 
 #: js/EventEditDialog.js:348
 msgid "Start date is not valid"
-msgstr ""
+msgstr "Start datoen er ikke gyldig"
 
 #: js/MainScreenCenterPanel.js:73
 msgid "Show declined events"
-msgstr ""
+msgstr "Vis aviste hendelser"
 
 #: js/MainScreenCenterPanel.js:108
 msgid "Day"
-msgstr ""
+msgstr "Dag"
 
 #: js/MainScreenCenterPanel.js:117 js/PagingToolbar.js:276
 msgid "Week"
-msgstr ""
+msgstr "Uke"
 
 #: js/MainScreenCenterPanel.js:126
 msgid "Month"
-msgstr ""
+msgstr "Måned"
 
 #: js/MainScreenCenterPanel.js:293
 msgid "Please Change Selection"
-msgstr ""
+msgstr "Vennligst Endre Valg"
 
 #: js/MainScreenCenterPanel.js:294
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
 msgstr ""
+"Dine valg inneholder gjentagende hendelser. Gjentagende hendelser må slettes "
+"separat!"
 
 #: js/MainScreenCenterPanel.js:308
 msgid "Confirm Deletion of Series"
-msgstr ""
+msgstr "Bekreft Sletting av Serie"
 
 #: js/MainScreenCenterPanel.js:309
 msgid "Do you really want to delete all events of this recurring event series?"
 msgstr ""
+"Vil du virkelig slette alle hendelser av denne gjentagende hendelses serien?"
 
 #: js/MainScreenCenterPanel.js:325
 msgid "Delete Event"
-msgstr ""
+msgstr "Slette Hendelse"
 
 #: js/MainScreenCenterPanel.js:328 js/MainScreenCenterPanel.js:330
 msgid ""
 "Do you want to delete the whole series, this and all future events of this "
 "series, or just this event"
 msgstr ""
+"Vil du slette hele serien, dinne og alle framtidige hendelser av denne "
+"serien, eller bare denne hendelsen"
 
 #: js/MainScreenCenterPanel.js:332
 msgid "Delete nothing"
-msgstr ""
+msgstr "Slett ingenting"
 
 #: js/MainScreenCenterPanel.js:339
 msgid "Delete whole series"
-msgstr ""
+msgstr "Slett hele serien"
 
 #: js/MainScreenCenterPanel.js:360
 msgid "Delete this and all future events"
-msgstr ""
+msgstr "Slett denne og alle framtidige hendelser"
 
 #: js/MainScreenCenterPanel.js:381
 msgid "Delete this event only"
-msgstr ""
+msgstr "Slette kun denne hendelsen"
 
 #: js/MainScreenCenterPanel.js:411
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Vil du virkelig slette denn hendelsen?"
+msgstr[1] "Vil du virkelig slette disse {0} hendelsene?"
 
 #: js/MainScreenLeftPanel.js:64 js/MonthView.js:87
 msgid "WK"
-msgstr ""
+msgstr "U"
 
 #: js/Model.js:64 js/Model.js:290
 msgid "Event"
 msgid_plural "Events"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hendelse"
+msgstr[1] "Hendelser"
 
 #: js/Model.js:64 js/Model.js:290
 msgid "Events"
-msgstr ""
+msgstr "Hendelser"
 
 #: js/Model.js:68
 msgid "Calendars"
-msgstr ""
+msgstr "Kalendere"
 
 #: js/Model.js:286
 msgid "Attender"
 msgid_plural "Attendee"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Deltager"
+msgstr[1] "Deltagere"
 
 #: js/Model.js:441
 msgid "Resources"
-msgstr ""
+msgstr "Resurser"
 
 #: js/MonthView.js:92
 msgid "{0} more..."
-msgstr ""
+msgstr "{0} mer..."
 
 #: js/ResourceEditDialog.js:63 js/ResourcesGridPanel.js:49
 msgid "Email"
-msgstr ""
+msgstr "E-post"
 
 #: js/ResourceEditDialog.js:69 js/ResourceEditDialog.js:70
 msgid "Is a location"
-msgstr ""
+msgstr "Er et sted"
 
 #: js/ResourceEditDialog.js:75
 msgid "Enter description..."
-msgstr ""
+msgstr "Tast inn beskrivelse..."
 
 #: js/RrulePanel.js:29
 msgid "Recurrances"
-msgstr ""
+msgstr "Gjentagelser"
 
 #: js/RrulePanel.js:37
 msgid "No recurring rule defined"
-msgstr ""
+msgstr "Ingen gjentagende regel definert"
 
 #: js/RrulePanel.js:77
 msgid "None"
-msgstr ""
+msgstr "Inegn"
 
 #: js/RrulePanel.js:84
 msgid "Daily"
-msgstr ""
+msgstr "Daglig"
 
 #: js/RrulePanel.js:91
 msgid "Weekly"
-msgstr ""
+msgstr "Ukentlig"
 
 #: js/RrulePanel.js:98
 msgid "Monthly"
-msgstr ""
+msgstr "Månedlig"
 
 #: js/RrulePanel.js:105
 msgid "Yearly"
-msgstr ""
+msgstr "Årlig"
 
 #: js/RrulePanel.js:228
 msgid "forever"
-msgstr ""
+msgstr "for alltid"
 
 #: js/RrulePanel.js:240
 msgid "Forever"
-msgstr ""
+msgstr "For alltid"
 
 #: js/RrulePanel.js:241
 msgid "at"
-msgstr ""
+msgstr "på"
 
 #: js/RrulePanel.js:247
 msgid "Every"
-msgstr ""
+msgstr "Hver"
 
 #: js/RrulePanel.js:282
 msgid "Until"
-msgstr ""
+msgstr "Intill"
 
 #: js/RrulePanel.js:296
 msgid "Until has to be after event start"
-msgstr ""
+msgstr "Til må være etter hendelses start"
 
 #: js/RrulePanel.js:329
 msgid ". Day"
-msgstr ""
+msgstr ". Dag"
 
 #: js/RrulePanel.js:359
 msgid ". Week at"
-msgstr ""
+msgstr ". Uke på "
 
 #: js/RrulePanel.js:417
 msgid ". Month"
-msgstr ""
+msgstr ". Måned"
 
 #: js/RrulePanel.js:423 js/RrulePanel.js:472 js/RrulePanel.js:603
 #: js/RrulePanel.js:653
 msgid "at the"
-msgstr ""
+msgstr "på den"
 
 #: js/RrulePanel.js:442 js/RrulePanel.js:622
 msgid "first"
-msgstr ""
+msgstr "første"
 
 #: js/RrulePanel.js:443 js/RrulePanel.js:623
 msgid "second"
-msgstr ""
+msgstr "andre"
 
 #: js/RrulePanel.js:444 js/RrulePanel.js:624
 msgid "third"
-msgstr ""
+msgstr "tredje"
 
 #: js/RrulePanel.js:445 js/RrulePanel.js:625
 msgid "fourth"
-msgstr ""
+msgstr "fjerde"
 
 #: js/RrulePanel.js:446 js/RrulePanel.js:626
 msgid "last"
-msgstr ""
+msgstr "siste"
 
 #: js/RrulePanel.js:596
 msgid ". Year"
-msgstr ""
+msgstr ". År"
 
 #: js/RrulePanel.js:693 js/RrulePanel.js:705
 msgid "of"
-msgstr ""
+msgstr "av"
 
 #: Model/Attender.php:167
 msgid "unknown"
-msgstr ""
+msgstr "ukjent"
 
 #: Model/Attender.php:313
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr ""
+"Denne kontakten har blitt automatisk lagt til av systemet som en handligs "
+"deltager"
 
 #: Model/Attender.php:203
 msgid "unknown)"
-msgstr ""
+msgstr "ukjent)"
 
 #: Model/Event.php:177
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: Model/Event.php:178
 msgid "End"
-msgstr ""
+msgstr "Slutt"
 
 #: Model/Event.php:180
 msgid "Classification"
-msgstr ""
+msgstr "Klasifisering"
 
 #: Model/Event.php:184
 msgid "Priority"
-msgstr ""
+msgstr "Prioritet"
 
 #: Model/Event.php:187
 msgid "Url"
-msgstr ""
+msgstr "Url"
 
 #: Model/Event.php:188
 msgid "Recurrance rule"
-msgstr ""
+msgstr "Gjentagelse regel"
 
 #: Model/Event.php:189
 msgid "Is all day event"
-msgstr ""
+msgstr "Er hele dagen hendelse"
 
 #: Model/Event.php:190
 msgid "Organizer timezone"
-msgstr ""
+msgstr "Organiserer tidssone"
 
 #: Model/Event.php:215
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: Model/Event.php:215
 msgid "No"
-msgstr ""
+msgstr "Nei"
 
 #: Preference.php:78
 msgid "Publish Free/Busy Information"
-msgstr ""
+msgstr "Utgi Ledig/Opptatt informasjon"
 
 #: Preference.php:79
 msgid "Allow all users to view your free/busy information"
-msgstr ""
+msgstr "Tillat alle brukere å se din ledig/opptatt informasjon"
 
 #: Preference.php:82
 msgid "Default Calendar"
-msgstr ""
+msgstr "Standard Kalender"
 
 #: Preference.php:83
 msgid "The default calendar for invitations and new events"
-msgstr ""
+msgstr "Standard kalenderen for invitasjoner og nye hendelser"
 
 #: Preference.php:86
 msgid "Get Notification Emails"
-msgstr ""
+msgstr "Få Varslings E-post"
 
 #: Preference.php:87
 msgid ""
@@ -591,47 +600,50 @@ msgid ""
 "organizers will get notifications for all updates including attendee answers "
 "unless this preference is set to \"Never\""
 msgstr ""
+"Ønsket nivå du vil bli varslet om. Vennligst noter at organiserere vil få "
+"varslinger for alle oppdateringer inkludert deltager svar hvis ikke dette "
+"valget er satt til \"Aldri\""
 
 #: Preference.php:90
 msgid "Send Notifications Emails of own Actions"
-msgstr ""
+msgstr "Send Varslings E-post på egne Handligner"
 
 #: Preference.php:91
 msgid "Get notifications emails for actions you did yourself"
-msgstr ""
+msgstr "Få varslings e-post for handligner du selv har gjort"
 
 #: views/eventNotification.php:13
 msgid "Updates"
-msgstr ""
+msgstr "Oppdateringer"
 
 #: views/eventNotification.php:21
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr ""
+msgstr "%1$s endret fra \"%2$s\" til \"%3$s\""
 
 #: views/eventNotification.php:28
 msgid "%1$s has been invited"
-msgstr ""
+msgstr "%1$s har blitt invitert"
 
 #: views/eventNotification.php:33
 msgid "%1$s has been removed"
-msgstr ""
+msgstr "%1$s har blitt fjernet"
 
 #: views/eventNotification.php:40
 msgid "%1$s accepted invitation"
-msgstr ""
+msgstr "%1$s har akseptert invitasjonen"
 
 #: views/eventNotification.php:44
 msgid "%1$s declined invitation"
-msgstr ""
+msgstr "%1$s har avvist invitasjonen"
 
 #: views/eventNotification.php:48
 msgid "Tentative response from %1$s"
-msgstr ""
+msgstr "Foreløbig svar fra %1$s"
 
 #: views/eventNotification.php:52
 msgid "No response from %1$s"
-msgstr ""
+msgstr "Ingen svar fra  %1$s"
 
 #: views/eventNotification.php:61
 msgid "Event details"
-msgstr ""
+msgstr "Hendelse detaljer"
