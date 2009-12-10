@@ -29,6 +29,11 @@ Tine.Tinebase.common = {
             _height = _height + 20;
         }
         
+        // chrome counts window decoration and location bar to window height
+        if (Ext.isChrome) {
+            _height += 40;
+        }
+        
         var windowName = Ext.isString(_windowName) ? _windowName.replace(/[^a-zA-Z0-9_]/g, '') : _windowName;
         var w,h,x,y,leftPos,topPos,popup;
 

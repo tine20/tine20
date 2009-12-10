@@ -62,10 +62,6 @@ Ext.ux.WindowFactory.prototype = {
         var win = Ext.ux.PopupWindowMgr.get(config.name);
         
         if (! win) {
-            if (Ext.isChrome) {
-                // chrome counts window decoration and location bar to window height
-                config.height += 40;
-            }
             win = new this.windowClass(config);
         }
         
