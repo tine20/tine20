@@ -22,16 +22,19 @@ class Setup_Server_Json extends Setup_Server_Abstract
 {
     /**
      * handler for JSON api requests
-     * @todo session expire handling
      * 
      * @return JSON
      */
     public function handle()
     {
         try {
-            $this->_initFramework();
-            
+            // init server and request first
             $request = new Zend_Json_Server_Request_Http();
+            $server = new Zend_Json_Server();
+            $server->setClass('Setup_Frontend_Json', 'Setup');
+            $server->setClass('Tinebase_Frontend_Json', 'Tinebase');
+            
+            $this->_initFramework();
             
             $method  = $request->getMethod();
             $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
@@ -51,10 +54,6 @@ class Setup_Server_Json extends Setup_Server_Abstract
 	                'Setup.envCheck',
 	            ));
             }
-            
-            $server = new Zend_Json_Server();
-            $server->setClass('Setup_Frontend_Json', 'Setup');
-            $server->setClass('Tinebase_Frontend_Json', 'Tinebase');
             
             // check json key for all methods but some exceptoins
             if (! in_array($method, $anonymnousMethods) && Setup_Core::configFileExists()
