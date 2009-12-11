@@ -112,14 +112,9 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
      * @return Ext.grid.ColumnModel
      * @private
      */
-    getColumnModel: function(){
-        return new Ext.grid.ColumnModel({ 
-            defaults: {
-                sortable: true,
-                hidden: true,
-                resizable: true
-            },
-            columns: [
+    getColumnModel: function() {
+        
+        var columns = [
             { id: 'tid', header: this.app.i18n._('Type'), dataIndex: 'tid', width: 30, renderer: this.contactTidRenderer.createDelegate(this), hidden: false },
             { id: 'tags', header: this.app.i18n._('Tags'), dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false, hidden: false  },
             { id: 'n_family', header: this.app.i18n._('Last Name'), dataIndex: 'n_family' },
@@ -159,7 +154,17 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             { id: 'bday', header: this.app.i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer },
             { id: 'creation_time', header: _('Creation Time'), dataIndex: 'creation_time', renderer: Tine.Tinebase.common.dateRenderer },
             { id: 'last_modified_time', header: _('Last Modified Time'), dataIndex: 'last_modified_time', renderer: Tine.Tinebase.common.dateRenderer }
-        ]});
+        ];
+        
+        return new Ext.grid.ColumnModel({ 
+            defaults: {
+                sortable: true,
+                hidden: true,
+                resizable: true
+            },
+            // add custom fields
+            columns: columns.concat(this.getCustomfieldColumns())
+        });
     },
     
     /**
