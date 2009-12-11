@@ -497,6 +497,11 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         
     },
     
+    /**
+     * load data
+     * 
+     * @param {Boolean} preserveCursor
+     */
     loadData: function(preserveCursor/*, preserveSelection*/) {
         var opts = {};
         
@@ -507,6 +512,31 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         }
         
         this.store.load(opts);
+    },
+    
+    /**
+     * get custom field columns for column model
+     * 
+     * @return {Array}
+     */
+    getCustomfieldColumns: function() {
+        var result = [];
+        
+        if (Tine[this.app.appName].registry.containsKey('customfields')) {
+            var allCfs = Tine[this.app.appName].registry.get('customfields');
+            for (var i=0; i < allCfs.length; i++) {
+                result.push({
+                    id: allCfs[i].id,
+                    header: allCfs[i].label,
+                    dataIndex: 'customfields',
+                    renderer: Tine.Tinebase.common.customfieldRenderer.createDelegate(this, [allCfs[i].name], true),
+                    sortable: false,
+                    hidden: true
+                })
+            }
+        }
+        
+        return result;
     },
     
     /**
