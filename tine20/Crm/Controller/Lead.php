@@ -191,20 +191,19 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         try {
             $pdfGenerator = new Crm_Export_Pdf();
             $pdfGenerator->generate($_lead);
-            $pdfOutput = $pdfGenerator->render();
+            $attachment = array('rawdata' => $pdfGenerator->render(), 'filename' => $_lead->lead_name . '.pdf');
         } catch ( Zend_Pdf_Exception $e ) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
-            $pdfOutput = NULL;
+            $attachment = NULL;
         }
                 
         $recipients = $this->_getNotificationRecipients($_lead);
         // send notificaton to updater in any case!
-        // UGH! how to find out his adb id?
-        //if (! in_array($_updater->accountId, $recipients)) {
-        //    $recipients[] = $_updater->accountId;
-        //}
+        if (! in_array($_updater->accountId, $recipients)) {
+            $recipients[] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_currentAccount->getId())->getId();
+        }
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $plain);
-        Tinebase_Notification::getInstance()->send($this->_currentAccount, $recipients, $subject, $plain, $html, $pdfOutput);
+        Tinebase_Notification::getInstance()->send($this->_currentAccount, $recipients, $subject, $plain, $html, array($attachment));
     }
     
     /*********************** helper functions ************************/
@@ -236,7 +235,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
             // NOTE: we just send notifications to users, not to groups or anyones!
             foreach ($containerGrants as $grant) {
                 if ($grant['account_type'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && $grant['readGrant'] == 1) {
-                    $recipients[] = $grant['account_id'];
+                    $recipients[] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($grant['account_id'])->getId();
                 }
             }
         }
