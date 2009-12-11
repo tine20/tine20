@@ -29,7 +29,9 @@ Tine.Crm.LinkGridPanel.initActions = function() {
         text: String.format(this.app.i18n._('Add new {0}'), recordName),
         tooltip: String.format(this.app.i18n._('Add new {0}'), recordName),
         iconCls: 'actionAdd',
-        disabled: true,
+        disabled: ! (this.record && this.record.get('container_id') 
+            && this.record.get('container_id').account_grants 
+            && this.record.get('container_id').account_grants.editGrant),
         scope: this,
         handler: function(_button, _event) {
             var editWindow = this.recordEditDialogOpener({
