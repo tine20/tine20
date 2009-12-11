@@ -235,12 +235,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
      * @private
      */
     getColumnModel: function(){
-        return new Ext.grid.ColumnModel({ 
-        defaults: {
-            sortable: true,
-            resizable: true
-        },
-        columns: [
+        var columns = [
             { id: 'tags',               header: this.app.i18n._('Tags'),                width: 50,  dataIndex: 'tags', sortable: false,
                 renderer: Tine.Tinebase.common.tagsRenderer },
             { id: 'start_date',         header: this.app.i18n._("Date"),                width: 120, dataIndex: 'start_date',            
@@ -261,7 +256,15 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
                 renderer: Tine.Tinebase.common.usernameRenderer },
             { id: 'duration',           header: this.app.i18n._("Duration"),            width: 150, dataIndex: 'duration',
                 renderer: Tine.Tinebase.common.minutesRenderer }
-        ]
+        ];
+        
+        return new Ext.grid.ColumnModel({ 
+            defaults: {
+                sortable: true,
+                resizable: true
+            },
+            // add custom fields
+            columns: columns.concat(this.getCustomfieldColumns())
         });
     },
     
