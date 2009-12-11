@@ -419,7 +419,7 @@ class Setup_ExtCheck
                         $data[] = array($value['attributes']['NAME'], 'SUCCESS');
                     } else {
                         Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                            . ' PHP version incompatible: ' . phpversion() . '<' . $value['attributes']['VERSION']);
+                            . ' PHP version incompatible: ' . phpversion() . ' < ' . $value['attributes']['VERSION']);
                         $data[] = array($value['attributes']['NAME'], 'FAILURE');
                     }
                     break;
@@ -438,11 +438,13 @@ class Setup_ExtCheck
                     } else {
                         $mysqlVersion = @mysql_get_client_info();
                     }
-                    $text = $value['attributes']['NAME'] . ' (> ' . $value['attributes']['VERSION'] . ')';
-                    //echo "mysql version: " . mysql_get_server_info();
+                    
+                    $text = $value['attributes']['NAME'];
                     if (version_compare($value['attributes']['VERSION'], $mysqlVersion, '<')) {
                         $data[] = array($text, 'SUCCESS');
                     } else {
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                            . ' MySQL version incompatible: ' . $mysqlVersion . ' < ' . $value['attributes']['VERSION']);                        
                         $data[] = array($text, 'FAILURE');
                     }
                     break;
