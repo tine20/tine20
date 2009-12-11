@@ -257,10 +257,12 @@ class Tinebase_Relations
                 $_relation->related_backend = Tasks_Backend_Factory::SQL;
                 break;
             case 'Sales_Model_Product':
-                $_relation->related_backend = Tasks_Backend_Factory::SQL;
+                $_relation->related_backend = Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND;
                 break;
             default:
-                throw new Tinebase_Exception_UnexpectedValue('Related model not supported.');
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Unsupported related model ' . $_relation->related_model . '. Using default backend (Sql).');
+                $_relation->related_backend = Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND;
+                //throw new Tinebase_Exception_UnexpectedValue('Related model not supported.');
                 break;
         }
     }

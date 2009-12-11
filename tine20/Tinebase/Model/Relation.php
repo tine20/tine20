@@ -38,6 +38,10 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
      */
     const TYPE_MANUAL = 'manual';
     /**
+     * default record backend
+     */
+    const DEFAULT_RECORD_BACKEND = 'Sql';
+    /**
      * key to find identifier
      */
 	protected $_identifier = 'id';
