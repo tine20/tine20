@@ -763,6 +763,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         }
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemFolders, TRUE));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_folders, TRUE));
         
         // do some mapping and save folder in db (if it doesn't exist
         foreach ($_folders as $folderData) {
@@ -799,6 +800,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
                         'delimiter'     => $folderData['delimiter']
                     ));
                     
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding new folder ' . $folderData['globalName'] . ' to cache.');
                     $folder = $this->_folderBackend->create($folder);
                 }
             }
