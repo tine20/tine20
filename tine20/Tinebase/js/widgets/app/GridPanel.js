@@ -321,20 +321,11 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             scope: this
         });
         
-        if (this.copyEditAction) {
-            this.actions = [
-                this.action_addInNewWindow,
-                this.action_editInNewWindow,
-                this.action_editCopyInNewWindow,
-                this.action_deleteRecord
-            ];
-        } else {
-            this.actions = [
-                this.action_addInNewWindow,
-                this.action_editInNewWindow,
-                this.action_deleteRecord
-            ];
-        }
+        this.actions = [
+            this.action_addInNewWindow,
+            this.action_editInNewWindow,
+            this.action_deleteRecord
+        ];
 
         if (this.recordClass.getField('tags')) {
             this.action_tagsMassAttach = new Tine.widgets.tags.TagsMassAttachAction({
@@ -344,6 +335,10 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             });
             
             this.contextMenuItems.push('-'/*, {xtype: 'menutextitem', text: _('Tagging')}*/, this.action_tagsMassAttach);
+            if (this.copyEditAction) {
+                // TODO move that between add and edit?
+                this.contextMenuItems.push(this.action_editCopyInNewWindow);
+            }
         }
         
         var actionToolbarItems = this.actions.concat(this.actionToolbarItems);
