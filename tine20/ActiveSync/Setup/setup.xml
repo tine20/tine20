@@ -276,6 +276,7 @@
                 <index>
                     <name>device_id--class--collectionid--contentid</name>
                     <unique>true</unique>
+                    <length>40</length>
                     <field>
                         <name>device_id</name>
                     </field>
@@ -354,6 +355,7 @@
                 <index>
                     <name>device_id--class--folderid</name>
                     <unique>true</unique>
+                    <length>40</length>
                     <field>
                         <name>device_id</name>
                     </field>
