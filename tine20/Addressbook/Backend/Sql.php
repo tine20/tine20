@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        move visibility='displayed' check from getSelect to contact filter
  */
 
 /**
@@ -47,12 +48,28 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function getByUserId($_userId)
     {
-        try {
-            $contact = $this->getByProperty($_userId, 'account_id');
-        } catch (Tinebase_Exception_NotFound $e) {
+        // can't use this anymore because this has to work even if user is hidden from addressbook
+        //$contact = $this->getByProperty($_userId, 'account_id');
+        
+        $select = parent::_getSelect('*');
+        $select->where($this->_db->quoteIdentifier($this->_tableName . '.account_id') . ' = ?', $_userId)
+               ->limit(1);
+
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+                
+        if (!$queryResult) {
             throw new Addressbook_Exception_NotFound('Contact with user id ' . $_userId . ' not found.');
         }
         
+        $contact = $this->_rawDataToRecord($queryResult);
+               
+        // get custom fields
+        if ($contact->has('customfields')) {
+            Tinebase_CustomField::getInstance()->resolveRecordCustomFields($contact);
+        }
+               
         return $contact;
     }
     
@@ -135,6 +152,8 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
      * @param boolean $_getDeleted get deleted records (if modlog is active)
      * @return Zend_Db_Select
+     * 
+     * @todo    move visibility='displayed' check to contact filter
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {
