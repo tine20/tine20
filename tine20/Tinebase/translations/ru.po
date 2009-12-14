@@ -81,21 +81,21 @@ msgstr "Неправильное завершение"
 msgid "An error occurred, the program ended abnormal."
 msgstr "Произошла ошибка, программа завершилась неправильно."
 
-#: js/common.js:145
+#: js/common.js:150
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} минута"
 msgstr[1] "{0} минуты"
 msgstr[2] "{0} минут"
 
-#: js/common.js:146
+#: js/common.js:151
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} час"
 msgstr[1] "{0} часа"
 msgstr[2] "{0} часов"
 
-#: js/common.js:147
+#: js/common.js:152
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} рабочий день"
@@ -427,7 +427,7 @@ msgstr ""
 "Установка Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
 "локально на этом компьютере."
 
-#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:678
+#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:746
 #: js/widgets/dialog/EditDialog.js:446
 #: js/widgets/grid/PersistentFilterPicker.js:124
 #: js/widgets/tree/ContextMenu.js:84
@@ -703,36 +703,40 @@ msgstr "Время"
 msgid "User"
 msgstr "Пользователь"
 
-#: js/widgets/app/GridPanel.js:275
+#: js/widgets/app/GridPanel.js:283
 msgid "Edit {0}"
 msgstr "Изменить {0}"
 
-#: js/widgets/app/GridPanel.js:286 js/widgets/tree/ContextMenu.js:214
+#: js/widgets/app/GridPanel.js:293
+msgid "Copy {0}"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:304 js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
 msgstr "Добавить {0}"
 
-#: js/widgets/app/GridPanel.js:296 js/widgets/app/GridPanel.js:297
-#: js/widgets/app/GridPanel.js:299
+#: js/widgets/app/GridPanel.js:314 js/widgets/app/GridPanel.js:315
+#: js/widgets/app/GridPanel.js:317
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Удалить {0}"
 msgstr[1] "Удалить {0}"
 msgstr[2] "Удалить {0}"
 
-#: js/widgets/app/GridPanel.js:319
+#: js/widgets/app/GridPanel.js:337
 #, fuzzy
 msgid "Tagging"
 msgstr "Тэг"
 
-#: js/widgets/app/GridPanel.js:395
+#: js/widgets/app/GridPanel.js:417
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Показаны записи {0} - {1} из {2}"
 
-#: js/widgets/app/GridPanel.js:396
+#: js/widgets/app/GridPanel.js:418
 msgid "No {0} to display"
 msgstr "Нет {0} для отображения"
 
-#: js/widgets/app/GridPanel.js:417
+#: js/widgets/app/GridPanel.js:439
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -740,36 +744,36 @@ msgstr ""
 "Никаких {0} не найдено. Пожалуйста попытайтесь изменить свои критерии "
 "фильтра, варианты представления, или {1} поменять в тех в которых Вы ищете."
 
-#: js/widgets/app/GridPanel.js:663
+#: js/widgets/app/GridPanel.js:731
 msgid "Not Allowed"
 msgstr "Не разрешено"
 
-#: js/widgets/app/GridPanel.js:664
+#: js/widgets/app/GridPanel.js:732
 msgid "You are not allowed to delete all pages at once"
 msgstr "Вам не позволяется удалить все страницы сразу"
 
-#: js/widgets/app/GridPanel.js:676
+#: js/widgets/app/GridPanel.js:744
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Вы действительно хотите удалить выделенную запись"
 msgstr[1] "Вы действительно хотите удалить выделенные записи"
 msgstr[2] "Вы действительно хотите удалить выделенные записи"
 
-#: js/widgets/app/GridPanel.js:683 js/widgets/dialog/EditDialog.js:448
+#: js/widgets/app/GridPanel.js:751 js/widgets/dialog/EditDialog.js:448
 msgid "Deleting {0}"
 msgstr "Удаление {0}"
 
-#: js/widgets/app/GridPanel.js:685
+#: js/widgets/app/GridPanel.js:753
 msgid " ... This may take a long time!"
 msgstr "... Это может занять много времени!"
 
-#: js/widgets/app/GridPanel.js:704 js/widgets/dialog/EditDialog.js:458
+#: js/widgets/app/GridPanel.js:772 js/widgets/dialog/EditDialog.js:458
 #: js/widgets/tags/TagsPanel.js:287 js/widgets/tags/TagsPanel.js:397
 #: js/widgets/tags/TagsPanel.js:430
 msgid "Failed"
 msgstr "Не удалось"
 
-#: js/widgets/app/GridPanel.js:704 js/widgets/dialog/EditDialog.js:458
+#: js/widgets/app/GridPanel.js:772 js/widgets/dialog/EditDialog.js:458
 msgid "Could not delete {0}."
 msgstr "Не удалось удалить {0}."
 
@@ -800,28 +804,28 @@ msgstr "общие"
 msgid "please select a {0}"
 msgstr "пожалуйста, выберите {0}"
 
-#: js/widgets/container/ContainerTree.js:129
+#: js/widgets/container/ContainerTree.js:134
 msgid "All {0}"
 msgstr "Все {0}"
 
-#: js/widgets/container/ContainerTree.js:134
+#: js/widgets/container/ContainerTree.js:140
 msgid "My {0}"
 msgstr "Мои {0}"
 
-#: js/widgets/container/ContainerTree.js:141
+#: js/widgets/container/ContainerTree.js:148
 msgid "Shared {0}"
 msgstr "Общие {0}"
 
-#: js/widgets/container/ContainerTree.js:149
+#: js/widgets/container/ContainerTree.js:157
 msgid "Other Users {0}"
 msgstr "{0} других пользователей "
 
-#: js/widgets/container/ContainerTree.js:172
+#: js/widgets/container/ContainerTree.js:181
 #, fuzzy
 msgid "Permission Denied"
 msgstr "Разрешения"
 
-#: js/widgets/container/ContainerTree.js:172
+#: js/widgets/container/ContainerTree.js:181
 #, fuzzy
 msgid "You don't have the required grant to select this {0}"
 msgstr "Вы уверены, что хотите удалить {0}?"

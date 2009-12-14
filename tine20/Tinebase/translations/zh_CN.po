@@ -79,17 +79,17 @@ msgstr "非正常结束"
 msgid "An error occurred, the program ended abnormal."
 msgstr "有错误发生，程序非正常终止"
 
-#: js/common.js:145
+#: js/common.js:150
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} 分钟"
 
-#: js/common.js:146
+#: js/common.js:151
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0}小时"
 
-#: js/common.js:147
+#: js/common.js:152
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0}工作日"
@@ -407,7 +407,7 @@ msgid ""
 "needed files locally on this computer."
 msgstr "安装 Gears 可以通过缓存所有需要的文件到本地电脑来提高 Tine 2.0 的性能"
 
-#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:678
+#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:746
 #: js/widgets/dialog/EditDialog.js:446
 #: js/widgets/grid/PersistentFilterPicker.js:124
 #: js/widgets/tree/ContextMenu.js:84
@@ -674,67 +674,71 @@ msgstr "时间"
 msgid "User"
 msgstr "用户"
 
-#: js/widgets/app/GridPanel.js:275
+#: js/widgets/app/GridPanel.js:283
 msgid "Edit {0}"
 msgstr "编辑{0}"
 
-#: js/widgets/app/GridPanel.js:286 js/widgets/tree/ContextMenu.js:214
+#: js/widgets/app/GridPanel.js:293
+msgid "Copy {0}"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:304 js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
 msgstr "添加{0}"
 
-#: js/widgets/app/GridPanel.js:296 js/widgets/app/GridPanel.js:297
-#: js/widgets/app/GridPanel.js:299
+#: js/widgets/app/GridPanel.js:314 js/widgets/app/GridPanel.js:315
+#: js/widgets/app/GridPanel.js:317
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "删除"
 
-#: js/widgets/app/GridPanel.js:319
+#: js/widgets/app/GridPanel.js:337
 #, fuzzy
 msgid "Tagging"
 msgstr "标签"
 
-#: js/widgets/app/GridPanel.js:395
+#: js/widgets/app/GridPanel.js:417
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "显示记录 {0} - {1} of {2}"
 
-#: js/widgets/app/GridPanel.js:396
+#: js/widgets/app/GridPanel.js:418
 msgid "No {0} to display"
 msgstr "没有{0}要显示"
 
-#: js/widgets/app/GridPanel.js:417
+#: js/widgets/app/GridPanel.js:439
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr "没有找到 {0}，请修改过滤条件，视图选项或搜索词 {1}"
 
-#: js/widgets/app/GridPanel.js:663
+#: js/widgets/app/GridPanel.js:731
 msgid "Not Allowed"
 msgstr "不允许"
 
-#: js/widgets/app/GridPanel.js:664
+#: js/widgets/app/GridPanel.js:732
 msgid "You are not allowed to delete all pages at once"
 msgstr "你不允许一次地删除所有页面"
 
-#: js/widgets/app/GridPanel.js:676
+#: js/widgets/app/GridPanel.js:744
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "真的想删除选中的记录？"
 
-#: js/widgets/app/GridPanel.js:683 js/widgets/dialog/EditDialog.js:448
+#: js/widgets/app/GridPanel.js:751 js/widgets/dialog/EditDialog.js:448
 msgid "Deleting {0}"
 msgstr "正删除{0}"
 
-#: js/widgets/app/GridPanel.js:685
+#: js/widgets/app/GridPanel.js:753
 msgid " ... This may take a long time!"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:704 js/widgets/dialog/EditDialog.js:458
+#: js/widgets/app/GridPanel.js:772 js/widgets/dialog/EditDialog.js:458
 #: js/widgets/tags/TagsPanel.js:287 js/widgets/tags/TagsPanel.js:397
 #: js/widgets/tags/TagsPanel.js:430
 msgid "Failed"
 msgstr "失败"
 
-#: js/widgets/app/GridPanel.js:704 js/widgets/dialog/EditDialog.js:458
+#: js/widgets/app/GridPanel.js:772 js/widgets/dialog/EditDialog.js:458
 msgid "Could not delete {0}."
 msgstr "不能删除{0}"
 
@@ -765,28 +769,28 @@ msgstr "共享的"
 msgid "please select a {0}"
 msgstr "请选择一个{0}"
 
-#: js/widgets/container/ContainerTree.js:129
+#: js/widgets/container/ContainerTree.js:134
 msgid "All {0}"
 msgstr "所有{0}"
 
-#: js/widgets/container/ContainerTree.js:134
+#: js/widgets/container/ContainerTree.js:140
 msgid "My {0}"
 msgstr "我的 {0}"
 
-#: js/widgets/container/ContainerTree.js:141
+#: js/widgets/container/ContainerTree.js:148
 msgid "Shared {0}"
 msgstr "共享的{0}"
 
-#: js/widgets/container/ContainerTree.js:149
+#: js/widgets/container/ContainerTree.js:157
 msgid "Other Users {0}"
 msgstr "其它用户{0}"
 
-#: js/widgets/container/ContainerTree.js:172
+#: js/widgets/container/ContainerTree.js:181
 #, fuzzy
 msgid "Permission Denied"
 msgstr "许可"
 
-#: js/widgets/container/ContainerTree.js:172
+#: js/widgets/container/ContainerTree.js:181
 #, fuzzy
 msgid "You don't have the required grant to select this {0}"
 msgstr "真的想删除这个{0}？"

@@ -56,13 +56,13 @@ msgid "End"
 msgstr "Ende"
 
 #: Controller/Lead.php:174 Export/Ods.php:89 Export/Pdf.php:88
-#: Export/Xls.php:61 js/LeadGridPanel.js:103 js/LeadGridPanel.js:145
+#: Export/Xls.php:61 js/LeadGridPanel.js:106 js/LeadGridPanel.js:148
 msgid "Turnover"
 msgstr "Umsatz"
 
 #: Controller/Lead.php:175 Export/Ods.php:94 Export/Pdf.php:91
-#: Export/Xls.php:66 js/LeadEditDialog.js:228 js/LeadGridPanel.js:102
-#: js/LeadGridPanel.js:144
+#: Export/Xls.php:66 js/LeadEditDialog.js:228 js/LeadGridPanel.js:105
+#: js/LeadGridPanel.js:147
 msgid "Probability"
 msgstr "Wahrscheinlichkeit"
 
@@ -100,13 +100,13 @@ msgstr "%ss persönliche Leads"
 
 #: Controller.php:152 Export/Xls.php:123 js/Contact.js:169 js/Contact.js:357
 #: js/Contact.js:397 js/LeadGridDetailsPanel.js:47
-#: js/LeadGridDetailsPanel.js:498 js/LeadGridPanel.js:142
+#: js/LeadGridDetailsPanel.js:498 js/LeadGridPanel.js:145
 msgid "Customer"
 msgstr "Kunde"
 
 #: Controller.php:153 Export/Xls.php:118 js/Contact.js:189 js/Contact.js:358
 #: js/Contact.js:401 js/LeadGridDetailsPanel.js:47
-#: js/LeadGridDetailsPanel.js:481 js/LeadGridPanel.js:141
+#: js/LeadGridDetailsPanel.js:481 js/LeadGridPanel.js:144
 msgid "Partner"
 msgstr "Partner"
 
@@ -184,7 +184,7 @@ msgid "Lead Data"
 msgstr "Lead-Daten"
 
 #: Export/Pdf.php:79 Export/Xls.php:106 js/AdminPanel.js:169
-#: js/LeadEditDialog.js:329 js/LeadGridPanel.js:100 js/LeadGridPanel.js:143
+#: js/LeadEditDialog.js:329 js/LeadGridPanel.js:103 js/LeadGridPanel.js:146
 msgid "Leadstate"
 msgstr "Status"
 
@@ -222,7 +222,7 @@ msgstr "Fälligkeitsdatum"
 msgid "Priority"
 msgstr "Priorität"
 
-#: Export/Pdf.php:270 js/LeadGridPanel.js:259 js/Product.js:87
+#: Export/Pdf.php:270 js/LeadGridPanel.js:262 js/Product.js:87
 msgid "Products"
 msgstr "Produkte"
 
@@ -315,11 +315,11 @@ msgstr "Name"
 msgid "Data"
 msgstr "Daten"
 
-#: js/Contact.js:253 js/LeadGridDetailsPanel.js:50 js/LeadGridPanel.js:292
+#: js/Contact.js:253 js/LeadGridDetailsPanel.js:50 js/LeadGridPanel.js:295
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/Contact.js:254 js/LeadGridPanel.js:293
+#: js/Contact.js:254 js/LeadGridPanel.js:296
 msgid "Cellphone"
 msgstr "Telefon (Mobil)"
 
@@ -373,63 +373,63 @@ msgstr "Webseite"
 msgid "Status"
 msgstr "Status"
 
-#: js/LeadGridPanel.js:98
+#: js/LeadGridPanel.js:101
 msgid "Quick search"
 msgstr "Schnellsuche"
 
-#: js/LeadGridPanel.js:99 js/LeadGridPanel.js:140
+#: js/LeadGridPanel.js:102 js/LeadGridPanel.js:143
 msgid "Lead name"
 msgstr "Lead-Name"
 
-#: js/LeadGridPanel.js:138
+#: js/LeadGridPanel.js:141
 msgid "Lead id"
 msgstr "Lead-Bezeichner"
 
-#: js/LeadGridPanel.js:139
+#: js/LeadGridPanel.js:142
 msgid "Tags"
 msgstr "Tags"
 
-#: js/LeadGridPanel.js:185
+#: js/LeadGridPanel.js:188
 msgid "Add task"
 msgstr "Aufgabe hinzufügen"
 
-#: js/LeadGridPanel.js:186
+#: js/LeadGridPanel.js:189
 msgid "Add task for selected lead"
 msgstr "Aufgabe zum Lead hinzufügen"
 
-#: js/LeadGridPanel.js:196
+#: js/LeadGridPanel.js:199
 msgid "Export Lead"
 msgstr "Lead exportieren"
 
-#: js/LeadGridPanel.js:205
+#: js/LeadGridPanel.js:208
 msgid "Export as PDF"
 msgstr "Als PDF exportieren"
 
-#: js/LeadGridPanel.js:212
+#: js/LeadGridPanel.js:215
 msgid "Export as CSV"
 msgstr "Als CSV exportieren"
 
-#: js/LeadGridPanel.js:219
+#: js/LeadGridPanel.js:222
 msgid "Export as ODS"
 msgstr "Als ODS exportieren"
 
-#: js/LeadGridPanel.js:226
+#: js/LeadGridPanel.js:229
 msgid "Export as XLS"
 msgstr "Als XLS exportieren"
 
-#: js/LeadGridPanel.js:237
+#: js/LeadGridPanel.js:240
 msgid "Show closed"
 msgstr "Abgeschlossene Leads anzeigen"
 
-#: js/LeadGridPanel.js:256
+#: js/LeadGridPanel.js:259
 msgid "Lead states"
 msgstr "Lead-Status"
 
-#: js/LeadGridPanel.js:257
+#: js/LeadGridPanel.js:260
 msgid "Lead sources"
 msgstr "Lead-Quellen"
 
-#: js/LeadGridPanel.js:258
+#: js/LeadGridPanel.js:261
 msgid "Lead types"
 msgstr "Lead-Typen"
 
@@ -449,19 +449,19 @@ msgstr "Lead-Typ hinzufügen..."
 msgid "Add new {0}"
 msgstr "Neuen {0} hinzufügen"
 
-#: js/LinkGridPanel.js:46 js/Product.js:179
+#: js/LinkGridPanel.js:48 js/Product.js:179
 msgid "Unlink {0}"
 msgstr "Entferne {0}"
 
-#: js/LinkGridPanel.js:47 js/Product.js:180
+#: js/LinkGridPanel.js:49 js/Product.js:180
 msgid "Unlink selected {0}"
 msgstr "Ausgewählte {0} entfernen"
 
-#: js/LinkGridPanel.js:62
+#: js/LinkGridPanel.js:64
 msgid "Edit {0}"
 msgstr "{0} bearbeiten"
 
-#: js/LinkGridPanel.js:63
+#: js/LinkGridPanel.js:65
 msgid "Edit selected {0}"
 msgstr "Ausgewählten {0} bearbeiten"
 

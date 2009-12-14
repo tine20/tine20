@@ -384,7 +384,7 @@ msgstr[0] "Czy na pewno chcesz usunąć ten termin?"
 msgstr[1] "Czy na pewno chcesz usunąć {0} zaznaczone terminy?"
 msgstr[2] "Czy na pewno chcesz usunąć {0} zaznaczonych terminów?"
 
-#: js/MainScreenLeftPanel.js:64 js/MonthView.js:87
+#: js/MainScreenLeftPanel.js:73 js/MonthView.js:87
 msgid "WK"
 msgstr "TK"
 

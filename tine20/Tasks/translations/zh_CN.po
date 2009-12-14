@@ -21,7 +21,7 @@ msgstr ""
 msgid "Create new shared tasks lists"
 msgstr ""
 
-#: Controller/Task.php:158
+#: Controller/Task.php:163
 msgid "Notification for Task "
 msgstr ""
 
@@ -30,7 +30,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%s 的个人任务"
 
-#: js/EditDialog.js:169 js/GridPanel.js:91 js/GridPanel.js:167
+#: js/EditDialog.js:169 js/GridPanel.js:94 js/GridPanel.js:170
 msgid "Summary"
 msgstr "摘要"
 
@@ -38,7 +38,7 @@ msgstr "摘要"
 msgid "Due date"
 msgstr "过期日期"
 
-#: js/EditDialog.js:177 js/GridPanel.js:186 Model/Task.php:181
+#: js/EditDialog.js:177 js/GridPanel.js:189 Model/Task.php:181
 msgid "Priority"
 msgstr "优先"
 
@@ -59,7 +59,7 @@ msgstr "输入描述"
 msgid "Percentage"
 msgstr "百分比"
 
-#: js/EditDialog.js:197 js/GridPanel.js:213 Model/Task.php:182
+#: js/EditDialog.js:197 js/GridPanel.js:216 Model/Task.php:182
 msgid "Status"
 msgstr "状态"
 
@@ -67,49 +67,49 @@ msgstr "状态"
 msgid "Completed"
 msgstr "完成的"
 
-#: js/GridPanel.js:53
+#: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "你确实想删除选中的任务？"
 
-#: js/GridPanel.js:90
+#: js/GridPanel.js:93
 msgid "Quick search"
 msgstr ""
 
-#: js/GridPanel.js:92 js/GridPanel.js:178
+#: js/GridPanel.js:95 js/GridPanel.js:181
 msgid "Due Date"
 msgstr "过期日期"
 
-#: js/GridPanel.js:93 js/GridPanel.js:234
+#: js/GridPanel.js:96 js/GridPanel.js:237
 msgid "Responsible"
 msgstr "有责任的"
 
-#: js/GridPanel.js:117
+#: js/GridPanel.js:120
 msgid "Failed"
 msgstr "失败"
 
-#: js/GridPanel.js:117
+#: js/GridPanel.js:120
 msgid "Could not save task."
 msgstr "不能保存任务"
 
-#: js/GridPanel.js:164
+#: js/GridPanel.js:167
 #, fuzzy
 msgid "Tags"
 msgstr "任务"
 
-#: js/GridPanel.js:174
+#: js/GridPanel.js:177
 msgid "Add a task..."
 msgstr "添加任务"
 
-#: js/GridPanel.js:200 Model/Task.php:183
+#: js/GridPanel.js:203 Model/Task.php:183
 msgid "Percent"
 msgstr "百分比"
 
-#: js/GridPanel.js:227
+#: js/GridPanel.js:230
 msgid "Creation Time"
 msgstr "创建时间"
 
-#: js/GridPanel.js:260
+#: js/GridPanel.js:263
 msgid "Show closed"
 msgstr "显示关闭的"
 

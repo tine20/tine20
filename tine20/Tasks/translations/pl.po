@@ -23,7 +23,7 @@ msgstr "Edytuj wspólną listę zadań"
 msgid "Create new shared tasks lists"
 msgstr "Utwórz nową, wspólną listę zadań"
 
-#: Controller/Task.php:158
+#: Controller/Task.php:163
 msgid "Notification for Task "
 msgstr "Powiadomienie o zadaniu"
 
@@ -32,7 +32,7 @@ msgstr "Powiadomienie o zadaniu"
 msgid "%s's personal tasks"
 msgstr "%s's zadań własnych"
 
-#: js/EditDialog.js:169 js/GridPanel.js:91 js/GridPanel.js:167
+#: js/EditDialog.js:169 js/GridPanel.js:94 js/GridPanel.js:170
 msgid "Summary"
 msgstr "Streszczenie"
 
@@ -40,7 +40,7 @@ msgstr "Streszczenie"
 msgid "Due date"
 msgstr "Data ukończenia"
 
-#: js/EditDialog.js:177 js/GridPanel.js:186 Model/Task.php:181
+#: js/EditDialog.js:177 js/GridPanel.js:189 Model/Task.php:181
 msgid "Priority"
 msgstr "Priorytet"
 
@@ -60,7 +60,7 @@ msgstr "Wprowadź opis..."
 msgid "Percentage"
 msgstr "Procentowo"
 
-#: js/EditDialog.js:197 js/GridPanel.js:213 Model/Task.php:182
+#: js/EditDialog.js:197 js/GridPanel.js:216 Model/Task.php:182
 msgid "Status"
 msgstr "Status"
 
@@ -68,50 +68,50 @@ msgstr "Status"
 msgid "Completed"
 msgstr "Zakończone dnia"
 
-#: js/GridPanel.js:53
+#: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Czy na pewno chcesz usunąć zaznaczone zadanie?"
 msgstr[1] "Czy na pewno chcesz usunąć zaznaczone zadania?"
 msgstr[2] "Czy na pewno chcesz usunąć zaznaczone zadania?"
 
-#: js/GridPanel.js:90
+#: js/GridPanel.js:93
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
-#: js/GridPanel.js:92 js/GridPanel.js:178
+#: js/GridPanel.js:95 js/GridPanel.js:181
 msgid "Due Date"
 msgstr "Data zakończenia"
 
-#: js/GridPanel.js:93 js/GridPanel.js:234
+#: js/GridPanel.js:96 js/GridPanel.js:237
 msgid "Responsible"
 msgstr "Osoba odpowiedzialna"
 
-#: js/GridPanel.js:117
+#: js/GridPanel.js:120
 msgid "Failed"
 msgstr "Próba nieudana"
 
-#: js/GridPanel.js:117
+#: js/GridPanel.js:120
 msgid "Could not save task."
 msgstr "Zapisanie zadania było niemożliwe."
 
-#: js/GridPanel.js:164
+#: js/GridPanel.js:167
 msgid "Tags"
 msgstr "Znaczniki"
 
-#: js/GridPanel.js:174
+#: js/GridPanel.js:177
 msgid "Add a task..."
 msgstr "Dodaj zadanie..."
 
-#: js/GridPanel.js:200 Model/Task.php:183
+#: js/GridPanel.js:203 Model/Task.php:183
 msgid "Percent"
 msgstr "W procentach"
 
-#: js/GridPanel.js:227
+#: js/GridPanel.js:230
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/GridPanel.js:260
+#: js/GridPanel.js:263
 msgid "Show closed"
 msgstr "Pokaż zakończone"
 

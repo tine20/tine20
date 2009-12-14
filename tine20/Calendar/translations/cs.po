@@ -379,7 +379,7 @@ msgstr[0] "Opravdu chcete smazat tuto událost?"
 msgstr[1] "Opravdu chcete smazat tyto události?"
 msgstr[2] "Opravdu chcete smazat tyto události?"
 
-#: js/MainScreenLeftPanel.js:64 js/MonthView.js:87
+#: js/MainScreenLeftPanel.js:73 js/MonthView.js:87
 msgid "WK"
 msgstr "Týd"
 

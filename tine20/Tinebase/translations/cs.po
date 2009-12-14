@@ -80,21 +80,21 @@ msgstr "Abnormální ukončení"
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo k chybě, program se neukončil korektně."
 
-#: js/common.js:145
+#: js/common.js:150
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} minuta"
 msgstr[1] "{0} minuty"
 msgstr[2] "{0} minut"
 
-#: js/common.js:146
+#: js/common.js:151
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} hodina"
 msgstr[1] "{0} hodiny"
 msgstr[2] "{0} hodin"
 
-#: js/common.js:147
+#: js/common.js:152
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} pracovní den"
@@ -423,7 +423,7 @@ msgstr ""
 "Instalace Google Gears zvýší výkon Tine 2.0 diky lokálnímu kešování všech "
 "potřebných souborů na tomto počítači."
 
-#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:678
+#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:746
 #: js/widgets/dialog/EditDialog.js:446
 #: js/widgets/grid/PersistentFilterPicker.js:124
 #: js/widgets/tree/ContextMenu.js:84
@@ -693,35 +693,39 @@ msgstr "Čas"
 msgid "User"
 msgstr "Uživatel"
 
-#: js/widgets/app/GridPanel.js:275
+#: js/widgets/app/GridPanel.js:283
 msgid "Edit {0}"
 msgstr "Editovat {0}"
 
-#: js/widgets/app/GridPanel.js:286 js/widgets/tree/ContextMenu.js:214
+#: js/widgets/app/GridPanel.js:293
+msgid "Copy {0}"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:304 js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
 msgstr "Přidat {0}"
 
-#: js/widgets/app/GridPanel.js:296 js/widgets/app/GridPanel.js:297
-#: js/widgets/app/GridPanel.js:299
+#: js/widgets/app/GridPanel.js:314 js/widgets/app/GridPanel.js:315
+#: js/widgets/app/GridPanel.js:317
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Smazat {0}"
 msgstr[1] "Smazat {0}"
 msgstr[2] "Smazat {0}"
 
-#: js/widgets/app/GridPanel.js:319
+#: js/widgets/app/GridPanel.js:337
 msgid "Tagging"
 msgstr "Štítkování"
 
-#: js/widgets/app/GridPanel.js:395
+#: js/widgets/app/GridPanel.js:417
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Zobrazuji záznamy {0} - {1} z {2}"
 
-#: js/widgets/app/GridPanel.js:396
+#: js/widgets/app/GridPanel.js:418
 msgid "No {0} to display"
 msgstr "Žádné {0} ke zobrazení"
 
-#: js/widgets/app/GridPanel.js:417
+#: js/widgets/app/GridPanel.js:439
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -729,36 +733,36 @@ msgstr ""
 "Nebyly nalezeny žádné {0}. Zkuste prosím změnit kritéria filtru, volby "
 "zobrazování nebo {1} ve kterém hledáte."
 
-#: js/widgets/app/GridPanel.js:663
+#: js/widgets/app/GridPanel.js:731
 msgid "Not Allowed"
 msgstr "Není povoleno"
 
-#: js/widgets/app/GridPanel.js:664
+#: js/widgets/app/GridPanel.js:732
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nemáte oprávnění smazat všechny stránky najednou."
 
-#: js/widgets/app/GridPanel.js:676
+#: js/widgets/app/GridPanel.js:744
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Opravdu chcete smazat vybraný záznam"
 msgstr[1] "Opravdu chcete smazat vybrané záznamy"
 msgstr[2] "Opravdu chcete smazat vybrané záznamy"
 
-#: js/widgets/app/GridPanel.js:683 js/widgets/dialog/EditDialog.js:448
+#: js/widgets/app/GridPanel.js:751 js/widgets/dialog/EditDialog.js:448
 msgid "Deleting {0}"
 msgstr "Mažu {0}"
 
-#: js/widgets/app/GridPanel.js:685
+#: js/widgets/app/GridPanel.js:753
 msgid " ... This may take a long time!"
 msgstr "... Toto může trvat dlouho!"
 
-#: js/widgets/app/GridPanel.js:704 js/widgets/dialog/EditDialog.js:458
+#: js/widgets/app/GridPanel.js:772 js/widgets/dialog/EditDialog.js:458
 #: js/widgets/tags/TagsPanel.js:287 js/widgets/tags/TagsPanel.js:397
 #: js/widgets/tags/TagsPanel.js:430
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/widgets/app/GridPanel.js:704 js/widgets/dialog/EditDialog.js:458
+#: js/widgets/app/GridPanel.js:772 js/widgets/dialog/EditDialog.js:458
 msgid "Could not delete {0}."
 msgstr "Nepodařilo se smazat {0}."
 
@@ -789,27 +793,27 @@ msgstr "sdílené"
 msgid "please select a {0}"
 msgstr "vyberte prosím  {0}"
 
-#: js/widgets/container/ContainerTree.js:129
+#: js/widgets/container/ContainerTree.js:134
 msgid "All {0}"
 msgstr "Všechny {0}"
 
-#: js/widgets/container/ContainerTree.js:134
+#: js/widgets/container/ContainerTree.js:140
 msgid "My {0}"
 msgstr "Moje {0}"
 
-#: js/widgets/container/ContainerTree.js:141
+#: js/widgets/container/ContainerTree.js:148
 msgid "Shared {0}"
 msgstr "Sdílené {0}"
 
-#: js/widgets/container/ContainerTree.js:149
+#: js/widgets/container/ContainerTree.js:157
 msgid "Other Users {0}"
 msgstr "{0} ostatních uživatelů"
 
-#: js/widgets/container/ContainerTree.js:172
+#: js/widgets/container/ContainerTree.js:181
 msgid "Permission Denied"
 msgstr "Přístup zamítnut"
 
-#: js/widgets/container/ContainerTree.js:172
+#: js/widgets/container/ContainerTree.js:181
 msgid "You don't have the required grant to select this {0}"
 msgstr "Nemáte oprávnění požadovaná pro výběr {0}"
 

@@ -55,13 +55,13 @@ msgid "End"
 msgstr "終了"
 
 #: Controller/Lead.php:174 Export/Ods.php:89 Export/Pdf.php:88
-#: Export/Xls.php:61 js/LeadGridPanel.js:103 js/LeadGridPanel.js:145
+#: Export/Xls.php:61 js/LeadGridPanel.js:106 js/LeadGridPanel.js:148
 msgid "Turnover"
 msgstr "取引高"
 
 #: Controller/Lead.php:175 Export/Ods.php:94 Export/Pdf.php:91
-#: Export/Xls.php:66 js/LeadEditDialog.js:228 js/LeadGridPanel.js:102
-#: js/LeadGridPanel.js:144
+#: Export/Xls.php:66 js/LeadEditDialog.js:228 js/LeadGridPanel.js:105
+#: js/LeadGridPanel.js:147
 msgid "Probability"
 msgstr "確度"
 
@@ -99,13 +99,13 @@ msgstr "%s　のパーソナルリード"
 
 #: Controller.php:152 Export/Xls.php:123 js/Contact.js:169 js/Contact.js:357
 #: js/Contact.js:397 js/LeadGridDetailsPanel.js:47
-#: js/LeadGridDetailsPanel.js:498 js/LeadGridPanel.js:142
+#: js/LeadGridDetailsPanel.js:498 js/LeadGridPanel.js:145
 msgid "Customer"
 msgstr "顧客"
 
 #: Controller.php:153 Export/Xls.php:118 js/Contact.js:189 js/Contact.js:358
 #: js/Contact.js:401 js/LeadGridDetailsPanel.js:47
-#: js/LeadGridDetailsPanel.js:481 js/LeadGridPanel.js:141
+#: js/LeadGridDetailsPanel.js:481 js/LeadGridPanel.js:144
 msgid "Partner"
 msgstr "パートナ"
 
@@ -189,7 +189,7 @@ msgid "Lead Data"
 msgstr "リードデータ"
 
 #: Export/Pdf.php:79 Export/Xls.php:106 js/AdminPanel.js:169
-#: js/LeadEditDialog.js:329 js/LeadGridPanel.js:100 js/LeadGridPanel.js:143
+#: js/LeadEditDialog.js:329 js/LeadGridPanel.js:103 js/LeadGridPanel.js:146
 msgid "Leadstate"
 msgstr "リードスタイル"
 
@@ -227,7 +227,7 @@ msgstr "期日"
 msgid "Priority"
 msgstr "重要度"
 
-#: Export/Pdf.php:270 js/LeadGridPanel.js:259 js/Product.js:87
+#: Export/Pdf.php:270 js/LeadGridPanel.js:262 js/Product.js:87
 msgid "Products"
 msgstr "プロダクト"
 
@@ -325,11 +325,11 @@ msgstr "名前"
 msgid "Data"
 msgstr "リードデータ"
 
-#: js/Contact.js:253 js/LeadGridDetailsPanel.js:50 js/LeadGridPanel.js:292
+#: js/Contact.js:253 js/LeadGridDetailsPanel.js:50 js/LeadGridPanel.js:295
 msgid "Phone"
 msgstr "電話"
 
-#: js/Contact.js:254 js/LeadGridPanel.js:293
+#: js/Contact.js:254 js/LeadGridPanel.js:296
 msgid "Cellphone"
 msgstr "携帯電話"
 
@@ -386,68 +386,68 @@ msgstr "ウェブサイト"
 msgid "Status"
 msgstr "ステータス"
 
-#: js/LeadGridPanel.js:98
+#: js/LeadGridPanel.js:101
 msgid "Quick search"
 msgstr ""
 
-#: js/LeadGridPanel.js:99 js/LeadGridPanel.js:140
+#: js/LeadGridPanel.js:102 js/LeadGridPanel.js:143
 msgid "Lead name"
 msgstr "リード名"
 
-#: js/LeadGridPanel.js:138
+#: js/LeadGridPanel.js:141
 msgid "Lead id"
 msgstr "リードID"
 
-#: js/LeadGridPanel.js:139
+#: js/LeadGridPanel.js:142
 #, fuzzy
 msgid "Tags"
 msgstr "タスク"
 
-#: js/LeadGridPanel.js:185
+#: js/LeadGridPanel.js:188
 msgid "Add task"
 msgstr "タスクの追加"
 
-#: js/LeadGridPanel.js:186
+#: js/LeadGridPanel.js:189
 msgid "Add task for selected lead"
 msgstr "選択されたリードにタスクを追加"
 
-#: js/LeadGridPanel.js:196
+#: js/LeadGridPanel.js:199
 #, fuzzy
 msgid "Export Lead"
 msgstr "PDFにエクスポート"
 
-#: js/LeadGridPanel.js:205
+#: js/LeadGridPanel.js:208
 msgid "Export as PDF"
 msgstr "PDFにエクスポート"
 
-#: js/LeadGridPanel.js:212
+#: js/LeadGridPanel.js:215
 #, fuzzy
 msgid "Export as CSV"
 msgstr "PDFにエクスポート"
 
-#: js/LeadGridPanel.js:219
+#: js/LeadGridPanel.js:222
 #, fuzzy
 msgid "Export as ODS"
 msgstr "PDFにエクスポート"
 
-#: js/LeadGridPanel.js:226
+#: js/LeadGridPanel.js:229
 msgid "Export as XLS"
 msgstr ""
 
-#: js/LeadGridPanel.js:237
+#: js/LeadGridPanel.js:240
 #, fuzzy
 msgid "Show closed"
 msgstr "クローズしたリードの表示"
 
-#: js/LeadGridPanel.js:256
+#: js/LeadGridPanel.js:259
 msgid "Lead states"
 msgstr "リードステータス"
 
-#: js/LeadGridPanel.js:257
+#: js/LeadGridPanel.js:260
 msgid "Lead sources"
 msgstr "リードソース"
 
-#: js/LeadGridPanel.js:258
+#: js/LeadGridPanel.js:261
 msgid "Lead types"
 msgstr "リードタイプ"
 
@@ -471,21 +471,21 @@ msgstr "プロダクトを追加しています..."
 msgid "Add new {0}"
 msgstr "新規リードの追加"
 
-#: js/LinkGridPanel.js:46 js/Product.js:179
+#: js/LinkGridPanel.js:48 js/Product.js:179
 msgid "Unlink {0}"
 msgstr ""
 
-#: js/LinkGridPanel.js:47 js/Product.js:180
+#: js/LinkGridPanel.js:49 js/Product.js:180
 #, fuzzy
 msgid "Unlink selected {0}"
 msgstr "選択されたコンタクトのアンリンク"
 
-#: js/LinkGridPanel.js:62
+#: js/LinkGridPanel.js:64
 #, fuzzy
 msgid "Edit {0}"
 msgstr "リードの編集　 \"{0}\""
 
-#: js/LinkGridPanel.js:63
+#: js/LinkGridPanel.js:65
 #, fuzzy
 msgid "Edit selected {0}"
 msgstr "選択されたリードの編集"

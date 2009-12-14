@@ -6,7 +6,7 @@ msgstr ""
 msgid "Create new shared tasks lists"
 msgstr ""
 
-#: Controller/Task.php:158
+#: Controller/Task.php:163
 msgid "Notification for Task "
 msgstr ""
 
@@ -15,7 +15,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr ""
 
-#: js/EditDialog.js:169 js/GridPanel.js:91 js/GridPanel.js:167
+#: js/EditDialog.js:169 js/GridPanel.js:94 js/GridPanel.js:170
 msgid "Summary"
 msgstr ""
 
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Due date"
 msgstr ""
 
-#: js/EditDialog.js:177 js/GridPanel.js:186 Model/Task.php:181
+#: js/EditDialog.js:177 js/GridPanel.js:189 Model/Task.php:181
 msgid "Priority"
 msgstr ""
 
@@ -43,7 +43,7 @@ msgstr ""
 msgid "Percentage"
 msgstr ""
 
-#: js/EditDialog.js:197 js/GridPanel.js:213 Model/Task.php:182
+#: js/EditDialog.js:197 js/GridPanel.js:216 Model/Task.php:182
 msgid "Status"
 msgstr ""
 
@@ -51,49 +51,49 @@ msgstr ""
 msgid "Completed"
 msgstr ""
 
-#: js/GridPanel.js:53
+#: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/GridPanel.js:90
+#: js/GridPanel.js:93
 msgid "Quick search"
 msgstr ""
 
-#: js/GridPanel.js:92 js/GridPanel.js:178
+#: js/GridPanel.js:95 js/GridPanel.js:181
 msgid "Due Date"
 msgstr ""
 
-#: js/GridPanel.js:93 js/GridPanel.js:234
+#: js/GridPanel.js:96 js/GridPanel.js:237
 msgid "Responsible"
 msgstr ""
 
-#: js/GridPanel.js:117
+#: js/GridPanel.js:120
 msgid "Failed"
 msgstr ""
 
-#: js/GridPanel.js:117
+#: js/GridPanel.js:120
 msgid "Could not save task."
 msgstr ""
 
-#: js/GridPanel.js:164
+#: js/GridPanel.js:167
 msgid "Tags"
 msgstr ""
 
-#: js/GridPanel.js:174
+#: js/GridPanel.js:177
 msgid "Add a task..."
 msgstr ""
 
-#: js/GridPanel.js:200 Model/Task.php:183
+#: js/GridPanel.js:203 Model/Task.php:183
 msgid "Percent"
 msgstr ""
 
-#: js/GridPanel.js:227
+#: js/GridPanel.js:230
 msgid "Creation Time"
 msgstr ""
 
-#: js/GridPanel.js:260
+#: js/GridPanel.js:263
 msgid "Show closed"
 msgstr ""
 

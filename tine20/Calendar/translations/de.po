@@ -374,7 +374,7 @@ msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Möchten Sie diesen Termin wirklich löschen?"
 msgstr[1] "Möchten Sie die ausgewählten Termine wirklich löschen?"
 
-#: js/MainScreenLeftPanel.js:64 js/MonthView.js:87
+#: js/MainScreenLeftPanel.js:73 js/MonthView.js:87
 msgid "WK"
 msgstr "KW"
 

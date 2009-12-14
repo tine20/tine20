@@ -378,7 +378,7 @@ msgstr[0] "Вы действительно хотите удалить это с
 msgstr[1] "Вы действительно хотите удалить {0} выделенных события?"
 msgstr[2] "Вы действительно хотите удалить {0} выделенных событий?"
 
-#: js/MainScreenLeftPanel.js:64 js/MonthView.js:87
+#: js/MainScreenLeftPanel.js:73 js/MonthView.js:87
 msgid "WK"
 msgstr "НЕД"
 

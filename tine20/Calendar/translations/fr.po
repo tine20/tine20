@@ -377,7 +377,7 @@ msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Êtes-vous sûr de vouloir supprimer l'évènement sélectionné?"
 msgstr[1] "Êtes-vous sûr de vouloir supprimer les {0} évènements sélectionnés?"
 
-#: js/MainScreenLeftPanel.js:64 js/MonthView.js:87
+#: js/MainScreenLeftPanel.js:73 js/MonthView.js:87
 msgid "WK"
 msgstr "WK"
 

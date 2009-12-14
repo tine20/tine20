@@ -56,13 +56,13 @@ msgid "End"
 msgstr "结束"
 
 #: Controller/Lead.php:174 Export/Ods.php:89 Export/Pdf.php:88
-#: Export/Xls.php:61 js/LeadGridPanel.js:103 js/LeadGridPanel.js:145
+#: Export/Xls.php:61 js/LeadGridPanel.js:106 js/LeadGridPanel.js:148
 msgid "Turnover"
 msgstr "周转"
 
 #: Controller/Lead.php:175 Export/Ods.php:94 Export/Pdf.php:91
-#: Export/Xls.php:66 js/LeadEditDialog.js:228 js/LeadGridPanel.js:102
-#: js/LeadGridPanel.js:144
+#: Export/Xls.php:66 js/LeadEditDialog.js:228 js/LeadGridPanel.js:105
+#: js/LeadGridPanel.js:147
 msgid "Probability"
 msgstr "可能性"
 
@@ -100,13 +100,13 @@ msgstr "%s 的个人线索"
 
 #: Controller.php:152 Export/Xls.php:123 js/Contact.js:169 js/Contact.js:357
 #: js/Contact.js:397 js/LeadGridDetailsPanel.js:47
-#: js/LeadGridDetailsPanel.js:498 js/LeadGridPanel.js:142
+#: js/LeadGridDetailsPanel.js:498 js/LeadGridPanel.js:145
 msgid "Customer"
 msgstr "客户"
 
 #: Controller.php:153 Export/Xls.php:118 js/Contact.js:189 js/Contact.js:358
 #: js/Contact.js:401 js/LeadGridDetailsPanel.js:47
-#: js/LeadGridDetailsPanel.js:481 js/LeadGridPanel.js:141
+#: js/LeadGridDetailsPanel.js:481 js/LeadGridPanel.js:144
 msgid "Partner"
 msgstr "伙伴"
 
@@ -190,7 +190,7 @@ msgid "Lead Data"
 msgstr "线索数据"
 
 #: Export/Pdf.php:79 Export/Xls.php:106 js/AdminPanel.js:169
-#: js/LeadEditDialog.js:329 js/LeadGridPanel.js:100 js/LeadGridPanel.js:143
+#: js/LeadEditDialog.js:329 js/LeadGridPanel.js:103 js/LeadGridPanel.js:146
 msgid "Leadstate"
 msgstr "线索状态"
 
@@ -228,7 +228,7 @@ msgstr "过期日期"
 msgid "Priority"
 msgstr "优先"
 
-#: Export/Pdf.php:270 js/LeadGridPanel.js:259 js/Product.js:87
+#: Export/Pdf.php:270 js/LeadGridPanel.js:262 js/Product.js:87
 msgid "Products"
 msgstr "产品"
 
@@ -326,11 +326,11 @@ msgstr "姓名"
 msgid "Data"
 msgstr "线索数据"
 
-#: js/Contact.js:253 js/LeadGridDetailsPanel.js:50 js/LeadGridPanel.js:292
+#: js/Contact.js:253 js/LeadGridDetailsPanel.js:50 js/LeadGridPanel.js:295
 msgid "Phone"
 msgstr "电话"
 
-#: js/Contact.js:254 js/LeadGridPanel.js:293
+#: js/Contact.js:254 js/LeadGridPanel.js:296
 msgid "Cellphone"
 msgstr "手机"
 
@@ -387,68 +387,68 @@ msgstr "网址"
 msgid "Status"
 msgstr "状态"
 
-#: js/LeadGridPanel.js:98
+#: js/LeadGridPanel.js:101
 msgid "Quick search"
 msgstr ""
 
-#: js/LeadGridPanel.js:99 js/LeadGridPanel.js:140
+#: js/LeadGridPanel.js:102 js/LeadGridPanel.js:143
 msgid "Lead name"
 msgstr "线索名"
 
-#: js/LeadGridPanel.js:138
+#: js/LeadGridPanel.js:141
 msgid "Lead id"
 msgstr "线索标识符"
 
-#: js/LeadGridPanel.js:139
+#: js/LeadGridPanel.js:142
 #, fuzzy
 msgid "Tags"
 msgstr "任务"
 
-#: js/LeadGridPanel.js:185
+#: js/LeadGridPanel.js:188
 msgid "Add task"
 msgstr "添加任务"
 
-#: js/LeadGridPanel.js:186
+#: js/LeadGridPanel.js:189
 msgid "Add task for selected lead"
 msgstr "为选中的线索添加任务"
 
-#: js/LeadGridPanel.js:196
+#: js/LeadGridPanel.js:199
 #, fuzzy
 msgid "Export Lead"
 msgstr "输出PDF文件"
 
-#: js/LeadGridPanel.js:205
+#: js/LeadGridPanel.js:208
 msgid "Export as PDF"
 msgstr "输出PDF文件"
 
-#: js/LeadGridPanel.js:212
+#: js/LeadGridPanel.js:215
 #, fuzzy
 msgid "Export as CSV"
 msgstr "输出PDF文件"
 
-#: js/LeadGridPanel.js:219
+#: js/LeadGridPanel.js:222
 #, fuzzy
 msgid "Export as ODS"
 msgstr "输出PDF文件"
 
-#: js/LeadGridPanel.js:226
+#: js/LeadGridPanel.js:229
 msgid "Export as XLS"
 msgstr ""
 
-#: js/LeadGridPanel.js:237
+#: js/LeadGridPanel.js:240
 #, fuzzy
 msgid "Show closed"
 msgstr "显示关闭的线索"
 
-#: js/LeadGridPanel.js:256
+#: js/LeadGridPanel.js:259
 msgid "Lead states"
 msgstr "线索状态"
 
-#: js/LeadGridPanel.js:257
+#: js/LeadGridPanel.js:260
 msgid "Lead sources"
 msgstr "线索源"
 
-#: js/LeadGridPanel.js:258
+#: js/LeadGridPanel.js:261
 msgid "Lead types"
 msgstr "线索类型"
 
@@ -472,21 +472,21 @@ msgstr "添加产品..."
 msgid "Add new {0}"
 msgstr "添加新线索"
 
-#: js/LinkGridPanel.js:46 js/Product.js:179
+#: js/LinkGridPanel.js:48 js/Product.js:179
 msgid "Unlink {0}"
 msgstr ""
 
-#: js/LinkGridPanel.js:47 js/Product.js:180
+#: js/LinkGridPanel.js:49 js/Product.js:180
 #, fuzzy
 msgid "Unlink selected {0}"
 msgstr "中断选中的联系人链接"
 
-#: js/LinkGridPanel.js:62
+#: js/LinkGridPanel.js:64
 #, fuzzy
 msgid "Edit {0}"
 msgstr "编辑线索 \"{0}\""
 
-#: js/LinkGridPanel.js:63
+#: js/LinkGridPanel.js:65
 #, fuzzy
 msgid "Edit selected {0}"
 msgstr "编辑选中的线索"
