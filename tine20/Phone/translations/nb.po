@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-12-14 15:23+0100\n"
+"Last-Translator: Ronny Gonzales <gonzito@online.no>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,80 +15,80 @@ msgstr ""
 
 #: js/MyPhoneEditDialog.js:270 js/Phone.js:57 js/Phone.js:253
 msgid "Phone"
-msgstr ""
+msgstr "Telefon"
 
 #: js/MyPhoneEditDialog.js:285
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 #: js/MyPhoneEditDialog.js:289
 msgid "Phone Model"
-msgstr ""
+msgstr "Telefon Modell"
 
 #: js/MyPhoneEditDialog.js:304
 msgid "MAC Address"
-msgstr ""
+msgstr "MAC Adresse"
 
 #: js/MyPhoneEditDialog.js:338
 msgid "infos"
-msgstr ""
+msgstr "informasjoner"
 
 #: js/MyPhoneEditDialog.js:353
 msgid "Current IP Address"
-msgstr ""
+msgstr "Gjeldende IP Adresse"
 
 #: js/MyPhoneEditDialog.js:360
 msgid "Firmware last checked at"
-msgstr ""
+msgstr "Fimware sist kontrollert på"
 
 #: js/MyPhoneEditDialog.js:368
 msgid "Current Software Version"
-msgstr ""
+msgstr "Gjeldende Programvare Versjon"
 
 #: js/MyPhoneEditDialog.js:375
 msgid "Settings Loaded at"
-msgstr ""
+msgstr "Innstillinger Lastet på"
 
 #: js/MyPhoneEditDialog.js:385 js/MyPhoneEditDialog.js:840
 msgid "redirection"
-msgstr ""
+msgstr "viderekobling"
 
 #: js/MyPhoneEditDialog.js:400 js/MyPhoneEditDialog.js:857
 msgid "redirect_event"
-msgstr ""
+msgstr "viderekoblet_hendelse"
 
 #: js/MyPhoneEditDialog.js:419 js/MyPhoneEditDialog.js:882
 msgid "all"
-msgstr ""
+msgstr "alle"
 
 #: js/MyPhoneEditDialog.js:420 js/MyPhoneEditDialog.js:883
 msgid "busy"
-msgstr ""
+msgstr "opptatt"
 
 #: js/MyPhoneEditDialog.js:421 js/MyPhoneEditDialog.js:555
 #: js/MyPhoneEditDialog.js:884 js/MyPhoneEditDialog.js:1188
 msgid "none"
-msgstr ""
+msgstr "ingen"
 
 #: js/MyPhoneEditDialog.js:422 js/MyPhoneEditDialog.js:885
 msgid "time"
-msgstr ""
+msgstr "tid"
 
 #: js/MyPhoneEditDialog.js:426 js/MyPhoneEditDialog.js:896
 msgid "redirect_number"
-msgstr ""
+msgstr "vidrekoble_nummer"
 
 #: js/MyPhoneEditDialog.js:430 js/MyPhoneEditDialog.js:908
 msgid "redirect_time"
-msgstr ""
+msgstr "viderekoblings_tid"
 
 #: js/MyPhoneEditDialog.js:448 js/MyPhoneEditDialog.js:932
 msgid "Settings"
-msgstr ""
+msgstr "Instillinger"
 
 #: js/MyPhoneEditDialog.js:466 js/MyPhoneEditDialog.js:964
 msgid "web_language"
-msgstr ""
+msgstr "web_språk"
 
 #: js/MyPhoneEditDialog.js:470 js/MyPhoneEditDialog.js:488
 #: js/MyPhoneEditDialog.js:512 js/MyPhoneEditDialog.js:524
@@ -103,39 +103,39 @@ msgstr ""
 #: js/MyPhoneEditDialog.js:1243 js/MyPhoneEditDialog.js:1276
 #: js/MyPhoneEditDialog.js:1304 js/MyPhoneEditDialog.js:1332
 msgid "- factory default -"
-msgstr ""
+msgstr "- fabrikk standard -"
 
 #: js/MyPhoneEditDialog.js:484 js/MyPhoneEditDialog.js:1001
 msgid "language"
-msgstr ""
+msgstr "språk"
 
 #: js/MyPhoneEditDialog.js:508 js/MyPhoneEditDialog.js:1044
 msgid "display_method"
-msgstr ""
+msgstr "visnings_metode"
 
 #: js/MyPhoneEditDialog.js:513 js/MyPhoneEditDialog.js:1060
 msgid "whole url"
-msgstr ""
+msgstr "hele url"
 
 #: js/MyPhoneEditDialog.js:514 js/MyPhoneEditDialog.js:1061
 msgid "name"
-msgstr ""
+msgstr "navn"
 
 #: js/MyPhoneEditDialog.js:515 js/MyPhoneEditDialog.js:1062
 msgid "number"
-msgstr ""
+msgstr "numme"
 
 #: js/MyPhoneEditDialog.js:516 js/MyPhoneEditDialog.js:1063
 msgid "name + number"
-msgstr ""
+msgstr "navn + nummer"
 
 #: js/MyPhoneEditDialog.js:517 js/MyPhoneEditDialog.js:1064
 msgid "number + name"
-msgstr ""
+msgstr "nummer + navn"
 
 #: js/MyPhoneEditDialog.js:520 js/MyPhoneEditDialog.js:1080
 msgid "call_waiting"
-msgstr ""
+msgstr "samtale_venter"
 
 #: js/MyPhoneEditDialog.js:525 js/MyPhoneEditDialog.js:564
 #: js/MyPhoneEditDialog.js:573 js/MyPhoneEditDialog.js:582
@@ -144,15 +144,15 @@ msgstr ""
 #: js/MyPhoneEditDialog.js:1244 js/MyPhoneEditDialog.js:1277
 #: js/MyPhoneEditDialog.js:1305 js/MyPhoneEditDialog.js:1333
 msgid "on"
-msgstr ""
+msgstr "på"
 
 #: js/MyPhoneEditDialog.js:526 js/MyPhoneEditDialog.js:1097
 msgid "visual"
-msgstr ""
+msgstr "visuell"
 
 #: js/MyPhoneEditDialog.js:527 js/MyPhoneEditDialog.js:1098
 msgid "ringer"
-msgstr ""
+msgstr "ringer"
 
 #: js/MyPhoneEditDialog.js:528 js/MyPhoneEditDialog.js:565
 #: js/MyPhoneEditDialog.js:574 js/MyPhoneEditDialog.js:583
@@ -161,43 +161,43 @@ msgstr ""
 #: js/MyPhoneEditDialog.js:1245 js/MyPhoneEditDialog.js:1278
 #: js/MyPhoneEditDialog.js:1306 js/MyPhoneEditDialog.js:1334
 msgid "off"
-msgstr ""
+msgstr "av"
 
 #: js/MyPhoneEditDialog.js:531 js/MyPhoneEditDialog.js:1110
 msgid "mwi_notification"
-msgstr ""
+msgstr "mwi_varsling"
 
 #: js/MyPhoneEditDialog.js:536 js/MyPhoneEditDialog.js:1126
 msgid "silent"
-msgstr ""
+msgstr "stille"
 
 #: js/MyPhoneEditDialog.js:537 js/MyPhoneEditDialog.js:1127
 msgid "beep"
-msgstr ""
+msgstr "pip"
 
 #: js/MyPhoneEditDialog.js:538 js/MyPhoneEditDialog.js:1128
 msgid "reminder"
-msgstr ""
+msgstr "varsel"
 
 #: js/MyPhoneEditDialog.js:541 js/MyPhoneEditDialog.js:1139
 msgid "mwi_dialtone"
-msgstr ""
+msgstr "mwi_ringetone"
 
 #: js/MyPhoneEditDialog.js:546 js/MyPhoneEditDialog.js:1155
 msgid "normal"
-msgstr ""
+msgstr "normal"
 
 #: js/MyPhoneEditDialog.js:547 js/MyPhoneEditDialog.js:1156
 msgid "stutter"
-msgstr ""
+msgstr "hakking"
 
 #: js/MyPhoneEditDialog.js:550 js/MyPhoneEditDialog.js:1172
 msgid "headset_device"
-msgstr ""
+msgstr "hodesett_enhet"
 
 #: js/MyPhoneEditDialog.js:556 js/MyPhoneEditDialog.js:1189
 msgid "headset_rj"
-msgstr ""
+msgstr "hodesett_rj"
 
 #: js/MyPhoneEditDialog.js:559 js/MyPhoneEditDialog.js:1200
 msgid "message_led_other"
@@ -221,7 +221,7 @@ msgstr ""
 
 #: js/MyPhoneEditDialog.js:620
 msgid "lineactive"
-msgstr ""
+msgstr "linjeaktiv"
 
 #: js/MyPhoneEditDialog.js:648
 msgid "sipCombo"
@@ -229,120 +229,123 @@ msgstr ""
 
 #: js/MyPhoneEditDialog.js:667
 msgid "Idle Text"
-msgstr ""
+msgstr "Vente Tekst"
 
 #: js/MyPhoneEditDialog.js:700
 msgid "Lines"
-msgstr ""
+msgstr "Linjer"
 
 #: js/MyPhoneEditDialog.js:715
 msgid "Users"
-msgstr ""
+msgstr "Brukere"
 
 #: js/MyPhoneEditDialog.js:719
 msgid "Rights"
-msgstr ""
+msgstr "Rettigheter"
 
 #: js/Phone.js:28 js/Phone.js:466 js/Phone.js:467
 msgid "Edit phone settings"
-msgstr ""
+msgstr "Rediger telefon instillinger"
 
 #: js/Phone.js:68
 msgid "Phones"
-msgstr ""
+msgstr "Telefoner"
 
 #: js/Phone.js:196
 msgid "Dial phone number"
-msgstr ""
+msgstr "Tast telefon nummer"
 
 #: js/Phone.js:276
 msgid "Line"
-msgstr ""
+msgstr "Linje"
 
 #: js/Phone.js:285
 msgid "Number"
-msgstr ""
+msgstr "Nummer"
 
 #: js/Phone.js:294
 msgid "Cancel"
-msgstr ""
+msgstr "Avbryt"
 
 #: js/Phone.js:304
 msgid "Dial"
-msgstr ""
+msgstr "Ring"
 
 #: js/Phone.js:456
 msgid "Dial number"
-msgstr ""
+msgstr "Ring nummer"
 
 #: js/Phone.js:457
 msgid "Initiate a new outgoing call"
-msgstr ""
+msgstr "Initsier en ny utgående samtale"
 
 #: js/Phone.js:517
 msgid "Incoming call"
-msgstr ""
+msgstr "Innkommende samtale"
 
 #: js/Phone.js:521
 msgid "Outgoing call"
-msgstr ""
+msgstr "Utgående samtale"
 
 #: js/Phone.js:529
 msgid "unknown number"
-msgstr ""
+msgstr "ukjent nummer"
 
 #: js/Phone.js:554
 msgid "Search:"
-msgstr ""
+msgstr "Søk:"
 
 #: js/Phone.js:639
 msgid "Source or Destination"
-msgstr ""
+msgstr "Kilde eller Destinasjon"
 
 #: js/Phone.js:655
 msgid "Displaying calls {0} - {1} of {2}"
-msgstr ""
+msgstr "Viser samtaler {0} - {1} av {2}"
 
 #: js/Phone.js:656 js/Phone.js:700
 msgid "No calls to display"
-msgstr ""
+msgstr "Ingen samtaler å vise"
 
 #: js/Phone.js:666
 msgid "Direction"
-msgstr ""
+msgstr "Retning"
 
 #: js/Phone.js:667
 msgid "Source"
-msgstr ""
+msgstr "Kilde"
 
 #: js/Phone.js:668
 msgid "Caller Id"
-msgstr ""
+msgstr "Samtale ID"
 
 #: js/Phone.js:669
 msgid "Destination"
-msgstr ""
+msgstr "Destinasjon"
 
 #: js/Phone.js:670
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: js/Phone.js:671
 msgid "Connected"
-msgstr ""
+msgstr "Tilkoblet"
 
 #: js/Phone.js:672
 msgid "Disconnected"
-msgstr ""
+msgstr "Frakoblet"
 
 #: js/Phone.js:673
 msgid "Duration"
-msgstr ""
+msgstr "Varighet"
 
 #: js/Phone.js:674
 msgid "Ringing"
-msgstr ""
+msgstr "Ringer"
 
 #: js/Phone.js:675
 msgid "Call ID"
-msgstr ""
+msgstr "Samtale ID"
+
+#~ msgid "enter searchfilter"
+#~ msgstr "tast inn søkefilter"

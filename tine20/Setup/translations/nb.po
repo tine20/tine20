@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-12-14 15:36+0100\n"
+"Last-Translator: Ronny Gonzales <gonzito@online.no>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,67 +15,67 @@ msgstr ""
 
 #: js/ApplicationGridPanel.js:67
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 #: js/ApplicationGridPanel.js:68
 msgid "Enabled"
-msgstr ""
+msgstr "Aktivert"
 
 #: js/ApplicationGridPanel.js:69
 msgid "Order"
-msgstr ""
+msgstr "Rekkefølge"
 
 #: js/ApplicationGridPanel.js:70
 msgid "Installed Version"
-msgstr ""
+msgstr "Installert Versjon"
 
 #: js/ApplicationGridPanel.js:71
 msgid "Available Version"
-msgstr ""
+msgstr "Tilgjengelig Versjon"
 
 #: js/ApplicationGridPanel.js:72
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/ApplicationGridPanel.js:73
 msgid "Depends on"
-msgstr ""
+msgstr "Avhenger av"
 
 #: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:207
 msgid "Install application"
-msgstr ""
+msgstr "Installer applikasjon"
 
 #: js/ApplicationGridPanel.js:91
 msgid "Uninstall application"
-msgstr ""
+msgstr "Avinstaller applikasjon"
 
 #: js/ApplicationGridPanel.js:100
 msgid "Update application"
-msgstr ""
+msgstr "Oppdater applikasjon"
 
 #: js/ApplicationGridPanel.js:109
 msgid "Go to {0} login"
-msgstr ""
+msgstr "Gå til {0} logg inn"
 
 #: js/ApplicationGridPanel.js:172
 msgid "uninstall"
-msgstr ""
+msgstr "avinstaller"
 
 #: js/ApplicationGridPanel.js:172
 msgid "Do you really want to uninstall the application(s)?"
-msgstr ""
+msgstr "Vil du virkelig avinstallere programmet(ene)?"
 
 #: js/ApplicationGridPanel.js:232
 msgid "This may take a while"
-msgstr ""
+msgstr "Dette kan ta litt tid"
 
 #: js/ApplicationGridPanel.js:262
 msgid "Dependency Violation"
-msgstr ""
+msgstr "Avhengighets Brudd"
 
 #: js/AuthenticationPanel.js:121
 msgid "Delete all existing users and groups"
-msgstr ""
+msgstr "Slette alle eksisterende brukere og grupper"
 
 #: js/AuthenticationPanel.js:121
 msgid ""

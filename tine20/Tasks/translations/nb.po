@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-12-14 15:36+0100\n"
+"Last-Translator: Ronny Gonzales <gonzito@online.no>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,147 +15,147 @@ msgstr ""
 
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
-msgstr ""
+msgstr "behandle delte oppgaver lister"
 
 #: Acl/Rights.php:90
 msgid "Create new shared tasks lists"
-msgstr ""
+msgstr "Opprett ny delt oppgaver liste"
 
 #: Controller/Task.php:163
 msgid "Notification for Task "
-msgstr ""
+msgstr "Varslinger for Oppgaver"
 
 #: Controller.php:97
 #, python-format
 msgid "%s's personal tasks"
-msgstr ""
+msgstr "%s's personlige oppgaver"
 
 #: js/EditDialog.js:169 js/GridPanel.js:94 js/GridPanel.js:170
 msgid "Summary"
-msgstr ""
+msgstr "Oppsumering"
 
 #: js/EditDialog.js:174
 msgid "Due date"
-msgstr ""
+msgstr "Utløps dato"
 
 #: js/EditDialog.js:177 js/GridPanel.js:189 Model/Task.php:181
 msgid "Priority"
-msgstr ""
+msgstr "Prioritet"
 
 #: js/EditDialog.js:180
 msgid "Add Responsible ..."
-msgstr ""
+msgstr "Legg til Ansvarlige ..."
 
 #: js/EditDialog.js:187
 msgid "Notes"
-msgstr ""
+msgstr "Notater"
 
 #: js/EditDialog.js:188
 msgid "Enter description..."
-msgstr ""
+msgstr "Tast inn beskrivelse..."
 
 #: js/EditDialog.js:193
 msgid "Percentage"
-msgstr ""
+msgstr "Prosent"
 
 #: js/EditDialog.js:197 js/GridPanel.js:216 Model/Task.php:182
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/EditDialog.js:201
 msgid "Completed"
-msgstr ""
+msgstr "Fullført"
 
 #: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Vil du virkelig slette valgt oppgave?"
+msgstr[1] "Vil du virkelig slette valgte oppgaver?"
 
 #: js/GridPanel.js:93
 msgid "Quick search"
-msgstr ""
+msgstr "Hurtig søk"
 
 #: js/GridPanel.js:95 js/GridPanel.js:181
 msgid "Due Date"
-msgstr ""
+msgstr "Utløps Dato"
 
 #: js/GridPanel.js:96 js/GridPanel.js:237
 msgid "Responsible"
-msgstr ""
+msgstr "Ansvarlig"
 
 #: js/GridPanel.js:120
 msgid "Failed"
-msgstr ""
+msgstr "Feilet"
 
 #: js/GridPanel.js:120
 msgid "Could not save task."
-msgstr ""
+msgstr "Klarte ikke å lagre oppgave."
 
 #: js/GridPanel.js:167
 msgid "Tags"
-msgstr ""
+msgstr "Merker"
 
 #: js/GridPanel.js:177
 msgid "Add a task..."
-msgstr ""
+msgstr "Legg til en oppgave..."
 
 #: js/GridPanel.js:203 Model/Task.php:183
 msgid "Percent"
-msgstr ""
+msgstr "Prosent"
 
 #: js/GridPanel.js:230
 msgid "Creation Time"
-msgstr ""
+msgstr "Opprettelses Tid"
 
 #: js/GridPanel.js:263
 msgid "Show closed"
-msgstr ""
+msgstr "Vis lukkede"
 
 #: js/Status.js:45 Setup/setup.xml:449
 msgid "IN-PROCESS"
-msgstr ""
+msgstr "I-PROSESS"
 
 #: js/Tasks.js:87
 msgid "Task"
 msgid_plural "Tasks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Oppgave"
+msgstr[1] "Oppgaver"
 
 #: js/Tasks.js:87
 msgid "Tasks"
-msgstr ""
+msgstr "Oppgaver"
 
 #: js/Tasks.js:91
 msgid "to do list"
 msgid_plural "to do lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "å gjør liste"
+msgstr[1] "å gjøre lister"
 
 #: js/Tasks.js:91
 msgid "to do lists"
-msgstr ""
+msgstr "å gjøre lister"
 
 #: Model/Task.php:178
 msgid "Due"
-msgstr ""
+msgstr "Utløper"
 
 #: Model/Task.php:179
 msgid "Organizer"
-msgstr ""
+msgstr "Planlegger"
 
 #: Model/Task.php:180
 msgid "Description"
-msgstr ""
+msgstr "Beskrivelse"
 
 #: Setup/setup.xml:405
 msgid "NEEDS-ACTION"
-msgstr ""
+msgstr "TRENGER-HANDLING"
 
 #: Setup/setup.xml:427
 msgid "COMPLETED"
-msgstr ""
+msgstr "FULLFØRT"
 
 #: Setup/setup.xml:471
 msgid "CANCELLED"
-msgstr ""
+msgstr "AVBRUTT"

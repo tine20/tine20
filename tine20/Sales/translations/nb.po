@@ -1,119 +1,128 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Erp\n"
-"POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Project-Id-Version: Tine 2.0 RequesTracker\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Ronny Gonzales <gonzito@online.no>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Norwegian Bokmål\n"
-"X-Poedit-Country: NOT SPECIFIED / ANY\n"
-"X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: Norwegian Bokmal\n"
+"X-Poedit-Country: NORWAY\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:104
 msgid "manage products"
-msgstr ""
+msgstr "behandle produkter"
 
 #: Acl/Rights.php:105
 msgid "add, edit and delete products"
-msgstr ""
+msgstr "legg til, rediger og slette produkter"
 
-#: js/ContractEditDialog.js:103 js/ContractGridPanel.js:113
+#: js/ContractEditDialog.js:103
+#: js/ContractGridPanel.js:113
 msgid "Title"
-msgstr ""
+msgstr "Tittel"
 
-#: js/ContractEditDialog.js:109 js/ProductEditDialog.js:126
+#: js/ContractEditDialog.js:109
+#: js/ProductEditDialog.js:126
 #: js/ProductGridPanel.js:128
 msgid "Description"
-msgstr ""
+msgstr "Beskrivelse"
 
-#: js/ContractEditDialog.js:110 js/ProductEditDialog.js:127
+#: js/ContractEditDialog.js:110
+#: js/ProductEditDialog.js:127
 msgid "Enter description..."
-msgstr ""
+msgstr "Tast inn beskrivelse..."
 
-#: js/ContractGridPanel.js:63 js/Models.js:79
+#: js/ContractGridPanel.js:63
+#: js/Models.js:79
 msgid "Quick search"
-msgstr ""
+msgstr "Hurtig søk"
 
 #: js/ContractGridPanel.js:64
 msgid "Summary"
-msgstr ""
+msgstr "Sammendrag"
 
 #: js/ContractGridPanel.js:107
 msgid "Contract number"
-msgstr ""
+msgstr "Kontrakts nummer"
 
 #: js/ContractGridPanel.js:119
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/Models.js:41
 msgid "Product"
 msgid_plural "Products"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Produkt"
+msgstr[1] "Produkter"
 
 #: js/Models.js:45
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "post liste"
+msgstr[1] "post lister"
 
 #: js/Models.js:80
 msgid "Product name"
-msgstr ""
+msgstr "Produkt navn"
 
 #: js/Models.js:113
 msgid "Contract"
 msgid_plural "Contracts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kontrakt"
+msgstr[1] "Kontrakter"
 
 #: js/Models.js:117
 msgid "contracts list"
 msgid_plural "contracts lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "kontrakt liste"
+msgstr[1] "kontrakts lister"
 
-#: js/ProductEditDialog.js:105 js/ProductGridPanel.js:125
+#: js/ProductEditDialog.js:105
+#: js/ProductGridPanel.js:125
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
-#: js/ProductEditDialog.js:111 js/ProductGridPanel.js:129
+#: js/ProductEditDialog.js:111
+#: js/ProductGridPanel.js:129
 msgid "Price"
-msgstr ""
+msgstr "Pris"
 
-#: js/ProductEditDialog.js:118 js/ProductGridPanel.js:126
+#: js/ProductEditDialog.js:118
+#: js/ProductGridPanel.js:126
 msgid "Manufacturer"
-msgstr ""
+msgstr "Produsent"
 
-#: js/ProductEditDialog.js:122 js/ProductGridPanel.js:127
+#: js/ProductEditDialog.js:122
+#: js/ProductGridPanel.js:127
 msgid "Category"
-msgstr ""
+msgstr "Kategori"
 
 #: js/ProductGridPanel.js:124
 msgid "Tags"
-msgstr ""
+msgstr "Merker"
 
 #: js/Sales.js:94
 msgid "Products"
-msgstr ""
+msgstr "Produkter"
 
 #: js/Sales.js:99
 msgid "All Products"
-msgstr ""
+msgstr "Alle Produkter"
 
 #: js/Sales.js:104
 msgid "Contracts"
-msgstr ""
+msgstr "Kontrakter"
 
 #: js/Sales.js:109
 msgid "All Contracts"
-msgstr ""
+msgstr "Alle Kontrakter"
 
 #: Setup/setup.xml:243
 msgid "Shared Contracts"
-msgstr ""
+msgstr "Delte Kontrakter"
+
