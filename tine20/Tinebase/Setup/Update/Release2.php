@@ -322,8 +322,9 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
                         </field>
                     </index>
                     <index>
-                        <name>user_idenity-site</name>
+                        <name>user_identity-site</name>
                         <unique>true</unique>
+                        <length>40</length>
                         <field>
                             <name>user_identity</name>
                         </field>

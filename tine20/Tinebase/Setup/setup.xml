@@ -2470,6 +2470,7 @@
                 <index>
                     <name>account_id-site</name>
                     <unique>true</unique>
+                    <length>40</length>
                     <field>
                         <name>account_id</name>
                     </field>
