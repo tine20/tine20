@@ -76,7 +76,12 @@ abstract class Setup_Backend_Schema_Index_Abstract extends Setup_Backend_Schema_
      */
     public $referenceOnUpdate;
     
-    
+    /**
+     * lenght of index 
+     * 
+     * @var integer
+     */
+    public $length = NULL;
     
     abstract protected function _setIndex($_declaration);
 

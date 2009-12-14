@@ -233,10 +233,14 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             $snippet = "  UNIQUE KEY `" . $_key->name . "`" ;
         }
         
+        if ($_key->length !== NULL) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' .$_key->length);
+        }
+        
         foreach ($_key->field as $keyfield) {
             $key = '`' . (string)$keyfield . '`';
-            if (!empty($keyfield->length)) {
-                $key .= ' (' . $keyfield->length . ')';
+            if ($_key->length !== NULL) {
+                $key .= ' (' . $_key->length . ')';
             }
             $keys[] = $key;
         }
@@ -246,6 +250,8 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         }
 
         $snippet .= ' (' . implode(",", $keys) . ')';
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $snippet);
         
         return $snippet;
     }
