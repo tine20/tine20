@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-06 16:43+0100\n"
+"PO-Revision-Date: 2009-12-13 14:18+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -219,13 +219,15 @@ msgstr ""
 
 #: js/ExceptionHandler.js:192
 msgid "Timeout"
-msgstr ""
+msgstr "Limit czasu"
 
 #: js/ExceptionHandler.js:193
 msgid ""
 "Sorry, some timeout occured while processing your request. Please reload "
 "your browser, try again or contact your administrator."
 msgstr ""
+"Niestety, dozwolony czas przetwarzania Twojego zapytania został "
+"przekroczony. Proszę przeładuj przeglądarkę."
 
 #: js/LoginPanel.js:79 js/LoginPanel.js:111
 msgid "Login"
@@ -250,8 +252,8 @@ msgid ""
 "and get help."
 msgstr ""
 "Tine 2.0 ma ułatwić prowadzenie biznesu i przybliżyć realizację procesów "
-"biznesowych Twoim potrzebom! Dlatego chętnie zapraszamy do dyskusji z nami, "
-"prezentacji własnych sugestii, a w razie potrzeby, oferujemy pomoc."
+"biznesowych do Twoich potrzeb. Dlatego uprzejmie zapraszamy do dyskusji z "
+"nami, prezentacji własnych sugestii i w razie potrzeby oferujemy pomoc."
 
 #: js/LoginPanel.js:138
 msgid "Tine 2.0 Homepage"
@@ -274,8 +276,9 @@ msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
 msgstr ""
-"Nieprzerwanie potrzebujemy odzewu na nasz produkt, aby następne wydania Tine "
-"2.0 coraz lepiej spełniały Twoje potrzeby. Współpracując, pomóż nam i sobie."
+"Aby następne wydania Tine 2.0 coraz lepiej spełniały Twoje oczekiwania, "
+"nieprzerwanie potrzebujemy odzewu na nasz produkt. Współpracując, pomóż nam "
+"i sobie."
 
 #: js/LoginPanel.js:196
 msgid "participate!"
@@ -287,7 +290,7 @@ msgstr "Języki"
 
 #: js/LoginPanel.js:219
 msgid "Duration"
-msgstr "Czas trwania"
+msgstr "Czas wypełniania ankiety"
 
 #: js/LoginPanel.js:276
 msgid "Logging you in..."
@@ -846,11 +849,13 @@ msgstr "Aktualizacja uprawnień"
 
 #: js/widgets/container/GrantsDialog.js:167
 msgid "Error"
-msgstr ""
+msgstr "Błąd"
 
 #: js/widgets/container/GrantsDialog.js:168
 msgid "You are not allowed to remove all admins for this container!"
 msgstr ""
+"Nie masz uprawnień, aby usunąć wszystkich administratorów niniejszego "
+"kontenera."
 
 #: js/widgets/customfields/CustomfieldsPanel.js:64
 msgid "Custom Fields"
@@ -990,7 +995,7 @@ msgstr "Zapisz konfigurację"
 
 #: js/widgets/form/ConfigPanel.js:239
 msgid "Reload config"
-msgstr ""
+msgstr "Przeładuj plik konfiguracyjny"
 
 #: js/widgets/form/RecordPickerComboBox.js:59 js/widgets/tags/TagsPanel.js:465
 msgid "Searching..."

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-06 16:35+0100\n"
+"PO-Revision-Date: 2009-12-13 13:48+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -10,8 +10,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: js/ApplicationGridPanel.js:67
 msgid "Name"
@@ -41,7 +40,8 @@ msgstr "Status"
 msgid "Depends on"
 msgstr "Zależy od"
 
-#: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:207
+#: js/ApplicationGridPanel.js:82
+#: js/EnvCheckGridPanel.js:207
 msgid "Install application"
 msgstr "Zainstaluj aplikację"
 
@@ -78,15 +78,11 @@ msgid "Delete all existing users and groups"
 msgstr "Usuń wszystkich, istniejących użytkowników i grupy"
 
 #: js/AuthenticationPanel.js:121
-msgid ""
-"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to "
-"LDAP ?"
-msgstr ""
-"Przejście z SQL na LDAP usunie wszystkie, istniejące konta użytkowników, "
-"grupy oraz funkcje. Czy na pewno chcesz przełączyć konta na LDAP?"
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgstr "Przejście z SQL na LDAP usunie wszystkie, istniejące konta użytkowników, grupy oraz funkcje. Czy na pewno chcesz przełączyć konta na LDAP?"
 
-#: js/AuthenticationPanel.js:184 js/AuthenticationPanel.js:205
+#: js/AuthenticationPanel.js:184
+#: js/AuthenticationPanel.js:205
 #: js/EmailPanel.js:156
 msgid "Backend"
 msgstr "W tle"
@@ -107,21 +103,27 @@ msgstr "Początkowe hasło administratora"
 msgid "Password confirmation"
 msgstr "Potwierdzenie hasła"
 
-#: js/AuthenticationPanel.js:266 js/AuthenticationPanel.js:352
+#: js/AuthenticationPanel.js:266
+#: js/AuthenticationPanel.js:352
 msgid "Host"
 msgstr "Komputer"
 
-#: js/AuthenticationPanel.js:271 js/AuthenticationPanel.js:357
+#: js/AuthenticationPanel.js:271
+#: js/AuthenticationPanel.js:357
 msgid "Login name"
 msgstr "Login"
 
-#: js/AuthenticationPanel.js:274 js/AuthenticationPanel.js:360
-#: js/ConfigManagerPanel.js:76 js/ConfigManagerPanel.js:112
-#: js/EmailPanel.js:196 js/EmailPanel.js:287
+#: js/AuthenticationPanel.js:274
+#: js/AuthenticationPanel.js:360
+#: js/ConfigManagerPanel.js:76
+#: js/ConfigManagerPanel.js:112
+#: js/EmailPanel.js:196
+#: js/EmailPanel.js:287
 msgid "Password"
 msgstr "Hasło"
 
-#: js/AuthenticationPanel.js:287 js/AuthenticationPanel.js:373
+#: js/AuthenticationPanel.js:287
+#: js/AuthenticationPanel.js:373
 msgid "Bind requires DN"
 msgstr "Bind wymaga nazwy domeny"
 
@@ -137,11 +139,13 @@ msgstr "Konto standardowe"
 msgid "Accounts storage"
 msgstr "Konta"
 
-#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:427
+#: js/AuthenticationPanel.js:323
+#: js/AuthenticationPanel.js:427
 msgid "Default user group name"
 msgstr "Domyślna nazwa grupy użytkownika"
 
-#: js/AuthenticationPanel.js:326 js/AuthenticationPanel.js:430
+#: js/AuthenticationPanel.js:326
+#: js/AuthenticationPanel.js:430
 msgid "Default admin group name"
 msgstr "Domyślna nazwa grupy administratora"
 
@@ -199,8 +203,7 @@ msgstr "Ustawienia przekierowania"
 
 #: js/AuthenticationPanel.js:459
 msgid "Redirect Url (after Logout, redirect to login screen if empty)"
-msgstr ""
-"Przekieruj URL (po wylogowaniu przekieruj do strony logowania, jeśli pusta)"
+msgstr "Przekieruj URL (po wylogowaniu przekieruj do strony logowania, jeśli pusta)"
 
 #: js/AuthenticationPanel.js:470
 msgid "Redirect to referring site, if exists"
@@ -210,7 +213,8 @@ msgstr "Przekieruj do powiązanej strony, jeśli istnieje"
 msgid "Save config and install"
 msgstr "Zapisz konfigurację i zainstaluj"
 
-#: js/AuthenticationPanel.js:485 js/ConfigManagerPanel.js:191
+#: js/AuthenticationPanel.js:485
+#: js/ConfigManagerPanel.js:191
 msgid "Save config"
 msgstr "Zapisz konfigurację"
 
@@ -218,10 +222,11 @@ msgstr "Zapisz konfigurację"
 msgid "Passwords don't match"
 msgstr "Hasła nie są takie same"
 
-#: js/AuthenticationPanel.js:519 js/AuthenticationPanel.js:526
+#: js/AuthenticationPanel.js:519
+#: js/AuthenticationPanel.js:526
 #: js/AuthenticationPanel.js:530
 msgid "Should not be empty"
-msgstr ""
+msgstr "Nie może być puste"
 
 #: js/ConfigManagerPanel.js:59
 msgid "Informations"
@@ -231,11 +236,14 @@ msgstr "Informacje"
 msgid "Setup Authentication"
 msgstr "Konfiguruj uwierzytelnianie"
 
-#: js/ConfigManagerPanel.js:66 js/EmailPanel.js:192 js/EmailPanel.js:283
+#: js/ConfigManagerPanel.js:66
+#: js/EmailPanel.js:192
+#: js/EmailPanel.js:283
 msgid "Username"
 msgstr "Użytkownik"
 
-#: js/ConfigManagerPanel.js:82 js/ConfigManagerPanel.js:102
+#: js/ConfigManagerPanel.js:82
+#: js/ConfigManagerPanel.js:102
 msgid "Database"
 msgstr "Baza danych"
 
@@ -243,11 +251,15 @@ msgstr "Baza danych"
 msgid "Adapter"
 msgstr "Adapter"
 
-#: js/ConfigManagerPanel.js:91 js/EmailPanel.js:188 js/EmailPanel.js:279
+#: js/ConfigManagerPanel.js:91
+#: js/EmailPanel.js:188
+#: js/EmailPanel.js:279
 msgid "Hostname"
 msgstr "Komputer"
 
-#: js/ConfigManagerPanel.js:96 js/EmailPanel.js:201 js/EmailPanel.js:292
+#: js/ConfigManagerPanel.js:96
+#: js/EmailPanel.js:201
+#: js/EmailPanel.js:292
 msgid "Port"
 msgstr "Port"
 
@@ -301,7 +313,7 @@ msgstr "Ścieżka do plików sesji"
 
 #: js/ConfigManagerPanel.js:189
 msgid "Config file is not writable"
-msgstr ""
+msgstr "Brak uprawnień zapisu do pliku konfiguracyjnego"
 
 #: js/ConfigManagerPanel.js:206
 msgid "Download config file"
@@ -319,23 +331,29 @@ msgstr "SMTP"
 msgid "Imap"
 msgstr "IMAP"
 
-#: js/EmailPanel.js:204 js/EmailPanel.js:295
+#: js/EmailPanel.js:204
+#: js/EmailPanel.js:295
 msgid "Secure Connection"
 msgstr "Bezpieczne połączenie"
 
-#: js/EmailPanel.js:215 js/EmailPanel.js:306 js/EmailPanel.js:322
+#: js/EmailPanel.js:215
+#: js/EmailPanel.js:306
+#: js/EmailPanel.js:322
 msgid "None"
 msgstr "Brak"
 
-#: js/EmailPanel.js:216 js/EmailPanel.js:307
+#: js/EmailPanel.js:216
+#: js/EmailPanel.js:307
 msgid "TLS"
 msgstr "TLS"
 
-#: js/EmailPanel.js:217 js/EmailPanel.js:308
+#: js/EmailPanel.js:217
+#: js/EmailPanel.js:308
 msgid "SSL"
 msgstr "SSL"
 
-#: js/EmailPanel.js:221 js/EmailPanel.js:328
+#: js/EmailPanel.js:221
+#: js/EmailPanel.js:328
 msgid "Domain"
 msgstr "Domena"
 
@@ -402,12 +420,8 @@ msgstr "Przygotowywanie testów środowiska..."
 # Instead of "widoku" it could stand the word "wyświetlania" here.
 # Anstatt "widoku" koennte es hier das Wort "wyświetlania" stehen.
 #: js/EnvCheckGridPanel.js:133
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-"{0} nie zostały znalezione. Proszę spróbować zmienić kryteria wyszukiwania, "
-"opcje wyświetlania albo {1}, w których szukasz."
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "{0} nie zostały znalezione. Proszę spróbować zmienić kryteria wyszukiwania, opcje wyświetlania albo {1}, w których szukasz."
 
 #: js/EnvCheckGridPanel.js:163
 msgid "Check"
@@ -482,26 +496,20 @@ msgstr "Akceptuję warunki i postanowienia."
 
 #~ msgid "Shit"
 #~ msgstr "Niedobrze"
-
 #~ msgid "Where are the backup tapes"
 #~ msgstr "Gdzie są taśmy archiwalne?"
-
 #~ msgid "Invalid configuration"
 #~ msgstr "Nieprawidłowa konfiguracja"
-
 #~ msgid ""
 #~ "You need to correct the red marked fields before config could be saved"
 #~ msgstr ""
 #~ "Przed zapisaniem konfiguracji, musisz poprawić pola zaznaczone na czerwono"
-
 #~ msgid "Transfering Configuration..."
 #~ msgstr "Przesyłanie konfiguracji..."
-
 #~ msgid "Check config"
 #~ msgstr "Sprawdź konfigurację"
-
 #~ msgid "Apply changes"
 #~ msgstr "Akceptuj zmiany"
-
 #~ msgid "Go to Tine 2.0 login"
 #~ msgstr "Przejdź do strony logowania"
+
