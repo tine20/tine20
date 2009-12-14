@@ -504,11 +504,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 // get password from credentials cache and create account credentials
                 $defaultAccount->credentials_id = $this->_createCredentials();
                 $defaultAccount->smtp_credentials_id = $defaultAccount->credentials_id;
+                
+                // sanitize port
+                if (empty($defaultAccount->port)) {
+                    $defaultAccount->port = 143;
+                }
 
                 // add smtp server settings
                 $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
                 if (! empty($smtpConfig)) {
-                    $defaultAccount->smtp_port              = $smtpConfig['port'];
+                    $defaultAccount->smtp_port              = ((! empty($smtpConfig['port'])) ? $smtpConfig['port'] : 25);
                     $defaultAccount->smtp_hostname          = $smtpConfig['hostname'];
                     $defaultAccount->smtp_auth              = $smtpConfig['auth'];
                     $defaultAccount->smtp_ssl               = $smtpConfig['ssl'];             
@@ -522,7 +527,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 // set as default account preference
                 Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $defaultAccount->getId();
                 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created new default account ' . $defaultAccount->name);
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Created new default account ' . $defaultAccount->name);
             }
         }
     }
