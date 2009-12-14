@@ -1476,43 +1476,43 @@ msgid ""
 "You can choose between ExtJs style windows or normal Browser popup windows."
 msgstr "Vous pouvez choisir des fenêtres de style popup ou Extjs."
 
-#: Setup/setup.xml:2506
+#: Setup/setup.xml:2507
 msgid "note"
 msgstr "Information"
 
-#: Setup/setup.xml:2511
+#: Setup/setup.xml:2512
 msgid "default note type"
 msgstr "type de note (défaut)"
 
-#: Setup/setup.xml:2537
+#: Setup/setup.xml:2538
 msgid "telephone"
 msgstr "téléphone"
 
-#: Setup/setup.xml:2542
+#: Setup/setup.xml:2543
 msgid "telephone call"
 msgstr "appel téléphonique"
 
-#: Setup/setup.xml:2568
+#: Setup/setup.xml:2569
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:2573
+#: Setup/setup.xml:2574
 msgid "email contact"
 msgstr "contact email"
 
-#: Setup/setup.xml:2599
+#: Setup/setup.xml:2600
 msgid "created"
 msgstr "créé"
 
-#: Setup/setup.xml:2604
+#: Setup/setup.xml:2605
 msgid "record created"
 msgstr "enregistrement créé"
 
-#: Setup/setup.xml:2630
+#: Setup/setup.xml:2631
 msgid "changed"
 msgstr "mis à jour"
 
-#: Setup/setup.xml:2635
+#: Setup/setup.xml:2636
 msgid "record changed"
 msgstr "enregistrement mis à jour"
 

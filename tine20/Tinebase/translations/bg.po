@@ -1492,43 +1492,43 @@ msgid ""
 "You can choose between ExtJs style windows or normal Browser popup windows."
 msgstr "Вие може да изберете между ExtJs- и нормален броузър-прозорец."
 
-#: Setup/setup.xml:2506
+#: Setup/setup.xml:2507
 msgid "note"
 msgstr "бележка"
 
-#: Setup/setup.xml:2511
+#: Setup/setup.xml:2512
 msgid "default note type"
 msgstr "отсъстващ тип на бележка"
 
-#: Setup/setup.xml:2537
+#: Setup/setup.xml:2538
 msgid "telephone"
 msgstr "телефон"
 
-#: Setup/setup.xml:2542
+#: Setup/setup.xml:2543
 msgid "telephone call"
 msgstr "телефонно позвъняване"
 
-#: Setup/setup.xml:2568
+#: Setup/setup.xml:2569
 msgid "email"
 msgstr "Имейл"
 
-#: Setup/setup.xml:2573
+#: Setup/setup.xml:2574
 msgid "email contact"
 msgstr "Имейл контакт"
 
-#: Setup/setup.xml:2599
+#: Setup/setup.xml:2600
 msgid "created"
 msgstr "създаден"
 
-#: Setup/setup.xml:2604
+#: Setup/setup.xml:2605
 msgid "record created"
 msgstr "създадена документация"
 
-#: Setup/setup.xml:2630
+#: Setup/setup.xml:2631
 msgid "changed"
 msgstr "променен"
 
-#: Setup/setup.xml:2635
+#: Setup/setup.xml:2636
 msgid "record changed"
 msgstr "променена документация"
 

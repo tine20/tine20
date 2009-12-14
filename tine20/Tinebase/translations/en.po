@@ -1470,42 +1470,42 @@ msgid ""
 msgstr ""
 "You can choose between ExtJs style windows or normal Browser popup windows."
 
-#: Setup/setup.xml:2506
+#: Setup/setup.xml:2507
 msgid "note"
 msgstr "note"
 
-#: Setup/setup.xml:2511
+#: Setup/setup.xml:2512
 msgid "default note type"
 msgstr "default note type"
 
-#: Setup/setup.xml:2537
+#: Setup/setup.xml:2538
 msgid "telephone"
 msgstr "telephone"
 
-#: Setup/setup.xml:2542
+#: Setup/setup.xml:2543
 msgid "telephone call"
 msgstr "telephone call"
 
-#: Setup/setup.xml:2568
+#: Setup/setup.xml:2569
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:2573
+#: Setup/setup.xml:2574
 msgid "email contact"
 msgstr "email contact"
 
-#: Setup/setup.xml:2599
+#: Setup/setup.xml:2600
 msgid "created"
 msgstr "created"
 
-#: Setup/setup.xml:2604
+#: Setup/setup.xml:2605
 msgid "record created"
 msgstr "record created"
 
-#: Setup/setup.xml:2630
+#: Setup/setup.xml:2631
 msgid "changed"
 msgstr "changed"
 
-#: Setup/setup.xml:2635
+#: Setup/setup.xml:2636
 msgid "record changed"
 msgstr "record changed"

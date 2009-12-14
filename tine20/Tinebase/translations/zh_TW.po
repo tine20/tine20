@@ -1455,43 +1455,43 @@ msgid ""
 "You can choose between ExtJs style windows or normal Browser popup windows."
 msgstr ""
 
-#: Setup/setup.xml:2506
+#: Setup/setup.xml:2507
 msgid "note"
 msgstr ""
 
-#: Setup/setup.xml:2511
+#: Setup/setup.xml:2512
 msgid "default note type"
 msgstr ""
 
-#: Setup/setup.xml:2537
+#: Setup/setup.xml:2538
 msgid "telephone"
 msgstr "電話"
 
-#: Setup/setup.xml:2542
+#: Setup/setup.xml:2543
 msgid "telephone call"
 msgstr ""
 
-#: Setup/setup.xml:2568
+#: Setup/setup.xml:2569
 msgid "email"
 msgstr "電子郵件"
 
-#: Setup/setup.xml:2573
+#: Setup/setup.xml:2574
 msgid "email contact"
 msgstr ""
 
-#: Setup/setup.xml:2599
+#: Setup/setup.xml:2600
 msgid "created"
 msgstr ""
 
-#: Setup/setup.xml:2604
+#: Setup/setup.xml:2605
 msgid "record created"
 msgstr ""
 
-#: Setup/setup.xml:2630
+#: Setup/setup.xml:2631
 msgid "changed"
 msgstr ""
 
-#: Setup/setup.xml:2635
+#: Setup/setup.xml:2636
 msgid "record changed"
 msgstr ""
 

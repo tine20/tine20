@@ -1485,43 +1485,43 @@ msgid ""
 msgstr ""
 "Sie können zwischen Extjs-Fenstern oder normalen Browserfenstern wählen."
 
-#: Setup/setup.xml:2506
+#: Setup/setup.xml:2507
 msgid "note"
 msgstr "Notiz"
 
-#: Setup/setup.xml:2511
+#: Setup/setup.xml:2512
 msgid "default note type"
 msgstr "default note type"
 
-#: Setup/setup.xml:2537
+#: Setup/setup.xml:2538
 msgid "telephone"
 msgstr "Telefon"
 
-#: Setup/setup.xml:2542
+#: Setup/setup.xml:2543
 msgid "telephone call"
 msgstr "Telefonanruf"
 
-#: Setup/setup.xml:2568
+#: Setup/setup.xml:2569
 msgid "email"
 msgstr "Email"
 
-#: Setup/setup.xml:2573
+#: Setup/setup.xml:2574
 msgid "email contact"
 msgstr "Email Kontakt"
 
-#: Setup/setup.xml:2599
+#: Setup/setup.xml:2600
 msgid "created"
 msgstr "erstellt"
 
-#: Setup/setup.xml:2604
+#: Setup/setup.xml:2605
 msgid "record created"
 msgstr "Eintrag erstellt"
 
-#: Setup/setup.xml:2630
+#: Setup/setup.xml:2631
 msgid "changed"
 msgstr "geändert"
 
-#: Setup/setup.xml:2635
+#: Setup/setup.xml:2636
 msgid "record changed"
 msgstr "Eintrag geändert"
 
