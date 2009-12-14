@@ -247,7 +247,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             if ($_data['jpegphoto'] != '') {
                 $imageParams = Tinebase_ImageHelper::parseImageLink($_data['jpegphoto']);
                 if ($imageParams['isNewImage']) {
-                    $_data['jpegphoto'] = Tinebase_ImageHelper::getImageData($imageParams);
+                    try {
+                        $_data['jpegphoto'] = Tinebase_ImageHelper::getImageData($imageParams);
+                    } catch(Tinebase_Exception_UnexpectedValue $teuv) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add contact image: ' . $teuv->getMessage());
+                        unset($_data['jpegphoto']);
+                    }
                 } else {
                     unset($_data['jpegphoto']);
                 }
