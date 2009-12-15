@@ -42,7 +42,6 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
      * set options 
      *
      * @param  array $_options
-     * @throws Tinebase_Exception_Record_NotDefined
      */
     protected function _setOptions(array $_options)
     {
@@ -76,7 +75,7 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
         $_select->joinLeft(
             /* what */    array($this->_value => SQL_TABLE_PREFIX . 'tagging'), 
             /* on   */    $db->quoteIdentifier("{$this->_value}.record_id") . " = $idProperty AND " . $db->quoteIdentifier("{$this->_value}.tag_id") . " = " . $db->quote($this->_value),
-            /* selecct */ array());
+            /* select */  array());
         
         $_select->where($db->quoteIdentifier("{$this->_value}.tag_id") .  $this->_opSqlMap[$this->_operator]['sqlop']);
     }
