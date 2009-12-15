@@ -953,7 +953,7 @@ class Setup_Controller
             foreach ($minimumRequirements as $requiredApp) {
                 if (!in_array($requiredApp, $_applications) && !$this->isInstalled($requiredApp)) {
                     // Addressbook has to be installed with Tinebase for initial data (user contact)
-                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                    Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                         . ' ' . $requiredApp . ' has to be installed first (adding it to list).'
                     ); 
                     $_applications[] = $requiredApp;
