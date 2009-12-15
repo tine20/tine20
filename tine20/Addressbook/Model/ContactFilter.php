@@ -86,7 +86,8 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Addressbook')),
         'type'                 => array('custom' => true),
-        'user_status'          => array('custom' => true)
+        'user_status'          => array('custom' => true),
+        'customfield'          => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array('idProperty' => 'addressbook.id')),
     );
     
     /**

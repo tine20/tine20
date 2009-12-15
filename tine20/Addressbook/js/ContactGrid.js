@@ -97,7 +97,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
         
         return new Tine.widgets.grid.FilterToolbar({
-            filterModels: Tine.Addressbook.Model.Contact.getFilterModel(),
+            filterModels: Tine.Addressbook.Model.Contact.getFilterModel().concat(this.getCustomfieldFilters()),
             defaultFilter: 'query',
             filters: [],
             plugins: [
