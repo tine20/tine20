@@ -222,12 +222,13 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // create timesheet and add custom fields
         $timesheetArray = $this->_getTimesheet()->toArray();
-        $timesheetArray[$customField1->name] = Tinebase_Record_Abstract::generateUID();
+        $cfValue1 = Tinebase_Record_Abstract::generateUID();
+        $timesheetArray[$customField1->name] = $cfValue1;
         $timesheetArray[$customField2->name] = Tinebase_Record_Abstract::generateUID();
         
         $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheetArray));
         
-        // tearDown setting
+        // tearDown settings
         $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
         $this->_toDeleteIds['cf'] = array($customField1->getId(), $customField2->getId());
         
@@ -239,9 +240,16 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // check if custom fields are returned with search
         $searchResult = $this->_json->searchTimesheets(Zend_Json::encode($this->_getTimesheetFilter()), Zend_Json::encode($this->_getPaging()));
         
-        $this->assertGreaterThan(0, count($timesheetData['customfields']));
+        $this->assertGreaterThan(0, count($searchResult['results'][0]['customfields']));
         $this->assertEquals($timesheetArray[$customField1->name], $searchResult['results'][0]['customfields'][$customField1->name]);
         $this->assertEquals($timesheetArray[$customField2->name], $searchResult['results'][0]['customfields'][$customField2->name]);
+        
+        // test search with custom field filter
+        $searchResult = $this->_json->searchTimesheets(
+            Zend_Json::encode($this->_getTimesheetFilterWithCustomField($customField1->getId(), $cfValue1)), 
+            Zend_Json::encode($this->_getPaging())
+        );
+        $this->assertGreaterThan(0, $searchResult['totalcount'], 'cf filter not working');
     }
     
     /**
@@ -756,6 +764,27 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         );        
     }
 
+    /**
+     * get Timesheet filter with custom field
+     *
+     * @return array
+     */
+    protected function _getTimesheetFilterWithCustomField($_cfId, $_value)
+    {
+        return array(
+            array(
+                'field' => 'query', 
+                'operator' => 'contains', 
+                'value' => 'blabla'
+            ),
+            array(
+                'field' => 'customfield', 
+                'operator' => 'equals', 
+                'value' => array('cfId' => $_cfId, 'value' => $_value)
+            ),
+        );        
+    }
+    
     /**
      * get persistent filter filter
      *
