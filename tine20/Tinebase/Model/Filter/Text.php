@@ -63,16 +63,9 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
     {
         $action = $this->_opSqlMap[$this->_operator];
          
-        // quote field identifier
+        // quote field identifier and replace wildcards
         $field = $this->_getQuotedFieldName($_backend);
-         
-        // replace wildcards from user
-        $value = str_replace(array('*', '_'), array('%', '\_'), $this->_value);
-         
-        // add wildcard to value according to operator
-        if ($this->_operator != 'in' && $this->_operator != 'notin') {
-            $value = str_replace('?', $value, $action['wildcards']);
-        }
+        $value = $this->_replaceWildcards($this->_value);
         
         // oneof operator (multiple values / OR) 
         if ($this->_operator == 'oneof') {
@@ -102,5 +95,24 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
          
         // finally append query to select object
         $_select->where($where);
+    }
+    
+    /**
+     * replace wildcards
+     * 
+     * @param string $_value
+     * @return string
+     */
+    protected function _replaceWildcards($_value)
+    {
+        // replace wildcards from user
+        $value = str_replace(array('*', '_'), array('%', '\_'), $_value);
+         
+        // add wildcard to value according to operator
+        if ($this->_operator != 'in' && $this->_operator != 'notin') {
+            $value = str_replace('?', $value, $this->_opSqlMap[$this->_operator]['wildcards']);
+        }
+        
+        return $value;
     }
 }
