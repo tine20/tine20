@@ -260,7 +260,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
             } else {
                 // use order defined by headline
                 
-                if ($field['destination'] == '' || !isset($_data_indexed[$field['source']])) {
+                if ($field['destination'] == '' || !isset($field['source']) || !isset($_data_indexed[$field['source']])) {
                     continue;
                 }
             
