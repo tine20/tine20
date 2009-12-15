@@ -518,7 +518,8 @@ class Tinebase_Container
      * @param string $_applicationName
      * @return Tinebase_Model_Container
      * 
-     * @todo return default container from preferences if available 
+     * @todo return default container from preferences if available
+     * @todo create new default/personal container if it was deleted
      */
     public function getDefaultContainer($_accountId, $_applicationName)
     {
@@ -751,7 +752,7 @@ class Tinebase_Container
             if($container->type !== Tinebase_Model_Container::TYPE_PERSONAL and $container->type !== Tinebase_Model_Container::TYPE_SHARED) {
                 throw new Tinebase_Exception_InvalidArgument('Can delete personal or shared containers only.');
             }
-        }        
+        }
         
         //$this->_backend->delete($containerId);
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($container, 'delete', $container);
