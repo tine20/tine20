@@ -113,6 +113,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         
         if (this.defaultValue === null) {
             switch (this.valueType) {
+                case 'customfield':
                 case 'string':
                     this.defaultValue = '';
                     break;
@@ -164,6 +165,9 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             switch (this.valueType) {
                 case 'string':
                     this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not', 'oneof');
+                    break;
+                case 'customfield':
+                    this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not');
                     break;
                 case 'date':
                     this.operators.push('equals', 'before', 'after', 'within', 'inweek');
@@ -347,6 +351,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 }
                 value = new Ext.form.ComboBox(comboConfig);
                 break;
+            case 'customfield':
             case 'string':
             case 'number':
             default:
@@ -377,7 +382,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
      */
     onValueChange: function(filter, newValue) {
         filter.set('value', newValue);
-        //console.log('value change');
     },
     
     /**

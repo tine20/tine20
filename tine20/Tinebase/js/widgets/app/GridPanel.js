@@ -540,6 +540,28 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
     },
     
     /**
+     * get custom field filter for filter toolbar
+     * 
+     * @return {Array}
+     */
+    getCustomfieldFilters: function() {
+        var result = [];
+        
+        if (Tine[this.app.appName].registry.containsKey('customfields')) {
+            var allCfs = Tine[this.app.appName].registry.get('customfields');
+            for (var i=0; i < allCfs.length; i++) {
+                result.push({
+                    label: allCfs[i].label, 
+                    field: 'customfield:' + allCfs[i].id, 
+                    valueType: 'customfield'
+                })
+            }
+        }
+        
+        return result;
+    },
+
+    /**
      * called when the store gets updated, e.g. from editgrid
      */
     onStoreUpdate: function(store, record, operation) {

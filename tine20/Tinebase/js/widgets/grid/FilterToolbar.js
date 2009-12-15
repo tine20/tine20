@@ -548,20 +548,27 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         var filters = [];
         var foreignFilters = {};
         this.filterStore.each(function(filter) {
+            
             var line = {};
             for (var formfield in filter.formFields) {
                 line[formfield] = filter.formFields[formfield].getValue();
             }
             
             if (line.field && line.field.match(/:/)) {
-                // subfilter handling
                 var parts = line.field.split(':');
-                var ownField = parts[0];
-                var foreignField = parts[1];
                 
-                line.field = foreignField;
-                foreignFilters[ownField] = foreignFilters[ownField] || [];
-                foreignFilters[ownField].push(line);
+                if (parts[0] == 'customfield') {
+                    // customfield handling
+                    filters.push({field: 'customfield', operator: line.operator, value: {cfId: parts[1], value: line.value}});
+                } else {
+                    // subfilter handling
+                    var ownField = parts[0];
+                    var foreignField = parts[1];
+                    
+                    line.field = foreignField;
+                    foreignFilters[ownField] = foreignFilters[ownField] || [];
+                    foreignFilters[ownField].push(line);
+                }
                 
             } else {
                 filters.push(line);
@@ -573,6 +580,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 filters.push({field: ownField, operator: 'AND', value: foreignFilters[ownField]});
             }
         }
+        
         return filters;
     },
     
@@ -584,16 +592,20 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         var filterData, filter, existingFilterPos, existingFilter;
         
-        // subfilter handling
         for (var i=0; i<filters.length; i++) {
             filterData = filters[i];
             
             if (filterData.operator == 'AND' || filterData.operator == 'OR') {
+                // subfilter handling
                 var subFilters = filterData.value;
                 for (var j=subFilters.length -1; j>=0; j--) {
                     subFilters[j].field = filterData.field + ':' + subFilters[j].field;
                     filters.splice(i+1, 0, subFilters[j]);
                 }
+            } else if (filterData.value.cfId) {
+                // custom fields handling
+                filters[i].field = filterData.field + ':' + filterData.value.cfId;
+                filters[i].value = filterData.value.value;
             }
         }
         
