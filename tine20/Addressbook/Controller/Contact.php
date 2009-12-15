@@ -80,6 +80,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * returns the default addressbook
      * 
      * @return Tinebase_Model_Container
+     * 
+     * @todo replace this with Tinebase_Container::getInstance()->getDefaultContainer
      */
     public function getDefaultAddressbook()
     {
