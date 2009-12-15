@@ -69,7 +69,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Text
         $idProperty = $db->quoteIdentifier($this->_options['idProperty']);
         
         // per left join we add a customfield column named as the customfield and filter this joined column
-        // NOTE: we name the column we join like the customfield, to be able to join multiple tag criteria (multiple invocations of this function)
+        // NOTE: we name the column we join like the customfield, to be able to join multiple customfield criteria (multiple invocations of this function)
         $_select->joinLeft(
             /* what */    array($correlationName => SQL_TABLE_PREFIX . 'customfield'), 
             /* on   */    $db->quoteIdentifier("{$correlationName}.record_id")      . " = $idProperty AND " 
