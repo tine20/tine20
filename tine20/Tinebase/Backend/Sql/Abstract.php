@@ -589,6 +589,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
      * @param boolean $_getDeleted get deleted records (if modlog is active)
      * @return Zend_Db_Select
+     * 
+     * @todo think about adding custom fields here
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {        
