@@ -69,7 +69,10 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
     public function exportTimesheets(Timetracker_Model_TimesheetFilter $_filter) {
         
         // get timesheets by filter
-        $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($_filter);
+        $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($_filter, new Tinebase_Model_Pagination(array(
+            'sort'  => 'start_date',
+            'dir'   => 'DESC'
+        )));
         $lastCell = count($timesheets) + $this->_firstRow - 1;
         
         // resolve timeaccounts
