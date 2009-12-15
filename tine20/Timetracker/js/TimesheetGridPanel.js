@@ -219,7 +219,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
                 {label: this.app.i18n._('Cleared'),      field: 'is_cleared',  valueType: 'bool', defaultValue: false },
                 {filtertype: 'tinebase.tag', app: this.app},
                 {filtertype: 'timetracker.timeaccount'}
-             ],
+             ].concat(this.getCustomfieldFilters()),
              defaultFilter: 'start_date',
              filters: [
                 {field: 'start_date', operator: 'within', value: 'weekThis'},
