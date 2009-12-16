@@ -81,7 +81,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * 
      * @param Calendar_Model_Event $_event
      * @return void
-     * @throws 
+     * @throws Calendar_Exception_AttendeeBusy
      */
     public function checkBusyConficts($_event)
     {
