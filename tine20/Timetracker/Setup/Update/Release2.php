@@ -13,6 +13,11 @@
 class Timetracker_Setup_Update_Release2 extends Setup_Update_Abstract
 {
 
+    /**
+     * changed budget and price to float
+     * 
+     * @return void
+     */
     public function update_0()
     {
         $declaration = new Setup_Backend_Schema_Field_Xml('
@@ -34,4 +39,25 @@ class Timetracker_Setup_Update_Release2 extends Setup_Update_Abstract
         $this->setApplicationVersion('Timetracker', '2.1');
     }
 
+    /**
+     * add deadline field
+     * 
+     * @return void
+     */
+    public function update_1()
+    {
+        $field = '<field>
+                    <name>deadline</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>false</notnull>
+                </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('timetracker_timeaccount', $declaration);
+        
+        $this->setTableVersion('timetracker_timeaccount', '6');
+
+        $this->setApplicationVersion('Timetracker', '3.0');
+    }
 }

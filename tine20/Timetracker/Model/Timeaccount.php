@@ -5,7 +5,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
  * @todo        update validators (default values, mandatory fields)
@@ -41,6 +41,18 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
     const RELATION_TYPE_CONTRACT = 'CONTRACT';
     
     /**
+     * deadline type: none
+     * = no deadline for timesheets
+     */
+    const DEADLINE_NONE = 'none';
+    
+    /**
+     * deadline type: last week
+     * = booking timesheets allowed until monday midnight for the last week
+     */
+    const DEADLINE_LASTWEEK = 'lastweek';
+    
+    /**
      * list of zend validator
      * 
      * this validators get used when validating user generated content with Zend_Input_Filter
@@ -62,6 +74,15 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         'is_billable'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'billed_in'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'not yet billed'),    
+    // how long can users book timesheets for this timeaccount 
+        'deadline'              => array(
+            Zend_Filter_Input::ALLOW_EMPTY      => true, 
+            Zend_Filter_Input::DEFAULT_VALUE    => self::DEADLINE_NONE,
+            'InArray'                           => array(
+                self::DEADLINE_NONE, 
+                self::DEADLINE_LASTWEEK,
+            )
+        ),    
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),

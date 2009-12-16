@@ -88,6 +88,7 @@ Tine.Timetracker.Model.TimeaccountArray = Tine.Tinebase.Model.genericFields.conc
     { name: 'is_billable' },
     { name: 'billed_in' },
     { name: 'status' },
+    { name: 'deadline' },
     { name: 'account_grants'},
     { name: 'grants'},
     // tine 2.0 notes + tags

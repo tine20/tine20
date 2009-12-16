@@ -134,10 +134,23 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             name: 'billed_in',
                             xtype: 'textfield'
                         }, {
+                            fieldLabel: this.app.i18n._('Booking deadline'),
+                            name: 'deadline',
+                            xtype: 'combo',
+                            mode: 'local',
+                            forceSelection: true,
+                            triggerAction: 'all',
+                            value: 'none',
+                            store: [
+                                ['none', this.app.i18n._('none')], 
+                                ['lastweek', this.app.i18n._('last week')]
+                            ]
+                        }, {
                             hideLabel: true,
                             boxLabel: this.app.i18n._('Timesheets are billable'),
                             name: 'is_billable',
-                            xtype: 'checkbox'
+                            xtype: 'checkbox',
+                            columnWidth: .666
                         }]] 
                 }, {
                     // activities and tags
@@ -253,7 +266,7 @@ Tine.Timetracker.TimeaccountEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
-        height: 470,
+        height: 500,
         name: Tine.Timetracker.TimeaccountEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Timetracker.TimeaccountEditDialog',
         contentPanelConstructorConfig: config
