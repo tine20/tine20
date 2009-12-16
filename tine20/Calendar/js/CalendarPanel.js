@@ -175,16 +175,16 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             
             // resort fbInfo to combine all events of a attender
             var busyAttendee = [];
-            var confictEvents = {};
+            var conflictEvents = {};
             var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(event.get('attendee'));
             Ext.each(error.freebusyinfo, function(fbinfo) {
                 attendeeStore.each(function(a) {
                     if (a.get('user_type') == fbinfo.user_type && a.getUserId() == fbinfo.user_id) {
                         if (busyAttendee.indexOf(a) < 0) {
                             busyAttendee.push(a);
-                            confictEvents[a.id] = [];
+                            conflictEvents[a.id] = [];
                         }
-                        confictEvents[a.id].push(fbinfo);
+                        conflictEvents[a.id].push(fbinfo);
                     }
                 });
             }, this);
@@ -199,7 +199,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 busyAttendeeHTML += '<div class="cal-conflict-attendername">' + attenderName + '</div>';
                 
                 var eventInfos = [];
-                Ext.each(confictEvents[busyAttender.id], function(fbInfo) {
+                Ext.each(conflictEvents[busyAttender.id], function(fbInfo) {
                     var format = 'H:i';
                     var dateFormat = Ext.form.DateField.prototype.format;
                     if (event.get('dtstart').format(dateFormat) != event.get('dtend').format(dateFormat) ||
