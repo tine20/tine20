@@ -23,7 +23,7 @@
     height: 15px;
 }
 
-.ext-safari .x-form-text {
+.ext-webkit .x-form-text {
     height: 17px;
     padding-top: 0px;
     padding-bottom: 0px;
@@ -65,15 +65,15 @@
     height: 18px;
 }
 
-.ext-safari .x-form-field-wrap .x-form-trigger {
+.ext-webkit .x-form-field-wrap .x-form-trigger {
     height: 18px;
 }
 
-.ext-safari .x-small-editor .x-form-trigger {
+.ext-webkit .x-small-editor .x-form-trigger {
     height: 17px;
 }
 
-.ext-safari .x-small-editor .x-form-text {
+.ext-webkit .x-small-editor .x-form-text {
     padding-top: 0px;
     padding-bottom: 0px;
 }
