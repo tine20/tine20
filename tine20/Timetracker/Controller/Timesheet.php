@@ -92,8 +92,51 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         return $records;
     }
     
+    
+    /**
+     * checks deadline of record
+     * 
+     * @param $_record
+     * @return void
+     * 
+     * @todo finish
+     */
+    protected function _checkDeadline($_record, $_throwException = TRUE)
+    {
+        // get timeaccount
+        $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
+        
+        if ($timeaccount->deadline == Timetracker_Model_Timeaccount::DEADLINE_LASTWEEK) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Check if deadline is exceeded for timeaccount ' . $timeaccount->title);
+            //throw new Timetracker_Exception_Deadline();
+        }
+    }
+    
     /****************************** overwritten functions ************************/    
-            
+    
+    /**
+     * inspect creation of one record
+     * 
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectCreate(Tinebase_Record_Interface $_record)
+    {
+        $this->_checkDeadline($_record);
+    }
+    
+    /**
+     * inspect update of one record
+     * 
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectUpdate($_record, $_oldRecord)
+    {
+        $this->_checkDeadline($_record);
+    }    
+    
     /**
      * check grant for action
      *
