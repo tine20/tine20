@@ -100,8 +100,6 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      * @param boolean $_throwException
      * @return void
      * @throws Timetracker_Exception_Deadline
-     * 
-     * @todo    allow someone with manage all grant to do it
      */
     protected function _checkDeadline(Timetracker_Model_Timesheet $_record, $_throwException = TRUE)
     {
@@ -116,7 +114,6 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             
             $date->set('00:00:00', Zend_Date::TIME_FULL);
             $dayOfWeek = $date->get(Zend_Date::WEEKDAY_DIGIT);
-            //$dayOfWeek = 1; // testing
             
             if ($dayOfWeek >= 2) {
                 // only allow to add ts for this week
@@ -128,7 +125,13 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             if ($date->compare($_record->start_date) >= 0) {
                 // later
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Deadline exceed: ' . $_record->start_date . ' < ' . $date);
-                if ($_throwException) {
+                
+                if ($this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)
+                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_ALL)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                        . ' User with admin / manage all rights is allowed to save Timesheet even if it exceeds the deadline.'
+                    );
+                } else if ($_throwException) {
                     throw new Timetracker_Exception_Deadline();
                 }
             } else {

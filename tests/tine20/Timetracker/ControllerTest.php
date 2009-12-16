@@ -288,6 +288,20 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_grantTestHelper($grants, 'searchTS', 1);
     }
     
+    /**
+     * try to add a Timesheet exceeding deadline
+     *
+     */
+    public function testAddTimesheetExceedingDeadline()
+    {
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            'book_own'      => TRUE,
+        )));        
+        
+        $this->_grantTestHelper($grants, 'create_deadline');
+    }
     
     /************ protected helper funcs *************/
     
@@ -321,6 +335,14 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
                     $ts = $this->_timesheetController->create($ts);
                     $this->assertEquals(Tinebase_Core::getUser()->getId(), $ts->created_by);
                 }
+                break;
+            case 'create_deadline':
+                // date is before deadline
+                $date = new Zend_Date();
+                $date->sub(8, Zend_Date::DAY);
+                $ts->start_date = $date->toString('yyyy-MM-dd');
+                $this->setExpectedException('Timetracker_Exception_Deadline');
+                $this->_timesheetController->create($ts);
                 break;
             case 'search_bookable':
                 $filter = $this->_getTimeaccountFilter(TRUE);
@@ -369,7 +391,8 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         return new Timetracker_Model_Timeaccount(array(
             'title'         => Tinebase_Record_Abstract::generateUID(),
             'description'   => 'blabla',
-            'is_open'       => 1
+            'is_open'       => 1,
+            'deadline'      => Timetracker_Model_Timeaccount::DEADLINE_LASTWEEK
         ), TRUE);
     }
     
