@@ -247,6 +247,29 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })]
         };
+    },
+    
+    /**
+     * show error if request fails
+     * 
+     * @param {} response
+     * @param {} request
+     * @private
+     * 
+     */
+    onRequestFailed: function(response, request) {
+        if (response.code && response.code == 902) {
+            // deadline exception
+            Ext.MessageBox.alert(
+                this.app.i18n._('Failed'), 
+                String.format(this.app.i18n._('Could not save {0}.'), this.i18nRecordName) 
+                    + ' ( ' + this.app.i18n._('Booking deadline for this Timeaccount has been exceeded.') /* + ' ' + response.message  */ + ')'
+            ); 
+        } else {
+            // call default exception handler
+            Tine.Tinebase.ExceptionHandler.handleRequestException(response);
+        }
+        this.loadMask.hide();
     }
 });
 
