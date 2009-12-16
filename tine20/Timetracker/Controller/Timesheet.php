@@ -96,19 +96,44 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
     /**
      * checks deadline of record
      * 
-     * @param $_record
+     * @param Timetracker_Model_Timesheet $_record
+     * @param boolean $_throwException
      * @return void
+     * @throws Timetracker_Exception_Deadline
      * 
-     * @todo finish
+     * @todo    allow someone with manage all grant to do it
      */
-    protected function _checkDeadline($_record, $_throwException = TRUE)
+    protected function _checkDeadline(Timetracker_Model_Timesheet $_record, $_throwException = TRUE)
     {
         // get timeaccount
         $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
         
         if ($timeaccount->deadline == Timetracker_Model_Timeaccount::DEADLINE_LASTWEEK) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Check if deadline is exceeded for timeaccount ' . $timeaccount->title);
-            //throw new Timetracker_Exception_Deadline();
+            
+            // it is only on monday allowed to add timesheets for last week
+            $date = new Zend_Date();
+            
+            $date->set('00:00:00', Zend_Date::TIME_FULL);
+            $dayOfWeek = $date->get(Zend_Date::WEEKDAY_DIGIT);
+            //$dayOfWeek = 1; // testing
+            
+            if ($dayOfWeek >= 2) {
+                // only allow to add ts for this week
+                $date->sub($dayOfWeek, Zend_Date::DAY);
+            } else {
+                // only allow to add ts for last week
+                $date->sub($dayOfWeek+7, Zend_Date::DAY);
+            }
+            if ($date->compare($_record->start_date) >= 0) {
+                // later
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Deadline exceed: ' . $_record->start_date . ' < ' . $date);
+                if ($_throwException) {
+                    throw new Timetracker_Exception_Deadline();
+                }
+            } else {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Valid date.');
+            }
         }
     }
     

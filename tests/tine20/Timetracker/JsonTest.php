@@ -209,6 +209,25 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Tinebase_Exception_NotFound');
         Timetracker_Controller_Timesheet::getInstance()->get($timesheetData['id']);
     }
+
+    /**
+     * try to add a Timesheet
+     *
+     */
+    public function testAddTimesheetExceedingDeadline()
+    {
+        $timesheet = $this->_getTimesheet();
+        $date = new Zend_Date();
+        $date->sub(8, Zend_Date::DAY);
+        $timesheet->start_date = $date->toString('yyyy-MM-dd');
+        
+        // checks
+        $this->setExpectedException('Timetracker_Exception_Deadline');
+        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        
+        // cleanup
+        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
+    }
     
     /**
      * try to add a Timesheet with custom fields
@@ -646,6 +665,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         return new Timetracker_Model_Timeaccount(array(
             'title'         => Tinebase_Record_Abstract::generateUID(),
             'description'   => 'blabla',
+            'deadline'      => Timetracker_Model_Timeaccount::DEADLINE_LASTWEEK
         ), TRUE);
     }
     
