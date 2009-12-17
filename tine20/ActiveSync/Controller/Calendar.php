@@ -312,24 +312,18 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         }
         
         if(count($data->attendee) > 0) {
-            $addressbook = Addressbook_Controller_Contact::getInstance();
-            
             $attendees = null;
             
             foreach($data->attendee as $attenderObject) {
-                $contact = $addressbook->get($attenderObject->user_id);
-                
-                if (!empty($contact->email) || !empty($contact->email_home)) {
-                    if($attendees === null) {
-                        $attendees = $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Attendees'));
-                    }
-                    $attendee = $attendees->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Attendee'));
-                    $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Name', $contact->n_fileas));
-                    $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Email', !empty($contact->email) ? $contact->email : $contact->email_home));
-                    if(version_compare($this->_device->acsversion, '12.0', '>=') === true) {
-                        $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'AttendeeType', array_search($attenderObject->role, $this->_attendeeTypeMapping)));
-                        $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'AttendeeStatus', array_search($attenderObject->status, $this->_attendeeStatusMapping)));
-                    }
+                if($attendees === null) {
+                    $attendees = $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Attendees'));
+                }
+                $attendee = $attendees->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Attendee'));
+                $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Name', $attenderObject->getName()));
+                $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Email', $attenderObject->getEmail()));
+                if(version_compare($this->_device->acsversion, '12.0', '>=') === true) {
+                    $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'AttendeeType', array_search($attenderObject->role, $this->_attendeeTypeMapping)));
+                    $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'AttendeeStatus', array_search($attenderObject->status, $this->_attendeeStatusMapping)));
                 }
             }
         }
