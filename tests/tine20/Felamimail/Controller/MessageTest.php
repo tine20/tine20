@@ -225,6 +225,33 @@ Christian Hoffmann
         $this->_controller->delete($message->getId());
     }
     
+    /**
+     * test multipart signed mail
+     *
+     */
+    public function testMessage()
+    {
+        /*
+        $message = $this->_messageTestHelper('sent.eml');
+        $completeMessage = $this->_controller->getCompleteMessage($message->getId(), TRUE);
+        
+        echo $message->subject;
+        echo $message->from;
+        echo $completeMessage->body;
+        
+        //$attachments = $completeMessage->attachments;
+        
+        // do checks
+        //$this->assertEquals('[gentoo-dev] Last rites: dev-php5/pecl-zip', $message->subject);
+        //$this->assertEquals('Christian Hoffmann <hoffie@gentoo.org>', $message->from);
+        //$this->assertEquals('multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary=------------enig43E7BAD372988B39EC5ECE0B', $completeMessage->headers['content-type']);
+        //$this->assertEquals('signature.asc', $attachments[0]['filename']);
+        //$this->assertEquals('', $completeMessage->body);
+        
+        // delete message
+        $this->_controller->delete($message->getId());
+        */
+    }
     
     /********************************* protected helper funcs *************************************/
     
