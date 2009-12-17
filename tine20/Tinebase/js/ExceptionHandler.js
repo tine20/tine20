@@ -133,11 +133,7 @@ Tine.Tinebase.ExceptionHandler = function() {
      */
     var handleRequestException = function(exception) {
         switch(exception.code) {
-            case 510:
-                // if communication is lost, we can't create a nice ext window.
-                alert(_('Connection lost, please check your network!'));
-                break;
-                
+            
             // not authorised
             case 401:
                 Ext.MessageBox.show({
@@ -186,11 +182,26 @@ Tine.Tinebase.ExceptionHandler = function() {
                 });
                 break;
             
+            // if communication is lost, we can't create a nice ext window.
+            case 510:
+                alert(_('Connection lost, please check your network!'));
+                break;
+                
             // transaction aborted / timeout
             case 520:
                 Ext.MessageBox.show({
                     title: _('Timeout'), 
                     msg: _('Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.WARNING
+                });
+                break;
+                
+            // empty response
+            case 540:
+                Ext.MessageBox.show({
+                    title: _('No Response'), 
+                    msg: _('Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator.'),
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.WARNING
                 });
