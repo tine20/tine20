@@ -28,11 +28,11 @@
     
     <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="library/ExtJS/ext-all<?php echo TINE20_BUILDTYPE != 'RELEASE' ? '-debug' : '' ?>.js"></script>
-    
+
+    <!--  geoext / openlayers (TODO: move this to a better place) -->    
     <script type="text/javascript" src="library/OpenLayers/OpenLayers.js"></script>
-    
     <script type="text/javascript" src="library/GeoExt/script/GeoExt.js" type="text/javascript"></script>
-    <link rel="stylesheet" type="text/css" href="library/GeoExt/resources/css/geoext-all.css"></link>
+    <link rel="stylesheet" type="text/css" href="library/GeoExt/resources/css/geoext-all.css" />
     
     <!-- Tine 2.0 static files --><?php
         /**
