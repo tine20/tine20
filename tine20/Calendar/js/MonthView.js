@@ -414,11 +414,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     
         ts.allDayEvent = new Ext.XTemplate(
             '<div id="{id}" class="cal-monthview-event cal-monthview-alldayevent {extraCls}" style="background-color: {bgColor};">' +
-                '<tpl if="values.showInfo">' +
-                    '<div class="cal-event-icon {iconCls}">' +
-                        '<div class="cal-monthview-alldayevent-summary">{[Ext.util.Format.htmlEncode(values.summary)]}</div>' +
-                    '</div>' +
-                '</tpl>' +
+                '<div class="cal-event-icon {iconCls} cal-monthview-event-info-{[values.showInfo ? "show" : "hide"]}">' +
+                    '<div class="cal-monthview-alldayevent-summary">{[Ext.util.Format.htmlEncode(values.summary)]}</div>' +
+                '</div>' +
             '</div>'
         );
         

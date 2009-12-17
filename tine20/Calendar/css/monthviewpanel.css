@@ -179,6 +179,13 @@ cal-monthview-wkcell-header {
     overflow: visible; 
 }
 
+.cal-monthview-event-info-hide {
+	display: none;
+}
+
+.cal-monthview-daypreviewbox .cal-monthview-event-info-hide {
+	display: block;
+}
 
 /******************************* daypreviewbox ********************************/
 .cal-monthview-daypreviewbox {
