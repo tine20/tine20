@@ -124,7 +124,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             }
             if ($date->compare($_record->start_date) >= 0) {
                 // later
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Deadline exceed: ' . $_record->start_date . ' < ' . $date);
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Deadline exceeded: ' . $_record->start_date . ' < ' . $date);
                 
                 if ($this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)
                      || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_ALL)) {
