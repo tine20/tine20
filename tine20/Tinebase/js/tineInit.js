@@ -313,14 +313,17 @@ Tine.Tinebase.tineInit = {
          *        with the jsonprc protocol. For implicitly converted jsonprc requests we 
          *        transform error states here and route them to the error methods defined 
          *        in the request options
+         *        
+         *  NOTE: Illegal json data responses are mapped to error code 530
+         *        Empty resonses (Ext.Decode can't deal with them) are maped to 540
          */
         Ext.Ajax.on('requestcomplete', function(connection, response, options){
             
             // detect resoponse errors (e.g. html from xdebug) and convert into error response
             if (! options.isUpload && ! response.responseText.match(/^([{\[])|(<\?xml)+/)) {
                 var exception = {
-                    code: 1, // @todo : find usefull error code here
-                    message: 'illegal json data in response',
+                    code: response.responseText !== "" ? 530 : 540,
+                    message: response.responseText !== "" ? 'illegal json data in response' : 'empty response',
                     traceHTML: response.responseText,
                     request: options.jsonData,
                     response: response.responseText
