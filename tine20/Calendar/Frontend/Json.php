@@ -286,7 +286,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach ($events as $event) {
             if ($event->organizer) {
                 $idx = $organizers->getIndexById($event->organizer);
-                $event->organizer = $organizers[$idx];
+                if ($idx !== FALSE) {
+                    $event->organizer = $organizers[$idx];
+                }
             }
         }
     }
