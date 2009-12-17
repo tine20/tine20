@@ -28,11 +28,6 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid
      */
     initComponent: function() {
 
-        // check if felamimail is installed and user has run right
-        if (Tine.Felamimail && Tine.Tinebase.common.hasRight('run', 'Felamimail')) {
-            this.felamimail = true;
-        }
-
         // init templates
         this.initTemplate();
         this.initDefaultTemplate();
@@ -46,7 +41,7 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid
     afterRender: function() {
         Tine.Felamimail.GridDetailsPanel.superclass.afterRender.apply(this, arguments);
         
-        if (this.felamimail) {
+        if (this.felamimail === true) {
             this.body.on('click', this.onClick, this);
         }
     },
@@ -258,7 +253,7 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid
                         return '';
                     }
                     
-                    var link = (felamimail) ? '#' : 'mailto:' + email;
+                    var link = (felamimail === true) ? '#' : 'mailto:' + email;
                     var id = Ext.id() + ':' + email;
                     
                     return '<a href="' + link + '" class="tinebase-email-link" id="' + id + '">'

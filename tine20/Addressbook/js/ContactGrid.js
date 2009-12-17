@@ -51,6 +51,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         ddGroup: 'containerDDGroup'
     },
     copyEditAction: true,
+    felamimail: false,
     
     /**
      * phoneMenu
@@ -67,6 +68,10 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     initComponent: function() {
         this.recordProxy = Tine.Addressbook.contactBackend;
         
+        // check if felamimail is installed and user has run right and wants to use felamimail in adb
+        if (Tine.Felamimail && Tine.Tinebase.common.hasRight('run', 'Felamimail') && Tine.Felamimail.registry.get('preferences').get('useInAdb')) {
+            this.felamimail = (Tine.Felamimail.registry.get('preferences').get('useInAdb') == 1);
+        }
         this.gridConfig.cm = this.getColumnModel();
         this.filterToolbar = this.getFilterToolbar();
         this.detailsPanel = this.getDetailsPanel();
@@ -80,7 +85,8 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             this.actions_exportContact,
             this.actions_callContact
         ];
-        if (Tine.Felamimail && Tine.Tinebase.common.hasRight('run', 'Felamimail')) {
+        
+        if (this.felamimail === true) {
             this.contextMenuItems.push(this.actions_composeEmail);
         }
         
@@ -230,7 +236,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             items.push(new Ext.Button(this.actions_callContact));
         }
         
-        if (Tine.Felamimail && Tine.Tinebase.common.hasRight('run', 'Felamimail')) {
+        if (this.felamimail === true) {
             items.push(new Ext.Button(this.actions_composeEmail));
         }
         
@@ -375,7 +381,8 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     getDetailsPanel: function() {
         return new Tine.Addressbook.ContactGridDetailsPanel({
             gridpanel: this,
-            il8n: this.app.i18n
+            il8n: this.app.i18n,
+            felamimail: this.felamimail
         });
     },
     

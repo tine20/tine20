@@ -43,6 +43,12 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     const UPDATEINTERVAL = 'updateInterval';
 
     /**
+     * use felamimail in addressbook
+     *
+     */
+    const USEINADB = 'useInAdb';
+
+    /**
      * application
      *
      * @var string
@@ -62,6 +68,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             self::USERACCOUNT,
             self::DEFAULTACCOUNT,
             self::UPDATEINTERVAL,
+            self::USEINADB,
         );
             
         return $allPrefs;
@@ -89,6 +96,10 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                 'label'         => $translate->_('Email Update Interval'),
                 'description'   => $translate->_('How often should Felamimail check for new Emails (in minutes). "0" means never.'),
             ),
+            self::USEINADB  => array(
+                'label'         => $translate->_('Use in Addressbook'),
+                'description'   => $translate->_('Compose Emails from the Addressbook with Felamimail.'),
+            ),
         );
         
         return $prefDescriptions;
@@ -105,6 +116,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
         $preference = $this->_getDefaultBasePreference($_preferenceName);
         
         switch($_preferenceName) {
+            case self::USEINADB:
             case self::USERACCOUNT:
                 $preference->value      = 0;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
