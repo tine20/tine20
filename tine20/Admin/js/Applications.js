@@ -22,12 +22,17 @@ Tine.Admin.Applications.Main = function() {
      * TODO     make that more generic?
      */
     var _editButtonHandler = function(_button, _event) {
-        var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
-        var appName = selectedRows[0].data.name;
-        Tine[appName].AdminPanel.openWindow({
-            record: (Tine[selectedRows[0].data.name].Model.Settings) ? new Tine[selectedRows[0].data.name].Model.Settings(selectedRows[0].data.name) : null,
-            windowTitle: String.format(_('{0} Settings'), appName)
-        });
+        var selModel = Ext.getCmp('gridAdminApplications').getSelectionModel();
+        if (selModel.getCount() > 0) {
+            var selectedRows = selModel.getSelections();
+            var appName = selectedRows[0].data.name;
+            Tine[appName].AdminPanel.openWindow({
+                record: (Tine[selectedRows[0].data.name].Model.Settings) ? new Tine[selectedRows[0].data.name].Model.Settings(selectedRows[0].data.name) : null,
+                windowTitle: String.format(_('{0} Settings'), appName)
+            });
+        } else {
+            _button.setDisabled(true);
+        }
     };
 
     var _enableDisableButtonHandler = function(state) {
