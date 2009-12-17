@@ -225,14 +225,16 @@ Christian Hoffmann
         $this->_controller->delete($message->getId());
     }
     
+    
     /********************************* protected helper funcs *************************************/
     
     protected function _messageTestHelper($_filename)
     {
-        // get inbox folder id
+        // get inbox folder id and empty folder
         Felamimail_Controller_Cache::getInstance()->updateFolders();
         $folderBackend = new Felamimail_Backend_Folder();
         $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
+        Felamimail_Controller_Folder::getInstance()->emptyFolder($folder->getId());
                 
         $this->_appendMessage($_filename, 'INBOX');
         
