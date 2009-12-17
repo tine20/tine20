@@ -808,6 +808,19 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             $result->addRecord($folder);
         }
         
+        // remove folders that exist no longer on the imap server
+        $filter = new Felamimail_Model_FolderFilter(array(
+            array('field' => 'parent',      'operator' => 'equals', 'value' => $_parentFolder),
+            array('field' => 'account_id',  'operator' => 'equals', 'value' => $_account->getId()),
+        ));
+        $cachedFolderIds = $this->_folderBackend->search($filter, NULL, TRUE);
+        if (count($cachedFolderIds) > count($result)) {
+            // remove folders from cache
+            $noLongerExistingIds = array_diff($cachedFolderIds, $result->getArrayOfIds());
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing ' . count($noLongerExistingIds) . ' no longer existing folder from cache.');
+            $this->_folderBackend->delete($noLongerExistingIds);
+        }
+        
         return $result;
     }
 }

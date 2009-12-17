@@ -13,6 +13,33 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Preference.php:81
+msgid "User Email Account"
+msgstr "Bruker E-post Konto"
+
+#: Preference.php:82
+msgid "Use user credentials for IMAP email account."
+msgstr "Bruk bruker konto informasjon for IMAP e-post konto."
+
+#: Preference.php:85
+msgid "Default Email Account"
+msgstr "Standard E-post Konto"
+
+#: Preference.php:86
+msgid "The default email account to use when sending mails."
+msgstr "Standard e-post konto for bruk med sending av e-post."
+
+#: Preference.php:89
+msgid "Email Update Interval"
+msgstr "E-post Oppdaterings Intervall"
+
+#: Preference.php:90
+msgid ""
+"How often should Felamimail check for new Emails (in minutes). \"0\" means "
+"never."
+msgstr ""
+"Hvor ofte bør Felamimail se etter nye E-post (i minutter). \"0\" betyr aldri."
+
 #: Acl/Rights.php:99
 msgid "manage email accounts"
 msgstr "behandle E-post kontoer"
@@ -21,26 +48,91 @@ msgstr "behandle E-post kontoer"
 msgid "Create and edit email accounts"
 msgstr "Opprett og rediger e-post kontoer"
 
-#: Controller/Message.php:989 js/FelamimailGridDetailsPanel.js:123
+#: js/FelamimailRecipientGrid.js:153 js/FelamimailRecipientGrid.js:174
+msgid "To:"
+msgstr "Til:"
+
+#: js/FelamimailRecipientGrid.js:156 js/FelamimailRecipientGrid.js:175
+msgid "Cc:"
+msgstr "Kopi:"
+
+#: js/FelamimailRecipientGrid.js:159 js/FelamimailRecipientGrid.js:176
+msgid "Bcc:"
+msgstr "Blind Kopi:"
+
+#: js/FelamimailRecipientGrid.js:197
+msgid "Remove"
+msgstr "Fjern"
+
+#: js/FelamimailGridDetailsPanel.js:123 js/FelamimailMessageEditDialog.js:280
 #: js/FelamimailGridPanel.js:258 js/FelamimailGridPanel.js:313
-#: js/FelamimailMessageEditDialog.js:280
+#: Controller/Message.php:989
 msgid "Subject"
 msgstr "Emne"
 
-#: Controller/Message.php:989 js/FelamimailMessageEditDialog.js:197
-msgid "Body"
-msgstr "Melding"
+#: js/FelamimailGridDetailsPanel.js:124 js/FelamimailMessageEditDialog.js:248
+#: js/FelamimailGridPanel.js:259 js/FelamimailGridPanel.js:319
+msgid "From"
+msgstr "Fra"
 
-#: js/Felamimail.js:39
-msgid "Email"
-msgstr "E-post"
+#: js/FelamimailGridDetailsPanel.js:125
+msgid "Add"
+msgstr "Legg til"
 
-#: js/FelamimailAccountEditDialog.js:64 js/FelamimailTreePanel.js:399
-#: js/Models.js:111
+#: js/FelamimailGridDetailsPanel.js:126
+msgid "Add contact to addressbook"
+msgstr "Legg til kontakt i adressebok"
+
+#: js/FelamimailGridDetailsPanel.js:127
+msgid "Date"
+msgstr "Dato"
+
+#: js/FelamimailGridDetailsPanel.js:129 js/FelamimailGridDetailsPanel.js:347
+msgid "Show or hide header information"
+msgstr "Vis eller gjem hode informasjon"
+
+#: js/FelamimailGridDetailsPanel.js:132 js/FelamimailMessageEditDialog.js:189
+msgid "Attachments"
+msgstr "Vedlegg"
+
+#: js/Models.js:43 js/FelamimailTreePanel.js:234
+msgid "Message"
+msgid_plural "Messages"
+msgstr[0] "Melding"
+msgstr[1] "Meldinger"
+
+#: js/Models.js:47 js/Models.js:115
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "lagre liste"
+msgstr[1] "lagre lister"
+
+#: js/Models.js:111 js/FelamimailAccountEditDialog.js:64
+#: js/FelamimailTreePanel.js:408
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Konto"
 msgstr[1] "Kontoer"
+
+#: js/FelamimailAttachmentGrid.js:129
+msgid "Upload Failed"
+msgstr "Opplasting Feilet"
+
+#: js/FelamimailAttachmentGrid.js:130
+msgid ""
+"Could not upload attachment. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr ""
+"Kunne ikke laste opp vedlegg. Filstørrelse kan være for stor. Vennligst "
+"informer din Administrator. Maks opplastings størrelse:"
+
+#: js/FelamimailAttachmentGrid.js:142
+msgid "Add Attachment"
+msgstr "Legg til Vedlegg"
+
+#: js/FelamimailAttachmentGrid.js:150
+msgid "Remove Attachment"
+msgstr "Fjern Vedlegg"
 
 #: js/FelamimailAccountEditDialog.js:77
 msgid "Account Name"
@@ -173,50 +265,128 @@ msgstr "Ren Tekst"
 msgid "Sort Folders (experimental)"
 msgstr "Sorter Mapper (eksperimentell)"
 
-#: js/FelamimailAttachmentGrid.js:129
-msgid "Upload Failed"
-msgstr "Opplasting Feilet"
+#: js/FelamimailTreePanel.js:187 js/FelamimailTreePanel.js:192
+#: js/FelamimailTreePanel.js:203
+msgid "Marked"
+msgstr "Markert"
 
-#: js/FelamimailAttachmentGrid.js:130
-msgid ""
-"Could not upload attachment. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
+#: js/FelamimailTreePanel.js:193
+msgid "Contains marked messages"
+msgstr "Inneholder markerte meldinger"
+
+#: js/FelamimailTreePanel.js:208
+msgid "Unread"
+msgstr "Ulest"
+
+#: js/FelamimailTreePanel.js:209
+msgid "Contains unread messages"
+msgstr "Inneholder uleste meldinger"
+
+#: js/FelamimailTreePanel.js:234 js/FelamimailTreePanel.js:371
+msgid "Update {0} Cache"
 msgstr ""
-"Kunne ikke laste opp vedlegg. Filstørrelse kan være for stor. Vennligst "
-"informer din Administrator. Maks opplastings størrelse:"
 
-#: js/FelamimailAttachmentGrid.js:142
-msgid "Add Attachment"
-msgstr "Legg til Vedlegg"
+#: js/FelamimailTreePanel.js:258
+msgid "Empty Folder"
+msgstr "Tom Mappe"
 
-#: js/FelamimailAttachmentGrid.js:150
-msgid "Remove Attachment"
-msgstr "Fjern Vedlegg"
+#: js/FelamimailTreePanel.js:289
+msgid "Add Folder"
+msgstr "Legg til Mappe"
 
-#: js/FelamimailGridDetailsPanel.js:124 js/FelamimailGridPanel.js:259
-#: js/FelamimailGridPanel.js:319 js/FelamimailMessageEditDialog.js:248
-msgid "From"
-msgstr "Fra"
+#: js/FelamimailTreePanel.js:294
+msgid "New {0}"
+msgstr "Ny {0}"
 
-#: js/FelamimailGridDetailsPanel.js:125
-msgid "Add"
-msgstr "Legg til"
+#: js/FelamimailTreePanel.js:294 js/FelamimailTreePanel.js:297
+#: js/FelamimailTreePanel.js:300 js/FelamimailTreePanel.js:359
+#: js/FelamimailTreePanel.js:371 js/FelamimailTreePanel.js:384
+msgid "Folder"
+msgstr "Mappe"
 
-#: js/FelamimailGridDetailsPanel.js:126
-msgid "Add contact to addressbook"
-msgstr "Legg til kontakt i adressebok"
+#: js/FelamimailTreePanel.js:294
+msgid "Please enter the name of the new {0}:"
+msgstr "Vennligst tast inn navnet på ny  {0}:"
 
-#: js/FelamimailGridDetailsPanel.js:127
-msgid "Date"
-msgstr "Dato"
+#: js/FelamimailTreePanel.js:297
+msgid "No {0} added"
+msgstr "Antall {0} lagt til"
 
-#: js/FelamimailGridDetailsPanel.js:129 js/FelamimailGridDetailsPanel.js:347
-msgid "Show or hide header information"
-msgstr "Vis eller gjem hode informasjon"
+#: js/FelamimailTreePanel.js:297
+msgid "You have to supply a {0} name!"
+msgstr "Du må oppgi et {0} navn!"
 
-#: js/FelamimailGridDetailsPanel.js:132 js/FelamimailMessageEditDialog.js:189
-msgid "Attachments"
-msgstr "Vedlegg"
+#: js/FelamimailTreePanel.js:300
+msgid "Please wait"
+msgstr "Vennligst vent"
+
+#: js/FelamimailTreePanel.js:300
+msgid "Creating {0}..."
+msgstr "Oppretter {0}..."
+
+#: js/FelamimailTreePanel.js:328
+msgid "Edit Account"
+msgstr "Rediger Konto"
+
+#: js/FelamimailTreePanel.js:359
+msgid "Reload {0}"
+msgstr "Omstart {0}"
+
+#: js/FelamimailTreePanel.js:707
+msgid "New mails"
+msgstr "Ny E-post"
+
+#: js/FelamimailTreePanel.js:708
+msgid "You got {0} new mail(s) in Folder "
+msgstr "Du har {0} nye E-post i mappe"
+
+#: js/FelamimailTreePanel.js:840
+msgid "Invalid drop target"
+msgstr "Ugyldig slipp mål"
+
+#: js/FelamimailTreePanel.js:840
+msgid "Could not move message(s)."
+msgstr "Klarte ikke å flytte melding(er)."
+
+#: js/FelamimailMessageEditDialog.js:47
+msgid "Send"
+msgstr "Send"
+
+#: js/FelamimailMessageEditDialog.js:96 js/FelamimailMessageEditDialog.js:291
+msgid "Compose email:"
+msgstr "Skriv E-post:"
+
+#: js/FelamimailMessageEditDialog.js:133
+msgid "Add Note"
+msgstr "Legg til Notat"
+
+#: js/FelamimailMessageEditDialog.js:134
+msgid "Edit Email Note Text:"
+msgstr "Rediger E-post Notat Tekst:"
+
+#: js/FelamimailMessageEditDialog.js:161 js/FelamimailGridPanel.js:695
+msgid "Failed"
+msgstr "Feilet"
+
+#: js/FelamimailMessageEditDialog.js:162
+msgid "Could not send {0}."
+msgstr "Clarte ikke å sende {0}."
+
+#: js/FelamimailMessageEditDialog.js:163
+msgid "Error:"
+msgstr "Feil:"
+
+#: js/FelamimailMessageEditDialog.js:181
+msgid "Recipients"
+msgstr "Mottagere"
+
+#: js/FelamimailMessageEditDialog.js:197 Controller/Message.php:989
+msgid "Body"
+msgstr "Melding"
+
+#: js/FelamimailMessageEditDialog.js:314
+msgid "Save contact note"
+msgstr "Lagre kontakt notat"
 
 #: js/FelamimailGridPanel.js:131
 msgid "Write"
@@ -323,61 +493,13 @@ msgstr "Orginal melding"
 msgid "Fwd: "
 msgstr "Videresend:"
 
-#: js/FelamimailGridPanel.js:695 js/FelamimailMessageEditDialog.js:161
-msgid "Failed"
-msgstr "Feilet"
-
 #: js/FelamimailGridPanel.js:696
 msgid "Some error occured while trying to update the messages."
 msgstr "En feil har oppstått ved forsøk på å oppdatere meldingene."
 
-#: js/FelamimailMessageEditDialog.js:47
-msgid "Send"
-msgstr "Send"
-
-#: js/FelamimailMessageEditDialog.js:96 js/FelamimailMessageEditDialog.js:291
-msgid "Compose email:"
-msgstr "Skriv E-post:"
-
-#: js/FelamimailMessageEditDialog.js:133
-msgid "Add Note"
-msgstr "Legg til Notat"
-
-#: js/FelamimailMessageEditDialog.js:134
-msgid "Edit Email Note Text:"
-msgstr "Rediger E-post Notat Tekst:"
-
-#: js/FelamimailMessageEditDialog.js:162
-msgid "Could not send {0}."
-msgstr "Clarte ikke å sende {0}."
-
-#: js/FelamimailMessageEditDialog.js:163
-msgid "Error:"
-msgstr "Feil:"
-
-#: js/FelamimailMessageEditDialog.js:181
-msgid "Recipients"
-msgstr "Mottagere"
-
-#: js/FelamimailMessageEditDialog.js:314
-msgid "Save contact note"
-msgstr "Lagre kontakt notat"
-
-#: js/FelamimailRecipientGrid.js:153 js/FelamimailRecipientGrid.js:174
-msgid "To:"
-msgstr "Til:"
-
-#: js/FelamimailRecipientGrid.js:156 js/FelamimailRecipientGrid.js:175
-msgid "Cc:"
-msgstr "Kopi:"
-
-#: js/FelamimailRecipientGrid.js:159 js/FelamimailRecipientGrid.js:176
-msgid "Bcc:"
-msgstr "Blind Kopi:"
-
-#: js/FelamimailRecipientGrid.js:197
-msgid "Remove"
-msgstr "Fjern"
+#: js/Felamimail.js:39
+msgid "Email"
+msgstr "E-post"
 
 #: js/FelamimailTreeLoader.js:70
 msgid "Totalcount"
@@ -399,127 +521,8 @@ msgstr "Konto informasjon"
 msgid "No connection to IMAP server."
 msgstr "Ingen tilkobling til IMAP server."
 
-#: js/FelamimailTreePanel.js:187 js/FelamimailTreePanel.js:192
-#: js/FelamimailTreePanel.js:203
-msgid "Marked"
-msgstr "Markert"
-
-#: js/FelamimailTreePanel.js:193
-msgid "Contains marked messages"
-msgstr "Inneholder markerte meldinger"
-
-#: js/FelamimailTreePanel.js:208
-msgid "Unread"
-msgstr "Ulest"
-
-#: js/FelamimailTreePanel.js:209
-msgid "Contains unread messages"
-msgstr "Inneholder uleste meldinger"
-
-#: js/FelamimailTreePanel.js:235
-msgid "Update Cache"
-msgstr "Oppdater Mellomlagring"
-
-#: js/FelamimailTreePanel.js:260
-msgid "Empty Folder"
-msgstr "Tom Mappe"
-
-#: js/FelamimailTreePanel.js:286
-msgid "Add Folder"
-msgstr "Legg til Mappe"
-
-#: js/FelamimailTreePanel.js:291
-msgid "New {0}"
-msgstr "Ny {0}"
-
-#: js/FelamimailTreePanel.js:291 js/FelamimailTreePanel.js:294
-#: js/FelamimailTreePanel.js:297 js/FelamimailTreePanel.js:356
-#: js/FelamimailTreePanel.js:375
-msgid "Folder"
-msgstr "Mappe"
-
-#: js/FelamimailTreePanel.js:291
-msgid "Please enter the name of the new {0}:"
-msgstr "Vennligst tast inn navnet på ny  {0}:"
-
-#: js/FelamimailTreePanel.js:294
-msgid "No {0} added"
-msgstr "Antall {0} lagt til"
-
-#: js/FelamimailTreePanel.js:294
-msgid "You have to supply a {0} name!"
-msgstr "Du må oppgi et {0} navn!"
-
-#: js/FelamimailTreePanel.js:297
-msgid "Please wait"
-msgstr "Vennligst vent"
-
-#: js/FelamimailTreePanel.js:297
-msgid "Creating {0}..."
-msgstr "Oppretter {0}..."
-
-#: js/FelamimailTreePanel.js:325
-msgid "Edit Account"
-msgstr "Rediger Konto"
-
-#: js/FelamimailTreePanel.js:356
-msgid "Reload {0}"
-msgstr "Omstart {0}"
-
-#: js/FelamimailTreePanel.js:698
-msgid "New mails"
-msgstr "Ny E-post"
-
-#: js/FelamimailTreePanel.js:699
-msgid "You got {0} new mail(s) in Folder "
-msgstr "Du har {0} nye E-post i mappe"
-
-#: js/FelamimailTreePanel.js:822
-msgid "Invalid drop target"
-msgstr "Ugyldig slipp mål"
-
-#: js/FelamimailTreePanel.js:822
-msgid "Could not move message(s)."
-msgstr "Klarte ikke å flytte melding(er)."
-
-#: js/Models.js:43
-msgid "Message"
-msgid_plural "Messages"
-msgstr[0] "Melding"
-msgstr[1] "Meldinger"
-
-#: js/Models.js:47 js/Models.js:115
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "lagre liste"
-msgstr[1] "lagre lister"
-
-#: Preference.php:81
-msgid "User Email Account"
-msgstr "Bruker E-post Konto"
-
-#: Preference.php:82
-msgid "Use user credentials for IMAP email account."
-msgstr "Bruk bruker konto informasjon for IMAP e-post konto."
-
-#: Preference.php:85
-msgid "Default Email Account"
-msgstr "Standard E-post Konto"
-
-#: Preference.php:86
-msgid "The default email account to use when sending mails."
-msgstr "Standard e-post konto for bruk med sending av e-post."
-
-#: Preference.php:89
-msgid "Email Update Interval"
-msgstr "E-post Oppdaterings Intervall"
-
-#: Preference.php:90
-msgid ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
-msgstr ""
-"Hvor ofte bør Felamimail se etter nye E-post (i minutter). \"0\" betyr aldri."
+#~ msgid "Update Cache"
+#~ msgstr "Oppdater Mellomlagring"
 
 #~ msgid "Port"
 #~ msgstr "Port"

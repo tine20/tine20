@@ -230,9 +230,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         // define additional actions
         
-        // TODO show loading... icon next to folder
         var updateCacheConfigAction = {
-            text: this.app.i18n._('Update Cache'),
+            text: String.format(_('Update {0} Cache'), this.app.i18n._('Message')),
             iconCls: 'action_update_cache',
             scope: this,
             handler: function() {
@@ -255,12 +254,12 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             }
         };
 
-        // TODO show loading... icon next to folder
         var emptyFolderAction = {
             text: this.app.i18n._('Empty Folder'),
             iconCls: 'action_folder_emptytrash',
             scope: this,
             handler: function() {
+                this.ctxNode.getUI().addClass("x-tree-node-loading");
                 Ext.Ajax.request({
                     params: {
                         method: 'Felamimail.emptyFolder',
@@ -275,6 +274,10 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                         } else {
                             this.ctxNode.attributes.cache_status = 'pending';
                         }
+                        this.ctxNode.getUI().removeClass("x-tree-node-loading");
+                    },
+                    failure: function() {
+                        this.ctxNode.getUI().removeClass("x-tree-node-loading");
                     },
                     timeout: 120000 // 2 minutes
                 });
@@ -360,15 +363,21 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 if (this.ctxNode) {
                     // trigger updateMessageCache
                     this.updateMessageCache(this.ctxNode);
-                    
-                    this.ctxNode.reload(function(node) {
-                        node.expand();
-                        node.select();
-                    });
                 }
             }
         };
 
+        var reloadFolderCacheAction = {
+            text: String.format(_('Update {0} Cache'), this.app.i18n._('Folder')),
+            iconCls: 'action_update_cache',
+            scope: this,
+            handler: function() {
+                if (this.ctxNode) {
+                    // trigger updateFolderCache
+                    this.updateFolderCache(this.ctxNode);
+                }
+            }
+        };
         // mutual config options
         
         var config = {
@@ -380,17 +389,17 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         // system folder ctx menu
 
-        config.actions = ['add', updateCacheConfigAction, reloadFolderAction];
+        config.actions = ['add', updateCacheConfigAction, reloadFolderAction, reloadFolderCacheAction];
         this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
         
         // user folder ctx menu
 
-        config.actions = ['add', 'rename', updateCacheConfigAction, reloadFolderAction, 'delete'];
+        config.actions = ['add', 'rename', updateCacheConfigAction, reloadFolderAction, reloadFolderCacheAction, 'delete'];
         this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
         
         // trash ctx menu
         
-        config.actions = ['add', emptyFolderAction, reloadFolderAction];
+        config.actions = ['add', emptyFolderAction, reloadFolderAction, reloadFolderCacheAction];
         this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
         
         // account ctx menu
@@ -750,14 +759,23 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var accountId = node.attributes.account_id;
         
         if (globalname && accountId) {
+            node.getUI().addClass("x-tree-node-loading");
             Ext.Ajax.request({
                 params: {
                     method: 'Felamimail.updateFolderCache',
-                    folderNames: globalname,
+                    folderNames: Ext.util.JSON.encode([globalname]),
                     accountId: accountId
                 },
                 scope: this,
                 success: function(_result, _request) {
+                   node.reload(function(node) {
+                        node.expand();
+                        node.select();
+                    });
+                },
+                failure: function(response, options) {
+                    node.getUI().removeClass("x-tree-node-loading");
+                    this.loader.handleFailure(response, options, node, false);
                 }
             });
         }        
