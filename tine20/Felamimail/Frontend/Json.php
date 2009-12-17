@@ -148,10 +148,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $decodedFolderNames = Zend_Json::decode($folderNames);
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $folderNames);
-        
-        // close session to allow other requests
-        Zend_Session::writeClose(true);
+        // close session to allow other requests (do we need that?)
+        //Zend_Session::writeClose(true);
             
         $result = array();
         if (empty($decodedFolderNames)) {
