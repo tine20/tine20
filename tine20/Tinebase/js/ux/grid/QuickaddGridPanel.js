@@ -210,7 +210,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     syncFields: function(){
         var pxToSubstract = 2;
-        if (Ext.isSafari) {pxToSubstract = 11;}
+        if (Ext.isSafari3) {pxToSubstract = 11;}
 
         var cm = this.colModel;
         var visCols = this.getVisibleCols();

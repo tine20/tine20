@@ -110,7 +110,7 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
                 // show menu and constrain to viewport if necessary
                 // ( + minor offset adjustments for pixel perfection)
                 this.showAt(
-                    this.el.getAlignToXY(el, pos || this.defaultAlign, [Ext.isSafari? 2 : 1, 0]), 
+                    this.el.getAlignToXY(el, pos || this.defaultAlign, [Ext.isWebKit? 2 : 1, 0]), 
                     parentMenu, 
                     true // true to constrain
                 );
