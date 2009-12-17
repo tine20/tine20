@@ -318,9 +318,16 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
                         success: function(_result, _request){
                             Ext.getCmp('dialerWindow').close();
                         },
-                        failure: function(result, request){
-                            // show error message?
-                        }
+                        failure: function(response, request){
+                            var responseText = Ext.util.JSON.decode(response.responseText);
+                            Ext.Msg.show({
+                               title:   this.translation._('Error'),
+                               msg:     (responseText.data.message) ? responseText.data.message : this.translation._('Not possible to dial.'),
+                               icon:    Ext.MessageBox.ERROR,
+                               buttons: Ext.Msg.OK
+                            });
+                        },
+                        scope: this
                     });                
                 }
             }
@@ -396,6 +403,9 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
     		var lineRecord = new Tine.Voipmanager.Model.SnomLine(phone.data.lines[i], phone.data.lines[i].id);
             this.linesStore.add(lineRecord);
     	}
+        
+        //console.log(phone);
+        //console.log(this.linesStore);
     	
         // disable lineCombo if only 1 line available
     	if (form) {
