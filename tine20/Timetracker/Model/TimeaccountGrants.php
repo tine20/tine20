@@ -207,7 +207,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     public static function getGrantsOfAccount($_accountId, $_timeaccountId, $_ignoreAcl = FALSE)
     {
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-        $cacheId = 'getGrantsOfAccount' . Tinebase_Model_User::convertUserIdToInt($_accountId) . (($_timeaccountId instanceof Timetracker_Model_Timeaccount) ? $_timeaccountId->getId() : $_timeaccountId) . $_ignoreAcl;
+        $cacheId = convertCacheId('getGrantsOfAccount' . Tinebase_Model_User::convertUserIdToInt($_accountId) . (($_timeaccountId instanceof Timetracker_Model_Timeaccount) ? $_timeaccountId->getId() : $_timeaccountId) . $_ignoreAcl);
         $result = $cache->load($cacheId);
         
         if (!$result) {
@@ -245,7 +245,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get grant: ' . print_r($_grant, true));
         
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-        $cacheId = 'getTimeaccountsByAcl' . Tinebase_Core::getUser()->getId() . $_grant . $_onlyIds;
+        $cacheId = convertCacheId('getTimeaccountsByAcl' . Tinebase_Core::getUser()->getId() . $_grant . $_onlyIds);
         $result = $cache->load($cacheId);
         
         if (!$result) {
@@ -297,7 +297,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
         }
         
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-        $cacheId = 'getTimeaccountGrants' . Tinebase_Core::getUser()->getId() . $_timeaccount->getId() . $_ignoreACL;
+        $cacheId = convertCacheId('getTimeaccountGrants' . Tinebase_Core::getUser()->getId() . $_timeaccount->getId() . $_ignoreACL);
         $result = $cache->load($cacheId);
         
         if (!$result) {
