@@ -497,6 +497,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
                                 break;
                             case 'from':
                                 $cachedMessage->from = Felamimail_Message::convertText($message->from, TRUE, 256);
+                                // unquote meta chars
+                                $cachedMessage->from = preg_replace("/\\\\([\[\]\*\?\+\.\^\$\(\)]+)/", "$1", $cachedMessage->from);
                                 break;
                             case 'sent':
                                 $cachedMessage->sent = $this->_convertDate($message->date);
