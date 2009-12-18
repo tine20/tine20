@@ -83,7 +83,9 @@ Ext.namespace('Tine.Felamimail');
         }
         
         // generalized keybord map for edit dlgs
-        // TODO check why onRender() (from Tine.widgets.dialog.EditDialog) is not called in this dialog
+        // TODO this is working in google chrome / check firefox
+        // TODO FF: check why onRender() (from Tine.widgets.dialog.EditDialog) is not called in this dialog
+        /*
         var map = new Ext.KeyMap(this.el, [
             {
                 key: [10,13], // enter + return
@@ -92,6 +94,7 @@ Ext.namespace('Tine.Felamimail');
                 scope: this
             }
         ]);
+        */
         
         var title = this.app.i18n._('Compose email:');
         if (this.record.get('subject')) {
