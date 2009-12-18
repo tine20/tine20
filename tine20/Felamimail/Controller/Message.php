@@ -388,7 +388,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             : substr($account->email, 0, strpos($account->email, '@'));
         // quote meta chars such as []\ etc
         $from = quotemeta($from);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $from);
         $mail->setFrom($account->email, $from);
 
         // set in reply to
