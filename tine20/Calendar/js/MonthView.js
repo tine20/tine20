@@ -724,7 +724,11 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     onMouseDown: function(e, target) {
         this.focusEl.focus();
         this.mainBody.focus();
-        this.unZoom();
+        
+        // only unzoom if click is not in the area of the daypreviewbox
+        if (! e.getTarget('div.cal-monthview-daypreviewbox')) {
+            this.unZoom();
+        }
     },
     
     /**
