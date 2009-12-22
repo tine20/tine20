@@ -70,6 +70,10 @@ $_SERVER['DOCUMENT_ROOT'] = $config->docroot;
 // set default test mailer
 Tinebase_Smtp::setDefaultTransport(new Zend_Mail_Transport_Array());
 
+// set max execution time
+Tinebase_Core::setExecutionLifeTime(1200);
+
+// finally init base framework
 TestServer::getInstance()->initFramework();
 
 Zend_Registry::set('locale', new Zend_Locale($config->locale));
