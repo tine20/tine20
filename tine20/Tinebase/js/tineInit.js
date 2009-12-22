@@ -489,7 +489,8 @@ Tine.Tinebase.tineInit = {
                 }
             });
         } else {
-            var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow();
+            //var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow();
+            var mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
             
             for (p in mainWindow.Tine) {
                 if (mainWindow.Tine[p].hasOwnProperty('registry') && Tine.hasOwnProperty(p)) {
