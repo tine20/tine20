@@ -5,7 +5,6 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
  
 
@@ -14,10 +13,22 @@
  * An object that represents a group of {@link Ext.ux.PopupWindow}
  * @constructor
  */
-Ext.ux.PopupWindowGroup = function(){
+Ext.ux.PopupWindowGroup = function(config) {
+    config = config || {};
+    
+    /**
+     * @cfg {window} mainWindow
+     */
+    var mainWindow = config.mainWindow || window;
+    
+    // mark mainWindow
+    mainWindow.isMainWindow = true;
+    
     var list = {};
     var accessList = [];
     var front = null;
+    
+    
 
     // private
     var cleanupClosedWindows = function() {
@@ -114,7 +125,16 @@ Ext.ux.PopupWindowGroup = function(){
             name = typeof name == "object" ? name.name : name;
             return list[name];
         },
-
+        
+        /**
+         * returns main window of this window group
+         * 
+         * @return window
+         */
+        getMainWindow: function() {
+            return mainWindow;
+        },
+        
         /**
          * Brings the specified window to the front of any other active windows.
          * @param {String/Object} win The id of the window or a {@link Ext.Window} instance
@@ -209,29 +229,6 @@ Ext.ux.PopupWindowGroup = function(){
     };
 };
 
-Ext.ux.PopupWindowGroup.MainWindowName = 'MainWindow';
-/**
- * returns the main window
- * 
- * @todo move to WindowManager
- */
-Ext.ux.PopupWindowGroup.getMainWindow = function() {
-    var w = window;
-    try {
-        while ( w.name != Ext.ux.PopupWindowGroup.MainWindowName) {
-            w = w.opener;
-            if (! w) {
-                return false;
-            }
-        }
-    } catch (e) {
-        // lets reuse this window
-        w.name = Ext.ux.PopupWindowGroup.MainWindowName;
-        return false;
-    }
-    return w;
-};
-
 /**
  * @class Ext.ux.PopupWindowMgr
  * @extends Ext.ux.PopupWindowGroup
@@ -239,12 +236,11 @@ Ext.ux.PopupWindowGroup.getMainWindow = function() {
  * popup windows, create additional instances of {@link Ext.ux.PopupWindowGroup} as needed.
  * @singleton
  */
-var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow();
-if (! mainWindow || mainWindow == window) {
+try {
+    Ext.ux.PopupWindowMgr = window.opener.Ext.ux.PopupWindowMgr ? 
+        window.opener.Ext.ux.PopupWindowMgr :
+        new Ext.ux.PopupWindowGroup();
+} catch (e) {
+    // we might have no access no opener
     Ext.ux.PopupWindowMgr = new Ext.ux.PopupWindowGroup();
-    window.name = Ext.ux.PopupWindowGroup.MainWindowName;
-    window.isMainWindow = true;
-} else {
-    Ext.ux.PopupWindowMgr = Ext.ux.PopupWindowGroup.getMainWindow().Ext.ux.PopupWindowMgr;
-    window.isMainWindow = false;
 }
