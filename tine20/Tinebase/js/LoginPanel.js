@@ -78,6 +78,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     cls: 'tb-login-big-label',
                     text: _('Login')
                 }, new Tine.widgets.LangChooser({
+                    name: 'locale',
                     width: 170,
                     tabindex: 1
                 }), {
