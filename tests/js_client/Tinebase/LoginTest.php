@@ -1,22 +1,30 @@
 <?php
-require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
+/**
+ * Tine 2.0
+ * 
+ * @package     tests
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL3
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
+ */
 
-class LoginTest extends PHPUnit_Extensions_SeleniumTestCase
- {
+/**
+ * Test helper
+ */
+require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+
+class Tinebase_LoginTest extends SessionTestCase
+{
     
     public function setUp()
     {
-        $this->setBrowser('*firefox');
-        $this->setBrowserUrl('http://localhost/tt/tine20/');
+        //$this->setBrowser('*firefox');
+        //$this->setBrowserUrl('http://localhost/tt/tine20/');
     }
     
     public function testLogin()
     {
-        $this->open('http://localhost/tt/tine20/');
-        
-        // maximize window
-        $this->getEval("window.moveBy(-1 * window.screenX, 0); window.resizeTo(screen.width,screen.height);");
-        
         $this->waitForElementPresent('username');
         
         $this->type('username', 'tine20admin');
@@ -35,7 +43,10 @@ class LoginTest extends PHPUnit_Extensions_SeleniumTestCase
         
         $this->type('password', 'lars');
         $this->click($loginButtonId);
-        
-        sleep(10);
+    }
+    
+    public function testLogout()
+    {
+        sleep(3);
     }
 }
