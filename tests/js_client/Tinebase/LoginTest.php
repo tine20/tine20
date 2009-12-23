@@ -17,10 +17,17 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 class Tinebase_LoginTest extends SessionTestCase
 {
     
-    public function setUp()
+    public function testLogut()
     {
-        //$this->setBrowser('*firefox');
-        //$this->setBrowserUrl('http://localhost/tt/tine20/');
+        $this->waitForElementPresent('tineMenu');
+        
+        $logoutButtonId = $this->getEval("window.Ext.getCmp('tineMenu').items.last().getEl().id");
+        $this->click($logoutButtonId);
+        
+        $extMsgYesButtonId = $this->getEval("window.Ext.MessageBox.getDialog().buttons[1].id");
+        $this->waitForVisible($extMsgYesButtonId);
+        $this->click($extMsgYesButtonId);
+        $this->waitForPageToLoad();
     }
     
     public function testLogin()
@@ -43,10 +50,8 @@ class Tinebase_LoginTest extends SessionTestCase
         
         $this->type('password', 'lars');
         $this->click($loginButtonId);
+        
+        $this->waitForElementPresent('tineMenu');
     }
-    
-    public function testLogout()
-    {
-        sleep(3);
-    }
+
 }
