@@ -12,6 +12,8 @@
 /**
  * test suite with shared Selenium RC Session
  *
+ *@todo it seems like setup is called in any suite, whereas tearDown only in the outer one (as expected)
+ *      we should run our setup code only once per session
  */
 class SessionTestSuite extends PHPUnit_Framework_TestSuite
 {

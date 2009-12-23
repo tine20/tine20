@@ -12,15 +12,15 @@
 /**
  * Test helper
  */
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class AllTests
+class Tinebase_AllTests
 {
     public static function suite()
     {
-        $suite = new SessionTestSuite('JSClient AllTests');
+        $suite = new SessionTestSuite('JSClient All Tinebase Tests');
     
-        $suite->addTestSuite('Tinebase_AllTests');
+        $suite->addTestSuite('Tinebase_LoginTest');
         
         return $suite;
     }

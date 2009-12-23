@@ -44,21 +44,12 @@ class SessionTestCase extends PHPUnit_Extensions_SeleniumTestCase
         if (!empty(self::$browsers)) {
             //...
         } else {
-            if (self::$driver instanceof PHPUnit_Extensions_SeleniumTestCase_Driver) {
+            if (self::driverInitialized()) {
                 $this->drivers[0] = self::$driver;
                 self::$driver->setTestCase($this);
                 
             } else {
                 self::$driver = parent::getDriver($browser);
-                
-                /*
-                // setup tine session
-                self::$driver->setBrowser('*firefox');
-                self::$driver->setBrowserUrl('http://localhost/tt/tine20/');
-                self::$driver->start();
-                self::$driver->open('http://localhost/tt/tine20/');
-                self::$driver->waitForElementPresent('username');
-                */
             }
             
             return self::$driver;
@@ -67,10 +58,15 @@ class SessionTestCase extends PHPUnit_Extensions_SeleniumTestCase
     
     public static function destroySession()
     {
-        if (self::$driver instanceof PHPUnit_Extensions_SeleniumTestCase_Driver) {
+        if (self::driverInitialized()) {
             self::$driver->stop();
             
             self::$driver = NULL;
         }
+    }
+    
+    public static function driverInitialized()
+    {
+        return self::$driver instanceof PHPUnit_Extensions_SeleniumTestCase_Driver;
     }
 }
