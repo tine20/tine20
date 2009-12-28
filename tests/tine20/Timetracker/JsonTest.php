@@ -783,6 +783,11 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
                 'operator' => 'equals', 
                 'value' => $_cfid
             ),
+            array(
+                'field' => 'value', 
+                'operator' => 'group', 
+                'value' => ''
+            ),
         );        
     }
     
