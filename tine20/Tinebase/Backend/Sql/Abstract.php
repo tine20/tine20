@@ -85,7 +85,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $this->_tablePrefix = $_tablePrefix ? $_tablePrefix : $this->_db->table_prefix;
         
         if (! ($this->_tableName && $this->_modelName)) {
-            throw new Tinebase_Exception_Backend('modelName and tableName must be configured or given');
+            throw new Tinebase_Exception_Backend('modelName and tableName must be configured or given.');
+        }
+        if (! $this->_db) {
+            throw new Tinebase_Exception_Backend('Database adapter must be configured or given.');
         }
         
         $this->_schema = $this->_db->describeTable($this->_tablePrefix . $this->_tableName);
