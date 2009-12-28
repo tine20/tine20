@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         make row dblclick work
  * TODO         add to extdoc
  */
  
@@ -170,7 +169,20 @@ Tine.Crm.LinkGridPanel.initGrid = function() {
         this.contextMenu.showAt(e.getXY());
     }, this);
     
-    //this.on('rowdblclick', this.actionEdit, this);
+    // doubleclick handler
+    this.on('rowdblclick', function(grid, row, e) {
+        var selectedRows = grid.getSelectionModel().getSelections();
+        record = selectedRows[0];
+        if (! record.phantom && this.recordEditDialogOpener != Ext.emptyFn) {
+            var editWindow = this.recordEditDialogOpener({
+                record: record,
+                listeners: {
+                    scope: this,
+                    'update': this.onUpdate
+                }
+            });
+        }
+    }, this);
 };
 
 //  update event handler for related records
