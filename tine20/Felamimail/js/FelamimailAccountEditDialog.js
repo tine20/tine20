@@ -272,7 +272,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ['plain',  this.app.i18n._('Plain Text')]
                     ]
                 }, {
-                    fieldLabel: this.app.i18n._('Sort Folders (experimental)'),
+                    fieldLabel: this.app.i18n._('Sort Folders'),
                     name: 'sort_folders',
                     typeAhead     : false,
                     triggerAction : 'all',
