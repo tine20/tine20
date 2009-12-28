@@ -101,15 +101,10 @@ class Tinebase_Frontend_Json_Container
      * 
      * @param   int $containerId
      * @return  string success
-     * @throws  Tinebase_Exception
      */
     public function deleteContainer($containerId)
     {
-        try {
-            Tinebase_Container::getInstance()->deleteContainer($containerId);
-        } catch (Tinebase_Exception $e) {
-            throw new Tinebase_Exception('Container not found or permission to delete container denied!');
-        }
+        Tinebase_Container::getInstance()->deleteContainer($containerId);
         
         return array(
             'success'      => TRUE
