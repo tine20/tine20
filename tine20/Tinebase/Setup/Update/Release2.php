@@ -525,4 +525,24 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '2.14');
     }
+    
+    /**
+     * update to 3.0
+     * - change user account status field to varchar (was: enum)
+     */
+    public function update_14()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>status</name>
+                <type>text</type>
+                <length>20</length>
+                <default>enabled</default>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('accounts', $declaration);
+        
+        $this->setTableVersion('accounts', '3');
+        $this->setApplicationVersion('Tinebase', '3.0');
+    }    
 }
