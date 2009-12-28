@@ -529,6 +529,20 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         //die(Zend_Json::encode($registryData));
     }
 
+
+    /**
+     * search / get custom field values
+     *
+     * @param string $filter json encoded filter array
+     * @param string $paging json encoded pagination info
+     * @return array
+     */
+    public function searchCustomFieldValues($filter, $paging)
+    {
+        $result = $this->_search($filter, $paging, Tinebase_CustomField::getInstance(), 'Tinebase_Model_CustomField_ValueFilter');
+        return $result;
+    }
+    
     /************************ preferences functions ***************************/
     
     /**
@@ -595,6 +609,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
             
             $result = $this->_multipleRecordsToJson($records);
+
             
             // add translated labels and descriptions
             $translations = $backend->getTranslatedPreferences();

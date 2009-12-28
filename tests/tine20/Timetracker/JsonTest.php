@@ -250,6 +250,11 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
             Zend_Json::encode($this->_getPaging())
         );
         $this->assertGreaterThan(0, $searchResult['totalcount'], 'cf filter not working');
+        
+        // search custom field values
+        $tinebaseJson = new Tinebase_Frontend_Json();
+        $cfValues = $tinebaseJson->searchCustomFieldValues(Zend_Json::encode($this->_getCfValueFilter($customField1->getId())), '');
+        $this->assertEquals($cfValue1, $cfValues['results'][0]['value']);
     }
     
     /**
@@ -764,6 +769,23 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         );        
     }
 
+    /**
+     * get customfield value filter
+     *
+     * @param string $_cfid
+     * @return array
+     */
+    protected function _getCfValueFilter($_cfid)
+    {
+        return array(
+            array(
+                'field' => 'customfield_id', 
+                'operator' => 'equals', 
+                'value' => $_cfid
+            ),
+        );        
+    }
+    
     /**
      * get Timesheet filter with custom field
      *

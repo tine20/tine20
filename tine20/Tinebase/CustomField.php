@@ -20,7 +20,7 @@
  * @package     Tinebase
  * @subpackage  CustomField
  */
-class Tinebase_CustomField
+class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
 {
     /**************************** protected vars *********************/
     
@@ -285,5 +285,36 @@ class Tinebase_CustomField
         $filter = new Tinebase_Model_CustomField_ValueFilter($filterValues);
         
         return $this->_backendValue->search($filter);
+    }
+    
+    /******************** functions for Tinebase_Controller_SearchInterface / get custom field values ***************************/
+    
+    /**
+     * get list of custom field values
+     *
+     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param bool $_getRelations (unused)
+     * @param boolean $_onlyIds (unused)
+     * @return Tinebase_Record_RecordSet
+     * 
+     * @todo    check if cf id is set in filter?
+     */
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
+    {
+        $result = $this->_backendValue->search($_filter, $_pagination);
+        return $result;
+    }
+    
+    /**
+     * Gets total count of search with $_filter
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return int
+     */
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
+    {
+        $count = $this->_backendValue->searchCount($_filter);
+        return $count;
     }
 }
