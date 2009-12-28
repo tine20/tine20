@@ -42,6 +42,8 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
         'length'            => array('allowEmpty' => true, 'Alnum'  ),
         'group'             => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => '' ),
         'order'             => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => 0, 'Int' ),
+    // search for values with typeahead combobox in cf panel
+        'value_search'      => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => 0 ),
     );
     
 } // end of Tinebase_Model_CustomField_Config

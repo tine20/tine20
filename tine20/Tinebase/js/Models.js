@@ -193,7 +193,8 @@ Tine.Tinebase.Model.Customfield = Ext.data.Record.create([
     { name: 'type'           },
     { name: 'length'         },
     { name: 'group'          },
-    { name: 'order'          }
+    { name: 'order'          },
+    { name: 'value_search'   }
 ]);
 
 /**
