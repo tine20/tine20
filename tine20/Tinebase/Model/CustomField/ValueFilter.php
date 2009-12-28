@@ -37,5 +37,6 @@ class Tinebase_Model_CustomField_ValueFilter extends Tinebase_Model_Filter_Filte
     protected $_filterModel = array(
         'record_id'         => array('filter' => 'Tinebase_Model_Filter_Id'),
         'customfield_id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'value'             => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }

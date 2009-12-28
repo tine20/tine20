@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: CustomfieldsPanel.js 6040 2008-12-18 09:57:40Z c.weiss@metaways.de $
  *
+ * TODO         this is only used in the phone dial dialog, do we need that?
  */
  
 Ext.ns('Tine.widgets', 'Tine.widgets.customfields');

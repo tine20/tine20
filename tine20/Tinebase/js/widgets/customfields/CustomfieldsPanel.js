@@ -73,8 +73,9 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
                 var fieldDef = {
                     fieldLabel: def.get('label'),
                     name: 'customfield_' + def.get('name'),
-                    xtype: def.get('type'),
-                    width: '90%'
+                    xtype: (def.get('value_search') == 1) ? 'customfieldsearchcombo' : def.get('type'),
+                    customfieldId: def.id,
+                    anchor: '95%'
                 };
                 
                 try {
