@@ -33,7 +33,9 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         //6 => 'notin',
         7 => 'isnull',
         8 => 'notnull',
-        9 => 'oneof'
+        9 => 'oneof',
+    // add 'group by _fieldname_' to select statement and remove empty values / filter value is not used when this operator is set
+        10 => 'group',
     );
     
     /**
@@ -50,6 +52,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         'isnull'     => array('sqlop' => ' IS NULL',     'wildcards' => '?'  ),
         'notnull'    => array('sqlop' => ' IS NOT NULL', 'wildcards' => '?'  ),
         'oneof'      => array('sqlop' => ' LIKE ?',      'wildcards' => '?'  ),
+        'group'      => array('sqlop' => " NOT LIKE  ''",'wildcards' => '?'  ),
     );
     
     /**
@@ -61,12 +64,16 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $action = $this->_opSqlMap[$this->_operator];
-         
-        // quote field identifier and replace wildcards
+        // quote field identifier, set action and replace wildcards
         $field = $this->_getQuotedFieldName($_backend);
+        $action = $this->_opSqlMap[$this->_operator];
         $value = $this->_replaceWildcards($this->_value);
-        
+
+        // check if group by is operator and return if this is the case
+        if ($this->_operator == 'group') {
+            $_select->group($this->_field);
+        }
+
         // oneof operator (multiple values / OR) 
         if ($this->_operator == 'oneof') {
             if (empty($this->_value)) {
