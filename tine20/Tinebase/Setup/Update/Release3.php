@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id: Release2.php 12076 2009-12-28 12:05:25Z p.schuele@metaways.de $
+ * @version     $Id$
  */
 
 class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
