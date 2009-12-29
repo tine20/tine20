@@ -473,6 +473,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // create
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
         
         // export & check
         $odsExportClass = new Timetracker_Export_Ods();
@@ -489,7 +490,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // cleanup / delete file
         unlink($result);
-        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
 
     /**
