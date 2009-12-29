@@ -76,7 +76,7 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
      * @param string $_preferenceName
      * @return Tinebase_Model_Preference
      */
-    public function getPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+    public function getPreferenceDefaults($_preferenceName, $_accountId = NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
         $preference = $this->_getDefaultBasePreference($_preferenceName);
         
@@ -96,8 +96,6 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
      *
      * @param string $_value
      * @return array
-     * 
-     * @todo get all export config labels
      */
     protected function _getSpecialOptions($_value)
     {
@@ -107,13 +105,15 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
         switch($_value) {
             case self::TSODSEXPORTCONFIG:
                 // get all export config labels
-                $result[] = array('default', $translate->_('default'));
-                /*
-                $accounts = Timetracker_Controller_Account::getInstance()->search();
-                foreach ($accounts as $account) {
-                    $result[] = array($account->getId(), $account->name);
+                $configs = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::ODSEXPORTCONFIG, 'Timetracker', array());
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . print_r($configs, TRUE));
+                if (! empty($configs)) {
+                    foreach($configs['timesheets'] as $key => $tsConfig) {
+                        $result[] = array($key, $key);
+                    }
+                } else {
+                    $result[] = array('default', $translate->_('default'));
                 }
-                */
                 break;
             default:
                 $result = parent::_getSpecialOptions($_value);
