@@ -190,7 +190,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $folderId id of active folder
      * @return array
      * 
-     * @todo    rewrite initial import to allow partial imports / only import 1000? mails at once (and return the progress) / add progress bar in client?
      * @todo    message caching should be resumable if it ended and wasn't finished 
      * @todo    add counter to update only X folders at once?
      */

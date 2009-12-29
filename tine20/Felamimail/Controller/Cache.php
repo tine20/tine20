@@ -40,6 +40,13 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
     protected $_initialNumber = 50;
     
     /**
+     * number of imported messages in one caching step
+     *
+     * @var int
+     */
+    protected $_importCountPerStep = 1000;
+    
+    /**
      * folder backend
      *
      * @var Felamimail_Backend_Folder
@@ -217,6 +224,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Finishing Initial import for folder ' . $folder->globalname . ' ... ');
         }
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($folder->toArray(), TRUE));
+        
         try {
             $backend = Felamimail_Backend_ImapFactory::factory($folder->account_id);
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
@@ -240,10 +249,12 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         
         $to = $messageCount - $folderCount;
         
-        while (! isset($from) || $from > 1) {
-            $from = ($to > 200) ? $to - 200 : 1;
+        $importCount = 0;
+        $importPerLoop = 100;
+        while ((! isset($from) || $from > 1) && $importCount <= $this->_importCountPerStep) {
+            $from = ($to > $importPerLoop) ? $to - $importPerLoop : 1;
             
-            // get next 200 message headers
+            // get next $importPerLoop message headers
             
             $uids = $backend->getUid($from, $to);
             
@@ -259,23 +270,31 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
                 
                 // get message headers and save them in cache db
                 $this->_addMessages($messages, $_folderId);
+                
+                $importCount += count($messages);
             }
             
             $to = $from - 1;
-            //$from = ($to > 200) ? $to - 200 : 1;
         }
         
-        // get number of unread messages
+        // check if there are still messages to fetch
+        if ($to > 1) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ... initial import not finished yet for folder ' . $folder->globalname);
+            $messageCount = $folderCount + $importCount;
+            $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
+            $folder->cache_lowest_uid = min($uids);
+        
+        } else {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ... done with initial import for folder ' . $folder->globalname);
+            $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
+            $folder->cache_lowest_uid = 0;
+        }
+        
+        // get number of unread messages and update folder
         $seenCount = $this->_messageCacheBackend->seenCountByFolderId($_folderId);
         $folder->unreadcount = $messageCount - $seenCount;
-        
-        // update folder
         $folder->totalcount = $messageCount;
-        $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
-        $folder->cache_lowest_uid = 0;
-        $folder = $this->_folderBackend->update($folder);
-        
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ... done with Initial import for folder ' . $folder->globalname);
+        $this->_folderBackend->update($folder);
         
         return TRUE;
     }
