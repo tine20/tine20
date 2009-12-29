@@ -257,7 +257,7 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid
                     var id = Ext.id() + ':' + email;
                     
                     return '<a href="' + link + '" class="tinebase-email-link" id="' + id + '">'
-                        + Ext.util.Format.ellipsis(email, 18); + '</a>';
+                        + Ext.util.Format.ellipsis(email, 18) + '</a>';
                 }
             }
         );
