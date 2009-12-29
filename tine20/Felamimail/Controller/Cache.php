@@ -103,17 +103,12 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
      * @param boolean $_recursive try it again if something goes wrong
      * @return Felamimail_Model_Folder
      * 
-     * @todo    only try to get the uncached mails instead of clearing the whole cache when count mismatched
-     * @todo    write tests for cache handling
      * @todo    check if more than $_initialNumber new messages arrived even if cache 
      *          is already complete (-> do initial import again?)
-     * @todo    split this into smaller parts
      */
     public function updateMessages($_folder, $_recursive = TRUE)
     {
-        $result = 0;
-        
-        /***************** get folder & backend *****************************/
+        /***************** get folder ***************************************/
         
         $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : $this->_folderBackend->get($_folder);
         
@@ -122,10 +117,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             return $folder;
         }
         
-        $folderId = $folder->getId();
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($folder->toArray(), true));
-        
+        /***************** get backend **************************************/
+
         try {
             $backend = Felamimail_Backend_ImapFactory::factory($folder->account_id);
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
@@ -133,6 +126,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
             return $folder;
         }
+        
+        /***************** get counts and folder data ***********************/
         
         try {
             $backendFolderValues = $backend->selectFolder($folder->globalname);
@@ -142,14 +137,6 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             return $folder;
         }
         
-        // init uidnext if empty
-        if (! isset($backendFolderValues['uidnext'])) {
-            $backendFolderValues['uidnext'] = $backendFolderValues['exists'];
-            $getUidsFirst = TRUE;
-        } else {
-            $getUidsFirst = FALSE;
-        }
-
         $messageCount = $backend->countMessages();
         
         // check if message count is strange
@@ -162,99 +149,31 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             $messageCount = $backendFolderValues['exists'];
         }
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Select Folder: ' . $backend->getCurrentFolder() 
-            //. ' Values: ' . print_r($backendFolderValues, TRUE)
-        );
-        
         // remove old \Recent flag from cached messages
-        $this->_messageCacheBackend->clearFlag($folderId, '\Recent', 'folder');
+        $this->_messageCacheBackend->clearFlag($folder->getId(), '\Recent', 'folder');
         
         /***************** check for messages to add ************************/
         
-        // check uidnext & get missing mails
-        if ($folder->uidnext < $backendFolderValues['uidnext']) {
-            if (empty($folder->uidnext)) {
+        $backendFolderValues = $this->_updateMessagesAdd($backend, $folder, $backendFolderValues, $messageCount);
                 
-                /********* initial ******************************************/
-                
-                $messages = $this->_updateInitial($backend, $folder, $backendFolderValues, $messageCount);
-                $result = $messageCount;
-                
-            } else {
-                
-                /********* update *******************************************/
-                
-                // only get messages with $backendFolderValues['uidnext'] > uid > $folder->uidnext
-                if ($getUidsFirst) {
-                    $uids = $backend->getUid($folder->uidnext, $backendFolderValues['uidnext']);
-                    $messages = $backend->getSummary($uids);
-                } else {
-                    $messages = $backend->getSummary($folder->uidnext, $backendFolderValues['uidnext']);
-                }
-            }
-
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Trying to add ' . count($messages) . ' new messages to cache. ');
-            
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Old uidnext: ' . $folder->uidnext
-                . ' New uidnext: ' . $backendFolderValues['uidnext']
-                //. ' uids: ' . print_r($uids, true)
-            );
-            
-            // get message headers and save them in cache db
-            $this->_addMessages($messages, $folderId);
-            
-        } else {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No need to get new messages, cache is up to date.');
-            
-            // check if folder is updating at the moment to show correct message number
-            if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING) {
-                $result = $messageCount;
-            }
-        }
-                
-        /***************** check uidvalidity and update folder *************/
+        /***************** check uidvalidity ********************************/
         
-        if ($folder->uidvalidity != $backendFolderValues['uidvalidity'] && $backendFolderValues['uidvalidity'] != 1) {
-            
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
-                ' Got non matching uidvalidity value: ' . $backendFolderValues['uidvalidity'] .'. Expected: ' . $folder->uidvalidity
-            );
-            
-            // update folder and cache messages again
-            if ($_recursive) {
-                $folder = $this->clear($folder);
-                return $this->updateMessages($folder, FALSE);
-            } /* else {
-                return $folder;
-            } */
+        if (! $this->_updateMessagesCheckValidity($folder, $backendFolderValues) && $_recursive) {
+            $folder = $this->clear($folder);
+            return $this->updateMessages($folder, FALSE);
         }
 
-        $folderCount = $this->_messageCacheBackend->searchCountByFolderId($folderId);
+        /***************** get folder message count *************************/
+        
+        $folderCount = $this->_messageCacheBackend->searchCountByFolderId($folder->getId());
         
         /***************** check for messages to delete *********************/
         
-        $messageCount = $this->_updateDelete($backend, $folderId, $backendFolderValues, $messageCount, $folderCount);
+        $messageCount = $this->_updateMessagesDelete($backend, $folder, $backendFolderValues, $messageCount, $folderCount);
         
         /***************** compare message counts ***************************/
         
-        if ($folderCount < $messageCount 
-            && $folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE 
-            && $folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_DELETING
-        ) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
-                ' foldercount is lower than (server)messagecount: ' . $folderCount . ' < ' . $messageCount
-            );
-            
-            // update folder and cache messages again (try it only once)
-            if ($_recursive) {
-                $folder = $this->clear($folder);
-                return $this->updateMessages($folder, FALSE);
-            } /* else {
-                return $folder;
-            } */
-        }
+        $this->_updateMessagesCompare($backend, $folder, $messageCount, $folderCount);
         
         /***************** update folder ************************************/
         
@@ -451,6 +370,168 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
     }
     
     /***************************** protected funcs *******************************/
+    
+    /**
+     * add new messages to cache
+     * 
+     * @param Felamimail_Backend_Imap $_backend
+     * @param Felamimail_Model_Folder $_folder
+     * @param array $_backendFolderValues
+     * @param integer $_messageCount
+     * @return array
+     */
+    protected function _updateMessagesAdd($_backend, $_folder, $_backendFolderValues, $_messageCount)
+    {
+        $backendFolderValues = $_backendFolderValues;
+        
+        // init uidnext if empty
+        if (! isset($backendFolderValues['uidnext'])) {
+            $backendFolderValues['uidnext'] = $backendFolderValues['exists'];
+            $getUidsFirst = TRUE;
+        } else {
+            $getUidsFirst = FALSE;
+        }
+
+        // check uidnext & get missing mails
+        if ($_folder->uidnext < $backendFolderValues['uidnext']) {
+            if (empty($_folder->uidnext)) {
+                
+                // initial 
+                $messages = $this->_updateInitial($_backend, $_folder, $backendFolderValues, $_messageCount);
+                
+            } else {
+                
+                // update
+                if ($getUidsFirst) {
+                    // only get messages with $backendFolderValues['uidnext'] > uid > $_folder->uidnext
+                    $uids = $_backend->getUid($_folder->uidnext, $backendFolderValues['uidnext']);
+                    $messages = $_backend->getSummary($uids);
+                } else {
+                    $messages = $_backend->getSummary($_folder->uidnext, $backendFolderValues['uidnext']);
+                }
+            }
+
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Trying to add ' . count($messages) . ' new messages to cache. ');
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Old uidnext: ' . $_folder->uidnext
+                . ' New uidnext: ' . $backendFolderValues['uidnext']
+                //. ' uids: ' . print_r($uids, true)
+            );
+            
+            // get message headers and save them in cache db
+            $this->_addMessages($messages, $_folder->getId());
+            
+        } else {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No need to get new messages, cache is up to date.');
+        }
+        
+        return $backendFolderValues;
+    }
+    
+    /**
+     * check if mails have been deleted (compare counts)
+     *
+     * @param Felamimail_Model_Folder $_folder
+     * @param array $_backendFolderValues
+     * @return boolean
+     */
+    protected function _updateMessagesCheckValidity($_folder, $_backendFolderValues)
+    {
+        $result = TRUE;
+        
+        if ($_folder->uidvalidity != $_backendFolderValues['uidvalidity'] && $_backendFolderValues['uidvalidity'] != 1) {
+            
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
+                ' Got non matching uidvalidity value: ' . $_backendFolderValues['uidvalidity'] .'. Expected: ' . $_folder->uidvalidity
+            );
+            
+            $result = FALSE;
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * check if mails have been deleted (compare counts)
+     *
+     * @param Felamimail_Backend_Imap $_backend
+     * @param Felamimail_Model_Folder $_folder
+     * @param array $_backendFolderValues
+     * @param integer $_messageCount
+     * @param integer $_folderCount
+     * @return integer new messageCount
+     */
+    protected function _updateMessagesDelete($_backend, $_folder, $_backendFolderValues, $_messageCount, $_folderCount)
+    {
+        if ($_backendFolderValues['exists'] < $_folderCount) {
+            // some messages have been deleted
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Checking for deleted messages.' .
+                ' cached msgs: ' . $_folderCount . ' server msgs: ' . $_backendFolderValues['exists']
+            );
+            
+            // get cached msguids
+            $cachedMsguids = $this->_messageCacheBackend->getMessageuidsByFolderId($_folder->getId());
+            
+            // get server msguids
+            $uids = $_backend->getUid(1, $_messageCount);
+            
+            // array diff the msg uids to delete from cache
+            $uidsToDelete = array_diff($cachedMsguids, $uids);
+            $deleted = $this->_messageCacheBackend->deleteMessageuidsByFolderId($uidsToDelete, $_folder->getId());
+            
+            $result = $_messageCount - $deleted;
+            
+            if ($result < 0) {
+                $result = 0;
+            }
+            
+        } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' No need to remove old messages from cache / it is up to date.' .
+                ' cached msgs: ' . $_folderCount . ' server msgs: ' . $_backendFolderValues['exists']
+            );
+            
+            $result = $_messageCount;
+        }
+        
+        return $result;
+    }
+    
+    
+    /**
+     * compare folder count with message count
+     *
+     * @param Felamimail_Backend_Imap $_backend
+     * @param Felamimail_Model_Folder $_folder
+     * @param integer $_messageCount
+     * @param integer $_folderCount
+     * @return void
+     * 
+     * @todo only try to get the uncached mails instead of clearing the whole cache when count mismatched
+     */
+    protected function _updateMessagesCompare($_backend, $_folder, $_messageCount, $_folderCount)
+    {
+        if ($_folderCount < $_messageCount 
+            && $_folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE 
+            && $_folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_DELETING
+        ) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
+                ' foldercount is lower than (server)messagecount: ' . $_folderCount . ' < ' . $_messageCount
+            );
+            
+            // @todo get remaining messages from server
+            /*
+            // update folder and cache messages again (try it only once)
+            if ($_recursive) {
+                $folder = $this->clear($folder);
+                return $this->updateMessages($folder, FALSE);
+            } else {
+                return $folder;
+            }
+            */
+        }
+    }
     
     /**
      * add messages to cache
@@ -652,52 +733,6 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         return $messages;
     }
 
-    /**
-     * check if mails have been deleted (compare counts)
-     *
-     * @param Felamimail_Backend_Imap $_backend
-     * @param string $_folderId
-     * @param array $_backendFolderValues
-     * @param integer $_messageCount
-     * @param integer $_folderCount
-     * @return integer new messageCount
-     */
-    protected function _updateDelete($_backend, $_folderId, $_backendFolderValues, $_messageCount, $_folderCount)
-    {
-        if ($_backendFolderValues['exists'] < $_folderCount) {
-            // some messages have been deleted
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Checking for deleted messages.' .
-                ' cached msgs: ' . $_folderCount . ' server msgs: ' . $_backendFolderValues['exists']
-            );
-            
-            // get cached msguids
-            $cachedMsguids = $this->_messageCacheBackend->getMessageuidsByFolderId($_folderId);
-            
-            // get server msguids
-            $uids = $_backend->getUid(1, $_messageCount);
-            
-            // array diff the msg uids to delete from cache
-            $uidsToDelete = array_diff($cachedMsguids, $uids);
-            $deleted = $this->_messageCacheBackend->deleteMessageuidsByFolderId($uidsToDelete, $_folderId);
-            
-            $result = $_messageCount - $deleted;
-            
-            if ($result < 0) {
-                $result = 0;
-            }
-            
-        } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-                ' No need to remove old messages from cache / it is up to date.' .
-                ' cached msgs: ' . $_folderCount . ' server msgs: ' . $_backendFolderValues['exists']
-            );
-            
-            $result = $_messageCount;
-        }
-        
-        return $result;
-    }
-    
     /**
      * update folder values and save it in db (cache)
      * 
