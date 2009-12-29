@@ -184,123 +184,130 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
      */
     protected function _getExportConfig()
     {
-        $exportConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::ODSEXPORTCONFIG, 'Timetracker', array(
-            'timesheets' => array(
-                'default' => array(
-                    'header' => array(
-                        '{date}', 
-                        '{user}',
-                    ),
-                    'customFields' => FALSE,
-                    'sumColumn' => 'F',
-                    'billableColumn' => 'G',
-                    'overviewTable' => TRUE,
-                    'fields' => array(
-                        'start_date' => array(
-                            'header'    => $this->_translate->_('Date'),
-                            'type'      => 'date', 
-                            'width'     => '2,5cm'
-                        ),
-                        'description' => array(
-                            'header'    => $this->_translate->_('Description'),
-                            'type'      => 'string', 
-                            'width'     => '10cm'
-                        ),
-                        'timeaccount_number' => array(
-                            'header'    => $this->_translate->_('Timeaccount Number'),
-                            'type'      => 'timeaccount', 
-                            'field'     => 'number', 
-                            'width'     => '5cm',
-                        ),                
-                        'timeaccount_id' => array(
-                            'header'    => $this->_translate->_('Timeaccount'),
-                            'type'      => 'timeaccount', 
-                            'field'     => 'title', 
-                            'width'     => '7cm',
-                            'replace'   => array('pattern' => "/^XYZ /", 'replacement' => '')
-                        ),
-                        'account_id' => array(
-                            'header'    => $this->_translate->_('Staff Member'),
-                            'type'      => 'account_id', 
-                            'field'     => 'accountDisplayName', 
-                            'width'     => '4cm'
-                        ),
-                        'duration' => array(
-                            'header'    => $this->_translate->_('Duration'),
-                            'type'      => 'float', 
-                            'width'     => '2cm',
-                            'divisor'   => 60,
-                            'number'    => TRUE,
-                        ),
-                        'is_billable_combined' => array(
-                            'header'    => $this->_translate->_('Billable'),
-                            'type'      => 'float', 
-                            'width'     => '3cm'
-                        ),
-                        'is_cleared_combined' => array(
-                            'header'    => $this->_translate->_('Cleared'),
-                            'type'      => 'float', 
-                            'width'     => '3cm'
-                        ),
-                    )
-                )
-            ), 
-            'timeaccounts' => array(
-                'header' => array(
-                    '{date}', 
-                    '{user}',
+        $defaultTsConfig = array(
+        'default' => array(
+            'header' => array(
+                '{date}', 
+                '{user}',
+            ),
+            'customFields' => FALSE,
+            'sumColumn' => 'F',
+            'billableColumn' => 'G',
+            'overviewTable' => TRUE,
+            'fields' => array(
+                'start_date' => array(
+                    'header'    => $this->_translate->_('Date'),
+                    'type'      => 'date', 
+                    'width'     => '2,5cm'
                 ),
-                'fields' => array(
-                    'number' => array(
-                        'header'    => $this->_translate->_('Number'),
-                        'type'      => 'string', 
-                        'width'     => '2,5cm'
-                    ),
-                    'title' => array(
-                        'header'    => $this->_translate->_('Title'),
-                        'type'      => 'string', 
-                        'width'     => '2,5cm'
-                    ),
-                    'description' => array(
-                        'header'    => $this->_translate->_('Description'),
-                        'type'      => 'string', 
-                        'width'     => '10cm'
-                    ),
-                    'created_by' => array(
-                        'header'    => $this->_translate->_('Created By'),
-                        'type'      => 'created_by', 
-                        'field'     => 'accountDisplayName', 
-                        'width'     => '4cm'
-                    ),
-                    'creation_time' => array(
-                        'header'    => $this->_translate->_('Creation Date'),
-                        'type'      => 'datetime', 
-                        'width'     => '2,5cm'
-                    ),
-                    'status' => array(
-                        'header'    => $this->_translate->_('Status'),
-                        'type'      => 'string',
-                        'translate' => TRUE, 
-                        'width'     => '3cm'
-                    ),
-                    'is_billable' => array(
-                        'header'    => $this->_translate->_('Billable'),
-                        'type'      => 'float', 
-                        'width'     => '3cm'
-                    ),
-                    'billed_in' => array(
-                        'header'    => $this->_translate->_('Cleared In'),
-                        'type'      => 'string', 
-                        'width'     => '3cm'
-                    ),
-                    'is_open' => array(
-                        'header'    => $this->_translate->_('Open'),
-                        'type'      => 'float', 
-                        'width'     => '3cm'
-                    ),
-                )
+                'description' => array(
+                    'header'    => $this->_translate->_('Description'),
+                    'type'      => 'string', 
+                    'width'     => '10cm'
+                ),
+                'timeaccount_number' => array(
+                    'header'    => $this->_translate->_('Timeaccount Number'),
+                    'type'      => 'timeaccount', 
+                    'field'     => 'number', 
+                    'width'     => '5cm',
+                ),                
+                'timeaccount_id' => array(
+                    'header'    => $this->_translate->_('Timeaccount'),
+                    'type'      => 'timeaccount', 
+                    'field'     => 'title', 
+                    'width'     => '7cm',
+                    'replace'   => array('pattern' => "/^XYZ /", 'replacement' => '')
+                ),
+                'account_id' => array(
+                    'header'    => $this->_translate->_('Staff Member'),
+                    'type'      => 'account_id', 
+                    'field'     => 'accountDisplayName', 
+                    'width'     => '4cm'
+                ),
+                'duration' => array(
+                    'header'    => $this->_translate->_('Duration'),
+                    'type'      => 'float', 
+                    'width'     => '2cm',
+                    'divisor'   => 60,
+                    'number'    => TRUE,
+                ),
+                'is_billable_combined' => array(
+                    'header'    => $this->_translate->_('Billable'),
+                    'type'      => 'float', 
+                    'width'     => '3cm'
+                ),
+                'is_cleared_combined' => array(
+                    'header'    => $this->_translate->_('Cleared'),
+                    'type'      => 'float', 
+                    'width'     => '3cm'
+                ),
             )
         ));
+        
+        $defaultTaConfig = array(
+            'header' => array(
+                '{date}', 
+                '{user}',
+            ),
+            'fields' => array(
+                'number' => array(
+                    'header'    => $this->_translate->_('Number'),
+                    'type'      => 'string', 
+                    'width'     => '2,5cm'
+                ),
+                'title' => array(
+                    'header'    => $this->_translate->_('Title'),
+                    'type'      => 'string', 
+                    'width'     => '2,5cm'
+                ),
+                'description' => array(
+                    'header'    => $this->_translate->_('Description'),
+                    'type'      => 'string', 
+                    'width'     => '10cm'
+                ),
+                'created_by' => array(
+                    'header'    => $this->_translate->_('Created By'),
+                    'type'      => 'created_by', 
+                    'field'     => 'accountDisplayName', 
+                    'width'     => '4cm'
+                ),
+                'creation_time' => array(
+                    'header'    => $this->_translate->_('Creation Date'),
+                    'type'      => 'datetime', 
+                    'width'     => '2,5cm'
+                ),
+                'status' => array(
+                    'header'    => $this->_translate->_('Status'),
+                    'type'      => 'string',
+                    'translate' => TRUE, 
+                    'width'     => '3cm'
+                ),
+                'is_billable' => array(
+                    'header'    => $this->_translate->_('Billable'),
+                    'type'      => 'float', 
+                    'width'     => '3cm'
+                ),
+                'billed_in' => array(
+                    'header'    => $this->_translate->_('Cleared In'),
+                    'type'      => 'string', 
+                    'width'     => '3cm'
+                ),
+                'is_open' => array(
+                    'header'    => $this->_translate->_('Open'),
+                    'type'      => 'float', 
+                    'width'     => '3cm'
+                ),
+            )
+        );
+        
+        // get config from db and set defaults
+        $exportConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::ODSEXPORTCONFIG, 'Timetracker', array());
+        if (! isset($exportConfig['timesheets'])) {
+            $exportConfig['timesheets'] = $defaultTsConfig;
+        }
+        if (! isset($exportConfig['timeaccounts'])) {
+            $exportConfig['timeaccounts'] = $defaultTaConfig;
+        }
         
         // check in prefs which ts pref to use
         $tsExportConfigPref = Tinebase_Core::getPreference('Timetracker')->getValue(Timetracker_Preference::TSODSEXPORTCONFIG);
