@@ -106,7 +106,6 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
             case self::TSODSEXPORTCONFIG:
                 // get all export config labels
                 $configs = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::ODSEXPORTCONFIG, 'Timetracker', array());
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . print_r($configs, TRUE));
                 if (! empty($configs)) {
                     foreach($configs['timesheets'] as $key => $tsConfig) {
                         $result[] = array($key, $key);
