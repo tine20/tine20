@@ -601,7 +601,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                         
                         var updateNode = this.getNodeById(folderData[i][0].id);
                         
-                        // trigger updateMessageCache if needed (only if not already updating / cache pedning or different unreadcounts)
+                        // trigger updateMessageCache if needed (only if not already updating / cache pending or different unreadcounts)
                         if (updateMessageCache && ! updating && (updateNode.attributes.cache_status == 'pending' || updateNode.attributes.unreadcount != folderData[i][0].unreadcount)) {
                             // calls updateUnreadCount if spomething changed
                             this.updateMessageCache(updateNode, false, true);
@@ -660,7 +660,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * update message cache (and trigger reload store)
      * @param {Ext.tree.AsyncTreeNode} node
      * 
-     * TODO add custom exception / on failure / on timeout handler -> this should never show errors to the user
      * TODO add accountId?
      */
     updateMessageCache: function(node, force, delayedTask)
@@ -683,7 +682,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     //accountId: accountId
                 },
                 scope: this,
-                timeout: 600000, // 10 minutes -> TODO lower timeout when caching is resumable
+                timeout: 300000, // 5 minutes
                 success: function(_result, _request) {
                     
                     // always remove loading icon
