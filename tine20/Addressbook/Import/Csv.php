@@ -20,17 +20,31 @@
 class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
 {
     /**
+     * the constructor
+     *
+     * @param Tinebase_Model_ImportExportDefinition $_definition
+     * @param mixed $_controller
+     * @param array $_options additional options
+     */
+    public function __construct(Tinebase_Model_ImportExportDefinition $_definition, $_controller = NULL, $_options = array())
+    {
+        parent::__construct($_definition, $_controller, $_options);
+        
+        // get container id from default container if not set
+        if (! isset($this->_options['container_id'])) {
+            $defaultContainer = Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook();
+            $this->_options['container_id'] = $defaultContainer->getId();
+        }
+    }
+    
+    /**
      * add some more values (container id)
      *
      * @return array
      */
     protected function _addData()
     {
-        $result = array();
-        if (isset($this->_options['container_id'])) {
-            $result['container_id'] = $this->_options['container_id'];
-        }
-
+        $result['container_id'] = $this->_options['container_id'];
         return $result;
     }
     
