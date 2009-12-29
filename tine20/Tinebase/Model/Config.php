@@ -123,6 +123,12 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
     const ACCEPTEDTERMSVERSION = 'acceptedTermsVersion';
     
     /**
+     * Config key for map panel in addressbook / include geoext code
+     * @var string
+     */
+    const MAPPANEL = 'mapPanel';
+    
+    /**
      * identifier
      * 
      * @var string

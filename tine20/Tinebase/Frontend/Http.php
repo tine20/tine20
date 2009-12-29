@@ -187,8 +187,16 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function getJsFilesToInclude()
     {
-       //'extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js';
-        return array(
+        $mappanelIncludes = (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, FALSE)->value) 
+            ? array(
+                'library/OpenLayers/OpenLayers.js', 
+                'library/GeoExt/script/GeoExt.js', 
+                'Tinebase/js/widgets/MapPanel.js'
+            ) 
+            : array();
+        
+        //'extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js';
+        return array_merge($mappanelIncludes, array(
             // base framework fixes
             'Tinebase/js/extFixes.js',
             // gears
@@ -290,7 +298,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/ActivitiesPanel.js',        
             'Tinebase/js/widgets/form/RecordPickerComboBox.js',
             'Tinebase/js/widgets/form/ConfigPanel.js',
-            'Tinebase/js/widgets/MapPanel.js',
             // yui stuff
             //'../yui/build/dragdrop/dragdrop-min.js',
             //'../yui/build/resize/resize-beta-min.js',
@@ -318,7 +325,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/LoginPanel.js',
             'Tinebase/js/common.js',
             'Tinebase/js/tineInit.js',
-            );
+        ));
     }
     
 	/**
@@ -329,7 +336,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 	 */
     public function getCssFilesToInclude()
     {
-    	return array(
+        $mappanelIncludes = (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, FALSE)->value) 
+            ? array('library/GeoExt/resources/css/geoext-all.css') 
+            : array();
+        
+        return array_merge($mappanelIncludes, array(
     	   'Tinebase/css/ExtFixes.css',
     	   'Tinebase/css/Tinebase.css',
     	   'Tinebase/css/SmallForms.css',
@@ -356,7 +367,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     	// yui stuff
     	   //'../yui/build/assets/skins/sam/resize.css',
     	   //'../yui/build/assets/skins/sam/imagecropper.css',
-    	);
+    	));
     }
     
     /**
