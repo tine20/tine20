@@ -348,6 +348,8 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
                 'packageString' => TINE20_PACKAGESTRING,
                 'releaseTime'   => TINE20_RELEASETIME
             ),
+        // no password changing in setup
+            'changepw'          => FALSE,
         );
         
         return $registryData;
