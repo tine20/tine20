@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        remove leading spaces in multipart messages
  */
 
 /**
@@ -17,7 +18,14 @@
  * @subpackage  Model
  */
 class Felamimail_Message extends Zend_Mail_Message 
-{    
+{
+    /**
+     * number of leading spaces
+     * 
+     * @var int
+     */
+    protected $_leadingSpaces = 0;
+    
     /**
      * Public constructor
      *
@@ -31,6 +39,10 @@ class Felamimail_Message extends Zend_Mail_Message
     {
         if (isset($params['uid'])) {
             $this->_useUid = (bool)$params['uid'];
+        }
+        
+        if (isset($params['spaces'])) {
+            $this->_leadingSpaces = $params['spaces'];
         }
         
         parent::__construct($params);
@@ -77,6 +89,11 @@ class Felamimail_Message extends Zend_Mail_Message
         }
         
         $content = $part->getContent();
+        
+        if ($this->_leadingSpaces > 0) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Removing ' . $this->_leadingSpaces . ' leading spaces from message.');
+            $content = preg_replace("/^[\s]{1," . $this->_leadingSpaces . "}/m", "", $content);
+        }
         
         try {
             $encoding       = $part->getHeaderField('content-transfer-encoding');

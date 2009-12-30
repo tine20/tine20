@@ -225,8 +225,31 @@ Christian Hoffmann
         $this->_controller->delete($message->getId());
     }
     
+
     /**
-     * test multipart signed mail
+     * test mail with leading spaces
+     *
+     */
+    public function testLeadingSpaces()
+    {
+        $message = $this->_messageTestHelper('leading_spaces.eml');
+        $completeMessage = $this->_controller->getCompleteMessage($message->getId(), TRUE);
+        
+        //echo 'subject: ' . $message->subject . "\n";
+        //echo 'from: ' . $message->from . "\n";
+        //echo $completeMessage->body;
+        
+        // do checks
+        $this->assertEquals('Ihre jajajaja über die xxxx einer stillen gefolgschaft', $message->subject);
+        $this->assertEquals('textanwälte . berater . anwälte ) <someone@domain.org>', $message->from);
+        $this->assertEquals("content\n", $completeMessage->body);
+        
+        // delete message
+        $this->_controller->delete($message->getId());
+    }
+
+    /**
+     * test some mail
      *
      */
     public function testMessage()

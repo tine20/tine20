@@ -188,14 +188,14 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     public function getMessage($id)
     {
         $data = $this->_protocol->fetch(array('FLAGS', 'RFC822.HEADER'), $id, null, $this->_useUid);
-        $header = $data['RFC822.HEADER'];
+        $header = $this->_getHeader($data['RFC822.HEADER'], $id, $spaces);
 
         $flags = array();
         foreach ($data['FLAGS'] as $flag) {
             $flags[] = isset(self::$_knownFlags[$flag]) ? self::$_knownFlags[$flag] : $flag;
         }
 
-        return new $this->_messageClass(array('handler' => $this, 'id' => $id, 'headers' => $header, 'flags' => $flags));
+        return new $this->_messageClass(array('handler' => $this, 'id' => $id, 'headers' => $header, 'flags' => $flags, 'spaces' => $spaces));
     }
     
     /**
@@ -357,7 +357,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $messages = array();
         
         foreach($summary as $id => $data) {
-            $header = $data['RFC822.HEADER'];
+            $header = $this->_getHeader($data['RFC822.HEADER'], $id, $spaces);
     
             $flags = array();
             foreach ($data['FLAGS'] as $flag) {
@@ -375,6 +375,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
                     'id' => $id, 
                     'headers' => $header, 
                     'flags' => $flags,
+                    'spaces' => $spaces,
                 )),
                 'received' => $data['INTERNALDATE'],
                 'size' => $data['RFC822.SIZE'],
@@ -448,6 +449,33 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             if ($namespace = $this->_protocol->getNamespace()) {
                 $result['namespace'] = $namespace;
             }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * get header (remove spaces if needed)
+     * NOTE: this fixes a bug in Zend_Mime_Decode: headers with leading spaces are not parsed correctly, 
+     *  we remove the spaces here to make it work again.
+     * 
+     * @param string $_header
+     * @param string $_messageId
+     * @param int $_leadingSpaces
+     * @return string
+     */
+    protected function _getHeader($_header, $_messageId, &$_leadingSpaces = 0)
+    {
+        // check for valid header at first line (this is done again in Zend_Mime_Decode)
+        $firstline = strtok($_header, "\n");
+        if (preg_match('/^([\s]+)[^:]+:/', $firstline, $matches)) {
+            // replace all spaces before headers
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No headers found. Removing leading spaces from headers for message ' . $_messageId . '.');
+            $_leadingSpaces = strlen($matches[1]);
+            $result = preg_replace("/^[\s]{1," . $_leadingSpaces . "}/m", "", $_header);
+        } else {
+            $_leadingSpaces = 0;
+            $result = $_header;
         }
         
         return $result;
