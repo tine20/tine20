@@ -232,11 +232,11 @@ Christian Hoffmann
     public function testMessage()
     {
         /*
-        $message = $this->_messageTestHelper('sent.eml');
+        $message = $this->_messageTestHelper('forwarded.eml');
         $completeMessage = $this->_controller->getCompleteMessage($message->getId(), TRUE);
         
-        echo $message->subject;
-        echo $message->from;
+        echo 'subject: ' . $message->subject . "\n";
+        echo 'from: ' . $message->from . "\n";
         echo $completeMessage->body;
         
         //$attachments = $completeMessage->attachments;
