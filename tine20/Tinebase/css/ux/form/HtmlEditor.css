@@ -1,15 +1,19 @@
 /*
+    html editor plugin button icons
+*/
+.x-edit-indent {background: url(../../../../images/oxygen/16x16/actions/format-indent-more.png) 0 0 no-repeat !important;}
+.x-edit-outdent {background: url(../../../../images/oxygen/16x16/actions/format-indent-less.png) 0 0 no-repeat !important;}
+.x-edit-removeFormat {background: url(../../../../images/oxygen/16x16/actions/eraser.png) 0 0 no-repeat !important;}
+
+/*
 	These are examples of styles for the button icons
 */
 .x-edit-wordpaste {background: url(../images/document-word-text.png) 0 0 no-repeat !important;}
 .x-edit-table {background: url(../images/table.png) 0 0 no-repeat !important;}
 .x-edit-hr {background: url(../images/edit-rule.png) 0 0 no-repeat !important;}
-.x-edit-indent {background: url(../../../../images/oxygen/16x16/actions/format-indent-more.png) 0 0 no-repeat !important;}
 .x-edit-char {background: url(../images/edit-char.png) 0 0 no-repeat !important;}
-.x-edit-outdent {background: url(../../../../images/oxygen/16x16/actions/format-indent-less.png) 0 0 no-repeat !important;}
 .x-edit-subscript {background: url(../images/text_sub.png) 0 0 no-repeat !important;}
 .x-edit-superscript {background: url(../images/text_super.png) 0 0 no-repeat !important;}
-.x-edit-removeFormat {background: url(../../../../images/oxygen/16x16/actions/eraser.png) 0 0 no-repeat !important;}
 
 /*
 	These styles are used for the character map
