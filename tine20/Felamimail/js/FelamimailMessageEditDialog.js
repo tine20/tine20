@@ -222,7 +222,17 @@ Ext.namespace('Tine.Felamimail');
                     + '</body></html>';
         
                 return markup;
-            }
+            },
+            plugins: [
+            // TODO which plugins to activate?
+                //new Ext.ux.form.HtmlEditor.Word(),  
+                //new Ext.ux.form.HtmlEditor.Divider(),  
+                //new Ext.ux.form.HtmlEditor.Table(),  
+                //new Ext.ux.form.HtmlEditor.HR(),
+                new Ext.ux.form.HtmlEditor.IndentOutdent(),  
+                //new Ext.ux.form.HtmlEditor.SubSuperScript(),  
+                new Ext.ux.form.HtmlEditor.RemoveFormat()
+            ]
         });
         
         var accountStore = Tine.Felamimail.loadAccountStore();
