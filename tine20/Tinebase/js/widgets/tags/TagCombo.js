@@ -30,7 +30,6 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     id: 'TagCombo',
     emptyText: null,
     typeAhead: true,
-    //editable: false,
     mode: 'remote',
     triggerAction: 'all',
     displayField:'name',
@@ -44,16 +43,9 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     initComponent: function() {
         this.emptyText = this.emptyText ? this.emptyText : _('tag name');
         
-        this.store = new Ext.data.JsonStore({
-            id: 'id',
-            root: 'results',
-            totalProperty: 'totalCount',
-            fields: Tine.Tinebase.Model.Tag,
-            baseParams: {
-                method: 'Tinebase.searchTags',
-                paging : Ext.util.JSON.encode({})
-            }
-        });
+        this.initStore();
+        this.initTemplate();
+        
         Tine.widgets.tags.TagCombo.superclass.initComponent.call(this);
         
         this.on('select', function(){
@@ -81,12 +73,53 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         this.store.baseParams.filter = Ext.util.JSON.encode(filter);
     },
 
-    
+    /**
+     * set value
+     * 
+     * @param {} value
+     */
     setValue: function(value) {
         if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Object]') {
             this.store.loadData({results: [value]});
             value = value.id;
         }
         Tine.widgets.tags.TagCombo.superclass.setValue.call(this, value);
+    },
+    
+    /**
+     * init store
+     */
+    initStore: function() {
+        this.store = new Ext.data.JsonStore({
+            id: 'id',
+            root: 'results',
+            totalProperty: 'totalCount',
+            fields: Tine.Tinebase.Model.Tag,
+            baseParams: {
+                method: 'Tinebase.searchTags',
+                paging : Ext.util.JSON.encode({})
+            }
+        });        
+    },
+    
+    /**
+     * init template
+     */
+    initTemplate: function() {
+        this.tpl = new Ext.XTemplate(
+            '<tpl for="."><div class="x-combo-list-item">',
+                '<div style="width: 8px; height: 8px; background-color:{values.color};',
+                    ' border: 1px solid black; float: left; margin-right: 4px; margin-top: 2px;">&#160;</div>',
+                '{[this.encode(values.name)]}</div></tpl>',
+            {
+                encode: function(value) {
+                     if (value) {
+                        return Ext.util.Format.htmlEncode(value);
+                    } else {
+                        return '';
+                    }
+                }
+            }
+        );        
     }
 });
