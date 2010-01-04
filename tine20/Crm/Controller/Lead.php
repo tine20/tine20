@@ -29,7 +29,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
     private function __construct() {
         $this->_applicationName = 'Crm';
         $this->_modelName = 'Crm_Model_Lead';
-        $this->_backend = new Crm_Backend_Leads();
+        $this->_backend = new Crm_Backend_Lead();
         $this->_currentAccount = Tinebase_Core::getUser();
         
         // send notifications
@@ -37,6 +37,9 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         
         // delete related tasks
         $this->_relatedObjectsToDelete = array('Tasks_Model_Task');
+        
+        // don't delete records
+        $this->_purgeRecords = FALSE;
     }
     
     /**

@@ -5,34 +5,35 @@
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        rename this to Crm_Backend_Lead
  */
 
 
 /**
- * interface for leads class
+ * backend for leads
  *
  * @package     Crm
  */
-class Crm_Backend_Leads extends Tinebase_Backend_Sql_Abstract
+class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
 {
     /**
-     * Table name without prefix
+     * the constructor
      *
-     * @var string
-     */
-    protected $_tableName = 'metacrm_lead';
-    
-    /**
-     * Model name
+     * @param Zend_Db_Adapter_Abstract $_db optional
+     * @param string $_modelName
+     * @param string $_tableName
+     * @param string $_tablePrefix
      *
-     * @var string
      */
-    protected $_modelName = 'Crm_Model_Lead';
-    
+    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL)
+    {
+        parent::__construct($_dbAdapter, 'Crm_Model_Lead', 'metacrm_lead', $_tablePrefix);
+        
+        $this->_modlogActive = TRUE;
+    }
+
     /**
      * getGroupCountForField
      * 
