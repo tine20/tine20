@@ -310,7 +310,9 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         
         if (this.field && this.field.rendered) {
             // NOTE: '+1' is to ensure we display the ISO8601 based week where weeks always start on monday!
-            this.field.setValue(parseInt(dtStart.getWeekOfYear(), 10) + parseInt(dtStart.getDay() < 1 ? 1 : 0, 10));
+            var wkStart = dtStart.add(Date.DAY, dtStart.getDay() < 1 ? 1 : 0);
+            
+            this.field.setValue(parseInt(wkStart.getWeekOfYear(), 10));
         }
     },
     render: function() {
