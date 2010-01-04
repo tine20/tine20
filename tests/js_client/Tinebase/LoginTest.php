@@ -30,19 +30,17 @@ class Tinebase_LoginTest extends SessionTestCase
     
     public function testLogin()
     {
+        $loginPanel = new Tinebase_DOMProxy_LoginPanel(NULL, NULL, $this);
+        $loginPanel->findField('username')->waitForVisible();
+        $loginPanel->setField("username", Zend_Registry::get('testConfig')->username);
+        $loginPanel->setField("password", rand(10000, 99999999));
         
-        $this->waitForElementPresent('username');
-        
-        $this->type('username', Zend_Registry::get('testConfig')->username);
-        $this->type('password', rand(10000, 99999999));
-        
-        $loginButtonId = $this->getEval("window.Tine.loginPanel.getLoginPanel().getForm().getEl().query('button')[0].id");
-        $this->click($loginButtonId);
+        $loginPanel->pressLogin();
         
         Ext_MessageBox::getInstance($this)->pressOK();
         
-        $this->type('password', Zend_Registry::get('testConfig')->password);
-        $this->click($loginButtonId);
+        $loginPanel->setField("password", Zend_Registry::get('testConfig')->password);
+        $loginPanel->pressLogin();
         
         $this->waitForElementPresent('tineMenu');
     }
