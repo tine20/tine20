@@ -55,7 +55,13 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
             hideLabel: true,
             anchor: '100%',
             onlyUsableTags: true,
-            app: this.app
+            app: this.app,
+            listeners: {
+                scope: this,
+                select: function() {
+                    this.onOk();
+                }
+            }
         });
         
         return [{
