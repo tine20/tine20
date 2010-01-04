@@ -250,6 +250,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/display/DisplayPanel.js',
             'Tinebase/js/ux/display/DisplayField.js',
             'Tinebase/js/ux/layout/Display.js',
+            'Tinebase/js/ux/MessageBox.js',
         // Tine 2.0 specific widgets
             'Tinebase/js/widgets/LangChooser.js',
             'Tinebase/js/widgets/ActionUpdater.js',
@@ -352,6 +353,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     	   'Tinebase/css/ux/display/DisplayPanel.css',
     	   'Tinebase/css/ux/LockCombo.css',
     	   'Tinebase/css/ux/Menu.css',
+    	   'Tinebase/css/ux/MessageBox.css',
     	   'Tinebase/css/widgets/EditRecord.css',
     	   'Tinebase/css/widgets/TagsPanel.css',
     	   'Tinebase/css/widgets/FilterToolbar.css',

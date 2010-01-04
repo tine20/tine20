@@ -1,0 +1,10 @@
+.x-ux-messagebox-msg .x-box-mc {
+    font-size:14px;
+}
+#x-ux-messagebox-msg-div {
+    position:absolute;
+    left:35%;
+    top:10px;
+    width:250px;
+    z-index:20000;
+}
