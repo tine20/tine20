@@ -137,7 +137,9 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
      */
     _handleHdMenuClick : function(item, e)
     {
-        return this._view.handleHdMenuClick(item, e);
+        if (this.colMenu.items.indexOf(item) > 1) {
+            return this._view.handleHdMenuClick(item, e);
+        }
     },
 
     /**
