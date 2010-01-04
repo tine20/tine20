@@ -36,17 +36,16 @@ Zend_Registry::set('testConfig', $config);
 // setup tine20 session
 $connection = new SessionTestCase();
 $connection->setBrowser('*firefox');
-$connection->setBrowserUrl('http://localhost/tt/tine20/');
+$connection->setBrowserUrl($config->url);
 
 $connection->start();
 $connection->open($config->url);
 
 $connection->getEval("window.moveBy(-1 * window.screenX, 0); window.resizeTo(screen.width,screen.height);");
 
-$connection->waitForElementPresent('username');
+$loginPanel = new Tinebase_DOMProxy_LoginPanel(NULL, NULL, $connection);
+$loginPanel->findField('username')->waitForVisible();
+$loginPanel->setField("username", $config->username);
+$loginPanel->setField("password", $config->password);
 
-$connection->type('username', $config->username);
-$connection->type('password', $config->password);
-
-$loginButtonId = $connection->getEval("window.Tine.loginPanel.getLoginPanel().getForm().getEl().query('button')[0].id");
-$connection->click($loginButtonId);
+$loginPanel->pressLogin();
