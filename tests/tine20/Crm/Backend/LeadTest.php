@@ -19,9 +19,9 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test class for Crm_Backend_Leads
+ * Test class for Crm_Backend_Lead
  */
-class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
+class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Fixtures
@@ -40,7 +40,7 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
     /**
      * Backend
      *
-     * @var Crm_Backend_Leads
+     * @var Crm_Backend_Lead
      */
 	protected $_backend;
 
@@ -103,7 +103,7 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
             'end_scheduled' => NULL,
         )); 
         
-        $this->_backend = new Crm_Backend_Leads();
+        $this->_backend = new Crm_Backend_Lead();
     }
 
     /**
@@ -220,6 +220,6 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
 }		
 	
 
-if (PHPUnit_MAIN_METHOD == 'Crm_Backend_LeadsTest::main') {
-    Crm_Backend_LeadsTest::main();
+if (PHPUnit_MAIN_METHOD == 'Crm_Backend_LeadTest::main') {
+    Crm_Backend_LeadTest::main();
 }

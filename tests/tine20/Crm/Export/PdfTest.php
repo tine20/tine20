@@ -64,7 +64,6 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
         }
         
         $this->objects['lead'] = new Crm_Model_Lead(array(
-            'id'            => 20,
             'lead_name'     => 'PHPUnit',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
@@ -79,7 +78,6 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
         )); 
 
         $this->objects['leadWithLink'] = new Crm_Model_Lead(array(
-            'id'            => 22,
             'lead_name'     => 'PHPUnit with contact',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
