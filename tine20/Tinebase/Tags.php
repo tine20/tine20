@@ -607,14 +607,12 @@ class Tinebase_Tags
             ->group('tag_id');
         $apps = $this->_db->fetchOne($select);
         
-        if ($apps == 0){
+        if (empty($apps)){
             $apps = 'any';
         }
-        //$stmt = $this->_db->query($select);
-        //$rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC); 
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' got tag contexts: ' .$apps);
         return explode(',', $apps);
-        
-        
     }
     
     /**
@@ -625,6 +623,8 @@ class Tinebase_Tags
      */
     public function purgeContexts($_tagId)
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' removing contexts for tag ' . $_tagId);
+        
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId);
         $this->_db->delete(SQL_TABLE_PREFIX . 'tags_context', $where);
     }
@@ -645,6 +645,8 @@ class Tinebase_Tags
         if (in_array('any', $_contexts, true) || in_array(0, $_contexts, true)) {
             $_contexts = array(0);
         }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting tag contexts: ' . print_r($_contexts, true));
         
         foreach ($_contexts as $context) {
             $this->_db->insert(SQL_TABLE_PREFIX . 'tags_context', array(
