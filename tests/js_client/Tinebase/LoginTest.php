@@ -24,9 +24,7 @@ class Tinebase_LoginTest extends SessionTestCase
         $logoutButtonId = $this->getEval("window.Ext.getCmp('tineMenu').items.last().getEl().id");
         $this->click($logoutButtonId);
         
-        $extMsgYesButtonId = $this->getEval("window.Ext.MessageBox.getDialog().buttons[1].id");
-        $this->waitForVisible($extMsgYesButtonId);
-        $this->click($extMsgYesButtonId);
+        Ext_MessageBox::getInstance($this)->pressYes();
         $this->waitForPageToLoad();
     }
     
@@ -40,13 +38,7 @@ class Tinebase_LoginTest extends SessionTestCase
         $loginButtonId = $this->getEval("window.Tine.loginPanel.getLoginPanel().getForm().getEl().query('button')[0].id");
         $this->click($loginButtonId);
         
-        $extMsgOkButtonId = $this->getEval("window.Ext.MessageBox.getDialog().buttons[0].id");
-        $extMsgYesButtonId = $this->getEval("window.Ext.MessageBox.getDialog().buttons[1].id");
-        $extMsgNoButtonId = $this->getEval("window.Ext.MessageBox.getDialog().buttons[2].id");
-        $extMsgCancelButtonId = $this->getEval("window.Ext.MessageBox.getDialog().buttons[3].id");
-        
-        $this->waitForVisible($extMsgOkButtonId);
-        $this->click($extMsgOkButtonId);
+        Ext_MessageBox::getInstance($this)->pressOK();
         
         $this->type('password', 'lars');
         $this->click($loginButtonId);
