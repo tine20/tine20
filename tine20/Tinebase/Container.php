@@ -312,26 +312,27 @@ class Tinebase_Container
                 // no containers found. maybe something went wrong when creating the initial folder
                 // any account should have at least one personal folder
                 // let's check if the controller of the application has a function to create the needed folders
+                $result = ($_onlyIds) ? array() : new Tinebase_Record_RecordSet('Tinebase_Model_Container');
                 try {
                     $application = Tinebase_Core::getApplicationInstance($_application);
                     
                     if($application instanceof Tinebase_Container_Interface) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create personal folders for application ' . $_application);
-                        return $application->createPersonalFolder($_accountId);
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' create personal folders for application ' . $_application);
+                        $personalContainers = $application->createPersonalFolder($_accountId);
+                        $result = ($_onlyIds) ? $personalContainers->getArrayOfIds() : $personalContainers;
                     }
                 } catch (Tinebase_Exception_NotFound $enf) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' no containers available in application ' . $_application);
-                }
-            }
-            
-            if ($_onlyIds) {
-                $result = array();
-                //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . print_r($rows, true));
-                foreach ($rows as $row) {
-                    $result[] = $row['id'];
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' no containers available in application ' . $_application);
                 }
             } else {
-                $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows);
+                if ($_onlyIds) {
+                    $result = array();
+                    foreach ($rows as $row) {
+                        $result[] = $row['id'];
+                    }
+                } else {
+                    $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows);
+                }
             }
             
             // save result and tag it with 'container'
