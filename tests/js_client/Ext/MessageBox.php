@@ -8,6 +8,9 @@
  * @version     $Id$
  */
 
+/**
+ * proxy for Ext.MessageBox
+ */
 class Ext_MessageBox
 {
     const BUTTON_OK     = 'OK';
