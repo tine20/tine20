@@ -206,8 +206,8 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
             modal: true,
             width: 300,
             height: 130,
-            layout: 'fit',
-            plain: true,
+            //layout: 'fit',
+            //plain: true,
             items: new Ext.FormPanel({
                 bodyStyle: 'padding:5px;',
                 buttonAlign: 'right',
@@ -217,7 +217,6 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'textfield',
                     inputType: 'password',
                     anchor: '100%',
-                    //allowBlank: false,
                     id: 'passwordRepeat',
                     fieldLabel: this.app.i18n._('Repeat password'), 
                     name:'passwordRepeat',
