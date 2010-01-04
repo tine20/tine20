@@ -54,7 +54,8 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
         this.tagSelect = new Tine.widgets.tags.TagCombo({
             hideLabel: true,
             anchor: '100%',
-            onlyUsableTags: true
+            onlyUsableTags: true,
+            app: this.app
         });
         
         return [{

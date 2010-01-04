@@ -331,7 +331,8 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             this.action_tagsMassAttach = new Tine.widgets.tags.TagsMassAttachAction({
                 selectionModel: this.grid.getSelectionModel(),
                 recordClass:    this.recordClass,
-                updateHandler:  this.loadData.createDelegate(this, [true])
+                updateHandler:  this.loadData.createDelegate(this, [true]),
+                app:            this.app
             });
             
             this.contextMenuItems.push('-'/*, {xtype: 'menutextitem', text: _('Tagging')}*/, this.action_tagsMassAttach);

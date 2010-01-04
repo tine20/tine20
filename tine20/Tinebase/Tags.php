@@ -607,7 +607,7 @@ class Tinebase_Tags
             ->group('tag_id');
         $apps = $this->_db->fetchOne($select);
         
-        if (empty($apps)){
+        if ($apps === '0'){
             $apps = 'any';
         }
         
