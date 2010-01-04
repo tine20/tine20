@@ -25,6 +25,8 @@ require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->setFallbackAutoloader(true);
 
+date_default_timezone_set('UTC');
+
 // get config
 if(file_exists(dirname(__FILE__) . '/config.inc.php')) {
     $config = new Zend_Config(require dirname(__FILE__) . '/config.inc.php');
@@ -49,3 +51,9 @@ $loginPanel->setField("username", $config->username);
 $loginPanel->setField("password", $config->password);
 
 $loginPanel->pressLogin();
+
+$writer = new LogWriter($connection);
+$logger = new Zend_Log($writer);
+Zend_Registry::set('log', $logger);
+
+$logger->info('logger initialized');

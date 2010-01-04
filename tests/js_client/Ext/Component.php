@@ -78,7 +78,7 @@ class Ext_Component
     }
     
     /**
-     * Returns as soon as expression evals, else throws exception on timeout
+     * returns as soon as expression evals, else throws exception on timeout
      * 
      * @param  string $_expr
      * @return void
@@ -88,6 +88,11 @@ class Ext_Component
         $this->getSelenium()->waitForCondition($this->getExpression() . $_expr);
     }
     
+    /**
+     * waits for this component to be visible
+     * 
+     * @return void
+     */
     public function waitForVisible()
     {
         $this->waitForEvalTrue(".isVisible()");

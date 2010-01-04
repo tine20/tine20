@@ -21,9 +21,12 @@ class Tinebase_LoginTest extends SessionTestCase
     {
         $this->waitForElementPresent('tineMenu');
         
+        Zend_Registry::get('log')->info('Press logout button');
+        
         $logoutButtonId = $this->getEval("window.Ext.getCmp('tineMenu').items.last().getEl().id");
         $this->click($logoutButtonId);
         
+        Zend_Registry::get('log')->info('Confirm logout');
         Ext_MessageBox::getInstance($this)->pressYes();
         $this->waitForPageToLoad();
     }
@@ -32,13 +35,17 @@ class Tinebase_LoginTest extends SessionTestCase
     {
         $loginPanel = new Tinebase_DOMProxy_LoginPanel(NULL, NULL, $this);
         $loginPanel->findField('username')->waitForVisible();
+        
+        Zend_Registry::get('log')->info('Try login with wrong password');
         $loginPanel->setField("username", Zend_Registry::get('testConfig')->username);
         $loginPanel->setField("password", rand(10000, 99999999));
         
         $loginPanel->pressLogin();
         
         Ext_MessageBox::getInstance($this)->pressOK();
+        Zend_Registry::get('log')->info('Confirm login failure');
         
+        Zend_Registry::get('log')->info('Use Correct Password');
         $loginPanel->setField("password", Zend_Registry::get('testConfig')->password);
         $loginPanel->pressLogin();
         

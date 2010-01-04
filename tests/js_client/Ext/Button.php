@@ -30,7 +30,7 @@ class Ext_Button extends Ext_Component
     {
         //log("click()");
 
-        $this->waitForEvalTrue(".disabled == false");  // Throws exception on timeout
+        $this->waitForEvalTrue(".disabled == false");
 
         $this->getSelenium()->click($this->getXPath());
     }
