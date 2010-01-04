@@ -478,7 +478,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'userApplications'  => $user->getApplications()->toArray(),
                 'NoteTypes'         => $this->getNoteTypes(),
                 'stateInfo'         => Tinebase_State::getInstance()->loadStateInfo(),
-                'changepw'          => Tinebase_User::getBackendConfiguration('changepw', true)
+                'changepw'          => Tinebase_User::getBackendConfiguration('changepw', true),
+                'mapPanel'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, TRUE)->value,
             );
         }
         

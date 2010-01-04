@@ -165,7 +165,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _setGeoData($_record)
     {
-        if (! Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, FALSE)->value) {
+        if (! Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, TRUE)->value) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Mappanel/geoext/nominatim disabled with config option.');
             return;
         }
