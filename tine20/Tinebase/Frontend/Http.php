@@ -187,26 +187,22 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function getJsFilesToInclude()
     {
-        $mappanelIncludes = (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, FALSE)->value) 
-            ? array(
-                'library/OpenLayers/OpenLayers.js', 
-                'library/GeoExt/script/GeoExt.js', 
-                'Tinebase/js/widgets/MapPanel.js'
-            ) 
-            : array();
-        
         //'extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js';
-        return array_merge($mappanelIncludes, array(
-            // base framework fixes
+        return array(
+        // base framework fixes
             'Tinebase/js/extFixes.js',
-            // gears
+        // gears
             'Tinebase/js/gears_init.js',
-            // generic init to be included before parsing of the tine code
+        // generic init to be included before parsing of the tine code
             'Tinebase/js/extInit.js',
-            // Locale support
+        // Locale support
             'Tinebase/js/Locale.js',
             'Tinebase/js/Locale/Gettext.js',
-            // Ext user extensions
+        // mappanel / geoext
+            'library/OpenLayers/OpenLayers.js', 
+            'library/GeoExt/script/GeoExt.js', 
+            'Tinebase/js/widgets/MapPanel.js',
+        // Ext user extensions
             'Tinebase/js/ux/ConnectionStatus.js',
             'Tinebase/js/ux/Direct/ZendFrameworkProvider.js',
             'Tinebase/js/ux/DatePickerWeekPlugin.js',
@@ -254,7 +250,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/display/DisplayPanel.js',
             'Tinebase/js/ux/display/DisplayField.js',
             'Tinebase/js/ux/layout/Display.js',
-            // Tine 2.0 specific widgets
+        // Tine 2.0 specific widgets
             'Tinebase/js/widgets/LangChooser.js',
             'Tinebase/js/widgets/ActionUpdater.js',
             'Tinebase/js/widgets/EditRecord.js',
@@ -299,12 +295,12 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/ActivitiesPanel.js',        
             'Tinebase/js/widgets/form/RecordPickerComboBox.js',
             'Tinebase/js/widgets/form/ConfigPanel.js',
-            // yui stuff
+        // yui stuff
             //'../yui/build/dragdrop/dragdrop-min.js',
             //'../yui/build/resize/resize-beta-min.js',
             //'../yui/build/imagecropper/imagecropper-beta-min.js',
-            // Tinebase
-            // NOTE: All the data stuff is going to and extra worker build
+        // Tinebase
+        // NOTE: All the data stuff is going to and extra worker build
             //'Tinebase/js/data/sync/Ping.js',
             //'Tinebase/js/data/schemaProc/sqlGenerator.js',
             //'Tinebase/js/data/schemaProc/xmlReader.js',
@@ -312,7 +308,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/data/RecordStore.js',
             'Tinebase/js/data/RecordProxy.js',
             'Tinebase/js/data/AbstractBackend.js',
-            //'Tinebase/js/data/MemoryBackend.js',
+        //'Tinebase/js/data/MemoryBackend.js',
             'Tinebase/js/StateProvider.js',
             'Tinebase/js/ExceptionHandler.js',
             'Tinebase/js/ExceptionDialog.js',
@@ -326,7 +322,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/LoginPanel.js',
             'Tinebase/js/common.js',
             'Tinebase/js/tineInit.js',
-        ));
+        );
     }
     
 	/**
@@ -337,11 +333,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 	 */
     public function getCssFilesToInclude()
     {
-        $mappanelIncludes = (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, FALSE)->value) 
-            ? array('library/GeoExt/resources/css/geoext-all.css') 
-            : array();
-        
-        return array_merge($mappanelIncludes, array(
+        return array(
     	   'Tinebase/css/ExtFixes.css',
     	   'Tinebase/css/Tinebase.css',
     	   'Tinebase/css/SmallForms.css',
@@ -366,10 +358,12 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     	   'Tinebase/css/widgets/AccountPicker.css',
     	   'Tinebase/css/widgets/PreviewPanel.css',
            'Tinebase/css/widgets/PreferencesPanel.css',
+        // geoext
+            'library/GeoExt/resources/css/geoext-all.css',
     	// yui stuff
     	   //'../yui/build/assets/skins/sam/resize.css',
     	   //'../yui/build/assets/skins/sam/imagecropper.css',
-    	));
+    	);
     }
     
     /**
