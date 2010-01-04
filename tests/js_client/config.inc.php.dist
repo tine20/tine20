@@ -1,0 +1,8 @@
+<?php
+// test config settings
+return array(
+    'url'       => 'http://localhost/tt/tine20',
+    'locale'    => 'de',
+    'username'  => 'tine20admin',
+    'password'  => 'lars',
+);

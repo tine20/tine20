@@ -25,14 +25,13 @@ require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->setFallbackAutoloader(true);
 
-/*
 // get config
 if(file_exists(dirname(__FILE__) . '/config.inc.php')) {
     $config = new Zend_Config(require dirname(__FILE__) . '/config.inc.php');
 } else {
     throw new Exception("Couldn't find config.inc.php! \n");
 }
-*/
+Zend_Registry::set('testConfig', $config);
 
 // setup tine20 session
 $connection = new SessionTestCase();
@@ -40,14 +39,14 @@ $connection->setBrowser('*firefox');
 $connection->setBrowserUrl('http://localhost/tt/tine20/');
 
 $connection->start();
-$connection->open('http://localhost/tt/tine20/');
+$connection->open($config->url);
 
 $connection->getEval("window.moveBy(-1 * window.screenX, 0); window.resizeTo(screen.width,screen.height);");
 
 $connection->waitForElementPresent('username');
 
-$connection->type('username', 'tine20admin');
-$connection->type('password', 'lars');
+$connection->type('username', $config->username);
+$connection->type('password', $config->password);
 
 $loginButtonId = $connection->getEval("window.Tine.loginPanel.getLoginPanel().getForm().getEl().query('button')[0].id");
 $connection->click($loginButtonId);
