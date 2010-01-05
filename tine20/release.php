@@ -43,9 +43,10 @@ define('TINE20_TITLE', 'Tine 2.0');
  * path to yui compressor
  */
 global $yuiCompressorPath;
-$yuiCompressorPath = dirname(__FILE__) . '/../../yuicompressor-2.3.6/build/yuicompressor-2.3.6.jar';
+$yuiCompressorPath = dirname(__FILE__) . '/../../yuicompressor-2.4.2/build/yuicompressor-2.4.2.jar';
 
-$jslintPath = dirname(__FILE__) . '/../../jslint4java-1.1/jslint4java-1.1+rhino.jar';
+//$jslintPath = dirname(__FILE__) . '/../../jslint4java-1.1/jslint4java-1.1+rhino.jar';
+$jslintPath = dirname(__FILE__) . '/../../jslint/jslint-1.0+rhino.jar';
 
 /**
  * options
