@@ -256,15 +256,18 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         }
         
         // loop subfolders (recursive) and replace new localname in globalname path
-        $filter = new Felamimail_Model_FolderFilter(array(array(
-            'field' => 'globalname', 'operator' => 'startswith', 'value' => $_oldGlobalName
-        )));
+        $filter = new Felamimail_Model_FolderFilter(array(
+            array('field' => 'globalname', 'operator' => 'startswith',  'value' => $_oldGlobalName),
+            array('field' => 'account_id', 'operator' => 'equals',      'value' => $_accountId),
+        ));
         $subfolders = $this->search($filter);
         foreach ($subfolders as $subfolder) {
-            $newSubfolderGlobalname = str_replace($_oldGlobalName, $newGlobalName, $subfolder->globalname);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $subfolder->globalname . ' -> ' . $newSubfolderGlobalname);
-            $subfolder->globalname = $newSubfolderGlobalname;
-            $this->update($subfolder);
+            if ($newGlobalName != $subfolder->globalname) {
+                $newSubfolderGlobalname = str_replace($_oldGlobalName, $newGlobalName, $subfolder->globalname);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $subfolder->globalname . ' -> ' . $newSubfolderGlobalname);
+                $subfolder->globalname = $newSubfolderGlobalname;
+                $this->update($subfolder);
+            }
         }
         
         return $folder;
