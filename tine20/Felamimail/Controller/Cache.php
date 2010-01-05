@@ -329,7 +329,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
     /**
      * get (sub) folder and create folders in db backend cache
      *
-     * @param string $_folderName
+     * @param string $_folderName global name
      * @param string $_accountId [optional]
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      */
@@ -376,6 +376,14 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             // remove folder if self
             if (in_array($_folderName, array_keys($folders))) {
                 unset($folders[$_folderName]);
+            }
+            
+            // update has children
+            $parentFolder = $this->_folderBackend->getByBackendAndGlobalName($_accountId, $_folderName);
+            $hasChildren = (empty($folders)) ? 0 : 1;
+            if ($hasChildren != $parentFolder->has_children) {
+                $parentFolder->has_children = $hasChildren;
+                $this->_folderBackend->update($parentFolder);
             }
         }
         
