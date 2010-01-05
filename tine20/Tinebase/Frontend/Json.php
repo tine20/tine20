@@ -464,6 +464,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ),
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,
+            'denySurveys'       => Tinebase_Core::getConfig()->denySurveys,
             'titlePostfix'      => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::PAGETITLEPOSTFIX, NULL, '')->value,
             'redirectUrl'       => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value,
         );
