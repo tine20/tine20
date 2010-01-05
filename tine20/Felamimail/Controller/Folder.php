@@ -257,7 +257,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         // loop subfolders (recursive) and replace new localname in globalname path
         $filter = new Felamimail_Model_FolderFilter(array(
-            array('field' => 'globalname', 'operator' => 'startswith',  'value' => $_oldGlobalName),
+            array('field' => 'globalname', 'operator' => 'startswith',  'value' => $_oldGlobalName . $account->delimiter),
             array('field' => 'account_id', 'operator' => 'equals',      'value' => $_accountId),
         ));
         $subfolders = $this->_folderBackend->search($filter);
