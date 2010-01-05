@@ -260,7 +260,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             array('field' => 'globalname', 'operator' => 'startswith',  'value' => $_oldGlobalName),
             array('field' => 'account_id', 'operator' => 'equals',      'value' => $_accountId),
         ));
-        $subfolders = $this->search($filter);
+        $subfolders = $this->_folderBackend->search($filter);
         foreach ($subfolders as $subfolder) {
             if ($newGlobalName != $subfolder->globalname) {
                 $newSubfolderGlobalname = str_replace($_oldGlobalName, $newGlobalName, $subfolder->globalname);
