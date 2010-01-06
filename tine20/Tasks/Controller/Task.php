@@ -127,7 +127,6 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
                 $_task->completed = NULL;
             } elseif (! $_task->completed instanceof Zend_Date) {
                 $_task->completed = Zend_Date::now();
-                $_task->percent = 100;
             }
         }
     }
