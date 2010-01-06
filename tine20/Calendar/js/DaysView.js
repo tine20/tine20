@@ -691,7 +691,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.mouseDown = true;
         
         var targetEvent = this.getTargetEvent(e);
-        if (this.editing && (targetEvent != this.editing)) {
+        if (this.editing && this.editing.summaryEditor && (targetEvent != this.editing)) {
             this.editing.summaryEditor.fireEvent('blur', this.editing.summaryEditor);
         }
         
