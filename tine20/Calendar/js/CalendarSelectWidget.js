@@ -199,7 +199,7 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
     },
     
     onBeforeCalComboQuery: function() {
-        if(this.currentCalMap.get('isOriginal')) {
+        if(! this.currentCalMap || this.currentCalMap.get('isOriginal')) {
             this.calCombo.startNode = 'all';
         } else {
             this.calCombo.startNode = 'personalOf';
@@ -211,7 +211,7 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
         var container = this.calCombo.container;
         container.toString = function() {return container.id};
         
-        if (this.currentCalMap.get('isOriginal')) {
+        if (! this.currentCalMap || this.currentCalMap.get('isOriginal')) {
             this.record.set('container_id', container);
         } else {
             this.currentCalMap.get('attender').set('displaycontainer_id', container);
@@ -240,7 +240,10 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
         this.record = record;
         this.buildCalMapStore();
         
-        if (this.calMapStore.getCount() == 1) {
+        if (this.calMapStore.getCount() == 0) {
+            // call setValue to add 'choose other'...
+            this.calCombo.setValue('');
+        } else if (this.calMapStore.getCount() == 1) {
             this.onCalMapSelect(this.calMapStore.getAt(0));
             this.calCombo.setTrigger2Disabled(true);
         } else {

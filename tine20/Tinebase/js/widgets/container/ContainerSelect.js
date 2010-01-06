@@ -256,7 +256,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         }
         
         // dynamically add current container to store if not exists
-        if (! this.store.getById(container.id)) {
+        if (container.id && ! this.store.getById(container.id)) {
             // we don't push arround container records yet...
             this.store.add(new Tine.Tinebase.Model.Container(container, container.id));
         }
