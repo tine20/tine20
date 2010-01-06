@@ -108,10 +108,14 @@ Tine.Sales.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker,{
                 children: [{
                     text: this.app.i18n._('All Contracts'),
                     id: 'allcontracts',
-                    leaf: true
+                    leaf: true,
+                    containerType: Tine.Tinebase.container.TYPE_SHARED,
+                    container: Tine.Sales.registry.get('DefaultContainer')
                 }]
             }]
         };
+        
+        this.initContextMenu();
         
         Tine.Sales.TreePanel.superclass.initComponent.call(this);
         
@@ -123,6 +127,26 @@ Tine.Sales.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker,{
                 this.app.getMainScreen().show();
             }
         }, this);
+        
+        this.on('contextmenu', function(node, event){
+            this.ctxNode = node;
+            if (node.id == 'allcontracts') {
+                this.contextMenu.showAt(event.getXY());
+            }
+        }, this);
+    },
+    
+    /**
+     * @private
+     */
+    initContextMenu: function() {
+        this.contextMenu = Tine.widgets.tree.ContextMenu.getMenu({
+            nodeName: this.app.i18n._('All Contracts'),
+            actions: ['grants'],
+            scope: this,
+            backend: 'Tinebase_Container',
+            backendModel: 'Container'
+        });
     },
     
     /**
