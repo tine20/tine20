@@ -39,6 +39,7 @@ class Sales_Setup_Initialize extends Setup_Initialize
                 Tinebase_Model_Container::GRANT_ADD,
                 Tinebase_Model_Container::GRANT_READ,
                 Tinebase_Model_Container::GRANT_EDIT,
+                Tinebase_Model_Container::GRANT_DELETE,
                 Tinebase_Model_Container::GRANT_ADMIN
             ), TRUE);
         } catch (Tinebase_Exception_NotFound $tenf) {
