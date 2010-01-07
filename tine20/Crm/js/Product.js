@@ -173,11 +173,15 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * init actions and bars
      */
     initActions: function() {
+        
+        var recordName = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')).i18n.n_(
+            this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1
+        );
 
         this.actionUnlink = new Ext.Action({
             requiredGrant: 'editGrant',
-            text: String.format(this.app.i18n._('Unlink {0}'), this.recordClass.getMeta('recordName')),
-            tooltip: String.format(this.app.i18n._('Unlink selected {0}'), this.recordClass.getMeta('recordName')),
+            text: String.format(this.app.i18n._('Unlink {0}'), recordName),
+            tooltip: String.format(this.app.i18n._('Unlink selected {0}'), recordName),
             disabled: true,
             iconCls: 'actionRemove',
             onlySingle: true,
