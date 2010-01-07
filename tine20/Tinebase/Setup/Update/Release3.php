@@ -41,7 +41,12 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 <name>personal_only</name>
                 <type>boolean</type>
             </field>');
-        $this->_backend->addCol('preferences', $declaration);
+        try {
+            $this->_backend->addCol('preferences', $declaration);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // field already exists
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+        }
         
         $this->setTableVersion('preferences', '5');
         
