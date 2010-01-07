@@ -74,7 +74,9 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
             self::TYPE_DEFAULT, 
             self::TYPE_FORCED,
         )),
-        // xml field with select options for this preference => only available in TYPE_DEFAULT prefs
-        'options'            => array('allowEmpty' => TRUE),        
+    // xml field with select options for this preference => only available in TYPE_DEFAULT prefs
+        'options'            => array('allowEmpty' => TRUE),
+    // don't allow to set this preference in admin mode
+        'personal_only'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     );
 }

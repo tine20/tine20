@@ -397,6 +397,26 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
     }
     
+    /**
+     * Creates new entry
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_UnexpectedValue
+     */
+    public function create(Tinebase_Record_Interface $_record) 
+    {
+        // check if personal only and account type=anyone -> throw exception
+        if ($_record->personal_only && $_record->account_type == Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE) {
+            $message = 'It is not allowed to set this preference for anyone.';
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $message);
+            throw new Tinebase_Exception_UnexpectedValue($message);
+        }
+        
+        return parent::create($_record);
+    }
+    
+    
     /**************************** protected functions *********************************/
     
     /**

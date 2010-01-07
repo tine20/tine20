@@ -28,4 +28,26 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('customfield_config', '4');
         $this->setApplicationVersion('Tinebase', '3.1');
     }    
+
+    /**
+     * update to 3.2
+     * - add personal_only field to preference
+     * - remove all admin/default prefs with this setting
+     */
+    public function update_1()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>personal_only</name>
+                <type>boolean</type>
+            </field>');
+        $this->_backend->addCol('preferences', $declaration);
+        
+        $this->setTableVersion('preferences', '5');
+        
+        // remove all personal only prefs for anyone
+        $this->_db->query("DELETE FROM " . SQL_TABLE_PREFIX . "preferences WHERE account_type LIKE 'anyone' AND name IN ('defaultCalendar', 'defaultAddressbook')");
+        
+        $this->setApplicationVersion('Tinebase', '3.2');
+    }    
 }

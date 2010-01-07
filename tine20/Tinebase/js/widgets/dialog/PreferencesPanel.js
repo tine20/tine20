@@ -88,7 +88,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
             
             this.items = [];
             this.prefStore.each(function(pref) {
-            	            	
+                
         	    // check if options available -> use combobox or textfield
                 var fieldDef = {
                     fieldLabel: pref.get('label'),
@@ -126,7 +126,8 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 	// set lock (value forced => hiddenFieldData = '0')
                 	fieldDef.hiddenFieldData = (pref.get('type') == 'default') ? '1' : '0';
                 	fieldDef.hiddenFieldId = pref.get('name') + '_writable';
-                	//console.log(pref);
+                    // disable personal only fields
+                    fieldDef.disabled = pref.get('personal_only');
                 } else {
                 	fieldDef.disabled = (pref.get('type') == 'forced');
                 }
