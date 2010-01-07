@@ -197,7 +197,17 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
 });
 
 /**
- * Crm Edit Popup
+ * admin panel on update function
+ * 
+ * TODO         update registry without reloading the mainscreen
+ */
+Tine.Crm.AdminPanel.onUpdate = function() {
+    // reload mainscreen to make sure registry gets updated
+    window.location = window.location.href.replace(/#+.*/, '');
+}
+
+/**
+ * Crm admin settings popup
  * 
  * @param   {Object} config
  * @return  {Ext.ux.Window}
