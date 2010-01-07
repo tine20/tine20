@@ -417,10 +417,16 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             echo $response;
             
             $size = ob_get_length();
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Content-Size: ' . $size);
+            
+            /**
+             * we set a special content-type to avoid compressing the output by mod_deflate
+             * the browser is closing the connection after he has received  Content-Length bytes
+             * if the output get's compressed, the browser waits until the php process finnishes 
+             */
             header("Content-Length: $size");
-            // need to set content type because the response should not be compressed by (apache) webserver
-            // -> there has been an issue with mod_deflate / content-type text/html here
-            header("Content-Type: application/json");
+            header("Content-Type: application/json-nodeflate");
+
             ob_end_flush(); // Strange behaviour, will not work
             flush();
             Zend_Session::writeClose(true);
