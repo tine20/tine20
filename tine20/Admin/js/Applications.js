@@ -28,7 +28,11 @@ Tine.Admin.Applications.Main = function() {
             var appName = selectedRows[0].data.name;
             Tine[appName].AdminPanel.openWindow({
                 record: (Tine[selectedRows[0].data.name].Model.Settings) ? new Tine[selectedRows[0].data.name].Model.Settings(selectedRows[0].data.name) : null,
-                windowTitle: String.format(_('{0} Settings'), appName)
+                windowTitle: String.format(_('{0} Settings'), appName),
+                listeners: {
+                    scope: this,
+                    'update': (Tine[appName].AdminPanel.onUpdate) ? Tine[appName].AdminPanel.onUpdate : Ext.emptyFn
+                }
             });
         } else {
             _button.setDisabled(true);
