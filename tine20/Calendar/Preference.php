@@ -117,6 +117,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 $accountId = $_accountId ? $_accountId : Tinebase_Core::getUser()->getId();
                 $calendars          = Tinebase_Container::getInstance()->getPersonalContainer($accountId, 'Calendar', $accountId, 0, true);
                 $preference->value  = $calendars->getFirstRecord()->getId();
+                $preference->personal_only = TRUE;
                 break;
             case self::NOTIFICATION_LEVEL:
                 $translate = Tinebase_Translation::getTranslation($this->_application);

@@ -80,6 +80,7 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
                 $accountId          = $_accountId ? $_accountId : Tinebase_Core::getUser()->getId();
                 $addressbooks       = Tinebase_Container::getInstance()->getPersonalContainer($accountId, 'Addressbook', $accountId, 0, true);
                 $preference->value  = $addressbooks->getFirstRecord()->getId();
+                $preference->personal_only = TRUE;
                 
                 break;
             default:
