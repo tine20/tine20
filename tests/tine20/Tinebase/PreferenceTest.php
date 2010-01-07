@@ -162,6 +162,28 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * test public only preference, try to force it -> should throw exception
+     *
+     */
+    public function testPublicOnlyPreference()
+    {
+        $prefName ='testForcedPref';
+        $pref = new Tinebase_Model_Preference(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            'name'              => $prefName,
+            'value'             => 'value',
+            'account_id'        => '0',
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+            'type'              => Tinebase_Model_Preference::TYPE_FORCED,
+            'personal_only'     => TRUE
+        ));
+        
+        // try to force pref
+        $this->setExpectedException('Tinebase_Exception_UnexpectedValue');
+        $pref = $this->_instance->create($pref);
+    }
+    
+    /**
      * test get users with pref function
      *
      */
