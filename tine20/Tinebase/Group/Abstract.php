@@ -111,7 +111,7 @@ abstract class Tinebase_Group_Abstract
      */
     public function getDefaultGroup()
     {
-        return $this->getGroupByName(Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY));
+        return $this->_getDefaultGroup('Users');
     }
     
     /**
@@ -121,7 +121,7 @@ abstract class Tinebase_Group_Abstract
      */
     public function getDefaultAdminGroup()
     {
-        return $this->getGroupByName(Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY));
+        return $this->_getDefaultGroup('Administrators');
     }
     
     /**
@@ -143,4 +143,26 @@ abstract class Tinebase_Group_Abstract
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Group
      */
     abstract public function getGroups($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL);
+    
+    /**
+     * get default group for users/admins
+     * 
+     * @param string $_name group name (Users|Administrators)
+     * @return unknown_type
+     */
+    protected function _getDefaultGroup($_name = 'Users')
+    {
+        if (! in_array($_name, array('Users', 'Administrators'))) {
+            throw new Tinebase_Exception_InvalidArgument('Wrong group name: ' . $_name);
+        }
+        
+        $configKey = ($_name == 'Users') ? Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY : Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY;
+        $defaultGroupName = Tinebase_User::getBackendConfiguration($configKey);
+        if (empty($defaultGroupName)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $configKey . ' not found. Check your user backend configuration.');
+            $defaultGroupName = $_name;
+        }
+        return $this->getGroupByName($defaultGroupName);        
+    }
  }
+ 
