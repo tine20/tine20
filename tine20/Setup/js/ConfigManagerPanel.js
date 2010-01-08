@@ -21,6 +21,7 @@ Ext.ns('Tine', 'Tine.Setup');
  * <p>Configuration Panel</p>
  * <p><pre>
  * TODO         make tabindex work correctly (there is some problem when tab is pressed in the setup username field, it takes 6x to reach the next field)
+ * TODO         move map panel config to common config panel -> it should not be saved in config.inc.php
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -140,7 +141,6 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                 name: 'logger_priority',
                 fieldLabel: this.app.i18n._('Priority'),
                 tabIndex: 10
-
             }]
         }, {
             title: this.app.i18n._('Caching'),
@@ -177,6 +177,23 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                 fieldLabel: this.app.i18n._('Session Files Path'),
                 tabIndex: 14
             }]
+        }, {
+            title: this.app.i18n._('Addressbook Map panel'),
+            items: [{
+                name: 'mapPanel',
+                fieldLabel: this.app.i18n._('Map panel'),
+                tabIndex: 15,
+                xtype: 'combo',
+                width: 283, // late rendering bug
+                listWidth: 300,
+                mode: 'local',
+                forceSelection: true,
+                allowEmpty: false,
+                triggerAction: 'all',
+                selectOnFocus:true,
+                value: 1,
+                store: [[0, this.app.i18n._('disabled')], [1,this.app.i18n._('enabled')]]
+            }] 
         }];
     },
     
