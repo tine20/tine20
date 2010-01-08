@@ -13,6 +13,7 @@
  * @todo        add more conversions e.g. date/accounts
  * @todo        add tests for tags + notes
  * @todo        add more documentation
+ * @todo        make it possible to import custom fields?
  */
 
 /**
