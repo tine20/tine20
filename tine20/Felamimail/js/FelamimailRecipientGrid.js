@@ -263,6 +263,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         Ext.each(records, function(record) {
             if (record.get('address') != '') {
                 this.store.remove(record);
+                this.store.fireEvent('update', this.store);
             }
         });
     },
