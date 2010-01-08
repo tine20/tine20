@@ -132,12 +132,15 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                     }
                 }
                 
-                foreach ($recipients as &$recipient) {
+                foreach ($recipients as $key => &$recipient) {
                     // get address 
                     // @todo get name here
                     //<*([a-zA-Z@_\-0-9\.]+)>*/
                     if (preg_match(self::EMAIL_ADDRESS_REGEXP, $recipient, $matches) > 0) {
                         $recipient = $matches[1];
+                    }
+                    if (empty($recipient)) {
+                        unset($recipients[$key]);
                     }
                 }
 
