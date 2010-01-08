@@ -10,6 +10,7 @@
  * 
  * @todo        update account credentials if user password changed
  * @todo        use generic (JSON encoded) field for 'other' settings like folder names
+ * @todo        don't use enum fields (ssl, smtp_ssl, display_format)
  */
 
 /**
@@ -148,6 +149,24 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'smtp_credentials_id'
     );
     
+    /**
+     * overwrite constructor to add more filters
+     *
+     * @param mixed $_data
+     * @param bool $_bypassFilters
+     * @param mixed $_convertDates
+     * @return void
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        // set ssl/smtp_ssl/display_format to default if not set
+        $this->_filters['ssl']              = new Zend_Filter_Empty('tls');
+        $this->_filters['smtp_ssl']         = new Zend_Filter_Empty('tls');
+        $this->_filters['display_format']   = new Zend_Filter_Empty('html');
+        
+        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+        
     /**
      * get imap config array
      * - decrypt pwd/user with user password
