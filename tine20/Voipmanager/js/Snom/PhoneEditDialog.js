@@ -83,6 +83,13 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         this.rightsStore.loadData({results: rights});
         
         var lines = this.record.get('lines') || [];
+        // convert string '0' to boolean false
+        // TODO try to do this in a generic way (in Ext.ux.grid.CheckColumn?)
+        for (var i = 0; i < lines.length; i++) {
+            if (lines[i].lineactive == '0') {
+                lines[i].lineactive = false;
+            }
+        }
         this.linesStore.loadData({results: lines});
 
         if (this.record.get('current_model')) {
