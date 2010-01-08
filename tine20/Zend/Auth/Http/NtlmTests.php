@@ -44,6 +44,8 @@ class NtlmTests extends PHPUnit_Framework_TestCase
         $this->assertTrue($identity->hasFlag(Zend_Auth_Http_Ntlm::FLAG_NEGOTIATE_WORKSTATION_SUPPLIED));
         $this->assertFalse($identity->hasFlag(Zend_Auth_Http_Ntlm::FLAG_NEGOTIATE_NTLM2_KEY));
         
-        
+        // assert domain / workstatsion
+        $this->assertEquals('DOMAIN', $identity->getDomain());
+        $this->assertEquals('WORKSTATION', $identity->getWorkstation());
     }
 }
