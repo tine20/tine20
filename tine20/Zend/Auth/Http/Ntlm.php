@@ -11,6 +11,8 @@
 
 /**
  * @see Zend_Auth_Http_Abstract
+ * @todo add getClientInfo fn
+ * @todo make _getClientFlags public
  */
 require_once 'Zend/Auth/Http/Abstract.php';
 
@@ -197,12 +199,38 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
     protected $_ntlmMessage;
     
     /**
+     * @var bool set to true to allow NTLMv1 responses
+     */
+    protected $_allowNTLMv1 = FALSE;
+    
+    /**
+     * @var int server flags
+     */
+    protected $_serverFlags;
+    
+    protected $_clientInfo;
+    
+    /**
      * @var array auth target info
      */
     protected $_targetInfo;
     
-    public function __construct()
+    public function __construct(array $config = array())
     {
+        if (array_key_exists('targetInfo', $config)) {
+            $this->_targetInfo = $config['targetInfo'];
+        }
+        
+        if (! array_key_exists('serverFlags', $config)) {
+            $config['serverFlags'] = dechex(
+                (0x00000000 | self::FLAG_NEGOTIATE_UNICODE | self::FLAG_NEGOTIATE_NTLM)
+            );
+        }
+        
+        $this->setServerFlags($config['serverFlags']);
+        
+        
+        // to be removed
         $this->_request = new Zend_Controller_Request_Http();
         $this->_response = new Zend_Controller_Response_Http();
     }
@@ -239,11 +267,72 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
         }
         
         $this->_ntlmMessage = bin2hex($authMessage);
+        
+        error_log('NTLM::authenticate message# ' . $this->_getMessageNumber());
         if ($this->_getMessageNumber() === 3) {
+            error_log($this->_ntlmMessage);
+            
             // try to authenticate
+            /*
+            return new Zend_Auth_Result(
+                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
+                array(),
+                array('Invalid or absent credentials; challenging client')
+            );
+            */
+            
         }
         
         return $this->_challengeClient();
+    }
+    
+    /**
+     * return message flags
+     * 
+     * @return int
+     */
+    public function getClientFlags()
+    {
+        $offset = $this->_getMessageNumber() == 1 ? 24 : 120;
+        $leFlags = substr($this->_ntlmMessage, $offset, 8);
+        
+        $flags = $this->leHex2hex($leFlags);
+        
+        return hexdec($flags);
+    }
+    
+    /**
+     * returns server flags (hex representation)
+     * 
+     * $param  $asLittleEndian
+     * @return string 
+     */
+    public function getServerFlags($asLittleEndian = TRUE)
+    {
+        return $asLittleEndian ? 
+            bin2hex(pack('V', $this->_serverFlags)) :
+            dechex($this->_serverFlags);
+    }
+    
+    /**
+     * sets server falgs from hex representation
+     * 
+     * @param string $flags in hex representation
+     * @return int
+     */
+    public function setServerFlags($flags)
+    {
+        $this->_serverFlags = hexdec($flags);
+        
+        if ($this->_allowNTLMv1 !== TRUE) {
+            $this->_serverFlags |= self::FLAG_NEGOTIATE_TARGET_INFO;
+        }
+        
+        if (! ($this->_serverFlags & (self::FLAG_TARGET_TYPE_SERVER | self::FLAG_TARGET_TYPE_SHARE))) {
+            $this->_serverFlags |= self::FLAG_TARGET_TYPE_DOMAIN;
+        }
+        
+        return $this->_serverFlags;
     }
     
     public function setTargetInfo($target)
@@ -263,7 +352,7 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
         return new Zend_Auth_Result(
             $result->getCode(),
             new Zend_Auth_Http_Ntlm_Identity(array(
-                'flags' => $this->_getMessageFlags(),
+                'flags' => $this->getClientFlags(),
                 'ntlmData' => $this->_clientInfo
             )),
             $result->getMessages()
@@ -276,7 +365,7 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
         
         if ($this->_getMessageNumber() === 1) {
             $message2 = $this->_getChallengeMessage();
-            $header .= ' ' . trim(base64_encode($message2));
+            $header .= ' ' . trim(base64_encode(pack('H*', $message2)));
         }
         
         return $header;
@@ -285,11 +374,11 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
     /**
      * generates challenge message
      * 
-     * @return string
+     * @return string hex
      */
     protected function _getChallengeMessage()
     {
-        $clientFlags = $this->_getMessageFlags();
+        $clientFlags = $this->getClientFlags();
         
         if ($clientFlags & self::FLAG_NEGOTIATE_DOMAIN_SUPPLIED) {
             $this->_clientInfo[self::BUFFER_DOMAIN] = $this->_getBufferData(self::BUFFER_DOMAIN);
@@ -300,43 +389,42 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
         }
         
         // assemble message 2
+        
+        // todo: decide by serverFlags
         $targetInfoBuffer = $this->_getTargetInfoBuffer($this->_targetInfo);
         
-        // todo: decide by given flags
+        // todo: decide by serverFlags
         $targetNameBuffer = bin2hex($this->toUTF16LE($this->_targetInfo[self::TARGETINFO_DOMAIN]));
         
-        /*
-    
-        return "NTLMSSP\x00\x02\x00\x00\x00".
-            pack('vvV', strlen($tname), strlen($tname), 48). // target name len/alloc/offset
-            "\x01\x02\x81\x00". // flags
-            $this->_getChallenge(). // challenge
-            "\x00\x00\x00\x00\x00\x00\x00\x00". // context
-            pack('vvV', strlen($tdata), strlen($tdata), 48 + strlen($tname)). // target info len/alloc/offset
+        // base offset to first buffer
+        $offset = 48;
+        
+        $message2 = 
+            '4e544c4d53535000'.                             // NTLMSSP Signature
+            '02000000'.                                     // Type 2 Indicator
+            bin2hex(pack('vvV',                             // Target Name Security Buffer
+                strlen($targetNameBuffer)/2,                //   - Length
+                strlen($targetNameBuffer)/2,                //   - Allocated Space
+                $offset                                     //   - Offset
+            )).
+            $this->getServerFlags().                        // Flags
+            $this->_getChallenge().                         // Challenge
+            '0000000000000000'.                             // Context
+            bin2hex(pack('vvV',                             // Target Information Security Buffer
+                strlen($targetInfoBuffer)/2,                //   - Length
+                strlen($targetInfoBuffer)/2,                //   - Allocated Space
+                $offset += strlen($targetNameBuffer)/2      //   - Offset
+            )).
             $targetNameBuffer.
             $targetInfoBuffer;
-        */
+            
+        return $message2;
     }
     
     // @todo generate random challenge and store it in session
     protected function _getChallenge()
     {
-        return '12345678';
-    }
-    
-    /**
-     * return message flags
-     * 
-     * @return int
-     */
-    protected function _getMessageFlags()
-    {
-        $offset = $this->_getMessageNumber() == 1 ? 24 : 120;
-        $leFlags = substr($this->_ntlmMessage, $offset, 8);
-        
-        $flags = $this->leHex2hex($leFlags);
-        
-        return hexdec($flags);
+        return '0123456789abcdef';
     }
     
     /**
@@ -366,7 +454,7 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
     protected function _getTargetInfoBuffer($targetInfo)
     {
         $buffer = '';
-        foreach ($targetInfo as $type => $data) {
+        foreach ((array)$targetInfo as $type => $data) {
             if (array_key_exists($type, $this->_targetInfoBufferTypMap)) {
                 $buffer .= $this->getTargetInfoSubBuffer($type, $data);
             }
