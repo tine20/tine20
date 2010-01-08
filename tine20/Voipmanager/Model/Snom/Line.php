@@ -55,9 +55,25 @@ class Voipmanager_Model_Snom_Line extends Tinebase_Record_Abstract
         'snomphone_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
         'asteriskline_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
         'linenumber'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-        'lineactive'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'presence' => 'required'),
+        'lineactive'        => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'presence' => 'required'),
         'idletext'          => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
+    
+    /**
+     * overwrite constructor to add more filters
+     *
+     * @param mixed $_data
+     * @param bool $_bypassFilters
+     * @param mixed $_convertDates
+     * @return void
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        // set default value if field is empty
+        $this->_filters['lineactive'] = new Zend_Filter_Empty(0);
+        
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
     
     /**
      * converts a int, string or Voipmanager_Model_Snom_Line to an phone id
