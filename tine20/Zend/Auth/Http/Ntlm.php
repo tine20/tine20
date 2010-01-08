@@ -160,7 +160,7 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
         }
         
         $authMessage = base64_decode(substr($authHeader, 5));
-        if (substr($authMessage, 0, 8) != "NTLMSSP\x00") {
+        if (substr($authMessage, 0, 7) != "NTLMSSP") {
             /**
              * @see Zend_Auth_Adapter_Exception
              */
@@ -168,12 +168,30 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
             throw new Zend_Auth_Adapter_Exception('Unexpected client response');
         }
         
-        $this->_ntlmMessage = $authMessage;
+        $this->_ntlmMessage = bin2hex($authMessage);
         if ($this->getMessageNumber() === 3) {
             // try to authenticate
         }
         
         return $this->_challengeClient();
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see tine20/Zend/Auth/Http/Zend_Auth_Http_Abstract#_challengeClient()
+     */
+    protected function _challengeClient()
+    {
+        $result = parent::_challengeClient();
+        
+        // include identity from message 1
+        return new Zend_Auth_Result(
+            $result->getCode(),
+            new Zend_Auth_Http_Ntlm_Identity(array(
+                'flags' => $this->_getMessageFlags()
+            )),
+            $result->getMessages()
+        ); 
     }
     
     protected function _getAuthHeader()
@@ -195,9 +213,8 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
      */
     protected function _getChallengeMessage()
     {
-        $flags = $this->getMessageFlags();
+        $flags = $this->_getMessageFlags();
         
-        error_log(dechex($flags));
         
         /*
         $domain = $this->_getMessageValue(16);
@@ -225,15 +242,19 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
         return '12345678';
     }
     
-    protected function getMessageFlags()
+    /**
+     * return message flags
+     * 
+     * @return int
+     */
+    protected function _getMessageFlags()
     {
-        $offset = $this->getMessageNumber() == 1 ? 12 : 60;
-        $leFlags = substr($this->_ntlmMessage, $offset, 4);
+        $offset = $this->getMessageNumber() == 1 ? 24 : 120;
+        $leFlags = substr($this->_ntlmMessage, $offset, 8);
         
-        $flags = 0x00000000;
-        extract(unpack('Vflags', $leFlags), EXTR_OVERWRITE);
+        $flags = $this->leHex2hex($leFlags);
         
-        return $flags;
+        return hexdec($flags);
     }
     
     /**
@@ -243,8 +264,7 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
      */
     protected function getMessageNumber()
     {
-        // for some reason bindec does not work
-        return hexdec(bin2hex($this->_ntlmMessage[8]));
+        return (int) $this->_ntlmMessage[17];
     }
     
     /**
@@ -293,5 +313,17 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
      */
     public static function toUTF16le($str) {
         return iconv('UTF-8', 'UTF-16LE', $str);
+    }
+    
+    /**
+     * converts little-endian hex string to normal hex string
+     * 
+     * @param  string $leHex
+     * @return string
+     */
+    public static function leHex2hex($leHex)
+    {
+        $l = $leHex;
+        return $l[6].$l[7].$l[4].$l[5].$l[2].$l[3].$l[0].$l[1];
     }
 }
