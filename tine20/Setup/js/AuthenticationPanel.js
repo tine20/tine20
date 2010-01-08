@@ -21,6 +21,7 @@ Ext.ns('Tine', 'Tine.Setup');
  * <p>Authentication Panel</p>
  * <p><pre>
  * TODO         move to next step after install?
+ * TODO         make default is valid mechanism with 'allowEmpty' work
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -320,10 +321,12 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                     },
                     items: [ {
                         name: 'accounts_Sql_defaultUserGroupName',
-                        fieldLabel: this.app.i18n._('Default user group name')
+                        fieldLabel: this.app.i18n._('Default user group name'),
+                        allowEmpty: false
                     }, {
                         name: 'accounts_Sql_defaultAdminGroupName',
-                        fieldLabel: this.app.i18n._('Default admin group name')
+                        fieldLabel: this.app.i18n._('Default admin group name'),
+                        allowEmpty: false
                     }, {
                         xtype: 'combo',
                         width: 300, //late rendering bug
@@ -531,6 +534,22 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 }]);
                 result = false;
             }
+        }
+        
+        if (form.findField('accounts_Sql_defaultUserGroupName') && form.findField('accounts_Sql_defaultUserGroupName').getValue() == '') {
+            form.markInvalid([{
+                id: 'accounts_Sql_defaultUserGroupName',
+                msg: this.app.i18n._("Should not be empty")
+            }]);
+            result = false;
+        }
+        
+        if (form.findField('accounts_Sql_defaultAdminGroupName') && form.findField('accounts_Sql_defaultAdminGroupName').getValue() == '') {
+            form.markInvalid([{
+                id: 'accounts_Sql_defaultAdminGroupName',
+                msg: this.app.i18n._("Should not be empty")
+            }]);
+            result = false;
         }
         
         return result;
