@@ -77,7 +77,11 @@ class Tinebase_Controller implements Tinebase_Event_Interface
             }
             
             Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
-            Zend_Session::registerValidator(new Zend_Session_Validator_IpAddress());
+            if (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::SESSIONIPVALIDATION, NULL, TRUE)->value) {
+                Zend_Session::registerValidator(new Zend_Session_Validator_IpAddress());
+            } else {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');
+            }
             Zend_Session::regenerateId();
             
             Tinebase_Core::set(Tinebase_Core::USER, $account);

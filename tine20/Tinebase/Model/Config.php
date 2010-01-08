@@ -129,6 +129,12 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
     const MAPPANEL = 'mapPanel';
     
     /**
+     * Config key for session ip validation
+     * @var string
+     */
+    const SESSIONIPVALIDATION = 'sessionIpValidation';
+    
+    /**
      * identifier
      * 
      * @var string
