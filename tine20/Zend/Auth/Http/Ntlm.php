@@ -138,6 +138,22 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
     const BUFFER_USERNAME       = 'username';
     const BUFFER_SESSIONKEY     = 'sessionkey';
     
+    /**
+     * auth targets server name
+     */
+    const TARGETINFO_SERVER = 'servername';
+    /**
+     * auth targets domain name
+     */
+    const TARGETINFO_DOMAIN = 'domain';
+    /**
+     * auth targets fully-qualified DNS host name (i.e., server.domain.com)
+     */
+    const TARGETINFO_FQSERVER = 'fqserver';
+    /**
+     * auth DNS domain name (i.e., domain.com)
+     */
+    const TARGETINFO_DNSDOMAIN = 'dnsdomain';
     
     /**
      * map where to find start of security buffers
@@ -164,9 +180,26 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
     );
     
     /**
+     * indicators in targetdata
+     *  
+     * @var array
+     */
+    protected $_targetInfoBufferTypMap = array(
+        self::TARGETINFO_SERVER     => 1,
+        self::TARGETINFO_DOMAIN     => 2,
+        self::TARGETINFO_FQSERVER   => 3,
+        self::TARGETINFO_DNSDOMAIN  => 4
+    );
+    
+    /**
      * @var string current client message
      */
     protected $_ntlmMessage;
+    
+    /**
+     * @var array auth target info
+     */
+    protected $_targetInfo;
     
     public function __construct()
     {
@@ -213,6 +246,11 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
         return $this->_challengeClient();
     }
     
+    public function setTargetInfo($target)
+    {
+        $this->_targetInfo = $target;
+    }
+    
     /**
      * (non-PHPdoc)
      * @see tine20/Zend/Auth/Http/Zend_Auth_Http_Abstract#_challengeClient()
@@ -226,7 +264,7 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
             $result->getCode(),
             new Zend_Auth_Http_Ntlm_Identity(array(
                 'flags' => $this->_getMessageFlags(),
-                'ntlmData' => $this->_ntlmData
+                'ntlmData' => $this->_clientInfo
             )),
             $result->getMessages()
         ); 
@@ -251,25 +289,23 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
      */
     protected function _getChallengeMessage()
     {
-        $flags = $this->_getMessageFlags();
+        $clientFlags = $this->_getMessageFlags();
         
-        if ($flags & self::FLAG_NEGOTIATE_DOMAIN_SUPPLIED) {
-            $this->_ntlmData[self::BUFFER_DOMAIN] = $this->_getBufferData(self::BUFFER_DOMAIN);
+        if ($clientFlags & self::FLAG_NEGOTIATE_DOMAIN_SUPPLIED) {
+            $this->_clientInfo[self::BUFFER_DOMAIN] = $this->_getBufferData(self::BUFFER_DOMAIN);
         }
         
-        if ($flags & self::FLAG_NEGOTIATE_WORKSTATION_SUPPLIED) {
-            $this->_ntlmData[self::BUFFER_WORKSTATION] = $this->_getBufferData(self::BUFFER_WORKSTATION);
+        if ($clientFlags & self::FLAG_NEGOTIATE_WORKSTATION_SUPPLIED) {
+            $this->_clientInfo[self::BUFFER_WORKSTATION] = $this->_getBufferData(self::BUFFER_WORKSTATION);
         }
+        
+        // assemble message 2
+        $targetInfoBuffer = $this->_getTargetInfoBuffer($this->_targetInfo);
+        
+        // todo: decide by given flags
+        $targetNameBuffer = bin2hex($this->toUTF16LE($this->_targetInfo[self::TARGETINFO_DOMAIN]));
         
         /*
-        $domain = $this->_getMessageValue(16);
-        $ws     = $this->_getMessageValue(24);
-        $tdata  = $this->avPair(2, $this->toUTF16le($this->_domain)).
-                  $this->avPair(1, $this->toUTF16le($this->_computer)).
-                  $this->avPair(4, $this->toUTF16le($this->_dnsdomain)).
-                  $this->avPair(3, $this->toUTF16le($this->_dnscomputer)).
-                  "\0\0\0\0\0\0\0\0";
-        $tname  = $this->toUTF16le($this->_targetname);
     
         return "NTLMSSP\x00\x02\x00\x00\x00".
             pack('vvV', strlen($tname), strlen($tname), 48). // target name len/alloc/offset
@@ -277,7 +313,8 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
             $this->_getChallenge(). // challenge
             "\x00\x00\x00\x00\x00\x00\x00\x00". // context
             pack('vvV', strlen($tdata), strlen($tdata), 48 + strlen($tname)). // target info len/alloc/offset
-            $tname.$tdata;
+            $targetNameBuffer.
+            $targetInfoBuffer;
         */
     }
     
@@ -321,6 +358,40 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
     }
     
     /**
+     * returns hex representation of given target info
+     * 
+     * @param  array $targetInfo
+     * @return string
+     */
+    protected function _getTargetInfoBuffer($targetInfo)
+    {
+        $buffer = '';
+        foreach ($targetInfo as $type => $data) {
+            if (array_key_exists($type, $this->_targetInfoBufferTypMap)) {
+                $buffer .= $this->getTargetInfoSubBuffer($type, $data);
+            }
+        }
+        
+        // terminate string (hex)
+        $buffer .= '00000000';
+        
+        return $buffer;
+    }
+    
+    /**
+     * return hex representation of given target info subblock
+     * 
+     * @param  string   $type
+     * @param  string   $data       utf8 encoded data
+     * @return string
+     */
+    protected function getTargetInfoSubBuffer($type, $data)
+    {
+        $utf16le = $this->toUTF16LE($data);
+        return bin2hex(pack('vv', $this->_targetInfoBufferTypMap[$type], strlen($utf16le)).$utf16le);
+    }
+    
+    /**
      * gets number of current message
      * 
      * @return int 
@@ -340,5 +411,15 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
     {
         $l = $leHex;
         return $l[6].$l[7].$l[4].$l[5].$l[2].$l[3].$l[0].$l[1];
+    }
+    
+    /**
+     * converts utf8 string to utf16+little-endian
+     * 
+     * @param  string $utf8
+     * @return string
+     */
+    public static function toUTF16LE($utf8) {
+        return iconv('UTF-8', 'UTF-16LE', $utf8);
     }
 }

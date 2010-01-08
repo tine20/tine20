@@ -12,8 +12,20 @@ class NtlmTests extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        //$this->_request = new Zend_Controller_Request_Http();
-        //$this->_response = new Zend_Controller_Response_Http();
+        $this->_auth = new Zend_Auth_Http_Ntlm();
+        
+        // prepare response for testing (phpunit sets headers...)
+        $this->_auth->getResponse()->headersSentThrowsException = FALSE;
+        
+        $targetInfo = array(
+            'domain'        => 'DOMAIN',
+            'servername'    => 'SERVER',
+            'dnsdomain'     => 'domain.com',
+            'fqserver'      => 'server.domain.com',
+        );
+        
+        $this->_auth->setTargetInfo($targetInfo);
+        
     }
     
     public function testMessage1Decode()
@@ -24,12 +36,7 @@ class NtlmTests extends PHPUnit_Framework_TestCase
         $authHeader = 'NTLM '. base64_encode($m1bin);
         $_SERVER['HTTP_AUTHORIZATION'] = $authHeader;
         
-        $auth = new Zend_Auth_Http_Ntlm();
-        
-        // prepare response for testing (phpunit sets headers...)
-        $auth->getResponse()->headersSentThrowsException = FALSE;
-        
-        $authResult = $auth->authenticate();
+        $authResult = $this->_auth->authenticate();
         
         $this->assertFalse($authResult->isValid(), 'Message 1 must not authenticate');
         
@@ -47,5 +54,25 @@ class NtlmTests extends PHPUnit_Framework_TestCase
         // assert domain / workstatsion
         $this->assertEquals('DOMAIN', $identity->getDomain());
         $this->assertEquals('WORKSTATION', $identity->getWorkstation());
+    }
+    
+    public function t2estMessage2Encode()
+    {
+        $targetInfo = array(
+            'servername'    => 'SERVER',
+            'domain'        => 'DOMAIN',
+            'fqserver'      => 'server.domain.com',
+            'dnsdomain'     => 'domain.com'
+        );
+        
+        $this->_auth->setTargetInfo($targetInfo);
+        
+        $m1hex = '4e544c4d53535000010000000732000006000600330000000b000b0028000000050093080000000f574f524b53544154494f4e444f4d41494e';
+        $m1bin = pack('H*', $m1hex);
+        
+        $authHeader = 'NTLM '. base64_encode($m1bin);
+        $_SERVER['HTTP_AUTHORIZATION'] = $authHeader;
+        
+        $authResult = $this->_auth->authenticate();
     }
 }
