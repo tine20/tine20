@@ -127,7 +127,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 	fieldDef.hiddenFieldData = (pref.get('type') == 'default') ? '1' : '0';
                 	fieldDef.hiddenFieldId = pref.get('name') + '_writable';
                     // disable personal only fields
-                    fieldDef.disabled = (pref.get('personal_only') == true || pref.get('personal_only') == '1');
+                    fieldDef.disabled = pref.get('personal_only');
                 } else {
                 	fieldDef.disabled = (pref.get('type') == 'forced');
                 }
