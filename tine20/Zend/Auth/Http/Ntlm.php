@@ -289,6 +289,8 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
         }
         
         $this->_ntlmMessage = bin2hex($authMessage);
+        $this->_log->INFO("client send ntlm message #{$this->_getMessageNumber()}");
+        $this->_log->DEBUG("ntlmMessage #{$this->_getMessageNumber()}: {$this->_ntlmMessage}");
         
         if ($this->_getMessageNumber() === 3) {
             return $this->_authenticateClient();
@@ -458,7 +460,7 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
     }
     
     /**
-     * generates challenge message
+     * generates challenge (message 2)
      * 
      * @return string hex
      */
@@ -466,7 +468,11 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
     {
         $clientFlags = $this->getClientFlags();
         
-        // assemble message 2
+        $useNTLM2SessionSecurity = $clientFlags & self::FLAG_NEGOTIATE_NTLM2_KEY;
+        $this->_log->INFO("client " . ($useNTLM2SessionSecurity ? 'supports' : " dosn't") . ' NTLM2 Session Security');
+        
+        // force NTLM2 as this implies NTLMv2 or NTLM2 session response
+        //$this->_serverFlags |= self::FLAG_NEGOTIATE_NTLM2_KEY;
         
         // todo: decide by serverFlags
         $targetInfoBuffer = $this->_getTargetInfoBuffer($this->_targetInfo);
@@ -496,6 +502,9 @@ class Zend_Auth_Http_Ntlm extends Zend_Auth_Http_Abstract
             $targetNameBuffer.
             $targetInfoBuffer;
             
+        $this->_log->INFO('server generated ntlm message #2');
+        $this->_log->DEBUG("ntlmMessage #2: $message2");
+        
         return $message2;
     }
     
