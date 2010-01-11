@@ -468,8 +468,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testExportTimesheetsOds()
     {
-        //-- set config
-        
+        Tinebase_Core::getPreference('Timetracker')->setValue(Timetracker_Preference::TSODSEXPORTCONFIG, 'default');
         $this->_exportTsOds();
     }
 
@@ -478,14 +477,11 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      * - this is no real json test
      * 
      */
-    /*
     public function testExportTimesheetsOdsWithTemplate()
     {
-        //-- set config
-        
+        Tinebase_Core::getPreference('Timetracker')->setValue(Timetracker_Preference::TSODSEXPORTCONFIG, 'template');
         $this->_exportTsOds();
     }
-    */
     
     /**
      * try to export Timeaccounts (as ods)
@@ -875,8 +871,9 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $xmlBody), 'no description'); 
         $translate = Tinebase_Translation::getTranslation('Timetracker'); 
         $this->assertEquals(1, preg_match("/". $translate->_('Description') ."/", $xmlBody), 'no headline'); 
+        $this->assertEquals(2, $odsExportClass->getDocument()->getBody()->count(), 'table count mismatch');
         
         // cleanup / delete file
-        unlink($result);
+        //unlink($result);
     }
 }

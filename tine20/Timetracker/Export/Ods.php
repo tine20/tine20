@@ -6,10 +6,9 @@
  * @subpackage	Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        allow template files
  */
 
 /**
@@ -50,7 +49,13 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
     {
         switch ($_filter->getModelName()) {
             case 'Timetracker_Model_Timesheet' :
-                $this->_openDocumentObject = new OpenDocument_Document(OpenDocument_Document::SPREADSHEET, NULL, Tinebase_Core::getTempDir());
+                if (array_key_exists('template', $this->_config['timesheets']) && ! empty($this->_config['timesheets']['template'])) {
+                    $templateFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $this->_config['timesheets']['template'];
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Using template file "' . $templateFile . '" for timesheet export.');
+                } else {
+                    $templateFile = NULL;
+                }
+                $this->_openDocumentObject = new OpenDocument_Document(OpenDocument_Document::SPREADSHEET, $templateFile, Tinebase_Core::getTempDir());
                 $result = $this->exportTimesheets($_filter);
                 break;
             case 'Timetracker_Model_Timeaccount' :
@@ -84,8 +89,13 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
         
         Tinebase_User::getInstance()->resolveMultipleUsers($timesheets, 'account_id', true);
         
-        // build export table
-        $table = $this->_openDocumentObject->getBody()->appendTable('Timesheets');        
+        // build export table (use current table if using template)
+        if (! array_key_exists('template', $this->_config['timesheets']) || empty($this->_config['timesheets']['template']) || $this->_openDocumentObject->getBody()->count() == 0) {
+            $table = $this->_openDocumentObject->getBody()->appendTable('Timesheets');
+        } else {
+            $this->_openDocumentObject->getBody()->rewind();
+            $table = $this->_openDocumentObject->getBody()->current();
+        }
         $this->_addHead($table, $this->_config['timesheets']/*, $_filter*/);
         $this->_addBody($table, $timesheets, $this->_config['timesheets']);
         $this->_addFooter($table, $lastCell);
@@ -154,7 +164,12 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
      */
     protected function _addOverviewTable($lastCell)
     {
-        $table = $this->_openDocumentObject->getBody()->appendTable('Overview');
+        if (! array_key_exists('template', $this->_config['timesheets']) || empty($this->_config['timesheets']['template']) || $this->_openDocumentObject->getBody()->count() == 1) {
+            $table = $this->_openDocumentObject->getBody()->appendTable('Overview');
+        } else {
+            $this->_openDocumentObject->getBody()->next();
+            $table = $this->_openDocumentObject->getBody()->current();
+        }
         
         $row = $table->appendRow();
         $row->appendCell('string', $this->_translate->_('Not billable'));
@@ -322,6 +337,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
         if (array_key_exists($tsExportConfigPref, $exportConfig['timesheets'])) {
             $exportConfig['timesheets'] = $exportConfig['timesheets'][$tsExportConfigPref];
         } else {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find export config "' . $tsExportConfigPref . '". Using default config instead.');
             $exportConfig['timesheets'] = $exportConfig['timesheets']['default'];
         }
         
