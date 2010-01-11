@@ -194,6 +194,12 @@ class OpenDocument_Document
                     $body = $this->_document->xpath('//office:body');
                     $node = $body[0]->addChild('office:spreadsheet', NULL, OpenDocument_Document::NS_OFFICE);
                 } else {
+                    // @todo remove existing spreadsheets?
+                    /*
+                    $this->_document->body = new SimpleXMLElement('<office:spreadsheet></office:spreadsheet>', NULL, FALSE, OpenDocument_Document::NS_OFFICE);
+                    //$spreadsheets[0] = new SimpleXMLElement('<office:spreadsheet></office:spreadsheet>', 0, FALSE, OpenDocument_Document::NS_OFFICE);
+                    $node = $this->_document['office:body'];
+                    */
                     $node = $spreadsheets[0];
                 }
                 $this->_body = new OpenDocument_SpreadSheet($node);
