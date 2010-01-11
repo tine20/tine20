@@ -78,4 +78,45 @@ class NtlmTests extends PHPUnit_Framework_TestCase
         echo bin2hex(base64_decode(substr($headers[0]['value'], 5))) . "\n";
         */
     }
+    
+    public function testMessage3Decode()
+    {
+        // from document LM / NTLM responses
+        $m3v1hex =  "4e544c4d5353500003000000180018006a00000018001800".
+                    "820000000c000c0040000000080008004c00000016001600".
+                    "54000000000000009a0000000102000044004f004d004100".
+                    "49004e00750073006500720057004f0052004b0053005400".
+                    "4100540049004f004e00c337cd5cbd44fc9782a667af6d42".
+                    "7c6de67c20c2d3e77c5625a98c1c31e81847466b29b2df46".
+                    "80f39958fb8c213a9cc6";
+        
+        // captured from IE8 user/SecREt01 
+        // with HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\LSA\LMCompatibility = 3
+        // so it should be LMv2 and NTLMv2!
+        $m3v2hex =  "4e544c4d5353500003000000180018007e0000008a008a00".
+                    "96000000100010004800000008000800580000001e001e00".
+                    "600000000000000020010000050280020501280a0000000f".
+                    "310030002e0030002e0032002e0032007500730065007200".
+                    "4d0045005400410057004100590053002d00300044003000".
+                    "3800340031003a7cbeb676aa589be625cbefe881247362b2".
+                    "43f24bebcdda433b26e048254c148108da2657b700400101".
+                    "0000000000006042ae554d92ca0162b243f24bebcdda0000".
+                    "00000200000001000c005300450052005600450052000400".
+                    "140064006f006d00610069006e002e0063006f006d000300".
+                    "22007300650072007600650072002e0064006f006d006100".
+                    "69006e002e0063006f006d00000000000000000000000000";
+        
+        
+        
+        $m3bin = pack('H*', $m3v2hex);
+        
+        $authHeader = 'NTLM '. base64_encode($m3bin);
+        $_SERVER['HTTP_AUTHORIZATION'] = $authHeader;
+        
+        $authResult = $this->_auth->authenticate();
+        
+        $this->assertTrue($authResult->isValid());
+        
+    }
+    
 }
