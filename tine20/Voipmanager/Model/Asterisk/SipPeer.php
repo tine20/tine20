@@ -100,7 +100,16 @@ class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
         'useragent'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'lastms'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => -1)
     );
-
+    
+    /**
+     * name of fields containing datetime or or an array of datetime information
+     *
+     * @var array list of datetime fields
+     */
+    protected $_datetimeFields = array(
+        'regseconds'
+    );
+    
     /**
      * overwrite constructor to add more filters
      *
