@@ -47,6 +47,13 @@ class Zend_Auth_Adapter_Http_Abstract
     protected $_response;
     
     /**
+     * Reference to the session namespace
+     * 
+     * @var Zend_Session_Namespace
+     */
+    protected $_session;
+    
+    /**
      * Whether or not to do Proxy Authentication instead of origin server
      * authentication (send 407's instead of 401's). Off by default.
      *
@@ -58,7 +65,7 @@ class Zend_Auth_Adapter_Http_Abstract
      * Setter for the Request object
      *
      * @param  Zend_Controller_Request_Http $request
-     * @return Zend_Auth_Adapter_Http Provides a fluent interface
+     * @return Zend_Auth_Adapter_Http_Abstract Provides a fluent interface
      */
     public function setRequest(Zend_Controller_Request_Http $request)
     {
@@ -81,7 +88,7 @@ class Zend_Auth_Adapter_Http_Abstract
      * Setter for the Response object
      *
      * @param  Zend_Controller_Response_Http $response
-     * @return Zend_Auth_Adapter_Http Provides a fluent interface
+     * @return Zend_Auth_Adapter_Http_Abstract Provides a fluent interface
      */
     public function setResponse(Zend_Controller_Response_Http $response)
     {
@@ -104,7 +111,7 @@ class Zend_Auth_Adapter_Http_Abstract
      * Setter for the _resolver property
      *
      * @param  Zend_Auth_Adapter_Http_Resolver_Interface $resolver
-     * @return Zend_Auth_Adapter_Http Provides a fluent interface
+     * @return Zend_Auth_Adapter_Http_Abstract Provides a fluent interface
      */
     public function setResolver($resolver)
     {
@@ -122,6 +129,30 @@ class Zend_Auth_Adapter_Http_Abstract
     {
         return $this->_resolver;
     }
+    
+    /**
+     * Setter for the _session property
+     *
+     * @param  Zend_Session_Namespace $session
+     * @return Zend_Auth_Adapter_Http_Abstract Provides a fluent interface
+     */
+    public function setSession($session)
+    {
+        $this->_session = $session;
+
+        return $this;
+    }
+
+    /**
+     * Getter for the _session property
+     *
+     * @return Zend_Session_Namespace
+     */
+    public function getSession()
+    {
+        return $this->_session;
+    }
+    
     /**
      * Challenge Client
      *

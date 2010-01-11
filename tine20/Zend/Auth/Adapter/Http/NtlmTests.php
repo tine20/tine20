@@ -12,7 +12,9 @@ class NtlmTests extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->_auth = new Zend_Auth_Adapter_Http_Ntlm();
+        $this->_auth = new Zend_Auth_Adapter_Http_Ntlm(array(
+            'challenge' => '0123456789abcdef',
+        ));
         
         // prepare response for testing (phpunit sets headers...)
         $this->_auth->getResponse()->headersSentThrowsException = FALSE;
@@ -28,6 +30,10 @@ class NtlmTests extends PHPUnit_Framework_TestCase
         
         $resolver = new Zend_Auth_Adapter_Http_Ntlm_Resolver_Mock();
         $this->_auth->setResolver($resolver);
+        
+        Zend_Session::$_unitTestEnabled = TRUE;
+        $session = new Zend_Session_Namespace('ntlm');
+        $this->_auth->setSession($session);
         
         $m1hex = '4e544c4d53535000010000000732000006000600330000000b000b0028000000050093080000000f574f524b53544154494f4e444f4d41494e';
         $m1bin = pack('H*', $m1hex);

@@ -22,6 +22,8 @@ require_once 'Zend/Auth/Adapter/Http/Abstract.php';
  * @see http://ubiqx.org/cifs/SMB.html
  * @see http://technet.microsoft.com/de-de/magazine/2006.08.securitywatch(en-us).aspx
  * 
+ * @todo add NTLMv1 support, as we can't prohibit sending v1 blobs anyway
+ * 
  * IMPORTANT NOTE: quoting section 2.8.5.7 from  
  *  http://ubiqx.org/cifs/SMB.html: "The use of NTLMv2 is
  *  not negotiated between the client and server. There is 
@@ -244,8 +246,16 @@ class Zend_Auth_Adapter_Http_Ntlm extends Zend_Auth_Adapter_Http_Abstract
             $this->_log = new Zend_Log(new Zend_Log_Writer_Null());
         }
         
-        if (array_key_exists('resolver', $config) /*&& $config['resoslver'] instanceof Zend_Auth_Adapter_Http_Resolver_Interface*/) {
+        if (array_key_exists('resolver', $config) /*&& $config['resolver'] instanceof Zend_Auth_Adapter_Http_Resolver_Interface*/) {
             $this->setResolver($config['resolver']);
+        }
+        
+        if (array_key_exists('session', $config) && $config['session'] instanceof Zend_Session_Namespace) {
+            $this->setSession($config['session']);
+        }
+        
+        if (array_key_exists('challenge', $config)) {
+            $this->_challenge = $config['challenge'];
         }
         
         if (array_key_exists('targetInfo', $config)) {
@@ -434,6 +444,11 @@ class Zend_Auth_Adapter_Http_Ntlm extends Zend_Auth_Adapter_Http_Abstract
         $NTLMv2hash = hash_hmac('md5', $this->toUTF16LE(strtoupper($userName) . $authTarget), $md4hash, TRUE);
         $blobHash = hash_hmac('md5', pack('H*', $this->_getChallenge()) . $clientBlob, $NTLMv2hash, TRUE);
         
+        // destroy challenge
+        if ($this->getSession() instanceof Zend_Session_Namespace) {
+            unset($this->getSession()->ntlmchallenge);
+        }
+        
         $identity = new Zend_Auth_Adapter_Http_Ntlm_Identity(array(
             'ntlmData' => $this->_clientInfo
         ));
@@ -525,10 +540,32 @@ class Zend_Auth_Adapter_Http_Ntlm extends Zend_Auth_Adapter_Http_Abstract
         return $message2;
     }
     
-    // @todo generate random challenge and store it in session
+    /**
+     * generates random challenge 
+     * 
+     * @return string
+     */
     protected function _getChallenge()
     {
-        return '0123456789abcdef';
+        if (! empty($this->_challenge)) {
+            return $this->_challenge;
+        }
+        
+        $session = $this->getSession();
+        if (! $session instanceof Zend_Session_Namespace) {
+            /**
+             * @see Zend_Auth_Adapter_Exception
+             */
+            require_once 'Zend/Auth/Adapter/Exception.php';
+            throw new Zend_Auth_Adapter_Exception('session is not set');
+        }
+        
+        if (empty($session->ntlmchallenge)) {
+            $session->ntlmchallenge = $this->generateChallenge();
+        }
+        
+        $this->_log->DEBUG("server challenge : {$session->ntlmchallenge}");
+        return $session->ntlmchallenge;
     }
     
     /**
@@ -617,5 +654,22 @@ class Zend_Auth_Adapter_Http_Ntlm extends Zend_Auth_Adapter_Http_Abstract
      */
     public static function toUTF16LE($utf8) {
         return iconv('UTF-8', 'UTF-16LE', $utf8);
+    }
+    
+    /**
+     * returns random challenge in hex representation
+     * 
+     * @return string
+     */
+    public static function generateChallenge($length = 8)
+    {
+        $hexVals = '0123456789abcdef';
+        
+        $challenge = "";
+        for ($i = 0; $i < $length*2; $i++) {
+            $challenge .= $hexVals[rand(0, 15)];
+        }
+        
+        return $challenge;
     }
 }
