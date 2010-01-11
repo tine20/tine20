@@ -90,12 +90,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
         Tinebase_User::getInstance()->resolveMultipleUsers($timesheets, 'account_id', true);
         
         // build export table (use current table if using template)
-        if (! array_key_exists('template', $this->_config['timesheets']) || empty($this->_config['timesheets']['template']) || $this->_openDocumentObject->getBody()->count() == 0) {
-            $table = $this->_openDocumentObject->getBody()->appendTable('Timesheets');
-        } else {
-            $this->_openDocumentObject->getBody()->rewind();
-            $table = $this->_openDocumentObject->getBody()->current();
-        }
+        $table = $this->_openDocumentObject->getBody()->appendTable('Timesheets');
         $this->_addHead($table, $this->_config['timesheets']/*, $_filter*/);
         $this->_addBody($table, $timesheets, $this->_config['timesheets']);
         $this->_addFooter($table, $lastCell);
@@ -164,12 +159,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
      */
     protected function _addOverviewTable($lastCell)
     {
-        if (! array_key_exists('template', $this->_config['timesheets']) || empty($this->_config['timesheets']['template']) || $this->_openDocumentObject->getBody()->count() == 1) {
-            $table = $this->_openDocumentObject->getBody()->appendTable('Overview');
-        } else {
-            $this->_openDocumentObject->getBody()->next();
-            $table = $this->_openDocumentObject->getBody()->current();
-        }
+        $table = $this->_openDocumentObject->getBody()->appendTable('Overview');
         
         $row = $table->appendRow();
         $row->appendCell('string', $this->_translate->_('Not billable'));
@@ -265,7 +255,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
         
         // add template config (same as default + template file definition
         $defaultTsConfig['template'] = $defaultTsConfig['default'];
-        $defaultTsConfig['template']['template'] = 'timesheet_export_default.ods';
+        $defaultTsConfig['template']['template'] = 'timesheet_export_default.ots';
         
         $defaultTaConfig = array(
             'header' => array(
