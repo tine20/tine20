@@ -155,6 +155,28 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             'count'       => $result,
         );
     }
+
+    /**
+     * update properties of record by id
+     *
+     * @param string $_id record id
+     * @param string $_data json encoded key/value pairs 
+     * @param Tinebase_Controller_Record_Interface $_controller
+     * @return updated record
+     */
+    protected function _updateProperties($_id, $_data, Tinebase_Controller_Record_Interface $_controller)
+    {
+        $data = Zend_Json::decode($_data);
+        
+        // get record
+        $record = $_controller->get($_id);
+        foreach ($data as $key => $value) {
+            $record->{$key} = $value;
+        }
+        $savedRecord = $_controller->update($record);
+        
+        return $this->_recordToJson($savedRecord);
+    }
     
     /**
      * deletes existing records
