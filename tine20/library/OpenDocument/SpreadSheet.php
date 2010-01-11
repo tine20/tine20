@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        parse existing tables/rows/columns/cells when using template file
  */
 
 /**
@@ -43,7 +45,7 @@ class OpenDocument_SpreadSheet implements Iterator, Countable
     }
 
     /**
-     * add new table an return reference
+     * add new table and return reference
      *
      * @param string|optional $_tableName
      * @return OpenDocument_SpreadSheet_Table
