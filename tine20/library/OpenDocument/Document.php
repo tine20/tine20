@@ -164,6 +164,14 @@ class OpenDocument_Document
     
     protected $_userStyles = array();
     
+    /**
+     * constructor
+     * 
+     * @param string $_type
+     * @param string $_fileName
+     * @param string $_tmpdir
+     * @return void
+     */
     public function __construct($_type, $_fileName = null, $_tmpdir = '/tmp')
     {
         if($_fileName !== null) {
@@ -180,9 +188,15 @@ class OpenDocument_Document
         
         switch ($_type) {
             case self::SPREADSHEET:
-                $body = $this->_document->xpath('//office:body');
-                $node = $body[0]->addChild('office:spreadsheet', NULL, OpenDocument_Document::NS_OFFICE);
-                $this->_body = new OpenDocument_SpreadSheet($node);        
+                // don't create new spreadsheet node if it already exists
+                $spreadsheets = $this->_document->xpath('//office:body/office:spreadsheet');
+                if (count($spreadsheets) == 0) {
+                    $body = $this->_document->xpath('//office:body');
+                    $node = $body[0]->addChild('office:spreadsheet', NULL, OpenDocument_Document::NS_OFFICE);
+                } else {
+                    $node = $spreadsheets[0];
+                }
+                $this->_body = new OpenDocument_SpreadSheet($node);
                 break;
             default:
                 throw new Exception('unsupported documenttype: ' . $_type);
