@@ -9,8 +9,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        make fonts customizable
- * @todo        add page layout (orientation landscape to styles
  * @todo        move configs to importexport definitions
  */
 
@@ -21,7 +19,7 @@
  * @subpackage	Export
  * 
  */
-class Tinebase_Export_Ods extends OpenDocument_Document
+class Tinebase_Export_Ods
 {
     /**
      * user styles
@@ -124,15 +122,32 @@ class Tinebase_Export_Ods extends OpenDocument_Document
     protected $_applicationName = 'Tinebase';
     
     /**
+     * the opendocument object
+     * 
+     * @var OpenDocument_Document
+     */
+    protected $_openDocumentObject = NULL;
+    
+    /**
      * the constructor
      *
      */
     public function __construct()
     {
-        parent::__construct(OpenDocument_Document::SPREADSHEET, NULL, Tinebase_Core::getTempDir());
+        //parent::__construct(OpenDocument_Document::SPREADSHEET, NULL, Tinebase_Core::getTempDir());
         
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_config = $this->_getExportConfig();
+    }
+    
+    /**
+     * get open document object
+     * 
+     * @return OpenDocument_Document
+     */
+    public function getDocument()
+    {
+        return $this->_openDocumentObject;
     }
     
     /**
@@ -384,6 +399,6 @@ class Tinebase_Export_Ods extends OpenDocument_Document
      */
     protected function _addColumnStyle($_styleName, $_columnWidth) 
     {
-        $this->addStyle('<style:style style:name="' . $_styleName . '" style:family="table-column" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><style:table-column-properties style:column-width="' . $_columnWidth . '"/></style:style>');
+        $this->_openDocumentObject->addStyle('<style:style style:name="' . $_styleName . '" style:family="table-column" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><style:table-column-properties style:column-width="' . $_columnWidth . '"/></style:style>');
     }
 }

@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        allow template files
  */
 
 /**
@@ -49,9 +50,11 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
     {
         switch ($_filter->getModelName()) {
             case 'Timetracker_Model_Timesheet' :
+                $this->_openDocumentObject = new OpenDocument_Document(OpenDocument_Document::SPREADSHEET, NULL, Tinebase_Core::getTempDir());
                 $result = $this->exportTimesheets($_filter);
                 break;
             case 'Timetracker_Model_Timeaccount' :
+                $this->_openDocumentObject = new OpenDocument_Document(OpenDocument_Document::SPREADSHEET, NULL, Tinebase_Core::getTempDir());
                 $result = $this->exportTimeaccounts($_filter);
                 break;
             default:
@@ -82,7 +85,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
         Tinebase_User::getInstance()->resolveMultipleUsers($timesheets, 'account_id', true);
         
         // build export table
-        $table = $this->getBody()->appendTable('Timesheets');        
+        $table = $this->_openDocumentObject->getBody()->appendTable('Timesheets');        
         $this->_addHead($table, $this->_config['timesheets']/*, $_filter*/);
         $this->_addBody($table, $timesheets, $this->_config['timesheets']);
         $this->_addFooter($table, $lastCell);
@@ -91,7 +94,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
         $this->_addOverviewTable($lastCell);
         
         // create file
-        $filename = $this->getDocument();        
+        $filename = $this->_openDocumentObject->getDocument();        
         return $filename;
     }
     
@@ -110,13 +113,13 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
         Tinebase_User::getInstance()->resolveMultipleUsers($timeaccounts, 'created_by', true);
         
         // build export table
-        $table = $this->getBody()->appendTable($this->_translate->_('Timesheets'));        
+        $table = $this->_openDocumentObject->getBody()->appendTable($this->_translate->_('Timesheets'));        
         $this->_addHead($table, $this->_config['timeaccounts']);
         $this->_addBody($table, $timeaccounts, $this->_config['timeaccounts']);
         //$this->_addFooter($table, $lastCell);
         
         // create file
-        $filename = $this->getDocument();        
+        $filename = $this->_openDocumentObject->getDocument();        
         return $filename;
     }
     
@@ -151,7 +154,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
      */
     protected function _addOverviewTable($lastCell)
     {
-        $table = $this->getBody()->appendTable('Overview');
+        $table = $this->_openDocumentObject->getBody()->appendTable('Overview');
         
         $row = $table->appendRow();
         $row->appendCell('string', $this->_translate->_('Not billable'));
@@ -241,8 +244,13 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
                     'type'      => 'float', 
                     'width'     => '3cm'
                 ),
-            )
-        ));
+            ),
+        ),
+        );
+        
+        // add template config (same as default + template file definition
+        $defaultTsConfig['template'] = $defaultTsConfig['default'];
+        $defaultTsConfig['template']['template'] = 'timesheet_export_default.ods';
         
         $defaultTaConfig = array(
             'header' => array(
@@ -311,7 +319,11 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
         
         // check in prefs which ts pref to use
         $tsExportConfigPref = Tinebase_Core::getPreference('Timetracker')->getValue(Timetracker_Preference::TSODSEXPORTCONFIG);
-        $exportConfig['timesheets'] = $exportConfig['timesheets'][$tsExportConfigPref];
+        if (array_key_exists($tsExportConfigPref, $exportConfig['timesheets'])) {
+            $exportConfig['timesheets'] = $exportConfig['timesheets'][$tsExportConfigPref];
+        } else {
+            $exportConfig['timesheets'] = $exportConfig['timesheets']['default'];
+        }
         
         return $exportConfig;
     }    

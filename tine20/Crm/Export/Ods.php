@@ -39,7 +39,9 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
      * @param Crm_Model_LeadFilter $_filter
      * @return string filename
      */
-    public function generate(Crm_Model_LeadFilter $_filter) {
+    public function generate(Crm_Model_LeadFilter $_filter) 
+    {
+        $this->_openDocumentObject = new OpenDocument_Document(OpenDocument_Document::SPREADSHEET, NULL, Tinebase_Core::getTempDir());
         
         // get leads by filter
         $leads = Crm_Controller_Lead::getInstance()->search($_filter);
@@ -50,12 +52,12 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
         Tinebase_User::getInstance()->resolveMultipleUsers($leads, 'created_by', true);
         
         // build export table
-        $table = $this->getBody()->appendTable('Leads');        
+        $table = $this->_openDocumentObject->getBody()->appendTable('Leads');        
         $this->_addHead($table, $this->_config['leads']);
         $this->_addBody($table, $leads, $this->_config['leads']);
         
         // create file
-        $filename = $this->getDocument();        
+        $filename = $this->_openDocumentObject->getDocument();        
         return $filename;
     }
     
