@@ -255,7 +255,9 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             { id: 'account_id',         header: this.app.i18n._("Account"),             width: 350, dataIndex: 'account_id',            
                 renderer: Tine.Tinebase.common.usernameRenderer },
             { id: 'duration',           header: this.app.i18n._("Duration"),            width: 150, dataIndex: 'duration',
-                renderer: Tine.Tinebase.common.minutesRenderer }
+                renderer: Tine.Tinebase.common.minutesRenderer },
+            { id: 'creation_time',      header: this.app.i18n._('Creation Time'), dataIndex: 'creation_time', renderer: Tine.Tinebase.common.dateRenderer,   hidden: true },
+            { id: 'last_modified_time', header: this.app.i18n._('Last Modified Time'), dataIndex: 'last_modified_time', renderer: Tine.Tinebase.common.dateRenderer,   hidden: true }
         ];
         
         return new Ext.grid.ColumnModel({ 
