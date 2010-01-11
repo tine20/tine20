@@ -383,7 +383,13 @@ class Setup_Controller
      */
     public function updateNeeded($_application)
     {
-        $setupXml = $this->getSetupXml($_application->name);
+        try {
+            $setupXml = $this->getSetupXml($_application->name);
+        } catch (Setup_Exception_NotFound $senf) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $senf->getMessage() . ' Disabling application "' . $_application->name . '".');
+            Tinebase_Application::getInstance()->setApplicationState(array($_application->getId()), Tinebase_Application::DISABLED);
+            return false;
+        }
         
         $updateNeeded = version_compare($_application->version, $setupXml->version);
         
@@ -412,6 +418,12 @@ class Setup_Controller
                 // merge to create result array
                 $applications = array();
                 foreach ($installed as $application) {
+                    
+                    if (! array_key_exists($application['name'], $installable)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' App ' . $application['name'] . ' does not exist any more.');
+                        continue;
+                    }
+                    
                     $depends = (array) $installable[$application['name']]->depends;
                     if (isset($depends['application'])) {
                         $depends = implode(', ', (array) $depends['application']);
@@ -581,8 +593,8 @@ class Setup_Controller
         # LEGACY/COMPATIBILITY: had to rename session.save_path key to sessiondir because otherwise the 
         # generic save config method would interpret the "_" as array key/value seperator
         if (empty($configArray['sessiondir']) && !empty($configArray['session.save_path'])) {
-          $configArray['sessiondir'] = $configArray['session.save_path'];
-          Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key 'session.save_path' should be renamed to 'sessiondir'");
+            $configArray['sessiondir'] = $configArray['session.save_path'];
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key 'session.save_path' should be renamed to 'sessiondir'");
         }
         #####################################
         
