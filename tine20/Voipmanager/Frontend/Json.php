@@ -657,7 +657,20 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveAsteriskSipPeer($recordData)
     {
         return $this->_save($recordData, Voipmanager_Controller_Asterisk_SipPeer::getInstance(), 'Asterisk_SipPeer');       
-    }     
+    }
+    
+    /**
+     * update multiple records
+     *
+     * @param string $_id record id
+     * @param string $_data json encoded key/value pairs 
+     * @return updated record
+     */
+    public function updatePropertiesAsteriskSipPeer($id, $data)
+    {
+        return $this->_updateProperties($id, $data, Voipmanager_Controller_Asterisk_SipPeer::getInstance());
+    }
+    
 
     /**
      * delete multiple asterisk sip peers

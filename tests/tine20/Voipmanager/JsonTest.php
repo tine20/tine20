@@ -66,7 +66,11 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         // delete all contexts
         $search = $this->_json->searchAsteriskContexts('', '');
         foreach ($search['results'] as $result) {
-            $this->_json->deleteAsteriskContexts($result['id']);
+            try {
+                $this->_json->deleteAsteriskContexts($result['id']);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                // integrity constraint
+            }
         }        
     }
     
@@ -203,6 +207,27 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($returned['name'], $updated['name']);
         $this->assertEquals($returned['context_id'], $updated['context_id']['value']);
         $this->assertNotNull($updated['id']);
+        
+        $this->_json->deleteAsteriskSipPeers(Zend_Json::encode(array($returned['id'])));
+    }
+
+    /**
+     * test update properties of asterisk SipPeer
+     *
+     */
+    public function testUpdatePropertiesAsteriskSipPeer()
+    {
+        $test = $this->_getAsteriskSipPeer();
+        
+        $returned = $this->_json->saveAsteriskSipPeer(Zend_Json::encode($test->toArray()));
+        
+        // update regseconds
+        $data = array('regseconds' => 123);
+        $updated = $this->_json->updatePropertiesAsteriskSipPeer($returned['id'], Zend_Json::encode($data));
+        
+        //print_r($updated);
+        
+        $this->assertEquals('1970-01-01 01:02:03', $updated['regseconds']);
         
         $this->_json->deleteAsteriskSipPeers(Zend_Json::encode(array($returned['id'])));
     }
