@@ -142,4 +142,21 @@ class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
         return $id;
     }
 
+    /**
+     * fills a record from json data
+     *
+     * @param string $_data json encoded data
+     * @return void
+     */
+    public function setFromJson($_data)
+    {
+        parent::setFromJson($_data);
+        
+        // readonly fields, only setable by asterisk
+        unset($this->ipaddr);
+        unset($this->lastms);
+        unset($this->regseconds);
+        unset($this->regserver);
+        unset($this->useragent);
+    }
 }

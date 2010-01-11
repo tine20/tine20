@@ -201,10 +201,13 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         //print_r($returned);
         $returned['name'] = Tinebase_Record_Abstract::generateUID();
         $returned['context_id'] = $returned['context_id']['value'];
+        $regseconds = $returned['regseconds'];
+        $returned['regseconds'] = 123;
         
         $updated = $this->_json->saveAsteriskSipPeer(Zend_Json::encode($returned));
         
         $this->assertEquals($returned['name'], $updated['name']);
+        $this->assertEquals($regseconds, $updated['regseconds'], 'regseconds should not be updated');
         $this->assertEquals($returned['context_id'], $updated['context_id']['value']);
         $this->assertNotNull($updated['id']);
         

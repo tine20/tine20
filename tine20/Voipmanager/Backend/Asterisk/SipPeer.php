@@ -72,13 +72,6 @@ class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Backend_Sql_Abstract
         // context is joined from the asterisk_context table and can not be set here
         unset($result['context']);
         
-        // readonly fields, only setable by asterisk
-        unset($result['ipaddr']);
-        unset($result['lastms']);
-        unset($result['regseconds']);
-        unset($result['regserver']);
-        unset($result['useragent']);
-        
         return $result;
     }
 }
