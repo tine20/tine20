@@ -89,9 +89,9 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         
         $result =  parent::create($_record);
         
-        /*if(isset(Tinebase_Core::getConfig()->asterisk)) {
+        if(isset(Tinebase_Core::getConfig()->asterisk)) {
             $this->publishConfiguration();
-        }*/
+        }
         
         return $result;
     }
@@ -106,9 +106,9 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         
         $result = parent::delete($_ids);
         
-        /*if(isset(Tinebase_Core::getConfig()->asterisk)) {
+        if(isset(Tinebase_Core::getConfig()->asterisk)) {
             $this->publishConfiguration();
-        }*/
+        }
         
         return $result;
     }
@@ -123,9 +123,9 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         
         $result =  parent::update($_record);
         
-        /*if(isset(Tinebase_Core::getConfig()->asterisk)) {
+        if(isset(Tinebase_Core::getConfig()->asterisk)) {
             $this->publishConfiguration();
-        }*/
+        }
         
         return $result;
     }
@@ -135,11 +135,6 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
      * 
      * @return void
      */
-    
-    /*
-     
-    currently unused
-    
     public static function publishConfiguration()
     {   
         if(isset(Tinebase_Core::getConfig()->asterisk)) {
@@ -177,5 +172,4 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         $ajam->command('sip reload');
         $ajam->logout();
     }
-     */
 }
