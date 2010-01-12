@@ -16,20 +16,15 @@
  */
 abstract class VoipMonitor_Frontend_Abstract
 {
-    /**
-     * the host to connect to
-     * @var string
-     */
-    protected $_host;
+    protected $_frontendDefaultSocket;
+    
+    protected $_frontendConfig;
+    
+    // Stores all observers
+    protected $_observers = array();
     
     /**
-     * the port to connect to
-     * @var string
-     */
-    protected $_port;
-    
-    /**
-     * the connectio to the voip system
+     * the connection to the voip system
      * @var resource
      */
     protected $_stream;
@@ -40,46 +35,72 @@ abstract class VoipMonitor_Frontend_Abstract
      * @param string  $_host
      * @param int     $_port
      */
-    public function __construct($_host = null, $_port = null)
+    public function __construct(Zend_Config $_frontendConfig)
     {
-        if(!is_null($_host)) {
-            $this->_host = $_host;
+        $this->_frontendConfig = $_frontendConfig;
+              
+        $socket = $_frontendConfig->get('socket', $this->_frontendDefaultSocket);
+        if($socket !== NULL) {
+            $this->connect($socket);
         }
         
-        if(!is_null($_port)) {
-            $this->_port = $_port;
-        }
-              
-        if($this->_host !== NULL) {
-            $this->connect($this->_host, $this->_port);
+        $username = $_frontendConfig->get('username', NULL);
+        $password = $_frontendConfig->get('password', NULL);
+        if($username !== NULL) {
+            $this->login($username, $password);
         }
     }
     
     /**
      * connect to host
      * 
-     * @param string  $host
-     * @param int     $port
+     * @param string  $_socket
      */
-    public function connect($host = null, $port = null)
+    public function connect($_socket)
     {
-        $host = !is_null($host) ? $host : $this->_host;
-        $port = !is_null($port) ? $port : $this->_port;
-        
-        if(empty($host)) {
-            throw new OutOfRangeException('$host can not be empty');
-        }
-        if(empty($port)) {
-            throw new OutOfRangeException('$port can not be empty');
+        if(empty($_socket)) {
+            throw new OutOfRangeException('$_socket can not be empty');
         }
         
-        $stream = stream_socket_client("tcp://$host:$port", $errno, $errstr, 10);
+        $stream = stream_socket_client($_socket, $errno, $errstr, 10);
         
         if($stream === FALSE) {
-            throw new UnexpectedValueException("Failed to connect to host $host:$port");
+            throw new UnexpectedValueException("Failed to connect to host $_socket");
         }
         
         $this->_stream = $stream;
+    }
+    
+    public function stopHandleEvents()
+    {
+        $this->_stream = null;
+    }
+    
+    /**
+     * Needed to register observers
+     * 
+     * Note the typehinting here.
+     */
+    public function attach(VoipMonitor_Backend_Abstract $observer) {
+        $this->_observers[]= $observer;
+    }
+
+    /**
+     * Needed to unregister observers
+     * 
+     * Note the typehinting here.
+     */
+    public function detach(VoipMonitor_Backend_Abstract $observer) {
+        // Not implemented here
+    }
+
+    /**
+     * Notify all Observers that we have changed
+     */
+    public function notify($_event) {
+        foreach ($this->_observers as $obj) {
+            $obj->update($_event);
+        }
     }
     
     /**

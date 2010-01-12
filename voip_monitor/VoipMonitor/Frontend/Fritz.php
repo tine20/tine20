@@ -16,8 +16,7 @@
  */
 class VoipMonitor_Frontend_Fritz extends VoipMonitor_Frontend_Abstract
 {
-    protected $_host = 'fitz.box';
-    protected $_port = 1012;
+    protected $_frontendDefaultSocket = 'tcp://fritz.box:1012';
     
     /**
      * (non-PHPdoc)

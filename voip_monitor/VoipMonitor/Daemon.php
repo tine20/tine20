@@ -27,7 +27,8 @@ abstract class VoipMonitor_Daemon
         ob_implicit_flush ();
         declare(ticks = 1);
         
-        pcntl_signal(SIGUSR1, array($this, "handleSigUSR1"));
+        pcntl_signal(SIGTERM, array($this, "handleSigTERM"));
+        pcntl_signal(SIGINT,  array($this, "handleSigINT"));
         
         if($_becomeDaemon === true) {
             $pid = $this->_becomeDaemon();
@@ -67,22 +68,22 @@ abstract class VoipMonitor_Daemon
     }
   
     /**
-     * handle signal SIGUSR1
+     * handle signal SIGTERM
      * @param int $signal  the signal
      */
-    public function handleSigUSR1($signal)
+    public function handleSigTERM($signal)
     {
-        $this->_handleSignal($signal);
+        exit(0);
     }
-
+    
     /**
-     * stub helper function
+     * handle signal SIGINT
      * @param int $signal  the signal
-     * @return unknown_type
      */
-    protected function _handleSignal($signal)
+    public function handleSigINT($signal)
     {
-        echo "Caught signal $signal ..." . PHP_EOL;
+        $this->handleSigTERM($signal);
     }
+    
 }
 

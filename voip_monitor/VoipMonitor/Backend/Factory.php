@@ -14,20 +14,14 @@
  * 
  * @package     VoipMonitor
  */
-class VoipMonitor_Frontend_Factory
+class VoipMonitor_Backend_Factory
 {
     /**
      * constant for Sql contacts backend class
      *
      */
-    const ASTERISK = 'Asterisk';
+    const TINE20 = 'Tine20';
     
-    /**
-     * constant for LDAP contacts backend class
-     *
-     */
-    const FRITZBOX = 'Fritz';
-
     /**
      * factory function to return a selected contacts backend class
      *
@@ -39,11 +33,8 @@ class VoipMonitor_Frontend_Factory
     static public function factory($_type, Zend_Config $_config)
     {
         switch (ucfirst(strtolower($_type))) {
-            case self::ASTERISK:
-                $instance = new VoipMonitor_Frontend_Asterisk($_config);
-                break;            
-            case self::FRITZ:
-                $instance = new VoipMonitor_Frontend_Fritz($_config);
+            case self::TINE20:
+                $instance = new VoipMonitor_Backend_Tine20($_config);
                 break;            
             default:
                 throw new Addressbook_Exception_InvalidArgument('Unknown backend type (' . $_type . ').');
