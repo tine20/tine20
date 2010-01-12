@@ -662,8 +662,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * update multiple records
      *
-     * @param string $_id record id
-     * @param string $_data json encoded key/value pairs 
+     * @param string $id record id
+     * @param array $data json encoded key/value pairs 
      * @return updated record
      */
     public function updatePropertiesAsteriskSipPeer($id, $data)
