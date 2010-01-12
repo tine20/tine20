@@ -225,12 +225,16 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $returned = $this->_json->saveAsteriskSipPeer(Zend_Json::encode($test->toArray()));
         
         // update regseconds
-        $data = array('regseconds' => 123);
-        $updated = $this->_json->updatePropertiesAsteriskSipPeer($returned['id'], Zend_Json::encode($data));
+        $now = Zend_Date::now();
+        $data = array('regseconds' => $now);
+        $updated = $this->_json->updatePropertiesAsteriskSipPeer($returned['id'], $data);
         
         //print_r($updated);
-        
-        $this->assertEquals('1970-01-01 01:02:03', $updated['regseconds']);
+        date_default_timezone_set(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $now->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $nowConverted = $now->get(Tinebase_Record_Abstract::ISO8601LONG);
+        date_default_timezone_set('UTC');
+        $this->assertEquals($nowConverted, $updated['regseconds']);
         
         $this->_json->deleteAsteriskSipPeers(Zend_Json::encode(array($returned['id'])));
     }
