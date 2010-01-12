@@ -41,7 +41,7 @@ if ($opts->h) {
 $configPath   = $opts->config ? $opts->config : '/etc/monitor.ini';
 $becomeDaemon = $opts->daemon ? true          : false;
 
-$config = new Zend_Config_Ini($configPath, 'general');
+$config = new Zend_Config_Ini($configPath);
 
 $voipMonitor = new VoipMonitor($config, $becomeDaemon);
 $voipMonitor->run();

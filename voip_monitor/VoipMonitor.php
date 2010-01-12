@@ -16,11 +16,10 @@
  */
 class VoipMonitor extends VoipMonitor_Daemon
 {
-    protected $_hostname;
-    protected $_port;
-    protected $_username;
-    protected $_password;
     protected $_frontend;
+    protected $_frontendName;
+    protected $_frontendConfig;
+    protected $_backendConfig;
     
     /**
      * constructor
@@ -30,11 +29,15 @@ class VoipMonitor extends VoipMonitor_Daemon
      */
     public function __construct(Zend_Config $_config, $_becomeDaemon = false)
     {
-        $this->_hostname    = $_config->get('hostname', 'localhost');
-        $this->_port        = $_config->get('port', null);
-        $this->_username    = $_config->get('username', null);
-        $this->_password    = $_config->get('password', null);
-        $this->_frontend    = $_config->get('frontend');
+        foreach($_config as $section => $config) {
+            $sectionUc = ucfirst(strtolower($section));
+            if(is_null($this->_frontendConfig) && @class_exists('VoipMonitor_Frontend_' . $sectionUc)) {
+                $this->_frontendName  = $sectionUc;
+                $this->_frontendConfig = $config;
+            } elseif(strtolower($section) == 'tine20') {
+                $this->_backendConfig = $config;
+            }
+        } 
         
         parent::__construct($_becomeDaemon);
     }
@@ -45,9 +48,23 @@ class VoipMonitor extends VoipMonitor_Daemon
      */
     public function run()
     {
-        $frontend = VoipMonitor_Frontend_Factory::factory($this->_frontend);
-        $frontend->connect($this->_hostname, $this->_port);
-        $frontend->login($this->_username, $this->_password);
-        $frontend->handleEvents();
+        $this->_frontend = VoipMonitor_Frontend_Factory::factory($this->_frontendName, $this->_frontendConfig);
+        $this->_backend  = VoipMonitor_Backend_Factory::factory('Tine20', $this->_backendConfig);
+        
+        $this->_frontend->attach($this->_backend);
+        
+        $this->_frontend->handleEvents();
     }  
+    
+    /**
+     * (non-PHPdoc)
+     * @see VoipMonitor/VoipMonitor_Daemon#handleSigTERM($signal)
+     */
+    public function handleSigTERM($signal)
+    {
+        echo "Caught SigTERM/INT... " . PHP_EOL;
+        $this->_frontend->stopHandleEvents();
+        $this->_backend->logout();
+        //exit(); 
+    }
 }
