@@ -10,6 +10,7 @@
  * @version     $Id: Ods.php 10912 2009-10-12 14:40:25Z p.schuele@metaways.de $
  * 
  * @todo        add formulas / charts?
+ * @todo        add class with common crm export functions (and move status/special field handling there)
  */
 
 /**
@@ -138,13 +139,36 @@ class Crm_Export_Xls extends Tinebase_Export_Xls
                     'header'    => $this->_translate->_('Product'),
                     'type'      => 'relation',
                     'field'     => 'name',
-                ),            
+                ),           
+                'status' => array(
+                    'header'    => $this->_translate->_('Status'),
+                    'type'      => 'special',
+                ),
                 'notes' => array(
                     'header'    => $this->_translate->_('History'),
                     'type'      => 'notes',
-                ),            
+                ),
             ),
             //'template' => 'lead_test_template.xls'
         );
+    }
+    
+    /**
+     * special field value function
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_fieldName
+     * @return string
+     */
+    protected function _addSpecialValue(Tinebase_Record_Abstract $_record, $_fieldName)
+    {
+        $result = '';
+        switch ($_fieldName) {
+            case 'status':
+                $result = (! empty($_record->end)) ? $this->_translate->_('closed') : $this->_translate->_('open');
+                break;
+        }
+        
+        return $result;
     }
 }
