@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Ods.php 10912 2009-10-12 14:40:25Z p.schuele@metaways.de $
  * 
+ * @todo        add Tinebase_Export_Abstract with common funcs (_addRelations, add notes, add special value)
  */
 
 // set include path for phpexcel
@@ -220,6 +221,9 @@ class Tinebase_Export_Xls
                     case 'notes':
                         $value = $this->_addNotes($record);
                         break;
+                    case 'special':
+                        $value = $this->_addSpecialValue($record, $key);
+                        break;
                     default:
                         $value = $record->$key;
                 }
@@ -289,5 +293,17 @@ class Tinebase_Export_Xls
         
         $result = implode(';', $resultArray);
         return $result;
+    }
+    
+    /**
+     * special field value function (overwrite that)
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_fieldName
+     * @return string
+     */
+    protected function _addSpecialValue(Tinebase_Record_Abstract $_record, $_fieldName)
+    {
+        return '';
     }
 }
