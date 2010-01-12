@@ -228,4 +228,27 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
             }
         }
     }            
+
+    /**
+     * use probability / end date to determine lead status
+     * 
+     * @return string
+     */
+    public function getLeadStatus()
+    {
+        $translate = Tinebase_Translation::getTranslation($this->_application);
+        if (empty($this->end)) {
+            $result = $translate->_('open');
+        } else {
+            if ($this->probability == 100) {
+                $result = $translate->_('won');
+            } elseif ($this->probability == 0) {
+                $result = $translate->_('lost');
+            } else {
+                // open or unknown/undefined?
+                $result = $translate->_('open');
+            }
+        }
+        return $result;
+    }
 }

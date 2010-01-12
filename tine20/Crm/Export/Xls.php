@@ -165,7 +165,7 @@ class Crm_Export_Xls extends Tinebase_Export_Xls
         $result = '';
         switch ($_fieldName) {
             case 'status':
-                $result = (! empty($_record->end)) ? $this->_translate->_('closed') : $this->_translate->_('open');
+                $result = $_record->getLeadStatus();
                 break;
         }
         

@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        add class with common crm export functions (and move status/special field handling there)
  * @todo        add relations / products / state / type / source
  */
 
@@ -31,7 +32,7 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
      *
      * @var array
      */
-    protected $_specialFields = array('created_by');
+    protected $_specialFields = array('created_by', 'status');
     
     /**
      * export leads to Ods file
@@ -118,6 +119,11 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
                     'field'     => 'accountDisplayName', 
                     'width'     => '4cm'
                 ),
+                'status' => array(
+                    'header'    => $this->_translate->_('Status'),
+                    'type'      => 'status',
+                    'width'     => '4cm'
+                ),                
             )
         )));
 
@@ -143,6 +149,9 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
             case 'created_by':
                 $value = $_record->$_param['type']->$_param['field'];
                 break;
+            case 'status':
+                $value = $_record->getLeadStatus();
+                break;                
         }        
         return $value;
     }
