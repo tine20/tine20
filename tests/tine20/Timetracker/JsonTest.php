@@ -874,6 +874,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $odsExportClass->getDocument()->getBody()->count(), 'table count mismatch');
         
         // cleanup / delete file
-        //unlink($result);
+        unlink($result);
     }
 }
