@@ -1,4 +1,4 @@
-#!/usr/bin/env php
+#!/usr/bin/env php -q
 <?php
 /**
  * VoIP Monitor Deamon
