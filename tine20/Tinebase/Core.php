@@ -535,9 +535,8 @@ class Tinebase_Core
             switch($dbBackend) {
                 case self::PDO_MYSQL:
                     $db = Zend_Db::factory('Pdo_Mysql', $dbConfig->toArray());
-                    $db->query("SET NAMES UTF8");
-                    // set mysql timezone to utc
-                    $db->query("SET time_zone ='+0:00'");
+                    // set utf8 charset and mysql timezone to utc
+                    $db->query("SET NAMES UTF8; SET time_zone ='+0:00';");
                     try {
                         $db->query("SET SQL_MODE = 'STRICT_ALL_TABLES'");
                     } catch (Exception $e) {
