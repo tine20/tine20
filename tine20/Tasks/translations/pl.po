@@ -23,7 +23,7 @@ msgstr "Edytuj wspólną listę zadań"
 msgid "Create new shared tasks lists"
 msgstr "Utwórz nową, wspólną listę zadań"
 
-#: Controller/Task.php:163
+#: Controller/Task.php:162
 msgid "Notification for Task "
 msgstr "Powiadomienie o zadaniu"
 

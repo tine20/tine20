@@ -115,7 +115,7 @@ msgstr ""
 msgid "Contracts"
 msgstr "Договоры"
 
-#: js/Sales.js:109
+#: js/Sales.js:109 js/Sales.js:144
 #, fuzzy
 msgid "All Contracts"
 msgstr "Договоры"

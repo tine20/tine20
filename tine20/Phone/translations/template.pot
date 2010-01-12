@@ -228,7 +228,7 @@ msgstr ""
 msgid "Rights"
 msgstr ""
 
-#: js/Phone.js:28 js/Phone.js:466 js/Phone.js:467
+#: js/Phone.js:28 js/Phone.js:476 js/Phone.js:477
 msgid "Edit phone settings"
 msgstr ""
 
@@ -256,78 +256,86 @@ msgstr ""
 msgid "Dial"
 msgstr ""
 
-#: js/Phone.js:456
+#: js/Phone.js:324
+msgid "Error"
+msgstr ""
+
+#: js/Phone.js:325
+msgid "Not possible to dial."
+msgstr ""
+
+#: js/Phone.js:466
 msgid "Dial number"
 msgstr ""
 
-#: js/Phone.js:457
+#: js/Phone.js:467
 msgid "Initiate a new outgoing call"
 msgstr ""
 
-#: js/Phone.js:517
+#: js/Phone.js:527
 msgid "Incoming call"
 msgstr ""
 
-#: js/Phone.js:521
+#: js/Phone.js:531
 msgid "Outgoing call"
 msgstr ""
 
-#: js/Phone.js:529
+#: js/Phone.js:539
 msgid "unknown number"
 msgstr ""
 
-#: js/Phone.js:554
+#: js/Phone.js:564
 msgid "Search:"
 msgstr ""
 
-#: js/Phone.js:639
+#: js/Phone.js:649
 msgid "Source or Destination"
 msgstr ""
 
-#: js/Phone.js:655
+#: js/Phone.js:665
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr ""
 
-#: js/Phone.js:656 js/Phone.js:700
+#: js/Phone.js:666 js/Phone.js:710
 msgid "No calls to display"
 msgstr ""
 
-#: js/Phone.js:666
+#: js/Phone.js:676
 msgid "Direction"
 msgstr ""
 
-#: js/Phone.js:667
+#: js/Phone.js:677
 msgid "Source"
 msgstr ""
 
-#: js/Phone.js:668
+#: js/Phone.js:678
 msgid "Caller Id"
 msgstr ""
 
-#: js/Phone.js:669
+#: js/Phone.js:679
 msgid "Destination"
 msgstr ""
 
-#: js/Phone.js:670
+#: js/Phone.js:680
 msgid "Start"
 msgstr ""
 
-#: js/Phone.js:671
+#: js/Phone.js:681
 msgid "Connected"
 msgstr ""
 
-#: js/Phone.js:672
+#: js/Phone.js:682
 msgid "Disconnected"
 msgstr ""
 
-#: js/Phone.js:673
+#: js/Phone.js:683
 msgid "Duration"
 msgstr ""
 
-#: js/Phone.js:674
+#: js/Phone.js:684
 msgid "Ringing"
 msgstr ""
 
-#: js/Phone.js:675
+#: js/Phone.js:685
 msgid "Call ID"
 msgstr ""

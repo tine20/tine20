@@ -21,7 +21,7 @@ msgstr "behandle delte oppgaver lister"
 msgid "Create new shared tasks lists"
 msgstr "Opprett ny delt oppgaver liste"
 
-#: Controller/Task.php:163
+#: Controller/Task.php:162
 msgid "Notification for Task "
 msgstr "Varslinger for Oppgaver"
 

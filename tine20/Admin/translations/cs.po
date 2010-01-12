@@ -169,7 +169,7 @@ msgstr "Zobrazit od:"
 msgid "to:"
 msgstr "do:"
 
-#: js/Admin.js:444 js/Applications.js:145 js/Groups.js:153 js/Roles.js:149
+#: js/Admin.js:444 js/Applications.js:156 js/Groups.js:153 js/Roles.js:149
 #: js/Tags.js:140 js/Users.js:234
 msgid "Search:"
 msgstr "Hledat:"
@@ -206,11 +206,11 @@ msgstr "Žádné záznamy přístupového logu ke zobrazení"
 msgid "Session ID"
 msgstr "ID relace"
 
-#: js/Admin.js:565 js/UserEditDialog.js:298
+#: js/Admin.js:565 js/UserEditDialog.js:297
 msgid "Login Name"
 msgstr "Přihlašovací jméno"
 
-#: js/Admin.js:566 js/Applications.js:220 js/Groups.js:203 js/Roles.js:201
+#: js/Admin.js:566 js/Applications.js:231 js/Groups.js:203 js/Roles.js:201
 #: js/SambaMachineGrid.js:90 js/Tags.js:187
 msgid "Name"
 msgstr "Jméno"
@@ -235,51 +235,51 @@ msgstr "ID účtu"
 msgid "Result"
 msgstr "Výsledek"
 
-#: js/Applications.js:29
+#: js/Applications.js:31
 msgid "{0} Settings"
 msgstr "Nastavení {0}"
 
-#: js/Applications.js:122
+#: js/Applications.js:133
 msgid "enable application"
 msgstr "povolit aplikaci"
 
-#: js/Applications.js:123
+#: js/Applications.js:134
 msgid "disable application"
 msgstr "zakázat aplikaci"
 
-#: js/Applications.js:124
+#: js/Applications.js:135
 msgid "settings"
 msgstr "nastavení"
 
-#: js/Applications.js:174 js/UserEditDialog.js:352
+#: js/Applications.js:185 js/UserEditDialog.js:351
 msgid "disabled"
 msgstr "zakázáno"
 
-#: js/Applications.js:177 js/UserEditDialog.js:352
+#: js/Applications.js:188 js/UserEditDialog.js:351
 msgid "enabled"
 msgstr "povoleno"
 
-#: js/Applications.js:181
+#: js/Applications.js:192
 msgid "unknown status ({0})"
 msgstr "neznámý stav ({0})"
 
-#: js/Applications.js:209
+#: js/Applications.js:220
 msgid "Displaying application {0} - {1} of {2}"
 msgstr "Zobrazuji aplikace {0} - {1} z {2}"
 
-#: js/Applications.js:210
+#: js/Applications.js:221
 msgid "No applications to display"
 msgstr "Žádné aplikace ke zobrazení"
 
-#: js/Applications.js:219
+#: js/Applications.js:230
 msgid "Order"
 msgstr "Pořadí"
 
-#: js/Applications.js:221 js/UserEditDialog.js:346 js/Users.js:294
+#: js/Applications.js:232 js/UserEditDialog.js:345 js/Users.js:294
 msgid "Status"
 msgstr "Stav"
 
-#: js/Applications.js:222
+#: js/Applications.js:233
 msgid "Version"
 msgstr "Verze"
 
@@ -557,207 +557,207 @@ msgstr "Přidat adresu pro přeposílání..."
 msgid "Password confirmation"
 msgstr "Potvrzení hesla"
 
-#: js/UserEditDialog.js:222
+#: js/UserEditDialog.js:221
 msgid "Repeat password"
 msgstr "Zopakujte heslo"
 
-#: js/UserEditDialog.js:234
+#: js/UserEditDialog.js:233
 msgid "Cancel"
 msgstr "Storno"
 
-#: js/UserEditDialog.js:241
+#: js/UserEditDialog.js:240
 msgid "Ok"
 msgstr "OK"
 
-#: js/UserEditDialog.js:267
+#: js/UserEditDialog.js:266
 msgid "Account"
 msgstr "Účet"
 
-#: js/UserEditDialog.js:282
+#: js/UserEditDialog.js:281
 msgid "First Name"
 msgstr "Křestní jméno"
 
-#: js/UserEditDialog.js:292
+#: js/UserEditDialog.js:291
 msgid "Last Name"
 msgstr "Příjmení"
 
-#: js/UserEditDialog.js:303
+#: js/UserEditDialog.js:302
 msgid "Password"
 msgstr "Heslo"
 
-#: js/UserEditDialog.js:307
+#: js/UserEditDialog.js:306
 msgid "no password set"
 msgstr "heslo nebylo nastaveno"
 
-#: js/UserEditDialog.js:328
+#: js/UserEditDialog.js:327
 msgid "Emailaddress"
 msgstr "Emailová adresa"
 
-#: js/UserEditDialog.js:334 js/Users.js:300
+#: js/UserEditDialog.js:333 js/Users.js:300
 msgid "OpenID"
 msgstr "OpenID"
 
-#: js/UserEditDialog.js:340
+#: js/UserEditDialog.js:339
 msgid "Primary group"
 msgstr "Primární skupina"
 
-#: js/UserEditDialog.js:352
+#: js/UserEditDialog.js:351
 msgid "expired"
 msgstr "vypršel"
 
-#: js/UserEditDialog.js:355 js/Users.js:304
+#: js/UserEditDialog.js:354 js/Users.js:304
 msgid "Expires"
 msgstr "Vyprší"
 
-#: js/UserEditDialog.js:357 js/UserEditDialog.js:399 js/UserEditDialog.js:476
+#: js/UserEditDialog.js:356 js/UserEditDialog.js:398 js/UserEditDialog.js:475
 msgid "never"
 msgstr "nikdy"
 
-#: js/UserEditDialog.js:362
+#: js/UserEditDialog.js:361
 msgid "Visibility"
 msgstr "Viditelnost"
 
-#: js/UserEditDialog.js:368
+#: js/UserEditDialog.js:367
 msgid "Display in addressbook"
 msgstr "Zobrazit v adresáři"
 
-#: js/UserEditDialog.js:368
+#: js/UserEditDialog.js:367
 msgid "Hide from addressbook"
 msgstr "Nezobrazovat v adresáři"
 
-#: js/UserEditDialog.js:373
+#: js/UserEditDialog.js:372
 msgid "Information"
 msgstr "Informace"
 
-#: js/UserEditDialog.js:389 js/Users.js:301
+#: js/UserEditDialog.js:388 js/Users.js:301
 msgid "Last login at"
 msgstr "Poslední přihlášení"
 
-#: js/UserEditDialog.js:391 js/UserEditDialog.js:395
+#: js/UserEditDialog.js:390 js/UserEditDialog.js:394
 msgid "don't know"
 msgstr "nevím"
 
-#: js/UserEditDialog.js:391 js/UserEditDialog.js:395 js/UserEditDialog.js:456
+#: js/UserEditDialog.js:390 js/UserEditDialog.js:394 js/UserEditDialog.js:455
 msgid "never logged in"
 msgstr "nikdy nepřihlášen"
 
-#: js/UserEditDialog.js:393 js/Users.js:302
+#: js/UserEditDialog.js:392 js/Users.js:302
 msgid "Last login from"
 msgstr "Poslední přihlášení z"
 
-#: js/UserEditDialog.js:397
+#: js/UserEditDialog.js:396
 msgid "Password set"
 msgstr "Heslo nastaveno"
 
-#: js/UserEditDialog.js:405
+#: js/UserEditDialog.js:404
 msgid "Fileserver"
 msgstr "Souborový server"
 
-#: js/UserEditDialog.js:410
+#: js/UserEditDialog.js:409
 msgid "Unix"
 msgstr "Unix"
 
-#: js/UserEditDialog.js:425
+#: js/UserEditDialog.js:424
 msgid "Home Directory"
 msgstr "Domovský adresář"
 
-#: js/UserEditDialog.js:429
+#: js/UserEditDialog.js:428
 msgid "Login Shell"
 msgstr "Přihlašovací shell"
 
-#: js/UserEditDialog.js:434
+#: js/UserEditDialog.js:433
 msgid "Windows"
 msgstr "Windows"
 
-#: js/UserEditDialog.js:449
+#: js/UserEditDialog.js:448
 msgid "Home Drive"
 msgstr "Domovský disk"
 
-#: js/UserEditDialog.js:454
+#: js/UserEditDialog.js:453
 msgid "Logon Time"
 msgstr "Čas přihlášení"
 
-#: js/UserEditDialog.js:459
+#: js/UserEditDialog.js:458
 msgid "Home Path"
 msgstr "Domovská cesta"
 
-#: js/UserEditDialog.js:464
+#: js/UserEditDialog.js:463
 msgid "Logoff Time"
 msgstr "Čas odhlášení"
 
-#: js/UserEditDialog.js:466
+#: js/UserEditDialog.js:465
 msgid "never logged off"
 msgstr "nikdy neodhlášen"
 
-#: js/UserEditDialog.js:469
+#: js/UserEditDialog.js:468
 msgid "Profile Path"
 msgstr "Cesta k profilu"
 
-#: js/UserEditDialog.js:474
+#: js/UserEditDialog.js:473
 msgid "Password Last Set"
 msgstr "Heslo naposledy nastaveno"
 
-#: js/UserEditDialog.js:479
+#: js/UserEditDialog.js:478
 msgid "Logon Script"
 msgstr "Přihlašovací skript"
 
-#: js/UserEditDialog.js:483
+#: js/UserEditDialog.js:482
 msgid "Password Can Change"
 msgstr "Může změnit heslo"
 
-#: js/UserEditDialog.js:485 js/UserEditDialog.js:489 js/UserEditDialog.js:493
+#: js/UserEditDialog.js:484 js/UserEditDialog.js:488 js/UserEditDialog.js:492
 msgid "not set"
 msgstr "není nastaveno"
 
-#: js/UserEditDialog.js:487
+#: js/UserEditDialog.js:486
 msgid "Password Must Change"
 msgstr "Musí změnit heslo"
 
-#: js/UserEditDialog.js:491
+#: js/UserEditDialog.js:490
 msgid "Kick Off Time"
 msgstr "Čas automatického odhlášení"
 
-#: js/UserEditDialog.js:498
+#: js/UserEditDialog.js:497
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/UserEditDialog.js:512
+#: js/UserEditDialog.js:511
 msgid "Email UID"
 msgstr "UID emailu"
 
-#: js/UserEditDialog.js:516
+#: js/UserEditDialog.js:515
 msgid "Email GID"
 msgstr "GID emailu"
 
-#: js/UserEditDialog.js:520
+#: js/UserEditDialog.js:519
 msgid "Email Username"
 msgstr "Uživatelské jméno pro email"
 
-#: js/UserEditDialog.js:524
+#: js/UserEditDialog.js:523
 msgid "Quota"
 msgstr "Kvóta"
 
-#: js/UserEditDialog.js:530
+#: js/UserEditDialog.js:529
 msgid "Current Mail Size"
 msgstr "Aktuální velikost zprávy"
 
-#: js/UserEditDialog.js:535
+#: js/UserEditDialog.js:534
 msgid "Sieve Quota"
 msgstr "Sieve kvóta"
 
-#: js/UserEditDialog.js:540
+#: js/UserEditDialog.js:539
 msgid "Current Sieve Size"
 msgstr "Aktuální velikost Sieve"
 
-#: js/UserEditDialog.js:545
+#: js/UserEditDialog.js:544
 msgid "Last Login"
 msgstr "Poslední přihlášení"
 
-#: js/UserEditDialog.js:550
+#: js/UserEditDialog.js:549
 msgid "SMTP"
 msgstr "SMTP"
 
-#: js/UserEditDialog.js:566
+#: js/UserEditDialog.js:565
 msgid "Forward Only"
 msgstr "Jen přesměrovat"
 

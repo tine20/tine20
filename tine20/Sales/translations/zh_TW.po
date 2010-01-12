@@ -107,7 +107,7 @@ msgstr ""
 msgid "Contracts"
 msgstr "合約"
 
-#: js/Sales.js:109
+#: js/Sales.js:109 js/Sales.js:144
 #, fuzzy
 msgid "All Contracts"
 msgstr "合約"

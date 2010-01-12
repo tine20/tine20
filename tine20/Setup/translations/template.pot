@@ -58,198 +58,199 @@ msgstr ""
 msgid "Dependency Violation"
 msgstr ""
 
-#: js/AuthenticationPanel.js:121
+#: js/AuthenticationPanel.js:122
 msgid "Delete all existing users and groups"
 msgstr ""
 
-#: js/AuthenticationPanel.js:121
+#: js/AuthenticationPanel.js:122
 msgid ""
 "Switching from SQL to LDAP will delete all existing User Accounts, Groups "
 "and Roles. Do you really want to switch the accounts storage backend to "
 "LDAP ?"
 msgstr ""
 
-#: js/AuthenticationPanel.js:184 js/AuthenticationPanel.js:205
+#: js/AuthenticationPanel.js:185 js/AuthenticationPanel.js:206
 #: js/EmailPanel.js:156
 msgid "Backend"
 msgstr ""
 
-#: js/AuthenticationPanel.js:218
+#: js/AuthenticationPanel.js:219
 msgid "Authentication provider"
 msgstr ""
 
-#: js/AuthenticationPanel.js:241
+#: js/AuthenticationPanel.js:242
 msgid "Initial admin login name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:246
+#: js/AuthenticationPanel.js:247
 msgid "Initial admin Password"
 msgstr ""
 
-#: js/AuthenticationPanel.js:251
+#: js/AuthenticationPanel.js:252
 msgid "Password confirmation"
 msgstr ""
 
-#: js/AuthenticationPanel.js:266 js/AuthenticationPanel.js:352
+#: js/AuthenticationPanel.js:267 js/AuthenticationPanel.js:355
 msgid "Host"
 msgstr ""
 
-#: js/AuthenticationPanel.js:271 js/AuthenticationPanel.js:357
+#: js/AuthenticationPanel.js:272 js/AuthenticationPanel.js:360
 msgid "Login name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:274 js/AuthenticationPanel.js:360
-#: js/ConfigManagerPanel.js:76 js/ConfigManagerPanel.js:112
+#: js/AuthenticationPanel.js:275 js/AuthenticationPanel.js:363
+#: js/ConfigManagerPanel.js:77 js/ConfigManagerPanel.js:113
 #: js/EmailPanel.js:196 js/EmailPanel.js:287
 msgid "Password"
 msgstr ""
 
-#: js/AuthenticationPanel.js:287 js/AuthenticationPanel.js:373
+#: js/AuthenticationPanel.js:288 js/AuthenticationPanel.js:376
 msgid "Bind requires DN"
 msgstr ""
 
-#: js/AuthenticationPanel.js:291
+#: js/AuthenticationPanel.js:292
 msgid "Base DN"
 msgstr ""
 
-#: js/AuthenticationPanel.js:294
+#: js/AuthenticationPanel.js:295
 msgid "Account canonical form"
 msgstr ""
 
-#: js/AuthenticationPanel.js:302
+#: js/AuthenticationPanel.js:303
 msgid "Accounts storage"
 msgstr ""
 
-#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:427
+#: js/AuthenticationPanel.js:324 js/AuthenticationPanel.js:430
 msgid "Default user group name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:326 js/AuthenticationPanel.js:430
+#: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:433
 msgid "Default admin group name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:338
+#: js/AuthenticationPanel.js:341
 msgid "User can change password"
 msgstr ""
 
-#: js/AuthenticationPanel.js:377
+#: js/AuthenticationPanel.js:380
 msgid "User DN"
 msgstr ""
 
-#: js/AuthenticationPanel.js:380
+#: js/AuthenticationPanel.js:383
 msgid "Groups DN"
 msgstr ""
 
-#: js/AuthenticationPanel.js:392
+#: js/AuthenticationPanel.js:395
 msgid "Password encoding"
 msgstr ""
 
-#: js/AuthenticationPanel.js:405
+#: js/AuthenticationPanel.js:408
 msgid "Use Rfc 2307 bis"
 msgstr ""
 
-#: js/AuthenticationPanel.js:409
+#: js/AuthenticationPanel.js:412
 msgid "Min User Id"
 msgstr ""
 
-#: js/AuthenticationPanel.js:412
+#: js/AuthenticationPanel.js:415
 msgid "Max User Id"
 msgstr ""
 
-#: js/AuthenticationPanel.js:415
+#: js/AuthenticationPanel.js:418
 msgid "Min Group Id"
 msgstr ""
 
-#: js/AuthenticationPanel.js:418
+#: js/AuthenticationPanel.js:421
 msgid "Max Group Id"
 msgstr ""
 
-#: js/AuthenticationPanel.js:421
+#: js/AuthenticationPanel.js:424
 msgid "Group UUID Attribute name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:424
+#: js/AuthenticationPanel.js:427
 msgid "User UUID Attribute name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:442
+#: js/AuthenticationPanel.js:445
 msgid "Allow user to change her password?"
 msgstr ""
 
-#: js/AuthenticationPanel.js:451
+#: js/AuthenticationPanel.js:454
 msgid "Redirect Settings"
 msgstr ""
 
-#: js/AuthenticationPanel.js:459
+#: js/AuthenticationPanel.js:462
 msgid "Redirect Url (after Logout, redirect to login screen if empty)"
 msgstr ""
 
-#: js/AuthenticationPanel.js:470
+#: js/AuthenticationPanel.js:473
 msgid "Redirect to referring site, if exists"
 msgstr ""
 
-#: js/AuthenticationPanel.js:483
+#: js/AuthenticationPanel.js:486
 msgid "Save config and install"
 msgstr ""
 
-#: js/AuthenticationPanel.js:485 js/ConfigManagerPanel.js:191
+#: js/AuthenticationPanel.js:488 js/ConfigManagerPanel.js:208
 msgid "Save config"
 msgstr ""
 
-#: js/AuthenticationPanel.js:509
+#: js/AuthenticationPanel.js:512
 msgid "Passwords don't match"
 msgstr ""
 
-#: js/AuthenticationPanel.js:519 js/AuthenticationPanel.js:526
-#: js/AuthenticationPanel.js:530
+#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:529
+#: js/AuthenticationPanel.js:533 js/AuthenticationPanel.js:542
+#: js/AuthenticationPanel.js:550
 msgid "Should not be empty"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:59
+#: js/ConfigManagerPanel.js:60
 msgid "Informations"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:63
+#: js/ConfigManagerPanel.js:64
 msgid "Setup Authentication"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:66 js/EmailPanel.js:192 js/EmailPanel.js:283
+#: js/ConfigManagerPanel.js:67 js/EmailPanel.js:192 js/EmailPanel.js:283
 msgid "Username"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:82 js/ConfigManagerPanel.js:102
+#: js/ConfigManagerPanel.js:83 js/ConfigManagerPanel.js:103
 msgid "Database"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:86
+#: js/ConfigManagerPanel.js:87
 msgid "Adapter"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:91 js/EmailPanel.js:188 js/EmailPanel.js:279
+#: js/ConfigManagerPanel.js:92 js/EmailPanel.js:188 js/EmailPanel.js:279
 msgid "Hostname"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:96 js/EmailPanel.js:201 js/EmailPanel.js:292
+#: js/ConfigManagerPanel.js:97 js/EmailPanel.js:201 js/EmailPanel.js:292
 msgid "Port"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:107
+#: js/ConfigManagerPanel.js:108
 msgid "User"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:117
+#: js/ConfigManagerPanel.js:118
 msgid "Prefix"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:122
+#: js/ConfigManagerPanel.js:123
 msgid "Logging"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:128
+#: js/ConfigManagerPanel.js:129
 msgid "Filename"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:141
+#: js/ConfigManagerPanel.js:142
 msgid "Priority"
 msgstr ""
 
@@ -281,11 +282,27 @@ msgstr ""
 msgid "Session Files Path"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:189
-msgid "Config file is not writable"
+#: js/ConfigManagerPanel.js:181
+msgid "Addressbook Map panel"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:184
+msgid "Map panel"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:195
+msgid "disabled"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:195
+msgid "enabled"
 msgstr ""
 
 #: js/ConfigManagerPanel.js:206
+msgid "Config file is not writable"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:223
 msgid "Download config file"
 msgstr ""
 

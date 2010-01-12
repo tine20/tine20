@@ -177,7 +177,7 @@ msgstr "Wyświetl od:"
 msgid "to:"
 msgstr "do:"
 
-#: js/Admin.js:444 js/Applications.js:145 js/Groups.js:153 js/Roles.js:149
+#: js/Admin.js:444 js/Applications.js:156 js/Groups.js:153 js/Roles.js:149
 #: js/Tags.js:140 js/Users.js:234
 msgid "Search:"
 msgstr "Znajdź:"
@@ -214,11 +214,11 @@ msgstr "Brak wpisów w dzienniku logowania"
 msgid "Session ID"
 msgstr "ID sesji"
 
-#: js/Admin.js:565 js/UserEditDialog.js:298
+#: js/Admin.js:565 js/UserEditDialog.js:297
 msgid "Login Name"
 msgstr "Login"
 
-#: js/Admin.js:566 js/Applications.js:220 js/Groups.js:203 js/Roles.js:201
+#: js/Admin.js:566 js/Applications.js:231 js/Groups.js:203 js/Roles.js:201
 #: js/SambaMachineGrid.js:90 js/Tags.js:187
 msgid "Name"
 msgstr "Nazwa"
@@ -243,51 +243,51 @@ msgstr "ID użytkownika"
 msgid "Result"
 msgstr "Wynik"
 
-#: js/Applications.js:29
+#: js/Applications.js:31
 msgid "{0} Settings"
 msgstr "Ustawienia {0}"
 
-#: js/Applications.js:122
+#: js/Applications.js:133
 msgid "enable application"
 msgstr "Włącz aplikację"
 
-#: js/Applications.js:123
+#: js/Applications.js:134
 msgid "disable application"
 msgstr "Wyłącz aplikację"
 
-#: js/Applications.js:124
+#: js/Applications.js:135
 msgid "settings"
 msgstr "ustawienia"
 
-#: js/Applications.js:174 js/UserEditDialog.js:352
+#: js/Applications.js:185 js/UserEditDialog.js:351
 msgid "disabled"
 msgstr "wyłączona"
 
-#: js/Applications.js:177 js/UserEditDialog.js:352
+#: js/Applications.js:188 js/UserEditDialog.js:351
 msgid "enabled"
 msgstr "włączona"
 
-#: js/Applications.js:181
+#: js/Applications.js:192
 msgid "unknown status ({0})"
 msgstr "nieznany status ({0})"
 
-#: js/Applications.js:209
+#: js/Applications.js:220
 msgid "Displaying application {0} - {1} of {2}"
 msgstr "Wyświetl aplikację {0} - {1} z {2}"
 
-#: js/Applications.js:210
+#: js/Applications.js:221
 msgid "No applications to display"
 msgstr "Brak aplikacji"
 
-#: js/Applications.js:219
+#: js/Applications.js:230
 msgid "Order"
 msgstr "Kolejność"
 
-#: js/Applications.js:221 js/UserEditDialog.js:346 js/Users.js:294
+#: js/Applications.js:232 js/UserEditDialog.js:345 js/Users.js:294
 msgid "Status"
 msgstr "Status"
 
-#: js/Applications.js:222
+#: js/Applications.js:233
 msgid "Version"
 msgstr "Wersja"
 
@@ -571,209 +571,209 @@ msgstr "Dodaj adres dla przekazywanych wiadomości..."
 msgid "Password confirmation"
 msgstr "Powtórz hasło"
 
-#: js/UserEditDialog.js:222
+#: js/UserEditDialog.js:221
 msgid "Repeat password"
 msgstr "Zresetuj hasło"
 
-#: js/UserEditDialog.js:234
+#: js/UserEditDialog.js:233
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: js/UserEditDialog.js:241
+#: js/UserEditDialog.js:240
 msgid "Ok"
 msgstr "OK"
 
-#: js/UserEditDialog.js:267
+#: js/UserEditDialog.js:266
 msgid "Account"
 msgstr "Konto"
 
-#: js/UserEditDialog.js:282
+#: js/UserEditDialog.js:281
 msgid "First Name"
 msgstr "Imię"
 
-#: js/UserEditDialog.js:292
+#: js/UserEditDialog.js:291
 msgid "Last Name"
 msgstr "Nazwisko"
 
-#: js/UserEditDialog.js:303
+#: js/UserEditDialog.js:302
 msgid "Password"
 msgstr "Hasło"
 
-#: js/UserEditDialog.js:307
+#: js/UserEditDialog.js:306
 msgid "no password set"
 msgstr "brak hasła"
 
-#: js/UserEditDialog.js:328
+#: js/UserEditDialog.js:327
 msgid "Emailaddress"
 msgstr "Adres e-mail"
 
-#: js/UserEditDialog.js:334 js/Users.js:300
+#: js/UserEditDialog.js:333 js/Users.js:300
 msgid "OpenID"
 msgstr "ID uwierzytelnienia"
 
-#: js/UserEditDialog.js:340
+#: js/UserEditDialog.js:339
 msgid "Primary group"
 msgstr "Grupa nadrzędna"
 
-#: js/UserEditDialog.js:352
+#: js/UserEditDialog.js:351
 msgid "expired"
 msgstr "wygasło"
 
-#: js/UserEditDialog.js:355 js/Users.js:304
+#: js/UserEditDialog.js:354 js/Users.js:304
 msgid "Expires"
 msgstr "Wygasa"
 
-#: js/UserEditDialog.js:357 js/UserEditDialog.js:399 js/UserEditDialog.js:476
+#: js/UserEditDialog.js:356 js/UserEditDialog.js:398 js/UserEditDialog.js:475
 msgid "never"
 msgstr "nigdy"
 
-#: js/UserEditDialog.js:362
+#: js/UserEditDialog.js:361
 msgid "Visibility"
 msgstr "Widoczny"
 
-#: js/UserEditDialog.js:368
+#: js/UserEditDialog.js:367
 msgid "Display in addressbook"
 msgstr "Wyświetlaj w książce adresowej"
 
-#: js/UserEditDialog.js:368
+#: js/UserEditDialog.js:367
 msgid "Hide from addressbook"
 msgstr "Ukryj w książce adresowej"
 
-#: js/UserEditDialog.js:373
+#: js/UserEditDialog.js:372
 msgid "Information"
 msgstr "Informacja"
 
-#: js/UserEditDialog.js:389 js/Users.js:301
+#: js/UserEditDialog.js:388 js/Users.js:301
 msgid "Last login at"
 msgstr "Czas ostatniego logowania"
 
-#: js/UserEditDialog.js:391 js/UserEditDialog.js:395
+#: js/UserEditDialog.js:390 js/UserEditDialog.js:394
 msgid "don't know"
 msgstr "nie znam"
 
-#: js/UserEditDialog.js:391 js/UserEditDialog.js:395 js/UserEditDialog.js:456
+#: js/UserEditDialog.js:390 js/UserEditDialog.js:394 js/UserEditDialog.js:455
 msgid "never logged in"
 msgstr "nigdy nie był zalogowany"
 
-#: js/UserEditDialog.js:393 js/Users.js:302
+#: js/UserEditDialog.js:392 js/Users.js:302
 msgid "Last login from"
 msgstr "Ostatnie zalogowanie z"
 
-#: js/UserEditDialog.js:397
+#: js/UserEditDialog.js:396
 msgid "Password set"
 msgstr "Hasło ustawione"
 
-#: js/UserEditDialog.js:405
+#: js/UserEditDialog.js:404
 msgid "Fileserver"
 msgstr "Serwer plików"
 
-#: js/UserEditDialog.js:410
+#: js/UserEditDialog.js:409
 msgid "Unix"
 msgstr "Unix"
 
-#: js/UserEditDialog.js:425
+#: js/UserEditDialog.js:424
 msgid "Home Directory"
 msgstr "Katalog domowy"
 
-#: js/UserEditDialog.js:429
+#: js/UserEditDialog.js:428
 msgid "Login Shell"
 msgstr "Powłoka logowania"
 
-#: js/UserEditDialog.js:434
+#: js/UserEditDialog.js:433
 msgid "Windows"
 msgstr "Windows"
 
-#: js/UserEditDialog.js:449
+#: js/UserEditDialog.js:448
 msgid "Home Drive"
 msgstr "Dysk lokalny"
 
-#: js/UserEditDialog.js:454
+#: js/UserEditDialog.js:453
 msgid "Logon Time"
 msgstr "Czas zalogowania"
 
-#: js/UserEditDialog.js:459
+#: js/UserEditDialog.js:458
 msgid "Home Path"
 msgstr "Ścieżka do katalogu domowego"
 
-#: js/UserEditDialog.js:464
+#: js/UserEditDialog.js:463
 msgid "Logoff Time"
 msgstr "Czas wylogowania"
 
-#: js/UserEditDialog.js:466
+#: js/UserEditDialog.js:465
 msgid "never logged off"
 msgstr "nigdy się nie wylogowywał(a)"
 
-#: js/UserEditDialog.js:469
+#: js/UserEditDialog.js:468
 msgid "Profile Path"
 msgstr "Ścieżka do katalogu z profilami"
 
-#: js/UserEditDialog.js:474
+#: js/UserEditDialog.js:473
 msgid "Password Last Set"
 msgstr "Ostatnia zmiana hasła"
 
-#: js/UserEditDialog.js:479
+#: js/UserEditDialog.js:478
 msgid "Logon Script"
 msgstr "Skrypt logowania"
 
-#: js/UserEditDialog.js:483
+#: js/UserEditDialog.js:482
 msgid "Password Can Change"
 msgstr "Możliwa zmiana hasła"
 
-#: js/UserEditDialog.js:485 js/UserEditDialog.js:489 js/UserEditDialog.js:493
+#: js/UserEditDialog.js:484 js/UserEditDialog.js:488 js/UserEditDialog.js:492
 msgid "not set"
 msgstr "nie ustawione"
 
-#: js/UserEditDialog.js:487
+#: js/UserEditDialog.js:486
 msgid "Password Must Change"
 msgstr "Konieczna zmiana hasła"
 
-#: js/UserEditDialog.js:491
+#: js/UserEditDialog.js:490
 msgid "Kick Off Time"
 msgstr "Czas wylogowania"
 
-#: js/UserEditDialog.js:498
+#: js/UserEditDialog.js:497
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/UserEditDialog.js:512
+#: js/UserEditDialog.js:511
 msgid "Email UID"
 msgstr "E-mail UID"
 
-#: js/UserEditDialog.js:516
+#: js/UserEditDialog.js:515
 msgid "Email GID"
 msgstr "E-mail GID"
 
-#: js/UserEditDialog.js:520
+#: js/UserEditDialog.js:519
 msgid "Email Username"
 msgstr "E-mail Użytkownik"
 
-#: js/UserEditDialog.js:524
+#: js/UserEditDialog.js:523
 msgid "Quota"
 msgstr "Kwota"
 
-#: js/UserEditDialog.js:530
+#: js/UserEditDialog.js:529
 msgid "Current Mail Size"
 msgstr "Rozmiar wiadomości"
 
-#: js/UserEditDialog.js:535
+#: js/UserEditDialog.js:534
 #, fuzzy
 msgid "Sieve Quota"
 msgstr "Kwota Sieve"
 
-#: js/UserEditDialog.js:540
+#: js/UserEditDialog.js:539
 #, fuzzy
 msgid "Current Sieve Size"
 msgstr "Obecny rozmiar Sieve"
 
-#: js/UserEditDialog.js:545
+#: js/UserEditDialog.js:544
 msgid "Last Login"
 msgstr "Ostatnie logowanie o"
 
-#: js/UserEditDialog.js:550
+#: js/UserEditDialog.js:549
 msgid "SMTP"
 msgstr "SMTP"
 
-#: js/UserEditDialog.js:566
+#: js/UserEditDialog.js:565
 msgid "Forward Only"
 msgstr "Tylko prześlij dalej"
 

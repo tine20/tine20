@@ -44,7 +44,7 @@ msgstr "バージョンを調べる"
 msgid "Check tine20.org for new versions"
 msgstr "tine20.orgで新しいバージョンのチェック"
 
-#: Export/Ods.php:198
+#: Export/Ods.php:213
 msgid "Filter"
 msgstr ""
 
@@ -60,19 +60,19 @@ msgstr "作成者"
 msgid "Activities"
 msgstr "アクティビティ"
 
-#: Frontend/Http.php:520 js/ExceptionHandler.js:144
+#: Frontend/Http.php:530 js/ExceptionHandler.js:140
 msgid "Authorisation Required"
 msgstr "要認証"
 
-#: Frontend/Http.php:521
+#: Frontend/Http.php:531
 msgid "Your session is not valid. You need to login again."
 msgstr "セッションが正しくありません。もう一度ログインしてください"
 
-#: Frontend/Http.php:547 js/ExceptionDialog.js:46
+#: Frontend/Http.php:557 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "以上終了"
 
-#: Frontend/Http.php:548 js/ExceptionDialog.js:71
+#: Frontend/Http.php:558 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "エラーが発生し、プログラムが異常終了しました"
 
@@ -105,7 +105,7 @@ msgstr[0] "ＴｏＤｏリスト"
 #: js/widgets/container/ContainerSelect.js:373
 #: js/widgets/dialog/EditDialog.js:193
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
-#: js/widgets/tags/TagsMassAttachAction.js:79
+#: js/widgets/tags/TagsMassAttachAction.js:86
 msgid "Cancel"
 msgstr "キャンセル"
 
@@ -157,39 +157,35 @@ msgstr "レポートは送信されました。ご協力ありがとうござい
 msgid "Please restart your browser now!"
 msgstr "ログイン情報を入力してください。"
 
-#: js/ExceptionHandler.js:138
-msgid "Connection lost, please check your network!"
-msgstr "コネクションに失敗しました。ネットワーク接続を確認してください。"
-
-#: js/ExceptionHandler.js:145
+#: js/ExceptionHandler.js:141
 msgid "Your session timed out. You need to login again."
 msgstr "セッションタイムアウトしました。再ログインしてください。"
 
-#: js/ExceptionHandler.js:162
+#: js/ExceptionHandler.js:158
 msgid "Insufficient Rights"
 msgstr "不十分な権利"
 
-#: js/ExceptionHandler.js:163
+#: js/ExceptionHandler.js:159
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "この操作をする権限がありません。"
 
-#: js/ExceptionHandler.js:172
+#: js/ExceptionHandler.js:168
 #, fuzzy
 msgid "Not Found"
 msgstr "許可されていません"
 
-#: js/ExceptionHandler.js:173
+#: js/ExceptionHandler.js:169
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr ""
 
-#: js/ExceptionHandler.js:182
+#: js/ExceptionHandler.js:178
 msgid "Concurrent Updates"
 msgstr "アップデートの発生"
 
-#: js/ExceptionHandler.js:183
+#: js/ExceptionHandler.js:179
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -197,102 +193,116 @@ msgstr ""
 "レコード編集中に誰かが同じレコードを編集したようです。画面を再ロードしてもう"
 "一度編集しなおしてください。"
 
-#: js/ExceptionHandler.js:192
+#: js/ExceptionHandler.js:187
+msgid "Connection lost, please check your network!"
+msgstr "コネクションに失敗しました。ネットワーク接続を確認してください。"
+
+#: js/ExceptionHandler.js:193
 msgid "Timeout"
 msgstr ""
 
-#: js/ExceptionHandler.js:193
+#: js/ExceptionHandler.js:194
 msgid ""
 "Sorry, some timeout occured while processing your request. Please reload "
 "your browser, try again or contact your administrator."
 msgstr ""
 
-#: js/LoginPanel.js:79 js/LoginPanel.js:111
+#: js/ExceptionHandler.js:203
+msgid "No Response"
+msgstr ""
+
+#: js/ExceptionHandler.js:204
+msgid ""
+"Sorry, the Server did not respond any data. Please reload your browser, try "
+"again or contact your administrator."
+msgstr ""
+
+#: js/LoginPanel.js:79 js/LoginPanel.js:112
 msgid "Login"
 msgstr "ログイン"
 
-#: js/LoginPanel.js:87 js/widgets/dialog/CredentialsDialog.js:76
+#: js/LoginPanel.js:88 js/widgets/dialog/CredentialsDialog.js:76
 msgid "Username"
 msgstr "ユーザ名"
 
-#: js/LoginPanel.js:98 js/widgets/dialog/CredentialsDialog.js:80
+#: js/LoginPanel.js:99 js/widgets/dialog/CredentialsDialog.js:80
 msgid "Password"
 msgstr "パスワード"
 
-#: js/LoginPanel.js:130
+#: js/LoginPanel.js:131
 msgid "Tine 2.0 is made for you"
 msgstr ""
 
-#: js/LoginPanel.js:132
+#: js/LoginPanel.js:133
 msgid ""
 "Tine 2.0 wants to make business collaboration easier and more enjoyable - "
 "for your needs! So you are warmly welcome to discuss with us, bring in ideas "
 "and get help."
 msgstr ""
 
-#: js/LoginPanel.js:138
+#: js/LoginPanel.js:139
 msgid "Tine 2.0 Homepage"
 msgstr ""
 
-#: js/LoginPanel.js:139
+#: js/LoginPanel.js:140
 msgid "Tine 2.0 Forum"
 msgstr ""
 
-#: js/LoginPanel.js:183
+#: js/LoginPanel.js:184
 msgid "about {0} minutes"
 msgstr ""
 
-#: js/LoginPanel.js:188 js/LoginPanel.js:350
+#: js/LoginPanel.js:189 js/LoginPanel.js:351
 msgid "Tine 2.0 needs your help"
 msgstr ""
 
-#: js/LoginPanel.js:190 js/LoginPanel.js:352
+#: js/LoginPanel.js:191 js/LoginPanel.js:353
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
 msgstr ""
 
-#: js/LoginPanel.js:196
+#: js/LoginPanel.js:197
 msgid "participate!"
 msgstr ""
 
-#: js/LoginPanel.js:218
+#: js/LoginPanel.js:219
 msgid "Languages"
 msgstr ""
 
-#: js/LoginPanel.js:219
+#: js/LoginPanel.js:220
 msgid "Duration"
 msgstr ""
 
-#: js/LoginPanel.js:276
+#: js/LoginPanel.js:277
 msgid "Logging you in..."
 msgstr "ログインしています..."
 
-#: js/LoginPanel.js:276 js/widgets/container/GrantsDialog.js:138
+#: js/LoginPanel.js:277 js/widgets/container/GrantsDialog.js:138
 #: js/widgets/grid/PersistentFilterPicker.js:126
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:140
 msgid "Please wait"
 msgstr "お待ちください"
 
-#: js/LoginPanel.js:288
+#: js/LoginPanel.js:289
 #, fuzzy
 msgid "Login successful. Loading {0}..."
 msgstr "ログイン成功.Tine 2.0をロードしています..."
 
-#: js/LoginPanel.js:288 js/MainScreen.js:534
+#: js/LoginPanel.js:289 js/MainScreen.js:534
 msgid "Please wait!"
 msgstr "お待ちください"
 
-#: js/LoginPanel.js:293
+#: js/LoginPanel.js:294
 msgid "Login failure"
 msgstr "ログインに失敗しました"
 
-#: js/LoginPanel.js:294
+#: js/LoginPanel.js:295
 msgid "Your username and/or your password are wrong!!!"
 msgstr "ユーザ名またはパスワードが違います"
 
-#: js/LoginPanel.js:318
+#: js/LoginPanel.js:319
 msgid "Please enter your login data"
 msgstr "ログイン情報を入力してください。"
 
@@ -370,7 +380,7 @@ msgstr "もう一度パスワードを入力してください"
 #: js/MainScreen.js:455 js/widgets/container/ContainerSelect.js:382
 #: js/widgets/dialog/EditDialog.js:176
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
-#: js/widgets/tags/TagsMassAttachAction.js:85
+#: js/widgets/tags/TagsMassAttachAction.js:92
 msgid "Ok"
 msgstr "OK"
 
@@ -406,7 +416,7 @@ msgstr ""
 "このコンピュータにGearsをインストールすると、必要なファイルをキャッシュするこ"
 "とによってTine2.0の性能が向上するでしょう。"
 
-#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:746
+#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:769
 #: js/widgets/dialog/EditDialog.js:446
 #: js/widgets/grid/PersistentFilterPicker.js:124
 #: js/widgets/tree/ContextMenu.js:84
@@ -430,17 +440,17 @@ msgstr[0] ""
 msgid "Groups"
 msgstr ""
 
-#: js/Models.js:247
+#: js/Models.js:258
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] ""
 
-#: js/Models.js:274
+#: js/Models.js:285
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] ""
 
-#: js/tineInit.js:560
+#: js/tineInit.js:564
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
@@ -691,20 +701,20 @@ msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "削除"
 
-#: js/widgets/app/GridPanel.js:337
+#: js/widgets/app/GridPanel.js:338
 #, fuzzy
 msgid "Tagging"
 msgstr "タグ"
 
-#: js/widgets/app/GridPanel.js:417
+#: js/widgets/app/GridPanel.js:418
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "レコードの表示{0} - {1}　件中 {2}"
 
-#: js/widgets/app/GridPanel.js:418
+#: js/widgets/app/GridPanel.js:419
 msgid "No {0} to display"
 msgstr "表示する {0} がありません"
 
-#: js/widgets/app/GridPanel.js:439
+#: js/widgets/app/GridPanel.js:440
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -712,34 +722,34 @@ msgstr ""
 " {0} が見つかりません。フィルターの変更、表示オプションの変更か {1} 再検索を"
 "してください"
 
-#: js/widgets/app/GridPanel.js:731
+#: js/widgets/app/GridPanel.js:754
 msgid "Not Allowed"
 msgstr "許可されていません"
 
-#: js/widgets/app/GridPanel.js:732
+#: js/widgets/app/GridPanel.js:755
 msgid "You are not allowed to delete all pages at once"
 msgstr "全てのページを一度に削除する権限がありません。"
 
-#: js/widgets/app/GridPanel.js:744
+#: js/widgets/app/GridPanel.js:767
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "選択したレコードを本当に削除しますか？"
 
-#: js/widgets/app/GridPanel.js:751 js/widgets/dialog/EditDialog.js:448
+#: js/widgets/app/GridPanel.js:774 js/widgets/dialog/EditDialog.js:448
 msgid "Deleting {0}"
 msgstr "{0}　を削除しています"
 
-#: js/widgets/app/GridPanel.js:753
+#: js/widgets/app/GridPanel.js:776
 msgid " ... This may take a long time!"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:772 js/widgets/dialog/EditDialog.js:458
+#: js/widgets/app/GridPanel.js:795 js/widgets/dialog/EditDialog.js:458
 #: js/widgets/tags/TagsPanel.js:287 js/widgets/tags/TagsPanel.js:397
 #: js/widgets/tags/TagsPanel.js:430
 msgid "Failed"
 msgstr "失敗"
 
-#: js/widgets/app/GridPanel.js:772 js/widgets/dialog/EditDialog.js:458
+#: js/widgets/app/GridPanel.js:795 js/widgets/dialog/EditDialog.js:458
 msgid "Could not delete {0}."
 msgstr " {0}を削除できません"
 
@@ -829,12 +839,12 @@ msgid "Custom Fields"
 msgstr "カスタムフィールド"
 
 #: js/widgets/customfields/CustomfieldsPanel.js:71
-#: js/widgets/customfields/CustomfieldsPanel.js:85
+#: js/widgets/customfields/CustomfieldsPanel.js:86
 #, fuzzy
 msgid "General"
 msgstr "普通"
 
-#: js/widgets/customfields/CustomfieldsPanel.js:107
+#: js/widgets/customfields/CustomfieldsPanel.js:108
 msgid "There are no custom fields yet"
 msgstr "カスタムフィールドがありません"
 
@@ -945,7 +955,7 @@ msgstr ""
 msgid "Saving of preferences failed."
 msgstr ""
 
-#: js/widgets/dialog/PreferencesPanel.js:150
+#: js/widgets/dialog/PreferencesPanel.js:151
 msgid "There are no preferences for this application."
 msgstr ""
 
@@ -979,130 +989,130 @@ msgstr ""
 msgid "Searching..."
 msgstr "検索しています。"
 
-#: js/widgets/grid/FilterModel.js:146
+#: js/widgets/grid/FilterModel.js:147
 msgid "contains"
 msgstr "contains"
 
-#: js/widgets/grid/FilterModel.js:147
+#: js/widgets/grid/FilterModel.js:148
 msgid "is equal to"
 msgstr "と等しい"
 
-#: js/widgets/grid/FilterModel.js:148
+#: js/widgets/grid/FilterModel.js:149
 msgid "is greater than"
 msgstr "より大きい"
 
-#: js/widgets/grid/FilterModel.js:149
+#: js/widgets/grid/FilterModel.js:150
 msgid "is less than"
 msgstr "より少ない"
 
-#: js/widgets/grid/FilterModel.js:150
+#: js/widgets/grid/FilterModel.js:151
 msgid "is not"
 msgstr "ではない"
 
-#: js/widgets/grid/FilterModel.js:151
+#: js/widgets/grid/FilterModel.js:152
 msgid "is in"
 msgstr "に含まれる"
 
-#: js/widgets/grid/FilterModel.js:152
+#: js/widgets/grid/FilterModel.js:153
 msgid "is before"
 msgstr "の前"
 
-#: js/widgets/grid/FilterModel.js:153
+#: js/widgets/grid/FilterModel.js:154
 msgid "is after"
 msgstr "の後"
 
-#: js/widgets/grid/FilterModel.js:154
+#: js/widgets/grid/FilterModel.js:155
 msgid "is within"
 msgstr "の中に"
 
-#: js/widgets/grid/FilterModel.js:155
+#: js/widgets/grid/FilterModel.js:156
 #, fuzzy
 msgid "is in week no."
 msgstr "今週"
 
-#: js/widgets/grid/FilterModel.js:156
+#: js/widgets/grid/FilterModel.js:157
 msgid "starts with"
 msgstr "から始まる"
 
-#: js/widgets/grid/FilterModel.js:157
+#: js/widgets/grid/FilterModel.js:158
 msgid "ends with"
 msgstr "で終る"
 
-#: js/widgets/grid/FilterModel.js:158
+#: js/widgets/grid/FilterModel.js:159
 #, fuzzy
 msgid "one of"
 msgstr "ノート"
 
-#: js/widgets/grid/FilterModel.js:196
+#: js/widgets/grid/FilterModel.js:200
 msgid "select a operator"
 msgstr "オペレータの選択"
 
-#: js/widgets/grid/FilterModel.js:289
+#: js/widgets/grid/FilterModel.js:293
 #, fuzzy
 msgid "Search Account ..."
 msgstr "検索しています。"
 
-#: js/widgets/grid/FilterModel.js:402
+#: js/widgets/grid/FilterModel.js:406
 msgid "today"
 msgstr "今日"
 
-#: js/widgets/grid/FilterModel.js:403
+#: js/widgets/grid/FilterModel.js:407
 msgid "yesterday"
 msgstr "昨日"
 
-#: js/widgets/grid/FilterModel.js:404
+#: js/widgets/grid/FilterModel.js:408
 msgid "this week"
 msgstr "今週"
 
-#: js/widgets/grid/FilterModel.js:405
+#: js/widgets/grid/FilterModel.js:409
 msgid "last week"
 msgstr "先週"
 
-#: js/widgets/grid/FilterModel.js:406
+#: js/widgets/grid/FilterModel.js:410
 msgid "the week before last"
 msgstr "先々週"
 
-#: js/widgets/grid/FilterModel.js:407
+#: js/widgets/grid/FilterModel.js:411
 msgid "this month"
 msgstr "今月"
 
-#: js/widgets/grid/FilterModel.js:408
+#: js/widgets/grid/FilterModel.js:412
 msgid "last month"
 msgstr "先月"
 
-#: js/widgets/grid/FilterModel.js:409
+#: js/widgets/grid/FilterModel.js:413
 msgid "this quarter"
 msgstr "今四半期"
 
-#: js/widgets/grid/FilterModel.js:410
+#: js/widgets/grid/FilterModel.js:414
 msgid "last quarter"
 msgstr "前四半期"
 
-#: js/widgets/grid/FilterModel.js:411
+#: js/widgets/grid/FilterModel.js:415
 msgid "this year"
 msgstr "今年"
 
-#: js/widgets/grid/FilterModel.js:412
+#: js/widgets/grid/FilterModel.js:416
 msgid "last year"
 msgstr "去年"
 
-#: js/widgets/grid/FilterModel.js:416
+#: js/widgets/grid/FilterModel.js:420
 msgid "tomorrow"
 msgstr "明日"
 
-#: js/widgets/grid/FilterModel.js:417
+#: js/widgets/grid/FilterModel.js:421
 msgid "next week"
 msgstr "来週"
 
-#: js/widgets/grid/FilterModel.js:418
+#: js/widgets/grid/FilterModel.js:422
 msgid "next month"
 msgstr "今月"
 
-#: js/widgets/grid/FilterModel.js:419
+#: js/widgets/grid/FilterModel.js:423
 msgid "next quarter"
 msgstr "来四半期"
 
-#: js/widgets/grid/FilterModel.js:420
+#: js/widgets/grid/FilterModel.js:424
 msgid "next year"
 msgstr "来年"
 
@@ -1118,7 +1128,7 @@ msgstr "全てのフィルタのリセット"
 msgid "start search"
 msgstr "検索の開始"
 
-#: js/widgets/grid/FilterToolbar.js:148 js/widgets/grid/FilterToolbar.js:632
+#: js/widgets/grid/FilterToolbar.js:148 js/widgets/grid/FilterToolbar.js:644
 msgid "save filter"
 msgstr "フィルタの保存"
 
@@ -1138,30 +1148,30 @@ msgstr "かつ"
 msgid "Show"
 msgstr "見る"
 
-#: js/widgets/grid/FilterToolbar.js:632
+#: js/widgets/grid/FilterToolbar.js:644
 msgid "Please enter a name for the filter"
 msgstr "フィルター名を入力してください"
 
-#: js/widgets/grid/FilterToolbar.js:635 js/widgets/grid/FilterToolbar.js:638
+#: js/widgets/grid/FilterToolbar.js:647 js/widgets/grid/FilterToolbar.js:650
 msgid "Filter not Saved"
 msgstr "フィルターは保存されませんでした"
 
-#: js/widgets/grid/FilterToolbar.js:635
+#: js/widgets/grid/FilterToolbar.js:647
 msgid "You have to supply a name for the filter!"
 msgstr "フィルターに名前を付けてください"
 
-#: js/widgets/grid/FilterToolbar.js:638
+#: js/widgets/grid/FilterToolbar.js:650
 msgid ""
 "You have to supply a shorter name! Names of saved filters can only be up to "
 "40 characters long."
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:641 js/widgets/LangChooser.js:64
+#: js/widgets/grid/FilterToolbar.js:653 js/widgets/LangChooser.js:64
 #: js/widgets/TimezoneChooser.js:74
 msgid "Please Wait"
 msgstr "お待ちください"
 
-#: js/widgets/grid/FilterToolbar.js:641
+#: js/widgets/grid/FilterToolbar.js:653
 msgid "Saving filter"
 msgstr "フィルタの保存"
 
@@ -1229,7 +1239,7 @@ msgstr "高"
 msgid "urgent"
 msgstr "緊急"
 
-#: js/widgets/tags/TagCombo.js:45
+#: js/widgets/tags/TagCombo.js:44
 msgid "tag name"
 msgstr "タグ名"
 
@@ -1242,11 +1252,11 @@ msgstr "タグ"
 msgid "Add Tag"
 msgstr "追加"
 
-#: js/widgets/tags/TagsMassAttachAction.js:62
+#: js/widgets/tags/TagsMassAttachAction.js:69
 msgid "Attach the following tag to all selected items:"
 msgstr ""
 
-#: js/widgets/tags/TagsMassAttachAction.js:73
+#: js/widgets/tags/TagsMassAttachAction.js:80
 #, fuzzy
 msgid "Select Tag"
 msgstr "タグの削除"
@@ -1470,43 +1480,43 @@ msgid ""
 "You can choose between ExtJs style windows or normal Browser popup windows."
 msgstr ""
 
-#: Setup/setup.xml:2507
+#: Setup/setup.xml:2515
 msgid "note"
 msgstr "ノート"
 
-#: Setup/setup.xml:2512
+#: Setup/setup.xml:2520
 msgid "default note type"
 msgstr "標準ノートタイプ"
 
-#: Setup/setup.xml:2538
+#: Setup/setup.xml:2546
 msgid "telephone"
 msgstr "電話"
 
-#: Setup/setup.xml:2543
+#: Setup/setup.xml:2551
 msgid "telephone call"
 msgstr "通話"
 
-#: Setup/setup.xml:2569
+#: Setup/setup.xml:2577
 msgid "email"
 msgstr "Eメール"
 
-#: Setup/setup.xml:2574
+#: Setup/setup.xml:2582
 msgid "email contact"
 msgstr "Eメールコンタクト"
 
-#: Setup/setup.xml:2600
+#: Setup/setup.xml:2608
 msgid "created"
 msgstr "作成されました"
 
-#: Setup/setup.xml:2605
+#: Setup/setup.xml:2613
 msgid "record created"
 msgstr "レコードが作製されました"
 
-#: Setup/setup.xml:2631
+#: Setup/setup.xml:2639
 msgid "changed"
 msgstr "変更されました"
 
-#: Setup/setup.xml:2636
+#: Setup/setup.xml:2644
 msgid "record changed"
 msgstr "レコードが変更されました"
 

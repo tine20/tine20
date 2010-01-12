@@ -29,65 +29,65 @@ msgstr "manage shared lead folders"
 msgid "Create new shared lead folders"
 msgstr "Create new shared lead folders"
 
-#: Controller/Lead.php:168
+#: Controller/Lead.php:171
 msgid "State"
 msgstr "State"
 
-#: Controller/Lead.php:169 js/Contact.js:260
+#: Controller/Lead.php:172 js/Contact.js:260
 msgid "Role"
 msgstr "Role"
 
-#: Controller/Lead.php:170
+#: Controller/Lead.php:173
 msgid "Source"
 msgstr "Source"
 
-#: Controller/Lead.php:171 Export/Pdf.php:94 js/LeadEditDialog.js:387
+#: Controller/Lead.php:174 Export/Pdf.php:94 js/LeadEditDialog.js:387
 #: js/LeadGridDetailsPanel.js:455
 msgid "Start"
 msgstr "Start"
 
-#: Controller/Lead.php:172
+#: Controller/Lead.php:175
 msgid "Scheduled end"
 msgstr "Scheduled end"
 
-#: Controller/Lead.php:173 Export/Pdf.php:97 js/LeadEditDialog.js:235
+#: Controller/Lead.php:176 Export/Pdf.php:97 js/LeadEditDialog.js:235
 msgid "End"
 msgstr "End"
 
-#: Controller/Lead.php:174 Export/Ods.php:89 Export/Pdf.php:88
+#: Controller/Lead.php:177 Export/Ods.php:91 Export/Pdf.php:88
 #: Export/Xls.php:61 js/LeadGridPanel.js:106 js/LeadGridPanel.js:148
 msgid "Turnover"
 msgstr "Turnover"
 
-#: Controller/Lead.php:175 Export/Ods.php:94 Export/Pdf.php:91
+#: Controller/Lead.php:178 Export/Ods.php:96 Export/Pdf.php:91
 #: Export/Xls.php:66 js/LeadEditDialog.js:228 js/LeadGridPanel.js:105
 #: js/LeadGridPanel.js:147
 msgid "Probability"
 msgstr "Probability"
 
-#: Controller/Lead.php:176
+#: Controller/Lead.php:179
 msgid "Folder"
 msgstr "Folder"
 
-#: Controller/Lead.php:177
+#: Controller/Lead.php:180
 msgid "Updated by"
 msgstr "Updated by"
 
-#: Controller/Lead.php:178
+#: Controller/Lead.php:181
 msgid "Updated Fields:"
 msgstr "Updated Fields:"
 
-#: Controller/Lead.php:179
+#: Controller/Lead.php:182
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr "%s changed from %s to %s."
 
-#: Controller/Lead.php:185
+#: Controller/Lead.php:188
 #, python-format
 msgid "Lead %s has been changed"
 msgstr "Lead %s has been changed"
 
-#: Controller/Lead.php:187
+#: Controller/Lead.php:190
 #, python-format
 msgid "Lead %s has been creaded"
 msgstr "Lead %s has been creaded"
@@ -153,28 +153,28 @@ msgstr "Telephone"
 msgid "Website"
 msgstr "Website"
 
-#: Export/Ods.php:79 Export/Xls.php:51
+#: Export/Ods.php:81 Export/Xls.php:51
 msgid "Lead Name"
 msgstr "Lead Name"
 
-#: Export/Ods.php:84 Export/Xls.php:56 js/LeadEditDialog.js:424
+#: Export/Ods.php:86 Export/Xls.php:56 js/LeadEditDialog.js:424
 #: js/Product.js:141
 msgid "Description"
 msgstr "Description"
 
-#: Export/Ods.php:99 Export/Xls.php:71
+#: Export/Ods.php:101 Export/Xls.php:71
 msgid "Date Start"
 msgstr "Date Start"
 
-#: Export/Ods.php:104 Export/Xls.php:76
+#: Export/Ods.php:106 Export/Xls.php:76
 msgid "Date End"
 msgstr "Date End"
 
-#: Export/Ods.php:109 Export/Xls.php:81
+#: Export/Ods.php:111 Export/Xls.php:81
 msgid "Date End Scheduled"
 msgstr "Date End Scheduled"
 
-#: Export/Ods.php:114 Export/Xls.php:86
+#: Export/Ods.php:116 Export/Xls.php:86
 msgid "Created By"
 msgstr "Created By"
 
@@ -444,23 +444,23 @@ msgstr "Add a Leadstate..."
 msgid "Add a Leadtype..."
 msgstr "Add a Leadtype..."
 
-#: js/LinkGridPanel.js:29 js/LinkGridPanel.js:30
+#: js/LinkGridPanel.js:28 js/LinkGridPanel.js:29
 msgid "Add new {0}"
 msgstr "Add new {0}"
 
-#: js/LinkGridPanel.js:48 js/Product.js:179
+#: js/LinkGridPanel.js:47 js/Product.js:183
 msgid "Unlink {0}"
 msgstr "Unlink {0}"
 
-#: js/LinkGridPanel.js:49 js/Product.js:180
+#: js/LinkGridPanel.js:48 js/Product.js:184
 msgid "Unlink selected {0}"
 msgstr "Unlink selected {0}"
 
-#: js/LinkGridPanel.js:64
+#: js/LinkGridPanel.js:63
 msgid "Edit {0}"
 msgstr "Edit {0}"
 
-#: js/LinkGridPanel.js:65
+#: js/LinkGridPanel.js:64
 msgid "Edit selected {0}"
 msgstr "Edit selected {0}"
 
@@ -484,7 +484,7 @@ msgstr "Price"
 msgid "Quantity"
 msgstr "Quantity"
 
-#: js/Product.js:210
+#: js/Product.js:214
 msgid "Search for Products to add ..."
 msgstr "Search for Products to add ..."
 

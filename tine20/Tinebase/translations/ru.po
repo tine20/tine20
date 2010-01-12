@@ -49,7 +49,7 @@ msgstr "Проверить версию"
 msgid "Check tine20.org for new versions"
 msgstr "Проверить новые версии на tine20.org"
 
-#: Export/Ods.php:198
+#: Export/Ods.php:213
 msgid "Filter"
 msgstr "Фильтр"
 
@@ -65,19 +65,19 @@ msgstr "Создано"
 msgid "Activities"
 msgstr "Действия"
 
-#: Frontend/Http.php:520 js/ExceptionHandler.js:144
+#: Frontend/Http.php:530 js/ExceptionHandler.js:140
 msgid "Authorisation Required"
 msgstr "Необходима регистрация"
 
-#: Frontend/Http.php:521
+#: Frontend/Http.php:531
 msgid "Your session is not valid. You need to login again."
 msgstr "Время вашего сеанса истекло. Вам нужно зарегистрироваться снова. "
 
-#: Frontend/Http.php:547 js/ExceptionDialog.js:46
+#: Frontend/Http.php:557 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Неправильное завершение"
 
-#: Frontend/Http.php:548 js/ExceptionDialog.js:71
+#: Frontend/Http.php:558 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "Произошла ошибка, программа завершилась неправильно."
 
@@ -120,7 +120,7 @@ msgstr[2] "списков заданий"
 #: js/widgets/container/ContainerSelect.js:373
 #: js/widgets/dialog/EditDialog.js:193
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
-#: js/widgets/tags/TagsMassAttachAction.js:79
+#: js/widgets/tags/TagsMassAttachAction.js:86
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -175,27 +175,23 @@ msgstr "Ваш отчет был отправлен. Спасибо за Ваш�
 msgid "Please restart your browser now!"
 msgstr "Пожалуйста, перезапустите ваш браузер!"
 
-#: js/ExceptionHandler.js:138
-msgid "Connection lost, please check your network!"
-msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
-
-#: js/ExceptionHandler.js:145
+#: js/ExceptionHandler.js:141
 msgid "Your session timed out. You need to login again."
 msgstr "Время вашего сеанса истекло. Вам нужно зарегистрироваться снова. "
 
-#: js/ExceptionHandler.js:162
+#: js/ExceptionHandler.js:158
 msgid "Insufficient Rights"
 msgstr "Недостаточно прав"
 
-#: js/ExceptionHandler.js:163
+#: js/ExceptionHandler.js:159
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "К сожалению Вам не позволяется выполнить это действие"
 
-#: js/ExceptionHandler.js:172
+#: js/ExceptionHandler.js:168
 msgid "Not Found"
 msgstr "Не найден"
 
-#: js/ExceptionHandler.js:173
+#: js/ExceptionHandler.js:169
 #, fuzzy
 msgid ""
 "Sorry, your request could not be completed because the required data could "
@@ -206,11 +202,11 @@ msgstr ""
 "не могут быть найдены. В большинстве случаев это означает, что кто-то уже "
 "удалил данные. Просьба обновить ваш текущий вид."
 
-#: js/ExceptionHandler.js:182
+#: js/ExceptionHandler.js:178
 msgid "Concurrent Updates"
 msgstr "Параллельные обновления"
 
-#: js/ExceptionHandler.js:183
+#: js/ExceptionHandler.js:179
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -218,102 +214,116 @@ msgstr ""
 "Вовремя того, как вы изменяли  эту запись, она была изменена кем-то другим. "
 "Вам нужно обновить и сделать изменения снова."
 
-#: js/ExceptionHandler.js:192
+#: js/ExceptionHandler.js:187
+msgid "Connection lost, please check your network!"
+msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
+
+#: js/ExceptionHandler.js:193
 msgid "Timeout"
 msgstr ""
 
-#: js/ExceptionHandler.js:193
+#: js/ExceptionHandler.js:194
 msgid ""
 "Sorry, some timeout occured while processing your request. Please reload "
 "your browser, try again or contact your administrator."
 msgstr ""
 
-#: js/LoginPanel.js:79 js/LoginPanel.js:111
+#: js/ExceptionHandler.js:203
+msgid "No Response"
+msgstr ""
+
+#: js/ExceptionHandler.js:204
+msgid ""
+"Sorry, the Server did not respond any data. Please reload your browser, try "
+"again or contact your administrator."
+msgstr ""
+
+#: js/LoginPanel.js:79 js/LoginPanel.js:112
 msgid "Login"
 msgstr "Вход в систему"
 
-#: js/LoginPanel.js:87 js/widgets/dialog/CredentialsDialog.js:76
+#: js/LoginPanel.js:88 js/widgets/dialog/CredentialsDialog.js:76
 msgid "Username"
 msgstr "Имя пользователя"
 
-#: js/LoginPanel.js:98 js/widgets/dialog/CredentialsDialog.js:80
+#: js/LoginPanel.js:99 js/widgets/dialog/CredentialsDialog.js:80
 msgid "Password"
 msgstr "Пароль"
 
-#: js/LoginPanel.js:130
+#: js/LoginPanel.js:131
 msgid "Tine 2.0 is made for you"
 msgstr ""
 
-#: js/LoginPanel.js:132
+#: js/LoginPanel.js:133
 msgid ""
 "Tine 2.0 wants to make business collaboration easier and more enjoyable - "
 "for your needs! So you are warmly welcome to discuss with us, bring in ideas "
 "and get help."
 msgstr ""
 
-#: js/LoginPanel.js:138
+#: js/LoginPanel.js:139
 msgid "Tine 2.0 Homepage"
 msgstr ""
 
-#: js/LoginPanel.js:139
+#: js/LoginPanel.js:140
 msgid "Tine 2.0 Forum"
 msgstr ""
 
-#: js/LoginPanel.js:183
+#: js/LoginPanel.js:184
 msgid "about {0} minutes"
 msgstr ""
 
-#: js/LoginPanel.js:188 js/LoginPanel.js:350
+#: js/LoginPanel.js:189 js/LoginPanel.js:351
 msgid "Tine 2.0 needs your help"
 msgstr ""
 
-#: js/LoginPanel.js:190 js/LoginPanel.js:352
+#: js/LoginPanel.js:191 js/LoginPanel.js:353
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
 msgstr ""
 
-#: js/LoginPanel.js:196
+#: js/LoginPanel.js:197
 msgid "participate!"
 msgstr ""
 
-#: js/LoginPanel.js:218
+#: js/LoginPanel.js:219
 msgid "Languages"
 msgstr ""
 
-#: js/LoginPanel.js:219
+#: js/LoginPanel.js:220
 msgid "Duration"
 msgstr ""
 
-#: js/LoginPanel.js:276
+#: js/LoginPanel.js:277
 msgid "Logging you in..."
 msgstr "Регистрирую Вас в..."
 
-#: js/LoginPanel.js:276 js/widgets/container/GrantsDialog.js:138
+#: js/LoginPanel.js:277 js/widgets/container/GrantsDialog.js:138
 #: js/widgets/grid/PersistentFilterPicker.js:126
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:140
 msgid "Please wait"
 msgstr "Пожалуйста, подождите"
 
-#: js/LoginPanel.js:288
+#: js/LoginPanel.js:289
 #, fuzzy
 msgid "Login successful. Loading {0}..."
 msgstr "Успешный вход в систему. Загрузка Tine 2.0..."
 
-#: js/LoginPanel.js:288 js/MainScreen.js:534
+#: js/LoginPanel.js:289 js/MainScreen.js:534
 msgid "Please wait!"
 msgstr "Пожалуйста, подождите!"
 
-#: js/LoginPanel.js:293
+#: js/LoginPanel.js:294
 msgid "Login failure"
 msgstr "Регистрация не удалась"
 
-#: js/LoginPanel.js:294
+#: js/LoginPanel.js:295
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
 
-#: js/LoginPanel.js:318
+#: js/LoginPanel.js:319
 msgid "Please enter your login data"
 msgstr "Пожалуйста, введите свои данные входа в систему"
 
@@ -391,7 +401,7 @@ msgstr "Повторите новый пароль"
 #: js/MainScreen.js:455 js/widgets/container/ContainerSelect.js:382
 #: js/widgets/dialog/EditDialog.js:176
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
-#: js/widgets/tags/TagsMassAttachAction.js:85
+#: js/widgets/tags/TagsMassAttachAction.js:92
 msgid "Ok"
 msgstr "Ок"
 
@@ -427,7 +437,7 @@ msgstr ""
 "Установка Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
 "локально на этом компьютере."
 
-#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:746
+#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:769
 #: js/widgets/dialog/EditDialog.js:446
 #: js/widgets/grid/PersistentFilterPicker.js:124
 #: js/widgets/tree/ContextMenu.js:84
@@ -453,14 +463,14 @@ msgstr[2] ""
 msgid "Groups"
 msgstr ""
 
-#: js/Models.js:247
+#: js/Models.js:258
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Models.js:274
+#: js/Models.js:285
 #, fuzzy
 msgid "Relation"
 msgid_plural "Relations"
@@ -468,7 +478,7 @@ msgstr[0] "Приложения"
 msgstr[1] "Приложения"
 msgstr[2] "Приложения"
 
-#: js/tineInit.js:560
+#: js/tineInit.js:564
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
@@ -723,20 +733,20 @@ msgstr[0] "Удалить {0}"
 msgstr[1] "Удалить {0}"
 msgstr[2] "Удалить {0}"
 
-#: js/widgets/app/GridPanel.js:337
+#: js/widgets/app/GridPanel.js:338
 #, fuzzy
 msgid "Tagging"
 msgstr "Тэг"
 
-#: js/widgets/app/GridPanel.js:417
+#: js/widgets/app/GridPanel.js:418
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Показаны записи {0} - {1} из {2}"
 
-#: js/widgets/app/GridPanel.js:418
+#: js/widgets/app/GridPanel.js:419
 msgid "No {0} to display"
 msgstr "Нет {0} для отображения"
 
-#: js/widgets/app/GridPanel.js:439
+#: js/widgets/app/GridPanel.js:440
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -744,36 +754,36 @@ msgstr ""
 "Никаких {0} не найдено. Пожалуйста попытайтесь изменить свои критерии "
 "фильтра, варианты представления, или {1} поменять в тех в которых Вы ищете."
 
-#: js/widgets/app/GridPanel.js:731
+#: js/widgets/app/GridPanel.js:754
 msgid "Not Allowed"
 msgstr "Не разрешено"
 
-#: js/widgets/app/GridPanel.js:732
+#: js/widgets/app/GridPanel.js:755
 msgid "You are not allowed to delete all pages at once"
 msgstr "Вам не позволяется удалить все страницы сразу"
 
-#: js/widgets/app/GridPanel.js:744
+#: js/widgets/app/GridPanel.js:767
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Вы действительно хотите удалить выделенную запись"
 msgstr[1] "Вы действительно хотите удалить выделенные записи"
 msgstr[2] "Вы действительно хотите удалить выделенные записи"
 
-#: js/widgets/app/GridPanel.js:751 js/widgets/dialog/EditDialog.js:448
+#: js/widgets/app/GridPanel.js:774 js/widgets/dialog/EditDialog.js:448
 msgid "Deleting {0}"
 msgstr "Удаление {0}"
 
-#: js/widgets/app/GridPanel.js:753
+#: js/widgets/app/GridPanel.js:776
 msgid " ... This may take a long time!"
 msgstr "... Это может занять много времени!"
 
-#: js/widgets/app/GridPanel.js:772 js/widgets/dialog/EditDialog.js:458
+#: js/widgets/app/GridPanel.js:795 js/widgets/dialog/EditDialog.js:458
 #: js/widgets/tags/TagsPanel.js:287 js/widgets/tags/TagsPanel.js:397
 #: js/widgets/tags/TagsPanel.js:430
 msgid "Failed"
 msgstr "Не удалось"
 
-#: js/widgets/app/GridPanel.js:772 js/widgets/dialog/EditDialog.js:458
+#: js/widgets/app/GridPanel.js:795 js/widgets/dialog/EditDialog.js:458
 msgid "Could not delete {0}."
 msgstr "Не удалось удалить {0}."
 
@@ -863,12 +873,12 @@ msgid "Custom Fields"
 msgstr "Дополнительные поля"
 
 #: js/widgets/customfields/CustomfieldsPanel.js:71
-#: js/widgets/customfields/CustomfieldsPanel.js:85
+#: js/widgets/customfields/CustomfieldsPanel.js:86
 #, fuzzy
 msgid "General"
 msgstr "Неправильное завершение"
 
-#: js/widgets/customfields/CustomfieldsPanel.js:107
+#: js/widgets/customfields/CustomfieldsPanel.js:108
 msgid "There are no custom fields yet"
 msgstr "Пока ещё нет дополнительных полей"
 
@@ -973,7 +983,7 @@ msgstr "Загрузка..."
 msgid "Saving of preferences failed."
 msgstr "Сбой сохранения параметров."
 
-#: js/widgets/dialog/PreferencesPanel.js:150
+#: js/widgets/dialog/PreferencesPanel.js:151
 msgid "There are no preferences for this application."
 msgstr "У этого приложения нет параметров."
 
@@ -1007,130 +1017,130 @@ msgstr ""
 msgid "Searching..."
 msgstr "Поиск..."
 
-#: js/widgets/grid/FilterModel.js:146
+#: js/widgets/grid/FilterModel.js:147
 msgid "contains"
 msgstr "содержит"
 
-#: js/widgets/grid/FilterModel.js:147
+#: js/widgets/grid/FilterModel.js:148
 msgid "is equal to"
 msgstr "равно"
 
-#: js/widgets/grid/FilterModel.js:148
+#: js/widgets/grid/FilterModel.js:149
 msgid "is greater than"
 msgstr "больше чем"
 
-#: js/widgets/grid/FilterModel.js:149
+#: js/widgets/grid/FilterModel.js:150
 msgid "is less than"
 msgstr "меньше чем"
 
-#: js/widgets/grid/FilterModel.js:150
+#: js/widgets/grid/FilterModel.js:151
 msgid "is not"
 msgstr "не"
 
-#: js/widgets/grid/FilterModel.js:151
+#: js/widgets/grid/FilterModel.js:152
 msgid "is in"
 msgstr "в"
 
-#: js/widgets/grid/FilterModel.js:152
+#: js/widgets/grid/FilterModel.js:153
 msgid "is before"
 msgstr "перед"
 
-#: js/widgets/grid/FilterModel.js:153
+#: js/widgets/grid/FilterModel.js:154
 msgid "is after"
 msgstr "после"
 
-#: js/widgets/grid/FilterModel.js:154
+#: js/widgets/grid/FilterModel.js:155
 msgid "is within"
 msgstr "в"
 
-#: js/widgets/grid/FilterModel.js:155
+#: js/widgets/grid/FilterModel.js:156
 #, fuzzy
 msgid "is in week no."
 msgstr "эта неделя"
 
-#: js/widgets/grid/FilterModel.js:156
+#: js/widgets/grid/FilterModel.js:157
 msgid "starts with"
 msgstr "начинается с"
 
-#: js/widgets/grid/FilterModel.js:157
+#: js/widgets/grid/FilterModel.js:158
 msgid "ends with"
 msgstr "заканчивается на"
 
-#: js/widgets/grid/FilterModel.js:158
+#: js/widgets/grid/FilterModel.js:159
 #, fuzzy
 msgid "one of"
 msgstr "Нет"
 
-#: js/widgets/grid/FilterModel.js:196
+#: js/widgets/grid/FilterModel.js:200
 msgid "select a operator"
 msgstr "выберите оператор"
 
-#: js/widgets/grid/FilterModel.js:289
+#: js/widgets/grid/FilterModel.js:293
 #, fuzzy
 msgid "Search Account ..."
 msgstr "Поиск..."
 
-#: js/widgets/grid/FilterModel.js:402
+#: js/widgets/grid/FilterModel.js:406
 msgid "today"
 msgstr "сегодня"
 
-#: js/widgets/grid/FilterModel.js:403
+#: js/widgets/grid/FilterModel.js:407
 msgid "yesterday"
 msgstr "вчера"
 
-#: js/widgets/grid/FilterModel.js:404
+#: js/widgets/grid/FilterModel.js:408
 msgid "this week"
 msgstr "эта неделя"
 
-#: js/widgets/grid/FilterModel.js:405
+#: js/widgets/grid/FilterModel.js:409
 msgid "last week"
 msgstr "последняя неделя"
 
-#: js/widgets/grid/FilterModel.js:406
+#: js/widgets/grid/FilterModel.js:410
 msgid "the week before last"
 msgstr "предпоследняя неделя"
 
-#: js/widgets/grid/FilterModel.js:407
+#: js/widgets/grid/FilterModel.js:411
 msgid "this month"
 msgstr "этот месяц"
 
-#: js/widgets/grid/FilterModel.js:408
+#: js/widgets/grid/FilterModel.js:412
 msgid "last month"
 msgstr "последний месяц"
 
-#: js/widgets/grid/FilterModel.js:409
+#: js/widgets/grid/FilterModel.js:413
 msgid "this quarter"
 msgstr "этот квартал"
 
-#: js/widgets/grid/FilterModel.js:410
+#: js/widgets/grid/FilterModel.js:414
 msgid "last quarter"
 msgstr "последний квартал"
 
-#: js/widgets/grid/FilterModel.js:411
+#: js/widgets/grid/FilterModel.js:415
 msgid "this year"
 msgstr "этот год"
 
-#: js/widgets/grid/FilterModel.js:412
+#: js/widgets/grid/FilterModel.js:416
 msgid "last year"
 msgstr "прошлый год"
 
-#: js/widgets/grid/FilterModel.js:416
+#: js/widgets/grid/FilterModel.js:420
 msgid "tomorrow"
 msgstr "завтра"
 
-#: js/widgets/grid/FilterModel.js:417
+#: js/widgets/grid/FilterModel.js:421
 msgid "next week"
 msgstr "следующая неделя"
 
-#: js/widgets/grid/FilterModel.js:418
+#: js/widgets/grid/FilterModel.js:422
 msgid "next month"
 msgstr "следующий месяц"
 
-#: js/widgets/grid/FilterModel.js:419
+#: js/widgets/grid/FilterModel.js:423
 msgid "next quarter"
 msgstr "следующий квартал"
 
-#: js/widgets/grid/FilterModel.js:420
+#: js/widgets/grid/FilterModel.js:424
 msgid "next year"
 msgstr "следующий год"
 
@@ -1146,7 +1156,7 @@ msgstr "сбросить все фильтры"
 msgid "start search"
 msgstr "начать поиск"
 
-#: js/widgets/grid/FilterToolbar.js:148 js/widgets/grid/FilterToolbar.js:632
+#: js/widgets/grid/FilterToolbar.js:148 js/widgets/grid/FilterToolbar.js:644
 msgid "save filter"
 msgstr "сохранить фильтр"
 
@@ -1166,19 +1176,19 @@ msgstr "и"
 msgid "Show"
 msgstr "Показать"
 
-#: js/widgets/grid/FilterToolbar.js:632
+#: js/widgets/grid/FilterToolbar.js:644
 msgid "Please enter a name for the filter"
 msgstr "Пожалуйста, введите название фильтра"
 
-#: js/widgets/grid/FilterToolbar.js:635 js/widgets/grid/FilterToolbar.js:638
+#: js/widgets/grid/FilterToolbar.js:647 js/widgets/grid/FilterToolbar.js:650
 msgid "Filter not Saved"
 msgstr "Фильтр не сохранен"
 
-#: js/widgets/grid/FilterToolbar.js:635
+#: js/widgets/grid/FilterToolbar.js:647
 msgid "You have to supply a name for the filter!"
 msgstr "Вы должны дать фильтру название!"
 
-#: js/widgets/grid/FilterToolbar.js:638
+#: js/widgets/grid/FilterToolbar.js:650
 msgid ""
 "You have to supply a shorter name! Names of saved filters can only be up to "
 "40 characters long."
@@ -1186,12 +1196,12 @@ msgstr ""
 "Вы должны использовать короткое имя! Имена сохраненных фильтров не могут "
 "быть длиннее 40 символов."
 
-#: js/widgets/grid/FilterToolbar.js:641 js/widgets/LangChooser.js:64
+#: js/widgets/grid/FilterToolbar.js:653 js/widgets/LangChooser.js:64
 #: js/widgets/TimezoneChooser.js:74
 msgid "Please Wait"
 msgstr "Пожалуйста, подождите"
 
-#: js/widgets/grid/FilterToolbar.js:641
+#: js/widgets/grid/FilterToolbar.js:653
 msgid "Saving filter"
 msgstr "Сохранённый фильтр"
 
@@ -1259,7 +1269,7 @@ msgstr "высокий"
 msgid "urgent"
 msgstr "срочный"
 
-#: js/widgets/tags/TagCombo.js:45
+#: js/widgets/tags/TagCombo.js:44
 msgid "tag name"
 msgstr "название тэга"
 
@@ -1272,11 +1282,11 @@ msgstr "Тэг"
 msgid "Add Tag"
 msgstr "Добавить"
 
-#: js/widgets/tags/TagsMassAttachAction.js:62
+#: js/widgets/tags/TagsMassAttachAction.js:69
 msgid "Attach the following tag to all selected items:"
 msgstr ""
 
-#: js/widgets/tags/TagsMassAttachAction.js:73
+#: js/widgets/tags/TagsMassAttachAction.js:80
 #, fuzzy
 msgid "Select Tag"
 msgstr "Удалить тэг"
@@ -1513,43 +1523,43 @@ msgstr ""
 "Вы можете выбрать между стилем окон ExtJs или обычными всплывающими окнами "
 "браузера."
 
-#: Setup/setup.xml:2507
+#: Setup/setup.xml:2515
 msgid "note"
 msgstr "заметка"
 
-#: Setup/setup.xml:2512
+#: Setup/setup.xml:2520
 msgid "default note type"
 msgstr "тип заметки по умолчанию"
 
-#: Setup/setup.xml:2538
+#: Setup/setup.xml:2546
 msgid "telephone"
 msgstr "телефон"
 
-#: Setup/setup.xml:2543
+#: Setup/setup.xml:2551
 msgid "telephone call"
 msgstr "телефонный звонок"
 
-#: Setup/setup.xml:2569
+#: Setup/setup.xml:2577
 msgid "email"
 msgstr "электронная почта"
 
-#: Setup/setup.xml:2574
+#: Setup/setup.xml:2582
 msgid "email contact"
 msgstr "контакт электронной почты"
 
-#: Setup/setup.xml:2600
+#: Setup/setup.xml:2608
 msgid "created"
 msgstr "создано"
 
-#: Setup/setup.xml:2605
+#: Setup/setup.xml:2613
 msgid "record created"
 msgstr "запись создана"
 
-#: Setup/setup.xml:2631
+#: Setup/setup.xml:2639
 msgid "changed"
 msgstr "изменено"
 
-#: Setup/setup.xml:2636
+#: Setup/setup.xml:2644
 msgid "record changed"
 msgstr "запись изменена"
 

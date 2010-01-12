@@ -20,24 +20,20 @@ msgstr "spravovat produkty"
 msgid "add, edit and delete products"
 msgstr "vytvořit, editovat a mazat produkty"
 
-#: js/ContractEditDialog.js:103
-#: js/ContractGridPanel.js:113
+#: js/ContractEditDialog.js:103 js/ContractGridPanel.js:113
 msgid "Title"
 msgstr "Název"
 
-#: js/ContractEditDialog.js:109
-#: js/ProductEditDialog.js:126
+#: js/ContractEditDialog.js:109 js/ProductEditDialog.js:126
 #: js/ProductGridPanel.js:128
 msgid "Description"
 msgstr "Popis"
 
-#: js/ContractEditDialog.js:110
-#: js/ProductEditDialog.js:127
+#: js/ContractEditDialog.js:110 js/ProductEditDialog.js:127
 msgid "Enter description..."
 msgstr "Vložte popis..."
 
-#: js/ContractGridPanel.js:63
-#: js/Models.js:79
+#: js/ContractGridPanel.js:63 js/Models.js:79
 msgid "Quick search"
 msgstr "Rychlé hledání"
 
@@ -85,23 +81,19 @@ msgstr[0] "seznam kontraktů"
 msgstr[1] "seznamy kontraktů"
 msgstr[2] "seznamů kontraktů"
 
-#: js/ProductEditDialog.js:105
-#: js/ProductGridPanel.js:125
+#: js/ProductEditDialog.js:105 js/ProductGridPanel.js:125
 msgid "Name"
 msgstr "Název"
 
-#: js/ProductEditDialog.js:111
-#: js/ProductGridPanel.js:129
+#: js/ProductEditDialog.js:111 js/ProductGridPanel.js:129
 msgid "Price"
 msgstr "Cena"
 
-#: js/ProductEditDialog.js:118
-#: js/ProductGridPanel.js:126
+#: js/ProductEditDialog.js:118 js/ProductGridPanel.js:126
 msgid "Manufacturer"
 msgstr "Výrobce"
 
-#: js/ProductEditDialog.js:122
-#: js/ProductGridPanel.js:127
+#: js/ProductEditDialog.js:122 js/ProductGridPanel.js:127
 msgid "Category"
 msgstr "Kategorie"
 
@@ -121,11 +113,10 @@ msgstr "Všechny produkty"
 msgid "Contracts"
 msgstr "Kontrakty"
 
-#: js/Sales.js:109
+#: js/Sales.js:109 js/Sales.js:144
 msgid "All Contracts"
 msgstr "Všechny kontrakty"
 
 #: Setup/setup.xml:243
 msgid "Shared Contracts"
 msgstr "Sdílené kontrakty"
-

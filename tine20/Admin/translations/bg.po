@@ -165,7 +165,7 @@ msgstr "Покажи от:"
 msgid "to:"
 msgstr "до:"
 
-#: js/Admin.js:444 js/Applications.js:145 js/Groups.js:153 js/Roles.js:149
+#: js/Admin.js:444 js/Applications.js:156 js/Groups.js:153 js/Roles.js:149
 #: js/Tags.js:140 js/Users.js:234
 msgid "Search:"
 msgstr "Търси:"
@@ -202,11 +202,11 @@ msgstr "Няма регистрирани усрешни влизания"
 msgid "Session ID"
 msgstr "ID на сесия"
 
-#: js/Admin.js:565 js/UserEditDialog.js:298
+#: js/Admin.js:565 js/UserEditDialog.js:297
 msgid "Login Name"
 msgstr "Потребителско име"
 
-#: js/Admin.js:566 js/Applications.js:220 js/Groups.js:203 js/Roles.js:201
+#: js/Admin.js:566 js/Applications.js:231 js/Groups.js:203 js/Roles.js:201
 #: js/SambaMachineGrid.js:90 js/Tags.js:187
 msgid "Name"
 msgstr "Име"
@@ -231,52 +231,52 @@ msgstr "Конто  ID"
 msgid "Result"
 msgstr "Резултат"
 
-#: js/Applications.js:29
+#: js/Applications.js:31
 #, fuzzy
 msgid "{0} Settings"
 msgstr "настройки"
 
-#: js/Applications.js:122
+#: js/Applications.js:133
 msgid "enable application"
 msgstr "активира арликация"
 
-#: js/Applications.js:123
+#: js/Applications.js:134
 msgid "disable application"
 msgstr "деактивира арликация"
 
-#: js/Applications.js:124
+#: js/Applications.js:135
 msgid "settings"
 msgstr "настройки"
 
-#: js/Applications.js:174 js/UserEditDialog.js:352
+#: js/Applications.js:185 js/UserEditDialog.js:351
 msgid "disabled"
 msgstr "деактивиран"
 
-#: js/Applications.js:177 js/UserEditDialog.js:352
+#: js/Applications.js:188 js/UserEditDialog.js:351
 msgid "enabled"
 msgstr "активиран"
 
-#: js/Applications.js:181
+#: js/Applications.js:192
 msgid "unknown status ({0})"
 msgstr "непознат статус ({0})"
 
-#: js/Applications.js:209
+#: js/Applications.js:220
 msgid "Displaying application {0} - {1} of {2}"
 msgstr "Намерени апликации {0} - {1} of {2}"
 
-#: js/Applications.js:210
+#: js/Applications.js:221
 msgid "No applications to display"
 msgstr "Няма намерени апликации"
 
-#: js/Applications.js:219
+#: js/Applications.js:230
 msgid "Order"
 msgstr "Последователност"
 
-#: js/Applications.js:221 js/UserEditDialog.js:346 js/Users.js:294
+#: js/Applications.js:232 js/UserEditDialog.js:345 js/Users.js:294
 msgid "Status"
 msgstr "Статус"
 
-#: js/Applications.js:222
+#: js/Applications.js:233
 msgid "Version"
 msgstr "Версия"
 
@@ -555,214 +555,214 @@ msgstr ""
 msgid "Password confirmation"
 msgstr "Задай отново парола"
 
-#: js/UserEditDialog.js:222
+#: js/UserEditDialog.js:221
 #, fuzzy
 msgid "Repeat password"
 msgstr "изтрий парола"
 
-#: js/UserEditDialog.js:234
+#: js/UserEditDialog.js:233
 msgid "Cancel"
 msgstr ""
 
-#: js/UserEditDialog.js:241
+#: js/UserEditDialog.js:240
 msgid "Ok"
 msgstr ""
 
-#: js/UserEditDialog.js:267
+#: js/UserEditDialog.js:266
 msgid "Account"
 msgstr "Потребител"
 
-#: js/UserEditDialog.js:282
+#: js/UserEditDialog.js:281
 msgid "First Name"
 msgstr "Име"
 
-#: js/UserEditDialog.js:292
+#: js/UserEditDialog.js:291
 msgid "Last Name"
 msgstr "Фамилия"
 
-#: js/UserEditDialog.js:303
+#: js/UserEditDialog.js:302
 msgid "Password"
 msgstr "Парола"
 
-#: js/UserEditDialog.js:307
+#: js/UserEditDialog.js:306
 msgid "no password set"
 msgstr "Няма зададена парола"
 
-#: js/UserEditDialog.js:328
+#: js/UserEditDialog.js:327
 msgid "Emailaddress"
 msgstr "Имейл адрес"
 
-#: js/UserEditDialog.js:334 js/Users.js:300
+#: js/UserEditDialog.js:333 js/Users.js:300
 msgid "OpenID"
 msgstr ""
 
-#: js/UserEditDialog.js:340
+#: js/UserEditDialog.js:339
 msgid "Primary group"
 msgstr "Основна група"
 
-#: js/UserEditDialog.js:352
+#: js/UserEditDialog.js:351
 #, fuzzy
 msgid "expired"
 msgstr "Краен срок"
 
-#: js/UserEditDialog.js:355 js/Users.js:304
+#: js/UserEditDialog.js:354 js/Users.js:304
 msgid "Expires"
 msgstr "Краен срок"
 
-#: js/UserEditDialog.js:357 js/UserEditDialog.js:399 js/UserEditDialog.js:476
+#: js/UserEditDialog.js:356 js/UserEditDialog.js:398 js/UserEditDialog.js:475
 msgid "never"
 msgstr "никога"
 
-#: js/UserEditDialog.js:362
+#: js/UserEditDialog.js:361
 msgid "Visibility"
 msgstr ""
 
-#: js/UserEditDialog.js:368
+#: js/UserEditDialog.js:367
 #, fuzzy
 msgid "Display in addressbook"
 msgstr "Покажи име"
 
-#: js/UserEditDialog.js:368
+#: js/UserEditDialog.js:367
 msgid "Hide from addressbook"
 msgstr ""
 
-#: js/UserEditDialog.js:373
+#: js/UserEditDialog.js:372
 msgid "Information"
 msgstr ""
 
-#: js/UserEditDialog.js:389 js/Users.js:301
+#: js/UserEditDialog.js:388 js/Users.js:301
 msgid "Last login at"
 msgstr "Последно регистрирано влизане"
 
-#: js/UserEditDialog.js:391 js/UserEditDialog.js:395
+#: js/UserEditDialog.js:390 js/UserEditDialog.js:394
 msgid "don't know"
 msgstr "неизвестен"
 
-#: js/UserEditDialog.js:391 js/UserEditDialog.js:395 js/UserEditDialog.js:456
+#: js/UserEditDialog.js:390 js/UserEditDialog.js:394 js/UserEditDialog.js:455
 msgid "never logged in"
 msgstr "До този момент няма регистрирано влизане."
 
-#: js/UserEditDialog.js:393 js/Users.js:302
+#: js/UserEditDialog.js:392 js/Users.js:302
 msgid "Last login from"
 msgstr "Последното регистрирано влизане е от"
 
-#: js/UserEditDialog.js:397
+#: js/UserEditDialog.js:396
 msgid "Password set"
 msgstr "Задава парола"
 
-#: js/UserEditDialog.js:405
+#: js/UserEditDialog.js:404
 msgid "Fileserver"
 msgstr "Файлов сървър"
 
-#: js/UserEditDialog.js:410
+#: js/UserEditDialog.js:409
 msgid "Unix"
 msgstr ""
 
-#: js/UserEditDialog.js:425
+#: js/UserEditDialog.js:424
 msgid "Home Directory"
 msgstr "Home-Директория"
 
-#: js/UserEditDialog.js:429
+#: js/UserEditDialog.js:428
 msgid "Login Shell"
 msgstr "Login Shell"
 
-#: js/UserEditDialog.js:434
+#: js/UserEditDialog.js:433
 msgid "Windows"
 msgstr ""
 
-#: js/UserEditDialog.js:449
+#: js/UserEditDialog.js:448
 msgid "Home Drive"
 msgstr "Home-Твърд диск"
 
-#: js/UserEditDialog.js:454
+#: js/UserEditDialog.js:453
 msgid "Logon Time"
 msgstr "Дата и час на влизане"
 
-#: js/UserEditDialog.js:459
+#: js/UserEditDialog.js:458
 msgid "Home Path"
 msgstr "Home-Адрес"
 
-#: js/UserEditDialog.js:464
+#: js/UserEditDialog.js:463
 msgid "Logoff Time"
 msgstr "Дата и час на излизане"
 
-#: js/UserEditDialog.js:466
+#: js/UserEditDialog.js:465
 msgid "never logged off"
 msgstr "До този момент няма регистрирано излизане."
 
-#: js/UserEditDialog.js:469
+#: js/UserEditDialog.js:468
 msgid "Profile Path"
 msgstr "Адрес на профила"
 
-#: js/UserEditDialog.js:474
+#: js/UserEditDialog.js:473
 msgid "Password Last Set"
 msgstr "Последно зададена парола"
 
-#: js/UserEditDialog.js:479
+#: js/UserEditDialog.js:478
 msgid "Logon Script"
 msgstr "Скрирт за влизане"
 
-#: js/UserEditDialog.js:483
+#: js/UserEditDialog.js:482
 msgid "Password Can Change"
 msgstr "Паролата може де бъде сменена"
 
-#: js/UserEditDialog.js:485 js/UserEditDialog.js:489 js/UserEditDialog.js:493
+#: js/UserEditDialog.js:484 js/UserEditDialog.js:488 js/UserEditDialog.js:492
 msgid "not set"
 msgstr "не е създаден"
 
-#: js/UserEditDialog.js:487
+#: js/UserEditDialog.js:486
 msgid "Password Must Change"
 msgstr "Паролата трябва де бъде сменена"
 
-#: js/UserEditDialog.js:491
+#: js/UserEditDialog.js:490
 msgid "Kick Off Time"
 msgstr "Време на излизане"
 
-#: js/UserEditDialog.js:498
+#: js/UserEditDialog.js:497
 msgid "IMAP"
 msgstr ""
 
-#: js/UserEditDialog.js:512
+#: js/UserEditDialog.js:511
 #, fuzzy
 msgid "Email UID"
 msgstr "Имейл"
 
-#: js/UserEditDialog.js:516
+#: js/UserEditDialog.js:515
 #, fuzzy
 msgid "Email GID"
 msgstr "Имейл"
 
-#: js/UserEditDialog.js:520
+#: js/UserEditDialog.js:519
 #, fuzzy
 msgid "Email Username"
 msgstr "Имейл"
 
-#: js/UserEditDialog.js:524
+#: js/UserEditDialog.js:523
 msgid "Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:530
+#: js/UserEditDialog.js:529
 msgid "Current Mail Size"
 msgstr ""
 
-#: js/UserEditDialog.js:535
+#: js/UserEditDialog.js:534
 msgid "Sieve Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:540
+#: js/UserEditDialog.js:539
 msgid "Current Sieve Size"
 msgstr ""
 
-#: js/UserEditDialog.js:545
+#: js/UserEditDialog.js:544
 #, fuzzy
 msgid "Last Login"
 msgstr "Последно регистрирано влизане"
 
-#: js/UserEditDialog.js:550
+#: js/UserEditDialog.js:549
 msgid "SMTP"
 msgstr ""
 
-#: js/UserEditDialog.js:566
+#: js/UserEditDialog.js:565
 msgid "Forward Only"
 msgstr ""
 

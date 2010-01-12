@@ -25,7 +25,7 @@ msgstr ""
 msgid "Create new shared tasks lists"
 msgstr ""
 
-#: Controller/Task.php:163
+#: Controller/Task.php:162
 msgid "Notification for Task "
 msgstr ""
 

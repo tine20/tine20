@@ -29,65 +29,65 @@ msgstr "управление на споделените предложения"
 msgid "Create new shared lead folders"
 msgstr "Създай нова папка за споделени предложения"
 
-#: Controller/Lead.php:168
+#: Controller/Lead.php:171
 msgid "State"
 msgstr "Статус"
 
-#: Controller/Lead.php:169 js/Contact.js:260
+#: Controller/Lead.php:172 js/Contact.js:260
 msgid "Role"
 msgstr ""
 
-#: Controller/Lead.php:170
+#: Controller/Lead.php:173
 msgid "Source"
 msgstr "Код"
 
-#: Controller/Lead.php:171 Export/Pdf.php:94 js/LeadEditDialog.js:387
+#: Controller/Lead.php:174 Export/Pdf.php:94 js/LeadEditDialog.js:387
 #: js/LeadGridDetailsPanel.js:455
 msgid "Start"
 msgstr "Старт"
 
-#: Controller/Lead.php:172
+#: Controller/Lead.php:175
 msgid "Scheduled end"
 msgstr "Запланувана продължителност"
 
-#: Controller/Lead.php:173 Export/Pdf.php:97 js/LeadEditDialog.js:235
+#: Controller/Lead.php:176 Export/Pdf.php:97 js/LeadEditDialog.js:235
 msgid "End"
 msgstr "Крайна дата"
 
-#: Controller/Lead.php:174 Export/Ods.php:89 Export/Pdf.php:88
+#: Controller/Lead.php:177 Export/Ods.php:91 Export/Pdf.php:88
 #: Export/Xls.php:61 js/LeadGridPanel.js:106 js/LeadGridPanel.js:148
 msgid "Turnover"
 msgstr "Оборот"
 
-#: Controller/Lead.php:175 Export/Ods.php:94 Export/Pdf.php:91
+#: Controller/Lead.php:178 Export/Ods.php:96 Export/Pdf.php:91
 #: Export/Xls.php:66 js/LeadEditDialog.js:228 js/LeadGridPanel.js:105
 #: js/LeadGridPanel.js:147
 msgid "Probability"
 msgstr "Вероятност"
 
-#: Controller/Lead.php:176
+#: Controller/Lead.php:179
 msgid "Folder"
 msgstr "Папка"
 
-#: Controller/Lead.php:177
+#: Controller/Lead.php:180
 msgid "Updated by"
 msgstr "Осъвременено от"
 
-#: Controller/Lead.php:178
+#: Controller/Lead.php:181
 msgid "Updated Fields:"
 msgstr "Актуализирани полета:"
 
-#: Controller/Lead.php:179
+#: Controller/Lead.php:182
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr "%s променени от %s на %s."
 
-#: Controller/Lead.php:185
+#: Controller/Lead.php:188
 #, python-format
 msgid "Lead %s has been changed"
 msgstr "Предложението е %s променено"
 
-#: Controller/Lead.php:187
+#: Controller/Lead.php:190
 #, python-format
 msgid "Lead %s has been creaded"
 msgstr "Предложението е %s готово"
@@ -155,31 +155,31 @@ msgstr "Телефон"
 msgid "Website"
 msgstr "вебсайт"
 
-#: Export/Ods.php:79 Export/Xls.php:51
+#: Export/Ods.php:81 Export/Xls.php:51
 #, fuzzy
 msgid "Lead Name"
 msgstr "Име на предложение"
 
-#: Export/Ods.php:84 Export/Xls.php:56 js/LeadEditDialog.js:424
+#: Export/Ods.php:86 Export/Xls.php:56 js/LeadEditDialog.js:424
 #: js/Product.js:141
 msgid "Description"
 msgstr "Описание"
 
-#: Export/Ods.php:99 Export/Xls.php:71
+#: Export/Ods.php:101 Export/Xls.php:71
 #, fuzzy
 msgid "Date Start"
 msgstr "Старт"
 
-#: Export/Ods.php:104 Export/Xls.php:76
+#: Export/Ods.php:106 Export/Xls.php:76
 msgid "Date End"
 msgstr ""
 
-#: Export/Ods.php:109 Export/Xls.php:81
+#: Export/Ods.php:111 Export/Xls.php:81
 #, fuzzy
 msgid "Date End Scheduled"
 msgstr "Краен срок"
 
-#: Export/Ods.php:114 Export/Xls.php:86
+#: Export/Ods.php:116 Export/Xls.php:86
 #, fuzzy
 msgid "Created By"
 msgstr "Осъвременено от"
@@ -466,26 +466,26 @@ msgstr "Добави задача"
 msgid "Add a Leadtype..."
 msgstr "Добави продукт"
 
-#: js/LinkGridPanel.js:29 js/LinkGridPanel.js:30
+#: js/LinkGridPanel.js:28 js/LinkGridPanel.js:29
 #, fuzzy
 msgid "Add new {0}"
 msgstr "Добави ново предложение"
 
-#: js/LinkGridPanel.js:48 js/Product.js:179
+#: js/LinkGridPanel.js:47 js/Product.js:183
 msgid "Unlink {0}"
 msgstr ""
 
-#: js/LinkGridPanel.js:49 js/Product.js:180
+#: js/LinkGridPanel.js:48 js/Product.js:184
 #, fuzzy
 msgid "Unlink selected {0}"
 msgstr "Прекъсни връзката към селектираните контакти"
 
-#: js/LinkGridPanel.js:64
+#: js/LinkGridPanel.js:63
 #, fuzzy
 msgid "Edit {0}"
 msgstr "Редактира предложение \"{0}\""
 
-#: js/LinkGridPanel.js:65
+#: js/LinkGridPanel.js:64
 #, fuzzy
 msgid "Edit selected {0}"
 msgstr "Редактирай селектирано предложение"
@@ -510,7 +510,7 @@ msgstr "Цена"
 msgid "Quantity"
 msgstr ""
 
-#: js/Product.js:210
+#: js/Product.js:214
 #, fuzzy
 msgid "Search for Products to add ..."
 msgstr "Търси да прибави контакти"

@@ -21,7 +21,7 @@ msgstr "организира списък на задачи"
 msgid "Create new shared tasks lists"
 msgstr "Състави нов списък на споделени задачи"
 
-#: Controller/Task.php:163
+#: Controller/Task.php:162
 msgid "Notification for Task "
 msgstr ""
 

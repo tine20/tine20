@@ -163,7 +163,7 @@ msgstr "Vis fra:"
 msgid "to:"
 msgstr "til:"
 
-#: js/Admin.js:444 js/Applications.js:145 js/Groups.js:153 js/Roles.js:149
+#: js/Admin.js:444 js/Applications.js:156 js/Groups.js:153 js/Roles.js:149
 #: js/Tags.js:140 js/Users.js:234
 msgid "Search:"
 msgstr "Søk:"
@@ -200,11 +200,11 @@ msgstr "Ingen tilgangs logg poster å vise"
 msgid "Session ID"
 msgstr "Sessjons ID"
 
-#: js/Admin.js:565 js/UserEditDialog.js:298
+#: js/Admin.js:565 js/UserEditDialog.js:297
 msgid "Login Name"
 msgstr "Logg inn Navn"
 
-#: js/Admin.js:566 js/Applications.js:220 js/Groups.js:203 js/Roles.js:201
+#: js/Admin.js:566 js/Applications.js:231 js/Groups.js:203 js/Roles.js:201
 #: js/SambaMachineGrid.js:90 js/Tags.js:187
 msgid "Name"
 msgstr "Navn"
@@ -229,51 +229,51 @@ msgstr "Konto ID"
 msgid "Result"
 msgstr "Resultat"
 
-#: js/Applications.js:29
+#: js/Applications.js:31
 msgid "{0} Settings"
 msgstr "{0} Instillinger"
 
-#: js/Applications.js:122
+#: js/Applications.js:133
 msgid "enable application"
 msgstr "aktiver program"
 
-#: js/Applications.js:123
+#: js/Applications.js:134
 msgid "disable application"
 msgstr "deaktiver program"
 
-#: js/Applications.js:124
+#: js/Applications.js:135
 msgid "settings"
 msgstr "instillinger"
 
-#: js/Applications.js:174 js/UserEditDialog.js:352
+#: js/Applications.js:185 js/UserEditDialog.js:351
 msgid "disabled"
 msgstr "deaktivert"
 
-#: js/Applications.js:177 js/UserEditDialog.js:352
+#: js/Applications.js:188 js/UserEditDialog.js:351
 msgid "enabled"
 msgstr "aktivert"
 
-#: js/Applications.js:181
+#: js/Applications.js:192
 msgid "unknown status ({0})"
 msgstr "ukjent status ({0})"
 
-#: js/Applications.js:209
+#: js/Applications.js:220
 msgid "Displaying application {0} - {1} of {2}"
 msgstr "Viser program {0} - {1} of {2}"
 
-#: js/Applications.js:210
+#: js/Applications.js:221
 msgid "No applications to display"
 msgstr "Ingen program å vise"
 
-#: js/Applications.js:219
+#: js/Applications.js:230
 msgid "Order"
 msgstr "Ordre"
 
-#: js/Applications.js:221 js/UserEditDialog.js:346 js/Users.js:294
+#: js/Applications.js:232 js/UserEditDialog.js:345 js/Users.js:294
 msgid "Status"
 msgstr "Status"
 
-#: js/Applications.js:222
+#: js/Applications.js:233
 msgid "Version"
 msgstr "Versjon"
 
@@ -550,207 +550,207 @@ msgstr "Legg til en videresendings adresse..."
 msgid "Password confirmation"
 msgstr "Passord bekreftelse"
 
-#: js/UserEditDialog.js:222
+#: js/UserEditDialog.js:221
 msgid "Repeat password"
 msgstr "Gjenta passord"
 
-#: js/UserEditDialog.js:234
+#: js/UserEditDialog.js:233
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: js/UserEditDialog.js:241
+#: js/UserEditDialog.js:240
 msgid "Ok"
 msgstr "Ok"
 
-#: js/UserEditDialog.js:267
+#: js/UserEditDialog.js:266
 msgid "Account"
 msgstr "Konto"
 
-#: js/UserEditDialog.js:282
+#: js/UserEditDialog.js:281
 msgid "First Name"
 msgstr "Fornavn"
 
-#: js/UserEditDialog.js:292
+#: js/UserEditDialog.js:291
 msgid "Last Name"
 msgstr "Etter Navn"
 
-#: js/UserEditDialog.js:303
+#: js/UserEditDialog.js:302
 msgid "Password"
 msgstr "Passord"
 
-#: js/UserEditDialog.js:307
+#: js/UserEditDialog.js:306
 msgid "no password set"
 msgstr "ingen passord er satt"
 
-#: js/UserEditDialog.js:328
+#: js/UserEditDialog.js:327
 msgid "Emailaddress"
 msgstr "Epost adresse"
 
-#: js/UserEditDialog.js:334 js/Users.js:300
+#: js/UserEditDialog.js:333 js/Users.js:300
 msgid "OpenID"
 msgstr "ÅpenID"
 
-#: js/UserEditDialog.js:340
+#: js/UserEditDialog.js:339
 msgid "Primary group"
 msgstr "Primær gruppe"
 
-#: js/UserEditDialog.js:352
+#: js/UserEditDialog.js:351
 msgid "expired"
 msgstr "Utgått"
 
-#: js/UserEditDialog.js:355 js/Users.js:304
+#: js/UserEditDialog.js:354 js/Users.js:304
 msgid "Expires"
 msgstr "Utgår"
 
-#: js/UserEditDialog.js:357 js/UserEditDialog.js:399 js/UserEditDialog.js:476
+#: js/UserEditDialog.js:356 js/UserEditDialog.js:398 js/UserEditDialog.js:475
 msgid "never"
 msgstr "aldri"
 
-#: js/UserEditDialog.js:362
+#: js/UserEditDialog.js:361
 msgid "Visibility"
 msgstr "Synlighet"
 
-#: js/UserEditDialog.js:368
+#: js/UserEditDialog.js:367
 msgid "Display in addressbook"
 msgstr "Vis i adressebok"
 
-#: js/UserEditDialog.js:368
+#: js/UserEditDialog.js:367
 msgid "Hide from addressbook"
 msgstr "Skjul fra adressebok"
 
-#: js/UserEditDialog.js:373
+#: js/UserEditDialog.js:372
 msgid "Information"
 msgstr "Informasjon"
 
-#: js/UserEditDialog.js:389 js/Users.js:301
+#: js/UserEditDialog.js:388 js/Users.js:301
 msgid "Last login at"
 msgstr "Siste logg inn kl"
 
-#: js/UserEditDialog.js:391 js/UserEditDialog.js:395
+#: js/UserEditDialog.js:390 js/UserEditDialog.js:394
 msgid "don't know"
 msgstr "vet ikke"
 
-#: js/UserEditDialog.js:391 js/UserEditDialog.js:395 js/UserEditDialog.js:456
+#: js/UserEditDialog.js:390 js/UserEditDialog.js:394 js/UserEditDialog.js:455
 msgid "never logged in"
 msgstr "aldri logget på"
 
-#: js/UserEditDialog.js:393 js/Users.js:302
+#: js/UserEditDialog.js:392 js/Users.js:302
 msgid "Last login from"
 msgstr "Siste logg inn fra"
 
-#: js/UserEditDialog.js:397
+#: js/UserEditDialog.js:396
 msgid "Password set"
 msgstr "Passord satt"
 
-#: js/UserEditDialog.js:405
+#: js/UserEditDialog.js:404
 msgid "Fileserver"
 msgstr "Fil server"
 
-#: js/UserEditDialog.js:410
+#: js/UserEditDialog.js:409
 msgid "Unix"
 msgstr "Unix"
 
-#: js/UserEditDialog.js:425
+#: js/UserEditDialog.js:424
 msgid "Home Directory"
 msgstr "Hjemme Mappe"
 
-#: js/UserEditDialog.js:429
+#: js/UserEditDialog.js:428
 msgid "Login Shell"
 msgstr "Logg inn skall"
 
-#: js/UserEditDialog.js:434
+#: js/UserEditDialog.js:433
 msgid "Windows"
 msgstr "Windows"
 
-#: js/UserEditDialog.js:449
+#: js/UserEditDialog.js:448
 msgid "Home Drive"
 msgstr "Hjemme Stasjon"
 
-#: js/UserEditDialog.js:454
+#: js/UserEditDialog.js:453
 msgid "Logon Time"
 msgstr "Logg in Tid"
 
-#: js/UserEditDialog.js:459
+#: js/UserEditDialog.js:458
 msgid "Home Path"
 msgstr "Hjemme Sti"
 
-#: js/UserEditDialog.js:464
+#: js/UserEditDialog.js:463
 msgid "Logoff Time"
 msgstr "Logg av Tid"
 
-#: js/UserEditDialog.js:466
+#: js/UserEditDialog.js:465
 msgid "never logged off"
 msgstr "aldri logget av"
 
-#: js/UserEditDialog.js:469
+#: js/UserEditDialog.js:468
 msgid "Profile Path"
 msgstr "Profil Sti"
 
-#: js/UserEditDialog.js:474
+#: js/UserEditDialog.js:473
 msgid "Password Last Set"
 msgstr "Passord Sist Satt"
 
-#: js/UserEditDialog.js:479
+#: js/UserEditDialog.js:478
 msgid "Logon Script"
 msgstr "Logg inn Skript"
 
-#: js/UserEditDialog.js:483
+#: js/UserEditDialog.js:482
 msgid "Password Can Change"
 msgstr "Passord Kan Endres"
 
-#: js/UserEditDialog.js:485 js/UserEditDialog.js:489 js/UserEditDialog.js:493
+#: js/UserEditDialog.js:484 js/UserEditDialog.js:488 js/UserEditDialog.js:492
 msgid "not set"
 msgstr "ikke satt"
 
-#: js/UserEditDialog.js:487
+#: js/UserEditDialog.js:486
 msgid "Password Must Change"
 msgstr "Passord Må Endres"
 
-#: js/UserEditDialog.js:491
+#: js/UserEditDialog.js:490
 msgid "Kick Off Time"
 msgstr "Utkastelses Tid"
 
-#: js/UserEditDialog.js:498
+#: js/UserEditDialog.js:497
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/UserEditDialog.js:512
+#: js/UserEditDialog.js:511
 msgid "Email UID"
 msgstr "E-post UID"
 
-#: js/UserEditDialog.js:516
+#: js/UserEditDialog.js:515
 msgid "Email GID"
 msgstr "E-post GID"
 
-#: js/UserEditDialog.js:520
+#: js/UserEditDialog.js:519
 msgid "Email Username"
 msgstr "E-post Brukernavn"
 
-#: js/UserEditDialog.js:524
+#: js/UserEditDialog.js:523
 msgid "Quota"
 msgstr "Kvote"
 
-#: js/UserEditDialog.js:530
+#: js/UserEditDialog.js:529
 msgid "Current Mail Size"
 msgstr "Gjeldende E-post Størrelse"
 
-#: js/UserEditDialog.js:535
+#: js/UserEditDialog.js:534
 msgid "Sieve Quota"
 msgstr "Sieve Kvote"
 
-#: js/UserEditDialog.js:540
+#: js/UserEditDialog.js:539
 msgid "Current Sieve Size"
 msgstr "Gjeldende Sieve Størrelse"
 
-#: js/UserEditDialog.js:545
+#: js/UserEditDialog.js:544
 msgid "Last Login"
 msgstr "Siste logg inn"
 
-#: js/UserEditDialog.js:550
+#: js/UserEditDialog.js:549
 msgid "SMTP"
 msgstr "SMTP"
 
-#: js/UserEditDialog.js:566
+#: js/UserEditDialog.js:565
 msgid "Forward Only"
 msgstr "Kun Videresending"
 

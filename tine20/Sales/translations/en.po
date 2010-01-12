@@ -110,7 +110,7 @@ msgstr "All Products"
 msgid "Contracts"
 msgstr "Contracts"
 
-#: js/Sales.js:109
+#: js/Sales.js:109 js/Sales.js:144
 msgid "All Contracts"
 msgstr "All Contracts"
 
