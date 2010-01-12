@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-06 15:30+0100\n"
+"PO-Revision-Date: 2009-12-26 20:27+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -425,7 +425,7 @@ msgstr "Zawiera nieprzeczytane wiadomości"
 
 #: js/FelamimailTreePanel.js:234 js/FelamimailTreePanel.js:371
 msgid "Update {0} Cache"
-msgstr ""
+msgstr "Aktualizuj pamięć podręczną: {0}"
 
 #: js/FelamimailTreePanel.js:234 js/Models.js:43
 msgid "Message"

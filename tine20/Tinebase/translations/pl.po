@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-13 14:18+0100\n"
+"PO-Revision-Date: 2009-12-26 21:36+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -719,7 +719,7 @@ msgstr "Edytuj {0}"
 
 #: js/widgets/app/GridPanel.js:293
 msgid "Copy {0}"
-msgstr ""
+msgstr "Kopiuj {0}"
 
 #: js/widgets/app/GridPanel.js:304 js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
@@ -793,7 +793,7 @@ msgstr "filtry"
 #: js/widgets/container/ContainerSelect.js:123
 #: js/widgets/container/ContainerSelect.js:221
 msgid "choose other {0}..."
-msgstr "wybierz inny {0}..."
+msgstr "wybierz z: {0}..."
 
 #: js/widgets/container/ContainerSelect.js:124
 msgid "Recently used {0}:"

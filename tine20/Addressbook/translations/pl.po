@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-13 13:44+0100\n"
+"PO-Revision-Date: 2009-12-26 21:31+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "%s's osobista książka adresowa"
 
 #: Export/Pdf.php:38
 msgid "Business Contact Data"
-msgstr "Firmowe dane kontaktowe"
+msgstr "Dane kontaktowe firmy"
 
 #: Export/Pdf.php:40
 msgid "Organisation / Unit"
@@ -41,7 +41,7 @@ msgstr "Organizacja / Jednostka"
 
 #: Export/Pdf.php:45
 msgid "Business Address"
-msgstr "Adres frimowy"
+msgstr "Adres firmowy"
 
 #: Export/Pdf.php:53 js/ContactGrid.js:145
 msgid "Email"
@@ -263,7 +263,7 @@ msgstr "Dopełnienie nazwiska (Sufix)"
 # Ich denke, es waere besser, wenn wir die Pluralform "Informacje" anstatt von "Informacja" verwenden.
 #: js/ContactEditDialog.js:165 js/EditDialog.js:536
 msgid "Contact Information"
-msgstr "Informacje o kontakcie"
+msgstr "Informacje kontaktowe"
 
 #: js/ContactEditDialog.js:173 js/ContactGrid.js:147
 #: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-06 15:23+0100\n"
+"PO-Revision-Date: 2009-12-26 21:57+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -47,7 +47,7 @@ msgstr "Źródło"
 #: Controller/Lead.php:174 Export/Pdf.php:94 js/LeadEditDialog.js:387
 #: js/LeadGridDetailsPanel.js:455
 msgid "Start"
-msgstr "Start"
+msgstr "Początek"
 
 #: Controller/Lead.php:175
 msgid "Scheduled end"
@@ -167,7 +167,7 @@ msgstr "Opis"
 
 #: Export/Ods.php:101 Export/Xls.php:71
 msgid "Date Start"
-msgstr "Data otrzymania"
+msgstr "Data zgłoszenia"
 
 #: Export/Ods.php:106 Export/Xls.php:76
 msgid "Date End"
@@ -188,7 +188,7 @@ msgstr "Dane dot. zapytania"
 #: Export/Pdf.php:79 Export/Xls.php:106 js/AdminPanel.js:169
 #: js/LeadEditDialog.js:329 js/LeadGridPanel.js:103 js/LeadGridPanel.js:146
 msgid "Leadstate"
-msgstr "Stan zapytania"
+msgstr "Status zapytania"
 
 #: Export/Pdf.php:82 Export/Xls.php:114 js/AdminPanel.js:183
 #: js/LeadEditDialog.js:348 js/LeadGridDetailsPanel.js:465
@@ -275,11 +275,11 @@ msgstr "Historia"
 #: js/AdminPanel.js:134 js/LeadGridDetailsPanel.js:218
 #: js/LeadGridDetailsPanel.js:250
 msgid "Leadstates"
-msgstr "Status zapytania"
+msgstr "Status zapytań"
 
 #: js/AdminPanel.js:138 js/LeadGridDetailsPanel.js:240
 msgid "Leadtypes"
-msgstr "Typy zapytania"
+msgstr "Typy zapytań"
 
 #: js/AdminPanel.js:142 js/LeadGridDetailsPanel.js:229
 msgid "Leadsources"
@@ -451,7 +451,7 @@ msgstr "Dodaj typ zapytania..."
 
 #: js/LinkGridPanel.js:28 js/LinkGridPanel.js:29
 msgid "Add new {0}"
-msgstr "Dodaj nowe {0}"
+msgstr "Dodaj nowy {0}"
 
 #: js/LinkGridPanel.js:47 js/Product.js:183
 msgid "Unlink {0}"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-11-22 16:41+0100\n"
+"PO-Revision-Date: 2009-12-26 20:32+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -379,12 +379,12 @@ msgstr "czas rozmowy m."
 msgid "attach"
 msgstr "załącznik"
 
-# I think, CID is a caller id, so the whole phrase could be translated as "ID rozmówcy"
+# I think, CID is a caller id, so the whole phrase could be translated as "ID rozmowy"
 #: js/Asterisk/VoicemailEditDialog.js:151
 #: js/Asterisk/VoicemailGridPanel.js:120
 #, fuzzy
 msgid "saycid"
-msgstr "Rozmowa CID"
+msgstr "ID rozmowy"
 
 #: js/Asterisk/VoicemailEditDialog.js:155
 #: js/Asterisk/VoicemailGridPanel.js:141

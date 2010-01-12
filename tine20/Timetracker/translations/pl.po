@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-11-22 16:26+0100\n"
+"PO-Revision-Date: 2009-12-26 21:23+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -37,7 +37,7 @@ msgstr "Nie gotowe do przeliczenia"
 #: js/TimesheetEditDialog.js:193 js/TimesheetGridPanel.js:74
 #: js/TimesheetGridPanel.js:218 js/TimesheetGridPanel.js:250
 msgid "Billable"
-msgstr "Gotowe do przeliczenia"
+msgstr "Do przeliczenia"
 
 #: Export/Ods.php:181
 msgid "Total"
@@ -138,7 +138,7 @@ msgstr[2] "listy kart godzin"
 #: js/TimesheetEditDialog.js:137 js/TimesheetGridPanel.js:245
 msgid "Time Account"
 msgid_plural "Time Accounts"
-msgstr[0] "konto godzin"
+msgstr[0] "Konto godzin"
 msgstr[1] "konta godzin"
 msgstr[2] "konta godzin"
 
@@ -287,7 +287,7 @@ msgstr "Wyszukiwanie..."
 
 #: js/TimesheetEditDialog.js:157
 msgid "Start"
-msgstr "Start"
+msgstr "Początek"
 
 #: js/TimesheetEditDialog.js:158
 msgid "not set"
@@ -348,7 +348,7 @@ msgstr "Czas rozpoczęcia"
 
 #: js/TimesheetGridPanel.js:247
 msgid "Time Account closed"
-msgstr "Data zamknięcia konta godzin"
+msgstr "Konto godzin zamknięte"
 
 #: js/TimesheetGridPanel.js:259
 msgid "Creation Time"
@@ -372,7 +372,7 @@ msgstr "Wszystkie karty godzin"
 
 #: js/TimesheetGridPanel.js:340
 msgid "Billable Timesheets"
-msgstr "Karty godzin gotowe do przeliczenia"
+msgstr "Ilość kart godzin gotowych do przeliczenia"
 
 #: js/TimesheetGridPanel.js:341
 msgid "Total Time"
@@ -380,7 +380,7 @@ msgstr "Łączny czas"
 
 #: js/TimesheetGridPanel.js:342
 msgid "Time of Billable Timesheets"
-msgstr "Łączny czas z przeliczalnych kart godzin"
+msgstr "Czas z kart godzin gotowych do przeliczenia"
 
 #: js/TimesheetGridPanel.js:413
 msgid "Detail"
