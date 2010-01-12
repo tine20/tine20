@@ -68,7 +68,7 @@ class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Backend_Sql_Abstract
     protected function _recordToRawData($_record)
     {
         // special handling, convert to UNIX timestamp
-        if($_record['regseconds'] instanceof Zend_Date) {
+        if(isset($_record['regseconds']) && $_record['regseconds'] instanceof Zend_Date) {
             $_record['regseconds'] = $_record['regseconds']->getTimestamp();
         }
         $result = parent::_recordToRawData($_record);
