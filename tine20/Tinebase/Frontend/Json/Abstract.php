@@ -223,7 +223,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _recordToJson($_record)
     {
-        $_record->setTimezone(Tinebase_Core::get('userTimeZone'));
+        $_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_record->bypassFilters = true;
         
         $recordArray = $_record->toArray();
