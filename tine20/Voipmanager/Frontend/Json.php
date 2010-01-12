@@ -663,7 +663,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * update multiple records
      *
      * @param string $id record id
-     * @param array $data json encoded key/value pairs 
+     * @param array $data key/value pairs to update 
      * @return updated record
      */
     public function updatePropertiesAsteriskSipPeer($id, $data)
@@ -671,7 +671,6 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_updateProperties($id, $data, Voipmanager_Controller_Asterisk_SipPeer::getInstance());
     }
     
-
     /**
      * delete multiple asterisk sip peers
      *
