@@ -313,5 +313,25 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
         $this->_backend->dropCol('asterisk_sip_peers', 'context');
         
         $this->setApplicationVersion('Voipmanager', '2.6');
-    }    
+    }
+        
+    /**
+     * add index for sip_peers.name
+     */
+    public function update_6()
+    {        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>name</name>
+                <unique>true</unique>
+                <field>
+                    <name>name</name>
+                </field>
+            </index>
+        ');
+        $this->_backend->addIndex('asterisk_sip_peers', $declaration);
+        
+        $this->setApplicationVersion('Voipmanager', '2.7');
+    }
+        
 }

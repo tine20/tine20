@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>2.6</version>
+    <version>2.7</version>
     <order>50</order>
     <depends>
         <application>Admin</application>
@@ -765,6 +765,13 @@
                     <primary>true</primary>
                     <field>
                         <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>name</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>name</name>
                     </field>
                 </index>
                 <index>
