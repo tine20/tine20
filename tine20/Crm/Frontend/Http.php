@@ -67,6 +67,7 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 	public function exportLead($_filter, $_format = 'pdf')
 	{
         $filter = new Crm_Model_LeadFilter(Zend_Json::decode($_filter));
+        $filter->createFilter('showClosed', '', TRUE);
 	    parent::_export($filter, $_format, Crm_Controller_Lead::getInstance());
 	}    
 }
