@@ -1,0 +1,21 @@
+
+
+
+                    TINE 2.0 RELEASENOTES
+                    
+Release:    2010-03
+Date:       $LastChangedDate: $
+
+
+Contents
+--
+1. ODS export configs moved to import_export_definitions table
+2. ....
+
+
+--------------------------------------------------------------
+1. ODS export configs moved to import_export_definitions table
+
+You need to transfer your custom definitions (formerly saved in config.inc.php) 
+into xml format and save them in the import_export_definitions table. You can look 
+at the default definitions to see how that is done.
