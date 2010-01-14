@@ -55,4 +55,55 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '3.2');
     }    
+    
+    /**
+     * update to 3.3
+     * - change key of import export definitions table
+     */
+    public function update_2()
+    {
+        // we need to drop the foreign key first
+        $this->_backend->dropForeignKey('importexport_definition', 'importexport_definitions::app_id--applications::id');
+        $declaration = new Setup_Backend_Schema_Index_Xml('<field>
+                <name>type</name>
+                <type>text</type>
+                <length>20</length>
+                <default>import</default>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('importexport_definition', $declaration);
+        
+        $this->_backend->dropIndex('importexport_definition', 'application_id-name-type');
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                    <name>model-name-type</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>model</name>
+                    </field>
+                    <field>
+                        <name>name</name>
+                    </field>
+                    <field>
+                        <name>type</name>
+                    </field>
+                </index>
+        ');
+        $this->_backend->addIndex('importexport_definition', $declaration); 
+        $this->_backend->addForeignKey('importexport_definition', new Setup_Backend_Schema_Index_Xml('<index>
+                <name>importexport_definitions::app_id--applications::id</name>
+                <field>
+                    <name>application_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>applications</table>
+                    <field>id</field>
+                </reference>
+            </index>')
+        );
+        
+        $this->setTableVersion('importexport_definition', '3');
+        $this->setApplicationVersion('Tinebase', '3.3');
+    }
 }
