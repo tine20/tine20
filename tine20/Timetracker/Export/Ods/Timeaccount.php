@@ -19,6 +19,13 @@
 class Timetracker_Export_Ods_Timeaccount extends Tinebase_Export_Ods
 {
     /**
+     * default export definition name
+     * 
+     * @var string
+     */
+    protected $_defaultExportname = 'ta_default_ods';
+        
+    /**
      * @var string application of this export class
      */
     protected $_applicationName = 'Timetracker';

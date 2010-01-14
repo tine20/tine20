@@ -22,9 +22,10 @@ abstract class Tinebase_Export_Abstract
 {
     /**
      * default export definition name
-     *
+     * 
+     * @var string
      */
-    const DEFAULTEXPORTNAME = 'default';
+    protected $_defaultExportname = 'default';
         
     /**
      * the record controller
@@ -144,9 +145,9 @@ abstract class Tinebase_Export_Abstract
             
         } else {
             // get preference from db and set export definition name
-            $exportName = self::DEFAULTEXPORTNAME;
+            $exportName = $this->_defaultExportname;
             if ($this->_prefKey !== NULL) {
-                $exportName = Tinebase_Core::getPreference($this->_applicationName)->getValue($this->_prefKey, self::DEFAULTEXPORTNAME);
+                $exportName = Tinebase_Core::getPreference($this->_applicationName)->getValue($this->_prefKey, $exportName);
             }
             
             // get export definition by name / model

@@ -52,73 +52,10 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Ods
     public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         $this->_prefKey = Timetracker_Preference::TSODSEXPORTCONFIG;
+        $this->_defaultExportname = 'ts_default_ods';
         
         parent::__construct($_filter, $_controller, $_additionalOptions);
     }
-    
-    /**
-     * export timesheets to Ods file
-     *
-     * @param Timetracker_Model_TimesheetFilter $_filter
-     * @return string filename
-     */
-    /*
-    public function exportTimesheets(Timetracker_Model_TimesheetFilter $_filter) {
-        
-        // get timesheets by filter
-        $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($_filter, new Tinebase_Model_Pagination(array(
-            'sort'  => 'start_date',
-            'dir'   => 'DESC'
-        )));
-        $lastCell = count($timesheets) + $this->_firstRow - 1;
-        
-        // resolve timeaccounts
-        $timeaccountIds = $timesheets->timeaccount_id;
-        $this->_resolvedRecords['timeaccounts'] = Timetracker_Controller_Timeaccount::getInstance()->getMultiple(array_unique(array_values($timeaccountIds)));
-        
-        Tinebase_User::getInstance()->resolveMultipleUsers($timesheets, 'account_id', true);
-        
-        // build export table (use current table if using template)
-        $table = $this->_openDocumentObject->getBody()->appendTable('Timesheets');
-        $this->_addHead($table, $this->_config['timesheets']);
-        $this->_addBody($table, $timesheets, $this->_config['timesheets']);
-        $this->_addFooter($table, $lastCell);
-        
-        // add overview table
-        $this->_addOverviewTable($lastCell);
-        
-        // create file
-        $filename = $this->_openDocumentObject->getDocument();        
-        return $filename;
-    }
-    */
-    
-    /**
-     * export timeaccounts to Ods file
-     *
-     * @param Timetracker_Model_TimeaccountFilter $_filter
-     * @return string filename
-     */
-    /*
-    public function exportTimeaccounts(Timetracker_Model_TimeaccountFilter $_filter) {
-        
-        // get $timeaccounts by filter
-        $timeaccounts = Timetracker_Controller_Timeaccount::getInstance()->search($_filter);
-        $lastCell = count($timeaccounts) + $this->_firstRow - 1;
-        
-        Tinebase_User::getInstance()->resolveMultipleUsers($timeaccounts, 'created_by', true);
-        
-        // build export table
-        $table = $this->_openDocumentObject->getBody()->appendTable($this->_translate->_('Timesheets'));        
-        $this->_addHead($table, $this->_config['timeaccounts']);
-        $this->_addBody($table, $timeaccounts, $this->_config['timeaccounts']);
-        //$this->_addFooter($table, $lastCell);
-        
-        // create file
-        $filename = $this->_openDocumentObject->getDocument();        
-        return $filename;
-    }
-    */
     
     /**
      * resolve records

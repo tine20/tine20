@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <model>Timetracker_Model_Timeaccount</model>
-    <name>default</name>
+    <name>ta_default_ods</name>
     <type>export</type>
     <plugin>Timetracker_Export_Ods_Timeaccount</plugin>
     <description>default ods timeaccount export definition</description>
