@@ -497,8 +497,10 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
         
         // export & check
-        $odsExportClass = new Timetracker_Export_Ods();
-        $result = $odsExportClass->generate(new Timetracker_Model_TimeaccountFilter($this->_getTimeaccountFilter()));
+        $odsExportClass = Tinebase_Export::factory(new Timetracker_Model_TimeaccountFilter($this->_getTimeaccountFilter())
+            , 'ods', NULL, array('definitionFilename' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'definitions/ta_default_ods.xml')
+        );
+        $result = $odsExportClass->generate();
         
         $this->assertTrue(file_exists($result));
         
@@ -506,8 +508,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         //echo  $xmlBody;
         //$this->assertEquals(1, preg_match("/0.5/", $xmlBody), 'no duration'); 
         $this->assertEquals(1, preg_match("/". $timeaccountData['description'] ."/", $xmlBody), 'no description'); 
-        $translate = Tinebase_Translation::getTranslation('Timetracker'); 
-        $this->assertEquals(1, preg_match("/". $translate->_('Description') ."/", $xmlBody), 'no headline'); 
+        $this->assertEquals(1, preg_match("/". 'Description' ."/", $xmlBody), 'no headline'); 
         
         // cleanup / delete file
         unlink($result);
