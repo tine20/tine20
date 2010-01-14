@@ -18,36 +18,29 @@
  * @package     Timetracker
  * @subpackage  Backend
  */
-class Tinebase_ImportExportDefinition
+class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstract
 {
-    /**
-     * @var Tinebase_Backend_Sql
-     */
-    protected $_backend;
-    
-    /**
-     * Model name
-     *
-     * @var string
-     */
-    protected $_modelName = 'Tinebase_Model_ImportExportDefinition';
-
     /**
      * holds the instance of the singleton
      *
      * @var Tinebase_ImportExportDefinition
      */
     private static $_instance = NULL;
-    
+        
     /**
      * the constructor
      *
+     * don't use the constructor. use the singleton 
      */
-    private function __construct()
-    {
+    private function __construct() {        
+        $this->_modelName = 'Tinebase_Model_ImportExportDefinition';
+        $this->_applicationName = 'Tinebase';
+        $this->_purgeRecords = FALSE;
+
         // set backend with activated modlog
         $this->_backend = new Tinebase_Backend_Sql($this->_modelName, 'importexport_definition', NULL, NULL, TRUE);
-    }
+        $this->_currentAccount = Tinebase_Core::getUser();   
+    }    
     
     /**
      * the singleton pattern
@@ -67,21 +60,12 @@ class Tinebase_ImportExportDefinition
      * 
      * @param string $_name
      * @return Tinebase_Model_ImportExportDefinition
+     * 
+     * @todo replace this with search function
      */
     public function getByName($_name)
     {
         return $this->_backend->getByProperty($_name);
-    }
-    
-    /**
-     * Creates new entry
-     *
-     * @param   Tinebase_Model_ImportExportDefinition $_record
-     * @return  Tinebase_Model_ImportExportDefinition
-     */
-    public function create(Tinebase_Model_ImportExportDefinition $_record) 
-    {
-        return $this->_backend->create($_record);
     }
     
     /**
