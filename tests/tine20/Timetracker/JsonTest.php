@@ -468,7 +468,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testExportTimesheetsOds()
     {
-        Tinebase_Core::getPreference('Timetracker')->setValue(Timetracker_Preference::TSODSEXPORTCONFIG, 'default');
+        Tinebase_Core::getPreference('Timetracker')->setValue(Timetracker_Preference::TSODSEXPORTCONFIG, 'ts_default_ods');
         $this->_exportTsOds();
     }
 
@@ -480,8 +480,8 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testExportTimesheetsOdsWithTemplate()
     {
-        //Tinebase_Core::getPreference('Timetracker')->setValue(Timetracker_Preference::TSODSEXPORTCONFIG, 'template');
-        //$this->_exportTsOds();
+        Tinebase_Core::getPreference('Timetracker')->setValue(Timetracker_Preference::TSODSEXPORTCONFIG, 'ts_template_ods');
+        $this->_exportTsOds();
     }
     
     /**
@@ -497,9 +497,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
         
         // export & check
-        $odsExportClass = Tinebase_Export::factory(new Timetracker_Model_TimeaccountFilter($this->_getTimeaccountFilter())
-            , 'ods', NULL, array('definitionFilename' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'definitions/ta_default_ods.xml')
-        );
+        $odsExportClass = Tinebase_Export::factory(new Timetracker_Model_TimeaccountFilter($this->_getTimeaccountFilter()), 'ods');
         $result = $odsExportClass->generate();
         
         $this->assertTrue(file_exists($result));
@@ -862,10 +860,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
         
         // export & check
-        $odsExportClass = Tinebase_Export::factory(
-            new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()), 
-            'ods', NULL, array('definitionFilename' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'definitions/ts_default_ods.xml')
-        );
+        $odsExportClass = Tinebase_Export::factory(new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()), 'ods');
         $result = $odsExportClass->generate();
         
         $this->assertTrue(file_exists($result));
