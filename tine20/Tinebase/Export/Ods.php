@@ -6,20 +6,17 @@
  * @subpackage	Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- * 
- * @todo        move configs to importexport definitions
  */
 
 /**
- * Timetracker Ods generation class
+ * Tinebase Ods generation class
  * 
  * @package     Tinebase
  * @subpackage	Export
- * 
  */
-class Tinebase_Export_Ods
+class Tinebase_Export_Ods extends Tinebase_Export_Abstract
 {
     /**
      * user styles
@@ -90,22 +87,9 @@ class Tinebase_Export_Ods
         );
     
     /**
-     * translation object
-     *
-     * @var Zend_Translate
-     */
-    protected $_translate;
-    
-    /**
-     * export config array
-     *
-     * @var array
-     */
-    protected $_config = array();
-    
-    /**
      * first row of body (records)
-     *
+     * 
+     * @var integer
      */
     protected $_firstRow = 4;
     
@@ -117,11 +101,6 @@ class Tinebase_Export_Ods
     protected $_specialFields = array();
     
     /**
-     * @var string application of this filter group
-     */
-    protected $_applicationName = 'Tinebase';
-    
-    /**
      * the opendocument object
      * 
      * @var OpenDocument_Document
@@ -129,15 +108,41 @@ class Tinebase_Export_Ods
     protected $_openDocumentObject = NULL;
     
     /**
-     * the constructor
-     *
+     * generate export
+     * 
+     * @return string filename
      */
-    public function __construct()
+    public function generate()
     {
-        //parent::__construct(OpenDocument_Document::SPREADSHEET, NULL, Tinebase_Core::getTempDir());
+        // check for template file
+        $templateFile = $this->_config->get('template', NULL);
+        if ($templateFile !== NULL) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Using template file "' . $templateFile . '" for ' . $this->_modelName . ' export.');
+        }
+                        
+        $this->_openDocumentObject = new OpenDocument_Document(OpenDocument_Document::SPREADSHEET, $templateFile, Tinebase_Core::getTempDir());
         
-        $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
-        $this->_config = $this->_getExportConfig();
+        // get records by filter
+        $pagination = (! empty($this->_sortInfo)) ? new Tinebase_Model_Pagination($this->_sortInfo) : NULL;
+        $records = $this->_controller->search($this->_filter, $pagination);
+        $lastCell = count($records) + $this->_firstRow - 1;
+        
+        // resolve stuff
+        $this->_resolveRecords($records);
+        
+        // build export table (use current table if using template)
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating export for ' . $this->_modelName . '.');
+        $table = $this->_openDocumentObject->getBody()->appendTable($this->_translate->_('Data'));
+        $this->_addHead($table);
+        $this->_addBody($table, $records);
+        $this->_addFooter($table, $lastCell);
+        
+        // add overview table
+        $this->_addOverviewTable($lastCell);
+        
+        // create file
+        $result = $this->_openDocumentObject->getDocument();        
+        return $result;
     }
     
     /**
@@ -154,22 +159,19 @@ class Tinebase_Export_Ods
      * add ods head (headline, column styles)
      *
      * @param OpenDocument_SpreadSheet_Table $table
-     * @param array $_config
      * 
      * @todo add filters/replacements again?
-     * param Timetracker_Model_TimesheetFilter $_filter
-     * param Tinebase_Record_RecordSet $timeaccounts
      */
-    protected function _addHead($table, $_config/*, $_filter, $timeaccounts*/)
+    protected function _addHead($table)
     {
         $columnId = 0;
-        foreach($_config['fields'] as $field) {
+        foreach($this->_config->columns->column as $field) {
             $column = $table->appendColumn();
             $column->setStyle('co' . $columnId);
-            if($field['type'] == 'date') {
+            if($field->type == 'date') {
                 $column->setDefaultCellStyle('ceShortDate');
             }
-            $this->_addColumnStyle('co' . $columnId, $field['width']);
+            $this->_addColumnStyle('co' . $columnId, $field->width);
             
             $columnId++;
         }
@@ -177,7 +179,7 @@ class Tinebase_Export_Ods
         $row = $table->appendRow();
         
         // add header (replace placeholders)
-        if (isset($_config['header'])) {
+        if (isset($this->_config->headers)) {
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
             
             $locale = Tinebase_Core::get('locale');
@@ -213,7 +215,7 @@ class Tinebase_Export_Ods
                 //$this->_translate->_('Filter') . ': ' . implode(', ', $filters)
             );
             
-            foreach($_config['header'] as $headerCell) {
+            foreach($this->_config->headers->header as $headerCell) {
                 // replace data
                 $value = preg_replace($patterns, $replacements, $headerCell);
                 $cell = $row->appendCell('string', $value);                
@@ -224,8 +226,8 @@ class Tinebase_Export_Ods
         
         // add table headline
         $row = $table->appendRow();
-        foreach($_config['fields'] as $field) {
-            $cell = $row->appendCell('string', $field['header']);
+        foreach($this->_config->columns->column as $field) {
+            $cell = $row->appendCell('string', $field->header);
             $cell->setStyle('ceHeader');
         }
     }
@@ -237,9 +239,9 @@ class Tinebase_Export_Ods
      * @param Tinebase_Record_RecordSet $records
      * @param array 
      */
-    protected function _addBody($table, $_records, $_config)
+    protected function _addBody($table, $_records)
     {
-        if (isset($_config['customFields']) && $_config['customFields']) {
+        if (isset($this->_config->customFields) && $this->_config->customFields) {
             // we need the sql backend if the export contains custom fields
             // @todo remove that when getMultiple() fetches the custom fields as well
             $recordBackend = new Timetracker_Backend_Timesheet();
@@ -251,9 +253,9 @@ class Tinebase_Export_Ods
         $i = 0;
         foreach ($_records as $record) {
             
-            // check if we need to get the complete timesheet with custom fields
+            // check if we need to get the complete record with custom fields
             // @todo remove that when getMultiple() fetches the custom fields as well
-            if (isset($_config['customFields']) && $_config['customFields']) {
+            if (isset($this->_config->customFields) && $this->_config->customFields) {
                 $record = $recordBackend->get($record->getId());
                 Tinebase_User::getInstance()->resolveUsers($record, 'account_id');
             }
@@ -262,21 +264,21 @@ class Tinebase_Export_Ods
             
             $row = $table->appendRow();
 
-            foreach ($_config['fields'] as $key => $params) {
+            foreach ($this->_config->columns->column as $field) {
                 
                 $altStyle = 'ceAlternate';
-                $type = $params['type'];
+                $type = $field->type;
                 
-                switch($params['type']) {
+                switch($field->type) {
                     case 'datetime':
                         // @todo add another style for datetime fields?
-                        $value = ($record->$key) ? $record->$key->toString(Zend_Locale_Format::getDateFormat($locale), $locale) : '';
+                        $value = ($record->{$field->identifier}) ? $record->{$field->identifier}->toString(Zend_Locale_Format::getDateFormat($locale), $locale) : '';
                         $altStyle = 'ceAlternateCentered';
                         //$type = 'date';
                         $type = 'string';
                         break;
                     case 'date':
-                        $value = $record->$key;
+                        $value = $record->{$field->identifier};
                         $altStyle = 'ceAlternateCentered';
                         break;
                     case 'tags':
@@ -285,35 +287,35 @@ class Tinebase_Export_Ods
                         $type = 'string';
                         break;
                     default:
-                        if (isset($params['custom']) && $params['custom']) {
+                        if (isset($field->custom) && $field->custom) {
                             // add custom fields
-                            if (isset($record->customfields[$key])) {
-                                $value = $record->customfields[$key];
+                            if (isset($record->customfields[$field->identifier])) {
+                                $value = $record->customfields[$field->identifier];
                             } else {
                                 $value = '';
                             }
                             
-                        } elseif (isset($params['divisor'])) {
+                        } elseif (isset($field->divisor)) {
                             // divisor
-                            $value = $record->$key / $params['divisor'];
+                            $value = $record->{$field->identifier} / $field->divisor;
 
-                        } elseif (in_array($params['type'], $this->_specialFields)) {
+                        } elseif (in_array($field->type, $this->_specialFields)) {
                             // special fields
-                            $value = $this->_getSpecialFieldValue($record, $params, $key);
+                            $value = $this->_getSpecialFieldValue($record, $field->toArray(), $field->identifier);
                             $type = 'string';
                         
                         } else {
                             // all remaining
-                            $value = $record->$key;
+                            $value = $record->{$field->identifier};
                         }
                         
                         // set special value from params
-                        if (isset($params['values']) && isset($params['values'][$value])) {
-                            $value = $params['values'][$value];
+                        if (isset($params->values) && isset($params->values[$value])) {
+                            $value = $params->values[$value];
                         }
                         
                         // translate strings
-                        if (isset($params['translate']) && $params['translate'] && $type === 'string') {
+                        if (isset($params->translate) && $params->translate && $type === 'string') {
                             $value = $this->_translate->_($value);
                         }
                         
@@ -321,20 +323,20 @@ class Tinebase_Export_Ods
                 }
                 
                 // check for replacements
-                if (isset($params['replace'])) {
-                    $value = preg_replace($params['replace']['pattern'], $params['replace']['replacement'], $value);
+                if (isset($params->replace)) {
+                    $value = preg_replace($params->replace->pattern, $params->replace->replacement, $value);
                 }
 
                 // check for matches
-                if (isset($params['match'])) {
-                    preg_match($params['match'], $value, $matches);
+                if (isset($params->match)) {
+                    preg_match($params->match, $value, $matches);
                     $value = (isset($matches[1])) ? $matches[1] : '';
                 }
                 
                 // create cell with type and value and add style
                 $cell = $row->appendCell($type, $value);
 
-                if (isset($params['number']) && $params['number']) {
+                if (isset($params->number) && $params->number) {
                     $cell->setStyle('numberStyle');
                     $altStyle = 'numberStyleAlternate';
                 }
@@ -368,29 +370,7 @@ class Tinebase_Export_Ods
     {
     }
     
-    /**
-     * get export config
-     *
-     * @return array
-     */
-    protected function _getExportConfig()
-    {
-        return array();
-    }
 
-    /**
-     * get special field value
-     *
-     * @param Tinebase_Record_Interface $_record
-     * @param array $_param
-     * @param string || null $key [may be used by child methods e.g. {@see Timetracker_Export_Ods::_getSpecialFieldValue)]
-     * @return string
-     */
-    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $key = null)
-    {
-        return '';
-    }
-    
     /**
      * add style/width to column
      *
