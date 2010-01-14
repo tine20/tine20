@@ -24,16 +24,6 @@ class Timetracker_Export_Ods_Timeaccount extends Tinebase_Export_Ods
     protected $_applicationName = 'Timetracker';
     
     /**
-     * sort records by this field / dir
-     *
-     * @var array
-     */
-    protected $_sortInfo = array(
-        'sort'  => 'start_date',
-        'dir'   => 'DESC'
-    );
-    
-    /**
      * fields with special treatment in addBody
      *
      * @var array
