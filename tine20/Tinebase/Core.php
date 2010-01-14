@@ -210,9 +210,9 @@ class Tinebase_Core
 
         // check for model controller
         if (!empty($_modelName)) {
-            $modelName = preg_replace('/' . $_applicationName . '_' . 'Model/', '', $_modelName);
+            $modelName = preg_replace('/^' . $_applicationName . '_' . 'Model_/', '', $_modelName);
             
-            $controllerNameModel = $controllerName . $modelName;
+            $controllerNameModel = $controllerName . '_' . $modelName;
             if (! class_exists($controllerNameModel)) {
     
                 // check for generic app controller
