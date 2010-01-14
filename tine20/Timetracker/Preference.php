@@ -104,11 +104,14 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
         $result = array();
         switch($_value) {
             case self::TSODSEXPORTCONFIG:
-                // get all export config labels
-                $configs = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::ODSEXPORTCONFIG, 'Timetracker', array());
+                // get names from import export definitions
+                $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+                    array('field' => 'plugin', 'operator' => 'equals', 'value' => 'Timetracker_Export_Ods_Timesheet'),
+                ));
+                $configs = Tinebase_ImportExportDefinition::getInstance()->search($filter);
                 if (! empty($configs)) {
-                    foreach($configs['timesheets'] as $key => $tsConfig) {
-                        $result[] = array($key, $key);
+                    foreach($configs as $tsConfig) {
+                        $result[] = array($tsConfig->name, $tsConfig->name);
                     }
                 } else {
                     $result[] = array('default', $translate->_('default'));
