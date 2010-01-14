@@ -1,0 +1,220 @@
+<?php
+/**
+ * Timesheet Ods generation class
+ *
+ * @package     Timetracker
+ * @subpackage	Export
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: Ods.php 12217 2010-01-11 16:51:08Z p.schuele@metaways.de $
+ * 
+ */
+
+/**
+ * Timetracker Ods generation class
+ * 
+ * @package     Timetracker
+ * @subpackage	Export
+ * 
+ */
+class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Ods
+{
+    /**
+     * @var string application of this export class
+     */
+    protected $_applicationName = 'Timetracker';
+    
+    /**
+     * sort records by this field / dir
+     *
+     * @var array
+     */
+    protected $_sortInfo = array(
+        'sort'  => 'start_date',
+        'dir'   => 'DESC'
+    );
+    
+    /**
+     * fields with special treatment in addBody
+     *
+     * @var array
+     */
+    protected $_specialFields = array('timeaccount', 'account_id', 'created_by');
+    
+    /**
+     * the constructor
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Controller_Record_Interface $_controller (optional)
+     * @param array $_additionalOptions (optional) additional options
+     */
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    {
+        $this->_prefKey = Timetracker_Preference::TSODSEXPORTCONFIG;
+        
+        parent::__construct($_filter, $_controller, $_additionalOptions);
+    }
+    
+    /**
+     * export timesheets to Ods file
+     *
+     * @param Timetracker_Model_TimesheetFilter $_filter
+     * @return string filename
+     */
+    /*
+    public function exportTimesheets(Timetracker_Model_TimesheetFilter $_filter) {
+        
+        // get timesheets by filter
+        $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($_filter, new Tinebase_Model_Pagination(array(
+            'sort'  => 'start_date',
+            'dir'   => 'DESC'
+        )));
+        $lastCell = count($timesheets) + $this->_firstRow - 1;
+        
+        // resolve timeaccounts
+        $timeaccountIds = $timesheets->timeaccount_id;
+        $this->_resolvedRecords['timeaccounts'] = Timetracker_Controller_Timeaccount::getInstance()->getMultiple(array_unique(array_values($timeaccountIds)));
+        
+        Tinebase_User::getInstance()->resolveMultipleUsers($timesheets, 'account_id', true);
+        
+        // build export table (use current table if using template)
+        $table = $this->_openDocumentObject->getBody()->appendTable('Timesheets');
+        $this->_addHead($table, $this->_config['timesheets']);
+        $this->_addBody($table, $timesheets, $this->_config['timesheets']);
+        $this->_addFooter($table, $lastCell);
+        
+        // add overview table
+        $this->_addOverviewTable($lastCell);
+        
+        // create file
+        $filename = $this->_openDocumentObject->getDocument();        
+        return $filename;
+    }
+    */
+    
+    /**
+     * export timeaccounts to Ods file
+     *
+     * @param Timetracker_Model_TimeaccountFilter $_filter
+     * @return string filename
+     */
+    /*
+    public function exportTimeaccounts(Timetracker_Model_TimeaccountFilter $_filter) {
+        
+        // get $timeaccounts by filter
+        $timeaccounts = Timetracker_Controller_Timeaccount::getInstance()->search($_filter);
+        $lastCell = count($timeaccounts) + $this->_firstRow - 1;
+        
+        Tinebase_User::getInstance()->resolveMultipleUsers($timeaccounts, 'created_by', true);
+        
+        // build export table
+        $table = $this->_openDocumentObject->getBody()->appendTable($this->_translate->_('Timesheets'));        
+        $this->_addHead($table, $this->_config['timeaccounts']);
+        $this->_addBody($table, $timeaccounts, $this->_config['timeaccounts']);
+        //$this->_addFooter($table, $lastCell);
+        
+        // create file
+        $filename = $this->_openDocumentObject->getDocument();        
+        return $filename;
+    }
+    */
+    
+    /**
+     * resolve records
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     */
+    protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
+    {
+        $timeaccountIds = $_records->timeaccount_id;
+        $this->_resolvedRecords['timeaccounts'] = Timetracker_Controller_Timeaccount::getInstance()->getMultiple(array_unique(array_values($timeaccountIds)));
+        
+        Tinebase_User::getInstance()->resolveMultipleUsers($_records, 'account_id', true);
+    }
+    
+    /**
+     * add table footer (formulas, ...)
+     *
+     * @param OpenDocument_SpreadSheet_Table $table
+     * @param integer $lastCell
+     */
+    protected function _addFooter($table, $lastCell)
+    {
+        // add footer
+        $row = $table->appendRow();
+        $row = $table->appendRow();
+        $numberOfEmptyCells = ord($this->_config->sumColumn) - 66;
+        for ($i=0; $i<$numberOfEmptyCells; $i++) {
+            $row->appendCell('string');
+        }
+
+        $row->appendCell('string', $this->_translate->_('Total Sum'));
+        $cell = $row->appendCell('float', 0);
+        // set sum for timesheet duration (for example E2:E10)
+        $cell->setFormula('oooc:=SUM(' . $this->_config->sumColumn . $this->_firstRow . ':' . $this->_config->sumColumn . $lastCell . ')');   
+        $cell->setStyle('ceBold');     
+    }
+    
+    /**
+     * add overview table
+     *
+     * @param integer $lastCell
+     */
+    protected function _addOverviewTable($lastCell)
+    {
+        $table = $this->_openDocumentObject->getBody()->appendTable('Overview');
+        
+        $row = $table->appendRow();
+        $row->appendCell('string', $this->_translate->_('Not billable'));
+        $cell = $row->appendCell('float', 0);
+        $cell->setFormula('oooc:=SUMIF(Timesheets.' . 
+            $this->_config->billableColumn . $this->_firstRow . ':Timesheets.' . $this->_config->billableColumn . $lastCell . 
+            ';0;Timesheets.' . $this->_config->sumColumn . $this->_firstRow . ':Timesheets.' . $this->_config->sumColumn . $lastCell . ')');
+        #$cell->setStyle('ceBold');     
+        
+        $row = $table->appendRow();
+        $row->appendCell('string', $this->_translate->_('Billable'));
+        $cell = $row->appendCell('float', 0);
+        $cell->setFormula('oooc:=SUMIF(Timesheets.' . 
+            $this->_config->billableColumn . $this->_firstRow . ':Timesheets.' . $this->_config->billableColumn . $lastCell . 
+            ';1;Timesheets.' . $this->_config->sumColumn . $this->_firstRow . ':Timesheets.' . $this->_config->sumColumn . $lastCell . ')');
+        #$cell->setStyle('ceBold');     
+        
+        $row = $table->appendRow();
+        $row->appendCell('string', $this->_translate->_('Total'));
+        $cell = $row->appendCell('float', 0);
+        $cell->setFormula('oooc:=SUM(Timesheets.' . 
+            $this->_config->sumColumn . $this->_firstRow . ':Timesheets.' . $this->_config->sumColumn . $lastCell . ')');
+        $cell->setStyle('ceBold');     
+    }
+    
+
+    /**
+     * get special field value
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @param array $_param
+     * @param string $key
+     * @return string
+     */
+    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $key = null)
+    {
+    	if (is_null($key)) {
+    		throw new Tinebase_Exception_InvalidArgument('Missing required parameter $key');
+    	}
+    	
+        $value = '';
+        
+        switch($_param['type']) {
+            case 'timeaccount':
+                $value = $this->_resolvedRecords['timeaccounts'][$this->_resolvedRecords['timeaccounts']->getIndexById($_record->timeaccount_id)]->$_param['field'];
+                break;
+            case 'account_id':
+            case 'created_by':
+                $value = $_record->$_param['type']->$_param['field'];
+                break;
+        }        
+        return $value;
+    }
+}
