@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
@@ -77,13 +77,13 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param string $_tablePrefix (optional)
      * @param boolean $_modlogActive (optional)
      */
-    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL, $_modlogActive = FALSE)
+    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL, $_modlogActive = NULL)
     {
         $this->_db = ($_dbAdapter instanceof Zend_Db_Adapter_Abstract) ? $_dbAdapter : Tinebase_Core::getDb();
         $this->_modelName = $_modelName ? $_modelName : $this->_modelName;
         $this->_tableName = $_tableName ? $_tableName : $this->_tableName;
         $this->_tablePrefix = $_tablePrefix ? $_tablePrefix : $this->_db->table_prefix;
-        $this->_modlogActive = $_modlogActive;
+        $this->_modlogActive = ($_modlogActive !== NULL) ? $_modlogActive : $this->_modlogActive;
         
         if (! ($this->_tableName && $this->_modelName)) {
             throw new Tinebase_Exception_Backend('modelName and tableName must be configured or given.');

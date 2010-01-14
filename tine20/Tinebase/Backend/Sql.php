@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -24,12 +24,12 @@ class Tinebase_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      *
      * @param string $_modelName
      * @param string $_tableName
-     * @param Zend_Db_Adapter_Abstract $_db [optional]
-     * @param string $_tablePrefix [optional]
-     *
+     * @param Zend_Db_Adapter_Abstract $_db (optional)
+     * @param string $_tablePrefix (optional)
+     * @param boolean $_modlogActive (optional)
      */
-    public function __construct ($_modelName, $_tableName, $_dbAdapter = NULL, $_tablePrefix = NULL)
+    public function __construct ($_modelName, $_tableName, $_dbAdapter = NULL, $_tablePrefix = NULL, $_modlogActive = NULL)
     {
-        parent::__construct($_dbAdapter, $_modelName, $_tableName, $_tablePrefix);
+        parent::__construct($_dbAdapter, $_modelName, $_tableName, $_tablePrefix, $_modlogActive);
     }
 }
