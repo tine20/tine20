@@ -228,7 +228,7 @@ class Tinebase_Model_Filter_FilterGroup
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating filter: $_field $_operator " . print_r($_value, true));
         
         if (empty($this->_filterModel[$_field])) {
-            throw new Tinebase_Exception_NotFound('no such field in this filter model');
+            throw new Tinebase_Exception_NotFound('no such field (' . $_field . ') in this filter model');
         }
         
         $definition = $this->_filterModel[$_field];
