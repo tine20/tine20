@@ -1082,32 +1082,32 @@ class Setup_Controller
      * look for import definitions and put them into the db
      *
      * @param Tinebase_Model_Application $_application
-     * 
-     * @todo add support for export definitions
      */
     protected function _createImportExportDefinitions($_application)
     {
-        $path = 
-            $this->_baseDir . DIRECTORY_SEPARATOR . $_application->name . 
-            DIRECTORY_SEPARATOR . 'Import' . DIRECTORY_SEPARATOR . 'definitions';
-
-        if (file_exists($path)) {
-            $definitionBackend = new Tinebase_ImportExportDefinition();
-            
-            foreach (new DirectoryIterator($path) as $item) {
-                $filename = $path . DIRECTORY_SEPARATOR . $item->getFileName();
-                if (preg_match("/\.xml/", $filename)) {
-                    
-                    // create definition
-                    try {
-                        $definition = $definitionBackend->getFromFile(
-                            $filename, 
-                            $_application->getId(), 
-                            preg_replace("/\.xml/", '', $item->getFileName())
-                        );
-                        $definitionBackend->create($definition);
-                    } catch (Tinebase_Exception_Record_Validation $erv) {
-                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' not installing import/export definion: ' . $erv->getMessage());
+        foreach (array('Import', 'Export') as $type) {
+            $path = 
+                $this->_baseDir . DIRECTORY_SEPARATOR . $_application->name . 
+                DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . 'definitions';
+    
+            if (file_exists($path)) {
+                foreach (new DirectoryIterator($path) as $item) {
+                    $filename = $path . DIRECTORY_SEPARATOR . $item->getFileName();
+                    if (preg_match("/\.xml/", $filename)) {
+                        
+                        // create definition
+                        try {
+                            $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
+                                $filename, 
+                                $_application->getId(), 
+                                preg_replace("/\.xml/", '', $item->getFileName())
+                            );
+                            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating import/export definion from file: ' . $item->getFileName());
+                            Tinebase_ImportExportDefinition::getInstance()->create($definition);
+                            
+                        } catch (Tinebase_Exception_Record_Validation $erv) {
+                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Not installing import/export definion: ' . $erv->getMessage());
+                        }
                     }
                 }
             }
