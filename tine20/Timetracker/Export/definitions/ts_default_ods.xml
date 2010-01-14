@@ -3,7 +3,7 @@
     <model>Timetracker_Model_Timesheet</model>
     <name>default</name>
     <type>export</type>
-    <plugin>ods</plugin>
+    <plugin>Timetracker_Export_Ods_Timesheet</plugin>
     <description>default ods timesheet export definition</description>
     <customFields>0</customFields>
     <sumColumn>F</sumColumn>

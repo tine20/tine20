@@ -3,7 +3,7 @@
     <model>Timetracker_Model_Timeaccount</model>
     <name>default</name>
     <type>export</type>
-    <plugin>ods</plugin>
+    <plugin>Timetracker_Export_Ods_Timeaccount</plugin>
     <description>default ods timeaccount export definition</description>
     <headers>
         <header>{date}</header>
