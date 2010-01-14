@@ -58,18 +58,13 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @param Tinebase_Controller_Record_Abstract $_controller
      * @return void
      * 
-     * @todo add export interface for $export object with generate() method?
      * @todo support single ids as filter?
      * @todo use stream here instead of temp file?
      */
     protected function _export(Tinebase_Model_Filter_FilterGroup $_filter, $_format, Tinebase_Controller_Record_Abstract $_controller = NULL)
     { 
-        // create export object
-        $exportClass = $_filter->getApplicationName() . '_Export_' . ucfirst(strtolower($_format));
-        if (! class_exists($exportClass)) {
-            throw new Tinebase_Exception_NotFound('No ' . $_format . ' export class found for ' . $_filter->getApplicationName());
-        }
-        $export = new $exportClass();
+        // get export object
+        $export = Tinebase_Export::factory($_filter, $_format, $_controller);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' in format ' . $_format);
 
@@ -117,7 +112,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 break;
 
             case 'ods':
-                $result = $export->generate($_filter);
+                $result = $export->generate();
                 $contentType = 'application/vnd.oasis.opendocument.spreadsheet';
                 break;
 
