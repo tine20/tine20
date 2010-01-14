@@ -301,9 +301,8 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $course = $this->_controller->get($courseId);
         
         // get definition and start import with admin user import csv plugin
-        $definitionBackend = new Tinebase_ImportExportDefinition();
         
-        $definition = $definitionBackend->getByProperty($this->_config->get('import_definition', 'admin_user_import_csv'));
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($this->_config->get('import_definition', 'admin_user_import_csv'));
         $importer = new $definition->plugin(
             $definition, 
             Admin_Controller_User::getInstance(),

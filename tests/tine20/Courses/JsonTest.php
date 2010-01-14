@@ -164,8 +164,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $courseData = $this->_json->saveCourse(Zend_Json::encode($course));
         
         // import data
-        $definitionBackend = new Tinebase_ImportExportDefinition();
-        $definition = $definitionBackend->getByProperty('admin_user_import_csv');
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
         $importer = new $definition->plugin(
             $definition, 
             Admin_Controller_User::getInstance(),

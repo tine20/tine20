@@ -18,14 +18,12 @@
  * @package     Timetracker
  * @subpackage  Backend
  */
-class Tinebase_ImportExportDefinition extends Tinebase_Backend_Sql_Abstract
+class Tinebase_ImportExportDefinition
 {
     /**
-     * Table name without prefix
-     *
-     * @var string
+     * @var Tinebase_Backend_Sql
      */
-    protected $_tableName = 'importexport_definition';
+    protected $_backend;
     
     /**
      * Model name
@@ -35,12 +33,57 @@ class Tinebase_ImportExportDefinition extends Tinebase_Backend_Sql_Abstract
     protected $_modelName = 'Tinebase_Model_ImportExportDefinition';
 
     /**
-     * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
+     * holds the instance of the singleton
      *
-     * @var boolean
+     * @var Tinebase_ImportExportDefinition
      */
-    protected $_modlogActive = TRUE;
-
+    private static $_instance = NULL;
+    
+    /**
+     * the constructor
+     *
+     */
+    private function __construct()
+    {
+        // set backend with activated modlog
+        $this->_backend = new Tinebase_Backend_Sql($this->_modelName, 'importexport_definition', NULL, NULL, TRUE);
+    }
+    
+    /**
+     * the singleton pattern
+     *
+     * @return Tinebase_ImportExportDefinition
+     */
+    public static function getInstance() 
+    {
+        if (self::$_instance === NULL) {
+            self::$_instance = new Tinebase_ImportExportDefinition();
+        }
+        return self::$_instance;
+    }
+    
+    /**
+     * get definition by name
+     * 
+     * @param string $_name
+     * @return Tinebase_Model_ImportExportDefinition
+     */
+    public function getByName($_name)
+    {
+        return $this->_backend->getByProperty($_name);
+    }
+    
+    /**
+     * Creates new entry
+     *
+     * @param   Tinebase_Model_ImportExportDefinition $_record
+     * @return  Tinebase_Model_ImportExportDefinition
+     */
+    public function create(Tinebase_Model_ImportExportDefinition $_record) 
+    {
+        return $this->_backend->create($_record);
+    }
+    
     /**
      * get definition from file
      *
@@ -71,5 +114,29 @@ class Tinebase_ImportExportDefinition extends Tinebase_Backend_Sql_Abstract
         } else {
             throw Tinebase_Exception_NotFound('Definition file not found.');
         }
+    }
+    
+    /**
+     * get config options as Zend_Config_Xml object
+     * 
+     * @param Tinebase_Model_ImportExportDefinition $_definition
+     * @param array $_additionalOptions additional options
+     * @return Zend_Config_Xml
+     */
+    public function getOptionsAsZendConfigXml(Tinebase_Model_ImportExportDefinition $_definition, $_additionalOptions = array())
+    {
+        $tmpfname = tempnam(Tinebase_Core::getTempDir(), "tine_tempfile_");
+        
+        $handle = fopen($tmpfname, "w");
+        fwrite($handle, $_definition->plugin_options);
+        fclose($handle);
+        
+        // read file with Zend_Config_Xml
+        $config = new Zend_Config_Xml($tmpfname, null, TRUE);
+        $config->merge(new Zend_Config($_additionalOptions));
+        
+        unlink($tmpfname);
+        
+        return $config;
     }
 }

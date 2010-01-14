@@ -143,13 +143,11 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
     protected function _importUsers($_config, $_filename, $_definition)
     {
         // create definition / check if exists
-        $definitionBackend = new Tinebase_ImportExportDefinition();
-        
         try {
-            $definition = $definitionBackend->getByProperty($_definition);
+            $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($_definition);
             $definition->plugin_options = $_config;
         } catch(Tinebase_Exception_NotFound $e) {
-            $definition = $definitionBackend->create(new Tinebase_Model_ImportExportDefinition(array(
+            $definition = Tinebase_ImportExportDefinition::getInstance()->create(new Tinebase_Model_ImportExportDefinition(array(
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Admin')->getId(),
                 'name'              => $_definition,
                 'type'              => 'import',

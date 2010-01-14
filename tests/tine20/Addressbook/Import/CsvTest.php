@@ -48,8 +48,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $definitionBackend = new Tinebase_ImportExportDefinition();
-        $definition = $definitionBackend->getByProperty('adb_tine_import_csv');
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
         
         $this->_instance = new Addressbook_Import_Csv($definition, Addressbook_Controller_Contact::getInstance(), array('dryrun' => 1));
     }
