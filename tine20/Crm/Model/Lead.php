@@ -236,17 +236,16 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      */
     public function getLeadStatus()
     {
-        $translate = Tinebase_Translation::getTranslation($this->_application);
         if (empty($this->end)) {
-            $result = $translate->_('open');
+            $result = 'open';
         } else {
             if ($this->probability == 100) {
-                $result = $translate->_('won');
+                $result = 'won';
             } elseif ($this->probability == 0) {
-                $result = $translate->_('lost');
+                $result = 'lost';
             } else {
                 // open or unknown/undefined?
-                $result = $translate->_('open');
+                $result = 'open';
             }
         }
         return $result;
