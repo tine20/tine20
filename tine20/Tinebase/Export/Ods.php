@@ -117,6 +117,8 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
         // check for template file
         $templateFile = $this->_config->get('template', NULL);
         if ($templateFile !== NULL) {
+            $templateFile = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName . 
+                DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $templateFile;
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Using template file "' . $templateFile . '" for ' . $this->_modelName . ' export.');
         }
                         
