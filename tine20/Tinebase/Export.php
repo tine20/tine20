@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        when more formats switched to Tinebase_Export_Abstract, change creation of object (new $exportClass($_additionalOptions))
  */
 
 /**
@@ -44,7 +46,12 @@ class Tinebase_Export
                 throw new Tinebase_Exception_NotFound('No ' . $_format . ' export class found for ' . $appName . ' / ' . $model);
             }
         }
-        $result = new $exportClass($_filter, $_controller, $_additionalOptions);
+        if ($_format == 'ods') {
+            $result = new $exportClass($_filter, $_controller, $_additionalOptions);
+        } else {
+            // legacy
+            $result = new $exportClass($_additionalOptions);
+        }
         
         return $result;
     }
