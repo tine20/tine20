@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:ImportExportDefinition.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
  */
@@ -36,6 +36,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         $this->_modelName = 'Tinebase_Model_ImportExportDefinition';
         $this->_applicationName = 'Tinebase';
         $this->_purgeRecords = FALSE;
+        $this->_doContainerACLChecks = FALSE;
 
         // set backend with activated modlog
         $this->_backend = new Tinebase_Backend_Sql($this->_modelName, 'importexport_definition', NULL, NULL, TRUE);
