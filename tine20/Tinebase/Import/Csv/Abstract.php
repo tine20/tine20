@@ -109,6 +109,8 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      * @param Tinebase_Model_ImportExportDefinition $_definition
      * @param mixed $_controller
      * @param array $_options additional options
+     * 
+     * @todo use Tinebase_Core::getApplicationInstance() to get controller
      */
     public function __construct(Tinebase_Model_ImportExportDefinition $_definition, $_controller = NULL, $_options = array())
     {
@@ -362,6 +364,8 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      * @param string $_configString
      * @param array $_options additional options
      * @return array 
+     * 
+     * @todo use Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml()
      */
     protected function _getConfig($_configString, $_options = array())
     {
