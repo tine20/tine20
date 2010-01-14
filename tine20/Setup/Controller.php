@@ -879,6 +879,11 @@ class Setup_Controller
         Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::SMTP, Zend_Json::encode($_data['smtp']));
     }
     
+    /**
+     * get accepted terms config
+     * 
+     * @return array
+     */
     public function getAcceptedTerms()
     {
         return Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::ACCEPTEDTERMSVERSION, 'Tinebase', 0);
@@ -953,7 +958,6 @@ class Setup_Controller
      * @param array $_applications list of application names
      * @param array | optional $_options
      * @return void
-     * @todo remove deprecated code
      */
     public function installApplications($_applications, $_options = null)
     {
@@ -1073,7 +1077,7 @@ class Setup_Controller
         }
         
         // look for import definitions and put them into the db
-        $this->_createImportExportDefinitions($application);
+        $this->createImportExportDefinitions($application);
         
         Setup_Initialize::initialize($application, $_options);
     }
@@ -1083,7 +1087,7 @@ class Setup_Controller
      *
      * @param Tinebase_Model_Application $_application
      */
-    protected function _createImportExportDefinitions($_application)
+    public function createImportExportDefinitions($_application)
     {
         foreach (array('Import', 'Export') as $type) {
             $path = 
@@ -1107,7 +1111,9 @@ class Setup_Controller
                             
                         } catch (Tinebase_Exception_Record_Validation $erv) {
                             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Not installing import/export definion: ' . $erv->getMessage());
-                        }
+                        }  catch (Zend_Db_Statement_Exception $zdse) {
+                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Not installing import/export definion: ' . $zdse->getMessage());
+                        } 
                     }
                 }
             }
