@@ -6,7 +6,7 @@
  * @subpackage	Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        add class with common crm export functions (and move status/special field handling there)
@@ -23,6 +23,13 @@
 class Crm_Export_Ods extends Tinebase_Export_Ods
 {
     /**
+     * default export definition name
+     * 
+     * @var string
+     */
+    protected $_defaultExportname = 'lead_default_ods';
+        
+    /**
      * @var string application of this export class
      */
     protected $_applicationName = 'Crm';
@@ -35,100 +42,14 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
     protected $_specialFields = array('created_by', 'status');
     
     /**
-     * export leads to Ods file
+     * resolve records
      *
-     * @param Crm_Model_LeadFilter $_filter
-     * @return string filename
+     * @param Tinebase_Record_RecordSet $_records
      */
-    public function generate(Crm_Model_LeadFilter $_filter) 
+    protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
-        $this->_openDocumentObject = new OpenDocument_Document(OpenDocument_Document::SPREADSHEET, NULL, Tinebase_Core::getTempDir());
-        
-        // get leads by filter
-        $leads = Crm_Controller_Lead::getInstance()->search($_filter);
-        $lastCell = count($leads) + $this->_firstRow - 1;
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leads->toArray(), TRUE));
-        
-        Tinebase_User::getInstance()->resolveMultipleUsers($leads, 'created_by', true);
-        
-        // build export table
-        $table = $this->_openDocumentObject->getBody()->appendTable('Leads');        
-        $this->_addHead($table, $this->_config['leads']);
-        $this->_addBody($table, $leads, $this->_config['leads']);
-        
-        // create file
-        $filename = $this->_openDocumentObject->getDocument();        
-        return $filename;
+        Tinebase_User::getInstance()->resolveMultipleUsers($_records, 'created_by', true);
     }
-    
-    /**
-     * get export config
-     *
-     * @return array
-     * 
-     * @todo add more fields
-     */
-    protected function _getExportConfig()
-    {
-        $exportConfig = Tinebase_Config::getInstance()->getConfigAsArray(
-            Tinebase_Model_Config::ODSEXPORTCONFIG, 'Crm', array('leads' => array(
-            'header' => array(
-                '{date}', 
-                '{user}',
-            ),
-            'fields' => array(
-                'lead_name' => array(
-                    'header'    => $this->_translate->_('Lead Name'),
-                    'type'      => 'string', 
-                    'width'     => '5cm',
-                ),
-                'description' => array(
-                    'header'    => $this->_translate->_('Description'),
-                    'type'      => 'string', 
-                    'width'     => '10cm'
-                ),
-                'turnover' => array(
-                    'header'    => $this->_translate->_('Turnover'),
-                    'type'      => 'string', 
-                    'width'     => '2cm'
-                ),
-                'probability' => array(
-                    'header'    => $this->_translate->_('Probability'),
-                    'type'      => 'string', 
-                    'width'     => '2cm'
-                ),
-                'start' => array(
-                    'header'    => $this->_translate->_('Date Start'),
-                    'type'      => 'datetime', 
-                    'width'     => '2,5cm'
-                ),
-                'end' => array(
-                    'header'    => $this->_translate->_('Date End'),
-                    'type'      => 'datetime', 
-                    'width'     => '2,5cm'
-                ),
-                'end_scheduled' => array(
-                    'header'    => $this->_translate->_('Date End Scheduled'),
-                    'type'      => 'datetime', 
-                    'width'     => '2,5cm'
-                ),
-                'created_by' => array(
-                    'header'    => $this->_translate->_('Created By'),
-                    'type'      => 'created_by', 
-                    'field'     => 'accountDisplayName', 
-                    'width'     => '4cm'
-                ),
-                'status' => array(
-                    'header'    => $this->_translate->_('Status'),
-                    'type'      => 'status',
-                    'width'     => '4cm'
-                ),                
-            )
-        )));
-
-        return $exportConfig;
-    }    
     
     /**
      * get special field value

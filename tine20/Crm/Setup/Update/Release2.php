@@ -5,9 +5,9 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id: Release0.php 2759 2008-06-10 15:52:56Z nelius_weiss $
+ * @version     $Id$
  */
 
 class Crm_Setup_Update_Release2 extends Setup_Update_Abstract
@@ -81,5 +81,18 @@ class Crm_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setTableVersion('metacrm_lead', '5');
         $this->setApplicationVersion('Crm', '2.2');
+    }
+    
+    /**
+     * move ods export config to import export definitions
+     * 
+     * @return void
+     */
+    public function update_2()
+    {
+        // get import export definitions and save them in db
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Crm'));
+        
+        $this->setApplicationVersion('Crm', '3.0');
     }
 }

@@ -52,7 +52,7 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
      */
     protected function setUp()
     {
-        $this->_instance = new Crm_Export_Ods();
+        $this->_instance = Tinebase_Export::factory(new Crm_Model_LeadFilter($this->_getLeadFilter()), 'ods');
         parent::setUp();
     }
 
@@ -65,16 +65,16 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
      */
     public function testExportOds()
     {
-        $translate = Tinebase_Translation::getTranslation('Crm');
-        $odsFilename = $this->_instance->generate(new Crm_Model_LeadFilter($this->_getLeadFilter()));
+        //$translate = Tinebase_Translation::getTranslation('Crm');   
+        $odsFilename = $this->_instance->generate();
         
         $this->assertTrue(file_exists($odsFilename));
         
         $xmlBody = $this->_instance->getDocument()->getBody()->generateXML();    
         //echo  $xmlBody;
-        $this->assertEquals(1, preg_match("/PHPUnit/", $xmlBody), 'no name'); 
-        $this->assertEquals(1, preg_match("/Description/", $xmlBody), 'no description');
-        $this->assertEquals(1, preg_match('/' . $translate->_('open') . '/',    $xmlBody), 'no leadstate');
+        $this->assertEquals(1, preg_match("/PHPUnit/",      $xmlBody), 'no name'); 
+        $this->assertEquals(1, preg_match("/Description/",  $xmlBody), 'no description');
+        $this->assertEquals(1, preg_match('/open/',         $xmlBody), 'no leadstate');
         
         unlink($odsFilename);
     }
