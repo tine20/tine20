@@ -201,6 +201,8 @@ class Tinebase_Core
      * @param   string $_modelName
      * @return  Tinebase_Controller_Abstract|Tinebase_Controller_Record_Abstract the controller of the application
      * @throws  Tinebase_Exception_NotFound
+     * 
+     * @todo    we should use model name here consistent to other params/vars with the same name (i.e. it should have the format App_Model_Record)
      */
     public static function getApplicationInstance($_applicationName, $_modelName = '')
     {
@@ -208,11 +210,13 @@ class Tinebase_Core
 
         // check for model controller
         if (!empty($_modelName)) {
-            $controllerNameModel = $controllerName . '_' . $_modelName;
-            if (!class_exists($controllerNameModel)) {
+            $modelName = preg_replace('/' . $_applicationName . '_' . 'Model/', '', $_modelName);
+            
+            $controllerNameModel = $controllerName . $modelName;
+            if (! class_exists($controllerNameModel)) {
     
                 // check for generic app controller
-                if (!class_exists($controllerName)) {            
+                if (! class_exists($controllerName)) {            
                     throw new Tinebase_Exception_NotFound('No Controller found (checked classes '. $controllerName . ' and ' . $controllerNameModel . ')!');
                 } 
             } else {
