@@ -97,7 +97,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             
             return $definition;
         } else {
-            throw Tinebase_Exception_NotFound('Definition file not found.');
+            throw new Tinebase_Exception_NotFound('Definition file "' . $_filename . '" not found.');
         }
     }
     
