@@ -10,6 +10,7 @@
  * @version     $Id: Ods.php 10912 2009-10-12 14:40:25Z p.schuele@metaways.de $
  * 
  * @todo        add Tinebase_Export_Abstract with common funcs (_addRelations, add notes, add special value)
+ * @todo        extend Tinebase_Export_Abstract
  */
 
 // set include path for phpexcel
