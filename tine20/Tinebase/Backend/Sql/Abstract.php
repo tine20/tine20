@@ -71,18 +71,19 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * the constructor
      *
-     * @param Zend_Db_Adapter_Abstract $_db optional
-     * @param string $_modelName
-     * @param string $_tableName
-     * @param string $_tablePrefix
-     *
+     * @param Zend_Db_Adapter_Abstract $_db (optional)
+     * @param string $_modelName (optional)
+     * @param string $_tableName (optional)
+     * @param string $_tablePrefix (optional)
+     * @param boolean $_modlogActive (optional)
      */
-    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL)
+    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL, $_modlogActive = FALSE)
     {
         $this->_db = ($_dbAdapter instanceof Zend_Db_Adapter_Abstract) ? $_dbAdapter : Tinebase_Core::getDb();
         $this->_modelName = $_modelName ? $_modelName : $this->_modelName;
         $this->_tableName = $_tableName ? $_tableName : $this->_tableName;
         $this->_tablePrefix = $_tablePrefix ? $_tablePrefix : $this->_db->table_prefix;
+        $this->_modlogActive = $_modlogActive;
         
         if (! ($this->_tableName && $this->_modelName)) {
             throw new Tinebase_Exception_Backend('modelName and tableName must be configured or given.');
