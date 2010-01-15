@@ -340,7 +340,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
                 // date is before deadline
                 $date = new Zend_Date();
                 $date->sub(8, Zend_Date::DAY);
-                $ts->start_date = $date->toString('yyyy-MM-dd');
+                $ts->start_date = $date;
                 $this->setExpectedException('Timetracker_Exception_Deadline');
                 $this->_timesheetController->create($ts);
                 break;
