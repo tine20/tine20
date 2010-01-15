@@ -11,6 +11,7 @@
  * 
  * @todo        add Tinebase_Export_Abstract with common funcs (_addRelations, add notes, add special value)
  * @todo        extend Tinebase_Export_Abstract
+ * @todo        move config to import/export definitions table
  */
 
 // set include path for phpexcel
