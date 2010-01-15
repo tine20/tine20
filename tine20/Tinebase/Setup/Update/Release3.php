@@ -62,34 +62,25 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_2()
     {
-        // we need to drop the foreign key first
+        // we need to drop the foreign key and the index first
         $this->_backend->dropForeignKey('importexport_definition', 'importexport_definitions::app_id--applications::id');
-        $declaration = new Setup_Backend_Schema_Index_Xml('<field>
-                <name>type</name>
-                <type>text</type>
-                <length>20</length>
-                <default>import</default>
-                <notnull>true</notnull>
-            </field>');
-        $this->_backend->alterCol('importexport_definition', $declaration);
-        
         $this->_backend->dropIndex('importexport_definition', 'application_id-name-type');
-        $declaration = new Setup_Backend_Schema_Index_Xml('
-            <index>
-                    <name>model-name-type</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>model</name>
-                    </field>
-                    <field>
-                        <name>name</name>
-                    </field>
-                    <field>
-                        <name>type</name>
-                    </field>
-                </index>
-        ');
-        $this->_backend->addIndex('importexport_definition', $declaration); 
+        
+        // add index and foreign key again
+        $this->_backend->addIndex('importexport_definition', new Setup_Backend_Schema_Index_Xml('<index>
+                <name>model-name-type</name>
+                <unique>true</unique>
+                <field>
+                    <name>model</name>
+                </field>
+                <field>
+                    <name>name</name>
+                </field>
+                <field>
+                    <name>type</name>
+                </field>
+            </index>')
+        ); 
         $this->_backend->addForeignKey('importexport_definition', new Setup_Backend_Schema_Index_Xml('<index>
                 <name>importexport_definitions::app_id--applications::id</name>
                 <field>
@@ -103,6 +94,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
             </index>')
         );
         
+        // increase versions
         $this->setTableVersion('importexport_definition', '3');
         $this->setApplicationVersion('Tinebase', '3.3');
     }

@@ -2181,9 +2181,9 @@
                 </field>
                 <field>
                     <name>type</name>
-                    <type>text</type>
-                    <length>20</length>
-                    <default>import</default>
+                    <type>enum</type>
+                    <value>import</value>
+                    <value>export</value>
                     <notnull>true</notnull>
                 </field>
                 <field>
