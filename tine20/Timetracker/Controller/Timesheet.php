@@ -135,7 +135,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                     throw new Timetracker_Exception_Deadline();
                 }
             } else {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Valid date.');
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Valid date: ' . $_record->start_date . ' >= ' . $date);
             }
         }
     }
