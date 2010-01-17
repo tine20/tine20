@@ -267,6 +267,8 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             $row = $table->appendRow();
 
             foreach ($this->_config->columns->column as $field) {
+
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($field->toArray(), true));
                 
                 $altStyle = 'ceAlternate';
                 $type = $field->type;
@@ -312,12 +314,15 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                         }
                         
                         // set special value from params
-                        if (isset($params->values) && isset($params->values[$value])) {
-                            $value = $params->values[$value];
+                        if (isset($field->values)) {
+                            $values = $field->values->toArray();
+                            if (array_key_exists($value, $values)) {
+                                $value = $values[$value];
+                            }
                         }
                         
                         // translate strings
-                        if (isset($params->translate) && $params->translate && $type === 'string') {
+                        if (isset($field->translate) && $field->translate && $type === 'string') {
                             $value = $this->_translate->_($value);
                         }
                         
@@ -325,20 +330,20 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                 }
                 
                 // check for replacements
-                if (isset($params->replace)) {
-                    $value = preg_replace($params->replace->pattern, $params->replace->replacement, $value);
+                if (isset($field->replace) && isset($field->replace->patterns) && isset($field->replace->replacements)) {
+                    $value = preg_replace($field->replace->patterns->toArray(), $field->replace->replacements->toArray(), $value);
                 }
 
                 // check for matches
-                if (isset($params->match)) {
-                    preg_match($params->match, $value, $matches);
+                if (isset($field->match)) {
+                    preg_match($field->match, $value, $matches);
                     $value = (isset($matches[1])) ? $matches[1] : '';
                 }
                 
                 // create cell with type and value and add style
                 $cell = $row->appendCell($type, $value);
 
-                if (isset($params->number) && $params->number) {
+                if (isset($field->number) && $field->number) {
                     $cell->setStyle('numberStyle');
                     $altStyle = 'numberStyleAlternate';
                 }
