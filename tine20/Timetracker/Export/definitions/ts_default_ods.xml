@@ -39,10 +39,6 @@
             <type>timeaccount</type>
             <width>7cm</width>
             <field>title</field>
-            <replace>
-                <pattern>/^XYZ /</pattern>
-                <replacement></replacement>
-            </replace>
         </column>
         <column>
             <identifier>account_id</identifier>

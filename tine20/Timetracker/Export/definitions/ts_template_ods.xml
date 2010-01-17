@@ -41,8 +41,12 @@
             <width>7cm</width>
             <field>title</field>
             <replace>
-                <pattern>/^XYZ /</pattern>
-                <replacement></replacement>
+                <patterns>
+                    <pattern>/^XYZ /</pattern>
+                </patterns>
+                <replacements>
+                    <replacement></replacement>
+                </replacements>
             </replace>
         </column>
         <column>
