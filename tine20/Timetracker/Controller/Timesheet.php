@@ -122,9 +122,12 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 // only allow to add ts for last week
                 $date->sub($dayOfWeek+7, Zend_Date::DAY);
             }
-            if ($date->compare($_record->start_date) >= 0) {
+            
+            // convert start date to Zend_Date
+            $startDate = new Zend_Date($_record->start_date, 'yyyy-MM-dd');
+            if ($date->compare($startDate) >= 0) {
                 // later
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Deadline exceeded: ' . $_record->start_date . ' < ' . $date);
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Deadline exceeded: ' . $startDate . ' < ' . $date);
                 
                 if ($this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)
                      || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_ALL)) {
@@ -135,7 +138,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                     throw new Timetracker_Exception_Deadline();
                 }
             } else {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Valid date: ' . $_record->start_date . ' >= ' . $date);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Valid date: ' . $startDate . ' >= ' . $date);
             }
         }
     }
