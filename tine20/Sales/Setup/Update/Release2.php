@@ -4,7 +4,7 @@
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  */
@@ -231,5 +231,14 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
         $this->_db->query("update " . SQL_TABLE_PREFIX . "relations set related_model='Sales_Model_Contract' where related_model='Erp_Model_Contract'");
         
         $this->setApplicationVersion('Sales', '2.5');
+    }
+    
+    /**
+     * update to 3.0
+     * @return void
+     */
+    public function update_5()
+    {
+        $this->setApplicationVersion('Sales', '3.0');
     }
 }

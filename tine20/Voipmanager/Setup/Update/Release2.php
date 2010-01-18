@@ -5,8 +5,8 @@
  * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  */
 
 class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
@@ -333,5 +333,13 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Voipmanager', '2.7');
     }
-        
+    
+    /**
+     * update to 3.0
+     * @return void
+     */
+    public function update_7()
+    {
+        $this->setApplicationVersion('Voipmanager', '3.0');
+    }
 }

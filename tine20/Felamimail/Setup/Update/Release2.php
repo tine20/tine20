@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id: Release0.php 10122 2009-08-21 10:23:50Z p.schuele@metaways.de $
  */
@@ -93,11 +93,19 @@ class Felamimail_Setup_Update_Release2 extends Setup_Update_Abstract
     }
     
     /**
+     * update to 3.0
+     */    
+    public function update_4()
+    {
+        $this->setApplicationVersion('Felamimail', '3.0');
+    }
+    
+    /**
      * - add recent field to folders?
      * - add options field to accounts?
      */    
     /*
-    public function update_2()
+    public function update_5()
     {
         $field = '<field>
                     <name>display_format</name>
