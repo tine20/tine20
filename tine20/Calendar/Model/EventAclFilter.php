@@ -54,7 +54,12 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
         // directly filter for required grant is only possible if requiredgrants does not contains GRANT_READ
         if (! in_array(Tinebase_Model_Container::GRANT_READ, $this->_requiredGrants)) {
             foreach ($this->_requiredGrants as $grant) {
-                $_select->orHaving($_backend->getAdapter()->quoteIdentifier(Tinebase_Model_Container::$GRANTNAMEMAP[$grant] . $grant) . ' = 1');
+                if ($grant == Tinebase_Model_Container::GRANT_ADMIN) {
+                    // admin grant not yet implemented
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Checking for admin grant is not yet implemented, results might be diffrent as expected");
+                    continue;
+                }
+                $_select->orHaving($_backend->getAdapter()->quoteIdentifier(Tinebase_Model_Container::$GRANTNAMEMAP[$grant]) . ' = 1');
             }
         }
     }
