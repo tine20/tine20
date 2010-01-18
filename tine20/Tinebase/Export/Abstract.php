@@ -191,8 +191,15 @@ abstract class Tinebase_Export_Abstract
         
         // check for replacements
         if (isset($_fieldConfig->replace) && isset($_fieldConfig->replace->patterns) && isset($_fieldConfig->replace->replacements)) {
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_fieldConfig->replace->patterns->pattern->toArray(), true));
-            $value = preg_replace($_fieldConfig->replace->patterns->pattern->toArray(), $_fieldConfig->replace->replacements->replacement->toArray(), $value);
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_fieldConfig->replace->patterns->toArray(), true));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_fieldConfig->replace->replacements->toArray(), true));
+            $patterns =     (count($_fieldConfig->replace->patterns->pattern) > 1)          
+                ? $_fieldConfig->replace->patterns->pattern->toArray()          
+                : $_fieldConfig->replace->patterns->toArray();
+            $replacements = (count($_fieldConfig->replace->replacements->replacement) > 1)  
+                ? $_fieldConfig->replace->replacements->replacement->toArray()  
+                : $_fieldConfig->replace->replacements->toArray();
+            $value = preg_replace($patterns, $replacements, $value);
         }
 
         // check for matches
