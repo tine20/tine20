@@ -18,6 +18,8 @@ abstract class VoipMonitor_Backend_Abstract
 {
     protected $_config;
     
+    protected $_stdErr;
+    
     /**
      * the constructor
      * 
@@ -27,6 +29,8 @@ abstract class VoipMonitor_Backend_Abstract
     public function __construct(Zend_Config $_config)
     {
         $this->_config = $_config;
+        
+        $this->_stdErr = fopen('php://stderr', 'w');
     }
     
     abstract public function update(array $_event);

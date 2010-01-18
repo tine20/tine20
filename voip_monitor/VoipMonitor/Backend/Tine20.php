@@ -20,7 +20,11 @@ class VoipMonitor_Backend_Tine20 extends VoipMonitor_Backend_Abstract
     
     protected $_voipManager;
     
-    protected $_peerIdFifo = array();
+    /**
+     * 
+     * @var Zend_Cache_Core
+     */
+    protected $_cache;
     
     /**
      * the constructor
@@ -33,6 +37,38 @@ class VoipMonitor_Backend_Tine20 extends VoipMonitor_Backend_Abstract
         parent::__construct($_config);
                       
         $this->_getTine20Connection($_config);
+        
+        $this->_initializeCache($_config);
+    }
+    
+    protected function _initializeCache(Zend_Config $_config)
+    {
+        $frontendOptions = array(
+            'lifetime'                => 3600,
+            'automatic_serialization' => true
+        );
+        $backendOptions  = array();
+        
+        if(($path = $_config->get('cachefile')) !== null) {
+            $backendType     = 'Sqlite';
+            $backendOptions  = array(
+                'cache_db_complete_path' => $path
+            );
+        } elseif(($path = $_config->get('cachedir')) !== null) {
+            $backendType     = 'File';
+            $backendOptions  = array(
+                'cache_dir' => $path
+            );
+        } else {
+            $backendType     = 'Test';
+            $frontendOptions = array(
+                'caching' => false
+            );
+        }
+        $this->_cache = Zend_Cache::factory('Core',
+                             $backendType,
+                             $frontendOptions,
+                             $backendOptions);
     }
     
     public function update(array $_event)
@@ -51,11 +87,13 @@ class VoipMonitor_Backend_Tine20 extends VoipMonitor_Backend_Abstract
     protected function _handlePeerStatus($_event)
     {
         $voipManager = $this->_tine20->getProxy('Voipmanager');
-
-        $peerName = substr($_event['Peer'], 4);
         
-        if(array_key_exists($peerName, $this->_peerIdFifo)) {
-            $peerId = $this->_peerIdFifo[$peerName];
+        $peerId = null;
+        $peerName = substr($_event['Peer'], 4);
+        $cacheId  = md5('sipPeerId_' . $peerName);
+        
+        if($this->_cache->test($cacheId)) {
+            $peerId = $this->_cache->load($cacheId);
         } else {
             $filter = array('filter' => array(
                 'field'    => 'name',
@@ -67,11 +105,10 @@ class VoipMonitor_Backend_Tine20 extends VoipMonitor_Backend_Abstract
             
             if($result['totalcount'] == 1) {
                 $sipPeer = $result['results'][0];
-                $this->_peerIdFifo[$peerName] = $sipPeer['id'];
-                $peerId = $this->_peerIdFifo[$peerName];
-            } else {
-                $this->_peerIdFifo[$peerName] = null;
-                $peerId = null;
+                $peerId = $sipPeer['id'];
+                
+                echo "Cache miss $peerName => $peerId" . PHP_EOL;
+                $this->_cache->save($peerId, $cacheId);
             }
         }
         
@@ -80,8 +117,12 @@ class VoipMonitor_Backend_Tine20 extends VoipMonitor_Backend_Abstract
             $update['regseconds'] = Zend_Date::now()->get('yyyy-MM-dd HH:mm:ss');
             $update['regserver']  = 'phonebox02';
             
-            $result = $voipManager->updatePropertiesAsteriskSipPeer($peerId, $update);
-            //var_dump($result);
+            try {
+                $result = $voipManager->updatePropertiesAsteriskSipPeer($peerId, $update);
+            } catch(Zend_Json_Client_FaultException $e) {
+                $this->_cache->remove($cacheId);
+                fwrite($this->_stdErr, $e->getMessage() . PHP_EOL);
+            }
         }
     }
     
