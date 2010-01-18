@@ -434,6 +434,26 @@ class Tinebase_Application
         return $backend->update($_application);
     }
     
+    
+    /**
+     * delete containers and configs of application
+     * 
+     * @param string $_applicationName
+     * @return void
+     */
+    public function removeApplicationConfigAndContainer($_applicationName)
+    {
+        $application = $this->getApplicationByName($_applicationName);
+        
+        // delete container
+        $containersDeleted = Tinebase_Container::getInstance()->deleteContainerByApplicationId($application->getId());
+        
+        // delete config
+        $configsDeleted = Tinebase_Config::getInstance()->deleteConfigByApplicationId($application->getId());
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $containersDeleted . ' containers and ' . $configsDeleted . ' configs for application ' . $_applicationName);
+    }
+    
     /**
      * clean cache
      * 

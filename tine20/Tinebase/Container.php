@@ -785,6 +785,17 @@ class Tinebase_Container
     }
     
     /**
+     * delete container by application id
+     * 
+     * @param string $_applicationId
+     * @return integer numer of deleted containers 
+     */
+    public function deleteContainerByApplicationId($_applicationId)
+    {
+        return $this->_backend->deleteByProperty($_applicationId, 'application_id');
+    }    
+    
+    /**
      * set container name, if the user has the required right
      *
      * @param   int $_containerId
