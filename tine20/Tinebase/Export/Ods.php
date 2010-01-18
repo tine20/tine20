@@ -134,7 +134,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
         
         // build export table (use current table if using template)
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating export for ' . $this->_modelName . '.');
-        $table = $this->_openDocumentObject->getBody()->appendTable($this->_translate->_('Data'));
+        $table = $this->_openDocumentObject->getBody()->appendTable($this->_getDataTableName());
         $this->_addHead($table);
         $this->_addBody($table, $records);
         $this->_addFooter($table, $lastCell);
@@ -372,7 +372,6 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
     protected function _addOverviewTable($lastCell)
     {
     }
-    
 
     /**
      * add style/width to column
@@ -383,5 +382,15 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
     protected function _addColumnStyle($_styleName, $_columnWidth) 
     {
         $this->_openDocumentObject->addStyle('<style:style style:name="' . $_styleName . '" style:family="table-column" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><style:table-column-properties style:column-width="' . $_columnWidth . '"/></style:style>');
+    }
+    
+    /**
+     * get name of data table
+     * 
+     * @return string
+     */
+    protected function _getDataTableName()
+    {
+        return $this->_translate->_('Data');        
     }
 }

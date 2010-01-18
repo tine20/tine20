@@ -154,4 +154,14 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Ods
         }        
         return $value;
     }
+    
+    /**
+     * get name of data table
+     * 
+     * @return string
+     */
+    protected function _getDataTableName()
+    {
+        return 'Timesheets';
+    }
 }
