@@ -1127,17 +1127,20 @@ class Setup_Controller
      */
     protected function _uninstallApplication(Tinebase_Model_Application $_application)
     {
-        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Uninstall $_application");
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Uninstall ' . $_application);
         $applicationTables = Tinebase_Application::getInstance()->getApplicationTables($_application);
         
         do {
             $oldCount = count($applicationTables);
 
-            if ($_application == 'Tinebase') {
+            if ($_application->name == 'Tinebase') {
                 $installedApplications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
                 if (count($installedApplications) !== 1) {
                     throw new Setup_Exception_Dependency('Failed to uninstall application "Tinebase" because of dependencies to other installed applications.');
                 }
+            } else {
+                // delete containers and config options for app
+                Tinebase_Application::getInstance()->removeApplicationConfigAndContainer($_application->name);
             }
 
             foreach ($applicationTables as $key => $table) {
