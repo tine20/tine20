@@ -485,6 +485,27 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
     }
     
+    /**
+     * delete rows by property
+     * 
+     * @param string $_value
+     * @param string $_property
+     * @return integer The number of affected rows.
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function deleteByProperty($_value, $_property)
+    {
+        if (! array_key_exists($_property, $this->_schema)) {
+            throw new Tinebase_Exception_InvalidArgument('Property ' . $_property . ' does not exist in table ' . $this->_tableName);
+        }
+        
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier($_property) . ' = ?', $_value)
+        );
+        
+        return $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
+    }
+    
     /*************************** foreign record fetchers *******************************/
     
     /**
