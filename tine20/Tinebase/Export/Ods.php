@@ -122,7 +122,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Using template file "' . $templateFile . '" for ' . $this->_modelName . ' export.');
         }
                         
-        $this->_openDocumentObject = new OpenDocument_Document(OpenDocument_Document::SPREADSHEET, $templateFile, Tinebase_Core::getTempDir());
+        $this->_openDocumentObject = new OpenDocument_Document(OpenDocument_Document::SPREADSHEET, $templateFile, Tinebase_Core::getTempDir(), $this->_userStyles);
         
         // get records by filter
         $pagination = (! empty($this->_sortInfo)) ? new Tinebase_Model_Pagination($this->_sortInfo) : NULL;
@@ -140,7 +140,10 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
         $this->_addFooter($table, $lastCell);
         
         // add overview table
-        $this->_addOverviewTable($lastCell);
+        if (isset($this->_config->overviewTable) && $this->_config->overviewTable) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding overview table.');
+            $this->_addOverviewTable($lastCell);
+        }
         
         // create file
         $result = $this->_openDocumentObject->getDocument();        
@@ -270,7 +273,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
 
             foreach ($this->_config->columns->column as $field) {
 
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($field->toArray(), true));
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($field->toArray(), true));
                 
                 $altStyle = 'ceAlternate';
                 $type = $field->type;
@@ -280,7 +283,6 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                         // @todo add another style for datetime fields?
                         $value = ($record->{$field->identifier}) ? $record->{$field->identifier}->toString(Zend_Locale_Format::getDateFormat($locale), $locale) : '';
                         $altStyle = 'ceAlternateCentered';
-                        //$type = 'date';
                         $type = 'string';
                         break;
                     case 'date':

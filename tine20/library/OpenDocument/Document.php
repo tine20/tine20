@@ -172,7 +172,7 @@ class OpenDocument_Document
      * @param string $_tmpdir
      * @return void
      */
-    public function __construct($_type, $_fileName = null, $_tmpdir = '/tmp')
+    public function __construct($_type, $_fileName = null, $_tmpdir = '/tmp', $_userStyles = array())
     {
         if($_fileName !== null) {
             $this->_content     = file_get_contents('zip://' . $_fileName . '#content.xml');
@@ -185,6 +185,7 @@ class OpenDocument_Document
         $this->_document = new SimpleXMLElement($this->_content);
         
         $this->_tmpdir = $_tmpdir;
+        $this->_userStyles = $_userStyles;
         
         switch ($_type) {
             case self::SPREADSHEET:
