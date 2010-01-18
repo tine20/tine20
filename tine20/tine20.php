@@ -11,7 +11,7 @@
  */
 
 if (php_sapi_name() != 'cli') {
-    die('not allowed!');
+    die('Not allowed: wrong sapi name!');
 }
 
 set_include_path(dirname(__FILE__) . PATH_SEPARATOR . dirname(__FILE__) . '/library' . PATH_SEPARATOR . get_include_path());
