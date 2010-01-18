@@ -179,6 +179,33 @@ abstract class Tinebase_Export_Abstract
     }
 
     /**
+     * replace and match strings in value
+     * 
+     * @param string $_value
+     * @param Zend_Config $_fieldConfig
+     * @return string
+     */
+    protected function _replaceAndMatchvalue($_value, Zend_Config $_fieldConfig)
+    {
+        $value = $_value;
+        
+        // check for replacements
+        if (isset($_fieldConfig->replace) && isset($_fieldConfig->replace->patterns) && isset($_fieldConfig->replace->replacements)) {
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_fieldConfig->replace->patterns->pattern->toArray(), true));
+            $value = preg_replace($_fieldConfig->replace->patterns->pattern->toArray(), $_fieldConfig->replace->replacements->replacement->toArray(), $value);
+        }
+
+        // check for matches
+        if (isset($_fieldConfig->match)) {
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_fieldConfig->match, true));
+            preg_match($_fieldConfig->match, $value, $matches);
+            $value = (isset($matches[1])) ? $matches[1] : '';
+        }
+        
+        return $value;
+    }
+    
+    /**
      * resolve records / overwrite this to resolve relations/linked data
      *
      * @param Tinebase_Record_RecordSet $_records

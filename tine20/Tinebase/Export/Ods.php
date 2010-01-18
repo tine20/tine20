@@ -240,6 +240,8 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
      * @param OpenDocument_SpreadSheet_Table $table
      * @param Tinebase_Record_RecordSet $records
      * @param array 
+     * 
+     * @todo    generalize this for other export formats
      */
     protected function _addBody($table, $_records)
     {
@@ -251,7 +253,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
         
         $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
         
-        // add timesheet rows
+        // add record rows
         $i = 0;
         foreach ($_records as $record) {
             
@@ -329,16 +331,8 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                         break;
                 }
                 
-                // check for replacements
-                if (isset($field->replace) && isset($field->replace->patterns) && isset($field->replace->replacements)) {
-                    $value = preg_replace($field->replace->patterns->toArray(), $field->replace->replacements->toArray(), $value);
-                }
-
-                // check for matches
-                if (isset($field->match)) {
-                    preg_match($field->match, $value, $matches);
-                    $value = (isset($matches[1])) ? $matches[1] : '';
-                }
+                // replace and match
+                $value = $this->_replaceAndMatchvalue($value, $field);
                 
                 // create cell with type and value and add style
                 $cell = $row->appendCell($type, $value);
