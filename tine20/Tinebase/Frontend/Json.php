@@ -505,6 +505,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $jsonAppName = $application->name . '_Frontend_Json';
                 
                 if(class_exists($jsonAppName)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting registry data for app ' . $application->name);
+                    
                     $applicationJson = new $jsonAppName;
                     
                     $registryData[$application->name] = $applicationJson->getRegistryData();
@@ -513,7 +515,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $registryData[$application->name]['customfields'] = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application)->toArray();
                     
                     // add preferences for app
-                    $appPrefs =Tinebase_Core::getPreference($application->name);
+                    $appPrefs = Tinebase_Core::getPreference($application->name);
                     if ($appPrefs !== NULL) {
                         $allPrefs = $appPrefs->getAllApplicationPreferences();
                         foreach($allPrefs as $pref) {
@@ -522,6 +524,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     }
                 }
             }
+            
+            if (! array_key_exists('Tinebase', $registryData)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' User has no permissions to run Tinebase or unable to get Tinebase preferences. Aborting ...');
+                $this->logout();
+            }
+            
         } else {
             $registryData['Tinebase'] = $this->getRegistryData();
         }
