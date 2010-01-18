@@ -151,7 +151,8 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     onBeforeLoad: function(store, options) {
         if (! options.refresh) {
             if (this.rendered) {
-                this.loadMask.show();
+                // defer to have the loadMask centered in case of rendering actions
+                this.loadMask.show.defer(50, this.loadMask);
             }
             this.store.each(this.view.removeEvent, this.view);
         }
