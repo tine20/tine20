@@ -19,6 +19,7 @@ Ext.onReady(function() {
     Tine.Tinebase.tineInit.initLocale();
     Tine.Tinebase.tineInit.initAjax();
     Tine.Tinebase.tineInit.initRegistry();
+    Tine.Tinebase.tineInit.initLibs();
     var waitForInits = function() {
         if (! Tine.Tinebase.tineInit.initList.initRegistry) {
             waitForInits.defer(100);
@@ -633,6 +634,18 @@ Tine.Tinebase.tineInit = {
             'namespace': 'Tine',
             'url'      : sam.target
         }));
+    },
+    
+    /**
+     * init external libraries
+     */
+    initLibs: function() {
+        if (OpenLayers) {
+            // fix OpenLayers script location to find images/themes/...
+            OpenLayers._getScriptLocation = function() {
+                return 'library/OpenLayers/';
+            }
+        }
     },
     
     /**
