@@ -337,7 +337,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                         scope: this.view,
                         sourceEl: eventEl,
                         event: event,
-                        ddel: d
+                        ddel: d,
+                        selections: this.view.getSelectionModel().getSelectedEvents()
                     }
                 }
             },

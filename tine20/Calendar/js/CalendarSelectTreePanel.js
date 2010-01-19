@@ -26,6 +26,7 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
     //stateful: true,
     //stateId: 'cal-calendartree-containers',
     recordClass: Tine.Calendar.Model.Event,
+    ddGroup: 'cal-event',
     
     initComponent: function() {
         this.selModel = new Ext.ux.tree.CheckboxSelectionModel({

@@ -319,19 +319,21 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         // init dragables
         this.dragZone = new Ext.dd.DragZone(this.el, {
             ddGroup: 'cal-event',
-            daysView: this,
+            view: this,
             scroll: false,
             containerScroll: true,
             
             getDragData: function(e) {
+                var selected = this.view.getSelectionModel().getSelectedEvents();
+                
                 var eventEl = e.getTarget('div.cal-daysviewpanel-event', 10);
                 if (eventEl) {
                     var parts = eventEl.id.split(':');
-                    var event = this.daysView.ds.getById(parts[1]);
+                    var event = this.view.ds.getById(parts[1]);
                     
                     // don't allow dragging of dirty events
                     // don't allow dragging with missing edit grant
-                    if (! event || event.dirty || (this.daysView.denyDragOnMissingEditGrant && ! event.get('editGrant'))) {
+                    if (! event || event.dirty || (this.view.denyDragOnMissingEditGrant && ! event.get('editGrant'))) {
                         return;
                     }
                     
@@ -342,17 +344,18 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     if (event.get('is_all_day_event')) { 
                         Ext.fly(d).setLeft(0);
                     } else {
-                        var width = (Ext.fly(this.daysView.dayCols[0]).getWidth() * 0.9);
+                        var width = (Ext.fly(this.view.dayCols[0]).getWidth() * 0.9);
                         Ext.fly(d).setTop(0);
                         Ext.fly(d).setWidth(width);
-                        Ext.fly(d).setHeight(this.daysView.getTimeHeight.call(this.daysView, event.get('dtstart'), event.get('dtend')));
+                        Ext.fly(d).setHeight(this.view.getTimeHeight.call(this.view, event.get('dtstart'), event.get('dtend')));
                     }
                     
                     return {
-                        scope: this.daysView,
+                        scope: this.view,
                         sourceEl: eventEl,
                         event: event,
-                        ddel: d
+                        ddel: d,
+                        selections: this.view.getSelectionModel().getSelectedEvents()
                     }
                 }
             },
@@ -1100,7 +1103,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var width = 100/this.numOfDays;
         
         for (var i=0, date; i<this.numOfDays; i++) {
-            day = this.startDate.add(Date.DAY, i);
+            var day = this.startDate.add(Date.DAY, i);
             html += this.templates.dayHeader.applyTemplate({
                 day: String.format(this.dayFormatString, day.format('l'), day.format('j'), day.format('F')),
                 height: this.granularityUnitHeights,
