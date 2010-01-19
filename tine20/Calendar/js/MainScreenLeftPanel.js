@@ -41,7 +41,8 @@ Tine.Calendar.MainScreenLeftPanel = Ext.extend(Ext.Panel, {
             app: Tine.Tinebase.appMgr.get('Calendar')
         });
         
-        this.calSelector.getSelectionModel().on('selectionchange', function(sm, node) {
+        //this.calSelector.getSelectionModel().on('selectionchange', function(sm, node) {
+        this.calSelector.getFilterPlugin().on('change', function() {
             var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
             if (contentPanel) {
                 contentPanel.refresh();
