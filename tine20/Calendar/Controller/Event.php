@@ -354,6 +354,33 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
+     * update multiple records
+     * 
+     * @param   Tinebase_Model_Filter_FilterGroup $_filter
+     * @param   array $_data
+     * @return  integer number of updated records
+     */
+    public function updateMultiple($_filter, $_data)
+    {
+        $this->_checkRight('update');
+        $this->checkFilterACL($_filter, 'update');
+        
+        // get only ids
+        $ids = $this->_backend->search($_filter, NULL, TRUE);
+        
+        foreach ($ids as $eventId) {
+            $event = $this->get($eventId);
+            foreach ($_data as $field => $value) {
+                $event->$field = $value;
+            }
+            
+            $this->update($event, FALSE);
+        }
+        
+        return count($ids);
+    }
+    
+    /**
      * updates a recur series
      *
      * @param  Calendar_Model_Event $_recurInstance
