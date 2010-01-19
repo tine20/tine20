@@ -88,6 +88,24 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $currentTz);
     }
     
+    public function testUpdateMultiple()
+    {
+        $persitentEvent = $this->testCreateEvent();
+        
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($persitentEvent->getId()))
+        ));
+        
+        $data = array(
+            'summary' => 'multipleTest'
+        );
+        
+        $this->_controller->updateMultiple($filter, $data);
+        
+        $updatedEvent = $this->_controller->get($persitentEvent->getId());
+        $this->assertEquals('multipleTest', $updatedEvent->summary);
+    }
+    
     public function testAttendeeBasics()
     {
         $event = $this->_getEvent();
