@@ -473,7 +473,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         
         // get imap domain and add it to username if available
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP, 'Tinebase', array());
-        if (array_key_exists('domain', $imapConfig)) {
+        if (array_key_exists('domain', $imapConfig) && ! empty($imapConfig['domain'])) {
             $_emailUser->emailUsername .= '@' . $imapConfig['domain'];
         }
     }
