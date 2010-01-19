@@ -37,11 +37,6 @@ class FastAGI extends VoipMonitor_Daemon
         //$this->_closeSocket();
     }  
         
-    public function speak($_text)
-    {
-        $this->_execute('Flite "' . $_text. '"');
-    }
-    
     public function busy()
     {
         $this->_command('busy');
@@ -52,9 +47,56 @@ class FastAGI extends VoipMonitor_Daemon
         $this->_command('answer');
     }
     
+    public function hangup()
+    {
+        $this->_command('HANGUP');
+    }
+    
+    public function getData($_filename, $_timeout=2000, $_maxDigits = null)
+    {
+        $result = $this->_command('GET DATA '. $_filename . ' ' . $_timeout . ' '. $_maxDigits);
+    }
+    
+    public function sendText($_text)
+    {
+        $result = $this->_command('SEND TEXT "'. $_text . '"');
+    }
+    
+    public function noop($_text)
+    {
+        $result = $this->_command('NOOP "'. $_text . '"');
+    }
+    
+    public function recordFile($_filename, $_format, $_escapeDigits, $_timeout, $_beep = false, $_offset = 0, $_silence = false)
+    {
+        $beep = $_beep !== false ? 'BEEP' : '';
+        
+        $result = $this->_command("RECORD FILE $_filename $_format $_escapeDigits $_timeout $_offset $beep");
+    }
+    
+    public function setVariable($_variable, $_value)
+    {
+        $result = $this->_command('SET VARIABLE '. $_variable . ' "' . $_value . '"');
+    }
+    
+    public function streamFile($_filename, $_escapeDigits = null, $_offset = null)
+    {
+        $escapeDigits = $_escapeDigits !== null ? $_escapeDigits : '""';
+        $offset       = $_offset       !== null ? " $_offset"    : '';
+        
+        $result = $this->_command("STREAM FILE $_filename $escapeDigits$offset");
+    }
+    
+    public function sayDigits($_digits, $_escapeDigits = null)
+    {
+        $escapeDigits = $_escapeDigits !== null ? $_escapeDigits : '""';
+        
+        $result = $this->_command('SAY DIGITS '. $_digits . ' ' . $escapeDigits);
+    }
+    
     public function sayTime($_time, $_digits = 0)
     {
-        $result = $this->_command('say time '. $_time . ' ' . $_digits);
+        $result = $this->_command('SAY TIME '. $_time . ' ' . $_digits);
     }
     
     public function setCallerId($_callerId)
@@ -67,6 +109,21 @@ class FastAGI extends VoipMonitor_Daemon
         $result = $this->_command('verbose ' . $_text . ' ' . $_level);
     }
     
+    public function waitForDigit($_timeout)
+    {
+        $response = $this->_command('WAIT FOR DIGIT ' . $_timeout);
+        
+        $responseCode = substr($response, 7);
+        
+        if($responseCode == 0) {
+            // timeout
+            $result = null;
+        } else {
+            $result = chr(substr($response, 7));
+        }
+        
+        return $result;
+    }
     
     protected function _command($_command)
     {
@@ -74,12 +131,19 @@ class FastAGI extends VoipMonitor_Daemon
         
         $response = $this->_readSocket($this->_clientConnection);
         
-        echo $response . PHP_EOL;
+        if(substr($response, 0 ,3) != '200') {
+            throw new Exception('Error during command: ' . $_command . PHP_EOL . 'Result: ' . $response);
+        }
+        
+        $result = substr($response, 4);
+        echo $result . PHP_EOL;
+        
+        return $result;
     }
     
     protected function _execute($_command)
     {
-        $command = 'exec ' . $_command;
+        $command = 'EXEC ' . $_command;
         $result = $this->_writeSocket($this->_clientConnection, $command);
         
         $response = $this->_readSocket($this->_clientConnection);
