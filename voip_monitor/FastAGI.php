@@ -109,9 +109,15 @@ class FastAGI extends VoipMonitor_Daemon
         $result = $this->_command('verbose ' . $_text . ' ' . $_level);
     }
     
+    /**
+     * waits until users pressed a digit
+     * 
+     * @param int $_timeout timeout in miliseconds
+     * @return string
+     */
     public function waitForDigit($_timeout)
     {
-        $response = $this->_command('WAIT FOR DIGIT ' . $_timeout);
+        $response = $this->_command('WAIT FOR DIGIT ' . $_timeout, $_timeout + 1000);
         
         $responseCode = substr($response, 7);
         
@@ -125,11 +131,11 @@ class FastAGI extends VoipMonitor_Daemon
         return $result;
     }
     
-    protected function _command($_command)
+    protected function _command($_command, $_timeout = 2000)
     {
         $result = $this->_writeSocket($this->_clientConnection, $_command);
         
-        $response = $this->_readSocket($this->_clientConnection);
+        $response = $this->_readSocket($this->_clientConnection, $_timeout);
         
         if(substr($response, 0 ,3) != '200') {
             throw new Exception('Error during command: ' . $_command . PHP_EOL . 'Result: ' . $response);
