@@ -324,8 +324,12 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     ['plain',   this.app.i18n._('Plain')]
                 ]
             }, {
-                name: 'smtp_domain',
-                fieldLabel: this.app.i18n._('Domain'),
+                name: 'smtp_primarydomain',
+                fieldLabel: this.app.i18n._('Primary Domain'),
+                xtype: 'textfield'
+            }, {
+                name: 'smtp_secondarydomains',
+                fieldLabel: this.app.i18n._('Secondary Domains (comma separated)'),
                 xtype: 'textfield'
             }, {
                 name: 'smtp_from',
