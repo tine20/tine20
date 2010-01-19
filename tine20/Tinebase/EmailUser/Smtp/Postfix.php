@@ -30,35 +30,12 @@
 -- --------------------------------------------------------
 
 --
--- Table structure for table `smtp_forwardings`
---
-
-CREATE TABLE IF NOT EXISTS `smtp_forwardings` (
-  `source` varchar(80) NOT NULL,
-  `destination` text NOT NULL,
-  KEY `source` (`source`)
-) ENGINE=Innodb DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `smtp_aliases`
---
-
-CREATE TABLE IF NOT EXISTS `smtp_aliases` (
-  `email` varchar(80) NOT NULL,
-  `alias` varchar(80) NULL,
-  KEY `emailalias` (`email`, `alias`)
-) ENGINE=Innodb DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `smtp_users`
 --
 
 CREATE TABLE IF NOT EXISTS `smtp_users` (
   `email` varchar(80) NOT NULL,
+  `username` varchar(80) NOT NULL,
   `passwd` varchar(34) DEFAULT NULL,
   `quota` int(10) DEFAULT '10485760',
   `userid` varchar(40) NOT NULL,
@@ -69,6 +46,35 @@ CREATE TABLE IF NOT EXISTS `smtp_users` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `smtp_forwardings`
+--
+
+CREATE TABLE IF NOT EXISTS `smtp_forwardings` (
+  `userid` varchar(80) NOT NULL,
+  `forward` varchar(80) NOT NULL,
+  KEY `userid` (`userid`, `forward`)
+) ENGINE=Innodb DEFAULT CHARSET=utf8;
+
+ALTER TABLE `smtp_forwardings`
+  ADD CONSTRAINT `smtp_forwardings::userid--smtp_users::userid` FOREIGN KEY (`userid`) REFERENCES `smtp_users` (`userid`) ON DELETE CASCADE;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `smtp_aliases`
+--
+
+CREATE TABLE IF NOT EXISTS `smtp_aliases` (
+  `userid` varchar(80) NOT NULL,
+  `alias` varchar(80) NOT NULL,
+  KEY `emailalias` (`userid`, `alias`)
+) ENGINE=Innodb DEFAULT CHARSET=utf8;
+
+ALTER TABLE `smtp_aliases`
+  ADD CONSTRAINT `smtp_aliases::userid--smtp_users::userid` FOREIGN KEY (`userid`) REFERENCES `smtp_users` (`userid`) ON DELETE CASCADE;
 
  */
 class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
@@ -117,6 +123,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         'emailUserId'       => 'userid',
         'emailAddress'      => 'email',
         'emailForwardOnly'  => 'forward_only',
+        'emailUsername'     => 'username',
     );
     
     /**
@@ -157,18 +164,18 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         $select = $this->_db->select();
         $select->from($this->_tableName);
         
-        $select->where($this->_db->quoteIdentifier('userid') . ' = ?', $_userId)
+        $select->where($this->_db->quoteIdentifier($this->_tableName . '.userid') . ' = ?', $_userId)
                ->where($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
-               ->group('userid')
+               ->group($this->_tableName . '.userid')
                ->joinLeft(
             /* table  */ array('aliases' => $this->_config['prefix'] . $this->_config['aliasTable']), 
-            /* on     */ $this->_db->quoteIdentifier('aliases.email') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.email'),
+            /* on     */ $this->_db->quoteIdentifier('aliases.userid') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.userid'),
             /* select */ array('emailAliases' => 'GROUP_CONCAT( DISTINCT ' . $this->_db->quoteIdentifier('aliases.alias') . ')'))
                ->joinLeft(
             /* table  */ array('forwards' => $this->_config['prefix'] . $this->_config['forwardTable']), 
-            /* on     */ $this->_db->quoteIdentifier('forwards.source') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.email'),
-            /* select */ array('emailForwards' => 'GROUP_CONCAT( DISTINCT ' . $this->_db->quoteIdentifier('forwards.destination') . ')'))
-               ->order('email');
+            /* on     */ $this->_db->quoteIdentifier('forwards.userid') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.userid'),
+            /* select */ array('emailForwards' => 'GROUP_CONCAT( DISTINCT ' . $this->_db->quoteIdentifier('forwards.forward') . ')'))
+               ->order($this->_tableName . '.email');
 
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
@@ -193,21 +200,14 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_FullUser $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser|NULL
-     * //@throws Tinebase_Exception_UnexpectedValue
-     * 
-     * @todo    throw exception or not?
      */
 	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
-	    if (! $_user->accountEmailAddress) {
-	        //throw new Tinebase_Exception_UnexpectedValue('User has no email address. This is mandatory for adding him or her to postfix table.');
-	        // just report this, don't throw expection
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' User has no email address. This is mandatory for adding him or her to postfix table: ' . $_emailUser->emailUserId);
+	    try {
+	        $this->_tineUserToEmailUser($_user, $_emailUser);
+	    } catch (Tinebase_Exception_UnexpectedValue $teuv) {
             return $_emailUser;
 	    }
-	    
-	    $_emailUser->emailUserId = $_user->getId();
-	    $_emailUser->emailAddress = $_user->accountEmailAddress;
 	    
 	    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding new postfix user ' . $_emailUser->emailUserId);
 	    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_emailUser->toArray(), TRUE));
@@ -241,20 +241,14 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_FullUser $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser|NULL
-     * //@throws Tinebase_Exception_UnexpectedValue
-     * 
-     * @todo    throw exception or not?
      */
 	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
-        if (! $_user->accountEmailAddress) {
-            //throw new Tinebase_Exception_UnexpectedValue('User has no email address. This is mandatory for updating the postfix table.');
-            // just report this, don't throw expection
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' User has no email address. This is mandatory for updating the postfix table: ' . $_emailUser->emailUserId);
+        try {
+            $this->_tineUserToEmailUser($_user, $_emailUser);
+        } catch (Tinebase_Exception_UnexpectedValue $teuv) {
             return $_emailUser;
         }
-	    
-        $_emailUser->emailUserId = $_user->getId();
 	    
         $recordArray = $this->_recordToRawData($_emailUser);
         
@@ -274,6 +268,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
             $this->_setAliases($_emailUser, TRUE);
             $this->_setForwards($_emailUser, TRUE);
             
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+
             $result = $this->getUserById($_user->getId());
             
         } catch (Zend_Db_Statement_Exception $zdse) {
@@ -322,9 +318,6 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         );
         
         $this->_db->delete($this->_tableName, $where);
-
-        // delete forwards
-        $this->_deleteForwards($user->accountEmailAddress);
     }
     
     /**
@@ -337,7 +330,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
     protected function _setAliases($_emailUser, $_deleteFirst = FALSE)
     {
         if ($_deleteFirst) {
-            $this->_deleteAliases($_emailUser->emailAddress);
+            $this->_deleteAliases($_emailUser->emailUserId);
         }
         
         if (! is_array($_emailUser->emailAliases)) {
@@ -351,7 +344,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         foreach ($_emailUser->emailAliases as $aliasAddress) {
             if (! empty($aliasAddress)) {
                 $aliasArray = array(
-                    'email' => $_emailUser->emailAddress,
+                    'userid' => $_emailUser->emailUserId,
                     'alias' => $aliasAddress
                 );
                 $this->_db->insert($this->_config['prefix'] . $this->_config['aliasTable'], $aliasArray);
@@ -362,13 +355,13 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
     /**
      * delete aliases
      * 
-     * @param string $_emailAddress
+     * @param string $_userId
      * @return void
      */
-    protected function _deleteAliases($_emailAddress)
+    protected function _deleteAliases($_userId)
     {
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('email') . ' = ?', $_emailAddress),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('userid') . ' = ?', $_userId),
         );
         
         $this->_db->delete($this->_config['prefix'] . $this->_config['aliasTable'], $where);
@@ -384,7 +377,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
     protected function _setForwards($_emailUser, $_deleteFirst = FALSE)
     {
         if ($_deleteFirst) {
-            $this->_deleteForwards($_emailUser->emailAddress);
+            $this->_deleteForwards($_emailUser->emailUserId);
         }
         
         if (! is_array($_emailUser->emailForwards)) {
@@ -394,8 +387,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         foreach ($_emailUser->emailForwards as $forwardAddress) {
             if (! empty($forwardAddress)) {
                 $forwardArray = array(
-                    'source'        => $_emailUser->emailAddress,
-                    'destination'   => $forwardAddress,
+                    'userid' => $_emailUser->emailUserId,
+                    'forward'   => $forwardAddress,
                 );
                 $this->_db->insert($this->_config['prefix'] . $this->_config['forwardTable'], $forwardArray);
             }
@@ -408,10 +401,10 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * @param string $_emailAddress
      * @return void
      */
-    protected function _deleteForwards($_emailAddress)
+    protected function _deleteForwards($_userId)
     {
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('source') . ' = ?', $_emailAddress),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('userid') . ' = ?', $_userId),
         );
         
         $this->_db->delete($this->_config['prefix'] . $this->_config['forwardTable'], $where);
@@ -439,5 +432,34 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         } 
         
         return $result;
+    }
+    
+    
+    /**
+     * convert tine user to email useru
+     * 
+     * @param Tinebase_Model_FullUser $_user
+     * @param Tinebase_Model_EmailUser $_emailUser
+     * @return void
+     * @throws Tinebase_Exception_UnexpectedValue
+     * 
+     * @todo move this to EmailUser_Abstract or Model
+     */
+    protected function _tineUserToEmailUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
+    {
+        if (! $_user->accountEmailAddress) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' User has no email address. This is mandatory for adding him or her to postfix table: ' . $_emailUser->emailUserId);
+            throw new Tinebase_Exception_UnexpectedValue('User has no email address. This is mandatory for adding him or her to postfix table.');
+        }
+        
+        $_emailUser->emailUserId = $_user->getId();
+        $_emailUser->emailAddress = $_user->accountEmailAddress;
+        $_emailUser->emailUsername = $_user->accountLoginName;
+        
+        // get imap domain and add it to username if available
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP, 'Tinebase', array());
+        if (array_key_exists('domain', $imapConfig)) {
+            $_emailUser->emailUsername .= '@' . $imapConfig['domain'];
+        }
     }
 }  

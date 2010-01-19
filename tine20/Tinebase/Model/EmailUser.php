@@ -49,6 +49,8 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
         'emailForwardOnly'  => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'emailAliases'      => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
         'emailAddress'      => array('allowEmpty' => true),
+    // dbmail username (tine username + dbmail domain)
+        'emailUsername'     => array('allowEmpty' => true),
     );
     
     /**

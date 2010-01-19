@@ -91,8 +91,9 @@ class Tinebase_User_EmailUser_PostfixTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(array(
             'emailAddress'      => $this->_objects['jsmith']->accountEmailAddress,
+            'emailUsername'     => $this->_objects['jsmith']->accountLoginName . '@tine20.org',
             'emailPassword'     => '',
-            'emailUserId'       => $this->_objects['jsmith']->accountLoginName,
+            'emailUserId'       => $this->_objects['jsmith']->getId(),
             'emailForwardOnly'  => 0,
             'emailAliases'      => array('bla@tine20.org', 'blubb@tine20.org'),
             'emailForwards'     => array('test@tine20.org', 'unittest@tine20.org'),
@@ -107,7 +108,8 @@ class Tinebase_User_EmailUser_PostfixTest extends PHPUnit_Framework_TestCase
         // update user
         $this->_objects['addedUser']->emailForwardOnly = 1;
         $this->_objects['addedUser']->emailAliases = array();
-        $this->_objects['addedUser']->emailForwards =  array('test@tine20.org');
+        $this->_objects['addedUser']->emailForwards = array('test@tine20.org');
+        $this->_objects['jsmith']->accountEmailAddress = 'j.smith@tine20.org';
         
         $updatedUser = $this->_backend->updateUser($this->_objects['jsmith'], $this->_objects['addedUser']);
         
@@ -115,8 +117,9 @@ class Tinebase_User_EmailUser_PostfixTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(array(
             'emailAddress'      => $this->_objects['jsmith']->accountEmailAddress,
+            'emailUsername'     => $this->_objects['jsmith']->accountLoginName . '@tine20.org',
             'emailPassword'     => '',
-            'emailUserId'       => $this->_objects['jsmith']->accountLoginName,
+            'emailUserId'       => $this->_objects['jsmith']->getId(),
             'emailForwardOnly'  => 1,
             'emailAliases'      => array(),
             'emailForwards'     => array('test@tine20.org'),
