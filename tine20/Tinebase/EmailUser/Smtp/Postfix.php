@@ -10,7 +10,6 @@
  * @version     $Id$
  * 
  * @todo        add validation of email addresses?
- * @todo        check domains when creating aliases
  */
 
 /**
@@ -111,6 +110,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         'forwardTable'      => 'forwardings',
         'aliasTable'        => 'aliases',
         'encryptionType'    => 'md5',
+        'alloweddomains'    => array(),
     );
 
     /**
@@ -137,17 +137,23 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
     
     /**
      * the constructor
-     *
-     * @todo get domain from imap config?
      */
     public function __construct()
     {
         $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
         $this->_config = array_merge($smtpConfig['postfix'], $this->_config);
-        //$this->_config['domain'] = (isset($smtpConfig['domain'])) ? $smtpConfig['domain'] : '';
         $this->_tableName = $this->_config['prefix'] . $this->_config['userTable'];
         
         $this->_db = Zend_Db::factory('Pdo_Mysql', $this->_config);
+        
+        // add allowed domains
+        if (! empty($smtpConfig['primarydomain'])) { 
+            $this->_config['alloweddomains'] = array($smtpConfig['primarydomain']);
+            if (! empty($smtpConfig['secondarydomains'])) {
+                // merge primary and secondary domains and split secondary domains + trim whitespaces
+                $this->_config['alloweddomains'] = array_merge($this->_config['alloweddomains'], preg_split('/\s*,\s*/', $smtpConfig['secondarydomains']));
+            } 
+        }
         
         $this->_clientId = $this->_convertToInt(Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId());
     }
@@ -340,9 +346,15 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Setting aliases for ' . $_emailUser->emailAddress . ': ' 
             . print_r($_emailUser->emailAliases, TRUE));
-        
+
         foreach ($_emailUser->emailAliases as $aliasAddress) {
             if (! empty($aliasAddress)) {
+                
+                // check if in primary or secondary domains
+                if (! $this->_checkDomain($aliasAddress)) {
+                    continue;
+                }
+                
                 $aliasArray = array(
                     'userid' => $_emailUser->emailUserId,
                     'alias' => $aliasAddress
@@ -444,6 +456,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * @throws Tinebase_Exception_UnexpectedValue
      * 
      * @todo move this to EmailUser_Abstract or Model
+     * @todo check if we should let exception from _checkDomain() be uncatched 
      */
     protected function _tineUserToEmailUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
     {
@@ -451,6 +464,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' User has no email address. This is mandatory for adding him or her to postfix table: ' . $_emailUser->emailUserId);
             throw new Tinebase_Exception_UnexpectedValue('User has no email address. This is mandatory for adding him or her to postfix table.');
         }
+        
+        $this->_checkDomain($_user->accountEmailAddress, TRUE);
         
         $_emailUser->emailUserId = $_user->getId();
         $_emailUser->emailAddress = $_user->accountEmailAddress;
@@ -461,5 +476,32 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         if (array_key_exists('domain', $imapConfig)) {
             $_emailUser->emailUsername .= '@' . $imapConfig['domain'];
         }
+    }
+    
+    /**
+     * check if email address is in allowed domains
+     * 
+     * @param string $_email
+     * @param boolean $_throwException
+     * @return boolean
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
+    protected function _checkDomain($_email, $_throwException = FALSE)
+    {
+        $result = TRUE;
+        if (! empty($this->_config['alloweddomains'])) {
+            $domain = substr($_email, strpos($_email, '@')+1);
+            if (! in_array($domain, $this->_config['alloweddomains'])) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Email address ' . $_email . ' not in allowed domains!');
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Allowed domains: ' . print_r($this->_config['alloweddomains'], TRUE));
+                if ($_throwException) {
+                    throw new Tinebase_Exception_UnexpectedValue('Email address not in allowed domains!');
+                } else {
+                    $result = FALSE;
+                }
+            }
+        }
+        
+        return $result;
     }
 }  
