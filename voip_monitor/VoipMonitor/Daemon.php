@@ -195,10 +195,9 @@ abstract class VoipMonitor_Daemon
             $line = fgets($_connection);
             
             if($line === false) {
-                if($result === null) {
-                    if($counter++ > $_timeout) {
-                        break;
-                    }
+                $counter++;
+                
+                if($result === null && $counter < $_timeout) {
                     usleep(200000);
                     continue;
                 } else {
@@ -209,14 +208,14 @@ abstract class VoipMonitor_Daemon
             $result .= $line;
         }
         
-        fwrite(STDERR, 'RESULT: ' . $result . PHP_EOL);
+        #fwrite(STDERR, 'RESULT: ' . $result . PHP_EOL);
         
         return $result;
     }
     
     protected function _writeSocket($_connection, $_data)
     {
-        fwrite(STDERR, $_data . PHP_EOL);
+        #fwrite(STDERR, $_data . PHP_EOL);
         
         if(!is_resource($_connection)) {
             return false;
