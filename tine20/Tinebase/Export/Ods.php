@@ -273,7 +273,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
 
             foreach ($this->_config->columns->column as $field) {
 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($field->toArray(), true));
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($field->toArray(), true));
                 
                 $altStyle = 'ceAlternate';
                 $type = $field->type;
