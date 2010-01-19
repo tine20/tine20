@@ -186,10 +186,17 @@ abstract class VoipMonitor_Daemon
         return $socket;
     }
     
-    protected function _readSocket($_connection, $_timeout = 20)
+    /**
+     * read from socket until fgets returns false
+     * 
+     * @param unknown_type $_connection
+     * @param int $_timeout timeout in miliseconds
+     * @return string
+     */
+    protected function _readSocket($_connection, $_timeout = 2000)
     {
         $result = null;
-        $counter = 0;
+        $counter = $_timeout / 100;
         
         while (is_resource($_connection) && !feof($_connection)) {
             $line = fgets($_connection);
@@ -198,7 +205,7 @@ abstract class VoipMonitor_Daemon
                 $counter++;
                 
                 if($result === null && $counter < $_timeout) {
-                    usleep(200000);
+                    usleep(100000);
                     continue;
                 } else {
                     break;
