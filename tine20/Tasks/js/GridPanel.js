@@ -165,6 +165,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         },
         columns: [
         {   id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer },
+        {   id: 'lead_name', header: this.app.i18n._('Lead'), dataIndex: 'relations', width: 175, sortable: false, hidden: true, renderer: this.leadRenderer },
         {
             id: 'summary',
             header: this.app.i18n._("Summary"),
@@ -254,6 +255,27 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         });
     },
     
+    /**
+     * return lead name for first linked Crm_Model_Lead
+     * 
+     * @param {Object} data
+     * @return {String} lead name
+     */
+    leadRenderer: function(data) {    
+    
+        if( Ext.isArray(data) && data.length > 0) {
+            var index = 0;
+            // get correct relation type from data (contact) array and show first matching record (org_name + n_fileas)
+            while (index < data.length && data[index].related_model != 'Crm_Model_Lead') {
+                index++;
+            }
+            if (data[index]) {
+                var name = (data[index].related_record.lead_name !== null ) ? data[index].related_record.lead_name : '';
+                return Ext.util.Format.htmlEncode(name);
+            }
+        }
+    },    
+
     /**
      * return additional tb items
      * @private

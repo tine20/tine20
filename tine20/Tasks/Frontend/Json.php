@@ -65,7 +65,7 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $pagination = new Tasks_Model_Pagination(Zend_Json::decode($paging));
         
-        $tasks = Tasks_Controller_Task::getInstance()->search($filter, $pagination);
+        $tasks = Tasks_Controller_Task::getInstance()->search($filter, $pagination, TRUE);
 
         $results = $this->_multipleTasksToJson($tasks);
         
