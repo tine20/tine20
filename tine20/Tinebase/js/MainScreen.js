@@ -237,7 +237,8 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             text: _('Logout'),
             tooltip:  String.format(_('Logout from {0}'), Tine.title),
             iconCls: 'action_logOut',
-            handler: this.onLogout
+            handler: this.onLogout,
+            scope: this
         });
     },
     
@@ -529,26 +530,36 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
      * @private
      */
     onLogout: function() {
-        Ext.MessageBox.confirm(_('Confirm'), _('Are you sure you want to logout?'), function(btn, text) {
-            if (btn == 'yes') {
-                Ext.MessageBox.wait(_('Logging you out...'), _('Please wait!'));
-                Ext.Ajax.request( {
-                    params : {
-                        method : 'Tinebase.logout'
-                    },
-                    callback : function(options, Success, response) {
-                        // remove the event handler
-                        // the reload() trigers the unload event
-                        var redirect = (Tine.Tinebase.registry.get('redirectUrl'));
-                        if (redirect && redirect != '') {
-                            window.location = Tine.Tinebase.registry.get('redirectUrl');
-                        } else {
-                            window.location = window.location.href.replace(/#+.*/, '');
-                        }
-                    }
-                });
+        if (Tine.Tinebase.registry.get('confirmLogout') != '0') {
+            Ext.MessageBox.confirm(_('Confirm'), _('Are you sure you want to logout?'), function(btn, text) {
+                if (btn == 'yes') {
+                    this._doLogout();
+                }
+            }, this);
+        } else {
+            this._doLogout();
+        }
+    },
+    
+    /**
+     * logout user & redirect
+     */
+    _doLogout: function() {
+        Ext.MessageBox.wait(_('Logging you out...'), _('Please wait!'));
+        Ext.Ajax.request( {
+            params : {
+                method : 'Tinebase.logout'
+            },
+            callback : function(options, Success, response) {
+                // remove the event handler
+                // the reload() trigers the unload event
+                var redirect = (Tine.Tinebase.registry.get('redirectUrl'));
+                if (redirect && redirect != '') {
+                    window.location = Tine.Tinebase.registry.get('redirectUrl');
+                } else {
+                    window.location = window.location.href.replace(/#+.*/, '');
+                }
             }
-        });
+        });        
     }
-
 });

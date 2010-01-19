@@ -41,10 +41,16 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
     const DEFAULT_APP = 'defaultapp';
 
     /**
-     * default application
+     * preferred window type
      *
      */
     const WINDOW_TYPE = 'windowtype';
+    
+    /**
+     * show logout confirmation
+     *
+     */
+    const CONFIRM_LOGOUT = 'confirmLogout';
     
     /**
      * application
@@ -67,7 +73,8 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 self::TIMEZONE,
                 self::LOCALE,
                 self::DEFAULT_APP,
-                self::WINDOW_TYPE
+                self::WINDOW_TYPE,
+                self::CONFIRM_LOGOUT,
             )
             : array();
             
@@ -99,6 +106,10 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
             self::WINDOW_TYPE  => array(
                 'label'         => $translate->_('Window Type'),
                 'description'   => $translate->_('You can choose between ExtJs style windows or normal Browser popup windows.'),
+            ),
+            self::CONFIRM_LOGOUT  => array(
+                'label'         => $translate->_('Confirm Logout'),
+                'description'   => $translate->_('Show confirmation dialog on logout.'),
             ),
         );
         
@@ -137,6 +148,13 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                             <label>Browser style</label>
                             <value>Browser</value>
                         </option>
+                    </options>';
+                break;
+            case self::CONFIRM_LOGOUT:
+                $preference->value      = 1;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
                 break;
             default:

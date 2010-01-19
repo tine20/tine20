@@ -514,6 +514,7 @@ Tine.Tinebase.tineInit = {
             case 'windowtype':
                 //console.log('hier');
                 //break;
+            case 'confirmLogout':
             case 'timezone':
             case 'locale':
                 if (window.google && google.gears && google.gears.localServer) {
