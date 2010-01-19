@@ -26,14 +26,16 @@ Tine.Admin.Applications.Main = function() {
         if (selModel.getCount() > 0) {
             var selectedRows = selModel.getSelections();
             var appName = selectedRows[0].data.name;
-            Tine[appName].AdminPanel.openWindow({
-                record: (Tine[selectedRows[0].data.name].Model.Settings) ? new Tine[selectedRows[0].data.name].Model.Settings(selectedRows[0].data.name) : null,
-                windowTitle: String.format(_('{0} Settings'), appName),
-                listeners: {
-                    scope: this,
-                    'update': (Tine[appName].AdminPanel.onUpdate) ? Tine[appName].AdminPanel.onUpdate : Ext.emptyFn
-                }
-            });
+            if (Tine[appName]) {
+                Tine[appName].AdminPanel.openWindow({
+                    record: (Tine[appName].Model.Settings) ? new Tine[appName].Model.Settings(appName) : null,
+                    windowTitle: String.format(_('{0} Settings'), appName),
+                    listeners: {
+                        scope: this,
+                        'update': (Tine[appName].AdminPanel.onUpdate) ? Tine[appName].AdminPanel.onUpdate : Ext.emptyFn
+                    }
+                });
+            }
         } else {
             _button.setDisabled(true);
         }
