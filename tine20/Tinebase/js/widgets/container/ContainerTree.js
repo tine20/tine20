@@ -298,7 +298,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * TODO use Ext.Direct
      */
     onBeforenodedrop: function(dropEvent) {
-        
         var targetContainerId = dropEvent.target.id;
         var recordIds = [];
         
@@ -322,6 +321,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             }
         });
         
+        // prevent repair actions
+        dropEvent.dropStatus = true;
         return true;
     }
     
