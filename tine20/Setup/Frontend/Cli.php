@@ -95,6 +95,10 @@ class Setup_Frontend_Cli
         
         $controller->installApplications($applications, $options);
         
+        if (array_key_exists('acceptedTermsVersion', $options)) {
+            Setup_Controller::getInstance()->saveAcceptedTerms($options['acceptedTermsVersion']);
+        }
+        
         echo "Successfully installed " . count($applications) . " applications.\n";        
     }
 
