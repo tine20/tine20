@@ -126,6 +126,13 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
         $result = $this->_rawDataToRecord($queryResult);
         
+        // add username
+        $user = Tinebase_User::getInstance()->getFullUserById($_userId);
+        $result->emailUsername = $user->accountLoginName;
+        if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
+            $result->emailUsername .= '@' . $this->_config['domain'];
+        }
+        
         return $result;
     }
     
