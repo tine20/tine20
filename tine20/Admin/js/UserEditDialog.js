@@ -517,7 +517,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     columnWidth: .666
                 }], [{
                     fieldLabel: this.app.i18n._('Email Username'),
-                    name: 'emailUserId',
+                    name: 'emailUsername',
                     columnWidth: .666
                 }], [{
                     fieldLabel: this.app.i18n._('Quota'),
