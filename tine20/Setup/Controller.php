@@ -702,11 +702,11 @@ class Setup_Controller
         }
         
         if (isset($_authenticationData['redirectSettings'])) {
-          $this->_updateRedirectSettings($_authenticationData['redirectSettings']);
+            $this->_updateRedirectSettings($_authenticationData['redirectSettings']);
         }
         
         if (isset($_authenticationData['acceptedTermsVersion'])) {
-          $this->saveAcceptedTerms($_authenticationData['acceptedTermsVersion']);
+            $this->saveAcceptedTerms($_authenticationData['acceptedTermsVersion']);
         } 
     }
     
@@ -779,7 +779,7 @@ class Setup_Controller
     protected function _updateRedirectSettings($_data)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, 1));
-        $keys = array(Tinebase_Model_Config::REDIRECTURL, Tinebase_Model_Config::REDIRECTTOREFERRER);
+        $keys = array(Tinebase_Model_Config::REDIRECTURL, Tinebase_Model_Config::REDIRECTALWAYS, Tinebase_Model_Config::REDIRECTTOREFERRER);
         foreach ($keys as $key) {
             if (array_key_exists($key, $_data)) {
                 if (strlen($_data[$key]) === 0) {

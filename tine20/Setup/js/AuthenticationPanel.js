@@ -459,7 +459,19 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             items: [{
                 inputType: 'text',
                 name: 'redirectSettings_redirectUrl',
-                fieldLabel: this.app.i18n._('Redirect Url (after Logout, redirect to login screen if empty)')
+                fieldLabel: this.app.i18n._('Redirect Url (redirect to login screen if empty)')
+            }, {
+                xtype: 'combo',
+                listWidth: 300,
+                mode: 'local',
+                forceSelection: true,
+                allowEmpty: false,
+                triggerAction: 'all',
+                selectOnFocus:true,
+                store: [['1', 'Yes'], ['0','No']],
+                value: '0',
+                name: 'redirectSettings_redirectAlways',
+                fieldLabel: this.app.i18n._('Redirect Always (if No, only redirect after logout)')
             }, {
                 xtype: 'combo',
                 listWidth: 300,
