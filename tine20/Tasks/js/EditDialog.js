@@ -121,6 +121,10 @@ Ext.namespace('Tine.Tasks');
      * @private
      */
     handleCompletedDate: function() {
+        if (this.getForm().findField('status_id') === null) {
+            return;
+        }
+        
         var status = Tine.Tasks.status.getStatus(this.getForm().findField('status_id').getValue());
         var completed = this.getForm().findField('completed');
         
