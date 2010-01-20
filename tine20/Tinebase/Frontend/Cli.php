@@ -146,10 +146,12 @@ class Tinebase_Frontend_Cli
                             ' LEFT JOIN ' . SQL_TABLE_PREFIX . 'felamimail_account ON ' . SQL_TABLE_PREFIX . 'credential_cache.id = ' . 
                                 SQL_TABLE_PREFIX . 'felamimail_account.credentials_id' .
                             ' WHERE ' . SQL_TABLE_PREFIX . 'felamimail_account.credentials_id IS NULL');
+                        break;
                     } else {
-                        // delete all
-                        Tinebase_Core::getDb()->query('TRUNCATE ' . SQL_TABLE_PREFIX . 'credential_cache');
+                        // fallthrough
                     }
+                case 'access_log':
+                    Tinebase_Core::getDb()->query('TRUNCATE ' . SQL_TABLE_PREFIX . $table);
                     break;
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";
