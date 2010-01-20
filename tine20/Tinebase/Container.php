@@ -322,7 +322,7 @@ class Tinebase_Container
                         $result = ($_onlyIds) ? $personalContainers->getArrayOfIds() : $personalContainers;
                     }
                 } catch (Tinebase_Exception_NotFound $enf) {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' no containers available in application ' . $_application);
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' no containers available in application ' . $_application);
                 }
             } else {
                 if ($_onlyIds) {
