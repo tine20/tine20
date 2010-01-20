@@ -161,11 +161,12 @@ Tine.Phone.updatePhoneTree = function(store){
  * @param string phone number to dial
  * 
  * @todo use window factory later
+ * @todo what todo if no lines are available?
  */
 Tine.Phone.dialPhoneNumber = function(number) {
 	
 	var phonesStore = Tine.Phone.loadPhoneStore();
-	var lines = phonesStore.getAt(0).data.lines;
+	var lines = (phonesStore.getAt(0)) ? phonesStore.getAt(0).data.lines : [];
     
     // check if only one phone / one line exists and numer is set
 	if (phonesStore.getTotalCount() == 1 && lines.length == 1 && number) {
@@ -363,7 +364,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         var lineCombo = this.getForm().findField('lineId'); 
         
         // select first combo values
-		if(! phoneCombo.getState()) {
+		if(! phoneCombo.getState() && this.phoneStore.getAt(0)) {
             phoneCombo.setValue(this.phoneStore.getAt(0).id);
         } else {
             // update line store again (we need this, because it is changed when dlg is opened the second time)
@@ -392,9 +393,11 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         if (phoneId == null) {
             if (form) {
                 phoneId = form.findField('phoneId').getValue();
-            } else {
+            } else if (this.phoneStore.getAt(0)){
                 // get first phone
                 phoneId = this.phoneStore.getAt(0).id;
+            } else {
+                return;
             }
         }
     	
