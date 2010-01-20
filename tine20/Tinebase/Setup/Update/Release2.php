@@ -545,4 +545,13 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         $this->setTableVersion('accounts', '3');
         $this->setApplicationVersion('Tinebase', '3.0');
     }    
+
+    /**
+     * update to 3.0
+     * -> this is needed if someone had 2009-11-4 / Tinebase version 2.16
+     */
+    public function update_16()
+    {
+        $this->setApplicationVersion('Tinebase', '3.0');
+    }
 }
