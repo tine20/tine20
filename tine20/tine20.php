@@ -47,6 +47,7 @@ try {
     ));
     $opts->parse();
 } catch (Zend_Console_Getopt_Exception $e) {
+   echo $e->getMessage() . "\n";
    echo $e->getUsageMessage();
    exit;
 }
