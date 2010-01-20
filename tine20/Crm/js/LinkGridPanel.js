@@ -19,9 +19,13 @@ Ext.ns('Tine.Crm.LinkGridPanel');
  */
 Tine.Crm.LinkGridPanel.initActions = function() {
     
-    var recordName = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')).i18n.n_(
-        this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1
-    );
+    if (Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')).i18n) {
+        var recordName = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')).i18n.n_(
+            this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1
+        );
+    } else {
+        var recordName = this.recordClass.getMeta('recordName');
+    }
 
     this.actionAdd = new Ext.Action({
         requiredGrant: 'editGrant',
