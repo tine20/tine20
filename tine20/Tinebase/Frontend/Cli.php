@@ -130,6 +130,12 @@ class Tinebase_Frontend_Cli
             return FALSE;
         }
         
+        // check if admin for tinebase
+        if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::ADMIN)) {
+            echo "No permission.\n";
+            return FALSE;
+        }
+        
         foreach ($tables as $table) {
             switch ($table) {
                 case 'credential_cache':
@@ -148,6 +154,7 @@ class Tinebase_Frontend_Cli
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";
             }
+            echo "Cleared table $table.\n";
         }
         
         return TRUE;
