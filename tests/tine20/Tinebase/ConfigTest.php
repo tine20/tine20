@@ -135,10 +135,10 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testGetConfigFromFile()
     {
-        $result = $this->_instance->getConfigAsArray('logger');
+        $result = $this->_instance->getConfigAsArray('database');
             
-        $this->assertGreaterThan(0, count($result));
-        $this->assertTrue($result['active'] || $result['active'] == 1, 'could not get logger config');
+        $this->assertGreaterThan(0, count($result), 'could not get db config');
+        $this->assertTrue($result['dbname'] != '', 'could not get dbname');
     }
     
 }
