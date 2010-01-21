@@ -58,8 +58,12 @@ class Tinebase_ImageHelper
         
         $imgInfo = getimagesize($tmpPath);
         unlink($tmpPath);
-        if (!in_array($imgInfo['mime'], array('image/png', 'image/jpeg', 'image/gif'))) {
+        if (! in_array($imgInfo['mime'], array('image/png', 'image/jpeg', 'image/gif'))) {
             throw new Tinebase_Exception_UnexpectedValue('given blob does not contain valid image data.');
+        }
+        if (! array_key_exists('channels', $imgInfo)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Uploaded ' . $imgInfo['mime'] . ' image had no channel information. Setting channels to 3.');
+            $imgInfo['channels'] = 3;
         }
         return array(
             'width'    => $imgInfo[0],
@@ -69,7 +73,6 @@ class Tinebase_ImageHelper
             'mime'     => $imgInfo['mime'],
             'blob'     => $_blob
         );
-        
     }
     /**
      * checks wether given file is an image or not
