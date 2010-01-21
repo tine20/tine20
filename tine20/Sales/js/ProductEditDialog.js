@@ -138,6 +138,7 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     split: true,
                     collapsible: true,
                     collapseMode: 'mini',
+                    header: false,
                     margins: '0 5 0 5',
                     border: true,
                     items: [

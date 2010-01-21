@@ -232,9 +232,6 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         this.supr().initComponent.call(this);
     },
     
-    /**
-     * initialize base layout
-     */
     initLayout: function() {
         var infoPanelItems = (this.showInfoBox) ? [
             this.getTinePanel(),
@@ -257,13 +254,10 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         this.items = [{
             layout: 'absolute',
             border: false,
-            items: [{
-                border: false,
-                items: this.getLoginPanel()
-            }, {
-                border: false,
-                items: this.infoPanel
-            }]
+            items: [
+                this.getLoginPanel(),
+                this.infoPanel
+            ]
         }];
     },
     
@@ -321,26 +315,24 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     
     onResize: function() {
         this.supr().onResize.apply(this, arguments);
-        
-        
+
         var box = this.getBox();
         
-        var loginBox = this.getLoginPanel().getBox();
-        var infoBox = this.infoPanel.getBox();
-        
+        var loginBox = this.getLoginPanel().rendered ? this.getLoginPanel().getBox() : {width : this.getLoginPanel().width, height: this.getLoginPanel().height};
+        var infoBox = this.infoPanel.rendered ? this.infoPanel.getBox() : {width : this.infoPanel.width, height: this.infoPanel.height};
+
         var top = (box.height - loginBox.height)/2;
         if (box.height - top < infoBox.height) {
             top = box.height - infoBox.height;
         }
         
-        
         var loginLeft = (box.width - loginBox.width)/2;
         if(loginLeft + loginBox.width + infoBox.width > box.width) {
             loginLeft = box.width - loginBox.width - infoBox.width;
         }
-        
-        this.getLoginPanel().ownerCt.setPosition(loginLeft, top);
-        this.infoPanel.ownerCt.setPosition(loginLeft + loginBox.width, top);
+                
+        this.getLoginPanel().setPosition(loginLeft, top);
+        this.infoPanel.setPosition(loginLeft + loginBox.width, top);
     },
     
     renderSurveyPanel: function(survey) {

@@ -100,7 +100,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     cls: 'tw-editdialog',
     anchor:'100% 100%',
     deferredRender: false,
-    buttonAlign: 'right',
+    buttonAlign: null,
     bufferResize: 500,
     
     //private
@@ -159,6 +159,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.initActions();
         // init buttons and tbar
         this.initButtons();
+        // init container selector
+        this.initContainerSelector();
         // init record 
         this.initRecord();
         // get items for this dialog
@@ -218,7 +220,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         //this.tbarItems = genericButtons.concat(this.tbarItems);
         
-        this.buttons = [
+        this.fbar = [
+            '->',
             //this.action_applyChanges,
             this.action_cancel,
             this.action_saveAndClose
@@ -229,6 +232,32 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 items: this.tbarItems
             });
         }
+    },
+    
+    /**
+     * init container selector
+     */
+    initContainerSelector: function() {
+        if (this.showContainerSelector) {
+            var ContainerForm = new Tine.widgets.container.selectionComboBox({
+                id: this.app.appName + 'EditDialogContainerSelector',
+                fieldLabel: _('Saved in'),
+                width: 300,
+                name: this.recordClass.getMeta('containerProperty'),
+                //itemName: this.recordClass.recordName,
+                containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
+                containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
+                appName: this.app.appName,
+                requiredGrant: this.evalGrants ? 'addGrant' : false
+            });
+            this.on('render', function() {this.getForm().add(ContainerForm);}, this);
+            
+            this.fbar = [
+                _('Saved in'),
+                ContainerForm
+            ].concat(this.fbar);
+        }
+        
     },
     
     /**
@@ -302,7 +331,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // generalized keybord map for edit dlgs
         var map = new Ext.KeyMap(this.el, [
             {
-                key: [10,13], // enter + return
+                key: [10,13], // ctrl + return
                 ctrl: true,
                 fn: this.onSaveAndClose,
                 scope: this
@@ -311,31 +340,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         // should be fixed in WindowFactory
         //this.setHeight(Ext.fly(this.el.dom.parentNode).getHeight());
-        
-        if (this.showContainerSelector) {
-            this.recordContainerEl = this.footer.first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}});
-            var ContainerForm = new Tine.widgets.container.selectionComboBox({
-                id: this.app.appName + 'EditDialogContainerSelector',
-                fieldLabel: _('Saved in'),
-                width: 300,
-                name: this.recordClass.getMeta('containerProperty'),
-                //itemName: this.recordClass.recordName,
-                containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
-                containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
-                appName: this.app.appName,
-                requiredGrant: this.evalGrants ? 'addGrant' : false
-            });
-            this.getForm().add(ContainerForm);
             
-            var containerSelect = new Ext.Panel({
-                layout: 'form',
-                border: false,
-                renderTo: this.recordContainerEl,
-                bodyStyle: {'background-color': '#F0F0F0'},
-                items: ContainerForm
-            });
-        }
-        
         this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transfering {0}...'), this.i18nRecordName)});
         if (this.recordProxy !== null && this.recordProxy.isLoading(this.loadRequest)) {
             this.loadMask.show();

@@ -269,7 +269,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsP
     updateDetails: function(record, body) {
         this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.eventDetailsPanel));
         
-        this.eventDetailsPanel.loadRecord(record);
+        this.eventDetailsPanel.loadRecord.defer(100, this.eventDetailsPanel, [record]);
     },
     
     /**

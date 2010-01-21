@@ -249,6 +249,7 @@ Ext.namespace('Tine.Felamimail');
                 layout: 'border',
                 split: true,
                 collapseMode: 'mini',
+                header: false,
                 collapsible: true,
                 items: [{
                     region: 'north',
@@ -320,6 +321,7 @@ Ext.namespace('Tine.Felamimail');
                 height: 100,
                 split: true,
                 collapseMode: 'mini',
+                header: false,
                 collapsible: true,
                 items: [
                     this.attachmentGrid, 

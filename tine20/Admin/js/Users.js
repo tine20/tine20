@@ -29,8 +29,10 @@ Tine.Admin.Users.Main = function() {
         
         dataStore.setDefaultSort('accountLoginName', 'asc');
 
-        dataStore.on('beforeload', function(_dataSource) {
-            _dataSource.baseParams.filter = Ext.getCmp('UserAdminQuickSearchField').getValue();
+        dataStore.on('beforeload', function(_dataSource, _options) {
+            _options = _options || {};
+            _options.params = _options.params || {};
+            _options.params.filter = Ext.getCmp('UserAdminQuickSearchField').getValue();
         });        
         
         dataStore.load({params:{start:0, limit:50}});

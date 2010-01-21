@@ -245,6 +245,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
                 border: false,
                 collapsible: true,
                 collapseMode: 'mini',
+                header: false,
                 split: true,
                 layout: 'fit',
                 height: this.detailsPanel.defaultHeight ? this.detailsPanel.defaultHeight : 125,

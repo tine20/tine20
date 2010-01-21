@@ -57,6 +57,7 @@ Tine.Calendar.MainScreenLeftPanel = Ext.extend(Ext.Panel, {
             split: true,
             collapsible: true,
             collapseMode: 'mini',
+            header: false,
             height: 190,
             cls: 'cal-datepicker-background',
             layout: 'hbox',

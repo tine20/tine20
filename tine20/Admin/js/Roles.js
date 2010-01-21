@@ -177,8 +177,10 @@ Tine.Admin.Roles.Main = {
         
         dataStore.setDefaultSort('id', 'asc');
 
-        dataStore.on('beforeload', function(_dataStore) {
-            _dataStore.baseParams.query = Ext.getCmp('RolesQuickSearchField').getValue();
+        dataStore.on('beforeload', function(_dataStore, _options) {
+            _options = _options || {};
+            _options.params = _options.params || {};
+            _options.params.query = Ext.getCmp('RolesQuickSearchField').getValue();
         }, this);        
         
         // the paging toolbar

@@ -70,7 +70,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     triggerAction: 'all',
     forceAll: true,
     lazyInit: false,
-    readOnly:true,
+    //readOnly:true,
     stateful: true,
     
     mode: 'local',

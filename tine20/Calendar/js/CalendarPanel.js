@@ -283,6 +283,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 modal: true,
                 cls: 'x-window-dlg',
                 closable: false,
+                width: 500,
                 title: this.app.i18n._('Update Event'),
                 html: '<div class="ext-mb-icon ext-mb-question"></div>' +
                       '<div class="ext-mb-content"><span class="ext-mb-text"></span>' +

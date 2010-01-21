@@ -179,8 +179,10 @@ Tine.Admin.Groups.Main = {
         
         dataStore.setDefaultSort('id', 'asc');
 
-        dataStore.on('beforeload', function(_dataStore) {
-            _dataStore.baseParams.filter = Ext.getCmp('GroupsAdminQuickSearchField').getValue();
+        dataStore.on('beforeload', function(_dataStore, _options) {
+            _options = _options || {};
+            _options.params = _options.params || {};
+            _options.params.filter = Ext.getCmp('GroupsAdminQuickSearchField').getValue();
         }, this);        
         
         // the paging toolbar

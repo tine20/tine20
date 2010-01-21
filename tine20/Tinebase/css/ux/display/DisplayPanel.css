@@ -1,8 +1,9 @@
 .x-ux-display .x-form-item {
     overflow: hidden;
+    line-height: 12px;
 }
 
-.x-ux-display .x-form-item-label {
+.x-ux-display label.x-form-item-label {
     color:#A0A0A0;
 	padding-right:5px;
 	text-align:right;

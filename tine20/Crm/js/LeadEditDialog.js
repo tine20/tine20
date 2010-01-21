@@ -302,6 +302,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         height: 390,
                         split: true,
                         collapseMode: 'mini',
+                        header: false,
                         collapsible: true,
                         items: [{
                             xtype: 'panel',
@@ -417,6 +418,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         split: true,
                         collapsible: true,
                         collapseMode: 'mini',
+                        header: false,
                         margins: '0 5 0 5',
                         border: true,
                         items: [

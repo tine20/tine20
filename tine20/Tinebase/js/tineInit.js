@@ -205,7 +205,7 @@ Tine.Tinebase.tineInit = {
                         waitForRegistry();
                     }
                 });
-                mainCardPanel.layout.container.add(Tine.loginPanel);
+                mainCardPanel.add(Tine.loginPanel);
             }
             mainCardPanel.layout.setActiveItem(Tine.loginPanel.id);
             Tine.loginPanel.doLayout();
@@ -231,7 +231,7 @@ Tine.Tinebase.tineInit = {
         
         // finaly render the window contentes in a new card  
         var card = Tine.WindowFactory.getContentPanel(c);
-        mainCardPanel.layout.container.add(card);
+        mainCardPanel.add(card);
         mainCardPanel.layout.setActiveItem(card.id);
         card.doLayout();
         

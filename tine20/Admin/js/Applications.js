@@ -118,8 +118,10 @@ Tine.Admin.Applications.Main = function() {
         
         ds_applications.setDefaultSort('name', 'asc');
 
-        ds_applications.on('beforeload', function(_dataSource) {
-            _dataSource.baseParams.filter = Ext.getCmp('ApplicationsAdminQuickSearchField').getValue();
+        ds_applications.on('beforeload', function(_dataSource, _options) {
+            _options = _options || {};
+            _options.params = _options.params || {};
+            _options.params.filter = Ext.getCmp('ApplicationsAdminQuickSearchField').getValue();
         });        
         
         ds_applications.load({params:{start:0, limit:50}});

@@ -180,6 +180,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             collapsible:true,
             //containerScroll: true,
             collapseMode: 'mini',
+            header: false,
             layout: 'fit',
             items: this.appPicker
         }];

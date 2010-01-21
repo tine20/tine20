@@ -119,6 +119,7 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
                     split: true,
                     collapsible: true,
                     collapseMode: 'mini',
+                    header: false,
                     margins: '0 5 0 5',
                     border: true,
                     items: [

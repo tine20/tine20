@@ -163,8 +163,10 @@ Tine.Admin.Tags.Main = {
         
         dataStore.setDefaultSort('name', 'asc');
 
-        dataStore.on('beforeload', function(_dataStore) {
-            _dataStore.baseParams.query = Ext.getCmp('TagsQuickSearchField').getRawValue();
+        dataStore.on('beforeload', function(_dataStore, _options) {
+            _options = _options || {};
+            _options.params = _options.params || {};
+            _options.params.query = Ext.getCmp('TagsQuickSearchField').getValue();
         }, this);        
         
         // the paging toolbar

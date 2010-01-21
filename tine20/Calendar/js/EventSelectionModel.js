@@ -20,7 +20,11 @@ Tine.Calendar.EventSelectionModel = Ext.extend(Ext.tree.MultiSelectionModel, {
         view.getTreeEl = function() {
             return view.el;
         }
-        Tine.Calendar.EventSelectionModel.superclass.init.call(this, view);
+        view.el.on("keydown", this.onKeyDown, this);
+        view.on("click", this.onNodeClick, this);
+        
+        // since 3.1 it requires a mon fn
+        //Tine.Calendar.EventSelectionModel.superclass.init.call(this, view);
     },
     
     /**

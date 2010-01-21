@@ -73,7 +73,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
                 id: this.idPrefix + 'tglbtn' + 'NONE',
                 xtype: 'tbbtnlockedtoggle',
                 enableToggle: true,
-                pressed: true,
+                //pressed: true,
                 text: this.app.i18n._('None'),
                 handler: this.onFreqChange.createDelegate(this, ['NONE']),
                 toggleGroup: this.idPrefix + 'freqtglgroup'
@@ -138,7 +138,6 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         }
         
         this.rrule = this.record.get('rrule');
-        //Ext.MessageBox.alert('fuck firebug', Ext.util.JSON.encode(this.rrule));
         
         var dtstart = this.record.get('dtstart');
         if (Ext.isDate(dtstart)) {
@@ -168,7 +167,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         freqBtn.toggle(true);
         
         this.activeRuleCard = this[freq + 'card'];
-        this.ruleCards.layout.setActiveItem(this.activeRuleCard);
+        this.ruleCards.activeItem = this.activeRuleCard;
         
         this.activeRuleCard.setRule(this.rrule);
     },
@@ -191,11 +190,6 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
     layout: 'form',
     labelAlign: 'side',
     autoHeight: true,
-    
-    afterRender: function() {
-        Tine.Calendar.RrulePanel.AbstractCard.superclass.afterRender.apply(this, arguments);
-        this.renderUntil();
-    },
     
     getRule: function() {
         var until = this.until.getRawValue();
@@ -280,9 +274,7 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
             items: [{
                 width: 70,
                 html: this.app.i18n._('Until')
-            }, {
-                html: '<div id="' + this.untilId + '" />'
-            }]
+            }, this.until]
                 
         });
         
@@ -299,17 +291,6 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         }
         
         return true;
-    },
-    
-    renderUntil: function() {
-        var untilEl = Ext.get(this.untilId);
-        if (! untilEl) {
-            return this.renderUntil.defer(250, this);
-        } else {
-            this.until.render(untilEl);
-            this.until.setWidth(100);
-            this.until.wrap.setWidth(117);
-        }
     },
     
     setRule: function(rrule) {
@@ -386,11 +367,22 @@ Tine.Calendar.RrulePanel.WEEKLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
             this.byDayValue = rrule.byday;
             
             var bydayArray = rrule.byday.split(',');
-            this.byday.items.each(function(cb) {
-                if (bydayArray.indexOf(cb.name) != -1) {
-                    cb.setValue(true);
-                }
-            }, this);
+            
+            if (Ext.isArray(this.byday.items)) {
+                // on initialisation items are not renderd
+                Ext.each(this.byday.items, function(cb) {
+                    if (bydayArray.indexOf(cb.name) != -1) {
+                        cb.checked = true;
+                    }
+                }, this);
+            } else {
+                // after items are rendered
+                this.byday.items.each(function(cb) {
+                    if (bydayArray.indexOf(cb.name) != -1) {
+                        cb.setValue(true);
+                    }
+                }, this);
+            }
         }
     }
 });

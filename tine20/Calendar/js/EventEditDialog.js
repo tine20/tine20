@@ -40,10 +40,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     // note: we need up use new action updater here or generally in the widget!
     evalGrants: false,
     
+    
     afterRender: function() {
         Tine.Calendar.EventEditDialog.superclass.afterRender.apply(this, arguments);
-        this.CalendarSelectWidget.render(this.footer.first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}}));
+        this.CalendarSelectWidget.render(Ext.get(Ext.query('div[class="cal-calselectwdgt"]')[0]));
     },
+    
     
     onResize: function() {
         Tine.Calendar.EventEditDialog.superclass.onResize.apply(this, arguments);
@@ -169,6 +171,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     split: true,
                     collapsible: true,
                     collapseMode: 'mini',
+                    header: false,
                     margins: '0 5 0 5',
                     border: true,
                     items: [
@@ -222,6 +225,15 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.CalendarSelectWidget = new Tine.Calendar.CalendarSelectWidget(this);
         
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * init container selector
+     */
+    initContainerSelector: function() {
+        this.fbar = [
+            '<div class="cal-calselectwdgt" />'
+        ].concat(this.fbar);
     },
     
     /**

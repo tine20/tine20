@@ -35,11 +35,11 @@ Ext.ux.ButtonLockedToggle = Ext.extend(Ext.Button,{
         state = state === undefined ? !this.pressed : state;
         if(state != this.pressed){
             if(state){
-                this.el.addClass("x-btn-pressed");
+                if (this.el) this.el.addClass("x-btn-pressed");
                 this.pressed = true;
                 this.fireEvent("toggle", this, true);
             }else{
-                this.el.removeClass("x-btn-pressed");
+                if (this.el) this.el.removeClass("x-btn-pressed");
                 this.pressed = false;
                 this.fireEvent("toggle", this, false);
             }

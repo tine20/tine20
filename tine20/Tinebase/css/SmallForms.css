@@ -33,17 +33,13 @@
     font-size: 11px;
 }
 
-.x-form-check-wrap, .x-form-radio-wrap {
-    padding: 0;
-}
-
-.x-form-check {
-    margin-bottom: 8px;
+.x-form-check-wrap input
+{
+    margin-bottom: 4px;
 }
 
 .x-form-cb-label {
-	/*position: absolute;*/
-	top: -4px
+	top: 1px;
 }
 
 .x-form-item {

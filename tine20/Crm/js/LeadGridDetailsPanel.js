@@ -528,7 +528,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPan
     updateDetails: function(record, body) {
         this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.leadDetailsPanel));
         
-        this.leadDetailsPanel.loadRecord(record);
+        this.leadDetailsPanel.loadRecord.defer(100, this.leadDetailsPanel, [record]);
     },
     
     /**

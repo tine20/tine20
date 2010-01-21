@@ -70,15 +70,17 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 layout: 'fit',
                                 style: {
                                     position: 'absolute',
+                                    width: '90px',
+                                    height: '120px',
                                     right: '10px',
                                     top: Ext.isGecko ? '6px' : '0px',
                                     'z-index': 100
                                 },
-                                items: new Ext.ux.form.ImageField({
+                                items: [new Ext.ux.form.ImageField({
                                     name: 'jpegphoto',
                                     width: 90,
                                     height: 120
-                                })
+                                })]
                             }, {
                                 xtype: 'columnform',
                                 items: [[{
@@ -287,6 +289,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     split: true,
                     collapsible: true,
                     collapseMode: 'mini',
+                    header: false,
                     margins: '0 5 0 5',
                     border: true,
                     items: [

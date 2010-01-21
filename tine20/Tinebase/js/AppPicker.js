@@ -53,6 +53,7 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
             width: 200,
             collapsible:true,
             collapseMode: 'mini',
+            header: false,
             region: 'south',
             apps: this.apps,
             defaultAppName: this.defaultAppName,
