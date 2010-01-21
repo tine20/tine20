@@ -634,7 +634,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
                     '. Error: ' . $zme->getMessage()
                 );
             } catch (Zend_Db_Statement_Exception $zdse) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                     ' Failed to create cache entry for msg ' . $uid . ' | ' . $subject .
                     '. Error: ' . $zdse->getMessage()
                 );
