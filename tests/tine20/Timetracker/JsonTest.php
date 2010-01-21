@@ -216,45 +216,18 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAddTimesheetWithCustomFields()
     {
-        // create custom fields
-        $customField1 = $this->_getCustomField();
-        $customField2 = $this->_getCustomField();
+        $value = 'abcd';
+        $cf = $this->_getCustomField();
+                
+        // create two timesheets with customfields
+        $this->_addTsWithCf($cf, $value);
+        $this->_addTsWithCf($cf, 'efgh');
         
-        // create timesheet and add custom fields
-        $timesheetArray = $this->_getTimesheet()->toArray();
-        $cfValue1 = Tinebase_Record_Abstract::generateUID();
-        $timesheetArray[$customField1->name] = $cfValue1;
-        $timesheetArray[$customField2->name] = Tinebase_Record_Abstract::generateUID();
-        
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheetArray));
-        
-        // tearDown settings
-        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
-        $this->_toDeleteIds['cf'] = array($customField1->getId(), $customField2->getId());
-        
-        // checks
-        $this->assertGreaterThan(0, count($timesheetData['customfields']));
-        $this->assertEquals($timesheetArray[$customField1->name], $timesheetData['customfields'][$customField1->name]);
-        $this->assertEquals($timesheetArray[$customField2->name], $timesheetData['customfields'][$customField2->name]);
-        
-        // check if custom fields are returned with search
-        $searchResult = $this->_json->searchTimesheets(Zend_Json::encode($this->_getTimesheetFilter()), Zend_Json::encode($this->_getPaging()));
-        
-        $this->assertGreaterThan(0, count($searchResult['results'][0]['customfields']));
-        $this->assertEquals($timesheetArray[$customField1->name], $searchResult['results'][0]['customfields'][$customField1->name]);
-        $this->assertEquals($timesheetArray[$customField2->name], $searchResult['results'][0]['customfields'][$customField2->name]);
-        
-        // test search with custom field filter
-        $searchResult = $this->_json->searchTimesheets(
-            Zend_Json::encode($this->_getTimesheetFilterWithCustomField($customField1->getId(), $cfValue1)), 
-            Zend_Json::encode($this->_getPaging())
-        );
-        $this->assertGreaterThan(0, $searchResult['totalcount'], 'cf filter not working');
-        
-        // search custom field values
+        // search custom field values and check totalcount
         $tinebaseJson = new Tinebase_Frontend_Json();
-        $cfValues = $tinebaseJson->searchCustomFieldValues(Zend_Json::encode($this->_getCfValueFilter($customField1->getId())), '');
-        $this->assertEquals($cfValue1, $cfValues['results'][0]['value']);
+        $cfValues = $tinebaseJson->searchCustomFieldValues(Zend_Json::encode($this->_getCfValueFilter($cf->getId())), '');
+        $this->assertEquals($value, $cfValues['results'][0]['value'], 'value mismatch');
+        $this->assertEquals(2, $cfValues['totalcount'], 'wrong totalcount');
     }
     
     /**
@@ -874,5 +847,47 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // cleanup / delete file
         unlink($result);
+    }
+    
+    protected function _addTsWithCf($_customField1, $_cf1Value)
+    {
+        // create custom fields
+        $customField2 = $this->_getCustomField();
+        
+        // create timesheet and add custom fields
+        $timesheetArray = $this->_getTimesheet()->toArray();
+        $timesheetArray[$_customField1->name] = $_cf1Value;
+        $timesheetArray[$customField2->name] = Tinebase_Record_Abstract::generateUID();
+        
+        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheetArray));
+        
+        // tearDown settings
+        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
+        $this->_toDeleteIds['cf'] = array($_customField1->getId(), $customField2->getId());
+        
+        // checks
+        $this->assertGreaterThan(0, count($timesheetData['customfields']));
+        $this->assertEquals($timesheetArray[$_customField1->name], $timesheetData['customfields'][$_customField1->name]);
+        $this->assertEquals($timesheetArray[$customField2->name], $timesheetData['customfields'][$customField2->name]);
+        
+        // check if custom fields are returned with search
+        $searchResult = $this->_json->searchTimesheets(Zend_Json::encode($this->_getTimesheetFilter()), Zend_Json::encode($this->_getPaging()));
+        $this->assertGreaterThan(0, count($searchResult['results'][0]['customfields']));
+        foreach($searchResult['results'] as $result) {
+            if ($result['id'] == $timesheetData['id']) {
+                $ts = $result;
+            }
+        }
+        $this->assertTrue(isset($ts));
+        $this->assertEquals($timesheetArray[$_customField1->name], $ts['customfields'][$_customField1->name]);
+        $this->assertEquals($timesheetArray[$customField2->name], $ts['customfields'][$customField2->name]);
+        
+        // test search with custom field filter
+        $searchResult = $this->_json->searchTimesheets(
+            Zend_Json::encode($this->_getTimesheetFilterWithCustomField($_customField1->getId(), $_cf1Value)), 
+            Zend_Json::encode($this->_getPaging())
+        );
+        $this->assertGreaterThan(0, $searchResult['totalcount'], 'cf filter not working');
+        
     }
 }

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  CustomField
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
@@ -60,7 +60,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     private function __construct() 
     {
         $this->_backendConfig = new Tinebase_Backend_Sql('Tinebase_Model_CustomField_Config', 'customfield_config');
-        $this->_backendValue = new Tinebase_Backend_Sql('Tinebase_Model_CustomField_Value', 'customfield');
+        $this->_backendValue = new Tinebase_Backend_Sql('Tinebase_Model_CustomField_Value', 'customfield', NULL, NULL, NULL, TRUE);
     }
 
     /**
