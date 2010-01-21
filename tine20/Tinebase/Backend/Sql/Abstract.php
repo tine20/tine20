@@ -50,6 +50,14 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected $_modlogActive = FALSE;
     
     /**
+     * use subselect in searchCount fn
+     *
+     * @var boolean
+     * @todo this should be TRUE by default / need to check if child classes overwrite _getSelect or searchCount()
+     */
+    protected $_useSubselectForCount = FALSE;
+    
+    /**
      * Identifier
      *
      * @var string
@@ -76,14 +84,16 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param string $_tableName (optional)
      * @param string $_tablePrefix (optional)
      * @param boolean $_modlogActive (optional)
+     * @param boolean $_useSubselectForCount (optional)
      */
-    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL, $_modlogActive = NULL)
+    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL, $_modlogActive = NULL, $_useSubselectForCount = NULL)
     {
         $this->_db = ($_dbAdapter instanceof Zend_Db_Adapter_Abstract) ? $_dbAdapter : Tinebase_Core::getDb();
         $this->_modelName = $_modelName ? $_modelName : $this->_modelName;
         $this->_tableName = $_tableName ? $_tableName : $this->_tableName;
         $this->_tablePrefix = $_tablePrefix ? $_tablePrefix : $this->_db->table_prefix;
         $this->_modlogActive = ($_modlogActive !== NULL) ? $_modlogActive : $this->_modlogActive;
+        $this->_useSubselectForCount = ($_useSubselectForCount !== NULL) ? $_useSubselectForCount : $this->_useSubselectForCount;
         
         if (! ($this->_tableName && $this->_modelName)) {
             throw new Tinebase_Exception_Backend('modelName and tableName must be configured or given.');
@@ -314,13 +324,23 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @return int
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
-    {        
-        $select = $this->_getSelect(array('count' => 'COUNT(*)'));
-        $this->_addFilter($select, $_filter);
+    {   
+        if ($this->_useSubselectForCount) {
+            // use normal search query as subselect to get count -> select count(*) from (select [...]) as count
+            $select = $this->_getSelect();
+            $this->_addFilter($select, $_filter);
+            $countSelect = $this->_db->select()->from($select, array('count' => 'COUNT(*)'));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $countSelect->__toString());
+            
+            $result = $this->_db->fetchOne($countSelect);
+        } else {
+            $select = $this->_getSelect(array('count' => 'COUNT(*)'));
+            $this->_addFilter($select, $_filter);
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+
+            $result = $this->_db->fetchOne($select);
+        }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-        
-        $result = $this->_db->fetchOne($select);
         return $result;        
     }    
         

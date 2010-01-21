@@ -27,9 +27,10 @@ class Tinebase_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param Zend_Db_Adapter_Abstract $_db (optional)
      * @param string $_tablePrefix (optional)
      * @param boolean $_modlogActive (optional)
+     * @param boolean $_useSubselectForCount (optional)
      */
-    public function __construct ($_modelName, $_tableName, $_dbAdapter = NULL, $_tablePrefix = NULL, $_modlogActive = NULL)
+    public function __construct ($_modelName, $_tableName, $_dbAdapter = NULL, $_tablePrefix = NULL, $_modlogActive = NULL, $_useSubselectForCount = NULL)
     {
-        parent::__construct($_dbAdapter, $_modelName, $_tableName, $_tablePrefix, $_modlogActive);
+        parent::__construct($_dbAdapter, $_modelName, $_tableName, $_tablePrefix, $_modlogActive, $_useSubselectForCount);
     }
 }
