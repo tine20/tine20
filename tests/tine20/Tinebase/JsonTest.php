@@ -201,7 +201,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
                     $this->assertGreaterThan(10, count($pref['options']));
                     break;
                 case Tinebase_Preference::TIMEZONE:
-                    $this->assertGreaterThan(500, count($pref['options']));
+                    $this->assertGreaterThan(100, count($pref['options']));
                     break;
             }
             // check label and description
@@ -300,7 +300,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
                 $savedPrefData['Tinebase'][$result['name']] = array('value' => $result['value']);
             
                 $this->assertTrue(is_array($result['options']), 'options missing');
-                $this->assertGreaterThan(500, count($result['options']));
+                $this->assertGreaterThan(100, count($result['options']));
                 // cleanup
                 Tinebase_Core::getPreference()->delete($result['id']);
             }            
