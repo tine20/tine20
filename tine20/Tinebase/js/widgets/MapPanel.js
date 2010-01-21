@@ -46,6 +46,11 @@ Tine.widgets.MapPanel = Ext.extend(GeoExt.MapPanel, {
         var markers = new OpenLayers.Layer.Markers( "Markers" );
         markers.addMarker(new OpenLayers.Marker(this.center, icon));
         this.map.addLayer(markers);
+    },
+    
+    beforeDestroy: function() {
+        delete this.map;
+        this.supr().beforeDestroy.apply(this, arguments); 
     }
 });
 
