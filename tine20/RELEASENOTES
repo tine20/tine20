@@ -10,7 +10,7 @@ Date:       $LastChangedDate$
 Contents
 --
 1. ODS export configs moved to import_export_definitions table
-2. ....
+2. Activate value search for customfields
 
 
 --------------------------------------------------------------
@@ -19,3 +19,15 @@ Contents
 You need to transfer your custom definitions (formerly saved in config.inc.php) 
 into xml format and save them in the import_export_definitions table. You can look 
 at the default definitions to see how that is done.
+
+
+--------------------------------------------------------------
+2. Activate value search for customfields
+
+To activate the value search function (and turn the custom field input fields into 
+comboboxes) you need to set the value_search field in the custom field config table 
+to 1.
+
+sql example:
+ update tine20_customfield_config set value_search=1 where type='textfield';
+ 
