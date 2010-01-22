@@ -26,9 +26,5 @@ abstract class FastAGI_Abstract
     {
         $this->_fastAGI   = $_fastAGI;
         $this->_arguments = $_arguments;
-        
-        $this->_processRequest();
     }
-    
-    abstract protected function _processRequest();
 }

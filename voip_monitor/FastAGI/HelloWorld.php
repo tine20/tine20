@@ -16,18 +16,18 @@
  */
 class FastAGI_HelloWorld extends FastAGI_Abstract
 {
-    protected function _processRequest()
+    public function processRequest()
     {
         $this->_fastAGI->answer();
         #$this->_fastAGI->verbose('Test');
         $this->_fastAGI->sayTime(mktime());
         #$this->_fastAGI->sendText('Hallo');
         #$this->_fastAGI->recordFile('records/test', 'wav', '#', 20000, true);
-        #$this->_fastAGI->streamFile('records/test');
-        #$digit = $this->_fastAGI->waitForDigit(20000);
-        #if($digit !== null) {
-        #    $this->_fastAGI->sayDigits($digit);
-        #}
+        $this->_fastAGI->streamFile('records/test');
+        $digit = $this->_fastAGI->waitForDigit(5000);
+        if($digit !== null) {
+            $this->_fastAGI->sayDigits($digit);
+        }
         #$this->_fastAGI->hangup();
     }
 }

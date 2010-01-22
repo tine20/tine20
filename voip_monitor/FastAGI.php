@@ -31,8 +31,8 @@ class FastAGI extends VoipMonitor_Daemon
      */
     public function run()
     {
-        #$this->_backend  = VoipMonitor_Backend_Factory::factory('Tine20', $this->_backendConfig);
-        $this->_serverSocket = $this->_createServerSocket('tcp://localhost:8000');
+        $socketPath = $this->_config->general->get('socket', 'tcp://localhost:4573');
+        $this->_serverSocket = $this->_createServerSocket($socketPath);
         $this->_handleServerConnections($this->_serverSocket);
         //$this->_closeSocket();
     }  
@@ -161,18 +161,30 @@ class FastAGI extends VoipMonitor_Daemon
     {
         $variables = $this->_loadAGIVariables();
 
-        if(!array_key_exists('agi_network_script', $variables)) {
-          return;
-        }
+        #var_dump($variables);
 
-        $className = 'FastAGI_' . $variables['agi_network_script'];
-
+        $className = $variables['className'];
+        $method    = $variables['method'];
+        
         if(!@class_exists($className)) {
-          echo "class $className not found" . PHP_EOL;
-          return;
+            throw new Exception("class $className not found");
+        }
+        
+        $reflectionClass = new Zend_Reflection_Class($className);
+        if(!$reflectionClass->hasMethod($method)) {
+            throw new Exception("method $method not found in class $className");
+        }
+        
+        $params = array();
+        $reflectionMethod = $reflectionClass->getMethod($method);
+        foreach($reflectionMethod->getParameters() as $parameter) {
+            if(array_key_exists($parameter->name, $variables)) {
+                $params[$parameter->name] = $variables[$parameter->name];
+            }
         }
 
         $application = new $className($this, $variables);
+        return call_user_func_array(array($application, $method), $params);
     }
     
     /**
@@ -184,11 +196,28 @@ class FastAGI extends VoipMonitor_Daemon
     {
         $variables = array();
         $request   = $this->_readSocket($this->_clientConnection);
-        $rows      = explode("\n", trim($request));
 
+        $rows = explode("\n", trim($request));
         foreach($rows as $row) {
             list($key, $value) = explode(': ', $row);
             $variables[$key] = $value;
+        }
+
+        if(!array_key_exists('agi_network_script', $variables)) {
+            throw new Exception('AGI variable agi_network_script not found');
+        }
+        
+        $requestInfo = parse_url($variables['agi_request']);
+        $variables['className'] = 'FastAGI_' . substr($requestInfo['path'], 1);
+        
+        $rows = explode("&", $requestInfo['query']);
+        foreach($rows as $row) {
+            list($key, $value) = explode('=', $row);
+            $variables[$key] = $value;
+        }
+        
+        if(!array_key_exists('method', $variables)) {
+            $variables['method'] = 'processRequest';
         }
         
         return $variables;
