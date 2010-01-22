@@ -341,8 +341,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $from = new Zend_Date ();
         $from->sub('02:00:00',Zend_Date::TIMES);
         $to = new Zend_Date ();
+        $paging = array("sort" => "li", "dir" => "DESC","start" => 0,"limit"=> 50);
         
-        $accessLogs = $this->_backend->getAccessLogEntries($from->get(Tinebase_Record_Abstract::ISO8601LONG), $to->get(Tinebase_Record_Abstract::ISO8601LONG), NULL, '{"sort":"li","dir":"DESC","start":0,"limit":50}');
+        $accessLogs = $this->_backend->getAccessLogEntries($from->get(Tinebase_Record_Abstract::ISO8601LONG), $to->get(Tinebase_Record_Abstract::ISO8601LONG), NULL, $paging);
         //print_r($accessLogs);
       
         // check total count
@@ -365,8 +366,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $from = new Zend_Date ();
         $from->sub('02:00:00',Zend_Date::TIMES);
         $to = new Zend_Date ();
+        $paging = array("sort" => "li", "dir" => "DESC","start" => 0,"limit"=> 50);
         
-        $accessLogs = $this->_backend->getAccessLogEntries($from->get(Tinebase_Record_Abstract::ISO8601LONG), $to->get(Tinebase_Record_Abstract::ISO8601LONG), NULL, '{"sort":"li","dir":"DESC","start":0,"limit":50}');
+        $accessLogs = $this->_backend->getAccessLogEntries($from->get(Tinebase_Record_Abstract::ISO8601LONG), $to->get(Tinebase_Record_Abstract::ISO8601LONG), NULL, $paging);
 
         // check total count
         $this->assertGreaterThan(0, sizeof($accessLogs['results']));
@@ -377,7 +379,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName, $testLogEntry['accountObject']['accountDisplayName']);
         
         // cleanup
-        $this->_backend->deleteAccessLogEntries(Zend_Json::encode(array($testLogEntry['id'])));
+        $this->_backend->deleteAccessLogEntries(array($testLogEntry['id']));
     }    
     
     /**
@@ -389,8 +391,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $from = new Zend_Date();
         $from->sub('02:00:00',Zend_Date::TIMES);
         $to = new Zend_Date ();
+        $paging = array("sort" => "li", "dir" => "DESC","start" => 0,"limit"=> 50);
         
-        $accessLogs = $this->_backend->getAccessLogEntries($from->get(Tinebase_Record_Abstract::ISO8601LONG), $to->get(Tinebase_Record_Abstract::ISO8601LONG), 'tine20admin', '{"sort":"li","dir":"DESC","start":0,"limit":50}');
+        $accessLogs = $this->_backend->getAccessLogEntries($from->get(Tinebase_Record_Abstract::ISO8601LONG), $to->get(Tinebase_Record_Abstract::ISO8601LONG), 'tine20admin', $paging);
 
         //print_r($accessLogs);
         
@@ -400,10 +403,10 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         }
         
         // delete logs
-        $this->_backend->deleteAccessLogEntries(Zend_Json::encode($deleteLogIds));
+        $this->_backend->deleteAccessLogEntries($deleteLogIds);
         
         // check total count
-        $accessLogs = $this->_backend->getAccessLogEntries($from->get(Tinebase_Record_Abstract::ISO8601LONG), $to->get(Tinebase_Record_Abstract::ISO8601LONG), 'tine20admin', 'id', 'ASC', 0, 10);
+        $accessLogs = $this->_backend->getAccessLogEntries($from->get(Tinebase_Record_Abstract::ISO8601LONG), $to->get(Tinebase_Record_Abstract::ISO8601LONG), 'tine20admin', $paging);
         $this->assertEquals(0, sizeof($accessLogs['results']), 'results not matched');
         $this->assertEquals(0, $accessLogs['totalcount'], 'totalcount not matched');
     }        

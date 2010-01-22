@@ -292,7 +292,7 @@ Tine.Admin.AccessLog.Main = function() {
                 Ext.Ajax.request( {
                     params : {
                         method : 'Admin.deleteAccessLogEntries',
-                        logIds : Ext.util.JSON.encode(logIds)
+                        logIds : logIds
                     },
                     callback : function(_options, _success, _response) {
                         if(_success === true) {
@@ -375,7 +375,7 @@ Tine.Admin.AccessLog.Main = function() {
                 'limit' : _options.params.limit ? _options.params.limit : Tine.Admin.AccessLog.Main.paging.limit
         	};
 
-            _options.params.paging = Ext.util.JSON.encode(paging);
+            _options.params.paging = paging;
         	
 			var from = Date.parseDate(Ext.getCmp('adminApplications_dateFrom').getRawValue(), Ext.getCmp('adminApplications_dateFrom').format);
 			_options.params.from   = from.format("Y-m-d\\T00:00:00");

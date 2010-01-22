@@ -82,7 +82,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete access log entries
      *
-     * @param string $logIds json encoded list of logIds to delete
+     * @param array $logIds list of logIds to delete
      * @return array with success flag
      */
     public function deleteAccessLogEntries($logIds)
@@ -97,7 +97,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $from (date format example: 2008-03-31T00:00:00)
      * @param string $to (date format example: 2008-03-31T00:00:00)
      * @param string $filter
-     * @param string $paging json encoded paging data (Tinebase_Model_Pagination)
+     * @param array $paging paging data (Tinebase_Model_Pagination)
      * @return array with results array & totalcount (int)
      * 
      * @todo switch to new api with only filter and paging params
@@ -106,7 +106,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $fromDateObject = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
         $toDateObject = new Zend_Date($to, Tinebase_Record_Abstract::ISO8601LONG);
-        $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
+        $pagination = new Tinebase_Model_Pagination($paging);
         
         $accessLogSet = Admin_Controller_AccessLog::getInstance()->search_($filter, $pagination, $fromDateObject, $toDateObject);
         
@@ -181,7 +181,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * set application state
      *
-     * @param   string $applicationIds  json encoded array of application ids
+     * @param   array  $applicationIds  array of application ids
      * @param   string $state           state to set
      * @return  array with success flag
      */
@@ -250,7 +250,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * save user
      *
-     * @param string $recordData JSON encoded Tinebase_Model_FullUser
+     * @param  array $recordData data of Tinebase_Model_FullUser
      * @return array  
      */
     public function saveUser($recordData)
@@ -304,7 +304,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete users
      *
-     * @param   string $accountIds  json encoded array of account ids
+     * @param   array $accountIds array of account ids
      * @return  array with success flag
      */
     public function deleteUsers($accountIds)
@@ -320,7 +320,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * set account state
      *
-     * @param   string $accountIds  json encoded array of account ids
+     * @param   array  $accountIds  array of account ids
      * @param   string $state      state to set
      * @return  array with success flag
      */
@@ -516,7 +516,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete multiple groups
      *
-     * @param string $groupIds json encoded list of contactId's to delete
+     * @param array $groupIds list of contactId's to delete
      * @return array with success flag
      */
     public function deleteGroups($groupIds)
@@ -535,8 +535,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param array $filter 
+     * @param array $paging 
      * @return array
      */
     public function searchSambaMachines($filter, $paging)
@@ -569,7 +569,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * creates/updates a record
      *
-     * @param  string $recordData
+     * @param  array $recordData
      * @return array created/updated record
      */
     public function saveSambaMachine($recordData)
@@ -587,7 +587,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing records
      *
-     * @param string $ids 
+     * @param  array $ids 
      * @return string
      */
     public function deleteSambaMachines($ids)
@@ -655,7 +655,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * save tag data from edit form
      *
-     * @param   string $tagData
+     * @param   array $tagData
      * 
      * @return  array with success, message, tag data and tag members
      */
@@ -684,7 +684,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete multiple tags
      *
-     * @param string $tagIds json encoded list of contactId's to delete
+     * @param array $tagIds list of contactId's to delete
      * @return array with success flag
      */
     public function deleteTags($tagIds)
