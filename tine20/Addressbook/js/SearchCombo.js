@@ -119,7 +119,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
             }
         }
         
-        this.store.baseParams.filter = Ext.util.JSON.encode(filter);
+        this.store.baseParams.filter = filter;
     },
     
     /**
@@ -253,12 +253,12 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     
             // prepare filter / get paging from combo
             this.store.on('beforeload', function(store, options){
-                options.params.paging = Ext.util.JSON.encode({
+                options.params.paging = {
                     start: options.params.start,
                     limit: options.params.limit,
                     sort: 'n_family',
                     dir: 'ASC'
-                });
+                };
             }, this);
         }
         
