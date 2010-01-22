@@ -747,28 +747,24 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * save role data from edit form
      *
-     * @param   string $roleData        json encoded role data
-     * @param   string $roleMembers     json encoded role members
-     * @param   string $roleMembers     json encoded role rights
+     * @param   array $roleData        role data
+     * @param   array $roleMembers     role members
+     * @param   array $roleMembers     role rights
      * @return  array
      */
     public function saveRole($roleData, $roleMembers, $roleRights)
     {
-        $decodedRoleData = Zend_Json::decode($roleData);
-        $decodedRoleMembers = Zend_Json::decode($roleMembers);
-        $decodedRoleRights = Zend_Json::decode($roleRights);
-        
         // unset if empty
-        if (empty($decodedRoleData['id'])) {
-            unset($decodedRoleData['id']);
+        if (empty($roleData['id'])) {
+            unset($roleData['id']);
         }
         
-        $role = new Tinebase_Model_Role($decodedRoleData);
+        $role = new Tinebase_Model_Role($roleData);
         
         if (empty($role->id) ) {
-            $role = Admin_Controller_Role::getInstance()->create($role, $decodedRoleMembers, $decodedRoleRights);
+            $role = Admin_Controller_Role::getInstance()->create($role, $roleMembers, $roleRights);
         } else {
-            $role = Admin_Controller_Role::getInstance()->update($role, $decodedRoleMembers, $decodedRoleRights);
+            $role = Admin_Controller_Role::getInstance()->update($role, $roleMembers, $roleRights);
         }
         
         return $this->getRole($role->getId());
@@ -777,7 +773,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete multiple roles
      *
-     * @param string $roleIds json encoded list of roleId's to delete
+     * @param array $roleIds list of roleId's to delete
      * @return array with success flag
      */
     public function deleteRoles($roleIds)
@@ -785,8 +781,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = array(
             'success'   => TRUE
         );
-        
-        $roleIds = Zend_Json::decode($roleIds);
         
         Admin_Controller_Role::getInstance()->delete($roleIds);
 

@@ -84,9 +84,9 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             Ext.Ajax.request({
                 params: {
                     method: 'Admin.saveRole', 
-                    roleData: Ext.util.JSON.encode(this.role.data),
-                    roleMembers: Ext.util.JSON.encode(roleMembers),
-                    roleRights: Ext.util.JSON.encode(roleRights)
+                    roleData: this.role.data,
+                    roleMembers: roleMembers,
+                    roleRights: roleRights
                 },
                 success: function(response) {
                     this.fireEvent('update', Ext.util.JSON.encode(this.role.data));
@@ -110,7 +110,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     },
     
     handlerDelete: function(_button, _event) {
-        var roleIds = Ext.util.JSON.encode([this.role.id]);
+        var roleIds = [this.role.id];
             
         Ext.Ajax.request({
             url: 'index.php',
