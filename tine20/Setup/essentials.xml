@@ -17,5 +17,6 @@
         <extension name="dom" />
         <extension name="mcrypt" />
         <extension name="iconv" />
+        <extension name="zip" />
     </extensions>	
 </essential>	
