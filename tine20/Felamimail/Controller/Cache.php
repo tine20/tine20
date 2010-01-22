@@ -615,8 +615,10 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
                                 $cachedMessage->sent = $this->_convertDate($message->date);
                                 break;
                             default:
-                                // need to check if field is set in message first
-                                $cachedMessage->{$field} = (isset($message->{$field})) ? $this->_convertAddresses($message->{$field}) : ''; 
+                                if (in_array($field, array('to', 'cc', 'bcc'))) {
+                                    // need to check if field is set in message first
+                                    $cachedMessage->{$field} = (isset($message->{$field})) ? $this->_convertAddresses($message->{$field}) : array();
+                                }
                         }
                     } catch (Zend_Mail_Exception $zme) {
                         // no 'subject', 'to', 'cc', 'bcc', from, sent or content_type available
