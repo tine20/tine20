@@ -185,7 +185,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /**
      * update cache
-     * - use output buffer mechanism to update incomplete cache
+     * - use session/writeClose to update incomplete cache and allow following requests
      *
      * @param string $folderId id of active folder
      * @return array
@@ -197,7 +197,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $cacheController = Felamimail_Controller_Cache::getInstance();
         
-        // update message cache of active folder and reload store (without loadmask)
+        // update message cache of active folder
         $folder = $cacheController->updateMessages($folderId);
         
         if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE
