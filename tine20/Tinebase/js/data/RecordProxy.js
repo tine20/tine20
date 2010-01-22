@@ -114,8 +114,8 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         var p = options.params;
         
         p.method = this.appName + '.search' + this.modelName + 's';
-        p.filter = Ext.util.JSON.encode(filter);
-        p.paging = Ext.util.JSON.encode(paging);
+        p.filter = filter;
+        p.paging = paging;
         
         options.beforeSuccess = function(response) {
             return [this.jsonReader.read(response)];
@@ -144,7 +144,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         
         var p = options.params;
         p.method = this.appName + '.save' + this.modelName;
-        p.recordData = Ext.util.JSON.encode(record.data);
+        p.recordData = record.data;
         if (additionalArguments) {
             Ext.apply(p, additionalArguments);
         }
@@ -167,7 +167,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options = options || {};
         options.params = options.params || {};
         options.params.method = this.appName + '.delete' + this.modelName + 's';
-        options.params.ids = Ext.util.JSON.encode(this.getRecordIds(records));
+        options.params.ids = this.getRecordIds(records);
         
         return this.doXHTTPRequest(options);
     },
@@ -184,7 +184,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options = options || {};
         options.params = options.params || {};
         options.params.method = this.appName + '.delete' + this.modelName + 'sByFilter';
-        options.params.filter = Ext.util.JSON.encode(filter);
+        options.params.filter = filter;
         
         // increase timeout as this can take a long time (5 mins)
         options.timeout = 300000;
@@ -204,8 +204,8 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options = options || {};
         options.params = options.params || {};
         options.params.method = this.appName + '.updateMultiple' + this.modelName + 's';
-        options.params.filter = Ext.util.JSON.encode(filter);
-        options.params.values = Ext.util.JSON.encode(updates);
+        options.params.filter = filter;
+        options.params.values = updates;
         
         options.beforeSuccess = function(response) {
             return [Ext.util.JSON.decode(response.responseText)];
