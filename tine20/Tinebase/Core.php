@@ -363,6 +363,11 @@ class Tinebase_Core
     
                 $filter = new Zend_Log_Filter_Priority($priority);
                 $logger->addFilter($filter);
+                
+                // add more filters here
+                //$userFilter = new Tinebase_Log_Filter_User();
+                //$logger->addFilter($userFilter);
+                
             } catch (Exception $e) {
                 error_log("Tine 2.0 can't setup the configured logger! The Server responded: $e");
                 $writer = ($_defaultWriter === NULL) ? new Zend_Log_Writer_Null() : $_defaultWriter;
