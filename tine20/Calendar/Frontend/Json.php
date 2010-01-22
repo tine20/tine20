@@ -64,7 +64,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes a recur series
      *
-     * @param  JSONstring $recordData
+     * @param  array $recordData
      * @return void
      */
     public function deleteRecurSeries($recordData)
@@ -125,8 +125,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for events matching given arguments
      *
-     * @param string $_filter json encoded
-     * @param string $_paging json encoded
+     * @param  array $_filter
+     * @param  array $_paging
      * @return array
      */
     public function searchEvents($filter, $paging)
@@ -137,8 +137,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for resources matching given arguments
      *
-     * @param string $_filter json encoded
-     * @param string $_paging json encoded
+     * @param  array $_filter
+     * @param  array $_paging
      * @return array
      */
     public function searchResources($filter, $paging)
@@ -149,9 +149,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * creates/updates an event
      *
-     * @param   $recordData
-     * @param   $checkBusyConficts
-     * @return  array created/updated event
+     * @param   array   $recordData
+     * @param   bool    $checkBusyConficts
+     * @return  array   created/updated event
      */
     public function saveEvent($recordData, $checkBusyConficts=FALSE)
     {
@@ -161,8 +161,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * creates/updates a Resource
      *
-     * @param   $recordData
-     * @return  array created/updated Resource
+     * @param   array   $recordData
+     * @return  array   created/updated Resource
      */
     public function saveResource($recordData)
     {
@@ -174,20 +174,17 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * NOTE: for recur events we implicitly create an exceptions on demand
      *
-     * @param  JSONstring    $_event
-     * @param  JSONstring    $_attendee
-     * @param  string        $_authKey
+     * @param  array         $eventData
+     * @param  array         $attenderData
+     * @param  string        $authKey
      * @return array         complete event
      */
-    public function setAttenderStatus($_event, $_attendee, $_authKey)
+    public function setAttenderStatus($eventData, $attenderData, $authKey)
     {
-        $eventData    = is_array($_event) ? $_event : Zend_Json::decode($_event);
-        $attenderData = is_array($_attendee) ? $_attendee : Zend_Json::decode($_attendee);
-        
         $event    = new Calendar_Model_Event($eventData);
         $attender = new Calendar_Model_Attender($attenderData);
         
-        Calendar_Controller_Event::getInstance()->attenderStatusUpdate($event, $attender, $_authKey);
+        Calendar_Controller_Event::getInstance()->attenderStatusUpdate($event, $attender, $authKey);
         
         return $this->getEvent($event->getId());
     }

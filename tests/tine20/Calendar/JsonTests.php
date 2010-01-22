@@ -61,7 +61,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         ));
         $eventData['notes'] = array($note->toArray());
         
-        $persistentEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
+        $persistentEventData = $this->_uit->saveEvent($eventData);
         $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
         
         $this->_assertJsonEvent($eventData, $loadedEventData, 'failed to create/load event');
@@ -78,7 +78,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     {
         $eventData = $this->_getEventWithAlarm()->toArray();
         
-        $persistentEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
+        $persistentEventData = $this->_uit->saveEvent($eventData);
         $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
         
         //print_r($loadedEventData);
@@ -113,7 +113,7 @@ class Calendar_JsonTests extends Calendar_TestCase
             }
         }
         
-        $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
+        $updatedEventData = $this->_uit->saveEvent($eventData);
         
         $this->_assertJsonEvent($eventData, $updatedEventData, 'failed to update event');
         
@@ -123,7 +123,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testDeleteEvent() {
         $eventData = $this->testCreateEvent();
         
-        $this->_uit->deleteEvents(Zend_Json::encode(array($eventData['id'])));
+        $this->_uit->deleteEvents(array($eventData['id']));
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_uit->getEvent($eventData['id']);
@@ -137,7 +137,7 @@ class Calendar_JsonTests extends Calendar_TestCase
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
         );
         
-        $searchResultData = $this->_uit->searchEvents(Zend_Json::encode($filter), Zend_Json::encode(array()));
+        $searchResultData = $this->_uit->searchEvents($filter, array());
         $resultEventData = $searchResultData['results'][0];
         
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
@@ -151,13 +151,13 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testSearchEventsWithAlarm()
     {
         $eventData = $this->_getEventWithAlarm()->toArray();
-        $persistentEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
+        $persistentEventData = $this->_uit->saveEvent($eventData);
         
         $filter = array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
         );
         
-        $searchResultData = $this->_uit->searchEvents(Zend_Json::encode($filter), Zend_Json::encode(array()));
+        $searchResultData = $this->_uit->searchEvents($filter, array());
         $resultEventData = $searchResultData['results'][0];
         
         $this->_assertJsonEvent($persistentEventData, $resultEventData, 'failed to search event with alarm');
@@ -172,7 +172,7 @@ class Calendar_JsonTests extends Calendar_TestCase
             'user_id' => $this->_personasContacts['pwulf']->getId(),
         );
         
-        $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
+        $updatedEventData = $this->_uit->saveEvent($eventData);
         $pwulf = $this->_findAttender($updatedEventData['attendee'], 'pwulf');
         
         // he he, we don't have his authkey, cause json class sorts it out due to rights restrictions.
@@ -182,7 +182,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $updatedEventData['container_id'] = $updatedEventData['container_id']['id'];
         
         $pwulf['status'] = Calendar_Model_Attender::STATUS_ACCEPTED;
-        $this->_uit->setAttenderStatus(Zend_Json::encode($updatedEventData), Zend_Json::encode($pwulf), $pwulf['status_authkey']);
+        $this->_uit->setAttenderStatus($updatedEventData, $pwulf, $pwulf['status_authkey']);
         
         $loadedEventData = $this->_uit->getEvent($eventData['id']);
         $loadedPwulf = $this->_findAttender($loadedEventData['attendee'], 'pwulf');
@@ -198,7 +198,7 @@ class Calendar_JsonTests extends Calendar_TestCase
             'byday'    => 'WE'
         );
         
-        $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
+        $updatedEventData = $this->_uit->saveEvent($eventData);
         $this->assertTrue(is_array($updatedEventData['rrule']));
 
         return $updatedEventData;
@@ -218,7 +218,7 @@ class Calendar_JsonTests extends Calendar_TestCase
             array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
         );
         
-        $searchResultData = $this->_uit->searchEvents(Zend_Json::encode($filter), Zend_Json::encode(array()));
+        $searchResultData = $this->_uit->searchEvents($filter, array());
         
         $this->assertEquals(6, count($searchResultData['results']));
         
@@ -233,13 +233,13 @@ class Calendar_JsonTests extends Calendar_TestCase
         $persistentException['summary'] = 'go sleeping';
         
         // create persistent exception
-        $this->_uit->createRecurException(Zend_Json::encode($persistentException), FALSE, FALSE);
+        $this->_uit->createRecurException($persistentException, FALSE, FALSE);
         
         // create exception date
-        $this->_uit->createRecurException(Zend_Json::encode($recurSet[2]), TRUE, FALSE);
+        $this->_uit->createRecurException($recurSet[2], TRUE, FALSE);
         
         // delete all following (including this)
-        $this->_uit->createRecurException(Zend_Json::encode($recurSet[4]), TRUE, TRUE);
+        $this->_uit->createRecurException($recurSet[4], TRUE, TRUE);
         
         $from = $recurSet[0]['dtstart'];
         $until = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
@@ -251,7 +251,7 @@ class Calendar_JsonTests extends Calendar_TestCase
             array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
         );
         
-        $searchResultData = $this->_uit->searchEvents(Zend_Json::encode($filter), Zend_Json::encode(array()));
+        $searchResultData = $this->_uit->searchEvents($filter, array());
         
         // we deleted one and cropped
         $this->assertEquals(3, count($searchResultData['results']));
@@ -274,7 +274,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $persistentException['dtend']   = '2009-04-01 20:30:00';
         
         // create persistent exception
-        $this->_uit->createRecurException(Zend_Json::encode($persistentException), FALSE, FALSE);
+        $this->_uit->createRecurException($persistentException, FALSE, FALSE);
         
         // update recurseries 
         $someRecurInstance = $persistentException = $recurSet[2];
@@ -282,7 +282,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $someRecurInstance['dtstart'] = '2009-04-08 10:00:00';
         $someRecurInstance['dtend']   = '2009-04-08 12:30:00';
         
-        $this->_uit->updateRecurSeries(Zend_Json::encode($someRecurInstance), FALSE, FALSE);
+        $this->_uit->updateRecurSeries($someRecurInstance, FALSE, FALSE);
         
         $from = $recurSet[0]['dtstart'];
         $until = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
@@ -295,7 +295,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         );
         
         
-        $searchResultData = $this->_uit->searchEvents(Zend_Json::encode($filter), Zend_Json::encode(array()));
+        $searchResultData = $this->_uit->searchEvents($filter, array());
         
         $this->assertEquals(6, count($searchResultData['results']));
         
@@ -332,11 +332,11 @@ class Calendar_JsonTests extends Calendar_TestCase
         $persistentException['summary'] = 'go sleeping';
         
         // create persistent exception
-        $this->_uit->createRecurException(Zend_Json::encode($persistentException), FALSE, FALSE);
+        $this->_uit->createRecurException($persistentException, FALSE, FALSE);
         
         // delete recurseries 
         $someRecurInstance = $persistentException = $recurSet[2];
-        $this->_uit->deleteRecurSeries(Zend_Json::encode($someRecurInstance));
+        $this->_uit->deleteRecurSeries($someRecurInstance);
         
         $from = $recurSet[0]['dtstart'];
         $until = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
@@ -349,7 +349,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         );
         
         
-        $searchResultData = $this->_uit->searchEvents(Zend_Json::encode($filter), Zend_Json::encode(array()));
+        $searchResultData = $this->_uit->searchEvents($filter, array());
         
         $this->assertEquals(0, count($searchResultData['results']));
     }

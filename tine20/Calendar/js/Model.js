@@ -191,7 +191,7 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy
         
         var p = options.params;
         p.method = this.appName + '.createRecurException';
-        p.recordData = Ext.util.JSON.encode(event.data);
+        p.recordData = event.data;
         p.deleteInstance = deleteInstance ? 1 : 0;
         p.deleteAllFollowing = deleteAllFollowing ? 1 : 0;
         
@@ -211,7 +211,7 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy
         
         var p = options.params;
         p.method = this.appName + '.deleteRecurSeries';
-        p.recordData = Ext.util.JSON.encode(event.data);
+        p.recordData = event.data;
         
         return this.doXHTTPRequest(options);
     },
@@ -232,7 +232,7 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy
         
         var p = options.params;
         p.method = this.appName + '.updateRecurSeries';
-        p.recordData = Ext.util.JSON.encode(event.data);
+        p.recordData = event.data;
         
         return this.doXHTTPRequest(options);
     }
