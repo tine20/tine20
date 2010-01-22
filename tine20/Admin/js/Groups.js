@@ -57,8 +57,6 @@ Tine.Admin.Groups.Main = {
                         groupIds.push(selectedRows[i].id);
                     }
                     
-                    groupIds = Ext.util.JSON.encode(groupIds);
-                    
                     Ext.Ajax.request({
                         url: 'index.php',
                         params: {
@@ -382,28 +380,6 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }
     },
     
-    handlerDelete: function(_button, _event) {
-        var groupIds = Ext.util.JSON.encode([Tine.Admin.Groups.EditDialog.group.data.id]);
-            
-        Ext.Ajax.request({
-            url: 'index.php',
-            params: {
-                method: 'Admin.deleteGroups', 
-                groupIds: groupIds
-            },
-            text: this.translation.gettext('Deleting group...'),
-            success: function(_result, _request) {
-                if(window.opener.Tine.Admin.Groups) {
-                    window.opener.Tine.Admin.Groups.Main.reload();
-                }
-                window.close();
-            },
-            failure: function ( result, request) { 
-                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the group.')); 
-            } 
-        });                           
-    },
-
     /**
      * function updateRecord
      */

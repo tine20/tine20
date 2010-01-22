@@ -320,8 +320,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     {
     	// delete group with json.php function
     	$group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name);
-    	$groupId = Zend_Json::encode(array($group->getId()));
-    	$result = $this->_backend->deleteGroups($groupId);
+    	$result = $this->_backend->deleteGroups(array($group->getId()));
     	
     	$this->assertTrue($result['success']);
     	

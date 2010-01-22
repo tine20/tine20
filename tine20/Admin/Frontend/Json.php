@@ -527,8 +527,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'success'   => TRUE
         );
         
-        $groupIds = Zend_Json::decode($groupIds);
-        
         Admin_Controller_Group::getInstance()->delete($groupIds);
 
         return $result;
