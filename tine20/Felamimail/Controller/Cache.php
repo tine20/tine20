@@ -113,7 +113,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
      * @todo    check if more than $_initialNumber new messages arrived even if cache 
      *          is already complete (-> do initial import again?)
      */
-    public function updateMessages($_folder, $_recursive = TRUE)
+    public function updateMessages($_folder, $_tryAgain = TRUE)
     {
         /***************** get folder ***************************************/
         
@@ -165,7 +165,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
                 
         /***************** check uidvalidity ********************************/
         
-        if (! $this->_updateMessagesCheckValidity($folder, $backendFolderValues) && $_recursive) {
+        if (! $this->_updateMessagesCheckValidity($folder, $backendFolderValues) && $_tryAgain) {
             $folder = $this->clear($folder);
             return $this->updateMessages($folder, FALSE);
         }
@@ -457,7 +457,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
     }
     
     /**
-     * check if mails have been deleted (compare counts)
+     * check folder uidvalidity
+     * if uidvalidity changed, we need to reload the cache because message uids may have changed
      *
      * @param Felamimail_Model_Folder $_folder
      * @param array $_backendFolderValues
@@ -576,11 +577,13 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         // set time limit to infinity for this operation
         set_time_limit(0);
         
+        $count = 0;
         foreach ($_messages as $uid => $value) {
             $message = $value['message'];
             $subject = '';
             
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($message, true));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' caching message ' . $message->subject);
             
             try {
                 $cachedMessage = new Felamimail_Model_Message(array(
@@ -612,7 +615,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
                                 $cachedMessage->sent = $this->_convertDate($message->date);
                                 break;
                             default:
-                                $cachedMessage->{$field} = $this->_convertAddresses($message->{$field});
+                                // need to check if field is set in message first
+                                $cachedMessage->{$field} = (isset($message->{$field})) ? $this->_convertAddresses($message->{$field}) : ''; 
                         }
                     } catch (Zend_Mail_Exception $zme) {
                         // no 'subject', 'to', 'cc', 'bcc', from, sent or content_type available
@@ -626,7 +630,9 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
                     }
                 }
                 
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($cachedMessage->toArray(), true));
                 $this->_messageCacheBackend->create($cachedMessage);
+                $count++;
                 
             } catch (Zend_Mail_Exception $zme) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
@@ -645,6 +651,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
                 );
             }
         }
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Added ' . $count . ' messages.');
     }
    
     /**
