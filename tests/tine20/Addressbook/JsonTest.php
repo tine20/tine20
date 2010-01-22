@@ -121,7 +121,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
         );
-        $contacts = $this->_backend->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
+        $contacts = $this->_backend->searchContacts($filter, $paging);
         
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }    
@@ -137,7 +137,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'otherUsers'),
         );
-        $contacts = $this->_backend->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
+        $contacts = $this->_backend->searchContacts($filter, $paging);
         
         $this->assertGreaterThanOrEqual(0, $contacts['totalcount'], 'getting other peoples contacts failed');
     }
@@ -153,7 +153,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'internal'),
         );
-        $contacts = $this->_backend->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
+        $contacts = $this->_backend->searchContacts($filter, $paging);
 
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }
@@ -177,7 +177,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'tel_cell_private'  => '+49TELCELLPRIVATE',
         );        
 
-        $newContact = $this->_backend->saveContact(Zend_Json::encode($newContactData));
+        $newContact = $this->_backend->saveContact($newContactData);
         $this->assertEquals($newContactData['n_family'], $newContact['n_family'], 'Adding contact failed');
         
         $GLOBALS['Addressbook_JsonTest']['addedContactId'] = $newContact['id'];
@@ -194,7 +194,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(
             array('field' => 'telephone', 'operator' => 'contains', 'value' => '+49TELCELLPRIVATE')
         );
-        $contacts = $this->_backend->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
+        $contacts = $this->_backend->searchContacts($filter, $paging);
         $this->assertEquals(1, $contacts['totalcount']);
     }
 
@@ -210,7 +210,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'singleContainer'),
             array('field' => 'container', 'operator' => 'equals',   'value' => $this->container->id),
         );
-        $contacts = $this->_backend->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
+        $contacts = $this->_backend->searchContacts($filter, $paging);
         
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }
@@ -227,7 +227,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
             array('field' => 'owner',  'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         );
-        $contacts = $this->_backend->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
+        $contacts = $this->_backend->searchContacts($filter, $paging);
         
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }
@@ -243,7 +243,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'shared'),
         );
-        $contacts = $this->_backend->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
+        $contacts = $this->_backend->searchContacts($filter, $paging);
         
         // this is not working with a new database
         #$this->assertGreaterThan(0, $contacts['totalcount']);
@@ -274,7 +274,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $contact = $this->_backend->getContact($contactId);
         
         $contact['n_family'] = 'PHPUNIT UPDATE';
-        $updatedContact = $this->_backend->saveContact(Zend_Json::encode($contact));
+        $updatedContact = $this->_backend->saveContact($contact);
         
         $this->assertEquals($contactId, $updatedContact['id'], 'updated produced a new contact');
         $this->assertEquals('PHPUNIT UPDATE', $updatedContact['n_family'], 'updating data failed');

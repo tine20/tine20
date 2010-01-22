@@ -48,8 +48,8 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for contacts matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchContacts($filter, $paging)
@@ -75,7 +75,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * if $recordData['id'] is empty the contact gets added, otherwise it gets updated
      *
-     * @param string $recordData a JSON encoded array of contact properties
+     * @param  array $recordData an array of contact properties
      * @return array
      */
     public function saveContact($recordData)
@@ -96,7 +96,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /****************************************** get default adb ****************************/
     
     /**
-     * get defautl addressbook
+     * get default addressbook
      * 
      * @return array
      */
