@@ -352,8 +352,8 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             Ext.Ajax.request({
                 params: {
                     method: 'Admin.saveGroup', 
-                    groupData: Ext.util.JSON.encode(this.group.data),
-                    groupMembers: Ext.util.JSON.encode(groupMembers)
+                    groupData: this.group.data,
+                    groupMembers: groupMembers
                 },
                 success: function(response) {
                     /*

@@ -282,16 +282,14 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     {
         $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name);
         
-        // set encoded data array
+        // set data array
         $data = $this->objects['updatedGroup']->toArray();
         $data['id'] = $group->getId();
-        $encodedData = Zend_Json::encode($data);
         
-        // add group members array and encode it
+        // add group members array
         $groupMembers = array($this->objects['user']->accountId);
-        $encodedGroupMembers = Zend_Json::encode($groupMembers);        
         
-        $result = $this->_backend->saveGroup($encodedData, $encodedGroupMembers);
+        $result = $this->_backend->saveGroup($data, $groupMembers);
 
         $this->assertGreaterThan(0,sizeof($result['groupMembers'])); 
         $this->assertEquals($this->objects['updatedGroup']->description, $result['description']); 

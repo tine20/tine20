@@ -494,23 +494,20 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * save group data from edit form
      *
-     * @param   string $groupData        json encoded group data
-     * @param   string $groupMembers     json encoded array of group members
+     * @param   array $groupData        group data
+     * @param   array $groupMembers     group members
      * 
      * @return  array
      */
     public function saveGroup($groupData, $groupMembers)
     {
-        $decodedGroupData = Zend_Json::decode($groupData);
-        $decodedGroupMembers = Zend_Json::decode($groupMembers);
-        
         // unset if empty
-        if (empty($decodedGroupData['id'])) {
-            unset($decodedGroupData['id']);
+        if (empty($groupData['id'])) {
+            unset($groupData['id']);
         }
         
-        $group = new Tinebase_Model_Group($decodedGroupData);
-        $group->members = $decodedGroupMembers;
+        $group = new Tinebase_Model_Group($groupData);
+        $group->members = $groupMembers;
         
         if ( empty($group->id) ) {
             $group = Admin_Controller_Group::getInstance()->create($group);
