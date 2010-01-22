@@ -388,7 +388,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $applications = Tinebase_Application::getInstance()->getApplications();
         foreach ($applications as $application) {
             if ($application->status == 'enabled' && $setupController->updateNeeded($application)) {
-                $this->_renderSetupRequired();
+                $this->setupRequired();
             }
         }
         
@@ -437,7 +437,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * renders the setup/update required dialog
      *
      */
-    protected function _renderSetupRequired()
+    public function setupRequired()
     {
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
