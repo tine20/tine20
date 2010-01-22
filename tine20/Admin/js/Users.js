@@ -150,7 +150,7 @@ Tine.Admin.Users.Main = function() {
         resetPasswordHandler: function(_button, _event) {
             Ext.MessageBox.prompt(this.translation.gettext('Set new password'), this.translation.gettext('Please enter the new password:'), function(_button, _text) {
                 if(_button == 'ok') {
-                    var accountObject = Ext.util.JSON.encode(Ext.getCmp('AdminUserGrid').getSelectionModel().getSelected().data);
+                    var accountObject = Ext.getCmp('AdminUserGrid').getSelectionModel().getSelected().data;
                     
                     Ext.Ajax.request( {
                         params: {

@@ -257,7 +257,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testResetPassword()
     {
-        $this->_backend->resetPassword(Zend_Json::encode($this->objects['user']->toArray()), 'password', FALSE);
+        $this->_backend->resetPassword($this->objects['user']->toArray(), 'password', FALSE);
         
         $authResult = Tinebase_Auth::getInstance()->authenticate($this->objects['user']->accountLoginName, 'password');
         $this->assertTrue($authResult->isValid());    
