@@ -64,7 +64,7 @@ Tine.Admin.Tags.Main = {
                         tagIds.push(selectedRows[i].id);
                     }
                     
-                    tagIds = Ext.util.JSON.encode(tagIds);
+                    tagIds = tagIds;
                     
                     Ext.Ajax.request({
                         url: 'index.php',
@@ -354,7 +354,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             Ext.Ajax.request({
                 params: {
                     method: 'Admin.saveTag', 
-                    tagData: Ext.util.JSON.encode(tag.data)
+                    tagData: tag.data
                 },
                 success: function(response) {
                     //if(this.window.opener.Tine.Admin.Tags) {

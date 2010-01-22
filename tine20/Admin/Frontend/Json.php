@@ -661,15 +661,13 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveTag($tagData)
     {
-        $decodedTagData = Zend_Json::decode($tagData);
-        
         // unset if empty
-        if (empty($decodedTagData['id'])) {
-            unset($decodedTagData['id']);
+        if (empty($tagData['id'])) {
+            unset($tagData['id']);
         }
         
-        $tag = new Tinebase_Model_FullTag($decodedTagData);
-        $tag->rights = new Tinebase_Record_RecordSet('Tinebase_Model_TagRight', $decodedTagData['rights']);
+        $tag = new Tinebase_Model_FullTag($tagData);
+        $tag->rights = new Tinebase_Record_RecordSet('Tinebase_Model_TagRight', $tagData['rights']);
         
         if ( empty($tag->id) ) {
             $tag = Admin_Controller_Tags::getInstance()->create($tag);
