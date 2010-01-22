@@ -128,7 +128,7 @@ Tine.Admin.Users.Main = function() {
                 method : 'post',
                 params : {
                     method : 'Admin.setAccountState',
-                    accountIds : Ext.util.JSON.encode(accountIds),
+                    accountIds : accountIds,
                     status: status
                 },
                 callback : function(_options, _success, _response) {
@@ -186,7 +186,7 @@ Tine.Admin.Users.Main = function() {
                         url: 'index.php',
                         params: {
                             method: 'Admin.deleteUsers',
-                            accountIds: Ext.util.JSON.encode(accountIds)
+                            accountIds: accountIds
                         },
                         text: this.translation.gettext('Deleting account(s)...'),
                         success: function(_result, _request){

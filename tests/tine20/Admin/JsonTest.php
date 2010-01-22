@@ -212,9 +212,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $accountData['accountPassword'] = 'test';
         $accountData['accountPassword2'] = 'test';
         
-        $encodedData = Zend_Json::encode($accountData);
-        
-        $account = $this->_backend->saveUser($encodedData);
+        $account = $this->_backend->saveUser($accountData);
         
         $this->assertTrue(is_array($account));
         $this->assertEquals('PHPUnitup', $account['accountFirstName']);
@@ -230,9 +228,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteAccounts()
     {
-        $encodedAccountIds = Zend_Json::encode(array($this->objects['user']->accountId));
-        
-        $this->_backend->deleteUsers($encodedAccountIds);
+        $this->_backend->deleteUsers(array($this->objects['user']->accountId));
         
         $this->setExpectedException('Exception');
         Tinebase_User::getInstance()->getUserById($this->objects['user']->getId);
@@ -244,7 +240,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSetAccountState()
     {
-        $this->_backend->setAccountState(Zend_Json::encode(array($this->objects['user']->getId())), 'disabled');
+        $this->_backend->setAccountState(array($this->objects['user']->getId()), 'disabled');
         
         $account = Tinebase_User::getInstance()->getFullUserById($this->objects['user']);
         

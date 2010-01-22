@@ -257,19 +257,18 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveUser($recordData)
     {
-        $decodedAccountData = Zend_Json::decode($recordData);
-        $password = $decodedAccountData['accountPassword'];
+        $password = $recordData['accountPassword'];
         
         $account = new Tinebase_Model_FullUser();
         
         try {
-            $account->setFromArray($decodedAccountData);
-            if (isset($decodedAccountData['sambaSAM'])) {
-                $account->sambaSAM = new Tinebase_Model_SAMUser($decodedAccountData['sambaSAM']);
+            $account->setFromArray($recordData);
+            if (isset($recordData['sambaSAM'])) {
+                $account->sambaSAM = new Tinebase_Model_SAMUser($recordData['sambaSAM']);
             }
             
-            if (isset($decodedAccountData['emailUser'])) {
-                $account->emailUser = new Tinebase_Model_EmailUser($decodedAccountData['emailUser']);
+            if (isset($recordData['emailUser'])) {
+                $account->emailUser = new Tinebase_Model_EmailUser($recordData['emailUser']);
             }
             
         } catch (Tinebase_Exception_Record_Validation $e) {
@@ -312,7 +311,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteUsers($accountIds)
     {
-        $accountIds = Zend_Json::decode($accountIds);
         Admin_Controller_User::getInstance()->delete($accountIds);
         
         $result = array(
@@ -330,8 +328,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function setAccountState($accountIds, $status)
     {
-        $accountIds = Zend_Json::decode($accountIds);
-        
         $controller = Admin_Controller_User::getInstance();
         foreach ($accountIds as $accountId) {
             $controller->setAccountStatus($accountId, $status);
