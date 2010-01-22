@@ -438,14 +438,14 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSetApplicationState()
     {
-        $this->_backend->setApplicationState(Zend_Json::encode(array($this->objects['application']->getId())), 'disabled');
+        $this->_backend->setApplicationState(array($this->objects['application']->getId()), 'disabled');
         
         $application = $this->_backend->getApplication($this->objects['application']->getId());
 
         $this->assertEquals($application['status'], 'disabled');
 
         // enable again
-        $this->_backend->setApplicationState(Zend_Json::encode(array($this->objects['application']->getId())), 'enabled');
+        $this->_backend->setApplicationState(array($this->objects['application']->getId()), 'enabled');
     }
 
     /**

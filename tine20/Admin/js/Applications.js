@@ -53,7 +53,7 @@ Tine.Admin.Applications.Main = function() {
             method : 'post',
             params : {
                 method : 'Admin.setApplicationState',
-                applicationIds : Ext.util.JSON.encode(applicationIds),
+                applicationIds : applicationIds,
                 state: state
             },
             callback : function(_options, _success, _response) {

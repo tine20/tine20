@@ -187,8 +187,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function setApplicationState($applicationIds, $state)
     {
-        $applicationIds = Zend_Json::decode($applicationIds);
-
         Admin_Controller_Application::getInstance()->setApplicationState($applicationIds, $state);
 
         $result = array(
