@@ -61,6 +61,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
      */
     protected $_userPropertyNameMapping = array(
         'emailUID'          => 'user_idnr', 
+        'emailGID'          => 'client_idnr',
         'emailPassword'     => 'passwd', 
         'emailMailQuota'    => 'maxmail_size',
         'emailMailSize'     => 'curmail_size',
@@ -82,6 +83,8 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
         'emailLastLogin',
     );
     
+    protected $_hasTine20Userid = false;
+    
     /**
      * the constructor
      *
@@ -94,8 +97,13 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
         $this->_tableName = $this->_config['prefix'] . $this->_config['userTable'];
         
         $this->_db = Zend_Db::factory('Pdo_Mysql', $this->_config);
+        $columns = $this->_db->describeTable('dbmail_users');
+
+        if(array_key_exists('tine20_userid', $columns) && array_key_exists('tine20_clientid', $columns)) {
+            $this->_hasTine20Userid = true;
+        }
         
-        $this->_clientId = $this->_convertToInt(Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId());
+        $this->_clientId = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
     }
     
     /**
@@ -108,10 +116,16 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
     {
         $select = $this->_db->select();
         $select->from($this->_tableName);
-        
-        $select->where($this->_db->quoteIdentifier('user_idnr') . ' = ?', $this->_convertToInt($_userId))
-               ->where($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
-               ->limit(1);
+
+        if($this->_hasTine20Userid === true) {
+            $select->where($this->_db->quoteIdentifier('tine20_userid') . ' = ?',   $_userId)
+                   ->where($this->_db->quoteIdentifier('tine20_clientid') . ' = ?', $this->_clientId)
+                   ->limit(1);
+        } else {
+            $select->where($this->_db->quoteIdentifier('user_idnr') . ' = ?',   $this->_convertToInt($_userId))
+                   ->where($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_convertToInt($this->_clientId))
+                   ->limit(1);
+        }
 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
@@ -147,8 +161,9 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
 	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
         $_emailUser->emailUserId    = $this->_generateUserId($_user->accountLoginName);
-        $_emailUser->emailUID       = $this->_convertToInt($_user->getId());
-	    
+        $_emailUser->emailUID       = $_user->getId();
+        $_emailUser->emailGID       = $this->_clientId;
+        
         $recordArray = $this->_recordToRawData($_emailUser);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordArray, TRUE));  
@@ -166,22 +181,31 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
 	/**
      * updates email properties for an existing user
      * 
-     * @param  Tinebase_Model_FullUser $_user
+     * @param  Tinebase_Model_FullUser   $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
      */
 	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
-        $_emailUser->emailUserId = $this->_generateUserId($_user->accountLoginName);
+        $_emailUser->emailUserId    = $this->_generateUserId($_user->accountLoginName);
+        unset($_emailUser->emailUID);
+        unset($_emailUser->emailGID);
         
         $recordArray = $this->_recordToRawData($_emailUser);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordArray, TRUE));  
-        
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('user_idnr') . ' = ?', $this->_convertToInt($_user->getId())),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
-        );
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordArray, TRUE));
+          
+        if($this->_hasTine20Userid === true) {
+            $where = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('tine20_userid') . ' = ?',   $_user->getId()),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('tine20_clientid') . ' = ?', $this->_clientId)
+            );
+        } else {
+            $where = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('user_idnr') . ' = ?',   $this->_convertToInt($_user->getId())),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_convertToInt($this->_clientId))
+            );
+        }
         
         $this->_db->update($this->_tableName, $recordArray, $where);
         
@@ -198,8 +222,9 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
 	public function setPassword($_userId, $_password)
 	{
 	    $user = Tinebase_User::getInstance()->getFullUserById($_userId);
+	    
 	    $emailUser = new Tinebase_Model_EmailUser(array(
-            'emailUID'      => $this->_convertToInt($user->getId()),
+            'emailUID'      => $user->getId(),
 	        'emailPassword' => $_password   
         ));
 	    
@@ -214,10 +239,17 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
      */
     public function deleteUser($_userId) 
     {
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('user_idnr') . ' = ?', $this->_convertToInt($_userId)),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
-        );
+        if($this->_hasTine20Userid === true) {
+            $where = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('tine20_userid') . ' = ?',   $_userId),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('tine20_clientid') . ' = ?', $this->_clientId)
+            );
+        } else {
+            $where = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('user_idnr') . ' = ?',   $this->_convertToInt($_userId)),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_convertToInt($this->_clientId))
+            );
+        }
         
         $this->_db->delete($this->_tableName, $where);
     }
@@ -255,6 +287,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
     protected function _recordToRawData(Tinebase_Model_EmailUser $_user)
     {
         $data = array();
+                
         foreach ($_user as $key => $value) {
             $property = array_key_exists($key, $this->_userPropertyNameMapping) ? $this->_userPropertyNameMapping[$key] : false;
             if ($property && ! in_array($key, $this->_readOnlyFields)) {
@@ -267,15 +300,30 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
                         }
                         break;
                         
+                    case 'emailUID':
+                        if($this->_hasTine20Userid === true) {
+                            // dbmail user_id gets populated from auto increment field
+                            $data['tine20_userid'] = $value;
+                        } else {
+                            $data[$property] = $this->_convertToInt($value);
+                        }
+                        break;
+                        
+                    case 'emailGID':
+                        if($this->_hasTine20Userid === true) {
+                            $data['tine20_clientid'] = $this->_clientId;
+                        }
+                        $data[$property]     = $this->_convertToInt($value);
+                        break;
+                        
                     default:
                         $data[$property] = $value;
                 }
             }
         }
         
-        $data['client_idnr'] = $this->_clientId;
         $data['encryption_type'] = $this->_config['encryptionType'];
-        
+                
         return $data;
     }
     
