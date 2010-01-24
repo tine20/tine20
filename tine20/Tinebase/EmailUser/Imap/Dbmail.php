@@ -224,7 +224,6 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
 	    $user = Tinebase_User::getInstance()->getFullUserById($_userId);
 	    
 	    $emailUser = new Tinebase_Model_EmailUser(array(
-            'emailUID'      => $user->getId(),
 	        'emailPassword' => $_password   
         ));
 	    
