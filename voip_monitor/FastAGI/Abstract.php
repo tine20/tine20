@@ -17,14 +17,44 @@
 abstract class FastAGI_Abstract
 {
     /**
+     * the fastagi connection (aka the socket handling object)
      * 
      * @var FastAGI
      */
     protected $_fastAGI;
     
-    public function __construct(FastAGI $_fastAGI, array $_arguments)
+    /**
+     * holds the agi variables as provided by Asterisk
+     * 
+     * @var array
+     */
+    protected $_agiVariables;
+    
+    /**
+     * the constructor
+     *  
+     * @param FastAGI $_fastAGI
+     * @param array $_variables
+     */
+    public function __construct(FastAGI $_fastAGI, array $_variables)
     {
-        $this->_fastAGI   = $_fastAGI;
-        $this->_arguments = $_arguments;
+        $this->_fastAGI      = $_fastAGI;
+        $this->_agiVariables = $_variables;
+    }
+
+    /**
+     * extract sip peername (SIP/XXX-yyyyy => XXX)
+     * 
+     * @param string $_sipPeer
+     * @return string
+     */
+    protected function _getSipPeer($_sipPeer = null)
+    {
+        $sipPeer = $_sipPeer !== null ? $_sipPeer : $this->_agiVariables['agi_channel'];
+        if(!preg_match('#SIP/(.*)-\w#', $sipPeer, $matches)) {
+            throw new Exception('invalid sip peer name provided ' . $sipPeer);
+        }
+        
+        return $matches[1];
     }
 }
