@@ -78,6 +78,7 @@ abstract class VoipMonitor_Daemon
             exit;
         }
     }
+    
     /**
      * 
      * @param string $_path
