@@ -85,8 +85,8 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
 
         $prefDescriptions = array(
             self::USESYSTEMACCOUNT  => array(
-                'label'         => $translate->_('User Email Account'),
-                'description'   => $translate->_('Use user credentials for IMAP email account.'),
+                'label'         => $translate->_('Use System Account'),
+                'description'   => $translate->_('Use user credentials and predefined settings for email account.'),
             ),
             self::DEFAULTACCOUNT  => array(
                 'label'         => $translate->_('Default Email Account'),
