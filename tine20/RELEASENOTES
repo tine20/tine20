@@ -11,6 +11,7 @@ Contents
 --
 1. ODS export configs moved to import_export_definitions table
 2. Activate value search for customfields
+3. Email system accounts
 
 
 --------------------------------------------------------------
@@ -30,4 +31,13 @@ to 1.
 
 sql example:
  update tine20_customfield_config set value_search=1 where type='textfield';
+
+--------------------------------------------------------------
+3. Email system accounts
+ 
+ If you want to use system email accounts (you define host/port/... and normal tine
+ user credentials are used to connect to the mailserver) for all users you can force 
+ the preference 'useSystemAccount' (has been renamed from 'userEmailAccount'). Users 
+ with the 'MANAGE_ACCOUNTS' right can change some of the account values (signature, 
+ name, ...). 
  
