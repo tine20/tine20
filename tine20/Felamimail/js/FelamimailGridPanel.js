@@ -684,8 +684,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             Ext.Ajax.request({
                 params: {
                     method: 'Felamimail.' + method,
-                    ids: Ext.util.JSON.encode(toUpdateIds),
-                    flag: Ext.util.JSON.encode('\\' + button.flag)
+                    ids: toUpdateIds,
+                    flag: '\\' + button.flag
                 },
                 success: function(_result, _request) {
                     this.app.getMainScreen().getTreePanel().updateFolderStatus();
