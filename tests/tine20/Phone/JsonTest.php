@@ -283,14 +283,12 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCalls()    
     {
-        $pagingJson = Zend_Json::encode($this->_objects['paging']);
-        
         // search calls
-        $result = $this->_json->searchCalls(Zend_Json::encode($this->_objects['filter1']), $pagingJson);
+        $result = $this->_json->searchCalls($this->_objects['filter1'], $this->_objects['paging']);
         $this->assertGreaterThan(1, $result['totalcount']);
         
         // search query -> '050'
-        $result = $this->_json->searchCalls(Zend_Json::encode($this->_objects['filter2']), $pagingJson);
+        $result = $this->_json->searchCalls($this->_objects['filter2'], $this->_objects['paging']);
         $this->assertEquals(1, $result['totalcount'], 'query filter not working');
         
         $call2 = $result['results'][0];
@@ -299,7 +297,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->_objects['call2']->getId(), $call2['id']);        
         
         // search for phone_id
-        $result = $this->_json->searchCalls(Zend_Json::encode($this->_objects['filter3']), $pagingJson);
+        $result = $this->_json->searchCalls($this->_objects['filter3'], $this->_objects['paging']);
         $this->assertGreaterThan(1, $result['totalcount'], 'phone_id filter not working');
     }    
 

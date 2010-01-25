@@ -611,7 +611,7 @@ Tine.Phone.Main = {
             options.params.dir   = store.getSortState() ? store.getSortState().direction : this.paging.dir;
             options.params.start = options.params.start ? options.params.start : this.paging.start;
             options.params.limit = options.params.limit ? options.params.limit : this.paging.limit;            
-            options.params.paging = Ext.util.JSON.encode(options.params);
+            options.params.paging = Ext.copyTo({}, options.params, 'sort,dir,start,limit');
                         
             // add quicksearch and phone_id filter
             var quicksearchField = Ext.getCmp('callhistoryQuickSearchField');
@@ -631,7 +631,7 @@ Tine.Phone.Main = {
                 });
 	        }
             
-            options.params.filter = Ext.util.JSON.encode(filter);
+            options.params.filter = filter;
             
         }, this);
     },

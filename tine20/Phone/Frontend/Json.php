@@ -23,9 +23,9 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * dial number
      *
-     * @param int $number phone number
-     * @param string $phoneId phone id
-     * @param string $lineId phone line id
+     * @param  int    $number  phone number
+     * @param  string $phoneId phone id
+     * @param  string $lineId  phone line id
      * @return array
      */
     public function dialNumber($number, $phoneId, $lineId)
@@ -42,7 +42,7 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * get user phones
      *
-     * @return string json encoded array with user phones
+     * @return array array with user phones
      * @todo add account id filter again
      */
     public function getUserPhones($accountId)
@@ -72,14 +72,14 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for calls matching given arguments
      *
-     * @param array $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchCalls($filter, $paging)
     {
-        $filter = new Phone_Model_CallFilter(Zend_Json::decode($filter));
-        $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
+        $filter = new Phone_Model_CallFilter($filter);
+        $pagination = new Tinebase_Model_Pagination($paging);
         
         $calls = Phone_Controller::getInstance()->searchCalls($filter, $pagination);
         
@@ -97,12 +97,11 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * if $phoneData['id'] is empty the phone gets added, otherwise it gets updated
      *
-     * @param string $phoneData a JSON encoded array of phone properties
+     * @param  array $phoneData an array of phone properties
      * @return array
      */
     public function saveMyPhone($phoneData)
     {
-        $phoneData = Zend_Json::decode($phoneData);
         $voipController = Voipmanager_Controller_MyPhone::getInstance();
         
         // unset if empty
