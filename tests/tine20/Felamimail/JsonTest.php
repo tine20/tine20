@@ -81,7 +81,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     public function testSearchFolders()
     {
         $filter = $this->_getFolderFilter();
-        $result = $this->_json->searchFolders(Zend_Json::encode($filter));
+        $result = $this->_json->searchFolders($filter);
         
         $this->assertEquals(6, $result['totalcount']);
         $expectedFolders = array('INBOX', 'Drafts', 'Sent', 'Templates', 'Junk', 'Trash');
@@ -104,7 +104,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             Felamimail_Controller_Folder::getInstance()->emptyFolder($folder->getId());
 
             $filter = $this->_getMessageFilter($folder->getId());
-            $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+            $result = $this->_json->searchMessages($filter, '');
             
             $this->assertEquals(0, $result['totalcount'], 'Found too many messages in folder ' . $folderName);
         }
@@ -129,7 +129,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $oldRecentCount = $inbox['recentcount'];
         
         $messageToSend = $this->_getMessageData();
-        $message = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
+        $message = $this->_json->saveMessage($messageToSend);
         
         // get inbox status again
         $result = $this->_json->updateFolderStatus('default', '');
@@ -178,7 +178,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     public function testCreateChangeDeleteAccount() 
     {
         // save & resolve
-        $account = $this->_json->saveAccount(Zend_Json::encode($this->_getAccountData()));
+        $account = $this->_json->saveAccount($this->_getAccountData());
         
         $accountRecord = new Felamimail_Model_Account($account, TRUE);
         $accountRecord->resolveCredentials(FALSE);
@@ -221,7 +221,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // send email
         $messageToSend = $this->_getMessageData();
         $messageToSend['note'] = 1;
-        $returned = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
+        $returned = $this->_json->saveMessage($messageToSend);
         
         //sleep(10);
         
@@ -229,7 +229,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $sent = $this->_getFolder('Sent');
         $filter = $this->_getMessageFilter($sent->getId());
         Felamimail_Controller_Cache::getInstance()->updateMessages($sent);
-        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        $result = $this->_json->searchMessages($filter, '');
         //print_r($result);
         
         $message = array(); 
@@ -291,14 +291,14 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $message = $this->_sendMessage();
         
         // add flag
-        $this->_json->setFlag(Zend_Json::encode(array($message['id'])), Zend_Json::encode('\\Flagged'));
+        $this->_json->setFlag(array($message['id']), '\\Flagged');
         
         // check flags
         $message = $this->_json->getMessage($message['id']);
         $this->assertTrue(preg_match('/\\Flagged/', $message['flags']) > 0);
         
         // remove flag
-        $this->_json->clearFlag(Zend_Json::encode(array($message['id'])), Zend_Json::encode('\\Flagged'));
+        $this->_json->clearFlag(array($message['id']), '\\Flagged');
         
         // check flags
         $message = $this->_json->getMessage($message['id']);
@@ -321,12 +321,12 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $replyMessage['flags']      = '\\Answered';
         $replyMessage['subject']    = 'Re: ' . $message['subject'];
         $replyMessage['original_id']= $message['id'];
-        $returned                   = $this->_json->saveMessage(Zend_Json::encode($replyMessage));
+        $returned                   = $this->_json->saveMessage($replyMessage);
         
         $inbox = $this->_getFolder();
         $filter = $this->_getMessageFilter($inbox->getId());
         Felamimail_Controller_Cache::getInstance()->updateMessages($inbox);
-        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        $result = $this->_json->searchMessages($filter, '');
         $replyMessageFound = array();
         $originalMessage = array();
         foreach ($result['results'] as $mail) {
@@ -358,11 +358,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // move
         $drafts = $this->_getFolder('Drafts');
         //print_r($message);
-        $this->_json->moveMessages(Zend_Json::encode(array($message['id'])), $drafts->getId());
+        $this->_json->moveMessages(array($message['id']), $drafts->getId());
         
         $filter = $this->_getMessageFilter($drafts->getId());
         Felamimail_Controller_Cache::getInstance()->updateMessages($drafts);
-        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        $result = $this->_json->searchMessages($filter, '');
         //print_r($result);
         $movedMessage = array();
         foreach ($result['results'] as $mail) {
@@ -456,7 +456,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     {
         $inbox = $this->_getFolder($_folderName);
         $filter = $this->_getMessageFilter($inbox->getId());
-        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        $result = $this->_json->searchMessages($filter, '');
         foreach ($result['results'] as $mail) {
             if ($mail['subject'] == $_subject) {
                 $this->_json->deleteMessages($mail['id']);
@@ -472,7 +472,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     protected function _sendMessage()
     {
         $messageToSend = $this->_getMessageData();
-        $returned = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
+        $returned = $this->_json->saveMessage($messageToSend);
         
         //sleep(10);
         
@@ -480,7 +480,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $filter = $this->_getMessageFilter($inbox->getId());
         // update cache
         Felamimail_Controller_Cache::getInstance()->updateMessages($inbox);
-        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        $result = $this->_json->searchMessages($filter, '');
         //print_r($result);
         $message = array(); 
         foreach ($result['results'] as $mail) {

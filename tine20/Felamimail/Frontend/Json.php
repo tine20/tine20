@@ -25,7 +25,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * search folders and update/initialize cache of subfolders 
      *
-     * @param string $filter
+     * @param  array $filter
      * @return array
      */
     public function searchFolders($filter)
@@ -99,7 +99,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * remove all messages from folder
      *
-     * @param string $folderId the folder id to delete
+     * @param  string $folderId the folder id to delete
      * @return array
      */
     public function emptyFolder($folderId)
@@ -115,21 +115,19 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * update folder status (unreadcount/totalcount/cache status?)
      *
      * @param string $accountId
-     * @param string $folderId
+     * @param array  $folderIds
      * @return array
      */
     public function updateFolderStatus($accountId, $folderIds)
     {
-        $decodedFolderIds = Zend_Json::decode($folderIds);
-
         // close session to allow other requests
         Zend_Session::writeClose(true);
         
         $result = array();
-        if (empty($decodedFolderIds)) {
+        if (empty($folderIds)) {
             $result = Felamimail_Controller_Folder::getInstance()->updateFolderStatus($accountId)->toArray();
         } else {
-            foreach ((array)$decodedFolderIds as $folderId) {
+            foreach ((array)$folderIds as $folderId) {
                 $result[] = Felamimail_Controller_Folder::getInstance()->updateFolderStatus($accountId, NULL, $folderId)->toArray();
             }
         }
@@ -141,21 +139,19 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * update folder cache
      *
      * @param string $accountId
-     * @param string $folderNames of parent folder(s)
+     * @param array  $folderNames of parent folder(s)
      * @return array
      */
     public function updateFolderCache($accountId, $folderNames)
     {
-        $decodedFolderNames = Zend_Json::decode($folderNames);
-        
         // close session to allow other requests (do we need that?)
         //Zend_Session::writeClose(true);
             
         $result = array();
-        if (empty($decodedFolderNames)) {
+        if (empty($folderNames)) {
             $result = Felamimail_Controller_Cache::getInstance()->updateFolders('', $accountId);
         } else {
-            foreach ((array)$decodedFolderNames as $folderName) {
+            foreach ((array)$folderNames as $folderName) {
                 $result[$folderName] = Felamimail_Controller_Cache::getInstance()->updateFolders($folderName, $accountId);
             }
         }
@@ -172,8 +168,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * search messages
      * - use output buffer mechanism to update incomplete cache
      *
-     * @param string $filter
-     * @param string $paging
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchMessages($filter, $paging)
@@ -187,7 +183,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * update cache
      * - use session/writeClose to update incomplete cache and allow following requests
      *
-     * @param string $folderId id of active folder
+     * @param  string $folderId id of active folder
      * @return array
      * 
      * @todo    message caching should be resumable if it ended and wasn't finished 
@@ -222,7 +218,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * get message data
      *
-     * @param string $id
+     * @param  string $id
      * @return array
      */
     public function getMessage($id)
@@ -236,7 +232,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing messages
      *
-     * @param string $ids  message ids
+     * @param  array $ids  message ids
      * @return string
      * @return array
      * 
@@ -244,9 +240,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteMessages($ids)
     {
-        if (strpos($ids, '[') !== false) {
-            $ids = Zend_Json::decode($ids);
-        }
         $deletedRecords = Felamimail_Controller_Message::getInstance()->delete($ids);
         $this->_backgroundDelete($deletedRecords);
     }
@@ -254,12 +247,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing messages by filter
      *
-     * @param string $filter
+     * @param  array $filter
      * @return array
      */
     public function deleteMessagesByFilter($filter)
     {
-        $filter = new Felamimail_Model_MessageFilter(Zend_Json::decode($filter));
+        $filter = new Felamimail_Model_MessageFilter($filter);
         $deletedRecords = Felamimail_Controller_Message::getInstance()->deleteByFilter($filter);
         $this->_backgroundDelete($deletedRecords);
     }
@@ -267,13 +260,13 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * move messsages to folder
      *
-     * @param string $ids message ids
-     * @param string $folderId
+     * @param  array $ids message ids
+     * @param  string $folderId
      * @return array
      */
     public function moveMessages($ids, $folderId)
     {
-        $result = Felamimail_Controller_Message::getInstance()->moveMessages(Zend_Json::decode($ids), $folderId);
+        $result = Felamimail_Controller_Message::getInstance()->moveMessages($ids, $folderId);
         
         return array(
             'status' => ($result) ? 'success' : 'failure'
@@ -285,7 +278,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * - this function has to be named 'saveMessage' because of the generic edit dialog function names
      *
-     * @param  string $recordData
+     * @param  array $recordData
      * @return array
      * 
      */
@@ -310,17 +303,16 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * set flag of messages
      *
-     * @param string $ids
-     * @param string $flag
+     * @param  array $ids
+     * @param  array $flag
      * @return array
      */
     public function setFlag($ids, $flag)
     {
-        $decodedFlag = Zend_Json::decode($flag);
-        if (! empty($decodedFlag)) {
-            foreach (Zend_Json::decode($ids) as $id) {
+        if (! empty($flag)) {
+            foreach ($ids as $id) {
                 $message = Felamimail_Controller_Message::getInstance()->get($id);
-                Felamimail_Controller_Message::getInstance()->addFlags($message, (array) $decodedFlag);
+                Felamimail_Controller_Message::getInstance()->addFlags($message, (array) $flag);
             }
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No flag set in request.');
@@ -332,16 +324,15 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * clear flag of messages
      *
-     * @param string $ids
+     * @param array  $ids
      * @param string $flag
      * @return array
      */
     public function clearFlag($ids, $flag)
     {
-        $encodedFlag = Zend_Json::decode($flag);
-        foreach (Zend_Json::decode($ids) as $id) {
+        foreach ($ids as $id) {
             $message = Felamimail_Controller_Message::getInstance()->get($id);
-            Felamimail_Controller_Message::getInstance()->clearFlags($message, array($encodedFlag));
+            Felamimail_Controller_Message::getInstance()->clearFlags($message, array($flag));
         }
         
         return array('status' => 'success');
@@ -444,7 +435,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /**
      * search accounts
-     *
+     * 
+     * @param  array $filter
      * @return array
      */
     public function searchAccounts($filter)
@@ -466,7 +458,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * creates/updates a record
      *
-     * @param  string $recordData
+     * @param  array $recordData
      * @return array created/updated record
      */
     public function saveAccount($recordData)
@@ -477,8 +469,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing accounts
      *
-     * @param string $ids
-     * @return string
+     * @param  array $ids
      * @return array
      */
     public function deleteAccounts($ids)

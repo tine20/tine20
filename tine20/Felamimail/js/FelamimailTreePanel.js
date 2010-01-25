@@ -581,7 +581,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         Ext.Ajax.request({
             params: {
                 method: 'Felamimail.updateFolderStatus',
-                folderIds: Ext.util.JSON.encode(folderIds),
+                folderIds: folderIds,
                 accountId: node.attributes.account_id
             },
             scope: this,
@@ -762,7 +762,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             Ext.Ajax.request({
                 params: {
                     method: 'Felamimail.updateFolderCache',
-                    folderNames: Ext.util.JSON.encode([globalname]),
+                    folderNames: [globalname],
                     accountId: accountId
                 },
                 scope: this,
@@ -852,7 +852,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             params: {
                 method: 'Felamimail.moveMessages',
                 folderId: targetFolderId,
-                ids: Ext.util.JSON.encode(ids)
+                ids: ids
             },
             scope: this,
             success: function(_result, _request){

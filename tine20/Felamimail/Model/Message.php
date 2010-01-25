@@ -114,7 +114,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      */
     public function setFromJson($_data)
     {
-        $recordData = Zend_Json::decode($_data);
+        if(is_array($_data)) {
+            $recordData = $_data;
+        } else {
+            $recordData = Zend_Json::decode($_data);
+        }
         $this->setFromArray($recordData);
         
         // explode email addresses if multiple
