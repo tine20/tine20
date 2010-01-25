@@ -107,20 +107,13 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     /**
      * fills a record from json data
      *
-     * @param string $_data json encoded data
+     * @param array $recordData
      * 
      * @todo    get/detect delimiter from row? could be ';' or ','
      * @todo    add recipient names
      */
-    public function setFromJson($_data)
+    protected function _setFromJson(array &$recordData)
     {
-        if(is_array($_data)) {
-            $recordData = $_data;
-        } else {
-            $recordData = Zend_Json::decode($_data);
-        }
-        $this->setFromArray($recordData);
-        
         // explode email addresses if multiple
         $recipientType = array('to', 'cc', 'bcc');
         $delimiter = ';';
