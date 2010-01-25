@@ -28,7 +28,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
      * use tine user credentials for imap connection
      *
      */
-    const USERACCOUNT = 'userEmailAccount';
+    const USESYSTEMACCOUNT = 'useSystemAccount';
 
     /**
      * default email account to use
@@ -65,7 +65,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     public function getAllApplicationPreferences()
     {
         $allPrefs = array(
-            self::USERACCOUNT,
+            self::USESYSTEMACCOUNT,
             self::DEFAULTACCOUNT,
             self::UPDATEINTERVAL,
             self::USEINADB,
@@ -84,7 +84,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
         $translate = Tinebase_Translation::getTranslation($this->_application);
 
         $prefDescriptions = array(
-            self::USERACCOUNT  => array(
+            self::USESYSTEMACCOUNT  => array(
                 'label'         => $translate->_('User Email Account'),
                 'description'   => $translate->_('Use user credentials for IMAP email account.'),
             ),
@@ -117,7 +117,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
         
         switch($_preferenceName) {
             case self::USEINADB:
-            case self::USERACCOUNT:
+            case self::USESYSTEMACCOUNT:
                 $preference->value      = 0;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>

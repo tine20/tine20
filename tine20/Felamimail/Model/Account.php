@@ -45,6 +45,18 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     const SECURE_SSL = 'ssl';
     
     /**
+     * system account
+     *
+     */
+    const TYPE_SYSTEM = 'system';
+    
+    /**
+     * user defined account
+     *
+     */
+    const TYPE_USER = 'user';
+    
+    /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 
@@ -74,7 +86,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'type'        => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => 'user',
-            'InArray' => array('user', 'system')
+            'InArray' => array(self::TYPE_USER, self::TYPE_SYSTEM)
         ),
     // imap server config
         'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
