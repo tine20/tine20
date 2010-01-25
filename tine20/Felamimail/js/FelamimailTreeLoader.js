@@ -77,6 +77,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             localname: attr.localname,
     		globalname: attr.globalname,
     		account_id: attr.account_id,
+            type: attr.type,
             folder_id: attr.id,
     		folderNode: true,
             allowDrop: true,

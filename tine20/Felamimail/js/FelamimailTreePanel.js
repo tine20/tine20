@@ -328,7 +328,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             text: this.app.i18n._('Edit Account'),
             iconCls: 'FelamimailIconCls',
             scope: this,
-            disabled: ! Tine.Tinebase.common.hasRight('manage_accounts', 'Felamimail'),
+            // TODO add right to add accounts?
+            //disabled: ! Tine.Tinebase.common.hasRight('manage_accounts', 'Felamimail'),
             handler: function() {
                 var record = this.accountStore.getById(this.ctxNode.attributes.account_id);
                 var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({

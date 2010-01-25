@@ -50,6 +50,32 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * executed after record got updated from proxy
+     * 
+     * -> only allow to change some of the fields if it is a system account
+     */
+    onRecordLoad: function() {
+        Tine.Felamimail.AccountEditDialog.superclass.onRecordLoad.call(this);
+        
+        // if account type == system disable most of the input fields
+        if (this.record.get('type') == 'system') {
+            this.getForm().items.each(function(item) {
+                // only enable some fields
+                switch(item.name) {
+                    case 'name':
+                    case 'signature':
+                    case 'intelligent_folders':
+                    case 'has_children_support':
+                    case 'sort_folders':
+                        break;
+                    default:
+                        item.setDisabled(true);
+                }
+            }, this);
+        }
+    },    
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
