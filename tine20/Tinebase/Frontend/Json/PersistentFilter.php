@@ -37,12 +37,12 @@ class Tinebase_Frontend_Json_PersistentFilter
     /**
      * search for persistent filters (by application, user, ...)
      *
-     * @param string $filter
+     * @param  array $filter
      * @return array
      */
     public function search($filter)
     {
-        $decodedFilter = Zend_Json::decode($filter);
+        $decodedFilter = is_array($filter) ? $filter : Zend_Json::decode($filter);
         $filter = new Tinebase_Model_PersistentFilterFilter(!empty($decodedFilter) ? $decodedFilter : array());
         
         $result = $this->_backend->search(
@@ -83,13 +83,15 @@ class Tinebase_Frontend_Json_PersistentFilter
     /**
      * save persistent filter
      *
-     * @param string $filterData
+     * @param array  $filterData
      * @param string $name
      * @param string $model model name (Application_Model_Record)
      * @throws Tinebase_Exception_InvalidArgument
      */
     public function save($filterData, $name, $model) 
     {
+        $decodedFilterData = is_array($filterData) ? $filterData : Zend_Json::decode($filterData);
+        
         list($appName, $ns, $modelName) = explode('_', $model);
         
         $filterModel = "{$appName}_Model_{$modelName}Filter";
@@ -100,7 +102,7 @@ class Tinebase_Frontend_Json_PersistentFilter
         }
         
         // set filter data und create persistent filter record
-        $filter->setFromArrayInUsersTimezone(Zend_Json::decode($filterData));
+        $filter->setFromArrayInUsersTimezone($decodedFilterData);
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
         $persistentFilter = new Tinebase_Model_PersistentFilter(array(
             'account_id'        => Tinebase_Core::getUser()->getId(),
