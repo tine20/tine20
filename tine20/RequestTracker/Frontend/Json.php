@@ -53,17 +53,14 @@ class RequestTracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * search tickets
      *
-     * @param string $filter
-     * @param string $paging
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      * 
      * @todo show error message in js frontend when Tinebase_Exception_NotFound is catched
      */
     public function searchTickets($filter, $paging)
     {
-        $filter = new RequestTracker_Model_TicketFilter(Zend_Json::decode($filter));
-        $paging = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
-        
         try {
             $result = array(
                 'results'    => $this->_getBackend()->search($filter, $paging)->toArray(),
