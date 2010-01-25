@@ -114,7 +114,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
         
         // check preference / config if we should add system account with tine user credentials or from config.inc.php
-        if (count($result == 0) && ! $_onlyIds) { 
+        if (count($result) == 0 && ! $_onlyIds && Tinebase_Core::getPreference('Felamimail')->useSystemAccount) { 
             $result = $this->_addSystemAccount();
         }
         
@@ -170,6 +170,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $record->setId(Felamimail_Model_Account::DEFAULT_ACCOUNT_ID);
         } else {
             $record = parent::get($_id, $_containerId);
+            
+            if ($record->type == Felamimail_Model_Account::TYPE_SYSTEM) {
+                $this->_addSystemAccountValues($record);
+                $this->_addUserValues($record, Tinebase_User::getInstance()->getFullUserById($this->_currentAccount->getId()));
+            }
         }
         
         return $record;    
@@ -468,74 +473,52 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * add system account with tine user credentials (from config.inc.php or config db) 
      *
      * @return Tinebase_Record_RecordSet
-     * 
-     * @todo    implement 
      */
     protected function _addSystemAccount()
     {
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Deprecated.');
+        $result = new Tinebase_Record_RecordSet('Felamimail_Model_Account');
         
-        /*
-        // add account from config.inc.php if available
-        if (! empty($this->_imapConfig) && $this->_imapConfig['useAsDefault']) {
+        // get user
+        $userId = $this->_currentAccount->getId();
+        $fullUser = Tinebase_User::getInstance()->getFullUserById($userId);
+        
+        // only create account if email address is set
+        if ($fullUser->accountEmailAddress) {
+            $systemAccount = new Felamimail_Model_Account($this->_imapConfig, TRUE);
+            $systemAccount->type = Felamimail_Model_Account::TYPE_SYSTEM;
+            $systemAccount->user_id = $userId;
             
-            try {
-                $defaultAccount = new Felamimail_Model_Account($this->_imapConfig);
-                $defaultAccount->setId(Felamimail_Model_Account::DEFAULT_ACCOUNT_ID);
-                $_accounts->addRecord($defaultAccount);
-                $this->_addedDefaultAccount = TRUE;
-                
-            } catch (Tinebase_Exception $e) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $e->getMessage());
+            $this->_addUserValues($systemAccount, $fullUser);
+            
+            // sanitize port
+            if (empty($systemAccount->port)) {
+                $systemAccount->port = 143;
             }
-            
-        // create new account with user credentials (if preference is set)
-        } else if (count($_accounts) == 0 && Tinebase_Core::getPreference('Felamimail')->useSystemAccount) {
-            
-            $defaultAccount = new Felamimail_Model_Account($this->_imapConfig, TRUE);
-            
-            $userId = $this->_currentAccount->getId();
-            $defaultAccount->user_id = $userId;
-            
-            $fullUser = Tinebase_User::getInstance()->getFullUserById($userId);
-            $defaultAccount->user   = $fullUser->accountLoginName;
-            
-            // only create account if email address is set
-            if ($fullUser->accountEmailAddress) {
-                $defaultAccount->email  = $fullUser->accountEmailAddress;
-                $defaultAccount->name   = $fullUser->accountEmailAddress;
-                $defaultAccount->from   = $fullUser->accountFullName;
-                
-                // get password from credentials cache and create account credentials
-                $defaultAccount->credentials_id = $this->_createCredentials();
-                $defaultAccount->smtp_credentials_id = $defaultAccount->credentials_id;
-                
-                // sanitize port
-                if (empty($defaultAccount->port)) {
-                    $defaultAccount->port = 143;
-                }
 
-                // add smtp server settings
-                $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
-                if (! empty($smtpConfig)) {
-                    $defaultAccount->smtp_port              = ((! empty($smtpConfig['port'])) ? $smtpConfig['port'] : 25);
-                    $defaultAccount->smtp_hostname          = $smtpConfig['hostname'];
-                    $defaultAccount->smtp_auth              = $smtpConfig['auth'];
-                    $defaultAccount->smtp_ssl               = $smtpConfig['ssl'];             
-                }
-                
-                // create new account
-                $defaultAccount = $this->_backend->create($defaultAccount);
-                $_accounts->addRecord($defaultAccount);
-                $this->_addedDefaultAccount = TRUE;
-                
-                // set as default account preference
-                Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $defaultAccount->getId();
-                
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Created new default account ' . $defaultAccount->name);
+            // add smtp server settings
+            $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+            if (! empty($smtpConfig)) {
+                $systemAccount->smtp_port              = ((! empty($smtpConfig['port'])) ? $smtpConfig['port'] : 25);
+                $systemAccount->smtp_hostname          = $smtpConfig['hostname'];
+                $systemAccount->smtp_auth              = $smtpConfig['auth'];
+                $systemAccount->smtp_ssl               = $smtpConfig['ssl'];             
             }
+            
+            // create new account
+            $systemAccount = $this->_backend->create($systemAccount);
+            $result->addRecord($systemAccount);
+            $this->_addedDefaultAccount = TRUE;
+            
+            // set as default account preference
+            Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $systemAccount->getId();
+            
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Created new system account ' . $systemAccount->name);
+            
+        } else {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not create system account for user ' . $fullUser->accountLoginName);
         }
-        */
+                
+        return $result;
     }
     
     /**
@@ -569,6 +552,54 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         );
         
         return $accountCredentials->getId();
+    }
+    
+    /**
+     * add settings/values from system account
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @return void
+     */
+    protected function _addSystemAccountValues(Felamimail_Model_Account $_account)
+    {
+        // add imap settings
+        $imapKeysOverwrite = array('host', 'port', 'ssl');
+        foreach ($this->_imapConfig as $key => $value) {
+            if (in_array($key, $imapKeysOverwrite)) {
+                $_account->{$key} = $value;
+            }
+        }
+        
+        // add smtp settings
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        $smtpKeysOverwrite = array();
+        foreach ($smtpConfig as $key => $value) {
+            if (in_array($key, $smtpKeysOverwrite)) {
+                $_account->{'smtp_' . $key} = $value;
+            }
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->toArray(), TRUE)); 
+    }
+    
+    /**
+     * add user account/contact data
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param Tinebase_Model_FullUser $_user
+     * @return unknown_type
+     */
+    protected function _addUserValues(Felamimail_Model_Account $_account, Tinebase_Model_FullUser $_user)
+    {
+        // add user data
+        $_account->user   = $_user->accountLoginName;
+        $_account->email  = $_user->accountEmailAddress;
+        $_account->name   = $_user->accountEmailAddress;
+        $_account->from   = $_user->accountFullName;
+        
+        // add contact data
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_user->getId());
+        $_account->organization = $contact->org_name;
     }
     
     /**
