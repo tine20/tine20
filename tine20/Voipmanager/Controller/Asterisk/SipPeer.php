@@ -151,7 +151,7 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         
         $sipPeers = $controller = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter);     
         
-        $fieldsToSkip = array('id', 'name');
+        $fieldsToSkip = array('id', 'name', 'fullcontact', 'username');
         
         $fp = fopen("php://temp", 'r+');
         foreach($sipPeers as $sipPeer) {
