@@ -43,8 +43,8 @@ class ExampleApplication_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchExampleRecords($filter, $paging)
@@ -66,7 +66,7 @@ class ExampleApplication_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * creates/updates a record
      *
-     * @param  string $recordData
+     * @param  array $recordData
      * @return array created/updated record
      */
     public function saveExampleRecord($recordData)
@@ -77,7 +77,7 @@ class ExampleApplication_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing records
      *
-     * @param string $ids 
+     * @param  array  $ids 
      * @return string
      */
     public function deleteExampleRecords($ids)
