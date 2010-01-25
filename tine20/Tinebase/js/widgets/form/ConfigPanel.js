@@ -91,7 +91,7 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
                 scope: this,
                 params: {
                     method: this.saveMethod,
-                    data: Ext.util.JSON.encode(configData)
+                    data: configData
                 },
                 success: function(response) {
                     var regData = Ext.util.JSON.decode(response.responseText);
