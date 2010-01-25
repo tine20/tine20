@@ -70,8 +70,14 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'user_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // account type (system/user defined)
+        'type'        => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true, 
+            Zend_Filter_Input::DEFAULT_VALUE => 'user',
+            'InArray' => array('user', 'system')
+        ),
     // imap server config
-        'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'port'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 143),
         'ssl'                   => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
@@ -79,7 +85,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             'InArray' => array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)
         ),
         'credentials_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'user'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'user'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'password'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // other settings (add single JSON encoded field for that?)
         'sent_folder'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'Sent'),
@@ -98,7 +104,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'ns_other'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'ns_shared'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // user data
-        'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),
         'organization'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),
         'signature'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),

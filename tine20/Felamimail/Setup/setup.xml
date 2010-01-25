@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>3.0</version>
+    <version>3.1</version>
     <order>30</order>
     <status>enabled</status>
     <depends>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>8</version>
+            <version>9</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -22,6 +22,12 @@
                     <name>user_id</name>
                     <type>text</type>
                     <length>40</length>
+                </field>
+                <field>
+                    <name>type</name>
+                    <type>text</type>
+                    <length>20</length>
+                    <default>user</default>
                 </field>
                 <field>
                     <name>name</name>
