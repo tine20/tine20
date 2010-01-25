@@ -240,8 +240,8 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
             scope: this,
             params: {
                 method: 'Setup.' + type + 'Applications',
-                applicationNames: Ext.util.JSON.encode(appNames),
-                options: Ext.util.JSON.encode(options)
+                applicationNames: appNames,
+                options: options
             },
             success: function(response) {
                 var regData = Ext.util.JSON.decode(response.responseText);

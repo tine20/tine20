@@ -75,7 +75,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     {
         $authenticationData = $this->_json->loadAuthenticationData();
         if ($this->_originalAuthenticationData !== $authenticationData) {
-            $this->_json->saveAuthentication(Zend_Json::encode($this->_originalAuthenticationData));
+            $this->_json->saveAuthentication($this->_originalAuthenticationData);
         }
         $this->_installAllApps();
     }
@@ -83,21 +83,21 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     public function testUninstallApplications()
     {
       try {
-        $result = $this->_json->uninstallApplications(Zend_Json::encode(array('ActiveSync')));
+        $result = $this->_json->uninstallApplications(array('ActiveSync'));
       } catch (Tinebase_Exception_NotFound $e) {
-        $this->_json->installApplications(Zend_Json::encode(array('ActiveSync')));
-        $result = $this->_json->uninstallApplications(Zend_Json::encode(array('ActiveSync')));
+        $this->_json->installApplications(array('ActiveSync'));
+        $result = $this->_json->uninstallApplications(array('ActiveSync'));
       }
               
         $this->assertTrue($result['success']);
 
-      $this->_json->installApplications(Zend_Json::encode(array('ActiveSync'))); //cleanup
+      $this->_json->installApplications(array('ActiveSync')); //cleanup
     }
 
     public function testUninstallTinebaseShouldThrowDependencyException()
     {
         $this->setExpectedException('Setup_Exception_Dependency');
-        $result = $this->_json->uninstallApplications(Zend_Json::encode(array('Tinebase')));
+        $result = $this->_json->uninstallApplications(array('Tinebase'));
     }
     
     public function testSearchApplications()
@@ -109,10 +109,10 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     public function testInstallApplications()
     {
         try {
-            $result = $this->_json->installApplications(Zend_Json::encode(array('ActiveSync')));
+            $result = $this->_json->installApplications(array('ActiveSync'));
         } catch (Exception $e) {
-            $this->_json->uninstallApplications(Zend_Json::encode(array('ActiveSync')));
-            $result = $this->_json->installApplications(Zend_Json::encode(array('ActiveSync')));
+            $this->_json->uninstallApplications(array('ActiveSync'));
+            $result = $this->_json->installApplications(array('ActiveSync'));
         }
         
         $this->assertTrue($result['success']);
@@ -125,7 +125,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateApplications()
     {
-        $result = $this->_json->updateApplications(Zend_Json::encode(array('ActiveSync')));
+        $result = $this->_json->updateApplications(array('ActiveSync'));
         $this->assertTrue($result['success']);
     }
 
@@ -203,7 +203,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->_uninstallAllApps();
         
-        $result = $this->_json->saveAuthentication(Zend_Json::encode($testAuthenticationData));
+        $result = $this->_json->saveAuthentication($testAuthenticationData);
         
         $savedAuthenticationData = $this->_json->loadAuthenticationData();
 
@@ -235,7 +235,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         
         // add something to config
         $configData['test'] = 'value';
-        $this->_json->saveConfig(Zend_Json::encode($configData));
+        $this->_json->saveConfig($configData);
 
         // load
         $result = $this->_json->loadConfig();
@@ -249,7 +249,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     protected function _uninstallAllApps()
     {
         $installedApplications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
-        $installedApplications = Zend_Json::encode($installedApplications->name);
+        $installedApplications = $installedApplications->name;
 
         $this->_json->uninstallApplications($installedApplications);
     }
@@ -258,6 +258,6 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     {
         $installableApplications = Setup_Controller::getInstance()->getInstallableApplications();
         $installableApplications = array_keys($installableApplications);
-        $this->_json->installApplications(Zend_Json::encode($installableApplications));
+        $this->_json->installApplications($installableApplications);
     }
 }

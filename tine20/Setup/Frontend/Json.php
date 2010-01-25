@@ -83,16 +83,13 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
     /**
      * install new applications
      *
-     * @param string $applicationNames application names to install
+     * @param array $applicationNames application names to install
      * @param array | optional $options
      */
     public function installApplications($applicationNames, $options = null)
     {
-    	$decodedOptions = Zend_Json::decode($options);
-        $decodedNames   = Zend_Json::decode($applicationNames);
-        
-        if (is_array($decodedNames)) {
-            $this->_controller->installApplications($decodedNames, $decodedOptions);
+        if (is_array($applicationNames)) {
+            $this->_controller->installApplications($applicationNames, $options);
                
             $result = TRUE;
         } else {
@@ -109,12 +106,12 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
     /**
      * update existing applications
      *
-     * @param string $applicationNames application names to update
+     * @param array $applicationNames application names to update
      */
     public function updateApplications($applicationNames)
     {
         $applications = new Tinebase_Record_RecordSet('Tinebase_Model_Application');
-        foreach (Zend_Json::decode($applicationNames) as $applicationName) {
+        foreach ($applicationNames as $applicationName) {
             $applications->addRecord(Tinebase_Application::getInstance()->getApplicationByName($applicationName));
         }
         
@@ -131,12 +128,11 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
     /**
      * uninstall applications
      *
-     * @param string $applicationNames application names to uninstall
+     * @param array $applicationNames application names to uninstall
      */
     public function uninstallApplications($applicationNames)
     {
-        $decodedNames = Zend_Json::decode($applicationNames);
-        $this->_controller->uninstallApplications($decodedNames);
+        $this->_controller->uninstallApplications($applicationNames);
         
         return array(
             'success'=> true,
@@ -181,13 +177,12 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
     /**
      * save config data in config file
      *
-     * @param string $data
+     * @param  array $data
      * @return array with config data
      */
     public function saveConfig($data)
     {
-        $configData = Zend_Json::decode($data);
-        Setup_Controller::getInstance()->saveConfigData($configData);
+        Setup_Controller::getInstance()->saveConfigData($data);
         
         return $this->checkConfig();
     }
@@ -237,12 +232,12 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      * 
      * @todo validate $data
      * 
-     * @param String $data [Json encoded string]
+     * @param  array $data
      * @return array [success status]
      */
     public function saveAuthentication($data)
     {
-        $this->_controller->saveAuthentication(Zend_Json::decode($data));
+        $this->_controller->saveAuthentication($data);
         return array(
             'success' => true,
             'setupRequired' => $this->_controller->setupRequired()
@@ -266,12 +261,12 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      * 
      * @todo implement controller function
      * 
-     * @param string $data [Json encoded string]
+     * @param  array $data
      * @return array [success status]
      */
     public function saveEmailConfig($data)
     {
-        $this->_controller->saveEmailConfig(Zend_Json::decode($data));
+        $this->_controller->saveEmailConfig($data);
         return array(
             'success' => true,
         );
