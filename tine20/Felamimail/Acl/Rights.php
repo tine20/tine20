@@ -23,11 +23,18 @@
 class Felamimail_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
     /**
-     * the right to manage shared folders of an application
+     * the right to manage (update/delete) email accounts
      *
      * @staticvar string
      */
     const MANAGE_ACCOUNTS = 'manage_accounts';
+    
+    /**
+     * the right to add new email accounts
+     *
+     * @staticvar string
+     */
+    const ADD_ACCOUNTS = 'add_accounts';
     
     /**
      * holds the instance of the singleton
@@ -78,7 +85,8 @@ class Felamimail_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array(
-            self::MANAGE_ACCOUNTS
+            self::MANAGE_ACCOUNTS,
+            self::ADD_ACCOUNTS,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -97,7 +105,11 @@ class Felamimail_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $rightDescriptions = array(
             self::MANAGE_ACCOUNTS => array(
                 'text'          => $translate->_('manage email accounts'),
-                'description'   => $translate->_('Create and edit email accounts'),
+                'description'   => $translate->_('Edit and delete email accounts'),
+            ),
+            self::ADD_ACCOUNTS => array(
+                'text'          => $translate->_('Add email accounts'),
+                'description'   => $translate->_('Create new email accounts'),
             ),
         );
         

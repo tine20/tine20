@@ -204,7 +204,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             handler: this.onAddAccount,
             iconCls: 'action_add',
             scope: this,
-            disabled: ! Tine.Tinebase.common.hasRight('manage_accounts', 'Felamimail')
+            disabled: ! Tine.Tinebase.common.hasRight('add_accounts', 'Felamimail')
         });
 
         this.actions = [
