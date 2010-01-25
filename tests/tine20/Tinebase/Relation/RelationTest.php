@@ -178,7 +178,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
     public function testSetRelationsUpdate()
     {
         $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
-        $relations[0]->type = 'UPDATETEST';
+        $relations->filter('related_model', 'Addressbook_Model_Contact')->getFirstRecord()->type = 'UPDATETEST';
         
         // NOTE: At the moment we need to set timezone to users timzone, as related records come as arrays and don't get
         // their dates converted in the JSON frontends
@@ -189,9 +189,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray());
         
         $updatedRelations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
-        $this->assertEquals('UPDATETEST', $updatedRelations[0]->type);
-        //$updatedRelations->related_record = '';
-        //print_r($updatedRelations->toArray());
+        $this->assertEquals('UPDATETEST', $updatedRelations->filter('related_model', 'Addressbook_Model_Contact')->getFirstRecord()->type);
     }
     
     /**
@@ -243,8 +241,8 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMultipleRelations()
     {
-        $crmIdRelations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'])->toArray();
-        $sharedRelation = $crmIdRelations[1];
+        $crmIdRelations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
+        $sharedRelation = $crmIdRelations->filter('related_model', 'Tasks_Model_Task')->getFirstRecord();
         $sharedRelation['id'] = $sharedRelation['own_id'] = $sharedRelation['own_model'] = $sharedRelation['own_backend'] = '';
         
         // lets second entry only have one shared relation
