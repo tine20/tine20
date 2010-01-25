@@ -18,6 +18,11 @@ Ext.ux.file.BrowsePlugin = function(config) {
 
 Ext.ux.file.BrowsePlugin.prototype = {
     /**
+     * @cfg {Boolean} multiple
+     * allow multiple files to be selected (HTML 5 only)
+     */
+    multiple: false,
+    /**
      * @cfg {String} inputFileName
      * Name to use for the hidden input file DOM element.  Deaults to "file".
      */
@@ -107,13 +112,13 @@ Ext.ux.file.BrowsePlugin.prototype = {
     },
     
     createInputFile: function() {
-        this.input_file = this.wrap.createChild({
+        this.input_file = this.wrap.createChild(Ext.apply({
             tag: 'input',
             type: 'file',
             size: 1,
             name: this.inputFileName || Ext.id(this.component.el),
             style: "position: absolute; display: block; border: none; cursor: pointer"
-        });
+        }, this.multiple ? {multiple: true} : {}));
         
         var button_box = this.button_container.getBox();
         this.input_file.setStyle('font-size', Math.max(button_box.height, button_box.width) + 'px');
