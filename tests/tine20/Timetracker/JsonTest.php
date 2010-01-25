@@ -72,7 +72,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->_json->deleteTimeaccounts(Zend_Json::encode($this->_toDeleteIds['ta']));
+        $this->_json->deleteTimeaccounts($this->_toDeleteIds['ta']);
         foreach ($this->_toDeleteIds['cf'] as $cf) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cf);
         }
@@ -85,7 +85,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     public function testAddTimeaccount()
     {
         $timeaccount = $this->_getTimeaccount();
-        $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
         
         // checks
         $this->assertEquals($timeaccount->description, $timeaccountData['description']);
@@ -109,7 +109,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetTimeaccount()
     {
         $timeaccount = $this->_getTimeaccount();
-        $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
         $timeaccountData = $this->_json->getTimeaccount($timeaccountData['id']);
         
         // checks
@@ -129,11 +129,11 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     public function testUpdateTimeaccount()
     {
         $timeaccount = $this->_getTimeaccount();
-        $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
         
         // update Timeaccount
         $timeaccountData['description'] = "blubbblubb";
-        $timeaccountUpdated = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccountData));
+        $timeaccountUpdated = $this->_json->saveTimeaccount($timeaccountData);
         
         // check
         $this->assertEquals($timeaccountData['id'], $timeaccountUpdated['id']);
@@ -152,10 +152,10 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     {
         // create
         $timeaccount = $this->_getTimeaccount();
-        $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
         
         // search & check
-        $search = $this->_json->searchTimeaccounts(Zend_Json::encode($this->_getTimeaccountFilter()), Zend_Json::encode($this->_getPaging()));
+        $search = $this->_json->searchTimeaccounts($this->_getTimeaccountFilter(), $this->_getPaging());
         $this->assertEquals($timeaccount->description, $search['results'][0]['description']);
         $this->assertEquals(1, $search['totalcount']);
         
@@ -173,7 +173,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $timeaccountData = $timeaccount->toArray();
         $grants = $this->_getGrants();
         $timeaccountData['grants'] = $this->_getGrants();
-        $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccountData));
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccountData);
         
         // checks
         $this->assertGreaterThan(0, count($timeaccountData['grants']));
@@ -194,7 +194,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     public function testAddTimesheet()
     {
         $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         
         // checks
         $this->assertEquals($timesheet->description, $timesheetData['description']);
@@ -237,7 +237,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetTimesheet()
     {
         $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         $timesheetData = $this->_json->getTimesheet($timesheetData['id']);
         
         // checks
@@ -257,7 +257,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     public function testUpdateTimesheet()
     {
         $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         
         // update Timesheet
         $timesheetData['description'] = "blubbblubb";
@@ -265,7 +265,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $timesheetData['account_id'] = $timesheetData['account_id']['accountId'];
         $timesheetData['timeaccount_id'] = $timesheetData['timeaccount_id']['id'];
         
-        $timesheetUpdated = $this->_json->saveTimesheet(Zend_Json::encode($timesheetData));
+        $timesheetUpdated = $this->_json->saveTimesheet($timesheetData);
         
         // check
         $this->assertEquals($timesheetData['id'], $timesheetUpdated['id']);
@@ -285,9 +285,9 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     {
         // create 2 timesheets
         $timesheet1 = $this->_getTimesheet();
-        $timesheetData1 = $this->_json->saveTimesheet(Zend_Json::encode($timesheet1->toArray()));
+        $timesheetData1 = $this->_json->saveTimesheet($timesheet1->toArray());
         $timesheet2 = $this->_getTimesheet($timesheetData1['timeaccount_id']['id']);
-        $timesheetData2 = $this->_json->saveTimesheet(Zend_Json::encode($timesheet2->toArray()));
+        $timesheetData2 = $this->_json->saveTimesheet($timesheet2->toArray());
         
         $this->assertEquals($timesheetData1['is_cleared'], 0);
         
@@ -296,7 +296,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $filterData = array(
             array('field' => 'id', 'operator' => 'in', 'value' => array($timesheetData1['id'], $timesheetData2['id']))
         );
-        $result = $this->_json->updateMultipleTimesheets(Zend_Json::encode($filterData), Zend_Json::encode($newValues));
+        $result = $this->_json->updateMultipleTimesheets($filterData, $newValues);
         
         $changed1 = $this->_json->getTimesheet($timesheetData1['id']);
         $changed2 = $this->_json->getTimesheet($timesheetData2['id']);
@@ -320,7 +320,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     public function testDeleteTimesheet()
     {
         $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         
         // delete
         $this->_json->deleteTimesheets($timesheetData['id']);
@@ -343,10 +343,10 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     {
         // create
         $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         
         // search & check
-        $search = $this->_json->searchTimesheets(Zend_Json::encode($this->_getTimesheetFilter()), Zend_Json::encode($this->_getPaging()));
+        $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(), $this->_getPaging());
         $this->assertEquals($timesheet->description, $search['results'][0]['description']);
         $this->assertType('array', $search['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
         $this->assertType('array', $search['results'][0]['account_id'], 'account_id is not resolved');
@@ -365,10 +365,10 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     {
         // create
         $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         
         // search & check
-        $search = $this->_json->searchTimesheets(Zend_Json::encode($this->_getTimesheetDateFilter()), Zend_Json::encode($this->_getPaging()));
+        $search = $this->_json->searchTimesheets($this->_getTimesheetDateFilter(), $this->_getPaging());
         $this->assertEquals($timesheet->description, $search['results'][0]['description']);
         $this->assertType('array', $search['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
         $this->assertType('array', $search['results'][0]['account_id'], 'account_id is not resolved');
@@ -386,7 +386,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     {
         // create
         $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         
         // update timeaccount -> is_billable = false
         $ta = Timetracker_Controller_Timeaccount::getInstance()->get($timesheetData['timeaccount_id']['id']);
@@ -394,7 +394,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         Timetracker_Controller_Timeaccount::getInstance()->update($ta);
         
         // search & check
-        $search = $this->_json->searchTimesheets(Zend_Json::encode($this->_getTimesheetFilter()), Zend_Json::encode($this->_getPaging()));
+        $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(), $this->_getPaging());
         $this->assertEquals(0, $search['results'][0]['is_billable_combined']);
         $this->assertEquals(0, $search['results'][0]['is_cleared_combined']);
         $this->assertEquals(1, $search['totalcount']);
@@ -417,7 +417,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     {
         // create
         $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         
         // export & check
         $csvExportClass = new Timetracker_Export_Csv();
@@ -467,7 +467,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     {
         // create
         $timeaccount = $this->_getTimeaccount();
-        $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
         
         // export & check
         $odsExportClass = Tinebase_Export::factory(new Timetracker_Model_TimeaccountFilter($this->_getTimeaccountFilter()), 'ods');
@@ -501,13 +501,13 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // create
         $filterName = Tinebase_Record_Abstract::generateUID();
         $persistentFiltersJson->save(
-            Zend_Json::encode($this->_getTimesheetFilter()), 
+            $this->_getTimesheetFilter(), 
             $filterName, 
             'Timetracker_Model_Timesheet'
         );
         
         // get
-        $persistentFilters = $persistentFiltersJson->search(Zend_Json::encode($this->_getPersistentFilterFilter($filterName)));
+        $persistentFilters = $persistentFiltersJson->search($this->_getPersistentFilterFilter($filterName));
         //print_r($persistentFilters);
         
         //check
@@ -534,24 +534,24 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // create
         $filterName = Tinebase_Record_Abstract::generateUID();
         $persistentFiltersJson->save(
-            Zend_Json::encode($tsFilter), 
+            $tsFilter, 
             $filterName, 
             'Timetracker_Model_Timesheet'
         );
 
-        $persistentFilters = $persistentFiltersJson->search(Zend_Json::encode($this->_getPersistentFilterFilter($filterName)));
+        $persistentFilters = $persistentFiltersJson->search($this->_getPersistentFilterFilter($filterName));
         
         // update
         $updatedFilter = $tsFilter;
         $updatedFilter[0]['value'] = 'blubb';
         $persistentFiltersJson->save(
-            Zend_Json::encode($updatedFilter), 
+            $updatedFilter, 
             $filterName, 
             'Timetracker_Model_Timesheet'
         );
         
         // get
-        $persistentFiltersUpdated = $persistentFiltersJson->search(Zend_Json::encode($this->_getPersistentFilterFilter($filterName)));
+        $persistentFiltersUpdated = $persistentFiltersJson->search($this->_getPersistentFilterFilter($filterName));
         //print_r($persistentFiltersUpdated);
         
         //check
@@ -579,18 +579,18 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // create
         $filterName = Tinebase_Record_Abstract::generateUID();
         $persistentFiltersJson->save(
-            Zend_Json::encode($tsFilter), 
+            $tsFilter, 
             $filterName, 
             'Timetracker_Model_Timesheet'
         );
         $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
         
         // search persistent filter
-        $persistentFilters = $persistentFiltersJson->search(Zend_Json::encode($this->_getPersistentFilterFilter($filterName)));
+        $persistentFilters = $persistentFiltersJson->search($this->_getPersistentFilterFilter($filterName));
         //check
-        $search = $this->_json->searchTimesheets(Zend_Json::encode($persistentFilters['results'][0]['id']), Zend_Json::encode($this->_getPaging()));
+        $search = $this->_json->searchTimesheets($persistentFilters['results'][0]['id'], $this->_getPaging());
         $this->assertEquals($timesheet->description, $search['results'][0]['description']);
         $this->assertType('array', $search['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
         $this->assertType('array', $search['results'][0]['account_id'], 'account_id is not resolved');
@@ -829,7 +829,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     {
         // create
         $timesheet = $this->_getTimesheet();
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
         
         // export & check
@@ -859,7 +859,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $timesheetArray[$_customField1->name] = $_cf1Value;
         $timesheetArray[$customField2->name] = Tinebase_Record_Abstract::generateUID();
         
-        $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheetArray));
+        $timesheetData = $this->_json->saveTimesheet($timesheetArray);
         
         // tearDown settings
         $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
@@ -871,7 +871,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($timesheetArray[$customField2->name], $timesheetData['customfields'][$customField2->name]);
         
         // check if custom fields are returned with search
-        $searchResult = $this->_json->searchTimesheets(Zend_Json::encode($this->_getTimesheetFilter()), Zend_Json::encode($this->_getPaging()));
+        $searchResult = $this->_json->searchTimesheets($this->_getTimesheetFilter(), $this->_getPaging());
         $this->assertGreaterThan(0, count($searchResult['results'][0]['customfields']));
         foreach($searchResult['results'] as $result) {
             if ($result['id'] == $timesheetData['id']) {
@@ -884,8 +884,8 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // test search with custom field filter
         $searchResult = $this->_json->searchTimesheets(
-            Zend_Json::encode($this->_getTimesheetFilterWithCustomField($_customField1->getId(), $_cf1Value)), 
-            Zend_Json::encode($this->_getPaging())
+            $this->_getTimesheetFilterWithCustomField($_customField1->getId(), $_cf1Value), 
+            $this->_getPaging()
         );
         $this->assertGreaterThan(0, $searchResult['totalcount'], 'cf filter not working');
         

@@ -127,16 +127,15 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
     }
 
     /**
-     * fills a record from json data
+     * set from array data
      *
-     * @param string $_data json encoded data
+     * @param array $_data
      * @return void
      */
-    public function setFromJson($_data)
+    public function setFromArray(array $_data)
     {
-        parent::setFromJson($_data);
+        parent::setFromArray($_data);
         
-        $_data = Zend_Json::decode($_data);
         if (isset($_data['grants']) && !empty($_data['grants'])) {
             $this->grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', $_data['grants']);
         }  else {
