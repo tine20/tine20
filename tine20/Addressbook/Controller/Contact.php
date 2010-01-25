@@ -88,7 +88,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $defaultAddressbookId = Tinebase_Core::getPreference('Addressbook')->getValue(Addressbook_Preference::DEFAULTADDRESSBOOK);
         try {
             $defaultAddressbook = Tinebase_Container::getInstance()->getContainerById($defaultAddressbookId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception $te) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Create new default addressbook. (' . $te->getMessage() . ')');
+            
             // default may be gone -> remove default adb pref
             Tinebase_Core::getPreference('Addressbook')->deleteUserPref(Addressbook_Preference::DEFAULTADDRESSBOOK);
             
