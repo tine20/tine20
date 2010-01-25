@@ -115,6 +115,11 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         });
         
         Tine.Tinebase.ExceptionDialog.superclass.initComponent.call(this);
+        
+        this.on('show', function() {
+            // fix layout issue
+            this.setHeight(this.getHeight() + 10);
+        }, this);
     },
     
     /**
