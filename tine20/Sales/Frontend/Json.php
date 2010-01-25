@@ -72,8 +72,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchContracts($filter, $paging)
@@ -95,7 +95,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * creates/updates a record
      *
-     * @param  string $recordData
+     * @param  array $recordData
      * @return array created/updated record
      */
     public function saveContract($recordData)
@@ -106,7 +106,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing records
      *
-     * @param string $ids 
+     * @param  array $ids 
      * @return string
      */
     public function deleteContracts($ids)
@@ -119,8 +119,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchProducts($filter, $paging)
@@ -142,7 +142,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * creates/updates a record
      *
-     * @param  string $recordData
+     * @param  array $recordData
      * @return array created/updated record
      */
     public function saveProduct($recordData)
@@ -153,7 +153,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing records
      *
-     * @param string $ids 
+     * @param  array $ids 
      * @return string
      */
     public function deleteProducts($ids)

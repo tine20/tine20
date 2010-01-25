@@ -69,7 +69,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
     public function testAddContract()
     {
         $contract = $this->_getContract();
-        $contractData = $this->_instance->saveContract(Zend_Json::encode($contract->toArray()));
+        $contractData = $this->_instance->saveContract($contract->toArray());
         
         // checks
         $this->assertGreaterThan(0, $contractData['number']);
@@ -87,7 +87,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetContract()
     {
         $contract = $this->_getContract();
-        $contractData = $this->_instance->saveContract(Zend_Json::encode($contract->toArray()));
+        $contractData = $this->_instance->saveContract($contract->toArray());
         $contractData = $this->_instance->getContract($contractData['id']);
         
         // checks
@@ -118,7 +118,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
     public function testUpdateContract()
     {
         $contract = $this->_getContract();
-        $contractData = $this->_instance->saveContract(Zend_Json::encode($contract->toArray()));
+        $contractData = $this->_instance->saveContract($contract->toArray());
         $contractData = $this->_instance->getContract($contractData['id']);
         
         // add account and contact + update contract
@@ -126,7 +126,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
 
         //print_r($contractData);
         
-        $contractUpdated = $this->_instance->saveContract(Zend_Json::encode($contractData));
+        $contractUpdated = $this->_instance->saveContract($contractData);
         
         //print_r($contractUpdated);
         
@@ -152,10 +152,10 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
     {
         // create
         $contract = $this->_getContract();
-        $contractData = $this->_instance->saveContract(Zend_Json::encode($contract->toArray()));
+        $contractData = $this->_instance->saveContract($contract->toArray());
         
         // search & check
-        $search = $this->_instance->searchContracts(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
+        $search = $this->_instance->searchContracts($this->_getFilter(), $this->_getPaging());
         $this->assertEquals($contract->title, $search['results'][0]['title']);
         $this->assertEquals(1, $search['totalcount']);
         
@@ -179,9 +179,9 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         );
         $productData['notes'] = array($note);        
         
-        $savedProduct = $this->_instance->saveProduct(Zend_Json::encode($productData));
+        $savedProduct = $this->_instance->saveProduct($productData);
         $getProduct = $this->_instance->getProduct($savedProduct['id']);
-        $searchProducts = $this->_instance->searchProducts(Zend_Json::encode($this->_getProductFilter()), '');
+        $searchProducts = $this->_instance->searchProducts($this->_getProductFilter(), '');
         
         //print_r($getProduct);
         
@@ -196,7 +196,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $this->_instance->deleteProducts($savedProduct['id']);
         
         // check if delete worked
-        $result = $this->_instance->searchProducts(Zend_Json::encode($this->_getProductFilter()), '');
+        $result = $this->_instance->searchProducts($this->_getProductFilter(), '');
         $this->assertEquals(0, $result['totalcount']);   
     }
     

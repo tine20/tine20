@@ -86,19 +86,11 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
     /**
      * fill record from json data
      *
-     * @param string $_data json encoded data
+     * @param  array &$data
      * @return void
-     * 
-     * @todo    discuss this concept / move to json abstract? / record abstract?
      */
-    public function setFromJson($_data)
+    protected function _setFromJson(array &$data)
     {
-        $data = Zend_Json::decode($_data);
-        
-        if (isset($data['container_id']) && is_array($data['container_id'])) {
-            $data['container_id'] = $data['container_id']['id'];
-        }
-        
         /************* add new relations *******************/
         
         if (isset($data['relations'])) {
@@ -137,7 +129,5 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                 }
             }
         }
-        
-        $this->setFromArray($data);
     }
 }
