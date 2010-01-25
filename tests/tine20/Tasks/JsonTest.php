@@ -72,7 +72,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     public function testCreateTask()
     {
         $task = $this->_getTask();
-        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $returned = $this->_backend->saveTask($task->toArray());
         
         $this->assertEquals($task['summary'], $returned['summary']);
         $this->assertNotNull($returned['id']);
@@ -88,7 +88,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_Core::getUser()->accountFirstName, $returnedGet['organizer']['accountFirstName']);
         $this->assertEquals('personal', $returnedGet['container_id']['type']);
         
-        $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
+        $this->_backend->deleteTasks(array($returned['id']));
     }
     
     /**
@@ -99,7 +99,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         $task = $this->_getTaskWithAlarm();
         
-        $persistentTaskData = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $persistentTaskData = $this->_backend->saveTask($task->toArray());
         $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
         
         // check if alarms are created / returned
@@ -118,7 +118,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
 
         // try to save task without due (alarm should be removed)
         unset($task->due);
-        $persistentTaskData = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $persistentTaskData = $this->_backend->saveTask($task->toArray());
         $this->assertEquals(0, count($persistentTaskData['alarms']));
     }
 
@@ -140,7 +140,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
             'Tasks'
         );
         
-        $persistentTaskData = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $persistentTaskData = $this->_backend->saveTask($task->toArray());
         $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
         
         // check if alarms are created / returned
@@ -168,14 +168,14 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         $task = $this->_getTask();
         
-        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $returned = $this->_backend->saveTask($task->toArray());
         $returned['summary'] = 'new summary';
         
-        $updated = $this->_backend->saveTask(Zend_Json::encode($returned));
+        $updated = $this->_backend->saveTask($returned);
         $this->assertEquals($returned['summary'], $updated['summary']);
         $this->assertNotNull($updated['id']);
                 
-        $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
+        $this->_backend->deleteTasks(array($returned['id']));
     }
     
     /**
@@ -189,17 +189,17 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $task = Tasks_Controller_Task::getInstance()->create($task);
         
         // search tasks
-        $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
+        $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
         
         // check
         $count = $tasks['totalcount'];
         $this->assertGreaterThan(0, $count);
         
         // delete task
-        $this->_backend->deleteTasks(Zend_Json::encode(array($task->getId())));
+        $this->_backend->deleteTasks(array($task->getId()));
 
         // search and check again
-        $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
+        $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
         $this->assertEquals($count - 1, $tasks['totalcount']);
     }
     
@@ -211,7 +211,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         $application = 'Tasks';
         $task = $this->_getTask();
-        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $returned = $this->_backend->saveTask($task->toArray());
         
         $test_container = $this->_backend->getDefaultContainer();
         $this->assertEquals($returned['container_id']['type'], 'personal');
@@ -222,7 +222,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($application_id_1, $application_id_2);
         
-        $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
+        $this->_backend->deleteTasks(array($returned['id']));
     }
 
     /**
@@ -235,12 +235,12 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $organizerId = $organizer->getId();
         
         $task = $this->_getTask();
-        $task->organizer = $organizer;      
-        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $task->organizer = $organizer;
+        $returned = $this->_backend->saveTask($task->toArray());
         $taskId = $returned['id'];
                
         // check search tasks- organizer exists
-        $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
+        $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
         $this->assertEquals(1, $tasks['totalcount'], 'more (or less) than one tasks found');
         $this->assertEquals($tasks['results'][0]['organizer']['accountId'], $organizerId);
 
@@ -252,7 +252,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         Tinebase_User::getInstance()->deleteUser($organizerId);       
 
         // test seach search tasks - organizer is deleted
-        $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
+        $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
         $this->assertEquals(1, $tasks['totalcount'], 'more (or less) than one tasks found');
 
         $this->assertEquals($tasks['results'][0]['organizer']['accountDisplayName'], Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName);
@@ -262,7 +262,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($task['organizer']['accountDisplayName'], Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName);
         
         //Cleanup test objects
-        $this->_backend->deleteTasks(Zend_Json::encode(array($taskId)));
+        $this->_backend->deleteTasks(array($taskId));
     }
     
     /**
@@ -272,13 +272,13 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetStatus()
     {
         $task = $this->_getTask();
-        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $returned = $this->_backend->saveTask($task->toArray());
         $status = $this->_backend->getAllStatus();
         
         $this->assertGreaterThan(0, count($status));
         $this->assertNotEquals('', $status[0]['status_name']);
         
-        $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
+        $this->_backend->deleteTasks(array($returned['id']));
     }
     
     /**
@@ -288,13 +288,13 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetRegistryData()
     {
         $task = $this->_getTask();
-        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $returned = $this->_backend->saveTask($task->toArray());
         $regData = $this->_backend->getRegistryData();
         
         $this->assertGreaterThan(0, count($regData['AllStatus']));
         $this->assertNotEquals('', $regData['AllStatus'][0]['status_name']);
         
-        $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
+        $this->_backend->deleteTasks(array($returned['id']));
     }
     
     /**

@@ -53,27 +53,7 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchTasks($filter, $paging)
     {
-        $filterData = Zend_Json::decode($filter);
-        
-        if (! is_array($filterData)) {
-            $persitentFilter = new Tinebase_Frontend_Json_PersistentFilter();
-            $filter = $persitentFilter->get($filterData);
-        } else {
-            $filter = new Tasks_Model_TaskFilter(array());
-            $filter->setFromArrayInUsersTimezone($filterData);
-        }
-        
-        $pagination = new Tasks_Model_Pagination(Zend_Json::decode($paging));
-        
-        $tasks = Tasks_Controller_Task::getInstance()->search($filter, $pagination, TRUE);
-
-        $results = $this->_multipleTasksToJson($tasks);
-        
-        return array(
-            'results' => $results,
-            'totalcount' => Tasks_Controller_Task::getInstance()->searchCount($filter),
-            'filter' => $filter->toArray(true)
-        );
+        return parent::_search($filter, $paging, Tasks_Controller_Task::getInstance(), 'Tasks_Model_TaskFilter', TRUE);
     }
     
     /**
@@ -106,7 +86,7 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * creates/updates a Task
      *
-     * @param  $recordData
+     * @param  array $recordData
      * @return array created/updated task
      */
     public function saveTask($recordData)
@@ -130,27 +110,21 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }    
     
     /**
-     * returns multiple tasks prepared for json transport
+     * returns multiple records prepared for json transport
      *
-     * @param Tinebase_Record_RecordSet $_tasks Tasks_Model_Task
-     * @return array tasks data
-     * 
-     * @todo use parent::_multipleRecordsToJson?
+     * @param  Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param  Tinebase_Model_Filter_FilterGroup
+     * @return array data
      */
-    protected function _multipleTasksToJson(Tinebase_Record_RecordSet $_tasks)
-    {        
-        // get acls for tasks
-        Tinebase_Container::getInstance()->getGrantsOfRecords($_tasks, Tinebase_Core::getUser());
-        $_tasks->setTimezone($this->_userTimezone);
-        $_tasks->convertDates = true;
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
+    {
+        if ($_records->getRecordClassName() == 'Tasks_Model_Task') {
+            // NOTE: in contrast to calendar, organizers in tasks are accounts atm.
+            Tinebase_User::getInstance()->resolveMultipleUsers($_records, 'organizer', true);
+        }
         
-        Tinebase_User::getInstance()->resolveMultipleUsers($_tasks, 'organizer', true);
-
-        Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_tasks);
-        
-        $result = $_tasks->toArray();
-        
-        return $result;
+        //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
+        return parent::_multipleRecordsToJson($_records);
     }    
     
     /**

@@ -118,34 +118,29 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
     }
     
     /**
-     * fill record from json data
+     * sets the record related properties from user generated input.
      *
-     * @param string $_data json encoded data
+     * @param   array $_data
      * @return void
      */
-    public function setFromJson($_data)
+    public function setFromArray(array $_data)
     {
-        $data = Zend_Json::decode($_data);
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
         
-        if (empty($data['geo'])) {
-            $data['geo'] = NULL;
+        if (empty($_data['geo'])) {
+            $_data['geo'] = NULL;
         }
         
-        if (isset($data['container_id']) && is_array($data['container_id'])) {
-            $data['container_id'] = $data['container_id']['id'];
+        if (isset($_data['organizer']) && is_array($_data['organizer'])) {
+            $_data['organizer'] = $_data['organizer']['accountId'];
         }
         
-        if (isset($data['organizer']) && is_array($data['organizer'])) {
-            $data['organizer'] = $data['organizer']['accountId'];
+        if (isset($_data['alarms']) && is_array($_data['alarms'])) {
+            $_data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', $_data['alarms'], TRUE);
         }
         
-        if (isset($data['alarms']) && is_array($data['alarms'])) {
-            $data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', $data['alarms'], TRUE);
-        }
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
-        $this->setFromArray($data);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
+        parent::setFromArray($_data);
     }
     
     /**
