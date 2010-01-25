@@ -147,9 +147,22 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _updateMultiple($_filter, $_data, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
     {
-        $filter = new $_filterModel(Zend_Json::decode($_filter));
+        $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : Zend_Json::decode($_filter);
+        $decodedData   = is_array($_data) ? $_data : Zend_Json::decode($_data);
         
-        $result = $_controller->updateMultiple($filter, Zend_Json::decode($_data));
+        if (is_array($decodedFilter)) {
+            $filter = new $_filterModel(array());
+            $filter->setFromArrayInUsersTimezone($decodedFilter);
+        } else if (!empty($decodedFilter) && strlen($decodedFilter) == 40) {
+            $persistentFilterJson = new Tinebase_Frontend_Json_PersistentFilter(); 
+            $filter = $persistentFilterJson->get($decodedFilter);
+        } else {
+            // filter is empty
+            throw new Tinebase_Exception_InvalidArgument('filter must not be empty');
+        }
+        
+        
+        $result = $_controller->updateMultiple($filter, $decodedData);
         
         return array(
             'count'       => $result,
@@ -170,7 +183,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $record = $_controller->get($_id);
         
         // merge with new properties
-        $record->setFromArray($_data);
+        foreach ($_data as $field => $value) {
+            $record->$field = $value;
+        }
         
         $savedRecord = $_controller->update($record);
         
