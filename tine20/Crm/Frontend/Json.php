@@ -42,8 +42,8 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchLeads($filter, $paging)
@@ -74,7 +74,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * creates/updates a record
      *
-     * @param  string $recordData
+     * @param  array $recordData
      * @return array created/updated record
      */
     public function saveLead($recordData)
@@ -85,7 +85,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing records
      *
-     * @param string $ids 
+     * @param  array  $ids 
      * @return string
      */
     public function deleteLeads($ids)
@@ -158,7 +158,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveSettings($recordData)
     {
-        $settings = new Crm_Model_Config(Zend_Json::decode($recordData));
+        $settings = new Crm_Model_Config($recordData);
         $result = Crm_Controller::getInstance()->saveSettings($settings)->toArray();
         
         return $result;

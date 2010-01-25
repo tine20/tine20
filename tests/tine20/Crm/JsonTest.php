@@ -131,11 +131,11 @@ class Crm_JsonTest extends Crm_AbstractTest
             'id' => 5,
             'leadsource' => 'Another Leadsource'
         );
-        $anotherResult = $this->_instance->saveSettings(Zend_json::encode($newSettings));
+        $anotherResult = $this->_instance->saveSettings($newSettings);
         $this->assertEquals($anotherResult, $newSettings);
         
         // reset original settings
-        $result = $this->_instance->saveSettings(Zend_json::encode($oldSettings));
+        $result = $this->_instance->saveSettings($oldSettings);
         $this->assertEquals($oldSettings, $result);
         
         // test Crm_Model_Config::getOptionById
@@ -168,9 +168,9 @@ class Crm_JsonTest extends Crm_AbstractTest
         );
         $leadData['notes'] = array($note);        
         
-        $savedLead = $this->_instance->saveLead(Zend_Json::encode($leadData));
+        $savedLead = $this->_instance->saveLead($leadData);
         $getLead = $this->_instance->getLead($savedLead['id']);
-        $searchLeads = $this->_instance->searchLeads(Zend_Json::encode($this->_getLeadFilter()), '');
+        $searchLeads = $this->_instance->searchLeads($this->_getLeadFilter(), '');
         
         //print_r($searchLeads);
         
@@ -211,7 +211,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         Sales_Controller_Product::getInstance()->delete($relatedProduct['id']);
         
         // check if delete worked
-        $result = $this->_instance->searchLeads(Zend_Json::encode($this->_getLeadFilter()), '');
+        $result = $this->_instance->searchLeads($this->_getLeadFilter(), '');
         $this->assertEquals(0, $result['totalcount']);   
         
         // check if linked task got removed as well
