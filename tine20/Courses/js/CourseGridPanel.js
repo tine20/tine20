@@ -174,7 +174,7 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         Ext.Ajax.request({
             params: {
                 method: 'Courses.updateAccess',
-                ids: Ext.util.JSON.encode(toUpdateIds),
+                ids: toUpdateIds,
                 type: button.type,
                 access: button.access
             },

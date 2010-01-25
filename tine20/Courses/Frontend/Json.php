@@ -200,8 +200,8 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchCourses($filter, $paging)
@@ -225,7 +225,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @todo move non api specific stuff to controller!
      * 
-     * @param  string $recordData
+     * @param  array $recordData
      * @return array created/updated record
      */
     public function saveCourse($recordData)
@@ -335,8 +335,8 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchCourseTypes($filter, $paging)
@@ -359,15 +359,14 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * update fileserver/internet access
      *
-     * @param string $ids
-     * @param string $type
-     * @param boolean $access
+     * @param  array   $ids
+     * @param  string  $type
+     * @param  boolean $access
      * @return array
      */
     public function updateAccess($ids, $type, $access)
     {
         $result = FALSE;
-        $ids = Zend_Json::decode($ids);
         $allowedTypes = array('internet', 'fileserver');
         
         if (in_array($type, $allowedTypes)) {
@@ -393,9 +392,9 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * reset password for given account
      * - call Admin_Frontend_Json::resetPassword()
      *
-     * @param string $account JSON encoded Tinebase_Model_FullUser or account id
-     * @param string $password the new password
-     * @param bool $mustChange
+     * @param  array  $account data of Tinebase_Model_FullUser or account id
+     * @param  string $password the new password
+     * @param  bool $mustChange
      * @return array
      */
     public function resetPassword($account, $password, $mustChange)

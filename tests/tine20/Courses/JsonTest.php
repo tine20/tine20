@@ -69,7 +69,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     public function testAddCourse()
     {
         $course = $this->_getCourseData();
-        $courseData = $this->_json->saveCourse(Zend_Json::encode($course));
+        $courseData = $this->_json->saveCourse($course);
         
         //print_r($courseData);
         
@@ -95,7 +95,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetCourse()
     {
         $course = $this->_getCourseData();
-        $courseData = $this->_json->saveCourse(Zend_Json::encode($course));
+        $courseData = $this->_json->saveCourse($course);
         $courseData = $this->_json->getCourse($courseData['id']);
         
         // checks
@@ -113,7 +113,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     public function testUpdateCourse()
     {
         $course = $this->_getCourseData();
-        $courseData = $this->_json->saveCourse(Zend_Json::encode($course));
+        $courseData = $this->_json->saveCourse($course);
 
         //print_r($courseData);
         
@@ -121,7 +121,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $courseData['description'] = "blubbblubb";
         $courseData['members'] = array();
         $courseData['type'] = $courseData['type']['value'];
-        $courseUpdated = $this->_json->saveCourse(Zend_Json::encode($courseData));
+        $courseUpdated = $this->_json->saveCourse($courseData);
         
         //print_r($courseUpdated);
         
@@ -143,10 +143,10 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     {
         // create
         $course = $this->_getCourseData();
-        $courseData = $this->_json->saveCourse(Zend_Json::encode($course));
+        $courseData = $this->_json->saveCourse($course);
         
         // search & check
-        $search = $this->_json->searchCourses(Zend_Json::encode($this->_getCourseFilter($courseData['name'])), Zend_Json::encode($this->_getPaging()));
+        $search = $this->_json->searchCourses($this->_getCourseFilter($courseData['name']), $this->_getPaging());
         $this->assertEquals($course['description'], $search['results'][0]['description']);
         $this->assertEquals(1, $search['totalcount']);
         
@@ -161,7 +161,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     public function testImportMembersIntoCourse()
     {
         $course = $this->_getCourseData();
-        $courseData = $this->_json->saveCourse(Zend_Json::encode($course));
+        $courseData = $this->_json->saveCourse($course);
         
         // import data
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
