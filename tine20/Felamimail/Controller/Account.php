@@ -113,8 +113,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $this->checkFilterACL($_filter);
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
         
-        // check preference / config if we should add default account with tine user credentials or from config.inc.php 
-        $this->_addDefaultAccount($result);
+        // check preference / config if we should add system account with tine user credentials or from config.inc.php
+        if (count($result == 0) && ! $_onlyIds) { 
+            $result = $this->_addSystemAccount();
+        }
         
         return $result;
     }
@@ -463,14 +465,17 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     /******************************** protected funcs *********************************/
 
     /**
-     * add default account with tine user credentials or from config.inc.php 
+     * add system account with tine user credentials (from config.inc.php or config db) 
      *
-     * @param Tinebase_Record_RecordSet $_accounts
+     * @return Tinebase_Record_RecordSet
      * 
-     * @todo get default account data (host, port, ...) from preferences?
+     * @todo    implement 
      */
-    protected function _addDefaultAccount($_accounts)
+    protected function _addSystemAccount()
     {
+        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Deprecated.');
+        
+        /*
         // add account from config.inc.php if available
         if (! empty($this->_imapConfig) && $this->_imapConfig['useAsDefault']) {
             
@@ -485,7 +490,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             }
             
         // create new account with user credentials (if preference is set)
-        } else if (count($_accounts) == 0 && Tinebase_Core::getPreference('Felamimail')->userEmailAccount) {
+        } else if (count($_accounts) == 0 && Tinebase_Core::getPreference('Felamimail')->useSystemAccount) {
             
             $defaultAccount = new Felamimail_Model_Account($this->_imapConfig, TRUE);
             
@@ -530,6 +535,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Created new default account ' . $defaultAccount->name);
             }
         }
+        */
     }
     
     /**
