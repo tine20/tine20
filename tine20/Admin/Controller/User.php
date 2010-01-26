@@ -420,7 +420,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         // update email user data here
         if ($this->_manageImapEmailUser) {
-            if ($_emailUser->emailUID) {
+            if ($_emailUser->emailUsername) {
                 $this->_imapUserBackend->updateUser($_user, $_emailUser);
             } else {
                 $this->_imapUserBackend->addUser($_user, $_emailUser);

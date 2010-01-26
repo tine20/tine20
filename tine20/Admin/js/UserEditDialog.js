@@ -19,7 +19,7 @@ Ext.namespace('Tine.Admin', 'Tine.Admin.Users');
  * 
  * <p>User Edit Dialog</p>
  * <p>
- * TODO         fix focus/tabs when password confirmation window is shown
+ * TODO         use quota fieldset checkbox information (checked/uncheckee) 
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -133,13 +133,20 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * @private
+     * 
+     * init email grids
+     * 
+     * TODO     add ctx menu
+     * TODO     make border work
      */
     initEmailGrids: function() {
         
         var commonConfig = {
             autoExpandColumn:'email',
             quickaddMandatory: 'email',
-            // border: false,
+            //border: true,
+            frame: false,
+            useBBar: true,
             dataField: 'email',
             height: 200,
             columnWidth: .5,
@@ -150,7 +157,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.aliasesGrid = new Tine.Tinebase.widgets.grid.QuickaddGridPanel(
             Ext.apply(commonConfig, {
-                title:this.app.i18n._('Aliases'),
+                //title:this.app.i18n._('Aliases'),
                 cm: new Ext.grid.ColumnModel([{ 
                     id:'email', 
                     header: this.app.i18n._('Email Alias'), 
@@ -169,7 +176,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.forwardsGrid = new Tine.Tinebase.widgets.grid.QuickaddGridPanel(
             Ext.apply(commonConfig, {
-                title:this.app.i18n._('Forwards'),
+                //title:this.app.i18n._('Forwards'),
                 cm: new Ext.grid.ColumnModel([{ 
                     id:'email', 
                     header: this.app.i18n._('Email Forward'), 
@@ -494,58 +501,86 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }]
                 }]
             }, {
-                title: this.app.i18n._('IMAP'),
-                disabled: ! Tine.Admin.registry.get('manageImapEmailUser'),
-                border: false,
-                frame: true,
-                xtype: 'columnform',
-                labelAlign: 'top',
-                formDefaults: {
-                    xtype:'textfield',
-                    anchor: '100%',
-                    labelSeparator: '',
-                    columnWidth: .333,
-                    readOnly: true
-                },
-                items: [[{
-                    fieldLabel: this.app.i18n._('Email UID'),
-                    name: 'emailUID',
-                    columnWidth: .666
-                }], [{
-                    fieldLabel: this.app.i18n._('Email GID'),
-                    name: 'emailGID',
-                    columnWidth: .666
-                }], [{
-                    fieldLabel: this.app.i18n._('Email Username'),
-                    name: 'emailUsername',
-                    columnWidth: .666
-                }], [{
-                    fieldLabel: this.app.i18n._('Quota'),
-                    name: 'emailMailQuota',
-                    xtype:'numberfield',
-                    columnWidth: .666,
-                    readOnly: false
-                }], [{
-                    fieldLabel: this.app.i18n._('Current Mail Size'),
-                    name: 'emailMailSize',
-                    xtype:'numberfield',
-                    columnWidth: .666
-                }], [{
-                    fieldLabel: this.app.i18n._('Sieve Quota'),
-                    name: 'emailSieveQuota',
-                    xtype:'numberfield',
-                    columnWidth: .666
-                }], [{
-                    fieldLabel: this.app.i18n._('Current Sieve Size'),
-                    name: 'emailSieveSize',
-                    xtype:'numberfield',
-                    columnWidth: .666
-                }], [{
-                    fieldLabel: this.app.i18n._('Last Login'),
-                    name: 'emailLastLogin',
-                    columnWidth: .666
-                }]]
-            }, {
+                    title: this.app.i18n._('IMAP'),
+                    disabled: ! Tine.Admin.registry.get('manageImapEmailUser'),
+                    autoScroll: true,
+                    border: false,
+                    frame: true,
+                    layout: 'hfit',
+                    items: [{
+                        title: this.app.i18n._('Quota (MB)'),
+                        autoHeight: true,
+                        xtype: 'fieldset',
+                        checkboxToggle: true,
+                        layout: 'hfit',
+                        items: [{
+                            xtype: 'columnform',
+                            labelAlign: 'top',
+                            formDefaults: {
+                                xtype: 'textfield',
+                                anchor: '100%',
+                                columnWidth: .666
+                            },
+                            items: [[{
+                                fieldLabel: this.app.i18n._('Quota'),
+                                name: 'emailMailQuota',
+                                xtype:'uxspinner'
+                            }], [{
+                                fieldLabel: this.app.i18n._('Current Mail Size'),
+                                name: 'emailMailSize',
+                                xtype:'displayfield',
+                                style: displayFieldStyle
+                            }]
+                            ]
+                        }]
+                    }, {
+                        title: this.app.i18n._('Sieve Quota (MB)'),
+                        autoHeight: true,
+                        xtype: 'fieldset',
+                        checkboxToggle: true,
+                        layout: 'hfit',
+                        items: [{
+                            xtype: 'columnform',
+                            labelAlign: 'top',
+                            formDefaults: {
+                                xtype: 'textfield',
+                                anchor: '100%',
+                                columnWidth: .666
+                            },
+                            items: [[{
+                                fieldLabel: this.app.i18n._('Sieve Quota'),
+                                name: 'emailSieveQuota',
+                                xtype:'uxspinner'
+                            }], [{
+                                fieldLabel: this.app.i18n._('Sieve Size'),
+                                name: 'emailSieveSize',
+                                xtype:'displayfield',
+                                style: displayFieldStyle
+                            }]
+                            ]
+                        }]
+                    }, {
+                        title: this.app.i18n._('Information'),
+                        autoHeight: true,
+                        xtype: 'fieldset',
+                        checkboxToggle: false,
+                        layout: 'hfit',
+                        items: [{
+                            xtype: 'columnform',
+                            labelAlign: 'top',
+                            formDefaults: {
+                                xtype: 'displayfield',
+                                anchor: '100%',
+                                columnWidth: .666,
+                                style: displayFieldStyle
+                            },
+                            items: [[{
+                                fieldLabel: this.app.i18n._('Last Login'),
+                                name: 'emailLastLogin'
+                            }]]
+                        }]
+                    }]
+                }, {
                 title: this.app.i18n._('SMTP'),
                 disabled: ! Tine.Admin.registry.get('manageSmtpEmailUser'),
                 border: false,

@@ -210,6 +210,14 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $user->setTimezone(Tinebase_Core::get('userTimeZone'));
             $userArray = $user->toArray();
             
+            // don't send some infos to the client: unset email uid+gid
+            if (array_key_exists('emailUser', $userArray)) {
+                $unsetFields = array('emailUID', 'emailGID');
+                foreach ($unsetFields as $field) {
+                    unset($userArray['emailUser'][$field]);
+                }
+            }
+            
             // add primary group to account for the group selection combo box
             $group = Tinebase_Group::getInstance()->getGroupById($user->accountPrimaryGroup);
         } else {
