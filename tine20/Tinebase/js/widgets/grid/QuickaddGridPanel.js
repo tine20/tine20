@@ -41,6 +41,12 @@ Tine.Tinebase.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGr
     dataField: null,
     
     /**
+     * useBBar 
+     * @config Boolean
+     */
+    useBBar: false,
+    
+    /**
      * @private
      */
     clicksToEdit:'auto',
@@ -99,7 +105,11 @@ Tine.Tinebase.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGr
             disabled: true
         });
         
-        this.tbar = [this.deleteAction];        
+        if (this.useBBar) {
+            this.bbar = [this.deleteAction];
+        } else {
+            this.tbar = [this.deleteAction];
+        }
     },
     
     /**
