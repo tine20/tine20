@@ -130,6 +130,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      *  - add changes to mail body
      *  - find updater in addressbook to notify him
      *  - add products?
+     *  - add notification levels
      *  
      * @param Crm_Model_Lead            $_lead
      * @param Tinebase_Model_FullUser   $_updater
@@ -139,6 +140,12 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      */
     protected function sendNotifications(Crm_Model_Lead $_lead, Tinebase_Model_FullUser $_updater, $_action, $_oldLead = NULL)
     {
+        $sendOnOwnActions = Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS);
+        if (! $sendOnOwnActions) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Sending of Lead notifications disabled by user.');
+            return;
+        }
+        
         $view = new Zend_View();
         $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views');
         
