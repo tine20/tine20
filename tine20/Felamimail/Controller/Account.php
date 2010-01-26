@@ -35,13 +35,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected $_addedDefaultAccount = FALSE;
     
     /**
-     * do right checks - can be enabled/disabled by _setRightChecks
-     * 
-     * @var boolean
-     */
-    protected $_doRightChecks = TRUE;
-    
-    /**
      * imap config
      * 
      * @var array
@@ -63,6 +56,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     private function __construct() {
         $this->_modelName = 'Felamimail_Model_Account';
         $this->_doContainerACLChecks = FALSE;
+        $this->_doRightChecks = TRUE;
         $this->_backend = new Felamimail_Backend_Account();
         
         $this->_currentAccount = Tinebase_Core::getUser();
@@ -633,14 +627,4 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $_account->organization = $contact->org_name;
     }
     
-    /**
-     * enable / disable right checks
-     * 
-     * @param boolean $_value
-     * @return void
-     */
-    private function _setRightChecks($_value)
-    {
-        $this->_doRightChecks = (bool) $_value;
-    }
 }
