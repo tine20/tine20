@@ -342,12 +342,12 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 		                        columnWidth: .5
 		                    }
 	                    ], [
-	                    	new Tine.widgets.group.selectionComboBox({
-	                            fieldLabel: this.app.i18n._('Primary group'),
-	                            name: 'accountPrimaryGroup',
-	                            displayField:'name',
-	                            valueField:'id'
-	                        }), {
+                            new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                                fieldLabel: this.app.i18n._('Primary group'),
+                                name: 'accountPrimaryGroup',
+                                blurOnSelect: true,
+                                recordClass: Tine.Tinebase.Model.Group
+                            }), {
 	                            xtype: 'combo',
 	                            fieldLabel: this.app.i18n._('Status'),
 	                            name: 'accountStatus',
