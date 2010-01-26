@@ -158,12 +158,12 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchAccounts()
     {
-        $results = $this->_json->searchAccounts('');
+        $results = $this->_json->searchAccounts(array());
 
         $this->assertGreaterThan(0, $results['totalcount']);
         $default = array();
         foreach ($results['results'] as $result) {
-            if ($result['name'] == 'default') {
+            if ($result['name'] == 'unittest@tine20.org') {
                 $default = $result;
             }
         }
