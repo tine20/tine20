@@ -657,7 +657,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 Ext.Ajax.request({
                     params: {
                         method: 'Tinebase_PersistentFilter.save',
-                        filterData: Ext.util.JSON.encode(this.getAllFilterData()),
+                        filterData: this.getAllFilterData(),
                         name: value,
                         model: model
                     },

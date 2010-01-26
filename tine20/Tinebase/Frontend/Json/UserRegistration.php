@@ -23,7 +23,7 @@ class Tinebase_Frontend_Json_UserRegistration
 	/**
 	 * suggests a username
 	 *
-	 * @param 	array $regData		json data from registration frontend
+	 * @param 	array $regData		data from registration frontend
 	 * @return 	string
 	 * 
 	 * @todo 	add other methods for building username (move to js later on)
@@ -32,11 +32,9 @@ class Tinebase_Frontend_Json_UserRegistration
 	 */
 	public function suggestUsername($regData) 
 	{
-		$regDataArray = Zend_Json_Decoder::decode($regData);
-
         // build username from firstname (first char) & lastname
-		$firstname = (isset($regDataArray['accountFirstName'])) ? substr($regDataArray['accountFirstName'], 0, 1) : '';
-        $lastname = (isset($regDataArray['accountLastName'])) ? $regDataArray['accountLastName'] : '';		
+		$firstname = (isset($regData['accountFirstName'])) ? substr($regData['accountFirstName'], 0, 1) : '';
+        $lastname = (isset($regData['accountLastName'])) ? $regData['accountLastName'] : '';		
 		$suggestedUsername = $firstname.$lastname;
 		
 		return $suggestedUsername;
@@ -51,8 +49,6 @@ class Tinebase_Frontend_Json_UserRegistration
 	 */
 	public function checkUniqueUsername($username) 
 	{
-		$username = Zend_Json_Decoder::decode($username);
-		
 		return Tinebase_User_Registration::getInstance()->checkUniqueUsername($username);
 	}
 
@@ -65,8 +61,6 @@ class Tinebase_Frontend_Json_UserRegistration
 	 */
 	public function registerUser($regData) 
 	{
-		$regData = Zend_Json_Decoder::decode($regData);
-		
 		return Tinebase_User_Registration::getInstance()->registerUser($regData);
 	}	
 

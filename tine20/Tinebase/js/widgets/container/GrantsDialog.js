@@ -146,7 +146,7 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
             params: {
                 method: 'Tinebase_Container.setContainerGrants',
                 containerId: this.grantContainer.id,
-                grants: Ext.util.JSON.encode(grants)
+                grants: grants
             },
             scope: this,
             success: function(_result, _request){

@@ -70,7 +70,7 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
             grant: (this.onlyUsableTags) ? 'use' : 'view' 
         };
         
-        this.store.baseParams.filter = Ext.util.JSON.encode(filter);
+        this.store.baseParams.filter = filter;
     },
 
     /**
@@ -97,7 +97,7 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
             fields: Tine.Tinebase.Model.Tag,
             baseParams: {
                 method: 'Tinebase.searchTags',
-                paging : Ext.util.JSON.encode({})
+                paging : {}
             }
         });        
     },

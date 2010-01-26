@@ -324,7 +324,7 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
             }
             this.requestParams = { 
                 method: this.requestMethod,
-                filter: Ext.util.JSON.encode([{
+                filter: [{
                     operator: 'contains',
                     field: 'query',
                     value: searchString
@@ -332,13 +332,13 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
                     field: 'containerType', 
                     operator: 'equals', 
                     value: 'all' 
-                }]),
-                paging: Ext.util.JSON.encode({
+                }],
+                paging: {
                     dir: 'asc', 
                     start: 0, 
                     limit: 50,
                     sort: this.displayField
-                }) 
+                } 
             };
 
             Ext.getCmp('Tinebase_Records_Grid').getStore().removeAll();

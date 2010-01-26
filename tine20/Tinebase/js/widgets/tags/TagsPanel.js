@@ -68,11 +68,11 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             fields: Tine.Tinebase.Model.Tag,
             baseParams: {
                 method: 'Tinebase.searchTags',
-                filter: Ext.util.JSON.encode({
+                filter: {
                     application: this.app,
                     grant: 'use'
-                }),
-                paging : Ext.util.JSON.encode({})
+                },
+                paging : {}
             }
         });
         
@@ -272,7 +272,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                                         Ext.Ajax.request({
                                             params: {
                                                 method: 'Tinebase.deleteTags', 
-                                                ids: Ext.util.JSON.encode(tagsToDelete)
+                                                ids: tagsToDelete
                                             },
                                             success: function(_result, _request) {
                                                 // reset avail tag store
@@ -382,7 +382,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     Ext.Ajax.request({
                         params: {
                             method: 'Tinebase.saveTag', 
-                            tag: Ext.util.JSON.encode(tagToAttach.data)
+                            tag: tagToAttach.data
                         },
                         success: function(_result, _request) {
                             var tagData = Ext.util.JSON.decode(_result.responseText);
@@ -419,7 +419,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             Ext.Ajax.request({
                 params: {
                     method: 'Tinebase.saveTag', 
-                    tag: Ext.util.JSON.encode(tag.data)
+                    tag: tag.data
                 },
                 success: function(_result, _request) {
                     // reset avail tag store

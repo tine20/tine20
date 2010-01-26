@@ -310,7 +310,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             params: {
                 method: 'Tinebase_Container.moveRecordsToContainer',
                 targetContainerId: targetContainerId,
-                recordIds: Ext.util.JSON.encode(recordIds),
+                recordIds: recordIds,
                 model: this.recordClass.getMeta('modelName'),
                 applicationName: this.recordClass.getMeta('appName')
             },

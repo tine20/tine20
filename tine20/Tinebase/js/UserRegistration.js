@@ -54,7 +54,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
             //method: POST, (should not be required)
             params: {
                 method: 'Tinebase_UserRegistration.suggestUsername',
-                regData: Ext.util.JSON.encode(this.registrationData)
+                regData: this.registrationData
             },
             
             success: function(result, request) {
@@ -196,7 +196,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
 					                    url: 'index.php',
 					                    params: {
 					                        method: 'Tinebase_UserRegistration.checkUniqueUsername',
-					                        username: Ext.util.JSON.encode(this.registrationData.accountLoginName)
+					                        username: this.registrationData.accountLoginName
 					                    },
 
 					                    success: function(result, request) {
@@ -259,7 +259,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                             url: 'index.php',
                             params: {
                                 method: 'Tinebase_UserRegistration.registerUser',
-                                regData: Ext.util.JSON.encode(this.registrationData)
+                                regData: this.registrationData
                             },
 
                             success: function(result, request) {

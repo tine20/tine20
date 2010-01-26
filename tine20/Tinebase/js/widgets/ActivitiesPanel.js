@@ -472,7 +472,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             options.params.start = options.params.start ? options.params.start : this.paging.start;
             options.params.limit = options.params.limit ? options.params.limit : this.paging.limit;
             
-            options.params.paging = Ext.util.JSON.encode(options.params);
+            options.params.paging = Ext.copyTo({}, options.params, 'sort,dir,start,limit');
             
             var filterToolbar = Ext.getCmp('activitiesFilterToolbar');
             var filter = filterToolbar ? filterToolbar.getValue() : [];
@@ -482,7 +482,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
                 {field: 'record_backend', operator: 'equals', value: 'Sql' }
             );
                         
-            options.params.filter = Ext.util.JSON.encode(filter);
+            options.params.filter = filter;
         }, this);
         
         // add new notes from notes store

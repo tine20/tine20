@@ -24,10 +24,11 @@ class Tinebase_Frontend_Json_Container
      * Backend function for containerTree widget
      * 
      * @todo move getOtherUsers to own function
-     * @param string $application
-     * @param string $containerType
-     * @param string $owner
-     * @return string JSON
+     * 
+     * @param  string $application
+     * @param  string $containerType
+     * @param  string $owner
+     * @return array
      */
     public function getContainer($application, $containerType, $owner)
     {       
@@ -99,8 +100,8 @@ class Tinebase_Frontend_Json_Container
     /**
      * deletes a container
      * 
-     * @param   int $containerId
-     * @return  string success
+     * @param   int     $containerId
+     * @return  string  success
      */
     public function deleteContainer($containerId)
     {
@@ -114,10 +115,10 @@ class Tinebase_Frontend_Json_Container
     /**
      * renames a container
      * 
-     * @param int $containerId
-     * @param string $newName
-     * @return array updated container
-     * @throws  Tinebase_Exception
+     * @param  int      $containerId
+     * @param  string   $newName
+     * @return array    updated container
+     * @throws Tinebase_Exception
      */
     public function renameContainer($containerId, $newName)
     {
@@ -133,7 +134,7 @@ class Tinebase_Frontend_Json_Container
     /**
      * returns container grants
      * 
-     * @param   int $containerId
+     * @param   int     $containerId
      * @return  array
      * @throws  Tinebase_Exception_InvalidArgument
      */
@@ -176,13 +177,13 @@ class Tinebase_Frontend_Json_Container
     /**
      * sets new grants for given container
      * 
-     * @param int $containerId
-     * @param array $grants
-     * @return array, see getContainerGrants
+     * @param  int      $containerId
+     * @param  array    $grants
+     * @return array    see getContainerGrants
      */
     public function setContainerGrants($containerId, $grants)
     {
-        $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', Zend_Json::decode($grants));
+        $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grants);
         
         $grants = Tinebase_Container::getInstance()->setGrants($containerId, $newGrants);
                
@@ -193,14 +194,14 @@ class Tinebase_Frontend_Json_Container
      * move records to container
      * 
      * @param string $targetContainerId
-     * @param string $recordIds
+     * @param array  $recordIds
      * @param string $applicationName
      * @param string $model
      * @return array
      */
     public function moveRecordsToContainer($targetContainerId, $recordIds, $applicationName, $model)
     {
-        Tinebase_Container::getInstance()->moveRecordsToContainer($targetContainerId, Zend_Json::decode($recordIds), $applicationName, $model);
+        Tinebase_Container::getInstance()->moveRecordsToContainer($targetContainerId, $recordIds, $applicationName, $model);
         
         return array(
             'status'    => 'success'

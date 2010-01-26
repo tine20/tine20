@@ -266,7 +266,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             scope: this,
             params: {
                 method: 'Tinebase.savePreferences',
-                data: Ext.util.JSON.encode(data),
+                data: data,
                 adminMode: (this.adminMode) ? 1 : 0
             },
             success: function(response) {
@@ -389,7 +389,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             baseParams: {
                 method: 'Tinebase.searchPreferencesForApplication',
                 applicationName: appName,
-                filter: Ext.util.JSON.encode(filter)
+                filter: filter
             },
             listeners: {
                 load: this.onStoreLoad,

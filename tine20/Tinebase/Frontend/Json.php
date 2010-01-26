@@ -160,29 +160,26 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for groups matching given arguments
      *
-     * @param string $_filter json encoded
-     * @param string $_paging json encoded
+     * @param  array $_filter
+     * @param  array $_paging
      * @return array
      * 
      * @todo replace this by Admin.searchGroups / getGroups (without acl check)? or add getGroupCount to Tinebase_Group
      */
     public function searchGroups($filter, $paging)
     {
-    	$filterData = Zend_Json::decode($filter);
-    	$pagingData = Zend_Json::decode($paging);
-    	
     	$result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
         // old fn style yet
-        $sort = (isset($pagingData['sort']))    ? $pagingData['sort']   : 'name';
-        $dir  = (isset($pagingData['dir']))     ? $pagingData['dir']    : 'ASC';
-        $groups = Tinebase_Group::getInstance()->getGroups($filterData[0]['value'], $sort, $dir, $pagingData['start'], $pagingData['limit']);
+        $sort = (isset($paging['sort']))    ? $paging['sort']   : 'name';
+        $dir  = (isset($paging['dir']))     ? $paging['dir']    : 'ASC';
+        $groups = Tinebase_Group::getInstance()->getGroups($filter[0]['value'], $sort, $dir, $paging['start'], $paging['limit']);
 
         $result['results'] = $groups->toArray();
-        $result['totalcount'] = Admin_Controller_Group::getInstance()->searchCount($filterData[0]['value']);
+        $result['totalcount'] = Admin_Controller_Group::getInstance()->searchCount($filter[0]['value']);
         
         return $result;
     }
@@ -190,8 +187,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * change password of user 
      *
-     * @param string $oldPassword the old password
-     * @param string $newPassword the new password
+     * @param  string $oldPassword the old password
+     * @param  string $newPassword the new password
      * @return array
      */
     public function changePassword($oldPassword, $newPassword)
@@ -215,7 +212,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * clears state
      * 
-     * @param string $name
+     * @param  string $name
      * @return void
      */
     public function clearState($name)
@@ -236,8 +233,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * set state
      * 
-     * @param string $name
-     * @param string $value
+     * @param  string $name
+     * @param  string $value
      * @return void
      */
     public function setState($name, $value)
@@ -249,11 +246,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /**
      * adds a new personal tag
+     * 
+     * @param  array $tag
+     * @return array
      */
     public function saveTag($tag)
     {
-        $tagData = Zend_Json::decode($tag);
-        $inTag = new Tinebase_Model_Tag($tagData);
+        $inTag = new Tinebase_Model_Tag($tag);
         
         if (strlen($inTag->getId()) < 40) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' creating tag: ' . print_r($inTag->toArray(), true));
@@ -268,14 +267,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * search tags
      *
-     * @param string $filter json encoded filter array
-     * @param string $paging json encoded pagination info
+     * @param  array $filter filter array
+     * @param  array $paging pagination info
      * @return array
      */
     public function searchTags($filter, $paging)
     {
-        $filter = new Tinebase_Model_TagFilter(Zend_Json::decode($filter));
-        $paging = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
+        $filter = new Tinebase_Model_TagFilter($filter);
+        $paging = new Tinebase_Model_Pagination($paging);
         
         return array(
             'results'    => Tinebase_Tags::getInstance()->searchTags($filter, $paging)->toArray(),
@@ -322,13 +321,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * search / get notes
      * - used by activities grid
      *
-     * @param string $filter json encoded filter array
-     * @param string $paging json encoded pagination info
+     * @param  array $filter filter array
+     * @param  array $paging pagination info
+     * @return array
      */
     public function searchNotes($filter, $paging)
     {
-        $filter = new Tinebase_Model_NoteFilter(Zend_Json::decode($filter));
-        $paging = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
+        $filter = new Tinebase_Model_NoteFilter($filter);
+        $paging = new Tinebase_Model_Pagination($paging);
         
         $records = Tinebase_Notes::getInstance()->searchNotes($filter, $paging);
         $result = $this->_multipleRecordsToJson($records);
@@ -362,15 +362,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteTags($ids)
     {
-        Tinebase_Tags::getInstance()->deleteTags(Zend_Json::decode($ids));
+        Tinebase_Tags::getInstance()->deleteTags($ids);
         return array('success' => true);
     }
     
     /**
      * authenticate user by username and password
      *
-     * @param string $username the username
-     * @param string $password the password
+     * @param  string $username the username
+     * @param  string $password the password
      * @return array
      */
     public function login($username, $password)
@@ -544,8 +544,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * search / get custom field values
      *
-     * @param string $filter json encoded filter array
-     * @param string $paging json encoded pagination info
+     * @param  array $filter filter array
+     * @param  array $paging pagination info
      * @return array
      */
     public function searchCustomFieldValues($filter, $paging)
@@ -559,13 +559,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * search preferences
      *
-     * @param string $applicationName
-     * @param string $filter json encoded
+     * @param  string $applicationName
+     * @param  array  $filter json encoded
      * @return array
      */
     public function searchPreferencesForApplication($applicationName, $filter)
     {
-        $decodedFilter = Zend_Json::decode($filter);
+        $decodedFilter = is_array($filter) ? $filter : Zend_Json::decode($filter);
         
         $filter = new Tinebase_Model_PreferenceFilter(array());
         
@@ -650,7 +650,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function savePreferences($data, $adminMode)
     {
-        $decodedData = Zend_Json::decode($data);
+        $decodedData = is_array($data) ? $data : Zend_Json::decode($data);
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedData, true));
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($adminMode, true));

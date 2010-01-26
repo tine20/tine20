@@ -55,7 +55,7 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
             this.transId = Ext.Ajax.request({
                 params: {
                     method: this.method,
-                    filter: Ext.util.JSON.encode(this.filter)
+                    filter: this.filter
                 },
                 success: this.handleResponse,
                 failure: this.handleFailure,
