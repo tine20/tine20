@@ -112,5 +112,32 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
             var record = this.store.getById(id);
             this.onSelect(record);
         }
+    },
+    
+    /**
+     * set value and prefill store if needed
+     * 
+     * @param {mixed} value
+     */
+    setValue: function(value){
+        if (value) {
+            if(typeof(value.get) == 'function') {
+                // value is a record
+                if (this.store.indexOf(value) < 0) {
+                    this.store.addSorted(value);
+                }
+                value = value.get(this.valueField);
+                
+                
+            } else if (value[this.valueField]) {
+                // value is a js object
+                if (! this.store.getById(value)) {
+                    this.store.addSorted(new this.recordClass(value));
+                }
+                value = value[this.valueField];
+            }
+        }
+        
+        return this.supr().setValue.call(this, value);
     }
 });
