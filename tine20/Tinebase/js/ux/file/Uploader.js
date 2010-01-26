@@ -25,12 +25,15 @@ Ext.ux.file.Uploader = function(config) {
          * @event uploadcomplete
          * Fires when the upload was done successfully 
          * @param {Ext.ux.file.Uploader} this
+         * @param {Ext.Record} Ext.ux.file.Uploader.file
          */
          'uploadcomplete',
+         
         /**
          * @event uploadfailure
          * Fires when the upload failed 
          * @param {Ext.ux.file.Uploader} this
+         * @param {Ext.Record} Ext.ux.file.Uploader.file
          */
          'uploadfailure'
     );
@@ -66,13 +69,16 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         });
         return form;
     },
+    
     /**
      * perform the upload
-     * @return {Ext.ux.file.Uploader} this
+     * 
+     * @param  {index} idx which file (optional for html5 uploads)
+     * @return {Ext.ux.file.Uploader.file}
      */
-    upload: function() {
+    upload: function(idx) {
         if (XMLHttpRequest) {
-            return this.html5upload();
+            return this.html5upload(idx);
         } else {
             return this.html4upload();
         }
@@ -94,51 +100,60 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      *   http://www.w3.org/TR/XMLHttpRequest/
      *  => the only way of uploading is using the XMLHttpRequest.
      */
-    html5upload: function() {
-        this.record = new Ext.ux.file.Uploader.file({
-            input: this.input,
-            status: 'uploading'
-        });
-        
-        var file = this.input.dom.files[0];
+    html5upload: function(idx) {
+        var file = this.input.dom.files[idx || 0];
+        console.log(file);
         
         var xhr = new XMLHttpRequest,
             upload = xhr.upload;
         
+        this.record = new Ext.ux.file.Uploader.file({
+            name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
+            type: (file.type ? file.type : file.fileType) || this.getFileCls(), // missing if safari and chrome
+            size: (file.size ? file.size : file.fileSize) || 0, // non standard but all have it ;-)
+            status: 'uploading',
+            progress: 0,
+            input: this.input,
+            request: xhr
+        });
+        
         var scope = this;
         upload.onload = function(e) {
-            setTimeout(function(){
-                if(xhr.readyState === 4){
-                    scope.onUploadSuccess.call(scope, xhr);
-                } else
-                    setTimeout(arguments.callee, 15);
-            }, 15);
+            if(xhr.readyState === 4){
+                scope.onUploadSuccess.call(scope, xhr);
+            } else {
+                setTimeout(arguments.callee, 15);
+            }
         };
         
         xhr.open("post", this.url + '?method=Tinebase.uploadTempFile', true);
         xhr.setRequestHeader("Cache-Control", "no-cache");
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-        xhr.setRequestHeader("X-File-Name", file.name);
-        xhr.setRequestHeader("X-File-Type", file.type);
-        xhr.setRequestHeader("X-File-Size", file.size); // not standard!!!
+        xhr.setRequestHeader("X-File-Name", this.record.get('name'));
+        xhr.setRequestHeader("X-File-Type", this.record.get('type'));
+        xhr.setRequestHeader("X-File-Size", this.record.get('size'));
         xhr.setRequestHeader("Content-Type", "multipart/form-data");
         xhr.send(file);
         
-        return this;
+        return this.record;
     },
     
     /**
      * uploads in a html4 fashion
      * 
-     * @return {this}
+     * @return {Ext.ux.file.Uploader.file}
      */
     html4upload: function() {
         var form = this.createForm();
         form.appendChild(this.input);
         this.record = new Ext.ux.file.Uploader.file({
+            name: this.getName(),
+            size: 0,
+            type: this.getFileCls(),
             input: this.input,
             form: form,
-            status: 'uploading'
+            status: 'uploading',
+            progress: 0
         });
         
         var request = Ext.Ajax.request({
@@ -155,7 +170,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         });
         
         this.record.set('request', request);
-        return this;
+        return this.record;
     },
     
     /**
@@ -222,9 +237,13 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
 
 Ext.ux.file.Uploader.file = Ext.data.Record.create([
     {name: 'id', type: 'text', system: true},
+    {name: 'name', type: 'text', system: true},
+    {name: 'size', type: 'number', system: true},
+    {name: 'type', type: 'text', system: true},
     {name: 'status', type: 'text', system: true},
-    {name: 'tempFile', system: true},
+    {name: 'progress', type: 'number', system: true},
     {name: 'form', system: true},
     {name: 'input', system: true},
-    {name: 'request', system: true}
+    {name: 'request', system: true},
+    {name: 'tempFile', system: true}
 ]);
