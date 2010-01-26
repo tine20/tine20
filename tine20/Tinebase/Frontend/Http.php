@@ -290,7 +290,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/tags/TagsMassAttachAction.js',
             'Tinebase/js/widgets/app/MainScreen.js',
             'Tinebase/js/widgets/app/GridPanel.js',
-            'Tinebase/js/widgets/GroupSelect.js',
             'Tinebase/js/widgets/CountryCombo.js',
             'Tinebase/js/widgets/GridPicker.js',
             'Tinebase/js/widgets/ActivitiesPanel.js',        
