@@ -102,7 +102,6 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      */
     html5upload: function(idx) {
         var file = this.input.dom.files[idx || 0];
-        console.log(file);
         
         var xhr = new XMLHttpRequest,
             upload = xhr.upload;

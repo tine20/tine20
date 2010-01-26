@@ -74,6 +74,9 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
     public function uploadTempFile()
     {
         $path = tempnam(Tinebase_Core::getTempDir(), 'tine_tempfile_');
+        if (!$path) {
+            throw new Tinebase_Exception_UnexpectedValue('Can not upload file, tempnam() could not return a valid filename!');
+        }
         
         if ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
             Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " XMLHttpRequest style upload");
@@ -82,8 +85,12 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
             $size = (int) $_SERVER['HTTP_X_FILE_SIZE'];
             $type =       $_SERVER['HTTP_X_FILE_TYPE'];
             
-            copy("php://input", $path);
+            $success = copy("php://input", $path);
+            if (! $success) {
+                throw new Tinebase_Exception_NotFound('No valid upload file found or some other error occurred while uploading! ');
+            }
             
+            Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " successfully created tempfile at {$path}");
         } else {
             Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " Plain old form style upload");
             
@@ -96,15 +103,15 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
             if ($uploadedFile['error'] == UPLOAD_ERR_FORM_SIZE) {
                 throw new Tinebase_Exception('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.');
             }
-            if (!$path) {
-                throw new Tinebase_Exception_UnexpectedValue('Can not upload file, tempnam() could not return a valid filename!');
-            }
             if (! move_uploaded_file($uploadedFile['tmp_name'], $path)) {
                 throw new Tinebase_Exception_NotFound('No valid upload file found or some other error occurred while uploading! ' . print_r($uploadedFile, true));
             }
             
             
         }
+        
+        //$type = mime_content_type($path);
+        //Tinebase_Core::getLogger()->CRIT(__METHOD__ . '::' . __LINE__ . " {$type}");
         
         $id = Tinebase_Model_TempFile::generateUID();
         $tempFile = new Tinebase_Model_TempFile(array(
