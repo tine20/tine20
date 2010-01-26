@@ -82,7 +82,7 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
         
         switch($_preferenceName) {
             case self::TSODSEXPORTCONFIG:
-                $preference->value      = 'default';
+                $preference->value      = 'ts_default_ods';
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
