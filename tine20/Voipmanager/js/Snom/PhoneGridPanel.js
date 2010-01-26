@@ -204,8 +204,6 @@ Tine.Voipmanager.SnomPhoneGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
                     phoneIds.push(selectedRows[i].id);
                 }
                 
-                phoneIds = Ext.util.JSON.encode(phoneIds);
-                
                 Ext.Ajax.request({
                     url: 'index.php',
                     params: {

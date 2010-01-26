@@ -120,8 +120,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchSnomPhones($filter, $paging)
@@ -146,7 +146,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * get one phone identified by phoneId
      *
-     * @param int $id
+     * @param  int $id
      * @return array
      */
     public function getSnomPhone($id)
@@ -158,13 +158,11 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * save one phone
      * -  if $phoneData['id'] is empty the phone gets added, otherwise it gets updated
      *
-     * @param string $phoneData a JSON encoded array of phone properties
+     * @param array $phoneData an array of phone properties
      * @return array
      */
-    public function saveSnomPhone($recordData)
+    public function saveSnomPhone($phoneData)
     {
-        $phoneData  = Zend_Json::decode($recordData);
-        
         // unset if empty
         if (empty($phoneData['id'])) {
             unset($phoneData['id']);
@@ -214,10 +212,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete multiple phones
      *
-     * @param array $ids list of phoneId's to delete
+     * @param  array $ids list of phoneId's to delete
      * @return array
-     * 
-     * @todo use generic _delete() function
      */
     public function deleteSnomPhones($ids)
     {
@@ -228,16 +224,14 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * send HTTP Client Info to multiple phones
      *
-     * @param array $_phoneIDs list of phoneId's to send http client info to
+     * @param  array $phoneIds list of phoneId's to send http client info to
      * @return array
      */      
-    public function resetHttpClientInfo($_phoneIds)
+    public function resetHttpClientInfo($phoneIds)
     {
         $result = array(
             'success'   => TRUE
         );
-        
-        $phoneIds = Zend_Json::decode($_phoneIds);        
         
         Voipmanager_Controller_Snom_Phone::getInstance()->resetHttpClientInfo($phoneIds);
         
@@ -245,10 +239,10 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }      
       
       
-   /**
+    /**
      * get one phoneSettings identified by phoneSettingsId
      *
-     * @param int $id
+     * @param  int   $id
      * @return array
      */
     public function getSnomPhoneSettings($id)
@@ -261,7 +255,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * if $phoneSettingsData['id'] is empty the phoneSettings gets added, otherwise it gets updated
      *
-     * @param string $recordData a JSON encoded array of phoneSettings properties
+     * @param  array $recordData an array of phoneSettings properties
      * @return array
      */
     public function saveSnomPhoneSettings($recordData)
@@ -272,7 +266,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete phoneSettings
      *
-     * @param array $ids phoneSettingsId to delete
+     * @param  array $ids phoneSettingsId to delete
      * @return array
      */
     public function deleteSnomPhoneSettings($ids)
@@ -290,8 +284,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchSnomLocations($filter, $paging)
@@ -303,7 +297,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * get one location identified by locationId
      *
-     * @param int $id
+     * @param  int $id
      * @return array
      */
     public function getSnomLocation($id)
@@ -317,7 +311,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * if $locationData['id'] is empty the location gets added, otherwise it gets updated
      *
-     * @param string $recordData a JSON encoded array of location properties
+     * @param  array $recordData an array of location properties
      * @return array
      */
     public function saveSnomLocation($recordData)
@@ -329,7 +323,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete multiple locations
      *
-     * @param array $ids list of locationId's to delete
+     * @param  array $ids list of locationId's to delete
      * @return array
      */
     public function deleteSnomLocations($ids)
@@ -348,8 +342,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchSnomSoftwares($filter, $paging)
@@ -361,7 +355,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
    /**
      * get one software identified by softwareId
      *
-     * @param int $id
+     * @param  int $id
      * @return array
      */
     public function getSnomSoftware($id)
@@ -375,7 +369,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * if $softwareData['id'] is empty the software gets added, otherwise it gets updated
      *
-     * @param string $recordData a JSON encoded array of software properties
+     * @param  array $recordData an array of software properties
      * @return array
      */
     public function saveSnomSoftware($recordData)
@@ -387,7 +381,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete multiple softwareversion entries
      *
-     * @param array $ids list of softwareId's to delete
+     * @param  array $ids list of softwareId's to delete
      * @return array
      */
     public function deleteSnomSoftwares($ids)
@@ -406,8 +400,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchSnomTemplates($filter, $paging)
@@ -419,7 +413,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
    /**
      * get one template identified by templateId
      *
-     * @param int $id
+     * @param  int $id
      * @return array
      */
     public function getSnomTemplate($id)
@@ -432,7 +426,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * if $templateData['id'] is empty the template gets added, otherwise it gets updated
      *
-     * @param string $recordData a JSON encoded array of template properties
+     * @param  array $recordData an array of template properties
      * @return array
      */
     public function saveSnomTemplate($recordData)
@@ -443,7 +437,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete multiple template entries
      *
-     * @param array $ids list of templateId's to delete
+     * @param  array $ids list of templateId's to delete
      * @return array
      */
     public function deleteSnomTemplates($ids)
@@ -460,8 +454,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchSnomSettings($filter, $paging)
@@ -473,7 +467,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
    /**
      * get one setting identified by settingId
      *
-     * @param int $id
+     * @param  int $id
      * @return array
      */
     public function getSnomSetting($id)
@@ -486,7 +480,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * if $settingData['id'] is empty the setting gets added, otherwise it gets updated
      *
-     * @param string $recordData a JSON encoded array of setting properties
+     * @param  array $recordData an array of setting properties
      * @return array
      */
     public function saveSnomSetting($recordData)
@@ -498,7 +492,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete multiple settings
      *
-     * @param array $ids list of settingId's to delete
+     * @param  array $ids list of settingId's to delete
      * @return array
      */
     public function deleteSnomSettings($ids)
@@ -516,8 +510,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchAsteriskContexts($filter, $paging)
@@ -528,7 +522,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
    /**
      * get one context identified by contextId
      *
-     * @param int $id
+     * @param  int $id
      * @return array
      */
     public function getAsteriskContext($id)
@@ -542,7 +536,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * if $contextData['id'] is empty the context gets added, otherwise it gets updated
      *
-     * @param string $recordData a JSON encoded array of context properties
+     * @param  array $recordData an array of context properties
      * @return array
      */
     public function saveAsteriskContext($recordData)
@@ -554,7 +548,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      /**
      * delete multiple contexts
      *
-     * @param array $ids list of contextId's to delete
+     * @param  array $ids list of contextId's to delete
      * @return array
      */
     public function deleteAsteriskContexts($ids)
@@ -571,8 +565,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchAsteriskMeetmes($filter, $paging)
@@ -583,7 +577,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
    /**
      * get one meetme identified by meetmeId
      *
-     * @param int $id
+     * @param  int $id
      * @return array
      */
     public function getAsteriskMeetme($id)
@@ -597,7 +591,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * if $meetmeData['id'] is empty the meetme gets added, otherwise it gets updated
      *
-     * @param string $recordData a JSON encoded array of meetme properties
+     * @param  array $recordData an array of meetme properties
      * @return array
      */
     public function saveAsteriskMeetme($recordData)
@@ -608,7 +602,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete multiple meetmes
      *
-     * @param array $ids list of meetmeId's to delete
+     * @param  array $ids list of meetmeId's to delete
      * @return array
      */
     public function deleteAsteriskMeetmes($ids)
@@ -625,8 +619,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchAsteriskSipPeers($filter, $paging)
@@ -637,7 +631,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
    /**
      * get one asterisk sip peer identified by sipPeerId
      *
-     * @param int $id
+     * @param  int $id
      * @return array
      */
     public function getAsteriskSipPeer($id)
@@ -651,7 +645,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * if $sipPeerData['id'] is empty the sip peer gets added, otherwise it gets updated
      *
-     * @param string $recordData a JSON encoded array of sipPeer properties
+     * @param  array $recordData an array of sipPeer properties
      * @return array
      */
     public function saveAsteriskSipPeer($recordData)
@@ -662,8 +656,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * update multiple records
      *
-     * @param string $id record id
-     * @param array $data key/value pairs to update 
+     * @param  string $id record id
+     * @param  array $data key/value pairs to update 
      * @return updated record
      */
     public function updatePropertiesAsteriskSipPeer($id, $data)
@@ -674,7 +668,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete multiple asterisk sip peers
      *
-     * @param array $ids list of sipPeerId's to delete
+     * @param  array $ids list of sipPeerId's to delete
      * @return array
      */
     public function deleteAsteriskSipPeers($ids)
@@ -691,8 +685,8 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for records matching given arguments
      *
-     * @param string $filter json encoded
-     * @param string $paging json encoded
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchAsteriskVoicemails($filter, $paging)
@@ -703,7 +697,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
    /**
      * get one voicemail identified by voicemailId
      *
-     * @param int $id
+     * @param  int $id
      * @return array
      */
     public function getAsteriskVoicemail($id)
@@ -716,7 +710,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * if $voicemailData['id'] is empty the voicemail gets added, otherwise it gets updated
      *
-     * @param string $recordData a JSON encoded array of voicemail properties
+     * @param  array $recordData an array of voicemail properties
      * @return array
      */
     public function saveAsteriskVoicemail($recordData)
@@ -728,7 +722,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete multiple voicemails
      *
-     * @param array $ids list of voicemailId's to delete
+     * @param  array $ids list of voicemailId's to delete
      * @return array
      */
     public function deleteAsteriskVoicemails($ids)
