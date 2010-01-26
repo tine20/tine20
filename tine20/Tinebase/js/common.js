@@ -231,65 +231,6 @@ Tine.Tinebase.common = {
         return Ext.util.Format.htmlEncode(customfields[name]); 
     },
     
-    /** 
-     * returns json coded data from given data source
-     *
-     * @param _dataSrc - Ext.data.JsonStore object
-     * @return json coded string
-     **/    
-    getJSONdata: function(_dataSrc) {
-            
-        if(Ext.isEmpty(_dataSrc)) {
-            return false;
-        }
-            
-        var data = _dataSrc.data;
-        var dataLen = data.getCount();
-        var jsonData = [];
-        var curRecData;
-        for(var i=0; i < dataLen; i++) {
-            curRecData = data.itemAt(i).data;
-            jsonData.push(curRecData);
-        }   
-
-        return Ext.util.JSON.encode(jsonData);
-    },
-       
-    /** 
-     * returns json coded data from given data source
-     * switches array keys
-     *
-     * @param _dataSrc - Ext.data.JsonStore object
-     * @param _switchKeys - Array with old=>new key pairs
-     * @return json coded string
-     **/    
-    getJSONdataSKeys: function(_dataSrc, _switchKeys) {
-            
-        if(Ext.isEmpty(_dataSrc) || Ext.isEmpty(_switchKeys)) {
-            return false;
-        }
-            
-        var data = _dataSrc.data, dataLen = data.getCount();
-        var jsonData = [];
-        var keysLen = _switchKeys.length;       
-        
-        if(keysLen < 1) {
-            return false;
-        }
-        
-        var curRecData;
-        for(var i=0; i < dataLen; i++) {
-                curRecData = [];
-                curRecData[0] = {};
-                curRecData[0][_switchKeys[0]] = data.itemAt(i).data.key;
-                curRecData[0][_switchKeys[1]] = data.itemAt(i).data.value;                
-
-            jsonData.push(curRecData[0]);
-        }   
-
-        return Ext.util.JSON.encode(jsonData);
-    },
-    
     /**
      * check if user has right to view/manage this application/resource
      * 
