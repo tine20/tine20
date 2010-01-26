@@ -83,7 +83,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         ));
         $paging = array();
         
-        $notes = $this->_instance->searchNotes(Zend_Json::encode($filter), Zend_Json::encode($paging));
+        $notes = $this->_instance->searchNotes($filter, $paging);
         
         $this->assertGreaterThan(0, $notes['totalcount']);        
         $this->assertEquals($this->_objects['note']->note, $notes['results'][0]['note']);
@@ -188,7 +188,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     public function testSearchPreferences()
     {
         // search prefs
-        $result = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter()));
+        $result = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter());
         
         // check results
         $this->assertTrue(isset($result['results']));
@@ -235,7 +235,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         $pref = Tinebase_Core::getPreference()->create($pref);        
         
         // search prefs
-        $results = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter()));
+        $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter());
         
         // check results
         $this->assertTrue(isset($results['results']));
@@ -266,7 +266,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         $pref = Tinebase_Core::getPreference()->create($pref);        
         
         // search prefs
-        $results = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter(TRUE, FALSE, 2)));
+        $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter(TRUE, FALSE, 2));
         
         // check results
         $this->assertTrue(isset($results['results']));
@@ -283,10 +283,10 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     public function testSavePreferences()
     {
         $prefData = $this->_getUserPreferenceData();
-        $this->_instance->savePreferences(Zend_Json::encode($prefData), false);
+        $this->_instance->savePreferences($prefData, false);
 
         // search saved prefs
-        $results = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter(FALSE)));
+        $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter(FALSE));
         
         //print_r($results);
         
@@ -320,10 +320,10 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         
         $prefData = array();
         $prefData['Tinebase'][$pref->getId()] = array('value' => 'test', 'type' => 'forced');
-        $this->_instance->savePreferences(Zend_Json::encode($prefData), true);
+        $this->_instance->savePreferences($prefData, true);
 
         // search saved prefs
-        $results = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter(TRUE)));
+        $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter(TRUE));
 
         // check results
         $this->assertTrue(isset($results['results']));

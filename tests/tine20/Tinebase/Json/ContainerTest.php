@@ -177,7 +177,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
             )
         );
         
-        $grants = $this->_backend->setContainerGrants($container['id'], Zend_Json::encode($newGrants));
+        $grants = $this->_backend->setContainerGrants($container['id'], $newGrants);
         
         $this->assertEquals(1, count($grants['results']));
         $this->assertFalse($grants['results'][0]["deleteGrant"]);
