@@ -335,8 +335,15 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                 $credentials->key = substr($userCredentialCache->password, 0, 24);
                 $credentialsBackend->getCachedCredentials($credentials);
             } else {
-                // just use tine user credentials to connect to mailserver
-                $credentials = $userCredentialCache;
+                // just use tine user credentials to connect to mailserver / or use credentials from config if set
+                $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+                
+                if (array_key_exists('user', $imapConfig) && array_key_exists('password', $imapConfig)) {
+                    $credentials->username = $imapConfig['user'];
+                    $credentials->password = $imapConfig['password'];;
+                } else {
+                    $credentials = $userCredentialCache;
+                }
             }
             
             $this->{$userField} = $credentials->username;

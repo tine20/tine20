@@ -32,7 +32,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
     }
 
     /**
-     * update function (-> 3.2
+     * update function (-> 3.2)
      * - check all users with 'userEmailAccount' and update their accounts / preferences
      */    
     public function update_1()
@@ -58,5 +58,20 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . "preferences SET name = 'useSystemAccount' WHERE name = 'userEmailAccount'");
         
         $this->setApplicationVersion('Felamimail', '3.2');
+    }
+    
+    /**
+     * update function (-> 3.3)
+     * - renamed config useAsDefault -> useSystemAccount
+     */    
+    public function update_2()
+    {
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        if (array_key_exists('useAsDefault', $imapConfig)) {
+            $imapConfig['useSystemAccount'] = $imapConfig['useAsDefault'];
+            unset($imapConfig['useAsDefault']);
+            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::IMAP, Zend_Json::encode($imapConfig));
+        }
+        $this->setApplicationVersion('Felamimail', '3.3');
     }
 }

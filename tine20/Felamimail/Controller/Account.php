@@ -114,7 +114,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
         
         // check preference / config if we should add system account with tine user credentials or from config.inc.php
-        if (count($result) == 0 && ! $_onlyIds && Tinebase_Core::getPreference('Felamimail')->useSystemAccount) { 
+        if (count($result) == 0 && ! $_onlyIds && (Tinebase_Core::getPreference('Felamimail')->useSystemAccount || $this->_imapConfig['useSystemAccount'])) { 
             $result = $this->_addSystemAccount();
         }
         
@@ -149,7 +149,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         if ($_id === Felamimail_Model_Account::DEFAULT_ACCOUNT_ID) {
             
-            if (empty($this->_imapConfig) || ! $this->_imapConfig['useAsDefault']) {
+            if (empty($this->_imapConfig) || ! $this->_imapConfig['useSystemAccount']) {
                 throw new Felamimail_Exception('No default imap account defined in config.inc.php!');
             }
             
@@ -508,6 +508,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $userId = $this->_currentAccount->getId();
         $fullUser = Tinebase_User::getInstance()->getFullUserById($userId);
         
+        if (! $fullUser->accountEmailAddress && array_key_exists('user', $this->_imapConfig)) {
+            // get email address / user from config
+            $fullUser->accountEmailAddress = $this->_imapConfig['user'];
+        }
+        
         // only create account if email address is set
         if ($fullUser->accountEmailAddress) {
             $systemAccount = new Felamimail_Model_Account($this->_imapConfig, TRUE);
@@ -541,7 +546,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Created new system account ' . $systemAccount->name);
             
         } else {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not create system account for user ' . $fullUser->accountLoginName);
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not create system account for user ' . $fullUser->accountLoginName . '. No email address given.');
         }
                 
         return $result;

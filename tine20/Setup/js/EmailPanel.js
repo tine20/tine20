@@ -230,7 +230,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 selectOnFocus:true,
                 value: 0,
                 store: [[0, this.app.i18n._('No')], [1, this.app.i18n._('Yes')]],
-                name: 'imap_useAsDefault',
+                name: 'imap_useSystemAccount',
                 fieldLabel: this.app.i18n._('Use as default account')
             }, {
                 name: 'imap_name',
