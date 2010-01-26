@@ -78,7 +78,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
      */
     protected $_readOnlyFields = array(
         'emailMailSize',
-        'emailSieveQuota',
+        //'emailSieveQuota',
         'emailSieveSize',
         'emailLastLogin',
     );
@@ -267,6 +267,13 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
             $keyMapping = array_search($key, $this->_userPropertyNameMapping);
             if ($keyMapping !== FALSE) {
                 switch($keyMapping) {
+                    case 'emailMailQuota':
+                    case 'emailMailSize':
+                    case 'emailSieveQuota':
+                    case 'emailSieveSize':
+                        // convert to megabytes
+                        $data[$keyMapping] = round($value / 1024 / 1024);
+                        break;
                     default: 
                         $data[$keyMapping] = $value;
                         break;
@@ -314,7 +321,13 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
                         }
                         $data[$property]     = $this->_convertToInt($value);
                         break;
-                        
+                    case 'emailMailQuota':
+                    case 'emailMailSize':
+                    case 'emailSieveQuota':
+                    case 'emailSieveSize':
+                        // convert to bytes
+                        $data[$property] = convertToBytes($value . 'M');
+                        break;
                     default:
                         $data[$property] = $value;
                 }
