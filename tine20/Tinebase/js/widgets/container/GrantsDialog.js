@@ -150,14 +150,15 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
             },
             scope: this,
             success: function(_result, _request){
-                var grants = Ext.util.JSON.decode(_result.responseText);
-                this.grantsStore.loadData(grants, false);
-                
                 Ext.MessageBox.hide();
                 if (closeWindow) {
                     this.purgeListeners();
                     this.window.close();
+                    return;
                 }
+                
+                var grants = Ext.util.JSON.decode(_result.responseText);
+                this.grantsStore.loadData(grants, false);
             },
             failure: function(response, options) {
                 var responseText = Ext.util.JSON.decode(response.responseText);
