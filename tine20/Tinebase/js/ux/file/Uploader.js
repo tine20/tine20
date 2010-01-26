@@ -71,6 +71,68 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      * @return {Ext.ux.file.Uploader} this
      */
     upload: function() {
+        if (XMLHttpRequest) {
+            return this.html5upload();
+        } else {
+            return this.html4upload();
+        }
+    },
+    
+    /**
+     * 2010-01-26 Current Browsers implemetation state of:
+     *  http://dev.w3.org/2006/webapi/FileAPI/
+     *  
+     *  Interface: File | Blob | FileReader | FileReaderSync | FileError
+     *  FF       : yes  | no   | no         | no             | no       
+     *  safari   : yes  | no   | no         | no             | no       
+     *  chrome   : yes  | no   | no         | no             | no       
+     *  
+     *  => no json rpc style upload possible
+     *  => no chunked uploads posible
+     *  
+     *  But all of them implement XMLHttpRequest:
+     *   http://www.w3.org/TR/XMLHttpRequest/
+     *  => the only way of uploading is using the XMLHttpRequest.
+     */
+    html5upload: function() {
+        this.record = new Ext.ux.file.Uploader.file({
+            input: this.input,
+            status: 'uploading'
+        });
+        
+        var file = this.input.dom.files[0];
+        
+        var xhr = new XMLHttpRequest,
+            upload = xhr.upload;
+        
+        var scope = this;
+        upload.onload = function(e) {
+            setTimeout(function(){
+                if(xhr.readyState === 4){
+                    scope.onUploadSuccess.call(scope, xhr);
+                } else
+                    setTimeout(arguments.callee, 15);
+            }, 15);
+        };
+        
+        xhr.open("post", this.url + '?method=Tinebase.uploadTempFile', true);
+        xhr.setRequestHeader("Cache-Control", "no-cache");
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xhr.setRequestHeader("X-File-Name", file.name);
+        xhr.setRequestHeader("X-File-Type", file.type);
+        xhr.setRequestHeader("X-File-Size", file.size); // not standard!!!
+        xhr.setRequestHeader("Content-Type", "multipart/form-data");
+        xhr.send(file);
+        
+        return this;
+    },
+    
+    /**
+     * uploads in a html4 fashion
+     * 
+     * @return {this}
+     */
+    html4upload: function() {
         var form = this.createForm();
         form.appendChild(this.input);
         this.record = new Ext.ux.file.Uploader.file({
@@ -95,6 +157,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         this.record.set('request', request);
         return this;
     },
+    
     /**
      * returns record with info about this upload
      * @return {Ext.data.Record}
