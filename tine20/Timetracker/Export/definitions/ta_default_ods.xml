@@ -5,6 +5,7 @@
     <type>export</type>
     <plugin>Timetracker_Export_Ods_Timeaccount</plugin>
     <description>default ods timeaccount export definition</description>
+    <!--header>1</header-->
     <headers>
         <header>{date}</header>
         <header>{user}</header>
