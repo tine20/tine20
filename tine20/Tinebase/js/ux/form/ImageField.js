@@ -42,7 +42,9 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.scope = this;
         this.handler = this.onFileSelect;
         
-        this.browsePlugin = new Ext.ux.file.BrowsePlugin({});
+        this.browsePlugin = new Ext.ux.file.BrowsePlugin({
+            dropElSelector: 'div[class^=x-panel-body]'
+        });
         this.plugins.push(this.browsePlugin);
         
         Ext.ux.form.ImageField.superclass.initComponent.call(this);
@@ -107,13 +109,17 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
      */
     onFileSelect: function(bb) {
         var input = bb.detachInputFile();
-        var uploader = new Ext.ux.file.Uploader({
-            input: input
-        });
-        if(! uploader.isImage()) {
+        if(! bb.isImage()) {
             Ext.MessageBox.alert(_('Not An Image'), _('Plase select an image file (gif/png/jpeg)')).setIcon(Ext.MessageBox.ERROR);
             return;
         }
+        
+        var uploader = new Ext.ux.file.Uploader({
+            input: input
+        });
+        
+        var file = bb.getFileList()[0];
+        
         uploader.on('uploadcomplete', function(uploader, record){
             this.imageSrc = new Ext.ux.util.ImageURL({
                 id: record.get('tempFile').id,
@@ -128,7 +134,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         uploader.on('uploadfailure', this.onUploadFail, this);
         
         this.loadMask.show();
-        uploader.upload();
+        uploader.upload(file);
         
         if (this.ctxMenu) {
             this.ctxMenu.hide();
