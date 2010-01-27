@@ -23,6 +23,18 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     multiple: false,
     /**
+     * @cfg {Ext.Element} dropEl 
+     * element used as drop target if enableFileDrop is enabled
+     */    
+    dropEl: null,
+    /**
+     * @cfg {Boolean} enableFileDrop
+     * @see http://www.w3.org/TR/2008/WD-html5-20080610/editing.html
+     * 
+     * enable drops from OS (defaults to true)
+     */
+    enableFileDrop: true,
+    /**
      * @cfg {String} inputFileName
      * Name to use for the hidden input file DOM element.  Deaults to "file".
      */
@@ -109,6 +121,32 @@ Ext.ux.file.BrowsePlugin.prototype = {
         this.button_container.position('relative');
         this.wrap = this.component.el.wrap({cls:'tbody'});
         this.createInputFile();
+        
+        if (this.enableFileDrop) {
+            if (! this.dropEl) {
+                if (this.dropElSelector) {
+                    this.dropEl = this.wrap.up(this.dropElSelector);
+                } else {
+                    this.dropEl = this.button_container;
+                }
+            }
+            
+            this.dropEl.on('dragover', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                // prevents drop in FF ;-(
+                //e.browserEvent.dataTransfer.dropEffect = 'copy';
+            }, this);
+            
+            this.dropEl.on('drop', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                var dt = e.browserEvent.dataTransfer;
+                var files = dt.files;
+                
+                this.onInputFileChange(null, null, null, files);
+            }, this);
+        }
     },
     
     createInputFile: function() {
@@ -154,9 +192,12 @@ Ext.ux.file.BrowsePlugin.prototype = {
     
     /**
      * Handler when inputFileEl changes value (i.e. a new file is selected).
+     * @param {FileList} files when input comes from drop...
      * @private
      */
-    onInputFileChange: function(){
+    onInputFileChange: function(e, target, options, files){
+        this.files = files ? files : this.input_file.dom.files;
+        
         if (this.originalHandler) {
             this.originalHandler.call(this.originalScope, this);
         }
@@ -187,6 +228,10 @@ Ext.ux.file.BrowsePlugin.prototype = {
             this.createInputFile();
         }
         return result;
+    },
+    
+    getFileList: function() {
+        return this.files;
     },
     
     /**
