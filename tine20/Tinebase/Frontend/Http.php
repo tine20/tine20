@@ -635,6 +635,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 	    try {
     	    $this->checkAuth();
     	    
+    	    // close session to allow other requests
+            Zend_Session::writeClose(true);
+        
     	    $tempfileBackend = new Tinebase_TempFile();
     	    $tempFile = $tempfileBackend->uploadTempFile();
     	    
