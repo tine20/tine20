@@ -77,14 +77,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             <style:table-cell-properties fo:background-color="#ccccff"/>
             <style:paragraph-properties fo:text-align="right"/>
         </style:style>',
-    /*
-        '<style:style style:name="pm1"
-                xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
-                xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
-            <style:page-layout-properties fo:page-width="11in" fo:page-height="8.5in" style:num-format="1" style:print-orientation="landscape" style:writing-mode="lr-tb"/>
-        </style:style>',
-    */
-        );
+    );
     
     /**
      * first row of body (records)
@@ -114,8 +107,10 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
      */
     public function generate()
     {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__);
         // check for template file
         $templateFile = $this->_config->get('template', NULL);
+        $templateFile = 'tine20_export_crm_from_php.ods';
         if ($templateFile !== NULL) {
             $templateFile = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName . 
                 DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $templateFile;
@@ -133,11 +128,19 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
         $this->_resolveRecords($records);
         
         // build export table (use current table if using template)
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating export for ' . $this->_modelName . '.');
-        $table = $this->_openDocumentObject->getBody()->appendTable($this->_getDataTableName());
-        $this->_addHead($table);
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating export for ' . $this->_modelName . ' . ' . $this->_getDataTableName());
+        
+        $spreadSheet = $this->_openDocumentObject->getBody();
+        
+        if($spreadSheet->tableExists($this->_getDataTableName()) === true) {
+            $table = $spreadSheet->getTable($this->_getDataTableName());
+        } else {
+            $table = $spreadSheet->appendTable($this->_getDataTableName());
+        }
+        
+        #$this->_addHead($table);
         $this->_addBody($table, $records);
-        $this->_addFooter($table, $lastCell);
+        #$this->_addFooter($table, $lastCell);
         
         // add overview table
         if (isset($this->_config->overviewTable) && $this->_config->overviewTable) {
@@ -276,23 +279,25 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($field->toArray(), true));
                 
                 $altStyle = 'ceAlternate';
-                $type = $field->type;
+                $cellType = OpenDocument_SpreadSheet_Cell::TYPE_STRING;
+                $type     = $field->type;
                 
                 switch($field->type) {
                     case 'datetime':
                         // @todo add another style for datetime fields?
-                        $value = ($record->{$field->identifier}) ? $record->{$field->identifier}->toString(Zend_Locale_Format::getDateFormat($locale), $locale) : '';
+                        $value    = ($record->{$field->identifier}) ? $record->{$field->identifier}->toString(Zend_Locale_Format::getDateFormat($locale), $locale) : '';
                         $altStyle = 'ceAlternateCentered';
-                        $type = 'string';
+                        $type     = OpenDocument_SpreadSheet_Cell::TYPE_STRING;
                         break;
                     case 'date':
-                        $value = $record->{$field->identifier};
+                        $value    = $record->{$field->identifier};
                         $altStyle = 'ceAlternateCentered';
+                        $type     = OpenDocument_SpreadSheet_Cell::TYPE_DATE;
                         break;
                     case 'tags':
-                        $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($record);
-                        $value = implode(', ', $tags->name);
-                        $type = 'string';
+                        $tags     = Tinebase_Tags::getInstance()->getTagsOfRecord($record);
+                        $value    = implode(', ', $tags->name);
+                        $type     = OpenDocument_SpreadSheet_Cell::TYPE_STRING;
                         break;
                     default:
                         if (isset($field->custom) && $field->custom) {
@@ -310,7 +315,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                         } elseif (in_array($field->type, $this->_specialFields)) {
                             // special fields
                             $value = $this->_getSpecialFieldValue($record, $field->toArray(), $field->identifier);
-                            $type = 'string';
+                            $type = OpenDocument_SpreadSheet_Cell::TYPE_STRING;
                         
                         } else {
                             // all remaining
@@ -337,7 +342,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                 $value = $this->_replaceAndMatchvalue($value, $field);
                 
                 // create cell with type and value and add style
-                $cell = $row->appendCell($type, $value);
+                $cell = $row->appendCell($value, $type);
 
                 if (isset($field->number) && $field->number) {
                     $cell->setStyle('numberStyle');
