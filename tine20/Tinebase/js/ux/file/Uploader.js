@@ -28,14 +28,22 @@ Ext.ux.file.Uploader = function(config) {
          * @param {Ext.Record} Ext.ux.file.Uploader.file
          */
          'uploadcomplete',
-         
         /**
          * @event uploadfailure
          * Fires when the upload failed 
          * @param {Ext.ux.file.Uploader} this
          * @param {Ext.Record} Ext.ux.file.Uploader.file
          */
-         'uploadfailure'
+         'uploadfailure',
+        /**
+         * @event progress
+         * Fires on upload progress (html5 only)
+         * @param {Ext.ux.file.Uploader} this
+         * @param {Ext.Record} Ext.ux.file.Uploader.file
+         * @param {Number} percentage complete
+         * @param {XMLHttpRequestProgressEvent}
+         */
+         'progress'
     );
 };
  
@@ -77,7 +85,10 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      * @return {Ext.ux.file.Uploader.file}
      */
     upload: function(idx) {
-        if (XMLHttpRequest) {
+        // NOTE: it's not yet clear how to detect XMLHttpRequest Level 2,
+        //       we assume that agents with multi file support also support
+        //       level 2 XMLHttpRequest.
+        if (XMLHttpRequest && this.input.dom.files.length > 1) {
             return this.html5upload(idx);
         } else {
             return this.html4upload();
@@ -96,15 +107,12 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      *  => no json rpc style upload possible
      *  => no chunked uploads posible
      *  
-     *  But all of them implement XMLHttpRequest:
-     *   http://www.w3.org/TR/XMLHttpRequest/
-     *  => the only way of uploading is using the XMLHttpRequest.
+     *  But all of them implement XMLHttpRequest Level 2:
+     *   http://www.w3.org/TR/XMLHttpRequest2/
+     *  => the only way of uploading is using the XMLHttpRequest Level 2.
      */
     html5upload: function(idx) {
         var file = this.input.dom.files[idx || 0];
-        
-        var xhr = new XMLHttpRequest,
-            upload = xhr.upload;
         
         this.record = new Ext.ux.file.Uploader.file({
             name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
@@ -112,27 +120,36 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             size: (file.size ? file.size : file.fileSize) || 0, // non standard but all have it ;-)
             status: 'uploading',
             progress: 0,
-            input: this.input,
-            request: xhr
+            input: this.input
         });
         
-        var scope = this;
-        upload.onload = function(e) {
-            if(xhr.readyState === 4){
-                scope.onUploadSuccess.call(scope, xhr);
-            } else {
-                setTimeout(arguments.callee, 15);
+        var conn = new Ext.data.Connection({
+            disableCaching: true,
+            method: 'HTTP',
+            url: this.url + '?method=Tinebase.uploadTempFile',
+            defaultHeaders: {
+                "Content-Type"          : "multipart/form-data",
+                "X-Tine20-Request-Type" : "HTTP",
+                "X-Requested-With"      : "XMLHttpRequest"
             }
-        };
+        });
         
-        xhr.open("post", this.url + '?method=Tinebase.uploadTempFile', true);
-        xhr.setRequestHeader("Cache-Control", "no-cache");
-        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-        xhr.setRequestHeader("X-File-Name", this.record.get('name'));
-        xhr.setRequestHeader("X-File-Type", this.record.get('type'));
-        xhr.setRequestHeader("X-File-Size", this.record.get('size'));
-        xhr.setRequestHeader("Content-Type", "multipart/form-data");
-        xhr.send(file);
+        var transaction = conn.request({
+            headers: {
+                "X-File-Name"           : this.record.get('name'),
+                "X-File-Type"           : this.record.get('type'),
+                "X-File-Size"           : this.record.get('size')
+            },
+            xmlData: file,
+            scope: this,
+            success: this.onUploadSuccess,
+            failure: this.onUploadFail
+        });
+        
+        var upload = transaction.conn.upload;
+        
+        //upload['onloadstart'] = this.onLoadStart.createDelegate(this);
+        upload['onprogress'] = this.onProgress.createDelegate(this);
         
         return this.record;
     },
@@ -146,7 +163,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         var form = this.createForm();
         form.appendChild(this.input);
         this.record = new Ext.ux.file.Uploader.file({
-            name: this.getName(),
+            name: this.getFileName(),
             size: 0,
             type: this.getFileCls(),
             input: this.input,
@@ -179,6 +196,18 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     getRecord: function() {
         return this.record;
     },
+    
+    /*
+    onLoadStart: function(e) {
+        this.fireEvent('loadstart', this, this.record, e);
+    },
+    */
+    
+    onProgress: function(e) {
+        var percent = Math.round(e.loaded / e.total * 100);
+        this.fireEvent('progress', this, this.record, percent, e);
+    },
+    
     /**
      * executed if a file got uploaded successfully
      */
