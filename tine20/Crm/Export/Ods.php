@@ -59,12 +59,13 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
      *
      * @param Tinebase_Record_Interface $_record
      * @param array $_param
-     * @param string $key
+     * @param string $_key
+     * @param string $_cellType
      * @return string
      */
-    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $key = null)
+    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, $_cellType = NULL)
     {
-    	if (is_null($key)) {
+    	if (is_null($_key)) {
     		throw new Tinebase_Exception_InvalidArgument('Missing required parameter $key');
     	}
     	
@@ -85,6 +86,7 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
                 } else {
                     $value = NULL;
                 }
+                $_cellType = OpenDocument_SpreadSheet_Cell::TYPE_FLOAT;
                 break;
             default:
                 $value = '';

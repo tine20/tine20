@@ -26,13 +26,14 @@
         <column>
             <identifier>turnover</identifier>
             <header>Turnover</header>
-            <type>string</type>
+            <type>currency</type>
+            <currency>EUR</currency>
             <width>2cm</width>
         </column>
         <column>
             <identifier>probability</identifier>
             <header>Probability</header>
-            <type>string</type>
+            <type>percentage</type>
             <width>2cm</width>
         </column>
         <column>

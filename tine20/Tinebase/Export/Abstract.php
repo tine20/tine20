@@ -185,10 +185,11 @@ abstract class Tinebase_Export_Abstract
      *
      * @param Tinebase_Record_Interface $_record
      * @param array $_param
-     * @param string || null $key [may be used by child methods e.g. {@see Timetracker_Export_Abstract::_getSpecialFieldValue)]
+     * @param string || null $_key [may be used by child methods e.g. {@see Timetracker_Export_Abstract::_getSpecialFieldValue)]
+     * @param string $_cellType
      * @return string
      */
-    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $key = null)
+    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL)
     {
         return '';
     }
