@@ -35,6 +35,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected $_addedDefaultAccount = FALSE;
     
     /**
+     * if user has preference useSystemAccount or global imap config useSystemAccount is active
+     *
+     * @var boolean
+     */
+    protected $_useSystemAccount = FALSE;
+    
+    /**
      * imap config
      * 
      * @var array
@@ -62,6 +69,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $this->_currentAccount = Tinebase_Core::getUser();
         
         $this->_imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        $this->_useSystemAccount = (
+            Tinebase_Core::getPreference('Felamimail')->useSystemAccount 
+            || (array_key_exists('useSystemAccount', $this->_imapConfig) && $this->_imapConfig['useSystemAccount'])
+        );
     }
     
     /**
@@ -108,7 +119,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
         
         // check preference / config if we should add system account with tine user credentials or from config.inc.php
-        if (count($result) == 0 && ! $_onlyIds && (Tinebase_Core::getPreference('Felamimail')->useSystemAccount || $this->_imapConfig['useSystemAccount'])) { 
+        if (count($result) == 0 && ! $_onlyIds && $this->_useSystemAccount) { 
             $result = $this->_addSystemAccount();
         }
         
