@@ -296,7 +296,11 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                         //$altStyle = 'ceAlternateCentered';
                         break;
                     case 'date':
-                        $value    = ($record->{$field->identifier}) ? $record->{$field->identifier}->toString('yyyy-MM-dd') : '';
+                        if ($record->{$field->identifier}) {
+                            $value    = ($record->{$field->identifier} instanceof Zend_Date) ? $record->{$field->identifier}->toString('yyyy-MM-dd') : $record->{$field->identifier};
+                        } else {
+                            $value = '';
+                        }
                         //$altStyle = 'ceAlternateCentered';
                         $cellType = OpenDocument_SpreadSheet_Cell::TYPE_DATE;
                         break;
@@ -358,8 +362,11 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                 $cell = $row->appendCell($value, $cellType);
 
                 if (isset($field->number) && $field->number) {
+                    /*
                     $cell->setStyle('numberStyle');
                     $altStyle = 'numberStyleAlternate';
+                    */
+                    $cellType = OpenDocument_SpreadSheet_Cell::TYPE_FLOAT;
                 }
                 
                 if ($i % 2 == 1) {

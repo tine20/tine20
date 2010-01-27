@@ -97,9 +97,12 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Ods
      * add overview table
      *
      * @param integer $lastCell
+     * 
+     * @todo make setFormula work again
      */
     protected function _addOverviewTable($lastCell)
     {
+        /*
         $table = $this->_openDocumentObject->getBody()->appendTable('Overview');
         
         $row = $table->appendRow();
@@ -123,7 +126,8 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Ods
         $cell = $row->appendCell('float', 0);
         $cell->setFormula('oooc:=SUM(Timesheets.' . 
             $this->_config->sumColumn . $this->_firstRow . ':Timesheets.' . $this->_config->sumColumn . $lastCell . ')');
-        $cell->setStyle('ceBold');     
+        $cell->setStyle('ceBold');
+        */     
     }
     
 
@@ -132,12 +136,13 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Ods
      *
      * @param Tinebase_Record_Interface $_record
      * @param array $_param
-     * @param string $key
+     * @param string $_key
+     * @param string $_cellType
      * @return string
      */
-    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $key = null)
+    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL)
     {
-    	if (is_null($key)) {
+    	if (is_null($_key)) {
     		throw new Tinebase_Exception_InvalidArgument('Missing required parameter $key');
     	}
     	
