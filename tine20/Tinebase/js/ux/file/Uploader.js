@@ -36,14 +36,13 @@ Ext.ux.file.Uploader = function(config) {
          */
          'uploadfailure',
         /**
-         * @event progress
+         * @event uploadprogress
          * Fires on upload progress (html5 only)
          * @param {Ext.ux.file.Uploader} this
          * @param {Ext.Record} Ext.ux.file.Uploader.file
-         * @param {Number} percentage complete
          * @param {XMLHttpRequestProgressEvent}
          */
-         'progress'
+         'uploadprogress'
     );
 };
  
@@ -82,7 +81,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      * perform the upload
      * 
      * @param  {index} idx which file (optional for html5 uploads)
-     * @return {Ext.ux.file.Uploader.file}
+     * @return {Ext.Record} Ext.ux.file.Uploader.file
      */
     upload: function(idx) {
         // NOTE: it's not yet clear how to detect XMLHttpRequest Level 2,
@@ -114,7 +113,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     html5upload: function(idx) {
         var file = this.input.dom.files[idx || 0];
         
-        this.record = new Ext.ux.file.Uploader.file({
+        var fileRecord = new Ext.ux.file.Uploader.file({
             name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
             type: (file.type ? file.type : file.fileType) || this.getFileCls(), // missing if safari and chrome
             size: (file.size ? file.size : file.fileSize) || 0, // non standard but all have it ;-)
@@ -136,33 +135,34 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         
         var transaction = conn.request({
             headers: {
-                "X-File-Name"           : this.record.get('name'),
-                "X-File-Type"           : this.record.get('type'),
-                "X-File-Size"           : this.record.get('size')
+                "X-File-Name"           : fileRecord.get('name'),
+                "X-File-Type"           : fileRecord.get('type'),
+                "X-File-Size"           : fileRecord.get('size')
             },
             xmlData: file,
-            scope: this,
-            success: this.onUploadSuccess,
-            failure: this.onUploadFail
+            success: this.onUploadSuccess.createDelegate(this, [fileRecord], true),
+            failure: this.onUploadFail.createDelegate(this, [fileRecord], true),
+            fileRecord: fileRecord
         });
         
         var upload = transaction.conn.upload;
         
-        //upload['onloadstart'] = this.onLoadStart.createDelegate(this);
-        upload['onprogress'] = this.onProgress.createDelegate(this);
+        //upload['onloadstart'] = this.onLoadStart.createDelegate(this, [fileRecord], true);
+        upload['onprogress'] = this.onUploadProgress.createDelegate(this, [fileRecord], true);
         
-        return this.record;
+        return fileRecord;
     },
     
     /**
      * uploads in a html4 fashion
      * 
-     * @return {Ext.ux.file.Uploader.file}
+     * @return {Ext.data.Connection}
      */
     html4upload: function() {
         var form = this.createForm();
         form.appendChild(this.input);
-        this.record = new Ext.ux.file.Uploader.file({
+        
+        var fileRecord = new Ext.ux.file.Uploader.file({
             name: this.getFileName(),
             size: 0,
             type: this.getFileCls(),
@@ -172,63 +172,60 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             progress: 0
         });
         
-        var request = Ext.Ajax.request({
+        Ext.Ajax.request({
+            fileRecord: fileRecord,
             isUpload: true,
             method:'post',
             form: form,
-            scope: this,
-            success: this.onUploadSuccess,
-            //failure: this.onUploadFail,
+            success: this.onUploadSuccess.createDelegate(this, [fileRecord], true),
+            failure: this.onUploadFail.createDelegate(this, [fileRecord], true),
             params: {
                 method: 'Tinebase.uploadTempFile',
                 requestType: 'HTTP'
             }
         });
         
-        this.record.set('request', request);
-        return this.record;
-    },
-    
-    /**
-     * returns record with info about this upload
-     * @return {Ext.data.Record}
-     */
-    getRecord: function() {
-        return this.record;
+        return fileRecord;
     },
     
     /*
-    onLoadStart: function(e) {
-        this.fireEvent('loadstart', this, this.record, e);
+    onLoadStart: function(e, fileRecord) {
+        this.fireEvent('loadstart', this, fileRecord, e);
     },
     */
     
-    onProgress: function(e) {
+    onUploadProgress: function(e, fileRecord) {
         var percent = Math.round(e.loaded / e.total * 100);
-        this.fireEvent('progress', this, this.record, percent, e);
+        fileRecord.set('progress', percent);
+        this.fireEvent('uploadprogress', this, fileRecord, e);
     },
     
     /**
      * executed if a file got uploaded successfully
      */
-    onUploadSuccess: function(response, request) {
+    onUploadSuccess: function(response, options, fileRecord) {
         response = Ext.util.JSON.decode(response.responseText);
         if (response.status && response.status !== 'success') {
-            this.onUploadFail();
+            this.onUploadFail(response, options, fileRecord);
         } else {
-            this.record.set('status', 'complete');
-            this.record.set('tempFile', response.tempFile);
-            
-            this.fireEvent('uploadcomplete', this, this.record);
+            fileRecord.beginEdit();
+            fileRecord.set('status', 'complete');
+            fileRecord.set('tempFile', response.tempFile);
+            fileRecord.set('name', response.tempFile.name);
+            fileRecord.set('size', response.tempFile.size);
+            fileRecord.set('type', response.tempFile.type);
+            fileRecord.set('path', response.tempFile.path);
+            fileRecord.commit(false);
+            this.fireEvent('uploadcomplete', this, fileRecord);
         }
     },
     /**
      * executed if a file upload failed
      */
-    onUploadFail: function(response, request) {
-        this.record.set('status', 'failure');
+    onUploadFail: function(response, options, fileRecord) {
+        fileRecord.set('status', 'failure');
         
-        this.fireEvent('uploadfailure', this, this.record);
+        this.fireEvent('uploadfailure', this, fileRecord);
     },
     /**
      * get file name
@@ -273,5 +270,6 @@ Ext.ux.file.Uploader.file = Ext.data.Record.create([
     {name: 'form', system: true},
     {name: 'input', system: true},
     {name: 'request', system: true},
+    {name: 'path', system: true},
     {name: 'tempFile', system: true}
 ]);
