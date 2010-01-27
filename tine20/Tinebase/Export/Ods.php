@@ -110,7 +110,6 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__);
         // check for template file
         $templateFile = $this->_config->get('template', NULL);
-        $templateFile = 'tine20_export_crm_from_php.ods';
         if ($templateFile !== NULL) {
             $templateFile = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName . 
                 DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $templateFile;

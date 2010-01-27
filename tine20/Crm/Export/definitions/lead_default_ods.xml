@@ -4,11 +4,12 @@
     <name>lead_default_ods</name>
     <type>export</type>
     <plugin>Crm_Export_Ods</plugin>
+    <template>crm_lead_export.ods</template>
     <description>default ods lead export definition</description>
-    <headers>
+    <!--headers>
         <header>{date}</header>
         <header>{user}</header>
-    </headers>
+    </headers-->
     <columns>
         <column>
             <identifier>lead_name</identifier>
