@@ -39,7 +39,7 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
      *
      * @var array
      */
-    protected $_specialFields = array('created_by', 'status');
+    protected $_specialFields = array('created_by', 'status', 'duration', 'container_id');
     
     /**
      * resolve records
@@ -49,6 +49,9 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
     protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
         Tinebase_User::getInstance()->resolveMultipleUsers($_records, 'created_by', true);
+        Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records->toArray(), TRUE));
     }
     
     /**
@@ -65,14 +68,26 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
     		throw new Tinebase_Exception_InvalidArgument('Missing required parameter $key');
     	}
     	
-        $value = '';
         switch($_param['type']) {
             case 'created_by':
                 $value = $_record->$_param['type']->$_param['field'];
                 break;
+            case 'container_id':
+                $container = $_record->$_param['type']; 
+                $value = $container[$_param['field']];
+                break;
             case 'status':
                 $value = $_record->getLeadStatus();
-                break;                
+                break;
+            case 'duration':
+                if ($_record->end) {
+                    $value = $_record->end->sub($_record->start, Zend_Date::DAY);
+                } else {
+                    $value = NULL;
+                }
+                break;
+            default:
+                $value = '';
         }        
         return $value;
     }

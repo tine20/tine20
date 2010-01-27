@@ -71,5 +71,18 @@
             <type>status</type>
             <width>4cm</width>
         </column>
+        <column>
+            <identifier>container</identifier>
+            <field>name</field>
+            <header>Container</header>
+            <type>container_id</type>
+            <width>4cm</width>
+        </column>
+        <column>
+            <identifier>duration</identifier>
+            <header>Duration</header>
+            <type>duration</type>
+            <width>4cm</width>
+        </column>
     </columns>
 </config>
