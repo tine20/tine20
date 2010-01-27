@@ -91,4 +91,14 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
         }        
         return $value;
     }
+    
+    /**
+     * get name of data table
+     * 
+     * @return string
+     */
+    protected function _getDataTableName()
+    {
+        return 'Leads';        
+    }
 }
