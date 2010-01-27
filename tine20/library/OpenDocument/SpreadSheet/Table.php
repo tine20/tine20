@@ -25,54 +25,38 @@ class OpenDocument_SpreadSheet_Table implements Iterator, Countable
     
     protected $_position = 0;
     
-    protected $_tableName;
+    protected $_table;
     
-    public function __construct($_tableName = null) 
+    public function __construct(SimpleXMLElement $_table)
     {
-        $this->_tableName = $_tableName;
+        $this->_table = $_table;
     }
     
     /**
-     * add new row an return reference
+     * add new row and return reference
      *
-     * @return OpenDocument_SpreadSheet_Row
+     * @param string|optional $_tableName
+     * @return OpenDocument_SpreadSheet_Table
      */
-    public function appendRow()
+    public function appendRow($_styleName = null)
     {
-        $row = new OpenDocument_SpreadSheet_Row();
-        
-        $this->_rows[] = $row;
-        $this->_position++;
+        $row = OpenDocument_SpreadSheet_Row::createRow($this->_table, $_styleName);
         
         return $row;
     }
     
-    /**
-     * add new row an return reference
-     *
-     * @return OpenDocument_SpreadSheet_Row
-     */
-    public function appendColumn()
+    static public function createTable(SimpleXMLElement $_parent, $_tableName, $_styleName = null)
     {
-        $column = new OpenDocument_SpreadSheet_Column();
+        $tableElement = $_parent->addChild('table', null, OpenDocument_Document::NS_TABLE);
+        $tableElement->addAttribute('table:name', $_tableName, OpenDocument_Document::NS_TABLE);
         
-        $this->_columns[] = $column;
-        
-        return $column;
-    }
-    
-    public function generateXML(SimpleXMLElement $_spreadSheet)
-    {
-        $table = $_spreadSheet->addChild('table', NULL, OpenDocument_Document::NS_TABLE);
-        $table->addAttribute('table:name', $this->_tableName, OpenDocument_Document::NS_TABLE);
-                
-        foreach($this->_columns as $column) {
-            $column->generateXML($table);
+        if($_styleName !== null) {
+            $tableElement->addAttribute('table:style-name', $_styleName, OpenDocument_Document::NS_TABLE);
         }
         
-        foreach($this->_rows as $row) {
-            $row->generateXML($table);
-        }
+        $table = new OpenDocument_SpreadSheet_Table($tableElement);
+        
+        return $table;
     }
     
     function rewind() {

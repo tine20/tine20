@@ -28,25 +28,47 @@ class OpenDocument_SpreadSheet_Row implements Iterator, Countable
     protected $_position = 0;
     
     /**
-     * add new cell an return reference
-     *
-     * @return OpenDocument_SpreadSheet_Row
+     * 
+     * @var SimpleXMLElement
      */
-    public function appendCell($_cellType, $_cellValue = null)
+    protected $_row;
+    
+    public function __construct(SimpleXMLElement $_row)
     {
-        $cell = OpenDocument_SpreadSheet_Cell::factory($_cellType, $_cellValue);
-        
-        $this->_cells[] = $cell;
-        $this->_position++;
-        
-        return $cell;
+        $this->_row = $_row;
     }
     
+    /**
+     * add new row and return reference
+     *
+     * @param string|optional $_tableName
+     * @return OpenDocument_SpreadSheet_Table
+     */
+    public function appendCell($_value, $_type = null)
+    {
+        $cell = OpenDocument_SpreadSheet_Cell::createCell($this->_row, $_value, $_type);
+                
+        return $cell;
+    }
+        
     public function setStyle($_styleName)
     {
         $this->_attributes['table:style-name'] = $_styleName;
     }
 
+    static public function createRow($_parent, $_styleName = null)
+    {
+        $rowElement = $_parent->addChild('table-row', null, OpenDocument_Document::NS_TABLE);
+        
+        if($_styleName !== null) {
+            $rowElement->addAttribute('table:style-name', $_styleName, OpenDocument_Document::NS_TABLE);
+        }
+        
+        $row = new OpenDocument_SpreadSheet_Row($rowElement);
+        
+        return $row;
+    }
+    
     public function generateXML(SimpleXMLElement $_table)
     {
         $row = $_table->addChild('table-row', NULL, OpenDocument_Document::NS_TABLE);

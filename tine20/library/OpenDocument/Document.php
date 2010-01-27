@@ -8,8 +8,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
- * 
- * @todo        add page layout (orientation landscape to styles
  */
 
 /**
@@ -25,6 +23,7 @@ class OpenDocument_Document
     const NS_STYLE  = 'urn:oasis:names:tc:opendocument:xmlns:style:1.0';
     const NS_OFFICE = 'urn:oasis:names:tc:opendocument:xmlns:office:1.0';
     const NS_FO     = 'urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0';
+    const NS_TEXT   = 'urn:oasis:names:tc:opendocument:xmlns:text:1.0';
     
     const SPREADSHEET = 'SpreadSheet';
     
@@ -150,17 +149,6 @@ class OpenDocument_Document
             xmlns:oooc="http://openoffice.org/2004/calc" 
             xmlns:dom="http://www.w3.org/2001/xml-events" office:version="1.1">
         </office:document-styles>';
-    /*
-            <office:automatic-styles>
-                <style:page-layout style:name="pm1">
-                    <style:page-layout-properties fo:page-width="11in" fo:page-height="8.5in" style:num-format="1" 
-                        style:print-orientation="landscape" style:writing-mode="lr-tb"/>
-                </style:page-layout>
-            </office:automatic-styles>            
-            <office:master-styles>
-                <style:master-page style:name="Default" style:page-layout-name="pm1">
-            </style:master-page>
-    */                        
     
     protected $_userStyles = array();
     
@@ -174,6 +162,8 @@ class OpenDocument_Document
      */
     public function __construct($_type, $_fileName = null, $_tmpdir = '/tmp', $_userStyles = array())
     {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "FILENAME: $_fileName");
+        
         if($_fileName !== null) {
             $this->_content     = file_get_contents('zip://' . $_fileName . '#content.xml');
             $this->_manifest    = file_get_contents('zip://' . $_fileName . '#META-INF/manifest.xml');
@@ -181,8 +171,14 @@ class OpenDocument_Document
             $this->_settings    = file_get_contents('zip://' . $_fileName . '#settings.xml');
             $this->_styles      = file_get_contents('zip://' . $_fileName . '#styles.xml');
         }
-        
+
         $this->_document = new SimpleXMLElement($this->_content);
+        
+        // register namespaces
+        $namespaces = $this->_document->getNamespaces(true);
+        foreach ($namespaces as $prefix => $ns) {
+          $this->_document->registerXPathNamespace($prefix, $ns);
+        }
         
         $this->_tmpdir = $_tmpdir;
         $this->_userStyles = $_userStyles;
@@ -193,17 +189,11 @@ class OpenDocument_Document
                 $spreadsheets = $this->_document->xpath('//office:body/office:spreadsheet');
                 if (count($spreadsheets) == 0) {
                     $body = $this->_document->xpath('//office:body');
-                    $node = $body[0]->addChild('office:spreadsheet', NULL, OpenDocument_Document::NS_OFFICE);
+                    $spreadsheet = $body[0]->addChild('office:spreadsheet', NULL, OpenDocument_Document::NS_OFFICE);
                 } else {
-                    // @todo remove existing spreadsheets?
-                    /*
-                    $this->_document->body = new SimpleXMLElement('<office:spreadsheet></office:spreadsheet>', NULL, FALSE, OpenDocument_Document::NS_OFFICE);
-                    //$spreadsheets[0] = new SimpleXMLElement('<office:spreadsheet></office:spreadsheet>', 0, FALSE, OpenDocument_Document::NS_OFFICE);
-                    $node = $this->_document['office:body'];
-                    */
-                    $node = $spreadsheets[0];
+                    $spreadsheet = $spreadsheets[0];
                 }
-                $this->_body = new OpenDocument_SpreadSheet($node);
+                $this->_body = new OpenDocument_SpreadSheet($spreadsheet);
                 break;
             default:
                 throw new Exception('unsupported documenttype: ' . $_type);
@@ -221,18 +211,21 @@ class OpenDocument_Document
         return $this->_body;
     }
     
+    public function asXML()
+    {
+        return $this->_document->asXML();
+    }
+    
     public function addStyle($_style)
     {
         $this->_userStyles[] = $_style; 
     }
     
-    public function getDocument()
+    public function getDocument($_filename = null)
     {
-        $this->_body->generateXML();
-        
         $this->_addStyles();
         
-        $filename =  $this->_tmpdir . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.ods';
+        $filename =  $_filename !== null ? $_filename : $this->_tmpdir . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.ods';
             
         if(class_exists('ZipArchive', false)) {
             $zip = new ZipArchive();

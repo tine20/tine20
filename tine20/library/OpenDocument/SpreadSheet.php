@@ -22,7 +22,7 @@
 class OpenDocument_SpreadSheet implements Iterator, Countable
 {
     const CONTENT_TYPE = 'application/vnd.oasis.opendocument.spreadsheet';
-    
+
     protected $_tables = array();
     
     protected $_position = 0;
@@ -32,7 +32,7 @@ class OpenDocument_SpreadSheet implements Iterator, Countable
      *
      * @var SimpleXMLElement
      */
-    protected $_document;
+    protected $_spreadSheet;
         
     public function getContentType()
     {
@@ -41,34 +41,56 @@ class OpenDocument_SpreadSheet implements Iterator, Countable
     
     public function __construct(SimpleXMLElement $_parentNode)
     {
-        $this->_document = $_parentNode;
+        $this->_spreadSheet = $_parentNode;
     }
-
+    
+    public function getTables()
+    {
+        $tables = $this->_spreadSheet->xpath('//office:body/office:spreadsheet/table:table');
+        
+        $result = array();
+        
+        foreach($tables as $table) {
+            $attributes = $table->attributes(self::TABLE_URN);
+            $result[(string)$attributes['name']] = new OpenDocument_SpreadSheet_Table($table);
+        }
+        
+        return $result;
+    }
+    
+    public function tableExists($_tableName)
+    {
+        $table = $this->_spreadSheet->xpath("//office:body/office:spreadsheet/table:table[@table:name='$_tableName']");
+        
+        if(count($table) === 0) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    public function getTable($_tableName)
+    {
+        $table = $this->_spreadSheet->xpath("//office:body/office:spreadsheet/table:table[@table:name='$_tableName']");
+        
+        if(count($table) === 0) {
+            return false;
+        }
+        
+        return new OpenDocument_SpreadSheet_Table($table[0]);
+    }
+    
     /**
      * add new table and return reference
      *
      * @param string|optional $_tableName
      * @return OpenDocument_SpreadSheet_Table
      */
-    public function appendTable($_tableName = NULL)
+    public function appendTable($_tableName, $_styleName = null)
     {
-        $table = new OpenDocument_SpreadSheet_Table($_tableName);
-        
-        $this->_tables[] = $table;
-        $this->_position++;
+        $table = OpenDocument_SpreadSheet_Table::createTable($this->_spreadSheet, $_tableName, $_styleName = null);
         
         return $table;
-    }
-    
-    public function generateXML()
-    {
-        foreach($this->_tables as $table) {
-            $table->generateXML($this->_document);
-        }
-        
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $this->_document->generateXML());
-        
-        return $this->_document->saveXML();
     }
     
     function rewind() {
