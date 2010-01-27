@@ -239,5 +239,31 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     getInputFile: function(){
         return this.input_file;
+    },
+    /**
+     * get file name
+     * @return {String}
+     */
+    getFileName:function() {
+        var file = this.getFileList()[0];
+        return file.name ? file.name : file.fileName;
+    },
+    
+    /**
+     * returns file class based on name extension
+     * @return {String} class to use for file type icon
+     */
+    getFileCls: function() {
+        var fparts = this.getFileName().split('.');
+        if(fparts.length === 1) {
+            return '';
+        }
+        else {
+            return fparts.pop().toLowerCase();
+        }
+    },
+    isImage: function() {
+        var cls = this.getFileCls();
+        return (cls == 'jpg' || cls == 'gif' || cls == 'png' || cls == 'jpeg');
     }
 };
