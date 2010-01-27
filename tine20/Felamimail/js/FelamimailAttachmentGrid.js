@@ -116,9 +116,10 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
             iconCls: 'actionAdd',
             scope: this,
             plugins: [new Ext.ux.file.BrowsePlugin({
-                multiple: true
+                multiple: true,
+                dropElSelector: 'div[id=felamimail-attachment-grid]'
             })],
-            handler: this.onFilesSelect//this.handlers.add
+            handler: this.onFilesSelect
         });
 
         this.actions.remove = new Ext.Action({
@@ -213,17 +214,17 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
      * @param {} e
      */
     onFilesSelect: function(btn, e) {
-        var input = btn.detachInputFile();
         var uploader = new Ext.ux.file.Uploader({
             maxFileSize: 67108864, // 64MB
-            input: input
+            input: btn.detachInputFile()
         });
                 
         uploader.on('uploadfailure', this.onUploadFail, this);
         
-        for (var i=0; i<input.dom.files.length; i++) {
-            var fileRecord = uploader.upload(i);
+        var files = btn.getFileList();
+        Ext.each(files, function(file){
+            var fileRecord = uploader.upload(file);
             this.store.add(fileRecord);
-        }
+        }, this);
     }
 });
