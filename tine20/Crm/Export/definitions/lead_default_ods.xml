@@ -79,6 +79,13 @@
             <width>4cm</width>
         </column>
         <column>
+            <identifier>container_id</identifier>
+            <field>id</field>
+            <header>Container ID</header>
+            <type>container_id</type>
+            <width>4cm</width>
+        </column>
+        <column>
             <identifier>duration</identifier>
             <header>Duration</header>
             <type>duration</type>
