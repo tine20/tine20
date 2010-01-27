@@ -94,12 +94,13 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
         } else {
             Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " Plain old form style upload");
             
+            $uploadedFile = $_FILES['file'];
+            
             $name  = $uploadedFile['name'];
             $size  = $uploadedFile['size'];
             $type  = $uploadedFile['type'];
             $error = $uploadedFile['error'];
             
-            $uploadedFile = $_FILES['file'];
             if ($uploadedFile['error'] == UPLOAD_ERR_FORM_SIZE) {
                 throw new Tinebase_Exception('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.');
             }
