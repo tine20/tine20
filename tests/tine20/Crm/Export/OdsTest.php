@@ -70,7 +70,7 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
         
         $this->assertTrue(file_exists($odsFilename));
         
-        $xmlBody = $this->_instance->getDocument()->getBody()->generateXML();    
+        $xmlBody = $this->_instance->getDocument()->asXML();    
         //echo  $xmlBody;
         $this->assertEquals(1, preg_match("/PHPUnit/",      $xmlBody), 'no name'); 
         $this->assertEquals(1, preg_match("/Description/",  $xmlBody), 'no description');
