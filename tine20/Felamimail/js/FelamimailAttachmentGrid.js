@@ -79,33 +79,6 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
      * @private
      */
     handlers: {   
-        
-        /**
-         * upload new attachment and add to store
-         * 
-         * @param {} _button
-         * @param {} _event
-         */
-        add: function(_button, _event) {
-
-            var input = _button.detachInputFile();
-            var uploader = new Ext.ux.file.Uploader({
-                maxFileSize: 67108864, // 64MB
-                input: input
-            });
-            uploader.on('uploadcomplete', function(uploader, file){
-                this.loadMask.hide();
-                
-                var attachment = new Tine.Felamimail.Model.Attachment(file.get('tempFile'));
-                this.store.add(attachment);
-                
-            }, this);
-            uploader.on('uploadfailure', this.onUploadFail, this);
-            
-            this.loadMask.show();
-            uploader.upload();
-        },
-
         /**
          * remove attachment from store
          * 
@@ -142,8 +115,10 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
             text: this.i18n._('Add Attachment'),
             iconCls: 'actionAdd',
             scope: this,
-            plugins: [new Ext.ux.file.BrowsePlugin({})],
-            handler: this.handlers.add
+            plugins: [new Ext.ux.file.BrowsePlugin({
+                multiple: true
+            })],
+            handler: this.onFilesSelect//this.handlers.add
         });
 
         this.actions.remove = new Ext.Action({
@@ -166,7 +141,7 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     initStore: function() {
         this.store = new Ext.data.SimpleStore({
-            fields: Tine.Felamimail.Model.Attachment
+            fields: Ext.ux.file.Uploader.file
         });
         
         // init attachments (on forward)
@@ -189,7 +164,16 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
                 id: 'name',
                 dataIndex: 'name',
                 width: 300,
-                header: 'name'
+                header: 'name',
+                renderer: function(value, metadata, record) {
+                    var val = value;
+                    if (record.get('status') !== 'complete') {
+                        //val += ' (' + record.get('progress') + '%)';
+                        metadata.css = 'x-fmail-uploadrow';
+                    }
+                    
+                    return val;
+                }
             },{
                 resizable: true,
                 id: 'size',
@@ -220,5 +204,26 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
             var rowCount = selModel.getCount();
             this.actions.remove.setDisabled(rowCount == 0);
         }, this);
+    },
+    
+    /**
+     * upload new attachment and add to store
+     * 
+     * @param {} btn
+     * @param {} e
+     */
+    onFilesSelect: function(btn, e) {
+        var input = btn.detachInputFile();
+        var uploader = new Ext.ux.file.Uploader({
+            maxFileSize: 67108864, // 64MB
+            input: input
+        });
+                
+        uploader.on('uploadfailure', this.onUploadFail, this);
+        
+        for (var i=0; i<input.dom.files.length; i++) {
+            var fileRecord = uploader.upload(i);
+            this.store.add(fileRecord);
+        }
     }
 });

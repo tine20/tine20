@@ -143,17 +143,3 @@ Tine.Felamimail.Model.Account.getDefaultData = function() {
         smtp_ssl: (defaults.smtp && defaults.smtp.ssl) ? defaults.smtp.ssl : 'none'
     };
 };
-
-/**
- * @namespace Tine.Felamimail.Model
- * @class Tine.Felamimail.Model.Attachment
- * @extends Tine.Tinebase.data.Record
- * 
- * Attachment Record Definition
- */ 
-Tine.Felamimail.Model.Attachment = Tine.Tinebase.data.Record.create([
-   { name: 'name' },
-   { name: 'size' },
-   { name: 'path' },
-   { name: 'type' }
-]);
