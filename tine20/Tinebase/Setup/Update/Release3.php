@@ -98,4 +98,22 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('importexport_definition', '3');
         $this->setApplicationVersion('Tinebase', '3.3');
     }
+    
+    /**
+     * update to 3.4
+     * - add filename field to import/export definitions
+     */
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                    <name>filename</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>');
+        $this->_backend->addCol('importexport_definition', $declaration);
+        
+        $this->setTableVersion('importexport_definition', '4');
+        $this->setApplicationVersion('Tinebase', '3.4');
+    }    
 }

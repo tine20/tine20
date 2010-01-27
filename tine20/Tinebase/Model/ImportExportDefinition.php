@@ -53,6 +53,8 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_Abstract
         ),
         'plugin'                => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'plugin_options'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // if filename is set, read file from App/Export(Import)/definitions/filename
+        'filename'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),

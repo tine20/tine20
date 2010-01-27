@@ -160,6 +160,21 @@ abstract class Tinebase_Export_Abstract
                 throw new Tinebase_Exception_NotFound('Export definition for model ' . $this->_modelName . ' not found.');
             }
             $definition = $definitions->getFirstRecord();
+            
+            if (! empty($definition->filename)) {
+                // check if file with plugin options exists and use that
+                $completeFilename = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName . 
+                    DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'definitions' . DIRECTORY_SEPARATOR . $definition->filename;
+                try {
+                    $fileDefinition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
+                        $completeFilename,
+                        Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
+                    );
+                    $definition->plugin_options = $fileDefinition->plugin_options;
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                }
+            }
         }
         
         return Tinebase_ImportExportDefinition::getInstance()->getOptionsAsZendConfigXml($definition, $_additionalOptions);
