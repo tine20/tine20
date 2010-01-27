@@ -84,7 +84,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      * @return {Ext.Record} Ext.ux.file.Uploader.file
      */
     upload: function(file) {
-        if (XMLHttpRequest && file) {
+        if (window.XMLHttpRequest && window.File && window.FileList && file) {
             return this.html5upload(file);
         } else {
             return this.html4upload();

@@ -196,7 +196,14 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * @private
      */
     onInputFileChange: function(e, target, options, files){
-        this.files = files ? files : this.input_file.dom.files;
+        if (window.FileList) { // HTML5 FileList support
+            this.files = files ? files : this.input_file.dom.files;
+        } else {
+            this.files = [{
+                name : this.input_file.getValue().split(/[\/\\]/).pop()
+            }];
+            this.files[0].type = this.getFileCls();
+        }
         
         if (this.originalHandler) {
             this.originalHandler.call(this.originalScope, this);
