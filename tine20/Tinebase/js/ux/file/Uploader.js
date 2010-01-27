@@ -80,15 +80,12 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     /**
      * perform the upload
      * 
-     * @param  {index} idx which file (optional for html5 uploads)
+     * @param  {FILE} file to upload (optional for html5 uploads)
      * @return {Ext.Record} Ext.ux.file.Uploader.file
      */
-    upload: function(idx) {
-        // NOTE: it's not yet clear how to detect XMLHttpRequest Level 2,
-        //       we assume that agents with multi file support also support
-        //       level 2 XMLHttpRequest.
-        if (XMLHttpRequest && this.input.dom.files.length > 1) {
-            return this.html5upload(idx);
+    upload: function(file) {
+        if (XMLHttpRequest && file) {
+            return this.html5upload(file);
         } else {
             return this.html4upload();
         }
@@ -110,8 +107,8 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      *   http://www.w3.org/TR/XMLHttpRequest2/
      *  => the only way of uploading is using the XMLHttpRequest Level 2.
      */
-    html5upload: function(idx) {
-        var file = this.input.dom.files[idx || 0];
+    html5upload: function(file) {
+        //var file = this.input.dom.files[idx || 0];
         
         var fileRecord = new Ext.ux.file.Uploader.file({
             name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
@@ -219,6 +216,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             this.fireEvent('uploadcomplete', this, fileRecord);
         }
     },
+    
     /**
      * executed if a file upload failed
      */
@@ -227,6 +225,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         
         this.fireEvent('uploadfailure', this, fileRecord);
     },
+    
     /**
      * get file name
      * @return {String}
