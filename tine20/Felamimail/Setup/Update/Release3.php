@@ -42,14 +42,16 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
         $accountBackend = new Felamimail_Backend_Account();
         
-        foreach ($accounts as $account) {
-            if (Tinebase_Core::getPreference('Felamimail')->getValueForUser('userEmailAccount', $account->user_id)) {
-                $user = Tinebase_User::getInstance()->getFullUserById($account->user_id);
-                // account email == user->emailAddress && account->host == system account host -> type = system
-                if ($account->email == $user->accountEmailAddress && $account->host == $imapConfig['host']) {
-                    $account->type = Felamimail_Model_Account::TYPE_SYSTEM;
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Switching to system account: ' . $account->name);
-                    $accountBackend->update($account);
+        if (array_key_exists('host', $imapConfig)) {
+            foreach ($accounts as $account) {
+                if (Tinebase_Core::getPreference('Felamimail')->getValueForUser('userEmailAccount', $account->user_id)) {
+                    $user = Tinebase_User::getInstance()->getFullUserById($account->user_id);
+                    // account email == user->emailAddress && account->host == system account host -> type = system
+                    if ($account->email == $user->accountEmailAddress && $account->host == $imapConfig['host']) {
+                        $account->type = Felamimail_Model_Account::TYPE_SYSTEM;
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Switching to system account: ' . $account->name);
+                        $accountBackend->update($account);
+                    }
                 }
             }
         }
