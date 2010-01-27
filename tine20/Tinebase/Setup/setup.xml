@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>3.4</version>
+    <version>3.5</version>
     <tables>
         <table>
             <name>applications</name>

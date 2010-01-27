@@ -116,4 +116,14 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('importexport_definition', '4');
         $this->setApplicationVersion('Tinebase', '3.4');
     }    
+
+    /**
+     * update to 3.5
+     * - set filename field in export definitions (name + .xml)
+     */
+    public function update_4()
+    {
+        $this->_db->query("UPDATE " . SQL_TABLE_PREFIX . "importexport_definition SET filename=CONCAT(name,'.xml') WHERE type = 'export'");
+        $this->setApplicationVersion('Tinebase', '3.5');
+    }    
 }

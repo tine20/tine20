@@ -1106,6 +1106,7 @@ class Setup_Controller
                                 $_application->getId(), 
                                 preg_replace("/\.xml/", '', $item->getFileName())
                             );
+                            $definition->filename = $item->getFileName();
                             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating import/export definion from file: ' . $item->getFileName());
                             Tinebase_ImportExportDefinition::getInstance()->create($definition);
                             
