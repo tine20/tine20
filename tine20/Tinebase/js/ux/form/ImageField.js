@@ -107,18 +107,17 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     /**
      * @private
      */
-    onFileSelect: function(bb) {
-        var input = bb.detachInputFile();
-        if(! bb.isImage()) {
+    onFileSelect: function(fileSelector) {
+        if(! fileSelector.isImage()) {
             Ext.MessageBox.alert(_('Not An Image'), _('Plase select an image file (gif/png/jpeg)')).setIcon(Ext.MessageBox.ERROR);
             return;
         }
         
         var uploader = new Ext.ux.file.Uploader({
-            input: input
+            fileSelector: fileSelector
         });
         
-        var file = bb.getFileList()[0];
+        var file = fileSelector.getFileList()[0];
         
         uploader.on('uploadcomplete', function(uploader, record){
             this.imageSrc = new Ext.ux.util.ImageURL({

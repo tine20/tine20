@@ -55,6 +55,12 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      * @cfg {String} url the url we upload to
      */
     url: 'index.php',
+    /**
+     * @cfg {Ext.ux.file.BrowsePlugin} fileSelector
+     * a file selector
+     */
+    fileSelector: null,
+    
     
     /**
      * creates a form where the upload takes place in
@@ -108,15 +114,13 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      *  => the only way of uploading is using the XMLHttpRequest Level 2.
      */
     html5upload: function(file) {
-        //var file = this.input.dom.files[idx || 0];
-        
         var fileRecord = new Ext.ux.file.Uploader.file({
             name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
-            type: (file.type ? file.type : file.fileType) || this.getFileCls(), // missing if safari and chrome
+            type: (file.type ? file.type : file.fileType) || this.fileSelector.getFileCls(), // missing if safari and chrome
             size: (file.size ? file.size : file.fileSize) || 0, // non standard but all have it ;-)
             status: 'uploading',
             progress: 0,
-            input: this.input
+            input: this.getInput()
         });
         
         var conn = new Ext.data.Connection({
@@ -157,13 +161,14 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      */
     html4upload: function() {
         var form = this.createForm();
-        form.appendChild(this.input);
+        var input = this.getInput();
+        form.appendChild(input);
         
         var fileRecord = new Ext.ux.file.Uploader.file({
-            name: this.getFileName(),
+            name: this.fileSelector.getFileName(),
             size: 0,
-            type: this.getFileCls(),
-            input: this.input,
+            type: this.fileSelector.getFileCls(),
+            input: input,
             form: form,
             status: 'uploading',
             progress: 0
@@ -226,36 +231,13 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         this.fireEvent('uploadfailure', this, fileRecord);
     },
     
-    /**
-     * get file name
-     * @return {String}
-     */
-    getFileName:function() {
-        return this.input.getValue().split(/[\/\\]/).pop();
-    },
-    /**
-     * get file path (excluding the file name)
-     * @return {String}
-     */
-    getFilePath:function() {
-        return this.input.getValue().replace(/[^\/\\]+$/,'');
-    },
-    /**
-     * returns file class based on name extension
-     * @return {String} class to use for file type icon
-     */
-    getFileCls: function() {
-        var fparts = this.getFileName().split('.');
-        if(fparts.length === 1) {
-            return '';
+    // private
+    getInput: function() {
+        if (! this.input) {
+            this.input = this.fileSelector.detachInputFile();
         }
-        else {
-            return fparts.pop().toLowerCase();
-        }
-    },
-    isImage: function() {
-        var cls = this.getFileCls();
-        return (cls == 'jpg' || cls == 'gif' || cls == 'png' || cls == 'jpeg');
+        
+        return this.input;
     }
 });
 

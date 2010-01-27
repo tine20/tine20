@@ -40,11 +40,10 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     // todo: wrap this into a uploadAction widget
-    onFileSelect: function(BrowseButton) {
-        var input = BrowseButton.detachInputFile();
+    onFileSelect: function(fileSelector) {
         this.loadMask.show();
         var uploader = new Ext.ux.file.Uploader({
-            input: input
+            fileSelector: fileSelector
         });
         
         uploader.on('uploadcomplete', function(uploader, record){
