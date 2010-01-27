@@ -112,7 +112,14 @@ Tine.Tinebase.tineInit = {
                 e.preventDefault();
             }
         });
-
+        
+        // disable generic drops
+        Ext.getBody().on('dragover', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            e.browserEvent.dataTransfer.dropEffect = 'none';
+        }, this);
+        
         //init window is done in Ext.ux.PopupWindowMgr. yet
         this.initList.initWindow = true;
     },
