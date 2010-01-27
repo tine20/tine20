@@ -93,5 +93,12 @@
             <type>duration</type>
             <width>4cm</width>
         </column>
+        <column>
+            <identifier>expected</identifier>
+            <header>Excpected Sales</header>
+            <type>formula</type>
+            <formula>--Add formula here to multiply probability with turnover--</formula>
+            <width>4cm</width>
+        </column>
     </columns>
 </config>
