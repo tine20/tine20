@@ -126,6 +126,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
            'size'        => !empty($size) ? $size : filesize($path),
         ));
         
+        Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " tempfile data: " . print_r($tempFile->toArray(), TRUE));
         $this->create($tempFile);
         
         return $tempFile;
