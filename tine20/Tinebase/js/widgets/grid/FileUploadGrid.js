@@ -1,44 +1,44 @@
 /*
  * Tine 2.0
  * 
- * @package     Felamimail
+ * @package     Tinebase
+ * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  */
  
-Ext.namespace('Tine.Felamimail');
+Ext.namespace('Tine.widgets.grid');
 
 /**
- * @namespace   Tine.Felamimail
- * @class       Tine.Felamimail.AttachmentGrid
+ * @namespace   Tine.widgets.grid
+ * @class       Tine.widgets.grid.FileUploadGrid
  * @extends     Ext.grid.GridPanel
  * 
- * <p>Attachment grid for compose dialog</p>
+ * <p>FileUpload grid for dialogs</p>
  * <p>
- * TODO         remove handlers / replace with onXXX
- * TODO         create generic file upload grid
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  * 
  * @param       {Object} config
  * 
  * @constructor
- * Create a new  Tine.Felamimail.AttachmentGrid
+ * Create a new  Tine.widgets.grid.FileUploadGrid
  */
-Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
+Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     
-	/**
-	 * @private
-	 */
-    id: 'felamimail-attachment-grid',
-    i18n: null,
+    /**
+     * @private
+     * 
+     * TODO: use dynamic id here?
+     */
+    id: 'tinebase-file-grid',
     
     /**
      * actions
@@ -72,26 +72,7 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
         this.initColumnModel();
         this.initSelectionModel();
         
-        Tine.Felamimail.AttachmentGrid.superclass.initComponent.call(this);
-    },
-    
-    /**
-     * button event handlers
-     * @private
-     */
-    handlers: {   
-        /**
-         * remove attachment from store
-         * 
-         * @param {} _button
-         * @param {} _event
-         */
-        remove: function(_button, _event) {
-            var selectedRows = this.getSelectionModel().getSelections();
-            for (var i = 0; i < selectedRows.length; ++i) {
-                this.store.remove(selectedRows[i]);
-            }                       
-        }
+        Tine.widgets.grid.FileUploadGrid.superclass.initComponent.call(this);
     },
     
     /**
@@ -100,11 +81,23 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     onUploadFail: function() {
         Ext.MessageBox.alert(
-            this.i18n._('Upload Failed'), 
-            this.i18n._('Could not upload attachment. Filesize could be too big. Please notify your Administrator. Max upload size: ') 
-                + Tine.Felamimail.registry.get('maxAttachmentSize')
+            _('Upload Failed'), 
+            _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: ') 
+                + Tine.widgets.grid.registry.get('maxFileUploadSize')
         ).setIcon(Ext.MessageBox.ERROR);
         this.loadMask.hide();
+    },
+    
+    /**
+     * on remove
+     * @param {} _button
+     * @param {} _event
+     */
+    onRemove: function(_button, _event) {
+        var selectedRows = this.getSelectionModel().getSelections();
+        for (var i = 0; i < selectedRows.length; ++i) {
+            this.store.remove(selectedRows[i]);
+        }                       
     },
 
     /**
@@ -113,22 +106,22 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     initToolbar: function() {
         this.actions.add = new Ext.Action({
-            text: this.i18n._('Add Attachment'),
+            text: _('Add file'),
             iconCls: 'actionAdd',
             scope: this,
             plugins: [new Ext.ux.file.BrowsePlugin({
                 multiple: true,
-                dropElSelector: 'div[id=felamimail-attachment-grid]'
+                dropElSelector: 'div[id=tinebase-file-grid]'
             })],
             handler: this.onFilesSelect
         });
 
         this.actions.remove = new Ext.Action({
-            text: this.i18n._('Remove Attachment'),
+            text: _('Remove file'),
             iconCls: 'actionRemove',
             scope: this,
             disabled: true,
-            handler: this.handlers.remove
+            handler: this.onRemove
         });
         
         this.tbar = [                
@@ -146,11 +139,11 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
             fields: Ext.ux.file.Uploader.file
         });
         
-        // init attachments (on forward)
-        if (this.record.get('attachments')) {
-            var attachments = this.record.get('attachments');
-            for (var i=0; i < attachments.length; i++) {
-                this.store.add(new Ext.data.Record(attachments[i]));
+        // init files (on forward)
+        if (this.record.get('files')) {
+            var files = this.record.get('files');
+            for (var i=0; i < files.length; i++) {
+                this.store.add(new Ext.data.Record(files[i]));
             }
         }
     },
@@ -209,7 +202,7 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
     },
     
     /**
-     * upload new attachment and add to store
+     * upload new file and add to store
      * 
      * @param {} btn
      * @param {} e

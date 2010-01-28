@@ -188,10 +188,9 @@ Ext.namespace('Tine.Felamimail');
             anchor: '100% 90%'
         });
         
-        this.attachmentGrid = new Tine.Felamimail.AttachmentGrid({
+        this.attachmentGrid = new Tine.widgets.grid.FileUploadGrid({
             fieldLabel: this.app.i18n._('Attachments'),
             record: this.record,
-            i18n: this.app.i18n,
             hideLabel: true,
             anchor: '100% 80%'
         });
