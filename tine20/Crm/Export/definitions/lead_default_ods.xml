@@ -24,6 +24,24 @@
             <width>10cm</width>
         </column>
         <column>
+            <identifier>status</identifier>
+            <header>Status</header>
+            <type>status</type>
+            <width>4cm</width>
+        </column>
+        <column>
+            <identifier>source</identifier>
+            <header>Source</header>
+            <type>source</type>
+            <width>4cm</width>
+        </column>
+        <column>
+            <identifier>type</identifier>
+            <header>Type</header>
+            <type>type</type>
+            <width>4cm</width>
+        </column>
+        <column>
             <identifier>turnover</identifier>
             <header>Turnover</header>
             <type>currency</type>
@@ -35,6 +53,14 @@
             <header>Probability</header>
             <type>percentage</type>
             <width>2cm</width>
+        </column>
+        <column>
+            <identifier>expected</identifier>
+            <header>Expected Sales</header>
+            <type>currency</type>
+            <currency>EUR</currency>
+            <width>4cm</width>
+            <formula>=INDIRECT(ADDRESS(ROW();COLUMN()-7))*INDIRECT(ADDRESS(ROW();COLUMN()-6))</formula>
         </column>
         <column>
             <identifier>start</identifier>
@@ -55,6 +81,12 @@
             <width>2,5cm</width>
         </column>
         <column>
+            <identifier>duration</identifier>
+            <header>Duration</header>
+            <type>duration</type>
+            <width>4cm</width>
+        </column>
+        <column>
             <identifier>created_by</identifier>
             <header>Created By</header>
             <type>created_by</type>
@@ -66,12 +98,6 @@
             <header>Creation Date</header>
             <type>datetime</type>
             <width>2,5cm</width>
-        </column>
-        <column>
-            <identifier>status</identifier>
-            <header>Status</header>
-            <type>status</type>
-            <width>4cm</width>
         </column>
         <column>
             <identifier>container</identifier>
@@ -86,20 +112,6 @@
             <header>Container ID</header>
             <type>container_id</type>
             <width>4cm</width>
-        </column>
-        <column>
-            <identifier>duration</identifier>
-            <header>Duration</header>
-            <type>duration</type>
-            <width>4cm</width>
-        </column>
-        <column>
-            <identifier>expected</identifier>
-            <header>Excpected Sales</header>
-            <type>currency</type>
-            <currency>EUR</currency>
-            <width>4cm</width>
-            <formula>=INDIRECT(ADDRESS(ROW();COLUMN()-7))*INDIRECT(ADDRESS(ROW();COLUMN()-6))</formula>
         </column>
     </columns>
 </config>
