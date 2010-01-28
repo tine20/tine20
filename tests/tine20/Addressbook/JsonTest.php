@@ -340,7 +340,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         // check
         $this->assertGreaterThan(0, $result['totalcount'], 'Didn\'t import anything.');
-        $this->assertEquals(0, $result['failcount'], 'Import failed for one or more recors.');
+        $this->assertEquals(0, $result['failcount'], 'Import failed for one or more records.');
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['account_id'], 'Did not get user record.');
         
         //cleanup
