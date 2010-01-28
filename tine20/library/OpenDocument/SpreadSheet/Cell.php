@@ -58,10 +58,10 @@ class OpenDocument_SpreadSheet_Cell
                     
                 case self::TYPE_CURRENCY:
                     list($value, $currency) = explode(' ', $_value);
-                    $cellElement->addAttribute('office:value', self::_encodeValue($value), OpenDocument_Document::NS_OFFICE);
                     if(!empty($currency)) {                 
                         $cellElement->addAttribute('office:currency', self::_encodeValue($currency), OpenDocument_Document::NS_OFFICE);
                     }                 
+                    $cellElement->addAttribute('office:value', self::_encodeValue($value), OpenDocument_Document::NS_OFFICE);
                     break;
             }
             
@@ -78,9 +78,14 @@ class OpenDocument_SpreadSheet_Cell
         return htmlspecialchars($_value, ENT_NOQUOTES, 'UTF-8');
     }
     
+    public function setFormula($_formula)
+    {
+        $this->_cell->addAttribute('table:formula', $this->_encodeValue('oooc:' . $_formula), OpenDocument_Document::NS_TABLE);
+    }
+    
     public function setStyle($_style)
     {
-        $this->_cell->addAttribute('table:style-name', $_style, OpenDocument_Document::NS_TABLE);
+        $this->_cell->addAttribute('table:style-name', $this->_encodeValue($_style), OpenDocument_Document::NS_TABLE);
     }
     
     public function setAtttibute($_key, $_value, $_nameSpace)
