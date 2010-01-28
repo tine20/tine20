@@ -60,7 +60,7 @@
             <type>currency</type>
             <currency>EUR</currency>
             <width>4cm</width>
-            <formula>=INDIRECT(ADDRESS(ROW();COLUMN()-7))*INDIRECT(ADDRESS(ROW();COLUMN()-6))</formula>
+            <formula>=INDIRECT(ADDRESS(ROW();COLUMN()-2))*INDIRECT(ADDRESS(ROW();COLUMN()-1))</formula>
         </column>
         <column>
             <identifier>start</identifier>
