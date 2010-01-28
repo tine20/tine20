@@ -289,6 +289,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                 
                 $altStyle = 'ceAlternate';
                 $cellType = OpenDocument_SpreadSheet_Cell::TYPE_STRING;
+                $value = '';
                 
                 switch($field->type) {
                     case 'datetime':
@@ -298,8 +299,6 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                     case 'date':
                         if ($record->{$field->identifier}) {
                             $value    = ($record->{$field->identifier} instanceof Zend_Date) ? $record->{$field->identifier}->toString('yyyy-MM-dd') : $record->{$field->identifier};
-                        } else {
-                            $value = '';
                         }
                         //$altStyle = 'ceAlternateCentered';
                         $cellType = OpenDocument_SpreadSheet_Cell::TYPE_DATE;
@@ -310,7 +309,10 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                         break;
                     case 'currency':
                         $currency = ($field->currency) ? $field->currency : 'EUR';
-                        $value    = (! $field->formula) ? $record->{$field->identifier} . ' ' . $currency : '';
+                        if (! $field->formula) {
+                            $value    =  ($record->{$field->identifier}) ? $record->{$field->identifier} : '0';
+                            $value .= ' ' . $currency;
+                        } 
                         $cellType = OpenDocument_SpreadSheet_Cell::TYPE_CURRENCY;
                         break;
                     case 'percentage':
@@ -329,8 +331,6 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                             // add custom fields
                             if (isset($record->customfields[$field->identifier])) {
                                 $value = $record->customfields[$field->identifier];
-                            } else {
-                                $value = '';
                             }
                             
                         } elseif (isset($field->divisor)) {
