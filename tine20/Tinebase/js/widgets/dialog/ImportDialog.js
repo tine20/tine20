@@ -21,18 +21,15 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.dialog');
  * @constructor
  * @param {Object} config The configuration options.
  * 
- * TODO add form fields
- * TODO use import model (with import definition, file, container id, dry run)
- * TODO add file upload grid
+ * TODO add form fields (import definitions, dry run, container selection)
  * TODO add app grid to show results when dry run is selected
+ * TODO update grid on update
  */
 Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @cfg {String} title of window
      */
     windowTitle: '',
-    
-    credentialsId: null,
     
     /**
      * @private
@@ -42,6 +39,13 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tbarItems: [],
     evalGrants: false,
     sendRequest: true,
+    
+    //private
+    initComponent: function(){
+        this.recordClass = Tine.Tinebase.Model.ImportJob;
+        
+        Tine.widgets.dialog.ImportDialog.superclass.initComponent.call(this);
+    },
     
     /**
      * init record to edit
@@ -55,10 +59,36 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.supr().onRender.apply(this, arguments);
         this.window.setTitle(this.windowTitle);
     },
+    
+    /**
+     * executed when record gets updated from form
+     * - add files to record here
+     * 
+     * @private
+     */
+    onRecordUpdate: function() {
+
+        this.record.data.files = [];
+        this.uploadGrid.store.each(function(record) {
+            this.record.data.files.push(record.data);
+        }, this);
+        
+        Tine.widgets.dialog.ImportDialog.superclass.onRecordUpdate.call(this);
+    },
+    
     /**
      * returns dialog
      */
     getFormItems: function() {
+        this.uploadGrid = new Tine.widgets.grid.FileUploadGrid({
+            fieldLabel: _('Files'),
+            record: this.record,
+            hideLabel: true,
+            anchor: '100%',
+            height: 150,
+            frame: true
+        });
+        
         return {
             bodyStyle: 'padding:5px;',
             buttonAlign: 'right',
@@ -77,35 +107,31 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
                 }*/
             },
-            items: [/*{
-                fieldLabel: _('Username'), 
-                name: 'username',
-                allowBlank: false
-            },{
-                fieldLabel: _('Password'), 
-                name: 'password',
-                inputType: 'password'
-            }*/]
+            items: [
+                this.uploadGrid
+            ]
         };
-    }
+    },
     
     /**
-     * generic apply changes handler
+     * apply changes handler
      */
-    /*
     onApplyChanges: function(button, event, closeWindow) {
         var form = this.getForm();
         if(form.isValid()) {
-            var values = form.getValues();
+            this.onRecordUpdate();
             
             if (this.sendRequest) {
                 this.loadMask.show();
                 
                 var params = {
-                    method: this.appName + '.changeImport',
-                    password: values.password,
-                    username: values.username,
-                    id: this.credentialsId
+                    method: this.appName + '.import' + this.record.get('model').getMeta('recordsName'),
+                    files: this.record.get('files'),
+                    definitionId: this.record.get('import_definition_id'),
+                    importOptions: {
+                        container_id: this.record.get('container_id'),
+                        dryrun: false
+                    }
                 };
                 
                 Ext.Ajax.request({
@@ -130,7 +156,6 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
         }
     }
-    */
 });
 
 /**
@@ -138,8 +163,8 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.widgets.dialog.ImportDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 240,
-        height: 180,
+        width: 400,
+        height: 300,
         name: Tine.widgets.dialog.ImportDialog.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.widgets.dialog.ImportDialog',
         contentPanelConstructorConfig: config,
