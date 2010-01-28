@@ -57,8 +57,12 @@ class OpenDocument_SpreadSheet_Cell
                     break;
                     
                 case self::TYPE_CURRENCY:
-                    list($value, $currency) = explode(' ', $_value);
-                    if(!empty($currency)) {                 
+                    if (strpos($_value, ' ') === FALSE) {
+                        $value = $_value;
+                    } else {
+                        list($value, $currency) = explode(' ', $_value);
+                    }
+                    if(isset($currency) && ! empty($$currency)) {                 
                         $cellElement->addAttribute('office:currency', self::_encodeValue($currency), OpenDocument_Document::NS_OFFICE);
                     }                 
                     $cellElement->addAttribute('office:value', self::_encodeValue($value), OpenDocument_Document::NS_OFFICE);
