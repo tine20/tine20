@@ -97,18 +97,15 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * import contacts
      * 
      * @param array $files to import
-     * @param string $importDefinitionId
-     * @param integer $containerId
-     * @param boolean $dryRun
+     * @param array $importOptions
+     * @param string $definitionId
      * @return array
      */
-    public function importContacts($files, $importDefinitionId, $containerId, $dryRun)
+    public function importContacts($files, $importOptions, $definitionId)
     {
-        $options = array(
-            'container_id'  => $containerId,
-            'dryrun'        => $dryRun,
-        );
-        return $this->_import($files, $importDefinitionId, Addressbook_Controller_Contact::getInstance(), $options);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' .$definitionId . ' ' . print_r($importOptions, TRUE));
+        
+        return $this->_import($files, $definitionId, Addressbook_Controller_Contact::getInstance(), $importOptions);
     }
     
     /****************************************** get default adb ****************************/
@@ -193,8 +190,6 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
 
-    
-
     /**
      * returns a image link
      * 
@@ -220,8 +215,9 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRegistryData()
     {
         $registryData = array(
-            'Salutations'        => $this->getSalutations(),
-            'defaultAddressbook' => $this->getDefaultAddressbook()
+            'Salutations'               => $this->getSalutations(),
+            'defaultAddressbook'        => $this->getDefaultAddressbook(),
+            'defaultImportDefinition'   => Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv')->toArray(),
         );        
         return $registryData;    
     }
