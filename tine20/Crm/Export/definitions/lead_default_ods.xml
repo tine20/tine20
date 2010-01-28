@@ -96,9 +96,10 @@
         <column>
             <identifier>expected</identifier>
             <header>Excpected Sales</header>
-            <type>formula</type>
-            <formula>--Add formula here to multiply probability with turnover--</formula>
+            <type>currency</type>
+            <currency>EUR</currency>
             <width>4cm</width>
+            <formula>=INDIRECT(ADDRESS(ROW();COLUMN()-7))*INDIRECT(ADDRESS(ROW();COLUMN()-6))</formula>
         </column>
     </columns>
 </config>
