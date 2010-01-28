@@ -107,7 +107,6 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
      */
     public function generate()
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__);
         // check for template file
         $templateFile = $this->_config->get('template', NULL);
         if ($templateFile !== NULL) {
@@ -319,13 +318,6 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                         $value    = $record->{$field->identifier} / 100;
                         $cellType = OpenDocument_SpreadSheet_Cell::TYPE_PERCENTAGE;
                         break;
-                        /*
-                    case 'formula':
-                        // @todo add formulas
-                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Formulas not implemented yet.');
-                        $value = $field->formula;
-                        break;
-                        */
                     default:
                         if (isset($field->custom) && $field->custom) {
                             // add custom fields

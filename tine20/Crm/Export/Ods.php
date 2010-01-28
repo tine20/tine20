@@ -93,7 +93,6 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
             case 'duration':
                 if ($_record->end) {
                     $value = $_record->end->sub($_record->start, Zend_Date::DAY);
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $value);
                 } else {
                     $value = 0;
                 }
