@@ -57,7 +57,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
     }    
 
-    /****************************************** save / delete contacts ****************************/
+    /****************************************** save / delete / import contacts ****************************/
     
     /**
      * delete multiple contacts
@@ -91,6 +91,24 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $result =  $this->getContact($contact->getId());
         return $result;
+    }
+    
+    /**
+     * import contacts
+     * 
+     * @param array $files to import
+     * @param string $importDefinitionId
+     * @param integer $containerId
+     * @param boolean $dryRun
+     * @return array
+     */
+    public function importContacts($files, $importDefinitionId, $containerId, $dryRun)
+    {
+        $options = array(
+            'container_id'  => $containerId,
+            'dryrun'        => $dryRun,
+        );
+        return $this->_import($files, $importDefinitionId, Addressbook_Controller_Contact::getInstance(), $options);
     }
     
     /****************************************** get default adb ****************************/

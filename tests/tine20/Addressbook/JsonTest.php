@@ -8,7 +8,8 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
- * @todo fix some of the search tests ("this is not working with a new database")
+ * @todo        fix some of the search tests ("this is not working with a new database")
+ * @todo        add testSetImage
  */
 
 /**
@@ -26,11 +27,11 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Backend
+     * instance of test class
      *
      * @var Addressbook_Frontend_Json
      */
-    protected $_backend;
+    protected $_instance;
     
     /**
      * @var bool allow the use of GLOBALS to exchange data between tests
@@ -69,7 +70,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = new Addressbook_Frontend_Json();
+        $this->_instance = new Addressbook_Frontend_Json();
         
         // initialise global for this test suite
         $GLOBALS['Addressbook_JsonTest'] = array_key_exists('Addressbook_JsonTest', $GLOBALS) ? $GLOBALS['Addressbook_JsonTest'] : array();
@@ -81,7 +82,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             Tinebase_Model_Container::GRANT_EDIT
         );
         
-        if($personalContainer->count() === 0) {
+        if ($personalContainer->count() === 0) {
             $this->container = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Addressbook', 'PHPUNIT');
         } else {
             $this->container = $personalContainer[0];
@@ -121,7 +122,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
         );
-        $contacts = $this->_backend->searchContacts($filter, $paging);
+        $contacts = $this->_instance->searchContacts($filter, $paging);
         
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }    
@@ -137,7 +138,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'otherUsers'),
         );
-        $contacts = $this->_backend->searchContacts($filter, $paging);
+        $contacts = $this->_instance->searchContacts($filter, $paging);
         
         $this->assertGreaterThanOrEqual(0, $contacts['totalcount'], 'getting other peoples contacts failed');
     }
@@ -153,7 +154,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'internal'),
         );
-        $contacts = $this->_backend->searchContacts($filter, $paging);
+        $contacts = $this->_instance->searchContacts($filter, $paging);
 
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }
@@ -177,7 +178,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'tel_cell_private'  => '+49TELCELLPRIVATE',
         );        
 
-        $newContact = $this->_backend->saveContact($newContactData);
+        $newContact = $this->_instance->saveContact($newContactData);
         $this->assertEquals($newContactData['n_family'], $newContact['n_family'], 'Adding contact failed');
         
         $GLOBALS['Addressbook_JsonTest']['addedContactId'] = $newContact['id'];
@@ -194,7 +195,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(
             array('field' => 'telephone', 'operator' => 'contains', 'value' => '+49TELCELLPRIVATE')
         );
-        $contacts = $this->_backend->searchContacts($filter, $paging);
+        $contacts = $this->_instance->searchContacts($filter, $paging);
         $this->assertEquals(1, $contacts['totalcount']);
     }
 
@@ -210,7 +211,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'singleContainer'),
             array('field' => 'container', 'operator' => 'equals',   'value' => $this->container->id),
         );
-        $contacts = $this->_backend->searchContacts($filter, $paging);
+        $contacts = $this->_instance->searchContacts($filter, $paging);
         
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }
@@ -227,7 +228,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
             array('field' => 'owner',  'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         );
-        $contacts = $this->_backend->searchContacts($filter, $paging);
+        $contacts = $this->_instance->searchContacts($filter, $paging);
         
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }
@@ -243,7 +244,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'shared'),
         );
-        $contacts = $this->_backend->searchContacts($filter, $paging);
+        $contacts = $this->_instance->searchContacts($filter, $paging);
         
         // this is not working with a new database
         #$this->assertGreaterThan(0, $contacts['totalcount']);
@@ -258,7 +259,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $contactId = $GLOBALS['Addressbook_JsonTest']['addedContactId'];
         
-        $contact = $this->_backend->getContact($contactId);
+        $contact = $this->_instance->getContact($contactId);
         
         $this->assertEquals('PHPUNIT', $contact['n_family'], 'getting contact failed');
     }
@@ -271,10 +272,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $contactId = $GLOBALS['Addressbook_JsonTest']['addedContactId'];
         
-        $contact = $this->_backend->getContact($contactId);
+        $contact = $this->_instance->getContact($contactId);
         
         $contact['n_family'] = 'PHPUNIT UPDATE';
-        $updatedContact = $this->_backend->saveContact($contact);
+        $updatedContact = $this->_instance->saveContact($contact);
         
         $this->assertEquals($contactId, $updatedContact['id'], 'updated produced a new contact');
         $this->assertEquals('PHPUNIT UPDATE', $updatedContact['n_family'], 'updating data failed');
@@ -301,11 +302,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $contactId = $GLOBALS['Addressbook_JsonTest']['addedContactId'];
         
-        $this->_backend->deleteContacts($contactId);
+        $this->_instance->deleteContacts($contactId);
         
         $this->setExpectedException('Exception');
-        $contact = $this->_backend->getContact($contactId);
-        
+        $contact = $this->_instance->getContact($contactId);
     }
     
     /**
@@ -314,8 +314,35 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSalutations()
     {
-        $salutations = $this->_backend->getSalutations();
+        $salutations = $this->_instance->getSalutations();
         
         $this->assertGreaterThan(2, $salutations['totalcount']);
     }
+    
+    /**
+     * test import data
+     *
+     */
+    public function testImport()
+    {
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
+        
+        // export first and create files array
+        $exporter = new Addressbook_Export_Csv();
+        $filename = $exporter->generate(new Addressbook_Model_ContactFilter(array()));
+        $files = array(
+            array('name' => $filename, 'path' => $filename)
+        );
+        
+        // then import
+        $result = $this->_instance->importContacts($files, $definition->getId(), $this->container->getId(), TRUE);
+        //print_r($result);
+        
+        // check
+        $this->assertGreaterThan(0, $result['totalcount'], 'Didn\'t import anything.');
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['account_id']);
+        
+        //cleanup
+        unset($filename);
+    }    
 }		
