@@ -227,9 +227,20 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             allowMultiple: true
         });
 
+        this.actions_import = new Ext.Action({
+            //requiredGrant: 'addGrant',
+            text: this.app.i18n._('Import contacts'),
+            disabled: false,
+            handler: this.onImport,
+            iconCls: 'action_import',
+            scope: this,
+            allowMultiple: true
+        });
+
         var items = [
             new Ext.Toolbar.Separator(),
-            this.actions_exportContact
+            this.actions_exportContact,
+            this.actions_import
         ];
         
         if (Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')) {
@@ -355,7 +366,23 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             record: record
         });
     },
-    
+
+    /**
+     * import contacts
+     * 
+     * @param {Button} btn 
+     * 
+     * TODO generalize this & the import button
+     */
+    onImport: function(btn) {
+        // TODO get selected container -> if no container is selected use default container
+        // TODO add import record
+        var popupWindow = Tine.widgets.dialog.ImportDialog.openWindow({
+            windowTitle: btn.getText()
+            //record: record
+        });
+    },
+        
     /**
      * tid renderer
      * 

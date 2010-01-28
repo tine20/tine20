@@ -264,6 +264,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/dialog/PreferencesDialog.js',
             'Tinebase/js/widgets/dialog/PreferencesTreePanel.js',
             'Tinebase/js/widgets/dialog/PreferencesPanel.js',
+            'Tinebase/js/widgets/dialog/ImportDialog.js',
             'Tinebase/js/widgets/dialog/LinkPanel.js',
 			'Tinebase/js/widgets/customfields/CustomfieldSearchCombo.js',
             'Tinebase/js/widgets/customfields/CustomfieldsPanel.js',
