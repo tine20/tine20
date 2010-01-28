@@ -67,7 +67,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.loadMask = new Ext.LoadMask(this.buttonCt, {msg: _('Loading'), msgCls: 'x-mask-loading'});
         
         // the click to edit text container
-        var clickToEditText = _('click to edit');
+        var clickToEditText = _('Click to edit');
         this.textCt = Ext.DomHelper.insertFirst(this.buttonCt, '<div class="x-ux-from-imagefield-text">' + clickToEditText + '</div>', true);
         this.textCt.setSize(this.width, this.height);
         var tm = Ext.util.TextMetrics.createInstance(this.textCt);
@@ -109,7 +109,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
      */
     onFileSelect: function(fileSelector) {
         if(! fileSelector.isImage()) {
-            Ext.MessageBox.alert(_('Not An Image'), _('Plase select an image file (gif/png/jpeg)')).setIcon(Ext.MessageBox.ERROR);
+            Ext.MessageBox.alert(_('Not An Image'), _('Please select an image file (gif/png/jpeg)')).setIcon(Ext.MessageBox.ERROR);
             return;
         }
         
