@@ -4,7 +4,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -24,7 +24,7 @@ Ext.namespace('Tine.Addressbook');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @param       {Object} config
@@ -376,10 +376,14 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
      */
     onImport: function(btn) {
         // TODO get selected container -> if no container is selected use default container
-        // TODO add import record
         var popupWindow = Tine.widgets.dialog.ImportDialog.openWindow({
-            windowTitle: btn.getText()
-            //record: record
+            windowTitle: btn.getText(),
+            appName: 'Addressbook',
+            record: new Tine.Tinebase.Model.ImportJob({
+                container_id: Tine.Addressbook.registry.get('defaultAddressbook').id,
+                model: this.recordClass,
+                import_definition_id:  Tine.Addressbook.registry.get('defaultImportDefinition').id
+            })
         });
     },
         
