@@ -267,21 +267,43 @@ class Tinebase_Translation
         $baseDir = dirname(__FILE__) . "/..";
         $localeString = (string) $_locale;
         
-        $jsTranslations  = "/************************** generic translations **************************/ \n";
-        $jsTranslations .= file_get_contents("$baseDir/Tinebase/js/Locale/static/generic-$localeString.js");
+        $genericTranslationFile = "$baseDir/Tinebase/js/Locale/static/generic-$localeString.js";
+        $extjsTranslationFile   = "$baseDir/library/ExtJS/src/locale/ext-lang-$localeString.js";
+        $tine20TranslationFiels = self::getPoTranslationFiles($_locale);
         
-        $jsTranslations  .= "/*************************** extjs translations ***************************/ \n";
-        if (file_exists("$baseDir/library/ExtJS/src/locale/ext-lang-$localeString.js")) {
-            $jsTranslations  .= file_get_contents("$baseDir/library/ExtJS/src/locale/ext-lang-$localeString.js");
-        } else {
-            $jsTranslations  .= "console.error('Translation Error: extjs chaged their lang file name again ;-(');";
-        }
+        $allTranslationFiles    = array_merge(array($genericTranslationFile, $extjsTranslationFile), $tine20TranslationFiels);
         
-        $poFiles = self::getPoTranslationFiles($_locale);
-        foreach ($poFiles as $appName => $poPath) {
-            $poObject = self::po2jsObject($poPath);
-            $jsTranslations  .= "/********************** tine translations of $appName**********************/ \n";
-            $jsTranslations .= "Locale.Gettext.prototype._msgs['./LC_MESSAGES/$appName'] = new Locale.Gettext.PO($poObject); \n";
+        // setup cache (saves about 20% @2010/01/28)
+        $cache = new Zend_Cache_Frontend_File(array(
+            'master_files' => $allTranslationFiles
+        ));
+        $cache->setBackend(Tinebase_Core::get(Tinebase_Core::CACHE)->getBackend());
+        
+        $cacheId = __CLASS__ . "_". __FUNCTION__ . "_{$localeString}";
+        
+        $jsTranslations = $cache->load($cacheId);
+        
+        if (! $jsTranslations) {
+            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " rebuilding js translation cache");
+            
+            $jsTranslations  = "/************************** generic translations **************************/ \n";
+            $jsTranslations .= file_get_contents("$baseDir/Tinebase/js/Locale/static/generic-$localeString.js");
+            
+            $jsTranslations  .= "/*************************** extjs translations ***************************/ \n";
+            if (file_exists("$baseDir/library/ExtJS/src/locale/ext-lang-$localeString.js")) {
+                $jsTranslations  .= file_get_contents("$baseDir/library/ExtJS/src/locale/ext-lang-$localeString.js");
+            } else {
+                $jsTranslations  .= "console.error('Translation Error: extjs chaged their lang file name again ;-(');";
+            }
+            
+            $poFiles = self::getPoTranslationFiles($_locale);
+            foreach ($poFiles as $appName => $poPath) {
+                $poObject = self::po2jsObject($poPath);
+                $jsTranslations  .= "/********************** tine translations of $appName**********************/ \n";
+                $jsTranslations .= "Locale.Gettext.prototype._msgs['./LC_MESSAGES/$appName'] = new Locale.Gettext.PO($poObject); \n";
+            }
+            
+            $cache->save($jsTranslations, $cacheId);
         }
         
         return $jsTranslations;
