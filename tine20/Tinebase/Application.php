@@ -451,7 +451,8 @@ class Tinebase_Application
         // delete config
         $configsDeleted = Tinebase_Config::getInstance()->deleteConfigByApplicationId($application->getId());
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $containersDeleted . ' containers and ' . $configsDeleted . ' configs for application ' . $_applicationName);
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $containersDeleted . ' containers and ' 
+            . $configsDeleted . ' config settings for application ' . $_applicationName);
     }
     
     /**
