@@ -10,7 +10,7 @@
  * @version     $Id$
  * 
  * @todo        add class with common crm export functions (and move status/special field handling there)
- * @todo        add relations / products / state / type / source
+ * @todo        add relations / products
  */
 
 /**
@@ -39,7 +39,7 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
      *
      * @var array
      */
-    protected $_specialFields = array('created_by', 'status', 'duration', 'container_id');
+    protected $_specialFields = array('created_by', 'status', 'source', 'type', 'duration', 'container_id');
     
     /**
      * resolve records
@@ -79,6 +79,16 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
                 break;
             case 'status':
                 $value = $_record->getLeadStatus();
+                break;
+            case 'source':
+                $settings = Crm_Controller::getInstance()->getSettings();
+                $source = $settings->getOptionById($_record->leadsource_id, 'leadsources');
+                $value = $source['leadsource'];
+                break;
+            case 'type':
+                $settings = Crm_Controller::getInstance()->getSettings();
+                $type = $settings->getOptionById($_record->leadtype_id, 'leadtypes');
+                $value = $type['leadtype'];                
                 break;
             case 'duration':
                 if ($_record->end) {
