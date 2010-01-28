@@ -241,6 +241,32 @@ Tine.Tinebase.Model.Alarm = Ext.data.Record.create([
 
 /**
  * @namespace Tine.Tinebase.Model
+ * @class     Tine.Tinebase.Model.ImportJob
+ * @extends   Tine.Tinebase.data.Record
+ * 
+ * Model of an import job
+ */
+Tine.Tinebase.Model.ImportJob = Tine.Tinebase.data.Record.create([
+    {name: 'files'                  },
+    {name: 'import_definition_id'   },
+    {name: 'model'                  },
+    {name: 'import_function'        },
+    {name: 'container_id'           },
+    {name: 'dry_run'                },
+    {name: 'options'                }
+], {
+    appName: 'Tinebase',
+    modelName: 'Import',
+    idProperty: 'id',
+    titleProperty: 'model',
+    // ngettext('Import', 'Imports', n); gettext('Import');
+    recordName: 'Import',
+    recordsName: 'Imports',
+    containerProperty: null
+});
+
+/**
+ * @namespace Tine.Tinebase.Model
  * @class     Tine.Tinebase.Model.Credentials
  * @extends   Tine.Tinebase.data.Record
  * 
