@@ -36,7 +36,7 @@ class OpenDocument_SpreadSheet_Table implements Iterator, Countable
      * add new row and return reference
      *
      * @param string|optional $_tableName
-     * @return OpenDocument_SpreadSheet_Table
+     * @return OpenDocument_SpreadSheet_Row
      */
     public function appendRow($_styleName = null)
     {
