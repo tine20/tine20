@@ -212,6 +212,44 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     }
     
     /**
+     * import contacts
+     * 
+     * @param array $_files to import
+     * @param string $_importDefinitionId
+     * @param Tinebase_Controller_Record_Interface $_controller
+     * @param boolean $_dryRun
+     * @param array $_options additional import options
+     * @return array
+     * 
+     * @todo check for duplicates
+     */
+    protected function _import($_files, $_importDefinitionId, $_controller, $_options = array())
+    {
+        $definition = Tinebase_ImportExportDefinition::getInstance()->get($_importDefinitionId);
+        $importer = new $definition->plugin($definition, $_controller, $_options);
+        
+        // import files
+        $results = array();
+        $totalcount = 0;
+        $failcount = 0;
+        foreach ($_files as $file) {
+            $result = $importer->import($file['path']);
+            $results = array_merge($results, $result['results']->toArray());
+            $totalcount += $result['totalcount'];
+            $failcount += $result['failcount'];
+        }
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($results, true));
+        
+        return array(
+            'results'       => $results,
+            'totalcount'    => $totalcount,
+            'failcount'     => $failcount,
+            'status'        => 'success',
+        );
+    }
+    
+    /**
      * deletes existing records by filter
      *
      * @param string $_filter json encoded filter
@@ -273,7 +311,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         }
         
-        $_records->setTimezone(Tinebase_Core::get('userTimeZone'));
+        $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_records->convertDates = true;
         
         $result = $_records->toArray();
