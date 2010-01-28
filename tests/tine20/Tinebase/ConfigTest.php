@@ -114,6 +114,21 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['config']->value, $result[$this->objects['config']->name]);
     }
 
+    
+    /**
+     * test if config from config.inc.php overwrites config in db
+     *
+     */
+    public function testConfigFromFileOverwrites()
+    {
+        $config = $this->objects['config'];
+        $config->name = 'Overwrite Test';
+        $configSet = $this->_instance->setConfigForApplication($config->name, $config->value);
+        
+        $configGet = $this->_instance->getConfig($configSet->name);
+        $this->assertEquals('From config.inc.php', $configGet->value);
+    }
+    
     /**
      * test delete config
      *
@@ -140,5 +155,4 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, count($result), 'could not get db config');
         $this->assertTrue($result['dbname'] != '', 'could not get dbname');
     }
-    
 }

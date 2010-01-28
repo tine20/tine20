@@ -9,7 +9,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        make settings from config.inc.php overwrite db config? 
  */
 
 /**
@@ -67,15 +66,14 @@ class Tinebase_Config
     
     /**
      * returns one config value identified by config name and application id
+     * -> value in config.inc.php overwrites value in db if $_fromFile is TRUE
      * 
      * @param   string      $_name config name/key
      * @param   string      $_applicationId application id [optional]
      * @param   mixed       $_default the default value [optional]
-     * @param   boolean     $_fromFile get from config.inc.php if not found [optional]
+     * @param   boolean     $_fromFile get from config.inc.php [optional]
      * @return  Tinebase_Model_Config  the config record
      * @throws  Tinebase_Exception_NotFound
-     * 
-     * @todo    check if validation can be enabled again when getting config from file/default
      */
     public function getConfig($_name, $_applicationId = NULL, $_default = NULL, $_fromFile = TRUE)
     {
@@ -98,35 +96,30 @@ class Tinebase_Config
         
         $records = $this->_backend->search($filter);
         
-        if (count($records) == 0) {
-            
-            // check config.inc.php and get value from there
-            if ($_fromFile && isset(Tinebase_Core::getConfig()->{$_name})) {
-                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Config setting for ' . $_name . ' not found, getting value from config.inc.php.');
-                $value = (is_object(Tinebase_Core::getConfig()->{$_name}))
-                    ? Tinebase_Core::getConfig()->{$_name}->toArray() 
-                    : Tinebase_Core::getConfig()->{$_name};
-            } else {
-                if ($_default === NULL) {
-                    throw new Tinebase_Exception_NotFound("Application config setting with name $_name not found and no default value given!");
-                } else {
-                    Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Config setting for ' . $_name . ' not found, using default.');
-                    $value = $_default;
-                }
+        if (count($records) > 0) {
+            $result = $records->getFirstRecord();
+        } else {
+            if ($_default !== NULL) {
+                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Config setting "' . $_name . '" not found, using default (' . $_default . ').');
             }
-            
-            //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . print_r($value, TRUE));
-            
-            // ommit validation because more dimensional arrays are not accepted :-/
             $result = new Tinebase_Model_Config(array(
                 'application_id'    => $applicationId,
                 'name'              => $_name,
-                'value'             => $value,
-            ), TRUE);
-            
-        } else {
-            $result = $records->getFirstRecord();
+                'value'             => $_default,
+            ), TRUE);            
         }
+            
+        // check config.inc.php and get value from there
+        if ($_fromFile && isset(Tinebase_Core::getConfig()->{$_name})) {
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Overwriting config setting "' . $_name . '" with value from config.inc.php.');
+            $result->value = (is_object(Tinebase_Core::getConfig()->{$_name}))
+                ? Tinebase_Core::getConfig()->{$_name}->toArray() 
+                : Tinebase_Core::getConfig()->{$_name};
+        } else if ($result->value === NULL) {
+            throw new Tinebase_Exception_NotFound("Application config setting with name $_name not found and no default value given!");
+        }
+        
+        //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . print_r($value, TRUE));
         
         return $result;
     }
