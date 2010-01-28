@@ -63,7 +63,7 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
      * @param string $_cellType
      * @return string
      */
-    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, $_cellType = NULL)
+    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL)
     {
     	if (is_null($_key)) {
     		throw new Tinebase_Exception_InvalidArgument('Missing required parameter $key');
