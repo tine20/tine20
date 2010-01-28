@@ -19,6 +19,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>Attachment grid for compose dialog</p>
  * <p>
  * TODO         remove handlers / replace with onXXX
+ * TODO         create generic file upload grid
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
