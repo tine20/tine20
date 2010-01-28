@@ -173,14 +173,14 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
                 resizable: true,
                 id: 'size',
                 dataIndex: 'size',
-                width: 100,
+                width: 70,
                 header: 'size',
                 renderer: Ext.util.Format.fileSize
             },{
                 resizable: true,
                 id: 'type',
                 dataIndex: 'type',
-                width: 100,
+                width: 70,
                 header: 'type'
                 // TODO show type icon?
                 //renderer: Ext.util.Format.fileSize
