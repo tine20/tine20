@@ -394,33 +394,42 @@ class Tinebase_Core
         
         // create zend cache
         if ($_enabled === true && $config->caching && $config->caching->active) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' cache enabled');
             $frontendOptions = array(
                 'cache_id_prefix' => SQL_TABLE_PREFIX,
                 'lifetime' => ($config->caching->lifetime) ? $config->caching->lifetime : 7200,
                 'automatic_serialization' => true, // turn that off for more speed
                 'caching' => true
             );
-                        
-            $backendType = ($config->caching->backend) ? ucfirst($config->caching->backend) : 'File';
             
-            switch ($backendType) {
-                case 'File':
-                    $backendOptions = array(
-                        'cache_dir' => ($config->caching->path) ? $config->caching->path : Tinebase_Core::getTempDir()  
-                    );
-                break;
-                case 'Memcached':                        
-                    $backendOptions = array(
-                        'servers' => array(
-                            'host' => ($config->caching->host) ? $config->caching->host : 'localhost',
-                            'port' => ($config->caching->port) ? $config->caching->port : 11211,
-                            'persistent' => TRUE
-                    ));
-                break;
+            $backendType = ($config->caching->backend) ? ucfirst($config->caching->backend) : 'File';
+            $backendOptions = ($config->caching->backendOptions) ? $config->caching->backendOptions->toArray() : false;
+            
+            if (! $backendOptions) {
+                switch ($backendType) {
+                    case 'File':
+                        $backendOptions = array(
+                            'cache_dir' => ($config->caching->path) ? $config->caching->path : Tinebase_Core::getTempDir()  
+                        );
+                        break;
+                    case 'Memcached':                        
+                        $backendOptions = array(
+                            'servers' => array(
+                                'host' => ($config->caching->host) ? $config->caching->host : 'localhost',
+                                'port' => ($config->caching->port) ? $config->caching->port : 11211,
+                                'persistent' => TRUE
+                        ));
+                        break;
+                    default:
+                        $backendOptions = array();
+                        break;
+                }
             }
+            
+            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " cache of backend type '{$backendType}' enabled");
+            Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " backend options: " . print_r($backendOptions, TRUE));
+            
         } else {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' cache disabled');
+            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' cache disabled');
             $backendType = 'Test';
             $frontendOptions = array(
                 'caching' => false
