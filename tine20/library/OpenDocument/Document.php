@@ -162,8 +162,6 @@ class OpenDocument_Document
      */
     public function __construct($_type, $_fileName = null, $_tmpdir = '/tmp', $_userStyles = array())
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "FILENAME: $_fileName");
-        
         if($_fileName !== null) {
             $this->_content     = file_get_contents('zip://' . $_fileName . '#content.xml');
             $this->_manifest    = file_get_contents('zip://' . $_fileName . '#META-INF/manifest.xml');
