@@ -258,7 +258,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
      * 
      * @todo    generalize this for other export formats
      */
-    protected function _addBody($table, $_records)
+    protected function _addBody(OpenDocument_SpreadSheet_Table $table, $_records)
     {
         if (isset($this->_config->customFields) && $this->_config->customFields) {
             // we need the sql backend if the export contains custom fields
@@ -310,18 +310,20 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                         break;
                     case 'currency':
                         $currency = ($field->currency) ? $field->currency : 'EUR';
-                        $value    = $record->{$field->identifier} . ' ' . $currency;
+                        $value    = (! $field->formula) ? $record->{$field->identifier} . ' ' . $currency : '';
                         $cellType = OpenDocument_SpreadSheet_Cell::TYPE_CURRENCY;
                         break;
                     case 'percentage':
                         $value    = $record->{$field->identifier} / 100;
                         $cellType = OpenDocument_SpreadSheet_Cell::TYPE_PERCENTAGE;
                         break;
+                        /*
                     case 'formula':
                         // @todo add formulas
                         Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Formulas not implemented yet.');
                         $value = $field->formula;
                         break;
+                        */
                     default:
                         if (isset($field->custom) && $field->custom) {
                             // add custom fields
@@ -365,6 +367,11 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                 
                 // create cell with type and value and add style
                 $cell = $row->appendCell($value, $cellType);
+                
+                // add formula
+                if ($field->formula) {
+                    $cell->setFormula($field->formula);
+                }
 
                 if (isset($field->number) && $field->number) {
                     /*
