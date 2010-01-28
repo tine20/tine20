@@ -51,6 +51,7 @@ class Tinebase_Frontend_Cli_Abstract
      * import records
      *
      * @param Zend_Console_Getopt $_opts
+     * @param Tinebase_Controller_Record_Interface $_controller
      */
     public function _import($_opts, $_controller)
     {
