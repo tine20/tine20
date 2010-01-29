@@ -35,8 +35,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     
     /**
      * @private
-     * 
-     * TODO: use dynamic id here?
      */
     id: 'tinebase-file-grid',
     
