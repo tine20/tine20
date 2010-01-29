@@ -676,6 +676,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             if (dtStart.is_all_day_event) {
                 dtend = dtend.add(Date.HOUR, 23).add(Date.SECOND, -1);
             }
+            
             var event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), {
                 id: newId,
                 dtstart: dtStart, 
@@ -721,6 +722,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 is_all_day_event: dtStart.is_all_day_event
             }), newId);
             event.isRangeAdd = true;
+            event.dirty = true;
             
             e.stopEvent();
             this.createEvent.defer(100, this, [e, event]);
