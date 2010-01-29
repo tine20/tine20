@@ -46,8 +46,8 @@ class OpenDocument_SpreadSheet_Cell
             }
             
             switch($_type) {
-                case 'string':
-                case 'float':
+                case self::TYPE_STRING:
+                case self::TYPE_FLOAT:
                 case self::TYPE_PERCENTAGE:
                     $cellElement->addAttribute('office:value', self::_encodeValue($_value), OpenDocument_Document::NS_OFFICE);
                     break;
@@ -69,7 +69,9 @@ class OpenDocument_SpreadSheet_Cell
                     break;
             }
             
-            $cellElement->addChild('p', self::_encodeValue($_value), OpenDocument_Document::NS_TEXT);
+            if($_type != self::TYPE_CURRENCY && $_type != self::TYPE_PERCENTAGE) {
+                $cellElement->addChild('p', self::_encodeValue($_value), OpenDocument_Document::NS_TEXT);
+            }
         }
         
         $cell = new OpenDocument_SpreadSheet_Cell($cellElement);
