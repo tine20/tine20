@@ -21,7 +21,6 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.dialog');
  * @constructor
  * @param {Object} config The configuration options.
  * 
- * TODO add form fields (dry run)
  * TODO add app grid to show results when dry run is selected
  */
 Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
@@ -51,7 +50,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             remoteSort: false
         });
         
-        // check if initital data available
+        // check if initial data available
         if (Tine[this.appName].registry.get('importDefinitions')) {
             this.definitionsStore.loadData(Tine[this.appName].registry.get('importDefinitions'));
         }
@@ -123,7 +122,12 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 containersName: this.app.i18n._hidden(this.record.get('model').getMeta('containersName')),
                 appName: this.app.appName,
                 requiredGrant: false
-            }),
+            }), {
+                xtype: 'checkbox',
+                name: 'dry_run',
+                fieldLabel: _('Dry run'),
+                checked: true
+            },
                 this.uploadGrid
             ]
         };
@@ -151,7 +155,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     definitionId: this.record.get('import_definition_id'),
                     importOptions: {
                         container_id: this.record.get('container_id'),
-                        dryrun: false
+                        dryrun: this.record.get('dry_run')
                     }
                 };
                 
@@ -160,11 +164,30 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     scope: this,
                     success: function(_result, _request){
                         this.loadMask.hide();
-                        this.fireEvent('update', _result);
                         
-                        if (closeWindow) {
-                            this.purgeListeners();
-                            this.window.close();
+                        var response = Ext.util.JSON.decode(_result.responseText);
+                        if (this.record.get('dry_run')) {
+                            // uncheck dry run and show results
+                            form.findField('dry_run').setValue(false);
+                            
+                            Ext.MessageBox.alert(
+                                _('Dry run results'), 
+                                String.format(_('Import test successful for {0} records, import test failed for {1} records.'), response.totalcount, response.failcount)
+                            );
+                        } else {
+                            Ext.MessageBox.alert(
+                                _('Import results'), 
+                                String.format(_('Import successful for {0} records, import failed for {1} records.'), response.totalcount, response.failcount),
+                                function() {
+                                    // import done
+                                    this.fireEvent('update', response);
+                                    if (closeWindow) {
+                                        this.purgeListeners();
+                                        this.window.close();
+                                    }                                    
+                                },
+                                this
+                            );                            
                         }
                     }
                 });

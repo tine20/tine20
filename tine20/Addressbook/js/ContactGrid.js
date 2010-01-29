@@ -378,22 +378,18 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         var popupWindow = Tine.widgets.dialog.ImportDialog.openWindow({
             windowTitle: btn.getText(),
             appName: 'Addressbook',
+            // update grid after import
+            listeners: {
+                scope: this,
+                'update': function(record) {
+                    this.loadData(true);
+                }
+            },
             record: new Tine.Tinebase.Model.ImportJob({
                 // TODO get selected container -> if no container is selected use default container
                 container_id: Tine.Addressbook.registry.get('defaultAddressbook'),
                 model: this.recordClass,
                 import_definition_id:  Tine.Addressbook.registry.get('defaultImportDefinition').id
-                
-                // TODO update grid after import
-                /*
-                listeners: {
-                    scope: this,
-                    'update': function(record) {
-                        //this.filterToolbar.onFilterChange();
-                        //this.loadData(true);
-                    }
-                }
-                */
             }, 0)
         });
     },
