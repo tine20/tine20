@@ -747,18 +747,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         rz.originalHeight = rz.el.getHeight();
         rz.originalWidth  = rz.el.getWidth();
         
-        rz.el.setStyle({'border-style': 'dashed'});
-        rz.el.setOpacity(0.5);
-        
-        // rz supresses resize event if element is not resized
-        rz.onMouseUp = rz.onMouseUp.createSequence(function() {
-            rz.el.setStyle({'border-style': 'solid'});
-            rz.el.setOpacity(1);
-        });
-        
-        //rz.onMouseMove = rz.onMouseMove.createSequence(function() {
-        //    console.log('move');
-        //});
+        event.ui.markDirty();
         
         //this.setActiveEvent(event);
         if (event) {
@@ -804,6 +793,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         // don't fire update events on rangeAdd
         if (diff != 0 && event != this.editing && ! event.isRangeAdd) {
             this.fireEvent('updateEvent', event);
+        } else {
+            event.ui.clearDirty();
         }
     },
     
