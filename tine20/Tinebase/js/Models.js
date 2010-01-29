@@ -266,6 +266,17 @@ Tine.Tinebase.Model.ImportJob = Tine.Tinebase.data.Record.create([
 });
 
 /**
+ * Model of an export/import definition
+ * 
+ * @constructor {Ext.data.Record}
+ */
+Tine.Tinebase.Model.ImportExportDefinition = Ext.data.Record.create([
+    {name: 'id'             },
+    {name: 'name'           },
+    {name: 'plugin'         }
+]);
+
+/**
  * @namespace Tine.Tinebase.Model
  * @class     Tine.Tinebase.Model.Credentials
  * @extends   Tine.Tinebase.data.Record

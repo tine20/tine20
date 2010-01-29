@@ -381,8 +381,21 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             appName: 'Addressbook',
             record: new Tine.Tinebase.Model.ImportJob({
                 container_id: Tine.Addressbook.registry.get('defaultAddressbook').id,
-                model: this.recordClass,
-                import_definition_id:  Tine.Addressbook.registry.get('defaultImportDefinition').id
+                model: this.recordClass
+                
+                // TODO use default definition?
+                //import_definition_id:  Tine.Addressbook.registry.get('defaultImportDefinition').id
+                
+                // TODO update grid after import
+                /*
+                listeners: {
+                    scope: this,
+                    'update': function(record) {
+                        ZZthis.filterToolbar.onFilterChange();
+                        //this.loadData(true);
+                    }
+                }
+                */
             })
         });
     },

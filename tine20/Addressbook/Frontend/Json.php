@@ -214,10 +214,19 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
+        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+            array('field' => 'plugin', 'operator' => 'equals', 'value' => 'Addressbook_Import_Csv'),
+        ));
+        $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);                
+        
         $registryData = array(
             'Salutations'               => $this->getSalutations(),
             'defaultAddressbook'        => $this->getDefaultAddressbook(),
             'defaultImportDefinition'   => Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv')->toArray(),
+            'importDefinitions'         => array(
+                'results'               => $importDefinitions->toArray(),
+                'totalcount'            => count($importDefinitions),
+            ),
         );        
         return $registryData;    
     }

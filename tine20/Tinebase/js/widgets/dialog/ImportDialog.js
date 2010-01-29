@@ -21,9 +21,8 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.dialog');
  * @constructor
  * @param {Object} config The configuration options.
  * 
- * TODO add form fields (import definitions, dry run, container selection)
+ * TODO add form fields (dry run, container selection)
  * TODO add app grid to show results when dry run is selected
- * TODO update grid on update
  */
 Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
@@ -43,6 +42,18 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     //private
     initComponent: function(){
         this.recordClass = Tine.Tinebase.Model.ImportJob;
+        this.definitionsStore = new Ext.data.JsonStore({
+            fields: Tine.Tinebase.Model.ImportExportDefinition,
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            remoteSort: false
+        });
+        
+        // check if initital data available
+        if (Tine[this.appName].registry.get('importDefinitions')) {
+            this.definitionsStore.loadData(Tine[this.appName].registry.get('importDefinitions'));
+        }
         
         Tine.widgets.dialog.ImportDialog.superclass.initComponent.call(this);
     },
@@ -84,7 +95,6 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             fieldLabel: _('Files'),
             record: this.record,
             hideLabel: true,
-            anchor: '100%',
             height: 150,
             frame: true
         });
@@ -95,7 +105,23 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             labelAlign: 'top',
             border: false,
             layout: 'form',
-            items: [
+            defaults: {
+                anchor: '100%'
+            },
+            items: [{
+                xtype: 'combo',
+                fieldLabel: _('Import definition'), 
+                name:'import_definition_id',
+                store: this.definitionsStore,
+                displayField:'name',
+                mode: 'local',
+                triggerAction: 'all',
+                editable: false,
+                allowBlank: false,
+                forceSelection: true,
+                valueField:'id',
+                value: (this.definitionsStore.getAt(0)) ? this.definitionsStore.getAt(0).id : ''
+            },
                 this.uploadGrid
             ]
         };
