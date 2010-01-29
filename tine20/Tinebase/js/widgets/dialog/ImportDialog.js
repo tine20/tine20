@@ -21,7 +21,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.dialog');
  * @constructor
  * @param {Object} config The configuration options.
  * 
- * TODO add form fields (dry run, container selection)
+ * TODO add form fields (dry run)
  * TODO add app grid to show results when dry run is selected
  */
 Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
@@ -38,6 +38,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tbarItems: [],
     evalGrants: false,
     sendRequest: true,
+    getDefaultsAgain: false,
     
     //private
     initComponent: function(){
@@ -56,14 +57,6 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         Tine.widgets.dialog.ImportDialog.superclass.initComponent.call(this);
-    },
-    
-    /**
-     * init record to edit
-     * 
-     * - overwritten: we don't have a record here 
-     */
-    initRecord: function() {
     },
     
     onRender: function() {
@@ -119,9 +112,18 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 editable: false,
                 allowBlank: false,
                 forceSelection: true,
-                valueField:'id',
-                value: (this.definitionsStore.getAt(0)) ? this.definitionsStore.getAt(0).id : ''
-            },
+                valueField:'id'
+            }, new Tine.widgets.container.selectionComboBox({
+                id: this.app.appName + 'EditDialogContainerSelector',
+                fieldLabel: _('Import into container'),
+                width: 300,
+                name: 'container_id',
+                stateful: false,
+                containerName: this.app.i18n.n_hidden(this.record.get('model').getMeta('containerName'), this.record.get('model').getMeta('containersName'), 1),
+                containersName: this.app.i18n._hidden(this.record.get('model').getMeta('containersName')),
+                appName: this.app.appName,
+                requiredGrant: false
+            }),
                 this.uploadGrid
             ]
         };
@@ -143,7 +145,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     files: this.record.get('files'),
                     definitionId: this.record.get('import_definition_id'),
                     importOptions: {
-                        container_id: this.record.get('container_id'),
+                        container_id: this.record.get('container_id').id,
                         dryrun: false
                     }
                 };
@@ -178,7 +180,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 Tine.widgets.dialog.ImportDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 400,
-        height: 300,
+        height: 500,
         name: Tine.widgets.dialog.ImportDialog.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.widgets.dialog.ImportDialog',
         contentPanelConstructorConfig: config,
