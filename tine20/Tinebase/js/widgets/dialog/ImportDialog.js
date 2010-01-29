@@ -23,6 +23,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.dialog');
  * 
  * TODO add form fields (dry run)
  * TODO add app grid to show results when dry run is selected
+ * TODO fix js exception on cancel: 'this.container.remove is not a function'
  */
 Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
@@ -136,6 +137,11 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var form = this.getForm();
         if(form.isValid()) {
             this.onRecordUpdate();
+            
+            if (this.record.get('files').length == 0) {
+                Ext.MessageBox.alert(_('No files added'), _('You need to add files to import.'));
+                return;
+            }
             
             if (this.sendRequest) {
                 this.loadMask.show();
