@@ -464,9 +464,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             return;
         }
         
-        //var parallels = this.parallelEventsRegistry.getEvents(dtStart, dtEnd, true);
-        //var pos = parallels.indexOf(event);
-        var pos = event.parallelEventRegistry.position;
+        var pos = this.parallelEventsRegistry.getPosition(event);
         
         // save some layout info
         event.ui.is_all_day_event = event.get('is_all_day_event') || startCellNumber != endCellNumber;
@@ -710,6 +708,11 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             dtEnd: this.dateMesh[this.dateMesh.length-1].add(Date.DAY, 1)/*.add(Date.SECOND, -1)*/,
             granularity: 60*24
         });
+        
+        // todo: sort generic?
+        this.ds.fields = Tine.Calendar.Model.Event.prototype.fields;
+        this.ds.sortInfo = {field: 'dtstart', direction: 'ASC'};
+        this.ds.applySort();
         
         // calculate duration and parallels
         this.ds.each(function(event) {

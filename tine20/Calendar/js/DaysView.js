@@ -918,6 +918,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
         this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
         
+        // todo: sort generic?
+        this.ds.fields = Tine.Calendar.Model.Event.prototype.fields;
+        this.ds.sortInfo = {field: 'dtstart', direction: 'ASC'};
+        this.ds.applySort();
+        
         this.ds.each(function(event) {
             var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
             registry.register(event);

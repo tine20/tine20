@@ -169,17 +169,14 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         }
         
         var registry = this.event.get('is_all_day_event') ? view.parallelWholeDayEventsRegistry : view.parallelScrollerEventsRegistry;
-        this.parallelEvents = registry.getEvents(this.dtStart, this.dtEnd);
         
-        // poperties might be missing on quickAdd
-        var parallels = Math.max(1, this.parallelEvents.length);
-        var pos = this.event.parallelEventRegistry.position;
-        //var pos = this.event.parallelEventRegistry.position;//Math.max(0, this.parallelEvents.indexOf(this.event));
+        var position = registry.getPosition(this.event);
+        var maxParallels = registry.getMaxParalles(this.dtStart, this.dtEnd);
         
         if (this.event.get('is_all_day_event')) {
-            this.renderAllDayEvent(view, parallels, pos);
+            this.renderAllDayEvent(view, maxParallels, position);
         } else {
-            this.renderScrollerEvent(view, parallels, pos);
+            this.renderScrollerEvent(view, maxParallels, position);
         }
         
         if (this.event.dirty) {
@@ -293,9 +290,12 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 color: this.colorSet.color,
                 bgColor: this.colorSet.light,
                 zIndex: 100,
-                width: Math.round(90 * 1/parallels) + '%',
                 height: height + 'px',
                 left: Math.round(pos * 90 * 1/parallels) + '%',
+                width: Math.round(90 * 1/parallels) + '%',
+                // max shift to 20+gap
+                //left: 80 - 80/Math.sqrt(pos+1) + 10*Math.sqrt(pos) + '%',
+                //width: 80/Math.sqrt(pos+1) + '%',
                 top: top + 'px'
             }, true);
             

@@ -150,41 +150,8 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
         
         var startIdx = this.tsToIdx(dtStart);
         var endIdx = this.tsToIdx(dtEndTs);
-        //console.info('get events from startIdx"' + startIdx + '" to endIdx "' + endIdx + '".'   )
         
-        return this.getEventsFromIdx(startIdx, endIdx, sortByDtStart);
-    },
-    
-    /**
-     * @private
-     * @param  {Number} startIdx
-     * @param  {Number} endIdx
-     * @return {Array}
-     */
-    getEventsFromIdx: function(startIdx, endIdx, sortByDtStart) {
-        var events = [];
-        Ext.each(this.map, function(frame) {
-            for (var idx=startIdx; idx<=endIdx; idx++) {
-                if (frame[idx] && events.indexOf(frame[idx]) === -1) {
-                    events.push(frame[idx]);
-                }
-            }
-        }, this);
-        
-        var parallels = events.length;
-        /*
-        var parallels = 1;
-        for (var i=startIdx; i<=endIdx; i++) {
-            if (Ext.isArray(this.map[i])) {
-                parallels = this.map[i].length > parallels ? this.map[i].length : parallels;
-                for (var j=0; j<this.map[i].length; j++) {
-                    if (events.indexOf(this.map[i][j]) === -1) {
-                        events.push(this.map[i][j]);
-                    }
-                }
-            }
-        }
-        */
+        var events = this.getSliceInfo(startIdx, endIdx).events;
         
         // sort by duration and dtstart
         var scope = this;
@@ -197,12 +164,64 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
                 d ? d : s;
         });
         
-        // layout helper
-        for (var i=0; i<events.length; i++) {
-            events[i].parallels = parallels;
+        return events;
+    },
+    
+    /**
+     * get number of maximal parallel events in given time span
+     * 
+     * @param {Date} dtStart
+     * @param {Date} dtEnd
+     * @return {Number}
+     */
+    getMaxParalles: function(dtStart, dtEnd) {
+        var dtStartTs = dtStart.getTime();
+        var dtEndTs = dtEnd.getTime() - 1000;
+        
+        var startIdx = this.tsToIdx(dtStart);
+        var endIdx = this.tsToIdx(dtEndTs);
+        
+        return this.getSliceInfo(startIdx, endIdx).maxParallels;
+    },
+    
+    /**
+     * get position of given event
+     * 
+     * @param {Ext.data.Record} event
+     * @return {Number}
+     */
+    getPosition: function(event) {
+        if (! event.parallelEventRegistry) {
+            throw new Ext.Error("can't compute position of a non registered event");
         }
         
-        return events;
+        return event.parallelEventRegistry.position;
+    },
+    
+    /**
+     * @private
+     * 
+     * @param {Number} startIdx
+     * @param {Number} endIdx
+     * @return {Object}
+     */
+    getSliceInfo: function(startIdx, endIdx) {
+        var events = [];
+        var maxParallels = 1;
+        for (var idx, frame, position=0; position<this.map.length; position++) {
+            frame = this.map[position];
+            for (idx=startIdx; idx<=endIdx; idx++) {
+                if (frame[idx] && events.indexOf(frame[idx]) === -1) {
+                    maxParallels = Math.max(maxParallels, position+1);
+                    events.push(frame[idx]);
+                }
+            }
+        }
+        
+        return {
+            events: events,
+            maxParallels: maxParallels
+        };
     },
     
     /*************************************** frame functions **********************************/
