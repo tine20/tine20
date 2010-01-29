@@ -58,6 +58,9 @@ Tine.Tinebase.ExceptionHandler = function() {
             return true;
         }
         
+        // return false here if you like to see the js trace in firebug
+        //return false;
+        
         var data = {
             message: 'js exception: ' + error.message,
             code:   error.number,
