@@ -103,8 +103,6 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function importContacts($files, $importOptions, $definitionId)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' .$definitionId . ' ' . print_r($importOptions, TRUE));
-        
         return $this->_import($files, $definitionId, Addressbook_Controller_Contact::getInstance(), $importOptions);
     }
     
