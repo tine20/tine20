@@ -328,8 +328,9 @@
 }
 
 .cal-daysviewpanel-body-wholedaycolumn-over {
+	width: 100%;
     height: 100%;
-    margin-left: 3px;
+    /*margin-left: 3px;*/
 }
 
 .cal-daysviewpanel-body-wholedaycolumn-over:hover {

@@ -398,6 +398,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.mainWrap.on('contextmenu', this.onContextMenu, this);
         this.mainWrap.on('mousedown', this.onMouseDown, this);
         this.mainWrap.on('mouseup', this.onMouseUp, this);
+        this.calPanel.on('resize', this.onResize, this);
         
         this.initDropZone();
         this.initDragZone();
@@ -634,6 +635,18 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
 
         //this.ds.resumeEvents();
         //this.ds.fireEvent.call(this.ds, 'add', this.ds, [event], this.ds.indexOf(event));
+    },
+    
+    
+    onResize: function(e) {
+        // redraw whole day events
+        (function(){this.ds.each(function(event) {
+            if (event.get('is_all_day_event')) {
+                this.removeEvent(event);
+                this.insertEvent(event);
+            }
+        }, this)}).defer(50, this);
+        
     },
     
     onClick: function(e) {
