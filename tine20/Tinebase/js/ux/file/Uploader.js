@@ -102,7 +102,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     
     /**
      * 2010-01-26 Current Browsers implemetation state of:
-     *  http://dev.w3.org/2006/webapi/FileAPI/
+     *  http://www.w3.org/TR/FileAPI
      *  
      *  Interface: File | Blob | FileReader | FileReaderSync | FileError
      *  FF       : yes  | no   | no         | no             | no       
