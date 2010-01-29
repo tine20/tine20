@@ -161,7 +161,9 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
 
         while (
             ($recordData = $this->_getRawData($_resource)) !== FALSE && 
-            (!$this->_options['dryrun'] || $result['totalcount'] < $this->_dryrunCount)
+            (! $this->_options['dryrun'] 
+                || ! (isset($this->_options['dryrunLimit']) && $this->_options['dryrunLimit'] && $result['totalcount'] >= $this->_dryrunCount)
+            )
         ) {
             if (is_array($recordData)) {
                 try {
