@@ -505,8 +505,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRegistryData()
     {
         $result = array(
-            'accounts'              => $this->searchAccounts(''),
-            'maxAttachmentSize'     => convertToBytes(ini_get('upload_max_filesize')) / 1048576 . ' MB'
+            'accounts'              => $this->searchAccounts('')
         );
         
         $defaults = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);

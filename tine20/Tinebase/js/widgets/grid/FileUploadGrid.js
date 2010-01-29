@@ -67,6 +67,8 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     initComponent: function() {
         
+        this.id = this.id + Ext.id();
+        
         this.initToolbar();
         this.initStore();
         this.initColumnModel();
@@ -83,7 +85,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         Ext.MessageBox.alert(
             _('Upload Failed'), 
             _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: ') 
-                + Tine.widgets.grid.registry.get('maxFileUploadSize')
+                + Tine.Tinebase.registry.get('maxFileUploadSize')
         ).setIcon(Ext.MessageBox.ERROR);
         this.loadMask.hide();
     },
@@ -111,7 +113,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             scope: this,
             plugins: [new Ext.ux.file.BrowsePlugin({
                 multiple: true,
-                dropElSelector: 'div[id=tinebase-file-grid]'
+                dropElSelector: 'div[id=' + this.id + ']'
             })],
             handler: this.onFilesSelect
         });
