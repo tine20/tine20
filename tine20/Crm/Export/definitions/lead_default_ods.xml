@@ -85,7 +85,7 @@
             <header>Duration</header>
             <type>number</type>
             <width>4cm</width>
-            <formula>=IF(ISBLANK(INDIRECT(ADDRESS(ROW();COLUMN()-2)));"";DAYS(ISBLANK(INDIRECT(ADDRESS(ROW();COLUMN()-2));ISBLANK(INDIRECT(ADDRESS(ROW();COLUMN()-3))))</formula>
+            <formula>=IF(ISBLANK(INDIRECT(ADDRESS(ROW();COLUMN()-2)));"";DAYS(INDIRECT(ADDRESS(ROW();COLUMN()-2));INDIRECT(ADDRESS(ROW();COLUMN()-3))))</formula>
         </column>
         <column>
             <identifier>created_by</identifier>
