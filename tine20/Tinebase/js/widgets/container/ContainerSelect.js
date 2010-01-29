@@ -243,7 +243,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @private
      */
     getValue: function(){
-        return this.selectedContainer.id;
+        return (this.selectedContainer !== null) ? this.selectedContainer.id : '';
     },
     
     /**
