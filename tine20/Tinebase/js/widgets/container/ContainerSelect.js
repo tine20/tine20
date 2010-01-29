@@ -30,7 +30,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @property {Object} currently displayed container
      */
-    container: null,
+    selectedContainer: null,
     /**
      * @cfg {Number} list width
      */    
@@ -126,7 +126,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         Tine.widgets.container.selectionComboBox.superclass.initComponent.call(this);
         
         if (this.defaultContainer) {
-            this.container = this.defaultContainer;
+            this.selectedContainer = this.defaultContainer;
             this.value = this.defaultContainer.name;
         }
         
@@ -229,8 +229,8 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             this.qtip = new Ext.QuickTip({
                 target: el,
                 targetXY : e.getXY(),
-                html: Ext.util.Format.htmlEncode(this.container.name) + 
-                    '<i> (' + (this.container.type == Tine.Tinebase.container.TYPE_PERSONAL ?  _('personal') : _('shared')) + ')</i>'
+                html: Ext.util.Format.htmlEncode(this.selectedContainer.name) + 
+                    '<i> (' + (this.selectedContainer.type == Tine.Tinebase.container.TYPE_PERSONAL ?  _('personal') : _('shared')) + ')</i>'
             }).show();
         }, this);
         
@@ -243,7 +243,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @private
      */
     getValue: function(){
-        return this.container.id;
+        return this.selectedContainer.id;
     },
     
     /**
@@ -261,7 +261,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             this.store.add(new Tine.Tinebase.Model.Container(container, container.id));
         }
         
-        this.container = container;
+        this.selectedContainer = container;
         
         // make sure 'choose other' is the last item
         var other = this.store.getById('other');

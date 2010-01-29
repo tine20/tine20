@@ -110,13 +110,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 appName: 'Calendar',
                 startNode: 'personalOf',
                 getValue: function() {
-                    if (this.container) {
+                    if (this.selectedContainer) {
                         // NOTE: the store checks if data changed. If we don't overwrite to string, 
                         //  the check only sees [Object Object] wich of course never changes...
-                        var container_id = this.container.id;
-                        this.container.toString = function() {return container_id;};
+                        var container_id = this.selectedContainer.id;
+                        this.selectedContainer.toString = function() {return container_id;};
                     }
-                    return this.container;
+                    return this.selectedContainer;
                 },
                 listeners: {
                     scope: this,

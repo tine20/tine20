@@ -208,7 +208,7 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
     },
     
     onCalComboSelect: function() {
-        var container = this.calCombo.container;
+        var container = this.calCombo.selectedContainer;
         container.toString = function() {return container.id};
         
         if (! this.currentCalMap || this.currentCalMap.get('isOriginal')) {
