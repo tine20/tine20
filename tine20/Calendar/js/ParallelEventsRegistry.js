@@ -22,8 +22,9 @@ Tine.Calendar.ParallelEventsRegistry = function(config) {
     this.dtEndTs = this.dtEnd.getTime();
     this.dt = this.granularity * Date.msMINUTE;
     
-    var timeScale = Math.ceil((this.dtEndTs - this.dtStartTs) / this.dt);
-    this.map = new Array(timeScale);
+    // init map
+    this.frameLength = Math.ceil((this.dtEndTs - this.dtStartTs) / this.dt);
+    this.map = [];
 }
 
 Tine.Calendar.ParallelEventsRegistry.prototype = {
@@ -53,7 +54,8 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
     
     /**
      * @private {Array} map
-     * hols registry 
+     * 
+     * array of frames. a frames
      */
     map: null,
     /**
@@ -68,6 +70,8 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
      * @private {Number} dt
      */
     dt: null,
+    
+    
     
     /**
      * register event
@@ -87,15 +91,21 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
         var startIdx = this.tsToIdx(dtStart);
         var endIdx = this.tsToIdx(dtEndTs);
         
-        for (var i=Math.max(startIdx,0); i<=Math.min(endIdx, this.map.length-1); i++) {
-            if (! Ext.isArray(this.map[i])) {
-                this.map[i] = [];
-            }
-            
-            this.map[i].push(event);
-        }
+        var position = 0;
+        var frame = this.getFrame(position);
+        while (! this.isEmptySlice(frame, startIdx, endIdx)) frame = this.getFrame(++position);
         
-        //console.info('pushed event from startIdx"' + startIdx + '" to endIdx "' + endIdx + '".');
+        this.registerSlice(frame, startIdx, endIdx, event);
+        
+        event.parallelEventRegistry = {
+            registry: this,
+            position: position,
+            startIdx: startIdx,
+            endIdx: endIdx
+        };
+        
+        //console.info('pushed event in frame# ' + position + ' from startIdx"' + startIdx + '" to endIdx "' + endIdx + '".');
+        
         if (returnAffected) {
             return this.getEvents(dtStart, dtEnd);
         }
@@ -103,14 +113,28 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
     
     /**
      * unregister event
+     * 
      * @param {Ext.data.Record} event
      */
     unregister: function(event) {
-        for (var i=0; i<this.map.length; i++) {
-            if (Ext.isArray(this.map[i])) {
-                    this.map[i].remove(event);
+        var ri =  event.parallelEventRegistry;
+        
+        if (! ri) {
+            // cannot unregister unregistered events
+        }
+        
+        var frame = this.getFrame(ri.position);
+        
+        if (! this.skipIntegrityChecks) {
+            for (var idx=ri.startIdx; idx<=ri.endIdx; idx++) {
+                if (frame[idx] !== event) {
+                    throw new Ext.Error('event is not registered at expected position');
+                }
             }
         }
+        
+        this.unregisterSlice(frame, ri.startIdx, ri.endIdx);
+        event.parallelEventRegistry = null;
     },
     
     /**
@@ -139,6 +163,16 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
      */
     getEventsFromIdx: function(startIdx, endIdx, sortByDtStart) {
         var events = [];
+        Ext.each(this.map, function(frame) {
+            for (var idx=startIdx; idx<=endIdx; idx++) {
+                if (frame[idx] && events.indexOf(frame[idx]) === -1) {
+                    events.push(frame[idx]);
+                }
+            }
+        }, this);
+        
+        var parallels = events.length;
+        /*
         var parallels = 1;
         for (var i=startIdx; i<=endIdx; i++) {
             if (Ext.isArray(this.map[i])) {
@@ -150,6 +184,7 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
                 }
             }
         }
+        */
         
         // sort by duration and dtstart
         var scope = this;
@@ -170,6 +205,61 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
         return events;
     },
     
+    /*************************************** frame functions **********************************/
+    
+    /**
+     * returns frame of given position. 
+     * If no frame is found on given position it will be created implicitlty
+     * 
+     * @private
+     * @param {Number} position
+     * @return {Array}
+     */
+    getFrame: function(position) {
+        if (position > this.map.length +1) {
+            throw new Ext.Error('skipping frames is not allowed');
+        }
+        
+        if (! Ext.isArray(this.map[position])) {
+            this.map[position] = new Array(this.frameLength);
+        }
+        
+        return this.map[position];
+    },
+    
+    /**
+     * checks if a slice in a given frame is free
+     * 
+     * @private
+     * @param {Array} frame
+     * @param {Number} startIdx
+     * @param {Number} endIdx
+     */
+    isEmptySlice: function(frame, startIdx, endIdx) {
+        for (var idx=startIdx; idx<=endIdx; idx++) {
+            if (frame[idx]) {
+                return false;
+            }
+        }
+        return true;
+    },
+    
+    /**
+     * registers evnet in given frame for given slice
+     * 
+     * @private
+     * @param {Array} frame
+     * @param {Number} startIdx
+     * @param {Number} endIdx
+     * @param {Ext.data.Record} event
+     * @return this
+     */
+    registerSlice: function(frame, startIdx, endIdx, event) {
+        for (var idx=startIdx; idx<=endIdx; idx++) {
+            frame[idx] = event;
+        }
+    },
+    
     /**
      * @private
      * @param  {Number} ts
@@ -177,5 +267,22 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
      */
     tsToIdx: function(ts) {
         return Math.floor((ts - this.dtStartTs) / this.dt);
+    },
+    
+    /**
+     * registers evnet in given frame for given slice 
+     * 
+     * @private
+     * @param {Array} frame
+     * @param {Number} startIdx
+     * @param {Number} endIdx
+     * @return this
+     */
+    unregisterSlice: function(frame, startIdx, endIdx) {
+        for (var idx=startIdx; idx<=endIdx; idx++) {
+            frame[idx] = null;
+        }
+        
+        return this;
     }
 };

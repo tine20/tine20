@@ -173,7 +173,8 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         
         // poperties might be missing on quickAdd
         var parallels = Math.max(1, this.parallelEvents.length);
-        var pos = Math.max(0, this.parallelEvents.indexOf(this.event));
+        var pos = this.event.parallelEventRegistry.position;
+        //var pos = this.event.parallelEventRegistry.position;//Math.max(0, this.parallelEvents.indexOf(this.event));
         
         if (this.event.get('is_all_day_event')) {
             this.renderAllDayEvent(view, parallels, pos);
@@ -243,6 +244,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 }
             });
         }
+        //console.log([eventEl.dom, parallels, pos])
     },
     
     renderScrollerEvent: function(view, parallels, pos) {

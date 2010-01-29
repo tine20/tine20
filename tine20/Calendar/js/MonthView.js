@@ -464,8 +464,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             return;
         }
         
-        var parallels = this.parallelEventsRegistry.getEvents(dtStart, dtEnd, true);
-        var pos = parallels.indexOf(event);
+        //var parallels = this.parallelEventsRegistry.getEvents(dtStart, dtEnd, true);
+        //var pos = parallels.indexOf(event);
+        var pos = event.parallelEventRegistry.position;
         
         // save some layout info
         event.ui.is_all_day_event = event.get('is_all_day_event') || startCellNumber != endCellNumber;
