@@ -281,7 +281,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         }
         
         // IE has problems with sate saving. Might be, that our clone function is not working correclty yet.
-        if (! Ext.isIE) {
+        if (! Ext.isIE && this.stateful) {
             this.saveState();
         }
     },
