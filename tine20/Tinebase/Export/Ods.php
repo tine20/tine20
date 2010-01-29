@@ -265,8 +265,6 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             $recordBackend = new Timetracker_Backend_Timesheet();
         }
         
-        $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
-        
         // add record rows
         $i = 0;
         foreach ($_records as $record) {
@@ -283,100 +281,28 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             $row = $table->appendRow();
 
             foreach ($this->_config->columns->column as $field) {
-
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($field->toArray(), true));
                 
-                $altStyle = 'ceAlternate';
-                $cellType = OpenDocument_SpreadSheet_Cell::TYPE_STRING;
-                $value = '';
+                //$altStyle = 'ceAlternate';
                 
-                switch($field->type) {
-                    case 'datetime':
-                        $value    = ($record->{$field->identifier}) ? $record->{$field->identifier}->toString(Zend_Locale_Format::getDateFormat($locale), $locale) : '';
-                        //$altStyle = 'ceAlternateCentered';
-                        break;
-                    case 'date':
-                        if ($record->{$field->identifier}) {
-                            $value    = ($record->{$field->identifier} instanceof Zend_Date) ? $record->{$field->identifier}->toString('yyyy-MM-dd') : $record->{$field->identifier};
-                        }
-                        //$altStyle = 'ceAlternateCentered';
-                        $cellType = OpenDocument_SpreadSheet_Cell::TYPE_DATE;
-                        break;
-                    case 'tags':
-                        $tags     = Tinebase_Tags::getInstance()->getTagsOfRecord($record);
-                        $value    = implode(', ', $tags->name);
-                        break;
-                    case 'currency':
-                        $currency = ($field->currency) ? $field->currency : 'EUR';
-                        if (! $field->formula) {
-                            $value    =  ($record->{$field->identifier}) ? $record->{$field->identifier} : '0';
-                            $value .= ' ' . $currency;
-                        } 
-                        $cellType = OpenDocument_SpreadSheet_Cell::TYPE_CURRENCY;
-                        break;
-                    case 'percentage':
-                        $value    = $record->{$field->identifier} / 100;
-                        $cellType = OpenDocument_SpreadSheet_Cell::TYPE_PERCENTAGE;
-                        break;
-                    default:
-                        if (isset($field->custom) && $field->custom) {
-                            // add custom fields
-                            if (isset($record->customfields[$field->identifier])) {
-                                $value = $record->customfields[$field->identifier];
-                            }
-                            
-                        } elseif (isset($field->divisor)) {
-                            // divisor
-                            $value = $record->{$field->identifier} / $field->divisor;
-
-                        } elseif (in_array($field->type, $this->_specialFields)) {
-                            // special fields
-                            $value = $this->_getSpecialFieldValue($record, $field->toArray(), $field->identifier, $cellType);
-                        
-                        } else {
-                            // all remaining
-                            $value = $record->{$field->identifier};
-                        }
-                        
-                        // set special value from params
-                        if (isset($field->values)) {
-                            $values = $field->values->toArray();
-                            if (array_key_exists($value, $values)) {
-                                $value = $values[$value];
-                            }
-                        }
-                        
-                        // translate strings
-                        if (isset($field->translate) && $field->translate && $cellType === OpenDocument_SpreadSheet_Cell::TYPE_STRING) {
-                            $value = $this->_translate->_($value);
-                        }
-                        
-                        break;
-                }
-                
-                // replace and match
-                $value = $this->_replaceAndMatchvalue($value, $field);
+                // get type and value for cell
+                $cellType = $this->_getCellType($field->type);
+                $cellValue = $this->_getCellValue($field, $record, $cellType);
                 
                 // create cell with type and value and add style
-                $cell = $row->appendCell($value, $cellType);
+                $cell = $row->appendCell($cellValue, $cellType);
                 
                 // add formula
                 if ($field->formula) {
                     $cell->setFormula($field->formula);
                 }
 
-                if (isset($field->number) && $field->number) {
-                    /*
-                    $cell->setStyle('numberStyle');
-                    $altStyle = 'numberStyleAlternate';
-                    */
-                    $cellType = OpenDocument_SpreadSheet_Cell::TYPE_FLOAT;
-                }
-                
+                /*
                 if ($i % 2 == 1) {
                     $cell->setStyle($altStyle);
                 }
+                */
                 
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($field->toArray(), true));
             }        
             $i++;
         }
@@ -421,5 +347,110 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
     protected function _getDataTableName()
     {
         return $this->_translate->_('Data');        
+    }
+    
+    /**
+     * get cell type
+     * 
+     * @param string $_fieldType
+     * @return string
+     */
+    protected function _getCellType($_fieldType)
+    {
+        switch($_fieldType) {
+            case 'date':
+                $result = OpenDocument_SpreadSheet_Cell::TYPE_DATE;
+                break;
+            case 'currency':
+                $result = OpenDocument_SpreadSheet_Cell::TYPE_CURRENCY;
+                break;
+            case 'percentage':
+                $result = OpenDocument_SpreadSheet_Cell::TYPE_PERCENTAGE;
+                break;
+            case 'number':
+                $result = OpenDocument_SpreadSheet_Cell::TYPE_FLOAT;
+                break;
+            default:
+                $result = OpenDocument_SpreadSheet_Cell::TYPE_STRING;
+        }
+        
+        return $result;
+    }
+
+    /**
+     * get cell value
+     * 
+     * @param Zend_Config $_field
+     * @param Tinebase_Record_Interface $_record
+     * @param string $_cellType
+     * @return string
+     * 
+     * @todo generalize this and move it to Tinebase_Export_Abstract
+     */
+    protected function _getCellValue(Zend_Config $_field, Tinebase_Record_Interface $_record, &$_cellType)
+    {
+        $result = '';
+        
+        if (in_array($_field->type, $this->_specialFields)) {
+            // special field handling
+            $result = $this->_getSpecialFieldValue($_record, $_field->toArray(), $_field->identifier, $_cellType);
+            return $result;
+            
+        } else if (isset($field->formula) || ! isset($_record->{$_field->identifier})) {
+            // don't add value for formula or undefined fields
+            return $result;
+        }
+        
+        switch($_field->type) {
+            case 'datetime':
+                $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
+                $result = $_record->{$_field->identifier}->toString(Zend_Locale_Format::getDateFormat($locale), $locale);
+                break;
+            case 'date':
+                $result = ($_record->{$_field->identifier} instanceof Zend_Date) ? $_record->{$_field->identifier}->toString('yyyy-MM-dd') : $_record->{$_field->identifier};
+                break;
+            case 'tags':
+                $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($_record);
+                $result = implode(', ', $tags->name);
+                break;
+            case 'currency':
+                $currency = ($_field->currency) ? $_field->currency : 'EUR';
+                $result =  ($_record->{$_field->identifier}) ? $_record->{$_field->identifier} : '0';
+                $result .= ' ' . $currency;
+                break;
+            case 'percentage':
+                $result    = $_record->{$_field->identifier} / 100;
+                break;
+            default:
+                if (isset($_field->custom) && $_field->custom) {
+                    // add custom fields
+                    if (isset($_record->customfields[$_field->identifier])) {
+                        $result = $_record->customfields[$_field->identifier];
+                    }
+                    
+                } elseif (isset($_field->divisor)) {
+                    // divisor
+                    $result = $_record->{$_field->identifier} / $_field->divisor;
+
+                } else {
+                    // all remaining
+                    $result = $_record->{$_field->identifier};
+                }
+                
+                // set special value from params
+                if (isset($_field->values)) {
+                    $values = $_field->values->toArray();
+                    if (array_key_exists($result, $values)) {
+                        $result = $values[$result];
+                    }
+                }
+                
+                // translate strings
+                if (isset($_field->translate) && $_field->translate && $_cellType === OpenDocument_SpreadSheet_Cell::TYPE_STRING) {
+                    $result = $this->_translate->_($result);
+                }
+        }
+        
+        return $result;
     }
 }
