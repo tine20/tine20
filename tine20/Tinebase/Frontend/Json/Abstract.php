@@ -239,14 +239,16 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $failcount += $result['failcount'];
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($results, true));
-        
-        return array(
+        $result = array(
             'results'       => $results,
             'totalcount'    => $totalcount,
             'failcount'     => $failcount,
             'status'        => 'success',
         );
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
+        
+        return $result;
     }
     
     /**
