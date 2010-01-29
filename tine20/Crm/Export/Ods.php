@@ -39,7 +39,7 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
      *
      * @var array
      */
-    protected $_specialFields = array('created_by', 'status', 'source', 'type', 'duration', 'container_id');
+    protected $_specialFields = array('created_by', 'status', 'source', 'type', 'container_id');
     
     /**
      * resolve records
@@ -90,6 +90,7 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
                 $type = $settings->getOptionById($_record->leadtype_id, 'leadtypes');
                 $value = $type['leadtype'];                
                 break;
+                /*
             case 'duration':
                 if ($_record->end) {
                     $value = $_record->end->sub($_record->start, Zend_Date::DAY);
@@ -98,6 +99,7 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
                 }
                 $_cellType = OpenDocument_SpreadSheet_Cell::TYPE_FLOAT;
                 break;
+                */
             default:
                 $value = '';
         }        
