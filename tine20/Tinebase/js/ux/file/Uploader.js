@@ -90,7 +90,10 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      * @return {Ext.Record} Ext.ux.file.Uploader.file
      */
     upload: function(file) {
-        if (window.XMLHttpRequest && window.File && window.FileList && file) {
+        if ((
+            (window.XMLHttpRequest && window.File && window.FileList) || // safari, chrome, ...?
+            (Ext.isGecko3 && window.FileReader) // FF
+        ) && file) {
             return this.html5upload(file);
         } else {
             return this.html4upload();
