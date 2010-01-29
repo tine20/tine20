@@ -95,18 +95,6 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             labelAlign: 'top',
             border: false,
             layout: 'form',
-            defaults: {
-                xtype: 'textfield',
-                anchor: '90%'/*,
-                listeners: {
-                    scope: this,
-                    specialkey: function(field, event) {
-                        if (event.getKey() == event.ENTER) {
-                            this.onApplyChanges({}, event, true);
-                        }
-                    }
-                }*/
-            },
             items: [
                 this.uploadGrid
             ]
