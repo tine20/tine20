@@ -65,19 +65,19 @@
         <column>
             <identifier>start</identifier>
             <header>Date Start</header>
-            <type>datetime</type>
+            <type>date</type>
             <width>2,5cm</width>
         </column>
         <column>
             <identifier>end</identifier>
             <header>Date End</header>
-            <type>datetime</type>
+            <type>date</type>
             <width>2,5cm</width>
         </column>
         <column>
             <identifier>end_scheduled</identifier>
             <header>Date End Scheduled</header>
-            <type>datetime</type>
+            <type>date</type>
             <width>2,5cm</width>
         </column>
         <column>
@@ -85,7 +85,7 @@
             <header>Duration</header>
             <type>number</type>
             <width>4cm</width>
-            <formula>=IF(ISBLANK(INDIRECT(ADDRESS(ROW();COLUMN()-2)));"";DAYS(INDIRECT(ADDRESS(ROW();COLUMN()-2));INDIRECT(ADDRESS(ROW();COLUMN()-3))))</formula>
+            <formula>=DAYS(IF(ISBLANK(INDIRECT(ADDRESS(ROW();COLUMN()-2)));TODAY();INDIRECT(ADDRESS(ROW();COLUMN()-2)));INDIRECT(ADDRESS(ROW();COLUMN()-3)))</formula>
         </column>
         <column>
             <identifier>created_by</identifier>
@@ -97,7 +97,7 @@
         <column>
             <identifier>creation_time</identifier>
             <header>Creation Date</header>
-            <type>datetime</type>
+            <type>date</type>
             <width>2,5cm</width>
         </column>
         <column>
