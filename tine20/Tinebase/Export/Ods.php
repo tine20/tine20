@@ -50,12 +50,12 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
             <style:text-properties fo:font-weight="bold"/>
         </style:style>',
-        '<style:style style:name="ceAlternate" style:family="table-cell" style:data-style-name="nShortDate"
+        '<style:style style:name="ceAlternate" style:family="table-cell"
                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
             <style:table-cell-properties fo:background-color="#ccccff"/>
         </style:style>',
-        '<style:style style:name="ceAlternateCentered" style:family="table-cell" style:data-style-name="nShortDate"
+        '<style:style style:name="ceAlternateCentered" style:family="table-cell"
                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
             <style:table-cell-properties fo:background-color="#ccccff"/>
@@ -288,6 +288,12 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                 $cellType = $this->_getCellType($field->type);
                 $cellValue = $this->_getCellValue($field, $record, $cellType);
                 
+                
+                #if($cellType == OpenDocument_SpreadSheet_Cell::TYPE_DATE && empty($cellValue)) {
+                    #$cellType = OpenDocument_SpreadSheet_Cell::TYPE_STRING;
+                #    $cellValue = null;
+                #}
+
                 // create cell with type and value and add style
                 $cell = $row->appendCell($cellValue, $cellType);
                 
@@ -297,9 +303,9 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                 }
 
                 /*
-                if ($i % 2 == 1) {
-                    $cell->setStyle($altStyle);
-                }
+                #if ($i % 2 == 1) {
+                #    $cell->setStyle($altStyle);
+                #}
                 */
                 
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($field->toArray(), true));
@@ -359,6 +365,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
     {
         switch($_fieldType) {
             case 'date':
+            case 'datetime':
                 $result = OpenDocument_SpreadSheet_Cell::TYPE_DATE;
                 break;
             case 'currency':
@@ -389,7 +396,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
      */
     protected function _getCellValue(Zend_Config $_field, Tinebase_Record_Interface $_record, &$_cellType)
     {
-        $result = '';
+        $result = null;
         
         if (in_array($_field->type, $this->_specialFields)) {
             // special field handling
@@ -405,9 +412,17 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             case 'datetime':
                 $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
                 $result = $_record->{$_field->identifier}->toString(Zend_Locale_Format::getDateFormat($locale), $locale);
+                // empty date cells, get displayed as 30.12.1899
+                if(empty($result)) {
+                    $result = null;
+                }
                 break;
             case 'date':
                 $result = ($_record->{$_field->identifier} instanceof Zend_Date) ? $_record->{$_field->identifier}->toString('yyyy-MM-dd') : $_record->{$_field->identifier};
+                // empty date cells, get displayed as 30.12.1899
+                if(empty($result)) {
+                    $result = null;
+                }
                 break;
             case 'tags':
                 $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($_record);
