@@ -288,12 +288,6 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                 $cellType = $this->_getCellType($field->type);
                 $cellValue = $this->_getCellValue($field, $record, $cellType);
                 
-                
-                #if($cellType == OpenDocument_SpreadSheet_Cell::TYPE_DATE && empty($cellValue)) {
-                    #$cellType = OpenDocument_SpreadSheet_Cell::TYPE_STRING;
-                #    $cellValue = null;
-                #}
-
                 // create cell with type and value and add style
                 $cell = $row->appendCell($cellValue, $cellType);
                 
