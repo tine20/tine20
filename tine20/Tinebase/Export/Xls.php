@@ -6,12 +6,9 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Ods.php 10912 2009-10-12 14:40:25Z p.schuele@metaways.de $
  * 
- * @todo        add Tinebase_Export_Abstract with common funcs (_addRelations, add notes, add special value)
- * @todo        extend Tinebase_Export_Abstract
- * @todo        move config to import/export definitions table
  */
 
 // set include path for phpexcel
@@ -24,34 +21,8 @@ set_include_path(dirname(dirname(dirname(__FILE__))) . '/library/PHPExcel' . PAT
  * @subpackage  Export
  * 
  */
-class Tinebase_Export_Xls
+class Tinebase_Export_Xls extends Tinebase_Export_Abstract
 {
-    /**
-     * @var string $_applicationName
-     */
-    protected $_applicationName = 'Tinebase';
-    
-    /**
-     * export config
-     * 
-     * @var array
-     */
-    protected $_config = array();
-    
-    /**
-     * translation object
-     *
-     * @var Zend_Translate
-     */
-    protected $_translate;
-
-    /**
-     * locale object
-     *
-     * @var Zend_Locale
-     */
-    protected $_locale;
-
     /**
      * current row number
      * 
@@ -67,52 +38,78 @@ class Tinebase_Export_Xls
     protected $_excelObject = NULL;
     
     /**
-     * user fields to resolve
+     * generate export
      * 
-     * @var array
+     * @return string filename
      */
-    protected $_userFields = array('created_by', 'last_modified_by');
+    public function generate()
+    {
+        $this->_createDocument();
+        $this->_setDocumentProperties();
+        $this->_currentRowIndex = 1;
+        
+        $records = $this->_getRecords();
+        
+        // add header
+        if (isset($this->_config->header) && $this->_config->header) {
+            $this->_addHead();
+        }
+        
+        // add body
+        $this->_addBody($records);
+        
+        return $this->getDocument();
+    }
     
     /**
-     * the constructor
-     *
+     * get excel object
+     * 
+     * @return PHPExcel
      */
-    public function __construct($_additionalConfig = array())
+    public function getDocument()
     {
-        $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
-        $this->_config = Tinebase_Config::getInstance()->getConfigAsArray(
-            Tinebase_Model_Config::XLSEXPORTCONFIG, 
-            $this->_applicationName, 
-            $this->_getDefaultConfig()
-        );
-        $this->_config = array_merge($this->_config, $_additionalConfig);
-        $this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_config, TRUE));
-        
+        return $this->_excelObject;
+    }
+    
+    /**
+     * create new excel document
+     * 
+     * @return void
+     */
+    protected function _createDocument()
+    {
         // check if we need to open template file
-        if (isset($this->_config['template'])) {
-            $templateFilename = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName 
-                . DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $this->_config['template'];
+        $templateFile = $this->_config->get('template', NULL);
+        if ($templateFile !== NULL) {
+            $templateFile = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName 
+                . DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $templateFile;
                 
-            if (file_exists($templateFilename)) {
+            if (file_exists($templateFile)) {
                 
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Using template file ' . $templateFilename);
-                $this->_excelObject = PHPExcel_IOFactory::load($templateFilename);
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Using template file ' . $templateFile);
+                $this->_excelObject = PHPExcel_IOFactory::load($templateFile);
                 
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_excelObject->getProperties(), true));
                 
                 $this->_excelObject->setActiveSheetIndex(1);
                 
             } else {
-                throw new Tinebase_Exception_NotFound('Template file ' . $templateFilename . ' not found');
+                throw new Tinebase_Exception_NotFound('Template file ' . $templateFile . ' not found');
             }
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new PHPExcel object.');
             
             $this->_excelObject = new PHPExcel();
         }
-        
+    }
+    
+    /**
+     * set properties
+     * 
+     * @return void
+     */
+    protected function _setDocumentProperties()
+    {
         // set metadata/properties
         $this->_excelObject->getProperties()
             ->setCreator(Tinebase_Core::getUser()->accountDisplayName)
@@ -124,50 +121,6 @@ class Tinebase_Export_Xls
             ->setCreated(Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale));
             
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_excelObject->getProperties(), true));
-        
-        $this->_currentRowIndex = 1;
-    }
-    
-    /**
-     * get excel object
-     * 
-     * @return PHPExcel
-     */
-    public function getExcelObject()
-    {
-        return $this->_excelObject;
-    }
-    
-    /**
-     * export records to Xls file
-     *
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @return PHPExcel
-     */
-    protected function _generate(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_SearchInterface $_controller, $_sortBy = 'id', $_getRelations = FALSE)
-    {
-        $pagination = new Tinebase_Model_Pagination(array(
-            'sort' => $_sortBy,
-        ));
-        $records = $_controller->search($_filter, $pagination, $_getRelations);
-        
-        // resolve users
-        foreach ($this->_userFields as $field) {
-            if (in_array($field, array_keys($this->_config['fields']))) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resolving users for ' . $field);
-                Tinebase_User::getInstance()->resolveMultipleUsers($records, $field, TRUE);
-            }
-        }
-        
-        // add notes
-        if (in_array('notes', array_keys($this->_config['fields']))) {
-            Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($records, 'notes', 'Sql', FALSE);
-        }
-
-        $this->_addHead();
-        $this->_addBody($records);
-        
-        return $this->getExcelObject();
     }
     
     /**
@@ -176,8 +129,8 @@ class Tinebase_Export_Xls
     protected function _addHead()
     {
         $columnId = 0;
-        foreach($this->_config['fields'] as $field) {
-            $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow($columnId++, $this->_currentRowIndex, $field['header']);
+        foreach($this->_config->columns->column as $field) {
+            $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow($columnId++, $this->_currentRowIndex, $field->header);
         }
         
         $this->_currentRowIndex++;
@@ -186,12 +139,9 @@ class Tinebase_Export_Xls
     /**
      * add body rows
      *
-     * @param OpenDocument_SpreadSheet_Table $table
      * @param Tinebase_Record_RecordSet $records
-     * @param array
      * 
-     * @todo add more different data types
-     * @todo add different styles?
+     * @todo add formulas
      */
     protected function _addBody($_records)
     {
@@ -202,110 +152,25 @@ class Tinebase_Export_Xls
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
             
             $columnId = 0;
-            foreach ($this->_config['fields'] as $key => $params) {
+            
+            foreach ($this->_config->columns->column as $field) {
                 
-                // string is default type
-                $params['type'] = (isset($params['type'])) ? $params['type'] : 'string';
+                // get type and value for cell
+                $cellType = (isset($field->type)) ? $field->type : 'string';
+                $cellValue = $this->_getCellValue($field, $record, $cellType);
                 
-                switch($params['type']) {
-                    case 'datetime':
-                        $value = ($record->$key) ? $record->$key->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale) : '';
-                        break;
-                    case 'user':
-                        $value = ($record->$key) ? $record->$key->accountDisplayName : '';
-                        break;
-                    case 'config':
-                        $value = Tinebase_Config::getOptionString($record, $key);
-                        break;
-                    case 'relation':
-                        $value = $this->_addRelations($record, $key, $params['field']);
-                        break;
-                    case 'notes':
-                        $value = $this->_addNotes($record);
-                        break;
-                    case 'special':
-                        $value = $this->_addSpecialValue($record, $key);
-                        break;
-                    default:
-                        $value = $record->$key;
+                // add formula
+                /*
+                if ($field->formula) {
+                    $cell->setFormula($field->formula);
                 }
+                */
                 
-                $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow($columnId++, $this->_currentRowIndex, $value);
+                $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow($columnId++, $this->_currentRowIndex, $cellValue);
             }
             
             $i++;
             $this->_currentRowIndex++;
         }
-    }
-    
-    /**
-     * get default export config
-     * 
-     * @return array
-     */
-    protected function _getDefaultConfig()
-    {
-        return array();
-    }
-    
-    /**
-     * add relation values from related records
-     * 
-     * @param Tinebase_Record_Abstract $_record
-     * @param string $_fieldName
-     * @param string $_recordField
-     * @return string
-     * 
-     * @todo    add _getSummary()?
-     */
-    protected function _addRelations(Tinebase_Record_Abstract $_record, $_fieldName, $_recordField)
-    {
-        $_record->relations->addIndices(array('type'));
-        $matchingRelations = $_record->relations->filter('type', $_fieldName);
-        
-        $resultArray = array();
-        foreach ($matchingRelations as $relation) {
-            $resultArray[] = $relation->related_record->{$_recordField};
-        }
-        
-        $result = implode(';', $resultArray);
-        
-        return $result;
-    }
-
-    /**
-     * add relation values from related records
-     * 
-     * @param Tinebase_Record_Abstract $_record
-     * @param string $_fieldName
-     * @param string $_recordField
-     * @return string
-     * 
-     * @todo use get multiple notes of records
-     */
-    protected function _addNotes(Tinebase_Record_Abstract $_record)
-    {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->notes->toArray(), true));
-        
-        $resultArray = array();
-        foreach ($_record->notes as $note) {
-            $date = $note->creation_time->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale);
-            $resultArray[] = $date . ' - ' . $note->note;
-        }
-        
-        $result = implode(';', $resultArray);
-        return $result;
-    }
-    
-    /**
-     * special field value function (overwrite that)
-     * 
-     * @param Tinebase_Record_Abstract $_record
-     * @param string $_fieldName
-     * @return string
-     */
-    protected function _addSpecialValue(Tinebase_Record_Abstract $_record, $_fieldName)
-    {
-        return '';
     }
 }

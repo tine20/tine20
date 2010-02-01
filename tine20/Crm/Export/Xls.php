@@ -6,11 +6,9 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Ods.php 10912 2009-10-12 14:40:25Z p.schuele@metaways.de $
  * 
- * @todo        add formulas / charts?
- * @todo        add class with common crm export functions (and move status/special field handling there)
  */
 
 /**
@@ -27,15 +25,45 @@ class Crm_Export_Xls extends Tinebase_Export_Xls
     protected $_applicationName = 'Crm';
     
     /**
+     * default export definition name
+     * 
+     * @var string
+     */
+    protected $_defaultExportname = 'lead_default_xls';
+        
+    /**
+     * fields with special treatment in addBody
+     *
+     * @var array
+     */
+    protected $_specialFields = array('status', 'source', 'type');
+    
+    /**
+     * get special field value
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @param array $_param
+     * @param string $_key
+     * @param string $_cellType
+     * @return string
+     */
+    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL)
+    {
+        return Crm_Export_Helper::getSpecialFieldValue($_record, $_param, $_key, $_cellType);
+    }
+    
+    /**
      * export records to Xls file
      *
      * @param Crm_Model_LeadFilter $_filter
      * @return PHPExcel
      */
+    /*
     public function generate(Crm_Model_LeadFilter $_filter)
     {
         return $this->_generate($_filter, Crm_Controller_Lead::getInstance(), 'lead_name', TRUE);
     }
+    */
     
     /**
      * get default export config
@@ -44,6 +72,7 @@ class Crm_Export_Xls extends Tinebase_Export_Xls
      * 
      * @todo    add column width again?
      */
+    /*
     protected function _getDefaultConfig()
     {
         return array(
@@ -152,23 +181,5 @@ class Crm_Export_Xls extends Tinebase_Export_Xls
             //'template' => 'lead_test_template.xls'
         );
     }
-    
-    /**
-     * special field value function
-     * 
-     * @param Tinebase_Record_Abstract $_record
-     * @param string $_fieldName
-     * @return string
-     */
-    protected function _addSpecialValue(Tinebase_Record_Abstract $_record, $_fieldName)
-    {
-        $result = '';
-        switch ($_fieldName) {
-            case 'status':
-                $result = $_record->getLeadStatus();
-                break;
-        }
-        
-        return $result;
-    }
+    */
 }

@@ -117,7 +117,7 @@ abstract class Tinebase_Export_Abstract
      * 
      * @var array
      */
-    protected $_resolvedFields = array('created_by', 'last_modified_by', 'container_id', 'tags', 'notes');
+    protected $_resolvedFields = array('created_by', 'last_modified_by', 'container_id', 'tags', 'notes', 'relation');
     
     /**
      * get record relations
@@ -147,7 +147,7 @@ abstract class Tinebase_Export_Abstract
     /**
      * generate export
      * 
-     * @return string filename
+     * @return mixed filename/generated object/...
      */
     abstract public function generate();
     
@@ -168,12 +168,11 @@ abstract class Tinebase_Export_Abstract
         // get records by filter
         $pagination = (! empty($this->_sortInfo)) ? new Tinebase_Model_Pagination($this->_sortInfo) : NULL;
         $records = $this->_controller->search($this->_filter, $pagination, $this->_getRelations);
-        $lastCell = count($records) + $this->_firstRow - 1;
         
         // resolve stuff
         $this->_resolveRecords($records);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), TRUE));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), TRUE));
         
         return $records;
     }
@@ -209,55 +208,6 @@ abstract class Tinebase_Export_Abstract
         if (in_array('container_id', $types)) {
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
         }
-    }
-
-    /**
-     * add relation values from related records
-     * 
-     * @param Tinebase_Record_Abstract $_record
-     * @param string $_fieldName
-     * @param string $_recordField
-     * @return string
-     * 
-     * @todo    add _getSummary()?
-     */
-    protected function _addRelations(Tinebase_Record_Abstract $_record, $_fieldName, $_recordField)
-    {
-        $_record->relations->addIndices(array('type'));
-        $matchingRelations = $_record->relations->filter('type', $_fieldName);
-        
-        $resultArray = array();
-        foreach ($matchingRelations as $relation) {
-            $resultArray[] = $relation->related_record->{$_recordField};
-        }
-        
-        $result = implode(';', $resultArray);
-        
-        return $result;
-    }
-    
-    /**
-     * add relation values from related records
-     * 
-     * @param Tinebase_Record_Abstract $_record
-     * @param string $_fieldName
-     * @param string $_recordField
-     * @return string
-     * 
-     * @todo use get multiple notes of records
-     */
-    protected function _addNotes(Tinebase_Record_Abstract $_record)
-    {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->notes->toArray(), true));
-        
-        $resultArray = array();
-        foreach ($_record->notes as $note) {
-            $date = $note->creation_time->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale);
-            $resultArray[] = $date . ' - ' . $note->note;
-        }
-        
-        $result = implode(';', $resultArray);
-        return $result;
     }
 
     /**
@@ -322,6 +272,7 @@ abstract class Tinebase_Export_Abstract
      * @return string
      * 
      * @todo check string type for translated fields?
+     * @todo add 'config' type again?
      */
     protected function _getCellValue(Zend_Config $_field, Tinebase_Record_Interface $_record, &$_cellType)
     {
@@ -368,6 +319,17 @@ abstract class Tinebase_Export_Abstract
                 $container = $_record->{$_field->type}; 
                 $result = $container[$_field->field];
                 break;
+                /*
+            case 'config':
+                $result = Tinebase_Config::getOptionString($_record, $_field->identifier);
+                break;
+                */
+            case 'relation':
+                $result = $this->_addRelations($_record, $_field->identifier, $_field->field);
+                break;
+            case 'notes':
+                $result = $this->_addNotes($_record);
+                break;
             default:
                 if (isset($_field->custom) && $_field->custom) {
                     // add custom fields
@@ -403,6 +365,53 @@ abstract class Tinebase_Export_Abstract
         return $result;
     }
     
+    /**
+     * add relation values from related records
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_fieldName
+     * @param string $_recordField
+     * @return string
+     * 
+     * @todo    add _getSummary()?
+     */
+    protected function _addRelations(Tinebase_Record_Abstract $_record, $_fieldName, $_recordField)
+    {
+        $_record->relations->addIndices(array('type'));
+        $matchingRelations = $_record->relations->filter('type', $_fieldName);
+        
+        $resultArray = array();
+        foreach ($matchingRelations as $relation) {
+            $resultArray[] = $relation->related_record->{$_recordField};
+        }
+        
+        $result = implode(';', $resultArray);
+        
+        return $result;
+    }
+    
+    /**
+     * add relation values from related records
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_fieldName
+     * @param string $_recordField
+     * @return string
+     */
+    protected function _addNotes(Tinebase_Record_Abstract $_record)
+    {
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->notes->toArray(), true));
+        
+        $resultArray = array();
+        foreach ($_record->notes as $note) {
+            $date = $note->creation_time->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale);
+            $resultArray[] = $date . ' - ' . $note->note;
+        }
+        
+        $result = implode(';', $resultArray);
+        return $result;
+    }
+
     /**
      * get special field value / overwrite this to add special values
      *
