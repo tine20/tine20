@@ -91,6 +91,8 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             frame: true
         });
         
+        var containerName = this.app.i18n.n_hidden(this.record.get('model').getMeta('containerName'), this.record.get('model').getMeta('containersName'), 1);
+        
         return {
             bodyStyle: 'padding:5px;',
             buttonAlign: 'right',
@@ -114,11 +116,11 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 valueField:'id'
             }, new Tine.widgets.container.selectionComboBox({
                 id: this.app.appName + 'EditDialogContainerSelector',
-                fieldLabel: _('Import into container'),
+                fieldLabel: String.format(_('Import into {0}'), containerName),
                 width: 300,
                 name: 'container_id',
                 stateful: false,
-                containerName: this.app.i18n.n_hidden(this.record.get('model').getMeta('containerName'), this.record.get('model').getMeta('containersName'), 1),
+                containerName: containerName,
                 containersName: this.app.i18n._hidden(this.record.get('model').getMeta('containersName')),
                 appName: this.app.appName,
                 requiredGrant: false
