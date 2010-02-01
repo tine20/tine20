@@ -30,13 +30,20 @@ Ext.ux.DatePickerWeekPlugin.prototype = {
         picker.getRowEl = this.getRowEl.createDelegate(picker);
         picker.selectWeek = this.selectWeek.createDelegate(picker);
         picker.clearSelection = this.clearSelection.createDelegate(picker);
+        picker.onWkCellOver = this.onWkCellOver.createDelegate(picker);
+        picker.onWkCellOut = this.onWkCellOut.createDelegate(picker);
     },
     
     onRender: function() {
         var innerCal = Ext.DomQuery.selectNode('table[class=x-date-inner]', this.getEl().dom);
         var trs = Ext.DomQuery.select('tr', innerCal);
-        for (var i=0; i<trs.length; i++) {
-            Ext.DomHelper.insertFirst(trs[i], i==0 ? '<th class="x-date-picker-wk-hd">' + this.weekHeaderString + '</th>' : '<td class="x-date-picker-wk"><a class="x-date-date" tabindex="1" hidefocus="on" href="#"><em><span>'+ i +'</span></em></td>');
+        for (var el, i=0; i<trs.length; i++) {
+            el = Ext.DomHelper.insertFirst(trs[i], i==0 ? '<th class="x-date-picker-wk-hd">' + this.weekHeaderString + '</th>' : '<td class="x-date-picker-wk"><a class="x-date-date" tabindex="1" hidefocus="on" href="#"><em><span>'+ i +'</span></em></td>');
+            Ext.get(el).addListener({
+                scope: this,
+                mouseover: this.onWkCellOver,
+                mouseout: this.onWkCellOut
+            });
         }
         
         // update again;
@@ -46,6 +53,16 @@ Ext.ux.DatePickerWeekPlugin.prototype = {
         //this.picker.getEl().container.on('resize', function() {
         //    console.log(this.picker.getEl());
         //}, this);
+    },
+    
+    onWkCellOver: function(e, t) {
+        var tr = e.getTarget('tr', 10 , true);
+        tr.addClass('x-date-picker-wk-wkrowover');
+    },
+    
+    onWkCellOut: function(e, t) {
+        var tr = e.getTarget('tr', 10, true);
+        tr.removeClass('x-date-picker-wk-wkrowover')
     },
     
     update: function(date, forceRefresh, weekNumber){
