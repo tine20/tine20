@@ -221,7 +221,9 @@ class OpenDocument_Document
         $filename =  $_filename !== null ? $_filename : tempnam(sys_get_temp_dir(), 'OpenDocument');
         $tempDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'od_' . md5(uniqid(rand(), true));
         
-        @unlink($tempDir);
+        if (file_exists($tempDir)) {
+            throw new Exception('Directory already exists.');
+        }
         mkdir($tempDir);
         
         if($this->_templateFile !== null) {
