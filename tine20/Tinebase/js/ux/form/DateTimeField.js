@@ -77,7 +77,8 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
             tabIndex: this.tabIndex == -1 ? this.tabIndex : false,
             listeners: {
                 scope: this,
-                change: this.onDateChange
+                change: this.onDateChange,
+                select: this.onDateChange
             }
         });
         
@@ -89,7 +90,8 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
             tabIndex: this.tabIndex == -1 ? this.tabIndex : false,
             listeners: {
                 scope: this,
-                change: this.onTimeChange
+                change: this.onTimeChange,
+                select: this.onTimeChange
             }
         });
         
