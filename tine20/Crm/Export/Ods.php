@@ -22,17 +22,17 @@
 class Crm_Export_Ods extends Tinebase_Export_Ods
 {
     /**
+     * @var string application of this export class
+     */
+    protected $_applicationName = 'Crm';
+    
+    /**
      * default export definition name
      * 
      * @var string
      */
     protected $_defaultExportname = 'lead_default_ods';
         
-    /**
-     * @var string application of this export class
-     */
-    protected $_applicationName = 'Crm';
-    
     /**
      * fields with special treatment in addBody
      *
@@ -51,28 +51,7 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
      */
     protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL)
     {
-    	if (is_null($_key)) {
-    		throw new Tinebase_Exception_InvalidArgument('Missing required parameter $key');
-    	}
-    	
-        switch($_param['type']) {
-            case 'status':
-                $value = $_record->getLeadStatus();
-                break;
-            case 'source':
-                $settings = Crm_Controller::getInstance()->getSettings();
-                $source = $settings->getOptionById($_record->leadsource_id, 'leadsources');
-                $value = $source['leadsource'];
-                break;
-            case 'type':
-                $settings = Crm_Controller::getInstance()->getSettings();
-                $type = $settings->getOptionById($_record->leadtype_id, 'leadtypes');
-                $value = $type['leadtype'];                
-                break;
-            default:
-                $value = '';
-        }        
-        return $value;
+        return Crm_Export_Helper::getSpecialFieldValue($_record, $_param, $_key, $_cellType);
     }
     
     /**
