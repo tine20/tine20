@@ -40,7 +40,7 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Ods
      *
      * @var array
      */
-    protected $_specialFields = array('timeaccount', 'account_id', 'created_by');
+    protected $_specialFields = array('timeaccount');
     
     /**
      * the constructor
@@ -64,10 +64,10 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Ods
      */
     protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
+        parent::_resolveRecords($_records);
+        
         $timeaccountIds = $_records->timeaccount_id;
         $this->_resolvedRecords['timeaccounts'] = Timetracker_Controller_Timeaccount::getInstance()->getMultiple(array_unique(array_values($timeaccountIds)));
-        
-        Tinebase_User::getInstance()->resolveMultipleUsers($_records, 'account_id', true);
     }
     
     /**
@@ -90,7 +90,7 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Ods
         $cell = $row->appendCell('float', 0);
         // set sum for timesheet duration (for example E2:E10)
         $cell->setFormula('oooc:=SUM(' . $this->_config->sumColumn . $this->_firstRow . ':' . $this->_config->sumColumn . $lastCell . ')');   
-        $cell->setStyle('ceBold');     
+        $cell->setStyle('ceBold');
     }
     
     /**
@@ -152,11 +152,7 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Ods
             case 'timeaccount':
                 $value = $this->_resolvedRecords['timeaccounts'][$this->_resolvedRecords['timeaccounts']->getIndexById($_record->timeaccount_id)]->$_param['field'];
                 break;
-            case 'account_id':
-            case 'created_by':
-                $value = $_record->$_param['type']->$_param['field'];
-                break;
-        }        
+        }
         return $value;
     }
     
