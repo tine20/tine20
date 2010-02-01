@@ -1108,7 +1108,14 @@ class Setup_Controller
                             );
                             $definition->filename = $item->getFileName();
                             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating import/export definion from file: ' . $item->getFileName());
-                            Tinebase_ImportExportDefinition::getInstance()->create($definition);
+
+                            // try to get definition and update if it exists
+                            try {
+                                $existing = Tinebase_ImportExportDefinition::getInstance()->getByName($definition->name);
+                            } catch (Tinebase_Exception_NotFound $tenf) {
+                                // does not exist
+                                Tinebase_ImportExportDefinition::getInstance()->create($definition);
+                            }
                             
                         } catch (Tinebase_Exception_Record_Validation $erv) {
                             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Not installing import/export definion: ' . $erv->getMessage());
