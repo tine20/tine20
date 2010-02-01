@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-26 20:27+0100\n"
+"PO-Revision-Date: 2010-01-13 14:03+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -184,7 +184,7 @@ msgstr "Czysty tekst"
 
 #: js/FelamimailAccountEditDialog.js:301
 msgid "Sort Folders"
-msgstr ""
+msgstr "Segreguj katalogi"
 
 #: js/FelamimailGridDetailsPanel.js:124 js/FelamimailGridPanel.js:259
 #: js/FelamimailGridPanel.js:319 js/FelamimailMessageEditDialog.js:261
@@ -520,11 +520,12 @@ msgstr ""
 
 #: Preference.php:100
 msgid "Use in Addressbook"
-msgstr ""
+msgstr "Zastosuj w książce adresowej"
 
 #: Preference.php:101
 msgid "Compose Emails from the Addressbook with Felamimail."
 msgstr ""
+"Użyj Felamimail do tworzenia wiadomości pocztowych z Książki adresowej."
 
 #~ msgid "Create and edit email accounts"
 #~ msgstr "Utwórz i edytuj konta e-mail"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-09-20 15:47+0100\n"
+"PO-Revision-Date: 2010-01-13 14:04+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -278,11 +278,11 @@ msgstr "Wybieranie"
 
 #: js/Phone.js:325
 msgid "Error"
-msgstr ""
+msgstr "Błąd"
 
 #: js/Phone.js:326
 msgid "Not possible to dial."
-msgstr ""
+msgstr "Nie można nawiązać połączenia."
 
 #: js/Phone.js:469
 msgid "Dial number"

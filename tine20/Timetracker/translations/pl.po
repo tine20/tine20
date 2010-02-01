@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-26 21:23+0100\n"
+"PO-Revision-Date: 2010-01-13 14:23+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -155,15 +155,15 @@ msgstr "Przeliczone w"
 
 #: js/TimeaccountEditDialog.js:137
 msgid "Booking deadline"
-msgstr ""
+msgstr "Rezerwacja ostatecznego terminu"
 
 #: js/TimeaccountEditDialog.js:145
 msgid "none"
-msgstr ""
+msgstr "Brak"
 
 #: js/TimeaccountEditDialog.js:146
 msgid "last week"
-msgstr ""
+msgstr "ubiegły tydzień"
 
 #: js/TimeaccountEditDialog.js:150
 msgid "Timesheets are billable"
@@ -275,15 +275,18 @@ msgstr "Przeliczone"
 
 #: js/TimesheetEditDialog.js:265
 msgid "Failed"
-msgstr ""
+msgstr "Próba nieudana"
 
 #: js/TimesheetEditDialog.js:266
 msgid "Could not save {0}."
-msgstr ""
+msgstr "Zapisanie {0} było niemożliwe."
 
 #: js/TimesheetEditDialog.js:267
+#, fuzzy
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr ""
+"Ostateczny termin rezerwacji dla niniejszego konta godzin został "
+"przekroczony."
 
 #: js/TimesheetGridPanel.js:66
 msgid "Mass Update"
@@ -323,11 +326,11 @@ msgstr "Konto godzin zamknięte"
 
 #: js/TimesheetGridPanel.js:259
 msgid "Creation Time"
-msgstr ""
+msgstr "Czas utworzenia"
 
 #: js/TimesheetGridPanel.js:260
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Czas ostatniej modyfikacji"
 
 #: js/TimesheetGridPanel.js:312
 msgid "timeframe"
@@ -375,15 +378,16 @@ msgstr "Wszystkie konta godzin"
 
 #: Preference.php:65
 msgid "Timesheets ODS export configuration"
-msgstr ""
+msgstr "Konfiguracja eksportu kart godzin do formatu ODS"
 
 #: Preference.php:66
 msgid "Use this configuration for the timesheet ODS export."
 msgstr ""
+"Użyj niniejszej konfiguracji podczas eksportu kart godzin do formatu ODS."
 
 #: Preference.php:117
 msgid "default"
-msgstr ""
+msgstr "domyślnie"
 
 #: Setup/setup.xml:4
 msgid "Timetracker"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-26 21:36+0100\n"
+"PO-Revision-Date: 2010-01-13 14:25+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -235,13 +235,15 @@ msgstr ""
 
 #: js/ExceptionHandler.js:206
 msgid "No Response"
-msgstr ""
+msgstr "Brak odpowiedzi"
 
 #: js/ExceptionHandler.js:207
 msgid ""
 "Sorry, the Server did not respond any data. Please reload your browser, try "
 "again or contact your administrator."
 msgstr ""
+"Niestety serwer nie przesłał żadnych danych. Proszę przeładować przeglądarkę "
+"WWW, ponowić próbę albo skontaktować się ze swoim administratorem"
 
 #: js/LoginPanel.js:79 js/LoginPanel.js:112
 msgid "Login"
