@@ -107,17 +107,10 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
      */
     public function generate()
     {
-        // check for template file
-        $templateFile = $this->_config->get('template', NULL);
-        if ($templateFile !== NULL) {
-            $templateFile = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName . 
-                DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $templateFile;
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Using template file "' . $templateFile . '" for ' . $this->_modelName . ' export.');
-        }
-                        
-        $this->_openDocumentObject = new OpenDocument_Document(OpenDocument_Document::SPREADSHEET, $templateFile, Tinebase_Core::getTempDir(), $this->_userStyles);
+        $this->_createDocument();
         
         $records = $this->_getRecords();
+        $lastCell = count($records) + $this->_firstRow - 1;
         
         // build export table (use current table if using template)
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating export for ' . $this->_modelName . ' . ' . $this->_getDataTableName());
@@ -153,6 +146,24 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
         // create file
         $result = $this->_openDocumentObject->getDocument();        
         return $result;
+    }
+    
+    /**
+     * create new open document document
+     * 
+     * @return void
+     */
+    protected function _createDocument()
+    {
+        // check for template file
+        $templateFile = $this->_config->get('template', NULL);
+        if ($templateFile !== NULL) {
+            $templateFile = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName . 
+                DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $templateFile;
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Using template file "' . $templateFile . '" for ' . $this->_modelName . ' export.');
+        }
+                        
+        $this->_openDocumentObject = new OpenDocument_Document(OpenDocument_Document::SPREADSHEET, $templateFile, Tinebase_Core::getTempDir(), $this->_userStyles);
     }
     
     /**
