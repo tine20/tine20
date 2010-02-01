@@ -110,7 +110,7 @@ abstract class Tinebase_Export_Abstract
      * 
      * @var array
      */
-    protected $_userFields = array('created_by', 'last_modified_by');
+    protected $_userFields = array('created_by', 'last_modified_by', 'account_id');
     
     /**
      * other fields to resolve
@@ -278,9 +278,12 @@ abstract class Tinebase_Export_Abstract
     {
         $result = null;
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_field->toArray(), TRUE));
+        
         if (in_array($_field->type, $this->_specialFields)) {
             // special field handling
             $result = $this->_getSpecialFieldValue($_record, $_field->toArray(), $_field->identifier, $_cellType);
+            $result = $this->_replaceAndMatchvalue($result, $_field);
             return $result;
             
         } else if (isset($field->formula) || (! isset($_record->{$_field->identifier}) && ! in_array($_field->type, $this->_resolvedFields))) {
@@ -360,6 +363,9 @@ abstract class Tinebase_Export_Abstract
                 if (isset($_field->translate) && $_field->translate/* && $_cellType === OpenDocument_SpreadSheet_Cell::TYPE_STRING*/) {
                     $result = $this->_translate->_($result);
                 }
+                
+                // do replacements
+                $result = $this->_replaceAndMatchvalue($result, $_field);
         }
         
         return $result;
