@@ -66,14 +66,16 @@ Ext.ux.DatePickerWeekPlugin.prototype = {
     },
     
     update: function(date, forceRefresh, weekNumber){
-        var firstOfMonth = date.getFirstDateOfMonth();
-        var startingPos = firstOfMonth.getDay()-this.startDay;
-        if(startingPos <= this.startDay) {
+        var firstOfMonth = date.getFirstDateOfMonth(),
+            startingPos = firstOfMonth.getDay()-this.startDay;
+
+        if(startingPos < 0){
             startingPos += 7;
         }
         
         // NOTE "+1" to ensure ISO week!
         var startDate = firstOfMonth.add(Date.DAY, -1*startingPos + 1);
+        
         var wkCells = Ext.DomQuery.select('td[class=x-date-picker-wk]', this.getEl().dom);
         for (var i=0, id; i<wkCells.length; i++) {
             id = Ext.id() + ':' + startDate.add(Date.DAY, i*7).format('Y-m-d');
