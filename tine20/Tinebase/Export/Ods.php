@@ -124,23 +124,23 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             $table = $spreadSheet->appendTable($this->_getDataTableName());
         }
         
-        // add header
+        // add header (disabled at the moment)
         if (isset($this->_config->header) && $this->_config->header) {
-            $this->_addHead($table);
+            //$this->_addHead($table);
         }
             
         // body
         $this->_addBody($table, $records);
         
-        // add footer
+        // add footer (disabled at the moment)
         if (isset($this->_config->footer) && $this->_config->footer) {
-            $this->_addFooter($table, $lastCell);
+            //$this->_addFooter($table, $lastCell);
         }
         
-        // add overview table
+        // add overview table (disabled at the moment)
         if (isset($this->_config->overviewTable) && $this->_config->overviewTable) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding overview table.');
-            $this->_addOverviewTable($lastCell);
+            //$this->_addOverviewTable($lastCell);
         }
         
         // create file
@@ -181,6 +181,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
      *
      * @param OpenDocument_SpreadSheet_Table $table
      * 
+     * @todo make this work again (append column, ...)
      * @todo add filters/replacements again?
      */
     protected function _addHead($table)
