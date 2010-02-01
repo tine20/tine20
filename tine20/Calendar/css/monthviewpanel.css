@@ -75,13 +75,13 @@ cal-monthview-wkcell-header {
 }
 
 .cal-monthview-daybody {
-    overflow: hidden;
-    
+    /*overflow: visible;*/
 }
 
 /*********************************** Events ***********************************/
 .cal-monthview-eventslice {
     height: 18px;
+    overflow: visible;
 }
 
 .cal-monthview-event-icon,
@@ -94,6 +94,7 @@ cal-monthview-wkcell-header {
 	margin: 0px 0px;
 	width: 100%;
 	cursor: pointer;
+	/*overflow: hidden;*/
 }
 
 .cal-monthview-eventslice .cal-event-active {
@@ -102,6 +103,7 @@ cal-monthview-wkcell-header {
 
 .cal-monthview-event-summary {
     white-space: nowrap;
+    overflow: hidden;
 }
 
 
@@ -112,6 +114,7 @@ cal-monthview-wkcell-header {
 	background-color: red;
 	height: 17px;
 	width: 100%;
+	/*overflow: visible;*/
 }
 
 .ext-gecko .cal-monthview-alldayevent {
@@ -176,7 +179,8 @@ cal-monthview-wkcell-header {
 
 .cal-monthview-alldayevent-summary {
     white-space: nowrap;
-    overflow: visible; 
+    overflow: hidden;
+    /*overflow: visible; */
 }
 
 .cal-monthview-event-info-hide {

@@ -421,7 +421,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         ts.allDayEvent = new Ext.XTemplate(
             '<div id="{id}" class="cal-monthview-event cal-monthview-alldayevent {extraCls}" style="background-color: {bgColor};">' +
                 '<div class="cal-event-icon {iconCls} cal-monthview-event-info-{[values.showInfo ? "show" : "hide"]}">' +
-                    '<div class="cal-monthview-alldayevent-summary">{[Ext.util.Format.htmlEncode(values.summary)]}</div>' +
+                    '<div class="cal-monthview-alldayevent-summary" style="width: {width};">{[Ext.util.Format.htmlEncode(values.summary)]}</div>' +
                 '</div>' +
             '</div>'
         );
@@ -481,10 +481,13 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             startTime: dtStart.format('H:i'),
             summary: event.get('summary'),
             color: event.ui.color,
-            bgColor: event.ui.bgColor
+            bgColor: event.ui.bgColor,
+            width: '100%'
         };
         
         for (var i=Math.max(startCellNumber, 0); i<=Math.min(endCellNumber, this.dayCells.length-1) ; i++) {
+            var col = i%7, row = Math.floor(i/7);
+            
             data.id = Ext.id() + '-event:' + event.get('id');
             event.ui.domIds.push(data.id);
                 
@@ -504,6 +507,12 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                 
                 // show icon on startCell and leftCells
                 data.showInfo = i == startCellNumber || i%7 == 0;
+                
+                // adopt summary width NOTE: we need width in row
+                if (data.showInfo && startCellNumber != endCellNumber) {
+                    var cols = (row == Math.floor(endCellNumber/7) ? endCellNumber%7 : 6) - col +1;
+                    data.width = 100 * cols + '%'
+                }
             } 
             
             var posEl = this.getEventSlice(this.dayCells[i].lastChild, pos);
