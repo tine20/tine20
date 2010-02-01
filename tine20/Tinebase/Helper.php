@@ -100,8 +100,28 @@ function getDevelopmentRevision()
  * @param string $_cacheId
  * @return string
  */
-function convertCacheId($_cacheId) {
+function convertCacheId($_cacheId) 
+{
     $result = preg_replace('/[^a-z^A-Z^0-9^_]/', '', $_cacheId);
 
     return $result;
+}
+
+/**
+ * recursive deleting of directory and all containing files
+ * 
+ * @param string $_dir
+ * @return void
+ */
+function removeDir($_dir)
+{
+    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($_dir), RecursiveIteratorIterator::CHILD_FIRST);
+    foreach ($iterator as $fullFilename => $cur) {
+        if (is_dir($fullFilename)) {
+            rmdir($fullFilename);
+        } else {
+            unlink($fullFilename);
+        }
+    }
+    rmdir($_dir);
 }
