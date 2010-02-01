@@ -333,9 +333,13 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $files = array(
             array('name' => $filename, 'path' => $filename)
         );
+        $options = array(
+            'container_id'  => $this->container->getId(),
+            'dryrun'        => 1,
+        );
         
         // then import
-        $result = $this->_instance->importContacts($files, $definition->getId(), $this->container->getId(), TRUE);
+        $result = $this->_instance->importContacts($files, $options, $definition->getId());
         //print_r($result);
         
         // check
