@@ -22,7 +22,26 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     border: false,
     layout: 'border',
     
+    stateful: true,
+    stateId: 'cal-mainscreen',
+    stateEvents: ['changeview'],
+    
+    getState: function() {
+        return Ext.copyTo({}, this, 'activeView');
+    },
+    
+    applyState: Ext.emptyFn,
+    
     initComponent: function() {
+        this.addEvents(
+        /**
+         * @event changeview
+         * fired if an event got clicked
+         * @param {Tine.Calendar.MainScreenCenterPanel} mspanel
+         * @param {String} view
+         */
+        'changeview');
+        
         this.recordClass = Tine.Calendar.Model.Event;
         
         this.app = Tine.Tinebase.appMgr.get('Calendar');
@@ -32,6 +51,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
         this.i18nContainerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
         this.i18nContainersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
+        
+        var state = Ext.state.Manager.get(this.stateId, {});
+        Ext.apply(this, state);
         
         this.initActions();
         this.initLayout();
@@ -235,7 +257,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         // update data
         panel.getView().updatePeriod({from: this.startDate});
         panel.getStore().load({});
-        //this.updateMiniCal();
+        
+        this.fireEvent('changeview', this, view);
     },
     
     onContextMenu: function(e) {
