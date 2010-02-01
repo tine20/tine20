@@ -72,6 +72,7 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         
         // output as csv
         $xlswriter = new PHPExcel_Writer_CSV($excelObj);
+        $xlswriter->setSheetIndex(1);
         //$xlswriter->save('php://output');
         
         $csvFilename = 'test.csv';
@@ -89,37 +90,6 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         
         unlink($csvFilename);
     }
-
-    /**
-     * test xls export
-     * 
-     * @return void
-     * 
-     * @todo activate test again
-     * @todo save and test xls file (with xls reader)
-     */
-    /*
-    public function testExportXlsWithTemplate()
-    {
-        $this->_instance = new Crm_Export_Xls(array('template' => 'lead_test_template.xls'));
-        $excelObj = $this->_instance->generate(new Crm_Model_LeadFilter($this->_getLeadFilter()));
-        
-        // output as csv
-        $xlswriter = new PHPExcel_Writer_CSV($excelObj);
-        $xlswriter->setSheetIndex(1);
-        //$xlswriter->save('php://output');
-        
-        $csvFilename = 'test.csv';
-        $xlswriter->save($csvFilename);
-        
-        $this->assertTrue(file_exists($csvFilename));
-        $export = file_get_contents($csvFilename);
-        $this->assertEquals(1, preg_match("/PHPUnit/", $export), 'no name'); 
-        $this->assertEquals(1, preg_match("/Description/", $export), 'no description');
-        
-        unlink($csvFilename);
-    }
-    */
 }       
 
 if (PHPUnit_MAIN_METHOD == 'Crm_Export_XlsTest::main') {
