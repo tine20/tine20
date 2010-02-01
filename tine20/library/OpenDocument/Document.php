@@ -33,17 +33,10 @@ class OpenDocument_Document
     
     protected $_cellStyles = array();
     
-    protected $_fileName;
+    protected $_templateFile;
     
     protected $_document;
-    
-    /**
-     * temp dir
-     * 
-     * @var string
-     */
-    protected $_tmpdir = '/tmp';
-    
+        
     /**
      * document body
      *
@@ -163,15 +156,17 @@ class OpenDocument_Document
     public function __construct($_type, $_fileName = null, $_tmpdir = '/tmp', $_userStyles = array())
     {
         if($_fileName !== null) {
+            $this->_templateFile = $_fileName;
+            
             $this->_content     = file_get_contents('zip://' . $_fileName . '#content.xml');
-            $this->_manifest    = file_get_contents('zip://' . $_fileName . '#META-INF/manifest.xml');
-            $this->_meta        = file_get_contents('zip://' . $_fileName . '#meta.xml');
-            $this->_settings    = file_get_contents('zip://' . $_fileName . '#settings.xml');
+            #$this->_manifest    = file_get_contents('zip://' . $_fileName . '#META-INF/manifest.xml');
+            #$this->_meta        = file_get_contents('zip://' . $_fileName . '#meta.xml');
+            #$this->_settings    = file_get_contents('zip://' . $_fileName . '#settings.xml');
             $this->_styles      = file_get_contents('zip://' . $_fileName . '#styles.xml');
         }
 
         $this->_document = new SimpleXMLElement($this->_content);
-        
+        #echo $this->_document->asXML();
         // register namespaces
         $namespaces = $this->_document->getNamespaces(true);
         foreach ($namespaces as $prefix => $ns) {
@@ -222,38 +217,45 @@ class OpenDocument_Document
     public function getDocument($_filename = null)
     {
         $this->_addStyles();
+
+        $filename =  $_filename !== null ? $_filename : tempnam(sys_get_temp_dir(), 'OpenDocument');
+        $tempDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'od_' . md5(uniqid(rand(), true));
         
-        $filename =  $_filename !== null ? $_filename : $this->_tmpdir . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.ods';
-            
-        if(class_exists('ZipArchive', false)) {
-            $zip = new ZipArchive();
-            
-            if ($zip->open($filename, ZIPARCHIVE::CREATE) !== true) {
-                exit("cannot open <$filename>\n");
+        @unlink($tempDir);
+        mkdir($tempDir);
+        
+        if($this->_templateFile !== null) {
+            #echo "Extract Zip" . PHP_EOL;
+            $templateZip = new ZipArchive();
+            if ($templateZip->open($this->_templateFile) === TRUE) {
+                $templateZip->extractTo($tempDir);
+                $templateZip->close();
             }
-            
-            $zip->addFromString('content.xml', $this->_document->saveXML());
-            $zip->addFromString('mimetype', $this->_body->getContentType());
-            $zip->addFromString('meta.xml', $this->_meta);
-            $zip->addFromString('styles.xml', $this->_styles);
-            $zip->addFromString('settings.xml', $this->_settings);
-            $zip->addFromString('META-INF/manifest.xml', $this->_manifest);
-            
-            $zip->close();
-        } else {
-            $tmp = $this->_tmpdir;
-            $uid = uniqid();
-            mkdir($tmp.'/'.$uid);
-            file_put_contents($tmp.'/'.$uid.'/content.xml', $this->_document->saveXML());
-            file_put_contents($tmp.'/'.$uid.'/mimetype', $this->_body->getContentType());
-            file_put_contents($tmp.'/'.$uid.'/meta.xml', $this->_meta);
-            file_put_contents($tmp.'/'.$uid.'/styles.xml', $this->_styles);
-            file_put_contents($tmp.'/'.$uid.'/settings.xml', $this->_settings);
-            mkdir($tmp.'/'.$uid.'/META-INF/');
-            file_put_contents($tmp.'/'.$uid.'/META-INF/manifest.xml', $this->_manifest);
-            shell_exec('cd '.$tmp.'/'.$uid.';zip -r '.escapeshellarg($filename).' ./');
-            shell_exec('rm -rf '.$tmp.'/'.$uid);
         }
+        
+        if($this->_templateFile === null) {
+            mkdir($tempDir . DIRECTORY_SEPARATOR . 'META-INF');
+            file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'mimetype', $this->_body->getContentType());
+            file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'meta.xml', $this->_meta);
+            file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'settings.xml', $this->_settings);
+            file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'META-INF/manifest.xml', $this->_manifest);
+        }
+        
+        file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'content.xml', $this->_document->saveXML());
+        file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'styles.xml', $this->_styles);
+        
+        $zip = new ZipArchive();
+        $zip->open($filename, ZIPARCHIVE::CREATE);
+
+        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tempDir));
+        
+        foreach ($iterator as $fullFilename => $cur) {
+            $zip->addFile($fullFilename, substr($fullFilename, strlen($tempDir)+1));
+        }
+
+        $zip->close();
+        
+        unlink($tempDir);
         
         return $filename;
     }
