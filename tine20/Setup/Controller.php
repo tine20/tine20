@@ -1106,14 +1106,15 @@ class Setup_Controller
                                 $_application->getId(), 
                                 preg_replace("/\.xml/", '', $item->getFileName())
                             );
-                            $definition->filename = $item->getFileName();
-                            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating import/export definion from file: ' . $item->getFileName());
 
                             // try to get definition and update if it exists
                             try {
                                 $existing = Tinebase_ImportExportDefinition::getInstance()->getByName($definition->name);
+                                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Not installing import/export definion because it already exists');
                             } catch (Tinebase_Exception_NotFound $tenf) {
                                 // does not exist
+                                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating import/export definion from file: ' . $item->getFileName());
+                                $definition->filename = $item->getFileName();
                                 Tinebase_ImportExportDefinition::getInstance()->create($definition);
                             }
                             
