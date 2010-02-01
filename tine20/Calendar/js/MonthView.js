@@ -224,6 +224,11 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @return {Object}
      */
     getPeriod: function() {
+        // happens if month view is rendered first
+        if (! this.dateMesh) {
+            this.calcDateMesh();
+        }
+        
         return {
             from: this.dateMesh[0],
             until: this.dateMesh[this.dateMesh.length -1].add(Date.DAY, 1)
@@ -274,7 +279,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         this.monthNames = Date.monthNames;
         this.dayNames   = Date.dayNames;
         this.startDay   = Ext.DatePicker.prototype.startDay;
-    
+        
         this.initData(calPanel.store);
         this.initTemplates();
     },
