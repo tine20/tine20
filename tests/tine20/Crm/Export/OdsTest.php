@@ -75,6 +75,8 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
         $this->assertEquals(1, preg_match("/PHPUnit/",      $xmlBody), 'no name'); 
         $this->assertEquals(1, preg_match("/Description/",  $xmlBody), 'no description');
         $this->assertEquals(1, preg_match('/open/',         $xmlBody), 'no leadstate');
+        $this->assertEquals(1, preg_match('/Admin Account, Tine 2\.0/',         $xmlBody), 'no creator');
+        $this->assertEquals(1, preg_match('/Tine 2\.0 Admin Accounts/',         $xmlBody), 'no container name');
         
         unlink($odsFilename);
     }

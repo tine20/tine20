@@ -117,13 +117,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                         
         $this->_openDocumentObject = new OpenDocument_Document(OpenDocument_Document::SPREADSHEET, $templateFile, Tinebase_Core::getTempDir(), $this->_userStyles);
         
-        // get records by filter
-        $pagination = (! empty($this->_sortInfo)) ? new Tinebase_Model_Pagination($this->_sortInfo) : NULL;
-        $records = $this->_controller->search($this->_filter, $pagination);
-        $lastCell = count($records) + $this->_firstRow - 1;
-        
-        // resolve stuff
-        $this->_resolveRecords($records);
+        $records = $this->_getRecords();
         
         // build export table (use current table if using template)
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating export for ' . $this->_modelName . ' . ' . $this->_getDataTableName());
@@ -198,8 +192,6 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
         if (isset($this->_config->headers)) {
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
             
-            $locale = Tinebase_Core::get('locale');
-            
             $patterns = array(
                 '/\{date\}/', 
                 '/\{user\}/',
@@ -226,7 +218,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             */
             
             $replacements = array(
-                Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($locale), $locale),
+                Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale),
                 Tinebase_Core::getUser()->accountDisplayName,
                 //$this->_translate->_('Filter') . ': ' . implode(', ', $filters)
             );
@@ -397,15 +389,14 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             $result = $this->_getSpecialFieldValue($_record, $_field->toArray(), $_field->identifier, $_cellType);
             return $result;
             
-        } else if (isset($field->formula) || ! isset($_record->{$_field->identifier})) {
+        } else if (isset($field->formula) || (! isset($_record->{$_field->identifier}) && ! in_array($_field->type, $this->_resolvedFields))) {
             // don't add value for formula or undefined fields
             return $result;
         }
         
         switch($_field->type) {
             case 'datetime':
-                $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
-                $result = $_record->{$_field->identifier}->toString(Zend_Locale_Format::getDateFormat($locale), $locale);
+                $result = $_record->{$_field->identifier}->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale);
                 // empty date cells, get displayed as 30.12.1899
                 if(empty($result)) {
                     $result = null;
@@ -430,6 +421,10 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             case 'percentage':
                 $result    = $_record->{$_field->identifier} / 100;
                 break;
+            case 'container_id':
+                $container = $_record->{$_field->type}; 
+                $result = $container[$_field->field];
+                break;
             default:
                 if (isset($_field->custom) && $_field->custom) {
                     // add custom fields
@@ -440,7 +435,9 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                 } elseif (isset($_field->divisor)) {
                     // divisor
                     $result = $_record->{$_field->identifier} / $_field->divisor;
-
+                } elseif (in_array($_field->type, $this->_userFields)) {
+                    // resolved user
+                    $result = $_record->{$_field->type}->{$_field->field};
                 } else {
                     // all remaining
                     $result = $_record->{$_field->identifier};

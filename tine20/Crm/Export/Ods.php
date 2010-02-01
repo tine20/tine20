@@ -10,7 +10,6 @@
  * @version     $Id$
  * 
  * @todo        add class with common crm export functions (and move status/special field handling there)
- * @todo        add relations / products
  */
 
 /**
@@ -39,20 +38,7 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
      *
      * @var array
      */
-    protected $_specialFields = array('created_by', 'status', 'source', 'type', 'container_id');
-    
-    /**
-     * resolve records
-     *
-     * @param Tinebase_Record_RecordSet $_records
-     */
-    protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
-    {
-        Tinebase_User::getInstance()->resolveMultipleUsers($_records, 'created_by', true);
-        Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records->toArray(), TRUE));
-    }
+    protected $_specialFields = array('status', 'source', 'type');
     
     /**
      * get special field value
@@ -70,13 +56,6 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
     	}
     	
         switch($_param['type']) {
-            case 'created_by':
-                $value = $_record->$_param['type']->$_param['field'];
-                break;
-            case 'container_id':
-                $container = $_record->$_param['type']; 
-                $value = $container[$_param['field']];
-                break;
             case 'status':
                 $value = $_record->getLeadStatus();
                 break;
@@ -90,16 +69,6 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
                 $type = $settings->getOptionById($_record->leadtype_id, 'leadtypes');
                 $value = $type['leadtype'];                
                 break;
-                /*
-            case 'duration':
-                if ($_record->end) {
-                    $value = $_record->end->sub($_record->start, Zend_Date::DAY);
-                } else {
-                    $value = 0;
-                }
-                $_cellType = OpenDocument_SpreadSheet_Cell::TYPE_FLOAT;
-                break;
-                */
             default:
                 $value = '';
         }        
