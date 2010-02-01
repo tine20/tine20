@@ -300,6 +300,22 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->_controller->update($persitentConflictEvent, TRUE);
     }
     
+    public function testUpdateWithConflictAttendeeChange()
+    {
+        $persitentConflictEvent = $this->testCreateEventWithConfict();
+        $persitentConflictEvent->summary = 'attendee adds should recheck free/busy';
+        
+        $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        $persitentConflictEvent->attendee->addRecord(new Calendar_Model_Attender(array(
+            'user_id'   => $defaultUserGroup->getId(),
+            'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+            'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+        )));        
+        
+        $this->setExpectedException('Calendar_Exception_AttendeeBusy');
+        $this->_controller->update($persitentConflictEvent, TRUE);
+    }
+    
     public function testUpdateWithConflictWithTimechange()
     {
         $persitentConflictEvent = $this->testCreateEventWithConfict();
