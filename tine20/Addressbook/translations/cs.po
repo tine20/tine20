@@ -74,8 +74,7 @@ msgstr "URL"
 msgid "Role"
 msgstr "Funkce"
 
-#: Export/Pdf.php:77 js/ContactEditDialog.js:159 js/ContactGrid.js:134
-#: js/EditDialog.js:329 js/EditDialog.js:447
+#: Export/Pdf.php:77 js/ContactEditDialog.js:161 js/ContactGrid.js:134
 msgid "Room"
 msgstr "Místnost"
 
@@ -92,7 +91,7 @@ msgid "Private Contact Data"
 msgstr "Soukromé kontaktní údaje"
 
 #: Export/Pdf.php:89 js/Addressbook.js:256 js/Addressbook.js:257
-#: js/Addressbook.js:258 js/ContactEditDialog.js:257 js/EditDialog.js:613
+#: js/Addressbook.js:258 js/ContactEditDialog.js:259
 msgid "Private Address"
 msgstr "Soukromá adresa"
 
@@ -120,13 +119,13 @@ msgstr "Domácí URL"
 msgid "Other Data"
 msgstr "Ostatní údaje"
 
-#: Export/Pdf.php:115 js/Addressbook.js:252 js/ContactEditDialog.js:143
-#: js/ContactGrid.js:160 js/EditDialog.js:429
+#: Export/Pdf.php:115 js/Addressbook.js:252 js/ContactEditDialog.js:145
+#: js/ContactGrid.js:160
 msgid "Birthday"
 msgstr "Narozeniny"
 
-#: Export/Pdf.php:118 js/Addressbook.js:249 js/ContactEditDialog.js:138
-#: js/ContactGrid.js:132 js/EditDialog.js:424
+#: Export/Pdf.php:118 js/Addressbook.js:249 js/ContactEditDialog.js:140
+#: js/ContactGrid.js:132
 msgid "Job Title"
 msgstr "Povolání"
 
@@ -149,7 +148,7 @@ msgstr[2] "Kontaktů"
 msgid "Contacts"
 msgstr "Kontakty"
 
-#: js/Addressbook.js:215 js/EditDialog.js:52
+#: js/Addressbook.js:215
 msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] "adresář"
@@ -168,52 +167,47 @@ msgstr "Uživatelský účet"
 msgid "Quick search"
 msgstr "Rychlé hledání"
 
-#: js/Addressbook.js:245 js/ContactEditDialog.js:103 js/ContactGrid.js:127
-#: js/EditDialog.js:389
+#: js/Addressbook.js:245 js/ContactEditDialog.js:105 js/ContactGrid.js:127
 msgid "First Name"
 msgstr "Křestní jméno"
 
-#: js/Addressbook.js:246 js/ContactEditDialog.js:111
-#: js/ContactEditDialog.js:383 js/ContactGrid.js:126 js/EditDialog.js:397
+#: js/Addressbook.js:246 js/ContactEditDialog.js:113
+#: js/ContactEditDialog.js:386 js/ContactGrid.js:126
 msgid "Last Name"
 msgstr "Příjmení"
 
-#: js/Addressbook.js:247 js/ContactEditDialog.js:119
-#: js/ContactEditDialog.js:383 js/ContactGrid.js:130
-#: js/ContactGridDetailsPanel.js:131 js/EditDialog.js:405 Setup/setup.xml:608
+#: js/Addressbook.js:247 js/ContactEditDialog.js:121
+#: js/ContactEditDialog.js:386 js/ContactGrid.js:130
+#: js/ContactGridDetailsPanel.js:131 Setup/setup.xml:608
 msgid "Company"
 msgstr "Firma"
 
-#: js/Addressbook.js:248 js/ContactEditDialog.js:169 js/ContactGrid.js:146
+#: js/Addressbook.js:248 js/ContactEditDialog.js:171 js/ContactGrid.js:146
 #: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
-#: js/EditDialog.js:465
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/Addressbook.js:250 js/ContactEditDialog.js:155 js/ContactGrid.js:133
-#: js/EditDialog.js:324 js/EditDialog.js:442
+#: js/Addressbook.js:250 js/ContactEditDialog.js:157 js/ContactGrid.js:133
 msgid "Job Role"
 msgstr "Pracovní funkce"
 
-#: js/Addressbook.js:253 js/Addressbook.js:256 js/ContactEditDialog.js:237
-#: js/ContactEditDialog.js:260 js/ContactGrid.js:135 js/EditDialog.js:582
-#: js/EditDialog.js:625
+#: js/Addressbook.js:253 js/Addressbook.js:256 js/ContactEditDialog.js:239
+#: js/ContactEditDialog.js:262 js/ContactGrid.js:135
 msgid "Street"
 msgstr "Ulice"
 
 #: js/Addressbook.js:253 js/Addressbook.js:254 js/Addressbook.js:255
-#: js/ContactEditDialog.js:234 js/EditDialog.js:566
+#: js/ContactEditDialog.js:236
 msgid "Company Address"
 msgstr "Firemní adresa"
 
-#: js/Addressbook.js:254 js/Addressbook.js:257 js/ContactEditDialog.js:246
-#: js/ContactEditDialog.js:269 js/EditDialog.js:596 js/EditDialog.js:639
+#: js/Addressbook.js:254 js/Addressbook.js:257 js/ContactEditDialog.js:248
+#: js/ContactEditDialog.js:271
 msgid "Postal Code"
 msgstr "PSČ"
 
-#: js/Addressbook.js:255 js/Addressbook.js:258 js/ContactEditDialog.js:249
-#: js/ContactEditDialog.js:272 js/ContactGrid.js:136 js/EditDialog.js:600
-#: js/EditDialog.js:643
+#: js/Addressbook.js:255 js/Addressbook.js:258 js/ContactEditDialog.js:251
+#: js/ContactEditDialog.js:274 js/ContactGrid.js:136
 msgid "City"
 msgstr "Město"
 
@@ -225,106 +219,101 @@ msgstr "Typ"
 msgid "Map"
 msgstr "Mapa"
 
-#: js/ContactEditDialog.js:66 js/EditDialog.js:337
+#: js/ContactEditDialog.js:66
 msgid "Personal Information"
 msgstr "Osobní informace"
 
-#: js/ContactEditDialog.js:86 js/EditDialog.js:370
+#: js/ContactEditDialog.js:88
 msgid "Salutation"
 msgstr "Oslovení"
 
-#: js/ContactEditDialog.js:96 js/EditDialog.js:381
+#: js/ContactEditDialog.js:98
 msgid "Title"
 msgstr "Titul"
 
-#: js/ContactEditDialog.js:107 js/EditDialog.js:393
+#: js/ContactEditDialog.js:109
 msgid "Middle Name"
 msgstr "Prostřední jméno"
 
-#: js/ContactEditDialog.js:124 js/ContactGrid.js:131 js/EditDialog.js:410
+#: js/ContactEditDialog.js:126 js/ContactGrid.js:131
 msgid "Unit"
 msgstr "Útvar"
 
-#: js/ContactEditDialog.js:133 js/ContactGrid.js:129 js/EditDialog.js:306
-#: js/EditDialog.js:419
+#: js/ContactEditDialog.js:135 js/ContactGrid.js:129
 msgid "Display Name"
 msgstr "Zobrazované jméno"
 
-#: js/ContactEditDialog.js:151 js/EditDialog.js:319 js/EditDialog.js:437
+#: js/ContactEditDialog.js:153
 msgid "Suffix"
 msgstr "Dodatek za jménem"
 
-#: js/ContactEditDialog.js:165 js/EditDialog.js:536
+#: js/ContactEditDialog.js:167
 msgid "Contact Information"
 msgstr "Kontaktní informace"
 
-#: js/ContactEditDialog.js:173 js/ContactGrid.js:147
+#: js/ContactEditDialog.js:175 js/ContactGrid.js:147
 #: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
-#: js/EditDialog.js:470
 msgid "Mobile"
 msgstr "Mobil"
 
-#: js/ContactEditDialog.js:177 js/ContactGrid.js:148
+#: js/ContactEditDialog.js:179 js/ContactGrid.js:148
 #: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
-#: js/EditDialog.js:475
 msgid "Fax"
 msgstr "Fax"
 
-#: js/ContactEditDialog.js:181 js/ContactGrid.js:151 js/EditDialog.js:482
+#: js/ContactEditDialog.js:183 js/ContactGrid.js:151
 msgid "Phone (private)"
 msgstr "Telefon (privátní)"
 
-#: js/ContactEditDialog.js:185 js/ContactGrid.js:153 js/EditDialog.js:487
+#: js/ContactEditDialog.js:187 js/ContactGrid.js:153
 msgid "Mobile (private)"
 msgstr "Mobil (privátní)"
 
-#: js/ContactEditDialog.js:189 js/ContactGrid.js:152 js/EditDialog.js:492
+#: js/ContactEditDialog.js:191 js/ContactGrid.js:152
 msgid "Fax (private)"
 msgstr "Fax (privátní)"
 
-#: js/ContactEditDialog.js:193 js/ContactGridDetailsPanel.js:142
-#: js/ContactGridDetailsPanel.js:166 js/EditDialog.js:499
+#: js/ContactEditDialog.js:195 js/ContactGridDetailsPanel.js:142
+#: js/ContactGridDetailsPanel.js:166
 msgid "E-Mail"
 msgstr "E-mail"
 
-#: js/ContactEditDialog.js:198 js/EditDialog.js:505
+#: js/ContactEditDialog.js:200
 msgid "E-Mail (private)"
 msgstr "E-mail (privátní)"
 
-#: js/ContactEditDialog.js:204 js/ContactGrid.js:155
+#: js/ContactEditDialog.js:206 js/ContactGrid.js:155
 #: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
-#: js/EditDialog.js:512
 msgid "Web"
 msgstr "WWW"
 
-#: js/ContactEditDialog.js:240 js/ContactEditDialog.js:263
-#: js/EditDialog.js:586 js/EditDialog.js:629
+#: js/ContactEditDialog.js:242 js/ContactEditDialog.js:265
 msgid "Street 2"
 msgstr "Ulice 2"
 
-#: js/ContactEditDialog.js:243 js/ContactEditDialog.js:266
-#: js/ContactGrid.js:137 js/EditDialog.js:590 js/EditDialog.js:633
+#: js/ContactEditDialog.js:245 js/ContactEditDialog.js:268
+#: js/ContactGrid.js:137
 msgid "Region"
 msgstr "Region / Kraj"
 
-#: js/ContactEditDialog.js:253 js/ContactEditDialog.js:276
-#: js/ContactGrid.js:139 js/EditDialog.js:605 js/EditDialog.js:648
+#: js/ContactEditDialog.js:255 js/ContactEditDialog.js:278
+#: js/ContactGrid.js:139
 msgid "Country"
 msgstr "Stát"
 
-#: js/ContactEditDialog.js:295 js/EditDialog.js:696
+#: js/ContactEditDialog.js:298
 msgid "Description"
 msgstr "Popis"
 
-#: js/ContactEditDialog.js:309 js/EditDialog.js:710
+#: js/ContactEditDialog.js:312
 msgid "Enter description"
 msgstr "Vložit popis"
 
-#: js/ContactEditDialog.js:358
+#: js/ContactEditDialog.js:361
 msgid "Export as pdf"
 msgstr "Exportovat do pdf"
 
-#: js/ContactEditDialog.js:383
+#: js/ContactEditDialog.js:386
 msgid "Either {0} or {1} must be given"
 msgstr "Musíte zadat buď {0} nebo {1}"
 
@@ -416,23 +405,27 @@ msgstr "Volat kontakt"
 msgid "Compose email"
 msgstr "Napsat email"
 
-#: js/ContactGrid.js:265
+#: js/ContactGrid.js:232
+msgid "Import contacts"
+msgstr ""
+
+#: js/ContactGrid.js:276
 msgid "Work"
 msgstr "Práce"
 
-#: js/ContactGrid.js:274
+#: js/ContactGrid.js:285
 msgid "Home"
 msgstr "Doma"
 
-#: js/ContactGrid.js:283
+#: js/ContactGrid.js:294
 msgid "Cell"
 msgstr "Mobil"
 
-#: js/ContactGrid.js:292
+#: js/ContactGrid.js:303
 msgid "Cell private"
 msgstr "Privátní mobil"
 
-#: js/ContactGrid.js:369
+#: js/ContactGrid.js:407
 msgid "Internal Contact"
 msgstr "Interní kontakt"
 
@@ -447,82 +440,6 @@ msgstr "Soukromé"
 #: js/ContactGridDetailsPanel.js:178
 msgid "Info"
 msgstr "Informace"
-
-#: js/EditDialog.js:51 js/EditDialog.js:53
-msgid "contacts"
-msgstr "kontakty"
-
-#: js/EditDialog.js:58
-msgid "export as pdf"
-msgstr "exportovat do pdf"
-
-#: js/EditDialog.js:83
-msgid "Loading Contact..."
-msgstr "Načítám kontakt..."
-
-#: js/EditDialog.js:83
-msgid "Please Wait"
-msgstr "Čekejte prosím"
-
-#: js/EditDialog.js:121
-msgid "Add new contact"
-msgstr "Přidat nový kontakt"
-
-#: js/EditDialog.js:123
-msgid "Edit Contact \"{0}\""
-msgstr "Editovat kontakt \"{0}\""
-
-#: js/EditDialog.js:153
-msgid "Please wait a moment..."
-msgstr "Počkejte prosím okamžik..."
-
-#: js/EditDialog.js:153
-msgid "Saving Contact"
-msgstr "Ukládám kontakt"
-
-#: js/EditDialog.js:178 js/EditDialog.js:203
-msgid "Failed"
-msgstr "Nepodařilo se"
-
-#: js/EditDialog.js:178
-msgid "Could not save contact."
-msgstr "Nepodařilo se uložit kontakt."
-
-#: js/EditDialog.js:182
-msgid "Either "
-msgstr "Buď"
-
-#: js/EditDialog.js:183
-msgid "Start date is not valid"
-msgstr "Počáteční datum je neplatné"
-
-#: js/EditDialog.js:184
-msgid "Errors"
-msgstr "Chyby"
-
-#: js/EditDialog.js:184
-msgid "Please fix the errors noted."
-msgstr "Opravte prosím vyznačené chyby."
-
-#: js/EditDialog.js:197
-msgid "Deleting contact..."
-msgstr "Mažu kontakt..."
-
-#: js/EditDialog.js:203
-msgid "Some error occured while trying to delete the contact."
-msgstr "Při mazání kontaktu došlo k chybě."
-
-#: js/EditDialog.js:656
-msgid "Custom Fields"
-msgstr "Volitelné položky"
-
-#: js/EditDialog.js:751
-#, python-format
-msgid "Link"
-msgid_plural "Links [%d]"
-msgstr[0] "Odkaz"
-msgstr[1] "Odkazy [%d]"
-msgstr[2] "Odkazů [%d]"
 
 #: js/SearchCombo.js:92
 msgid "Searching..."
@@ -543,6 +460,63 @@ msgstr "Pan"
 #: Setup/setup.xml:590
 msgid "Ms"
 msgstr "Paní"
+
+#~ msgid "contacts"
+#~ msgstr "kontakty"
+
+#~ msgid "export as pdf"
+#~ msgstr "exportovat do pdf"
+
+#~ msgid "Loading Contact..."
+#~ msgstr "Načítám kontakt..."
+
+#~ msgid "Please Wait"
+#~ msgstr "Čekejte prosím"
+
+#~ msgid "Add new contact"
+#~ msgstr "Přidat nový kontakt"
+
+#~ msgid "Edit Contact \"{0}\""
+#~ msgstr "Editovat kontakt \"{0}\""
+
+#~ msgid "Please wait a moment..."
+#~ msgstr "Počkejte prosím okamžik..."
+
+#~ msgid "Saving Contact"
+#~ msgstr "Ukládám kontakt"
+
+#~ msgid "Failed"
+#~ msgstr "Nepodařilo se"
+
+#~ msgid "Could not save contact."
+#~ msgstr "Nepodařilo se uložit kontakt."
+
+#~ msgid "Either "
+#~ msgstr "Buď"
+
+#~ msgid "Start date is not valid"
+#~ msgstr "Počáteční datum je neplatné"
+
+#~ msgid "Errors"
+#~ msgstr "Chyby"
+
+#~ msgid "Please fix the errors noted."
+#~ msgstr "Opravte prosím vyznačené chyby."
+
+#~ msgid "Deleting contact..."
+#~ msgstr "Mažu kontakt..."
+
+#~ msgid "Some error occured while trying to delete the contact."
+#~ msgstr "Při mazání kontaktu došlo k chybě."
+
+#~ msgid "Custom Fields"
+#~ msgstr "Volitelné položky"
+
+#~ msgid "Link"
+#~ msgid_plural "Links [%d]"
+#~ msgstr[0] "Odkaz"
+#~ msgstr[1] "Odkazy [%d]"
+#~ msgstr[2] "Odkazů [%d]"
 
 #~ msgid "The defualt addressbook for new contacts"
 #~ msgstr "Výchozí adresář pro nové kontakty"

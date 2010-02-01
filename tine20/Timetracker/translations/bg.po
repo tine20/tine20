@@ -20,94 +20,23 @@ msgstr "Обработка на времеви конта"
 msgid "Add, edit and delete timeaccounts"
 msgstr "Обработка, задаване и изтриване на времевите конта"
 
-#: Export/Ods.php:121 js/Timetracker.js:30
-msgid "Timesheets"
-msgstr "Работни часове"
-
-#: Export/Ods.php:148
+#: Export/Ods/Timesheet.php:89
 msgid "Total Sum"
 msgstr "Обща сума"
 
-#: Export/Ods.php:165
+#: Export/Ods/Timesheet.php:109
 msgid "Not billable"
 msgstr "Не по сметка/Не се отчита"
 
-#: Export/Ods.php:173 Export/Ods.php:243 Export/Ods.php:299
-#: js/TimesheetEditDialog.js:193 js/TimesheetGridPanel.js:74
-#: js/TimesheetGridPanel.js:218 js/TimesheetGridPanel.js:250
+#: Export/Ods/Timesheet.php:117 js/TimesheetEditDialog.js:193
+#: js/TimesheetGridPanel.js:74 js/TimesheetGridPanel.js:218
+#: js/TimesheetGridPanel.js:250
 msgid "Billable"
 msgstr "по сметка / заплатими"
 
-#: Export/Ods.php:181
+#: Export/Ods/Timesheet.php:125
 msgid "Total"
 msgstr "Тотално"
-
-#: Export/Ods.php:207 js/TimesheetEditDialog.js:152
-#: js/TimesheetGridPanel.js:216 js/TimesheetGridPanel.js:241
-msgid "Date"
-msgstr "Дата"
-
-#: Export/Ods.php:212 Export/Ods.php:277 js/Models.js:133
-#: js/TimeaccountEditDialog.js:93 js/TimeaccountEditDialog.js:168
-#: js/TimesheetEditDialog.js:174 js/TimesheetGridPanel.js:217
-#: js/TimesheetGridPanel.js:249 js/TimesheetGridPanel.js:399
-msgid "Description"
-msgstr "Описание"
-
-#: Export/Ods.php:217
-msgid "Timeaccount Number"
-msgstr "Номер на времево конто"
-
-#: Export/Ods.php:223
-msgid "Timeaccount"
-msgstr "Времево конто"
-
-#: Export/Ods.php:230
-msgid "Staff Member"
-msgstr "Колега"
-
-#: Export/Ods.php:236 js/TimesheetEditDialog.js:147
-#: js/TimesheetGridPanel.js:257
-msgid "Duration"
-msgstr "Продължителност"
-
-#: Export/Ods.php:248 js/TimesheetEditDialog.js:200
-#: js/TimesheetGridPanel.js:79 js/TimesheetGridPanel.js:219
-#: js/TimesheetGridPanel.js:252
-msgid "Cleared"
-msgstr "Осчетоводено"
-
-#: Export/Ods.php:267 js/Models.js:131 js/TimeaccountEditDialog.js:83
-#: js/TimeaccountGridPanel.js:94
-msgid "Number"
-msgstr "Номер"
-
-#: Export/Ods.php:272 js/Models.js:132 js/TimeaccountEditDialog.js:88
-#: js/TimeaccountGridPanel.js:99
-msgid "Title"
-msgstr "Име"
-
-#: Export/Ods.php:282 js/Models.js:134
-msgid "Created By"
-msgstr "Създаден от"
-
-#: Export/Ods.php:288
-msgid "Creation Date"
-msgstr "Лата на създаване"
-
-#: Export/Ods.php:293 js/Models.js:135 js/TimeaccountEditDialog.js:110
-#: js/TimeaccountGridPanel.js:104
-msgid "Status"
-msgstr "Статус"
-
-#: Export/Ods.php:304 js/TimeaccountEditDialog.js:133
-#: js/TimesheetEditDialog.js:211
-msgid "Cleared In"
-msgstr "Пресметнат (нанесен) в"
-
-#: Export/Ods.php:309
-msgid "Open"
-msgstr "Отворено"
 
 #: js/DurationSlider.js:95
 msgid "{0}"
@@ -145,6 +74,32 @@ msgstr[1] "листи на времеви конта"
 #: js/Models.js:130 js/TimesheetGridPanel.js:214
 msgid "Quick search"
 msgstr ""
+
+#: js/Models.js:131 js/TimeaccountEditDialog.js:83
+#: js/TimeaccountGridPanel.js:94
+msgid "Number"
+msgstr "Номер"
+
+#: js/Models.js:132 js/TimeaccountEditDialog.js:88
+#: js/TimeaccountGridPanel.js:99
+msgid "Title"
+msgstr "Име"
+
+#: js/Models.js:133 js/TimeaccountEditDialog.js:93
+#: js/TimeaccountEditDialog.js:169 js/TimesheetEditDialog.js:174
+#: js/TimesheetGridPanel.js:217 js/TimesheetGridPanel.js:249
+#: js/TimesheetGridPanel.js:399
+msgid "Description"
+msgstr "Описание"
+
+#: js/Models.js:134
+msgid "Created By"
+msgstr "Създаден от"
+
+#: js/Models.js:135 js/TimeaccountEditDialog.js:110
+#: js/TimeaccountGridPanel.js:104
+msgid "Status"
+msgstr "Статус"
 
 #: js/TimeaccountEditDialog.js:98
 msgid "Unit"
@@ -189,6 +144,10 @@ msgstr "платени"
 msgid "not cleared yet..."
 msgstr "Все още непресметнат (нанесен)..."
 
+#: js/TimeaccountEditDialog.js:133 js/TimesheetEditDialog.js:211
+msgid "Cleared In"
+msgstr "Пресметнат (нанесен) в"
+
 #: js/TimeaccountEditDialog.js:137
 msgid "Booking deadline"
 msgstr ""
@@ -205,35 +164,35 @@ msgstr ""
 msgid "Timesheets are billable"
 msgstr "Работните часове са по сметка / заплатими"
 
-#: js/TimeaccountEditDialog.js:182
+#: js/TimeaccountEditDialog.js:183
 msgid "Enter description"
 msgstr "Редактирай описание"
 
-#: js/TimeaccountEditDialog.js:198
+#: js/TimeaccountEditDialog.js:199
 msgid "Access"
 msgstr "Достъп"
 
-#: js/TimeaccountEditDialog.js:222
+#: js/TimeaccountEditDialog.js:223
 msgid "Book Own"
 msgstr "Запази собствени"
 
-#: js/TimeaccountEditDialog.js:227
+#: js/TimeaccountEditDialog.js:228
 msgid "View All"
 msgstr "Виж всички"
 
-#: js/TimeaccountEditDialog.js:232
+#: js/TimeaccountEditDialog.js:233
 msgid "Book All"
 msgstr "Запази всички"
 
-#: js/TimeaccountEditDialog.js:237
+#: js/TimeaccountEditDialog.js:238
 msgid "Manage Clearing"
 msgstr "Организирай По сметка"
 
-#: js/TimeaccountEditDialog.js:242
+#: js/TimeaccountEditDialog.js:243
 msgid "Manage All"
 msgstr "Организирай Всички"
 
-#: js/TimeaccountEditDialog.js:250
+#: js/TimeaccountEditDialog.js:251
 msgid "Permissions"
 msgstr "Права за достър"
 
@@ -278,6 +237,15 @@ msgstr "Селектирай времево конто"
 msgid "Searching..."
 msgstr "Търси..."
 
+#: js/TimesheetEditDialog.js:147 js/TimesheetGridPanel.js:257
+msgid "Duration"
+msgstr "Продължителност"
+
+#: js/TimesheetEditDialog.js:152 js/TimesheetGridPanel.js:216
+#: js/TimesheetGridPanel.js:241
+msgid "Date"
+msgstr "Дата"
+
 #: js/TimesheetEditDialog.js:157
 msgid "Start"
 msgstr "Начало"
@@ -295,15 +263,20 @@ msgstr "Редактирай описание..."
 msgid "Account"
 msgstr "Сметка (конто)"
 
-#: js/TimesheetEditDialog.js:264
+#: js/TimesheetEditDialog.js:200 js/TimesheetGridPanel.js:79
+#: js/TimesheetGridPanel.js:219 js/TimesheetGridPanel.js:252
+msgid "Cleared"
+msgstr "Осчетоводено"
+
+#: js/TimesheetEditDialog.js:265
 msgid "Failed"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:265
+#: js/TimesheetEditDialog.js:266
 msgid "Could not save {0}."
 msgstr ""
 
-#: js/TimesheetEditDialog.js:266
+#: js/TimesheetEditDialog.js:267
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr ""
 
@@ -379,6 +352,10 @@ msgstr "Обща сума на платимите часове "
 msgid "Detail"
 msgstr "Детайл"
 
+#: js/Timetracker.js:30
+msgid "Timesheets"
+msgstr "Работни часове"
+
 #: js/Timetracker.js:35
 msgid "All Timesheets"
 msgstr "Всички работни часове"
@@ -399,13 +376,28 @@ msgstr ""
 msgid "Use this configuration for the timesheet ODS export."
 msgstr ""
 
-#: Preference.php:114
+#: Preference.php:117
 msgid "default"
 msgstr ""
 
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "Нанасянене на работни часове"
+
+#~ msgid "Timeaccount Number"
+#~ msgstr "Номер на времево конто"
+
+#~ msgid "Timeaccount"
+#~ msgstr "Времево конто"
+
+#~ msgid "Staff Member"
+#~ msgstr "Колега"
+
+#~ msgid "Creation Date"
+#~ msgstr "Лата на създаване"
+
+#~ msgid "Open"
+#~ msgstr "Отворено"
 
 #~ msgid "Filter"
 #~ msgstr "Филтър"

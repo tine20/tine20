@@ -30,40 +30,40 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%s 的个人任务"
 
-#: js/EditDialog.js:169 js/GridPanel.js:94 js/GridPanel.js:170
+#: js/EditDialog.js:173 js/GridPanel.js:94 js/GridPanel.js:171
 msgid "Summary"
 msgstr "摘要"
 
-#: js/EditDialog.js:174
+#: js/EditDialog.js:178
 msgid "Due date"
 msgstr "过期日期"
 
-#: js/EditDialog.js:177 js/GridPanel.js:189 Model/Task.php:181
+#: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:176
 msgid "Priority"
 msgstr "优先"
 
-#: js/EditDialog.js:180
+#: js/EditDialog.js:184
 #, fuzzy
 msgid "Add Responsible ..."
 msgstr "有责任的"
 
-#: js/EditDialog.js:187
+#: js/EditDialog.js:191
 msgid "Notes"
 msgstr "注释"
 
-#: js/EditDialog.js:188
+#: js/EditDialog.js:192
 msgid "Enter description..."
 msgstr "输入描述"
 
-#: js/EditDialog.js:193
+#: js/EditDialog.js:197
 msgid "Percentage"
 msgstr "百分比"
 
-#: js/EditDialog.js:197 js/GridPanel.js:216 Model/Task.php:182
+#: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:177
 msgid "Status"
 msgstr "状态"
 
-#: js/EditDialog.js:201
+#: js/EditDialog.js:205
 msgid "Completed"
 msgstr "完成的"
 
@@ -76,11 +76,11 @@ msgstr[0] "你确实想删除选中的任务？"
 msgid "Quick search"
 msgstr ""
 
-#: js/GridPanel.js:95 js/GridPanel.js:181
+#: js/GridPanel.js:95 js/GridPanel.js:182
 msgid "Due Date"
 msgstr "过期日期"
 
-#: js/GridPanel.js:96 js/GridPanel.js:237
+#: js/GridPanel.js:96 js/GridPanel.js:238
 msgid "Responsible"
 msgstr "有责任的"
 
@@ -97,19 +97,23 @@ msgstr "不能保存任务"
 msgid "Tags"
 msgstr "任务"
 
-#: js/GridPanel.js:177
+#: js/GridPanel.js:168
+msgid "Lead"
+msgstr ""
+
+#: js/GridPanel.js:178
 msgid "Add a task..."
 msgstr "添加任务"
 
-#: js/GridPanel.js:203 Model/Task.php:183
+#: js/GridPanel.js:204 Model/Task.php:178
 msgid "Percent"
 msgstr "百分比"
 
-#: js/GridPanel.js:230
+#: js/GridPanel.js:231
 msgid "Creation Time"
 msgstr "创建时间"
 
-#: js/GridPanel.js:263
+#: js/GridPanel.js:285
 msgid "Show closed"
 msgstr "显示关闭的"
 
@@ -135,15 +139,15 @@ msgstr[0] "要做的事项列表"
 msgid "to do lists"
 msgstr "to do 列表"
 
-#: Model/Task.php:178
+#: Model/Task.php:173
 msgid "Due"
 msgstr ""
 
-#: Model/Task.php:179
+#: Model/Task.php:174
 msgid "Organizer"
 msgstr ""
 
-#: Model/Task.php:180
+#: Model/Task.php:175
 #, fuzzy
 msgid "Description"
 msgstr "输入描述"

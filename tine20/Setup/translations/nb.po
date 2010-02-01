@@ -196,28 +196,32 @@ msgid "Redirect Settings"
 msgstr ""
 
 #: js/AuthenticationPanel.js:462
-msgid "Redirect Url (after Logout, redirect to login screen if empty)"
+msgid "Redirect Url (redirect to login screen if empty)"
 msgstr ""
 
-#: js/AuthenticationPanel.js:473
+#: js/AuthenticationPanel.js:474
+msgid "Redirect Always (if No, only redirect after logout)"
+msgstr ""
+
+#: js/AuthenticationPanel.js:485
 msgid "Redirect to referring site, if exists"
 msgstr ""
 
-#: js/AuthenticationPanel.js:486
+#: js/AuthenticationPanel.js:498
 msgid "Save config and install"
 msgstr ""
 
-#: js/AuthenticationPanel.js:488 js/ConfigManagerPanel.js:208
+#: js/AuthenticationPanel.js:500 js/ConfigManagerPanel.js:208
 msgid "Save config"
 msgstr ""
 
-#: js/AuthenticationPanel.js:512
+#: js/AuthenticationPanel.js:524
 msgid "Passwords don't match"
 msgstr ""
 
-#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:529
-#: js/AuthenticationPanel.js:533 js/AuthenticationPanel.js:542
-#: js/AuthenticationPanel.js:550
+#: js/AuthenticationPanel.js:534 js/AuthenticationPanel.js:541
+#: js/AuthenticationPanel.js:545 js/AuthenticationPanel.js:554
+#: js/AuthenticationPanel.js:562
 msgid "Should not be empty"
 msgstr ""
 
@@ -349,7 +353,7 @@ msgstr ""
 msgid "SSL"
 msgstr ""
 
-#: js/EmailPanel.js:221 js/EmailPanel.js:328
+#: js/EmailPanel.js:221
 msgid "Domain"
 msgstr ""
 
@@ -385,27 +389,35 @@ msgstr ""
 msgid "Plain"
 msgstr ""
 
+#: js/EmailPanel.js:328
+msgid "Primary Domain"
+msgstr ""
+
 #: js/EmailPanel.js:332
+msgid "Secondary Domains (comma separated)"
+msgstr ""
+
+#: js/EmailPanel.js:336
 msgid "Notifications service address"
 msgstr ""
 
-#: js/EmailPanel.js:381
+#: js/EmailPanel.js:385
 msgid "MySql Hostname"
 msgstr ""
 
-#: js/EmailPanel.js:384
+#: js/EmailPanel.js:388
 msgid "MySql Database"
 msgstr ""
 
-#: js/EmailPanel.js:387
+#: js/EmailPanel.js:391
 msgid "MySql User"
 msgstr ""
 
-#: js/EmailPanel.js:390
+#: js/EmailPanel.js:394
 msgid "MySql Password"
 msgstr ""
 
-#: js/EmailPanel.js:394
+#: js/EmailPanel.js:398
 msgid "MySql Port"
 msgstr ""
 

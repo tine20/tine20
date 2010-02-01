@@ -176,60 +176,60 @@ msgstr[1] "Calendars"
 msgid "Loading events, please wait..."
 msgstr "Loading events, please wait..."
 
-#: js/CalendarPanel.js:226
+#: js/CalendarPanel.js:227
 msgid "Scheduling Conflict"
 msgstr "Scheduling Conflict"
 
-#: js/CalendarPanel.js:230
+#: js/CalendarPanel.js:231
 msgid "The following attendee are busy at the requested time:"
 msgstr "The following attendee are busy at the requested time:"
 
-#: js/CalendarPanel.js:235
+#: js/CalendarPanel.js:236
 msgid "Ignore Conflict"
 msgstr "Ignore Conflict"
 
-#: js/CalendarPanel.js:242
+#: js/CalendarPanel.js:243
 msgid "Edit Event"
 msgstr "Edit Event"
 
-#: js/CalendarPanel.js:267
+#: js/CalendarPanel.js:268
 msgid "Confirm Update of Series"
 msgstr "Confirm Update of Series"
 
-#: js/CalendarPanel.js:268
+#: js/CalendarPanel.js:269
 msgid "Do you really want to update all events of this recurring event series?"
 msgstr ""
 "Do you really want to update all events of this recurring event series?"
 
-#: js/CalendarPanel.js:285
+#: js/CalendarPanel.js:287
 msgid "Update Event"
 msgstr "Update Event"
 
-#: js/CalendarPanel.js:288 js/CalendarPanel.js:290
+#: js/CalendarPanel.js:290 js/CalendarPanel.js:292
 msgid "Do you want to update the whole series, or just this event"
 msgstr "Do you want to update the whole series, or just this event"
 
-#: js/CalendarPanel.js:292
+#: js/CalendarPanel.js:294
 msgid "Update nothing"
 msgstr "Update nothing"
 
-#: js/CalendarPanel.js:300
+#: js/CalendarPanel.js:302
 msgid "Update whole series"
 msgstr "Update whole series"
 
-#: js/CalendarPanel.js:312
+#: js/CalendarPanel.js:314
 msgid "Failed not update recurring event series"
 msgstr "Failed not update recurring event series"
 
-#: js/CalendarPanel.js:320
+#: js/CalendarPanel.js:322
 msgid "Update this event only"
 msgstr "Update this event only"
 
-#: js/CalendarPanel.js:334
+#: js/CalendarPanel.js:336
 msgid "Failed not update event"
 msgstr "Failed not update event"
 
-#: js/CalendarSelectTreePanel.js:42
+#: js/CalendarSelectTreePanel.js:43
 msgid "Resources {0}"
 msgstr "Resources {0}"
 
@@ -253,15 +253,15 @@ msgstr "Unknown calendar"
 msgid "{0} {1} o'clock"
 msgstr "{0} {1} o'clock"
 
-#: js/EventDetailsPanel.js:172 js/EventEditDialog.js:93 Model/Event.php:186
+#: js/EventDetailsPanel.js:172 js/EventEditDialog.js:95 Model/Event.php:186
 msgid "Summary"
 msgstr "Summary"
 
-#: js/EventDetailsPanel.js:208 js/EventEditDialog.js:105
+#: js/EventDetailsPanel.js:208 js/EventEditDialog.js:107
 msgid "Start Time"
 msgstr "Start Time"
 
-#: js/EventDetailsPanel.js:213 js/EventEditDialog.js:120
+#: js/EventDetailsPanel.js:213 js/EventEditDialog.js:122
 msgid "End Time"
 msgstr "End Time"
 
@@ -269,7 +269,7 @@ msgstr "End Time"
 msgid "Blocking"
 msgstr "Blocking"
 
-#: js/EventDetailsPanel.js:223 js/EventEditDialog.js:100
+#: js/EventDetailsPanel.js:223 js/EventEditDialog.js:102
 #: js/ResourcesGridPanel.js:54 Model/Event.php:182
 msgid "Location"
 msgstr "Location"
@@ -278,31 +278,31 @@ msgstr "Location"
 msgid "Organizer"
 msgstr "Organizer"
 
-#: js/EventEditDialog.js:128
+#: js/EventEditDialog.js:130
 msgid "whole day"
 msgstr "whole day"
 
-#: js/EventEditDialog.js:136
+#: js/EventEditDialog.js:138
 msgid "non-blocking"
 msgstr "non-blocking"
 
-#: js/EventEditDialog.js:177 js/ResourceEditDialog.js:74 Model/Event.php:181
+#: js/EventEditDialog.js:180 js/ResourceEditDialog.js:74 Model/Event.php:181
 msgid "Description"
 msgstr "Description"
 
-#: js/EventEditDialog.js:191
+#: js/EventEditDialog.js:194
 msgid "Enter description"
 msgstr "Enter description"
 
-#: js/EventEditDialog.js:332
+#: js/EventEditDialog.js:344
 msgid "End date is not valid"
 msgstr "End date is not valid"
 
-#: js/EventEditDialog.js:335
+#: js/EventEditDialog.js:347
 msgid "End date must be after start date"
 msgstr "End date must be after start date"
 
-#: js/EventEditDialog.js:348
+#: js/EventEditDialog.js:360
 msgid "Start date is not valid"
 msgstr "Start date is not valid"
 
@@ -322,11 +322,11 @@ msgstr "Week"
 msgid "Month"
 msgstr "Month"
 
-#: js/MainScreenCenterPanel.js:293
+#: js/MainScreenCenterPanel.js:294
 msgid "Please Change Selection"
 msgstr "Please Change Selection"
 
-#: js/MainScreenCenterPanel.js:294
+#: js/MainScreenCenterPanel.js:295
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
@@ -334,20 +334,20 @@ msgstr ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
 
-#: js/MainScreenCenterPanel.js:308
+#: js/MainScreenCenterPanel.js:309
 msgid "Confirm Deletion of Series"
 msgstr "Confirm Deletion of Series"
 
-#: js/MainScreenCenterPanel.js:309
+#: js/MainScreenCenterPanel.js:310
 msgid "Do you really want to delete all events of this recurring event series?"
 msgstr ""
 "Do you really want to delete all events of this recurring event series?"
 
-#: js/MainScreenCenterPanel.js:325
+#: js/MainScreenCenterPanel.js:326
 msgid "Delete Event"
 msgstr "Delete Event"
 
-#: js/MainScreenCenterPanel.js:328 js/MainScreenCenterPanel.js:330
+#: js/MainScreenCenterPanel.js:329 js/MainScreenCenterPanel.js:331
 msgid ""
 "Do you want to delete the whole series, this and all future events of this "
 "series, or just this event"
@@ -355,29 +355,29 @@ msgstr ""
 "Do you want to delete the whole series, this and all future events of this "
 "series, or just this event"
 
-#: js/MainScreenCenterPanel.js:332
+#: js/MainScreenCenterPanel.js:333
 msgid "Delete nothing"
 msgstr "Delete nothing"
 
-#: js/MainScreenCenterPanel.js:339
+#: js/MainScreenCenterPanel.js:340
 msgid "Delete whole series"
 msgstr "Delete whole series"
 
-#: js/MainScreenCenterPanel.js:360
+#: js/MainScreenCenterPanel.js:361
 msgid "Delete this and all future events"
 msgstr "Delete this and all future events"
 
-#: js/MainScreenCenterPanel.js:381
+#: js/MainScreenCenterPanel.js:382
 msgid "Delete this event only"
 msgstr "Delete this event only"
 
-#: js/MainScreenCenterPanel.js:411
+#: js/MainScreenCenterPanel.js:412
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Do you really want to delete this event?"
 msgstr[1] "Do you really want to delete the {0} selected events?"
 
-#: js/MainScreenLeftPanel.js:73 js/MonthView.js:87
+#: js/MainScreenLeftPanel.js:75 js/MonthView.js:87
 msgid "WK"
 msgstr "WK"
 
@@ -449,72 +449,68 @@ msgstr "Monthly"
 msgid "Yearly"
 msgstr "Yearly"
 
-#: js/RrulePanel.js:228
+#: js/RrulePanel.js:222
 msgid "forever"
 msgstr "forever"
 
-#: js/RrulePanel.js:240
+#: js/RrulePanel.js:234
 msgid "Forever"
 msgstr "Forever"
 
-#: js/RrulePanel.js:241
+#: js/RrulePanel.js:235
 msgid "at"
 msgstr "at"
 
-#: js/RrulePanel.js:247
-msgid "Every"
-msgstr "Every"
-
-#: js/RrulePanel.js:282
+#: js/RrulePanel.js:275
 msgid "Until"
 msgstr "Until"
 
-#: js/RrulePanel.js:296
+#: js/RrulePanel.js:287
 msgid "Until has to be after event start"
 msgstr "Until has to be after event start"
 
-#: js/RrulePanel.js:329
-msgid ". Day"
-msgstr ". Day"
+#: js/RrulePanel.js:309
+msgid "Every {0}. Day"
+msgstr "Every {0}. Day"
 
-#: js/RrulePanel.js:359
-msgid ". Week at"
-msgstr ". Week at"
+#: js/RrulePanel.js:339
+msgid "Every {0}. Week at"
+msgstr "Every {0}. Week at"
 
-#: js/RrulePanel.js:417
-msgid ". Month"
-msgstr ". Month"
+#: js/RrulePanel.js:408
+msgid "Every {0}. Month"
+msgstr "Every {0}. Month"
 
-#: js/RrulePanel.js:423 js/RrulePanel.js:472 js/RrulePanel.js:603
-#: js/RrulePanel.js:653
+#: js/RrulePanel.js:414 js/RrulePanel.js:463 js/RrulePanel.js:594
+#: js/RrulePanel.js:644
 msgid "at the"
 msgstr "at the"
 
-#: js/RrulePanel.js:442 js/RrulePanel.js:622
+#: js/RrulePanel.js:433 js/RrulePanel.js:613
 msgid "first"
 msgstr "first"
 
-#: js/RrulePanel.js:443 js/RrulePanel.js:623
+#: js/RrulePanel.js:434 js/RrulePanel.js:614
 msgid "second"
 msgstr "second"
 
-#: js/RrulePanel.js:444 js/RrulePanel.js:624
+#: js/RrulePanel.js:435 js/RrulePanel.js:615
 msgid "third"
 msgstr "third"
 
-#: js/RrulePanel.js:445 js/RrulePanel.js:625
+#: js/RrulePanel.js:436 js/RrulePanel.js:616
 msgid "fourth"
 msgstr "fourth"
 
-#: js/RrulePanel.js:446 js/RrulePanel.js:626
+#: js/RrulePanel.js:437 js/RrulePanel.js:617
 msgid "last"
 msgstr "last"
 
-#: js/RrulePanel.js:596
-msgid ". Year"
-msgstr ". Year"
+#: js/RrulePanel.js:587
+msgid "Every {0}. Year"
+msgstr "Every {0}. Year"
 
-#: js/RrulePanel.js:693 js/RrulePanel.js:705
+#: js/RrulePanel.js:684 js/RrulePanel.js:696
 msgid "of"
 msgstr "of"
 

@@ -21,96 +21,23 @@ msgstr "管理时间帐户"
 msgid "Add, edit and delete timeaccounts"
 msgstr "添加、编辑和删除时间帐户"
 
-#: Export/Ods.php:121 js/Timetracker.js:30
-msgid "Timesheets"
-msgstr "时间表"
-
-#: Export/Ods.php:148
+#: Export/Ods/Timesheet.php:89
 msgid "Total Sum"
 msgstr "合计"
 
-#: Export/Ods.php:165
+#: Export/Ods/Timesheet.php:109
 msgid "Not billable"
 msgstr "不记帐"
 
-#: Export/Ods.php:173 Export/Ods.php:243 Export/Ods.php:299
-#: js/TimesheetEditDialog.js:193 js/TimesheetGridPanel.js:74
-#: js/TimesheetGridPanel.js:218 js/TimesheetGridPanel.js:250
+#: Export/Ods/Timesheet.php:117 js/TimesheetEditDialog.js:193
+#: js/TimesheetGridPanel.js:74 js/TimesheetGridPanel.js:218
+#: js/TimesheetGridPanel.js:250
 msgid "Billable"
 msgstr "记帐"
 
-#: Export/Ods.php:181
+#: Export/Ods/Timesheet.php:125
 msgid "Total"
 msgstr "所有"
-
-#: Export/Ods.php:207 js/TimesheetEditDialog.js:152
-#: js/TimesheetGridPanel.js:216 js/TimesheetGridPanel.js:241
-msgid "Date"
-msgstr "日期"
-
-#: Export/Ods.php:212 Export/Ods.php:277 js/Models.js:133
-#: js/TimeaccountEditDialog.js:93 js/TimeaccountEditDialog.js:168
-#: js/TimesheetEditDialog.js:174 js/TimesheetGridPanel.js:217
-#: js/TimesheetGridPanel.js:249 js/TimesheetGridPanel.js:399
-msgid "Description"
-msgstr "描述"
-
-#: Export/Ods.php:217
-msgid "Timeaccount Number"
-msgstr "时间帐户号码"
-
-#: Export/Ods.php:223
-msgid "Timeaccount"
-msgstr "时间帐户"
-
-#: Export/Ods.php:230
-msgid "Staff Member"
-msgstr "员工成员"
-
-#: Export/Ods.php:236 js/TimesheetEditDialog.js:147
-#: js/TimesheetGridPanel.js:257
-msgid "Duration"
-msgstr "期间"
-
-#: Export/Ods.php:248 js/TimesheetEditDialog.js:200
-#: js/TimesheetGridPanel.js:79 js/TimesheetGridPanel.js:219
-#: js/TimesheetGridPanel.js:252
-msgid "Cleared"
-msgstr "已清除"
-
-#: Export/Ods.php:267 js/Models.js:131 js/TimeaccountEditDialog.js:83
-#: js/TimeaccountGridPanel.js:94
-msgid "Number"
-msgstr "号码"
-
-#: Export/Ods.php:272 js/Models.js:132 js/TimeaccountEditDialog.js:88
-#: js/TimeaccountGridPanel.js:99
-msgid "Title"
-msgstr "头衔"
-
-#: Export/Ods.php:282 js/Models.js:134
-#, fuzzy
-msgid "Created By"
-msgstr "已清除于"
-
-#: Export/Ods.php:288
-msgid "Creation Date"
-msgstr ""
-
-#: Export/Ods.php:293 js/Models.js:135 js/TimeaccountEditDialog.js:110
-#: js/TimeaccountGridPanel.js:104
-msgid "Status"
-msgstr "状态"
-
-#: Export/Ods.php:304 js/TimeaccountEditDialog.js:133
-#: js/TimesheetEditDialog.js:211
-msgid "Cleared In"
-msgstr "已清除于"
-
-#: Export/Ods.php:309
-#, fuzzy
-msgid "Open"
-msgstr "打开"
 
 #: js/DurationSlider.js:95
 msgid "{0}"
@@ -144,6 +71,33 @@ msgstr[0] "时间帐户列表"
 #: js/Models.js:130 js/TimesheetGridPanel.js:214
 msgid "Quick search"
 msgstr ""
+
+#: js/Models.js:131 js/TimeaccountEditDialog.js:83
+#: js/TimeaccountGridPanel.js:94
+msgid "Number"
+msgstr "号码"
+
+#: js/Models.js:132 js/TimeaccountEditDialog.js:88
+#: js/TimeaccountGridPanel.js:99
+msgid "Title"
+msgstr "头衔"
+
+#: js/Models.js:133 js/TimeaccountEditDialog.js:93
+#: js/TimeaccountEditDialog.js:169 js/TimesheetEditDialog.js:174
+#: js/TimesheetGridPanel.js:217 js/TimesheetGridPanel.js:249
+#: js/TimesheetGridPanel.js:399
+msgid "Description"
+msgstr "描述"
+
+#: js/Models.js:134
+#, fuzzy
+msgid "Created By"
+msgstr "已清除于"
+
+#: js/Models.js:135 js/TimeaccountEditDialog.js:110
+#: js/TimeaccountGridPanel.js:104
+msgid "Status"
+msgstr "状态"
 
 #: js/TimeaccountEditDialog.js:98
 msgid "Unit"
@@ -188,6 +142,10 @@ msgstr "已记帐"
 msgid "not cleared yet..."
 msgstr "还没有清除"
 
+#: js/TimeaccountEditDialog.js:133 js/TimesheetEditDialog.js:211
+msgid "Cleared In"
+msgstr "已清除于"
+
 #: js/TimeaccountEditDialog.js:137
 msgid "Booking deadline"
 msgstr ""
@@ -204,35 +162,35 @@ msgstr ""
 msgid "Timesheets are billable"
 msgstr "记帐的时间表"
 
-#: js/TimeaccountEditDialog.js:182
+#: js/TimeaccountEditDialog.js:183
 msgid "Enter description"
 msgstr "输入描述"
 
-#: js/TimeaccountEditDialog.js:198
+#: js/TimeaccountEditDialog.js:199
 msgid "Access"
 msgstr "访问"
 
-#: js/TimeaccountEditDialog.js:222
+#: js/TimeaccountEditDialog.js:223
 msgid "Book Own"
 msgstr "预定自己的"
 
-#: js/TimeaccountEditDialog.js:227
+#: js/TimeaccountEditDialog.js:228
 msgid "View All"
 msgstr "浏览所有的"
 
-#: js/TimeaccountEditDialog.js:232
+#: js/TimeaccountEditDialog.js:233
 msgid "Book All"
 msgstr "预定所有的"
 
-#: js/TimeaccountEditDialog.js:237
+#: js/TimeaccountEditDialog.js:238
 msgid "Manage Clearing"
 msgstr "管理清除"
 
-#: js/TimeaccountEditDialog.js:242
+#: js/TimeaccountEditDialog.js:243
 msgid "Manage All"
 msgstr "管理所有的"
 
-#: js/TimeaccountEditDialog.js:250
+#: js/TimeaccountEditDialog.js:251
 msgid "Permissions"
 msgstr "许可"
 
@@ -277,6 +235,15 @@ msgstr "选择时间帐户"
 msgid "Searching..."
 msgstr "搜索 ..."
 
+#: js/TimesheetEditDialog.js:147 js/TimesheetGridPanel.js:257
+msgid "Duration"
+msgstr "期间"
+
+#: js/TimesheetEditDialog.js:152 js/TimesheetGridPanel.js:216
+#: js/TimesheetGridPanel.js:241
+msgid "Date"
+msgstr "日期"
+
 #: js/TimesheetEditDialog.js:157
 msgid "Start"
 msgstr "开始"
@@ -294,15 +261,20 @@ msgstr "输入描述 ..."
 msgid "Account"
 msgstr "帐户"
 
-#: js/TimesheetEditDialog.js:264
+#: js/TimesheetEditDialog.js:200 js/TimesheetGridPanel.js:79
+#: js/TimesheetGridPanel.js:219 js/TimesheetGridPanel.js:252
+msgid "Cleared"
+msgstr "已清除"
+
+#: js/TimesheetEditDialog.js:265
 msgid "Failed"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:265
+#: js/TimesheetEditDialog.js:266
 msgid "Could not save {0}."
 msgstr ""
 
-#: js/TimesheetEditDialog.js:266
+#: js/TimesheetEditDialog.js:267
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr ""
 
@@ -378,6 +350,10 @@ msgstr "记帐时间表的时间"
 msgid "Detail"
 msgstr ""
 
+#: js/Timetracker.js:30
+msgid "Timesheets"
+msgstr "时间表"
+
 #: js/Timetracker.js:35
 msgid "All Timesheets"
 msgstr "所有的时间表"
@@ -398,13 +374,26 @@ msgstr ""
 msgid "Use this configuration for the timesheet ODS export."
 msgstr ""
 
-#: Preference.php:114
+#: Preference.php:117
 msgid "default"
 msgstr ""
 
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "时间跟踪器"
+
+#~ msgid "Timeaccount Number"
+#~ msgstr "时间帐户号码"
+
+#~ msgid "Timeaccount"
+#~ msgstr "时间帐户"
+
+#~ msgid "Staff Member"
+#~ msgstr "员工成员"
+
+#, fuzzy
+#~ msgid "Open"
+#~ msgstr "打开"
 
 #~ msgid "Filter"
 #~ msgstr "过滤器"

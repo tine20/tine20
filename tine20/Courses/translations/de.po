@@ -24,9 +24,7 @@ msgstr "Lehrer"
 msgid "Teacher Account"
 msgstr "Lehrer Zugang"
 
-#: Frontend/Json.php:240
-#: js/CourseEditDialog.js:135
-#: js/Models.js:42
+#: Frontend/Json.php:240 js/CourseEditDialog.js:134 js/Models.js:42
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Klasse"
@@ -36,26 +34,23 @@ msgstr[1] "Klassen"
 msgid "Import course members"
 msgstr "Klassenmitglieder importieren"
 
-#: js/CourseEditDialog.js:151
+#: js/CourseEditDialog.js:150
 msgid "Course Name"
 msgstr "Klassenname"
 
-#: js/CourseEditDialog.js:155
-#: js/CourseEditDialog.js:162
+#: js/CourseEditDialog.js:154 js/CourseEditDialog.js:161
 msgid "Course / School Type"
 msgstr "Schultyp"
 
-#: js/CourseEditDialog.js:173
+#: js/CourseEditDialog.js:172
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/CourseEditDialog.js:179
-#: js/CourseGridPanel.js:81
+#: js/CourseEditDialog.js:178 js/CourseGridPanel.js:81
 msgid "Internet Access"
 msgstr "Internet freigegeben"
 
-#: js/CourseEditDialog.js:185
-#: js/CourseGridPanel.js:88
+#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:88
 msgid "Fileserver Access"
 msgstr "Zugriff auf Fileserver gesperrt"
 
@@ -115,8 +110,7 @@ msgstr "Fehlgeschlagen"
 msgid "Some error occured while trying to update the courses."
 msgstr "Beim aktualisieren der Klasse(n) trat ein Fehler auf."
 
-#: js/Courses.js:29
-#: Setup/setup.xml:4
+#: js/Courses.js:29 Setup/setup.xml:4
 msgid "Courses"
 msgstr "Klassen"
 
@@ -135,4 +129,3 @@ msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Klassentyp"
 msgstr[1] "Klassentypen"
-

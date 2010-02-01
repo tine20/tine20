@@ -10,7 +10,7 @@ msgstr ""
 msgid "Teacher Account"
 msgstr ""
 
-#: Frontend/Json.php:240 js/CourseEditDialog.js:135 js/Models.js:42
+#: Frontend/Json.php:240 js/CourseEditDialog.js:134 js/Models.js:42
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] ""
@@ -20,23 +20,23 @@ msgstr[1] ""
 msgid "Import course members"
 msgstr ""
 
-#: js/CourseEditDialog.js:151
+#: js/CourseEditDialog.js:150
 msgid "Course Name"
 msgstr ""
 
-#: js/CourseEditDialog.js:155 js/CourseEditDialog.js:162
+#: js/CourseEditDialog.js:154 js/CourseEditDialog.js:161
 msgid "Course / School Type"
 msgstr ""
 
-#: js/CourseEditDialog.js:173
+#: js/CourseEditDialog.js:172
 msgid "Description"
 msgstr ""
 
-#: js/CourseEditDialog.js:179 js/CourseGridPanel.js:81
+#: js/CourseEditDialog.js:178 js/CourseGridPanel.js:81
 msgid "Internet Access"
 msgstr ""
 
-#: js/CourseEditDialog.js:185 js/CourseGridPanel.js:88
+#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:88
 msgid "Fileserver Access"
 msgstr ""
 

@@ -24,9 +24,7 @@ msgstr "Lektor"
 msgid "Teacher Account"
 msgstr "Účet lektora"
 
-#: Frontend/Json.php:240
-#: js/CourseEditDialog.js:135
-#: js/Models.js:42
+#: Frontend/Json.php:240 js/CourseEditDialog.js:134 js/Models.js:42
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurz"
@@ -37,26 +35,23 @@ msgstr[2] "Kurzů"
 msgid "Import course members"
 msgstr "Importovat členy kurzu"
 
-#: js/CourseEditDialog.js:151
+#: js/CourseEditDialog.js:150
 msgid "Course Name"
 msgstr "Název kurzu"
 
-#: js/CourseEditDialog.js:155
-#: js/CourseEditDialog.js:162
+#: js/CourseEditDialog.js:154 js/CourseEditDialog.js:161
 msgid "Course / School Type"
 msgstr "Typ kurzu / školení"
 
-#: js/CourseEditDialog.js:173
+#: js/CourseEditDialog.js:172
 msgid "Description"
 msgstr "Popis"
 
-#: js/CourseEditDialog.js:179
-#: js/CourseGridPanel.js:81
+#: js/CourseEditDialog.js:178 js/CourseGridPanel.js:81
 msgid "Internet Access"
 msgstr "Přístup k Internetu"
 
-#: js/CourseEditDialog.js:185
-#: js/CourseGridPanel.js:88
+#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:88
 msgid "Fileserver Access"
 msgstr "Přístup k souborovému serveru"
 
@@ -116,8 +111,7 @@ msgstr "Nepodařilo se"
 msgid "Some error occured while trying to update the courses."
 msgstr "Při aktualizaci kurzů došlo k chybě."
 
-#: js/Courses.js:29
-#: Setup/setup.xml:4
+#: js/Courses.js:29 Setup/setup.xml:4
 msgid "Courses"
 msgstr "Kurzy"
 
@@ -138,4 +132,3 @@ msgid_plural "Course Types"
 msgstr[0] "Typ kurzu"
 msgstr[1] "Typy kurzů"
 msgstr[2] "Typů kurzů"
-

@@ -34,40 +34,40 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%s личные задания"
 
-#: js/EditDialog.js:169 js/GridPanel.js:94 js/GridPanel.js:170
+#: js/EditDialog.js:173 js/GridPanel.js:94 js/GridPanel.js:171
 msgid "Summary"
 msgstr "Сводка"
 
-#: js/EditDialog.js:174
+#: js/EditDialog.js:178
 msgid "Due date"
 msgstr "Дата завершения"
 
-#: js/EditDialog.js:177 js/GridPanel.js:189 Model/Task.php:181
+#: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:176
 msgid "Priority"
 msgstr "Приоритет"
 
-#: js/EditDialog.js:180
+#: js/EditDialog.js:184
 #, fuzzy
 msgid "Add Responsible ..."
 msgstr "Ответственный"
 
-#: js/EditDialog.js:187
+#: js/EditDialog.js:191
 msgid "Notes"
 msgstr "Примечания"
 
-#: js/EditDialog.js:188
+#: js/EditDialog.js:192
 msgid "Enter description..."
 msgstr "Введите описание..."
 
-#: js/EditDialog.js:193
+#: js/EditDialog.js:197
 msgid "Percentage"
 msgstr "Процентное отношение"
 
-#: js/EditDialog.js:197 js/GridPanel.js:216 Model/Task.php:182
+#: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:177
 msgid "Status"
 msgstr "Статус"
 
-#: js/EditDialog.js:201
+#: js/EditDialog.js:205
 msgid "Completed"
 msgstr "Закончено"
 
@@ -82,11 +82,11 @@ msgstr[2] "Вы действительно хотите удалить выбр�
 msgid "Quick search"
 msgstr ""
 
-#: js/GridPanel.js:95 js/GridPanel.js:181
+#: js/GridPanel.js:95 js/GridPanel.js:182
 msgid "Due Date"
 msgstr "Дата завершения"
 
-#: js/GridPanel.js:96 js/GridPanel.js:237
+#: js/GridPanel.js:96 js/GridPanel.js:238
 msgid "Responsible"
 msgstr "Ответственный"
 
@@ -103,19 +103,23 @@ msgstr "Не удалось сохранить задание."
 msgid "Tags"
 msgstr "Задание"
 
-#: js/GridPanel.js:177
+#: js/GridPanel.js:168
+msgid "Lead"
+msgstr ""
+
+#: js/GridPanel.js:178
 msgid "Add a task..."
 msgstr "Добавить задание..."
 
-#: js/GridPanel.js:203 Model/Task.php:183
+#: js/GridPanel.js:204 Model/Task.php:178
 msgid "Percent"
 msgstr "Процент"
 
-#: js/GridPanel.js:230
+#: js/GridPanel.js:231
 msgid "Creation Time"
 msgstr "Время создания"
 
-#: js/GridPanel.js:263
+#: js/GridPanel.js:285
 msgid "Show closed"
 msgstr "Показать закрытые"
 
@@ -145,15 +149,15 @@ msgstr[2] "списков работ"
 msgid "to do lists"
 msgstr "списки работ"
 
-#: Model/Task.php:178
+#: Model/Task.php:173
 msgid "Due"
 msgstr ""
 
-#: Model/Task.php:179
+#: Model/Task.php:174
 msgid "Organizer"
 msgstr ""
 
-#: Model/Task.php:180
+#: Model/Task.php:175
 #, fuzzy
 msgid "Description"
 msgstr "Введите описание..."
