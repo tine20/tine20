@@ -255,7 +255,8 @@ class OpenDocument_Document
 
         $zip->close();
         
-        unlink($tempDir);
+        // delete files / remove dir
+        removeDir($tempDir);
         
         return $filename;
     }
