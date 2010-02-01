@@ -4,7 +4,7 @@
     <name>lead_default_xls</name>
     <type>export</type>
     <plugin>Crm_Export_Xls</plugin>
-    <!--template>crm_lead_export.ods</template-->
+    <template>crm_lead_export.xls</template>
     <description>default xls lead export definition</description>
     <columns>
         <column>
