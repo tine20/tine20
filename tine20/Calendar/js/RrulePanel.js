@@ -236,15 +236,14 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
             ]
         });
         */
-        
-        if (! this.intervalBeforeString) {
-            this.intervalBeforeString = this.app.i18n._('Every');
-        }
+        var intervalPars = this.intervalString.split('{0}');
+        var intervalBeforeString = intervalPars[0];
+        var intervalAfterString = intervalPars[1];
         
         this.interval = new Ext.form.NumberField({
             requiredGrant : 'editGrant',
             style         : 'text-align:right;',
-            fieldLabel    : this.intervalBeforeString,
+            //fieldLabel    : this.intervalBeforeString,
             value         : 1,
             width         : 40
         });
@@ -258,12 +257,12 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
                 layout: 'column',
                 items: [{
                     width: 70,
-                    html: this.intervalBeforeString
+                    html: intervalBeforeString
                 },
                     this.interval,
                 {
                     style: 'padding-top: 2px;',
-                    html: this.intervalAfterString
+                    html: intervalAfterString
                 }]
             }].concat(this.items);
         }
@@ -307,7 +306,7 @@ Tine.Calendar.RrulePanel.DAILYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstrac
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
-        this.intervalAfterString = this.app.i18n._('. Day');
+        this.intervalString = this.app.i18n._('Every {0}. Day');
         
         Tine.Calendar.RrulePanel.DAILYcard.superclass.initComponent.call(this);
     }
@@ -337,7 +336,7 @@ Tine.Calendar.RrulePanel.WEEKLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
-        this.intervalAfterString = this.app.i18n._('. Week at');
+        this.intervalString = this.app.i18n._('Every {0}. Week at');
         
         var bydayItems = [];
         for (var i=0,d; i<7; i++) {
@@ -406,7 +405,7 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
-        this.intervalAfterString = this.app.i18n._('. Month');
+        this.intervalString = this.app.i18n._('Every {0}. Month');
         
         this.idPrefix = Ext.id();
         
@@ -585,7 +584,7 @@ Tine.Calendar.RrulePanel.YEARLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
-        this.intervalAfterString = this.app.i18n._('. Year');
+        this.intervalString = this.app.i18n._('Every {0}. Year');
         
         this.idPrefix = Ext.id();
         
