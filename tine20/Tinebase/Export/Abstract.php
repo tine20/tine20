@@ -97,13 +97,11 @@ abstract class Tinebase_Export_Abstract
     protected $_prefKey = NULL;
     
     /**
-     * resolved records
+     * other resolved records
      *
      * @var array of Tinebase_Record_RecordSet
-     * 
-     * @todo check if this is needed
      */
-    //protected $_resolvedRecords = array();
+    protected $_resolvedRecords = array();
     
     /**
      * user fields to resolve
