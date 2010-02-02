@@ -123,9 +123,19 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         });
         
         this.on('newentry', function(taskData){
-            // add new task to store
             var newTask = taskData;
             newTask.relation_type = 'task';
+            
+            // get first responsible person and add it to task as organizer
+            var i = 0;
+            while (this.record.data.relations.length > i && this.record.data.relations[i].type != 'responsible') {
+                i++;
+            }
+            if (this.record.data.relations[i] && this.record.data.relations[i].type == 'responsible' && this.record.data.relations[i].related_record.account_id != '') {
+                newTask.organizer = this.record.data.relations[i].related_record.account_id;
+            }
+            
+            // add new task to store
             this.store.loadData([newTask], true);
             
             return true;
