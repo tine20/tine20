@@ -29,46 +29,4 @@ class Timetracker_Export_Ods_Timeaccount extends Tinebase_Export_Ods
      * @var string application of this export class
      */
     protected $_applicationName = 'Timetracker';
-    
-    /**
-     * fields with special treatment in addBody
-     *
-     * @var array
-     */
-    protected $_specialFields = array('created_by');
-    
-    /**
-     * resolve records
-     *
-     * @param Tinebase_Record_RecordSet $_records
-     */
-    protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
-    {
-        Tinebase_User::getInstance()->resolveMultipleUsers($_records, 'created_by', true);
-    }
-    
-    /**
-     * get special field value
-     *
-     * @param Tinebase_Record_Interface $_record
-     * @param array $_param
-     * @param string $_key
-     * @param string $_cellType
-     * @return string
-     */
-    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL)
-    {
-        if (is_null($_key)) {
-            throw new Tinebase_Exception_InvalidArgument('Missing required parameter $key');
-        }
-        
-        $value = '';
-        
-        switch($_param['type']) {
-            case 'created_by':
-                $value = $_record->$_param['type']->$_param['field'];
-                break;
-        }        
-        return $value;
-    }
 }
