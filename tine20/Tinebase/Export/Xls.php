@@ -46,13 +46,15 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
     {
         $this->_createDocument();
         $this->_setDocumentProperties();
-        $this->_currentRowIndex = 1;
         
         $records = $this->_getRecords();
         
         // add header
         if (isset($this->_config->header) && $this->_config->header) {
+            $this->_currentRowIndex = 1;
             $this->_addHead();
+        } else {
+            $this->_currentRowIndex = 2;
         }
         
         // add body
