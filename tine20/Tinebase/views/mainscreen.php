@@ -13,9 +13,9 @@
  */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
+    <title>Tine 2.0</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
@@ -47,23 +47,23 @@
                 
                 //css files
                 foreach ($includeFiles['js'] as $name) {
-                    echo "\n    ". '<script type="text/javascript" language="javascript" src="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'"></script>';
+                    echo "\n    ". '<script type="text/javascript" src="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'"></script>';
                 }
                 
                 // laguage file
-                echo "\n    ". '<script type="text/javascript" language="javascript" src="index.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
+                echo "\n    ". '<script type="text/javascript" src="index.php?method=Tinebase.getJsTranslations?' . time() . '"></script>';
                 break;
 
             case 'DEBUG':
-                echo "\n    <link rel='stylesheet' type='text/css' href='" . Tinebase_Frontend_Http_Abstract::_appendFileTime('Tinebase/css/' . $tineBuildPath . 'tine-all-debug.css') . "' />";
-                echo "\n    <script type='text/javascript' language='javascript' src='" . Tinebase_Frontend_Http_Abstract::_appendFileTime('Tinebase/js/' . $tineBuildPath . 'tine-all-debug.js') . "'></script>";
-                echo "\n    <script type='text/javascript' language='javascript' src='" . Tinebase_Frontend_Http_Abstract::_appendFileTime("Tinebase/js/Locale/build/" . (string)$locale . "-all-debug.js") ."'></script>";
+                echo "\n    <link rel='stylesheet' type='text/css' href='" . Tinebase_Frontend_Http_Abstract::_appendFileTime('Tinebase/css/' . $tineBuildPath . 'tine-all-debug.css') . "\" />";
+                echo "\n    <script type=\"text/javascript\" src=\"" . Tinebase_Frontend_Http_Abstract::_appendFileTime('Tinebase/js/' . $tineBuildPath . 'tine-all-debug.js') . "\"></script>";
+                echo "\n    <script type=\"text/javascript\" src=\"" . Tinebase_Frontend_Http_Abstract::_appendFileTime("Tinebase/js/Locale/build/" . (string)$locale . "-all-debug.js") ."\"></script>";
                 break;
                 
             case 'RELEASE':
-                echo "\n    <link rel='stylesheet' type='text/css' href='Tinebase/css/" . $tineBuildPath . "tine-all.css' />";
-                echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/" . $tineBuildPath . "tine-all.js'></script>";
-                echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Locale/build/" . (string)$locale . "-all.js'></script>";
+                echo "\n    <link rel='stylesheet' type='text/css' href='Tinebase/css/" . $tineBuildPath . "tine-all.css\" />";
+                echo "\n    <script type=\"text/javascript\" src=\"Tinebase/js/" . $tineBuildPath . "tine-all.js\"></script>";
+                echo "\n    <script type=\"text/javascript\" src=\"Tinebase/js/Locale/build/" . (string)$locale . "-all.js\"></script>";
                 break;
         }
         
@@ -72,6 +72,6 @@
         <link rel="stylesheet" type="text/css" href="styles/tine20.css" />
 </head>
 <body>
-    <noscript>You need to enable javascript to use <a href="http://www.tine20.org">Tine 2.0</a></noscript>
+    <noscript><p>You need to enable javascript to use <a href="http://www.tine20.org">Tine 2.0</a></p></noscript>
 </body>
 </html>
