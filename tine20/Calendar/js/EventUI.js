@@ -129,6 +129,43 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             el.setStyle({'border-style': 'solid'});
         });
     },
+    /**
+     * get diff of resizeable
+     * 
+     * @param {Ext.Resizeable} rz
+     */
+    getRzInfo: function(rz, width, height) {
+        var rzInfo = {};
+        
+        var event = rz.event;
+        var view = event.view;
+        
+        // NOTE proxy might be gone after resize
+        var box = rz.proxy.getBox();
+        var width = width ? width: box.width;
+        var height =  height? height : box.height;
+        
+        var originalDuration = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE;
+        
+        if(event.get('is_all_day_event')) {
+            var dayWidth = Ext.fly(view.wholeDayArea).getWidth() / view.numOfDays;
+            rzInfo.diff = Math.round((width - rz.originalWidth) / dayWidth);
+            
+        } else {
+            rzInfo.diff = Math.round((height - rz.originalHeight) * (view.timeGranularity / view.granularityUnitHeights));
+            // neglegt diffs due to borders etc.
+            rzInfo.diff = Math.round(rzInfo.diff/15) * 15;
+        }
+        rzInfo.duration = originalDuration + rzInfo.diff;
+        
+        if(event.get('is_all_day_event')) {
+            rzInfo.dtend = event.get('dtend').add(Date.DAY, rzInfo.diff);
+        } else {
+            rzInfo.dtend = event.get('dtstart').add(Date.MINUTE, rzInfo.duration);
+        }
+        
+        return rzInfo;
+    },
     
     markDirty: function() {
         Tine.Calendar.DaysViewEventUI.superclass.markDirty.call(this);
@@ -149,6 +186,8 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
     },
     
     render: function(view) {
+        this.event.view = view;
+        
         this.colorSet = Tine.Calendar.colorMgr.getColor(this.event);
         
         this.dtStart = this.event.get('dtstart');

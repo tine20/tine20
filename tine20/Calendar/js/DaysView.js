@@ -746,10 +746,31 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         rz.event = event;
         rz.originalHeight = rz.el.getHeight();
         rz.originalWidth  = rz.el.getWidth();
+
+        // NOTE: ext dosn't support move events via api
+        rz.onMouseMove = rz.onMouseMove.createSequence(function() {
+            var event = this.event;
+            if (! event) {
+                //event already gone -> late event / busy brower?
+                return;
+            }
+            var ui = event.ui;
+            var rzInfo = ui.getRzInfo(this);
+            
+            this.durationEl.update(rzInfo.dtend.format('H:i'));
+        });
         
         event.ui.markDirty();
         
-        //this.setActiveEvent(event);
+        // NOTE: Ext keeps proxy if element is not destroyed (diff !=0)
+        if (! rz.durationEl) {
+            rz.durationEl = rz.proxy.insertFirst({
+                'class': 'cal-daysviewpanel-event-rzduration',
+                'style': 'position: absolute; bottom: 3px; right: 2px;'
+            });
+        }
+        rz.durationEl.update(event.get('dtend').format('H:i'));
+        
         if (event) {
             this.getSelectionModel().select(event);
         } else {
@@ -768,30 +789,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             return;
         }
         
-        var originalDuration = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE;
-        
-        if(event.get('is_all_day_event')) {
-            var dayWidth = Ext.fly(this.wholeDayArea).getWidth() / this.numOfDays;
-            var diff = Math.round((width - rz.originalWidth) / dayWidth);
-            
-            if (diff != 0) {
-                event.set('dtend', event.get('dtend').add(Date.DAY, diff));
-            }
-        } else {
-            
-            var diff = Math.round((height - rz.originalHeight) * (this.timeGranularity / this.granularityUnitHeights));
-            // neglegt diffs due to borders etc.
-            diff = Math.round(diff/15) * 15;
-            
-            var duration = originalDuration + diff;
-            
-            if (diff != 0) {
-                event.set('dtend', event.get('dtstart').add(Date.MINUTE, duration));
-            }
+        var rzInfo = event.ui.getRzInfo(rz, width, height);
+        if (rzInfo.diff != 0) {
+            event.set('dtend', rzInfo.dtend);
         }
-        
+
         // don't fire update events on rangeAdd
-        if (diff != 0 && event != this.editing && ! event.isRangeAdd) {
+        if (rzInfo.diff != 0 && event != this.editing && ! event.isRangeAdd) {
             this.fireEvent('updateEvent', event);
         } else {
             event.ui.clearDirty();
