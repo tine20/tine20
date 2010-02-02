@@ -160,11 +160,10 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
                 $cellValue = $this->_getCellValue($field, $record, $cellType);
                 
                 // add formula
-                /*
                 if ($field->formula) {
-                    $cell->setFormula($field->formula);
+                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding formula: ' . $field->formula);
+                    $cellValue = $field->formula;
                 }
-                */
                 
                 $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow($columnId++, $this->_currentRowIndex, $cellValue);
             }
