@@ -823,7 +823,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      * 
      * @return void
      * 
-     * @todo add headline check again
      * @todo add table check again
      * @todo check custom fields
      */
@@ -844,7 +843,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         //echo  $xmlBody;
         $this->assertEquals(1, preg_match("/0.5/", $xmlBody), 'no duration'); 
         $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $xmlBody), 'no description'); 
-        //$this->assertEquals(1, preg_match("/Description/", $xmlBody), 'no headline'); 
+        $this->assertEquals(1, preg_match("/Description/", $xmlBody), 'no headline'); 
         //$this->assertEquals(2, $odsExportClass->getDocument()->getBody()->count(), 'table count mismatch');
         
         // cleanup / delete file
