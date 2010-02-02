@@ -247,7 +247,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     onAfterEdit: function(o) {
         if (o.field == 'address') {
             if (o.originalValue == '') {
-                this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
+                // use selected type to create new row with empty address and start editing
+                this.store.add(new Ext.data.Record({type: o.record.data.type, 'address': ''}));
                 this.store.commitChanges();
                 this.startEditing(o.row +1, o.column);
             }            
