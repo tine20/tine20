@@ -23,6 +23,13 @@
 class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implements Tinebase_Controller_Alarm_Interface
 {
     /**
+     * @var boolean
+     * 
+     * just set is_delete=1 if record is going to be deleted
+     */
+    protected $_purgeRecords = FALSE;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 

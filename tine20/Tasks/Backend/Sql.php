@@ -103,7 +103,7 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $this->deleteDependentRows($_record->getId());
         $this->insertDependentRows($taskParts);
         
-        return $this->get($_record->getId());
+        return $this->get($_record->getId(), TRUE);
     }
     
     /**
