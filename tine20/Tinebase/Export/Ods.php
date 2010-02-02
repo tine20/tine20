@@ -181,12 +181,11 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
      *
      * @param OpenDocument_SpreadSheet_Table $table
      * 
-     * @todo make this work again (append column, ...)
-     * @todo add filters/replacements again?
      */
     protected function _addHead($table)
     {
         /*
+        // @todo add this again?
         $columnId = 0;
         foreach($this->_config->columns->column as $field) {
             $column = $table->appendColumn();
