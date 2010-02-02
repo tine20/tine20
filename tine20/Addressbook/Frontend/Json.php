@@ -215,12 +215,22 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
             array('field' => 'plugin', 'operator' => 'equals', 'value' => 'Addressbook_Import_Csv'),
         ));
-        $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);                
+        $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
+        try {
+            $defaultDefinitionArray = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv')->toArray();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (count($importDefinitions) > 0) {
+                $defaultDefinitionArray = $importDefinitions->getFirstRecord()->toArray();
+            } else {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No import definitions found for Addressbook');
+                $defaultDefinitionArray = array();
+            }
+        }
         
         $registryData = array(
             'Salutations'               => $this->getSalutations(),
             'defaultAddressbook'        => $this->getDefaultAddressbook(),
-            'defaultImportDefinition'   => Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv')->toArray(),
+            'defaultImportDefinition'   => $defaultDefinitionArray,
             'importDefinitions'         => array(
                 'results'               => $importDefinitions->toArray(),
                 'totalcount'            => count($importDefinitions),
