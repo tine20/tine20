@@ -126,7 +126,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
         
         // add header (disabled at the moment)
         if (isset($this->_config->header) && $this->_config->header) {
-            //$this->_addHead($table);
+            $this->_addHead($table);
         }
             
         // body
@@ -186,6 +186,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
      */
     protected function _addHead($table)
     {
+        /*
         $columnId = 0;
         foreach($this->_config->columns->column as $field) {
             $column = $table->appendColumn();
@@ -197,6 +198,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             
             $columnId++;
         }
+        */
 
         $row = $table->appendRow();
         
@@ -207,27 +209,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             $patterns = array(
                 '/\{date\}/', 
                 '/\{user\}/',
-                //'/\{filter\}/'
             );
-            
-            /*
-            $filters = array();
-            foreach ($_filter->toArray() as $filter) {
-                switch($filter['field']) {
-                    case 'timeaccount_id':
-                        if (!empty($filter['value']) && is_array($filter['value'])) {
-                            $value = $timeaccounts[$timeaccounts->getIndexById($filter['value'][0])]->title;
-                        }
-                        break;
-                    case 'account_id':
-                        $value = Tinebase_User::getInstance()->getUserById($filter['value'])->accountDisplayName;
-                        break;
-                    default:
-                        $value = $filter['value'];
-                }
-                $filters[] = $filter['field'] . '=' . $value;
-            }
-            */
             
             $replacements = array(
                 Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale),
@@ -238,7 +220,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             foreach($this->_config->headers->header as $headerCell) {
                 // replace data
                 $value = preg_replace($patterns, $replacements, $headerCell);
-                $cell = $row->appendCell('string', $value);                
+                $cell = $row->appendCell($value, OpenDocument_SpreadSheet_Cell::TYPE_STRING);                
             }
         }
         
@@ -247,7 +229,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
         // add table headline
         $row = $table->appendRow();
         foreach($this->_config->columns->column as $field) {
-            $cell = $row->appendCell('string', $field->header);
+            $cell = $row->appendCell($field->header, OpenDocument_SpreadSheet_Cell::TYPE_STRING);
             $cell->setStyle('ceHeader');
         }
     }
