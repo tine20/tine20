@@ -247,7 +247,10 @@ class OpenDocument_Document
         file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'styles.xml', $this->_styles);
         
         $zip = new ZipArchive();
-        $zip->open($filename, ZIPARCHIVE::CREATE);
+        $opened = $zip->open($filename, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
+        if( $opened !== true ) {
+            throw new Exception('could not open zip file');
+        }
 
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tempDir));
         
