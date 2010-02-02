@@ -1,12 +1,12 @@
 <?php
 /**
- * main view
+ * Tine 2.0 main view
  * 
  * @package     Tinebase
  * @subpackage  Views
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * @todo        check if build script puts the translation files in build dir $tineBuildPath
@@ -40,18 +40,18 @@
             case 'DEVELOPMENT':
                 $includeFiles = Tinebase_Frontend_Http::getAllIncludeFiles();
                 
-                // js files
+                // css files
                 foreach ($includeFiles['css'] as $name) {
                     echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'" />';
                 }
                 
-                //css files
+                // js files
                 foreach ($includeFiles['js'] as $name) {
                     echo "\n    ". '<script type="text/javascript" src="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'"></script>';
                 }
                 
                 // laguage file
-                echo "\n    ". '<script type="text/javascript" src="index.php?method=Tinebase.getJsTranslations?' . time() . '"></script>';
+                echo "\n    ". '<script type="text/javascript" src="index.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
                 break;
 
             case 'DEBUG':
