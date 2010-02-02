@@ -757,7 +757,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             var ui = event.ui;
             var rzInfo = ui.getRzInfo(this);
             
-            this.durationEl.update(rzInfo.dtend.format('H:i'));
+            this.durationEl.update(rzInfo.dtend.format(event.get('is_all_day_event') ? Ext.form.DateField.prototype.format : 'H:i'));
         });
         
         event.ui.markDirty();
@@ -769,7 +769,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 'style': 'position: absolute; bottom: 3px; right: 2px;'
             });
         }
-        rz.durationEl.update(event.get('dtend').format('H:i'));
+        rz.durationEl.update(event.get('dtend').format(event.get('is_all_day_event') ? Ext.form.DateField.prototype.format : 'H:i'));
         
         if (event) {
             this.getSelectionModel().select(event);
