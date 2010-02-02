@@ -343,7 +343,7 @@ abstract class Tinebase_Export_Abstract
                     $result = $_record->{$_field->identifier} / $_field->divisor;
                 } elseif (in_array($_field->type, $this->_userFields)) {
                     // resolved user
-                    $result = $_record->{$_field->type}->{$_field->field};
+                    $result = (! empty($_record->{$_field->type})) ? $_record->{$_field->type}->{$_field->field} : '';
                 } else {
                     // all remaining
                     $result = $_record->{$_field->identifier};
