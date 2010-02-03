@@ -164,8 +164,11 @@ abstract class Tinebase_Export_Abstract
     protected function _getRecords()
     {
         // get records by filter
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting records using filter: ' . print_r($this->_filter->toArray(), TRUE));
         $pagination = (! empty($this->_sortInfo)) ? new Tinebase_Model_Pagination($this->_sortInfo) : NULL;
         $records = $this->_controller->search($this->_filter, $pagination, $this->_getRelations);
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Exporting  ' . count($records) . ' records ...');
         
         // resolve stuff
         $this->_resolveRecords($records);
