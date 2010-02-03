@@ -455,18 +455,13 @@ Tine.widgets.container.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
  	createNode: function(attr) {
 		// map attributes from Tinebase_Container to attrs from library/ExtJS
 		if (attr.name) {
-            if (!attr.account_grants.account_id){
-                // temporary workaround, for a Zend_Json::encode problem
-                attr.account_grants = Ext.util.JSON.decode(attr.account_grants);
-            }
             attr = {
                 containerType: 'singleContainer',
                 container: attr,
                 text: attr.name,
                 id: attr.id,
                 cls: 'file',
-                leaf: false,
-                expanded: true
+                leaf: true
             };
         } else if (attr.accountDisplayName) {
             attr = {
@@ -491,32 +486,12 @@ Tine.widgets.container.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     
     inspectCreateNode: Ext.emptyFn,
     
-    /**
-     * request data
-     * 
-     * @param {} node
-     * @param {} callback
-     * @private
-     */
-    requestData: function(node, callback, scope){
-        if(this.fireEvent("beforeload", this, node, callback) !== false){
-            
-            this.transId = Ext.Ajax.request({
-                params: {
-                    method: 'Tinebase_Container.getContainer',
-                    application: this.appName,
-                    containerType: node.attributes.containerType,
-                    owner: node.attributes.owner ? node.attributes.owner.accountId : null
-                },
-                success: this.handleResponse,
-                failure: this.handleFailure,
-                scope: this,
-                argument: {callback: callback, node: node, scope: scope}
-            });
-        } else {
-            // if the load is cancelled, make sure we notify
-            // the node that we are done
-            this.runCallback(callback, scope || node, []);
-        }
+    getParams: function(node) {
+        return {
+            method: 'Tinebase_Container.getContainer',
+            application: this.appName,
+            containerType: node.attributes.containerType,
+            owner: node.attributes.owner ? node.attributes.owner.accountId : null
+        };
     }
  });
