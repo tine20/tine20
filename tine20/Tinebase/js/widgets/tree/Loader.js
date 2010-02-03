@@ -38,34 +38,14 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
      * @cfg {Array} of filter objects for search method 
      */
     filter: null,
-
-    // trick parent
-    url: true,
     
-    /**
-     * request data
-     * 
-     * @param {} node
-     * @param {} callback
-     * @private
-     */
-    requestData: function(node, callback, scope){
-        if(this.fireEvent("beforeload", this, node, callback) !== false){
-            
-            this.transId = Ext.Ajax.request({
-                params: {
-                    method: this.method,
-                    filter: this.filter
-                },
-                success: this.handleResponse,
-                failure: this.handleFailure,
-                scope: this,
-                argument: {callback: callback, node: node, scope: scope}
-            });
-        } else {
-            // if the load is cancelled, make sure we notify
-            // the node that we are done
-            this.runCallback(callback, scope || node, []);
+    method: 'POST',
+    url: 'index.php',
+    
+    getParams: function(node) {
+        return {
+            method: this.method,
+            filter: this.filter
         }
     }
  });
