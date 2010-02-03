@@ -86,6 +86,10 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
     cursor:pointer;
 }
 
+.cal-calselectwdgt {
+	position: relative;
+}
+
 /**** date picker ****/
 .cal-tree .x-date-picker {
     border: 0;
