@@ -67,33 +67,5 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
             // the node that we are done
             this.runCallback(callback, scope || node, []);
         }
-    },
-    
-    /**
-     * process response
-     * 
-     * @param {} response
-     * @param {} node
-     * @param {} callback
-     */
-    processResponse : function(response, node, callback){
-        var data = Ext.util.JSON.decode(response.responseText);
-        var o = data.results;
-        
-        try {
-            node.beginUpdate();
-            for(var i = 0, len = o.length; i < len; i++){
-                var n = this.createNode(o[i]);
-                if(n){
-                    node.appendChild(n);
-                }
-            }
-            node.endUpdate();
-            if(typeof callback == "function"){
-                callback(this, node);
-            }
-        }catch(e){
-            this.handleFailure(response);
-        }
-    }    
+    }
  });

@@ -448,8 +448,8 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
 });
 
 Tine.widgets.container.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
-    
-	/**
+
+    /**
      * @private
      */
  	createNode: function(attr) {
@@ -486,19 +486,7 @@ Tine.widgets.container.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         
         this.inspectCreateNode(attr);
         
-		// apply baseAttrs, nice idea Corey!
-        if(this.baseAttrs){
-            Ext.applyIf(attr, this.baseAttrs);
-        }
-        if(this.applyLoader !== false){
-            attr.loader = this;
-        }
-        if(typeof attr.uiProvider == 'string'){
-           attr.uiProvider = this.uiProviders[attr.uiProvider] || eval(attr.uiProvider);
-        }
-        return(attr.leaf ?
-                        new Ext.tree.TreeNode(attr) :
-                        new Ext.tree.AsyncTreeNode(attr));
+        return Tine.widgets.container.TreeLoader.superclass.createNode.apply(this, arguments);
     },
     
     inspectCreateNode: Ext.emptyFn,
@@ -530,34 +518,5 @@ Tine.widgets.container.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             // the node that we are done
             this.runCallback(callback, scope || node, []);
         }
-    },
-    
-    /**
-     * process response
-     * 
-     * @param {} response
-     * @param {} node
-     * @param {} callback
-     */
-    processResponse : function(response, node, callback){
-        var data = Ext.util.JSON.decode(response.responseText);
-        var o = data;
-        
-        try {
-            node.beginUpdate();
-            for(var i = 0, len = o.length; i < len; i++){
-                var n = this.createNode(o[i]);
-                if(n){
-                    node.appendChild(n);
-                }
-            }
-            node.endUpdate();
-            if(typeof callback == "function"){
-                callback(this, node);
-            }
-        }catch(e){
-            this.handleFailure(response);
-        }
     }
-
  });
