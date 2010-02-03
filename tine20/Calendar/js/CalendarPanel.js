@@ -279,70 +279,53 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 }, this
             );
         } else if (event.isRecurInstance()) {
-            this.updateeMethodWin = new Ext.Window({
-                modal: true,
-                cls: 'x-window-dlg',
-                closable: false,
-                width: 500,
-                title: this.app.i18n._('Update Event'),
-                html: '<div class="ext-mb-icon ext-mb-question"></div>' +
-                      '<div class="ext-mb-content"><span class="ext-mb-text"></span>' +
-                          this.app.i18n._('Do you want to update the whole series, or just this event') +
-                      '<br /><div class="ext-mb-fix-cursor"></div></div>',
-                //html:  this.app.i18n._('Do you want to update the whole series, or just this event'),
-                buttons: [{
-                    text: this.app.i18n._('Update nothing'),
-                    scope: this,
-                    handler: function() {
-                        this.loadMask.show();
-                        this.store.load({refresh: true});
-                        this.updateeMethodWin.close();
-                    }
-                }, {
-                    text: this.app.i18n._('Update whole series'),
-                    scope: this,
-                    handler: function() {
-                        this.loadMask.show();
+            this.deleteMethodWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
+                windowTitle: this.app.i18n._('Delete Event'),
+                scope: this,
+                options: [
+                    {text: this.app.i18n._('Update nothing'), name: 'cancel'},
+                    {text: this.app.i18n._('Update whole series'), name: 'series'},
+                    {text: this.app.i18n._('Update this event only'), name: 'this'}
+                ],
+                handler: function(option) {
+                    switch (option) {
+                        case 'series':
+                            this.loadMask.show();
+                            
+                            var options = {
+                                scope: this,
+                                success: function() {
+                                    this.store.load({refresh: true});
+                                },
+                                failure: this.onProxyFail.createDelegate(this, [event], true)
+                            };
+                            
+                            Tine.Calendar.backend.updateRecurSeries(event, options);
+                            break;
+                            
+                        case 'this':
+                            var options = {
+                                scope: this,
+                                success: function(updatedEvent) {
+                                    event =  this.store.indexOf(event) != -1 ? event : this.store.getById(event.id);
                         
-                        var options = {
-                            scope: this,
-                            success: function() {
-                                this.store.load({refresh: true});
-                            },
-                            failure: this.onProxyFail.createDelegate(this, [event], true) /*function () {
-                                this.loadMask.hide();;
-                                Ext.MessageBox.alert(Tine.Tinebase.translation._hidden('Failed'), this.app.i18n._('Failed not update recurring event series')); 
-                            }*/
-                        };
-                        
-                        Tine.Calendar.backend.updateRecurSeries(event, options);
-                        this.updateeMethodWin.close();
+                                    this.store.remove(event);
+                                    this.store.add(updatedEvent);
+                                    this.setLoading(false);
+                                    this.view.getSelectionModel().select(updatedEvent);
+                                },
+                                failure: this.onProxyFail.createDelegate(this, [event], true)
+                            };
+                            
+                            Tine.Calendar.backend.createRecurException(event, false, false, options);
+                                
+                        default:
+                            this.loadMask.show();
+                            this.store.load({refresh: true});
+                            break;
                     }
-                }, {
-                    text: this.app.i18n._('Update this event only'),
-                    scope: this,
-                    handler: function() {
-                        var options = {
-                            scope: this,
-                            success: function(updatedEvent) {
-                                event =  this.store.indexOf(event) != -1 ? event : this.store.getById(event.id);
-                    
-                                this.store.remove(event);
-                                this.store.add(updatedEvent);
-                                this.setLoading(false);
-                                this.view.getSelectionModel().select(updatedEvent);
-                            },
-                            failure: this.onProxyFail.createDelegate(this, [event], true) /* function () {
-                                Ext.MessageBox.alert(Tine.Tinebase.translation._hidden('Failed'), this.app.i18n._('Failed not update event')); 
-                            }*/
-                        };
-                        
-                        Tine.Calendar.backend.createRecurException(event, false, false, options);
-                        this.updateeMethodWin.close();
-                    }
-                }]
+                }
             });
-            this.updateeMethodWin.show();
         } else {
             this.onUpdateEventAction(event);
         }
