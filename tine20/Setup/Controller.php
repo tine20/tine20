@@ -565,7 +565,7 @@ class Setup_Controller
             ),
             'logger' => array(
                 'filename' => $defaultPath . DIRECTORY_SEPARATOR . 'tine20.log',
-                'priority' => '7'    
+                'priority' => '5'    
             ),
             'caching' => array(
                    'active' => 1,
