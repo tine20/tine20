@@ -590,7 +590,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         foreach ($this->_datetimeFields as $field) {
             if (!isset($_data[$field]) || $_data[$field] instanceof Zend_Date) continue;
             
-            if (strpos($_data[$field], ',') !== false) {
+            if (! is_array($_data[$field]) && strpos($_data[$field], ',') !== false) {
                 $_data[$field] = explode(',', $_data[$field]);
             }
             
