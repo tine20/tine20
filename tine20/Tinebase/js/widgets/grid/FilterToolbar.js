@@ -346,6 +346,11 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             oldValue = '';
         }
         
+        // NOTE: removeMode got introduced on ext3.1 but is not docuemented
+        //       'childonly' is no ext mode, we just need something other than 'container'
+        filter.formFields.operator.removeMode = 'childsonly';
+        filter.formFields.value.removeMode = 'childsonly';
+        
         filter.formFields.operator.destroy();
         filter.formFields.value.destroy();
         
