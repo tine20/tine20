@@ -31,25 +31,17 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
 	
     // private
     method: 'Felamimail.searchFolders',
-
-    /**
-     * request data
-     * 
-     * @param {} node
-     * @param {} callback
-     * @private
-     */
-    requestData: function(node, callback){
-        
-    	// add globalname to filter
-    	this.filter = [
+    
+    getParams: function(node) {
+        // add globalname to filter
+        this.filter = [
             {field: 'account_id', operator: 'equals', value: node.attributes.account_id},
             {field: 'globalname', operator: 'equals', value: node.attributes.globalname}
         ];
-    	
-    	Tine.Felamimail.TreeLoader.superclass.requestData.call(this, node, callback);
-    },
         
+        return Tine.Felamimail.TreeLoader.superclass.getParams.apply(this, arguments);
+    },
+    
     /**
      * @private
      * 
