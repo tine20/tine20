@@ -9,7 +9,7 @@
     <sumColumn>F</sumColumn>
     <billableColumn>G</billableColumn>
     <overviewTable>1</overviewTable>
-    <!--header>1</header-->
+    <header>1</header>
     <headers>
         <header>{date}</header>
         <header>{user}</header>
