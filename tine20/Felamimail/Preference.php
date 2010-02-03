@@ -48,6 +48,13 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
      */
     const USEINADB = 'useInAdb';
 
+   
+    /**
+     * use for default note
+     *
+     */
+    const AUTOATTACHNOTE = 'autoAttachNote';
+    
     /**
      * application
      *
@@ -69,6 +76,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTACCOUNT,
             self::UPDATEINTERVAL,
             self::USEINADB,
+            self::AUTOATTACHNOTE,
         );
             
         return $allPrefs;
@@ -99,6 +107,10 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             self::USEINADB  => array(
                 'label'         => $translate->_('Use in Addressbook'),
                 'description'   => $translate->_('Compose Emails from the Addressbook with Felamimail.'),
+            ),
+            self::AUTOATTACHNOTE  => array(
+                'label'         => $translate->_('Use for NOTES'),
+                'description'   => $translate->_('Save Note default Value.'),
             ),
         );
         
@@ -138,6 +150,12 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                     </option>';
                 }
                 $preference->options    .= '</options>';
+                break;
+            case self::AUTOATTACHNOTE:
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');

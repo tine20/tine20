@@ -59,8 +59,10 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
  */
 Tine.Felamimail.Model.Message.getDefaultData = function() {
     var defaultFrom = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+    var autoAttachNote = Tine.Felamimail.registry.get('preferences').get('autoAttachNote');
     return {
-        from: defaultFrom
+        from: defaultFrom,
+        note: autoAttachNote
     };
 };
 
