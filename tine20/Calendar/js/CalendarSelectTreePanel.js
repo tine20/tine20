@@ -155,11 +155,8 @@ Tine.Calendar.CalendarSelectTreeLoader = Ext.extend(Tine.widgets.container.TreeL
     },
     
     processResponse: function(response, node, callback, scope) {
-        // convert resources responses into old treeLoader structure
-        var json = response.responseText;
-        var o = response.responseData || Ext.decode(json);
-        if (o.totalcount) {
-            
+        if (node.attributes.id.match(/resource/i)) {
+            var o = response.responseData || Ext.decode(response.responseText);
             Ext.each(o.results, function(resource) {
                 // fake grants
                 resource.account_grants = {
@@ -170,9 +167,6 @@ Tine.Calendar.CalendarSelectTreeLoader = Ext.extend(Tine.widgets.container.TreeL
                 // prefix id
                 resource.id = 'resource_' + resource.id;
             });
-            
-            // take results part as response only
-            response.responseData = o.results;
         }
         
         return Tine.Calendar.CalendarSelectTreeLoader.superclass.processResponse.apply(this, arguments);
