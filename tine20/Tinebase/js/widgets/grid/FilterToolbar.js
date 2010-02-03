@@ -370,8 +370,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         // only use old operator/value for textfields
         var f = filter.formFields.value;
         if (oldValue && typeof f.selectText == 'function' && typeof f.doQuery != 'function') {
-            if (typeof filter.formFields.operator.setValue == 'function') {
-                filter.formFields.operator.setValue(oldOperator);
+            var o = filter.formFields.operator;
+            
+            if (typeof o.setValue == 'function' && o.findRecord(o.valueField, oldOperator)) {
+                o.setValue(oldOperator);
             }
             filter.formFields.value.setValue(oldValue);
             filter.formFields.value.selectText.defer(50, filter.formFields.value);
