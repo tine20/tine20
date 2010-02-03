@@ -39,7 +39,6 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
      */
     filter: null,
     
-    method: 'POST',
     url: 'index.php',
     
     getParams: function(node) {
