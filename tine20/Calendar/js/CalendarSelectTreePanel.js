@@ -143,15 +143,15 @@ Tine.Calendar.CalendarSelectTreeLoader = Ext.extend(Tine.widgets.container.TreeL
         };
     },
     
-    onBeforeLoad: function(loader, node) {
-        // route resources requests to calendar json frontend
+    getParams: function(node) {
         if (node.attributes.id.match(/resource/i)) {
-            loader.baseParams.method = 'Calendar.searchResources';
-            loader.baseParams.filter = [{field: 'name', operator: 'contains', value: ''}];
-            loader.baseParams.paging = {};
-        } else {
-            Tine.Calendar.CalendarSelectTreeLoader.superclass.onBeforeLoad.call(this, loader, node);
+            return {
+                method: 'Calendar.searchResources',
+                filter: [{field: 'name', operator: 'contains', value: ''}]
+            };
         }
+        
+        return Tine.Calendar.CalendarSelectTreeLoader.superclass.getParams.apply(this, arguments);
     },
     
     processResponse: function(response, node, callback, scope) {
