@@ -200,6 +200,20 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                         format: 'csv',
                         exportFunction: 'Addressbook.exportContacts',
                         gridPanel: this
+                    }),
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as ODS'),
+                        format: 'ods',
+                        iconCls: 'tinebase-action-export-ods',
+                        exportFunction: 'Addressbook.exportContacts',
+                        gridPanel: this
+                    }),
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as XLS'),
+                        format: 'xls',
+                        iconCls: 'tinebase-action-export-xls',
+                        exportFunction: 'Addressbook.exportContacts',
+                        gridPanel: this
                     })
                 ]
             }

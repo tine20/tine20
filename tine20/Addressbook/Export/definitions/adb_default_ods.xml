@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_Contact</model>
+    <name>adb_default_ods</name>
+    <type>export</type>
+    <plugin>Addressbook_Export_Ods</plugin>
+    <description>default ods contact export definition</description>
+    <header>1</header>
+    <headers>
+        <header>{date}</header>
+        <header>{user}</header>
+    </headers>
+    <columns>
+        <column>
+            <identifier>n_fn</identifier>
+            <header>Full Name</header>
+            <type>string</type>
+        </column>
+        <column>
+            <identifier>org_name</identifier>
+            <header>Organization</header>
+            <type>string</type>
+        </column>
+        <column>
+            <identifier>tel_work</identifier>
+            <header>Telephone (Work)</header>
+            <type>string</type>
+        </column>
+        <column>
+            <identifier>tel_cell</identifier>
+            <header>Telephone (Cellphone)</header>
+            <type>string</type>
+        </column>
+        <column>
+            <identifier>tel_fax</identifier>
+            <header>Telephone (Fax)</header>
+            <type>string</type>
+        </column>
+        <column>
+            <identifier>email</identifier>
+            <header>Email</header>
+            <type>string</type>
+        </column>
+        <column>
+            <identifier>adr_one_street</identifier>
+            <header>Street</header>
+            <type>string</type>
+        </column>
+        <column>
+            <identifier>adr_one_postalcode</identifier>
+            <header>Postal Code</header>
+            <type>string</type>
+        </column>
+        <column>
+            <identifier>adr_one_locality</identifier>
+            <header>Locality</header>
+            <type>string</type>
+        </column>
+        <column>
+            <identifier>adr_one_countryname</identifier>
+            <header>Country</header>
+            <type>string</type>
+        </column>
+    </columns>
+</config>
