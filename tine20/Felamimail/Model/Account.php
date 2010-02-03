@@ -236,6 +236,11 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         
         if ($this->smtp_user) {
             $result['username'] = $this->smtp_user; 
+            
+            // add domain
+            if (isset($result['primarydomain']) && ! empty($result['primarydomain'])) {            
+                $result['username'] .= '@' . $result['primarydomain'];                
+            }
         }
         
         if ($this->smtp_password) {
