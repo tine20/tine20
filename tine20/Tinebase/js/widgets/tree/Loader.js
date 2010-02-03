@@ -46,5 +46,16 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
             method: this.method,
             filter: this.filter
         }
+    },
+    
+    processResponse: function(response, node, callback, scope) {
+        // convert tine search response into usual treeLoader structure
+        var o = response.responseData || Ext.decode(response.responseText);
+        if (o.totalcount) {
+            // take results part as response only
+            response.responseData = o.results;
+        }
+        
+        return Tine.widgets.tree.Loader.superclass.processResponse.apply(this, arguments);
     }
  });
