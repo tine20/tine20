@@ -2,14 +2,14 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->   
-    <version>3.0</version>
+    <version>3.1</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
         <!-- events -->
         <table>
             <name>cal_events</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -72,8 +72,11 @@
                     <default>OPAQUE</default>
                 </field>
                 <field>
-                    <name>class_id</name>
-                    <type>integer</type>
+                    <name>class</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <default>PUBLIC</default>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>description</name>
