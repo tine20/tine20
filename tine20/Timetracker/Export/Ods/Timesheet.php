@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Ods.php 12217 2010-01-11 16:51:08Z p.schuele@metaways.de $
  * 
+ * @todo        remove header/footer/overview/$lastCell/$_firstRow? perhaps we can handle all of this in templates with formulas 
  */
 
 /**
@@ -129,7 +130,6 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Ods
         $cell->setStyle('ceBold');
         */     
     }
-    
 
     /**
      * get special field value

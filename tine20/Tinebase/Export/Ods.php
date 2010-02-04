@@ -8,6 +8,9 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @todo        remove header/footer/overview/$lastCell/$_firstRow? perhaps we can handle all of this in templates with formulas 
+ * @todo        add alternating row styles again?
  */
 
 /**
@@ -83,6 +86,8 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
      * first row of body (records)
      * 
      * @var integer
+     * 
+     * @deprecated
      */
     protected $_firstRow = 4;
     
