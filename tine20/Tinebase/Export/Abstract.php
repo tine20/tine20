@@ -288,7 +288,12 @@ abstract class Tinebase_Export_Abstract
             $result = $this->_replaceAndMatchvalue($result, $_field);
             return $result;
             
-        } else if (isset($field->formula) || (! isset($_record->{$_field->identifier}) && ! in_array($_field->type, $this->_resolvedFields))) {
+        } else if (isset($field->formula) 
+            || (! isset($_record->{$_field->identifier}) 
+                && ! in_array($_field->type, $this->_resolvedFields) 
+                && ! isset($_field->custom)
+            )
+        ) {
             // don't add value for formula or undefined fields
             return $result;
         }
@@ -339,6 +344,7 @@ abstract class Tinebase_Export_Abstract
                 if (isset($_field->custom) && $_field->custom) {
                     // add custom fields
                     if (isset($_record->customfields[$_field->identifier])) {
+                        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_field->identifier . '-' . $_record->customfields[$_field->identifier]);
                         $result = $_record->customfields[$_field->identifier];
                     }
                     
@@ -355,8 +361,8 @@ abstract class Tinebase_Export_Abstract
                 
                 // set special value from params
                 if (isset($_field->values)) {
-                    $values = $_field->values->toArray();
-                    if (array_key_exists($result, $values)) {
+                    $values = $_field->values->value->toArray();
+                    if (isset($values[$result])) {
                         $result = $values[$result];
                     }
                 }
