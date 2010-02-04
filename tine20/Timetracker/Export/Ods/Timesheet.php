@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Ods.php 12217 2010-01-11 16:51:08Z p.schuele@metaways.de $
  * 
- * @todo        remove header/footer/overview/$lastCell/$_firstRow? perhaps we can handle all of this in templates with formulas 
  */
 
 /**
@@ -69,66 +68,6 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Ods
         
         $timeaccountIds = $_records->timeaccount_id;
         $this->_resolvedRecords['timeaccounts'] = Timetracker_Controller_Timeaccount::getInstance()->getMultiple(array_unique(array_values($timeaccountIds)));
-    }
-    
-    /**
-     * add table footer (formulas, ...)
-     *
-     * @param OpenDocument_SpreadSheet_Table $table
-     * @param integer $lastCell
-     */
-    protected function _addFooter($table, $lastCell)
-    {
-        // add footer
-        $row = $table->appendRow();
-        $row = $table->appendRow();
-        $numberOfEmptyCells = ord($this->_config->sumColumn) - 66;
-        for ($i=0; $i<$numberOfEmptyCells; $i++) {
-            $row->appendCell('string');
-        }
-
-        $row->appendCell('string', $this->_translate->_('Total Sum'));
-        $cell = $row->appendCell('float', 0);
-        // set sum for timesheet duration (for example E2:E10)
-        $cell->setFormula('oooc:=SUM(' . $this->_config->sumColumn . $this->_firstRow . ':' . $this->_config->sumColumn . $lastCell . ')');   
-        $cell->setStyle('ceBold');
-    }
-    
-    /**
-     * add overview table
-     *
-     * @param integer $lastCell
-     * 
-     * @todo make setFormula work again
-     */
-    protected function _addOverviewTable($lastCell)
-    {
-        /*
-        $table = $this->_openDocumentObject->getBody()->appendTable('Overview');
-        
-        $row = $table->appendRow();
-        $row->appendCell('string', $this->_translate->_('Not billable'));
-        $cell = $row->appendCell('float', 0);
-        $cell->setFormula('oooc:=SUMIF(Timesheets.' . 
-            $this->_config->billableColumn . $this->_firstRow . ':Timesheets.' . $this->_config->billableColumn . $lastCell . 
-            ';0;Timesheets.' . $this->_config->sumColumn . $this->_firstRow . ':Timesheets.' . $this->_config->sumColumn . $lastCell . ')');
-        #$cell->setStyle('ceBold');     
-        
-        $row = $table->appendRow();
-        $row->appendCell('string', $this->_translate->_('Billable'));
-        $cell = $row->appendCell('float', 0);
-        $cell->setFormula('oooc:=SUMIF(Timesheets.' . 
-            $this->_config->billableColumn . $this->_firstRow . ':Timesheets.' . $this->_config->billableColumn . $lastCell . 
-            ';1;Timesheets.' . $this->_config->sumColumn . $this->_firstRow . ':Timesheets.' . $this->_config->sumColumn . $lastCell . ')');
-        #$cell->setStyle('ceBold');     
-        
-        $row = $table->appendRow();
-        $row->appendCell('string', $this->_translate->_('Total'));
-        $cell = $row->appendCell('float', 0);
-        $cell->setFormula('oooc:=SUM(Timesheets.' . 
-            $this->_config->sumColumn . $this->_firstRow . ':Timesheets.' . $this->_config->sumColumn . $lastCell . ')');
-        $cell->setStyle('ceBold');
-        */     
     }
 
     /**

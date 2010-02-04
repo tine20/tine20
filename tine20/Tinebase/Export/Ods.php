@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        remove header/footer/overview/$lastCell/$_firstRow? perhaps we can handle all of this in templates with formulas 
  * @todo        add alternating row styles again?
  */
 
@@ -83,15 +82,6 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
     );
     
     /**
-     * first row of body (records)
-     * 
-     * @var integer
-     * 
-     * @deprecated
-     */
-    protected $_firstRow = 4;
-    
-    /**
      * fields with special treatment in addBody
      *
      * @var array
@@ -115,7 +105,6 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
         $this->_createDocument();
         
         $records = $this->_getRecords();
-        $lastCell = count($records) + $this->_firstRow - 1;
         
         // build export table (use current table if using template)
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating export for ' . $this->_modelName . ' . ' . $this->_getDataTableName());
@@ -136,17 +125,6 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             
         // body
         $this->_addBody($table, $records);
-        
-        // add footer (disabled at the moment)
-        if (isset($this->_config->footer) && $this->_config->footer) {
-            //$this->_addFooter($table, $lastCell);
-        }
-        
-        // add overview table (disabled at the moment)
-        if (isset($this->_config->overviewTable) && $this->_config->overviewTable) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding overview table.');
-            //$this->_addOverviewTable($lastCell);
-        }
         
         // create file
         $result = $this->_openDocumentObject->getDocument();        
@@ -245,28 +223,12 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
      * @param Tinebase_Record_RecordSet $records
      * @param array 
      * 
-     * @todo    generalize this for other export formats
      */
     protected function _addBody(OpenDocument_SpreadSheet_Table $table, $_records)
     {
-        if (isset($this->_config->customFields) && $this->_config->customFields) {
-            // we need the sql backend if the export contains custom fields
-            // @todo remove that when getMultiple() fetches the custom fields as well
-            $recordBackend = new Timetracker_Backend_Timesheet();
-        }
-        
         // add record rows
         $i = 0;
         foreach ($_records as $record) {
-            
-            // check if we need to get the complete record with custom fields
-            // @todo remove that when getMultiple() fetches the custom fields as well
-            if (isset($this->_config->customFields) && $this->_config->customFields) {
-                $record = $recordBackend->get($record->getId());
-                Tinebase_User::getInstance()->resolveUsers($record, 'account_id');
-            }
-            
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
             
             $row = $table->appendRow();
 
@@ -287,9 +249,9 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                 }
 
                 /*
-                #if ($i % 2 == 1) {
-                #    $cell->setStyle($altStyle);
-                #}
+                if ($i % 2 == 1) {
+                    $cell->setStyle($altStyle);
+                }
                 */
                 
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($field->toArray(), true));
@@ -299,25 +261,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
         
     }
     
-    /**
-     * add table footer (formulas, ...)
-     *
-     * @param OpenDocument_SpreadSheet_Table $table
-     * @param integer $lastCell
-     */
-    protected function _addFooter($table, $lastCell)
-    {
-    }
     
-    /**
-     * add overview table
-     *
-     * @param integer $lastCell
-     */
-    protected function _addOverviewTable($lastCell)
-    {
-    }
-
     /**
      * add style/width to column
      *
