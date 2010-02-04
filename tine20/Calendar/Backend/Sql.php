@@ -15,7 +15,7 @@
  * Events consists of the properties of Calendar_Model_Evnet except Tags and Notes 
  * which are as always handles by their controllers/backends
  * 
- * @todo add handling for class_id
+ * @todo add handling for class
  * @package Calendar 
  */
 class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract

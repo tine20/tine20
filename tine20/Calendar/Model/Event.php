@@ -31,6 +31,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
     const TRANSP_TRANSP        = 'TRANSPARENT';
     const TRANSP_OPAQUE        = 'OPAQUE';
+    
+    const CLASS_PUBLIC         = 'PUBLIC';
+    const CLASS_PRIVATE        = 'PRIVATE';
+    const CLASS_CONFIDENTIAL   = 'CONFIDENTIAL';
+    
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -67,7 +72,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'dtend'                => array('allowEmpty' => true          ),
         'transp'               => array('allowEmpty' => true,  'InArray' => array(self::TRANSP_TRANSP, self::TRANSP_OPAQUE)),
         // ical common fields
-        'class_id'             => array('allowEmpty' => true, 'Int'   ),
+        'class'                => array('allowEmpty' => true,  'InArray' => array(self::CLASS_PUBLIC, self::CLASS_PRIVATE, self::CLASS_CONFIDENTIAL)),
         'description'          => array('allowEmpty' => true          ),
         'geo'                  => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'location'             => array('allowEmpty' => true          ),
@@ -177,7 +182,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             case 'dtstart':           return $t->_('Start');
             case 'dtend':             return $t->_('End');
             case 'transp':            return $t->_('Blocking');
-            case 'class_id':          return $t->_('Classification');
+            case 'class':             return $t->_('Classification');
             case 'description':       return $t->_('Description');
             case 'location':          return $t->_('Location');
             case 'organizer':         return $t->_('Organizer');
@@ -279,8 +284,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             $_data['geo'] = NULL;
         }
         
-        if (empty($_data['class_id'])) {
-            $_data['class_id'] = NULL;
+        if (empty($_data['class'])) {
+            $_data['class'] = self::CLASS_PUBLIC;
         }
         
         if (empty($_data['priority'])) {

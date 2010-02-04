@@ -202,7 +202,7 @@ class Calendar_Setup_Import_Egw14 {
             //'organizer'         => $_egwEventData['cal_owner'], NOTE we would need contact id here
             'transp'            => $_egwEventData['cal_non_blocking'] ? Calendar_Model_Event::TRANSP_TRANSP : Calendar_Model_Event::TRANSP_OPAQUE,
             'priority'          => $this->getPriority($_egwEventData['cal_priority']),
-            // 'class_id'
+            // 'class'
         );
         
         // TODO: figure out users tz

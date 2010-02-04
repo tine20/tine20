@@ -72,7 +72,7 @@
         
         $orderedUpdateFieldOfInterest = array(
             'dtstart', 'dtend', 'summary', 'location', 'description',
-            'organizer', 'transp', 'priority', 'status_id', 'class_id',
+            'organizer', 'transp', 'priority', 'status_id', 'class',
             'url', 'rrule', 'is_all_day_event', 'originator_tz', /*'tags', 'notes',*/
         );
         
