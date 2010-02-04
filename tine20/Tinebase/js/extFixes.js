@@ -78,9 +78,10 @@ Date.parseIso = function(isoString) {
 Ext.Window.prototype.rename = function(newId) {
     // Note PopupWindows are identified by name, whereas Ext.windows
     // get identified by id this should be solved some time ;-)
-    this.manager.unregister(this);
+    var manager = this.manager || Ext.WindowMgr;
+    manager.unregister(this);
     this.id = newId;
-    this.manager.register(this);
+    manager.register(this);
 };
 
 /**
