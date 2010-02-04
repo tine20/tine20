@@ -254,6 +254,7 @@ abstract class Tinebase_Export_Abstract
                         $completeFilename,
                         Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
                     );
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Using definition from file ' . $definition->filename);
                     $definition->plugin_options = $fileDefinition->plugin_options;
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
