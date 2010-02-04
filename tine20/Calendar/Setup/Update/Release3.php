@@ -28,6 +28,15 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
             </field>');
         $this->_backend->addCol('cal_events', $declaration, 11);
         
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>class</name>
+                <field>
+                    <name>class</name>
+                </field>
+            </index>');
+        $this->_backend->addIndex('cal_events', $declaration);
+        
         $this->setTableVersion('cal_events', 3);
         $this->setApplicationVersion('Calendar', '3.1');
     }

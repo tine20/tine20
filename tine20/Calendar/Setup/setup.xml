@@ -198,6 +198,12 @@
                         <name>rrule_until</name>
                     </field>
                 </index>
+                <index>
+                    <name>class</name>
+                    <field>
+                        <name>class</name>
+                    </field>
+                </index>
             </declaration>
         </table>
         
