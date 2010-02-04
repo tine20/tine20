@@ -40,7 +40,7 @@ Tine.Tasks.TaskArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'completed', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'due', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     // ical common fields
-    { name: 'class_id' },
+    { name: 'class' },
     { name: 'description' },
     { name: 'geo' },
     { name: 'location' },
