@@ -20,7 +20,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'dtend', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'transp' },
     // ical common fields
-    { name: 'class_id' },
+    { name: 'class' },
     { name: 'description' },
     { name: 'geo' },
     { name: 'location' },
