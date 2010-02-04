@@ -153,7 +153,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         'EndTime'           => 'dtend',
         'Location'          => 'location',
         //'Reminder'          => 'alarms',
-        //'Sensitivity'       => 'class_id',
+        //'Sensitivity'       => 'class',
         'Subject'           => 'summary',
         'Body'              => 'description',
         'StartTime'         => 'dtstart',
