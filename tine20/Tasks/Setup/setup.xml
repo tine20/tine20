@@ -1,75 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tasks</name>
-    <version>3.0</version>
+    <version>3.1</version>
     <order>30</order>
     <depends>
         <application>Admin</application>
     </depends>
     <tables>
-        <table>
-            <name>class</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
-                </field>
-                <field>
-                    <name>class</name>
-                    <notnull>true</notnull>
-                    <type>text</type>
-                    <length>64</length>
-                </field>
-                <field>
-                    <name>created_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>
-                <field>
-                    <name>creation_time</name>
-                    <type>datetime</type>
-                </field>            
-                <field>
-                    <name>last_modified_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>
-                <field>
-                    <name>last_modified_time</name>
-                    <type>datetime</type>
-                </field>
-                <field>
-                    <name>is_deleted</name>
-                    <type>boolean</type>
-                    <default>false</default>
-                </field>
-                <field>
-                    <name>deleted_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>            
-                <field>
-                    <name>deleted_time</name>
-                    <type>datetime</type>
-                </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>class</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>class</name>
-                    </field>
-                </index>
-           </declaration>
-        </table>
         <table>
             <name>tasks_status</name>
             <version>1</version>
@@ -148,7 +85,7 @@
         </table>    
         <table>
             <name>tasks</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -207,8 +144,11 @@
                     <type>datetime</type>
                 </field>            
                 <field>
-                    <name>class_id</name>
-                    <type>integer</type>
+                    <name>class</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <default>PUBLIC</default>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>description</name>
@@ -274,9 +214,9 @@
                     </field>
                 </index>            
                 <index>
-                    <name>class_id</name>
+                    <name>class</name>
                     <field>
-                        <name>class_id</name>
+                        <name>class</name>
                     </field>
                 </index>
                 <index>
@@ -285,17 +225,6 @@
                         <name>status_id</name>
                     </field>
                 </index>                
-                <index>
-                    <name>tasks::class_id--class::id</name>
-                    <foreign>true</foreign>
-                    <field>
-                        <name>class_id</name>
-                    </field>
-                    <reference>
-                        <table>class</table>
-                        <field>id</field>
-                    </reference>
-                </index>                  
                 <index>
                     <name>tasks::status_id--tasks_status::id</name>
                     <foreign>true</foreign>
@@ -352,45 +281,6 @@
             
     </tables>
     <defaultRecords>
-        <record>
-            <table>
-                <name>class</name>
-            </table>
-            <field>
-                <name>creation_time</name>
-                <value special="now">NOW</value>
-            </field>
-            <field>
-                <name>class</name>
-                <value>PUBLIC</value>
-            </field>
-        </record>
-        <record>
-            <table>
-                <name>class</name>
-            </table>
-            <field>
-                <name>creation_time</name>
-                <value special="now">NOW</value>
-            </field>
-            <field>
-                <name>class</name>
-                <value>PRIVATE</value>
-            </field>
-        </record>
-        <record>
-            <table>
-                <name>class</name>
-            </table>
-            <field>
-                <name>creation_time</name>
-                <value special="now">NOW</value>
-            </field>
-            <field>
-                <name>class</name>
-                <value>CONFIDENTIAL</value>
-            </field>
-        </record>
         <record>
             <table>
                 <name>tasks_status</name>
