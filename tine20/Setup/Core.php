@@ -33,6 +33,19 @@ class Setup_Core extends Tinebase_Core
      */
     public static function dispatchRequest()
     {
+        // disable magic_quotes_runtime
+        ini_set('magic_quotes_runtime', 0);
+        
+        // display errors we can't handle ourselves
+        error_reporting(E_COMPILE_ERROR | E_CORE_ERROR | E_ERROR | E_PARSE);
+        ini_set('display_errors', 1);
+        
+        ini_set('log_errors', 1);
+        set_error_handler('Tinebase_Core::errorHandler', E_ALL);
+        
+        // set default internal encoding
+        ini_set('iconv.internal_encoding', 'utf-8');
+        
         $server = NULL;
         
         /**************************** JSON API *****************************/

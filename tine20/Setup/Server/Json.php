@@ -76,12 +76,12 @@ class Setup_Server_Json extends Setup_Server_Abstract
                 }
             }
             
+            $server->handle($request);
+            
         } catch (Exception $exception) {
             echo $this->_handleException($server, $request, $exception);
             exit;
         }
-         
-        $server->handle($request);
     }
     
     /**
