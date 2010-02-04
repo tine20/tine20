@@ -348,7 +348,9 @@ Tine.Admin.Users.Main = function() {
                 enableColLock:false,
                 loadMask: true,
                 autoExpandColumn: 'accountDisplayName',
-                border: false
+                border: false,
+                plugins: [new Ext.ux.grid.GridViewMenuPlugin({})],
+                enableHdMenu: false
             });
             
             Tine.Tinebase.MainScreen.setActiveContentPanel(grid_accounts);
