@@ -921,7 +921,7 @@ class Tinebase_Container
         	
             $grants = explode(',', $row['account_grants']);
             foreach($grants as $grant) {
-                $row[Tinebase_Model_Container::$GRANTNAMEMAP[$grant]] = TRUE;
+                $row[$grant] = TRUE;
             }
         	
             $containerGrant = new Tinebase_Model_Grants($row);
@@ -1112,8 +1112,8 @@ class Tinebase_Container
                 }
                 
                 foreach ($recordGrants as $grantName => $grant) {
-                    if (in_array($grantName, array_values(Tinebase_Model_Container::$GRANTNAMEMAP)) && $grant === true) {
-                        $this->containerAclTable->insert($data + array('account_grant' => array_value($grantName, array_flip(Tinebase_Model_Container::$GRANTNAMEMAP))));
+                    if (in_array($grantName, Tinebase_Model_Grants::$GRANTS_AVAILABLE) && $grant === TRUE) {
+                        $this->containerAclTable->insert($data + array('account_grant' => $grantName));
                     }
                 }
             }
@@ -1173,7 +1173,7 @@ class Tinebase_Container
         $grants = array();
         foreach($_grantsArray as $key => $value) {
             $grantValue = (is_array($value)) ? $value['account_grant'] : $value; 
-            $grants[Tinebase_Model_Container::$GRANTNAMEMAP[$grantValue]] = TRUE;
+            $grants[$grantValue] = TRUE;
         }
         $grantsFields = array(
             'account_id'     => $_accountId,

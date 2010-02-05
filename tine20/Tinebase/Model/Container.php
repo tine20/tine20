@@ -73,19 +73,6 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      */
     const TYPE_SHARED = 'shared';
     
-    /**
-     * maps grant constants to names
-     *
-     * @var array
-     */
-    public static $GRANTNAMEMAP = array(
-        self::GRANT_READ    => Tinebase_Model_Grants::READGRANT,
-        self::GRANT_ADD     => Tinebase_Model_Grants::ADDGRANT,
-        self::GRANT_EDIT    => Tinebase_Model_Grants::EDITGRANT,
-        self::GRANT_DELETE  => Tinebase_Model_Grants::DELETEGRANT,
-        self::GRANT_ADMIN   => Tinebase_Model_Grants::ADMINGRANT
-    );
-    
 	/**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier

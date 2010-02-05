@@ -28,6 +28,19 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
     const DELETEGRANT   = 'deleteGrant';
     const ADMINGRANT    = 'adminGrant';
     
+    /**
+     * define supported/available grants
+     *
+     * @var array
+     */
+    public static $GRANTS_AVAILABLE = array(
+        self::READGRANT,
+        self::ADDGRANT,
+        self::EDITGRANT,
+        self::DELETEGRANT,
+        self::ADMINGRANT,
+    );
+    
 	/**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
