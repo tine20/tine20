@@ -38,11 +38,11 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
     public function update_1()
     {
         // update account types for users with userEmailAccount preference
-        $accounts = Felamimail_Controller_Account::getInstance()->getAll();
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
-        $accountBackend = new Felamimail_Backend_Account();
         
         if (array_key_exists('host', $imapConfig)) {
+            $accounts = Felamimail_Controller_Account::getInstance()->getAll();
+            $accountBackend = new Felamimail_Backend_Account();
             foreach ($accounts as $account) {
                 if (Tinebase_Core::getPreference('Felamimail')->getValueForUser('userEmailAccount', $account->user_id)) {
                     $user = Tinebase_User::getInstance()->getFullUserById($account->user_id);
