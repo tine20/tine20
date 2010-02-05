@@ -46,7 +46,7 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
         'turnover'       => array('filter' => 'Tinebase_Model_Filter_Int'),
         'leadstate_id'   => array('filter' => 'Tinebase_Model_Filter_Int'),
         'container_id'   => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Crm')),
-        'showClosed'     => array('custom' => true),
+        'showClosed'     => array('filter' => 'Crm_Model_LeadClosedFilter'),
         
     // relation filters
         'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
@@ -58,31 +58,4 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
             'related_filter'    => 'Sales_Model_ProductFilter'
         )),
     );
-
-    /**
-     * appends custom filters to a given select object
-     * 
-     * @param  Zend_Db_Select                    $_select
-     * @param  Tinebase_Backend_Sql_Abstract     $_backend
-     * @return void
-     */
-    public function appendFilterSql($_select, $_backend)
-    {
-        $db = $_backend->getAdapter();
-        
-        $showClosed = false;
-        foreach ($this->_customData as $customData) {
-            if ($customData['field'] == 'showClosed' && $customData['value'] == true) {
-                $showClosed = true;
-            }
-        }
-        
-        if($showClosed){
-            // nothing to filter
-        } else {
-            $_select->where($db->quoteIdentifier($_backend->getTableName() . '.end') . ' IS NULL');
-        }
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
-    }
 }
