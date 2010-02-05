@@ -17,26 +17,6 @@ Ext.namespace('Tine.Tinebase.container');
  * @todo internal cache (store)
  */
 Tine.Tinebase.container = {
-    /**
-     * constant for read grant
-     */
-    GRANT_READ: 1,
-    /**
-     * constant for add grant
-     */
-    GRANT_ADD: 2,
-    /**
-     * constant for edit grant
-     */
-    GRANT_EDIT: 4,
-    /**
-     * constant for delete grant
-     */
-    GRANT_DELETE: 8,
-    /**
-     * constant for admin grant
-     */
-    GRANT_ADMIN: 16,
     /** 
      * type for internal contaier
      * for example the internal addressbook
