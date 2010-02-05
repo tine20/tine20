@@ -116,11 +116,14 @@ Tine.Tinebase.Model.Grant = Ext.data.Record.create([
     {name: 'account_id'},
     {name: 'account_type'},
     {name: 'account_name'},
-    {name: 'readGrant',   type: 'boolean'},
-    {name: 'addGrant',    type: 'boolean'},
-    {name: 'editGrant',   type: 'boolean'},
-    {name: 'deleteGrant', type: 'boolean'},
-    {name: 'adminGrant',  type: 'boolean'}
+    {name: 'readGrant',    type: 'boolean'},
+    {name: 'addGrant',     type: 'boolean'},
+    {name: 'editGrant',    type: 'boolean'},
+    {name: 'deleteGrant',  type: 'boolean'},
+    {name: 'privateGrant', type: 'boolean'},
+    {name: 'exportGrant',  type: 'boolean'},
+    {name: 'syncGrant',    type: 'boolean'},
+    {name: 'adminGrant',   type: 'boolean'}
 ]);
 
 /**

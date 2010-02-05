@@ -92,22 +92,44 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
         var columns = [
             new Ext.ux.grid.CheckColumn({
                 header: _('Read'),
+                tooltip: _('The grant to read records of this container'),
                 dataIndex: 'readGrant',
                 width: 55
             }),
             new Ext.ux.grid.CheckColumn({
                 header: _('Add'),
+                tooltip: _('The grant to add records to this container'),
                 dataIndex: 'addGrant',
                 width: 55
             }),
             new Ext.ux.grid.CheckColumn({
                 header: _('Edit'),
+                tooltip: _('The grant to edit records in this container'),
                 dataIndex: 'editGrant',
                 width: 55
             }),
             new Ext.ux.grid.CheckColumn({
                 header: _('Delete'),
+                tooltip: _('The grant to delete records in this container'),
                 dataIndex: 'deleteGrant',
+                width: 55
+            }),
+            new Ext.ux.grid.CheckColumn({
+                header: _('Export'),
+                tooltip: _('The grant to export records from this container'),
+                dataIndex: 'exportGrant',
+                width: 55
+            }),
+            new Ext.ux.grid.CheckColumn({
+                header: _('Sync'),
+                tooltip: _('The grant to synchronise records with this container'),
+                dataIndex: 'syncGrant',
+                width: 55
+            }),
+            new Ext.ux.grid.CheckColumn({
+                header: _('Private'),
+                tooltip: _('The grant to access records marked as private in this container'),
+                dataIndex: 'privateGrant',
                 width: 55
             })
         ];
@@ -115,6 +137,7 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
         if (this.grantContainer.type == 'shared') {
             columns.push(new Ext.ux.grid.CheckColumn({
                 header: _('Admin'),
+                tooltip: _('The grant to administrate this container'),
                 dataIndex: 'adminGrant',
                 width: 55
             }));
@@ -186,7 +209,7 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
  */
 Tine.widgets.container.GrantsDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 700,
+        width: 865,
         height: 450,
         name: Tine.widgets.container.GrantsDialog.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.widgets.container.GrantsDialog',
