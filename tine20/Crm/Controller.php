@@ -116,6 +116,8 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId() 
         ));
         
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new personal folder for account id ' . $_accountId);
+        
         $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer, NULL, FALSE, $accountId);
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
