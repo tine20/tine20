@@ -192,14 +192,14 @@ Ext.namespace('Tine.Felamimail');
             fieldLabel: this.app.i18n._('Attachments'),
             record: this.record,
             hideLabel: true,
-            anchor: '100% 80%'
+            anchor: '100% 100%'
         });
         
         this.htmlEditor = new Ext.form.HtmlEditor({
             fieldLabel: this.app.i18n._('Body'),
             name: 'body',
             allowBlank: true,
-            anchor: '100% 90%',
+            anchor: '100% 100%',
             getDocMarkup: function(){
                 var markup = '<html>'
                     + '<head>'
@@ -317,7 +317,7 @@ Ext.namespace('Tine.Felamimail');
             }, {
                 region: 'south',
                 layout: 'form',
-                height: 100,
+                height: 130,
                 split: true,
                 collapseMode: 'mini',
                 header: false,
@@ -345,7 +345,7 @@ Tine.Felamimail.MessageEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
-        height: 600,
+        height: 700,
         name: Tine.Felamimail.MessageEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Felamimail.MessageEditDialog',
         contentPanelConstructorConfig: config
