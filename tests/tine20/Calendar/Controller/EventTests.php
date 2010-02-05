@@ -58,14 +58,14 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     public function testGetEvent()
     {
         $persitentEvent = $this->testCreateEvent();
-        $this->assertTrue((bool) $persitentEvent->readGrant);
-        $this->assertTrue((bool) $persitentEvent->editGrant);
-        $this->assertTrue((bool) $persitentEvent->deleteGrant);
+        $this->assertTrue((bool) $persitentEvent->{Tinebase_Model_Grants::READGRANT});
+        $this->assertTrue((bool) $persitentEvent->{Tinebase_Model_Grants::EDITGRANT});
+        $this->assertTrue((bool) $persitentEvent->{Tinebase_Model_Grants::DELETEGRANT});
         
         $loadedEvent = $this->_controller->get($persitentEvent->getId());
-        $this->assertTrue((bool) $loadedEvent->readGrant);
-        $this->assertTrue((bool) $loadedEvent->editGrant);
-        $this->assertTrue((bool) $loadedEvent->deleteGrant);
+        $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::READGRANT});
+        $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::EDITGRANT});
+        $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::DELETEGRANT});
     }
     
     public function testUpdateEvent()

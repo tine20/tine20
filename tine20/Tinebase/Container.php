@@ -711,7 +711,7 @@ class Tinebase_Container
                 
                 $userId = NULL;
                 foreach ($allGrants as $grants) {
-                    if ($grants->adminGrant === true) {
+                    if ($grants->{Tinebase_Model_Grants::ADMINGRANT} === true) {
                         $userId = $grants->account_id;
                         break;
                     }

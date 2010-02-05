@@ -68,8 +68,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
-        $this->assertTrue((bool)$loadedEvent->editGrant);
-        $this->assertTrue((bool)$loadedEvent->deleteGrant);
+        $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::EDITGRANT});
+        $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::DELETEGRANT});
     }
     
     /**
@@ -82,8 +82,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
-        $this->assertTrue((bool)$loadedEvent->editGrant);
-        $this->assertTrue((bool)$loadedEvent->deleteGrant);
+        $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::EDITGRANT});
+        $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::DELETEGRANT});
     }
     
     /**
@@ -96,8 +96,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
-        $this->assertFalse((bool)$loadedEvent->editGrant);
-        $this->assertFalse((bool)$loadedEvent->deleteGrant);
+        $this->assertFalse((bool)$loadedEvent->{Tinebase_Model_Grants::EDITGRANT});
+        $this->assertFalse((bool)$loadedEvent->{Tinebase_Model_Grants::DELETEGRANT});
     }
     
     /**
@@ -122,8 +122,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
-        $this->assertFalse((bool)$loadedEvent->editGrant);
-        $this->assertFalse((bool)$loadedEvent->deleteGrant);
+        $this->assertFalse((bool)$loadedEvent->{Tinebase_Model_Grants::EDITGRANT});
+        $this->assertFalse((bool)$loadedEvent->{Tinebase_Model_Grants::DELETEGRANT});
     }
     
     /**
@@ -136,8 +136,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
-        $this->assertTrue((bool)$loadedEvent->editGrant);
-        $this->assertFalse((bool)$loadedEvent->deleteGrant);
+        $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::EDITGRANT});
+        $this->assertFalse((bool)$loadedEvent->{Tinebase_Model_Grants::DELETEGRANT});
     }
     
     /**
@@ -150,8 +150,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
-        $this->assertTrue((bool)$loadedEvent->editGrant);
-        $this->assertFalse((bool)$loadedEvent->deleteGrant);
+        $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::EDITGRANT});
+        $this->assertFalse((bool)$loadedEvent->{Tinebase_Model_Grants::DELETEGRANT});
     }
     
     /**
@@ -169,9 +169,9 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         
         $event = $events->getFirstRecord();
         $this->assertTrue(empty($event->summary), 'event with freebusy only is not cleaned up');
-        $this->assertFalse((bool)$event->readGrant);
-        $this->assertFalse((bool)$event->editGrant);
-        $this->assertFalse((bool)$event->deleteGrant);
+        $this->assertFalse((bool)$event->{Tinebase_Model_Grants::READGRANT});
+        $this->assertFalse((bool)$event->{Tinebase_Model_Grants::EDITGRANT});
+        $this->assertFalse((bool)$event->{Tinebase_Model_Grants::DELETEGRANT});
         
         // direct get of freebusy only events is not allowed
         $this->setExpectedException('Tinebase_Exception_AccessDenied');

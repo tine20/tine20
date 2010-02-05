@@ -224,11 +224,11 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $grants = $this->_instance->getGrantsOfAccount(Tinebase_Core::getUser(), $this->objects['initialContainer']);
         
         $this->assertType('Tinebase_Model_Grants', $grants);
-        $this->assertTrue($grants->readGrant);
-        $this->assertTrue($grants->addGrant);
-        $this->assertTrue($grants->editGrant);
-        $this->assertTrue($grants->deleteGrant);
-        $this->assertTrue($grants->adminGrant);
+        $this->assertTrue($grants->{Tinebase_Model_Grants::READGRANT});
+        $this->assertTrue($grants->{Tinebase_Model_Grants::ADDGRANT});
+        $this->assertTrue($grants->{Tinebase_Model_Grants::EDITGRANT});
+        $this->assertTrue($grants->{Tinebase_Model_Grants::DELETEGRANT});
+        $this->assertTrue($grants->{Tinebase_Model_Grants::ADMINGRANT});
     }
     
     /**

@@ -59,7 +59,7 @@ class Timetracker_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             
             foreach ($allGrants as $grants) {
                 // set manage billable grant;
-                $grants->deleteGrant = TRUE;
+                $grants->{Tinebase_Model_Grants::DELETEGRANT} = TRUE;
             }
             $containerController->setGrants($container_id, $allGrants, true);
             echo '.';

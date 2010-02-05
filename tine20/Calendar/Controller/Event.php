@@ -306,7 +306,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
 	        $event = $this->get($_record->getId());
-	        if ($event->editGrant) {
+	        if ($event->{Tinebase_Model_Grants::EDITGRANT}) {
 	            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " updating event: {$_record->id} ");
 		        
 	            // we need to resolve groupmembers before free/busy checking
@@ -441,7 +441,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $baseEvent = $this->getRecurBaseEvent($_event);
         
-        if ($this->_doContainerACLChecks && !$baseEvent->editGrant) {
+        if ($this->_doContainerACLChecks && !$baseEvent->{Tinebase_Model_Grants::EDITGRANT}) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: '{$baseEvent->getId()}'. Only creating exception for attendee status");
             if ($_event->attendee instanceof Tinebase_Record_RecordSet) {
                 foreach ($_event->attendee as $attender) {
@@ -775,7 +775,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         switch ($_action) {
             case 'get':
                 // NOTE: free/busy is not a read grant!
-                $hasGrant = (bool) $_record->readGrant;
+                $hasGrant = (bool) $_record->{Tinebase_Model_Grants::READGRANT};
                 if (! $hasGrant) {
                 	$_record->doFreeBusyCleanup();
                 }
@@ -784,10 +784,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_ADD);
                 break;
             case 'update':
-                $hasGrant = (bool) $_record->editGrant;
+                $hasGrant = (bool) $_record->{Tinebase_Model_Grants::EDITGRANT};
                 break;
             case 'delete':
-                $hasGrant = (bool) $_record->deleteGrant;
+                $hasGrant = (bool) $_record->{Tinebase_Model_Grants::DELETEGRANT};
                 break;
         }
         
