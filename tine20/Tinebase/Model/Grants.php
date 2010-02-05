@@ -120,47 +120,48 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      * get translated grants
      * 
      * @return  array with translated descriptions for the containers grants
-     */
+     *
     public function getTranslatedGrants()
     {
         $translate = Tinebase_Translation::getTranslation($this->_application);
 
         $descriptions = array(
             self::GRANT_READ  => array(
-                'label'         => $translate->_('Read'),
-                'description'   => $translate->_('The grant to read records of this container'),
+                'label'         => $translate->_/('Read'),
+                'description'   => $translate->_/('The grant to read records of this container'),
             ),
             self::GRANT_ADD  => array(
-                'label'         => $translate->_('Add'),
-                'description'   => $translate->_('The grant to add records to this container'),
+                'label'         => $translate->_/('Add'),
+                'description'   => $translate->_/('The grant to add records to this container'),
             ),
             self::GRANT_EDIT => array(
-                'label'         => $translate->_('Edit'),
-                'description'   => $translate->_('The grant to edit records in this container'),
+                'label'         => $translate->_/('Edit'),
+                'description'   => $translate->_/('The grant to edit records in this container'),
             ),
             self::GRANT_DELETE => array(
-                'label'         => $translate->_('Delete'),
-                'description'   => $translate->_('The grant to delete records in this container'),
+                'label'         => $translate->_/('Delete'),
+                'description'   => $translate->_/('The grant to delete records in this container'),
             ),
             self::GRANT_PRIVATE => array(
-                'label'         => $translate->_('Private'),
-                'description'   => $translate->_('The grant to access records marked as private in this container'),
+                'label'         => $translate->_/('Private'),
+                'description'   => $translate->_/('The grant to access records marked as private in this container'),
             ),
             self::GRANT_EXPORT => array(
-                'label'         => $translate->_('Export'),
-                'description'   => $translate->_('The grant to export records from this container'),
+                'label'         => $translate->_/('Export'),
+                'description'   => $translate->_/('The grant to export records from this container'),
             ),
             self::GRANT_SYNC => array(
-                'label'         => $translate->_('Sync'),
-                'description'   => $translate->_('The grant to synchronise records with this container'),
+                'label'         => $translate->_/('Sync'),
+                'description'   => $translate->_/('The grant to synchronise records with this container'),
             ),
             self::GRANT_ADMIN => array(
-                'label'         => $translate->_('Admin'),
-                'description'   => $translate->_('The grant to administrate this container'),
+                'label'         => $translate->_/('Admin'),
+                'description'   => $translate->_/('The grant to administrate this container'),
             ),
         );
         
         return $descriptions;
     }
+    */
     
 }
