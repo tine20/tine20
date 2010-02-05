@@ -4,7 +4,7 @@
  * 
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
@@ -48,7 +48,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
 	public function setUp()
 	{
 	    $user = Tinebase_Core::getUser();
-        $container = $user->getPersonalContainer('Tasks', $user, Tinebase_Model_Container::GRANT_ANY);
+        $container = $user->getPersonalContainer('Tasks', $user, Tinebase_Model_Container::GRANT_ADMIN);
         $this->container_id = $container[0]->getId();
         
 		$this->_backend = new Tasks_Backend_Sql();

@@ -104,8 +104,6 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
         ));
         
         $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer, NULL, FALSE, $accountId);
-        $personalContainer['account_grants'] = Tinebase_Model_Container::GRANT_ANY;
-        
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
         return $container;

@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -17,10 +17,6 @@ Ext.namespace('Tine.Tinebase.container');
  * @todo internal cache (store)
  */
 Tine.Tinebase.container = {
-    /**
-     * constant for no grants
-     */
-    GRANT_NONE: 0,
     /**
      * constant for read grant
      */
@@ -41,10 +37,6 @@ Tine.Tinebase.container = {
      * constant for admin grant
      */
     GRANT_ADMIN: 16,
-    /**
-     * constant for all grants
-     */
-    GRANT_ANY: 31,
     /** 
      * type for internal contaier
      * for example the internal addressbook

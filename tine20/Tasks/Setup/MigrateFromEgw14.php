@@ -172,9 +172,6 @@ class Tasks_Setup_MigrateFromTine14
                 Tinebase_Model_Container::TYPE_PERSONAL,
                 Tasks_Backend_Factory::SQL
             );
-            Tinebase_Container::getInstance()->addGrants($containers[$_owner], $_owner, array(
-                Tinebase_Model_Container::GRANT_ANY
-            ));
         }
         return $containers[$_owner];  
     }

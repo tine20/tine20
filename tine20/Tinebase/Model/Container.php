@@ -23,12 +23,6 @@
 class Tinebase_Model_Container extends Tinebase_Record_Abstract
 {
     /**
-     * constant for no grants
-     *
-     */
-    const GRANT_NONE = 0;
-
-    /**
      * constant for read grant
      *
      */
@@ -58,12 +52,6 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      */
     const GRANT_ADMIN = 16;
 
-    /**
-     * constant for all grants
-     *
-     */
-    const GRANT_ANY = 31;
-    
     /**
      * type for internal contaier
      * 

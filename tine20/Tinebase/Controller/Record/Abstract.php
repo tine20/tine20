@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * @todo        add (empty) sendNotifications()
@@ -650,14 +650,12 @@ abstract class Tinebase_Controller_Record_Abstract
                 $_filter->setRequiredGrants(array(
                     Tinebase_Model_Container::GRANT_READ,
                     Tinebase_Model_Container::GRANT_ADMIN,
-                    //Tinebase_Model_Container::GRANT_ANY
                 ));
                 break;
             case 'update':
                 $_filter->setRequiredGrants(array(
                     Tinebase_Model_Container::GRANT_EDIT,
                     Tinebase_Model_Container::GRANT_ADMIN,
-                    //Tinebase_Model_Container::GRANT_ANY
                 ));
                 break;
             default:
