@@ -146,20 +146,24 @@ class Tinebase_Container
         $container = $this->_backend->create($_container);
         
         if($_grants === NULL) {
+            $creatorGrants = array(
+                'account_id'     => $accountId,
+                'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Model_Grants::GRANT_READ      => true,
+                Tinebase_Model_Grants::GRANT_ADD       => true,
+                Tinebase_Model_Grants::GRANT_EDIT      => true,
+                Tinebase_Model_Grants::GRANT_DELETE    => true,
+                Tinebase_Model_Grants::GRANT_EXPORT    => true,
+                Tinebase_Model_Grants::GRANT_SYNC      => true,
+                Tinebase_Model_Grants::GRANT_ADMIN     => true,
+            );
+            
             if($container->type === Tinebase_Model_Container::TYPE_SHARED) {
     
                 // add all grants to creator
                 // add read grants to any other user
                 $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
-                    array(
-                        'account_id'     => $accountId,
-                        'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                        Tinebase_Model_Grants::GRANT_READ      => true,
-                        Tinebase_Model_Grants::GRANT_ADD       => true,
-                        Tinebase_Model_Grants::GRANT_EDIT      => true,
-                        Tinebase_Model_Grants::GRANT_DELETE    => true,
-                        Tinebase_Model_Grants::GRANT_ADMIN     => true
-                    ),            
+                    $creatorGrants,            
                     array(
                         'account_id'      => '0',
                         'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
@@ -168,17 +172,7 @@ class Tinebase_Container
                 ));
             } else {
                 // add all grants to creator only
-                $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
-                    array(
-                        'account_id'     => $accountId,
-                        'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                        Tinebase_Model_Grants::GRANT_READ      => true,
-                        Tinebase_Model_Grants::GRANT_ADD       => true,
-                        Tinebase_Model_Grants::GRANT_EDIT      => true,
-                        Tinebase_Model_Grants::GRANT_DELETE    => true,
-                        Tinebase_Model_Grants::GRANT_ADMIN     => true
-                    )            
-                ));
+                $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants));
             }
         } else {
             $grants = $_grants;
@@ -259,7 +253,7 @@ class Tinebase_Container
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' app: ' . $_application . ' / account: ' . $_accountId);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' app: ' . $_application . ' / account: ' . $_accountId . ' / grant:' . $_grant);
 
         $cache = Tinebase_Core::get('cache');
         $cacheId = convertCacheId('getContainerByACL' . $accountId . $_application . $_grant . $_onlyIds);
@@ -1091,6 +1085,8 @@ class Tinebase_Container
                 throw new Tinebase_Exception_UnexpectedValue('You are not allowed to remove all (admin) grants for this container.');
             }
         }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting grants for container id ' . $containerId . ' ...');
         
         $container = $this->getContainerById($containerId);
        
