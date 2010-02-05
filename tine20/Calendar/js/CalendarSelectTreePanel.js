@@ -119,6 +119,10 @@ Tine.Calendar.CalendarSelectTreeLoader = Ext.extend(Tine.widgets.container.TreeL
      * draw colored bullets before cal icon
      */
     inspectCreateNode: function(attr) {
+        if (attr.container) {
+            attr.container.capabilites_private = true;
+        }
+        
         if (attr.id.match(/resource/i)) {
             // don't add colors to resources yet
             return;
