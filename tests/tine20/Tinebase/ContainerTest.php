@@ -70,11 +70,11 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
                 'account_id'     => Tinebase_Core::getUser()->getId(),
                 'account_type'   => 'user',
                 //'account_name'   => 'not used',
-                'readGrant'      => true,
-                'addGrant'       => true,
-                'editGrant'      => true,
-                'deleteGrant'    => true,
-                'adminGrant'     => true
+                Tinebase_Model_Grants::READGRANT      => true,
+                Tinebase_Model_Grants::ADDGRANT       => true,
+                Tinebase_Model_Grants::EDITGRANT      => true,
+                Tinebase_Model_Grants::DELETEGRANT    => true,
+                Tinebase_Model_Grants::ADMINGRANT     => true
             )            
         ));
         
@@ -244,11 +244,11 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
                     'account_id'     => Tinebase_Core::getUser()->getId(),
                     'account_type'   => 'user',
                     //'account_name'   => 'not used',
-                    'readGrant'      => true,
-                    'addGrant'       => false,
-                    'editGrant'      => true,
-                    'deleteGrant'    => true,
-                    'adminGrant'     => true
+                    Tinebase_Model_Grants::READGRANT      => true,
+                    Tinebase_Model_Grants::ADDGRANT       => false,
+                    Tinebase_Model_Grants::EDITGRANT      => true,
+                    Tinebase_Model_Grants::DELETEGRANT    => true,
+                    Tinebase_Model_Grants::ADMINGRANT     => true
              ))
          );
         

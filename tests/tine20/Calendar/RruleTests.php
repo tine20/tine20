@@ -61,7 +61,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'rrule'         => 'FREQ=DAILY;INTERVAL=2;UNTIL=2009-04-01 08:00:00',
             'exdate'        => '2009-03-31 07:00:00',
             'originator_tz' => 'Europe/Berlin',
-            'editGrant'     => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event', array(
@@ -71,7 +71,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
                 'dtstart'       => '2009-03-25 08:00:00',
                 'dtend'         => '2009-03-25 08:05:00',
                 'recurid'       => $event->uid . '-' . '2009-03-25 08:00:00',
-                'editGrant'     => true,
+                Tinebase_Model_Grants::EDITGRANT     => true,
             )
         ));
         
@@ -116,7 +116,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'dtend'         => '1979-06-05 18:00:00',
             'rrule'         => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=SU',
             'originator_tz' => 'Europe/Berlin',
-            'editGrant'     => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -166,7 +166,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'is_all_day_event' => true,
             'rrule'            => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO',
             'originator_tz'    => 'Europe/Berlin',
-            'editGrant'        => true,
+            Tinebase_Model_Grants::EDITGRANT        => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -190,7 +190,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'rrule'         => 'FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=5',
             'exdate'        => '2009-02-05 15:00:00,2009-05-05 14:00:00',
             'originator_tz' => 'Europe/Berlin',
-            'editGrant'     => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event', array(
@@ -200,7 +200,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
                 'dtstart'       => '2009-06-05 20:00:00',
                 'dtend'         => '2009-06-06 05:00:00',
                 'recurid'       => $event->uid . '-' . '2009-06-05 14:00:00',
-                'editGrant'     => true,
+                Tinebase_Model_Grants::EDITGRANT     => true,
             )
         ));
         
@@ -256,7 +256,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'dtend'         => '2009-07-10 11:00:00',
             'rrule'         => 'FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=20',
             'originator_tz' => 'Europe/Berlin',
-            'editGrant'     => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -280,7 +280,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
     	    'is_all_day_event' => true,
             'rrule'           => 'FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=15',
             'originator_tz'   => 'Europe/Berlin',
-            'editGrant'       => true,
+            Tinebase_Model_Grants::EDITGRANT       => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -312,7 +312,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'dtend'         => '1974-02-11 16:00:00',
             'rrule'         => 'FREQ=MONTHLY;INTERVAL=5;BYDAY=4SU',
             'originator_tz' => 'Europe/Berlin',
-            'editGrant'     => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -334,7 +334,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'dtend'         => '2009-04-29 16:00:00',
             'rrule'         => 'FREQ=MONTHLY;INTERVAL=2;BYDAY=-1WE',
             'originator_tz' => 'Europe/Berlin',
-            'editGrant'     => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event', array(
@@ -344,7 +344,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
                 'dtstart'       => '2009-06-24 15:00:00',
                 'dtend'         => '2009-06-24 16:00:00',
                 'recurid'       => $event->uid . '-' . '2009-06-24 15:00:00',
-                'editGrant'     => true,
+                Tinebase_Model_Grants::EDITGRANT     => true,
             )
         ));
         
@@ -370,7 +370,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'dtend'         => '2009-07-10 11:00:00',
             'rrule'         => 'FREQ=MONTHLY;INTERVAL=1;BYDAY=-1FR',
             'originator_tz' => 'Europe/Berlin',
-            'editGrant'     => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -395,7 +395,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'is_all_day_event' => true,
             'rrule'           => 'FREQ=MONTHLY;INTERVAL=1;BYDAY=4WE',
             'originator_tz'   => 'Europe/Berlin',
-            'editGrant'       => true,
+            Tinebase_Model_Grants::EDITGRANT       => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -419,7 +419,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'dtend'         => '2009-07-10 11:00:00',
             'rrule'         => 'FREQ=YEARLY;INTERVAL=1;BYMONTH=7;BYMONTHDAY=10',
             'originator_tz' => 'Europe/Berlin',
-            'editGrant'     => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -446,7 +446,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'dtend'         => '2008-02-29 10:00:00',
             'rrule'         => 'FREQ=YEARLY;INTERVAL=1;BYMONTH=2;BYMONTHDAY=29',
             'originator_tz' => 'Europe/Berlin',
-            'editGrant'     => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -468,7 +468,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'dtend'         => '2008-02-29 10:00:00',
             'rrule'         => 'FREQ=YEARLY;INTERVAL=1;BYMONTH=2;BYDAY=-1FR',
             'originator_tz' => 'Europe/Berlin',
-            'editGrant'     => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -499,7 +499,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'dtend'         => '2003-03-28 12:00:00',
             'rrule'         => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=FR',
             'originator_tz' => 'US/Pacific',
-            'editGrant'     => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
         ));
         $event->setTimezone('UTC');
         date_default_timezone_set('UTC');
@@ -538,7 +538,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'dtend'         => '2003-03-28 13:00:00',
             'rrule'         => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=FR',
             'originator_tz' => 'US/Arizona',
-            'editGrant'     => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
         ));
         $event->setTimezone('UTC');
         date_default_timezone_set('UTC');
@@ -576,7 +576,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'dtend'         => '2009-08-28 10:00:00',
             'rrule'         => 'FREQ=WEEKLY;BYDAY=TU',
             'originator_tz' => 'Europe/Berlin',
-            'editGrant'     => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');

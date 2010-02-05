@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -70,31 +70,31 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             'account_id'   => array('presence' => 'required', 'allowEmpty' => TRUE, 'default' => '0'),
             'account_type' => array('presence' => 'required', 'InArray' => array(Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP)),
             //'account_name' => array('allowEmpty' => TRUE),
-            'readGrant'   => array(
+            self::READGRANT   => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE,
                 'presence' => 'required',
                 'allowEmpty' => true
             ),
-            'addGrant'    => array(
+            self::ADDGRANT    => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE,
                 'presence' => 'required',
                 'allowEmpty' => true
             ),
-            'editGrant'   => array(
+            self::EDITGRANT   => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE,
                 'presence' => 'required',
                 'allowEmpty' => true
             ),
-            'deleteGrant' => array(
+            self::DELETEGRANT => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE,
                 'presence' => 'required',
                 'allowEmpty' => true
             ),
-            'adminGrant'  => array(
+            self::ADMINGRANT  => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE,
                 'presence' => 'required',

@@ -57,11 +57,11 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_mapping = array(
-        'readGrant'     => 'book_own',
-        'addGrant'      => 'view_all',
-        'editGrant'     => 'book_all',
-        'deleteGrant'   => 'manage_billable',
-        'adminGrant'    => 'manage_all'
+        Tinebase_Model_Grants::READGRANT     => 'book_own',
+        Tinebase_Model_Grants::ADDGRANT      => 'view_all',
+        Tinebase_Model_Grants::EDITGRANT     => 'book_all',
+        Tinebase_Model_Grants::DELETEGRANT   => 'manage_billable',
+        Tinebase_Model_Grants::ADMINGRANT    => 'manage_all'
     );
     
 	/**
@@ -364,11 +364,11 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
             $result->addRecord(new Tinebase_Model_Grants(array(
                 'account_id'    => $grant->account_id,
                 'account_type'  => $grant->account_type,
-                'readGrant'     => $grant->book_own,
-                'addGrant'      => $grant->view_all,
-                'editGrant'     => $grant->book_all,
-                'deleteGrant'   => $grant->manage_billable,
-                'adminGrant'    => $grant->manage_all
+                Tinebase_Model_Grants::READGRANT     => $grant->book_own,
+                Tinebase_Model_Grants::ADDGRANT      => $grant->view_all,
+                Tinebase_Model_Grants::EDITGRANT     => $grant->book_all,
+                Tinebase_Model_Grants::DELETEGRANT   => $grant->manage_billable,
+                Tinebase_Model_Grants::ADMINGRANT    => $grant->manage_all
             )));
         }
         return $result;

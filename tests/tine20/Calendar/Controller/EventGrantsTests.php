@@ -243,7 +243,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         $eventData['summary'] = 'This text must not be saved!';
         
         // force attendee saving w.o. event saving  
-        $eventData['editGrant'] = false;
+        $eventData[Tinebase_Model_Grants::EDITGRANT] = false;
         
         $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
         
@@ -292,103 +292,103 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['jsmith'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => $this->_personas['jsmith']->getId(),
             'account_type'  => 'user',
-            'readGrant'     => true,
-            'addGrant'      => true,
-            'editGrant'     => true,
-            'deleteGrant'   => true,
-            'adminGrant'    => true,
+            Tinebase_Model_Grants::READGRANT     => true,
+            Tinebase_Model_Grants::ADDGRANT      => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
+            Tinebase_Model_Grants::DELETEGRANT   => true,
+            Tinebase_Model_Grants::ADMINGRANT    => true,
         ), array(
             'account_id'    => 0,
             'account_type'  => 'anyone',
-            'readGrant'     => true,
-            'addGrant'      => true,
-            'editGrant'     => true,
-            'deleteGrant'   => true,
-            'adminGrant'    => false,
+            Tinebase_Model_Grants::READGRANT     => true,
+            Tinebase_Model_Grants::ADDGRANT      => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
+            Tinebase_Model_Grants::DELETEGRANT   => true,
+            Tinebase_Model_Grants::ADMINGRANT    => false,
         ))), true);
         
         // pwulf:      anyone readGrant, sclever addGrant, readGrant, editGrant, deleteGrant
         Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['pwulf'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => $this->_personas['pwulf']->getId(),
             'account_type'  => 'user',
-            'readGrant'     => true,
-            'addGrant'      => true,
-            'editGrant'     => true,
-            'deleteGrant'   => true,
-            'adminGrant'    => true,
+            Tinebase_Model_Grants::READGRANT     => true,
+            Tinebase_Model_Grants::ADDGRANT      => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
+            Tinebase_Model_Grants::DELETEGRANT   => true,
+            Tinebase_Model_Grants::ADMINGRANT    => true,
         ), array(
             'account_id'    => 0,
             'account_type'  => 'anyone',
-            'readGrant'     => true,
-            'addGrant'      => false,
-            'editGrant'     => false,
-            'deleteGrant'   => false,
-            'adminGrant'    => false,
+            Tinebase_Model_Grants::READGRANT     => true,
+            Tinebase_Model_Grants::ADDGRANT      => false,
+            Tinebase_Model_Grants::EDITGRANT     => false,
+            Tinebase_Model_Grants::DELETEGRANT   => false,
+            Tinebase_Model_Grants::ADMINGRANT    => false,
         ), array(
             'account_id'    => $this->_personas['sclever']->getId(),
             'account_type'  => 'user',
-            'readGrant'     => true,
-            'addGrant'      => true,
-            'editGrant'     => true,
-            'deleteGrant'   => true,
-            'adminGrant'    => false,
+            Tinebase_Model_Grants::READGRANT     => true,
+            Tinebase_Model_Grants::ADDGRANT      => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
+            Tinebase_Model_Grants::DELETEGRANT   => true,
+            Tinebase_Model_Grants::ADMINGRANT    => false,
         ))), true);
         
         // sclever:   testuser addGrant, readGrant, editGrant, deleteGrant
         Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['sclever'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => $this->_personas['sclever']->getId(),
             'account_type'  => 'user',
-            'readGrant'     => true,
-            'addGrant'      => true,
-            'editGrant'     => true,
-            'deleteGrant'   => true,
-            'adminGrant'    => true,
+            Tinebase_Model_Grants::READGRANT     => true,
+            Tinebase_Model_Grants::ADDGRANT      => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
+            Tinebase_Model_Grants::DELETEGRANT   => true,
+            Tinebase_Model_Grants::ADMINGRANT    => true,
         ),array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            'readGrant'     => true,
-            'addGrant'      => true,
-            'editGrant'     => true,
-            'deleteGrant'   => true,
-            'adminGrant'    => false,
+            Tinebase_Model_Grants::READGRANT     => true,
+            Tinebase_Model_Grants::ADDGRANT      => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
+            Tinebase_Model_Grants::DELETEGRANT   => true,
+            Tinebase_Model_Grants::ADMINGRANT    => false,
         ))), true);
         
         // jmacblack: prim group of testuser readGrant
         Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['jmcblack'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => $this->_personas['jmcblack']->getId(),
             'account_type'  => 'user',
-            'readGrant'     => true,
-            'addGrant'      => true,
-            'editGrant'     => true,
-            'deleteGrant'   => true,
-            'adminGrant'    => true,
+            Tinebase_Model_Grants::READGRANT     => true,
+            Tinebase_Model_Grants::ADDGRANT      => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
+            Tinebase_Model_Grants::DELETEGRANT   => true,
+            Tinebase_Model_Grants::ADMINGRANT    => true,
         ),array(
             'account_id'    => Tinebase_Core::getUser()->accountPrimaryGroup,
             'account_type'  => 'group',
-            'readGrant'     => true,
-            'addGrant'      => false,
-            'editGrant'     => false,
-            'deleteGrant'   => false,
-            'adminGrant'    => false,
+            Tinebase_Model_Grants::READGRANT     => true,
+            Tinebase_Model_Grants::ADDGRANT      => false,
+            Tinebase_Model_Grants::EDITGRANT     => false,
+            Tinebase_Model_Grants::DELETEGRANT   => false,
+            Tinebase_Model_Grants::ADMINGRANT    => false,
         ))), true);
         
         // rwright:   nothing
         Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['rwright'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => $this->_personas['rwright']->getId(),
             'account_type'  => 'user',
-            'readGrant'     => true,
-            'addGrant'      => true,
-            'editGrant'     => true,
-            'deleteGrant'   => true,
-            'adminGrant'    => true,
+            Tinebase_Model_Grants::READGRANT     => true,
+            Tinebase_Model_Grants::ADDGRANT      => true,
+            Tinebase_Model_Grants::EDITGRANT     => true,
+            Tinebase_Model_Grants::DELETEGRANT   => true,
+            Tinebase_Model_Grants::ADMINGRANT    => true,
         ), array(
             'account_id'    => $this->_personas['sclever']->getId(),
             'account_type'  => 'user',
-            'readGrant'     => true,
-            'addGrant'      => false,
-            'editGrant'     => true,
-            'deleteGrant'   => false,
-            'adminGrant'    => false,
+            Tinebase_Model_Grants::READGRANT     => true,
+            Tinebase_Model_Grants::ADDGRANT      => false,
+            Tinebase_Model_Grants::EDITGRANT     => true,
+            Tinebase_Model_Grants::DELETEGRANT   => false,
+            Tinebase_Model_Grants::ADMINGRANT    => false,
         ))), true);
     }
     
@@ -401,11 +401,11 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Container::getInstance()->setGrants($calendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
 	            'account_id'    => $this->_personas[$loginName]->getId(),
 	            'account_type'  => 'user',
-	            'readGrant'     => true,
-	            'addGrant'      => true,
-	            'editGrant'     => true,
-	            'deleteGrant'   => true,
-	            'adminGrant'    => true,
+	            Tinebase_Model_Grants::READGRANT     => true,
+	            Tinebase_Model_Grants::ADDGRANT      => true,
+	            Tinebase_Model_Grants::EDITGRANT     => true,
+	            Tinebase_Model_Grants::DELETEGRANT   => true,
+	            Tinebase_Model_Grants::ADMINGRANT    => true,
 	        ))), true);
 	        
 	        $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
