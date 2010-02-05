@@ -192,6 +192,7 @@ Ext.namespace('Tine.Felamimail');
             fieldLabel: this.app.i18n._('Attachments'),
             record: this.record,
             hideLabel: true,
+            filesProperty: 'attachments',
             anchor: '100% 100%'
         });
         
