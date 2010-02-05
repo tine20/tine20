@@ -152,4 +152,37 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('container_acl', '2');
         $this->setApplicationVersion('Tinebase', '3.6');
     }
+    
+    /**
+     * update to 3.7
+     * - container_acl -> add EXPORT/SYNC grants
+     */
+    public function update_6()
+    {
+        // get timetracker app id
+        try {
+            $tt = Tinebase_Application::getInstance()->getApplicationByName('Timetracker');
+            $select = $this->_db->select()
+                ->from(array('container_acl' => SQL_TABLE_PREFIX . 'container_acl'), array('container_acl.container_id', 'container_acl.account_type', 'container_acl.account_id'))
+                ->join(array('container' => SQL_TABLE_PREFIX . 'container'), 'container.id = container_acl.container_id', '')
+                ->where('account_grant = ?', 'readGrant')
+                ->where('application_id <> ?', $tt->getId());
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $select = $this->_db->select()
+                ->from(array('container_acl' => SQL_TABLE_PREFIX . 'container_acl'), array('container_acl.id', 'container_acl.account_type', 'container_acl.account_id'))
+                ->where('account_grant = ?', 'readGrant');
+        }
+        
+        $result = $this->_db->fetchAll($select);
+        foreach ($result as $row) {
+            // insert new grants
+            foreach (array(Tinebase_Model_Grants::GRANT_EXPORT, Tinebase_Model_Grants::GRANT_SYNC) as $grant) {
+                $row['account_grant'] = $grant;
+                $row['id'] = Tinebase_Record_Abstract::generateUID();
+                $this->_db->insert(SQL_TABLE_PREFIX . 'container_acl', $row);
+            }
+        }
+        
+        $this->setApplicationVersion('Tinebase', '3.7');
+    }    
 }
