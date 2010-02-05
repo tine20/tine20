@@ -34,7 +34,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     
     const CLASS_PUBLIC         = 'PUBLIC';
     const CLASS_PRIVATE        = 'PRIVATE';
-    const CLASS_CONFIDENTIAL   = 'CONFIDENTIAL';
+    //const CLASS_CONFIDENTIAL   = 'CONFIDENTIAL';
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -72,7 +72,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'dtend'                => array('allowEmpty' => true          ),
         'transp'               => array('allowEmpty' => true,  'InArray' => array(self::TRANSP_TRANSP, self::TRANSP_OPAQUE)),
         // ical common fields
-        'class'                => array('allowEmpty' => true,  'InArray' => array(self::CLASS_PUBLIC, self::CLASS_PRIVATE, self::CLASS_CONFIDENTIAL)),
+        'class'                => array('allowEmpty' => true,  'InArray' => array(self::CLASS_PUBLIC, self::CLASS_PRIVATE, /*self::CLASS_CONFIDENTIAL*/)),
         'description'          => array('allowEmpty' => true          ),
         'geo'                  => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'location'             => array('allowEmpty' => true          ),
