@@ -125,15 +125,17 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
                 tooltip: _('The grant to synchronise records with this container'),
                 dataIndex: 'syncGrant',
                 width: 55
-            }),
-            new Ext.ux.grid.CheckColumn({
+            })
+        ];
+        
+        if (this.grantContainer.type == 'personal' && this.grantContainer.capabilites_private) {
+            columns.push(new Ext.ux.grid.CheckColumn({
                 header: _('Private'),
                 tooltip: _('The grant to access records marked as private in this container'),
                 dataIndex: 'privateGrant',
                 width: 55
-            })
-        ];
-        
+            }));
+        }
         if (this.grantContainer.type == 'shared') {
             columns.push(new Ext.ux.grid.CheckColumn({
                 header: _('Admin'),
@@ -209,7 +211,7 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
  */
 Tine.widgets.container.GrantsDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 865,
+        width: 700,
         height: 450,
         name: Tine.widgets.container.GrantsDialog.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.widgets.container.GrantsDialog',
