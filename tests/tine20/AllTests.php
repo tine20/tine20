@@ -43,7 +43,7 @@ class AllTests
         
         // only call Felamimail tests if imap is configured in config.inc.php
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
-        if (! empty($imapConfig) && $imapConfig['useSystemAccount']) {
+        if (! empty($imapConfig) && array_key_exists('useSystemAccount', $imapConfig) && $imapConfig['useSystemAccount']) {
             $suite->addTest(Felamimail_AllTests::suite());
         }
         
