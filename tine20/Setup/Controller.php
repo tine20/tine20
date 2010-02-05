@@ -1147,9 +1147,6 @@ class Setup_Controller
                 if (count($installedApplications) !== 1) {
                     throw new Setup_Exception_Dependency('Failed to uninstall application "Tinebase" because of dependencies to other installed applications.');
                 }
-            } else {
-                // delete containers and config options for app
-                Tinebase_Application::getInstance()->removeApplicationConfigAndContainer($_application->name);
             }
 
             foreach ($applicationTables as $key => $table) {
@@ -1173,7 +1170,6 @@ class Setup_Controller
                         unset($applicationTables[$key]);
                     }
                 }
-                
             }
             
             if ($oldCount > 0 && count($applicationTables) == $oldCount) {
@@ -1182,6 +1178,9 @@ class Setup_Controller
         } while (count($applicationTables) > 0);
                 
         if ($_application != 'Tinebase') {
+            // delete containers and config options for app
+            Tinebase_Application::getInstance()->removeApplicationConfigAndContainer($_application->name);
+            
             // remove application from table of installed applications
             $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_application);
             $where = array(
