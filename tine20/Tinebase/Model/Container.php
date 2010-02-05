@@ -24,36 +24,6 @@
 class Tinebase_Model_Container extends Tinebase_Record_Abstract
 {
     /**
-     * constant for read grant
-     *
-     */
-    const GRANT_READ = Tinebase_Model_Grants::GRANT_READ;
-
-    /**
-     * constant for add grant
-     *
-     */
-    const GRANT_ADD = Tinebase_Model_Grants::GRANT_ADD;
-
-    /**
-     * constant for edit grant
-     *
-     */
-    const GRANT_EDIT = Tinebase_Model_Grants::GRANT_EDIT;
-
-    /**
-     * constant for delete grant
-     *
-     */
-    const GRANT_DELETE = Tinebase_Model_Grants::GRANT_DELETE;
-
-    /**
-     * constant for admin grant
-     *
-     */
-    const GRANT_ADMIN = Tinebase_Model_Grants::GRANT_ADMIN;
-
-    /**
      * type for internal contaier
      * 
      * for example the internal addressbook
