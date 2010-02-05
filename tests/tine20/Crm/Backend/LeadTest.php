@@ -147,7 +147,7 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
         $leads = $this->_backend->search($filter);
         $this->assertEquals(0, count($leads), 'Closed lead should not be found.');
 
-        $filter->createFilter('showClosed', 'equals', TRUE);
+        $filter = $this->_getFilter(TRUE);
         $leads = $this->_backend->search($filter);
         $this->assertEquals(1, count($leads), 'Closed lead should be found.');
     }
@@ -202,7 +202,7 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
      *
      * @return Crm_Model_LeadFilter
      */
-    protected function _getFilter()
+    protected function _getFilter($_showClosed = FALSE)
     {
         return new Crm_Model_LeadFilter(array(
             array(
@@ -215,6 +215,11 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
                 'operator' => 'equals', 
                 'value' => $this->_testContainer->id
             ),
+            array(
+                'field' => 'showClosed', 
+                'operator' => 'equals', 
+                'value' => $_showClosed
+            ),     
         ));
     }
 }		
