@@ -48,7 +48,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
 	public function setUp()
 	{
 	    $user = Tinebase_Core::getUser();
-        $container = $user->getPersonalContainer('Tasks', $user, Tinebase_Model_Container::GRANT_ADMIN);
+        $container = $user->getPersonalContainer('Tasks', $user, Tinebase_Model_Grants::ADMINGRANT);
         $this->container_id = $container[0]->getId();
         
 		$this->_backend = new Tasks_Backend_Sql();

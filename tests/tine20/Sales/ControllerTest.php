@@ -56,7 +56,7 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
             Zend_Registry::get('currentAccount'), 
             'Crm', 
             Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Container::GRANT_EDIT
+            Tinebase_Model_Grants::EDITGRANT
         );
         
         if($personalContainer->count() === 0) {
@@ -99,7 +99,7 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
             Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Container::GRANT_EDIT
+            Tinebase_Model_Grants::EDITGRANT
         );
         
         $addressbookContainer = $addressbookPersonalContainer[0];
@@ -151,7 +151,7 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
             Zend_Registry::get('currentAccount'), 
             'Tasks', 
             Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Container::GRANT_EDIT
+            Tinebase_Model_Grants::EDITGRANT
         );
         
         $tasksContainer = $tasksPersonalContainer[0];

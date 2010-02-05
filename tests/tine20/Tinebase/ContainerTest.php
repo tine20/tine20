@@ -193,7 +193,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGrantsOfContainer()
     {
-        $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Container::GRANT_READ));
+        $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Grants::READGRANT));
 
         $grants = $this->_instance->getGrantsOfContainer($this->objects['initialContainer']);
         
@@ -219,7 +219,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGrantsOfAccount()
     {
-        $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Container::GRANT_READ));
+        $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Grants::READGRANT));
 
         $grants = $this->_instance->getGrantsOfAccount(Tinebase_Core::getUser(), $this->objects['initialContainer']);
         
@@ -281,7 +281,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetOtherUsers()
     {
-        $otherUsers = $this->_instance->getOtherUsers(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Container::GRANT_READ);
+        $otherUsers = $this->_instance->getOtherUsers(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::READGRANT);
         
         $this->assertType('Tinebase_Record_RecordSet', $otherUsers);
     }
@@ -292,9 +292,9 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContainerByAcl()
     {
-        $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Container::GRANT_READ));
+        $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Grants::READGRANT));
 
-        $readableContainer = $this->_instance->getContainerByAcl(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Container::GRANT_READ);
+        $readableContainer = $this->_instance->getContainerByAcl(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::READGRANT);
         $this->assertType('Tinebase_Record_RecordSet', $readableContainer);
         $this->assertTrue(count($readableContainer) >= 2);
     }

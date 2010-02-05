@@ -203,7 +203,7 @@ class Tinebase_Container
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
-        if($_ignoreAcl !== TRUE and !$this->hasGrant(Tinebase_Core::getUser(), $_containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
+        if($_ignoreAcl !== TRUE and !$this->hasGrant(Tinebase_Core::getUser(), $_containerId, Tinebase_Model_Grants::ADMINGRANT)) {
                 throw new Tinebase_Exception_AccessDenied('Permission to manage grants on container denied.');
         }
         
@@ -434,7 +434,7 @@ class Tinebase_Container
 
         $container = new Tinebase_Model_Container($row->toArray());
         
-        if(!$this->hasGrant($_accountId, $container, Tinebase_Model_Container::GRANT_READ)) {
+        if(!$this->hasGrant($_accountId, $container, Tinebase_Model_Grants::READGRANT)) {
             throw new Tinebase_Exception_AccessDenied('Permission to container denied.');
         }
         
@@ -472,7 +472,7 @@ class Tinebase_Container
             )
             ->join(SQL_TABLE_PREFIX . 'container', 'owner.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
             ->where('owner.account_id = ?', $ownerId)
-            ->where('owner.account_grant = ?', Tinebase_Model_Container::GRANT_ADMIN)
+            ->where('owner.account_grant = ?', Tinebase_Model_Grants::ADMINGRANT)
             
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->getId())
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', Tinebase_Model_Container::TYPE_PERSONAL)
@@ -528,7 +528,7 @@ class Tinebase_Container
             $_accountId, 
             $_applicationName, 
             $_accountId, 
-            Tinebase_Model_Container::GRANT_ADD
+            Tinebase_Model_Grants::ADDGRANT
         )->getFirstRecord();
     }
     
@@ -605,7 +605,7 @@ class Tinebase_Container
             ->join(array('contacts' => SQL_TABLE_PREFIX . 'addressbook'),'owner.account_id = contacts.account_id', array())
             ->join(SQL_TABLE_PREFIX . 'container', 'user.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array())
             ->where('owner.account_id != ?', $accountId)
-            ->where('owner.account_grant = ?', Tinebase_Model_Container::GRANT_ADMIN)
+            ->where('owner.account_grant = ?', Tinebase_Model_Grants::ADMINGRANT)
 
             # beware of the extra parenthesis of the next 3 rows
             ->where("(user.account_id = ? AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
@@ -666,7 +666,7 @@ class Tinebase_Container
                 array())
             ->join(SQL_TABLE_PREFIX . 'container', 'user.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
             ->where('owner.account_id != ?', $accountId)
-            ->where('owner.account_grant = ?', Tinebase_Model_Container::GRANT_ADMIN)
+            ->where('owner.account_grant = ?', Tinebase_Model_Grants::ADMINGRANT)
 
             # beware of the extra parenthesis of the next 3 rows
             ->where("(user.account_id = ? AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
@@ -746,7 +746,7 @@ class Tinebase_Container
         $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($containerId);
         
         if($_ignoreAcl !== TRUE) {
-            if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
+            if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::ADMINGRANT)) {
                 throw new Tinebase_Exception_AccessDenied('Permission to delete container denied.');
             }
             
@@ -770,7 +770,7 @@ class Tinebase_Container
             Tinebase_Core::getUser(),
             $app->name,
             $container->owner,
-            Tinebase_Model_Container::GRANT_ADD
+            Tinebase_Model_Grants::ADDGRANT
         );
         
         //-- determine first matching personal container (or create new one)
@@ -807,7 +807,7 @@ class Tinebase_Container
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
 
-        if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
+        if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::ADMINGRANT)) {
             throw new Tinebase_Exception_AccessDenied('Permission to rename container denied.');
         }
         
@@ -896,7 +896,7 @@ class Tinebase_Container
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
         if($_ignoreAcl !== TRUE) {
-            if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
+            if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::ADMINGRANT)) {
                 throw new Tinebase_Exception_AccessDenied('Permission to get grants of container denied.');
             }            
         }
@@ -953,7 +953,7 @@ class Tinebase_Container
             $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
             
             #if($_ignoreAcl !== TRUE) {
-            #    if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
+            #    if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::ADMINGRANT)) {
             #        throw new Exception('permission to get grants of container denied');
             #    }            
             #}
@@ -1073,8 +1073,8 @@ class Tinebase_Container
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
         if($_ignoreAcl !== TRUE) {
-            // if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
-            if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
+            // if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::ADMINGRANT)) {
+            if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::ADMINGRANT)) {
                 throw new Tinebase_Exception_AccessDenied('Permission to set grants of container denied.');
             }            
         }
@@ -1206,7 +1206,7 @@ class Tinebase_Container
         $userId = Tinebase_Core::getUser()->getId();
         
         // check add grant in target container
-        if (! $this->hasGrant($userId, $_targetContainerId, Tinebase_Model_Container::GRANT_ADD)) {
+        if (! $this->hasGrant($userId, $_targetContainerId, Tinebase_Model_Grants::ADDGRANT)) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Permission denied to add records to container.');
             throw new Tinebase_Exception_AccessDenied('You are not allowed to move records to this container');
         }
@@ -1216,7 +1216,7 @@ class Tinebase_Container
         $records = $recordController->getMultiple($_recordIds);
         
         // check delete grant in source container
-        $containerIdsWithDeleteGrant = $this->getContainerByACL($userId, $_applicationName, Tinebase_Model_Container::GRANT_DELETE, TRUE);
+        $containerIdsWithDeleteGrant = $this->getContainerByACL($userId, $_applicationName, Tinebase_Model_Grants::DELETEGRANT, TRUE);
         foreach ($records as $index => $record) {
             if (! in_array($record->{$_containerProperty}, $containerIdsWithDeleteGrant)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 

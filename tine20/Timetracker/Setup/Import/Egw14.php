@@ -475,31 +475,31 @@ class Timetracker_Setup_Import_Egw14
             switch ($role) {
                 case 4:
                     $grants = array(
-                        Tinebase_Model_Container::GRANT_READ
+                        Tinebase_Model_Grants::READGRANT
                     );
                     break;
                 case 3:
                     $grants = array(
-                        Tinebase_Model_Container::GRANT_READ,
-                        Tinebase_Model_Container::GRANT_EDIT,
-                        Tinebase_Model_Container::GRANT_ADD,
+                        Tinebase_Model_Grants::READGRANT,
+                        Tinebase_Model_Grants::EDITGRANT,
+                        Tinebase_Model_Grants::ADDGRANT,
                     );
                     break;
                 case 2:
                     $grants = array(
-                        Tinebase_Model_Container::GRANT_READ,
-                        Tinebase_Model_Container::GRANT_EDIT,
-                        Tinebase_Model_Container::GRANT_ADD,
-                        Tinebase_Model_Container::GRANT_DELETE,
+                        Tinebase_Model_Grants::READGRANT,
+                        Tinebase_Model_Grants::EDITGRANT,
+                        Tinebase_Model_Grants::ADDGRANT,
+                        Tinebase_Model_Grants::DELETEGRANT,
                     );
                     break;
                 case 1:
                     $grants = array(
-                        Tinebase_Model_Container::GRANT_READ,
-                        Tinebase_Model_Container::GRANT_EDIT,
-                        Tinebase_Model_Container::GRANT_ADD,
-                        Tinebase_Model_Container::GRANT_DELETE,
-                        Tinebase_Model_Container::GRANT_ADMIN
+                        Tinebase_Model_Grants::READGRANT,
+                        Tinebase_Model_Grants::EDITGRANT,
+                        Tinebase_Model_Grants::ADDGRANT,
+                        Tinebase_Model_Grants::DELETEGRANT,
+                        Tinebase_Model_Grants::ADMINGRANT
                     );
                     break;
             }

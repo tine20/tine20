@@ -178,7 +178,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         // only the IPhone supports multiple folders for contacts currently
         if(strtolower($this->_device->devicetype) == 'iphone') {
         
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Container::GRANT_READ);
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::READGRANT);
             foreach ($containers as $container) {
                 $folders[$container->id] = array(
                     'folderId'      => $container->id,
@@ -188,7 +188,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                 );
             }
             
-            $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Container::GRANT_READ);
+            $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::READGRANT);
             foreach ($containers as $container) {
                 $folders[$container->id] = array(
                     'folderId'      => $container->id,

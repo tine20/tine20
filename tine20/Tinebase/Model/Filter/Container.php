@@ -43,7 +43,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
      * @var array one of these grants must be met
      */
     protected $_requiredGrants = array(
-        Tinebase_Model_Container::GRANT_READ
+        Tinebase_Model_Grants::READGRANT
     );
     
     /**

@@ -680,7 +680,7 @@ class Calendar_Setup_Import_Egw14 {
         $privateString = 'private events';
         
         if (! array_key_exists($_userId, $this->_privateCalendarCache)) {
-            $personalCalendars = Tinebase_Container::getInstance()->getPersonalContainer($_userId, 'Calendar', $_userId, Tinebase_Model_Container::GRANT_ADMIN, TRUE);
+            $personalCalendars = Tinebase_Container::getInstance()->getPersonalContainer($_userId, 'Calendar', $_userId, Tinebase_Model_Grants::ADMINGRANT, TRUE);
             $privateCalendar = $personalCalendars->filter('name', $privateString);
             
             if (count($privateCalendar) < 1) {

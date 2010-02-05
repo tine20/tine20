@@ -166,7 +166,7 @@ abstract class Tinebase_Controller_Record_Abstract
             
             if ($this->_doContainerACLChecks) {
                 if ($_containerId === NULL) {
-                    $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, $this->_applicationName, $this->_currentAccount, Tinebase_Model_Container::GRANT_ADD);
+                    $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, $this->_applicationName, $this->_currentAccount, Tinebase_Model_Grants::ADDGRANT);
                     $record->container_id = $containers[0]->getId();
                 } else {
                     $record->container_id = $_containerId;
@@ -212,7 +212,7 @@ abstract class Tinebase_Controller_Record_Abstract
     	   ? Tinebase_Container::getInstance()->getContainerByACL(
     	       $this->_currentAccount, 
     	       $this->_applicationName, 
-    	       Tinebase_Model_Container::GRANT_READ,
+    	       Tinebase_Model_Grants::READGRANT,
     	       TRUE) 
     	   : NULL;
         $records = $this->_backend->getMultiple($_ids, $containerIds);
@@ -255,7 +255,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
             // add personal container id if container id is missing in record
             if($_record->has('container_id') && empty($_record->container_id)) {
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, $this->_applicationName, $this->_currentAccount, Tinebase_Model_Container::GRANT_ADD);
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, $this->_applicationName, $this->_currentAccount, Tinebase_Model_Grants::ADDGRANT);
                 $_record->container_id = $containers[0]->getId();
             }            
             
@@ -573,7 +573,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if (    !$this->_doContainerACLChecks 
             ||  !$_record->has('container_id') 
             // admin grant includes all others
-            ||  $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_ADMIN)) {
+            ||  $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::ADMINGRANT)) {
             return TRUE;
         }
 
@@ -581,18 +581,18 @@ abstract class Tinebase_Controller_Record_Abstract
         
         switch ($_action) {
             case 'get':
-                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_READ);
+                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::READGRANT);
                 break;
             case 'create':
-                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_ADD);
+                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::ADDGRANT);
                 break;
             case 'update':
-                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_EDIT);
+                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::EDITGRANT);
                 break;
             case 'delete':
                 $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
                 $hasGrant = (
-                    $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_DELETE)
+                    $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::DELETEGRANT)
                     && $container->type != Tinebase_Model_Container::TYPE_INTERNAL
                 );
                 break;
@@ -648,14 +648,14 @@ abstract class Tinebase_Controller_Record_Abstract
         switch ($_action) {
             case 'get':
                 $_filter->setRequiredGrants(array(
-                    Tinebase_Model_Container::GRANT_READ,
-                    Tinebase_Model_Container::GRANT_ADMIN,
+                    Tinebase_Model_Grants::READGRANT,
+                    Tinebase_Model_Grants::ADMINGRANT,
                 ));
                 break;
             case 'update':
                 $_filter->setRequiredGrants(array(
-                    Tinebase_Model_Container::GRANT_EDIT,
-                    Tinebase_Model_Container::GRANT_ADMIN,
+                    Tinebase_Model_Grants::EDITGRANT,
+                    Tinebase_Model_Grants::ADMINGRANT,
                 ));
                 break;
             default:

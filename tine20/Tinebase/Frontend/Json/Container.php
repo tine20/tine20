@@ -34,7 +34,7 @@ class Tinebase_Frontend_Json_Container
     {       
         switch($containerType) {
             case Tinebase_Model_Container::TYPE_PERSONAL:
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $application, $owner, Tinebase_Model_Container::GRANT_READ);
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $application, $owner, Tinebase_Model_Grants::READGRANT);
                 foreach ($containers as $container) {
                     $container->bypassFilters = true;
                     $container->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
@@ -44,7 +44,7 @@ class Tinebase_Frontend_Json_Container
                 break;
                 
             case Tinebase_Model_Container::TYPE_SHARED:
-                $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $application, Tinebase_Model_Container::GRANT_READ);
+                $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $application, Tinebase_Model_Grants::READGRANT);
                 foreach ($containers as $container) {
                     $container->bypassFilters = true;
                     $container->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
@@ -54,7 +54,7 @@ class Tinebase_Frontend_Json_Container
                 break;
                 
             case 'otherUsers':
-                $accounts = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $application, Tinebase_Model_Container::GRANT_READ);
+                $accounts = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $application, Tinebase_Model_Grants::READGRANT);
                 $response = $accounts->toArray();
                 
                 break;

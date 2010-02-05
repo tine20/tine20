@@ -173,7 +173,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
         switch($_value) {
             case self::DEFAULTCALENDAR:
                 // get all user accounts
-                $calendars = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), 'Calendar', Tinebase_Core::getUser(), Tinebase_Model_Container::GRANT_ADD);
+                $calendars = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), 'Calendar', Tinebase_Core::getUser(), Tinebase_Model_Grants::ADDGRANT);
                 
                 foreach ($calendars as $calendar) {
                     $result[] = array($calendar->getId(), $calendar->name);

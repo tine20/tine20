@@ -62,7 +62,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
             Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Container::GRANT_EDIT
+            Tinebase_Model_Grants::EDITGRANT
         );
         
         $container = $personalContainer[0];
@@ -235,7 +235,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
             Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Container::GRANT_EDIT
+            Tinebase_Model_Grants::EDITGRANT
         );        
         $container = $personalContainer[0];
         

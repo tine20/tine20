@@ -52,9 +52,9 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
         $_select->orWhere($quotedDisplayContainerIdentifier  .  ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
         
         // directly filter for required grant is only possible if requiredgrants does not contains GRANT_READ
-        if (! in_array(Tinebase_Model_Container::GRANT_READ, $this->_requiredGrants)) {
+        if (! in_array(Tinebase_Model_Grants::READGRANT, $this->_requiredGrants)) {
             foreach ($this->_requiredGrants as $grant) {
-                if ($grant == Tinebase_Model_Container::GRANT_ADMIN) {
+                if ($grant == Tinebase_Model_Grants::ADMINGRANT) {
                     // admin grant not yet implemented
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Checking for admin grant is not yet implemented, results might be diffrent as expected");
                     continue;
@@ -79,7 +79,7 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
         parent::_resolve();
         
         // we only need to include free/busy if required grants contain GRANT_READ
-        if (! in_array(Tinebase_Model_Container::GRANT_READ, $this->_requiredGrants)) {
+        if (! in_array(Tinebase_Model_Grants::READGRANT, $this->_requiredGrants)) {
             return;
         }
         
