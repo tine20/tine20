@@ -33,7 +33,7 @@ class Timetracker_Export_Csv extends Tinebase_Export_Csv
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($_filter, new Tinebase_Model_Pagination(array(
             'sort'  => 'start_date',
             'dir'   => 'DESC'
-        )));
+        )), FALSE, FALSE, 'export');
         if (count($timesheets) < 1) {
             throw new Timetracker_Exception_NotFound('No Timesheets found.');
         }

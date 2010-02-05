@@ -107,16 +107,15 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
      * @param Tinebase_Model_Pagination|optional $_pagination
-     * @param bool $_getRelations
+     * @param boolean $_getRelations
      * @param boolean $_onlyIds
+     * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
-     * 
-     * @todo create filter group if it is NULL to make sure that acl filter is applied correctly ?
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
-    	$this->_checkRight('get');
-        $this->checkFilterACL($_filter);
+    	$this->_checkRight($_action);
+        $this->checkFilterACL($_filter, $_action);
         
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
         
@@ -136,11 +135,12 @@ abstract class Tinebase_Controller_Record_Abstract
      * Gets total count of search with $_filter
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action for right/acl check
      * @return int
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get') 
     {
-        $this->checkFilterACL($_filter);
+        $this->checkFilterACL($_filter, $_action);
 
         $count = $this->_backend->searchCount($_filter);
         
@@ -644,7 +644,8 @@ abstract class Tinebase_Controller_Record_Abstract
             $_filter->addFilter($containerFilter);
         }
         
-        // do something like that
+        // set grants according to action
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting filter grants for action ' . $_action);
         switch ($_action) {
             case 'get':
                 $_filter->setRequiredGrants(array(
@@ -655,6 +656,12 @@ abstract class Tinebase_Controller_Record_Abstract
             case 'update':
                 $_filter->setRequiredGrants(array(
                     Tinebase_Model_Grants::GRANT_EDIT,
+                    Tinebase_Model_Grants::GRANT_ADMIN,
+                ));
+                break;
+            case 'export':
+                $_filter->setRequiredGrants(array(
+                    Tinebase_Model_Grants::GRANT_EXPORT,
                     Tinebase_Model_Grants::GRANT_ADMIN,
                 ));
                 break;

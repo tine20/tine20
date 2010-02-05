@@ -104,18 +104,21 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
      * @param Tinebase_Model_Pagination|optional $_pagination
-     * @param bool $_getRelations
+     * @param boolean $_getRelations
      * @param boolean $_onlyIds
+     * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
+     * 
+     * @todo move creation of system account to another place
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         if ($_filter === NULL) {
             $_filter = new Felamimail_Model_AccountFilter(array());
         }
         
-        $this->_checkRight('get');
-        $this->checkFilterACL($_filter);
+        $this->_checkRight($_action);
+        $this->checkFilterACL($_filter, $_action);
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
         
         // check preference / config if we should add system account with tine user credentials or from config.inc.php
@@ -130,11 +133,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * Gets total count of search with $_filter
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action for right/acl check
      * @return int
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get') 
     {
-        $this->checkFilterACL($_filter);
+        $this->checkFilterACL($_filter, $_action);
         $count = $this->_backend->searchCount($_filter);
         
         if ($this->_addedDefaultAccount) {

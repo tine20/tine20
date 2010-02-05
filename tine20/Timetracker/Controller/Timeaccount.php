@@ -218,6 +218,8 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      * 
      * @param Timetracker_Model_TimeaccountFilter $_filter
      * @param string $_action
+     * 
+     * @todo add export grant here
      */
     public function checkFilterACL(/*Tinebase_Model_Filter_FilterGroup*/ $_filter, $_action = 'get')
     {
@@ -235,52 +237,13 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
                     Timetracker_Model_TimeaccountGrants::MANAGE_ALL,
                 ));
                 break;
+            case 'export':
+                $_filter->setRequiredGrants(array(
+                    Timetracker_Model_TimeaccountGrants::MANAGE_ALL,
+                ));
+                break;                
             default:
                 throw new Timetracker_Exception_UnexpectedValue('Unknown action: ' . $_action);
         }
-        
-        
-        /*
-        if ($this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
-            return TRUE;
-        }
-        
-        if ($_filter->isBookable) {
-            $rights = array(
-                Timetracker_Model_TimeaccountGrants::BOOK_OWN,
-                Timetracker_Model_TimeaccountGrants::BOOK_ALL,
-                Timetracker_Model_TimeaccountGrants::MANAGE_ALL
-            );
-        } else {
-            $rights = array(
-                Timetracker_Model_TimeaccountGrants::VIEW_ALL,
-                Timetracker_Model_TimeaccountGrants::BOOK_OWN,
-                Timetracker_Model_TimeaccountGrants::BOOK_ALL,
-                Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE,
-                Timetracker_Model_TimeaccountGrants::MANAGE_ALL
-            );
-        }        
-        
-        $readableContainerIds = array();
-        foreach ($rights as $right) {
-            //echo "check right: " . $right;
-            $readableContainerIds = array_merge($readableContainerIds, 
-                $this->_currentAccount->getContainerByACL($this->_applicationName, $right, TRUE));
-        }
-        $readableContainerIds = array_unique($readableContainerIds);
-                
-        if (!empty($_filter->container) && is_array($_filter->container)) {
-            $_filter->container = array_intersect($_filter->container, $readableContainerIds);
-        } else {
-            if (empty($readableContainerIds)) {
-                // no readable containers found -> access denied
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'No readable containers found.');
-                return FALSE;
-            }
-            $_filter->container = $readableContainerIds;
-        }
-        
-        return TRUE;
-        */
     }         
 }

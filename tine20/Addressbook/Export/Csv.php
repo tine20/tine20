@@ -37,7 +37,7 @@ class Addressbook_Export_Csv extends Tinebase_Export_Csv
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
         
-        $contacts = Addressbook_Controller_Contact::getInstance()->search($_filter, $pagination);
+        $contacts = Addressbook_Controller_Contact::getInstance()->search($_filter, $pagination, FALSE, FALSE, 'export');
         if (count($contacts) < 1) {
             throw new Addressbook_Exception_NotFound('No Contacts found.');
         }

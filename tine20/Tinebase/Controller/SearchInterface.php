@@ -26,15 +26,18 @@ interface Tinebase_Controller_SearchInterface
      * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
      * @param Tinebase_Model_Pagination|optional $_pagination
      * @param bool $_getRelations
+     * @param bool $_onlyIds
+     * @param string|optional $_action
      * @return Tinebase_Record_RecordSet
      */
-    //public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE);
+    //public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get');
     
     /**
      * Gets total count of search with $_filter
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string|optional $_action
      * @return int
      */
-    //public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter);
+    //public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get');
 }

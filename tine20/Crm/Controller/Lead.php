@@ -82,11 +82,13 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Record_Interface $_pagination
      * @param boolean $_getRelations
+     * @param boolean $_onlyIds
+     * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
-        $leads = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds);
+        $leads = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         
         if ($_getRelations) {
             $leads->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations(
@@ -105,11 +107,12 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      * Gets total count of search with $_filter
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action for right/acl check
      * @return array
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get') 
     {
-        $this->checkFilterACL($_filter);
+        $this->checkFilterACL($_filter, $_action);
 
         $result['totalcount'] = $this->_backend->searchCount($_filter);
         

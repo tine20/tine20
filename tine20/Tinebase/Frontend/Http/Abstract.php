@@ -82,7 +82,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 */
                 
                 // get ids by filter
-                $ids = $_controller->search($_filter, NULL, FALSE, TRUE);
+                $ids = $_controller->search($_filter, NULL, FALSE, TRUE, 'export');
                 
                 // loop records
                 foreach ($ids as $id) {

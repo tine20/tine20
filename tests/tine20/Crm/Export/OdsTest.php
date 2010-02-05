@@ -32,6 +32,8 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
      */
     protected $_instance;
     
+    protected $_container = NULL;
+    
     /**
      * Runs the test methods of this class.
      *
@@ -57,6 +59,33 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
     }
 
     /**
+     * Tears down the fixture
+     * This method is called after a test is executed.
+     *
+     * @access protected
+     */
+    protected function tearDown()
+    {
+        // set grants again
+        //$container = Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId();
+        if ($this->_container !== null) {
+            Tinebase_Container::getInstance()->setGrants($this->_container, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+                'account_id'    => Tinebase_Core::getUser()->getId(),
+                'account_type'  => 'user',
+                Tinebase_Model_Grants::GRANT_READ      => true,
+                Tinebase_Model_Grants::GRANT_ADD       => true,
+                Tinebase_Model_Grants::GRANT_EDIT      => true,
+                Tinebase_Model_Grants::GRANT_DELETE    => true,
+                Tinebase_Model_Grants::GRANT_EXPORT    => true,
+                Tinebase_Model_Grants::GRANT_SYNC      => true,
+                Tinebase_Model_Grants::GRANT_ADMIN     => true,
+            ))), TRUE);
+        }
+
+        parent::tearDown();
+    }
+    
+    /**
      * test ods export
      * 
      * @return void
@@ -77,6 +106,32 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
         $this->assertEquals(1, preg_match('/open/',         $xmlBody), 'no leadstate');
         $this->assertEquals(1, preg_match('/Admin Account, Tine 2\.0/',         $xmlBody), 'no creator');
         $this->assertEquals(1, preg_match('/Tine 2\.0 Admin Accounts/',         $xmlBody), 'no container name');
+        
+        unlink($odsFilename);
+    }
+
+    /**
+     * test ods export without export grant
+     * 
+     * @return void
+     */
+    public function testExportOdsWithoutGrant()
+    {
+        // remove all grants for container
+        $this->_container = Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId();
+        Tinebase_Container::getInstance()->setGrants($this->_container, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ      => true,
+        ))), TRUE, FALSE);
+        
+        $odsFilename = $this->_instance->generate();
+        
+        $this->assertTrue(file_exists($odsFilename));
+        
+        $xmlBody = $this->_instance->getDocument()->asXML();    
+        //echo  $xmlBody;
+        $this->assertEquals(0, preg_match("/PHPUnit/",      $xmlBody), 'grant not forced'); 
         
         unlink($odsFilename);
     }

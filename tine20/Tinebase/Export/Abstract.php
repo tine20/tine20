@@ -30,7 +30,7 @@ abstract class Tinebase_Export_Abstract
     /**
      * the record controller
      *
-     * @var Tinebase_Controller_Record_Interface
+     * @var Tinebase_Controller_Record_Abstract
      */
     protected $_controller = NULL;
     
@@ -163,10 +163,10 @@ abstract class Tinebase_Export_Abstract
      */
     protected function _getRecords()
     {
-        // get records by filter
+        // get records by filter (ensure export acl first)
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting records using filter: ' . print_r($this->_filter->toArray(), TRUE));
         $pagination = (! empty($this->_sortInfo)) ? new Tinebase_Model_Pagination($this->_sortInfo) : NULL;
-        $records = $this->_controller->search($this->_filter, $pagination, $this->_getRelations);
+        $records = $this->_controller->search($this->_filter, $pagination, $this->_getRelations, FALSE, 'export');
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Exporting  ' . count($records) . ' records ...');
         
@@ -278,9 +278,9 @@ abstract class Tinebase_Export_Abstract
      */
     protected function _getCellValue(Zend_Config $_field, Tinebase_Record_Interface $_record, &$_cellType)
     {
-        $result = null;
+        $result = NULL;
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_field->toArray(), TRUE));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_field->toArray(), TRUE));
         
         if (in_array($_field->type, $this->_specialFields)) {
             // special field handling
@@ -351,7 +351,6 @@ abstract class Tinebase_Export_Abstract
                 if (isset($_field->custom) && $_field->custom) {
                     // add custom fields
                     if (isset($_record->customfields[$_field->identifier])) {
-                        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_field->identifier . '-' . $_record->customfields[$_field->identifier]);
                         $result = $_record->customfields[$_field->identifier];
                     }
                     
