@@ -68,7 +68,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
             Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Grants::EDITGRANT
+            Tinebase_Model_Grants::GRANT_EDIT
         );
         
         $container = $personalContainer[0];

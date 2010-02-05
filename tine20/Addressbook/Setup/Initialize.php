@@ -50,12 +50,12 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL);
         //Tinebase_Container::getInstance()->addGrants($internalAddressbook, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
         Tinebase_Container::getInstance()->addGrants($internalAddressbook, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, '0', array(
-            Tinebase_Model_Grants::READGRANT
+            Tinebase_Model_Grants::GRANT_READ
         ), TRUE);
         Tinebase_Container::getInstance()->addGrants($internalAddressbook, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $adminGroup, array(
-            Tinebase_Model_Grants::READGRANT,
-            Tinebase_Model_Grants::EDITGRANT,
-            Tinebase_Model_Grants::ADMINGRANT
+            Tinebase_Model_Grants::GRANT_READ,
+            Tinebase_Model_Grants::GRANT_EDIT,
+            Tinebase_Model_Grants::GRANT_ADMIN
         ), TRUE);               
     }
     

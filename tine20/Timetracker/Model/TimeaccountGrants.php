@@ -22,34 +22,34 @@
 class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
 {
     /**
-     * constant for book own TS grant (READGRANT)
+     * constant for book own TS grant (GRANT_READ)
      *
      */
-    const BOOK_OWN = Tinebase_Model_Grants::READGRANT;
+    const BOOK_OWN = Tinebase_Model_Grants::GRANT_READ;
 
     /**
-     * constant for view all TS (ADDGRANT)
+     * constant for view all TS (GRANT_ADD)
      *
      */
-    const VIEW_ALL = Tinebase_Model_Grants::ADDGRANT;
+    const VIEW_ALL = Tinebase_Model_Grants::GRANT_ADD;
 
     /**
-     * constant for book TS for all users (EDITGRANT)
+     * constant for book TS for all users (GRANT_EDIT)
      *
      */
-    const BOOK_ALL = Tinebase_Model_Grants::EDITGRANT;
+    const BOOK_ALL = Tinebase_Model_Grants::GRANT_EDIT;
 
     /**
-     * constant for manage billable in all bookable TS (DELETEGRANT)
+     * constant for manage billable in all bookable TS (GRANT_DELETE)
      *
      */
-    const MANAGE_BILLABLE = Tinebase_Model_Grants::DELETEGRANT;
+    const MANAGE_BILLABLE = Tinebase_Model_Grants::GRANT_DELETE;
 
     /**
-     * constant for manage all / admin grant (ADMINGRANT)
+     * constant for manage all / admin grant (GRANT_ADMIN)
      *
      */
-    const MANAGE_ALL = Tinebase_Model_Grants::ADMINGRANT;
+    const MANAGE_ALL = Tinebase_Model_Grants::GRANT_ADMIN;
 
     /**
      * mapping container_grants => timeaccount_grants
@@ -57,11 +57,11 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_mapping = array(
-        Tinebase_Model_Grants::READGRANT     => 'book_own',
-        Tinebase_Model_Grants::ADDGRANT      => 'view_all',
-        Tinebase_Model_Grants::EDITGRANT     => 'book_all',
-        Tinebase_Model_Grants::DELETEGRANT   => 'manage_billable',
-        Tinebase_Model_Grants::ADMINGRANT    => 'manage_all'
+        Tinebase_Model_Grants::GRANT_READ     => 'book_own',
+        Tinebase_Model_Grants::GRANT_ADD      => 'view_all',
+        Tinebase_Model_Grants::GRANT_EDIT     => 'book_all',
+        Tinebase_Model_Grants::GRANT_DELETE   => 'manage_billable',
+        Tinebase_Model_Grants::GRANT_ADMIN    => 'manage_all'
     );
     
 	/**
@@ -364,11 +364,11 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
             $result->addRecord(new Tinebase_Model_Grants(array(
                 'account_id'    => $grant->account_id,
                 'account_type'  => $grant->account_type,
-                Tinebase_Model_Grants::READGRANT     => $grant->book_own,
-                Tinebase_Model_Grants::ADDGRANT      => $grant->view_all,
-                Tinebase_Model_Grants::EDITGRANT     => $grant->book_all,
-                Tinebase_Model_Grants::DELETEGRANT   => $grant->manage_billable,
-                Tinebase_Model_Grants::ADMINGRANT    => $grant->manage_all
+                Tinebase_Model_Grants::GRANT_READ     => $grant->book_own,
+                Tinebase_Model_Grants::GRANT_ADD      => $grant->view_all,
+                Tinebase_Model_Grants::GRANT_EDIT     => $grant->book_all,
+                Tinebase_Model_Grants::GRANT_DELETE   => $grant->manage_billable,
+                Tinebase_Model_Grants::GRANT_ADMIN    => $grant->manage_all
             )));
         }
         return $result;

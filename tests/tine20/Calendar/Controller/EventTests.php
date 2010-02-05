@@ -58,14 +58,14 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     public function testGetEvent()
     {
         $persitentEvent = $this->testCreateEvent();
-        $this->assertTrue((bool) $persitentEvent->{Tinebase_Model_Grants::READGRANT});
-        $this->assertTrue((bool) $persitentEvent->{Tinebase_Model_Grants::EDITGRANT});
-        $this->assertTrue((bool) $persitentEvent->{Tinebase_Model_Grants::DELETEGRANT});
+        $this->assertTrue((bool) $persitentEvent->{Tinebase_Model_Grants::GRANT_READ});
+        $this->assertTrue((bool) $persitentEvent->{Tinebase_Model_Grants::GRANT_EDIT});
+        $this->assertTrue((bool) $persitentEvent->{Tinebase_Model_Grants::GRANT_DELETE});
         
         $loadedEvent = $this->_controller->get($persitentEvent->getId());
-        $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::READGRANT});
-        $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::EDITGRANT});
-        $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::DELETEGRANT});
+        $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::GRANT_READ});
+        $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::GRANT_EDIT});
+        $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::GRANT_DELETE});
     }
     
     public function testUpdateEvent()
@@ -433,7 +433,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-03-31 17:30:00',
             'exdate'        => '2009-03-27 18:00:00,2009-03-29 17:00:00',
             'container_id'  => $this->_testCalendar->getId(),
-            Tinebase_Model_Grants::EDITGRANT     => true,
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
         $event->attendee = $this->_getAttendee();
         unset($event->attendee[1]);
@@ -574,7 +574,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-02 17:30:00',
             'exdate'        => '2009-03-27 18:00:00,2009-03-31 17:00:00',
             'container_id'  => $this->_testCalendar->getId(),
-            Tinebase_Model_Grants::EDITGRANT     => true,
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
         
         $persitentEvent = $this->_controller->create($event);
@@ -893,7 +893,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'description' => 'Wieslaw Brudzinski: Das Gesetz garantiert zwar die Mittagspause, aber nicht das Mittagessen...',
         
             'container_id' => $this->_testCalendar->getId(),
-            Tinebase_Model_Grants::EDITGRANT    => true,
+            Tinebase_Model_Grants::GRANT_EDIT    => true,
         ));
     }
     

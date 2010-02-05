@@ -70,11 +70,11 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
                 'account_id'     => Tinebase_Core::getUser()->getId(),
                 'account_type'   => 'user',
                 //'account_name'   => 'not used',
-                Tinebase_Model_Grants::READGRANT      => true,
-                Tinebase_Model_Grants::ADDGRANT       => true,
-                Tinebase_Model_Grants::EDITGRANT      => true,
-                Tinebase_Model_Grants::DELETEGRANT    => true,
-                Tinebase_Model_Grants::ADMINGRANT     => true
+                Tinebase_Model_Grants::GRANT_READ      => true,
+                Tinebase_Model_Grants::GRANT_ADD       => true,
+                Tinebase_Model_Grants::GRANT_EDIT      => true,
+                Tinebase_Model_Grants::GRANT_DELETE    => true,
+                Tinebase_Model_Grants::GRANT_ADMIN     => true
             )            
         ));
         
@@ -193,7 +193,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGrantsOfContainer()
     {
-        $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Grants::READGRANT));
+        $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Grants::GRANT_READ));
 
         $grants = $this->_instance->getGrantsOfContainer($this->objects['initialContainer']);
         
@@ -219,16 +219,16 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGrantsOfAccount()
     {
-        $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Grants::READGRANT));
+        $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Grants::GRANT_READ));
 
         $grants = $this->_instance->getGrantsOfAccount(Tinebase_Core::getUser(), $this->objects['initialContainer']);
         
         $this->assertType('Tinebase_Model_Grants', $grants);
-        $this->assertTrue($grants->{Tinebase_Model_Grants::READGRANT});
-        $this->assertTrue($grants->{Tinebase_Model_Grants::ADDGRANT});
-        $this->assertTrue($grants->{Tinebase_Model_Grants::EDITGRANT});
-        $this->assertTrue($grants->{Tinebase_Model_Grants::DELETEGRANT});
-        $this->assertTrue($grants->{Tinebase_Model_Grants::ADMINGRANT});
+        $this->assertTrue($grants->{Tinebase_Model_Grants::GRANT_READ});
+        $this->assertTrue($grants->{Tinebase_Model_Grants::GRANT_ADD});
+        $this->assertTrue($grants->{Tinebase_Model_Grants::GRANT_EDIT});
+        $this->assertTrue($grants->{Tinebase_Model_Grants::GRANT_DELETE});
+        $this->assertTrue($grants->{Tinebase_Model_Grants::GRANT_ADMIN});
     }
     
     /**
@@ -244,11 +244,11 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
                     'account_id'     => Tinebase_Core::getUser()->getId(),
                     'account_type'   => 'user',
                     //'account_name'   => 'not used',
-                    Tinebase_Model_Grants::READGRANT      => true,
-                    Tinebase_Model_Grants::ADDGRANT       => false,
-                    Tinebase_Model_Grants::EDITGRANT      => true,
-                    Tinebase_Model_Grants::DELETEGRANT    => true,
-                    Tinebase_Model_Grants::ADMINGRANT     => true
+                    Tinebase_Model_Grants::GRANT_READ      => true,
+                    Tinebase_Model_Grants::GRANT_ADD       => false,
+                    Tinebase_Model_Grants::GRANT_EDIT      => true,
+                    Tinebase_Model_Grants::GRANT_DELETE    => true,
+                    Tinebase_Model_Grants::GRANT_ADMIN     => true
              ))
          );
         
@@ -281,7 +281,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetOtherUsers()
     {
-        $otherUsers = $this->_instance->getOtherUsers(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::READGRANT);
+        $otherUsers = $this->_instance->getOtherUsers(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_READ);
         
         $this->assertType('Tinebase_Record_RecordSet', $otherUsers);
     }
@@ -292,9 +292,9 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContainerByAcl()
     {
-        $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Grants::READGRANT));
+        $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Grants::GRANT_READ));
 
-        $readableContainer = $this->_instance->getContainerByAcl(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::READGRANT);
+        $readableContainer = $this->_instance->getContainerByAcl(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_READ);
         $this->assertType('Tinebase_Record_RecordSet', $readableContainer);
         $this->assertTrue(count($readableContainer) >= 2);
     }

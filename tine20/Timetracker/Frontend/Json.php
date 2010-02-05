@@ -160,9 +160,9 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $modifyGrant = $manageAllRight || ($timeaccountGrantsArray['book_own'] && $timesheetOwnerId == $currentUserId) || $timeaccountGrantsArray['book_all'];
             
-        $timeaccountGrantsArray[Tinebase_Model_Grants::READGRANT]   = true;
-        $timeaccountGrantsArray[Tinebase_Model_Grants::EDITGRANT]   = $modifyGrant;
-        $timeaccountGrantsArray[Tinebase_Model_Grants::DELETEGRANT] = $modifyGrant;
+        $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_READ]   = true;
+        $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_EDIT]   = $modifyGrant;
+        $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_DELETE] = $modifyGrant;
         
         return $timeaccountGrantsArray;
     }
@@ -181,9 +181,9 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
              $timeaccountGrantsArray = $timeaccount->account_grants;
              $modifyGrant = $manageAllRight || $timeaccountGrantsArray['manage_all'];
              
-             $timeaccountGrantsArray[Tinebase_Model_Grants::READGRANT]   = true;
-             $timeaccountGrantsArray[Tinebase_Model_Grants::EDITGRANT]   = $modifyGrant;
-             $timeaccountGrantsArray[Tinebase_Model_Grants::DELETEGRANT] = $modifyGrant;
+             $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_READ]   = true;
+             $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_EDIT]   = $modifyGrant;
+             $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_DELETE] = $modifyGrant;
              $timeaccount->account_grants = $timeaccountGrantsArray;
              
              // also move the grants into the container_id property, as the clients expects records to 

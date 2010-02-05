@@ -124,9 +124,9 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
             'organizer'    => $this->_testUserContact->getId(),
             'uid'          => Calendar_Model_Event::generateUID(),
         
-            Tinebase_Model_Grants::READGRANT    => true,
-            Tinebase_Model_Grants::EDITGRANT    => true,
-            Tinebase_Model_Grants::DELETEGRANT  => true,
+            Tinebase_Model_Grants::GRANT_READ    => true,
+            Tinebase_Model_Grants::GRANT_EDIT    => true,
+            Tinebase_Model_Grants::GRANT_DELETE  => true,
         ));
     }
 

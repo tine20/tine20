@@ -32,15 +32,15 @@ class Sales_Setup_Initialize extends Setup_Initialize
         try {
             $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Sales', 'Shared Contracts', Tinebase_Model_Container::TYPE_SHARED);
             Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
-                Tinebase_Model_Grants::READGRANT,
-                Tinebase_Model_Grants::EDITGRANT
+                Tinebase_Model_Grants::GRANT_READ,
+                Tinebase_Model_Grants::GRANT_EDIT
             ), TRUE);
             Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $adminGroup, array(
-                Tinebase_Model_Grants::ADDGRANT,
-                Tinebase_Model_Grants::READGRANT,
-                Tinebase_Model_Grants::EDITGRANT,
-                Tinebase_Model_Grants::DELETEGRANT,
-                Tinebase_Model_Grants::ADMINGRANT
+                Tinebase_Model_Grants::GRANT_ADD,
+                Tinebase_Model_Grants::GRANT_READ,
+                Tinebase_Model_Grants::GRANT_EDIT,
+                Tinebase_Model_Grants::GRANT_DELETE,
+                Tinebase_Model_Grants::GRANT_ADMIN
             ), TRUE);
         } catch (Tinebase_Exception_NotFound $tenf) {
             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Sales application not found.');

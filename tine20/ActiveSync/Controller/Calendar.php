@@ -764,7 +764,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         // only the IPhone supports multiple folders for calendars currently
         if(strtolower($this->_device->devicetype) == 'iphone') {
         
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::READGRANT);
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_READ);
             foreach ($containers as $container) {
                 $folders[$container->id] = array(
                     'folderId'      => $container->id,

@@ -64,7 +64,7 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
             Zend_Registry::get('currentAccount'), 
             'Crm', 
             Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Grants::EDITGRANT
+            Tinebase_Model_Grants::GRANT_EDIT
         );
         
         if($personalContainer->count() === 0) {

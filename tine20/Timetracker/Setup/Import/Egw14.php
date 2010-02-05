@@ -475,31 +475,31 @@ class Timetracker_Setup_Import_Egw14
             switch ($role) {
                 case 4:
                     $grants = array(
-                        Tinebase_Model_Grants::READGRANT
+                        Tinebase_Model_Grants::GRANT_READ
                     );
                     break;
                 case 3:
                     $grants = array(
-                        Tinebase_Model_Grants::READGRANT,
-                        Tinebase_Model_Grants::EDITGRANT,
-                        Tinebase_Model_Grants::ADDGRANT,
+                        Tinebase_Model_Grants::GRANT_READ,
+                        Tinebase_Model_Grants::GRANT_EDIT,
+                        Tinebase_Model_Grants::GRANT_ADD,
                     );
                     break;
                 case 2:
                     $grants = array(
-                        Tinebase_Model_Grants::READGRANT,
-                        Tinebase_Model_Grants::EDITGRANT,
-                        Tinebase_Model_Grants::ADDGRANT,
-                        Tinebase_Model_Grants::DELETEGRANT,
+                        Tinebase_Model_Grants::GRANT_READ,
+                        Tinebase_Model_Grants::GRANT_EDIT,
+                        Tinebase_Model_Grants::GRANT_ADD,
+                        Tinebase_Model_Grants::GRANT_DELETE,
                     );
                     break;
                 case 1:
                     $grants = array(
-                        Tinebase_Model_Grants::READGRANT,
-                        Tinebase_Model_Grants::EDITGRANT,
-                        Tinebase_Model_Grants::ADDGRANT,
-                        Tinebase_Model_Grants::DELETEGRANT,
-                        Tinebase_Model_Grants::ADMINGRANT
+                        Tinebase_Model_Grants::GRANT_READ,
+                        Tinebase_Model_Grants::GRANT_EDIT,
+                        Tinebase_Model_Grants::GRANT_ADD,
+                        Tinebase_Model_Grants::GRANT_DELETE,
+                        Tinebase_Model_Grants::GRANT_ADMIN
                     );
                     break;
             }

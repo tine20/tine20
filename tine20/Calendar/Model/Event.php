@@ -106,9 +106,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'originator_tz'         => array('allowEmpty' => true         ),
     
         // grant helper fields
-        Tinebase_Model_Grants::READGRANT   => array('allowEmpty' => true),
-        Tinebase_Model_Grants::EDITGRANT   => array('allowEmpty' => true),
-        Tinebase_Model_Grants::DELETEGRANT => array('allowEmpty' => true),
+        Tinebase_Model_Grants::GRANT_READ   => array('allowEmpty' => true),
+        Tinebase_Model_Grants::GRANT_EDIT   => array('allowEmpty' => true),
+        Tinebase_Model_Grants::GRANT_DELETE => array('allowEmpty' => true),
     );
     
     /**
@@ -247,7 +247,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function doFreeBusyCleanup()
     {
-    	if ($this->{Tinebase_Model_Grants::READGRANT} || $this->{Tinebase_Model_Grants::EDITGRANT}) {
+    	if ($this->{Tinebase_Model_Grants::GRANT_READ} || $this->{Tinebase_Model_Grants::GRANT_EDIT}) {
     	   return;
     	}
     	

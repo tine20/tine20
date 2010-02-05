@@ -1564,14 +1564,14 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $userGroup = Tinebase_Group::getInstance()->getDefaultGroup();
         
         Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
-            Tinebase_Model_Grants::READGRANT,
-            Tinebase_Model_Grants::EDITGRANT
+            Tinebase_Model_Grants::GRANT_READ,
+            Tinebase_Model_Grants::GRANT_EDIT
         ), TRUE);
         Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $adminGroup, array(
-            Tinebase_Model_Grants::ADDGRANT,
-            Tinebase_Model_Grants::READGRANT,
-            Tinebase_Model_Grants::EDITGRANT,
-            Tinebase_Model_Grants::ADMINGRANT
+            Tinebase_Model_Grants::GRANT_ADD,
+            Tinebase_Model_Grants::GRANT_READ,
+            Tinebase_Model_Grants::GRANT_EDIT,
+            Tinebase_Model_Grants::GRANT_ADMIN
         ), TRUE);
         
         $this->setApplicationVersion('Tinebase', '0.19');

@@ -365,7 +365,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertEquals($expectedEventData['summary'], $eventData['summary'], $msg . ': failed to create/load event');
         
         // assert effective grants are set
-        $this->assertEquals((bool) $expectedEventData[Tinebase_Model_Grants::EDITGRANT], (bool) $eventData[Tinebase_Model_Grants::EDITGRANT], $msg . ': effective grants mismatch');
+        $this->assertEquals((bool) $expectedEventData[Tinebase_Model_Grants::GRANT_EDIT], (bool) $eventData[Tinebase_Model_Grants::GRANT_EDIT], $msg . ': effective grants mismatch');
         // container, assert attendee, tags, relations
         $this->assertEquals($expectedEventData['dtstart'], $eventData['dtstart'], $msg . ': dtstart mismatch');
         $this->assertTrue(is_array($eventData['container_id']), $msg . ': failed to "resolve" container');

@@ -22,11 +22,11 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
     /**
      * constants for default grants
      */
-    const READGRANT     = 'readGrant';
-    const ADDGRANT      = 'addGrant';
-    const EDITGRANT     = 'editGrant';
-    const DELETEGRANT   = 'deleteGrant';
-    const ADMINGRANT    = 'adminGrant';
+    const GRANT_READ     = 'readGrant';
+    const GRANT_ADD      = 'addGrant';
+    const GRANT_EDIT     = 'editGrant';
+    const GRANT_DELETE   = 'deleteGrant';
+    const GRANT_ADMIN    = 'adminGrant';
     
     /**
      * define supported/available grants
@@ -34,11 +34,11 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      * @var array
      */
     public static $GRANTS_AVAILABLE = array(
-        self::READGRANT,
-        self::ADDGRANT,
-        self::EDITGRANT,
-        self::DELETEGRANT,
-        self::ADMINGRANT,
+        self::GRANT_READ,
+        self::GRANT_ADD,
+        self::GRANT_EDIT,
+        self::GRANT_DELETE,
+        self::GRANT_ADMIN,
     );
     
 	/**
@@ -83,31 +83,31 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             'account_id'   => array('presence' => 'required', 'allowEmpty' => TRUE, 'default' => '0'),
             'account_type' => array('presence' => 'required', 'InArray' => array(Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP)),
             //'account_name' => array('allowEmpty' => TRUE),
-            self::READGRANT   => array(
+            self::GRANT_READ   => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE,
                 'presence' => 'required',
                 'allowEmpty' => true
             ),
-            self::ADDGRANT    => array(
+            self::GRANT_ADD    => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE,
                 'presence' => 'required',
                 'allowEmpty' => true
             ),
-            self::EDITGRANT   => array(
+            self::GRANT_EDIT   => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE,
                 'presence' => 'required',
                 'allowEmpty' => true
             ),
-            self::DELETEGRANT => array(
+            self::GRANT_DELETE => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE,
                 'presence' => 'required',
                 'allowEmpty' => true
             ),
-            self::ADMINGRANT  => array(
+            self::GRANT_ADMIN  => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE,
                 'presence' => 'required',

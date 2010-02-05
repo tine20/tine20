@@ -247,7 +247,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
             $containerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_lead->container_id, TRUE);
             // NOTE: we just send notifications to users, not to groups or anyones!
             foreach ($containerGrants as $grant) {
-                if ($grant['account_type'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && $grant[Tinebase_Model_Grants::READGRANT] == 1) {
+                if ($grant['account_type'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && $grant[Tinebase_Model_Grants::GRANT_READ] == 1) {
                     $recipients[] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($grant['account_id'])->getId();
                 }
             }

@@ -84,7 +84,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
         $container = $this->_backend->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL);
 
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
-        $this->assertTrue($container['account_grants'][Tinebase_Model_Grants::ADMINGRANT]);
+        $this->assertTrue($container['account_grants'][Tinebase_Model_Grants::GRANT_ADMIN]);
 
         Tinebase_Container::getInstance()->deleteContainer($container['id']);
     }
@@ -169,11 +169,11 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
                 'account_id'     => Zend_Registry::get('currentAccount')->getId(),
                 'account_type'   => 'user',
                 //'account_name'   => 'not used',
-                Tinebase_Model_Grants::READGRANT      => true,
-                Tinebase_Model_Grants::ADDGRANT       => true,
-                Tinebase_Model_Grants::EDITGRANT      => true,
-                Tinebase_Model_Grants::DELETEGRANT    => false,
-                Tinebase_Model_Grants::ADMINGRANT     => true
+                Tinebase_Model_Grants::GRANT_READ      => true,
+                Tinebase_Model_Grants::GRANT_ADD       => true,
+                Tinebase_Model_Grants::GRANT_EDIT      => true,
+                Tinebase_Model_Grants::GRANT_DELETE    => false,
+                Tinebase_Model_Grants::GRANT_ADMIN     => true
             )
         );
         

@@ -680,7 +680,7 @@ class Calendar_Setup_Import_Egw14 {
         $privateString = 'private events';
         
         if (! array_key_exists($_userId, $this->_privateCalendarCache)) {
-            $personalCalendars = Tinebase_Container::getInstance()->getPersonalContainer($_userId, 'Calendar', $_userId, Tinebase_Model_Grants::ADMINGRANT, TRUE);
+            $personalCalendars = Tinebase_Container::getInstance()->getPersonalContainer($_userId, 'Calendar', $_userId, Tinebase_Model_Grants::GRANT_ADMIN, TRUE);
             $privateCalendar = $personalCalendars->filter('name', $privateString);
             
             if (count($privateCalendar) < 1) {
@@ -820,10 +820,10 @@ class Calendar_Setup_Import_Egw14 {
      * @var array
      */
     protected $_grantMap = array(
-        1 => Tinebase_Model_Grants::READGRANT,
-        2 => Tinebase_Model_Grants::ADDGRANT,
-        4 => Tinebase_Model_Grants::EDITGRANT,
-        8 => Tinebase_Model_Grants::DELETEGRANT,
+        1 => Tinebase_Model_Grants::GRANT_READ,
+        2 => Tinebase_Model_Grants::GRANT_ADD,
+        4 => Tinebase_Model_Grants::GRANT_EDIT,
+        8 => Tinebase_Model_Grants::GRANT_DELETE,
     );
     
     /**
@@ -934,7 +934,7 @@ class Calendar_Setup_Import_Egw14 {
             
             // the owner also gets admin grants
             if ($_accountId > 0 && $grantAccount == $_accountId) {
-                $tineGrant->{Tinebase_Model_Grants::ADMINGRANT} = TRUE;
+                $tineGrant->{Tinebase_Model_Grants::GRANT_ADMIN} = TRUE;
             }
             
             $tineGrants->addRecord($tineGrant);
@@ -948,7 +948,7 @@ class Calendar_Setup_Import_Egw14 {
                 'account_id' => abs($_accountId),
                 'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP
             ));
-            $tineGrant->{Tinebase_Model_Grants::ADMINGRANT} = TRUE;
+            $tineGrant->{Tinebase_Model_Grants::GRANT_ADMIN} = TRUE;
             
             $tineGrants->addRecord($tineGrant);
         }
