@@ -280,7 +280,7 @@ abstract class Tinebase_Export_Abstract
     {
         $result = null;
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_field->toArray(), TRUE));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_field->toArray(), TRUE));
         
         if (in_array($_field->type, $this->_specialFields)) {
             // special field handling
@@ -294,6 +294,13 @@ abstract class Tinebase_Export_Abstract
                 && ! isset($_field->custom)
             )
         ) {
+            // check if empty -> use alternative field
+            if (isset($_field->empty)) {
+                $fieldConfig = $_field->toArray();
+                unset($fieldConfig['empty']);
+                $fieldConfig['identifier'] = $_field->empty;
+                $result = $this->_getCellValue(new Zend_Config($fieldConfig), $_record, $_cellType);
+            }            
             // don't add value for formula or undefined fields
             return $result;
         }
@@ -303,14 +310,14 @@ abstract class Tinebase_Export_Abstract
                 $result = $_record->{$_field->identifier}->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale);
                 // empty date cells, get displayed as 30.12.1899
                 if(empty($result)) {
-                    $result = null;
+                    $result = NULL;
                 }
                 break;
             case 'date':
                 $result = ($_record->{$_field->identifier} instanceof Zend_Date) ? $_record->{$_field->identifier}->toString('yyyy-MM-dd') : $_record->{$_field->identifier};
                 // empty date cells, get displayed as 30.12.1899
                 if(empty($result)) {
-                    $result = null;
+                    $result = NULL;
                 }
                 break;
             case 'tags':
