@@ -21,6 +21,8 @@ class Tinebase_Group
     const SQL = 'Sql';
     
     const LDAP = 'Ldap';
+    
+    const TYPO3 = 'Typo3';
 
     /**
      * the constructor
@@ -80,6 +82,10 @@ class Tinebase_Group
                 $result = new Tinebase_Group_Sql();
                 break;
             
+            case self::TYPO3:
+                $result = new Tinebase_Group_Typo3();
+                break;
+                
             default:
                 throw new Tinebase_Exception_InvalidArgument("Groups backend type $_backendType not implemented.");
         }

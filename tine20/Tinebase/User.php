@@ -22,6 +22,8 @@ class Tinebase_User
     
     const LDAP = 'Ldap';
     
+    const TYPO3 = 'Typo3';
+    
     /**
      * Key under which the default user group name setting will be stored/retrieved
      *
@@ -142,6 +144,10 @@ class Tinebase_User
                 $result = new Tinebase_User_Sql();
                 break;
             
+            case self::TYPO3:
+                $result = new Tinebase_User_Typo3();
+                break;
+                
             default:
                 throw new Tinebase_Exception_InvalidArgument("User backend type $_backendType not implemented.");
         }
