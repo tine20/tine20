@@ -125,5 +125,31 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
     {
         $this->_db->query("UPDATE " . SQL_TABLE_PREFIX . "importexport_definition SET filename=CONCAT(name,'.xml') WHERE type = 'export'");
         $this->setApplicationVersion('Tinebase', '3.5');
-    }    
+    }
+    
+    /**
+     * update to 3.6
+     * - container_acl -> int to string
+     */
+    public function update_5()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+         <field>
+            <name>account_grant</name>
+            <type>text</type>
+            <length>40</length>
+            <notnull>true</notnull>
+        </field>');
+        
+        $this->_backend->alterCol('container_acl', $declaration);
+        
+        $this->_db->query("UPDATE `" . SQL_TABLE_PREFIX . "container_acl` SET `account_grant`='readGrant' WHERE `account_grant` = '1'");
+        $this->_db->query("UPDATE `" . SQL_TABLE_PREFIX . "container_acl` SET `account_grant`='addGrant' WHERE `account_grant` = '2'");
+        $this->_db->query("UPDATE `" . SQL_TABLE_PREFIX . "container_acl` SET `account_grant`='editGrant' WHERE `account_grant` = '4'");
+        $this->_db->query("UPDATE `" . SQL_TABLE_PREFIX . "container_acl` SET `account_grant`='deleteGrant' WHERE `account_grant` = '8'");
+        $this->_db->query("UPDATE `" . SQL_TABLE_PREFIX . "container_acl` SET `account_grant`='adminGrant' WHERE `account_grant` = '16'");
+        
+        $this->setTableVersion('container_acl', '2');
+        $this->setApplicationVersion('Tinebase', '3.6');
+    }
 }

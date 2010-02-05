@@ -5,12 +5,12 @@
  * @package     Timetracker
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  *
- * @todo        add memcached support
  * @todo        extend Tinebase_Model_Grants?
+ * @todo        maping is obsolete, as container class supports strings now!
  */
 
 /**
@@ -22,34 +22,34 @@
 class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
 {
     /**
-     * constant for book own TS grant (GRANT_READ)
+     * constant for book own TS grant (READGRANT)
      *
      */
-    const BOOK_OWN = 1;
+    const BOOK_OWN = Tinebase_Model_Grants::READGRANT;
 
     /**
-     * constant for view all TS (GRANT_ADD)
+     * constant for view all TS (ADDGRANT)
      *
      */
-    const VIEW_ALL = 2;
+    const VIEW_ALL = Tinebase_Model_Grants::ADDGRANT;
 
     /**
-     * constant for book TS for all users (GRANT_EDIT)
+     * constant for book TS for all users (EDITGRANT)
      *
      */
-    const BOOK_ALL = 4;
+    const BOOK_ALL = Tinebase_Model_Grants::EDITGRANT;
 
     /**
-     * constant for manage billable in all bookable TS (GRANT_DELETE)
+     * constant for manage billable in all bookable TS (DELETEGRANT)
      *
      */
-    const MANAGE_BILLABLE = 8;
+    const MANAGE_BILLABLE = Tinebase_Model_Grants::DELETEGRANT;
 
     /**
-     * constant for manage all / admin grant (GRANT_ADMIN)
+     * constant for manage all / admin grant (ADMINGRANT)
      *
      */
-    const MANAGE_ALL = 16;
+    const MANAGE_ALL = Tinebase_Model_Grants::ADMINGRANT;
 
     /**
      * mapping container_grants => timeaccount_grants

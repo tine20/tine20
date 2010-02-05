@@ -840,17 +840,12 @@ class Tinebase_Container
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
-        $grant = (int)$_grant;
         
         $cache = Tinebase_Core::get('cache');
-        $cacheId = convertCacheId('hasGrant' . $accountId . $containerId . $grant);
+        $cacheId = convertCacheId('hasGrant' . $accountId . $containerId . $_grant);
         $result = $cache->load($cacheId);
         
         if (! $result) {
-            if($grant != $_grant) {
-                throw new Tinebase_Exception_InvalidArgument('$_grant must be integer');
-            }
-            
             $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
             if(count($groupMemberships) === 0) {
                 throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
@@ -867,7 +862,7 @@ class Tinebase_Container
                     SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
                 ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
                 
-                ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $grant)
+                ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $_grant)
                 ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId)
                 ;
                         
