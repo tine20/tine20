@@ -18,7 +18,8 @@
  * 
  * NOTE: container class is in the transition from int based grants to string based
  *       grants! In the next refactoring step of container class, int based grants 
- *       will be replaced
+ *       will be replaced. Also the grants will not longer be part of container class!
+ *       This way apps can define their own grants
  */
 class Tinebase_Model_Container extends Tinebase_Record_Abstract
 {
