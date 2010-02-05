@@ -20,26 +20,29 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
 {
     
     /**
-     * constants for default grants
+     * read grant to all records of a container / a single record
      */
     const GRANT_READ     = 'readGrant';
-    const GRANT_ADD      = 'addGrant';
-    const GRANT_EDIT     = 'editGrant';
-    const GRANT_DELETE   = 'deleteGrant';
-    const GRANT_ADMIN    = 'adminGrant';
     
     /**
-     * define supported/available grants
-     *
-     * @var array
+     * add grant to a container
      */
-    public static $GRANTS_AVAILABLE = array(
-        self::GRANT_READ,
-        self::GRANT_ADD,
-        self::GRANT_EDIT,
-        self::GRANT_DELETE,
-        self::GRANT_ADMIN,
-    );
+    const GRANT_ADD      = 'addGrant';
+    
+    /**
+     * edit grant to all records of a container / a single record
+     */
+    const GRANT_EDIT     = 'editGrant';
+    
+    /**
+     * delete grant to all records of a container / a single record
+     */
+    const GRANT_DELETE   = 'deleteGrant';
+    
+    /**
+     * admin grant to a container
+     */
+    const GRANT_ADMIN    = 'adminGrant';
     
 	/**
      * key in $_validators/$_properties array for the filed which 
@@ -82,39 +85,35 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             'id'          => array('Alnum', 'allowEmpty' => TRUE),
             'account_id'   => array('presence' => 'required', 'allowEmpty' => TRUE, 'default' => '0'),
             'account_type' => array('presence' => 'required', 'InArray' => array(Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP)),
-            //'account_name' => array('allowEmpty' => TRUE),
-            self::GRANT_READ   => array(
-                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE,
-                'presence' => 'required',
-                'allowEmpty' => true
-            ),
-            self::GRANT_ADD    => array(
-                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE,
-                'presence' => 'required',
-                'allowEmpty' => true
-            ),
-            self::GRANT_EDIT   => array(
-                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE,
-                'presence' => 'required',
-                'allowEmpty' => true
-            ),
-            self::GRANT_DELETE => array(
-                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE,
-                'presence' => 'required',
-                'allowEmpty' => true
-            ),
-            self::GRANT_ADMIN  => array(
-                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE,
-                'presence' => 'required',
-                'allowEmpty' => true
-            )
         );
         
+        foreach ($this->getAllGrants() as $grant) {
+            $this->_validators[$grant] = array(
+                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
+                'default' => FALSE,
+                'presence' => 'required',
+                'allowEmpty' => true
+            );
+        }
+        
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+    
+    /**
+     * get all possible grants
+     *
+     * @return  array   all application prefs
+     */
+    public function getAllGrants()
+    {
+        $allGrants = array(
+            self::GRANT_READ,
+            self::GRANT_ADD,
+            self::GRANT_EDIT,
+            self::GRANT_DELETE,
+            self::GRANT_ADMIN,
+        );
+    
+        return $allGrants;
     }
 }

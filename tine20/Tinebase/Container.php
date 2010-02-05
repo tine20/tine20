@@ -1112,7 +1112,7 @@ class Tinebase_Container
                 }
                 
                 foreach ($recordGrants as $grantName => $grant) {
-                    if (in_array($grantName, Tinebase_Model_Grants::$GRANTS_AVAILABLE) && $grant === TRUE) {
+                    if (in_array($grantName, $recordGrants->getAllGrants()) && $grant === TRUE) {
                         $this->containerAclTable->insert($data + array('account_grant' => $grantName));
                     }
                 }
