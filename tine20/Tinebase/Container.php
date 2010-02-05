@@ -154,16 +154,16 @@ class Tinebase_Container
                     array(
                         'account_id'     => $accountId,
                         'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                        Tinebase_Model_Container::READGRANT      => true,
-                        Tinebase_Model_Container::ADDGRANT       => true,
-                        Tinebase_Model_Container::EDITGRANT      => true,
-                        Tinebase_Model_Container::DELETEGRANT    => true,
-                        Tinebase_Model_Container::ADMINGRANT     => true
+                        Tinebase_Model_Grants::READGRANT      => true,
+                        Tinebase_Model_Grants::ADDGRANT       => true,
+                        Tinebase_Model_Grants::EDITGRANT      => true,
+                        Tinebase_Model_Grants::DELETEGRANT    => true,
+                        Tinebase_Model_Grants::ADMINGRANT     => true
                     ),            
                     array(
                         'account_id'      => '0',
                         'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                        Tinebase_Model_Container::READGRANT       => true
+                        Tinebase_Model_Grants::READGRANT       => true
                     )            
                 ));
             } else {
@@ -172,11 +172,11 @@ class Tinebase_Container
                     array(
                         'account_id'     => $accountId,
                         'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                        Tinebase_Model_Container::READGRANT      => true,
-                        Tinebase_Model_Container::ADDGRANT       => true,
-                        Tinebase_Model_Container::EDITGRANT      => true,
-                        Tinebase_Model_Container::DELETEGRANT    => true,
-                        Tinebase_Model_Container::ADMINGRANT     => true
+                        Tinebase_Model_Grants::READGRANT      => true,
+                        Tinebase_Model_Grants::ADDGRANT       => true,
+                        Tinebase_Model_Grants::EDITGRANT      => true,
+                        Tinebase_Model_Grants::DELETEGRANT    => true,
+                        Tinebase_Model_Grants::ADMINGRANT     => true
                     )            
                 ));
             }
@@ -1088,7 +1088,7 @@ class Tinebase_Container
         if ($_failSafe) {
             $adminGrant = FALSE;
             foreach ($_grants as $recordGrants) {
-                if ($recordGrants->{Tinebase_Model_Container::ADMINGRANT}) {
+                if ($recordGrants->{Tinebase_Model_Grants::ADMINGRANT}) {
                     $adminGrant = TRUE;
                 }
             }

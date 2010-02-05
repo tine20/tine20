@@ -18,6 +18,16 @@
  *  */
 class Tinebase_Model_Grants extends Tinebase_Record_Abstract
 {
+    
+    /**
+     * constants for default grants
+     */
+    const READGRANT     = 'readGrant';
+    const ADDGRANT      = 'addGrant';
+    const EDITGRANT     = 'editGrant';
+    const DELETEGRANT   = 'deleteGrant';
+    const ADMINGRANT    = 'adminGrant';
+    
 	/**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier

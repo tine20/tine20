@@ -180,17 +180,17 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* table  */ array('physgrants' => $this->_tablePrefix . 'container_acl'), 
             /* on     */ $this->_db->quoteIdentifier('physgrants.container_id') . ' = ' . $this->_db->quoteIdentifier('cal_events.container_id'),
             /* select */ array(
-                Tinebase_Model_Container::READGRANT => "\n MAX( \n" .
+                Tinebase_Model_Grants::READGRANT => "\n MAX( \n" .
                     '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Container::GRANT_READ) . " OR \n" . 
                     '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Container::GRANT_READ) . " OR \n" .
                     '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Container::GRANT_READ) . " \n" .
                  ")",
-                Tinebase_Model_Container::EDITGRANT => "\n MAX( \n" .
+                Tinebase_Model_Grants::EDITGRANT => "\n MAX( \n" .
                     '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Container::GRANT_EDIT) . " OR \n" . 
                     '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Container::GRANT_EDIT) . " OR \n" .
                     '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Container::GRANT_EDIT) . " \n" .
                  ")",
-                Tinebase_Model_Container::DELETEGRANT => "\n MAX( \n" .
+                Tinebase_Model_Grants::DELETEGRANT => "\n MAX( \n" .
                     '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Container::GRANT_DELETE) . " OR \n" . 
                     '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Container::GRANT_DELETE) . " OR \n" .
                     '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Container::GRANT_DELETE) . " \n" .

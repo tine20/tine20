@@ -244,7 +244,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         'type'      => Calendar_Model_FreeBusy::FREEBUSY_BUSY,
                     ), true);
                     
-                    if ($event->{Tinebase_Model_Container::READGRANT}) {
+                    if ($event->{Tinebase_Model_Grants::READGRANT}) {
                         $fbInfo->event = clone $event;
                         unset($fbInfo->event->attendee);
                     }

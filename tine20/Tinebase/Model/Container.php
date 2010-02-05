@@ -33,35 +33,30 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      *
      */
     const GRANT_READ = 1;
-    const READGRANT = 'readGrant';
 
     /**
      * constant for add grant
      *
      */
     const GRANT_ADD = 2;
-    const ADDGRANT = 'addGrant';
 
     /**
      * constant for edit grant
      *
      */
     const GRANT_EDIT = 4;
-    const EDITGRANT = 'editGrant';
 
     /**
      * constant for delete grant
      *
      */
     const GRANT_DELETE = 8;
-    const DELETEGRANT = 'deleteGrant';
 
     /**
      * constant for admin grant
      *
      */
     const GRANT_ADMIN = 16;
-    const ADMINGRANT = 'adminGrant';
 
     /**
      * constant for all grants
@@ -95,11 +90,11 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * @var array
      */
     public static $GRANTNAMEMAP = array(
-        self::GRANT_READ    => self::READGRANT,
-        self::GRANT_ADD     => self::ADDGRANT,
-        self::GRANT_EDIT    => self::EDITGRANT,
-        self::GRANT_DELETE  => self::DELETEGRANT,
-        self::GRANT_ADMIN   => self::ADMINGRANT
+        self::GRANT_READ    => Tinebase_Model_Grants::READGRANT,
+        self::GRANT_ADD     => Tinebase_Model_Grants::ADDGRANT,
+        self::GRANT_EDIT    => Tinebase_Model_Grants::EDITGRANT,
+        self::GRANT_DELETE  => Tinebase_Model_Grants::DELETEGRANT,
+        self::GRANT_ADMIN   => Tinebase_Model_Grants::ADMINGRANT
     );
     
 	/**
