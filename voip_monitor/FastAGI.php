@@ -34,39 +34,79 @@ class FastAGI extends VoipMonitor_Daemon
         $socketPath = $this->_config->general->get('socket', 'tcp://localhost:4573');
         $this->_serverSocket = $this->_createServerSocket($socketPath);
         $this->_handleServerConnections($this->_serverSocket);
-        //$this->_closeSocket();
+        #$this->_closeSocket();
     }  
-        
+
+    /**
+     * execute agi busy command
+     */
     public function busy()
     {
         $this->_command('busy');
     }
-    
+
+    /*
+     * execute agi answer command
+     */
     public function answer()
     {
         $this->_command('answer');
     }
     
+    /*
+     * execute agi hangup command
+     */
     public function hangup()
     {
         $this->_command('HANGUP');
     }
     
+    /**
+     * execute agi get data command
+     * 
+     * @param $_filename
+     * @param $_timeout
+     * @param $_maxDigits
+     * @return unknown_type
+     */
     public function getData($_filename, $_timeout=2000, $_maxDigits = null)
     {
         $result = $this->_command('GET DATA '. $_filename . ' ' . $_timeout . ' '. $_maxDigits);
     }
     
+    /**
+     * execute agi send text command
+     * 
+     * @param $_text
+     * @return unknown_type
+     */
     public function sendText($_text)
     {
         $result = $this->_command('SEND TEXT "'. $_text . '"');
     }
     
+    /**
+     * execute agi noop command
+     * 
+     * @param $_text
+     * @return unknown_type
+     */
     public function noop($_text)
     {
         $result = $this->_command('NOOP "'. $_text . '"');
     }
     
+    /**
+     * 
+     * @param $_filename
+     * @param $_format
+     * @param $_escapeDigits
+     * @param $_timeout
+     * @param $_beep
+     * @param $_offset
+     * @param $_silence
+     * @return unknown_type
+     */
     public function recordFile($_filename, $_format, $_escapeDigits, $_timeout, $_beep = false, $_offset = 0, $_silence = false)
     {
         $beep = $_beep !== false ? 'BEEP' : '';
@@ -74,11 +114,24 @@ class FastAGI extends VoipMonitor_Daemon
         $result = $this->_command("RECORD FILE $_filename $_format $_escapeDigits $_timeout $_offset $beep");
     }
     
+    /**
+     * 
+     * @param $_variable
+     * @param $_value
+     * @return unknown_type
+     */
     public function setVariable($_variable, $_value)
     {
         $result = $this->_command('SET VARIABLE '. $_variable . ' "' . $_value . '"');
     }
     
+    /**
+     * 
+     * @param $_filename
+     * @param $_escapeDigits
+     * @param $_offset
+     * @return unknown_type
+     */
     public function streamFile($_filename, $_escapeDigits = null, $_offset = null)
     {
         $escapeDigits = $_escapeDigits !== null ? $_escapeDigits : '""';
@@ -87,6 +140,12 @@ class FastAGI extends VoipMonitor_Daemon
         $result = $this->_command("STREAM FILE $_filename $escapeDigits$offset");
     }
     
+    /**
+     * 
+     * @param $_digits
+     * @param $_escapeDigits
+     * @return unknown_type
+     */
     public function sayDigits($_digits, $_escapeDigits = null)
     {
         $escapeDigits = $_escapeDigits !== null ? $_escapeDigits : '""';
@@ -94,19 +153,36 @@ class FastAGI extends VoipMonitor_Daemon
         $result = $this->_command('SAY DIGITS '. $_digits . ' ' . $escapeDigits);
     }
     
+    /**
+     * 
+     * @param $_time
+     * @param $_digits
+     * @return unknown_type
+     */
     public function sayTime($_time, $_digits = 0)
     {
         $result = $this->_command('SAY TIME '. $_time . ' ' . $_digits);
     }
     
+    /**
+     * 
+     * @param $_callerId
+     * @return unknown_type
+     */
     public function setCallerId($_callerId)
     {
         $result = $this->_command('set callerid '. $_callerId);
     }
     
+    /**
+     * 
+     * @param $_text
+     * @param $_level
+     * @return unknown_type
+     */
     public function verbose($_text, $_level=1)
     {
-        $result = $this->_command('verbose ' . $_text . ' ' . $_level);
+        $result = $this->_command('verbose "' . $_text . '" ' . $_level);
     }
     
     /**
@@ -131,6 +207,12 @@ class FastAGI extends VoipMonitor_Daemon
         return $result;
     }
     
+    /**
+     * 
+     * @param unknown_type $_command
+     * @param unknown_type $_timeout
+     * @return unknown_type
+     */
     protected function _command($_command, $_timeout = 2000)
     {
         $result = $this->_writeSocket($this->_clientConnection, $_command);
@@ -147,6 +229,11 @@ class FastAGI extends VoipMonitor_Daemon
         return $result;
     }
     
+    /**
+     * 
+     * @param unknown_type $_command
+     * @return unknown_type
+     */
     protected function _execute($_command)
     {
         $command = 'EXEC ' . $_command;
@@ -157,34 +244,41 @@ class FastAGI extends VoipMonitor_Daemon
         echo $response . PHP_EOL;
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see VoipMonitor/VoipMonitor_Daemon#_handleClient()
+     */
     protected function _handleClient()
     {
-        $variables = $this->_loadAGIVariables();
-
-        #var_dump($variables);
-
-        $className = $variables['className'];
-        $method    = $variables['method'];
+        try {
+            $variables = $this->_loadAGIVariables();
+    
+            $className = $variables['className'];
+            $method    = $variables['method'];
         
-        if(!@class_exists($className)) {
-            throw new Exception("class $className not found");
-        }
-        
-        $reflectionClass = new Zend_Reflection_Class($className);
-        if(!$reflectionClass->hasMethod($method)) {
-            throw new Exception("method $method not found in class $className");
-        }
-        
-        $params = array();
-        $reflectionMethod = $reflectionClass->getMethod($method);
-        foreach($reflectionMethod->getParameters() as $parameter) {
-            if(array_key_exists($parameter->name, $variables)) {
-                $params[$parameter->name] = $variables[$parameter->name];
+            if(!@class_exists($className)) {
+                throw new UnexpectedValueException("class $className not found");
             }
-        }
-
-        $application = new $className($this, $variables);
-        return call_user_func_array(array($application, $method), $params);
+            
+            $reflectionClass = new Zend_Reflection_Class($className);
+            if(!$reflectionClass->hasMethod($method)) {
+                throw new UnexpectedValueException("method $method not found in class $className");
+            }
+            
+            $params = array();
+            $reflectionMethod = $reflectionClass->getMethod($method);
+            foreach($reflectionMethod->getParameters() as $parameter) {
+                if(array_key_exists($parameter->name, $variables)) {
+                    $params[$parameter->name] = $variables[$parameter->name];
+                }
+            }
+    
+            $application = new $className($this, $variables);
+            
+            call_user_func_array(array($application, $method), $params);
+        } catch (Exception $e) {
+            $this->_writeSocket($this->_clientConnection, $e->getMessage() . PHP_EOL);
+        } 
     }
     
     /**
@@ -203,8 +297,8 @@ class FastAGI extends VoipMonitor_Daemon
             $variables[$key] = $value;
         }
 
-        if(!array_key_exists('agi_network_script', $variables)) {
-            throw new Exception('AGI variable agi_network_script not found');
+        if(!array_key_exists('agi_request', $variables)) {
+            throw new UnexpectedValueException('AGI variable agi_request not found');
         }
         
         $requestInfo = parse_url($variables['agi_request']);
@@ -221,17 +315,5 @@ class FastAGI extends VoipMonitor_Daemon
         }
         
         return $variables;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see VoipMonitor/VoipMonitor_Daemon#handleSigTERM($signal)
-     */
-    #public function handleSigTERM($signal)
-    #{
-    #    echo "Caught SigTERM/INT... " . PHP_EOL;
-    #    $this->_frontend->stopHandleEvents();
-    #    $this->_backend->logout();
-    #    //exit(); 
-    #}
+    }    
 }
