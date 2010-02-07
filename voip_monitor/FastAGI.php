@@ -215,7 +215,7 @@ class FastAGI extends VoipMonitor_Daemon
      */
     protected function _command($_command, $_timeout = 2000)
     {
-        $result = $this->_writeSocket($this->_clientConnection, $_command);
+        $result = $this->_writeSocket($this->_clientConnection, $_command . PHP_EOL);
         
         $response = $this->_readSocket($this->_clientConnection, $_timeout);
         
@@ -224,7 +224,7 @@ class FastAGI extends VoipMonitor_Daemon
         }
         
         $result = substr($response, 4);
-        echo $result . PHP_EOL;
+        #echo $result . PHP_EOL;
         
         return $result;
     }
@@ -241,7 +241,7 @@ class FastAGI extends VoipMonitor_Daemon
         
         $response = $this->_readSocket($this->_clientConnection);
         
-        echo $response . PHP_EOL;
+        #echo $response . PHP_EOL;
     }
     
     /**
@@ -277,7 +277,7 @@ class FastAGI extends VoipMonitor_Daemon
             
             call_user_func_array(array($application, $method), $params);
         } catch (Exception $e) {
-            $this->_writeSocket($this->_clientConnection, $e->getMessage() . PHP_EOL);
+            $this->verbose($e->getMessage());
         } 
     }
     
