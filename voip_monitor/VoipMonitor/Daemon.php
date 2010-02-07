@@ -61,21 +61,34 @@ abstract class VoipMonitor_Daemon
         }        
         
         $configPath = (isset($options->config)) ? $options->config : $this->_configPath;
-        $this->_config = $this->_getConfig($configPath);
+        $this->_config = $this->_loadConfig($configPath);
         
-        // $this->_changeIdentity($uid, $gid);
+        if(isset($this->_config->general->user) && isset($this->_config->general->group)) {
+            $this->_changeIdentity($this->_config->general->user, $this->_config->general->group);
+        }
     }
     
-    protected function _changeIdentity($uid, $gid)
+    public function getConfig()
     {
-        if( !posix_setgid( $gid )) { 
-            print "Unable to setgid to " . $gid . "!\n";    
-            exit;
+        return $this->_config;
+    }
+    
+    protected function _changeIdentity($_username, $_groupname)
+    {
+        if(($userInfo = posix_getpwnam($_username)) === false) {
+            throw new RuntimeException("user $_username not found");
         }
         
-        if( !posix_setuid( $uid )) { 
-            print "Unable to setuid to " . $uid . "!\n";    
-            exit;
+        if(($groupInfo = posix_getgrnam($_groupname)) === false) {
+            throw new RuntimeException("group $_groupname not found");
+        }
+
+        if(posix_setgid($groupInfo['gid']) !== true) { 
+            throw new RuntimeException("failed to change group to $_groupname");
+        }
+        
+        if(posix_setuid($userInfo['uid']) !== true) { 
+            throw new RuntimeException("failed to change user to $_username");        
         }
     }
     
@@ -84,7 +97,7 @@ abstract class VoipMonitor_Daemon
      * @param string $_path
      * @return Zend_Config_Ini
      */
-    protected function _getConfig($_path)
+    protected function _loadConfig($_path)
     {
         try {
             $config = new Zend_Config_Ini($_path);
@@ -106,7 +119,7 @@ abstract class VoipMonitor_Daemon
         $childPid = pcntl_fork();
         
         if($childPid < 0) {
-            fwrite(STDERR, "Something went wrong while forking to background" . PHP_EOL);
+            #fwrite(STDERR, "Something went wrong while forking to background" . PHP_EOL);
             exit(1);
         }
         
@@ -131,7 +144,7 @@ abstract class VoipMonitor_Daemon
         $childPid = pcntl_fork();
         
         if($childPid < 0) {
-            fwrite(STDERR, "Something went wrong while forking to background" . PHP_EOL);
+            #fwrite(STDERR, "Something went wrong while forking to background" . PHP_EOL);
             exit;
         }
         
@@ -180,7 +193,7 @@ abstract class VoipMonitor_Daemon
     {
         $socket = stream_socket_server($_socketName, $errno, $errstr);
         if (!$socket) {
-            fwrite(STDERR, "Failed to open socket: $errstr ($errno)" . PHP_EOL);
+            #fwrite(STDERR, "Failed to open socket: $errstr ($errno)" . PHP_EOL);
             exit(1);
         }
         
@@ -234,6 +247,11 @@ abstract class VoipMonitor_Daemon
         return $result;
     }
     
+    /**
+     * abstract function to handle client connection 
+     */
+    abstract protected function _handleClient();
+    
     protected function _handleServerConnections($socket)
     {
         while(is_resource($socket)) {
@@ -272,10 +290,7 @@ abstract class VoipMonitor_Daemon
      */
     public function handleSigTERM($signal)
     {
-        fwrite(STDERR, "Handle SigTERM" . PHP_EOL);
-        #var_dump($this->_children);
         foreach($this->_children as $pid) {
-            #echo "Kill $pid" . PHP_EOL;
             posix_kill($pid, SIGTERM);
         }
         exit(0);
@@ -296,9 +311,7 @@ abstract class VoipMonitor_Daemon
      */
     public function handleSigCHLD($signal)
     {
-        echo posix_getpid() .  " Handle SIGCHILD" . PHP_EOL;
         while (($pid = pcntl_waitpid(-1, $status, WNOHANG)) > 0) {
-            echo "Child with PID $pid returned " . pcntl_wexitstatus($status) . PHP_EOL;
             unset($this->_children[$pid]);
         }
     }
