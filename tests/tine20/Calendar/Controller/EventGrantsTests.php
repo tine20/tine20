@@ -209,7 +209,25 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testPrivateViaAttendee()
     {
-        
+        $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', NULL, Calendar_Model_Event::CLASS_PRIVATE);
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+        $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_READ});
+        $this->assertFalse((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_EDIT});
+    }
+    
+    /**
+     * reads an private event of rwright with testuser as organizer
+     *  -> test user should have implicit read+edit grant
+     */
+    public function testPrivateViaOrganizer()
+    {
+        $persistentEvent = $this->_createEventInPersonasCalendar('rwright', NULL, 'rwright', Calendar_Model_Event::CLASS_PRIVATE);
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+        $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_READ});
+        $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_EDIT});
+        $this->assertFalse((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_DELETE});
     }
     
     /**
@@ -218,7 +236,10 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testPrivateViaAttendeeInherritance()
     {
-        
+        $persistentEvent = $this->_createEventInPersonasCalendar('pwulf', 'pwulf', 'sclever', Calendar_Model_Event::CLASS_PRIVATE);
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+        $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_READ});
     }
     
     protected function _createEventInPersonasCalendar($_calendarPersona, $_organizerPersona = NULL, $_attenderPersona = NULL, $_classification = Calendar_Model_Event::CLASS_PUBLIC)
