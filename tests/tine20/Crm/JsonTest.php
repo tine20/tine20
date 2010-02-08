@@ -180,6 +180,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertTrue($searchLeads['totalcount'] > 0);
         $this->assertTrue(isset($searchLeads['totalleadstates']) && count($searchLeads['totalleadstates']) > 0);
         $this->assertEquals($lead->description, $searchLeads['results'][0]['description']);
+        $this->assertEquals($lead->turnover*$lead->probability/100, $searchLeads['results'][0]['probableTurnover']);
         $this->assertTrue(count($searchLeads['results'][0]['relations']) == 3, 'did not get all relations');     
 
         // get related records and check relations

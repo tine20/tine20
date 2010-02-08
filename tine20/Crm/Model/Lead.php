@@ -64,6 +64,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'end'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'turnover'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'probableTurnover'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'probability'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'end_scheduled'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
     // linked objects

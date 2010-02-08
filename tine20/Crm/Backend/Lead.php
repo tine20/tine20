@@ -69,5 +69,27 @@ class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
         
         return $result;
     }
-    
+
+    /**
+     * get the basic select object to fetch records from the database
+     *  
+     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
+     * @param boolean $_getDeleted get deleted records (if modlog is active)
+     * @return Zend_Db_Select
+     */
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
+    {
+        $select = parent::_getSelect($_cols, $_getDeleted);
+        
+        // return probableTurnover (turnover * probability)
+        if ($_cols == '*' || array_key_exists('probableTurnover', (array)$_cols)) {
+            $select->columns(
+                array('probableTurnover' => '(' . $this->_db->quoteIdentifier($this->_tableName . '.turnover') 
+                    . '*' . $this->_db->quoteIdentifier($this->_tableName . '.probability') . '*0.01)'
+                )
+            );
+        }
+        
+        return $select;
+    }    
 }
