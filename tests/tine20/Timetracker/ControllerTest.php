@@ -395,7 +395,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'book_all'      => TRUE,
             'book_own'      => TRUE,
             'view_all'      => TRUE,
-            'export'        => TRUE,
+            Timetracker_Model_TimeaccountGrants::EXPORT  => TRUE,
         )));    
         Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
             $this->_objects['timeaccount'],
