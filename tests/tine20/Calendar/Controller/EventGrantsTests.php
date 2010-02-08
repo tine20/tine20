@@ -43,7 +43,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
          * 
          *  jsmith:    anyone readGrant, addGrant, editGrant, deleteGrant
          *  pwulf:     anyone readGrant, sclever addGrant, readGrant, editGrant, deleteGrant, privateGrant
-         *  sclever:   testuser addGrant, readGrant, editGrant, deleteGrant
+         *  sclever:   testuser addGrant, readGrant, editGrant, deleteGrant, privateGrant
          *  jmcblack:  prim group of testuser readGrant, testuser privateGrant
          *  rwright:   sclever has readGrant and editGrant
          */
@@ -179,33 +179,40 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     }
     
     /**
-     * 
-     *
-    public function testSetAttendeeStatusViaSaveEvent()
+     * reads an private event of jmcblack
+     *  -> test user has private grant
+     */
+    public function testPrivateViaContainer()
     {
-        $event = $this->_getEvent();
-        $event->attendee = $this->_getAttendee();
-        unset($event->attendee[1]);
         
-        print_r($event->toArray());
-        
-        $eventData = $this->testCreateEvent();
-        $eventData['container_id'] = $eventData['container_id']['id'];
-        
-        // should be ok to only test test user
-        $eventData['attendee'][0]['status'] = Calendar_Model_Attender::STATUS_TENTATIVE;
-        $eventData['summary'] = 'This text must not be saved!';
-        
-        // force attendee saving w.o. event saving  
-        $eventData[Tinebase_Model_Grants::GRANT_EDIT] = false;
-        
-        $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
-        
-        $loadedEventData = $this->_uit->getEvent($eventData['id']);
-        $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $eventData['attendee'][0]['status']);
-        $this->assertNotEquals($eventData['summary'], $loadedEventData['summary'], 'event must not be updated!');
     }
-    */
+    
+    /**
+     * attempt to read an private event of pwulf
+     *  -> test user has no private grant
+     */
+    public function testPrivateViaContainerFail()
+    {
+        
+    }
+    
+    /**
+     * reads an private event of rwright with testuser as attender
+     *  -> test user should have implicit read grant
+     */
+    public function testPrivateViaAttendee()
+    {
+        
+    }
+    
+    /**
+     * reads an private event of pwulf and sclever
+     *  -> test user has private grant for sclever
+     */
+    public function testPrivateViaAttendeeInherritance()
+    {
+        
+    }
     
     protected function _createEventInPersonasCalendar($_calendarPersona, $_organizerPersona = NULL, $_attenderPersona = NULL)
     {
@@ -236,7 +243,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      * 
      *  jsmith:    anyone readGrant, addGrant, editGrant, deleteGrant
      *  pwulf:     anyone readGrant, sclever addGrant, readGrant, editGrant, deleteGrant, privateGrant
-     *  sclever:   testuser addGrant, readGrant, editGrant, deleteGrant
+     *  sclever:   testuser addGrant, readGrant, editGrant, deleteGrant, privateGrant
      *  jmcblack:  prim group of testuser readGrant, testuser privateGrant
      *  rwright:   sclever has readGrant and editGrant
      */
@@ -289,7 +296,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADMIN    => false,
         ))), true);
         
-        // sclever:   testuser addGrant, readGrant, editGrant, deleteGrant
+        // sclever:   testuser addGrant, readGrant, editGrant, deleteGrant, privateGrant
         Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['sclever'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => $this->_personas['sclever']->getId(),
             'account_type'  => 'user',
@@ -305,6 +312,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => false,
         ))), true);
         
