@@ -15,7 +15,7 @@
  * In the calendar application, the container grants concept is slightly extended:
  *  1. GRANTS for events are not only based on the events "calendar" (technically 
  *     a container) but additionally a USER gets implicit grants for a event if 
- *     he is ATTENDER (+READ GRANT) or ORGANIZER (+READ,EDIT,DELETE GRANT).
+ *     he is ATTENDER (+READ GRANT) or ORGANIZER (+READ,EDIT GRANT).
  *  2. ATTENDER which are invited to a certain "event" can assign the "event" to
  *     one of their personal calenders as "display calendar" (technically personal 
  *     containers they are admin of). The "display calendar" of an ATTENDER is
@@ -24,7 +24,7 @@
  *  3. The "effective GRANT" a USER has on a event (read/update/delete) is the 
  *     maximum GRANT of the following sources: 
  *      - container: GRANT the USER has to the calender of the event
- *      - implicit:  Additional READ GRANT for an attender and READ,EDIT,DELETE
+ *      - implicit:  Additional READ GRANT for an attender and READ,EDIT
  *                   GRANT for the organizer.
  *      - inherited: GRANT the USER has to a the "display calendar" of an ATTENDER 
  *                   of the event, LIMITED by the maximum GRANT the ATTENDER has 
