@@ -49,6 +49,16 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     protected $_attendeeBackend = NULL;
     
     /**
+     * list of record based grants
+     */
+    protected $_recordBasedGrants = array(
+        Tinebase_Model_Grants::GRANT_READ, 
+        Tinebase_Model_Grants::GRANT_EDIT, 
+        Tinebase_Model_Grants::GRANT_DELETE, 
+        Tinebase_Model_Grants::GRANT_PRIVATE
+    );
+    
+    /**
      * the constructor
      *
      * @param Zend_Db_Adapter_Abstract $_db optional
@@ -195,6 +205,11 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                     '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Grants::GRANT_DELETE) . " OR \n" .
                     '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Grants::GRANT_DELETE) . " \n" .
                  ")",
+                Tinebase_Model_Grants::GRANT_PRIVATE => "\n MAX( \n" .
+                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Grants::GRANT_PRIVATE) . " OR \n" . 
+                    '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Grants::GRANT_PRIVATE) . " OR \n" .
+                    '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Grants::GRANT_PRIVATE) . " \n" .
+                 ")",
             ));
     }
     
@@ -203,7 +218,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * returns SQL with container grant condition 
      *
      * @param  string                               $_aclTableName
-     * @param  int|array                            $_requiredGrant (defaults none)
+     * @param  string                               $_groupMembersTableName
+     * @param  string|array                         $_requiredGrant (defaults none)
      * @param  Zend_Db_Expr|int|Tinebase_Model_User $_user (defaults current user)
      * @return string
      */
@@ -223,9 +239,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) . ' AND ' . $this->_db->quoteIdentifier("$_groupMembersTableName.group_id") . " = $quoteIdIdentifier" . ')' . 
                $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?)", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
         
-        
         if ($_requiredGrant) {
             $sql = "($sql) AND " . $this->_db->quoteInto($this->_db->quoteIdentifier($_aclTableName . '.account_grant') . ' IN (?)', (array)$_requiredGrant);
+            
         }
         
         return "($sql)";
@@ -234,7 +250,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * returns SQL condition for implicit grants
      *
-     * @param  int                      $_requiredGrant
+     * @param  string               $_requiredGrant
      * @param  Tinebase_Model_User  $_user (defaults to current user)
      * @return string
      */
@@ -243,13 +259,16 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $accountId = $_user ? $_user->getId() : Tinebase_Core::getUser()->getId();
         $contactId = $_user ? $user->contact_id : Tinebase_Core::getUser()->contact_id;
         
-        if (! in_array($_requiredGrant, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_EDIT))) {
+        // delte grant couldn't be gained implicitly
+        if ($_requiredGrant == Tinebase_Model_Grants::GRANT_DELETE) {
             return '1=0';
         }
         
+        // organizer gets all other grants implicitly
         $sql = $this->_db->quoteIdentifier('cal_events.organizer') . " = " . $this->_db->quote($contactId);
         
-        if ($_requiredGrant == Tinebase_Model_Grants::GRANT_READ) {
+        // attendee get read and private grants implicitly
+        if (in_array($_requiredGrant, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_PRIVATE))) {
             $readCond = $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . ' = ?', Calendar_Model_Attender::USERTYPE_USER) . 
                    ' AND ' .  $this->_db->quoteIdentifier('attendeecontacts.account_id') . ' = ' . $this->_db->quote($accountId);
             
@@ -262,7 +281,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * returns SQL for inherited grants
      *
-     * @param  int $_requiredGrant
+     * @param  string $_requiredGrant
      * @return string
      */
     protected function _getInheritedGrantCondition($_requiredGrant)
