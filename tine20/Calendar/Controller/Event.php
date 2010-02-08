@@ -271,17 +271,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /**
      * get list of records
      *
-     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
-     * @param Tinebase_Model_Pagination|optional $_pagination
-     * @param bool $_getRelations
-     * @param boolean $_onlyIds
+     * @param Tinebase_Model_Filter_FilterGroup|optional    $_filter
+     * @param Tinebase_Model_Pagination|optional            $_pagination
+     * @param bool                                          $_getRelations
+     * @param boolean                                       $_onlyIds
+     * @param string                                        $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
-     * 
-     * @todo create filter group if it is NULL to make sure that acl filter is applied correctly ?
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
-        $events = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds);
+        $events = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         
         if (! $_onlyIds) {
         	$events->doFreeBusyCleanup();
