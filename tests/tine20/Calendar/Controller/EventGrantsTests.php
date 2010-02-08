@@ -197,7 +197,10 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testPrivateViaContainerFail()
     {
+        $persistentEvent = $this->_createEventInPersonasCalendar('pwulf', 'pwulf', 'pwulf', Calendar_Model_Event::CLASS_PRIVATE);
         
+        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
     }
     
     /**
