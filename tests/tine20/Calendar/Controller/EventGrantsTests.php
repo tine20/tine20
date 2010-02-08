@@ -184,7 +184,11 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testPrivateViaContainer()
     {
-        
+        $persistentEvent = $this->_createEventInPersonasCalendar('jmcblack', 'jmcblack', 'jmcblack', Calendar_Model_Event::CLASS_PRIVATE);
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+        $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_READ});
+        $this->assertFalse((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_DELETE});
     }
     
     /**
@@ -214,13 +218,14 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         
     }
     
-    protected function _createEventInPersonasCalendar($_calendarPersona, $_organizerPersona = NULL, $_attenderPersona = NULL)
+    protected function _createEventInPersonasCalendar($_calendarPersona, $_organizerPersona = NULL, $_attenderPersona = NULL, $_classification = Calendar_Model_Event::CLASS_PUBLIC)
     {
         $calendarId  = $this->_personasDefaultCals[$_calendarPersona]->getId();
         $organizerId = $_organizerPersona ? $this->_personasContacts[$_organizerPersona]->getId() : $this->_testUserContact->getId();
         $attenderId  = $_attenderPersona ? $this->_personasContacts[$_attenderPersona]->getId() : $this->_testUserContact->getId();
         
         $event = $this->_getEvent();
+        $event->class = $_classification;
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array(
                 'user_id'        => $attenderId,
@@ -257,6 +262,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
         ), array(
             'account_id'    => 0,
@@ -276,6 +282,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
         ), array(
             'account_id'    => 0,
@@ -304,6 +311,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
         ),array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
@@ -324,6 +332,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
         ),array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
@@ -352,6 +361,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
         ), array(
             'account_id'    => $this->_personas['sclever']->getId(),
@@ -377,6 +387,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
 	            Tinebase_Model_Grants::GRANT_ADD      => true,
 	            Tinebase_Model_Grants::GRANT_EDIT     => true,
 	            Tinebase_Model_Grants::GRANT_DELETE   => true,
+	            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
 	            Tinebase_Model_Grants::GRANT_ADMIN    => true,
 	        ))), true);
 	        
