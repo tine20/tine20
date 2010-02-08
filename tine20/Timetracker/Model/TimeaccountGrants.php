@@ -10,7 +10,7 @@
  * @version     $Id$
  *
  * @todo        extend Tinebase_Model_Grants?
- * @todo        maping is obsolete, as container class supports strings now!
+ * @todo        mapping is obsolete, as container class supports strings now!
  */
 
 /**
@@ -46,6 +46,12 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     const MANAGE_BILLABLE = Tinebase_Model_Grants::GRANT_DELETE;
 
     /**
+     * constant for export grant (GRANT_EXPORT)
+     *
+     */
+    const EXPORT = Tinebase_Model_Grants::GRANT_EXPORT;
+    
+    /**
      * constant for manage all / admin grant (GRANT_ADMIN)
      *
      */
@@ -61,6 +67,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
         Tinebase_Model_Grants::GRANT_ADD      => 'view_all',
         Tinebase_Model_Grants::GRANT_EDIT     => 'book_all',
         Tinebase_Model_Grants::GRANT_DELETE   => 'manage_billable',
+        Tinebase_Model_Grants::GRANT_EXPORT   => 'export',
         Tinebase_Model_Grants::GRANT_ADMIN    => 'manage_all'
     );
     
@@ -123,6 +130,12 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
                 'allowEmpty' => TRUE
             ),
             'manage_billable' => array(
+                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
+                'default' => FALSE,
+                'presence' => 'required',
+                'allowEmpty' => TRUE
+            ),
+            self::EXPORT => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE,
                 'presence' => 'required',
@@ -368,6 +381,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
                 Tinebase_Model_Grants::GRANT_ADD      => $grant->view_all,
                 Tinebase_Model_Grants::GRANT_EDIT     => $grant->book_all,
                 Tinebase_Model_Grants::GRANT_DELETE   => $grant->manage_billable,
+                Tinebase_Model_Grants::GRANT_EXPORT   => $grant->{self::EXPORT},
                 Tinebase_Model_Grants::GRANT_ADMIN    => $grant->manage_all
             )));
         }

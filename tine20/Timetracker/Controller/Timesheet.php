@@ -297,6 +297,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 break;
             case 'export':
                 $_filter->setRequiredGrants(array(
+                    Timetracker_Model_TimeaccountGrants::EXPORT,
                     Timetracker_Model_TimeaccountGrants::MANAGE_ALL,
                 ));
                 break;

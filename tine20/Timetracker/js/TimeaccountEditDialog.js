@@ -222,25 +222,36 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 new Ext.ux.grid.CheckColumn({
                     header: this.app.i18n._('Book Own'),
                     dataIndex: 'book_own',
+                    tooltip: _('The grant to add Timesheets to this Timeaccount'),
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
                     header: this.app.i18n._('View All'),
+                    tooltip: _('The grant to view Timesheetsof other users'),
                     dataIndex: 'view_all',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
                     header: this.app.i18n._('Book All'),
+                    tooltip: _('The grant to add Timesheets for other users'),
                     dataIndex: 'book_all',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
                     header:this.app.i18n. _('Manage Clearing'),
+                    tooltip: _('The grant to manage clearing of Timesheets'),
                     dataIndex: 'manage_billable',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
+                    header:this.app.i18n. _('Export'),
+                    tooltip: _('The grant to export Timesheets of Timeaccount'),
+                    dataIndex: 'export',
+                    width: 55
+                }),
+                new Ext.ux.grid.CheckColumn({
                     header: this.app.i18n._('Manage All'),
+                    tooltip: _('Includes all other grants'),
                     dataIndex: 'manage_all',
                     width: 55
                 })

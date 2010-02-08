@@ -287,6 +287,23 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         
         $this->_grantTestHelper($grants, 'searchTS', 1);
     }
+
+    /**
+     * test to search TSs for export
+     *
+     */
+    public function testSearchTSExport()
+    {
+        $ts = $this->_timesheetController->create($this->_objects['timesheet']);
+        
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            Timetracker_Model_TimeaccountGrants::EXPORT   => TRUE,
+        )));        
+        
+        $this->_grantTestHelper($grants, 'searchTSExport', 1, $ts);
+    }
     
     /**
      * try to add a Timesheet exceeding deadline
@@ -360,6 +377,11 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
                 $result = $this->_timesheetController->search($filter);
                 $this->assertEquals($_expect, count($result));                
                 break;
+            case 'searchTSExport':
+                $filter = $this->_getTimesheetFilter();
+                $result = $this->_timesheetController->search($filter, NULL, FALSE, FALSE, 'export');
+                $this->assertEquals($_expect, count($result));                
+                break;
             default:
                 echo "nothing tested.";
         }
@@ -373,6 +395,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'book_all'      => TRUE,
             'book_own'      => TRUE,
             'view_all'      => TRUE,
+            'export'        => TRUE,
         )));    
         Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
             $this->_objects['timeaccount'],

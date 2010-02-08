@@ -86,6 +86,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
             'view_all'      => TRUE,
             'book_all'      => TRUE,
             'manage_billable' => TRUE,
+            Timetracker_Model_TimeaccountGrants::EXPORT        => TRUE,
             'manage_all'    => TRUE,
         )));
         
@@ -218,8 +219,6 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      * 
      * @param Timetracker_Model_TimeaccountFilter $_filter
      * @param string $_action
-     * 
-     * @todo add export grant here
      */
     public function checkFilterACL(/*Tinebase_Model_Filter_FilterGroup*/ $_filter, $_action = 'get')
     {
@@ -239,6 +238,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
                 break;
             case 'export':
                 $_filter->setRequiredGrants(array(
+                    Timetracker_Model_TimeaccountGrants::EXPORT,
                     Timetracker_Model_TimeaccountGrants::MANAGE_ALL,
                 ));
                 break;                
