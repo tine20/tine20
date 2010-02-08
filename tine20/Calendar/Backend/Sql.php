@@ -5,17 +5,17 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
 /**
- * native tine 2.0 events sql backend
+ * Native tine 2.0 events sql backend
  *
- * Events consists of the properties of Calendar_Model_Evnet except Tags and Notes 
+ * Events consists of the properties of Calendar_Model_Event except Tags and Notes 
  * which are as always handles by their controllers/backends
  * 
- * @todo add handling for class
+ * 
  * @package Calendar 
  */
 class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract

@@ -5,12 +5,51 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
 /**
  * Calendar Event Controller
+ * 
+ * In the calendar application, the container grants concept is slightly extended:
+ *  1. GRANTS for events are not only based on the events "calendar" (technically 
+ *     a container) but additionally a USER gets implicit grants for a event if 
+ *     he is ATTENDER (+READ GRANT) or ORGANIZER (+READ,EDIT,DELETE GRANT).
+ *  2. ATTENDER which are invited to a certain "event" can assign the "event" to
+ *     one of their personal calenders as "display calendar" (technically personal 
+ *     containers they are admin of). The "display calendar" of an ATTENDER is
+ *     stored in the attendee table.  Each USER has a default calendar, as 
+ *     PREFERENCE,  all invitations are assigned to.
+ *  3. The "effective GRANT" a USER has on a event (read/update/delete) is the 
+ *     maximum GRANT of the following sources: 
+ *      - container: GRANT the USER has to the calender of the event
+ *      - implicit:  Additional READ GRANT for an attender and READ,EDIT,DELETE
+ *                   GRANT for the organizer.
+ *      - inherited: GRANT the USER has to a the "display calendar" of an ATTENDER 
+ *                   of the event, LIMITED by the maximum GRANT the ATTENDER has 
+ *                   to the event. NOTE: that the ATTENDERS 'event' and _not_ 
+ *                   'calendar' is important to also inherit implicit GRANTS.
+ *  4. An Additional pseudo grant is the users PREFERENCE to grant all users to
+ *     view his free/busy information.
+ * 
+ * When Applying/Asuring grants, we have to deal with two differnt situations:
+ *  A: Check: Check individual grants on a event (record) basis.
+ *            This is required for CRUD actions and done by this controllers 
+ *            _checkGrant method.
+ *  B: Seach: From the grants perspective this is a multy step process
+ *            1. limiting the query (mixture of grants and filter)
+ *            2. transform event set (all events user has only free/busy grant 
+ *               for need to be cleaned)
+ * 
+ *  NOTE: To empower the client for enabling/disabling of actions based on the 
+ *        grants a user has to an event, we need to compute the "effective GRANT"
+ *        also for read/search operations
+ *                  
+ * Case A is not critical, as the amount of data is low and for CRUD operations
+ * performace is less important. Case B however is the hard one, as lots of
+ * calendars and events may be involved and performance is an issue.
+ * 
  * 
  * @todo add handling to fetch all exceptions of a given event set (ActiveSync Frontend)
  * 
