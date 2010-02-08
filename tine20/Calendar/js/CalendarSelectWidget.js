@@ -24,50 +24,13 @@ Ext.ns('Tine.Calendar');
 Tine.Calendar.CalendarSelectWidget = function(EventEditDialog) {
     this.EventEditDialog = EventEditDialog;
     
-    this.app = Tine.Tinebase.appMgr.get('Calendar');
-    this.recordClass = Tine.Calendar.Model.Event;
-    
-    this.currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
-    
-    this.calMapStore = new Ext.data.SimpleStore({
-        fields: this.calMapRecord
-    });
-    
-    this.initTpl();
-    
-    this.fakeCombo = new Ext.form.ComboBox({
-        mode          : 'local',
-        width         : 450,
-        store         : this.calMapStore,
-        tpl           : this.attendeeListTpl,
-        onSelect      : this.onCalMapSelect.createDelegate(this)
-    });
-    
-    this.calCombo = new Tine.widgets.container.selectionComboBox({
-        //id: this.app.appName + 'EditDialogPhysCalSelector',
-        fieldLabel: Tine.Tinebase.translation._hidden('Saved in'),
-        width: 450,
-        containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
-        containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
-        appName: this.app.appName,
-        requiredGrant: 'addGrant',
-        hideTrigger2: false,
-        trigger2Class: 'cal-invitation-trigger',
-        onTrigger2Click: this.fakeCombo.onTriggerClick.createDelegate(this.fakeCombo),
-        allowBlank: true,
-        listeners: {
-            scope: this,
-            beforequery: this.onBeforeCalComboQuery,
-            select: this.onCalComboSelect
-        }
-    });
-    
-    //this.EventEditDialog.attendeeStore.on('update', this.onAttendeUpdate, this);
-    
+    Tine.Calendar.CalendarSelectWidget.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
-    
+Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.Panel, {
+    layout: 'fit',
+
+    style: 'padding-right: 5px;',
     /**
      * Calmap record definition
      * 
@@ -162,6 +125,52 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
         }
     },
     
+    initComponent: function() {
+        this.app = Tine.Tinebase.appMgr.get('Calendar');
+        this.recordClass = Tine.Calendar.Model.Event;
+        
+        this.currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
+        
+        this.calMapStore = new Ext.data.SimpleStore({
+            fields: this.calMapRecord
+        });
+        
+        this.initTpl();
+        
+        this.fakeCombo = new Ext.form.ComboBox({
+            mode          : 'local',
+            hideMode      : 'visibility',
+            style         : {'position': 'absolute', 'top': '0px', 'right': '0px'},
+            store         : this.calMapStore,
+            tpl           : this.attendeeListTpl,
+            onSelect      : this.onCalMapSelect.createDelegate(this)
+        });
+        
+        this.calCombo = new Tine.widgets.container.selectionComboBox({
+            hideLabel: true,
+            containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
+            containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
+            appName: this.app.appName,
+            requiredGrant: 'addGrant',
+            hideTrigger2: false,
+            trigger2Class: 'cal-invitation-trigger',
+            onTrigger2Click: this.fakeCombo.onTriggerClick.createDelegate(this.fakeCombo),
+            allowBlank: true,
+            listeners: {
+                scope: this,
+                beforequery: this.onBeforeCalComboQuery,
+                select: this.onCalComboSelect
+            }
+        });
+        
+        this.items = [
+            this.calCombo,
+            this.fakeCombo
+        ];
+        
+        this.supr().initComponent.call(this);
+    },
+    
     initTpl: function() {
         this.attendeeListTpl = new Ext.XTemplate(
             '<tpl for=".">' +
@@ -226,6 +235,8 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
             this.currentCalMap = record;
             
             this.fakeCombo.collapse();
+            this.fakeCombo.hide();
+            
             this.fakeCombo.fireEvent('select', this.fakeCombo, record, index);
         }
     },
@@ -266,22 +277,8 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
         //console.log('todo: onRecordUpdate');
     },
     
-    /**
-     * render this widget to given element
-     * 
-     * @param {Ext.Element} el
-     */
-    render: function(el) {
-        this.el = el;
-        
-        new Ext.Panel({
-            layout: 'form',
-            border: false,
-            renderTo: el,
-            bodyStyle: {'background-color': '#F0F0F0'},
-            items: this.calCombo
-        });
-        
-        this.fakeCombo.render(this.el.insertFirst({tag: 'div', style: {'position': 'absolute', 'top': '0px', 'right': '0px'}}));
+    onResize: function(width, height) {
+        this.supr().onResize.apply(this, arguments);
+        this.fakeCombo.setWidth(width);
     }
 });

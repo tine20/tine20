@@ -41,12 +41,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: false,
     
     
-    afterRender: function() {
-        Tine.Calendar.EventEditDialog.superclass.afterRender.apply(this, arguments);
-        this.CalendarSelectWidget.render(Ext.get(Ext.query('div[class="cal-calselectwdgt"]')[0]));
-    },
-    
-    
     onResize: function() {
         Tine.Calendar.EventEditDialog.superclass.onResize.apply(this, arguments);
         this.setTabHeight.defer(100, this);
@@ -138,7 +132,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 boxLabel: this.app.i18n._('non-blocking'),
                                 name: 'transp',
                                 requiredGrant: 'editGrant',
-                                id: 'mycheckid',
+                                //id: 'mycheckid',
                                 getValue: function() {
                                     var bool = Ext.form.Checkbox.prototype.getValue.call(this);
                                     return bool ? 'TRANSPARENT' : 'OPAQUE';
@@ -148,6 +142,30 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     return Ext.form.Checkbox.prototype.setValue.call(this, bool);
                                 }
                             }]]
+                        }]
+                    },{
+                        xtype: 'fieldset',
+                        layout: 'hfit',
+                        autoHeight:true,
+                        title: Tine.Tinebase.translation._hidden('Saved in'),
+                        items: [{
+                            layout: 'column',
+                            items: [Ext.apply({columnWidth: .77}, this.CalendarSelectWidget), {
+                                columnWidth: .23,
+                                xtype: 'checkbox',
+                                hideLabel: true,
+                                boxLabel: this.app.i18n._('Private'),
+                                name: 'class',
+                                requiredGrant: 'editGrant',
+                                getValue: function() {
+                                    var bool = Ext.form.Checkbox.prototype.getValue.call(this);
+                                    return bool ? 'PRIVATE' : 'PUBLIC';
+                                },
+                                setValue: function(value) {
+                                    var bool = (value == 'PRIVATE' || value === true);
+                                    return Ext.form.Checkbox.prototype.setValue.call(this, bool);
+                                }
+                            }]
                         }]
                     }, {
                         xtype: 'tabpanel',
@@ -228,15 +246,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
-     * init container selector
-     */
-    initContainerSelector: function() {
-        this.fbar = [
-            '<div class="cal-calselectwdgt" />'
-        ].concat(this.fbar);
-    },
-    
-    /**
      * checks if form data is valid
      * 
      * @return {Boolean}
@@ -271,17 +280,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             dtEndField.undo();
         }
     },
-    
-    /*
-    onApplyChanges: function(button, event, closeWindow) {
-        if(this.isValid()) {
-            //this.loadMask.show();
-            this.onRecordUpdate();
-            
-            this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
-        }
-    },
-    */
     
     onDtEndChange: function(dtEndField, newValue, oldValue) {
         this.validateDtEnd();
