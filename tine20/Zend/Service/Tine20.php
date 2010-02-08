@@ -83,6 +83,8 @@ class Zend_Service_Tine20 extends Zend_Json_Client
      */
     public function login($loginname, $password)
     {
+        $this->setSkipSystemLookup(true);
+        
         $response = $this->call('Tinebase.login', array(
             'username'  => $loginname,
             'password'  => $password
@@ -98,6 +100,8 @@ class Zend_Service_Tine20 extends Zend_Json_Client
         
         $this->getIntrospector()->fetchSMD();
         
+        $this->setSkipSystemLookup(false);
+        
         return $response;
     }
 
@@ -108,13 +112,17 @@ class Zend_Service_Tine20 extends Zend_Json_Client
      */
     public function logout()
     {
+        $this->setSkipSystemLookup(true);
+        
         $response = $this->call('Tinebase.logout');
         
         $this->_jsonKey = null;
-        $this->_account = null
-        ;
+        $this->_account = null;
+        
         // unset header
         $this->getHttpClient()->setHeaders('X-Tine20-JsonKey');
+        
+        $this->setSkipSystemLookup(false);
         
         return $response;
     }
