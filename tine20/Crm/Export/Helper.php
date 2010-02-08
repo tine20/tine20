@@ -59,6 +59,23 @@ class Crm_Export_Helper
                     $value = '';
                 }
                 break;
+            case 'open_tasks':
+                $value = 0;
+                $taskStatus = Tasks_Controller_Status::getInstance()->getAllStatus();
+                foreach ($_record->relations as $relation) {
+                    // check if is task and open
+                    if ($relation->type == 'TASK') {
+                        $idx = $taskStatus->getIndexById($relation->related_record->status_id);
+                        if ($idx) {
+                            $status = $taskStatus[$idx];
+                            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($status->toArray(), TRUE)); 
+                            if ($status->status_is_open) {
+                                $value++;
+                            }
+                        }
+                    }
+                }
+                break;
             default:
                 $value = '';
         }

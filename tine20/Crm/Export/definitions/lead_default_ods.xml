@@ -100,5 +100,10 @@
             <header>Container ID</header>
             <type>container_id</type>
         </column>
+        <column>
+            <identifier>open_tasks</identifier>
+            <header>Open Tasks</header>
+            <type>open_tasks</type>
+        </column>
     </columns>
 </config>

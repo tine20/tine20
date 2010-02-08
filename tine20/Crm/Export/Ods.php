@@ -38,7 +38,14 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
      *
      * @var array
      */
-    protected $_specialFields = array('status', 'source', 'type');
+    protected $_specialFields = array('status', 'source', 'type', 'open_tasks');
+    
+    /**
+     * get record relations
+     * 
+     * @var boolean
+     */
+    protected $_getRelations = TRUE;    
     
     /**
      * get special field value
