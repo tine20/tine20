@@ -813,7 +813,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         switch ($_action) {
             case 'get':
                 // NOTE: free/busy is not a read grant!
-                $hasGrant = (bool) $_record->{Tinebase_Model_Grants::GRANT_READ};
+                $hasGrant = $_record->hasGrant(Tinebase_Model_Grants::GRANT_READ);
                 if (! $hasGrant) {
                 	$_record->doFreeBusyCleanup();
                 }
@@ -822,10 +822,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD);
                 break;
             case 'update':
-                $hasGrant = (bool) $_record->{Tinebase_Model_Grants::GRANT_EDIT};
+                $hasGrant = (bool) $_record->hasGrant(Tinebase_Model_Grants::GRANT_EDIT);
                 break;
             case 'delete':
-                $hasGrant = (bool) $_record->{Tinebase_Model_Grants::GRANT_DELETE};
+                $hasGrant = (bool) $_record->hasGrant(Tinebase_Model_Grants::GRANT_DELETE);
                 break;
         }
         
