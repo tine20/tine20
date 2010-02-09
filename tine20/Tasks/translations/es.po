@@ -1,0 +1,165 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Tasks\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: NOT SPECIFIED / ANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Acl/Rights.php:89
+msgid "manage shared task lists"
+msgstr ""
+
+#: Acl/Rights.php:90
+msgid "Create new shared tasks lists"
+msgstr ""
+
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr ""
+
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr ""
+
+#: js/EditDialog.js:173 js/GridPanel.js:94 js/GridPanel.js:171
+msgid "Summary"
+msgstr ""
+
+#: js/EditDialog.js:178
+msgid "Due date"
+msgstr ""
+
+#: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:184
+msgid "Priority"
+msgstr ""
+
+#: js/EditDialog.js:184
+msgid "Add Responsible ..."
+msgstr ""
+
+#: js/EditDialog.js:191
+msgid "Notes"
+msgstr ""
+
+#: js/EditDialog.js:192
+msgid "Enter description..."
+msgstr ""
+
+#: js/EditDialog.js:197
+msgid "Percentage"
+msgstr ""
+
+#: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:185
+msgid "Status"
+msgstr ""
+
+#: js/EditDialog.js:205
+msgid "Completed"
+msgstr ""
+
+#: js/GridPanel.js:56
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/GridPanel.js:93
+msgid "Quick search"
+msgstr ""
+
+#: js/GridPanel.js:95 js/GridPanel.js:182
+msgid "Due Date"
+msgstr ""
+
+#: js/GridPanel.js:96 js/GridPanel.js:238
+msgid "Responsible"
+msgstr ""
+
+#: js/GridPanel.js:120
+msgid "Failed"
+msgstr ""
+
+#: js/GridPanel.js:120
+msgid "Could not save task."
+msgstr ""
+
+#: js/GridPanel.js:167
+msgid "Tags"
+msgstr ""
+
+#: js/GridPanel.js:168
+msgid "Lead"
+msgstr ""
+
+#: js/GridPanel.js:178
+msgid "Add a task..."
+msgstr ""
+
+#: js/GridPanel.js:204 Model/Task.php:186
+msgid "Percent"
+msgstr ""
+
+#: js/GridPanel.js:231
+msgid "Creation Time"
+msgstr ""
+
+#: js/GridPanel.js:285
+msgid "Show closed"
+msgstr ""
+
+#: js/Status.js:45 Setup/setup.xml:339
+msgid "IN-PROCESS"
+msgstr ""
+
+#: js/Tasks.js:87
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Tasks.js:87
+msgid "Tasks"
+msgstr ""
+
+#: js/Tasks.js:91
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Tasks.js:91
+msgid "to do lists"
+msgstr ""
+
+#: Model/Task.php:181
+msgid "Due"
+msgstr ""
+
+#: Model/Task.php:182
+msgid "Organizer"
+msgstr ""
+
+#: Model/Task.php:183
+msgid "Description"
+msgstr ""
+
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr ""
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr ""
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr ""

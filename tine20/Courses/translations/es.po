@@ -1,0 +1,132 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Courses\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: NOT SPECIFIED / ANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Controller/Course.php:79
+msgid "teacher"
+msgstr ""
+
+#: Controller/Course.php:85
+msgid "Teacher"
+msgstr ""
+
+#: Controller/Course.php:86
+msgid "Teacher Account"
+msgstr ""
+
+#: Frontend/Json.php:240 js/CourseEditDialog.js:134 js/Models.js:42
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/CourseEditDialog.js:34
+msgid "Import course members"
+msgstr ""
+
+#: js/CourseEditDialog.js:150
+msgid "Course Name"
+msgstr ""
+
+#: js/CourseEditDialog.js:154 js/CourseEditDialog.js:161
+msgid "Course / School Type"
+msgstr ""
+
+#: js/CourseEditDialog.js:172
+msgid "Description"
+msgstr ""
+
+#: js/CourseEditDialog.js:178 js/CourseGridPanel.js:81
+msgid "Internet Access"
+msgstr ""
+
+#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:88
+msgid "Fileserver Access"
+msgstr ""
+
+#: js/CourseEditDialog.js:215
+msgid "Members"
+msgstr ""
+
+#: js/CourseEditDialog.js:241
+msgid "Login"
+msgstr ""
+
+#: js/CourseEditDialog.js:247
+msgid "Reset Password"
+msgstr ""
+
+#: js/CourseEditDialog.js:265
+msgid "Set new password"
+msgstr ""
+
+#: js/CourseEditDialog.js:265
+msgid "Please enter the new password:"
+msgstr ""
+
+#: js/CourseGridPanel.js:51
+msgid "Quick search"
+msgstr ""
+
+#: js/CourseGridPanel.js:68
+msgid "Name"
+msgstr ""
+
+#: js/CourseGridPanel.js:74
+msgid "Type"
+msgstr ""
+
+#: js/CourseGridPanel.js:113
+msgid "Internet Access On"
+msgstr ""
+
+#: js/CourseGridPanel.js:124
+msgid "Internet Access Off"
+msgstr ""
+
+#: js/CourseGridPanel.js:135
+msgid "Fileserver Access On"
+msgstr ""
+
+#: js/CourseGridPanel.js:146
+msgid "Fileserver Access Off"
+msgstr ""
+
+#: js/CourseGridPanel.js:188
+msgid "Failed"
+msgstr ""
+
+#: js/CourseGridPanel.js:189
+msgid "Some error occured while trying to update the courses."
+msgstr ""
+
+#: js/Courses.js:29 Setup/setup.xml:4
+msgid "Courses"
+msgstr ""
+
+#: js/Courses.js:34
+msgid "All Courses"
+msgstr ""
+
+#: js/Models.js:46
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:75
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] ""
+msgstr[1] ""
