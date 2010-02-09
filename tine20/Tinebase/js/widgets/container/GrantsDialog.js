@@ -147,6 +147,7 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
         
         this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
             selectType: 'both',
+            selectTypeDefault: 'group',
             store: this.grantsStore,
             hasAccountPrefix: true,
             configColumns: columns,
