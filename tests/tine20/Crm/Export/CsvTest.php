@@ -72,9 +72,9 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
         
         $defaultContainerId = Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId();
         $this->assertEquals('"lead_name","leadstate_id","Leadstate","leadtype_id","Leadtype","leadsource_id","Leadsource","container_id",'
-            . '"description","turnover","probability","start","end","end_scheduled","CUSTOMER","PARTNER","RESPONSIBLE","TASK"
+            . '"description","turnover","probability","start","end","end_scheduled","probableTurnover","CUSTOMER","PARTNER","RESPONSIBLE","TASK"
 "PHPUnit","1","' . $translate->_('open') . '","1","' . $translate->_('Customer') . '","1","' . $translate->_('Market') . '","' .$defaultContainerId . '","Description","200000","70","' . $this->_objects['lead']['start'] 
-            . '","","","","Kneschke, Lars
+            . '","","","140000","","Kneschke, Lars
 ","","phpunit: crm test task
 "
 ', $export);
