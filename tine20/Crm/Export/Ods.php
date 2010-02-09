@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add class with common crm export functions (and move status/special field handling there)
  */
 
 /**
@@ -34,18 +33,27 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
     protected $_defaultExportname = 'lead_default_ods';
         
     /**
-     * fields with special treatment in addBody
-     *
-     * @var array
-     */
-    protected $_specialFields = array('status', 'source', 'type', 'open_tasks');
-    
-    /**
      * get record relations
      * 
      * @var boolean
      */
     protected $_getRelations = TRUE;    
+    
+    /**
+     * constructor (adds more values with Crm_Export_Helper)
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Controller_Record_Interface $_controller
+     * @param array $_additionalOptions
+     * @return void
+     */
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    {
+        parent::__construct($_filter, $_controller, $_additionalOptions);
+        
+        $this->_specialFields = Crm_Export_Helper::getSpecialFields();
+        $this->_resolvedRecords = Crm_Export_Helper::getResolvedRecords();
+    }
     
     /**
      * get special field value
@@ -58,7 +66,7 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
      */
     protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL)
     {
-        return Crm_Export_Helper::getSpecialFieldValue($_record, $_param, $_key, $_cellType);
+        return Crm_Export_Helper::getSpecialFieldValue($_record, $_param, $_key, $_cellType, $this->_resolvedRecords);
     }
     
     /**

@@ -21,15 +21,39 @@
 class Crm_Export_Helper
 {
     /**
+     * get special fields for export
+     * 
+     * @return array
+     */
+    public static function getSpecialFields()
+    {
+        return array('status', 'source', 'type', 'open_tasks');
+    }
+    
+    /**
+     * get resolved records (task status, ...)
+     * 
+     * @return array
+     */
+    public static function getResolvedRecords()
+    {
+        $result = array();
+        $result['tasksStatus'] = Tasks_Controller_Status::getInstance()->getAllStatus();
+        
+        return $result;
+    }
+    
+    /**
      * get special field value
      *
      * @param Tinebase_Record_Interface $_record
      * @param array $_param
      * @param string $_key
      * @param string $_cellType
+     * @param array $_resolvedRecords
      * @return string
      */
-    public static function getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL)
+    public static function getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL, $_resolvedRecords = NULL)
     {
         if (is_null($_key)) {
             throw new Tinebase_Exception_InvalidArgument('Missing required parameter $key');
@@ -61,13 +85,12 @@ class Crm_Export_Helper
                 break;
             case 'open_tasks':
                 $value = 0;
-                $taskStatus = Tasks_Controller_Status::getInstance()->getAllStatus();
                 foreach ($_record->relations as $relation) {
                     // check if is task and open
                     if ($relation->type == 'TASK') {
-                        $idx = $taskStatus->getIndexById($relation->related_record->status_id);
+                        $idx = $_resolvedRecords['tasksStatus']->getIndexById($relation->related_record->status_id);
                         if ($idx) {
-                            $status = $taskStatus[$idx];
+                            $status = $_resolvedRecords['tasksStatus'][$idx];
                             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($status->toArray(), TRUE)); 
                             if ($status->status_is_open) {
                                 $value++;

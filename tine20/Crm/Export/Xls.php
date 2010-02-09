@@ -30,13 +30,29 @@ class Crm_Export_Xls extends Tinebase_Export_Xls
      * @var string
      */
     protected $_defaultExportname = 'lead_default_xls';
-        
+
     /**
-     * fields with special treatment in addBody
-     *
-     * @var array
+     * get record relations
+     * 
+     * @var boolean
      */
-    protected $_specialFields = array('status', 'source', 'type');
+    protected $_getRelations = TRUE;    
+    
+    /**
+     * constructor (adds more values with Crm_Export_Helper)
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Controller_Record_Interface $_controller
+     * @param array $_additionalOptions
+     * @return void
+     */
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    {
+        parent::__construct($_filter, $_controller, $_additionalOptions);
+        
+        $this->_specialFields = Crm_Export_Helper::getSpecialFields();
+        $this->_resolvedRecords = Crm_Export_Helper::getResolvedRecords();
+    }
     
     /**
      * get special field value
@@ -49,102 +65,22 @@ class Crm_Export_Xls extends Tinebase_Export_Xls
      */
     protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL)
     {
-        return Crm_Export_Helper::getSpecialFieldValue($_record, $_param, $_key, $_cellType);
+        return Crm_Export_Helper::getSpecialFieldValue($_record, $_param, $_key, $_cellType, $this->_resolvedRecords);
     }
-    
-    /**
-     * export records to Xls file
-     *
-     * @param Crm_Model_LeadFilter $_filter
-     * @return PHPExcel
-     */
-    /*
-    public function generate(Crm_Model_LeadFilter $_filter)
-    {
-        return $this->_generate($_filter, Crm_Controller_Lead::getInstance(), 'lead_name', TRUE);
-    }
-    */
-    
+        
     /**
      * get default export config
      * 
      * @return array
      * 
-     * @todo    add column width again?
+     * @todo    add relations again?
      */
     /*
     protected function _getDefaultConfig()
     {
         return array(
             'fields' => array(
-                'lead_name' => array(
-                    'header'    => $this->_translate->_('Lead Name'),
-                    'type'      => 'string', 
-                //    'width'     => '5cm',
-                ),
-                'description' => array(
-                    'header'    => $this->_translate->_('Description'),
-                    'type'      => 'string', 
-                //    'width'     => '10cm'
-                ),
-                'turnover' => array(
-                    'header'    => $this->_translate->_('Turnover'),
-                    'type'      => 'string', 
-                //    'width'     => '2cm'
-                ),
-                'probability' => array(
-                    'header'    => $this->_translate->_('Probability'),
-                    'type'      => 'string', 
-                //    'width'     => '2cm'
-                ),
-                'start' => array(
-                    'header'    => $this->_translate->_('Date Start'),
-                    'type'      => 'datetime', 
-                //    'width'     => '2,5cm'
-                ),
-                'end' => array(
-                    'header'    => $this->_translate->_('Date End'),
-                    'type'      => 'datetime', 
-                //    'width'     => '2,5cm'
-                ),
-                'end_scheduled' => array(
-                    'header'    => $this->_translate->_('Date End Scheduled'),
-                    'type'      => 'datetime', 
-                //    'width'     => '2,5cm'
-                ),
-                'created_by' => array(
-                    'header'    => $this->_translate->_('Created By'),
-                    'type'      => 'user', 
-                //    'width'     => '4cm'
-                ),
-                'creation_time' => array(
-                    'header'    => $this->_translate->_('Creation Time'),
-                    'type'      => 'datetime', 
-                //    'width'     => '4cm'
-                ),
-                'last_modified_by' => array(
-                    'header'    => $this->_translate->_('Last modified By'),
-                    'type'      => 'user', 
-                //    'width'     => '4cm'
-                ),
-                'last_modified_time' => array(
-                    'header'    => $this->_translate->_('Last modified'),
-                    'type'      => 'datetime', 
-                //    'width'     => '4cm'
-                ),
-                'leadstate' => array(
-                    'header'    => $this->_translate->_('Leadstate'),
-                    'type'      => 'config', 
-                ),
-                'leadsource' => array(
-                    'header'    => $this->_translate->_('Leadsource'),
-                    'type'      => 'config', 
-                ),
-                'leadtype' => array(
-                    'header'    => $this->_translate->_('Leadtype'),
-                    'type'      => 'config', 
-                ),
-                'PARTNER' => array(
+                 'PARTNER' => array(
                     'header'    => $this->_translate->_('Partner'),
                     'type'      => 'relation',
                     'field'     => 'n_fileas',
