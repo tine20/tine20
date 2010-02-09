@@ -203,6 +203,13 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $fbinfo = $this->_controller->getFreeBusyInfo($persistentEvent->dtstart, $persistentEvent->dtend, $persistentEvent->attendee);
         $this->assertGreaterThanOrEqual(2, count($fbinfo));
         
+        return $persistentEvent;
+    }
+    
+    public function testsearchFreeTime() {
+        $persistentEvent = $this->testGetFreeBusyInfo();
+        
+        $this->_controller->searchFreeTime($persistentEvent->dtstart->setHour(6), $persistentEvent->dtend->setHour(22), $persistentEvent->attendee); 
     }
     
     public function testCreateEventWithConfict()
