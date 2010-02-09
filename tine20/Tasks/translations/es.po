@@ -2,99 +2,99 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
-msgstr ""
+msgstr "administrar lista de tareas compartidas"
 
 #: Acl/Rights.php:90
 msgid "Create new shared tasks lists"
-msgstr ""
+msgstr "Crear nueva lista de tareas compartidas"
 
 #: Controller/Task.php:166
 msgid "Notification for Task "
-msgstr ""
+msgstr "Notificación por Tarea"
 
 #: Controller.php:97
 #, python-format
 msgid "%s's personal tasks"
-msgstr ""
+msgstr "Tareas personales de %s"
 
 #: js/EditDialog.js:173 js/GridPanel.js:94 js/GridPanel.js:171
 msgid "Summary"
-msgstr ""
+msgstr "Resumen"
 
 #: js/EditDialog.js:178
 msgid "Due date"
-msgstr ""
+msgstr "Fecha de deuda"
 
 #: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:184
 msgid "Priority"
-msgstr ""
+msgstr "Prioridad"
 
 #: js/EditDialog.js:184
 msgid "Add Responsible ..."
-msgstr ""
+msgstr "Agregar Responsable..."
 
 #: js/EditDialog.js:191
 msgid "Notes"
-msgstr ""
+msgstr "Notas"
 
 #: js/EditDialog.js:192
 msgid "Enter description..."
-msgstr ""
+msgstr "Escribir descripción..."
 
 #: js/EditDialog.js:197
 msgid "Percentage"
-msgstr ""
+msgstr "Porcentaje"
 
 #: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:185
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: js/EditDialog.js:205
 msgid "Completed"
-msgstr ""
+msgstr "Completado"
 
 #: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "¿Realmente desea borrar la tarea seleccionada?"
+msgstr[1] "¿Realmente desea borrar las tareas seleccionadas?"
 
 #: js/GridPanel.js:93
 msgid "Quick search"
-msgstr ""
+msgstr "Búsqueda Rápida"
 
 #: js/GridPanel.js:95 js/GridPanel.js:182
 msgid "Due Date"
-msgstr ""
+msgstr "Fecha de Deuda"
 
 #: js/GridPanel.js:96 js/GridPanel.js:238
 msgid "Responsible"
-msgstr ""
+msgstr "Responsable"
 
 #: js/GridPanel.js:120
 msgid "Failed"
-msgstr ""
+msgstr "Falló"
 
 #: js/GridPanel.js:120
 msgid "Could not save task."
-msgstr ""
+msgstr "No se pudo guardar la tarea."
 
 #: js/GridPanel.js:167
 msgid "Tags"
-msgstr ""
+msgstr "Etiquetas"
 
 #: js/GridPanel.js:168
 msgid "Lead"
@@ -102,64 +102,64 @@ msgstr ""
 
 #: js/GridPanel.js:178
 msgid "Add a task..."
-msgstr ""
+msgstr "Agregar una tarea..."
 
 #: js/GridPanel.js:204 Model/Task.php:186
 msgid "Percent"
-msgstr ""
+msgstr "Porcentaje"
 
 #: js/GridPanel.js:231
 msgid "Creation Time"
-msgstr ""
+msgstr "Fecha de Creación"
 
 #: js/GridPanel.js:285
 msgid "Show closed"
-msgstr ""
+msgstr "Visualización Cerrada"
 
 #: js/Status.js:45 Setup/setup.xml:339
 msgid "IN-PROCESS"
-msgstr ""
+msgstr "EN-PROCESO"
 
 #: js/Tasks.js:87
 msgid "Task"
 msgid_plural "Tasks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Tare"
+msgstr[1] "Tareas"
 
 #: js/Tasks.js:87
 msgid "Tasks"
-msgstr ""
+msgstr "Tareas"
 
 #: js/Tasks.js:91
 msgid "to do list"
 msgid_plural "to do lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "lista para hacer"
+msgstr[1] "listas para hacer"
 
 #: js/Tasks.js:91
 msgid "to do lists"
-msgstr ""
+msgstr "listas para hacer"
 
 #: Model/Task.php:181
 msgid "Due"
-msgstr ""
+msgstr "Deuda"
 
 #: Model/Task.php:182
 msgid "Organizer"
-msgstr ""
+msgstr "Organizador"
 
 #: Model/Task.php:183
 msgid "Description"
-msgstr ""
+msgstr "Descripción"
 
 #: Setup/setup.xml:295
 msgid "NEEDS-ACTION"
-msgstr ""
+msgstr "NECESITAN-ATENCION"
 
 #: Setup/setup.xml:317
 msgid "COMPLETED"
-msgstr ""
+msgstr "COMPLETADO"
 
 #: Setup/setup.xml:361
 msgid "CANCELLED"
-msgstr ""
+msgstr "CANCELADO"

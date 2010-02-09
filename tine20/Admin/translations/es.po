@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,698 +15,702 @@ msgstr ""
 
 #: Acl/Rights.php:174
 msgid "manage access log"
-msgstr ""
+msgstr "Administrar acceso al log"
 
 #: Acl/Rights.php:175
 msgid "delete access log entries"
-msgstr ""
+msgstr "borrar accesos de entrada al log"
 
 #: Acl/Rights.php:178
 msgid "manage accounts"
-msgstr ""
+msgstr "administrar cuentas"
 
 #: Acl/Rights.php:179
 msgid "add and edit users and groups, add group members, change user passwords"
 msgstr ""
+"agregar y editar usuarios y groups, agregar miembros de grupos, cambiar "
+"contraseñas de usuarios"
 
 #: Acl/Rights.php:182
 msgid "manage applications"
-msgstr ""
+msgstr "administrar aplicaciones"
 
 #: Acl/Rights.php:183
 msgid "enable and disable applications, edit application settings"
-msgstr ""
+msgstr "activar y desactivar aplicaciones, editar opciones de las aplicaciones"
 
 #: Acl/Rights.php:186
 msgid "manage roles"
-msgstr ""
+msgstr "administrar cargos"
 
 #: Acl/Rights.php:187
 msgid ""
 "add and edit roles, add new members to roles, add application rights to roles"
 msgstr ""
+"agregar y editar cargos, agregar nuevos miembros a los cargos, agregar "
+"privilegios de aplicacion a esos cargos"
 
 #: Acl/Rights.php:190
 msgid "manage shared tags"
-msgstr ""
+msgstr "administrar etiquetas compartidas"
 
 #: Acl/Rights.php:191
 msgid "add, delete and edit shared tags"
-msgstr ""
+msgstr "agregar, borrar y editar etiquetas compartidas"
 
 #: Acl/Rights.php:194
 msgid "manage computers"
-msgstr ""
+msgstr "administrar computadores"
 
 #: Acl/Rights.php:195
 msgid "add, delete and edit (samba) computers"
-msgstr ""
+msgstr "agregar, borrar y editar computadores (samba)"
 
 #: Acl/Rights.php:198
 msgid "view access log"
-msgstr ""
+msgstr "ver log de acceso"
 
 #: Acl/Rights.php:199
 msgid "view access log list"
-msgstr ""
+msgstr "ver listado de log de acceso"
 
 #: Acl/Rights.php:202
 msgid "view accounts"
-msgstr ""
+msgstr "ver cuentas"
 
 #: Acl/Rights.php:203
 msgid "view accounts list and details"
-msgstr ""
+msgstr "ver listado de cuentas y detalles"
 
 #: Acl/Rights.php:206
 msgid "view applications"
-msgstr ""
+msgstr "ver aplicaciones"
 
 #: Acl/Rights.php:207
 msgid "view applications list and details"
-msgstr ""
+msgstr "ver listado de aplicaciones y detalles"
 
 #: Acl/Rights.php:210
 msgid "view roles"
-msgstr ""
+msgstr "ver cargos"
 
 #: Acl/Rights.php:211
 msgid "view roles list and details"
-msgstr ""
+msgstr "ver lista de cargos y detalles"
 
 #: Acl/Rights.php:214
 msgid "view computers"
-msgstr ""
+msgstr "ver computadores"
 
 #: Acl/Rights.php:215
 msgid "view computers list and details"
-msgstr ""
+msgstr "ver lista de computadores y detalles"
 
 #: js/Admin.js:20 js/Users.js:493
 msgid "User"
 msgid_plural "Users"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Usuario"
+msgstr[1] "Usuarios"
 
 #: js/Admin.js:33
 msgid "Groups"
-msgstr ""
+msgstr "Grupos"
 
 #: js/Admin.js:46
 msgid "Computers"
-msgstr ""
+msgstr "Computadores"
 
 #: js/Admin.js:59
 msgid "Applications"
-msgstr ""
+msgstr "Aplicaciones"
 
 #: js/Admin.js:72
 msgid "Access Log"
-msgstr ""
+msgstr "Log de Acceso"
 
 #: js/Admin.js:85
 msgid "Shared Tags"
-msgstr ""
+msgstr "Etiquetas Compartidas"
 
 #: js/Admin.js:98
 msgid "Roles"
-msgstr ""
+msgstr "Cargos"
 
 #: js/Admin.js:133
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: js/Admin.js:284 js/Groups.js:51 js/Roles.js:45 js/Tags.js:58
 #: js/Users.js:176
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmar"
 
 #: js/Admin.js:284
 msgid "Do you really want to delete the selected access log entries?"
-msgstr ""
+msgstr "¿Realmente desea borrar los logs de accesos seleccionados?"
 
 #: js/Admin.js:397
 msgid "delete entry"
-msgstr ""
+msgstr "borrar ingreso"
 
 #: js/Admin.js:398
 msgid "select all"
-msgstr ""
+msgstr "seleccionar todo"
 
 #: js/Admin.js:433
 msgid "Display from:"
-msgstr ""
+msgstr "Mostrar de:"
 
 #: js/Admin.js:437
 msgid "to:"
-msgstr ""
+msgstr "para:"
 
 #: js/Admin.js:442 js/Applications.js:160 js/Groups.js:151 js/Roles.js:149
 #: js/Tags.js:140 js/Users.js:236
 msgid "Search:"
-msgstr ""
+msgstr "Buscar:"
 
 #: js/Admin.js:515
 msgid "invalid password"
-msgstr ""
+msgstr "Contraseña incorrecta"
 
 #: js/Admin.js:519
 msgid "ambiguous username"
-msgstr ""
+msgstr "nombre de usuario ambiguo"
 
 #: js/Admin.js:523
 msgid "user not found"
-msgstr ""
+msgstr "usuario no encontrado"
 
 #: js/Admin.js:527
 msgid "failure"
-msgstr ""
+msgstr "Error"
 
 #: js/Admin.js:531
 msgid "success"
-msgstr ""
+msgstr "Exitoso"
 
 #: js/Admin.js:552
 msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr ""
+msgstr "Mostrando logs de acceso {0} - {1} of {2}"
 
 #: js/Admin.js:553
 msgid "No access log entries to display"
-msgstr ""
+msgstr "No hay logs de acceso para mostrar"
 
 #: js/Admin.js:562
 msgid "Session ID"
-msgstr ""
+msgstr "ID de Sesión"
 
 #: js/Admin.js:563 js/UserEditDialog.js:304
 msgid "Login Name"
-msgstr ""
+msgstr "Nombre de Usuario"
 
 #: js/Admin.js:564 js/Applications.js:235 js/Groups.js:203 js/Roles.js:203
 #: js/SambaMachineGrid.js:90 js/Tags.js:189
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #: js/Admin.js:565
 msgid "IP Address"
-msgstr ""
+msgstr "Dirección IP"
 
 #: js/Admin.js:566
 msgid "Login Time"
-msgstr ""
+msgstr "Hora de Ingreso"
 
 #: js/Admin.js:567
 msgid "Logout Time"
-msgstr ""
+msgstr "Hora de Salida"
 
 #: js/Admin.js:568
 msgid "Account ID"
-msgstr ""
+msgstr "ID de Cuenta"
 
 #: js/Admin.js:569
 msgid "Result"
-msgstr ""
+msgstr "Resultado"
 
 #: js/Applications.js:32
 msgid "{0} Settings"
-msgstr ""
+msgstr "{0} Configuraciones"
 
 #: js/Applications.js:137
 msgid "enable application"
-msgstr ""
+msgstr "activar aplicación"
 
 #: js/Applications.js:138
 msgid "disable application"
-msgstr ""
+msgstr "desactivar aplicación"
 
 #: js/Applications.js:139
 msgid "settings"
-msgstr ""
+msgstr "opciones"
 
 #: js/Applications.js:189 js/UserEditDialog.js:358
 msgid "disabled"
-msgstr ""
+msgstr "deshabilitado"
 
 #: js/Applications.js:192 js/UserEditDialog.js:358
 msgid "enabled"
-msgstr ""
+msgstr "habilitado"
 
 #: js/Applications.js:196
 msgid "unknown status ({0})"
-msgstr ""
+msgstr "Estado desconocido ({0})"
 
 #: js/Applications.js:224
 msgid "Displaying application {0} - {1} of {2}"
-msgstr ""
+msgstr "Mostrando aplicación {0} - {1} of {2}"
 
 #: js/Applications.js:225
 msgid "No applications to display"
-msgstr ""
+msgstr "No hay aplicaciones para mostrar"
 
 #: js/Applications.js:234
 msgid "Order"
-msgstr ""
+msgstr "Ordenar"
 
 #: js/Applications.js:236 js/UserEditDialog.js:352 js/Users.js:296
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: js/Applications.js:237
 msgid "Version"
-msgstr ""
+msgstr "Versión"
 
 #: js/Groups.js:51
 msgid "Do you really want to delete the selected groups?"
-msgstr ""
+msgstr "¿Realmente desea borrar los grupos seleccionados?"
 
 #: js/Groups.js:67
 msgid "Deleting group(s)..."
-msgstr ""
+msgstr "Borrando grupo(s)..."
 
 #: js/Groups.js:72 js/Groups.js:372 js/RoleEditDialog.js:101
 #: js/RoleEditDialog.js:129 js/Roles.js:67 js/Tags.js:372 js/Users.js:196
 msgid "Failed"
-msgstr ""
+msgstr "Falló"
 
 #: js/Groups.js:72
 msgid "Some error occurred while trying to delete the group."
-msgstr ""
+msgstr "Ocurrió un error al intentar borrar este grupo."
 
 #: js/Groups.js:102
 msgid "add group"
-msgstr ""
+msgstr "agregar grupo"
 
 #: js/Groups.js:110
 msgid "edit group"
-msgstr ""
+msgstr "editar grupo"
 
 #: js/Groups.js:118
 msgid "delete group"
-msgstr ""
+msgstr "borrar grupo"
 
 #: js/Groups.js:191
 msgid "Displaying groups {0} - {1} of {2}"
-msgstr ""
+msgstr "Mostrando grupos {0} - {1} of {2}"
 
 #: js/Groups.js:192 js/Groups.js:247
 msgid "No groups to display"
-msgstr ""
+msgstr "No hay grupos para mostrar"
 
 #: js/Groups.js:202 js/Roles.js:202 js/SambaMachineGrid.js:83 js/Users.js:295
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: js/Groups.js:204 js/Groups.js:439 js/RoleEditDialog.js:300 js/Roles.js:204
 #: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:96 js/Tags.js:190
 #: js/Tags.js:508
 msgid "Description"
-msgstr ""
+msgstr "Descripción"
 
 #: js/Groups.js:337 js/RoleEditDialog.js:64 js/Tags.js:327
 msgid "Please wait"
-msgstr ""
+msgstr "Por favor espere"
 
 #: js/Groups.js:337 js/RoleEditDialog.js:64
 msgid "Updating Memberships"
-msgstr ""
+msgstr "Actualizando Cuentas de Usuario"
 
 #: js/Groups.js:372
 msgid "Could not save group."
-msgstr ""
+msgstr "No se pudo guardar el grupo."
 
 #: js/Groups.js:379 js/RoleEditDialog.js:108 js/Tags.js:377
 msgid "Errors"
-msgstr ""
+msgstr "Errores"
 
 #: js/Groups.js:379 js/RoleEditDialog.js:108 js/Tags.js:377
 msgid "Please fix the errors noted."
-msgstr ""
+msgstr "Por favor corrija los errores indicados."
 
 #: js/Groups.js:410
 msgid "Group Members"
-msgstr ""
+msgstr "Miembros del Grupo"
 
 #: js/Groups.js:432
 msgid "Group Name"
-msgstr ""
+msgstr "Nombre del Grupo"
 
 #: js/Groups.js:488
 msgid "Add new group"
-msgstr ""
+msgstr "Agregar Nuevo Grupo"
 
 #: js/Groups.js:490
 msgid "Edit Group \"{0}\""
-msgstr ""
+msgstr "Editar Grupo \"{0}\""
 
 #: js/RoleEditDialog.js:101
 msgid "Could not save role."
-msgstr ""
+msgstr "No se pudo guardar cargo."
 
 #: js/RoleEditDialog.js:121
 msgid "Deleting role..."
-msgstr ""
+msgstr "Borrando cargo..."
 
 #: js/RoleEditDialog.js:129 js/Roles.js:67
 msgid "Some error occurred while trying to delete the role."
-msgstr ""
+msgstr "Ocurrió un error al intentar borrar el cargo."
 
 #: js/RoleEditDialog.js:253
 msgid "Members"
-msgstr ""
+msgstr "Miembros"
 
 #: js/RoleEditDialog.js:262
 msgid "Rights"
-msgstr ""
+msgstr "Derechos"
 
 #: js/RoleEditDialog.js:292
 msgid "Role Name"
-msgstr ""
+msgstr "Nombre del Cargo"
 
 #: js/RoleEditDialog.js:334
 msgid "Loading Role..."
-msgstr ""
+msgstr "Cargando cargo..."
 
 #: js/RoleEditDialog.js:334 js/Tags.js:547
 msgid "Please Wait"
-msgstr ""
+msgstr "Por favor espere"
 
 #: js/RoleEditDialog.js:371
 msgid "Add New Role"
-msgstr ""
+msgstr "Agregar Nuevo Cargo"
 
 #: js/RoleEditDialog.js:373
 msgid "Edit Role \"{0}\""
-msgstr ""
+msgstr "Editar Cargo \"{0}\""
 
 #: js/Roles.js:45
 msgid "Do you really want to delete the selected roles?"
-msgstr ""
+msgstr "¿Realmente desea borrar los cargos seleccionados?"
 
 #: js/Roles.js:62
 msgid "Deleting role(s)..."
-msgstr ""
+msgstr "Borrando cargo(s)..."
 
 #: js/Roles.js:100
 msgid "add role"
-msgstr ""
+msgstr "agregar cargo"
 
 #: js/Roles.js:108
 msgid "edit role"
-msgstr ""
+msgstr "editar cargo"
 
 #: js/Roles.js:116
 msgid "delete role"
-msgstr ""
+msgstr "borrar cargo"
 
 #: js/Roles.js:191
 msgid "Displaying roles {0} - {1} of {2}"
-msgstr ""
+msgstr "Mostrando cargos {0} - {1} of {2}"
 
 #: js/Roles.js:192 js/Roles.js:247
 msgid "No roles to display"
-msgstr ""
+msgstr "Sin cargos para mostrar"
 
 #: js/SambaMachineEditDialog.js:38 js/SambaMachineGrid.js:65
 msgid "Computer Name"
-msgstr ""
+msgstr "Nombre del Computador"
 
 #: js/SambaMachineModel.js:40
 msgid "Computer"
 msgid_plural "Computers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Computador"
+msgstr[1] "Computadores"
 
 #: js/Tags.js:58
 msgid "Do you really want to delete the selected tags?"
-msgstr ""
+msgstr "¿Realmente desea borrar las etiquetas seleccionadas?"
 
 #: js/Tags.js:75
 msgid "Deleting tag(s)..."
-msgstr ""
+msgstr "Borrando etiqueta(s)..."
 
 #: js/Tags.js:90
 msgid "add tag"
-msgstr ""
+msgstr "agregar etiqueta"
 
 #: js/Tags.js:98
 msgid "edit tag"
-msgstr ""
+msgstr "editar etiqueta"
 
 #: js/Tags.js:106
 msgid "delete tag"
-msgstr ""
+msgstr "borrar etiqueta"
 
 #: js/Tags.js:177
 msgid "Displaying tags {0} - {1} of {2}"
-msgstr ""
+msgstr "Mostrando etiquetas {0} - {1} of {2}"
 
 #: js/Tags.js:178 js/Tags.js:233
 msgid "No tags to display"
-msgstr ""
+msgstr "No hay etiquetas para mostrar"
 
 #: js/Tags.js:188 js/Tags.js:514
 msgid "Color"
-msgstr ""
+msgstr "Color"
 
 #: js/Tags.js:327
 msgid "Updating Tag"
-msgstr ""
+msgstr "Actualizando Etiqueta"
 
 #: js/Tags.js:372
 msgid "Could not save tag."
-msgstr ""
+msgstr "No se pudo guardar la etiqueta."
 
 #: js/Tags.js:455
 msgid "Allowed Contexts"
-msgstr ""
+msgstr "Contextos Permitidos"
 
 #: js/Tags.js:461
 msgid "Context"
-msgstr ""
+msgstr "Contexto"
 
 #: js/Tags.js:469
 msgid "Account Rights"
-msgstr ""
+msgstr "Derechos de Cuentas"
 
 #: js/Tags.js:477
 msgid "View"
-msgstr ""
+msgstr "Ver"
 
 #: js/Tags.js:482
 msgid "Use"
-msgstr ""
+msgstr "Usar"
 
 #: js/Tags.js:501
 msgid "Tag Name"
-msgstr ""
+msgstr "Nombre de Etiqueta"
 
 #: js/Tags.js:547
 msgid "Loading Tag..."
-msgstr ""
+msgstr "Cargando Etiqueta..."
 
 #: js/Tags.js:574
 msgid "Add New Tag"
-msgstr ""
+msgstr "Agregar Nueva Etiqueta"
 
 #: js/Tags.js:576
 msgid "Edit Tag \"{0}\""
-msgstr ""
+msgstr "Editar Etiqueta \"{0}\""
 
 #: js/UserEditDialog.js:120
 msgid "Passwords do not match!"
-msgstr ""
+msgstr "¡Las contraseñas no concuerdan!"
 
 #: js/UserEditDialog.js:160
 msgid "Aliases"
-msgstr ""
+msgstr "Pseudónimos"
 
 #: js/UserEditDialog.js:163
 msgid "Email Alias"
-msgstr ""
+msgstr "Pseudónimo de Correo"
 
 #: js/UserEditDialog.js:169
 msgid "Add an alias address..."
-msgstr ""
+msgstr "Agregar un pseudónimo de dirección..."
 
 #: js/UserEditDialog.js:179
 msgid "Forwards"
-msgstr ""
+msgstr "Reenvíos"
 
 #: js/UserEditDialog.js:182
 msgid "Email Forward"
-msgstr ""
+msgstr "Reenvío de Correo"
 
 #: js/UserEditDialog.js:188
 msgid "Add a forward address..."
-msgstr ""
+msgstr "Agregar una dirección de correo de reenvio..."
 
 #: js/UserEditDialog.js:211
 msgid "Password confirmation"
-msgstr ""
+msgstr "Confirmación de Contraseña"
 
 #: js/UserEditDialog.js:228
 msgid "Repeat password"
-msgstr ""
+msgstr "Repetir Contraseña"
 
 #: js/UserEditDialog.js:240
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: js/UserEditDialog.js:247
 msgid "Ok"
-msgstr ""
+msgstr "Aceptar"
 
 #: js/UserEditDialog.js:273
 msgid "Account"
-msgstr ""
+msgstr "Cuenta"
 
 #: js/UserEditDialog.js:288
 msgid "First Name"
-msgstr ""
+msgstr "Nombres"
 
 #: js/UserEditDialog.js:298
 msgid "Last Name"
-msgstr ""
+msgstr "Apellidos"
 
 #: js/UserEditDialog.js:309
 msgid "Password"
-msgstr ""
+msgstr "Contraseña"
 
 #: js/UserEditDialog.js:313
 msgid "no password set"
-msgstr ""
+msgstr "no hay contraseña guardada"
 
 #: js/UserEditDialog.js:334
 msgid "Emailaddress"
-msgstr ""
+msgstr "Dirección de Correo"
 
 #: js/UserEditDialog.js:340 js/Users.js:302
 msgid "OpenID"
-msgstr ""
+msgstr "OpenID"
 
 #: js/UserEditDialog.js:346
 msgid "Primary group"
-msgstr ""
+msgstr "Grupo primario"
 
 #: js/UserEditDialog.js:358
 msgid "expired"
-msgstr ""
+msgstr "expirado"
 
 #: js/UserEditDialog.js:361 js/Users.js:306
 msgid "Expires"
-msgstr ""
+msgstr "Expira"
 
 #: js/UserEditDialog.js:363 js/UserEditDialog.js:405 js/UserEditDialog.js:482
 msgid "never"
-msgstr ""
+msgstr "nunca"
 
 #: js/UserEditDialog.js:368
 msgid "Visibility"
-msgstr ""
+msgstr "Visibilidad"
 
 #: js/UserEditDialog.js:374
 msgid "Display in addressbook"
-msgstr ""
+msgstr "Mostrar en libreta de direcciones"
 
 #: js/UserEditDialog.js:374
 msgid "Hide from addressbook"
-msgstr ""
+msgstr "Esconder de la libreta de direcciones"
 
 #: js/UserEditDialog.js:379 js/UserEditDialog.js:563
 msgid "Information"
-msgstr ""
+msgstr "Información"
 
 #: js/UserEditDialog.js:395 js/Users.js:303
 msgid "Last login at"
-msgstr ""
+msgstr "Último ingreso el"
 
 #: js/UserEditDialog.js:397 js/UserEditDialog.js:401
 msgid "don't know"
-msgstr ""
+msgstr "desconocido"
 
 #: js/UserEditDialog.js:397 js/UserEditDialog.js:401 js/UserEditDialog.js:462
 msgid "never logged in"
-msgstr ""
+msgstr "nunca ha ingresado"
 
 #: js/UserEditDialog.js:399 js/Users.js:304
 msgid "Last login from"
-msgstr ""
+msgstr "Último ingreso desde"
 
 #: js/UserEditDialog.js:403
 msgid "Password set"
-msgstr ""
+msgstr "Contraseña guardada"
 
 #: js/UserEditDialog.js:411
 msgid "Fileserver"
-msgstr ""
+msgstr "Servidor de Archivos"
 
 #: js/UserEditDialog.js:416
 msgid "Unix"
-msgstr ""
+msgstr "Unix"
 
 #: js/UserEditDialog.js:431
 msgid "Home Directory"
-msgstr ""
+msgstr "Directorio Home"
 
 #: js/UserEditDialog.js:435
 msgid "Login Shell"
-msgstr ""
+msgstr "Consola de Ingreso"
 
 #: js/UserEditDialog.js:440
 msgid "Windows"
-msgstr ""
+msgstr "Windows"
 
 #: js/UserEditDialog.js:455
 msgid "Home Drive"
-msgstr ""
+msgstr "Unidad Home"
 
 #: js/UserEditDialog.js:460
 msgid "Logon Time"
-msgstr ""
+msgstr "Tiempo de Ingreso"
 
 #: js/UserEditDialog.js:465
 msgid "Home Path"
-msgstr ""
+msgstr "Ubicación Home"
 
 #: js/UserEditDialog.js:470
 msgid "Logoff Time"
-msgstr ""
+msgstr "Hora de Salida"
 
 #: js/UserEditDialog.js:472
 msgid "never logged off"
-msgstr ""
+msgstr "nunca ha salido"
 
 #: js/UserEditDialog.js:475
 msgid "Profile Path"
-msgstr ""
+msgstr "Ubicación del Perfil"
 
 #: js/UserEditDialog.js:480
 msgid "Password Last Set"
-msgstr ""
+msgstr "Última Contraseña Guardada"
 
 #: js/UserEditDialog.js:485
 msgid "Logon Script"
-msgstr ""
+msgstr "Script de Inicio"
 
 #: js/UserEditDialog.js:489
 msgid "Password Can Change"
-msgstr ""
+msgstr "La Contraseña Puede Cambiar"
 
 #: js/UserEditDialog.js:491 js/UserEditDialog.js:495 js/UserEditDialog.js:499
 msgid "not set"
-msgstr ""
+msgstr "sin guardar"
 
 #: js/UserEditDialog.js:493
 msgid "Password Must Change"
-msgstr ""
+msgstr "La Contraseña Debe Cambiar"
 
 #: js/UserEditDialog.js:497
 msgid "Kick Off Time"
-msgstr ""
+msgstr "Tiempo de Expulsión"
 
 #: js/UserEditDialog.js:504
 msgid "IMAP"
-msgstr ""
+msgstr "IMAP"
 
 #: js/UserEditDialog.js:511
 msgid "Quota (MB)"
@@ -714,11 +718,11 @@ msgstr ""
 
 #: js/UserEditDialog.js:525
 msgid "Quota"
-msgstr ""
+msgstr "Cuota"
 
 #: js/UserEditDialog.js:529
 msgid "Current Mail Size"
-msgstr ""
+msgstr "Tamaño Actual del Correo"
 
 #: js/UserEditDialog.js:537
 msgid "Sieve Quota (MB)"
@@ -726,7 +730,7 @@ msgstr ""
 
 #: js/UserEditDialog.js:551
 msgid "Sieve Quota"
-msgstr ""
+msgstr "Cuota Discreta"
 
 #: js/UserEditDialog.js:555
 msgid "Sieve Size"
@@ -734,100 +738,115 @@ msgstr ""
 
 #: js/UserEditDialog.js:578
 msgid "Last Login"
-msgstr ""
+msgstr "Último Ingreso"
 
 #: js/UserEditDialog.js:584
 msgid "SMTP"
-msgstr ""
+msgstr "SMTP"
 
 #: js/UserEditDialog.js:600
 msgid "Forward Only"
-msgstr ""
+msgstr "Sólo Reenviar"
 
 #: js/Users.js:151
 msgid "Set new password"
-msgstr ""
+msgstr "Establecer nueva contraseña"
 
 #: js/Users.js:151
 msgid "Please enter the new password:"
-msgstr ""
+msgstr "Porfavor escriba la nueva contraseña:"
 
 #: js/Users.js:176
 msgid "Do you really want to delete the selected account(s)?"
-msgstr ""
+msgstr "¿Realmente desea borrar la(s) cuenta(s) seleccionada(s)?"
 
 #: js/Users.js:191
 msgid "Deleting account(s)..."
-msgstr ""
+msgstr "Borrando cuenta(s)..."
 
 #: js/Users.js:196
 msgid "Some error occurred while trying to delete the account(s)."
-msgstr ""
+msgstr "Ocurrió un error al intentar borrar la(s) cuenta(s)."
 
 #: js/Users.js:282
 msgid "Displaying accounts {0} - {1} of {2}"
-msgstr ""
+msgstr "Mostrando Cuentas {0} - {1} de {2}"
 
 #: js/Users.js:283
 msgid "No accounts to display"
-msgstr ""
+msgstr "No hay cuentas para mostrar"
 
 #: js/Users.js:297
 msgid "Displayname"
-msgstr ""
+msgstr "Nombre a Mostrar"
 
 #: js/Users.js:298
 msgid "Loginname"
-msgstr ""
+msgstr "Nombre de Ingreso"
 
 #: js/Users.js:299
 msgid "Last name"
-msgstr ""
+msgstr "Apellidos"
 
 #: js/Users.js:300
 msgid "First name"
-msgstr ""
+msgstr "Nombres"
 
 #: js/Users.js:301
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: js/Users.js:305
 msgid "Password changed"
-msgstr ""
+msgstr "Contraseña cambiada"
 
 #: js/Users.js:396
 msgid "add account"
-msgstr ""
+msgstr "agregar cuenta"
 
 #: js/Users.js:404
 msgid "edit account"
-msgstr ""
+msgstr "editar cuenta"
 
 #: js/Users.js:412
 msgid "delete account"
-msgstr ""
+msgstr "borrar cuenta"
 
 #: js/Users.js:420
 msgid "enable account"
-msgstr ""
+msgstr "activar cuenta"
 
 #: js/Users.js:429
 msgid "disable account"
-msgstr ""
+msgstr "desactivar cuenta"
 
 #: js/Users.js:438
 msgid "reset password"
-msgstr ""
+msgstr "reestablecer contraseña"
 
 #: js/Users.js:519
 msgid "Samba User"
 msgid_plural "Samba Users"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Usuario de Samba"
+msgstr[1] "Usuarios de Samba"
 
 #: js/Users.js:545
 msgid "Email User"
 msgid_plural "Email Users"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Usuario de Correo"
+msgstr[1] "Usuarios de Correo"
+
+#~ msgid "Deleting group..."
+#~ msgstr "Borrando grupo..."
+
+#~ msgid "Email UID"
+#~ msgstr "Email UID"
+
+#~ msgid "Email GID"
+#~ msgstr "Email GID"
+
+#~ msgid "Email Username"
+#~ msgstr "Usuario de Email"
+
+#~ msgid "Current Sieve Size"
+#~ msgstr "Tamaño Actual de Cuota Discreta"
