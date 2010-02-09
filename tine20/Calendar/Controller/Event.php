@@ -226,6 +226,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function getFreeBusyInfo($_from, $_until, $_attendee, $_ignoreUIDs = array())
     {
+        $fbInfoSet = new Tinebase_Record_RecordSet('Calendar_Model_FreeBusy');
+        
         // map groupmembers to users
         $attendee = clone $_attendee;
         $groupmembers = $attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
@@ -252,7 +254,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         //Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($typeMap, true));
         
-        // sort freebusy info into tyepmap
+        // generate freeBusyInfos
         foreach($events as $event) {
         	// skip events with ignoreUID
         	if (in_array($event->uid, $_ignoreUIDs)) {
@@ -288,23 +290,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         unset($fbInfo->event->attendee);
                     }
                     
-                    $typeMap[$attender->user_type][$attender->user_id][] = $fbInfo;
-                    
-                    
+                    //$typeMap[$attender->user_type][$attender->user_id][] = $fbInfo;
+                    $fbInfoSet->addRecord($fbInfo);
                 }
             }
         }
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($typeMap, true));
         
-        $resultArray = array();
-        foreach ($typeMap as $type => $typeEntries) {
-            foreach ($typeEntries as $id => $fbslice) {
-                $resultArray = array_merge($resultArray, $fbslice);
-            }
-        }
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($resultArray, true));
-        
-        return new Tinebase_Record_RecordSet('Calendar_Model_FreeBusy', $resultArray);
+        return $fbInfoSet;
     }
     
     /**
@@ -326,6 +318,39 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         return $events;
+    }
+    
+    /**
+     * returns freeTime (suggestions) for given period of given attendee
+     * 
+     * @param  Zend_Date                                            $_from
+     * @param  Zend_Date                                            $_until
+     * @param  Tinebase_Record_RecordSet of Calendar_Model_Attender $_attendee
+     * 
+     * ...
+     */
+    public function searchFreeTime($_from, $_until, $_attendee/*, $_constains, $_mode*/)
+    {
+        $fbInfoSet = $this->getFreeBusyInfo($_from, $_until, $_attendee);
+        
+        $fromTs = $_from->getTimestamp();
+        $untilTs = $_until->getTimestamp();
+        $granularity = 1800;
+        
+        // init registry of granularity
+        $eventRegistry = array_combine(range($fromTs, $untilTs, $granularity), array_fill(0, ceil(($untilTs - $fromTs)/$granularity)+1, ''));
+        
+        foreach ($fbInfoSet as $fbInfo) {
+            $startIdx = $fromTs + $granularity * floor(($fbInfo->dtstart->getTimestamp() - $fromTs) / $granularity);
+            $endIdx = $fromTs + $granularity * ceil(($fbInfo->dtend->getTimestamp() - $fromTs) / $granularity);
+            
+            for ($idx=$startIdx; $idx<=$endIdx; $idx+=$granularity) {
+                //$eventRegistry[$idx][] = $fbInfo;
+                $eventRegistry[$idx] .= '.';
+            }
+        }
+        
+        print_r($eventRegistry);
     }
     
     /**
