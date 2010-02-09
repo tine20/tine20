@@ -21,24 +21,6 @@ msgstr "Manage timeaccounts"
 msgid "Add, edit and delete timeaccounts"
 msgstr "Add, edit and delete timeaccounts"
 
-#: Export/Ods/Timesheet.php:89
-msgid "Total Sum"
-msgstr "Total Sum"
-
-#: Export/Ods/Timesheet.php:109
-msgid "Not billable"
-msgstr "Not billable"
-
-#: Export/Ods/Timesheet.php:117 js/TimesheetEditDialog.js:193
-#: js/TimesheetGridPanel.js:74 js/TimesheetGridPanel.js:218
-#: js/TimesheetGridPanel.js:250
-msgid "Billable"
-msgstr "Billable"
-
-#: Export/Ods/Timesheet.php:125
-msgid "Total"
-msgstr "Total"
-
 #: js/DurationSlider.js:95
 msgid "{0}"
 msgstr "{0}"
@@ -177,23 +159,52 @@ msgstr "Access"
 msgid "Book Own"
 msgstr "Book Own"
 
-#: js/TimeaccountEditDialog.js:228
+#: js/TimeaccountEditDialog.js:225
+msgid "The grant to add Timesheets to this Timeaccount"
+msgstr "The grant to add Timesheets to this Timeaccount"
+
+#: js/TimeaccountEditDialog.js:229
 msgid "View All"
 msgstr "View All"
 
-#: js/TimeaccountEditDialog.js:233
+#: js/TimeaccountEditDialog.js:230
+msgid "The grant to view Timesheetsof other users"
+msgstr "The grant to view Timesheetsof other users"
+
+#: js/TimeaccountEditDialog.js:235
 msgid "Book All"
 msgstr "Book All"
 
-#: js/TimeaccountEditDialog.js:238
+#: js/TimeaccountEditDialog.js:236
+msgid "The grant to add Timesheets for other users"
+msgstr "The grant to add Timesheets for other users"
+
+#: js/TimeaccountEditDialog.js:241
 msgid "Manage Clearing"
 msgstr "Manage Clearing"
 
-#: js/TimeaccountEditDialog.js:243
+#: js/TimeaccountEditDialog.js:242
+msgid "The grant to manage clearing of Timesheets"
+msgstr "The grant to manage clearing of Timesheets"
+
+#: js/TimeaccountEditDialog.js:247 js/TimeaccountGridPanel.js:137
+#: js/TimesheetGridPanel.js:468
+msgid "Export"
+msgstr "Export"
+
+#: js/TimeaccountEditDialog.js:248
+msgid "The grant to export Timesheets of Timeaccount"
+msgstr "The grant to export Timesheets of Timeaccount"
+
+#: js/TimeaccountEditDialog.js:253
 msgid "Manage All"
 msgstr "Manage All"
 
-#: js/TimeaccountEditDialog.js:251
+#: js/TimeaccountEditDialog.js:254
+msgid "Includes all other grants"
+msgstr "Includes all other grants"
+
+#: js/TimeaccountEditDialog.js:262
 msgid "Permissions"
 msgstr "Permissions"
 
@@ -205,10 +216,6 @@ msgstr "Tags"
 #: js/TimesheetGridPanel.js:254
 msgid "Cleared in"
 msgstr "Cleared in"
-
-#: js/TimeaccountGridPanel.js:137 js/TimesheetGridPanel.js:468
-msgid "Export"
-msgstr "Export"
 
 #: js/TimeaccountGridPanel.js:146 js/TimesheetGridPanel.js:477
 msgid "Export as ODS"
@@ -263,6 +270,11 @@ msgstr "Enter description..."
 #: js/TimesheetGridPanel.js:255
 msgid "Account"
 msgstr "Account"
+
+#: js/TimesheetEditDialog.js:193 js/TimesheetGridPanel.js:74
+#: js/TimesheetGridPanel.js:218 js/TimesheetGridPanel.js:250
+msgid "Billable"
+msgstr "Billable"
 
 #: js/TimesheetEditDialog.js:200 js/TimesheetGridPanel.js:79
 #: js/TimesheetGridPanel.js:219 js/TimesheetGridPanel.js:252

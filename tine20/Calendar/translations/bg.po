@@ -117,7 +117,7 @@ msgstr[1] ""
 msgid "Name"
 msgstr "Име"
 
-#: js/AttendeeGridPanel.js:187 Model/Event.php:185
+#: js/AttendeeGridPanel.js:187 Model/Event.php:191
 msgid "Status"
 msgstr "Статус"
 
@@ -200,39 +200,27 @@ msgstr "Потвърди актуализирането на серии"
 msgid "Do you really want to update all events of this recurring event series?"
 msgstr ""
 
-#: js/CalendarPanel.js:287
-msgid "Update Event"
-msgstr "Актуализирай събитие"
+#: js/CalendarPanel.js:283 js/MainScreenCenterPanel.js:346
+msgid "Delete Event"
+msgstr "Изтрий събитие"
 
-#: js/CalendarPanel.js:290 js/CalendarPanel.js:292
-msgid "Do you want to update the whole series, or just this event"
-msgstr "Желаете ли да актуализирате цялата серия или само това събитие?"
-
-#: js/CalendarPanel.js:294
+#: js/CalendarPanel.js:286
 msgid "Update nothing"
 msgstr "Не актуализирай нищо"
 
-#: js/CalendarPanel.js:302
+#: js/CalendarPanel.js:287
 msgid "Update whole series"
 msgstr "Актуализирай цялата серия"
 
-#: js/CalendarPanel.js:314
-msgid "Failed not update recurring event series"
-msgstr "Неуспешно актуализиране на избраните серии събития"
-
-#: js/CalendarPanel.js:322
+#: js/CalendarPanel.js:288
 msgid "Update this event only"
 msgstr "Актуализирай само това събитие"
-
-#: js/CalendarPanel.js:336
-msgid "Failed not update event"
-msgstr "Неуспешно актуализиране на събитието"
 
 #: js/CalendarSelectTreePanel.js:43
 msgid "Resources {0}"
 msgstr ""
 
-#: js/CalendarSelectWidget.js:158
+#: js/CalendarSelectWidget.js:121
 msgid "Originally"
 msgstr "Първоначално"
 
@@ -252,122 +240,110 @@ msgstr ""
 msgid "{0} {1} o'clock"
 msgstr ""
 
-#: js/EventDetailsPanel.js:172 js/EventEditDialog.js:95 Model/Event.php:186
+#: js/EventDetailsPanel.js:172 js/EventEditDialog.js:89 Model/Event.php:192
 msgid "Summary"
 msgstr "Общо"
 
-#: js/EventDetailsPanel.js:208 js/EventEditDialog.js:107
+#: js/EventDetailsPanel.js:208 js/EventEditDialog.js:101
 msgid "Start Time"
 msgstr "Време на стартиране"
 
-#: js/EventDetailsPanel.js:213 js/EventEditDialog.js:122
+#: js/EventDetailsPanel.js:213 js/EventEditDialog.js:116
 msgid "End Time"
 msgstr "Време на приключване"
 
-#: js/EventDetailsPanel.js:218 Model/Event.php:179
+#: js/EventDetailsPanel.js:218 Model/Event.php:185
 msgid "Blocking"
 msgstr ""
 
-#: js/EventDetailsPanel.js:223 js/EventEditDialog.js:102
-#: js/ResourcesGridPanel.js:54 Model/Event.php:182
+#: js/EventDetailsPanel.js:223 js/EventEditDialog.js:96
+#: js/ResourcesGridPanel.js:54 Model/Event.php:188
 msgid "Location"
 msgstr "Местонахождение"
 
-#: js/EventDetailsPanel.js:227 Model/Event.php:183
+#: js/EventDetailsPanel.js:227 Model/Event.php:189
 msgid "Organizer"
 msgstr ""
 
-#: js/EventEditDialog.js:130
+#: js/EventEditDialog.js:124
 msgid "whole day"
 msgstr "цял ден"
 
-#: js/EventEditDialog.js:138
+#: js/EventEditDialog.js:132
 msgid "non-blocking"
 msgstr ""
 
-#: js/EventEditDialog.js:180 js/ResourceEditDialog.js:74 Model/Event.php:181
+#: js/EventEditDialog.js:157
+msgid "Private"
+msgstr ""
+
+#: js/EventEditDialog.js:198 js/ResourceEditDialog.js:74 Model/Event.php:187
 msgid "Description"
 msgstr "Описание"
 
-#: js/EventEditDialog.js:194
+#: js/EventEditDialog.js:212
 msgid "Enter description"
 msgstr "Приеми описание"
 
-#: js/EventEditDialog.js:344
+#: js/EventEditDialog.js:342
 msgid "End date is not valid"
 msgstr "Приключващата дата е нелалидна"
 
-#: js/EventEditDialog.js:347
+#: js/EventEditDialog.js:345
 msgid "End date must be after start date"
 msgstr "Приключващата дата трябва да е по-късна от стартовата"
 
-#: js/EventEditDialog.js:360
+#: js/EventEditDialog.js:358
 msgid "Start date is not valid"
 msgstr "Невалидна стартова дата"
 
-#: js/MainScreenCenterPanel.js:73
+#: js/MainScreenCenterPanel.js:95
 msgid "Show declined events"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:108
+#: js/MainScreenCenterPanel.js:130
 msgid "Day"
 msgstr "Ден"
 
-#: js/MainScreenCenterPanel.js:117 js/PagingToolbar.js:276
+#: js/MainScreenCenterPanel.js:139 js/PagingToolbar.js:276
 msgid "Week"
 msgstr "Седмица"
 
-#: js/MainScreenCenterPanel.js:126
+#: js/MainScreenCenterPanel.js:148
 msgid "Month"
 msgstr "Месец"
 
-#: js/MainScreenCenterPanel.js:294
+#: js/MainScreenCenterPanel.js:317
 msgid "Please Change Selection"
 msgstr "Моля сменете селекциятата"
 
-#: js/MainScreenCenterPanel.js:295
+#: js/MainScreenCenterPanel.js:318
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:309
+#: js/MainScreenCenterPanel.js:332
 msgid "Confirm Deletion of Series"
 msgstr "Потвърди изтриването  на серии"
 
-#: js/MainScreenCenterPanel.js:310
+#: js/MainScreenCenterPanel.js:333
 msgid "Do you really want to delete all events of this recurring event series?"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:326
-msgid "Delete Event"
-msgstr "Изтрий събитие"
-
-#: js/MainScreenCenterPanel.js:329 js/MainScreenCenterPanel.js:331
-msgid ""
-"Do you want to delete the whole series, this and all future events of this "
-"series, or just this event"
-msgstr ""
-"Желаете да изтриете цялата серия, това и всички събитя напред в тази серия, "
-"или само това събитие?"
-
-#: js/MainScreenCenterPanel.js:333
-msgid "Delete nothing"
-msgstr "Не изтривай "
-
-#: js/MainScreenCenterPanel.js:340
+#: js/MainScreenCenterPanel.js:349
 msgid "Delete whole series"
 msgstr "Изтрий цялата серия"
 
-#: js/MainScreenCenterPanel.js:361
+#: js/MainScreenCenterPanel.js:350
 msgid "Delete this and all future events"
 msgstr " Изтрий това и всички събитя напред"
 
-#: js/MainScreenCenterPanel.js:382
+#: js/MainScreenCenterPanel.js:351
 msgid "Delete this event only"
 msgstr " Изтрий само това събитие"
 
-#: js/MainScreenCenterPanel.js:412
+#: js/MainScreenCenterPanel.js:399
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Наистина ли желаете да изтриете събитието?"
@@ -524,43 +500,43 @@ msgstr ""
 msgid "unknown)"
 msgstr ""
 
-#: Model/Event.php:177
+#: Model/Event.php:183
 msgid "Start"
 msgstr ""
 
-#: Model/Event.php:178
+#: Model/Event.php:184
 msgid "End"
 msgstr ""
 
-#: Model/Event.php:180
+#: Model/Event.php:186
 msgid "Classification"
 msgstr ""
 
-#: Model/Event.php:184
+#: Model/Event.php:190
 msgid "Priority"
 msgstr ""
 
-#: Model/Event.php:187
+#: Model/Event.php:193
 msgid "Url"
 msgstr ""
 
-#: Model/Event.php:188
+#: Model/Event.php:194
 msgid "Recurrance rule"
 msgstr ""
 
-#: Model/Event.php:189
+#: Model/Event.php:195
 msgid "Is all day event"
 msgstr ""
 
-#: Model/Event.php:190
+#: Model/Event.php:196
 msgid "Organizer timezone"
 msgstr ""
 
-#: Model/Event.php:215
+#: Model/Event.php:221
 msgid "Yes"
 msgstr ""
 
-#: Model/Event.php:215
+#: Model/Event.php:221
 msgid "No"
 msgstr ""
 
@@ -636,6 +612,28 @@ msgstr ""
 #: views/eventNotification.php:61
 msgid "Event details"
 msgstr ""
+
+#~ msgid "Update Event"
+#~ msgstr "Актуализирай събитие"
+
+#~ msgid "Do you want to update the whole series, or just this event"
+#~ msgstr "Желаете ли да актуализирате цялата серия или само това събитие?"
+
+#~ msgid "Failed not update recurring event series"
+#~ msgstr "Неуспешно актуализиране на избраните серии събития"
+
+#~ msgid "Failed not update event"
+#~ msgstr "Неуспешно актуализиране на събитието"
+
+#~ msgid ""
+#~ "Do you want to delete the whole series, this and all future events of "
+#~ "this series, or just this event"
+#~ msgstr ""
+#~ "Желаете да изтриете цялата серия, това и всички събитя напред в тази "
+#~ "серия, или само това събитие?"
+
+#~ msgid "Delete nothing"
+#~ msgstr "Не изтривай "
 
 #~ msgid "Every"
 #~ msgstr "Всеки"

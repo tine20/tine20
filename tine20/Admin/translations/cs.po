@@ -109,7 +109,7 @@ msgstr "zobrazit počítače"
 msgid "view computers list and details"
 msgstr "zobrazit podrobný seznam počítačů"
 
-#: js/Admin.js:20 js/Users.js:491
+#: js/Admin.js:20 js/Users.js:493
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "Uživatel"
@@ -324,9 +324,9 @@ msgstr "Žádné skupiny ke zobrazení"
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:204 js/Groups.js:439 js/RoleEditDialog.js:299 js/Roles.js:204
+#: js/Groups.js:204 js/Groups.js:439 js/RoleEditDialog.js:300 js/Roles.js:204
 #: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:96 js/Tags.js:190
-#: js/Tags.js:507
+#: js/Tags.js:508
 msgid "Description"
 msgstr "Popis"
 
@@ -382,27 +382,27 @@ msgstr "Během mazání role došlo k chybě."
 msgid "Members"
 msgstr "Členové"
 
-#: js/RoleEditDialog.js:261
+#: js/RoleEditDialog.js:262
 msgid "Rights"
 msgstr "Práva"
 
-#: js/RoleEditDialog.js:291
+#: js/RoleEditDialog.js:292
 msgid "Role Name"
 msgstr "Název role"
 
-#: js/RoleEditDialog.js:333
+#: js/RoleEditDialog.js:334
 msgid "Loading Role..."
 msgstr "Načítám roli..."
 
-#: js/RoleEditDialog.js:333 js/Tags.js:546
+#: js/RoleEditDialog.js:334 js/Tags.js:547
 msgid "Please Wait"
 msgstr "Čekejte prosím"
 
-#: js/RoleEditDialog.js:370
+#: js/RoleEditDialog.js:371
 msgid "Add New Role"
 msgstr "Přidat novou roli"
 
-#: js/RoleEditDialog.js:372
+#: js/RoleEditDialog.js:373
 msgid "Edit Role \"{0}\""
 msgstr "Editovat roli \"{0}\""
 
@@ -473,7 +473,7 @@ msgstr "Zobrazuji štítky {0} - {1} of {2}"
 msgid "No tags to display"
 msgstr "Žádné štítky ke zobrazení"
 
-#: js/Tags.js:188 js/Tags.js:513
+#: js/Tags.js:188 js/Tags.js:514
 msgid "Color"
 msgstr "Barva"
 
@@ -497,27 +497,27 @@ msgstr "Kontext"
 msgid "Account Rights"
 msgstr "Práva účtu"
 
-#: js/Tags.js:476
+#: js/Tags.js:477
 msgid "View"
 msgstr "Prohlížet"
 
-#: js/Tags.js:481
+#: js/Tags.js:482
 msgid "Use"
 msgstr "Používat"
 
-#: js/Tags.js:500
+#: js/Tags.js:501
 msgid "Tag Name"
 msgstr "Název štítku"
 
-#: js/Tags.js:546
+#: js/Tags.js:547
 msgid "Loading Tag..."
 msgstr "Načítám štítek..."
 
-#: js/Tags.js:573
+#: js/Tags.js:574
 msgid "Add New Tag"
 msgstr "Přidat nový štítek"
 
-#: js/Tags.js:575
+#: js/Tags.js:576
 msgid "Edit Tag \"{0}\""
 msgstr "Editovat štítek \"{0}\""
 
@@ -805,38 +805,38 @@ msgstr "Email"
 msgid "Password changed"
 msgstr "Heslo změněno"
 
-#: js/Users.js:394
+#: js/Users.js:396
 msgid "add account"
 msgstr "přidat účet"
 
-#: js/Users.js:402
+#: js/Users.js:404
 msgid "edit account"
 msgstr "editovat účet"
 
-#: js/Users.js:410
+#: js/Users.js:412
 msgid "delete account"
 msgstr "smazat účet"
 
-#: js/Users.js:418
+#: js/Users.js:420
 msgid "enable account"
 msgstr "povolit účet"
 
-#: js/Users.js:427
+#: js/Users.js:429
 msgid "disable account"
 msgstr "zakázat účet"
 
-#: js/Users.js:436
+#: js/Users.js:438
 msgid "reset password"
 msgstr "resetovat heslo"
 
-#: js/Users.js:517
+#: js/Users.js:519
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] "Uživatel Samby"
 msgstr[1] "Uživatelé Samby"
 msgstr[2] "Uživatelů Samby"
 
-#: js/Users.js:543
+#: js/Users.js:545
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "Uživatel emailu"

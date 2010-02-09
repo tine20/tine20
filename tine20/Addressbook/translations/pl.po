@@ -408,37 +408,45 @@ msgstr "Eksportuj jako PDF"
 msgid "Export as CSV"
 msgstr "Eksportuj jako CSV"
 
+#: js/ContactGrid.js:205
+msgid "Export as ODS"
+msgstr ""
+
 #: js/ContactGrid.js:212
+msgid "Export as XLS"
+msgstr ""
+
+#: js/ContactGrid.js:226
 msgid "Call contact"
 msgstr "Wywołaj kontakt"
 
-#: js/ContactGrid.js:222
+#: js/ContactGrid.js:236
 msgid "Compose email"
 msgstr "Nowa wiadomość"
 
-#: js/ContactGrid.js:232
+#: js/ContactGrid.js:246
 msgid "Import contacts"
 msgstr ""
 
 # The other possibility could be: "Służbowo", see the german translation.
 # Die andere moeglichkeit waere: "Służbowo", siehe die deutsche Uebersetzung.
-#: js/ContactGrid.js:276
+#: js/ContactGrid.js:290
 msgid "Work"
 msgstr "Praca"
 
-#: js/ContactGrid.js:285
+#: js/ContactGrid.js:299
 msgid "Home"
 msgstr "Prywatnie"
 
-#: js/ContactGrid.js:294
+#: js/ContactGrid.js:308
 msgid "Cell"
 msgstr "Komórka"
 
-#: js/ContactGrid.js:303
+#: js/ContactGrid.js:317
 msgid "Cell private"
 msgstr "Komórka prywatna"
 
-#: js/ContactGrid.js:407
+#: js/ContactGrid.js:421
 msgid "Internal Contact"
 msgstr "Kontakty wewnętrzne"
 

@@ -20,7 +20,7 @@ msgstr ""
 msgid "Create new shared tasks lists"
 msgstr ""
 
-#: Controller/Task.php:162
+#: Controller/Task.php:166
 msgid "Notification for Task "
 msgstr ""
 
@@ -37,7 +37,7 @@ msgstr "サマリー"
 msgid "Due date"
 msgstr "期日"
 
-#: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:176
+#: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:184
 msgid "Priority"
 msgstr "重要度"
 
@@ -58,7 +58,7 @@ msgstr "説明を入力してください..."
 msgid "Percentage"
 msgstr "割合"
 
-#: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:177
+#: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:185
 msgid "Status"
 msgstr "ステータス"
 
@@ -104,7 +104,7 @@ msgstr ""
 msgid "Add a task..."
 msgstr "タスクを追加しています..."
 
-#: js/GridPanel.js:204 Model/Task.php:178
+#: js/GridPanel.js:204 Model/Task.php:186
 msgid "Percent"
 msgstr "パーセント"
 
@@ -116,7 +116,7 @@ msgstr "作成時間"
 msgid "Show closed"
 msgstr "クローズされたものの表示"
 
-#: js/Status.js:45 Setup/setup.xml:449
+#: js/Status.js:45 Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "進行中"
 
@@ -138,27 +138,27 @@ msgstr[0] "ToDoリスト"
 msgid "to do lists"
 msgstr "ToDoリスト"
 
-#: Model/Task.php:173
+#: Model/Task.php:181
 msgid "Due"
 msgstr ""
 
-#: Model/Task.php:174
+#: Model/Task.php:182
 msgid "Organizer"
 msgstr ""
 
-#: Model/Task.php:175
+#: Model/Task.php:183
 #, fuzzy
 msgid "Description"
 msgstr "説明を入力してください..."
 
-#: Setup/setup.xml:405
+#: Setup/setup.xml:295
 msgid "NEEDS-ACTION"
 msgstr "要アクション"
 
-#: Setup/setup.xml:427
+#: Setup/setup.xml:317
 msgid "COMPLETED"
 msgstr "完了"
 
-#: Setup/setup.xml:471
+#: Setup/setup.xml:361
 msgid "CANCELLED"
 msgstr "キャンセル"

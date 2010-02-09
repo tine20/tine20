@@ -106,7 +106,7 @@ msgstr "檢視帳號"
 msgid "view computers list and details"
 msgstr "檢視帳號列表和明細"
 
-#: js/Admin.js:20 js/Users.js:491
+#: js/Admin.js:20 js/Users.js:493
 #, fuzzy
 msgid "User"
 msgid_plural "Users"
@@ -322,9 +322,9 @@ msgstr "無此群組"
 msgid "ID"
 msgstr ""
 
-#: js/Groups.js:204 js/Groups.js:439 js/RoleEditDialog.js:299 js/Roles.js:204
+#: js/Groups.js:204 js/Groups.js:439 js/RoleEditDialog.js:300 js/Roles.js:204
 #: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:96 js/Tags.js:190
-#: js/Tags.js:507
+#: js/Tags.js:508
 msgid "Description"
 msgstr "描述"
 
@@ -380,27 +380,27 @@ msgstr ""
 msgid "Members"
 msgstr "成員"
 
-#: js/RoleEditDialog.js:261
+#: js/RoleEditDialog.js:262
 msgid "Rights"
 msgstr "權限"
 
-#: js/RoleEditDialog.js:291
+#: js/RoleEditDialog.js:292
 msgid "Role Name"
 msgstr "角色名稱"
 
-#: js/RoleEditDialog.js:333
+#: js/RoleEditDialog.js:334
 msgid "Loading Role..."
 msgstr "角色載入中..."
 
-#: js/RoleEditDialog.js:333 js/Tags.js:546
+#: js/RoleEditDialog.js:334 js/Tags.js:547
 msgid "Please Wait"
 msgstr "請稍後"
 
-#: js/RoleEditDialog.js:370
+#: js/RoleEditDialog.js:371
 msgid "Add New Role"
 msgstr "加入新角色"
 
-#: js/RoleEditDialog.js:372
+#: js/RoleEditDialog.js:373
 msgid "Edit Role \"{0}\""
 msgstr "編輯角色 \"{0}\""
 
@@ -469,7 +469,7 @@ msgstr ""
 msgid "No tags to display"
 msgstr "無此標記顯示"
 
-#: js/Tags.js:188 js/Tags.js:513
+#: js/Tags.js:188 js/Tags.js:514
 msgid "Color"
 msgstr ""
 
@@ -494,27 +494,27 @@ msgstr "內容"
 msgid "Account Rights"
 msgstr "帳號權限"
 
-#: js/Tags.js:476
+#: js/Tags.js:477
 msgid "View"
 msgstr "檢視"
 
-#: js/Tags.js:481
+#: js/Tags.js:482
 msgid "Use"
 msgstr ""
 
-#: js/Tags.js:500
+#: js/Tags.js:501
 msgid "Tag Name"
 msgstr "標籤名稱"
 
-#: js/Tags.js:546
+#: js/Tags.js:547
 msgid "Loading Tag..."
 msgstr "載入標籤中..."
 
-#: js/Tags.js:573
+#: js/Tags.js:574
 msgid "Add New Tag"
 msgstr "加入新標籤"
 
-#: js/Tags.js:575
+#: js/Tags.js:576
 msgid "Edit Tag \"{0}\""
 msgstr "編輯標籤 \"{0}\""
 
@@ -808,36 +808,36 @@ msgstr "電子郵件"
 msgid "Password changed"
 msgstr "變更密碼"
 
-#: js/Users.js:394
+#: js/Users.js:396
 msgid "add account"
 msgstr "新增帳號"
 
-#: js/Users.js:402
+#: js/Users.js:404
 msgid "edit account"
 msgstr "編輯帳號"
 
-#: js/Users.js:410
+#: js/Users.js:412
 msgid "delete account"
 msgstr "刪除帳號"
 
-#: js/Users.js:418
+#: js/Users.js:420
 msgid "enable account"
 msgstr "啟用帳號"
 
-#: js/Users.js:427
+#: js/Users.js:429
 msgid "disable account"
 msgstr "關閉帳號"
 
-#: js/Users.js:436
+#: js/Users.js:438
 msgid "reset password"
 msgstr "重設密碼"
 
-#: js/Users.js:517
+#: js/Users.js:519
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] ""
 
-#: js/Users.js:543
+#: js/Users.js:545
 #, fuzzy
 msgid "Email User"
 msgid_plural "Email Users"

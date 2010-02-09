@@ -115,7 +115,7 @@ msgstr "wyświetl listę komputerów"
 msgid "view computers list and details"
 msgstr "wyświetl listę komputerów i szczegóły"
 
-#: js/Admin.js:20 js/Users.js:491
+#: js/Admin.js:20 js/Users.js:493
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "Użytkownik"
@@ -334,9 +334,9 @@ msgstr "Brak grup"
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:204 js/Groups.js:439 js/RoleEditDialog.js:299 js/Roles.js:204
+#: js/Groups.js:204 js/Groups.js:439 js/RoleEditDialog.js:300 js/Roles.js:204
 #: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:96 js/Tags.js:190
-#: js/Tags.js:507
+#: js/Tags.js:508
 msgid "Description"
 msgstr "Opis"
 
@@ -394,27 +394,27 @@ msgstr "Podczas próby usunięcia funkcji wystąpił błąd."
 msgid "Members"
 msgstr "Uczestnicy"
 
-#: js/RoleEditDialog.js:261
+#: js/RoleEditDialog.js:262
 msgid "Rights"
 msgstr "Uprawnienia"
 
-#: js/RoleEditDialog.js:291
+#: js/RoleEditDialog.js:292
 msgid "Role Name"
 msgstr "Nazwę funkcji"
 
-#: js/RoleEditDialog.js:333
+#: js/RoleEditDialog.js:334
 msgid "Loading Role..."
 msgstr "Ładowanie funkcji…"
 
-#: js/RoleEditDialog.js:333 js/Tags.js:546
+#: js/RoleEditDialog.js:334 js/Tags.js:547
 msgid "Please Wait"
 msgstr "Proszę czekać"
 
-#: js/RoleEditDialog.js:370
+#: js/RoleEditDialog.js:371
 msgid "Add New Role"
 msgstr "Dodaj nową funkcję"
 
-#: js/RoleEditDialog.js:372
+#: js/RoleEditDialog.js:373
 msgid "Edit Role \"{0}\""
 msgstr "Edytuj funkcję \"{0}\""
 
@@ -487,7 +487,7 @@ msgstr "Wyświetl znaczniki {0} - {1} z {2}"
 msgid "No tags to display"
 msgstr "Brak znaczników"
 
-#: js/Tags.js:188 js/Tags.js:513
+#: js/Tags.js:188 js/Tags.js:514
 msgid "Color"
 msgstr "Kolor"
 
@@ -511,27 +511,27 @@ msgstr "Kontekst"
 msgid "Account Rights"
 msgstr "Uprawnienia do konta"
 
-#: js/Tags.js:476
+#: js/Tags.js:477
 msgid "View"
 msgstr "Podgląd"
 
-#: js/Tags.js:481
+#: js/Tags.js:482
 msgid "Use"
 msgstr "Zastosuj"
 
-#: js/Tags.js:500
+#: js/Tags.js:501
 msgid "Tag Name"
 msgstr "Nazwę znacznika"
 
-#: js/Tags.js:546
+#: js/Tags.js:547
 msgid "Loading Tag..."
 msgstr "Ładowanie znacznika …"
 
-#: js/Tags.js:573
+#: js/Tags.js:574
 msgid "Add New Tag"
 msgstr "Dodaj nowy znacznik"
 
-#: js/Tags.js:575
+#: js/Tags.js:576
 msgid "Edit Tag \"{0}\""
 msgstr "Edytuj znacznik \"{0}\""
 
@@ -820,38 +820,38 @@ msgstr "E-mail"
 msgid "Password changed"
 msgstr "Hasło zostało zmienione"
 
-#: js/Users.js:394
+#: js/Users.js:396
 msgid "add account"
 msgstr "Dodaj konto"
 
-#: js/Users.js:402
+#: js/Users.js:404
 msgid "edit account"
 msgstr "Edytuj konto"
 
-#: js/Users.js:410
+#: js/Users.js:412
 msgid "delete account"
 msgstr "Usuń konto"
 
-#: js/Users.js:418
+#: js/Users.js:420
 msgid "enable account"
 msgstr "Włącz konto"
 
-#: js/Users.js:427
+#: js/Users.js:429
 msgid "disable account"
 msgstr "Wyłącz konto"
 
-#: js/Users.js:436
+#: js/Users.js:438
 msgid "reset password"
 msgstr "Zresetuj hasło"
 
-#: js/Users.js:517
+#: js/Users.js:519
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] "Użytkownik Samby"
 msgstr[1] "użytkowników Samby"
 msgstr[2] "użytkowników Samby"
 
-#: js/Users.js:543
+#: js/Users.js:545
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "E-mail użytkownika"

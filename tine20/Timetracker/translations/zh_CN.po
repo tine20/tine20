@@ -21,24 +21,6 @@ msgstr "管理时间帐户"
 msgid "Add, edit and delete timeaccounts"
 msgstr "添加、编辑和删除时间帐户"
 
-#: Export/Ods/Timesheet.php:89
-msgid "Total Sum"
-msgstr "合计"
-
-#: Export/Ods/Timesheet.php:109
-msgid "Not billable"
-msgstr "不记帐"
-
-#: Export/Ods/Timesheet.php:117 js/TimesheetEditDialog.js:193
-#: js/TimesheetGridPanel.js:74 js/TimesheetGridPanel.js:218
-#: js/TimesheetGridPanel.js:250
-msgid "Billable"
-msgstr "记帐"
-
-#: Export/Ods/Timesheet.php:125
-msgid "Total"
-msgstr "所有"
-
 #: js/DurationSlider.js:95
 msgid "{0}"
 msgstr "{0}"
@@ -174,23 +156,52 @@ msgstr "访问"
 msgid "Book Own"
 msgstr "预定自己的"
 
-#: js/TimeaccountEditDialog.js:228
+#: js/TimeaccountEditDialog.js:225
+msgid "The grant to add Timesheets to this Timeaccount"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:229
 msgid "View All"
 msgstr "浏览所有的"
 
-#: js/TimeaccountEditDialog.js:233
+#: js/TimeaccountEditDialog.js:230
+msgid "The grant to view Timesheetsof other users"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:235
 msgid "Book All"
 msgstr "预定所有的"
 
-#: js/TimeaccountEditDialog.js:238
+#: js/TimeaccountEditDialog.js:236
+msgid "The grant to add Timesheets for other users"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:241
 msgid "Manage Clearing"
 msgstr "管理清除"
 
-#: js/TimeaccountEditDialog.js:243
+#: js/TimeaccountEditDialog.js:242
+msgid "The grant to manage clearing of Timesheets"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:247 js/TimeaccountGridPanel.js:137
+#: js/TimesheetGridPanel.js:468
+msgid "Export"
+msgstr "导出"
+
+#: js/TimeaccountEditDialog.js:248
+msgid "The grant to export Timesheets of Timeaccount"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:253
 msgid "Manage All"
 msgstr "管理所有的"
 
-#: js/TimeaccountEditDialog.js:251
+#: js/TimeaccountEditDialog.js:254
+msgid "Includes all other grants"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:262
 msgid "Permissions"
 msgstr "许可"
 
@@ -202,10 +213,6 @@ msgstr ""
 #: js/TimesheetGridPanel.js:254
 msgid "Cleared in"
 msgstr "已清除于"
-
-#: js/TimeaccountGridPanel.js:137 js/TimesheetGridPanel.js:468
-msgid "Export"
-msgstr "导出"
 
 #: js/TimeaccountGridPanel.js:146 js/TimesheetGridPanel.js:477
 msgid "Export as ODS"
@@ -260,6 +267,11 @@ msgstr "输入描述 ..."
 #: js/TimesheetGridPanel.js:255
 msgid "Account"
 msgstr "帐户"
+
+#: js/TimesheetEditDialog.js:193 js/TimesheetGridPanel.js:74
+#: js/TimesheetGridPanel.js:218 js/TimesheetGridPanel.js:250
+msgid "Billable"
+msgstr "记帐"
 
 #: js/TimesheetEditDialog.js:200 js/TimesheetGridPanel.js:79
 #: js/TimesheetGridPanel.js:219 js/TimesheetGridPanel.js:252
@@ -381,6 +393,15 @@ msgstr ""
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "时间跟踪器"
+
+#~ msgid "Total Sum"
+#~ msgstr "合计"
+
+#~ msgid "Not billable"
+#~ msgstr "不记帐"
+
+#~ msgid "Total"
+#~ msgstr "所有"
 
 #~ msgid "Timeaccount Number"
 #~ msgstr "时间帐户号码"

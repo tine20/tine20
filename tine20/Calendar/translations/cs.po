@@ -117,7 +117,7 @@ msgstr[2] "Zdrojů"
 msgid "Name"
 msgstr "Název"
 
-#: js/AttendeeGridPanel.js:187 Model/Event.php:185
+#: js/AttendeeGridPanel.js:187 Model/Event.php:191
 msgid "Status"
 msgstr "Stav"
 
@@ -203,39 +203,27 @@ msgstr ""
 "Opravdu chcete aktualizovat všechny události z této řady opakovaných "
 "událostí?"
 
-#: js/CalendarPanel.js:287
-msgid "Update Event"
-msgstr "Aktualizovat událost"
+#: js/CalendarPanel.js:283 js/MainScreenCenterPanel.js:346
+msgid "Delete Event"
+msgstr "Smazat událost"
 
-#: js/CalendarPanel.js:290 js/CalendarPanel.js:292
-msgid "Do you want to update the whole series, or just this event"
-msgstr "Chete aktuaklizovat celou řadu nebo jen tuto událost"
-
-#: js/CalendarPanel.js:294
+#: js/CalendarPanel.js:286
 msgid "Update nothing"
 msgstr "Nic neaktualizovat"
 
-#: js/CalendarPanel.js:302
+#: js/CalendarPanel.js:287
 msgid "Update whole series"
 msgstr "Aktualizovat celou řadu"
 
-#: js/CalendarPanel.js:314
-msgid "Failed not update recurring event series"
-msgstr "Pokus neaktualizovat řadu opakovaných událostí se nezdařil"
-
-#: js/CalendarPanel.js:322
+#: js/CalendarPanel.js:288
 msgid "Update this event only"
 msgstr "Aktualizovat jen tuto událost"
-
-#: js/CalendarPanel.js:336
-msgid "Failed not update event"
-msgstr "Pokus neaktualizovat událost se nezdařil"
 
 #: js/CalendarSelectTreePanel.js:43
 msgid "Resources {0}"
 msgstr "Zdroje {0}"
 
-#: js/CalendarSelectWidget.js:158
+#: js/CalendarSelectWidget.js:121
 msgid "Originally"
 msgstr "Původně"
 
@@ -255,80 +243,84 @@ msgstr "Neznámý kalendář"
 msgid "{0} {1} o'clock"
 msgstr "{0} {1}"
 
-#: js/EventDetailsPanel.js:172 js/EventEditDialog.js:95 Model/Event.php:186
+#: js/EventDetailsPanel.js:172 js/EventEditDialog.js:89 Model/Event.php:192
 msgid "Summary"
 msgstr "Shrnutí"
 
-#: js/EventDetailsPanel.js:208 js/EventEditDialog.js:107
+#: js/EventDetailsPanel.js:208 js/EventEditDialog.js:101
 msgid "Start Time"
 msgstr "Počáteční čas"
 
-#: js/EventDetailsPanel.js:213 js/EventEditDialog.js:122
+#: js/EventDetailsPanel.js:213 js/EventEditDialog.js:116
 msgid "End Time"
 msgstr "Čas ukončení"
 
-#: js/EventDetailsPanel.js:218 Model/Event.php:179
+#: js/EventDetailsPanel.js:218 Model/Event.php:185
 msgid "Blocking"
 msgstr "Blokující"
 
-#: js/EventDetailsPanel.js:223 js/EventEditDialog.js:102
-#: js/ResourcesGridPanel.js:54 Model/Event.php:182
+#: js/EventDetailsPanel.js:223 js/EventEditDialog.js:96
+#: js/ResourcesGridPanel.js:54 Model/Event.php:188
 msgid "Location"
 msgstr "Umístění"
 
-#: js/EventDetailsPanel.js:227 Model/Event.php:183
+#: js/EventDetailsPanel.js:227 Model/Event.php:189
 msgid "Organizer"
 msgstr "Organizátor"
 
-#: js/EventEditDialog.js:130
+#: js/EventEditDialog.js:124
 msgid "whole day"
 msgstr "celý den"
 
-#: js/EventEditDialog.js:138
+#: js/EventEditDialog.js:132
 msgid "non-blocking"
 msgstr "neblokující"
 
-#: js/EventEditDialog.js:180 js/ResourceEditDialog.js:74 Model/Event.php:181
+#: js/EventEditDialog.js:157
+msgid "Private"
+msgstr ""
+
+#: js/EventEditDialog.js:198 js/ResourceEditDialog.js:74 Model/Event.php:187
 msgid "Description"
 msgstr "Popis"
 
-#: js/EventEditDialog.js:194
+#: js/EventEditDialog.js:212
 msgid "Enter description"
 msgstr "Zadejte popis"
 
-#: js/EventEditDialog.js:344
+#: js/EventEditDialog.js:342
 msgid "End date is not valid"
 msgstr "Datum ukončení je neplatné"
 
-#: js/EventEditDialog.js:347
+#: js/EventEditDialog.js:345
 msgid "End date must be after start date"
 msgstr "Datum ukončení musí být po počátečním datu"
 
-#: js/EventEditDialog.js:360
+#: js/EventEditDialog.js:358
 msgid "Start date is not valid"
 msgstr "Počáteční datum je neplatné"
 
-#: js/MainScreenCenterPanel.js:73
+#: js/MainScreenCenterPanel.js:95
 msgid "Show declined events"
 msgstr "Zobrazit odmítnuté události"
 
-#: js/MainScreenCenterPanel.js:108
+#: js/MainScreenCenterPanel.js:130
 msgid "Day"
 msgstr "Den"
 
-#: js/MainScreenCenterPanel.js:117 js/PagingToolbar.js:276
+#: js/MainScreenCenterPanel.js:139 js/PagingToolbar.js:276
 msgid "Week"
 msgstr "Týden"
 
-#: js/MainScreenCenterPanel.js:126
+#: js/MainScreenCenterPanel.js:148
 msgid "Month"
 msgstr "Měsíc"
 
-#: js/MainScreenCenterPanel.js:294
+#: js/MainScreenCenterPanel.js:317
 msgid "Please Change Selection"
 msgstr "Změňte prosím výběr"
 
-#: js/MainScreenCenterPanel.js:295
+#: js/MainScreenCenterPanel.js:318
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
@@ -336,43 +328,27 @@ msgstr ""
 "Vás výběr obsahuje opakované události. Opakované události je nutné smazat "
 "zvlášť!"
 
-#: js/MainScreenCenterPanel.js:309
+#: js/MainScreenCenterPanel.js:332
 msgid "Confirm Deletion of Series"
 msgstr "Potvrdit smazání řady"
 
-#: js/MainScreenCenterPanel.js:310
+#: js/MainScreenCenterPanel.js:333
 msgid "Do you really want to delete all events of this recurring event series?"
 msgstr "Opravdu chcete smazat všechny události této řady opakovaných událostí?"
 
-#: js/MainScreenCenterPanel.js:326
-msgid "Delete Event"
-msgstr "Smazat událost"
-
-#: js/MainScreenCenterPanel.js:329 js/MainScreenCenterPanel.js:331
-msgid ""
-"Do you want to delete the whole series, this and all future events of this "
-"series, or just this event"
-msgstr ""
-"Chcete smazat celou řadu, tuto a všechny budoucí události této řady, nebo "
-"jen tuto událost"
-
-#: js/MainScreenCenterPanel.js:333
-msgid "Delete nothing"
-msgstr "Nic nemazat"
-
-#: js/MainScreenCenterPanel.js:340
+#: js/MainScreenCenterPanel.js:349
 msgid "Delete whole series"
 msgstr "Smazat celou řadu"
 
-#: js/MainScreenCenterPanel.js:361
+#: js/MainScreenCenterPanel.js:350
 msgid "Delete this and all future events"
 msgstr "Smazat tuto a všechny budoucí události"
 
-#: js/MainScreenCenterPanel.js:382
+#: js/MainScreenCenterPanel.js:351
 msgid "Delete this event only"
 msgstr "Smazat jen tuto událost"
 
-#: js/MainScreenCenterPanel.js:412
+#: js/MainScreenCenterPanel.js:399
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Opravdu chcete smazat tuto událost?"
@@ -531,43 +507,43 @@ msgstr "Systém automaticky přídal kontakt jako účastníka události"
 msgid "unknown)"
 msgstr "neznámý)"
 
-#: Model/Event.php:177
+#: Model/Event.php:183
 msgid "Start"
 msgstr "Začátek"
 
-#: Model/Event.php:178
+#: Model/Event.php:184
 msgid "End"
 msgstr "Konec"
 
-#: Model/Event.php:180
+#: Model/Event.php:186
 msgid "Classification"
 msgstr "Kategorie"
 
-#: Model/Event.php:184
+#: Model/Event.php:190
 msgid "Priority"
 msgstr "Priorita"
 
-#: Model/Event.php:187
+#: Model/Event.php:193
 msgid "Url"
 msgstr "URL"
 
-#: Model/Event.php:188
+#: Model/Event.php:194
 msgid "Recurrance rule"
 msgstr "Pravidlo opakování"
 
-#: Model/Event.php:189
+#: Model/Event.php:195
 msgid "Is all day event"
 msgstr "Celodenní událost"
 
-#: Model/Event.php:190
+#: Model/Event.php:196
 msgid "Organizer timezone"
 msgstr "Časové pásmo organizátora"
 
-#: Model/Event.php:215
+#: Model/Event.php:221
 msgid "Yes"
 msgstr "Ano"
 
-#: Model/Event.php:215
+#: Model/Event.php:221
 msgid "No"
 msgstr "Ne"
 
@@ -644,6 +620,28 @@ msgstr "Žádná odpověď od %1$s"
 #: views/eventNotification.php:61
 msgid "Event details"
 msgstr "Detaily události"
+
+#~ msgid "Update Event"
+#~ msgstr "Aktualizovat událost"
+
+#~ msgid "Do you want to update the whole series, or just this event"
+#~ msgstr "Chete aktuaklizovat celou řadu nebo jen tuto událost"
+
+#~ msgid "Failed not update recurring event series"
+#~ msgstr "Pokus neaktualizovat řadu opakovaných událostí se nezdařil"
+
+#~ msgid "Failed not update event"
+#~ msgstr "Pokus neaktualizovat událost se nezdařil"
+
+#~ msgid ""
+#~ "Do you want to delete the whole series, this and all future events of "
+#~ "this series, or just this event"
+#~ msgstr ""
+#~ "Chcete smazat celou řadu, tuto a všechny budoucí události této řady, nebo "
+#~ "jen tuto událost"
+
+#~ msgid "Delete nothing"
+#~ msgstr "Nic nemazat"
 
 #~ msgid "Every"
 #~ msgstr "Každý"

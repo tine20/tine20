@@ -102,7 +102,7 @@ msgstr "浏览电脑"
 msgid "view computers list and details"
 msgstr "浏览电脑列表和细节"
 
-#: js/Admin.js:20 js/Users.js:491
+#: js/Admin.js:20 js/Users.js:493
 #, fuzzy
 msgid "User"
 msgid_plural "Users"
@@ -318,9 +318,9 @@ msgstr "没有组要显示"
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:204 js/Groups.js:439 js/RoleEditDialog.js:299 js/Roles.js:204
+#: js/Groups.js:204 js/Groups.js:439 js/RoleEditDialog.js:300 js/Roles.js:204
 #: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:96 js/Tags.js:190
-#: js/Tags.js:507
+#: js/Tags.js:508
 msgid "Description"
 msgstr "描述"
 
@@ -376,27 +376,27 @@ msgstr "当试图删除角色是发生错误"
 msgid "Members"
 msgstr "成员"
 
-#: js/RoleEditDialog.js:261
+#: js/RoleEditDialog.js:262
 msgid "Rights"
 msgstr "权限"
 
-#: js/RoleEditDialog.js:291
+#: js/RoleEditDialog.js:292
 msgid "Role Name"
 msgstr "角色名"
 
-#: js/RoleEditDialog.js:333
+#: js/RoleEditDialog.js:334
 msgid "Loading Role..."
 msgstr "加载角色"
 
-#: js/RoleEditDialog.js:333 js/Tags.js:546
+#: js/RoleEditDialog.js:334 js/Tags.js:547
 msgid "Please Wait"
 msgstr "请稍等"
 
-#: js/RoleEditDialog.js:370
+#: js/RoleEditDialog.js:371
 msgid "Add New Role"
 msgstr "添加新角色"
 
-#: js/RoleEditDialog.js:372
+#: js/RoleEditDialog.js:373
 msgid "Edit Role \"{0}\""
 msgstr "编辑角色 \"{0}\""
 
@@ -465,7 +465,7 @@ msgstr "显示标签{0} - {1} of {2}"
 msgid "No tags to display"
 msgstr "没有标签要显示"
 
-#: js/Tags.js:188 js/Tags.js:513
+#: js/Tags.js:188 js/Tags.js:514
 msgid "Color"
 msgstr "颜色"
 
@@ -489,27 +489,27 @@ msgstr "上下文"
 msgid "Account Rights"
 msgstr "账户权限"
 
-#: js/Tags.js:476
+#: js/Tags.js:477
 msgid "View"
 msgstr "视图"
 
-#: js/Tags.js:481
+#: js/Tags.js:482
 msgid "Use"
 msgstr "使用"
 
-#: js/Tags.js:500
+#: js/Tags.js:501
 msgid "Tag Name"
 msgstr "标签名"
 
-#: js/Tags.js:546
+#: js/Tags.js:547
 msgid "Loading Tag..."
 msgstr "加载标签..."
 
-#: js/Tags.js:573
+#: js/Tags.js:574
 msgid "Add New Tag"
 msgstr "添加新标签"
 
-#: js/Tags.js:575
+#: js/Tags.js:576
 msgid "Edit Tag \"{0}\""
 msgstr "编辑标签\"{0}\""
 
@@ -801,36 +801,36 @@ msgstr "电子邮件"
 msgid "Password changed"
 msgstr "密码已修改"
 
-#: js/Users.js:394
+#: js/Users.js:396
 msgid "add account"
 msgstr "添加账户"
 
-#: js/Users.js:402
+#: js/Users.js:404
 msgid "edit account"
 msgstr "编辑账户"
 
-#: js/Users.js:410
+#: js/Users.js:412
 msgid "delete account"
 msgstr "删除账户"
 
-#: js/Users.js:418
+#: js/Users.js:420
 msgid "enable account"
 msgstr "开启账户"
 
-#: js/Users.js:427
+#: js/Users.js:429
 msgid "disable account"
 msgstr "关闭账户"
 
-#: js/Users.js:436
+#: js/Users.js:438
 msgid "reset password"
 msgstr "重置密码"
 
-#: js/Users.js:517
+#: js/Users.js:519
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] "Samba 用户"
 
-#: js/Users.js:543
+#: js/Users.js:545
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "电子邮件用户"

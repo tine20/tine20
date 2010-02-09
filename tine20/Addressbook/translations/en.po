@@ -391,35 +391,43 @@ msgstr "Export as PDF"
 msgid "Export as CSV"
 msgstr "Export as CSV"
 
+#: js/ContactGrid.js:205
+msgid "Export as ODS"
+msgstr "Export as ODS"
+
 #: js/ContactGrid.js:212
+msgid "Export as XLS"
+msgstr "Export as XLS"
+
+#: js/ContactGrid.js:226
 msgid "Call contact"
 msgstr "Call contact"
 
-#: js/ContactGrid.js:222
+#: js/ContactGrid.js:236
 msgid "Compose email"
 msgstr "Compose email"
 
-#: js/ContactGrid.js:232
+#: js/ContactGrid.js:246
 msgid "Import contacts"
 msgstr "Import contacts"
 
-#: js/ContactGrid.js:276
+#: js/ContactGrid.js:290
 msgid "Work"
 msgstr "Work"
 
-#: js/ContactGrid.js:285
+#: js/ContactGrid.js:299
 msgid "Home"
 msgstr "Home"
 
-#: js/ContactGrid.js:294
+#: js/ContactGrid.js:308
 msgid "Cell"
 msgstr "Cell"
 
-#: js/ContactGrid.js:303
+#: js/ContactGrid.js:317
 msgid "Cell private"
 msgstr "Cell private"
 
-#: js/ContactGrid.js:407
+#: js/ContactGrid.js:421
 msgid "Internal Contact"
 msgstr "Internal Contact"
 

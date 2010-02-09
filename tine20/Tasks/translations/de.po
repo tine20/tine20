@@ -21,7 +21,7 @@ msgstr "Gemeinsame Aufgabenlisten verwalten"
 msgid "Create new shared tasks lists"
 msgstr "Neue gemeinse Aufgabenliste anlegen"
 
-#: Controller/Task.php:162
+#: Controller/Task.php:166
 msgid "Notification for Task "
 msgstr "Benachrichtigung für Aufgabe"
 
@@ -38,7 +38,7 @@ msgstr "Beschreibung"
 msgid "Due date"
 msgstr "Fälligkeitsdatum"
 
-#: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:176
+#: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:184
 msgid "Priority"
 msgstr "Priorität"
 
@@ -58,7 +58,7 @@ msgstr "Beschreibung eingeben..."
 msgid "Percentage"
 msgstr "Prozent"
 
-#: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:177
+#: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:185
 msgid "Status"
 msgstr "Status"
 
@@ -104,7 +104,7 @@ msgstr ""
 msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
-#: js/GridPanel.js:204 Model/Task.php:178
+#: js/GridPanel.js:204 Model/Task.php:186
 msgid "Percent"
 msgstr "Prozent"
 
@@ -116,7 +116,7 @@ msgstr "Angelegt am"
 msgid "Show closed"
 msgstr "Geschlossene Aufgaben anzeigen"
 
-#: js/Status.js:45 Setup/setup.xml:449
+#: js/Status.js:45 Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "IN BEARBEITUNG"
 
@@ -140,26 +140,26 @@ msgstr[1] "Aufgabenlisten"
 msgid "to do lists"
 msgstr "Aufgabenlisten"
 
-#: Model/Task.php:173
+#: Model/Task.php:181
 msgid "Due"
 msgstr "Fälligkeit"
 
-#: Model/Task.php:174
+#: Model/Task.php:182
 msgid "Organizer"
 msgstr "Organisator"
 
-#: Model/Task.php:175
+#: Model/Task.php:183
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Setup/setup.xml:405
+#: Setup/setup.xml:295
 msgid "NEEDS-ACTION"
 msgstr "ZU BEARBEITEN"
 
-#: Setup/setup.xml:427
+#: Setup/setup.xml:317
 msgid "COMPLETED"
 msgstr "ERLEDIGT"
 
-#: Setup/setup.xml:471
+#: Setup/setup.xml:361
 msgid "CANCELLED"
 msgstr "ZURÜCKGESTELLT"

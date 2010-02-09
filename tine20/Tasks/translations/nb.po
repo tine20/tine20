@@ -21,7 +21,7 @@ msgstr "behandle delte oppgaver lister"
 msgid "Create new shared tasks lists"
 msgstr "Opprett ny delt oppgaver liste"
 
-#: Controller/Task.php:162
+#: Controller/Task.php:166
 msgid "Notification for Task "
 msgstr "Varslinger for Oppgaver"
 
@@ -38,7 +38,7 @@ msgstr "Oppsumering"
 msgid "Due date"
 msgstr "Utløps dato"
 
-#: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:176
+#: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:184
 msgid "Priority"
 msgstr "Prioritet"
 
@@ -58,7 +58,7 @@ msgstr "Tast inn beskrivelse..."
 msgid "Percentage"
 msgstr "Prosent"
 
-#: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:177
+#: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:185
 msgid "Status"
 msgstr "Status"
 
@@ -104,7 +104,7 @@ msgstr ""
 msgid "Add a task..."
 msgstr "Legg til en oppgave..."
 
-#: js/GridPanel.js:204 Model/Task.php:178
+#: js/GridPanel.js:204 Model/Task.php:186
 msgid "Percent"
 msgstr "Prosent"
 
@@ -116,7 +116,7 @@ msgstr "Opprettelses Tid"
 msgid "Show closed"
 msgstr "Vis lukkede"
 
-#: js/Status.js:45 Setup/setup.xml:449
+#: js/Status.js:45 Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "I-PROSESS"
 
@@ -140,26 +140,26 @@ msgstr[1] "å gjøre lister"
 msgid "to do lists"
 msgstr "å gjøre lister"
 
-#: Model/Task.php:173
+#: Model/Task.php:181
 msgid "Due"
 msgstr "Utløper"
 
-#: Model/Task.php:174
+#: Model/Task.php:182
 msgid "Organizer"
 msgstr "Planlegger"
 
-#: Model/Task.php:175
+#: Model/Task.php:183
 msgid "Description"
 msgstr "Beskrivelse"
 
-#: Setup/setup.xml:405
+#: Setup/setup.xml:295
 msgid "NEEDS-ACTION"
 msgstr "TRENGER-HANDLING"
 
-#: Setup/setup.xml:427
+#: Setup/setup.xml:317
 msgid "COMPLETED"
 msgstr "FULLFØRT"
 
-#: Setup/setup.xml:471
+#: Setup/setup.xml:361
 msgid "CANCELLED"
 msgstr "AVBRUTT"

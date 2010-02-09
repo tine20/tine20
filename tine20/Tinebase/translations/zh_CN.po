@@ -46,12 +46,12 @@ msgstr "检查版本"
 msgid "Check tine20.org for new versions"
 msgstr "查询 tine20.org 看是否有新版本"
 
-#: Export/Ods.php:231
+#: Export/Ods.php:194
 #, fuzzy
 msgid "Filter"
 msgstr "失败"
 
-#: Export/Ods.php:349
+#: Export/Ods.php:278
 msgid "Data"
 msgstr ""
 
@@ -67,19 +67,19 @@ msgstr "创建者"
 msgid "Activities"
 msgstr "活动"
 
-#: Frontend/Http.php:531 js/ExceptionHandler.js:143
+#: Frontend/Http.php:532 js/ExceptionHandler.js:127
 msgid "Authorisation Required"
 msgstr "需要授权"
 
-#: Frontend/Http.php:532
+#: Frontend/Http.php:533
 msgid "Your session is not valid. You need to login again."
 msgstr "会话无效，需要重新登录"
 
-#: Frontend/Http.php:558 js/ExceptionDialog.js:46
+#: Frontend/Http.php:559 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "非正常结束"
 
-#: Frontend/Http.php:559 js/ExceptionDialog.js:71
+#: Frontend/Http.php:560 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "有错误发生，程序非正常终止"
 
@@ -111,6 +111,7 @@ msgstr[0] "要做的事项列表"
 #: js/ExceptionDialog.js:54 js/MainScreen.js:451
 #: js/widgets/container/ContainerSelect.js:373
 #: js/widgets/dialog/EditDialog.js:195
+#: js/widgets/dialog/MultiOptionsDialog.js:98
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
 #: js/widgets/tags/TagsMassAttachAction.js:86
 msgid "Cancel"
@@ -167,59 +168,59 @@ msgstr "报告已经发送，谢谢你的贡献"
 msgid "Please restart your browser now!"
 msgstr "请输入登录数据"
 
-#: js/ExceptionHandler.js:144
+#: js/ExceptionHandler.js:128
 msgid "Your session timed out. You need to login again."
 msgstr "会话超时，需要重新登录"
 
-#: js/ExceptionHandler.js:161
+#: js/ExceptionHandler.js:145
 msgid "Insufficient Rights"
 msgstr "权限不够"
 
-#: js/ExceptionHandler.js:162
+#: js/ExceptionHandler.js:146
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "对不起，你不允许执行该动作"
 
-#: js/ExceptionHandler.js:171
+#: js/ExceptionHandler.js:155
 #, fuzzy
 msgid "Not Found"
 msgstr "不允许"
 
-#: js/ExceptionHandler.js:172
+#: js/ExceptionHandler.js:156
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr ""
 
-#: js/ExceptionHandler.js:181
+#: js/ExceptionHandler.js:165
 msgid "Concurrent Updates"
 msgstr "同时更新"
 
-#: js/ExceptionHandler.js:182
+#: js/ExceptionHandler.js:166
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
 msgstr "当你编辑时，有人保存了这条记录。你 ..."
 
-#: js/ExceptionHandler.js:190
+#: js/ExceptionHandler.js:174
 msgid "Connection lost, please check your network!"
 msgstr "失去连接，请检查网络"
 
-#: js/ExceptionHandler.js:196
+#: js/ExceptionHandler.js:180
 msgid "Timeout"
 msgstr ""
 
-#: js/ExceptionHandler.js:197
+#: js/ExceptionHandler.js:181
 msgid ""
 "Sorry, some timeout occured while processing your request. Please reload "
 "your browser, try again or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:206
+#: js/ExceptionHandler.js:190
 msgid "No Response"
 msgstr ""
 
-#: js/ExceptionHandler.js:207
+#: js/ExceptionHandler.js:191
 msgid ""
 "Sorry, the Server did not respond any data. Please reload your browser, try "
 "again or contact your administrator."
@@ -286,7 +287,7 @@ msgstr ""
 msgid "Logging you in..."
 msgstr "正在登录 ..."
 
-#: js/LoginPanel.js:271 js/widgets/container/GrantsDialog.js:138
+#: js/LoginPanel.js:271 js/widgets/container/GrantsDialog.js:164
 #: js/widgets/grid/PersistentFilterPicker.js:126
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:140
@@ -318,7 +319,7 @@ msgstr "请输入登录数据"
 msgid "Debug Console (Ctrl + F11)"
 msgstr ""
 
-#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:117
+#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:141
 msgid "Admin"
 msgstr "管理"
 
@@ -386,6 +387,7 @@ msgstr "重复新密码"
 
 #: js/MainScreen.js:457 js/widgets/container/ContainerSelect.js:382
 #: js/widgets/dialog/EditDialog.js:178
+#: js/widgets/dialog/MultiOptionsDialog.js:91
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 #: js/widgets/tags/TagsMassAttachAction.js:92
 msgid "Ok"
@@ -445,17 +447,17 @@ msgstr[0] ""
 msgid "Groups"
 msgstr ""
 
-#: js/Models.js:262
+#: js/Models.js:265
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] ""
 
-#: js/Models.js:295
+#: js/Models.js:298
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] ""
 
-#: js/Models.js:322
+#: js/Models.js:325
 #, fuzzy
 msgid "Relation"
 msgid_plural "Relations"
@@ -526,7 +528,7 @@ msgstr "不是图像"
 msgid "Please select an image file (gif/png/jpeg)"
 msgstr ""
 
-#: js/ux/form/ImageField.js:146 js/widgets/grid/FileUploadGrid.js:84
+#: js/ux/form/ImageField.js:146 js/widgets/grid/FileUploadGrid.js:90
 msgid "Upload Failed"
 msgstr "上载失败"
 
@@ -629,7 +631,7 @@ msgid "Add a Note..."
 msgstr "添加一个注释..."
 
 #: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:168
-#: js/widgets/container/GrantsDialog.js:99
+#: js/widgets/container/GrantsDialog.js:100
 msgid "Add"
 msgstr "添加"
 
@@ -822,23 +824,67 @@ msgstr "文件夹"
 msgid "Read"
 msgstr "读"
 
-#: js/widgets/container/GrantsDialog.js:104
+#: js/widgets/container/GrantsDialog.js:95
+msgid "The grant to read records of this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:101
+msgid "The grant to add records to this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:106
 msgid "Edit"
 msgstr "编辑"
 
-#: js/widgets/container/GrantsDialog.js:109
+#: js/widgets/container/GrantsDialog.js:107
+msgid "The grant to edit records in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:112
 msgid "Delete"
 msgstr "删除"
 
-#: js/widgets/container/GrantsDialog.js:138
+#: js/widgets/container/GrantsDialog.js:113
+msgid "The grant to delete records in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:118
+msgid "Export"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:119
+msgid "The grant to export records from this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:124
+msgid "Sync"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:125
+msgid "The grant to synchronise records with this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:133
+msgid "Private"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:134
+msgid "The grant to access records marked as private in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:142
+msgid "The grant to administrate this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:164
 msgid "Updating Grants"
 msgstr "正在更新权限"
 
-#: js/widgets/container/GrantsDialog.js:168
+#: js/widgets/container/GrantsDialog.js:194
 msgid "Error"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:169
+#: js/widgets/container/GrantsDialog.js:195
 msgid "You are not allowed to remove all admins for this container!"
 msgstr ""
 
@@ -900,13 +946,13 @@ msgid "1 day before"
 msgstr "是以前"
 
 #: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:443 js/widgets/dialog/ImportDialog.js:200
+#: js/widgets/dialog/EditDialog.js:443 js/widgets/dialog/ImportDialog.js:202
 #: js/widgets/dialog/PreferencesDialog.js:284
 msgid "Errors"
 msgstr "错误"
 
 #: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:443 js/widgets/dialog/ImportDialog.js:200
+#: js/widgets/dialog/EditDialog.js:443 js/widgets/dialog/ImportDialog.js:202
 msgid "Please fix the errors noted."
 msgstr "请修改注释的错误。"
 
@@ -943,40 +989,40 @@ msgstr "真的想删除这个{0}？"
 msgid "Files"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:105
+#: js/widgets/dialog/ImportDialog.js:107
 msgid "Import definition"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:117
-msgid "Import into container"
+#: js/widgets/dialog/ImportDialog.js:119
+msgid "Import into {0}"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:128
+#: js/widgets/dialog/ImportDialog.js:130
 msgid "Dry run"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:145
+#: js/widgets/dialog/ImportDialog.js:147
 msgid "No files added"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:145
+#: js/widgets/dialog/ImportDialog.js:147
 msgid "You need to add files to import."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:174
+#: js/widgets/dialog/ImportDialog.js:176
 msgid "Dry run results"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:175
+#: js/widgets/dialog/ImportDialog.js:177
 msgid ""
 "Import test successful for {0} records, import test failed for {1} records."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:179
+#: js/widgets/dialog/ImportDialog.js:181
 msgid "Import results"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:180
+#: js/widgets/dialog/ImportDialog.js:182
 msgid "Import successful for {0} records, import failed for {1} records."
 msgstr ""
 
@@ -984,6 +1030,16 @@ msgstr ""
 #, fuzzy
 msgid "Links"
 msgstr "登录"
+
+#: js/widgets/dialog/MultiOptionsDialog.js:23
+#: js/widgets/dialog/MultiOptionsDialog.js:70
+msgid "What would you like to do?"
+msgstr ""
+
+#: js/widgets/dialog/MultiOptionsDialog.js:27
+#: js/widgets/dialog/MultiOptionsDialog.js:129
+msgid "You need to select an option!"
+msgstr ""
 
 #: js/widgets/dialog/PreferencesDialog.js:137
 #, fuzzy
@@ -1045,17 +1101,17 @@ msgstr ""
 msgid "Searching..."
 msgstr "搜索..."
 
-#: js/widgets/grid/FileUploadGrid.js:85
+#: js/widgets/grid/FileUploadGrid.js:91
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:109
+#: js/widgets/grid/FileUploadGrid.js:115
 msgid "Add file"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:120
+#: js/widgets/grid/FileUploadGrid.js:126
 msgid "Remove file"
 msgstr ""
 
@@ -1198,7 +1254,7 @@ msgstr "重置所有的过滤器"
 msgid "start search"
 msgstr "开始搜索"
 
-#: js/widgets/grid/FilterToolbar.js:148 js/widgets/grid/FilterToolbar.js:644
+#: js/widgets/grid/FilterToolbar.js:148 js/widgets/grid/FilterToolbar.js:651
 msgid "save filter"
 msgstr "保存过滤器"
 
@@ -1218,30 +1274,30 @@ msgstr "和"
 msgid "Show"
 msgstr "显示"
 
-#: js/widgets/grid/FilterToolbar.js:644
+#: js/widgets/grid/FilterToolbar.js:651
 msgid "Please enter a name for the filter"
 msgstr "请输入过滤器的名称"
 
-#: js/widgets/grid/FilterToolbar.js:647 js/widgets/grid/FilterToolbar.js:650
+#: js/widgets/grid/FilterToolbar.js:654 js/widgets/grid/FilterToolbar.js:657
 msgid "Filter not Saved"
 msgstr "过滤器没有保存"
 
-#: js/widgets/grid/FilterToolbar.js:647
+#: js/widgets/grid/FilterToolbar.js:654
 msgid "You have to supply a name for the filter!"
 msgstr "你需要提供过滤器的名称！"
 
-#: js/widgets/grid/FilterToolbar.js:650
+#: js/widgets/grid/FilterToolbar.js:657
 msgid ""
 "You have to supply a shorter name! Names of saved filters can only be up to "
 "40 characters long."
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:653 js/widgets/LangChooser.js:64
+#: js/widgets/grid/FilterToolbar.js:660 js/widgets/LangChooser.js:64
 #: js/widgets/TimezoneChooser.js:74
 msgid "Please Wait"
 msgstr "请等待"
 
-#: js/widgets/grid/FilterToolbar.js:653
+#: js/widgets/grid/FilterToolbar.js:660
 msgid "Saving filter"
 msgstr "正保存过滤器"
 
@@ -1555,43 +1611,43 @@ msgstr ""
 msgid "Show confirmation dialog on logout."
 msgstr ""
 
-#: Setup/setup.xml:2520
+#: Setup/setup.xml:2521
 msgid "note"
 msgstr "注释"
 
-#: Setup/setup.xml:2525
+#: Setup/setup.xml:2526
 msgid "default note type"
 msgstr "缺省注释类型"
 
-#: Setup/setup.xml:2551
+#: Setup/setup.xml:2552
 msgid "telephone"
 msgstr "电话"
 
-#: Setup/setup.xml:2556
+#: Setup/setup.xml:2557
 msgid "telephone call"
 msgstr "电话呼叫"
 
-#: Setup/setup.xml:2582
+#: Setup/setup.xml:2583
 msgid "email"
 msgstr "电子邮件"
 
-#: Setup/setup.xml:2587
+#: Setup/setup.xml:2588
 msgid "email contact"
 msgstr "电子邮件联系"
 
-#: Setup/setup.xml:2613
+#: Setup/setup.xml:2614
 msgid "created"
 msgstr "生成的"
 
-#: Setup/setup.xml:2618
+#: Setup/setup.xml:2619
 msgid "record created"
 msgstr "记录已生成"
 
-#: Setup/setup.xml:2644
+#: Setup/setup.xml:2645
 msgid "changed"
 msgstr "已修改"
 
-#: Setup/setup.xml:2649
+#: Setup/setup.xml:2650
 msgid "record changed"
 msgstr "记录已修改"
 

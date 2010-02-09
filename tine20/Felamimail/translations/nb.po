@@ -31,11 +31,11 @@ msgstr ""
 
 #: Controller/Message.php:991 js/FelamimailGridDetailsPanel.js:123
 #: js/FelamimailGridPanel.js:258 js/FelamimailGridPanel.js:313
-#: js/FelamimailMessageEditDialog.js:293
+#: js/FelamimailMessageEditDialog.js:294
 msgid "Subject"
 msgstr "Emne"
 
-#: Controller/Message.php:991 js/FelamimailMessageEditDialog.js:199
+#: Controller/Message.php:991 js/FelamimailMessageEditDialog.js:200
 msgid "Body"
 msgstr "Melding"
 
@@ -44,7 +44,7 @@ msgid "Email"
 msgstr "E-post"
 
 #: js/FelamimailAccountEditDialog.js:90 js/FelamimailTreePanel.js:409
-#: js/Models.js:112
+#: js/Models.js:114
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Konto"
@@ -182,7 +182,7 @@ msgid "Sort Folders"
 msgstr ""
 
 #: js/FelamimailGridDetailsPanel.js:124 js/FelamimailGridPanel.js:259
-#: js/FelamimailGridPanel.js:319 js/FelamimailMessageEditDialog.js:261
+#: js/FelamimailGridPanel.js:319 js/FelamimailMessageEditDialog.js:262
 msgid "From"
 msgstr "Fra"
 
@@ -283,7 +283,7 @@ msgstr "Videresendt"
 msgid "Recent"
 msgstr "Nylig"
 
-#: js/FelamimailGridPanel.js:488 js/FelamimailTreeLoader.js:180
+#: js/FelamimailGridPanel.js:488 js/FelamimailTreeLoader.js:172
 msgid "Error"
 msgstr "Feil"
 
@@ -323,7 +323,7 @@ msgstr "En feil har oppstått ved forsøk på å oppdatere meldingene."
 msgid "Send"
 msgstr "Send"
 
-#: js/FelamimailMessageEditDialog.js:99 js/FelamimailMessageEditDialog.js:304
+#: js/FelamimailMessageEditDialog.js:99 js/FelamimailMessageEditDialog.js:305
 msgid "Compose email:"
 msgstr "Skriv E-post:"
 
@@ -347,7 +347,7 @@ msgstr "Feil:"
 msgid "Recipients"
 msgstr "Mottagere"
 
-#: js/FelamimailMessageEditDialog.js:328
+#: js/FelamimailMessageEditDialog.js:329
 msgid "Save contact note"
 msgstr "Lagre kontakt notat"
 
@@ -367,23 +367,23 @@ msgstr "Blind Kopi:"
 msgid "Remove"
 msgstr "Fjern"
 
-#: js/FelamimailTreeLoader.js:70
+#: js/FelamimailTreeLoader.js:62
 msgid "Totalcount"
 msgstr "Totalteller"
 
-#: js/FelamimailTreeLoader.js:71
+#: js/FelamimailTreeLoader.js:63
 msgid "Cache"
 msgstr "Mellomlagring"
 
-#: js/FelamimailTreeLoader.js:161
+#: js/FelamimailTreeLoader.js:153
 msgid "IMAP Credentials for {0}"
 msgstr "IMAP Konto informasjon for {0}"
 
-#: js/FelamimailTreeLoader.js:164
+#: js/FelamimailTreeLoader.js:156
 msgid "Credentials"
 msgstr "Konto informasjon"
 
-#: js/FelamimailTreeLoader.js:181
+#: js/FelamimailTreeLoader.js:173
 msgid "No connection to IMAP server."
 msgstr "Ingen tilkobling til IMAP server."
 
@@ -476,45 +476,53 @@ msgstr "Ugyldig slipp mål"
 msgid "Could not move message(s)."
 msgstr "Klarte ikke å flytte melding(er)."
 
-#: js/Models.js:47 js/Models.js:116
+#: js/Models.js:47 js/Models.js:118
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "lagre liste"
 msgstr[1] "lagre lister"
 
-#: Preference.php:88
+#: Preference.php:96
 msgid "Use System Account"
 msgstr ""
 
-#: Preference.php:89
+#: Preference.php:97
 msgid "Use user credentials and predefined settings for email account."
 msgstr ""
 
-#: Preference.php:92
+#: Preference.php:100
 msgid "Default Email Account"
 msgstr "Standard E-post Konto"
 
-#: Preference.php:93
+#: Preference.php:101
 msgid "The default email account to use when sending mails."
 msgstr "Standard e-post konto for bruk med sending av e-post."
 
-#: Preference.php:96
+#: Preference.php:104
 msgid "Email Update Interval"
 msgstr "E-post Oppdaterings Intervall"
 
-#: Preference.php:97
+#: Preference.php:105
 msgid ""
 "How often should Felamimail check for new Emails (in minutes). \"0\" means "
 "never."
 msgstr ""
 "Hvor ofte bør Felamimail se etter nye E-post (i minutter). \"0\" betyr aldri."
 
-#: Preference.php:100
+#: Preference.php:108
 msgid "Use in Addressbook"
 msgstr ""
 
-#: Preference.php:101
+#: Preference.php:109
 msgid "Compose Emails from the Addressbook with Felamimail."
+msgstr ""
+
+#: Preference.php:112
+msgid "Use for NOTES"
+msgstr ""
+
+#: Preference.php:113
+msgid "Save Note default Value."
 msgstr ""
 
 #~ msgid "Create and edit email accounts"

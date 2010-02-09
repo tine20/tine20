@@ -45,11 +45,11 @@ msgstr "Check version"
 msgid "Check tine20.org for new versions"
 msgstr "Check tine20.org for new versions"
 
-#: Export/Ods.php:231
+#: Export/Ods.php:194
 msgid "Filter"
 msgstr "Filter"
 
-#: Export/Ods.php:349
+#: Export/Ods.php:278
 msgid "Data"
 msgstr "Data"
 
@@ -65,19 +65,19 @@ msgstr "Created by"
 msgid "Activities"
 msgstr "Activities"
 
-#: Frontend/Http.php:531 js/ExceptionHandler.js:143
+#: Frontend/Http.php:532 js/ExceptionHandler.js:127
 msgid "Authorisation Required"
 msgstr "Authorisation Required"
 
-#: Frontend/Http.php:532
+#: Frontend/Http.php:533
 msgid "Your session is not valid. You need to login again."
 msgstr "Your session is not valid. You need to login again."
 
-#: Frontend/Http.php:558 js/ExceptionDialog.js:46
+#: Frontend/Http.php:559 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Abnormal End"
 
-#: Frontend/Http.php:559 js/ExceptionDialog.js:71
+#: Frontend/Http.php:560 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "An error occurred, the program ended abnormal."
 
@@ -114,6 +114,7 @@ msgstr[1] "to do lists"
 #: js/ExceptionDialog.js:54 js/MainScreen.js:451
 #: js/widgets/container/ContainerSelect.js:373
 #: js/widgets/dialog/EditDialog.js:195
+#: js/widgets/dialog/MultiOptionsDialog.js:98
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
 #: js/widgets/tags/TagsMassAttachAction.js:86
 msgid "Cancel"
@@ -167,23 +168,23 @@ msgstr "Your report has been sent. Thanks for your contribution"
 msgid "Please restart your browser now!"
 msgstr "Please restart your browser now!"
 
-#: js/ExceptionHandler.js:144
+#: js/ExceptionHandler.js:128
 msgid "Your session timed out. You need to login again."
 msgstr "Your session timed out. You need to login again."
 
-#: js/ExceptionHandler.js:161
+#: js/ExceptionHandler.js:145
 msgid "Insufficient Rights"
 msgstr "Insufficient Rights"
 
-#: js/ExceptionHandler.js:162
+#: js/ExceptionHandler.js:146
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Sorry, you are not permitted to perform this action"
 
-#: js/ExceptionHandler.js:171
+#: js/ExceptionHandler.js:155
 msgid "Not Found"
 msgstr "Not Found"
 
-#: js/ExceptionHandler.js:172
+#: js/ExceptionHandler.js:156
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
@@ -193,11 +194,11 @@ msgstr ""
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 
-#: js/ExceptionHandler.js:181
+#: js/ExceptionHandler.js:165
 msgid "Concurrent Updates"
 msgstr "Concurrent Updates"
 
-#: js/ExceptionHandler.js:182
+#: js/ExceptionHandler.js:166
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -205,15 +206,15 @@ msgstr ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
 
-#: js/ExceptionHandler.js:190
+#: js/ExceptionHandler.js:174
 msgid "Connection lost, please check your network!"
 msgstr "Connection lost, please check your network!"
 
-#: js/ExceptionHandler.js:196
+#: js/ExceptionHandler.js:180
 msgid "Timeout"
 msgstr "Timeout"
 
-#: js/ExceptionHandler.js:197
+#: js/ExceptionHandler.js:181
 msgid ""
 "Sorry, some timeout occured while processing your request. Please reload "
 "your browser, try again or contact your administrator."
@@ -221,11 +222,11 @@ msgstr ""
 "Sorry, some timeout occured while processing your request. Please reload "
 "your browser, try again or contact your administrator."
 
-#: js/ExceptionHandler.js:206
+#: js/ExceptionHandler.js:190
 msgid "No Response"
 msgstr "No Response"
 
-#: js/ExceptionHandler.js:207
+#: js/ExceptionHandler.js:191
 msgid ""
 "Sorry, the Server did not respond any data. Please reload your browser, try "
 "again or contact your administrator."
@@ -299,7 +300,7 @@ msgstr "Duration"
 msgid "Logging you in..."
 msgstr "Logging you in..."
 
-#: js/LoginPanel.js:271 js/widgets/container/GrantsDialog.js:138
+#: js/LoginPanel.js:271 js/widgets/container/GrantsDialog.js:164
 #: js/widgets/grid/PersistentFilterPicker.js:126
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:140
@@ -330,7 +331,7 @@ msgstr "Please enter your login data"
 msgid "Debug Console (Ctrl + F11)"
 msgstr "Debug Console (Ctrl + F11)"
 
-#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:117
+#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:141
 msgid "Admin"
 msgstr "Admin"
 
@@ -395,6 +396,7 @@ msgstr "Repeat new Password"
 
 #: js/MainScreen.js:457 js/widgets/container/ContainerSelect.js:382
 #: js/widgets/dialog/EditDialog.js:178
+#: js/widgets/dialog/MultiOptionsDialog.js:91
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 #: js/widgets/tags/TagsMassAttachAction.js:92
 msgid "Ok"
@@ -457,19 +459,19 @@ msgstr[1] "Groups"
 msgid "Groups"
 msgstr "Groups"
 
-#: js/Models.js:262
+#: js/Models.js:265
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] "Import"
 msgstr[1] "Imports"
 
-#: js/Models.js:295
+#: js/Models.js:298
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] "Credentials"
 msgstr[1] "Credentials"
 
-#: js/Models.js:322
+#: js/Models.js:325
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Relation"
@@ -544,7 +546,7 @@ msgstr "Not An Image"
 msgid "Please select an image file (gif/png/jpeg)"
 msgstr "Please select an image file (gif/png/jpeg)"
 
-#: js/ux/form/ImageField.js:146 js/widgets/grid/FileUploadGrid.js:84
+#: js/ux/form/ImageField.js:146 js/widgets/grid/FileUploadGrid.js:90
 msgid "Upload Failed"
 msgstr "Upload Failed"
 
@@ -641,7 +643,7 @@ msgid "Add a Note..."
 msgstr "Add a Note..."
 
 #: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:168
-#: js/widgets/container/GrantsDialog.js:99
+#: js/widgets/container/GrantsDialog.js:100
 msgid "Add"
 msgstr "Add"
 
@@ -835,23 +837,67 @@ msgstr "Folder"
 msgid "Read"
 msgstr "Read"
 
-#: js/widgets/container/GrantsDialog.js:104
+#: js/widgets/container/GrantsDialog.js:95
+msgid "The grant to read records of this container"
+msgstr "The grant to read records of this container"
+
+#: js/widgets/container/GrantsDialog.js:101
+msgid "The grant to add records to this container"
+msgstr "The grant to add records to this container"
+
+#: js/widgets/container/GrantsDialog.js:106
 msgid "Edit"
 msgstr "Edit"
 
-#: js/widgets/container/GrantsDialog.js:109
+#: js/widgets/container/GrantsDialog.js:107
+msgid "The grant to edit records in this container"
+msgstr "The grant to edit records in this container"
+
+#: js/widgets/container/GrantsDialog.js:112
 msgid "Delete"
 msgstr "Delete"
 
-#: js/widgets/container/GrantsDialog.js:138
+#: js/widgets/container/GrantsDialog.js:113
+msgid "The grant to delete records in this container"
+msgstr "The grant to delete records in this container"
+
+#: js/widgets/container/GrantsDialog.js:118
+msgid "Export"
+msgstr "Export"
+
+#: js/widgets/container/GrantsDialog.js:119
+msgid "The grant to export records from this container"
+msgstr "The grant to export records from this container"
+
+#: js/widgets/container/GrantsDialog.js:124
+msgid "Sync"
+msgstr "Sync"
+
+#: js/widgets/container/GrantsDialog.js:125
+msgid "The grant to synchronise records with this container"
+msgstr "The grant to synchronise records with this container"
+
+#: js/widgets/container/GrantsDialog.js:133
+msgid "Private"
+msgstr "Private"
+
+#: js/widgets/container/GrantsDialog.js:134
+msgid "The grant to access records marked as private in this container"
+msgstr "The grant to access records marked as private in this container"
+
+#: js/widgets/container/GrantsDialog.js:142
+msgid "The grant to administrate this container"
+msgstr "The grant to administrate this container"
+
+#: js/widgets/container/GrantsDialog.js:164
 msgid "Updating Grants"
 msgstr "Updating Grants"
 
-#: js/widgets/container/GrantsDialog.js:168
+#: js/widgets/container/GrantsDialog.js:194
 msgid "Error"
 msgstr "Error"
 
-#: js/widgets/container/GrantsDialog.js:169
+#: js/widgets/container/GrantsDialog.js:195
 msgid "You are not allowed to remove all admins for this container!"
 msgstr "You are not allowed to remove all admins for this container!"
 
@@ -905,13 +951,13 @@ msgid "1 day before"
 msgstr "1 day before"
 
 #: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:443 js/widgets/dialog/ImportDialog.js:200
+#: js/widgets/dialog/EditDialog.js:443 js/widgets/dialog/ImportDialog.js:202
 #: js/widgets/dialog/PreferencesDialog.js:284
 msgid "Errors"
 msgstr "Errors"
 
 #: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:443 js/widgets/dialog/ImportDialog.js:200
+#: js/widgets/dialog/EditDialog.js:443 js/widgets/dialog/ImportDialog.js:202
 msgid "Please fix the errors noted."
 msgstr "Please fix the errors noted."
 
@@ -948,47 +994,57 @@ msgstr "Do you really want to delete this {0}?"
 msgid "Files"
 msgstr "Files"
 
-#: js/widgets/dialog/ImportDialog.js:105
+#: js/widgets/dialog/ImportDialog.js:107
 msgid "Import definition"
 msgstr "Import definition"
 
-#: js/widgets/dialog/ImportDialog.js:117
-msgid "Import into container"
-msgstr "Import into container"
+#: js/widgets/dialog/ImportDialog.js:119
+msgid "Import into {0}"
+msgstr "Import into {0}"
 
-#: js/widgets/dialog/ImportDialog.js:128
+#: js/widgets/dialog/ImportDialog.js:130
 msgid "Dry run"
 msgstr "Dry run"
 
-#: js/widgets/dialog/ImportDialog.js:145
+#: js/widgets/dialog/ImportDialog.js:147
 msgid "No files added"
 msgstr "No files added"
 
-#: js/widgets/dialog/ImportDialog.js:145
+#: js/widgets/dialog/ImportDialog.js:147
 msgid "You need to add files to import."
 msgstr "You need to add files to import."
 
-#: js/widgets/dialog/ImportDialog.js:174
+#: js/widgets/dialog/ImportDialog.js:176
 msgid "Dry run results"
 msgstr "Dry run results"
 
-#: js/widgets/dialog/ImportDialog.js:175
+#: js/widgets/dialog/ImportDialog.js:177
 msgid ""
 "Import test successful for {0} records, import test failed for {1} records."
 msgstr ""
 "Import test successful for {0} records, import test failed for {1} records."
 
-#: js/widgets/dialog/ImportDialog.js:179
+#: js/widgets/dialog/ImportDialog.js:181
 msgid "Import results"
 msgstr "Import results"
 
-#: js/widgets/dialog/ImportDialog.js:180
+#: js/widgets/dialog/ImportDialog.js:182
 msgid "Import successful for {0} records, import failed for {1} records."
 msgstr "Import successful for {0} records, import failed for {1} records."
 
 #: js/widgets/dialog/LinkPanel.js:48
 msgid "Links"
 msgstr "Links"
+
+#: js/widgets/dialog/MultiOptionsDialog.js:23
+#: js/widgets/dialog/MultiOptionsDialog.js:70
+msgid "What would you like to do?"
+msgstr "What would you like to do?"
+
+#: js/widgets/dialog/MultiOptionsDialog.js:27
+#: js/widgets/dialog/MultiOptionsDialog.js:129
+msgid "You need to select an option!"
+msgstr "You need to select an option!"
 
 #: js/widgets/dialog/PreferencesDialog.js:137
 msgid "Admin Mode"
@@ -1042,7 +1098,7 @@ msgstr "Reload config"
 msgid "Searching..."
 msgstr "Searching..."
 
-#: js/widgets/grid/FileUploadGrid.js:85
+#: js/widgets/grid/FileUploadGrid.js:91
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
@@ -1050,11 +1106,11 @@ msgstr ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 
-#: js/widgets/grid/FileUploadGrid.js:109
+#: js/widgets/grid/FileUploadGrid.js:115
 msgid "Add file"
 msgstr "Add file"
 
-#: js/widgets/grid/FileUploadGrid.js:120
+#: js/widgets/grid/FileUploadGrid.js:126
 msgid "Remove file"
 msgstr "Remove file"
 
@@ -1194,7 +1250,7 @@ msgstr "reset all filters"
 msgid "start search"
 msgstr "start search"
 
-#: js/widgets/grid/FilterToolbar.js:148 js/widgets/grid/FilterToolbar.js:644
+#: js/widgets/grid/FilterToolbar.js:148 js/widgets/grid/FilterToolbar.js:651
 msgid "save filter"
 msgstr "save filter"
 
@@ -1214,19 +1270,19 @@ msgstr "and"
 msgid "Show"
 msgstr "Show"
 
-#: js/widgets/grid/FilterToolbar.js:644
+#: js/widgets/grid/FilterToolbar.js:651
 msgid "Please enter a name for the filter"
 msgstr "Please enter a name for the filter"
 
-#: js/widgets/grid/FilterToolbar.js:647 js/widgets/grid/FilterToolbar.js:650
+#: js/widgets/grid/FilterToolbar.js:654 js/widgets/grid/FilterToolbar.js:657
 msgid "Filter not Saved"
 msgstr "Filter not Saved"
 
-#: js/widgets/grid/FilterToolbar.js:647
+#: js/widgets/grid/FilterToolbar.js:654
 msgid "You have to supply a name for the filter!"
 msgstr "You have to supply a name for the filter!"
 
-#: js/widgets/grid/FilterToolbar.js:650
+#: js/widgets/grid/FilterToolbar.js:657
 msgid ""
 "You have to supply a shorter name! Names of saved filters can only be up to "
 "40 characters long."
@@ -1234,12 +1290,12 @@ msgstr ""
 "You have to supply a shorter name! Names of saved filters can only be up to "
 "40 characters long."
 
-#: js/widgets/grid/FilterToolbar.js:653 js/widgets/LangChooser.js:64
+#: js/widgets/grid/FilterToolbar.js:660 js/widgets/LangChooser.js:64
 #: js/widgets/TimezoneChooser.js:74
 msgid "Please Wait"
 msgstr "Please Wait"
 
-#: js/widgets/grid/FilterToolbar.js:653
+#: js/widgets/grid/FilterToolbar.js:660
 msgid "Saving filter"
 msgstr "Saving filter"
 
@@ -1555,42 +1611,42 @@ msgstr "Confirm Logout"
 msgid "Show confirmation dialog on logout."
 msgstr "Show confirmation dialog on logout."
 
-#: Setup/setup.xml:2520
+#: Setup/setup.xml:2521
 msgid "note"
 msgstr "note"
 
-#: Setup/setup.xml:2525
+#: Setup/setup.xml:2526
 msgid "default note type"
 msgstr "default note type"
 
-#: Setup/setup.xml:2551
+#: Setup/setup.xml:2552
 msgid "telephone"
 msgstr "telephone"
 
-#: Setup/setup.xml:2556
+#: Setup/setup.xml:2557
 msgid "telephone call"
 msgstr "telephone call"
 
-#: Setup/setup.xml:2582
+#: Setup/setup.xml:2583
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:2587
+#: Setup/setup.xml:2588
 msgid "email contact"
 msgstr "email contact"
 
-#: Setup/setup.xml:2613
+#: Setup/setup.xml:2614
 msgid "created"
 msgstr "created"
 
-#: Setup/setup.xml:2618
+#: Setup/setup.xml:2619
 msgid "record created"
 msgstr "record created"
 
-#: Setup/setup.xml:2644
+#: Setup/setup.xml:2645
 msgid "changed"
 msgstr "changed"
 
-#: Setup/setup.xml:2649
+#: Setup/setup.xml:2650
 msgid "record changed"
 msgstr "record changed"

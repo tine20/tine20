@@ -20,24 +20,6 @@ msgstr "Zeitkonten verwalten"
 msgid "Add, edit and delete timeaccounts"
 msgstr "Zeitkonten ändern, editieren und löschen"
 
-#: Export/Ods/Timesheet.php:89
-msgid "Total Sum"
-msgstr "Gesamtsumme"
-
-#: Export/Ods/Timesheet.php:109
-msgid "Not billable"
-msgstr "Nicht abrechenbar"
-
-#: Export/Ods/Timesheet.php:117 js/TimesheetEditDialog.js:193
-#: js/TimesheetGridPanel.js:74 js/TimesheetGridPanel.js:218
-#: js/TimesheetGridPanel.js:250
-msgid "Billable"
-msgstr "Abrechenbar"
-
-#: Export/Ods/Timesheet.php:125
-msgid "Total"
-msgstr "Total"
-
 #: js/DurationSlider.js:95
 msgid "{0}"
 msgstr "{0}"
@@ -176,23 +158,52 @@ msgstr "Zugang"
 msgid "Book Own"
 msgstr "Eigene buchen"
 
-#: js/TimeaccountEditDialog.js:228
+#: js/TimeaccountEditDialog.js:225
+msgid "The grant to add Timesheets to this Timeaccount"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:229
 msgid "View All"
 msgstr "Alle sehen"
 
-#: js/TimeaccountEditDialog.js:233
+#: js/TimeaccountEditDialog.js:230
+msgid "The grant to view Timesheetsof other users"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:235
 msgid "Book All"
 msgstr "Alle buchen"
 
-#: js/TimeaccountEditDialog.js:238
+#: js/TimeaccountEditDialog.js:236
+msgid "The grant to add Timesheets for other users"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:241
 msgid "Manage Clearing"
 msgstr "Abrechenbar setzen"
 
-#: js/TimeaccountEditDialog.js:243
+#: js/TimeaccountEditDialog.js:242
+msgid "The grant to manage clearing of Timesheets"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:247 js/TimeaccountGridPanel.js:137
+#: js/TimesheetGridPanel.js:468
+msgid "Export"
+msgstr "Export"
+
+#: js/TimeaccountEditDialog.js:248
+msgid "The grant to export Timesheets of Timeaccount"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:253
 msgid "Manage All"
 msgstr "Darf Alles"
 
-#: js/TimeaccountEditDialog.js:251
+#: js/TimeaccountEditDialog.js:254
+msgid "Includes all other grants"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:262
 msgid "Permissions"
 msgstr "Zugriffsrechte"
 
@@ -204,10 +215,6 @@ msgstr "Tags"
 #: js/TimesheetGridPanel.js:254
 msgid "Cleared in"
 msgstr "Abgerechnet in"
-
-#: js/TimeaccountGridPanel.js:137 js/TimesheetGridPanel.js:468
-msgid "Export"
-msgstr "Export"
 
 #: js/TimeaccountGridPanel.js:146 js/TimesheetGridPanel.js:477
 msgid "Export as ODS"
@@ -262,6 +269,11 @@ msgstr "Bitte geben Sie eine Beschreibung an..."
 #: js/TimesheetGridPanel.js:255
 msgid "Account"
 msgstr "Benutzer"
+
+#: js/TimesheetEditDialog.js:193 js/TimesheetGridPanel.js:74
+#: js/TimesheetGridPanel.js:218 js/TimesheetGridPanel.js:250
+msgid "Billable"
+msgstr "Abrechenbar"
 
 #: js/TimesheetEditDialog.js:200 js/TimesheetGridPanel.js:79
 #: js/TimesheetGridPanel.js:219 js/TimesheetGridPanel.js:252
@@ -384,6 +396,15 @@ msgstr "Standard"
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "Zeiterfassung"
+
+#~ msgid "Total Sum"
+#~ msgstr "Gesamtsumme"
+
+#~ msgid "Not billable"
+#~ msgstr "Nicht abrechenbar"
+
+#~ msgid "Total"
+#~ msgstr "Total"
 
 #~ msgid "Timeaccount Number"
 #~ msgstr "Zeitkontonummer"

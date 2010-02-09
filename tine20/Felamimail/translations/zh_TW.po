@@ -31,11 +31,11 @@ msgstr ""
 
 #: Controller/Message.php:991 js/FelamimailGridDetailsPanel.js:123
 #: js/FelamimailGridPanel.js:258 js/FelamimailGridPanel.js:313
-#: js/FelamimailMessageEditDialog.js:293
+#: js/FelamimailMessageEditDialog.js:294
 msgid "Subject"
 msgstr ""
 
-#: Controller/Message.php:991 js/FelamimailMessageEditDialog.js:199
+#: Controller/Message.php:991 js/FelamimailMessageEditDialog.js:200
 msgid "Body"
 msgstr ""
 
@@ -44,7 +44,7 @@ msgid "Email"
 msgstr ""
 
 #: js/FelamimailAccountEditDialog.js:90 js/FelamimailTreePanel.js:409
-#: js/Models.js:112
+#: js/Models.js:114
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] ""
@@ -181,7 +181,7 @@ msgid "Sort Folders"
 msgstr ""
 
 #: js/FelamimailGridDetailsPanel.js:124 js/FelamimailGridPanel.js:259
-#: js/FelamimailGridPanel.js:319 js/FelamimailMessageEditDialog.js:261
+#: js/FelamimailGridPanel.js:319 js/FelamimailMessageEditDialog.js:262
 msgid "From"
 msgstr ""
 
@@ -282,7 +282,7 @@ msgstr ""
 msgid "Recent"
 msgstr ""
 
-#: js/FelamimailGridPanel.js:488 js/FelamimailTreeLoader.js:180
+#: js/FelamimailGridPanel.js:488 js/FelamimailTreeLoader.js:172
 msgid "Error"
 msgstr ""
 
@@ -322,7 +322,7 @@ msgstr ""
 msgid "Send"
 msgstr ""
 
-#: js/FelamimailMessageEditDialog.js:99 js/FelamimailMessageEditDialog.js:304
+#: js/FelamimailMessageEditDialog.js:99 js/FelamimailMessageEditDialog.js:305
 msgid "Compose email:"
 msgstr ""
 
@@ -346,7 +346,7 @@ msgstr ""
 msgid "Recipients"
 msgstr ""
 
-#: js/FelamimailMessageEditDialog.js:328
+#: js/FelamimailMessageEditDialog.js:329
 msgid "Save contact note"
 msgstr ""
 
@@ -366,23 +366,23 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: js/FelamimailTreeLoader.js:70
+#: js/FelamimailTreeLoader.js:62
 msgid "Totalcount"
 msgstr ""
 
-#: js/FelamimailTreeLoader.js:71
+#: js/FelamimailTreeLoader.js:63
 msgid "Cache"
 msgstr ""
 
-#: js/FelamimailTreeLoader.js:161
+#: js/FelamimailTreeLoader.js:153
 msgid "IMAP Credentials for {0}"
 msgstr ""
 
-#: js/FelamimailTreeLoader.js:164
+#: js/FelamimailTreeLoader.js:156
 msgid "Credentials"
 msgstr ""
 
-#: js/FelamimailTreeLoader.js:181
+#: js/FelamimailTreeLoader.js:173
 msgid "No connection to IMAP server."
 msgstr ""
 
@@ -474,41 +474,49 @@ msgstr ""
 msgid "Could not move message(s)."
 msgstr ""
 
-#: js/Models.js:47 js/Models.js:116
+#: js/Models.js:47 js/Models.js:118
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] ""
 
-#: Preference.php:88
+#: Preference.php:96
 msgid "Use System Account"
 msgstr ""
 
-#: Preference.php:89
+#: Preference.php:97
 msgid "Use user credentials and predefined settings for email account."
 msgstr ""
 
-#: Preference.php:92
+#: Preference.php:100
 msgid "Default Email Account"
 msgstr ""
 
-#: Preference.php:93
+#: Preference.php:101
 msgid "The default email account to use when sending mails."
 msgstr ""
 
-#: Preference.php:96
+#: Preference.php:104
 msgid "Email Update Interval"
 msgstr ""
 
-#: Preference.php:97
+#: Preference.php:105
 msgid ""
 "How often should Felamimail check for new Emails (in minutes). \"0\" means "
 "never."
 msgstr ""
 
-#: Preference.php:100
+#: Preference.php:108
 msgid "Use in Addressbook"
 msgstr ""
 
-#: Preference.php:101
+#: Preference.php:109
 msgid "Compose Emails from the Addressbook with Felamimail."
+msgstr ""
+
+#: Preference.php:112
+msgid "Use for NOTES"
+msgstr ""
+
+#: Preference.php:113
+msgid "Save Note default Value."
 msgstr ""
