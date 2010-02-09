@@ -284,4 +284,56 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
                break;
         }
     }
+    
+    /**
+     * inspect creation of one record
+     * 
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectCreate(Tinebase_Record_Interface $_record)
+    {
+        $this->_setTurnover($_record);
+    }
+    
+    /**
+     * inspect update of one record
+     * 
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectUpdate($_record, $_oldRecord)
+    {
+        $this->_setTurnover($_record);
+    }
+    
+    /**
+     * set turnover of record if empty by calulating sum of product prices
+     * 
+     * @param Tinebase_Record_Interface $_record
+     * @return void
+     */
+    protected function _setTurnover($_record)
+    {
+        if (empty($_record->turnover)) {
+            $sum = 0;
+            foreach ($_record->relations as $relation) {
+                if (! is_array($relation)) {
+                    $relation = $relation->toArray();
+                }
+                
+                // check if relation is product and has price
+                if ($relation['type'] == 'PRODUCT') {
+                    $quantity = (isset($relation['remark']['quantity'])) ? $relation['remark']['quantity'] : 1; 
+                    $sum += $relation['remark']['price'] * (integer) $quantity;
+                }
+            }
+            
+            if ($sum > 0) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Set turnover of record by calculating sum of product prices: ' . $sum);
+                $_record->turnover = $sum;
+            }
+        }
+    }
 }

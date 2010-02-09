@@ -154,12 +154,13 @@ class Crm_JsonTest extends Crm_AbstractTest
         $task       = $this->_getTask();
         $lead       = $this->_getLead();
         $product    = $this->_getProduct();
+        $price      = 200; 
         
         $leadData = $lead->toArray();
         $leadData['relations'] = array(
             array('type'  => 'TASK',    'related_record' => $task->toArray()),
             array('type'  => 'PARTNER', 'related_record' => $contact->toArray()),
-            array('type'  => 'PRODUCT', 'related_record' => $product->toArray(), 'remark' => array('price' => 200)),
+            array('type'  => 'PRODUCT', 'related_record' => $product->toArray(), 'remark' => array('price' => $price)),
         );
         // add note
         $note = array(
@@ -180,7 +181,8 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertTrue($searchLeads['totalcount'] > 0);
         $this->assertTrue(isset($searchLeads['totalleadstates']) && count($searchLeads['totalleadstates']) > 0);
         $this->assertEquals($lead->description, $searchLeads['results'][0]['description']);
-        $this->assertEquals($lead->turnover*$lead->probability/100, $searchLeads['results'][0]['probableTurnover']);
+        $this->assertEquals($price, $searchLeads['results'][0]['turnover'], 'turnover has not been calculated using product prices');
+        $this->assertEquals($searchLeads['results'][0]['turnover']*$lead->probability/100, $searchLeads['results'][0]['probableTurnover']);
         $this->assertTrue(count($searchLeads['results'][0]['relations']) == 3, 'did not get all relations');     
 
         // get related records and check relations
@@ -301,7 +303,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             'start'         => Zend_Date::now(),
             'description'   => 'Description',
             'end'           => NULL,
-            'turnover'      => '200000',
+            'turnover'      => 0,
             'probability'   => 70,
             'end_scheduled' => NULL,
         ));
