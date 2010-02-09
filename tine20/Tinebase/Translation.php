@@ -46,7 +46,7 @@ class Tinebase_Translation
         'cs',      // Czech                Michael Sladek <msladek@brotel.cz>
         'de',      // German               Cornelius Weiss <c.weiss@metaways.de>
         'en',      // English              Cornelius Weiss <c.weiss@metaways.de>
-        //'es',      // Spanish              Holger Rothemund <holger@rothemund.org>
+        'es',      // Spanish              Enrique Palacios <enriquepalaciosc@gmail.com>
         'fr',      // French               Rémi Peltier <rpeltier@agglo-clermont.fr>
         //'it',      // Italian              Lidia Panio <lidiapanio@hotmail.com>
         'ja',      // Japanese             Yuuki Kitamura <ykitamura@clasi-co.jp>
