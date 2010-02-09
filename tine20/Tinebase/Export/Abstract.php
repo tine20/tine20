@@ -212,6 +212,31 @@ abstract class Tinebase_Export_Abstract
     }
 
     /**
+     * return template filename if set
+     * 
+     * @return string|NULL
+     */
+    protected function _getTemplateFilename()
+    {
+        $templateFile = $this->_config->get('template', NULL);
+        if ($templateFile !== NULL) {
+            
+            // check if template file has absolute path
+            if (strpos($templateFile, '/') !== 0) {
+                $templateFile = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName . 
+                    DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $templateFile;
+            }
+            if (file_exists($templateFile)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Using template file "' . $templateFile . '" for ' . $this->_modelName . ' export.');
+            } else {
+                throw new Tinebase_Exception_NotFound('Template file ' . $templateFile . ' not found');
+            }
+        }
+        
+        return $templateFile;
+    }
+    
+    /**
      * get export config
      *
      * @param array $_additionalOptions additional options

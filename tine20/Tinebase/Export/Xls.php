@@ -80,27 +80,13 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
      */
     protected function _createDocument()
     {
-        // check if we need to open template file
-        $templateFile = $this->_config->get('template', NULL);
+        $templateFile = $this->_getTemplateFilename();
+        
         if ($templateFile !== NULL) {
-            $templateFile = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName 
-                . DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $templateFile;
-                
-            if (file_exists($templateFile)) {
-                
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Using template file ' . $templateFile);
-                $this->_excelObject = PHPExcel_IOFactory::load($templateFile);
-                
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_excelObject->getProperties(), true));
-                
-                $this->_excelObject->setActiveSheetIndex(1);
-                
-            } else {
-                throw new Tinebase_Exception_NotFound('Template file ' . $templateFile . ' not found');
-            }
+            $this->_excelObject = PHPExcel_IOFactory::load($templateFile);
+            $this->_excelObject->setActiveSheetIndex(1);
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new PHPExcel object.');
-            
             $this->_excelObject = new PHPExcel();
         }
     }
