@@ -139,13 +139,26 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     protected function _getGroupById($_groupId)
     {   
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
+
+        throw new RuntimeException('still untested');
         
-        try {
-            $group = $this->_ldap->fetch($this->_options['groupsDn'], $this->_groupUUIDAttribute . '=' . $groupId, array('cn', 'description', $this->_groupUUIDAttribute));
-        } catch (Exception $e) {
+        $filter = Zend_Ldap_Filter::equals(
+            $this->_groupUUIDAttribute, $groupId
+        );
+        
+        $groups = $this->_ldap->search(
+            $filter, 
+            $this->_options['groupsDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array('cn', 'description', $this->_groupUUIDAttribute)
+        );
+        
+        if(count($groups) == 0) {
             throw new Tinebase_Exception_Record_NotDefined('Group not found.');
         }
 
+        $group = $groups->getFirst();
+        
         $result = new Tinebase_Model_Group(array(
             'id'            => $group[strtolower($this->_groupUUIDAttribute)][0],
             'name'          => $group['cn'][0],
@@ -247,20 +260,45 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $accountMetaData = $this->_getAccountMetaData($_accountId);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " account meta data: " . print_r($accountMetaData, true));
         
-        try {
-            $filter = "(&({$this->_groupUUIDAttribute}=$groupId)(memberuid={$accountMetaData['uid']}))";
-            $this->_ldap->fetch($this->_options['groupsDn'], $filter, array('dn'));
-        } catch (Tinebase_Exception_NotFound $e) {
+        $accounts = $this->_ldap->search(
+            $filter, 
+            $this->_options['userDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array('uid', $this->_userUUIDAttribute, 'objectclass')
+        );
+        
+        $filter = Zend_Ldap_Filter::andFilter(
+            Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId)),
+            Zend_Ldap_Filter::equals('memberuid', Zend_Ldap::filterEscape($accountMetaData['uid']))
+        );
+        
+        $groups = $this->_ldap->search(
+            $filter, 
+            $this->_options['groupsDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array('dn')
+        );
+
+        if(count($groups) == 0) {
             // need to add memberuid
             $data['memberuid'] = $accountMetaData['uid'];
         }
         
         
         if ($this->_options['useRfc2307bis']) {
-            try {
-                $filter = "(&({$this->_groupUUIDAttribute}=$groupId)(member={$accountMetaData['dn']}))";
-                $this->_ldap->fetch($this->_options['groupsDn'], $filter, array('dn'));
-            } catch (Tinebase_Exception_NotFound $e) {
+            $filter = Zend_Ldap_Filter::andFilter(
+                Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId)),
+                Zend_Ldap_Filter::equals('member', Zend_Ldap::filterEscape($accountMetaData['dn']))
+            );
+            
+            $groups = $this->_ldap->search(
+                $filter, 
+                $this->_options['groupsDn'], 
+                Zend_Ldap::SEARCH_SCOPE_SUB, 
+                array('dn')
+            );
+            
+            if(count($groups) == 0) {
                 // need to add member
                 $data['member'] = $accountMetaData['dn'];
             }
@@ -270,20 +308,28 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
         
         if(!empty($data)) {
-            $this->_ldap->insertProperty($groupDn, $data);
+            $this->_ldap->addProperty($groupDn, $data);
         }
         
         if ($this->_options['useRfc2307bis']) {
             // remove groupdn if no longer needed
-            try {
-                $filter = "(&({$this->_groupUUIDAttribute}=$groupId)(member=$groupDn))";
-                $this->_ldap->fetch($this->_options['groupsDn'], $filter, array('dn'));
+            $filter = Zend_Ldap_Filter::andFilter(
+                Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId)),
+                Zend_Ldap_Filter::equals('member', Zend_Ldap::filterEscape($groupDn))
+            );
+            
+            $groups = $this->_ldap->search(
+                $filter, 
+                $this->_options['groupsDn'], 
+                Zend_Ldap::SEARCH_SCOPE_SUB, 
+                array('dn')
+            );
+            
+            if(count($groups) > 0) {
                 $data = array (
                     'member' => $groupDn
                 );
                 $this->_ldap->deleteProperty($groupDn, $data);
-            } catch (Tinebase_Exception_NotFound $e) {
-                // do nothing
             }
         }
         
@@ -348,6 +394,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      */
     public function addGroup(Tinebase_Model_Group $_group) 
     {
+        throw new RuntimeException('still untested');
+        
         $dn = $this->_generateDn($_group);
         $objectClass = array(
             'top',
@@ -371,9 +419,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
-        $this->_ldap->insert($dn, $data);
+        $this->_ldap->add($dn, $data);
         
-        $groupId = $this->_ldap->fetch($dn, 'objectclass=*', array($this->_groupUUIDAttribute));
+        $groupId = $this->_ldap->getEntry($dn, array($this->_groupUUIDAttribute));
         
         $groupId = $groupId[strtolower($this->_groupUUIDAttribute)][0];
         
@@ -463,26 +511,24 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     protected function _getMetaData($_groupId)
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
-        $result = $this->_ldap->getMetaData($this->_options['groupsDn'], $this->_groupUUIDAttribute . '=' . $groupId);
+        
+        $filter = Zend_Ldap_Filter::equals(
+            $this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId)
+        );
+        
+        $result = $this->_ldap->search(
+            $filter, 
+            $this->_options['groupsDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array('objectclass')
+        )->getFirst();
+        
         return $result;
         
         /*
-        $metaData = array();
-        
-        try {
-            $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
-            $group = $this->_ldap->fetch($this->_options['groupsDn'], $this->_groupUUIDAttribute . '=' . $groupId, array('objectclass'));
-            $metaData['dn'] = $group['dn'];
-            
-            $metaData['objectClass'] = $group['objectclass'];
-            unset($metaData['objectClass']['count']);
-                
         } catch (Tinebase_Exception_NotFound $e) {
             throw new Exception("group with id $groupId not found");
         }
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($metaData, true));
-        return $metaData;
         */
     }
     
@@ -497,29 +543,34 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $filterArray = array();
         foreach ($_accountIds as $accountId) {
             $accountId = Tinebase_Model_User::convertUserIdToInt($accountId);
-            $filterArray[] = "({$this->_userUUIDAttribute}={$accountId})";
+            $filterArray[] = Zend_Ldap_Filter::equals($this->_userUUIDAttribute, $accountId);
         }
+        $filter = new Zend_Ldap_Filter_Or($filterArray);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $filter: ' . $filter);
+        
         
         // fetch all dns at once
-        $filter = '(|' . implode('', $filterArray) . ')';
-        $accounts = $this->_ldap->fetchAll($this->_options['userDn'], $filter, array('uid', $this->_userUUIDAttribute, 'objectclass'));
+        $accounts = $this->_ldap->search(
+            $filter, 
+            $this->_options['userDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array('uid', $this->_userUUIDAttribute, 'objectclass')
+        );
+        
         if (count($accounts) != count($_accountIds)) {
             throw new Exception("Some dn's are missing");
         }
         
         $result = array();
         foreach ($accounts as $account) {
-            unset($account['objectclass']['count']);
-            
             $result[] = array(
                 'dn'                        => $account['dn'],
+                'objectclass'               => $account['objectclass'],
                 'uid'                       => $account['uid'][0],
-                $this->_userUUIDAttribute   => $account[$this->_userUUIDAttribute][0],
-                'objectClass'               => $account['objectclass'],
+                $this->_userUUIDAttribute   => $account[$this->_userUUIDAttribute][0]
             );
-            
         }
-        
+
         return $result;
     }
     
@@ -560,7 +611,20 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $allGidNumbers = array();
         $gidNumber = null;
         
-        foreach ($this->_ldap->fetchAll($this->_options['groupsDn'], 'objectclass=posixgroup', array('gidnumber')) as $groupData) {
+        throw new RuntimeException('still untested');
+        
+        $filter = Zend_Ldap_Filter::equals(
+            'objectclass', 'posixgroup'
+        );
+        
+        $groups = $this->_ldap->search(
+            $filter, 
+            $this->_options['groupsDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array('gidnumber')
+        );
+        
+        foreach ($groups as $groupData) {
             $allGidNumbers[] = $groupData['gidnumber'][0];
         }
         sort($allGidNumbers);
@@ -595,16 +659,18 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      */
     public function importGroups()
     {
-        #if(!empty($_filter)) {
-        #    $searchString = "*" . Tinebase_Ldap::filterEscape($_filter) . "*";
-        #    $filter = "(&(objectclass=posixgroup)(|(cn=$searchString)))";
-        #} else {
-            $filter = 'objectclass=posixgroup';
-        #}
+        throw new RuntimeException('still untested');
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
+        $filter = Zend_Ldap_Filter::equals(
+            'objectclass', 'posixgroup'
+        );
         
-        $groups = $this->_ldap->fetchAll($this->_options['groupsDn'], $filter, array('cn', 'description', $this->_groupUUIDAttribute), 'cn');
+        $groups = $this->_ldap->search(
+            $filter, 
+            $this->_options['groupsDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array('cn', 'description', $this->_groupUUIDAttribute)
+        );
         
         foreach($groups as $group) {
             $groupObject = new Tinebase_Model_Group(array(
@@ -629,14 +695,25 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      */
     public function importGroupMembers()
     {
+        throw new RuntimeException('still untested');
+        
         $groups = $this->getGroups();
         
         foreach($groups as $group) {
             $groupId = Tinebase_Model_Group::convertGroupIdToInt($group);     
 
-            try {
-                $groupMembers = $this->_ldap->fetch($this->_options['groupsDn'], $this->_groupUUIDAttribute . '=' . $groupId, array('member', 'memberuid'));
-            } catch (Exception $e) {
+            $filter = Zend_Ldap_Filter::equals(
+                $this->_groupUUIDAttribute, $groupId
+            );
+            
+            $groupMembers = $this->_ldap->search(
+                $filter, 
+                $this->_options['groupsDn'], 
+                Zend_Ldap::SEARCH_SCOPE_SUB, 
+                array('member', 'memberuid')
+            )->getFirst();
+
+            if(count($groupMembers) == 0) {
                 // group not found => nothing to import
                 continue;
             }
@@ -646,7 +723,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
                 foreach($groupMembers['member'] as $dn) {
                     try {
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' read ldap data for dn: ' . $dn);
-                        $accountData = $this->_ldap->fetchDn($dn, $this->_userBaseFilter, array('uidnumber'));
+                        $accountData = $this->_ldap->getEntry($dn, array('uidnumber'));
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ldap data returned: ' . print_r($accountData, true));
                         $memberId = Tinebase_User::getInstance()->resolveLdapUIdNumber($accountData['uidnumber'][0]);
                         
@@ -681,7 +758,20 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             return $_gidNumber;
         }
         
-        $groupId = $this->_ldap->fetch($this->_options['groupsDn'], 'gidnumber=' . $_gidNumber, array($this->_groupUUIDAttribute));
+        return $groupId[strtolower($this->_groupUUIDAttribute)][0];
+        
+        throw new RuntimeException('still untested');
+        
+        $filter = Zend_Ldap_Filter::equals(
+            'gidnumber', Zend_Ldap::filterEscape($_gidNumber)
+        );
+        
+        $groupId = $this->_ldap->search(
+            $filter, 
+            $this->_options['groupsDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array($this->_groupUUIDAttribute)
+        )->getFirst();
         
         return $groupId[strtolower($this->_groupUUIDAttribute)][0];
     }
@@ -698,7 +788,18 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             return $_uuid;
         }
         
-        $groupId = $this->_ldap->fetch($this->_options['groupsDn'], $this->_groupUUIDAttribute . '=' . $_uuid, array('gidnumber'));
+        throw new RuntimeException('still untested');
+        
+        $filter = Zend_Ldap_Filter::equals(
+            $this->_groupUUIDAttribute, Zend_Ldap::filterEscape($_uuid)
+        );
+        
+        $groupId = $this->_ldap->search(
+            $filter, 
+            $this->_options['groupsDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array('gidnumber')
+        )->getFirst();
         
         return $groupId['gidnumber'][0];
     }
