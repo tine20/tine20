@@ -63,6 +63,8 @@ class Tinebase_Ldap extends Zend_Ldap
             'accountFilterFormat'       => null,
             'allowEmptyPassword'        => null,
             'useStartTls'               => null,
+            'optReferrals'              => null,
+            'tryUsernameSplit'          => null
         ));
         
         $returnValue = parent::__construct($options);
@@ -71,125 +73,35 @@ class Tinebase_Ldap extends Zend_Ldap
     }
     
     /**
-     * Removes one or more attributes from the specified dn
+     * Delete an LDAP entry
      *
-     * @param  string $_dn
+     * @param  string|Zend_Ldap_Dn $dn
      * @param  array $data
-     * @return void
+     * @return Zend_Ldap *Provides a fluid interface*
+     * @throws Zend_Ldap_Exception
      */
-    public function deleteProperty($_dn, array $data)
+    public function deleteProperty($dn, array $data)
     {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
-        if (! @ldap_mod_del($this->_resource, $_dn, $data)) {
-            throw new Exception(ldap_error($this->_resource));
-        }
-    }
-    
-    /**
-     * search ldap directory
-     *
-     * @param   string $_dn base dn (where to start searching)
-     * @param   string $_filter search filter
-     * @param   array  $_attributes which fields to return
-     * @param   string $_order sort result by given attreibute ASC
-     * @return  array
-     * @throws  Exception with ldap error
-     */
-    public function fetchAll($_dn, $_filter= 'objectclass=*', array $_attributes = array(), $_order = NULL)
-    {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
-        $searchResult = @ldap_search($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);
-        
-        if($_order !== NULL) {
-            ldap_sort($this->_resource, $searchResult, $_order);
-        }
-        
-        if($searchResult === FALSE) {
-            throw new Exception(ldap_error($this->_resource));
-        }
-        
-        $entries = ldap_get_entries($this->_resource, $searchResult);
-        
-        ldap_free_result($searchResult);
-        
-        unset($entries['count']);
-        
-        return $entries;
-    }
-    
-    /**
-     * read one entry from the ldap directory
-     *
-     * @param string $_dn the dn to read
-     * @param string $_filter search filter
-     * @param array $_attributes which fields to return
-     * @return array
-     * @throws  Exception with ldap error
-     */
-    public function fetch($_dn, $_filter = 'objectclass=*', array $_attributes = array())
-    {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
-        $searchResult = @ldap_search($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);  
-        
-        if($searchResult === FALSE) {
-            throw new Exception(ldap_error($this->_resource));
-        }
-        
-        if(ldap_count_entries($this->_resource, $searchResult) === 0) {
-            throw new Tinebase_Exception_NotFound('Nothing found for filter: ' . $_filter);
-        }
-        
-        $entries = ldap_get_entries($this->_resource, $searchResult);
-        
-        ldap_free_result($searchResult);
-        
-        return $entries[0];
-    }
-    
-    /**
-     * read one entry from the ldap directory
-     *
-     * @param string $_dn the dn to read
-     * @param string $_filter search filter
-     * @param array $_attributes which fields to return
-     * @return array
-     * @throws  Exception with ldap error
-     */
-    public function fetchDn($_dn, $_filter = 'objectclass=*', array $_attributes = array())
-    {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
-        $searchResult = @ldap_read($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);
-
-        if($searchResult === FALSE) {
-            throw new Exception(ldap_error($this->_resource));
+        if ($dn instanceof Zend_Ldap_Dn) {
+            $dn = $dn->toString();
         }
 
-        if(ldap_count_entries($this->_resource, $searchResult) === 0) {
-            throw new Exception('Nothing found.');
+        $isDeleted = @ldap_mod_del($this->getResource(), $dn, $data);
+        if($isDeleted === false) {
+            /**
+             * @see Zend_Ldap_Exception
+             */
+            require_once 'Zend/Ldap/Exception.php';
+            throw new Zend_Ldap_Exception($this, 'deleting: ' . $dn);
         }
-        
-        $entries = ldap_get_entries($this->_resource, $searchResult);
-        
-        ldap_free_result($searchResult);
-        
-        return $entries[0];
+        return $this;
     }
     
     /**
      * read binary attribute from one entry from the ldap directory
      *
+     * @todo still needed???
+     * 
      * @param string $_dn the dn to read
      * @param string $_filter search filter
      * @param array $_attribute which field to return
@@ -198,141 +110,107 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function fetchBinaryAttribute($_dn, $_filter, $_attribute)
     {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
-        $searchResult = @ldap_search($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);  
+        $searchResult = @ldap_search($this->getResource(), $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);  
         
         if($searchResult === FALSE) {
-            throw new Exception(ldap_error($this->_resource));
+            throw new Exception(ldap_error($this->getResource()));
         }
         
-        $searchCount = ldap_count_entries($this->_resource, $searchResult);
+        $searchCount = ldap_count_entries($this->getResource(), $searchResult);
         if($searchCount === 0) {
             throw new Exception('Nothing found for filter: ' . $_filter);
         } elseif ($searchCount > 1) {
             throw new Exception('More than one entry found for filter: ' . $_filter);
         }
         
-        $entry = ldap_first_entry($this->_resource, $searchResult);
+        $entry = ldap_first_entry($this->getResource(), $searchResult);
         
-        return ldap_get_values_len($this->_resource, $entry, $attribute);
+        return ldap_get_values_len($this->getResource(), $entry, $attribute);
     }
     
     /**
-     * get information about the ldap server
+     * Add new information to the LDAP repository
      *
-     * @return array
+     * @param string|Zend_Ldap_Dn $dn
+     * @param array $entry
+     * @return Zend_Ldap *Provides a fluid interface*
+     * @throws Zend_Ldap_Exception
      */
-    public function getServerInfo()
+    public function addProperty($dn, array $entry)
     {
-        if (! $this->_serverInfo) {
-            $this->_serverInfo = new Tinebase_LdapInfo($this);
+        if (!($dn instanceof Zend_Ldap_Dn)) {
+            $dn = Zend_Ldap_Dn::factory($dn, null);
         }
-        
-        return $this->_serverInfo;
-    }
-    
-    /**
-     * Add entries to LDAP directory
-     *
-     * @param  string $_dn
-     * @param  array $_data
-     * @return void
-     */
-    public function insert($_dn, array $_data)
-    {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
-        self::convertEmpty($_data, NULL);
-        if (! @ldap_add($this->_resource, $_dn, $_data)) {
-            throw new Exception(ldap_error($this->_resource));
-        }
-    }
-    
-    /**
-     * Add property
-     *
-     * @param  string $_dn
-     * @param  array $_data
-     * @return void
-     */
-    public function insertProperty($_dn, array $_data)
-    {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
-        self::convertEmpty($_data, NULL);
-        if (! @ldap_mod_add($this->_resource, $_dn, $_data)) {
-            throw new Exception(ldap_error($this->_resource));
-        }
-    }
-    
-    /**
-     * Modify (Replace) the given properties 
-     *
-     * @param  string $_dn
-     * @param  array $_data
-     * @return void
-     */
-    public function updateProperty($_dn, array $_data)
-    {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
-        self::convertEmpty($_data);
-        if (! @ldap_mod_replace($this->_resource, $_dn, $_data)) {
-            throw new Exception(ldap_error($this->_resource));
-        }
-    }
-    
-    /**
-     * converts empty values into empty arrays
-     *
-     * @param array &$_data
-     * @param mixed $_to  if set to NULL, attribute will be removed
-     */
-    public static function convertEmpty(&$_data, $_to = array()) {
-        foreach ($_data as $attribute => $value) {
-            if (empty($value)) {
-                if (is_null($_to)) {
-                    unset($_data[$attribute]);
-                } else {
-                    $_data[$attribute] = $_to;
-                }
+        self::prepareLdapEntryArray($entry);
+        foreach ($entry as $key => $value) {
+            if (is_array($value) && count($value) === 0) {
+                unset($entry[$key]);
             }
         }
-    }
 
-    /**
-     * get metadata of ldap record
-     *
-     * @param  string $_dn
-     * @param  string $_filter
-     * @param  array  $_attributes
-     * @return array 
-     */
-    public function getMetaData($_dn, $_filter, $_attributes = array('objectclass'))
-    {
-        $metaData = array();
-        
-        $record = $this->fetch($_dn, $_filter, $_attributes);
-        $metaData['dn'] = $record['dn'];
-        
-        foreach($_attributes as $attribute) {
-            if ($attribute == 'objectclass') {
-                $metaData['objectClass'] = $record['objectclass'];
-                unset($metaData['objectClass']['count']);
-            } else {
-                $metaData[$attribute] = $record[$attribute];
+        $rdnParts = $dn->getRdn(Zend_Ldap_Dn::ATTR_CASEFOLD_LOWER);
+        foreach ($rdnParts as $key => $value) {
+            $value = Zend_Ldap_Dn::unescapeValue($value);
+            if (!array_key_exists($key, $entry) ||
+                    !in_array($value, $entry[$key]) ||
+                    count($entry[$key]) !== 1) {
+                $entry[$key] = array($value);
             }
         }
-        
-        return $metaData;
+        $adAttributes = array('distinguishedname', 'instancetype', 'name', 'objectcategory',
+            'objectguid', 'usnchanged', 'usncreated', 'whenchanged', 'whencreated');
+        foreach ($adAttributes as $attr) {
+            if (array_key_exists($attr, $entry)) {
+                unset($entry[$attr]);
+            }
+        }
+
+        $isAdded = @ldap_mod_add($this->getResource(), $dn->toString(), $entry);
+        if($isAdded === false) {
+            /**
+             * @see Zend_Ldap_Exception
+             */
+            require_once 'Zend/Ldap/Exception.php';
+            throw new Zend_Ldap_Exception($this, 'adding: ' . $dn->toString());
+        }
+        return $this;
     }
+    
+    /**
+     * Update LDAP registry
+     *
+     * @param string|Zend_Ldap_Dn $dn
+     * @param array $entry
+     * @return Zend_Ldap *Provides a fluid interface*
+     * @throws Zend_Ldap_Exception
+     */
+    public function updateProperty($dn, array $entry)
+    {
+        if (!($dn instanceof Zend_Ldap_Dn)) {
+            $dn = Zend_Ldap_Dn::factory($dn, null);
+        }
+        self::prepareLdapEntryArray($entry);
+
+        $rdnParts = $dn->getRdn(Zend_Ldap_Dn::ATTR_CASEFOLD_LOWER);
+        $adAttributes = array('distinguishedname', 'instancetype', 'name', 'objectcategory',
+            'objectguid', 'usnchanged', 'usncreated', 'whenchanged', 'whencreated');
+        $stripAttributes = array_merge(array_keys($rdnParts), $adAttributes);
+        foreach ($stripAttributes as $attr) {
+            if (array_key_exists($attr, $entry)) {
+                unset($entry[$attr]);
+            }
+        }
+
+        if (count($entry) > 0) {
+            $isModified = @ldap_mod_replace($this->getResource(), $dn->toString(), $entry);
+            if($isModified === false) {
+                /**
+                 * @see Zend_Ldap_Exception
+                 */
+                require_once 'Zend/Ldap/Exception.php';
+                throw new Zend_Ldap_Exception($this, 'updating: ' . $dn->toString());
+            }
+        }
+        return $this;
+    }    
 }
