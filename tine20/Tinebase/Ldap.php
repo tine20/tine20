@@ -149,22 +149,18 @@ class Tinebase_Ldap extends Zend_Ldap
         }
 
         $rdnParts = $dn->getRdn(Zend_Ldap_Dn::ATTR_CASEFOLD_LOWER);
-        foreach ($rdnParts as $key => $value) {
-            $value = Zend_Ldap_Dn::unescapeValue($value);
-            if (!array_key_exists($key, $entry) ||
-                    !in_array($value, $entry[$key]) ||
-                    count($entry[$key]) !== 1) {
-                $entry[$key] = array($value);
-            }
-        }
         $adAttributes = array('distinguishedname', 'instancetype', 'name', 'objectcategory',
             'objectguid', 'usnchanged', 'usncreated', 'whenchanged', 'whencreated');
-        foreach ($adAttributes as $attr) {
+        $stripAttributes = array_merge(array_keys($rdnParts), $adAttributes);
+        foreach ($stripAttributes as $attr) {
             if (array_key_exists($attr, $entry)) {
                 unset($entry[$attr]);
             }
         }
-
+                
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn->toString());
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($entry, true));
+        
         $isAdded = @ldap_mod_add($this->getResource(), $dn->toString(), $entry);
         if($isAdded === false) {
             /**
