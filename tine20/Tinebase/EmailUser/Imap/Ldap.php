@@ -97,13 +97,23 @@ class Tinebase_EmailUser_Imap_Ldap extends Tinebase_EmailUser_Abstract
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Trying to get ldap user with id ' . $_userId);
         
-        try {
-            $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-            $ldapData = $this->_ldap->fetch($this->_options['userDn'], $this->_options['userUUIDAttribute'] . '=' . $userId);
-            $user = $this->_ldap2User($ldapData);
-        } catch (Exception $e) {
+        $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
+        $filter = Zend_Ldap_Filter::equals(
+            $this->_options['userUUIDAttribute'], Zend_Ldap::filterEscape($userId)
+        );
+        
+        $accounts = $this->_ldap->search(
+            $filter, 
+            $this->_options['userDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array()
+        );
+        
+        if(count($accounts) == 0) {
             throw new Exception('User not found: ' . $e->getMessage());
         }
+        
+        $user = $this->_ldap2User($accounts->getFirst());
 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), TRUE));
         
@@ -125,7 +135,7 @@ class Tinebase_EmailUser_Imap_Ldap extends Tinebase_EmailUser_Abstract
         $metaData = $this->_getUserMetaData($_user);
         $ldapData = $this->_user2ldap($_emailUser);
         
-        $ldapData['objectclass'] = array_unique(array_merge($metaData['objectClass'], $this->_requiredObjectClass));
+        $ldapData['objectclass'] = array_unique(array_merge($metaData['objectclass'], $this->_requiredObjectClass));
                 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
@@ -151,7 +161,7 @@ class Tinebase_EmailUser_Imap_Ldap extends Tinebase_EmailUser_Abstract
         
         // check if user has all required object classes.
         foreach ($this->_requiredObjectClass as $className) {
-            if (! in_array($className, $metaData['objectClass'])) {
+            if (!in_array($className, $metaData['objectclass'])) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn'] . ' had no email objectclass.');
 
                 return $this->addUser($_user, $_emailUser);
@@ -197,8 +207,20 @@ class Tinebase_EmailUser_Imap_Ldap extends Tinebase_EmailUser_Abstract
     protected function _getUserMetaData($_userId)
     {
         $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-        $result = $this->_ldap->getMetaData($this->_options['userDn'], $this->_options['userUUIDAttribute'] . '=' . $userId);
+        
+        $filter = Zend_Ldap_Filter::equals(
+            $this->_options['userUUIDAttribute'], Zend_Ldap::filterEscape($userId)
+        );
+        
+        $result = $this->_ldap->search(
+            $filter, 
+            $this->_options['userDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array('objectclass')
+        )->getFirst();
+        
         return $result;
+        
     }
     
     /**
