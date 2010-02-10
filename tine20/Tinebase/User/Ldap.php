@@ -380,13 +380,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' added user with dn: ' . $dn);
         
-        $userId = $this->_backend->fetch($dn, 'objectclass=*', array($this->_userUUIDAttribute));
+        $userId = $this->_backend->getEntry($dn, array($this->_userUUIDAttribute));
         
         $userId = $userId[strtolower($this->_userUUIDAttribute)][0];
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' new userid: ' . $userId);
         
-        $user = $this->_getUserById($userId, 'Tinebase_Model_FullUser');
+        $user = $this->_getUserByProperty('accountId', $userId, 'Tinebase_Model_FullUser');
         
         // add account to sql backend too
         $user = $this->_sql->addUser($user);
@@ -405,8 +405,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        throw new RuntimeException('still untested');
-        
         $this->_backend->add($dn, $ldapData);
         
         return $dn;
@@ -421,12 +419,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {
         $metaData = $this->_getMetaData($_accountId);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        
         // delete user in sql backend first (foreign keys)
         $this->_sql->deleteUser($_accountId);
         
-        $this->_backend->delete($metaData['dn']);
+        // if does not exist in ldap anymore
+        if(!empty($metaData['dn'])) {
+            $this->_backend->delete($metaData['dn']);
+        }
     }
 
     /**
@@ -450,28 +449,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     public function getMultiple($_ids) 
     {
         return $this->_sql->getMultiple($_ids);
-        
-        // old ldap code
-        $ids = is_array($_ids) ? $_ids : (array) $_ids;
-        
-        $idFilter = '';
-        foreach ($ids as $id) {
-            $idFilter .= "($this->_rowNameMapping['accountId']=$id)";
-        }
-        $filter = "(&($this->_userBaseFilter)(|$idFilter))";
-        
-        $result = $this->_getUsersFromBackend($filter, 'Tinebase_Model_User');
-		
-        /*
-        // add unknown users if not found in database
-        foreach($ids as $id) {
-            if (!isset($result[$result->getIndexById($id)])) {
-                $result->addRecord($this->getNonExistentUser('Tinebase_Model_User', $id));
-            }
-        }
-        */
-		
-		return $result;
     }
     
     /**
