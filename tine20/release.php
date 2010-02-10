@@ -14,7 +14,7 @@ if (php_sapi_name() != 'cli') {
     die('not allowed!');
 }
 
-set_include_path('.' . PATH_SEPARATOR . dirname(__FILE__) . '/library' . PATH_SEPARATOR . get_include_path());
+set_include_path(dirname(__FILE__) . PATH_SEPARATOR . dirname(__FILE__) . '/library' . PATH_SEPARATOR . get_include_path());
 
 require_once 'Tinebase/Helper.php';
 require_once 'Zend/Loader/Autoloader.php';
