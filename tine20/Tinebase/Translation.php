@@ -259,6 +259,9 @@ class Tinebase_Translation
      * This is a javascript spechial function!
      * The data will be preseted to be included as javascript on client side!
      *
+     * NOTE: This functino is called from release.php cli script. In this case no 
+     *       tine 2.0 core initialisation took place beforehand
+     *       
      * @param  Zend_Locale $_locale
      * @return string      javascript
      */
@@ -288,8 +291,6 @@ class Tinebase_Translation
         }
         
         if (! $jsTranslations) {
-            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " rebuilding js translation cache");
-            
             $jsTranslations  = "/************************** generic translations **************************/ \n";
             $jsTranslations .= file_get_contents("$baseDir/Tinebase/js/Locale/static/generic-$localeString.js");
             
