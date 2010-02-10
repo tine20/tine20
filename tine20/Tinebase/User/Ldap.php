@@ -26,7 +26,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     /**
      * @var Tinebase_Ldap
      */
-    protected $_backend = NULL;
+    protected $_ldap = NULL;
 
     /**
      * the sql user backend
@@ -122,8 +122,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         $this->_rowNameMapping['accountId'] = strtolower($this->_userUUIDAttribute);
         
-        $this->_backend = new Tinebase_Ldap($_options);
-        $this->_backend->bind();
+        $this->_ldap = new Tinebase_Ldap($_options);
+        $this->_ldap->bind();
         
         $this->_sql = new Tinebase_User_Sql();
     }   
@@ -171,7 +171,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             Zend_Ldap_Filter::equals($this->_rowNameMapping[$_property], Zend_Ldap::filterEscape($value))
         );
         
-        $accounts = $this->_backend->search(
+        $accounts = $this->_ldap->search(
             $filter, 
             $this->_options['userDn'], 
             Zend_Ldap::SEARCH_SCOPE_SUB, 
@@ -255,7 +255,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        $this->_backend->update($metaData['dn'], $ldapData);
+        $this->_ldap->update($metaData['dn'], $ldapData);
     }
     
     /**
@@ -296,7 +296,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " {$metaData['dn']}  $data: " . print_r($data, true));
  
-        $this->_backend->update($metaData['dn'], $data);
+        $this->_ldap->update($metaData['dn'], $data);
         
         $this->_sql->setExpiryDate($_accountId, $_expiryDate);
     }
@@ -365,7 +365,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        $this->_backend->update($metaData['dn'], $ldapData);
+        $this->_ldap->update($metaData['dn'], $ldapData);
     }
     
     /**
@@ -380,7 +380,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' added user with dn: ' . $dn);
         
-        $userId = $this->_backend->getEntry($dn, array($this->_userUUIDAttribute));
+        $userId = $this->_ldap->getEntry($dn, array($this->_userUUIDAttribute));
         
         $userId = $userId[strtolower($this->_userUUIDAttribute)][0];
         
@@ -405,7 +405,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        $this->_backend->add($dn, $ldapData);
+        $this->_ldap->add($dn, $ldapData);
         
         return $dn;
     }
@@ -424,7 +424,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         // if does not exist in ldap anymore
         if(!empty($metaData['dn'])) {
-            $this->_backend->delete($metaData['dn']);
+            $this->_ldap->delete($metaData['dn']);
         }
     }
 
@@ -467,7 +467,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             $this->_rowNameMapping['accountId'], Zend_Ldap::filterEscape($userId)
         );
         
-        $result = $this->_backend->search(
+        $result = $this->_ldap->search(
             $filter, 
             $this->_options['userDn'], 
             Zend_Ldap::SEARCH_SCOPE_SUB, 
@@ -516,7 +516,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             'objectclass', 'posixAccount'
         );
         
-        $accounts = $this->_backend->search(
+        $accounts = $this->_ldap->search(
             $filter, 
             $this->_options['userDn'], 
             Zend_Ldap::SEARCH_SCOPE_SUB, 
@@ -564,7 +564,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         $result = new Tinebase_Record_RecordSet($_accountClass);
         
-        $accounts = $this->_backend->search(
+        $accounts = $this->_ldap->search(
             $_filter, 
             $this->_options['userDn'], 
             Zend_Ldap::SEARCH_SCOPE_SUB, 
@@ -595,7 +595,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $userData = $this->_getMetaData($_user);
         
         throw new RuntimeException('still untested');
-        $userData = $this->_backend->getEntry($userData['dn']);
+        $userData = $this->_ldap->getEntry($userData['dn']);
         
         $contact = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL)->getByUserId($_user->getId());
         
@@ -789,7 +789,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             'uidnumber', Zend_Ldap::filterEscape($_uidNumber)
         );
         
-        $userId = $this->_backend->search(
+        $userId = $this->_ldap->search(
             $filter, 
             $this->_options['userDn'], 
             Zend_Ldap::SEARCH_SCOPE_SUB, 
