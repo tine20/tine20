@@ -260,13 +260,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $accountMetaData = $this->_getAccountMetaData($_accountId);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " account meta data: " . print_r($accountMetaData, true));
         
-        $accounts = $this->_ldap->search(
-            $filter, 
-            $this->_options['userDn'], 
-            Zend_Ldap::SEARCH_SCOPE_SUB, 
-            array('uid', $this->_userUUIDAttribute, 'objectclass')
-        );
-        
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId)),
             Zend_Ldap_Filter::equals('memberuid', Zend_Ldap::filterEscape($accountMetaData['uid']))
@@ -304,9 +297,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             }
         }
                 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $groupDn);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
-        
         if(!empty($data)) {
             $this->_ldap->addProperty($groupDn, $data);
         }
