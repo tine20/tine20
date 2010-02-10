@@ -273,15 +273,19 @@ class Tinebase_Translation
         
         $allTranslationFiles    = array_merge(array($genericTranslationFile, $extjsTranslationFile), $tine20TranslationFiels);
         
-        // setup cache (saves about 20% @2010/01/28)
-        $cache = new Zend_Cache_Frontend_File(array(
-            'master_files' => $allTranslationFiles
-        ));
-        $cache->setBackend(Tinebase_Core::get(Tinebase_Core::CACHE)->getBackend());
+        $jsTranslations = NULL;
         
-        $cacheId = __CLASS__ . "_". __FUNCTION__ . "_{$localeString}";
-        
-        $jsTranslations = $cache->load($cacheId);
+        if (Tinebase_Core::get(Tinebase_Core::CACHE)) {
+            // setup cache (saves about 20% @2010/01/28)
+            $cache = new Zend_Cache_Frontend_File(array(
+                'master_files' => $allTranslationFiles
+            ));
+            $cache->setBackend(Tinebase_Core::get(Tinebase_Core::CACHE)->getBackend());
+            
+            $cacheId = __CLASS__ . "_". __FUNCTION__ . "_{$localeString}";
+            
+            $jsTranslations = $cache->load($cacheId);
+        }
         
         if (! $jsTranslations) {
             Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " rebuilding js translation cache");
@@ -303,7 +307,9 @@ class Tinebase_Translation
                 $jsTranslations .= "Locale.Gettext.prototype._msgs['./LC_MESSAGES/$appName'] = new Locale.Gettext.PO($poObject); \n";
             }
             
-            $cache->save($jsTranslations, $cacheId);
+            if (isset($cache)) {
+                $cache->save($jsTranslations, $cacheId);
+            }
         }
         
         return $jsTranslations;
