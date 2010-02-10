@@ -170,7 +170,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             Zend_Ldap_Filter::string($this->_userBaseFilter),
             Zend_Ldap_Filter::equals($this->_rowNameMapping[$_property], Zend_Ldap::filterEscape($value))
         );
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ldap search filter ' . $filter);
         
         $accounts = $this->_backend->search(
             $filter, 
@@ -397,8 +396,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     
     protected function _addUser(Tinebase_Model_FullUser $_account)
     {
-        throw new RuntimeException('still untested');
-        
         $dn = $this->_generateDn($_account);
         $ldapData = $this->_user2ldap($_account);
         
@@ -407,6 +404,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        
+        throw new RuntimeException('still untested');
         
         $this->_backend->add($dn, $ldapData);
         
@@ -533,8 +532,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     protected function _generateUidNumber()
     {
-        throw new RuntimeException('still untested');
-        
         $allUidNumbers = array();
         $uidNumber = null;
 
@@ -542,7 +539,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             'objectclass', 'posixAccount'
         );
         
-        $accounts = $this->_ldap->search(
+        $accounts = $this->_backend->search(
             $filter, 
             $this->_options['userDn'], 
             Zend_Ldap::SEARCH_SCOPE_SUB, 
@@ -590,7 +587,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         $result = new Tinebase_Record_RecordSet($_accountClass);
         
-        $accounts = $this->_ldap->search(
+        $accounts = $this->_backend->search(
             $_filter, 
             $this->_options['userDn'], 
             Zend_Ldap::SEARCH_SCOPE_SUB, 
@@ -815,7 +812,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             'uidnumber', Zend_Ldap::filterEscape($_uidNumber)
         );
         
-        $userId = $this->_ldap->search(
+        $userId = $this->_backend->search(
             $filter, 
             $this->_options['userDn'], 
             Zend_Ldap::SEARCH_SCOPE_SUB, 
