@@ -143,7 +143,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         throw new RuntimeException('still untested');
         
         $filter = Zend_Ldap_Filter::equals(
-            $this->_groupUUIDAttribute, $groupId
+            $this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId)
         );
         
         $groups = $this->_ldap->search(
@@ -543,7 +543,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $filterArray = array();
         foreach ($_accountIds as $accountId) {
             $accountId = Tinebase_Model_User::convertUserIdToInt($accountId);
-            $filterArray[] = Zend_Ldap_Filter::equals($this->_userUUIDAttribute, $accountId);
+            $filterArray[] = Zend_Ldap_Filter::equals($this->_userUUIDAttribute, Zend_Ldap::filterEscape($accountId));
         }
         $filter = new Zend_Ldap_Filter_Or($filterArray);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $filter: ' . $filter);
@@ -703,7 +703,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             $groupId = Tinebase_Model_Group::convertGroupIdToInt($group);     
 
             $filter = Zend_Ldap_Filter::equals(
-                $this->_groupUUIDAttribute, $groupId
+                $this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId)
             );
             
             $groupMembers = $this->_ldap->search(
