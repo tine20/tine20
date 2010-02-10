@@ -65,7 +65,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      * @var array
      */
     protected $_requiredUserObjectClass = array(
-        'sambaSamAccount',
+        'sambaSamAccount'
     );
     
     /**
@@ -74,7 +74,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      * @var array
      */
     protected $_requiredGroupObjectClass = array(
-        'sambaGroupMapping',
+        'sambaGroupMapping'
     );
         
     /**
@@ -101,14 +101,25 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      */
     public function getUserById($_userId) 
     {
-        try {
-            $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-            $ldapData = $this->_ldap->fetch($this->_options['userDn'], $this->_options['userUUIDAttribute'] . '=' . $userId);
-            $user = $this->_ldap2User($ldapData);
-        } catch (Exception $e) {
+        $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
+        
+        $filter = Zend_Ldap_Filter::equals(
+            $this->_options['userUUIDAttribute'], Zend_Ldap::filterEscape($userId)
+        );
+        
+        $accounts = $this->_ldap->search(
+            $filter, 
+            $this->_options['userDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array()
+        );
+        
+        if(count($accounts) == 0) {
             throw new Exception('User not found');
         }
         
+        $user = $this->_ldap2User($accounts->getFirst());
+
         return $user;
     }
 
@@ -124,11 +135,11 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         $metaData = $this->_getUserMetaData($_user);
         $ldapData = $this->_user2ldap($_samUser);
         
-        $ldapData['objectclass'] = array_unique(array_merge($metaData['objectClass'], $this->_requiredUserObjectClass));
+        $ldapData['objectclass'] = array_unique(array_merge($metaData['objectclass'], $this->_requiredUserObjectClass));
         
         // defaults
-        $ldapData['sambasid'] = $this->_options['sid'] . '-' . (2 * $_user->getId() + 1000);
-        $ldapData['sambaacctflags'] = (isset($ldapData['sambaacctflags']) && !empty($ldapData['sambaacctflags'])) ? $ldapData['sambaacctflags'] : '[U          ]';
+        $ldapData['sambasid']           = $this->_options['sid'] . '-' . (2 * $_user->getId() + 1000);
+        $ldapData['sambaacctflags']     = !empty($ldapData['sambaacctflags'])    ? $ldapData['sambaacctflags'] : '[U          ]';
         $ldapData['sambapwdcanchange']	= isset($ldapData['sambapwdcanchange'])  ? $ldapData['sambapwdcanchange']  : 0;
         $ldapData['sambapwdmustchange']	= isset($ldapData['sambapwdmustchange']) ? $ldapData['sambapwdmustchange'] : 2147483647;
 
@@ -156,7 +167,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         
         // check if user has all required object classes.
         foreach ($this->_requiredUserObjectClass as $className) {
-            if (! in_array($className, $metaData['objectClass'])) {
+            if (!in_array($className, $metaData['objectclass'])) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn'] . ' had no samba account. Make sure to reset the users password!');
 
                 return $this->addUser($_user, $_samUser);
@@ -262,13 +273,24 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      */
     public function getGroupById($_groupId)
     {
-        try {
-            $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
-            $ldapData = $this->_ldap->fetch($this->_options['groupsDn'], 'gidnumber=' . $groupId);
-            $group = $this->_ldap2Group($ldapData);
-        } catch (Exception $e) {
+        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
+
+        $filter = Zend_Ldap_Filter::equals(
+            $this->_options['groupUUIDAttribute'], Zend_Ldap::filterEscape($groupId)
+        );
+        
+        $groups = $this->_ldap->search(
+            $filter, 
+            $this->_options['groupsDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array()
+        );
+        
+        if(count($groups) == 0) {
             throw new Exception('Group not found');
         }
+        
+        $group = $this->_ldap2Group($groups->getFirst());
         
         return $group;
     }
@@ -284,7 +306,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         $metaData = $this->_getGroupMetaData($_group);
 
         $ldapData = array(
-            'objectclass'    => array_unique(array_merge($metaData['objectClass'], $this->_requiredGroupObjectClass)),
+            'objectclass'    => array_unique(array_merge($metaData['objectclass'], $this->_requiredGroupObjectClass)),
             'sambasid'       => $this->_options['sid'] . '-' . (2 * $_group->getId() + 1001),
             'sambagrouptype' => 2,
             'displayname'    => $_group->name
@@ -309,7 +331,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
 
         // check if group has all required object classes.
         foreach ($this->_requiredGroupObjectClass as $className) {
-            if (! in_array($className, $metaData['objectClass'])) {
+            if (! in_array($className, $metaData['objectclass'])) {
                 return $this->addGroup($_group);
             }
         }
@@ -345,25 +367,24 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
     protected function _getUserMetaData($_userId)
     {
         $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-        $result = $this->_ldap->getMetaData($this->_options['userDn'], $this->_options['userUUIDAttribute'] . '=' . $userId);
+        
+        $filter = Zend_Ldap_Filter::equals(
+            $this->_options['userUUIDAttribute'], Zend_Ldap::filterEscape($userId)
+        );
+        
+        $result = $this->_ldap->search(
+            $filter, 
+            $this->_options['userDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array('objectclass')
+        )->getFirst();
+        
         return $result;
         
         /*
-        $metaData = array();
-        
-        try {
-            $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-            $account = $this->_ldap->fetch($this->_options['userDn'], 'uidnumber=' . $userId, array('objectclass'));
-            $metaData['dn'] = $account['dn'];
-            
-            $metaData['objectClass'] = $account['objectclass'];
-            unset($metaData['objectClass']['count']);
-            
         } catch (Tinebase_Exception_NotFound $enf) {
             throw new Exception("account with id $userId not found");
         }
-        
-        return $metaData;
         */
     }
     
@@ -378,26 +399,24 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
     protected function _getGroupMetaData($_groupId)
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
-        $result = $this->_ldap->getMetaData($this->_options['groupsDn'], 'gidnumber=' . $groupId);
+        
+        $filter = Zend_Ldap_Filter::equals(
+            $this->_options['groupUUIDAttribute'], Zend_Ldap::filterEscape($groupId)
+        );
+        
+        $result = $this->_ldap->search(
+            $filter, 
+            $this->_options['groupsDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array('objectclass')
+        )->getFirst();
+        
         return $result;
         
         /*
-        $metaData = array();
-        
-        try {
-            $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
-            $group = $this->_ldap->fetch($this->_options['groupsDn'], 'gidnumber=' . $groupId, array('objectclass'));
-            $metaData['dn'] = $group['dn'];
-            
-            $metaData['objectClass'] = $group['objectclass'];
-            unset($metaData['objectClass']['count']);
-                
         } catch (Tinebase_Exception_NotFound $e) {
             throw new Exception("group with id $groupId not found");
         }
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($metaData, true));
-        return $metaData;
         */
     }
     
@@ -408,10 +427,21 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      * @param string $_accountClass
      * @return Tinebase_Record_RecordSet
      */
-    protected function _getUsersFromBackend($_filter, $_accountClass = 'Tinebase_Model_SAMUser')
+/*    protected function _getUsersFromBackend($_filter, $_accountClass = 'Tinebase_Model_SAMUser')
     {
         $result = new Tinebase_Record_RecordSet($_accountClass);
         $accounts = $this->_ldap->fetchAll($this->_options['userDn'], $_filter, array_values($this->_userPropertyNameMapping));
+        
+        $filter = Zend_Ldap_Filter::equals(
+            $this->_options['userUUIDAttribute'], Zend_Ldap::filterEscape($userId)
+        );
+        
+        $result = $this->_ldap->search(
+            $filter, 
+            $this->_options['userDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array_values($this->_userPropertyNameMapping)
+        )->getFirst();
         
         foreach ($accounts as $account) {
             $accountObject = $this->_ldap2User($account, $_accountClass);
@@ -420,7 +450,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         }
         
         return $result;
-    }
+    } */
     
     /**
      * Returns a user obj with raw data from ldap
