@@ -383,8 +383,40 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         name: 'accounts_Ldap_userDn',
                         fieldLabel: this.app.i18n._('User DN')
                     }, {
+                        name: 'accounts_Ldap_userFilter',
+                        fieldLabel: this.app.i18n._('User Filter')
+                    }, {
+                        xtype: 'combo',
+                        width: 283, //late rendering bug
+                        listWidth: 300,
+                        mode: 'local',
+                        forceSelection: true,
+                        allowEmpty: false,
+                        triggerAction: 'all',
+                        selectOnFocus:true,
+                        store: [['1', 'SEARCH_SCOPE_SUB'], ['2','SEARCH_SCOPE_ONE']],
+                        name: 'accounts_Ldap_userSearchScope',
+                        fieldLabel: this.app.i18n._('User Search Scope'),
+                        value: '1'
+                    }, {
                         name: 'accounts_Ldap_groupsDn',
                         fieldLabel: this.app.i18n._('Groups DN')
+                    }, {
+                        name: 'accounts_Ldap_groupFilter',
+                        fieldLabel: this.app.i18n._('Group Filter')
+                    }, {
+                        xtype: 'combo',
+                        width: 283, //late rendering bug
+                        listWidth: 300,
+                        mode: 'local',
+                        forceSelection: true,
+                        allowEmpty: false,
+                        triggerAction: 'all',
+                        selectOnFocus:true,
+                        store: [['1', 'SEARCH_SCOPE_SUB'], ['2','SEARCH_SCOPE_ONE']],
+                        name: 'accounts_Ldap_groupSearchScope',
+                        fieldLabel: this.app.i18n._('Group Search Scope'),
+                        value: '1'
                     }, {
                         xtype: 'combo',
                         width: 283, //late rendering bug

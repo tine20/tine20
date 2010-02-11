@@ -96,6 +96,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     protected $_userBaseFilter      = 'objectclass=posixaccount';
     
     /**
+     * the basic user search scope
+     *
+     * @var integer
+     */
+    protected $_userSearchScope      = Zend_Ldap::SEARCH_SCOPE_SUB;
+    
+    /**
      * the query filter for the ldap search (for example uid=%s)
      *
      * @var string
@@ -118,6 +125,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $this->_userUUIDAttribute  = isset($_options['userUUIDAttribute'])  ? $_options['userUUIDAttribute']  : 'entryUUID';
         $this->_groupUUIDAttribute = isset($_options['groupUUIDAttribute']) ? $_options['groupUUIDAttribute'] : 'entryUUID';
         $this->_userBaseFilter     = isset($_options['userFilter'])         ? $_options['userFilter']         : 'objectclass=posixaccount';
+        $this->_userSearchScope    = isset($_options['userSearchScope'])    ? $_options['userSearchScope']    : Zend_Ldap::SEARCH_SCOPE_SUB;
         $this->_groupBaseFilter    = isset($_options['groupFilter'])        ? $_options['groupFilter']        : 'objectclass=posixgroup';
         
         $this->_rowNameMapping['accountId'] = strtolower($this->_userUUIDAttribute);
@@ -174,7 +182,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $accounts = $this->_ldap->search(
             $filter, 
             $this->_options['userDn'], 
-            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            $this->_userSearchScope, 
             array_values($this->_rowNameMapping)
         );
 
@@ -470,7 +478,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $result = $this->_ldap->search(
             $filter, 
             $this->_options['userDn'], 
-            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            $this->_userSearchScope, 
             array('objectclass')
         )->getFirst();
         
@@ -567,7 +575,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $accounts = $this->_ldap->search(
             $_filter, 
             $this->_options['userDn'], 
-            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            $this->_userSearchScope, 
             array_values($this->_rowNameMapping)
         );
         
@@ -792,7 +800,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $userId = $this->_ldap->search(
             $filter, 
             $this->_options['userDn'], 
-            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            $this->_userSearchScope, 
             array($this->_userUUIDAttribute)
         )->getFirst();
         

@@ -68,6 +68,20 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     protected $_userBaseFilter      = 'objectclass=posixaccount';
     
     /**
+     * the basic user search scope
+     *
+     * @var integer
+     */
+    protected $_groupSearchScope     = Zend_Ldap::SEARCH_SCOPE_SUB;
+    
+    /**
+     * the basic user search scope
+     *
+     * @var integer
+     */
+    protected $_userSearchScope      = Zend_Ldap::SEARCH_SCOPE_SUB;
+    
+    /**
      * the constructor
      *
      * @param  array $options Options used in connecting, binding, etc.
@@ -79,6 +93,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $this->_groupUUIDAttribute = isset($_options['groupUUIDAttribute']) ? strtolower($_options['groupUUIDAttribute']) : 'entryuuid';
         $this->_userBaseFilter     = isset($_options['userFilter'])         ? $_options['userFilter']         : 'objectclass=posixaccount';
         $this->_groupBaseFilter    = isset($_options['groupFilter'])        ? $_options['groupFilter']        : 'objectclass=posixgroup';
+        $this->_groupSearchScope   = isset($_options['groupSearchScope'])   ? $_options['groupSearchScope']   : Zend_Ldap::SEARCH_SCOPE_SUB;
+        $this->_userSearchScope    = isset($_options['userSearchScope'])    ? $_options['userSearchScope']    : Zend_Ldap::SEARCH_SCOPE_SUB;
         
         $this->_ldap = new Tinebase_Ldap($_options);
         $this->_ldap->bind();
@@ -149,7 +165,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $groups = $this->_ldap->search(
             $filter, 
             $this->_options['groupsDn'], 
-            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            $this->_groupSearchScope, 
             array('cn', 'description', $this->_groupUUIDAttribute)
         );
         
@@ -268,7 +284,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $groups = $this->_ldap->search(
             $filter, 
             $this->_options['groupsDn'], 
-            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            $this->_groupSearchScope, 
             array('dn')
         );
 
@@ -287,7 +303,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             $groups = $this->_ldap->search(
                 $filter, 
                 $this->_options['groupsDn'], 
-                Zend_Ldap::SEARCH_SCOPE_SUB, 
+                $this->_groupSearchScope, 
                 array('dn')
             );
             
@@ -311,7 +327,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             $groups = $this->_ldap->search(
                 $filter, 
                 $this->_options['groupsDn'], 
-                Zend_Ldap::SEARCH_SCOPE_SUB, 
+                $this->_groupSearchScope, 
                 array('dn')
             );
             
@@ -509,7 +525,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $result = $this->_ldap->search(
             $filter, 
             $this->_options['groupsDn'], 
-            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            $this->_groupSearchScope, 
             array('objectclass')
         )->getFirst();
         
@@ -543,7 +559,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $accounts = $this->_ldap->search(
             $filter, 
             $this->_options['userDn'], 
-            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            $this->_userSearchScope, 
             array('uid', $this->_userUUIDAttribute, 'objectclass')
         );
         
@@ -658,7 +674,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $groups = $this->_ldap->search(
             $filter, 
             $this->_options['groupsDn'], 
-            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            $this->_groupSearchScope, 
             array('cn', 'description', $this->_groupUUIDAttribute)
         );
         
@@ -699,7 +715,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             $groupMembers = $this->_ldap->search(
                 $filter, 
                 $this->_options['groupsDn'], 
-                Zend_Ldap::SEARCH_SCOPE_SUB, 
+                $this->_groupSearchScope, 
                 array('member', 'memberuid')
             )->getFirst();
 
@@ -759,7 +775,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $groupId = $this->_ldap->search(
             $filter, 
             $this->_options['groupsDn'], 
-            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            $this->_groupSearchScope, 
             array($this->_groupUUIDAttribute)
         )->getFirst();
         
@@ -787,7 +803,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $groupId = $this->_ldap->search(
             $filter, 
             $this->_options['groupsDn'], 
-            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            $this->_groupSearchScope, 
             array('gidnumber')
         )->getFirst();
         
