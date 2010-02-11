@@ -70,9 +70,12 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.emailRecord = Tine.Admin.emailUserBackend.recordReader(emailResponse);
         this.getForm().loadRecord(this.emailRecord);
         
-        this.record.set('accountLastLogin', Tine.Tinebase.common.dateTimeRenderer(this.record.get('accountLastLogin')));
-        this.record.set('accountLastPasswordChange', Tine.Tinebase.common.dateTimeRenderer(this.record.get('accountLastPasswordChange')));
-        
+        // format dates
+        var dateTimeDisplayFields = ['accountLastLogin', 'accountLastPasswordChange', 'logonTime', 'logoffTime', 'pwdLastSet', 'kickoffTime'];
+        for (var i=0; i < dateTimeDisplayFields.length; i++) {
+            this.record.set(dateTimeDisplayFields[i], Tine.Tinebase.common.dateTimeRenderer(this.record.get(dateTimeDisplayFields[i])));
+        }
+
         if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
             this.aliasesGrid.setStoreFromArray(this.emailRecord.get('emailAliases'));
             this.forwardsGrid.setStoreFromArray(this.emailRecord.get('emailForwards'));
