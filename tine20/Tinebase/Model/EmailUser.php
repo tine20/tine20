@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        make default quota configurable
  */
 
 /**
@@ -38,7 +40,7 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
     protected $_validators = array(
         'emailUID'          => array('allowEmpty' => true),
         'emailGID'          => array('allowEmpty' => true),
-        'emailMailQuota'    => array('allowEmpty' => true),
+        'emailMailQuota'    => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => 500),
         'emailMailSize'     => array('allowEmpty' => true),
         'emailSieveQuota'   => array('allowEmpty' => true),
         'emailSieveSize'    => array('allowEmpty' => true),
