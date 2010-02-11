@@ -19,7 +19,7 @@ Ext.namespace('Tine.Admin', 'Tine.Admin.Users');
  * 
  * <p>User Edit Dialog</p>
  * <p>
- * TODO         use quota fieldset checkbox information (checked/uncheckee) 
+ * TODO         use quota fieldset checkbox information (checked/unchecked) 
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
