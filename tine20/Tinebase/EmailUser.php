@@ -44,6 +44,13 @@ class Tinebase_EmailUser
     const LDAP_IMAP      = 'Ldap_imap';
 
     /**
+     * smtp ldap backend const
+     * 
+     * @staticvar string
+     */
+    const LDAP_SMTP      = 'Ldapsmtp';
+
+    /**
      * backend object instances
      * 
      * @var array
@@ -116,6 +123,12 @@ class Tinebase_EmailUser
                 }
                 break;
                 
+            case self::LDAP_SMTP:
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Tinebase_EmailUser_Smtp_Ldap();
+                }
+                break;
+                
             default:
                 throw new Tinebase_Exception_InvalidArgument("Backend type $_type not implemented.");
         }
@@ -152,6 +165,8 @@ class Tinebase_EmailUser
                 case Tinebase_Model_Config::SMTP:
                     if ($backend == self::POSTFIX) {
                         $result = self::POSTFIX;
+                    } else if ($backend == self::LDAP_SMTP) {
+                        $result = self::LDAP_SMTP;
                     }
                     break;
             }
@@ -159,7 +174,7 @@ class Tinebase_EmailUser
         }
 
         if (empty($result)) {
-            throw new Tinebase_Exception_NotFound("Config for type $_configType not found.");
+            throw new Tinebase_Exception_NotFound("Config for type $_configType / $backend not found.");
         }
         
         return $result;
