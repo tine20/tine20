@@ -265,12 +265,15 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         inputType: 'text',
                         name: 'authentication_Ldap_host',
                         fieldLabel: this.app.i18n._('Host')
-                    },
-                    {
+                    }, {
+                        inputType: 'text',
+                        name: 'authentication_Ldap_port',
+                        fieldLabel: this.app.i18n._('Port')
+                    }, {
                         inputType: 'text',
                         name: 'authentication_Ldap_username',
                         fieldLabel: this.app.i18n._('Login name')
-                    },{
+                    }, {
                         name: 'authentication_Ldap_password',
                         fieldLabel: this.app.i18n._('Password'),
                         inputType: 'password'
