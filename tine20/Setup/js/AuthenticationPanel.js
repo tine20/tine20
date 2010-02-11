@@ -22,6 +22,7 @@ Ext.ns('Tine', 'Tine.Setup');
  * <p><pre>
  * TODO         move to next step after install?
  * TODO         make default is valid mechanism with 'allowEmpty' work
+ * TODO         add port for ldap hosts
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -265,11 +266,11 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         inputType: 'text',
                         name: 'authentication_Ldap_host',
                         fieldLabel: this.app.i18n._('Host')
-                    }, {
+                    }/*, {
                         inputType: 'text',
                         name: 'authentication_Ldap_port',
                         fieldLabel: this.app.i18n._('Port')
-                    }, {
+                    }*/, {
                         inputType: 'text',
                         name: 'authentication_Ldap_username',
                         fieldLabel: this.app.i18n._('Login name')
