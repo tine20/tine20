@@ -157,7 +157,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         }
         
         // imap combo
-        backendComboConfig.store = [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail'], ['ldap_imap', 'Ldap']];
+        backendComboConfig.store = [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail  MySQL'], ['ldap_imap', 'DBmail Ldap']];
         backendComboConfig.name = 'imap_backend';
         backendComboConfig.listeners = {
             scope: this,
@@ -167,7 +167,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         this.imapBackendCombo = new Ext.form.ComboBox(backendComboConfig);
         
         // smtp combo
-        backendComboConfig.store = [['standard', this.app.i18n._('Standard SMTP')], ['postfix', 'Postfix']];
+        backendComboConfig.store = [['standard', this.app.i18n._('Standard SMTP')], ['postfix', 'Postfix MySQL'], ['ldapSmtp', 'Postfix Ldap']];
         backendComboConfig.name = 'smtp_backend';
         backendComboConfig.listeners = {
             scope: this,
@@ -187,7 +187,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 name: 'imap_host',
                 fieldLabel: this.app.i18n._('Hostname'),
                 xtype: 'textfield'
-            }, {
+            }, /*{
                 name: 'imap_user',
                 fieldLabel: this.app.i18n._('Username'),
                 xtype: 'textfield'
@@ -196,7 +196,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 fieldLabel: this.app.i18n._('Password'),
                 xtype: 'textfield',
                 inputType: 'password'
-            }, {
+            }, */{
                 name: 'imap_port',
                 fieldLabel: this.app.i18n._('Port'),
                 xtype: 'numberfield'
@@ -217,10 +217,6 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     ['ssl',  this.app.i18n._('SSL')]
                 ]
             }, {
-                name: 'imap_domain',
-                fieldLabel: this.app.i18n._('Domain'),
-                xtype: 'textfield'
-            }, {
                 xtype: 'combo',
                 listWidth: 300,
                 mode: 'local',
@@ -231,10 +227,10 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 value: 0,
                 store: [[0, this.app.i18n._('No')], [1, this.app.i18n._('Yes')]],
                 name: 'imap_useSystemAccount',
-                fieldLabel: this.app.i18n._('Use as default account')
+                fieldLabel: this.app.i18n._('Use system account')
             }, {
-                name: 'imap_name',
-                fieldLabel: this.app.i18n._('Default account name'),
+                name: 'imap_domain',
+                fieldLabel: this.app.i18n._('Append domain to login name'),
                 xtype: 'textfield'
             }, {
                 id: this.imapBackendIdPrefix + 'CardLayout',
@@ -264,6 +260,10 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     // nothing in here yet
                     id: this.imapBackendIdPrefix + 'ldap_imap',
                     layout: 'form',
+                    defaults: {
+                        width: 300,
+                        xtype: 'textfield'
+                    },
                     items: []
                 }]
             }]
@@ -277,15 +277,6 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             {
                 name: 'smtp_hostname',
                 fieldLabel: this.app.i18n._('Hostname'),
-                xtype: 'textfield'
-            }, {
-                name: 'smtp_username',
-                fieldLabel: this.app.i18n._('Username'),
-                xtype: 'textfield'
-            }, {
-                name: 'smtp_password',
-                fieldLabel: this.app.i18n._('Password'),
-                inputType: 'password',
                 xtype: 'textfield'
             }, {
                 name: 'smtp_port',
@@ -336,6 +327,15 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 fieldLabel: this.app.i18n._('Notifications service address'),
                 xtype: 'textfield'
             }, {
+                name: 'smtp_username',
+                fieldLabel: this.app.i18n._('Notification Username'),
+                xtype: 'textfield'
+            }, {
+                name: 'smtp_password',
+                fieldLabel: this.app.i18n._('Notification Password'),
+                inputType: 'password',
+                xtype: 'textfield'
+            }, {
                 id: this.smtpBackendIdPrefix + 'CardLayout',
                 layout: 'card',
                 activeItem: this.smtpBackendIdPrefix + 'standard',
@@ -359,6 +359,16 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                         xtype: 'textfield'
                     },
                     items: this.getDbConfigFields('smtp', 'postfix')
+                }, {
+                    // postfix config options
+                    id: this.smtpBackendIdPrefix + 'ldap_smtp',
+                    layout: 'form',
+                    autoHeight: 'auto',
+                    defaults: {
+                        width: 300,
+                        xtype: 'textfield'
+                    },
+                    items: []
                 }]
             }]
         }];
