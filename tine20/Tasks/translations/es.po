@@ -36,7 +36,7 @@ msgstr "Resumen"
 
 #: js/EditDialog.js:178
 msgid "Due date"
-msgstr "Fecha de deuda"
+msgstr "Fecha apta"
 
 #: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:184
 msgid "Priority"
@@ -78,7 +78,7 @@ msgstr "Búsqueda Rápida"
 
 #: js/GridPanel.js:95 js/GridPanel.js:182
 msgid "Due Date"
-msgstr "Fecha de Deuda"
+msgstr "Fecha Apta"
 
 #: js/GridPanel.js:96 js/GridPanel.js:238
 msgid "Responsible"
@@ -123,7 +123,7 @@ msgstr "EN-PROCESO"
 #: js/Tasks.js:87
 msgid "Task"
 msgid_plural "Tasks"
-msgstr[0] "Tare"
+msgstr[0] "Tarea"
 msgstr[1] "Tareas"
 
 #: js/Tasks.js:87
@@ -142,7 +142,7 @@ msgstr "listas para hacer"
 
 #: Model/Task.php:181
 msgid "Due"
-msgstr "Deuda"
+msgstr "Apta"
 
 #: Model/Task.php:182
 msgid "Organizer"

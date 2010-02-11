@@ -200,7 +200,7 @@ msgstr "Confirmar Actualización de la Serie"
 msgid "Do you really want to update all events of this recurring event series?"
 msgstr ""
 "¿Está seguro que quiere actualizar todos los eventos para esta serie de "
-"eventos recurrentes?"
+"eventos repetitivos?"
 
 #: js/CalendarPanel.js:283 js/MainScreenCenterPanel.js:346
 msgid "Delete Event"
@@ -232,7 +232,7 @@ msgstr "Evento Nuevo"
 
 #: js/DaysView.js:95
 msgid "{0}, the {1}. of {2}"
-msgstr "{0}, el (la) {1}. de {2}"
+msgstr "{0}, {1} de {2}"
 
 #: js/EventDetailsPanel.js:51
 msgid "Unknown calendar"
@@ -244,7 +244,7 @@ msgstr "{0} {1} en punto"
 
 #: js/EventDetailsPanel.js:172 js/EventEditDialog.js:89 Model/Event.php:192
 msgid "Summary"
-msgstr "Sumario"
+msgstr "Resumen"
 
 #: js/EventDetailsPanel.js:208 js/EventEditDialog.js:101
 msgid "Start Time"
@@ -324,8 +324,8 @@ msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
 msgstr ""
-"Los elementos seleccionados contienen eventos recurrentes. ¡Los eventos "
-"recurrentes deben eliminarse por separado!"
+"Los elementos seleccionados contienen eventos repetitivos. ¡Los eventos "
+"repetitivos deben eliminarse por separado!"
 
 #: js/MainScreenCenterPanel.js:332
 msgid "Confirm Deletion of Series"
@@ -335,7 +335,7 @@ msgstr "Confirme la Eliminación de las Series"
 msgid "Do you really want to delete all events of this recurring event series?"
 msgstr ""
 "¿Realmente desea eliminar todos los eventos de esta serie de eventos "
-"recurrentes?"
+"repetitivos?"
 
 #: js/MainScreenCenterPanel.js:349
 msgid "Delete whole series"
@@ -357,7 +357,7 @@ msgstr[1] "¿Realmente desea eliminar los {0} eventos seleccioniados?"
 
 #: js/MainScreenLeftPanel.js:75 js/MonthView.js:87
 msgid "WK"
-msgstr "WK"
+msgstr "SEM"
 
 #: js/Model.js:64 js/Model.js:290
 msgid "Event"
@@ -401,11 +401,11 @@ msgstr "Ingrese descripción..."
 
 #: js/RrulePanel.js:29
 msgid "Recurrances"
-msgstr "Recurrencias"
+msgstr "Repeticiones"
 
 #: js/RrulePanel.js:37
 msgid "No recurring rule defined"
-msgstr "No se definió una regla de recurrencia"
+msgstr "No se definió una regla de repetición"
 
 #: js/RrulePanel.js:77
 msgid "None"
@@ -529,7 +529,7 @@ msgstr "Url"
 
 #: Model/Event.php:194
 msgid "Recurrance rule"
-msgstr "Regla de recurrencia"
+msgstr "Regla de Repetición"
 
 #: Model/Event.php:195
 msgid "Is all day event"
@@ -629,7 +629,7 @@ msgstr "Detalles del Evento"
 #~ msgstr "Desea actualizar toda la serie o solamente este evento"
 
 #~ msgid "Failed not update recurring event series"
-#~ msgstr "Falló en actualizar la serie de eventos recurrentes"
+#~ msgstr "Falló en actualizar la serie de eventos repetitivos"
 
 #~ msgid "Failed not update event"
 #~ msgstr "Falló en actualizar el evento"
