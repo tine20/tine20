@@ -557,10 +557,11 @@ class Tinebase_Core
                     // force some driver options
                     $config['driver_options'] = array(
                         PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
+                        // set utf8 charset and mysql timezone to utc
                         PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES UTF8; SET time_zone ='+0:00';",
                     );
                     $db = Zend_Db::factory('Pdo_Mysql', $config);
-                    // set utf8 charset and mysql timezone to utc
+                    // the old way to set utf8 and timezone / is this obsolete?
                     // $db->query("SET NAMES UTF8; SET time_zone ='+0:00';");
                     try {
                         $db->query("SET SQL_MODE = 'STRICT_ALL_TABLES'");
