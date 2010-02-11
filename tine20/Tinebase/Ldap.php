@@ -17,27 +17,6 @@
  */
 class Tinebase_Ldap extends Zend_Ldap
 {
-    
-    /**
-     * options set by object construction
-     *
-     * @var array
-     */
-    protected $_options = NULL;
-    
-    protected $_attrsOnly = 0;
-    
-    protected $_sizeLimit = 0;
-    
-    protected $_timeLimit = 0;
-    
-    /**
-     * Infos about the ldap server
-     *
-     * @var array
-     */
-    protected $_serverInfo = NULL;
-    
     /**
      * Extend constructor
      *
@@ -46,8 +25,6 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function __construct(array $_options)
     {
-        $this->_options = $_options;
-        
         // strip non Zend_Ldap options
         $options = array_intersect_key($_options, array(
             'host'                      => null,
