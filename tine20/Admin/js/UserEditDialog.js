@@ -524,7 +524,11 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             items: [[{
                                 fieldLabel: this.app.i18n._('Quota'),
                                 name: 'emailMailQuota',
-                                xtype:'uxspinner'
+                                xtype:'uxspinner',
+                                strategy: new Ext.ux.form.Spinner.NumberStrategy({
+                                    incrementValue : 10,
+                                    allowDecimals : false
+                                })
                             }], [{
                                 fieldLabel: this.app.i18n._('Current Mail Size'),
                                 name: 'emailMailSize',
@@ -550,7 +554,11 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             items: [[{
                                 fieldLabel: this.app.i18n._('Sieve Quota'),
                                 name: 'emailSieveQuota',
-                                xtype:'uxspinner'
+                                xtype:'uxspinner',
+                                strategy: new Ext.ux.form.Spinner.NumberStrategy({
+                                    incrementValue : 10,
+                                    allowDecimals : false
+                                })
                             }], [{
                                 fieldLabel: this.app.i18n._('Sieve Size'),
                                 name: 'emailSieveSize',
