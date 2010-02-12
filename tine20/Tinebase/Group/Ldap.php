@@ -156,10 +156,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     {   
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
 
-        throw new RuntimeException('still untested');
-        
-        $filter = Zend_Ldap_Filter::equals(
-            $this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId)
+        $filter = Zend_Ldap_Filter::andFilter(
+            Zend_Ldap_Filter::string($this->_groupBaseFilter),
+            Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId))
         );
         
         $groups = $this->_ldap->search(
@@ -219,9 +218,24 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      */
     public function setGroupMembers($_groupId, $_groupMembers) 
     {
+        $this->setLdapGroupMembers($_groupId, $_groupMembers);
+        
+        $this->_sql->setGroupMembers($_groupId, $_groupMembers);
+    }
+    
+    /**
+     * replace all current groupmembers with the new groupmembers list in ldap only
+     *
+     * @param string $_groupId
+     * @param array $_groupMembers array of ids
+     * @return unknown
+     */
+    public function setLdapGroupMembers($_groupId, $_groupMembers) 
+    {
         $metaData = $this->_getMetaData($_groupId);
         $membersMetaDatas = $this->_getAccountsMetaData((array)$_groupMembers);
-        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $group data: ' . print_r($metaData, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $memebers: ' . print_r($memberMetadata, true));
         $groupDn = $this->_getDn($_groupId);
         
         $memberDn = array(); 
@@ -247,11 +261,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
         
-        $this->_ldap->updateProperty($metaData['dn'], $data);
-        
-        $this->_sql->setGroupMembers($_groupId, $_groupMembers);
+        $this->_ldap->update($metaData['dn'], $data);
     }
-        
+    
     /**
      * add a new groupmember to the group
      *
@@ -447,6 +459,23 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      */
     public function updateGroup(Tinebase_Model_Group $_group) 
     {
+        // update group in ldap backend
+        $group = $this->updateLdapGroup($_group);
+        
+        // update group in sql backend too
+        $group = $this->_sql->updateGroup($group);
+        
+        return $group;
+    }
+    
+    /**
+     * updates an existing group in ldap only
+     *
+     * @param Tinebase_Model_Group $_group
+     * @return Tinebase_Model_Group
+     */
+    public function updateLdapGroup(Tinebase_Model_Group $_group) 
+    {
         $dn = $this->_getDn($_group->getId());
         
         $data = array(
@@ -459,13 +488,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $this->_ldap->update($dn, $data);
         
         $group = $this->_getGroupById($_group);
-        
-        // add group to sql backend too
-        $group = $this->_sql->updateGroup($group);
-        
+
         return $group;
     }
-
+    
     /**
      * delete one or more groups
      *
