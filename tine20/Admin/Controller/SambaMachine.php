@@ -61,14 +61,22 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
         if (!Tinebase_Core::getConfig()->samba) {
             throw new Admin_Exception('No samba settings defined in config.');
         }
+        if(Tinebase_User::getConfiguredBackend() != Tinebase_User::LDAP) {
+            throw new Admin_Exception('Works only with LDAP user backend.');
+        }
+        
+        $ldapOptions = Tinebase_User::getBackendConfiguration();
         $sambaOptions = Tinebase_Core::getConfig()->samba->toArray();
-        $this->_options = $sambaOptions;
+        $sambaOptions['machineGroup'] = isset($sambaOptions['machineGroup']) ? $sambaOptions['machineGroup'] : 'Domain Computers';
+         
+        $this->_options = array_merge($ldapOptions, $sambaOptions);
+        
 
         $this->_currentAccount = Tinebase_Core::getUser();        
         $this->_applicationName = 'Admin';
 		
         // we might want to add a factory here when we support multiple backends
-		$this->_backend = new Admin_Backend_SambaMachine_Ldap();
+		$this->_backend = new Admin_Backend_SambaMachine($this->_options);
     }
 
     /**
