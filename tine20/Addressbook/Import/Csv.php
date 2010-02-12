@@ -18,14 +18,7 @@
  * 
  */
 class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
-{
-    /**
-     * save mappanel setting to restore in destructor
-     * 
-     * @var boolean
-     */
-    protected $_mapPanelSetting = FALSE;
-    
+{    
     /**
      * the constructor
      *
