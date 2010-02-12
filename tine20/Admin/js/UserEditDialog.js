@@ -362,8 +362,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	                            triggerAction: 'all',
 	                            allowBlank: false,
 	                            editable: false,
-	                            store: [['enabled', this.app.i18n._('enabled')],['disabled', this.app.i18n._('disabled')],['expired', this.app.i18n._('expired')]],
-	                            disabled: this.ldapBackend
+	                            store: [['enabled', this.app.i18n._('enabled')],['disabled', this.app.i18n._('disabled')],['expired', this.app.i18n._('expired')]]
 	                        }, new Ext.ux.form.ClearableDateField({ 
 	                            fieldLabel: this.app.i18n._('Expires'),
 	                            name: 'accountExpires',
