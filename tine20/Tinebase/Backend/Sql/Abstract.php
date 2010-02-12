@@ -422,9 +422,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type');
         }
         
-    	if(!$_record->isValid()) {
-            throw new Tinebase_Exception_Record_Validation('record object is not valid');
-        }
+    	$_record->isValid(TRUE);
         
         $id = $_record->getId();
 
