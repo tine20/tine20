@@ -82,6 +82,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     );
     
     /**
+     * the base dn to work on (defaults to to userDn, but can also be machineDn)
+     * 
+     * @var string
+     */
+    protected $_baseDn;
+    
+    /**
      * the basic group ldap filter (for example the objectclass)
      *
      * @var string
@@ -124,6 +131,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         $this->_userUUIDAttribute  = isset($_options['userUUIDAttribute'])  ? $_options['userUUIDAttribute']  : 'entryUUID';
         $this->_groupUUIDAttribute = isset($_options['groupUUIDAttribute']) ? $_options['groupUUIDAttribute'] : 'entryUUID';
+        $this->_baseDn             = isset($_options['baseDn'])             ? $_options['baseDn']             : $_options['userDn'];
         $this->_userBaseFilter     = isset($_options['userFilter'])         ? $_options['userFilter']         : 'objectclass=posixaccount';
         $this->_userSearchScope    = isset($_options['userSearchScope'])    ? $_options['userSearchScope']    : Zend_Ldap::SEARCH_SCOPE_SUB;
         $this->_groupBaseFilter    = isset($_options['groupFilter'])        ? $_options['groupFilter']        : 'objectclass=posixgroup';
@@ -152,14 +160,83 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         return $this->_sql->getUsers($_filter, $_sort, $_dir, $_start, $_limit, $_accountClass);
     }
     
-   /**
+    /**
+     * get list of users
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @param string $_accountClass the type of subclass for the Tinebase_Record_RecordSet to return
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_User
+     */
+    public function getLdapUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Model_User')
+    {
+        $filter = Zend_Ldap_Filter::andFilter(
+            Zend_Ldap_Filter::string($this->_userBaseFilter)
+        );
+        
+        if($_filter !== null) {
+            $filter = $filter->add(Zend_Ldap_Filter::orFilter(
+                    Zend_Ldap_Filter::equals($this->_rowNameMapping['accountFirstName'], Zend_Ldap::filterEscape($_filter)),
+                    Zend_Ldap_Filter::equals($this->_rowNameMapping['accountLastName'], Zend_Ldap::filterEscape($_filter)),
+                    Zend_Ldap_Filter::equals($this->_rowNameMapping['accountLoginName'], Zend_Ldap::filterEscape($_filter))
+                )
+            );
+        }
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  filterString: " . $filter);
+        
+        $accounts = $this->_ldap->search(
+            $filter, 
+            $this->_baseDn, 
+            $this->_userSearchScope, 
+            array_values($this->_rowNameMapping),
+            $_sort !== null ? $this->_rowNameMapping[$_sort] : null
+        );
+        
+        $result = new Tinebase_Record_RecordSet($_accountClass);
+
+        // nothing to be done anymore
+        if(count($accounts) == 0) {
+            return $result;
+        }
+        
+        foreach ($accounts as $account) {
+            $accountObject = $this->_ldap2User($account, $_accountClass);
+            
+            if ($accountObject) {
+                $result->addRecord($accountObject);
+            }
+            
+        }
+        
+        return $result;
+
+        // @todo implement limit, start, dir and status
+        $select = $this->_getUserSelectObject()
+            ->limit($_limit, $_start);
+            
+        if($_sort !== NULL) {
+            $select->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
+        }
+
+        // return only active users, when searching for simple users
+        if($_accountClass == 'Tinebase_Model_User') {
+            $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', 'enabled'));
+        }
+        
+    }
+    
+    /**
      * get user by login name
      *
      * @param   string  $_property
      * @param   string  $_accountId
      * @return Tinebase_Model_User the user object
      */
-    protected function _getUserByProperty($_property, $_accountId, $_accountClass = 'Tinebase_Model_User')
+    public function getLdapUserByProperty($_property, $_accountId, $_accountClass = 'Tinebase_Model_User')
     {
         if(!array_key_exists($_property, $this->_rowNameMapping)) {
             throw new Tinebase_Exception_InvalidArgument("invalid property $_property requested");
@@ -181,7 +258,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         $accounts = $this->_ldap->search(
             $filter, 
-            $this->_options['userDn'], 
+            $this->_baseDn, 
             $this->_userSearchScope, 
             array_values($this->_rowNameMapping)
         );
@@ -210,7 +287,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             $user = $this->_sql->getUserByProperty($_property, $_accountId, $_accountClass);
         } catch (Tinebase_Exception_NotFound $e) {
             // if not found we try to get the user from the ldap backend
-            $fullUser = $this->_getUserByProperty($_property, $_accountId, 'Tinebase_Model_FullUser');
+            $fullUser = $this->getLdapUserByProperty($_property, $_accountId, 'Tinebase_Model_FullUser');
             $fullUser = $this->_sql->addUser($fullUser);
             
             // fetch again to make sure the correct account class is used
@@ -332,10 +409,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function updateUser(Tinebase_Model_FullUser $_account) 
     {
-        $this->_updateUser($_account);
-        
-        // refetch user from ldap backend
-        $user = $this->_getUserByProperty('accountId', $_account, 'Tinebase_Model_FullUser');
+        $user = $this->updateLdapUser($_account);
         
         // update user in sql backend too (and add visibility info)
         $user->visibility = $_account->visibility;
@@ -352,7 +426,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      * @param Tinebase_Model_FullUser $_account
      * @return Tinebase_Model_FullUser
      */
-    protected function _updateUser(Tinebase_Model_FullUser $_account) 
+    public function updateLdapUser(Tinebase_Model_FullUser $_account) 
     {
         $metaData = $this->_getMetaData($_account);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($metaData, true));
@@ -374,6 +448,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
         $this->_ldap->update($metaData['dn'], $ldapData);
+
+        // refetch user from ldap backend
+        $user = $this->getLdapUserByProperty('accountId', $_account, 'Tinebase_Model_FullUser');
+        
+        return $user;
     }
     
     /**
@@ -384,17 +463,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function addUser(Tinebase_Model_FullUser $_account) 
     {
-        $dn = $this->_addUser($_account);
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' added user with dn: ' . $dn);
-        
-        $userId = $this->_ldap->getEntry($dn, array($this->_userUUIDAttribute));
-        
-        $userId = $userId[strtolower($this->_userUUIDAttribute)][0];
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' new userid: ' . $userId);
-        
-        $user = $this->_getUserByProperty('accountId', $userId, 'Tinebase_Model_FullUser');
+        $user = $this->addLdapUser($_account);
         
         // add account to sql backend too
         $user = $this->_sql->addUser($user);
@@ -402,7 +471,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         return $user;
     }
     
-    protected function _addUser(Tinebase_Model_FullUser $_account)
+    public function addLdapUser(Tinebase_Model_FullUser $_account)
     {
         $dn = $this->_generateDn($_account);
         $ldapData = $this->_user2ldap($_account);
@@ -412,10 +481,18 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
-        
+
         $this->_ldap->add($dn, $ldapData);
         
-        return $dn;
+        $userId = $this->_ldap->getEntry($dn, array($this->_userUUIDAttribute));
+        
+        $userId = $userId[strtolower($this->_userUUIDAttribute)][0];
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' new ldap userid: ' . $userId);
+        
+        $user = $this->getLdapUserByProperty('accountId', $userId, 'Tinebase_Model_FullUser');
+        
+        return $user;
     }
     
     /**
@@ -477,7 +554,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         $result = $this->_ldap->search(
             $filter, 
-            $this->_options['userDn'], 
+            $this->_baseDn, 
             $this->_userSearchScope, 
             array('objectclass')
         )->getFirst();
@@ -499,7 +576,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     protected function _generateDn(Tinebase_Model_FullUser $_account)
     {
-        $baseDn = $this->_options['userDn'];
+        $baseDn = $this->_baseDn;
         
         $uidProperty = array_search('uid', $this->_rowNameMapping);
         $newDn = "uid={$_account->$uidProperty},{$baseDn}";
@@ -523,7 +600,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $filter = Zend_Ldap_Filter::equals(
             'objectclass', 'posixAccount'
         );
-        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user DN " . $this->_options['userDn']);        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " machine DN " . $this->_options['machineDn']);        
         $accounts = $this->_ldap->search(
             $filter, 
             $this->_options['userDn'], 
@@ -532,19 +610,36 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         );
         
         foreach ($accounts as $userData) {
-            $allUidNumbers[] = $userData['uidnumber'][0];
+            $allUidNumbers[$userData['uidnumber'][0]] = $userData['uidnumber'][0];
+        }
+        
+        // fetch also the uidnumbers of machine accounts, if needed
+        if(isset($this->_options['machineDn'])) {
+            $accounts = $this->_ldap->search(
+                $filter, 
+                $this->_options['machineDn'], 
+                Zend_Ldap::SEARCH_SCOPE_SUB, 
+                array('uidnumber')
+            );
+            
+            foreach ($accounts as $userData) {
+                $allUidNumbers[$userData['uidnumber'][0]] = $userData['uidnumber'][0];
+            }
         }
         sort($allUidNumbers);
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  Existing uidnumbers " . print_r($allUidNumbers, true));
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  Existing uidnumbers " . print_r($allUidNumbers, true));
+        $minUidNumber = isset($this->_options['minUserId']) ? $this->_options['minUserId'] : 1000;
+        $maxUidNumber = isset($this->_options['maxUserId']) ? $this->_options['maxUserId'] : 65000;
         
         $numUsers = count($allUidNumbers);
-        if ($numUsers == 0 || $allUidNumbers[$numUsers-1] < $this->_options['minUserId']) {
-            $uidNumber = $this->_options['minUserId'];
-        } elseif ($allUidNumbers[$numUsers-1] < $this->_options['maxUserId']) {
+        if ($numUsers == 0 || $allUidNumbers[$numUsers-1] < $minUidNumber) {
+            $uidNumber = $minUidNumber;
+        } elseif ($allUidNumbers[$numUsers-1] < $maxUidNumber) {
             $uidNumber = ++$allUidNumbers[$numUsers-1];
-        } elseif(count($allUidNumbers) < ($this->_options['maxUserId'] - $this->_options['minUserId'])) {
+        } elseif(count($allUidNumbers) < ($maxUidNumber - $minUidNumber)) {
             // maybe there is a gap
-            for($i = $this->_options['minUserId']; $i <= $this->_options['maxUserId']; $i++) {
+            for($i = $minUidNumber; $i <= $maxUidNumber; $i++) {
                 if(!in_array($i, $allUidNumbers)) {
                     $uidNumber = $i;
                     break;
@@ -561,6 +656,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     
     /**
      * Fetches all accounts from backend matching the given filter
+     * 
+     * @todo replace with getLdapUsers
      *
      * @param string $_filter
      * @param string $_accountClass
@@ -574,7 +671,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         $accounts = $this->_ldap->search(
             $_filter, 
-            $this->_options['userDn'], 
+            $this->_baseDn, 
             $this->_userSearchScope, 
             array_values($this->_rowNameMapping)
         );
@@ -799,7 +896,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         $userId = $this->_ldap->search(
             $filter, 
-            $this->_options['userDn'], 
+            $this->_baseDn, 
             $this->_userSearchScope, 
             array($this->_userUUIDAttribute)
         )->getFirst();
