@@ -36,26 +36,27 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Backend_Interface
     /**
      * constructor
      */
-    public function __construct()
+    public function __construct(array $_options)
     {
-            $ldapOptions = Tinebase_User::getBackendConfiguration();
-            $machineOptions = Tinebase_Core::getConfig()->samba->toArray();
-            $options = array_merge($ldapOptions, $machineOptions);
+            $this->_options = $_options;
             
-            $options['userDn']    = $machineOptions['ldap']['machineDn'];
-            $options['minUserId'] = $machineOptions['minMachineId'];
-            $options['maxUserId'] = $machineOptions['maxMachineId'];
-            $options['requiredObjectClass'] = array(
+            $this->_options['baseDn']    = $_options['machineDn'];
+            
+            if(isset($_options['minMachineId'])) {
+                $this->_options['minUserId'] = $_options['minMachineId'];
+            }
+            if(isset($_options['maxMachineId'])) {
+                $this->_options['maxUserId'] = $_options['maxMachineId'];
+            }
+            $this->_options['requiredObjectClass'] = array(
                 'top',
                 'person',
                 'posixAccount',
                 //'sambaSamAccount'
             );
-            
-            $this->_options = $options;
 
-            $this->_posixBackend = new Tinebase_User_Ldap($options);
-            $this->_samBackend = new Tinebase_SambaSAM_Ldap($options);
+            $this->_posixBackend = new Tinebase_User_Ldap($this->_options);
+            $this->_samBackend = new Tinebase_SambaSAM_Ldap($this->_options);
     }
     
     /**
@@ -68,6 +69,8 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Backend_Interface
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
+        $filterString = null;
+        
         // we only support query filter atm
         foreach ($_filter as $filterLine) {
             if ($filterLine instanceof Tinebase_Model_Filter_Query) {
@@ -75,7 +78,7 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Backend_Interface
             }
         }
 
-        $records = $this->_posixBackend->getUsers($filterString, $_pagination->sort, $_pagination->dir, $_pagination->start, $_pagination->limit, 'Admin_Model_SambaMachine');
+        $records = $this->_posixBackend->getLdapUsers($filterString, $_pagination->sort, $_pagination->dir, $_pagination->start, $_pagination->limit, 'Admin_Model_SambaMachine');
         
         return $records;
     }
@@ -101,8 +104,8 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Backend_Interface
      */
     public function get($_id, $_getDeleted = FALSE)
     {
-        $posixAccount = $this->_posixBackend->getUserById($_id, 'Admin_Model_SambaMachine')->toArray();
-        $samAccount = $this->_samBackend->getUserById($_id)->toArray();
+        $posixAccount = $this->_posixBackend->getLdapUserByProperty('accountId', $_id, 'Admin_Model_SambaMachine')->toArray();
+        $samAccount   = $this->_samBackend->getUserById($_id)->toArray();
 
         $machine = new Admin_Model_SambaMachine(array_merge($posixAccount, $samAccount));
         
@@ -148,8 +151,8 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Backend_Interface
         $displayName = $allData['accountDisplayName'];
         $posixAccount = new Tinebase_Model_FullUser($allData, true);
         $posixAccount->accountDisplayName = NULL;
-
-        $posixAccount = $this->_posixBackend->addUser($posixAccount);
+        
+        $posixAccount = $this->_posixBackend->addLdapUser($posixAccount);
         
 
         $samAccount = new Tinebase_Model_SAMUser($allData, true);
@@ -160,7 +163,7 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Backend_Interface
 
         // after we saved the samAccount we can also save the displayName
         $posixAccount->accountDisplayName = $displayName;
-        $this->_posixBackend->updateUser($posixAccount);
+        $this->_posixBackend->updateLdapUser($posixAccount);
 
         return $this->get($posixAccount->getId());
     }
@@ -177,7 +180,7 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Backend_Interface
         $posixAccount = new Tinebase_Model_FullUser($allData, true);
         $samAccount = new Tinebase_Model_SAMUser($allData, true);
 
-        $posixAccount = $this->_posixBackend->updateUser($posixAccount);
+        $posixAccount = $this->_posixBackend->updateLdapUser($posixAccount);
         $samAccount = $this->_samBackend->updateUser($posixAccount, $samAccount);
 
         return $this->get($posixAccount->getId());
