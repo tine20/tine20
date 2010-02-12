@@ -206,8 +206,7 @@ class Admin_Backend_SambaMachine implements Tinebase_Backend_Interface
      */
     public function delete($_identifier)
     {
-        $posixAccount = $this->_posixBackend->deleteUsers((array)$_identifier);
-        $samAccount = $this->_samBackend->deleteUsers((array)$_identifier);
+        $posixAccount = $this->_posixBackend->deleteLdapUsers((array)$_identifier);
     }
     
     /**
