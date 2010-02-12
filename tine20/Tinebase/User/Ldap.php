@@ -334,7 +334,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $userpassword = $_encrypt ? Tinebase_User_Abstract::encryptPassword($_password, $encryptionType) : $_password;
         $ldapData = array(
             'userpassword'     => $userpassword,
-            'shadowlastchange' => Zend_Date::now()->getTimestamp()
+            'shadowlastchange' => floor(Zend_Date::now()->getTimestamp() / 86400)
         );
                 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
@@ -795,8 +795,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
                         $accountArray[$keyMapping] = new Zend_Date($value[0] * 86400, Zend_Date::TIMESTAMP);
                         break;
                     case 'accountStatus':
-                        if(array_key_exists('shadowlastchange', $_userData) && array_key_exists('shadowmax', $_userData) && array_key_exists('shadowinactive', $_userData)) {
-                            if(($_userData['shadowlastchange'] + $_userData['shadowmax'] + $_userData['shadowinactive']) * 86400 <= Zend_Date::now()->getTimestamp()) {
+                        if(array_key_exists('shadowmax', $_userData) && array_key_exists('shadowinactive', $_userData)) {
+                            $lastChange = array_key_exists('shadowlastchange', $_userData) ? $_userData['shadowlastchange'] : 0;
+                            if(($lastChange + $_userData['shadowmax'] + $_userData['shadowinactive']) * 86400 <= Zend_Date::now()->getTimestamp()) {
                                 $accountArray[$keyMapping] = 'enabled';
                             } else {
                                 $accountArray[$keyMapping] = 'disabled';
