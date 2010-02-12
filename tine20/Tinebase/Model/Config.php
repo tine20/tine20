@@ -157,7 +157,7 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
         'id'                => array('allowEmpty' => true ),
         'application_id'    => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
         'name'              => array('presence' => 'required', 'allowEmpty' => false ),
-        'value'             => array('presence' => 'required', 'allowEmpty' => false ),        
+        'value'             => array('presence' => 'required', 'allowEmpty' => true ),        
     );
     
 } // end of Tinebase_Model_Config
