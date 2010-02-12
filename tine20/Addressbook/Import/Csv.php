@@ -20,6 +20,13 @@
 class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
 {
     /**
+     * save mappanel setting to restore in destructor
+     * 
+     * @var boolean
+     */
+    protected $_mapPanelSetting = FALSE;
+    
+    /**
      * the constructor
      *
      * @param Tinebase_Model_ImportExportDefinition $_definition
@@ -30,11 +37,41 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
     {
         parent::__construct($_definition, $_controller, $_options);
         
+        // don't set geodata for imported contacts as this is too much traffic for the nominatim server
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
+        
         // get container id from default container if not set
         if (! isset($this->_options['container_id'])) {
             $defaultContainer = Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook();
             $this->_options['container_id'] = $defaultContainer->getId();
         }
+    }
+    
+    /**
+     * get filter for duplicate check
+     * 
+     * @param Tinebase_Record_Interface $_record
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    protected function _getDuplicateSearchFilter(Tinebase_Record_Interface $_record)
+    {
+        $containerFilter = array('field' => 'container_id',    'operator' => 'equals', 'value' => $this->_options['container_id']);
+        
+        if (empty($_record->n_given) && empty($_record->n_family)) {
+            // check organisation duplicates if given/fullnames are empty
+            $filter = new Addressbook_Model_ContactFilter(array(
+                $containerFilter,
+                array('field' => 'org_name',        'operator' => 'equals', 'value' => $_record->org_name),
+            ));
+        } else {
+            $filter = new Addressbook_Model_ContactFilter(array(
+                $containerFilter,
+                array('field' => 'n_given',         'operator' => 'equals', 'value' => $_record->n_given),
+                array('field' => 'n_family',        'operator' => 'equals', 'value' => $_record->n_family),
+            ));
+        }
+        
+        return $filter;
     }
     
     /**

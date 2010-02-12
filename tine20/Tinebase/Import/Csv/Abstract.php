@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add conditions (what to do when record already exists)
  * @todo        add generic mechanism for value pre/postfixes? (see accountLoginNamePrefix in Admin_User_Import)
  * @todo        add more conversions e.g. date/accounts
  * @todo        add tests for tags + notes
@@ -27,6 +26,7 @@
  * <config> main tags
  * <container_id>34</container_id>:     container id for imported records (required)
  * <encoding>UTF-8</encoding>:          encoding of input file
+ * <duplicates>1<duplicates>:           check for duplicates
  * 
  * <mapping><field> special tags:
  * <append>glue</append>:               value is appended to destination field with 'glue' as glue
@@ -79,6 +79,11 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      * @var int dryrun record count
      */
     protected $_dryrunCount = 20;
+    
+    /**
+     * @var int duplicate record count
+     */
+    protected $_duplicateCount = 0;
     
     /**
      * the record controller
@@ -154,9 +159,10 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         }
 
         $result = array(
-            'results'       => new Tinebase_Record_RecordSet($this->_modelName),
-            'totalcount'    => 0,
-            'failcount'     => 0
+            'results'           => new Tinebase_Record_RecordSet($this->_modelName),
+            'totalcount'        => 0,
+            'failcount'         => 0,
+            'duplicatecount'    => 0,
         );
 
         while (
@@ -178,12 +184,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, true));
                         
                         // import record into tine!
-                        $importedRecord = $this->_importRecord($recordData);
-                        
-                        if ($this->_options['dryrun']) {
-                            $result['results']->addRecord($importedRecord);
-                        }
-                        $result['totalcount']++;
+                        $importedRecord = $this->_importRecord($recordData, $result);
                     }
                     
                 } catch (Exception $e) {
@@ -194,6 +195,10 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                 }
             }
         }
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Import finished. (total: ' . $result['totalcount'] 
+            . ' fail: ' . $result['failcount'] . ' duplicates: ' . $result['duplicatecount']. ')');
         
         return $result;
     }
@@ -320,19 +325,30 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      * import single record
      *
      * @param array $_recordData
-     * @return Tinebase_Record_Interface
+     * @param array $_result
+     * @return void
      * @throws Tinebase_Exception_Record_Validation
-     * 
-     * @todo check conditions (duplicates, ...)
      */
-    protected function _importRecord($_recordData)
+    protected function _importRecord($_recordData, &$_result)
     {
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recordData, true));
         
         $record = new $this->_modelName($_recordData, TRUE);
         
         if ($record->isValid()) {
-            if (!$this->_options['dryrun']) {
+            if (! $this->_options['dryrun']) {
+                
+                // check for duplicate
+                if (isset($this->_options['duplicates']) && $this->_options['duplicates']) {
+                    // search for record in container and print log message
+                    $existingRecords = $this->_controller->search($this->_getDuplicateSearchFilter($record), NULL, FALSE, TRUE);
+                    if (count($existingRecords) > 0) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Duplicate found: ' . $existingRecords[0]);
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
+                        $_result['duplicatecount']++;
+                        return;
+                    }
+                }
                 
                 // create/add shared tags
                 if (isset($_recordData['tags'])) {
@@ -340,14 +356,27 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                 }
 
                 $record = call_user_func(array($this->_controller, $this->_createMethod), $record);
+            } else {
+                $_result['results']->addRecord($record);
             }
+            
+            $_result['totalcount']++;
+            
         } else {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
             throw new Tinebase_Exception_Record_Validation('Imported record is invalid.');
         }
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
-        return $record;
+    }
+    
+    /**
+     * get filter for duplicate check
+     * 
+     * @param Tinebase_Record_Interface $_record
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    protected function _getDuplicateSearchFilter(Tinebase_Record_Interface $_record)
+    {
+        throw new Tinebase_Exception_NotImplemented('You need to implement this function if you want to use the duplicate check.');
     }
         
     /**

@@ -220,31 +220,31 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param boolean $_dryRun
      * @param array $_options additional import options
      * @return array
-     * 
-     * @todo check for duplicates
      */
     protected function _import($_files, $_importDefinitionId, $_controller, $_options = array())
     {
         $definition = Tinebase_ImportExportDefinition::getInstance()->get($_importDefinitionId);
         $importer = new $definition->plugin($definition, $_controller, $_options);
         
-        // import files
-        $results = array();
-        $totalcount = 0;
-        $failcount = 0;
-        foreach ($_files as $file) {
-            $result = $importer->import($file['path']);
-            $results = array_merge($results, $result['results']->toArray());
-            $totalcount += $result['totalcount'];
-            $failcount += $result['failcount'];
-        }
+        // extend execution time and close session
+        Tinebase_Core::setExecutionLifeTime(1800); // 30 minutes
+        Zend_Session::writeClose(true);
         
+        // import files
         $result = array(
-            'results'       => $results,
-            'totalcount'    => $totalcount,
-            'failcount'     => $failcount,
-            'status'        => 'success',
+            'results'           => array(),
+            'totalcount'        => 0,
+            'failcount'         => 0,
+            'duplicatecount'    => 0,
+            'status'            => 'success',
         );
+        foreach ($_files as $file) {
+            $importResult = $importer->import($file['path']);
+            $result['results']           = array_merge($result['results'], $importResult['results']->toArray());
+            $result['totalcount']       += $importResult['totalcount'];
+            $result['failcount']        += $importResult['failcount'];
+            $result['duplicatecount']   += $importResult['duplicatecount'];
+        }
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
         

@@ -29,6 +29,11 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     protected $_instance = NULL;
     
     /**
+     * @var string $_filename
+     */
+    protected $_filename = NULL;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -48,9 +53,6 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
-        
-        $this->_instance = new Addressbook_Import_Csv($definition, Addressbook_Controller_Contact::getInstance(), array('dryrun' => 1));
     }
 
     /**
@@ -61,6 +63,10 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        // cleanup
+        if (file_exists($this->_filename)) {
+            unlink($this->_filename);
+        }
     }
     
     /**
@@ -69,19 +75,56 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     public function testImport()
     {
-        // export first
-        $exporter = new Addressbook_Export_Csv();
-        $filename = $exporter->generate(new Addressbook_Model_ContactFilter(array()));
-        
-        // then import
-        $result = $this->_instance->import($filename);
+        // import
+        $result = $this->_doImport(array('dryrun' => 1), new Addressbook_Model_ContactFilter(array()));
         
         // check
         $this->assertGreaterThan(0, $result['totalcount'], 'Didn\'t import anything.');
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['account_id']);
+    }
+
+    /**
+     * test import data
+     *
+     */
+    public function testImportDuplicates()
+    {
+        $internalContainer = Tinebase_Container::getInstance()->getInternalContainer(Tinebase_Core::getUser(), 'Addressbook');
+        $options = array(
+            'dryrun'        => 0,
+            'container_id'  => $internalContainer->getId(),
+            'duplicates'    => 1,
+        );
+        // import
+        $result = $this->_doImport($options, new Addressbook_Model_ContactFilter(array(
+            array('field' => 'container_id',    'operator' => 'equals', 'value' => $internalContainer->getId()),
+        )));
         
-        //cleanup
-        unset($filename);
+        //print_r($result);
+        
+        // check
+        $this->assertGreaterThan(0, $result['duplicatecount'], 'no duplicates.');
+    }
+    
+    /**
+     * 
+     * @param array $_options
+     * @param Addressbook_Model_ContactFilter $_exportFilter
+     * @return array
+     */
+    protected function _doImport(array $_options, Addressbook_Model_ContactFilter $_exportFilter)
+    {
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
+        $this->_instance = new Addressbook_Import_Csv($definition, Addressbook_Controller_Contact::getInstance(), $_options);
+        
+        // export first
+        $exporter = new Addressbook_Export_Csv();
+        $this->_filename = $exporter->generate($_exportFilter);
+        
+        // then import
+        $result = $this->_instance->import($this->_filename);
+        
+        return $result;
     }
 }		
 	
