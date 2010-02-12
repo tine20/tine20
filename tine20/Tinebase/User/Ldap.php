@@ -502,17 +502,28 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function deleteUser($_accountId) 
     {
-        $metaData = $this->_getMetaData($_accountId);
-        
         // delete user in sql backend first (foreign keys)
         $this->_sql->deleteUser($_accountId);
         
-        // if does not exist in ldap anymore
+        // delete user in ldap backend
+        $this->deleteLdapUser($_accountId);
+    }
+    
+    /**
+     * delete an user in ldap only
+     *
+     * @param int $_accountId
+     */
+    public function deleteLdapUser($_accountId) 
+    {
+        $metaData = $this->_getMetaData($_accountId);
+
+        // user does not exist in ldap anymore
         if(!empty($metaData['dn'])) {
             $this->_ldap->delete($metaData['dn']);
         }
     }
-
+    
     /**
      * delete multiple users
      *
@@ -522,6 +533,18 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {
         foreach ($_accountIds as $accountId) {
             $this->deleteUser($accountId);
+        }
+    }
+
+    /**
+     * delete multiple users from ldap only
+     *
+     * @param array $_accountIds
+     */
+    public function deleteLdapUsers(array $_accountIds) 
+    {
+        foreach ($_accountIds as $accountId) {
+            $this->deleteLdapUser($accountId);
         }
     }
 
