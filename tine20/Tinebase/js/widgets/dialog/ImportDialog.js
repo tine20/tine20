@@ -164,6 +164,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 Ext.Ajax.request({
                     params: params,
                     scope: this,
+                    timeout: 1800000, // 30 minutes
                     success: function(_result, _request){
                         this.loadMask.hide();
                         
@@ -179,7 +180,8 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         } else {
                             Ext.MessageBox.alert(
                                 _('Import results'), 
-                                String.format(_('Import successful for {0} records, import failed for {1} records.'), response.totalcount, response.failcount),
+                                String.format(_('Import successful for {0} records / import failed for {1} records / {2} duplicates found'),
+                                    response.totalcount, response.failcount, response.duplicatecount),
                                 function() {
                                     // import done
                                     this.fireEvent('update', response);
