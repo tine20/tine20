@@ -20,6 +20,13 @@
 class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
 {
     /**
+     * set geo data for contacts
+     * 
+     * @var boolean
+     */
+    protected $_setGeoDataForContacts = FALSE;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -31,6 +38,11 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $this->_currentAccount = Tinebase_Core::getUser();
         $this->_purgeRecords = FALSE;
         $this->_resolveCustomFields = TRUE;
+        
+        $this->_setGeoDataForContacts = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, TRUE)->value;
+        if (! $this->_setGeoDataForContacts) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Mappanel/geoext/nominatim disabled with config option.');
+        }
     }
     
     /**
@@ -119,6 +131,17 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * can be called to activate/deactivate if geodata should be set for contacts (ignoring the config setting)
+     * 
+     * @param boolean $_value
+     * @return void
+     */
+    public function setGeoDataForContacts($_value)
+    {
+        $this->_setGeoDataForContacts = (boolean) $_value;
+    }
+    
+    /**
      * delete one record
      * - don't delete if it belongs to an user account
      *
@@ -167,8 +190,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _setGeoData($_record)
     {
-        if (! Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, TRUE)->value) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Mappanel/geoext/nominatim disabled with config option.');
+        if (! $this->_setGeoDataForContacts) {
             return;
         }
         
