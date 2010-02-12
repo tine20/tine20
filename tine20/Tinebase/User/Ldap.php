@@ -376,8 +376,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         if ($_status == 'disabled') {
             $data = array(
-                'shadowMax'      => 0,
-                'shadowInactive' => 0
+                'shadowMax'      => 1,
+                'shadowInactive' => 1
             );
         } else {
             $data = array(
