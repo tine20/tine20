@@ -61,20 +61,24 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
             responseText: Ext.util.JSON.encode(this.record.get('sambaSAM'))
         };
         this.samRecord = Tine.Admin.samUserBackend.recordReader(response);
-        this.getForm().loadRecord(this.samRecord);
-
         // email user
         var emailResponse = {
             responseText: Ext.util.JSON.encode(this.record.get('emailUser'))
         };
         this.emailRecord = Tine.Admin.emailUserBackend.recordReader(emailResponse);
-        this.getForm().loadRecord(this.emailRecord);
         
         // format dates
         var dateTimeDisplayFields = ['accountLastLogin', 'accountLastPasswordChange', 'logonTime', 'logoffTime', 'pwdLastSet', 'kickoffTime'];
         for (var i=0; i < dateTimeDisplayFields.length; i++) {
-            this.record.set(dateTimeDisplayFields[i], Tine.Tinebase.common.dateTimeRenderer(this.record.get(dateTimeDisplayFields[i])));
+            if (dateTimeDisplayFields[i] == 'accountLastLogin' || dateTimeDisplayFields[i] == 'accountLastPasswordChange') {
+                this.record.set(dateTimeDisplayFields[i], Tine.Tinebase.common.dateTimeRenderer(this.record.get(dateTimeDisplayFields[i])));
+            } else {
+                this.samRecord.set(dateTimeDisplayFields[i], Tine.Tinebase.common.dateTimeRenderer(this.record.get(dateTimeDisplayFields[i])));
+            }
         }
+
+        this.getForm().loadRecord(this.emailRecord);
+        this.getForm().loadRecord(this.samRecord);
 
         if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
             this.aliasesGrid.setStoreFromArray(this.emailRecord.get('emailAliases'));
