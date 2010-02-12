@@ -553,15 +553,13 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             $this->_options['groupsDn'], 
             $this->_groupSearchScope, 
             array('objectclass')
-        )->getFirst();
+        );
         
-        return $result;
-        
-        /*
-        } catch (Tinebase_Exception_NotFound $e) {
-            throw new Exception("group with id $groupId not found");
+        if(count($result) !== 1) {
+            throw new Exception("group with id $_groupId not found");
         }
-        */
+        
+        return $result->getFirst();        
     }
     
     /**
