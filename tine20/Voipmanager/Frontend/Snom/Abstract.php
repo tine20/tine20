@@ -44,7 +44,7 @@ abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Frontend_Abst
         $authResult = $authAdapter->authenticate();
         
         if (!$authResult->isValid()) {
-            Zend_Registry::get('logger')->warning(__METHOD__ . '::' . __LINE__ . ' authentication failed for ' . $_SERVER['PHP_AUTH_USER']);
+            Zend_Registry::get('logger')->warn(__METHOD__ . '::' . __LINE__ . ' authentication failed for ' . $_SERVER['PHP_AUTH_USER']);
             header('WWW-Authenticate: Basic realm="Tine 2.0"');
             header('HTTP/1.0 401 Unauthorized');
             exit;
