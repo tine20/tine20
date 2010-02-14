@@ -18,6 +18,24 @@
 class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
 {
     /**
+     * set call forward off
+     * @var string
+     */
+    const CFMODE_OFF        = 'off';
+    
+    /**
+     * forward call to number
+     * @var string
+     */
+    const CFMODE_NUMBER     = 'number';
+    
+    /**
+     * forward call to voicemail
+     * @var string
+     */
+    const CFMODE_VOICEMAIL  = 'voicemail';
+    
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
@@ -98,7 +116,14 @@ class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
         'busy-level'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'regserver'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'useragent'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'lastms'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => -1)
+        'lastms'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => -1),
+        'cfi_mode'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::CFMODE_OFF, self::CFMODE_NUMBER, self::CFMODE_VOICEMAIL), 'default' => self::CFMODE_OFF),
+        'cfi_number'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'cfb_mode'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::CFMODE_OFF, self::CFMODE_NUMBER, self::CFMODE_VOICEMAIL), 'default' => self::CFMODE_OFF),
+        'cfb_number'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'cfd_mode'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::CFMODE_OFF, self::CFMODE_NUMBER, self::CFMODE_VOICEMAIL), 'default' => self::CFMODE_OFF),
+        'cfd_number'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'cfd_time'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Int', 'default' => 30)
     );
     
     /**
