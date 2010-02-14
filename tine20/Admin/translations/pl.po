@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-06 15:15+0100\n"
+"PO-Revision-Date: 2010-02-14 10:17+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -11,8 +11,7 @@ msgstr ""
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: Acl/Rights.php:174
 msgid "manage access log"
@@ -28,9 +27,7 @@ msgstr "edytuj konta użytkowników"
 
 #: Acl/Rights.php:179
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"dodaj i edytuj użytkowników oraz grupy, zmień hasła użytkowników, dodaj "
-"użytkowników do grup"
+msgstr "dodaj i edytuj użytkowników oraz grupy, zmień hasła użytkowników, dodaj użytkowników do grup"
 
 #: Acl/Rights.php:182
 msgid "manage applications"
@@ -47,11 +44,8 @@ msgid "manage roles"
 msgstr "edytuj funkcje"
 
 #: Acl/Rights.php:187
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"dodaj nowych użytkowników do funkcji, dodaj i edytuj funkcje, przypisz "
-"funkcjom uprawnienia do aplikacji"
+msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgstr "dodaj nowych użytkowników do funkcji, dodaj i edytuj funkcje, przypisz funkcjom uprawnienia do aplikacji"
 
 #: Acl/Rights.php:190
 msgid "manage shared tags"
@@ -115,7 +109,8 @@ msgstr "wyświetl listę komputerów"
 msgid "view computers list and details"
 msgstr "wyświetl listę komputerów i szczegóły"
 
-#: js/Admin.js:20 js/Users.js:493
+#: js/Admin.js:20
+#: js/Users.js:493
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "Użytkownik"
@@ -152,7 +147,10 @@ msgstr "Funkcje"
 msgid "Admin"
 msgstr "Administrator"
 
-#: js/Admin.js:284 js/Groups.js:51 js/Roles.js:45 js/Tags.js:58
+#: js/Admin.js:284
+#: js/Groups.js:51
+#: js/Roles.js:45
+#: js/Tags.js:58
 #: js/Users.js:176
 msgid "Confirm"
 msgstr "Potwierdź"
@@ -177,8 +175,12 @@ msgstr "Wyświetl od:"
 msgid "to:"
 msgstr "do:"
 
-#: js/Admin.js:442 js/Applications.js:160 js/Groups.js:151 js/Roles.js:149
-#: js/Tags.js:140 js/Users.js:236
+#: js/Admin.js:442
+#: js/Applications.js:160
+#: js/Groups.js:151
+#: js/Roles.js:149
+#: js/Tags.js:140
+#: js/Users.js:236
 msgid "Search:"
 msgstr "Znajdź:"
 
@@ -214,12 +216,17 @@ msgstr "Brak wpisów w dzienniku logowania"
 msgid "Session ID"
 msgstr "ID sesji"
 
-#: js/Admin.js:563 js/UserEditDialog.js:304
+#: js/Admin.js:563
+#: js/UserEditDialog.js:304
 msgid "Login Name"
 msgstr "Login"
 
-#: js/Admin.js:564 js/Applications.js:235 js/Groups.js:203 js/Roles.js:203
-#: js/SambaMachineGrid.js:90 js/Tags.js:189
+#: js/Admin.js:564
+#: js/Applications.js:235
+#: js/Groups.js:203
+#: js/Roles.js:203
+#: js/SambaMachineGrid.js:90
+#: js/Tags.js:189
 msgid "Name"
 msgstr "Nazwa"
 
@@ -259,11 +266,13 @@ msgstr "Wyłącz aplikację"
 msgid "settings"
 msgstr "ustawienia"
 
-#: js/Applications.js:189 js/UserEditDialog.js:358
+#: js/Applications.js:189
+#: js/UserEditDialog.js:358
 msgid "disabled"
 msgstr "wyłączona"
 
-#: js/Applications.js:192 js/UserEditDialog.js:358
+#: js/Applications.js:192
+#: js/UserEditDialog.js:358
 msgid "enabled"
 msgstr "włączona"
 
@@ -283,7 +292,9 @@ msgstr "Brak aplikacji"
 msgid "Order"
 msgstr "Kolejność"
 
-#: js/Applications.js:236 js/UserEditDialog.js:352 js/Users.js:296
+#: js/Applications.js:236
+#: js/UserEditDialog.js:352
+#: js/Users.js:296
 msgid "Status"
 msgstr "Status"
 
@@ -301,8 +312,13 @@ msgstr "Usuwanie grup(y)..."
 
 # The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
 # Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
-#: js/Groups.js:72 js/Groups.js:372 js/RoleEditDialog.js:101
-#: js/RoleEditDialog.js:129 js/Roles.js:67 js/Tags.js:372 js/Users.js:196
+#: js/Groups.js:72
+#: js/Groups.js:372
+#: js/RoleEditDialog.js:101
+#: js/RoleEditDialog.js:129
+#: js/Roles.js:67
+#: js/Tags.js:372
+#: js/Users.js:196
 msgid "Failed"
 msgstr "Próba nieudana"
 
@@ -326,25 +342,37 @@ msgstr "Usuń grupę"
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "Wyświetlane grupy {0} - {1} z {2}"
 
-#: js/Groups.js:192 js/Groups.js:247
+#: js/Groups.js:192
+#: js/Groups.js:247
 msgid "No groups to display"
 msgstr "Brak grup"
 
-#: js/Groups.js:202 js/Roles.js:202 js/SambaMachineGrid.js:83 js/Users.js:295
+#: js/Groups.js:202
+#: js/Roles.js:202
+#: js/SambaMachineGrid.js:83
+#: js/Users.js:295
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:204 js/Groups.js:439 js/RoleEditDialog.js:300 js/Roles.js:204
-#: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:96 js/Tags.js:190
+#: js/Groups.js:204
+#: js/Groups.js:439
+#: js/RoleEditDialog.js:300
+#: js/Roles.js:204
+#: js/SambaMachineGrid.js:66
+#: js/SambaMachineGrid.js:96
+#: js/Tags.js:190
 #: js/Tags.js:508
 msgid "Description"
 msgstr "Opis"
 
-#: js/Groups.js:337 js/RoleEditDialog.js:64 js/Tags.js:327
+#: js/Groups.js:337
+#: js/RoleEditDialog.js:64
+#: js/Tags.js:327
 msgid "Please wait"
 msgstr "Proszę czekać"
 
-#: js/Groups.js:337 js/RoleEditDialog.js:64
+#: js/Groups.js:337
+#: js/RoleEditDialog.js:64
 msgid "Updating Memberships"
 msgstr "Aktualizacja uczestnictwa"
 
@@ -352,11 +380,15 @@ msgstr "Aktualizacja uczestnictwa"
 msgid "Could not save group."
 msgstr "Zapisanie grupy było niemożliwe."
 
-#: js/Groups.js:379 js/RoleEditDialog.js:108 js/Tags.js:377
+#: js/Groups.js:379
+#: js/RoleEditDialog.js:108
+#: js/Tags.js:377
 msgid "Errors"
 msgstr "Błędy"
 
-#: js/Groups.js:379 js/RoleEditDialog.js:108 js/Tags.js:377
+#: js/Groups.js:379
+#: js/RoleEditDialog.js:108
+#: js/Tags.js:377
 msgid "Please fix the errors noted."
 msgstr "Proszę poprawić wskazane błędy."
 
@@ -386,7 +418,8 @@ msgstr "Usuwanie funkcji…"
 
 # The word "Roli" could not be clearly understood. The word "funkcji" is the better choice.
 # Das Wort "Roli" koennte missverstanden werden. Das Wort "funkcji" passt besser.
-#: js/RoleEditDialog.js:129 js/Roles.js:67
+#: js/RoleEditDialog.js:129
+#: js/Roles.js:67
 msgid "Some error occurred while trying to delete the role."
 msgstr "Podczas próby usunięcia funkcji wystąpił błąd."
 
@@ -406,7 +439,8 @@ msgstr "Nazwę funkcji"
 msgid "Loading Role..."
 msgstr "Ładowanie funkcji…"
 
-#: js/RoleEditDialog.js:334 js/Tags.js:547
+#: js/RoleEditDialog.js:334
+#: js/Tags.js:547
 msgid "Please Wait"
 msgstr "Proszę czekać"
 
@@ -444,11 +478,13 @@ msgstr "Usuń funkcję"
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr "Wyświetlane funkcje {0} - {1} z {2}"
 
-#: js/Roles.js:192 js/Roles.js:247
+#: js/Roles.js:192
+#: js/Roles.js:247
 msgid "No roles to display"
 msgstr "Brak funkcji"
 
-#: js/SambaMachineEditDialog.js:38 js/SambaMachineGrid.js:65
+#: js/SambaMachineEditDialog.js:38
+#: js/SambaMachineGrid.js:65
 msgid "Computer Name"
 msgstr "Nazwa komputera"
 
@@ -483,11 +519,13 @@ msgstr "Usuń znacznik"
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "Wyświetl znaczniki {0} - {1} z {2}"
 
-#: js/Tags.js:178 js/Tags.js:233
+#: js/Tags.js:178
+#: js/Tags.js:233
 msgid "No tags to display"
 msgstr "Brak znaczników"
 
-#: js/Tags.js:188 js/Tags.js:514
+#: js/Tags.js:188
+#: js/Tags.js:514
 msgid "Color"
 msgstr "Kolor"
 
@@ -603,7 +641,8 @@ msgstr "brak hasła"
 msgid "Emailaddress"
 msgstr "Adres e-mail"
 
-#: js/UserEditDialog.js:340 js/Users.js:302
+#: js/UserEditDialog.js:340
+#: js/Users.js:302
 msgid "OpenID"
 msgstr "ID uwierzytelnienia"
 
@@ -615,11 +654,14 @@ msgstr "Grupa nadrzędna"
 msgid "expired"
 msgstr "wygasło"
 
-#: js/UserEditDialog.js:361 js/Users.js:306
+#: js/UserEditDialog.js:361
+#: js/Users.js:306
 msgid "Expires"
 msgstr "Wygasa"
 
-#: js/UserEditDialog.js:363 js/UserEditDialog.js:405 js/UserEditDialog.js:482
+#: js/UserEditDialog.js:363
+#: js/UserEditDialog.js:405
+#: js/UserEditDialog.js:482
 msgid "never"
 msgstr "nigdy"
 
@@ -635,23 +677,29 @@ msgstr "Wyświetlaj w książce adresowej"
 msgid "Hide from addressbook"
 msgstr "Ukryj w książce adresowej"
 
-#: js/UserEditDialog.js:379 js/UserEditDialog.js:563
+#: js/UserEditDialog.js:379
+#: js/UserEditDialog.js:563
 msgid "Information"
 msgstr "Informacja"
 
-#: js/UserEditDialog.js:395 js/Users.js:303
+#: js/UserEditDialog.js:395
+#: js/Users.js:303
 msgid "Last login at"
 msgstr "Czas ostatniego logowania"
 
-#: js/UserEditDialog.js:397 js/UserEditDialog.js:401
+#: js/UserEditDialog.js:397
+#: js/UserEditDialog.js:401
 msgid "don't know"
 msgstr "nie znam"
 
-#: js/UserEditDialog.js:397 js/UserEditDialog.js:401 js/UserEditDialog.js:462
+#: js/UserEditDialog.js:397
+#: js/UserEditDialog.js:401
+#: js/UserEditDialog.js:462
 msgid "never logged in"
 msgstr "nigdy nie był zalogowany"
 
-#: js/UserEditDialog.js:399 js/Users.js:304
+#: js/UserEditDialog.js:399
+#: js/Users.js:304
 msgid "Last login from"
 msgstr "Ostatnie zalogowanie z"
 
@@ -715,7 +763,9 @@ msgstr "Skrypt logowania"
 msgid "Password Can Change"
 msgstr "Możliwa zmiana hasła"
 
-#: js/UserEditDialog.js:491 js/UserEditDialog.js:495 js/UserEditDialog.js:499
+#: js/UserEditDialog.js:491
+#: js/UserEditDialog.js:495
+#: js/UserEditDialog.js:499
 msgid "not set"
 msgstr "nie ustawione"
 
@@ -733,7 +783,7 @@ msgstr "IMAP"
 
 #: js/UserEditDialog.js:511
 msgid "Quota (MB)"
-msgstr ""
+msgstr "Kwota (MB)"
 
 #: js/UserEditDialog.js:525
 msgid "Quota"
@@ -744,17 +794,19 @@ msgid "Current Mail Size"
 msgstr "Rozmiar wiadomości"
 
 #: js/UserEditDialog.js:537
+#, fuzzy
 msgid "Sieve Quota (MB)"
-msgstr ""
+msgstr "Kwota ograniczenia (MB)"
 
 #: js/UserEditDialog.js:551
 #, fuzzy
 msgid "Sieve Quota"
-msgstr "Kwota Sieve"
+msgstr "Kwota ograniczenia"
 
 #: js/UserEditDialog.js:555
+#, fuzzy
 msgid "Sieve Size"
-msgstr ""
+msgstr "Rozmiar ograniczenia"
 
 #: js/UserEditDialog.js:578
 msgid "Last Login"
@@ -860,55 +912,40 @@ msgstr[2] "E-maile użytkowników"
 
 #~ msgid "Deleting group..."
 #~ msgstr "Usuwanie grupy…"
-
 #~ msgid "Email UID"
 #~ msgstr "E-mail UID"
-
 #~ msgid "Email GID"
 #~ msgstr "E-mail GID"
-
 #~ msgid "Email Username"
 #~ msgstr "E-mail Użytkownik"
 
 #, fuzzy
 #~ msgid "Current Sieve Size"
 #~ msgstr "Obecny rozmiar Sieve"
-
 #~ msgid "enter searchfilter"
 #~ msgstr "wpisz szukaną frazę"
-
 #~ msgid "remove account"
 #~ msgstr "Usuń konto"
-
 #~ msgid "Role members"
 #~ msgstr "Przypisani do funkcji"
-
 #~ msgid "Deleting tag..."
 #~ msgstr "Usuwanie znacznika..."
-
 #~ msgid "name"
 #~ msgstr "nazwa"
-
 #~ msgid "status"
 #~ msgstr "status"
-
 #~ msgid "Deleting account..."
 #~ msgstr "Usuwanie konta …"
-
 #~ msgid "Some error occurred while trying to delete the account."
 #~ msgstr "Podczas próby usunięcia konta wystąpił błąd."
-
 #~ msgid "Saving User Account"
 #~ msgstr "Zapisywanie konta użytkownika"
-
 #~ msgid "Could not save user account."
 #~ msgstr "Zapisanie konta użytkownika było niemożliwe."
-
 #~ msgid "Add New User Account"
 #~ msgstr "Utwórz nowego użytkownika"
-
 #~ msgid "Edit User Account \"{0}\""
 #~ msgstr "Edytuj konto użytkownika \"{0}\""
-
 #~ msgid "Forward"
 #~ msgstr "Prześlij dalej"
+
