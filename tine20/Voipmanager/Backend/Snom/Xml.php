@@ -79,18 +79,15 @@ class Voipmanager_Backend_Snom_Xml
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
         $snomLocation     = new Voipmanager_Backend_Snom_Location($this->_db);        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
         $locationSettings = $snomLocation->get($_phone->location_id);
         #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localtion_id " . print_r($locationSettings, true));
         $locationSettings = $locationSettings->toArray();
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
         
-        unset($locationsSettings['id']);
-        unset($locationsSettings['name']);
-        unset($locationsSettings['description']);
-        unset($locationsSettings['registrar']);
-        unset($locationsSettings['base_download_url']);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
+        unset($locationSettings['id']);
+        unset($locationSettings['name']);
+        unset($locationSettings['description']);
+        unset($locationSettings['registrar']);
+        unset($locationSettings['base_download_url']);
         
         // see http://wiki.snom.com/Interoperability/Asterisk#Basic_Asterisk_configuration
         $locationSettings['user_phone']         = 'off';
@@ -102,7 +99,7 @@ class Voipmanager_Backend_Snom_Xml
         
         $locationSettings['setting_server']     = Voipmanager_Frontend_Snom_Abstract::getBaseUrl() . '?method=Voipmanager.settings&amp;mac=' . $_phone->macaddress;
         $locationSettings['firmware_status']    = Voipmanager_Frontend_Snom_Abstract::getBaseUrl() . '?method=Voipmanager.firmware&amp;mac=' . $_phone->macaddress;
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
+        
         foreach($locationSettings as $key => $value) {
             $child = $_xml->addChild($key, $value);
             if($key == 'admin_mode') {
@@ -115,6 +112,8 @@ class Voipmanager_Backend_Snom_Xml
         // reset old dialplan
         $child = $_xml->addChild('user_dp_str1');
         $child->addAttribute('perm', 'RW');
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
     }
     
     protected function _appendPhoneUrls(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
@@ -348,10 +347,10 @@ class Voipmanager_Backend_Snom_Xml
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><firmware-settings></firmware-settings>');
         
         $select = $this->_db->select()
-            ->from(Tinebase_Core::get('voipdbTablePrefix') . 'snom_phones', array())
-            ->where($this->_db->quoteIdentifier(Tinebase_Core::get('voipdbTablePrefix') . 'snom_phones.macaddress') . ' = ?', $_phone->macaddress)
-            ->join(Tinebase_Core::get('voipdbTablePrefix') . 'snom_templates', Tinebase_Core::get('voipdbTablePrefix') . 'snom_phones.template_id = ' . Tinebase_Core::get('voipdbTablePrefix') . 'snom_templates.id', array())
-            ->join(Tinebase_Core::get('voipdbTablePrefix') . 'snom_software', Tinebase_Core::get('voipdbTablePrefix') . 'snom_templates.software_id = ' . Tinebase_Core::get('voipdbTablePrefix') . 'snom_software.id', array('softwareimage_' . $_phone->current_model));
+            ->from(SQL_TABLE_PREFIX . 'snom_phones', array())
+            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'snom_phones.macaddress') . ' = ?', $_phone->macaddress)
+            ->join(SQL_TABLE_PREFIX . 'snom_templates', SQL_TABLE_PREFIX . 'snom_phones.template_id = ' . SQL_TABLE_PREFIX . 'snom_templates.id', array())
+            ->join(SQL_TABLE_PREFIX . 'snom_software', SQL_TABLE_PREFIX . 'snom_templates.software_id = ' . SQL_TABLE_PREFIX . 'snom_software.id', array('softwareimage_' . $_phone->current_model));
             
         $firmware = $this->_db->fetchOne($select);
     
