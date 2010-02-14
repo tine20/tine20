@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>3.0</version>
+    <version>3.2</version>
     <order>50</order>
     <depends>
         <application>Admin</application>
@@ -760,6 +760,50 @@
                     <length>11</length>
                     <notnull>false</notnull>
                 </field>
+                <field>
+                    <name>cfi_mode</name>
+                    <type>enum</type>
+                    <value>off</value>
+                    <value>number</value>
+                    <value>voicemail</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cfi_number</name>
+                    <type>text</type>
+                    <length>80</length>
+                </field>
+                <field>
+                    <name>cfb_mode</name>
+                    <type>enum</type>
+                    <value>off</value>
+                    <value>number</value>
+                    <value>voicemail</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cfb_number</name>
+                    <type>text</type>
+                    <length>80</length>
+                </field>
+                <field>
+                    <name>cfd_mode</name>
+                    <type>enum</type>
+                    <value>off</value>
+                    <value>number</value>
+                    <value>voicemail</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cfd_number</name>
+                    <type>text</type>
+                    <length>80</length>
+                </field>
+                <field>
+                    <name>cfd_time</name>
+                    <type>integer</type>
+                    <length>11</length>
+                </field>                                
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -1514,12 +1558,6 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>sippeer_id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
                     <name>cfi_mode</name>
                     <type>enum</type>
                     <value>off</value>
@@ -1571,15 +1609,17 @@
                     </field>
                 </index>
                 <index>
-                    <name>asterisk_redirect::sippeer_id--asterisk_sip_peers::id</name>
+                    <name>asterisk_redirect::id--asterisk_sip_peers::id</name>
                     <field>
-                        <name>sippeer_id</name>
+                        <name>id</name>
                     </field>
                     <foreign>true</foreign>
                     <reference>
                         <table>asterisk_sip_peers</table>
                         <field>id</field>
                     </reference>
+                    <ondelete>cascade</ondelete>
+                    <onupdate>cascade</onupdate>
                 </index>   
             </declaration>
         </table> 
