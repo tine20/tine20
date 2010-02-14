@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-01-13 14:03+0100\n"
+"PO-Revision-Date: 2010-02-14 10:31+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -10,8 +10,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: Acl/Rights.php:107
 msgid "manage email accounts"
@@ -19,23 +18,26 @@ msgstr "edytuj konta e-mail"
 
 #: Acl/Rights.php:108
 msgid "Edit and delete email accounts"
-msgstr ""
+msgstr "Edytuj i usuwaj konta e-mail"
 
 #: Acl/Rights.php:111
 msgid "Add email accounts"
-msgstr ""
+msgstr "Dodawaj konta e-mail"
 
 #: Acl/Rights.php:112
 msgid "Create new email accounts"
-msgstr ""
+msgstr "Twórz nowe konta e-mail"
 
-#: Controller/Message.php:991 js/FelamimailGridDetailsPanel.js:123
-#: js/FelamimailGridPanel.js:258 js/FelamimailGridPanel.js:313
+#: Controller/Message.php:991
+#: js/FelamimailGridDetailsPanel.js:123
+#: js/FelamimailGridPanel.js:258
+#: js/FelamimailGridPanel.js:313
 #: js/FelamimailMessageEditDialog.js:294
 msgid "Subject"
 msgstr "Temat"
 
-#: Controller/Message.php:991 js/FelamimailMessageEditDialog.js:200
+#: Controller/Message.php:991
+#: js/FelamimailMessageEditDialog.js:200
 msgid "Body"
 msgstr "Wiadomość"
 
@@ -43,7 +45,8 @@ msgstr "Wiadomość"
 msgid "Email"
 msgstr "E-mail"
 
-#: js/FelamimailAccountEditDialog.js:90 js/FelamimailTreePanel.js:409
+#: js/FelamimailAccountEditDialog.js:90
+#: js/FelamimailTreePanel.js:409
 #: js/Models.js:114
 msgid "Account"
 msgid_plural "Accounts"
@@ -75,7 +78,8 @@ msgstr "Podpis"
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/FelamimailAccountEditDialog.js:138 js/FelamimailAccountEditDialog.js:187
+#: js/FelamimailAccountEditDialog.js:138
+#: js/FelamimailAccountEditDialog.js:187
 msgid "Host"
 msgstr "Host"
 
@@ -83,20 +87,24 @@ msgstr "Host"
 msgid "Port (Default: 143 / SSL: 993)"
 msgstr "Port (domyślnie 143 / SSL: 993)"
 
-#: js/FelamimailAccountEditDialog.js:148 js/FelamimailAccountEditDialog.js:196
+#: js/FelamimailAccountEditDialog.js:148
+#: js/FelamimailAccountEditDialog.js:196
 msgid "Secure Connection"
 msgstr "Bezpieczne połączenie"
 
-#: js/FelamimailAccountEditDialog.js:159 js/FelamimailAccountEditDialog.js:206
+#: js/FelamimailAccountEditDialog.js:159
+#: js/FelamimailAccountEditDialog.js:206
 #: js/FelamimailAccountEditDialog.js:221
 msgid "None"
 msgstr "Brak"
 
-#: js/FelamimailAccountEditDialog.js:160 js/FelamimailAccountEditDialog.js:207
+#: js/FelamimailAccountEditDialog.js:160
+#: js/FelamimailAccountEditDialog.js:207
 msgid "TLS"
 msgstr "TLS"
 
-#: js/FelamimailAccountEditDialog.js:161 js/FelamimailAccountEditDialog.js:208
+#: js/FelamimailAccountEditDialog.js:161
+#: js/FelamimailAccountEditDialog.js:208
 msgid "SSL"
 msgstr "SSL"
 
@@ -154,12 +162,14 @@ msgstr "Katalog: Kosz"
 msgid "Show Intelligent Folders"
 msgstr "Pokaż inteligentne katalogi"
 
-#: js/FelamimailAccountEditDialog.js:267 js/FelamimailAccountEditDialog.js:282
+#: js/FelamimailAccountEditDialog.js:267
+#: js/FelamimailAccountEditDialog.js:282
 #: js/FelamimailAccountEditDialog.js:312
 msgid "No"
 msgstr "Nie"
 
-#: js/FelamimailAccountEditDialog.js:268 js/FelamimailAccountEditDialog.js:283
+#: js/FelamimailAccountEditDialog.js:268
+#: js/FelamimailAccountEditDialog.js:283
 #: js/FelamimailAccountEditDialog.js:313
 msgid "Yes"
 msgstr "Tak"
@@ -186,8 +196,10 @@ msgstr "Czysty tekst"
 msgid "Sort Folders"
 msgstr "Segreguj katalogi"
 
-#: js/FelamimailGridDetailsPanel.js:124 js/FelamimailGridPanel.js:259
-#: js/FelamimailGridPanel.js:319 js/FelamimailMessageEditDialog.js:262
+#: js/FelamimailGridDetailsPanel.js:124
+#: js/FelamimailGridPanel.js:259
+#: js/FelamimailGridPanel.js:319
+#: js/FelamimailMessageEditDialog.js:262
 msgid "From"
 msgstr "Od"
 
@@ -203,11 +215,13 @@ msgstr "Dodaj kontakt do książki adresowej"
 msgid "Date"
 msgstr "Data"
 
-#: js/FelamimailGridDetailsPanel.js:129 js/FelamimailGridDetailsPanel.js:347
+#: js/FelamimailGridDetailsPanel.js:129
+#: js/FelamimailGridDetailsPanel.js:347
 msgid "Show or hide header information"
 msgstr "Pokazuj albo ukrywaj informacje nagłówkowe"
 
-#: js/FelamimailGridDetailsPanel.js:132 js/FelamimailMessageEditDialog.js:192
+#: js/FelamimailGridDetailsPanel.js:132
+#: js/FelamimailMessageEditDialog.js:192
 msgid "Attachments"
 msgstr "Załączniki"
 
@@ -235,7 +249,8 @@ msgstr "Ustaw flagę"
 msgid "Mark read/unread"
 msgstr "Oznacz jako (nie)przeczytane"
 
-#: js/FelamimailGridPanel.js:192 js/FelamimailGridPanel.js:193
+#: js/FelamimailGridPanel.js:192
+#: js/FelamimailGridPanel.js:193
 #: js/FelamimailGridPanel.js:195
 msgid "Delete"
 msgstr "Usuń"
@@ -248,7 +263,8 @@ msgstr "Dodaj konto"
 msgid "Subject/From"
 msgstr "Temat/Od"
 
-#: js/FelamimailGridPanel.js:260 js/FelamimailGridPanel.js:325
+#: js/FelamimailGridPanel.js:260
+#: js/FelamimailGridPanel.js:325
 msgid "To"
 msgstr "Do"
 
@@ -260,7 +276,8 @@ msgstr "DW"
 msgid "Bcc"
 msgstr "UDW"
 
-#: js/FelamimailGridPanel.js:263 js/FelamimailGridPanel.js:340
+#: js/FelamimailGridPanel.js:263
+#: js/FelamimailGridPanel.js:340
 msgid "Received"
 msgstr "Odebrane"
 
@@ -288,7 +305,8 @@ msgstr "Przesłane dalej"
 msgid "Recent"
 msgstr "Nowe"
 
-#: js/FelamimailGridPanel.js:488 js/FelamimailTreeLoader.js:172
+#: js/FelamimailGridPanel.js:488
+#: js/FelamimailTreeLoader.js:172
 msgid "Error"
 msgstr "Błąd"
 
@@ -318,7 +336,8 @@ msgstr "Fw:"
 
 # The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
 # Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
-#: js/FelamimailGridPanel.js:695 js/FelamimailMessageEditDialog.js:164
+#: js/FelamimailGridPanel.js:695
+#: js/FelamimailMessageEditDialog.js:164
 msgid "Failed"
 msgstr "Próba nieudana"
 
@@ -330,7 +349,8 @@ msgstr "Podczas próby aktualizacji wiadomości wystąpił błąd."
 msgid "Send"
 msgstr "Wyślij"
 
-#: js/FelamimailMessageEditDialog.js:99 js/FelamimailMessageEditDialog.js:305
+#: js/FelamimailMessageEditDialog.js:99
+#: js/FelamimailMessageEditDialog.js:305
 msgid "Compose email:"
 msgstr "Redaguj wiadomość:"
 
@@ -358,15 +378,18 @@ msgstr "Odbiorcy"
 msgid "Save contact note"
 msgstr "Zapisz"
 
-#: js/FelamimailRecipientGrid.js:153 js/FelamimailRecipientGrid.js:174
+#: js/FelamimailRecipientGrid.js:153
+#: js/FelamimailRecipientGrid.js:174
 msgid "To:"
 msgstr "Do:"
 
-#: js/FelamimailRecipientGrid.js:156 js/FelamimailRecipientGrid.js:175
+#: js/FelamimailRecipientGrid.js:156
+#: js/FelamimailRecipientGrid.js:175
 msgid "Cc:"
 msgstr "DW:"
 
-#: js/FelamimailRecipientGrid.js:159 js/FelamimailRecipientGrid.js:176
+#: js/FelamimailRecipientGrid.js:159
+#: js/FelamimailRecipientGrid.js:176
 msgid "Bcc:"
 msgstr "UDW:"
 
@@ -394,7 +417,8 @@ msgstr "Dane dostępowe"
 msgid "No connection to IMAP server."
 msgstr "Brak połączenia z serwerem IMAP."
 
-#: js/FelamimailTreePanel.js:188 js/FelamimailTreePanel.js:193
+#: js/FelamimailTreePanel.js:188
+#: js/FelamimailTreePanel.js:193
 #: js/FelamimailTreePanel.js:204
 msgid "Marked"
 msgstr "Zaznaczone"
@@ -411,11 +435,13 @@ msgstr "Nieprzeczytane"
 msgid "Contains unread messages"
 msgstr "Zawiera nieprzeczytane wiadomości"
 
-#: js/FelamimailTreePanel.js:235 js/FelamimailTreePanel.js:372
+#: js/FelamimailTreePanel.js:235
+#: js/FelamimailTreePanel.js:372
 msgid "Update {0} Cache"
 msgstr "Aktualizuj pamięć podręczną: {0}"
 
-#: js/FelamimailTreePanel.js:235 js/Models.js:43
+#: js/FelamimailTreePanel.js:235
+#: js/Models.js:43
 msgid "Message"
 msgid_plural "Messages"
 msgstr[0] "Wiadomość"
@@ -434,9 +460,12 @@ msgstr "Dodaj katalog"
 msgid "New {0}"
 msgstr "Nowy {0}"
 
-#: js/FelamimailTreePanel.js:295 js/FelamimailTreePanel.js:298
-#: js/FelamimailTreePanel.js:301 js/FelamimailTreePanel.js:360
-#: js/FelamimailTreePanel.js:372 js/FelamimailTreePanel.js:385
+#: js/FelamimailTreePanel.js:295
+#: js/FelamimailTreePanel.js:298
+#: js/FelamimailTreePanel.js:301
+#: js/FelamimailTreePanel.js:360
+#: js/FelamimailTreePanel.js:372
+#: js/FelamimailTreePanel.js:385
 msgid "Folder"
 msgstr "Katalog"
 
@@ -484,7 +513,8 @@ msgstr "Nieprawidłowy katalog docelowy"
 msgid "Could not move message(s)."
 msgstr "Przeniesienie wiadomości było niemożliwe."
 
-#: js/Models.js:47 js/Models.js:118
+#: js/Models.js:47
+#: js/Models.js:118
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "lista wiadomości"
@@ -493,11 +523,11 @@ msgstr[2] "list wiadomości"
 
 #: Preference.php:96
 msgid "Use System Account"
-msgstr ""
+msgstr "Używaj konta systemowego"
 
 #: Preference.php:97
 msgid "Use user credentials and predefined settings for email account."
-msgstr ""
+msgstr "Używaj uwierzytelnienia i wcześniej zdefiniowanych ustawień konta e-mail użytkownika"
 
 #: Preference.php:100
 msgid "Default Email Account"
@@ -512,11 +542,8 @@ msgid "Email Update Interval"
 msgstr "Częstotliwość aktualicacji poczty"
 
 #: Preference.php:105
-msgid ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
-msgstr ""
-"Jak często Felamimail ma sprawdzać pocztę (w minutach). \"0\" oznacza nigdy."
+msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
+msgstr "Jak często Felamimail ma sprawdzać pocztę (w minutach). \"0\" oznacza nigdy."
 
 #: Preference.php:108
 msgid "Use in Addressbook"
@@ -524,23 +551,20 @@ msgstr "Zastosuj w książce adresowej"
 
 #: Preference.php:109
 msgid "Compose Emails from the Addressbook with Felamimail."
-msgstr ""
-"Użyj Felamimail do tworzenia wiadomości pocztowych z Książki adresowej."
+msgstr "Użyj Felamimail do tworzenia wiadomości pocztowych z Książki adresowej."
 
 #: Preference.php:112
 msgid "Use for NOTES"
-msgstr ""
+msgstr "Użyj dla notatek"
 
 #: Preference.php:113
 msgid "Save Note default Value."
-msgstr ""
+msgstr "Zapisz domyślną treść notatki"
 
 #~ msgid "Create and edit email accounts"
 #~ msgstr "Utwórz i edytuj konta e-mail"
-
 #~ msgid "Upload Failed"
 #~ msgstr "Wysyłanie zakończone niepowodzeniem"
-
 #~ msgid ""
 #~ "Could not upload attachment. Filesize could be too big. Please notify "
 #~ "your Administrator. Max upload size: "
@@ -548,36 +572,28 @@ msgstr ""
 #~ "Przesłanie załącznika było niemożliwe. Prawdopodobnie rozmiar pliku jest "
 #~ "za duży. Prosimy powiadomić swojego administratora. Maks. rozmiar pliku "
 #~ "wynosi:"
-
 #~ msgid "Add Attachment"
 #~ msgstr "Dodaj załącznik"
-
 #~ msgid "Remove Attachment"
 #~ msgstr "Usuń załącznik"
-
 #~ msgid "User Email Account"
 #~ msgstr "Konto e-mail użytkownika"
-
 #~ msgid "Use user credentials for IMAP email account."
 #~ msgstr ""
 #~ "Użyj danych dostępowych (z Tine 2.0) dla konta e-mail znajdującego się na "
 #~ "serwerze IMAP, aby uwierzytelnić użytkownika."
-
 #~ msgid "Sort Folders (experimental)"
 #~ msgstr "Segreguj katalogi (eksperymentalne)"
-
 #~ msgid "Update Cache"
 #~ msgstr "Aktualizuj pamięć podręczną"
-
 #~ msgid ""
 #~ "Could not upload attachment. Filesize could be too big. Please notify "
 #~ "your Administrator."
 #~ msgstr ""
 #~ "Wysłanie załącznika było niemożliwe. Zbyt duży rozmiar pliku. Proszę "
 #~ "powiadomić swojego administratora."
-
 #~ msgid "Port"
 #~ msgstr "Port"
-
 #~ msgid "Mark Unread"
 #~ msgstr "Oznacz jako nieprzeczytane"
+
