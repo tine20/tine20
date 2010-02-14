@@ -83,7 +83,9 @@ class Voipmanager_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         
         $xmlConfig = Voipmanager_Controller_Snom_Xml::getInstance()->getConfig($phone);
         
-        header('Content-Type: text/xml');
+        header('Content-Type: application/xml');
+        // we must sent this header, as the snom phones can't work with chunked encoding
+        header('Content-Length: ' . strlen($xmlConfig));
         echo $xmlConfig;
         
         if($phone->http_client_info_sent == false) {
@@ -112,7 +114,9 @@ class Voipmanager_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         
         $xmlFirmware = Voipmanager_Controller_Snom_Xml::getInstance()->getFirmware($phone);
         
-        header('Content-Type: text/xml');
+        header('Content-Type: application/xml');
+        // we must sent this header, as the snom phones can't work with chunked encoding
+        header('Content-Length: ' . strlen($xmlFirmware));
         echo $xmlFirmware;        
     }    
     
