@@ -147,6 +147,7 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
             throw new Voipmanager_Exception_NotFound('No settings found for asterisk backend in config file!');
         }
         
+        /*
         $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array());
         
         $sipPeers = $controller = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter);     
@@ -165,10 +166,10 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
             fputs($fp, "\n");
         }
         rewind($fp);
-        
+        */
         $ajam = new Ajam_Connection($url);
         $ajam->login($username, $password);
-        $ajam->upload($url . '/tine20config', 'sip.conf', stream_get_contents($fp));
+        #$ajam->upload($url . '/tine20config', 'sip.conf', stream_get_contents($fp));
         $ajam->command('sip reload');
         $ajam->logout();
     }
