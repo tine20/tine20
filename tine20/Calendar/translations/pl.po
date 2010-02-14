@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-26 21:52+0100\n"
+"PO-Revision-Date: 2010-02-14 15:36+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -10,8 +10,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: Acl/Rights.php:96
 msgid "manage shared calendars"
@@ -78,7 +77,9 @@ msgstr "%s's kalendarz osobisty"
 msgid "Manage Resources"
 msgstr "Zarządzaj zasobami"
 
-#: js/AttendeeGridPanel.js:62 js/EventDetailsPanel.js:244 js/Model.js:286
+#: js/AttendeeGridPanel.js:62
+#: js/EventDetailsPanel.js:244
+#: js/Model.js:286
 msgid "Attendee"
 msgstr "Uczestnik"
 
@@ -108,38 +109,45 @@ msgstr "Użytkownik"
 msgid "Group"
 msgstr "Grupa"
 
-#: js/AttendeeGridPanel.js:149 js/Model.js:441
+#: js/AttendeeGridPanel.js:149
+#: js/Model.js:441
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Zasób"
 msgstr[1] "zasoby"
 msgstr[2] "zasoby"
 
-#: js/AttendeeGridPanel.js:157 js/ResourceEditDialog.js:58
+#: js/AttendeeGridPanel.js:157
+#: js/ResourceEditDialog.js:58
 #: js/ResourcesGridPanel.js:43
 msgid "Name"
 msgstr "Nazwa"
 
-#: js/AttendeeGridPanel.js:187 Model/Event.php:191
+#: js/AttendeeGridPanel.js:187
+#: Model/Event.php:191
 msgid "Status"
 msgstr "Status"
 
-#: js/AttendeeGridPanel.js:194 js/AttendeeGridPanel.js:491
+#: js/AttendeeGridPanel.js:194
+#: js/AttendeeGridPanel.js:491
 #: Model/Attender.php:45
 msgid "No response"
 msgstr "Brak odpowiedzi"
 
-#: js/AttendeeGridPanel.js:195 js/AttendeeGridPanel.js:494
+#: js/AttendeeGridPanel.js:195
+#: js/AttendeeGridPanel.js:494
 #: Model/Attender.php:46
 msgid "Accepted"
 msgstr "zaakceptowane"
 
-#: js/AttendeeGridPanel.js:196 js/AttendeeGridPanel.js:497
+#: js/AttendeeGridPanel.js:196
+#: js/AttendeeGridPanel.js:497
 #: Model/Attender.php:47
 msgid "Declined"
 msgstr "Odrzucone"
 
-#: js/AttendeeGridPanel.js:197 js/AttendeeGridPanel.js:500
+#: js/AttendeeGridPanel.js:197
+#: js/AttendeeGridPanel.js:500
 #: Model/Attender.php:48
 msgid "Tentative"
 msgstr "Niepewne"
@@ -152,8 +160,11 @@ msgstr "Usuń uczestnika"
 msgid "Click here to invite another attender..."
 msgstr "Aby zaprosić innego uczestnika, kliknij tutaj..."
 
-#: js/AttendeeGridPanel.js:411 js/AttendeeGridPanel.js:429
-#: js/AttendeeGridPanel.js:442 js/AttendeeGridPanel.js:454 js/Model.js:302
+#: js/AttendeeGridPanel.js:411
+#: js/AttendeeGridPanel.js:429
+#: js/AttendeeGridPanel.js:442
+#: js/AttendeeGridPanel.js:454
+#: js/Model.js:302
 msgid "No Information"
 msgstr "Brak informacji"
 
@@ -169,7 +180,9 @@ msgstr "Obowiązkowe"
 msgid "Optional"
 msgstr "Dobrowolny"
 
-#: js/Calendar.js:36 js/Model.js:68 Setup/setup.xml:4
+#: js/Calendar.js:36
+#: js/Model.js:68
+#: Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "Kalendarz"
@@ -202,10 +215,10 @@ msgstr "Potwierdź aktualizację serii terminów"
 
 #: js/CalendarPanel.js:269
 msgid "Do you really want to update all events of this recurring event series?"
-msgstr ""
-"Czy na pewno chcesz uaktualnić wszystkie terminy z serii terminów okresowych?"
+msgstr "Czy na pewno chcesz uaktualnić wszystkie terminy z serii terminów okresowych?"
 
-#: js/CalendarPanel.js:283 js/MainScreenCenterPanel.js:346
+#: js/CalendarPanel.js:283
+#: js/MainScreenCenterPanel.js:346
 msgid "Delete Event"
 msgstr "Usuń termin"
 
@@ -223,13 +236,14 @@ msgstr "Aktualizuj wyłącznie ten jeden termin"
 
 #: js/CalendarSelectTreePanel.js:43
 msgid "Resources {0}"
-msgstr "Zasoby {0}"
+msgstr "{0} zasobów"
 
 #: js/CalendarSelectWidget.js:121
 msgid "Originally"
 msgstr "Pierwotny kalendarz"
 
-#: js/DaysView.js:90 js/MonthView.js:82
+#: js/DaysView.js:90
+#: js/MonthView.js:82
 msgid "New Event"
 msgstr "Nowy termin"
 
@@ -245,29 +259,36 @@ msgstr "Nieznany kalendarz"
 msgid "{0} {1} o'clock"
 msgstr "godzina {0} {1}"
 
-#: js/EventDetailsPanel.js:172 js/EventEditDialog.js:89 Model/Event.php:192
+#: js/EventDetailsPanel.js:172
+#: js/EventEditDialog.js:89
+#: Model/Event.php:192
 msgid "Summary"
 msgstr "Streszczenie"
 
-#: js/EventDetailsPanel.js:208 js/EventEditDialog.js:101
+#: js/EventDetailsPanel.js:208
+#: js/EventEditDialog.js:101
 msgid "Start Time"
 msgstr "Początek"
 
-#: js/EventDetailsPanel.js:213 js/EventEditDialog.js:116
+#: js/EventDetailsPanel.js:213
+#: js/EventEditDialog.js:116
 msgid "End Time"
 msgstr "Koniec"
 
-#: js/EventDetailsPanel.js:218 Model/Event.php:185
-#, fuzzy
+#: js/EventDetailsPanel.js:218
+#: Model/Event.php:185
 msgid "Blocking"
-msgstr "Blokuje"
+msgstr "Blokowanie"
 
-#: js/EventDetailsPanel.js:223 js/EventEditDialog.js:96
-#: js/ResourcesGridPanel.js:54 Model/Event.php:188
+#: js/EventDetailsPanel.js:223
+#: js/EventEditDialog.js:96
+#: js/ResourcesGridPanel.js:54
+#: Model/Event.php:188
 msgid "Location"
 msgstr "Miejsce"
 
-#: js/EventDetailsPanel.js:227 Model/Event.php:189
+#: js/EventDetailsPanel.js:227
+#: Model/Event.php:189
 msgid "Organizer"
 msgstr "Notes"
 
@@ -281,9 +302,11 @@ msgstr "nie blokuj"
 
 #: js/EventEditDialog.js:157
 msgid "Private"
-msgstr ""
+msgstr "Osobiste"
 
-#: js/EventEditDialog.js:198 js/ResourceEditDialog.js:74 Model/Event.php:187
+#: js/EventEditDialog.js:198
+#: js/ResourceEditDialog.js:74
+#: Model/Event.php:187
 msgid "Description"
 msgstr "Opis"
 
@@ -311,7 +334,8 @@ msgstr "Pokaż zatarte terminy"
 msgid "Day"
 msgstr "Dzień"
 
-#: js/MainScreenCenterPanel.js:139 js/PagingToolbar.js:276
+#: js/MainScreenCenterPanel.js:139
+#: js/PagingToolbar.js:276
 msgid "Week"
 msgstr "Tydzień"
 
@@ -324,12 +348,8 @@ msgid "Please Change Selection"
 msgstr "Proszę zmienić wybór"
 
 #: js/MainScreenCenterPanel.js:318
-msgid ""
-"Your selection contains recurring events. Recuring events must be deleted "
-"seperatly!"
-msgstr ""
-"Twój wybór zawiera terminy okresowe. Terminy okresowe należy usuwać "
-"pojedynczo!"
+msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
+msgstr "Twój wybór zawiera terminy okresowe. Terminy okresowe należy usuwać pojedynczo!"
 
 #: js/MainScreenCenterPanel.js:332
 msgid "Confirm Deletion of Series"
@@ -337,8 +357,7 @@ msgstr "Potwierdź usunięcie serii terminów lub zrezygnuj"
 
 #: js/MainScreenCenterPanel.js:333
 msgid "Do you really want to delete all events of this recurring event series?"
-msgstr ""
-"Czy na pewno chcesz usunąć wszystkie terminy z serii terminów okresowych?"
+msgstr "Czy na pewno chcesz usunąć wszystkie terminy z serii terminów okresowych?"
 
 #: js/MainScreenCenterPanel.js:349
 msgid "Delete whole series"
@@ -359,18 +378,21 @@ msgstr[0] "Czy na pewno chcesz usunąć ten termin?"
 msgstr[1] "Czy na pewno chcesz usunąć {0} zaznaczone terminy?"
 msgstr[2] "Czy na pewno chcesz usunąć {0} zaznaczonych terminów?"
 
-#: js/MainScreenLeftPanel.js:75 js/MonthView.js:87
+#: js/MainScreenLeftPanel.js:75
+#: js/MonthView.js:87
 msgid "WK"
 msgstr "TK"
 
-#: js/Model.js:64 js/Model.js:290
+#: js/Model.js:64
+#: js/Model.js:290
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Termin"
 msgstr[1] "terminy"
 msgstr[2] "terminów"
 
-#: js/Model.js:64 js/Model.js:290
+#: js/Model.js:64
+#: js/Model.js:290
 msgid "Events"
 msgstr "Terminy"
 
@@ -391,13 +413,15 @@ msgstr "Zasoby"
 
 #: js/MonthView.js:92
 msgid "{0} more..."
-msgstr "Jeszcze {0} ..."
+msgstr "i jeszcze {0} ..."
 
-#: js/ResourceEditDialog.js:63 js/ResourcesGridPanel.js:49
+#: js/ResourceEditDialog.js:63
+#: js/ResourcesGridPanel.js:49
 msgid "Email"
 msgstr "E-mail"
 
-#: js/ResourceEditDialog.js:69 js/ResourceEditDialog.js:70
+#: js/ResourceEditDialog.js:69
+#: js/ResourceEditDialog.js:70
 msgid "Is a location"
 msgstr "Jest miejscem"
 
@@ -455,46 +479,54 @@ msgstr "Termin zakończenia musi przypadać po terminie rozpoczęcia"
 
 #: js/RrulePanel.js:309
 msgid "Every {0}. Day"
-msgstr ""
+msgstr "W każdy {0} dzień"
 
 #: js/RrulePanel.js:339
 msgid "Every {0}. Week at"
-msgstr ""
+msgstr "W każdy {0} tydzień o"
 
 #: js/RrulePanel.js:408
 msgid "Every {0}. Month"
-msgstr ""
+msgstr "W każdy {0} miesiąc"
 
-#: js/RrulePanel.js:414 js/RrulePanel.js:463 js/RrulePanel.js:594
+#: js/RrulePanel.js:414
+#: js/RrulePanel.js:463
+#: js/RrulePanel.js:594
 #: js/RrulePanel.js:644
 msgid "at the"
-msgstr " "
+msgstr ""
 
-#: js/RrulePanel.js:433 js/RrulePanel.js:613
+#: js/RrulePanel.js:433
+#: js/RrulePanel.js:613
 msgid "first"
 msgstr "pierwszy(a)"
 
-#: js/RrulePanel.js:434 js/RrulePanel.js:614
+#: js/RrulePanel.js:434
+#: js/RrulePanel.js:614
 msgid "second"
 msgstr "drugi(a)"
 
-#: js/RrulePanel.js:435 js/RrulePanel.js:615
+#: js/RrulePanel.js:435
+#: js/RrulePanel.js:615
 msgid "third"
 msgstr "trzeci(a)"
 
-#: js/RrulePanel.js:436 js/RrulePanel.js:616
+#: js/RrulePanel.js:436
+#: js/RrulePanel.js:616
 msgid "fourth"
 msgstr "czwarty(a)"
 
-#: js/RrulePanel.js:437 js/RrulePanel.js:617
+#: js/RrulePanel.js:437
+#: js/RrulePanel.js:617
 msgid "last"
 msgstr "ostatni(a)"
 
 #: js/RrulePanel.js:587
 msgid "Every {0}. Year"
-msgstr ""
+msgstr "W każdy {0} rok"
 
-#: js/RrulePanel.js:684 js/RrulePanel.js:696
+#: js/RrulePanel.js:684
+#: js/RrulePanel.js:696
 msgid "of"
 msgstr " "
 
@@ -503,10 +535,8 @@ msgid "unknown"
 msgstr "nieznany"
 
 #: Model/Attender.php:313
-msgid ""
-"This contact has been automatically added by the system as an event attender"
-msgstr ""
-"Niniejszy kontakt został dodany automatycznie podczas synchronizacji systemu"
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr "Niniejszy kontakt został dodany automatycznie podczas synchronizacji systemu"
 
 #: Model/Attender.php:203
 msgid "unknown)"
@@ -558,8 +588,7 @@ msgstr "Udostępniaj informację dostępny/zajęty"
 
 #: Preference.php:79
 msgid "Allow all users to view your free/busy information"
-msgstr ""
-"Zezwól wszystkim użytkownikom na czytanie Twojej informacji dostępny/zajęty"
+msgstr "Zezwól wszystkim użytkownikom na czytanie Twojej informacji dostępny/zajęty"
 
 #: Preference.php:82
 msgid "Default Calendar"
@@ -574,15 +603,8 @@ msgid "Get Notification Emails"
 msgstr "Powiadomienie e-mail o terminach"
 
 #: Preference.php:87
-msgid ""
-"The level of actions you want to be notified about. Please note that "
-"organizers will get notifications for all updates including attendee answers "
-"unless this preference is set to \"Never\""
-msgstr ""
-"Wybierz poziom szczegółowości powiadomień o wykonywanych akcjach. Zauważ "
-"proszę, że organizatorzy otrzymują powiadomienia o każdej aktualizacji, "
-"łącznie z odpowiedziami uczestników, o ile niniejsza opcja nie zostanie "
-"ustawiona na wartość \"Never\""
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgstr "Wybierz poziom szczegółowości powiadomień o wykonywanych akcjach. Zauważ proszę, że organizatorzy otrzymują powiadomienia o każdej aktualizacji, łącznie z odpowiedziami uczestników, o ile niniejsza opcja nie zostanie ustawiona na wartość \"Never\""
 
 #: Preference.php:90
 msgid "Send Notifications Emails of own Actions"
@@ -630,171 +652,122 @@ msgstr "Szczegóły terminów"
 
 #~ msgid "Update Event"
 #~ msgstr "Aktualizuj termin"
-
 #~ msgid "Do you want to update the whole series, or just this event"
 #~ msgstr "Czy chcesz zaktualizować całą serię, czy tylko ten jeden termin?"
-
 #~ msgid "Failed not update recurring event series"
 #~ msgstr "Aktualizacja serii terminów okresowych nie powiodła się"
-
 #~ msgid "Failed not update event"
 #~ msgstr "Aktualizacja terminu nie powiodła się"
-
 #~ msgid ""
 #~ "Do you want to delete the whole series, this and all future events of "
 #~ "this series, or just this event"
 #~ msgstr ""
 #~ "Czy chcesz usunąć całą serię terminów, tylko ten oraz wszystkie przyszłe "
 #~ "terminy, czy tylko ten jeden termin?"
-
 #~ msgid "Delete nothing"
 #~ msgstr "Nie usuwaj niczego"
-
 #~ msgid "Every"
 #~ msgstr "Co"
-
 #~ msgid ". Day"
 #~ msgstr "   dzień"
-
 #~ msgid ". Week at"
 #~ msgstr "   tydzień"
-
 #~ msgid ". Month"
 #~ msgstr "   miesiąc"
-
 #~ msgid ". Year"
 #~ msgstr ". rok"
-
 #~ msgid "The follwing attendee are busy at the requested time:"
 #~ msgstr "Następujący uczestnicy są zajęci w zaproponowanym czasie:"
-
 #~ msgid "Resouces {0}"
 #~ msgstr "Zasoby {0}"
-
 #~ msgid "Ignore Scheduling Conflict?"
 #~ msgstr "Czy zignorować konflikt terminów?"
-
 #~ msgid "Here is your requested alarm for to following event:"
 #~ msgstr "To jest przypomnienie ustawione dla następującego terminu:"
-
 #~ msgid "You have been invited to the following event:"
 #~ msgstr "Zaproszono Cię do udziału w następującym zdarzeniu:"
-
 #~ msgid "The following event has been canceled:"
 #~ msgstr "Następujący termin został odwołany:"
-
 #~ msgid "The following event has been rescheduled:"
 #~ msgstr "Następujący termin został przełożony"
-
 #~ msgid "From"
 #~ msgstr "Od"
-
 #~ msgid "To"
 #~ msgstr "Do"
-
 #~ msgid "The following event has been updated:"
 #~ msgstr "Następujący termin został zaktualizowany:"
-
 #~ msgid "Resouce"
 #~ msgstr "Zasób"
-
 #~ msgid "Event description:<br/>"
 #~ msgstr "Opis terminu:<br/>"
-
 #~ msgid ""
 #~ "Do you realy want to update all events of this recuring event series?"
 #~ msgstr "Czy na pewno chcesz zaktualizować wszystkie terminy z tej serii?"
-
 #~ msgid ""
 #~ "Your selection contains recuring events. Recuring events must be deleted "
 #~ "seperatly!"
 #~ msgstr ""
 #~ "Twój wybór zawiera powtarzające się terminy. Należy je usunąć pojedynczo!"
-
 #~ msgid ""
 #~ "Do you realy want to delete all events of this recuring event series?"
 #~ msgstr "Czy na pewno chcesz usunąć wszystkie terminy z tej serii?"
-
 #~ msgid "No recuring rule defined"
 #~ msgstr "Termin się nie powtarza"
-
 #~ msgid "teacher"
 #~ msgstr "nauczyciel"
-
 #~ msgid "Teacher"
 #~ msgstr "Nauczyciel"
-
 #~ msgid "Teacher Account"
 #~ msgstr "Konto nauczyciela"
-
 #~ msgid "Course"
 #~ msgid_plural "Courses"
 #~ msgstr[0] "Kurs"
 #~ msgstr[1] "kursy"
 #~ msgstr[2] "kursów"
-
 #~ msgid "Import course members"
 #~ msgstr "Importuj uczestników kursu"
-
 #~ msgid "Course Name"
 #~ msgstr "Nazwa kursu"
-
 #~ msgid "Course / School Type"
 #~ msgstr "Kurs / Typ szkoły"
-
 #~ msgid "Internet Access"
 #~ msgstr "Internet"
-
 #~ msgid "Fileserver Access"
 #~ msgstr "Serwer plików"
-
 #~ msgid "Members"
 #~ msgstr "Uczestnicy"
-
 #~ msgid "Login"
 #~ msgstr "Login"
-
 #~ msgid "Reset Password"
 #~ msgstr "Zresetuj hasło"
-
 #~ msgid "Set new password"
 #~ msgstr "Ustaw nowe hasło"
-
 #~ msgid "Please enter the new password:"
 #~ msgstr "Proszę wprowadzić nowe hasło:"
-
 #~ msgid "Internet Access On"
 #~ msgstr "Internet włączony"
-
 #~ msgid "Internet Access Off"
 #~ msgstr "Internet wyłączony"
-
 #~ msgid "Fileserver Access On"
 #~ msgstr "Serwer plików włączony"
-
 #~ msgid "Fileserver Access Off"
 #~ msgstr "Serwer plików wyłączony"
-
 #~ msgid "Failed"
 #~ msgstr "Błąd"
-
 #~ msgid "Some error occured while trying to update the courses."
 #~ msgstr "Podczas próby aktualizacji kursów wystąpił błąd."
-
 #~ msgid "Courses"
 #~ msgstr "Kursy"
-
 #~ msgid "All Courses"
 #~ msgstr "Wszystkie kursy"
-
 #~ msgid "record list"
 #~ msgid_plural "record lists"
 #~ msgstr[0] "lista kursów"
 #~ msgstr[1] "listy kursów"
 #~ msgstr[2] "list kursów"
-
 #~ msgid "Course Type"
 #~ msgid_plural "Course Types"
 #~ msgstr[0] "Rodzaj kursu"
 #~ msgstr[1] "rodzaje kursu"
 #~ msgstr[2] "rodzajów kursu"
+
