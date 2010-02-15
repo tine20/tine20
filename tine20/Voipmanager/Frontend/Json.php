@@ -156,16 +156,16 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /**
      * save one phone
-     * -  if $phoneData['id'] is empty the phone gets added, otherwise it gets updated
+     * -  if $recordData['id'] is empty the phone gets added, otherwise it gets updated
      *
-     * @param array $phoneData an array of phone properties
+     * @param array $recordData an array of phone properties
      * @return array
      */
-    public function saveSnomPhone($phoneData)
+    public function saveSnomPhone($recordData)
     {
         // unset if empty
-        if (empty($phoneData['id'])) {
-            unset($phoneData['id']);
+        if (empty($recordData['id'])) {
+            unset($recordData['id']);
         }
 
         // unset some (readonly-)fields 
@@ -177,23 +177,23 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'current_software',
         ); 
         foreach ($unsetFields as $field) {
-            unset($phoneData[$field]);
+            unset($recordData[$field]);
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($phoneData, true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, true));
         
-        $phone = new Voipmanager_Model_Snom_Phone($phoneData);
+        $phone = new Voipmanager_Model_Snom_Phone($recordData);
         
         $phoneSettings = new Voipmanager_Model_Snom_PhoneSettings();
-        $phoneSettings->setFromArray($phoneData);
+        $phoneSettings->setFromArray($recordData);
         
         $phone->lines = new Tinebase_Record_RecordSet(
             'Voipmanager_Model_Snom_Line', 
-            (isset($phoneData['lines']) && !empty($phoneData['lines'])) ? $phoneData['lines'] : array(),
+            (isset($recordData['lines']) && !empty($recordData['lines'])) ? $recordData['lines'] : array(),
             TRUE
         );
         $phone->rights = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', 
-            (isset($phoneData['rights']) && !empty($phoneData['rights'])) ? $phoneData['rights'] : array()
+            (isset($recordData['rights']) && !empty($recordData['rights'])) ? $recordData['rights'] : array()
         );
         $phone->settings = $phoneSettings;
         
