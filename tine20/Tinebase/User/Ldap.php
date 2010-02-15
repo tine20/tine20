@@ -632,7 +632,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     }
     
     /**
-     * generates a new dn
+     * generates dn for new user
      *
      * @param  Tinebase_Model_FullUser $_account
      * @return string
