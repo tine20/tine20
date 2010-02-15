@@ -220,6 +220,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param boolean $_dryRun
      * @param array $_options additional import options
      * @return array
+     * 
+     * @todo    close session? this caused a problem with the unittests ....
      */
     protected function _import($_files, $_importDefinitionId, $_controller, $_options = array())
     {
@@ -228,7 +230,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         
         // extend execution time and close session
         Tinebase_Core::setExecutionLifeTime(1800); // 30 minutes
-        Zend_Session::writeClose(true);
+        //Zend_Session::writeClose(true);
         
         // import files
         $result = array(
