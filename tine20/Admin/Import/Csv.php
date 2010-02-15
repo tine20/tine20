@@ -24,10 +24,11 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
      * import single record (create password if in data)
      *
      * @param array $_recordData
+     * @param array $_result
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _importRecord($_recordData)
+    protected function _importRecord($_recordData, &$_result)
     {
         $record = new $this->_modelName($_recordData, TRUE);
         
@@ -58,7 +59,10 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         if ($record->isValid()) {   
             if (!$this->_options['dryrun']) {
                 $record = $this->_controller->create($record, $password, $password);
+            } else {
+                $_result['results']->addRecord($record);
             }
+            $_result['totalcount']++;
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Record invalid: ' . print_r($record->getValidationErrors(), TRUE));
             throw new Tinebase_Exception_Record_Validation('Imported record is invalid.');
