@@ -61,7 +61,6 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
             responseText: Ext.util.JSON.encode(this.record.get('sambaSAM'))
         };
         this.samRecord = Tine.Admin.samUserBackend.recordReader(response);
-        this.samRecord.data.homeDrive = 'cyz';
         // email user
         var emailResponse = {
             responseText: Ext.util.JSON.encode(this.record.get('emailUser'))
@@ -419,7 +418,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }]
             }, {
                 title: this.app.i18n._('Fileserver'),
-                //disabled: !this.ldapBackend,
+                disabled: !this.ldapBackend,
                 border: false,
                 frame: true,
                 items: [{
