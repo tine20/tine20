@@ -111,17 +111,17 @@ Ext.ux.form.HtmlEditor.Divider = Ext.extend(Ext.util.Observable, {
 Ext.ux.form.HtmlEditor.IndentOutdent = Ext.extend(Ext.ux.form.HtmlEditor.MidasCommand, {
     // private
     midasBtns: ['|', {
-        cmd: 'indent',
-        tooltip: {
-            title: 'Indent Text'
-        },
-        overflowText: 'Indent Text'
-    }, {
         cmd: 'outdent',
         tooltip: {
             title: 'Outdent Text'
         },
         overflowText: 'Outdent Text'
+    }, {
+        cmd: 'indent',
+        tooltip: {
+            title: 'Indent Text'
+        },
+        overflowText: 'Indent Text'
     }]
 });
 /**
