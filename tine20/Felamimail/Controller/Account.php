@@ -302,6 +302,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 'signature',
                 'intelligent_folders',
                 'has_children_support',
+                'delimiter',
+                'ns_personal',
+                'ns_other',
+                'ns_shared',
                 'sort_folders',
                 'last_modified_time',
                 'last_modified_by',
@@ -491,6 +495,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         if (! $_account->id || $_account->id == Felamimail_Model_Account::DEFAULT_ACCOUNT_ID) {
             $result = $_account;
         } else {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating capabilities for account.' . $_account->name);
+            
             $this->_setRightChecks(FALSE);
             if ($_account->delimiter) {
                 $_account->delimiter = substr($_account->delimiter, 0, 1);
@@ -544,9 +550,21 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 $systemAccount->smtp_ssl               = $smtpConfig['ssl'];             
             }
             
-            // create new account
+            // set some default settings if not set
+            if (empty($systemAccount->sent_folder)) {
+                $systemAccount->sent_folder = 'Sent';
+            }
+            if (empty($systemAccount->trash_folder)) {
+                $systemAccount->trash_folder = 'Trash';
+            }
+            if (! isset($this->_imapConfig['sort_folders'])) {
+                $systemAccount->sort_folders = 1;
+            }
+            
+            // create new account and update capabilities
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($systemAccount, 'create');
             $systemAccount = $this->_backend->create($systemAccount);
+            $systemAccount = $this->updateCapabilities($systemAccount);
             $result->addRecord($systemAccount);
             $this->_addedDefaultAccount = TRUE;
             
