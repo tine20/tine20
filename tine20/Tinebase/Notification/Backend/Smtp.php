@@ -70,6 +70,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         
         // set mail generator
         $mail->addHeader('X-MailGenerator', 'Tine 2.0');
+        $mail->addHeader('X-Tine20-Type', 'Notification');
         
         // don't reply to this mail, dear autoresponder ... :)
         $mail->addHeader('Precedence', 'bulk');
