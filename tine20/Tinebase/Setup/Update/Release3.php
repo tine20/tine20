@@ -169,7 +169,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 ->where('application_id <> ?', $tt->getId());
         } catch (Tinebase_Exception_NotFound $tenf) {
             $select = $this->_db->select()
-                ->from(array('container_acl' => SQL_TABLE_PREFIX . 'container_acl'), array('container_acl.id', 'container_acl.account_type', 'container_acl.account_id'))
+                ->from(array('container_acl' => SQL_TABLE_PREFIX . 'container_acl'), array('container_acl.container_id', 'container_acl.id', 'container_acl.account_type', 'container_acl.account_id'))
                 ->where('account_grant = ?', 'readGrant');
         }
         
