@@ -234,6 +234,13 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             dataIndex: 'creation_time',
             renderer: Tine.Tinebase.common.dateTimeRenderer
         }, {
+            id: 'completed',
+            header: this.app.i18n._("Completed"),
+            hidden: true,
+            width: 90,
+            dataIndex: 'completed',
+            renderer: Tine.Tinebase.common.dateTimeRenderer
+        }, {
             id: 'organizer',
             header: this.app.i18n._('Responsible'),
             width: 150,
