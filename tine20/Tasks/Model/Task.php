@@ -157,6 +157,8 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      * @return string
      * 
      * @todo should we get the locale pref for each single user here instead of the default?
+     * @todo move lead stuff to Crm(_Model_Lead)?
+     * @todo add getSummary to Addressbook_Model_Contact for linked contacts?
      */
     public function getNotificationMessage()
     {
@@ -183,7 +185,27 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
             . $translate->_('Description')  . ': ' . $this->description     . "\n"
             . $translate->_('Priority')     . ': ' . $this->priority        . "\n"
             . $translate->_('Status')       . ': ' . $status['status_name'] . "\n"
-            . $translate->_('Percent')      . ': ' . $this->percent         . "%\n";
+            . $translate->_('Percent')      . ': ' . $this->percent         . "%\n\n";
+            
+        // add relations
+        $relations = Tinebase_Relations::getInstance()->getRelations(get_class($this), 'Sql', $this->getId());
+        foreach ($relations as $relation) {
+            if ($relation->related_model == 'Crm_Model_Lead') {
+                $lead = $relation->related_record;
+                $text .= $translate->_('Lead') . ': ' . $lead->lead_name . "\n";
+                $leadRelations = Tinebase_Relations::getInstance()->getRelations(get_class($lead), 'Sql', $lead->getId());
+                foreach ($leadRelations as $leadRelation) {
+                    if ($leadRelation->related_model == 'Addressbook_Model_Contact') {
+                        $contact = $leadRelation->related_record;
+                        $text .= $leadRelation->type . ': ' . $contact->n_fn . ' (' . $contact->org_name . ')' . "\n"
+                            . ((! empty($contact->tel_work)) ?  "\t" . $translate->_('Telephone')   . ': ' . $contact->tel_work   . "\n" : '')
+                            . ((! empty($contact->email)) ?     "\t" . $translate->_('Email')       . ': ' . $contact->email      . "\n" : '');
+                    }
+                }
+            }
+        }
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $text);
             
         return $text;
     }
