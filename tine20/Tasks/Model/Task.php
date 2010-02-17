@@ -187,8 +187,8 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
             . $translate->_('Status')       . ': ' . $status['status_name'] . "\n"
             . $translate->_('Percent')      . ': ' . $this->percent         . "%\n\n";
             
-        // add relations
-        $relations = Tinebase_Relations::getInstance()->getRelations(get_class($this), 'Sql', $this->getId());
+        // add relations (get with ignore acl)
+        $relations = Tinebase_Relations::getInstance()->getRelations(get_class($this), 'Sql', $this->getId(), NULL, array('TASK'), TRUE);
         foreach ($relations as $relation) {
             if ($relation->related_model == 'Crm_Model_Lead') {
                 $lead = $relation->related_record;
