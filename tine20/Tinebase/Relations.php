@@ -155,7 +155,7 @@ class Tinebase_Relations
         );
     
         $result = $this->_backend->getAllRelations($_model, $_backend, $_id, $_degree, $_type);
-        $this->resolveAppRecords($result);
+        $this->resolveAppRecords($result, $_ignoreACL);
             
         return $result;
     }
