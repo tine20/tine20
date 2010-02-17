@@ -43,6 +43,18 @@ Tine.Admin = function() {
         dataPanelType: 'groups', 
         viewRight: 'accounts'
     },{
+        text :translation.gettext('Roles'),
+        cls :"treemain",
+        iconCls: 'action_permissions',
+        allowDrag :false,
+        allowDrop :true,
+        id :"roles",
+        children :[],
+        leaf :null,
+        expanded :true,
+        dataPanelType :"roles",
+        viewRight: 'roles'
+    },{
         text: translation.gettext('Computers'),
         cls: 'treemain',
         iconCls: 'admin-node-computers',
@@ -94,18 +106,6 @@ Tine.Admin = function() {
         expanded :true,
         dataPanelType :"sharedtags",
         viewRight: 'shared_tags'
-    },{
-        text :translation.gettext('Roles'),
-        cls :"treemain",
-        iconCls: 'action_permissions',
-        allowDrag :false,
-        allowDrop :true,
-        id :"roles",
-        children :[],
-        leaf :null,
-        expanded :true,
-        dataPanelType :"roles",
-        viewRight: 'roles'
     }];};
 
 	/**
