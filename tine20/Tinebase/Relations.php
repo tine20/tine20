@@ -62,10 +62,10 @@ class Tinebase_Relations
      * @param  string $_backend      own backend to get relations for
      * @param  string $_id           own id to get relations for 
      * @param  array  $_relationData data for relations to create
-     * @param  bool   $_ignoreAcl    create relations without checking permissions
+     * @param  bool   $_ignoreACL    create relations without checking permissions
      * @return void
      */
-    public function setRelations($_model, $_backend, $_id, $_relationData, $_ignoreAcl=false)
+    public function setRelations($_model, $_backend, $_id, $_relationData, $_ignoreACL = FALSE)
     {
         $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', $_relationData, true);
         // own id sanitising
@@ -78,7 +78,7 @@ class Tinebase_Relations
         $this->_relatedRecordToObject($relations);
         
         // compute relations to add/delete
-        $currentRelations = $this->getRelations($_model, $_backend, $_id, NULL, array(), $_ignoreAcl);
+        $currentRelations = $this->getRelations($_model, $_backend, $_id, NULL, array(), $_ignoreACL);
         $currentIds   = $currentRelations->getArrayOfIds();
         $relationsIds = $relations->getArrayOfIds();
         
@@ -140,17 +140,15 @@ class Tinebase_Relations
      * get all relations of a given record
      * - cache result if caching is activated
      * 
-     * @todo support $_ignoreACL? we would need to implement this in app controllers
-     * 
      * @param  string       $_model     own model to get relations for
      * @param  string       $_backend   own backend to get relations for
      * @param  string|array $_id        own id to get relations for
      * @param  string       $_degree    only return relations of given degree
      * @param  array        $_type      only return relations of given type
-     * @param  bool         $_ignoreAcl get relations without checking permissions
+     * @param  bool         $_ignoreACL get relations without checking permissions
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
-    public function getRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_ignoreAcl=false)
+    public function getRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_ignoreACL = FALSE)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' backend: '$_backend' " 
             // . 'ids: ' . print_r((array)$_id, true)
@@ -165,17 +163,15 @@ class Tinebase_Relations
     /**
      * get all relations of all given records
      * 
-     * @todo support $_ignoreACL? we would need to implement this in app controllers
-     * 
      * @param  string $_model     own model to get relations for
      * @param  string $_backend   own backend to get relations for
      * @param  array  $_ids       own ids to get relations for
      * @param  string $_degree    only return relations of given degree
      * @param  array  $_type      only return relations of given type
-     * @param  bool   $_ignoreAcl get relations without checking permissions
+     * @param  bool   $_ignoreACL get relations without checking permissions
      * @return array  key from $_ids => Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
-    public function getMultipleRelations($_model, $_backend, $_ids, $_degree = NULL, array $_type = array(), $_ignoreAcl=false)
+    public function getMultipleRelations($_model, $_backend, $_ids, $_degree = NULL, array $_type = array(), $_ignoreACL = FALSE)
     {
         // prepare a record set for each given id
         $result = array();
@@ -184,7 +180,7 @@ class Tinebase_Relations
         }
         
         // fetch all relations in a single set
-        $relations = $this->getRelations($_model, $_backend, $_ids, $_degree, $_type, $_ignoreAcl);
+        $relations = $this->getRelations($_model, $_backend, $_ids, $_degree, $_type, $_ignoreACL);
         
         // sort relations into corrensponding sets
         foreach ($relations as $relation) {
@@ -272,12 +268,13 @@ class Tinebase_Relations
      * 
      * NOTE: With this, READ ACL is implicitly checked as non readable records woun't get retuned!
      * 
-     * @param  Tinebase_Record_RecordSet of Tinebase_Model_Relation
+     * @param  Tinebase_Record_RecordSet $_relations of Tinebase_Model_Relation
+     * @param  boolean $_ignoreACL 
      * @return void
      * 
      * @todo    make getApplicationInstance work for tinebase record (Tinebase_Model_User for example)
      */
-    protected function resolveAppRecords($_relations)
+    protected function resolveAppRecords($_relations, $_ignoreACL = FALSE)
     {
         // seperate relations by model
         $modelMap = array();
@@ -301,7 +298,7 @@ class Tinebase_Relations
             
             $getMultipleMethod = 'getMultiple';
             
-            $records = $appController->$getMultipleMethod($relations->related_id);
+            $records = $appController->$getMultipleMethod($relations->related_id, $_ignoreACL);
             
             foreach ($relations as $relation) {
                 $recordIndex    = $records->getIndexById($relation->related_id);
