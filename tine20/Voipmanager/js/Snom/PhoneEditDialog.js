@@ -408,7 +408,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             }]
                         ]
                     }]
-                }, {
+                }/*, {
                     title: this.app.i18n._('redirection'),
                     xtype: 'fieldset',
                     checkboxToggle: false,
@@ -461,7 +461,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                            }]
                         ]  
                     }]
-                }]
+                }*/]
             };
     },
     
