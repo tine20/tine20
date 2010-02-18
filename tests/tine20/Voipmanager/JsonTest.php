@@ -9,6 +9,7 @@
  * @version     $Id$
  * 
  * @todo        add more tests
+ * @todo        use $this->_toDelete in more tests
  */
 
 /**
@@ -31,6 +32,16 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      * @var Voipmanager_Frontend_Json
      */
     protected $_json = array();
+    
+    /**
+     * objects to delete
+     * 
+     * @var array
+     */
+    protected $_toDelete = array(
+        'phone'     => array(),
+        'sippeer'   => array(),
+    );
     
     /**
      * Runs the test methods of this class.
@@ -63,6 +74,19 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {	
+        foreach ($this->_toDelete['phone'] as $phone) {
+            $phoneTemplate = $this->_json->getSnomTemplate($phone['template_id']['value']);
+            $this->_json->deleteSnomPhones(array($phone['id']));
+            $this->_json->deleteSnomLocations(array($phone['location_id']['value']));
+            $this->_json->deleteSnomSettings(array($phoneTemplate['setting_id']['value']));
+            $this->_json->deleteSnomTemplates(array($phone['template_id']['value']));
+            $this->_json->deleteSnomSoftwares(array($phoneTemplate['software_id']['value']));
+        }
+        
+        foreach ($this->_toDelete['sippeer'] as $sippeer) {
+            $this->_json->deleteAsteriskSipPeers(array($sippeer['id']));
+        }
+
         // delete all contexts
         $search = $this->_json->searchAsteriskContexts('', '');
         foreach ($search['results'] as $result) {
@@ -71,7 +95,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
             } catch (Zend_Db_Statement_Exception $zdse) {
                 // integrity constraint
             }
-        }        
+        }
     }
     
     /** Asterisk Context tests **/
@@ -662,6 +686,34 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->deleteSnomTemplates(array($returned['template_id']));
         $this->_json->deleteSnomSoftwares(array($phoneTemplate['software_id']['value']));
         $this->_json->deleteSnomSettings(array($phoneTemplate['setting_id']['value']));
+    }
+    
+/**
+     * test update of snom phone
+     *
+     */
+    public function testCreateSnomPhoneWithLines()
+    {
+        $testPhone = $this->_getSnomPhone();
+        $sipPeer = $this->_json->saveAsteriskSipPeer($this->_getAsteriskSipPeer()->toArray());
+        $this->_toDelete['sippeer'][] = $sipPeer;
+        $sipPeer['context_id'] = $sipPeer['context_id']['value'];
+        $sipPeer['cfi_mode'] = 'number';
+        $snomLine = new Voipmanager_Model_Snom_Line(array(
+            'asteriskline_id'   => $sipPeer,
+            'linenumber'        => 1,
+            'lineactive'        => 1,
+            'idletext'          => 'idle'
+        ));
+        $testPhone['lines'] = array($snomLine->toArray());
+        
+        // save
+        $returned = $this->_json->saveSnomPhone($testPhone);
+        $this->_toDelete['phone'][] = $returned;
+        
+        // check result
+        $this->assertGreaterThan(0, count($returned['lines']));
+        $this->assertEquals($sipPeer, $returned['lines'][0]['asteriskline_id']);
     }
     
     /**

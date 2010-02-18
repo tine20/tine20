@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -128,16 +128,13 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         
         $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->create($_phoneSettings);
         
-        foreach($_phone->lines as $line) {
-            $line->snomphone_id = $phone->getId();
-            $addedLine = Voipmanager_Controller_Snom_Line::getInstance()->create($line);
-        }
-        
+        $this->_createLines($phone, $_phone->lines);
+      
         // save phone rights
         if (isset($phone->rights)) {
             $this->_backend->setPhoneRights($phone);
         }        
-      
+        
         return $this->get($phone->getId());
     }
     
@@ -193,17 +190,13 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         }
         
         Voipmanager_Controller_Snom_Line::getInstance()->deletePhoneLines($phone->getId());
-        
-        foreach($_phone->lines as $line) {
-            $line->snomphone_id = $phone->getId();
-            $addedLine = Voipmanager_Controller_Snom_Line::getInstance()->create($line);
-        }
+        $this->_createLines($phone, $_phone->lines);
         
         // save phone rights
         if (isset($_phone->rights)) {
             $this->_backend->setPhoneRights($_phone);
         }
-              
+        
         return $this->get($phone->getId());
     }    
     
@@ -246,6 +239,27 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         foreach ($_phone->rights as &$right) {
             $user = Tinebase_User::getInstance()->getUserById($right->account_id);
             $right->account_name = $user->accountDisplayName;
+        }
+    }
+    
+    /**
+     * create lines / sippeers
+     * 
+     * @param Voipmanager_Model_Snom_Phone $_phone
+     * @param array $_lines
+     * @return void
+     */
+    protected function _createLines(Voipmanager_Model_Snom_Phone $_phone, $_lines)
+    {
+        foreach($_lines as $line) {
+            $line->snomphone_id = $_phone->getId();
+            if (is_array($line->asteriskline_id)) {
+                $sippeer = new Voipmanager_Model_Asterisk_SipPeer($line->asteriskline_id);
+                $sippeer = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->update($sippeer);
+                $line->asteriskline_id = $sippeer->getId();
+            }
+            
+            $addedLine = Voipmanager_Controller_Snom_Line::getInstance()->create($line);
         }
     }
 }

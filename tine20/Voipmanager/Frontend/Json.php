@@ -52,9 +52,9 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     'records'   => $this->searchSnomLocations('', '')
                 );
                 
-                // add names to lines
+                // resolve lines
                 foreach ($recordArray['lines'] as &$line) {
-                    $line['name'] = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($line['asteriskline_id'])->name;
+                    $line['asteriskline_id'] = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($line['asteriskline_id'])->toArray();
                 }
                 
                 break;
