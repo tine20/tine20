@@ -53,6 +53,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     recordClass: null,
     
     /**
+     * record class
+     * @cfg {} recordClass
+     */
+    searchRecordClass: null,
+    
+    /**
      * @type Ext.Menu
      * @property contextMenu
      */
@@ -169,6 +175,37 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             
             this.contextMenu.showAt(e.getXY());
         }, this);
+    },
+    
+    /**
+     * @return {Tine.Tinebase.widgets.form.RecordPickerComboBox}
+     */
+    getSearchCombo: function() {
+        return new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+            recordStore: this.store,
+            blurOnSelect: true,
+            recordClass: (this.searchRecordClass !== null) ? this.searchRecordClass : this.recordClass,
+            newRecordClass: this.recordClass,
+            emptyText: _('Search for records ...'),
+            onSelect: this.onAddRecordFromCombo
+        });        
+    },
+    
+    /**
+     * @param {Record} recordToAdd
+     * 
+     * TODO make reset work correctly -> show emptyText again
+     */
+    onAddRecordFromCombo: function(recordToAdd) {
+        var record = new this.newRecordClass(recordToAdd, recordToAdd.id);
+        
+        // check if already in
+        if (! this.recordStore.getById(record.id)) {
+            this.recordStore.add([record]);
+        }
+        this.collapse();
+        this.clearValue();
+        this.reset();
     },
     
     /**
