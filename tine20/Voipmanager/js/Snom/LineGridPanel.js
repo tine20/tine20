@@ -50,15 +50,17 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
      * @private
      */
     initComponent: function() {
+        /*
         this.checkColumn = new Ext.ux.grid.CheckColumn({
            header: this.app.i18n._('Line active'),
            dataIndex: 'lineactive',
            width: 50
         });
+        */
         
         this.recordClass = Tine.Voipmanager.Model.SnomLine;
         this.searchRecordClass = Tine.Voipmanager.Model.AsteriskSipPeer;
-        this.configColumns = this.checkColumn;
+        //this.configColumns = this.checkColumn;
         
         Tine.Voipmanager.LineGridPanel.superclass.initComponent.call(this);
     },
@@ -116,28 +118,71 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
     /**
      * @return Ext.grid.ColumnModel
      * @private
+     * 
+     * TODO add more editors
      */
     getColumnModel: function() {
+        var genericComboConfig = {
+            typeAhead: true,
+            triggerAction: 'all',
+            lazyRender:true,
+            triggerAction: 'all',
+            allowBlank: false,
+            editable: true,
+            store: [
+                ['off', this.app.i18n._('off')],
+                ['voicemail', this.app.i18n._('voicemail')]
+            ]
+        };
+
+        var cfiModeConfig = genericComboConfig;
+        cfiModeConfig.onSelect = function(record) {
+            //console.log(record);
+            // TODO save in corresponding field (if off/voicemail -> mode / if number -> number and mode -> number) 
+        };
         
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true
             },
             columns:  [
+                {id: 'linenumber',  header: '', dataIndex: 'linenumber', width: 20},
                 {id: 'name', header: this.app.i18n._('Line'), dataIndex: 'asteriskline_id', width: 100, renderer: this.nameRenderer},
-                {id: 'idletext', header: this.app.i18n._('Idle Text'), dataIndex: 'idletext', width: 100, editor: new Ext.form.TextField({
+                {id: 'idletext', header: this.app.i18n._('Idle Text'), dataIndex: 'idletext', width: 80, editor: new Ext.form.TextField({
                     allowBlank: false,
                     allowNegative: false,
                     maxLength: 60
                 })},
-                {id: 'linenumber', header: this.app.i18n._('Line Number'), dataIndex: 'linenumber', width: 100},
-                this.checkColumn
+                {id: 'cfi_mode',    header: this.app.i18n._('Forward'), dataIndex: 'asteriskline_id', width: 80, renderer: this.forwardRenderer, 
+                    editor: new Ext.form.ComboBox(cfiModeConfig)},
+                {id: 'cfb_mode',    header: this.app.i18n._('Forward Busy'), dataIndex: 'asteriskline_id', width: 80, renderer: this.busyRenderer},
+                {id: 'cfd_mode',    header: this.app.i18n._('Forward No Answer'), dataIndex: 'asteriskline_id', width: 80, renderer: this.noanswerRenderer},
+                {id: 'cfd_time',    header: this.app.i18n._('No Answer Time'), dataIndex: 'asteriskline_id', width: 80, renderer: this.noanswerTimeRenderer}
+                //this.checkColumn
             ]
         });
     },
     
     nameRenderer: function(value) {
         return value.name;
+    },
+    
+    // TODO generalize this
+    // TODO show number or mode depending on mode
+    forwardRenderer: function(value) {
+        return value.cfi_mode;
+    },
+
+    busyRenderer: function(value) {
+        return value.cfb_mode;
+    },
+
+    noanswerRenderer: function(value) {
+        return value.cfd_mode;
+    },
+
+    noanswerTimeRenderer: function(value) {
+        return value.cfd_time;
     }
 });
 
