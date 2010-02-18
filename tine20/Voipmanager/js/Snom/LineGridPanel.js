@@ -57,6 +57,7 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
         });
         
         this.recordClass = Tine.Voipmanager.Model.SnomLine;
+        this.searchRecordClass = Tine.Voipmanager.Model.AsteriskSipPeer;
         this.configColumns = this.checkColumn;
         
         Tine.Voipmanager.LineGridPanel.superclass.initComponent.call(this);
@@ -69,64 +70,49 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
         
         Tine.Voipmanager.LineGridPanel.superclass.initActionsAndToolbars.call(this);
         
-        /*
-        this.accountTypeSelector = this.getAccountTypeSelector();
-        this.contactSearchCombo = this.getContactSearchCombo();
-        this.groupSearchCombo = this.getGroupSearchCombo();
-        
-        var items = [];
-        switch (this.selectType) {
-            case 'both':
-                items = items.concat([this.contactSearchCombo, this.groupSearchCombo]);
-                if (this.selectTypeDefault == 'user') {
-                    this.groupSearchCombo.hide();
-                } else {
-                    this.contactSearchCombo.hide();
-                }
-                break;
-            case 'user':
-                items = this.contactSearchCombo;
-                break;
-            case 'group':
-                items = this.groupSearchCombo;
-                break;
-        }
-        
+        this.searchCombo = this.getSearchCombo();
+
         this.comboPanel = new Ext.Panel({
             layout: 'hfit',
             border: false,
-            items: items,
+            items: this.searchCombo,
             columnWidth: 1
         });
         
         this.tbar = new Ext.Toolbar({
             items: [
-                this.accountTypeSelector,
                 this.comboPanel
             ],
             layout: 'column'
         });
-        */
     },
     
     /**
-     * @return {Tine.Tinebase.widgets.form.RecordPickerComboBox}
+     * @param {Record} recordToAdd
+     * 
+     * TODO make reset work correctly -> show emptyText again
      */
-    getSearchCombo: function() {
+    onAddRecordFromCombo: function(recordToAdd) {
+        
+        var recordData = {
+            asteriskline_id: recordToAdd.data,
+            linenumber: this.recordStore.getCount()+1,
+            lineactive: 1
+        };
+        var record = new this.newRecordClass(recordData);
+        
+        this.recordStore.add([record]);
+        
+        // TODO check if already in
         /*
-        return new Tine.Tinebase.widgets.form.RecordPickerComboBox({
-            //anchor: '100%',
-            accountsStore: this.store,
-            blurOnSelect: true,
-            recordClass: Tine.Tinebase.Model.Group,
-            newRecordClass: this.recordClass,
-            recordPrefix: this.recordPrefix,
-            emptyText: _('Search for groups ...'),
-            onSelect: this.onAddRecordFromCombo
-        });        
+        if (! this.recordStore.getById(record.id)) {
+        }
         */
+        this.collapse();
+        this.clearValue();
+        this.reset();
     },
-
+    
     /**
      * @return Ext.grid.ColumnModel
      * @private
