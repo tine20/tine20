@@ -7,7 +7,9 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        perhaps we should load the settings only if settings tab is clicked
+ * TODO         perhaps we should load the settings only if settings tab is clicked
+ * TODO         remove deprecated code
+ * TODO         don't use json stores for lines/rights
  */
  
 Ext.namespace('Tine.Voipmanager');
@@ -35,6 +37,11 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @property {Ext.data.JsonStore}
      */
     linesStore: null,
+
+    /**
+     * @property {Tine.Voipmanager.LineGridPanel}
+     */
+    linesGrid: null,
     
     /**
      * max lines (depending on phone model)
@@ -52,6 +59,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     
     /**
      * @private
+     * 
      */
     initComponent: function() {
         
@@ -83,18 +91,13 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         this.rightsStore.loadData({results: rights});
         
         var lines = this.record.get('lines') || [];
-        // convert string '0' to boolean false
-        // TODO try to do this in a generic way (in Ext.ux.grid.CheckColumn?)
-        for (var i = 0; i < lines.length; i++) {
-            if (lines[i].lineactive == '0') {
-                lines[i].lineactive = false;
-            }
-        }
         this.linesStore.loadData({results: lines});
 
+        /* @deprecated
         if (this.record.get('current_model')) {
         	this.addEmptyLines(this.getMaxLines(this.record.get('current_model')));
         }
+        */
         
         if (this.record.get('setting_id')) {
             this.getWriteableFields(this.record.get('setting_id'));
@@ -104,7 +107,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
     
     /**
-     * record update (push rights into record property)
+     * record update (push rights and lines into record property)
      */
     onRecordUpdate: function() {
         Tine.Voipmanager.SnomPhoneEditDialog.superclass.onRecordUpdate.call(this);
@@ -120,11 +123,8 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         
         var lines = [];
         this.linesStore.each(function(_record){
-        	if (_record.data.asteriskline_id) {
-                lines.push(_record.data);
-        	}
+            lines.push(_record.data);
         });
-        
         this.record.set('lines', lines);
     },
     
@@ -134,7 +134,9 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @todo this data is already in some data array in voipmanager.js
      * @param {} _val
      * @return {}
+     * @deprecated
      */
+    /*
     getMaxLines: function(_val) {      
         var _data = new Object();
         _data.snom300 = '4';
@@ -146,12 +148,15 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             return _data;
         }        
         return _data[_val];
-    },    
+    },
+    */    
     
     /**
      * 
      * @param {} maxLines
+     * @deprecated
      */
+    /*
     addEmptyLines: function(maxLines) {
         while (this.linesStore.getCount() < maxLines) {
             _snomRecord = new Tine.Voipmanager.Model.SnomLine({
@@ -166,6 +171,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             this.linesStore.add(_snomRecord);
         }                                            	
     },
+    */
     
     /**
      * 
@@ -234,7 +240,11 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @param {} _combo
      * @param {} _record
      * @param {} _index
+     * 
+     * TODO remove lines?
+     * @deprecated ?
      */
+    /*
     onModelChange: function(_combo, _record, _index) {
 
     	while (this.linesStore.getCount() > this.getMaxLines(_record.data.id) ) {
@@ -245,6 +255,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         // add empty rows to grid
         this.addEmptyLines(this.getMaxLines(_record.data.id));
     },
+    */
     
     /**
      * returns dialog
@@ -252,6 +263,12 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * NOTE: when this method gets called, all initalisation is done.
      */
     getFormItems: function() {
+        this.linesGrid = new Tine.Voipmanager.LineGridPanel({
+            title: this.app.i18n._('Lines'),
+            store: this.linesStore,
+            app: this.app
+        });
+        
         return {
             xtype: 'tabpanel',
             border: false,
@@ -259,9 +276,10 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             activeTab: 0,
             deferredRender: false,
             items:[
-                this.getPhonePanel(), 
+                this.getPhonePanel(),
+                this.linesGrid,
+                //this.getLinesPanel(),
                 this.getSettingsPanel(),
-                this.getLinesPanel(),
                 this.getRightsPanel()
             ]
         };
@@ -301,10 +319,12 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         triggerAction: 'all',
                         editable: false,
                         forceSelection: true,
+                        /*
                         listeners: {
                         	scope: this,
                             select: this.onModelChange
                         },
+                        */
                         store: Tine.Voipmanager.Data.loadPhoneModelData()
                     }], [{
                         xtype: 'textfield',
@@ -616,7 +636,9 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * returns the lines panel (thrid panel)
      * 
      * @return {Object}
+     * @deprecated
      */
+    /*
     getLinesPanel: function() {
         var linesText = [];
         var linesSIPCombo = [];
@@ -711,6 +733,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             ]
         };
     },
+    */
     
     /**
      * returns right panel (fourth panel)
