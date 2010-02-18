@@ -83,17 +83,11 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
     autoExpandColumn: 'name',
     
     /**
-     * @cfg {Array} Array of column's config objects where the config options are in
-     */
-    configColumns: null,
-    
-    /**
      * @private
      */
     initComponent: function() {
         this.recordPrefix = (this.hasAccountPrefix) ? 'account_' : '';
         this.recordClass = (this.recordClass !== null) ? this.recordClass : Tine.Tinebase.Model.Account;
-        this.configColumns = (this.configColumns !== null) ? this.configColumns : [];
         
         Tine.widgets.account.PickerGridPanel.superclass.initComponent.call(this);
     },

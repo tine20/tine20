@@ -31,7 +31,7 @@ Ext.namespace('Tine.widgets.grid');
  * @constructor
  * Create a new Tine.widgets.grid.PickerGridPanel
  */
-Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
+Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * @cfg {bool}
      * enable bottom toolbar
@@ -65,10 +65,16 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.GridPanel, {
     contextMenuItems: null,
     
     /**
+     * @cfg {Array} Array of column's config objects where the config options are in
+     */
+    configColumns: null,
+    
+    /**
      * @private
      */
     initComponent: function() {
         this.contextMenuItems = (this.contextMenuItems !== null) ? this.contextMenuItems : [];
+        this.configColumns = (this.configColumns !== null) ? this.configColumns : [];
         
         this.initStore();
         this.initActionsAndToolbars();
