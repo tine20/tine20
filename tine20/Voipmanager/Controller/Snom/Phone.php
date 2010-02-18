@@ -74,18 +74,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
     public function get($_id)
     {
         $phone = $this->_backend->get($_id);
-        
-        $filter = new Voipmanager_Model_Snom_LineFilter(array(
-            array('field' => 'snomphone_id', 'operator' => 'equals', 'value' => $phone->id)
-        ));
-        $phone->lines  = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
-        $phone->rights = $this->_backend->getPhoneRights($phone->id);
-        
-        // add accountDisplayName
-        foreach ($phone->rights as &$right) {
-            $user = Tinebase_User::getInstance()->getUserById($right->account_id);
-            $right->account_name = $user->accountDisplayName;
-        }
+        $this->_resolveRightsAndLines($phone);
         
         return $phone;    
     }
@@ -99,18 +88,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
     public function getByMacAddress($_macAddress)
     {
         $phone = $this->_backend->getByMacAddress($_macAddress);
-        
-        $filter = new Voipmanager_Model_Snom_LineFilter(array(
-            array('field' => 'snomphone_id', 'operator' => 'equals', 'value' => $phone->id)
-        ));
-        $phone->lines  = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
-        $phone->rights = $this->_backend->getPhoneRights($phone->id);
-        
-        // add accountDisplayName
-        foreach ($phone->rights as &$right) {
-            $user = Tinebase_User::getInstance()->getUserById($right->account_id);
-            $right->account_name = $user->accountDisplayName;
-        }
+        $this->_resolveRightsAndLines($phone);
         
         return $phone;    
     }
@@ -247,6 +225,27 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
             $phone->http_client_info_sent = 0;
             
             $phone = $this->_backend->update($phone);
+        }
+    }
+    
+    /**
+     * resolve phone rights and lines
+     * 
+     * @param Voipmanager_Model_Snom_Phone $_phone
+     * @return void
+     */
+    protected function _resolveRightsAndLines(Voipmanager_Model_Snom_Phone $_phone)
+    {
+        $filter = new Voipmanager_Model_Snom_LineFilter(array(
+            array('field' => 'snomphone_id', 'operator' => 'equals', 'value' => $_phone->id)
+        ));
+        $_phone->lines  = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
+        $_phone->rights = $this->_backend->getPhoneRights($_phone->id);
+        
+        // add accountDisplayName
+        foreach ($_phone->rights as &$right) {
+            $user = Tinebase_User::getInstance()->getUserById($right->account_id);
+            $right->account_name = $user->accountDisplayName;
         }
     }
 }
