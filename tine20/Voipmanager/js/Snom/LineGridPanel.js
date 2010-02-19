@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * @version     $Id$
  *
  */
 
@@ -21,6 +21,8 @@ Ext.namespace('Tine.Voipmanager');
  * 
  * <p>Line Picker GridPanel</p>
  * <p><pre>
+ * TODO         check max number of lines ?
+ * TODO         remove lineactive stuff / checkcolumn ?
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
