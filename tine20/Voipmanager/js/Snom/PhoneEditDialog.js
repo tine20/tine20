@@ -8,7 +8,6 @@
  * @version     $Id$
  *
  * TODO         perhaps we should load the settings only if settings tab is clicked
- * TODO         remove deprecated code
  * TODO         don't use json stores for lines/rights
  */
  
@@ -101,12 +100,6 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         }
         this.linesStore.loadData({results: lines});
 
-        /* @deprecated
-        if (this.record.get('current_model')) {
-        	this.addEmptyLines(this.getMaxLines(this.record.get('current_model')));
-        }
-        */
-        
         if (this.record.get('setting_id')) {
             this.getWriteableFields(this.record.get('setting_id'));
         }
@@ -141,51 +134,6 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         });
         this.record.set('lines', lines);
     },
-    
-    /**
-     * max lines
-     * 
-     * @todo this data is already in some data array in voipmanager.js
-     * @param {} _val
-     * @return {}
-     * @deprecated
-     */
-    /*
-    getMaxLines: function(_val) {      
-        var _data = new Object();
-        _data.snom300 = '4';
-        _data.snom320 = '12';
-        _data.snom360 = '12';
-        _data.snom370 = '12';   
-         
-        if(!_val) {
-            return _data;
-        }        
-        return _data[_val];
-    },
-    */    
-    
-    /**
-     * 
-     * @param {} maxLines
-     * @deprecated
-     */
-    /*
-    addEmptyLines: function(maxLines) {
-        while (this.linesStore.getCount() < maxLines) {
-            _snomRecord = new Tine.Voipmanager.Model.SnomLine({
-                'asteriskline_id':'',
-                'id':'',
-                'idletext':'',
-                'lineactive':0,
-                'linenumber':this.linesStore.getCount()+1,
-                'snomphone_id':'',
-                'name': ''
-            });         
-            this.linesStore.add(_snomRecord);
-        }                                            	
-    },
-    */
     
     /**
      * 
@@ -249,29 +197,6 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
     
     /**
-     * on model change
-     * 
-     * @param {} _combo
-     * @param {} _record
-     * @param {} _index
-     * 
-     * TODO remove lines?
-     * @deprecated ?
-     */
-    /*
-    onModelChange: function(_combo, _record, _index) {
-
-    	while (this.linesStore.getCount() > this.getMaxLines(_record.data.id) ) {
-            var _id = this.linesStore.getCount();
-            this.linesStore.remove(this.linesStore.getAt((_id-1)));
-        }
-  
-        // add empty rows to grid
-        this.addEmptyLines(this.getMaxLines(_record.data.id));
-    },
-    */
-    
-    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
@@ -292,7 +217,6 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             items:[
                 this.getPhonePanel(),
                 this.linesGrid,
-                //this.getLinesPanel(),
                 this.getSettingsPanel(),
                 this.getRightsPanel()
             ]
@@ -333,12 +257,6 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         triggerAction: 'all',
                         editable: false,
                         forceSelection: true,
-                        /*
-                        listeners: {
-                        	scope: this,
-                            select: this.onModelChange
-                        },
-                        */
                         store: Tine.Voipmanager.Data.loadPhoneModelData()
                     }], [{
                         xtype: 'textfield',
@@ -422,60 +340,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             }]
                         ]
                     }]
-                }/*, {
-                    title: this.app.i18n._('redirection'),
-                    xtype: 'fieldset',
-                    checkboxToggle: false,
-                    autoHeight: true,
-                    items: [{
-                        xtype: 'columnform',
-                        border: false,
-                        formDefaults: {
-                            columnWidth: 0.333,
-                            anchor: '100%',
-                            labelSeparator: ''
-                        },
-                        items: [
-                            [{ 
-                                xtype: 'combo',
-                                fieldLabel: this.app.i18n._('redirect_event'),
-                                name: 'redirect_event',
-                                mode: 'local',
-                                triggerAction: 'all',
-                                editable: false,
-                                forceSelection: true,
-                                value: 'all',
-                                listeners: {
-                                    select: function(_combo, _record, _index) {
-                                        if (_record.data.id == 'time') {
-                                            Ext.getCmp('redirect_time').enable();
-                                        }
-                                        
-                                        if(_record.data.id != 'time') {                                                   
-                                            Ext.getCmp('redirect_time').disable();
-                                        }
-                                    }
-                                },
-                                store: [
-                                    ['all', this.app.i18n._('all')],
-                                    ['busy', this.app.i18n._('busy')],
-                                    ['none', this.app.i18n._('none')],
-                                    ['time', this.app.i18n._('time')]
-                                ]
-                            }, {
-                                xtype: 'textfield',
-                                fieldLabel: this.app.i18n._('redirect_number'),
-                                name: 'redirect_number'
-                            }, {
-                                xtype: 'numberfield',
-                                fieldLabel: this.app.i18n._('redirect_time'),
-                                name: 'redirect_time',
-                                id: 'redirect_time',
-                                anchor: '100%'                                                                     
-                           }]
-                        ]  
-                    }]
-                }*/]
+                }]
             };
     },
     
@@ -645,109 +510,6 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             ]
         };
     },
-    
-    /**
-     * returns the lines panel (thrid panel)
-     * 
-     * @return {Object}
-     * @deprecated
-     */
-    /*
-    getLinesPanel: function() {
-        var linesText = [];
-        var linesSIPCombo = [];
-        var linesIdleText = [];
-        var linesActive = [];
-        
-        var checkColumn = new Ext.ux.grid.CheckColumn({
-           header: this.app.i18n._('lineactive'),
-           dataIndex: 'lineactive',
-           width: 25
-        });         
-        
-        var combo = new Ext.form.ComboBox({
-            typeAhead: true,
-            triggerAction: 'all',
-            lazyRender:true,
-            displayField:'name',
-            valueField:'id',
-            anchor:'98%',                    
-            triggerAction: 'all',
-            allowBlank: false,
-            editable: false,
-            store: new Ext.data.Store({
-                fields: Tine.Voipmanager.Model.AsteriskSipPeer,
-                proxy: Tine.Voipmanager.AsteriskSipPeerBackend,
-                remoteSort: true,
-                sortInfo: {field: 'name', dir: 'ASC'}
-            })
-        });
-
-        var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'id', header: 'line', dataIndex: 'id', width: 20, hidden: true },
-            {
-                resizable: true,
-                id: 'sipCombo',
-                header: this.app.i18n._('sipCombo'),
-                dataIndex: 'asteriskline_id',
-                width: 80,
-                editor: combo,
-                renderer: function (value, b, record) {
-                    if (record.data && record.data.name) {
-                    	return record.data.name;
-                    } else {
-                    	if(combo.store.getById(value)) {
-                            return combo.store.getById(value).get('name');
-                    	} else {
-                    		return '';
-                    	}
-                    }
-                }
-            },
-            {
-                resizable: true,
-                id: 'idletext',
-                header: this.app.i18n._('Idle Text'),
-                dataIndex: 'idletext',
-                width: 40,
-                editor: new Ext.form.TextField({
-                   allowBlank: false,
-                   allowNegative: false,
-                   maxLength: 60
-               })  
-            },
-            checkColumn
-        ]); 
-        
-        var gridPanel = new Ext.grid.EditorGridPanel({
-            region: 'center',
-            id: 'Voipmanager_PhoneLines_Grid',
-            store: this.linesStore,
-            cm: columnModel,
-            autoSizeColumns: false,
-            plugins:checkColumn,
-            clicksToEdit:1,
-            enableColLock:false,
-            loadMask: true,
-            autoExpandColumn: 'idleText',
-            border: false,
-            view: new Ext.grid.GridView({
-                autoFill: true,
-                forceFit:true,
-                ignoreAdd: true,
-                emptyText: 'No software to display'
-            })            
-        });
-
-    	return {
-            title: this.app.i18n._('Lines'),
-            layout: 'fit',
-            items: [
-                gridPanel
-            ]
-        };
-    },
-    */
     
     /**
      * returns right panel (fourth panel)
