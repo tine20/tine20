@@ -114,7 +114,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         var p = options.params;
         
         p.method = this.appName + '.search' + this.modelName + 's';
-        p.filter = filter;
+        p.filter = (filter) ? filter : [];
         p.paging = paging;
         
         options.beforeSuccess = function(response) {
