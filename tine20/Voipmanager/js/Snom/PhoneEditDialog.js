@@ -92,7 +92,6 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         // copy fields from asteriskline_id for lines grid
         var lines = this.record.get('lines') || [];
         var fields = ['cfi_mode','cfi_number','cfb_mode','cfb_number','cfd_mode','cfd_number','cfd_time' ];
-        console.log(lines);
         for (var j=0; j < lines.length; j++) {
             for (var i=0; i < fields.length; i++) {
                 lines[j][fields[i]] = lines[j].asteriskline_id[fields[i]];
