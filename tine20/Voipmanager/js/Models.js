@@ -261,7 +261,14 @@ Tine.Voipmanager.Model.SnomLineArray = Tine.Tinebase.Model.genericFields.concat(
     {name: 'idletext'},
     {name: 'lineactive', type: 'boolean'},
     {name: 'linenumber'},
-    {name: 'snomphone_id'}
+    {name: 'snomphone_id'},
+    {name: 'cfi_mode'},
+    {name: 'cfi_number'},
+    {name: 'cfb_mode'},
+    {name: 'cfb_number'},
+    {name: 'cfd_mode'},
+    {name: 'cfd_number'},
+    {name: 'cfd_time'}    
 ]);
 /**
  * @type {Tine.Tinebase.data.Record}

@@ -118,8 +118,6 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
     /**
      * @return Ext.grid.ColumnModel
      * @private
-     * 
-     * TODO add more editors
      */
     getColumnModel: function() {
         var genericComboConfig = {
@@ -128,61 +126,56 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
             lazyRender:true,
             triggerAction: 'all',
             allowBlank: false,
-            editable: true,
+            editable: false,
+            blurOnSelect: true,
             store: [
-                ['off', this.app.i18n._('off')],
-                ['voicemail', this.app.i18n._('voicemail')]
+                ['off', 'off'],
+                ['number', 'number'],
+                ['voicemail', 'voicemail']
             ]
         };
 
-        var cfiModeConfig = genericComboConfig;
-        cfiModeConfig.onSelect = function(record) {
-            //console.log(record);
-            // TODO save in corresponding field (if off/voicemail -> mode / if number -> number and mode -> number) 
-        };
-        
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true
             },
             columns:  [
                 {id: 'linenumber',  header: '', dataIndex: 'linenumber', width: 20},
-                {id: 'name', header: this.app.i18n._('Line'), dataIndex: 'asteriskline_id', width: 100, renderer: this.nameRenderer},
+                {id: 'name', header: this.app.i18n._('Line'), dataIndex: 'asteriskline_id', width: 120, renderer: this.nameRenderer},
                 {id: 'idletext', header: this.app.i18n._('Idle Text'), dataIndex: 'idletext', width: 80, editor: new Ext.form.TextField({
                     allowBlank: false,
                     allowNegative: false,
                     maxLength: 60
                 })},
-                {id: 'cfi_mode',    header: this.app.i18n._('Forward'), dataIndex: 'asteriskline_id', width: 80, renderer: this.forwardRenderer, 
-                    editor: new Ext.form.ComboBox(cfiModeConfig)},
-                {id: 'cfb_mode',    header: this.app.i18n._('Forward Busy'), dataIndex: 'asteriskline_id', width: 80, renderer: this.busyRenderer},
-                {id: 'cfd_mode',    header: this.app.i18n._('Forward No Answer'), dataIndex: 'asteriskline_id', width: 80, renderer: this.noanswerRenderer},
-                {id: 'cfd_time',    header: this.app.i18n._('No Answer Time'), dataIndex: 'asteriskline_id', width: 80, renderer: this.noanswerTimeRenderer}
+                {id: 'cfi_mode',    header: this.app.i18n._('Forward'), dataIndex: 'cfi_mode', width: 70, editor: new Ext.form.ComboBox(genericComboConfig)},
+                {id: 'cfi_number',    header: this.app.i18n._('Forward #'), dataIndex: 'cfi_number', width: 90, editor: new Ext.form.TextField({
+                    allowBlank: true,
+                    allowNegative: false,
+                    maxLength: 60
+                })},
+                {id: 'cfb_mode',    header: this.app.i18n._('Forward Busy'), dataIndex: 'cfb_mode', width: 70, editor: new Ext.form.ComboBox(genericComboConfig)},
+                {id: 'cfb_number',    header: this.app.i18n._('Busy #'), dataIndex: 'cfb_number', width: 90, editor: new Ext.form.TextField({
+                    allowBlank: true,
+                    allowNegative: false,
+                    maxLength: 60
+                })},
+                {id: 'cfd_mode',    header: this.app.i18n._('Forward No Answer'), dataIndex: 'cfd_mode', width: 70, editor: new Ext.form.ComboBox(genericComboConfig)},
+                {id: 'cfd_number',    header: this.app.i18n._('No Answer #'), dataIndex: 'cfd_number', width: 90, editor: new Ext.form.TextField({
+                    allowBlank: true,
+                    allowNegative: false,
+                    maxLength: 60
+                })},
+                {id: 'cfd_time',    header: this.app.i18n._('No Answer Time'), dataIndex: 'cfd_time', width: 80, editor: new Ext.form.TextField({
+                    allowBlank: true,
+                    allowNegative: false,
+                    maxLength: 60
+                })}
                 //this.checkColumn
             ]
         });
     },
     
     nameRenderer: function(value) {
-        return value.name;
-    },
-    
-    // TODO generalize this
-    // TODO show number or mode depending on mode
-    forwardRenderer: function(value) {
-        return value.cfi_mode;
-    },
-
-    busyRenderer: function(value) {
-        return value.cfb_mode;
-    },
-
-    noanswerRenderer: function(value) {
-        return value.cfd_mode;
-    },
-
-    noanswerTimeRenderer: function(value) {
-        return value.cfd_time;
+        return (value && value.name) ? value.name : '';
     }
 });
-

@@ -90,7 +90,15 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         var rights = this.record.get('rights') || [];
         this.rightsStore.loadData({results: rights});
         
+        // copy fields from asteriskline_id for lines grid
         var lines = this.record.get('lines') || [];
+        var fields = ['cfi_mode','cfi_number','cfb_mode','cfb_number','cfd_mode','cfd_number','cfd_time' ];
+        console.log(lines);
+        for (var j=0; j < lines.length; j++) {
+            for (var i=0; i < fields.length; i++) {
+                lines[j][fields[i]] = lines[j].asteriskline_id[fields[i]];
+            }
+        }
         this.linesStore.loadData({results: lines});
 
         /* @deprecated
@@ -121,9 +129,15 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         });
         this.record.set('rights', rights);
         
+        // save lines / copy fields to asteriskline_id
         var lines = [];
+        var fields = ['cfi_mode','cfi_number','cfb_mode','cfb_number','cfd_mode','cfd_number','cfd_time' ];
         this.linesStore.each(function(_record){
-            lines.push(_record.data);
+            var data = _record.data;
+            for (var i=0; i < fields.length; i++) {
+                data.asteriskline_id[fields[i]] = data[fields[i]];
+            }
+            lines.push(data);
         });
         this.record.set('lines', lines);
     },
@@ -760,8 +774,8 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 Tine.Voipmanager.SnomPhoneEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
-        width: 700,
-        height: 450,
+        width: 800,
+        height: 350,
         name: Tine.Voipmanager.SnomPhoneEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Voipmanager.SnomPhoneEditDialog',
         contentPanelConstructorConfig: config
