@@ -28,7 +28,7 @@ Tine.Phone.getPanel = function(){
         text: translation._('Edit phone settings'),
         iconCls: 'PhoneIconCls',
         handler: function() {
-            var popupWindow = Tine.Phone.MyPhoneEditDialog.openWindow({
+            var popupWindow = Tine.Voipmanager.SnomPhoneEditDialog.openWindow({
                 record: this.ctxNode.attributes.record,
                 listeners: {
                     scope: this,
@@ -483,7 +483,7 @@ Tine.Phone.Main = {
             	// get selected node id
             	var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode();
                 
-                var popupWindow = Tine.Phone.MyPhoneEditDialog.openWindow({
+                var popupWindow = Tine.Voipmanager.SnomPhoneEditDialog.openWindow({
                     record: node.attributes.record,
                     listeners: {
                         scope: this,

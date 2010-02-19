@@ -29,7 +29,6 @@ class Phone_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         return array(
             'Phone/js/Phone.js',
-            'Phone/js/MyPhoneEditDialog.js',
         );
     }
     
