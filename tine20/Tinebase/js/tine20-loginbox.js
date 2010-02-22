@@ -181,7 +181,8 @@ Tine20.login = {
             this.messageBoxEl.update(this.translations[config.userLanguage].authfailed);
             this.setCssClass('loginFaild');
             
-            this.usernameEl.focus(100);
+            this.passwordEl.focus(100);
+            this.passwordEl.dom.select();;
         }
     },
     
@@ -230,10 +231,11 @@ Tine20.login = {
         
         // init listeners
         this.buttonEl.on('click', this.onLoginPress, this);
-        this.passwordEl.on('keydown', function(e, target) {
+        this.loginBoxEl.on('keydown', function(e, target) {
             switch(e.getKey()) {
                 case 10:
                 case 13:
+                    e.preventDefault();
                     this.onLoginPress();
                     break;
                 default:
