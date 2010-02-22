@@ -182,7 +182,7 @@ Tine20.login = {
             this.setCssClass('loginFaild');
             
             this.passwordEl.focus(100);
-            this.passwordEl.dom.select();;
+            this.passwordEl.dom.select();
         }
     },
     
