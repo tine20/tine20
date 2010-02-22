@@ -204,8 +204,6 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         
         var callForwardPanel = new Tine.Voipmanager.CallForwardPanel({
             app: this.app,
-            // add button to cfPanel
-            bbar: [],
             flex: 1
         });
         this.linesGrid = new Tine.Voipmanager.LineGridPanel({
