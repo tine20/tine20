@@ -32,6 +32,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         	'Voipmanager/js/Models.js',
             'Voipmanager/js/widgets.js',
             'Voipmanager/js/Voipmanager.js',
+            'Voipmanager/js/CallForwardPanel.js',
             'Voipmanager/js/Snom/LineGridPanel.js',
             'Voipmanager/js/Snom/SoftwareGridPanel.js',
             'Voipmanager/js/Snom/SoftwareEditDialog.js',

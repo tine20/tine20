@@ -31,7 +31,10 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() { 
+    getFormItems: function() {
+        
+        // TODO add Tine.Voipmanager.CallForwardPanel
+        
         return {
             xtype: 'tabpanel',
             border: false,
