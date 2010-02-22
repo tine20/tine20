@@ -49,6 +49,12 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
      * @private
      */
     initComponent: function() {
+        this.addEvents(
+            /**
+             * @event change
+             * Fired when user pressed cancel button
+             */
+            'change');
         this.items = this.getFormItems();
         
         Tine.Voipmanager.CallForwardPanel.superclass.initComponent.call(this);
@@ -93,12 +99,18 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
                     select: function(combo, record) {
                         // disable number if != number
                         this.getForm().findField('cfi_number').setDisabled(record.data.field1 != 'number');
+                        this.onFieldChange();
                     }
                 }
             }, {
                 name: 'cfi_number',    
                 fieldLabel: this.app.i18n._('Number'),
-                xtype: 'textfield'
+                xtype: 'textfield',
+                enableKeyEvents: true,
+                listeners: {
+                    keyup: this.onFieldChange,
+                    scope: this
+                }
             }]
         }, {
             title: this.app.i18n._('Forward busy'),
@@ -130,12 +142,18 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
                     scope: this,
                     select: function(combo, record) {
                         this.getForm().findField('cfb_number').setDisabled(record.data.field1 != 'number');
+                        this.onFieldChange();
                     }
                 }
             }, {
                 name: 'cfb_number',    
                 fieldLabel: this.app.i18n._('Number'),
-                xtype: 'textfield'
+                xtype: 'textfield',
+                enableKeyEvents: true,
+                listeners: {
+                    keyup: this.onFieldChange,
+                    scope: this
+                }
             }]
          }, {
             title: this.app.i18n._('Forward delayed'),
@@ -168,18 +186,29 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
                     select: function(combo, record) {
                         this.getForm().findField('cfd_number').setDisabled(record.data.field1 != 'number');
                         this.getForm().findField('cfd_time').setDisabled(record.data.field1 == 'off');
+                        this.onFieldChange();
                     }
                 }
             }, {
                 name: 'cfd_number',    
                 fieldLabel: this.app.i18n._('Number'),
-                xtype: 'textfield'
+                xtype: 'textfield',
+                enableKeyEvents: true,
+                listeners: {
+                    keyup: this.onFieldChange,
+                    scope: this
+                }
             }, {
                 name: 'cfd_time',      
                 fieldLabel: this.app.i18n._('Delay time'),
                 xtype: 'numberfield',
                 allowNegative: false,
-                value: 30
+                value: 30,
+                enableKeyEvents: true,
+                listeners: {
+                    keyup: this.onFieldChange,
+                    scope: this
+                }
             }]
         }];
     },
@@ -190,7 +219,6 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
      */
     onRecordLoad: function(record) {
         this.record = record;
-        // TODO set form ?
         
         this.getForm().findField('cfi_number').setDisabled(record.data.cfi_mode != 'number');
         this.getForm().findField('cfb_number').setDisabled(record.data.cfb_mode != 'number');
@@ -199,12 +227,10 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
     },
 
     /**
-     * 
-     * @param {Object} record
+     * fire change event if field changes
      */
-    onRecordUpdate: function(record) {
-        // TODO get form ?
+    onFieldChange: function() {
+        this.fireEvent('change');
     }
-    
 });
 
