@@ -133,14 +133,21 @@ Tine20.login = {
         var conn = new Ext.ux.data.windowNameConnection({
             proxyUrl: config.tine20ProxyUrl
         });
-        
+                
         conn.request({
             url: config.tine20Url,
-            params: {
-                method: 'Tinebase.authenticate',
-                username: username,
-                password: password
+            headers: {
+                'X-Tine20-Request-Type' : 'JSON'
             },
+            jsonData: Ext.encode({
+                jsonrpc: '2.0',
+                method: 'Tinebase.authenticate',
+                id: ++Ext.Ajax.requestId,
+                params: {
+                    username: username,
+                    password: password
+                }
+            }),
             success: cb
         });
     },
@@ -155,7 +162,7 @@ Tine20.login = {
      */
     onLoginResponse: function(response) {
         try {
-            var data = Ext.decode(response.responseText);
+            var data = Ext.decode(response.responseText).result;
         } catch (e) {
             var data = {};
         }
