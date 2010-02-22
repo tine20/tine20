@@ -34,6 +34,13 @@ Ext.namespace('Tine.Voipmanager');
 Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
 
     /**
+     * @cfg
+     */
+    border: false,
+    frame: true,
+    anchor: '100%',
+                
+    /**
      * @type Tine.Tinebase.data.Record
      */
     record: null,
@@ -42,7 +49,6 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
      * @private
      */
     initComponent: function() {
-        
         this.items = this.getFormItems();
         
         Tine.Voipmanager.CallForwardPanel.superclass.initComponent.call(this);
@@ -55,7 +61,123 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
      * 
      * TODO add form items
      */
-    getFormItems: function() { 
+    getFormItems: function() {
+        return [{
+            title: this.app.i18n._('Forward immediately'),
+            autoHeight: true,
+            xtype: 'fieldset',
+            layout: 'form',
+            labelAlign: 'top',
+            defaults: {
+                anchor: '100%'
+            },
+            items: [{
+                name: 'cfi_mode',
+                xtype: 'combo',
+                fieldLabel: this.app.i18n._('Mode'),
+                typeAhead: true,
+                triggerAction: 'all',
+                lazyRender:true,
+                triggerAction: 'all',
+                allowBlank: false,
+                editable: false,
+                blurOnSelect: true,
+                store: [
+                    ['off', 'off'],
+                    ['number', 'number'],
+                    ['voicemail', 'voicemail']
+                ],
+                listeners: {
+                    scope: this,
+                    select: function(combo, record) {
+                        // disable number if != number
+                        this.getForm().findField('cfi_number').setDisabled(record.data.field1 != 'number');
+                    }
+                }
+            }, {
+                name: 'cfi_number',    
+                fieldLabel: this.app.i18n._('Forward number'),
+                xtype: 'textfield'
+            }]
+        }, {
+            title: this.app.i18n._('Forward busy'),
+            autoHeight: true,
+            xtype: 'fieldset',
+            layout: 'form',
+            labelAlign: 'top',
+            defaults: {
+                anchor: '100%'
+            },
+            items: [{
+                name: 'cfb_mode',
+                xtype: 'combo',
+                fieldLabel: this.app.i18n._('Mode'),
+                typeAhead: true,
+                triggerAction: 'all',
+                lazyRender:true,
+                triggerAction: 'all',
+                allowBlank: false,
+                editable: false,
+                blurOnSelect: true,
+                store: [
+                    ['off', 'off'],
+                    ['number', 'number'],
+                    ['voicemail', 'voicemail']
+                ],
+                listeners: {
+                    scope: this,
+                    select: function(combo, record) {
+                        this.getForm().findField('cfb_number').setDisabled(record.data.field1 != 'number');
+                    }
+                }
+            }, {
+                name: 'cfb_number',    
+                fieldLabel: this.app.i18n._('Forward busy number'),
+                xtype: 'textfield'
+            }]
+         }, {
+            title: this.app.i18n._('Forward delayed'),
+            autoHeight: true,
+            xtype: 'fieldset',
+            layout: 'form',
+            labelAlign: 'top',
+            defaults: {
+                anchor: '100%'
+            },
+            items: [{
+                name: 'cfd_mode',
+                xtype: 'combo',
+                fieldLabel: this.app.i18n._('Mode'),
+                typeAhead: true,
+                triggerAction: 'all',
+                lazyRender:true,
+                triggerAction: 'all',
+                allowBlank: false,
+                editable: false,
+                blurOnSelect: true,
+                store: [
+                    ['off', 'off'],
+                    ['number', 'number'],
+                    ['voicemail', 'voicemail']
+                ],
+                listeners: {
+                    scope: this,
+                    select: function(combo, record) {
+                        this.getForm().findField('cfd_number').setDisabled(record.data.field1 != 'number');
+                        this.getForm().findField('cfd_time').setDisabled(record.data.field1 == 'off');
+                    }
+                }
+            }, {
+                name: 'cfd_number',    
+                fieldLabel: this.app.i18n._('Forward delayed number'),
+                xtype: 'textfield'
+            }, {
+                name: 'cfd_time',      
+                fieldLabel: this.app.i18n._('Forward delay time (seconds)'),
+                xtype: 'numberfield',
+                allowNegative: false
+            }]
+        }];
     },
     
     /**
@@ -64,7 +186,12 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
      */
     onRecordLoad: function(record) {
         this.record = record;
-        // TODO set form
+        // TODO set form ?
+        
+        this.getForm().findField('cfi_number').setDisabled(record.data.cfi_mode != 'number');
+        this.getForm().findField('cfb_number').setDisabled(record.data.cfb_mode != 'number');
+        this.getForm().findField('cfd_number').setDisabled(record.data.cfd_mode != 'number');
+        this.getForm().findField('cfd_time').setDisabled(record.data.cfd_mode == 'off');
     },
 
     /**
@@ -72,7 +199,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
      * @param {Object} record
      */
     onRecordUpdate: function(record) {
-        // TODO get form
+        // TODO get form ?
     }
     
 });

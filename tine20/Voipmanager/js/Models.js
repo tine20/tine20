@@ -413,7 +413,14 @@ Tine.Voipmanager.Model.AsteriskSipPeerArray = Tine.Tinebase.Model.genericFields.
     {name: 'useclientcode'},
     {name: 'authuser'},
     {name: 'call-limit'},
-    {name: 'busy-level'}
+    {name: 'busy-level'},
+    {name: 'cfi_mode'},
+    {name: 'cfi_number'},
+    {name: 'cfb_mode'},
+    {name: 'cfb_number'},
+    {name: 'cfd_mode'},
+    {name: 'cfd_number'},
+    {name: 'cfd_time'}    
 ]);
 /**
  * @type {Tine.Tinebase.data.Record}

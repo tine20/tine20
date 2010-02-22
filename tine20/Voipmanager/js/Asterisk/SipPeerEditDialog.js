@@ -27,13 +27,44 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
     evalGrants: false,
     
     /**
+     * @private
+     */
+    initComponent: function() {
+        Tine.Voipmanager.AsteriskSipPeerEditDialog.superclass.initComponent.call(this);
+    },
+       
+    /**
+     * executed when record is loaded
+     * @private
+     */
+    onRecordLoad: function() {
+        Tine.Voipmanager.AsteriskSipPeerEditDialog.superclass.onRecordLoad.call(this);
+        
+        // update tabpanels
+        this.callForwardPanel.onRecordLoad(this.record);
+    },
+    
+    /**
+     * executed when record is updated
+     * @private
+     */
+    onRecordUpdate: function() {
+        Tine.Voipmanager.AsteriskSipPeerEditDialog.superclass.onRecordUpdate.apply(this, arguments);
+        this.callForwardPanel.onRecordUpdate(this.record);
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
     getFormItems: function() {
-        
-        // TODO add Tine.Voipmanager.CallForwardPanel
+
+        // init tabpanels
+        this.callForwardPanel = new Tine.Voipmanager.CallForwardPanel({
+            title: this.app.i18n._('Call Forwards'),
+            app: this.app
+        });
         
         return {
             xtype: 'tabpanel',
@@ -154,7 +185,8 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
                     value: 'no',
                     store: [['no', this.app.i18n._('off')], ['yes', this.app.i18n._('on')]] 
                 }]]
-            }]
+            }, this.callForwardPanel
+            ]
         };
     }
 });
