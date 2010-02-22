@@ -41,7 +41,9 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
         Tine.Voipmanager.AsteriskSipPeerEditDialog.superclass.onRecordLoad.call(this);
         
         // update tabpanels
-        this.callForwardPanel.onRecordLoad(this.record);
+        if (this.callForwardPanel) {
+            this.callForwardPanel.onRecordLoad(this.record);
+        }
     },
     
     /**
@@ -50,7 +52,9 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
      */
     onRecordUpdate: function() {
         Tine.Voipmanager.AsteriskSipPeerEditDialog.superclass.onRecordUpdate.apply(this, arguments);
-        this.callForwardPanel.onRecordUpdate(this.record);
+        if (this.callForwardPanel) {
+            this.callForwardPanel.onRecordUpdate(this.record);
+        }
     },
     
     /**
