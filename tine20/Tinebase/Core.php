@@ -144,15 +144,7 @@ class Tinebase_Core
              (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')
             ) {
             $server = new Tinebase_Server_Json();
-
-            
-        /**************************** JSONP API *****************************/
-        } elseif(
-            isset($_GET['jsonp'])
-        ) {
-            $server = new Tinebase_Server_JsonP();
-            
-            
+        
         /**************************** SNOM API *****************************/
         } elseif(
             isset($_SERVER['HTTP_USER_AGENT']) && 
