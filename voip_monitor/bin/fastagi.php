@@ -10,7 +10,8 @@
  * @version     $Id$
  */
 
-set_include_path(dirname(__FILE__) . PATH_SEPARATOR . dirname(__FILE__) . '/library' . PATH_SEPARATOR . get_include_path());
+$baseIncludePath = dirname(dirname(__FILE__));
+set_include_path($baseIncludePath . PATH_SEPARATOR . $baseIncludePath . '/library' . PATH_SEPARATOR . get_include_path());
 
 require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
