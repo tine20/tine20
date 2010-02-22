@@ -52,7 +52,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
         this.addEvents(
             /**
              * @event change
-             * Fired when user pressed cancel button
+             * Fired when one of the input fields changed
              */
             'change');
         this.items = this.getFormItems();
@@ -64,8 +64,6 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
-     * 
-     * TODO add form items
      */
     getFormItems: function() {
         return [{
@@ -73,7 +71,6 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
             autoHeight: true,
             xtype: 'fieldset',
             layout: 'form',
-            //labelAlign: 'top',
             defaults: {
                 anchor: '100%'
             },
@@ -117,7 +114,6 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
             autoHeight: true,
             xtype: 'fieldset',
             layout: 'form',
-            //labelAlign: 'top',
             defaults: {
                 anchor: '100%'
             },
@@ -160,7 +156,6 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
             autoHeight: true,
             xtype: 'fieldset',
             layout: 'form',
-            //labelAlign: 'top',
             defaults: {
                 anchor: '100%'
             },
