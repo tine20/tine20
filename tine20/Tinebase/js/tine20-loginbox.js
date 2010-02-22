@@ -73,7 +73,7 @@ Tine20.login = {
                     src.substring(0, src.indexOf('Tinebase'))  + 'index.php' :
                     src.substring(0, src.indexOf('tine20-loginbox.js')) + 'index.php';
             
-            var tine20ProxyUrl = src.substring(0, src.indexOf('tine20-loginbox.js')) + 'windowNameConnection.html';
+            var tine20ProxyUrl = src.substring(0, src.indexOf('tine20-loginbox.js')) + 'ux/data/windowNameConnection.html';
                     
             var config = {
                 userLanguage: Tine20.login.detectBrowserLanguage(),
@@ -154,9 +154,13 @@ Tine20.login = {
      * @return void
      */
     onLoginResponse: function(response) {
-        var data = Ext.decode(response.responseText);
-        var config = this.getConfig();
+        try {
+            var data = Ext.decode(response.responseText);
+        } catch (e) {
+            var data = {};
+        }
         
+        var config = this.getConfig();
         if (data.status == 'success') {
             // show success message
             this.messageBoxEl.update(this.translations[config.userLanguage].authsuccess);
