@@ -202,6 +202,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             '', //empty method
             'Tinebase.getRegistryData',
             'Tinebase.getAllRegistryData',
+            'Tinebase.authenticate',
             'Tinebase.login',
             'Tinebase.getAvailableTranslations',
             'Tinebase.getTranslations',
