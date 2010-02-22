@@ -373,6 +373,33 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  string $password the password
      * @return array
      */
+    public function authenticate($username, $password)
+    {
+        $authResult = Tinebase_Auth::getInstance()->authenticate($username, $password);
+        
+        if ($authResult->isValid()) {
+            $response = array(
+                'status'    => 'success',
+                'msg'       => 'authentication succseed',
+                //'loginUrl'  => 'someurl',
+            );
+        } else {
+            $response = array(
+                'status'    => 'fail',
+                'msg'       => 'authentication failed',
+            );
+        }
+        
+        return $response;
+    }
+    
+    /**
+     * login user with given username and password
+     *
+     * @param  string $username the username
+     * @param  string $password the password
+     * @return array
+     */
     public function login($username, $password)
     {
         // try to login user
