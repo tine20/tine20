@@ -67,7 +67,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
             autoHeight: true,
             xtype: 'fieldset',
             layout: 'form',
-            labelAlign: 'top',
+            //labelAlign: 'top',
             defaults: {
                 anchor: '100%'
             },
@@ -82,6 +82,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
                 allowBlank: false,
                 editable: false,
                 blurOnSelect: true,
+                value: 'off',
                 store: [
                     ['off', 'off'],
                     ['number', 'number'],
@@ -96,7 +97,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
                 }
             }, {
                 name: 'cfi_number',    
-                fieldLabel: this.app.i18n._('Forward number'),
+                fieldLabel: this.app.i18n._('Number'),
                 xtype: 'textfield'
             }]
         }, {
@@ -104,7 +105,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
             autoHeight: true,
             xtype: 'fieldset',
             layout: 'form',
-            labelAlign: 'top',
+            //labelAlign: 'top',
             defaults: {
                 anchor: '100%'
             },
@@ -119,6 +120,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
                 allowBlank: false,
                 editable: false,
                 blurOnSelect: true,
+                value: 'off',
                 store: [
                     ['off', 'off'],
                     ['number', 'number'],
@@ -132,7 +134,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
                 }
             }, {
                 name: 'cfb_number',    
-                fieldLabel: this.app.i18n._('Forward busy number'),
+                fieldLabel: this.app.i18n._('Number'),
                 xtype: 'textfield'
             }]
          }, {
@@ -140,7 +142,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
             autoHeight: true,
             xtype: 'fieldset',
             layout: 'form',
-            labelAlign: 'top',
+            //labelAlign: 'top',
             defaults: {
                 anchor: '100%'
             },
@@ -155,6 +157,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
                 allowBlank: false,
                 editable: false,
                 blurOnSelect: true,
+                value: 'off',
                 store: [
                     ['off', 'off'],
                     ['number', 'number'],
@@ -169,13 +172,14 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
                 }
             }, {
                 name: 'cfd_number',    
-                fieldLabel: this.app.i18n._('Forward delayed number'),
+                fieldLabel: this.app.i18n._('Number'),
                 xtype: 'textfield'
             }, {
                 name: 'cfd_time',      
-                fieldLabel: this.app.i18n._('Forward delay time (seconds)'),
+                fieldLabel: this.app.i18n._('Delay time'),
                 xtype: 'numberfield',
-                allowNegative: false
+                allowNegative: false,
+                value: 30
             }]
         }];
     },

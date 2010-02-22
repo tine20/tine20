@@ -147,6 +147,7 @@ class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
     {
         // set default value if field is empty
         $this->_filters['nat'] = new Zend_Filter_Empty('no');
+        $this->_filters['cfd_time'] = new Zend_Filter_Empty(0);
         
         parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
