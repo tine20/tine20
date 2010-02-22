@@ -201,10 +201,30 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * NOTE: when this method gets called, all initalisation is done.
      */
     getFormItems: function() {
+        
+        var callForwardPanel = new Tine.Voipmanager.CallForwardPanel({
+            app: this.app,
+            // add button to cfPanel
+            bbar: [],
+            flex: 1
+        });
         this.linesGrid = new Tine.Voipmanager.LineGridPanel({
-            title: this.app.i18n._('Lines'),
             store: this.linesStore,
-            app: this.app
+            app: this.app,
+            cfPanel: callForwardPanel,
+            flex: 1
+        });
+        
+        this.linesPanel = new Ext.Panel({
+            title: this.app.i18n._('Lines'),
+            layout: {
+                type: 'hbox',
+                align: 'stretch'
+            },
+            items:[
+                this.linesGrid,
+                callForwardPanel
+            ]
         });
         
         return {
@@ -215,7 +235,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             deferredRender: false,
             items:[
                 this.getPhonePanel(),
-                this.linesGrid,
+                this.linesPanel,
                 this.getSettingsPanel(),
                 this.getRightsPanel()
             ]
