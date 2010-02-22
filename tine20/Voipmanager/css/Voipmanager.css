@@ -48,3 +48,7 @@
     bottom: -14px;
 }
 
+.voipmanager-row-changed td{
+    font-weight: bold;
+}
+
