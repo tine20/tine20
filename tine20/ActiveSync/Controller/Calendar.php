@@ -165,19 +165,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         //'Exceptions'        => 'exdate',
     );
     
-    
-    /**
-     * list of supported folders
-     * @todo retrieve users real container
-     * @var array
-     */
-    protected $_folders = array(array(
-        'folderId'      => 'eventsroot',
-        'parentId'      => 0,
-        'displayName'   => 'Events',
-        'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_CALENDAR
-    ));
-    
     /**
      * name of Tine 2.0 backend application
      * 
@@ -751,7 +738,35 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         
         return $filterArray;
     }
+    
+    /**
+     * return folder filter
+     * 
+     * @param $_folderId
+     * @return array
+     */
+    protected function _getFolderFilter($_folderId)
+    {
+        if($_folderId == $this->_specialFolderName) {
+            // search only personal containers
+            $folderFilter = array(array(
+                'field'     => 'container_id',
+                'operator'  => 'personalNode',
+                'value'     => Tinebase_Core::getUser()->getId()
+            ));        
+        } else {
+            $folderFilter = array(
+                array(
+                    'field'     => 'container_id',
+                    'operator'  => 'equals',
+                    'value'     => $_folderId
+                )
+            );        
+        }
         
+        return $folderFilter;
+    }
+    
     /**
      * return list of supported folders for this backend
      *
