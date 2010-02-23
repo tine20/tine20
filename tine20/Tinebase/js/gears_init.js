@@ -84,3 +84,13 @@
     google.gears = {factory: factory};
   }
 })();
+
+Ext.onReady(function() {
+    var gg = Ext.DomQuery.selectNode('object[type="application/x-googlegears"]');
+    if (gg) {
+        Ext.fly(gg).applyStyles({
+            position: "absolute",
+            top: "-20px"
+        });
+    }
+});
