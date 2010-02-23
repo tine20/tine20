@@ -219,7 +219,9 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.Panel, {
      * disable some fields after render
      */
     onAfterRender: function() {
-        this.disableFields();
+        if (this.record !== null) {
+            this.disableFields();
+        }
     },
     
     /**
