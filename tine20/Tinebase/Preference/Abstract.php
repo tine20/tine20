@@ -294,7 +294,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         if(!$_ignoreAcl){
             $userId = Tinebase_Core::getUser()->getId();
             if (
-            && $_accountId !== $userId
+            $_accountId !== $userId
             && !Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, $userId, Tinebase_Acl_Rights_Abstract::ADMIN)
             ) {
                 throw new Tinebase_Exception_AccessDenied('You are not allowed to change the preferences.');
