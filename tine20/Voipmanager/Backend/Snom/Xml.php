@@ -126,9 +126,9 @@ class Voipmanager_Backend_Snom_Xml
         // add directory button
         $locationSettings['dkey_directory']          = 'url ' . $this->_baseURL . '?method=Phone.directory&amp;mac=$mac';
         
-        // add redirect on/off action url
-        $locationSettings['action_redirection_on_url'] = $this->_baseURL . '?method=Voipmanager.redirect&amp;mac=$mac&amp;event=$redirect_event&amp;number=$redirect_number&amp;time=$redirect_time';
-        $locationSettings['action_redirection_off_url'] = $this->_baseURL . '?method=Voipmanager.redirect&amp;mac=$mac&amp;event=$redirect_event&amp;number=$redirect_number&amp;time=$redirect_time';
+        // not used anymore
+        $locationSettings['action_redirection_on_url']  = '';
+        $locationSettings['action_redirection_off_url'] = '';
         
         // callhistory logging
         $locationSettings['action_incoming_url']     = $this->_baseURL . '?method=Phone.callHistory&amp;mac=$mac&amp;event=incoming&amp;callId=$call-id&amp;local=$local&amp;remote=$remote';
@@ -150,15 +150,38 @@ class Voipmanager_Backend_Snom_Xml
         $phoneSettings['http_client_pass']['value'] = $_phone->http_client_pass;
         $phoneSettings['http_client_pass']['perms'] = 'RO';
         
-        /**
-         * disabled until snom releases new software image which fixes a bug
-         */
-        #$phoneSettings['redirect_event']['value'] = $_phone->redirect_event;
-        #$phoneSettings['redirect_event']['perms'] = 'RW';
-        #$phoneSettings['redirect_number']['value'] = $_phone->redirect_number;
-        #$phoneSettings['redirect_number']['perms'] = 'RW';
-        #$phoneSettings['redirect_time']['value'] = $_phone->redirect_time;
-        #$phoneSettings['redirect_time']['perms'] = 'RW';
+        $phoneSettings['redirect_time']['value'] = 99;
+        $phoneSettings['redirect_time']['perms'] = 'RO';
+        
+        $phoneSettings['redirect_time_on_code']['value'] = '*23';
+        $phoneSettings['redirect_time_on_code']['perms'] = 'RO';
+        $phoneSettings['redirect_time_off_code']['value'] = '#23';
+        $phoneSettings['redirect_time_off_code']['perms'] = 'RO';
+        $phoneSettings['redirect_always_on_code']['value'] = '*21';
+        $phoneSettings['redirect_always_on_code']['perms'] = 'RO';
+        $phoneSettings['redirect_always_off_code']['value'] = '#21';
+        $phoneSettings['redirect_always_off_code']['perms'] = 'RO';
+        $phoneSettings['redirect_busy_on_code']['value'] = '*22';
+        $phoneSettings['redirect_busy_on_code']['perms'] = 'RO';
+        $phoneSettings['redirect_busy_off_code']['value'] = '#22';
+        $phoneSettings['redirect_busy_off_code']['perms'] = 'RO';
+        $phoneSettings['dnd_on_code']['value'] = '*24';
+        $phoneSettings['dnd_on_code']['perms'] = 'RO';
+        $phoneSettings['dnd_off_code']['value'] = '#24';
+        $phoneSettings['dnd_off_code']['perms'] = 'RO';
+        
+        $phoneSettings['phone_name']['value'] = $_phone->description;
+        $phoneSettings['phone_name']['perms'] = 'RO';
+        
+        $phoneSettings['alert_internal_ring_sound']['value'] = 'Ringer9';
+        $phoneSettings['alert_internal_ring_sound']['perms'] = 'RO';
+        $phoneSettings['alert_external_ring_sound']['value'] = 'Ringer1';
+        $phoneSettings['alert_external_ring_sound']['perms'] = 'RO';
+        $phoneSettings['alert_group_ring_sound']['value'] = 'Ringer7';
+        $phoneSettings['alert_group_ring_sound']['perms'] = 'RO';
+
+        $phoneSettings['advertisement']['value'] = 'off';
+        $phoneSettings['advertisement']['perms'] = 'RO';
         
         foreach($phoneSettings as $key => $value) {
             $child = $_xml->addChild($key, $value['value']);
