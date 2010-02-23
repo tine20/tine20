@@ -19,9 +19,9 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
     apps: null,
     
     /**
-     * @cfg {String} defaultAppName (required)
+     * @cfg {String} defaultAppName
      */
-    defaultAppName: '',
+    defaultAppName: 'Addressbook',
     
     layout: 'border',
     border: false,
@@ -30,6 +30,23 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function() {
+        
+        // get default app from preferences if available
+        this.defaultAppName = (Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('defaultapp')) 
+            ? Tine.Tinebase.registry.get('preferences').get('defaultapp') 
+            : this.defaultAppName;
+        
+        this.apps = Tine.Tinebase.appMgr.getAll();
+        
+        if (! Tine.Tinebase.appMgr.get(this.defaultAppName)) {
+            var firstApp = apps.first();
+            if (firstApp) {
+                this.defaultAppName = firstApp.appName;
+            } else {
+                Ext.Msg.alert(_('Sorry'), _('There are no applications enabled for you. Please contact your administrator.'));
+            }
+        }
+        
         this.appTitle = this.apps.get(this.defaultAppName).getTitle();
         
         this.initLayout();
