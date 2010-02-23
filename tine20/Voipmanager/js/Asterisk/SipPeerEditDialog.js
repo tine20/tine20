@@ -4,7 +4,7 @@
  * @package     Voipmanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -16,7 +16,6 @@ Ext.namespace('Tine.Voipmanager');
  */
 Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
-    
     /**
      * @private
      */
@@ -26,13 +25,6 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
     recordProxy: Tine.Voipmanager.AsteriskSipPeerBackend, 
     evalGrants: false,
     
-    /**
-     * @private
-     */
-    initComponent: function() {
-        Tine.Voipmanager.AsteriskSipPeerEditDialog.superclass.initComponent.call(this);
-    },
-       
     /**
      * executed when record is loaded
      * @private
@@ -47,17 +39,6 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
     },
     
     /**
-     * executed when record is updated
-     * @private
-     */
-    onRecordUpdate: function() {
-        Tine.Voipmanager.AsteriskSipPeerEditDialog.superclass.onRecordUpdate.apply(this, arguments);
-        if (this.callForwardPanel) {
-            this.callForwardPanel.onRecordUpdate(this.record);
-        }
-    },
-    
-    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
@@ -67,7 +48,8 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
         // init tabpanels
         this.callForwardPanel = new Tine.Voipmanager.CallForwardPanel({
             title: this.app.i18n._('Call Forwards'),
-            app: this.app
+            app: this.app,
+            editDialog: this
         });
         
         return {

@@ -204,12 +204,14 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         
         var callForwardPanel = new Tine.Voipmanager.CallForwardPanel({
             app: this.app,
+            editDialog: this,
             flex: 1
         });
         this.linesGrid = new Tine.Voipmanager.LineGridPanel({
             store: this.linesStore,
             app: this.app,
             cfPanel: callForwardPanel,
+            editDialog: this,
             flex: 1
         });
         

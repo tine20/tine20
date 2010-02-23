@@ -16,7 +16,7 @@ Ext.namespace('Tine.Voipmanager');
  * 
  * @namespace   Tine.Voipmanager
  * @class       Tine.Voipmanager.CallForwardPanel
- * @extends     Ext.form.FormPanel
+ * @extends     Ext.Panel
  * 
  * <p>Call Forward Form Panel</p>
  * <p><pre>
@@ -31,7 +31,7 @@ Ext.namespace('Tine.Voipmanager');
  * @constructor
  * Create a new Tine.Voipmanager.CallForwardPanel
  */
-Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
+Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.Panel, {
 
     /**
      * @cfg
@@ -46,6 +46,11 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
     record: null,
     
     /**
+     * @type Tine.widgets.dialog.EditDialog
+     */
+    editDialog: null,
+    
+    /**
      * @private
      */
     initComponent: function() {
@@ -58,6 +63,8 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
         this.items = this.getFormItems();
         
         Tine.Voipmanager.CallForwardPanel.superclass.initComponent.call(this);
+        
+        this.on('afterrender', this.onAfterRender, this);
     },
 
     /**
@@ -95,7 +102,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
                     scope: this,
                     select: function(combo, record) {
                         // disable number if != number
-                        this.getForm().findField('cfi_number').setDisabled(record.data.field1 != 'number');
+                        this.editDialog.getForm().findField('cfi_number').setDisabled(record.data.field1 != 'number');
                         this.onFieldChange();
                     }
                 }
@@ -137,7 +144,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
                 listeners: {
                     scope: this,
                     select: function(combo, record) {
-                        this.getForm().findField('cfb_number').setDisabled(record.data.field1 != 'number');
+                        this.editDialog.getForm().findField('cfb_number').setDisabled(record.data.field1 != 'number');
                         this.onFieldChange();
                     }
                 }
@@ -179,8 +186,8 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
                 listeners: {
                     scope: this,
                     select: function(combo, record) {
-                        this.getForm().findField('cfd_number').setDisabled(record.data.field1 != 'number');
-                        this.getForm().findField('cfd_time').setDisabled(record.data.field1 == 'off');
+                        this.editDialog.getForm().findField('cfd_number').setDisabled(record.data.field1 != 'number');
+                        this.editDialog.getForm().findField('cfd_time').setDisabled(record.data.field1 == 'off');
                         this.onFieldChange();
                     }
                 }
@@ -209,23 +216,34 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.form.FormPanel, {
     },
     
     /**
+     * disable some fields after render
+     */
+    onAfterRender: function() {
+        this.disableFields();
+    },
+    
+    /**
      * 
      * @param {Object} record
      */
     onRecordLoad: function(record) {
         this.record = record;
-        
-        this.getForm().findField('cfi_number').setDisabled(record.data.cfi_mode != 'number');
-        this.getForm().findField('cfb_number').setDisabled(record.data.cfb_mode != 'number');
-        this.getForm().findField('cfd_number').setDisabled(record.data.cfd_mode != 'number');
-        this.getForm().findField('cfd_time').setDisabled(record.data.cfd_mode == 'off');
+        if (this.rendered) {
+            this.disableFields();
+        }
     },
-
+    
     /**
      * fire change event if field changes
      */
     onFieldChange: function() {
         this.fireEvent('change');
+    },
+    
+    disableFields: function() {
+        this.editDialog.getForm().findField('cfi_number').setDisabled(this.record.data.cfi_mode != 'number');
+        this.editDialog.getForm().findField('cfb_number').setDisabled(this.record.data.cfb_mode != 'number');
+        this.editDialog.getForm().findField('cfd_number').setDisabled(this.record.data.cfd_mode != 'number');
+        this.editDialog.getForm().findField('cfd_time').setDisabled(this.record.data.cfd_mode == 'off');
     }
 });
-

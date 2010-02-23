@@ -53,6 +53,11 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
     activeRecord: null,
     
     /**
+     * @type Tine.widgets.dialog.EditDialog
+     */
+    editDialog: null,
+    
+    /**
      * 
      * @cfg
      */
@@ -90,7 +95,8 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
      * on call forward form field change: update store
      */
     onFieldChange: function() {
-        this.cfPanel.getForm().updateRecord(this.activeRecord);
+        //this.cfPanel.getForm().updateRecord(this.activeRecord);
+        this.editDialog.getForm().updateRecord(this.activeRecord);
         this.getView().refresh();
     },
     
@@ -192,10 +198,11 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
             var selectedRows = sm.getSelections();
             this.activeRecord = selectedRows[0];
             this.cfPanel.setDisabled(false);
-            this.cfPanel.getForm().loadRecord(this.activeRecord);
+            //this.cfPanel.getForm().loadRecord(this.activeRecord);
+            this.editDialog.getForm().loadRecord(this.activeRecord);
             this.cfPanel.onRecordLoad(this.activeRecord);
         } else {
-            this.cfPanel.getForm().reset();
+            //this.cfPanel.getForm().reset();
             this.cfPanel.setDisabled(true);
         }
 
