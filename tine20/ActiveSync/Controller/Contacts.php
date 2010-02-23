@@ -281,6 +281,20 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                     $contact->$value = Tinebase_Translation::getRegionCodeByCountryName((string)$xmlData->$fieldName);
                     break;
                     
+                case 'adr_one_street':
+                    if(strtolower($this->_device->devicetype) == 'palm') {
+                        // palm pre sends the whole address in the <Contacts:BusinessStreet> tag
+                        unset($contact->adr_one_street);
+                    } else {
+                        // default handling for all other devices
+                        if(isset($xmlData->$fieldName)) {
+                            $contact->$value = (string)$xmlData->$fieldName;
+                        } else {
+                            $contact->$value = null;
+                        }
+                    }
+                    break;
+                    
                 default:
                     if(isset($xmlData->$fieldName)) {
                         $contact->$value = (string)$xmlData->$fieldName;
