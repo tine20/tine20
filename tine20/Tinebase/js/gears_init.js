@@ -85,6 +85,7 @@
   }
 })();
 
+// @see http://www.mail-archive.com/gears-users@googlegroups.com/msg02261.html
 Ext.onReady(function() {
     var gg = Ext.DomQuery.selectNode('object[type="application/x-googlegears"]');
     if (gg) {
