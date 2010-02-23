@@ -291,7 +291,9 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     public function setValueForUser($_preferenceName, $_value, $_accountId, $_ignoreAcl = FALSE) 
     {
         // check acl first
-        $userId = Tinebase_Core::getUser()->getId();
+        if(!$_ignoreAcl){
+            $userId = Tinebase_Core::getUser()->getId();
+        }
         if (
             $_ignoreAcl !== TRUE 
             && $_accountId !== $userId 
