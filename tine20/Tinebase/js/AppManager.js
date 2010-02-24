@@ -37,6 +37,10 @@ Tine.Tinebase.AppManager = function() {
 };
 
 Ext.apply(Tine.Tinebase.AppManager.prototype, {
+    /**
+     * @cfg {Tine.Application}
+     */
+    defaultApp: null,
     
     /**
      * returns an appObject
@@ -58,6 +62,23 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
         }
         
         return this.apps.get(appName);
+    },
+    
+    /**
+     * returns appObject of default app
+     * 
+     * @return {Tine.Application}
+     */
+    getDefault: function() {
+        if (! this.defaultApp) {
+            var defaultAppName = (Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('defaultapp')) 
+                ? Tine.Tinebase.registry.get('preferences').get('defaultapp') 
+                : this.defaultAppName;
+                
+            this.defaultApp = this.get(defaultAppName) || this.apps.first();
+        }
+        
+        return this.defaultApp;
     },
     
     /**

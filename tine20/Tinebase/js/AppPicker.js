@@ -19,9 +19,9 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
     apps: null,
     
     /**
-     * @cfg {String} defaultAppName
+     * @type Tine.Application
      */
-    defaultAppName: 'Addressbook',
+    defaultApp: null,
     
     layout: 'border',
     border: false,
@@ -30,24 +30,14 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function() {
-        
-        // get default app from preferences if available
-        this.defaultAppName = (Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('defaultapp')) 
-            ? Tine.Tinebase.registry.get('preferences').get('defaultapp') 
-            : this.defaultAppName;
-        
         this.apps = Tine.Tinebase.appMgr.getAll();
+        this.defaultApp = Tine.Tinebase.appMgr.getDefault();
         
-        if (! Tine.Tinebase.appMgr.get(this.defaultAppName)) {
-            var firstApp = apps.first();
-            if (firstApp) {
-                this.defaultAppName = firstApp.appName;
-            } else {
-                Ext.Msg.alert(_('Sorry'), _('There are no applications enabled for you. Please contact your administrator.'));
-            }
+        if (! this.defaultApp) {
+            Ext.Msg.alert(_('Sorry'), _('There are no applications enabled for you. Please contact your administrator.'));
         }
         
-        this.appTitle = this.apps.get(this.defaultAppName).getTitle();
+        this.appTitle = this.defaultApp.getTitle();
         
         this.initLayout();
         Tine.Tinebase.AppPicker.superclass.initComponent.call(this);
@@ -73,7 +63,7 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
             header: false,
             region: 'south',
             apps: this.apps,
-            defaultAppName: this.defaultAppName,
+            defaultApp: this.defaultApp,
             scope: this,
             handler: function(app) {
                 this.setAppTitle(app.getTitle());
@@ -104,9 +94,9 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
      */
     apps: null,
     /**
-     * @cfg {String} defaultAppName (required)
+     * @cfg {Tine.Application} defaultApp (required)
      */
-    defaultAppName: '',
+    defaultApp: null,
     /**
      * @cfg {Object} scope
      * scope hander is called int
@@ -176,7 +166,7 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
                 this.setHeight(height);
             }
         });
-        this.setActiveItem(this.els[this.defaultAppName]);
+        this.setActiveItem(this.els[this.defaultApp.appName]);
     },
     
     /**
