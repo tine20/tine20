@@ -24,6 +24,11 @@ Ext.ux.ConnectionStatus = function(config) {
 
 Ext.extend(Ext.ux.ConnectionStatus, Ext.Button, {
     /**
+     * @cfg {boolean} showIcon
+     */
+    showIcon: true,
+    
+    /**
      * @property {String}
      */
     status: 'unknown',
@@ -78,6 +83,10 @@ Ext.extend(Ext.ux.ConnectionStatus, Ext.Button, {
      */
     toggleStatus: function() {
         this.setStatus(this.status == 'online' ? 'offline' : 'online');
+    },
+    
+    setIconClass: function(iconCls) {
+        this.supr().setIconClass.call(this, this.showIcon ? iconCls : '');
     },
     
     /**
