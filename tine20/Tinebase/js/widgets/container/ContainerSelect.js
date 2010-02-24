@@ -249,7 +249,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @private
      */
-    setValue: function(container){
+    setValue: function(container) {
         // element which is already in this.store 
         if (typeof(container) == 'string' && this.store.getById(container)) {
             container = this.store.getById(container).data;
@@ -304,7 +304,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @private
      */
-    applyState : function(state, config){
+    applyState : function(state, config) {
         for (var container in state) {
             if(state.hasOwnProperty(container)) {
                 this.store.add(new Tine.Tinebase.Model.Container(state[container], state[container].id));
