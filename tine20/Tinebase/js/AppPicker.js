@@ -12,97 +12,19 @@
  
 Ext.namespace('Tine.Tinebase');
 
-Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
-    /**
-     * @cfg {Ext.util.Observable} apps (required)
-     */
-    apps: null,
-    
-    /**
-     * @type Tine.Application
-     */
-    defaultApp: null,
-    
-    layout: 'border',
-    border: false,
-    
-    /**
-     * @private
-     */
-    initComponent: function() {
-        this.apps = Tine.Tinebase.appMgr.getAll();
-        this.defaultApp = Tine.Tinebase.appMgr.getDefault();
-        
-        this.appTitle = this.defaultApp.getTitle();
-        
-        this.initLayout();
-        Tine.Tinebase.AppPicker.superclass.initComponent.call(this);
-    },
-    
-    initLayout: function() {
-        this.items = [{
-            region: 'north',
-            layout: 'fit',
-            border: false,
-            height: 40,
-            baseCls: 'x-panel-header',
-            html: '<div class ="app-panel-title">' + this.getAppTitle() + '</div>'
-        }, {
-            region: 'center',
-            layout: 'card',
-            border: false
-        }, new Tine.Tinebase.AppPile({
-            split: true,
-            width: 200,
-            collapsible:true,
-            collapseMode: 'mini',
-            header: false,
-            region: 'south',
-            apps: this.apps,
-            defaultApp: this.defaultApp,
-            scope: this,
-            handler: function(app) {
-                this.setAppTitle(app.getTitle());
-                app.getMainScreen().show();
-            }})
-        ];
-    },
-    
-    setAppTitle: function(appTitle) {
-        this.appTitle = appTitle;
-        var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '';
-        document.title = Tine.title + postfix + ' - ' + appTitle;
-        this.items.get(0).body.dom.innerHTML = '<div class ="app-panel-title">' + appTitle + '</div>';
-    },
-    
-    getAppTitle: function() {
-        return this.appTitle;
-    },
-    
-    getTreeCardPanel: function() {
-        return this.items.get(1);
-    }
-});
 
 Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
     /**
-     * @cfg {Ext.util.Observable} apps (required)
+     * @property apps
+     * @type Ext.util.Observable
      */
     apps: null,
+    
     /**
-     * @cfg {Tine.Application} defaultApp (required)
+     * @property defaultApp
+     * @type Tine.Application
      */
     defaultApp: null,
-    /**
-     * @cfg {Object} scope
-     * scope hander is called int
-     */
-    scope: null,
-    /**
-     * @cfg {Function} handler
-     * click handler of apps
-     */
-    handler: null,
     
     /**
      * @private
@@ -123,6 +45,9 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
      * @todo: register app.on('titlechange', ...)
      */
     initComponent: function() {
+        this.apps = Tine.Tinebase.appMgr.getAll();
+        this.defaultApp = Tine.Tinebase.appMgr.getDefault();
+        
         Tine.Tinebase.AppPile.superclass.initComponent.call(this);
         
         this.tpl = new Ext.XTemplate(
@@ -140,10 +65,6 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
     onRender: function(ct, position) {
         Tine.Tinebase.AppPile.superclass.onRender.call(this, ct, position);
 
-        this.apps.sort("ASC", function(app1, app2) {
-            return parseInt(app1.order, 10) < parseInt(app2.order, 10) ? 1 : -1;
-        });
-        
         this.apps.each(function(app) {
             this.els[app.appName] = this.tpl.insertFirst(this.body, {title: app.getTitle(), iconCls: app.getIconCls()}, true);
             this.els[app.appName].setStyle('cursor', 'pointer');
@@ -170,7 +91,7 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
      */
     onAppTitleClick: function(e, dom, app) {
         this.setActiveItem(Ext.get(dom));
-        this.handler.call(this.scope|| this, app);
+        Tine.Tinebase.appMgr.activate(app);
     },
     
     /**
