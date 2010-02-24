@@ -16,101 +16,115 @@ Ext.namespace('Tine', 'Tine.Tinebase');
  */
 Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     
-    //private
-    layout: 'border',
     border: false,
+    layout: {
+        type:'vbox',
+        align:'stretch',
+        padding:'0'
+    },
     
     /**
      * @private
      */
     initComponent: function() {
-        this.onlineStatus = new Ext.ux.ConnectionStatus({});
         this.tineMenu = new Tine.Tinebase.MainMenu({});
         this.appPicker = new Tine.Tinebase.AppPicker({});
-                    
-        // init generic mainscreen layout
-        var mainscreen = [{
-            region: 'north',
-            id:     'north-panel',
-            split:  false,
-            height: /*'platform' in window ? 26 :*/ 52,
+        
+        this.initLayout();
+        
+        Tine.Tinebase.MainScreen.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * @private
+     */
+    initLayout: function() {
+        
+        this.items = [{
+            cls: 'tine-mainscreen-topbox',
             border: false,
-            layout:'border',
-            items: [/*'platform' in window ? {} :*/ {
+            html: '<div class="tine-mainscreen-topbox-left"></div><div class="tine-mainscreen-topbox-middle"></div><div class="tine-mainscreen-topbox-right"></div>'
+        }, {
+            cls: 'tine-mainscreen-mainmenu',
+            height: 26,
+            layout: 'fit',
+            border: false,
+            items: this.tineMenu,
+            hidden: false
+        }, {
+            cls: 'tine-mainscreen-statusbar',
+            height: 20,
+            layout: 'fit',
+            border: false,
+            html: 'statusbar',
+            //items: this.getStatusBar()
+            hidden: true
+        }, {
+            cls: 'tine-mainscreen-apptabs',
+            height: 26,
+            layout: 'fit',
+            border: false,
+            html: 'apptabs',
+            hidden: true
+            //items: this.getAppTabs()
+        }, {
+            cls: 'tine-mainscreen-centerpanel',
+            flex: 1,
+            layout: 'border',
+            border: false,
+            items: [{
+                cls: 'tine-mainscreen-centerpanel-north',
                 region: 'north',
-                height: 26,
-                border: false,
-                id:     'north-panel-1',
-                items: [
-                    this.tineMenu
-                ]
-            },{
-                region: 'center',
                 layout: 'card',
                 activeItem: 0,
                 height: 26,
                 border: false,
                 id:     'north-panel-2',
                 items: []
+            }, {
+                cls: 'tine-mainscreen-centerpanel-center',
+                region: 'center',
+                id: 'center-panel',
+                animate: true,
+                border: false,
+                layout: 'card',
+                activeItem: 0,
+                items: []
+            }, {
+                cls: 'tine-mainscreen-centerpanel-west',
+                region: 'west',
+                id: 'west',
+                split: true,
+                width: 200,
+                minSize: 100,
+                maxSize: 300,
+                border: false,
+                collapsible:true,
+                //containerScroll: true,
+                collapseMode: 'mini',
+                header: false,
+                layout: 'fit',
+                items: this.appPicker
             }]
-        }, {
-            region: 'south',
-            id: 'south',
-            border: false,
-            split: false,
-            height: 26,
-            initialSize: 26,
-            items:[new Ext.Toolbar({
-                id: 'tineFooter',
-                height: 26,
-                items:[
-                    String.format(_('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName), 
-                    '->',
-                    this.onlineStatus
-                ]
-        
-            })]
-        }, {
-            region: 'center',
-            id: 'center-panel',
-            animate: true,
-            useShim:true,
-            border: false,
-            layout: 'card'
-        }, {
-            region: 'west',
-            id: 'west',
-            split: true,
-            width: 200,
-            minSize: 100,
-            maxSize: 300,
-            border: false,
-            collapsible:true,
-            //containerScroll: true,
-            collapseMode: 'mini',
-            header: false,
-            layout: 'fit',
-            items: this.appPicker
         }];
+    },
+    
+    getStatusBar: function() {
+        if (! this.statusBar) {
+            this.statusBar = new Ext.Toolbar({
+                items:[]
+            });
+        }
         
-        this.items = [{
-            region: 'north',
-            border: false,
-            cls: 'tine-mainscreen-topbox',
-            html: '<div class="tine-mainscreen-topbox-left"></div><div class="tine-mainscreen-topbox-middle"></div><div class="tine-mainscreen-topbox-right"></div>'
-        }, {
-            region: 'center',
-            border: false,
-            layout: 'border',
-            items: mainscreen
-        }];
-        
-        Tine.Tinebase.MainScreen.superclass.initComponent.call(this);
+        return this.statusBar;
     },
     
     onRender: function(ct, position) {
         Tine.Tinebase.MainScreen.superclass.onRender.call(this, ct, position);
+        
+        // argh!!! fixme!!!
         Tine.Tinebase.MainScreen = this;
+        
         this.activateDefaultApp();
         
         // check for new version 
