@@ -76,6 +76,17 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
                 : this.defaultAppName;
                 
             this.defaultApp = this.get(defaultAppName) || this.apps.first();
+            
+            if (! this.defaultApp) {
+                // no global exception concept yet...
+                //throw Ext.Error('no apps enabled', 620);
+                Ext.MessageBox.show({
+                    title: _('Missing Applications'), 
+                    msg: _('There are no applications enabled for you. Please contact your administrator.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.WARNING
+                });
+            }
         }
         
         return this.defaultApp;

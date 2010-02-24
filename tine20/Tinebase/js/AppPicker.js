@@ -33,10 +33,6 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
         this.apps = Tine.Tinebase.appMgr.getAll();
         this.defaultApp = Tine.Tinebase.appMgr.getDefault();
         
-        if (! this.defaultApp) {
-            Ext.Msg.alert(_('Sorry'), _('There are no applications enabled for you. Please contact your administrator.'));
-        }
-        
         this.appTitle = this.defaultApp.getTitle();
         
         this.initLayout();
