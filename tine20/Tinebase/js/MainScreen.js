@@ -24,6 +24,11 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     },
     
     /**
+     * @cfg {String} appPickerStyle "tabs" or "pile" defaults to "tabs"
+     */
+    appPicker: 'tabs',
+    
+    /**
      * @private
      */
     initComponent: function() {
@@ -63,7 +68,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             //items: this.getStatusBar()
         }, {
             cls: 'tine-mainscreen-apptabs',
-            //hidden: true,
+            hidden: this.appPicker != 'tabs',
             border: false,
             height: 22,
             items: new Tine.Tinebase.AppTabsPanel({
@@ -107,6 +112,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                 header: false,
                 items: [{
                     cls: 'tine-mainscreen-centerpanel-west-apptitle',
+                    hidden: this.appPicker != 'pile',
                     region: 'north',
                     layout: 'fit',
                     border: false,
@@ -123,6 +129,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                     items: []
                 }, new Tine.Tinebase.AppPile({
                     cls: 'tine-mainscreen-centerpanel-west-apppile',
+                    hidden: this.appPicker != 'pile',
                     region: 'south',
                     layout: 'fit',
                     border: false,
