@@ -85,6 +85,7 @@ Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.create
         status: 'enabled'
     }]);
     Tine.Tinebase.MainScreen.prototype.defaultAppName = 'Setup';
+    Tine.Tinebase.MainScreen.prototype.appPickerStyle = 'none';
     
     return true;
 });
