@@ -48,6 +48,8 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
         this.apps = Tine.Tinebase.appMgr.getAll();
         this.defaultApp = Tine.Tinebase.appMgr.getDefault();
         
+        Tine.Tinebase.appMgr.on('activate', this.onActivateApp, this);
+        
         Tine.Tinebase.AppPile.superclass.initComponent.call(this);
         
         this.tpl = new Ext.XTemplate(
@@ -84,6 +86,15 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
             }
         });
         this.setActiveItem(this.els[this.defaultApp.appName]);
+    },
+    
+    /**
+     * executed when an app get activated by mainscreen
+     * 
+     * @param {Tine.Application} app
+     */
+    onActivateApp: function(app) {
+        this.setActiveItem(this.els[app.appName]);
     },
     
     /**
