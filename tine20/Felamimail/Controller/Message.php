@@ -163,6 +163,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                         );
                         
                         // move to trash folder
+                        $this->createFolderIfNotExists($account, $trashFolder);
                         $imapBackend->moveMessage($message->messageuid, $trashFolder);
                         
                     } catch (Zend_Mail_Storage_Exception $zmse) {
