@@ -28,9 +28,11 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
      */
     initComponent: function() {
         this.tineMenu = new Tine.Tinebase.MainMenu({});
-        this.appPicker = new Tine.Tinebase.AppPicker({});
+        //this.appPicker = new Tine.Tinebase.AppPicker({});
         
         this.initLayout();
+        
+        Tine.Tinebase.appMgr.on('activate', this.onAppActivate, this);
         
         Tine.Tinebase.MainScreen.superclass.initComponent.call(this);
     },
@@ -94,17 +96,41 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                 cls: 'tine-mainscreen-centerpanel-west',
                 region: 'west',
                 id: 'west',
+                layout: 'border',
                 split: true,
                 width: 200,
                 minSize: 100,
                 maxSize: 300,
                 border: false,
                 collapsible:true,
-                //containerScroll: true,
                 collapseMode: 'mini',
                 header: false,
-                layout: 'fit',
-                items: this.appPicker
+                items: [{
+                    cls: 'tine-mainscreen-centerpanel-west-apptitle',
+                    region: 'north',
+                    layout: 'fit',
+                    border: false,
+                    height: 40,
+                    baseCls: 'x-panel-header',
+                    html: '<div class ="app-panel-title"></div>'
+                }, {
+                    cls: 'tine-mainscreen-centerpanel-west-treecards',
+                    border: false,
+                    id: 'treecards',
+                    region: 'center',
+                    layout: 'card',
+                    activeItem: 0,
+                    items: []
+                }, new Tine.Tinebase.AppPile({
+                    cls: 'tine-mainscreen-centerpanel-west-apppile',
+                    region: 'south',
+                    layout: 'fit',
+                    border: false,
+                    split: true,
+                    collapsible:true,
+                    collapseMode: 'mini',
+                    header: false
+                })]
             }]
         }];
     },
@@ -117,6 +143,16 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         }
         
         return this.statusBar;
+    },
+    
+    onAppActivate: function(app) {
+        // set document / browser title
+        var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '';
+        document.title = Tine.title + postfix  + ' - ' + app.getTitle();
+        
+        // set left top title
+        Ext.DomQuery.selectNode('div[class=app-panel-title]').innerHTML = app.getTitle();
+        
     },
     
     onRender: function(ct, position) {
@@ -134,11 +170,8 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     },
     
     activateDefaultApp: function() {
-        if (this.appPicker.getTreeCardPanel().rendered) {
-            var defaultApp = Tine.Tinebase.appMgr.getDefault();
-            defaultApp.getMainScreen().show();
-            var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '';
-            document.title = Tine.title + postfix  + ' - ' + defaultApp.getTitle();
+        if (Ext.getCmp('treecards').rendered) {
+            Tine.Tinebase.appMgr.activate();
         } else {
             this.activateDefaultApp.defer(10, this);
         }
@@ -181,7 +214,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
      */
     setActiveTreePanel: function(panel, keep) {
         // get card panel to which component will be added
-        var cardPanel =  this.appPicker.getTreeCardPanel();
+        var cardPanel = Ext.getCmp('treecards');
         panel.keep = keep;
         
         // remove all panels which should not be keeped
