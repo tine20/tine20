@@ -40,7 +40,9 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
             iconCls: 'tine-favicon'
         }].concat(this.getDefaultTabItems());
         
+        Tine.Tinebase.appMgr.on('activate', this.onActivateApp, this);
         this.on('beforetabchange', this.onBeforeTabChange, this);
+        
         this.supr().initComponent.call(this);
     },
     
@@ -127,9 +129,21 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
             closable: true,
             listeners: {
                 scope: this,
-                beforeclose: this.onBeforeTabClose
+                beforeclose: this.onBeforeTabClose,
+                activate: this.onTabActivate
             }
         };
+    },
+    
+    /**
+     * executed when an app get activated by mainscreen
+     * 
+     * @param {Tine.Application} app
+     */
+    onActivateApp: function(app) {
+        var tab = this.getItem(this.id + '-' + app.appName) || this.add(this.getTabItem(app));
+        
+        this.setActiveTab(tab);
     },
     
     /**
@@ -138,7 +152,8 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
      * @param {Tine.Application} app
      */
     onAppItemClick: function(app) {
-        console.log(app.appName);
+        handler: Tine.Tinebase.appMgr.activate(app);
+        
         this.menu.hide();
     },
     
@@ -165,6 +180,21 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
     onBeforeTabClose: function(tab) {
         // don't close last app panel
         return this.items.getCount() > 2;
+    },
+    
+    /**
+     * executed when a tab gets activated
+     * 
+     * @param {Ext.Panel} tab
+     */
+    onTabActivate: function(tab) {
+        var appName = tab.id.split('-').pop();
+        var app = Tine.Tinebase.appMgr.get(appName);
+        
+        // fixme
+        if (Ext.getCmp('treecards').rendered) {
+            Tine.Tinebase.appMgr.activate(app);
+        }
     }
     
 });
