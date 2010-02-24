@@ -79,7 +79,7 @@ Tine.Tinebase.ExceptionHandler = function() {
         var error = {
             name       : 'unknown error',
             message    : 'unknown',
-            number     : 'unknown',
+            code       : 'unknown',
             description: 'unknown',
             url        : 'unknown',
             line       : 'unknown'
@@ -95,7 +95,7 @@ Tine.Tinebase.ExceptionHandler = function() {
         if (args[0] instanceof Error) { // Error object thrown in try...catch
             error.name        = args[0].name;
             error.message     = args[0].message;
-            error.number      = args[0].number & 0xFFFF; //Apply binary arithmetic for IE number, firefox returns message string in element array element 0
+            error.code        = args[0].number & 0xFFFF; //Apply binary arithmetic for IE number, firefox returns message string in element array element 0
             error.description = args[0].description;
             
         } else if ((args.length == 3) && (typeof(args[2]) == "number")) { // Check the signature for a match with an unhandled exception
@@ -193,7 +193,17 @@ Tine.Tinebase.ExceptionHandler = function() {
                     icon: Ext.MessageBox.WARNING
                 });
                 break;
-
+            
+            // user in no role
+            case 610:
+            Ext.MessageBox.show({
+                    title: _('No Role Memberships'), 
+                    msg: _('Your user account has no role memberships. Please contact your administrator.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.WARNING
+                });
+                break;
+                
             // generic failure -> notify developers
             default:
             
