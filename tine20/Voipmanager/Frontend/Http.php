@@ -126,7 +126,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $view->jsExecute = 'Tine.Voipmanager.Snom.Phones.EditDialog.display(' . $encodedSnomPhone . ', ' . $encodedSnomLines . ', ' . $encodedAsteriskSipPeers . ', ' . $encodedTemplates . ', ' . $encodedLocations . ', '. $encodedWritable .');';
         
         header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
+        echo $view->render('jsclient.php');
     }
     
     /**
@@ -157,7 +157,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $view->jsExecute = 'Tine.Voipmanager.Asterisk.SipPeers.EditDialog.display(' . $encodedSipPeer .','. $encodedContexts .');';
         
         header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
+        echo $view->render('jsclient.php');
     }       
     
 
@@ -183,7 +183,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $view->jsExecute = 'Tine.Voipmanager.Asterisk.Context.EditDialog.display(' . $encodedContext .');';
         
         header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
+        echo $view->render('jsclient.php');
     }
 
 
@@ -211,7 +211,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $view->jsExecute = 'Tine.Voipmanager.Asterisk.Voicemail.EditDialog.display(' . $encodedVoicemail .','.$encodedContexts.');';
 
         header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
+        echo $view->render('jsclient.php');
     }
 
 
@@ -244,7 +244,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $view->jsExecute = 'Tine.Voipmanager.Snom.Location.EditDialog.display(' . $encodedLocation .');';
         
         header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
+        echo $view->render('jsclient.php');
     }    
     
     
@@ -271,7 +271,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $view->jsExecute = 'Tine.Voipmanager.Snom.Software.EditDialog.display(' . $encodedSoftware .');';
         
         header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
+        echo $view->render('jsclient.php');
     }    
 
 
@@ -298,7 +298,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $view->jsExecute = 'Tine.Voipmanager.Snom.Settings.EditDialog.display(' . $encodedSetting .');';
 
         header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
+        echo $view->render('jsclient.php');
     }  
 
 
@@ -342,7 +342,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         ';
         
         header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
+        echo $view->render('jsclient.php');
     }        
      
 
@@ -368,7 +368,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $view->jsExecute = 'Tine.Voipmanager.Asterisk.Meetme.EditDialog.display(' . $encodedMeetme .');';
         
         header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
+        echo $view->render('jsclient.php');
     }	 
 	 
 }

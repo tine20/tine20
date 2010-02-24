@@ -95,6 +95,6 @@ class Phone_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $view->jsExecute = 'Tine.Voipmanager.MyPhones.EditDialog.display(' . $encodedSnomPhone . ', '. $encodedWritable .');';
         
         header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
+        echo $view->render('jsclient.php');
     }    
 }

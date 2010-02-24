@@ -79,7 +79,7 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $view->setScriptPath('Setup/views');
         
         header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
+        echo $view->render('jsclient.php');
     }
     
     
