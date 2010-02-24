@@ -28,7 +28,11 @@
     
     <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="library/ExtJS/ext-all<?php echo TINE20_BUILDTYPE != 'RELEASE' ? '-debug' : '' ?>.js"></script>
-
+    
+    <!--  not yet
+        <link rel="stylesheet" type="text/css"  media="print" href="print.css" />
+    -->
+          
     <!-- Tine 2.0 static files --><?php
         /**
          * this variable gets replaced by the buildscript
