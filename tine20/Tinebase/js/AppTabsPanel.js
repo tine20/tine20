@@ -42,6 +42,8 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
         
         Tine.Tinebase.appMgr.on('activate', this.onActivateApp, this);
         this.on('beforetabchange', this.onBeforeTabChange, this);
+        this.on('add', this.onTabChange, this);
+        this.on('remove', this.onTabChange, this);
         
         this.supr().initComponent.call(this);
     },
@@ -194,6 +196,23 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
         // fixme
         if (Ext.getCmp('treecards').rendered) {
             Tine.Tinebase.appMgr.activate(app);
+        }
+    },
+    
+    /**
+     * executed when tabs chages
+     */
+    onTabChange: function() {
+        var tabCount = this.items.getCount();
+        var closable = tabCount > 2;
+        
+        for (var i=1, el; i<tabCount; i++) {
+            this.items.get(i).closable = closable;
+            
+            el = this.getTabEl(i);
+            if (el) {
+                Ext.get(el)[closable ? 'addClass' : 'removeClass']('x-tab-strip-closable');
+            }
         }
     }
     
