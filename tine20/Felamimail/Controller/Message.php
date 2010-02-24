@@ -162,8 +162,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                             . $message->messageuid . "' from " . $folder->globalname . " to $trashFolder."
                         );
                         
-                        // move to trash folder
-                        $this->createFolderIfNotExists($account, $trashFolder);
+                        // move to trash folder (create folder if it does not exist)
+                        if ($account->trash_folder && ! empty($account->trash_folder)) {
+                            $this->_createFolderIfNotExists($account, $trashFolder);
+                        }
                         $imapBackend->moveMessage($message->messageuid, $trashFolder);
                         
                     } catch (Zend_Mail_Storage_Exception $zmse) {
@@ -1017,8 +1019,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         try {
             $mailAsString = $_transport->getHeaders() . Zend_Mime::LINEEND . $_transport->getBody();
             
-            $sentFolder = ($_account->sent_folder && ! empty($_account->sent_folder)) ? $_account->sent_folder : 'Sent';
-            $this->createFolderIfNotExists($_account, $sentFolder);
+            if (($_account->sent_folder && ! empty($_account->sent_folder))) {
+                $sentFolder = $_account->sent_folder;
+                $this->_createFolderIfNotExists($_account, $sentFolder);
+            } else {
+                $sentFolder = 'Sent';
+            }
+            
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to save message in sent folder ...');
             Felamimail_Backend_ImapFactory::factory($_account)->appendMessage($mailAsString, $sentFolder);
             
@@ -1046,7 +1053,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 	 * @param Felamimail_Model_Account $_account
 	 * @return boolean
 	 */
-	public function createFolderIfNotExists(Felamimail_Model_Account $_account, $folderName){
+	protected function _createFolderIfNotExists(Felamimail_Model_Account $_account, $folderName){
 		$imap = Felamimail_Backend_ImapFactory::factory($_account);
 		if($imap->getFolderStatus($folderName) === false){
 			Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no Sent Folder, try to add it.');
