@@ -249,6 +249,11 @@ html, body {
    background-image:url(../../images/oxygen/16x16/apps/kwrite.png) !important;
 }
 
+/* ----- mainmenu ------------------------------------------------------------*/
+.tine-favicon {
+	background-image:url(../../images/favicon.png) !important;
+}
+
 /* ----- appchooser panel-----------------------------------------------------*/
 .app-panel-title {
     font-size: 15px;
