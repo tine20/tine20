@@ -4,6 +4,10 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             
     initComponent: function() {
         this.initActions();
+        this.onlineStatus = new Ext.ux.ConnectionStatus({
+            showIcon: false
+        });
+        
         this.items = this.getItems();
         
         this.supr().initComponent.call(this);
@@ -47,6 +51,8 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                     ]
                 }*/
             }, '->', 
+            String.format(_('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName), 
+            this.onlineStatus,
             this.action_logout
         ];
     },
