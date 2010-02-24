@@ -193,7 +193,7 @@ Ext.namespace('Tine.Felamimail');
             record: this.record,
             hideLabel: true,
             filesProperty: 'attachments',
-            anchor: '100% 100%'
+            anchor: '100% 80%'
         });
         
         this.htmlEditor = new Ext.form.HtmlEditor({
