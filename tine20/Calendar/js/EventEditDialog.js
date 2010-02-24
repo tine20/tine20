@@ -150,7 +150,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         title: Tine.Tinebase.translation._hidden('Saved in'),
                         items: [{
                             layout: 'column',
-                            items: [Ext.apply({columnWidth: .77}, this.CalendarSelectWidget), {
+                            items: [Ext.apply(this.CalendarSelectWidget, {columnWidth: .77}), {
                                 columnWidth: .23,
                                 xtype: 'checkbox',
                                 hideLabel: true,
