@@ -14,10 +14,40 @@ Ext.ns('Tine.Tinebase');
 
 Tine.Tinebase.AppManager = function() {
     /**
-     * @property {Ext.util.MixedCollection} apps
+     * @property apps
+     * @type Ext.util.MixedCollection
+     * 
      * enabled apps
      */
     this.apps = new Ext.util.MixedCollection({});
+    
+    this.addEvents(
+        /**
+         * @event beforeactivate
+         * fired before an application gets activated. Retrun false to stop activation
+         * @param {Tine.Aplication} app about to activate
+         */
+        'beforeactivate',
+        /**
+         * @event activate
+         * fired when an application gets activated
+         * @param {Tine.Aplication} activated app
+         */
+        'activate',
+        /**
+         * @event beforedeactivate
+         * fired before an application gets deactivated. Retrun false to stop deactivation
+         * @param {Tine.Aplication} app about to deactivate
+         */
+        'beforeactivate',
+        /**
+         * @event deactivate
+         * fired when an application gets deactivated
+         * @param {Tine.Aplication} deactivated app
+         */
+        'deactivate'
+    );
+    
     
     // fill this.apps with registry data
     var enabledApps = Tine.Tinebase.registry.get('userApplications');
@@ -33,14 +63,46 @@ Tine.Tinebase.AppManager = function() {
             
             this.apps.add(app.appName, app);
         }
+        
+        this.apps.sort("ASC", function(app1, app2) {
+            return parseInt(app1.order, 10) < parseInt(app2.order, 10) ? 1 : -1;
+        });
     }
 };
 
-Ext.apply(Tine.Tinebase.AppManager.prototype, {
+Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
     /**
      * @cfg {Tine.Application}
      */
     defaultApp: null,
+    
+    /**
+     * @property activeApp
+     * @type Tine.Application
+     * 
+     * currently active app
+     */
+    activeApp: null,
+    
+    activate: function(app) {
+        if (app || (app = this.getDefault()) ) {
+            
+            if (this.activeApp && this.fireEvent('beforedeactivate', this.activeApp) === false) {
+                return false;
+            }
+            var activeApp = this.activeApp;
+            this.activeApp = null;
+            this.fireEvent('deactivate', activeApp);
+            
+            if (this.fireEvent('beforeactivate', app) === false) {
+                return false;
+            }
+            
+            app.getMainScreen().show();
+            this.activeApp = app;
+            this.fireEvent('activate', app);
+        }
+    },
     
     /**
      * returns an appObject
