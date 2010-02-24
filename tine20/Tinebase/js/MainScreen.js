@@ -63,12 +63,12 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             hidden: true
         }, {
             cls: 'tine-mainscreen-apptabs',
-            height: 26,
-            layout: 'fit',
+            hidden: true,
             border: false,
-            html: 'apptabs',
-            hidden: true
-            //items: this.getAppTabs()
+            height: 22,
+            items: new Tine.Tinebase.AppTabsPanel({
+                plain: true
+            })
         }, {
             cls: 'tine-mainscreen-centerpanel',
             flex: 1,
