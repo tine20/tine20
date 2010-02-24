@@ -250,6 +250,11 @@ html, body {
 }
 
 /* ----- mainmenu ------------------------------------------------------------*/
+.tine-mainscreen-statusbar .x-toolbar {
+    background: none;
+    border: 0;
+}
+
 .tine-favicon {
 	background-image:url(../../images/favicon.png) !important;
 }
