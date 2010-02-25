@@ -1,7 +1,13 @@
 Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
     id: 'tineMenu',
     height: 26,
-            
+    
+    /**
+     * @type Array
+     * @property mainActions
+     */
+    mainActions: null,
+    
     initComponent: function() {
         this.initActions();
         this.onlineStatus = new Ext.ux.ConnectionStatus({
@@ -18,19 +24,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             text: Tine.title,
             menu: {
                 id: 'Tinebase_System_Menu',     
-                items: [
-                    this.action_aboutTine,
-                    '-',
-                    this.action_changePassword,
-                    this.action_installGoogleGears,
-                    '-',
-                    {
-                        text: _('Debug Console (Ctrl + F11)'),
-                        handler: Tine.Tinebase.common.showDebugConsole,
-                        hidden: ! Tine.Tinebase.registry.get("version").buildType.match(/(DEVELOPMENT|DEBUG)/)
-                    },
-                    this.action_logout
-                ]                
+                items: this.getMainActions()               
             }}/*, {
                 text: _('Admin'),
                 id: 'Tinebase_System_AdminButton',
@@ -56,6 +50,16 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             this.action_logout
         ];
     },
+    
+    /**
+     * returns main actions to be used outside this menu
+     * 
+     * @return {Array}
+     */
+    getMainActions: function() {
+        return this.mainActions;
+    },
+    
     /**
      * initialize actions
      * @private
@@ -97,6 +101,20 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             handler: this.onLogout,
             scope: this
         });
+        
+        this.mainActions = [
+            this.action_aboutTine,
+            '-',
+            this.action_changePassword,
+            this.action_installGoogleGears,
+            '-',
+            {
+                text: _('Debug Console (Ctrl + F11)'),
+                handler: Tine.Tinebase.common.showDebugConsole,
+                hidden: ! Tine.Tinebase.registry.get("version").buildType.match(/(DEVELOPMENT|DEBUG)/)
+            },
+            this.action_logout
+        ];
     },
     
     /**
