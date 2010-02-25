@@ -6,9 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Json.php 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
- * 
- * @todo        remove obsolete code
+ * @version     $Id$
  */
 
 /**
@@ -45,38 +43,6 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'success'   => TRUE
         );
     }
-    
-    /**
-     * get user phones
-     *
-     * @return array array with user phones
-     * @todo add account id filter again
-     */
-    /*
-    public function getUserPhones($accountId)
-    {        
-        $voipController = Voipmanager_Controller_MyPhone::getInstance();
-        
-        $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
-            array('field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId())
-        ));
-        $phones = $voipController->search($filter);
-        
-        // add lines to phones
-        $results = array();
-        foreach ($phones as $phone) {
-            $myPhone = $voipController->getMyPhone($phone->getId(), $accountId);
-
-            $result = $phone->toArray();
-            $result['lines'] = $myPhone->lines->toArray();
-            $results[] = $result;
-        }
-        
-        $result = $results;
-        
-        return $result;        
-    }
-    */
     
     /**
      * Search for calls matching given arguments
