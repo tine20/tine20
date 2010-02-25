@@ -79,8 +79,8 @@ Tine.Setup.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         
         Tine.Tinebase.MainScreen.setActiveToolbar(this[panel + 'ActionToolbar'], true);
         
-        // disable preferences in main menu
-        var preferences = Ext.getCmp('Tinebase_System_PreferencesButton');
-        preferences.setDisabled(true);
+        // hide stuff in main menu
+        Tine.Tinebase.MainScreen.getMainMenu().action_changePassword.setHidden(true);
+        Tine.Tinebase.MainScreen.getMainMenu().action_showPreferencesDialog.setHidden(true);
     }
 });
