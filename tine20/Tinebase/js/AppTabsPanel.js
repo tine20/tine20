@@ -87,15 +87,15 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
                 columnWidth: 0.5,
                 hidden: false,
                 style: {
-                    'border-color': 'transparent'
+                    //'border-color': 'transparent'
+                    'border': '0'
                 }
             },
             items: [{
-                items: this.getAppItems()
+                items: this.getAppItems(),
+                style: {'border-right' : '1px solid lightgray'}
             }, {
-                items: [{
-                    text: 'logout'
-                }]
+                items: Tine.Tinebase.MainScreen.getMainMenu().getMainActions()
             }]
         });
     },
