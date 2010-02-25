@@ -1,7 +1,10 @@
 Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
-    id: 'tineMenu',
-    height: 26,
+    /**
+     * @cfg {Boolean} showMainMenu
+     */
+    showMainMenu: false,    
     
+    id: 'tineMenu',
     /**
      * @type Array
      * @property mainActions
@@ -22,17 +25,21 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
     getItems: function() {
         return [{
             text: Tine.title,
+            hidden: !showMainMenu,
             menu: {
-                id: 'Tinebase_System_Menu',     
-                items: this.getMainActions()               
-            }}/*, {
+                id: 'Tinebase_System_Menu', 
+                items: this.getMainActions()
+            }},
+            '->',
+            String.format(_('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName),
+            /* {
                 text: _('Admin'),
                 id: 'Tinebase_System_AdminButton',
                 disabled: true,
                 menu: {
                     id: 'Tinebase_System_AdminMenu'
                 }     
-            }*/,{
+            }*/{
                 text: _('Preferences'),
                 id: 'Tinebase_System_PreferencesButton',
                 disabled: false,
@@ -44,8 +51,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                         //this.action_editPreferences
                     ]
                 }*/
-            }, '->', 
-            String.format(_('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName), 
+            },/* '->',*/ 
             this.onlineStatus,
             this.action_logout
         ];
