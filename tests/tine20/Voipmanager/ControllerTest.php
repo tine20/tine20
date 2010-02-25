@@ -71,7 +71,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_backends['Snom_Setting'] = Voipmanager_Controller_Snom_Setting::getInstance();
         $this->_backends['Snom_Software'] = Voipmanager_Controller_Snom_Software::getInstance();
         $this->_backends['Snom_Template'] = Voipmanager_Controller_Snom_Template::getInstance();
-        $this->_backends['MyPhone'] = Voipmanager_Controller_MyPhone::getInstance();
     }
 
     /**
