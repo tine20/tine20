@@ -122,21 +122,24 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
         
         Tine.Voipmanager.LineGridPanel.superclass.initActionsAndToolbars.call(this);
         
-        this.searchCombo = this.getSearchCombo();
-
-        this.comboPanel = new Ext.Panel({
-            layout: 'hfit',
-            border: false,
-            items: this.searchCombo,
-            columnWidth: 1
-        });
-        
-        this.tbar = new Ext.Toolbar({
-            items: [
-                this.comboPanel
-            ],
-            layout: 'column'
-        });
+        // only allow to add new lines from Voipmanager
+        if (this.editDialog.recordProxy.appName == 'Voipmanager') {
+            this.searchCombo = this.getSearchCombo();
+    
+            this.comboPanel = new Ext.Panel({
+                layout: 'hfit',
+                border: false,
+                items: this.searchCombo,
+                columnWidth: 1
+            });
+            
+            this.tbar = new Ext.Toolbar({
+                items: [
+                    this.comboPanel
+                ],
+                layout: 'column'
+            });
+        }
     },
     
     /**
@@ -205,8 +208,9 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
             //this.cfPanel.getForm().reset();
             this.cfPanel.setDisabled(true);
         }
-
-        this.actionRemove.setDisabled(rowCount == 0);
+        
+        // only allow to remove lines from Voipmanager and if rowCount > 0
+        this.actionRemove.setDisabled(this.editDialog.recordProxy.appName != 'Voipmanager' || rowCount == 0);
     },
     
     /**
