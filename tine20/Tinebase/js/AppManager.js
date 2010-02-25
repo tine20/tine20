@@ -176,7 +176,9 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
             app = this.get(app);
         }
         
-        this.defaultApp = app;
+        if (app) {
+            this.defaultApp = app;
+        }
     },
     
     /**
