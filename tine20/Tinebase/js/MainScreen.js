@@ -32,14 +32,13 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function() {
-        this.tineMenu = new Tine.Tinebase.MainMenu({});
-        //this.appPicker = new Tine.Tinebase.AppPicker({});
+        // NOTE: this is a cruid method to create some kind of singleton...
+        Tine.Tinebase.MainScreen = this;
         
         this.initLayout();
-        
         Tine.Tinebase.appMgr.on('activate', this.onAppActivate, this);
         
-        Tine.Tinebase.MainScreen.superclass.initComponent.call(this);
+        this.supr().initComponent.call(this);
     },
     
     /**
@@ -56,7 +55,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             height: 26,
             layout: 'fit',
             border: false,
-            items: this.tineMenu,
+            items: this.getMainMenu(),
             hidden: false
         }*/, {
             cls: 'tine-mainscreen-statusbar',
@@ -64,7 +63,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             layout: 'fit',
             border: false,
             //hidden: false,
-            items: this.tineMenu
+            items: this.getMainMenu()
             //items: this.getStatusBar()
         }, {
             cls: 'tine-mainscreen-apptabs',
@@ -142,6 +141,14 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         }];
     },
     
+    getMainMenu: function() {
+        if (! this.mainMenu) {
+            this.mainMenu = new Tine.Tinebase.MainMenu({});
+        }
+        
+        return this.mainMenu;
+    },
+    
     getStatusBar: function() {
         if (! this.statusBar) {
             this.statusBar = new Ext.Toolbar({
@@ -163,10 +170,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     },
     
     onRender: function(ct, position) {
-        Tine.Tinebase.MainScreen.superclass.onRender.call(this, ct, position);
-        
-        // argh!!! fixme!!!
-        Tine.Tinebase.MainScreen = this;
+        this.supr().onRender.call(this, ct, position);
         
         this.activateDefaultApp();
         
