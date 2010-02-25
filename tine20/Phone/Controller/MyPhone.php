@@ -2,32 +2,23 @@
 /**
  * MyPhone controller for Voipmanager Management application
  *
- * @package     Voipmanager
+ * @package     Phone
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        refactor update function (use generic params) 
- * @todo        move that to Phone app?
  */
 
 /**
  * MyPhone controller class for Voipmanager Management application
  * 
- * @package     Voipmanager
+ * @package     Phone
  * @subpackage  Controller
  */
-class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
+class Phone_Controller_MyPhone extends Voipmanager_Controller_Snom_Phone
 {
-    /**
-     * Voipmanager backend class
-     *
-     * @var Voipmanager_Backend_Snom_Phone
-     */
-    protected $_backend;
-    
     /**
      * the constructor
      *
@@ -35,8 +26,8 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
      */
     private function __construct() 
     {
-        $this->_backend         = new Voipmanager_Backend_Snom_Phone();
-        $this->_currentAccount  = Tinebase_Core::getUser();
+        $this->_modelName   = 'Phone_Model_MyPhone';
+        $this->_backend     = new Voipmanager_Backend_Snom_Phone(NULL, $this->_modelName);
     }
     
     /**
@@ -50,19 +41,19 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
     /**
      * holds the instance of the singleton
      *
-     * @var Voipmanager_Controller_MyPhone
+     * @var Phone_Controller_MyPhone
      */
     private static $_instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return Voipmanager_Controller_MyPhone
+     * @return Phone_Controller_MyPhone
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Voipmanager_Controller_MyPhone();
+            self::$_instance = new Phone_Controller_MyPhone();
         }
         
         return self::$_instance;
@@ -76,6 +67,7 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
      * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Snom_Phone
      * @throws  Voipmanager_Exception_NotFound
      */
+    /*
     public function getMyPhone($_id)
     {
         $phone = $this->_backend->getMyPhone($_id, $this->_currentAccount->getId());
@@ -87,6 +79,7 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
 
         return $phone;    
     }
+    */
     
    /**
      * update one myPhone
@@ -95,7 +88,8 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
      * @return  Voipmanager_Model_Snom_Phone
      * @throws  Voipmanager_Exception_InvalidArgument
      */
-    public function update(Tinebase_Record_Interface $_phone/*, Voipmanager_Model_Snom_PhoneSettings $_phoneSettings, $_accountId*/)
+    /*
+    public function update(Tinebase_Record_Interface $_phone)
     {
         $phone = $this->_backend->updateMyPhone($_phone, $this->_currentAccount->getId());
         
@@ -124,4 +118,5 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
     
         return $this->getMyPhone($phone, $_accountId);
     }
+    */
 }

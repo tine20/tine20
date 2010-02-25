@@ -182,6 +182,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
             }
             
             if(Voipmanager_Controller_Snom_PhoneSettings::getInstance()->get($phone->getId())) {
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_phoneSettings->toArray(), true));
                 $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->update($_phoneSettings);
             } else {
                 $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->create($_phoneSettings);            
@@ -224,32 +225,34 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
     /**
      * resolve phone rights and lines
      * 
-     * @param Voipmanager_Model_Snom_Phone $_phone
+     * @param Voipmanager_Model_Snom_Phone|Phone_Model_MyPhone $_phone
      * @return void
      */
-    protected function _resolveRightsAndLines(Voipmanager_Model_Snom_Phone $_phone)
+    protected function _resolveRightsAndLines($_phone)
     {
         $filter = new Voipmanager_Model_Snom_LineFilter(array(
             array('field' => 'snomphone_id', 'operator' => 'equals', 'value' => $_phone->id)
         ));
         $_phone->lines  = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
-        $_phone->rights = $this->_backend->getPhoneRights($_phone->id);
         
-        // add accountDisplayName
-        foreach ($_phone->rights as &$right) {
-            $user = Tinebase_User::getInstance()->getUserById($right->account_id);
-            $right->account_name = $user->accountDisplayName;
+        if ($_phone instanceof Voipmanager_Model_Snom_Phone) {
+            $_phone->rights = $this->_backend->getPhoneRights($_phone->id);
+            // add accountDisplayName
+            foreach ($_phone->rights as &$right) {
+                $user = Tinebase_User::getInstance()->getUserById($right->account_id);
+                $right->account_name = $user->accountDisplayName;
+            }
         }
     }
     
     /**
      * create lines / sippeers
      * 
-     * @param Voipmanager_Model_Snom_Phone $_phone
+     * @param Voipmanager_Model_Snom_Phone|Phone_Model_MyPhone $_phone
      * @param array $_lines
      * @return void
      */
-    protected function _createLines(Voipmanager_Model_Snom_Phone $_phone, $_lines)
+    protected function _createLines($_phone, $_lines)
     {
         foreach($_lines as $line) {
             $line->snomphone_id = $_phone->getId();

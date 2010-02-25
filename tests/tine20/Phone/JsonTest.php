@@ -74,6 +74,11 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
             'name' => 'test setting',
             'description' => 'test setting',
         ));       
+
+        $this->_objects['phonesetting'] = new Voipmanager_Model_Snom_PhoneSettings(array(
+            'phone_id'  => 1001,
+            'web_language' => 'English'
+        ));       
         
         $this->_objects['template'] = new Voipmanager_Model_Snom_Template(array(
             'id' => 20002,
@@ -86,6 +91,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $this->_objects['phone'] = new Voipmanager_Model_Snom_Phone(array(
             'id' => 1001,
             'macaddress' => "1234567890cd",
+            'description' => 'user phone',
             'location_id' => $this->_objects['location']->getId(),
             'template_id' => $this->_objects['template']->getId(),
             'current_model' => 'snom320',
@@ -126,6 +132,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $phoneBackend               = new Voipmanager_Backend_Snom_Phone();
         $snomLocationBackend        = new Voipmanager_Backend_Snom_Location();
         $snomSettingBackend         = new Voipmanager_Backend_Snom_Setting();
+        $snomPhoneSettingBackend    = new Voipmanager_Backend_Snom_PhoneSettings();
         $snomTemplateBackend        = new Voipmanager_Backend_Snom_Template();     
         $snomSoftwareBackend        = new Voipmanager_Backend_Snom_Software(); 
         $snomLineBackend            = new Voipmanager_Backend_Snom_Line();
@@ -174,6 +181,11 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         }
         try {
             $snomLineBackend->create($this->_objects['line']);
+        } catch (Zend_Db_Statement_Exception $e) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+        }
+        try {
+            $snomPhoneSettingBackend->create($this->_objects['phonesetting']);
         } catch (Zend_Db_Statement_Exception $e) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
         }
@@ -237,7 +249,6 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {	
-        /*
         // remove phone, location, template
         $phoneBackend               = new Voipmanager_Backend_Snom_Phone();
         $snomLocationBackend        = new Voipmanager_Backend_Snom_Location();
@@ -247,7 +258,9 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $snomLineBackend            = new Voipmanager_Backend_Snom_Line();
         $asteriskSipPeerBackend     = new Voipmanager_Backend_Asterisk_SipPeer();
         $callHistoryBackend         = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);    
+        $snomPhoneSettingBackend    = new Voipmanager_Backend_Snom_PhoneSettings();
         
+        $snomPhoneSettingBackend->delete($this->_objects['phone']->getId());
         $phoneBackend->delete($this->_objects['phone']->getId());
         $snomLocationBackend->delete($this->_objects['location']->getId());
         $snomTemplateBackend->delete($this->_objects['template']->getId());
@@ -258,24 +271,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         
         $callHistoryBackend->delete($this->_objects['call1']->getId());
         $callHistoryBackend->delete($this->_objects['call2']->getId());
-        */
     }
-    
-    /**
-     * try to get user phones
-     *
-     */
-    public function testGetUserPhones()
-    {        
-        // get phone json
-        $phones = $this->_json->getUserPhones(Zend_Registry::get('currentAccount')->getId());
-
-        //print_r($phones);
-        $this->assertGreaterThan(0, count($phones), 'more than 1 phone expected');        
-        $this->assertEquals($this->_objects['phone']->macaddress, $phones[0]['macaddress'], 'got wrong phone');
-        $this->assertGreaterThan(0, count($phones[0]['lines']), 'no lines attached');
-        $this->assertEquals($this->_objects['sippeer']->getId(), $phones[0]['lines'][0]['asteriskline_id'], 'got wrong line');
-    }    
     
     /**
      * try to get all calls
@@ -302,6 +298,30 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
     }    
 
     /**
+     * get and update user phone
+     * 
+     * @return void
+     */
+    public function testGetUpdateSnomPhone()
+    {
+        $userPhone = $this->_json->getMyPhone($this->_objects['phone']->getId());
+        
+        $this->assertEquals('user phone', $userPhone['description'], 'no description');
+        $this->assertEquals('English', $userPhone['web_language'], 'no web_language');
+        $this->assertGreaterThan(0, count($userPhone['lines']), 'no lines attached');
+
+        // update phone
+        $userPhone['web_language'] = 'Deutsch';
+        $userPhone['lines'][0]['idletext'] = 'idle';
+        $userPhone['lines'][0]['asteriskline_id']['cfd_time'] = 60;
+        $userPhoneUpdated = $this->_json->saveMyPhone($userPhone);
+        
+        $this->assertEquals('Deutsch', $userPhoneUpdated['web_language'], 'no updated web_language');
+        $this->assertEquals('idle', $userPhoneUpdated['lines'][0]['idletext'], 'no updated idletext');
+        $this->assertEquals(60, $userPhoneUpdated['lines'][0]['asteriskline_id']['cfd_time'], 'no updated cfd time');
+    }
+    
+    /**
      * try to get registry data
      *
      */
@@ -309,8 +329,9 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
     {        
         // get phone json
         $data = $this->_json->getRegistryData();
-
-        $this->assertGreaterThan(0, count($data['Phones']), 'more than 1 phone expected');        
+        
+        $this->assertGreaterThan(0, count($data['Phones']), 'more than 1 phone expected');
         $this->assertGreaterThan(0, count($data['Phones'][0]['lines']), 'no lines attached');
+        $this->assertEquals('user phone', $data['Phones'][0]['description'], 'no description');
     }        
 }		

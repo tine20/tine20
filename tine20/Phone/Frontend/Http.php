@@ -28,6 +28,7 @@ class Phone_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
+            'Phone/js/Models.js',
             'Phone/js/Phone.js',
         );
     }

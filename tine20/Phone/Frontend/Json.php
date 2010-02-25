@@ -5,8 +5,10 @@
  * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Json.php 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: Json.php 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
+ * 
+ * @todo        remove obsolete code
  */
 
 /**
@@ -18,6 +20,11 @@
  */
 class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
+    /**
+     * app name
+     * 
+     * @var string
+     */
     protected $_applicationName = 'Phone';
     
     /**
@@ -45,6 +52,7 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array array with user phones
      * @todo add account id filter again
      */
+    /*
     public function getUserPhones($accountId)
     {        
         $voipController = Voipmanager_Controller_MyPhone::getInstance();
@@ -68,6 +76,7 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $result;        
     }
+    */
     
     /**
      * Search for calls matching given arguments
@@ -92,40 +101,74 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
     }
     
+
     /**
-     * save one myPhone
+     * get one phone identified by phoneId
      *
-     * if $phoneData['id'] is empty the phone gets added, otherwise it gets updated
-     *
-     * @param  array $phoneData an array of phone properties
+     * @param  int $id
      * @return array
      */
-    public function saveMyPhone($phoneData)
+    public function getMyPhone($id)
     {
-        $voipController = Voipmanager_Controller_MyPhone::getInstance();
+        return $this->_get($id, Phone_Controller_MyPhone::getInstance());
+    } 
+    
+    /**
+     * save one phone
+     * -  if $recordData['id'] is empty the phone gets added, otherwise it gets updated
+     *
+     * @param array $recordData an array of phone properties
+     * @return array
+     */
+    public function saveMyPhone($recordData)
+    {
+        $voipController = Phone_Controller_MyPhone::getInstance();
         
-        // unset if empty
-        if (empty($phoneData['id'])) {
-            unset($phoneData['id']);
-        }
-        
-        $phone = new Voipmanager_Model_MyPhone();
-        $phone->setFromArray($phoneData);
+        $phone = new Phone_Model_MyPhone();
+        $phone->setFromArray($recordData);
         
         $phoneSettings = new Voipmanager_Model_Snom_PhoneSettings();
-        $phoneSettings->setFromArray($phoneData);
+        $phoneSettings->setFromArray($recordData);
         $phone->settings = $phoneSettings;
+        
+        $phone->lines = new Tinebase_Record_RecordSet(
+            'Voipmanager_Model_Snom_Line', 
+            (isset($recordData['lines']) && !empty($recordData['lines'])) ? $recordData['lines'] : array(),
+            TRUE
+        );
         
         if (!empty($phone->id)) {
             $phone = $voipController->update($phone);
         } 
         
-        $result = array('success'           => true,
-            'welcomeMessage'    => 'Entry updated',
-            'updatedData'       => $phone->toArray()
-        );
+        return $this->getMyPhone($phone->getId());
+    } 
+    
+    /**
+     * returns record prepared for json transport
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @return array record data
+     */
+    protected function _recordToJson($_record)
+    {
+        $recordArray = parent::_recordToJson($_record);
         
-        return $result;         
+        switch (get_class($_record)) {
+            case 'Phone_Model_MyPhone':
+                // add settings
+                $settings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->get($_record->getId());
+                $recordArray = array_merge($recordArray, $settings->toArray());
+                
+                // resolve lines
+                foreach ($recordArray['lines'] as &$line) {
+                    $line['asteriskline_id'] = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($line['asteriskline_id'])->toArray();
+                }
+                
+                break;
+        }
+        
+        return $recordArray;
     }
     
     /**
@@ -136,16 +179,20 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
-        $accountId = Tinebase_Core::getUser()->getId();
-        
-        try {
-            $phones = $this->getUserPhones($accountId);
-        } catch (Voipmanager_Exception_AccessDenied $vead) {
-            $phones = array();
+        // get user phones
+        $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
+            array('field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId())
+        ));
+        $phones = Phone_Controller_MyPhone::getInstance()->search($filter);
+        foreach ($phones as $phone) {
+            $filter = new Voipmanager_Model_Snom_LineFilter(array(
+                array('field' => 'snomphone_id', 'operator' => 'equals', 'value' => $phone->id)
+            ));
+            $phone->lines  = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);            
         }
         
         $registryData = array(
-            'Phones' => $phones
+            'Phones' => $phones->toArray()
         );
         
         return $registryData;
