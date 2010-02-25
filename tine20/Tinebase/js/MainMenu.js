@@ -29,41 +29,43 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             menu: {
                 id: 'Tinebase_System_Menu', 
                 items: this.getMainActions()
-            }},
-            '->',
-            String.format(_('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName),
-            /* {
-                text: _('Admin'),
-                id: 'Tinebase_System_AdminButton',
-                disabled: true,
-                menu: {
-                    id: 'Tinebase_System_AdminMenu'
-                }     
-            }*/{
-                text: _('Preferences'),
-                id: 'Tinebase_System_PreferencesButton',
-                disabled: false,
-                handler: this.onEditPreferences
-                /*,
-                menu: {
-                    id: 'Tinebase_System_PreferencesMenu',
-                    items: [
-                        //this.action_editPreferences
-                    ]
-                }*/
-            },/* '->',*/ 
-            this.onlineStatus,
-            this.action_logout
-        ];
+        }},
+        '->', {
+            text: String.format(_('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName),
+            menu: this.getUserActions()
+        },
+        this.onlineStatus,
+        this.action_logout];
     },
     
     /**
-     * returns main actions to be used outside this menu
+     * returns all main actions
      * 
      * @return {Array}
      */
     getMainActions: function() {
+        if (! this.mainActions) {
+            this.mainActions = [
+                this.action_aboutTine,
+                '-',
+                this.action_installGoogleGears,
+                this.action_showDebugConsole,
+                '-',
+                this.getUserActions()
+            ];
+        }
         return this.mainActions;
+    },
+    
+    getUserActions: function() {
+        if (! this.userActions) {
+            this.userActions = [
+                this.action_showPreferencesDialog,
+                this.action_changePassword,
+                this.action_logout
+            ];
+        }
+        return this.userActions;
     },
     
     /**
@@ -77,6 +79,24 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             iconCls: 'action_about'
         });
         
+        this.action_installGoogleGears = new Ext.Action({
+            text: _('Install Google Gears'),
+            handler: this.onInstallGoogleGears,
+            disabled: (window.google && google.gears)
+        });
+        
+        this.action_showDebugConsole = new Ext.Action({
+            text: _('Debug Console (Ctrl + F11)'),
+            handler: Tine.Tinebase.common.showDebugConsole,
+            hidden: ! Tine.Tinebase.registry.get("version").buildType.match(/(DEVELOPMENT|DEBUG)/)
+        });
+        
+        this.action_showPreferencesDialog = new Ext.Action({
+            text: _('Preferences'),
+            disabled: false,
+            handler: this.onEditPreferences
+        });
+        
         this.action_changePassword = new Ext.Action({
             text: _('Change password'),
             handler: this.onChangePassword,
@@ -84,22 +104,6 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             iconCls: 'action_password'
         });
         
-        this.action_installGoogleGears = new Ext.Action({
-            text: _('Install Google Gears'),
-            handler: this.onInstallGoogleGears,
-            disabled: (window.google && google.gears)
-        });
-        
-        /*
-        this.action_editPreferences = new Ext.Action({
-            text: _('Preferences'),
-            handler: this.onEditPreferences,
-            disabled: false,
-            //id: 'Tinebase_System_PreferencesButton',
-            iconCls: 'AddressbookTreePanel' //''action_preferences'
-        });
-        */
-
         this.action_logout = new Ext.Action({
             text: _('Logout'),
             tooltip:  String.format(_('Logout from {0}'), Tine.title),
@@ -107,20 +111,6 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             handler: this.onLogout,
             scope: this
         });
-        
-        this.mainActions = [
-            this.action_aboutTine,
-            '-',
-            this.action_changePassword,
-            this.action_installGoogleGears,
-            '-',
-            {
-                text: _('Debug Console (Ctrl + F11)'),
-                handler: Tine.Tinebase.common.showDebugConsole,
-                hidden: ! Tine.Tinebase.registry.get("version").buildType.match(/(DEVELOPMENT|DEBUG)/)
-            },
-            this.action_logout
-        ];
     },
     
     /**
