@@ -250,7 +250,7 @@ html, body {
 }
 
 /* ----- mainmenu ------------------------------------------------------------*/
-.tine-mainscreen-statusbar .x-toolbar {
+.tine-mainscreen-mainmenu .x-toolbar {
     background: none;
     border: 0;
 }
