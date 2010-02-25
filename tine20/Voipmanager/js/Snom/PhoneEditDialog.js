@@ -24,7 +24,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     windowNamePrefix: 'SnomPhoneEditWindow_',
     appName: 'Voipmanager',
     recordClass: Tine.Voipmanager.Model.SnomPhone,
-    recordProxy: Tine.Voipmanager.SnomPhoneBackend,
+    recordProxy: null,
     evalGrants: false,
     
     /**
@@ -61,6 +61,8 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * 
      */
     initComponent: function() {
+        
+        this.recordProxy =  (this.recordProxy == null) ? Tine.Voipmanager.SnomPhoneBackend : this.recordProxy;
         
         // why the hack is this a jsonStore???
         this.rightsStore =  new Ext.data.JsonStore({
@@ -227,18 +229,23 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             ]
         });
         
+        var items = (this.recordProxy.appName == 'Voipmanager') ? [
+            this.getPhonePanel(),
+            this.linesPanel,
+            this.getSettingsPanel(),
+            this.getRightsPanel()
+        ] : [
+            this.linesPanel,
+            this.getSettingsPanel()
+        ];
+        
         return {
             xtype: 'tabpanel',
             border: false,
-            plain:true,
+            plain: true,
             activeTab: 0,
             deferredRender: false,
-            items:[
-                this.getPhonePanel(),
-                this.linesPanel,
-                this.getSettingsPanel(),
-                this.getRightsPanel()
-            ]
+            items: items
         };
     },
     

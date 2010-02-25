@@ -1,11 +1,11 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Dialer.js 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
+ * @version     $Id$
  *
  * TODO         refactor this
  */
@@ -30,6 +30,7 @@ Tine.Phone.getPanel = function(){
         handler: function() {
             var popupWindow = Tine.Voipmanager.SnomPhoneEditDialog.openWindow({
                 record: this.ctxNode.attributes.record,
+                recordProxy: Tine.Phone.MyPhoneBackend,
                 listeners: {
                     scope: this,
                     'update': function(encodedRecord) {
@@ -485,6 +486,7 @@ Tine.Phone.Main = {
                 
                 var popupWindow = Tine.Voipmanager.SnomPhoneEditDialog.openWindow({
                     record: node.attributes.record,
+                    recordProxy: Tine.Phone.MyPhoneBackend,
                     listeners: {
                         scope: this,
                         'update': function(encodedRecord) {
@@ -813,29 +815,6 @@ Tine.Phone.loadPhoneStore = function(reload) {
     
     return store;
 };
-
-/**************************** models ****************************************/
-
-Ext.namespace('Tine.Phone.Model');
-
-/**
- * Model of a call
- */
-Tine.Phone.Model.Call = Ext.data.Record.create([
-    { name: 'id' },
-    { name: 'line_id' },
-    { name: 'phone_id' },
-    { name: 'callerid' },
-    { name: 'start', type: 'date', dateFormat: Date.patterns.ISO8601Long  },
-    { name: 'connected', type: 'date', dateFormat: Date.patterns.ISO8601Long  },
-    { name: 'disconnected', type: 'date', dateFormat: Date.patterns.ISO8601Long  },
-    { name: 'duration' },
-    { name: 'ringing' },
-    { name: 'direction' },
-    { name: 'source' },
-    { name: 'destination' }
-]);
-
 
 /***************************** utils ****************************************/
 
