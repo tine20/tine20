@@ -50,21 +50,12 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             cls: 'tine-mainscreen-topbox',
             border: false,
             html: '<div class="tine-mainscreen-topbox-left"></div><div class="tine-mainscreen-topbox-middle"></div><div class="tine-mainscreen-topbox-right"></div>'
-        }/*, {
+        }, {
             cls: 'tine-mainscreen-mainmenu',
             height: 26,
             layout: 'fit',
             border: false,
-            items: this.getMainMenu(),
-            hidden: false
-        }*/, {
-            cls: 'tine-mainscreen-statusbar',
-            height: 26,
-            layout: 'fit',
-            border: false,
-            //hidden: false,
             items: this.getMainMenu()
-            //items: this.getStatusBar()
         }, {
             cls: 'tine-mainscreen-apptabs',
             hidden: this.appPickerStyle != 'tabs',
