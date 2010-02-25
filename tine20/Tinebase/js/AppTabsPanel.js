@@ -50,9 +50,13 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
         
         this.items = [{
             id: this.app2id('menu'),
-            // NOTE: there is no easy way to add the standard split arrows
-            title: Tine.title + ' &#8595;',
-            iconCls: 'tine-favicon'
+            title: Tine.title,
+            iconCls: 'tine-favicon',
+            closable: true,
+            listeners: {
+                scope: this,
+                beforeclose: this.onBeforeTabClose
+            }
         }].concat(this.getDefaultTabItems());
         
         // set states last active app to the sessions default app
@@ -94,6 +98,16 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
                 }]
             }]
         });
+    },
+    
+    /**
+     * executed after render
+     */
+    afterRender: function() {
+        this.supr().afterRender.apply(this, arguments);
+        
+        this.menuTabEl = Ext.get(this.getTabEl(0));
+        this.menuTabEl.addClass('tine-mainscreen-apptabspanel-menu-tabel');
     },
     
     /**
@@ -198,8 +212,8 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
      * @param {Panel} currentTab The current active tab
      */
     onBeforeTabChange: function(tp, newTab, currentTab) {
-        if (this.items.indexOf(newTab) == 0) {
-            this.menu.show(this.getTabEl(0), 'tl-bl');
+        if (this.id2appName(newTab) === 'menu') {
+            this.menu.show(this.menuTabEl, 'tl-bl');
             return false;
         }
     },
@@ -211,6 +225,10 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
      * @return {boolean}
      */
     onBeforeTabClose: function(tab) {
+        if (this.id2appName(tab) === 'menu') {
+            return this.onBeforeTabChange(this, tab, this.activeTab);
+        }
+        
         // don't close last app panel
         return this.items.getCount() > 2;
     },
