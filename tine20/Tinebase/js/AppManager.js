@@ -86,6 +86,10 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
     
     activate: function(app) {
         if (app || (app = this.getDefault()) ) {
+            if (app == this.getActive()) {
+                // app is already active, nothing to do
+                return true;
+            }
             
             if (this.activeApp && this.fireEvent('beforedeactivate', this.activeApp) === false) {
                 return false;
@@ -124,6 +128,14 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
         }
         
         return this.apps.get(appName);
+    },
+    
+    /**
+     * returns currently activated app
+     * @return {Tine.Application}
+     */
+    getActive: function() {
+        return this.activeApp;
     },
     
     /**
