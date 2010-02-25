@@ -167,6 +167,19 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
     },
     
     /**
+     * set default app for this session
+     * 
+     * @param {Tine.Application/String} app
+     */
+    setDefault: function(app) {
+        if (Ext.isString(app)) {
+            app = this.get(app);
+        }
+        
+        this.defaultApp = app;
+    },
+    
+    /**
      * returns a list of all apps for current user
      */
     getAll: function() {
