@@ -12,33 +12,51 @@
  
 Ext.namespace('Tine.Tinebase');
 
-
+/**
+ * Main appStarter/picker tab panel
+ * 
+ * NOTE: Tab panels are not sortable yet {@see http://www.extjs.com/forum/showthread.php?p=55045#post55045}
+ * 
+ * @todo discuss: default app vs. last active tab
+ * @todo discuss: have a set of default apps?
+ * 
+ * @class Tine.Tinebase.AppTabsPanel
+ * @extends Ext.TabPanel
+ */
 Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
+    activeTab: 1,
+    
+    stateful: true,
+    stateEvents: ['add', 'remove', 'tabchange'],
+    stateId: 'tinebase-mainscreen-apptabs',
     
     /**
      * @cfg {Array} defaultTabs
-     *
-    defaultTabs: [
+     */
+    currentTabs: null/*
         'Addressbook',
         'Calendar',
         'Felamimail',
         'Tasks'
-    ],*/
-    
-    activeTab: 1,
+    ]*/,
     
     /**
      * init appTabsPanel
      */
     initComponent: function() {
+        Ext.apply(this, Ext.state.Manager.get(this.stateId));
+        
         this.initMenu();
         
         this.items = [{
-            id: this.id + '-menu',
+            id: this.app2id('menu'),
             // NOTE: there is no easy way to add the standard split arrows
             title: Tine.title + ' &#8595;',
             iconCls: 'tine-favicon'
         }].concat(this.getDefaultTabItems());
+        
+        // set states last active app to the sessions default app
+        Tine.Tinebase.appMgr.setDefault(this.id2appName(this.activeTab));
         
         Tine.Tinebase.appMgr.on('activate', this.onActivateApp, this);
         this.on('beforetabchange', this.onBeforeTabChange, this);
@@ -47,7 +65,7 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
         
         this.supr().initComponent.call(this);
     },
-    
+
     /**
      * init the combined appchooser/tine menu
      */
@@ -102,10 +120,13 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
      * @return {Array}
      */
     getDefaultTabItems: function() {
-        /*
+        if (Ext.isEmpty(this.currentTabs)) {
+            this.currentTabs = [this.id2appName(Tine.Tinebase.appMgr.getDefault())];
+        }
+        
         var tabItems = [];
         
-        Ext.each(this.defaultTabs, function(appName) {
+        Ext.each(this.currentTabs, function(appName) {
             var app = Tine.Tinebase.appMgr.get(appName);
             if (app) {
                 tabItems.push(this.getTabItem(app));
@@ -113,8 +134,18 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
         }, this);
         
         return tabItems;
-        */
-        return [this.getTabItem(Tine.Tinebase.appMgr.getDefault())];
+    },
+    
+    /**
+     * get tabs state
+     * 
+     * @return {Object}
+     */
+    getState: function() {
+        return {
+            currentTabs: this.currentTabs,
+            activeTab: Ext.isNumber(this.activeTab) ? this.activeTab : this.items.indexOf(this.activeTab)
+        };
     },
     
     /**
@@ -125,7 +156,7 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
      */
     getTabItem: function(app) {
         return {
-            id: this.id + '-' + app.appName,
+            id: this.app2id(app),
             title: app.getTitle(),
             iconCls: app.getIconCls(),
             closable: true,
@@ -143,7 +174,7 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
      * @param {Tine.Application} app
      */
     onActivateApp: function(app) {
-        var tab = this.getItem(this.id + '-' + app.appName) || this.add(this.getTabItem(app));
+        var tab = this.getItem(this.app2id(app)) || this.add(this.getTabItem(app));
         
         this.setActiveTab(tab);
     },
@@ -154,7 +185,7 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
      * @param {Tine.Application} app
      */
     onAppItemClick: function(app) {
-        handler: Tine.Tinebase.appMgr.activate(app);
+        Tine.Tinebase.appMgr.activate(app);
         
         this.menu.hide();
     },
@@ -190,7 +221,7 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
      * @param {Ext.Panel} tab
      */
     onTabActivate: function(tab) {
-        var appName = tab.id.split('-').pop();
+        var appName = this.id2appName(tab);
         var app = Tine.Tinebase.appMgr.get(appName);
         
         // fixme
@@ -206,14 +237,56 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
         var tabCount = this.items.getCount();
         var closable = tabCount > 2;
         
-        for (var i=1, el; i<tabCount; i++) {
-            this.items.get(i).closable = closable;
+        this.currentTabs = [];
+        
+        for (var i=1, tab, el; i<tabCount; i++) {
+            tab = this.items.get(i);
             
+            // update currentTabs
+            this.currentTabs.push(this.id2appName(tab.id));
+            
+            // handle closeables
+            tab.closable = closable;
             el = this.getTabEl(i);
             if (el) {
                 Ext.get(el)[closable ? 'addClass' : 'removeClass']('x-tab-strip-closable');
             }
         }
-    }
+    },
     
+    /**
+     * returns appName of given tab/id
+     * 
+     * @param {Ext.Panel/String/Number} id
+     * @return {String} appName
+     */
+    id2appName: function(id) {
+        if (Ext.isNumber(id)) {
+            if (Ext.isArray(this.items)) {
+                id = this.items[id].id;
+            } else {
+                id = this.items.get(id);
+            }
+        }
+        
+        if (Ext.isObject(id)) {
+            id = id.id;
+        }
+        
+        if (Ext.isString(id)) {
+            return id.split('-').pop();
+        }
+        
+        return null;
+    },
+    
+    /**
+     * returns tab id of given app
+     * @param {Tine.Application/String} app
+     */
+    app2id: function(app) {
+        var appName = app.appName || app;
+        
+        return this.id + '-' + appName;
+    }
 });
