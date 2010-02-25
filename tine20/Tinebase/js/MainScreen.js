@@ -142,16 +142,6 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         return this.mainMenu;
     },
     
-    getStatusBar: function() {
-        if (! this.statusBar) {
-            this.statusBar = new Ext.Toolbar({
-                items:[]
-            });
-        }
-        
-        return this.statusBar;
-    },
-    
     onAppActivate: function(app) {
         // set document / browser title
         var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '';
