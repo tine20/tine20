@@ -32,7 +32,8 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         }},
         '->', {
             text: String.format(_('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName),
-            menu: this.getUserActions()
+            menu: this.getUserActions(),
+            menuAlign: 'tr-br'
         },
         this.onlineStatus,
         this.action_logout];
