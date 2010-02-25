@@ -143,7 +143,9 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     
     getMainMenu: function() {
         if (! this.mainMenu) {
-            this.mainMenu = new Tine.Tinebase.MainMenu({});
+            this.mainMenu = new Tine.Tinebase.MainMenu({
+                showMainMenu: this.appPickerStyle != 'tabs'
+            });
         }
         
         return this.mainMenu;

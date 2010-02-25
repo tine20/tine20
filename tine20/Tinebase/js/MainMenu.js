@@ -25,7 +25,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
     getItems: function() {
         return [{
             text: Tine.title,
-            hidden: !showMainMenu,
+            hidden: !this.showMainMenu,
             menu: {
                 id: 'Tinebase_System_Menu', 
                 items: this.getMainActions()
