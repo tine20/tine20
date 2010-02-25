@@ -259,6 +259,16 @@ html, body {
 	background-image:url(../../images/favicon.png) !important;
 }
 
+.tine-mainscreen-apptabspanel-menu-tabel {
+    margin-right: 5px;
+}
+
+.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel a.x-tab-strip-close,
+.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel a.x-tab-strip-close:hover {
+    background-image:url("../../library/ExtJS/resources/images/default/button/arrow.gif");
+    top: 6px;
+}
+
 /* ----- appchooser panel-----------------------------------------------------*/
 .app-panel-title {
     font-size: 15px;
