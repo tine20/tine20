@@ -281,13 +281,13 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
     id2appName: function(id) {
         if (Ext.isNumber(id)) {
             if (Ext.isArray(this.items)) {
-                id = this.items[id].id;
+                id = this.items[id] ? this.items[id].id : null;
             } else {
                 id = this.items.get(id);
             }
         }
         
-        if (Ext.isObject(id)) {
+        if (Ext.isObject(id) && ! Ext.isEmpty(id)) {
             id = id.id;
         }
         
