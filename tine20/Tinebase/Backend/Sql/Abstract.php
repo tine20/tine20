@@ -506,19 +506,31 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * delete rows by property
      * 
-     * @param string $_value
+     * @param string|array $_value
      * @param string $_property
+     * @param string $_operator (equals|in)
      * @return integer The number of affected rows.
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function deleteByProperty($_value, $_property)
+    public function deleteByProperty($_value, $_property, $_operator = 'equals')
     {
         if (! array_key_exists($_property, $this->_schema)) {
             throw new Tinebase_Exception_InvalidArgument('Property ' . $_property . ' does not exist in table ' . $this->_tableName);
         }
         
+        switch ($_operator) {
+            case 'equals':
+                $op = ' = ?';
+                break;
+            case 'in':
+                $op = ' IN (?)';
+                $_value = (array) $_value; 
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument('Invalid operator: ' . $_operator);
+        }
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($_property) . ' = ?', $_value)
+            $this->_db->quoteInto($this->_db->quoteIdentifier($_property) . $op, $_value)
         );
         
         return $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
