@@ -251,11 +251,13 @@ html, body {
 
 /* ----- mainmenu ------------------------------------------------------------*/
 .tine-mainscreen-mainmenu .x-toolbar,
-.tine-mainscreen-mainmenu .x-btn-click td,
-.tine-mainscreen-mainmenu .x-btn-over td,
-.tine-mainscreen-mainmenu .x-btn-menu-active td {
+.tine-mainscreen-mainmenu .x-toolbar .x-btn td {
     background: none;
     border: 0;
+}
+
+.tine-mainscreen-mainmenu .x-toolbar-ct {
+    margin-top: -2px;
 }
 
 .tine-mainscreen-mainmenu .x-btn-over td.x-btn-mc {
