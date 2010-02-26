@@ -131,6 +131,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 }
             }
             
+            // @see http://dev.w3.org/html5/spec/Overview.html#the-dragevent-and-datatransfer-interfaces
             this.dropEl.on('dragover', function(e) {
                 e.stopPropagation();
                 e.preventDefault();
