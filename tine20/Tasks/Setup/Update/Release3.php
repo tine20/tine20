@@ -16,10 +16,10 @@ class Tasks_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_0()
     {
-        $this->_backend->dropForeignKey('tasks', 'tasks::class_id--class::id');
+        $this->_backend->dropCol('tasks', 'class_id');
         $this->_backend->dropTable('class');
         
-        $this->_backend->dropCol('tasks', 'class_id');
+        
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
