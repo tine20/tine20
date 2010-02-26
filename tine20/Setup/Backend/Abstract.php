@@ -327,7 +327,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     public function dropForeignKey($_tableName, $_name)
     {
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) 
-            . " DROP FOREIGN KEY `" . SQL_TABLE_PREFIX . $_name . "`" ;
+            . " DROP FOREIGN KEY `" . $_name . "`" ;
         $this->execQueryVoid($statement);    
     }
     
