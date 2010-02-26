@@ -130,6 +130,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             // select folder and get all missing message uids from cache_job_lowestuid (imap_uidnext) to cache_uidnext
             $imap->selectFolder($folder['globalname']);
             $missingUids = $imap->getUid($folder->cache_job_lowestuid, $folder->cache_uidnext);
+            rsort($missingUids, SORT_NUMERIC);
             
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Queried message uids from ' . $folder->cache_job_lowestuid . ' to ' . $folder->cache_uidnext . ' from imap server.'
