@@ -22,15 +22,15 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         this.supr().initComponent.call(this);
     },
     
+    /*
     afterRender: function() {
         this.supr().afterRender.apply(this, arguments);
         
         this.items.each(function(item) {
-            item.on('mouseover', function() {
-                item.getEl().removeClass('x-btn-over');
-            }, this);
+            
         }, this);
     },
+    */
     
     getItems: function() {
         return [{
