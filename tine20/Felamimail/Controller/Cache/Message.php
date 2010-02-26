@@ -123,7 +123,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 $folder->cache_uidnext = 1;
             }
             
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' before import: ' . print_r($folder->toArray(), TRUE));
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder values before import: ' . print_r($folder->toArray(), TRUE));
             
             ///////////////////////////// main message import loop
              
@@ -140,6 +140,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 // more messages to add ?
                 count($missingUids) > 0 &&
                 $folder->cache_totalcount != $folder->imap_totalcount &&
+                $folder->imap_uidnext != $folder->cache_uidnext &&
                 $timeLeft
             ) {
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($missingUids, TRUE));
@@ -150,7 +151,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     $lastUid = $firstUid;
                 } else {
                     $i = 0;
-                    while (count($missingUids) > 0 && $i < $this->_importCountPerStep) {
+                    while (count($missingUids) > 0 && $i++ < $this->_importCountPerStep) {
                         $lastUid = array_shift($missingUids);
                     }
                 }
@@ -175,33 +176,33 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         
             ///////////////////////////// sync deleted messages or start again to add recent messages
                 
-            if ($timeLeft && $folder->cache_totalcount != $folder->imap_totalcount) {
+            if ($timeLeft && $folder->cache_totalcount > $folder->imap_totalcount) {
                 // sync deleted if we still got time left and totalcounts mismatch
                 $timeLeft = $this->_syncDeletedMessages($folder, $_time, $imap);
-                
-                if ($timeLeft && $folder->cache_totalcount != $folder->imap_totalcount) {
-                    // no messages found to delete -> perhaps new mails arrived in the meantime
-                    if ($folder->cache_job_lowestuid == $folder->imap_uidnext) {
-                        // something bad happened
-                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No messages found on imap server ...');
-                        $timeLeft = FALSE;
-                    } else {
-                        $folder->cache_job_lowestuid = 0;
-                        $folder->cache_uidnext = $folder->cache_job_startuid;
-    
-                        $secondsLeft = $_time - (Zend_Date::now()->get() - $folder->cache_timestamp->get()); // substract timestamps
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No messages found to delete -> perhaps new mails arrived in the meantime ('
-                            . $secondsLeft . ' seconds left)');
-                        if ($secondsLeft > 0) {
-                            // start again with remaining time
-                            $folder = $this->_updateFolderStatus($folder, Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE);
-                            return $this->update($folder, $secondsLeft);
-                        } else {
-                            $timeLeft = FALSE;
-                        }
-                    }
+
+            } else if ($timeLeft && $folder->cache_totalcount < $folder->imap_totalcount) {
+                $folder->cache_job_lowestuid = 0;
+                if ($folder->imap_uidnext > $folder->cache_job_startuid) {
+                    // new mails arrived in the meantime
+                    $folder->cache_uidnext = $folder->cache_job_startuid;
+                } else {
+                    // need to start again, we did not import some messages
+                    // @todo this needs to be improved - but how?
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Need to start import again ... :(');
+                    $folder->cache_uidnext = 1;
                 }
-            } 
+
+                $secondsLeft = $_time - (Zend_Date::now()->get() - $folder->cache_timestamp->get()); // substract timestamps
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No messages found to delete -> perhaps new mails arrived in the meantime ('
+                    . $secondsLeft . ' seconds left)');
+                if ($secondsLeft > 0) {
+                    // start again with remaining time
+                    $folder = $this->_updateFolderStatus($folder, Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE);
+                    return $this->update($folder, $secondsLeft);
+                } else {
+                    $timeLeft = FALSE;
+                }
+            }
                 
             ///////////////////////////// finished with import run
             
@@ -366,6 +367,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      * @return integer|boolean lowest uid of imported messages
      * 
      * @todo get replyTo & inReplyTo
+     * @todo what shall we do with duplicates ? check first with uid search in cache?
      */
     protected function _addMessages($_messages, $_folderId, &$_count)
     {
@@ -502,7 +504,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             
             // delete uids not on mailserver from cache
             $toDeleteUids = array_diff($messages->messageuid, $imapUids);
-            $this->_backend->deleteByProperty($toDeleteUids, 'messageuid', 'in');
+            if (! empty($toDeleteUids)) {
+                $this->_backend->deleteByProperty($toDeleteUids, 'messageuid', 'in');
+            }
             $numberDeleted = count($toDeleteUids);
             
             // update folder values
