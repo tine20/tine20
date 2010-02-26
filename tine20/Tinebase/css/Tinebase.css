@@ -260,7 +260,8 @@ html, body {
     margin-top: -2px;
 }
 
-.tine-mainscreen-mainmenu .x-btn-over td.x-btn-mc {
+.tine-mainscreen-mainmenu .x-btn-over td.x-btn-mc,
+.tine-mainscreen-mainmenu .x-btn-over td.x-btn-mc button{
     text-decoration: underline;
 }
 
