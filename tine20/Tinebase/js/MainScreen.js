@@ -60,7 +60,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             cls: 'tine-mainscreen-apptabs',
             hidden: this.appPickerStyle != 'tabs',
             border: false,
-            height: 22,
+            height: Ext.isGecko ? 22 : 20,
             items: new Tine.Tinebase.AppTabsPanel({
                 plain: true
             })
