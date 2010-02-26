@@ -129,12 +129,12 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
              
             // select folder and get all missing message uids from cache_job_lowestuid (imap_uidnext) to cache_uidnext
             $imap->selectFolder($folder['globalname']);
-            $missingUids = $imap->getUid($folder->cache_job_lowestuid, $folder->cache_uidnext);
-            rsort($missingUids, SORT_NUMERIC);
+            $allUids = $imap->getUid($folder->imap_totalcount, 1);
+            $missingUids = $this->_getMissingUids($allUids, $folder->cache_job_lowestuid, $folder->cache_uidnext);
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' Queried message uids from ' . $folder->cache_job_lowestuid . ' to ' . $folder->cache_uidnext . ' from imap server.'
-                . ' Got ' . count($missingUids) . ' new mail(s).'
+                . ' Got ' . count($missingUids) . ' uncached mail(s).'
             );
             
             while (
@@ -144,28 +144,18 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 $folder->imap_uidnext != $folder->cache_uidnext &&
                 $timeLeft
             ) {
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($missingUids, TRUE));
-                
                 // get maximum of $this->_importCountPerStep uids from array
-                $firstUid = array_shift($missingUids);
-                if (empty($missingUids)) {
-                    $lastUid = $firstUid;
-                } else {
-                    $i = 0;
-                    while (count($missingUids) > 0 && $i++ < $this->_importCountPerStep) {
-                        $lastUid = array_shift($missingUids);
-                    }
-                }
+                $this->_getFirstAndLast($missingUids, $firstUid, $lastUid);
                 
                 // get summary and add messages
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get summary from ' . $firstUid . ' to ' . $lastUid);
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' get summary from ' . $firstUid . ' to ' . $lastUid);
                 // get summary is not working correctly with a single param
-                $messages = $imap->getSummary($firstUid, ($firstUid == $lastUid ) ? $lastUid - 1 : $lastUid);
-                $this->_addMessages($messages, $folder->getId(), $messageCount);
+                $messages = $imap->getSummary($firstUid, $lastUid);
+                $recents = $this->_addMessages($messages, $folder->getId(), $messageCount);
                 
                 $folder->cache_job_lowestuid = $lastUid;
                 $folder->cache_totalcount   += $messageCount;
-                $folder->cache_recentcount  += $messageCount;
+                $folder->cache_recentcount  += $recents;
                 
                 $timeLeft = ($folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
             }
@@ -222,7 +212,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
 
         // update and return folder
         $status = ($complete) ? Felamimail_Model_Folder::CACHE_STATUS_COMPLETE : Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
-        return $this->_updateFolderStatus($folder, $status);
+        $folder = $this->_updateFolderStatus($folder, $status);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder values after import: ' . print_r($folder->toArray(), TRUE));
+        return $folder;
     }
     
     /**
@@ -365,7 +357,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      * @param array $_messages
      * @param string $_folderId
      * @param integer $_count number of imported messages
-     * @return integer|boolean lowest uid of imported messages
+     * @return integer recent count
      * 
      * @todo get replyTo & inReplyTo
      * @todo what shall we do with duplicates ? check first with uid search in cache?
@@ -376,7 +368,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         $exceptionFields = array('subject', 'to', 'cc', 'bcc', 'content_type', 'from', 'sent');
         
         $_count = 0;
-        $result = FALSE;
+        $result = 0;
         foreach ($_messages as $uid => $value) {
             $message = $value['message'];
             $subject = '';
@@ -435,7 +427,10 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 
                 $this->_backend->create($cachedMessage);
                 $_count++;
-                $result = $uid;
+                
+                if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags)) {
+                    $result++;
+                }
                 
             } catch (Zend_Mail_Exception $zme) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
@@ -600,6 +595,53 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 }
             }
         }
+        return $result;
+    }
+    
+    /**
+     * gets first and last elements of an array_splice and returns the remaining array
+     * 
+     * @param array $uids
+     * @param mixed $first
+     * @param mixed $last
+     * @return void
+     */
+    protected function _getFirstAndLast(&$uids, &$first, &$last)
+    {
+        $nextUids = array_splice($uids, 0, $this->_importCountPerStep);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' next uids: ' . print_r($nextUids, TRUE));
+        
+        $first = array_shift($nextUids);
+        $last = (empty($nextUids)) ? $first : array_pop($nextUids);
+        
+        return $uids;
+    }
+    
+    /**
+     * get missing uids from all uid array and sort it
+     * 
+     * @param array $uids
+     * @param integer $joblowest
+     * @param integer $cacheuidnext
+     * @return array
+     * 
+     * @todo find a more efficient way to do this
+     */
+    protected function _getMissingUids($uids, $joblowest, $cacheuidnext)
+    {
+        rsort($uids, SORT_NUMERIC);
+        
+        $result = array();
+        foreach ($uids as $uid) {
+            if ($uid < $cacheuidnext) {
+                break;
+            }
+            if ($uid < $joblowest) {
+                $result[] = $uid;
+            }
+        }
+        
         return $result;
     }
 }
