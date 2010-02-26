@@ -74,7 +74,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $this->_currentAccount = Tinebase_Core::getUser();
         
-        $this->_cacheController = Felamimail_Controller_Cache::getInstance();
+        $this->_cacheController = Felamimail_Controller_Cache_Message::getInstance();
     }
     
     /**

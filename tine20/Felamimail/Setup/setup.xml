@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>3.3</version>
+    <version>3.4</version>
     <order>30</order>
     <status>enabled</status>
     <depends>
@@ -211,7 +211,7 @@
         </table>
         <table>
             <name>felamimail_folder</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -263,44 +263,82 @@
                     <name>system_folder</name>
                     <type>boolean</type>
                     <default>0</default>
-                </field>                
-                <field>
-                    <name>uidnext</name>
-                    <type>integer</type>
-                    <length>64</length>
                 </field>
                 <field>
-                    <name>uidvalidity</name>
+                    <name>imap_status</name>
                     <type>text</type>
                     <length>40</length>
                 </field>
                 <field>
-                    <name>totalcount</name>
-                    <type>integer</type>
-                </field>
-                <field>
-                    <name>unreadcount</name>
-                    <type>integer</type>
-                </field>
-                <field>
-                    <name>cache_status</name>
-                    <type>enum</type>
-                    <value>pending</value>
-                    <value>empty</value>
-                    <value>complete</value>
-                    <value>incomplete</value>
-                    <value>updating</value>
-                    <value>deleting</value>
-                </field>
-                <field>
-                    <name>cache_lowest_uid</name>
+                    <name>imap_uidnext</name>
                     <type>integer</type>
                     <length>64</length>
                 </field>
                 <field>
-                    <name>timestamp</name>
+                    <name>imap_uidvalidity</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>imap_totalcount</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>imap_recentcount</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>imap_unreadcount</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>imap_timestamp</name>
                     <type>datetime</type>
-                </field>                
+                </field>
+                <field>
+                    <name>cache_status</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>cache_uidnext</name>
+                    <type>integer</type>
+                    <length>64</length>
+                </field>
+                <field>
+                    <name>cache_totalcount</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>cache_recentcount</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>cache_unreadcount</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>cache_timestamp</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>cache_job_lowestuid</name>
+                    <type>integer</type>
+                    <length>64</length>
+                </field>
+                <field>
+                    <name>cache_job_startuid</name>
+                    <type>integer</type>
+                    <length>64</length>
+                </field>
+                <field>
+                    <name>cache_job_actions_estimate</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>cache_job_actions_done</name>
+                    <type>integer</type>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>

@@ -19,6 +19,10 @@ Ext.namespace('Tine.Felamimail');
  * <p>Account/Folder Tree Panel</p>
  * <p>Tree of Accounts with folders</p>
  * <pre>
+ * TODO         add delayed tasks for folder status
+ * TODO         update non-selected folders
+ * TODO         add pie progress
+ * TODO         check if unread count is updated correctly for folders
  * low priority:
  * TODO         only allow nodes as drop target (not 'between')
  * TODO         make inbox/drafts/templates configurable in account
@@ -52,10 +56,15 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     accountStore: null,
     
     /**
+     * @type Ext.data.Store
+     */
+    folderStore: null,
+    
+    /**
      * @property updateFoldersTask
      * @type Ext.util.DelayedTask
      */
-    updateFoldersTask: null,
+    //updateFoldersTask: null,
     
     /**
      * @property updateMessagesTask
@@ -69,7 +78,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @property updateFolderRefreshTime
      * @type Number
      */
-    updateFolderRefreshTime: 60000, // 1 min
+    //updateFolderRefreshTime: 60000, // 1 min
     
     /**
      * refresh time in milliseconds
@@ -77,7 +86,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @property updateMessageRefreshTime
      * @type Number
      */
-    updateMessageRefreshTime: 60000, // 1 min
+    updateMessageRefreshTime: 10000, // 20 seconds
     
     /**
      * @cfg {String} containerName
@@ -103,8 +112,16 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @private
      */
     initComponent: function() {
+        
+        this.folderStore = new Ext.data.Store({
+            id: 'id',
+            fields: Tine.Felamimail.Model.Folder,
+            //proxy: Tine.Calendar.backend,
+            reader: new Ext.data.JsonReader({})
+        });
     	
         this.loader = new Tine.Felamimail.TreeLoader({
+            folderStore: this.folderStore,
             app: this.app
         });
 
@@ -120,16 +137,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         // add account nodes and context menu
         this.initAccounts();
-        this.initContextMenus();
+        var initCtxMenu = Tine.Felamimail.setTreeContextMenus.createDelegate(this);
+        initCtxMenu();
         
-        // get folder update interval from preferences
-        var updateInterval = parseInt(Tine.Felamimail.registry.get('preferences').get('updateInterval'));
-        if (updateInterval > 0) {
-            // convert to milliseconds
-            this.updateMessageRefreshTime = 60000*updateInterval;
-            this.updateMessagesTask = new Ext.util.DelayedTask(this.updateMessages, this);
-        }
-        this.updateFoldersTask = new Ext.util.DelayedTask(this.updateFolders, this);
+        this.updateMessagesTask = new Ext.util.DelayedTask(this.updateMessages, this);
+        //this.updateFoldersTask = new Ext.util.DelayedTask(this.updateFolders, this);
         
     	Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
 
@@ -137,13 +149,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforenodedrop, this);
-        this.on('append', function(tree, node, appendedNode, index) {
-            if (Ext.util.Format.lowercase(appendedNode.attributes.localname) == 'inbox') {
-                appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
-                    appendedNode.fireEvent('click', appendedNode);
-                }, appendedNode.ui);
-            }
-        }, this);
+        this.on('append', this.onAppend, this);
 	},
     
     /**
@@ -153,283 +159,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     initAccounts: function() {
         this.accountStore = Tine.Felamimail.loadAccountStore();
         this.accountStore.each(this.addAccount, this);
-    },
-    
-    /**
-     * add account record to root node
-     * 
-     * @param {Tine.Felamimail.Model.Account} record
-     */
-    addAccount: function(record) {
-        
-        var node = new Ext.tree.AsyncTreeNode({
-            id: record.data.id,
-            record: record,
-            globalname: '',
-            draggable: false,
-            allowDrop: false,
-            expanded: false,
-            text: record.get('name'),
-            qtip: record.get('host'),
-            leaf: false,
-            cls: 'felamimail-node-account',
-            intelligent_folders: (record.get('intelligent_folders')) ? record.get('intelligent_folders') : 0,
-            delimiter: record.get('delimiter'),
-            ns_personal: record.get('ns_personal'),
-            account_id: record.data.id,
-            listeners: {
-                scope: this,
-                load: function(node) {
-                    
-                    // add 'intelligent' folders
-                    if (node.attributes.intelligent_folders == 1/* || node.attributes.intelligent_folders == '1'*/) {
-                        var markedNode = new Ext.tree.TreeNode({
-                            id: record.data.id + '/marked',
-                            localname: 'marked', //this.app.i18n._('Marked'),
-                            globalname: 'marked',
-                            draggable: false,
-                            allowDrop: false,
-                            expanded: false,
-                            text: this.app.i18n._('Marked'),
-                            qtip: this.app.i18n._('Contains marked messages'),
-                            leaf: true,
-                            cls: 'felamimail-node-intelligent-marked',
-                            account_id: record.data.id
-                        });
-                
-                        node.appendChild(markedNode);
-                    
-                        var unreadNode = new Ext.tree.TreeNode({
-                            id: record.data.id + '/unread',
-                            localname: 'unread', //this.app.i18n._('Marked'),
-                            globalname: 'unread',
-                            draggable: false,
-                            allowDrop: false,
-                            expanded: false,
-                            text: this.app.i18n._('Unread'),
-                            qtip: this.app.i18n._('Contains unread messages'),
-                            leaf: true,
-                            cls: 'felamimail-node-intelligent-unread',
-                            account_id: record.data.id
-                        });
-                
-                        node.appendChild(unreadNode);
-                    }
-                }
-            }
-        });
-        
-        this.root.appendChild(node);
-    },
-    
-    /**
-     * init context menu
-     * 
-     * @private
-     */
-    initContextMenus: function() {
-        
-        // define additional actions
-        
-        var updateCacheConfigAction = {
-            text: String.format(_('Update {0} Cache'), this.app.i18n._('Message')),
-            iconCls: 'action_update_cache',
-            scope: this,
-            handler: function() {
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Felamimail.refreshFolder',
-                        folderId: this.ctxNode.attributes.folder_id
-                    },
-                    scope: this,
-                    success: function(_result, _request){
-                        if (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id) {
-                            // update grid
-                            this.updateMessageCache(this.ctxNode, true);
-                            this.filterPlugin.onFilterChange();
-                        } else {
-                            this.ctxNode.attributes.cache_status = 'pending';
-                        }
-                    }
-                });
-            }
-        };
-
-        var emptyFolderAction = {
-            text: this.app.i18n._('Empty Folder'),
-            iconCls: 'action_folder_emptytrash',
-            scope: this,
-            handler: function() {
-                this.ctxNode.getUI().addClass("x-tree-node-loading");
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Felamimail.emptyFolder',
-                        folderId: this.ctxNode.attributes.folder_id
-                    },
-                    scope: this,
-                    success: function(_result, _request){
-                        if (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id) {
-                            // update grid
-                            this.updateMessageCache(this.ctxNode, true);
-                            this.filterPlugin.onFilterChange();
-                        } else {
-                            this.ctxNode.attributes.cache_status = 'pending';
-                        }
-                        this.ctxNode.getUI().removeClass("x-tree-node-loading");
-                    },
-                    failure: function() {
-                        this.ctxNode.getUI().removeClass("x-tree-node-loading");
-                    },
-                    timeout: 120000 // 2 minutes
-                });
-            }
-        };
-        
-        // we need this for adding folders to account (root level)
-        var addFolderToRootAction = {
-            text: this.app.i18n._('Add Folder'),
-            iconCls: 'action_add',
-            scope: this,
-            disabled: true,
-            handler: function() {
-                Ext.MessageBox.prompt(String.format(_('New {0}'), this.app.i18n._('Folder')), String.format(_('Please enter the name of the new {0}:'), this.app.i18n._('Folder')), function(_btn, _text) {
-                    if( this.ctxNode && _btn == 'ok') {
-                        if (! _text) {
-                            Ext.Msg.alert(String.format(_('No {0} added'), this.app.i18n._('Folder')), String.format(_('You have to supply a {0} name!'), this.app.i18n._('Folder')));
-                            return;
-                        }
-                        Ext.MessageBox.wait(_('Please wait'), String.format(_('Creating {0}...' ), this.app.i18n._('Folder')));
-                        var parentNode = this.ctxNode;
-                        
-                        var params = {
-                            method: 'Felamimail.addFolder',
-                            name: _text
-                        };
-                        
-                        params.parent = '';
-                        params.accountId = parentNode.id;
-                        
-                        Ext.Ajax.request({
-                            params: params,
-                            scope: this,
-                            success: function(_result, _request){
-                                var nodeData = Ext.util.JSON.decode(_result.responseText);
-                                var newNode = this.loader.createNode(nodeData);
-                                parentNode.appendChild(newNode);
-                                Ext.MessageBox.hide();
-                            }
-                        });
-                        
-                    }
-                }, this);
-            }
-        };
-        
-        var editAccountAction = {
-            text: this.app.i18n._('Edit Account'),
-            iconCls: 'FelamimailIconCls',
-            scope: this,
-            disabled: ! Tine.Tinebase.common.hasRight('manage_accounts', 'Felamimail'),
-            handler: function() {
-                var record = this.accountStore.getById(this.ctxNode.attributes.account_id);
-                var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
-                    record: record,
-                    listeners: {
-                        scope: this,
-                        'update': function(record) {
-                            var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
-                            
-                            // update tree node + store
-                            this.ctxNode.setText(account.get('name'));
-                            this.ctxNode.attributes.intelligent_folders = account.get('intelligent_folders');
-                            this.accountStore.reload();
-                            
-                            // reload tree node
-                            this.ctxNode.reload(function(callback) {
-                            });
-                            
-                            // update grid
-                            this.filterPlugin.onFilterChange();
-                        }
-                    }
-                });        
-            }
-        };
-        
-        var reloadFolderAction = {
-            text: String.format(_('Reload {0}'), this.app.i18n._('Folder')),
-            iconCls: 'x-tbar-loading',
-            scope: this,
-            handler: function() {
-                if (this.ctxNode) {
-                    // trigger updateMessageCache
-                    this.updateMessageCache(this.ctxNode);
-                }
-            }
-        };
-
-        var reloadFolderCacheAction = {
-            text: String.format(_('Update {0} Cache'), this.app.i18n._('Folder')),
-            iconCls: 'action_update_cache',
-            scope: this,
-            handler: function() {
-                if (this.ctxNode) {
-                    // trigger updateFolderCache
-                    this.updateFolderCache(this.ctxNode);
-                }
-            }
-        };
-        // mutual config options
-        
-        var config = {
-            nodeName: this.app.i18n._('Folder'),
-            scope: this,
-            backend: 'Felamimail',
-            backendModel: 'Folder'
-        };
-        
-        // system folder ctx menu
-
-        config.actions = ['add', updateCacheConfigAction, reloadFolderAction, reloadFolderCacheAction];
-        this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
-        
-        // user folder ctx menu
-
-        config.actions = ['add', 'rename', updateCacheConfigAction, reloadFolderAction, reloadFolderCacheAction, 'delete'];
-        this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
-        
-        // trash ctx menu
-        
-        config.actions = ['add', emptyFolderAction, reloadFolderAction, reloadFolderCacheAction];
-        this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
-        
-        // account ctx menu
-        
-        this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
-            nodeName: this.app.i18n._('Account'),
-            actions: [editAccountAction, addFolderToRootAction, 'reload', 'delete'],
-            scope: this,
-            backend: 'Felamimail',
-            backendModel: 'Account'
-        });        
-    },
-       
-    /**
-     * @private
-     */
-    afterRender: function() {
-        Tine.Felamimail.TreePanel.superclass.afterRender.call(this);
-
-        var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
-        this.expandPath('/root/' + defaultAccount + '/');
-        
-        // start delayed tasks
-        if (this.updateMessagesTask !== null) {
-            this.updateMessagesTask.delay(this.updateMessageRefreshTime);
-        }
-        if (this.updateFoldersTask !== null) {
-            this.updateFoldersTask.delay(this.updateFolderRefreshTime);
-        }
     },
     
    /**
@@ -485,155 +214,27 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         return this.filterPlugin;
     },
     
-    /**
-     * update unread count of a folder node (use selected node per default)
-     * 
-     * @param {Number} change
-     * @param {Number} unreadcount [optional]
-     * @param {Ext.tree.AsyncTreeNode} node [optional]
-     */
-    updateUnreadCount: function(change, unreadcount, node) {
-        
-        if (! node) {
-            var node = this.getSelectionModel().getSelectedNode();
-        }
-        
-        if (! change ) {
-            change = Number(unreadcount) - Number(node.attributes.unreadcount);
-        }
-        
-        if (Number(change) != 0) {
-            node.attributes.unreadcount = Number(node.attributes.unreadcount) + Number(change);
-            
-            if (node.attributes.unreadcount > 0) {
-                node.setText(node.attributes.localname + ' (' + node.attributes.unreadcount + ')');
-            } else {
-                node.setText(node.attributes.localname);
-            }
-        }
-        
-        node.getUI().removeClass('felamimail-node-unread');
-        if (node.attributes.unreadcount > 0) {
-            node.getUI().addClass('felamimail-node-unread');
-        }
-    },
+    /********************* event handler ******************/
     
     /**
-     * delayed task function
-     * - calls updateFolderStatus and updateMessageCache
+     * @private
      */
-    updateMessages: function() {
-        var node = this.getSelectionModel().getSelectedNode();
-        if (node) {
-            this.updateMessageCache(node, false, true);
-            this.updateFolderStatus(true, node, true);
-        }
-        this.updateMessagesTask.delay(this.updateMessageRefreshTime);
-    },
+    afterRender: function() {
+        Tine.Felamimail.TreePanel.superclass.afterRender.call(this);
 
-    /**
-     * delayed task function
-     * - calls updateFolderStatus
-     */
-    updateFolders: function() {
-        var node = this.getSelectionModel().getSelectedNode();
-        if (node) {
-            this.updateFolderStatus(true, node, false);
+        var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+        this.expandPath('/root/' + defaultAccount + '/');
+        
+        // start delayed tasks
+        if (this.updateMessagesTask !== null) {
+            this.updateMessagesTask.delay(this.updateMessageRefreshTime);
         }
-        this.updateFoldersTask.delay(this.updateFolderRefreshTime);
-    },
-    
-    /**
-     * update folder status of all visible / all node in one level or one folder(s)
-     * 
-     * @param {Boolean} multiple
-     * @param {Ext.tree.AsyncTreeNode} node [optional]
-     * @param {Boolean} updateMessageCache
-     * 
-     * TODO make this work for multiple accounts ?
-     * TODO get all visible nodes of active account ?
-     */
-    updateFolderStatus: function(multiple, node, updateMessageCache) {
-        
-        if (multiple) {
-            // get all nodes on the same level with the active node
-            var parent = node.parentNode;
-            
-            if (! parent || parent.id == 'root') {
-                return;
-            }
-            
-            var folderIds = [];
-            parent.eachChild(function(child) {
-                if (child.id != node.id && child.attributes.localname != 'unread' && child.attributes.localname != 'marked') {
-                    folderIds.push(child.id);
-                }
-            }, this);
-            
-        } else {
-            // single node
-            if (! node) {
-                node = this.getSelectionModel().getSelectedNode();
-            }
-            
-            var folderIds = [node.attributes.folder_id];
+        // TODO update
+        /*
+        if (this.updateFoldersTask !== null) {
+            this.updateFoldersTask.delay(this.updateFolderRefreshTime);
         }
-        
-        Ext.Ajax.request({
-            params: {
-                method: 'Felamimail.updateFolderStatus',
-                folderIds: folderIds,
-                accountId: node.attributes.account_id
-            },
-            scope: this,
-            timeout: 60000, // 1 minute
-            success: function(_result, _request) {
-                var folderData = Ext.util.JSON.decode(_result.responseText);
-                
-                // update folders
-                if (multiple) {
-                    // update cache of one extra folder
-                    var updating = false;
-                    for (var i = 0; i < folderData.length; i++) {
-                        if (! folderData[i][0]) {
-                            // goto next folder
-                            continue;
-                        }
-                        
-                        var updateNode = this.getNodeById(folderData[i][0].id);
-                        
-                        // trigger updateMessageCache if needed (only if not already updating / cache pending or different unreadcounts)
-                        if (updateMessageCache && ! updating && (updateNode.attributes.cache_status == 'pending' || updateNode.attributes.unreadcount != folderData[i][0].unreadcount)) {
-                            // calls updateUnreadCount if spomething changed
-                            this.updateMessageCache(updateNode, false, true);
-                            updating = true;
-                        } else {
-                            this.updateUnreadCount(null, folderData[i][0].unreadcount, updateNode);
-                        }
-                    }
-                } else {
-                    if (folderData[0] && folderData[0][0]) {
-                        this.updateUnreadCount(null, folderData[0][0].unreadcount, node);
-                    }
-                }
-            },
-            failure: function() {
-                // do nothing
-            }
-        });
-    },
-    
-    /**
-     * get active account by checking selected node
-     * @return Tine.Felamimail.Model.Account
-     */
-    getActiveAccount: function() {
-        var node = this.getSelectionModel().getSelectedNode();
-        var accountId = node.attributes.account_id;
-        
-        var result = this.accountStore.getById(accountId);
-        
-        return result;
+        */
     },
     
     /**
@@ -644,6 +245,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * @param {Ext.tree.AsyncTreeNode} node
      * @private
+     * 
+     * TODO update
      */
     onClick: function(node) {
         
@@ -653,132 +256,12 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         node.select();
         
         if (node.id && node.id != '/') {
-            this.updateMessageCache(node);
-        }
-    },
-    
-    /**
-     * update message cache (and trigger reload store)
-     * @param {Ext.tree.AsyncTreeNode} node
-     * 
-     * TODO add accountId?
-     */
-    updateMessageCache: function(node, force, delayedTask)
-    {
-        var folderId = node.attributes.folder_id;
-        //var accountId = node.attributes.account_id;
-        
-        if (
-            folderId 
-            && (node.attributes.cache_status != 'complete' || force || delayedTask)
-            && node.attributes.localname != 'unread' && node.attributes.localname != 'marked'
-            /* && accountId*/
-        ) {
-            node.getUI().addClass("x-tree-node-loading");
-            
-            Ext.Ajax.request({
-                params: {
-                    method: 'Felamimail.updateMessageCache',
-                    folderId: folderId
-                    //accountId: accountId
-                },
-                scope: this,
-                timeout: 300000, // 5 minutes
-                success: function(_result, _request) {
-                    
-                    // always remove loading icon
-                    node.getUI().removeClass("x-tree-node-loading");
-                    
-                    if (! node.attributes) {
-                        return;
-                    }
-                    
-                    // update folder counters / class
-                    var folderData = Ext.util.JSON.decode(_result.responseText);
-                    
-                    // update node values
-                    if (node.attributes.unreadcount != folderData.unreadcount || node.attributes.totalcount != folderData.totalcount) {
-
-                        if (delayedTask) {
-                            //if (node.attributes.unreadcount < folderData.unreadcount) {
-                            if (folderData.recent && (folderData.unreadcount - node.attributes.unreadcount) > 0) {
-                                // show toast window on new mails
-                                Ext.ux.Notification.show(
-                                    this.app.i18n._('New mails'), 
-                                    String.format(this.app.i18n._('You got {0} new mail(s) in Folder '), 
-                                        folderData.unreadcount - node.attributes.unreadcount) 
-                                        + node.attributes.localname
-                                );
-                                // update only if something changed
-                                if (this.getSelectionModel().getSelectedNode().id = node.id) {
-                                    this.filterPlugin.onFilterChange();
-                                }
-                            }
-                        }
-                        
-                        node.attributes.totalcount = folderData.totalcount;
-                        this.updateUnreadCount(null, folderData.unreadcount, node);
-                    }
-                    node.attributes.cache_status = folderData.cache_status;
-                    
-                    // update grid and remove style
-                    if (! delayedTask) {
-                        if (this.getSelectionModel().getSelectedNode().id = node.id) {
-                            this.filterPlugin.onFilterChange();
-                        }
-                    }
-                },
-                failure: function(response, options) {
-                    node.getUI().removeClass("x-tree-node-loading");
-                    
-                    // call handle failure in tree loader and show credentials dialog / reload account afterwards
-                    if (node.parentNode) {
-                        this.loader.handleFailure(response, options, node.parentNode, false);
-                    }
-                }
-            });
-        } else if (! delayedTask) {
-            // update message cache again if no delayed task is set
-            if (this.updateMessagesTask === null) {
-                node.attributes.cache_status = 'pending';
-                this.updateMessageCache.defer(2000, this, [node]);
-            }
-            
             this.filterPlugin.onFilterChange();
+            
+            this.updateFolderStatus([node]);
+            // TODO start fast delayed task if this returns false?
+            this.updateMessageCache();
         }
-    },
-
-    /**
-     * update folder cache
-     * @param {Ext.tree.AsyncTreeNode} node
-     * 
-     */
-    updateFolderCache: function(node)
-    {
-        var globalname = node.attributes.globalname;
-        var accountId = node.attributes.account_id;
-        
-        if (globalname && accountId) {
-            node.getUI().addClass("x-tree-node-loading");
-            Ext.Ajax.request({
-                params: {
-                    method: 'Felamimail.updateFolderCache',
-                    folderNames: [globalname],
-                    accountId: accountId
-                },
-                scope: this,
-                success: function(_result, _request) {
-                   node.reload(function(node) {
-                        node.expand();
-                        node.select();
-                    });
-                },
-                failure: function(response, options) {
-                    node.getUI().removeClass("x-tree-node-loading");
-                    this.loader.handleFailure(response, options, node, false);
-                }
-            });
-        }        
     },
     
     /**
@@ -860,12 +343,314 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 // update grid
                 this.filterPlugin.onFilterChange();
                 
+                // TODO update ?
+                /*
                 // update folder status of both folders
                 this.updateFolderStatus(false, dropEvent.target);
                 this.updateFolderStatus(false);
+                */
             }
         });
         
         return true;
+    },
+    
+    /**
+     * on append node
+     * 
+     * @param {} tree
+     * @param {} node
+     * @param {} appendedNode
+     * @param {} index
+     */
+    onAppend: function(tree, node, appendedNode, index) {
+        if (Ext.util.Format.lowercase(appendedNode.attributes.localname) == 'inbox') {
+            appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
+                appendedNode.fireEvent('click', appendedNode);
+            }, appendedNode.ui);
+            // TODO update folder status of inbox
+            //this.updateFolderStatus([appendedNode]);
+        }
+    },
+    
+    /********************* cache control functions ******************/
+    
+    /**
+     * delayed task function
+     * - calls updateFolderStatus and updateMessageCache
+     */
+    updateMessages: function() {
+        var cacheComplete = this.updateMessageCache();
+        
+        if (cacheComplete) {
+            // get folder update interval from preferences
+            var updateInterval = parseInt(Tine.Felamimail.registry.get('preferences').get('updateInterval'));
+            if (updateInterval > 0) {
+                // convert to milliseconds
+                this.updateMessageRefreshTime = 60000*updateInterval;
+            } else {
+                // TODO what shall we de if pref is set to 0?
+                this.updateMessageRefreshTime = 1200000; // 20 minutes
+            }
+        } else {
+            this.updateMessageRefreshTime = 10000; // 10 seconds
+        }
+        this.updateMessagesTask.delay(this.updateMessageRefreshTime);
+    },
+
+    /**
+     * update folder status of all visible / all node in one level or one folder(s)
+     * 
+     * @param {Array} nodes array of Ext.tree.AsyncTreeNode
+     * 
+     * TODO abort request if another folder has been clicked
+     * TODO get folder ids by iterating through tree if param is null/empty 
+     */
+    updateFolderStatus: function(nodes) {
+        
+        if (nodes) {
+            var folderIds = [];
+            var accountId = '';
+            for (var i=0; i < nodes.length; i++) {
+                folderIds.push(nodes[i].attributes.folder_id);
+                accountId = nodes[i].attributes.account_id;
+            }
+        } else {
+            // get selected node
+            var node = this.getSelectionModel().getSelectedNode();
+            // check if folder node with attributes
+            if (! node || ! node.attributes || ! node.attributes.folder_id) {
+                return false;
+            }
+            folderIds = [node.attributes.folder_id];
+            accountId = [node.attributes.account_id];
+        }
+        
+        Ext.Ajax.request({
+            params: {
+                method: 'Felamimail.updateFolderStatus',
+                folderIds: folderIds,
+                accountId: accountId
+            },
+            scope: this,
+            timeout: 60000, // 1 minute
+            success: function(_result, _request) {
+                var folderData = Ext.util.JSON.decode(_result.responseText);
+                for (var i = 0; i < folderData.length; i++) {
+                    this.updateFolder(folderData[i]);
+                }
+            },
+            failure: function() {
+                // do nothing
+            }
+        });
+    },
+
+    /**
+     * update folder status of all visible / all node in one level or one folder(s)
+     * 
+     * @return boolean true if caching is complete
+     * 
+     * TODO only update if new mails in cache
+     * TODO add update pie
+     * TODO check in folder store if another folder has to be updated
+     */
+    updateMessageCache: function() {
+        // get active node
+        var node = this.getSelectionModel().getSelectedNode();
+        // check if folder node with attributes
+        if (! node || ! node.attributes || ! node.attributes.folder_id) {
+            return false;
+        }
+        var folder = this.folderStore.getById(node.attributes.folder_id);
+        
+        if (folder.get('cache_status') == 'incomplete' || folder.get('cache_status') == 'invalid') {
+            Ext.Ajax.request({
+                params: {
+                    method: 'Felamimail.updateMessageCache',
+                    folderId: node.attributes.folder_id,
+                    time: 10
+                },
+                scope: this,
+                success: function(_result, _request) {
+                    
+                    var folderData = Ext.util.JSON.decode(_result.responseText);
+                    var folder = this.folderStore.getById(folderData.id);
+                    this.updateFolder(folderData, node);
+                },
+                failure: function(response, options) {
+                    // call handle failure in tree loader and show credentials dialog / reload account afterwards
+                    if (node.parentNode) {
+                        this.loader.handleFailure(response, options, node.parentNode, false);
+                    }
+                }
+            });           
+            return false;
+        } else {
+            return true;
+        }
+    },
+    
+    /********************* helpers *****************************/
+
+    /**
+     * update folder in store
+     * 
+     * @param {Object} folderData
+     * @param {AsyncNode} node
+     * @return {Tine.Felamimail.Model.Folder}
+     * 
+     * TODO do tree/notification/pie updates on update of the store
+     */
+    updateFolder: function(folderData, node) {
+        
+        var folder = this.folderStore.getById(folderData.id);
+        if (folder.get('cache_unreadcount') != folderData.cache_unreadcount || folder.get('cache_totalcount') != folderData.cache_totalcount) {
+            // check if grid has to be updated
+            var selectedNode = this.getSelectionModel().getSelectedNode();
+            if (selectedNode.attributes && selectedNode.attributes.folder_id == folder.id) { 
+                this.filterPlugin.onFilterChange();
+            }
+            
+            // show toast window on new mails
+            if (folderData.cache_recentcount > 0) {
+                Ext.ux.Notification.show(
+                    this.app.i18n._('New mails'), 
+                    String.format(this.app.i18n._('You got {0} new mail(s) in Folder {1}.'), 
+                        folderData.cache_recentcount, folder.get('localname'))
+                );
+            }
+            
+            // update unreadcount in tree
+            if (node) {
+                this.updateUnreadCount(null, folderData.cache_unreadcount, node);
+            }
+            
+            // TODO update pie
+        }
+        
+        var fieldsToUpdate = ['imap_status','imap_timestamp','imap_uidnext','imap_uidvalidity','imap_totalcount','imap_recentcount',
+            'imap_unreadcount','cache_status','cache_uidnext','cache_recentcount','cache_unreadcount','cache_timestamp',
+            'cache_job_actions_estimate','cache_job_actions_done'];
+
+        // update folder store
+        for (var j = 0; j < fieldsToUpdate.length; j++) {
+            folder.set(fieldsToUpdate[j], folderData[fieldsToUpdate[j]]);
+        }
+        
+        return folder;
+    },
+
+    /**
+     * update unread count of a folder node (use selected node per default)
+     * 
+     * @param {Number} change
+     * @param {Number} unreadcount [optional]
+     * @param {Ext.tree.AsyncTreeNode} node [optional]
+     */
+    updateUnreadCount: function(change, unreadcount, node) {
+        
+        if (! node) {
+            var node = this.getSelectionModel().getSelectedNode();
+        }
+        
+        if (! change ) {
+            change = Number(unreadcount) - Number(node.attributes.unreadcount);
+        }
+        
+        if (Number(change) != 0) {
+            node.attributes.unreadcount = Number(node.attributes.unreadcount) + Number(change);
+            
+            if (node.attributes.unreadcount > 0) {
+                node.setText(node.attributes.localname + ' (' + node.attributes.unreadcount + ')');
+            } else {
+                node.setText(node.attributes.localname);
+            }
+        }
+        
+        node.getUI().removeClass('felamimail-node-unread');
+        if (node.attributes.unreadcount > 0) {
+            node.getUI().addClass('felamimail-node-unread');
+        }
+    },
+    
+    /**
+     * add account record to root node
+     * 
+     * @param {Tine.Felamimail.Model.Account} record
+     */
+    addAccount: function(record) {
+        
+        var node = new Ext.tree.AsyncTreeNode({
+            id: record.data.id,
+            record: record,
+            globalname: '',
+            draggable: false,
+            allowDrop: false,
+            expanded: false,
+            text: record.get('name'),
+            qtip: record.get('host'),
+            leaf: false,
+            cls: 'felamimail-node-account',
+            intelligent_folders: (record.get('intelligent_folders')) ? record.get('intelligent_folders') : 0,
+            delimiter: record.get('delimiter'),
+            ns_personal: record.get('ns_personal'),
+            account_id: record.data.id,
+            listeners: {
+                scope: this,
+                load: function(node) {
+                    
+                    // add 'intelligent' folders
+                    if (node.attributes.intelligent_folders == 1) {
+                        var markedNode = new Ext.tree.TreeNode({
+                            id: record.data.id + '/marked',
+                            localname: 'marked', //this.app.i18n._('Marked'),
+                            globalname: 'marked',
+                            draggable: false,
+                            allowDrop: false,
+                            expanded: false,
+                            text: this.app.i18n._('Marked'),
+                            qtip: this.app.i18n._('Contains marked messages'),
+                            leaf: true,
+                            cls: 'felamimail-node-intelligent-marked',
+                            account_id: record.data.id
+                        });
+                
+                        node.appendChild(markedNode);
+                    
+                        var unreadNode = new Ext.tree.TreeNode({
+                            id: record.data.id + '/unread',
+                            localname: 'unread', //this.app.i18n._('Marked'),
+                            globalname: 'unread',
+                            draggable: false,
+                            allowDrop: false,
+                            expanded: false,
+                            text: this.app.i18n._('Unread'),
+                            qtip: this.app.i18n._('Contains unread messages'),
+                            leaf: true,
+                            cls: 'felamimail-node-intelligent-unread',
+                            account_id: record.data.id
+                        });
+                
+                        node.appendChild(unreadNode);
+                    }
+                }
+            }
+        });
+        
+        this.root.appendChild(node);
+    },
+    
+    /**
+     * get active account by checking selected node
+     * @return Tine.Felamimail.Model.Account
+     */
+    getActiveAccount: function() {
+        var node = this.getSelectionModel().getSelectedNode();
+        var accountId = node.attributes.account_id;
+        
+        var result = this.accountStore.getById(accountId);
+        
+        return result;
     }
 });

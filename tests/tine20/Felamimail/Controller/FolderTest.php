@@ -4,10 +4,9 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
- * 
+ * @version     $Id$
  */
 
 /**
@@ -20,7 +19,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test class for Tinebase_Group
+ * Test class for Felamimail_Controller_Folder
  */
 class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
 {
@@ -28,6 +27,11 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      * @var Felamimail_Controller_Folder
      */
     protected $_controller = array();
+    
+    /**
+     * @var Felamimail_Model_Account
+     */
+    protected $_account = NULL;
     
     /**
      * folders to delete in tearDown()
@@ -56,6 +60,7 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_controller = Felamimail_Controller_Folder::getInstance();        
     }
 
@@ -68,7 +73,7 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         foreach ($this->_foldersToDelete as $foldername) {
-            $this->_controller->delete($foldername);
+            $this->_controller->delete($this->_account->getId(), $foldername);
         }
     }
 
@@ -84,14 +89,13 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         
         // get inbox folder and do more checks
         $inboxFolder = $result->filter('localname', 'INBOX')->getFirstRecord();
-        //print_r($inboxFolder->toArray());
         $this->assertFalse($inboxFolder === NULL, 'inbox not found');
         $this->assertTrue(($inboxFolder->is_selectable == 1), 'should be selectable');
         $this->assertTrue(($inboxFolder->has_children == 0), 'has children');
         
         // check if entry is created/exists in db
         $folderBackend = new Felamimail_Backend_Folder();
-        $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
+        $folder = $folderBackend->getByBackendAndGlobalName($this->_account->getId(), 'INBOX');
         //print_r($folder->toArray());
         $this->assertTrue(!empty($folder->id));
         $this->assertEquals('INBOX', $folder->localname);
@@ -104,11 +108,13 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateFolder()
     {
-        $newFolder = $this->_controller->create('test', 'INBOX');
+        $newFolder = $this->_controller->create($this->_account->getId(), 'test', 'INBOX');
 
         // check returned data (id)
         $this->assertTrue(!empty($newFolder->id));
         $this->assertEquals('INBOX/test', $newFolder->globalname);
+        
+        $this->_foldersToDelete[] = 'INBOX/test';
         
         // search for subfolders
         $resultInboxSub = $this->_controller->search($this->_getFolderFilter());
@@ -118,8 +124,6 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         
         $this->assertFalse($testFolder === NULL, 'No test folder created.');
         $this->assertTrue(($testFolder->is_selectable == 1));
-
-        $this->_controller->delete('INBOX/test');
     }
 
     /**
@@ -128,11 +132,12 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      */
     public function testRenameFolder()
     {
-        $this->_controller->create('test', 'INBOX');
+        $this->_controller->create($this->_account->getId(), 'test', 'INBOX');
 
-        $renamedFolder = $this->_controller->rename('test_renamed', 'INBOX/test');
+        $renamedFolder = $this->_controller->rename($this->_account->getId(), 'test_renamed', 'INBOX/test');
         
         $this->assertEquals('test_renamed', $renamedFolder->localname);
+        $this->_foldersToDelete[] = 'INBOX/test_renamed';
         
         $resultInboxSub = $this->_controller->search($this->_getFolderFilter());
         $this->assertGreaterThan(0, count($resultInboxSub), 'No subfolders found.');
@@ -140,8 +145,6 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         
         $this->assertFalse($testFolder === NULL, 'No renamed folder found.');
         $this->assertTrue(($testFolder->is_selectable == 1));
-        
-        $this->_controller->delete('INBOX/test_renamed');
     }
     
     /**
@@ -150,10 +153,10 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      */
     public function testRenameFolderWithSubfolder()
     {
-        $this->_controller->create('test', 'INBOX');
-        $this->_controller->create('testsub', 'INBOX/test');
+        $this->_controller->create($this->_account->getId(), 'test', 'INBOX');
+        $this->_controller->create($this->_account->getId(), 'testsub', 'INBOX/test');
 
-        $renamedFolder = $this->_controller->rename('test_renamed', 'INBOX/test');
+        $renamedFolder = $this->_controller->rename($this->_account->getId(), 'test_renamed', 'INBOX/test');
 
         $this->_foldersToDelete[] = 'INBOX/test_renamed/testsub';
         $this->_foldersToDelete[] = 'INBOX/test_renamed';
@@ -177,9 +180,9 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      */
     protected function _getFolderFilter($_globalname = 'INBOX')
     {
-        return new Felamimail_Model_FolderFilter(array(array(
-            'field' => 'globalname', 'operator' => 'equals', 'value' => $_globalname
-        )));
+        return new Felamimail_Model_FolderFilter(array(
+            array('field' => 'globalname', 'operator' => 'equals', 'value' => $_globalname),
+            array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())
+        ));
     }
-    
 }

@@ -6,10 +6,11 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        refactor caching functions
  */
 class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
@@ -45,7 +46,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function addFolder($name, $parent, $accountId)
     {
-        $result = Felamimail_Controller_Folder::getInstance()->create($name, $parent, $accountId);
+        $result = Felamimail_Controller_Folder::getInstance()->create($accountId, $name, $parent);
         
         return $result->toArray();
     }
@@ -60,7 +61,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function renameFolder($newName, $oldGlobalName, $accountId)
     {
-        $result = Felamimail_Controller_Folder::getInstance()->rename($newName, $oldGlobalName, $accountId);
+        $result = Felamimail_Controller_Folder::getInstance()->rename($accountId, $newName, $oldGlobalName);
         
         return $result->toArray();
     }
@@ -74,7 +75,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteFolder($folder, $accountId)
     {
-        $result = Felamimail_Controller_Folder::getInstance()->delete($folder, $accountId);
+        $result = Felamimail_Controller_Folder::getInstance()->delete($accountId, $folder);
 
         return array(
             'status'    => ($result) ? 'success' : 'failure'
@@ -89,7 +90,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function refreshFolder($folderId)
     {
-        $result = Felamimail_Controller_Cache::getInstance()->clear($folderId);
+        $result = Felamimail_Controller_Cache_Message::getInstance()->clear($folderId);
 
         return array(
             'status'    => ($result) ? 'success' : 'failure'
@@ -125,11 +126,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $result = array();
         if (empty($folderIds)) {
-            $result = Felamimail_Controller_Folder::getInstance()->updateFolderStatus($accountId)->toArray();
+            $result = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($accountId)->toArray();
         } else {
-            foreach ((array)$folderIds as $folderId) {
-                $result[] = Felamimail_Controller_Folder::getInstance()->updateFolderStatus($accountId, NULL, $folderId)->toArray();
-            }
+            $result = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($accountId, $folderIds)->toArray();
         }
         
         return $result;
@@ -144,15 +143,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function updateFolderCache($accountId, $folderNames)
     {
-        // close session to allow other requests (do we need that?)
-        //Zend_Session::writeClose(true);
-            
         $result = array();
         if (empty($folderNames)) {
-            $result = Felamimail_Controller_Cache::getInstance()->updateFolders('', $accountId);
+            $result = Felamimail_Controller_Cache_Folder::getInstance()->update($accountId);
         } else {
             foreach ((array)$folderNames as $folderName) {
-                $result[$folderName] = Felamimail_Controller_Cache::getInstance()->updateFolders($folderName, $accountId);
+                $result[$folderName] = Felamimail_Controller_Cache_Folder::getInstance()->update($accountId, $folderName);
             }
         }
         
@@ -183,36 +179,18 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * update cache
      * - use session/writeClose to update incomplete cache and allow following requests
      *
-     * @param  string $folderId id of active folder
+     * @param string $folderId id of active folder
+     * @param integer $time update time in seconds
      * @return array
-     * 
-     * @todo    message caching should be resumable if it ended and wasn't finished 
-     * @todo    add counter to update only X folders at once?
      */
-    public function updateMessageCache($folderId)
+    public function updateMessageCache($folderId, $time)
     {
-        $cacheController = Felamimail_Controller_Cache::getInstance();
+        // close session to allow other requests
+        Zend_Session::writeClose(true);
         
-        // update message cache of active folder
-        $folder = $cacheController->updateMessages($folderId);
+        $folder = Felamimail_Controller_Cache_Message::getInstance()->update($folderId, $time);
         
-        if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE
-                || $folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING
-        ) {
-            // close session to allow other requests
-            Zend_Session::writeClose(true);
-            
-            // update rest of cache here
-            Tinebase_Core::setExecutionLifeTime(600); // 10 minutes
-            Felamimail_Controller_Cache::getInstance()->initialImport($folderId);
-            
-            $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
-        }
-        
-        // return folder data
-        $result = $folder->toArray();
-        
-        return $result;
+        return $folder->toArray();
     }
     
     /**

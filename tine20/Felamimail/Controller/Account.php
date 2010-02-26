@@ -156,34 +156,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     public function get($_id, $_containerId = NULL)
     {
-        if ($_id === Felamimail_Model_Account::DEFAULT_ACCOUNT_ID) {
-            
-            if (empty($this->_imapConfig) || ! $this->_imapConfig['useSystemAccount']) {
-                throw new Felamimail_Exception('No default imap account defined in config.inc.php!');
-            }
-            
-            // create new default account with imap config data
-            $record = new Felamimail_Model_Account($this->_imapConfig);
-            
-            // add smtp settings
-            $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
-            if (empty($smtpConfig)) {
-                // just warn
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No default smtp account defined in config.inc.php!');
-            } else {
-                $record->smtp_hostname  = $smtpConfig['hostname'];
-                $record->smtp_user      = $smtpConfig['username'];
-                $record->smtp_password  = $smtpConfig['password'];
-            }
-            
-            $record->setId(Felamimail_Model_Account::DEFAULT_ACCOUNT_ID);
-        } else {
-            $record = parent::get($_id, $_containerId);
-            
-            if ($record->type == Felamimail_Model_Account::TYPE_SYSTEM) {
-                $this->_addSystemAccountValues($record);
-                $this->_addUserValues($record, Tinebase_User::getInstance()->getFullUserById($this->_currentAccount->getId()));
-            }
+        $record = parent::get($_id, $_containerId);
+        
+        if ($record->type == Felamimail_Model_Account::TYPE_SYSTEM) {
+            $this->_addSystemAccountValues($record);
+            // @todo remove that / it shouldn't be needed here
+            //$this->_addUserValues($record, Tinebase_User::getInstance()->getFullUserById($this->_currentAccount->getId()));
         }
         
         return $record;    
@@ -223,7 +201,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         // check if default account got deleted and set new default account
         if (in_array(Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, (array) $_ids)) {
             $accounts = $this->search();
-            $defaultAccountId = (count($accounts) > 0) ? $accounts->getFirstRecord()->getId() : Felamimail_Model_Account::DEFAULT_ACCOUNT_ID;
+            $defaultAccountId = (count($accounts) > 0) ? $accounts->getFirstRecord()->getId() : '';
             
             Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $defaultAccountId;
         }
@@ -491,19 +469,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             }
         }
         
-        // don't update default account
-        if (! $_account->id || $_account->id == Felamimail_Model_Account::DEFAULT_ACCOUNT_ID) {
-            $result = $_account;
-        } else {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating capabilities for account.' . $_account->name);
-            
-            $this->_setRightChecks(FALSE);
-            if ($_account->delimiter) {
-                $_account->delimiter = substr($_account->delimiter, 0, 1);
-            }
-            $result = $this->update($_account);
-            $this->_setRightChecks(TRUE);
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating capabilities for account: ' . $_account->name);
+        
+        $this->_setRightChecks(FALSE);
+        if ($_account->delimiter) {
+            $_account->delimiter = substr($_account->delimiter, 0, 1);
         }
+        $result = $this->update($_account);
+        $this->_setRightChecks(TRUE);
         
         return $result;
     }
@@ -522,19 +495,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         // get user
         $userId = $this->_currentAccount->getId();
         $fullUser = Tinebase_User::getInstance()->getFullUserById($userId);
-        
-        if (! $fullUser->accountEmailAddress && array_key_exists('user', $this->_imapConfig)) {
-            // get email address / user from config
-            $fullUser->accountEmailAddress = $this->_imapConfig['user'];
-        }
+        $email = ((! $fullUser->accountEmailAddress || empty($fullUser->accountEmailAddress)) && array_key_exists('user', $this->_imapConfig)) 
+            ? $this->_imapConfig['user']
+            : $fullUser->accountEmailAddress;
         
         // only create account if email address is set
-        if ($fullUser->accountEmailAddress) {
+        if ($email) {
             $systemAccount = new Felamimail_Model_Account($this->_imapConfig, TRUE);
             $systemAccount->type = Felamimail_Model_Account::TYPE_SYSTEM;
             $systemAccount->user_id = $userId;
-            
-            $this->_addUserValues($systemAccount, $fullUser);
+            $this->_addUserValues($systemAccount, $fullUser, $email);
             
             // sanitize port
             if (empty($systemAccount->port)) {
@@ -571,7 +541,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             // set as default account preference
             Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $systemAccount->getId();
             
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Created new system account ' . $systemAccount->name);
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Created new system account "' . $systemAccount->name . '".');
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemAccount->toArray(), TRUE));
             
         } else {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not create system account for user ' . $fullUser->accountLoginName . '. No email address given.');
@@ -646,14 +617,15 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * 
      * @param Felamimail_Model_Account $_account
      * @param Tinebase_Model_FullUser $_user
-     * @return unknown_type
+     * @param string $_email
+     * @return void
      */
-    protected function _addUserValues(Felamimail_Model_Account $_account, Tinebase_Model_FullUser $_user)
+    protected function _addUserValues(Felamimail_Model_Account $_account, Tinebase_Model_FullUser $_user, $_email = NULL)
     {
         // add user data
         $_account->user   = $_user->accountLoginName;
-        $_account->email  = $_user->accountEmailAddress;
-        $_account->name   = $_user->accountEmailAddress;
+        $_account->email  = ($_email !== NULL) ? $_email : $_user->accountEmailAddress;
+        $_account->name   = ($_email !== NULL) ? $_email : $_user->accountEmailAddress;
         $_account->from   = $_user->accountFullName;
         
         // add contact data

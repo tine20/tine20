@@ -30,6 +30,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected $_controller = array();
     
     /**
+     * @var Felamimail_Model_Account
+     */
+    protected $_account = NULL;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -49,6 +54,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_controller = Felamimail_Controller_Message::getInstance();        
     }
 
@@ -72,19 +78,20 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testSearchWithCache()
     {
         // get inbox folder id
-        Felamimail_Controller_Cache::getInstance()->updateFolders();
+        Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
         $folderBackend = new Felamimail_Backend_Folder();
-        $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
+        $folder = $folderBackend->getByBackendAndGlobalName($this->_account->getId(), 'INBOX');
         
         // clear cache and empty folder
-        Felamimail_Controller_Cache::getInstance()->clear($folder->getId());
+        Felamimail_Controller_Cache_Message::getInstance()->clear($folder->getId());
         Felamimail_Controller_Folder::getInstance()->emptyFolder($folder->getId());
         
         // append message
         $this->_appendMessage('text_plain.eml', 'INBOX');
         
         // search messages in inbox
-        Felamimail_Controller_Cache::getInstance()->updateMessages($folder);
+        $folder = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $folder->getId())->getFirstRecord();
+        Felamimail_Controller_Cache_Message::getInstance()->update($folder);
         $result = $this->_controller->search($this->_getFilter($folder->getId()));
         
         //print_r($result->toArray());
@@ -105,7 +112,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->_controller->delete($firstMessage->getId());
         
         // clear cache
-        Felamimail_Controller_Cache::getInstance()->clear($folder->getId());
+        Felamimail_Controller_Cache_Message::getInstance()->clear($folder->getId());
     }
     
     /**
@@ -281,23 +288,26 @@ Christian Hoffmann
     protected function _messageTestHelper($_filename)
     {
         // get inbox folder id and empty folder
-        Felamimail_Controller_Cache::getInstance()->updateFolders();
+        Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
         $folderBackend = new Felamimail_Backend_Folder();
-        $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
+        $folder = $folderBackend->getByBackendAndGlobalName($this->_account->getId(), 'INBOX');
         Felamimail_Controller_Folder::getInstance()->emptyFolder($folder->getId());
                 
         $this->_appendMessage($_filename, 'INBOX');
         
         // get inbox folder id
-        Felamimail_Controller_Cache::getInstance()->updateFolders();
+        Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
         $folderBackend = new Felamimail_Backend_Folder();
-        $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
+        $folder = $folderBackend->getByBackendAndGlobalName($this->_account->getId(), 'INBOX');
         
         // search messages in inbox
-        Felamimail_Controller_Cache::getInstance()->updateMessages($folder);
+        $folder = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $folder->getId())->getFirstRecord();
+        Felamimail_Controller_Cache_Message::getInstance()->update($folder);
         $result = $this->_controller->search($this->_getFilter($folder->getId()));
         
         //print_r($result->toArray());
+        
+        $this->assertTrue(! empty($result));
         
         // return result
         return $result->getFirstRecord();        
@@ -312,7 +322,7 @@ Christian Hoffmann
     protected function _appendMessage($_filename, $_folder)
     {
         $mailAsString = file_get_contents(dirname(dirname(__FILE__)) . '/files/' . $_filename);
-        Felamimail_Backend_ImapFactory::factory(Felamimail_Model_Account::DEFAULT_ACCOUNT_ID)
+        Felamimail_Backend_ImapFactory::factory($this->_account->getId())
             ->appendMessage($mailAsString, $_folder);
     }
     

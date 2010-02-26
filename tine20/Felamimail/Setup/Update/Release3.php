@@ -76,4 +76,127 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Felamimail', '3.3');
     }
+
+    /**
+     * update function (-> 3.4)
+     * - add field to felamimail_folder table for better caching 
+     */    
+    public function update_3()
+    {
+        // rename cols
+        $this->_backend->alterCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>imap_uidnext</name>
+                    <type>integer</type>
+                    <length>64</length>
+                </field>'
+        ), 'uidnext');
+        $this->_backend->alterCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>imap_uidvalidity</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>'
+        ), 'uidvalidity');
+        $this->_backend->alterCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>imap_totalcount</name>
+                    <type>integer</type>
+                </field>'
+        ), 'totalcount');
+        $this->_backend->alterCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>imap_unreadcount</name>
+                    <type>integer</type>
+                </field>'
+        ), 'unreadcount');
+        $this->_backend->alterCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>imap_timestamp</name>
+                    <type>datetime</type>
+                </field>'
+        ), 'timestamp');
+        $this->_backend->alterCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>cache_status</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>'
+        ));
+        $this->_backend->alterCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>cache_job_lowestuid</name>
+                    <type>integer</type>
+                    <length>64</length>
+                </field>'
+        ), 'cache_lowest_uid');
+
+        // add new cols
+        $this->_backend->addCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>imap_status</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>'
+        ));
+        $this->_backend->addCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>imap_recentcount</name>
+                    <type>integer</type>
+                </field>'
+        ));
+        $this->_backend->addCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>cache_uidnext</name>
+                    <type>integer</type>
+                    <length>64</length>
+                </field>'
+        ));
+        $this->_backend->addCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>cache_job_startuid</name>
+                    <type>integer</type>
+                    <length>64</length>
+                </field>'
+        ));
+        $this->_backend->addCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>cache_totalcount</name>
+                    <type>integer</type>
+                </field>'
+        ));
+        $this->_backend->addCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>cache_recentcount</name>
+                    <type>integer</type>
+                </field>'
+        ));
+        $this->_backend->addCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>cache_unreadcount</name>
+                    <type>integer</type>
+                </field>'
+        ));
+        $this->_backend->addCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>cache_timestamp</name>
+                    <type>datetime</type>
+                </field>'
+        ));
+        $this->_backend->addCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>cache_job_actions_estimate</name>
+                    <type>integer</type>
+                </field>'
+        ));
+        $this->_backend->addCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>cache_job_actions_done</name>
+                    <type>integer</type>
+                </field>'
+        ));
+        
+        $this->setTableVersion('felamimail_folder', '5');
+        $this->setApplicationVersion('Felamimail', '3.4');
+    }
 }

@@ -51,6 +51,10 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         
         var account = Tine.Felamimail.loadAccountStore().getById(attr.account_id);
         
+        // add folder to folderStore
+        var folder = new Tine.Felamimail.Model.Folder(attr, attr.id);
+        this.folderStore.add([folder]);
+        
         // check for account setting
         attr.has_children = (
             account 
@@ -75,8 +79,8 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             allowDrop: true,
             //qtip: qtiptext,
             systemFolder: (attr.system_folder == '1'),
-            unreadcount: attr.unreadcount,
-            totalcount: attr.totalcount,
+            unreadcount: attr.cache_unreadcount,
+            totalcount: attr.cache_totalcount,
             cache_status: attr.cache_status,
             
             // if it has no children, it shouldn't have an expand icon 
@@ -117,8 +121,8 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         }
 
         // add unread class to node
-        if (attr.unreadcount > 0) {
-            node.text = node.text + ' (' + attr.unreadcount + ')';
+        if (attr.cache_unreadcount > 0) {
+            node.text = node.text + ' (' + attr.cache_unreadcount + ')';
             node.cls = node.cls + ' felamimail-node-unread'; // x-tree-node-collapsed';
         }
         

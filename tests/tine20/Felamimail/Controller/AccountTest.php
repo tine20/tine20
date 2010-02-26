@@ -68,7 +68,7 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccountCapabilities()
     {
-        $account = $this->_controller->get(Felamimail_Model_Account::DEFAULT_ACCOUNT_ID);
+        $account = $this->_controller->search()->getFirstRecord();;
         $account = $this->_controller->updateCapabilities($account);
         
         //print_r($account->toArray());

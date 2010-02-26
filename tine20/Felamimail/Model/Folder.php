@@ -19,6 +19,18 @@
 class Felamimail_Model_Folder extends Tinebase_Record_Abstract
 {  
     /**
+     * imap status: ok
+     *
+     */
+    const IMAP_STATUS_OK = 'ok';
+    
+    /**
+     * imap status: disconnected
+     *
+     */
+    const IMAP_STATUS_DISCONNECT = 'disconnect';
+    
+    /**
      * cache status: empty
      *
      */
@@ -47,6 +59,12 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
      *
      */
     const CACHE_STATUS_INCOMPLETE = 'incomplete';
+    
+    /**
+     * cache status: invalid
+     *
+     */
+    const CACHE_STATUS_INVALID = 'invalid';
     
     /**
      * cache status: deleting
@@ -87,14 +105,22 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
         'has_children'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'recent'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'system_folder'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'timestamp'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'totalcount'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-    // folder status
-        'unreadcount'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'recentcount'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-    // cache/mailbox sync values 
-        'uidnext'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'uidvalidity'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+    // imap values
+        'imap_status'           => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true, 
+            Zend_Filter_Input::DEFAULT_VALUE => self::CACHE_STATUS_EMPTY, 
+            'InArray' => array(
+                self::IMAP_STATUS_OK,
+                self::IMAP_STATUS_DISCONNECT,
+            )
+        ),
+        'imap_uidnext'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
+        'imap_uidvalidity'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'imap_totalcount'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'imap_recentcount'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'imap_unreadcount'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'imap_timestamp'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // cache values 
         'cache_status'          => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => self::CACHE_STATUS_EMPTY, 
@@ -107,7 +133,15 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
                 self::CACHE_STATUS_DELETING
             )
         ),
-        'cache_lowest_uid'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_uidnext'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
+        'cache_totalcount'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_recentcount'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_unreadcount'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_timestamp'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'cache_job_lowestuid'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_job_startuid'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_job_actions_estimate'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_job_actions_done'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     );
     
     /**
@@ -116,6 +150,7 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
      * @var array list of datetime fields
      */
     protected $_datetimeFields = array(
-        'timestamp',
+        'cache_timestamp',
+        'imap_timestamp',
     );
 }

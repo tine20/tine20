@@ -145,3 +145,32 @@ Tine.Felamimail.Model.Account.getDefaultData = function() {
         smtp_ssl: (defaults.smtp && defaults.smtp.ssl) ? defaults.smtp.ssl : 'none'
     };
 };
+
+/**
+ * @namespace Tine.Felamimail.Model
+ * @class Tine.Felamimail.Model.Record
+ * @extends Ext.data.Record
+ * 
+ * Folder Record Definition
+ */ 
+Tine.Felamimail.Model.Folder = Ext.data.Record.create([
+      { name: 'id' },
+      { name: 'localname' },
+      { name: 'globalname' },
+      { name: 'parent' },
+      { name: 'account_id' },
+      { name: 'imap_status' },
+      { name: 'imap_timestamp',     type: 'date', dateFormat: Date.patterns.ISO8601Long },
+      { name: 'imap_uidnext' },
+      { name: 'imap_uidvalidity' },
+      { name: 'imap_totalcount' },
+      { name: 'imap_recentcount' },
+      { name: 'imap_unreadcount' },
+      { name: 'cache_status' },
+      { name: 'cache_uidnext' },
+      { name: 'cache_recentcount' },
+      { name: 'cache_unreadcount' },
+      { name: 'cache_timestamp',     type: 'date', dateFormat: Date.patterns.ISO8601Long  },
+      { name: 'cache_job_actions_estimate' },
+      { name: 'cache_job_actions_done' }
+]);

@@ -45,6 +45,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'bcc'           => array('custom' => true),
         'flags'         => array('custom' => true),
         'account_id'    => array('custom' => true),
+        'messageuid'    => array('filter' => 'Tinebase_Model_Filter_Int'),
     );
 
     /**
