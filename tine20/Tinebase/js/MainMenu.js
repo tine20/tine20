@@ -3,8 +3,8 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
      * @cfg {Boolean} showMainMenu
      */
     showMainMenu: false,    
+    style: {'padding': '0px 2px'},
     
-    id: 'tineMenu',
     /**
      * @type Array
      * @property mainActions
@@ -19,6 +19,16 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         
         this.items = this.getItems();
         
+        var buttonTpl = new Ext.Template(
+            '<table id="{4}" cellspacing="0" class="x-btn {3}"><tbody class="{1}">',
+            '<tr><td class="x-btn-ml"><i>&#160;</i></td><td class="x-btn-mc"><em class="{2}" unselectable="on"><button type="{0}"></button></em></td><td class="x-btn-mr"><i>&#160;</i></td></tr>',
+            '</tbody></table>'
+        ).compile();
+        
+        Ext.each(this.items, function(item) {
+            item.template = buttonTpl;
+        }, this);
+        
         this.supr().initComponent.call(this);
     },
     
@@ -27,7 +37,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         this.supr().afterRender.apply(this, arguments);
         
         this.items.each(function(item) {
-            
+            Ext.select('.tine-mainscreen-mainmenu .x-toolbar .x-btn tbody tr:first-child').remove();
         }, this);
     },
     */
