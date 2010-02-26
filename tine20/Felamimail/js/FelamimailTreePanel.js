@@ -86,7 +86,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @property updateMessageRefreshTime
      * @type Number
      */
-    updateMessageRefreshTime: 10000, // 20 seconds
+    updateMessageRefreshTime: 20000, // 20 seconds
     
     /**
      * @cfg {String} containerName
@@ -226,11 +226,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.expandPath('/root/' + defaultAccount + '/');
         
         // start delayed tasks
+        /*
         if (this.updateMessagesTask !== null) {
             this.updateMessagesTask.delay(this.updateMessageRefreshTime);
         }
-        // TODO update
+        */
         /*
+        // TODO update
         if (this.updateFoldersTask !== null) {
             this.updateFoldersTask.delay(this.updateFolderRefreshTime);
         }
@@ -259,8 +261,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             this.filterPlugin.onFilterChange();
             
             this.updateFolderStatus([node]);
-            // TODO start fast delayed task if this returns false?
-            this.updateMessageCache();
+            //this.updateMessageCache();
+            if (this.updateMessagesTask !== null) {
+                this.setMessageRefresh('fast');
+                this.updateMessagesTask.delay(this.updateMessageRefreshTime);
+            }
         }
     },
     
@@ -380,21 +385,10 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * - calls updateFolderStatus and updateMessageCache
      */
     updateMessages: function() {
-        var cacheComplete = this.updateMessageCache();
+        var refreshMode = (this.updateMessageCache()) ? 'slow' : 'fast';
+        this.setMessageRefresh(refreshMode);
+        //console.log('start task with delay ' + this.updateMessageRefreshTime)
         
-        if (cacheComplete) {
-            // get folder update interval from preferences
-            var updateInterval = parseInt(Tine.Felamimail.registry.get('preferences').get('updateInterval'));
-            if (updateInterval > 0) {
-                // convert to milliseconds
-                this.updateMessageRefreshTime = 60000*updateInterval;
-            } else {
-                // TODO what shall we de if pref is set to 0?
-                this.updateMessageRefreshTime = 1200000; // 20 minutes
-            }
-        } else {
-            this.updateMessageRefreshTime = 10000; // 10 seconds
-        }
         this.updateMessagesTask.delay(this.updateMessageRefreshTime);
     },
 
@@ -571,6 +565,26 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         node.getUI().removeClass('felamimail-node-unread');
         if (node.attributes.unreadcount > 0) {
             node.getUI().addClass('felamimail-node-unread');
+        }
+    },
+    
+    /**
+     * set this.updateMessageRefreshTime
+     * @param {} mode fast|slow
+     */
+    setMessageRefresh: function(mode) {
+        if (mode == 'slow') {
+            // get folder update interval from preferences
+            var updateInterval = parseInt(Tine.Felamimail.registry.get('preferences').get('updateInterval'));
+            if (updateInterval > 0) {
+                // convert to milliseconds
+                this.updateMessageRefreshTime = 60000*updateInterval;
+            } else {
+                // TODO what shall we de if pref is set to 0?
+                this.updateMessageRefreshTime = 1200000; // 20 minutes
+            }
+        } else {
+            this.updateMessageRefreshTime = 20000; // 20 seconds
         }
     },
     
