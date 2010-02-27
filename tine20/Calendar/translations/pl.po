@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-02-14 15:36+0100\n"
+"PO-Revision-Date: 2010-02-27 18:58+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -493,8 +493,9 @@ msgstr "W każdy {0} miesiąc"
 #: js/RrulePanel.js:463
 #: js/RrulePanel.js:594
 #: js/RrulePanel.js:644
+#, fuzzy
 msgid "at the"
-msgstr ""
+msgstr "o"
 
 #: js/RrulePanel.js:433
 #: js/RrulePanel.js:613
