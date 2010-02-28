@@ -133,10 +133,14 @@ Ext.ux.file.BrowsePlugin.prototype = {
             
             // @see http://dev.w3.org/html5/spec/Overview.html#the-dragevent-and-datatransfer-interfaces
             this.dropEl.on('dragover', function(e) {
+                console.log('hier')
                 e.stopPropagation();
                 e.preventDefault();
+                
                 // prevents drop in FF ;-(
-                //e.browserEvent.dataTransfer.dropEffect = 'copy';
+                if (! Ext.isGecko) {
+                    e.browserEvent.dataTransfer.dropEffect = 'copy';
+                }
             }, this);
             
             this.dropEl.on('drop', function(e) {
