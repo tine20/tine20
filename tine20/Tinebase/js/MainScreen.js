@@ -10,11 +10,12 @@
 Ext.ns('Tine.Tinebase');
 
 /**
- * Tine 2.0 library/ExtJS client Mainscreen.
+ * Tine 2.0 jsclient MainScreen.
  * 
  * @namespace   Tine.Tinebase
  * @class       Tine.Tinebase.MainScreen
  * @extends     Ext.Panel
+ * @singleton   
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */

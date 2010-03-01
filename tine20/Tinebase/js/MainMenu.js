@@ -1,3 +1,23 @@
+/*
+ * Tine 2.0
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
+Ext.ns('Tine.Tinebase');
+
+/**
+ * Tine 2.0 jsclient main menu
+ * 
+ * @namespace   Tine.Tinebase
+ * @class       Tine.Tinebase.MainMenu
+ * @extends     Ext.Toolbar
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
+ */
 Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
     /**
      * @cfg {Boolean} showMainMenu
