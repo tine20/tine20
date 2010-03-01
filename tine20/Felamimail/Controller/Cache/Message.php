@@ -125,6 +125,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder values before import: ' . print_r($folder->toArray(), TRUE));
             
+            // remove old \Recent flag from cached messages
+            $this->_backend->clearFlag($folder->getId(), Zend_Mail_Storage::FLAG_RECENT, 'folder');
+            
             ///////////////////////////// get missing uids from imap
              
             // select folder and get all missing message uids from cache_job_lowestuid (imap_uidnext) to cache_uidnext
@@ -155,9 +158,10 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 $messages = $imap->getSummary($firstUid, $lastUid);
                 $recents = $this->_addMessages($messages, $folder->getId(), $messageCount);
                 
-                $folder->cache_job_lowestuid = $lastUid;
-                $folder->cache_totalcount   += $messageCount;
-                $folder->cache_recentcount  += $recents;
+                $folder->cache_job_lowestuid    = $lastUid;
+                $folder->cache_totalcount       += $messageCount;
+                $folder->cache_job_actions_done += $messageCount;
+                $folder->cache_recentcount      += $recents;
                 
                 $timeLeft = ($folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
             }
@@ -165,13 +169,10 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Finished import run  ... Time: ' . Zend_Date::now()->toString() 
                 . ' Added new messages: ' . $folder->cache_recentcount);
             
-            $folder->cache_job_actions_done += $messageCount;
-                        
             ///////////////////////////// sync deleted messages or start again to add recent messages
                 
             if ($timeLeft && $folder->cache_totalcount > $folder->imap_totalcount) {
                 // sync deleted if we still got time left and totalcounts mismatch
-                //$timeLeft = $this->_syncDeletedMessages($folder, $_time, $allUids);
                 
                 $this->_syncDeletedMessages($folder, $allUids);
 
@@ -433,11 +434,12 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 }
                 
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cachedMessage->toArray(), true));
+                $createdMessage = $this->_backend->create($cachedMessage);
                 
-                $this->_backend->create($cachedMessage);
-                
+                // count unseen and Zend_Mail_Storage::FLAG_RECENT 
                 if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags)) {
                     $result++;
+                    $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
                 }
                 
             } catch (Zend_Mail_Exception $zme) {
@@ -541,15 +543,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 }
             }
         }
-        
-        /*
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' format: ' . $_format);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' before: ' . $_dateString);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' after: ' . $dateString);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' zend date:' . $date->toString());
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' zend date:' . $date->getTimezone());
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' zend date:' . $date->get(Zend_Date::GMT_DIFF));
-        */
         
         return $date;
     }
