@@ -125,7 +125,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder values before import: ' . print_r($folder->toArray(), TRUE));
             
-            ///////////////////////////// main message import loop
+            ///////////////////////////// get missing uids from imap
              
             // select folder and get all missing message uids from cache_job_lowestuid (imap_uidnext) to cache_uidnext
             $imap->selectFolder($folder['globalname']);
@@ -136,6 +136,8 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 . ' Queried message uids from ' . $folder->cache_job_lowestuid . ' to ' . $folder->cache_uidnext . ' from imap server.'
                 . ' Got ' . count($missingUids) . ' uncached mail(s).'
             );
+
+            ///////////////////////////// main message import loop
             
             while (
                 // more messages to add ?
@@ -148,7 +150,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 $this->_getFirstAndLast($missingUids, $firstUid, $lastUid);
                 
                 // get summary and add messages
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' get summary from ' . $firstUid . ' to ' . $lastUid);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get summary from ' . $firstUid . ' to ' . $lastUid);
                 // get summary is not working correctly with a single param
                 $messages = $imap->getSummary($firstUid, $lastUid);
                 $recents = $this->_addMessages($messages, $folder->getId(), $messageCount);
@@ -169,7 +171,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 
             if ($timeLeft && $folder->cache_totalcount > $folder->imap_totalcount) {
                 // sync deleted if we still got time left and totalcounts mismatch
-                $timeLeft = $this->_syncDeletedMessages($folder, $_time, $imap);
+                //$timeLeft = $this->_syncDeletedMessages($folder, $_time, $allUids);
+                
+                $this->_syncDeletedMessages($folder, $allUids);
 
             } else if ($timeLeft && $folder->cache_totalcount < $folder->imap_totalcount) {
                 $folder->cache_job_lowestuid = 0;
@@ -182,7 +186,11 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Need to start import again ... :(');
                     $folder->cache_uidnext = 1;
                 }
+                
+                // wait for next import run
+                $timeLeft = FALSE;
 
+                /*
                 $secondsLeft = $_time - (Zend_Date::now()->get() - $folder->cache_timestamp->get()); // substract timestamps
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No messages found to delete -> perhaps new mails arrived in the meantime ('
                     . $secondsLeft . ' seconds left)');
@@ -193,6 +201,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 } else {
                     $timeLeft = FALSE;
                 }
+                */
             }
                 
             ///////////////////////////// finished with import run
@@ -457,10 +466,10 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      * sync deleted messages
      * 
      * @param Felamimail_Model_Folder $_folder
-     * @param integer $_time
-     * @return boolean time left
+     * @param array $_imapUids
+     * @return void
      */
-    protected function _syncDeletedMessages(Felamimail_Model_Folder $_folder, $_time, Felamimail_Backend_Imap $_imap)
+    protected function _syncDeletedMessages(Felamimail_Model_Folder $_folder, $_imapUids)
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Syncing deleted messages in folder ' . $_folder->globalname);
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' before deleted sync: ' . print_r($_folder->toArray(), TRUE));
@@ -468,56 +477,21 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         // update folder with estimate / actions
         $_folder->cache_job_actions_estimate += abs($_folder->cache_totalcount - $_folder->imap_totalcount);
         
-        $timeLeft = TRUE;
-        $start = 0;
-        $stepSize = 50;
-        while ($timeLeft && $_folder->cache_totalcount != $_folder->imap_totalcount) {
-            
-            // get next 50 messages from cache job lowest uid
-            $messages = Felamimail_Controller_Message::getInstance()->search(new Felamimail_Model_MessageFilter(array(
-                array('field' => 'folder_id',   'operator' => 'equals', 'value' => $_folder->getId()),
-                array('field' => 'account_id',  'operator' => 'equals', 'value' => $_folder->account_id),
-                array('field' => 'messageuid',  'operator' => 'less',   'value' => $_folder->cache_job_lowestuid),
-            )), new Tinebase_Model_Pagination(array('start' => $start, 'limit' => $stepSize, 'sort' => 'messageuid')));
-            
-            if (count($messages) == 0) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No messages found in cache with uid lower than ' . $_folder->cache_job_lowestuid);
-                break;
-            }
-            
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($messages) 
-                . ' message(s) from cache beginning with uid ' . $_folder->cache_job_lowestuid);
-            
-            // get messageuids
-            $cacheUids = $messages->messageuid;
-            $firstUid = array_shift($cacheUids);
-            $lastUid = (empty($cacheUids)) ? $firstUid : array_pop($cacheUids);
-            
-            // query mailserver
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Query uids from ' . $firstUid
-                . ' to ' . $lastUid) . ' from imap server.';
-            $imapUids = $_imap->getUid($firstUid, $lastUid);
-            
-            // delete uids not on mailserver from cache
-            $toDeleteUids = array_diff($messages->messageuid, $imapUids);
-            if (! empty($toDeleteUids)) {
-                $this->_backend->deleteByProperty($toDeleteUids, 'messageuid', 'in');
-            }
-            $numberDeleted = count($toDeleteUids);
-            
-            // update folder values
-            $_folder->cache_job_actions_done += $numberDeleted;
-            $_folder->cache_totalcount -= $numberDeleted;
-            $_folder->cache_job_lowestuid = $lastUid;
-            
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $numberDeleted . ' messages from cache.');
-            
-            // check time and increase start for pagination
-            $timeLeft = ($_folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
-            $start += $stepSize;
-        }
+        $cacheUids = $this->_backend->getMessageuidsByFolderId($_folder->getId());
+        $toDeleteUids = array_diff($cacheUids, $_imapUids);
         
-        return $timeLeft;
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($toDeleteUids, TRUE));
+        
+        if (! empty($toDeleteUids)) {
+            $this->_backend->deleteByProperty($toDeleteUids, 'messageuid', 'in');
+        }
+        $numberDeleted = count($toDeleteUids);
+        
+        // update folder values
+        $_folder->cache_job_actions_done += $numberDeleted;
+        $_folder->cache_totalcount -= $numberDeleted;
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $numberDeleted . ' messages from cache.');
     }
     
     /**
