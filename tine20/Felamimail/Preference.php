@@ -129,6 +129,12 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
         
         switch($_preferenceName) {
             case self::USEINADB:
+                $preference->value      = 1;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                break;
             case self::USESYSTEMACCOUNT:
                 $preference->value      = 0;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
