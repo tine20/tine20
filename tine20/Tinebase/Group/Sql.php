@@ -124,9 +124,18 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . ' = ?', $groupId);
         $this->groupMembersTable->delete($where);
         
-        // add new members
-        foreach ($_groupMembers as $accountId) {
-            $this->addGroupMember($_groupId, $accountId);
+        if(count($_groupMembers) > 0) {
+            $db = Tinebase_Core::getDb();
+            $stmt = $db->prepare('INSERT INTO ' . SQL_TABLE_PREFIX . 'group_members (group_id, account_id) VALUES (?,?)');
+            
+            // add new members
+            foreach ($_groupMembers as $accountId) {
+                $accountId = Tinebase_Model_User::convertUserIdToInt($accountId);        
+                $stmt->execute(array(
+                    $groupId, 
+                    $accountId
+                ));
+            }
         }
         
         // invalidate cache (no memcached support yet)
