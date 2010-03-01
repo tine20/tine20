@@ -74,7 +74,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                 region: 'north',
                 layout: 'card',
                 activeItem: 0,
-                height: 26,
+                height: 52,
                 border: false,
                 id:     'north-panel-2',
                 items: []
@@ -174,30 +174,15 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     /**
      * sets the active content panel
      * 
-     * @param {Ext.Panel} _panel Panel to activate
-     * @param {Bool} _keep keep panel
+     * @param {Ext.Panel} item Panel to activate
+     * @param {Bool} keep keep panel
      */
-    setActiveContentPanel: function(_panel, _keep) {
-        // get container to which component will be added
-        var centerPanel = Ext.getCmp('center-panel');
-        _panel.keep = _keep;
-
-        var i,p;
-        if(centerPanel.items) {
-            for (i=0; i<centerPanel.items.length; i++){
-                p =  centerPanel.items.get(i);
-                if (! p.keep) {
-                    centerPanel.remove(p);
-                }
-            }  
-        }
-        if(_panel.keep && _panel.rendered) {
-            centerPanel.layout.setActiveItem(_panel.id);
-        } else {
-            centerPanel.add(_panel);
-            centerPanel.layout.setActiveItem(_panel.id);
-            centerPanel.doLayout();
-        }
+    setActiveContentPanel: function(panel, keep) {
+        var cardPanel = Ext.getCmp('center-panel');
+        panel.keep = keep;
+        
+        this.cleanupCardPanelItems(cardPanel);
+        this.setActiveCardPanelItem(cardPanel, panel);
     },
     
     /**
@@ -207,30 +192,25 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
      * @param {Bool} keep keep panel
      */
     setActiveTreePanel: function(panel, keep) {
-        // get card panel to which component will be added
         var cardPanel = Ext.getCmp('treecards');
         panel.keep = keep;
         
-        // remove all panels which should not be keeped
-        var i,p;
-        if(cardPanel.items) {
-            for (i=0; i<cardPanel.items.length; i++){
-                p =  cardPanel.items.get(i);
-                if (! p.keep) {
-                    cardPanel.remove(p);
-                }
-            }  
-        }
+        this.cleanupCardPanelItems(cardPanel);
+        this.setActiveCardPanelItem(cardPanel, panel);
+    },
+    
+    /**
+     * sets item
+     * 
+     * @param {Ext.Toolbar} panel toolbar to activate
+     * @param {Bool} keep keep panel
+     */
+    setActiveToolbar: function(panel, keep) {
+        var cardPanel = Ext.getCmp('north-panel-2');
+        panel.keep = keep;
         
-        // add or set given panel
-        if(panel.keep && panel.rendered) {
-            cardPanel.layout.setActiveItem(panel.id);
-        } else {
-            cardPanel.add(panel);
-            cardPanel.layout.setActiveItem(panel.id);
-            cardPanel.doLayout();
-        }
-        
+        this.cleanupCardPanelItems(cardPanel);
+        this.setActiveCardPanelItem(cardPanel, panel);
     },
     
     /**
@@ -249,30 +229,34 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     },
     
     /**
-     * sets toolbar
+     * remove all items which should not be keeped -> don't have a keep flag
      * 
-     * @param {Ext.Toolbar}
+     * @param {Ext.Panel} cardPanel
      */
-    setActiveToolbar: function(_toolbar, _keep) {
-        var northPanel = Ext.getCmp('north-panel-2');
-        _toolbar.keep = _keep;
-        
-        var i,t;
-        if(northPanel.items) {
-            for (i=0; i<northPanel.items.length; i++){
-                t = northPanel.items.get(i);
-                if (! t.keep) {
-                    northPanel.remove(t);
+    cleanupCardPanelItems: function(cardPanel) {
+        if(cardPanel.items) {
+            for (var i=0,p; i<cardPanel.items.length; i++){
+                p =  cardPanel.items.get(i);
+                if (! p.keep) {
+                    cardPanel.remove(p);
                 }
             }  
         }
-        
-        if(_toolbar.keep && _toolbar.rendered) {
-            northPanel.layout.setActiveItem(_toolbar.id);
+    },
+    
+    /**
+     * add or set given item
+     * 
+     * @param {Ext.Panel} cardPanel
+     * @param {Ext.Panel} item
+     */
+    setActiveCardPanelItem: function(cardPanel, item) {
+        if (cardPanel.items.indexOf(item) !== -1) {
+            cardPanel.layout.setActiveItem(item.id);
         } else {
-            northPanel.add(_toolbar);
-            northPanel.layout.setActiveItem(_toolbar.id);
-            northPanel.doLayout();
+            cardPanel.add(item);
+            cardPanel.layout.setActiveItem(item.id);
+            cardPanel.doLayout();
         }
     }
 });
