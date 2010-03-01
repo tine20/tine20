@@ -139,6 +139,15 @@
     background-image:url(../../images/oxygen/16x16/places/user-home.png);
 }
 
+/*.felamimail-node-progress x-tree-node a span { */
+/* TODO make this work */
+.felamimail-node-progress x-tree-node-anchor a span {
+    color: '#dddddd';
+    text-align: 'right';
+    /* float: 'left'; */
+    width: '100%';
+}
+
 /***** email composing dialog ******/
 
 /* disable grid headers */

@@ -21,7 +21,6 @@ Ext.namespace('Tine.Felamimail');
  * <pre>
  * TODO         add delayed tasks for folder status
  * TODO         update non-selected folders
- * TODO         add pie progress
  * low priority:
  * TODO         only allow nodes as drop target (not 'between')
  * TODO         make inbox/drafts/templates configurable in account
@@ -386,19 +385,17 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {} record
      * @param {} operation
      * 
-     * TODO update pie
      */
     onUpdateFolderStore: function(store, record, operation) {
         
         var changes = record.getChanges();
 
         // cache count changed
-        if (/*changes.cache_unreadcount || */changes.cache_totalcount) {
+        if (changes.cache_totalcount) {
             var selectedNode = this.getSelectionModel().getSelectedNode();
             
             // check if grid has to be updated
             if (selectedNode.attributes && selectedNode.attributes.folder_id == record.id) {
-                console.log('grid');
                 this.filterPlugin.onFilterChange();
             }
         }
@@ -415,11 +412,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             );                
         }
             
+        // update pie / progress
+        if (changes.cache_status || changes.cache_job_actions_done) {
+            this.updateCachingProgress(record);
+        }
+
         // silent commit
         record.commit(true);
-
-        // TODO update pie
-        
     },
     
     /********************* cache control functions ******************/
@@ -552,6 +551,42 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         return folder;
     },
 
+    /**
+     * update progress pie
+     * 
+     * @param {} folder
+     * 
+     * TODO show if disconnected
+     * TODO make css style work for class felamimail-node-progress 
+     * TODO show pie progress?
+     */
+    updateCachingProgress: function(folder) {
+        
+        // get node ui
+        var node = this.getNodeById(folder.id);
+        if (! node) {
+            return;
+        }
+        var nodeUI = node.getUI();
+        
+        // insert caching progress element
+        if (folder.get('cache_status') == 'complete' || folder.get('cache_job_actions_estimate') == 0) {
+            var html = folder.get('cache_totalcount');
+        } else {
+            var number = folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 100;
+            var html = number.toFixed(2) + ' %';
+        }
+        
+        var domEl = {tag: 'span', html: html, cls: 'felamimail-node-progress'};
+
+        var progressEl = Ext.DomQuery.select('span[class=felamimail-node-progress]', nodeUI.getEl());
+        if (progressEl[0]) {
+            Ext.DomHelper.overwrite(progressEl[0], html);
+        } else {
+            Ext.DomHelper.insertAfter(nodeUI.getTextEl(), domEl);
+        }
+    },
+    
     /**
      * update unread count of a folder node (use selected node per default)
      * 
