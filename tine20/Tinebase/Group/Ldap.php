@@ -152,7 +152,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      * @param $_groupId
      * @return Tinebase_Model_Group
      */
-    protected function _getGroupById($_groupId)
+    public function getLdapGroupById($_groupId)
     {   
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
 
@@ -235,7 +235,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         $metaData = $this->_getMetaData($_groupId);
         $membersMetaDatas = $this->_getAccountsMetaData((array)$_groupMembers);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $group data: ' . print_r($metaData, true));
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $memebers: ' . print_r($memberMetadata, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $memebers: ' . print_r($membersMetaDatas, true));
         $groupDn = $this->_getDn($_groupId);
         
         $memberDn = array(); 
@@ -412,8 +412,24 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      */
     public function addGroup(Tinebase_Model_Group $_group) 
     {
-        throw new RuntimeException('still untested');
+        $ldapGroup = $this->addLdapGroup($_group);
         
+        $_group->id = $ldapGroup->getId();
+        
+        // add group to sql backend too
+        $group = $this->_sql->addGroup($_group);
+        
+        return $group;
+    }
+    
+    /**
+     * create a new group
+     *
+     * @param Tinebase_Model_Group $_group
+     * @return Tinebase_Model_Group
+     */
+    public function addLdapGroup(Tinebase_Model_Group $_group) 
+    {
         $dn = $this->_generateDn($_group);
         $objectClass = array(
             'top',
@@ -443,11 +459,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         $groupId = $groupId[strtolower($this->_groupUUIDAttribute)][0];
         
-        $group = $this->_getGroupById($groupId);
-        
-        // add group to sql backend too
-        $group = $this->_sql->addGroup($group);
-        
+        $group = $this->getLdapGroupById($groupId);
+                
         return $group;
     }
     
@@ -487,7 +500,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
         $this->_ldap->update($dn, $data);
         
-        $group = $this->_getGroupById($_group);
+        $group = $this->getLdapGroupById($_group);
 
         return $group;
     }
@@ -640,8 +653,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     {
         $allGidNumbers = array();
         $gidNumber = null;
-        
-        throw new RuntimeException('still untested');
         
         $filter = Zend_Ldap_Filter::equals(
             'objectclass', 'posixgroup'
