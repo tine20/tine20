@@ -244,6 +244,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 this.actions.push(all[i]);
             }
         }
+        
+        this.actionUpdater.addActions(this.actions);
     },
     
     /**
