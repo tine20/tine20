@@ -154,7 +154,7 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
      */
     setToolbar: function() {
         if(!this.actionToolbar) {
-            this.actionToolbar = this.gridPanel.actionToolbar;
+            this.actionToolbar = this.gridPanel.getActionToolbar();
         }
         
         Tine.Tinebase.MainScreen.setActiveToolbar(this.actionToolbar, true);
