@@ -131,7 +131,8 @@
         var nCondition     = records.length != 0 && (records.length > 1 ? action.initialConfig.allowMultiple : true);
         var grantCondition = (! this.evalGrants) || grants[action.initialConfig.requiredGrant];
         
-        if (action.initialConfig.requiredGrant) {
+        // @todo discuss if actions are only to be touched if requiredGrant is set
+        if (action.initialConfig.requiredGrant && action.initialConfig.requiredGrant != 'addGrant') {
             action.setDisabled(! (grantCondition && nCondition));
         }
         
@@ -164,12 +165,16 @@
 
         var defaultGrant = records.length == 0 ? false : true;
         var grants = {
-            addGrant:    defaultGrant,
-            adminGrant:  defaultGrant,
+            //addGrant:    defaultGrant,
+            //adminGrant:  defaultGrant,
             deleteGrant: defaultGrant,
             editGrant:   defaultGrant,
             readGrant:   defaultGrant
         };
+        
+        if (! this.evalGrants) {
+            return grants;
+        }
         
         var recordGrants;
         for (var i=0; i<records.length; i++) {
