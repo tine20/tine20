@@ -1,18 +1,22 @@
 /*
  * Tine 2.0
  * 
- * @package     Tine
- * @subpackage  Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
-Ext.namespace('Tine', 'Tine.Tinebase');
+Ext.ns('Tine.Tinebase');
 
 /**
  * Tine 2.0 library/ExtJS client Mainscreen.
+ * 
+ * @namespace   Tine.Tinebase
+ * @class       Tine.Tinebase.MainScreen
+ * @extends     Ext.Panel
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
  */
 Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     
@@ -132,6 +136,11 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         }];
     },
     
+    /**
+     * returns main menu
+     * 
+     * @return {Ext.Menu}
+     */
     getMainMenu: function() {
         if (! this.mainMenu) {
             this.mainMenu = new Tine.Tinebase.MainMenu({
@@ -142,6 +151,11 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         return this.mainMenu;
     },
     
+    /**
+     * appMgr app activation listener
+     * 
+     * @param {Tine.Application} app
+     */
     onAppActivate: function(app) {
         // set document / browser title
         var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '';
@@ -152,8 +166,13 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         
     },
     
-    onRender: function(ct, position) {
-        this.supr().onRender.call(this, ct, position);
+    /**
+     * executed after rendering process
+     * 
+     * @private
+     */
+    afterRender: function() {
+        this.supr().afterRender.apply(this, arguments);
         
         this.activateDefaultApp();
         
@@ -163,6 +182,13 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         }
     },
     
+    /**
+     * activate default application
+     * 
+     * NOTE: this fn waits for treecard panel to be rendered
+     * 
+     * @private
+     */
     activateDefaultApp: function() {
         if (Ext.getCmp('treecards').rendered) {
             Tine.Tinebase.appMgr.activate();
