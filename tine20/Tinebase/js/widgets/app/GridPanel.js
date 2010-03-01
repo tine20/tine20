@@ -44,6 +44,7 @@ Tine.Tinebase.widgets.app.GridPanel = function(config) {
         limit: 50
     };
     
+    // legacy item support
     this.actionToolbarItems = this.actionToolbarItems || [];
     this.contextMenuItems = this.contextMenuItems || [];
     
@@ -77,7 +78,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
     recordProxy: null,
     /**
      * @cfg {Array} actionToolbarItems
-     * additional items for actionToolbar
+     * additional items for actionToolbar (depricated) overwrite getActionToolbar instead
      */
     actionToolbarItems: null,
     /**
@@ -86,7 +87,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
     filterToolbar: null,
     /**
      * @cfg {Array} contextMenuItems
-     * additional items for contextMenu
+     * additional items for contextMenu (depricated) overwirte getContextMenu instead
      */
     contextMenuItems: null,
     /**
@@ -203,7 +204,12 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         this.initStore();
         // init (ext) grid
         this.initGrid();
-        // init actions with actionToolbar and contextMenu
+        
+        // init actions
+        this.actionUpdater = new Tine.widgets.ActionUpdater({
+            containerProperty: this.recordClass.getMeta('containerProperty'), 
+            evalGrants: this.evalGrants
+        });
         this.initActions();
         
         this.initLayout();
@@ -290,6 +296,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         });
         
         this.action_editCopyInNewWindow = new Ext.Action({
+            hidden: ! this.copyEditAction,
             requiredGrant: 'readGrant',
             text: String.format(_('Copy {0}'), this.i18nRecordName),
             disabled: true,
@@ -300,12 +307,18 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         });
         
         this.action_addInNewWindow = new Ext.Action({
+            //xtype:'splitbutton',
+            //menu: [{text: 'Menu Item 1'}],
             requiredGrant: 'addGrant',
             actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(_('Add {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow,
             iconCls: (this.newRecordIcon !== null) ? this.newRecordIcon : this.app.appName + 'IconCls',
-            scope: this
+            scope: this,
+            scale: 'medium',
+            rowspan: 2,
+            iconAlign: 'top',
+            arrowAlign:'right'
         });
         
         // note: unprecise plural form here, but this is hard to change
@@ -322,50 +335,26 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             scope: this
         });
         
-        this.actions = [
+        //if (this.recordClass.getField('tags')) {
+        this.action_tagsMassAttach = new Tine.widgets.tags.TagsMassAttachAction({
+            hidden:         ! this.recordClass.getField('tags'),
+            selectionModel: this.grid.getSelectionModel(),
+            recordClass:    this.recordClass,
+            updateHandler:  this.loadData.createDelegate(this, [true]),
+            app:            this.app
+        });
+            
+        // add actions to updater
+        this.actionUpdater.addActions([
             this.action_addInNewWindow,
             this.action_editInNewWindow,
-            this.action_deleteRecord
-        ];
-
-        if (this.recordClass.getField('tags')) {
-            this.action_tagsMassAttach = new Tine.widgets.tags.TagsMassAttachAction({
-                selectionModel: this.grid.getSelectionModel(),
-                recordClass:    this.recordClass,
-                updateHandler:  this.loadData.createDelegate(this, [true]),
-                app:            this.app
-            });
-            
-            this.contextMenuItems.push('-'/*, {xtype: 'menutextitem', text: _('Tagging')}*/, this.action_tagsMassAttach);
-            if (this.copyEditAction) {
-                // TODO move that between add and edit?
-                this.contextMenuItems.push(this.action_editCopyInNewWindow);
-            }
-        }
+            this.action_deleteRecord,
+            this.action_tagsMassAttach,
+            this.action_editCopyInNewWindow
+        ]);
         
-        var actionToolbarItems = this.actions.concat(this.actionToolbarItems);
-        if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
-            actionToolbarItems.push('->');
-            actionToolbarItems.push(this.filterToolbar.getQuickFilterField());
-        }
-        
-        this.actionToolbar = new Ext.Toolbar({
-            split: false,
-            height: 26,
-            items: actionToolbarItems
-        });
-        
-        this.contextMenu = new Ext.menu.Menu({
-            items: this.actions.concat(this.contextMenuItems)
-        });
-        
-        // pool together all our actions, so that we can hand them over to our actionUpdater
-        for (var all=this.actionToolbarItems.concat(this.contextMenuItems), i=0; i<all.length; i++) {
-            if(this.actions.indexOf(all[i]) == -1) {
-                this.actions.push(all[i]);
-            }
-        }
-        
+        // init actionToolbar (neeted for corrent fitertoolbar init yet -> fixme)
+        this.getActionToolbar();
     },
     
     /**
@@ -405,7 +394,8 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             store: this.store
         });
         this.selectionModel.on('selectionchange', function(sm) {
-            Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'), !this.evalGrants);
+            //Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'), !this.evalGrants);
+            this.actionUpdater.updateActions(sm);
             if (this.updateOnSelectionChange && this.detailsPanel) {
                 this.detailsPanel.onDetailsUpdate(sm);
             }
@@ -492,7 +482,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
                 selModel.selectRow(row);
             }
             
-            this.contextMenu.showAt(e.getXY());
+            this.getContextMenu().showAt(e.getXY());
             // reset preview update
             this.updateOnSelectionChange = true;
         }, this);
@@ -514,6 +504,61 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         }
         
         this.store.load(opts);
+    },
+    
+    getActionToolbar: function() {
+        if (! this.actionToolbar) {
+            this.actionToolbar = new Ext.Toolbar({
+                items: [{
+                    xtype: 'buttongroup',
+                    columns: 2,
+                    items: [
+                        this.action_addInNewWindow,
+                        this.action_editInNewWindow,
+                        this.action_deleteRecord
+                    ]
+                }, this.actionToolbarItems]
+            });
+            
+            if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
+                this.actionToolbar.add('->');
+                this.actionToolbar.add({
+                    xtype: 'buttongroup',
+                    items: this.filterToolbar.getQuickFilterField()
+                });
+            }
+        }
+        
+        return this.actionToolbar;
+    },
+    
+    /**
+     * returns rows context menu
+     * 
+     * @return {Ext.menu.Menu}
+     */
+    getContextMenu: function() {
+        if (! this.contextMenu) {
+            var items = [
+                this.action_addInNewWindow,
+                this.action_editCopyInNewWindow,
+                this.action_editInNewWindow,
+                this.action_deleteRecord
+            ];
+            
+            if (! this.action_tagsMassAttach.hidden) {
+                items.push('-'/*, {xtype: 'menutextitem', text: _('Tagging')}*/, this.action_tagsMassAttach);
+            }
+            
+            if (! Ext.isEmpty(this.contextMenuItems)) {
+                items.concat(this.contextMenuItems);
+                this.actionUpdater.addActions(this.contextMenuItems);
+            }
+            
+            this.contextMenu = new Ext.menu.Menu({items: items});
+        }
+        
+        return this.contextMenu;
     },
     
     /**
