@@ -156,7 +156,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     /**
      * add flag to message
      *
-     * @param Felamimail_Model_Message $_messageId
+     * @param Felamimail_Model_Message $_message
      * @param string $_flag
      */
     public function addFlag($_message, $_flag)
