@@ -22,7 +22,6 @@ Ext.namespace('Tine.Felamimail');
  * TODO         add delayed tasks for folder status
  * TODO         update non-selected folders
  * TODO         add pie progress
- * TODO         check if unread count is updated correctly for folders
  * low priority:
  * TODO         only allow nodes as drop target (not 'between')
  * TODO         make inbox/drafts/templates configurable in account
@@ -117,7 +116,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             id: 'id',
             fields: Tine.Felamimail.Model.Folder,
             //proxy: Tine.Calendar.backend,
-            reader: new Ext.data.JsonReader({})
+            reader: new Ext.data.JsonReader({}),
+            listeners: {
+                scope: this,
+                update: this.onUpdateFolderStore
+            }
         });
     	
         this.loader = new Tine.Felamimail.TreeLoader({
@@ -247,8 +250,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * @param {Ext.tree.AsyncTreeNode} node
      * @private
-     * 
-     * TODO update
      */
     onClick: function(node) {
         
@@ -378,6 +379,49 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         }
     },
     
+    /**
+     * folder store gets updated -> update grid/tree and show notifications
+     * 
+     * @param {} store
+     * @param {} record
+     * @param {} operation
+     * 
+     * TODO update pie
+     */
+    onUpdateFolderStore: function(store, record, operation) {
+        
+        var changes = record.getChanges();
+
+        // cache count changed
+        if (/*changes.cache_unreadcount || */changes.cache_totalcount) {
+            var selectedNode = this.getSelectionModel().getSelectedNode();
+            
+            // check if grid has to be updated
+            if (selectedNode.attributes && selectedNode.attributes.folder_id == record.id) {
+                console.log('grid');
+                this.filterPlugin.onFilterChange();
+            }
+        }
+            
+        if (changes.cache_unreadcount && changes.cache_unreadcount > 0) {
+            this.updateUnreadCount(null, changes.cache_unreadcount, selectedNode);
+        }
+        
+        if (changes.cache_recentcount && changes.cache_recentcount > 0) {
+            Ext.ux.Notification.show(
+                this.app.i18n._('New mails'), 
+                String.format(this.app.i18n._('You got {0} new mail(s) in Folder {1}.'), 
+                    changes.cache_recentcount, record.get('localname'))
+            );                
+        }
+            
+        // silent commit
+        record.commit(true);
+
+        // TODO update pie
+        
+    },
+    
     /********************* cache control functions ******************/
     
     /**
@@ -445,8 +489,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * @return boolean true if caching is complete
      * 
-     * TODO only update if new mails in cache
-     * TODO add update pie
      * TODO check in folder store if another folder has to be updated
      */
     updateMessageCache: function() {
@@ -470,7 +512,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     
                     var folderData = Ext.util.JSON.decode(_result.responseText);
                     var folder = this.folderStore.getById(folderData.id);
-                    this.updateFolder(folderData, node);
+                    this.updateFolder(folderData);
                 },
                 failure: function(response, options) {
                     // call handle failure in tree loader and show credentials dialog / reload account afterwards
@@ -493,38 +535,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {Object} folderData
      * @param {AsyncNode} node
      * @return {Tine.Felamimail.Model.Folder}
-     * 
-     * TODO do tree/notification/pie updates on update of the store
      */
-    updateFolder: function(folderData, node) {
+    updateFolder: function(folderData) {
         
         var folder = this.folderStore.getById(folderData.id);
-        if (folder.get('cache_unreadcount') != folderData.cache_unreadcount || folder.get('cache_totalcount') != folderData.cache_totalcount) {
-            // check if grid has to be updated
-            var selectedNode = this.getSelectionModel().getSelectedNode();
-            if (selectedNode.attributes && selectedNode.attributes.folder_id == folder.id) { 
-                this.filterPlugin.onFilterChange();
-            }
-            
-            // show toast window on new mails
-            if (folderData.cache_recentcount > 0) {
-                Ext.ux.Notification.show(
-                    this.app.i18n._('New mails'), 
-                    String.format(this.app.i18n._('You got {0} new mail(s) in Folder {1}.'), 
-                        folderData.cache_recentcount, folder.get('localname'))
-                );
-            }
-            
-            // update unreadcount in tree
-            if (node) {
-                this.updateUnreadCount(null, folderData.cache_unreadcount, node);
-            }
-            
-            // TODO update pie
-        }
         
         var fieldsToUpdate = ['imap_status','imap_timestamp','imap_uidnext','imap_uidvalidity','imap_totalcount','imap_recentcount',
-            'imap_unreadcount','cache_status','cache_uidnext','cache_recentcount','cache_unreadcount','cache_timestamp',
+            'imap_unreadcount','cache_status','cache_uidnext','cache_totalcount', 'cache_recentcount','cache_unreadcount','cache_timestamp',
             'cache_job_actions_estimate','cache_job_actions_done'];
 
         // update folder store
