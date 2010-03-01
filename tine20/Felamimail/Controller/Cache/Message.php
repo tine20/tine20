@@ -163,9 +163,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             }
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Finished import run  ... Time: ' . Zend_Date::now()->toString() 
-                . ' Added messages: ' . $folder->cache_recentcount);
+                . ' Added new messages: ' . $folder->cache_recentcount);
             
-            $folder->cache_job_actions_done += $folder->cache_recentcount;
+            $folder->cache_job_actions_done += $messageCount;
                         
             ///////////////////////////// sync deleted messages or start again to add recent messages
                 
@@ -435,7 +435,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cachedMessage->toArray(), true));
                 
                 $this->_backend->create($cachedMessage);
-                $_count++;
                 
                 if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags)) {
                     $result++;
@@ -457,6 +456,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     '. Error: ' . $zde->getMessage()
                 );
             }
+            
+            // count duplicates as well
+            $_count++;
         }
         
         return $result;
