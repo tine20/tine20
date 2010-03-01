@@ -14,6 +14,7 @@
  Ext.namespace('Tine', 'Tine.widgets');
  
  Tine.widgets.ActionUpdater = function(config) {
+    config = config || {};
     var actions = config.actions || [];
     delete(config.actions);
     
@@ -27,6 +28,12 @@
      * all actions to update
      */
     actions: [],
+    
+    /**
+     * @cfg {Bool} evalGrants
+     * should grants of a grant-aware records be evaluated (defaults to true)
+     */
+    evalGrants: true,
     
     /**
      * @cfg {String} grantsProperty
@@ -125,10 +132,11 @@
      * @param {Object} grants
      */
     defaultUpdater: function(action, grants, records) {
-        var nCondition = records.length != 0 && (records.length > 1 ? action.initialConfig.allowMultiple : true);
+        var nCondition     = records.length != 0 && (records.length > 1 ? action.initialConfig.allowMultiple : true);
+        var grantCondition = (! this.evalGrants) || grants[action.initialConfig.requiredGrant];
         
         if (action.initialConfig.requiredGrant) {
-            action.setDisabled(! (grants[action.initialConfig.requiredGrant] && nCondition));
+            action.setDisabled(! (grantCondition && nCondition));
         }
         
         if (action.initialConfig.singularText && action.initialConfig.pluralText && action.initialConfig.translationObject) {
