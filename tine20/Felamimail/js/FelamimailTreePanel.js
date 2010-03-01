@@ -19,7 +19,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>Account/Folder Tree Panel</p>
  * <p>Tree of Accounts with folders</p>
  * <pre>
- * TODO         add delayed tasks for folder status
  * TODO         update non-selected folders
  * low priority:
  * TODO         only allow nodes as drop target (not 'between')
@@ -62,7 +61,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @property updateFoldersTask
      * @type Ext.util.DelayedTask
      */
-    //updateFoldersTask: null,
+    updateFoldersTask: null,
     
     /**
      * @property updateMessagesTask
@@ -76,7 +75,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @property updateFolderRefreshTime
      * @type Number
      */
-    //updateFolderRefreshTime: 60000, // 1 min
+    updateFolderRefreshTime: 60000, // 1 min
     
     /**
      * refresh time in milliseconds
@@ -143,7 +142,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         initCtxMenu();
         
         this.updateMessagesTask = new Ext.util.DelayedTask(this.updateMessages, this);
-        //this.updateFoldersTask = new Ext.util.DelayedTask(this.updateFolders, this);
+        this.updateFoldersTask = new Ext.util.DelayedTask(this.updateFolders, this);
         
     	Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
 
@@ -233,12 +232,9 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             this.updateMessagesTask.delay(this.updateMessageRefreshTime);
         }
         */
-        /*
-        // TODO update
         if (this.updateFoldersTask !== null) {
             this.updateFoldersTask.delay(this.updateFolderRefreshTime);
         }
-        */
     },
     
     /**
@@ -424,8 +420,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     /********************* cache control functions ******************/
     
     /**
-     * delayed task function
-     * - calls updateFolderStatus and updateMessageCache
+     * delayed task function / messages
+     * - calls updateMessageCache
      */
     updateMessages: function() {
         var refreshMode = (this.updateMessageCache()) ? 'slow' : 'fast';
@@ -433,6 +429,21 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         //console.log('start task with delay ' + this.updateMessageRefreshTime)
         
         this.updateMessagesTask.delay(this.updateMessageRefreshTime);
+    },
+    
+    /**
+     * delayed task function / folders
+     * - calls updateFolderStatus
+     * 
+     * TODO think about starting updateMessageCache in updateFolderStatus() on success instead of (re)starting the delayed task
+     */
+    updateFolders: function() {
+        this.updateFolderStatus();
+        if (this.updateMessagesTask !== null) {
+            this.setMessageRefresh('fast');
+            this.updateMessagesTask.delay(this.updateMessageRefreshTime);
+        }
+        this.updateFoldersTask.delay(this.updateFolderRefreshTime);
     },
 
     /**
@@ -460,7 +471,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 return false;
             }
             folderIds = [node.attributes.folder_id];
-            accountId = [node.attributes.account_id];
+            accountId = node.attributes.account_id;
         }
         
         Ext.Ajax.request({
@@ -474,7 +485,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             success: function(_result, _request) {
                 var folderData = Ext.util.JSON.decode(_result.responseText);
                 for (var i = 0; i < folderData.length; i++) {
-                    this.updateFolder(folderData[i]);
+                    this.updateFolderInStore(folderData[i]);
                 }
             },
             failure: function() {
@@ -511,7 +522,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     
                     var folderData = Ext.util.JSON.decode(_result.responseText);
                     var folder = this.folderStore.getById(folderData.id);
-                    this.updateFolder(folderData);
+                    this.updateFolderInStore(folderData);
                 },
                 failure: function(response, options) {
                     // call handle failure in tree loader and show credentials dialog / reload account afterwards
@@ -535,7 +546,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {AsyncNode} node
      * @return {Tine.Felamimail.Model.Folder}
      */
-    updateFolder: function(folderData) {
+    updateFolderInStore: function(folderData) {
         
         var folder = this.folderStore.getById(folderData.id);
         
@@ -558,6 +569,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * TODO show if disconnected
      * TODO make css style work for class felamimail-node-progress 
+     * TODO show initial incomplete status? 
      * TODO show pie progress?
      */
     updateCachingProgress: function(folder) {
@@ -570,11 +582,14 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var nodeUI = node.getUI();
         
         // insert caching progress element
-        if (folder.get('cache_status') == 'complete' || folder.get('cache_job_actions_estimate') == 0) {
-            var html = folder.get('cache_totalcount');
+        if (folder.get('cache_status') == 'complete') {
+            //var html = folder.get('cache_totalcount');
+            var html = '';
+        } else if (folder.get('cache_job_actions_estimate') == 0) {
+            var html = '<i>0 %</i>';
         } else {
             var number = folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 100;
-            var html = number.toFixed(2) + ' %';
+            var html = '<i>' + number.toFixed(0) + ' %</i>';
         }
         
         var domEl = {tag: 'span', html: html, cls: 'felamimail-node-progress'};
