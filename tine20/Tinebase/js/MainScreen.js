@@ -79,7 +79,8 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                 region: 'north',
                 layout: 'card',
                 activeItem: 0,
-                height: 52,
+                //height: 26,
+                height: 59,
                 border: false,
                 id:     'north-panel-2',
                 items: []
