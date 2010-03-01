@@ -1,21 +1,22 @@
 /*
  * Tine 2.0
  * 
- * @package     Tine
- * @subpackage  Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
- 
 Ext.ns('Tine.Tinebase');
 
 /**
+ * <p>Abstract base class for all Tine applications</p>
+ * 
+ * @namespace   Tine.Tinebase
  * @class Tine.Tinebase.Application
  * @extends Ext.util.Observable
  * @consturctor
- * <p>Abstract base class for all Tine applications</p>
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
  */
 Tine.Tinebase.Application = function(config) {
     config = config || {};
