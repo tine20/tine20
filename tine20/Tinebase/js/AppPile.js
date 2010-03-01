@@ -1,18 +1,22 @@
 /*
  * Tine 2.0
  * 
- * @package     Tinebase
- * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
- 
-Ext.namespace('Tine.Tinebase');
+Ext.ns('Tine.Tinebase');
 
-
+/**
+ * Main appStarter/picker app pile panel
+ * 
+ * @namespace   Tine.Tinebase
+ * @class       Tine.Tinebase.AppPile
+ * @extends     Ext.Panel
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
+ */
 Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
     /**
      * @property apps
