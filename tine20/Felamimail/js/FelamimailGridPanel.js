@@ -206,7 +206,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             scope: this,
             disabled: ! Tine.Tinebase.common.hasRight('add_accounts', 'Felamimail')
         });
-
+        
+        this.actionUpdater.addActions([
+            this.action_write,
+            this.action_reply,
+            this.action_replyAll,
+            this.action_forward,
+            this.action_flag,
+            this.action_markUnread,
+            this.action_deleteRecord,
+            this.action_addAccount
+        ]);
+        
         this.actions = [
             this.action_write,
             this.action_reply,
@@ -223,7 +234,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         
         this.actionToolbar = new Ext.Toolbar({
             split: false,
-            height: 26,
             items: this.actions
         });
         
@@ -237,15 +247,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 this.action_deleteRecord
             ]
         });
-        
-        // pool together all our actions, so that we can hand them over to our actionUpdater
-        for (var all=this.actionToolbarItems.concat(this.contextMenuItems), i=0; i<all.length; i++) {
-            if(this.actions.indexOf(all[i]) == -1) {
-                this.actions.push(all[i]);
-            }
-        }
-        
-        this.actionUpdater.addActions(this.actions);
     },
     
     /**
