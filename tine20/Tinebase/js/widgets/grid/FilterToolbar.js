@@ -322,6 +322,23 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }, this);
     },
     
+    doLayout: function() {
+        if (typeof this.layout.layout == 'function') {
+            this.supr().doLayout.apply(this, arguments);
+        }
+        
+        this.arrangeButtons();
+        
+        this.filterStore.each(function(filter){
+            for (var formItemName in filter.formFields) {
+                if (filter.formFields[formItemName] && typeof filter.formFields[formItemName].syncSize == 'function') {
+                    filter.formFields[formItemName].setWidth(filter.formFields[formItemName].width);
+                    filter.formFields[formItemName].syncSize();
+                }
+            }
+        }, this);
+    },
+    
     /**
      * called  when a filter action is to be triggered (start new search)
      * @private
@@ -386,6 +403,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     initComponent: function() {
         Tine.widgets.grid.FilterToolbar.superclass.initComponent.call(this);
         
+        this.on('show', function() {
+            this.doLayout();
+        }, this);
+        
         this.initTemplates();
         this.initActions();
         
@@ -443,11 +464,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @private
      */
     onFilterRowsChange: function() {
-        this.arrangeButtons();
-        
         if (! this.supressEvents) {
             this.ownerCt.layout.layout();
         }
+        this.doLayout();
     },
     
     createFilterModel: function(config) {
@@ -485,7 +505,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.filterStore.add(filter);
         
         // NOTE: adding filter rows and contents in hidden state leads to layouting problems
-        this.show();
+        //var isHidden = this.hidden;
+        //this.show();
         
         var fRow = this.templates.filterrow.insertAfter(this.el.child('tr[class=fw-ftb-frow]:last'),{
             id: 'tw-ftb-frowid-' + filter.id
@@ -493,7 +514,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         this.renderFilterRow(filter);
         this.onFilterRowsChange();
-
+        
+        //if (isHidden) {
+        //    this.hide();
+        //}
         return filter;
     },
     
