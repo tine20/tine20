@@ -154,15 +154,10 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 
                 // get summary and add messages
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get summary from ' . $firstUid . ' to ' . $lastUid);
-                // get summary is not working correctly with a single param
                 $messages = $imap->getSummary($firstUid, $lastUid);
-                $recents = $this->_addMessages($messages, $folder->getId(), $messageCount);
+                $this->_addMessages($messages, $folder);
                 
-                $folder->cache_job_lowestuid    = $lastUid;
-                $folder->cache_totalcount       += $messageCount;
-                $folder->cache_job_actions_done += $messageCount;
-                $folder->cache_recentcount      += $recents;
-                
+                $folder->cache_job_lowestuid = $lastUid;
                 $timeLeft = ($folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
             }
             
@@ -362,23 +357,20 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
     }
     
     /**
-     * add messages to cache
+     * add messages to cache and increase folder counts
      *
      * @param array $_messages
-     * @param string $_folderId
-     * @param integer $_count number of imported messages
-     * @return integer recent count
+     * @param Felamimail_Model_Folder $_folder
+     * @return void
      * 
-     * @todo get replyTo & inReplyTo
-     * @todo what shall we do with duplicates ? check first with uid search in cache?
+     * @todo get replyTo & inReplyTo?
+     * @todo think about speeding this up with prepared statements
      */
-    protected function _addMessages($_messages, $_folderId, &$_count)
+    protected function _addMessages($_messages, $_folder)
     {
         // set fields with try / catch blocks
         $exceptionFields = array('subject', 'to', 'cc', 'bcc', 'content_type', 'from', 'sent');
         
-        $_count = 0;
-        $result = 0;
         foreach ($_messages as $uid => $value) {
             $message = $value['message'];
             $subject = '';
@@ -389,7 +381,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             try {
                 $cachedMessage = new Felamimail_Model_Message(array(
                     'messageuid'    => $uid,
-                    'folder_id'     => $_folderId,
+                    'folder_id'     => $_folder->getId(),
                     'timestamp'     => Zend_Date::now(),
                     'received'      => $this->_convertDate($value['received'], Felamimail_Model_Message::DATE_FORMAT_RECEIVED),
                     'size'          => $value['size'],
@@ -438,9 +430,11 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 
                 // count unseen and Zend_Mail_Storage::FLAG_RECENT 
                 if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags)) {
-                    $result++;
+                    $folder->cache_recentcount++;
                     $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
                 }
+                
+                $_folder->cache_totalcount++;
                 
             } catch (Zend_Mail_Exception $zme) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
@@ -459,11 +453,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 );
             }
             
-            // count duplicates as well
-            $_count++;
+            // increase job actions count (with duplicates)
+            $_folder->cache_job_actions_done++;
         }
-        
-        return $result;
     }
     
     /**
