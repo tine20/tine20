@@ -156,29 +156,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             sortable: true,
             header: this.app.i18n._('Name'),
             renderer: this.renderAttenderName.createDelegate(this),
-            editor: true,
-            userEditor: new Ext.grid.GridEditor(new Tine.Addressbook.SearchCombo({
-                blurOnSelect: true,
-                selectOnFocus: true,
-                renderAttenderName: this.renderAttenderName,
-                getValue: function() {
-                    return this.selectedRecord ? this.selectedRecord.data : null;
-                }
-            })),
-            groupEditor: new Ext.grid.GridEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
-                blurOnSelect: true,
-                recordClass: Tine.Tinebase.Model.Group,
-                getValue: function() {
-                    return this.selectedRecord ? this.selectedRecord.data : null;
-                }
-            })),
-            resourceEditor: new Ext.grid.GridEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
-                blurOnSelect: true,
-                recordClass: Tine.Calendar.Model.Resource,
-                getValue: function() {
-                    return this.selectedRecord ? this.selectedRecord.data : null;
-                }
-            }))
+            editor: true
         }, {
             id: 'status',
             dataIndex: 'status',
@@ -273,11 +251,40 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         if (o.field == 'user_id') {
             // switch editor
-            var userType = o.record.get('user_type');
             var colModel = o.grid.getColumnModel();
-            
-            colModel.config[o.column].editor = colModel.config[o.column][userType + 'Editor'];
-            colModel.config[o.column][userType + 'Editor'].selectedRecord = null;
+            switch(o.record.get('user_type')) {
+                case 'user' :
+                colModel.config[o.column].setEditor(new Tine.Addressbook.SearchCombo({
+                    blurOnSelect: true,
+                    selectOnFocus: true,
+                    renderAttenderName: this.renderAttenderName,
+                    getValue: function() {
+                        return this.selectedRecord ? this.selectedRecord.data : null;
+                    }
+                }));
+                break;
+                
+                case 'group':
+                colModel.config[o.column].setEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                    blurOnSelect: true,
+                    recordClass: Tine.Tinebase.Model.Group,
+                    getValue: function() {
+                        return this.selectedRecord ? this.selectedRecord.data : null;
+                    }
+                }));
+                break;
+                
+                case 'resource':
+                colModel.config[o.column].setEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                    blurOnSelect: true,
+                    recordClass: Tine.Calendar.Model.Resource,
+                    getValue: function() {
+                        return this.selectedRecord ? this.selectedRecord.data : null;
+                    }
+                }));
+                break;
+            }
+            colModel.config[o.column].editor.selectedRecord = null;
         }
     },
     
