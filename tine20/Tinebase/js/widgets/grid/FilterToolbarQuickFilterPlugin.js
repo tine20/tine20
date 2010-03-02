@@ -81,48 +81,25 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
     },
     
     /**
-     * gets the (extra) quick filter field
-     * @return {}
+     * gets the (extra) quick filter toolbar items
+     * 
+     * @return {Ext.ButtonGroup}
      */
     getQuickFilterField: function() {
-        if (! this.quickFilter) {
-            this.quickFilter = new Ext.ux.SearchField({
-                width: 300,
-                enableKeyEvents: true
-            });
-            
-            this.quickFilter.onTrigger1Click = this.quickFilter.onTrigger1Click.createSequence(this.onQuickFilterClear, this);
-            this.quickFilter.onTrigger2Click = this.quickFilter.onTrigger2Click.createSequence(this.onQuickFilterTrigger, this);
-            
-            this.quickFilter.on('keyup', this.syncField, this);
-            this.quickFilter.on('change', this.syncField, this);
-            
-            this.criteriaText = new Ext.Panel({
-                border: 0,
-                bodyStyle: {border: 0, background: 'none', 'text-align': 'left'},
-                html: 'Your view is limited by {0} criteria:' + '<br />' + 'Calendar, Attendee...'
-            });
-            
-            this.alwaysBtn = new Ext.Button({
-                style: {'margin-top': '2px'},
-                enableToggle: true,
-                text: _('show details'),
-                tooltip: _('Always show advanced filters'),
-                handler: this.ftb.onFilterRowsChange.createDelegate(this.ftb)
+        if (! this.quickFilterGroup) {
+            this.quickFilterGroup = new Ext.ButtonGroup({
+                columns: 1,
+                items: [
+                    this.quickFilter, {
+                        xtype: 'toolbar',
+                        style: {border: 0, background: 'none'},
+                        items: [this.criteriaText, '->', this.detailsToggleBtn]
+                    }
+                ]
             });
         }
         
-        return {
-            xtype: 'buttongroup',
-            columns: 1,
-            items: [
-                this.quickFilter, {
-                    xtype: 'toolbar',
-                    style: {border: 0, background: 'none'},
-                    items: [/*this.criteriaText, '->',*/ this.alwaysBtn]
-                }
-            ]
-        };
+        return this.quickFilterGroup;
     },
     
     /**
@@ -150,8 +127,39 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         this.ftb.onFieldChange   = this.ftb.onFieldChange.createSequence(this.onFieldChange, this);
         this.ftb.deleteFilter    = this.ftb.deleteFilter.createInterceptor(this.onBeforeDeleteFilter, this);
         
-        this.ftb.onFilterRowsChange = this.ftb.onFilterRowsChange.createInterceptor(this.onFilterRowsChange, this);
+        //this.ftb.onFilterRowsChange = this.ftb.onFilterRowsChange.createInterceptor(this.onFilterRowsChange, this);
         this.ftb.getQuickFilterField = this.getQuickFilterField.createDelegate(this);
+        
+        this.quickFilter = new Ext.ux.SearchField({
+            width: 300,
+            enableKeyEvents: true
+        });
+        
+        this.quickFilter.onTrigger1Click = this.quickFilter.onTrigger1Click.createSequence(this.onQuickFilterClear, this);
+        this.quickFilter.onTrigger2Click = this.quickFilter.onTrigger2Click.createSequence(this.onQuickFilterTrigger, this);
+        
+        this.quickFilter.on('keyup', this.syncField, this);
+        this.quickFilter.on('change', this.syncField, this);
+        
+        this.criteriaText = new Ext.Panel({
+            border: 0,
+            bodyStyle: {border: 0, background: 'none', 'text-align': 'left'},
+            html: ''
+            //html: 'Your view is limited by {0} criteria:' + '<br />' + 'Calendar, Attendee...'
+        });
+        
+        this.detailsToggleBtn = new Ext.Button({
+            style: {'margin-top': '2px'},
+            enableToggle: true,
+            text: _('show details'),
+            tooltip: _('Always show advanced filters'),
+            //handler: this.ftb.onFilterRowsChange.createDelegate(this.ftb)
+            scope: this,
+            handler: this.onDetailsToggle
+        });
+        
+        this.ftb.hide();
+        //this.detailsToggleBtn.toggle(false);
     },
     
     /**
@@ -171,6 +179,18 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
     },
     
     /**
+     * called when the details toggle button gets toggled
+     * 
+     * @param {Ext.Button} btn
+     */
+    onDetailsToggle: function(btn) {
+        this.ftb[btn.pressed ? 'show' : 'hide']();
+        
+        // cares for resizing
+        this.ftb.onFilterRowsChange();
+    },
+    
+    /**
      * called when a filter field of the filtertoolbar changes
      */
     onFieldChange: function(filter, newField) {
@@ -187,20 +207,21 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * called when the filterrows of the filtertoolbar changes
      * 
      * we detect the hidestatus of the filtertoolbar
-     */
+     *
     onFilterRowsChange: function() {
         this.ftb.searchButtonWrap.removeClass('x-btn-over');
         
         if (this.ftb.filterStore.getCount() <= 1 
             && this.ftb.filterStore.getAt(0).get('field') == this.quickFilterField
             && !this.ftb.filterStore.getAt(0).formFields.value.getValue()
-            && !this.alwaysBtn.pressed) {
+            && !this.detailsToggleBtn.pressed) {
             
             this.ftb.hide();
         } else {
             this.ftb.show();
         }
     },
+    */
     
     /**
      * called before a filter row is deleted from filtertoolbar
