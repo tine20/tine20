@@ -225,7 +225,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Call contact'),
             disabled: true,
-            //handler: this.onCallContact,
             iconCls: 'PhoneIconCls',
             menu: this.phoneMenu,
             scope: this
@@ -251,8 +250,9 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             allowMultiple: true
         });
 
+        /*
         var items = [
-            new Ext.Toolbar.Separator(),
+            //new Ext.Toolbar.Separator(),
             this.actions_exportContact,
             this.actions_import
         ];
@@ -264,8 +264,27 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         if (this.felamimail === true) {
             items.push(new Ext.Button(this.actions_composeEmail));
         }
+        */
         
-        return items;
+        return {
+            xtype: 'buttongroup',
+            columns: 3,
+            items: [
+                Ext.apply(new Ext.SplitButton(this.actions_callContact), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top',
+                    arrowAlign:'right'
+                }),
+                Ext.apply(new Ext.Button(this.actions_composeEmail), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top'
+                }),
+                this.actions_exportContact,
+                this.actions_import
+            ]
+        };
     },
     
     /**
