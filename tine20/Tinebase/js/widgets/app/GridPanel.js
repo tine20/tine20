@@ -44,10 +44,6 @@ Tine.Tinebase.widgets.app.GridPanel = function(config) {
         limit: 50
     };
     
-    // legacy item support
-    this.actionToolbarItems = this.actionToolbarItems || [];
-    this.contextMenuItems = this.contextMenuItems || [];
-    
     // autogenerate stateId
     if (this.stateful !== false && ! this.stateId) {
         this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel';
@@ -77,19 +73,9 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
      */
     recordProxy: null,
     /**
-     * @cfg {Array} actionToolbarItems
-     * additional items for actionToolbar (depricated) overwrite getActionToolbar instead
-     */
-    actionToolbarItems: null,
-    /**
      * @cfg {Tine.widgets.grid.FilterToolbar} filterToolbar
      */
     filterToolbar: null,
-    /**
-     * @cfg {Array} contextMenuItems
-     * additional items for contextMenu (depricated) overwirte getContextMenu instead
-     */
-    contextMenuItems: null,
     /**
      * @cfg {Bool} evalGrants
      * should grants of a grant-aware records be evaluated (defaults to true)
@@ -518,7 +504,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
                         this.action_editInNewWindow,
                         this.action_deleteRecord
                     ]
-                }, this.actionToolbarItems]
+                }, this.getActionToolbarItems()]
             });
             
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
@@ -531,6 +517,22 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         }
         
         return this.actionToolbar;
+    },
+    
+    /**
+     * template fn for subclasses to add custom items to action toolbar
+     * 
+     * @return {Array/Object}
+     */
+    getActionToolbarItems: function() {
+        var items = this.actionToolbarItems || [];
+        
+        if (! Ext.isEmpty(items)) {
+            // legacy handling! subclasses should register all actions when initializing actions
+            this.actionUpdater.addActions(items);
+        }
+        
+        return items;
     },
     
     /**
@@ -551,15 +553,29 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
                 items.push('-'/*, {xtype: 'menutextitem', text: _('Tagging')}*/, this.action_tagsMassAttach);
             }
             
-            if (! Ext.isEmpty(this.contextMenuItems)) {
-                items.concat(this.contextMenuItems);
-                this.actionUpdater.addActions(this.contextMenuItems);
-            }
+            // lookup additional items
+            items = items.concat(this.getContextMenuItems());
             
             this.contextMenu = new Ext.menu.Menu({items: items});
         }
         
         return this.contextMenu;
+    },
+    
+    /**
+     * template fn for subclasses to add custom items to context menu
+     * 
+     * @return {Array}
+     */
+    getContextMenuItems: function() {
+        var items = this.contextMenuItems || [];
+        
+        if (! Ext.isEmpty(items)) {
+            // legacy handling! subclasses should register all actions when initializing actions
+            this.actionUpdater.addActions(items);
+        }
+        
+        return items;
     },
     
     /**
