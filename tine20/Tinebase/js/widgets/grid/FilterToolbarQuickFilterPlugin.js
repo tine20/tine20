@@ -87,6 +87,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
     getQuickFilterField: function() {
         if (! this.quickFilter) {
             this.quickFilter = new Ext.ux.SearchField({
+                width: 300,
                 enableKeyEvents: true
             });
             
@@ -96,19 +97,32 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             this.quickFilter.on('keyup', this.syncField, this);
             this.quickFilter.on('change', this.syncField, this);
             
+            this.criteriaText = new Ext.Panel({
+                border: 0,
+                bodyStyle: {border: 0, background: 'none', 'text-align': 'left'},
+                html: 'Your view is limited by {0} criteria:' + '<br />' + 'Calendar, Attendee...'
+            });
+            
             this.alwaysBtn = new Ext.Button({
-                xtype: 'button',
+                style: {'margin-top': '2px'},
                 enableToggle: true,
-                text: '...',
+                text: _('show details'),
                 tooltip: _('Always show advanced filters'),
                 handler: this.ftb.onFilterRowsChange.createDelegate(this.ftb)
             });
         }
         
-        return [
-            this.quickFilter,
-            this.alwaysBtn
-        ];
+        return {
+            xtype: 'buttongroup',
+            columns: 1,
+            items: [
+                this.quickFilter, {
+                    xtype: 'toolbar',
+                    style: {border: 0, background: 'none'},
+                    items: [/*this.criteriaText, '->',*/ this.alwaysBtn]
+                }
+            ]
+        };
     },
     
     /**
