@@ -58,30 +58,26 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     );
     
     /**
-     * sets the record related properties from user generated input.
-     * 
-     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
-     *
-     * @param array $_data the new data to set
-     * @param bool $_bypassFilters enabled/disable validation of data. set to NULL to use state set by the constructor 
-     * @throws Tinebase_Record_Exception when content contains invalid or missing data
+     * (non-PHPdoc)
+     * @see Tinebase/Record/Tinebase_Record_Abstract#setFromArray($_data)
      */
     public function setFromArray(array $_data)
     {
-        if (empty($_data['accountDisplayName'])) {
-            $_data['accountDisplayName'] = !empty($_data['accountFirstName']) ? 
-                $_data['accountLastName'] . ', ' . $_data['accountFirstName'] : 
-                $_data['accountLastName'];
+        // always update accountDisplayName and accountFullName
+        $_data['accountDisplayName'] = $_data['accountLastName'];
+        if (!empty($_data['accountFirstName'])) {
+            $_data['accountDisplayName'] .= ', ' . $_data['accountFirstName'];
         }
-
-        if (empty($_data['accountFullName'])) {
-            $_data['accountFullName'] = !empty($_data['accountFirstName']) ? 
-                $_data['accountFirstName'] . ' ' . $_data['accountLastName'] : 
-                $_data['accountLastName'];
+            
+        $_data['accountFullName'] = $_data['accountLastName'];
+        if (!empty($_data['accountFirstName'])) {
+            $_data['accountFullName'] = $_data['accountFirstName'] . ' ' . $_data['accountLastName'];
         }
+        
         parent::setFromArray($_data);
     }
-
+    
+    
    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
