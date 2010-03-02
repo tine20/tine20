@@ -126,12 +126,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $result = array();
         if (empty($folderIds)) {
-            $result = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($accountId)->toArray();
+            $folders = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($accountId);
         } else {
-            $result = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($accountId, $folderIds)->toArray();
+            $folders = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($accountId, $folderIds);
         }
         
-        return $result;
+        return $this->_multipleRecordsToJson($folders);
     }
     
     /**
@@ -190,7 +190,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $folder = Felamimail_Controller_Cache_Message::getInstance()->update($folderId, $time);
         
-        return $folder->toArray();
+        return $this->_recordToJson($folder);
     }
     
     /**
