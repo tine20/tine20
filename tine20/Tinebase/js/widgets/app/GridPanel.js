@@ -508,11 +508,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             });
             
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
-                this.actionToolbar.add('->');
-                this.actionToolbar.add({
-                    xtype: 'buttongroup',
-                    items: this.filterToolbar.getQuickFilterField()
-                });
+                this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
             }
         }
         
