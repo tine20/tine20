@@ -31,16 +31,10 @@ Tine.Felamimail.setTreeContextMenus = function() {
                 },
                 scope: this,
                 success: function(_result, _request){
-                    // TODO update
-                    /*
                     if (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id) {
-                        // update grid
-                        this.updateMessageCache(this.ctxNode, true);
-                        this.filterPlugin.onFilterChange();
-                    } else {
-                        this.ctxNode.attributes.cache_status = 'pending';
+                        // update message cache
+                        this.updateFolderStatus([this.ctxNode]);
                     }
-                    */
                 }
             });
         }
@@ -59,16 +53,9 @@ Tine.Felamimail.setTreeContextMenus = function() {
                 },
                 scope: this,
                 success: function(_result, _request){
-                    // TODO update
-                    /*
                     if (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id) {
-                        // update grid
-                        this.updateMessageCache(this.ctxNode, true);
-                        this.filterPlugin.onFilterChange();
-                    } else {
-                        this.ctxNode.attributes.cache_status = 'pending';
+                        this.updateFolderStatus([this.ctxNode]);
                     }
-                    */
                     this.ctxNode.getUI().removeClass("x-tree-node-loading");
                 },
                 failure: function() {
@@ -156,11 +143,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
         scope: this,
         handler: function() {
             if (this.ctxNode) {
-                // TODO update
-                /*
-                // trigger updateMessageCache
-                this.updateMessageCache(this.ctxNode);
-                */
+                this.updateFolderStatus([this.ctxNode]);
             }
         }
     };
@@ -171,11 +154,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
         scope: this,
         handler: function() {
             if (this.ctxNode) {
-                // TODO update
-                /*
-                // trigger updateFolderCache
-                this.updateFolderCache(this.ctxNode);
-                */
+               this.updateFolderStatus([this.ctxNode]);
             }
         }
     };
