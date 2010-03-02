@@ -157,28 +157,28 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             header: this.app.i18n._('Name'),
             renderer: this.renderAttenderName.createDelegate(this),
             editor: true,
-            userEditor: new Tine.Addressbook.SearchCombo({
+            userEditor: new Ext.grid.GridEditor(new Tine.Addressbook.SearchCombo({
                 blurOnSelect: true,
                 selectOnFocus: true,
                 renderAttenderName: this.renderAttenderName,
                 getValue: function() {
                     return this.selectedRecord ? this.selectedRecord.data : null;
                 }
-            }),
-            groupEditor: new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+            })),
+            groupEditor: new Ext.grid.GridEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
                 blurOnSelect: true,
                 recordClass: Tine.Tinebase.Model.Group,
                 getValue: function() {
                     return this.selectedRecord ? this.selectedRecord.data : null;
                 }
-            }),
-            resourceEditor: new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+            })),
+            resourceEditor: new Ext.grid.GridEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
                 blurOnSelect: true,
                 recordClass: Tine.Calendar.Model.Resource,
                 getValue: function() {
                     return this.selectedRecord ? this.selectedRecord.data : null;
                 }
-            })
+            }))
         }, {
             id: 'status',
             dataIndex: 'status',
@@ -201,7 +201,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     onAfterAttenderEdit: function(o) {
-        
         switch (o.field) {
             case 'user_id' :
                 // detect duplicate entry
@@ -276,8 +275,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             // switch editor
             var userType = o.record.get('user_type');
             var colModel = o.grid.getColumnModel();
+            
             colModel.config[o.column].editor = colModel.config[o.column][userType + 'Editor'];
-            colModel.config[o.column].editor.selectedRecord = null;
+            colModel.config[o.column][userType + 'Editor'].selectedRecord = null;
         }
     },
     
