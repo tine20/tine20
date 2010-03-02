@@ -50,32 +50,6 @@ Ext.namespace('Tine.Felamimail');
 Tine.Felamimail.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
 
 /**
- * @namespace Tine.Felamimail
- * @class Tine.Felamimail.messageBackend
- * @extends Tine.Tinebase.data.RecordProxy
- * 
- * Message Backend
- */ 
-Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
-    appName: 'Felamimail',
-    modelName: 'Message',
-    recordClass: Tine.Felamimail.Model.Message
-});
-
-/**
- * @namespace Tine.Felamimail
- * @class Tine.Felamimail.accountBackend
- * @extends Tine.Tinebase.data.RecordProxy
- * 
- * Account Backend
- */ 
-Tine.Felamimail.accountBackend = new Tine.Tinebase.data.RecordProxy({
-    appName: 'Felamimail',
-    modelName: 'Account',
-    recordClass: Tine.Felamimail.Model.Account
-});
-
-/**
  * get account store
  *
  * @param {Boolean} reload

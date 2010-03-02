@@ -45,8 +45,8 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
     recordsName: 'Messages',
     containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
-    containerName: 'record list',
-    containersName: 'record lists',
+    containerName: 'Message list',
+    containersName: 'Message lists',
     getTitle: function() {
         return this.get('number') ? (this.get('number') + ' ' + this.get('title')) : false;
     }
@@ -100,6 +100,19 @@ Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
 ]);
 
 /**
+ * @namespace Tine.Felamimail
+ * @class Tine.Felamimail.messageBackend
+ * @extends Tine.Tinebase.data.RecordProxy
+ * 
+ * Message Backend
+ */ 
+Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Felamimail',
+    modelName: 'Message',
+    recordClass: Tine.Felamimail.Model.Message
+});
+
+/**
  * @namespace Tine.Felamimail.Model
  * @class Tine.Felamimail.Model.Account
  * @extends Tine.Tinebase.data.Record
@@ -116,8 +129,8 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Felamimail
     recordsName: 'Accounts',
     containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
-    containerName: 'record list',
-    containersName: 'record lists' /*,
+    containerName: 'Account list',
+    containersName: 'Account lists' /*,
     getTitle: function() {
         return this.get('number') ? (this.get('number') + ' ' + this.get('title')) : false;
     } */
@@ -147,13 +160,26 @@ Tine.Felamimail.Model.Account.getDefaultData = function() {
 };
 
 /**
+ * @namespace Tine.Felamimail
+ * @class Tine.Felamimail.accountBackend
+ * @extends Tine.Tinebase.data.RecordProxy
+ * 
+ * Account Backend
+ */ 
+Tine.Felamimail.accountBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Felamimail',
+    modelName: 'Account',
+    recordClass: Tine.Felamimail.Model.Account
+});
+
+/**
  * @namespace Tine.Felamimail.Model
  * @class Tine.Felamimail.Model.Record
  * @extends Ext.data.Record
  * 
  * Folder Record Definition
  */ 
-Tine.Felamimail.Model.Folder = Ext.data.Record.create([
+Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
       { name: 'id' },
       { name: 'localname' },
       { name: 'globalname' },
@@ -174,4 +200,29 @@ Tine.Felamimail.Model.Folder = Ext.data.Record.create([
       { name: 'cache_timestamp',    type: 'date', dateFormat: Date.patterns.ISO8601Long  },
       { name: 'cache_job_actions_estimate',     type: 'int' },
       { name: 'cache_job_actions_done',         type: 'int' }
-]);
+], {
+    appName: 'Felamimail',
+    modelName: 'Folder',
+    idProperty: 'id',
+    titleProperty: 'localname',
+    // ngettext('Folder', 'Folders', n);
+    recordName: 'Folder',
+    recordsName: 'Folders',
+    // ngettext('record list', 'record lists', n);
+    containerName: 'Folder list',
+    containersName: 'Folder lists'
+});
+
+/**
+ * @namespace Tine.Felamimail
+ * @class Tine.Felamimail.folderBackend
+ * @extends Tine.Tinebase.data.RecordProxy
+ * 
+ * Folder Backend
+ */ 
+Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Felamimail',
+    modelName: 'Folder',
+    recordClass: Tine.Felamimail.Model.Folder
+});
+
