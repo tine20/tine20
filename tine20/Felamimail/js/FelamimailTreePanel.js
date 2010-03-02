@@ -19,6 +19,8 @@ Ext.namespace('Tine.Felamimail');
  * <p>Account/Folder Tree Panel</p>
  * <p>Tree of Accounts with folders</p>
  * <pre>
+ * TODO         use pie for progress
+ * TODO         fix drop target
  * low priority:
  * TODO         only allow nodes as drop target (not 'between')
  * TODO         make inbox/drafts/templates configurable in account
@@ -427,7 +429,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     updateMessages: function() {
         var refreshMode = (this.updateMessageCache()) ? 'slow' : 'fast';
         this.setMessageRefresh(refreshMode);
-        //console.log('start task with delay ' + this.updateMessageRefreshTime)
+        //console.log('start mc task with delay ' + this.updateMessageRefreshTime)
         
         this.updateMessagesTask.delay(this.updateMessageRefreshTime);
     },
@@ -463,9 +465,14 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var account = this.getActiveAccount();
 
         if (! nodes || nodes.length == 0) {
+            //console.log('update multi');
             // get all folders of active account in store
             folderIds = this.getFoldersForUpdateStatus(account.id);
+            if (folderIds.length == 0) {
+                return;
+            }
         } else if (nodes[0].attributes) {
+            //console.log('update single');
             for (var i=0; i < nodes.length; i++) {
                 folderIds.push(nodes[i].attributes.folder_id);
             }
@@ -484,7 +491,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             success: function(_result, _request) {
                 var folderData = Ext.util.JSON.decode(_result.responseText);
                 for (var i = 0; i < folderData.length; i++) {
-                    this.folderStore.loadData(folderData[i]);
+                    this.folderStore.loadData(folderData[i], true);
                     
                     // update message cache of selected folder/node
                     var selectedNode = this.getSelectionModel().getSelectedNode();
@@ -507,21 +514,35 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     updateMessageCache: function(node) {
         
+        /////////// select folder to update message cache for
+        
         var folderId = null;
+        var singleFolderUpdate = false;
         
         // get active node
         if (! node) {
             node = this.getSelectionModel().getSelectedNode();
+        } else {
+            //console.log('update single mc');
+            singleFolderUpdate = true;
         }
         var folder = this.folderStore.getById(node.id);
         
         if (folder && (folder.get('cache_status') == 'incomplete' || folder.get('cache_status') == 'invalid')) {
             folderId = folder.id;
-        } else {
+            
+        } else if (! singleFolderUpdate) {
             folderId = this.getNextFolderToUpdate();
+            if (folderId === null) {
+                // nothing left to do for the moment! -> set refresh rate to 'slow'
+                //console.log('finished for the moment');
+                return true;
+            }
         }
         
         if (folderId !== null) {
+            /////////// do request
+            
             Ext.Ajax.request({
                 params: {
                     method: 'Felamimail.updateMessageCache',
@@ -530,7 +551,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 },
                 scope: this,
                 success: function(_result, _request) {
-                    this.folderStore.loadData(Ext.util.JSON.decode(_result.responseText));
+                    this.folderStore.loadData(Ext.util.JSON.decode(_result.responseText), true);
                 },
                 failure: function(response, options) {
                     // call handle failure in tree loader and show credentials dialog / reload account afterwards
@@ -539,10 +560,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     }
                 }
             });           
-            return false;
-        } else {
-            return true;
         }
+        return false;
     },
     
     /********************* helpers *****************************/
@@ -731,17 +750,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     getFoldersForUpdateStatus: function(accountId) {
         var result = [];
 
-        //var accountFolders = this.folderStore.query('account_id', accountId);
+        //console.log('# records: ' + this.folderStore.getCount());
+        //console.log(this.folderStore);
         var accountFolders = this.folderStore.queryBy(function(record) {
-            //var timestamp = new Date(record.get('cache_timestamp'));
-            /*
-            var timestamp = record.get('cache_timestamp');
-            console.log(timestamp);
-            console.log(record.id + ' elapsed: ' + timestamp.getElapsed());
+            var timestamp = record.get('imap_timestamp');
             return (record.get('account_id') == accountId && timestamp.getElapsed() > 300000); // 5 minutes
-            */
-            return false;
         });
+        //console.log(accountFolders);
         accountFolders.each(function(record) {
             result.push(record.id);
         });
@@ -759,7 +774,10 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         var account = this.getActiveAccount();
         // look for folder to update
+        //console.log(account.id);
         var candidates = this.folderStore.queryBy(function(record) {
+            //console.log(record);
+            //console.log(record.id + ' ' + record.get('cache_status'));
             return (
                 record.get('account_id') == account.id 
                 && (record.get('cache_status') == 'incomplete' || record.get('cache_status') == 'invalid')
@@ -768,7 +786,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         //console.log(candidates);
         if (candidates.getCount() > 0) {
             folder = candidates.first();
-            folderId = folder.id;
+            result = folder.id;
         }
         
         return result;
