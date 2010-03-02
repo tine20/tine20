@@ -79,20 +79,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
         
-        this.actionToolbarItems = this.getToolbarItems();
-        this.contextMenuItems = [
-            '-',
-            this.actions_exportContact,
-            this.actions_callContact
-        ];
-        
-        if (this.felamimail === true) {
-            this.contextMenuItems.push(this.actions_composeEmail);
-        }
-        
         Tine.Addressbook.ContactGridPanel.superclass.initComponent.call(this);
-        
-        this.grid.getSelectionModel().on('selectionchange', this.onSelectionchange, this);
     },
     
     /**
@@ -174,11 +161,11 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     },
     
     /**
-     * return additional tb items
      * @private
      */
-    getToolbarItems: function() {
+    initActions: function() {
         this.actions_exportContact = new Ext.Action({
+            requiredGrant: 'exportGrant',
             text: this.app.i18n._('Export Contact'),
             iconCls: 'action_export',
             scope: this,
@@ -223,6 +210,8 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         });
         this.actions_callContact = new Ext.Action({
             requiredGrant: 'readGrant',
+            hidden: ! (Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')),
+            actionUpdater: this.updatePhoneActions,
             text: this.app.i18n._('Call contact'),
             disabled: true,
             iconCls: 'PhoneIconCls',
@@ -232,6 +221,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         
         this.actions_composeEmail = new Ext.Action({
             requiredGrant: 'readGrant',
+            hidden: ! this.felamimail,
             text: this.app.i18n._('Compose email'),
             disabled: true,
             handler: this.onComposeEmail,
@@ -249,23 +239,24 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             scope: this,
             allowMultiple: true
         });
-
-        /*
-        var items = [
-            //new Ext.Toolbar.Separator(),
+        
+        //register actions in updater
+        this.actionUpdater.addActions([
             this.actions_exportContact,
+            this.actions_callContact,
+            this.actions_composeEmail,
             this.actions_import
-        ];
+        ]);
         
-        if (Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')) {
-            items.push(new Ext.Button(this.actions_callContact));
-        }
-        
-        if (this.felamimail === true) {
-            items.push(new Ext.Button(this.actions_composeEmail));
-        }
-        */
-        
+        this.supr().initActions.call(this);
+    },
+    
+    /**
+     * add custom items to action toolbar
+     * 
+     * @return {Object}
+     */
+    getActionToolbarItems: function() {
         return {
             xtype: 'buttongroup',
             columns: 3,
@@ -288,17 +279,39 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     },
     
     /**
-     * updates call menu
-     * @param {SelectionModel} sm
+     * add custom items to context menu
+     * 
+     * @return {Array}
      */
-    onSelectionchange: function(sm) {
-        var rowCount = sm.getCount();
-        if (rowCount == 1 && Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')) {
-            this.phoneMenu.removeAll();
+    getContextMenuItems: function() {
+        var items = [
+            '-',
+            this.actions_exportContact,
+            '-',
+            this.actions_callContact,
+            this.actions_composeEmail
+        ];
+        
+        return items;
+    },
+    
+    /**
+     * updates call menu
+     * 
+     * @param {Ext.Action} action
+     * @param {Object} grants grants sum of grants
+     * @param {Object} records
+     */
+    updatePhoneActions: function(action, grants, records) {
+        if (action.isHidden()) {
+            return;
+        }
+        
+        this.phoneMenu.removeAll();
+        this.actions_callContact.setDisabled(true);
             
-            this.actions_callContact.setDisabled(true);
-            
-            var contact = sm.getSelected();
+        if (records.length == 1) {
+            var contact = records[0];
             
             if (! contact) {
                 return false;
@@ -311,7 +324,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                    handler: this.onCallContact,
                    field: 'tel_work'
                 });
-                this.actions_callContact.setDisabled(false);
+                action.setDisabled(false);
             }
             if(!Ext.isEmpty(contact.data.tel_home)) {
                 this.phoneMenu.add({
@@ -320,7 +333,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                    handler: this.onCallContact,
                    field: 'tel_home'
                 });
-                this.actions_callContact.setDisabled(false);
+                action.setDisabled(false);
             }
             if(!Ext.isEmpty(contact.data.tel_cell)) {
                 this.phoneMenu.add({
@@ -329,7 +342,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                    handler: this.onCallContact,
                    field: 'tel_cell'
                 });
-                this.actions_callContact.setDisabled(false);
+                action.setDisabled(false);
             }
             if(!Ext.isEmpty(contact.data.tel_cell_private)) {
                 this.phoneMenu.add({
@@ -338,7 +351,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                    handler: this.onCallContact,
                    field: 'tel_cell'
                 });
-                this.actions_callContact.setDisabled(false);
+                action.setDisabled(false);
             }
         }
     },
