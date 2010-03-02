@@ -107,8 +107,10 @@
         
         this.each(function(action) {
             // action updater opt-in fn has precedence over generic action updater!
-            if (typeof(action.actionUpdater) == 'function') {
-                action.actionUpdater.call(action.scope||action, grants, records);
+            var actionUpdater = action.actionUpdater || action.initialConfig.actionUpdater;
+            if (typeof(actionUpdater) == 'function') {
+                var scope = action.scope || action.initialConfig.scope || window;
+                actionUpdater.call(scope, action, grants, records);
             } else {
                 this.defaultUpdater(action, grants, records);
             }
@@ -125,7 +127,7 @@
      * 
      * @param {Ext.Action} action
      * @param {Object} grants
-     * @param {Object} grants
+     * @param {Object} records
      */
     defaultUpdater: function(action, grants, records) {
         var nCondition     = records.length != 0 && (records.length > 1 ? action.initialConfig.allowMultiple : true);
