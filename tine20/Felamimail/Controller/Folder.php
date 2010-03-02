@@ -119,7 +119,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             // try to get folders from imap server
             $result = Felamimail_Controller_Cache_Folder::getInstance()->update($filterValues['account_id'], $filterValues['globalname']);
         }             
-        $result->cache_status = Felamimail_Model_Folder::CACHE_STATUS_PENDING;
         
         $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['account_id']] = count($result);
         
