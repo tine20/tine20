@@ -509,6 +509,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
     getActionToolbar: function() {
         if (! this.actionToolbar) {
             this.actionToolbar = new Ext.Toolbar({
+                defaults: {height: 55},
                 items: [{
                     xtype: 'buttongroup',
                     columns: 2,
