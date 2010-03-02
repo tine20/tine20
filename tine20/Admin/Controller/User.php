@@ -66,9 +66,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->_applicationName = 'Admin';
 		
 		$this->_userBackend = Tinebase_User::getInstance();
-		
+
 		// manage samba sam?
-		if(isset(Tinebase_Core::getConfig()->samba)) {
+		if(Tinebase_User::getConfiguredBackend() == Tinebase_User::LDAP && isset(Tinebase_Core::getConfig()->samba)) {
 			$this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE); 
 			if ($this->_manageSAM) {
 				$this->_samBackend = Tinebase_SambaSAM::getInstance();
@@ -248,7 +248,14 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        $account = $this->_userBackend->updateUser($_account);
+        $oldAccount = $this->_userBackend->getUserByProperty('accountId', $_account, 'Tinebase_Model_FullUser');
+        $account    = $this->_userBackend->updateUser($_account);
+
+        // remove user from primary group, if primary group changes
+        if($oldAccount->accountPrimaryGroup != $account->accountPrimaryGroup) {
+            Tinebase_Group::getInstance()->removeGroupMember($oldAccount->accountPrimaryGroup, $account);
+        }
+        // always add user to primary group
         Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
         
         // fire needed events
