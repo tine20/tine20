@@ -126,6 +126,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         this.ftb.renderFilterRow = this.ftb.renderFilterRow.createSequence(this.onAddFilter, this);
         this.ftb.onFieldChange   = this.ftb.onFieldChange.createSequence(this.onFieldChange, this);
         this.ftb.deleteFilter    = this.ftb.deleteFilter.createInterceptor(this.onBeforeDeleteFilter, this);
+        this.ftb.setValue        = this.ftb.setValue.createSequence(this.onSetValue, this);
         
         //this.ftb.onFilterRowsChange = this.ftb.onFilterRowsChange.createInterceptor(this.onFilterRowsChange, this);
         this.ftb.getQuickFilterField = this.getQuickFilterField.createDelegate(this);
@@ -143,9 +144,13 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         
         this.criteriaText = new Ext.Panel({
             border: 0,
-            bodyStyle: {border: 0, background: 'none', 'text-align': 'left'},
-            html: ''
-            //html: 'Your view is limited by {0} criteria:' + '<br />' + 'Calendar, Attendee...'
+            html: '',
+            bodyStyle: {
+                border: 0,
+                background: 'none', 
+                'text-align': 'left', 
+                'line-height': '11px'
+            }
         });
         
         this.detailsToggleBtn = new Ext.Button({
@@ -153,13 +158,11 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             enableToggle: true,
             text: _('show details'),
             tooltip: _('Always show advanced filters'),
-            //handler: this.ftb.onFilterRowsChange.createDelegate(this.ftb)
             scope: this,
             handler: this.onDetailsToggle
         });
         
         this.ftb.hide();
-        //this.detailsToggleBtn.toggle(false);
     },
     
     /**
@@ -257,6 +260,51 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
     onQuickFilterTrigger: function() {
         this.ftb.onFiltertrigger.call(this.ftb);
         this.ftb.onFilterRowsChange.call(this.ftb);
+    },
+    
+    /**
+     * called after setValue is called for the filter toolbar
+     * 
+     * @param {Array} filters
+     */
+    onSetValue: function(filters) {
+        this.setCriteriaText(filters);
+    },
+    
+    /**
+     * sets this.criteriaText according to filters
+     * 
+     * @param {Array} filters
+     */
+    setCriteriaText: function(filters) {
+        var text = '' , 
+            criterias = [];
+        
+        Ext.each(filters, function(f) {
+            if(
+                (f.field === 'container_id' && f.operator === 'specialNode' && f.value === 'all') ||
+                (f.field === 'query' && f.operator === 'contains' && f.value === '')
+              ) {
+                // don't judge them as criterias
+                return;
+            }
+            
+            if (this.ftb.filterModelMap[f.field]) {
+                criterias.push(this.ftb.filterModelMap[f.field].label);
+            } else {
+                // no idea how to get the filterplugin for non ftb itmes
+                criterias.push(f.field);
+            }
+        }, this);
+        
+        
+        if (! Ext.isEmpty(criterias)) {
+            text = String.format(Tine.Tinebase.translation.ngettext('Your view is limited by {0} criteria:', 'Your view is limited by {0} criterias:', criterias.length), criterias.length) + 
+                   '<br />' +
+                   criterias.join(', ');
+        }
+            
+        this.criteriaText.update(text);
     },
     
     /**
