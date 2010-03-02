@@ -180,12 +180,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     }
     
     /**
-     * sets the record related properties from user generated input.
-     * 
-     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
-     *
-     * @param array $_data the new data to set
-     * @param bool $_bypassFilters enabled/disable validation of data. set to NULL to use state set by the constructor 
+     * (non-PHPdoc)
+     * @see Tinebase/Record/Tinebase_Record_Abstract#setFromArray($_data)
      */
     public function setFromArray(array $_data)
     {
