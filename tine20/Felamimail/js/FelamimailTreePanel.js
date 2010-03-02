@@ -385,22 +385,26 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     onUpdateFolderStore: function(store, record, operation) {
         
         var changes = record.getChanges();
+        //console.log(changes);
 
         // cache count changed
-        if (changes.cache_totalcount) {
+        if (record.isModified('cache_totalcount')) {
             var selectedNode = this.getSelectionModel().getSelectedNode();
             
             // check if grid has to be updated
-            if (selectedNode.attributes && selectedNode.attributes.folder_id == record.id) {
+            if (selectedNode.id == record.id) {
+                //console.log('update grid');
                 this.filterPlugin.onFilterChange();
             }
         }
             
-        if (changes.cache_unreadcount && changes.cache_unreadcount > 0) {
+        if (record.isModified('cache_unreadcount') && changes.cache_unreadcount > 0) {
+            //console.log('update unread');
             this.updateUnreadCount(null, changes.cache_unreadcount, selectedNode);
         }
         
-        if (changes.cache_recentcount && changes.cache_recentcount > 0) {
+        if (record.isModified('cache_recentcount') && changes.cache_recentcount > 0) {
+            //console.log('show notification');
             Ext.ux.Notification.show(
                 this.app.i18n._('New mails'), 
                 String.format(this.app.i18n._('You got {0} new mail(s) in Folder {1}.'), 
@@ -409,7 +413,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         }
             
         // update pie / progress
-        if (changes.cache_status || changes.cache_job_actions_done) {
+        if (record.isModified('cache_status') || record.isModified('cache_job_actions_done')) {
+            //console.log('update progress');
             this.updateCachingProgress(record);
         }
 
@@ -485,7 +490,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             success: function(_result, _request) {
                 var folderData = Ext.util.JSON.decode(_result.responseText);
                 for (var i = 0; i < folderData.length; i++) {
-                    this.updateFolderInStore(folderData[i]);
+                    var folder = this.updateFolderInStore(folderData[i]);
+                    
+                    // update message cache of selected folder/node
+                    var selectedNode = this.getSelectionModel().getSelectedNode();
+                    if (selectedNode.id == folder.id) {
+                        this.updateMessageCache(selectedNode);
+                    }
                 }
             },
             failure: function() {
@@ -497,20 +508,19 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     /**
      * update folder status of all visible / all node in one level or one folder(s)
      * 
+     * @param {} node
      * @return boolean true if caching is complete
      * 
      * TODO check in folder store if another folder has to be updated
      */
-    updateMessageCache: function() {
+    updateMessageCache: function(node) {
         // get active node
-        var node = this.getSelectionModel().getSelectedNode();
-        // check if folder node with attributes
-        if (! node || ! node.attributes || ! node.attributes.folder_id) {
-            return false;
+        if (! node) {
+            node = this.getSelectionModel().getSelectedNode();
         }
         var folder = this.folderStore.getById(node.attributes.folder_id);
         
-        if (folder.get('cache_status') == 'incomplete' || folder.get('cache_status') == 'invalid') {
+        if (folder && (folder.get('cache_status') == 'incomplete' || folder.get('cache_status') == 'invalid')) {
             Ext.Ajax.request({
                 params: {
                     method: 'Felamimail.updateMessageCache',
@@ -582,6 +592,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var nodeUI = node.getUI();
         
         // insert caching progress element
+        //if (folder.get('cache_status') == 'complete' || folder.get('cache_job_actions_estimate') == 0) {
         if (folder.get('cache_status') == 'complete') {
             //var html = folder.get('cache_totalcount');
             var html = '';
