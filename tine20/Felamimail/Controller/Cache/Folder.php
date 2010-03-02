@@ -257,7 +257,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 $_folder->cache_unreadcount = $_folder->cache_totalcount - $messageCacheBackend->seenCountByFolderId($_folder->getId());
                 
                 // update cache status if we need to do something
-                if ($_folder->imap_totalcount != $_folder->cache_totalcount || $_folder->imap_uidnext || $_folder->cache_uidnext) {
+                if ($_folder->imap_totalcount != $_folder->cache_totalcount || $_folder->imap_uidnext != $_folder->cache_uidnext) {
                     $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
                 }
             }
