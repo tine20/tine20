@@ -52,8 +52,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         var account = Tine.Felamimail.loadAccountStore().getById(attr.account_id);
         
         // add folder to folderStore
-        var folder = new Tine.Felamimail.Model.Folder(attr, attr.id);
-        this.folderStore.add([folder]);
+        this.folderStore.loadData(attr);
         
         // check for account setting
         attr.has_children = (
