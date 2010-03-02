@@ -48,7 +48,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         $this->_applicationName = 'Admin';
         
         // manage samba sam?
-		if(isset(Tinebase_Core::getConfig()->samba)) {
+		if(Tinebase_User::getConfiguredBackend() == Tinebase_User::LDAP && isset(Tinebase_Core::getConfig()->samba)) {
 			$this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false); 
 			if ($this->_manageSAM) {
 				$this->_samBackend = Tinebase_SambaSAM::getInstance();
