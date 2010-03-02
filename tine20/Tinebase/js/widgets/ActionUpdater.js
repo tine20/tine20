@@ -72,7 +72,7 @@
      */
     addAction: function(action) {
         // if action has to initialConfig it's no Ext.Action!
-        if (action.initialConfig) {
+        if (action && action.initialConfig) {
             
             // in some coses our actionUpdater config is not in the initial config
             // this happens for direct extensions of button class, like the notes button
@@ -167,9 +167,11 @@
         var grants = {
             //addGrant:    defaultGrant,
             //adminGrant:  defaultGrant,
-            deleteGrant: defaultGrant,
-            editGrant:   defaultGrant,
-            readGrant:   defaultGrant
+            deleteGrant:    defaultGrant,
+            editGrant:      defaultGrant,
+            readGrant:      defaultGrant,
+            exportGrant:    defaultGrant,
+            syncGrant:      defaultGrant
         };
         
         if (! this.evalGrants) {
