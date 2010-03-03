@@ -412,6 +412,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @return  Tinebase_Record_RecordSet
      * @throws  Tinebase_Exception_InvalidArgument
      * 
+     * @todo    has to be tested
      * @todo    support custom fields
      */
     public function createPrepared($_records) 
@@ -457,13 +458,13 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 $recordArray[$identifier] = $record->generateUID();
             }
             
-            if (count($recordArray) == count($firstRecordArray)) {
+            if (array_keys($recordArray) === array_keys($firstRecordArray)) {
                 // sort data and execute!
                 ksort($recordArray);
                 $stmt->execute(array_values($recordArray));
                 $ids[] = $recordArray[$identifier];
             } else {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Field count mismatch.');
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Fields mismatch.');
             }
         }
         
