@@ -19,7 +19,10 @@ Ext.ns('Ext.ux.form.');
  * trigger field with support for extra layer on trigger click
  */
 Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
-    
+    /**
+     * @cfg {Boolean} hideButton Hide standard form buttons 
+     */
+    hideButtons: false,
     /**
      * @cfg {String} triggerClass An additional CSS class used to style the trigger button.  The trigger will always
      * get the class <tt>'x-form-trigger'</tt> and <tt>triggerClass</tt> will be <b>appended</b> if specified
@@ -61,7 +64,6 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      * @cfg {Number} layerHeight The width (used as a parameter to {@link Ext.Element#setHeight}) of the dropdown
      * layer (defaults to the width of the ComboBox field).  See also <tt>{@link #minLayerHeight}
      */
-    
     
     /**
      * Hides the dropdown layer if it is currently expanded. Fires the {@link #collapse} event on completion.
@@ -109,6 +111,13 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
     },
     
     /**
+     * template fn for subclasses to return inner form items
+     */
+    getItems: function() {
+        return [];
+    },
+    
+    /**
      * <p>Returns the element used to house this ComboBox's pop-up layer. Defaults to the document body.</p>
      * A custom implementation may be provided as a configuration option if the floating layer needs to be rendered
      * to a different Element. An example might be rendering the layer inside a Menu so that clicking
@@ -119,6 +128,32 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
     },
     
     /**
+     * returns inner form of the layer
+     * 
+     */
+    getInnerForm: function() {
+        if (! this.innerForm) {
+            this.innerForm = new Ext.form.FormPanel({
+                border: false,
+                cls: 'tw-editdialog',
+                items: this.getItems(),
+                buttonAlign: 'right',
+                buttons: this.hideButtons ? false : [{
+                    text: _('Cancel'),
+                    handler: this.onCancel,
+                    iconCls: 'action_cancel'
+                }, {
+                    text: _('Ok'),
+                    handler: this.onOk,
+                    iconCls: 'action_saveAndClose'
+                }]
+            });
+        }
+        
+        return this.innerForm;
+    },
+    
+    /**
      * Returns the currently selected field value or empty string if no value is set.
      * @return {String} value The selected value
      */
@@ -126,6 +161,11 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
         
     },
     
+    initComponent: function() {
+        
+        Ext.ux.form.LayerCombo.superclass.initComponent.apply(this, arguments);
+    },
+
     /**
      * init the dropdown layer
      * 
@@ -133,7 +173,7 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      */
     initLayer: function() {
         if(!this.layer){
-            var cls = 'x-combo-list',
+            var cls = 'ux-layercombo-layer',
                 layerParent = Ext.getDom(this.getLayerParent() || Ext.getBody()),
                 zindex = parseInt(Ext.fly(layerParent).getStyle('z-index') ,10);
 
@@ -168,8 +208,11 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
             //this.mon(this.innerLayer, 'mousemove', this.onViewMove, this);
             this.innerLayer.setWidth(lw - this.layer.getFrameWidth('lr'));
             
-            this.setLayerHeight(this.layerHeight ? this.layerHeight : this.minHeight);
+            this.setLayerHeight(this.layerHeight ? this.layerHeight : this.minLayerHeight);
             
+            
+            var innerForm = this.getInnerForm();
+            innerForm.render(this.innerLayer);
         }
     },
     
@@ -178,6 +221,21 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      */
     isExpanded : function(){
         return this.layer && this.layer.isVisible();
+    },
+    
+    /**
+     * cancel handler
+     */
+    onCancel: function() {
+        this.collapse();
+    },
+    
+    /**
+     * ok handler
+     */
+    onOk: function() {
+        this.collapse();
+        this.fireEvent('change', this, this.getValue())
     },
     
     /**
