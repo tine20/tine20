@@ -429,7 +429,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 
                 // count unseen and Zend_Mail_Storage::FLAG_RECENT 
                 if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags)) {
-                    $folder->cache_recentcount++;
+                    $_folder->cache_recentcount++;
                     $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
                 }
                 
