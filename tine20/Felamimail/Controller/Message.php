@@ -829,6 +829,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     $part->encoding = Zend_Mime::ENCODING_7BIT;
                     
                 } else {
+                    if (! array_key_exists('path', $attachment)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find attachment.');
+                        continue;
+                    }
+                    
                     // get contents from uploaded files
                     $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
                     $part->filename = $attachment['name'];
