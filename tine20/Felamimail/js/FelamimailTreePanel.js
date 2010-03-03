@@ -304,7 +304,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             
             var account = Tine.Felamimail.loadAccountStore().getById(node.attributes.account_id);
             
-            if (account && node.attributes.globalname == account.get('trash_folder')) {
+            if (account && node.attributes.globalname == account.get('trash_folder') || node.attributes.globalname.match(/junk/i)) {
                 this.contextMenuTrash.showAt(event.getXY());
             } else if (node.attributes.systemFolder) {
                 this.contextMenuSystemFolder.showAt(event.getXY());    
