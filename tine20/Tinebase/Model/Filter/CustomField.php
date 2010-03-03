@@ -54,8 +54,8 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Text
             || ! isset($this->_value['value']) || empty($this->_value['value'])) 
         {
             return;
-        } else if ($this->_operator == 'oneof') {
-            throw new Tinebase_Exception_UnexpectedValue('Operator "oneof" not supported.');
+        } else if ($this->_operator == 'in') {
+            throw new Tinebase_Exception_UnexpectedValue('Operator "in" not supported.');
         }
         
         // make sure $correlationName is a string
