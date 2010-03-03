@@ -126,7 +126,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     {
         $result = $this->_json->updateFolderStatus($this->_account->getId(), '');
         $inbox = array();
-        foreach ($result as $folder) {
+        foreach ($result['results'] as $folder) {
             if ($folder['globalname'] == 'INBOX') {
                 $inbox = $folder;
                 break;
@@ -138,8 +138,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_json->updateFolderStatus($this->_account->getId(), array($inbox['id']));
         // timestamps can be different
         unset($inbox['imap_timestamp']);
-        unset($result[0]['imap_timestamp']);
-        $this->assertEquals($inbox, $result[0]);
+        unset($result['results'][0]['imap_timestamp']);
+        $this->assertEquals($inbox, $result['results'][0]);
         
         // save some values and send mail
         $oldUnreadCount = $inbox['imap_unreadcount'];
@@ -152,7 +152,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // get inbox status again
         $result = $this->_json->updateFolderStatus($this->_account->getId(), '');
         $inbox = array();
-        foreach ($result as $folder) {
+        foreach ($result['results'] as $folder) {
             if ($folder['globalname'] == 'INBOX') {
                 $inbox = $folder;
                 break;
@@ -233,7 +233,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // get inbox status
         $result = $this->_json->updateFolderStatus($this->_account->getId(), '');
         $inbox = array();
-        foreach ($result as $folder) {
+        foreach ($result['results'] as $folder) {
             if ($folder['globalname'] == 'INBOX') {
                 $inbox = $folder;
                 break;

@@ -94,6 +94,23 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * test clear message cache
+     *
+     */
+    public function testClear()
+    {
+        $this->_controller->clear($this->_folder);
+        
+        $messageCacheBackend = new Felamimail_Backend_Cache_Sql_Message();
+        $count = $messageCacheBackend->searchCountByFolderId($this->_folder->getId());
+        
+        // check if empty
+        $this->assertEquals(0, $count);
+        $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_EMPTY, $this->_folder->cache_status);
+        $this->assertEquals(0, $this->_folder->cache_job_actions_estimate);
+    }
+
+    /**
      * test update message cache
      *
      * @todo move update folder status stuff to  Felamimail_Controller_Cache_FolderTest ?
@@ -121,23 +138,6 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($updatedFolder->imap_totalcount, $result->cache_totalcount, 'totalcounts should be equal');
         $this->assertGreaterThan(-1, Zend_Date::now()->compare($result->cache_timestamp), 'timestamp incorrect'); // later or equals
         $this->assertEquals($result->cache_job_actions_estimate, $result->cache_job_actions_done, 'done/estimate wrong');
-    }
-
-    /**
-     * test clear message cache
-     *
-     */
-    public function testClear()
-    {
-        $this->_controller->clear($this->_folder);
-        
-        $messageCacheBackend = new Felamimail_Backend_Cache_Sql_Message();
-        $count = $messageCacheBackend->searchCountByFolderId($this->_folder->getId());
-        
-        // check if empty
-        $this->assertEquals(0, $count);
-        $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_EMPTY, $this->_folder->cache_status);
-        $this->assertEquals(0, $this->_folder->cache_job_actions_estimate);
     }
 
     /**
