@@ -325,12 +325,12 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                     },
                     items: [ {
                         name: 'accounts_Sql_defaultUserGroupName',
-                        fieldLabel: this.app.i18n._('Default user group name'),
-                        allowEmpty: false
+                        fieldLabel: this.app.i18n._('Default user group name')
+                        //allowEmpty: false
                     }, {
                         name: 'accounts_Sql_defaultAdminGroupName',
-                        fieldLabel: this.app.i18n._('Default admin group name'),
-                        allowEmpty: false
+                        fieldLabel: this.app.i18n._('Default admin group name')
+                        //allowEmpty: false
                     }, {
                         xtype: 'combo',
                         width: 300, //late rendering bug
@@ -552,7 +552,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
         var result = form.isValid();
         
         // check if passwords match
-        if (form.findField('authentication_Sql_adminPassword') 
+        if (this.authenticationBackendCombo.getValue() == 'Sql' && form.findField('authentication_Sql_adminPassword') 
             && form.findField('authentication_Sql_adminPassword').getValue() != form.findField('authentication_Sql_adminPasswordConfirmation').getValue()) 
         {
             form.markInvalid([{
@@ -563,7 +563,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
         }
         
         // check if initial username/passwords are set
-        if(Tine.Setup.registry.get('setupRequired') && form.findField('authentication_Sql_adminLoginName')) {
+        if(Tine.Setup.registry.get('setupRequired') && this.authenticationBackendCombo.getValue() == 'Sql' && form.findField('authentication_Sql_adminLoginName')) {
             if (form.findField('authentication_Sql_adminLoginName').getValue() == '') {
                 form.markInvalid([{
                     id: 'authentication_Sql_adminLoginName',
@@ -584,7 +584,9 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             }
         }
         
-        if (form.findField('accounts_Sql_defaultUserGroupName') && form.findField('accounts_Sql_defaultUserGroupName').getValue() == '') {
+        if (this.accountsStorageCombo.getValue() == 'Sql' && 
+                form.findField('accounts_Sql_defaultUserGroupName') && form.findField('accounts_Sql_defaultUserGroupName').getValue() == ''
+            ) {
             form.markInvalid([{
                 id: 'accounts_Sql_defaultUserGroupName',
                 msg: this.app.i18n._("Should not be empty")
@@ -592,7 +594,9 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             result = false;
         }
         
-        if (form.findField('accounts_Sql_defaultAdminGroupName') && form.findField('accounts_Sql_defaultAdminGroupName').getValue() == '') {
+        if (this.accountsStorageCombo.getValue() == 'Sql' && 
+                form.findField('accounts_Sql_defaultAdminGroupName') && form.findField('accounts_Sql_defaultAdminGroupName').getValue() == ''
+            ) {
             form.markInvalid([{
                 id: 'accounts_Sql_defaultAdminGroupName',
                 msg: this.app.i18n._("Should not be empty")
