@@ -358,7 +358,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function create(Tinebase_Record_Interface $_record) 
     {
-    	
     	$identifier = $_record->getIdProperty();
     	
     	if (!$_record instanceof $this->_modelName) {
@@ -404,6 +403,73 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         
         return $this->get($_record->$identifier);
+    }
+    
+    /**
+     * Creates new entry/entries with prepared statement
+     *
+     * @param   Tinebase_Record_Interface|Tinebase_Record_RecordSet $_record
+     * @return  Tinebase_Record_RecordSet
+     * @throws  Tinebase_Exception_InvalidArgument
+     * 
+     * @todo    support custom fields
+     */
+    public function createPrepared($_records) 
+    {
+        // only do this for records with hash ids
+        if (! $this->_hasHashId()) {
+            throw new Tinebase_Exception_InvalidArgument('Autoincremental ids are not supported (yet).');
+        } 
+        
+        // sanitize param
+        if ($_records instanceof Tinebase_Record_Abstract) {
+            $records = new Tinebase_Record_RecordSet($this->_modelName);
+            $records->addRecord($_records);
+        } else if (! $_records instanceof Tinebase_Record_RecordSet) {
+            throw new Tinebase_Exception_InvalidArgument('Recordset or single Record expected');
+        } else if (count($_records) == 0) {
+            return $_records;
+        } else {
+            $records = $_records;
+        }
+        
+        // use first record to determine fields (sorted by fieldname)
+        $first = $records->getFirstRecord();
+        $identifier = $first->getIdProperty();
+        $firstRecordArray = array_intersect_key($this->_recordToRawData($first), $this->_schema);
+        if (! array_key_exists($first->getIdProperty(), $firstRecordArray)) {
+            $firstRecordArray[$identifier] = '';
+        }
+        ksort($firstRecordArray);
+        $fields = array_keys($firstRecordArray);
+        $placeholders = array_fill(0, count($fields), '?'); 
+        
+        $stmt = $this->_db->prepare('INSERT INTO ' . SQL_TABLE_PREFIX . $this->_tableName 
+            . ' (' . implode(',', $fields) . ') VALUES (' . implode(',', $placeholders) . ')'
+        );
+        
+        // insert records
+        $ids = array();
+        foreach ($records as $record) {
+            $recordArray = array_intersect_key($this->_recordToRawData($record), $this->_schema);
+            if (! array_key_exists($first->getIdProperty(), $firstRecordArray)) {
+                // add identifier
+                $recordArray[$identifier] = $record->generateUID();
+            }
+            
+            if (count($recordArray) == count($firstRecordArray)) {
+                // sort data and execute!
+                ksort($recordArray);
+                $stmt->execute(array_values($recordArray));
+                $ids[] = $recordArray[$identifier];
+            } else {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Field count mismatch.');
+            }
+        }
+        
+        // get and return inserted records
+        $createdRecords = $this->getMultiple($ids);
+        return $createdRecords;
     }
     
     /**
