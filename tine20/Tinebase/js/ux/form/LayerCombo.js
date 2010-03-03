@@ -338,7 +338,7 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      * @return {Ext.form.Field} this
      */
     setValue: function(value) {
-        
+        return this;
     }
     
 });
