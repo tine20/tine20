@@ -69,6 +69,8 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      * layer (defaults to the width of the ComboBox field).  See also <tt>{@link #minLayerHeight}
      */
     
+    editable: false,
+    
     /**
      * Hides the dropdown layer if it is currently expanded. Fires the {@link #collapse} event on completion.
      */
@@ -100,7 +102,8 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
         if(this.isExpanded() || !this.hasFocus){
             return;
         }
-
+        
+        this.startValue = this.getValue();
         this.layer.alignTo.apply(this.layer, [this.el].concat(this.layerAlign));
         this.layer.show();
         if(Ext.isGecko2){
@@ -233,6 +236,7 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      * cancel handler
      */
     onCancel: function() {
+        this.setValue(this.startValue);
         this.collapse();
     },
     
@@ -259,7 +263,11 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      */
     onOk: function() {
         this.collapse();
-        this.fireEvent('change', this, this.getValue())
+        var v = this.getValue();
+        this.setValue(v);
+        
+        this.fireEvent('change', this, v, this.startValue);
+        this.startValue = v;
     },
     
     /**
