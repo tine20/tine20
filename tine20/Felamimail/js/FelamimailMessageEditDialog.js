@@ -333,7 +333,22 @@ Ext.namespace('Tine.Felamimail');
                 }]
             }]
         };
+    },
+
+    /**
+     * is form valid (checks if attachments are still uploading)
+     * 
+     * @return {Boolean}
+     * 
+     * TODO check if recipient grid has more than 0 records 
+     * TODO show better fitting error message if still uploading attachments
+     */
+    isValid: function() {
+        var result = (! this.attachmentGrid.isUploading());
+        
+        return (result && Tine.Felamimail.MessageEditDialog.superclass.isValid.call(this));
     }
+        
 });
 
 /**

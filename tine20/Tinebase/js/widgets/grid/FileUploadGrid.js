@@ -228,5 +228,15 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             var fileRecord = uploader.upload(file);
             this.store.add(fileRecord);
         }, this);
+    },
+    
+    /**
+     * returns true if files are uploading atm
+     * 
+     * @return {Boolean}
+     */
+    isUploading: function() {
+        var uploadingFiles = this.store.query('status', 'uploading');
+        return (uploadingFiles.getCount() > 0);
     }
 });
