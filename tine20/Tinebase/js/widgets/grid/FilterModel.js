@@ -150,13 +150,13 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 {operator: 'less',       label: _('is less than')},
                 {operator: 'not',        label: _('is not')},
                 {operator: 'in',         label: _('is in')},
+                {operator: 'notin',      label: _('none of')},
                 {operator: 'before',     label: _('is before')},
                 {operator: 'after',      label: _('is after')},
                 {operator: 'within',     label: _('is within')},
                 {operator: 'inweek',     label: _('is in week no.')},
                 {operator: 'startswith', label: _('starts with')},
-                {operator: 'endswith',   label: _('ends with')},
-                {operator: 'oneof',      label: _('one of')}
+                {operator: 'endswith',   label: _('ends with')}
             ]
         });
 
@@ -164,7 +164,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         if (this.operators.length == 0) {
             switch (this.valueType) {
                 case 'string':
-                    this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not', 'oneof');
+                    this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not', 'in');
                     break;
                 case 'customfield':
                     this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not');
