@@ -24,6 +24,10 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      */
     hideButtons: false,
     /**
+     * @cfg {Object} config for innerForm
+     */
+    formConfig: null,
+    /**
      * @cfg {String} triggerClass An additional CSS class used to style the trigger button.  The trigger will always
      * get the class <tt>'x-form-trigger'</tt> and <tt>triggerClass</tt> will be <b>appended</b> if specified
      * (defaults to <tt>'x-form-arrow-trigger'</tt> which displays a downward arrow icon).
@@ -133,7 +137,8 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      */
     getInnerForm: function() {
         if (! this.innerForm) {
-            this.innerForm = new Ext.form.FormPanel({
+            this.innerForm = new Ext.form.FormPanel(Ext.apply({
+                //labelWidth: 30,
                 border: false,
                 cls: 'tw-editdialog',
                 items: this.getItems(),
@@ -149,7 +154,7 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
                     handler: this.onOk,
                     iconCls: 'action_saveAndClose'
                 }]
-            });
+            }, this.formConfig));
         }
         
         return this.innerForm;
