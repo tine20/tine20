@@ -94,6 +94,54 @@ Tine.Tasks.status.StatusFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
         }, this);
         
         return items;
+    },
+    
+    /**
+     * Returns the currently selected field value or empty string if no value is set.
+     * 
+     * @return {Array} value The selected status id's
+     */
+    getValue: function() {
+        var ids = [];
+        var statusStore = Tine.Tasks.status.getStore();
+        
+        var formValues = this.getInnerForm().getForm().getValues();
+        for (var id in formValues) {
+            if (formValues[id] === 'on' && statusStore.getById(id)) {
+                ids.push(id);
+            }
+        }
+        
+        return ids;
+    },
+    
+    /**
+     * @param {String} value
+     * @return {Ext.form.Field} this
+     */
+    setValue: function(value) {
+        value = Ext.isArray(value) ? value : [value];
+        
+        var statusStore = Tine.Tasks.status.getStore();
+        var form = this.getInnerForm().getForm();
+        var statusText = [];
+        
+        Tine.Tasks.status.getStore().each(function(status) {
+            var id = status.get('id');
+            var name = status.get('status_name');
+            var field = form.findField(id);
+            if (value.indexOf(id) >= 0) {
+                field.setValue('on');
+                statusText.push(name);
+            } else {
+                field.setValue('off');
+            }
+        }, this);
+        
+        this.setRawValue(statusText.join(', '));
+        
+        return this;
+        
     }
 });
 
