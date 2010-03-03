@@ -149,7 +149,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 {operator: 'greater',    label: _('is greater than')},
                 {operator: 'less',       label: _('is less than')},
                 {operator: 'not',        label: _('is not')},
-                {operator: 'in',         label: _('is in')},
+                {operator: 'in',         label: _('one of')},
                 {operator: 'notin',      label: _('none of')},
                 {operator: 'before',     label: _('is before')},
                 {operator: 'after',      label: _('is after')},
