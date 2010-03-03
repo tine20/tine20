@@ -140,10 +140,12 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
                 buttonAlign: 'right',
                 buttons: this.hideButtons ? false : [{
                     text: _('Cancel'),
+                    scope: this,
                     handler: this.onCancel,
                     iconCls: 'action_cancel'
                 }, {
                     text: _('Ok'),
+                    scope: this,
                     handler: this.onOk,
                     iconCls: 'action_saveAndClose'
                 }]
@@ -208,11 +210,10 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
             //this.mon(this.innerLayer, 'mousemove', this.onViewMove, this);
             this.innerLayer.setWidth(lw - this.layer.getFrameWidth('lr'));
             
-            this.setLayerHeight(this.layerHeight ? this.layerHeight : this.minLayerHeight);
-            
-            
             var innerForm = this.getInnerForm();
             innerForm.render(this.innerLayer);
+            
+            this.setLayerHeight(this.layerHeight ? this.layerHeight : 'auto');
         }
     },
     
@@ -230,6 +231,24 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
         this.collapse();
     },
     
+    /**
+     * do cleanup
+     * 
+     * @private
+     */
+    onDestroy : function(){
+       if (this.dqTask){
+           this.dqTask.cancel();
+           this.dqTask = null;
+       }
+       Ext.destroy(
+           this.resizer,
+           this.layer
+       );
+       Ext.destroyMembers(this, 'hiddenField');
+       Ext.form.ComboBox.superclass.onDestroy.call(this);
+   },
+ 
     /**
      * ok handler
      */
@@ -291,6 +310,9 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      * @param {Number} height
      */
     setLayerHeight: function(height) {
+        if (! Ext.isNumber(height)) {
+            height = this.innerForm.getHeight();
+        }
         this.innerLayer.dom.style.height = '';
         var pad = this.layer.getFrameWidth('tb') + (this.resizable ? this.handleHeight : 0) + this.assetHeight;
 
