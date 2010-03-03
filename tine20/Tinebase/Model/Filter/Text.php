@@ -33,9 +33,8 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         //6 => 'notin',
         7 => 'isnull',
         8 => 'notnull',
-        9 => 'oneof',
     // add 'group by _fieldname_' to select statement and remove empty values / filter value is not used when this operator is set
-        10 => 'group',
+        9 => 'group',
     );
     
     /**
@@ -51,7 +50,6 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         //'notin'      => array('sqlop' => ' NOT IN (?)',  'wildcards' => '?'  ),
         'isnull'     => array('sqlop' => ' IS NULL',     'wildcards' => '?'  ),
         'notnull'    => array('sqlop' => ' IS NOT NULL', 'wildcards' => '?'  ),
-        'oneof'      => array('sqlop' => ' LIKE ?',      'wildcards' => '?'  ),
         'group'      => array('sqlop' => " NOT LIKE  ''",'wildcards' => '?'  ),
     );
     
@@ -74,27 +72,16 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
             $_select->group($this->_field);
         }
 
-        // oneof operator (multiple values / OR) 
-        if ($this->_operator == 'oneof') {
-            if (empty($this->_value)) {
-                $_select->where('1=1/* empty query */');
-                return;
-            }
-            $parts = explode(' ', $value);
-            $whereParts = array();
-            foreach ($parts as $part) {
-                $whereParts[] = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $part);
-            }
-            $where = implode(' OR ', $whereParts);
-            
-        // single value
-        } else {
-            if (is_array($value) && empty($value)) {
-                 // prevent sql error
-                 $value = array(' ');
-            }
-            $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
+        if ($this->_operator == 'in') {
+            $value = is_array($this->_value) ? $this->_value : explode(' ', $this->_value);
         }
+            
+        if (is_array($value) && empty($value)) {
+             $_select->where('1=1/* empty query */');
+             return;
+        }
+        
+        $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
         
         if ($this->_operator == 'not' || $this->_operator == 'notin') {
             $where = "( $where OR $field IS NULL)";
