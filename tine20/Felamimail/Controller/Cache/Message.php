@@ -145,7 +145,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             while (
                 // more messages to add ?
                 count($missingUids) > 0 &&
-                $folder->cache_totalcount != $folder->imap_totalcount &&
                 $folder->imap_uidnext != $folder->cache_uidnext &&
                 $timeLeft
             ) {
