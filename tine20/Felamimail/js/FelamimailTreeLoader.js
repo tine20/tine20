@@ -52,7 +52,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         var account = Tine.Felamimail.loadAccountStore().getById(attr.account_id);
         
         // append folder to folderStore
-        this.folderStore.loadData(attr, true);
+        this.folderStore.loadData({results: [attr]}, true);
         
         // check for account setting
         attr.has_children = (

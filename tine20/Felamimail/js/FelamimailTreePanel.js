@@ -115,12 +115,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.folderStore = new Ext.data.JsonStore({
             id: 'id',
             fields: Tine.Felamimail.Model.Folder,
+            root: 'results',
             listeners: {
                 scope: this,
                 update: this.onUpdateFolderStore
             },
-            proxy: Tine.Felamimail.accountBackend,
-            reader: Tine.Felamimail.accountBackend.getReader()            
+            proxy: Tine.Felamimail.folderBackend,
+            reader: Tine.Felamimail.folderBackend.getReader()            
         });
     	
         // init tree loader
@@ -386,7 +387,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         //console.log(changes);
 
         // cache count changed
-        if (record.isModified('cache_totalcount')) {
+        if (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done')) {
             var selectedNode = this.getSelectionModel().getSelectedNode();
             
             // check if grid has to be updated
@@ -396,7 +397,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             }
         }
             
-        if (record.isModified('cache_unreadcount') && changes.cache_unreadcount > 0) {
+        if (record.isModified('cache_unreadcount')) {
             //console.log('update unread');
             this.updateUnreadCount(null, changes.cache_unreadcount, selectedNode);
         }
@@ -489,13 +490,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             scope: this,
             timeout: 60000, // 1 minute
             success: function(_result, _request) {
-                var folderData = Ext.util.JSON.decode(_result.responseText);
-                for (var i = 0; i < folderData.length; i++) {
-                    this.folderStore.loadData(folderData[i], true);
+                var result = Tine.Felamimail.folderBackend.getReader().readRecords(Ext.util.JSON.decode(_result.responseText));
+                for (var i = 0; i < result.records.length; i++) {
+                    this.updateFolderInStore(result.records[i]);
                     
                     // update message cache of selected folder/node
                     var selectedNode = this.getSelectionModel().getSelectedNode();
-                    if (selectedNode.id == folderData[i].id) {
+                    if (selectedNode.id == result.records[i].id) {
                         this.updateMessageCache(selectedNode);
                     }
                 }
@@ -521,6 +522,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         // get active node
         if (! node) {
+            //console.log('update multi mc');
             node = this.getSelectionModel().getSelectedNode();
         } else {
             //console.log('update single mc');
@@ -528,6 +530,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         }
         var folder = this.folderStore.getById(node.id);
         
+        //console.log(folder);
         if (folder && (folder.get('cache_status') == 'incomplete' || folder.get('cache_status') == 'invalid')) {
             folderId = folder.id;
             
@@ -540,18 +543,20 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             }
         }
         
+        //console.log('update folder:' + folderId);
         if (folderId !== null) {
             /////////// do request
             
             Ext.Ajax.request({
                 params: {
                     method: 'Felamimail.updateMessageCache',
-                    folderId: node.attributes.folder_id,
+                    folderId: folderId,
                     time: 10
                 },
                 scope: this,
-                success: function(_result, _request) {
-                    this.folderStore.loadData(Ext.util.JSON.decode(_result.responseText), true);
+                success: function(result, request) {
+                    var newRecord = Tine.Felamimail.folderBackend.recordReader(result);
+                    this.updateFolderInStore(newRecord);
                 },
                 failure: function(response, options) {
                     // call handle failure in tree loader and show credentials dialog / reload account afterwards
@@ -566,6 +571,28 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     
     /********************* helpers *****************************/
 
+    /**
+     * update folder in store
+     * 
+     * @param {Tine.Felamimail.Model.Folder} folderData
+     * @return {Tine.Felamimail.Model.Folder}
+     */
+    updateFolderInStore: function(newFolder) {
+        
+        var folder = this.folderStore.getById(newFolder.id);
+        
+        var fieldsToUpdate = ['imap_status','imap_timestamp','imap_uidnext','imap_uidvalidity','imap_totalcount','imap_recentcount',
+            'imap_unreadcount','cache_status','cache_uidnext','cache_totalcount', 'cache_recentcount','cache_unreadcount','cache_timestamp',
+            'cache_job_actions_estimate','cache_job_actions_done'];
+
+        // update folder store
+        for (var j = 0; j < fieldsToUpdate.length; j++) {
+            folder.set(fieldsToUpdate[j], newFolder.get(fieldsToUpdate[j]));
+        }
+        
+        return folder;
+    },
+    
     /**
      * update progress pie
      * 
@@ -588,8 +615,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         // insert caching progress element
         //if (folder.get('cache_status') == 'complete' || folder.get('cache_job_actions_estimate') == 0) {
         if (folder.get('cache_status') == 'complete') {
-            //var html = folder.get('cache_totalcount');
-            var html = '';
+            var html = '<i style:"color:grey"> / ' + folder.get('cache_totalcount') + '</i>';;
+            //var html = '';
         } else if (folder.get('cache_job_actions_estimate') == 0) {
             var html = '<i>0 %</i>';
         } else {
