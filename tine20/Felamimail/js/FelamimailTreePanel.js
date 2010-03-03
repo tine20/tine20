@@ -602,6 +602,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * TODO make css style work for class felamimail-node-progress 
      * TODO show initial incomplete status? 
      * TODO show pie progress?
+     * TODO show totalcount?
      */
     updateCachingProgress: function(folder) {
         
@@ -615,8 +616,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         // insert caching progress element
         //if (folder.get('cache_status') == 'complete' || folder.get('cache_job_actions_estimate') == 0) {
         if (folder.get('cache_status') == 'complete') {
-            var html = '<i style:"color:grey"> / ' + folder.get('cache_totalcount') + '</i>';;
-            //var html = '';
+            //var html = '<i style:"color:grey"> / ' + folder.get('cache_totalcount') + '</i>';;
+            var html = '';
         } else if (folder.get('cache_job_actions_estimate') == 0) {
             var html = '<i>0 %</i>';
         } else {
