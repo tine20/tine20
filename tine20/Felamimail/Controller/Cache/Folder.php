@@ -234,7 +234,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             $imapFolderStatus = $_imap->getFolderStatus($_folder->globalname);
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting status and values for folder ' . $_folder->globalname);
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapFolderValues, TRUE));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cache folder status: ' . print_r($_folder->toArray(), TRUE));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' imap folder status: ' . print_r($imapFolderValues, TRUE));
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapFolderStatus, TRUE));
             
             // check validity
@@ -258,6 +259,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 
                 // update cache status if we need to do something
                 if ($_folder->imap_totalcount != $_folder->cache_totalcount || $_folder->imap_uidnext != $_folder->cache_uidnext) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Cache of folder ' . $_folder->globalname . ' is incomplete.');
                     $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
                 }
             }
