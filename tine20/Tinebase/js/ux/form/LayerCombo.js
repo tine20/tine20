@@ -289,7 +289,7 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
         var v = this.getFormValue();
         this.setValue(v);
         
-        this.fireEvent('change', this, v, this.startValue);
+        this.fireEvent('select', this, v);
         this.startValue = v;
     },
     
