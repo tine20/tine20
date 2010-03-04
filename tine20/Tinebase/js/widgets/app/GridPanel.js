@@ -619,7 +619,24 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         
         return result;
     },
-
+    
+    /**
+     * returns filter toolbar
+     * @private
+     */
+    getFilterToolbar: function() {
+        this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
+        
+        return new Tine.widgets.grid.FilterToolbar({
+            filterModels: this.recordClass.getFilterModel().concat(this.getCustomfieldFilters()),
+            defaultFilter: 'query',
+            filters: [],
+            plugins: [
+                this.quickSearchFilterToolbarPlugin
+            ]
+        });
+    },
+    
     /**
      * called when the store gets updated, e.g. from editgrid
      */
