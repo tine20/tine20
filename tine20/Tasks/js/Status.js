@@ -141,7 +141,7 @@ Tine.Tasks.status.StatusFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
      */
     setFormValue: function(value) {
         this.getInnerForm().getForm().items.each(function(item) {
-            item.setValue(values.indexOf(item.name) >= 0 ? 'on' : 'off');
+            item.setValue(value.indexOf(item.name) >= 0 ? 'on' : 'off');
         }, this);
     }
 });
