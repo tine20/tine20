@@ -772,6 +772,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // delete recur exceptions if update is not longer a recur series
         if (! empty($_oldRecord->rrule) && empty($_record->rrule)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' deleteing recur exceptions as event is no longer a recur series');
             $exceptionIds = $this->_backend->getMultipleByProperty($_record->uid, 'uid')->getId();
             unset($exceptionIds[array_search($_record->getId(), $exceptionIds)]);
             $this->_backend->delete($exceptionIds);
@@ -779,6 +780,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // touch base event of a recur series if an persisten exception changes
         if ($_record->recurid) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' touch base event of a persisten exception');
             $baseEvent = $this->getRecurBaseEvent($_record);
             $this->_touch($baseEvent, TRUE);
         }
