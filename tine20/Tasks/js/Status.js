@@ -23,7 +23,7 @@ Tine.Tasks.status.StatusFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     app: null,
     
     field: 'status_id',
-    defaultOperator: 'in',
+    defaultOperator: 'notin',
     
     /**
      * @private
@@ -33,8 +33,10 @@ Tine.Tasks.status.StatusFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
         
         this.app = Tine.Tinebase.appMgr.get('Tasks');
         
-        this.operators = ['in'];
+        this.operators = ['in', 'notin'];
         this.label = _('Status');
+        
+        this.defaultValue = Tine.Tasks.status.getClosedStatus();
     },
     
     /**
@@ -80,6 +82,19 @@ Tine.Tasks.status.StatusFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
         labelWidth: 30
     },
     
+    getFormValue: function() {
+        var ids = [];
+        var statusStore = Tine.Tasks.status.getStore();
+        
+        var formValues = this.getInnerForm().getForm().getValues();
+        for (var id in formValues) {
+            if (formValues[id] === 'on' && statusStore.getById(id)) {
+                ids.push(id);
+            }
+        }
+        
+        return ids;
+    },
     
     getItems: function() {
         var items = [];
@@ -97,25 +112,6 @@ Tine.Tasks.status.StatusFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     },
     
     /**
-     * Returns the currently selected field value or empty string if no value is set.
-     * 
-     * @return {Array} value The selected status id's
-     */
-    getValue: function() {
-        var ids = [];
-        var statusStore = Tine.Tasks.status.getStore();
-        
-        var formValues = this.getInnerForm().getForm().getValues();
-        for (var id in formValues) {
-            if (formValues[id] === 'on' && statusStore.getById(id)) {
-                ids.push(id);
-            }
-        }
-        
-        return ids;
-    },
-    
-    /**
      * @param {String} value
      * @return {Ext.form.Field} this
      */
@@ -123,25 +119,30 @@ Tine.Tasks.status.StatusFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
         value = Ext.isArray(value) ? value : [value];
         
         var statusStore = Tine.Tasks.status.getStore();
-        var form = this.getInnerForm().getForm();
         var statusText = [];
+        this.currentValue = [];
         
         Tine.Tasks.status.getStore().each(function(status) {
             var id = status.get('id');
             var name = status.get('status_name');
-            var field = form.findField(id);
             if (value.indexOf(id) >= 0) {
-                field.setValue('on');
                 statusText.push(name);
-            } else {
-                field.setValue('off');
+                this.currentValue.push(id);
             }
         }, this);
         
         this.setRawValue(statusText.join(', '));
         
         return this;
-        
+    },
+    
+    /**
+     * sets values to innerForm
+     */
+    setFormValue: function(value) {
+        this.getInnerForm().getForm().items.each(function(item) {
+            item.setValue(values.indexOf(item.name) >= 0 ? 'on' : 'off');
+        }, this);
     }
 });
 
@@ -225,7 +226,7 @@ Tine.Tasks.status.getStore = function() {
                 { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long }, 
                 { name: 'deleted_by'                                        },
                 { name: 'status_name'                                       },
-                { name: 'status_is_open'                                    },
+                { name: 'status_is_open',      type: 'bool'                 },
                 { name: 'status_icon'                                       }
            ],
 		   // initial data from http request
@@ -235,6 +236,18 @@ Tine.Tasks.status.getStore = function() {
        });
 	}
 	return store;
+};
+
+Tine.Tasks.status.getClosedStatus = function() {
+    var reqStatus = [];
+        
+    Tine.Tasks.status.getStore().each(function(status) {
+        if (! status.get('status_is_open')) {
+            reqStatus.push(status.get('id'));
+        }
+    }, this);
+    
+    return reqStatus;
 };
 
 Tine.Tasks.status.getIdentifier = function(statusName) {
