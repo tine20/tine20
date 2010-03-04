@@ -205,7 +205,6 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      * @private
      */
     initLayer: function() {
-        console.log('initlayer');
         if(!this.layer){
             var cls = 'ux-layercombo-layer',
                 layerParent = Ext.getDom(this.getLayerParent() || Ext.getBody()),
