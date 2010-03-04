@@ -41,6 +41,7 @@ class Calendar_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Calendar/js/MainScreenLeftPanel.js',
             'Calendar/js/EventEditDialog.js',
             'Calendar/js/AttendeeGridPanel.js',
+            'Calendar/js/AttendeeStatusFilter.js',
             'Calendar/js/CalendarSelectTreePanel.js',
             'Calendar/js/CalendarSelectWidget.js',
             'Calendar/js/ColorManager.js',
