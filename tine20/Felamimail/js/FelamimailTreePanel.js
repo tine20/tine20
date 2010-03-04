@@ -259,7 +259,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         }
         node.select();
         
-        if (node.id && node.id != '/') {
+        if (node.id && node.id != '/' && node.attributes.globalname != '') {
             this.filterPlugin.onFilterChange();
             
             this.updateFolderStatus([node]);
