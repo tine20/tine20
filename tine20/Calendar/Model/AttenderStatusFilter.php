@@ -24,6 +24,8 @@ class Calendar_Model_AttenderStatusFilter extends Tinebase_Model_Filter_Text
     protected $_operators = array(
         0 => 'equals',
         1 => 'not',
+        2 => 'in',
+        3 => 'notin',
     );
     
     /**
