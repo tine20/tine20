@@ -96,9 +96,7 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
      */
     setToolbar: function() {
         if (! this.actionToolbar) {
-            this.actionToolbar = new Ext.Toolbar({
-                items: this.contentPanel.actionToolbarActions
-            });
+            this.actionToolbar = this.contentPanel.getActionToolbar();
         }
         
         Tine.Tinebase.MainScreen.setActiveToolbar(this.actionToolbar, true);
