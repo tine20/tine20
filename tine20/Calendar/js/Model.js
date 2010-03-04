@@ -164,6 +164,15 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     return data;
 };
 
+Tine.Calendar.Model.Event.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('Calendar');
+    
+    return [
+        {label: _('Quick search'), field: 'query', operators: ['contains']},
+        {filtertype: 'tinebase.tag', app: app}
+    ];
+};
+
 /**
  * @namespace Tine.Calendar.Model
  * @class Tine.Calendar.Model.EventJsonBackend
