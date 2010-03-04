@@ -28,6 +28,11 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      */
     formConfig: null,
     /**
+     * @cfg {Boolean} lazyInit <tt>true</tt> to not initialize the list for this combo until the field is focused
+     * (defaults to <tt>true</tt>)
+     */
+    lazyInit : true,
+    /**
      * @cfg {String} triggerClass An additional CSS class used to style the trigger button.  The trigger will always
      * get the class <tt>'x-form-trigger'</tt> and <tt>triggerClass</tt> will be <b>appended</b> if specified
      * (defaults to <tt>'x-form-arrow-trigger'</tt> which displays a downward arrow icon).
@@ -69,6 +74,12 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      * layer (defaults to the width of the ComboBox field).  See also <tt>{@link #minLayerHeight}
      */
     
+    /**
+     * @property currentValue
+     * @type mixed
+     */
+    currentValue: null,
+    
     editable: false,
     
     /**
@@ -103,7 +114,9 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
             return;
         }
         
-        this.startValue = this.getValue();
+        //var v = this.getValue();
+        //this.startValue = this.getValue();
+        this.setFormValue(this.currentValue);
         this.layer.alignTo.apply(this.layer, [this.el].concat(this.layerAlign));
         this.layer.show();
         if(Ext.isGecko2){
@@ -115,6 +128,16 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
             mousedown: this.collapseIf
         });
         this.fireEvent('expand', this);
+    },
+    
+    /**
+     * get values from form
+     * 
+     * @return {mixed}
+     */
+    getFormValue: function() {
+        var formValues = this.getInnerForm().getForm().getValues();
+        return formValues;
     },
     
     /**
@@ -168,7 +191,7 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      * @return {String} value The selected value
      */
     getValue: function() {
-        
+        return this.currentValue;
     },
     
     initComponent: function() {
@@ -182,6 +205,7 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      * @private
      */
     initLayer: function() {
+        console.log('initlayer');
         if(!this.layer){
             var cls = 'ux-layercombo-layer',
                 layerParent = Ext.getDom(this.getLayerParent() || Ext.getBody()),
@@ -236,7 +260,7 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      * cancel handler
      */
     onCancel: function() {
-        this.setValue(this.startValue);
+        this.setValue(this.currentValue);
         this.collapse();
     },
     
@@ -263,7 +287,7 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      */
     onOk: function() {
         this.collapse();
-        var v = this.getValue();
+        var v = this.getFormValue();
         this.setValue(v);
         
         this.fireEvent('change', this, v, this.startValue);
@@ -346,7 +370,14 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      * @return {Ext.form.Field} this
      */
     setValue: function(value) {
+        this.currentValue = value;
         return this;
-    }
+    },
     
+    /**
+     * sets values to innerForm
+     */
+    setFormValue: function(value) {
+        this.getInnerForm().getForm().setValues(value);
+    }
 });
