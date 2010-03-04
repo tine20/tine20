@@ -419,7 +419,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     scrollToNow: function() {
-        this.scroller.dom.scrollTop = this.getTimeOffset(new Date()) /2;
+        this.scroller.dom.scrollTop = this.getTimeOffset(new Date());
     },
     
     /**
