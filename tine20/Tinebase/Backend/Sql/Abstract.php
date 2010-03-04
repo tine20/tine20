@@ -402,7 +402,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             Tinebase_CustomField::getInstance()->saveRecordCustomFields($_record);
         }
         
-        return $this->get($_record->$identifier);
+        $result = $this->get($_record->$identifier);
+        $this->_inspectAfterCreate($result);
+        
+        return $result;
     }
     
     /**
@@ -436,7 +439,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $single = FALSE;
         }
         
-        // use first record to determine fields (sorted by fieldname)
+        // use first record to determine fields (sorted by fieldname) and quote identifiers
         $first = $records->getFirstRecord();
         $identifier = $first->getIdProperty();
         $firstRecordArray = array_intersect_key($this->_recordToRawData($first), $this->_schema);
@@ -445,6 +448,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         ksort($firstRecordArray);
         $fields = array_keys($firstRecordArray);
+        foreach ($fields as &$field) {
+            $field = $this->_db->quoteIdentifier($field);
+        }
         $placeholders = array_fill(0, count($fields), '?'); 
         
         $stmt = $this->_db->prepare('INSERT INTO ' . SQL_TABLE_PREFIX . $this->_tableName 
@@ -455,18 +461,23 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $ids = array();
         foreach ($records as $record) {
             $recordArray = array_intersect_key($this->_recordToRawData($record), $this->_schema);
-            if (! array_key_exists($first->getIdProperty(), $firstRecordArray)) {
+            if (! array_key_exists($first->getIdProperty(), $recordArray) || empty($recordArray[$identifier])) {
                 // add identifier
                 $recordArray[$identifier] = $record->generateUID();
+                $record->setId($recordArray[$identifier]);
             }
             
+            // sort data and execute!
+            ksort($recordArray);
             if (array_keys($recordArray) === array_keys($firstRecordArray)) {
-                // sort data and execute!
-                ksort($recordArray);
                 $stmt->execute(array_values($recordArray));
                 $ids[] = $recordArray[$identifier];
+                
+                $this->_inspectAfterCreate($record);
             } else {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Fields mismatch.');
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(array_keys($firstRecordArray), TRUE));
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(array_keys($recordArray), TRUE));
             }
         }
         
@@ -854,5 +865,15 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 $_recordArray[$key] = new Zend_Db_Expr((string) $value);
             }
         }
+    }
+    
+    /**
+     * do something after creation of record
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @return void
+     */
+    protected function _inspectAfterCreate(Tinebase_Record_Abstract $_record)
+    {
     }
 }
