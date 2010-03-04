@@ -293,18 +293,12 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         });
         
         this.action_addInNewWindow = new Ext.Action({
-            //xtype:'splitbutton',
-            //menu: [{text: 'Menu Item 1'}],
             requiredGrant: 'addGrant',
             actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(_('Add {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow,
             iconCls: (this.newRecordIcon !== null) ? this.newRecordIcon : this.app.appName + 'IconCls',
-            scope: this,
-            scale: 'medium',
-            rowspan: 2,
-            iconAlign: 'top',
-            arrowAlign:'right'
+            scope: this
         });
         
         // note: unprecise plural form here, but this is hard to change
@@ -500,7 +494,12 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
                     xtype: 'buttongroup',
                     columns: 2,
                     items: [
-                        this.action_addInNewWindow,
+                        Ext.apply(new Ext.Button(this.action_addInNewWindow), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top',
+                            arrowAlign:'right'
+                        }),
                         this.action_editInNewWindow,
                         this.action_deleteRecord
                     ]
