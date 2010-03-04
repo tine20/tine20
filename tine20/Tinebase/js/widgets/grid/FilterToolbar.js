@@ -633,7 +633,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     subFilters[j].field = filterData.field + ':' + subFilters[j].field;
                     filters.splice(i+1, 0, subFilters[j]);
                 }
-            } else if (filterData.value.cfId) {
+            } else if (filterData.value && filterData.value.cfId) {
                 // custom fields handling
                 filters[i].field = filterData.field + ':' + filterData.value.cfId;
                 filters[i].value = filterData.value.value;
