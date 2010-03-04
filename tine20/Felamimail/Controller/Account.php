@@ -183,9 +183,21 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $result->getId();
         
         // update account capabilities
-        $result = $this->updateCapabilities($result);
+        return $this->updateCapabilities($result);
+    }
+    
+    /**
+     * update one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     */
+    public function update(Tinebase_Record_Interface $_record)
+    {
+        $result = parent::update($_record);
         
-        return $result;
+        // update account capabilities
+        return $this->updateCapabilities($result);
     }
     
     /**
@@ -469,16 +481,17 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             }
         }
         
+        // check if server has 'CHILDREN' support
+        $_account->has_children_support = (in_array('CHILDREN', $capabilities['capabilities'])) ? 1 : 0;
+        
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating capabilities for account: ' . $_account->name);
         
-        $this->_setRightChecks(FALSE);
         if ($_account->delimiter) {
             $_account->delimiter = substr($_account->delimiter, 0, 1);
         }
-        $result = $this->update($_account);
-        $this->_setRightChecks(TRUE);
         
-        return $result;
+        $result = $this->_backend->update($_account);
+        return $this->get($result->getId());
     }
     
     /******************************** protected funcs *********************************/
