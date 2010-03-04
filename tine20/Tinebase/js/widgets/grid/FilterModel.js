@@ -281,7 +281,16 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                     width: fieldWidth,
                     id: 'tw-ftb-frow-valuefield-' + filter.id,
                     value: filter.data.value ? filter.data.value : this.defaultValue,
-                    renderTo: el
+                    renderTo: el,
+                    listeners: {
+                        'specialkey': function(field, e) {
+                             if(e.getKey() == e.ENTER){
+                                 this.onFiltertrigger();
+                             }
+                        },
+                        'select': this.onFiltertrigger,
+                        scope: this
+                    }
                 });
                 break;
             case 'user':
@@ -321,7 +330,16 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                     store: [
                         [0, Locale.getTranslationData('Question', 'no').replace(/:.*/, '')], 
                         [1, Locale.getTranslationData('Question', 'yes').replace(/:.*/, '')]
-                    ]
+                    ],
+                    listeners: {
+                        'specialkey': function(field, e) {
+                             if(e.getKey() == e.ENTER){
+                                 this.onFiltertrigger();
+                             }
+                        },
+                        'select': this.onFiltertrigger,
+                        scope: this
+                    }
                 });
                 break;
             case 'combo':
@@ -443,7 +461,16 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             forceSelection: true,
             typeAhead: true,
             triggerAction: 'all',
-            store: comboOps
+            store: comboOps,
+            listeners: {
+                'specialkey': function(field, e) {
+                     if(e.getKey() == e.ENTER){
+                         this.onFiltertrigger();
+                     }
+                },
+                'select': this.onFiltertrigger,
+                scope: this
+            }
         });
 
         var pickerValue = '';
@@ -460,7 +487,16 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             filter: filter,
             width: 200,
             value: pickerValue,
-            renderTo: el
+            renderTo: el,
+            listeners: {
+                'specialkey': function(field, e) {
+                     if(e.getKey() == e.ENTER){
+                         this.onFiltertrigger();
+                     }
+                },
+                'select': this.onFiltertrigger,
+                scope: this
+            }
         });
         
         filter.numberfield = new Ext.form.NumberField({
@@ -473,7 +509,15 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             maxValue: 52,
             maxLength: 2,   
             allowDecimals: false,
-            allowNegative: false
+            allowNegative: false,
+            listeners: {
+                scope: this,
+                specialkey: function(field, e){
+                    if(e.getKey() == e.ENTER){
+                        this.onFiltertrigger();
+                    }
+                }
+            }
         });
         
         // upps, how to get a var i only know the name of???
