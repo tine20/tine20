@@ -40,6 +40,12 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.grid');
  */
 Tine.widgets.grid.FilterToolbarQuickFilterPlugin = function(config) {
     config = config || {};
+    
+    this.criteriaIgnores = [
+        {field: 'container_id', operator: 'specialNode', value:'all'},
+        {field: 'query',        operator: 'contains',    value: ''}
+    ];
+        
     Ext.apply(this, config);
 };
 
@@ -73,6 +79,11 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
     quickFilterRow: null,
     
     /**
+     * @cfg {Array} criterias to ignore
+     */
+    criteriaIgnores: null,
+    
+    /**
      * bind value field of this.quickFilterRow to sync process
      */
     bind: function() {
@@ -100,6 +111,10 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         }
         
         return this.quickFilterGroup;
+    },
+    
+    getQuickFilterPlugin: function() {
+        return this;
     },
     
     /**
@@ -130,6 +145,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         
         //this.ftb.onFilterRowsChange = this.ftb.onFilterRowsChange.createInterceptor(this.onFilterRowsChange, this);
         this.ftb.getQuickFilterField = this.getQuickFilterField.createDelegate(this);
+        this.ftb.getQuickFilterPlugin = this.getQuickFilterPlugin.createDelegate(this);
         
         this.quickFilter = new Ext.ux.SearchField({
             width: 300,
@@ -282,12 +298,18 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             criterias = [];
         
         Ext.each(filters, function(f) {
-            if(
-                (f.field === 'container_id' && f.operator === 'specialNode' && f.value === 'all') ||
-                (f.field === 'query' && f.operator === 'contains' && f.value === '')
-              ) {
-                // don't judge them as criterias
-                return;
+            for (var i=0, criteria, ignore; i<this.criteriaIgnores.length; i++) {
+                criteria = this.criteriaIgnores[i];
+                ignore = true;
+                
+                for (var p in criteria) {
+                    ignore &= f[p] === criteria[p];
+                }
+                
+                if (ignore) {
+                    // don't judge them as criterias
+                    return;
+                }
             }
             
             if (this.ftb.filterModelMap[f.field]) {
