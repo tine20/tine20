@@ -45,23 +45,19 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     );
 
     /******************* overwritten functions *********************/
-    
+
     /**
-     * Creates new entry
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
+     * do something after creation of record
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @return void
      */
-    public function create(Tinebase_Record_Interface $_record) 
+    protected function _inspectAfterCreate(Tinebase_Record_Abstract $_record)
     {
-        $record = parent::create($_record);
-        
         // update to/cc/bcc/flags
         foreach ($this->_foreignTables as $field => $tablename) {
-            $record->{$field} = $this->createForeignValues($_record, $field, $tablename);
+            $_record->{$field} = $this->createForeignValues($_record, $field, $tablename);
         }
-        
-        return $record;
     }
     
     /**
