@@ -218,6 +218,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             this.action_addAccount
         ]);
         
+        /*
         this.actions = [
             this.action_write,
             this.action_reply,
@@ -236,7 +237,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             split: false,
             items: this.actions
         });
-        
+        */
         this.contextMenu = new Ext.menu.Menu({
             items: [
                 this.action_reply,
@@ -284,6 +285,70 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             grid: this,
             i18n: this.app.i18n
         });
+    },
+    
+    getActionToolbar: function() {
+        /*
+        this.actions = [
+            this.action_write,
+            this.action_reply,
+            this.action_replyAll,
+            this.action_forward,
+            this.action_flag,
+            this.action_markUnread,
+            this.action_deleteRecord,
+            '-',
+            this.action_addAccount,
+            '->',
+            this.filterToolbar.getQuickFilterField()
+        ];
+        */
+        
+        if (! this.actionToolbar) {
+            this.actionToolbar = new Ext.Toolbar({
+                defaults: {height: 55},
+                items: [{
+                    xtype: 'buttongroup',
+                    columns: 7,
+                    items: [
+                        Ext.apply(new Ext.Button(this.action_write), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        }),
+                        Ext.apply(new Ext.Button(this.action_reply), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        }),
+                        Ext.apply(new Ext.Button(this.action_replyAll), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        }),
+                        Ext.apply(new Ext.Button(this.action_forward), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        }),
+                        Ext.apply(new Ext.Button(this.action_deleteRecord), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        }),
+                        this.action_flag,
+                        this.action_addAccount,
+                        this.action_markUnread
+                    ]
+                }, this.getActionToolbarItems()]
+            });
+            
+            if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
+                this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
+            }
+        }
+        
+        return this.actionToolbar;
     },
     
     /**
