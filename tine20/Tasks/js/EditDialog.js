@@ -128,7 +128,7 @@ Ext.namespace('Tine.Tasks');
         var status = Tine.Tasks.status.getStatus(this.getForm().findField('status_id').getValue());
         var completed = this.getForm().findField('completed');
         
-        if (status.get('status_is_open') == 1) {
+        if (status.get('status_is_open')) {
             completed.setValue(null);
             completed.setDisabled(true);
         } else {
