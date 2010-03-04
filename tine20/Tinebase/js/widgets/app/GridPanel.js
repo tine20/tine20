@@ -630,7 +630,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         return new Tine.widgets.grid.FilterToolbar({
             filterModels: this.recordClass.getFilterModel().concat(this.getCustomfieldFilters()),
             defaultFilter: 'query',
-            filters: [],
+            filters: this.defaultFilters || [],
             plugins: [
                 this.quickSearchFilterToolbarPlugin
             ]
