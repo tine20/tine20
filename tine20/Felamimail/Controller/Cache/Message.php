@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        decide which addMessages fn to use
  * @todo        add body of messages of last week (?) to cache?
  */
 
@@ -134,6 +135,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             $imap->selectFolder($folder['globalname']);
             $allUids = $imap->getUid($folder->imap_totalcount, 1);
             $missingUids = $this->_getMissingUids($allUids, $folder->cache_job_lowestuid, $folder->cache_uidnext);
+            $missingUids = $this->_removeDuplicates($missingUids, $folder);
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' Queried message uids from ' . $folder->cache_job_lowestuid . ' to ' . $folder->cache_uidnext . ' from imap server.'
@@ -155,6 +157,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get summary from ' . $firstUid . ' to ' . $lastUid);
                 $messages = $imap->getSummary($firstUid, $lastUid);
                 $this->_addMessages($messages, $folder);
+                //$this->_addMessagesPrepared($messages, $folder);
                 
                 $folder->cache_job_lowestuid = $lastUid;
                 $timeLeft = ($folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
@@ -362,14 +365,15 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      * @param Felamimail_Model_Folder $_folder
      * @return void
      * 
+     * @todo use this or _addMessagesPrepared?
      * @todo get replyTo & inReplyTo?
-     * @todo think about speeding this up with prepared statements
      */
     protected function _addMessages($_messages, $_folder)
     {
         // set fields with try / catch blocks
         $exceptionFields = array('subject', 'to', 'cc', 'bcc', 'content_type', 'from', 'sent');
         
+        $count = 0;
         foreach ($_messages as $uid => $value) {
             $message = $value['message'];
             $subject = '';
@@ -433,7 +437,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
                 }
                 
-                $_folder->cache_totalcount++;
+                $count++;
                 
             } catch (Zend_Mail_Exception $zme) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
@@ -455,6 +459,130 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             // increase job actions count (with duplicates)
             $_folder->cache_job_actions_done++;
         }
+        
+        $_folder->cache_totalcount += $count;
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Added ' . $count . ' messages to DB.');
+    }
+
+    /**
+     * add messages to cache and increase folder counts
+     *
+     * @param array $_messages
+     * @param Felamimail_Model_Folder $_folder
+     * @return void
+     * 
+     * @todo use this or _addMessages?
+     * @todo get replyTo & inReplyTo?
+     */
+    protected function _addMessagesPrepared($_messages, $_folder)
+    {
+        // set fields with try / catch blocks
+        $exceptionFields = array('subject', 'to', 'cc', 'bcc', 'content_type', 'from', 'sent');
+        
+        $messagesToAdd = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
+        foreach ($_messages as $uid => $value) {
+            $message = $value['message'];
+            $subject = '';
+            
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($message, true));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' caching message ' . $message->subject);
+            
+            try {
+                $cachedMessage = new Felamimail_Model_Message(array(
+                    'messageuid'    => $uid,
+                    'folder_id'     => $_folder->getId(),
+                    'timestamp'     => Zend_Date::now(),
+                    'received'      => $this->_convertDate($value['received'], Felamimail_Model_Message::DATE_FORMAT_RECEIVED),
+                    'size'          => $value['size'],
+                    'flags'         => $message->getFlags(),
+                ));
+                
+                // try to get optional fields
+                foreach ($exceptionFields as $field) {
+                    try {
+                        switch ($field) {
+                            case 'subject':
+                                $cachedMessage->subject = Felamimail_Message::convertText($message->subject);
+                                $subject = $cachedMessage->subject;
+                                break;
+                            case 'content_type':
+                                $cachedMessage->content_type = $message->contentType;
+                                break;
+                            case 'from':
+                                $cachedMessage->from = Felamimail_Message::convertText($message->from, TRUE, 256);
+                                // unquote meta chars
+                                $cachedMessage->from = preg_replace("/\\\\([\[\]\*\?\+\.\^\$\(\)]+)/", "$1", $cachedMessage->from);
+                                break;
+                            case 'sent':
+                                $cachedMessage->sent = $this->_convertDate($message->date);
+                                break;
+                            default:
+                                if (in_array($field, array('to', 'cc', 'bcc'))) {
+                                    // need to check if field is set in message first
+                                    $cachedMessage->{$field} = (isset($message->{$field})) ? $this->_convertAddresses($message->{$field}) : array();
+                                }
+                        }
+                    } catch (Zend_Mail_Exception $zme) {
+                        // no 'subject', 'to', 'cc', 'bcc', from, sent or content_type available
+                        if (in_array($field, array('to', 'cc', 'bcc'))) {
+                            $cachedMessage->{$field} = array();
+                        } else if ($field == 'sent') {
+                            $cachedMessage->{$field} = new Zend_Date(0);
+                        } else {
+                            $cachedMessage->{$field} = '';
+                        }
+                    }
+                }
+                
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cachedMessage->toArray(), true));
+                //$createdMessage = $this->_backend->create($cachedMessage);
+                
+                // count unseen and Zend_Mail_Storage::FLAG_RECENT 
+                if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags)) {
+                    $_folder->cache_recentcount++;
+                    // add flag to flags array
+                    $cachedMessage->flags += array(Zend_Mail_Storage::FLAG_RECENT => Zend_Mail_Storage::FLAG_RECENT);
+                    //$this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
+                }
+                
+                $messagesToAdd->addRecord($cachedMessage);
+                
+            } catch (Zend_Mail_Exception $zme) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
+                    ' Could not parse message ' . $uid . ' | ' . $subject .
+                    '. Error: ' . $zme->getMessage()
+                );
+            } catch (Zend_Date_Exception $zde) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
+                    ' Could not parse message ' . $uid . ' | ' . $subject .
+                    '. Error: ' . $zde->getMessage()
+                );
+            }
+            
+            // increase job actions count (with duplicates)
+            $_folder->cache_job_actions_done++;
+        }
+        
+        $result = $this->_backend->createPrepared($messagesToAdd);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Added ' . count($result) . ' messages to DB (createPrepared).');
+        $_folder->cache_job_actions_done    += count($result);
+        $_folder->cache_totalcount          += count($result);
+    }
+    
+    /**
+     * check duplicates first and remove them before adding messages to cache
+     * 
+     * @param array $_imapUids
+     * @param Felamimail_Model_Folder $_folder
+     * @return array with uncached uids
+     */
+    protected function _removeDuplicates($_imapUids, $_folder)
+    {
+        $cacheUids = $this->_backend->getMessageuidsByFolderId($_folder->getId());
+        $uncachedUids = array_diff($_imapUids, $cacheUids);
+        
+        return $uncachedUids;
     }
     
     /**
