@@ -251,8 +251,8 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * called when the (external) quick filter is cleared
      */
     onQuickFilterClear: function() {
+        this.ftb.deleteFilter(this.quickFilterRow);
         this.quickFilter.reset();
-        this.onQuickFilterTrigger();
     },
     
     /**
