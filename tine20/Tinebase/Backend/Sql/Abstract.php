@@ -408,8 +408,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * Creates new entry/entries with prepared statement
      *
-     * @param   Tinebase_Record_Interface|Tinebase_Record_RecordSet $_record
-     * @return  Tinebase_Record_RecordSet
+     * @param   Tinebase_Record_Abstract|Tinebase_Record_RecordSet $_record
+     * @return  Tinebase_Record_Abstract|Tinebase_Record_RecordSet
      * @throws  Tinebase_Exception_InvalidArgument
      * 
      * @todo    has to be tested
@@ -426,12 +426,14 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if ($_records instanceof Tinebase_Record_Abstract) {
             $records = new Tinebase_Record_RecordSet($this->_modelName);
             $records->addRecord($_records);
+            $single = TRUE;
         } else if (! $_records instanceof Tinebase_Record_RecordSet) {
             throw new Tinebase_Exception_InvalidArgument('Recordset or single Record expected');
         } else if (count($_records) == 0) {
             return $_records;
         } else {
             $records = $_records;
+            $single = FALSE;
         }
         
         // use first record to determine fields (sorted by fieldname)
@@ -468,9 +470,13 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             }
         }
         
-        // get and return inserted records
-        $createdRecords = $this->getMultiple($ids);
-        return $createdRecords;
+        // get and return inserted record(s)
+        if ($single) {
+            $result = $this->get($ids[0]);
+        } else {
+            $result = $this->getMultiple($ids);
+        }
+        return $result;
     }
     
     /**
