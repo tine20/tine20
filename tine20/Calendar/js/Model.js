@@ -428,6 +428,25 @@ Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
     return attendeeStore;
 };
 
+Tine.Calendar.Model.Attender.getAttendeeStatusStore = function() {
+    if (! Tine.Calendar.Model.Attender.attendeeStatusStore) {
+        var app = Tine.Tinebase.appMgr.get('Calendar');
+        Tine.Calendar.Model.Attender.attendeeStatusStore = new Ext.data.ArrayStore({
+            storeId: 'calendar.attener.status',
+            idIndex: 0,  
+            fields: ['id', 'status_name'],
+            data: [
+                ['NEEDS-ACTION', app.i18n._('No response')],
+                ['ACCEPTED',     app.i18n._('Accepted')   ],
+                ['DECLINED',     app.i18n._('Declined')   ],
+                ['TENTATIVE',    app.i18n._('Tentative')  ]
+            ]
+        });
+    }
+    
+    return Tine.Calendar.Model.Attender.attendeeStatusStore;
+}
+
 /**
  * @namespace Tine.Calendar.Model
  * @class Tine.Calendar.Model.Resource

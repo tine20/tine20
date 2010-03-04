@@ -168,12 +168,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 blurOnSelect  : true,
                 expandOnFocus : true,
                 mode          : 'local',
-                store         : [
-                    ['NEEDS-ACTION', this.app.i18n._('No response')],
-                    ['ACCEPTED',     this.app.i18n._('Accepted')   ],
-                    ['DECLINED',     this.app.i18n._('Declined')   ],
-                    ['TENTATIVE',    this.app.i18n._('Tentative')  ]
-                ]
+                displayField  : 'status_name',
+                valueField    : 'id',
+                store         : Tine.Calendar.Model.Attender.getAttendeeStatusStore()
             })
         }];
     },
