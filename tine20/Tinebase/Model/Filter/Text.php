@@ -30,7 +30,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         3 => 'endswith',
         4 => 'not',
         5 => 'in',
-        //6 => 'notin',
+        6 => 'notin',
         7 => 'isnull',
         8 => 'notnull',
     // add 'group by _fieldname_' to select statement and remove empty values / filter value is not used when this operator is set
@@ -47,7 +47,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         'endswith'   => array('sqlop' => ' LIKE ?',      'wildcards' => '%?' ),
         'not'        => array('sqlop' => ' NOT LIKE ?',  'wildcards' => '?'  ),
         'in'         => array('sqlop' => ' IN (?)',      'wildcards' => '?'  ),
-        //'notin'      => array('sqlop' => ' NOT IN (?)',  'wildcards' => '?'  ),
+        'notin'      => array('sqlop' => ' NOT IN (?)',  'wildcards' => '?'  ),
         'isnull'     => array('sqlop' => ' IS NULL',     'wildcards' => '?'  ),
         'notnull'    => array('sqlop' => ' IS NOT NULL', 'wildcards' => '?'  ),
         'group'      => array('sqlop' => " NOT LIKE  ''",'wildcards' => '?'  ),
@@ -72,12 +72,12 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
             $_select->group($this->_field);
         }
 
-        if ($this->_operator == 'in') {
-            $value = is_array($this->_value) ? $this->_value : explode(' ', $this->_value);
+        if (in_array($this->_operator, array('in', 'notin')) && ! is_array($value)) {
+            $value = explode(' ', $value);
         }
             
         if (is_array($value) && empty($value)) {
-             $_select->where('1=1/* empty query */');
+             $_select->where('1=' . (substr($this->_operator, 0, 3) == 'not' ? '1/* empty query */' : '0/* impossible query */'));
              return;
         }
         
@@ -89,24 +89,5 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
          
         // finally append query to select object
         $_select->where($where);
-    }
-    
-    /**
-     * replace wildcards
-     * 
-     * @param string $_value
-     * @return string
-     */
-    protected function _replaceWildcards($_value)
-    {
-        // replace wildcards from user
-        $value = str_replace(array('*', '_'), array('%', '\_'), $_value);
-         
-        // add wildcard to value according to operator
-        if ($this->_operator != 'in' && $this->_operator != 'notin') {
-            $value = str_replace('?', $value, $this->_opSqlMap[$this->_operator]['wildcards']);
-        }
-        
-        return $value;
     }
 }
