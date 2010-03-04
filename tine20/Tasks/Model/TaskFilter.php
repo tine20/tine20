@@ -33,7 +33,7 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id'),
         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description'))),
         'organizer'            => array('filter' => 'Tinebase_Model_Filter_User'),
-        'status'               => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'status_id'            => array('filter' => 'Tinebase_Model_Filter_Int'),
         'due'                  => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'description'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'summary'              => array('filter' => 'Tinebase_Model_Filter_Text'),
@@ -42,7 +42,7 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Tasks')),
-        'showClosed'           => array('custom' => true),
+        //'showClosed'           => array('custom' => true),
     );
     
     /**
@@ -53,7 +53,7 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
      * @return void
      * 
      * @todo    add status & organizer filters
-     */
+     *
     public function appendFilterSql($_select, $_backend)
     {
         $db = Tinebase_Core::getDb();
@@ -73,5 +73,5 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
             $_select->where($where);
         }
     }
-
+    */
 }
