@@ -55,6 +55,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var state = Ext.state.Manager.get(this.stateId, {});
         Ext.apply(this, state);
         
+        this.filterToolbar = this.getFilterToolbar();
+        //this.filterToolbar.onFilterChange = this.refresh.createDelegate(this, [true]);
+        
         this.initActions();
         this.initLayout();
         
@@ -159,6 +162,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             this.showMonthView
         ];
         
+        /*
         this.actionToolbarActions = [
             this.action_addInNewWindow,
             this.action_editInNewWindow,
@@ -166,6 +170,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             '-',
             this.filter_showDeclined
         ];
+        */
         
         this.recordActions = [
             this.action_editInNewWindow,
@@ -216,12 +221,18 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         // add filter toolbar
         if (this.filterToolbar) {
-            this.items.push(this.filterToolbar);
-            this.filterToolbar.on('bodyresize', function(ftb, w, h) {
-                if (this.filterToolbar.rendered && this.layout.rendered) {
-                    this.layout.layout();
+            this.items.push({
+                region: 'north',
+                border: false,
+                items: this.filterToolbar,
+                listeners: {
+                    scope: this,
+                    afterlayout: function(ct) {
+                        ct.setHeight(this.filterToolbar.getHeight());
+                        ct.ownerCt.layout.layout();
+                    }
                 }
-            }, this);
+            });
         }
     },
     
@@ -260,6 +271,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         this.fireEvent('changeview', this, view);
     },
+    
+    getActionToolbar: Tine.Tinebase.widgets.app.GridPanel.prototype.getActionToolbar,
+    
+    getActionToolbarItems: Tine.Tinebase.widgets.app.GridPanel.prototype.getActionToolbarItems,
+    
+    getCustomfieldFilters: Tine.Tinebase.widgets.app.GridPanel.prototype.getCustomfieldFilters,
+    
+    getFilterToolbar: Tine.Tinebase.widgets.app.GridPanel.prototype.getFilterToolbar,
     
     onContextMenu: function(e) {
         e.stopEvent();
@@ -527,7 +546,22 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var calendarSelectionPlugin = this.app.getMainScreen().getTreePanel().getCalSelector().getFilterPlugin();
         calendarSelectionPlugin.onBeforeLoad.call(calendarSelectionPlugin, store, options);
         
-        this.filter_showDeclined.onBeforeLoad.call(this.filter_showDeclined, store, options);
+        this.filterToolbar.onBeforeLoad.call(this.filterToolbar, store, options);
+        //this.filter_showDeclined.onBeforeLoad.call(this.filter_showDeclined, store, options);
+    },
+    
+    /**
+     * called when store loaded data
+     */
+    onStoreLoad: function(store, options) {
+        // check if store is current store
+        if (store !== this.getCalendarPanel(this.activeView).getStore()) {
+            console.log('not active anymore');
+            return;
+        }
+        
+        // update filtertoolbar
+        this.filterToolbar.setValue(store.proxy.jsonReader.jsonData.filter);
     },
     
     refresh: function(refresh) {
@@ -572,7 +606,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 reader: new Ext.data.JsonReader({}), //Tine.Calendar.backend.getReader(),
                 listeners: {
                     scope: this,
-                    'beforeload': this.onStoreBeforeload
+                    'beforeload': this.onStoreBeforeload,
+                    'load': this.onStoreLoad
                 }
             });
             
