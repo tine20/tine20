@@ -603,7 +603,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         $cacheUids = $this->_backend->getMessageuidsByFolderId($_folder->getId());
         $toDeleteUids = array_diff($cacheUids, $_imapUids);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($toDeleteUids, TRUE));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($toDeleteUids, TRUE));
         
         if (! empty($toDeleteUids)) {
             $this->_backend->deleteByProperty($toDeleteUids, 'messageuid', 'in');
@@ -698,7 +698,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
     {
         $nextUids = array_splice($uids, 0, $this->_importCountPerStep);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' next uids: ' . print_r($nextUids, TRUE));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' next uids: ' . print_r($nextUids, TRUE));
         
         $first = array_shift($nextUids);
         $last = (empty($nextUids)) ? $first : array_pop($nextUids);
