@@ -83,23 +83,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     },
     
     /**
-     * returns filter toolbar
-     * @private
-     */
-    getFilterToolbar: function() {
-        this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
-        
-        return new Tine.widgets.grid.FilterToolbar({
-            filterModels: Tine.Addressbook.Model.Contact.getFilterModel().concat(this.getCustomfieldFilters()),
-            defaultFilter: 'query',
-            filters: [],
-            plugins: [
-                this.quickSearchFilterToolbarPlugin
-            ]
-        });
-    },    
-    
-    /**
      * returns column model
      * 
      * @return Ext.grid.ColumnModel
