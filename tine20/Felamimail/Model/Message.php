@@ -142,7 +142,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
 
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recipients, true));
                 
-                $this->{$field} = array_unique($recipients);
+                $recordData[$field] = array_unique($recipients);
             }
         }
     }
