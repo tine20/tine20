@@ -585,6 +585,14 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 line[formfield] = filter.formFields[formfield].getValue();
             }
             
+            // fill data with filter record data in case form field not exist (not rendered)
+            filter.fields.each(function(field)  {
+                var name = field.name;
+                if (! line.hasOwnProperty(name)) {
+                    line[name] = filter.get(name);
+                }
+            }, this);
+            
             if (line.field && line.field.match(/:/)) {
                 var parts = line.field.split(':');
                 
