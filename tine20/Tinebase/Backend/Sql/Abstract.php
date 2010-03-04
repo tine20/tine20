@@ -410,12 +410,14 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     
     /**
      * Creates new entry/entries with prepared statement
+     *  - perhaps this could be faster than creating new entries with create() but first tests could not prove that
+     *  - this has to be further tested and improved or removed if we don't need it 
      *
      * @param   Tinebase_Record_Abstract|Tinebase_Record_RecordSet $_record
      * @return  Tinebase_Record_Abstract|Tinebase_Record_RecordSet
      * @throws  Tinebase_Exception_InvalidArgument
      * 
-     * @todo    has to be tested
+     * @todo    check if we need this
      * @todo    support custom fields
      */
     public function createPrepared($_records) 
