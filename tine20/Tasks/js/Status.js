@@ -59,7 +59,7 @@ Tine.Tasks.status.StatusFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
                  this.onFiltertrigger();
              }
         }, this);
-        //value.on('select', this.onFiltertrigger, this);
+        value.on('change', this.onFiltertrigger, this);
         
         return value;
     }
