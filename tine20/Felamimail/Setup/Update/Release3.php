@@ -199,4 +199,15 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('felamimail_folder', '5');
         $this->setApplicationVersion('Felamimail', '3.4');
     }
+    
+    /**
+     * update function (-> 3.5)
+     * - remove useSystemAccount preference
+     */    
+    public function update_4()
+    {
+        $this->_db->query('DELETE FROM ' . SQL_TABLE_PREFIX . "preferences where name = 'useSystemAccount'");
+        
+        $this->setApplicationVersion('Felamimail', '3.5');
+    }
 }

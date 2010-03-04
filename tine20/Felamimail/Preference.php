@@ -25,12 +25,6 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     /**************************** application preferences/settings *****************/
     
     /**
-     * use tine user credentials for imap connection
-     *
-     */
-    const USESYSTEMACCOUNT = 'useSystemAccount';
-
-    /**
      * default email account to use
      *
      */
@@ -72,7 +66,6 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     public function getAllApplicationPreferences()
     {
         $allPrefs = array(
-            self::USESYSTEMACCOUNT,
             self::DEFAULTACCOUNT,
             self::UPDATEINTERVAL,
             self::USEINADB,
@@ -92,10 +85,6 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
         $translate = Tinebase_Translation::getTranslation($this->_application);
 
         $prefDescriptions = array(
-            self::USESYSTEMACCOUNT  => array(
-                'label'         => $translate->_('Use System Account'),
-                'description'   => $translate->_('Use user credentials and predefined settings for email account.'),
-            ),
             self::DEFAULTACCOUNT  => array(
                 'label'         => $translate->_('Default Email Account'),
                 'description'   => $translate->_('The default email account to use when sending mails.'),
@@ -130,13 +119,6 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
         switch($_preferenceName) {
             case self::USEINADB:
                 $preference->value      = 1;
-                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
-                    <options>
-                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
-                    </options>';
-                break;
-            case self::USESYSTEMACCOUNT:
-                $preference->value      = 0;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
