@@ -62,18 +62,14 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     initComponent: function() {
         this.recordProxy = Tine.Tasks.JsonBackend;
         
-        this.actionToolbarItems = this.getToolbarItems();
+        //this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.cm = this.getColumnModel();
         this.initFilterToolbar();
         
         this.plugins = this.plugins || [];
-        this.plugins.push(this.action_showClosedToggle, this.filterToolbar);
+        this.plugins.push(/*this.action_showClosedToggle,*/ this.filterToolbar);
         
         Tine.Tasks.GridPanel.superclass.initComponent.call(this);
-        
-        //this.grid.on('afteredit', function() {
-            //alert('hier');
-        //});
         
         // the editGrids onEditComplete calls the focusCell after a edit operation
         // this leads to a 'flicker' effect we dont want!
@@ -98,7 +94,9 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 {filtertype: 'tinebase.tag', app: this.app}
             ],
             defaultFilter: 'query',
-            filters: [],
+            filters: [
+                {field: 'status_id', operator: 'notin', value: Tine.Tasks.status.getClosedStatus()}
+            ],
             plugins: [
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
             ]
