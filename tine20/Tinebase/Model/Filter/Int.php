@@ -31,6 +31,7 @@ class Tinebase_Model_Filter_Int extends Tinebase_Model_Filter_Abstract
         4 => 'less',
         5 => 'not',
         6 => 'in',
+        7 => 'notin',
     );
     
     /**
@@ -44,6 +45,7 @@ class Tinebase_Model_Filter_Int extends Tinebase_Model_Filter_Abstract
         'less'       => array('sqlop' => ' < ?',        'wildcards' => '?'  ),
         'not'        => array('sqlop' => ' NOT LIKE ?', 'wildcards' => '?'  ),
         'in'         => array('sqlop' => ' IN (?)',     'wildcards' => '?'  ),
+        'notin'      => array('sqlop' => ' NOT IN (?)', 'wildcards' => '?'  ),
     );
     
     /**
@@ -54,31 +56,20 @@ class Tinebase_Model_Filter_Int extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $action = $this->_opSqlMap[$this->_operator];
-         
-        // quote field identifier
+        // quote field identifier, set action and replace wildcards
         $field = $this->_getQuotedFieldName($_backend);
-         
-        // only string replace if value is no array 
-        if ($this->_operator !== 'in') {
-            // replace wildcards from user ()
-            $value = str_replace(array('*', '_'), array('%', '\_'), $this->_value);
-            // add wildcard to value according to operator
-            $value = str_replace('?', $value, $action['wildcards']);
-            
-        } else {
-            $value = $this->_value;
+        $action = $this->_opSqlMap[$this->_operator];
+        $value = $this->_replaceWildcards($this->_value);
+        
+        if (in_array($this->_operator, array('in', 'notin')) && ! is_array($value)) {
+            $value = explode(' ', $this->_value);
         }
-         
-        if (in_array($this->_operator, array('equals', 'greater', 'less', 'in'))) {
-            if ($this->_operator !== 'in') {
-                // discard wildcards silently
-                $value = str_replace(array('%', '\\_'), '', $value);
-            }
+        
+        if (in_array($this->_operator, array('equals', 'greater', 'less', 'in', 'notin'))) {
+            $value = str_replace(array('%', '\\_'), '', $value);
             
-            if ($this->_operator == 'in' && empty($value)) {
-                // prevent sql error
-                $_select->where('1=0');
+            if (is_array($value) && empty($value)) {
+                $_select->where('1=' . (substr($this->_operator, 0, 3) == 'not' ? '1/* empty query */' : '0/* impossible query */'));
             } elseif ($this->_operator == 'equals' && ($value === '' || $value === NULL || $value === false)) {
                 $_select->where($field . 'IS NULL');
             } else {
