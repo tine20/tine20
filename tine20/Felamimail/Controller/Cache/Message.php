@@ -434,6 +434,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 // count unseen and Zend_Mail_Storage::FLAG_RECENT 
                 if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags)) {
                     $_folder->cache_recentcount++;
+                    $_folder->cache_unreadcount++;
                     $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
                 }
                 
@@ -535,14 +536,12 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 }
                 
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cachedMessage->toArray(), true));
-                //$createdMessage = $this->_backend->create($cachedMessage);
                 
                 // count unseen and Zend_Mail_Storage::FLAG_RECENT 
                 if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags)) {
                     $_folder->cache_recentcount++;
-                    // add flag to flags array
+                    $_folder->cache_unreadcount++;
                     $cachedMessage->flags += array(Zend_Mail_Storage::FLAG_RECENT => Zend_Mail_Storage::FLAG_RECENT);
-                    //$this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
                 }
                 
                 $messagesToAdd->addRecord($cachedMessage);
