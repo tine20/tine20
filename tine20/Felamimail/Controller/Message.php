@@ -109,6 +109,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @todo    allow to configure if messages should be moved to trash
      * @todo    move this to cache controller?
+     * @todo    decrease cache totalcount
      */
     public function deleteMessagesFromImapServer(Tinebase_Record_RecordSet $_messagesToDelete)
     {
@@ -268,6 +269,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Message  $_message
      * @param array                     $_flags
      * @param Felamimail_Model_Folder   $_folder [optional]
+     * 
+     * @todo update folder status if message unread/read
      */
     public function addFlags($_message, $_flags, $_folder = NULL)
     {
@@ -296,6 +299,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Message  $_message
      * @param array                     $_flags
      * @param Felamimail_Model_Folder   $_folder [optional]
+     * 
+     * @todo update folder status if message unread/read
      */
     public function clearFlags($_message, $_flags, $_folder = NULL)
     {
