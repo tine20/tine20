@@ -335,6 +335,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         // messages have been deleted and new messages have been added
                         $_folder->cache_job_actions_estimate = $_folder->imap_uidnext - $_folder->cache_uidnext;
                     }
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Actions estimate: ' . $_folder->cache_job_actions_estimate);
                 }
                 $message = ' Starting cache update.';
                 break;
