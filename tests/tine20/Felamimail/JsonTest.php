@@ -399,8 +399,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test move
-     * 
-     * @todo fix this
      */
     public function testMoveMessage()
     {
@@ -408,15 +406,12 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         // move
         $drafts = $this->_getFolder('Drafts');
-        //print_r($drafts->toArray());
-        //print_r($message);
         $this->_json->moveMessages(array($message['id']), $drafts->getId());
         
         $filter = $this->_getMessageFilter($drafts->getId());
         $drafts = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $drafts->getId())->getFirstRecord();
         Felamimail_Controller_Cache_Message::getInstance()->update($drafts);
         $result = $this->_json->searchMessages($filter, '');
-        //print_r($result);
         $movedMessage = array();
         foreach ($result['results'] as $mail) {
             if ($mail['subject'] == $message['subject']) {
