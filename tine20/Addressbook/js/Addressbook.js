@@ -1,58 +1,46 @@
-﻿/**
+﻿/*
  * Tine 2.0
  * 
- * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: ContactGrid.js 6638 2009-02-09 11:56:32Z c.weiss@metaways.de $
- *
  */
 
-// appName translation: _('Addressbook')
-Ext.namespace('Tine.Addressbook');
+Ext.ns('Tine.Addressbook');
 
-
-/******************************* main screen **********************************/
-Tine.Addressbook.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
-    
-    activeContentType: 'Contact',
-    
-    setContentPanel: function() {
-        
-        // which content panel?
-        var type = this.activeContentType;
-        
-        if (! this[type + 'GridPanel']) {
-            this[type + 'GridPanel'] = new Tine[this.app.appName][type + 'GridPanel']({
-                app: this.app,
-                plugins: [this.treePanel.getFilterPlugin()]
-            });
-            
-        }
-        
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this[type + 'GridPanel'], true);
-        this[type + 'GridPanel'].store.load();
-    },
-    
-    getContentPanel: function() {
-        // which content panel?
-        var type = this.activeContentType;
-        return this[type + 'GridPanel'];
-    },
+/**
+ * @namespace   Tine.Addressbook
+ * @class       Tine.Addressbook.Application
+ * @extends     Tine.Tinebase.Application
+ * Addressbook Application Object <br>
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id: AttendeeGridPanel.js 9749 2009-08-05 09:08:34Z c.weiss@metaways.de $
+ */
+Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
     
     /**
-     * sets toolbar in mainscreen
+     * Get translated application title of the calendar application
+     * 
+     * @return {String}
      */
-    setToolbar: function() {
-        var type = this.activeContentType;
-        
-        if (! this[type + 'ActionToolbar']) {
-            this[type + 'ActionToolbar'] = this[type + 'GridPanel'].actionToolbar;
-        }
-        
-        Tine.Tinebase.MainScreen.setActiveToolbar(this[type + 'ActionToolbar'], true);
+    getTitle: function() {
+        return this.i18n.ngettext('Addressbook', 'Addressbooks', 1);
     }
+});
+
+/**
+ * @namespace   Tine.Addressbook
+ * @class       Tine.Addressbook.MainScreen
+ * @extends     Tine.Tinebase.widgets.app.MainScreen
+ * MainScreen of the Addressbook Application <br>
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id: AttendeeGridPanel.js 9749 2009-08-05 09:08:34Z c.weiss@metaways.de $
+ */
+Tine.Addressbook.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
+    activeContentType: 'Contact'
 });
 
 
@@ -212,9 +200,9 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
     recordName: 'Contact',
     recordsName: 'Contacts',
     containerProperty: 'container_id',
-    // ngettext('addressbook', 'addressbooks', n); gettext('addressbooks');
-    containerName: 'addressbook',
-    containersName: 'addressbooks'
+    // ngettext('Addressbook', 'Addressbooks', n); gettext('Addressbooks');
+    containerName: 'Addressbook',
+    containersName: 'Addressbooks'
 });
 
 /* not usefull as long we don't use full records in the gird
