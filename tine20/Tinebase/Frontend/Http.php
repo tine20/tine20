@@ -289,6 +289,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/container/ContainerSelect.js',
             'Tinebase/js/widgets/container/GrantsDialog.js',
             'Tinebase/js/widgets/container/ContainerTree.js',
+            'Tinebase/js/widgets/container/FilterModel.js',
             'Tinebase/js/widgets/tags/TagsPanel.js',
             'Tinebase/js/widgets/tags/TagCombo.js',
             'Tinebase/js/widgets/tags/TagFilter.js',
