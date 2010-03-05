@@ -47,9 +47,9 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      * @cfg {String/Array} layerAlign A valid anchor position value. See <tt>{@link Ext.Element#alignTo}</tt> for details
      * on supported anchor positions and offsets. To specify x/y offsets as well, this value
      * may be specified as an Array of <tt>{@link Ext.Element#alignTo}</tt> method arguments.</p>
-     * <pre><code>[ 'tl-bl?', [6,0] ]</code></pre>(defaults to <tt>'tl-bl?'</tt>)
+     * <pre><code>[ 'tr-br?', [6,0] ]</code></pre>(defaults to <tt>'tr-br?'</tt>)
      */
-    layerAlign : 'tl-bl?',
+    layerAlign : 'tr-br?',
     /**
      * @cfg {String} layerClass The CSS class to add to the predefined <tt>'x-combo-layer'</tt> class
      * applied the dropdown layer element (defaults to '').
@@ -62,7 +62,7 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
     minLayerWidth : 70,
     /**
      * @cfg {Number} layerWidth The width (used as a parameter to {@link Ext.Element#setWidth}) of the dropdown
-     * layer (defaults to the width of the ComboBox field).  See also <tt>{@link #minLayerWidth}
+     * layer (defaults to the width of the ComboBox field).  See also <tt>{@link #minLayerWidth}</tt>
      */
     /**
      * @cfg {Number} minLayerHeight The minimum height of the dropdown layer in pixels (defaults to <tt>70</tt>, will
@@ -71,7 +71,7 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
     minLayerHeight: 70,
     /**
      * @cfg {Number} layerHeight The width (used as a parameter to {@link Ext.Element#setHeight}) of the dropdown
-     * layer (defaults to the width of the ComboBox field).  See also <tt>{@link #minLayerHeight}
+     * layer (defaults to the width of the ComboBox field).  See also <tt>{@link #minLayerHeight}</tt>
      */
     
     /**
