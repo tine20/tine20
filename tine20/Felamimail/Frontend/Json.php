@@ -10,7 +10,6 @@
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        refactor caching functions
  */
 class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
@@ -124,12 +123,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // close session to allow other requests
         Zend_Session::writeClose(true);
         
-        $result = array();
-        if (empty($folderIds)) {
-            $folders = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($accountId);
-        } else {
-            $folders = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($accountId, $folderIds);
-        }
+        $folderIds = (empty($folderIds)) ? NULL : $folderIds;
+        $folders = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($accountId, $folderIds);
         
         return array(
             'results' => $this->_multipleRecordsToJson($folders)
@@ -142,7 +137,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $accountId
      * @param array  $folderNames of parent folder(s)
      * @return array
+     * 
+     * unused at the moment
      */
+    /*
     public function updateFolderCache($accountId, $folderNames)
     {
         $result = array();
@@ -159,6 +157,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'results'   => $result,
         );
     }
+    */
     
     /***************************** messages funcs *******************************/
     
