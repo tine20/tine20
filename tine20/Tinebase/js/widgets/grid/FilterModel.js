@@ -61,7 +61,12 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
      * @cfg {String} name of the default operator
      */
     defaultOperator: null,
-
+    
+    /**
+     * @cfg {Array} define custom operators
+     */
+    customOperators: null,
+    
     /**
      * @cfg {Ext.data.Store|Array} (used by combo valueType)
      */
@@ -157,7 +162,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 {operator: 'inweek',     label: _('is in week no.')},
                 {operator: 'startswith', label: _('starts with')},
                 {operator: 'endswith',   label: _('ends with')}
-            ]
+            ].concat(this.getCustomOperators() || [])
         });
 
         // filter operators
@@ -226,6 +231,15 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         }
         
         return operator;
+    },
+    
+    /**
+     * get custom operators
+     * 
+     * @return {Array}
+     */
+    getCustomOperators: function() {
+        return this.customOperators || [];
     },
     
     /**
