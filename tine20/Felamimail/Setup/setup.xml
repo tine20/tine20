@@ -288,10 +288,6 @@
                     <type>integer</type>
                 </field>
                 <field>
-                    <name>imap_unreadcount</name>
-                    <type>integer</type>
-                </field>
-                <field>
                     <name>imap_timestamp</name>
                     <type>datetime</type>
                 </field>

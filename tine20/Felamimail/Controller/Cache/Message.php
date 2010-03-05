@@ -219,7 +219,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         $folder->imap_uidvalidity   = 0;
         $folder->imap_totalcount    = 0;
         $folder->imap_recentcount   = 0;
-        $folder->imap_unreadcount   = 0;
         $folder->imap_timestamp     = NULL;
         $folder->cache_timestamp    = NULL;
         $folder->cache_uidnext      = 1;

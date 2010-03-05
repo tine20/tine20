@@ -191,7 +191,6 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
       { name: 'imap_uidvalidity',   type: 'int' },
       { name: 'imap_totalcount',    type: 'int' },
       { name: 'imap_recentcount',   type: 'int' },
-      { name: 'imap_unreadcount',   type: 'int' },
       { name: 'cache_status' },
       { name: 'cache_uidnext',      type: 'int' },
       { name: 'cache_recentcount',  type: 'int' },
