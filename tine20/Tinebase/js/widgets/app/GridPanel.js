@@ -344,6 +344,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
     initStore: function() {
         if (this.recordProxy) {
             this.store = new Ext.data.Store({
+                autoLoad: true,
                 fields: this.recordClass,
                 proxy: this.recordProxy,
                 reader: this.recordProxy.getReader(),
