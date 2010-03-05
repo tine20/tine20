@@ -142,7 +142,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($inbox, $result['results'][0]);
         
         // save some values and send mail
-        $oldUnreadCount = $inbox['imap_unreadcount'];
         $oldTotalCount = $inbox['imap_totalcount'];
         $oldRecentCount = $inbox['imap_recentcount'];
         
@@ -160,7 +159,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         }
         
         // checks
-        $this->assertEquals($oldUnreadCount+1, $inbox['imap_unreadcount']);
         $this->assertEquals($oldTotalCount+1, $inbox['imap_totalcount']);
         $this->assertEquals($oldRecentCount+1, $inbox['imap_recentcount']);
         $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE, $inbox['cache_status']);
@@ -231,7 +229,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $message = $this->_json->saveMessage($messageToSend);
         
         // get inbox status
-        $result = $this->_json->updateFolderStatus($this->_account->getId(), '');
+        $result = $this->_json->updateFolderStatus($this->_account->getId(), array());
         $inbox = array();
         foreach ($result['results'] as $folder) {
             if ($folder['globalname'] == 'INBOX') {
@@ -271,12 +269,14 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // send email
         $messageToSend = $this->_getMessageData();
         $messageToSend['note'] = 1;
+        //print_r($messageToSend);
         $returned = $this->_json->saveMessage($messageToSend);
         
         //sleep(10);
         
         // check if message is in sent folder
         $sent = $this->_getFolder('Sent');
+        $sent = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $sent->getId())->getFirstRecord();
         $filter = $this->_getMessageFilter($sent->getId());
         Felamimail_Controller_Cache_Message::getInstance()->update($sent);
         $result = $this->_json->searchMessages($filter, '');
@@ -288,10 +288,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 $message = $mail;
             }
         }
+        //print_r($message);
         $this->assertGreaterThan(0, $result['totalcount'], 'folder is empty');
         $this->assertTrue(! empty($message));
         $this->assertEquals($message['subject'],  $messageToSend['subject']);
-        $this->assertEquals($message['to'],       $messageToSend['to'][0]);
+        $this->assertEquals($message['to'],       $messageToSend['to'][0], 'recipient not found');
         
         // delete message from inbox & sent
         $this->_json->deleteMessages($message['id']);
@@ -399,6 +400,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test move
      * 
+     * @todo fix this
      */
     public function testMoveMessage()
     {
@@ -406,10 +408,12 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         // move
         $drafts = $this->_getFolder('Drafts');
+        //print_r($drafts->toArray());
         //print_r($message);
         $this->_json->moveMessages(array($message['id']), $drafts->getId());
         
         $filter = $this->_getMessageFilter($drafts->getId());
+        $drafts = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $drafts->getId())->getFirstRecord();
         Felamimail_Controller_Cache_Message::getInstance()->update($drafts);
         $result = $this->_json->searchMessages($filter, '');
         //print_r($result);
