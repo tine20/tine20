@@ -154,13 +154,14 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
      * sets toolbar in mainscreen
      */
     setToolbar: function() {
-        if(!this.actionToolbar) {
-            this.actionToolbar = this.getContentPanel().getActionToolbar();
+        var type = this.activeContentType;
+        
+        if (! this[type + 'ActionToolbar']) {
+            this[type + 'ActionToolbar'] = this[type + 'GridPanel'].getActionToolbar();
         }
         
-        Tine.Tinebase.MainScreen.setActiveToolbar(this.actionToolbar, true);
+        Tine.Tinebase.MainScreen.setActiveToolbar(this[type + 'ActionToolbar'], true);
     },
-    
     /**
      * updates main toolbar
      * 
