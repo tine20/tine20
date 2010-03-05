@@ -38,7 +38,10 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
      * instance of the app object (required)
      */
     app: null,
-    
+    /**
+     * @cfg {String} activeContentType
+     */
+    activeContentType: '',
     /**
      * @property {Ext.Panel} treePanel
      */
@@ -129,24 +132,22 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
      * sets content panel in mainscreen
      */
     setContentPanel: function() {
-        if(!this.gridPanel) {
-            var plugins = [];
-            if (typeof(this.treePanel.getFilterPlugin) == 'function') {
-                plugins.push(this.treePanel.getFilterPlugin());
-            }
-            
-            this.gridPanel = new Tine[this.app.appName].GridPanel({
+        Tine.Tinebase.MainScreen.setActiveContentPanel(this.getContentPanel(), true);
+    },
+    
+    
+    getContentPanel: function() {
+        // which content panel?
+        var type = this.activeContentType;
+        
+        if (! this[type + 'GridPanel']) {
+            this[type + 'GridPanel'] = new Tine[this.app.appName][type + 'GridPanel']({
                 app: this.app,
-                plugins: plugins
+                plugins: [this.treePanel.getFilterPlugin()]
             });
         }
         
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
-        this.gridPanel.store.load();
-    },
-    
-    getContentPanel: function() {
-        return this.gridPanel;
+        return this[type + 'GridPanel'];
     },
     
     /**
@@ -154,7 +155,7 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
      */
     setToolbar: function() {
         if(!this.actionToolbar) {
-            this.actionToolbar = this.gridPanel.getActionToolbar();
+            this.actionToolbar = this.getContentPanel().getActionToolbar();
         }
         
         Tine.Tinebase.MainScreen.setActiveToolbar(this.actionToolbar, true);
