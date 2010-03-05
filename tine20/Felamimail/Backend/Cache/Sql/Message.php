@@ -52,11 +52,11 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * @param Tinebase_Record_Abstract $_record
      * @return void
      */
-    protected function _inspectAfterCreate(Tinebase_Record_Abstract $_record)
+    protected function _inspectAfterCreate(Tinebase_Record_Abstract $_newRecord, Tinebase_Record_Abstract $_recordToCreate)
     {
         // update to/cc/bcc/flags
         foreach ($this->_foreignTables as $field => $tablename) {
-            $_record->{$field} = $this->createForeignValues($_record, $field, $tablename);
+            $_newRecord->{$field} = $this->createForeignValues($_recordToCreate, $field, $tablename);
         }
     }
     
@@ -134,6 +134,8 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         }
         
         $messageId = $_message->getId();
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_field . ': ' . print_r($_message->{$_field}, TRUE));
         
         foreach ($_message->{$_field} as $data) {
             if ($_field == 'flags') {

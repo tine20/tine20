@@ -403,7 +403,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         
         $result = $this->get($_record->$identifier);
-        $this->_inspectAfterCreate($result);
+        $this->_inspectAfterCreate($result, $_record);
         
         return $result;
     }
@@ -474,8 +474,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             if (array_keys($recordArray) === array_keys($firstRecordArray)) {
                 $stmt->execute(array_values($recordArray));
                 $ids[] = $recordArray[$identifier];
-                
-                $this->_inspectAfterCreate($record);
             } else {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Fields mismatch.');
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(array_keys($firstRecordArray), TRUE));
@@ -872,10 +870,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * do something after creation of record
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Abstract $_newRecord
+     * @param Tinebase_Record_Abstract $_recordToCreate
      * @return void
      */
-    protected function _inspectAfterCreate(Tinebase_Record_Abstract $_record)
+    protected function _inspectAfterCreate(Tinebase_Record_Abstract $_newRecord, Tinebase_Record_Abstract $_recordToCreate)
     {
     }
 }
