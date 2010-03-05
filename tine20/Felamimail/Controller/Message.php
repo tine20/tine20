@@ -125,7 +125,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // loop messages / only get imap backend and account in the first iteration of the loop
         $imapBackend = NULL;
         $folder = NULL;
-        $updatedFolder = NULL;
+        $updatedFolders = array();
+        $oldCacheStatus = array();
         foreach($_messagesToDelete as $message) {
             if ($imapBackend = $this->_getBackendAndSelectFolder($message->folder_id, $folder, TRUE, $imapBackend)) {
                 
@@ -136,10 +137,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 }
                 
                 // don't update cache while deleting in a single folder / @todo do this for all folders with messages to delete?
-                if (! isset($updatedFolder)) {
-                    $oldCacheStatus = $folder->cache_status;
+                if (! isset($updatedFolders[$folder->getId()])) {
+                    $oldCacheStatus[$folder->getId()] = $folder->cache_status;
                     $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_DELETING;
-                    $updatedFolder = Felamimail_Controller_Folder::getInstance()->update($folder);
+                    $updatedFolders[$folder->getId()] = Felamimail_Controller_Folder::getInstance()->update($folder);
                 }
                 
                 if ($folder->globalname == $trashFolder) {
@@ -149,6 +150,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Removing message " . $message->messageuid . ' from ' . $folder->globalname);
                         
                         $imapBackend->removeMessage($message->messageuid);
+                        $folder->cache_totalcount -= 1;
+
                     } catch (Zend_Mail_Storage_Exception $zmse) {
                         Tinebase_Core::getLogger()->warn(
                             __METHOD__ . '::' . __LINE__ 
@@ -168,6 +171,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                             $this->_createFolderIfNotExists($account, $trashFolder);
                         }
                         $imapBackend->moveMessage($message->messageuid, $trashFolder);
+                        $folder->cache_totalcount -= 1;
                         
                     } catch (Zend_Mail_Storage_Exception $zmse) {
                         
@@ -190,8 +194,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         // reset old cache status
-        $updatedFolder->cache_status = $oldCacheStatus;
-        Felamimail_Controller_Folder::getInstance()->update($updatedFolder);
+        foreach ($updatedFolders as $folderId => $updatedFolder) {
+            $updatedFolder->cache_status = $oldCacheStatus[$folderId];
+            Felamimail_Controller_Folder::getInstance()->update($updatedFolder);
+        }
     }
     
     /************************* other public funcs *************************/
@@ -319,6 +325,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param array $_ids
      * @param string $_folderId
      * @return boolean success
+     * 
+     * @todo add cache_status MOVING?
      */
     public function moveMessages($_ids, $_folderId)
     {
@@ -351,10 +359,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 }
                 
                 $imapBackend->moveMessage($message->messageuid, $folder->globalname);
+                $sourceFolder->cache_totalcount -= 1;
             }
             
             // remove from cache db table
             $this->_backend->delete($_ids);
+            
+            // update source folder (cache_totalcount)
+            Felamimail_Controller_Folder::getInstance()->update($sourceFolder);
         }
                 
         return TRUE;
