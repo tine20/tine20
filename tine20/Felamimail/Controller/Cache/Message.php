@@ -182,7 +182,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
                 $folder->cache_uidnext = $folder->imap_uidnext;
                 $folder->cache_job_lowestuid = 0;
-            } else {
+            } else if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING) {
                 $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
             }
             
@@ -236,7 +236,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
     }
     
     /**
-     * check if folder is updating atm
+     * check if folder cache is updating atm
      * 
      * @param Felamimail_Model_Folder $_folder
      * @return boolean
@@ -345,6 +345,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             case Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE:
                 $message = ' Update incomplete.';
                 break;
+            case Felamimail_Model_Folder::CACHE_STATUS_INVALID:
+                $message = ' Update broken. Invalidating cache.';
+                break;
         }
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . $message . ' Updating folder status now. Time: ' . $_folder->cache_timestamp);
@@ -424,6 +427,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 }
                 
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cachedMessage->toArray(), true));
+                
                 $createdMessage = $this->_backend->create($cachedMessage);
                 
                 // count unseen and Zend_Mail_Storage::FLAG_RECENT 
