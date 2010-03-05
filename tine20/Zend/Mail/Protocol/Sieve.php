@@ -22,6 +22,8 @@
 
 
 /**
+ * see http://tools.ietf.org/html/draft-ietf-sieve-managesieve-09.txt
+ * 
  * @category   Zend
  * @package    Zend_Mail
  * @subpackage Protocol
