@@ -31,7 +31,6 @@ class Timetracker_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Timetracker/js/DurationSpinner.js',
             'Timetracker/js/Models.js',
             'Timetracker/js/Timetracker.js',
-            'Timetracker/js/MainScreen.js',
             'Timetracker/js/TimeaccountSelect.js',
             'Timetracker/js/TimeaccountGridPanel.js',
             'Timetracker/js/TimeaccountEditDialog.js',

@@ -1,17 +1,28 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
- * TODO         activate different gridpanels if subapp from treepanel is clicked
- * TODO         generalize this
  */
  
-Ext.namespace('Tine.Timetracker');
+Ext.ns('Tine.Timetracker');
+
+/**
+ * @namespace   Tine.Timetracker
+ * @class       Tine.Timetracker.MainScreen
+ * @extends     Tine.Tinebase.widgets.app.MainScreen
+ * MainScreen of the Timetracker Application <br>
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
+ */
+Tine.Timetracker.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
+    activeContentType: 'Timesheet'
+});
+
 
 Tine.Timetracker.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
     
@@ -73,30 +84,27 @@ Tine.Timetracker.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker
     },
     
     /**
+     * load grid from saved filter
+     */
+    onFilterSelect: function() {
+        this.app.getMainScreen().activeContentType = 'Timesheet';
+        this.app.getMainScreen().show();
+        
+        this.supr().onFilterSelect.apply(this, arguments);
+    },
+    
+    /**
      * returns a filter plugin to be used in a grid
-     * 
-     * ???
      */
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
             var scope = this;
-            this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
-                getValue: function() {
-                    //var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
-                    return [
-                        //{field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
-                        //{field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
-                        //{field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
-                    ];
-                }
-            });
+            this.filterPlugin = new Tine.widgets.grid.FilterPlugin({});
         }
         
         return this.filterPlugin;
     }
 });
-
-//Tine.Timetracker.FilterPanel = Tine.widgets.grid.PersistentFilterPicker
 
 
 /**
