@@ -215,15 +215,18 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * @param Felamimail_Backend_Imap|boolean $_imap
      * @return Felamimail_Model_Folder
      * 
-     * @todo do we need two imap calls here?
      * @todo delete folder from cache if it no longer exists
      */
     protected function _updateFolderStatus(Felamimail_Model_Folder $_folder, $_imap)
     {
+        // check fencing
+        if (Felamimail_Controller_Cache_Message::getInstance()->isUpdating($_folder)) {
+            return $_folder;
+        }
+        
         if ($_imap && $_imap instanceof Felamimail_Backend_Imap) {
             
             // get folder values / status from imap server
-            // 
             try {
                 $imapFolderValues = $_imap->selectFolder($_folder->globalname);
             } catch (Zend_Mail_Storage_Exception $zmse) {
@@ -231,12 +234,10 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 // delete folder from cache if it no longer exists
                 return;
             }
-            $imapFolderStatus = $_imap->getFolderStatus($_folder->globalname);
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting status and values for folder ' . $_folder->globalname);
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cache folder status: ' . print_r($_folder->toArray(), TRUE));
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' imap folder status: ' . print_r($imapFolderValues, TRUE));
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapFolderStatus, TRUE));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapFolderValues, TRUE));
             
             // check validity
             if ($_folder->imap_uidvalidity != 0 && $_folder->imap_uidvalidity != $imapFolderValues['uidvalidity']) {
@@ -244,15 +245,13 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INVALID;
             
             } else {
-                $_folder->imap_unreadcount  = (isset($imapFolderStatus['unseen'])) ? $imapFolderStatus['unseen'] : 0;
-                $_folder->imap_recentcount  = $imapFolderStatus['recent'];
-                $_folder->imap_totalcount   = $imapFolderStatus['messages'];
+                $_folder->imap_recentcount  = $imapFolderValues['recent'];
+                $_folder->imap_totalcount   = $imapFolderValues['exists'];
                 $_folder->imap_status       = Felamimail_Model_Folder::IMAP_STATUS_OK;
                 $_folder->imap_uidvalidity  = $imapFolderValues['uidvalidity'];
                 $_folder->imap_uidnext      = $imapFolderValues['uidnext'];
                 
-                // @todo do we need that here ?
-                // @todo add cache recent count ?
+                // @todo do we need that here ? -> should be done when something happens with the message cache (delete/add)
                 $messageCacheBackend = new Felamimail_Backend_Cache_Sql_Message();
                 $_folder->cache_totalcount = $messageCacheBackend->searchCountByFolderId($_folder->getId());
                 $_folder->cache_unreadcount = $_folder->cache_totalcount - $messageCacheBackend->seenCountByFolderId($_folder->getId());
