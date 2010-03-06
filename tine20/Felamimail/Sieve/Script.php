@@ -103,57 +103,62 @@ class Felamimail_Sieve_Script
     {
         $rule = new Felamimail_Sieve_Rule();
         
-        $rule->setId($parts[1]);
-        $rule->setEnabled(($parts[2] == 'ENABLED') ? true : false);
+        $rule->setId($parts[1])
+            ->setEnabled(($parts[2] == 'ENABLED') ? true : false);
         
         // conditions
         
         // from test
         if (!empty($parts[3])) {
             $condition = new Felamimail_Sieve_Rule_Condition();
-            $condition->setTest(Felamimail_Sieve_Rule_Condition::TEST_ADDRESS);
-            $condition->setComperator(Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS);
-            $condition->setHeader('from');
-            $condition->setKey($this->_unescapeChars($parts[3]));
+            
+            $condition->setTest(Felamimail_Sieve_Rule_Condition::TEST_ADDRESS)
+                ->setComperator(Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS)
+                ->setHeader('from')
+                ->setKey($this->_unescapeChars($parts[3]));
 
             $rule->addCondition($condition);
         }
         // to test
         if (!empty($parts[4])) {
             $condition = new Felamimail_Sieve_Rule_Condition();
-            $condition->setTest(Felamimail_Sieve_Rule_Condition::TEST_ADDRESS);
-            $condition->setComperator(Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS);
-            $condition->setHeader(array('to', 'cc'));
-            $condition->setKey($this->_unescapeChars($parts[4]));
+            
+            $condition->setTest(Felamimail_Sieve_Rule_Condition::TEST_ADDRESS)
+                ->setComperator(Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS)
+                ->setHeader(array('to', 'cc'))
+                ->setKey($this->_unescapeChars($parts[4]));
 
             $rule->addCondition($condition);
         }
         // subject test
         if (!empty($parts[5])) {
             $condition = new Felamimail_Sieve_Rule_Condition();
-            $condition->setTest(Felamimail_Sieve_Rule_Condition::TEST_HEADER);
-            $condition->setComperator(Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS);
-            $condition->setHeader('subject');
-            $condition->setKey($this->_unescapeChars($parts[5]));
+            
+            $condition->setTest(Felamimail_Sieve_Rule_Condition::TEST_HEADER)
+                ->setComperator(Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS)
+                ->setHeader('subject')
+                ->setKey($this->_unescapeChars($parts[5]));
 
             $rule->addCondition($condition);
         }
         // header test
         if (!empty($parts[9])) {
             $condition = new Felamimail_Sieve_Rule_Condition();
-            $condition->setTest(Felamimail_Sieve_Rule_Condition::TEST_HEADER);
-            $condition->setComperator(Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS);
-            $condition->setHeader($this->_unescapeChars($parts[9]));
-            $condition->setKey($this->_unescapeChars($parts[10]));
+            
+            $condition->setTest(Felamimail_Sieve_Rule_Condition::TEST_HEADER)
+                ->setComperator(Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS)
+                ->setHeader($this->_unescapeChars($parts[9]))
+                ->setKey($this->_unescapeChars($parts[10]));
 
             $rule->addCondition($condition);
         }
         // size
         if (!empty($parts[11])) {
             $condition = new Felamimail_Sieve_Rule_Condition();
-            $condition->setTest(Felamimail_Sieve_Rule_Condition::TEST_SIZE);
-            $condition->setComperator(Felamimail_Sieve_Rule_Condition::COMPERATOR_OVER);
-            $condition->setKey($this->_unescapeChars($parts[11]));
+            
+            $condition->setTest(Felamimail_Sieve_Rule_Condition::TEST_SIZE)
+                ->setComperator(Felamimail_Sieve_Rule_Condition::COMPERATOR_OVER)
+                ->setKey($this->_unescapeChars($parts[11]));
 
             $rule->addCondition($condition);
         }
@@ -163,16 +168,16 @@ class Felamimail_Sieve_Script
         
         switch ($this->_unescapeChars($parts[6])) {
             case ('folder'):
-                $action->setType(Felamimail_Sieve_Rule_Action::FILEINTO);
-                $action->setArgument($this->_unescapeChars($parts[7]));
+                $action->setType(Felamimail_Sieve_Rule_Action::FILEINTO)
+                    ->setArgument($this->_unescapeChars($parts[7]));
                 break;
             case ('address'):
-                $action->setType(Felamimail_Sieve_Rule_Action::REDIRECT);
-                $action->setArgument($this->_unescapeChars($parts[7]));
+                $action->setType(Felamimail_Sieve_Rule_Action::REDIRECT)
+                    ->setArgument($this->_unescapeChars($parts[7]));
                 break;
             case ('reject'):
-                $action->setType(Felamimail_Sieve_Rule_Action::REJECT);
-                $action->setArgument($this->_unescapeChars($parts[7]));
+                $action->setType(Felamimail_Sieve_Rule_Action::REJECT)
+                    ->setArgument($this->_unescapeChars($parts[7]));
                 break;
             case ('discard'):
                 $action->setType(Felamimail_Sieve_Rule_Action::DISCARD);
