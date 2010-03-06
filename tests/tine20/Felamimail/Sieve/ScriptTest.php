@@ -55,10 +55,40 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
     {
     }
 
-
+    /**
+     * test enabled rule
+     */
+    public function testEnabledRule()
+    {
+        $script    = new Felamimail_Sieve_Script();
+        $rule      = new Felamimail_Sieve_Rule();
+        $condition = new Felamimail_Sieve_Rule_Condition();
+        $action    = new Felamimail_Sieve_Rule_Action();
+        
+        $condition->setComperator(Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS)
+            ->setTest(Felamimail_Sieve_Rule_Condition::TEST_ADDRESS)
+            ->setHeader('From')
+            ->setKey('info@example.com');
+        
+        $action->setType(Felamimail_Sieve_Rule_Action::FILEINTO)
+            ->setArgument('INBOX/UNITTEST');
+            
+        $rule->setEnabled(true)
+            ->setId(12)
+            ->addAction($action)
+            ->addCondition($condition);
+        
+        $script->addRule($rule);
+        
+        $sieveScript = $script->getSieve();
+        
+        $this->assertContains('if allof (address :contains "From" "info@example.com")', $sieveScript);
+        $this->assertContains('fileinto "INBOX/UNITTEST";', $sieveScript);
+        $this->assertContains('Felamimail_Sieve_Rule', $sieveScript);
+    }
+    
     /**
      * test enabled vacation
-     *
      */
     public function testEnabledVacation()
     {
@@ -75,16 +105,13 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
         
         $sieveScript = $script->getSieve();
         
-        #echo $sieveScript;
-        
-        $this->assertContains('vacation :days', $sieveScript);
+        $this->assertContains('vacation :days 8 :addresses ["info@example.com"]', $sieveScript);
         $this->assertContains('Felamimail_Sieve_Vacation', $sieveScript);
         $this->assertContains('Tine 2.0 Unit Test', $sieveScript);
     }
     
     /**
      * test disabled vacation
-     *
      */
     public function testDisabledVacation()
     {
@@ -101,9 +128,7 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
         
         $sieveScript = $script->getSieve();
         
-        #echo $sieveScript;
-        
-        $this->assertNotContains('vacation :days', $sieveScript);
+        $this->assertNotContains('vacation :days 8 :addresses ["info@example.com"]', $sieveScript);
         $this->assertContains('Felamimail_Sieve_Vacation', $sieveScript);
         $this->assertContains('Tine 2.0 Unit Test', $sieveScript);
     }
