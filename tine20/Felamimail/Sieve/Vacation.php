@@ -105,6 +105,7 @@ class Felamimail_Sieve_Vacation
      * set the days
      * 
      * @param   integer $days   the days
+     * @throws  InvalidArgumentException
      * @return  Felamimail_Sieve_Vacation
      */
     public function setDays($days)
