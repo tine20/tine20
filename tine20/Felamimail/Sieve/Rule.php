@@ -150,7 +150,7 @@ class Felamimail_Sieve_Rule
      */
     public function __toString() 
     {
-        $rule .= sprintf("%s (%s) {\r\n%s\r\n}\r\n",
+        $rule = sprintf("%s (%s) {\r\n%s\r\n}\r\n",
             'allof',
             $this->_getSieveConditions(),
             $this->_getSieveActions()
