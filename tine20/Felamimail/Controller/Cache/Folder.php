@@ -237,7 +237,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting status and values for folder ' . $_folder->globalname);
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cache folder status: ' . print_r($_folder->toArray(), TRUE));
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapFolderValues, TRUE));
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapFolderValues, TRUE));
             
             // check validity
             if ($_folder->imap_uidvalidity != 0 && $_folder->imap_uidvalidity != $imapFolderValues['uidvalidity']) {
@@ -249,7 +249,14 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 $_folder->imap_totalcount   = $imapFolderValues['exists'];
                 $_folder->imap_status       = Felamimail_Model_Folder::IMAP_STATUS_OK;
                 $_folder->imap_uidvalidity  = $imapFolderValues['uidvalidity'];
-                $_folder->imap_uidnext      = $imapFolderValues['uidnext'];
+                if (! array_key_exists('uidnext', $imapFolderValues)) {
+                    // @todo try to make caching work with web.de for example (it has no uidnext value)
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Non-standard IMAP server. Trying to guess uidnext by getting all Uids. Maybe it does not work.');
+                    $alluids = $_imap->getUniqueId();
+                    $_folder->imap_uidnext = max($alluids) + 1;
+                } else {
+                    $_folder->imap_uidnext = $imapFolderValues['uidnext'];
+                }
                 
                 // @todo do we need that here ? -> should be done when something happens with the message cache (delete/add)
                 $messageCacheBackend = new Felamimail_Backend_Cache_Sql_Message();
