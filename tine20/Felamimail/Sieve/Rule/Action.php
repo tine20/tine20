@@ -12,7 +12,7 @@
  */
 
 /**
- * class to store Sieve rule actiong and to generate Sieve code for action
+ * class to store Sieve rule action and to generate Sieve code for action
  * 
  * @package     Felamimail
  * @subpackage  Sieve
