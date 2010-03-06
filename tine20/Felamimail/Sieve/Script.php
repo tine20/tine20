@@ -223,18 +223,15 @@ class Felamimail_Sieve_Script
     {
         $vacation = new Felamimail_Sieve_Vacation();
         
-        $vacation->setDays($parts[1]);
+        $vacation->setDays($parts[1])
+            ->setReason($this->_unescapeChars($parts[3]))
+            ->setEnabled(($parts[4] == 'on') ? true : false);
         
         $addresses = explode(',', $this->_unescapeChars($parts[2]));
         $addresses = array_map('trim', $addresses, array('"'));
-        
         foreach($addresses as $address) {
             $vacation->addAddress($address);
         }
-        
-        $vacation->setReason($this->_unescapeChars($parts[3]));
-
-        $vacation->setEnabled(($parts[4] == 'on') ? true : false);
         
         $this->setVacation($vacation);        
     }
