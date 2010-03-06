@@ -211,7 +211,7 @@ class Felamimail_Sieve_Script
         }        
         
         $vacation = null;
-        if($this->_vacation->isEnabled() === true) {
+        if($this->_vacation instanceof Felamimail_Sieve_Vacation && $this->_vacation->isEnabled() === true) {
             $vacation = $this->_vacation;
         }
         $pseudoScript .= '#SieveVacation' . $this->_escapeChars(serialize($this->_vacation)) . "\r\n";
