@@ -147,7 +147,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     $timeLeft
                 ) {
                     // get summary and add messages
-                    $stepLowestUid = min($folder->cache_job_lowestuid - $this->_importCountPerStep, $folder->cache_uidnext);
+                    $stepLowestUid = max($folder->cache_job_lowestuid - $this->_importCountPerStep, $folder->cache_uidnext);
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get summary from ' 
                         . $folder->cache_job_lowestuid . ' to ' . $stepLowestUid);
                     // @todo check if this can cause errors if it doesn't find messages
@@ -164,11 +164,13 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             
             ///////////////////////////// sync deleted messages or start again to add recent messages
                 
-            if ($timeLeft && $folder->cache_totalcount > $folder->imap_totalcount) {
-                // sync deleted if we still got time left and totalcounts mismatch
-                $this->_syncDeletedMessages($folder, $_time, $imap);
-            } else {
-                $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
+            if ($timeLeft) {
+                if ($folder->cache_totalcount > $folder->imap_totalcount) {
+                    // sync deleted if we still got time left and totalcounts mismatch
+                    $this->_syncDeletedMessages($folder, $_time, $imap);
+                } else {
+                    $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
+                }
             }
             
             // need to start again, we did not import some messages -> invalidate cache
@@ -333,7 +335,11 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     $_folder->cache_job_actions_estimate = abs($_folder->imap_totalcount - $_folder->cache_totalcount);
                     if ($_folder->cache_job_actions_estimate == 0) {
                         // messages have been deleted and new messages have been added
-                        $_folder->cache_job_actions_estimate = $_folder->imap_uidnext - $_folder->cache_uidnext;
+                        if ($_folder->cache_uidnext < $_folder->imap_uidnext) {
+                            $_folder->cache_job_actions_estimate = abs($_folder->imap_uidnext - $_folder->cache_uidnext);
+                        } else {
+                            $_folder->cache_uidnext = $_folder->imap_uidnext;
+                        }
                     }
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Actions estimate: ' . $_folder->cache_job_actions_estimate);
                 }
