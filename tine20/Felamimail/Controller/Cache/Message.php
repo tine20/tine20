@@ -33,11 +33,20 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
     protected $_encoding = 'UTF-8';
     
     /**
-     * number of imported messages in one caching step
+     * stepwidth of uid in one caching step
      *
      * @var integer
      */
-    protected $_importCountPerStep = 10;
+    protected $_uidStepWidth = 1000;
+    
+    /**
+     * number of imported messages in one caching step
+     *
+     * @var integer
+     * 
+     * @todo unused at the moment, think about adding this again
+     */
+    protected $_importCountPerStep = 1000;
     
     /**
      * message backend
@@ -140,19 +149,21 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
 
             ///////////////////////////// main message import loop
             
+            $count = 0;
             if ($folder->imap_uidnext != $folder->cache_uidnext) {
                 while (
                     // more messages to add ?
                     $folder->cache_job_lowestuid > $folder->cache_uidnext &&
-                    $timeLeft
+                    $timeLeft &&
+                    // initial import
+                    ($folder->cache_uidnext != 1 || $folder->imap_totalcount > $folder->cache_totalcount)
                 ) {
                     // get summary and add messages
-                    $stepLowestUid = max($folder->cache_job_lowestuid - $this->_importCountPerStep, $folder->cache_uidnext);
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get summary from ' 
-                        . $folder->cache_job_lowestuid . ' to ' . $stepLowestUid);
+                    $stepLowestUid = max($folder->cache_job_lowestuid - $this->_uidStepWidth, $folder->cache_uidnext);
+                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get summary from ' . $folder->cache_job_lowestuid . ' to ' . $stepLowestUid);
                     // @todo check if this can cause errors if it doesn't find messages
                     $messages = $imap->getSummary($folder->cache_job_lowestuid, $stepLowestUid);
-                    $this->_addMessages($messages, $folder);
+                    $count += $this->_addMessages($messages, $folder);
                     
                     $folder->cache_job_lowestuid = $stepLowestUid;
                     $timeLeft = ($folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
@@ -160,7 +171,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             }
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Finished import run  ... Time: ' . Zend_Date::now()->toString() 
-                . ' Added new messages: ' . $folder->cache_recentcount);
+                . ' Added messages to cache (new/recent): ' . $count . ' / ' . $folder->cache_recentcount);
             
             ///////////////////////////// sync deleted messages or start again to add recent messages
                 
@@ -368,7 +379,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      *
      * @param array $_messages
      * @param Felamimail_Model_Folder $_folder
-     * @return void
+     * @return integer count
      * 
      * @todo use this or _addMessagesPrepared?
      * @todo get replyTo & inReplyTo?
@@ -468,7 +479,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         }
         
         $_folder->cache_totalcount += $count;
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Added ' . $count . ' messages to DB.');
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Added ' . $count . ' messages to DB.');
+        
+        return $count;
     }
     
     /**
@@ -503,25 +516,27 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 . ' message(s) from cache beginning with uid ' . $_folder->cache_job_lowestuid);
             
             // get messageuids
-            $cacheUids = $messages->messageuid;
-            
-            // query mailserver
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Query uids from imap server.');
-            $imapUids = $_imap->getExistingUids($cacheUids);
-            
-            // delete uids not on mailserver from cache
-            $toDeleteUids = array_diff($cacheUids, $imapUids);
-            if (! empty($toDeleteUids)) {
-                $this->_backend->deleteByProperty($toDeleteUids, 'messageuid', 'in');
+            if (! empty($cacheUids)) {
+                $cacheUids = $messages->messageuid;
+                
+                // query mailserver
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Query uids from imap server.');
+                $imapUids = $_imap->getExistingUids($cacheUids);
+                
+                // delete uids not on mailserver from cache
+                $toDeleteUids = array_diff($cacheUids, $imapUids);
+                if (! empty($toDeleteUids)) {
+                    $this->_backend->deleteByProperty($toDeleteUids, 'messageuid', 'in');
+                }
+                $numberDeleted = count($toDeleteUids);
+                
+                // update folder values
+                $_folder->cache_job_actions_done += $numberDeleted;
+                $_folder->cache_totalcount -= $numberDeleted;
+                $_folder->cache_job_lowestuid = min($cacheUids);
+                
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $numberDeleted . ' messages from cache.');
             }
-            $numberDeleted = count($toDeleteUids);
-            
-            // update folder values
-            $_folder->cache_job_actions_done += $numberDeleted;
-            $_folder->cache_totalcount -= $numberDeleted;
-            $_folder->cache_job_lowestuid = min($cacheUids);
-            
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $numberDeleted . ' messages from cache.');
             
             // check if we are done
             if (count($messages) < $stepSize) {
