@@ -175,9 +175,22 @@ class Felamimail_Sieve_Vacation
      */
     public function __toString() 
     {
-        $vacation = sprintf("vacation :days %d :addresses %s text:\r\n%s\r\n.\r\n;",
-            $this->_days,
-            $this->_quoteString($this->_addresses),
+        $days      = ":days $this->_days ";
+        $from      = !empty($this->_from) ? ":from $this->_from " : null;
+        $addresses = count($this->_addresses) > 0 ? ":addresses {$this->_quoteString($this->_addresses)} " : null;
+        
+        if(!empty($this->_subject)) {
+            $subject = iconv_mime_encode(null, $this->_subject, array('scheme' => 'Q'));
+            $subject = ':subject ' . substr($subject, 2) . ' ';
+        } else {
+            $subject = null;
+        }
+        
+        $vacation = sprintf("vacation %s%s%s%s text:\r\n%s\r\n.\r\n;",
+            $days,
+            $from,
+            $addresses,
+            $subject,
             $this->_reason
         );
         
