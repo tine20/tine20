@@ -99,13 +99,18 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
         $vacation->setEnabled(true)
             ->addAddress('info@example.com')
             ->setDays(8)
+            ->setSubject('Lößlich')
+            ->setFrom('sieve@example.com')
             ->setReason('Tine 2.0 Unit Test');
         
         $script->setVacation($vacation);
         
         $sieveScript = $script->getSieve();
         
-        $this->assertContains('vacation :days 8 :addresses ["info@example.com"]', $sieveScript);
+        $this->assertContains(':days 8', $sieveScript);
+        $this->assertContains(':from sieve@example.com', $sieveScript);
+        $this->assertContains(':addresses ["info@example.com"]', $sieveScript);
+        $this->assertContains('=?utf-8?Q?L=C3=B6=C3=9Flich?=', $sieveScript);
         $this->assertContains('Felamimail_Sieve_Vacation', $sieveScript);
         $this->assertContains('Tine 2.0 Unit Test', $sieveScript);
     }
