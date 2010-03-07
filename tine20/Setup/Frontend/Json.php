@@ -200,15 +200,17 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         //if (!Setup_Core::get(Setup_Core::CHECKDB))
         Setup_Core::setupDatabaseConnection();
         
+        $checkDB = Setup_Core::get(Setup_Core::CHECKDB);
+        
         $result = array(
             'configExists'    => Setup_Core::configFileExists(),
             'configWritable'  => Setup_Core::configFileWritable(),
-            'checkDB'         => Setup_Core::get(Setup_Core::CHECKDB),
+            'checkDB'         => $checkDB,
             'checkLogger'     => $this->_controller->checkConfigLogger(),
             'checkCaching'    => $this->_controller->checkConfigCaching(),
             'checkTmpDir'     => $this->_controller->checkConfigTmpDir(),
             'checkSessionDir' => $this->_controller->checkConfigSessionDir(),
-            'setupRequired'	  => $this->_controller->setupRequired(),
+            'setupRequired'	  => empty($checkDB) ? TRUE : $this->_controller->setupRequired(),
         );
 
         return $result;        
