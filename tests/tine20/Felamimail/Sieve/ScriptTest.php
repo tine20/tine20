@@ -23,6 +23,8 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
 {
+    protected $_serializedSieveRule;
+    
     /**
      * Runs the test methods of this class.
      *
@@ -43,6 +45,24 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $rule      = new Felamimail_Sieve_Rule();
+        $condition = new Felamimail_Sieve_Rule_Condition();
+        $action    = new Felamimail_Sieve_Rule_Action();
+        
+        $condition->setComperator(Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS)
+            ->setTest(Felamimail_Sieve_Rule_Condition::TEST_ADDRESS)
+            ->setHeader('From')
+            ->setKey('info@example.com');
+        
+        $action->setType(Felamimail_Sieve_Rule_Action::FILEINTO)
+            ->setArgument('INBOX/UNITTEST');
+            
+        $rule->setEnabled(true)
+            ->setId(12)
+            ->addAction($action)
+            ->addCondition($condition);
+            
+        $this->_serializedSieveRule = '#SieveRule' . serialize($rule);
     }
 
     /**
@@ -81,7 +101,7 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
         $script->addRule($rule);
         
         $sieveScript = $script->getSieve();
-        
+        #echo $sieveScript;
         $this->assertContains('if allof (address :contains "From" "info@example.com")', $sieveScript);
         $this->assertContains('fileinto "INBOX/UNITTEST";', $sieveScript);
         $this->assertContains('Felamimail_Sieve_Rule', $sieveScript);
@@ -137,5 +157,18 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
         $this->assertContains('Felamimail_Sieve_Vacation', $sieveScript);
         $this->assertContains('Tine 2.0 Unit Test', $sieveScript);
     }
-    
+
+    /**
+     * parse serialized sieve rule
+     */
+    public function testParseSerializedSieveRule()
+    {
+        $script = new Felamimail_Sieve_Script();
+        
+        $script->parseScript($this->_serializedSieveRule);
+        
+        $rules = $script->getRules();
+        
+        $this->assertEquals(1, count($rules));
+    }
 }
