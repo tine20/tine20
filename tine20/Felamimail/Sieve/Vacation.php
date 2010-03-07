@@ -81,7 +81,7 @@ class Felamimail_Sieve_Vacation
      * @param   string  $from   the from address
      * @return  Felamimail_Sieve_Vacation
      */
-    protected function setFrom($from)
+    public function setFrom($from)
     {
         $this->_from = $from;
         
@@ -94,7 +94,7 @@ class Felamimail_Sieve_Vacation
      * @param   string  $subject    the subject
      * @return  Felamimail_Sieve_Vacation 
      */
-    protected function setSubject($subject)
+    public function setSubject($subject)
     {
         $this->_subject = $subject;
         
