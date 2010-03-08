@@ -44,7 +44,7 @@ class Sales_Model_Product extends Tinebase_Record_Abstract
         'id'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'name'              => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
         'description'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'price'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'price'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'manufacturer'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'category'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information
