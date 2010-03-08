@@ -168,12 +168,7 @@ class Tinebase_Model_Filter_FilterGroup
                     $this->_customData[] = $filterData;
                 
                 } else {
-                    try {
-                        throw new Exception('skipping filter (filter syntax problem)');
-                    } catch (Exception $e) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e);
-                    }
-                    
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' skipping filter (filter syntax problem)'. print_r($filterData, TRUE));
                 }
             }
         }
