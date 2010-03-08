@@ -134,38 +134,38 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	        text: String.format(translation._('All {0}'), this.containersName),
 	        cls: "treemain",
 	        containerType: 'all',
-            container: {filter: {field: 'container_id', operator: 'specialNode', value: 'all'}},
+            container: {path: '/'},
 	        id: 'all',
             allowDrop:false,
 	        children: [{
 	            text: String.format(translation._('My {0}'), this.containersName),
 	            cls: 'file',
 	            containerType: Tine.Tinebase.container.TYPE_PERSONAL,
+                container: {path: '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId},
 	            id: 'user',
 	            leaf: null,
 	            owner: Tine.Tinebase.registry.get('currentAccount'),
-                allowDrop:false,
-                container: {filter: {field: 'container_id', operator: 'personalNode', value: Tine.Tinebase.registry.get('currentAccount').accountId}}
+                allowDrop:false
 	        }, {
 	            text: String.format(translation._('Shared {0}'), this.containersName),
 	            cls: 'file',
 	            containerType: Tine.Tinebase.container.TYPE_SHARED,
+                container: {path: '/shared'},
                 id: 'shared',
 	            children: null,
 	            leaf: null,
 				owner: null,
-                allowDrop:false,
-                container: {filter: {field: 'container_id', operator: 'specialNode', value: 'shared'}}
+                allowDrop:false
 	        }, {
 	            text: String.format(translation._('Other Users {0}'), this.containersName),
 	            cls: 'file',
 	            containerType: 'otherUsers',
+                container: {path: '/personal'},
                 id: 'otherUsers',
 	            children: null,
 	            leaf: null,
 				owner: null,
-                allowDrop:false,
-                container: {filter: {field: 'container_id', operator: 'specialNode', value: 'otherUsers'}}
+                allowDrop:false
 	        }]
 	    }];
         
@@ -350,7 +350,9 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
         
         var filters = [];
         Ext.each(selection, function(node) {
-            filters.push(node.attributes.container.filter);
+            // NOTE: operator gets adopted when path is parsed
+            filters.push({field: 'container_id', operator: 'equals', value: node.attributes.container.path});
+            //filters.push(node.attributes.container.path);
         }, this);
         
         if (filters.length == 0) {
@@ -439,7 +441,7 @@ Tine.widgets.container.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
 		if (attr.name) {
             attr = {
                 containerType: 'singleContainer',
-                container: Ext.apply(attr, {filter: {field: 'container_id', operator: 'equals', value: attr.id}}),
+                container: attr,
                 text: attr.name,
                 id: attr.id,
                 cls: 'file',
@@ -448,7 +450,6 @@ Tine.widgets.container.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         } else if (attr.accountDisplayName) {
             attr = {
                 containerType: Tine.Tinebase.container.TYPE_PERSONAL,
-                container: {filter: {field: 'container_id', operator: 'personalNode', value: attr.accountId}},
                 text: attr.accountDisplayName,
                 id: attr.accountId,
                 cls: 'folder',
