@@ -250,10 +250,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 $_folder->imap_status       = Felamimail_Model_Folder::IMAP_STATUS_OK;
                 $_folder->imap_uidvalidity  = $imapFolderValues['uidvalidity'];
                 if (! array_key_exists('uidnext', $imapFolderValues)) {
-                    // @todo try to make caching work with web.de for example (it has no uidnext value)
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Non-standard IMAP server. Trying to guess uidnext by getting all Uids. Maybe it does not work.');
-                    $alluids = $_imap->getUniqueId();
-                    $_folder->imap_uidnext = max($alluids) + 1;
+                    $_folder->imap_uidnext = 0;
                 } else {
                     $_folder->imap_uidnext = $imapFolderValues['uidnext'];
                 }

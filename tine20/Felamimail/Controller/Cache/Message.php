@@ -123,7 +123,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             $timeLeft = TRUE;
             
             if ($folder->cache_job_lowestuid == 0) {
-                $folder->cache_job_lowestuid = $folder->imap_uidnext;
+                $folder->cache_job_lowestuid = ($folder->imap_uidnext) ? $folder->imap_uidnext : $folder->imap_totalcount;
                 $folder->cache_job_startuid = $folder->cache_job_lowestuid; 
             }
             // @todo this should be initialized by the model/clear()
@@ -159,11 +159,20 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 ) {
                     // get summary and add messages
                     if (empty($uids)) {
-                        $stepLowestUid = max($folder->cache_job_lowestuid - $this->_uidStepWidth, $folder->cache_uidnext);
-                        $uids = $imap->getUidbyUid($folder->cache_job_lowestuid - 1, $stepLowestUid);
-                        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
-                        //    . ' new uids from IMAP server: ' . ($folder->cache_job_lowestuid - 1) . ' - ' . $stepLowestUid);
-                        sort($uids, SORT_NUMERIC);
+                        if ($folder->imap_uidnext) {
+                            $stepLowestUid = max($folder->cache_job_lowestuid - $this->_uidStepWidth, $folder->cache_uidnext);
+                            $uids = $imap->getUidbyUid($folder->cache_job_lowestuid - 1, $stepLowestUid);
+                            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
+                            //    . ' new uids from IMAP server: ' . ($folder->cache_job_lowestuid - 1) . ' - ' . $stepLowestUid);
+                        } else {
+                            // imap servers without uidnext
+                            $stepLowestUid = $folder->cache_uidnext;
+                            $uids = $imap->getUid($folder->cache_uidnext, $folder->cache_job_lowestuid);
+                            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
+                            //    . ' new uids from IMAP server: ' . ($folder->cache_uidnext) . ' - ' . $folder->cache_job_lowestuid);
+                        }
+                        
+                        rsort($uids, SORT_NUMERIC);
                     }
                     
                     if (! empty($uids)) {
@@ -173,11 +182,12 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         $messages = $imap->getSummary($nextUids);
                         $count += $this->_addMessages($messages, $folder);
                         
-                        $folder->cache_job_lowestuid = min($nextUids);
-                        $timeLeft = ($folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
+                        $folder->cache_job_lowestuid = ($folder->imap_uidnext) ? min($nextUids) : ($folder->imap_totalcount - $folder->cache_totalcount);
                     } else {
                         $folder->cache_job_lowestuid = $stepLowestUid;
                     }
+                    
+                    $timeLeft = ($folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
                 }
             }
             
