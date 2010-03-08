@@ -451,6 +451,13 @@ Tine.Tinebase.tineInit = {
                 params: {
                     method: Tine.Tinebase.tineInit.getAllRegistryDataMethod
                 },
+                failure: function() {
+                    // if registry could not be loaded, this is mostly due to missconfiguaration
+                    // don't send error reports for that!
+                    Tine.Tinebase.ExceptionHandler.handleRequestException({
+                        code: 503
+                    });
+                },
                 success: function(response, request) {
                     var registryData = Ext.util.JSON.decode(response.responseText);
                     for (var app in registryData) {
