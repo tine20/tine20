@@ -278,7 +278,6 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
         }
         
         $parts = explode('/', $path);
-        Tinebase_Core::getLogger()->warn(print_r($parts, TRUE));
         $partsCount = count($parts);
         
         switch($parts[1]) {
