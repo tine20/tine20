@@ -40,17 +40,10 @@ $path = array(
         
 set_include_path(implode(PATH_SEPARATOR, $path));
 
-/*
- * Set parameters  for logging (call via browser)
- * 
- * @todo put that in config.inc as well or remove that?
- */
-define('CONFIGURATION', PATH_TO_TEST_DIR."/conf.xml");
 
-/*
+/**
  * Set up basic tine 2.0 environment
-*/
-
+ */
 require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->setFallbackAutoloader(true);
