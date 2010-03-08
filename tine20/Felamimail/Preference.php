@@ -50,6 +50,13 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     const AUTOATTACHNOTE = 'autoAttachNote';
     
     /**
+     * show delete confirmation
+     *
+     * @todo add this to more apps?
+     */
+    const CONFIRM_DELETE = 'confirmDelete';
+    
+    /**
      * application
      *
      * @var string
@@ -70,6 +77,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             self::UPDATEINTERVAL,
             self::USEINADB,
             self::AUTOATTACHNOTE,
+            self::CONFIRM_DELETE,
         );
             
         return $allPrefs;
@@ -100,6 +108,10 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             self::AUTOATTACHNOTE  => array(
                 'label'         => $translate->_('Use for NOTES'),
                 'description'   => $translate->_('Save Note default Value.'),
+            ),
+            self::CONFIRM_DELETE  => array(
+                'label'         => $translate->_('Confirm Delete'),
+                'description'   => $translate->_('Show confirmation dialog when deleting mails.'),
             ),
         );
         
@@ -140,6 +152,13 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                 $preference->options    .= '</options>';
                 break;
             case self::AUTOATTACHNOTE:
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                break;
+            case self::CONFIRM_DELETE:
+                $preference->value      = 1;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
