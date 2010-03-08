@@ -35,35 +35,34 @@ class Tinebase_Frontend_Json_Container
         switch($containerType) {
             case Tinebase_Model_Container::TYPE_PERSONAL:
                 $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $application, $owner, Tinebase_Model_Grants::GRANT_READ);
-                foreach ($containers as $container) {
-                    $container->bypassFilters = true;
-                    $container->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
-                }
-                $response = $containers->toArray();
-                
                 break;
                 
             case Tinebase_Model_Container::TYPE_SHARED:
                 $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $application, Tinebase_Model_Grants::GRANT_READ);
-                foreach ($containers as $container) {
-                    $container->bypassFilters = true;
-                    $container->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
-                }
-                $response = $containers->toArray();
-                
                 break;
                 
             case 'otherUsers':
-                $accounts = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $application, Tinebase_Model_Grants::GRANT_READ);
-                $response = $accounts->toArray();
-                
+                $containers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $application, Tinebase_Model_Grants::GRANT_READ);
                 break;
                 
             default:
                 throw new Exception('no such NodeType');
         }
-        // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
-        //exit;
+        
+        $response = array();
+        foreach ($containers as $container) {
+            $containerArray = $container->toArray();
+            
+            if ($container instanceof Tinebase_Model_Container) {
+                $containerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
+                $containerArray['path'] = Tinebase_Container::getInstance()->getPath($container);
+            } else {
+                $containerArray['path'] = "personal/{$container->getId()}";
+            }
+            
+            $response[] = $containerArray;
+        }
+        
         return $response;
     }
     
