@@ -161,8 +161,8 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     if (empty($uids)) {
                         $stepLowestUid = max($folder->cache_job_lowestuid - $this->_uidStepWidth, $folder->cache_uidnext);
                         $uids = $imap->getUidbyUid($folder->cache_job_lowestuid - 1, $stepLowestUid);
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
-                            . ' new uids from IMAP server: ' . ($folder->cache_job_lowestuid - 1) . ' - ' . $stepLowestUid);
+                        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
+                        //    . ' new uids from IMAP server: ' . ($folder->cache_job_lowestuid - 1) . ' - ' . $stepLowestUid);
                         sort($uids, SORT_NUMERIC);
                     }
                     
@@ -364,6 +364,11 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         }
                     }
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Actions estimate: ' . $_folder->cache_job_actions_estimate);
+                    
+                } else if ($_folder->cache_job_actions_done > $_folder->cache_job_actions_estimate) {
+                    // sanitize actions
+                    $_folder->cache_job_actions_estimate = $_folder->imap_totalcount;
+                    $_folder->cache_job_actions_done = $_folder->cache_totalcount;
                 }
                 $message = ' Starting cache update.';
                 break;
@@ -467,6 +472,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 }
                 
                 $count++;
+                $_folder->cache_job_actions_done++;
                 
             } catch (Zend_Mail_Exception $zme) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
@@ -484,9 +490,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     '. Error: ' . $zde->getMessage()
                 );
             }
-            
-            // increase job actions count (with duplicates)
-            $_folder->cache_job_actions_done++;
         }
         
         $_folder->cache_totalcount += $count;
