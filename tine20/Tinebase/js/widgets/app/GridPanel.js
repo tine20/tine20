@@ -837,53 +837,71 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         }
         var records = sm.getSelections();
         
-        var i18nItems    = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length);
-        var i18nQuestion = this.i18nDeleteQuestion ?
-            this.app.i18n.n_hidden(this.i18nDeleteQuestion[0], this.i18nDeleteQuestion[1], records.length) :
-            Tine.Tinebase.translation.ngettext('Do you really want to delete the selected record', 'Do you really want to delete the selected records', records.length);
-            
-        Ext.MessageBox.confirm(_('Confirm'), i18nQuestion, function(btn) {
-            if(btn == 'yes') {
-                if (this.recordProxy) {
-                    if (this.showDeleteMask) {
-                        if (! this.deleteMask) {
-                            var message = String.format(_('Deleting {0}'), i18nItems);
-                            if (sm.isFilterSelect) {
-                                message = message + _(' ... This may take a long time!');
-                            } 
-                            this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {msg: message});
-                        }
-                        this.deleteMask.show();
-                    }
-                    
-                    var options = {
-                        scope: this,
-                        success: function() {
-                            if (this.showDeleteMask) {
-                                this.deleteMask.hide();
-                            }
-                            this.onAfterDelete();
-                        },
-                        failure: function () {
-                            if (this.showDeleteMask) {
-                                this.deleteMask.hide();
-                            }
-                            Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), i18nItems)); 
-                        }
-                    };
-                    
-                    if (sm.isFilterSelect && this.filterSelectionDelete) {
-                        this.recordProxy.deleteRecordsByFilter(sm.getSelectionFilter(), options);
-                    } else {
-                        this.recordProxy.deleteRecords(records, options);
-                    }
-                } else {
-                    Ext.each(records, function(record) {
-                        this.store.remove(record);
-                    });
+        if (Tine[this.app.appName].registry.containsKey('preferences') 
+            && Tine[this.app.appName].registry.get('preferences').containsKey('confirmDelete')
+            && Tine[this.app.appName].registry.get('preferences').get('confirmDelete') == 0
+        ) {
+            // don't show confirmation question for record deletion
+            this.deleteRecords(sm, records);
+        } else {
+            var i18nQuestion = this.i18nDeleteQuestion ?
+                this.app.i18n.n_hidden(this.i18nDeleteQuestion[0], this.i18nDeleteQuestion[1], records.length) :
+                Tine.Tinebase.translation.ngettext('Do you really want to delete the selected record', 'Do you really want to delete the selected records', records.length);
+            Ext.MessageBox.confirm(_('Confirm'), i18nQuestion, function(btn) {
+                if(btn == 'yes') {
+                    this.deleteRecords(sm, records);
                 }
+            }, this);
+        }
+    },
+    
+    /**
+     * delete records
+     * 
+     * @param {SelectionModel} sm
+     * @param {Array} records
+     */
+    deleteRecords: function(sm, records) {
+        if (this.recordProxy) {
+            var i18nItems    = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length);
+
+            if (this.showDeleteMask) {
+                if (! this.deleteMask) {
+                    var message = String.format(_('Deleting {0}'), i18nItems);
+                    if (sm.isFilterSelect) {
+                        message = message + _(' ... This may take a long time!');
+                    } 
+                    this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {msg: message});
+                }
+                this.deleteMask.show();
             }
-        }, this);
+            
+            var options = {
+                scope: this,
+                success: function() {
+                    if (this.showDeleteMask) {
+                        this.deleteMask.hide();
+                    }
+                    this.onAfterDelete();
+                },
+                failure: function () {
+                    if (this.showDeleteMask) {
+                        this.deleteMask.hide();
+                    }
+                    Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), i18nItems)); 
+                }
+            };
+            
+            if (sm.isFilterSelect && this.filterSelectionDelete) {
+                this.recordProxy.deleteRecordsByFilter(sm.getSelectionFilter(), options);
+            } else {
+                this.recordProxy.deleteRecords(records, options);
+            }
+        } else {
+            Ext.each(records, function(record) {
+                this.store.remove(record);
+            });
+        }
     },
     
     /**
