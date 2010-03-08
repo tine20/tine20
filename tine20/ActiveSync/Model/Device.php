@@ -17,6 +17,7 @@
  * class to hold device data
  * 
  * @package     ActiveSync
+ * @property    string  $id the id
  */
 class ActiveSync_Model_Device extends Tinebase_Record_Abstract
 {  
