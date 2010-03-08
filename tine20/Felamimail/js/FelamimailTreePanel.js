@@ -772,8 +772,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * get all folders to update of account in store
      * 
      * @param {String} accountId
-     * 
-     * TODO make date comparison work (record.get('cache_timestamp') should return a date object!
      */
     getFoldersForUpdateStatus: function(accountId) {
         var result = [];
@@ -782,7 +780,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         //console.log(this.folderStore);
         var accountFolders = this.folderStore.queryBy(function(record) {
             var timestamp = record.get('imap_timestamp');
-            return (record.get('account_id') == accountId && timestamp.getElapsed() > 300000); // 5 minutes
+            return (record.get('account_id') == accountId && (timestamp == '' || timestamp.getElapsed() > 300000)); // 5 minutes
         });
         //console.log(accountFolders);
         accountFolders.each(function(record) {
