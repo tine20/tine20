@@ -204,4 +204,23 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Felamimail', '3.5');
     }
+    
+    /**
+     * update function (-> 3.6)
+     * - clear all existing folder message caches
+     */    
+    public function update_5()
+    {
+        // loop all folders
+        $folderBackend = new Felamimail_Backend_Folder();
+        $folders = $folderBackend->getAll();
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing all folder message caches ...');
+        foreach ($folders as $folder) {
+            if ($folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
+                Felamimail_Controller_Cache_Message::getInstance()->clear($folder);
+            }
+        }
+        
+        $this->setApplicationVersion('Felamimail', '3.6');
+    }
 }
