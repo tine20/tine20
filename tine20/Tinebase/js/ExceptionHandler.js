@@ -169,6 +169,16 @@ Tine.Tinebase.ExceptionHandler = function() {
                 });
                 break;
             
+            // Service Unavailable!
+            // Use this error code for generic problems like missconfig we don't want to see bugreports for
+            case 503:
+                Ext.MessageBox.show({
+                    title: _('Service Unavailable'), 
+                    msg: _('The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.WARNING
+                });
+                break;
             // if communication is lost, we can't create a nice ext window.
             case 510:
                 alert(_('Connection lost, please check your network!'));
