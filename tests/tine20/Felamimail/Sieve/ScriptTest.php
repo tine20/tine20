@@ -177,7 +177,7 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
         $script->parseScript($this->_smartSieveVacation);
         
         $rules = $script->getRules();
-        echo $script->getSieve();
+        
         $this->assertEquals(3, count($rules));
     }
 }
