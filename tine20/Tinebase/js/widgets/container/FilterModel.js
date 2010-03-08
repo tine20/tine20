@@ -98,7 +98,8 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
                         if (value == Tine.Tinebase.registry.get('currentAccount').accountId) {
                             container.name = String.format(_('My {0}'), this.containersName);
                         }
-                        value = {id: value, name: value};
+                        // todo: resolve user at server time!
+                        container.name = value;
                     } else if (this.filter.data.operator == 'specialNode') {
                         switch (value) {
                             case 'all':
