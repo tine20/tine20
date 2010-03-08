@@ -327,16 +327,18 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             this.supr().doLayout.apply(this, arguments);
         }
         
-        this.arrangeButtons();
-        
-        this.filterStore.each(function(filter){
-            for (var formItemName in filter.formFields) {
-                if (filter.formFields[formItemName] && typeof filter.formFields[formItemName].syncSize == 'function') {
-                    filter.formFields[formItemName].setWidth(filter.formFields[formItemName].width);
-                    filter.formFields[formItemName].syncSize();
+        if (this.rendered) {
+            this.arrangeButtons();
+            
+            this.filterStore.each(function(filter){
+                for (var formItemName in filter.formFields) {
+                    if (filter.formFields[formItemName] && typeof filter.formFields[formItemName].syncSize == 'function') {
+                        filter.formFields[formItemName].setWidth(filter.formFields[formItemName].width);
+                        filter.formFields[formItemName].syncSize();
+                    }
                 }
-            }
-        }, this);
+            }, this);
+        }
     },
     
     /**
