@@ -71,7 +71,8 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     forceAll: true,
     lazyInit: false,
     //readOnly:true,
-    stateful: true,
+    // need to be reworked
+    //stateful: true,
     
     mode: 'local',
     valueField: 'id',
@@ -282,7 +283,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         
         // IE has problems with sate saving. Might be, that our clone function is not working correclty yet.
         if (! Ext.isIE && this.stateful) {
-            this.saveState();
+            //this.saveState();
         }
     },
     
@@ -299,18 +300,18 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         }, this);
 
         return recents;
-    },
+    }
     
     /**
      * @private
-     */
+     *
     applyState : function(state, config) {
         for (var container in state) {
             if(state.hasOwnProperty(container)) {
                 this.store.add(new Tine.Tinebase.Model.Container(state[container], state[container].id));
             }
         }
-    }
+    }*/
     
     
 });
