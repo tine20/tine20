@@ -105,7 +105,21 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
      */
     public function setValue($_value)
     {
-        parent::setValue($_value);
+        $value = array();
+        foreach ((array) $_value as $v) {
+            if (strpos($v, '/') !== FALSE) {
+                $filter = $this->path2filter($v);
+                if ($this->getOperator() !== 'in') {
+                    $this->setOperator($filter['operator']);
+                } else if ($filter['operator'] !== 'equals') {
+                    throw new Tinebase_Exception_UnexpectedValue('filter constallation not supported');
+                }
+                $v = $filter['value'];
+            }
+            $value[] = $v;
+        }
+        
+        parent::setValue(is_array($_value) ? $value : $value[0]);
         $this->_isResolved = FALSE;
     }
     
@@ -252,13 +266,51 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     }
     
     /**
+     * transforms path into filter
+     * 
+     * @param  string $path
+     * @return array
+     */
+    public static function path2filter($path)
+    {
+        if ($path == '/') {
+            return array('operator' => 'specialNode', 'value' => 'all');
+        }
+        
+        $parts = explode('/', $path);
+        Tinebase_Core::getLogger()->warn(print_r($parts, TRUE));
+        $partsCount = count($parts);
+        
+        switch($parts[1]) {
+            case 'personal':
+                switch ($partsCount) {
+                    case 2: return array('operator' => 'specialNode', 'value' => 'otherUsers');
+                    case 3: return array('operator' => 'personalNode', 'value' => $parts[2]);
+                    case 4: return array('operator' => 'equals', 'value' => $parts[3]);
+                }
+            case 'shared':
+                switch ($partsCount) {
+                    case 2: return array('operator' => 'specialNode', 'value' => 'shared');
+                    case 3: return array('operator' => 'equals', 'value' => $parts[2]);
+                }
+            case 'internal':
+                switch ($partsCount) {
+                    case 2: return array('operator' => 'specialNode', 'value' => $parts[1]);
+                }
+        }
+        
+        throw new Tinebase_Exception_UnexpectedValue('malformatted path');
+    }
+    
+    /**
      * transforms filter data from filter group into new representation if old
      * container filter notation is in use
      *
      * @param  array &$_data
      * @throws Tinebase_Exception_UnexpectedValue
      */
-    public static function _transformLegacyData(array &$_data, $_containerProperty='container_id') {
+    public static function _transformLegacyData(array &$_data, $_containerProperty='container_id')
+    {
         $legacyData = array();
         foreach ($_data as $key => $filterData) {
             if (array_key_exists('field', $filterData) && in_array($filterData['field'], array('containerType', 'container', 'owner'))) {
