@@ -386,17 +386,15 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     }
     
     /**
-     * get existing uids from imap server by passing an array of uids 
+     * get uids by uid
      * 
-     * @param array $_uids
-     * @return array
+     * @param int $from
+     * @param int|null $to
+     * @return array with uids
      */
-    public function getExistingUids($_uids)
+    public function getUidbyUid($from, $to = null)
     {
-        if (empty($_uids)) {
-            return array();
-        }
-        $result = $this->_protocol->fetch(array('UID'), $_uids, NULL, $this->_useUid);
+        $result = $this->_protocol->fetch(array('UID'), $from, $to, $this->_useUid);
         
         return array_values($result);
     }
