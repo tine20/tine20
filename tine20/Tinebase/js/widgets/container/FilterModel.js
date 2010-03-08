@@ -31,7 +31,8 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**
      * @cfg {Array} operators allowed operators
      */
-    operators: ['personalNode', 'specialNode', 'equals', 'in'],
+    operators: ['equals'],
+    //operators: ['personalNode', 'specialNode', 'equals', 'in'],
     
     /**
      * @cfg {String} field container field (defaults to container_id)
@@ -39,9 +40,9 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     field: 'container_id',
     
     /**
-     * @cfg {String} defaultOperator default operator, one of <tt>{@link #operators} (defaults to specialNode)
+     * @cfg {String} defaultOperator default operator, one of <tt>{@link #operators} (defaults to equals)
      */
-    defaultOperator: 'specialNode',
+    defaultOperator: 'equals',
     
     /**
      * @cfg {String} defaultValue default value (defaults to all)
@@ -59,11 +60,13 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         
         this.label = this.containerName;
         
+        /*
         // define custom operators
         this.customOperators = [
             {operator: 'specialNode',label: _('sub of')},
             {operator: 'personalNode',label: _('personal of')}
         ];
+        */
     },
     
     /**
@@ -73,13 +76,54 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
-        var value = new Tine.widgets.container.FilterModelValueField({
+        var defaultValue = this.defaultValue;
+        
+        var value = new Tine.widgets.container.selectionComboBox({
             app: this.app,
             filter: filter,
             width: 200,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
-            renderTo: el
+            renderTo: el,
+            appName: this.recordClass.getMeta('appName'),
+            containerName: this.containerName,
+            containersName: this.containersName,
+            getValue: function() {
+                return this.selectedContainer.path;
+            },
+            setValue: function(value) {
+                if (Ext.isString(value)) {
+                    var container = {id : value};
+                    if (this.filter.data.operator == 'personalNode') {
+                        if (value == Tine.Tinebase.registry.get('currentAccount').accountId) {
+                            container.name = String.format(_('My {0}'), this.containersName);
+                        }
+                        value = {id: value, name: value};
+                    } else if (this.filter.data.operator == 'specialNode') {
+                        switch (value) {
+                            case 'all':
+                                container.name = String.format(_('All {0}'), this.containersName);
+                                break;
+                            case 'shared':
+                                container.name = String.format(_('Shared {0}'), this.containersName);
+                                break;
+                            case 'otherUsers':
+                                container.name = String.format(_('Other Users {0}'), this.containersName);
+                                break;
+                            case 'internal':
+                                container.name = String.format(_('Internal {0}'), this.containerName);
+                                break;
+                        }
+                    } else {
+                        container = value;
+                    }
+                } else {
+                    container = value;
+                }
+                
+                return Tine.widgets.container.selectionComboBox.prototype.setValue.call(this, container);
+                
+            }
         });
         value.on('specialkey', function(field, e){
              if(e.getKey() == e.ENTER){
@@ -93,91 +137,3 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
 });
 
 Tine.widgets.grid.FilterToolbar.FILTERS['tine.widget.container.filtermodel'] = Tine.widgets.container.FilterModel;
-
-/**
- * @namespace   Tine.widgets.container
- * @class       Tine.widgets.container.FilterModelValueField
- * @extends     Ext.ux.form.LayerCombo
- * 
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
- */
-Tine.widgets.container.FilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo, {
-    hideButtons: false,
-    layerWidth: 400,
-    
-    formConfig: {
-        labelAlign: 'left',
-        labelWidth: 30
-    },
-    
-    getFormValue: function() {
-        /*
-        var ids = [];
-        var statusStore = Tine.widgets.container.Model.Attender.getAttendeeStatusStore();
-        
-        var formValues = this.getInnerForm().getForm().getValues();
-        for (var id in formValues) {
-            if (formValues[id] === 'on' && statusStore.getById(id)) {
-                ids.push(id);
-            }
-        }
-        
-        return ids;
-        */
-    },
-    
-    getItems: function() {
-        var items = [];
-        
-        /*
-        Tine.widgets.container.Model.Attender.getAttendeeStatusStore().each(function(status) {
-            items.push({
-                xtype: 'checkbox',
-                boxLabel: status.get('status_name'),
-                icon: status.get('status_icon'),
-                name: status.get('id')
-            });
-        }, this);
-        */
-        
-        return items;
-    },
-    
-    /**
-     * @param {String} value
-     * @return {Ext.form.Field} this
-     */
-    setValue: function(value) {
-        /*
-        value = Ext.isArray(value) ? value : [value];
-        
-        var statusStore = Tine.widgets.container.Model.Attender.getAttendeeStatusStore();
-        var statusText = [];
-        this.currentValue = [];
-        
-        Tine.widgets.container.Model.Attender.getAttendeeStatusStore().each(function(status) {
-            var id = status.get('id');
-            var name = status.get('status_name');
-            if (value.indexOf(id) >= 0) {
-                statusText.push(name);
-                this.currentValue.push(id);
-            }
-        }, this);
-        
-        this.setRawValue(statusText.join(', '));
-        */
-        return this;
-    },
-    
-    /**
-     * sets values to innerForm
-     */
-    setFormValue: function(value) {
-        /*
-        this.getInnerForm().getForm().items.each(function(item) {
-            item.setValue(value.indexOf(item.name) >= 0 ? 'on' : 'off');
-        }, this);
-        */
-    }
-});
