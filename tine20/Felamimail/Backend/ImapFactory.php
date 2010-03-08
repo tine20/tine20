@@ -18,13 +18,6 @@
 class Felamimail_Backend_ImapFactory
 {
     /**
-     * object instance
-     *
-     * @var array of Felamimail_Backend_Imap
-     */
-    private static $_instance = NULL;
-    
-    /**
      * backend object instances
      */
     private static $_backends = array();
@@ -55,7 +48,6 @@ class Felamimail_Backend_ImapFactory
             self::$_backends[$accountId] = new Felamimail_Backend_Imap($imapConfig);
         }
         
-        $instance = self::$_backends[$accountId];
-        return $instance;
+        return self::$_backends[$accountId];
     }
 }    
