@@ -327,6 +327,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @return boolean success
      * 
      * @todo add cache_status MOVING?
+     * @todo move messages in the cache?
      */
     public function moveMessages($_ids, $_folderId)
     {
