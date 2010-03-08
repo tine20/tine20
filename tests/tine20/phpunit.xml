@@ -1,0 +1,16 @@
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false">
+
+    <filter>
+      <blacklist>
+          <directory suffix=".php">tine20/library</directory>
+          <directory suffix=".php">tine20/Zend</directory>
+      </blacklist>
+    </filter>
+</phpunit>
