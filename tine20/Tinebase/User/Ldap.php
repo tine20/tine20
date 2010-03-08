@@ -508,7 +508,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         // add account to sql backend too
         $_account->accountId = $ldapUser->getId();
-        $user = $this->_sql->addUser($user);
+        $user = $this->_sql->addUser($_account);
         
         return $user;
     }
