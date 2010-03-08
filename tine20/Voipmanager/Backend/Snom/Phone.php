@@ -231,40 +231,6 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
     }            
     
     /**
-     * update an existing myPhone
-     *
-     * @param Voipmanager_Model_Snom_Phone $_phone the phonedata
-     * @return Voipmanager_Model_Snom_Phone
-     * @throws  Voipmanager_Exception_Validation
-     * @throws  Voipmanager_Exception_AccessDenied
-     */
-    public function updateMyPhone(Voipmanager_Model_MyPhone $_phone, $_accountId)
-    {
-        if (! $_phone->isValid()) {
-            throw new Voipmanager_Exception_Validation('invalid myPhone');
-        }
-        
-        $_validPhoneIds = $this->getValidPhoneIds($_accountId);   
-        if(empty($_validPhoneIds)) {
-            throw new Voipmanager_Exception_AccessDenied('not enough rights to edit phone');
-        }         
-        
-        $phoneId = $_phone->getId();
-        $phoneData = $_phone->toArray();
-        unset($phoneData['id']);
-        unset($phoneData['template_id']);
-        unset($phoneData['settings']);
-
-        $where = array($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $phoneId), $this->_db->quoteInto('id IN (?)', $_validPhoneIds) );
-
-        $this->_db->update($this->_tablePrefix . 'snom_phones', $phoneData, $where);
-
-  
-        return $this->get($phoneId);
-    }      
-    
-    
-    /**
      * update an existing phone
      *
      * @param Voipmanager_Model_Snom_Phone $_phone the phonedata
