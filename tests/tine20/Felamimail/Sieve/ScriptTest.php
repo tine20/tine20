@@ -25,6 +25,12 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
 {
     protected $_serializedSieveRule;
     
+    protected $_smartSieveRuleFileInto = '#rule&&13&&ENABLED&&&&&&&&folder&&Listen/Icecast&&0&&List-Id&&icecast.xiph.org&&0';
+    
+    protected $_smartSieveRuleDiscard  = '#rule&&15&&ENABLED&&&&&&Bacula: Backup OK of&&discard&&&&0&&&&&&0';
+    
+    protected $_smartSieveVacation = '#vacation&&7&&"info@example.com"&&Thank you very much for your email.\n\n&&off';
+    
     /**
      * Runs the test methods of this class.
      *
@@ -166,9 +172,12 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
         $script = new Felamimail_Sieve_Script();
         
         $script->parseScript($this->_serializedSieveRule);
+        $script->parseScript($this->_smartSieveRuleFileInto);
+        $script->parseScript($this->_smartSieveRuleDiscard);
+        $script->parseScript($this->_smartSieveVacation);
         
         $rules = $script->getRules();
-        
-        $this->assertEquals(1, count($rules));
+        echo $script->getSieve();
+        $this->assertEquals(3, count($rules));
     }
 }
