@@ -125,6 +125,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         });
         
         this.otherRecord = new Tine.Tinebase.Model.Container({id: 'other', name: String.format(_('choose other {0}...'), this.containerName)}, 'other');
+        
         //this.title = String.format(_('Recently used {0}:'), this.containersName);
         
         Tine.widgets.container.selectionComboBox.superclass.initComponent.call(this);
@@ -255,24 +256,28 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @private
      */
     setValue: function(container) {
-        //console.log(container);
-        // element which is already in this.store 
-        if (typeof(container) == 'string' && this.store.getById(container)) {
-            container = this.store.getById(container).data;
+        if (typeof container.get === 'function') {
+            // container is a record -> already in store -> nothing to do
+        } else if (container.id && this.store.getById(container)) {
+            // store already has a record of this container
+            container = this.store.getById(container);
+        } else if (container.path) {
+            container.name = container.name || Tine.Tinebase.container.path2name(container.path, this.containerName, this.containersName);
+            container.id = container.id ||container.path;
+            
+            container = new Tine.Tinebase.Model.Container(container, container.id);
+            this.store.add(container);
+        } else {
+            // reject container
+            return this;
         }
         
-        // dynamically add current container to store if not exists
-        if (container.id && ! this.store.getById(container.id)) {
-            // we don't push arround container records yet...
-            this.store.add(new Tine.Tinebase.Model.Container(container, container.id));
-        }
-        
-        this.selectedContainer = container;
+        this.selectedContainer = container.data;
         
         // make sure 'choose other' is the last item
         var other = this.store.getById('other');
         if (other) {
-            this.store.remove(other);
+            this.store.remove(this.otherRecord);
         }
         this.store.add(this.otherRecord);
         
