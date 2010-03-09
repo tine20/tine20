@@ -95,20 +95,20 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     extraItems: null,
     
-	// presets
 	iconCls: 'x-new-application',
 	border: false,
     autoScroll: true,
-    //style: 'overflow-x: hidden; overflow-y: auto',
-	
-	// holds treenode which got a contextmenu
+	enableDrop: true,
+    ddGroup: 'containerDDGroup',
+    
+    /**
+     * @fixme not needed => all events hand their events over!!!
+     * 
+     * @property ctxNode holds treenode which got a contextmenu
+     * @type Ext.tree.TreeNode
+     */
 	ctxNode: null,
     
-    // drag n drop
-    // TODO make this configurable?
-    enableDrop: true,
-    ddGroup: 'containerDDGroup',
-	
 	/**
      * init this treePanel
 	 */
@@ -213,11 +213,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             backendModel: 'Container'
 	    });
 	},
-    
-    hasGrant: function(node, grant) {
-        var attr = node.attributes;
-        return (attr.containerType == "singleContainer" && attr.container.account_grants[grant]);
-    },
     
     /**
      * expand automatically on node click
