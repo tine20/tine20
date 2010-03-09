@@ -33,6 +33,10 @@ Tine.widgets.grid.FilterPlugin = function(config) {
 };
 
 Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
+    /**
+     * @property {Ext.grid.GridPanel} grid
+     */
+    grid: null,
     
     /**
      * @property {Ext.data.Store} store
@@ -64,6 +68,7 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
      * @oaran {Ext.grid.GridPanel} grid
      */
     init: function(grid) {
+        this.grid = grid;
         this.store = grid.store;
         this.doBind();
     },
