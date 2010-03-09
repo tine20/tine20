@@ -73,6 +73,15 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         
         
         ############# TEST CONTACT ##########
+        $containerWithSyncGrant = new Tinebase_Model_Container(array(
+            'name'              => 'ContainerWithSycnGrant',
+            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            //'account_grants'    => 'Tine 2.0',
+        ));
+        #Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'ContainerWithSycnGrant', Tinebase_Model_Container::TYPE_PERSONAL);
+        
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
@@ -81,8 +90,9 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         );
         
         $container = $personalContainer[0];
+        $this->objects['container'] = $container;
         
-        $this->objects['initialContact'] = new Addressbook_Model_Contact(array(
+        $contact = new Addressbook_Model_Contact(array(
             'adr_one_countryname'   => 'DE',
             'adr_one_locality'      => 'Hamburg',
             'adr_one_postalcode'    => '24xxx',
@@ -95,7 +105,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
             'adr_two_region'        => 'Hamburg',
             'adr_two_street'        => 'Pickhuben 4',
             'adr_two_street2'       => 'no second street2',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
+            'bday'                  => '1975-01-02 03:00:00', // new Zend_Date???
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
 //            'jpegphoto'             => file_get_contents(dirname(__FILE__) . '/../../Tinebase/ImageHelper/phpunit-logo.gif'),
@@ -105,20 +115,30 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
             'n_fileas'              => 'Kneschke, Lars',
         )); 
         
-        
-        $contact = $this->objects['initialContact'];
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
+        #var_dump($contact->toArray());
+        $this->objects['contact'] = $contact;
         
         ########### Test Controller / uit ###############
-        $device = new ActiveSync_Model_Device(array(
+        $palm = new ActiveSync_Model_Device(array(
             'deviceid'  => 'test_device_id',
-            'devicetype' => 'test_device_type',
+            'devicetype' => 'palm',
             'owner_id' => $user->getId(),
             'policy_id'=> 'test_:policy_id'
            )
         );
-        $this->_controller = new ActiveSync_Controller_Contacts($device, new Zend_Date(null, null, 'de_DE'));
+        $this->objects['devicePalm'] = $palm;
         
+        $iphone = new ActiveSync_Model_Device(array(
+            'deviceid'  => 'test_device_id',
+            'devicetype' => 'iphone',
+            'owner_id' => $user->getId(),
+            'policy_id'=> 'test_:policy_id'
+           )
+        );
+        $this->objects['deviceIPhone'] = $iphone;
+        
+        //$this->_controller = new ActiveSync_Controller_Contacts($device, new Zend_Date(null, null, 'de_DE'));
     }
 
     /**
@@ -136,26 +156,72 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
             // do nothing
         }
 
-        Addressbook_Controller_Contact::getInstance()->delete(array($this->objects['initialContact']->getId()));
+        Addressbook_Controller_Contact::getInstance()->delete(array($this->objects['contact']->getId()));
     }
     
-    public function testAppendXml()
+    /**
+     * validate getFolders for all devices except IPhone
+     */
+    public function testGetFoldersPalm()
     {
-    	$defaultNameSpace      = 'uri:AirSync';
-        $documentElement       = 'Sync';
+    	$controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Zend_Date(null, null, 'de_DE'));
+    	
+    	$folders = $controller->getFolders();
+    	
+    	$this->assertArrayHasKey("addressbook-root", $folders, "key addressbook-root not found");
+    }
+    
+    /**
+     * validate getFolders for IPhones
+     */
+    public function testGetFoldersIPhone()
+    {
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
+        
+        $folders = $controller->getFolders();
+        #var_dump($folders);
+        $this->assertArrayNotHasKey("addressbook-root", $folders, "key addressbook-root found");
+    }
+    
+    /**
+     * validate xml generation for all devices except IPhone
+     */
+    public function testAppendXmlPalm()
+    {
     	$dtd                   = @DOMImplementation::createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
-        $testDom               = @DOMImplementation::createDocument($defaultNameSpace, $documentElement, $dtd);
+        $testDom               = @DOMImplementation::createDocument('uri:AirSync', 'Sync', $dtd);
         $testDom->formatOutput = false;
         $testDom->encoding     = 'utf-8';
+        $testNode = $testDom->appendChild($testDom->createElementNS('uri:AirSync', 'TestAppendXml'));
         
-        $testNode = $testDom->appendChild($testDom->createElementNS('uri:AirSync', 'TestAppendXml'));   	
+        $controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Zend_Date(null, null, 'de_DE'));   	
         
-    	$this->_controller->appendXML($testDom, $testNode, 0, $this->objects['initialContact']->getId());
+    	$controller->appendXML($testDom, $testNode, null, $this->objects['contact']->getId());
     	$this->assertEquals(Tinebase_Translation::getCountryNameByRegionCode('DE'), $testDom->getElementsByTagName('BusinessCountry')->item(0)->nodeValue);
-    	$this->assertEquals('Deutschland', $testDom->getElementsByTagName('BusinessCountry')->item(0)->nodeValue);
-    	$this->assertEquals('1975-01-02T03:04:05.000Z', $testDom->getElementsByTagName('Birthday')->item(0)->nodeValue);
+    	$this->assertEquals('Germany', $testDom->getElementsByTagName('BusinessCountry')->item(0)->nodeValue);
+    	$this->assertEquals('1975-01-02T03:00:00.000Z', $testDom->getElementsByTagName('Birthday')->item(0)->nodeValue);
     }
-
+    
+    /**
+     * test xml generation for IPhone
+     * 
+     * birthday must have 12 hours added
+     */
+    public function testAppendXmlIPhone()
+    {
+        $dtd                   = @DOMImplementation::createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
+        $testDom               = @DOMImplementation::createDocument('uri:AirSync', 'Sync', $dtd);
+        $testDom->formatOutput = false;
+        $testDom->encoding     = 'utf-8';
+        $testNode = $testDom->appendChild($testDom->createElementNS('uri:AirSync', 'TestAppendXml'));
+        
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));     
+        
+        $controller->appendXML($testDom, $testNode, null, $this->objects['contact']->getId());
+        // offset birthday 12 hours
+        $this->assertEquals('1975-01-02T15:00:00.000Z', $testDom->getElementsByTagName('Birthday')->item(0)->nodeValue);
+    }
+    
 }
     
 if (PHPUnit_MAIN_METHOD == 'ActiveSync_Controller_Contacts::main') {
