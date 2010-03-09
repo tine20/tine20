@@ -115,8 +115,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         var containersName = this.recordClass ? this.recordClass.getMeta('containersName') : 'containers';
         
         //ngettext('container', 'containers', n);
-        this.containerName = this.app.i18n.n_hidden(containerName, containersName, 1);
-        this.containersName = this.app.i18n._hidden(containersName);
+        this.containerName = this.containerName || this.app.i18n.n_hidden(containerName, containersName, 1);
+        this.containersName = this.containersName || this.app.i18n._hidden(containersName);
         
         this.loader = this.loader || new Tine.widgets.tree.Loader({
             getParams: this.onBeforeLoad.createDelegate(this),
