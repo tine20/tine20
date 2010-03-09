@@ -94,6 +94,12 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @cfg {array} extraItems additional items to display under all
      */
     extraItems: null,
+    /**
+     * @cfg {String} filterMode one of:
+     *   - gridFilter: hooks into the grids.store
+     *   - filterToolbar: hooks into the filterToolbar (container filterModel required)
+     */
+    filterMode: 'gridFilter',
     
 	iconCls: 'x-new-application',
 	border: false,
@@ -122,11 +128,14 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             path: '/',
             expanded: true,
             children: [{
-                path: '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId
+                path: '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId,
+                id: 'personal'
             }, {
-                path: '/shared'
+                path: '/shared',
+                id: 'shared'
             }, {
-                path: '/personal'
+                path: '/personal',
+                id: 'otherUsers'
             }].concat(this.getExtraItems())
         };
         
@@ -134,6 +143,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 		this.initContextMenu();
 		
         this.getSelectionModel().on('beforeselect', this.onBeforeSelect, this);
+        this.getSelectionModel().on('selectionchange', this.onSelectionChange, this);
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforenodedrop, this);
@@ -157,13 +167,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
             this.filterPlugin = new Tine.widgets.container.TreeFilterPlugin({
-                scope: this,
-                ommitFilter: this.ommitTreeFilter
+                treePanel: this
             });
-            
-            this.getSelectionModel().on('selectionchange', function(sm, node){
-                this.filterPlugin.onFilterChange();
-            }, this);
         }
         
         return this.filterPlugin;
@@ -260,7 +265,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     onBeforeCreateNode: function(attr) {
         if (attr.accountDisplayName) {
             attr.name = attr.accountDisplayName;
-            attr.path = '/personal/' + attr.accountId
+            attr.path = '/personal/' + attr.accountId;
+            attr.id = attr.accountId;
         }
         
         if (! attr.name && attr.path) {
@@ -270,8 +276,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         Ext.applyIf(attr, {
             text: Ext.util.Format.htmlEncode(attr.name),
             qtip: Ext.util.Format.htmlEncode(attr.name),
-            leaf: !!attr.id,
-            allowDrop: !!attr.id,
+            leaf: !!attr.account_grants,
+            allowDrop: !!attr.account_grants,
             container: attr
         });
     },
@@ -348,6 +354,21 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         // prevent repair actions
         dropEvent.dropStatus = true;
         return true;
+    },
+    
+    /**
+     * called when tree selection changes
+     * 
+     * @param {} sm
+     * @param {} node
+     */
+    onSelectionChange: function(sm, node) {
+        if (this.filterMode == 'gridFilter' && this.filterPlugin) {
+            this.filterPlugin.onFilterChange();
+        }
+        if (this.filterMode == 'filterToolbar') {
+            
+        }
     }
     
 });
@@ -361,16 +382,21 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
  * @extends   Tine.widgets.grid.FilterPlugin
  */
 Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
+    /**
+     * @cfg {ContainerTree} treePanel (required)
+     */
+    treePanel: null,
     
     /**
      * gets value of this container filter
      */
     getValue: function() {
-        if (this.ommitFilter) {
+        // only return values if gridFilter mode
+        if (this.treePanel.filterMode !== 'gridFilter') {
             return null;
         }
         
-        var sm = this.scope.getSelectionModel();
+        var sm = this.treePanel.getSelectionModel();
         var selection =  typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
         
         var filters = [];
@@ -395,64 +421,17 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
      * @param {Array} all filters
      */
     setValue: function(filters) {
-        for (var i=0; i<filters.length; i++) {
-            if (filters[i].field == 'container_id') {
-                switch (filters[i].operator) {
-                    case 'equals':
-                        var parts = filters[i].value.path.replace(/^\//, '').split('/');
-                        var userId, containerId;
-                        switch (parts[0]) {
-                            case 'personal':
-                                userId = parts[1];
-                                containerId = parts[2];
-                                
-                                if (userId == Tine.Tinebase.registry.get('currentAccount').accountId) {
-                                    this.scope.selectPath('/root/all/user/' + containerId);
-                                } else {
-                                    this.scope.selectPath('/root/all/otherUsers/' + containerId);
-                                }
-                                break;
-                            case 'shared':
-                                containerId = parts[1];
-                                this.scope.selectPath('/root/all/shared/' + containerId);
-                                break;
-                            default:
-                                console.error('no such container type');
-                                break;
-                                
-                        }
-                        break;
-                    case 'specialNode':
-                        switch (filters[i].value) {
-                            case 'all':
-                                this.scope.selectPath('/root/all');
-                                break;
-                            case 'shared':
-                            case 'otherUsers':
-                            case 'internal':
-                                this.scope.selectPath('/root/all' + filters[i].value);
-                                break;
-                            default:
-                                //throw new 
-                                console.error('no such container_id spechial node');
-                                break;
-                        }
-                        break;
-                    case 'personalNode':
-                        if (filters[i].value == Tine.Tinebase.registry.get('currentAccount').accountId) {
-                            this.scope.selectPath('/root/all/user');
-                        } else {
-                            //scope.expandPath('/root/all/otherUsers');
-                            this.scope.selectPath('/root/all/otherUsers/' + filters[i].value);
-                        }
-                        break;
-                    default:
-                        console.error('no such container_id filter operator');
-                        break;
-                }
+        Ext.each(filters, function(filter) {
+            if (filter.field !== 'container_id') {
+                return;
             }
-        }
-        //console.log(filters);
+            
+            var pathParts = filter.value.path.split('/');
+            if (pathParts.length > 1) {
+                pathParts[1] = Tine.Tinebase.container.path2type(pathParts);
+            }
+            this.treePanel.selectPath(pathParts.join('/'));
+        }, this);
     }
 });
 
