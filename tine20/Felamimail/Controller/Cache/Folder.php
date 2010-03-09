@@ -245,7 +245,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INVALID;
             
             } else {
-                $_folder->imap_recentcount  = $imapFolderValues['recent'];
                 $_folder->imap_totalcount   = $imapFolderValues['exists'];
                 $_folder->imap_status       = Felamimail_Model_Folder::IMAP_STATUS_OK;
                 $_folder->imap_uidvalidity  = $imapFolderValues['uidvalidity'];

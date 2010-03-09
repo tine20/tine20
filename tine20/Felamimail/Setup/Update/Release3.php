@@ -141,12 +141,6 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         ));
         $this->_backend->addCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
             '<field>
-                    <name>imap_recentcount</name>
-                    <type>integer</type>
-                </field>'
-        ));
-        $this->_backend->addCol('felamimail_folder', new Setup_Backend_Schema_Field_Xml(
-            '<field>
                     <name>cache_uidnext</name>
                     <type>integer</type>
                     <length>64</length>

@@ -111,7 +111,6 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
         'imap_uidnext'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'imap_uidvalidity'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'imap_totalcount'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'imap_recentcount'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'imap_timestamp'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // cache values 
         'cache_status'          => array(

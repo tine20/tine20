@@ -284,10 +284,6 @@
                     <type>integer</type>
                 </field>
                 <field>
-                    <name>imap_recentcount</name>
-                    <type>integer</type>
-                </field>
-                <field>
                     <name>imap_timestamp</name>
                     <type>datetime</type>
                 </field>
