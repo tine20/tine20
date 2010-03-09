@@ -14,6 +14,8 @@ Ext.namespace('Tine.Felamimail');
 /**
  * get felamimail tree panel context menus
  * this is used in Tine.Felamimail.TreePanel (with createDelegate)
+ * 
+ * TODO use Ext.apply to get this
  */
 Tine.Felamimail.setTreeContextMenus = function() {
         
