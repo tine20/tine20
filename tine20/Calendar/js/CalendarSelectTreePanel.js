@@ -34,10 +34,11 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
             optimizeSelection: true
         });
         
+        /*
         this.loader = new Tine.Calendar.CalendarSelectTreeLoader({
             appName: this.appName
         });
-        
+        */
         // inject resources tree node
         this.extraItems = [{
             text: String.format(this.app.i18n._('Resources {0}'), this.containersName),
@@ -48,6 +49,8 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         }];
         
         this.supr().initComponent.call(this);
+        
+        this.loader.processResponse = this.processResponse.createDelegate(this);
     },
     
     afterRender: function() {
@@ -71,7 +74,7 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
             this.filterPlugin = new Tine.widgets.container.TreeFilterPlugin({
-                scope: this,
+                treePanel: this,
                 node2Filter: function(node) {
                     var id = node.attributes.id;
                     
@@ -104,33 +107,28 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         }, this);
         
         return checkedPaths;
-    }
-});
-
-
-/**
- * @namespace   Tine.Calendar.Calendar
- * @class       Tine.Calendar.CalendarSelectTreeLoader
- * @extends     Tine.widgets.container.TreeLoader
- */
-Tine.Calendar.CalendarSelectTreeLoader = Ext.extend(Tine.widgets.container.TreeLoader, {
+    },
     
     /**
-     * draw colored bullets before cal icon
+     * adopt attr
+     * 
+     * @param {Object} attr
      */
-    inspectCreateNode: function(attr) {
+    onBeforeCreateNode: function(attr) {
+        this.supr().onBeforeCreateNode.apply(this, arguments);
+        
         if (attr.container) {
             attr.container.capabilites_private = true;
         }
         
-        if (attr.id.match(/resource/i)) {
+        if (attr.id && attr.id.match(/resource/i)) {
             // don't add colors to resources yet
             return;
         }
         
         attr.listeners = {
             append: function(tree, node, appendedNode, index) {
-                if (appendedNode.attributes.containerType == 'singleContainer') {
+                if (appendedNode.leaf) {
                     var container = appendedNode.attributes.container;
                     // dynamically initialize colorMgr if needed
                     if (! Tine.Calendar.colorMgr) {
@@ -147,7 +145,13 @@ Tine.Calendar.CalendarSelectTreeLoader = Ext.extend(Tine.widgets.container.TreeL
         };
     },
     
-    getParams: function(node) {
+    /**
+     * returns params for async request
+     * 
+     * @param {Ext.tree.TreeNode} node
+     * @return {Object}
+     */
+    onBeforeLoad: function(node) {
         if (node.attributes.id.match(/resource/i)) {
             return {
                 method: 'Calendar.searchResources',
@@ -155,24 +159,25 @@ Tine.Calendar.CalendarSelectTreeLoader = Ext.extend(Tine.widgets.container.TreeL
             };
         }
         
-        return Tine.Calendar.CalendarSelectTreeLoader.superclass.getParams.apply(this, arguments);
+        return this.supr().onBeforeLoad.apply(this, arguments);
     },
     
     processResponse: function(response, node, callback, scope) {
         if (node.attributes.id.match(/resource/i)) {
-            var o = response.responseData || Ext.decode(response.responseText);
+            var o = response.responseData = response.responseData || Ext.decode(response.responseText);
             Ext.each(o.results, function(resource) {
                 // fake grants
                 resource.account_grants = {
                     account_id: Tine.Tinebase.registry.get('currentAccount').accountId,
                     readGrant: true
                 };
+                resource.leaf = true;
                 
                 // prefix id
                 resource.id = 'resource_' + resource.id;
             });
         }
         
-        return Tine.Calendar.CalendarSelectTreeLoader.superclass.processResponse.apply(this, arguments);
+        return Tine.widgets.tree.Loader.prototype.processResponse.apply(this.loader, arguments);
     }
 });
