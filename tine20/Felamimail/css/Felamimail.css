@@ -163,11 +163,6 @@
     border-left: 2px solid #000088;
 }
 
-.felamimail-body-signature {
-    font-size: 9px;
-    color: #888888;
-}
-
 .x-fmail-uploadrow .x-grid3-cell-inner {
     background-image:url(../../library/ExtJS/resources/images/default/grid/wait.gif);
     background-repeat: no-repeat;

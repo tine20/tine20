@@ -212,10 +212,12 @@ Ext.namespace('Tine.Felamimail');
                             + 'padding-left: 10px;'
                             + 'border-left: 2px solid #000088;'
                         + '} '
+                        /*
                         + '.felamimail-body-signature {'
                             + 'font-size: 9px;'
                             + 'color: #888888;'
                         + '} '
+                        */
                     + '</style>'
                     + '</head>'
                     + '<body>'
