@@ -486,5 +486,3 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
         }, this);
     }
 });
-
-Tine.widgets.container.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {});
