@@ -49,7 +49,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
     }
     
     
-    public function setUp()
+    protected function setUp()
     {   	
     	############# TEST USER ##########
     	$user = new Tinebase_Model_FullUser(array(
@@ -149,7 +149,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $testDom->encoding     = 'utf-8';
         
         $testNode = $testDom->appendChild($testDom->createElementNS('uri:AirSync', 'TestAppendXml'));   	
-
+        
     	$this->_controller->appendXML($testDom, $testNode, 0, $this->objects['initialContact']->getId());
     	$this->assertEquals(Tinebase_Translation::getCountryNameByRegionCode('DE'), $testDom->getElementsByTagName('BusinessCountry')->item(0)->nodeValue);
     	$this->assertEquals('Deutschland', $testDom->getElementsByTagName('BusinessCountry')->item(0)->nodeValue);
