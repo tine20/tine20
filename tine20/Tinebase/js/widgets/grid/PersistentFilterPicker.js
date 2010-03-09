@@ -41,9 +41,23 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
      * @private
      */
     initComponent: function() {
-        this.loader = new Tine.widgets.grid.PersistentFilterLoader({
+        this.loader = new Tine.widgets.tree.Loader({
             app: this.app,
-            filter: this.filter
+            filter: this.filter,
+            method: 'Tinebase_PersistentFilter.search',
+            inspectCreateNode: function(attr) {
+                var isPersistentFilter = !!attr.model && !!attr.filters;
+                
+                if (isPersistentFilter) {
+                    Ext.apply(attr, {
+                        isPersistentFilter: isPersistentFilter,
+                        text: attr.name,
+                        id: attr.id,
+                        leaf: attr.leaf === false ? attr.leaf : true,
+                        filter: attr
+                    });
+                }
+            }
         });
         
         if (! this.root) {
@@ -146,25 +160,3 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
     }
     
 });
-
-Tine.widgets.grid.PersistentFilterLoader = Ext.extend(Tine.widgets.tree.Loader, {
-
-	method: 'Tinebase_PersistentFilter.search',
-	
-	/**
-     * @private
-     * 
-     * @todo generalize this?
-     */
-    createNode: function(attr) {
-        var isPersistentFilter = !!attr.model && !!attr.filters,
-        node = isPersistentFilter ? {
-            isPersistentFilter: isPersistentFilter,
-            text: attr.name,
-            id: attr.id,
-            leaf: attr.leaf === false ? attr.leaf : true,
-            filter: attr
-        } : attr;
-        return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);
-    }
- });
