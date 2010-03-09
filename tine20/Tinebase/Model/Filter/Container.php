@@ -150,6 +150,30 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
         if ($_valueToJson == true) {
             $cc = Tinebase_Container::getInstance();
             switch ($this->_operator) {
+                case 'specialNode':
+                    switch($this->_value) {
+                        case 'all':
+                            $result['value'] = array('path' => '/');
+                            break;
+                        case 'shared':
+                            $result['value'] = array('path' => '/shared');
+                            break;
+                        case 'otherUsers':
+                            $result['value'] = array('path' => '/personal');
+                            break;
+                        case 'internal':
+                            $result['value'] = array('path' => '/internal');
+                            break;
+                    }
+                    break;
+                case 'personalNode':
+                    $owner = Tinebase_User::getInstance()->getUserById($this->_value);
+                    $result['value'] = array(
+                        'path' => "/personal/{$this->_value}",
+                        'name' => $owner->accountDisplayName,
+                        'owner' => $owner->toArray()
+                    );
+                    break;
                 case 'equals':
                 	if ($this->_value) {
 	                    $container = $cc->getContainerById($this->_value);
