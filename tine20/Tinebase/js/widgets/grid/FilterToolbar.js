@@ -508,20 +508,19 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }
         this.filterStore.add(filter);
         
-        // NOTE: adding filter rows and contents in hidden state leads to layouting problems
-        //var isHidden = this.hidden;
-        //this.show();
-        
         var fRow = this.templates.filterrow.insertAfter(this.el.child('tr[class=fw-ftb-frow]:last'),{
             id: 'tw-ftb-frowid-' + filter.id
         }, true);
         
         this.renderFilterRow(filter);
+        
         this.onFilterRowsChange();
         
-        //if (isHidden) {
-        //    this.hide();
-        //}
+        /*
+        if (!this.supressEvents) {
+            this.onFiltertrigger();
+        }
+        */
         return filter;
     },
     
@@ -558,8 +557,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }
         fRow.remove();
         
+        this.onFilterRowsChange();
+        
         if (!this.supressEvents) {
-            this.onFilterRowsChange();
             this.onFiltertrigger();
         }
     },
