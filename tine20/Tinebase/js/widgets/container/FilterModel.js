@@ -67,7 +67,32 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             {operator: 'personalNode',label: _('personal of')}
         ];
         */
+        
+        // legacy handling for tree panel filter plugin:
+        // - atm. the TreeFilterPlugin is initialised as GridPlugin by the mainscreen
+        //   we grep this plugin and rewrite it to work as plugin for this filterModel
+        //console.log(this.ftb.onBeforeLoad);
+        
+        //this.ftb.onBeforeLoad = this.ftb.onBeforeLoad.createInterceptor(this.onBeforeFtbLoad, this);
     },
+    
+    /**
+     * legacy handling for tree panel filter plugin
+     *
+    onBeforeFtbLoad: function(store, options) {
+        options = options || {};
+        options.params = options.params || {};
+        options.params.filter = options.params.filter ? options.params.filter : [];
+        
+        // check if alrady a filter for "our" field is registered and remove it
+        Ext.each(options.params.filter, function(filter) {
+            if (filter.operator === this.field) {
+                options.params.filter.remove(filter);
+                return false;
+            }
+        }, this);
+    },
+    */
     
     /**
      * value renderer
@@ -85,6 +110,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el,
+            allowNodeSelect: true,
             appName: this.recordClass.getMeta('appName'),
             containerName: this.containerName,
             containersName: this.containersName,
@@ -97,9 +123,10 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
                     if (this.filter.data.operator == 'personalNode') {
                         if (value == Tine.Tinebase.registry.get('currentAccount').accountId) {
                             container.name = String.format(_('My {0}'), this.containersName);
+                        } else {
+                            // todo: resolve user at server time!
+                            container.name = value;
                         }
-                        // todo: resolve user at server time!
-                        container.name = value;
                     } else if (this.filter.data.operator == 'specialNode') {
                         switch (value) {
                             case 'all':
