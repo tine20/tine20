@@ -67,32 +67,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             {operator: 'personalNode',label: _('personal of')}
         ];
         */
-        
-        // legacy handling for tree panel filter plugin:
-        // - atm. the TreeFilterPlugin is initialised as GridPlugin by the mainscreen
-        //   we grep this plugin and rewrite it to work as plugin for this filterModel
-        //console.log(this.ftb.onBeforeLoad);
-        
-        //this.ftb.onBeforeLoad = this.ftb.onBeforeLoad.createInterceptor(this.onBeforeFtbLoad, this);
     },
-    
-    /**
-     * legacy handling for tree panel filter plugin
-     *
-    onBeforeFtbLoad: function(store, options) {
-        options = options || {};
-        options.params = options.params || {};
-        options.params.filter = options.params.filter ? options.params.filter : [];
-        
-        // check if alrady a filter for "our" field is registered and remove it
-        Ext.each(options.params.filter, function(filter) {
-            if (filter.operator === this.field) {
-                options.params.filter.remove(filter);
-                return false;
-            }
-        }, this);
-    },
-    */
     
     /**
      * value renderer
@@ -107,6 +82,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             app: this.app,
             filter: filter,
             width: 200,
+            listWidth: 200,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el,
@@ -116,6 +92,11 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             containersName: this.containersName,
             getValue: function() {
                 return this.selectedContainer ? this.selectedContainer.path : null;
+            },
+            setValue: function(value) {
+                var operatorText = this.filter.data.operator === 'personalNode' ? _('is personal of') : _('is equal to');
+                this.filter.formFields.operator.setText(operatorText);
+                return Tine.widgets.container.selectionComboBox.prototype.setValue.call(this, value);
             }
         });
         value.on('specialkey', function(field, e){
