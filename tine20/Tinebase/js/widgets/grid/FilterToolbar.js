@@ -37,7 +37,6 @@ Tine.widgets.grid.FilterToolbar = function(config) {
     
     // become filterPlugin
     Ext.applyIf(this, new Tine.widgets.grid.FilterPlugin());
-    
 };
 
 /**
@@ -476,6 +475,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         if (config.isFilterModel) {
             return config;
         }
+        
+        // push this filtertoolbar in config
+        config.ftb = this;
         
         if (config.filtertype) {
             // filter from reg
