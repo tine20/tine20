@@ -21,14 +21,10 @@ Ext.ns('Tine.widgets', 'Tine.widgets.container');
   * and manager permissions<p>
   * <p>Example usage:</p>
   * <pre><code>
-  var taskPanel =  new Tine.containerTreePanel({
-        iconCls: 'TasksTreePanel',
-        title: 'Tasks',
-        appName: 'Tasks',
-        containerName: 'to do list',
-        containersName: 'to do lists',
-        border: false
-    });
+var taskPanel =  new Tine.containerTreePanel({
+    app: Tine.Tinebase.appMgr.get('Tasks'),
+    recordClass: Tine.Tasks.Task
+});
   </code></pre>
   */
 Tine.widgets.container.TreePanel = function(config) {
@@ -61,35 +57,18 @@ Tine.widgets.container.TreePanel = function(config) {
         'containerpermissionchange'
     );
         
-    if (this.app) {
-        this.appName = this.app.appName;
-        
-        if (this.recordClass) {
-            this.containerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
-            this.containersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
-        }
-    }
     Tine.widgets.container.TreePanel.superclass.constructor.call(this);
 };
 
 Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
  	/**
-     * @cfg {string} appName name of application
+     * @cfg {Tine.Tinebase.Application} app
      */
-    appName: '',
+    app: null,
     /**
-     * @cfg {String} requiredGrant
-     * grant which is required to select leaf node(s)
+     * @cfg {String} defaultContainerPath
      */
-    requiredGrant: 'readGrant',
-    /**
-     * @cfg {string} containerName name of container (singular)
-     */
-	containerName: 'container',
-    /**
-     * @cfg {string} containerName name of container (plural)
-     */
-    containersName: 'containers',
+    defaultContainerPath: null,
     /**
      * @cfg {array} extraItems additional items to display under all
      */
@@ -100,8 +79,17 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      *   - filterToolbar: hooks into the filterToolbar (container filterModel required)
      */
     filterMode: 'gridFilter',
+    /**
+     * @cfg {Tine.data.Record} recordClass
+     */
+    recordClass: null,
+    /**
+     * @cfg {String} requiredGrant
+     * grant which is required to select leaf node(s)
+     */
+    requiredGrant: 'readGrant',
     
-	iconCls: 'x-new-application',
+	//iconCls: 'x-new-application',
 	border: false,
     autoScroll: true,
 	enableDrop: true,
@@ -118,7 +106,18 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	/**
      * init this treePanel
 	 */
-	initComponent: function(){
+	initComponent: function() {
+        if (! this.app) {
+            this.app = Tine.Tinebase.appMgr.get(this.appName);
+        }
+        
+        var containerName = this.recordClass ? this.recordClass.getMeta('containerName') : 'container';
+        var containersName = this.recordClass ? this.recordClass.getMeta('containersName') : 'containers';
+        
+        //ngettext('container', 'containers', n);
+        this.containerName = this.app.i18n.n_hidden(containerName, containersName, 1);
+        this.containersName = this.app.i18n._hidden(containersName);
+        
         this.loader = this.loader || new Tine.widgets.tree.Loader({
             getParams: this.onBeforeLoad.createDelegate(this),
             inspectCreateNode: this.onBeforeCreateNode.createDelegate(this)
@@ -151,6 +150,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
         return;
 	},
+    
+    /**
+     * template fn for subclasses to set default path
+     * 
+     * @return {String}
+     */
+    getDefaultContainerPath: function() {
+        return this.defaultContainerPath || '/';
+    },
     
     /**
      * template fn for subclasses to append extra items
@@ -189,12 +197,30 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         return container;
     },
     
-	// private
+    /**
+     * convert containerPath to treePath
+     * 
+     * @param {String} containerPath
+     * @return {String}
+     */
+    getTreePath: function(containerPath) {
+        var treePath = '/' + this.getRootNode().id + (containerPath !== '/' ? containerPath : '');
+        treePath = treePath.replace('personal', Tine.Tinebase.container.path2type(containerPath));
+        treePath = treePath.replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountId, 'personal');
+        
+        return treePath;
+    },
+    
+	/**
+     * @private
+     * 
+     * - kill x-scrollers
+     * - select default path
+	 */
 	afterRender: function() {
 		Tine.widgets.container.TreePanel.superclass.afterRender.call(this);
         this.getEl().first().first().applyStyles('overflow-x: hidden');
-		this.expandPath('/');
-		this.selectPath('/');
+		this.selectContainerPath(this.getDefaultContainerPath());
 	},
     
 	/**
@@ -251,7 +277,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             
             if (type == Tine.Tinebase.container.TYPE_PERSONAL && pathParts[2] == Tine.Tinebase.registry.get('currentAccount').accountId) {
                 this.contextMenuUserFolder.showAt(event.getXY());
-            } else if(Tine.Tinebase.common.hasRight('admin', this.appName) || Tine.Tinebase.common.hasRight('manage_shared_folders', this.appName)) {
+            } else if(Tine.Tinebase.common.hasRight('admin', this.app.appName) || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName)) {
                 this.contextMenuUserFolder.showAt(event.getXY());
             }
         }
@@ -293,7 +319,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         
         var params = {
             method: 'Tinebase_Container.getContainer',
-            application: this.appName,
+            application: this.app.appName,
             containerType: Tine.Tinebase.container.path2type(pathParts),
             owner: pathParts[2]
         };
@@ -369,8 +395,16 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         if (this.filterMode == 'filterToolbar') {
             
         }
-    }
+    },
     
+    /**
+     * selects path by container Path
+     * 
+     * @param {String} containerPath
+     */
+    selectContainerPath: function(containerPath) {
+        return this.selectPath(this.getTreePath(containerPath));
+    }
 });
 
 
@@ -426,11 +460,7 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
                 return;
             }
             
-            var pathParts = filter.value.path.split('/');
-            if (pathParts.length > 1) {
-                pathParts[1] = Tine.Tinebase.container.path2type(pathParts);
-            }
-            this.treePanel.selectPath(pathParts.join('/'));
+            this.treePanel.selectContainerPath(filter.value.path);
         }, this);
     }
 });
