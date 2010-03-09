@@ -19,6 +19,8 @@ Tine.Tasks.TreePanel = function(config) {
     
     this.id = 'TasksTreePanel';
     this.recordClass = Tine.Tasks.Task;
+    
+    this.filterMode = 'filterToolbar';
     Tine.Tasks.TreePanel.superclass.constructor.call(this);
 };
 
