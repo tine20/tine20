@@ -82,6 +82,22 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function() {
+
+        this.signatureEditor = new Ext.form.HtmlEditor({
+            fieldLabel: this.app.i18n._('Signature'),
+            name: 'signature',
+            allowBlank: true,
+            height: 220,
+            getDocMarkup: function(){
+                var markup = '<span id="felamimail\-body\-signature">'
+                    + '</span>';
+                return markup;
+            },
+            plugins: [
+                new Ext.ux.form.HtmlEditor.RemoveFormat()
+            ]
+        });
+        
         return {
             layout: 'accordion',
             animate: true,
@@ -114,13 +130,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }, {
                     fieldLabel: this.app.i18n._('Organization'),
                     name: 'organization'
-                }, {
+                }, this.signatureEditor
+                /*, {
                     fieldLabel: this.app.i18n._('Signature'),
                     name: 'signature',
                     xtype: 'textarea',
                     height: 120,
                     maxLength: 2048
-                }]]
+                }*/]]
             }, {
                 title: this.app.i18n._('IMAP'),
                 autoScroll: true,
@@ -313,7 +330,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 400,
-        height: 500,
+        height: 600,
         name: Tine.Felamimail.AccountEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Felamimail.AccountEditDialog',
         contentPanelConstructorConfig: config

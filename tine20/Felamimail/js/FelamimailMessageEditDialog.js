@@ -212,12 +212,6 @@ Ext.namespace('Tine.Felamimail');
                             + 'padding-left: 10px;'
                             + 'border-left: 2px solid #000088;'
                         + '} '
-                        /*
-                        + '.felamimail-body-signature {'
-                            + 'font-size: 9px;'
-                            + 'color: #888888;'
-                        + '} '
-                        */
                     + '</style>'
                     + '</head>'
                     + '<body>'
@@ -273,7 +267,7 @@ Ext.namespace('Tine.Felamimail');
                             'change': function(combo, newValue, oldValue) {
                                 // get new signature
                                 var newSignature = Tine.Felamimail.getSignature(newValue);
-                                var signatureRegexp = new RegExp('<br><br><span class="felamimail\-body\-signature">\-\-<br>.*$');
+                                var signatureRegexp = new RegExp('<br><br><span id="felamimail\-body\-signature">\-\-<br>.*$');
                                 
                                 // update signature
                                 var bodyContent = this.htmlEditor.getValue();
