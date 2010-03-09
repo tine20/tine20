@@ -87,6 +87,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
                 {label: _('Quick search'),    field: 'query',    operators: ['contains']},
+                {filtertype: 'tine.widget.container.filtermodel', app: this.app, recordClass: this.recordClass},
                 {label: this.app.i18n._('Summary'), field: 'summary' },
                 {label: this.app.i18n._('Due Date'), field: 'due', valueType: 'date', operators: ['within', 'before', 'after']},
                 {filtertype: 'tasks.status'},
