@@ -7,8 +7,7 @@
  * @version     $Id$
  *
  */
-
-Ext.namespace('Tine.widgets', 'Tine.widgets.container');
+Ext.ns('Tine.widgets', 'Tine.widgets.container');
 
  /**
   * @namespace   Tine.widgets.container
@@ -35,6 +34,33 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 Tine.widgets.container.TreePanel = function(config) {
     Ext.apply(this, config);
     
+    this.addEvents(
+        /**
+         * @event containeradded
+         * Fires when a container was added
+         * @param {container} the new container
+         */
+        'containeradd',
+        /**
+         * @event containerdelete
+         * Fires when a container got deleted
+         * @param {container} the deleted container
+         */
+        'containerdelete',
+        /**
+         * @event containerrename
+         * Fires when a container got renamed
+         * @param {container} the renamed container
+         */
+        'containerrename',
+        /**
+         * @event containerpermissionchange
+         * Fires when a container got renamed
+         * @param {container} the container whose permissions where changed
+         */
+        'containerpermissionchange'
+    );
+        
     if (this.app) {
         this.appName = this.app.appName;
         
@@ -71,7 +97,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     
 	// presets
 	iconCls: 'x-new-application',
-	rootVisible: false,
 	border: false,
     autoScroll: true,
     //style: 'overflow-x: hidden; overflow-y: auto',
@@ -84,148 +109,47 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     enableDrop: true,
     ddGroup: 'containerDDGroup',
 	
-	// private
+	/**
+     * init this treePanel
+	 */
 	initComponent: function(){
-        var translation = new Locale.Gettext();
-        translation.textdomain('Tinebase');
+        this.loader = this.loader || new Tine.widgets.tree.Loader({
+            getParams: this.onBeforeLoad.createDelegate(this),
+            inspectCreateNode: this.onBeforeCreateNode.createDelegate(this)
+        });
         
-        if (! this.loader) {
-            this.loader = new Tine.widgets.container.TreeLoader({
-                appName: this.appName
-            });
-        }
-		
-        Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
-		this.addEvents(
-            /**
-             * @event containeradded
-             * Fires when a container was added
-             * @param {container} the new container
-             */
-            'containeradd',
-            /**
-             * @event containerdelete
-             * Fires when a container got deleted
-             * @param {container} the deleted container
-             */
-            'containerdelete',
-            /**
-             * @event containerrename
-             * Fires when a container got renamed
-             * @param {container} the renamed container
-             */
-            'containerrename',
-			/**
-             * @event containerpermissionchange
-             * Fires when a container got renamed
-             * @param {container} the container whose permissions where changed
-             */
-            'containerpermissionchange'
-		);
-			
-		var treeRoot = new Ext.tree.TreeNode({
-	        text: 'root',
-	        draggable:false,
-	        allowDrop:false,
-	        id:'root'
-	    });
-	    
-	    var initialTree = [{
-	        text: String.format(translation._('All {0}'), this.containersName),
-	        cls: "treemain",
-	        containerType: 'all',
-            container: {path: '/'},
-	        id: 'all',
-            allowDrop:false,
-	        children: [{
-	            text: String.format(translation._('My {0}'), this.containersName),
-	            cls: 'file',
-	            containerType: Tine.Tinebase.container.TYPE_PERSONAL,
-                container: {path: '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId},
-	            id: 'user',
-	            leaf: null,
-	            owner: Tine.Tinebase.registry.get('currentAccount'),
-                allowDrop:false
-	        }, {
-	            text: String.format(translation._('Shared {0}'), this.containersName),
-	            cls: 'file',
-	            containerType: Tine.Tinebase.container.TYPE_SHARED,
-                container: {path: '/shared'},
-                id: 'shared',
-	            children: null,
-	            leaf: null,
-				owner: null,
-                allowDrop:false
-	        }, {
-	            text: String.format(translation._('Other Users {0}'), this.containersName),
-	            cls: 'file',
-	            containerType: 'otherUsers',
-                container: {path: '/personal'},
-                id: 'otherUsers',
-	            children: null,
-	            leaf: null,
-				owner: null,
-                allowDrop:false
-	        }]
-	    }];
+		this.root = {
+            path: '/',
+            expanded: true,
+            children: [{
+                path: '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId
+            }, {
+                path: '/shared'
+            }, {
+                path: '/personal'
+            }].concat(this.getExtraItems())
+        };
         
-        if(this.extraItems !== null) {
-            Ext.each(this.extraItems, function(_item){
-            	initialTree[0].children.push(_item);
-            });
-        }
-	    
+        
 		this.initContextMenu();
 		
-        // permit selection of nodes with missing required grant
-        this.getSelectionModel().on('beforeselect', function(sm, newSelection, oldSelection) {
-            if (this.requiredGrant && newSelection.isLeaf()) {
-                var accountGrants =  newSelection.attributes.container.account_grants || {};
-                if (! accountGrants[this.requiredGrant]) {
-                    Ext.Msg.alert(_('Permission Denied'), String.format(translation._("You don't have the required grant to select this {0}"), this.containerName));
-                    return false;
-                }
-            }
-        }, this);
-        
-        // expand automatically on node click
-        this.on('click', function(node, e) {
-            node.expand();
-        }, this);
-        
-	    this.on('contextmenu', function(node, event){
-			this.ctxNode = node;
-			var container = node.attributes.container;
-			var owner     = node.attributes.owner;
-			switch (node.attributes.containerType) {
-				case 'singleContainer':
-					if (container.account_grants.adminGrant) {
-						this.contextMenuSingleContainer.showAt(event.getXY());
-					}
-					break;
-				case Tine.Tinebase.container.TYPE_PERSONAL:
-				    if (owner.accountId == Tine.Tinebase.registry.get('currentAccount').accountId) {
-						//console.log('owner clicked his own folder');
-						this.contextMenuUserFolder.showAt(event.getXY());
-					}
-					break;
-				case Tine.Tinebase.container.TYPE_SHARED:
-				    if(Tine.Tinebase.common.hasRight('admin', this.appName) || Tine.Tinebase.common.hasRight('manage_shared_folders', this.appName)) {
-				        this.contextMenuUserFolder.showAt(event.getXY());
-				    }
-					break;
-			}
-		}, this);
-        
-        // define d&d drop function
+        this.getSelectionModel().on('beforeselect', this.onBeforeSelect, this);
+        this.on('click', this.onClick, this);
+        this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforenodedrop, this);
 		
-		this.setRootNode(treeRoot);
-	   
-	    for(var i=0; i<initialTree.length; i++) {
-           treeRoot.appendChild( new Ext.tree.AsyncTreeNode(initialTree[i]) );
-        }
+        Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
+        return;
 	},
+    
+    /**
+     * template fn for subclasses to append extra items
+     * 
+     * @return {Array}
+     */
+    getExtraItems: function() {
+        return this.extraItems || [];
+    },
     
     /**
      * returns a filter plugin to be used in a grid
@@ -233,7 +157,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
             this.filterPlugin = new Tine.widgets.container.TreeFilterPlugin({
-                scope: this
+                scope: this,
+                ommitFilter: this.ommitTreeFilter
             });
             
             this.getSelectionModel().on('selectionchange', function(sm, node){
@@ -263,11 +188,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	afterRender: function() {
 		Tine.widgets.container.TreePanel.superclass.afterRender.call(this);
         this.getEl().first().first().applyStyles('overflow-x: hidden');
-		this.expandPath('/root/all');
-		this.selectPath('/root/all');
+		this.expandPath('/');
+		this.selectPath('/');
 	},
     
-	// private
+	/**
+     * @private
+	 */
 	initContextMenu: function() {
         
         this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu({
@@ -290,6 +217,105 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     hasGrant: function(node, grant) {
         var attr = node.attributes;
         return (attr.containerType == "singleContainer" && attr.container.account_grants[grant]);
+    },
+    
+    /**
+     * expand automatically on node click
+     * 
+     * @param {} node
+     * @param {} e
+     */
+    onClick: function(node, e) {
+        node.expand();
+    },
+    
+    /**
+     * show context menu
+     * 
+     * @param {} node
+     * @param {} event
+     */
+    onContextMenu: function(node, event) {
+        this.ctxNode = node;
+        var container = node.attributes.container;
+        
+        if (node.leaf) {
+            if (container.account_grants.adminGrant) {
+                this.contextMenuSingleContainer.showAt(event.getXY());
+            }
+        } else {
+            var pathParts = container.path.split('/');
+            var type = Tine.Tinebase.container.path2type(pathParts);
+            // @fixme when all other ctxmenu users work on paths
+            this.ctxNode.attributes.containerType = type;
+            
+            if (type == Tine.Tinebase.container.TYPE_PERSONAL && pathParts[2] == Tine.Tinebase.registry.get('currentAccount').accountId) {
+                this.contextMenuUserFolder.showAt(event.getXY());
+            } else if(Tine.Tinebase.common.hasRight('admin', this.appName) || Tine.Tinebase.common.hasRight('manage_shared_folders', this.appName)) {
+                this.contextMenuUserFolder.showAt(event.getXY());
+            }
+        }
+    },
+
+    /**
+     * adopt attr
+     * 
+     * @param {Object} attr
+     */
+    onBeforeCreateNode: function(attr) {
+        if (attr.accountDisplayName) {
+            attr.name = attr.accountDisplayName;
+            attr.path = '/personal/' + attr.accountId
+        }
+        
+        if (! attr.name && attr.path) {
+            attr.name = Tine.Tinebase.container.path2name(attr.path, this.containerName, this.containersName);
+        }
+        
+        Ext.applyIf(attr, {
+            text: Ext.util.Format.htmlEncode(attr.name),
+            qtip: Ext.util.Format.htmlEncode(attr.name),
+            leaf: !!attr.id,
+            allowDrop: !!attr.id,
+            container: attr
+        });
+    },
+    
+    /**
+     * returns params for async request
+     * 
+     * @param {Ext.tree.TreeNode} node
+     * @return {Object}
+     */
+    onBeforeLoad: function(node) {
+        var pathParts = node.attributes.path.split('/');
+        
+        var params = {
+            method: 'Tinebase_Container.getContainer',
+            application: this.appName,
+            containerType: Tine.Tinebase.container.path2type(pathParts),
+            owner: pathParts[2]
+        };
+        
+        return params;
+    },
+    
+    /**
+     * permit selection of nodes with missing required grant
+     * 
+     * @param {} sm
+     * @param {} newSelection
+     * @param {} oldSelection
+     * @return {Boolean}
+     */
+    onBeforeSelect: function(sm, newSelection, oldSelection) {
+        if (this.requiredGrant && newSelection.isLeaf()) {
+            var accountGrants =  newSelection.attributes.container.account_grants || {};
+            if (! accountGrants[this.requiredGrant]) {
+                Ext.Msg.alert(_('Permission Denied'), String.format(_("You don't have the required grant to select this {0}"), this.containerName));
+                return false;
+            }
+        }
     },
     
     /**
@@ -345,6 +371,10 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
      * gets value of this container filter
      */
     getValue: function() {
+        if (this.ommitFilter) {
+            return null;
+        }
+        
         var sm = this.scope.getSelectionModel();
         var selection =  typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
         
@@ -431,51 +461,4 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
     }
 });
 
-Tine.widgets.container.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
-
-    /**
-     * @private
-     */
- 	createNode: function(attr) {
-		// map attributes from Tinebase_Container to attrs from library/ExtJS
-		if (attr.name) {
-            attr = {
-                containerType: 'singleContainer',
-                container: attr,
-                text: attr.name,
-                id: attr.id,
-                cls: 'file',
-                leaf: true
-            };
-        } else if (attr.accountDisplayName) {
-            attr = {
-                containerType: Tine.Tinebase.container.TYPE_PERSONAL,
-                text: attr.accountDisplayName,
-                id: attr.accountId,
-                cls: 'folder',
-                leaf: false,
-                owner: attr
-            };
-        }
-        
-        attr.allowDrop = (attr.containerType && attr.containerType == 'singleContainer');
-                
-        attr.qtip = Ext.util.Format.htmlEncode(attr.text);
-        attr.text = Ext.util.Format.htmlEncode(attr.text);
-        
-        this.inspectCreateNode(attr);
-        
-        return Tine.widgets.container.TreeLoader.superclass.createNode.apply(this, arguments);
-    },
-    
-    inspectCreateNode: Ext.emptyFn,
-    
-    getParams: function(node) {
-        return {
-            method: 'Tinebase_Container.getContainer',
-            application: this.appName,
-            containerType: node.attributes.containerType,
-            owner: node.attributes.owner ? node.attributes.owner.accountId : null
-        };
-    }
- });
+Tine.widgets.container.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {});
