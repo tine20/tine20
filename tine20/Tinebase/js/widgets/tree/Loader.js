@@ -41,12 +41,33 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
     
     url: 'index.php',
     
+    /**
+     * @private
+     */
+    createNode: function() {
+        this.inspectCreateNode.apply(this, arguments);
+        return this.supr().createNode.apply(this, arguments);
+    },
+    
+    /**
+     * returns params for async request
+     * 
+     * @param {Ext.tree.TreeNode} node
+     * @return {Object}
+     */
     getParams: function(node) {
         return {
             method: this.method,
             filter: this.filter
         }
     },
+    
+    /**
+     * template fn for subclasses to inspect createNode
+     * 
+     * @param {Object} attr
+     */
+    inspectCreateNode: Ext.EmptyFn,
     
     processResponse: function(response, node, callback, scope) {
         // convert tine search response into usual treeLoader structure
