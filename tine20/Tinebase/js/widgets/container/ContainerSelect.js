@@ -19,6 +19,10 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
  */
 Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
+     * @cfg {Boolean} allowNodeSelect
+     */
+    allowNodeSelect: false,
+    /**
      * @cfg {array}
      * default container
      */
@@ -203,6 +207,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         this.collapse();
         this.dlg = new Tine.widgets.container.selectionDialog({
             //itemName: this.itemName,
+            allowNodeSelect: this.allowNodeSelect,
             containerName: this.containerName,
             containersName: this.containersName,
             requiredGrant: this.requiredGrant,
@@ -326,9 +331,9 @@ Ext.reg('tinewidgetscontainerselectcombo', Tine.widgets.container.selectionCombo
  */
 Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 	/**
-     * @cfg {String}
+     * @cfg {Boolean} allowNodeSelect
      */
-    //itemName: 'record',
+    allowNodeSelect: false,
     /**
      * @cfg {string} containerName
      * name of container (singular)
@@ -433,7 +438,8 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
      * @private
      */
     onTreeNodeClick: function(node) {
-        this.okAction.setDisabled(node.attributes.containerType != 'singleContainer');
+        this.okAction.setDisabled(node.attributes.containerType != 'singleContainer' && ! this.allowNodeSelect);
+        
         if (! node.leaf ) {//&& ! node.isExpanded() && node.isExpandable()) {
             node.expand();
         }
