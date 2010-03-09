@@ -42,7 +42,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @cfg {String}
      */
-    //itemName: 'record',
     /**
      * @cfg {string} containerName
      * name of container (singular)
@@ -85,7 +84,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @private
      */
-    initComponent: function(){
+    initComponent: function() {
         if (! this.hideTrigger2) {
             if (this.triggerClass == 'x-form-arrow-trigger') {
                 this.triggerClass = 'x-form-arrow-trigger-rectangle';
@@ -256,6 +255,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @private
      */
     setValue: function(container) {
+        //console.log(container);
         // element which is already in this.store 
         if (typeof(container) == 'string' && this.store.getById(container)) {
             container = this.store.getById(container).data;
@@ -429,8 +429,6 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
         
         this.win.add(this.tree);
         
-        // disable onBlur for the moment:
-        
         this.win.show();
     },
     
@@ -438,9 +436,9 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
      * @private
      */
     onTreeNodeClick: function(node) {
-        this.okAction.setDisabled(node.attributes.containerType != 'singleContainer' && ! this.allowNodeSelect);
+        this.okAction.setDisabled(! (node.leaf ||this.allowNodeSelect));
         
-        if (! node.leaf ) {//&& ! node.isExpanded() && node.isExpandable()) {
+        if (! node.leaf ) {
             node.expand();
         }
     },
