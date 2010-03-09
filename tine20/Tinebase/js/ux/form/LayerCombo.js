@@ -47,9 +47,9 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
      * @cfg {String/Array} layerAlign A valid anchor position value. See <tt>{@link Ext.Element#alignTo}</tt> for details
      * on supported anchor positions and offsets. To specify x/y offsets as well, this value
      * may be specified as an Array of <tt>{@link Ext.Element#alignTo}</tt> method arguments.</p>
-     * <pre><code>[ 'tr-br?', [6,0] ]</code></pre>(defaults to <tt>'tr-br?'</tt>)
+     * <pre><code>[ 'tl-bl?', [6,0] ]</code></pre>(defaults to <tt>'tr-br?'</tt>)
      */
-    layerAlign : 'tr-br?',
+    layerAlign : 'tl-bl?',
     /**
      * @cfg {String} layerClass The CSS class to add to the predefined <tt>'x-combo-layer'</tt> class
      * applied the dropdown layer element (defaults to '').
