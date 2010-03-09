@@ -115,42 +115,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             containerName: this.containerName,
             containersName: this.containersName,
             getValue: function() {
-                return this.selectedContainer.path;
-            },
-            setValue: function(value) {
-                if (Ext.isString(value)) {
-                    var container = {id : value};
-                    if (this.filter.data.operator == 'personalNode') {
-                        if (value == Tine.Tinebase.registry.get('currentAccount').accountId) {
-                            container.name = String.format(_('My {0}'), this.containersName);
-                        } else {
-                            // todo: resolve user at server time!
-                            container.name = value;
-                        }
-                    } else if (this.filter.data.operator == 'specialNode') {
-                        switch (value) {
-                            case 'all':
-                                container.name = String.format(_('All {0}'), this.containersName);
-                                break;
-                            case 'shared':
-                                container.name = String.format(_('Shared {0}'), this.containersName);
-                                break;
-                            case 'otherUsers':
-                                container.name = String.format(_('Other Users {0}'), this.containersName);
-                                break;
-                            case 'internal':
-                                container.name = String.format(_('Internal {0}'), this.containerName);
-                                break;
-                        }
-                    } else {
-                        container = value;
-                    }
-                } else {
-                    container = value;
-                }
-                
-                return Tine.widgets.container.selectionComboBox.prototype.setValue.call(this, container);
-                
+                return this.selectedContainer ? this.selectedContainer.path : null;
             }
         });
         value.on('specialkey', function(field, e){
