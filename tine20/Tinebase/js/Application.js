@@ -26,6 +26,8 @@ Tine.Tinebase.Application = function(config) {
     
     this.i18n = new Locale.Gettext();
     this.i18n.textdomain(this.appName);
+    
+    this.init();
 };
 
 Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
@@ -72,5 +74,10 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
         }
         
         return this.mainScreen;
-    }
+    },
+    
+    /**
+     * template function for subclasses to initialize application
+     */
+    init: Ext.emptyFn
 });
