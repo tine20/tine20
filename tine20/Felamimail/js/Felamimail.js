@@ -87,18 +87,37 @@ Ext.namespace('Tine.Felamimail');
                 root: 'results',
                 listeners: {
                     scope: this,
-                    update: this.onUpdateFolder
+                    update: this.onUpdateFolder,
+                    beforeload: this.onStoreBeforeLoad,
+                    load: this.onStoreLoad
                 },
                 proxy: Tine.Felamimail.folderBackend,
                 reader: Tine.Felamimail.folderBackend.getReader()            
             });
             
+            var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
             this.folderStore.load({
+                path: '/' + defaultAccount,
+                params: {filter: [
+                    {field: 'account_id', operator: 'equals', value: defaultAccount},
+                    {field: 'globalname', operator: 'equals', value: ''}
+                ]},
                 callback: this.onStoreInitialLoad.createDelegate(this)
             });
         }
         
         return this.folderStore;
+    },
+    
+    /**
+     * 
+     * 
+     * @param {} store
+     * @param {} options
+     */
+    onStoreBeforeLoad: function(store, options) {
+        // set options.path
+        //console.log(options);
     },
     
     /**
@@ -118,6 +137,22 @@ Ext.namespace('Tine.Felamimail');
         } else {
             this.updateFolderStatus([folderName]);
         }        
+    },
+    
+    /**
+     * 
+     * @param {} store
+     * @param {} records
+     * @param {} success
+     */
+    onStoreLoad: function(store, records, options) {
+        Ext.each(records, function(record) {
+            // compute paths
+            var parent_path = options.path;
+            record.set('parent_path', parent_path);
+            record.set('path', parent_path + '/' + record.id);
+            
+        }, this);
     },
     
     /**
@@ -258,7 +293,7 @@ Ext.namespace('Tine.Felamimail');
         var refreshRate = 'fast';
         var folderId = null;
         var singleFolderUpdate = false;
-        if (! folder && this.getTreePanel()) {
+        if (! folder && false /*this.getTreePanel()*/) {
             // get active node
             var node = this.getTreePanel().getSelectionModel().getSelectedNode();
             if (node && node.attributes.folder_id) {
