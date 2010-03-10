@@ -178,7 +178,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         // only the IPhone supports multiple folders for contacts currently
         if(strtolower($this->_device->devicetype) == 'iphone') {
         
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_READ);
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_SYNC);
             foreach ($containers as $container) {
                 $folders[$container->id] = array(
                     'folderId'      => $container->id,
@@ -188,7 +188,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                 );
             }
             
-            $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_READ);
+            $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC);
             foreach ($containers as $container) {
                 $folders[$container->id] = array(
                     'folderId'      => $container->id,
@@ -199,12 +199,14 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
             }
             
             $accountsFolder = Tinebase_Container::getInstance()->getInternalContainer(Tinebase_Core::getUser(), $this->_applicationName);
-            $folders[$accountsFolder->id] = array(
-                'folderId'      => $accountsFolder->id,
-                'parentId'      => 0,
-                'displayName'   => $accountsFolder->name,
-                'type'          => $this->_folderType
-            );
+            if(Tinebase_Core::getUser()->hasGrant($accountsFolder->id, Tinebase_Model_Grants::GRANT_SYNC)) {
+	            $folders[$accountsFolder->id] = array(
+	                'folderId'      => $accountsFolder->id,
+	                'parentId'      => 0,
+	                'displayName'   => $accountsFolder->name,
+	                'type'          => $this->_folderType
+	            );
+            }
 
         } else {
             
