@@ -105,8 +105,9 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
      * generate FolderSync response
      *
      * @todo currently we support only the main folder which contains all contacts/tasks/events/notes per class
+     * @param boolean $_keepSession keep session active(don't logout user) when true
      */
-    public function getResponse()
+    public function getResponse($_keepSession = false)
     {
         $folderSync = $this->_outputDom->documentElement;
         
