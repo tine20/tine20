@@ -30,26 +30,48 @@
  */
 Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
 	
-    // private
-    method: 'Felamimail.searchFolders',
-    
-    getParams: function(node) {
-        // add globalname to filter
-        this.filter = [
-            {field: 'account_id', operator: 'equals', value: node.attributes.account_id},
-            {field: 'globalname', operator: 'equals', value: node.attributes.globalname}
-        ];
+    /**
+     * 
+     * @param {Ext.tree.TreeNode} node
+     * @param {Function} callback Function to call after the node has been loaded. The
+     * function is passed the TreeNode which was requested to be loaded.
+     * @param (Object) scope The cope (this reference) in which the callback is executed.
+     * defaults to the loaded TreeNode.
+     */
+    requestData : function(node, callback, scope){
+        var folders = [];
         
-        return Tine.Felamimail.TreeLoader.superclass.getParams.apply(this, arguments);
+        if(this.fireEvent("beforeload", this, node, callback) !== false) {
+            var fstore = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore();
+            
+            // does this really transparently do async request?
+            var folderCollection = fstore.query('parent_path', node.attributes.path);
+            
+            node.beginUpdate();
+            
+            folderCollection.each(function(folderRecord) {
+                var n = this.createNode(folderRecord.data);
+                console.log(n);
+                if(n){
+                    node.appendChild(n);
+                }
+            }, this);
+            
+            node.endUpdate();
+            this.runCallback(callback, scope || node, [node]);
+        }else{
+            // if the load is cancelled, make sure we notify
+            // the node that we are done
+            this.runCallback(callback, scope || node, []);
+        }
     },
-    
+   
     /**
      * @private
      * 
      * TODO     add qtip again (problem: it can't be changed later)?
      */
-    createNode: function(attr) {
-        
+    inspectCreateNode: function(attr) {
         var account = Tine.Felamimail.loadAccountStore().getById(attr.account_id);
         
         // append folder to folderStore
@@ -65,15 +87,9 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         
         //var qtiptext = this.app.i18n._('Totalcount') + ': ' + attr.totalcount 
         //    + ' / ' + this.app.i18n._('Cache') + ': ' + attr.cache_status;
-        
-        var node = {
-    		id: attr.id,
+        Ext.apply(attr, {
     		leaf: false,
     		text: attr.localname,
-            localname: attr.localname,
-    		globalname: attr.globalname,
-    		account_id: attr.account_id,
-            type: attr.type,
             folder_id: attr.id,
     		folderNode: true,
             allowDrop: true,
@@ -81,52 +97,49 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             systemFolder: (attr.system_folder == '1'),
             unreadcount: attr.cache_unreadcount,
             totalcount: attr.cache_totalcount,
-            cache_status: attr.cache_status,
             
             // if it has no children, it shouldn't have an expand icon 
             expandable: attr.has_children,
             expanded: ! attr.has_children
-    	};
+    	});
         
         // if it has no children, it shouldn't have an expand icon 
         if (! attr.has_children) {
-            node.children = [];
-            node.cls = 'x-tree-node-collapsed';
+            attr.children = [];
+            attr.cls = 'x-tree-node-collapsed';
         }
 
         // show standard folders icons 
         if (account) {
             if (account.get('trash_folder') == attr.globalname) {
                 if (attr.totalcount > 0) {
-                    node.cls = 'felamimail-node-trash-full';
+                    attr.cls = 'felamimail-node-trash-full';
                 } else {
-                    node.cls = 'felamimail-node-trash';
+                    attr.cls = 'felamimail-node-trash';
                 }
             }
             if (account.get('sent_folder') == attr.globalname) {
-                node.cls = 'felamimail-node-sent';
+                attr.cls = 'felamimail-node-sent';
             }
         }
         if ('INBOX' == attr.globalname) {
-            node.cls = 'felamimail-node-inbox';
+            attr.cls = 'felamimail-node-inbox';
         }
         if ('Drafts' == attr.globalname) {
-            node.cls = 'felamimail-node-drafts';
+            attr.cls = 'felamimail-node-drafts';
         }
         if ('Templates' == attr.globalname) {
-            node.cls = 'felamimail-node-templates';
+            attr.cls = 'felamimail-node-templates';
         }
         if ('Junk' == attr.globalname) {
-            node.cls = 'felamimail-node-junk';
+            attr.cls = 'felamimail-node-junk';
         }
 
         // add unread class to node
         if (attr.cache_unreadcount > 0) {
-            node.text = node.text + ' (' + attr.cache_unreadcount + ')';
-            node.cls = node.cls + ' felamimail-node-unread'; // x-tree-node-collapsed';
+            attr.text = attr.text + ' (' + attr.cache_unreadcount + ')';
+            attr.cls = attr.cls + ' felamimail-node-unread'; // x-tree-node-collapsed';
         }
-        
-        return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);
     }
     
     /**
