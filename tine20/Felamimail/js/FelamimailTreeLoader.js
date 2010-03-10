@@ -4,8 +4,8 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: FelamimailTreePanel.js 11338 2009-11-06 17:30:48Z p.schuele@metaways.de $
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  *
  */
  
@@ -15,12 +15,13 @@
  * @extends     Tine.widgets.tree.Loader
  * 
  * <p>Felamimail Account/Folder Tree Loader</p>
- * <p></p>
+ * <p>
+ * TODO         get nodes from folder store!
+ * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  * @param       {Object} config
  * @constructor
@@ -52,7 +53,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         var account = Tine.Felamimail.loadAccountStore().getById(attr.account_id);
         
         // append folder to folderStore
-        this.folderStore.loadData({results: [attr]}, true);
+        //this.folderStore.loadData({results: [attr]}, true);
         
         // check for account setting
         attr.has_children = (
@@ -126,7 +127,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         }
         
         return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);
-    },
+    }
     
     /**
      * handle failure to show credentials dialog if imap login failed
@@ -135,7 +136,10 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      * @param {Object}  options
      * @param {Node}    node optional account node
      * @param {Boolean} handleException
+     * 
+     * @deprecated
      */
+    /*
     handleFailure: function(response, options, node, handleException) {
         var responseText = Ext.util.JSON.decode(response.responseText);
         var accountNode = (options.argument) ? options.argument.node : node;
@@ -183,4 +187,5 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             //Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
         }
     }
+    */
 });
