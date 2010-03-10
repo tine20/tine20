@@ -143,7 +143,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         // save some values and send mail
         $oldTotalCount = $inbox['imap_totalcount'];
-        $oldRecentCount = $inbox['imap_recentcount'];
+        $oldRecentCount = $inbox['cache_recentcount'];
         
         $messageToSend = $this->_getMessageData();
         $message = $this->_json->saveMessage($messageToSend);
@@ -160,7 +160,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         // checks
         $this->assertEquals($oldTotalCount+1, $inbox['imap_totalcount']);
-        $this->assertEquals($oldRecentCount+1, $inbox['imap_recentcount']);
+        $this->assertEquals($oldRecentCount+1, $inbox['cache_recentcount']);
         $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE, $inbox['cache_status']);
         
         // delete message from inbox
