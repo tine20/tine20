@@ -304,12 +304,12 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
                 
                 for (var p in criteria) {
                     if (criteria.hasOwnProperty(p)) {
-                        if (Ext.isString(criteria[p])) {
+                        if (Ext.isString(criteria[p]) || Ext.isEmpty(f[p]) ) {
                             ignore &= f.hasOwnProperty(p) && f[p] === criteria[p];
                         } else {
                             for (var pp in criteria[p]) {
                                 if (criteria[p].hasOwnProperty(pp)) {
-                                    ignore &= f.hasOwnProperty(p) && f[p].hasOwnProperty(pp) && f[p][pp] === criteria[p][pp];
+                                    ignore &= f.hasOwnProperty(p) && typeof f[p].hasOwnProperty == 'function' && f[p].hasOwnProperty(pp) && f[p][pp] === criteria[p][pp];
                                 }
                             }
                         }
