@@ -194,7 +194,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         Tine.Felamimail.TreePanel.superclass.afterRender.call(this);
 
         var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
-        this.expandPath('/root/' + defaultAccount + '/');
+        //this.expandPath('/root/' + defaultAccount + '/');
     },
     
     /**
