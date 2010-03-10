@@ -339,7 +339,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         if (this.requiredGrant && newSelection.isLeaf()) {
             var accountGrants =  newSelection.attributes.container.account_grants || {};
             if (! accountGrants[this.requiredGrant]) {
-                Ext.Msg.alert(_('Permission Denied'), String.format(_("You don't have the required grant to select this {0}"), this.containerName));
+                var message = '<b>' +String.format(_("You are not allowed to select the {0} '{1}':"), this.containerName, newSelection.attributes.text) + '</b><br />' +
+                              String.format(_("{0} grant is required for desired action"), this.requiredGrant);
+                Ext.Msg.alert(_('Insufficient Grants'), message);
                 return false;
             }
         }
