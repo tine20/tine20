@@ -16,7 +16,13 @@ if (isset($_SERVER['HTTP_HOST'])) {
     die('not allowed!');
 }
 
-set_include_path(dirname(__FILE__) . PATH_SEPARATOR . dirname(__FILE__) . '/library' . PATH_SEPARATOR . get_include_path());
+$paths = array(
+    realpath(dirname(__FILE__)),
+    realpath(dirname(__FILE__) . '/library'),
+    get_include_path()
+);
+set_include_path(implode(PATH_SEPARATOR, $paths));
+
 require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->setFallbackAutoloader(true);
