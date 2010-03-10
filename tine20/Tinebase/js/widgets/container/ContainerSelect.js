@@ -54,9 +54,9 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     hideTrigger2: true,
     /**
-     * @cfg {String} startNode
+     * @cfg {String} startPath
      */
-    startNode: 'all',
+    startPath: '/',
     /**
      * @cfg {Tine.data.Record} recordClass
      */
@@ -140,7 +140,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     },
     
     /**
-     * prepare for personalNode remote search (startNode personalOf)
+     * prepare for remote search if this.startPath = /personal/*
      * 
      * @private
      */
@@ -148,22 +148,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         this.store = new Ext.data.JsonStore({
             id: 'id',
             fields: Tine.Tinebase.Model.Container,
-            baseParams: {
-                method: 'Tinebase_Container.getContainer',
-                application: this.appName,
-                containerType: Tine.Tinebase.container.TYPE_PERSONAL
-            },
-            listeners: {
-                scope: this,
-                beforeload: function(store, options) {
-                    //if (! this.owner) {
-                        // if owner is not set, take the owner from the record we already have
-                        options.params.owner = this.store.getAt(0).get('account_grants').account_id;
-                    //} else {
-                    //    options.params.owner = this.owner
-                    //}
-                }
-            }
+            listeners: {beforeload: this.onBeforeLoad.createDelegate(this)}
         });
         
         this.otherRecord = new Tine.Tinebase.Model.Container({id: 'other', name: String.format(_('choose other {0}...'), this.containerName)}, 'other');
@@ -190,10 +175,31 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         }
     },
     
+    /**
+     * prepare params for remote search (this.startPath == /personal/*
+     * 
+     * @param {} store
+     * @param {} options
+     */
+    onBeforeLoad: function(store, options) {
+        options.params = {
+            method: 'Tinebase_Container.getContainer',
+            application: this.appName,
+            containerType: Tine.Tinebase.container.TYPE_PERSONAL,
+            owner: this.startPath.match(/personal\/(.*)/)[1]
+        };
+    },
+    
+    /**
+     * if this.startPath correspondes to a personal node, 
+     * directly do a remote search w.o. container tree dialog
+     * 
+     * @private
+     * @param {} queryEvent
+     */
     onBeforeQuery: function(queryEvent) {
-        // for startNode 'all' we open recents locally
         queryEvent.query = new Date().getTime();
-        this.mode = this.startNode == 'all' ? 'local' : 'remote';
+        this.mode = this.startPath.match(/^\/personal\/[a-z0-9]+$)/) ? 'remote' : 'local' ;
     },
     
     setTrigger2Text: function(text) {
@@ -237,7 +243,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     onChoseOther: function() {
         this.collapse();
         this.dlg = new Tine.widgets.container.selectionDialog({
-            //itemName: this.itemName,
             allowNodeSelect: this.allowNodeSelect,
             containerName: this.containerName,
             containersName: this.containersName,
@@ -331,14 +336,10 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @private
      * 
      * todo:
-     * - path and selectCount in container model
      * - onSelect 
      *  -> set selected Node to 10 and all others -1;
      *  -> remove other
      *  -> sort store by selectCount and keep 10 max
-     * - revork this.startNode 
-     *  -> this.startPath 
-     *  -> get rid of this.owner, as we have owner in path
      * - statesave needs name, id, path, selectCount, isLeaf (aka singleContainer) -> might need a flag in model
      * - initStore -> take records from state according to startPath and allowNode
      */
