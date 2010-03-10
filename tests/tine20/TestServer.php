@@ -58,7 +58,8 @@ class TestServer extends Tinebase_Server_Abstract
         $this->_initTestUsers();
         
         // set default internal encoding
-        ini_set('iconv.internal_encoding', 'utf-8');
+        //ini_set('iconv.internal_encoding', 'utf-8');
+        iconv_set_encoding("internal_encoding", "UTF-8");
     }
     
     /**
