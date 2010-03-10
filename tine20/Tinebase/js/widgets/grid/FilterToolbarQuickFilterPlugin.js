@@ -42,7 +42,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin = function(config) {
     config = config || {};
     
     this.criteriaIgnores = [
-        {field: 'container_id', operator: 'specialNode', value:'all'},
+        {field: 'container_id', operator: 'specialNode', value: {path: '/'}},
         {field: 'query',        operator: 'contains',    value: ''}
     ];
         
@@ -303,7 +303,17 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
                 ignore = true;
                 
                 for (var p in criteria) {
-                    ignore &= f[p] === criteria[p];
+                    if (criteria.hasOwnProperty(p)) {
+                        if (Ext.isString(criteria[p])) {
+                            ignore &= f.hasOwnProperty(p) && f[p] === criteria[p];
+                        } else {
+                            for (var pp in criteria[p]) {
+                                if (criteria[p].hasOwnProperty(pp)) {
+                                    ignore &= f.hasOwnProperty(p) && f[p].hasOwnProperty(pp) && f[p][pp] === criteria[p][pp];
+                                }
+                            }
+                        }
+                    }
                 }
                 
                 if (ignore) {
