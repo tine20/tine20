@@ -51,7 +51,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             
             folderCollection.each(function(folderRecord) {
                 var n = this.createNode(folderRecord.data);
-                console.log(n);
                 if(n){
                     node.appendChild(n);
                 }
