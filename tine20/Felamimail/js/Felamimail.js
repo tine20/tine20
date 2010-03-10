@@ -64,7 +64,7 @@ Ext.namespace('Tine.Felamimail');
     init: function() {
         this.checkMailsDelayedTask = new Ext.util.DelayedTask(this.checkMails, this);
         
-        var delayTime = (Tine.Tinebase.appMgr.getDefault() == this) ? 1000 : 15000;
+        var delayTime = (Tine.Tinebase.appMgr.getActive() == this) ? 1000 : 15000;
         this.getFolderStore.defer(delayTime, this);
     },
     
