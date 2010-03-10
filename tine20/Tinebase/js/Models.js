@@ -99,14 +99,16 @@ Tine.Tinebase.Model.Account = Ext.data.Record.create([
 /**
  * Model of a container
  */
-Tine.Tinebase.Model.Container = Ext.data.Record.create([
+Tine.Tinebase.Model.Container = Ext.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'},
     {name: 'name'},
     {name: 'type'},
+    {name: 'path'},
+    {name: 'selectCount', type: 'number'},
     {name: 'backend'},
     {name: 'application_id'},
     {name: 'account_grants'}
-]);
+]));
 
 /**
  * Model of a grant
