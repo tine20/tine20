@@ -46,7 +46,7 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
      */
     createNode: function() {
         this.inspectCreateNode.apply(this, arguments);
-        return this.supr().createNode.apply(this, arguments);
+        return Tine.widgets.tree.Loader.superclass.createNode.apply(this, arguments);
     },
     
     /**
