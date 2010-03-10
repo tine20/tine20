@@ -16,8 +16,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/ext-all.css"/>
-    <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/xtheme-gray.css" /><!-- LIBS -->
-
+    <!-- <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/xtheme-gray.css" /> --><!-- LIBS -->
+    
     <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="library/ExtJS/ext-all.js"></script>
 
