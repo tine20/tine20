@@ -29,6 +29,12 @@ class AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 All Tests');
         
+        // only call Felamimail tests if imap is configured in config.inc.php
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        if (! empty($imapConfig) && array_key_exists('useSystemAccount', $imapConfig) && $imapConfig['useSystemAccount']) {
+            $suite->addTest(Felamimail_AllTests::suite());
+        }
+        
         $suite->addTest(Tinebase_AllTests::suite());
         $suite->addTest(Addressbook_AllTests::suite());
         $suite->addTest(Admin_AllTests::suite());
@@ -41,12 +47,6 @@ class AllTests
         $suite->addTest(Courses_AllTests::suite());
         $suite->addTest(Calendar_AllTests::suite());
         $suite->addTest(ActiveSync_AllTests::suite());
-        
-        // only call Felamimail tests if imap is configured in config.inc.php
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
-        if (! empty($imapConfig) && array_key_exists('useSystemAccount', $imapConfig) && $imapConfig['useSystemAccount']) {
-            $suite->addTest(Felamimail_AllTests::suite());
-        }
         
         return $suite;
     }
