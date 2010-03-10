@@ -147,6 +147,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     initStore: function() {
         this.store = new Ext.data.JsonStore({
             id: 'id',
+            remoteSort: false,
             fields: Tine.Tinebase.Model.Container,
             listeners: {beforeload: this.onBeforeLoad.createDelegate(this)}
         });
@@ -199,7 +200,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     onBeforeQuery: function(queryEvent) {
         queryEvent.query = new Date().getTime();
-        this.mode = this.startPath.match(/^\/personal\/[a-z0-9]+$)/) ? 'remote' : 'local' ;
+        this.mode = this.startPath.match(/^\/personal\/[a-z0-9]+$/) ? 'remote' : 'local' ;
     },
     
     setTrigger2Text: function(text) {
@@ -294,7 +295,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     setValue: function(container) {
         if (typeof container.get === 'function') {
             // container is a record -> already in store -> nothing to do
-        } else if (container.id && this.store.getById(container)) {
+        } else if (this.store.getById(container)) {
             // store already has a record of this container
             container = this.store.getById(container);
         } else if (container.path || container.id) {
@@ -312,12 +313,14 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             return this;
         }
         
+        container.set('dtselect', new Date().getTime());
         this.selectedContainer = container.data;
         
-        // make sure 'choose other' is the last item
-        var other = this.store.getById('other');
-        if (other) {
-            this.store.remove(this.otherRecord);
+        // manage recents
+        this.store.remove(this.otherRecord);
+        this.store.sort('dtselect', 'DESC');
+        while (this.store.getCount() > 10) {
+            this.store.remove(this.store.getAt(10));
         }
         this.store.add(this.otherRecord);
         
@@ -336,22 +339,19 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @private
      * 
      * todo:
-     * - onSelect 
-     *  -> set selected Node to 10 and all others -1;
-     *  -> remove other
-     *  -> sort store by selectCount and keep 10 max
-     * - statesave needs name, id, path, selectCount, isLeaf (aka singleContainer) -> might need a flag in model
+     * - we might need a pathIsLeaf fn
      * - initStore -> take records from state according to startPath and allowNode
      */
     getState: function() {
-        var recents = [];
+        var recentsData = [];
         this.store.each(function(container) {
-            if (container.get('type') != 'internal') {
-                recents.push(container.data);
+            if (container != this.otherRecord) {
+                var data = Ext.copyTo({}, container.data, 'id, name, path, dtselect', 'account_grants');
+                recentsData.push(data);
             }
         }, this);
-        //console.log(recents);
-        //return recents;
+        
+        return recentsData;
     }
     
 });
