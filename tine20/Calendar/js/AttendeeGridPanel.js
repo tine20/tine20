@@ -108,7 +108,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 blurOnSelect: true,
                 selectOnFocus: true,
                 appName: 'Calendar',
-                startNode: 'personalOf',
+                //startNode: 'personalOf', -> rework to startPath!
                 getValue: function() {
                     if (this.selectedContainer) {
                         // NOTE: the store checks if data changed. If we don't overwrite to string, 
