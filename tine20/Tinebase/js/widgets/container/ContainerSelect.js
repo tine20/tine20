@@ -40,9 +40,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */    
     listWidth: 400,
     /**
-     * @cfg {String}
-     */
-    /**
      * @cfg {string} containerName
      * name of container (singular)
      */
@@ -61,6 +58,10 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     startNode: 'all',
     /**
+     * @cfg {Tine.data.Record} recordClass
+     */
+    recordClass: null,
+    /**
      * @cfg {String} requiredGrant
      * grant which is required to select leaf node(s)
      */
@@ -73,9 +74,10 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     triggerAction: 'all',
     forceAll: true,
     lazyInit: false,
-    //readOnly:true,
-    // need to be reworked
-    //stateful: true,
+    editable: false,
+    
+    stateful: true,
+    stateEvents: ['select'],
     
     mode: 'local',
     valueField: 'id',
@@ -85,6 +87,10 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @private
      */
     initComponent: function() {
+        this.initStore();
+        this.initState();
+        
+        // init triggers (needs to be done before standard initTrigger template fn)
         if (! this.hideTrigger2) {
             if (this.triggerClass == 'x-form-arrow-trigger') {
                 this.triggerClass = 'x-form-arrow-trigger-rectangle';
@@ -102,7 +108,44 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             
         }
         
-        // prepare for personalNode remote search (startNode personalOf)
+        //this.title = String.format(_('Recently used {0}:'), this.containersName);
+        
+        Tine.widgets.container.selectionComboBox.superclass.initComponent.call(this);
+        
+        if (this.defaultContainer) {
+            this.selectedContainer = this.defaultContainer;
+            this.value = this.defaultContainer.name;
+        }
+        
+        this.on('beforequery', this.onBeforeQuery, this);
+    },
+    
+    /**
+     * init state
+     * 
+     * @private
+     */
+    initState: function() {
+        if (this.stateful && !this.stateId) {
+            if (! this.recordClass) {
+                this.stateful = false;
+            } else {
+                this.stateId = this.recordClass.getMeta('appName') + '-tinebase-widgets-container-selectcombo-' + this.recordClass.getMeta('modelName');
+            }
+        }
+        
+        if (this.stateful) {
+            var state = Ext.state.Manager.get(this.stateId);
+            console.log(state);
+        }
+    },
+    
+    /**
+     * prepare for personalNode remote search (startNode personalOf)
+     * 
+     * @private
+     */
+    initStore: function() {
         this.store = new Ext.data.JsonStore({
             id: 'id',
             fields: Tine.Tinebase.Model.Container,
@@ -125,23 +168,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         });
         
         this.otherRecord = new Tine.Tinebase.Model.Container({id: 'other', name: String.format(_('choose other {0}...'), this.containerName)}, 'other');
-        
-        //this.title = String.format(_('Recently used {0}:'), this.containersName);
-        
-        Tine.widgets.container.selectionComboBox.superclass.initComponent.call(this);
-        
-        if (this.defaultContainer) {
-            this.selectedContainer = this.defaultContainer;
-            this.value = this.defaultContainer.name;
-        }
-        
-        this.on('beforequery', this.onBeforeQuery, this);
-    },
-    
-    onBeforeQuery: function(queryEvent) {
-        // for startNode 'all' we open recents locally
-        queryEvent.query = new Date().getTime();
-        this.mode = this.startNode == 'all' ? 'local' : 'remote';
     },
     
     initTrigger : function(){
@@ -163,6 +189,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         } else {
             Tine.widgets.container.selectionComboBox.superclass.initTrigger.call(this);
         }
+    },
+    
+    onBeforeQuery: function(queryEvent) {
+        // for startNode 'all' we open recents locally
+        queryEvent.query = new Date().getTime();
+        this.mode = this.startNode == 'all' ? 'local' : 'remote';
     },
     
     setTrigger2Text: function(text) {
@@ -261,7 +293,11 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         } else if (container.id && this.store.getById(container)) {
             // store already has a record of this container
             container = this.store.getById(container);
-        } else if (container.path) {
+        } else if (container.path || container.id) {
+            // ignore server name for node 'My containers'
+            if (container.path && container.path === '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId) {
+                container.name = null;
+            }
             container.name = container.name || Tine.Tinebase.container.path2name(container.path, this.containerName, this.containersName);
             container.id = container.id ||container.path;
             
