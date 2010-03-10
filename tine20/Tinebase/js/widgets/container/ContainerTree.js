@@ -138,6 +138,23 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             }].concat(this.getExtraItems())
         };
         
+        // init drop zone
+        this.dropConfig = {
+            ddGroup: this.ddGroup || 'TreeDD',
+            appendOnly: this.ddAppendOnly === true,
+            onNodeOver : function(n, dd, e, data) {
+                var node = n.node;
+                
+                // auto node expand check
+                if(node.hasChildNodes() && !node.isExpanded()){
+                    this.queueExpand(node);
+                }
+                return node.attributes.allowDrop ? "x-tree-drop-ok-append" : false;
+            },
+            isValidDropPoint: function(n, dd, e, data){
+                return n.node.attributes.allowDrop;
+            }
+        }
         
 		this.initContextMenu();
 		
@@ -145,7 +162,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         this.getSelectionModel().on('selectionchange', this.onSelectionChange, this);
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
-        this.on('beforenodedrop', this.onBeforenodedrop, this);
+        this.on('beforenodedrop', this.onBeforeNodeDrop, this);
 		
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
         return;
@@ -306,6 +323,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             allowDrop: !!attr.account_grants,
             container: attr
         });
+        console.log(attr.allowChildren);
     },
     
     /**
@@ -355,7 +373,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * 
      * TODO use Ext.Direct
      */
-    onBeforenodedrop: function(dropEvent) {
+    onBeforeNodeDrop: function(dropEvent) {
         var targetContainerId = dropEvent.target.id;
         var recordIds = [];
         
