@@ -136,7 +136,7 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
         $this->assertContains(':days 8', $sieveScript);
         $this->assertContains(':from sieve@example.com', $sieveScript);
         $this->assertContains(':addresses ["info@example.com"]', $sieveScript);
-        $this->assertContains('=?utf-8?Q?L=C3=B6=C3=9Flich?=', $sieveScript, $sieveScript);
+        $this->assertContains('?Q?L=C3=B6=C3=9Flich?=', $sieveScript, $sieveScript);
         $this->assertContains('Felamimail_Sieve_Vacation', $sieveScript);
         $this->assertContains('Tine 2.0 Unit Test', $sieveScript);
     }
