@@ -32,6 +32,7 @@ class AllTests
         $suite->addTest(Tinebase_AllTests::suite());
         $suite->addTest(Addressbook_AllTests::suite());
         $suite->addTest(Admin_AllTests::suite());
+        $suite->addTest(Calendar_AllTests::suite());
         // only call Felamimail tests if imap is configured in config.inc.php
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
         if (! empty($imapConfig) && array_key_exists('useSystemAccount', $imapConfig) && $imapConfig['useSystemAccount']) {
@@ -44,7 +45,6 @@ class AllTests
         $suite->addTest(Sales_AllTests::suite());
         $suite->addTest(Timetracker_AllTests::suite());
         $suite->addTest(Courses_AllTests::suite());
-        $suite->addTest(Calendar_AllTests::suite());
         $suite->addTest(ActiveSync_AllTests::suite());
         
         return $suite;
