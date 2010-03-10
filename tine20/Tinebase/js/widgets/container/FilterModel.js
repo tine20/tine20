@@ -95,6 +95,12 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             },
             setValue: function(value) {
                 var operatorText = this.filter.data.operator === 'personalNode' ? _('is personal of') : _('is equal to');
+                
+                // use equals for node 'My containers'
+                if (value.path && value.path === '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId) {
+                    operatorText = _('is equal to')
+                }
+                
                 this.filter.formFields.operator.setText(operatorText);
                 return Tine.widgets.container.selectionComboBox.prototype.setValue.call(this, value);
             }
