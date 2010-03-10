@@ -17,7 +17,11 @@ Ext.namespace('Tine.Felamimail');
  * @extends     Tine.Tinebase.Application
  * 
  * <p>Felamimail application obj</p>
- * <p></p>
+ * <p>
+ * TODO         move store to extra file/class
+ * TODO         make message caching flow work again
+ * TODO         add doQuery fn to store to decide if we need to get data from local or remote
+ * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -77,14 +81,14 @@ Ext.namespace('Tine.Felamimail');
     },
     
     /**
+     * get folder store
      * 
      * @return {Ext.data.JsonStore}
      */
     getFolderStore: function() {
         if (! this.folderStore) {
-                this.folderStore = new Ext.data.JsonStore({
+            this.folderStore = new Ext.data.JsonStore({
                 fields: Tine.Felamimail.Model.Folder,
-                root: 'results',
                 listeners: {
                     scope: this,
                     update: this.onUpdateFolder,
@@ -92,7 +96,48 @@ Ext.namespace('Tine.Felamimail');
                     load: this.onStoreLoad
                 },
                 proxy: Tine.Felamimail.folderBackend,
-                reader: Tine.Felamimail.folderBackend.getReader()            
+                reader: Tine.Felamimail.folderBackend.getReader(),
+                queriesDone: [],
+                doQuery: function(field, value, callback) {
+                    // TODO implement
+                    /*
+                    q = Ext.isEmpty(q) ? '' : q;
+                    var qe = {
+                        query: q,
+                        forceAll: forceAll,
+                        combo: this,
+                        cancel:false
+                    };
+                    if(this.fireEvent('beforequery', qe)===false || qe.cancel){
+                        return false;
+                    }
+                    q = qe.query;
+                    forceAll = qe.forceAll;
+                    if(forceAll === true || (q.length >= this.minChars)){
+                        if(this.lastQuery !== q){
+                            this.lastQuery = q;
+                            if(this.mode == 'local'){
+                                this.selectedIndex = -1;
+                                if(forceAll){
+                                    this.store.clearFilter();
+                                }else{
+                                    this.store.filter(this.displayField, q);
+                                }
+                                this.onLoad();
+                            }else{
+                                this.store.baseParams[this.queryParam] = q;
+                                this.store.load({
+                                    params: this.getParams(q)
+                                });
+                                this.expand();
+                            }
+                        }else{
+                            this.selectedIndex = -1;
+                            this.onLoad();
+                        }
+                    }
+                    */
+                }
             });
             
             var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
@@ -110,17 +155,7 @@ Ext.namespace('Tine.Felamimail');
     },
     
     /**
-     * 
-     * 
-     * @param {} store
-     * @param {} options
-     */
-    onStoreBeforeLoad: function(store, options) {
-        // set options.path
-        //console.log(options);
-    },
-    
-    /**
+     * initial load of folder store
      *
      * @param {} record
      * @param {} options
@@ -140,6 +175,17 @@ Ext.namespace('Tine.Felamimail');
     },
     
     /**
+     * before load handler of folder store
+     * 
+     * @param {} store
+     * @param {} options
+     */
+    onStoreBeforeLoad: function(store, options) {
+        // set options.path
+        //console.log(options);
+    },
+    
+    /**
      * 
      * @param {} store
      * @param {} records
@@ -154,7 +200,7 @@ Ext.namespace('Tine.Felamimail');
             
         }, this);
     },
-    
+
     /**
      * on update folder
      * 
