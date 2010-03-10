@@ -320,10 +320,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             text: Ext.util.Format.htmlEncode(attr.name),
             qtip: Ext.util.Format.htmlEncode(attr.name),
             leaf: !!attr.account_grants,
-            allowDrop: !!attr.account_grants,
+            allowDrop: !!attr.account_grants && attr.account_grants.addGrant,
             container: attr
         });
-        console.log(attr.allowChildren);
     },
     
     /**
