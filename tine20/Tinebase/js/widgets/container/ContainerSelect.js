@@ -88,7 +88,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     initComponent: function() {
         this.initStore();
-        this.initState();
         
         // init triggers (needs to be done before standard initTrigger template fn)
         if (! this.hideTrigger2) {
@@ -157,12 +156,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             listeners: {
                 scope: this,
                 beforeload: function(store, options) {
-                    if (! this.owner) {
+                    //if (! this.owner) {
                         // if owner is not set, take the owner from the record we already have
                         options.params.owner = this.store.getAt(0).get('account_grants').account_id;
-                    } else {
-                        options.params.owner = this.owner
-                    }
+                    //} else {
+                    //    options.params.owner = this.owner
+                    //}
                 }
             }
         });
@@ -326,16 +325,22 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         if(this.qtip) {
             this.qtip.remove();
         }
-        
-        // IE has problems with sate saving. Might be, that our clone function is not working correclty yet.
-        if (! Ext.isIE && this.stateful) {
-            //this.saveState();
-        }
     },
     
     /**
      * @private
-     * Recents are a bit more than a simple state...
+     * 
+     * todo:
+     * - path and selectCount in container model
+     * - onSelect 
+     *  -> set selected Node to 10 and all others -1;
+     *  -> remove other
+     *  -> sort store by selectCount and keep 10 max
+     * - revork this.startNode 
+     *  -> this.startPath 
+     *  -> get rid of this.owner, as we have owner in path
+     * - statesave needs name, id, path, selectCount, isLeaf (aka singleContainer) -> might need a flag in model
+     * - initStore -> take records from state according to startPath and allowNode
      */
     getState: function() {
         var recents = [];
@@ -344,21 +349,9 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
                 recents.push(container.data);
             }
         }, this);
-
-        return recents;
+        //console.log(recents);
+        //return recents;
     }
-    
-    /**
-     * @private
-     *
-    applyState : function(state, config) {
-        for (var container in state) {
-            if(state.hasOwnProperty(container)) {
-                this.store.add(new Tine.Tinebase.Model.Container(state[container], state[container].id));
-            }
-        }
-    }*/
-    
     
 });
 Ext.reg('tinewidgetscontainerselectcombo', Tine.widgets.container.selectionComboBox);
