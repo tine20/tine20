@@ -136,7 +136,6 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         )); 
         
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
-        #var_dump($contact->toArray());
         $this->objects['contact'] = $contact;
         
         ########### Test Controller / uit ###############
