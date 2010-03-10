@@ -222,8 +222,17 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     getTreePath: function(containerPath) {
         var treePath = '/' + this.getRootNode().id + (containerPath !== '/' ? containerPath : '');
-        treePath = treePath.replace('personal', Tine.Tinebase.container.path2type(containerPath));
-        treePath = treePath.replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountId, 'personal');
+
+        // replace personal with otherUsers if personal && ! personal/myaccountid
+        var matches = treePath.match(/personal\/{0,1}(.*)/)
+        if (matches) {
+            if (matches[1] != Tine.Tinebase.registry.get('currentAccount').accountId) {
+                console.log('other')
+                treePath = treePath.replace('personal', 'otherUsers');
+            } else {
+                treePath = treePath.replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountId, 'personal');
+            }
+        }
         
         return treePath;
     },
