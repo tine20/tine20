@@ -39,7 +39,12 @@ if (ini_get('magic_quotes_gpc')) {
 } // end magic_quotes_gpc Hack
 */
 
-set_include_path(dirname(__FILE__) . PATH_SEPARATOR . dirname(__FILE__) . '/library' . PATH_SEPARATOR . get_include_path());
+$paths = array(
+    realpath(dirname(__FILE__)),
+    realpath(dirname(__FILE__) . '/library'),
+    get_include_path()
+);
+set_include_path(implode(PATH_SEPARATOR, $paths));
 
 require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
