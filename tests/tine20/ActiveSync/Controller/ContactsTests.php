@@ -223,7 +223,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         
     	$controller->appendXML($testDom, $testNode, null, $this->objects['contact']->getId());
     	$this->assertEquals(Tinebase_Translation::getCountryNameByRegionCode('DE'), $testDom->getElementsByTagName('BusinessCountry')->item(0)->nodeValue);
-    	$this->assertEquals('Germany', $testDom->getElementsByTagName('BusinessCountry')->item(0)->nodeValue);
+    	//$this->assertEquals('Germany', $testDom->getElementsByTagName('BusinessCountry')->item(0)->nodeValue);
     	$this->assertEquals('1975-01-02T03:00:00.000Z', $testDom->getElementsByTagName('Birthday')->item(0)->nodeValue);
     }
     
