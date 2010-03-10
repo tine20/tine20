@@ -44,14 +44,14 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         if(this.fireEvent("beforeload", this, node, callback) !== false) {
             var fstore = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore();
             
-            // does this really transparently do async request?
+            // does this really transparently do async request? -> no TODO: we need to call doQuery fn from store
             var folderCollection = fstore.query('parent_path', node.attributes.path);
-            
+            //console.log(folderCollection);
             node.beginUpdate();
             
             folderCollection.each(function(folderRecord) {
                 var n = this.createNode(folderRecord.data);
-                if(n){
+                if (n) {
                     node.appendChild(n);
                 }
             }, this);
@@ -72,9 +72,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      */
     inspectCreateNode: function(attr) {
         var account = Tine.Felamimail.loadAccountStore().getById(attr.account_id);
-        
-        // append folder to folderStore
-        //this.folderStore.loadData({results: [attr]}, true);
         
         // check for account setting
         attr.has_children = (
@@ -139,6 +136,8 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             attr.text = attr.text + ' (' + attr.cache_unreadcount + ')';
             attr.cls = attr.cls + ' felamimail-node-unread'; // x-tree-node-collapsed';
         }
+        
+        //console.log(attr);
     }
     
     /**
