@@ -434,7 +434,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             // set ftb filters according to tree selection
             ftb.supressEvents = false;
             ftb.addFilter(new ftb.record({field: 'container_id', operator: 'equals', value: node.attributes.container}));
-            ftb.onFiltertrigger();
+            if (! sm.filterPluginSetValue) {
+                ftb.onFiltertrigger();
+            }
+            
+            sm.filterPluginSetValue = false;
         }
     },
     
@@ -501,6 +505,7 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
                 return;
             }
             
+            this.treePanel.getSelectionModel().filterPluginSetValue = true;
             this.treePanel.selectContainerPath(filter.value.path);
         }, this);
     }
