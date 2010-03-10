@@ -214,7 +214,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         node.select();
         
         if (node.id && node.id != '/' && node.attributes.globalname != '') {
-            this.filterPlugin.onFilterChange();
+//            this.filterPlugin.onFilterChange();
             
             // TOOD updateFolderStatus!
             
@@ -454,6 +454,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         var node = new Ext.tree.AsyncTreeNode({
             id: record.data.id,
+            path: '/' + record.data.id,
             record: record,
             globalname: '',
             draggable: false,
