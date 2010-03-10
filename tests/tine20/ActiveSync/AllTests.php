@@ -28,8 +28,10 @@ class ActiveSync_AllTests
     public static function suite ()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync All Tests');
+        
         $suite->addTestSuite('ActiveSync_TimezoneConverterTest');
         $suite->addTestSuite('ActiveSync_Controller_ContactsTests');
+        
         return $suite;
     }
 }

@@ -15,7 +15,7 @@
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Controller_EventTests::main');
+    define('PHPUnit_MAIN_METHOD', 'ActiveSync_Controller_ContactsTests::main');
 }
 
 /**
@@ -73,24 +73,44 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         
         
         ############# TEST CONTACT ##########
-        $containerWithSyncGrant = new Tinebase_Model_Container(array(
-            'name'              => 'ContainerWithSycnGrant',
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            //'account_grants'    => 'Tine 2.0',
-        ));
-        #Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'ContainerWithSycnGrant', Tinebase_Model_Container::TYPE_PERSONAL);
+        try {
+            $containerWithSyncGrant = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'ContainerWithSyncGrant', Tinebase_Model_Container::TYPE_PERSONAL);
+        } catch (Tinebase_Exception_NotFound $e) {
+	        $containerWithSyncGrant = new Tinebase_Model_Container(array(
+	            'name'              => 'ContainerWithSyncGrant',
+	            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+	            'backend'           => 'Sql',
+	            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()
+	        ));
+	        $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithSyncGrant);
+        }
+        $this->objects['containerWithSyncGrant'] = $containerWithSyncGrant;
         
-        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Zend_Registry::get('currentAccount'), 
-            'Addressbook', 
-            Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Grants::GRANT_EDIT
-        );
-        
-        $container = $personalContainer[0];
-        $this->objects['container'] = $container;
+        try {
+            $containerWithoutSyncGrant = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'ContainerWithoutSyncGrant', Tinebase_Model_Container::TYPE_PERSONAL);
+        } catch (Tinebase_Exception_NotFound $e) {
+            $creatorGrants = array(
+                'account_id'     => Tinebase_Core::getUser()->getId(),
+                'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Model_Grants::GRANT_READ      => true,
+                Tinebase_Model_Grants::GRANT_ADD       => true,
+                Tinebase_Model_Grants::GRANT_EDIT      => true,
+                Tinebase_Model_Grants::GRANT_DELETE    => true,
+                //Tinebase_Model_Grants::GRANT_EXPORT    => true,
+                //Tinebase_Model_Grants::GRANT_SYNC      => true,
+                Tinebase_Model_Grants::GRANT_ADMIN     => true,
+            );        	
+        	$grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants));
+        	
+            $containerWithoutSyncGrant = new Tinebase_Model_Container(array(
+                'name'              => 'ContainerWithoutSyncGrant',
+                'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+                'backend'           => 'Sql',
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()
+            ));
+            $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithoutSyncGrant, $grants = null);
+        }
+        $this->objects['containerWithoutSyncGrant'] = $containerWithoutSyncGrant;
         
         $contact = new Addressbook_Model_Contact(array(
             'adr_one_countryname'   => 'DE',
@@ -109,7 +129,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
 //            'jpegphoto'             => file_get_contents(dirname(__FILE__) . '/../../Tinebase/ImageHelper/phpunit-logo.gif'),
-            'container_id'          => $container->id,
+            'container_id'          => $this->objects['containerWithSyncGrant']->id,
             'role'                  => 'Role',
             'n_family'              => 'Kneschke',
             'n_fileas'              => 'Kneschke, Lars',
@@ -157,6 +177,9 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         }
 
         Addressbook_Controller_Contact::getInstance()->delete(array($this->objects['contact']->getId()));
+        
+        Tinebase_Container::getInstance()->deleteContainer($this->objects['containerWithSyncGrant']);
+        Tinebase_Container::getInstance()->deleteContainer($this->objects['containerWithoutSyncGrant']);
     }
     
     /**
@@ -179,7 +202,9 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
         
         $folders = $controller->getFolders();
-        #var_dump($folders);
+        foreach($folders as $folder) {
+        	$this->assertTrue(Tinebase_Core::getUser()->hasGrant($folder['folderId'], Tinebase_Model_Grants::GRANT_SYNC));
+        }
         $this->assertArrayNotHasKey("addressbook-root", $folders, "key addressbook-root found");
     }
     
