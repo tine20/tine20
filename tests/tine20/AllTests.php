@@ -29,15 +29,14 @@ class AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 All Tests');
         
+        $suite->addTest(Tinebase_AllTests::suite());
+        $suite->addTest(Addressbook_AllTests::suite());
+        $suite->addTest(Admin_AllTests::suite());
         // only call Felamimail tests if imap is configured in config.inc.php
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
         if (! empty($imapConfig) && array_key_exists('useSystemAccount', $imapConfig) && $imapConfig['useSystemAccount']) {
             $suite->addTest(Felamimail_AllTests::suite());
         }
-        
-        $suite->addTest(Tinebase_AllTests::suite());
-        $suite->addTest(Addressbook_AllTests::suite());
-        $suite->addTest(Admin_AllTests::suite());
         $suite->addTest(Crm_AllTests::suite());
         $suite->addTest(Tasks_AllTests::suite());
         $suite->addTest(Voipmanager_AllTests::suite());
