@@ -187,6 +187,7 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
       { name: 'parent' },
       { name: 'parent_path' }, // /accountid/folderid/...
       { name: 'account_id' },
+      { name: 'has_children' },
       { name: 'imap_status' },
       { name: 'imap_timestamp',     type: 'date', dateFormat: Date.patterns.ISO8601Long },
       { name: 'imap_uidnext',       type: 'int' },
