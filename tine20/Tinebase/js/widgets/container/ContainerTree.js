@@ -227,7 +227,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         var matches = treePath.match(/personal\/{0,1}(.*)/)
         if (matches) {
             if (matches[1] != Tine.Tinebase.registry.get('currentAccount').accountId) {
-                console.log('other')
                 treePath = treePath.replace('personal', 'otherUsers');
             } else {
                 treePath = treePath.replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountId, 'personal');
