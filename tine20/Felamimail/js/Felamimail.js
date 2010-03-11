@@ -104,12 +104,28 @@ Ext.namespace('Tine.Felamimail');
                     var queryObject = {field: field, value: value};
                     
                     if (result.getCount() == 0 && ! store.queriesDone.contains(queryObject)) {
-                        // TODO do async request (only once)
-                        console.log('async');
+                        // do async request (only once)
+                        var accountId = value.match(/^\/([a-z0-9]*)/i)[1];
+                        var folderId = value.match(/([a-z0-9]*)$/i)[1];
+                        var folder = store.getById(folderId);
+                        store.load({
+                            path: value,
+                            params: {filter: [
+                                {field: 'account_id', operator: 'equals', value: accountId},
+                                {field: 'globalname', operator: 'equals', value: folder.get('globalname')}
+                            ]},
+                            callback: function () {
+                                // query store again (it should have the new folders now) and call callback function to add nodes
+                                result = store.query(field, value);
+                                args.push(result);
+                                callback.apply(scope, args);
+                            }
+                        });
                         
+                        // save query
                         store.queriesDone.add(queryObject);
+                        
                     } else {
-                        //console.log('call callback fn');
                         if (Ext.isFunction(callback)) {
                             args.push(result);
                             callback.apply(scope, args);
