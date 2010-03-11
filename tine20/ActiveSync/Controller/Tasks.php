@@ -79,7 +79,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      */
     protected $_folderType          = ActiveSync_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED;
     
-    public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_folderId, $_serverId)
+    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId)
     {
         $data = $this->_contentController->get($_serverId);
         
@@ -92,23 +92,25 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                         
                     case 'due':
                         if($data->$value instanceof Zend_Date) {
-                            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', $key, $data->$value->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z'));
-                            #$_xmlNode->appendChild($_xmlDocument->createElementNS('POOMTASKS', $key, '2008-12-30T23:00:00.000Z'));
+                            $_xmlNode->appendChild(new DOMElement($key, $data->$value->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z', 'uri:Tasks'));
+                            #$_xmlNode->appendChild($_xmlDocument->createElementNS('POOMTASKS', $key, '2008-12-30T23:00:00.000Z', 'uri:Tasks'));
                             $data->$value->setTimezone(Tinebase_Core::get('userTimeZone'));
-                            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', 'DueDate', $data->$value->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z'));
+                            $_xmlNode->appendChild(new DOMElement('DueDate', $data->$value->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z', 'uri:Tasks'));
                         }
                         break;
                         
                     case 'priority':
                         $priority = ($data->$value <= 2) ? $data->$value : 2;
-                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', $key, $priority));
+                        $_xmlNode->appendChild(new DOMElement($key, $priority, 'uri:Tasks'));
                         break;
                         
                     default:
-                        $node = $_xmlDocument->createElementNS('uri:Tasks', $key);
-                        $node->appendChild(new DOMText($data->$value));
+                        $node = new DOMElement($key, null, 'uri:Tasks');
                         
                         $_xmlNode->appendChild($node);
+                        
+                        $node->appendChild(new DOMText($data->$value));
+                        
                         break;
                 }
             }
@@ -116,10 +118,10 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         
         // Completed is required
         if($data->completed instanceof Zend_Date) {
-            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', 'Complete', 1));
-            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', 'DateCompleted', $data->completed->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z'));
+            $_xmlNode->appendChild(new DOMElement('Complete', 1, 'uri:Tasks'));
+            $_xmlNode->appendChild(new DOMElement('DateCompleted', $data->completed->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z', 'uri:Tasks'));
         } else {
-            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', 'Complete', 0));
+            $_xmlNode->appendChild(new DOMElement('Complete', 0, 'uri:Tasks'));
         }
         
     }

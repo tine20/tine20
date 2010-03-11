@@ -118,7 +118,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      * @param $_folderId
      * @param string $_serverId
      */
-    public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_folderId, $_serverId)
+    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId)
     {
         $data = $this->_contentController->get($_serverId);
         
@@ -158,10 +158,17 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         $nodeContent = $data->$value;
                         break;
                 }
-                $node = $_xmlDocument->createElementNS('uri:Contacts', $key);
+
+                // create a new DOMElement ...
+                $node = new DOMElement($key, null, 'uri:Contacts');
+
+                // ... append it to parent node aka append it to the document ...
+                $_xmlNode->appendChild($node);
+                
+                // ... and now add the content (DomText takes care of special chars)
                 $node->appendChild(new DOMText($nodeContent));
                 
-                $_xmlNode->appendChild($node);
+                
             }
         }        
     }

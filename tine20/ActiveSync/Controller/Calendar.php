@@ -202,7 +202,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      * @param DOMElement $_xmlNode
      * @param string $_serverId
      */
-    public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_folderId, $_serverId)
+    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId)
     {
         $data = $this->_contentController->get($_serverId);
         
@@ -214,13 +214,15 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     case 'dtend':
                     case 'dtstart':
                         $date = $data->$value->toString('yyyyMMddTHHmmss') . 'Z';
-                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', $key, $date));
+                        $_xmlNode->appendChild(new DOMElement($key, $date, 'uri:Calendar'));
                         break;
                     default:
-                        $node = $_xmlDocument->createElementNS('uri:Calendar', $key);
-                        $node->appendChild(new DOMText($data->$value));
+                        $node = new DOMElement($key, null, 'uri:Calendar');
                         
                         $_xmlNode->appendChild($node);
+                        
+                        $node->appendChild(new DOMText($data->$value));
+                        
                         break;
                 }
             }
@@ -232,7 +234,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 $start = $data->dtstart;
                 $reminder = $alarm->alarm_time;
                 $reminderMinutes = ($start->getTimestamp() - $reminder->getTimestamp()) / 60;
-                $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Reminder', $reminderMinutes));
+                $_xmlNode->appendChild(new DOMElement('Reminder', $reminderMinutes, 'uri:Calendar'));
             }
         }
                 
@@ -241,58 +243,57 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " calendar rrule " . $data->rrule);
             $rrule = Calendar_Model_Rrule::getRruleFromString($data->rrule);
             
-            $recurrence = $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Recurrence'));
+            $recurrence = $_xmlNode->appendChild(new DOMElement('Recurrence', null, 'uri:Calendar'));
             // required fields
             switch($rrule->freq) {
                 case Calendar_Model_Rrule::FREQ_DAILY:
-                    $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Type', self::RECUR_TYPE_DAILY));
+                    $recurrence->appendChild(new DOMElement('Type', self::RECUR_TYPE_DAILY, 'uri:Calendar'));
                     break;
                     
                 case Calendar_Model_Rrule::FREQ_WEEKLY:
-                    $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Type', self::RECUR_TYPE_WEEKLY));
-                    $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DayOfWeek', $this->_convertDayToBitMask($rrule->byday)));
+                    $recurrence->appendChild(new DOMElement('Type',      self::RECUR_TYPE_WEEKLY,                    'uri:Calendar'));
+                    $recurrence->appendChild(new DOMElement('DayOfWeek', $this->_convertDayToBitMask($rrule->byday), 'uri:Calendar'));
                     break;
                     
                 case Calendar_Model_Rrule::FREQ_MONTHLY:
                     if(!empty($rrule->bymonthday)) {
-                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Type', self::RECUR_TYPE_MONTHLY));
-
-                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DayOfMonth', $rrule->bymonthday));
+                        $recurrence->appendChild(new DOMElement('Type',       self::RECUR_TYPE_MONTHLY, 'uri:Calendar'));
+                        $recurrence->appendChild(new DOMElement('DayOfMonth', $rrule->bymonthday,       'uri:Calendar'));
                     } else {
-                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Type', self::RECUR_TYPE_MONTHLY_DAYN));
-
                         $weekOfMonth = (int) substr($rrule->byday, 0, -2);
                         $weekOfMonth = ($weekOfMonth == -1) ? 5 : $weekOfMonth; 
                         $dayOfWeek   = substr($rrule->byday, -2);
-                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'WeekOfMonth', $weekOfMonth));
-                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DayOfWeek',   $this->_convertDayToBitMask($dayOfWeek)));
+                    	
+                        $recurrence->appendChild(new DOMElement('Type',        self::RECUR_TYPE_MONTHLY_DAYN,           'uri:Calendar'));
+                        $recurrence->appendChild(new DOMElement('WeekOfMonth', $weekOfMonth,                            'uri:Calendar'));
+                        $recurrence->appendChild(new DOMElement('DayOfWeek',   $this->_convertDayToBitMask($dayOfWeek), 'uri:Calendar'));
                     }
                     break;
+                    
                 case Calendar_Model_Rrule::FREQ_YEARLY:
                     if(!empty($rrule->bymonthday)) {
-                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Type', self::RECUR_TYPE_YEARLY));
-                        
-                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DayOfMonth', $rrule->bymonthday));
-                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'MonthOfYear', $rrule->bymonth));
+                        $recurrence->appendChild(new DOMElement('Type',        self::RECUR_TYPE_YEARLY, 'uri:Calendar'));
+                        $recurrence->appendChild(new DOMElement('DayOfMonth',  $rrule->bymonthday,      'uri:Calendar'));
+                        $recurrence->appendChild(new DOMElement('MonthOfYear', $rrule->bymonth,         'uri:Calendar'));
                     } else {
-                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Type', self::RECUR_TYPE_YEARLY_DAYN));
-
                         $weekOfMonth = (int) substr($rrule->byday, 0, -2);
                         $weekOfMonth = ($weekOfMonth == -1) ? 5 : $weekOfMonth; 
                         $dayOfWeek   = substr($rrule->byday, -2);
-                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'WeekOfMonth', $weekOfMonth));
-                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DayOfWeek',   $this->_convertDayToBitMask($dayOfWeek)));
-                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'MonthOfYear', $rrule->bymonth));
+                    	
+                        $recurrence->appendChild(new DOMElement('Type',        self::RECUR_TYPE_YEARLY_DAYN, 'uri:Calendar'));
+                        $recurrence->appendChild(new DOMElement('WeekOfMonth', $weekOfMonth,                 'uri:Calendar'));
+                        $recurrence->appendChild(new DOMElement('DayOfWeek',   $this->_convertDayToBitMask($dayOfWeek), 'uri:Calendar'));
+                        $recurrence->appendChild(new DOMElement('MonthOfYear', $rrule->bymonth,              'uri:Calendar'));
                     }
                     break;
             }
             
             if ($rrule->freq != Calendar_Model_Rrule::FREQ_YEARLY) {
-                $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Interval', $rrule->interval));
+                $recurrence->appendChild(new DOMElement('Interval', $rrule->interval, 'uri:Calendar'));
             }
             
             if($rrule->until instanceof Zend_Date) {
-                $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Until', $rrule->until->toString('yyyyMMddTHHmmss') . 'Z'));
+                $recurrence->appendChild(new DOMElement('Until', $rrule->until->toString('yyyyMMddTHHmmss') . 'Z', 'uri:Calendar'));
             }
                         
             //Occurences
@@ -303,14 +304,14 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             
             foreach($data->attendee as $attenderObject) {
                 if($attendees === null) {
-                    $attendees = $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Attendees'));
+                    $attendees = $_xmlNode->appendChild(new DOMElement('Attendees', null, 'uri:Calendar'));
                 }
-                $attendee = $attendees->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Attendee'));
-                $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Name', $attenderObject->getName()));
-                $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Email', $attenderObject->getEmail()));
+                $attendee = $attendees->appendChild(new DOMElement('Attendee', null, 'uri:Calendar'));
+                $attendee->appendChild(new DOMElement('Name', $attenderObject->getName(), 'uri:Calendar'));
+                $attendee->appendChild(new DOMElement('Email', $attenderObject->getEmail(), 'uri:Calendar'));
                 if(version_compare($this->_device->acsversion, '12.0', '>=') === true) {
-                    $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'AttendeeType', array_search($attenderObject->role, $this->_attendeeTypeMapping)));
-                    $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'AttendeeStatus', array_search($attenderObject->status, $this->_attendeeStatusMapping)));
+                    $attendee->appendChild(new DOMElement('AttendeeType', array_search($attenderObject->role, $this->_attendeeTypeMapping), 'uri:Calendar'));
+                    $attendee->appendChild(new DOMElement('AttendeeStatus', array_search($attenderObject->status, $this->_attendeeStatusMapping), 'uri:Calendar'));
                 }
             }
         }
@@ -319,16 +320,16 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             Tinebase_Core::get(Tinebase_Core::CACHE)
         );
         
-        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Timezone', $timeZoneConverter->encodeTimezone(
+        $_xmlNode->appendChild(new DOMElement('Timezone', $timeZoneConverter->encodeTimezone(
             Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
-        )));
+        ), 'uri:Calendar'));
         
-        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'MeetingStatus', 1));
-        #$_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Timezone', 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAEAAAAAAAAAxP///w=='));
-        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'BusyStatus', 2));
-        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Sensitivity', 0));
-        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DtStamp', $data->creation_time->toString('yyyyMMddTHHmmss') . 'Z'));
-        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'UID', $data->getId()));
+        $_xmlNode->appendChild(new DOMElement('MeetingStatus', 1, 'uri:Calendar'));
+        #$_xmlNode->appendChild(new DOMElement('Timezone', 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAEAAAAAAAAAxP///w==', 'uri:Calendar'));
+        $_xmlNode->appendChild(new DOMElement('BusyStatus', 2, 'uri:Calendar'));
+        $_xmlNode->appendChild(new DOMElement('Sensitivity', 0, 'uri:Calendar'));
+        $_xmlNode->appendChild(new DOMElement('DtStamp', $data->creation_time->toString('yyyyMMddTHHmmss') . 'Z', 'uri:Calendar'));
+        $_xmlNode->appendChild(new DOMElement('UID', $data->getId(), 'uri:Calendar'));
     }
     
     /**
@@ -779,7 +780,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         // only the IPhone supports multiple folders for calendars currently
         if(strtolower($this->_device->devicetype) == 'iphone') {
         
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_READ);
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_SYNC);
             foreach ($containers as $container) {
                 $folders[$container->id] = array(
                     'folderId'      => $container->id,

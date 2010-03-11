@@ -423,5 +423,5 @@ abstract class ActiveSync_Controller_Abstract
     
     abstract protected function _toTineFilter(SimpleXMLElement $_data);
     
-    abstract public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_folderId, $_serverId);    
+    abstract public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId);    
 }
