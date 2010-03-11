@@ -24,6 +24,7 @@ Ext.onReady(function() {
         if (! Tine.Tinebase.tineInit.initList.initRegistry) {
             waitForInits.defer(100);
         } else {
+            Tine.Tinebase.tineInit.initState();
             Tine.Tinebase.tineInit.initExtDirect();
             Tine.Tinebase.tineInit.initWindowMgr();
             Tine.Tinebase.tineInit.onLangFilesLoad();
@@ -495,11 +496,6 @@ Tine.Tinebase.tineInit = {
                         }
                     }
                     
-                    // init state with data from reg
-                    if (Tine.Tinebase.tineInit.stateful === true) {
-                        Tine.Tinebase.tineInit.initState();
-                    }
-                    
                     Tine.Tinebase.tineInit.initList.initRegistry = true;
                 }
             });
@@ -667,7 +663,9 @@ Tine.Tinebase.tineInit = {
      * initialise state provider
      */
     initState: function() {
-        Ext.state.Manager.setProvider(new Tine.Tinebase.StateProvider());
+        if (Tine.Tinebase.tineInit.stateful === true) {
+            Ext.state.Manager.setProvider(new Tine.Tinebase.StateProvider());
+        }
     },
     
     /**
