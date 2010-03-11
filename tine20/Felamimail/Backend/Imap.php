@@ -394,7 +394,23 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function getUidbyUid($from, $to = null)
     {
-        $result = $this->_protocol->fetch(array('UID'), $from, $to, $this->_useUid);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $from . ' - ' . $to);
+        
+        $result = $this->_protocol->fetch('UID', $from, $to, $this->_useUid);
+        
+        // @todo check if this is really needed
+        // sanitize result, sometimes the fetch command can return wrong results :(
+        if (is_numeric($from) && is_numeric($to)) {
+            foreach ($result as $key => $value) {
+                // check if out of bounds
+                if ($value < min($to, $from) || $value > max($to, $from)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Uid out of bounds detected: ' . $key);
+                    unset($result[$key]);
+                }
+            }
+        } else {
+            // @todo perhaps we should do an array_intersect here as well
+        }
         
         return array_values($result);
     }
