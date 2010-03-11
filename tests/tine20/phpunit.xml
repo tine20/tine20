@@ -10,6 +10,7 @@
     <filter>
       <blacklist>
           <directory suffix=".php">tine20/library</directory>
+          <directory suffix=".php">tine20/Setup</directory>
           <directory suffix=".php">tine20/Zend</directory>
       </blacklist>
     </filter>
