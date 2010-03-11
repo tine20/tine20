@@ -149,7 +149,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             $imap->selectFolder($folder->globalname);
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . ' Try to get message uids from ' . ($folder->cache_job_lowestuid -1) . ' to ' . $folder->cache_uidnext . ' from imap server.'
+                . ' Try to get message uids from ' . ($folder->cache_job_lowestuid - 1) . ' to ' . $folder->cache_uidnext . ' from imap server.'
             );
 
             ///////////////////////////// main message import loop
