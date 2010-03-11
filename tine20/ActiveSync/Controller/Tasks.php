@@ -262,4 +262,40 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         list($match, $year, $month, $day, $hour, $minute, $second) = $matches;
         return  mktime($hour, $minute, $second, $month, $day, $year);
     }
+    
+    /**
+     * return list of supported folders for this backend
+     *
+     * @return array
+     */
+    public function getSupportedFolders()
+    {
+        $folders[$this->_specialFolderName] = array(
+            'folderId'      => $this->_specialFolderName,
+            'parentId'      => 0,
+            'displayName'   => $this->_applicationName,
+            'type'          => $this->_defaultFolderType
+        );
+        
+        return $folders;
+    }
+    
+    protected function _getSyncableFolders()
+    {
+        $folders = array();
+        
+        $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_SYNC);
+        foreach ($containers as $container) {
+            $folders[$container->id] = array(
+                'folderId'      => $container->id,
+                'parentId'      => 0,
+                'displayName'   => $container->name,
+                'type'          => (count($folders) == 0) ? $this->_defaultFolderType : $this->_folderType
+            );
+        }
+                
+        // we ignore the folders of others users and shared folders for now
+                
+        return $folders;
+    }
 }
