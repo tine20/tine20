@@ -104,6 +104,7 @@ Tine.Tinebase.Model.Container = Ext.data.Record.create(Tine.Tinebase.Model.gener
     {name: 'name'},
     {name: 'type'},
     {name: 'path'},
+    {name: 'is_container_node', type: 'boolean'},
     {name: 'dtselect', type: 'number'},
     {name: 'backend'},
     {name: 'application_id'},
