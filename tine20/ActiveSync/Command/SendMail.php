@@ -66,6 +66,8 @@ class ActiveSync_Command_SendMail
             throw new Exception('no email address set for current user');
         }
         
+        return;
+        
         $mail = new Tinebase_Mail();
         
         $mail->setFrom($currentUser->accountEmailAddress, $currentUser->accountDisplayName);
