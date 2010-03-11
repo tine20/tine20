@@ -440,6 +440,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             // set ftb filters according to tree selection
             ftb.supressEvents = false;
             ftb.addFilter(new ftb.record({field: 'container_id', operator: 'equals', value: node.attributes.container}));
+            
             if (! sm.filterPluginSetValue) {
                 ftb.onFiltertrigger();
             }
@@ -513,6 +514,7 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
             
             this.treePanel.getSelectionModel().filterPluginSetValue = true;
             this.treePanel.selectContainerPath(filter.value.path);
+            this.treePanel.getSelectionModel().filterPluginSetValue = false;
         }, this);
     }
 });
