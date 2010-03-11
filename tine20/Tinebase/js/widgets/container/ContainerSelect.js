@@ -3,19 +3,19 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
-
-Ext.namespace('Tine.widgets', 'Tine.widgets.container');
+Ext.ns('Tine.widgets', 'Tine.widgets.container');
 
 /**
- * @namespace Tine.widgets.container
- * @class Tine.widgets.container.selectionComboBox
- * @extends Ext.form.ComboBox
- * 
  * Container select ComboBox widget
+ * 
+ * @namespace Tine.widgets.container
+ * @class       Tine.widgets.container.selectionComboBox
+ * @extends     Ext.form.ComboBox
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
  */
 Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**

@@ -5,28 +5,27 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
 Ext.ns('Tine.widgets', 'Tine.widgets.container');
 
- /**
-  * @namespace   Tine.widgets.container
-  * @class       Tine.containerTreePanel
-  * @extends     Ext.tree.TreePanel
-  * @param       {Object} config Configuration options
-  * @description
-  * <p>Utility class for generating container trees as used in the 
-  * apps tree panel</p>
-  * <p>This widget handles all container related actions like add/rename/delte 
-  * and manager permissions<p>
-  * <p>Example usage:</p>
-  * <pre><code>
+/**
+ * @namespace   Tine.widgets.container
+ * @class       Tine.containerTreePanel
+ * @extends     Ext.tree.TreePanel
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
+ * @param       {Object} config Configuration options
+ * @description
+ * <p>Utility class for generating container trees as used in the apps tree panel</p>
+ * <p>This widget handles all container related actions like add/rename/delte and manager permissions<p>
+ *<p>Example usage:</p>
+<pre><code>
 var taskPanel =  new Tine.containerTreePanel({
     app: Tine.Tinebase.appMgr.get('Tasks'),
     recordClass: Tine.Tasks.Task
 });
-  </code></pre>
-  */
+</code></pre>
+ */
 Tine.widgets.container.TreePanel = function(config) {
     Ext.apply(this, config);
     
