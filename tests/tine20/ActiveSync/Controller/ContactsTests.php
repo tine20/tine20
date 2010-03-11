@@ -51,6 +51,8 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {   	
+    	$appName = 'Addressbook';
+    	
     	############# TEST USER ##########
     	$user = new Tinebase_Model_FullUser(array(
             'accountId'             => 10,
@@ -74,20 +76,20 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         
         ############# TEST CONTACT ##########
         try {
-            $containerWithSyncGrant = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'ContainerWithSyncGrant', Tinebase_Model_Container::TYPE_PERSONAL);
+            $containerWithSyncGrant = Tinebase_Container::getInstance()->getContainerByName($appName, 'ContainerWithSyncGrant', Tinebase_Model_Container::TYPE_PERSONAL);
         } catch (Tinebase_Exception_NotFound $e) {
 	        $containerWithSyncGrant = new Tinebase_Model_Container(array(
 	            'name'              => 'ContainerWithSyncGrant',
 	            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
 	            'backend'           => 'Sql',
-	            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()
+	            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId()
 	        ));
 	        $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithSyncGrant);
         }
         $this->objects['containerWithSyncGrant'] = $containerWithSyncGrant;
         
         try {
-            $containerWithoutSyncGrant = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'ContainerWithoutSyncGrant', Tinebase_Model_Container::TYPE_PERSONAL);
+            $containerWithoutSyncGrant = Tinebase_Container::getInstance()->getContainerByName($appName, 'ContainerWithoutSyncGrant', Tinebase_Model_Container::TYPE_PERSONAL);
         } catch (Tinebase_Exception_NotFound $e) {
             $creatorGrants = array(
                 'account_id'     => Tinebase_Core::getUser()->getId(),
@@ -106,9 +108,9 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
                 'name'              => 'ContainerWithoutSyncGrant',
                 'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
                 'backend'           => 'Sql',
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId()
             ));
-            $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithoutSyncGrant, $grants = null);
+            $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithoutSyncGrant, $grants);
         }
         $this->objects['containerWithoutSyncGrant'] = $containerWithoutSyncGrant;
         
@@ -212,18 +214,23 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      */
     public function testAppendXmlPalm()
     {
-    	$dtd                   = @DOMImplementation::createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
-        $testDom               = @DOMImplementation::createDocument('uri:AirSync', 'Sync', $dtd);
-        $testDom->formatOutput = false;
+        $imp                   = new DOMImplementation();
+        
+        $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
+        $testDom               = $imp->createDocument('uri:AirSync', 'Sync', $dtd);
+        $testDom->formatOutput = true;
         $testDom->encoding     = 'utf-8';
-        $testNode = $testDom->appendChild($testDom->createElementNS('uri:AirSync', 'TestAppendXml'));
+        
+        $testDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Contacts', 'uri:Contacts');
+        $testNode = $testDom->documentElement->appendChild($testDom->createElementNS('uri:AirSync', 'TestAppendXml'));
         
         $controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Zend_Date(null, null, 'de_DE'));   	
         
-    	$controller->appendXML($testDom, $testNode, null, $this->objects['contact']->getId());
-    	$this->assertEquals(Tinebase_Translation::getCountryNameByRegionCode('DE'), $testDom->getElementsByTagName('BusinessCountry')->item(0)->nodeValue);
-    	//$this->assertEquals('Germany', $testDom->getElementsByTagName('BusinessCountry')->item(0)->nodeValue);
-    	$this->assertEquals('1975-01-02T03:00:00.000Z', $testDom->getElementsByTagName('Birthday')->item(0)->nodeValue);
+    	$controller->appendXML($testNode, null, $this->objects['contact']->getId());
+    	
+    	// offset birthday 0 hours and namespace === uri:Contacts
+    	$this->assertEquals(Tinebase_Translation::getCountryNameByRegionCode('DE'), @$testDom->getElementsByTagNameNS('uri:Contacts', 'BusinessCountry')->item(0)->nodeValue, $testDom->saveXML());
+    	$this->assertEquals('1975-01-02T03:00:00.000Z', @$testDom->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDom->saveXML());
     }
     
     /**
@@ -233,17 +240,37 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      */
     public function testAppendXmlIPhone()
     {
-        $dtd                   = @DOMImplementation::createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
-        $testDom               = @DOMImplementation::createDocument('uri:AirSync', 'Sync', $dtd);
-        $testDom->formatOutput = false;
+		$imp                   = new DOMImplementation();
+		
+        $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
+        $testDom               = $imp->createDocument('uri:AirSync', 'Sync', $dtd);
+        $testDom->formatOutput = true;
         $testDom->encoding     = 'utf-8';
-        $testNode = $testDom->appendChild($testDom->createElementNS('uri:AirSync', 'TestAppendXml'));
+        $testDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Contacts', 'uri:Contacts');
+        
+        $collections    = $testDom->documentElement->appendChild($testDom->createElementNS('uri:AirSync', 'Collections'));
+        $collection     = $collections->appendChild($testDom->createElementNS('uri:AirSync', 'Collection'));
+        $commands       = $collection->appendChild($testDom->createElementNS('uri:AirSync', 'Commands'));
+        $add            = $commands->appendChild($testDom->createElementNS('uri:AirSync', 'Add'));
+        $appData        = $add->appendChild($testDom->createElementNS('uri:AirSync', 'ApplicationData'));
+        
         
         $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));     
         
-        $controller->appendXML($testDom, $testNode, null, $this->objects['contact']->getId());
-        // offset birthday 12 hours
-        $this->assertEquals('1975-01-02T15:00:00.000Z', $testDom->getElementsByTagName('Birthday')->item(0)->nodeValue);
+        $controller->appendXML($appData, null, $this->objects['contact']->getId());
+        
+        // offset birthday 12 hours and namespace === uri:Contacts
+        $this->assertEquals('1975-01-02T15:00:00.000Z', @$testDom->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDom->saveXML());
+        
+        #echo $testDom->saveXML();
+
+        // try to encode XML until we have wbxml tests
+        $outputStream = fopen("php://temp", 'r+');
+        $encoder = new Wbxml_Encoder($outputStream, 'UTF-8', 3);
+        $encoder->encode($testDom);
+        
+        #rewind($outputStream);
+        #fpassthru($outputStream);
     }
     
 }
