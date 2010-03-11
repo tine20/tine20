@@ -5,16 +5,17 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
-
-Ext.namespace('Tine.Tinebase.container');
+Ext.ns('Tine.Tinebase.container');
 
 /**
  * Tinebase container class
  * 
- * @todo add generic container model
- * @todo internal cache (store)
+ * @todo move container model here
+ * 
+ * @namespace   Tine.Tinebase.container
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
  */
 Tine.Tinebase.container = {
     /**
