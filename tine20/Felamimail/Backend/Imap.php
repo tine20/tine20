@@ -394,8 +394,6 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function getUidbyUid($from, $to = null)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $from . ' - ' . $to);
-        
         $result = $this->_protocol->fetch('UID', $from, $to, $this->_useUid);
         
         // @todo check if this is really needed
