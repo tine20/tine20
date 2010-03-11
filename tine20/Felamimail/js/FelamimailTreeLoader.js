@@ -44,21 +44,21 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         if(this.fireEvent("beforeload", this, node, callback) !== false) {
             var fstore = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore();
             
-            // does this really transparently do async request? -> no TODO: we need to call doQuery fn from store
-            var folderCollection = fstore.query('parent_path', node.attributes.path);
-            //console.log(folderCollection);
-            node.beginUpdate();
+            // we need to call doQuery fn from store to transparently do async request
+            fstore.asyncQuery('parent_path', node.attributes.path, function(node, callback, scope, data) {
+                //console.log(arguments);
+                node.beginUpdate();
+                data.each(function(folderRecord) {
+                    var n = this.createNode(folderRecord.data);
+                    if (n) {
+                        node.appendChild(n);
+                    }
+                }, this);
+                node.endUpdate();
+                this.runCallback(callback, scope || node, [node]);
+            }, [node, callback, scope], this, fstore);
             
-            folderCollection.each(function(folderRecord) {
-                var n = this.createNode(folderRecord.data);
-                if (n) {
-                    node.appendChild(n);
-                }
-            }, this);
-            
-            node.endUpdate();
-            this.runCallback(callback, scope || node, [node]);
-        }else{
+        } else {
             // if the load is cancelled, make sure we notify
             // the node that we are done
             this.runCallback(callback, scope || node, []);

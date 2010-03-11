@@ -87,7 +87,7 @@ Ext.namespace('Tine.Felamimail');
      */
     getFolderStore: function() {
         if (! this.folderStore) {
-            this.folderStore = new Ext.data.JsonStore({
+            this.folderStore = new Ext.data.Store({
                 fields: Tine.Felamimail.Model.Folder,
                 listeners: {
                     scope: this,
@@ -97,46 +97,24 @@ Ext.namespace('Tine.Felamimail');
                 },
                 proxy: Tine.Felamimail.folderBackend,
                 reader: Tine.Felamimail.folderBackend.getReader(),
-                queriesDone: [],
-                doQuery: function(field, value, callback) {
-                    // TODO implement
-                    /*
-                    q = Ext.isEmpty(q) ? '' : q;
-                    var qe = {
-                        query: q,
-                        forceAll: forceAll,
-                        combo: this,
-                        cancel:false
-                    };
-                    if(this.fireEvent('beforequery', qe)===false || qe.cancel){
-                        return false;
-                    }
-                    q = qe.query;
-                    forceAll = qe.forceAll;
-                    if(forceAll === true || (q.length >= this.minChars)){
-                        if(this.lastQuery !== q){
-                            this.lastQuery = q;
-                            if(this.mode == 'local'){
-                                this.selectedIndex = -1;
-                                if(forceAll){
-                                    this.store.clearFilter();
-                                }else{
-                                    this.store.filter(this.displayField, q);
-                                }
-                                this.onLoad();
-                            }else{
-                                this.store.baseParams[this.queryParam] = q;
-                                this.store.load({
-                                    params: this.getParams(q)
-                                });
-                                this.expand();
-                            }
-                        }else{
-                            this.selectedIndex = -1;
-                            this.onLoad();
+                queriesDone: new Ext.util.MixedCollection(),
+                asyncQuery: function(field, value, callback, args, scope, store) {
+                    
+                    var result = store.query(field, value);
+                    var queryObject = {field: field, value: value};
+                    
+                    if (result.getCount() == 0 && ! store.queriesDone.contains(queryObject)) {
+                        // TODO do async request (only once)
+                        console.log('async');
+                        
+                        store.queriesDone.add(queryObject);
+                    } else {
+                        //console.log('call callback fn');
+                        if (Ext.isFunction(callback)) {
+                            args.push(result);
+                            callback.apply(scope, args);
                         }
                     }
-                    */
                 }
             });
             
