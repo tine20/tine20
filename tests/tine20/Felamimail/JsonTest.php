@@ -273,11 +273,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         //sleep(10);
         
         // check if message is in sent folder
-        $sent = $this->_getFolder('Sent');
-        $sent = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $sent->getId())->getFirstRecord();
-        $filter = $this->_getMessageFilter($sent->getId());
-        Felamimail_Controller_Cache_Message::getInstance()->update($sent);
-        $result = $this->_json->searchMessages($filter, '');
+        $result = $this->_getMessages('Sent');
         //print_r($result);
         
         $message = array(); 
@@ -373,7 +369,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $returned                   = $this->_json->saveMessage($replyMessage);
         
         $result = $this->_getMessages();
-        print_r($result);
+        //print_r($result);
         
         $replyMessageFound = array();
         $originalMessage = array();
@@ -407,10 +403,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $drafts = $this->_getFolder('Drafts');
         $this->_json->moveMessages(array($message['id']), $drafts->getId());
         
-        $filter = $this->_getMessageFilter($drafts->getId());
-        $drafts = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $drafts->getId())->getFirstRecord();
-        Felamimail_Controller_Cache_Message::getInstance()->update($drafts);
-        $result = $this->_json->searchMessages($filter, '');
+        $result = $this->_getMessages('Drafts');
         $movedMessage = array();
         foreach ($result['results'] as $mail) {
             if ($mail['subject'] == $message['subject']) {
@@ -536,17 +529,22 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * get messages from inbox
+     * get messages from folder
      * 
+     * @param string $_folderName
      * @return array
      */
-    protected function _getMessages()
+    protected function _getMessages($_folderName = 'INBOX')
     {
-        $inbox = $this->_getFolder();
-        $filter = $this->_getMessageFilter($inbox->getId());
+        $folder = $this->_getFolder($_folderName);
+        $filter = $this->_getMessageFilter($folder->getId());
         // update cache
-        $inbox = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $inbox->getId())->getFirstRecord();
-        Felamimail_Controller_Cache_Message::getInstance()->update($inbox);
+        $folder = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $folder->getId())->getFirstRecord();
+        $i = 0;
+        while ($folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $i < 10) {
+            $folder = Felamimail_Controller_Cache_Message::getInstance()->update($folder, 10);
+            $i++;
+        }
         $result = $this->_json->searchMessages($filter, '');
         //print_r($result);
         
