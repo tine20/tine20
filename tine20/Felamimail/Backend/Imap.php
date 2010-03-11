@@ -402,7 +402,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             foreach ($result as $key => $value) {
                 // check if out of bounds
                 if ($value < min($to, $from) || $value > max($to, $from)) {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Uid out of bounds detected: ' . $key);
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Uid out of bounds detected: ' 
+                        . $key . ' (' . min($to, $from) . ' - ' . max($to, $from) . ')');
                     unset($result[$key]);
                 }
             }
