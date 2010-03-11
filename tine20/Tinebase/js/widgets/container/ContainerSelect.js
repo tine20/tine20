@@ -219,7 +219,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             method: 'Tinebase_Container.getContainer',
             application: this.appName,
             containerType: Tine.Tinebase.container.TYPE_PERSONAL,
-            owner: this.startPath.match(Tine.Tinebase.container.ownerRegExp)[1]
+            owner: Tine.Tinebase.container.pathIsPersonalNode(this.startPath)
         };
     },
     
@@ -232,7 +232,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     onBeforeQuery: function(queryEvent) {
         queryEvent.query = new Date().getTime();
-        this.mode = this.startPath.match(Tine.Tinebase.container.ownerRegExp) ? 'remote' : 'local' ;
+        this.mode = Tine.Tinebase.container.pathIsPersonalNode(this.startPath) ? 'remote' : 'local' ;
     },
     
     /**
