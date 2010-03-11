@@ -92,7 +92,7 @@ class Tinebase_Frontend_Json_Container
         
         $result = $container->toArray();
         $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
-        
+        $result['path'] = Tinebase_Container::getInstance()->getPath($container);
         return $result;
     }
     
@@ -127,7 +127,10 @@ class Tinebase_Frontend_Json_Container
             throw new Tinebase_Exception('Container not found or permission to set containername denied!');
         }
         
-        return $container->toArray();
+        $result = $container->toArray();
+        $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
+        $result['path'] = Tinebase_Container::getInstance()->getPath($container);
+        return $result;
     }
     
     /**
