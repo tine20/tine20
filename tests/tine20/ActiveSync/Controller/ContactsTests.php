@@ -140,6 +140,32 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
         $this->objects['contact'] = $contact;
         
+        $unSyncableContact = new Addressbook_Model_Contact(array(
+            'adr_one_countryname'   => 'DE',
+            'adr_one_locality'      => 'Hamburg',
+            'adr_one_postalcode'    => '24xxx',
+            'adr_one_region'        => 'Hamburg',
+            'adr_one_street'        => 'Pickhuben 4',
+            'adr_one_street2'       => 'no second street',
+            'adr_two_countryname'   => 'DE',
+            'adr_two_locality'      => 'Hamburg',
+            'adr_two_postalcode'    => '24xxx',
+            'adr_two_region'        => 'Hamburg',
+            'adr_two_street'        => 'Pickhuben 4',
+            'adr_two_street2'       => 'no second street2',
+            'bday'                  => '1975-01-02 03:00:00', // new Zend_Date???
+            'email'                 => 'unittests@tine20.org',
+            'email_home'            => 'unittests@tine20.org',
+//            'jpegphoto'             => file_get_contents(dirname(__FILE__) . '/../../Tinebase/ImageHelper/phpunit-logo.gif'),
+            'container_id'          => $this->objects['containerWithoutSyncGrant']->id,
+            'role'                  => 'Role',
+            'n_family'              => 'Kneschke',
+            'n_fileas'              => 'Kneschke, Lars',
+        )); 
+        
+        $unSyncableContact = Addressbook_Controller_Contact::getInstance()->create($unSyncableContact);
+        $this->objects['unSyncableContact'] = $unSyncableContact;
+        
         ########### Test Controller / uit ###############
         $palm = new ActiveSync_Model_Device(array(
             'deviceid'  => 'test_device_id',
@@ -177,7 +203,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
             // do nothing
         }
 
-        Addressbook_Controller_Contact::getInstance()->delete(array($this->objects['contact']->getId()));
+        Addressbook_Controller_Contact::getInstance()->delete(array($this->objects['contact']->getId(), $this->objects['unSyncableContact']->getId()));
         
         Tinebase_Container::getInstance()->deleteContainer($this->objects['containerWithSyncGrant']);
         Tinebase_Container::getInstance()->deleteContainer($this->objects['containerWithoutSyncGrant']);
@@ -190,7 +216,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
     {
     	$controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Zend_Date(null, null, 'de_DE'));
     	
-    	$folders = $controller->getFolders();
+    	$folders = $controller->getSupportedFolders();
     	
     	$this->assertArrayHasKey("addressbook-root", $folders, "key addressbook-root not found");
     }
@@ -202,7 +228,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
     {
         $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
         
-        $folders = $controller->getFolders();
+        $folders = $controller->getSupportedFolders();
         foreach($folders as $folder) {
         	$this->assertTrue(Tinebase_Core::getUser()->hasGrant($folder['folderId'], Tinebase_Model_Grants::GRANT_SYNC));
         }
@@ -273,6 +299,68 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         #fpassthru($outputStream);
     }
     
+    /**
+     * test xml generation for IPhone
+     * 
+     * birthday must have 12 hours added
+     */
+    public function testGetServerEntries()
+    {
+    	$controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
+    	
+    	$entries = $controller->getServerEntries('addressbook-root', null);
+    	
+    	$this->assertContains($this->objects['contact']->getId(), $entries);
+    	$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
+    }
+    
+    /**
+     * test xml generation for IPhone
+     * 
+     * birthday must have 12 hours added
+     */
+    public function testSyncableFolder()
+    {
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
+        
+        $entries = $controller->getServerEntries($this->objects['containerWithSyncGrant']->getId(), null);
+        
+        $this->assertContains($this->objects['contact']->getId(), $entries);
+        $this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
+    }
+    
+    /**
+     * test xml generation for IPhone
+     * 
+     * birthday must have 12 hours added
+     */
+    public function testUnSyncableFolder()
+    {
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
+        
+        $entries = $controller->getServerEntries($this->objects['containerWithoutSyncGrant']->getId(), null);
+        
+        $this->assertNotContains($this->objects['contact']->getId(), $entries);
+        $this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
+    }
+    
+    /**
+     * test xml generation for IPhone
+     * 
+     * birthday must have 12 hours added
+     */
+    public function testGetChanged()
+    {
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
+        
+        Addressbook_Controller_Contact::getInstance()->update($this->objects['contact']);
+        Addressbook_Controller_Contact::getInstance()->update($this->objects['unSyncableContact']);
+        
+        $entries = $controller->getChanged('addressbook-root', Zend_Date::now()->subMinute(1));
+        #var_dump($entries);
+        $this->assertContains($this->objects['contact']->getId(), $entries);
+        $this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
+    }
 }
     
 if (PHPUnit_MAIN_METHOD == 'ActiveSync_Controller_Contacts::main') {

@@ -196,7 +196,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
     {
     	$controller = new ActiveSync_Controller_Calendar($this->objects['devicePalm'], new Zend_Date(null, null, 'de_DE'));
     	
-    	$folders = $controller->getFolders();
+    	$folders = $controller->getSupportedFolders();
     	
     	$this->assertArrayHasKey("calendar-root", $folders, print_r($folders, true));
     }
@@ -208,7 +208,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
     {
         $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
         
-        $folders = $controller->getFolders();
+        $folders = $controller->getSupportedFolders();
         foreach($folders as $folder) {
         	$this->assertTrue(Tinebase_Core::getUser()->hasGrant($folder['folderId'], Tinebase_Model_Grants::GRANT_SYNC), print_r($folder, true));
         }
