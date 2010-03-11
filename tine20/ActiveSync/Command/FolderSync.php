@@ -126,7 +126,7 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
                     $this->_folderStateBackend->resetState($this->_device, $class);
                     
                     $dataController = ActiveSync_Controller::dataFactory($class, $this->_device, $this->_syncTimeStamp);
-                    foreach($dataController->getFolders() as $folderId => $folder) {
+                    foreach($dataController->getSupportedFolders() as $folderId => $folder) {
                         $adds[$class][$folderId] = $folder;
                         $count++;
                     }
@@ -136,7 +136,7 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
                 foreach($this->_classes as $class) {
                     $dataController = ActiveSync_Controller::dataFactory($class, $this->_device, $this->_syncTimeStamp);
                     
-                    $folders = $dataController->getFolders();
+                    $folders = $dataController->getSupportedFolders();
                     $allServerEntries = array_keys($folders);
                     $allClientEntries = $this->_folderStateBackend->getClientState($this->_device, $class);
                     
