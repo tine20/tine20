@@ -108,18 +108,56 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     protected $_applicationName     = 'Felamimail';
     
     protected $_modelName           = 'Message';
-        
+    
+    /**
+     * type of the default folder
+     *
+     * @var int
+     */
+    protected $_defaultFolderType   = ActiveSync_Command_FolderSync::FOLDERTYPE_INBOX;
+    
+    /**
+     * type of user created folders
+     *
+     * @var int
+     */
+    protected $_folderType          = ActiveSync_Command_FolderSync::FOLDERTYPE_MAIL_USER_CREATED;
+    
     /**
      * the constructor
      *
      * @param Zend_Date $_syncTimeStamp
      */
-    public function __construct(Zend_Date $_syncTimeStamp)
+    public function __construct(ActiveSync_Model_Device $_device, Zend_Date $_syncTimeStamp)
     {
-        $this->_syncTimeStamp = $_syncTimeStamp;
+    	#parent::__construct($_device, $_syncTimeStamp);
+        if(empty($this->_applicationName)) {
+            throw new Tinebase_Exception_UnexpectedValue('$this->_applicationName can not be empty');
+        }
         
-        $this->_messageController = Felamimail_Controller_Message::getInstance();
-        $this->_folderController = Felamimail_Controller_Folder::getInstance();                
+        if(empty($this->_modelName)) {
+            throw new Tinebase_Exception_UnexpectedValue('$this->_modelName can not be empty');
+        }
+        
+        if(empty($this->_defaultFolderType)) {
+            throw new Tinebase_Exception_UnexpectedValue('$this->_defaultFolderType can not be empty');
+        }
+        
+        if(empty($this->_folderType)) {
+            throw new Tinebase_Exception_UnexpectedValue('$this->_folderType can not be empty');
+        }
+                
+        if(empty($this->_specialFolderName)) {
+            $this->_specialFolderName = strtolower($this->_applicationName) . '-root';
+        }
+        
+        $this->_device              = $_device;
+        $this->_syncTimeStamp       = $_syncTimeStamp;
+        #$this->_contentFilterClass  = $this->_applicationName . '_Model_' . $this->_modelName . 'Filter';
+        #$this->_contentController   = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
+        
+        #$this->_messageController = Felamimail_Controller_Message::getInstance();
+        #$this->_folderController = Felamimail_Controller_Folder::getInstance();                
     }
     
     /**
@@ -131,7 +169,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      */
     public function getItemEstimate($_startTimeStamp = NULL, $_endTimeStamp = NULL)
     {
-        return 1;
+        return 0;
     }
     
     /**
@@ -159,7 +197,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      * (non-PHPdoc)
      * @see ActiveSync/Controller/ActiveSync_Controller_Abstract#appendXML($_xmlDocument, $_xmlNode, $_folderId, $_serverId)
      */
-    public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_folderId, $_serverId)
+    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " serverId " . $_serverId);
         
@@ -277,6 +315,8 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      */
     public function getServerEntries($_folderId, $_filterType)
     {
+    	return array();
+    	
         $foundEntries = $this->_messageController->getUid($_folderId, 1, INF);
                 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEntries) . ' entries');
@@ -362,29 +402,25 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $_data
      * @return Addressbook_Model_ContactFilter
      */
-    protected function _toTineFilter(SimpleXMLElement $_data)
+    protected function _toTineFilterArray(SimpleXMLElement $_data)
     {
-        $xmlData = $_data->children('Tasks');
+        $xmlData = $_data->children('Email');
         
-        $filter = new Tasks_Model_TaskFilter(array(
-            array(
-                'field'     => 'containerType',
-                'operator'  => 'equals',
-                'value'     => 'all'
-            )
-        )); 
-            
+        $filterArray = array();
+        
         foreach($this->_mapping as $fieldName => $value) {
-            if($filter->has($value)) {
-                $filter->$value = array(
+            if(isset($xmlData->$fieldName)) {
+                $filterArray[] = array(
+                    'field'     => $value,
                     'operator'  => 'equals',
                     'value'     => (string)$xmlData->$fieldName
                 );
             }
         }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filter, true));
         
-        return $filter;
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
+        
+        return $filterArray;
     }
     
     /**
@@ -405,12 +441,10 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      */
     public function getFolder($_folderId)
     {
-        foreach($this->_folders as $folder) {
-            if($folder['folderId'] == $_folderId) {
-                return $folder;
-            }
+        if(!array_key_exists($_folderId, $this->_folders)) {
+            throw new ActiveSync_Exception_FolderNotFound('folder not found. ' . $_folderId);
         }
         
-        throw new ActiveSync_Exception_FolderNotFound('folder not found. ' . $_folderId);
+        return $this->_folders[$_folderId];
     }
 }

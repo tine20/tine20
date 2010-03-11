@@ -57,7 +57,7 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
     protected $_defaultNameSpace    = 'uri:FolderHierarchy';
     protected $_documentElement     = 'FolderSync';
     
-    protected $_classes             = array('Contacts', 'Tasks'/*, 'Email'*/, 'Calendar');
+    protected $_classes             = array('Contacts', 'Tasks', 'Email', 'Calendar');
     
     protected $_syncKey;
     
