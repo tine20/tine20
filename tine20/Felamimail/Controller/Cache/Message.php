@@ -142,7 +142,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             $imap->selectFolder($folder->globalname);
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . ' Try to get message uids from ' . $folder->cache_job_lowestuid . ' to ' . $folder->cache_uidnext . ' from imap server.'
+                . ' Try to get message uids from ' . ($folder->cache_job_lowestuid -1) . ' to ' . $folder->cache_uidnext . ' from imap server.'
             );
 
             ///////////////////////////// main message import loop
@@ -161,9 +161,11 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     if (empty($uids)) {
                         if ($folder->imap_uidnext) {
                             $stepLowestUid = max($folder->cache_job_lowestuid - $this->_uidStepWidth, $folder->cache_uidnext);
-                            $uids = $imap->getUidbyUid($folder->cache_job_lowestuid - 1, $stepLowestUid);
+                            $stepHighestUid = $folder->cache_job_lowestuid - 1;
+                            $uids = $imap->getUidbyUid($stepLowestUid, $stepHighestUid);
                             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
-                            //    . ' new uids from IMAP server: ' . ($folder->cache_job_lowestuid - 1) . ' - ' . $stepLowestUid);
+                            //    . ' new uids from IMAP server: ' . $stepHighestUid . ' - ' . $stepLowestUid);
+                                
                         } else {
                             // imap servers without uidnext
                             $stepLowestUid = $folder->cache_uidnext;
@@ -335,7 +337,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             case Felamimail_Model_Folder::CACHE_STATUS_INVALID:
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Folder cache of ' . $_folder->globalname . ' is invalid. Clearing cache ...');
                 $this->clear($_folder);
-                $result = TRUE;
+                $result = FALSE;
                 break;
             default:
                 $result = TRUE;
