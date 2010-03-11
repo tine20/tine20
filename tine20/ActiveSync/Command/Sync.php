@@ -233,11 +233,11 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     public function getResponse()
     {
         // add aditional namespaces for contacts, tasks and email
-        $this->_outputDom->documentElement->setAttribute('xmlns:Contacts'    , 'uri:Contacts');
-        $this->_outputDom->documentElement->setAttribute('xmlns:Tasks'       , 'uri:Tasks');
-        $this->_outputDom->documentElement->setAttribute('xmlns:Email'       , 'uri:Email');
-        $this->_outputDom->documentElement->setAttribute('xmlns:Calendar'    , 'uri:Calendar');
-        $this->_outputDom->documentElement->setAttribute('xmlns:AirSyncBase' , 'uri:AirSyncBase');
+        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts'    , 'uri:Contacts');
+        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Tasks'       , 'uri:Tasks');
+        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Email'       , 'uri:Email');
+        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Calendar'    , 'uri:Calendar');
+        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSyncBase' , 'uri:AirSyncBase');
         
         $sync = $this->_outputDom->documentElement;
         
@@ -381,7 +381,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             $add = $commands->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Add'));
                             $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                             $applicationData = $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
-                            $dataController->appendXML($this->_outputDom, $applicationData, $collectionData['collectionId'], $serverId);
+                            $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId);
     
                             $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
                             
@@ -400,7 +400,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             $change = $commands->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Change'));
                             $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                             $applicationData = $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
-                            $dataController->appendXML($this->_outputDom, $applicationData, $collectionData['collectionId'], $serverId);
+                            $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId);
     
                             $this->_totalCount++;
                             unset($serverChanges[$id]);    
