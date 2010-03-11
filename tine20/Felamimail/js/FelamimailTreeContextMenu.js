@@ -15,6 +15,7 @@ Ext.namespace('Tine.Felamimail');
  * get felamimail tree panel context menus
  * this is used in Tine.Felamimail.TreePanel (with createDelegate)
  * 
+ * TODO update folder in store/ update folder cache after ctx menu actions
  * TODO use Ext.apply to get this
  */
 Tine.Felamimail.setTreeContextMenus = function() {

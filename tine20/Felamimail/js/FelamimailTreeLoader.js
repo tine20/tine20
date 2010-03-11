@@ -16,7 +16,7 @@
  * 
  * <p>Felamimail Account/Folder Tree Loader</p>
  * <p>
- * TODO         get nodes from folder store!
+ * TODO         remove obsolete code
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -135,67 +135,5 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             attr.text = attr.text + ' (' + attr.cache_unreadcount + ')';
             attr.cls = attr.cls + ' felamimail-node-unread'; // x-tree-node-collapsed';
         }
-        
-        //console.log(attr);
     }
-    
-    /**
-     * handle failure to show credentials dialog if imap login failed
-     * 
-     * @param {String}  response
-     * @param {Object}  options
-     * @param {Node}    node optional account node
-     * @param {Boolean} handleException
-     * 
-     * @deprecated
-     */
-    /*
-    handleFailure: function(response, options, node, handleException) {
-        var responseText = Ext.util.JSON.decode(response.responseText);
-        var accountNode = (options.argument) ? options.argument.node : node;
-
-        // cancel loading
-        accountNode.loading = false;
-        accountNode.ui.afterLoad(accountNode);
-        
-        if (responseText.data.code == 902) {
-            
-            // get account id and update username/password
-            var accountId = accountNode.attributes.account_id;
-            
-            // remove intelligent folders
-            accountNode.attributes.intelligent_folders = 0;
-                        
-            var credentialsWindow = Tine.widgets.dialog.CredentialsDialog.openWindow({
-                windowTitle: String.format(this.app.i18n._('IMAP Credentials for {0}'), accountNode.text),
-                appName: 'Felamimail',
-                credentialsId: accountId,
-                i18nRecordName: this.app.i18n._('Credentials'),
-                recordClass: Tine.Tinebase.Model.Credentials,
-                listeners: {
-                    scope: this,
-                    'update': function(data) {
-                        // update account node
-                        var account = Tine.Felamimail.loadAccountStore().getById(accountId);
-                        accountNode.attributes.intelligent_folders = account.get('intelligent_folders');
-                        accountNode.reload(function(callback) {
-                        }, this);
-                    }
-                }
-            });
-            
-        } else if (handleException !== false) {
-            Ext.Msg.show({
-               title:   this.app.i18n._('Error'),
-               msg:     (responseText.data.message) ? responseText.data.message : this.app.i18n._('No connection to IMAP server.'),
-               icon:    Ext.MessageBox.ERROR,
-               buttons: Ext.Msg.OK
-            });
-
-            // TODO call default exception handler on specific exceptions?
-            //var exception = responseText.data ? responseText.data : responseText;
-            //Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
-        }
-    }
-    */
 });

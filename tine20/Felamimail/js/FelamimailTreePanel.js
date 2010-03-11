@@ -19,9 +19,8 @@ Ext.namespace('Tine.Felamimail');
  * <p>Account/Folder Tree Panel</p>
  * <p>Tree of Accounts with folders</p>
  * <pre>
- * TODO         register tree on folder store (on update)
  * TODO         use pie for progress
- * TODO         fix drop target
+ * TODO         fix drop target / see container tree -> overwrite some fns of tree dropzone
  * low priority:
  * TODO         only allow nodes as drop target (not 'between')
  * TODO         make inbox/drafts/templates configurable in account
