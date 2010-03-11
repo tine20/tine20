@@ -83,9 +83,10 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     initComponent: function() {
         
-        // TODO register with folder store (onUpdate)
+        // register with folder store (onUpdate)
         // TODO unregister from folder store (on destroy)
-        this.folderStore = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore(); 
+        this.folderStore = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore();
+        this.folderStore.on('update', this.onUpdateFolderStore, this);
     	
         // init tree loader
         this.loader = new Tine.Felamimail.TreeLoader({
@@ -216,7 +217,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         if (node.id && node.id != '/' && node.attributes.globalname != '') {
             this.filterPlugin.onFilterChange();
             
-            // TOOD updateFolderStatus!
+            // updateFolderStatus
+            this.app.updateFolderStatus(node.attributes.globalname);
         }
     },
     
