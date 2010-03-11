@@ -29,7 +29,25 @@ Tine.Tinebase.container = {
     /**
      * type for shared container
      */
-    TYPE_SHARED: 'shared'
+    TYPE_SHARED: 'shared',
+    
+    isLeafRegExp: /^\/personal\/[a-f0-9]+\/|^\/shared|^\/internal/,
+    
+    ownerRegExp: /^\/personal\/([a-f0-9]+)/,
+    
+    /**
+     * returns true if given path represents a (single) container
+     * 
+     * NOTE: if path could only be undefined when server send container without path.
+     *       This happens only in server json classes which only could return containers
+     *
+     * @param {String} path
+     * @return {Boolean}
+     */
+    pathIsContainer: function(path) {
+        return !Ext.isString(path) || !!path.match(Tine.Tinebase.container.isLeafRegExp);
+    }
+    
 };
 
 /**
