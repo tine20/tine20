@@ -35,7 +35,8 @@ Tine.Felamimail.setTreeContextMenus = function() {
                 success: function(_result, _request){
                     if (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id) {
                         // update message cache
-                        this.updateFolderStatus([this.ctxNode]);
+                        // TODO update folder store
+                        //this.updateFolderStatus([this.ctxNode]);
                     }
                 }
             });
@@ -56,7 +57,8 @@ Tine.Felamimail.setTreeContextMenus = function() {
                 scope: this,
                 success: function(_result, _request){
                     if (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id) {
-                        this.updateFolderStatus([this.ctxNode]);
+                        // TODO update folder store
+                        //this.updateFolderStatus([this.ctxNode]);
                     }
                     this.ctxNode.getUI().removeClass("x-tree-node-loading");
                 },
@@ -145,7 +147,8 @@ Tine.Felamimail.setTreeContextMenus = function() {
         scope: this,
         handler: function() {
             if (this.ctxNode) {
-                this.updateFolderStatus([this.ctxNode]);
+                // TODO call update folder status from felamimail app
+                //this.updateFolderStatus([this.ctxNode]);
             }
         }
     };
@@ -156,7 +159,8 @@ Tine.Felamimail.setTreeContextMenus = function() {
         scope: this,
         handler: function() {
             if (this.ctxNode) {
-               this.updateFolderStatus([this.ctxNode]);
+                // TODO call update folder status from felamimail app
+               //this.updateFolderStatus([this.ctxNode]);
             }
         }
     };
