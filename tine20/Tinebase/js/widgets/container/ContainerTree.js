@@ -288,23 +288,22 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     onContextMenu: function(node, event) {
         this.ctxNode = node;
-        var container = node.attributes.container;
+        var container = node.attributes.container,
+            path = container.path,
+            owner;
         
-        if (node.leaf) {
-            if (container.account_grants.adminGrant) {
+        if (! Ext.isString(path)) {
+            return;
+        }
+        
+        if (Tine.Tinebase.container.pathIsContainer(path)) {
+            if (container.account_grants && container.account_grants.adminGrant) {
                 this.contextMenuSingleContainer.showAt(event.getXY());
             }
-        } else {
-            var pathParts = container.path.split('/');
-            var type = Tine.Tinebase.container.path2type(pathParts);
-            // @fixme when all other ctxmenu users work on paths
-            this.ctxNode.attributes.containerType = type;
-            
-            if (type == Tine.Tinebase.container.TYPE_PERSONAL && pathParts[2] == Tine.Tinebase.registry.get('currentAccount').accountId) {
-                this.contextMenuUserFolder.showAt(event.getXY());
-            } else if(Tine.Tinebase.common.hasRight('admin', this.app.appName) || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName)) {
-                this.contextMenuUserFolder.showAt(event.getXY());
-            }
+        } else if (path.match(/^\/shared$/) && (Tine.Tinebase.common.hasRight('admin', this.app.appName) || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName))){
+            this.contextMenuUserFolder.showAt(event.getXY());
+        } else if (Tine.Tinebase.registry.get('currentAccount').accountId == Tine.Tinebase.container.pathIsPersonalNode(path)){
+            this.contextMenuUserFolder.showAt(event.getXY());
         }
     },
 
