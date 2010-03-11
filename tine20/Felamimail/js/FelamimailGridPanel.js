@@ -756,7 +756,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     flag: '\\' + button.flag
                 },
                 success: function(_result, _request) {
-                    this.app.getMainScreen().getTreePanel().updateFolderStatus();
+                    // TODO update folder store
+                    //this.app.getMainScreen().getTreePanel().updateFolderStatus();
                 },
                 failure: function(result, request){
                     Ext.MessageBox.alert(
@@ -840,7 +841,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         */
         
         // get update folder status
-        this.app.getMainScreen().getTreePanel().updateFolderStatus(false);
+        //this.app.getMainScreen().getTreePanel().updateFolderStatus(false);
+        // TODO delete + move should return the folder status and update the folder store
         this.store.load({});
     },
     
