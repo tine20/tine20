@@ -194,7 +194,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         Tine.Felamimail.TreePanel.superclass.afterRender.call(this);
 
         var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
-        //this.expandPath('/root/' + defaultAccount + '/');
+        this.expandPath('/root/' + defaultAccount + '/');
     },
     
     /**
@@ -217,15 +217,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             this.filterPlugin.onFilterChange();
             
             // TOOD updateFolderStatus!
-            
-            /*
-            this.updateFolderStatus([node]);
-            //this.updateMessageCache();
-            if (this.updateMessagesTask !== null) {
-                this.setMessageRefresh('fast');
-                this.updateMessagesTask.delay(this.updateMessageRefreshTime);
-            }
-            */
         }
     },
     
@@ -518,10 +509,12 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @return Tine.Felamimail.Model.Account
      */
     getActiveAccount: function() {
+        var result = null;
         var node = this.getSelectionModel().getSelectedNode();
-        var accountId = node.attributes.account_id;
-        
-        var result = this.accountStore.getById(accountId);
+        if (node) {
+            var accountId = node.attributes.account_id;
+            result = this.accountStore.getById(accountId);
+        }
         
         return result;
     }
