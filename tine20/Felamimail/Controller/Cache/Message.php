@@ -122,13 +122,20 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             $folder->cache_recentcount = 0;
             $timeLeft = TRUE;
             
-            if ($folder->cache_job_lowestuid == 0) {
-                $folder->cache_job_lowestuid = ($folder->imap_uidnext) ? $folder->imap_uidnext : $folder->imap_totalcount;
-                $folder->cache_job_startuid = $folder->cache_job_lowestuid; 
-            }
             // @todo this should be initialized by the model/clear()
             if (! $folder->cache_uidnext) {
                 $folder->cache_uidnext = 1;
+            }
+            
+            if (
+            // fresh import run
+                $folder->cache_job_lowestuid == 0
+            // if initial import is running, we should check if new messages arrived
+            // @todo think about adding a second job_start_uid that we can use as cache_uidnext for the recent new mails
+                || ($folder->imap_uidnext && $folder->cache_uidnext == 1 && $folder->cache_job_startuid != $folder->imap_uidnext)
+            ) {
+                $folder->cache_job_lowestuid = ($folder->imap_uidnext) ? $folder->imap_uidnext : $folder->imap_totalcount;
+                $folder->cache_job_startuid = $folder->cache_job_lowestuid; 
             }
             
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder values before import: ' . print_r($folder->toArray(), TRUE));
