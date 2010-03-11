@@ -17,27 +17,53 @@ Ext.namespace('Tine.Tinebase.container');
  * @todo internal cache (store)
  */
 Tine.Tinebase.container = {
-    /** 
-     * type for internal contaier
-     * for example the internal addressbook
+    /**
+     * type for internal contaier for example the internal addressbook
+     * 
+     * @constant TYPE_INTERNAL
+     * @type String
      */
     TYPE_INTERNAL: 'internal',
+    
     /**
      * type for personal containers
+     * 
+     * @constant TYPE_PERSONAL
+     * @type String
      */
     TYPE_PERSONAL: 'personal',
+    
     /**
      * type for shared container
+     * 
+     * @constant TYPE_SHARED
+     * @type String
      */
     TYPE_SHARED: 'shared',
     
+    /**
+     * @private
+     * 
+     * @property isLeafRegExp
+     * @type RegExp
+     */
     isLeafRegExp: /^\/personal\/[a-f0-9]+\/|^\/shared\/[a-f0-9]+|^\/internal/,
     
+    /**
+     * @private
+     * 
+     * @property isPersonalNodeRegExp
+     * @type RegExp
+     */
     isPersonalNodeRegExp: /^\/personal\/([a-f0-9]+)$/,
     
+    /**
+     * @private
+     * 
+     * @property isInternalRegExp
+     * @type RegExp
+     */
     isInternalRegExp: /^\/internal/,
-    
-    ownerRegExp: /^\/personal\/([a-f0-9]+)/,
     
     /**
      * returns true if given path represents a (single) container
