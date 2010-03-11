@@ -123,8 +123,6 @@ abstract class ActiveSync_Controller_Abstract
         $this->_syncTimeStamp       = $_syncTimeStamp;
         $this->_contentFilterClass  = $this->_applicationName . '_Model_' . $this->_modelName . 'Filter';
         $this->_contentController   = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
-        
-        
     }
     
     /**
