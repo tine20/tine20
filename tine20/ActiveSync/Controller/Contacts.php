@@ -173,47 +173,56 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         }        
     }
     
+    protected function _getSyncableFolders()
+    {
+        $folders = array();
+    	
+        $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_SYNC);
+        foreach ($containers as $container) {
+            $folders[$container->id] = array(
+                'folderId'      => $container->id,
+                'parentId'      => 0,
+                'displayName'   => $container->name,
+                'type'          => (count($folders) == 0) ? $this->_defaultFolderType : $this->_folderType
+           );
+        }
+	            
+        $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC);
+        foreach ($containers as $container) {
+            $folders[$container->id] = array(
+                'folderId'      => $container->id,
+                'parentId'      => 0,
+                'displayName'   => $container->name,
+                'type'          => $this->_folderType
+            );
+        }
+	            
+        $accountsFolder = Tinebase_Container::getInstance()->getInternalContainer(Tinebase_Core::getUser(), $this->_applicationName);
+        if(Tinebase_Core::getUser()->hasGrant($accountsFolder->id, Tinebase_Model_Grants::GRANT_SYNC)) {
+            $folders[$accountsFolder->id] = array(
+                'folderId'      => $accountsFolder->id,
+                'parentId'      => 0,
+                'displayName'   => $accountsFolder->name,
+                'type'          => $this->_folderType
+            );
+        }
+        
+        // we ignore the folders of others users for now
+	            
+        return $folders;
+    }
+    
     /**
      * return list of supported folders for this backend
      *
      * @return array
      */
-    public function getFolders()
+    public function getSupportedFolders()
     {
-        $folders = array();
-
         // only the IPhone supports multiple folders for contacts currently
         if(strtolower($this->_device->devicetype) == 'iphone') {
         
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_SYNC);
-            foreach ($containers as $container) {
-                $folders[$container->id] = array(
-                    'folderId'      => $container->id,
-                    'parentId'      => 0,
-                    'displayName'   => $container->name,
-                    'type'          => (count($folders) == 0) ? $this->_defaultFolderType : $this->_folderType
-                );
-            }
-            
-            $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC);
-            foreach ($containers as $container) {
-                $folders[$container->id] = array(
-                    'folderId'      => $container->id,
-                    'parentId'      => 0,
-                    'displayName'   => $container->name,
-                    'type'          => $this->_folderType
-                );
-            }
-            
-            $accountsFolder = Tinebase_Container::getInstance()->getInternalContainer(Tinebase_Core::getUser(), $this->_applicationName);
-            if(Tinebase_Core::getUser()->hasGrant($accountsFolder->id, Tinebase_Model_Grants::GRANT_SYNC)) {
-	            $folders[$accountsFolder->id] = array(
-	                'folderId'      => $accountsFolder->id,
-	                'parentId'      => 0,
-	                'displayName'   => $accountsFolder->name,
-	                'type'          => $this->_folderType
-	            );
-            }
+        	$folders = $this->_getSyncableFolders();
 
         } else {
             
@@ -225,7 +234,6 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
             );
             
         }
-        // we ignore the folders of others users for now
         
         return $folders;
     }
@@ -332,18 +340,14 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      * convert contact from xml to Addressbook_Model_ContactFilter
      *
      * @param SimpleXMLElement $_data
-     * @return Addressbook_Model_ContactFilter
+     * @return array
      */
-    protected function _toTineFilter(SimpleXMLElement $_data)
+    protected function _toTineFilterArray(SimpleXMLElement $_data)
     {
-        $xmlData = $_data->children('Contacts');
+        $xmlData = $_data->children('uri:Contacts');
         
-        $filterArray[] = array(
-            'field'     => 'containerType',
-            'operator'  => 'equals',
-            'value'     => 'all'
-        );
-         
+        $filterArray = array();
+        
         foreach($this->_mapping as $fieldName => $value) {
             if(isset($xmlData->$fieldName)) {
                 $filterArray[] = array(
@@ -354,11 +358,9 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
             }
         }
         
-        $filter = new Addressbook_Model_ContactFilter($filterArray); 
-    
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filter, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
         
-        return $filter;
+        return $filterArray;
     }
     
     /**

@@ -132,9 +132,9 @@ abstract class ActiveSync_Controller_Abstract
      *
      * @return array
      */
-    public function getFolders()
-    {
-        $folders = array();
+    abstract public function getSupportedFolders();
+/*    {
+        //$folders = array();
         
         $folders[$this->_specialFolderName] = array(
             'folderId'      => $this->_specialFolderName,
@@ -144,7 +144,7 @@ abstract class ActiveSync_Controller_Abstract
         );
         
         return $folders;
-    }
+    }*/
     
     /**
      * get folder identified by $_folderId
@@ -171,6 +171,10 @@ abstract class ActiveSync_Controller_Abstract
                 throw new ActiveSync_Exception_FolderNotFound('folder not found. ' . $_folderId);
             } catch (Tinebase_Exception_InvalidArgument $e) {
                 throw new ActiveSync_Exception_FolderNotFound('folder not found. ' . $_folderId);
+            }
+            
+            if(!Tinebase_Core::getUser()->hasGrant($_folderId, Tinebase_Model_Grants::GRANT_SYNC)) {
+            	throw new ActiveSync_Exception_FolderNotFound('No sync right for folder: ' . $_folderId);
             }
             
             $folder[$container->id] = array(
@@ -311,13 +315,45 @@ abstract class ActiveSync_Controller_Abstract
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId");
         
-        $filter = $this->_toTineFilter($_data);
+        $filterArray   = $this->_toTineFilter($_data);
+        $filterArray[] = $this->_getContainerFilter($_folderId);
+        
+        $filter = new $this->_contentFilterClass($filterArray);
         
         $foundEmtries = $this->_contentController->search($filter);
 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEmtries));
             
         return $foundEmtries;
+    }
+    
+    protected function _getContainerFilter($_containerId)
+    {
+        $syncableContainers = $this->_getSyncableFolders();
+        
+        $containersToCheck = array();
+        
+        if($_containerId == $this->_specialFolderName) {
+            $containersToCheck = array_keys($syncableContainers);
+        } elseif(array_key_exists($_containerId, $syncableContainers)) {
+            $containersToCheck = array($_containerId);        
+        }
+        
+        $containerIds = array();
+        
+    	foreach($containersToCheck as $container) {
+    		if(Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ)) {
+    			$containerIds[] = $container;
+    		}
+    	}
+    	
+        $filter = array(
+            'field'     => 'container_id',
+            'operator'  => 'in',
+            'value'     => $containerIds
+        );
+        
+        return $filter;
     }
     
     /**
@@ -330,10 +366,9 @@ abstract class ActiveSync_Controller_Abstract
      */
     public function getChanged($_folderId, $_startTimeStamp, $_endTimeStamp = NULL)
     {
-        $filterArray   = $this->_getFolderFilter($_folderId);
-        $filterArray   = array_merge($filterArray, $this->_getContentFilter(0));
-        
-        
+        $filterArray     = $this->_getContentFilter(0);
+        $filterArray[]   = $this->_getContainerFilter($_folderId);
+
         $startTimeStamp = ($_startTimeStamp instanceof Zend_Date) ? $_startTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
         $endTimeStamp = ($_endTimeStamp instanceof Zend_Date) ? $_endTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
         
@@ -349,7 +384,6 @@ abstract class ActiveSync_Controller_Abstract
                 'value'     => $endTimeStamp
             );
         }
-        
         
         #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter:  " . print_r($filterArray, true));
         
@@ -369,12 +403,12 @@ abstract class ActiveSync_Controller_Abstract
      */
     public function getServerEntries($_folderId, $_filterType)
     {
-        $filterArray  = $this->_getFolderFilter($_folderId);
-        $filterArray  = array_merge($filterArray, $this->_getContentFilter($_filterType));
-        
+        $filterArray     = $this->_getContentFilter($_filterType);
+        $filterArray[]   = $this->_getContainerFilter($_folderId);
+
         $filter = new $this->_contentFilterClass($filterArray);
-        
-        $result      = $this->_contentController->search($filter, NULL, false, true);
+
+        $result = $this->_contentController->search($filter, NULL, false, true);
         
         return $result;
     }
@@ -396,32 +430,25 @@ abstract class ActiveSync_Controller_Abstract
      * @param $_folderId
      * @return array
      */
-    protected function _getFolderFilter($_folderId)
+/*    protected function _getFolderFilter($_containerId)
     {
+    	$containerIds = array();
+    	$syncableFolders = $this->_getSyncableFolders();
+    	
         if($_folderId == $this->_specialFolderName) {
-            $folderFilter = array(
-                array(
-                    'field'     => 'container_id',
-                    'operator'  => 'specialNode',
-                    'value'     => 'all'
-                )
-            );        
-        } else {
-            $folderFilter = array(
-                array(
-                    'field'     => 'container_id',
-                    'operator'  => 'equals',
-                    'value'     => $_folderId
-                )
-            );        
+            $containerIds = array_keys($syncableFolders);
+        } elseif(array_key_exists($_containerId, $containerIds)) {
+            $containerIds = array($_folderId);        
         }
         
+        $folderFilter = $this->_getContainerFilter($containerIds);
+        
         return $folderFilter;
-    }
+    }*/
         
     abstract protected function _toTineModel(SimpleXMLElement $_data, $_entry = null);
     
-    abstract protected function _toTineFilter(SimpleXMLElement $_data);
+    abstract protected function _toTineFilterArray(SimpleXMLElement $_data);
     
     abstract public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId);    
 }

@@ -630,17 +630,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      * convert contact from xml to Calendar_Model_EventFilter
      *
      * @param SimpleXMLElement $_data
-     * @return Addressbook_Model_ContactFilter
+     * @return array
      */
-    protected function _toTineFilter(SimpleXMLElement $_data)
+    protected function _toTineFilterArray(SimpleXMLElement $_data)
     {
         $xmlData = $_data->children('uri:Calendar');
         
-        $filterArray[] = array(
-            'field'     => 'containerType',
-            'operator'  => 'equals',
-            'value'     => 'all'
-        ); 
+        $filterArray = array();
         
         foreach($this->_mapping as $fieldName => $value) {
             if(isset($xmlData->$fieldName)) {
@@ -652,11 +648,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
         }
         
-        $filter = new Calendar_Model_EventFilter($filterArray); 
-    
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filter, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
         
-        return $filter;
+        return $filterArray;
     }
     
     /**
@@ -678,26 +672,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         list($match, $year, $month, $day, $hour, $minute, $second) = $matches;
         return  mktime($hour, $minute, $second, $month, $day, $year);
     }
-    
-    /**
-     * get id's of all contacts available on the server
-     *
-     * @return array
-     */
-/*    public function getServerEntries($_folderId, $_filterType)
-    {
-    	// NOTE: $folderFilter is an array containing filterdata for one container filter 
-        $folderFilter  = $this->_getFolderFilter($_folderId, $_filterType);
-        
-        
-        $contentFilter = new $this->_contentFilterClass($folderFilter);
-        
-        $foundEntries  = $this->_contentController->search($contentFilter, NULL, false, true);
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEntries) . ' entries');
-            
-        return $foundEntries;
-    } */
     
     /**
      * return contentfilter array
@@ -741,55 +715,17 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     }
     
     /**
-     * return folder filter
-     * 
-     * @param $_folderId
-     * @return array
-     */
-    protected function _getFolderFilter($_folderId)
-    {
-        if($_folderId == $this->_specialFolderName) {
-            // search only personal containers
-            $folderFilter = array(array(
-                'field'     => 'container_id',
-                'operator'  => 'personalNode',
-                'value'     => Tinebase_Core::getUser()->getId()
-            ));        
-        } else {
-            $folderFilter = array(
-                array(
-                    'field'     => 'container_id',
-                    'operator'  => 'equals',
-                    'value'     => $_folderId
-                )
-            );        
-        }
-        
-        return $folderFilter;
-    }
-    
-    /**
      * return list of supported folders for this backend
      *
      * @return array
      */
-    public function getFolders()
+    public function getSupportedFolders()
     {
-        $folders = array();
-
-        // only the IPhone supports multiple folders for calendars currently
+        // only the IPhone supports multiple folders for contacts currently
         if(strtolower($this->_device->devicetype) == 'iphone') {
         
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_SYNC);
-            foreach ($containers as $container) {
-                $folders[$container->id] = array(
-                    'folderId'      => $container->id,
-                    'parentId'      => 0,
-                    'displayName'   => $container->name,
-                    'type'          => (count($folders) == 0) ? $this->_defaultFolderType : $this->_folderType
-                );
-            }
-            
+            $folders = $this->_getSyncableFolders();
+
         } else {
             
             $folders[$this->_specialFolderName] = array(
@@ -800,8 +736,26 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             );
             
         }
-        // we ignore the folders of others users for now
         
+        return $folders;
+    }
+    
+    protected function _getSyncableFolders()
+    {
+        $folders = array();
+        
+        $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_SYNC);
+        foreach ($containers as $container) {
+            $folders[$container->id] = array(
+                'folderId'      => $container->id,
+                'parentId'      => 0,
+                'displayName'   => $container->name,
+                'type'          => (count($folders) == 0) ? $this->_defaultFolderType : $this->_folderType
+            );
+        }
+                
+        // we ignore the folders of others users and shared folders for now
+                
         return $folders;
     }
 }

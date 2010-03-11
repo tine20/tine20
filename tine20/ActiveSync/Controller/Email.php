@@ -392,7 +392,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      *
      * @return array
      */
-    public function getFolders()
+    public function getSupportedFolders()
     {
         return $this->_folders;
     }

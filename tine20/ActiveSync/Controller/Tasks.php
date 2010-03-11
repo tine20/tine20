@@ -198,17 +198,13 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      * convert contact from xml to Addressbook_Model_ContactFilter
      *
      * @param SimpleXMLElement $_data
-     * @return Addressbook_Model_ContactFilter
+     * @return array
      */
-    protected function _toTineFilter(SimpleXMLElement $_data)
+    protected function _toTineFilterArray(SimpleXMLElement $_data)
     {
         $xmlData = $_data->children('Tasks');
                 
         $filterArray = array(array(
-            'field'     => 'containerType',
-            'operator'  => 'equals',
-            'value'     => 'all'
-        ), array(
             'field'     => 'showClosed',
             'value'     => TRUE
         )); 
@@ -223,11 +219,9 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
             }
         }
         
-        $filter = new Tasks_Model_TaskFilter($filterArray); 
-    
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filter, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
         
-        return $filter;
+        return $filterArray;
     }
     
     /**
@@ -240,41 +234,11 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      */
     protected function _getContentFilter($_filterType)
     {
-        // calendar content filter:
-        // exclude recur exceptions
-        /*
-        $filterArray[] = array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL);
-        
-        if(in_array($_filterType, $this->_filterArray)) {
-            switch($_filterType) {
-                case self::FILTER_2_WEEKS_BACK:
-                    $from = Zend_Date::now()->subWeek(2);
-                    break;
-                case self::FILTER_1_MONTH_BACK:
-                    $from = Zend_Date::now()->subMonth(2);
-                    break;
-                case self::FILTER_3_MONTHS_BACK:
-                    $from = Zend_Date::now()->subMonth(3);
-                    break;
-                case self::FILTER_6_MONTHS_BACK:
-                    $from = Zend_Date::now()->subMonth(6);
-                    break;
-            }
-            // next 10 years
-            $to = Zend_Date::now()->addYear(10);
-            // add period filter
-            $filterArray[] = array(
-                'field'    => 'period',
-                'operator' => 'within',
-                'value'    => array(
-                    'from'  => $from,
-                    'until' => $to
-            ));
-        }
-        */
-        
         // always get closed tasks
-        $filterArray[] = array('field' => 'showClosed', 'value' => TRUE);
+        $filterArray[] = array(
+            'field' => 'showClosed', 
+            'value' => TRUE
+        );
         
         return $filterArray;
     }
