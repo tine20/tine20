@@ -333,7 +333,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     onUpdateFolderStore: function(store, record, operation) {
         
         var changes = record.getChanges();
-        console.log(changes);
+        //console.log(changes);
 
         // cache count changed
         if (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done')) {
@@ -341,7 +341,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             
             // check if grid has to be updated
             if (selectedNode.id == record.id) {
-                console.log('update grid');
+                //console.log('update grid');
                 this.filterPlugin.onFilterChange();
             }
         }
