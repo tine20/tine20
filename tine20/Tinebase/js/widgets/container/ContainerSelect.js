@@ -197,7 +197,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         var containerKeepCount = 0;
         this.store.each(function(record) {
             if (containerKeepCount < 10) {
-                if (! record.get('is_container_node')) {
+                if (record.get('is_container_node')) {
                     containerKeepCount += 1;
                 }
                 return;
@@ -250,7 +250,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         if (this.store.getCount() > 10) {
             var dtselectMin = this.store.getAt(10).get('dtselect');
             
-            this.store.store.filterBy(function(record) {
+            this.store.filterBy(function(record) {
                 return ! (this.allowNodeSelect || record.get('is_container_node')) && record.get('dtselect' > dtselectMin);
             }, this);
         }
@@ -333,6 +333,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             container.id = container.id ||container.path;
             
             container = new Tine.Tinebase.Model.Container(container, container.id);
+            //container.set('dtselect', 0);
             this.store.add(container);
         } else {
             // reject container
