@@ -54,7 +54,10 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     hideTrigger2: true,
     /**
-     * @cfg {String} startPath
+     * @cfg {String} startPath a container path to start with
+     * possible values are: '/', '/personal/someAccountId', '/shared' (defaults to '/')
+     * 
+     * NOTE: container paths could not express tree paths .../otherUsers!
      */
     startPath: '/',
     /**
@@ -87,7 +90,20 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @private
      */
     initComponent: function() {
+        // init state
+        if (this.stateful && !this.stateId) {
+            if (! this.recordClass) {
+                this.stateful = false;
+            } else {
+                this.stateId = this.recordClass.getMeta('appName') + '-tinebase-widgets-container-selectcombo-' + this.recordClass.getMeta('modelName');
+            }
+        }
+        // no state saving for startPath != /
+        this.on('beforestatesave', function() {return this.startPath === '/';}, this);
+        
         this.initStore();
+        
+        this.otherRecord = new Tine.Tinebase.Model.Container({id: 'other', name: String.format(_('choose other {0}...'), this.containerName)}, 'other');
         
         // init triggers (needs to be done before standard initTrigger template fn)
         if (! this.hideTrigger2) {
@@ -120,39 +136,33 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     },
     
     /**
-     * init state
-     * 
-     * @private
-     */
-    initState: function() {
-        if (this.stateful && !this.stateId) {
-            if (! this.recordClass) {
-                this.stateful = false;
-            } else {
-                this.stateId = this.recordClass.getMeta('appName') + '-tinebase-widgets-container-selectcombo-' + this.recordClass.getMeta('modelName');
-            }
-        }
-        
-        if (this.stateful) {
-            var state = Ext.state.Manager.get(this.stateId);
-            console.log(state);
-        }
-    },
-    
-    /**
-     * prepare for remote search if this.startPath = /personal/*
-     * 
      * @private
      */
     initStore: function() {
+        var state = this.stateful ? Ext.state.Manager.get(this.stateId) : null;
+        var recentsData = state && state.recentsData || [];
+        
+        /*
+        // NOTE: if startPath is given resents are not used as we force remote load
+        Ext.each(recentsData, function(recent) {
+            var path = recent.path;
+            
+            // NOTE: if path is undefined, the recent record was set from form data w.o. path append in json class -> leaf
+            if (! this.allowNodeSelect && (! path || recent.path.match(Tine.Tinebase.container.isLeafRegExp))) {
+                recentsData.remove(recent);
+            }
+            
+        }, this);
+        */
+        
         this.store = new Ext.data.JsonStore({
             id: 'id',
+            data: recentsData,
             remoteSort: false,
             fields: Tine.Tinebase.Model.Container,
             listeners: {beforeload: this.onBeforeLoad.createDelegate(this)}
         });
-        
-        this.otherRecord = new Tine.Tinebase.Model.Container({id: 'other', name: String.format(_('choose other {0}...'), this.containerName)}, 'other');
+        this.setStoreFilter();
     },
     
     initTrigger : function(){
@@ -176,6 +186,28 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         }
     },
     
+    manageRecents: function(recent) {
+        recent.set('dtselect', new Date().getTime());
+        
+        this.store.remove(this.otherRecord);
+        this.store.clearFilter();
+        this.store.sort('dtselect', 'DESC');
+        
+        // keep 10 containers and the nodes in betwwen
+        var containerKeepCount = 0;
+        this.store.each(function(record) {
+            if (containerKeepCount < 10) {
+                if (! record.get('is_container_node')) {
+                    containerKeepCount += 1;
+                }
+                return;
+            }
+            this.store.remove(record);
+        }, this);
+        this.setStoreFilter();
+        this.store.add(this.otherRecord);
+    },
+    
     /**
      * prepare params for remote search (this.startPath == /personal/*
      * 
@@ -187,7 +219,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             method: 'Tinebase_Container.getContainer',
             application: this.appName,
             containerType: Tine.Tinebase.container.TYPE_PERSONAL,
-            owner: this.startPath.match(/personal\/(.*)/)[1]
+            owner: this.startPath.match(Tine.Tinebase.container.ownerRegExp)[1]
         };
     },
     
@@ -200,7 +232,29 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     onBeforeQuery: function(queryEvent) {
         queryEvent.query = new Date().getTime();
-        this.mode = this.startPath.match(/^\/personal\/[a-z0-9]+$/) ? 'remote' : 'local' ;
+        this.mode = this.startPath.match(Tine.Tinebase.container.ownerRegExp) ? 'remote' : 'local' ;
+    },
+    
+    /**
+     * filter store according to this.startPath and this.allowNodeSelect
+     * 
+     * NOTE: If this.startPath != '/' resents are not used as we force remote loads,
+     *       thus we don't need to filter in this case!
+     */
+    setStoreFilter: function() {
+        if (! this.allowNodeSelect) {
+            this.store.filter('is_container_node', true);
+        }
+        
+        // limit list to 10
+        if (this.store.getCount() > 10) {
+            var dtselectMin = this.store.getAt(10).get('dtselect');
+            
+            this.store.store.filterBy(function(record) {
+                return ! (this.allowNodeSelect || record.get('is_container_node')) && record.get('dtselect' > dtselectMin);
+            }, this);
+        }
+        
     },
     
     setTrigger2Text: function(text) {
@@ -234,6 +288,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         if (record == this.otherRecord) {
             this.onChoseOther();
         } else {
+            this.manageRecents(record);
             Tine.widgets.container.selectionComboBox.superclass.onSelect.apply(this, arguments);
         }
     },
@@ -255,36 +310,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @private
      */
-    onRender2: function(ct, position) {
-        Tine.widgets.container.selectionComboBox.superclass.onRender.call(this, ct, position);
-        
-        var cls = 'x-combo-list';
-        this.footer = this.list.createChild({cls:cls+'-ft'});
-        this.button = new Ext.Button({
-            text: String.format(_('choose other {0}...'), this.containerName),
-            scope: this,
-            handler: this.onChoseOther,
-            renderTo: this.footer
-        });
-        this.assetHeight += this.footer.getHeight();
-        
-        this.getEl().on('mouseover', function(e, el) {
-            this.qtip = new Ext.QuickTip({
-                target: el,
-                targetXY : e.getXY(),
-                html: Ext.util.Format.htmlEncode(this.selectedContainer.name) + 
-                    '<i> (' + (this.selectedContainer.type == Tine.Tinebase.container.TYPE_PERSONAL ?  _('personal') : _('shared')) + ')</i>'
-            }).show();
-        }, this);
-        
-        //if (this.hideTrigger2) {
-        //    this.triggers[1].hide();
-        //}
-    },
-    
-    /**
-     * @private
-     */
     getValue: function(){
         return (this.selectedContainer !== null) ? this.selectedContainer.id : '';
     },
@@ -298,6 +323,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         } else if (this.store.getById(container)) {
             // store already has a record of this container
             container = this.store.getById(container);
+            
         } else if (container.path || container.id) {
             // ignore server name for node 'My containers'
             if (container.path && container.path === '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId) {
@@ -313,15 +339,11 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             return this;
         }
         
-        container.set('dtselect', new Date().getTime());
+        container.set('is_container_node', Tine.Tinebase.container.pathIsContainer(container.get('path')));
         this.selectedContainer = container.data;
         
-        // manage recents
+        // make shure other is _last_ entry in list
         this.store.remove(this.otherRecord);
-        this.store.sort('dtselect', 'DESC');
-        while (this.store.getCount() > 10) {
-            this.store.remove(this.store.getAt(10));
-        }
         this.store.add(this.otherRecord);
         
         Tine.widgets.container.selectionComboBox.superclass.setValue.call(this, container.id);
@@ -333,14 +355,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         if(this.qtip) {
             this.qtip.remove();
         }
+        
+        return container;
     },
     
     /**
      * @private
-     * 
-     * todo:
-     * - we might need a pathIsLeaf fn
-     * - initStore -> take records from state according to startPath and allowNode
      */
     getState: function() {
         var recentsData = [];
@@ -351,9 +371,10 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             }
         }, this);
         
-        return recentsData;
+        return {
+            recentsData : recentsData
+        };
     }
-    
 });
 Ext.reg('tinewidgetscontainerselectcombo', Tine.widgets.container.selectionComboBox);
 
@@ -507,8 +528,10 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
     onOk: function() {
         var  node = this.tree.getSelectionModel().getSelectedNode();
         if (node) {
-            this.TriggerField.setValue(node.attributes.container);
+            var container = this.TriggerField.setValue(node.attributes.container);
+            this.TriggerField.manageRecents(container);
             this.TriggerField.fireEvent('select', this.TriggerField, node.attributes.container);
+            
             if (this.TriggerField.blurOnSelect) {
                 this.TriggerField.fireEvent('blur', this.TriggerField);
             }
