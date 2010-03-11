@@ -339,13 +339,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @return {Object}
      */
     onBeforeLoad: function(node) {
-        var pathParts = node.attributes.path.split('/');
+        var path = node.attributes.path;
         
         var params = {
             method: 'Tinebase_Container.getContainer',
             application: this.app.appName,
-            containerType: Tine.Tinebase.container.path2type(pathParts),
-            owner: pathParts[2]
+            containerType: Tine.Tinebase.container.path2type(path),
+            owner: Tine.Tinebase.container.pathIsPersonalNode(path)
         };
         
         return params;
