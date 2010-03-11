@@ -50,7 +50,7 @@ Tine.widgets.tree.ContextMenu = {
                         
                         // TODO try to generalize this
                         if (config.backendModel == 'Container') {
-                            params.application = this.appName;
+                            params.application = this.app.appName || this.appName;
                             params.containerType = parentNode.attributes.containerType;
                         } else if (config.backendModel == 'Folder') {
                             params.parent = parentNode.attributes.globalname;
