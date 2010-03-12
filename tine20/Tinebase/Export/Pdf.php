@@ -103,7 +103,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * @param   integer $_contentLineHeight
      * @param   integer $_contentBlockLineHeight
      *      */
-	public function __construct($_contentFontSize = NULL, $_footerFontSize = NULL, $_contentLineHeight = NULL, $_contentBlockLineHeight = NULL)
+	public function __construct($_additionalOptions = array(), $_contentFontSize = NULL, $_footerFontSize = NULL, $_contentLineHeight = NULL, $_contentBlockLineHeight = NULL)
 	{
 		parent::__construct();
 		
