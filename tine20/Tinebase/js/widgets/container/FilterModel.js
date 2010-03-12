@@ -87,6 +87,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el,
             allowNodeSelect: true,
+            recordClass: this.recordClass,
             appName: this.recordClass.getMeta('appName'),
             containerName: this.containerName,
             containersName: this.containersName,
