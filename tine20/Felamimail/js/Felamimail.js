@@ -134,14 +134,16 @@ Ext.namespace('Tine.Felamimail');
             });
             
             var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
-            this.folderStore.load({
-                path: '/' + defaultAccount,
-                params: {filter: [
-                    {field: 'account_id', operator: 'equals', value: defaultAccount},
-                    {field: 'globalname', operator: 'equals', value: ''}
-                ]},
-                callback: this.onStoreInitialLoad.createDelegate(this)
-            });
+            if (defaultAccount != '') {
+                this.folderStore.load({
+                    path: '/' + defaultAccount,
+                    params: {filter: [
+                        {field: 'account_id', operator: 'equals', value: defaultAccount},
+                        {field: 'globalname', operator: 'equals', value: ''}
+                    ]},
+                    callback: this.onStoreInitialLoad.createDelegate(this)
+                });
+            }
         }
         
         return this.folderStore;
@@ -153,6 +155,8 @@ Ext.namespace('Tine.Felamimail');
      * @param {} record
      * @param {} options
      * @param {} success
+     * 
+     * TODO this could be obsolete, try to make it work without the initial load
      */
     onStoreInitialLoad: function(record, options, success) {
         var folderName = 'INBOX';
