@@ -1,25 +1,21 @@
-/**
+/*
  * Tine 2.0
  * 
- * @package     Tine
- * @subpackage  Widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- * 
  */
-Ext.namespace('Tine.widgets');
-
-Ext.namespace('Tine.widgets.dialog');
+Ext.ns('Tine.widgets.dialog');
 
 /**
  * Generic 'Edit Record' dialog
- */
-/**
- * @class Tine.widgets.dialog.EditDialog
- * @extends Ext.FormPanel
  * Base class for all 'Edit Record' dialogs
+ * 
+ * @class       Tine.widgets.dialog.EditDialog
+ * @extends     Ext.FormPanel
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
  * @constructor
  * @param {Object} config The configuration options.
  */
