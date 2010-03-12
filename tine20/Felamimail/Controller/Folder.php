@@ -109,6 +109,10 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     {
         $filterValues = $this->_extractFilter($_filter);
         
+        if (empty($filterValues['account_id'])) {
+            throw new Felamimail_Exception('No account id set in search filter.');
+        }
+        
         // get folders from db
         $filter = new Felamimail_Model_FolderFilter(array(
             array('field' => 'parent',      'operator' => 'equals', 'value' => $filterValues['globalname']),

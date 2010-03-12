@@ -157,6 +157,10 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      */
     public function updateStatus($_accountId, $_folders = NULL, $_folderId = NULL)
     {
+        if (empty($_accountId)) {
+            throw new Felamimail_Exception("Account id is required");
+        }
+        
         if ($_folders === NULL && ($_folderId === NULL || empty($_folderId))) {
             // get all folders of account
             $filter = new Felamimail_Model_FolderFilter(array(
