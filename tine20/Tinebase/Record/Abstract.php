@@ -594,13 +594,18 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 $_data[$field] = explode(',', $_data[$field]);
             }
             
-            if(is_array($_data[$field])) {
-                foreach($_data[$field] as $dataKey => $dataValue) {
-                    if ($dataValue instanceof Zend_Date) continue;
-                    $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Zend_Date($this->_convertISOToTs($dataValue), NULL);
+            try {
+                if(is_array($_data[$field])) {
+                    foreach($_data[$field] as $dataKey => $dataValue) {
+                        if ($dataValue instanceof Zend_Date) continue;
+                        $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Zend_Date($this->_convertISOToTs($dataValue), NULL);
+                    }
+                } else {
+                    $_data[$field] = (int)$_data[$field] == 0 ? NULL : new Zend_Date($this->_convertISOToTs($_data[$field]), NULL);
                 }
-            } else {
-                $_data[$field] = (int)$_data[$field] == 0 ? NULL : new Zend_Date($this->_convertISOToTs($_data[$field]), NULL);
+            } catch (Zend_Date_Exception $zde) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Error while converting date field "' . $field . '": ' . $zde->getMessage());
+                $_data[$field] = NULL;
             }
         }
     }
