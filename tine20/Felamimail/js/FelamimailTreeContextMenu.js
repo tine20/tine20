@@ -131,8 +131,11 @@ Tine.Felamimail.setTreeContextMenus = function() {
                         this.accountStore.reload();
                         
                         // reload tree node
+                        // TODO make this work again
+                        /*
                         this.ctxNode.reload(function(callback) {
                         });
+                        */
                         
                         // update grid
                         this.filterPlugin.onFilterChange();
