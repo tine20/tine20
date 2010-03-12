@@ -197,7 +197,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         var containerKeepCount = 0;
         this.store.each(function(record) {
             if (containerKeepCount < 10) {
-                if (record.get('is_container_node')) {
+                if (! record.get('is_container_node')) {
                     containerKeepCount += 1;
                 }
                 return;
@@ -316,6 +316,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     
     /**
      * @private
+     * @todo // records might be in from state, but value is conainerData only
      */
     setValue: function(container) {
         if (typeof container.get === 'function') {
@@ -324,7 +325,11 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             // store already has a record of this container
             container = this.store.getById(container);
             
-        } else if (container.path || container.id) {
+        } else if (container.path && this.store.find('path', container.path) >= 0) {
+            // store already has a record of this container
+            container = this.store.getAt(this.store.find('path', container.path));
+            
+        }else if (container.path || container.id) {
             // ignore server name for node 'My containers'
             if (container.path && container.path === '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId) {
                 container.name = null;
@@ -333,14 +338,14 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             container.id = container.id ||container.path;
             
             container = new Tine.Tinebase.Model.Container(container, container.id);
-            //container.set('dtselect', 0);
+            
             this.store.add(container);
         } else {
             // reject container
             return this;
         }
         
-        container.set('is_container_node', Tine.Tinebase.container.pathIsContainer(container.get('path')));
+        container.set('is_container_node', !!!Tine.Tinebase.container.pathIsContainer(container.get('path')));
         this.selectedContainer = container.data;
         
         // make shure other is _last_ entry in list
