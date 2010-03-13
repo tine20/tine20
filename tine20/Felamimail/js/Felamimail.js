@@ -18,7 +18,6 @@ Ext.namespace('Tine.Felamimail');
  * 
  * <p>Felamimail application obj</p>
  * <p>
- * TODO         move store to extra file/class
  * TODO         make message caching flow work again
  * TODO         add credentials dialog on failure of folder store / updatefolderstatus
  * </p>
@@ -83,53 +82,14 @@ Ext.namespace('Tine.Felamimail');
     /**
      * get folder store
      * 
-     * @return {Ext.data.JsonStore}
+     * @return {Tine.Felamimail.FolderStore}
      */
     getFolderStore: function() {
         if (! this.folderStore) {
-            this.folderStore = new Ext.data.Store({
-                fields: Tine.Felamimail.Model.Folder,
+            this.folderStore = new Tine.Felamimail.FolderStore({
                 listeners: {
                     scope: this,
-                    update: this.onUpdateFolder,
-                    load: this.onStoreLoad
-                },
-                proxy: Tine.Felamimail.folderBackend,
-                reader: Tine.Felamimail.folderBackend.getReader(),
-                queriesDone: new Ext.util.MixedCollection(),
-                asyncQuery: function(field, value, callback, args, scope, store) {
-                    
-                    var result = store.query(field, value);
-                    var queryObject = {field: field, value: value};
-                    
-                    if (result.getCount() == 0 && ! store.queriesDone.contains(queryObject)) {
-                        // do async request (only once)
-                        var accountId = value.match(/^\/([a-z0-9]*)/i)[1];
-                        var folderId = value.match(/([a-z0-9]*)$/i)[1];
-                        var folder = store.getById(folderId);
-                        store.load({
-                            path: value,
-                            params: {filter: [
-                                {field: 'account_id', operator: 'equals', value: accountId},
-                                {field: 'globalname', operator: 'equals', value: (folder) ? folder.get('globalname') : ''}
-                            ]},
-                            callback: function () {
-                                // query store again (it should have the new folders now) and call callback function to add nodes
-                                result = store.query(field, value);
-                                args.push(result);
-                                callback.apply(scope, args);
-                            }
-                        });
-                        
-                        // save query
-                        store.queriesDone.add(queryObject);
-                        
-                    } else {
-                        if (Ext.isFunction(callback)) {
-                            args.push(result);
-                            callback.apply(scope, args);
-                        }
-                    }
+                    update: this.onUpdateFolder
                 }
             });
             
@@ -171,22 +131,6 @@ Ext.namespace('Tine.Felamimail');
         this.updateFolderStatus(folderName);
     },
     
-    /**
-     * 
-     * @param {} store
-     * @param {} records
-     * @param {} success
-     */
-    onStoreLoad: function(store, records, options) {
-        Ext.each(records, function(record) {
-            // compute paths
-            var parent_path = options.path;
-            record.set('parent_path', parent_path);
-            record.set('path', parent_path + '/' + record.id);
-            
-        }, this);
-    },
-
     /**
      * on update folder
      * 
