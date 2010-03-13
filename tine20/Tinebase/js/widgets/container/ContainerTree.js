@@ -235,6 +235,18 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         return treePath;
     },
     
+    /**
+     * checkes if user has requested grant for given container represented by a tree node 
+     * 
+     * @param {Ext.tree.TreeNode} node
+     * @param {String} grant
+     * @return {}
+     */
+    hasGrant: function(node, grant) {
+        var attr = node.attributes;
+        return (attr.leaf && attr.container.account_grants[grant]);
+    },
+    
 	/**
      * @private
      * 
