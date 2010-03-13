@@ -85,7 +85,12 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
     public function update($_accountId, $_folderName = '')
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
-        $imap = Felamimail_Backend_ImapFactory::factory($account);
+        try {
+            $imap = Felamimail_Backend_ImapFactory::factory($account);
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
+            return $this->_getOrCreateFolders(array(), $account, $_folderName);
+        }
         
         $this->_delimiter = $account->delimiter;
         
