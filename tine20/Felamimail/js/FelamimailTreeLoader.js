@@ -46,14 +46,16 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             
             // we need to call doQuery fn from store to transparently do async request
             fstore.asyncQuery('parent_path', node.attributes.path, function(node, callback, scope, data) {
-                node.beginUpdate();
-                data.each(function(folderRecord) {
-                    var n = this.createNode(folderRecord.data);
-                    if (n) {
-                        node.appendChild(n);
-                    }
-                }, this);
-                node.endUpdate();
+                if (data) {
+                    node.beginUpdate();
+                    data.each(function(folderRecord) {
+                        var n = this.createNode(folderRecord.data);
+                        if (n) {
+                            node.appendChild(n);
+                        }
+                    }, this);
+                    node.endUpdate();
+                }
                 this.runCallback(callback, scope || node, [node]);
             }, [node, callback, scope], this, fstore);
             
