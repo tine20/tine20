@@ -99,7 +99,7 @@ Tine.Tinebase.Model.Account = Ext.data.Record.create([
 /**
  * Model of a container
  */
-Tine.Tinebase.Model.Container = Ext.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+Tine.Tinebase.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'},
     {name: 'name'},
     {name: 'type'},
