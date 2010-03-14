@@ -243,6 +243,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @return {}
      */
     hasGrant: function(node, grant) {
+        console.log(node.attributes.container);
         var attr = node.attributes;
         return (attr.leaf && attr.container.account_grants[grant]);
     },
@@ -338,9 +339,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             text: Ext.util.Format.htmlEncode(attr.name),
             qtip: Ext.util.Format.htmlEncode(attr.name),
             leaf: !!attr.account_grants,
-            allowDrop: !!attr.account_grants && attr.account_grants.addGrant,
-            container: attr
+            allowDrop: !!attr.account_grants && attr.account_grants.addGrant
         });
+        
+        // copy 'real' data to container space
+        attr.container = Ext.copyTo({}, attr, Tine.Tinebase.Model.Container.getFieldNames());
     },
     
     /**
