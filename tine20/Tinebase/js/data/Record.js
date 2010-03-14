@@ -145,5 +145,12 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     f.getFieldDefinitions = function() {
         return p.fields.items;
     };
+    f.getFieldNames = function() {
+        if (! p.fieldsarray) {
+            var arr = p.fieldsarray = [];
+            Ext.each(p.fields.items, function(item) {arr.push(item.name);});
+        }
+        return p.fieldsarray;
+    };
     return f;
 };
