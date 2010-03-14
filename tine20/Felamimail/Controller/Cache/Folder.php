@@ -264,10 +264,12 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                     $_folder->imap_uidnext = $imapFolderValues['uidnext'];
                 }
                 
-                // @todo do we need that here ? -> should be done when something happens with the message cache (delete/add)
+                // @todo remov it -> is done when something happens with the message cache (delete/add/move)
+                /*
                 $messageCacheBackend = new Felamimail_Backend_Cache_Sql_Message();
                 $_folder->cache_totalcount = $messageCacheBackend->searchCountByFolderId($_folder->getId());
                 $_folder->cache_unreadcount = $_folder->cache_totalcount - $messageCacheBackend->seenCountByFolderId($_folder->getId());
+                */
                 
                 // update cache status if we need to do something
                 if (

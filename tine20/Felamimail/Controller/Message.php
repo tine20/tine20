@@ -58,7 +58,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * cache controller
      *
-     * @var Felamimail_Controller_Cache
+     * @var Felamimail_Controller_Cache_Message
      */
     protected $_cacheController = NULL;
     
@@ -193,9 +193,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
         }
         
-        // reset old cache status
+        // reset old cache status and set new unread count
         foreach ($updatedFolders as $folderId => $updatedFolder) {
             $updatedFolder->cache_status = $oldCacheStatus[$folderId];
+            $updatedFolder->cache_unreadcount = $this->_cacheController->getUnreadCount($updatedFolder);
             Felamimail_Controller_Folder::getInstance()->update($updatedFolder);
         }
     }
@@ -366,7 +367,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             // remove from cache db table
             $this->_backend->delete($_ids);
             
-            // update source folder (cache_totalcount)
+            // update source folder (cache_totalcount + unreadcount)
+            $sourceFolder->cache_unreadcount = $this->_cacheController->getUnreadCount($sourceFolder);
             $folder = Felamimail_Controller_Folder::getInstance()->update($sourceFolder);
         }
                 
