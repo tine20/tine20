@@ -324,9 +324,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param array $_ids
      * @param string $_folderId
-     * @return boolean success
+     * @return Felamimail_Model_Folder
      * 
-     * @todo add cache_status MOVING?
+     * @todo add cache_status MOVING/set to UPDATING?
      * @todo move messages in the cache?
      */
     public function moveMessages($_ids, $_folderId)
@@ -367,10 +367,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $this->_backend->delete($_ids);
             
             // update source folder (cache_totalcount)
-            Felamimail_Controller_Folder::getInstance()->update($sourceFolder);
+            $folder = Felamimail_Controller_Folder::getInstance()->update($sourceFolder);
         }
                 
-        return TRUE;
+        return $folder;
     }
     
     /**

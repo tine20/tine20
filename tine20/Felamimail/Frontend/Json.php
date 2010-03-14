@@ -241,15 +241,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param  array $ids message ids
      * @param  string $folderId
-     * @return array
+     * @return array folder status
      */
     public function moveMessages($ids, $folderId)
     {
         $result = Felamimail_Controller_Message::getInstance()->moveMessages($ids, $folderId);
-        
-        return array(
-            'status' => ($result) ? 'success' : 'failure'
-        );
+        return $result;
     }
     
     /**
