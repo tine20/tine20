@@ -58,6 +58,10 @@
     font-weight:bold;
 }
 
+.x-ux-display .x-ux-display-header .x-tree-node-leaf img {
+    height: 16px;
+}
+
 .x-ux-display .x-ux-display-background-declaration {
     position: absolute;
     left:5px;
