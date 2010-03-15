@@ -24,8 +24,8 @@ Ext.onReady(function() {
         if (! Tine.Tinebase.tineInit.initList.initRegistry) {
             waitForInits.defer(100);
         } else {
-            Tine.Tinebase.tineInit.initState();
             Tine.Tinebase.tineInit.initExtDirect();
+            Tine.Tinebase.tineInit.initState();
             Tine.Tinebase.tineInit.initWindowMgr();
             Tine.Tinebase.tineInit.onLangFilesLoad();
             Tine.Tinebase.tineInit.checkSelfUpdate();
@@ -205,6 +205,7 @@ Tine.Tinebase.tineInit = {
                             if (Tine.Tinebase.tineInit.initList.initRegistry) {
                                 Ext.MessageBox.hide();
                                 Tine.Tinebase.tineInit.initExtDirect();
+                                Tine.Tinebase.tineInit.initState();
                                 Tine.Tinebase.tineInit.renderWindow();
                             } else {
                                 waitForRegistry.defer(100);
@@ -633,6 +634,19 @@ Tine.Tinebase.tineInit = {
             });
         }
     },
+    /**
+     * initialise state provider
+     */
+    initState: function() {
+        if (Tine.Tinebase.tineInit.stateful === true) {
+            if (window.isMainWindow) {
+                Ext.state.Manager.setProvider(new Tine.Tinebase.StateProvider());
+            } else {
+                var mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
+                Ext.state.Manager = mainWindow.Ext.state.Manager;
+            }
+        }
+    },
     
     /**
      * add provider to Ext.Direct based on Tine servicemap
@@ -656,15 +670,6 @@ Tine.Tinebase.tineInit = {
             OpenLayers._getScriptLocation = function() {
                 return 'library/OpenLayers/';
             }
-        }
-    },
-    
-    /**
-     * initialise state provider
-     */
-    initState: function() {
-        if (Tine.Tinebase.tineInit.stateful === true) {
-            Ext.state.Manager.setProvider(new Tine.Tinebase.StateProvider());
         }
     },
     
