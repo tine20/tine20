@@ -76,8 +76,9 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     allowBlank: false,
     triggerAction: 'all',
     forceAll: true,
-    lazyInit: false,
+    lazyInit: true,
     editable: false,
+    clearFilterOnReset: false,
     
     stateful: true,
     stateEvents: ['select'],
@@ -141,19 +142,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     initStore: function() {
         var state = this.stateful ? Ext.state.Manager.get(this.stateId) : null;
         var recentsData = state && state.recentsData || [];
-        
-        /*
-        // NOTE: if startPath is given resents are not used as we force remote load
-        Ext.each(recentsData, function(recent) {
-            var path = recent.path;
-            
-            // NOTE: if path is undefined, the recent record was set from form data w.o. path append in json class -> leaf
-            if (! this.allowNodeSelect && (! path || recent.path.match(Tine.Tinebase.container.isLeafRegExp))) {
-                recentsData.remove(recent);
-            }
-            
-        }, this);
-        */
         
         this.store = new Ext.data.JsonStore({
             id: 'id',
@@ -233,6 +221,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     onBeforeQuery: function(queryEvent) {
         queryEvent.query = new Date().getTime();
         this.mode = Tine.Tinebase.container.pathIsPersonalNode(this.startPath) ? 'remote' : 'local' ;
+        
+        // skip combobox nativ filtering to preserv our filters
+        if (this.mode == 'local') {
+            this.onLoad();
+            return false;
+        }
     },
     
     /**
@@ -242,19 +236,16 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      *       thus we don't need to filter in this case!
      */
     setStoreFilter: function() {
-        if (! this.allowNodeSelect) {
-            this.store.filter('is_container_node', true);
-        }
+        this.store.clearFilter();
+        this.store.sort('dtselect', 'DESC');
         
-        // limit list to 10
-        if (this.store.getCount() > 10) {
-            var dtselectMin = this.store.getAt(10).get('dtselect');
-            
-            this.store.filterBy(function(record) {
-                return ! (this.allowNodeSelect || record.get('is_container_node')) && record.get('dtselect' > dtselectMin);
-            }, this);
-        }
+        var skipBoundary = this.store.getAt(Math.max(this.store.getCount(), 10) -1);
+        var dtselectMin = skipBoundary ? skipBoundary.get('dtselect') : -1;
         
+        this.store.filterBy(function(record) {
+            var keep = (this.allowNodeSelect || !record.get('is_container_node')) && record.get('dtselect') > dtselectMin;
+            return keep;
+        }, this);
     },
     
     setTrigger2Text: function(text) {
@@ -325,9 +316,9 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             // store already has a record of this container
             container = this.store.getById(container);
             
-        } else if (container.path && this.store.find('path', container.path) >= 0) {
+        } else if (container.path && this.store.findExact('path', container.path) >= 0) {
             // store already has a record of this container
-            container = this.store.getAt(this.store.find('path', container.path));
+            container = this.store.getAt(this.store.findExact('path', container.path));
             
         }else if (container.path || container.id) {
             // ignore server name for node 'My containers'
@@ -365,18 +356,21 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         return container;
     },
     
+    applyState: Ext.emptyFn,
+    
     /**
      * @private
      */
     getState: function() {
         var recentsData = [];
+        this.store.clearFilter();
         this.store.each(function(container) {
             if (container != this.otherRecord) {
-                var data = Ext.copyTo({}, container.data, 'id, name, path, dtselect', 'account_grants');
+                var data = Ext.copyTo({}, container.data, Tine.Tinebase.Model.Container.getFieldNames());
                 recentsData.push(data);
             }
         }, this);
-        
+        this.setStoreFilter();
         return {
             recentsData : recentsData
         };
