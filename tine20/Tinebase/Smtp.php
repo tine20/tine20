@@ -50,13 +50,13 @@ class Tinebase_Smtp
         // set default transport none is set yet
         if (! self::getDefaultTransport()) {
             // don't try to login if no username is given or if auth set to 'none'
-            if ($config['auth'] == 'none' || empty($config['username'])) {
+            if (! isset($config['auth']) || $config['auth'] == 'none' || empty($config['username'])) {
                 unset($config['username']);
                 unset($config['password']);
                 unset($config['auth']);
             }
             
-            if ($config['ssl'] == 'none') {
+            if (isset($config['ssl']) && $config['ssl'] == 'none') {
                 unset($config['ssl']);
             }
             
