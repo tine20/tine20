@@ -258,7 +258,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      */
     public function getForeignKeyDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
     { 
-        $snippet = '  CONSTRAINT `' . SQL_TABLE_PREFIX .  $_key->name . '` FOREIGN KEY ';
+        $snippet = '  CONSTRAINT `' . $_key->name . '` FOREIGN KEY ';
         $snippet .= '(`' . $_key->field . "`) REFERENCES `" . SQL_TABLE_PREFIX
                     . $_key->referenceTable . 
                     "` (`" . $_key->referenceField . "`)";
