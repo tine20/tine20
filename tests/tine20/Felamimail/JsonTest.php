@@ -398,10 +398,22 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     public function testMoveMessage()
     {
         $message = $this->_sendMessage();
+        $result = $this->_json->updateFolderStatus($this->_account->getId(), '');
+        $inbox = array();
+        foreach ($result['results'] as $folder) {
+            if ($folder['globalname'] == 'INBOX') {
+                $inbox = $folder;
+                break;
+            }
+        }
         
         // move
         $drafts = $this->_getFolder('Drafts');
-        $this->_json->moveMessages(array($message['id']), $drafts->getId());
+        $result = $this->_json->moveMessages(array($message['id']), $drafts->getId());
+        
+        // check if counts were decreased correctly
+        $this->assertEquals($inbox['cache_totalcount'] - 1, $result['cache_totalcount']);
+        $this->assertEquals($inbox['cache_unreadcount'] - 1, $result['cache_unreadcount']);
         
         $result = $this->_getMessages('Drafts');
         $movedMessage = array();
