@@ -243,7 +243,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @return {}
      */
     hasGrant: function(node, grant) {
-        console.log(node.attributes.container);
         var attr = node.attributes;
         return (attr.leaf && attr.container.account_grants[grant]);
     },
