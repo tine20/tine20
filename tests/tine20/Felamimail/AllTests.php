@@ -39,11 +39,16 @@ class Felamimail_AllTests
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail All Tests');
-        $suite->addTestSuite('Felamimail_Controller_Cache_MessageTest');
-        $suite->addTestSuite('Felamimail_JsonTest');
-        $suite->addTestSuite('Felamimail_Controller_FolderTest');
-        $suite->addTestSuite('Felamimail_Controller_MessageTest');
-        $suite->addTestSuite('Felamimail_Controller_AccountTest');
+        
+        // only call Felamimail tests if imap is configured in config.inc.php
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        if (! empty($imapConfig) && array_key_exists('useSystemAccount', $imapConfig) && $imapConfig['useSystemAccount']) {
+            $suite->addTestSuite('Felamimail_Controller_Cache_MessageTest');
+            $suite->addTestSuite('Felamimail_JsonTest');
+            $suite->addTestSuite('Felamimail_Controller_FolderTest');
+            $suite->addTestSuite('Felamimail_Controller_MessageTest');
+            $suite->addTestSuite('Felamimail_Controller_AccountTest');
+        }
         $suite->addTestSuite('Felamimail_Sieve_ScriptTest');
         
         return $suite;
