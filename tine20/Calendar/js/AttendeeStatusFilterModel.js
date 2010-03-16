@@ -10,13 +10,13 @@ Ext.ns('Tine.Calendar');
 
 /**
  * @namespace   Tine.Calendar
- * @class       Tine.Calendar.AttendeeStatusFilter
+ * @class       Tine.Calendar.AttendeeStatusFilterModel
  * @extends     Tine.widgets.grid.FilterModel
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
-Tine.Calendar.AttendeeStatusFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
+Tine.Calendar.AttendeeStatusFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**
      * @property Tine.Tinebase.Application app
      */
@@ -46,7 +46,7 @@ Tine.Calendar.AttendeeStatusFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
-        var value = new Tine.Calendar.AttendeeStatusFilterValueField({
+        var value = new Tine.Calendar.AttendeeStatusFilterModelValueField({
             app: this.app,
             filter: filter,
             width: 200,
@@ -65,17 +65,17 @@ Tine.Calendar.AttendeeStatusFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     }
 });
 
-Tine.widgets.grid.FilterToolbar.FILTERS['calendar.attendeestatus'] = Tine.Calendar.AttendeeStatusFilter;
+Tine.widgets.grid.FilterToolbar.FILTERS['calendar.attendeestatus'] = Tine.Calendar.AttendeeStatusFilterModel;
 
 /**
  * @namespace   Tine.Calendar
- * @class       Tine.Calendar.AttendeeStatusFilterValueField
+ * @class       Tine.Calendar.AttendeeStatusFilterModelValueField
  * @extends     Ext.ux.form.LayerCombo
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
-Tine.Calendar.AttendeeStatusFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
+Tine.Calendar.AttendeeStatusFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     hideButtons: false,
     formConfig: {
         labelAlign: 'left',
