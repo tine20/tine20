@@ -30,7 +30,6 @@ class Felamimail_Backend_ImapFactory
      */
     static public function factory($_accountId)
     {
-        echo 'imap factory';
         $accountId = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId->getId() : $_accountId;
         
         if (!isset(self::$_backends[$accountId])) {
