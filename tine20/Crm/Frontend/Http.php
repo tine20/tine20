@@ -35,7 +35,7 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
-            'Crm/js/Models.js',
+            'Crm/js/Model.js',
             'Crm/js/Crm.js',
             'Crm/js/LinkGridPanel.js',
             'Crm/js/LeadGridContactFilter.js',
