@@ -347,7 +347,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             
         if (record.isModified('cache_unreadcount')) {
             //console.log('update unread');
-            this.updateUnreadCount(0, changes.cache_unreadcount, this.getNodeById(record.id));
+            this.updateUnreadCount(null, changes.cache_unreadcount, this.getNodeById(record.id));
         }
         
         // update pie / progress
