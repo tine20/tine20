@@ -569,6 +569,10 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 
                 // delete uids not on mailserver from cache
                 $toDeleteUids = array_diff($cacheUids, $imapUids);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cacheUids, TRUE));
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapUids, TRUE));
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($toDeleteUids, TRUE));
+                
                 if (! empty($toDeleteUids)) {
                     $this->_backend->deleteByProperty($toDeleteUids, 'messageuid', 'in');
                 }
@@ -586,6 +590,10 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             if (count($messages) < $stepSize) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No more messages in cache with uid lower than ' . $_folder->cache_job_lowestuid);
                 $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
+                if ($_folder->cache_totalcount > $_folder->imap_totalcount) {
+                    // sanitize folder totalcount
+                    $_folder->cache_totalcount = $this->_backend->searchCountByFolderId($_folder->getId()); 
+                }
                 break;
             }
             
