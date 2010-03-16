@@ -31,7 +31,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
-            'Felamimail/js/Models.js',
+            'Felamimail/js/Model.js',
             'Felamimail/js/FelamimailFolderStore.js',
             'Felamimail/js/Felamimail.js',
             'Felamimail/js/FelamimailTreeContextMenu.js',
