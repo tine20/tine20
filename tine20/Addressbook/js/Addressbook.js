@@ -64,6 +64,7 @@ Tine.Addressbook.TreePanel = function(config) {
     //}
     
     this.id = 'Addressbook_Tree';
+    this.filterMode = 'filterToolbar';
     this.recordClass = Tine.Addressbook.Model.Contact;
     Tine.Addressbook.TreePanel.superclass.constructor.call(this);
 };
@@ -231,6 +232,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
     
     return [
         {label: _('Quick search'),                                                      field: 'query',              operators: ['contains']},
+        {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
         {label: app.i18n._('First Name'),                                               field: 'n_given' },
         {label: app.i18n._('Last Name'),                                                field: 'n_family'},
         {label: app.i18n._('Company'),                                                  field: 'org_name'},
