@@ -174,6 +174,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($result->cache_job_actions_estimate, $result->cache_job_actions_done, 'done/estimate wrong');
             $this->assertEquals(0, $result->cache_job_lowestuid, 'lowest job uid was not reset');
             $this->assertEquals($result->imap_totalcount, $result->cache_totalcount, 'totalcounts should be equal');
+            $this->assertTrue($result->cache_unreadcount <= $result->cache_totalcount, 'unreadcount was not decreased');
         } else {
             $this->assertNotEquals($result->cache_job_actions_estimate, $result->cache_job_actions_done, 'done/estimate wrong');
             $this->assertGreaterThan(0, $result->cache_job_lowestuid, 'lowest job uid was not reset');

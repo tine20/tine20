@@ -593,6 +593,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             $timeLeft = ($_folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
             $start += $stepSize;
         }
+        
+        // calc new cache unreadcount
+        $_folder->cache_unreadcount = $this->getUnreadCount($_folder);
     }
     
     /**
