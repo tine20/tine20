@@ -80,7 +80,7 @@ class Felamimail_Backend_ImapProxy
             $this->_backend->noop();
         } catch (Zend_Mail_Storage_Exception $zmse) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Lost IMAP connection ... trying relogin.'); 
-            $this->_backend->login($this->_params->user, $this->_params->password);
+            $this->_backend->connectAndLogin($this->_params);
         }
         
         return call_user_func_array(array($this->_backend, $_name), $_arguments);

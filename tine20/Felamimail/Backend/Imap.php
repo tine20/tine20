@@ -52,8 +52,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $this->_useUid = true;
         
         $this->_protocol = new Felamimail_Protocol_Imap();
-        $this->_protocol->connect($params->host, $params->port, $params->ssl);
-        $this->login($params->user, $params->password);
+        
+        $this->connectAndLogin($params);
         
         $this->selectFolder(isset($params->folder) ? $params->folder : 'INBOX');
     }
@@ -61,14 +61,14 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     /**
      * login to imap server
      * 
-     * @param string $_user
-     * @param string $_password
+     * @param object $_params
      * @return void
      * @throws Felamimail_Exception_InvalidCredentials
      */
-    public function login($_user, $_password)
+    public function connectAndLogin($_params)
     {
-        if (! $this->_protocol->login($_user, $_password)) {
+        $this->_protocol->connect($_params->host, $_params->port, $_params->ssl);
+        if (! $this->_protocol->login($_params->user, $_params->password)) {
             throw new Felamimail_Exception_InvalidCredentials('Cannot login, user or password wrong.');
         }        
     }    
