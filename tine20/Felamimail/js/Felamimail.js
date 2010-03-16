@@ -18,7 +18,6 @@ Ext.namespace('Tine.Felamimail');
  * 
  * <p>Felamimail application obj</p>
  * <p>
- * TODO         make message caching flow work again
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -195,15 +194,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         
         var folderIds, accountId;
         if (! folder || typeof folder.get !== 'function') {
-            var treePanel = this.getMainScreen().getTreePanel();
-            accountId = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
-                
-            if (treePanel && treePanel.rendered) {
-                var account = treePanel.getActiveAccount();
-                if (account !== null) {
-                    accountId = account.id;
-                }
-            }
+            var account = this.getActiveAccount();
+            accountId = account.id;
             folderIds = this.getFoldersForUpdateStatus(accountId);
             folder = null;
         } else {
@@ -231,6 +223,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 },
                 failure: this.handleFailure
             });
+        } else {
+            this.updateMessageCache();
         }
     },
     
@@ -247,9 +241,9 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         var refreshRate = 'fast';
         var folderId = null;
         var singleFolderUpdate = false;
-        if (! folder && false /*this.getTreePanel()*/) {
+        if (! folder && this.getMainScreen().getTreePanel()) {
             // get active node
-            var node = this.getTreePanel().getSelectionModel().getSelectedNode();
+            var node = this.getMainScreen().getTreePanel().getSelectionModel().getSelectedNode();
             if (node && node.attributes.folder_id) {
                 folder = this.folderStore.getById(node.id);
             }
@@ -263,6 +257,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             
         } else if (! singleFolderUpdate) {
             folderId = this.getNextFolderToUpdate();
+            //console.log('folder id:' + folderId);
             if (folderId === null) {
                 // nothing left to do for the moment! -> set refresh rate to 'slow'
                 //console.log('finished for the moment');
@@ -292,7 +287,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             });           
         }
         
-        // TODO add folder as arg
+        // TODO add folder as arg ?
         // start delayed task again
         var delayTime = this.setCheckMailsRefreshTime(refreshRate);
         //console.log('start delayed task again. time: ' + delayTime);
@@ -359,20 +354,22 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         var result = null;
         
         var account = this.getActiveAccount();
-        // look for folder to update
-        //console.log(account.id);
-        var candidates = this.folderStore.queryBy(function(record) {
-            //console.log(record);
-            //console.log(record.id + ' ' + record.get('cache_status'));
-            return (
-                record.get('account_id') == account.id 
-                && (record.get('cache_status') == 'incomplete' || record.get('cache_status') == 'invalid')
-            );
-        });
-        //console.log(candidates);
-        if (candidates.getCount() > 0) {
-            folder = candidates.first();
-            result = folder.id;
+        if (account !== null) {
+            // look for folder to update
+            //console.log(account.id);
+            var candidates = this.folderStore.queryBy(function(record) {
+                //console.log(record);
+                //console.log(record.id + ' ' + record.get('cache_status'));
+                return (
+                    record.get('account_id') == account.id 
+                    && (record.get('cache_status') == 'incomplete' || record.get('cache_status') == 'invalid')
+                );
+            });
+            //console.log(candidates);
+            if (candidates.getCount() > 0) {
+                folder = candidates.first();
+                result = folder.id;
+            }
         }
         
         return result;
@@ -423,6 +420,25 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             //var exception = responseText.data ? responseText.data : responseText;
             //Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
         }
+    },
+    
+    /**
+     * get active account
+     * @return {Tine.Felamimail.Model.Account}
+     */
+    getActiveAccount: function() {
+        var account = null;
+            
+        var treePanel = this.getMainScreen().getTreePanel();
+        if (treePanel && treePanel.rendered) {
+            account = treePanel.getActiveAccount();
+        }
+        
+        if (account === null) {
+            account = Tine.Felamimail.loadAccountStore().getById(Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'));
+        }
+        
+        return account;
     }
 });
 
