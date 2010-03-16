@@ -167,8 +167,10 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 this.checkMailDelayTime = 1200000; // 20 minutes
             }
         } else {
-            this.checkMailDelayTime = 20000; // 20 seconds
+            this.checkMailDelayTime = 25000; // 25 seconds
         }
+        
+        return this.checkMailDelayTime;
     },
     
     /**
@@ -209,24 +211,27 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             accountId = folder.get('account_id');
         }
         
-        Ext.Ajax.request({
-            params: {
-                method: 'Felamimail.updateFolderStatus',
-                folderIds: folderIds,
-                accountId: accountId
-            },
-            scope: this,
-            timeout: 60000, // 1 minute
-            success: function(_result, _request) {
-                var result = Tine.Felamimail.folderBackend.getReader().readRecords(Ext.util.JSON.decode(_result.responseText));
-                //console.log(result);
-                for (var i = 0; i < result.records.length; i++) {
-                    this.updateFolderInStore(result.records[i]);
-                }
-                var result = this.updateMessageCache(folder);
-            },
-            failure: this.handleFailure
-        });
+        // don't update if we got no folder ids 
+        if (folderIds.length > 0) {
+            Ext.Ajax.request({
+                params: {
+                    method: 'Felamimail.updateFolderStatus',
+                    folderIds: folderIds,
+                    accountId: accountId
+                },
+                scope: this,
+                timeout: 60000, // 1 minute
+                success: function(_result, _request) {
+                    var result = Tine.Felamimail.folderBackend.getReader().readRecords(Ext.util.JSON.decode(_result.responseText));
+                    //console.log(result);
+                    for (var i = 0; i < result.records.length; i++) {
+                        this.updateFolderInStore(result.records[i]);
+                    }
+                    var result = this.updateMessageCache(folder);
+                },
+                failure: this.handleFailure
+            });
+        }
     },
     
     /**
@@ -282,20 +287,16 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     this.updateFolderInStore(newRecord);
                 },
                 failure: function(response, options) {
-                    // TODO call handle failure and show credentials dialog / reload account afterwards
-                    /*
-                    if (node.parentNode) {
-                        this.handleFailure(response, options, node.parentNode, false);
-                    }
-                    */
+                    // do nothing
                 }
             });           
         }
         
         // TODO add folder as arg
-        // TODO start delayed task again
+        // start delayed task again
         var delayTime = this.setCheckMailsRefreshTime(refreshRate);
-        //this.checkMailsDelayedTask.delay(delayTime/*, folder?*/);
+        //console.log('start delayed task again. time: ' + delayTime);
+        this.checkMailsDelayedTask.delay(delayTime/*, folder?*/);
     },
    
     /**
@@ -312,7 +313,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             var timestamp = record.get('imap_timestamp');
             return (record.get('account_id') == accountId && (timestamp == '' || timestamp.getElapsed() > 300000)); // 5 minutes
         });
-        console.log(accountFolders);
+        //console.log(accountFolders);
         accountFolders.each(function(record) {
             result.push(record.id);
         });
