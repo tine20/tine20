@@ -840,10 +840,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         }
         */
         
-        // get update folder status
-        //this.app.getMainScreen().getTreePanel().updateFolderStatus(false);
-        // TODO delete + move should return the folder status and update the folder store
         this.store.load({});
+        this.app.checkMailsDelayedTask.delay(10000);
     },
     
     /**
