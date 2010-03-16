@@ -30,11 +30,13 @@ class ExampleApplication_Model_ExampleRecordFilter extends Tinebase_Model_Filter
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
+        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', /*'...'*/))),
+        'container_id'   => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'ExampleApplication')),
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'example_application_record.id')),
+        
         // @todo add filters
         /*
-        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('number', 'title'))),
         'title'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'number'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),

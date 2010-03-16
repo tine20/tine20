@@ -28,9 +28,8 @@ class ExampleApplication_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
-            'ExampleApplication/js/Models.js',
+            'ExampleApplication/js/Model.js',
             'ExampleApplication/js/ExampleApplication.js',
-            'ExampleApplication/js/MainScreen.js',
             'ExampleApplication/js/ExampleRecordGridPanel.js',
             'ExampleApplication/js/ExampleRecordEditDialog.js',
         );

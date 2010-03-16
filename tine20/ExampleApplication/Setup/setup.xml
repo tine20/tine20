@@ -23,6 +23,11 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
+                    <name>container_id</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
                     <name>name</name>
                     <type>text</type>
                     <length>255</length>
@@ -67,6 +72,12 @@
                     <primary>true</primary>
                     <field>
                         <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>container_id</name>
+                    <field>
+                        <name>container_id</name>
                     </field>
                 </index>
             </declaration>

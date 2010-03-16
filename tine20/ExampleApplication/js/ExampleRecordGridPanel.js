@@ -1,15 +1,12 @@
 /*
  * Tine 2.0
  * 
- * @package     ExampleApplication
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:ExampleRecordGridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
- *
  */
- 
-Ext.namespace('Tine.ExampleApplication');
+Ext.ns('Tine.ExampleApplication');
 
 /**
  * ExampleRecord grid panel
@@ -42,7 +39,7 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widget
      * eval grants
      * @cfg {Boolean} evalGrants
      */
-    evalGrants: false,
+    evalGrants: true,
     
     /**
      * grid specific
@@ -61,18 +58,13 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widget
     initComponent: function() {
         this.recordProxy = Tine.ExampleApplication.recordBackend;
         
-        //this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.cm = this.getColumnModel();
-        //this.initFilterToolbar();
+        this.initFilterToolbar();
         
         this.plugins = this.plugins || [];
-        //this.plugins.push(this.filterToolbar);
+        this.plugins.push(this.filterToolbar);
         
         Tine.ExampleApplication.ExampleRecordGridPanel.superclass.initComponent.call(this);
-        
-        //this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'ExampleApplication', 'records'));
-        //this.action_editInNewWindow.requiredGrant = 'editGrant';
-        
     },
     
     /**
@@ -82,21 +74,15 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widget
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                // @todo add filtes
-                /*
                 {label: _('Quick search'),    field: 'query',       operators: ['contains']},
-                {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
-                new Tine.ExampleApplication.TimeAccountStatusGridFilter({
-                    field: 'status'
-                }),
-                */
-                new Tine.widgets.tags.TagFilter({app: this.app})
+                {filtertype: 'tine.widget.container.filtermodel', app: this.app, recordClass: this.recordClass},
+                {filtertype: 'tinebase.tag', app: this.app}
             ],
             defaultFilter: 'query',
-            filters: []/*,
+            filters: [],
             plugins: [
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
-            ]*/
+            ]
         });
     },    
     

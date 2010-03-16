@@ -49,7 +49,7 @@ class ExampleApplication_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchExampleRecords($filter, $paging)
     {
-        return $this->_search($filter, $paging, $this->_controller, 'ExampleApplication_Model_ExampleRecordFilter');
+        return $this->_search($filter, $paging, $this->_controller, 'ExampleApplication_Model_ExampleRecordFilter', TRUE);
     }     
     
     /**

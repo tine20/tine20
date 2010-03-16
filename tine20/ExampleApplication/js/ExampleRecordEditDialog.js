@@ -1,15 +1,12 @@
 /*
  * Tine 2.0
  * 
- * @package     ExampleApplication
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:ExampleRecordEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
- *
  */
- 
-Ext.namespace('Tine.ExampleApplication');
+Ext.ns('Tine.ExampleApplication');
 
 /**
  * @namespace   Tine.ExampleApplication
@@ -39,7 +36,8 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
     recordProxy: Tine.ExampleApplication.recordBackend,
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
-    evalGrants: false,
+    evalGrants: true,
+    showContainerSelector: true,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)

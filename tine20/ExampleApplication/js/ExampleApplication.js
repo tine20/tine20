@@ -1,99 +1,58 @@
-/**
+/*
  * Tine 2.0
  * 
- * @package     ExampleApplication
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
- 
-Ext.namespace('Tine.ExampleApplication');
+Ext.ns('Tine.ExampleApplication');
 
-Tine.ExampleApplication.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
-    
-    filter: [{field: 'model', operator: 'equals', value: 'ExampleApplication_Model_ExampleRecordFilter'}],
-    
-    // quick hack to get filter saving grid working
-    //recordClass: Tine.ExampleApplication.Model.ExampleRecord,
-    
-    initComponent: function() {
-        this.filterMountId = 'ExampleRecord';
-        
-        this.root = {
-            id: 'root',
-            leaf: false,
-            expanded: true,
-            children: [{
-                text: this.app.i18n._('ExampleRecords'),
-                id: 'ExampleRecord',
-                iconCls: 'ExampleApplicationExampleRecord',
-                expanded: true,
-                children: [{
-                    text: this.app.i18n._('All ExampleRecords'),
-                    id: 'allrecords',
-                    leaf: true
-                }]
-            }]
-        };
-        
-    	Tine.ExampleApplication.TreePanel.superclass.initComponent.call(this);
-        
-    	/*
-        this.on('click', function(node) {
-            if (node.attributes.isPersistentFilter != true) {
-                var contentType = node.getPath().split('/')[2];
-                
-                this.app.getMainScreen().activeContentType = contentType;
-                this.app.getMainScreen().show();
-            }
-        }, this);
-        */
-	},
-    
-    /**
-     * @private
-     */
-    afterRender: function() {
-        Tine.ExampleApplication.TreePanel.superclass.afterRender.call(this);
-        var type = this.app.getMainScreen().activeContentType;
 
-        this.expandPath('/root/' + type + '/allrecords');
-        this.selectPath('/root/' + type + '/allrecords');
-    },
-    
+/**
+ * @namespace   Tine.ExampleApplication
+ * @class       Tine.ExampleApplication.Application
+ * @extends     Tine.Tinebase.Application
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
+ */
+Tine.ExampleApplication.Application = Ext.extend(Tine.Tinebase.Application, {
     /**
-     * returns a filter plugin to be used in a grid
+     * Get translated application title of the calendar application
      * 
-     * ???
+     * @return {String}
      */
-    getFilterPlugin: function() {
-        if (!this.filterPlugin) {
-            var scope = this;
-            this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
-                getValue: function() {
-                    var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
-                    return [
-                        //{field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
-                        //{field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
-                        //{field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
-                    ];
-                }
-            });
-        }
-        
-        return this.filterPlugin;
+    getTitle: function() {
+        return this.i18n.gettext('Example Application');
     }
 });
 
-//Tine.ExampleApplication.FilterPanel = Tine.widgets.grid.PersistentFilterPicker
-
 /**
- * default ExampleRecord backend
+ * @namespace   Tine.ExampleApplication
+ * @class       Tine.ExampleApplication.MainScreen
+ * @extends     Tine.Tinebase.widgets.app.MainScreen
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
  */
-Tine.ExampleApplication.recordBackend = new Tine.Tinebase.data.RecordProxy({
-    appName: 'ExampleApplication',
-    modelName: 'ExampleRecord',
+Tine.ExampleApplication.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
+    
+    activeContentType: 'ExampleRecord'
+});
+
+    
+/**
+ * @namespace   Tine.ExampleApplication
+ * @class       Tine.ExampleApplication.TreePanel
+ * @extends     Tine.widgets.container.TreePanel
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
+ */
+Tine.ExampleApplication.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
+    id: 'ExampleApplication_Tree',
+    filterMode: 'filterToolbar',
     recordClass: Tine.ExampleApplication.Model.ExampleRecord
 });
+
