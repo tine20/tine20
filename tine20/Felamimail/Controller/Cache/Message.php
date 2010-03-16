@@ -327,6 +327,18 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         return $result;
     }
     
+    /**
+     * get total count for folder
+     * 
+     * @param Felamimail_Model_Folder $_folder
+     * @return integer
+     */
+    public function getTotalCount(Felamimail_Model_Folder $_folder)
+    {
+        $result = $this->_backend->searchCountByFolderId($_folder->getId());
+        return $result;
+    }
+    
     /***************************** protected funcs *******************************/
 
     /**
@@ -592,7 +604,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
                 if ($_folder->cache_totalcount > $_folder->imap_totalcount) {
                     // sanitize folder totalcount
-                    $_folder->cache_totalcount = $this->_backend->searchCountByFolderId($_folder->getId()); 
+                    $_folder->cache_totalcount = $this->getTotalCount($_folder); 
                 }
                 break;
             }

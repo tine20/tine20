@@ -109,7 +109,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @todo    allow to configure if messages should be moved to trash
      * @todo    move this to cache controller?
-     * @todo    decrease cache totalcount
      */
     public function deleteMessagesFromImapServer(Tinebase_Record_RecordSet $_messagesToDelete)
     {
@@ -150,7 +149,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Removing message " . $message->messageuid . ' from ' . $folder->globalname);
                         
                         $imapBackend->removeMessage($message->messageuid);
-                        $folder->cache_totalcount -= 1;
 
                     } catch (Zend_Mail_Storage_Exception $zmse) {
                         Tinebase_Core::getLogger()->warn(
@@ -171,7 +169,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                             $this->_createFolderIfNotExists($account, $trashFolder);
                         }
                         $imapBackend->moveMessage($message->messageuid, $trashFolder);
-                        $folder->cache_totalcount -= 1;
                         
                     } catch (Zend_Mail_Storage_Exception $zmse) {
                         
@@ -196,8 +193,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // reset old cache status and set new unread count
         foreach ($updatedFolders as $folderId => $updatedFolder) {
             $updatedFolder->cache_status = $oldCacheStatus[$folderId];
+            $updatedFolder->cache_totalcount = $this->_cacheController->getTotalCount($updatedFolder);
             $updatedFolder->cache_unreadcount = $this->_cacheController->getUnreadCount($updatedFolder);
-            Felamimail_Controller_Folder::getInstance()->update($updatedFolder);
+            $updatedFolder = Felamimail_Controller_Folder::getInstance()->update($updatedFolder);
+            
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder ' . $updatedFolder->globalname . ' after delete: ' . print_r($updatedFolder->toArray(), TRUE));
         }
     }
     
