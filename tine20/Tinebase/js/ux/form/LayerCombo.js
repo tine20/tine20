@@ -165,6 +165,7 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
         if (! this.innerForm) {
             this.innerForm = new Ext.form.FormPanel(Ext.apply({
                 //labelWidth: 30,
+                height: this.layerHeight || 'auto',
                 border: false,
                 cls: 'tw-editdialog',
                 items: this.getItems(),
