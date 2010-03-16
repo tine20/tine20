@@ -19,7 +19,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>Felamimail application obj</p>
  * <p>
  * TODO         make message caching flow work again
- * TODO         add credentials dialog on failure of folder store / updatefolderstatus
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -31,7 +30,7 @@ Ext.namespace('Tine.Felamimail');
  * @constructor
  * Create a new  Tine.Felamimail.Application
  */
- Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
+Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     
     /**
      * refresh time in milliseconds
@@ -226,9 +225,7 @@ Ext.namespace('Tine.Felamimail');
                 }
                 var result = this.updateMessageCache(folder);
             },
-            failure: function() {
-                // do nothing
-            }
+            failure: this.handleFailure
         });
     },
     
@@ -296,6 +293,7 @@ Ext.namespace('Tine.Felamimail');
         }
         
         // TODO add folder as arg
+        // TODO start delayed task again
         var delayTime = this.setCheckMailsRefreshTime(refreshRate);
         //this.checkMailsDelayedTask.delay(delayTime/*, folder?*/);
     },
@@ -314,7 +312,7 @@ Ext.namespace('Tine.Felamimail');
             var timestamp = record.get('imap_timestamp');
             return (record.get('account_id') == accountId && (timestamp == '' || timestamp.getElapsed() > 300000)); // 5 minutes
         });
-        //console.log(accountFolders);
+        console.log(accountFolders);
         accountFolders.each(function(record) {
             result.push(record.id);
         });
@@ -328,7 +326,8 @@ Ext.namespace('Tine.Felamimail');
      * @param {Tine.Felamimail.Model.Folder} folderData
      * @return {Tine.Felamimail.Model.Folder}
      * 
-     * TODO iterate record fields
+     * TODO iterate record fields -> do it like this:
+     * Ext.copyTo({}, attr, Tine.Tinebase.Model.Container.getFieldNames()); 
      */
     updateFolderInStore: function(newFolder) {
         
@@ -385,48 +384,36 @@ Ext.namespace('Tine.Felamimail');
      * @param {Object}  options
      * @param {Node}    node optional account node
      * @param {Boolean} handleException
-     * 
-     * TODO implement
      */
-    handleFailure: function(response, options, node, handleException) {
-        /*
+    handleFailure: function(response, options) {
         var responseText = Ext.util.JSON.decode(response.responseText);
-        var accountNode = (options.argument) ? options.argument.node : node;
-
-        // cancel loading
-        accountNode.loading = false;
-        accountNode.ui.afterLoad(accountNode);
         
         if (responseText.data.code == 902) {
             
-            // get account id and update username/password
-            var accountId = accountNode.attributes.account_id;
-            
-            // remove intelligent folders
-            accountNode.attributes.intelligent_folders = 0;
+            var jsonData = Ext.util.JSON.decode(options.jsonData);
+            var accountId = (jsonData.params.accountId) ? jsonData.params.accountId : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+            var account = Tine.Felamimail.loadAccountStore().getById(accountId);
                         
-            var credentialsWindow = Tine.widgets.dialog.CredentialsDialog.openWindow({
-                windowTitle: String.format(this.app.i18n._('IMAP Credentials for {0}'), accountNode.text),
-                appName: 'Felamimail',
-                credentialsId: accountId,
-                i18nRecordName: this.app.i18n._('Credentials'),
-                recordClass: Tine.Tinebase.Model.Credentials,
-                listeners: {
-                    scope: this,
-                    'update': function(data) {
-                        // update account node
-                        var account = Tine.Felamimail.loadAccountStore().getById(accountId);
-                        accountNode.attributes.intelligent_folders = account.get('intelligent_folders');
-                        accountNode.reload(function(callback) {
-                        }, this);
+            if (! Tine.Felamimail.credentialsDialog) {
+                Tine.Felamimail.credentialsDialog = Tine.widgets.dialog.CredentialsDialog.openWindow({
+                    windowTitle: String.format(this.i18n._('IMAP Credentials for {0}'), account.get('name')),
+                    appName: 'Felamimail',
+                    credentialsId: accountId,
+                    i18nRecordName: this.i18n._('Credentials'),
+                    recordClass: Tine.Tinebase.Model.Credentials,
+                    listeners: {
+                        scope: this,
+                        'update': function(data) {
+                            this.checkMails();
+                        }
                     }
-                }
-            });
+                });
+            }
             
-        } else if (handleException !== false) {
+        } else {
             Ext.Msg.show({
-               title:   this.app.i18n._('Error'),
-               msg:     (responseText.data.message) ? responseText.data.message : this.app.i18n._('No connection to IMAP server.'),
+               title:   this.i18n._('Error'),
+               msg:     (responseText.data.message) ? responseText.data.message : this.i18n._('No connection to IMAP server.'),
                icon:    Ext.MessageBox.ERROR,
                buttons: Ext.Msg.OK
             });
@@ -435,7 +422,6 @@ Ext.namespace('Tine.Felamimail');
             //var exception = responseText.data ? responseText.data : responseText;
             //Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
         }
-        */
     }
 });
 
