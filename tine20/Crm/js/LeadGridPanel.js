@@ -99,6 +99,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     getFilterToolbar: function() {
         var filters = [
             {label: _('Quick search'),  field: 'query',    operators: ['contains']},
+            {filtertype: 'tine.widget.container.filtermodel', app: this.app, recordClass: Tine.Crm.Model.Lead},
             {label: this.app.i18n._('Lead name'),   field: 'lead_name' },
             {label: this.app.i18n._('Leadstate'),   field: 'leadstate_id', valueType: 'combo',
                 displayField: 'leadstate', valueField: 'id', store: Tine.Crm.LeadState.getStore()},

@@ -43,6 +43,7 @@ Tine.Crm.TreePanel = function(config) {
     Ext.apply(this, config);
     
     this.id = 'CrmTreePanel';
+    this.filterMode = 'filterToolbar';
     this.recordClass = Tine.Crm.Model.Lead;
     Tine.Crm.TreePanel.superclass.constructor.call(this);
 };
