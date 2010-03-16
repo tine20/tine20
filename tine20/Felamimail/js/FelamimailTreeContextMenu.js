@@ -130,15 +130,14 @@ Tine.Felamimail.setTreeContextMenus = function() {
                         this.ctxNode.attributes.intelligent_folders = account.get('intelligent_folders');
                         this.accountStore.reload();
                         
-                        // reload tree node
-                        // TODO make this work again
+                        // TODO reload tree node + remove all folders of this account from store ?
+                        // TODO or call update folder status
                         /*
                         this.ctxNode.reload(function(callback) {
                         });
                         */
-                        
                         // update grid
-                        this.filterPlugin.onFilterChange();
+                        //this.filterPlugin.onFilterChange();
                     }
                 }
             });        
