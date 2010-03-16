@@ -233,7 +233,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             return $_folder;
         }
         
-        if ($_imap && $_imap instanceof Felamimail_Backend_Imap) {
+        if ($_imap && $_imap instanceof Felamimail_Backend_ImapProxy) {
             
             // get folder values / status from imap server
             try {
@@ -246,7 +246,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting status and values for folder ' . $_folder->globalname);
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cache folder status: ' . print_r($_folder->toArray(), TRUE));
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapFolderValues, TRUE));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapFolderValues, TRUE));
             
             // check validity
             if ($_folder->imap_uidvalidity != 0 && $_folder->imap_uidvalidity != $imapFolderValues['uidvalidity']) {
@@ -264,13 +264,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                     $_folder->imap_uidnext = $imapFolderValues['uidnext'];
                 }
                 
-                // @todo remov it -> is done when something happens with the message cache (delete/add/move)
-                /*
-                $messageCacheBackend = new Felamimail_Backend_Cache_Sql_Message();
-                $_folder->cache_totalcount = $messageCacheBackend->searchCountByFolderId($_folder->getId());
-                $_folder->cache_unreadcount = $_folder->cache_totalcount - $messageCacheBackend->seenCountByFolderId($_folder->getId());
-                */
-                
                 // update cache status if we need to do something
                 if (
                     ($_folder->imap_totalcount != $_folder->cache_totalcount || $_folder->imap_uidnext != $_folder->cache_uidnext)
@@ -282,6 +275,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             }
             
         } else {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' IMAP connection lost while getting folder status for ' . $_folder->globalname);
             $_folder->imap_status        = Felamimail_Model_Folder::IMAP_STATUS_DISCONNECT;
         }
         

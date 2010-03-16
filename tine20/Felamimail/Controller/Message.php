@@ -639,10 +639,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string                    $_folderId
      * @param Felamimail_Backend_Folder &$_folder
      * @param boolean                   $_select
-     * @param Felamimail_Backend_Imap   $_imapBackend
-     * @return NULL|Felamimail_Backend_Imap
+     * @param Felamimail_Backend_ImapProxy   $_imapBackend
+     * @return NULL|Felamimail_Backend_ImapProxy
      */
-    protected function _getBackendAndSelectFolder($_folderId = NULL, &$_folder = NULL, $_select = TRUE, $_imapBackend = NULL)
+    protected function _getBackendAndSelectFolder($_folderId = NULL, &$_folder = NULL, $_select = TRUE, Felamimail_Backend_ImapProxy $_imapBackend = NULL)
     {
         $imapBackend = $_imapBackend;
         

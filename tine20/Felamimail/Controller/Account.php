@@ -423,11 +423,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * get imap server capabilities and save delimiter / personal namespace in account
      *
      * @param Felamimail_Model_Account $_account
-     * @param Felamimail_Backend_Imap $_imapBackend
+     * @param Felamimail_Backend_ImapProxy $_imapBackend
      * @param string $_delimiter
      * @return Felamimail_Model_Account
      */
-    public function updateCapabilities($_account, $_imapBackend = NULL, $_delimiter = NULL)
+    public function updateCapabilities($_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL, $_delimiter = NULL)
     {
         if ($_imapBackend === NULL) {
             try {

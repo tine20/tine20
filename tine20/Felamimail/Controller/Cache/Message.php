@@ -533,10 +533,10 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      * 
      * @param Felamimail_Model_Folder $_folder
      * @param integer $_time
-     * @param Felamimail_Backend_Imap $_imap
+     * @param Felamimail_Backend_ImapProxy $_imap
      * @return void
      */
-    protected function _syncDeletedMessages(Felamimail_Model_Folder $_folder, $_time, Felamimail_Backend_Imap $_imap)
+    protected function _syncDeletedMessages(Felamimail_Model_Folder $_folder, $_time, Felamimail_Backend_ImapProxy $_imap)
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Syncing deleted messages in folder ' . $_folder->globalname);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' before deleted sync: ' . print_r($_folder->toArray(), TRUE));

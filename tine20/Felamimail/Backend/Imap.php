@@ -42,57 +42,36 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      *   - ssl 'SSL' or 'TLS' for secure sockets
      *   - folder select this folder [optional, default = 'INBOX']
      *
-     * @param  array $params mail reader specific parameters
-     * @throws Zend_Mail_Storage_Exception
-     * @throws Felamimail_Exception_InvalidCredentials
+     * @param  object $params mail reader specific parameters
      */
     public function __construct($params)
     {
-        if (is_array($params)) {
-            $params = (object)$params;
-        }
-
         $this->_has['flags'] = true;
-
-        if ($params instanceof Zend_Mail_Protocol_Imap) {
-            $this->_protocol = $params;
-            try {
-                $this->selectFolder('INBOX');
-            } catch(Zend_Mail_Storage_Exception $e) {
-                /**
-                 * @see Zend_Mail_Storage_Exception
-                 */
-                require_once 'Zend/Mail/Storage/Exception.php';
-                throw new Zend_Mail_Storage_Exception('cannot select INBOX, is this a valid transport?');
-            }
-            return;
-        }
-
-        if (!isset($params->user)) {
-            /**
-             * @see Felamimail_Exception_InvalidCredentials
-             */
-            throw new Felamimail_Exception_InvalidCredentials('Need at least user in params.');
-        }
 
         $this->_messageClass = 'Felamimail_Message';
         $this->_useUid = true;
         
-        $host     = isset($params->host)     ? $params->host     : 'localhost';
-        $password = isset($params->password) ? $params->password : '';
-        $port     = isset($params->port)     ? $params->port     : null;
-        $ssl      = isset($params->ssl)      ? $params->ssl      : false;
-
         $this->_protocol = new Felamimail_Protocol_Imap();
-        $this->_protocol->connect($host, $port, $ssl);
-        if (!$this->_protocol->login($params->user, $password)) {
-            /**
-             * @see Felamimail_Exception_InvalidCredentials
-             */
-            throw new Felamimail_Exception_InvalidCredentials('Cannot login, user or password wrong.');
-        }
+        $this->_protocol->connect($params->host, $params->port, $params->ssl);
+        $this->login($params->user, $params->password);
+        
         $this->selectFolder(isset($params->folder) ? $params->folder : 'INBOX');
     }
+    
+    /**
+     * login to imap server
+     * 
+     * @param string $_user
+     * @param string $_password
+     * @return void
+     * @throws Felamimail_Exception_InvalidCredentials
+     */
+    public function login($_user, $_password)
+    {
+        if (! $this->_protocol->login($_user, $_password)) {
+            throw new Felamimail_Exception_InvalidCredentials('Cannot login, user or password wrong.');
+        }        
+    }    
     
     /**
      * select given folder

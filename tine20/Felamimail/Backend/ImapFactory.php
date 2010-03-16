@@ -26,7 +26,7 @@ class Felamimail_Backend_ImapFactory
      * factory function to return a selected account/imap backend class
      *
      * @param   string|Felamimail_Model_Account $_accountId
-     * @return  Felamimail_Backend_Imap
+     * @return  Felamimail_Backend_ImapProxy
      */
     static public function factory($_accountId)
     {
@@ -45,7 +45,7 @@ class Felamimail_Backend_ImapFactory
                 . ' Connecting to server ' . $imapConfig['host'] . ':' . $imapConfig['port'] 
                 . ' with username ' . $imapConfig['user']);
             
-            self::$_backends[$accountId] = new Felamimail_Backend_Imap($imapConfig);
+            self::$_backends[$accountId] = new Felamimail_Backend_ImapProxy($imapConfig);
         }
         
         return self::$_backends[$accountId];
