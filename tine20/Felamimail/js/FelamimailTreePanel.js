@@ -110,7 +110,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             onNodeOver : function(n, dd, e, data) {
                 var node = n.node;
                 
-                // auto node expand check
+                // auto node expand check (only for non-account nodes)
+                //console.log(node);
                 if(node.hasChildNodes() && !node.isExpanded()){
                     this.queueExpand(node);
                 }
@@ -314,10 +315,10 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 ids: ids
             },
             scope: this,
-            success: function(_result, _request){
-                // TODO return folder status of both folders here
-                // update folder status of both folders
-                //this.updateFolderStatus([dropEvent.target, selectedNode]);
+            success: function(result, request) {
+                // update source folder
+                var newRecord = Tine.Felamimail.folderBackend.recordReader(result);
+                this.app.updateFolderInStore(newRecord);
             }
         });
         
