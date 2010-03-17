@@ -183,7 +183,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     updateFolderStatus: function(folder) {
         
         if (Ext.isString(folder)) {
-        //if (folder && folder.split) {
             var index = this.getFolderStore().find('globalname', folder);
             if (index >= 0) {
                 folder = this.getFolderStore().getAt(index);
