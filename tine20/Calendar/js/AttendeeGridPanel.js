@@ -74,7 +74,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
         
-        this.title = this.app.i18n._('Attendee');
+        this.title = this.hasOwnProperty('title') ? this.title : this.app.i18n._('Attendee');
         this.plugins = this.plugins || [];
         if (! this.showNamesOnly) {
             this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
