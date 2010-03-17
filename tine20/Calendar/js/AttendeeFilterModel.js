@@ -101,7 +101,8 @@ Tine.Calendar.AttendeeFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo,
     getItems: function() {
         
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({
-            height: this.layerHeight || 'auto'
+            height: this.layerHeight || 'auto',
+            showNamesOnly: true
         });
         var items = [this.attendeeGridPanel];
         
