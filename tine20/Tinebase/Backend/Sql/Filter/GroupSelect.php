@@ -56,9 +56,8 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
      */
     public function __call($_name, $_arguments)
     {
-        call_user_func_array(array($this->_select, $_name), $_arguments);
+        return call_user_func_array(array($this->_select, $_name), $_arguments);
     }
-    
     
     /**
      * Adds a WHERE condition to the query by AND.
