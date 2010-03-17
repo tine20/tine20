@@ -169,6 +169,7 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
     
     return [
         {label: _('Quick search'), field: 'query', operators: ['contains']},
+        {filtertype: 'calendar.attendee'},
         {filtertype: 'calendar.attendeestatus'},
         {filtertype: 'tinebase.tag', app: app}
     ];
