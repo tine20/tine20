@@ -88,9 +88,9 @@ Tine.Calendar.AttendeeFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo,
     initComponent: function() {
         this.fakeRecord = new Tine.Calendar.Model.Event(Tine.Calendar.Model.Event.getDefaultData());
         
-        this.supr().initComponent.call(this);
-        
         this.on('beforecollapse', this.onBeforeCollapse, this);
+        
+        this.supr().initComponent.call(this);
     },
     
     getFormValue: function() {
