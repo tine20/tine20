@@ -38,7 +38,34 @@ Ext.namespace('Tine.Felamimail');
  * Create a new Tine.Felamimail.TreePanel
  * 
  */
-Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
+Tine.Felamimail.TreePanel = function(config) {
+    Ext.apply(this, config);
+    
+    this.addEvents(
+        /**
+         * @event containeradd
+         * Fires when a folder was added
+         * @param {folder} the new folder
+         */
+        'containeradd',
+        /**
+         * @event containerdelete
+         * Fires when a folder got deleted
+         * @param {folder} the deleted folder
+         */
+        'containerdelete',
+        /**
+         * @event containerrename
+         * Fires when a folder got renamed
+         * @param {folder} the renamed folder
+         */
+        'containerrename'
+    );
+        
+    Tine.Felamimail.TreePanel.superclass.constructor.call(this);
+};
+
+Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
 	
     /**
      * @property app
@@ -139,6 +166,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforenodedrop, this);
         this.on('append', this.onAppend, this);
+        this.on('containeradd', this.onFolderAdd, this);
+        this.on('containerdelete', this.onFolderDelete, this);
 	},
     
     /**
@@ -376,6 +405,26 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
 
         // silent commit
         record.commit(true);
+    },
+    
+    /**
+     * add new folder to the store
+     * 
+     * @param {Object} folderData
+     */
+    onFolderAdd: function(folderData) {
+        var recordData = Ext.copyTo({}, folderData, Tine.Felamimail.Model.Folder.getFieldNames());
+        var newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: Ext.util.JSON.encode(recordData)});
+        this.folderStore.add([newRecord]);
+    },
+
+    /**
+     * remove deleted folder from the store
+     * 
+     * @param {Object} folderData
+     */
+    onFolderDelete: function(folderData) {
+        this.folderStore.remove(this.folderStore.getById(folderData.id));
     },
     
     /********************* helpers *****************************/
