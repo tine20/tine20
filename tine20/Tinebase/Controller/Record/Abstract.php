@@ -665,6 +665,12 @@ abstract class Tinebase_Controller_Record_Abstract
                     Tinebase_Model_Grants::GRANT_ADMIN,
                 ));
                 break;
+            case 'sync':
+                $_filter->setRequiredGrants(array(
+                    Tinebase_Model_Grants::GRANT_SYNC,
+                    Tinebase_Model_Grants::GRANT_ADMIN,
+                ));
+                break;
             default:
                 throw new Tinebase_Exception_UnexpectedValue('Unknown action: ' . $_action);
         }
