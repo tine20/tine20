@@ -58,7 +58,6 @@ Tine.Calendar.AttendeeFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             renderTo: el
         });
         value.on('select', this.onFiltertrigger, this);
-        
         return value;
     }
 });
@@ -89,6 +88,9 @@ Tine.Calendar.AttendeeFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo,
     initComponent: function() {
         this.fakeRecord = new Tine.Calendar.Model.Event(Tine.Calendar.Model.Event.getDefaultData());
         
+        this.supr().initComponent.call(this);
+        
+        this.on('beforecollapse', this.onBeforeCollapse, this);
     },
     
     getFormValue: function() {
@@ -104,6 +106,13 @@ Tine.Calendar.AttendeeFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo,
         var items = [this.attendeeGridPanel];
         
         return items;
+    },
+    
+    /**
+     * cancel collapse if ctx menu is shown
+     */
+    onBeforeCollapse: function() {
+        return !this.attendeeGridPanel.ctxMenu || this.attendeeGridPanel.ctxMenu.hidden;
     },
     
     /**
