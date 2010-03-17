@@ -313,13 +313,13 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * delete all messages in one folder -> be careful, they are completly removed and not moved to trash
      *
      * @param string $_folderId
-     * @return void
+     * @return Felamimail_Model_Folder
+     * @throws Felamimail_Exception_ServiceUnavailable
      */
     public function emptyFolder($_folderId)
     {
         $folder = $this->_backend->get($_folderId);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
-        Felamimail_Controller_Cache_Message::getInstance()->clear($_folderId);
         
         try {
             // try to delete messages in imap folder
@@ -339,7 +339,11 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
 
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
+            throw new Felamimail_Exception_ServiceUnavailable();
         }
+        
+        $folder = Felamimail_Controller_Cache_Message::getInstance()->clear($_folderId);
+        return $folder;
     }
     
     /**
