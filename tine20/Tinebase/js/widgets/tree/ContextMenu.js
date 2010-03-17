@@ -64,9 +64,7 @@ Tine.widgets.tree.ContextMenu = {
                                 var nodeData = Ext.util.JSON.decode(_result.responseText);
                                 var newNode = this.loader.createNode(nodeData);
                                 parentNode.appendChild(newNode);
-                                if (config.backendModel == 'Container') {
-                                    this.fireEvent('containeradd', nodeData);
-                                }
+                                this.fireEvent('containeradd', nodeData);
                                 Ext.MessageBox.hide();
                             }
                         });
@@ -111,6 +109,8 @@ Tine.widgets.tree.ContextMenu = {
                                     node.remove();
                                     if (config.backendModel == 'Container') {
                                         this.fireEvent('containerdelete', node.attributes.container);
+                                    } else {
+                                        this.fireEvent('containerdelete', node.attributes);
                                     }
                                     Ext.MessageBox.hide();
                                 }
