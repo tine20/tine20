@@ -102,6 +102,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
                             var nodeData = Ext.util.JSON.decode(_result.responseText);
                             var newNode = this.loader.createNode(nodeData);
                             parentNode.appendChild(newNode);
+                            this.fireEvent('containeradd', nodeData);
                             Ext.MessageBox.hide();
                         }
                     });
@@ -176,19 +177,21 @@ Tine.Felamimail.setTreeContextMenus = function() {
         backendModel: 'Folder'
     };
     
+    // TODO update other actions again?
+    
     // system folder ctx menu
 
-    config.actions = ['add', updateCacheConfigAction, reloadFolderAction, reloadFolderCacheAction];
+    config.actions = ['add'/*, updateCacheConfigAction, reloadFolderAction, reloadFolderCacheAction*/];
     this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // user folder ctx menu
 
-    config.actions = ['add', 'rename', updateCacheConfigAction, reloadFolderAction, reloadFolderCacheAction, 'delete'];
+    config.actions = ['add', 'rename', /*updateCacheConfigAction, reloadFolderAction, reloadFolderCacheAction, */'delete'];
     this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // trash ctx menu
     
-    config.actions = ['add', emptyFolderAction, reloadFolderAction, reloadFolderCacheAction];
+    config.actions = ['add', emptyFolderAction /*, reloadFolderAction, reloadFolderCacheAction */];
     this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // account ctx menu
