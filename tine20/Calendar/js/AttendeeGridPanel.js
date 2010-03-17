@@ -40,6 +40,14 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     currentAccountId: null,
     
     /**
+     * ctx menu
+     * 
+     * @type Ext.menu.Menu
+     * @property ctxMenu
+     */
+    ctxMenu: null,
+    
+    /**
      * store to hold all attendee
      * 
      * @type Ext.data.Store
@@ -297,7 +305,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 return;
             }
                         
-            var menu = new Ext.menu.Menu({
+            this.ctxMenu = new Ext.menu.Menu({
                 items: [{
                     text: this.app.i18n._('Remove Attender'),
                     iconCls: 'action_delete',
@@ -309,7 +317,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     
                 }]
             });
-            menu.showAt(e.getXY());
+            this.ctxMenu.showAt(e.getXY());
         }
     },
     
