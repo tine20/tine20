@@ -114,7 +114,9 @@ Tine.Calendar.AttendeeFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo,
      * cancel collapse if ctx menu is shown
      */
     onBeforeCollapse: function() {
-        return !this.attendeeGridPanel.ctxMenu || this.attendeeGridPanel.ctxMenu.hidden;
+        
+        return (!this.attendeeGridPanel.ctxMenu || this.attendeeGridPanel.ctxMenu.hidden) &&
+                !this.attendeeGridPanel.editing;
     },
     
     /**
