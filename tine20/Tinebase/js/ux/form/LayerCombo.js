@@ -18,7 +18,21 @@ Ext.ns('Ext.ux.form.');
  * 
  * trigger field with support for extra layer on trigger click
  */
-Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
+Ext.ux.form.LayerCombo = function(config) {
+    Ext.ux.form.LayerCombo.superclass.constructor.call(this, config);
+    
+    this.addEvents(
+        /**
+         * @event beforecollapse
+         * Fires before the layer is collapsed by calling the {@link #collapse} method.
+         * Return false from an event handler to stop the collapse.
+         * @param {LayerCombo} this
+         */
+        'beforecollapse'
+    );
+};
+
+Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
     /**
      * @cfg {Boolean} hideButton Hide standard form buttons 
      */
@@ -89,10 +103,12 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
         if(!this.isExpanded()){
             return;
         }
-        this.layer.hide();
-        Ext.getDoc().un('mousewheel', this.collapseIf, this);
-        Ext.getDoc().un('mousedown', this.collapseIf, this);
-        this.fireEvent('collapse', this);
+        if(this.fireEvent('beforecollapse', this) !== false){
+            this.layer.hide();
+            Ext.getDoc().un('mousewheel', this.collapseIf, this);
+            Ext.getDoc().un('mousedown', this.collapseIf, this);
+            this.fireEvent('collapse', this);
+        }
     },
     
     
@@ -202,7 +218,6 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
     },
     
     initComponent: function() {
-        
         Ext.ux.form.LayerCombo.superclass.initComponent.apply(this, arguments);
     },
 
