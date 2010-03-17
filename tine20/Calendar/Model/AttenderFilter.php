@@ -56,7 +56,20 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                     );
                 }
         }
-
+        
+        $value = array();
+        foreach($this->_value as $attender) {
+            // make shure values had on roundrobin with attender model
+            // so we are shure to deal with correct values
+            if (! $attender instanceof Calendar_Model_Attender) {
+                $attender = new Calendar_Model_Attender($attender);
+            }
+            $value[] = array(
+                'user_type' => $attender->user_type,
+                'user_id'   => $attender->user_id,
+            );
+        }
+        $this->_value = $value;
     }
     
     /**
