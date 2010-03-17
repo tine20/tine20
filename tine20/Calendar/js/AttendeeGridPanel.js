@@ -24,6 +24,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     enableHdMenu: false,
     
     /**
+     * @cfg {Boolean} showNamesOnly
+     * true to only show types and names in the list
+     */
+    showNamesOnly: false,
+    
+    /**
      * The record currently being edited
      * 
      * @type Tine.Calendar.Model.Event
@@ -58,6 +64,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     stateful: true,
     stateId: 'cal-attendeegridpanel',
     //stateEvents: ['sortchange', ],
+    applyState: Ext.emptyFn,
     //applyState: function(state) {
     //    console.log(state);
     //},
@@ -69,7 +76,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.title = this.app.i18n._('Attendee');
         this.plugins = this.plugins || [];
-        this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
+        if (! this.showNamesOnly) {
+            this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
+        }
         
         this.store = new Ext.data.SimpleStore({
             fields: Tine.Calendar.Model.Attender.getFieldDefinitions(),
@@ -90,7 +99,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             dataIndex: 'role',
             width: 70,
             sortable: true,
-            hidden: true,
+            hidden: this.showNamesOnly || true,
             header: this.app.i18n._('Role'),
             renderer: this.renderAttenderRole.createDelegate(this)
         },/* {
@@ -98,7 +107,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             dataIndex: 'quantity',
             width: 40,
             sortable: true,
-            hidden: true,
+            hidden: this.showNamesOnly || true,
             header: '&#160;',
             tooltip: this.app.i18n._('Quantity'),
             renderer: this.renderAttenderQuantity.createDelegate(this)
@@ -107,7 +116,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             dataIndex: 'displaycontainer_id',
             width: 200,
             sortable: false,
-            hidden: true,
+            hidden: this.showNamesOnly || true,
             header: Tine.Tinebase.translation._hidden('Saved in'),
             tooltip: this.app.i18n._('This is the calendar where the attender has saved this event in'),
             renderer: this.renderAttenderDispContainer.createDelegate(this),
@@ -171,6 +180,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             width: 100,
             sortable: true,
             header: this.app.i18n._('Status'),
+            hidden: this.showNamesOnly,
             renderer: this.renderAttenderStatus.createDelegate(this),
             editor: new Ext.form.ComboBox({
                 blurOnSelect  : true,
