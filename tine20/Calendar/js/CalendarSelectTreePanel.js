@@ -29,16 +29,13 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
     ddGroup: 'cal-event',
     
     initComponent: function() {
+        
         this.selModel = new Ext.ux.tree.CheckboxSelectionModel({
             activateLeafNodesOnly : true,
             optimizeSelection: true
         });
         
         /*
-        this.loader = new Tine.Calendar.CalendarSelectTreeLoader({
-            appName: this.appName
-        });
-        */
         // inject resources tree node
         this.extraItems = [{
             text: String.format(this.app.i18n._('Resources {0}'), this.containersName),
@@ -47,10 +44,11 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
             children: null,
             leaf: null
         }];
+        */
         
         this.supr().initComponent.call(this);
         
-        this.loader.processResponse = this.processResponse.createDelegate(this);
+        //this.loader.processResponse = this.processResponse.createDelegate(this);
     },
     
     afterRender: function() {
@@ -59,13 +57,15 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         this.selectContainerPath('/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId);
     },
     
+    /*
     applyState: function(state) {
         this.expandPaths = state;
     },
+    */
     
     /**
      * returns a filter plugin to be used in a grid
-     */
+     *
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
             this.filterPlugin = new Tine.widgets.container.TreeFilterPlugin({
@@ -94,7 +94,9 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         
         return this.filterPlugin;
     },
+    */
     
+    /*
     getState: function() {
         var checkedPaths = [];
         Ext.each(this.getChecked(), function(node) {
@@ -103,6 +105,7 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         
         return checkedPaths;
     },
+    */
     
     /**
      * adopt attr
@@ -116,10 +119,12 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
             attr.container.capabilites_private = true;
         }
         
+        /*
         if (attr.id && attr.id.match(/resource/i)) {
             // don't add colors to resources yet
             return;
         }
+        */
         
         attr.listeners = {
             append: function(tree, node, appendedNode, index) {
@@ -138,14 +143,14 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
                 }
             }
         };
-    },
+    }
     
     /**
      * returns params for async request
      * 
      * @param {Ext.tree.TreeNode} node
      * @return {Object}
-     */
+     *
     onBeforeLoad: function(node) {
         if (node.attributes.id.match(/resource/i)) {
             return {
@@ -156,7 +161,9 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         
         return this.supr().onBeforeLoad.apply(this, arguments);
     },
+    */
     
+    /*
     processResponse: function(response, node, callback, scope) {
         if (node.attributes.id.match(/resource/i)) {
             var o = response.responseData = response.responseData || Ext.decode(response.responseText);
@@ -175,4 +182,5 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         
         return Tine.widgets.tree.Loader.prototype.processResponse.apply(this.loader, arguments);
     }
+    */
 });
