@@ -257,7 +257,7 @@
                 $messageSubject = sprintf($translate->_('Event invitation "%1$s" at %2$s'), $_event->summary, $startDateString);
                 break;
             case 'deleted':
-                $messageSubject = sprintf($translate->_('Event "%1$s" at %s has been canceled' ), $_event->summary, $startDateString);
+                $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been canceled' ), $_event->summary, $startDateString);
                 break;
             case 'changed':
                 switch ($_notificationLevel) {
