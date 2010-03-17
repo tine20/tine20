@@ -143,7 +143,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                 $preference->value      = 5;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>';
-                for ($i = 0; $i < 21; $i++) {
+                for ($i = 1; $i <= 20; $i++) {
                     $preference->options .= '<option>
                         <label>'. $i . '</label>
                         <value>'. $i . '</value>
