@@ -148,7 +148,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 if(node.hasChildNodes() && !node.isExpanded()){
                     this.queueExpand(node);
                 }
-                return node.attributes.allowDrop ? "x-tree-drop-ok-append" : false;
+                return node.attributes.allowDrop ? 'tinebase-tree-drop-move' : false;
             },
             isValidDropPoint: function(n, dd, e, data){
                 return n.node.attributes.allowDrop;
