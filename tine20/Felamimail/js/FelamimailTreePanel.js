@@ -111,8 +111,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 var node = n.node;
                 
                 // auto node expand check (only for non-account nodes)
-                //console.log(node);
-                if(node.hasChildNodes() && !node.isExpanded()){
+                if(node.attributes.allowDrop && node.hasChildNodes() && !node.isExpanded()){
                     this.queueExpand(node);
                 }
                 return node.attributes.allowDrop ? 'tinebase-tree-drop-move' : false;
