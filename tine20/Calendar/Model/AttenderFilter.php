@@ -57,19 +57,9 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                 }
         }
         
-        $value = array();
-        foreach($this->_value as $attender) {
-            // make shure values had on roundrobin with attender model
-            // so we are shure to deal with correct values
-            if (! $attender instanceof Calendar_Model_Attender) {
-                $attender = new Calendar_Model_Attender($attender);
-            }
-            $value[] = array(
-                'user_type' => $attender->user_type,
-                'user_id'   => $attender->user_id,
-            );
+        if (! $this->_value instanceof Tinebase_Record_RecordSet) {
+            $this->_value = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $this->_value);
         }
-        $this->_value = $value;
     }
     
     /**
@@ -108,5 +98,26 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
             }
         }
         $gs->appendWhere(Zend_Db_Select::SQL_OR);
+    }
+    
+    /**
+     * returns array with the filter settings of this filter
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false)
+    {
+        if ($_valueToJson) {
+            Calendar_Model_Attender::resolveAttendee($this->_value);
+        }
+        
+        $result = array(
+            'field'     => $this->_field,
+            'operator'  => $this->_operator,
+            'value'     => $this->_operator == 'equals' ? $this->_value[0]->toArray($_valueToJson) : $this->_value->toArray($_valueToJson)
+        );
+        
+        return $result;
     }
 }
