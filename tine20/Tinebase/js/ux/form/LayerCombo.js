@@ -107,6 +107,12 @@ Ext.ux.form.LayerCombo = Ext.extend(Ext.form.TriggerField, {
     },
     
     /**
+     * this fn is here so this filed is detected like a combo
+     * @private
+     */
+    doQuery: Ext.emptyFn,
+    
+    /**
      * Expands the dropdown layer if it is currently hidden. Fires the {@link #expand} event on completion.
      */
     expand: function() {
