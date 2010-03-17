@@ -152,6 +152,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
 
     /**
      * set this.checkMailDelayTime
+     * 
      * @param {} mode fast|slow
      */
     setCheckMailsRefreshTime: function(mode) {
@@ -162,7 +163,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 // convert to milliseconds
                 this.checkMailDelayTime = 60000*updateInterval;
             } else {
-                // TODO what shall we de if pref is set to 0?
                 this.checkMailDelayTime = 1200000; // 20 minutes
             }
         } else {
@@ -213,8 +213,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 },
                 scope: this,
                 timeout: 60000, // 1 minute
-                success: function(_result, _request) {
-                    var result = Tine.Felamimail.folderBackend.getReader().readRecords(Ext.util.JSON.decode(_result.responseText));
+                success: function(result, request) {
+                    var result = Tine.Felamimail.folderBackend.getReader().readRecords(Ext.util.JSON.decode(result.responseText));
                     //console.log(result);
                     for (var i = 0; i < result.records.length; i++) {
                         this.updateFolderInStore(result.records[i]);
@@ -254,6 +254,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         //console.log(folder);
         if (folder && (folder.get('cache_status') == 'incomplete' || folder.get('cache_status') == 'invalid')) {
             folderId = folder.id;
+            refreshRate = 'fast';
             
         } else if (! singleFolderUpdate) {
             folderId = this.getNextFolderToUpdate();
@@ -262,6 +263,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 // nothing left to do for the moment! -> set refresh rate to 'slow'
                 //console.log('finished for the moment');
                 refreshRate = 'slow';
+            } else {
+                refreshRate = 'fast';
             }
         }
         
@@ -275,6 +278,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     folderId: folderId,
                     time: 10
                 },
+                timeout: 60000, // 1 minute
                 scope: this,
                 success: function(result, request) {
                     var newRecord = Tine.Felamimail.folderBackend.recordReader(result);
