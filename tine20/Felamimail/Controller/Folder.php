@@ -57,6 +57,13 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     protected $_backend = NULL;
     
     /**
+     * cache controller
+     *
+     * @var Felamimail_Controller_Cache_Folder
+     */
+    protected $_cacheController = NULL;
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Felamimail_Controller_Folder
@@ -71,6 +78,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     private function __construct() {
         $this->_currentAccount = Tinebase_Core::getUser();
         $this->_backend = new Felamimail_Backend_Folder();
+        $this->_cacheController = Felamimail_Controller_Cache_Folder::getInstance();
     }
     
     /**
@@ -121,7 +129,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $result = $this->_backend->search($filter);
         if (count($result) == 0) {
             // try to get folders from imap server
-            $result = Felamimail_Controller_Cache_Folder::getInstance()->update($filterValues['account_id'], $filterValues['globalname']);
+            $result = $this->_cacheController->update($filterValues['account_id'], $filterValues['globalname']);
         }             
         
         $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['account_id']] = count($result);
@@ -166,28 +174,41 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param string $_parentFolder
      * @param string $_accountId [optional]
      * @return Felamimail_Model_Folder
+     * @throws Felamimail_Exception_ServiceUnavailable
      */
     public function create($_accountId, $_folderName, $_parentFolder = '')
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to create new folder: ' . $_parentFolder . $this->_delimiter . $_folderName );
-        
-        $imap = Felamimail_Backend_ImapFactory::factory($account);
-        $imap->createFolder($_folderName, (empty($_parentFolder)) ? NULL : $_parentFolder, $this->_delimiter);
-        
         $globalname = (empty($_parentFolder)) ? $_folderName : $_parentFolder . $this->_delimiter . $_folderName;
         
-        // create new folder
-        $folder = new Felamimail_Model_Folder(array(
-            'localname'     => $_folderName,
-            'globalname'    => $globalname,
-            'account_id'    => $_accountId,
-            'parent'        => $_parentFolder
-        ));
-        
-        $folder = $this->_backend->create($folder);
+        try {
+            $imap = Felamimail_Backend_ImapFactory::factory($account);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to create new folder: ' . $globalname);
+            $imap->createFolder($_folderName, (empty($_parentFolder)) ? NULL : $_parentFolder, $this->_delimiter);
+
+            // create new folder
+            $folder = new Felamimail_Model_Folder(array(
+                'localname'     => $_folderName,
+                'globalname'    => $globalname,
+                'account_id'    => $_accountId,
+                'parent'        => $_parentFolder
+            ));
+            
+            $folder = $this->_backend->create($folder);
+            
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            // perhaps the folder already exists
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Could not create new folder: ' . $globalname . ' (' . $zmse->getMessage() . ')');
+            
+            // reload folder cache of parent
+            $parentSubs = $this->_cacheController->update($_accountId, $_parentFolder);
+            $folder = $parentSubs->filter('globalname', $globalname)->getFirstRecord();
+            if ($folder === NULL) {
+                throw new Felamimail_Exception_ServiceUnavailable();
+            }
+        }
         
         // update parent (has_children)
         $this->_updateHasChildren($_accountId, $_parentFolder, 1);
@@ -211,6 +232,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      *
      * @param string $_accountId
      * @param string $_folderName globalName (complete path) of folder to delete
+     * @return void
      * 
      * @todo check if folder has subfolders
      */
@@ -225,11 +247,13 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             );
             
             //-- check if folders has subfolders and throw exception if that is the case
+            return;
         }
         
         try {
             $folder = $this->_backend->getByBackendAndGlobalName($_accountId, $_folderName);
             $this->_backend->delete($folder->getId());
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleted folder ' . $_folderName);
             $this->_updateHasChildren($_accountId, $folder->parent);
         } catch (Tinebase_Exception_NotFound $tenf) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Trying to delete non-existant folder ' . $_folderName);
