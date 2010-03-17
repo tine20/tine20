@@ -15,6 +15,7 @@ Ext.namespace('Tine.Felamimail');
  * get felamimail tree panel context menus
  * this is used in Tine.Felamimail.TreePanel (with createDelegate)
  * 
+ * TODO reactivate some folder actions
  * TODO update folder in store/ update folder cache after ctx menu actions
  * TODO use Ext.apply to get this
  */
@@ -56,10 +57,10 @@ Tine.Felamimail.setTreeContextMenus = function() {
                     folderId: this.ctxNode.attributes.folder_id
                 },
                 scope: this,
-                success: function(_result, _request){
+                success: function(result, request){
                     if (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id) {
-                        // TODO update folder store
-                        //this.updateFolderStatus([this.ctxNode]);
+                        var newRecord = Tine.Felamimail.folderBackend.recordReader(result);
+                        this.app.updateFolderInStore(newRecord);
                     }
                     this.ctxNode.getUI().removeClass("x-tree-node-loading");
                 },
