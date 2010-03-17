@@ -9,6 +9,9 @@
  * @version     $Id$
  */
 
+/***************** NOTE: not yet active *****************/
+
+
 /**
  * Test helper
  */
