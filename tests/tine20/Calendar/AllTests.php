@@ -33,6 +33,7 @@ class Calendar_AllTests
     public static function suite ()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar All Tests');
+        $suite->addTestSuite('Calendar_Model_AttenderFilterTests');
         $suite->addTestSuite('Calendar_RruleTests');
         $suite->addTestSuite('Calendar_Backend_SqlTests');
         $suite->addTestSuite('Calendar_Controller_EventTests');
