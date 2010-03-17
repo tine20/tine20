@@ -111,7 +111,6 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
     /**
      * create a mail folder on the server
      *
-     *
      */
     public function testCreateFolder()
     {
@@ -122,6 +121,11 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('INBOX/test', $newFolder->globalname);
         
         $this->_foldersToDelete[] = 'INBOX/test';
+        
+        // get inbox folder and do more checks -> inbox should have children now
+        $result = $this->_controller->search($this->_getFolderFilter(''));
+        $inboxFolder = $result->filter('localname', 'INBOX')->getFirstRecord();
+        $this->assertTrue($inboxFolder->has_children == 1);
         
         // search for subfolders
         $resultInboxSub = $this->_controller->search($this->_getFolderFilter());

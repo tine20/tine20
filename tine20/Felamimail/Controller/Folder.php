@@ -175,7 +175,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to create new folder: ' . $_parentFolder . $this->_delimiter . $_folderName );
         
         $imap = Felamimail_Backend_ImapFactory::factory($account);
-        $imap->createFolder($_folderName, (empty($_parentFolder)) ? NULL : $_parentFolder , $this->_delimiter);
+        $imap->createFolder($_folderName, (empty($_parentFolder)) ? NULL : $_parentFolder, $this->_delimiter);
         
         $globalname = (empty($_parentFolder)) ? $_folderName : $_parentFolder . $this->_delimiter . $_folderName;
         
@@ -185,9 +185,13 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             'globalname'    => $globalname,
             'account_id'    => $_accountId,
             'parent'        => $_parentFolder
-        ));           
+        ));
         
         $folder = $this->_backend->create($folder);
+        
+        // update parent (has_children)
+        $this->_updateHasChildren($_accountId, $_parentFolder, 1);
+        
         return $folder;
     }
     
@@ -208,7 +212,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param string $_accountId
      * @param string $_folderName globalName (complete path) of folder to delete
      * 
-     * @todo check if folders has subfolders
+     * @todo check if folder has subfolders
      */
     public function delete($_accountId, $_folderName)
     {
@@ -226,6 +230,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         try {
             $folder = $this->_backend->getByBackendAndGlobalName($_accountId, $_folderName);
             $this->_backend->delete($folder->getId());
+            $this->_updateHasChildren($_accountId, $folder->parent);
         } catch (Tinebase_Exception_NotFound $tenf) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Trying to delete non-existant folder ' . $_folderName);
         }
@@ -267,11 +272,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         }
         
         // loop subfolders (recursive) and replace new localname in globalname path
-        $filter = new Felamimail_Model_FolderFilter(array(
-            array('field' => 'globalname', 'operator' => 'startswith',  'value' => $_oldGlobalName . $account->delimiter),
-            array('field' => 'account_id', 'operator' => 'equals',      'value' => $_accountId),
-        ));
-        $subfolders = $this->_backend->search($filter);
+        $subfolders = $this->getSubfolders($_accountId, $_oldGlobalName . $account->delimiter);
         foreach ($subfolders as $subfolder) {
             if ($newGlobalName != $subfolder->globalname) {
                 $newSubfolderGlobalname = str_replace($_oldGlobalName, $newGlobalName, $subfolder->globalname);
@@ -398,5 +399,53 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($sortedFolders->globalname, TRUE));
         
         return $sortedFolders;
+    }
+
+    /**
+     * update folder value has_children
+     * 
+     * @param string $_globalname
+     * @param integer $_value
+     * @return null|Felamimail_Model_Folder
+     */
+    protected function _updateHasChildren($_accountId, $_globalname, $_value = NULL) 
+    {
+        $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
+        if ($_globalname !== '' || ! $account->has_children_support) {
+            return NULL;
+        }
+
+        $folder = $this->_backend->getByBackendAndGlobalName($_accountId, $_globalname);
+        if ($_value === NULL) {
+            // check if folder has children by searching in db
+            $subfolders = $this->getSubfolders($_accountId, $_globalname);
+            $value = (count($subfolders) > 0);
+        } else {
+            $value = $_value;
+        }
+        
+        if ($folder->has_children != $value) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set new has_children value for folder ' . $_globalname . ': ' . $value); 
+            $folder->has_children = $value;
+            $folder = $this->update($folder);
+        }
+        
+        return $folder;
+    }
+    
+    /**
+     * get subfolders
+     * 
+     * @param string $_accountId
+     * @param string $_globalname
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getSubfolders($_accountId, $_globalname)
+    {
+        $filter = new Felamimail_Model_FolderFilter(array(
+            array('field' => 'globalname', 'operator' => 'startswith',  'value' => $_globalname),
+            array('field' => 'account_id', 'operator' => 'equals',      'value' => $_accountId),
+        ));
+        return $this->_backend->search($filter);
     }
 }
