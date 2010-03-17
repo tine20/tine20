@@ -403,8 +403,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         $typeMap = array();
         
         foreach ($eventAttendee as $attendee) {
-            // resolve displaycontainers
-            Tinebase_Container::getInstance()->getGrantsOfRecords($attendee, Tinebase_Core::getUser(), 'displaycontainer_id');
+            // resolve displaycontainers only if they are present...
+            // ... they are not when used in filter context
+            $displaycontainerId = $attendee->displaycontainer_id;
+            if (! empty($displaycontainerId) && $displaycontainerId[0]) {
+                Tinebase_Container::getInstance()->getGrantsOfRecords($attendee, Tinebase_Core::getUser(), 'displaycontainer_id');
+            }
             
             foreach ($attendee as $attender) {
                 if ($attender->user_id instanceof Tinebase_Record_Abstract) {
