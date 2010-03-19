@@ -52,12 +52,12 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
      */
     asyncQuery: function(field, value, callback, args, scope, store) {
         
-        //console.log(value);
-        
-        var result = store.query(field, value);
+        var result = null;
         var queryObject = {field: field, value: value};
         
-        if (result.getCount() == 0 && ! store.queriesDone.contains(queryObject)) {
+        //console.log(queryObject);
+        
+        if (! store.queriesDone.contains(queryObject)) {
             // do async request (only once)
             var accountId = value.match(/^\/([a-z0-9]*)/i)[1];
             var folderIdMatch = value.match(/[a-z0-9]+\/([a-z0-9]*)$/i);
@@ -86,17 +86,17 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
                     result = store.query(field, value);
                     args.push(result);
                     callback.apply(scope, args);
-                }
+                },
+                add: true
             });
             
             // save query
             store.queriesDone.add(queryObject);
             
-        } else {
-            if (Ext.isFunction(callback)) {
-                args.push(result);
-                callback.apply(scope, args);
-            }
+        } else if (Ext.isFunction(callback)) {
+            result = store.query(field, value);
+            args.push(result);
+            callback.apply(scope, args);
         }
     },
     
@@ -114,6 +114,24 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
             record.set('path', parent_path + '/' + record.id);
             
         }, this);
+    },
+    
+    /**
+     * resets the query and removes all records that match it
+     * 
+     * @param {String} field
+     * @param {String} value
+     */
+    resetQueryAndRemoveRecords: function(field, value) {
+        var toRemove = this.query(field, value);
+        toRemove.each(function(record) {
+            this.remove(record);
+        }, this);
+        
+        var index = this.queriesDone.findIndex('value', value);
+        if (index >= 0) {
+            this.queriesDone.removeAt(index);
+        }
     }
 });
 
