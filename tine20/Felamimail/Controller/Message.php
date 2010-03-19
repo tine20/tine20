@@ -243,7 +243,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             // add body
             if ($account->display_format == 'plain') {
-                $message->content_type = 'text/plain';
+                $message->content_type = Felamimail_Model_Message::CONTENT_TYPE_PLAIN;
                 $replaceUriAndEmails = FALSE;
             } else {
                 $replaceUriAndEmails = TRUE;
@@ -404,9 +404,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $mail = new Tinebase_Mail('UTF-8');
         
         // build mail content
-        $mailBodyText = $this->_removeHtml($_message->body);
+        if ($_message->content_type == Felamimail_Model_Message::CONTENT_TYPE_HTML) {
+            $mailBodyText = $this->_removeHtml($_message->body);
+            $mail->setBodyHtml($this->_addHtmlMarkup($_message->body));
+        } else {
+            $mailBodyText = $_message->body;
+        }
         $mail->setBodyText($mailBodyText);
-        $mail->setBodyHtml($this->_addHtmlMarkup($_message->body));
         
         // set from
         $from = (isset($account->from) && ! empty($account->from)) 
@@ -919,7 +923,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected function _removeHtml($_content)
     {
         $result = strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $_content));
-        $result = preg_replace('/\<br(\s*)?\/?\>/i', "\n", $result);
         $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
         
         return $result;
