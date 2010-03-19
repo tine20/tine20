@@ -130,7 +130,7 @@ Ext.namespace('Tine.Felamimail');
                 '</div>',
                 '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments, "' 
                     + this.i18n._('Attachments') + '")]}</div>',
-                '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values.headers, values.attachments)]}</div>',
+                '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values.headers, values.attachments, values.content_type)]}</div>',
             '</div>',{
             treePanel: this.grid.app.getMainScreen().getTreePanel(),
             encode: function(value) {
@@ -175,9 +175,10 @@ Ext.namespace('Tine.Felamimail');
                 return result;
             },
             
-            showBody: function(value, headers, attachments) {
+            showBody: function(value, headers, attachments, content_type) {
                 if (value) {
-                    if (headers['content-type']
+                    // check body content type and header content types
+                    if (content_type != 'text/plain' && headers['content-type']
                         && (headers['content-type'].match(/text\/html/) 
                             || headers['content-type'].match(/multipart\/alternative/)
                             //|| headers['content-type'].match(/multipart\/signed/)
@@ -189,10 +190,8 @@ Ext.namespace('Tine.Felamimail');
                         if (this.treePanel.getActiveAccount().get('display_format') == 'plain') {
                             value = Ext.util.Format.htmlEncode(value);
                         }
-
                         value = Ext.util.Format.nl2br(value);
                     }
-                    
                     
                     // add images inline
                     /*
