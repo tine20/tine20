@@ -314,10 +314,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     initDragZone: function() {
         this.scroller.ddScrollConfig = {
-            vthresh: 50,
+            vthresh: this.granularityUnitHeights * 2,
+            increment: this.granularityUnitHeights * 4,
             hthresh: -1,
-            frequency: 100,
-            increment: 100
+            frequency: 500
         };
         Ext.dd.ScrollManager.register(this.scroller);
         
