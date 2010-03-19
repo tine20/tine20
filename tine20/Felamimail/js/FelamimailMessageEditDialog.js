@@ -169,6 +169,27 @@ Ext.namespace('Tine.Felamimail');
     },
     
     /**
+     * if 'from' is changed we need to update the signature
+     * 
+     * @param {} combo
+     * @param {} newValue
+     * @param {} oldValue
+     * 
+     * TODO improve that by checking first if value/ account id changed
+     */
+     onFromSelect: function(combo, record, index) {
+        // get new signature
+        var newSignature = Tine.Felamimail.getSignature(record.id);
+        var signatureRegexp = new RegExp('<br><br><span id="felamimail\-body\-signature">\-\-<br>.*</span>');
+        
+        // update signature
+        var bodyContent = this.htmlEditor.getValue();
+        bodyContent = bodyContent.replace(signatureRegexp, newSignature);
+        
+        this.htmlEditor.setValue(bodyContent);
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
@@ -264,16 +285,7 @@ Ext.namespace('Tine.Felamimail');
                         store: accountStore,
                         listeners: {
                             scope: this,
-                            'change': function(combo, newValue, oldValue) {
-                                // get new signature
-                                var newSignature = Tine.Felamimail.getSignature(newValue);
-                                var signatureRegexp = new RegExp('<br><br><span id="felamimail\-body\-signature">\-\-<br>.*$');
-                                
-                                // update signature
-                                var bodyContent = this.htmlEditor.getValue();
-                                bodyContent = bodyContent.replace(signatureRegexp, newSignature);
-                                this.htmlEditor.setValue(bodyContent);
-                            }
+                            select: this.onFromSelect
                         }
                     }]
                 }, {
