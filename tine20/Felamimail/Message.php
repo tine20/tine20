@@ -17,7 +17,7 @@
  * @package     Felamimail
  * @subpackage  Model
  */
-class Felamimail_Message extends Zend_Mail_Message 
+class Felamimail_Message extends Zend_Mail_Message
 {
     /**
      * number of leading spaces
@@ -60,11 +60,11 @@ class Felamimail_Message extends Zend_Mail_Message
     {
         $part = null;
         
-        if($this->isMultipart()) {
+        if ($this->isMultipart()) {
             foreach (new RecursiveIteratorIterator($this) as $messagePart) {
                 try {
                     $contentType    = $messagePart->getHeaderField('content-type', 0);
-                    if(strtolower($contentType) == strtolower($_contentType)) {
+                    if (strtolower($contentType) == strtolower($_contentType)) {
                         $part = $messagePart;
                         break;
                     } else {
@@ -84,7 +84,7 @@ class Felamimail_Message extends Zend_Mail_Message
             $part = $this;
         }
         
-        if($part === null) {
+        if ($part === null) {
             return "no text part found";
         }
         
@@ -125,7 +125,7 @@ class Felamimail_Message extends Zend_Mail_Message
             $charset        = 'iso-8859-1';            
         }
         
-        if($charset != 'utf-8') {
+        if ($charset != 'utf-8') {
             $content = $this->_decode($charset, $content);
         }
         
@@ -140,14 +140,16 @@ class Felamimail_Message extends Zend_Mail_Message
      */
     public static function parseAdresslist($_addressList)
     {
+    	// create stream to be used with fgetcsv
         $stream = fopen("php://temp", 'r+');
         fputs($stream, $_addressList);
         rewind($stream);
         
+        // split addresses
         $addresses = fgetcsv($stream);
         
-        foreach($addresses as $key => $address) {
-            if(preg_match('/(.*)<(.+@[^@]+)>/', $address, $matches)) {
+        foreach ($addresses as $key => $address) {
+            if (preg_match('/(.*)<(.+@[^@]+)>/', $address, $matches)) {
                 $addresses[$key] = array('name' => trim(trim($matches[1]), '"'), 'address' => trim($matches[2]));
             } else {
                 $addresses[$key] = array('name' => null, 'address' => $address);
@@ -191,6 +193,64 @@ class Felamimail_Message extends Zend_Mail_Message
         }
         
         return $string;
+    }
+    
+    public static function createMessageFromZendMailMessage(Zend_Mail_Message $_zendMailMessage)
+    {
+        $message = new Felamimail_Model_Message();
+        
+        foreach ($_zendMailMessage->getHeaders() as $headerName => $headerValue) {
+            #echo "$headerName => $headerValue". PHP_EOL;
+            switch($headerName) {
+                case 'subject':
+                    $message->$headerName = $headerValue;
+                    
+                    break;
+                    
+                case 'from':
+                    // do nothing
+                    
+                    break;
+                    
+                case 'to':
+                case 'bcc':
+                case 'cc':
+                    $receipients = array();
+                    
+                    $addresses = Felamimail_Message::parseAdresslist($headerValue);
+                    foreach ($addresses as $address) {
+                        $receipients[] = $address['address'];
+                    }
+                    
+                    $message->$headerName = $receipients;
+                    
+                    break;                    
+            }
+        }
+        
+        
+        $contentType    = $_zendMailMessage->getHeaderField('content-type', 0);
+        $message->content_type = $contentType;
+        
+        // @todo convert to utf-8 if needed
+        $charset        = $_zendMailMessage->getHeaderField('content-type', 'charset');
+        
+        $encoding       = $_zendMailMessage->getHeaderField('content-transfer-encoding');
+        
+        switch ($encoding) {
+            case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
+                $message->body = quoted_printable_decode($_zendMailMessage->getContent());
+                break;
+            case Zend_Mime::ENCODING_BASE64:
+                $message->body = base64_decode($_zendMailMessage->getContent());
+                break;
+                
+            default:
+                $message->body = $_zendMailMessage->getContent();
+                break;
+        }
+        
+        return $message;
     }
     
     /**
