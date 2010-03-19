@@ -1,17 +1,25 @@
 /*
  * Tine 2.0
  * 
- * @package     Tinebase
- * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
- 
 Ext.ns('Tine.Tinebase.widgets.app');
 
+/**
+ * @namespace   Tine.Tinebase.widgets.app
+ * @class       Tine.Tinebase.widgets.app.MainScreen
+ * @extends     Ext.util.Observable
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
+ * 
+ * @constructor
+ * @todo refactor set/get tree stuff
+ */
 Tine.Tinebase.widgets.app.MainScreen = function(config) {
     Ext.apply(this, config);
     
@@ -82,6 +90,7 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
         }
         
         if(!this.filterPanel && Tine[this.app.appName].FilterPanel) {
+            //console.log('creating filterPanel for ' + this.app.appName);
             this.filterPanel = new Tine[this.app.appName].FilterPanel({
                 app: this.app,
                 treePanel: this.treePanel
@@ -89,30 +98,34 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
         }
         
         if (this.filterPanel) {
-            var containersName = 'not found';
-            if (this.treePanel.recordClass) {
-                var containersName = this.app.i18n.n_hidden(this.treePanel.recordClass.getMeta('containerName'), this.treePanel.recordClass.getMeta('containersName'), 50);
+            
+            if (! this.leftTabPanel) {
+                //console.log('creating leftTabPanel for ' + this.app.appName);
+                var containersName = 'not found';
+                if (this.treePanel.recordClass) {
+                    var containersName = this.app.i18n.n_hidden(this.treePanel.recordClass.getMeta('containerName'), this.treePanel.recordClass.getMeta('containersName'), 50);
+                }
+                
+                this.leftTabPanel = new Ext.TabPanel({
+                    border: false,
+                    activeItem: 0,
+                    layoutOnTabChange: true,
+                    autoScroll: true,
+                    items: [{
+                        title: containersName,
+                        layout: 'fit',
+                        items: this.treePanel,
+                        autoScroll: true
+                    }, {
+                        title: _('Saved filter'),
+                        layout: 'fit',
+                        items: this.filterPanel,
+                        autoScroll: true
+                    }],
+                    getPersistentFilterNode: this.filterPanel.getPersistentFilterNode.createDelegate(this.filterPanel)
+                
+                });
             }
-            
-            this.leftTabPanel = new Ext.TabPanel({
-                border: false,
-                activeItem: 0,
-                layoutOnTabChange: true,
-                autoScroll: true,
-                items: [{
-                    title: containersName,
-                    layout: 'fit',
-                    items: this.treePanel,
-                    autoScroll: true
-                }, {
-                    title: _('Saved filter'),
-                    layout: 'fit',
-                    items: this.filterPanel,
-                    autoScroll: true
-                }],
-                getPersistentFilterNode: this.filterPanel.getPersistentFilterNode.createDelegate(this.filterPanel)
-            
-            });
             
             Tine.Tinebase.MainScreen.setActiveTreePanel(this.leftTabPanel, true);
         } else {
