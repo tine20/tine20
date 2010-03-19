@@ -496,7 +496,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
                 defaults: {height: 55},
                 items: [{
                     xtype: 'buttongroup',
-                    columns: 2,
+                    columns: 3,
                     items: [
                         Ext.apply(new Ext.Button(this.action_addInNewWindow), {
                             scale: 'medium',
@@ -504,8 +504,16 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
                             iconAlign: 'top',
                             arrowAlign:'right'
                         }),
-                        this.action_editInNewWindow,
-                        this.action_deleteRecord
+                        Ext.apply(new Ext.Button(this.action_editInNewWindow), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        }),
+                        Ext.apply(new Ext.Button(this.action_deleteRecord), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        })
                     ]
                 }, this.getActionToolbarItems()]
             });
@@ -632,6 +640,8 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
         
         return new Tine.widgets.grid.FilterToolbar({
+            app: this.app,
+            recordClass: this.recordClass,
             filterModels: this.recordClass.getFilterModel().concat(this.getCustomfieldFilters()),
             defaultFilter: 'query',
             filters: this.defaultFilters || [],
