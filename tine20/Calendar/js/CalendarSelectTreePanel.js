@@ -9,6 +9,10 @@
 
 Ext.ns('Tine.Calendar');
 
+Tine.Calendar.FilterPanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
+    filter: [{field: 'model', operator: 'equals', value: 'Calendar_Model_EventFilter'}]
+});
+
 /**
  * @namespace Tine.Calendar
  * @class     Tine.Calendar.CalendarSelectTreePanel
@@ -27,36 +31,58 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
     //stateId: 'cal-calendartree-containers',
     recordClass: Tine.Calendar.Model.Event,
     ddGroup: 'cal-event',
+    // disabled for the moment, as ftb can't deal with n containers yet
+    //allowMultiSelection: true,
+    filterMode: 'filterToolbar',
     
     initComponent: function() {
-        
-        this.selModel = new Ext.ux.tree.CheckboxSelectionModel({
-            activateLeafNodesOnly : true,
-            optimizeSelection: true
+        this.filterPlugin = new Tine.widgets.container.TreeFilterPlugin({
+            treePanel: this,
+            /**
+             * overwritten to deal with calendars special filter approach
+             * 
+             * @return {Ext.Panel}
+             */
+            getGridPanel: function() {
+                return Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
+            }
         });
         
-        /*
-        // inject resources tree node
-        this.extraItems = [{
-            text: String.format(this.app.i18n._('Resources {0}'), this.containersName),
-            cls: 'file',
-            id: 'allResources',
-            children: null,
-            leaf: null
-        }];
-        */
-        
         this.supr().initComponent.call(this);
-        
-        //this.loader.processResponse = this.processResponse.createDelegate(this);
     },
     
+//    initComponent: function() {
+//        this.selModel = new Ext.tree.MultiSelectionModel({});
+//        /*
+//        this.selModel = new Ext.ux.tree.CheckboxSelectionModel({
+//            activateLeafNodesOnly : true,
+//            optimizeSelection: true
+//        });
+//        */
+//        
+//        /*
+//        // inject resources tree node
+//        this.extraItems = [{
+//            text: String.format(this.app.i18n._('Resources {0}'), this.containersName),
+//            cls: 'file',
+//            id: 'allResources',
+//            children: null,
+//            leaf: null
+//        }];
+//        */
+//        
+//        this.supr().initComponent.call(this);
+//        
+//        //this.loader.processResponse = this.processResponse.createDelegate(this);
+//    },
+//    
+    /*
     afterRender: function() {
         this.supr().afterRender.apply(this, arguments);
 
         this.selectContainerPath('/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId);
     },
-    
+    */
     /*
     applyState: function(state) {
         this.expandPaths = state;
