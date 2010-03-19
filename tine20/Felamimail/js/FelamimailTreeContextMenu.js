@@ -15,14 +15,15 @@ Ext.namespace('Tine.Felamimail');
  * get felamimail tree panel context menus
  * this is used in Tine.Felamimail.TreePanel (with createDelegate)
  * 
- * TODO reactivate some folder actions
- * TODO update folder in store/ update folder cache after ctx menu actions
+ * TODO update other actions again?
  * TODO use Ext.apply to get this
  */
 Tine.Felamimail.setTreeContextMenus = function() {
         
     // define additional actions
     
+    // inactive
+    /*
     var updateCacheConfigAction = {
         text: String.format(_('Update {0} Cache'), this.app.i18n._('Message')),
         iconCls: 'action_update_cache',
@@ -37,13 +38,13 @@ Tine.Felamimail.setTreeContextMenus = function() {
                 success: function(_result, _request){
                     if (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id) {
                         // update message cache
-                        // TODO update folder store
                         //this.updateFolderStatus([this.ctxNode]);
                     }
                 }
             });
         }
     };
+    */
 
     var emptyFolderAction = {
         text: this.app.i18n._('Empty Folder'),
@@ -132,31 +133,30 @@ Tine.Felamimail.setTreeContextMenus = function() {
                         this.ctxNode.attributes.intelligent_folders = account.get('intelligent_folders');
                         this.accountStore.reload();
                         
-                        // TODO reload tree node + remove all folders of this account from store ?
-                        // TODO or call update folder status
-                        /*
+                        // reload tree node + remove all folders of this account from store ?
+                        this.folderStore.resetQueryAndRemoveRecords('parent_path', '/' + this.ctxNode.attributes.account_id);
                         this.ctxNode.reload(function(callback) {
                         });
-                        */
-                        // update grid
-                        //this.filterPlugin.onFilterChange();
                     }
                 }
-            });        
+            });
         }
     };
     
+    // inactive
+    /*
     var reloadFolderAction = {
         text: String.format(_('Reload {0}'), this.app.i18n._('Folder')),
         iconCls: 'x-tbar-loading',
         scope: this,
         handler: function() {
             if (this.ctxNode) {
-                // TODO call update folder status from felamimail app
+                // call update folder status from felamimail app
                 //this.updateFolderStatus([this.ctxNode]);
             }
         }
     };
+    */
 
     var reloadFolderCacheAction = {
         text: String.format(_('Update {0} Cache'), this.app.i18n._('Folder')),
@@ -164,8 +164,27 @@ Tine.Felamimail.setTreeContextMenus = function() {
         scope: this,
         handler: function() {
             if (this.ctxNode) {
-                // TODO call update folder status from felamimail app
-               //this.updateFolderStatus([this.ctxNode]);
+                this.ctxNode.getUI().addClass("x-tree-node-loading");
+                // call update folder cache
+                Ext.Ajax.request({
+                    params: {
+                        method: 'Felamimail.updateFolderCache',
+                        accountId: this.ctxNode.attributes.account_id,
+                        folderName: this.ctxNode.attributes.globalname
+                    },
+                    scope: this,
+                    success: function(result, request){
+                        this.ctxNode.getUI().removeClass("x-tree-node-loading");
+                        // clear query to query server again and reload subfolders
+                        var parentFolder = this.folderStore.getById(this.ctxNode.id);
+                        this.folderStore.resetQueryAndRemoveRecords('parent_path', (parentFolder) ? parentFolder.get('path') : '/' + this.ctxNode.attributes.account_id);
+                        this.ctxNode.reload(function(callback) {
+                        });
+                    },
+                    failure: function() {
+                        this.ctxNode.getUI().removeClass("x-tree-node-loading");
+                    }
+                });
             }
         }
     };
@@ -178,21 +197,19 @@ Tine.Felamimail.setTreeContextMenus = function() {
         backendModel: 'Folder'
     };
     
-    // TODO update other actions again?
-    
     // system folder ctx menu
 
-    config.actions = ['add'/*, updateCacheConfigAction, reloadFolderAction, reloadFolderCacheAction*/];
+    config.actions = ['add', reloadFolderCacheAction /*, updateCacheConfigAction, reloadFolderAction*/];
     this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // user folder ctx menu
 
-    config.actions = ['add', 'rename', /*updateCacheConfigAction, reloadFolderAction, reloadFolderCacheAction, */'delete'];
+    config.actions = ['add', 'rename', reloadFolderCacheAction, /*updateCacheConfigAction, reloadFolderAction, */'delete'];
     this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // trash ctx menu
     
-    config.actions = ['add', emptyFolderAction /*, reloadFolderAction, reloadFolderCacheAction */];
+    config.actions = ['add', emptyFolderAction, reloadFolderCacheAction /*, reloadFolderAction*/];
     this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // account ctx menu
