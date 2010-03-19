@@ -63,6 +63,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         ];
         this.filterToolbar = this.getFilterToolbar();
         this.filterToolbar.onFilterChange = this.refresh.createDelegate(this, [false]);
+        this.filterToolbar.getAllFilterData = this.getAllFilterData.createDelegate(this);
+        
         this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push(
             {field: 'period'}
         );
@@ -242,9 +244,28 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     
     getActionToolbarItems: Tine.Tinebase.widgets.app.GridPanel.prototype.getActionToolbarItems,
     
+    /**
+     * returns all filter data for current view
+     */
+    getAllFilterData: function() {
+        var store = this.getCalendarPanel(this.activeView).getStore();
+        
+        var options = {};
+        this.onStoreBeforeload(store, options);
+        
+        return options.params.filter;
+    },
+    
     getCustomfieldFilters: Tine.Tinebase.widgets.app.GridPanel.prototype.getCustomfieldFilters,
     
     getFilterToolbar: Tine.Tinebase.widgets.app.GridPanel.prototype.getFilterToolbar,
+    
+    /**
+     * returns store of currently active view
+     */
+    getStore: function() {
+        return this.getCalendarPanel(this.activeView).getStore();
+    },
     
     onContextMenu: function(e) {
         e.stopEvent();
@@ -509,8 +530,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         options.params.filter = [];
         
         // note, we can't use the 'normal' plugin approach here, cause we have to deal with n stores
-        var calendarSelectionPlugin = this.app.getMainScreen().getTreePanel().getCalSelector().getFilterPlugin();
-        calendarSelectionPlugin.onBeforeLoad.call(calendarSelectionPlugin, store, options);
+        //var calendarSelectionPlugin = this.app.getMainScreen().treePanel.getCalSelector().getFilterPlugin();
+        //calendarSelectionPlugin.onBeforeLoad.call(calendarSelectionPlugin, store, options);
         
         this.filterToolbar.onBeforeLoad.call(this.filterToolbar, store, options);
     },
@@ -527,6 +548,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         // update filtertoolbar
         this.filterToolbar.setValue(store.proxy.jsonReader.jsonData.filter);
+        
+        // update tree
+        Tine.Tinebase.appMgr.get('Calendar').getMainScreen().treePanel.getCalSelector().getFilterPlugin().setValue(store.proxy.jsonReader.jsonData.filter);
     },
     
     refresh: function(refresh) {
