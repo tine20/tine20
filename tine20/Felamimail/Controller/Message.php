@@ -229,8 +229,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $message->message = $imapBackend->getMessage($message->messageuid);
             } catch (Zend_Mail_Protocol_Exception $zmpe) {
                 if ($zmpe->getMessage() == 'the single id was not found in response') {
-                    // set cache status to incomplete (@todo invalidate cache if this happens?)
-                    $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
+                    // invalidate cache if this happens
+                    $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INVALID;
                     Felamimail_Controller_Folder::getInstance()->update($folder);
                     throw new Felamimail_Exception('Message not found. Maybe it was deleted by another client.', 404);
                 } else {
