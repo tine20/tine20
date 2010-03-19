@@ -460,6 +460,26 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     }
     
     /**
+     * empty complete folder by setting \Deleted flag and expunge afterwards
+     * 
+     * @param string $globalName
+     * @return void
+     * @throws Zend_Mail_Storage_Exception
+     */
+    public function emptyFolder($globalName)
+    {
+        $this->selectFolder($globalName);
+        if (! $this->_protocol->store(array(Zend_Mail_Storage::FLAG_DELETED), 1, INF, null, true)) {
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('cannot set \Deleted flags');
+        }
+        $this->_protocol->expunge();
+    }
+    
+    /**
      * get header (remove spaces if needed)
      * NOTE: this fixes a bug in Zend_Mime_Decode: headers with leading spaces are not parsed correctly, 
      *  we remove the spaces here to make it work again.

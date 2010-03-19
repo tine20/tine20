@@ -323,19 +323,10 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         try {
             // try to delete messages in imap folder
-            $imap = Felamimail_Backend_ImapFactory::factory($account);    
+            $imap = Felamimail_Backend_ImapFactory::factory($account);
             
-            $imap->selectFolder($folder->globalname);
-            $messageUids = $imap->getUniqueId();
-            
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to delete ' 
-                . count($messageUids) . ' messages from folder ' . $folder->globalname . '.'
-                //. print_r($messageUids, TRUE)
-            );
-            
-            foreach ($messageUids as $uid) {
-                $imap->removeMessage($uid);
-            }
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete all messages in folder ' . $folder->globalname);
+            $imap->emptyFolder($folder->globalname);
 
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
