@@ -1,21 +1,19 @@
 /*
  * Tine 2.0
  * 
- * @package     Admin
- * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
- 
-Ext.namespace('Tine.Admin', 'Tine.Admin.Users');
+Ext.ns('Tine.Admin.user');
 
 /**
- * @namespace   Tine.Admin.Users
- * @class       Tine.Admin.Users.EditDialog
+ * @namespace   Tine.Admin.user
+ * @class       Tine.Admin.UserEditDialog
  * @extends     Tine.widgets.dialog.EditDialog
+ * 
+ * NOTE: this class dosn't use the user namespace as this is not yet supported by generic grid
  * 
  * <p>User Edit Dialog</p>
  * <p>
@@ -29,9 +27,9 @@ Ext.namespace('Tine.Admin', 'Tine.Admin.Users');
  * 
  * @param       {Object} config
  * @constructor
- * Create a new Tine.Admin.Users.EditDialog
+ * Create a new Tine.Admin.UserEditDialog
  */
-Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
+Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * @private
@@ -49,7 +47,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var accountBackend = Tine.Tinebase.registry.get('accountBackend');
         this.ldapBackend = (accountBackend == 'Ldap');
 
-        Tine.Admin.Users.EditDialog.superclass.initComponent.call(this);
+        Tine.Admin.UserEditDialog.superclass.initComponent.call(this);
     },
 
     /**
@@ -86,14 +84,14 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.forwardsGrid.setStoreFromArray(this.emailRecord.get('emailForwards'));
         }
         
-        Tine.Admin.Users.EditDialog.superclass.onRecordLoad.call(this);
+        Tine.Admin.UserEditDialog.superclass.onRecordLoad.call(this);
     },
     
     /**
      * @private
      */
     onRecordUpdate: function() {
-        Tine.Admin.Users.EditDialog.superclass.onRecordUpdate.call(this);
+        Tine.Admin.UserEditDialog.superclass.onRecordUpdate.call(this);
         
         var form = this.getForm();
         form.updateRecord(this.samRecord);
@@ -631,13 +629,13 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
  * @param   {Object} config
  * @return  {Ext.ux.Window}
  */
-Tine.Admin.Users.EditDialog.openWindow = function (config) {
+Tine.Admin.UserEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 600,
         height: 400,
-        name: Tine.Admin.Users.EditDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.Admin.Users.EditDialog',
+        name: Tine.Admin.UserEditDialog.prototype.windowNamePrefix + id,
+        contentPanelConstructor: 'Tine.Admin.UserEditDialog',
         contentPanelConstructorConfig: config
     });
     return window;

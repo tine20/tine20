@@ -181,12 +181,13 @@ Tine.Admin = function() {
                     break;
                     
                 case 'accounts':
-                    if(currentToolbar !== false && currentToolbar.id == 'AdminUserToolbar') {
-                        Ext.getCmp('AdminUserGrid').getStore().load({params:{start:0, limit:50}});
-                    } else {
-                        Tine.Admin.Users.Main.show();
-                    }
-                    
+                    Tine.Admin.user.show();
+//                    if(currentToolbar !== false && currentToolbar.id == 'AdminUserToolbar') {
+//                        Ext.getCmp('AdminUserGrid').getStore().load({params:{start:0, limit:50}});
+//                    } else {
+//                        Tine.Admin.user.Main.show();
+//                    }
+//                    
                     break;
                     
                 case 'groups':
