@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
  * @todo        add flags as consts here?
@@ -31,6 +31,18 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      *
      */
     const CONTENT_TYPE_MESSAGE_RFC822 = 'message/rfc822';
+
+    /**
+     * content type html
+     *
+     */
+    const CONTENT_TYPE_HTML = 'text/html';
+
+    /**
+     * content type plain text
+     *
+     */
+    const CONTENT_TYPE_PLAIN = 'text/plain';
     
     /**
      * attachment filename regexp 
@@ -84,7 +96,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'timestamp'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'body'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'headers'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'content_type'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'content_type'          => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true,
+            Zend_Filter_Input::DEFAULT_VALUE => self::CONTENT_TYPE_HTML,
+            'InArray' => array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN)
+        ),
         'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // save email as contact note
         'note'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
