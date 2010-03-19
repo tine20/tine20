@@ -492,7 +492,7 @@ Tine.Felamimail.loadAccountStore = function(reload) {
  * add signature (get it from default account settings)
  * 
  * @param {String} id
- * @return {Tine.Felamimail.Model.Account}
+ * @return {String}
  */
 Tine.Felamimail.getSignature = function(id) {
         
@@ -506,7 +506,7 @@ Tine.Felamimail.getSignature = function(id) {
     var signature = (defaultAccount) ? defaultAccount.get('signature') : '';
     if (signature && signature != '') {
         signature = Ext.util.Format.nl2br(signature);
-        result = '<br><br><span class="felamimail-body-signature">--<br>' + signature + '</span>';
+        result = '<br><br><span id="felamimail-body-signature">--<br>' + signature + '</span>';
     }
     
     return result;
