@@ -148,7 +148,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         summary: '',
         dtstart: dtstart,
         dtend: dtstart.add(Date.HOUR, 1),
-        container_id: app.getMainScreen().getTreePanel().getAddCalendar(),
+        container_id: app.getMainScreen().treePanel.getAddCalendar(),
         transp: 'OPAQUE',
         editGrant: true,
         organizer: Tine.Tinebase.registry.get('userContact'),
@@ -169,6 +169,7 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
     
     return [
         {label: _('Quick search'), field: 'query', operators: ['contains']},
+        {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Calendar.Model.Event},
         {filtertype: 'calendar.attendee'},
         {filtertype: 'calendar.attendeestatus'},
         {filtertype: 'tinebase.tag', app: app}
