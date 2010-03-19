@@ -695,7 +695,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 }
                 Ext.Msg.wait(_('Please Wait'), _('Saving filter'));
                 
-                var model = this.store.reader.recordType.getMeta('appName') + '_Model_' + this.store.reader.recordType.getMeta('modelName');
+                var recordClass = this.recordClass || this.store.reader.recordType;
+                var model = recordClass.getMeta('appName') + '_Model_' + recordClass.getMeta('modelName');
                 
                 Ext.Ajax.request({
                     params: {
