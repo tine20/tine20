@@ -60,6 +60,17 @@ Tine.Crm.LeadState.getStore = function() {
 	return store;
 };
 
+Tine.Crm.LeadState.getClosedStatus = function() {
+    var reqStatus = [];
+        
+    Tine.Crm.LeadState.getStore().each(function(status) {
+        if (status.get('endslead')) {
+            reqStatus.push(status.get('id'));
+        }
+    }, this);
+    
+    return reqStatus;
+};
 /**
  * lead state renderer
  * 
