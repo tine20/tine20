@@ -406,11 +406,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // build mail content
         if ($_message->content_type == Felamimail_Model_Message::CONTENT_TYPE_HTML) {
             $mailBodyText = $this->_removeHtml($_message->body);
+            $mail->setBodyText($mailBodyText);
             $mail->setBodyHtml($this->_addHtmlMarkup($_message->body));
         } else {
-            $mailBodyText = $_message->body;
+            $mail->setBodyText($_message->body);
         }
-        $mail->setBodyText($mailBodyText);
+        
         
         // set from
         $from = (isset($account->from) && ! empty($account->from)) 
