@@ -120,6 +120,8 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
      */
     i18nDeleteActionText: null,
     
+    i18nEmptyText: null,
+    
     /**
      * @cfg {String} newRecordIcon 
      * icon for adding new records button
@@ -185,6 +187,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
         this.i18nContainerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
         this.i18nContainersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
+        this.i18nEmptyText = this.i18nEmptyText || String.format(Tine.Tinebase.translation._("No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName)
         
         // init store
         this.initStore();
@@ -409,7 +412,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             autoFill: true,
             forceFit:true,
             ignoreAdd: true,
-            emptyText: String.format(Tine.Tinebase.translation._("No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName),
+            emptyText: this.i18nEmptyText,
             onLoad: Ext.emptyFn,
             listeners: {
                 beforerefresh: function(v) {
