@@ -73,8 +73,17 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.Panel, {
      * NOTE: when this method gets called, all initalisation is done.
      */
     getFormItems: function() {
+        // we need to init translations because it could be that we call this from Phone app without Voipmanager
+        var translations;
+        if (! this.app) {
+            translations = new Locale.Gettext();
+            translations.textdomain('Voipmanager');    
+        } else {
+            translations = this.app.i18n;
+        }
+        
         return [{
-            title: this.app.i18n._('Forward immediately'),
+            title: translations._('Forward immediately'),
             autoHeight: true,
             xtype: 'fieldset',
             layout: 'form',
@@ -84,7 +93,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.Panel, {
             items: [{
                 name: 'cfi_mode',
                 xtype: 'combo',
-                fieldLabel: this.app.i18n._('Mode'),
+                fieldLabel: translations._('Mode'),
                 typeAhead: true,
                 triggerAction: 'all',
                 lazyRender:true,
@@ -108,7 +117,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.Panel, {
                 }
             }, {
                 name: 'cfi_number',    
-                fieldLabel: this.app.i18n._('Number'),
+                fieldLabel: translations._('Number'),
                 xtype: 'textfield',
                 enableKeyEvents: true,
                 listeners: {
@@ -117,7 +126,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.Panel, {
                 }
             }]
         }, {
-            title: this.app.i18n._('Forward busy'),
+            title: translations._('Forward busy'),
             autoHeight: true,
             xtype: 'fieldset',
             layout: 'form',
@@ -127,7 +136,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.Panel, {
             items: [{
                 name: 'cfb_mode',
                 xtype: 'combo',
-                fieldLabel: this.app.i18n._('Mode'),
+                fieldLabel: translations._('Mode'),
                 typeAhead: true,
                 triggerAction: 'all',
                 lazyRender:true,
@@ -150,7 +159,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.Panel, {
                 }
             }, {
                 name: 'cfb_number',    
-                fieldLabel: this.app.i18n._('Number'),
+                fieldLabel: translations._('Number'),
                 xtype: 'textfield',
                 enableKeyEvents: true,
                 listeners: {
@@ -159,7 +168,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.Panel, {
                 }
             }]
          }, {
-            title: this.app.i18n._('Forward delayed'),
+            title: translations._('Forward delayed'),
             autoHeight: true,
             xtype: 'fieldset',
             layout: 'form',
@@ -169,7 +178,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.Panel, {
             items: [{
                 name: 'cfd_mode',
                 xtype: 'combo',
-                fieldLabel: this.app.i18n._('Mode'),
+                fieldLabel: translations._('Mode'),
                 typeAhead: true,
                 triggerAction: 'all',
                 lazyRender:true,
@@ -193,7 +202,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.Panel, {
                 }
             }, {
                 name: 'cfd_number',    
-                fieldLabel: this.app.i18n._('Number'),
+                fieldLabel: translations._('Number'),
                 xtype: 'textfield',
                 enableKeyEvents: true,
                 listeners: {
@@ -202,7 +211,7 @@ Tine.Voipmanager.CallForwardPanel = Ext.extend(Ext.Panel, {
                 }
             }, {
                 name: 'cfd_time',      
-                fieldLabel: this.app.i18n._('Delay time'),
+                fieldLabel: translations._('Delay time'),
                 xtype: 'numberfield',
                 allowNegative: false,
                 value: 30,

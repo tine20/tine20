@@ -218,14 +218,23 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
      * @private
      */
     getColumnModel: function() {
+        // we need to init translations because it could be that we call this from Phone app without Voipmanager
+        var translations;
+        if (! this.app) {
+            translations = new Locale.Gettext();
+            translations.textdomain('Voipmanager');    
+        } else {
+            translations = this.app.i18n;
+        }
+        
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true
             },
             columns:  [
                 {id: 'linenumber',  header: '', dataIndex: 'linenumber', width: 20},
-                {id: 'name', header: this.app.i18n._('Line'), dataIndex: 'asteriskline_id', width: 120, renderer: this.nameRenderer},
-                {id: 'idletext', header: this.app.i18n._('Idle Text'), dataIndex: 'idletext', width: 100, editor: new Ext.form.TextField({
+                {id: 'name', header: translations._('Line'), dataIndex: 'asteriskline_id', width: 120, renderer: this.nameRenderer},
+                {id: 'idletext', header: translations._('Idle Text'), dataIndex: 'idletext', width: 100, editor: new Ext.form.TextField({
                     allowBlank: false,
                     allowNegative: false,
                     maxLength: 60
