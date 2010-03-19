@@ -62,7 +62,8 @@ Tine.Felamimail.Model.Message.getDefaultData = function() {
     var autoAttachNote = Tine.Felamimail.registry.get('preferences').get('autoAttachNote');
     return {
         from: defaultFrom,
-        note: autoAttachNote
+        note: autoAttachNote,
+        content_type: 'text/html'
     };
 };
 
