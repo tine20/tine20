@@ -29,14 +29,12 @@ Tine.Tasks.status.StatusFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @private
      */
     initComponent: function() {
-        Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
-        
-        this.app = Tine.Tinebase.appMgr.get('Tasks');
-        
         this.operators = ['in', 'notin'];
         this.label = _('Status');
         
         this.defaultValue = Tine.Tasks.status.getClosedStatus();
+        
+        this.supr().initComponent.call(this);
     },
     
     /**
