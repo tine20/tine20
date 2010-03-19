@@ -48,7 +48,7 @@ Tine.Tinebase.container = {
      * @property isLeafRegExp
      * @type RegExp
      */
-    isLeafRegExp: /^\/personal\/[a-f0-9]+\/|^\/shared\/[a-f0-9]+|^\/internal/,
+    isLeafRegExp: /^\/personal\/[0-9a-z_\-]+\/|^\/shared\/[a-f0-9]+|^\/internal/i,
     
     /**
      * @private
@@ -56,7 +56,7 @@ Tine.Tinebase.container = {
      * @property isPersonalNodeRegExp
      * @type RegExp
      */
-    isPersonalNodeRegExp: /^\/personal\/([a-f0-9]+)$/,
+    isPersonalNodeRegExp: /^\/personal\/([0-9a-z_\-]+)$/i,
     
     /**
      * @private
