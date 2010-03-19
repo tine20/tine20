@@ -44,7 +44,7 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
             $set = implode(',', $from);
         } else if ($to === null) {
             $set = (int)$from;
-        } else if ($to === INF) {
+        } else if (is_infinite($to)) {
             $set = (int)$from . ':*';
         } else {
             $set = (int)$from . ':' . (int)$to;
@@ -125,7 +125,7 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
         $flags = $this->escapeList($flags);
         $set = (int)$from;
         if ($to != null) {
-            $set .= ':' . ($to == INF ? '*' : (int)$to);
+            $set .= ':' . (is_infinite($to) ? '*' : (int)$to);
         }
 
         $result = $this->requestAndResponse($uid ? 'UID STORE' : 'STORE', array($set, $item, $flags), $silent);
@@ -275,7 +275,7 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
     {
         $set = (int)$from;
         if ($to != null) {
-            $set .= ':' . ($to == INF ? '*' : (int)$to);
+            $set .= ':' . (is_infinite($to) ? '*' : (int)$to);
         }
 
         return $this->requestAndResponse($uid ? 'UID COPY' : 'COPY', array($set, $this->escapeString($folder)), true);
