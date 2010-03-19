@@ -255,6 +255,14 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
 
+    public function searchUsers($filter, $paging)
+    {
+        $result = $this->getUsers($filter[0]['value'], $paging['sort'], $paging['dir'], $paging['start'], $paging['limit']);
+        $result['filter'] = $filter[0];
+        
+        return $result;
+    }
+    
     /**
      * save user
      *
