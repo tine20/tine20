@@ -205,6 +205,8 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             $result['user'] .= '@' . $imapConfig['domain'];
         }
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
+        
         return $result;
     }
     
