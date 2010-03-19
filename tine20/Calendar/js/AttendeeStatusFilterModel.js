@@ -29,14 +29,12 @@ Tine.Calendar.AttendeeStatusFilterModel = Ext.extend(Tine.widgets.grid.FilterMod
      * @private
      */
     initComponent: function() {
-        Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
-        
-        this.app = Tine.Tinebase.appMgr.get('Calendar');
-        
         this.operators = ['in', 'notin'];
         this.label = _('Attendee Status');
         
         this.defaultValue = ['DECLINED'];
+        
+        this.supr().initComponent.call(this);
     },
     
     /**
