@@ -67,17 +67,19 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     initComponent: function() {
         this.recordProxy = Tine.Crm.leadBackend;
         
+        /*
         this.actionToolbarItems = this.getToolbarItems();
         this.contextMenuItems = [
             '-',
             this.actions_exportLead
         ];
-
+        */
+        
         this.gridConfig.cm = this.getColumnModel();
         this.filterToolbar = this.getFilterToolbar();
         
         this.plugins = this.plugins || [];
-        this.plugins.push(this.action_showClosedToggle, this.filterToolbar);
+        this.plugins.push(/*this.action_showClosedToggle,*/ this.filterToolbar);
         
         this.detailsPanel = new Tine.Crm.LeadGridDetailsPanel({
             grid: this
@@ -91,6 +93,40 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     },
     
     /**
+     * add custom items to action toolbar
+     * 
+     * @return {Object}
+     */
+    getActionToolbarItems: function() {
+        return {
+            xtype: 'buttongroup',
+            columns: 1,
+            items: [
+                Ext.apply(new Ext.SplitButton(this.actions_exportLead), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top',
+                    arrowAlign:'right'
+                })
+            ]
+        };
+    },
+    
+    /**
+     * add custom items to context menu
+     * 
+     * @return {Array}
+     */
+    getContextMenuItems: function() {
+        var items = [
+            '-',
+            this.actions_exportLead
+        ];
+        
+        return items;
+    },
+    
+    /**
      * initialises filter toolbar
      * 
      * @return Tine.widgets.grid.FilterToolbar
@@ -101,8 +137,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             {label: _('Quick search'),  field: 'query',    operators: ['contains']},
             {filtertype: 'tine.widget.container.filtermodel', app: this.app, recordClass: Tine.Crm.Model.Lead},
             {label: this.app.i18n._('Lead name'),   field: 'lead_name' },
-            {label: this.app.i18n._('Leadstate'),   field: 'leadstate_id', valueType: 'combo',
-                displayField: 'leadstate', valueField: 'id', store: Tine.Crm.LeadState.getStore()},
+            {filtertype: 'crm.leadstate', app: this.app},
             {label: this.app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
             {label: this.app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
             {filtertype: 'tinebase.tag', app: this.app},
@@ -120,7 +155,9 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         return new Tine.widgets.grid.FilterToolbar({
             filterModels: filters,
             defaultFilter: 'query',
-            filters: [],
+            filters: [
+                {field: 'leadstate_id', operator: 'notin', value: Tine.Crm.LeadState.getClosedStatus()}
+            ],
             plugins: [
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
             ]
@@ -175,10 +212,9 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     },
 
     /**
-     * return additional tb items
      * @private
      */
-    getToolbarItems: function(){
+    initActions: function(){
         
         /*
         handlerAddTask: function(){
@@ -240,17 +276,19 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             }
         });
         
+        /*
         this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
             text: this.app.i18n._('Show closed'),
             iconCls: 'action_showArchived',
             field: 'showClosed'
         });
+        */
         
-        return [
-            new Ext.Toolbar.Separator(),
-            this.actions_exportLead,
-            this.action_showClosedToggle
-        ];
+        this.actionUpdater.addActions([
+            this.actions_exportLead
+        ]);
+        
+        this.supr().initActions.call(this);
     }    
 });
 
