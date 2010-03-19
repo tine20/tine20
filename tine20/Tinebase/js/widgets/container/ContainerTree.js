@@ -65,6 +65,10 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     app: null,
     /**
+     * @cfg {Boolean} allowMultiSelection
+     */
+    allowMultiSelection: false,
+    /**
      * @cfg {String} defaultContainerPath
      */
     defaultContainerPath: null,
@@ -108,6 +112,10 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	initComponent: function() {
         if (! this.app) {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
+        }
+        
+        if (this.allowMultiSelection) {
+            this.selModel = new Ext.tree.MultiSelectionModel({});
         }
         
         var containerName = this.recordClass ? this.recordClass.getMeta('containerName') : 'container';
@@ -223,7 +231,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         var treePath = '/' + this.getRootNode().id + (containerPath !== '/' ? containerPath : '');
 
         // replace personal with otherUsers if personal && ! personal/myaccountid
-        var matches = treePath.match(/personal\/{0,1}(.*)/)
+        var matches = containerPath.match(/^\/personal\/{0,1}([0-9a-z_\-]*)\/{0,1}/i);
         if (matches) {
             if (matches[1] != Tine.Tinebase.registry.get('currentAccount').accountId) {
                 treePath = treePath.replace('personal', 'otherUsers');
@@ -256,7 +264,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	afterRender: function() {
 		Tine.widgets.container.TreePanel.superclass.afterRender.call(this);
         this.getEl().first().first().applyStyles('overflow-x: hidden');
-		this.selectContainerPath(this.getDefaultContainerPath());
+        // NOTE: selecting fires selectionChange... this breaks ftb if not rendered.
+        //       As all searches return used filters, we don't need this anyway
+		//this.selectContainerPath(this.getDefaultContainerPath());
 	},
     
 	/**
@@ -439,7 +449,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             var node = selection[0];
             
             // get filterToolbar
-            var ftb = this.filterPlugin.grid.filterToolbar;
+            var ftb = this.filterPlugin.getGridPanel().filterToolbar;
             
             //var supressEvents = ftb.supressEvents;
             ftb.supressEvents = true;
