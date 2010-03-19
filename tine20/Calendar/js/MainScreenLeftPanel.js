@@ -29,6 +29,7 @@ Tine.Calendar.MainScreenLeftPanel = Ext.extend(Ext.Panel, {
     //align: 'stretch',
     layout: 'border',
     cls: 'cal-tree',
+    recordClass: Tine.Calendar.Model.Event,
     defaults: {
         border: false
     },
@@ -115,19 +116,20 @@ Tine.Calendar.MainScreenLeftPanel = Ext.extend(Ext.Panel, {
      * @return {Tine.Model.Container}
      */
     getAddCalendar: function() {
-        var selections = this.getCalSelector().getSelectionModel().getSelectedNodes();
-        
+        var sm = this.getCalSelector().getSelectionModel();
+        var selections =  typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
+            
         var addCalendar = Tine.Calendar.registry.get('defaultCalendar');
         
         //active calendar
-        var activeNode = this.getCalSelector().getSelectionModel().getActiveNode();
+        var activeNode = typeof sm.getActiveNode == 'function' ? sm.getActiveNode() : selections[0];
         if (activeNode && this.getCalSelector().hasGrant(activeNode, 'addGrant')) {
             return activeNode.attributes.container;
         }
         
         //first container with add grant
         Ext.each(selections, function(node){
-            if (this.getCalSelector().hasGrant(node, 'addGrant')) {
+            if (node && this.getCalSelector().hasGrant(node, 'addGrant')) {
                 addCalendar = node.attributes.container;
                 return false;
             }
