@@ -16,9 +16,15 @@
  * class to hold message cache data
  * 
  * @package     Felamimail
+ * @property    string  $subject        the subject of the email
+ * @property    string  $from           the address of the sender
+ * @property    string  $content_type   the address of the sender
+ * @property    array   $to             the to receipients
+ * @property    array   $cc             the cc receipients
+ * @property    array   $bcc            the bcc receipients
  */
 class Felamimail_Model_Message extends Tinebase_Record_Abstract
-{  
+{
     /**
      * date format constants
      *
@@ -135,7 +141,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         foreach ($recipientType as $field) {
             if (!empty($recordData[$field])) {
                 $recipients = array();
-                foreach($recordData[$field] as $addresses) {
+                foreach ($recordData[$field] as $addresses) {
                     if (substr_count($addresses, '@') > 1) {
                         $recipients = array_merge($recipients, explode($delimiter, $addresses));
                     } else {
@@ -161,5 +167,5 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                 $recordData[$field] = array_unique($recipients);
             }
         }
-    }
+    }    
 }
