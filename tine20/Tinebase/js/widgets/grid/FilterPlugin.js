@@ -56,6 +56,15 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
     getValue: Ext.emptyFn,
     
     /**
+     * returns gird panel this filterplugin is bound to/for
+     * 
+     * @return {Ext.Panel}
+     */
+    getGridPanel: function() {
+        return this.grid;
+    },
+    
+    /**
      * main method which must set the filter from given data
      * 
      * @param {Array} all filters
