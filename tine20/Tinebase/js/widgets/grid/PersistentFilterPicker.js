@@ -110,7 +110,7 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
      *       always the last listener, we directly remove the listener afterwards
      */
     onFilterSelect: function() {
-        var store = this.app.getMainScreen().getContentPanel().store;
+        var store = this.app.getMainScreen().getContentPanel().getStore();
         store.on('beforeload', this.storeOnBeforeload, this);
         store.load();
         
