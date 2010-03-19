@@ -132,29 +132,14 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * update folder cache
      *
      * @param string $accountId
-     * @param array  $folderNames of parent folder(s)
-     * @return array
-     * 
-     * unused at the moment
+     * @param string  $folderName of parent folder
+     * @return array of (sub)folders in cache
      */
-    /*
-    public function updateFolderCache($accountId, $folderNames)
+    public function updateFolderCache($accountId, $folderName)
     {
-        $result = array();
-        if (empty($folderNames)) {
-            $result = Felamimail_Controller_Cache_Folder::getInstance()->update($accountId);
-        } else {
-            foreach ((array)$folderNames as $folderName) {
-                $result[$folderName] = Felamimail_Controller_Cache_Folder::getInstance()->update($accountId, $folderName);
-            }
-        }
-        
-        return array(
-            'status'    => 'success',
-            'results'   => $result,
-        );
+        $result = Felamimail_Controller_Cache_Folder::getInstance()->update($accountId, $folderName);
+        return $this->_multipleRecordsToJson($result);
     }
-    */
     
     /***************************** messages funcs *******************************/
     

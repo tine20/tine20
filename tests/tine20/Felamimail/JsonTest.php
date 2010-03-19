@@ -120,10 +120,35 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testUpdateFolders
+     * testUpdateFolderCache
      *
      */
-    public function testUpdateFolders()
+    public function testUpdateFolderCache()
+    {
+        $imap = Felamimail_Backend_ImapFactory::factory($this->_account);
+        
+        // create folder directly on imap server
+        $imap->createFolder('test', 'INBOX', $this->_account->delimiter);
+        $this->_foldersToDelete[] = 'INBOX/test';
+        
+        // update cache and check if folder is found
+        $result = $this->_json->updateFolderCache($this->_account->getId(), 'INBOX');
+        $this->assertGreaterThan(0, count($result));
+        $this->assertEquals('INBOX/test', $result[0]['globalname']);
+        
+        // delete folder directly on imap server
+        $imap->removeFolder('INBOX/test');
+        
+        // update cache and check if folder is deleted
+        $result = $this->_json->updateFolderCache($this->_account->getId(), 'INBOX');
+        $this->assertEquals(0, count($result));
+    }
+    
+    /**
+     * testUpdateFolderStatus
+     *
+     */
+    public function testUpdateFolderStatus()
     {
         $result = $this->_json->updateFolderStatus($this->_account->getId(), '');
         $inbox = array();
