@@ -60,19 +60,6 @@ Tine.Calendar.MainScreen = function(config) {
 Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
     
     /**
-     * Set content panel in Tinebase.MainScreen
-     */
-    setContentPanel: function() {
-        if (! this.contentPanel) {
-            this.contentPanel = new Tine.Calendar.MainScreenCenterPanel({
-                detailsPanel: new Tine.Calendar.EventDetailsPanel()
-            });
-        }
-        
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this.contentPanel, true);
-    },
-    
-    /**
      * sets left panel aka tree panel in other apps
      */
     setTreePanel: function() {
@@ -88,6 +75,12 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
      * @return {Tine.Calendar.MainScreenCenterPanel}
      */
     getContentPanel: function() {
+        if (! this.contentPanel) {
+            this.contentPanel = new Tine.Calendar.MainScreenCenterPanel({
+                detailsPanel: new Tine.Calendar.EventDetailsPanel()
+            });
+        }
+        
         return this.contentPanel;
     },
     
