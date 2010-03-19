@@ -759,12 +759,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * converts raw data from adapter into a single record
      *
-     * @param  array $_data
+     * @param  array $_rawData
      * @return Tinebase_Record_Abstract
      */
-    protected function _rawDataToRecord(array $_rawdata)
+    protected function _rawDataToRecord(array $_rawData)
     {
-        return new $this->_modelName($_rawdata, true);
+        return new $this->_modelName($_rawData, true);
     }
     
     /**
