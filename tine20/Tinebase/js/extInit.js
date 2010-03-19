@@ -60,10 +60,14 @@ Ext.BLANK_IMAGE_URL = "library/ExtJS/resources/images/default/s.gif";
 Ext.QuickTips.init();
 
 /**
- * html encode all grid columns per defaut
+ * html encode all grid columns per default and convert spaces to &nbsp;
  */
 Ext.grid.ColumnModel.defaultRenderer = Ext.util.Format.htmlEncode;
-Ext.grid.Column.prototype.renderer = Ext.util.Format.htmlEncode;
+Ext.grid.Column.prototype.renderer = function(value) {
+    var result = Ext.util.Format.htmlEncode(value);
+    result = result.replace(/ /g, '&nbsp;');
+    return result;
+};
 
 Ext.apply(Ext.data.JsonStore.prototype, {
     url:  'index.php',
