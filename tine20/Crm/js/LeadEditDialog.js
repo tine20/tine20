@@ -81,15 +81,20 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // load contacts/tasks/products into link grid (only first time this function gets called/store is empty)
         if (this.contactGrid && this.tasksGrid && this.productsGrid 
             && this.contactGrid.store.getCount() == 0 
-            && this.tasksGrid.store.getCount() == 0 
-            && this.productsGrid.store.getCount() == 0) {
+            && (! this.tasksGrid.store || this.tasksGrid.store.getCount() == 0) 
+            && (! this.productsGrid.store || this.productsGrid.store.getCount() == 0)) {
                     
             var relations = this.splitRelations();
             //console.log(relations);
             
             this.contactGrid.store.loadData(relations.contacts, true);
-            this.tasksGrid.store.loadData(relations.tasks, true);
-            this.productsGrid.store.loadData(relations.products, true);
+            
+            if (this.tasksGrid.store) {
+                this.tasksGrid.store.loadData(relations.tasks, true);
+            }
+            if (this.productsGrid.store) {
+                this.productsGrid.store.loadData(relations.products, true);
+            }
         }
         
         Tine.Crm.LeadEditDialog.superclass.onRecordLoad.call(this);        
@@ -163,12 +168,16 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.contactGrid.store.each(function(record) {                     
             relations.push(this.getRelationData(record));
         }, this);
-        this.tasksGrid.store.each(function(record) {
-            relations.push(this.getRelationData(record));
-        }, this);
-        this.productsGrid.store.each(function(record) {
-            relations.push(this.getRelationData(record));
-        }, this);
+        if (this.tasksGrid.store) {
+            this.tasksGrid.store.each(function(record) {
+                relations.push(this.getRelationData(record));
+            }, this);
+        }
+        if (this.productsGrid.store) {
+            this.productsGrid.store.each(function(record) {
+                relations.push(this.getRelationData(record));
+            }, this);
+        }
         
         this.record.data.relations = relations;
     },
@@ -242,15 +251,27 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             anchor: '100% 98%'
         });
 
-        this.tasksGrid = new Tine.Crm.Task.GridPanel({
-            record: this.record,
-            disabled: ! (Tine.Tasks && Tine.Tinebase.common.hasRight('run', 'Tasks'))
-        });
+        if (Tine.Tasks && Tine.Tinebase.common.hasRight('run', 'Tasks')) {
+            this.tasksGrid = new Tine.Crm.Task.GridPanel({
+                record: this.record
+            });
+        } else {
+            this.tasksGrid = new Ext.Panel({
+                title: this.app.i18n._('Tasks'),
+                html: this.app.i18n._('You do not have the run right for the Tasks application or it is not activated.')
+            })
+        }
         
-        this.productsGrid = new Tine.Crm.Product.GridPanel({
-            record: this.record,
-            disabled: ! (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales'))
-        });
+        if (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales')) {
+            this.productsGrid = new Tine.Crm.Product.GridPanel({
+                record: this.record
+            });
+        } else {
+            this.productsGrid = new Ext.Panel({
+                title: this.app.i18n._('Products'),
+                html: this.app.i18n._('You do not have the run right for the Sales application or it is not activated.')
+            })
+        }
         
         return {
             xtype: 'tabpanel',
@@ -461,15 +482,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             ] // end of main tabpanel items
         }; // end of return
     } // end of getFormItems
-    
-    // obsolete code
-//        exportLead: function(_button, _event) {         
-//            
-//            var leadId = Ext.util.JSON.encode([_button.leadId]);
-//            
-//            Tine.Tinebase.common.openWindow('exportWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadIds=' + leadId, 768, 1024);
-//        }
-    
 });
 
 /**

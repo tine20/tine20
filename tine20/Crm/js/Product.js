@@ -174,7 +174,11 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     initActions: function() {
         
-        var recordName = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')).i18n.n_(
+        var app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')); 
+        if (! app) {
+            return;
+        }        
+        var recordName = app.i18n.n_(
             this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1
         );
 
