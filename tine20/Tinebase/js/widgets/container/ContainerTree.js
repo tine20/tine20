@@ -363,12 +363,18 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     onBeforeLoad: function(node) {
         var path = node.attributes.path;
+        var type = Tine.Tinebase.container.path2type(path);
+        var owner = Tine.Tinebase.container.pathIsPersonalNode(path);
+        
+        if (type === 'personal' && ! owner) {
+            type = 'otherUsers';
+        }
         
         var params = {
             method: 'Tinebase_Container.getContainer',
             application: this.app.appName,
-            containerType: Tine.Tinebase.container.path2type(path),
-            owner: Tine.Tinebase.container.pathIsPersonalNode(path)
+            containerType: type,
+            owner: owner
         };
         
         return params;
