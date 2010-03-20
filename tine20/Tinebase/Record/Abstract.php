@@ -401,7 +401,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             foreach ($recordArray as $property => $value) {
                 if (is_object($value) && 
                         (in_array('Tinebase_Record_Interface', class_implements($value)) || 
-                        $value instanceof Tinebase_Record_Recordset) ) {
+                        $value instanceof Tinebase_Record_Recordset) ||
+                        (is_object($value) && method_exists($value, 'toArray'))) {
                     $recordArray[$property] = $value->toArray(FALSE);
                 }
             }
