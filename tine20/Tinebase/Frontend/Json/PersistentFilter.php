@@ -45,20 +45,13 @@ class Tinebase_Frontend_Json_PersistentFilter
         $decodedFilter = is_array($filter) ? $filter : Zend_Json::decode($filter);
         $filter = new Tinebase_Model_PersistentFilterFilter(!empty($decodedFilter) ? $decodedFilter : array());
         
-        $result = $this->_backend->search(
-            $filter,
-            new Tinebase_Model_Pagination(array(
-                'dir'       => 'ASC',
-                'sort'      => array('name', 'creation_time')
-            ))
-        )->toArray();
-        
-        foreach ($result as &$record) {
-            $record['filters'] = Zend_Json::decode($record['filters']);
-        }
+        $persistentFilters = $this->_backend->search($filter, new Tinebase_Model_Pagination(array(
+            'dir'       => 'ASC',
+            'sort'      => array('name', 'creation_time')
+        )));
         
         return array(
-            'results'       => $result,
+            'results'       => $persistentFilters->toArray(),
             'totalcount'    => $this->_backend->searchCount($filter)
         );
     }
@@ -73,11 +66,10 @@ class Tinebase_Frontend_Json_PersistentFilter
     {
         $persistentFilter = $this->_backend->get($filterId);
         
-        $filter = new $persistentFilter->model(Zend_Json::decode($persistentFilter->filters));
+        $persistenFilterData = $persistentFilter->toArray(FALSE);
+        $persistenFilterData['filters'] = $persistenFilterData['filters']->toArray(TRUE);
         
-        //$result = $filter->toArray(TRUE);
-        
-        return $filter;
+        return $persistenFilterData;
     }
     
     /**
@@ -90,32 +82,25 @@ class Tinebase_Frontend_Json_PersistentFilter
      */
     public function save($filterData, $name, $model) 
     {
-        $decodedFilterData = is_array($filterData) ? $filterData : Zend_Json::decode($filterData);
+        $filterData = is_array($filterData) ? $filterData : Zend_Json::decode($filterData);
+        
         
         list($appName, $ns, $modelName) = explode('_', $model);
-        
         $filterModel = "{$appName}_Model_{$modelName}Filter";
-        $filter = new $filterModel(array());
         
-        if (!is_subclass_of($filter, 'Tinebase_Model_Filter_FilterGroup')) {
-            throw new Tinebase_Exception_InvalidArgument('Filter Model has to be subclass of Tinebase_Model_Filter_FilterGroup.');
-        }
-        
-        // set filter data und create persistent filter record
-        $filter->setFromArrayInUsersTimezone($decodedFilterData);
-        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
-        $persistentFilter = new Tinebase_Model_PersistentFilter(array(
+        $persistentFilter = new Tinebase_Model_PersistentFilter();
+        $persistentFilter->setFromJsonInUsersTimezone(array(
             'account_id'        => Tinebase_Core::getUser()->getId(),
-            'application_id'    => $applicationId,
-            'model'             => get_class($filter),
-            'filters'           => Zend_Json::encode($filter->toArray()),
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId(),
+            'model'             => $filterModel,
+            'filters'           => Tinebase_Model_PersistentFilter::getFilterGroup($filterModel, $filterData, TRUE),
             'name'              => $name
         ));
         
         // check if exists
         $searchFilter = new Tinebase_Model_PersistentFilterFilter(array(
             array('field' => 'name',            'operator' => 'equals', 'value' => $name),
-            array('field' => 'application_id',  'operator' => 'equals', 'value' => $applicationId),
+            array('field' => 'application_id',  'operator' => 'equals', 'value' => $persistentFilter->application_id),
         ));
         $existing = $this->_backend->search($searchFilter);
         
@@ -130,7 +115,7 @@ class Tinebase_Frontend_Json_PersistentFilter
             $persistentFilter = $this->_backend->create($persistentFilter);
         }
         
-        return $persistentFilter->toArray();
+        return $this->get($persistentFilter->getId());
     }
     
     /**
