@@ -19,6 +19,8 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 
 /**
  * Test class for Tinebase_Frontend_Json_PersistentFilter
+ * 
+ * @todo test search -> filter resolving not yet implemented -> do we need this? -> filters need to cope with resolved values!
  */
 class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
 {
@@ -35,6 +37,7 @@ class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
         
         $this->_testFilterData = array(
             array('field' => 'query', 'operator' => 'contains', 'value' => 'test'),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => Tasks_Controller::getInstance()->getDefaultContainer()->getId()),
             array('field' => 'organizer', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()),
             array('field' => 'due', 'operator' => 'after', 'value' => '2010-03-20 18:00:00'),
         );
@@ -120,6 +123,10 @@ class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($requestFilter['operator'], $responseFilter['operator'], 'operator missmatch');
             
             switch ($requestFilter['field']) {
+                case 'container_id':
+                    $this->assertTrue(is_array($responseFilter['value']), 'container is not resolved');
+                    $this->assertEquals($requestFilter['value'], $responseFilter['value']['id'], 'wrong containerId');
+                    break;
                 case 'organizer':
                     $this->assertTrue(is_array($responseFilter['value']), 'user is not resolved');
                     $this->assertEquals($requestFilter['value'], $responseFilter['value']['accountId'], 'wrong accountId');
