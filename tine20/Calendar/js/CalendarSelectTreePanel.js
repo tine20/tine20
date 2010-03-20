@@ -10,7 +10,26 @@
 Ext.ns('Tine.Calendar');
 
 Tine.Calendar.FilterPanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
-    filter: [{field: 'model', operator: 'equals', value: 'Calendar_Model_EventFilter'}]
+    filter: [{field: 'model', operator: 'equals', value: 'Calendar_Model_EventFilter'}],
+    
+    storeOnBeforeload: function(store, options) {
+        options.params.filter = this.getSelectionModel().getSelectedNode().attributes.filters;
+        
+        var cp = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
+        var period = cp.getCalendarPanel(cp.activeView).getTopToolbar().getPeriod();
+        
+        // remove all existing period filters
+        Ext.each(options.params.filter, function(filter) {
+            if (filter.field === 'period') {
+                options.params.filter.remove(filter);
+                return false;
+            }
+        }, this);
+        
+        options.params.filter.push({field: 'period', operator: 'within', value: period});
+        
+        store.un('beforeload', this.storeOnBeforeload, this);
+    }
 });
 
 /**
