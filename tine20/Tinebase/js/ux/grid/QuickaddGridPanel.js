@@ -173,11 +173,11 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     getCols: function(visibleOnly) {
         if(visibleOnly === true){
             var visibleCols = [];
-            for(var i = 0, len = this.colModel.config.length; i < len; i++){
-                if(!this.colModel.isHidden(i)){
-                    visibleCols.push(this.colModel.getColumnId(i))
+            Ext.each(this.colModel.config, function(column) {
+                if (! column.hidden) {
+                    visibleCols.push(column);
                 }
-            }
+            }, this);
             return visibleCols;
         }
         return this.colModel.config;
