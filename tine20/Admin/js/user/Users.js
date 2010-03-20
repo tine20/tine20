@@ -65,6 +65,23 @@ Tine.Admin.Model.User = Tine.Tinebase.data.Record.create(Tine.Admin.Model.UserAr
     recordsName: 'Users'
 });
 
+/**
+ * returns default account data
+ * 
+ * @namespace Tine.Admin.Model.User
+ * @static
+ * @return {Object} default data
+ */
+Tine.Admin.Model.User.getDefaultData = function() {
+    return {
+        sambaSAM: '',
+        emailUser: '',
+        accountStatus: 'enabled',
+        visibility: 'displayed',
+        accountPrimaryGroup: Tine.Admin.registry.get('defaultPrimaryGroup')
+    };
+};
+
 Tine.Admin.Model.SAMUserArray = [
     { name: 'sid'              },
     { name: 'primaryGroupSID'  },
