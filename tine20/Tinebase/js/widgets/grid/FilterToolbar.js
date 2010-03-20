@@ -713,7 +713,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                             if (persistentFilterNode && persistentFilterNode.isExpanded()) {
                                 var filter = Ext.util.JSON.decode(result.responseText);
                                 
-                                if (! persistentFilterNode.findChild('id', filter.id)) {
+                                var existingNode = persistentFilterNode.findChild('id', filter.id);
+                                if (existingNode) {
+                                    existingNode.attributes.filter = filter;
+                                } else {
                                     var newNode = persistentFilterNode.getOwnerTree().loader.createNode(filter);
                                     persistentFilterNode.appendChild(newNode);
                                 }
