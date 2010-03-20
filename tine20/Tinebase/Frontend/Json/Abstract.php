@@ -90,8 +90,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $filter = new $_filterModel(array());
             $filter->setFromArrayInUsersTimezone($decodedFilter);
         } else if (!empty($decodedFilter) && strlen($decodedFilter) == 40) {
-            $persistentFilterJson = new Tinebase_Frontend_Json_PersistentFilter(); 
-            $filter = $persistentFilterJson->get($decodedFilter);
+            $filter = Tinebase_PersistentFilter::getFilterById($decodedFilter);
         } else {
             // filter is empty
             $filter = new $_filterModel(array());
