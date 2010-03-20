@@ -124,6 +124,11 @@ abstract class Tinebase_Model_Filter_Abstract
      */
     public function setValue($_value)
     {
+        // cope with resolved records
+        if (is_array($_value) && array_key_exists('id', $_value)) {
+            $_value = $_value['id'];
+        }
+        
         //@todo validate value before setting it!
         $this->_value = $_value;
     }
