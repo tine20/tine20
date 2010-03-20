@@ -60,7 +60,7 @@ class Tinebase_Frontend_Json_PersistentFilter
      * loads a persistent filter
      *
      * @param  string $filterId
-     * @return Tinebase_Model_Filter_FilterGroup
+     * @return array persistent filter
      */
     public function get($filterId)
     {
@@ -73,11 +73,28 @@ class Tinebase_Frontend_Json_PersistentFilter
     }
     
     /**
+     * rename a saved filter
+     * 
+     * @param $filterId
+     * @param $newName
+     * @return array persistent filter
+     */
+    public function rename($filterId, $newName)
+    {
+        $persistentFilter = $this->_backend->get($filterId);
+        $persistentFilter->name = $newName;
+        $this->_backend->update($persistentFilter);
+        
+        return $this->get($filterId);
+    }
+    
+    /**
      * save persistent filter
      *
      * @param  array  $filterData
      * @param  string $name
      * @param  string $model model name (Application_Model_Record)
+     * @return array persistent filter
      * @throws Tinebase_Exception_InvalidArgument
      */
     public function save($filterData, $name, $model) 
