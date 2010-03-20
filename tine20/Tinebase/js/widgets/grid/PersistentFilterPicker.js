@@ -120,7 +120,7 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
     },
     
     storeOnBeforeload: function(store, options) {
-        options.params.filter = this.getSelectionModel().getSelectedNode().attributes.filters;
+        options.params.filter = this.getSelectionModel().getSelectedNode().attributes.filter.filters;
         store.un('beforeload', this.storeOnBeforeload, this);
     },
     
@@ -153,6 +153,32 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
                             });
                         }
                     }, this);
+                }
+            }, {
+                text: _('Rename Filter'),
+                iconCls: 'action_edit',
+                scope: this,
+                handler: function() {
+                    Ext.MessageBox.prompt(_('New Name'), String.format(_('Please enter the new name for filter "{0}"?'), node.text), function(_btn, _newName){
+                        if ( _btn == 'ok') {
+                            Ext.MessageBox.wait(_('Please wait'), String.format(_('Renaming Filter "{0}"' ), this.containerName , node.text));
+                            
+                            Ext.Ajax.request({
+                                params: {
+                                    method: 'Tinebase_PersistentFilter.rename',
+                                    filterId: node.id,
+                                    newName: _newName
+                                },
+                                scope: this,
+                                success: function(response) {
+                                    var pfilter = Ext.decode(response.responseText);
+                                    node.setText(_newName);
+                                    node.attributes.filter = pfilter;
+                                    Ext.MessageBox.hide();
+                                }
+                            });
+                        }
+                    }, this, false, node.text);
                 }
             }]
         });
