@@ -19,6 +19,10 @@
 class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract 
 {
     /**
+     * @property String $application_id
+     */
+    
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
@@ -46,6 +50,7 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
         'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'model'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'filters'               => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'filters'               => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'is_default'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
@@ -69,4 +74,49 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
+    
+    /**
+     * sets the record related properties from user generated input.
+     * 
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data            the new data to set
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
+     */
+    public function setFromArray(array $_data)
+    {
+        list($appName, $ns, $modelName) = explode('_', $_data['model']);
+        
+        if (! $_data['filters'] instanceof Tinebase_Model_Filter_FilterGroup) {
+            $_data['filters'] = $this->getFilterGroup($_data['model'], $_data['filters']);
+        }
+        
+        return parent::setFromArray($_data);
+    }
+    
+    /**
+     * gets filtergroup 
+     * 
+     * @param  $_filterModel    filtermodel
+     * @param  $_filterData     array data of all filters
+     * @param  $_fromUserTime   filterData is in user time
+     * @return Tinebase_Model_Filter_FilterGroup
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public static function getFilterGroup($_filterModel, $_filterData, $_fromUserTime = FALSE)
+    {
+        $filter = new $_filterModel(array());
+        
+        if (! is_subclass_of($filter, 'Tinebase_Model_Filter_FilterGroup')) {
+            throw new Tinebase_Exception_InvalidArgument('Filter Model has to be subclass of Tinebase_Model_Filter_FilterGroup.');
+        }
+        
+        if ($_fromUserTime === TRUE) {
+            $filter->setFromArrayInUsersTimezone($_filterData);
+        } else {
+            $filter->setFromArray($_filterData);
+        }
+        
+        return $filter;
+    }
 }
