@@ -73,6 +73,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'manageSAM' => $this->_manageSAM,
             'manageImapEmailUser' => $this->_manageImapEmailUser,
             'manageSmtpEmailUser' => $this->_manageSmtpEmailUser,
+            'defaultPrimaryGroup' => Tinebase_Group::getInstance()->getDefaultGroup()->toArray()
         );        
         return $registryData;    
     }
