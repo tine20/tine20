@@ -29,6 +29,7 @@ class Tinebase_Json_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Json Tests');
         $suite->addTestSuite('Tinebase_Json_ContainerTest');
+        $suite->addTestSuite('Tinebase_Json_PersistentFilterTest');
         
         return $suite;
     }
