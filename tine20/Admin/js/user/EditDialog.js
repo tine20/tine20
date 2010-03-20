@@ -54,6 +54,12 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     onRecordLoad: function() {
+        // interrupt process flow until dialog is rendered
+        if (! this.rendered) {
+            this.onRecordLoad.defer(250, this);
+            return;
+        }
+        
         // samba user
         var response = {
             responseText: Ext.util.JSON.encode(this.record.get('sambaSAM'))
