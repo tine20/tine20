@@ -105,9 +105,17 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
      */
     public function setValue($_value)
     {
+        // cope with resolved records
+        if (is_array($_value) && array_key_exists('id', $_value)) {
+            $_value = $_value['id'];
+        } 
+            
         $value = array();
         foreach ((array) $_value as $v) {
-            if (strpos($v, '/') !== FALSE) {
+            if (is_array($v) && array_key_exists('id', $v)) {
+                // cope with resolved records
+                $v = $v['id'];
+            } else if (strpos($v, '/') !== FALSE) {
                 $filter = $this->path2filter($v);
                 if ($this->getOperator() !== 'in') {
                     $this->setOperator($filter['operator']);
