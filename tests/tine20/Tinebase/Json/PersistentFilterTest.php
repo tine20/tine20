@@ -50,6 +50,7 @@ class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
     public function testSaveFilter()
     {
         $savedFilter = $this->_uit->save($this->_testFilterData, 'testFilter', 'Tasks_Model_Task');
+        $this->_testFilterIds[] = $savedFilter['id'];
         
         $this->_assertSavedFilter($savedFilter);
         
@@ -60,7 +61,16 @@ class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
     {
         $savedFilter = $this->testSaveFilter();
         $loadedFilter = $this->_uit->get($savedFilter['id']);
-        $this->_assertSavedFilter($savedFilter);
+        $this->_assertSavedFilter($loadedFilter);
+    }
+    
+    public function testRenameFilter()
+    {
+        $savedFilter = $this->testSaveFilter();
+        $this->_uit->rename($savedFilter['id'], 'renamedFilter');
+        
+        $loadedFilter = $this->_uit->get($savedFilter['id']);
+        $this->assertEquals('renamedFilter', $loadedFilter['name'], 'filter renameing failed');
     }
     
     public function testOverwriteByName()
