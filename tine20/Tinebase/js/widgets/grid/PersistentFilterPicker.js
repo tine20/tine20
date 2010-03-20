@@ -54,7 +54,7 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
                         text: attr.name,
                         id: attr.id,
                         leaf: attr.leaf === false ? attr.leaf : true,
-                        filter: attr
+                        filter: Ext.copyTo({}, attr, 'id, name, filters')
                     });
                 }
             }
@@ -120,7 +120,7 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
     },
     
     storeOnBeforeload: function(store, options) {
-        options.params.filter = this.getSelectionModel().getSelectedNode().id;
+        options.params.filter = this.getSelectionModel().getSelectedNode().attributes.filters;
         store.un('beforeload', this.storeOnBeforeload, this);
     },
     
