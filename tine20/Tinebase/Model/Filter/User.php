@@ -47,6 +47,11 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
      */
     public function setValue($_value)
     {
+        // cope with resolved records
+        if (is_array($_value) && array_key_exists('accountId', $_value)) {
+            $_value = $_value['accountId'];
+        }
+        
         if ($this->_userOperator && $this->_userOperator == 'inGroup' && $this->_userValue) {
             $this->_userValue = $_value;
             $_value = Tinebase_Group::getInstance()->getGroupMembers($this->_userValue);
