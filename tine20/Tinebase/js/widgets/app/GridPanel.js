@@ -653,6 +653,8 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
     
     /**
      * return store from grid
+     * 
+     * @return {Ext.data.Store}
      */
     getStore: function() {
         return this.grid.getStore();
