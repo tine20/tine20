@@ -107,9 +107,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // legacy
     initGridEvents: function() {    
         this.grid.on('newentry', function(taskData){
-            var selectedNode = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode();
-            taskData.container_id = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.id : null;
-            var task = new Tine.Tasks.Task(taskData);
+            var task = new Tine.Tasks.Task(Ext.apply(this.recordClass.getDefaultData(), taskData));
             
             Tine.Tasks.JsonBackend.saveRecord(task, {
                 scope: this,
@@ -122,34 +120,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             });
             return true;
         }, this);
-    },
-    
-    /**
-     * edit in new window
-     * 
-     * @param {Button} _button
-     * @param {Event} _event
-     */
-    onEditInNewWindow: function(_button, _event){
-        var taskId = -1;
-        if (_button.actionType == 'edit') {
-            var selectedRows = this.grid.getSelectionModel().getSelections();
-            var task = selectedRows[0];
-        } else {
-            var nodeAttributes = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode().attributes || {};
-        }
-        var containerId = (nodeAttributes && nodeAttributes.container) ? nodeAttributes.container.id : -1;
-        
-        var popupWindow = Tine.Tasks.EditDialog.openWindow({
-            record: task,
-            containerId: containerId,
-            listeners: {
-                scope: this,
-                'update': function(task) {
-                    this.store.load({});
-                }
-            }
-        });
     },
     
     /**
