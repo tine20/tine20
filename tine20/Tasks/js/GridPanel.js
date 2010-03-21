@@ -222,6 +222,8 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 nameField: 'n_fileas',
                 blurOnSelect: true,
                 selectOnFocus: true,
+                value: Tine.Tinebase.registry.get('currentAccount').accountDisplayName,
+                selectedRecord: new Tine.Addressbook.Model.Contact(Tine.Tinebase.registry.get('userContact')),
                 getValue: function() {
                     if (this.selectedRecord) {
                         return this.selectedRecord.get('account_id');
