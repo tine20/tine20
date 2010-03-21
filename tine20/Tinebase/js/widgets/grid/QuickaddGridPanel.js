@@ -128,10 +128,9 @@ Tine.Tinebase.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGr
      * @return {Boolean}
      */
     onNewentry: function(recordData) {
-        // add new option to store
-        recordData.id = this.getNextId();
-        var newOption = new this.recordClass(recordData);
-        this.store.insert(0,newOption);
+        // add new record to store
+        var newRecord = new this.recordClass(Ext.apply(this.recordClass.getDefaultData(), recordData));
+        this.store.insert(0 , newRecord);
         return true;
     },
     
