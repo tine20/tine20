@@ -13,7 +13,7 @@ Ext.namespace('Tine.Tasks');
 
 /**
  * @namespace   Tine.Tasks
- * @class       Tine.Tasks.EditDialog
+ * @class       Tine.Tasks.TaskEditDialog
  * @extends     Tine.widgets.dialog.EditDialog
  * 
  * <p>Tasks Edit Dialog</p>
@@ -29,9 +29,9 @@ Ext.namespace('Tine.Tasks');
  * 
  * @param       {Object} config
  * @constructor
- * Create a new Tine.Tasks.EditDialog
+ * Create a new Tine.Tasks.TaskEditDialog
  */
- Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+ Tine.Tasks.TaskEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @cfg {Number} containerId
      */
@@ -72,26 +72,7 @@ Ext.namespace('Tine.Tasks');
             }
         });
         
-        Tine.Tasks.EditDialog.superclass.initComponent.call(this);
-    },
-    
-    /**
-     * @private
-     */
-    initRecord: function() {
-        this.loadRequest = Ext.Ajax.request({
-            scope: this,
-            success: function(response) {
-                this.record = this.recordProxy.recordReader(response);
-                this.onRecordLoad();
-            },
-            params: {
-                method: 'Tasks.getTask',
-                uid: (this.record) ? this.record.id : '',
-                containerId: this.containerId,
-                relatedApp: this.relatedApp
-            }
-        });
+        Tine.Tasks.TaskEditDialog.superclass.initComponent.call(this);
     },
     
     /**
@@ -99,7 +80,13 @@ Ext.namespace('Tine.Tasks');
      * @private
      */
     onRecordLoad: function() {
-        Tine.Tasks.EditDialog.superclass.onRecordLoad.call(this);
+        // interrupt process flow until dialog is rendered
+        if (! this.rendered) {
+            this.onRecordLoad.defer(250, this);
+            return;
+        }
+        
+        Tine.Tasks.TaskEditDialog.superclass.onRecordLoad.apply(this, arguments);
         this.handleCompletedDate();
         
         // update tabpanels
@@ -112,7 +99,7 @@ Ext.namespace('Tine.Tasks');
      * @private
      */
     onRecordUpdate: function() {
-        Tine.Tasks.EditDialog.superclass.onRecordUpdate.apply(this, arguments);
+        Tine.Tasks.TaskEditDialog.superclass.onRecordUpdate.apply(this, arguments);
         this.alarmPanel.onRecordUpdate(this.record);
     },
     
@@ -248,13 +235,13 @@ Ext.namespace('Tine.Tasks');
  * @param   {Object} config
  * @return  {Ext.ux.Window}
  */
-Tine.Tasks.EditDialog.openWindow = function (config) {
+Tine.Tasks.TaskEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 490,
-        name: Tine.Tasks.EditDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.Tasks.EditDialog',
+        name: Tine.Tasks.TaskEditDialog.prototype.windowNamePrefix + id,
+        contentPanelConstructor: 'Tine.Tasks.TaskEditDialog',
         contentPanelConstructorConfig: config
     });
     return window;

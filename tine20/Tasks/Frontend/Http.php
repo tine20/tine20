@@ -31,7 +31,7 @@ class Tasks_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tasks/js/Tasks.js',
             'Tasks/js/Status.js',
             'Tasks/js/GridPanel.js',
-            'Tasks/js/EditDialog.js',
+            'Tasks/js/TaskEditDialog.js',
         );
     }
 }
