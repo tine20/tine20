@@ -59,15 +59,15 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Return a single Task
      *
-     * @param string $uid
+     * @param string $id
      * @param int    $containerId
      * @param string $relatedApp
      * @return Tasks_Model_Task task
      */
-    public function getTask($uid, $containerId = -1, $relatedApp = '')
+    public function getTask($id, $containerId = -1, $relatedApp = '')
     {
-        if(strlen($uid) == 40) {
-            $task = Tasks_Controller_Task::getInstance()->get($uid);
+        if(strlen($id) == 40) {
+            $task = Tasks_Controller_Task::getInstance()->get($id);
         } else {
             $task = new Tasks_Model_Task(array(
                 'container_id' => $containerId
@@ -169,16 +169,15 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
+        $allStatus = Tasks_Controller_Status::getInstance()->getAllStatus();
+        $allStatus->setTimezone(Tinebase_Core::get('userTimeZone'));
+        $allStatus->translate();
+            
         $registryData = array(
-            'AllStatus' => Tasks_Controller_Status::getInstance()->getAllStatus(),
-            //'DefaultContainer' => $controller->getDefaultContainer()
+            'AllStatus' => $allStatus->toArray(),
+            'defaultContainer' => Tasks_Controller::getInstance()->getDefaultContainer()->toArray()
         );
         
-        foreach ($registryData as &$data) {
-            $data->setTimezone(Tinebase_Core::get('userTimeZone'));
-            $data->translate();
-            $data = $data->toArray();
-        }
         return $registryData;    
     }
 }
