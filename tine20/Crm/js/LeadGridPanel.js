@@ -218,7 +218,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         
         /*
         handlerAddTask: function(){
-            Tine.Tasks.EditDialog.openWindow({
+            Tine.Tasks.TaskEditDialog.openWindow({
                 relatedApp: 'Crm'
             });
         }
