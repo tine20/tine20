@@ -207,14 +207,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     },
     
     /**
-     * returns object of selected container or null
+     * returns object of selected container or null/default
      */
-    getSelectedContainer: function() {
-        var container = null;
+    getSelectedContainer: function(defaultContainer) {
+        var container = defaultContainer;
         
         var node = this.getSelectionModel().getSelectedNode();
-        var containerType = node.attributes && node.attributes.containerType;
-        if (containerType == 'singleContainer' && node.attributes.container) {
+            
+        //var containerType = node.attributes && node.attributes.containerType;
+        if (node && Tine.Tinebase.container.pathIsContainer(node.attributes.container.path)) {
             container = node.attributes.container;
         }
         
