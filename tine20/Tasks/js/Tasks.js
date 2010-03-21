@@ -24,7 +24,14 @@ Tine.Tasks.TreePanel = function(config) {
     Tine.Tasks.TreePanel.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.Tasks.TreePanel , Tine.widgets.container.TreePanel);
+Ext.extend(Tine.Tasks.TreePanel , Tine.widgets.container.TreePanel, {
+    getAddContainer: function() {
+        var container = Tine.Tasks.registry.get('defaultContainer');
+        if (this.rendered) {
+            var selected = this.getSelectedContainer(container);
+        }
+    }
+});
 
 Tine.Tasks.FilterPanel = function(config) {
     Ext.apply(this, config);
@@ -94,6 +101,24 @@ Tine.Tasks.Task = Tine.Tinebase.data.Record.create(Tine.Tasks.TaskArray, {
     containerName: 'to do list',
     containersName: 'to do lists'
 });
+
+/**
+ * returns default account data
+ * 
+ * @namespace Tine.Admin.Model.User
+ * @static
+ * @return {Object} default data
+ */
+Tine.Tasks.Task.getDefaultData = function() {
+    var app = Tine.Tinebase.appMgr.get('Tasks');
+    
+    return {
+        class: 'PUBLIC',
+        percent: 0,
+        organizer: Tine.Tinebase.registry.get('currentAccount'),
+        container_id: app.getMainScreen().treePanel.getAddContainer()
+    };
+};
 
 /**
  * default tasks backend
