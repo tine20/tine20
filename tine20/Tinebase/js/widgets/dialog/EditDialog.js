@@ -65,14 +65,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     record: null,
     /**
-     * @cfg {Bool} getDefaultsAgain
-     * load record defaults if new record is created and mode != local
-     * 
-     * TODO is it required to load the defaults again here? should load defaults only if no record is supplied when opening dialog window
-     */
-    getDefaultsAgain: true,
-    
-    /**
      * @cfg {String} saveAndCloseButtonText
      * text of save and close button
      */
@@ -272,7 +264,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     }
                 });
             } else {
-                if (! this.record || this.getDefaultsAgain) {
+                if (! this.record) {
                     this.record = new this.recordClass(this.recordClass.getDefaultData(), 0);
                 }
                 this.onRecordLoad();

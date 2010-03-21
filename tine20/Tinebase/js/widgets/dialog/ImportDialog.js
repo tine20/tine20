@@ -37,7 +37,6 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tbarItems: [],
     evalGrants: false,
     sendRequest: true,
-    getDefaultsAgain: false,
     
     //private
     initComponent: function(){
