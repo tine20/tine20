@@ -82,6 +82,15 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
     },
     
     /**
+     * returns registry of this app
+     * 
+     * @return {Ext.util.MixedCollection}
+     */
+    getRegistry: function() {
+        return Tine[this.appName].registry;
+    },
+    
+    /**
      * template function for subclasses to initialize application
      */
     init: Ext.emptyFn
