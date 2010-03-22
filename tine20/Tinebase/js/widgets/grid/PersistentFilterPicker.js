@@ -97,6 +97,12 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
         });
         
         this.getNodeById(this.filterMountId).appendChild(this.filterNode);
+        
+        /*
+        if (this.filterMountId === '/') {
+            this.expandPath('///_persistentFilters');
+        }
+        */
     },
     
     /**
@@ -131,12 +137,12 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
      * 
      * @return {Array}
      */
-    getAdditionalCtxItems: function() {
+    getAdditionalCtxItems: function(filter) {
         var items = [];
         
         var as = Tine.Tinebase.appMgr.get('ActiveSync');
         if (as) {
-            items.concat(as.getPersistentFilterPickerCtxItems(this));
+            items = items.concat(as.getPersistentFilterPickerCtxItems(this, filter));
         }
         
         return items;
@@ -198,7 +204,7 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
                         }
                     }, this, false, node.text);
                 }
-            }].concat(this.getAdditionalCtxItems())
+            }].concat(this.getAdditionalCtxItems(node.attributes.filter))
         });
         menu.showAt(e.getXY());
     }
