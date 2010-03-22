@@ -30,5 +30,52 @@ Tine.ActiveSync.Application = Ext.extend(Tine.Tinebase.Application, {
      */
     getTitle: function() {
         return this.i18n.gettext('Active Sync');
+    },
+    
+    /**
+     * returns additional items for persitentn filter context menu
+     * 
+     * @todo rework this to be event/hook 
+     * 
+     * @param {} picker
+     * @param {} filter
+     */
+    getPersistentFilterPickerCtxItems: function(picker, filter) {
+        var items = [];
+        
+        if (picker.app.appName.match(/Addressbook|Calendar|Email|Tasks/)) {
+            var devices =  this.getRegistry().get('userDevices');
+            var menu = [];
+            Ext.each(devices, function(device) {
+                menu.push({
+                    text: Ext.util.Format.htmlEncode(device.friendlyname || device.useragent),
+                    iconCls: 'activesync-device-standard',
+                    handler: this.setDeviceContentFilter.createDelegate(this, [device, picker.app, filter])
+                });
+            }, this);
+            if (! Ext.isEmpty(devices)) {
+                items.push({
+                    text: String.format(this.i18n._('Set this as {0} Filter'), this.getTitle()),
+                    iconCls: this.getIconCls(),
+                    menu: menu
+                });
+            }
+        }
+        
+        return items;
+        
+    },
+    
+    setDeviceContentFilter: function(device, app, filter) {
+        var contentType = Tine.ActiveSync.Model.getContentType(app.appName);
+        
+        Tine.ActiveSync.setDeviceContentFilter(device.id, contentType, filter.id, function(response) {
+            Ext.Msg.alert(this.i18n._('Set Sync Filter'), String.format(
+                this.i18n._('{0} filter for device "{1}" is now "{2}"'),
+                    this.getTitle(),
+                    Ext.util.Format.htmlEncode(device.friendlyname || device.useragent),
+                    Ext.util.Format.htmlEncode(filter.name)
+                ));
+        }, this);
     }
 });
