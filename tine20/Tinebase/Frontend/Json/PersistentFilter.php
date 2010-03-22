@@ -50,8 +50,15 @@ class Tinebase_Frontend_Json_PersistentFilter
             'sort'      => array('name', 'creation_time')
         )));
         
+        $persistentFiltersData = array();
+        foreach ($persistentFilters as $persistentFilter) {
+            $persistentFilterData = $persistentFilter->toArray(FALSE);
+            $persistentFilterData['filters'] = $persistentFilterData['filters']->toArray(TRUE);
+            $persistentFiltersData[] = $persistentFilterData;
+        }
+        
         return array(
-            'results'       => $persistentFilters->toArray(),
+            'results'       => $persistentFiltersData,
             'totalcount'    => $this->_backend->searchCount($filter)
         );
     }
@@ -66,10 +73,10 @@ class Tinebase_Frontend_Json_PersistentFilter
     {
         $persistentFilter = $this->_backend->get($filterId);
         
-        $persistenFilterData = $persistentFilter->toArray(FALSE);
-        $persistenFilterData['filters'] = $persistenFilterData['filters']->toArray(TRUE);
+        $persistentFilterData = $persistentFilter->toArray(FALSE);
+        $persistentFilterData['filters'] = $persistentFilterData['filters']->toArray(TRUE);
         
-        return $persistenFilterData;
+        return $persistentFilterData;
     }
     
     /**
