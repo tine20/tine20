@@ -4,11 +4,9 @@
     <name>lead_default_xls</name>
     <type>export</type>
     <plugin>Crm_Export_Xls</plugin>
-    <template>crm_lead_export.xls</template>
-    <!-- Sadly, phpexcel does not support some of the formulas/diagrams in this template at the moment -->
-    <!--template>crm_lead_export_unsupported.xls</template-->
+    <template>crm_lead_export_excel5.xls</template>
     <reader>autodetection</reader>
-    <writer>Excel2007</writer>
+    <writer>Excel5</writer>
     <description>default xls lead export definition</description>
     <columns>
         <column>
