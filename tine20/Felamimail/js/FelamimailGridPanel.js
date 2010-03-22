@@ -273,7 +273,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
              defaultFilter: 'query',
              filters: [],
              plugins: [
-                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin({
+                    criteriaIgnores: [{field: 'folder_id'}]
+                })
              ]
         });
     },    
