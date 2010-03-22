@@ -92,7 +92,7 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Abstract
                 break;
                 
             case ActiveSync_Controller::CLASS_CONTACTS:
-                $device->contactfilter_id = $filterId;
+                $device->contactsfilter_id = $filterId;
                 break;
                 
             case ActiveSync_Controller::CLASS_EMAIL:
@@ -100,7 +100,7 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Abstract
                 break;
                 
             case ActiveSync_Controller::CLASS_TASKS:
-                $device->taskfilter_id = $filterId;
+                $device->tasksfilter_id = $filterId;
                 break;
                 
             default:
