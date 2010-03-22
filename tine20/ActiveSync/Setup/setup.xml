@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>3.2</version>
+    <version>3.3</version>
     <order>90</order>
     <depends>
         <application>Addressbook</application>
@@ -155,7 +155,7 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
-                    <name>contactfilter_id</name>
+                    <name>contactsfilter_id</name>
                     <type>text</type>
                     <length>64</length>
                     <notnull>false</notnull>
@@ -167,7 +167,7 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
-                    <name>taskfilter_id</name>
+                    <name>tasksfilter_id</name>
                     <type>text</type>
                     <length>64</length>
                     <notnull>false</notnull>

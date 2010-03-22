@@ -110,4 +110,34 @@ class ActiveSync_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('ActiveSync', '3.2');
     }
+    
+    /**
+     * rename filter columns once more
+     * 
+     * @return void
+     */
+    public function update_2()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>contactsfilter_id</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('acsync_device', $declaration, 'contactfilter_id');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>tasksfilter_id</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('acsync_device', $declaration, 'taskfilter_id');
+
+        $this->setApplicationVersion('ActiveSync', '3.3');
+    }
 }
