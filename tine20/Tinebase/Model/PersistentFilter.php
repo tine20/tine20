@@ -50,7 +50,6 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
         'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'model'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'filters'               => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'filters'               => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'is_default'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
