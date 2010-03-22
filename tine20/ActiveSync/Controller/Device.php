@@ -19,7 +19,7 @@
  * @package     ActiveSync
  * @subpackage  Controller
  */
-class ActiveSync_Controller_Device extends Tinebase_Controller_Abstract
+class ActiveSync_Controller_Device extends Tinebase_Controller_Record_Abstract
 {
     /**
      * the salutation backend
@@ -34,7 +34,14 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Abstract
      * @var ActiveSync_Controller_Device
      */
     private static $_instance = NULL;
-        
+
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'ActiveSync_Model_Device';
+    
     /**
      * the singleton pattern
      *
