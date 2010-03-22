@@ -682,6 +682,15 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
     },
     
     /**
+     * return view from grid
+     * 
+     * @return {Ext.grid.GridView}
+     */
+    getView: function() {
+        return this.grid.getView();
+    },
+    
+    /**
      * called when the store gets updated, e.g. from editgrid
      */
     onStoreUpdate: function(store, record, operation) {
