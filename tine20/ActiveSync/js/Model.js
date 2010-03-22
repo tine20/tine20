@@ -103,7 +103,7 @@ Tine.ActiveSync.Model.DeviceJsonBackend = Ext.extend(Tine.Tinebase.data.RecordPr
      * @param {Object} options
      * @return {String} transaction id
      */
-    setDeviceContentFilter: function(device, contentType, filterId) {
+    setDeviceContentFilter: function(device, contentClass, filterId) {
         options = options || {};
         options.params = options.params || {};
         options.beforeSuccess = function(response) {
@@ -113,7 +113,7 @@ Tine.ActiveSync.Model.DeviceJsonBackend = Ext.extend(Tine.Tinebase.data.RecordPr
         var p = options.params;
         p.method = this.appName + '.setDeviceContentFilter';
         p.deviceId = event.data;
-        p.contentType = contentType;
+        p.contentClass = contentClass;
         p.filterId = filterId;
         
         return this.doXHTTPRequest(options);
