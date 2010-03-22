@@ -119,7 +119,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
 
         // write headers
         $contentType = $export->getDownloadContentType();
-        $filename = 'tine20_export_' . strtolower($_filter->getApplicationName()) . '.' . $_format;
+        $filename = $export->getDownloadFilename($_filter->getApplicationName(), $_format);
         header("Pragma: public");
         header("Cache-Control: max-age=0");
         header("Content-Disposition: " . (($_format == 'pdf') ? 'inline' : 'attachment') . '; filename=' . $filename);

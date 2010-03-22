@@ -90,6 +90,23 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
     }
     
     /**
+     * return download filename
+     * @param string $_appName
+     * @param string $_format
+     */
+    public function getDownloadFilename($_appName, $_format)
+    {
+        $result = parent::getDownloadFilename($_appName, $_format);
+        
+        if ($this->_config->writer == 'Excel2007') {
+            // excel2007 extension is .xlsx
+            $result .= 'x';
+        }
+        
+        return $result;
+    }
+    
+    /**
      * output result
      */
     public function write()
@@ -141,7 +158,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
                 ->setSubject('Office 2007 XLSX Test Document')
                 ->setDescription('Export for ' . $this->_applicationName . ', generated using PHP classes.')
                 ->setKeywords("tine20 openxml php")
-                ->setCreated(Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale));
+                ->setCreated(Zend_Date::now()->get());
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_excelObject->getProperties(), true));
         }
     }

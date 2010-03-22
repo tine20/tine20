@@ -164,6 +164,17 @@ abstract class Tinebase_Export_Abstract
     abstract public function getDownloadContentType();
     
     /**
+     * return download filename
+     * 
+     * @param string $_appName
+     * @param string $_format
+     */
+    public function getDownloadFilename($_appName, $_format)
+    {
+        return 'export_' . strtolower($_appName) . '.' . $_format;
+    }
+    
+    /**
      * get records and resolve fields
      * 
      * @return Tinebase_Record_RecordSet
