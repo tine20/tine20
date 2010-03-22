@@ -27,6 +27,7 @@ class ActiveSync_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_applicationName = 'ActiveSync';
     
     /**
+     * Set sync filter
      * 
      * @param $deviceId
      * @param $contentType one of {Calendar, Contacts, Email, Tasks}
