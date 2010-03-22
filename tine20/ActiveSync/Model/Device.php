@@ -18,6 +18,10 @@
  * 
  * @package     ActiveSync
  * @property    string  $id the id
+ * @property    string  calendarfilter_id   the calendar filter id
+ * @property    string  contactfilter_id    the contact filter id
+ * @property    string  emailfilter_id      the email filter id
+ * @property    string  taskfilter_id       the tasks filter id
  */
 class ActiveSync_Model_Device extends Tinebase_Record_Abstract
 {  
