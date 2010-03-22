@@ -145,24 +145,16 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         $this->objects['eventDaily'] = $eventDaily;
         
         ########### Test Controller / uit ###############
-        $palm = new ActiveSync_Model_Device(array(
-            'deviceid'  => 'test_device_id',
-            'devicetype' => 'palm',
-            'owner_id' => $user->getId(),
-            'policy_id'=> 'test_:policy_id'
-           )
-        );
+        $palm = ActiveSync_Backend_DeviceTests::getTestDevice();
+        $palm->devicetype = 'palm';
+        $palm->owner_id   = $user->getId();
         $this->objects['devicePalm'] = $palm;
         
-        $iphone = new ActiveSync_Model_Device(array(
-            'deviceid'  => 'test_device_id',
-            'devicetype' => 'iphone',
-            'owner_id' => $user->getId(),
-            'policy_id'=> 'test_:policy_id'
-           )
-        );
+        $iphone = ActiveSync_Backend_DeviceTests::getTestDevice();
+        $iphone->devicetype = 'iphone';
+        $iphone->owner_id   = $user->getId();
         $this->objects['deviceIPhone'] = $iphone;
-        
+                
         //$this->_controller = new ActiveSync_Controller_Calendar($device, new Zend_Date(null, null, 'de_DE'));
     }
 

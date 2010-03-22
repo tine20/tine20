@@ -78,6 +78,19 @@ class ActiveSync_Controller_DeviceTests extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($device->id, $this->_device->id);
     }
+    
+    public function testSetDeviceContentFilter()
+    {
+        #$filter = new Tinebase_Model_PersistentFilter(array(
+        #    array(
+        #        'field' => 'query', 
+        #        'operator' => 'contains', 
+        #        'value' => 'blabla'
+        #    ),
+        #));
+        #//$filder = Tinebase_PersistentFilter::getFilterById($_filterId);
+        #ActiveSync_Controller_Device::getInstance()->setDeviceContentFilter($this->_device->getId(), ActiveSync_Controller::CLASS_CONTACTS, $filterId);
+    }
 }
     
 if (PHPUnit_MAIN_METHOD == 'ActiveSync_Controller_Device::main') {
