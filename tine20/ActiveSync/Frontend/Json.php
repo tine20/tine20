@@ -36,7 +36,9 @@ class ActiveSync_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function setDeviceContentFilter($deviceId, $contentType, $filterId)
     {
+        $device = ActiveSync_Controller_Device::getInstance()->setDeviceContentFilter($deviceId, $contentType, $filterId);
         
+        return $device->toArray();
     }
     
     /**
