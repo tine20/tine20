@@ -71,17 +71,40 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Abstract
      * set filter for different ActiveSync content types
      * 
      * @param unknown_type $_deviceId
-     * @param unknown_type $_contentType
+     * @param unknown_type $_class
      * @param unknown_type $_filterId
      * 
      * @return ActiveSync_Model_Device
      */
-    public function setDeviceContentFilter($_deviceId, $_contentType, $_filterId)
+    public function setDeviceContentFilter($_deviceId, $_class, $_filterId)
     {
         $device = $this->_backend->get($_deviceId);
         
         if($device->owner_id != $this->_currentAccount->getId()) {
             throw new Tinebase_Exception_AccessDenied('not owner of device ' . $_deviceId);
+        }
+        
+        $filterId = empty($_filterId) ? null : $_filterId;
+        
+        switch($_class) {
+            case ActiveSync_Controller::CLASS_CALENDAR:
+                $device->calendarfilter_id = $filterId;
+                break;
+                
+            case ActiveSync_Controller::CLASS_CONTACTS:
+                $device->contactfilter_id = $filterId;
+                break;
+                
+            case ActiveSync_Controller::CLASS_EMAIL:
+                $device->emailfilter_id = $filterId;
+                break;
+                
+            case ActiveSync_Controller::CLASS_TASKS:
+                $device->taskfilter_id = $filterId;
+                break;
+                
+            default:
+                throw new ActiveSync_Exception('unsupported class ' . $_class);
         }
         
         $device = $this->_backend->update($device);
