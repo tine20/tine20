@@ -132,11 +132,11 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $rightDescriptions = array(            
             self::REPORT_BUGS  => array(
                 'text'          => $translate->_('Report bugs'),
-                'description'   => $translate->_('Report bugs to tine20.org directly when they occur'),
+                'description'   => $translate->_('Report bugs to the software vendor directly when they occur.'),
             ),
             self::CHECK_VERSION  => array(
                 'text'          => $translate->_('Check version'),
-                'description'   => $translate->_('Check tine20.org for new versions'),
+                'description'   => $translate->_('Check for new versions of this software.'),
             ),
         );
         
