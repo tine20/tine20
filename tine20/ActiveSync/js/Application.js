@@ -55,7 +55,7 @@ Tine.ActiveSync.Application = Ext.extend(Tine.Tinebase.Application, {
                     checked: device[Ext.util.Format.lowercase(contentClass) + 'filter_id'] === filter.id,
                     group: 'activesyncdevices',
                     //iconCls: 'activesync-device-standard',
-                    checkHandler: this.setDeviceContentFilter.createDelegate(this, [device, contentClass, filter])
+                    handler: this.setDeviceContentFilter.createDelegate(this, [device, contentClass, filter])
                 });
             }, this);
             if (! Ext.isEmpty(devices)) {
@@ -74,12 +74,14 @@ Tine.ActiveSync.Application = Ext.extend(Tine.Tinebase.Application, {
     setDeviceContentFilter: function(device, contentClass, filter) {
         
         Tine.ActiveSync.setDeviceContentFilter(device.id, contentClass, filter.id, function(response) {
+            device[Ext.util.Format.lowercase(contentClass) + 'filter_id'] = filter.id; 
+            
             Ext.Msg.alert(this.i18n._('Set Sync Filter'), String.format(
                 this.i18n._('{0} filter for device "{1}" is now "{2}"'),
                     this.getTitle(),
                     Ext.util.Format.htmlEncode(device.friendlyname || device.useragent),
                     Ext.util.Format.htmlEncode(filter.name)
-                ));
+            ));
         }, this);
     }
 });
