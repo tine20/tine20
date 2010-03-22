@@ -124,6 +124,24 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
         store.un('beforeload', this.storeOnBeforeload, this);
     },
     
+    /**
+     * returns additional ctx items
+     * 
+     * @TODO: make this a hooking approach!
+     * 
+     * @return {Array}
+     */
+    getAdditionalCtxItems: function() {
+        var items = [];
+        
+        var as = Tine.Tinebase.appMgr.get('ActiveSync');
+        if (as) {
+            items.concat(as.getPersistentFilterPickerCtxItems(this));
+        }
+        
+        return items;
+    },
+    
     onContextMenu: function(node, e) {
         if (! node.attributes.isPersistentFilter) {
             return;
@@ -180,7 +198,7 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
                         }
                     }, this, false, node.text);
                 }
-            }]
+            }].concat(this.getAdditionalCtxItems())
         });
         menu.showAt(e.getXY());
     }
