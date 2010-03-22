@@ -1,0 +1,8 @@
+.ActiveSyncIconCls {
+    background-image:url(../../images/oxygen/16x16/actions/gears);
+}
+
+
+.activesync-device-standard {
+    background-image:url(../../images/oxygen/16x16/devices/phone.png) !important;
+}
