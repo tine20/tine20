@@ -74,6 +74,22 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
     }
     
     /**
+     * get export content type
+     * 
+     * @return string
+     */
+    public function getDownloadContentType()
+    {
+        $contentType = ($this->_config->writer == 'Excel2007') 
+            // Excel 2007 content type
+            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            // Excel 5 content type or other
+            : 'application/vnd.ms-excel';
+                
+        return $contentType;  
+    }
+    
+    /**
      * create new excel document
      * 
      * @return void
@@ -83,7 +99,14 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
         $templateFile = $this->_getTemplateFilename();
         
         if ($templateFile !== NULL) {
-            $this->_excelObject = PHPExcel_IOFactory::load($templateFile);
+            
+            if (! $this->_config->reader || $this->_config->reader == 'autodetection') {
+                $this->_excelObject = PHPExcel_IOFactory::load($templateFile);
+            } else {
+                $reader = PHPExcel_IOFactory::createReader($this->_config->reader);
+                $this->_excelObject = $reader->load($templateFile);                
+            }
+            
             $this->_excelObject->setActiveSheetIndex(1);
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new PHPExcel object.');
@@ -99,16 +122,17 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
     protected function _setDocumentProperties()
     {
         // set metadata/properties
-        $this->_excelObject->getProperties()
-            ->setCreator(Tinebase_Core::getUser()->accountDisplayName)
-            ->setLastModifiedBy(Tinebase_Core::getUser()->accountDisplayName)
-            ->setTitle('Tine 2.0 ' . $this->_applicationName . ' Export')
-            ->setSubject('Office 2007 XLSX Test Document')
-            ->setDescription('Export for ' . $this->_applicationName . ', generated using PHP classes.')
-            ->setKeywords("tine20 openxml php")
-            ->setCreated(Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale));
-            
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_excelObject->getProperties(), true));
+        if ($this->_config->writer == 'Excel2007') {
+            $this->_excelObject->getProperties()
+                ->setCreator(Tinebase_Core::getUser()->accountDisplayName)
+                ->setLastModifiedBy(Tinebase_Core::getUser()->accountDisplayName)
+                ->setTitle('Tine 2.0 ' . $this->_applicationName . ' Export')
+                ->setSubject('Office 2007 XLSX Test Document')
+                ->setDescription('Export for ' . $this->_applicationName . ', generated using PHP classes.')
+                ->setKeywords("tine20 openxml php")
+                ->setCreated(Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_excelObject->getProperties(), true));
+        }
     }
     
     /**
@@ -159,5 +183,9 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
             $i++;
             $this->_currentRowIndex++;
         }
+        
+        // save number of records
+        $this->_excelObject->setActiveSheetIndex(0);
+        $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow(5, 2, count($_records));
     }
 }
