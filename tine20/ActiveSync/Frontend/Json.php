@@ -29,11 +29,10 @@ class ActiveSync_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Set sync filter
      * 
-     * @param $deviceId
-     * @param $contentType one of {Calendar, Contacts, Email, Tasks}
-     * @param $filterId
-     * 
-     * @return device data
+     * @param  string $deviceId
+     * @param  string $contentType one of {Calendar, Contacts, Email, Tasks}
+     * @param  string $filterId
+     * @return array device data
      */
     public function setDeviceContentFilter($deviceId, $contentType, $filterId)
     {
