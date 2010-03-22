@@ -81,6 +81,12 @@
             <type>date</type>
         </column>
         <column>
+            <identifier>last_modified_time</identifier>
+            <header>Last Modified Date</header>
+            <type>date</type>
+            <empty>creation_time</empty>
+        </column>
+        <column>
             <identifier>container</identifier>
             <field>name</field>
             <header>Container</header>
