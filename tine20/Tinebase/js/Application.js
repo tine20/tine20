@@ -39,6 +39,11 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
     appName: null,
     
     /**
+     * @cfg {Boolean} hasMainScreen
+     */
+    hasMainScreen: true,
+    
+    /**
      * @property {Locale.gettext} i18n
      */
     i18n: null,

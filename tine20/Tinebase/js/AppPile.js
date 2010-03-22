@@ -72,10 +72,12 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
         Tine.Tinebase.AppPile.superclass.onRender.call(this, ct, position);
 
         this.apps.each(function(app) {
-            this.els[app.appName] = this.tpl.insertFirst(this.body, {title: app.getTitle(), iconCls: app.getIconCls()}, true);
-            this.els[app.appName].setStyle('cursor', 'pointer');
-            this.els[app.appName].addClassOnOver('app-panel-header-over');
-            this.els[app.appName].on('click', this.onAppTitleClick, this, app);
+            if (app.hasMainScreen) {
+                this.els[app.appName] = this.tpl.insertFirst(this.body, {title: app.getTitle(), iconCls: app.getIconCls()}, true);
+                this.els[app.appName].setStyle('cursor', 'pointer');
+                this.els[app.appName].addClassOnOver('app-panel-header-over');
+                this.els[app.appName].on('click', this.onAppTitleClick, this, app);
+            }
             
         }, this);
         

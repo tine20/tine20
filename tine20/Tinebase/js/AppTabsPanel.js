@@ -117,11 +117,13 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
     getAppItems: function() {
         var appItems = [];
         Tine.Tinebase.appMgr.getAll().each(function(app) {
-            appItems.push({
-                text: app.getTitle(),
-                iconCls: app.getIconCls(),
-                handler: this.onAppItemClick.createDelegate(this, [app])
-            });
+            if (app.hasMainScreen) {
+                appItems.push({
+                    text: app.getTitle(),
+                    iconCls: app.getIconCls(),
+                    handler: this.onAppItemClick.createDelegate(this, [app])
+                });
+            }
         }, this);
         
         return appItems.reverse();
