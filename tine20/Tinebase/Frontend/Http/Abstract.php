@@ -103,35 +103,22 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                     exit;
                 }
                 
-                $contentType = 'application/x-pdf';
                 break;
                 
-            case 'csv':
-                $result = $export->generate($_filter);
-                $contentType = 'text/csv';
-                break;
-
             case 'ods':
                 $result = $export->generate();
-                $contentType = 'application/vnd.oasis.opendocument.spreadsheet';
                 break;
 
-            case 'xls':
-                $result = $export->generate($_filter);
-                // @todo support older excel formats? add config option?
-                
-                // Excel 2007 content type
-                //$contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-                
-                // Excel 5 content type
-                $contentType = 'application/vnd.ms-excel';
-                break;
-                
             default:
-                throw new Tinebase_Exception_UnexpectedValue('Format ' . $_format . ' not supported.');
+                if (in_array($_format, array('csv', 'xls'))) {
+                    $result = $export->generate($_filter);
+                } else {
+                    throw new Tinebase_Exception_UnexpectedValue('Format ' . $_format . ' not supported.');
+                }
         }
 
         // write headers
+        $contentType = $export->getDownloadContentType();
         $filename = 'tine20_export_' . strtolower($_filter->getApplicationName()) . '.' . $_format;
         header("Pragma: public");
         header("Cache-Control: max-age=0");
@@ -146,8 +133,8 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 break;
             case 'xls':
                 // redirect output to client browser
-                //$xlswriter = PHPExcel_IOFactory::createWriter($result, 'Excel2007');
-                $xlswriter = PHPExcel_IOFactory::createWriter($result, 'Excel5');
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating and sending xls to client (Format: ' . $xlsFormat . ').');
+                $xlswriter = PHPExcel_IOFactory::createWriter($result, $xlsFormat);
                 $xlswriter->save('php://output');
                 break;
             default:

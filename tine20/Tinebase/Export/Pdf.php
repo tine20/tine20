@@ -290,6 +290,16 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
     }			
 
     /**
+     * get download content type
+     * 
+     * @return string
+     */
+    public function getDownloadContentType()
+    {
+        return 'application/x-pdf';
+    }
+        
+    /**
      * create a table
      * 
      * @param   array   $_content content

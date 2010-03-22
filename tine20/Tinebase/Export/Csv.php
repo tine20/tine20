@@ -137,6 +137,16 @@ class Tinebase_Export_Csv
     }
     
     /**
+     * get download content type
+     * 
+     * @return string
+     */
+    public function getDownloadContentType()
+    {
+        return 'text/csv';
+    }
+        
+    /**
      * add relation types
      * 
      * @param array $_fields

@@ -157,6 +157,13 @@ abstract class Tinebase_Export_Abstract
     abstract public function getDocument();
     
     /**
+     * get download content type
+     * 
+     * @return string
+     */
+    abstract public function getDownloadContentType();
+    
+    /**
      * get records and resolve fields
      * 
      * @return Tinebase_Record_RecordSet

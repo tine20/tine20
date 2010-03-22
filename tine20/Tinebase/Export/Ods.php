@@ -132,6 +132,16 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
     }
     
     /**
+     * get download content type
+     * 
+     * @return string
+     */
+    public function getDownloadContentType()
+    {
+        return 'application/vnd.oasis.opendocument.spreadsheet';
+    }
+    
+    /**
      * create new open document document
      * 
      * @return void
