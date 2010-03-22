@@ -103,6 +103,20 @@ class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals($originalDueDateFilter['value'], $convertedDueDataFilter['value']);
     }
     
+    public function testSearchFilter()
+    {
+        $savedFilter = $this->testSaveFilter();
+        
+        $filterData = array(
+            array('field' => 'model', 'operator' => 'equals', 'value' => 'Tasks_Model_TaskFilter'),
+            array('field' => 'id', 'operator' => 'equals', 'value' => $savedFilter['id'])
+        );
+        
+        $searchResult = $this->_uit->search($filterData);
+        $this->assertEquals(1, $searchResult['totalcount']);
+        $this->_assertSavedFilter($searchResult['results'][0]);
+    }
+    
     /**
      * assert saved filer matches expections for $this->_testFilterData
      * 
