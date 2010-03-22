@@ -55,7 +55,7 @@ Tine.ActiveSync.Application = Ext.extend(Tine.Tinebase.Application, {
             }, this);
             if (! Ext.isEmpty(devices)) {
                 items.push({
-                    text: String.format(this.i18n._('Set this as {0} Filter'), this.getTitle()),
+                    text: String.format(this.i18n._('Set as {0} Filter'), this.getTitle()),
                     iconCls: this.getIconCls(),
                     menu: menu
                 });
