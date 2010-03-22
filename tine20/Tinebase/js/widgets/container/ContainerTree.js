@@ -549,7 +549,6 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
             
             this.treePanel.getSelectionModel().filterPluginSetValue = true;
             this.treePanel.selectContainerPath(filter.value.path);
-            this.treePanel.getSelectionModel().filterPluginSetValue = false;
         }, this);
     }
 });
