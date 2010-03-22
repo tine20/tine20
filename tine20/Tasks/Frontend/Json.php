@@ -172,10 +172,14 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $allStatus = Tasks_Controller_Status::getInstance()->getAllStatus();
         $allStatus->setTimezone(Tinebase_Core::get('userTimeZone'));
         $allStatus->translate();
-            
+        
+        $defaultContainer = Tasks_Controller::getInstance()->getDefaultContainer()->toArray();
+        $defaultContainer['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultContainer['id'])->toArray();
+        
+        
         $registryData = array(
             'AllStatus' => $allStatus->toArray(),
-            'defaultContainer' => Tasks_Controller::getInstance()->getDefaultContainer()->toArray()
+            'defaultContainer' => $defaultContainer
         );
         
         return $registryData;    
