@@ -12,13 +12,18 @@
  * @version     $Id$
  */
 
+/**
+ * Test helper
+ */
+require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+
 class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
 {
 	
 	protected $_uit = null;
 	
 	protected $_fixtures = array(
-               'Europe/Berlin' => array(                                                                                                                            
+               /*'Europe/Berlin' => array(                                                                                                                            
                     'bias' => -60,
                     'standardName' => '',
                     'standardYear' => 0,
@@ -40,7 +45,7 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
                     'daylightSecond' => 0,
                     'daylightMilliseconds' => 0,
                     'daylightBias' => -60                                                         
-               ),
+               ),*/
                'Europe/Berlin' => array( //fake test with standardYear and daylightYear => will evaluate the specified year when guessing the timezone
                     'bias' => -60,
                     'standardName' => '',
@@ -64,7 +69,7 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
                     'daylightMilliseconds' => 0,
                     'daylightBias' => -60                                                         
                ),
-               'US/Arizona' => array(
+               'America/Phoenix' => array(
                     'bias' => 420,
                     'standardName' => '',
                     'standardYear' => 0,
@@ -113,9 +118,9 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
         );
         
     protected $_packedFixtrues = array(
-        'Europe/Berlin' => 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==',
-        'US/Arizona'    => 'pAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
-        'Africa/Douala'   => 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
+        'Europe/Berlin'     => 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==',
+        'America/Phoenix'   => 'pAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
+        'Africa/Douala'     => 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
         'Pacific/Kwajalein' => '0AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
 //        'Asia/Baghdad' => 'TP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAABAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAABAAMAAAAAAAAAxP///w==',
 //        'Asia/Tehran' => 'Lv///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkAAgAEAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAABAAIAAAAAAAAAxP///w==',
@@ -124,7 +129,7 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
          
     protected $_timezoneIdentifierToAbbreviation = array(
         'Europe/Berlin'     => 'CET',
-        'US/Arizona'        => 'MST',
+        'America/Phoenix'   => 'MST',
         'Africa/Algiers'    => 'CET',
         'Africa/Douala'     => 'WAT',
         'Pacific/Kwajalein' => 'MHT',
@@ -168,12 +173,11 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
     public function testExpectedTimezoneOption()
     {
         foreach ($this->_fixtures as $timezoneIdentifier => $offsets) {
-        	$timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
+            $timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
             $matchedTimezones = $this->_uit->getListOfTimezones($offsets, $timezoneIdentifier);
             $this->assertTrue(array_key_exists($timezoneIdentifier, $matchedTimezones));
             $this->assertEquals($timezoneAbbr, $matchedTimezones[$timezoneIdentifier]);
         }
-        
         
         //Africa/Algiers exceptionally belongs to CET insetad of WAT
         $packed = 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
