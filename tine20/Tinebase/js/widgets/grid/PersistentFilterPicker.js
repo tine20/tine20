@@ -51,7 +51,7 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
                 if (isPersistentFilter) {
                     Ext.apply(attr, {
                         isPersistentFilter: isPersistentFilter,
-                        text: attr.name,
+                        text: Ext.util.Format.htmlEncode(attr.name),
                         id: attr.id,
                         leaf: attr.leaf === false ? attr.leaf : true,
                         filter: Ext.copyTo({}, attr, 'id, name, filters')
