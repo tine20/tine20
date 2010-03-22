@@ -61,4 +61,53 @@ class ActiveSync_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('ActiveSync', '3.1');
     }
+    
+    /**
+     * rename filter columns
+     * @return void
+     */
+    public function update_1()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>contactfilter_id</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('acsync_device', $declaration, 'contactfilter');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>calendarfilter_id</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('acsync_device', $declaration, 'calendarfilter');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>taskfilter_id</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('acsync_device', $declaration, 'taskfilter');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>emailfilter_id</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('acsync_device', $declaration, 'emailfilter');
+        
+        $this->setApplicationVersion('ActiveSync', '3.2');
+    }
 }
