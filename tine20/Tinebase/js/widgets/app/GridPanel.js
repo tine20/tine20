@@ -464,6 +464,8 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
      * load data
      * 
      * @todo rethink -> preservCursor and preservSelection might conflict on page breaks!
+     * @todo scroller preserving might me not enough, as selected position might change
+     *       we better make shure, that first seeable record stays or something like this -> liveGrid
      * 
      * 
      * @param {Boolean} preserveCursor
