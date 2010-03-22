@@ -323,7 +323,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             hidden:         ! this.recordClass.getField('tags'),
             selectionModel: this.grid.getSelectionModel(),
             recordClass:    this.recordClass,
-            updateHandler:  this.loadData.createDelegate(this, [true]),
+            updateHandler:  this.loadData.createDelegate(this, [true, true, true]),
             app:            this.app
         });
             
@@ -399,12 +399,6 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
         this.pagingToolbar.on('beforechange', function() {
             this.grid.getView().isPagingRefresh = true;
         }, this);
-        this.pagingToolbar.on('render', function() {
-            //Ext.fly(this.pagingToolbar.el.dom).createChild({cls:'x-tw-selection-info', html: '<b>100 Selected</b>'});
-            //console.log('h9er');
-            //this.pagingToolbar.addFill();
-            //this.pagingToolbar.add('sometext');
-        }, this);
         
         // init view
         var view =  new Ext.grid.GridView({
@@ -413,21 +407,14 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             forceFit:true,
             ignoreAdd: true,
             emptyText: this.i18nEmptyText,
-            onLoad: Ext.emptyFn,
-            listeners: {
-                beforerefresh: function(v) {
-                    v.scrollTop = v.scroller.dom.scrollTop;
-                },
-                refresh: function(v) {
-                    // on paging-refreshes (prev/last...) we don't preserve the scroller state
-                    if (v.isPagingRefresh) {
-                        v.scrollToTop();
-                        v.isPagingRefresh = false;
-                    } else {
-                        v.scroller.dom.scrollTop = v.scrollTop;
-                    }
+            onLoad: Ext.grid.GridView.prototype.onLoad.createInterceptor(function() {
+                if (this.grid.getView().isPagingRefresh) {
+                    this.grid.getView().isPagingRefresh = false;
+                    return true;
                 }
-            }
+                
+                return false;
+            }, this)
         });
         
         // which grid to use?
@@ -476,15 +463,47 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
     /**
      * load data
      * 
+     * @todo rethink -> preservCursor and preservSelection might conflict on page breaks!
+     * 
+     * 
      * @param {Boolean} preserveCursor
+     * @param {Boolean} preserveSelection
+     * @param {Boolean} preserveScroller
      */
-    loadData: function(preserveCursor/*, preserveSelection*/) {
-        var opts = {};
+    loadData: function(preserveCursor, preserveSelection, preserveScroller) {
+        var opts = {
+            callback: Ext.emptyFn,
+            scope: this
+        };
         
         if (preserveCursor) {
             opts.params = {
                 start: this.pagingToolbar.cursor
             };
+        }
+        
+        if (preserveSelection) {
+            var oldSelection = this.grid.getSelectionModel().getSelections();
+        
+            opts.callback = opts.callback.createSequence(function(records, options, success) {
+                var sm = this.grid.getSelectionModel();
+                var store = this.getStore();
+                
+                Ext.each(oldSelection, function(record) {
+                    var row = store.indexOfId(record.id);
+                    if (row >= 0) {
+                        sm.selectRow(row, true);
+                    }
+                }, this);
+            }, this);
+        }
+        
+        if (preserveScroller) {
+            this.grid.getView().scrollTop = this.grid.getView().scroller.dom.scrollTop;
+            
+            opts.callback = opts.callback.createSequence(function(records, options, success) {
+                var v = this.grid.getView().scroller.dom.scrollTop = this.grid.getView().scrollTop;
+            }, this);
         }
         
         this.store.load(opts);
@@ -824,7 +843,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             listeners: {
                 scope: this,
                 'update': function(record) {
-                    this.loadData(true);
+                    this.loadData(true, true, true);
                 }
             }
         });
@@ -931,6 +950,6 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
      * - reload the store
      */
     onAfterDelete: function() {
-        this.loadData(true);
+        this.loadData(true, false, true);
     }
 });
