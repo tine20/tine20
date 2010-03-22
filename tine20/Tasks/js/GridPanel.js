@@ -73,7 +73,8 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         
         // the editGrids onEditComplete calls the focusCell after a edit operation
         // this leads to a 'flicker' effect we dont want!
-        this.grid.view.focusCell = Ext.emptyFn;
+        // mhh! but disabling this, breaks keynav 
+        //this.grid.view.focusCell = Ext.emptyFn;
         
         // legacy
         this.initGridEvents();
