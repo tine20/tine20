@@ -18,7 +18,7 @@
  * @package     ActiveSync
  * @subpackage  Frontend
  */
-class ActiveSync_Frontend_Http extends Tinebase_Frontend_Abstract
+class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     /**
      * app name
@@ -26,6 +26,19 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Abstract
      * @var string
      */
     protected $_applicationName = 'ActiveSync';
+    
+    /**
+     * Returns all JS files which must be included for this app
+     *
+     * @return array Array of filenames
+     */
+    public function getJsFilesToInclude()
+    {
+        return array(
+            'ActiveSync/js/Application.js',
+            'ActiveSync/js/Model.js',
+        );
+    }
     
     /**
      * authenticate user
