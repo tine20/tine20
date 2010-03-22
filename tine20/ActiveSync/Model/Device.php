@@ -66,9 +66,9 @@ class ActiveSync_Model_Device extends Tinebase_Record_Abstract
         'pingfolder'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'remotewipe'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'calendarfilter_id'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contactfilter_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'contactsfilter_id'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'emailfilter_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'taskfilter_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tasksfilter_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
 }
