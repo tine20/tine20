@@ -90,6 +90,17 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
     }
     
     /**
+     * output result
+     */
+    public function write()
+    {
+        $xlsFormat = ($this->_config->writer) ? $this->_config->writer : 'Excel5';
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating and sending xls to client (Format: ' . $xlsFormat . ').');
+        $xlswriter = PHPExcel_IOFactory::createWriter($this->_excelObject, $xlsFormat);
+        $xlswriter->save('php://output');
+    }
+    
+    /**
      * create new excel document
      * 
      * @return void

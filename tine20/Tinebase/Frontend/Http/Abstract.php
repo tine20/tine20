@@ -133,9 +133,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 break;
             case 'xls':
                 // redirect output to client browser
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating and sending xls to client (Format: ' . $xlsFormat . ').');
-                $xlswriter = PHPExcel_IOFactory::createWriter($result, $xlsFormat);
-                $xlswriter->save('php://output');
+                $export->write($result);
                 break;
             default:
                 readfile($result);
