@@ -24,6 +24,11 @@
  */
 class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tinebase_Event_Interface
 {
+    const CLASS_CONTACTS = 'Contacts';
+    const CLASS_CALENDAR = 'Calendar';
+    const CLASS_TASKS    = 'Tasks';
+    const CLASS_EMAIL    = 'Email';
+    
     /**
      * holds the instance of the singleton
      *
@@ -122,10 +127,10 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
     public static function dataFactory($_class, ActiveSync_Model_Device $_device, Zend_Date $_syncTimeStamp) 
     {
         switch($_class) {
-            case 'Contacts':
-            case 'Calendar':
-            case 'Tasks':
-            case 'Email':
+            case self::CLASS_CONTACTS:
+            case self::CLASS_CALENDAR:
+            case self::CLASS_EMAIL:
+            case self::CLASS_TASKS:
                 $className = 'ActiveSync_Controller_' . $_class;
                 $backend = new $className($_device, $_syncTimeStamp);
                 break;
