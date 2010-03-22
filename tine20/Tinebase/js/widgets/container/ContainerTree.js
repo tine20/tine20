@@ -208,15 +208,19 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     
     /**
      * returns object of selected container or null/default
+     * 
+     * @param {String} [requiredGrant]
+     * @param {Object} [defaultContainer]
      */
-    getSelectedContainer: function(defaultContainer) {
+    getSelectedContainer: function(requiredGrant, defaultContainer) {
         var container = defaultContainer;
         
         var node = this.getSelectionModel().getSelectedNode();
             
-        //var containerType = node.attributes && node.attributes.containerType;
         if (node && Tine.Tinebase.container.pathIsContainer(node.attributes.container.path)) {
-            container = node.attributes.container;
+            if (! requiredGrant || this.hasGrant(requiredGrant, node)) {
+                container = node.attributes.container;
+            }
         }
         
         return container;
