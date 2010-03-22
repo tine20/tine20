@@ -14,3 +14,16 @@
  */
 .ext-el-mask {z-index: 5000;}
 .ext-el-mask-msg {z-index: 5001;}
+
+/* only included in expamples :-(*/
+.x-menu-title {
+    background: #D6E3F2;
+    border-style: solid;
+    border-color:#DAE6F4 #99bbe8 #99bbe8 #DAE6F4;
+    border-width: 1px;
+    margin:-2px -2px 0;
+    color:#15428b;
+    font:bold 10px tahoma,arial,verdana,sans-serif;
+    display:block;
+    padding:3px;
+}
