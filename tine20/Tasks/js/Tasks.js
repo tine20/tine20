@@ -27,9 +27,7 @@ Tine.Tasks.TreePanel = function(config) {
 Ext.extend(Tine.Tasks.TreePanel , Tine.widgets.container.TreePanel, {
     getAddContainer: function() {
         var container = Tine.Tasks.registry.get('defaultContainer');
-        if (this.rendered) {
-            var selected = this.getSelectedContainer(container);
-        }
+        return this.getSelectedContainer('addGrant', container);
     }
 });
 
