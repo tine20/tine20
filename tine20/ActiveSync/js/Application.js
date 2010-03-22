@@ -20,6 +20,9 @@ Ext.ns('Tine.ActiveSync');
  * @version     $Id$
  */
 Tine.ActiveSync.Application = Ext.extend(Tine.Tinebase.Application, {
+    
+    hasMainScreen: false,
+    
     /**
      * Get translated application title of the calendar application
      * 
