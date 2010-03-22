@@ -61,6 +61,30 @@ Tine.ActiveSync.Model.Device = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
 
 /**
  * @namespace   Tine.ActiveSync.Model
+ * @class       Tine.ActiveSync.Model.Device
+ * @extends     Tine.Tinebase.data.Record
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
+ * 
+ * get content type of app
+ * 
+ * @static
+ * @param {String} appName
+ * @return {String}
+ */
+Tine.ActiveSync.Model.getContentType = function(appName) {
+    switch(appName) {
+        case 'Calendar'   : return 'Calendar';
+        case 'Addressbook': return 'Contacts';
+        case 'Felamimail' : return 'Email';
+        case 'Tasks'      : return 'Tasks';
+        default: throw new Ext.Error('no contentType for this app');
+    }
+};
+
+/**
+ * @namespace   Tine.ActiveSync.Model
  * @class       Tine.ActiveSync.Model.DeviceJsonBackend
  * @extends     Tine.Tinebase.data.RecordProxy
  * 
