@@ -32,6 +32,7 @@ class ActiveSync_AllTests
         $suite->addTestSuite('ActiveSync_TimezoneConverterTest');
         $suite->addTestSuite('ActiveSync_Controller_ContactsTests');
         $suite->addTestSuite('ActiveSync_Controller_CalendarTests');
+        $suite->addTestSuite('ActiveSync_Controller_DeviceTests');
         
         return $suite;
     }
