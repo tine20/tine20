@@ -113,7 +113,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             Tine.Tasks.JsonBackend.saveRecord(task, {
                 scope: this,
                 success: function() {
-                    this.loadData(true);
+                    this.loadData(true, true, true);
                 },
                 failure: function () { 
                     Ext.MessageBox.alert(this.app.i18n._('Failed'), this.app.i18n._('Could not save task.')); 
