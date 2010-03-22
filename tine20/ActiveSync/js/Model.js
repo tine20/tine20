@@ -73,13 +73,13 @@ Tine.ActiveSync.Model.Device = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
  * @param {String} appName
  * @return {String}
  */
-Tine.ActiveSync.Model.getContentType = function(appName) {
+Tine.ActiveSync.Model.getContentClass = function(appName) {
     switch(appName) {
         case 'Calendar'   : return 'Calendar';
         case 'Addressbook': return 'Contacts';
         case 'Felamimail' : return 'Email';
         case 'Tasks'      : return 'Tasks';
-        default: throw new Ext.Error('no contentType for this app');
+        default: throw new Ext.Error('no contentClass for this app');
     }
 };
 
