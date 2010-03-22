@@ -73,7 +73,7 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
         this.on('click', function(node) {
             if (node.attributes.isPersistentFilter) {
                 node.select();
-                this.onFilterSelect();
+                this.onFilterSelect(node.attributes.filter);
             } else if (node.id == '_persistentFilters') {
                 node.expand();
                 return false;
@@ -115,10 +115,14 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
      *       remove all filter data and paste our filter id. To ensure we are
      *       always the last listener, we directly remove the listener afterwards
      */
-    onFilterSelect: function() {
+    onFilterSelect: function(filter) {
         var store = this.app.getMainScreen().getContentPanel().getStore();
+        
+        // NOTE: this can be removed when all instances of filterplugins are removed
         store.on('beforeload', this.storeOnBeforeload, this);
         store.load();
+        
+        //this.app.getMainScreen().getContentPanel().filterToolbar.setValue(filter.filters);
         
         if (typeof this.app.getMainScreen().getTreePanel().activate == 'function') {
             this.app.getMainScreen().getTreePanel().activate(0);
