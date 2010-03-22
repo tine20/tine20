@@ -57,3 +57,41 @@ Tine.ActiveSync.Model.Device = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
         return this.get('friendlyname') || this.get('useragent');
     }
 });
+
+
+/**
+ * @namespace   Tine.ActiveSync.Model
+ * @class       Tine.ActiveSync.Model.DeviceJsonBackend
+ * @extends     Tine.Tinebase.data.RecordProxy
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
+ * JSON backend for devices
+ */
+Tine.ActiveSync.Model.DeviceJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, {
+    
+    /**
+     * Creates a recuring event exception
+     * 
+     * @param {Tine.Calendar.Model.Event} event
+     * @param {Boolean} deleteInstance
+     * @param {Boolean} deleteAllFollowing
+     * @param {Object} options
+     * @return {String} transaction id
+     */
+    setDeviceContentFilter: function(device, contentType, filterId) {
+        options = options || {};
+        options.params = options.params || {};
+        options.beforeSuccess = function(response) {
+            return [this.recordReader(response)];
+        };
+        
+        var p = options.params;
+        p.method = this.appName + '.setDeviceContentFilter';
+        p.deviceId = event.data;
+        p.contentType = contentType;
+        p.filterId = filterId;
+        
+        return this.doXHTTPRequest(options);
+    }
+});
