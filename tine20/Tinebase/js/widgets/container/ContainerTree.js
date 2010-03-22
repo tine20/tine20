@@ -488,9 +488,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * selects path by container Path
      * 
      * @param {String} containerPath
+     * @param {String} [attr]
+     * @param {Function} [callback]
      */
-    selectContainerPath: function(containerPath) {
-        return this.selectPath(this.getTreePath(containerPath));
+    selectContainerPath: function(containerPath, attr, callback) {
+        return this.selectPath(this.getTreePath(containerPath), attr, callback);
     }
 });
 
@@ -548,7 +550,9 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
             }
             
             this.treePanel.getSelectionModel().filterPluginSetValue = true;
-            this.treePanel.selectContainerPath(filter.value.path);
+            this.treePanel.selectContainerPath(filter.value.path, null, function() {
+                this.treePanel.getSelectionModel().filterPluginSetValue = false;
+            }.createDelegate(this));
         }, this);
     }
 });
