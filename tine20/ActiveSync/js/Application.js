@@ -45,7 +45,7 @@ Tine.ActiveSync.Application = Ext.extend(Tine.Tinebase.Application, {
         
         if (picker.app.appName.match(/Addressbook|Calendar|Email|Tasks/)) {
             var devices =  this.getRegistry().get('userDevices');
-            var menuItems = ['<b class="menu-title">' + this.i18n._('Select a Device') +'</b>'];
+            var menuItems = ['<b class="x-menu-title">' + this.i18n._('Select a Device') +'</b>'];
             
             Ext.each(devices, function(device) {
                 var contentClass = Tine.ActiveSync.Model.getContentClass(picker.app.appName);
