@@ -53,7 +53,6 @@ Tine.ActiveSync.Application = Ext.extend(Tine.Tinebase.Application, {
                 menuItems.push({
                     text: Ext.util.Format.htmlEncode(device.friendlyname || device.useragent),
                     checked: device[Ext.util.Format.lowercase(contentClass) + 'filter_id'] === filter.id,
-                    group: 'activesyncdevices',
                     //iconCls: 'activesync-device-standard',
                     handler: this.setDeviceContentFilter.createDelegate(this, [device, contentClass, filter])
                 });
