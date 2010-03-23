@@ -329,6 +329,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         var targetFolderId = dropEvent.target.attributes.folder_id;
         var ids = [];
         
+        // TODO get selections from grid selection model
         for (var i=0; i < dropEvent.data.selections.length; i++) {
             ids.push(dropEvent.data.selections[i].id);
         };
