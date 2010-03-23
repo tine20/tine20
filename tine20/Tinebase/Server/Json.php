@@ -213,7 +213,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                 && $jsonKey != Tinebase_Core::get('jsonKey')) {
         
             if (! Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-                Tinebase_Core::getLogger()->INFO('Attempt to request a privileged Json-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
+                Tinebase_Core::getLogger()->INFO('Attempt to request a privileged Json-API method without authorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (session timeout?)');
                 
                 throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
             } else {
