@@ -200,7 +200,6 @@ class Felamimail_Message extends Zend_Mail_Message
         $message = new Felamimail_Model_Message();
         
         foreach ($_zendMailMessage->getHeaders() as $headerName => $headerValue) {
-            #echo "$headerName => $headerValue". PHP_EOL;
             switch($headerName) {
                 case 'subject':
                     $message->$headerName = $headerValue;
@@ -209,7 +208,6 @@ class Felamimail_Message extends Zend_Mail_Message
                     
                 case 'from':
                     // do nothing
-                    
                     break;
                     
                 case 'to':
