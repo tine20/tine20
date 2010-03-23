@@ -145,6 +145,19 @@ class Tinebase_Export_Csv
     {
         return 'text/csv';
     }
+
+    /**
+     * return download filename
+     * 
+     * @param string $_appName
+     * @param string $_format
+     * 
+     * @todo remove this when we extend Tinebase_Export_Abstract
+     */
+    public function getDownloadFilename($_appName, $_format)
+    {
+        return 'export_' . strtolower($_appName) . '.' . $_format;
+    }
         
     /**
      * add relation types
