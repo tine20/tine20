@@ -192,8 +192,15 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         $count += $this->_addMessages($messages, $folder);
                         
                         $folder->cache_job_lowestuid = ($folder->imap_uidnext) ? min($nextUids) : ($folder->imap_totalcount - $folder->cache_totalcount);
+                        
+                        // set stepwidth back to normal
+                        $this->_uidStepWidth = 10000;
+
                     } else {
                         $folder->cache_job_lowestuid = $stepLowestUid;
+                        
+                        // increase stepwidth
+                        $this->_uidStepWidth *= 10;
                     }
                     
                     $timeLeft = ($folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
