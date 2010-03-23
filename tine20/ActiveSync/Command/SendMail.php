@@ -39,109 +39,53 @@ class ActiveSync_Command_SendMail
     /**
      * process the XML file and add, change, delete or fetches data 
      *
-     * @todo can we get rid of LIBXML_NOWARNING
-     * @todo we need to stored the initial data for folders and lifetime as the phone is sending them only when they change
      * @return resource
      */
     public function handle()
     {
         $this->_saveInSent = (bool)$_GET['SaveInSent'] == 'T';
         
-        $rawMessage = file_get_contents("php://input"); 
+        $this->_incomingMessage = new Zend_Mail_Message(
+            array(
+                'file' => fopen("php://input", 'r')
+            )
+        );
 
-        $this->_incomingMessage = new Zend_Mail_Message(array('raw' => $rawMessage));
-
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . $this->_saveInSent . " message: " . $rawMessage);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . $this->_saveInSent);
         
     }    
     
     /**
      * this function generates the response for the client
+     * 
+     * @return void
      */
     public function getResponse()
     {
         $currentUser = Tinebase_Core::getUser();
         
         if(empty($currentUser->accountEmailAddress)) {
-            throw new Exception('no email address set for current user');
+            throw new ActiveSync_Exception('no email address set for current user');
         }
         
-        return;
+        $message = Felamimail_Message::createMessageFromZendMailMessage($this->_incomingMessage);
         
-        $mail = new Tinebase_Mail();
+        $accounts = Felamimail_Controller_Account::getInstance()->search(null, null, null, true);
         
-        $mail->setFrom($currentUser->accountEmailAddress, $currentUser->accountDisplayName);
-        
-        $this->_addHeaders($mail);
-        
-        if($this->_incomingMessage->isMultipart() === true) {
-            foreach (new RecursiveIteratorIterator($this->_incomingMessage) as $part) {
-                $this->_addPart($mail, $part);
-            }    
-        } else {
-            $this->_addPart($mail, $this->_incomingMessage);
+        if(count($accounts) == 0) {
+            throw new ActiveSync_Exception('no email account found');
         }
         
-        Tinebase_Smtp::getInstance()->sendMessage($mail);
+        $message->from = $accounts[0];
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " content_type: " . $message->content_type);
+        
+        Felamimail_Controller_Message::getInstance()->sendMessage($message);
     }
     
-    protected function _addHeaders(Tinebase_Mail $_mail)
-    {
-        foreach($this->_incomingMessage->getHeaders() as $headerName => $headerValue) {
-            switch($headerName) {
-                case 'date':
-                    $_mail->setDate($headerValue);
-                    
-                    break;
-                    
-                case 'content-transfer-encoding':
-                case 'content-type':
-                case 'from':
-                case 'mime-version':
-                    // do nothing
-                    break;
-                    
-                case 'subject':
-                    $_mail->setSubject($headerValue);
-                    
-                    break;
-                    
-                case 'to':
-                    $tos = $this->_incomingMessage->getHeader('to');
-                    $tos = Felamimail_Message::parseAdresslist($tos);
-                    foreach($tos as $to) {
-                        $_mail->addTo($to['address'], $to['name']);
-                    }
-                    
-                    break;
-                    
-                case 'cc':
-                    $ccs = $this->_incomingMessage->getHeader('cc');
-                    $ccs = Felamimail_Message::parseAdresslist($ccs);
-                    foreach($ccs as $cc) {
-                        $_mail->addCc($cc['address'], $cc['name']);
-                    }
-                    
-                    break;
-                    
-                case 'bcc':
-                    $bccs = $this->_incomingMessage->getHeader('bcc');
-                    $bccs = Felamimail_Message::parseAdresslist($bccs);
-                    foreach($bccs as $bcc) {
-                        $_mail->addBcc($bcc['address'], $bcc['name']);
-                    }
-                                
-                    break;
-                    
-                    
-                default:
-                    $_mail->addHeader(ucwords($headerName), $headerValue);
-                    
-                    break;
-            }
-        }
-        
-    }
+    /**
+     * keeped for reference
+     * 
     
     function _addPart(Tinebase_Mail $_mail, Zend_Mail_Part $_part)
     {
@@ -190,5 +134,6 @@ class ActiveSync_Command_SendMail
                 
                 break;
         }
-    }    
+    }   
+    */ 
 }
