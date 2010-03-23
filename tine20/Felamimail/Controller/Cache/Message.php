@@ -21,6 +21,11 @@
 class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
 {
     /**
+     * default uid stepwidth
+     */
+    const DEFAULT_UID_STEPWIDTH = 10000;
+    
+    /**
      * application name (is needed in checkRight())
      *
      * @var string
@@ -194,13 +199,17 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         $folder->cache_job_lowestuid = ($folder->imap_uidnext) ? min($nextUids) : ($folder->imap_totalcount - $folder->cache_totalcount);
                         
                         // set stepwidth back to normal
-                        $this->_uidStepWidth = 10000;
+                        if ($this->_uidStepWidth > self::DEFAULT_UID_STEPWIDTH) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting uid stepwidth back to normal: ' . self::DEFAULT_UID_STEPWIDTH);
+                            $this->_uidStepWidth = self::DEFAULT_UID_STEPWIDTH;
+                        }
 
                     } else {
                         $folder->cache_job_lowestuid = $stepLowestUid;
                         
                         // increase stepwidth
                         $this->_uidStepWidth *= 10;
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No new messages found, increasing uid stepwidth to ' . $this->_uidStepWidth);
                     }
                     
                     $timeLeft = ($folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
