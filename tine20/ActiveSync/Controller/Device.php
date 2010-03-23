@@ -73,7 +73,40 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Record_Abstract
     private function __clone() 
     {        
     }
-
+    
+    /**
+     * check grant for action (CRUD)
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @param string $_action
+     * @param boolean $_throw
+     * @param string $_errorMessage
+     * @param Tinebase_Record_Interface $_oldRecord
+     * @return boolean
+     * @throws Tinebase_Exception_AccessDenied
+     * 
+     * @todo use this function in other create + update functions
+     * @todo invent concept for simple adding of grants (plugins?) 
+     */
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
+    {
+        $hasGrant = false;
+        
+        if (Tinebase_Core::getUser()->hasRight('ActiveSync', Tinebase_Acl_Rights::ADMIN) || $_record->owner_id == Tinebase_Core::getUser()->getId()) {
+            $hasGrant = true;
+        }
+                
+        if ($hasGrant !== true) {
+            if ($_throw) {
+                throw new Tinebase_Exception_AccessDenied($_errorMessage);
+            } else {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No permissions to ' . $_action);
+            }
+        }
+        
+        return $hasGrant;
+    }
+    
     /**
      * set filter for different ActiveSync content types
      * 
