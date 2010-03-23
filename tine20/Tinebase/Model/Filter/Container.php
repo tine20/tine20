@@ -234,6 +234,12 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                 $this->_containerIds = $this->_getContainer('getPersonalContainer');
                 break;
             case 'specialNode':
+                // sanitize filter value
+                if (is_array($this->_value)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Value should not be an array. Using first element.');
+                    $this->_value = array_pop($this->_value);
+                }
+                
                 switch ($this->_value) {
                     case 'all':
                         $this->_containerIds = $this->_getContainer('getContainerByACL');
