@@ -111,7 +111,7 @@ Tine.Tasks.Task.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('Tasks');
     
     return {
-        class: 'PUBLIC',
+        'class': 'PUBLIC',
         percent: 0,
         organizer: Tine.Tinebase.registry.get('currentAccount'),
         container_id: app.getMainScreen().treePanel.getAddContainer()
