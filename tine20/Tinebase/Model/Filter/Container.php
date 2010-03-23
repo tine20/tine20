@@ -211,6 +211,18 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     } 
     
     /**
+     * return ids of containers selected by filter
+     * 
+     * @return array
+     */
+    public function getContainerIds()
+    {
+        $this->_resolve();
+        
+        return $this->_containerIds;
+    }
+    
+    /**
      * resolve container ids
      *
      */
