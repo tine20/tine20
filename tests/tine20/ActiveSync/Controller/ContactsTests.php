@@ -195,11 +195,13 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $palm = ActiveSync_Backend_DeviceTests::getTestDevice();
         $palm->devicetype   = 'palm';
         $palm->owner_id     = $user->getId();
+        $palm->contactsfilter_id = $this->objects['filter']->getId();
         $this->objects['devicePalm']   = ActiveSync_Controller_Device::getInstance()->create($palm);
         
         $iphone = ActiveSync_Backend_DeviceTests::getTestDevice();
         $iphone->devicetype = 'iphone';
         $iphone->owner_id   = $user->getId();
+        $iphone->contactsfilter_id = $this->objects['filter']->getId();
         $this->objects['deviceIPhone'] = ActiveSync_Controller_Device::getInstance()->create($iphone);
         
     }
