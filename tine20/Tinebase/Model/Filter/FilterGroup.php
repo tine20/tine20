@@ -58,7 +58,7 @@
  * $filterGroup = new myFilterGroup($filterData);
  * 
  */
-class Tinebase_Model_Filter_FilterGroup
+class Tinebase_Model_Filter_FilterGroup implements Iterator
 {
     /*************** config options for inheriting filter groups ***************/
     
@@ -464,5 +464,26 @@ class Tinebase_Model_Filter_FilterGroup
 	            }
         	}
         }
+    }
+    
+    ###### iterator interface ###########
+    public function rewind() {
+        reset($this->_filterObjects);
+    }
+
+    public function current() {
+        return current($this->_filterObjects);
+    }
+
+    public function key() {
+        return key($this->_filterObjects);
+    }
+
+    public function next() {
+        return next($this->_filterObjects);
+    }
+
+    public function valid() {
+        return $this->current() !== false;
     }
 }
