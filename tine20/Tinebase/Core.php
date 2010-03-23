@@ -503,7 +503,23 @@ class Tinebase_Core
             }
         }
         
-        Zend_Session::start();
+        try {
+            Zend_Session::start();
+        } catch (Zend_Session_Exception $zse) {
+            // check session validation errors
+            $errorMessage = $zse->getMessage();
+            self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Session error: ' . $errorMessage);
+            self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getTraceAsString());
+            
+            if (preg_match('/Zend_Session_Validator_HttpUserAgent/', $errorMessage)) {
+                self::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' User agent validation problem -> ' . $_SERVER['HTTP_USER_AGENT']);
+                if (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::SESSIONUSERAGENTVALIDATION, NULL, TRUE)->value) {
+                    throw $zse;
+                }
+            } else {
+                throw $zse;
+            }
+        }
         
         define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
         define('TINE20_CODENAME',      getDevelopmentRevision());

@@ -135,6 +135,12 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
     const SESSIONIPVALIDATION = 'sessionIpValidation';
     
     /**
+     * Config key for session user agent validation -> if this is set to FALSE no exception is thrown
+     * @var string
+     */
+    const SESSIONUSERAGENTVALIDATION = 'sessionUserAgentValidation';
+    
+    /**
      * identifier
      * 
      * @var string
