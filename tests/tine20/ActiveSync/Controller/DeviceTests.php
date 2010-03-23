@@ -50,29 +50,34 @@ class ActiveSync_Controller_DeviceTests extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {   	
-        $deviceBackend = new ActiveSync_Backend_Device();
-        
+        ########### define test device
         $testDevice = ActiveSync_Backend_DeviceTests::getTestDevice();
         
-        $this->objects['device'] = $deviceBackend->create($testDevice);
+        $this->objects['device'] = ActiveSync_Controller_Device::getInstance()->create($testDevice);
         
-        
+        ########### define test filter
         $filterBackend = new Tinebase_PersistentFilter();
         
-        $filter = new Tinebase_Model_PersistentFilter(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            'account_id'        => Tinebase_Core::getUser()->getId(),
-            'model'             => 'Addressbook_Model_ContactFilter',
-            'filters'           => array(array(
-                'field' => 'query', 
-                'operator' => 'contains', 
-                'value' => 'blabla'
-            )),
-            'name'              => 'Sync Test',
-            'description'       => 'Created by unit test'
-        ));
+        try {
+            $filter = $filterBackend->getByProperty('Sync Test', 'name');
+        } catch (Tinebase_Exception_NotFound $e) {
+            $filter = new Tinebase_Model_PersistentFilter(array(
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+                'account_id'        => Tinebase_Core::getUser()->getId(),
+                'model'             => 'Addressbook_Model_ContactFilter',
+                'filters'           => array(array(
+                    'field' => 'query', 
+                    'operator' => 'contains', 
+                    'value' => 'blabla'
+                )),
+                'name'              => 'Sync Test',
+                'description'       => 'Created by unit test'
+            ));
+            
+            $filter = $filterBackend->create($filter);
+        }
         
-        $this->objects['filter'] = $filterBackend->create($filter);
+        $this->objects['filter'] = $filter;
     }
     
     /**
