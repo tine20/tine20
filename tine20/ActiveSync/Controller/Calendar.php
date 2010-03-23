@@ -724,8 +724,23 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         // only the IPhone supports multiple folders for contacts currently
         if(strtolower($this->_device->devicetype) == 'iphone') {
         
-            $folders = $this->_getSyncableFolders();
-
+            // get the folders the user has access to
+            $allowedFolders = $this->_getSyncableFolders();
+            
+            $wantedFolders = null;
+            // maybe the user has defined a filter to limit the search results
+            if(!empty($this->_device->calendarfilter_id)) {
+                $persistentFilter = Tinebase_PersistentFilter::getFilterById($this->_device->calendarfilter_id);
+                
+                foreach($persistentFilter as $filter) {
+                    if($filter instanceof Tinebase_Model_Filter_Container) {
+                        $wantedFolders = array_flip($filter->getContainerIds());
+                    }
+                }
+            }
+            
+            $folders = $wantedFolders === null ? $allowedFolders : array_intersect_key($allowedFolders, $wantedFolders);
+            
         } else {
             
             $folders[$this->_specialFolderName] = array(
