@@ -1186,19 +1186,15 @@ class Tinebase_Container
      * move records to container
      * 
      * @param string $_targetContainerId
-     * @param array $_recordIds
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_applicationName
      * @param string $_modelName
      * @param string $_containerProperty
      * @return void
      * @throws Tinebase_Exception_AccessDenied|Tinebase_Exception_NotFound
      */
-    public function moveRecordsToContainer($_targetContainerId, $_recordIds, $_applicationName, $_modelName, $_containerProperty = 'container_id')
+    public function moveRecordsToContainer($_targetContainerId, Tinebase_Model_Filter_FilterGroup $_filter, $_applicationName, $_modelName, $_containerProperty = 'container_id')
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Moving ' 
-            . count($_recordIds) . ' records to ' . $_applicationName . ' / ' . $_modelName . ' container ' . $_targetContainerId
-        );
-        
         $userId = Tinebase_Core::getUser()->getId();
         
         // check add grant in target container
@@ -1209,7 +1205,11 @@ class Tinebase_Container
         
         // get records
         $recordController = Tinebase_Core::getApplicationInstance($_applicationName, $_modelName);
-        $records = $recordController->getMultiple($_recordIds);
+        $records = $recordController->search($_filter);
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Moving ' 
+            . count($records) . ' records to ' . $_applicationName . ' / ' . $_modelName . ' container ' . $_targetContainerId
+        );
         
         // check delete grant in source container
         $containerIdsWithDeleteGrant = $this->getContainerByACL($userId, $_applicationName, Tinebase_Model_Grants::GRANT_DELETE, TRUE);

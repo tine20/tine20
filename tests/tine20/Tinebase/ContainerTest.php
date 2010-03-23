@@ -331,7 +331,9 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
         $this->objects['contactsToDelete'][] = $contact->getId();
         
-        $this->_instance->moveRecordsToContainer($this->objects['initialContainer']->getId(), array($contact->getId()), 'Addressbook', 'Contact');
+        $filter = array(array('field' => 'id', 'operator' => 'in', 'value' => array($contact->getId())));
+        $containerJson = new Tinebase_Frontend_Json_Container();
+        $containerJson->moveRecordsToContainer($this->objects['initialContainer']->getId(), $filter, 'Addressbook', 'Contact');
         
         $movedContact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
         

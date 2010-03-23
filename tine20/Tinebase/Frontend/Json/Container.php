@@ -196,14 +196,18 @@ class Tinebase_Frontend_Json_Container
      * move records to container
      * 
      * @param string $targetContainerId
-     * @param array  $recordIds
+     * @param array  $filterData
      * @param string $applicationName
      * @param string $model
      * @return array
      */
-    public function moveRecordsToContainer($targetContainerId, $recordIds, $applicationName, $model)
+    public function moveRecordsToContainer($targetContainerId, $filterData, $applicationName, $model)
     {
-        Tinebase_Container::getInstance()->moveRecordsToContainer($targetContainerId, $recordIds, $applicationName, $model);
+        $filterModel = $applicationName . '_Model_' . $model . 'Filter'; 
+        $filter = new $filterModel(array());
+        $filter->setFromArrayInUsersTimezone($filterData);
+        
+        Tinebase_Container::getInstance()->moveRecordsToContainer($targetContainerId, $filter, $applicationName, $model);
         
         return array(
             'status'    => 'success'
