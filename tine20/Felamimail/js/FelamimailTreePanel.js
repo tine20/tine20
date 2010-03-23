@@ -20,9 +20,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>Tree of Accounts with folders</p>
  * <pre>
  * TODO         use pie for progress
- * TODO         fix drop target / see container tree -> overwrite some fns of tree dropzone
  * low priority:
- * TODO         only allow nodes as drop target (not 'between')
  * TODO         make inbox/drafts/templates configurable in account
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
  * TODO         add unread count to intelligent folders
@@ -388,7 +386,14 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             // check if grid has to be updated
             if (selectedNode.id == record.id) {
                 //console.log('update grid');
-                this.filterPlugin.onFilterChange();
+                
+                // TODO do not update if multiple messages are selected (this does not work if messages are moved!)
+                // TODO do not reload details panel
+                var contentPanel = this.app.getMainScreen().getContentPanel();
+                if (contentPanel /*&& contentPanel.getGrid().getSelectionModel().getCount() <= 1*/) {
+                    // update & preserve selection
+                    contentPanel.loadData(true, true, true);
+                }
             }
         }
             
