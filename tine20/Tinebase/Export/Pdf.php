@@ -6,7 +6,7 @@
  * @subpackage	Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        extend Tinebase_Export_Abstract
@@ -157,10 +157,9 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * @param   string $_titleIcon icon next to the title      
      * @param   Zend_Pdf_Image $_image image for the upper right corner (i.e. contact photo)
      * @param   bool $_tableBorder
-     * @return  string  the contact pdf
-     * 
+     * @return  void
      */
-    public function generatePdf(array $_record, 
+    public function generatePdf(    $_record, 
                                     $_title = "", 
                                     $_subtitle = "", 
                                     $_tags = array(),
@@ -173,7 +172,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         $xPos = 50;
         $yPos = 800;
         $yPosImage = 720;
-        $translate = Tinebase_Translation::getTranslation('Tinebase');        
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
         
         // add page
         if (!isset($this->pages[$this->_pageNumber])) { 
@@ -286,7 +285,9 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         $this->_CreateFooter();
         
         // increase page number
-        $this->_pageNumber++;        
+        $this->_pageNumber++;
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created PDF export page for record: ' . print_r($_record, TRUE));
     }			
 
     /**
@@ -297,6 +298,17 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
     public function getDownloadContentType()
     {
         return 'application/x-pdf';
+    }
+    
+    /**
+     * return download filename
+     * 
+     * @param string $_appName
+     * @param string $_format
+     */
+    public function getDownloadFilename($_appName, $_format)
+    {
+        return 'export_' . strtolower($_appName) . '.' . $_format;
     }
         
     /**
