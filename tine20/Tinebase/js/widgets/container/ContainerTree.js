@@ -60,7 +60,7 @@ Tine.widgets.container.TreePanel = function(config) {
 };
 
 Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
- 	/**
+    /**
      * @cfg {Tine.Tinebase.Application} app
      */
     app: null,
@@ -92,10 +92,10 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     requiredGrant: 'readGrant',
     
-	//iconCls: 'x-new-application',
-	border: false,
+    //iconCls: 'x-new-application',
+    border: false,
     autoScroll: true,
-	enableDrop: true,
+    enableDrop: true,
     ddGroup: 'containerDDGroup',
     
     /**
@@ -104,12 +104,12 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @property ctxNode holds treenode which got a contextmenu
      * @type Ext.tree.TreeNode
      */
-	ctxNode: null,
+    ctxNode: null,
     
-	/**
+    /**
      * init this treePanel
-	 */
-	initComponent: function() {
+     */
+    initComponent: function() {
         if (! this.app) {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
         }
@@ -130,7 +130,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             inspectCreateNode: this.onBeforeCreateNode.createDelegate(this)
         });
         
-		this.root = {
+        this.root = {
             path: '/',
             expanded: true,
             children: [{
@@ -163,17 +163,17 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             }
         }
         
-		this.initContextMenu();
-		
+        this.initContextMenu();
+        
         this.getSelectionModel().on('beforeselect', this.onBeforeSelect, this);
         this.getSelectionModel().on('selectionchange', this.onSelectionChange, this);
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforeNodeDrop, this);
-		
+        
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
         return;
-	},
+    },
     
     /**
      * template fn for subclasses to set default path
@@ -260,24 +260,24 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         return (attr.leaf && attr.container.account_grants[grant]);
     },
     
-	/**
+    /**
      * @private
      * 
      * - kill x-scrollers
      * - select default path
-	 */
-	afterRender: function() {
-		Tine.widgets.container.TreePanel.superclass.afterRender.call(this);
+     */
+    afterRender: function() {
+        Tine.widgets.container.TreePanel.superclass.afterRender.call(this);
         this.getEl().first().first().applyStyles('overflow-x: hidden');
         // NOTE: selecting fires selectionChange... this breaks ftb if not rendered.
         //       As all searches return used filters, we don't need this anyway
-		//this.selectContainerPath(this.getDefaultContainerPath());
-	},
+        //this.selectContainerPath(this.getDefaultContainerPath());
+    },
     
-	/**
+    /**
      * @private
-	 */
-	initContextMenu: function() {
+     */
+    initContextMenu: function() {
         
         this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.containerName,
@@ -286,15 +286,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             backend: 'Tinebase_Container',
             backendModel: 'Container'
         });
-	    
-	    this.contextMenuSingleContainer= Tine.widgets.tree.ContextMenu.getMenu({
+        
+        this.contextMenuSingleContainer= Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.containerName,
-	    	actions: ['delete', 'rename', 'grants'],
+            actions: ['delete', 'rename', 'grants'],
             scope: this,
             backend: 'Tinebase_Container',
             backendModel: 'Container'
-	    });
-	},
+        });
+    },
     
     /**
      * expand automatically on node click
@@ -415,18 +415,20 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     onBeforeNodeDrop: function(dropEvent) {
         var targetContainerId = dropEvent.target.id;
-        var recordIds = [];
         
-        for (var i=0; i < dropEvent.data.selections.length; i++) {
-            recordIds.push(dropEvent.data.selections[i].id);
-        };
+        // get selection filter from grid
+        var sm = this.app.getMainScreen().getContentPanel().getGrid().getSelectionModel();
+        if (sm.getCount() === 0) {
+            return false;
+        }
+        var filter = sm.getSelectionFilter();
         
         // move messages to folder
         Ext.Ajax.request({
             params: {
                 method: 'Tinebase_Container.moveRecordsToContainer',
                 targetContainerId: targetContainerId,
-                recordIds: recordIds,
+                filterData: filter,
                 model: this.recordClass.getMeta('modelName'),
                 applicationName: this.recordClass.getMeta('appName')
             },
