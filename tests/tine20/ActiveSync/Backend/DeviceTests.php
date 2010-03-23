@@ -48,6 +48,11 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
+    /**
+     * create ActiveSync_Model_Device to be used in tests
+     * 
+     * @return ActiveSync_Model_Device
+     */
     public static function getTestDevice()
     {
         $testDevice = new ActiveSync_Model_Device(array(
