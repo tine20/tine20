@@ -135,6 +135,10 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
                 $this->_excelObject = $reader->load($templateFile);                
             }
             
+            // need to unregister the zip stream wrapper because it is overwritten by PHPExcel!
+            // TODO file a bugreport to PHPExcel 
+            @stream_wrapper_restore("zip");
+            
             $this->_excelObject->setActiveSheetIndex(1);
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new PHPExcel object.');
