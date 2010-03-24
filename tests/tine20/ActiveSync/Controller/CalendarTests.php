@@ -144,18 +144,43 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         #var_dump($eventDaily->toArray());
         $this->objects['eventDaily'] = $eventDaily;
         
-        ########### Test Controller / uit ###############
+        ########### define test filter
+        $filterBackend = new Tinebase_PersistentFilter();
+        
+        try {
+            $filter = $filterBackend->getByProperty('Calendar Sync Test', 'name');
+        } catch (Tinebase_Exception_NotFound $e) {
+            $filter = new Tinebase_Model_PersistentFilter(array(
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+                'account_id'        => Tinebase_Core::getUser()->getId(),
+                'model'             => 'Calendar_Model_EventFilter',
+                'filters'           => array(array(
+                    'field'     => 'container_id', 
+                    'operator'  => 'equals', 
+                    'value'     => $this->objects['containerWithSyncGrant']->getId()
+                )),
+                'name'              => 'Calendar Sync Test',
+                'description'       => 'Created by unit test'
+            ));
+            
+            $filter = $filterBackend->create($filter);
+        }
+        $this->objects['filter'] = $filter;
+        
+        
+        ########### define test devices
         $palm = ActiveSync_Backend_DeviceTests::getTestDevice();
-        $palm->devicetype = 'palm';
-        $palm->owner_id   = $user->getId();
-        $this->objects['devicePalm'] = $palm;
+        $palm->devicetype   = 'palm';
+        $palm->owner_id     = $user->getId();
+        $palm->calendarfilter_id = $this->objects['filter']->getId();
+        $this->objects['devicePalm']   = ActiveSync_Controller_Device::getInstance()->create($palm);
         
         $iphone = ActiveSync_Backend_DeviceTests::getTestDevice();
         $iphone->devicetype = 'iphone';
         $iphone->owner_id   = $user->getId();
-        $this->objects['deviceIPhone'] = $iphone;
-                
-        //$this->_controller = new ActiveSync_Controller_Calendar($device, new Zend_Date(null, null, 'de_DE'));
+        $iphone->calendarfilter_id = $this->objects['filter']->getId();
+        $this->objects['deviceIPhone'] = ActiveSync_Controller_Device::getInstance()->create($iphone);
+        
     }
 
     /**
@@ -179,6 +204,12 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         
         Tinebase_Container::getInstance()->deleteContainer($this->objects['containerWithSyncGrant']);
         Tinebase_Container::getInstance()->deleteContainer($this->objects['containerWithoutSyncGrant']);
+        
+        ActiveSync_Controller_Device::getInstance()->delete($this->objects['devicePalm']);
+        ActiveSync_Controller_Device::getInstance()->delete($this->objects['deviceIPhone']);
+        
+        $filterBackend = new Tinebase_PersistentFilter();
+        $filterBackend->delete($this->objects['filter']->getId());
     }
     
     /**
@@ -277,6 +308,21 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('20090525T183000Z', @$testDom->getElementsByTagNameNS('uri:Calendar', 'EndTime')->item(0)->nodeValue, $testDom->saveXML());
         $this->assertEquals('20090531T173000Z', @$testDom->getElementsByTagNameNS('uri:Calendar', 'Until')->item(0)->nodeValue, $testDom->saveXML());
         
+    }
+    
+    /**
+     * test xml generation for IPhone
+     * 
+     * birthday must have 12 hours added
+     */
+    public function _testGetServerEntries()
+    {
+        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
+        
+        $entries = $controller->getServerEntries('calendar-root', ActiveSync_Controller_Calendar::FILTER_2_WEEKS_BACK);
+        
+        $this->assertContains($this->objects['event']->getId(), $entries);
+        #$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
     }
     
 }

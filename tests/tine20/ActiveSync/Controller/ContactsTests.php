@@ -178,9 +178,9 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
                 'account_id'        => Tinebase_Core::getUser()->getId(),
                 'model'             => 'Addressbook_Model_ContactFilter',
                 'filters'           => array(array(
-                    'field' => 'query', 
-                    'operator' => 'contains', 
-                    'value' => 'blabla'
+                    'field'     => 'container_id', 
+                    'operator'  => 'equals', 
+                    'value'     => $this->objects['containerWithSyncGrant']->getId()
                 )),
                 'name'              => 'Contacts Sync Test',
                 'description'       => 'Created by unit test'
@@ -253,10 +253,12 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
         
         $folders = $controller->getSupportedFolders();
+        
         foreach($folders as $folder) {
         	$this->assertTrue(Tinebase_Core::getUser()->hasGrant($folder['folderId'], Tinebase_Model_Grants::GRANT_SYNC));
         }
         $this->assertArrayNotHasKey("addressbook-root", $folders, "key addressbook-root found");
+        $this->assertEquals(1, count($folders));
     }
     
     /**
