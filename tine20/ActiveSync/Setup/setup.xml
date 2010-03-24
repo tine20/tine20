@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>3.3</version>
+    <version>3.4</version>
     <order>90</order>
     <depends>
         <application>Addressbook</application>
@@ -157,25 +157,25 @@
                 <field>
                     <name>contactsfilter_id</name>
                     <type>text</type>
-                    <length>64</length>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
                     <name>calendarfilter_id</name>
                     <type>text</type>
-                    <length>64</length>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
                     <name>tasksfilter_id</name>
                     <type>text</type>
-                    <length>64</length>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
                     <name>emailfilter_id</name>
                     <type>text</type>
-                    <length>64</length>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <index>
@@ -194,6 +194,50 @@
                     <foreign>true</foreign>
                     <reference>
                         <table>acsync_policy</table>
+                        <field>id</field>
+                    </reference>
+                </index>   
+                <index>
+                    <name>acsync_device::calendarfilter_id--filter::id</name>
+                    <field>
+                        <name>calendarfilter_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>filter</table>
+                        <field>id</field>
+                    </reference>
+                </index>   
+                <index>
+                    <name>acsync_device::contactsfilter_id--filter::id</name>
+                    <field>
+                        <name>contactsfilter_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>filter</table>
+                        <field>id</field>
+                    </reference>
+                </index>   
+                <index>
+                    <name>acsync_device::emailfilter_id--filter::id</name>
+                    <field>
+                        <name>emailfilter_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>filter</table>
+                        <field>id</field>
+                    </reference>
+                </index>   
+                <index>
+                    <name>acsync_device::tasksfilter_id--filter::id</name>
+                    <field>
+                        <name>tasksfilter_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>filter</table>
                         <field>id</field>
                     </reference>
                 </index>   
