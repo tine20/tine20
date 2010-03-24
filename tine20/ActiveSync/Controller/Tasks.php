@@ -79,6 +79,13 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      */
     protected $_folderType          = ActiveSync_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED;
     
+    /**
+     * name of property which defines the filterid for different content classes
+     * 
+     * @var string
+     */
+    protected $_filterProperty = 'tasksfilter_id';        
+    
     public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId)
     {
         $data = $this->_contentController->get($_serverId);
@@ -220,25 +227,6 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
-        
-        return $filterArray;
-    }
-    
-    /**
-     * return contentfilter array
-     * 
-     * @param $_filterType
-     * @return Tinebase_Model_Filter_FilterGroup
-     * 
-     * @todo include period filter?
-     */
-    protected function _getContentFilter($_filterType)
-    {
-        // always get closed tasks
-        $filterArray[] = array(
-            'field' => 'showClosed', 
-            'value' => TRUE
-        );
         
         return $filterArray;
     }

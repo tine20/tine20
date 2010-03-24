@@ -194,6 +194,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     protected $_folderType          = ActiveSync_Command_FolderSync::FOLDERTYPE_CALENDAR_USER_CREATED;
     
     /**
+     * name of property which defines the filterid for different content classes
+     * 
+     * @var string
+     */
+    protected $_filterProperty = 'calendarfilter_id';
+        
+    /**
      * append contact to xml parent node
      *
      * @todo handle BusyStatus
@@ -679,10 +686,16 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      * @param $_filterType
      * @return Tinebase_Model_Filter_FilterGroup
      */
-    protected function _getContentFilter($_filterType)
+    protected function _getContentFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_filterType)
     {
-        // exclude recur exceptions
-        $filterArray[] = array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL);
+        $_filter->addFilter(new Tinebase_Model_Filter_Text('recurid', 'isnull', null));
+        
+        #// exclude recur exceptions
+        #$filterArray[] = array(
+        #    'field'     => 'recurid', 
+        #    'operator'  => 'isnull', 
+        #    'value'     => NULL
+        #);
         
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
@@ -702,16 +715,18 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             // next 10 years
             $to = Zend_Date::now()->addYear(10);
             // add period filter
-            $filterArray[] = array(
-                'field'    => 'period',
-                'operator' => 'within',
-                'value'    => array(
-                    'from'  => $from,
-                    'until' => $to
-            ));
+            #$filterArray[] = array(
+            #    'field'    => 'period',
+            #    'operator' => 'within',
+            #    'value'    => array(
+            #        'from'  => $from,
+            #        'until' => $to
+            #));
+            $_filter->addFilter(new Calendar_Model_PeriodFilter('period', 'within', array(
+                'from'  => $from,
+                'until' => $to
+            )));
         }
-        
-        return $filterArray;
     }
     
     /**

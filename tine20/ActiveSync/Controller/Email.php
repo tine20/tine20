@@ -124,6 +124,13 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     protected $_folderType          = ActiveSync_Command_FolderSync::FOLDERTYPE_MAIL_USER_CREATED;
     
     /**
+     * name of property which defines the filterid for different content classes
+     * 
+     * @var string
+     */
+    protected $_filterProperty = 'emailfilter_id';        
+    
+    /**
      * the constructor
      *
      * @param Zend_Date $_syncTimeStamp

@@ -108,7 +108,14 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      * @var int
      */
     protected $_folderType          = ActiveSync_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED;
-        
+
+    /**
+     * name of property which defines the filterid for different content classes
+     * 
+     * @var string
+     */
+    protected $_filterProperty = 'contactsfilter_id';        
+    
     
     /**
      * append contact to xml parent node
