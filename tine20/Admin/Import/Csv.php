@@ -30,42 +30,47 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected function _importRecord($_recordData, &$_result)
     {
-        $record = new $this->_modelName($_recordData, TRUE);
+        if ($this->_modelName == 'Tinebase_Model_FullUser' && $this->_controller instanceof Admin_Controller_User) {
         
-        // add prefix to login name if given or create valid login name
-        if (isset($record->accountLoginName)) {
-            if (isset($this->_options['accountLoginNamePrefix'])) {
-                $record->accountLoginName = $this->_options['accountLoginNamePrefix'] . $record->accountLoginName;
-            }
-        } else {
-            $record->accountLoginName = Tinebase_User::getInstance()->generateUserName($record);
-        }
-        
-        // fire 'before import' event
-        Tinebase_Event::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
-        
-        // generate passwd (use accountLoginName or password from options or password from csv in this order)
-        $password = $record->accountLoginName;
-        if (isset($this->_options['password'])) {
-            $password = $this->_options['password'];
-        }
-        if (isset($_recordData['password']) && !empty($_recordData['password'])) {
-            $password = $_recordData['password'];
-        }
+            $record = new $this->_modelName($_recordData, TRUE);
             
-        // try to create record with password
-        if ($record->isValid()) {   
-            if (!$this->_options['dryrun']) {
-                $record = $this->_controller->create($record, $password, $password);
+            // add prefix to login name if given or create valid login name
+            if (isset($record->accountLoginName)) {
+                if (isset($this->_options['accountLoginNamePrefix'])) {
+                    $record->accountLoginName = $this->_options['accountLoginNamePrefix'] . $record->accountLoginName;
+                }
             } else {
-                $_result['results']->addRecord($record);
+                $record->accountLoginName = Tinebase_User::getInstance()->generateUserName($record);
             }
-            $_result['totalcount']++;
+            
+            // fire 'before import' event
+            Tinebase_Event::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
+            
+            // generate passwd (use accountLoginName or password from options or password from csv in this order)
+            $password = $record->accountLoginName;
+            if (isset($this->_options['password'])) {
+                $password = $this->_options['password'];
+            }
+            if (isset($_recordData['password']) && !empty($_recordData['password'])) {
+                $password = $_recordData['password'];
+            }
+                
+            // try to create record with password
+            if ($record->isValid()) {   
+                if (!$this->_options['dryrun']) {
+                    $record = $this->_controller->create($record, $password, $password);
+                } else {
+                    $_result['results']->addRecord($record);
+                }
+                $_result['totalcount']++;
+            } else {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Record invalid: ' . print_r($record->getValidationErrors(), TRUE));
+                throw new Tinebase_Exception_Record_Validation('Imported record is invalid.');
+            }
         } else {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Record invalid: ' . print_r($record->getValidationErrors(), TRUE));
-            throw new Tinebase_Exception_Record_Validation('Imported record is invalid.');
+            $record = parent::_importRecord($_recordData, $_result);
         }
         
         return $record;

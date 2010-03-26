@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -44,11 +44,9 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * import users
      *
      * @param Zend_Console_Getopt $_opts
-     * 
-     * @todo remove obsolete code
      */
     public function importUser($_opts)
     {
-        parent::_import($_opts, Tinebase_User::factory(Tinebase_User::getConfiguredBackend()));
+        parent::_import($_opts, Admin_Controller_User::getInstance());
     }
 }
