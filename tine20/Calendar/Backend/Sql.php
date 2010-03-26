@@ -210,6 +210,16 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                     '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Grants::GRANT_PRIVATE) . " OR \n" .
                     '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Grants::GRANT_PRIVATE) . " \n" .
                  ")",
+                Tinebase_Model_Grants::GRANT_SYNC => "\n MAX( \n" .
+                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Grants::GRANT_SYNC) . " OR \n" . 
+                    '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Grants::GRANT_SYNC) . " OR \n" .
+                    '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Grants::GRANT_SYNC) . " \n" .
+                 ")",
+                Tinebase_Model_Grants::GRANT_EXPORT => "\n MAX( \n" .
+                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Grants::GRANT_EXPORT) . " OR \n" . 
+                    '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Grants::GRANT_EXPORT) . " OR \n" .
+                    '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Grants::GRANT_EXPORT) . " \n" .
+                 ")",
             ));
     }
     
