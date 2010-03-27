@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-02-27 18:58+0100\n"
+"PO-Revision-Date: 2010-03-27 12:43+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -83,8 +83,6 @@ msgstr "Zarządzaj zasobami"
 msgid "Attendee"
 msgstr "Uczestnik"
 
-# The word "Rola" could not be clearly understood. The word "Funkcja" is a better choice.
-# Das Wort "Rola" koennte missverstanden werden. Das Wort "Funkcja" passt besser.
 #: js/AttendeeGridPanel.js:86
 msgid "Role"
 msgstr "Rodzaj spotkania"
