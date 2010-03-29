@@ -205,6 +205,18 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             $result['user'] .= '@' . $imapConfig['domain'];
         }
         
+        // overwrite settings with config.inc.php values if set
+        $imapConfigOverwriteFields = array('host', 'port', 'secure_connection');
+        foreach ($imapConfigOverwriteFields as $field) {
+            if (array_key_exists($field, $imapConfig)) {
+                if ($field == 'secure_connection' && in_array($imapConfig[$field], array('ssl', 'tls'))) {
+                    $result['ssl'] = strtoupper($imapConfig[$field]);
+                } else {
+                    $result[$field] = $imapConfig[$field];
+                }
+            }
+        }
+        
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
         
         return $result;
