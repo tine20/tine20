@@ -154,8 +154,9 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                                 $image->resize(120, 160, Tinebase_Model_Image::RATIOMODE_PRESERVANDCROP);
                                 $jpegData = $image->getBlob('image/jpeg');
                                 $nodeContent = base64_encode($jpegData);
-                            } catch (Exception $e) {
-                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Failed to convert image " . $e);
+                            } catch (Addressbook_Exception_NotFound $e) {
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Image for contact not found");
+                                continue;
                             }
 
                             
