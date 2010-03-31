@@ -116,6 +116,12 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      */
     protected $_filterProperty = 'contactsfilter_id';        
     
+    /**
+     * field to sort search results by
+     * 
+     * @var string
+     */
+    protected $_sortField = 'n_fileas';
     
     /**
      * append contact to xml parent node

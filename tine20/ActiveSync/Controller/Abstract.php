@@ -100,6 +100,13 @@ abstract class ActiveSync_Controller_Abstract
     protected $_filterProperty;
     
     /**
+     * field to sort search results by
+     * 
+     * @var string
+     */
+    protected $_sortField;
+    
+    /**
      * the constructor
      *
      * @param Zend_Date $_syncTimeStamp
@@ -357,7 +364,15 @@ abstract class ActiveSync_Controller_Abstract
         $this->_getContentFilter($filter, $_filterType);
         $this->_getContainerFilter($filter, $_folderId);
         
-        $result = $this->_contentController->search($filter, NULL, false, true, 'sync');
+        if(!empty($this->_sortField)) {
+            $pagination = new Tinebase_Model_Pagination(array(
+                'sort' => $this->_sortField
+            ));
+        } else {
+            $pagination = null;
+        }
+        
+        $result = $this->_contentController->search($filter, $pagination, false, true, 'sync');
         
         return $result;
     }
