@@ -377,15 +377,23 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             if($this->_totalCount === $collectionData['windowSize']) {
                                 break;
                             }
-                                                        
-                            $add = $commands->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Add'));
-                            $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
-                            $applicationData = $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
-                            $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId);
-    
-                            $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
                             
-                            $this->_totalCount++;                                
+                            try {
+                                #$add = $commands->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Add'));
+                                $add = $this->_outputDom->createElementNS('uri:AirSync', 'Add');
+                                
+                                $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
+                                $applicationData = $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
+                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId);
+        
+                                $commands->appendChild($add);
+                                
+                                $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
+                                
+                                $this->_totalCount++;
+                            } catch (Exception $e) {
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml (maybe access denied) " . $e->getMessage());
+                            }                                
                             unset($serverAdds[$id]);    
                         }
     
@@ -396,13 +404,21 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             if($this->_totalCount === $collectionData['windowSize']) {
                                 break;
                             }
-                                                        
-                            $change = $commands->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Change'));
-                            $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
-                            $applicationData = $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
-                            $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId);
-    
-                            $this->_totalCount++;
+
+                            try {
+                                #$change = $commands->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Change'));
+                                $change = $this->_outputDom->createElementNS('uri:AirSync', 'Change');
+                                
+                                $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
+                                $applicationData = $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
+                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId);
+        
+                                $commands->appendChild($change);
+                                
+                                $this->_totalCount++;
+                            } catch (Exception $e) {
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml (maybe access denied) " . $e->getMessage());
+                            } 
                             unset($serverChanges[$id]);    
                         }
     
@@ -414,12 +430,19 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 break;
                             }
                                                         
-                            $delete = $commands->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Delete'));
-                            $delete->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
-                            
-                            $this->_deleteContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
-    
-                            $this->_totalCount++;
+                            try {
+                                #$delete = $commands->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Delete'));
+                                $delete = $this->_outputDom->createElementNS('uri:AirSync', 'Delete');
+                                $delete->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
+                                
+                                $this->_deleteContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
+        
+                                $commands->appendChild($delete);
+                                
+                                $this->_totalCount++;
+                            } catch (Exception $e) {
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml (maybe access denied) " . $e->getMessage());
+                            }
                             unset($serverDeletes[$id]);    
                         }
                     }
