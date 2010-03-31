@@ -690,13 +690,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     {
         $_filter->addFilter(new Tinebase_Model_Filter_Text('recurid', 'isnull', null));
         
-        #// exclude recur exceptions
-        #$filterArray[] = array(
-        #    'field'     => 'recurid', 
-        #    'operator'  => 'isnull', 
-        #    'value'     => NULL
-        #);
-        
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
                 case self::FILTER_2_WEEKS_BACK:
@@ -714,14 +707,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
             // next 10 years
             $to = Zend_Date::now()->addYear(10);
+            
             // add period filter
-            #$filterArray[] = array(
-            #    'field'    => 'period',
-            #    'operator' => 'within',
-            #    'value'    => array(
-            #        'from'  => $from,
-            #        'until' => $to
-            #));
             $_filter->addFilter(new Calendar_Model_PeriodFilter('period', 'within', array(
                 'from'  => $from,
                 'until' => $to
