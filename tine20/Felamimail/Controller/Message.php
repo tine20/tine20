@@ -1080,12 +1080,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 	 *
 	 * @param Felamimail_Model_Account $_account
 	 * @return boolean
+	 * 
+	 * @todo add test for this
 	 */
 	protected function _createFolderIfNotExists(Felamimail_Model_Account $_account, $folderName){
 		$imap = Felamimail_Backend_ImapFactory::factory($_account);
 		if($imap->getFolderStatus($folderName) === false){
-			Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no Sent Folder, try to add it.');
-			$Felamimail_Controller_Folder = Felamimail_Controller_Folder::getInstance()->create($folderName, '', $_account->id);
+			Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no Sent Folder, trying to add it.');
+			$Felamimail_Controller_Folder = Felamimail_Controller_Folder::getInstance()->create($_account->id, $folderName);
 		}
 	}
 }
