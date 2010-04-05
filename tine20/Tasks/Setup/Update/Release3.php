@@ -20,11 +20,18 @@ class Tasks_Setup_Update_Release3 extends Setup_Update_Abstract
         try {
             $this->_backend->dropForeignKey('tasks', 'tasks::class_id--class::id');
         } catch (Zend_Db_Statement_Exception $zdse) {
-            // try it again with table prefix
+
+            // @todo verify the catch block!!!
             try {
+
+            
+                // try it again with table prefix
                 $this->_backend->dropForeignKey('tasks', SQL_TABLE_PREFIX . 'tasks::class_id--class::id');
-            } catch (Zend_Db_Statement_Exception $zdse) {
-                // already dropped
+
+            } catch ( Zend_Db_Statement_Exception $zdse ) {
+
+                // throw informations to output!
+
             }
         }
         
