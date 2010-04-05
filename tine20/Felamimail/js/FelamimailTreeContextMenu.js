@@ -15,7 +15,8 @@ Ext.namespace('Tine.Felamimail');
  * get felamimail tree panel context menus
  * this is used in Tine.Felamimail.TreePanel (with createDelegate)
  * 
- * TODO update other actions again?
+ * TODO add reload account again
+ * TODO add other actions again?
  * TODO use Ext.apply to get this
  */
 Tine.Felamimail.setTreeContextMenus = function() {
@@ -216,7 +217,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
     
     this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
         nodeName: this.app.i18n._('Account'),
-        actions: [editAccountAction, addFolderToRootAction, 'reload', 'delete'],
+        actions: [editAccountAction, addFolderToRootAction/*, 'reload' */, 'delete'],
         scope: this,
         backend: 'Felamimail',
         backendModel: 'Account'
