@@ -708,6 +708,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             // next 10 years
             $to = Zend_Date::now()->addYear(10);
             
+            // remove all 'old' period filters
+            $_filter->removeFilter('period');
+            
             // add period filter
             $_filter->addFilter(new Calendar_Model_PeriodFilter('period', 'within', array(
                 'from'  => $from,
