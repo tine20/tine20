@@ -62,22 +62,19 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_2()
     {
+        // we need to drop the foreign key and the index first
         try {
-            $this->_backend->dropForeignKey( 'importexport_definition', 'importexport_definitions::app_id--applications::id');
-        } 
-        catch ( Zend_Db_Statement_Exception $zdse) 
-        {
-
+            $this->_backend->dropForeignKey('importexport_definition', 'importexport_definitions::app_id--applications::id');
+        } catch (Zend_Db_Statement_Exception $zdse) {
             try {
                 // try it again with table prefix
-                $this->_backend->dropForeignKey( 'importexport_definition', SQL_TABLE_PREFIX . 'importexport_definitions::app_id--applications::id');
-
-            } catch ( Zend_Db_Statement_Exception $zdse) {
-
+                $this->_backend->dropForeignKey('importexport_definition', SQL_TABLE_PREFIX . 'importexport_definitions::app_id--applications::id');
+            } catch (Zend_Db_Statement_Exception $zdse) {
                 // already dropped
             }
         }
-
+        $this->_backend->dropIndex('importexport_definition', 'application_id-name-type');
+        
         // add index and foreign key again
         $this->_backend->addIndex('importexport_definition', new Setup_Backend_Schema_Index_Xml('<index>
                 <name>model-name-type</name>
