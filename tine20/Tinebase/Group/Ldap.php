@@ -766,7 +766,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' read ldap data for dn: ' . $dn);
                         $accountData = $this->_ldap->getEntry($dn, array('uidnumber'));
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ldap data returned: ' . print_r($accountData, true));
-                        $memberId = Tinebase_User::getInstance()->resolveLdapUIdNumber($accountData['uidnumber'][0]);
+                        $memberId = Tinebase_User::getInstance()->resolveUIdNumberToUUId($accountData['uidnumber'][0]);
                         
                         // add account to sql backend
                         $this->_sql->addGroupMember($groupId, $memberId);
@@ -799,10 +799,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             return $_gidNumber;
         }
         
-        return $groupId[strtolower($this->_groupUUIDAttribute)][0];
-        
-        throw new RuntimeException('still untested');
-        
         $filter = Zend_Ldap_Filter::equals(
             'gidnumber', Zend_Ldap::filterEscape($_gidNumber)
         );
@@ -828,8 +824,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         if(strtolower($this->_groupUUIDAttribute) == 'gidnumber') {
             return $_uuid;
         }
-        
-        throw new RuntimeException('still untested');
         
         $filter = Zend_Ldap_Filter::equals(
             $this->_groupUUIDAttribute, Zend_Ldap::filterEscape($_uuid)
