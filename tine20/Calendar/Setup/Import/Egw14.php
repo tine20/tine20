@@ -55,6 +55,12 @@ class Calendar_Setup_Import_Egw14 {
     protected $_privateCalendarCache = array();
     
     /**
+     * 
+     * @var array
+     */
+    protected $_accountIdMapCache = array();
+    
+    /**
      * maps egw attender status to tine attender status
      * 
      * @var array
@@ -191,7 +197,7 @@ class Calendar_Setup_Import_Egw14 {
             'id'                => $_egwEventData['cal_id'],
             'uid'               => substr($_egwEventData['cal_uid'], 0, 40),
             'creation_time'     => $_egwEventData['cal_modified'],
-            'created_by'        => $_egwEventData['cal_modifier'],
+            'created_by'        => $this->mapAccountIdEgw2Tine($_egwEventData['cal_modifier']),
             // 'tags'
             'dtstart'           => $_egwEventData['cal_start'],
             'dtend'             => $_egwEventData['cal_end'],
@@ -210,8 +216,8 @@ class Calendar_Setup_Import_Egw14 {
         
         // find calendar
         $tineEventData['container_id'] = $_egwEventData['cal_public'] ? 
-            $this->_getPersonalCalendar($_egwEventData['cal_owner'])->getId() :
-            $this->_getPrivateCalendar($_egwEventData['cal_owner'])->getId();
+            $this->_getPersonalCalendar($this->mapAccountIdEgw2Tine($_egwEventData['cal_owner']))->getId() :
+            $this->_getPrivateCalendar($this->mapAccountIdEgw2Tine($_egwEventData['cal_owner']))->getId();
 
         // handle recuring
         if ($_egwEventData['rrule']) {
@@ -377,20 +383,20 @@ class Calendar_Setup_Import_Egw14 {
                         // user and group
                         if ($egwAttender['cal_user_id'] > 0) {
                             $tineAttenderArray['user_type'] = Calendar_Model_Attender::USERTYPE_USER;
-                            $tineAttenderArray['user_id']   = Tinebase_User::getInstance()->getUserById($egwAttender['cal_user_id'])->contact_id;
+                            $tineAttenderArray['user_id']   = Tinebase_User::getInstance()->getUserById($this->mapAccountIdEgw2Tine($egwAttender['cal_user_id']))->contact_id;
                             
                             $tineAttenderArray['displaycontainer_id'] = $_egwEventData['cal_public'] ? 
-                                $this->_getPersonalCalendar($egwAttender['cal_user_id'])->getId() :
-                                $this->_getPrivateCalendar($egwAttender['cal_user_id'])->getId();
+                                $this->_getPersonalCalendar($this->mapAccountIdEgw2Tine($egwAttender['cal_user_id']))->getId() :
+                                $this->_getPrivateCalendar($this->mapAccountIdEgw2Tine($egwAttender['cal_user_id']))->getId();
                         
                         } else {
                             $tineAttenderArray['user_type'] = Calendar_Model_Attender::USERTYPE_GROUP;
-                            $tineAttenderArray['user_id']   = abs($egwAttender['cal_user_id']);
+                            $tineAttenderArray['user_id']   = $this->mapAccountIdEgw2Tine($egwAttender['cal_user_id']);
                         }
                         break;
                     case 'c':
                         // try to find contact in tine (NOTE: id is useless, as contacts get new ids during migration)
-                        $contact_id = $this->_getContactIdByEmail($egwAttender['email'], $_egwEventData['cal_owner']);
+                        $contact_id = $this->_getContactIdByEmail($egwAttender['email'], $this->mapAccountIdEgw2Tine($_egwEventData['cal_owner']));
                         if (! $contact_id) {
                             continue 2;
                         }
@@ -858,6 +864,64 @@ class Calendar_Setup_Import_Egw14 {
     }
     
     /**
+     * maps egw account to tine 2.0 user/group Id
+     * 
+     * @todo move to a generic egw import helper
+     * 
+     * @param  int $_egwAccountId
+     * @return string 
+     */
+    public function mapAccountIdEgw2Tine($_egwAccountId)
+    {
+        if (! isset ($this->_accountIdMapCache[$_egwAccountId])) {
+            
+            $tineUserId = $_egwAccountId;
+            if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
+                if ((int) $_egwAccountId < 0) {
+                    $this->_accountIdMapCache[$_egwAccountId] = Tinebase_Group::getInstance()->resolveGIdNumberToUUId($_egwAccountId);
+                } else {
+                    $this->_accountIdMapCache[$_egwAccountId] = Tinebase_User::getInstance()->resolveUIdNumberToUUId($_egwAccountId);
+                }
+            } else {
+                $this->_accountIdMapCache[$_egwAccountId] = abs($_egwAccountId);
+            }
+        }
+        
+        return $this->_accountIdMapCache[$_egwAccountId];
+    }
+    
+    public function mapAccountIdTine2Egw($_tineAccountId, $_accountType = 'User')
+    {
+        $egwAccountId = NULL;
+        
+        $keys = array_keys($this->_accountIdMapCache, $_tineAccountId);
+        foreach ((array) $keys as $candidate) {
+            if ($_accountType == 'User' && (int) $candidate > 0) {
+                $egwAccountId = $candidate;
+            } else if ($_accountType == 'Group' && (int) $candidate < 0) {
+                $egwAccountId = $candidate;
+            }
+        }
+        
+        // not in cache
+        if (! $egwAccountId) {
+            if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
+                if ($_accountType == 'User') {
+                    $this->_accountIdMapCache[$egwAccountId] = Tinebase_User::getInstance()->resolveUUIdToUIdNumber($_tineAccountId);
+                } else {
+                    $this->_accountIdMapCache[$egwAccountId] = Tinebase_Group::getInstance()->resolveUUIdToGIdNumber($_tineAccountId);
+                }
+            } else {
+                $egwAccountId = ($_accountType == 'User' ? '' : '-') . $_tineAccountId;
+            }
+            
+            $this->_accountIdMapCache[$egwAccountId] = $_tineAccountId;
+        }
+        
+        return $egwAccountId;
+    }
+    
+    /**
      * returns grants by owner
      * 
      * eGW has owner based grants whereas Tine 2.0 has container based grants.
@@ -873,15 +937,16 @@ class Calendar_Setup_Import_Egw14 {
      */
     public function getGrantsByOwner($_application, $_accountId)
     {
-        $acl_account = array($_accountId);
+        $egwAccountId = $this->mapAccountIdTine2Egw($_accountId);
+        $acl_account = array($egwAccountId);
         
-        if ($_accountId > 0) {
+        if ($egwAccountId > 0) {
             $user     = Tinebase_User::getInstance()->getUserById($_accountId);
             $groupIds = $user->getGroupMemberships();
             
             
             foreach($groupIds as $groupId) {
-                $acl_account[] = '-' . $groupId;
+                $acl_account[] = '-' . $this->mapAccountIdTine2Egw($groupId, 'Group');
             }
         }
         
@@ -895,9 +960,9 @@ class Calendar_Setup_Import_Egw14 {
         
         // in a first run we merge grants from different sources
         $effectiveGrants = array();
-        if ($_accountId > 0) {
+        if ($egwAccountId > 0) {
             // owner has implicitly all grants in egw
-            $effectiveGrants[$_accountId] = 15;
+            $effectiveGrants[$egwAccountId] = 15;
         }
         foreach ($egwGrantDatas as $egwGrantData) {
             // grants are int != 0
@@ -922,7 +987,7 @@ class Calendar_Setup_Import_Egw14 {
         $tineGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
         foreach ($effectiveGrants as $grantAccount => $egwGrants) {
             $tineGrant = new Tinebase_Model_Grants(array(
-                'account_id' => abs($grantAccount),
+                'account_id' => $this->mapAccountIdEgw2Tine($grantAccount),
                 'account_type' => (int) $grantAccount > 0 ? 
                     Tinebase_Acl_Rights::ACCOUNT_TYPE_USER : 
                     Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP
@@ -933,7 +998,7 @@ class Calendar_Setup_Import_Egw14 {
             }
             
             // the owner also gets admin grants
-            if ($_accountId > 0 && $grantAccount == $_accountId) {
+            if ($egwAccountId > 0 && $grantAccount == $egwAccountId) {
                 $tineGrant->{Tinebase_Model_Grants::GRANT_ADMIN} = TRUE;
             }
             
@@ -942,10 +1007,10 @@ class Calendar_Setup_Import_Egw14 {
         //print_r($tineGrants->toArray());
         
         // for group owners (e.g. group addressbooks) we need an container admin
-        if ($_accountId < 0) {
+        if ($egwAccountId < 0) {
             $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
             $tineGrant = new Tinebase_Model_Grants(array(
-                'account_id' => abs($_accountId),
+                'account_id' => $this->mapAccountIdEgw2Tine($_accountId),
                 'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP
             ));
             $tineGrant->{Tinebase_Model_Grants::GRANT_ADMIN} = TRUE;
