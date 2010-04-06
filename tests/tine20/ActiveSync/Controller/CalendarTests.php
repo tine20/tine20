@@ -117,8 +117,8 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         $event = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => 'SyncTest',
-            'dtstart'       => '2009-04-25 18:00:00',
-            'dtend'         => '2009-04-25 18:30:00',
+            'dtstart'       => Zend_Date::now()->addMonth(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:00:00',
+            'dtend'         => Zend_Date::now()->addMonth(1)->addHour(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:30:00',
             'originator_tz' => 'Europe/Berlin',
             'container_id'  => $this->objects['containerWithSyncGrant']->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
@@ -131,11 +131,14 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         $eventDaily = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => 'SyncTest',
-            'dtstart'       => '2009-05-25 18:00:00',
-            'dtend'         => '2009-05-25 18:30:00',
+            'dtstart'       => Zend_Date::now()->addMonth(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-05-25 18:00:00',
+            'dtend'         => Zend_Date::now()->addMonth(1)->addHour(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-05-25 18:30:00',
             'originator_tz' => 'Europe/Berlin',
-            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-05-31 17:30:00',
-            'exdate'        => '2009-05-27 18:00:00,2009-05-29 17:00:00',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=' . Zend_Date::now()->addMonth(1)->addHour(1)->addDay(6)->toString(Tinebase_Record_Abstract::ISO8601LONG), //2009-05-31 17:30:00',
+            'exdate'        => implode(',', array(
+                Zend_Date::now()->addMonth(1)->addHour(1)->addDay(2)->toString(Tinebase_Record_Abstract::ISO8601LONG),
+                Zend_Date::now()->addMonth(1)->addHour(1)->addDay(3)->toString(Tinebase_Record_Abstract::ISO8601LONG)
+            )),// '2009-05-27 18:00:00,2009-05-29 17:00:00',
             'container_id'  => $this->objects['containerWithSyncGrant']->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
@@ -265,7 +268,8 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         $controller->appendXML($appData, null, $this->objects['event']->getId());
         
         // namespace === uri:Calendar
-        $this->assertEquals('20090425T183000Z', @$testDom->getElementsByTagNameNS('uri:Calendar', 'EndTime')->item(0)->nodeValue, $testDom->saveXML());
+        $endTime = $this->objects['event']->dtend->toString('yyyyMMddTHHmmss') . 'Z';
+        $this->assertEquals($endTime, @$testDom->getElementsByTagNameNS('uri:Calendar', 'EndTime')->item(0)->nodeValue, $testDom->saveXML());
         $this->assertEquals($this->objects['event']->getId(), @$testDom->getElementsByTagNameNS('uri:Calendar', 'UID')->item(0)->nodeValue, $testDom->saveXML());
         
         // try to encode XML until we have wbxml tests
@@ -305,8 +309,10 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         
         // namespace === uri:Calendar
         $this->assertEquals(ActiveSync_Controller_Calendar::RECUR_TYPE_DAILY, @$testDom->getElementsByTagNameNS('uri:Calendar', 'Type')->item(0)->nodeValue, $testDom->saveXML());
-        $this->assertEquals('20090525T183000Z', @$testDom->getElementsByTagNameNS('uri:Calendar', 'EndTime')->item(0)->nodeValue, $testDom->saveXML());
-        $this->assertEquals('20090531T173000Z', @$testDom->getElementsByTagNameNS('uri:Calendar', 'Until')->item(0)->nodeValue, $testDom->saveXML());
+        $endTime = $this->objects['eventDaily']->dtend->toString('yyyyMMddTHHmmss') . 'Z';
+        $this->assertEquals($endTime, @$testDom->getElementsByTagNameNS('uri:Calendar', 'EndTime')->item(0)->nodeValue, $testDom->saveXML());
+        $untilTime = Calendar_Model_Rrule::getRruleFromString($this->objects['eventDaily']->rrule)->until->toString('yyyyMMddTHHmmss') . 'Z';
+        $this->assertEquals($untilTime, @$testDom->getElementsByTagNameNS('uri:Calendar', 'Until')->item(0)->nodeValue, $testDom->saveXML());
         
     }
     
@@ -315,7 +321,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
      * 
      * birthday must have 12 hours added
      */
-    public function _testGetServerEntries()
+    public function testGetServerEntries()
     {
         $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
         
