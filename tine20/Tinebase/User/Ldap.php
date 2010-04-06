@@ -959,13 +959,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         }
     }
     
-    public function resolveLdapUIdNumber($_uidNumber)
+    public function resolveUIdNumberToUUId($_uidNumber)
     {
         if(strtolower($this->_userUUIDAttribute) == 'uidnumber') {
             return $_uidNumber;
         }
-        
-        throw new RuntimeException('still untested');
         
         $filter = Zend_Ldap_Filter::equals(
             'uidnumber', Zend_Ldap::filterEscape($_uidNumber)
@@ -979,5 +977,31 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         )->getFirst();
         
         return $userId[strtolower($this->_userUUIDAttribute)][0];
+    }
+    
+    /**
+     * resolve UUID(for example entryUUID) to uidnumber
+     * 
+     * @param string $_uuid
+     * @return string
+     */
+    public function resolveUUIdToUIdNumber($_uuid)
+    {
+        if(strtolower($this->_groupUUIDAttribute) == 'uidnumber') {
+            return $_uuid;
+        }
+        
+        $filter = Zend_Ldap_Filter::equals(
+            $this->_userUUIDAttribute, Zend_Ldap::filterEscape($_uuid)
+        );
+        
+        $groupId = $this->_ldap->search(
+            $filter, 
+            $this->_options['userDn'], 
+            $this->_userSearchScope,
+            array('uidnumber')
+        )->getFirst();
+        
+        return $groupId['uidnumber'][0];
     }
 }
