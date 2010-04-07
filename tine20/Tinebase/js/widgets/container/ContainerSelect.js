@@ -359,6 +359,15 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         return container;
     },
     
+    /**
+     * Resets the current field value to the originally loaded value and clears any validation messages.
+     * See {@link Ext.form.BasicForm}.{@link Ext.form.BasicForm#trackResetOnLoad trackResetOnLoad}
+     */
+    reset : function() {
+        this.supr().setValue(this.originalValue);
+        this.supr().reset.call(this);
+    },
+    
     applyState: Ext.emptyFn,
     
     /**
@@ -367,13 +376,16 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     getState: function() {
         var recentsData = [];
         this.store.clearFilter();
+        this.store.remove(this.otherRecord);
+        
         this.store.each(function(container) {
-            if (container != this.otherRecord) {
-                var data = Ext.copyTo({}, container.data, Tine.Tinebase.Model.Container.getFieldNames());
-                recentsData.push(data);
-            }
+            var data = Ext.copyTo({}, container.data, Tine.Tinebase.Model.Container.getFieldNames());
+            recentsData.push(data);
         }, this);
+        
         this.setStoreFilter();
+        this.store.add(this.otherRecord);
+        
         return {
             recentsData : recentsData
         };
