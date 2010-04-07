@@ -322,6 +322,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 }
             }
         }
+        
         $timeZoneConverter = ActiveSync_TimezoneConverter::getInstance(
             Tinebase_Core::getLogger(),
             Tinebase_Core::get(Tinebase_Core::CACHE)
@@ -332,11 +333,32 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         ), 'uri:Calendar'));
         
         $_xmlNode->appendChild(new DOMElement('MeetingStatus', 1, 'uri:Calendar'));
-        #$_xmlNode->appendChild(new DOMElement('Timezone', 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAEAAAAAAAAAxP///w==', 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('BusyStatus', 2, 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('Sensitivity', 0, 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('DtStamp', $data->creation_time->toString('yyyyMMddTHHmmss') . 'Z', 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('UID', $data->getId(), 'uri:Calendar'));
+        if(!empty($data->organizer)) {
+            try {
+                $contact = Addressbook_Controller_Contact::getInstance()->get($data->organizer);
+                
+                $_xmlNode->appendChild(new DOMElement('OrganizerName', $contact->n_fn, 'uri:Calendar'));
+                $_xmlNode->appendChild(new DOMElement('OrganizerEmail', $contact->email, 'uri:Calendar'));
+            } catch (Tinebase_Exception_AccessDenied $e) {
+                // set the current account as organizer
+                // if organizer is not set, you can not edit the event on the Motorola Milestone
+                $_xmlNode->appendChild(new DOMElement('OrganizerName', Tinebase_Core::getUser()->accountFullName, 'uri:Calendar'));
+                if(isset(Tinebase_Core::getUser()->accountEmailAddress)) {
+                    $_xmlNode->appendChild(new DOMElement('OrganizerEmail', Tinebase_Core::getUser()->accountEmailAddress, 'uri:Calendar'));
+                }
+            }
+        } else {
+            // set the current account as organizer
+            // if organizer is not set, you can not edit the event on the Motorola Milestone
+            $_xmlNode->appendChild(new DOMElement('OrganizerName', Tinebase_Core::getUser()->accountFullName, 'uri:Calendar'));
+            if(isset(Tinebase_Core::getUser()->accountEmailAddress)) {
+                $_xmlNode->appendChild(new DOMElement('OrganizerEmail', Tinebase_Core::getUser()->accountEmailAddress, 'uri:Calendar'));
+            }
+        }
     }
     
     /**
@@ -561,8 +583,15 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     unset($event->attendee[$index]);
                 }
             }
-        } else {
-            $event->attendee = array();
+        } elseif(count($event->attendee) == 0) {
+            $contactId = Tinebase_Core::getUser()->contact_id;
+            $newAttender = new Calendar_Model_Attender(array(
+                'user_id'   => $contactId,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'status'    => Calendar_Model_Attender::STATUS_ACCEPTED,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+            ));
+            $event->attendee->addRecord($newAttender);
         }
         
         // handle recurrence
@@ -623,6 +652,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }            
             
             $event->rrule = $rrule;
+        }
+        
+        if(empty($event->organizer)) {
+            $event->organizer = Tinebase_Core::getUser()->contact_id;
         }
         
         // event should be valid now
@@ -726,7 +759,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      */
     public function getSupportedFolders()
     {
-        // only the IPhone supports multiple folders for contacts currently
+        // only the IPhone supports multiple folders for calendars currently
         if(strtolower($this->_device->devicetype) == 'iphone') {
         
             // get the folders the user has access to
