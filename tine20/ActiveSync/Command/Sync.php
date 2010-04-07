@@ -124,15 +124,14 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 
         foreach ($xml->Collections->Collection as $xmlCollection) {
             $clientSyncKey  = (int)$xmlCollection->SyncKey;
-            $class          = (string)$xmlCollection->Class;
             $collectionId   = (string)$xmlCollection->CollectionId;
-            
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " SyncKey is $clientSyncKey Class: $class CollectionId: $collectionId");
+            $folder         = $this->_folderStateBackend->getByProperty($collectionId, 'folderid');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " SyncKey is $clientSyncKey Class: $folder->class CollectionId: $collectionId");
             
             $collectionData = array(
                 'syncKey'       => $clientSyncKey,
                 'syncKeyValid'  => true,
-                'class'         => $class,
+                'class'         => $folder->class,
                 'collectionId'  => $collectionId,
                 'windowSize'    => isset($xmlCollection->WindowSize) ? (int)$xmlCollection->WindowSize : 100,
                 'getChanges'    => isset($xmlCollection->GetChanges) && (string)$xmlCollection->GetChanges === '0' ? false : true,
@@ -143,15 +142,15 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 'forceChange'   => array(),
                 'filterType'    => isset($xmlCollection->Options) && isset($xmlCollection->Options->FilterType) ? (int)$xmlCollection->Options->FilterType : 0
             );
-            $this->_collections[$class][$collectionId] = $collectionData;
+            $this->_collections[$folder->class][$collectionId] = $collectionData;
             
-            if($clientSyncKey === 0 || $this->_controller->validateSyncKey($this->_device, $clientSyncKey, $class, $collectionId) !== true) {
+            if($clientSyncKey === 0 || $this->_controller->validateSyncKey($this->_device, $clientSyncKey, $folder->class, $collectionId) !== true) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey $clientSyncKey provided");
-                $this->_collections[$class][$collectionId]['syncKeyValid'] = false;
+                $this->_collections[$folder->class][$collectionId]['syncKeyValid'] = false;
                 continue;
             }
             
-            $dataController = ActiveSync_Controller::dataFactory($class, $this->_device, $this->_syncTimeStamp);
+            $dataController = ActiveSync_Controller::dataFactory($folder->class, $this->_device, $this->_syncTimeStamp);
             
             // handle incoming data
             
@@ -176,12 +175,12 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             // use the first found entry
                             $added = $existing[0];
                         }
-                        $this->_collections[$class][$collectionId]['added'][(string)$add->ClientId]['serverId'] = $added->getId(); 
-                        $this->_collections[$class][$collectionId]['added'][(string)$add->ClientId]['status'] = self::STATUS_SUCCESS;
+                        $this->_collections[$folder->class][$collectionId]['added'][(string)$add->ClientId]['serverId'] = $added->getId(); 
+                        $this->_collections[$folder->class][$collectionId]['added'][(string)$add->ClientId]['status'] = self::STATUS_SUCCESS;
                         $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $added->getId());
                     } catch (Exception $e) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to add entry " . $e);
-                        $this->_collections[$class][$collectionId]['added'][(string)$add->ClientId]['status'] = self::STATUS_SERVER_ERROR;
+                        $this->_collections[$folder->class][$collectionId]['added'][(string)$add->ClientId]['status'] = self::STATUS_SERVER_ERROR;
                     }
                 }
             }
@@ -194,17 +193,17 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                     $serverId = (string)$change->ServerId;
                     try {
                         $changed = $dataController->change($collectionId, $serverId, $change->ApplicationData);
-                        $this->_collections[$class][$collectionId]['changed'][$serverId] = self::STATUS_SUCCESS;
+                        $this->_collections[$folder->class][$collectionId]['changed'][$serverId] = self::STATUS_SUCCESS;
                     } catch (Tinebase_Exception_AccessDenied $e) {
-                        $this->_collections[$class][$collectionId]['changed'][$serverId] = self::STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT;
-                        $this->_collections[$class][$collectionId]['forceChange'][$serverId] = $serverId;
+                        $this->_collections[$folder->class][$collectionId]['changed'][$serverId] = self::STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT;
+                        $this->_collections[$folder->class][$collectionId]['forceChange'][$serverId] = $serverId;
                     } catch (Tinebase_Exception_NotFound $e) {
                         // entry does not exist anymore, will get deleted automaticly
-                        $this->_collections[$class][$collectionId]['changed'][$serverId] = self::STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT;
+                        $this->_collections[$folder->class][$collectionId]['changed'][$serverId] = self::STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT;
                     } catch (Exception $e) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to update entry " . $e);
                         // something went wrong while trying to update the entry
-                        $this->_collections[$class][$collectionId]['changed'][$serverId] = self::STATUS_SERVER_ERROR;
+                        $this->_collections[$folder->class][$collectionId]['changed'][$serverId] = self::STATUS_SERVER_ERROR;
                     }
                 }
             }
@@ -221,9 +220,9 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but entry was not found');
                     } catch (Tinebase_Exception $e) {
                         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but permission was denied');
-                        $this->_collections[$class][$collectionId]['forceAdd'][$serverId] = $serverId;
+                        $this->_collections[$folder->class][$collectionId]['forceAdd'][$serverId] = $serverId;
                     }
-                    $this->_collections[$class][$collectionId]['deleted'][$serverId] = self::STATUS_SUCCESS;
+                    $this->_collections[$folder->class][$collectionId]['deleted'][$serverId] = self::STATUS_SUCCESS;
                     $this->_deleteContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
                 }
             }            
@@ -388,12 +387,14 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
         
                                 $commands->appendChild($add);
                                 
-                                $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
+                                #$this->_addContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
                                 
                                 $this->_totalCount++;
                             } catch (Exception $e) {
                                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml (maybe access denied) " . $e->getMessage());
-                            }                                
+                            }
+                            // mark as send to the client, even the conversion to xml might have failed                 
+                            $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $serverId);              
                             unset($serverAdds[$id]);    
                         }
     
@@ -406,7 +407,6 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             }
 
                             try {
-                                #$change = $commands->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Change'));
                                 $change = $this->_outputDom->createElementNS('uri:AirSync', 'Change');
                                 
                                 $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
