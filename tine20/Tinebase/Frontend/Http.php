@@ -297,7 +297,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/app/MainScreen.js',
             'Tinebase/js/widgets/app/GridPanel.js',
             'Tinebase/js/widgets/CountryCombo.js',
-            'Tinebase/js/widgets/GridPicker.js',
             'Tinebase/js/widgets/ActivitiesPanel.js',        
             'Tinebase/js/widgets/form/RecordPickerComboBox.js',
             'Tinebase/js/widgets/form/ConfigPanel.js',
