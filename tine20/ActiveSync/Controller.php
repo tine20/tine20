@@ -96,27 +96,6 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
     }
 
     /**
-     * authenticate user against tine20 user database
-     *
-     * @param string $_username the username
-     * @param string $_password the password
-     * @param string $_ipAddress the ip address
-     * @return boolean false on failure, true on success
-     */
-    public function authenticate($_username, $_password, $_ipAddress)
-    {
-        $pos = strrchr($_username, '\\');
-        
-        if($pos !== false) {
-            $username = substr(strrchr($_username, '\\'), 1);
-        } else {
-            $username = $_username;
-        }
-        
-        return Tinebase_Controller::getInstance()->login($username, $_password, $_ipAddress);
-    }
-
-    /**
      * the factory pattern for data controller
      *
      * @param string $_class the class name
