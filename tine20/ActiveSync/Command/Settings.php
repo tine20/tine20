@@ -99,9 +99,11 @@ class ActiveSync_Command_Settings extends ActiveSync_Command_Wbxml
             $userInformation = $settings->appendChild($this->_outputDom->createElementNS('uri:Settings', 'UserInformation'));
             $userInformation->appendChild($this->_outputDom->createElementNS('uri:Settings', 'Status', self::STATUS_SUCCESS));
             $get = $userInformation->appendChild($this->_outputDom->createElementNS('uri:Settings', 'Get'));
-            $emailAddresses = $get->appendChild($this->_outputDom->createElementNS('uri:Settings', 'EmailAddresses'));
-            foreach($smtpAddresses as $smtpAddress) {
-                $emailAddresses->appendChild($this->_outputDom->createElementNS('uri:Settings', 'SMTPAddress', $smtpAddress));
+            if(!empty($smtpAddresses)) {
+                $emailAddresses = $get->appendChild($this->_outputDom->createElementNS('uri:Settings', 'EmailAddresses'));
+                foreach($smtpAddresses as $smtpAddress) {
+                    $emailAddresses->appendChild($this->_outputDom->createElementNS('uri:Settings', 'SMTPAddress', $smtpAddress));
+                }
             }
         }
         
