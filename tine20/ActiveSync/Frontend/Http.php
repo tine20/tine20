@@ -43,14 +43,22 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * authenticate user
      *
-     * @param unknown_type $_username
-     * @param unknown_type $_password
-     * @param unknown_type $_ipAddress
-     * @return unknown
+     * @param string $_username
+     * @param string $_password
+     * @param string $_ipAddress
+     * @return bool
      */
     public function authenticate($_username, $_password, $_ipAddress)
     {
-        return ActiveSync_Controller::getInstance()->authenticate($_username, $_password, $_ipAddress);
+        $pos = strrchr($_username, '\\');
+        
+        if($pos !== false) {
+            $username = substr(strrchr($_username, '\\'), 1);
+        } else {
+            $username = $_username;
+        }
+        
+        return Tinebase_Controller::getInstance()->login($username, $_password, $_ipAddress);
     }
     
     /**
@@ -60,8 +68,10 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function handleOptions()
     {
         // same header like Exchange 2003
-        header("MS-Server-ActiveSync: 6.5.7638.1");
-        header("MS-ASProtocolVersions: 2.5");
+        header("MS-Server-ActiveSync: 8.1");
+        header("MS-ASProtocolVersions: 2.5, 12.0");
+        # version 12.1 breaks the Motorola Milestone
+        #header("MS-ASProtocolVersions: 2.5,12.0,12.1");
         # no Notify(SMS AUTD)
         #header("MS-ASProtocolCommands: Sync,SendMail,SmartForward,SmartReply,GetAttachment,GetHierarchy,CreateCollection,DeleteCollection,MoveCollection,FolderSync,FolderCreate,FolderDelete,FolderUpdate,MoveItems,GetItemEstimate,MeetingResponse,ResolveRecipients,ValidateCert,Provision,Search,Ping");
         header("MS-ASProtocolCommands: FolderCreate,FolderDelete,FolderSync,FolderUpdate,GetItemEstimate,Ping,Provision,SendMail,Settings,SmartReply,Sync");
@@ -75,14 +85,8 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @param unknown_type $_deviceType
      * @param unknown_type $_command
      */
-    public function handlePost($_user, $_deviceId, $_deviceType, $_command)
+    public function handlePost($_user, $_deviceId, $_deviceType, $_command, $_version)
     {
-        if(!isset($_SERVER['HTTP_MS_ASPROTOCOLVERSION'])) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " MS-ASPROTOCOLVERSION missing (" . $_command. ')');
-            header("HTTP/1.1 400 header MS-ASPROTOCOLVERSION not found");
-            return;
-        }
-        
         #if(!isset($_SERVER['HTTP_X_MS_POLICYKEY']) && $_command != 'Ping') {
         #    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " X-MS-POLICYKEY missing (" . $_command. ')');
         #    header("HTTP/1.1 400 header X-MS-POLICYKEY not found");
@@ -94,12 +98,11 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $_deviceType = 'Nokia';
         }
         
-        $userAgent = $_SERVER['HTTP_USER_AGENT'];
-        $asVersion = $_SERVER['HTTP_MS_ASPROTOCOLVERSION'];
-        $policyKey = (int)$_SERVER['HTTP_X_MS_POLICYKEY']; 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Agent: $userAgent  PolicyKey: $policyKey ASVersion: $asVersion Command: $_command");
+        $userAgent = array_key_exists('HTTP_USER_AGENT', $_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : $_deviceType;
+        $policyKey = array_key_exists('HTTP_X_MS_POLICYKEY', $_SERVER) ? (int)$_SERVER['HTTP_X_MS_POLICYKEY'] : null; 
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Agent: $userAgent  PolicyKey: $policyKey ASVersion: $_version Command: $_command");
         
-        $device = ActiveSync_Controller::getInstance()->getUserDevice($_deviceId, $_deviceType, $userAgent, $asVersion);
+        $device = ActiveSync_Controller::getInstance()->getUserDevice($_deviceId, $_deviceType, $userAgent, $_version);
         
         #if($_command != 'Provision' && $_command != 'Ping' && $policyKey != $device->policykey) {
         #    header("HTTP/1.1 449 Retry after sending a PROVISION command");
@@ -114,7 +117,7 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             
             $command->handle();
             
-            header("MS-Server-ActiveSync: 6.5.7638.1");
+            header("MS-Server-ActiveSync: 8.1");
             
             $command->getResponse();            
         #}
