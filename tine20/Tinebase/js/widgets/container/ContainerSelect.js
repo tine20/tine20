@@ -107,6 +107,8 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         this.otherRecord = new Tine.Tinebase.Model.Container({id: 'other', name: String.format(_('choose other {0}...'), this.containerName)}, 'other');
         this.store.add(this.otherRecord);
         
+        this.emptyText = String.format(_('Select a {0}'), this.containerName);
+        
         // init triggers (needs to be done before standard initTrigger template fn)
         if (! this.hideTrigger2) {
             if (this.triggerClass == 'x-form-arrow-trigger') {
