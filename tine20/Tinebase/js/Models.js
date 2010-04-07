@@ -109,7 +109,12 @@ Tine.Tinebase.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     {name: 'backend'},
     {name: 'application_id'},
     {name: 'account_grants'}
-]));
+]), {
+    appName: 'Tinebase',
+    modelName: 'Container',
+    idProperty: 'id',
+    titleProperty: 'name'
+});
 
 /**
  * Model of a grant
