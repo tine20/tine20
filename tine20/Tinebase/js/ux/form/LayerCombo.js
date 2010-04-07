@@ -244,7 +244,7 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
                 shadow: this.shadow,
                 cls: [cls, this.layerClass].join(' '),
                 constrain:false,
-                zindex: (zindex || 12000) + 5
+                zindex: (zindex || 8000) + 5
             });
 
             var lw = this.layerWidth || Math.max(this.wrap.getWidth(), this.minLayerWidth);
