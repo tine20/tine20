@@ -333,6 +333,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 for (var formItemName in filter.formFields) {
                     if (filter.formFields[formItemName] && typeof filter.formFields[formItemName].syncSize == 'function') {
                         filter.formFields[formItemName].setWidth(filter.formFields[formItemName].width);
+                        if (filter.formFields[formItemName].wrap) {
+                            filter.formFields[formItemName].wrap.setWidth(filter.formFields[formItemName].width);
+                        }
                         filter.formFields[formItemName].syncSize();
                     }
                 }
