@@ -85,7 +85,16 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ActiveSync not enabled for account ' . $_SERVER['PHP_AUTH_USER']);
                     return;                            
                 }
-                $syncFrontend->handlePost($_GET['User'], $_GET['DeviceId'], $_GET['DeviceType'], $_GET['Cmd']);
+                if(count($_GET) == 1) {
+                    $arrayKeys = array_keys($_GET);
+                    $parameters = $this->decodeRequestParameters($arrayKeys[0]);
+                } else {
+                    $parameters = $this->_getRequestParameters();
+                }
+                
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' REQUEST ' . print_r($parameters, true));
+                
+                $syncFrontend->handlePost($_SERVER['PHP_AUTH_USER'], $parameters['deviceId'], $parameters['deviceType'], $parameters['command'], $parameters['protocolVersion']);
                 break;
                 
             case 'GET':
@@ -102,5 +111,94 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract
                 echo "It works!<br>Your username is: {$_SERVER['PHP_AUTH_USER']} and your IP address is: {$_SERVER['REMOTE_ADDR']}.";
                 break;
         }
-    }    
+    }
+    
+    protected function _getRequestParameters()
+    {
+        $result['protocolVersion']  = $_SERVER['HTTP_MS_ASPROTOCOLVERSION'];
+        $result['command']          = $_GET['Cmd'];
+        $result['deviceId']         = $_GET['DeviceId'];
+        $result['deviceType']       = $_GET['DeviceType'];
+        
+        return $result;
+    }
+
+    public function decodeRequestParameters($_requestParameters)
+    {
+        $request = base64_decode($_requestParameters);
+        #Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' REQUEST ' . $request);
+        
+        $stream = fopen('php://temp', 'w');
+        fputs($stream, $request);
+        rewind($stream);
+        
+        $result['protocolVersion']  = $this->_readInteger($stream);
+        $result['protocolVersion']  = '12.1';
+        $result['command']          = $this->_decodeCommandCode($this->_readInteger($stream));
+        $result['locale']           = $this->_readShort($stream);
+        $result['deviceId']         = $this->_readString($stream);
+        $result['policyKey']        = $this->_readString($stream);
+        $result['deviceType']       = $this->_readString($stream);
+        
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' REQUEST ' . print_r($result, true));
+
+        return $result;
+    }
+    
+    protected function _decodeCommandCode($_code)
+    {
+        $codes = array(
+            1   => 'SendMail',
+            2   => 'SmartForward',
+            3   => 'SmartReply',
+            4   => 'GetAttachment',
+            5   => 'GetHierarchy',
+            6   => 'CreateCollection',
+            7   => 'DeleteCollection',
+            8   => 'MoveCollection',
+            9   => 'FolderSync',
+            10  => 'FolderCreate',
+            11  => 'FolderDelete',
+            12  => 'FolderUpdate',
+            13  => 'MoveItems',
+            14  => 'GetItemEstimate',
+            15  => 'MeetingResponse',
+            16  => 'Search',
+            17  => 'Settings',
+            18  => 'Ping',
+            19  => 'ItemOperations',
+            20  => 'Provision',
+            21  => 'ResolveReceipients',
+            22  => 'ValidateCert'
+        );
+        
+        return $codes[$_code];
+    }
+    
+    protected function _readInteger($stream)
+    {
+        $byte = fread($stream, 1);
+        
+        $unpacked = unpack('Cinteger', $byte);
+
+        return $unpacked['integer'];
+    }
+    
+    protected function _readShort($stream)
+    {
+        $bytes = fread($stream, 2);
+        
+        $unpacked = unpack('nshort', $bytes);
+
+        return $unpacked['short'];
+    }
+    
+    protected function _readString($stream)
+    {
+        $length = $this->_readInteger($stream);
+        
+        $string = fread($stream, $length);
+
+        return $string;
+    }
 }
