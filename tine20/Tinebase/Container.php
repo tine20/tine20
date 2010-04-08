@@ -685,45 +685,6 @@ class Tinebase_Container
     }
     
     /**
-     * gets path of given container
-     *
-     * @param  Tinebase_Model_Container $_container
-     * @return string path
-     */
-    public function getPath($_container)
-    {
-        $path = "/{$_container->type}";
-        switch ($_container->type) {
-            case 'internal':
-                break;
-            case 'shared':
-                $path .= "/{$_container->getId()}";
-                break;
-            case 'personal':
-                // we need to find out who has admin grant
-                $allGrants = $this->getGrantsOfContainer($_container, true);
-                
-                $userId = NULL;
-                foreach ($allGrants as $grants) {
-                    if ($grants->{Tinebase_Model_Grants::GRANT_ADMIN} === true) {
-                        $userId = $grants->account_id;
-                        break;
-                    }
-                }
-                if (! $userId) {
-                    throw new Exception('could not find container admin');
-                }
-                
-                $path .= "/$userId/{$_container->getId()}";
-                break;
-            default:
-                throw new Exception("unknown container type: '{$_container->type}'");
-                break;
-        }
-        return $path;
-    }
-    
-    /**
      * delete container if user has the required right
      *
      * @param   int|Tinebase_Model_Container $_containerId
