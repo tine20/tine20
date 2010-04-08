@@ -345,6 +345,17 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                     }
                     break;
                     
+                case 'email':
+                case 'email_home':
+                    // android send email address as
+                    // Lars Kneschke <l.kneschke@metaways.de>
+                    if (preg_match('/(.*)<(.+@[^@]+)>/', (string)$xmlData->$fieldName, $matches)) {
+                        $contact->$value = trim($matches[2]);
+                    } else {
+                        $contact->$value = (string)$xmlData->$fieldName;
+                    }
+                    break;
+                    
                 default:
                     if(isset($xmlData->$fieldName)) {
                         $contact->$value = (string)$xmlData->$fieldName;
