@@ -22,14 +22,14 @@
  
 class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml 
 {
-    const STATUS_NO_CHANGES_FOUND = 1;
-    const STATUS_CHANGES_FOUND = 2;
-    const STATUS_MISSING_PARAMETERS = 3;
-    const STATUS_REQUEST_FORMAT_ERROR = 4;
+    const STATUS_NO_CHANGES_FOUND           = 1;
+    const STATUS_CHANGES_FOUND              = 2;
+    const STATUS_MISSING_PARAMETERS         = 3;
+    const STATUS_REQUEST_FORMAT_ERROR       = 4;
     const STATUS_INTERVAL_TO_GREAT_OR_SMALL = 5;
-    const STATUS_TO_MUCH_FOLDERS = 6;
-    const STATUS_FOLDER_NOT_FOUND = 7;
-    const STATUS_GENERAL_ERROR = 8;
+    const STATUS_TO_MUCH_FOLDERS            = 6;
+    const STATUS_FOLDER_NOT_FOUND           = 7;
+    const STATUS_GENERAL_ERROR              = 8;
     
     /**
      * folders to monitor
@@ -106,6 +106,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
         Tinebase_Core::setExecutionLifeTime($lifeTime);
         
         $intervalEnd = $intervalStart + $lifeTime;
+        $secondsLeft = $intervalEnd;
         $folders = unserialize($this->_device->pingfolder);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Folders to monitor($lifeTime / $intervalStart / $intervalEnd / $status): " . print_r($folders, true));
