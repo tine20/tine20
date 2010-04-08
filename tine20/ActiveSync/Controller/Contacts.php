@@ -136,7 +136,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         $data = $this->_contentController->get($_serverId);
         
         foreach($this->_mapping as $key => $value) {
-        	$nodeContent = '';
+        	$nodeContent = null;
             if(!empty($data->$value)) {
                 switch($value) {
                     case 'bday':
@@ -156,8 +156,6 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                                 $nodeContent = base64_encode($jpegData);
                             } catch (Exception $e) {
                                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Image for contact {$data->getId()} not found or invalid");
-                                // Note that in PHP the switch statement is considered a looping structure for the purposes of continue
-                                continue 2;
                             }
 
                             
@@ -173,7 +171,13 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         $nodeContent = $data->$value;
                         break;
                 }
-
+                
+                // skip empty elements
+                if($nodeContent === null || $nodeContent == '') {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Value for $key is empty. Skip element.");
+                    continue;
+                }
+                
                 // create a new DOMElement ...
                 $node = new DOMElement($key, null, 'uri:Contacts');
 
