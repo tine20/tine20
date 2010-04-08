@@ -136,8 +136,6 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
             return;
         }
         
-        //var v = this.getValue();
-        //this.startValue = this.getValue();
         this.setFormValue(this.currentValue);
         this.layer.alignTo.apply(this.layer, [this.el].concat(this.layerAlign));
         this.layer.show();
