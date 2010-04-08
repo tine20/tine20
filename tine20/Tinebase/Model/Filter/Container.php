@@ -18,13 +18,16 @@
  * 
  * filters by containers
  * 
- * If no operator / value is given, this filter filters for all containers
- * current user has readGrants for
+ * NOTE: this filter accepts multiple formats for incoming container values
+ *  - id (always represents a single container)
+ *  - path (may also represent a node)
+ *  - array containing id or path
+ *  
+ * NOTE: If no operator / value is given, this filter filters for all containers
+ * current user has readGrants for => @todo verfy this NOTE
  * 
  * NOTE: This filter already does all ACL checks. This means a controller only 
  *       has to make sure a containerfilter is set and if not add one
- * 
- * @todo implement setRequiredGrants
  */
 class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract implements Tinebase_Model_Filter_AclFilter 
 {
@@ -34,8 +37,8 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     protected $_operators = array(
         0 => 'equals',       // value is expected to be a single container id
         1 => 'in',           // value is expected to be an array of container ids
-        2 => 'specialNode',  // value is one of {all|shared|otherUsers|internal}
-        3 => 'personalNode', // value is expected to be a user id 
+        2 => 'specialNode',  // value is one of {all|shared|otherUsers|internal} (depricated please us path instead)
+        3 => 'personalNode', // value is expected to be a user id (depricated please us path instead)
         //5 => 'not',        // value is expected to be a single container id
     );
     
@@ -100,11 +103,17 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     
     /**
      * set value
-     *
+     * 
+     * NOTE: incoming pathes representing a single container will be rewritten to their corresponding id's
+     * NOTE: incoming *Node operators will be rewritten to their corresponding pathes
+     * 
      * @param mixed $_value
      */
     public function setValue($_value)
     {
+        // transform *Node operators
+        //if (strstr($this->getOperator(), 'Node') !== FALSE)
+        
         // cope with resolved records
         if (is_array($_value) && array_key_exists('id', $_value)) {
             $_value = $_value['id'];
@@ -120,6 +129,9 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                 if ($this->getOperator() !== 'in') {
                     $this->setOperator($filter['operator']);
                 } else if ($filter['operator'] !== 'equals') {
+                    // we need to resolve nodes already here
+                    
+                    // we only support single containers here yet!
                     throw new Tinebase_Exception_UnexpectedValue('filter constallation not supported');
                 }
                 $v = $filter['value'];
@@ -148,7 +160,11 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     /**
      * returns array with the filter settings of this filter
      *
-     * @param  bool $_valueToJson resolve value for json api?
+     * NOTE: When returning values for JSON api, single containers represented by 
+     *       ids or paths will be resolved with full container data. Moreover, all values
+     *       will get the path in its data.
+     *        
+     * @param  bool $_valueToJson resolve value for json api
      * @return array
      */
     public function toArray($_valueToJson = false)
@@ -186,7 +202,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                 	if ($this->_value) {
 	                    $container = $cc->getContainerById($this->_value);
 	                    $result['value'] = $container->toArray();
-	                    $result['value']['path'] = $cc->getPath($container);
+	                    $result['value']['path'] = $container->getPath();
                 	}
                     break;
                 case 'in':
@@ -195,7 +211,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                     	if ($this->_value) {
 	                        $container = $cc->getContainerById($containerId);
 	                        $contaienrArray = $container->toArray();
-	                        $contaienrArray['path'] = $cc->getPath($container);
+	                        $contaienrArray['path'] = $container->getPath();
 	                        
 	                        $result['value'][] = $contaienrArray;
                     	}
@@ -238,12 +254,12 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             case 'in':
                 $this->_containerIds = (array)$this->_value;
                 if ($this->_options['ignoreAcl'] !== true) {
-                    $readableContainerIds = $this->_getContainer('getContainerByACL');
+                    $readableContainerIds = $this->_resolveContainerNode('all');
                     $this->_containerIds = array_intersect($this->_containerIds, $readableContainerIds);
                 }
                 break;
             case 'personalNode':
-                $this->_containerIds = $this->_getContainer('getPersonalContainer');
+                $this->_containerIds = $this->_resolveContainerNode('personal');
                 break;
             case 'specialNode':
                 // sanitize filter value
@@ -252,23 +268,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                     $this->_value = array_pop($this->_value);
                 }
                 
-                switch ($this->_value) {
-                    case 'all':
-                        $this->_containerIds = $this->_getContainer('getContainerByACL');
-                        break;
-                    case 'shared':
-                        $this->_containerIds = $this->_getContainer('getSharedContainer');
-                        break;
-                    case 'otherUsers':
-                        $this->_containerIds = $this->_getContainer('getOtherUsersContainer');
-                        break;
-                    case 'internal':
-                        $this->_containerIds = $this->_getContainer('getInternalContainer');
-                        break;
-                    default:
-                        throw new Tinebase_Exception_UnexpectedValue('specialNode not supported.');
-                        break;
-                }
+                $this->_containerIds = $this->_resolveContainerNode($this->_value);
                 break;
             default:
                 throw new Tinebase_Exception_UnexpectedValue('Operator not supported.');
@@ -284,28 +284,31 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
      * @param string $_function
      * @return array of container ids
      */
-    protected function _getContainer($_function)
+    protected function _resolveContainerNode($_node)
     {
         $currentAccount = Tinebase_Core::getUser();
         $appName = $this->_options['applicationName'];
         
         $ids = array();
         foreach ($this->_requiredGrants as $grant) {
-            switch ($_function) {
-                case 'getContainerByACL':
+            switch ($_node) {
+                case 'all':
                     $result = $currentAccount->getContainerByACL($appName, $grant, TRUE);
                     break;
-                case 'getPersonalContainer':
+                case 'personal':
                     $result = $currentAccount->getPersonalContainer($appName, $this->_value, $grant)->getId();
                     break;
-                case 'getSharedContainer':
+                case 'shared':
                     $result = $currentAccount->getSharedContainer($appName, $grant)->getId();
                     break;
-                case 'getOtherUsersContainer':
+                case 'otherUsers':
                     $result = $currentAccount->getOtherUsersContainer($appName, $grant)->getId();
                     break;
-                case 'getInternalContainer':
+                case 'internal':
                     $result = Tinebase_Container::getInstance()->getInternalContainer($currentAccount, $appName)->getId();
+                    break;
+                default:
+                    throw new Tinebase_Exception_UnexpectedValue('specialNode not supported.');
                     break;
             }
             
@@ -348,7 +351,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                 }
         }
         
-        throw new Tinebase_Exception_UnexpectedValue('malformatted path');
+        throw new Tinebase_Exception_UnexpectedValue('malformatted path: ' . $path);
     }
     
     /**
@@ -358,8 +361,10 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
      * @param  array &$_data
      * @throws Tinebase_Exception_UnexpectedValue
      */
-    public static function _transformLegacyData(array &$_data, $_containerProperty='container_id')
+    public static function transformLegacyData(array &$_data, $_containerProperty='container_id')
     {
+        Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . 'HEADS UP DEVELOPERS: old container filter notation in use.  PLEASE UPDATE' . print_r(debug_backtrace(), TRUE));
+        
         $legacyData = array();
         foreach ($_data as $key => $filterData) {
             if (array_key_exists('field', $filterData) && in_array($filterData['field'], array('containerType', 'container', 'owner'))) {

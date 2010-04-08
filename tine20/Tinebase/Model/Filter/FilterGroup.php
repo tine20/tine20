@@ -145,7 +145,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         $this->_filterObjects = array();
         
         // legacy container handling
-        Tinebase_Model_Filter_Container::_transformLegacyData($_data);
+        Tinebase_Model_Filter_Container::transformLegacyData($_data);
         
         foreach ($_data as $filterData) {
             
