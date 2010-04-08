@@ -55,7 +55,7 @@ class Tinebase_Frontend_Json_Container
             
             if ($container instanceof Tinebase_Model_Container) {
                 $containerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
-                $containerArray['path'] = Tinebase_Container::getInstance()->getPath($container);
+                $containerArray['path'] = $container->getPath();
             } else {
                 $containerArray['path'] = "personal/{$container->getId()}";
             }
@@ -92,7 +92,7 @@ class Tinebase_Frontend_Json_Container
         
         $result = $container->toArray();
         $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
-        $result['path'] = Tinebase_Container::getInstance()->getPath($container);
+        $result['path'] = $container->getPath();
         return $result;
     }
     
@@ -129,7 +129,7 @@ class Tinebase_Frontend_Json_Container
         
         $result = $container->toArray();
         $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
-        $result['path'] = Tinebase_Container::getInstance()->getPath($container);
+        $result['path'] = $container->getPath();
         return $result;
     }
     
