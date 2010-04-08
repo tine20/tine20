@@ -216,22 +216,36 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " calendar data " . print_r($data->toArray(), true));
         
         foreach($this->_mapping as $key => $value) {
+            $nodeContent = null;
+            
             if(!empty($data->$value)) {
+                
                 switch($value) {
                     case 'dtend':
                     case 'dtstart':
-                        $date = $data->$value->toString('yyyyMMddTHHmmss') . 'Z';
-                        $_xmlNode->appendChild(new DOMElement($key, $date, 'uri:Calendar'));
+                        $nodeContent = $data->$value->toString('yyyyMMddTHHmmss') . 'Z';
+                        #$_xmlNode->appendChild(new DOMElement($key, $date, 'uri:Calendar'));
                         break;
                     default:
-                        $node = new DOMElement($key, null, 'uri:Calendar');
-                        
-                        $_xmlNode->appendChild($node);
-                        
-                        $node->appendChild(new DOMText($data->$value));
+                        $nodeContent = $data->$value;
                         
                         break;
                 }
+                
+                // skip empty elements
+                if($nodeContent === null || $nodeContent == '') {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Value for $key is empty. Skip element.");
+                    continue;
+                }
+                
+                // create a new DOMElement ...
+                $node = new DOMElement($key, null, 'uri:Calendar');
+
+                // ... append it to parent node aka append it to the document ...
+                $_xmlNode->appendChild($node);
+                
+                // ... and now add the content (DomText takes care of special chars)
+                $node->appendChild(new DOMText($nodeContent));
             }
         }
            
