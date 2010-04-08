@@ -60,6 +60,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         
         this.label = this.containerName;
         
+        
         /*
         // define custom operators
         this.customOperators = [
@@ -142,7 +143,11 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
                     operatorText = _('is equal to')
                 }
                 
-                //this.filter.formFields.operator.setText(operatorText);
+                //var store = this.filter.formFields.operator.getStore();
+                //var equalsRecord = store.getAt(store.find('operator', 'equals'));
+                //equalsRecord.set('label', operatorText);
+                this.filter.formFields.operator.setRawValue(operatorText);
+            
                 return Tine.widgets.container.selectionComboBox.prototype.setValue.call(this, value);
             },
             listeners: {
@@ -166,7 +171,16 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             width: 200,
             //id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
-            renderTo: el
+            renderTo: el,
+            listeners: {
+                scope: this, 
+                select: this.onFiltertrigger,
+                specialkey: function(field, e){
+                     if(e.getKey() == e.ENTER){
+                         this.onFiltertrigger();
+                     }
+                }
+            }
         });
         
         return filter.valueFields[valueType];
@@ -185,6 +199,24 @@ Tine.widgets.grid.FilterToolbar.FILTERS['tine.widget.container.filtermodel'] = T
  * @version     $Id$
  */
 Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.LayerCombo, {
+    /**
+     * @cfg {string} containerName
+     * name of container (singular)
+     */
+    containerName: 'container',
+    
+    /**
+     * @cfg {string} containerName
+     * name of container (plural)
+     */
+    containersName: 'containers',
+    
+    /**
+     * @cfg {Tine.Tinebase.data.Record} recordClass
+     * record definition class  (required)
+     */
+    recordClass: null,
+    
     hideButtons: false,
     layerAlign : 'tr-br?',
     minLayerWidth: 400,
@@ -198,9 +230,10 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
     },
     
     initComponent: function() {
-        //this.fakeRecord = new Tine.widgets.container.Model.Event(Tine.widgets.container.Model.Event.getDefaultData());
-        
         this.on('beforecollapse', this.onBeforeCollapse, this);
+        this.store = new Ext.data.SimpleStore({
+            fields: this.recordClass
+        });
         
         this.supr().initComponent.call(this);
     },
@@ -219,9 +252,18 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
         });
     },
     
+    /**
+     * 
+     * @return {Array} of containerData
+     */
     getFormValue: function() {
-        //this.containerGridPanel.onRecordUpdate(this.fakeRecord);
-        //return this.fakeRecord.get('attendee');
+        var container = [];
+        
+        this.store.each(function(containerRecord) {
+            container.push(containerRecord.data);
+        }, this);
+        
+        return container;
     },
     
     getItems: function() {
@@ -242,6 +284,7 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
         this.containerGridPanel = new Tine.widgets.grid.PickerGridPanel({
             height: this.layerHeight || 'auto',
             recordClass: Tine.Tinebase.Model.Container,
+            store: this.store,
             autoExpandColumn: 'name',
             getColumnModel: this.getColumnModel.createDelegate(this),
             initActionsAndToolbars: function() {
@@ -269,11 +312,11 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
     },
     
     onContainerSelect: function(field, containerRecord) {
-        var existingRecord = this.containerGridPanel.store.getById(containerRecord.id);
+        var existingRecord = this.store.getById(containerRecord.id);
         if (! existingRecord) {
-            this.containerGridPanel.store.add(containerRecord);
+            this.store.add(containerRecord);
         } else {
-            var idx = this.containerGridPanel.store.indexOf(existingRecord);
+            var idx = this.store.indexOf(existingRecord);
             var row = this.containerGridPanel.getView().getRow(idx);
             Ext.fly(row).highlight();
         }
@@ -282,37 +325,28 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
     },
     
     /**
-     * @param {String} value
+     * @param {Array/Object} value
      * @return {Ext.form.Field} this
      */
     setValue: function(value) {
-        value = Ext.isArray(value) ? value : [value];
-        //this.fakeRecord.set('attendee', '');
-        //this.fakeRecord.set('attendee', value);
-        this.currentValue = [];
+        this.currentValue = Ext.isArray(value) ? value : [value];
         
-        /*
-        var attendeeStore = Tine.widgets.container.Model.Attender.getAttendeeStore(value);
-        
-        var a = [];
-        attendeeStore.each(function(attender) {
-            this.currentValue.push(attender.data);
-            var name = Tine.widgets.container.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.widgets.container.AttendeeGridPanel.prototype, attender.get('user_id'), false, attender);
-            //var status = Tine.widgets.container.AttendeeGridPanel.prototype.renderAttenderStatus.call(Tine.widgets.container.AttendeeGridPanel.prototype, attender.get('status'), {}, attender);
-            a.push(name);
+        this.store.removeAll();
+        var containerNames = [];
+        Ext.each(this.currentValue, function(containerData) {
+            this.store.add(new Tine.Tinebase.Model.Container(containerData));
+            containerNames.push(containerData.name);
         }, this);
         
-        this.setRawValue(a.join(', '));
-        */
+        this.setRawValue(containerNames.join(', '));
         return this;
-        
     },
     
     /**
      * sets values to innerForm
      */
     setFormValue: function(value) {
-        //this.containerGridPanel.onRecordLoad(this.fakeRecord);
+        // nothing to do
     }
 });
 
