@@ -373,6 +373,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 $_xmlNode->appendChild(new DOMElement('OrganizerEmail', Tinebase_Core::getUser()->accountEmailAddress, 'uri:Calendar'));
             }
         }
+        
+        if (isset($data->tags) && count($data->tags) > 0) {
+            $categories = $_xmlNode->appendChild(new DOMElement('Categories', null, 'uri:Calendar'));
+            foreach ($data->tags as $tag) {
+                $categories->appendChild(new DOMElement('Category', $tag, 'uri:Calendar'));
+            }
+        }
     }
     
     /**
