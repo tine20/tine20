@@ -105,8 +105,8 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     {
         $data = $this->_contentController->get($_serverId);
         
-        foreach($this->_mapping as $key => $value) {
-            if(!empty($data->$value)) {
+        foreach ($this->_mapping as $key => $value) {
+            if (!empty($data->$value)) {
                 switch($value) {
                     case 'completed':
                         continue 2;
@@ -139,11 +139,18 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         }        
         
         // Completed is required
-        if($data->completed instanceof Zend_Date) {
+        if ($data->completed instanceof Zend_Date) {
             $_xmlNode->appendChild(new DOMElement('Complete', 1, 'uri:Tasks'));
             $_xmlNode->appendChild(new DOMElement('DateCompleted', $data->completed->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z', 'uri:Tasks'));
         } else {
             $_xmlNode->appendChild(new DOMElement('Complete', 0, 'uri:Tasks'));
+        }
+        
+        if (isset($data->tags) && count($data->tags) > 0) {
+            $categories = $_xmlNode->appendChild(new DOMElement('Categories', null, 'uri:Tasks'));
+            foreach ($data->tags as $tag) {
+                $categories->appendChild(new DOMElement('Category', $tag, 'uri:Tasks'));
+            }
         }
         
     }
@@ -308,13 +315,20 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
                 case self::FILTER_INCOMPLETE:
-                    /* can be enabled when tasks can be filtered by status again
-                    $_filter->addFilter(new Tasks_Model_TaskFilter(
-                        'closed', 
-                        'equals', 
-                        true
+                    $_filter->removeFilter('status_id');
+                    
+                    $status = Tasks_Controller_Status::getInstance()
+                        ->getAllStatus()
+                        ->filter('status_is_open', 1);
+
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter by status ids " . print_r($status->getArrayOfIds(), true));
+                    
+                    $_filter->addFilter(new Tinebase_Model_Filter_Int(
+                        'status_id', 
+                        'in', 
+                        $status->getArrayOfIds()
                     ));
-                    */
+                    
                     break;
             }
         }
