@@ -189,7 +189,14 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                 
                 
             }
-        }        
+        }
+          
+        if(isset($data->tags) && count($data->tags) > 0) {
+            $categories = $_xmlNode->appendChild(new DOMElement('Categories', null, 'uri:Contacts'));
+            foreach($data->tags as $tag) {
+                $categories->appendChild(new DOMElement('Category', $tag, 'uri:Contacts'));
+            }
+        }
     }
     
     protected function _getSyncableFolders()
