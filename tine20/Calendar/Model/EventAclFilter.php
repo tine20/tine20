@@ -17,7 +17,7 @@
  * 
  * Assuring event grants is a two stage process for search operations.
  *  1. limiting the query (mixture of grants and filter)
- *  2. transform event set (all events user has only free/busy grant for need to be cleaned)
+ *  2. transform event set (all events user has no read grant for need to be cleaned -> freebusy infos)
  * 
  * NOTE: The effective grants of the events get dynamically appended to the
  *       event rows in SQL (at the moment by the sql backend class.)
@@ -65,10 +65,32 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
     }
     
     /**
+     * append freebusy containers
+     * 
+     * NOTE: when a user filters for the node containing personal nodes, the user expects
+     *       to see all events of the corresponding persons and not only those which are in calendars
+     *       the user has read access to -> freebusy info. As such we need to detect this cases here
+     *       and dynamically append all the persons calendars if the person gave freebusy grant
+     * 
+     * @param  string $_function
+     * @param  string $_ownerId    => needed for $_node == 'personal'
+     * @return array of container ids
+     *
+    protected function _resolveContainerNode($_node, $_ownerId = NULL)
+    {
+        // we only need to include freebusy if required grants contain GRANT_READ
+        if (! in_array(Tinebase_Model_Grants::GRANT_READ, $this->_requiredGrants)) {
+            return;
+        }
+        
+        // call paraent or not? parent might to multiple getCpontaienr calls for each grant
+    }
+    */
+    /**
      * resolve container ids
      *
      * @todo speed up retrival of freebusyContainers for all other users by a single call to container class/table
-     */
+     *
     protected function _resolve()
     {
         if ($this->_isResolved) {
@@ -133,6 +155,7 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
             $this->_containerIds = array_merge($this->_containerIds, $this->_freebusyContainers);
         }
     }
+    */
     
     /**
      * returns all freebusy container ids this idfilter added to query
