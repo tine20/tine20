@@ -158,7 +158,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      * try to get/search event of rwright
      *  -> testuser has not Grants, but freebusy
      */
-    public function testFreeBusy()
+    public function _testFreeBusy()
     {
     	Tinebase_Core::getPreference('Calendar')->setValueForUser(Calendar_Preference::FREEBUSY, 1, $this->_personas['rwright']->getId(), TRUE);
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'rwright');
