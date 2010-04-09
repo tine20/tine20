@@ -126,6 +126,17 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
             })
         ];
         
+        // @todo move this to cal app when apps can cope with their own grant models
+        var calApp = Tine.Tinebase.appMgr.get('Calendar');
+        var calId = calApp ? calApp.id : 'none';
+        if (this.grantContainer.type == 'personal' && this.grantContainer.application_id === calId) {
+            columns.push(new Ext.ux.grid.CheckColumn({
+                header: _('Free Busy'),
+                tooltip: _('The grant to access free busy information of events in this calendar'),
+                dataIndex: 'freebusyGrant',
+                width: 55
+            }));
+        }
         if (this.grantContainer.type == 'personal' && this.grantContainer.capabilites_private) {
             columns.push(new Ext.ux.grid.CheckColumn({
                 header: _('Private'),
