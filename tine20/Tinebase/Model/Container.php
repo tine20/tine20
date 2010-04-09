@@ -167,6 +167,44 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         return $path;
     }
     
+    public static function path2node($_path)
+    {
+        
+    }
+    
+    /**
+     * returns containerId if given path represents a (single) container
+     * 
+     * 
+     * @static
+     * @param  String path
+     * @return String|Bool
+     */
+    public static function pathIsContainer($_path)
+    {
+        if (preg_match("/^\/personal\/[0-9a-z_\-]+\/([a-f0-9]+)|^\/shared\/([a-f0-9]+)/i", $_path, $matches)) {
+            return array_key_exists(2, $matches) ? $matches[2] : $matches[1];
+        }
+        
+        return false;
+    }
+    
+    /**
+     * returns owner id if given path represents a personal _node_
+     * 
+     * @static
+     * @param  String $_path
+     * @return String|Bool
+     */
+    public static function pathIsPersonalNode($_path)
+    {
+        if (preg_match("/^\/personal\/([0-9a-z_\-]+)$/i", $_path, $matches)) {
+            return $matches[1];
+        }
+        
+        return false;
+    }
+    
     /**
      * returns containername
      *
