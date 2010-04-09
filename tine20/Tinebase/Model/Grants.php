@@ -60,6 +60,12 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      */
     const GRANT_ADMIN    = 'adminGrant';
     
+    /**
+     * grant to see freebusy info in calendar app
+     * @todo move to Calendar_Model_Grant once we are able to cope with app specific grant classes
+     */
+    const GRANT_FREEBUSY = 'freebusyGrant';
+    
 	/**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -111,6 +117,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             self::GRANT_EXPORT,
             self::GRANT_SYNC,
             self::GRANT_ADMIN,
+            self::GRANT_FREEBUSY,
         );
     
         return $allGrants;
