@@ -19,6 +19,21 @@
  */
 class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract 
 {
+    /**
+     * filter types
+     */
+    const FILTER_NOTHING    = 0;
+    const FILTER_INCOMPLETE = 8;
+    
+    /**
+     * available filters
+     * 
+     * @var array
+     */
+    protected $_filterArray = array(
+        self::FILTER_INCOMPLETE
+    );
+    
     protected $_mapping = array(
         #'Body'              => 'body',
         #'BodySize'          => 'bodysize',
@@ -211,11 +226,6 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     {
         $xmlData = $_data->children('Tasks');
                 
-        $filterArray = array(array(
-            'field'     => 'showClosed',
-            'value'     => TRUE
-        )); 
-        
         foreach($this->_mapping as $fieldName => $value) {
             if(isset($xmlData->$fieldName)) {
                 $filterArray[] = array(
@@ -285,5 +295,28 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         // we ignore the folders of others users and shared folders for now
                 
         return $folders;
+    }
+    
+    /**
+     * return contentfilter array
+     * 
+     * @param $_filterType
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    protected function _getContentFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_filterType)
+    {
+        if(in_array($_filterType, $this->_filterArray)) {
+            switch($_filterType) {
+                case self::FILTER_INCOMPLETE:
+                    /* can be enabled when tasks can be filtered by status again
+                    $_filter->addFilter(new Tasks_Model_TaskFilter(
+                        'closed', 
+                        'equals', 
+                        true
+                    ));
+                    */
+                    break;
+            }
+        }
     }
 }
