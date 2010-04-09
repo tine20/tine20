@@ -41,11 +41,11 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         /**
          * set up personas personal container grants:
          * 
-         *  jsmith:    anyone readGrant, addGrant, editGrant, deleteGrant
+         *  jsmith:    anyone freebusyGrant, readGrant, addGrant, editGrant, deleteGrant
          *  pwulf:     anyone readGrant, sclever addGrant, readGrant, editGrant, deleteGrant, privateGrant
          *  sclever:   testuser addGrant, readGrant, editGrant, deleteGrant, privateGrant
          *  jmcblack:  prim group of testuser readGrant, testuser privateGrant
-         *  rwright:   sclever has readGrant and editGrant
+         *  rwright:   testuser freebusyGrant, sclever has readGrant and editGrant
          */
         $this->_setupTestCalendars();
         
@@ -156,11 +156,10 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     
     /**
      * try to get/search event of rwright
-     *  -> testuser has not Grants, but freebusy
+     *  -> testuser has no Grants, but freebusy
      */
-    public function _testFreeBusy()
+    public function testGrantsByFreeBusy()
     {
-    	Tinebase_Core::getPreference('Calendar')->setValueForUser(Calendar_Preference::FREEBUSY, 1, $this->_personas['rwright']->getId(), TRUE);
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'rwright');
         
         $events = $this->_uit->search(new Calendar_Model_EventFilter(array(
@@ -168,6 +167,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         )));
         
         $event = $events->getFirstRecord();
+        
+        $this->assertFalse(empty($event), 'no event found, but freebusy info should be');
         $this->assertTrue(empty($event->summary), 'event with freebusy only is not cleaned up');
         $this->assertFalse((bool)$event->{Tinebase_Model_Grants::GRANT_READ});
         $this->assertFalse((bool)$event->{Tinebase_Model_Grants::GRANT_EDIT});
@@ -270,15 +271,15 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     /**
      * set up personas personal container grants:
      * 
-     *  jsmith:    anyone readGrant, addGrant, editGrant, deleteGrant
+     *  jsmith:    anyone freebusyGrant, readGrant, addGrant, editGrant, deleteGrant
      *  pwulf:     anyone readGrant, sclever addGrant, readGrant, editGrant, deleteGrant, privateGrant
      *  sclever:   testuser addGrant, readGrant, editGrant, deleteGrant, privateGrant
      *  jmcblack:  prim group of testuser readGrant, testuser privateGrant
-     *  rwright:   sclever has readGrant and editGrant
+     *  rwright:   testuser freebusyGrant, sclever has readGrant and editGrant
      */
     protected function _setupTestCalendars()
     {
-        // jsmith:     anyone readGrant, addGrant, editGrant, deleteGrant
+        // jsmith:     anyone freebusyGrant, readGrant, addGrant, editGrant, deleteGrant
         Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['jsmith'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => $this->_personas['jsmith']->getId(),
             'account_type'  => 'user',
@@ -288,6 +289,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_DELETE   => true,
             Tinebase_Model_Grants::GRANT_PRIVATE  => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ), array(
             'account_id'    => 0,
             'account_type'  => 'anyone',
@@ -295,6 +297,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => false,
         ))), true);
         
@@ -308,6 +311,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_DELETE   => true,
             Tinebase_Model_Grants::GRANT_PRIVATE  => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ), array(
             'account_id'    => 0,
             'account_type'  => 'anyone',
@@ -337,6 +341,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_DELETE   => true,
             Tinebase_Model_Grants::GRANT_PRIVATE  => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ),array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
@@ -358,6 +363,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_DELETE   => true,
             Tinebase_Model_Grants::GRANT_PRIVATE  => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ),array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
@@ -377,7 +383,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADMIN    => false,
         ))), true);
         
-        // rwright:   nothing
+        // rwright:   testuser freebusyGrant, sclever has readGrant and editGrant
         Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['rwright'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => $this->_personas['rwright']->getId(),
             'account_type'  => 'user',
@@ -387,6 +393,17 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_DELETE   => true,
             Tinebase_Model_Grants::GRANT_PRIVATE  => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+        ),array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ     => false,
+            Tinebase_Model_Grants::GRANT_ADD      => false,
+            Tinebase_Model_Grants::GRANT_EDIT     => false,
+            Tinebase_Model_Grants::GRANT_DELETE   => false,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => false,
+            Tinebase_Model_Grants::GRANT_ADMIN    => false,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ), array(
             'account_id'    => $this->_personas['sclever']->getId(),
             'account_type'  => 'user',
