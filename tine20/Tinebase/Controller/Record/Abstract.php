@@ -626,10 +626,8 @@ abstract class Tinebase_Controller_Record_Abstract
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action get|update
-     * 
-     * @todo add type hint again
      */
-    public function checkFilterACL(/*Tinebase_Model_Filter_FilterGroup */$_filter, $_action = 'get')
+    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
         if (! $this->_doContainerACLChecks) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Container ACL disabled for ' . $_filter->getModelName() . '.');

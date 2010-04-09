@@ -277,7 +277,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      * 
      * @todo add export grant here
      */
-    public function checkFilterACL(/*Tinebase_Model_Filter_FilterGroup*/ $_filter, $_action = 'get')
+    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
         switch ($_action) {
             case 'get':
