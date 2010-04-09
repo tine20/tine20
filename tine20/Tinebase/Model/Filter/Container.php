@@ -333,8 +333,6 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
      */
     public static function transformLegacyData(array &$_data, $_containerProperty='container_id')
     {
-        Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . 'HEADS UP DEVELOPERS: old container filter notation in use.  PLEASE UPDATE ');
-        
         $legacyData = array();
         foreach ($_data as $key => $filterData) {
             if (array_key_exists('field', $filterData) && in_array($filterData['field'], array('containerType', 'container', 'owner'))) {
@@ -344,6 +342,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
         }
         
         if (! empty($legacyData)) {
+            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . 'HEADS UP DEVELOPERS: old container filter notation in use.  PLEASE UPDATE ');
             
             if (! $legacyData['containerType']) {
                 $legacyData['containerType'] = 'all';
