@@ -816,6 +816,25 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
+     * redefine required grants for get actions
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action get|update
+     */
+    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    {
+        parent::checkFilterACL($_filter, $_action);
+        
+        if ($_action == 'get') {
+            $_filter->setRequiredGrants(array(
+                Tinebase_Model_Grants::GRANT_FREEBUSY,
+                Tinebase_Model_Grants::GRANT_READ,
+                Tinebase_Model_Grants::GRANT_ADMIN,
+            ));
+        }
+    }
+    
+    /**
      * check grant for action (CRUD)
      *
      * @param Tinebase_Record_Interface $_record
