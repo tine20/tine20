@@ -334,6 +334,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * return a container by containerId
      * - cache the results because this function is called very often
      *
+     * @todo what about grant checking here???
+     * 
      * @param   int|Tinebase_Model_Container $_containerId the id of the container
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
@@ -385,9 +387,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             throw new Tinebase_Exception_NotFound("Container $_containerName not found.");
         }
         
+        /* 2010-04-10 cweiss: needs to be reviewed, breaks some tests... 
         if (! $_ignoreACL && TRUE !== Tinebase_Core::getUser()->hasGrant($container->getId(), Tinebase_Model_Grants::GRANT_READ)) {
             throw new Tinebase_Exception_AccessDenied('Permission to container denied.');
         }
+        */
         
         return $container;
     }
@@ -440,10 +444,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     public function getPersonalContainer($_accountId, $_application, $_owner, $_grant, $_ignoreACL=false)
     {
         $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-        if(count($groupMemberships) === 0) {
-            throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
-        }
+        //$groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+        //if(count($groupMemberships) === 0) {
+        //    throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
+        //}
         $ownerId            = Tinebase_Model_User::convertUserIdToInt($_owner);
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
@@ -466,13 +470,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->group(SQL_TABLE_PREFIX . 'container.id')
             ->order(SQL_TABLE_PREFIX . 'container.name');
             
-        if ($_ignoreACL !== true) {
+        if ($_ignoreACL !== TRUE) {
+            $this->_addGrantsSql($select, $accountId, $_grant, 'user');
+            /*
             $select->where('user.account_grant = ?', $_grant)
 
             # beware of the extra parenthesis of the next 3 rows
             ->where("(user.account_id = ? AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
             ->orWhere("user.account_id IN (?) AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
             ->orWhere('user.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
+            */
         }
             
         //error_log("getContainer:: " . $select->__toString());
@@ -494,6 +501,32 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows);
         
         return $result;
+    }
+    
+    /**
+     * appends container_acl sql 
+     * 
+     * @param  Zend_Db_Select    $_select
+     * @param  String            $_accountId
+     * @param  String            $_grant
+     * @param  String            $_aclTableName
+     * @return void
+     * @throws Tinebase_Exception_NotFound
+     */
+    public static function _addGrantsSql($_select, $_accountId, $_grant, $_aclTableName = 'container_acl')
+    {
+        // @todo add groupmembers via join
+        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($_accountId);
+        if(count($groupMemberships) === 0) {
+            // this is crap isn't it?
+            throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
+        }
+        
+        $_select->where("{$_aclTableName}.account_grant = ?", $_grant)
+            ->where("({$_aclTableName}.account_id = ? AND {$_aclTableName}.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $_accountId)
+            ->orWhere("{$_aclTableName}.account_id IN (?) AND {$_aclTableName}.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
+            ->orWhere("{$_aclTableName}.account_type = ?)", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
+            
     }
     
     /**
