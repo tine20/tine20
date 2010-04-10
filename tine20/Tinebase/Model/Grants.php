@@ -106,7 +106,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      *
      * @return  array   all container grants
      */
-    public function getAllGrants()
+    public static function getAllGrants()
     {
         $allGrants = array(
             self::GRANT_READ,
