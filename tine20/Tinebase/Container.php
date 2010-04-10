@@ -367,35 +367,23 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     public function getContainerByName($_application, $_containerName, $_type)
     {
         if($_type !== Tinebase_Model_Container::TYPE_INTERNAL and $_type !== Tinebase_Model_Container::TYPE_PERSONAL and $_type !== Tinebase_Model_Container::TYPE_SHARED) {
-            throw new Tinebase_Exception_UnexpectedValue ('Invalid type $_type supplied.');
+            throw new Tinebase_Exception_UnexpectedValue ("Invalid type $_type supplied.");
         }
+        
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
         
-        $colName = $this->_db->quoteIdentifier('name');
-        $colType = $this->_db->quoteIdentifier('type');
-        $colApplicationId = $this->_db->quoteIdentifier('application_id');
-        $colIsDeleted = $this->_db->quoteIdentifier('is_deleted');
+        $filter = new Tinebase_Model_ContainerFilter(array(
+            array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
+            array('field' => 'name', 'operator' => 'equals', 'value' => $_containerName),
+            array('field' => 'type', 'operator' => 'equals', 'value' => $_type),
+        ));
         
-        $select = $this->_getSelect()
-            ->where($colName . ' = ?', $_containerName)
-            ->where($colType . ' = ?', $_type)
-            ->where($colApplicationId . ' = ?', $applicationId)
-            ->where($colIsDeleted . ' = 0');
-
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-        
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetch();
-        $stmt->closeCursor();
-        
-        if ($queryResult === NULL) {
-            throw new Tinebase_Exception_NotFound('Container ' . $_containerName . ' not found.');
+        $containers =  $this->search($filter);
+        if (empty($containers)) {
+            throw new Tinebase_Exception_NotFound("Container $_containerName not found.");
         }
         
-        $result = new Tinebase_Model_Container($queryResult);
-        
-        return $result;
-        
+        return $containers->getFirstRecord();
     }
     
     /**
