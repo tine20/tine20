@@ -23,43 +23,45 @@
  * @package     Tinebase
  * @subpackage  Acl
  */
-class Tinebase_Container
+class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
 {
 	/**
-     * @var Zend_Db_Adapter_Abstract
-     */
-    protected $_db;
-		
-    /**
-     * the table object for the SQL_TABLE_PREFIX .container table
+     * Table name without prefix
      *
-     * @var Zend_Db_Table_Abstract
+     * @var string
      */
-    protected $containerTable;
-
+    protected $_tableName = 'container';
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Tinebase_Model_Container';
+    
+    /**
+     * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
+     *
+     * @var boolean
+     */
+    protected $_modlogActive = TRUE;
+		
     /**
      * the table object for the SQL_TABLE_PREFIX . container_acl table
      *
      * @var Zend_Db_Table_Abstract
      */
-    protected $containerAclTable;
+    protected $_containerAclTable;
     
-    /**
-     * container backend class
-     *
-     * @var Tinebase_Container_Backend
-     */
-    protected $_backend;
-
     /**
      * the constructor
      */
-    private function __construct() {
-        $this->containerTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container'));
-        $this->containerAclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
-        $this->_db = Tinebase_Core::getDb();
-        $this->_backend = new Tinebase_Container_Backend();
+    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL, $_modlogActive = NULL, $_useSubselectForCount = NULL)
+    {
+        parent::__construct($_dbAdapter, $_modelName, $_tableName, $_tablePrefix, $_modlogActive, $_useSubselectForCount);
+        $this->_containerAclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
     }
+    
     /**
      * don't clone. Use the singleton.
      *
@@ -143,7 +145,7 @@ class Tinebase_Container
         }
         
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_container, 'create');
-        $container = $this->_backend->create($_container);
+        $container = $this->create($_container);
         
         if($_grants === NULL) {
             $creatorGrants = array(
@@ -227,7 +229,7 @@ class Tinebase_Container
                 'account_id'    => $accountId,
                 'account_grant' => $grant
             );
-            $this->containerAclTable->insert($data);
+            $this->_containerAclTable->insert($data);
         }
 
         $this->_removeFromCache($containerId);
@@ -354,7 +356,7 @@ class Tinebase_Container
         $result = $cache->load('getContainerById' . $containerId);
 
         if(!$result) {
-            $result = $this->_backend->get($containerId);
+            $result = $this->get($containerId);
 
             $cache->save($result, 'getContainerById' . $containerId);
         }
@@ -378,12 +380,12 @@ class Tinebase_Container
         }
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
         
-        $colName = $this->containerTable->getAdapter()->quoteIdentifier('name');
-        $colType = $this->containerTable->getAdapter()->quoteIdentifier('type');
-        $colApplicationId = $this->containerTable->getAdapter()->quoteIdentifier('application_id');
-        $colIsDeleted = $this->containerTable->getAdapter()->quoteIdentifier('is_deleted');
+        $colName = $this->_db->quoteIdentifier('name');
+        $colType = $this->_db->quoteIdentifier('type');
+        $colApplicationId = $this->_db->quoteIdentifier('application_id');
+        $colIsDeleted = $this->_db->quoteIdentifier('is_deleted');
         
-        $select = $this->containerTable->select()
+        $select = $this->_getSelect()
             ->where($colName . ' = ?', $_containerName)
             ->where($colType . ' = ?', $_type)
             ->where($colApplicationId . ' = ?', $applicationId)
@@ -391,13 +393,15 @@ class Tinebase_Container
 
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
-        $row = $this->containerTable->fetchRow($select);
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
         
-        if ($row === NULL) {
+        if ($queryResult === NULL) {
             throw new Tinebase_Exception_NotFound('Container ' . $_containerName . ' not found.');
         }
         
-        $result = new Tinebase_Model_Container($row->toArray());
+        $result = new Tinebase_Model_Container($queryResult);
         
         return $result;
         
@@ -416,17 +420,19 @@ class Tinebase_Container
     {
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
         
-        $select  = $this->containerTable->select()
+        $select = $this->_getSelect()
             ->where('type = ?', Tinebase_Model_Container::TYPE_INTERNAL)
             ->where('application_id = ?', $applicationId);
 
-        $row = $this->containerTable->fetchRow($select);
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
         
-        if($row === NULL) {
+        if($queryResult === NULL) {
             throw new Tinebase_Exception_NotFound('No internal container found.');
         }
 
-        $container = new Tinebase_Model_Container($row->toArray());
+        $container = new Tinebase_Model_Container($queryResult);
         
         if(!$this->hasGrant($_accountId, $container, Tinebase_Model_Grants::GRANT_READ)) {
             throw new Tinebase_Exception_AccessDenied('Permission to container denied.');
@@ -710,9 +716,9 @@ class Tinebase_Container
             }
         }
         
-        //$this->_backend->delete($containerId);
+        //$this->delete($containerId);
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($container, 'delete', $container);
-        $this->_backend->update($container);
+        $this->update($container);
         
         $this->_removeFromCache($containerId);
         
@@ -747,7 +753,7 @@ class Tinebase_Container
      */
     public function deleteContainerByApplicationId($_applicationId)
     {
-        return $this->_backend->deleteByProperty($_applicationId, 'application_id');
+        return $this->deleteByProperty($_applicationId, 'application_id');
     }    
     
     /**
@@ -767,14 +773,14 @@ class Tinebase_Container
         }
         
         $where = array(
-            $this->containerTable->getAdapter()->quoteInto('id = ?', $containerId)
+            $this->_db->quoteInto('id = ?', $containerId)
         );
         
         $data = array(
             'name' => $_containerName
         );
         
-        $this->containerTable->update($data, $where);
+        $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
 
         $this->_removeFromCache($containerId);
         
@@ -1054,8 +1060,8 @@ class Tinebase_Container
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
-            $where = $this->containerAclTable->getAdapter()->quoteInto('container_id = ?', $containerId);
-            $this->containerAclTable->delete($where);
+            $where = $this->_containerAclTable->getAdapter()->quoteInto('container_id = ?', $containerId);
+            $this->_containerAclTable->delete($where);
             
             foreach($_grants as $recordGrants) {
                 $data = array(
@@ -1070,7 +1076,7 @@ class Tinebase_Container
                 
                 foreach ($recordGrants as $grantName => $grant) {
                     if (in_array($grantName, $recordGrants->getAllGrants()) && $grant === TRUE) {
-                        $this->containerAclTable->insert($data + array('account_grant' => $grantName));
+                        $this->_containerAclTable->insert($data + array('account_grant' => $grantName));
                     }
                 }
             }
