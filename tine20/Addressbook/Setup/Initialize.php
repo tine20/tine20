@@ -47,7 +47,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         
         // give anyone read rights to the internal addressbook
         // give Adminstrators group read/edit/admin rights to the internal addressbook
-        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL);
+        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL, TRUE);
         //Tinebase_Container::getInstance()->addGrants($internalAddressbook, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
         Tinebase_Container::getInstance()->addGrants($internalAddressbook, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, '0', array(
             Tinebase_Model_Grants::GRANT_READ

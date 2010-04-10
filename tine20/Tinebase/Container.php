@@ -360,11 +360,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * return a container by container name
      *
      * @param   int|Tinebase_Model_Container $_containerId the id of the container
+     * @param   int|Tinebase_Model_Container $_ignoreACL
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_UnexpectedValue
+     * @throws  Tinebase_Exception_AccessDenied
      */
-    public function getContainerByName($_application, $_containerName, $_type)
+    public function getContainerByName($_application, $_containerName, $_type, $_ignoreACL = FALSE)
     {
         if($_type !== Tinebase_Model_Container::TYPE_INTERNAL and $_type !== Tinebase_Model_Container::TYPE_PERSONAL and $_type !== Tinebase_Model_Container::TYPE_SHARED) {
             throw new Tinebase_Exception_UnexpectedValue ("Invalid type $_type supplied.");
@@ -378,12 +380,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             array('field' => 'type', 'operator' => 'equals', 'value' => $_type),
         ));
         
-        $containers =  $this->search($filter);
-        if (empty($containers)) {
+        $container =  $this->search($filter)->getFirstRecord();
+        if (! $container) {
             throw new Tinebase_Exception_NotFound("Container $_containerName not found.");
         }
         
-        return $containers->getFirstRecord();
+        if (! $_ignoreACL && TRUE !== Tinebase_Core::getUser()->hasGrant($container->getId(), Tinebase_Model_Grants::GRANT_READ)) {
+            throw new Tinebase_Exception_AccessDenied('Permission to container denied.');
+        }
+        
+        return $container;
     }
     
     /**

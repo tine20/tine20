@@ -30,7 +30,7 @@ class Sales_Setup_Initialize extends Setup_Initialize
         $userGroup  = $groupsBackend->getDefaultGroup();
         
         try {
-            $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Sales', 'Shared Contracts', Tinebase_Model_Container::TYPE_SHARED);
+            $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Sales', 'Shared Contracts', Tinebase_Model_Container::TYPE_SHARED, TRUE);
             Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
                 Tinebase_Model_Grants::GRANT_READ,
                 Tinebase_Model_Grants::GRANT_EDIT
