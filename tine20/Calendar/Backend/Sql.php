@@ -185,44 +185,27 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* on     */ $this->_db->quoteIdentifier('dispgrants.container_id') . ' = ' . $this->_db->quoteIdentifier('attendee.displaycontainer_id') . 
                            ' AND ' . $this->_getContainGrantCondition('dispgrants', 'groupmemberships'),
             /* select */ array());
-                
+        
         $_select->joinLeft(
             /* table  */ array('physgrants' => $this->_tablePrefix . 'container_acl'), 
             /* on     */ $this->_db->quoteIdentifier('physgrants.container_id') . ' = ' . $this->_db->quoteIdentifier('cal_events.container_id'),
-            /* select */ array(
-                Tinebase_Model_Grants::GRANT_READ => "\n MAX( \n" .
-                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Grants::GRANT_READ) . " OR \n" . 
-                    '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Grants::GRANT_READ) . " OR \n" .
-                    '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Grants::GRANT_READ) . " \n" .
-                 ")",
-                Tinebase_Model_Grants::GRANT_EDIT => "\n MAX( \n" .
-                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Grants::GRANT_EDIT) . " OR \n" . 
-                    '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Grants::GRANT_EDIT) . " OR \n" .
-                    '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Grants::GRANT_EDIT) . " \n" .
-                 ")",
-                Tinebase_Model_Grants::GRANT_DELETE => "\n MAX( \n" .
-                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Grants::GRANT_DELETE) . " OR \n" . 
-                    '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Grants::GRANT_DELETE) . " OR \n" .
-                    '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Grants::GRANT_DELETE) . " \n" .
-                 ")",
-                Tinebase_Model_Grants::GRANT_PRIVATE => "\n MAX( \n" .
-                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Grants::GRANT_PRIVATE) . " OR \n" . 
-                    '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Grants::GRANT_PRIVATE) . " OR \n" .
-                    '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Grants::GRANT_PRIVATE) . " \n" .
-                 ")",
-                Tinebase_Model_Grants::GRANT_SYNC => "\n MAX( \n" .
-                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Grants::GRANT_SYNC) . " OR \n" . 
-                    '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Grants::GRANT_SYNC) . " OR \n" .
-                    '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Grants::GRANT_SYNC) . " \n" .
-                 ")",
-                Tinebase_Model_Grants::GRANT_EXPORT => "\n MAX( \n" .
-                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Grants::GRANT_EXPORT) . " OR \n" . 
-                    '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Grants::GRANT_EXPORT) . " OR \n" .
-                    '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Grants::GRANT_EXPORT) . " \n" .
-                 ")",
-            ));
+            /* select */ array());
+        
+        $allGrants = Tinebase_Model_Grants::getAllGrants();
+        foreach ($allGrants as $grant) {
+            if (in_array($grant, $this->_recordBasedGrants)) {
+                $_select->columns(array($grant => "\n MAX( \n" .
+                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', $grant) . " OR \n" . 
+                    '  /* implicit  */' . $this->_getImplicitGrantCondition($grant) . " OR \n" .
+                    '  /* inherited */' . $this->_getInheritedGrantCondition($grant) . " \n" .
+                 ")"));
+            } else {
+                $_select->columns(array($grant => "\n MAX( \n" .
+                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', $grant) . "\n" .
+                ")"));
+            }
+        }
     }
-    
     
     /**
      * returns SQL with container grant condition 
