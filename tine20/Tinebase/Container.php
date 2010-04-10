@@ -47,20 +47,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     protected $_modlogActive = TRUE;
 		
     /**
-     * the table object for the SQL_TABLE_PREFIX . container_acl table
+     * the table object for the container_acl table
      *
      * @var Zend_Db_Table_Abstract
      */
     protected $_containerAclTable;
-    
-    /**
-     * the constructor
-     */
-    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL, $_modlogActive = NULL, $_useSubselectForCount = NULL)
-    {
-        parent::__construct($_dbAdapter, $_modelName, $_tableName, $_tablePrefix, $_modlogActive, $_useSubselectForCount);
-        $this->_containerAclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
-    }
     
     /**
      * don't clone. Use the singleton.
@@ -229,7 +220,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 'account_id'    => $accountId,
                 'account_grant' => $grant
             );
-            $this->_containerAclTable->insert($data);
+            $this->_getContainerAclTable()->insert($data);
         }
 
         $this->_removeFromCache($containerId);
@@ -1060,8 +1051,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
-            $where = $this->_containerAclTable->getAdapter()->quoteInto('container_id = ?', $containerId);
-            $this->_containerAclTable->delete($where);
+            $where = $this->_getContainerAclTable()->getAdapter()->quoteInto('container_id = ?', $containerId);
+            $this->_getContainerAclTable()->delete($where);
             
             foreach($_grants as $recordGrants) {
                 $data = array(
@@ -1076,7 +1067,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 
                 foreach ($recordGrants as $grantName => $grant) {
                     if (in_array($grantName, $recordGrants->getAllGrants()) && $grant === TRUE) {
-                        $this->_containerAclTable->insert($data + array('account_grant' => $grantName));
+                        $this->_getContainerAclTable()->insert($data + array('account_grant' => $grantName));
                     }
                 }
             }
@@ -1124,6 +1115,20 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
     }
 
+    /**
+     * lazy loading for containerACLTable
+     * 
+     * @return Tinebase_Db_Table
+     */
+    protected function _getContainerAclTable()
+    {
+        if (! $this->_containerAclTable) {
+            $this->_containerAclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
+        }
+        
+        return $this->_containerAclTable;
+    }
+    
     /**
      * get grants record from an array with grant values
      *
