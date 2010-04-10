@@ -31,13 +31,22 @@
 class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container 
 {
     /**
-     * @var array freebusy containers added to query
-     */
-    private $_freebusyContainers = array();
-    
-    /**
      * appends sql to given select statement
-     *
+     * 
+     * NOTE: $this->_containerIds contains a list of calendars the user has required grant for.
+     *       _BUT_ in Calendar Grants are record based!
+     *       -> For 'get/sync/export' actions this is no problem, as attendee/organizer have
+     *          a copy of the event in one of their personal calendars via the display_calendar
+     *       -> For 'update' this is a problem, as user needs grant to direct calendar of
+     *          implcit record EDIT GRANT
+     *          -> more over a mass update is not a trivial operation in calendar cause of 
+     *          real and displaycontaier stuff -> @todo RECHECK implementation
+     *       -> There seems to be no 'delete' action in the framework yet... -> ;-)
+     * 
+     * @todo RETHINK do we need to include record grants in search/get operatios???
+     *  --> and even if so, we would only need to append grants for which we query
+     *  
+     *  
      * @param  Zend_Db_Select                    $_select
      * @param  Tinebase_Backend_Sql_Abstract     $_backend
      * @throws Tinebase_Exception_NotFound
@@ -51,26 +60,9 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
         $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
         $_select->orWhere($quotedDisplayContainerIdentifier  .  ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
         
-        // directly filter for required grant is only possible if requiredgrants does not contains GRANT_READ
-        if (! in_array(Tinebase_Model_Grants::GRANT_READ, $this->_requiredGrants)) {
-            foreach ($this->_requiredGrants as $grant) {
-                if ($grant == Tinebase_Model_Grants::GRANT_ADMIN) {
-                    // admin grant not yet implemented
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Checking for admin grant is not yet implemented, results might be diffrent as expected");
-                    continue;
-                }
-                $_select->orHaving($_backend->getAdapter()->quoteIdentifier($grant) . ' = 1');
-            }
+        $db = $_backend->getAdapter();
+        foreach ($this->_requiredGrants as $grant) {
+            $_select->orHaving($db->quoteInto($db->quoteIdentifier($grant) . ' = ?', 1, Zend_Db::INT_TYPE));
         }
-    }
-    
-    /**
-     * returns all freebusy container ids this idfilter added to query
-     *
-     * @return array
-     */
-    public function getFreebusyContainers()
-    {
-        return $this->_freebusyContainers;
     }
 }
