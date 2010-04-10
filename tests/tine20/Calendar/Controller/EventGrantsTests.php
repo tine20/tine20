@@ -281,7 +281,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      *  -> test user is attendee -> implicit READ GRANT
      *  
      */
-    public function _testSearchGrantsActionUpdate()
+    public function testSearchGrantsActionUpdate()
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright');
         
