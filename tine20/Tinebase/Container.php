@@ -235,91 +235,59 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      *
      * used to get a list of all containers accesssible by the current user
      * 
-     * @param   int    $_accountId
-     * @param   string $_application the application name
-     * @param   int    $_grant the required grant
-     * @param   bool   $_onlyIds return only ids
+     * @param   string|Tinebase_Model_User          $_accountId
+     * @param   string|Tinebase_Model_Application   $_application
+     * @param   string                              $_grant
+     * @param   bool                                $_onlyIds return only ids
+     * @param   bool                                $_ignoreACL
      * @return  Tinebase_Record_RecordSet|array
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getContainerByACL($_accountId, $_application, $_grant, $_onlyIds = FALSE)
+    public function getContainerByACL($_accountId, $_application, $_grant, $_onlyIds = FALSE, $_ignoreACL = FALSE)
     {
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' app: ' . $_application . ' / account: ' . $_accountId . ' / grant:' . $_grant);
-
+        
+        $accountId     = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
+        $grant         = $_ignoreACL ? '%' : $_grant;
+        
         $cache = Tinebase_Core::get('cache');
-        $cacheId = convertCacheId('getContainerByACL' . $accountId . $_application . $_grant . $_onlyIds);
+        $cacheId = convertCacheId('getContainerByACL' . $accountId . $applicationId . $grant . $_onlyIds);
         $result = $cache->load($cacheId);
         
         if (!$result) {
-            $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-            if(count($groupMemberships) === 0) {
-                throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
-            }
-            
-            $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
-            
-            $tableContainer = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container');
-            $tableContainerAcl = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container_acl');
-            $colId = $this->_db->quoteIdentifier('id');
-            #$colName = $this->_db->quoteIdentifier('name');
-            $colContainerId = $this->_db->quoteIdentifier('container_id');
-            $colApplicationId = $this->_db->quoteIdentifier('application_id');
-            $colAccountGrant = $this->_db->quoteIdentifier('account_grant');
-            $colAccountId = $this->_db->quoteIdentifier('account_id');
-            $colAccountType = $this->_db->quoteIdentifier('account_type');
-            
-            $select = $this->_db->select()
-                ->from(SQL_TABLE_PREFIX . 'container', $_onlyIds ? 'id' : '*')
-                ->join(
-                    SQL_TABLE_PREFIX . 'container_acl',
-                    $tableContainer . '.' . $colId . ' = ' . $tableContainerAcl . '.' . $colContainerId , 
-                    array()
+            $select = $this->_getSelect($_onlyIds ? 'id' : '*')
+                ->join(array(
+                    /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
+                    /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
+                    /* select */ array()
                 )
-                ->where($tableContainer . '.' . $colApplicationId . ' = ?', $applicationId)
-                ->where($tableContainerAcl . '.' . $colAccountGrant . ' = ?', $_grant)
-                ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
                 
-                # beware of the extra parenthesis of the next 3 rows
-                ->where('(' . $tableContainerAcl . '.' . $colAccountId . ' = ? AND ' . 
-                    $tableContainerAcl . "." . $colAccountType . " = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
-                ->orWhere($tableContainerAcl . '.' . $colAccountId . ' IN (?) AND ' . 
-                    $tableContainerAcl . "." . $colAccountType . " = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
-                ->orWhere($tableContainerAcl . '.' . $colAccountType . ' = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
+                ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $applicationId)
                 
-                ->group(SQL_TABLE_PREFIX . 'container.id')
-                ->order(SQL_TABLE_PREFIX . 'container.name');
+                ->group('container.id')
+                ->order('container.name');
+            
+            $this->_addGrantsSql($select, $accountId, $grant);
     
             $stmt = $this->_db->query($select);
-            
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
             
-            if(empty($rows)) {
-                // no containers found. maybe something went wrong when creating the initial folder
-                // any account should have at least one personal folder
-                // let's check if the controller of the application has a function to create the needed folders
-                $result = ($_onlyIds) ? array() : new Tinebase_Record_RecordSet('Tinebase_Model_Container');
-                try {
-                    $application = Tinebase_Core::getApplicationInstance($_application);
-                    
-                    if($application instanceof Tinebase_Container_Interface) {
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' create personal folders for application ' . $_application);
-                        $personalContainers = $application->createPersonalFolder($_accountId);
-                        $result = ($_onlyIds) ? $personalContainers->getArrayOfIds() : $personalContainers;
-                    }
-                } catch (Tinebase_Exception_NotFound $enf) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' no containers available in application ' . $_application);
+            if ($_onlyIds) {
+                $result = array();
+                foreach ($rows as $row) {
+                    $result[] = $row['id'];
                 }
             } else {
-                if ($_onlyIds) {
-                    $result = array();
-                    foreach ($rows as $row) {
-                        $result[] = $row['id'];
-                    }
-                } else {
-                    $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows);
-                }
+                $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows);
+            }
+            
+            // any account should have at least one personal folder
+            if(empty($result)) {
+                $personalContainer = $this->getDefaultContainer($_accountId, $_application);
+                $result = ($_onlyIds) ? 
+                    $personalContainer->getId() : 
+                    new Tinebase_Record_RecordSet('Tinebase_Model_Container', $personalContainers);
             }
             
             // save result and tag it with 'container'
