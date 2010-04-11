@@ -249,7 +249,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         $accountId     = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
-        $grant         = $_ignoreACL ? '%' : $_grant;
+        $grant         = $_ignoreACL ? '*' : $_grant;
         
         $cache = Tinebase_Core::get('cache');
         $cacheId = convertCacheId('getContainerByACL' . $accountId . $applicationId . $grant . $_onlyIds);
@@ -400,9 +400,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function getPersonalContainer($_accountId, $_application, $_owner, $_grant, $_ignoreACL=false)
     {
-        $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $ownerId            = Tinebase_Model_User::convertUserIdToInt($_owner);
-        
+        $accountId   = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        $ownerId     = Tinebase_Model_User::convertUserIdToInt($_owner);
+        $grant       = $_ignoreACL ? '*' : $_grant;
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $this->_db->select()
@@ -426,10 +426,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->group('container.id')
             ->order('container.name');
             
-        if ($_ignoreACL !== TRUE) {
-            $this->_addGrantsSql($select, $accountId, $_grant, 'user');
-        }
-            
+        $this->_addGrantsSql($select, $accountId, $grant, 'user');
+        
         $stmt = $this->_db->query($select);
         $containersData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
@@ -462,6 +460,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $db = $_select->getAdapter();
         
+        //@todo fetch wildcard from specific db adapter
+        $grant = $_grant == '*' ? '%' : $_grant;
+        
         // @todo add groupmembers via join
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($_accountId);
         if(count($groupMemberships) === 0) {
@@ -475,7 +476,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         //$db->quoteIdentifier(
         $_select
-            ->where("{$quotedGrant} LIKE ?", $_grant)
+            ->where("{$quotedGrant} LIKE ?", $grant)
             ->where("({$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $_accountId)
             ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), $groupMemberships)
             ->orWhere("{$quotedActType} = ?)", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
@@ -517,6 +518,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $accountId   = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
+        $grant       = $_ignoreACL ? '*' : $_grant;
         
         $select = $this->_getSelect()
             ->join(array(
@@ -530,9 +532,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->group('container.id')
             ->order('container.name');
         
-        if ($_ignoreACL !== TRUE) {
-            $this->_addGrantsSql($select, $accountId, $_grant);
-        }
+        $this->_addGrantsSql($select, $accountId, $grant);
         
         $stmt = $this->_db->query($select);
 
@@ -593,9 +593,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     protected function _getOtherUsersContainerData($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
     {
-        $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        $accountId   = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
-
+        $grant       = $_ignoreACL ? '*' : $_grant;
+        
         $select = $this->_db->select()
             ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array('account_id'))
             ->join(array(
@@ -623,9 +624,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->order('contacts.n_fileas')
             ->group('owner.account_id');
         
-        if ($_ignoreACL !== TRUE) {
-            $this->_addGrantsSql($select, $accountId, $_grant, 'user');
-        }
+        $this->_addGrantsSql($select, $accountId, $grant, 'user');
         
         $stmt = $this->_db->query($select);
         $containersData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -844,16 +843,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
 
         if(!$grants) {
             $select = $this->_getSelect('*', TRUE)
-            ->where("{$this->_db->quoteIdentifier('container.id')} = ?", $containerId)
-            ->join(array(
-                /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
-                /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
-                /* select */ array('*', 'account_grants' => "GROUP_CONCAT(container_acl.account_grant)")
-            )
-            ->group('container_acl.account_grant');
+                ->where("{$this->_db->quoteIdentifier('container.id')} = ?", $containerId)
+                ->join(array(
+                    /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
+                    /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
+                    /* select */ array('*', 'account_grants' => "GROUP_CONCAT(container_acl.account_grant)")
+                )
+                ->group('container_acl.account_grant');
     
-            // @todo get wildcard from adapter
-            $this->_addGrantsSql($select, $accountId, '%');
+            $this->_addGrantsSql($select, $accountId, '*');
             
             $stmt = $this->_db->query($select);
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -897,8 +895,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             )
             ->group('container.id', 'container_acl.account_type', 'container_acl.account_id');
         
-        // @todo get wildcard from adapter
-        $this->_addGrantsSql($select, $accountId, '%');
+        $this->_addGrantsSql($select, $accountId, '*');
         
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
