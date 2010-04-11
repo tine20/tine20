@@ -780,36 +780,21 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $result = $cache->load($cacheId);
         
         if (! $result) {
-            $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-            if(count($groupMemberships) === 0) {
-                throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
-            }
+            // NOTE: some tests ask for already deleted container ;-)
+            $select = $this->_getSelect('*', TRUE)
+            ->where("{$this->_db->quoteIdentifier('container.id')} = ?", $containerId)
+            ->join(array(
+                /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
+                /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
+                /* select */ array()
+            );
             
-            $select = $this->_db->select()
-                ->from(SQL_TABLE_PREFIX . 'container_acl', array())
-                ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array('id'))
-    
-                # beware of the extra parenthesis of the next 3 rows
-                ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . 
-                    SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
-                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . 
-                    SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
-                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
-                
-                ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $_grant)
-                ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId)
-                ;
-                        
-            //error_log("getContainer:: " . $select->__toString());
-    
+            $this->_addGrantsSql($select, $accountId, $_grant);
+            
             $stmt = $this->_db->query($select);
             
             $grants = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-            if(empty($grants)) {
-                $result = FALSE;
-            } else {
-                $result = TRUE;
-            }
+            $result = ! empty($grants);
             
             // save result and tag it with 'container'
             $cache->save($result, $cacheId, array('container'));
@@ -822,6 +807,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * get all grants assigned to this container
      *
      * @param   int|Tinebase_Model_Container $_containerId
+     * @param   bool                         $_ignoreAcl
      * @return  Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
      * @throws  Tinebase_Exception_AccessDenied
      */
