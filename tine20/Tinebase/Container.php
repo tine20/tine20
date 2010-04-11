@@ -402,19 +402,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
         
-        $select = $this->_getSelect()
-            ->where('type = ?', Tinebase_Model_Container::TYPE_INTERNAL)
-            ->where('application_id = ?', $applicationId);
-
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetch();
-        $stmt->closeCursor();
+        $filter = new Tinebase_Model_ContainerFilter(array(
+            array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
+            array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_INTERNAL),
+        ));
         
-        if($queryResult === NULL) {
+        $container =  $this->search($filter)->getFirstRecord();
+        if (! $container) {
             throw new Tinebase_Exception_NotFound('No internal container found.');
         }
-
-        $container = new Tinebase_Model_Container($queryResult);
         
         if(!$this->hasGrant($_accountId, $container, Tinebase_Model_Grants::GRANT_READ)) {
             throw new Tinebase_Exception_AccessDenied('Permission to container denied.');
@@ -467,12 +463,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
             
         $stmt = $this->_db->query($select);
+        $containersData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        if(empty($rows) and $accountId === $ownerId) {
-            // no containers found. maybe something went wrong when creating the initial folder
-            // let's check if the controller of the application has a function to create the needed folders
+        // if no containers where found,  maybe something went wrong when creating the initial folder
+        // let's check if the controller of the application has a function to create the needed folders
+        if(empty($containersData) and $accountId === $ownerId) {
             $application = Tinebase_Core::getApplicationInstance($application);
             
             if($application instanceof Tinebase_Container_Interface) {
@@ -480,9 +475,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             }
         }
 
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows);
+        $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $containersData);
         
-        return $result;
+        return $containers;
     }
     
     /**
@@ -565,6 +560,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
 
             # beware of the extra parenthesis of the next 3 rows
+            ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $_grant)
             ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . 
                 SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . 
@@ -573,14 +569,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->getId())
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', Tinebase_Model_Container::TYPE_SHARED)
-            ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $_grant)
             ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container.is_deleted') . ' = 0')
             
             ->group(SQL_TABLE_PREFIX . 'container.id')
             ->order(SQL_TABLE_PREFIX . 'container.name');
             
-        //error_log("getContainer:: " . $select->__toString());
-
         $stmt = $this->_db->query($select);
 
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
