@@ -507,7 +507,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         //$db->quoteIdentifier(
         $_select
-            ->where("{$quotedGrant} = ?", $_grant)
+            ->where("{$quotedGrant} LIKE ?", $_grant)
             ->where("({$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $_accountId)
             ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), $groupMemberships)
             ->orWhere("{$quotedActType} = ?)", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
@@ -864,49 +864,31 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param int|Tinebase_Model_Container $_containerId
      * @return Tinebase_Model_Grants
      */
-    public function getGrantsOfAccount($_accountId, $_containerId, $_ignoreAcl = FALSE) 
+    public function getGrantsOfAccount($_accountId, $_containerId) 
     {
         $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
-        $cacheKey = convertCacheId('getGrantsOfAccount' . $containerId . $accountId . (int)$_ignoreAcl);
+        $cacheKey = convertCacheId('getGrantsOfAccount' . $containerId . $accountId);
         // load from cache
         $cache = Tinebase_Core::get('cache');
         $grants = $cache->load($cacheKey);
 
         if(!$grants) {
-            $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+            $select = $this->_getSelect('*', TRUE)
+            ->where("{$this->_db->quoteIdentifier('container.id')} = ?", $containerId)
+            ->join(array(
+                /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
+                /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
+                /* select */ array('*', 'account_grants' => "GROUP_CONCAT(container_acl.account_grant)")
+            )
+            ->group('container_acl.account_grant');
+    
+            // @todo get wildcard from adapter
+            $this->_addGrantsSql($select, $accountId, '%');
             
-            #if($_ignoreAcl !== TRUE) {
-            #    if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
-            #        throw new Exception('permission to get grants of container denied');
-            #    }            
-            #}
-            
-            if(count($groupMemberships) === 0) {
-                throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
-            }
-            
-            $select = $this->_db->select()
-                ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grant'))
-                ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
-    
-                # beware of the extra parenthesis of the next 3 rows
-                ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . 
-                    SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
-                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . 
-                    SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
-                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
-    
-                ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId)
-                ->group(SQL_TABLE_PREFIX . 'container_acl.account_grant');
-    
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-    
             $stmt = $this->_db->query($select);
-    
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-    
 	        $grants = $this->_getGrantsFromArray($rows, $accountId);
             
             $cache->save($grants, $cacheKey);
