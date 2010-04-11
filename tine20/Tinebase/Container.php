@@ -366,9 +366,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_UnexpectedValue
-     * @throws  Tinebase_Exception_AccessDenied
      */
-    public function getContainerByName($_application, $_containerName, $_type, $_ignoreACL = FALSE)
+    public function getContainerByName($_application, $_containerName, $_type)
     {
         if($_type !== Tinebase_Model_Container::TYPE_INTERNAL and $_type !== Tinebase_Model_Container::TYPE_PERSONAL and $_type !== Tinebase_Model_Container::TYPE_SHARED) {
             throw new Tinebase_Exception_UnexpectedValue ("Invalid type $_type supplied.");
@@ -386,12 +385,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         if (! $container) {
             throw new Tinebase_Exception_NotFound("Container $_containerName not found.");
         }
-        
-        /* 2010-04-10 cweiss: needs to be reviewed, breaks some tests... 
-        if (! $_ignoreACL && TRUE !== Tinebase_Core::getUser()->hasGrant($container->getId(), Tinebase_Model_Grants::GRANT_READ)) {
-            throw new Tinebase_Exception_AccessDenied('Permission to container denied.');
-        }
-        */
         
         return $container;
     }

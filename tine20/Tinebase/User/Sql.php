@@ -459,7 +459,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             
             $contact->account_id = $_account->getId();
             //$contact->tid = 'n';
-            $contact->container_id = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL, TRUE)->getId();
+            $contact->container_id = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL)->getId();
             
             // add modlog info
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'create');
