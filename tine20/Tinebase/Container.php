@@ -813,43 +813,48 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function getGrantsOfContainer($_containerId, $_ignoreAcl = FALSE) 
     {
+        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
+        
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
-        if($_ignoreAcl !== TRUE) {
-            if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
-                throw new Tinebase_Exception_AccessDenied('Permission to get grants of container denied.');
-            }            
-        }
-        
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'container', array('id'))
-            ->join(SQL_TABLE_PREFIX . 'container_acl', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', 
-                array('id', 'account_type', 'account_id', 'account_grants' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
-            ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId)
-            ->group(array(SQL_TABLE_PREFIX . 'container.id', SQL_TABLE_PREFIX . 'container_acl.account_type', SQL_TABLE_PREFIX . 'container_acl.account_id'));
-
-        //error_log("getAllGrants:: " . $select->__toString());
-
+        $select = $this->_getSelect('*', TRUE)
+            ->where("{$this->_db->quoteIdentifier('container.id')} = ?", $containerId)
+            ->join(array(
+                /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
+                /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
+                /* select */ array('*', 'account_grants' => "GROUP_CONCAT(container_acl.account_grant)")
+            )
+            ->group(array('container.id', 'container_acl.account_type', 'container_acl.account_id'));
+            
         $stmt = $this->_db->query($select);
 
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $grantsData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
 
         // @todo use _getGrantsFromArray here
-        foreach($rows as $row) {
+        foreach($grantsData as $grantData) {
         	
-            $grants = explode(',', $row['account_grants']);
-            foreach($grants as $grant) {
-                $row[$grant] = TRUE;
+            $givenGrants = explode(',', $grantData['account_grants']);
+            foreach($givenGrants as $grant) {
+                $grantData[$grant] = TRUE;
             }
         	
-            $containerGrant = new Tinebase_Model_Grants($row);
+            $containerGrant = new Tinebase_Model_Grants($grantData);
 
-            $result->addRecord($containerGrant);
+            $grants->addRecord($containerGrant);
         }
-
-        return $result;
+        
+        if ($_ignoreAcl !== TRUE) {
+            $currUserGrant = $grants
+                ->filter('account_id', Tinebase_Core::getUser()->getId())
+                ->filter('account_type', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+                ->getFirstRecord();
+                
+            if (! $currUserGrant || ! $currUserGrant->{Tinebase_Model_Grants::GRANT_ADMIN}) {
+                throw new Tinebase_Exception_AccessDenied('Permission to get grants of container denied.');
+            }
+        }
+        return $grants;
     }
     
     /**
