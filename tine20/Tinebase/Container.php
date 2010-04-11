@@ -443,14 +443,21 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
 
         $select = $this->_db->select()
             ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array())
-            ->join(array('user' => SQL_TABLE_PREFIX . 'container_acl'), 'owner.container_id = user.container_id', array())
-            ->join(array('container' => SQL_TABLE_PREFIX . 'container'), 'owner.container_id = container.id')
-            ->where('owner.account_id = ?', $ownerId)
-            ->where('owner.account_grant = ?', Tinebase_Model_Grants::GRANT_ADMIN)
+            ->join(array(
+                /* table  */ 'user' => SQL_TABLE_PREFIX . 'container_acl'), 
+                /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('user.container_id')}",
+                /* select */ array()
+            )
+            ->join(array(
+                /* table  */ 'container' => SQL_TABLE_PREFIX . 'container'), 
+                /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')}")
             
-            ->where('container.application_id = ?', $application->getId())
-            ->where('container.type = ?', Tinebase_Model_Container::TYPE_PERSONAL)
-            ->where($this->_db->quoteIdentifier('container.is_deleted') . ' = 0')
+            ->where("{$this->_db->quoteIdentifier('owner.account_id')} = ?", $ownerId)
+            ->where("{$this->_db->quoteIdentifier('owner.account_grant')} = ?", Tinebase_Model_Grants::GRANT_ADMIN)
+            
+            ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $application->getId())
+            ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_PERSONAL)
+            ->where("{$this->_db->quoteIdentifier('container.is_deleted')} = ?", 0, Zend_Db::INT_TYPE)
             
             ->group('container.id')
             ->order('container.name');
@@ -490,6 +497,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public static function _addGrantsSql($_select, $_accountId, $_grant, $_aclTableName = 'container_acl')
     {
+        $db = $_select->getAdapter();
+        
         // @todo add groupmembers via join
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($_accountId);
         if(count($groupMemberships) === 0) {
@@ -497,10 +506,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
         }
         
-        $_select->where("{$_aclTableName}.account_grant = ?", $_grant)
-            ->where("({$_aclTableName}.account_id = ? AND {$_aclTableName}.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $_accountId)
-            ->orWhere("{$_aclTableName}.account_id IN (?) AND {$_aclTableName}.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
-            ->orWhere("{$_aclTableName}.account_type = ?)", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
+        $quotedActId   = $db->quoteIdentifier("{$_aclTableName}.account_id");
+        $quotedActType = $db->quoteIdentifier("{$_aclTableName}.account_type");
+        $quotedGrant   = $db->quoteIdentifier("{$_aclTableName}.account_grant");
+        
+        //$db->quoteIdentifier(
+        $_select
+            ->where("{$quotedGrant} = ?", $_grant)
+            ->where("({$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $_accountId)
+            ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), $groupMemberships)
+            ->orWhere("{$quotedActType} = ?)", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
             
     }
     
