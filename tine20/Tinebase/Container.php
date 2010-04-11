@@ -422,11 +422,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     /**
      * returns the personal container of a given account accessible by a another given account
      *
-     * @param   int|Tinebase_Model_User $_accountId
-     * @param   string                  $_application
-     * @param   int|Tinebase_Model_User $_owner
-     * @param   int                     $_grant
-     * @param   bool                    $_ignoreACL
+     * @param   string|Tinebase_Model_User          $_accountId
+     * @param   string|Tinebase_Model_Application   $_application
+     * @param   int|Tinebase_Model_User             $_owner
+     * @param   int                                 $_grant
+     * @param   bool                                $_ignoreACL
      * @return  Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      */
@@ -518,9 +518,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * gets default container of given user for given app
      *  - returns personal first container at the moment
      *
-     * @param string $_accountId
-     * @param string $_applicationName
-     * @return Tinebase_Model_Container
+     * @param   string|Tinebase_Model_User          $_accountId
+     * @param   string|Tinebase_Model_Application   $_applicationName
+     * @return  Tinebase_Model_Container
      * 
      * @todo return default container from preferences if available
      * @todo create new default/personal container if it was deleted
@@ -538,47 +538,39 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     /**
      * returns the shared container for a given application accessible by the current user
      *
-     * @param   int|Tinebase_Model_User $_accountId
-     * @param   string $_application the name of the application
-     * @param   int $_grant
+     * @param   string|Tinebase_Model_User          $_accountId
+     * @param   string|Tinebase_Model_Application   $_application
+     * @param   string                              $_grant
+     * @param   bool                                $_ignoreACL
      * @return  Tinebase_Record_RecordSet set of Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getSharedContainer($_accountId, $_application, $_grant)
+    public function getSharedContainer($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
     {
-        $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+        $accountId   = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
-        if(count($groupMemberships) === 0) {
-            throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
+        $select = $this->_getSelect()
+            ->join(array(
+                /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
+                /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}"
+            )
+            
+            ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $application->getId())
+            ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_SHARED)
+            
+            ->group('container.id')
+            ->order('container.name');
+        
+        if ($_ignoreACL !== TRUE) {
+            $this->_addGrantsSql($select, $accountId, $_grant);
         }
         
-        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
-
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'container_acl', array())
-            ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
-
-            # beware of the extra parenthesis of the next 3 rows
-            ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $_grant)
-            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . 
-                SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . 
-                SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
-            
-            ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->getId())
-            ->where(SQL_TABLE_PREFIX . 'container.type = ?', Tinebase_Model_Container::TYPE_SHARED)
-            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container.is_deleted') . ' = 0')
-            
-            ->group(SQL_TABLE_PREFIX . 'container.id')
-            ->order(SQL_TABLE_PREFIX . 'container.name');
-            
         $stmt = $this->_db->query($select);
 
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
+        $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
         
-        return $result;
+        return $containers;
     }
     
     /**
