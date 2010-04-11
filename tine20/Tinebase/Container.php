@@ -574,27 +574,62 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-     * return users which made personal containers accessible to current account
+     * return users which made personal containers accessible to given account
      *
      * @param   string|Tinebase_Model_User          $_accountId
      * @param   string|Tinebase_Model_Application   $_application
      * @param   string                              $_grant
      * @param   bool                                $_ignoreACL
      * @return  Tinebase_Record_RecordSet set of Tinebase_Model_User
-     * @throws  Tinebase_Exception_NotFound
      */
     public function getOtherUsers($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
+    {
+        $containersData = $this->_getOtherUsersContainerData($_accountId, $_application, $_grant, $_ignoreACL);
+        
+        $userIds = array();
+        foreach($containersData as $containerData) {
+            $userIds[] = $containerData['account_id'];
+        }
+
+        $users = Tinebase_User::getInstance()->getMultiple($userIds);
+        
+        return $users;
+    }
+    
+    /**
+     * return set of all personal container of other users made accessible to the given account 
+     *
+     * @param   string|Tinebase_Model_User          $_accountId
+     * @param   string|Tinebase_Model_Application   $_application
+     * @param   string                              $_grant
+     * @param   bool                                $_ignoreACL
+     * @return  Tinebase_Record_RecordSet set of Tinebase_Model_Container
+     */
+    public function getOtherUsersContainer($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
+    {
+        $containerData = $this->_getOtherUsersContainerData($_accountId, $_application, $_grant, $_ignoreACL);
+        
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $containerData);
+        
+        return $result;
+    }
+    
+    /**
+     * return containerData of containers which made personal accessible to given account
+     *
+     * @param   string|Tinebase_Model_User          $_accountId
+     * @param   string|Tinebase_Model_Application   $_application
+     * @param   string                              $_grant
+     * @param   bool                                $_ignoreACL
+     * @return  array of array of containerData
+     */
+    protected function _getOtherUsersContainerData($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
     {
         $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $this->_db->select()
             ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array('account_id'))
-            ->join(array(
-                /* table  */ 'contacts' => SQL_TABLE_PREFIX . 'addressbook'),
-                /* on     */ "{$this->_db->quoteIdentifier('owner.account_id')} = {$this->_db->quoteIdentifier('contacts.account_id')}",
-                /* select */ array()
-            )
             ->join(array(
                 /* table  */ 'user' => SQL_TABLE_PREFIX . 'container_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('user.container_id')}",
@@ -605,7 +640,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
                 /* select */ array()
             )
-            
+            ->join(array(
+                /* table  */ 'contacts' => SQL_TABLE_PREFIX . 'addressbook'),
+                /* on     */ "{$this->_db->quoteIdentifier('owner.account_id')} = {$this->_db->quoteIdentifier('contacts.account_id')}",
+                /* select */ array()
+            )
             ->where("{$this->_db->quoteIdentifier('owner.account_id')} != ?", $accountId)
             ->where("{$this->_db->quoteIdentifier('owner.account_grant')} = ?", Tinebase_Model_Grants::GRANT_ADMIN)
             
@@ -623,65 +662,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $stmt = $this->_db->query($select);
         $containersData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        $userIds = array();
-        foreach($containersData as $containerData) {
-            $userIds[] = $containerData['account_id'];
-        }
-
-        $users = Tinebase_User::getInstance()->getMultiple($userIds);
-        
-        return $users;
-    }
-    
-    /**
-     * return set of all personal container of other users made accessible to the current account 
-     *
-     * @param   int|Tinebase_Model_User $_accountId
-     * @param   string $_application the name of the application
-     * @return  Tinebase_Record_RecordSet set of Tinebase_Model_Container
-     * @throws  Tinebase_Exception_NotFound
-     */
-    public function getOtherUsersContainer($_accountId, $_application, $_grant)
-    {
-        $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-        
-        if(count($groupMemberships) === 0) {
-            throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
-        }
-        
-        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
-
-        $select = $this->_db->select()
-            ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array())
-            ->join(
-                array('user' => SQL_TABLE_PREFIX . 'container_acl'),
-                'owner.container_id = user.container_id', 
-                array())
-            ->join(SQL_TABLE_PREFIX . 'container', 'user.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
-            ->where('owner.account_id != ?', $accountId)
-            ->where('owner.account_grant = ?', Tinebase_Model_Grants::GRANT_ADMIN)
-
-            # beware of the extra parenthesis of the next 3 rows
-            ->where("(user.account_id = ? AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
-            ->orWhere("user.account_id IN (?) AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
-            ->orWhere('user.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
-            
-            ->where('user.account_grant = ?', $_grant)
-            ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->getId())
-            ->where(SQL_TABLE_PREFIX . 'container.type = ?', Tinebase_Model_Container::TYPE_PERSONAL)
-            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container.is_deleted') . ' = 0')
-            
-            ->group(SQL_TABLE_PREFIX . 'container.id')
-            ->order(SQL_TABLE_PREFIX . 'container.name');
-            
-        //error_log("getContainer:: " . $select->__toString());
-
-        $stmt = $this->_db->query($select);
-
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
-        
-        return $result;
+        return $containersData;
     }
     
     /**
@@ -784,12 +765,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     /**
      * check if the given user user has a certain grant
      *
-     * @param   int $_accountId
-     * @param   int|Tinebase_Model_Container $_containerId
-     * @param   int $_grant
+     * @param   string|Tinebase_Model_User          $_accountId
+     * @param   int|Tinebase_Model_Container        $_containerId
+     * @param   string                              $_grant
      * @return  boolean
-     * @throws  Tinebase_Exception_InvalidArgument
-     * @throws  Tinebase_Exception_NotFound
      */
     public function hasGrant($_accountId, $_containerId, $_grant) 
     {
