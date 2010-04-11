@@ -437,46 +437,28 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     public function getPersonalContainer($_accountId, $_application, $_owner, $_grant, $_ignoreACL=false)
     {
         $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        //$groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-        //if(count($groupMemberships) === 0) {
-        //    throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
-        //}
         $ownerId            = Tinebase_Model_User::convertUserIdToInt($_owner);
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $this->_db->select()
             ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array())
-            ->join(
-                array('user' => SQL_TABLE_PREFIX . 'container_acl'),
-                'owner.container_id = user.container_id', 
-                array()
-            )
-            ->join(SQL_TABLE_PREFIX . 'container', 'owner.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
+            ->join(array('user' => SQL_TABLE_PREFIX . 'container_acl'), 'owner.container_id = user.container_id', array())
+            ->join(array('container' => SQL_TABLE_PREFIX . 'container'), 'owner.container_id = container.id')
             ->where('owner.account_id = ?', $ownerId)
             ->where('owner.account_grant = ?', Tinebase_Model_Grants::GRANT_ADMIN)
             
-            ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->getId())
-            ->where(SQL_TABLE_PREFIX . 'container.type = ?', Tinebase_Model_Container::TYPE_PERSONAL)
-            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container.is_deleted') . ' = 0')
+            ->where('container.application_id = ?', $application->getId())
+            ->where('container.type = ?', Tinebase_Model_Container::TYPE_PERSONAL)
+            ->where($this->_db->quoteIdentifier('container.is_deleted') . ' = 0')
             
-            ->group(SQL_TABLE_PREFIX . 'container.id')
-            ->order(SQL_TABLE_PREFIX . 'container.name');
+            ->group('container.id')
+            ->order('container.name');
             
         if ($_ignoreACL !== TRUE) {
             $this->_addGrantsSql($select, $accountId, $_grant, 'user');
-            /*
-            $select->where('user.account_grant = ?', $_grant)
-
-            # beware of the extra parenthesis of the next 3 rows
-            ->where("(user.account_id = ? AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
-            ->orWhere("user.account_id IN (?) AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
-            ->orWhere('user.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
-            */
         }
             
-        //error_log("getContainer:: " . $select->__toString());
-
         $stmt = $this->_db->query($select);
         
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
