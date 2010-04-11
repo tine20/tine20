@@ -237,7 +237,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * 
      * @param   string|Tinebase_Model_User          $_accountId
      * @param   string|Tinebase_Model_Application   $_application
-     * @param   string                              $_grant
+     * @param   array|string                        $_grant
      * @param   bool                                $_onlyIds return only ids
      * @param   bool                                $_ignoreACL
      * @return  Tinebase_Record_RecordSet|array
@@ -245,14 +245,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function getContainerByACL($_accountId, $_application, $_grant, $_onlyIds = FALSE, $_ignoreACL = FALSE)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' app: ' . $_application . ' / account: ' . $_accountId . ' / grant:' . $_grant);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' app: ' . $_application . ' / account: ' . $_accountId . ' / grant:' . implode('', (array)$_grant));
         
         $accountId     = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
         $grant         = $_ignoreACL ? '*' : $_grant;
         
         $cache = Tinebase_Core::get('cache');
-        $cacheId = convertCacheId('getContainerByACL' . $accountId . $applicationId . $grant . $_onlyIds);
+        $cacheId = convertCacheId('getContainerByACL' . $accountId . $applicationId . implode('', (array)$grant) . $_onlyIds);
         $result = $cache->load($cacheId);
         
         if (!$result) {
@@ -393,7 +393,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param   string|Tinebase_Model_User          $_accountId
      * @param   string|Tinebase_Model_Application   $_application
      * @param   int|Tinebase_Model_User             $_owner
-     * @param   int                                 $_grant
+     * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
      * @return  Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
@@ -451,7 +451,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * 
      * @param  Zend_Db_Select    $_select
      * @param  String            $_accountId
-     * @param  String            $_grant
+     * @param  Array|String      $_grant
      * @param  String            $_aclTableName
      * @return void
      * @throws Tinebase_Exception_NotFound
@@ -461,7 +461,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $db = $_select->getAdapter();
         
         //@todo fetch wildcard from specific db adapter
-        $grant = $_grant == '*' ? '%' : $_grant;
+        $grant = is_array($_grant) ? $_grant : array($_grant);
+        $grants = str_replace('*', '%', $grant);
+        
+        if (empty($grants)) {
+            $_select->where('1=0');
+            return;
+        }
         
         // @todo add groupmembers via join
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($_accountId);
@@ -474,13 +480,21 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $quotedActType = $db->quoteIdentifier("{$_aclTableName}.account_type");
         $quotedGrant   = $db->quoteIdentifier("{$_aclTableName}.account_grant");
         
-        //$db->quoteIdentifier(
-        $_select
-            ->where("{$quotedGrant} LIKE ?", $grant)
-            ->where("({$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $_accountId)
+        $accountSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
+        $accountSelect
+            ->orWhere("{$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $_accountId)
             ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), $groupMemberships)
-            ->orWhere("{$quotedActType} = ?)", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
-            
+            ->orWhere("{$quotedActType} = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
+        
+        $grantsSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
+        foreach($grants as $grant) {
+            $grantsSelect->orWhere("{$quotedGrant} LIKE ?", $grant);
+        }
+        
+        
+        $grantsSelect->appendWhere(Zend_Db_Select::SQL_AND);
+        $accountSelect->appendWhere(Zend_Db_Select::SQL_AND);
+        
     }
     
     /**
@@ -509,7 +523,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      *
      * @param   string|Tinebase_Model_User          $_accountId
      * @param   string|Tinebase_Model_Application   $_application
-     * @param   string                              $_grant
+     * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
      * @return  Tinebase_Record_RecordSet set of Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
@@ -546,7 +560,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      *
      * @param   string|Tinebase_Model_User          $_accountId
      * @param   string|Tinebase_Model_Application   $_application
-     * @param   string                              $_grant
+     * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
      * @return  Tinebase_Record_RecordSet set of Tinebase_Model_User
      */
@@ -569,7 +583,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      *
      * @param   string|Tinebase_Model_User          $_accountId
      * @param   string|Tinebase_Model_Application   $_application
-     * @param   string                              $_grant
+     * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
      * @return  Tinebase_Record_RecordSet set of Tinebase_Model_Container
      */
@@ -587,7 +601,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      *
      * @param   string|Tinebase_Model_User          $_accountId
      * @param   string|Tinebase_Model_Application   $_application
-     * @param   string                              $_grant
+     * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
      * @return  array of array of containerData
      */
@@ -734,7 +748,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      *
      * @param   string|Tinebase_Model_User          $_accountId
      * @param   int|Tinebase_Model_Container        $_containerId
-     * @param   string                              $_grant
+     * @param   array|string                        $_grant
      * @return  boolean
      */
     public function hasGrant($_accountId, $_containerId, $_grant) 
@@ -743,7 +757,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
         $cache = Tinebase_Core::get('cache');
-        $cacheId = convertCacheId('hasGrant' . $accountId . $containerId . $_grant);
+        $cacheId = convertCacheId('hasGrant' . $accountId . $containerId . implode('', (array)$_grant));
         $result = $cache->load($cacheId);
         
         if (! $result) {
