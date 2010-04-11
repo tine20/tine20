@@ -860,8 +860,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     /**
      * get grants assigned to one account of one container
      *
-     * @param int|Tinebase_Model_User $_accountId the account to get the grants for
-     * @param int|Tinebase_Model_Container $_containerId
+     * @param   string|Tinebase_Model_User          $_accountId
+     * @param   int|Tinebase_Model_Container        $_containerId
      * @return Tinebase_Model_Grants
      */
     public function getGrantsOfAccount($_accountId, $_containerId) 
@@ -897,26 +897,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-     * get grants assigned to multiple records
+     * get grants assigned to given account of multiple records
      *
-     * @param   Tinebase_Record_RecordSet $_records records to get the grants for
-     * @param   int|Tinebase_Model_User $_accountId the account to get the grants for
-     * @param   string $_containerProperty container property
+     * @param   Tinebase_Record_RecordSet   $_records records to get the grants for
+     * @param   string|Tinebase_Model_User  $_accountId the account to get the grants for
+     * @param   string                      $_containerProperty container property
      * @throws  Tinebase_Exception_NotFound
      */
     public function getGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId, $_containerProperty = 'container_id')
     {
-        if (count($_records) === 0) {
-            return;
-        }
-        
-        $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-        
-        if(count($groupMemberships) === 0) {
-            throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
-        }
-
         // get container ids
         $containers = array();
         foreach ($_records as $record) {
@@ -929,25 +918,26 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         	return;
         }
         
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grants' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
-            ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
-
-            # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
-
-            ->where(SQL_TABLE_PREFIX . 'container.id IN (?)', array_keys($containers))
-            
-            ->group(SQL_TABLE_PREFIX . 'container.id');
-
-        $stmt = $this->_db->query($select);
-
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
+        $select = $this->_getSelect('*', TRUE)
+            ->where("{$this->_db->quoteIdentifier('container.id')} IN (?)", array_keys($containers))
+            ->join(array(
+                /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
+                /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
+                /* select */ array('*', 'account_grants' => "GROUP_CONCAT(container_acl.account_grant)")
+            )
+            ->group('container.id', 'container_acl.account_type', 'container_acl.account_id');
+        
+        // @todo get wildcard from adapter
+        $this->_addGrantsSql($select, $accountId, '%');
+        
+        $stmt = $this->_db->query($select);
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         // add results to container ids and get grants array
         foreach ($rows as $row) {
+            // NOTE id is non-ambiguous
+            $row['id'] = $row['container_id'];
             $grantsArray = array_unique(explode(',', $row['account_grants']));
             $row['account_grants'] = $this->_getGrantsFromArray($grantsArray, $accountId)->toArray();
             $containers[$row['id']] = $row;
@@ -956,7 +946,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         // add container & grants to records
         foreach ($_records as &$record) {
             $containerId = $record[$_containerProperty];
-            
             if (! is_array($containerId) && ! $containerId instanceof Tinebase_Record_Abstract && ! empty($containers[$containerId])) {
                 $record[$_containerProperty] = $containers[$containerId];
             }
