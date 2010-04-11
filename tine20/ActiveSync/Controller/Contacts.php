@@ -222,15 +222,17 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                 'type'          => $this->_folderType
             );
         }
-	            
-        $accountsFolder = Tinebase_Container::getInstance()->getInternalContainer(Tinebase_Core::getUser(), $this->_applicationName);
-        if(Tinebase_Core::getUser()->hasGrant($accountsFolder->id, Tinebase_Model_Grants::GRANT_SYNC)) {
+	    
+        try {
+            $accountsFolder = Tinebase_Container::getInstance()->getInternalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC);
             $folders[$accountsFolder->id] = array(
                 'folderId'      => $accountsFolder->id,
                 'parentId'      => 0,
                 'displayName'   => $accountsFolder->name,
                 'type'          => $this->_folderType
             );
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " leaving out internal container as user has no GRANT_SYNC for it");
         }
         
         // we ignore the folders of others users for now

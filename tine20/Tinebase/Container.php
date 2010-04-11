@@ -286,7 +286,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             if(empty($result)) {
                 $personalContainer = $this->getDefaultContainer($_accountId, $_application);
                 $result = ($_onlyIds) ? 
-                    $personalContainer->getId() : 
+                    array($personalContainer->getId()) : 
                     new Tinebase_Record_RecordSet('Tinebase_Model_Container', $personalContainers);
             }
             
@@ -360,13 +360,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     /**
      * returns the internal conatainer for a given application
      *
-     * @param   int|Tinebase_Model_User $_accountId
-     * @param   string $_application name of the application
+     * @param   string|Tinebase_Model_User          $_accountId
+     * @param   string|Tinebase_Model_Application   $_application
+     * @param   array|string                        $_grant
+     * @param   bool                                $_ignoreACL
      * @return  Tinebase_Model_Container the internal container
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function getInternalContainer($_accountId, $_application)
+    public function getInternalContainer($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
     {
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
         
@@ -380,7 +382,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             throw new Tinebase_Exception_NotFound('No internal container found.');
         }
         
-        if(!$this->hasGrant($_accountId, $container, Tinebase_Model_Grants::GRANT_READ)) {
+        if($_ignoreACL !== TRUE && !$this->hasGrant($_accountId, $container, $_grant)) {
             throw new Tinebase_Exception_AccessDenied('Permission to container denied.');
         }
         

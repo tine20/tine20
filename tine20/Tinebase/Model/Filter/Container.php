@@ -243,14 +243,8 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
         if (($containerId = Tinebase_Model_Container::pathIsContainer($_path))) {
             if ($this->_options['ignoreAcl'] == TRUE) {
                 $containerIds[] = $containerId;
-            } else {
-                foreach ($this->_requiredGrants as $grant) {
-                    if (Tinebase_Core::getUser()->hasGrant($containerId, $grant)) {
-                        $containerIds[] = $containerId;
-                        break;
-                    }
-                }
-                $containerIds = array_unique($containerIds);
+            } else if (Tinebase_Core::getUser()->hasGrant($containerId, $this->_requiredGrants)) {
+                $containerIds[] = $containerId;
             }
         } else if (($ownerId = Tinebase_Model_Container::pathIsPersonalNode($_path))) {
             $containerIds = $this->_resolveContainerNode('personal', $ownerId);
@@ -265,8 +259,6 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     /**
      * wrapper for get container functions
      *
-     * @todo implement handling for $this->_options['ignoreAcl'] == TRUE
-     * 
      * @param  string $_function
      * @param  string $_ownerId    => needed for $_node == 'personal'
      * @return array of container ids
@@ -276,33 +268,16 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
         $currentAccount = Tinebase_Core::getUser();
         $appName = $this->_options['applicationName'];
         
-        $ids = array();
-        foreach ($this->_requiredGrants as $grant) {
-            switch ($_node) {
-                case 'all':
-                    $result = $currentAccount->getContainerByACL($appName, $grant, TRUE);
-                    break;
-                case 'personal':
-                    $result = $currentAccount->getPersonalContainer($appName, $_ownerId, $grant)->getId();
-                    break;
-                case 'shared':
-                    $result = $currentAccount->getSharedContainer($appName, $grant)->getId();
-                    break;
-                case 'otherUsers':
-                    $result = $currentAccount->getOtherUsersContainer($appName, $grant)->getId();
-                    break;
-                case 'internal':
-                    $result = Tinebase_Container::getInstance()->getInternalContainer($currentAccount, $appName)->getId();
-                    break;
-                default:
-                    throw new Tinebase_Exception_UnexpectedValue('specialNode not supported.');
-                    break;
-            }
-            
-            $ids = array_merge($ids, (array)$result);
+        switch ($_node) {
+            case 'all':        return Tinebase_Container::getInstance()->getContainerByACL($currentAccount, $appName, $this->_requiredGrants, TRUE, $this->_options['ignoreAcl']);
+            case 'personal':   return Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName, $_ownerId, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
+            case 'shared':     return Tinebase_Container::getInstance()->getSharedContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
+            case 'otherUsers': return Tinebase_Container::getInstance()->getOtherUsersContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
+            case 'internal':   return array(Tinebase_Container::getInstance()->getInternalContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId());
+            default:           throw new Tinebase_Exception_UnexpectedValue('specialNode not supported.');
         }
                 
-        return array_unique($ids);
+        return $ids;
     }
     
     /**
