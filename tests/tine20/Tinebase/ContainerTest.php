@@ -284,6 +284,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $otherUsers = $this->_instance->getOtherUsers(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_READ);
         
         $this->assertType('Tinebase_Record_RecordSet', $otherUsers);
+        $this->assertEquals(0, $otherUsers->filter('accountId', Tinebase_Core::getUser()->getId())->count(), 'current user must not be part of otherUsers');
     }
     
     /**
