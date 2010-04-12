@@ -66,7 +66,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         this.filterToolbar.getAllFilterData = this.getAllFilterData.createDelegate(this);
         
         this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push(
-            {field: 'period'}
+            {field: 'period'},
+            {field: 'grants'}
         );
         
         this.initActions();
