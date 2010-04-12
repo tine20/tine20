@@ -288,6 +288,30 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * get shared containers
+     *
+     */
+    public function testGetSharedContainer()
+    {
+        $container = $this->_instance->addContainer(new Tinebase_Model_Container(array(
+            'name'           => 'containerTest' . Tinebase_Record_Abstract::generateUID(),
+            'type'           => Tinebase_Model_Container::TYPE_SHARED,
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'backend'        => 'Sql'
+        )));
+        
+        $otherUsers = $this->_instance->getOtherUsers(Tinebase_Core::getUser(), 'Addressbook', array(
+            Tinebase_Model_Grants::GRANT_READ,
+            Tinebase_Model_Grants::GRANT_ADMIN,
+        ));
+        
+        $this->assertType('Tinebase_Record_RecordSet', $otherUsers);
+        $this->assertEquals(0, $otherUsers->filter('accountId', Tinebase_Core::getUser()->getId())->count(), 'current user must not be part of otherUsers');
+    
+        $this->_instance->deleteContainer($container->getId(), TRUE);
+    }
+    
+    /**
      * try to get container by acl
      *
      */
