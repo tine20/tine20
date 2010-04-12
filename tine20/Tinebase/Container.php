@@ -539,7 +539,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $select = $this->_getSelect()
             ->join(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
-                /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}"
+                /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
+                array()
             )
             
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $application->getId())
