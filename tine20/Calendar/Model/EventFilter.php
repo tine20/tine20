@@ -40,7 +40,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_filterModel = array(
         'id'                    => array('filter' => 'Tinebase_Model_Filter_Id'),
         'uid'                   => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'container_id'          => array('filter' => 'Calendar_Model_EventAclFilter', 'options' => array('applicationName' => 'Calendar')),
+        'container_id'          => array('filter' => 'Calendar_Model_CalendarFilter', 'options' => array('applicationName' => 'Calendar')),
         'query'                 => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description', 'location'))),
         'period'                => array('filter' => 'Calendar_Model_PeriodFilter'),
         'attender'              => array('filter' => 'Calendar_Model_AttenderFilter'),
@@ -48,7 +48,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         //'class'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         //'status'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'                   => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'cal_events.id')),
-    
+        'grants'                => array('filter' => 'Calendar_Model_GrantFilter'),
         // NOTE using dtdstart and dtend filters may not lead to the desired result. 
         //      you need to use the period filter to filter for events in a given period
         'dtstart'               => array('filter' => 'Tinebase_Model_Filter_DateTime'),

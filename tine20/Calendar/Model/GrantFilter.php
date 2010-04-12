@@ -28,41 +28,37 @@
  * 
  * @package Calendar
  */
-class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container 
+class Calendar_Model_GrantFilter extends Tinebase_Model_Filter_Abstract implements Tinebase_Model_Filter_AclFilter
 {
+    /**
+     * @var array list of allowed operators
+     */
+    protected $_operators = array(
+        0 => 'in',
+    );
+    
+    /**
+     * @var array One of theese grants must be given
+     */
+    protected $_requiredGrants = NULL;
+    
     /**
      * appends sql to given select statement
      * 
-     * NOTE: $this->_containerIds contains a list of calendars the user has required grant for.
-     *       _BUT_ in Calendar Grants are record based!
-     *       -> For 'get/sync/export' actions this is no problem, as attendee/organizer have
-     *          a copy of the event in one of their personal calendars via the display_calendar
-     *       -> For 'update' this is a problem, as user needs grant to direct calendar of
-     *          implcit record EDIT GRANT
-     *          -> more over a mass update is not a trivial operation in calendar cause of 
-     *          real and displaycontaier stuff -> @todo RECHECK implementation
-     *       -> There seems to be no 'delete' action in the framework yet... -> ;-)
-     * 
-     * @todo RETHINK do we need to include record grants in search/get operatios???
-     *  --> and even if so, we would only need to append grants for which we query
-     *  
-     *  
      * @param  Zend_Db_Select                    $_select
      * @param  Tinebase_Backend_Sql_Abstract     $_backend
      * @throws Tinebase_Exception_NotFound
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $this->_resolve();
-        
-        $quotedDisplayContainerIdentifier = $_backend->getAdapter()->quoteIdentifier('attendee.displaycontainer_id');
-        
-        $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
-        $_select->orWhere($quotedDisplayContainerIdentifier  .  ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
-        
         $db = $_backend->getAdapter();
         foreach ($this->_requiredGrants as $grant) {
             $_select->orHaving($db->quoteInto($db->quoteIdentifier($grant) . ' = ?', 1, Zend_Db::INT_TYPE));
         }
+    }
+    
+    public function setRequiredGrants(array $_grants)
+    {
+        $this->_requiredGrants = $_grants;
     }
 }

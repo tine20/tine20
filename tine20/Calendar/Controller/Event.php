@@ -823,6 +823,20 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
+        $hasGrantsFilter = FALSE;
+        foreach($_filter->getAclFilters() as $aclFilter) {
+            if ($aclFilter instanceof Calendar_Model_GrantFilter) {
+                $hasGrantsFilter = TRUE;
+                break;
+            }
+        }
+        
+        if (! $hasGrantsFilter) {
+            // force a grant filter
+            $grantsFilter = $_filter->createFilter('grants', 'in', '@setRequiredGrants');
+            $_filter->addFilter($grantsFilter);
+        }
+        
         parent::checkFilterACL($_filter, $_action);
         
         if ($_action == 'get') {
