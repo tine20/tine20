@@ -634,10 +634,10 @@ abstract class Tinebase_Controller_Record_Abstract
             return TRUE;
         }
         
-        $containerFilters = $_filter->getAclFilters();
+        $aclFilters = $_filter->getAclFilters();
         
-        if (! $containerFilters) {
-            // force a $containerFilter filter (ACL)
+        if (! $aclFilters) {
+            // force a standard containerFilter as ACL filter
             $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all', array('applicationName' => $_filter->getApplicationName()));
             $_filter->addFilter($containerFilter);
         }
