@@ -32,7 +32,6 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @cfg {Array} operators allowed operators
      */
     operators: ['equals', 'in'],
-    //operators: ['personalNode', 'specialNode', 'equals', 'in'],
     
     /**
      * @cfg {String} field container field (defaults to container_id)
@@ -59,15 +58,6 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         this.containersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
         
         this.label = this.containerName;
-        
-        
-        /*
-        // define custom operators
-        this.customOperators = [
-            {operator: 'specialNode',label: _('sub of')},
-            {operator: 'personalNode',label: _('personal of')}
-        ];
-        */
     },
     
     /**
@@ -136,17 +126,15 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
                 return this.selectedContainer ? this.selectedContainer.path : null;
             },
             setValue: function(value) {
-                var operatorText = this.filter.data.operator === 'personalNode' ? _('is personal of') : _('is equal to');
-                
-                // use equals for node 'My containers'
-                if (value.path && value.path === '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId) {
-                    operatorText = _('is equal to')
+                if (this.filter.get('operator') !== 'in') {
+                    var operatorText = this.filter.data.operator === 'personalNode' ? _('is personal of') : _('is equal to');
+                    
+                    // use equals for node 'My containers'
+                    if (value.path && value.path === '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId) {
+                        operatorText = _('is equal to')
+                    }
+                    this.filter.formFields.operator.setRawValue(operatorText);
                 }
-                
-                //var store = this.filter.formFields.operator.getStore();
-                //var equalsRecord = store.getAt(store.find('operator', 'equals'));
-                //equalsRecord.set('label', operatorText);
-                this.filter.formFields.operator.setRawValue(operatorText);
             
                 return Tine.widgets.container.selectionComboBox.prototype.setValue.call(this, value);
             },
@@ -335,14 +323,16 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
         this.store.removeAll();
         var containerNames = [];
         Ext.each(value, function(containerData) {
-            if (! Ext.isEmpty(containerData)) {
-                containerData.name = containerData.name || Tine.Tinebase.container.path2name(containerData.path, this.containerName, this.containersName);
-                containerData.id = containerData.id ||containerData.path;
-                
-                this.store.add(new Tine.Tinebase.Model.Container(containerData));
-                this.currentValue.push(containerData.path);
-                containerNames.push(containerData.name);
+            // ignore server name for node 'My containers'
+            if (containerData.path && containerData.path === '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId) {
+                containerData.name = null;
             }
+            containerData.name = containerData.name || Tine.Tinebase.container.path2name(containerData.path, this.containerName, this.containersName);
+            containerData.id = containerData.id ||containerData.path;
+            
+            this.store.add(new Tine.Tinebase.Model.Container(containerData));
+            this.currentValue.push(containerData.path);
+            containerNames.push(containerData.name);
         }, this);
         
         this.setRawValue(containerNames.join(', '));
