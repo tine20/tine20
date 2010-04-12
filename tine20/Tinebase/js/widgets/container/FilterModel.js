@@ -47,7 +47,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**
      * @cfg {String} defaultValue default value (defaults to all)
      */
-    defaultValue: 'all',
+    defaultValue: {path: '/'},
     
     /**
      * @private
@@ -329,13 +329,20 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
      * @return {Ext.form.Field} this
      */
     setValue: function(value) {
-        this.currentValue = Ext.isArray(value) ? value : [value];
+        value = Ext.isArray(value) ? value : [value];
+        this.currentValue = [];
         
         this.store.removeAll();
         var containerNames = [];
-        Ext.each(this.currentValue, function(containerData) {
-            this.store.add(new Tine.Tinebase.Model.Container(containerData));
-            containerNames.push(containerData.name);
+        Ext.each(value, function(containerData) {
+            if (! Ext.isEmpty(containerData)) {
+                containerData.name = containerData.name || Tine.Tinebase.container.path2name(containerData.path, this.containerName, this.containersName);
+                containerData.id = containerData.id ||containerData.path;
+                
+                this.store.add(new Tine.Tinebase.Model.Container(containerData));
+                this.currentValue.push(containerData.path);
+                containerNames.push(containerData.name);
+            }
         }, this);
         
         this.setRawValue(containerNames.join(', '));
