@@ -41,7 +41,7 @@ msgstr "Role"
 msgid "Source"
 msgstr "Source"
 
-#: Controller/Lead.php:187 Export/Pdf.php:94 js/LeadEditDialog.js:388
+#: Controller/Lead.php:187 Export/Pdf.php:94 js/LeadEditDialog.js:408
 #: js/LeadGridDetailsPanel.js:455
 msgid "Start"
 msgstr "Start"
@@ -50,17 +50,17 @@ msgstr "Start"
 msgid "Scheduled end"
 msgstr "Scheduled end"
 
-#: Controller/Lead.php:189 Export/Pdf.php:97 js/LeadEditDialog.js:235
+#: Controller/Lead.php:189 Export/Pdf.php:97 js/LeadEditDialog.js:243
 msgid "End"
 msgstr "End"
 
-#: Controller/Lead.php:190 Export/Pdf.php:88 js/LeadGridPanel.js:106
-#: js/LeadGridPanel.js:148
+#: Controller/Lead.php:190 Export/Pdf.php:88 js/LeadGridPanel.js:142
+#: js/LeadGridPanel.js:186
 msgid "Turnover"
 msgstr "Turnover"
 
-#: Controller/Lead.php:191 Export/Pdf.php:91 js/LeadEditDialog.js:228
-#: js/LeadGridPanel.js:105 js/LeadGridPanel.js:147
+#: Controller/Lead.php:191 Export/Pdf.php:91 js/LeadEditDialog.js:236
+#: js/LeadGridPanel.js:141 js/LeadGridPanel.js:185
 msgid "Probability"
 msgstr "Probability"
 
@@ -96,15 +96,15 @@ msgstr "Lead %s has been creaded"
 msgid "%s's personal leads"
 msgstr "%s's personal leads"
 
-#: Controller.php:152 Export/Xls.php:89 js/Contact.js:169 js/Contact.js:357
-#: js/Contact.js:397 js/LeadGridDetailsPanel.js:47
-#: js/LeadGridDetailsPanel.js:498 js/LeadGridPanel.js:145
+#: Controller.php:152 js/Contact.js:169 js/Contact.js:357 js/Contact.js:397
+#: js/LeadGridDetailsPanel.js:47 js/LeadGridDetailsPanel.js:498
+#: js/LeadGridPanel.js:183
 msgid "Customer"
 msgstr "Customer"
 
-#: Controller.php:153 Export/Xls.php:84 js/Contact.js:189 js/Contact.js:358
-#: js/Contact.js:401 js/LeadGridDetailsPanel.js:47
-#: js/LeadGridDetailsPanel.js:481 js/LeadGridPanel.js:144
+#: Controller.php:153 js/Contact.js:189 js/Contact.js:358 js/Contact.js:401
+#: js/LeadGridDetailsPanel.js:47 js/LeadGridDetailsPanel.js:481
+#: js/LeadGridPanel.js:182
 msgid "Partner"
 msgstr "Partner"
 
@@ -156,17 +156,17 @@ msgstr "Website"
 msgid "Lead Data"
 msgstr "Lead Data"
 
-#: Export/Pdf.php:79 js/AdminPanel.js:169 js/LeadEditDialog.js:330
-#: js/LeadGridPanel.js:103 js/LeadGridPanel.js:146
+#: Export/Pdf.php:79 js/AdminPanel.js:169 js/LeadEditDialog.js:350
+#: js/LeadGridPanel.js:184 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr "Leadstate"
 
-#: Export/Pdf.php:82 js/AdminPanel.js:183 js/LeadEditDialog.js:349
+#: Export/Pdf.php:82 js/AdminPanel.js:183 js/LeadEditDialog.js:369
 #: js/LeadGridDetailsPanel.js:465
 msgid "Leadtype"
 msgstr "Leadtype"
 
-#: Export/Pdf.php:85 js/AdminPanel.js:176 js/LeadEditDialog.js:356
+#: Export/Pdf.php:85 js/AdminPanel.js:176 js/LeadEditDialog.js:376
 #: js/LeadGridDetailsPanel.js:470
 msgid "Leadsource"
 msgstr "Leadsource"
@@ -183,7 +183,7 @@ msgstr "Contacts"
 msgid "Address"
 msgstr "Address"
 
-#: Export/Pdf.php:231 js/Task.js:87
+#: Export/Pdf.php:231 js/LeadEditDialog.js:259 js/Task.js:87
 msgid "Tasks"
 msgstr "Tasks"
 
@@ -195,7 +195,7 @@ msgstr "Due Date"
 msgid "Priority"
 msgstr "Priority"
 
-#: Export/Pdf.php:270 js/Product.js:87
+#: Export/Pdf.php:270 js/LeadEditDialog.js:270 js/Product.js:87
 msgid "Products"
 msgstr "Products"
 
@@ -214,26 +214,6 @@ msgstr "high"
 #: Export/Pdf.php:314
 msgid "urgent"
 msgstr "urgent"
-
-#: Export/Xls.php:94 js/Contact.js:179 js/Contact.js:356 js/Contact.js:393
-msgid "Responsible"
-msgstr "Responsible"
-
-#: Export/Xls.php:99
-msgid "Task"
-msgstr "Task"
-
-#: Export/Xls.php:104 js/Product.js:136
-msgid "Product"
-msgstr "Product"
-
-#: Export/Xls.php:109 js/LeadGridDetailsPanel.js:450 js/Task.js:220
-msgid "Status"
-msgstr "Status"
-
-#: Export/Xls.php:113
-msgid "History"
-msgstr "History"
 
 #: js/AdminPanel.js:134 js/LeadGridDetailsPanel.js:218
 #: js/LeadGridDetailsPanel.js:250
@@ -255,6 +235,10 @@ msgstr "Defaults"
 #: js/Contact.js:170
 msgid "Change type to Customer"
 msgstr "Change type to Customer"
+
+#: js/Contact.js:179 js/Contact.js:356 js/Contact.js:393
+msgid "Responsible"
+msgstr "Responsible"
 
 #: js/Contact.js:180
 msgid "Change type to Responsible"
@@ -288,29 +272,45 @@ msgstr "Phone"
 msgid "Cellphone"
 msgstr "Cellphone"
 
-#: js/LeadEditDialog.js:262 js/Models.js:57
+#: js/LeadEditDialog.js:260
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
+msgstr ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
+
+#: js/LeadEditDialog.js:271
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
+msgstr ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
+
+#: js/LeadEditDialog.js:282 js/Model.js:57
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] "Lead"
 msgstr[1] "Leads"
 
-#: js/LeadEditDialog.js:289
+#: js/LeadEditDialog.js:309
 msgid "Enter short name"
 msgstr "Enter short name"
 
-#: js/LeadEditDialog.js:372
+#: js/LeadEditDialog.js:392
 msgid "Expected turnover"
 msgstr "Expected turnover"
 
-#: js/LeadEditDialog.js:394 js/LeadGridDetailsPanel.js:460
+#: js/LeadEditDialog.js:414 js/LeadGridDetailsPanel.js:460
 msgid "Estimated end"
 msgstr "Estimated end"
 
-#: js/LeadEditDialog.js:426 js/Product.js:141
+#: js/LeadEditDialog.js:446 js/Product.js:141
 msgid "Description"
 msgstr "Description"
 
-#: js/LeadEditDialog.js:440
+#: js/LeadEditDialog.js:460
 msgid "Enter description"
 msgstr "Enter description"
 
@@ -338,63 +338,67 @@ msgstr "E-Mail"
 msgid "Web"
 msgstr "Web"
 
-#: js/LeadGridPanel.js:101
+#: js/LeadGridDetailsPanel.js:450 js/Task.js:220
+msgid "Status"
+msgstr "Status"
+
+#: js/LeadGridPanel.js:137
 msgid "Quick search"
 msgstr "Quick search"
 
-#: js/LeadGridPanel.js:102 js/LeadGridPanel.js:143
+#: js/LeadGridPanel.js:139 js/LeadGridPanel.js:181
 msgid "Lead name"
 msgstr "Lead name"
 
-#: js/LeadGridPanel.js:141
+#: js/LeadGridPanel.js:179
 msgid "Lead id"
 msgstr "Lead id"
 
-#: js/LeadGridPanel.js:142
+#: js/LeadGridPanel.js:180
 msgid "Tags"
 msgstr "Tags"
 
-#: js/LeadGridPanel.js:149
+#: js/LeadGridPanel.js:187
 msgid "Probable Turnover"
 msgstr "Probable Turnover"
 
-#: js/LeadGridPanel.js:150
+#: js/LeadGridPanel.js:188
 msgid "Creation Time"
 msgstr "Creation Time"
 
-#: js/LeadGridPanel.js:151
+#: js/LeadGridPanel.js:189
 msgid "Last Modified Time"
 msgstr "Last Modified Time"
 
-#: js/LeadGridPanel.js:191
+#: js/LeadGridPanel.js:228
 msgid "Add task"
 msgstr "Add task"
 
-#: js/LeadGridPanel.js:192
+#: js/LeadGridPanel.js:229
 msgid "Add task for selected lead"
 msgstr "Add task for selected lead"
 
-#: js/LeadGridPanel.js:202
+#: js/LeadGridPanel.js:239
 msgid "Export Lead"
 msgstr "Export Lead"
 
-#: js/LeadGridPanel.js:211
+#: js/LeadGridPanel.js:248
 msgid "Export as PDF"
 msgstr "Export as PDF"
 
-#: js/LeadGridPanel.js:218
+#: js/LeadGridPanel.js:255
 msgid "Export as CSV"
 msgstr "Export as CSV"
 
-#: js/LeadGridPanel.js:225
+#: js/LeadGridPanel.js:262
 msgid "Export as ODS"
 msgstr "Export as ODS"
 
-#: js/LeadGridPanel.js:232
+#: js/LeadGridPanel.js:269
 msgid "Export as XLS"
 msgstr "Export as XLS"
 
-#: js/LeadGridPanel.js:243
+#: js/LeadGridPanel.js:281 js/LeadStateFilterModel.js:37
 msgid "Show closed"
 msgstr "Show closed"
 
@@ -402,7 +406,7 @@ msgstr "Show closed"
 msgid "Add a Leadsource..."
 msgstr "Add a Leadsource..."
 
-#: js/LeadState.js:132
+#: js/LeadState.js:143
 msgid "Add a Leadstate..."
 msgstr "Add a Leadstate..."
 
@@ -410,37 +414,47 @@ msgstr "Add a Leadstate..."
 msgid "Add a Leadtype..."
 msgstr "Add a Leadtype..."
 
-#: js/LinkGridPanel.js:32 js/LinkGridPanel.js:33
+#: js/LinkGridPanel.js:37 js/LinkGridPanel.js:38
 msgid "Add new {0}"
 msgstr "Add new {0}"
 
-#: js/LinkGridPanel.js:51 js/Product.js:183
+#: js/LinkGridPanel.js:56 js/Product.js:187
 msgid "Unlink {0}"
 msgstr "Unlink {0}"
 
-#: js/LinkGridPanel.js:52 js/Product.js:184
+#: js/LinkGridPanel.js:57 js/Product.js:188
 msgid "Unlink selected {0}"
 msgstr "Unlink selected {0}"
 
-#: js/LinkGridPanel.js:67
+#: js/LinkGridPanel.js:72
 msgid "Edit {0}"
 msgstr "Edit {0}"
 
-#: js/LinkGridPanel.js:68
+#: js/LinkGridPanel.js:73
 msgid "Edit selected {0}"
 msgstr "Edit selected {0}"
 
-#: js/Models.js:61 js/Models.js:137
+#: js/Model.js:61
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] "lead list"
+msgstr[1] "lead lists"
+
+#: js/Model.js:133
+msgid "Settings"
+msgid_plural "Settings"
+msgstr[0] "Settings"
+msgstr[1] "Settings"
+
+#: js/Model.js:137
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "record list"
 msgstr[1] "record lists"
 
-#: js/Models.js:133
-msgid "Settings"
-msgid_plural "Settings"
-msgstr[0] "Settings"
-msgstr[1] "Settings"
+#: js/Product.js:136
+msgid "Product"
+msgstr "Product"
 
 #: js/Product.js:148
 msgid "Price"
@@ -450,7 +464,7 @@ msgstr "Price"
 msgid "Quantity"
 msgstr "Quantity"
 
-#: js/Product.js:214
+#: js/Product.js:218
 msgid "Search for Products to add ..."
 msgstr "Search for Products to add ..."
 

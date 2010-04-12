@@ -29,7 +29,7 @@ msgstr "{0}"
 msgid "Not a valid time"
 msgstr "Not a valid time"
 
-#: js/Models.js:46 js/TimesheetEditDialog.js:120
+#: js/Models.js:46 js/TimesheetEditDialog.js:119
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "Timesheet"
@@ -42,7 +42,7 @@ msgstr[0] "timesheets list"
 msgstr[1] "timesheets lists"
 
 #: js/Models.js:108 js/TimeaccountEditDialog.js:67 js/TimeaccountSelect.js:169
-#: js/TimesheetEditDialog.js:137 js/TimesheetGridPanel.js:245
+#: js/TimesheetEditDialog.js:136 js/TimesheetGridPanel.js:245
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] "Time Account"
@@ -69,7 +69,7 @@ msgid "Title"
 msgstr "Title"
 
 #: js/Models.js:133 js/TimeaccountEditDialog.js:93
-#: js/TimeaccountEditDialog.js:169 js/TimesheetEditDialog.js:174
+#: js/TimeaccountEditDialog.js:169 js/TimesheetEditDialog.js:173
 #: js/TimesheetGridPanel.js:217 js/TimesheetGridPanel.js:249
 #: js/TimesheetGridPanel.js:399
 msgid "Description"
@@ -123,11 +123,11 @@ msgstr "to bill"
 msgid "billed"
 msgstr "billed"
 
-#: js/TimeaccountEditDialog.js:132 js/TimesheetEditDialog.js:210
+#: js/TimeaccountEditDialog.js:132 js/TimesheetEditDialog.js:209
 msgid "not cleared yet..."
 msgstr "not cleared yet..."
 
-#: js/TimeaccountEditDialog.js:133 js/TimesheetEditDialog.js:211
+#: js/TimeaccountEditDialog.js:133 js/TimesheetEditDialog.js:210
 msgid "Cleared In"
 msgstr "Cleared In"
 
@@ -233,63 +233,63 @@ msgstr "Show closed"
 msgid "Time Account - Status"
 msgstr "Time Account - Status"
 
-#: js/TimesheetEditDialog.js:92 js/TimesheetEditDialog.js:93
+#: js/TimesheetEditDialog.js:91 js/TimesheetEditDialog.js:92
 msgid "Billed in ..."
 msgstr "Billed in ..."
 
-#: js/TimesheetEditDialog.js:138
+#: js/TimesheetEditDialog.js:137
 msgid "Select Time Account..."
 msgstr "Select Time Account..."
 
-#: js/TimesheetEditDialog.js:139
+#: js/TimesheetEditDialog.js:138
 msgid "Searching..."
 msgstr "Searching..."
 
-#: js/TimesheetEditDialog.js:147 js/TimesheetGridPanel.js:257
+#: js/TimesheetEditDialog.js:146 js/TimesheetGridPanel.js:257
 msgid "Duration"
 msgstr "Duration"
 
-#: js/TimesheetEditDialog.js:152 js/TimesheetGridPanel.js:216
+#: js/TimesheetEditDialog.js:151 js/TimesheetGridPanel.js:216
 #: js/TimesheetGridPanel.js:241
 msgid "Date"
 msgstr "Date"
 
-#: js/TimesheetEditDialog.js:157
+#: js/TimesheetEditDialog.js:156
 msgid "Start"
 msgstr "Start"
 
-#: js/TimesheetEditDialog.js:158
+#: js/TimesheetEditDialog.js:157
 msgid "not set"
 msgstr "not set"
 
-#: js/TimesheetEditDialog.js:175
+#: js/TimesheetEditDialog.js:174
 msgid "Enter description..."
 msgstr "Enter description..."
 
-#: js/TimesheetEditDialog.js:187 js/TimesheetGridPanel.js:215
+#: js/TimesheetEditDialog.js:186 js/TimesheetGridPanel.js:215
 #: js/TimesheetGridPanel.js:255
 msgid "Account"
 msgstr "Account"
 
-#: js/TimesheetEditDialog.js:193 js/TimesheetGridPanel.js:74
+#: js/TimesheetEditDialog.js:192 js/TimesheetGridPanel.js:74
 #: js/TimesheetGridPanel.js:218 js/TimesheetGridPanel.js:250
 msgid "Billable"
 msgstr "Billable"
 
-#: js/TimesheetEditDialog.js:200 js/TimesheetGridPanel.js:79
+#: js/TimesheetEditDialog.js:199 js/TimesheetGridPanel.js:79
 #: js/TimesheetGridPanel.js:219 js/TimesheetGridPanel.js:252
 msgid "Cleared"
 msgstr "Cleared"
 
-#: js/TimesheetEditDialog.js:265
+#: js/TimesheetEditDialog.js:264
 msgid "Failed"
 msgstr "Failed"
 
-#: js/TimesheetEditDialog.js:266
+#: js/TimesheetEditDialog.js:265
 msgid "Could not save {0}."
 msgstr "Could not save {0}."
 
-#: js/TimesheetEditDialog.js:267
+#: js/TimesheetEditDialog.js:266
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr "Booking deadline for this Timeaccount has been exceeded."
 
@@ -365,19 +365,19 @@ msgstr "Time of Billable Timesheets"
 msgid "Detail"
 msgstr "Detail"
 
-#: js/Timetracker.js:30
+#: js/Timetracker.js:41
 msgid "Timesheets"
 msgstr "Timesheets"
 
-#: js/Timetracker.js:35
+#: js/Timetracker.js:46
 msgid "All Timesheets"
 msgstr "All Timesheets"
 
-#: js/Timetracker.js:40
+#: js/Timetracker.js:51
 msgid "Timeaccounts"
 msgstr "Timeaccounts"
 
-#: js/Timetracker.js:45
+#: js/Timetracker.js:56
 msgid "All Timeaccounts"
 msgstr "All Timeaccounts"
 
