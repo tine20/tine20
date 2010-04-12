@@ -48,7 +48,7 @@ class Tinebase_Translation
         'en',      // English              Cornelius Weiss <c.weiss@metaways.de>
         'es',      // Spanish              Enrique Palacios <enriquepalaciosc@gmail.com>
         'fr',      // French               Rémi Peltier <rpeltier@agglo-clermont.fr>
-        //'it',      // Italian              Lidia Panio <lidiapanio@hotmail.com>
+        'it',      // Italian              Impiastro <impiastro@gmail.com>
         'ja',      // Japanese             Yuuki Kitamura <ykitamura@clasi-co.jp>
         'nb',      // Norwegian Bokmål     Ronny Gonzales <gonzito@online.no>
         //'nl',      // Dutch                Joost Venema <post@joostvenema.nl>
