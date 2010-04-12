@@ -455,30 +455,30 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             this.filterPlugin.onFilterChange();
         }
         if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
-            var sm = this.getSelectionModel();
-            var selection =  typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
-            
-            // multi select not implemented in ftb yet!
-            var node = selection[0];
-            
-            // get filterToolbar
-            var ftb = this.filterPlugin.getGridPanel().filterToolbar;
-            
-            //var supressEvents = ftb.supressEvents;
-            ftb.supressEvents = true;
-            
-            // remove all ftb container filters
-            ftb.filterStore.each(function(filter) {
-                if (filter.get('field') === 'container_id') {
-                    ftb.deleteFilter(filter);
-                }
-            }, this);
-            
-            // set ftb filters according to tree selection
-            ftb.supressEvents = false;
-            ftb.addFilter(new ftb.record({field: 'container_id', operator: 'equals', value: node.attributes.container}));
-            
             if (! sm.filterPluginSetValue) {
+                var sm = this.getSelectionModel();
+                var selection =  typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
+                
+                // multi select not implemented in ftb yet!
+                var node = selection[0];
+                
+                // get filterToolbar
+                var ftb = this.filterPlugin.getGridPanel().filterToolbar;
+                
+                //var supressEvents = ftb.supressEvents;
+                ftb.supressEvents = true;
+                
+                // remove all ftb container filters
+                ftb.filterStore.each(function(filter) {
+                    if (filter.get('field') === 'container_id') {
+                        ftb.deleteFilter(filter);
+                    }
+                }, this);
+                
+                // set ftb filters according to tree selection
+                ftb.supressEvents = false;
+                ftb.addFilter(new ftb.record({field: 'container_id', operator: 'equals', value: node.attributes.container}));
+            
                 ftb.onFiltertrigger();
             }
             
