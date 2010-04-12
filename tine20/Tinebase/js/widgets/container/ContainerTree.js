@@ -551,8 +551,11 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
                 return;
             }
             
+            // @todo add hanlding for multi select
+            var value = filter.operator === 'in' ? filter.value[0] : filter.value;
+            
             this.treePanel.getSelectionModel().filterPluginSetValue = true;
-            this.treePanel.selectContainerPath(filter.value.path, null, function() {
+            this.treePanel.selectContainerPath(value.path, null, function() {
                 this.treePanel.getSelectionModel().filterPluginSetValue = false;
             }.createDelegate(this));
         }, this);
