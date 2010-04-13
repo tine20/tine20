@@ -65,9 +65,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     app: null,
     /**
-     * @cfg {Boolean} allowMultiSelection
+     * @cfg {Boolean} allowMultiSelection (defaults to true)
      */
-    allowMultiSelection: false,
+    allowMultiSelection: true,
     /**
      * @cfg {String} defaultContainerPath
      */
@@ -433,7 +433,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 applicationName: this.recordClass.getMeta('appName')
             },
             scope: this,
-            success: function(_result, _request){
+            success: function(result, request){
                 // update grid
                 this.filterPlugin.onFilterChange();
             }
@@ -455,34 +455,23 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             this.filterPlugin.onFilterChange();
         }
         if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
-            //if (! sm.filterPluginSetValue) {
-                var sm = this.getSelectionModel();
-                var selection =  typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
-                
-                // multi select not implemented in ftb yet!
-                var node = selection[0];
-                
-                // get filterToolbar
-                var ftb = this.filterPlugin.getGridPanel().filterToolbar;
-                
-                //var supressEvents = ftb.supressEvents;
-                ftb.supressEvents = true;
-                
-                // remove all ftb container filters
-                ftb.filterStore.each(function(filter) {
-                    if (filter.get('field') === 'container_id') {
-                        ftb.deleteFilter(filter);
-                    }
-                }, this);
-                
-                // set ftb filters according to tree selection
-                ftb.supressEvents = false;
-                ftb.addFilter(new ftb.record({field: 'container_id', operator: 'equals', value: node.attributes.container}));
+            // get filterToolbar
+            var ftb = this.filterPlugin.getGridPanel().filterToolbar;
             
-                ftb.onFiltertrigger();
-            //}
+            // remove all ftb container filters
+            ftb.supressEvents = true;
+            ftb.filterStore.each(function(filter) {
+                if (filter.get('field') === 'container_id') {
+                    ftb.deleteFilter(filter);
+                }
+            }, this);
+            ftb.supressEvents = false;
             
-            //sm.filterPluginSetValue = false;
+            // set ftb filters according to tree selection
+            var containerFilter = this.getFilterPlugin().getContainerFilter();
+            ftb.addFilter(new ftb.record(containerFilter));
+        
+            ftb.onFiltertrigger();
         }
     },
     
@@ -512,6 +501,21 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
      */
     treePanel: null,
     
+    getContainerFilter: function() {
+        var filter = {field: 'container_id'};
+        var sm = this.treePanel.getSelectionModel();
+        filter.operator = typeof sm.getSelectedNodes == 'function' ? 'in' : 'equals';
+        var selection =  filter.operator === 'in' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
+        
+        var values = [];
+        Ext.each(selection, function(node) {
+            values.push(node.attributes.container);
+        }, this);
+        
+        filter.value = Ext.isEmpty(values) ? '' : filter.operator === 'in' ? values : values[0];
+        return filter;
+    },
+    
     /**
      * gets value of this container filter
      */
@@ -521,18 +525,7 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
             return null;
         }
         
-        var filter = {field: 'container_id'};
-        var sm = this.treePanel.getSelectionModel();
-        filter.operator = typeof sm.getSelectedNodes == 'function' ? 'in' : 'equals';
-        var selection =  filter.operator === 'in' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
-        
-        var values = [];
-        Ext.each(selection, function(node) {
-            values.push(node.attributes.container.path);
-        }, this);
-        
-        filter.value = Ext.isEmpty(values) ? '' : filter.operator === 'in' ? values : values[0];
-        return filter;
+        return this.getContainerFilter();
     },
     
     /**
