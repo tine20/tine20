@@ -50,8 +50,6 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
     //stateId: 'cal-calendartree-containers',
     recordClass: Tine.Calendar.Model.Event,
     ddGroup: 'cal-event',
-    // disabled for the moment, as ftb can't deal with n containers yet
-    //allowMultiSelection: true,
     filterMode: 'filterToolbar',
     
     initComponent: function() {
