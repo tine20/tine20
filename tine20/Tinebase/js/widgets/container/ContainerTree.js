@@ -521,23 +521,18 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
             return null;
         }
         
+        var filter = {field: 'container_id'};
         var sm = this.treePanel.getSelectionModel();
-        var selection =  typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
+        filter.operator = typeof sm.getSelectedNodes == 'function' ? 'in' : 'equals';
+        var selection =  filter.operator === 'in' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
         
-        var filters = [];
+        var values = [];
         Ext.each(selection, function(node) {
-            // NOTE: operator gets adopted when path is parsed
-            filters.push({field: 'container_id', operator: 'equals', value: node.attributes.container.path});
-            //filters.push(node.attributes.container.path);
+            values.push(node.attributes.container.path);
         }, this);
         
-        if (filters.length == 0) {
-            return {field: 'container_id', operator: 'equals', value: ''};
-        } else if (filters.length == 1) {
-            return filters[0];
-        } else  {
-            return {condition: 'OR', filters: filters};
-        }
+        filter.value = Ext.isEmpty(values) ? '' : filter.operator === 'in' ? values : values[0];
+        return filter;
     },
     
     /**
