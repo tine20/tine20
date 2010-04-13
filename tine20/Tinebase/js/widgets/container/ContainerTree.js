@@ -455,7 +455,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             this.filterPlugin.onFilterChange();
         }
         if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
-            if (! sm.filterPluginSetValue) {
+            //if (! sm.filterPluginSetValue) {
                 var sm = this.getSelectionModel();
                 var selection =  typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
                 
@@ -480,9 +480,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 ftb.addFilter(new ftb.record({field: 'container_id', operator: 'equals', value: node.attributes.container}));
             
                 ftb.onFiltertrigger();
-            }
+            //}
             
-            sm.filterPluginSetValue = false;
+            //sm.filterPluginSetValue = false;
         }
     },
     
@@ -541,18 +541,77 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
      * @param {Array} all filters
      */
     setValue: function(filters) {
+        var sm = this.treePanel.getSelectionModel();
+        
+        // clear all selections
+        sm.clearSelections(true);
+        
         Ext.each(filters, function(filter) {
             if (filter.field !== 'container_id') {
                 return;
             }
             
-            // @todo add hanlding for multi select
-            var value = filter.operator === 'in' ? filter.value[0] : filter.value;
-            
-            this.treePanel.getSelectionModel().filterPluginSetValue = true;
-            this.treePanel.selectContainerPath(value.path, null, function() {
-                this.treePanel.getSelectionModel().filterPluginSetValue = false;
-            }.createDelegate(this));
+            this.treePanel.getSelectionModel().suspendEvents();
+            //this.treePanel.getSelectionModel().filterPluginSetValue = true;
+            this.selectValue(filter.value);
         }, this);
+    },
+    
+    selectValue: function(value) {
+        var values = Ext.isArray(value) ? value : [value];
+        Ext.each(values, function(value) {
+            var treePath = this.treePanel.getTreePath(value.path);
+            this.selectPath.call(this.treePanel, treePath, null, function() {
+                // mark this expansion as done and check if all are done
+                value.isExpanded = true;
+                var allValuesExpanded = true;
+                Ext.each(values, function(v) {
+                    allValuesExpanded &= v.isExpanded;
+                }, this);
+                
+                if (allValuesExpanded) {
+                    this.treePanel.getSelectionModel().resumeEvents();
+                    //this.treePanel.getSelectionModel().filterPluginSetValue = false;
+                }
+            }.createDelegate(this), true)
+        }, this);
+    },
+    
+    /**
+     * Selects the node in this tree at the specified path. A path can be retrieved from a node with {@link Ext.data.Node#getPath}
+     * @param {String} path
+     * @param {String} attr (optional) The attribute used in the path (see {@link Ext.data.Node#getPath} for more info)
+     * @param {Function} callback (optional) The callback to call when the selection is complete. The callback will be called with
+     * (bSuccess, oSelNode) where bSuccess is if the selection was successful and oSelNode is the selected node.
+     */
+    selectPath : function(path, attr, callback, keep){
+        attr = attr || 'id';
+        var keys = path.split(this.pathSeparator),
+            v = keys.pop();
+        if(keys.length > 1){
+            var f = function(success, node){
+                if(success && node){
+                    var n = node.findChild(attr, v);
+                    if(n){
+                        n.getOwnerTree().getSelectionModel().select(n, false, keep);
+                        if(callback){
+                            callback(true, n);
+                        }
+                    }else if(callback){
+                        callback(false, n);
+                    }
+                }else{
+                    if(callback){
+                        callback(false, n);
+                    }
+                }
+            };
+            this.expandPath(keys.join(this.pathSeparator), attr, f);
+        }else{
+            this.root.select();
+            if(callback){
+                callback(true, this.root);
+            }
+        }
     }
 });
