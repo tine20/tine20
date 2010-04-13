@@ -331,7 +331,7 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
             containerData.id = containerData.id ||containerData.path;
             
             this.store.add(new Tine.Tinebase.Model.Container(containerData));
-            this.currentValue.push(containerData.path);
+            this.currentValue.push(containerData);
             containerNames.push(containerData.name);
         }, this);
         
