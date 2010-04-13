@@ -54,8 +54,8 @@ Tine.Addressbook.TreePanel = function(config) {
             text: Tine.Tinebase.appMgr.get('Addressbook').i18n._("Internal Contacts"),
             cls: "file",
             containerType: 'internal',
-            container: {path: '/internal'},
             id: "internal",
+            path: '/internal',
             children: [],
             leaf: false,
             expanded: true
