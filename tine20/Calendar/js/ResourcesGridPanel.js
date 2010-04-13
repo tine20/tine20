@@ -64,7 +64,7 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPane
         
         this.items.push({
             region : 'north',
-            height: 26,
+            height : 55,
             border : false,
             items  : this.actionToolbar
         });
