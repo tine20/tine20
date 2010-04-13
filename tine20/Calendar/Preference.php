@@ -20,11 +20,6 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     /**************************** application preferences/settings *****************/
     
     /**
-     * give all useraccounts grants to view free/busy of the account this preference is yes
-     */
-    const FREEBUSY = 'freeBusy';
-    
-    /**
      * default calendar all newly created/invited events are placed in
      */
     const DEFAULTCALENDAR = 'defaultCalendar';
@@ -55,7 +50,6 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     public function getAllApplicationPreferences()
     {
         $allPrefs = array(
-            self::FREEBUSY,
             self::DEFAULTCALENDAR,
             self::NOTIFICATION_LEVEL,
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
@@ -74,10 +68,6 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
         $translate = Tinebase_Translation::getTranslation($this->_application);
 
         $prefDescriptions = array(
-            self::FREEBUSY  => array(
-                'label'         => $translate->_('Publish Free/Busy Information'),
-                'description'   => $translate->_('Allow all users to view your free/busy information'),
-            ),
             self::DEFAULTCALENDAR  => array(
                 'label'         => $translate->_('Default Calendar'),
                 'description'   => $translate->_('The default calendar for invitations and new events'),
@@ -106,13 +96,6 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
         $preference = $this->_getDefaultBasePreference($_preferenceName);
         
         switch($_preferenceName) {
-            case self::FREEBUSY:
-                $preference->value      = 0;
-                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
-                    <options>
-                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
-                    </options>';
-                break;
             case self::DEFAULTCALENDAR:
                 $accountId = $_accountId ? $_accountId : Tinebase_Core::getUser()->getId();
                 $calendars          = Tinebase_Container::getInstance()->getPersonalContainer($accountId, 'Calendar', $accountId, 0, true);
