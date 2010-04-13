@@ -68,88 +68,6 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         this.supr().initComponent.call(this);
     },
     
-//    initComponent: function() {
-//        this.selModel = new Ext.tree.MultiSelectionModel({});
-//        /*
-//        this.selModel = new Ext.ux.tree.CheckboxSelectionModel({
-//            activateLeafNodesOnly : true,
-//            optimizeSelection: true
-//        });
-//        */
-//        
-//        /*
-//        // inject resources tree node
-//        this.extraItems = [{
-//            text: String.format(this.app.i18n._('Resources {0}'), this.containersName),
-//            cls: 'file',
-//            id: 'allResources',
-//            children: null,
-//            leaf: null
-//        }];
-//        */
-//        
-//        this.supr().initComponent.call(this);
-//        
-//        //this.loader.processResponse = this.processResponse.createDelegate(this);
-//    },
-//    
-    /*
-    afterRender: function() {
-        this.supr().afterRender.apply(this, arguments);
-
-        this.selectContainerPath(Tine.Tinebase.container.getMyNodePath());
-    },
-    */
-    /*
-    applyState: function(state) {
-        this.expandPaths = state;
-    },
-    */
-    
-    /**
-     * returns a filter plugin to be used in a grid
-     *
-    getFilterPlugin: function() {
-        if (!this.filterPlugin) {
-            this.filterPlugin = new Tine.widgets.container.TreeFilterPlugin({
-                treePanel: this,
-                node2Filter: function(node) {
-                    var id = node.attributes.id;
-                    
-                    if (id.match(/resource/i)) {
-                        if (id == 'allResources') {
-                            return {field: 'attender', operator: 'specialNode', value: 'allResources'};
-                        } else {
-                            var rid = node.attributes.id.split('_')[1];
-                            return {field: 'attender', operator: 'equals', value: {user_type: 'resource', user_id: rid}};
-                        }
-                        
-                    } else {
-                        return Tine.widgets.container.TreeFilterPlugin.prototype.node2Filter.call(this, node);
-                    }
-                }
-            });
-            
-            this.getSelectionModel().on('selectionchange', function(sm, node){
-                this.filterPlugin.onFilterChange();
-            }, this);
-        }
-        
-        return this.filterPlugin;
-    },
-    */
-    
-    /*
-    getState: function() {
-        var checkedPaths = [];
-        Ext.each(this.getChecked(), function(node) {
-            checkedPaths.push(node.getPath());
-        }, this);
-        
-        return checkedPaths;
-    },
-    */
-    
     /**
      * adopt attr
      * 
@@ -161,13 +79,6 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         if (attr.container) {
             attr.container.capabilites_private = true;
         }
-        
-        /*
-        if (attr.id && attr.id.match(/resource/i)) {
-            // don't add colors to resources yet
-            return;
-        }
-        */
         
         attr.listeners = {
             append: function(tree, node, appendedNode, index) {
@@ -187,43 +98,4 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
             }
         };
     }
-    
-    /**
-     * returns params for async request
-     * 
-     * @param {Ext.tree.TreeNode} node
-     * @return {Object}
-     *
-    onBeforeLoad: function(node) {
-        if (node.attributes.id.match(/resource/i)) {
-            return {
-                method: 'Calendar.searchResources',
-                filter: [{field: 'name', operator: 'contains', value: ''}]
-            };
-        }
-        
-        return this.supr().onBeforeLoad.apply(this, arguments);
-    },
-    */
-    
-    /*
-    processResponse: function(response, node, callback, scope) {
-        if (node.attributes.id.match(/resource/i)) {
-            var o = response.responseData = response.responseData || Ext.decode(response.responseText);
-            Ext.each(o.results, function(resource) {
-                // fake grants
-                resource.account_grants = {
-                    account_id: Tine.Tinebase.registry.get('currentAccount').accountId,
-                    readGrant: true
-                };
-                resource.leaf = true;
-                
-                // prefix id
-                resource.id = 'resource_' + resource.id;
-            });
-        }
-        
-        return Tine.widgets.tree.Loader.prototype.processResponse.apply(this.loader, arguments);
-    }
-    */
 });
