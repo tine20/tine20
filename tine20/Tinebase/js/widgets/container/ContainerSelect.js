@@ -488,6 +488,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
         });
         
         this.tree = new Tine.widgets.container.TreePanel({
+            allowMultiSelection: false,
             containerName: this.TriggerField.containerName,
             containersName: this.TriggerField.containersName,
             appName: this.TriggerField.appName,
