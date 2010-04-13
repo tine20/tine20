@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * TODO         refactor this
@@ -21,25 +21,29 @@ Tine.Admin.Applications.Main = function() {
      * 
      * TODO     make that more generic?
      */
-    var _editButtonHandler = function(_button, _event) {
+    var _settingsHandler = function(_button, _event) {
         var selModel = Ext.getCmp('gridAdminApplications').getSelectionModel();
         if (selModel.getCount() > 0) {
             var selectedRows = selModel.getSelections();
             var appName = selectedRows[0].data.name;
             if (Tine[appName]) {
-                Tine[appName].AdminPanel.openWindow({
-                    record: (Tine[appName].Model.Settings) ? new Tine[appName].Model.Settings(appName) : null,
-                    windowTitle: String.format(_('{0} Settings'), appName),
-                    listeners: {
-                        scope: this,
-                        'update': (Tine[appName].AdminPanel.onUpdate) ? Tine[appName].AdminPanel.onUpdate : Ext.emptyFn
-                    }
-                });
+                _openSettingsWindow(appName);
             }
         } else {
             _button.setDisabled(true);
         }
     };
+    
+    var _openSettingsWindow = function(appName) {
+        Tine[appName].AdminPanel.openWindow({
+            record: (Tine[appName].Model.Settings) ? new Tine[appName].Model.Settings(appName) : null,
+            windowTitle: String.format(_('{0} Settings'), appName),
+            listeners: {
+                scope: this,
+                'update': (Tine[appName].AdminPanel.onUpdate) ? Tine[appName].AdminPanel.onUpdate : Ext.emptyFn
+            }
+        });
+    }
 
     var _enableDisableButtonHandler = function(state) {
         var applicationIds = new Array();
@@ -87,7 +91,7 @@ Tine.Admin.Applications.Main = function() {
 	var _action_settings = new Ext.Action({
         text: 'settings',
         disabled: true,
-        handler: _editButtonHandler,
+        handler: _settingsHandler,
         iconCls: 'action_settings'
     });
 
@@ -321,11 +325,16 @@ Tine.Admin.Applications.Main = function() {
                 if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'apps') ) {
                     _action_enable.setDisabled(false);
                     _action_disable.setDisabled(false);
-                    //_action_settings.setDisabled(true);
                 }
             }
-            //var record = _grid.getStore().getAt(rowIndex);
             ctxMenuGrid.showAt(_eventObject.getXY());
+        }, this);
+        
+        grid_applications.on('rowdblclick', function(grid, index, e) {
+            var record = grid.getStore().getAt(index);
+            if (Tine[record.data.name].AdminPanel && record.data.status == 'enabled') {
+                _openSettingsWindow(record.data.name);
+            }
         }, this);
           
         return;
