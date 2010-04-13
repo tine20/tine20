@@ -67,6 +67,15 @@ Tine.Tinebase.container = {
     isInternalRegExp: /^\/internal/,
     
     /**
+     * returns the path of the 'my ...' node
+     * 
+     * @return {String}
+     */
+    getMyNodePath: function() {
+        return '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId
+    },
+    
+    /**
      * returns true if given path represents a (single) container
      * 
      * NOTE: if path could only be undefined when server send container without path.
@@ -124,7 +133,7 @@ Tine.Tinebase.container = {
             case '/internal':   return String.format(_('Internal {0}'), containersName);
         }
         
-        if (path === '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId) {
+        if (path === Tine.Tinebase.container.getMyNodePath()) {
             return String.format(_('My {0}'), containersName);
         }
         
