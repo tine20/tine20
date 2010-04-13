@@ -299,10 +299,11 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
                 !this.containerSelectionCombo.isExpanded() && !this.containerSelectionCombo.dlg;
     },
     
-    onContainerSelect: function(field, containerRecord) {
-        var existingRecord = this.store.getById(containerRecord.id);
+    onContainerSelect: function(field, containerData) {
+        var existingRecord = this.store.getById(containerData.id);
         if (! existingRecord) {
-            this.store.add(containerRecord);
+            this.store.add(new Tine.Tinebase.Model.Container(containerData));
+            
         } else {
             var idx = this.store.indexOf(existingRecord);
             var row = this.containerGridPanel.getView().getRow(idx);
