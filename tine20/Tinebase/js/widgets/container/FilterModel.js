@@ -130,7 +130,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
                     var operatorText = this.filter.data.operator === 'personalNode' ? _('is personal of') : _('is equal to');
                     
                     // use equals for node 'My containers'
-                    if (value.path && value.path === '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId) {
+                    if (value.path && value.path === Tine.Tinebase.container.getMyNodePath()) {
                         operatorText = _('is equal to')
                     }
                     this.filter.formFields.operator.setRawValue(operatorText);
@@ -324,7 +324,7 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
         var containerNames = [];
         Ext.each(value, function(containerData) {
             // ignore server name for node 'My containers'
-            if (containerData.path && containerData.path === '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId) {
+            if (containerData.path && containerData.path === Tine.Tinebase.container.getMyNodePath()) {
                 containerData.name = null;
             }
             containerData.name = containerData.name || Tine.Tinebase.container.path2name(containerData.path, this.containerName, this.containersName);

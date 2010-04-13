@@ -134,7 +134,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             path: '/',
             expanded: true,
             children: [{
-                path: '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId,
+                path: Tine.Tinebase.container.getMyNodePath(),
                 id: 'personal'
             }, {
                 path: '/shared',

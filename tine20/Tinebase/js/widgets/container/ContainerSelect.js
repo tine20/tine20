@@ -325,7 +325,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             
         }else if (container.path || container.id) {
             // ignore server name for node 'My containers'
-            if (container.path && container.path === '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId) {
+            if (container.path && container.path === Tine.Tinebase.container.getMyNodePath()) {
                 container.name = null;
             }
             container.name = container.name || Tine.Tinebase.container.path2name(container.path, this.containerName, this.containersName);

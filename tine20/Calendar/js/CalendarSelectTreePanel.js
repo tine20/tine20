@@ -99,7 +99,7 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
     afterRender: function() {
         this.supr().afterRender.apply(this, arguments);
 
-        this.selectContainerPath('/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId);
+        this.selectContainerPath(Tine.Tinebase.container.getMyNodePath());
     },
     */
     /*
