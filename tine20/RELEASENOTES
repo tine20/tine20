@@ -41,3 +41,14 @@ sql example:
  with the 'MANAGE_ACCOUNTS' right can change some of the account values (signature, 
  name, ...). 
  
+ --------------------------------------------------------------
+3. Calendar FreeBusy Grant
+
+In previous versions, each user could define if he wants to publish his freebusy info
+for other users in the system, unless the admin forced so via preferences.
+This freebusy preference got removed and users can now define to grant freebusy informations
+to other users via standard calendar grants on calendar basis.
+
+A migration script automatically migrated old rights to new grants and new personal container 
+will grant freebusy to anyone per default. In a future version this default can be forced for
+all personal containers.
