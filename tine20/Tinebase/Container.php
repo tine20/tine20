@@ -473,10 +473,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         // @todo add groupmembers via join
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($_accountId);
-        if(count($groupMemberships) === 0) {
-            // this is crap isn't it?
-            throw new Tinebase_Exception_NotFound('Account must be in at least one group.');
-        }
         
         $quotedActId   = $db->quoteIdentifier("{$_aclTableName}.account_id");
         $quotedActType = $db->quoteIdentifier("{$_aclTableName}.account_type");
@@ -485,7 +481,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $accountSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
         $accountSelect
             ->orWhere("{$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $_accountId)
-            ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), $groupMemberships)
+            ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), empty($groupMemberships) ? ' ' : $groupMemberships)
             ->orWhere("{$quotedActType} = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
         
         $grantsSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
