@@ -1,3 +1,8 @@
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr ""
+
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
 msgstr ""
@@ -6,104 +11,41 @@ msgstr ""
 msgid "Create new shared tasks lists"
 msgstr ""
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
+#: Model/Task.php:183
+msgid "Due"
 msgstr ""
 
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
+#: Model/Task.php:184
+msgid "Organizer"
 msgstr ""
 
-#: js/GridPanel.js:56
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/GridPanel.js:90
-msgid "Quick search"
+#: Model/Task.php:185
+msgid "Description"
 msgstr ""
 
-#: js/GridPanel.js:92 js/GridPanel.js:142 js/TaskEditDialog.js:160
-msgid "Summary"
-msgstr ""
-
-#: js/GridPanel.js:93 js/GridPanel.js:153
-msgid "Due Date"
-msgstr ""
-
-#: js/GridPanel.js:95 js/GridPanel.js:216
-msgid "Responsible"
-msgstr ""
-
-#: js/GridPanel.js:119
-msgid "Failed"
-msgstr ""
-
-#: js/GridPanel.js:119
-msgid "Could not save task."
-msgstr ""
-
-#: js/GridPanel.js:138
-msgid "Tags"
-msgstr ""
-
-#: js/GridPanel.js:139 Model/Task.php:195
-msgid "Lead"
-msgstr ""
-
-#: js/GridPanel.js:149
-msgid "Add a task..."
-msgstr ""
-
-#: js/GridPanel.js:161 js/TaskEditDialog.js:168 Model/Task.php:186
+#: Model/Task.php:186 js/TaskEditDialog.js:168 js/GridPanel.js:161
 msgid "Priority"
 msgstr ""
 
-#: js/GridPanel.js:175 Model/Task.php:188
-msgid "Percent"
-msgstr ""
-
-#: js/GridPanel.js:188 js/Status.js:33 js/TaskEditDialog.js:188
-#: Model/Task.php:187
+#: Model/Task.php:187 js/TaskEditDialog.js:188 js/GridPanel.js:188
+#: js/Status.js:33
 msgid "Status"
 msgstr ""
 
-#: js/GridPanel.js:202
-msgid "Creation Time"
+#: Model/Task.php:188 js/GridPanel.js:175
+msgid "Percent"
 msgstr ""
 
-#: js/GridPanel.js:209 js/TaskEditDialog.js:192
-msgid "Completed"
+#: Model/Task.php:195 js/GridPanel.js:139
+msgid "Lead"
 msgstr ""
 
-#: js/GridPanel.js:265
-msgid "Show closed"
+#: Model/Task.php:201
+msgid "Telephone"
 msgstr ""
 
-#: js/Status.js:187 Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr ""
-
-#: js/TaskEditDialog.js:165
-msgid "Due date"
-msgstr ""
-
-#: js/TaskEditDialog.js:171
-msgid "Add Responsible ..."
-msgstr ""
-
-#: js/TaskEditDialog.js:178
-msgid "Notes"
-msgstr ""
-
-#: js/TaskEditDialog.js:179
-msgid "Enter description..."
-msgstr ""
-
-#: js/TaskEditDialog.js:184
-msgid "Percentage"
+#: Model/Task.php:202
+msgid "Email"
 msgstr ""
 
 #: js/Tasks.js:94
@@ -126,24 +68,82 @@ msgstr[1] ""
 msgid "to do lists"
 msgstr ""
 
-#: Model/Task.php:183
-msgid "Due"
+#: js/TaskEditDialog.js:160 js/GridPanel.js:92 js/GridPanel.js:142
+msgid "Summary"
 msgstr ""
 
-#: Model/Task.php:184
-msgid "Organizer"
+#: js/TaskEditDialog.js:165
+msgid "Due date"
 msgstr ""
 
-#: Model/Task.php:185
-msgid "Description"
+#: js/TaskEditDialog.js:171
+msgid "Add Responsible ..."
 msgstr ""
 
-#: Model/Task.php:201
-msgid "Telephone"
+#: js/TaskEditDialog.js:178
+msgid "Notes"
 msgstr ""
 
-#: Model/Task.php:202
-msgid "Email"
+#: js/TaskEditDialog.js:179
+msgid "Enter description..."
+msgstr ""
+
+#: js/TaskEditDialog.js:184
+msgid "Percentage"
+msgstr ""
+
+#: js/TaskEditDialog.js:192 js/GridPanel.js:209
+msgid "Completed"
+msgstr ""
+
+#: js/GridPanel.js:56
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/GridPanel.js:90
+msgid "Quick search"
+msgstr ""
+
+#: js/GridPanel.js:93 js/GridPanel.js:153
+msgid "Due Date"
+msgstr ""
+
+#: js/GridPanel.js:95 js/GridPanel.js:216
+msgid "Responsible"
+msgstr ""
+
+#: js/GridPanel.js:119
+msgid "Failed"
+msgstr ""
+
+#: js/GridPanel.js:119
+msgid "Could not save task."
+msgstr ""
+
+#: js/GridPanel.js:138
+msgid "Tags"
+msgstr ""
+
+#: js/GridPanel.js:149
+msgid "Add a task..."
+msgstr ""
+
+#: js/GridPanel.js:202
+msgid "Creation Time"
+msgstr ""
+
+#: js/GridPanel.js:265
+msgid "Show closed"
+msgstr ""
+
+#: js/Status.js:187 Setup/setup.xml:339
+msgid "IN-PROCESS"
+msgstr ""
+
+#: Controller/Task.php:166
+msgid "Notification for Task "
 msgstr ""
 
 #: Setup/setup.xml:295

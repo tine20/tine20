@@ -12,6 +12,11 @@ msgstr ""
 "X-Poedit-Language: Japanese\n"
 "X-Poedit-Country: JAPAN\n"
 
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s のパーソナルタスク"
+
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
 msgstr ""
@@ -20,49 +25,88 @@ msgstr ""
 msgid "Create new shared tasks lists"
 msgstr ""
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
+#: Model/Task.php:183
+msgid "Due"
 msgstr ""
 
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s のパーソナルタスク"
+#: Model/Task.php:184
+msgid "Organizer"
+msgstr ""
 
-#: js/EditDialog.js:173 js/GridPanel.js:94 js/GridPanel.js:171
-msgid "Summary"
-msgstr "サマリー"
+#: Model/Task.php:185
+#, fuzzy
+msgid "Description"
+msgstr "説明を入力してください..."
 
-#: js/EditDialog.js:178
-msgid "Due date"
-msgstr "期日"
-
-#: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:184
+#: Model/Task.php:186 js/TaskEditDialog.js:168 js/GridPanel.js:161
 msgid "Priority"
 msgstr "重要度"
 
-#: js/EditDialog.js:184
+#: Model/Task.php:187 js/TaskEditDialog.js:188 js/GridPanel.js:188
+#: js/Status.js:33
+msgid "Status"
+msgstr "ステータス"
+
+#: Model/Task.php:188 js/GridPanel.js:175
+msgid "Percent"
+msgstr "パーセント"
+
+#: Model/Task.php:195 js/GridPanel.js:139
+msgid "Lead"
+msgstr ""
+
+#: Model/Task.php:201
+msgid "Telephone"
+msgstr ""
+
+#: Model/Task.php:202
+msgid "Email"
+msgstr ""
+
+#: js/Tasks.js:94
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "タスク"
+
+#: js/Tasks.js:94
+msgid "Tasks"
+msgstr "タスク"
+
+#: js/Tasks.js:98
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "ToDoリスト"
+
+#: js/Tasks.js:98
+msgid "to do lists"
+msgstr "ToDoリスト"
+
+#: js/TaskEditDialog.js:160 js/GridPanel.js:92 js/GridPanel.js:142
+msgid "Summary"
+msgstr "サマリー"
+
+#: js/TaskEditDialog.js:165
+msgid "Due date"
+msgstr "期日"
+
+#: js/TaskEditDialog.js:171
 #, fuzzy
 msgid "Add Responsible ..."
 msgstr "責任担当"
 
-#: js/EditDialog.js:191
+#: js/TaskEditDialog.js:178
 msgid "Notes"
 msgstr "ノート"
 
-#: js/EditDialog.js:192
+#: js/TaskEditDialog.js:179
 msgid "Enter description..."
 msgstr "説明を入力してください..."
 
-#: js/EditDialog.js:197
+#: js/TaskEditDialog.js:184
 msgid "Percentage"
 msgstr "割合"
 
-#: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:185
-msgid "Status"
-msgstr "ステータス"
-
-#: js/EditDialog.js:205
+#: js/TaskEditDialog.js:192 js/GridPanel.js:209
 msgid "Completed"
 msgstr "完了"
 
@@ -71,85 +115,50 @@ msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "選択されたタスクを本当に削除しますか？"
 
-#: js/GridPanel.js:93
+#: js/GridPanel.js:90
 msgid "Quick search"
 msgstr ""
 
-#: js/GridPanel.js:95 js/GridPanel.js:182
+#: js/GridPanel.js:93 js/GridPanel.js:153
 msgid "Due Date"
 msgstr "期日"
 
-#: js/GridPanel.js:96 js/GridPanel.js:238
+#: js/GridPanel.js:95 js/GridPanel.js:216
 msgid "Responsible"
 msgstr "責任担当"
 
-#: js/GridPanel.js:120
+#: js/GridPanel.js:119
 msgid "Failed"
 msgstr "失敗"
 
-#: js/GridPanel.js:120
+#: js/GridPanel.js:119
 msgid "Could not save task."
 msgstr "タスクの保存に失敗しました"
 
-#: js/GridPanel.js:167
+#: js/GridPanel.js:138
 #, fuzzy
 msgid "Tags"
 msgstr "タスク"
 
-#: js/GridPanel.js:168
-msgid "Lead"
-msgstr ""
-
-#: js/GridPanel.js:178
+#: js/GridPanel.js:149
 msgid "Add a task..."
 msgstr "タスクを追加しています..."
 
-#: js/GridPanel.js:204 Model/Task.php:186
-msgid "Percent"
-msgstr "パーセント"
-
-#: js/GridPanel.js:231
+#: js/GridPanel.js:202
 msgid "Creation Time"
 msgstr "作成時間"
 
-#: js/GridPanel.js:285
+#: js/GridPanel.js:265
 msgid "Show closed"
 msgstr "クローズされたものの表示"
 
-#: js/Status.js:45 Setup/setup.xml:339
+#: js/Status.js:187 Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "進行中"
 
-#: js/Tasks.js:87
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "タスク"
-
-#: js/Tasks.js:87
-msgid "Tasks"
-msgstr "タスク"
-
-#: js/Tasks.js:91
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "ToDoリスト"
-
-#: js/Tasks.js:91
-msgid "to do lists"
-msgstr "ToDoリスト"
-
-#: Model/Task.php:181
-msgid "Due"
+#: Controller/Task.php:166
+msgid "Notification for Task "
 msgstr ""
-
-#: Model/Task.php:182
-msgid "Organizer"
-msgstr ""
-
-#: Model/Task.php:183
-#, fuzzy
-msgid "Description"
-msgstr "説明を入力してください..."
 
 #: Setup/setup.xml:295
 msgid "NEEDS-ACTION"

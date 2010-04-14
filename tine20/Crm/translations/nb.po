@@ -13,98 +13,20 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Acl/Rights.php:106
-msgid "manage leads"
-msgstr "behandle muligheter"
-
-#: Acl/Rights.php:107
-msgid "add, edit and delete leads"
-msgstr "legg til, rediger og slett muligheter"
-
-#: Acl/Rights.php:110
-msgid "manage shared lead folders"
-msgstr "behandle delte muligheter mapper"
-
-#: Acl/Rights.php:111
-msgid "Create new shared lead folders"
-msgstr "Opprett ny delt mulighet mappe"
-
-#: Controller/Lead.php:184
-msgid "State"
-msgstr "Fylke"
-
-#: Controller/Lead.php:185 js/Contact.js:260
-msgid "Role"
-msgstr "Rolle"
-
-#: Controller/Lead.php:186
-msgid "Source"
-msgstr "Kilde"
-
-#: Controller/Lead.php:187 Export/Pdf.php:94 js/LeadEditDialog.js:388
-#: js/LeadGridDetailsPanel.js:455
-msgid "Start"
-msgstr "Start"
-
-#: Controller/Lead.php:188
-msgid "Scheduled end"
-msgstr "Avtalt slutt"
-
-#: Controller/Lead.php:189 Export/Pdf.php:97 js/LeadEditDialog.js:235
-msgid "End"
-msgstr "Slutt"
-
-#: Controller/Lead.php:190 Export/Pdf.php:88 js/LeadGridPanel.js:106
-#: js/LeadGridPanel.js:148
-msgid "Turnover"
-msgstr "Omsetning"
-
-#: Controller/Lead.php:191 Export/Pdf.php:91 js/LeadEditDialog.js:228
-#: js/LeadGridPanel.js:105 js/LeadGridPanel.js:147
-msgid "Probability"
-msgstr "Sannsynlighet"
-
-#: Controller/Lead.php:192
-msgid "Folder"
-msgstr "Mappe"
-
-#: Controller/Lead.php:193
-msgid "Updated by"
-msgstr "Oppdater av"
-
-#: Controller/Lead.php:194
-msgid "Updated Fields:"
-msgstr "Oppdaterte Felter:"
-
-#: Controller/Lead.php:195
-#, python-format
-msgid "%s changed from %s to %s."
-msgstr "%s endred fra %s til %s."
-
-#: Controller/Lead.php:201
-#, python-format
-msgid "Lead %s has been changed"
-msgstr "Mulighet %s har blitt endret"
-
-#: Controller/Lead.php:203
-#, python-format
-msgid "Lead %s has been creaded"
-msgstr "Mulighet %s har blitt opprettet"
-
 #: Controller.php:113
 #, python-format
 msgid "%s's personal leads"
 msgstr "%s's personlige muligheter"
 
-#: Controller.php:152 Export/Xls.php:89 js/Contact.js:169 js/Contact.js:357
-#: js/Contact.js:397 js/LeadGridDetailsPanel.js:47
-#: js/LeadGridDetailsPanel.js:498 js/LeadGridPanel.js:145
+#: Controller.php:152 js/LeadGridDetailsPanel.js:47
+#: js/LeadGridDetailsPanel.js:498 js/Contact.js:169 js/Contact.js:357
+#: js/Contact.js:397 js/LeadGridPanel.js:183
 msgid "Customer"
 msgstr "Kunde"
 
-#: Controller.php:153 Export/Xls.php:84 js/Contact.js:189 js/Contact.js:358
-#: js/Contact.js:401 js/LeadGridDetailsPanel.js:47
-#: js/LeadGridDetailsPanel.js:481 js/LeadGridPanel.js:144
+#: Controller.php:153 js/LeadGridDetailsPanel.js:47
+#: js/LeadGridDetailsPanel.js:481 js/Contact.js:189 js/Contact.js:358
+#: js/Contact.js:401 js/LeadGridPanel.js:182
 msgid "Partner"
 msgstr "Partner"
 
@@ -156,20 +78,39 @@ msgstr "Webside"
 msgid "Lead Data"
 msgstr "Mulighets Data"
 
-#: Export/Pdf.php:79 js/AdminPanel.js:169 js/LeadEditDialog.js:330
-#: js/LeadGridPanel.js:103 js/LeadGridPanel.js:146
+#: Export/Pdf.php:79 js/LeadStateFilterModel.js:32 js/AdminPanel.js:169
+#: js/LeadEditDialog.js:350 js/LeadGridPanel.js:184
 msgid "Leadstate"
 msgstr "Mulighets fylke"
 
-#: Export/Pdf.php:82 js/AdminPanel.js:183 js/LeadEditDialog.js:349
-#: js/LeadGridDetailsPanel.js:465
+#: Export/Pdf.php:82 js/LeadGridDetailsPanel.js:465 js/AdminPanel.js:183
+#: js/LeadEditDialog.js:369
 msgid "Leadtype"
 msgstr "Mulighets type"
 
-#: Export/Pdf.php:85 js/AdminPanel.js:176 js/LeadEditDialog.js:356
-#: js/LeadGridDetailsPanel.js:470
+#: Export/Pdf.php:85 js/LeadGridDetailsPanel.js:470 js/AdminPanel.js:176
+#: js/LeadEditDialog.js:376
 msgid "Leadsource"
 msgstr "Mulighets kilde"
+
+#: Export/Pdf.php:88 js/LeadGridPanel.js:142 js/LeadGridPanel.js:186
+#: Controller/Lead.php:190
+msgid "Turnover"
+msgstr "Omsetning"
+
+#: Export/Pdf.php:91 js/LeadEditDialog.js:236 js/LeadGridPanel.js:141
+#: js/LeadGridPanel.js:185 Controller/Lead.php:191
+msgid "Probability"
+msgstr "Sannsynlighet"
+
+#: Export/Pdf.php:94 js/LeadGridDetailsPanel.js:455 js/LeadEditDialog.js:408
+#: Controller/Lead.php:187
+msgid "Start"
+msgstr "Start"
+
+#: Export/Pdf.php:97 js/LeadEditDialog.js:243 Controller/Lead.php:189
+msgid "End"
+msgstr "Slutt"
 
 #: Export/Pdf.php:100
 msgid "End Scheduled"
@@ -183,7 +124,7 @@ msgstr "Kontakter"
 msgid "Address"
 msgstr "Adresse"
 
-#: Export/Pdf.php:231 js/Task.js:87
+#: Export/Pdf.php:231 js/Task.js:87 js/LeadEditDialog.js:259
 msgid "Tasks"
 msgstr "Oppgaver"
 
@@ -195,7 +136,7 @@ msgstr "Ferdig Innen"
 msgid "Priority"
 msgstr "Prioritet"
 
-#: Export/Pdf.php:270 js/Product.js:87
+#: Export/Pdf.php:270 js/Product.js:87 js/LeadEditDialog.js:270
 msgid "Products"
 msgstr "Produkter"
 
@@ -215,46 +156,194 @@ msgstr "høy"
 msgid "urgent"
 msgstr "viktig"
 
-#: Export/Xls.php:94 js/Contact.js:179 js/Contact.js:356 js/Contact.js:393
-msgid "Responsible"
-msgstr "Ansvarlig"
+#: Acl/Rights.php:106
+msgid "manage leads"
+msgstr "behandle muligheter"
 
-#: Export/Xls.php:99
-msgid "Task"
-msgstr "Oppgave"
+#: Acl/Rights.php:107
+msgid "add, edit and delete leads"
+msgstr "legg til, rediger og slett muligheter"
 
-#: Export/Xls.php:104 js/Product.js:136
+#: Acl/Rights.php:110
+msgid "manage shared lead folders"
+msgstr "behandle delte muligheter mapper"
+
+#: Acl/Rights.php:111
+msgid "Create new shared lead folders"
+msgstr "Opprett ny delt mulighet mappe"
+
+#: js/Product.js:136
 msgid "Product"
 msgstr "Produkt"
 
-#: Export/Xls.php:109 js/LeadGridDetailsPanel.js:450 js/Task.js:220
-msgid "Status"
-msgstr "Status"
+#: js/Product.js:141 js/LeadEditDialog.js:446
+msgid "Description"
+msgstr "Beskrivelse"
 
-#: Export/Xls.php:113
-msgid "History"
-msgstr "Historikk"
+#: js/Product.js:148
+msgid "Price"
+msgstr "Pris"
 
-#: js/AdminPanel.js:134 js/LeadGridDetailsPanel.js:218
-#: js/LeadGridDetailsPanel.js:250
+#: js/Product.js:160
+msgid "Quantity"
+msgstr "Kvantum"
+
+#: js/Product.js:187 js/LinkGridPanel.js:56
+msgid "Unlink {0}"
+msgstr "Frakoble {0}"
+
+#: js/Product.js:188 js/LinkGridPanel.js:57
+msgid "Unlink selected {0}"
+msgstr "Frakoble valgte {0}"
+
+#: js/Product.js:218
+msgid "Search for Products to add ..."
+msgstr "Søk etter Produkter å legge til ..."
+
+#: js/LeadStateFilterModel.js:37 js/LeadGridPanel.js:281
+msgid "Show closed"
+msgstr "Vis lukkede"
+
+#: js/Model.js:57 js/LeadEditDialog.js:282
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Mulighet"
+msgstr[1] "Muligheter"
+
+#: js/Model.js:61
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:133
+msgid "Settings"
+msgid_plural "Settings"
+msgstr[0] "Instillinger"
+msgstr[1] "Instillinger"
+
+#: js/Model.js:137
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "lagre liste"
+msgstr[1] "lagre lister"
+
+#: js/LeadGridDetailsPanel.js:50 js/Contact.js:253
+msgid "Phone"
+msgstr "Telefon"
+
+#: js/LeadGridDetailsPanel.js:53
+msgid "Mobile"
+msgstr "Mobil"
+
+#: js/LeadGridDetailsPanel.js:56
+msgid "Fax"
+msgstr "Fax"
+
+#: js/LeadGridDetailsPanel.js:59
+msgid "E-Mail"
+msgstr "E-Post"
+
+#: js/LeadGridDetailsPanel.js:62
+msgid "Web"
+msgstr "Web"
+
+#: js/LeadGridDetailsPanel.js:218 js/LeadGridDetailsPanel.js:250
+#: js/AdminPanel.js:134
 msgid "Leadstates"
 msgstr "Mulighets tilstand"
 
-#: js/AdminPanel.js:138 js/LeadGridDetailsPanel.js:240
+#: js/LeadGridDetailsPanel.js:229 js/AdminPanel.js:142
+msgid "Leadsources"
+msgstr "Mulighets kilder"
+
+#: js/LeadGridDetailsPanel.js:240 js/AdminPanel.js:138
 msgid "Leadtypes"
 msgstr "Mulighets typer"
 
-#: js/AdminPanel.js:142 js/LeadGridDetailsPanel.js:229
-msgid "Leadsources"
-msgstr "Mulighets kilder"
+#: js/LeadGridDetailsPanel.js:450 js/Task.js:220
+msgid "Status"
+msgstr "Status"
+
+#: js/LeadGridDetailsPanel.js:460 js/LeadEditDialog.js:414
+msgid "Estimated end"
+msgstr "Forventet slutt"
+
+#: js/LinkGridPanel.js:37 js/LinkGridPanel.js:38
+msgid "Add new {0}"
+msgstr "Legg til ny {0}"
+
+#: js/LinkGridPanel.js:72
+msgid "Edit {0}"
+msgstr "Rediger {0}"
+
+#: js/LinkGridPanel.js:73
+msgid "Edit selected {0}"
+msgstr "Rediger valgte {0}"
+
+#: js/LeadType.js:111
+msgid "Add a Leadtype..."
+msgstr "Legg til en Mulighets type..."
+
+#: js/LeadGridContactFilter.js:46
+msgid "Contact"
+msgstr "Kontakt"
+
+#: js/LeadGridContactFilter.js:54
+msgid "CRM Role"
+msgstr "CRM Rolle"
+
+#: js/Task.js:113
+msgid "No Tasks to display"
+msgstr "Ingen Oppgaver å vise"
+
+#: js/Task.js:172
+msgid "Summary"
+msgstr "Sammendrag"
+
+#: js/Task.js:176
+msgid "Add a task..."
+msgstr "Legg til en oppgave..."
+
+#: js/Task.js:207
+msgid "Percent"
+msgstr "Prosent"
 
 #: js/AdminPanel.js:150
 msgid "Defaults"
 msgstr "Standard"
 
+#: js/LeadEditDialog.js:260
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
+msgstr ""
+
+#: js/LeadEditDialog.js:271
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
+msgstr ""
+
+#: js/LeadEditDialog.js:309
+msgid "Enter short name"
+msgstr "Tast inn kort navn"
+
+#: js/LeadEditDialog.js:392
+msgid "Expected turnover"
+msgstr "Forventet omsetning"
+
+#: js/LeadEditDialog.js:460
+msgid "Enter description"
+msgstr "Tast inn beskrivelse"
+
 #: js/Contact.js:170
 msgid "Change type to Customer"
 msgstr "Endre type til Kunde"
+
+#: js/Contact.js:179 js/Contact.js:356 js/Contact.js:393
+msgid "Responsible"
+msgstr "Ansvarlig"
 
 #: js/Contact.js:180
 msgid "Change type to Responsible"
@@ -280,195 +369,77 @@ msgstr "Navn"
 msgid "Data"
 msgstr "Data"
 
-#: js/Contact.js:253 js/LeadGridDetailsPanel.js:50
-msgid "Phone"
-msgstr "Telefon"
-
 #: js/Contact.js:254
 msgid "Cellphone"
 msgstr "Mobil"
 
-#: js/LeadEditDialog.js:262 js/Models.js:57
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Mulighet"
-msgstr[1] "Muligheter"
+#: js/Contact.js:260 Controller/Lead.php:185
+msgid "Role"
+msgstr "Rolle"
 
-#: js/LeadEditDialog.js:289
-msgid "Enter short name"
-msgstr "Tast inn kort navn"
-
-#: js/LeadEditDialog.js:372
-msgid "Expected turnover"
-msgstr "Forventet omsetning"
-
-#: js/LeadEditDialog.js:394 js/LeadGridDetailsPanel.js:460
-msgid "Estimated end"
-msgstr "Forventet slutt"
-
-#: js/LeadEditDialog.js:426 js/Product.js:141
-msgid "Description"
-msgstr "Beskrivelse"
-
-#: js/LeadEditDialog.js:440
-msgid "Enter description"
-msgstr "Tast inn beskrivelse"
-
-#: js/LeadGridContactFilter.js:46
-msgid "Contact"
-msgstr "Kontakt"
-
-#: js/LeadGridContactFilter.js:54
-msgid "CRM Role"
-msgstr "CRM Rolle"
-
-#: js/LeadGridDetailsPanel.js:53
-msgid "Mobile"
-msgstr "Mobil"
-
-#: js/LeadGridDetailsPanel.js:56
-msgid "Fax"
-msgstr "Fax"
-
-#: js/LeadGridDetailsPanel.js:59
-msgid "E-Mail"
-msgstr "E-Post"
-
-#: js/LeadGridDetailsPanel.js:62
-msgid "Web"
-msgstr "Web"
-
-#: js/LeadGridPanel.js:101
-msgid "Quick search"
-msgstr "Hurtig Søk"
-
-#: js/LeadGridPanel.js:102 js/LeadGridPanel.js:143
-msgid "Lead name"
-msgstr "Mulighets navn"
-
-#: js/LeadGridPanel.js:141
-msgid "Lead id"
-msgstr "Mulighets id"
-
-#: js/LeadGridPanel.js:142
-msgid "Tags"
-msgstr "Merker"
-
-#: js/LeadGridPanel.js:149
-msgid "Probable Turnover"
-msgstr ""
-
-#: js/LeadGridPanel.js:150
-msgid "Creation Time"
-msgstr "Opprettelses Tid"
-
-#: js/LeadGridPanel.js:151
-msgid "Last Modified Time"
-msgstr ""
-
-#: js/LeadGridPanel.js:191
-msgid "Add task"
-msgstr "Legg til oppgave"
-
-#: js/LeadGridPanel.js:192
-msgid "Add task for selected lead"
-msgstr "Legg til oppgave for valgt mulighet"
-
-#: js/LeadGridPanel.js:202
-msgid "Export Lead"
-msgstr "Eksporter Mulighet"
-
-#: js/LeadGridPanel.js:211
-msgid "Export as PDF"
-msgstr "Eksporter som PDF"
-
-#: js/LeadGridPanel.js:218
-msgid "Export as CSV"
-msgstr "Eksporter som CSV"
-
-#: js/LeadGridPanel.js:225
-msgid "Export as ODS"
-msgstr "Eksporter som ODS"
-
-#: js/LeadGridPanel.js:232
-msgid "Export as XLS"
-msgstr "Eksporter som XLS"
-
-#: js/LeadGridPanel.js:243
-msgid "Show closed"
-msgstr "Vis lukkede"
+#: js/LeadState.js:143
+msgid "Add a Leadstate..."
+msgstr "Legg til en Mulihgets tilstand..."
 
 #: js/LeadSource.js:113
 msgid "Add a Leadsource..."
 msgstr "Legg til en Mulighets kilde..."
 
-#: js/LeadState.js:132
-msgid "Add a Leadstate..."
-msgstr "Legg til en Mulihgets tilstand..."
+#: js/LeadGridPanel.js:137
+msgid "Quick search"
+msgstr "Hurtig Søk"
 
-#: js/LeadType.js:111
-msgid "Add a Leadtype..."
-msgstr "Legg til en Mulighets type..."
+#: js/LeadGridPanel.js:139 js/LeadGridPanel.js:181
+msgid "Lead name"
+msgstr "Mulighets navn"
 
-#: js/LinkGridPanel.js:32 js/LinkGridPanel.js:33
-msgid "Add new {0}"
-msgstr "Legg til ny {0}"
+#: js/LeadGridPanel.js:179
+msgid "Lead id"
+msgstr "Mulighets id"
 
-#: js/LinkGridPanel.js:51 js/Product.js:183
-msgid "Unlink {0}"
-msgstr "Frakoble {0}"
+#: js/LeadGridPanel.js:180
+msgid "Tags"
+msgstr "Merker"
 
-#: js/LinkGridPanel.js:52 js/Product.js:184
-msgid "Unlink selected {0}"
-msgstr "Frakoble valgte {0}"
+#: js/LeadGridPanel.js:187
+msgid "Probable Turnover"
+msgstr ""
 
-#: js/LinkGridPanel.js:67
-msgid "Edit {0}"
-msgstr "Rediger {0}"
+#: js/LeadGridPanel.js:188
+msgid "Creation Time"
+msgstr "Opprettelses Tid"
 
-#: js/LinkGridPanel.js:68
-msgid "Edit selected {0}"
-msgstr "Rediger valgte {0}"
+#: js/LeadGridPanel.js:189
+msgid "Last Modified Time"
+msgstr ""
 
-#: js/Models.js:61 js/Models.js:137
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "lagre liste"
-msgstr[1] "lagre lister"
+#: js/LeadGridPanel.js:228
+msgid "Add task"
+msgstr "Legg til oppgave"
 
-#: js/Models.js:133
-msgid "Settings"
-msgid_plural "Settings"
-msgstr[0] "Instillinger"
-msgstr[1] "Instillinger"
+#: js/LeadGridPanel.js:229
+msgid "Add task for selected lead"
+msgstr "Legg til oppgave for valgt mulighet"
 
-#: js/Product.js:148
-msgid "Price"
-msgstr "Pris"
+#: js/LeadGridPanel.js:239
+msgid "Export Lead"
+msgstr "Eksporter Mulighet"
 
-#: js/Product.js:160
-msgid "Quantity"
-msgstr "Kvantum"
+#: js/LeadGridPanel.js:248
+msgid "Export as PDF"
+msgstr "Eksporter som PDF"
 
-#: js/Product.js:214
-msgid "Search for Products to add ..."
-msgstr "Søk etter Produkter å legge til ..."
+#: js/LeadGridPanel.js:255
+msgid "Export as CSV"
+msgstr "Eksporter som CSV"
 
-#: js/Task.js:113
-msgid "No Tasks to display"
-msgstr "Ingen Oppgaver å vise"
+#: js/LeadGridPanel.js:262
+msgid "Export as ODS"
+msgstr "Eksporter som ODS"
 
-#: js/Task.js:172
-msgid "Summary"
-msgstr "Sammendrag"
-
-#: js/Task.js:176
-msgid "Add a task..."
-msgstr "Legg til en oppgave..."
-
-#: js/Task.js:207
-msgid "Percent"
-msgstr "Prosent"
+#: js/LeadGridPanel.js:269
+msgid "Export as XLS"
+msgstr "Eksporter som XLS"
 
 #: Preference.php:68
 msgid "Get Notification Emails"
@@ -485,6 +456,51 @@ msgstr ""
 #: Preference.php:74
 msgid "Get notifications emails for actions you did yourself"
 msgstr ""
+
+#: Controller/Lead.php:184
+msgid "State"
+msgstr "Fylke"
+
+#: Controller/Lead.php:186
+msgid "Source"
+msgstr "Kilde"
+
+#: Controller/Lead.php:188
+msgid "Scheduled end"
+msgstr "Avtalt slutt"
+
+#: Controller/Lead.php:192
+msgid "Folder"
+msgstr "Mappe"
+
+#: Controller/Lead.php:193
+msgid "Updated by"
+msgstr "Oppdater av"
+
+#: Controller/Lead.php:194
+msgid "Updated Fields:"
+msgstr "Oppdaterte Felter:"
+
+#: Controller/Lead.php:195
+#, python-format
+msgid "%s changed from %s to %s."
+msgstr "%s endred fra %s til %s."
+
+#: Controller/Lead.php:201
+#, python-format
+msgid "Lead %s has been changed"
+msgstr "Mulighet %s har blitt endret"
+
+#: Controller/Lead.php:203
+#, python-format
+msgid "Lead %s has been creaded"
+msgstr "Mulighet %s har blitt opprettet"
+
+#~ msgid "Task"
+#~ msgstr "Oppgave"
+
+#~ msgid "History"
+#~ msgstr "Historikk"
 
 #~ msgid "Lead Name"
 #~ msgstr "Mulighets Navn"

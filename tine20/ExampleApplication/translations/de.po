@@ -12,57 +12,73 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/ExampleApplication.js:29
-msgid "ExampleRecords"
-msgstr "BeispielEinträge"
+#: Controller.php:97
+#, python-format
+msgid "%s's personal example records"
+msgstr ""
 
-#: js/ExampleApplication.js:34
-msgid "All ExampleRecords"
-msgstr "Alle BeispielEinträge"
+#: js/Model.js:33
+msgid "example record"
+msgid_plural "example records"
+msgstr[0] ""
+msgstr[1] ""
 
-#: js/ExampleRecordEditDialog.js:91 js/Models.js:36
+#: js/Model.js:37
+msgid "example record list"
+msgid_plural "example record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ExampleRecordEditDialog.js:89
+#, fuzzy
 msgid "ExampleRecord"
-msgid_plural "ExampleRecords"
-msgstr[0] "BeispielEintrag"
-msgstr[1] "BeispielEinträge"
+msgstr "BeispielEintrag"
 
-#: js/ExampleRecordEditDialog.js:108 js/ExampleRecordGridPanel.js:119
+#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
 msgid "Name"
 msgstr ""
 
-#: js/ExampleRecordGridPanel.js:87
+#: js/ExampleApplication.js:27
+msgid "Example Application"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:77
 msgid "Quick search"
 msgstr "Schnellsuche"
 
-#: js/ExampleRecordGridPanel.js:88
-msgid "Description"
-msgstr "Beschreibung"
-
-#: js/ExampleRecordGridPanel.js:125
+#: js/ExampleRecordGridPanel.js:111
 msgid "Title"
 msgstr "Titel"
 
-#: js/ExampleRecordGridPanel.js:131
+#: js/ExampleRecordGridPanel.js:117
 msgid "Status"
 msgstr "Status"
 
-#: js/ExampleRecordGridPanel.js:138
+#: js/ExampleRecordGridPanel.js:124
 msgid "Budget"
 msgstr "Budget"
 
-#: js/ExampleRecordGridPanel.js:162
+#: js/ExampleRecordGridPanel.js:148
 msgid "Show closed"
 msgstr "Zeige geschlossene"
-
-#: js/Models.js:40
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "Eintrags Liste"
-msgstr[1] "Eintrags Listen"
 
 #: Setup/setup.xml:10
 msgid "ExampleApplication"
 msgstr "BeispielAnwendung"
+
+#~ msgid "ExampleRecords"
+#~ msgstr "BeispielEinträge"
+
+#~ msgid "All ExampleRecords"
+#~ msgstr "Alle BeispielEinträge"
+
+#~ msgid "Description"
+#~ msgstr "Beschreibung"
+
+#~ msgid "record list"
+#~ msgid_plural "record lists"
+#~ msgstr[0] "Eintrags Liste"
+#~ msgstr[1] "Eintrags Listen"
 
 #~ msgid "Number"
 #~ msgstr "Zahl"

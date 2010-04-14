@@ -13,21 +13,15 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Models.js:70 js/Phone.js:58 js/Phone.js:255
+#: js/Phone.js:28 js/Phone.js:480 js/Phone.js:481
+msgid "Edit phone settings"
+msgstr "Edit phone settings"
+
+#: js/Phone.js:58 js/Phone.js:255 js/Models.js:70
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Phone"
 msgstr[1] "Phones"
-
-#: js/Models.js:74
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "phones list"
-msgstr[1] "phones lists"
-
-#: js/Phone.js:28 js/Phone.js:480 js/Phone.js:481
-msgid "Edit phone settings"
-msgstr "Edit phone settings"
 
 #: js/Phone.js:69
 msgid "Phones"
@@ -136,3 +130,9 @@ msgstr "Ringing"
 #: js/Phone.js:690
 msgid "Call ID"
 msgstr "Call ID"
+
+#: js/Models.js:74
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "phones list"
+msgstr[1] "phones lists"

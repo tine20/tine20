@@ -11,122 +11,23 @@ msgstr ""
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-
-# There is no word "leads" in the polish language. I think we can replace "leads" with "zapytania" or "zapytania ofertowe". I mean samething, that can start some process in the feature.
-# Es gibt kein Wort "leads" im Polnischen. Ich denke, wir koennen es durch "zapytania" oder "zapytania ofertowe" ersetzen. Ich meine etwas, womit einen weiteren Prozess anfangen kann.
-#: Acl/Rights.php:106
-msgid "manage leads"
-msgstr "Edytuj zapytania"
-
-#: Acl/Rights.php:107
-msgid "add, edit and delete leads"
-msgstr "dodaj, edytuj i usuń zapytania"
-
-#: Acl/Rights.php:110
-msgid "manage shared lead folders"
-msgstr "edytuj wspólne katalogi zapytań"
-
-#: Acl/Rights.php:111
-msgid "Create new shared lead folders"
-msgstr "Utwórz nowe, wspólne katalogi zapytań"
-
-#: Controller/Lead.php:184
-msgid "State"
-msgstr "Kraj"
-
-#: Controller/Lead.php:185
-#: js/Contact.js:260
-msgid "Role"
-msgstr "Funkcja"
-
-#: Controller/Lead.php:186
-msgid "Source"
-msgstr "Źródło"
-
-#: Controller/Lead.php:187
-#: Export/Pdf.php:94
-#: js/LeadEditDialog.js:388
-#: js/LeadGridDetailsPanel.js:455
-msgid "Start"
-msgstr "Początek"
-
-#: Controller/Lead.php:188
-msgid "Scheduled end"
-msgstr "Planowane zakończenie"
-
-#: Controller/Lead.php:189
-#: Export/Pdf.php:97
-#: js/LeadEditDialog.js:235
-msgid "End"
-msgstr "Koniec"
-
-#: Controller/Lead.php:190
-#: Export/Pdf.php:88
-#: js/LeadGridPanel.js:106
-#: js/LeadGridPanel.js:148
-msgid "Turnover"
-msgstr "Obroty"
-
-#: Controller/Lead.php:191
-#: Export/Pdf.php:91
-#: js/LeadEditDialog.js:228
-#: js/LeadGridPanel.js:105
-#: js/LeadGridPanel.js:147
-msgid "Probability"
-msgstr "Prawdopodobieństwo"
-
-#: Controller/Lead.php:192
-msgid "Folder"
-msgstr "Katalog"
-
-#: Controller/Lead.php:193
-msgid "Updated by"
-msgstr "Zaktualizowane przez"
-
-#: Controller/Lead.php:194
-msgid "Updated Fields:"
-msgstr "Zaktualizowane pola:"
-
-#: Controller/Lead.php:195
-#, python-format
-msgid "%s changed from %s to %s."
-msgstr "%s zmieniony z %s na %s."
-
-#: Controller/Lead.php:201
-#, python-format
-msgid "Lead %s has been changed"
-msgstr "Zapytanie %s zostało zmienione"
-
-#: Controller/Lead.php:203
-#, python-format
-msgid "Lead %s has been creaded"
-msgstr "Zapytanie %s zostało utworzone"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
 
 #: Controller.php:113
 #, python-format
 msgid "%s's personal leads"
 msgstr "%s's zapytania osobiste"
 
-#: Controller.php:152
-#: Export/Xls.php:89
-#: js/Contact.js:169
-#: js/Contact.js:357
-#: js/Contact.js:397
-#: js/LeadGridDetailsPanel.js:47
-#: js/LeadGridDetailsPanel.js:498
-#: js/LeadGridPanel.js:145
+#: Controller.php:152 js/LeadGridDetailsPanel.js:47
+#: js/LeadGridDetailsPanel.js:498 js/Contact.js:169 js/Contact.js:357
+#: js/Contact.js:397 js/LeadGridPanel.js:183
 msgid "Customer"
 msgstr "Klienci"
 
-#: Controller.php:153
-#: Export/Xls.php:84
-#: js/Contact.js:189
-#: js/Contact.js:358
-#: js/Contact.js:401
-#: js/LeadGridDetailsPanel.js:47
-#: js/LeadGridDetailsPanel.js:481
-#: js/LeadGridPanel.js:144
+#: Controller.php:153 js/LeadGridDetailsPanel.js:47
+#: js/LeadGridDetailsPanel.js:481 js/Contact.js:189 js/Contact.js:358
+#: js/Contact.js:401 js/LeadGridPanel.js:182
 msgid "Partner"
 msgstr "Wspólnicy"
 
@@ -163,13 +64,11 @@ msgstr "stracone"
 msgid "Market"
 msgstr "Rynek"
 
-#: Controller.php:166
-#: Export/Pdf.php:218
+#: Controller.php:166 Export/Pdf.php:218
 msgid "Email"
 msgstr "E-mail"
 
-#: Controller.php:167
-#: Export/Pdf.php:217
+#: Controller.php:167 Export/Pdf.php:217
 msgid "Telephone"
 msgstr "Telefon"
 
@@ -181,27 +80,39 @@ msgstr "strona WWW"
 msgid "Lead Data"
 msgstr "Dane dot. zapytania"
 
-#: Export/Pdf.php:79
-#: js/AdminPanel.js:169
-#: js/LeadEditDialog.js:330
-#: js/LeadGridPanel.js:103
-#: js/LeadGridPanel.js:146
+#: Export/Pdf.php:79 js/LeadStateFilterModel.js:32 js/AdminPanel.js:169
+#: js/LeadEditDialog.js:350 js/LeadGridPanel.js:184
 msgid "Leadstate"
 msgstr "Status zapytań"
 
-#: Export/Pdf.php:82
-#: js/AdminPanel.js:183
-#: js/LeadEditDialog.js:349
-#: js/LeadGridDetailsPanel.js:465
+#: Export/Pdf.php:82 js/LeadGridDetailsPanel.js:465 js/AdminPanel.js:183
+#: js/LeadEditDialog.js:369
 msgid "Leadtype"
 msgstr "Typ zapytania"
 
-#: Export/Pdf.php:85
-#: js/AdminPanel.js:176
-#: js/LeadEditDialog.js:356
-#: js/LeadGridDetailsPanel.js:470
+#: Export/Pdf.php:85 js/LeadGridDetailsPanel.js:470 js/AdminPanel.js:176
+#: js/LeadEditDialog.js:376
 msgid "Leadsource"
 msgstr "Źródło zapytania"
+
+#: Export/Pdf.php:88 js/LeadGridPanel.js:142 js/LeadGridPanel.js:186
+#: Controller/Lead.php:190
+msgid "Turnover"
+msgstr "Obroty"
+
+#: Export/Pdf.php:91 js/LeadEditDialog.js:236 js/LeadGridPanel.js:141
+#: js/LeadGridPanel.js:185 Controller/Lead.php:191
+msgid "Probability"
+msgstr "Prawdopodobieństwo"
+
+#: Export/Pdf.php:94 js/LeadGridDetailsPanel.js:455 js/LeadEditDialog.js:408
+#: Controller/Lead.php:187
+msgid "Start"
+msgstr "Początek"
+
+#: Export/Pdf.php:97 js/LeadEditDialog.js:243 Controller/Lead.php:189
+msgid "End"
+msgstr "Koniec"
 
 #: Export/Pdf.php:100
 msgid "End Scheduled"
@@ -211,28 +122,23 @@ msgstr "Planowany koniec"
 msgid "Contacts"
 msgstr "Kontakty"
 
-#: Export/Pdf.php:210
-#: js/Contact.js:239
+#: Export/Pdf.php:210 js/Contact.js:239
 msgid "Address"
 msgstr "Adres"
 
-#: Export/Pdf.php:231
-#: js/Task.js:87
+#: Export/Pdf.php:231 js/Task.js:87 js/LeadEditDialog.js:259
 msgid "Tasks"
 msgstr "Zadania"
 
-#: Export/Pdf.php:250
-#: js/Task.js:180
+#: Export/Pdf.php:250 js/Task.js:180
 msgid "Due Date"
 msgstr "Termin"
 
-#: Export/Pdf.php:255
-#: js/Task.js:193
+#: Export/Pdf.php:255 js/Task.js:193
 msgid "Priority"
 msgstr "Priorytet"
 
-#: Export/Pdf.php:270
-#: js/Product.js:87
+#: Export/Pdf.php:270 js/Product.js:87 js/LeadEditDialog.js:270
 msgid "Products"
 msgstr "Produkty"
 
@@ -252,55 +158,201 @@ msgstr "wysoki"
 msgid "urgent"
 msgstr "pilny"
 
-#: Export/Xls.php:94
-#: js/Contact.js:179
-#: js/Contact.js:356
-#: js/Contact.js:393
-msgid "Responsible"
-msgstr "Osoba odpowiedzialna"
+# There is no word "leads" in the polish language. I think we can replace "leads" with "zapytania" or "zapytania ofertowe". I mean samething, that can start some process in the feature.
+# Es gibt kein Wort "leads" im Polnischen. Ich denke, wir koennen es durch "zapytania" oder "zapytania ofertowe" ersetzen. Ich meine etwas, womit einen weiteren Prozess anfangen kann.
+#: Acl/Rights.php:106
+msgid "manage leads"
+msgstr "Edytuj zapytania"
 
-#: Export/Xls.php:99
-msgid "Task"
-msgstr "Zadanie"
+#: Acl/Rights.php:107
+msgid "add, edit and delete leads"
+msgstr "dodaj, edytuj i usuń zapytania"
 
-#: Export/Xls.php:104
+#: Acl/Rights.php:110
+msgid "manage shared lead folders"
+msgstr "edytuj wspólne katalogi zapytań"
+
+#: Acl/Rights.php:111
+msgid "Create new shared lead folders"
+msgstr "Utwórz nowe, wspólne katalogi zapytań"
+
 #: js/Product.js:136
 msgid "Product"
 msgstr "Produkt"
 
-#: Export/Xls.php:109
-#: js/LeadGridDetailsPanel.js:450
-#: js/Task.js:220
-msgid "Status"
-msgstr "Status"
+#: js/Product.js:141 js/LeadEditDialog.js:446
+msgid "Description"
+msgstr "Opis"
 
-#: Export/Xls.php:113
-msgid "History"
-msgstr "Historia"
+#: js/Product.js:148
+msgid "Price"
+msgstr "Cena"
 
+#: js/Product.js:160
+msgid "Quantity"
+msgstr "Ilość"
+
+#: js/Product.js:187 js/LinkGridPanel.js:56
+msgid "Unlink {0}"
+msgstr "Odłącz {0}"
+
+#: js/Product.js:188 js/LinkGridPanel.js:57
+msgid "Unlink selected {0}"
+msgstr "Usuń zaznaczone {0}"
+
+#: js/Product.js:218
+msgid "Search for Products to add ..."
+msgstr "Znajdź produkty do dodania ..."
+
+#: js/LeadStateFilterModel.js:37 js/LeadGridPanel.js:281
+msgid "Show closed"
+msgstr "Pokaż zrealizowane zapytania"
+
+#: js/Model.js:57 js/LeadEditDialog.js:282
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "zapytanie wstępne"
+msgstr[1] "zapytania wstępne"
+msgstr[2] "zapytania wstępne"
+
+#: js/Model.js:61
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Model.js:133
+msgid "Settings"
+msgid_plural "Settings"
+msgstr[0] "Ustawienia"
+msgstr[1] "Ustawienia"
+msgstr[2] "Ustawienia"
+
+#: js/Model.js:137
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "lista wierszy"
+msgstr[1] "listy wierszy"
+msgstr[2] "listy wierszy"
+
+#: js/LeadGridDetailsPanel.js:50 js/Contact.js:253
+msgid "Phone"
+msgstr "Telefon"
+
+#: js/LeadGridDetailsPanel.js:53
+msgid "Mobile"
+msgstr "Komórka"
+
+#: js/LeadGridDetailsPanel.js:56
+msgid "Fax"
+msgstr "Faks"
+
+#: js/LeadGridDetailsPanel.js:59
+msgid "E-Mail"
+msgstr "E-mail"
+
+#: js/LeadGridDetailsPanel.js:62
+msgid "Web"
+msgstr "WWW"
+
+#: js/LeadGridDetailsPanel.js:218 js/LeadGridDetailsPanel.js:250
 #: js/AdminPanel.js:134
-#: js/LeadGridDetailsPanel.js:218
-#: js/LeadGridDetailsPanel.js:250
 msgid "Leadstates"
 msgstr "Status zapytań"
 
-#: js/AdminPanel.js:138
-#: js/LeadGridDetailsPanel.js:240
+#: js/LeadGridDetailsPanel.js:229 js/AdminPanel.js:142
+msgid "Leadsources"
+msgstr "Źródła zapytań"
+
+#: js/LeadGridDetailsPanel.js:240 js/AdminPanel.js:138
 msgid "Leadtypes"
 msgstr "Typy zapytań"
 
-#: js/AdminPanel.js:142
-#: js/LeadGridDetailsPanel.js:229
-msgid "Leadsources"
-msgstr "Źródła zapytań"
+#: js/LeadGridDetailsPanel.js:450 js/Task.js:220
+msgid "Status"
+msgstr "Status"
+
+#: js/LeadGridDetailsPanel.js:460 js/LeadEditDialog.js:414
+msgid "Estimated end"
+msgstr "Szacowane zakończenie"
+
+#: js/LinkGridPanel.js:37 js/LinkGridPanel.js:38
+msgid "Add new {0}"
+msgstr "Dodaj nowy {0}"
+
+#: js/LinkGridPanel.js:72
+msgid "Edit {0}"
+msgstr "Edytuj \"{0}\""
+
+#: js/LinkGridPanel.js:73
+msgid "Edit selected {0}"
+msgstr "Edytuj zaznaczone {0}"
+
+#: js/LeadType.js:111
+msgid "Add a Leadtype..."
+msgstr "Dodaj typ zapytania..."
+
+#: js/LeadGridContactFilter.js:46
+msgid "Contact"
+msgstr "Kontakt"
+
+#: js/LeadGridContactFilter.js:54
+#, fuzzy
+msgid "CRM Role"
+msgstr "Jako CRM"
+
+#: js/Task.js:113
+msgid "No Tasks to display"
+msgstr "Brak zadań"
+
+#: js/Task.js:172
+msgid "Summary"
+msgstr "Streszczenie"
+
+#: js/Task.js:176
+msgid "Add a task..."
+msgstr "Dodaj zadanie…"
+
+#: js/Task.js:207
+msgid "Percent"
+msgstr "W procentach"
 
 #: js/AdminPanel.js:150
 msgid "Defaults"
 msgstr "Ustawienia domyślne"
 
+#: js/LeadEditDialog.js:260
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
+msgstr ""
+
+#: js/LeadEditDialog.js:271
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
+msgstr ""
+
+#: js/LeadEditDialog.js:309
+msgid "Enter short name"
+msgstr "wpisz skróconą nazwę"
+
+#: js/LeadEditDialog.js:392
+msgid "Expected turnover"
+msgstr "Oczekiwany obrót"
+
+#: js/LeadEditDialog.js:460
+msgid "Enter description"
+msgstr "Wprowadź opis"
+
 #: js/Contact.js:170
 msgid "Change type to Customer"
 msgstr "Zmień typ na wartość: Klient"
+
+#: js/Contact.js:179 js/Contact.js:356 js/Contact.js:393
+msgid "Responsible"
+msgstr "Osoba odpowiedzialna"
 
 #: js/Contact.js:180
 msgid "Change type to Responsible"
@@ -326,208 +378,77 @@ msgstr "Nazwa"
 msgid "Data"
 msgstr "Dane dot. zapytania"
 
-#: js/Contact.js:253
-#: js/LeadGridDetailsPanel.js:50
-msgid "Phone"
-msgstr "Telefon"
-
 #: js/Contact.js:254
 msgid "Cellphone"
 msgstr "Komórka"
 
-#: js/LeadEditDialog.js:262
-#: js/Models.js:57
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "zapytanie wstępne"
-msgstr[1] "zapytania wstępne"
-msgstr[2] "zapytania wstępne"
+#: js/Contact.js:260 Controller/Lead.php:185
+msgid "Role"
+msgstr "Funkcja"
 
-#: js/LeadEditDialog.js:289
-msgid "Enter short name"
-msgstr "wpisz skróconą nazwę"
-
-#: js/LeadEditDialog.js:372
-msgid "Expected turnover"
-msgstr "Oczekiwany obrót"
-
-#: js/LeadEditDialog.js:394
-#: js/LeadGridDetailsPanel.js:460
-msgid "Estimated end"
-msgstr "Szacowane zakończenie"
-
-#: js/LeadEditDialog.js:426
-#: js/Product.js:141
-msgid "Description"
-msgstr "Opis"
-
-#: js/LeadEditDialog.js:440
-msgid "Enter description"
-msgstr "Wprowadź opis"
-
-#: js/LeadGridContactFilter.js:46
-msgid "Contact"
-msgstr "Kontakt"
-
-#: js/LeadGridContactFilter.js:54
-#, fuzzy
-msgid "CRM Role"
-msgstr "Jako CRM"
-
-#: js/LeadGridDetailsPanel.js:53
-msgid "Mobile"
-msgstr "Komórka"
-
-#: js/LeadGridDetailsPanel.js:56
-msgid "Fax"
-msgstr "Faks"
-
-#: js/LeadGridDetailsPanel.js:59
-msgid "E-Mail"
-msgstr "E-mail"
-
-#: js/LeadGridDetailsPanel.js:62
-msgid "Web"
-msgstr "WWW"
-
-#: js/LeadGridPanel.js:101
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
-
-#: js/LeadGridPanel.js:102
-#: js/LeadGridPanel.js:143
-msgid "Lead name"
-msgstr "Nazwa zapytania"
-
-#: js/LeadGridPanel.js:141
-msgid "Lead id"
-msgstr "ID zapytania"
-
-#: js/LeadGridPanel.js:142
-msgid "Tags"
-msgstr "Znaczniki"
-
-#: js/LeadGridPanel.js:149
-msgid "Probable Turnover"
-msgstr "Prawdopodobny zwrot"
-
-#: js/LeadGridPanel.js:150
-msgid "Creation Time"
-msgstr "Utworzono"
-
-#: js/LeadGridPanel.js:151
-msgid "Last Modified Time"
-msgstr "Czas ostatniej zmiany"
-
-#: js/LeadGridPanel.js:191
-msgid "Add task"
-msgstr "Dodaj zadanie"
-
-#: js/LeadGridPanel.js:192
-msgid "Add task for selected lead"
-msgstr "Dodaj zadanie do zaznaczonego zapytania"
-
-#: js/LeadGridPanel.js:202
-msgid "Export Lead"
-msgstr "Eksportuj zapytanie"
-
-#: js/LeadGridPanel.js:211
-msgid "Export as PDF"
-msgstr "Eksportuj jako PDF"
-
-#: js/LeadGridPanel.js:218
-msgid "Export as CSV"
-msgstr "Eksportuj jako CSV"
-
-#: js/LeadGridPanel.js:225
-msgid "Export as ODS"
-msgstr "Eksportuj jako ODS"
-
-#: js/LeadGridPanel.js:232
-msgid "Export as XLS"
-msgstr "Exportuj jako XLS"
-
-#: js/LeadGridPanel.js:243
-msgid "Show closed"
-msgstr "Pokaż zrealizowane zapytania"
+#: js/LeadState.js:143
+msgid "Add a Leadstate..."
+msgstr "Dodaj status zapytania…"
 
 #: js/LeadSource.js:113
 msgid "Add a Leadsource..."
 msgstr "Źródło zapytania..."
 
-#: js/LeadState.js:132
-msgid "Add a Leadstate..."
-msgstr "Dodaj status zapytania…"
+#: js/LeadGridPanel.js:137
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
 
-#: js/LeadType.js:111
-msgid "Add a Leadtype..."
-msgstr "Dodaj typ zapytania..."
+#: js/LeadGridPanel.js:139 js/LeadGridPanel.js:181
+msgid "Lead name"
+msgstr "Nazwa zapytania"
 
-#: js/LinkGridPanel.js:32
-#: js/LinkGridPanel.js:33
-msgid "Add new {0}"
-msgstr "Dodaj nowy {0}"
+#: js/LeadGridPanel.js:179
+msgid "Lead id"
+msgstr "ID zapytania"
 
-#: js/LinkGridPanel.js:51
-#: js/Product.js:183
-msgid "Unlink {0}"
-msgstr "Odłącz {0}"
+#: js/LeadGridPanel.js:180
+msgid "Tags"
+msgstr "Znaczniki"
 
-#: js/LinkGridPanel.js:52
-#: js/Product.js:184
-msgid "Unlink selected {0}"
-msgstr "Usuń zaznaczone {0}"
+#: js/LeadGridPanel.js:187
+msgid "Probable Turnover"
+msgstr "Prawdopodobny zwrot"
 
-#: js/LinkGridPanel.js:67
-msgid "Edit {0}"
-msgstr "Edytuj \"{0}\""
+#: js/LeadGridPanel.js:188
+msgid "Creation Time"
+msgstr "Utworzono"
 
-#: js/LinkGridPanel.js:68
-msgid "Edit selected {0}"
-msgstr "Edytuj zaznaczone {0}"
+#: js/LeadGridPanel.js:189
+msgid "Last Modified Time"
+msgstr "Czas ostatniej zmiany"
 
-#: js/Models.js:61
-#: js/Models.js:137
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "lista wierszy"
-msgstr[1] "listy wierszy"
-msgstr[2] "listy wierszy"
+#: js/LeadGridPanel.js:228
+msgid "Add task"
+msgstr "Dodaj zadanie"
 
-#: js/Models.js:133
-msgid "Settings"
-msgid_plural "Settings"
-msgstr[0] "Ustawienia"
-msgstr[1] "Ustawienia"
-msgstr[2] "Ustawienia"
+#: js/LeadGridPanel.js:229
+msgid "Add task for selected lead"
+msgstr "Dodaj zadanie do zaznaczonego zapytania"
 
-#: js/Product.js:148
-msgid "Price"
-msgstr "Cena"
+#: js/LeadGridPanel.js:239
+msgid "Export Lead"
+msgstr "Eksportuj zapytanie"
 
-#: js/Product.js:160
-msgid "Quantity"
-msgstr "Ilość"
+#: js/LeadGridPanel.js:248
+msgid "Export as PDF"
+msgstr "Eksportuj jako PDF"
 
-#: js/Product.js:214
-msgid "Search for Products to add ..."
-msgstr "Znajdź produkty do dodania ..."
+#: js/LeadGridPanel.js:255
+msgid "Export as CSV"
+msgstr "Eksportuj jako CSV"
 
-#: js/Task.js:113
-msgid "No Tasks to display"
-msgstr "Brak zadań"
+#: js/LeadGridPanel.js:262
+msgid "Export as ODS"
+msgstr "Eksportuj jako ODS"
 
-#: js/Task.js:172
-msgid "Summary"
-msgstr "Streszczenie"
-
-#: js/Task.js:176
-msgid "Add a task..."
-msgstr "Dodaj zadanie…"
-
-#: js/Task.js:207
-msgid "Percent"
-msgstr "W procentach"
+#: js/LeadGridPanel.js:269
+msgid "Export as XLS"
+msgstr "Exportuj jako XLS"
 
 #: Preference.php:68
 msgid "Get Notification Emails"
@@ -545,24 +466,78 @@ msgstr "Przesyłaj pocztowe powiadomienie dla własnych akcji"
 msgid "Get notifications emails for actions you did yourself"
 msgstr "Otrzymuj maile potwierdzające akcje wykonane przez siebie"
 
+#: Controller/Lead.php:184
+msgid "State"
+msgstr "Kraj"
+
+#: Controller/Lead.php:186
+msgid "Source"
+msgstr "Źródło"
+
+#: Controller/Lead.php:188
+msgid "Scheduled end"
+msgstr "Planowane zakończenie"
+
+#: Controller/Lead.php:192
+msgid "Folder"
+msgstr "Katalog"
+
+#: Controller/Lead.php:193
+msgid "Updated by"
+msgstr "Zaktualizowane przez"
+
+#: Controller/Lead.php:194
+msgid "Updated Fields:"
+msgstr "Zaktualizowane pola:"
+
+#: Controller/Lead.php:195
+#, python-format
+msgid "%s changed from %s to %s."
+msgstr "%s zmieniony z %s na %s."
+
+#: Controller/Lead.php:201
+#, python-format
+msgid "Lead %s has been changed"
+msgstr "Zapytanie %s zostało zmienione"
+
+#: Controller/Lead.php:203
+#, python-format
+msgid "Lead %s has been creaded"
+msgstr "Zapytanie %s zostało utworzone"
+
+#~ msgid "Task"
+#~ msgstr "Zadanie"
+
+#~ msgid "History"
+#~ msgstr "Historia"
+
 #~ msgid "Lead Name"
 #~ msgstr "Nazwa zapytania"
+
 #~ msgid "Date Start"
 #~ msgstr "Data zgłoszenia"
+
 #~ msgid "Date End"
 #~ msgstr "Data zakończenia"
+
 #~ msgid "Date End Scheduled"
 #~ msgstr "Planowany koniec"
+
 #~ msgid "Created By"
 #~ msgstr "Zaktualizowane przez"
+
 #~ msgid "Last modified By"
 #~ msgstr "Ostatnio modyfikowane przez"
+
 #~ msgid "Last modified"
 #~ msgstr "Ostatnio modyfikowano"
+
 #~ msgid "Lead states"
 #~ msgstr "Status zapytania"
+
 #~ msgid "Lead sources"
 #~ msgstr "Źródła zapytań"
+
 #~ msgid "Lead types"
 #~ msgstr "Typy zapytań"
 
@@ -570,92 +545,136 @@ msgstr "Otrzymuj maile potwierdzające akcje wykonane przez siebie"
 # Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
 #~ msgid "Failed"
 #~ msgstr "Próba nieudana"
+
 #~ msgid "Could not save lead."
 #~ msgstr "Zapisanie zapytania było niemożliwe."
+
 #~ msgid "Please fix the errors noted."
 #~ msgstr "Proszę poprawić wskazane błędy."
+
 #~ msgid "Contactdata"
 #~ msgstr "Kontakty"
+
 #~ msgid "Add new contact"
 #~ msgstr "Dodaj nowy kontakt"
+
 #~ msgid "Add new customer contact"
 #~ msgstr "Dodaj nowego klienta"
+
 #~ msgid "Edit contact"
 #~ msgstr "Edytuj kontakt"
+
 #~ msgid "Edit selected contact"
 #~ msgstr "Edytuj zaznaczony kontakt"
+
 #~ msgid "Unlink contact"
 #~ msgstr "Usuń kontakt"
+
 #~ msgid "Add new task"
 #~ msgstr "Dodaj nowe zadanie"
+
 #~ msgid "Edit task"
 #~ msgstr "Edytuj zadanie"
+
 #~ msgid "Edit selected task"
 #~ msgstr "Edytuj zaznaczone zadanie"
+
 #~ msgid "Add existing task to lead"
 #~ msgstr "Dodaj istniejące zadanie do zapytania"
+
 #~ msgid "Remove selected tasks"
 #~ msgstr "Usuń zaznaczone zadania"
+
 #~ msgid "Remove selected products"
 #~ msgstr "Usuń wybrane produkty"
+
 #~ msgid "Leads"
 #~ msgstr "zapytania wstępne"
+
 #~ msgid "Loading Lead..."
 #~ msgstr "Ładowanie wstępnego zapytania..."
+
 #~ msgid "Please Wait"
 #~ msgstr "Proszę czekać"
+
 #~ msgid "Add New Lead"
 #~ msgstr "Dodaj nowe zapytanie"
+
 #~ msgid "Overview"
 #~ msgstr "Przegląd"
+
 #~ msgid "folder"
 #~ msgstr "katalog"
+
 #~ msgid "Enter searchfilter"
 #~ msgstr "wpisz szukaną frazę"
+
 #~ msgid "Search Contacts"
 #~ msgstr "Znajdź kontakty"
+
 #~ msgid "Add existing contact"
 #~ msgstr "Utwórz istniejący kontakt"
+
 #~ msgid "Add existing contact to lead"
 #~ msgstr "Dodaj istniejący kontakt do zapytania"
+
 #~ msgid "Organisation"
 #~ msgstr "Organizacja"
+
 #~ msgid "Lead updated"
 #~ msgstr "Zapytanie zaktualizowane"
+
 #~ msgid "Lead added"
 #~ msgstr "Zapytanie dodane"
+
 #~ msgid "Add responsible"
 #~ msgstr "Dodaj osobę odpowiedzialną"
+
 #~ msgid "Add new responsible contact"
 #~ msgstr "Dodaj nowy kontakt jako osobę odpowiedzialną"
+
 #~ msgid "Add customer"
 #~ msgstr "Dodaj klienta"
+
 #~ msgid "Add partner"
 #~ msgstr "Dodaj wspólnika"
+
 #~ msgid "Add new partner contact"
 #~ msgstr "Dodaj nowy kontakt jako wspólnika"
+
 #~ msgid "Show closed leads"
 #~ msgstr "Pokaż zrealizowane zapytania"
+
 #~ msgid "Add new lead"
 #~ msgstr "Dodaj nowe zapytanie"
+
 #~ msgid "Edit selected lead"
 #~ msgstr "Edytuj zaznaczone zapytanie"
+
 #~ msgid "Unlink selected contacts"
 #~ msgstr "Usuń zaznaczone kontakty"
+
 #~ msgid "Edit Lead \"{0}\""
 #~ msgstr "Edytuj zapytanie \"{0}\""
+
 #~ msgid "Add a product..."
 #~ msgstr "Dodaj produkt"
+
 #~ msgid "website"
 #~ msgstr "strona WWW"
+
 #~ msgid "reseller"
 #~ msgstr "dystrybutor"
+
 #~ msgid "Remove products"
 #~ msgstr "Usuń produkty"
+
 #~ msgid "Remove Option"
 #~ msgstr "Usuń opcję"
+
 #~ msgid "Type"
 #~ msgstr "Ikona"
+
 #, fuzzy
 #~ msgid "Select lead"
 #~ msgstr "Usuń zapytanie"
@@ -667,40 +686,55 @@ msgstr "Otrzymuj maile potwierdzające akcje wykonane przez siebie"
 #, fuzzy
 #~ msgid "Tasks status"
 #~ msgstr "Status zapytania"
+
 #~ msgid "telephone"
 #~ msgstr "telefon"
+
 #~ msgid "email"
 #~ msgstr "e-mail"
 
 #, fuzzy
 #~ msgid "fair"
 #~ msgstr "rynek"
+
 #~ msgid "customer"
 #~ msgstr "klient"
+
 #~ msgid "partner"
 #~ msgstr "wspólnik"
+
 #~ msgid "Are you sure you want to delete this lead?"
 #~ msgstr "Czy na pewno chcesz usunąć to zapytanie?"
+
 #~ msgid "Deleting lead"
 #~ msgstr "Usuwanie zapytania"
+
 #~ msgid "Some error occured while trying to delete the lead."
 #~ msgstr "Podczas próby usunięcia zapytania wystąpił błąd."
+
 #~ msgid "Show details"
 #~ msgstr "Pokaż szczegóły"
+
 #~ msgid "Displaying leads {0} - {1} of {2}"
 #~ msgstr "Wyświetlane zapytania {0} - {1} z {2}"
+
 #~ msgid "No leads found."
 #~ msgstr "Nie znaleziono zapytań."
+
 #~ msgid "Add lead"
 #~ msgstr "Dodaj zapytanie"
+
 #~ msgid "Edit lead"
 #~ msgstr "Edytuj zapytanie"
+
 #~ msgid "Delete selected leads"
 #~ msgstr "Usuń zaznaczone zapytania"
+
 #~ msgid "Export selected lead as PDF"
 #~ msgstr "Eksportuj zaznaczone zapytania jako PDF"
+
 #~ msgid "Please wait"
 #~ msgstr "Proszę czekać"
+
 #~ msgid "Saving lead"
 #~ msgstr "Zapisywanie zapytania"
-
