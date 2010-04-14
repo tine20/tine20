@@ -13,6 +13,11 @@ msgstr ""
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "Tareas personales de %s"
+
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
 msgstr "administrar lista de tareas compartidas"
@@ -21,48 +26,88 @@ msgstr "administrar lista de tareas compartidas"
 msgid "Create new shared tasks lists"
 msgstr "Crear nueva lista de tareas compartidas"
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Notificación por Tarea"
+#: Model/Task.php:183
+msgid "Due"
+msgstr "Apta"
 
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "Tareas personales de %s"
+#: Model/Task.php:184
+msgid "Organizer"
+msgstr "Organizador"
 
-#: js/EditDialog.js:173 js/GridPanel.js:94 js/GridPanel.js:171
-msgid "Summary"
-msgstr "Resumen"
+#: Model/Task.php:185
+msgid "Description"
+msgstr "Descripción"
 
-#: js/EditDialog.js:178
-msgid "Due date"
-msgstr "Fecha apta"
-
-#: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:184
+#: Model/Task.php:186 js/TaskEditDialog.js:168 js/GridPanel.js:161
 msgid "Priority"
 msgstr "Prioridad"
 
-#: js/EditDialog.js:184
-msgid "Add Responsible ..."
-msgstr "Agregar Responsable..."
-
-#: js/EditDialog.js:191
-msgid "Notes"
-msgstr "Notas"
-
-#: js/EditDialog.js:192
-msgid "Enter description..."
-msgstr "Escribir descripción..."
-
-#: js/EditDialog.js:197
-msgid "Percentage"
-msgstr "Porcentaje"
-
-#: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:185
+#: Model/Task.php:187 js/TaskEditDialog.js:188 js/GridPanel.js:188
+#: js/Status.js:33
 msgid "Status"
 msgstr "Estado"
 
-#: js/EditDialog.js:205
+#: Model/Task.php:188 js/GridPanel.js:175
+msgid "Percent"
+msgstr "Porcentaje"
+
+#: Model/Task.php:195 js/GridPanel.js:139
+msgid "Lead"
+msgstr ""
+
+#: Model/Task.php:201
+msgid "Telephone"
+msgstr ""
+
+#: Model/Task.php:202
+msgid "Email"
+msgstr ""
+
+#: js/Tasks.js:94
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Tarea"
+msgstr[1] "Tareas"
+
+#: js/Tasks.js:94
+msgid "Tasks"
+msgstr "Tareas"
+
+#: js/Tasks.js:98
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "lista para hacer"
+msgstr[1] "listas para hacer"
+
+#: js/Tasks.js:98
+msgid "to do lists"
+msgstr "listas para hacer"
+
+#: js/TaskEditDialog.js:160 js/GridPanel.js:92 js/GridPanel.js:142
+msgid "Summary"
+msgstr "Resumen"
+
+#: js/TaskEditDialog.js:165
+msgid "Due date"
+msgstr "Fecha apta"
+
+#: js/TaskEditDialog.js:171
+msgid "Add Responsible ..."
+msgstr "Agregar Responsable..."
+
+#: js/TaskEditDialog.js:178
+msgid "Notes"
+msgstr "Notas"
+
+#: js/TaskEditDialog.js:179
+msgid "Enter description..."
+msgstr "Escribir descripción..."
+
+#: js/TaskEditDialog.js:184
+msgid "Percentage"
+msgstr "Porcentaje"
+
+#: js/TaskEditDialog.js:192 js/GridPanel.js:209
 msgid "Completed"
 msgstr "Completado"
 
@@ -72,85 +117,49 @@ msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "¿Realmente desea borrar la tarea seleccionada?"
 msgstr[1] "¿Realmente desea borrar las tareas seleccionadas?"
 
-#: js/GridPanel.js:93
+#: js/GridPanel.js:90
 msgid "Quick search"
 msgstr "Búsqueda Rápida"
 
-#: js/GridPanel.js:95 js/GridPanel.js:182
+#: js/GridPanel.js:93 js/GridPanel.js:153
 msgid "Due Date"
 msgstr "Fecha Apta"
 
-#: js/GridPanel.js:96 js/GridPanel.js:238
+#: js/GridPanel.js:95 js/GridPanel.js:216
 msgid "Responsible"
 msgstr "Responsable"
 
-#: js/GridPanel.js:120
+#: js/GridPanel.js:119
 msgid "Failed"
 msgstr "Falló"
 
-#: js/GridPanel.js:120
+#: js/GridPanel.js:119
 msgid "Could not save task."
 msgstr "No se pudo guardar la tarea."
 
-#: js/GridPanel.js:167
+#: js/GridPanel.js:138
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: js/GridPanel.js:168
-msgid "Lead"
-msgstr ""
-
-#: js/GridPanel.js:178
+#: js/GridPanel.js:149
 msgid "Add a task..."
 msgstr "Agregar una tarea..."
 
-#: js/GridPanel.js:204 Model/Task.php:186
-msgid "Percent"
-msgstr "Porcentaje"
-
-#: js/GridPanel.js:231
+#: js/GridPanel.js:202
 msgid "Creation Time"
 msgstr "Fecha de Creación"
 
-#: js/GridPanel.js:285
+#: js/GridPanel.js:265
 msgid "Show closed"
 msgstr "Visualización Cerrada"
 
-#: js/Status.js:45 Setup/setup.xml:339
+#: js/Status.js:187 Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "EN-PROCESO"
 
-#: js/Tasks.js:87
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Tarea"
-msgstr[1] "Tareas"
-
-#: js/Tasks.js:87
-msgid "Tasks"
-msgstr "Tareas"
-
-#: js/Tasks.js:91
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "lista para hacer"
-msgstr[1] "listas para hacer"
-
-#: js/Tasks.js:91
-msgid "to do lists"
-msgstr "listas para hacer"
-
-#: Model/Task.php:181
-msgid "Due"
-msgstr "Apta"
-
-#: Model/Task.php:182
-msgid "Organizer"
-msgstr "Organizador"
-
-#: Model/Task.php:183
-msgid "Description"
-msgstr "Descripción"
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Notificación por Tarea"
 
 #: Setup/setup.xml:295
 msgid "NEEDS-ACTION"

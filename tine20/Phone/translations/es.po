@@ -13,344 +13,280 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/MyPhoneEditDialog.js:270 js/Phone.js:57 js/Phone.js:254
-msgid "Phone"
-msgstr "Telefono"
-
-#: js/MyPhoneEditDialog.js:285
-msgid "Name"
-msgstr "Nombre"
-
-#: js/MyPhoneEditDialog.js:289
-msgid "Phone Model"
-msgstr "Modelo de Teléfono"
-
-#: js/MyPhoneEditDialog.js:304
-msgid "MAC Address"
-msgstr "Dirección MAC"
-
-#: js/MyPhoneEditDialog.js:338
-msgid "infos"
-msgstr "informaciones"
-
-#: js/MyPhoneEditDialog.js:353
-msgid "Current IP Address"
-msgstr "Dirección IP Actual"
-
-#: js/MyPhoneEditDialog.js:360
-msgid "Firmware last checked at"
-msgstr "Firmware revisado por última vez el "
-
-#: js/MyPhoneEditDialog.js:368
-msgid "Current Software Version"
-msgstr "Versión Actual del Software"
-
-#: js/MyPhoneEditDialog.js:375
-msgid "Settings Loaded at"
-msgstr "Preferncias Guaradas en"
-
-#: js/MyPhoneEditDialog.js:385 js/MyPhoneEditDialog.js:840
-msgid "redirection"
-msgstr "redirección"
-
-#: js/MyPhoneEditDialog.js:400 js/MyPhoneEditDialog.js:857
-msgid "redirect_event"
-msgstr "evento_redireccion"
-
-#: js/MyPhoneEditDialog.js:419 js/MyPhoneEditDialog.js:882
-msgid "all"
-msgstr "todos"
-
-#: js/MyPhoneEditDialog.js:420 js/MyPhoneEditDialog.js:883
-msgid "busy"
-msgstr "ocupado"
-
-#: js/MyPhoneEditDialog.js:421 js/MyPhoneEditDialog.js:555
-#: js/MyPhoneEditDialog.js:884 js/MyPhoneEditDialog.js:1188
-msgid "none"
-msgstr "ninguno"
-
-#: js/MyPhoneEditDialog.js:422 js/MyPhoneEditDialog.js:885
-msgid "time"
-msgstr "hora"
-
-#: js/MyPhoneEditDialog.js:426 js/MyPhoneEditDialog.js:896
-msgid "redirect_number"
-msgstr "numero_redireccion"
-
-#: js/MyPhoneEditDialog.js:430 js/MyPhoneEditDialog.js:908
-msgid "redirect_time"
-msgstr "hora_redireccion"
-
-#: js/MyPhoneEditDialog.js:448 js/MyPhoneEditDialog.js:932
-msgid "Settings"
-msgstr "Configuración"
-
-#: js/MyPhoneEditDialog.js:466 js/MyPhoneEditDialog.js:964
-msgid "web_language"
-msgstr "idioma_web"
-
-#: js/MyPhoneEditDialog.js:470 js/MyPhoneEditDialog.js:488
-#: js/MyPhoneEditDialog.js:512 js/MyPhoneEditDialog.js:524
-#: js/MyPhoneEditDialog.js:535 js/MyPhoneEditDialog.js:545
-#: js/MyPhoneEditDialog.js:554 js/MyPhoneEditDialog.js:563
-#: js/MyPhoneEditDialog.js:572 js/MyPhoneEditDialog.js:581
-#: js/MyPhoneEditDialog.js:590 js/MyPhoneEditDialog.js:599
-#: js/MyPhoneEditDialog.js:979 js/MyPhoneEditDialog.js:1016
-#: js/MyPhoneEditDialog.js:1059 js/MyPhoneEditDialog.js:1095
-#: js/MyPhoneEditDialog.js:1125 js/MyPhoneEditDialog.js:1154
-#: js/MyPhoneEditDialog.js:1187 js/MyPhoneEditDialog.js:1215
-#: js/MyPhoneEditDialog.js:1243 js/MyPhoneEditDialog.js:1276
-#: js/MyPhoneEditDialog.js:1304 js/MyPhoneEditDialog.js:1332
-msgid "- factory default -"
-msgstr "-opciones de fábrica-"
-
-#: js/MyPhoneEditDialog.js:484 js/MyPhoneEditDialog.js:1001
-msgid "language"
-msgstr "idioma"
-
-#: js/MyPhoneEditDialog.js:508 js/MyPhoneEditDialog.js:1044
-msgid "display_method"
-msgstr "forma_a_mostrar"
-
-#: js/MyPhoneEditDialog.js:513 js/MyPhoneEditDialog.js:1060
-msgid "whole url"
-msgstr "url completa"
-
-#: js/MyPhoneEditDialog.js:514 js/MyPhoneEditDialog.js:1061
-msgid "name"
-msgstr "nombre"
-
-#: js/MyPhoneEditDialog.js:515 js/MyPhoneEditDialog.js:1062
-msgid "number"
-msgstr "numero"
-
-#: js/MyPhoneEditDialog.js:516 js/MyPhoneEditDialog.js:1063
-msgid "name + number"
-msgstr "nombre + numero"
-
-#: js/MyPhoneEditDialog.js:517 js/MyPhoneEditDialog.js:1064
-msgid "number + name"
-msgstr "numero + nombre"
-
-#: js/MyPhoneEditDialog.js:520 js/MyPhoneEditDialog.js:1080
-msgid "call_waiting"
-msgstr "llamada_en_espera"
-
-#: js/MyPhoneEditDialog.js:525 js/MyPhoneEditDialog.js:564
-#: js/MyPhoneEditDialog.js:573 js/MyPhoneEditDialog.js:582
-#: js/MyPhoneEditDialog.js:591 js/MyPhoneEditDialog.js:600
-#: js/MyPhoneEditDialog.js:1096 js/MyPhoneEditDialog.js:1216
-#: js/MyPhoneEditDialog.js:1244 js/MyPhoneEditDialog.js:1277
-#: js/MyPhoneEditDialog.js:1305 js/MyPhoneEditDialog.js:1333
-msgid "on"
-msgstr "encendido"
-
-#: js/MyPhoneEditDialog.js:526 js/MyPhoneEditDialog.js:1097
-msgid "visual"
-msgstr "visual"
-
-#: js/MyPhoneEditDialog.js:527 js/MyPhoneEditDialog.js:1098
-msgid "ringer"
-msgstr "timbre"
-
-#: js/MyPhoneEditDialog.js:528 js/MyPhoneEditDialog.js:565
-#: js/MyPhoneEditDialog.js:574 js/MyPhoneEditDialog.js:583
-#: js/MyPhoneEditDialog.js:592 js/MyPhoneEditDialog.js:601
-#: js/MyPhoneEditDialog.js:1099 js/MyPhoneEditDialog.js:1217
-#: js/MyPhoneEditDialog.js:1245 js/MyPhoneEditDialog.js:1278
-#: js/MyPhoneEditDialog.js:1306 js/MyPhoneEditDialog.js:1334
-msgid "off"
-msgstr "apagado"
-
-#: js/MyPhoneEditDialog.js:531 js/MyPhoneEditDialog.js:1110
-msgid "mwi_notification"
-msgstr "notificacion_mwi"
-
-#: js/MyPhoneEditDialog.js:536 js/MyPhoneEditDialog.js:1126
-msgid "silent"
-msgstr "silencioso"
-
-#: js/MyPhoneEditDialog.js:537 js/MyPhoneEditDialog.js:1127
-msgid "beep"
-msgstr "alarma"
-
-#: js/MyPhoneEditDialog.js:538 js/MyPhoneEditDialog.js:1128
-msgid "reminder"
-msgstr "recordatorio"
-
-#: js/MyPhoneEditDialog.js:541 js/MyPhoneEditDialog.js:1139
-msgid "mwi_dialtone"
-msgstr "tono_marcado_mwi"
-
-#: js/MyPhoneEditDialog.js:546 js/MyPhoneEditDialog.js:1155
-msgid "normal"
-msgstr "normal"
-
-#: js/MyPhoneEditDialog.js:547 js/MyPhoneEditDialog.js:1156
-msgid "stutter"
-msgstr "balbucear"
-
-#: js/MyPhoneEditDialog.js:550 js/MyPhoneEditDialog.js:1172
-msgid "headset_device"
-msgstr "dispositivo_auricular"
-
-#: js/MyPhoneEditDialog.js:556 js/MyPhoneEditDialog.js:1189
-msgid "headset_rj"
-msgstr "auricular_rj"
-
-#: js/MyPhoneEditDialog.js:559 js/MyPhoneEditDialog.js:1200
-msgid "message_led_other"
-msgstr "mensaje_dirigido_a_otr"
-
-#: js/MyPhoneEditDialog.js:568 js/MyPhoneEditDialog.js:1228
-msgid "global_missed_counter"
-msgstr "contador_global_perdido"
-
-#: js/MyPhoneEditDialog.js:577 js/MyPhoneEditDialog.js:1261
-msgid "scroll_outgoing"
-msgstr "desplazamiento_de_salida"
-
-#: js/MyPhoneEditDialog.js:586 js/MyPhoneEditDialog.js:1289
-msgid "show_local_line"
-msgstr "mostrar_linea_local"
-
-#: js/MyPhoneEditDialog.js:595 js/MyPhoneEditDialog.js:1317
-msgid "show_call_status"
-msgstr "mostrar_estado_llamada"
-
-#: js/MyPhoneEditDialog.js:620
-msgid "lineactive"
-msgstr "lineaactiva"
-
-#: js/MyPhoneEditDialog.js:648
-msgid "sipCombo"
-msgstr "comboSip"
-
-#: js/MyPhoneEditDialog.js:667
-msgid "Idle Text"
-msgstr "Texto de espera"
-
-#: js/MyPhoneEditDialog.js:700
-msgid "Lines"
-msgstr "Líneas"
-
-#: js/MyPhoneEditDialog.js:715
-msgid "Users"
-msgstr "Usuarios"
-
-#: js/MyPhoneEditDialog.js:719
-msgid "Rights"
-msgstr "Derechos"
-
-#: js/Phone.js:28 js/Phone.js:479 js/Phone.js:480
+#: js/Phone.js:28 js/Phone.js:480 js/Phone.js:481
 msgid "Edit phone settings"
 msgstr "Editar preferencias del teléfono"
 
-#: js/Phone.js:68
+#: js/Phone.js:58 js/Phone.js:255 js/Models.js:70
+#, fuzzy
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] "Telefono"
+msgstr[1] "Telefono"
+
+#: js/Phone.js:69
 msgid "Phones"
 msgstr "Teléfonos"
 
-#: js/Phone.js:197
+#: js/Phone.js:198
 msgid "Dial phone number"
 msgstr "Teléfono de discado"
 
-#: js/Phone.js:277
+#: js/Phone.js:278
 msgid "Line"
 msgstr "Línea"
 
-#: js/Phone.js:286
+#: js/Phone.js:287
 msgid "Number"
 msgstr "Número"
 
-#: js/Phone.js:295
+#: js/Phone.js:296
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: js/Phone.js:305
+#: js/Phone.js:306
 msgid "Dial"
 msgstr "Marcar"
 
-#: js/Phone.js:325
+#: js/Phone.js:326
 msgid "Error"
 msgstr "Error"
 
-#: js/Phone.js:326
+#: js/Phone.js:327
 msgid "Not possible to dial."
 msgstr "Fue imposible discar."
 
-#: js/Phone.js:469
+#: js/Phone.js:470
 msgid "Dial number"
 msgstr "Número de discado"
 
-#: js/Phone.js:470
+#: js/Phone.js:471
 msgid "Initiate a new outgoing call"
 msgstr "Comenzar una nueva llamada de salida"
 
-#: js/Phone.js:530
+#: js/Phone.js:532
 msgid "Incoming call"
 msgstr "Llamada entrante"
 
-#: js/Phone.js:534
+#: js/Phone.js:536
 msgid "Outgoing call"
 msgstr "Llamada de salida"
 
-#: js/Phone.js:542
+#: js/Phone.js:544
 msgid "unknown number"
 msgstr "número desconocido"
 
-#: js/Phone.js:567
+#: js/Phone.js:569
 msgid "Search:"
 msgstr "Búscar:"
 
-#: js/Phone.js:652
+#: js/Phone.js:654
 msgid "Source or Destination"
 msgstr "Origen o Destino"
 
-#: js/Phone.js:668
+#: js/Phone.js:670
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Mostrando llamadas {0] - {1} de {2}"
 
-#: js/Phone.js:669 js/Phone.js:713
+#: js/Phone.js:671 js/Phone.js:715
 msgid "No calls to display"
 msgstr "No hay llamadas"
 
-#: js/Phone.js:679
+#: js/Phone.js:681
 msgid "Direction"
 msgstr "Orientación"
 
-#: js/Phone.js:680
+#: js/Phone.js:682
 msgid "Source"
 msgstr "Fuente"
 
-#: js/Phone.js:681
+#: js/Phone.js:683
 msgid "Caller Id"
 msgstr "Identificador de la Llamada"
 
-#: js/Phone.js:682
+#: js/Phone.js:684
 msgid "Destination"
 msgstr "Destino"
 
-#: js/Phone.js:683
+#: js/Phone.js:685
 msgid "Start"
 msgstr "Comenzar"
 
-#: js/Phone.js:684
+#: js/Phone.js:686
 msgid "Connected"
 msgstr "Conectado"
 
-#: js/Phone.js:685
+#: js/Phone.js:687
 msgid "Disconnected"
 msgstr "Desconectado"
 
-#: js/Phone.js:686
+#: js/Phone.js:688
 msgid "Duration"
 msgstr "Duración"
 
-#: js/Phone.js:687
+#: js/Phone.js:689
 msgid "Ringing"
 msgstr "Timbrando"
 
-#: js/Phone.js:688
+#: js/Phone.js:690
 msgid "Call ID"
 msgstr "Identificador de Llamada"
+
+#: js/Models.js:74
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#~ msgid "Name"
+#~ msgstr "Nombre"
+
+#~ msgid "Phone Model"
+#~ msgstr "Modelo de Teléfono"
+
+#~ msgid "MAC Address"
+#~ msgstr "Dirección MAC"
+
+#~ msgid "infos"
+#~ msgstr "informaciones"
+
+#~ msgid "Current IP Address"
+#~ msgstr "Dirección IP Actual"
+
+#~ msgid "Firmware last checked at"
+#~ msgstr "Firmware revisado por última vez el "
+
+#~ msgid "Current Software Version"
+#~ msgstr "Versión Actual del Software"
+
+#~ msgid "Settings Loaded at"
+#~ msgstr "Preferncias Guaradas en"
+
+#~ msgid "redirection"
+#~ msgstr "redirección"
+
+#~ msgid "redirect_event"
+#~ msgstr "evento_redireccion"
+
+#~ msgid "all"
+#~ msgstr "todos"
+
+#~ msgid "busy"
+#~ msgstr "ocupado"
+
+#~ msgid "none"
+#~ msgstr "ninguno"
+
+#~ msgid "time"
+#~ msgstr "hora"
+
+#~ msgid "redirect_number"
+#~ msgstr "numero_redireccion"
+
+#~ msgid "redirect_time"
+#~ msgstr "hora_redireccion"
+
+#~ msgid "Settings"
+#~ msgstr "Configuración"
+
+#~ msgid "web_language"
+#~ msgstr "idioma_web"
+
+#~ msgid "- factory default -"
+#~ msgstr "-opciones de fábrica-"
+
+#~ msgid "language"
+#~ msgstr "idioma"
+
+#~ msgid "display_method"
+#~ msgstr "forma_a_mostrar"
+
+#~ msgid "whole url"
+#~ msgstr "url completa"
+
+#~ msgid "name"
+#~ msgstr "nombre"
+
+#~ msgid "number"
+#~ msgstr "numero"
+
+#~ msgid "name + number"
+#~ msgstr "nombre + numero"
+
+#~ msgid "number + name"
+#~ msgstr "numero + nombre"
+
+#~ msgid "call_waiting"
+#~ msgstr "llamada_en_espera"
+
+#~ msgid "on"
+#~ msgstr "encendido"
+
+#~ msgid "visual"
+#~ msgstr "visual"
+
+#~ msgid "ringer"
+#~ msgstr "timbre"
+
+#~ msgid "off"
+#~ msgstr "apagado"
+
+#~ msgid "mwi_notification"
+#~ msgstr "notificacion_mwi"
+
+#~ msgid "silent"
+#~ msgstr "silencioso"
+
+#~ msgid "beep"
+#~ msgstr "alarma"
+
+#~ msgid "reminder"
+#~ msgstr "recordatorio"
+
+#~ msgid "mwi_dialtone"
+#~ msgstr "tono_marcado_mwi"
+
+#~ msgid "normal"
+#~ msgstr "normal"
+
+#~ msgid "stutter"
+#~ msgstr "balbucear"
+
+#~ msgid "headset_device"
+#~ msgstr "dispositivo_auricular"
+
+#~ msgid "headset_rj"
+#~ msgstr "auricular_rj"
+
+#~ msgid "message_led_other"
+#~ msgstr "mensaje_dirigido_a_otr"
+
+#~ msgid "global_missed_counter"
+#~ msgstr "contador_global_perdido"
+
+#~ msgid "scroll_outgoing"
+#~ msgstr "desplazamiento_de_salida"
+
+#~ msgid "show_local_line"
+#~ msgstr "mostrar_linea_local"
+
+#~ msgid "show_call_status"
+#~ msgstr "mostrar_estado_llamada"
+
+#~ msgid "lineactive"
+#~ msgstr "lineaactiva"
+
+#~ msgid "sipCombo"
+#~ msgstr "comboSip"
+
+#~ msgid "Idle Text"
+#~ msgstr "Texto de espera"
+
+#~ msgid "Lines"
+#~ msgstr "Líneas"
+
+#~ msgid "Users"
+#~ msgstr "Usuarios"
+
+#~ msgid "Rights"
+#~ msgstr "Derechos"

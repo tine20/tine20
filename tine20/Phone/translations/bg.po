@@ -12,347 +12,283 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/MyPhoneEditDialog.js:270 js/Phone.js:57 js/Phone.js:254
-msgid "Phone"
-msgstr "Телефон"
-
-#: js/MyPhoneEditDialog.js:285
-msgid "Name"
-msgstr "Име"
-
-#: js/MyPhoneEditDialog.js:289
-msgid "Phone Model"
-msgstr "Модел Телефон"
-
-#: js/MyPhoneEditDialog.js:304
-msgid "MAC Address"
-msgstr "MAC адрес"
-
-#: js/MyPhoneEditDialog.js:338
-msgid "infos"
-msgstr "информации"
-
-#: js/MyPhoneEditDialog.js:353
-msgid "Current IP Address"
-msgstr "Актуален IP адрес"
-
-#: js/MyPhoneEditDialog.js:360
-msgid "Firmware last checked at"
-msgstr "Последна проверка на фирменният продукт"
-
-#: js/MyPhoneEditDialog.js:368
-msgid "Current Software Version"
-msgstr "Актуална програмна версия"
-
-#: js/MyPhoneEditDialog.js:375
-msgid "Settings Loaded at"
-msgstr "Качени настройки"
-
-#: js/MyPhoneEditDialog.js:385 js/MyPhoneEditDialog.js:840
-msgid "redirection"
-msgstr "прехвърлена връзка"
-
-#: js/MyPhoneEditDialog.js:400 js/MyPhoneEditDialog.js:857
-msgid "redirect_event"
-msgstr "причина за прехвърляне на връзка"
-
-#: js/MyPhoneEditDialog.js:419 js/MyPhoneEditDialog.js:882
-msgid "all"
-msgstr "всички"
-
-#: js/MyPhoneEditDialog.js:420 js/MyPhoneEditDialog.js:883
-msgid "busy"
-msgstr "заето"
-
-#: js/MyPhoneEditDialog.js:421 js/MyPhoneEditDialog.js:555
-#: js/MyPhoneEditDialog.js:884 js/MyPhoneEditDialog.js:1188
-msgid "none"
-msgstr "нищо"
-
-#: js/MyPhoneEditDialog.js:422 js/MyPhoneEditDialog.js:885
-msgid "time"
-msgstr "време"
-
-#: js/MyPhoneEditDialog.js:426 js/MyPhoneEditDialog.js:896
-msgid "redirect_number"
-msgstr "номер на прехвърляне"
-
-#: js/MyPhoneEditDialog.js:430 js/MyPhoneEditDialog.js:908
-msgid "redirect_time"
-msgstr "време на прехвърляне"
-
-#: js/MyPhoneEditDialog.js:448 js/MyPhoneEditDialog.js:932
-msgid "Settings"
-msgstr "Настройки"
-
-#: js/MyPhoneEditDialog.js:466 js/MyPhoneEditDialog.js:964
-msgid "web_language"
-msgstr "език на програмната маска"
-
-#: js/MyPhoneEditDialog.js:470 js/MyPhoneEditDialog.js:488
-#: js/MyPhoneEditDialog.js:512 js/MyPhoneEditDialog.js:524
-#: js/MyPhoneEditDialog.js:535 js/MyPhoneEditDialog.js:545
-#: js/MyPhoneEditDialog.js:554 js/MyPhoneEditDialog.js:563
-#: js/MyPhoneEditDialog.js:572 js/MyPhoneEditDialog.js:581
-#: js/MyPhoneEditDialog.js:590 js/MyPhoneEditDialog.js:599
-#: js/MyPhoneEditDialog.js:979 js/MyPhoneEditDialog.js:1016
-#: js/MyPhoneEditDialog.js:1059 js/MyPhoneEditDialog.js:1095
-#: js/MyPhoneEditDialog.js:1125 js/MyPhoneEditDialog.js:1154
-#: js/MyPhoneEditDialog.js:1187 js/MyPhoneEditDialog.js:1215
-#: js/MyPhoneEditDialog.js:1243 js/MyPhoneEditDialog.js:1276
-#: js/MyPhoneEditDialog.js:1304 js/MyPhoneEditDialog.js:1332
-msgid "- factory default -"
-msgstr "- фирмени настройки -"
-
-#: js/MyPhoneEditDialog.js:484 js/MyPhoneEditDialog.js:1001
-msgid "language"
-msgstr "език"
-
-#: js/MyPhoneEditDialog.js:508 js/MyPhoneEditDialog.js:1044
-msgid "display_method"
-msgstr "метод на показване"
-
-#: js/MyPhoneEditDialog.js:513 js/MyPhoneEditDialog.js:1060
-msgid "whole url"
-msgstr "пълен адрес (url)"
-
-#: js/MyPhoneEditDialog.js:514 js/MyPhoneEditDialog.js:1061
-msgid "name"
-msgstr "име"
-
-#: js/MyPhoneEditDialog.js:515 js/MyPhoneEditDialog.js:1062
-msgid "number"
-msgstr "номер"
-
-#: js/MyPhoneEditDialog.js:516 js/MyPhoneEditDialog.js:1063
-msgid "name + number"
-msgstr "име + номер"
-
-#: js/MyPhoneEditDialog.js:517 js/MyPhoneEditDialog.js:1064
-msgid "number + name"
-msgstr "номер + име"
-
-#: js/MyPhoneEditDialog.js:520 js/MyPhoneEditDialog.js:1080
-msgid "call_waiting"
-msgstr "изчакващо обаждане"
-
-#: js/MyPhoneEditDialog.js:525 js/MyPhoneEditDialog.js:564
-#: js/MyPhoneEditDialog.js:573 js/MyPhoneEditDialog.js:582
-#: js/MyPhoneEditDialog.js:591 js/MyPhoneEditDialog.js:600
-#: js/MyPhoneEditDialog.js:1096 js/MyPhoneEditDialog.js:1216
-#: js/MyPhoneEditDialog.js:1244 js/MyPhoneEditDialog.js:1277
-#: js/MyPhoneEditDialog.js:1305 js/MyPhoneEditDialog.js:1333
-msgid "on"
-msgstr "включено"
-
-#: js/MyPhoneEditDialog.js:526 js/MyPhoneEditDialog.js:1097
-msgid "visual"
-msgstr "показва"
-
-#: js/MyPhoneEditDialog.js:527 js/MyPhoneEditDialog.js:1098
-msgid "ringer"
-msgstr "линия"
-
-#: js/MyPhoneEditDialog.js:528 js/MyPhoneEditDialog.js:565
-#: js/MyPhoneEditDialog.js:574 js/MyPhoneEditDialog.js:583
-#: js/MyPhoneEditDialog.js:592 js/MyPhoneEditDialog.js:601
-#: js/MyPhoneEditDialog.js:1099 js/MyPhoneEditDialog.js:1217
-#: js/MyPhoneEditDialog.js:1245 js/MyPhoneEditDialog.js:1278
-#: js/MyPhoneEditDialog.js:1306 js/MyPhoneEditDialog.js:1334
-msgid "off"
-msgstr "изключено"
-
-#: js/MyPhoneEditDialog.js:531 js/MyPhoneEditDialog.js:1110
-msgid "mwi_notification"
-msgstr "MWI осведомяване"
-
-#: js/MyPhoneEditDialog.js:536 js/MyPhoneEditDialog.js:1126
-msgid "silent"
-msgstr "без звук"
-
-#: js/MyPhoneEditDialog.js:537 js/MyPhoneEditDialog.js:1127
-msgid "beep"
-msgstr "сигнален тон"
-
-#: js/MyPhoneEditDialog.js:538 js/MyPhoneEditDialog.js:1128
-msgid "reminder"
-msgstr "напомняне"
-
-#: js/MyPhoneEditDialog.js:541 js/MyPhoneEditDialog.js:1139
-msgid "mwi_dialtone"
-msgstr "MWI сигнал"
-
-#: js/MyPhoneEditDialog.js:546 js/MyPhoneEditDialog.js:1155
-msgid "normal"
-msgstr "нормално"
-
-#: js/MyPhoneEditDialog.js:547 js/MyPhoneEditDialog.js:1156
-msgid "stutter"
-msgstr "прекъсвач"
-
-#: js/MyPhoneEditDialog.js:550 js/MyPhoneEditDialog.js:1172
-msgid "headset_device"
-msgstr "headset уред"
-
-#: js/MyPhoneEditDialog.js:556 js/MyPhoneEditDialog.js:1189
-msgid "headset_rj"
-msgstr "Headset RJ"
-
-#: js/MyPhoneEditDialog.js:559 js/MyPhoneEditDialog.js:1200
-msgid "message_led_other"
-msgstr "други LED"
-
-#: js/MyPhoneEditDialog.js:568 js/MyPhoneEditDialog.js:1228
-msgid "global_missed_counter"
-msgstr "Брояч пропуснати"
-
-#: js/MyPhoneEditDialog.js:577 js/MyPhoneEditDialog.js:1261
-msgid "scroll_outgoing"
-msgstr "прелиства изходящи"
-
-#: js/MyPhoneEditDialog.js:586 js/MyPhoneEditDialog.js:1289
-msgid "show_local_line"
-msgstr "собствен номер"
-
-#: js/MyPhoneEditDialog.js:595 js/MyPhoneEditDialog.js:1317
-msgid "show_call_status"
-msgstr "показва статус на повиквания"
-
-#: js/MyPhoneEditDialog.js:620
-msgid "lineactive"
-msgstr "активна линия"
-
-#: js/MyPhoneEditDialog.js:648
-msgid "sipCombo"
-msgstr "SIP Избор"
-
-#: js/MyPhoneEditDialog.js:667
-msgid "Idle Text"
-msgstr "Текст при ненабрано състояние"
-
-#: js/MyPhoneEditDialog.js:700
-msgid "Lines"
-msgstr "Линии"
-
-#: js/MyPhoneEditDialog.js:715
-msgid "Users"
-msgstr "Потребитили"
-
-#: js/MyPhoneEditDialog.js:719
-msgid "Rights"
-msgstr "Права"
-
-#: js/Phone.js:28 js/Phone.js:479 js/Phone.js:480
+#: js/Phone.js:28 js/Phone.js:480 js/Phone.js:481
 msgid "Edit phone settings"
 msgstr "Редактирай условията на телефонниране"
 
-#: js/Phone.js:68
+#: js/Phone.js:58 js/Phone.js:255 js/Models.js:70
+#, fuzzy
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] "Телефон"
+msgstr[1] "Телефон"
+
+#: js/Phone.js:69
 msgid "Phones"
 msgstr "Телефони"
 
-#: js/Phone.js:197
+#: js/Phone.js:198
 msgid "Dial phone number"
 msgstr "Набран телефонен номер"
 
-#: js/Phone.js:277
+#: js/Phone.js:278
 msgid "Line"
 msgstr "Линия"
 
-#: js/Phone.js:286
+#: js/Phone.js:287
 msgid "Number"
 msgstr "Номер"
 
-#: js/Phone.js:295
+#: js/Phone.js:296
 msgid "Cancel"
 msgstr "Прекъсване"
 
-#: js/Phone.js:305
+#: js/Phone.js:306
 msgid "Dial"
 msgstr "Набиране"
 
-#: js/Phone.js:325
+#: js/Phone.js:326
 msgid "Error"
 msgstr ""
 
-#: js/Phone.js:326
+#: js/Phone.js:327
 msgid "Not possible to dial."
 msgstr ""
 
-#: js/Phone.js:469
+#: js/Phone.js:470
 msgid "Dial number"
 msgstr "Набран номер"
 
-#: js/Phone.js:470
+#: js/Phone.js:471
 msgid "Initiate a new outgoing call"
 msgstr "Въведи ново изходящо обаждане"
 
-#: js/Phone.js:530
+#: js/Phone.js:532
 msgid "Incoming call"
 msgstr "Влизащи позвънявания"
 
-#: js/Phone.js:534
+#: js/Phone.js:536
 msgid "Outgoing call"
 msgstr "Излизащи позвънявания"
 
-#: js/Phone.js:542
+#: js/Phone.js:544
 msgid "unknown number"
 msgstr "непознат номер"
 
-#: js/Phone.js:567
+#: js/Phone.js:569
 msgid "Search:"
 msgstr "Търси:"
 
-#: js/Phone.js:652
+#: js/Phone.js:654
 msgid "Source or Destination"
 msgstr "Източник или предназначение"
 
-#: js/Phone.js:668
+#: js/Phone.js:670
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Намерени позвънявания {0} - {1} от{2}"
 
-#: js/Phone.js:669 js/Phone.js:713
+#: js/Phone.js:671 js/Phone.js:715
 msgid "No calls to display"
 msgstr "Няма намерении позвънявания"
 
-#: js/Phone.js:679
+#: js/Phone.js:681
 msgid "Direction"
 msgstr "Направление"
 
-#: js/Phone.js:680
+#: js/Phone.js:682
 msgid "Source"
 msgstr "Източник"
 
-#: js/Phone.js:681
+#: js/Phone.js:683
 msgid "Caller Id"
 msgstr "Идентификатор на обаждащият се"
 
-#: js/Phone.js:682
+#: js/Phone.js:684
 msgid "Destination"
 msgstr "Предназначение"
 
-#: js/Phone.js:683
+#: js/Phone.js:685
 msgid "Start"
 msgstr "Старт"
 
-#: js/Phone.js:684
+#: js/Phone.js:686
 msgid "Connected"
 msgstr "Свързан"
 
-#: js/Phone.js:685
+#: js/Phone.js:687
 msgid "Disconnected"
 msgstr "Несвързан (прекъсната връзка)"
 
-#: js/Phone.js:686
+#: js/Phone.js:688
 msgid "Duration"
 msgstr "Продължителност"
 
-#: js/Phone.js:687
+#: js/Phone.js:689
 msgid "Ringing"
 msgstr "Позвъняване"
 
-#: js/Phone.js:688
+#: js/Phone.js:690
 msgid "Call ID"
 msgstr "Идентификатор (ID) на обаждането"
+
+#: js/Models.js:74
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#~ msgid "Name"
+#~ msgstr "Име"
+
+#~ msgid "Phone Model"
+#~ msgstr "Модел Телефон"
+
+#~ msgid "MAC Address"
+#~ msgstr "MAC адрес"
+
+#~ msgid "infos"
+#~ msgstr "информации"
+
+#~ msgid "Current IP Address"
+#~ msgstr "Актуален IP адрес"
+
+#~ msgid "Firmware last checked at"
+#~ msgstr "Последна проверка на фирменният продукт"
+
+#~ msgid "Current Software Version"
+#~ msgstr "Актуална програмна версия"
+
+#~ msgid "Settings Loaded at"
+#~ msgstr "Качени настройки"
+
+#~ msgid "redirection"
+#~ msgstr "прехвърлена връзка"
+
+#~ msgid "redirect_event"
+#~ msgstr "причина за прехвърляне на връзка"
+
+#~ msgid "all"
+#~ msgstr "всички"
+
+#~ msgid "busy"
+#~ msgstr "заето"
+
+#~ msgid "none"
+#~ msgstr "нищо"
+
+#~ msgid "time"
+#~ msgstr "време"
+
+#~ msgid "redirect_number"
+#~ msgstr "номер на прехвърляне"
+
+#~ msgid "redirect_time"
+#~ msgstr "време на прехвърляне"
+
+#~ msgid "Settings"
+#~ msgstr "Настройки"
+
+#~ msgid "web_language"
+#~ msgstr "език на програмната маска"
+
+#~ msgid "- factory default -"
+#~ msgstr "- фирмени настройки -"
+
+#~ msgid "language"
+#~ msgstr "език"
+
+#~ msgid "display_method"
+#~ msgstr "метод на показване"
+
+#~ msgid "whole url"
+#~ msgstr "пълен адрес (url)"
+
+#~ msgid "name"
+#~ msgstr "име"
+
+#~ msgid "number"
+#~ msgstr "номер"
+
+#~ msgid "name + number"
+#~ msgstr "име + номер"
+
+#~ msgid "number + name"
+#~ msgstr "номер + име"
+
+#~ msgid "call_waiting"
+#~ msgstr "изчакващо обаждане"
+
+#~ msgid "on"
+#~ msgstr "включено"
+
+#~ msgid "visual"
+#~ msgstr "показва"
+
+#~ msgid "ringer"
+#~ msgstr "линия"
+
+#~ msgid "off"
+#~ msgstr "изключено"
+
+#~ msgid "mwi_notification"
+#~ msgstr "MWI осведомяване"
+
+#~ msgid "silent"
+#~ msgstr "без звук"
+
+#~ msgid "beep"
+#~ msgstr "сигнален тон"
+
+#~ msgid "reminder"
+#~ msgstr "напомняне"
+
+#~ msgid "mwi_dialtone"
+#~ msgstr "MWI сигнал"
+
+#~ msgid "normal"
+#~ msgstr "нормално"
+
+#~ msgid "stutter"
+#~ msgstr "прекъсвач"
+
+#~ msgid "headset_device"
+#~ msgstr "headset уред"
+
+#~ msgid "headset_rj"
+#~ msgstr "Headset RJ"
+
+#~ msgid "message_led_other"
+#~ msgstr "други LED"
+
+#~ msgid "global_missed_counter"
+#~ msgstr "Брояч пропуснати"
+
+#~ msgid "scroll_outgoing"
+#~ msgstr "прелиства изходящи"
+
+#~ msgid "show_local_line"
+#~ msgstr "собствен номер"
+
+#~ msgid "show_call_status"
+#~ msgstr "показва статус на повиквания"
+
+#~ msgid "lineactive"
+#~ msgstr "активна линия"
+
+#~ msgid "sipCombo"
+#~ msgstr "SIP Избор"
+
+#~ msgid "Idle Text"
+#~ msgstr "Текст при ненабрано състояние"
+
+#~ msgid "Lines"
+#~ msgstr "Линии"
+
+#~ msgid "Users"
+#~ msgstr "Потребитили"
+
+#~ msgid "Rights"
+#~ msgstr "Права"
 
 #~ msgid "enter searchfilter"
 #~ msgstr "включи филтър за търсене"

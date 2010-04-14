@@ -13,68 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller/Course.php:79
-msgid "teacher"
-msgstr "teacher"
-
-#: Controller/Course.php:85
-msgid "Teacher"
-msgstr "Teacher"
-
-#: Controller/Course.php:86
-msgid "Teacher Account"
-msgstr "Teacher Account"
-
-#: Frontend/Json.php:240 js/CourseEditDialog.js:134 js/Models.js:42
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Course"
-msgstr[1] "Courses"
-
-#: js/CourseEditDialog.js:34
-msgid "Import course members"
-msgstr "Import course members"
-
-#: js/CourseEditDialog.js:150
-msgid "Course Name"
-msgstr "Course Name"
-
-#: js/CourseEditDialog.js:154 js/CourseEditDialog.js:161
-msgid "Course / School Type"
-msgstr "Course / School Type"
-
-#: js/CourseEditDialog.js:172
-msgid "Description"
-msgstr "Description"
-
-#: js/CourseEditDialog.js:178 js/CourseGridPanel.js:81
-msgid "Internet Access"
-msgstr "Internet Access"
-
-#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:88
-msgid "Fileserver Access"
-msgstr "Fileserver Access"
-
-#: js/CourseEditDialog.js:215
-msgid "Members"
-msgstr "Members"
-
-#: js/CourseEditDialog.js:241
-msgid "Login"
-msgstr "Login"
-
-#: js/CourseEditDialog.js:247
-msgid "Reset Password"
-msgstr "Reset Password"
-
-#: js/CourseEditDialog.js:265
-msgid "Set new password"
-msgstr "Set new password"
-
-#: js/CourseEditDialog.js:265
-msgid "Please enter the new password:"
-msgstr "Please enter the new password:"
-
 #: js/CourseGridPanel.js:51
 msgid "Quick search"
 msgstr "Quick search"
@@ -86,6 +24,14 @@ msgstr "Name"
 #: js/CourseGridPanel.js:74
 msgid "Type"
 msgstr "Type"
+
+#: js/CourseGridPanel.js:81 js/CourseEditDialog.js:178
+msgid "Internet Access"
+msgstr "Internet Access"
+
+#: js/CourseGridPanel.js:88 js/CourseEditDialog.js:184
+msgid "Fileserver Access"
+msgstr "Fileserver Access"
 
 #: js/CourseGridPanel.js:113
 msgid "Internet Access On"
@@ -119,6 +65,48 @@ msgstr "Courses"
 msgid "All Courses"
 msgstr "All Courses"
 
+#: js/CourseEditDialog.js:34
+msgid "Import course members"
+msgstr "Import course members"
+
+#: js/CourseEditDialog.js:134 js/Models.js:42 Frontend/Json.php:240
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Course"
+msgstr[1] "Courses"
+
+#: js/CourseEditDialog.js:150
+msgid "Course Name"
+msgstr "Course Name"
+
+#: js/CourseEditDialog.js:154 js/CourseEditDialog.js:161
+msgid "Course / School Type"
+msgstr "Course / School Type"
+
+#: js/CourseEditDialog.js:172
+msgid "Description"
+msgstr "Description"
+
+#: js/CourseEditDialog.js:215
+msgid "Members"
+msgstr "Members"
+
+#: js/CourseEditDialog.js:241
+msgid "Login"
+msgstr "Login"
+
+#: js/CourseEditDialog.js:247
+msgid "Reset Password"
+msgstr "Reset Password"
+
+#: js/CourseEditDialog.js:265
+msgid "Set new password"
+msgstr "Set new password"
+
+#: js/CourseEditDialog.js:265
+msgid "Please enter the new password:"
+msgstr "Please enter the new password:"
+
 #: js/Models.js:46
 msgid "record list"
 msgid_plural "record lists"
@@ -130,3 +118,15 @@ msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Course Type"
 msgstr[1] "Course Types"
+
+#: Controller/Course.php:79
+msgid "teacher"
+msgstr "teacher"
+
+#: Controller/Course.php:85
+msgid "Teacher"
+msgstr "Teacher"
+
+#: Controller/Course.php:86
+msgid "Teacher Account"
+msgstr "Teacher Account"

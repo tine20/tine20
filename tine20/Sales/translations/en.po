@@ -25,8 +25,8 @@ msgstr "add, edit and delete products"
 msgid "Title"
 msgstr "Title"
 
-#: js/ContractEditDialog.js:109 js/ProductEditDialog.js:126
-#: js/ProductGridPanel.js:128
+#: js/ContractEditDialog.js:109 js/ProductGridPanel.js:128
+#: js/ProductEditDialog.js:126
 msgid "Description"
 msgstr "Description"
 
@@ -49,6 +49,42 @@ msgstr "Contract number"
 #: js/ContractGridPanel.js:119
 msgid "Status"
 msgstr "Status"
+
+#: js/Sales.js:94
+msgid "Products"
+msgstr "Products"
+
+#: js/Sales.js:99
+msgid "All Products"
+msgstr "All Products"
+
+#: js/Sales.js:104
+msgid "Contracts"
+msgstr "Contracts"
+
+#: js/Sales.js:109 js/Sales.js:144
+msgid "All Contracts"
+msgstr "All Contracts"
+
+#: js/ProductGridPanel.js:124
+msgid "Tags"
+msgstr "Tags"
+
+#: js/ProductGridPanel.js:125 js/ProductEditDialog.js:105
+msgid "Name"
+msgstr "Name"
+
+#: js/ProductGridPanel.js:126 js/ProductEditDialog.js:118
+msgid "Manufacturer"
+msgstr "Manufacturer"
+
+#: js/ProductGridPanel.js:127 js/ProductEditDialog.js:122
+msgid "Category"
+msgstr "Category"
+
+#: js/ProductGridPanel.js:129 js/ProductEditDialog.js:111
+msgid "Price"
+msgstr "Price"
 
 #: js/Models.js:41
 msgid "Product"
@@ -77,42 +113,6 @@ msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] "contracts list"
 msgstr[1] "contracts lists"
-
-#: js/ProductEditDialog.js:105 js/ProductGridPanel.js:125
-msgid "Name"
-msgstr "Name"
-
-#: js/ProductEditDialog.js:111 js/ProductGridPanel.js:129
-msgid "Price"
-msgstr "Price"
-
-#: js/ProductEditDialog.js:118 js/ProductGridPanel.js:126
-msgid "Manufacturer"
-msgstr "Manufacturer"
-
-#: js/ProductEditDialog.js:122 js/ProductGridPanel.js:127
-msgid "Category"
-msgstr "Category"
-
-#: js/ProductGridPanel.js:124
-msgid "Tags"
-msgstr "Tags"
-
-#: js/Sales.js:94
-msgid "Products"
-msgstr "Products"
-
-#: js/Sales.js:99
-msgid "All Products"
-msgstr "All Products"
-
-#: js/Sales.js:104
-msgid "Contracts"
-msgstr "Contracts"
-
-#: js/Sales.js:109 js/Sales.js:144
-msgid "All Contracts"
-msgstr "All Contracts"
 
 #: Setup/setup.xml:243
 msgid "Shared Contracts"

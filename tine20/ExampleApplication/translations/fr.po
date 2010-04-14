@@ -13,53 +13,54 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: js/ExampleApplication.js:29
-msgid "ExampleRecords"
+#: Controller.php:97
+#, python-format
+msgid "%s's personal example records"
 msgstr ""
 
-#: js/ExampleApplication.js:34
-msgid "All ExampleRecords"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:91 js/Models.js:36
-msgid "ExampleRecord"
-msgid_plural "ExampleRecords"
+#: js/Model.js:33
+msgid "example record"
+msgid_plural "example records"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/ExampleRecordEditDialog.js:108 js/ExampleRecordGridPanel.js:119
+#: js/Model.js:37
+msgid "example record list"
+msgid_plural "example record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ExampleRecordEditDialog.js:89
+msgid "ExampleRecord"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
 msgid "Name"
 msgstr ""
 
-#: js/ExampleRecordGridPanel.js:87
+#: js/ExampleApplication.js:27
+msgid "Example Application"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:77
 msgid "Quick search"
 msgstr ""
 
-#: js/ExampleRecordGridPanel.js:88
-msgid "Description"
-msgstr ""
-
-#: js/ExampleRecordGridPanel.js:125
+#: js/ExampleRecordGridPanel.js:111
 msgid "Title"
 msgstr ""
 
-#: js/ExampleRecordGridPanel.js:131
+#: js/ExampleRecordGridPanel.js:117
 msgid "Status"
 msgstr ""
 
-#: js/ExampleRecordGridPanel.js:138
+#: js/ExampleRecordGridPanel.js:124
 msgid "Budget"
 msgstr ""
 
-#: js/ExampleRecordGridPanel.js:162
+#: js/ExampleRecordGridPanel.js:148
 msgid "Show closed"
 msgstr ""
-
-#: js/Models.js:40
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
 
 #: Setup/setup.xml:10
 msgid "ExampleApplication"

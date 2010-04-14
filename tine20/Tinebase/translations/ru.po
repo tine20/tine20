@@ -17,6 +17,42 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: Tinebase\n"
 
+#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:54
+msgid "Tags"
+msgstr "Тэги"
+
+#: Export/Pdf.php:428
+msgid "Created by"
+msgstr "Создано"
+
+#: Export/Pdf.php:482
+msgid "Activities"
+msgstr "Действия"
+
+#: Export/Ods.php:204
+msgid "Filter"
+msgstr "Фильтр"
+
+#: Export/Ods.php:288
+msgid "Data"
+msgstr ""
+
+#: Acl/Rights.php:134
+msgid "Report bugs"
+msgstr "Сообщить об ошибках"
+
+#: Acl/Rights.php:135
+msgid "Report bugs to the software vendor directly when they occur."
+msgstr ""
+
+#: Acl/Rights.php:138
+msgid "Check version"
+msgstr "Проверить версию"
+
+#: Acl/Rights.php:139
+msgid "Check for new versions of this software."
+msgstr ""
+
 #: Acl/Rights/Abstract.php:65
 msgid "admin"
 msgstr "администратор"
@@ -33,514 +69,60 @@ msgstr "запуск"
 msgid "run right description"
 msgstr "описание прав запуска "
 
-#: Acl/Rights.php:134
-msgid "Report bugs"
-msgstr "Сообщить об ошибках"
-
-#: Acl/Rights.php:135
-msgid "Report bugs to tine20.org directly when they occur"
-msgstr "Сообщайте об ошибках, когда они происходят, прямо на tine20.org"
-
-#: Acl/Rights.php:138
-msgid "Check version"
-msgstr "Проверить версию"
-
-#: Acl/Rights.php:139
-msgid "Check tine20.org for new versions"
-msgstr "Проверить новые версии на tine20.org"
-
-#: Export/Ods.php:194
-msgid "Filter"
-msgstr "Фильтр"
-
-#: Export/Ods.php:278
-msgid "Data"
-msgstr ""
-
-#: Export/Pdf.php:207 js/widgets/tags/TagsPanel.js:54
-msgid "Tags"
-msgstr "Тэги"
-
-#: Export/Pdf.php:404
-msgid "Created by"
-msgstr "Создано"
-
-#: Export/Pdf.php:458
-msgid "Activities"
-msgstr "Действия"
-
-#: Frontend/Http.php:532 js/ExceptionHandler.js:127
-msgid "Authorisation Required"
-msgstr "Необходима регистрация"
-
-#: Frontend/Http.php:533
-msgid "Your session is not valid. You need to login again."
-msgstr "Время вашего сеанса истекло. Вам нужно зарегистрироваться снова. "
-
-#: Frontend/Http.php:559 js/ExceptionDialog.js:46
-msgid "Abnormal End"
-msgstr "Неправильное завершение"
-
-#: Frontend/Http.php:560 js/ExceptionDialog.js:71
-msgid "An error occurred, the program ended abnormal."
-msgstr "Произошла ошибка, программа завершилась неправильно."
-
-#: js/common.js:150
-msgid "{0} minute"
-msgid_plural "{0} minutes"
-msgstr[0] "{0} минута"
-msgstr[1] "{0} минуты"
-msgstr[2] "{0} минут"
-
-#: js/common.js:151
-msgid "{0} hour"
-msgid_plural "{0} hours"
-msgstr[0] "{0} час"
-msgstr[1] "{0} часа"
-msgstr[2] "{0} часов"
-
-#: js/common.js:152
-msgid "{0} workday"
-msgid_plural "{0} workdays"
-msgstr[0] "{0} рабочий день"
-msgstr[1] "{0} рабочих дня"
-msgstr[2] "{0} рабочих дней"
-
-#: js/data/Record.js:115
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Задача"
-msgstr[1] "Задачи"
-msgstr[2] "Задач"
-
-#: js/data/Record.js:119
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "список заданий"
-msgstr[1] "списка заданий"
-msgstr[2] "списков заданий"
-
-#: js/ExceptionDialog.js:54 js/MainScreen.js:451
-#: js/widgets/container/ContainerSelect.js:373
-#: js/widgets/dialog/EditDialog.js:195
-#: js/widgets/dialog/MultiOptionsDialog.js:98
-#: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
-#: js/widgets/tags/TagsMassAttachAction.js:86
-msgid "Cancel"
-msgstr "Отмена"
-
-#: js/ExceptionDialog.js:62
-msgid "Send Report"
-msgstr "Послать отчёт"
-
-#: js/ExceptionDialog.js:72
-msgid "The last action you made was potentially not performed correctly."
-msgstr ""
-"Последнее действие, которое Вы сделали, было потенциально не правильно "
-"выполнено."
-
-#: js/ExceptionDialog.js:73
-msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occurred."
-msgstr ""
-"Пожалуйста, помогите улучшить это программное обеспечение. Сообщите "
-"издателю, включив краткое описание, что и где Вы делали, когда возникла "
-"ошибка. "
-
-#: js/ExceptionDialog.js:79 js/widgets/tags/TagsPanel.js:595
-msgid "Description"
-msgstr "Описание"
-
-#: js/ExceptionDialog.js:87
-msgid "Send Contact Information"
-msgstr "Отправить контактную информацию"
-
-#: js/ExceptionDialog.js:104
-msgid "Details:"
-msgstr "Подробности:"
-
-#: js/ExceptionDialog.js:132
-msgid "Sending report..."
-msgstr "Отчёт отправляется..."
-
-#: js/ExceptionDialog.js:132
-msgid "Please wait a moment"
-msgstr "Пожалуйста, подождите минуту"
-
-#: js/ExceptionDialog.js:174
-msgid "Transmission Completed"
-msgstr "Передача завершена"
-
-#: js/ExceptionDialog.js:175
-msgid "Your report has been sent. Thanks for your contribution"
-msgstr "Ваш отчет был отправлен. Спасибо за Ваше содействие"
-
-#: js/ExceptionDialog.js:175
-msgid "Please restart your browser now!"
-msgstr "Пожалуйста, перезапустите ваш браузер!"
-
-#: js/ExceptionHandler.js:128
-msgid "Your session timed out. You need to login again."
-msgstr "Время вашего сеанса истекло. Вам нужно зарегистрироваться снова. "
-
-#: js/ExceptionHandler.js:145
-msgid "Insufficient Rights"
-msgstr "Недостаточно прав"
-
-#: js/ExceptionHandler.js:146
-msgid "Sorry, you are not permitted to perform this action"
-msgstr "К сожалению Вам не позволяется выполнить это действие"
-
-#: js/ExceptionHandler.js:155
-msgid "Not Found"
-msgstr "Не найден"
-
-#: js/ExceptionHandler.js:156
-#, fuzzy
-msgid ""
-"Sorry, your request could not be completed because the required data could "
-"not be found. In most cases this means that someone already deleted the "
-"data. Please refresh your current view."
-msgstr ""
-"К сожалению, ваш запрос не может быть завершён, поскольку необходимые данные "
-"не могут быть найдены. В большинстве случаев это означает, что кто-то уже "
-"удалил данные. Просьба обновить ваш текущий вид."
-
-#: js/ExceptionHandler.js:165
-msgid "Concurrent Updates"
-msgstr "Параллельные обновления"
-
-#: js/ExceptionHandler.js:166
-msgid ""
-"Someone else saved this record while you where editing the data. You need to "
-"reload and make your changes again."
-msgstr ""
-"Вовремя того, как вы изменяли  эту запись, она была изменена кем-то другим. "
-"Вам нужно обновить и сделать изменения снова."
-
-#: js/ExceptionHandler.js:174
-msgid "Connection lost, please check your network!"
-msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
-
-#: js/ExceptionHandler.js:180
-msgid "Timeout"
-msgstr ""
-
-#: js/ExceptionHandler.js:181
-msgid ""
-"Sorry, some timeout occured while processing your request. Please reload "
-"your browser, try again or contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:190
-msgid "No Response"
-msgstr ""
-
-#: js/ExceptionHandler.js:191
-msgid ""
-"Sorry, the Server did not respond any data. Please reload your browser, try "
-"again or contact your administrator."
-msgstr ""
-
-#: js/LoginPanel.js:79 js/LoginPanel.js:112
-msgid "Login"
-msgstr "Вход в систему"
-
-#: js/LoginPanel.js:88 js/widgets/dialog/CredentialsDialog.js:76
-msgid "Username"
-msgstr "Имя пользователя"
-
-#: js/LoginPanel.js:99 js/widgets/dialog/CredentialsDialog.js:80
-msgid "Password"
-msgstr "Пароль"
-
-#: js/LoginPanel.js:131
-msgid "Tine 2.0 is made for you"
-msgstr ""
-
-#: js/LoginPanel.js:133
-msgid ""
-"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas "
-"and get help."
-msgstr ""
-
-#: js/LoginPanel.js:139
-msgid "Tine 2.0 Homepage"
-msgstr ""
-
-#: js/LoginPanel.js:140
-msgid "Tine 2.0 Forum"
-msgstr ""
-
-#: js/LoginPanel.js:184
-msgid "about {0} minutes"
-msgstr ""
-
-#: js/LoginPanel.js:189 js/LoginPanel.js:343
-msgid "Tine 2.0 needs your help"
-msgstr ""
-
-#: js/LoginPanel.js:191 js/LoginPanel.js:345
-msgid ""
-"We regularly need your feedback to make the next Tine 2.0 releases fit your "
-"needs even better. Help us and yourself by participating:"
-msgstr ""
-
-#: js/LoginPanel.js:197
-msgid "participate!"
-msgstr ""
-
-#: js/LoginPanel.js:219
-msgid "Languages"
-msgstr ""
-
-#: js/LoginPanel.js:220
-msgid "Duration"
-msgstr ""
-
-#: js/LoginPanel.js:271
-msgid "Logging you in..."
-msgstr "Регистрирую Вас в..."
-
-#: js/LoginPanel.js:271 js/widgets/container/GrantsDialog.js:164
-#: js/widgets/grid/PersistentFilterPicker.js:126
-#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
-#: js/widgets/tree/ContextMenu.js:140
-msgid "Please wait"
-msgstr "Пожалуйста, подождите"
-
-#: js/LoginPanel.js:283
-#, fuzzy
-msgid "Login successful. Loading {0}..."
-msgstr "Успешный вход в систему. Загрузка Tine 2.0..."
-
-#: js/LoginPanel.js:283 js/MainScreen.js:549
-msgid "Please wait!"
-msgstr "Пожалуйста, подождите!"
-
-#: js/LoginPanel.js:288
-msgid "Login failure"
-msgstr "Регистрация не удалась"
-
-#: js/LoginPanel.js:289
-msgid "Your username and/or your password are wrong!!!"
-msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
-
-#: js/LoginPanel.js:313
-msgid "Please enter your login data"
-msgstr "Пожалуйста, введите свои данные входа в систему"
-
-#: js/MainScreen.js:52
-msgid "Debug Console (Ctrl + F11)"
-msgstr ""
-
-#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:141
-msgid "Admin"
-msgstr "Администратор"
-
-#: js/MainScreen.js:67 js/MainScreen.js:229
-#: js/widgets/dialog/PreferencesPanel.js:37
-msgid "Preferences"
-msgstr "Параметры"
-
-#: js/MainScreen.js:89
-msgid "User: {0}"
-msgstr "Пользователь: {0}"
-
-#: js/MainScreen.js:109
-msgid "Sorry"
-msgstr ""
-
-#: js/MainScreen.js:109
-#, fuzzy
-msgid ""
-"There are no applications enabled for you. Please contact your administrator."
-msgstr ""
-"Сервер не ответил на Ваш запрос. Пожалуйста проверьте свою сеть или "
-"свяжитесь с Вашим администратором."
-
-#: js/MainScreen.js:209 js/MainScreen.js:384
-#, fuzzy
-msgid "About {0}"
-msgstr "Добавить {0}"
-
-#: js/MainScreen.js:215
-msgid "Change password"
-msgstr "Изменить пароль"
-
-#: js/MainScreen.js:222
-msgid "Install Google Gears"
-msgstr "Установить Google Gears"
-
-#: js/MainScreen.js:238
-msgid "Logout"
-msgstr "Выход"
-
-#: js/MainScreen.js:239
-#, fuzzy
-msgid "Logout from {0}"
-msgstr "Выход из Tine 2.0"
-
-#: js/MainScreen.js:399
-msgid "About Tine 2.0"
-msgstr "О Tine 2.0"
-
-#: js/MainScreen.js:415
-msgid "Change Password For \"{0}\""
-msgstr "Изменить пароль для \"{0}\""
-
-#: js/MainScreen.js:439
-msgid "Old Password"
-msgstr "Старый пароль"
-
-#: js/MainScreen.js:443
-msgid "New Password"
-msgstr "Новый пароль"
-
-#: js/MainScreen.js:447
-msgid "Repeat new Password"
-msgstr "Повторите новый пароль"
-
-#: js/MainScreen.js:457 js/widgets/container/ContainerSelect.js:382
-#: js/widgets/dialog/EditDialog.js:178
-#: js/widgets/dialog/MultiOptionsDialog.js:91
-#: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
-#: js/widgets/tags/TagsMassAttachAction.js:92
-msgid "Ok"
-msgstr "Ок"
-
-#: js/MainScreen.js:466
-msgid "Please Wait!"
-msgstr "Пожалуйста, подождите!"
-
-#: js/MainScreen.js:467
-msgid "changing password..."
-msgstr "изменение пароля..."
-
-#: js/MainScreen.js:478
-msgid "Success"
-msgstr "Успех"
-
-#: js/MainScreen.js:479
-msgid "Your password has been changed."
-msgstr "Ваш пароль изменен."
-
-#: js/MainScreen.js:485 js/MainScreen.js:495
-msgid "Failure"
-msgstr "Сбой"
-
-#: js/MainScreen.js:496
-msgid "The new passwords mismatch, please correct them."
-msgstr "Новые пароли не совпадают, пожалуйста, исправьте их."
-
-#: js/MainScreen.js:514
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-"Установка Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
-"локально на этом компьютере."
-
-#: js/MainScreen.js:535 js/widgets/app/GridPanel.js:770
-#: js/widgets/dialog/EditDialog.js:451
-#: js/widgets/grid/PersistentFilterPicker.js:124
-#: js/widgets/tree/ContextMenu.js:84
-msgid "Confirm"
-msgstr "Подтверждение"
-
-#: js/MainScreen.js:535
-msgid "Are you sure you want to logout?"
-msgstr "Вы уверены, что хотите выйти?"
-
-#: js/MainScreen.js:549
-msgid "Logging you out..."
-msgstr "завершаю программу..."
-
-#: js/Models.js:74
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Models.js:74
-msgid "Groups"
-msgstr ""
-
-#: js/Models.js:265
-msgid "Import"
-msgid_plural "Imports"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Models.js:298
-msgid "Credentials"
-msgid_plural "Credentials"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Models.js:325
-#, fuzzy
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] "Приложения"
-msgstr[1] "Приложения"
-msgstr[2] "Приложения"
-
-#: js/tineInit.js:573
-msgid ""
-"Fatal Error: Client self-update failed, please contact your administrator "
-"and/or restart/reload your browser."
-msgstr ""
-
-#: js/UserRegistration.js:33
-msgid "Registration Wizard"
-msgstr "Помощник регистрации"
-
-#: js/UserRegistration.js:86
-msgid "Given name"
-msgstr "Имя"
-
-#: js/UserRegistration.js:97
-msgid "Family name"
-msgstr "Фамилия"
-
-#: js/UserRegistration.js:108
-msgid "Login name"
-msgstr "Имя пользователя"
-
-#: js/UserRegistration.js:121
-msgid "Emailaddress"
-msgstr "Электронный адрес"
-
-#: js/UserRegistration.js:167
-msgid "Congratulations!"
-msgstr "Поздравления!"
-
-#: js/UserRegistration.js:167
-msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr ""
-"Вы ввели всю необходимую информацию. Как только вы нажмете кнопку готово, "
-"вам будет отправлено подтверждающие электронное письмо."
-
-#: js/ux/ConnectionStatus.js:52
+#: js/ux/ConnectionStatus.js:57
 msgid "online"
 msgstr "онлайн"
 
-#: js/ux/ConnectionStatus.js:53
+#: js/ux/ConnectionStatus.js:58
 msgid "offline"
 msgstr "офлайн"
 
-#: js/ux/ConnectionStatus.js:54 User/Abstract.php:247 User/Abstract.php:248
+#: js/ux/ConnectionStatus.js:59 User/Abstract.php:247 User/Abstract.php:248
 #: User/Abstract.php:249 User/Abstract.php:250 User/Abstract.php:251
 msgid "unknown"
 msgstr "неизвестно"
+
+#: js/ux/grid/PagingToolbar.js:45
+msgid "{0} selected"
+msgstr "{0} выбрано"
+
+#: js/ux/grid/PagingToolbar.js:46
+msgid "Unselect all"
+msgstr "Снять выделение"
+
+#: js/ux/grid/PagingToolbar.js:47
+msgid "Select all visible ({0} records)"
+msgstr "Выбрать все видимые ({0} записей)"
+
+#: js/ux/grid/PagingToolbar.js:48
+msgid "Select all pages ({0} records)"
+msgstr "Выбрать все страницы ({0} записей)"
+
+#: js/ux/grid/PagingToolbar.js:49
+msgid "Toggle selection"
+msgstr "Инвертировать выбор"
+
+#: js/ux/form/RecordsComboBox.js:27
+msgid "Software Version"
+msgstr "Версия программного обеспечения"
+
+#: js/ux/form/LayerCombo.js:194 js/MainMenu.js:235 js/ExceptionDialog.js:54
+#: js/widgets/EditRecord.js:136 js/widgets/tags/TagsMassAttachAction.js:86
+#: js/widgets/container/ContainerSelect.js:450
+#: js/widgets/dialog/PreferencesDialog.js:129
+#: js/widgets/dialog/EditDialog.js:183
+#: js/widgets/dialog/MultiOptionsDialog.js:98
+msgid "Cancel"
+msgstr "Отмена"
+
+#: js/ux/form/LayerCombo.js:199 js/MainMenu.js:241
+#: js/widgets/EditRecord.js:115 js/widgets/tags/TagsMassAttachAction.js:92
+#: js/widgets/container/ContainerSelect.js:459
+#: js/widgets/dialog/PreferencesDialog.js:121
+#: js/widgets/dialog/EditDialog.js:166
+#: js/widgets/dialog/MultiOptionsDialog.js:91
+msgid "Ok"
+msgstr "Ок"
 
 #: js/ux/form/ImageField.js:67
 msgid "Loading"
@@ -592,785 +174,516 @@ msgid "Could not load image. Please notify your Administrator"
 msgstr ""
 "Картинка не могла загрузиться. Пожалуйста, информируйте своего администратора"
 
-#: js/ux/form/RecordsComboBox.js:27
-msgid "Software Version"
-msgstr "Версия программного обеспечения"
-
-#: js/ux/grid/PagingToolbar.js:45
-msgid "{0} selected"
-msgstr "{0} выбрано"
-
-#: js/ux/grid/PagingToolbar.js:46
-msgid "Unselect all"
-msgstr "Снять выделение"
-
-#: js/ux/grid/PagingToolbar.js:47
-msgid "Select all visible ({0} records)"
-msgstr "Выбрать все видимые ({0} записей)"
-
-#: js/ux/grid/PagingToolbar.js:48
-msgid "Select all pages ({0} records)"
-msgstr "Выбрать все страницы ({0} записей)"
-
-#: js/ux/grid/PagingToolbar.js:49
-msgid "Toggle selection"
-msgstr "Инвертировать выбор"
-
-#: js/ux/SearchField.js:41 js/widgets/GridPicker.js:389
+#: js/ux/SearchField.js:41
 msgid "enter searchfilter"
 msgstr "ввести поисковый фильтр"
 
-#: js/widgets/account/PickerGridPanel.js:167
-msgid "Remove account"
-msgstr "Удалить учётную запись"
+#: js/UserRegistration.js:33
+msgid "Registration Wizard"
+msgstr "Помощник регистрации"
 
-#: js/widgets/account/PickerGridPanel.js:231
+#: js/UserRegistration.js:86
+msgid "Given name"
+msgstr "Имя"
+
+#: js/UserRegistration.js:97
+msgid "Family name"
+msgstr "Фамилия"
+
+#: js/UserRegistration.js:108
+msgid "Login name"
+msgstr "Имя пользователя"
+
+#: js/UserRegistration.js:121
+msgid "Emailaddress"
+msgstr "Электронный адрес"
+
+#: js/UserRegistration.js:167
+msgid "Congratulations!"
+msgstr "Поздравления!"
+
+#: js/UserRegistration.js:167
+msgid ""
+"You have entered all needed information. If you press the Finish button we "
+"will send you the registration email."
+msgstr ""
+"Вы ввели всю необходимую информацию. Как только вы нажмете кнопку готово, "
+"вам будет отправлено подтверждающие электронное письмо."
+
+#: js/ExceptionHandler.js:127 Frontend/Http.php:536
+msgid "Authorisation Required"
+msgstr "Необходима регистрация"
+
+#: js/ExceptionHandler.js:128
+msgid "Your session timed out. You need to login again."
+msgstr "Время вашего сеанса истекло. Вам нужно зарегистрироваться снова. "
+
+#: js/ExceptionHandler.js:145
+msgid "Insufficient Rights"
+msgstr "Недостаточно прав"
+
+#: js/ExceptionHandler.js:146
+msgid "Sorry, you are not permitted to perform this action"
+msgstr "К сожалению Вам не позволяется выполнить это действие"
+
+#: js/ExceptionHandler.js:155
+msgid "Not Found"
+msgstr "Не найден"
+
+#: js/ExceptionHandler.js:156
+#, fuzzy
+msgid ""
+"Sorry, your request could not be completed because the required data could "
+"not be found. In most cases this means that someone already deleted the "
+"data. Please refresh your current view."
+msgstr ""
+"К сожалению, ваш запрос не может быть завершён, поскольку необходимые данные "
+"не могут быть найдены. В большинстве случаев это означает, что кто-то уже "
+"удалил данные. Просьба обновить ваш текущий вид."
+
+#: js/ExceptionHandler.js:165
+msgid "Concurrent Updates"
+msgstr "Параллельные обновления"
+
+#: js/ExceptionHandler.js:166
+msgid ""
+"Someone else saved this record while you where editing the data. You need to "
+"reload and make your changes again."
+msgstr ""
+"Вовремя того, как вы изменяли  эту запись, она была изменена кем-то другим. "
+"Вам нужно обновить и сделать изменения снова."
+
+#: js/ExceptionHandler.js:176
+msgid "Service Unavailable"
+msgstr ""
+
+#: js/ExceptionHandler.js:177
+msgid ""
+"The server is currently unable to handle the request due to a temporary "
+"overloading or maintenance of the server. Please try again or contact your "
+"administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:184
+msgid "Connection lost, please check your network!"
+msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
+
+#: js/ExceptionHandler.js:190
+msgid "Timeout"
+msgstr ""
+
+#: js/ExceptionHandler.js:191
+msgid ""
+"Sorry, some timeout occured while processing your request. Please reload "
+"your browser, try again or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:200
+msgid "No Response"
+msgstr ""
+
+#: js/ExceptionHandler.js:201
+msgid ""
+"Sorry, the Server did not respond any data. Please reload your browser, try "
+"again or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:210
+msgid "No Role Memberships"
+msgstr ""
+
+#: js/ExceptionHandler.js:211
+msgid ""
+"Your user account has no role memberships. Please contact your administrator."
+msgstr ""
+
+#: js/data/Record.js:115
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Задача"
+msgstr[1] "Задачи"
+msgstr[2] "Задач"
+
+#: js/data/Record.js:119
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "список заданий"
+msgstr[1] "списка заданий"
+msgstr[2] "списков заданий"
+
+#: js/Container.js:130
+msgid "All {0}"
+msgstr "Все {0}"
+
+#: js/Container.js:131
+msgid "Shared {0}"
+msgstr "Общие {0}"
+
+#: js/Container.js:132
+msgid "Other Users {0}"
+msgstr "{0} других пользователей "
+
+#: js/Container.js:133
+msgid "Internal {0}"
+msgstr ""
+
+#: js/Container.js:137
+msgid "My {0}"
+msgstr "Мои {0}"
+
+#: js/tineInit.js:577
+msgid ""
+"Fatal Error: Client self-update failed, please contact your administrator "
+"and/or restart/reload your browser."
+msgstr ""
+
+#: js/common.js:150
+msgid "{0} minute"
+msgid_plural "{0} minutes"
+msgstr[0] "{0} минута"
+msgstr[1] "{0} минуты"
+msgstr[2] "{0} минут"
+
+#: js/common.js:151
+msgid "{0} hour"
+msgid_plural "{0} hours"
+msgstr[0] "{0} час"
+msgstr[1] "{0} часа"
+msgstr[2] "{0} часов"
+
+#: js/common.js:152
+msgid "{0} workday"
+msgid_plural "{0} workdays"
+msgstr[0] "{0} рабочий день"
+msgstr[1] "{0} рабочих дня"
+msgstr[2] "{0} рабочих дней"
+
+#: js/MainMenu.js:74
+msgid "User: {0}"
+msgstr "Пользователь: {0}"
+
+#: js/MainMenu.js:118 js/MainMenu.js:168
+#, fuzzy
+msgid "About {0}"
+msgstr "Добавить {0}"
+
+#: js/MainMenu.js:124
+msgid "Install Google Gears"
+msgstr "Установить Google Gears"
+
+#: js/MainMenu.js:130
+msgid "Debug Console (Ctrl + F11)"
+msgstr ""
+
+#: js/MainMenu.js:136 js/widgets/dialog/PreferencesPanel.js:37
+msgid "Preferences"
+msgstr "Параметры"
+
+#: js/MainMenu.js:142
+msgid "Change password"
+msgstr "Изменить пароль"
+
+#: js/MainMenu.js:149
+msgid "Logout"
+msgstr "Выход"
+
+#: js/MainMenu.js:150
+#, fuzzy
+msgid "Logout from {0}"
+msgstr "Выход из Tine 2.0"
+
+#: js/MainMenu.js:183
+msgid "About Tine 2.0"
+msgstr "О Tine 2.0"
+
+#: js/MainMenu.js:199
+msgid "Change Password For \"{0}\""
+msgstr "Изменить пароль для \"{0}\""
+
+#: js/MainMenu.js:223
+msgid "Old Password"
+msgstr "Старый пароль"
+
+#: js/MainMenu.js:227
+msgid "New Password"
+msgstr "Новый пароль"
+
+#: js/MainMenu.js:231
+msgid "Repeat new Password"
+msgstr "Повторите новый пароль"
+
+#: js/MainMenu.js:250
+msgid "Please Wait!"
+msgstr "Пожалуйста, подождите!"
+
+#: js/MainMenu.js:251
+msgid "changing password..."
+msgstr "изменение пароля..."
+
+#: js/MainMenu.js:262
+msgid "Success"
+msgstr "Успех"
+
+#: js/MainMenu.js:263
+msgid "Your password has been changed."
+msgstr "Ваш пароль изменен."
+
+#: js/MainMenu.js:269 js/MainMenu.js:279
+msgid "Failure"
+msgstr "Сбой"
+
+#: js/MainMenu.js:280
+msgid "The new passwords mismatch, please correct them."
+msgstr "Новые пароли не совпадают, пожалуйста, исправьте их."
+
+#: js/MainMenu.js:298
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
+msgstr ""
+"Установка Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
+"локально на этом компьютере."
+
+#: js/MainMenu.js:319 js/widgets/grid/PersistentFilterPicker.js:166
+#: js/widgets/app/GridPanel.js:911 js/widgets/dialog/EditDialog.js:440
+#: js/widgets/tree/ContextMenu.js:82
+msgid "Confirm"
+msgstr "Подтверждение"
+
+#: js/MainMenu.js:319
+msgid "Are you sure you want to logout?"
+msgstr "Вы уверены, что хотите выйти?"
+
+#: js/MainMenu.js:333
+msgid "Logging you out..."
+msgstr "завершаю программу..."
+
+#: js/MainMenu.js:333 js/LoginPanel.js:282
+msgid "Please wait!"
+msgstr "Пожалуйста, подождите!"
+
+#: js/LoginPanel.js:78 js/LoginPanel.js:111
+msgid "Login"
+msgstr "Вход в систему"
+
+#: js/LoginPanel.js:87 js/widgets/dialog/CredentialsDialog.js:76
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: js/LoginPanel.js:98 js/widgets/dialog/CredentialsDialog.js:80
+msgid "Password"
+msgstr "Пароль"
+
+#: js/LoginPanel.js:130
+msgid "Tine 2.0 is made for you"
+msgstr ""
+
+#: js/LoginPanel.js:132
+msgid ""
+"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
+"for your needs! So you are warmly welcome to discuss with us, bring in ideas "
+"and get help."
+msgstr ""
+
+#: js/LoginPanel.js:138
+msgid "Tine 2.0 Homepage"
+msgstr ""
+
+#: js/LoginPanel.js:139
+msgid "Tine 2.0 Forum"
+msgstr ""
+
+#: js/LoginPanel.js:183
+msgid "about {0} minutes"
+msgstr ""
+
+#: js/LoginPanel.js:188 js/LoginPanel.js:342
+msgid "Tine 2.0 needs your help"
+msgstr ""
+
+#: js/LoginPanel.js:190 js/LoginPanel.js:344
+msgid ""
+"We regularly need your feedback to make the next Tine 2.0 releases fit your "
+"needs even better. Help us and yourself by participating:"
+msgstr ""
+
+#: js/LoginPanel.js:196
+msgid "participate!"
+msgstr ""
+
+#: js/LoginPanel.js:218
+msgid "Languages"
+msgstr ""
+
+#: js/LoginPanel.js:219
+msgid "Duration"
+msgstr ""
+
+#: js/LoginPanel.js:270
+msgid "Logging you in..."
+msgstr "Регистрирую Вас в..."
+
+#: js/LoginPanel.js:270 js/widgets/grid/PersistentFilterPicker.js:168
+#: js/widgets/grid/PersistentFilterPicker.js:192
+#: js/widgets/container/GrantsDialog.js:173 js/widgets/tree/ContextMenu.js:43
+#: js/widgets/tree/ContextMenu.js:84 js/widgets/tree/ContextMenu.js:140
+msgid "Please wait"
+msgstr "Пожалуйста, подождите"
+
+#: js/LoginPanel.js:282
+#, fuzzy
+msgid "Login successful. Loading {0}..."
+msgstr "Успешный вход в систему. Загрузка Tine 2.0..."
+
+#: js/LoginPanel.js:287
+msgid "Login failure"
+msgstr "Регистрация не удалась"
+
+#: js/LoginPanel.js:288
+msgid "Your username and/or your password are wrong!!!"
+msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
+
+#: js/LoginPanel.js:312
+msgid "Please enter your login data"
+msgstr "Пожалуйста, введите свои данные входа в систему"
+
+#: js/Models.js:74
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Models.js:74
+msgid "Groups"
+msgstr ""
+
+#: js/Models.js:273
+msgid "Import"
+msgid_plural "Imports"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Models.js:306
+msgid "Credentials"
+msgid_plural "Credentials"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Models.js:333
+#, fuzzy
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] "Приложения"
+msgstr[1] "Приложения"
+msgstr[2] "Приложения"
+
+#: js/ExceptionDialog.js:46 Frontend/Http.php:563
+msgid "Abnormal End"
+msgstr "Неправильное завершение"
+
+#: js/ExceptionDialog.js:62
+msgid "Send Report"
+msgstr "Послать отчёт"
+
+#: js/ExceptionDialog.js:71 Frontend/Http.php:564
+msgid "An error occurred, the program ended abnormal."
+msgstr "Произошла ошибка, программа завершилась неправильно."
+
+#: js/ExceptionDialog.js:72
+msgid "The last action you made was potentially not performed correctly."
+msgstr ""
+"Последнее действие, которое Вы сделали, было потенциально не правильно "
+"выполнено."
+
+#: js/ExceptionDialog.js:73
+msgid ""
+"Please help improving this software and notify the vendor. Include a brief "
+"description of what you where doing when the error occurred."
+msgstr ""
+"Пожалуйста, помогите улучшить это программное обеспечение. Сообщите "
+"издателю, включив краткое описание, что и где Вы делали, когда возникла "
+"ошибка. "
+
+#: js/ExceptionDialog.js:79 js/widgets/tags/TagsPanel.js:595
+msgid "Description"
+msgstr "Описание"
+
+#: js/ExceptionDialog.js:87
+msgid "Send Contact Information"
+msgstr "Отправить контактную информацию"
+
+#: js/ExceptionDialog.js:104
+msgid "Details:"
+msgstr "Подробности:"
+
+#: js/ExceptionDialog.js:132
+msgid "Sending report..."
+msgstr "Отчёт отправляется..."
+
+#: js/ExceptionDialog.js:132
+msgid "Please wait a moment"
+msgstr "Пожалуйста, подождите минуту"
+
+#: js/ExceptionDialog.js:174
+msgid "Transmission Completed"
+msgstr "Передача завершена"
+
+#: js/ExceptionDialog.js:175
+msgid "Your report has been sent. Thanks for your contribution"
+msgstr "Ваш отчет был отправлен. Спасибо за Ваше содействие"
+
+#: js/ExceptionDialog.js:175
+msgid "Please restart your browser now!"
+msgstr "Пожалуйста, перезапустите ваш браузер!"
+
+#: js/widgets/account/PickerGridPanel.js:146
 #, fuzzy
 msgid "Search User"
 msgstr "Поиск"
 
-#: js/widgets/account/PickerGridPanel.js:237
+#: js/widgets/account/PickerGridPanel.js:152
 #, fuzzy
 msgid "Search Group"
 msgstr "Поиск..."
 
-#: js/widgets/account/PickerGridPanel.js:243
+#: js/widgets/account/PickerGridPanel.js:158
 #, fuzzy
 msgid "Add Anyone"
 msgstr "Добавить примечание"
 
-#: js/widgets/account/PickerGridPanel.js:251
+#: js/widgets/account/PickerGridPanel.js:166
 #, fuzzy
 msgid "Anyone"
 msgstr "Нет"
 
-#: js/widgets/account/PickerGridPanel.js:298
+#: js/widgets/account/PickerGridPanel.js:213
 msgid "Search for users ..."
 msgstr ""
 
-#: js/widgets/account/PickerGridPanel.js:318
+#: js/widgets/account/PickerGridPanel.js:233
 #, fuzzy
 msgid "Search for groups ..."
 msgstr "Поиск..."
 
-#: js/widgets/account/PickerGridPanel.js:372
+#: js/widgets/account/PickerGridPanel.js:249
 msgid "Name"
 msgstr "Имя"
 
-#: js/widgets/ActivitiesPanel.js:141
-msgid "Add a Note..."
-msgstr "Добавить примечание..."
-
-#: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:168
-#: js/widgets/container/GrantsDialog.js:100
-msgid "Add"
-msgstr "Добавить"
-
-#: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:396
-msgid "Note"
-msgstr "Примечание"
-
-#: js/widgets/ActivitiesPanel.js:169 js/widgets/ActivitiesPanel.js:322
-msgid "Add new note"
-msgstr "Добавить новое примечание"
-
-#: js/widgets/ActivitiesPanel.js:200
-msgid "Notes"
-msgstr "Примечания"
-
-#: js/widgets/ActivitiesPanel.js:264 js/widgets/ActivitiesPanel.js:321
-msgid "Add Note"
-msgstr "Добавить примечание"
-
-#: js/widgets/ActivitiesPanel.js:265
-msgid "Enter new note:"
-msgstr "Введите новое примечание:"
-
-#: js/widgets/ActivitiesPanel.js:308
-msgid "Add a {0} Note"
-msgstr "Добавить {0} примечание"
-
-#: js/widgets/ActivitiesPanel.js:394 js/widgets/ActivitiesPanel.js:529
-msgid "Type"
-msgstr "Тип"
-
-#: js/widgets/ActivitiesPanel.js:397
-msgid "Created By"
-msgstr "Создано "
-
-#: js/widgets/ActivitiesPanel.js:398
-msgid "Timestamp"
-msgstr "Метка времени"
-
-#: js/widgets/ActivitiesPanel.js:412
-msgid "Displaying history records {0} - {1} of {2}"
-msgstr "Показаны записи истории {0} - {1} из {2}"
-
-#: js/widgets/ActivitiesPanel.js:413
-msgid "No history to display"
-msgstr "Нет истории для отображения"
-
-#: js/widgets/ActivitiesPanel.js:511
-msgid "History"
-msgstr "История"
-
-#: js/widgets/ActivitiesPanel.js:523
-msgid "Quick search"
-msgstr ""
-
-#: js/widgets/ActivitiesPanel.js:524 js/widgets/ActivitiesPanel.js:525
-msgid "Time"
-msgstr "Время"
-
-#: js/widgets/ActivitiesPanel.js:527
-msgid "User"
-msgstr "Пользователь"
-
-#: js/widgets/app/GridPanel.js:284
-msgid "Edit {0}"
-msgstr "Изменить {0}"
-
-#: js/widgets/app/GridPanel.js:294
-msgid "Copy {0}"
-msgstr ""
-
-#: js/widgets/app/GridPanel.js:305 js/widgets/tree/ContextMenu.js:214
-msgid "Add {0}"
-msgstr "Добавить {0}"
-
-#: js/widgets/app/GridPanel.js:315 js/widgets/app/GridPanel.js:316
-#: js/widgets/app/GridPanel.js:318
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] "Удалить {0}"
-msgstr[1] "Удалить {0}"
-msgstr[2] "Удалить {0}"
-
-#: js/widgets/app/GridPanel.js:339
-#, fuzzy
-msgid "Tagging"
-msgstr "Тэг"
-
-#: js/widgets/app/GridPanel.js:419
-msgid "Displaying records {0} - {1} of {2}"
-msgstr "Показаны записи {0} - {1} из {2}"
-
-#: js/widgets/app/GridPanel.js:420
-msgid "No {0} to display"
-msgstr "Нет {0} для отображения"
-
-#: js/widgets/app/GridPanel.js:441
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-"Никаких {0} не найдено. Пожалуйста попытайтесь изменить свои критерии "
-"фильтра, варианты представления, или {1} поменять в тех в которых Вы ищете."
-
-#: js/widgets/app/GridPanel.js:755
-msgid "Not Allowed"
-msgstr "Не разрешено"
-
-#: js/widgets/app/GridPanel.js:756
-msgid "You are not allowed to delete all pages at once"
-msgstr "Вам не позволяется удалить все страницы сразу"
-
-#: js/widgets/app/GridPanel.js:768
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "Вы действительно хотите удалить выделенную запись"
-msgstr[1] "Вы действительно хотите удалить выделенные записи"
-msgstr[2] "Вы действительно хотите удалить выделенные записи"
-
-#: js/widgets/app/GridPanel.js:775 js/widgets/dialog/EditDialog.js:453
-msgid "Deleting {0}"
-msgstr "Удаление {0}"
-
-#: js/widgets/app/GridPanel.js:777
-msgid " ... This may take a long time!"
-msgstr "... Это может занять много времени!"
-
-#: js/widgets/app/GridPanel.js:796 js/widgets/dialog/EditDialog.js:463
-#: js/widgets/tags/TagsPanel.js:287 js/widgets/tags/TagsPanel.js:397
-#: js/widgets/tags/TagsPanel.js:430
-msgid "Failed"
-msgstr "Не удалось"
-
-#: js/widgets/app/GridPanel.js:796 js/widgets/dialog/EditDialog.js:463
-msgid "Could not delete {0}."
-msgstr "Не удалось удалить {0}."
-
-#: js/widgets/app/MainScreen.js:105
-msgid "Saved filter"
-msgstr "Сохранённый фильтр"
-
-#: js/widgets/container/ContainerSelect.js:123
-#: js/widgets/container/ContainerSelect.js:221
-msgid "choose other {0}..."
-msgstr "выберите другое {0}..."
-
-#: js/widgets/container/ContainerSelect.js:124
-msgid "Recently used {0}:"
-msgstr "Недавно используемый {0}:"
-
-#: js/widgets/container/ContainerSelect.js:233
-#: js/widgets/tags/TagsPanel.js:137 js/widgets/tags/TagsPanel.js:445
-#: js/widgets/tags/TagsPanel.js:449
-msgid "personal"
-msgstr "личные"
-
-#: js/widgets/container/ContainerSelect.js:233
-msgid "shared"
-msgstr "общие"
-
-#: js/widgets/container/ContainerSelect.js:370
-msgid "please select a {0}"
-msgstr "пожалуйста, выберите {0}"
-
-#: js/widgets/container/ContainerTree.js:134
-msgid "All {0}"
-msgstr "Все {0}"
-
-#: js/widgets/container/ContainerTree.js:140
-msgid "My {0}"
-msgstr "Мои {0}"
-
-#: js/widgets/container/ContainerTree.js:148
-msgid "Shared {0}"
-msgstr "Общие {0}"
-
-#: js/widgets/container/ContainerTree.js:157
-msgid "Other Users {0}"
-msgstr "{0} других пользователей "
-
-#: js/widgets/container/ContainerTree.js:181
-#, fuzzy
-msgid "Permission Denied"
-msgstr "Разрешения"
-
-#: js/widgets/container/ContainerTree.js:181
-#, fuzzy
-msgid "You don't have the required grant to select this {0}"
-msgstr "Вы уверены, что хотите удалить {0}?"
-
-#: js/widgets/container/GrantsDialog.js:55
-msgid "Folder"
-msgstr "Папка"
-
-#: js/widgets/container/GrantsDialog.js:94
-msgid "Read"
-msgstr "Читать"
-
-#: js/widgets/container/GrantsDialog.js:95
-msgid "The grant to read records of this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:101
-msgid "The grant to add records to this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:106
-msgid "Edit"
-msgstr "Изменить"
-
-#: js/widgets/container/GrantsDialog.js:107
-msgid "The grant to edit records in this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:112
-msgid "Delete"
-msgstr "Удалить"
-
-#: js/widgets/container/GrantsDialog.js:113
-msgid "The grant to delete records in this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:118
-msgid "Export"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:119
-msgid "The grant to export records from this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:124
-msgid "Sync"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:125
-msgid "The grant to synchronise records with this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:133
-msgid "Private"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:134
-msgid "The grant to access records marked as private in this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:142
-msgid "The grant to administrate this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:164
-msgid "Updating Grants"
-msgstr "Обновление разрешений"
-
-#: js/widgets/container/GrantsDialog.js:194
-msgid "Error"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:195
-msgid "You are not allowed to remove all admins for this container!"
-msgstr ""
-
-#: js/widgets/customfields/CustomfieldsPanel.js:64
-msgid "Custom Fields"
-msgstr "Дополнительные поля"
-
-#: js/widgets/customfields/CustomfieldsPanel.js:71
-#: js/widgets/customfields/CustomfieldsPanel.js:86
-#, fuzzy
-msgid "General"
-msgstr "Неправильное завершение"
-
-#: js/widgets/customfields/CustomfieldsPanel.js:108
-msgid "There are no custom fields yet"
-msgstr "Пока ещё нет дополнительных полей"
-
-#: js/widgets/dialog/AlarmPanel.js:35
-msgid "Alarms"
-msgstr "Напоминания"
-
-#: js/widgets/dialog/AlarmPanel.js:46
-msgid "Send Alarm"
-msgstr "Отправить напоминание"
-
-#: js/widgets/dialog/AlarmPanel.js:56
-msgid "None"
-msgstr "Нет"
-
-#: js/widgets/dialog/AlarmPanel.js:57
-#, fuzzy
-msgid "0 minutes before"
-msgstr "существует"
-
-#: js/widgets/dialog/AlarmPanel.js:58
-msgid "15 minutes before"
-msgstr "15 минут до"
-
-#: js/widgets/dialog/AlarmPanel.js:59
-msgid "30 minutes before"
-msgstr "30 минут до"
-
-#: js/widgets/dialog/AlarmPanel.js:60
-msgid "1 hour before"
-msgstr "1 час до"
-
-#: js/widgets/dialog/AlarmPanel.js:61
-msgid "2 hours before"
-msgstr "2 часа до"
-
-#: js/widgets/dialog/AlarmPanel.js:62
-msgid "1 day before"
-msgstr "1 день до"
-
-#: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:443 js/widgets/dialog/ImportDialog.js:202
-#: js/widgets/dialog/PreferencesDialog.js:284
-msgid "Errors"
-msgstr "Ошибки"
-
-#: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:443 js/widgets/dialog/ImportDialog.js:202
-msgid "Please fix the errors noted."
-msgstr "Пожалуйста, исправьте отмеченные ошибки."
-
-#: js/widgets/dialog/EditDialog.js:187 js/widgets/EditRecord.js:126
+#: js/widgets/EditRecord.js:126 js/widgets/dialog/EditDialog.js:175
 msgid "Apply"
 msgstr "Применить"
 
-#: js/widgets/dialog/EditDialog.js:204 js/widgets/EditRecord.js:146
+#: js/widgets/EditRecord.js:146 js/widgets/dialog/EditDialog.js:192
 msgid "delete"
 msgstr "удалить"
 
-#: js/widgets/dialog/EditDialog.js:244 js/widgets/dialog/EditDialog.js:256
-#: js/widgets/EditRecord.js:185
+#: js/widgets/EditRecord.js:185 js/widgets/dialog/EditDialog.js:232
+#: js/widgets/dialog/EditDialog.js:245
 msgid "Saved in"
 msgstr "Сохранено в"
-
-#: js/widgets/dialog/EditDialog.js:302
-msgid "Add New {0}"
-msgstr "Добавить новый {0}"
-
-#: js/widgets/dialog/EditDialog.js:304
-msgid "Edit {0} \"{1}\""
-msgstr "Редактировать {0} \"{1}\""
-
-#: js/widgets/dialog/EditDialog.js:344
-msgid "Transfering {0}..."
-msgstr "Передача {0}..."
-
-#: js/widgets/dialog/EditDialog.js:451
-msgid "Do you really want to delete this {0}?"
-msgstr "Вы уверены, что хотите удалить {0}?"
-
-#: js/widgets/dialog/ImportDialog.js:87
-msgid "Files"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:107
-msgid "Import definition"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:119
-msgid "Import into {0}"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:130
-msgid "Dry run"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:147
-msgid "No files added"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:147
-msgid "You need to add files to import."
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:176
-msgid "Dry run results"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:177
-msgid ""
-"Import test successful for {0} records, import test failed for {1} records."
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:181
-msgid "Import results"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:182
-msgid "Import successful for {0} records, import failed for {1} records."
-msgstr ""
-
-#: js/widgets/dialog/LinkPanel.js:48
-#, fuzzy
-msgid "Links"
-msgstr "Вход в систему"
-
-#: js/widgets/dialog/MultiOptionsDialog.js:23
-#: js/widgets/dialog/MultiOptionsDialog.js:70
-msgid "What would you like to do?"
-msgstr ""
-
-#: js/widgets/dialog/MultiOptionsDialog.js:27
-#: js/widgets/dialog/MultiOptionsDialog.js:129
-msgid "You need to select an option!"
-msgstr ""
-
-#: js/widgets/dialog/PreferencesDialog.js:137
-msgid "Admin Mode"
-msgstr "Режим администратора"
-
-#: js/widgets/dialog/PreferencesDialog.js:173
-msgid "Applications"
-msgstr "Приложения"
-
-#: js/widgets/dialog/PreferencesDialog.js:200
-msgid "Edit Preferences"
-msgstr "Изменить параметры"
-
-#: js/widgets/dialog/PreferencesDialog.js:201
-msgid "Loading ..."
-msgstr "Загрузка..."
-
-#: js/widgets/dialog/PreferencesDialog.js:284
-msgid "Saving of preferences failed."
-msgstr "Сбой сохранения параметров."
-
-#: js/widgets/dialog/PreferencesPanel.js:151
-msgid "There are no preferences for this application."
-msgstr "У этого приложения нет параметров."
-
-#: js/widgets/dialog/PreferencesTreePanel.js:60
-msgid "General Preferences"
-msgstr "Общие параметры"
-
-#: js/widgets/form/ConfigPanel.js:108
-msgid "Invalid configuration"
-msgstr ""
-
-#: js/widgets/form/ConfigPanel.js:108
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr ""
-
-#: js/widgets/form/ConfigPanel.js:133
-#, fuzzy
-msgid "Transfering Configuration..."
-msgstr "Передача {0}..."
-
-#: js/widgets/form/ConfigPanel.js:229
-#, fuzzy
-msgid "Save config"
-msgstr "Сохранено в"
-
-#: js/widgets/form/ConfigPanel.js:239
-msgid "Reload config"
-msgstr ""
-
-#: js/widgets/form/RecordPickerComboBox.js:59 js/widgets/tags/TagsPanel.js:465
-msgid "Searching..."
-msgstr "Поиск..."
-
-#: js/widgets/grid/FileUploadGrid.js:91
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:115
-msgid "Add file"
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:126
-msgid "Remove file"
-msgstr ""
-
-#: js/widgets/grid/FilterModel.js:147
-msgid "contains"
-msgstr "содержит"
-
-#: js/widgets/grid/FilterModel.js:148
-msgid "is equal to"
-msgstr "равно"
-
-#: js/widgets/grid/FilterModel.js:149
-msgid "is greater than"
-msgstr "больше чем"
-
-#: js/widgets/grid/FilterModel.js:150
-msgid "is less than"
-msgstr "меньше чем"
-
-#: js/widgets/grid/FilterModel.js:151
-msgid "is not"
-msgstr "не"
-
-#: js/widgets/grid/FilterModel.js:152
-msgid "is in"
-msgstr "в"
-
-#: js/widgets/grid/FilterModel.js:153
-msgid "is before"
-msgstr "перед"
-
-#: js/widgets/grid/FilterModel.js:154
-msgid "is after"
-msgstr "после"
-
-#: js/widgets/grid/FilterModel.js:155
-msgid "is within"
-msgstr "в"
-
-#: js/widgets/grid/FilterModel.js:156
-#, fuzzy
-msgid "is in week no."
-msgstr "эта неделя"
-
-#: js/widgets/grid/FilterModel.js:157
-msgid "starts with"
-msgstr "начинается с"
-
-#: js/widgets/grid/FilterModel.js:158
-msgid "ends with"
-msgstr "заканчивается на"
-
-#: js/widgets/grid/FilterModel.js:159
-#, fuzzy
-msgid "one of"
-msgstr "Нет"
-
-#: js/widgets/grid/FilterModel.js:200
-msgid "select a operator"
-msgstr "выберите оператор"
-
-#: js/widgets/grid/FilterModel.js:293
-#, fuzzy
-msgid "Search Account ..."
-msgstr "Поиск..."
-
-#: js/widgets/grid/FilterModel.js:406
-msgid "today"
-msgstr "сегодня"
-
-#: js/widgets/grid/FilterModel.js:407
-msgid "yesterday"
-msgstr "вчера"
-
-#: js/widgets/grid/FilterModel.js:408
-msgid "this week"
-msgstr "эта неделя"
-
-#: js/widgets/grid/FilterModel.js:409
-msgid "last week"
-msgstr "последняя неделя"
-
-#: js/widgets/grid/FilterModel.js:410
-msgid "the week before last"
-msgstr "предпоследняя неделя"
-
-#: js/widgets/grid/FilterModel.js:411
-msgid "this month"
-msgstr "этот месяц"
-
-#: js/widgets/grid/FilterModel.js:412
-msgid "last month"
-msgstr "последний месяц"
-
-#: js/widgets/grid/FilterModel.js:413
-msgid "this quarter"
-msgstr "этот квартал"
-
-#: js/widgets/grid/FilterModel.js:414
-msgid "last quarter"
-msgstr "последний квартал"
-
-#: js/widgets/grid/FilterModel.js:415
-msgid "this year"
-msgstr "этот год"
-
-#: js/widgets/grid/FilterModel.js:416
-msgid "last year"
-msgstr "прошлый год"
-
-#: js/widgets/grid/FilterModel.js:420
-msgid "tomorrow"
-msgstr "завтра"
-
-#: js/widgets/grid/FilterModel.js:421
-msgid "next week"
-msgstr "следующая неделя"
-
-#: js/widgets/grid/FilterModel.js:422
-msgid "next month"
-msgstr "следующий месяц"
-
-#: js/widgets/grid/FilterModel.js:423
-msgid "next quarter"
-msgstr "следующий квартал"
-
-#: js/widgets/grid/FilterModel.js:424
-msgid "next year"
-msgstr "следующий год"
-
-#: js/widgets/grid/FilterToolbar.js:128
-msgid "add new filter"
-msgstr "добавить новый фильтр"
-
-#: js/widgets/grid/FilterToolbar.js:134
-msgid "reset all filters"
-msgstr "сбросить все фильтры"
-
-#: js/widgets/grid/FilterToolbar.js:140
-msgid "start search"
-msgstr "начать поиск"
-
-#: js/widgets/grid/FilterToolbar.js:148 js/widgets/grid/FilterToolbar.js:651
-msgid "save filter"
-msgstr "сохранить фильтр"
-
-#: js/widgets/grid/FilterToolbar.js:231
-msgid "select a field"
-msgstr "выберите поле"
-
-#: js/widgets/grid/FilterToolbar.js:256
-msgid "Delete this filter"
-msgstr "Удалить этот фильтр"
-
-#: js/widgets/grid/FilterToolbar.js:287
-msgid "and"
-msgstr "и"
-
-#: js/widgets/grid/FilterToolbar.js:306
-msgid "Show"
-msgstr "Показать"
-
-#: js/widgets/grid/FilterToolbar.js:651
-msgid "Please enter a name for the filter"
-msgstr "Пожалуйста, введите название фильтра"
-
-#: js/widgets/grid/FilterToolbar.js:654 js/widgets/grid/FilterToolbar.js:657
-msgid "Filter not Saved"
-msgstr "Фильтр не сохранен"
-
-#: js/widgets/grid/FilterToolbar.js:654
-msgid "You have to supply a name for the filter!"
-msgstr "Вы должны дать фильтру название!"
-
-#: js/widgets/grid/FilterToolbar.js:657
-msgid ""
-"You have to supply a shorter name! Names of saved filters can only be up to "
-"40 characters long."
-msgstr ""
-"Вы должны использовать короткое имя! Имена сохраненных фильтров не могут "
-"быть длиннее 40 символов."
-
-#: js/widgets/grid/FilterToolbar.js:660 js/widgets/LangChooser.js:64
-#: js/widgets/TimezoneChooser.js:74
-msgid "Please Wait"
-msgstr "Пожалуйста, подождите"
-
-#: js/widgets/grid/FilterToolbar.js:660
-msgid "Saving filter"
-msgstr "Сохранённый фильтр"
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:103
-msgid "Always show advanced filters"
-msgstr ""
-
-#: js/widgets/grid/PersistentFilterPicker.js:79
-msgid "My saved filters"
-msgstr "Мои сохранённые фильтры"
-
-#: js/widgets/grid/PersistentFilterPicker.js:120
-msgid "Delete Filter"
-msgstr "Удалить фильтр"
-
-#: js/widgets/grid/PersistentFilterPicker.js:124
-msgid "Do you really want to delete the Filter \"{0}\"?"
-msgstr "Вы уверены, что хотите удалить фильтр \"{0}\"?"
-
-#: js/widgets/grid/PersistentFilterPicker.js:126
-msgid "Deleting Filter \"{0}\""
-msgstr "Удаление фильтра \"{0}\""
-
-#: js/widgets/grid/QuickaddGridPanel.js:101
-msgid "Remove"
-msgstr ""
-
-#: js/widgets/GridPicker.js:78
-msgid "remove record"
-msgstr "удалить запись"
-
-#: js/widgets/GridPicker.js:410
-msgid "Search"
-msgstr "Поиск"
-
-#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
-msgid "Browse"
-msgstr "Листать"
-
-#: js/widgets/LangChooser.js:31 Preference.php:99
-msgid "Language"
-msgstr "Язык"
-
-#: js/widgets/LangChooser.js:64
-msgid "setting new language..."
-msgstr "установка нового языка..."
 
 #: js/widgets/Priority.js:23
 msgid "low"
@@ -1388,9 +701,267 @@ msgstr "высокий"
 msgid "urgent"
 msgstr "срочный"
 
-#: js/widgets/tags/TagCombo.js:44
-msgid "tag name"
-msgstr "название тэга"
+#: js/widgets/grid/FilterToolbar.js:127
+msgid "add new filter"
+msgstr "добавить новый фильтр"
+
+#: js/widgets/grid/FilterToolbar.js:133
+msgid "reset all filters"
+msgstr "сбросить все фильтры"
+
+#: js/widgets/grid/FilterToolbar.js:139
+msgid "start search"
+msgstr "начать поиск"
+
+#: js/widgets/grid/FilterToolbar.js:147 js/widgets/grid/FilterToolbar.js:690
+msgid "save filter"
+msgstr "сохранить фильтр"
+
+#: js/widgets/grid/FilterToolbar.js:230
+msgid "select a field"
+msgstr "выберите поле"
+
+#: js/widgets/grid/FilterToolbar.js:255
+msgid "Delete this filter"
+msgstr "Удалить этот фильтр"
+
+#: js/widgets/grid/FilterToolbar.js:286
+msgid "and"
+msgstr "и"
+
+#: js/widgets/grid/FilterToolbar.js:305
+msgid "Show"
+msgstr "Показать"
+
+#: js/widgets/grid/FilterToolbar.js:690
+msgid "Please enter a name for the filter"
+msgstr "Пожалуйста, введите название фильтра"
+
+#: js/widgets/grid/FilterToolbar.js:693 js/widgets/grid/FilterToolbar.js:696
+msgid "Filter not Saved"
+msgstr "Фильтр не сохранен"
+
+#: js/widgets/grid/FilterToolbar.js:693
+msgid "You have to supply a name for the filter!"
+msgstr "Вы должны дать фильтру название!"
+
+#: js/widgets/grid/FilterToolbar.js:696
+msgid ""
+"You have to supply a shorter name! Names of saved filters can only be up to "
+"40 characters long."
+msgstr ""
+"Вы должны использовать короткое имя! Имена сохраненных фильтров не могут "
+"быть длиннее 40 символов."
+
+#: js/widgets/grid/FilterToolbar.js:699 js/widgets/TimezoneChooser.js:74
+#: js/widgets/LangChooser.js:64
+msgid "Please Wait"
+msgstr "Пожалуйста, подождите"
+
+#: js/widgets/grid/FilterToolbar.js:699
+msgid "Saving filter"
+msgstr "Сохранённый фильтр"
+
+#: js/widgets/grid/FilterModel.js:152
+msgid "contains"
+msgstr "содержит"
+
+#: js/widgets/grid/FilterModel.js:153 js/widgets/container/FilterModel.js:130
+#: js/widgets/container/FilterModel.js:134
+msgid "is equal to"
+msgstr "равно"
+
+#: js/widgets/grid/FilterModel.js:154
+msgid "is greater than"
+msgstr "больше чем"
+
+#: js/widgets/grid/FilterModel.js:155
+msgid "is less than"
+msgstr "меньше чем"
+
+#: js/widgets/grid/FilterModel.js:156
+msgid "is not"
+msgstr "не"
+
+#: js/widgets/grid/FilterModel.js:157
+#, fuzzy
+msgid "one of"
+msgstr "Нет"
+
+#: js/widgets/grid/FilterModel.js:158
+msgid "none of"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:159
+msgid "is before"
+msgstr "перед"
+
+#: js/widgets/grid/FilterModel.js:160
+msgid "is after"
+msgstr "после"
+
+#: js/widgets/grid/FilterModel.js:161
+msgid "is within"
+msgstr "в"
+
+#: js/widgets/grid/FilterModel.js:162
+#, fuzzy
+msgid "is in week no."
+msgstr "эта неделя"
+
+#: js/widgets/grid/FilterModel.js:163
+msgid "starts with"
+msgstr "начинается с"
+
+#: js/widgets/grid/FilterModel.js:164
+msgid "ends with"
+msgstr "заканчивается на"
+
+#: js/widgets/grid/FilterModel.js:205
+msgid "select a operator"
+msgstr "выберите оператор"
+
+#: js/widgets/grid/FilterModel.js:316
+#, fuzzy
+msgid "Search Account ..."
+msgstr "Поиск..."
+
+#: js/widgets/grid/FilterModel.js:438
+msgid "today"
+msgstr "сегодня"
+
+#: js/widgets/grid/FilterModel.js:439
+msgid "yesterday"
+msgstr "вчера"
+
+#: js/widgets/grid/FilterModel.js:440
+msgid "this week"
+msgstr "эта неделя"
+
+#: js/widgets/grid/FilterModel.js:441
+msgid "last week"
+msgstr "последняя неделя"
+
+#: js/widgets/grid/FilterModel.js:442
+msgid "the week before last"
+msgstr "предпоследняя неделя"
+
+#: js/widgets/grid/FilterModel.js:443
+msgid "this month"
+msgstr "этот месяц"
+
+#: js/widgets/grid/FilterModel.js:444
+msgid "last month"
+msgstr "последний месяц"
+
+#: js/widgets/grid/FilterModel.js:445
+msgid "this quarter"
+msgstr "этот квартал"
+
+#: js/widgets/grid/FilterModel.js:446
+msgid "last quarter"
+msgstr "последний квартал"
+
+#: js/widgets/grid/FilterModel.js:447
+msgid "this year"
+msgstr "этот год"
+
+#: js/widgets/grid/FilterModel.js:448
+msgid "last year"
+msgstr "прошлый год"
+
+#: js/widgets/grid/FilterModel.js:452
+msgid "tomorrow"
+msgstr "завтра"
+
+#: js/widgets/grid/FilterModel.js:453
+msgid "next week"
+msgstr "следующая неделя"
+
+#: js/widgets/grid/FilterModel.js:454
+msgid "next month"
+msgstr "следующий месяц"
+
+#: js/widgets/grid/FilterModel.js:455
+msgid "next quarter"
+msgstr "следующий квартал"
+
+#: js/widgets/grid/FilterModel.js:456
+msgid "next year"
+msgstr "следующий год"
+
+#: js/widgets/grid/FileUploadGrid.js:91
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:115
+msgid "Add file"
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:126
+msgid "Remove file"
+msgstr ""
+
+#: js/widgets/grid/PersistentFilterPicker.js:93
+msgid "My saved filters"
+msgstr "Мои сохранённые фильтры"
+
+#: js/widgets/grid/PersistentFilterPicker.js:162
+msgid "Delete Filter"
+msgstr "Удалить фильтр"
+
+#: js/widgets/grid/PersistentFilterPicker.js:166
+msgid "Do you really want to delete the Filter \"{0}\"?"
+msgstr "Вы уверены, что хотите удалить фильтр \"{0}\"?"
+
+#: js/widgets/grid/PersistentFilterPicker.js:168
+msgid "Deleting Filter \"{0}\""
+msgstr "Удаление фильтра \"{0}\""
+
+#: js/widgets/grid/PersistentFilterPicker.js:186
+msgid "Rename Filter"
+msgstr ""
+
+#: js/widgets/grid/PersistentFilterPicker.js:190
+msgid "New Name"
+msgstr ""
+
+#: js/widgets/grid/PersistentFilterPicker.js:190
+msgid "Please enter the new name for filter \"{0}\"?"
+msgstr ""
+
+#: js/widgets/grid/PersistentFilterPicker.js:192
+msgid "Renaming Filter \"{0}\""
+msgstr ""
+
+#: js/widgets/grid/QuickaddGridPanel.js:101
+msgid "Remove"
+msgstr ""
+
+#: js/widgets/grid/PickerGridPanel.js:121
+msgid "Remove record"
+msgstr ""
+
+#: js/widgets/grid/PickerGridPanel.js:189
+msgid "Search for records ..."
+msgstr ""
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:175
+msgid "show details"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:176
+msgid "Always show advanced filters"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:335
+msgid "Your view is limited by {0} criteria:"
+msgid_plural "Your view is limited by {0} criterias:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: js/widgets/tags/TagFilter.js:29
 msgid "Tag"
@@ -1427,6 +998,11 @@ msgstr ""
 #: js/widgets/tags/TagsPanel.js:93 js/widgets/tags/TagsPanel.js:118
 msgid "Enter tag name:"
 msgstr "Введите название тэга:"
+
+#: js/widgets/tags/TagsPanel.js:137 js/widgets/tags/TagsPanel.js:445
+#: js/widgets/tags/TagsPanel.js:449
+msgid "personal"
+msgstr "личные"
 
 #: js/widgets/tags/TagsPanel.js:159
 msgid "No Tags to display"
@@ -1499,6 +1075,12 @@ msgstr[0] "Удаление тэга"
 msgstr[1] "Удаление тэгов"
 msgstr[2] "Удаление тэгов"
 
+#: js/widgets/tags/TagsPanel.js:287 js/widgets/tags/TagsPanel.js:397
+#: js/widgets/tags/TagsPanel.js:430 js/widgets/app/GridPanel.js:952
+#: js/widgets/dialog/EditDialog.js:452
+msgid "Failed"
+msgstr "Не удалось"
+
 #: js/widgets/tags/TagsPanel.js:287
 msgid "Could not delete Tag(s)."
 msgstr "Не удалось удалить тэг(и)."
@@ -1523,9 +1105,307 @@ msgstr "Не удалось обновить тэг."
 msgid "Enter tag name"
 msgstr "Введите название тэга"
 
+#: js/widgets/tags/TagsPanel.js:465 js/widgets/form/RecordPickerComboBox.js:59
+msgid "Searching..."
+msgstr "Поиск..."
+
 #: js/widgets/tags/TagsPanel.js:599
 msgid "Color"
 msgstr "Цвет"
+
+#: js/widgets/tags/TagCombo.js:44
+msgid "tag name"
+msgstr "название тэга"
+
+#: js/widgets/container/FilterModel.js:130
+msgid "is personal of"
+msgstr ""
+
+#: js/widgets/container/FilterModel.js:238
+msgid "Selected  {0}"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:53
+msgid "Folder"
+msgstr "Папка"
+
+#: js/widgets/container/GrantsDialog.js:92
+msgid "Read"
+msgstr "Читать"
+
+#: js/widgets/container/GrantsDialog.js:93
+msgid "The grant to read records of this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:98 js/widgets/ActivitiesPanel.js:156
+#: js/widgets/ActivitiesPanel.js:168
+msgid "Add"
+msgstr "Добавить"
+
+#: js/widgets/container/GrantsDialog.js:99
+msgid "The grant to add records to this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:104
+msgid "Edit"
+msgstr "Изменить"
+
+#: js/widgets/container/GrantsDialog.js:105
+msgid "The grant to edit records in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:110
+msgid "Delete"
+msgstr "Удалить"
+
+#: js/widgets/container/GrantsDialog.js:111
+msgid "The grant to delete records in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:116
+msgid "Export"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:117
+msgid "The grant to export records from this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:122
+msgid "Sync"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:123
+msgid "The grant to synchronise records with this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:134
+msgid "Free Busy"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:135
+msgid "The grant to access free busy information of events in this calendar"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:142
+msgid "Private"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:143
+msgid "The grant to access records marked as private in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:150
+msgid "Admin"
+msgstr "Администратор"
+
+#: js/widgets/container/GrantsDialog.js:151
+msgid "The grant to administrate this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:173
+msgid "Updating Grants"
+msgstr "Обновление разрешений"
+
+#: js/widgets/container/GrantsDialog.js:203
+msgid "Error"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:204
+msgid "You are not allowed to remove all admins for this container!"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:107
+msgid "choose other {0}..."
+msgstr "выберите другое {0}..."
+
+#: js/widgets/container/ContainerSelect.js:110
+msgid "Select a {0}"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:130
+msgid "Recently used {0}:"
+msgstr "Недавно используемый {0}:"
+
+#: js/widgets/container/ContainerSelect.js:447
+msgid "please select a {0}"
+msgstr "пожалуйста, выберите {0}"
+
+#: js/widgets/container/ContainerTree.js:124
+msgid "container"
+msgid_plural "containers"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/widgets/container/ContainerTree.js:400
+msgid "You are not allowed to select the {0} '{1}':"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:401
+msgid "{0} grant is required for desired action"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:402
+msgid "Insufficient Grants"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:141
+msgid "Add a Note..."
+msgstr "Добавить примечание..."
+
+#: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:396
+msgid "Note"
+msgstr "Примечание"
+
+#: js/widgets/ActivitiesPanel.js:169 js/widgets/ActivitiesPanel.js:322
+msgid "Add new note"
+msgstr "Добавить новое примечание"
+
+#: js/widgets/ActivitiesPanel.js:200
+msgid "Notes"
+msgstr "Примечания"
+
+#: js/widgets/ActivitiesPanel.js:264 js/widgets/ActivitiesPanel.js:321
+msgid "Add Note"
+msgstr "Добавить примечание"
+
+#: js/widgets/ActivitiesPanel.js:265
+msgid "Enter new note:"
+msgstr "Введите новое примечание:"
+
+#: js/widgets/ActivitiesPanel.js:308
+msgid "Add a {0} Note"
+msgstr "Добавить {0} примечание"
+
+#: js/widgets/ActivitiesPanel.js:394 js/widgets/ActivitiesPanel.js:529
+msgid "Type"
+msgstr "Тип"
+
+#: js/widgets/ActivitiesPanel.js:397
+msgid "Created By"
+msgstr "Создано "
+
+#: js/widgets/ActivitiesPanel.js:398
+msgid "Timestamp"
+msgstr "Метка времени"
+
+#: js/widgets/ActivitiesPanel.js:412
+msgid "Displaying history records {0} - {1} of {2}"
+msgstr "Показаны записи истории {0} - {1} из {2}"
+
+#: js/widgets/ActivitiesPanel.js:413
+msgid "No history to display"
+msgstr "Нет истории для отображения"
+
+#: js/widgets/ActivitiesPanel.js:511
+msgid "History"
+msgstr "История"
+
+#: js/widgets/ActivitiesPanel.js:523
+msgid "Quick search"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:524 js/widgets/ActivitiesPanel.js:525
+msgid "Time"
+msgstr "Время"
+
+#: js/widgets/ActivitiesPanel.js:527
+msgid "User"
+msgstr "Пользователь"
+
+#: js/widgets/form/ConfigPanel.js:108
+msgid "Invalid configuration"
+msgstr ""
+
+#: js/widgets/form/ConfigPanel.js:108
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr ""
+
+#: js/widgets/form/ConfigPanel.js:133
+#, fuzzy
+msgid "Transfering Configuration..."
+msgstr "Передача {0}..."
+
+#: js/widgets/form/ConfigPanel.js:229
+#, fuzzy
+msgid "Save config"
+msgstr "Сохранено в"
+
+#: js/widgets/form/ConfigPanel.js:239
+msgid "Reload config"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:190
+msgid ""
+"No {0} where found. Please try to change your filter-criteria, view-options "
+"or the {1} you search in."
+msgstr ""
+"Никаких {0} не найдено. Пожалуйста попытайтесь изменить свои критерии "
+"фильтра, варианты представления, или {1} поменять в тех в которых Вы ищете."
+
+#: js/widgets/app/GridPanel.js:279
+msgid "Edit {0}"
+msgstr "Изменить {0}"
+
+#: js/widgets/app/GridPanel.js:290
+msgid "Copy {0}"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:301 js/widgets/tree/ContextMenu.js:214
+msgid "Add {0}"
+msgstr "Добавить {0}"
+
+#: js/widgets/app/GridPanel.js:311 js/widgets/app/GridPanel.js:312
+#: js/widgets/app/GridPanel.js:314
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] "Удалить {0}"
+msgstr[1] "Удалить {0}"
+msgstr[2] "Удалить {0}"
+
+#: js/widgets/app/GridPanel.js:393
+msgid "Displaying records {0} - {1} of {2}"
+msgstr "Показаны записи {0} - {1} из {2}"
+
+#: js/widgets/app/GridPanel.js:394
+msgid "No {0} to display"
+msgstr "Нет {0} для отображения"
+
+#: js/widgets/app/GridPanel.js:581
+#, fuzzy
+msgid "Tagging"
+msgstr "Тэг"
+
+#: js/widgets/app/GridPanel.js:891
+msgid "Not Allowed"
+msgstr "Не разрешено"
+
+#: js/widgets/app/GridPanel.js:892
+msgid "You are not allowed to delete all pages at once"
+msgstr "Вам не позволяется удалить все страницы сразу"
+
+#: js/widgets/app/GridPanel.js:910
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
+msgstr[0] "Вы действительно хотите удалить выделенную запись"
+msgstr[1] "Вы действительно хотите удалить выделенные записи"
+msgstr[2] "Вы действительно хотите удалить выделенные записи"
+
+#: js/widgets/app/GridPanel.js:931 js/widgets/dialog/EditDialog.js:442
+msgid "Deleting {0}"
+msgstr "Удаление {0}"
+
+#: js/widgets/app/GridPanel.js:933
+msgid " ... This may take a long time!"
+msgstr "... Это может занять много времени!"
+
+#: js/widgets/app/GridPanel.js:952 js/widgets/dialog/EditDialog.js:452
+msgid "Could not delete {0}."
+msgstr "Не удалось удалить {0}."
+
+#: js/widgets/app/MainScreen.js:120
+msgid "Saved filter"
+msgstr "Сохранённый фильтр"
 
 #: js/widgets/TimezoneChooser.js:34 Preference.php:95
 msgid "Timezone"
@@ -1534,6 +1414,194 @@ msgstr "Часовой пояс"
 #: js/widgets/TimezoneChooser.js:74
 msgid "setting new timezone..."
 msgstr "задание нового часового пояса..."
+
+#: js/widgets/customfields/CustomfieldsPanel.js:64
+msgid "Custom Fields"
+msgstr "Дополнительные поля"
+
+#: js/widgets/customfields/CustomfieldsPanel.js:71
+#: js/widgets/customfields/CustomfieldsPanel.js:86
+#, fuzzy
+msgid "General"
+msgstr "Неправильное завершение"
+
+#: js/widgets/customfields/CustomfieldsPanel.js:108
+msgid "There are no custom fields yet"
+msgstr "Пока ещё нет дополнительных полей"
+
+#: js/widgets/dialog/PreferencesDialog.js:137
+msgid "Admin Mode"
+msgstr "Режим администратора"
+
+#: js/widgets/dialog/PreferencesDialog.js:173
+msgid "Applications"
+msgstr "Приложения"
+
+#: js/widgets/dialog/PreferencesDialog.js:200
+msgid "Edit Preferences"
+msgstr "Изменить параметры"
+
+#: js/widgets/dialog/PreferencesDialog.js:201
+msgid "Loading ..."
+msgstr "Загрузка..."
+
+#: js/widgets/dialog/PreferencesDialog.js:284
+#: js/widgets/dialog/CredentialsDialog.js:124
+#: js/widgets/dialog/EditDialog.js:432 js/widgets/dialog/ImportDialog.js:203
+msgid "Errors"
+msgstr "Ошибки"
+
+#: js/widgets/dialog/PreferencesDialog.js:284
+msgid "Saving of preferences failed."
+msgstr "Сбой сохранения параметров."
+
+#: js/widgets/dialog/LinkPanel.js:48
+#, fuzzy
+msgid "Links"
+msgstr "Вход в систему"
+
+#: js/widgets/dialog/PreferencesTreePanel.js:60
+msgid "General Preferences"
+msgstr "Общие параметры"
+
+#: js/widgets/dialog/CredentialsDialog.js:124
+#: js/widgets/dialog/EditDialog.js:432 js/widgets/dialog/ImportDialog.js:203
+msgid "Please fix the errors noted."
+msgstr "Пожалуйста, исправьте отмеченные ошибки."
+
+#: js/widgets/dialog/AlarmPanel.js:35
+msgid "Alarms"
+msgstr "Напоминания"
+
+#: js/widgets/dialog/AlarmPanel.js:46
+msgid "Send Alarm"
+msgstr "Отправить напоминание"
+
+#: js/widgets/dialog/AlarmPanel.js:56
+msgid "None"
+msgstr "Нет"
+
+#: js/widgets/dialog/AlarmPanel.js:57
+#, fuzzy
+msgid "0 minutes before"
+msgstr "существует"
+
+#: js/widgets/dialog/AlarmPanel.js:58
+msgid "15 minutes before"
+msgstr "15 минут до"
+
+#: js/widgets/dialog/AlarmPanel.js:59
+msgid "30 minutes before"
+msgstr "30 минут до"
+
+#: js/widgets/dialog/AlarmPanel.js:60
+msgid "1 hour before"
+msgstr "1 час до"
+
+#: js/widgets/dialog/AlarmPanel.js:61
+msgid "2 hours before"
+msgstr "2 часа до"
+
+#: js/widgets/dialog/AlarmPanel.js:62
+msgid "1 day before"
+msgstr "1 день до"
+
+#: js/widgets/dialog/EditDialog.js:291
+msgid "Add New {0}"
+msgstr "Добавить новый {0}"
+
+#: js/widgets/dialog/EditDialog.js:293
+msgid "Edit {0} \"{1}\""
+msgstr "Редактировать {0} \"{1}\""
+
+#: js/widgets/dialog/EditDialog.js:333
+msgid "Transfering {0}..."
+msgstr "Передача {0}..."
+
+#: js/widgets/dialog/EditDialog.js:440
+msgid "Do you really want to delete this {0}?"
+msgstr "Вы уверены, что хотите удалить {0}?"
+
+#: js/widgets/dialog/MultiOptionsDialog.js:23
+#: js/widgets/dialog/MultiOptionsDialog.js:70
+msgid "What would you like to do?"
+msgstr ""
+
+#: js/widgets/dialog/MultiOptionsDialog.js:27
+#: js/widgets/dialog/MultiOptionsDialog.js:129
+msgid "You need to select an option!"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:86
+msgid "Files"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:106
+msgid "Import definition"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:118
+msgid "Import into {0}"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:129
+msgid "Dry run"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:146
+msgid "No files added"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:146
+msgid "You need to add files to import."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:176
+msgid "Dry run results"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:177
+msgid ""
+"Import test successful for {0} records, import test failed for {1} records."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:181
+msgid "Import results"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:182
+msgid ""
+"Import successful for {0} records / import failed for {1} records / {2} "
+"duplicates found"
+msgstr ""
+
+#: js/widgets/dialog/PreferencesPanel.js:151
+msgid "There are no preferences for this application."
+msgstr "У этого приложения нет параметров."
+
+#: js/widgets/LangChooser.js:31 Preference.php:99
+msgid "Language"
+msgstr "Язык"
+
+#: js/widgets/LangChooser.js:64
+msgid "setting new language..."
+msgstr "установка нового языка..."
+
+#: js/widgets/VersionCheck.js:43 js/widgets/VersionCheck.js:52
+msgid "New version of Tine 2.0 available"
+msgstr "Доступна новая версия Tine 2.0"
+
+#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+msgid "Version \"{0}\" of Tine 2.0 is available."
+msgstr "Доступна версия \"{0}\" Tine 2.0."
+
+#: js/widgets/VersionCheck.js:45
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr "Эта важное обновление должно быть установлено как можно быстрее!"
+
+#: js/widgets/VersionCheck.js:54
+msgid "Please consider updating!"
+msgstr "Пожалуйста, рассмотрите обновление!"
 
 #: js/widgets/tree/ContextMenu.js:37
 msgid "New {0}"
@@ -1555,11 +1623,11 @@ msgstr "Вы должны назвать {0}!"
 msgid "Creating {0}..."
 msgstr "Создание {0}..."
 
-#: js/widgets/tree/ContextMenu.js:84
+#: js/widgets/tree/ContextMenu.js:82
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr "Вы действительно хотите удалить {0} \"{1}\"?"
 
-#: js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:84
 msgid "Deleting {0} \"{1}\""
 msgstr "Удаление {0} \"{1}\""
 
@@ -1591,29 +1659,17 @@ msgstr "Управлять правами доступа"
 msgid "Reload {0}"
 msgstr "Перезагрузить {0}"
 
-#: js/widgets/VersionCheck.js:43 js/widgets/VersionCheck.js:52
-msgid "New version of Tine 2.0 available"
-msgstr "Доступна новая версия Tine 2.0"
+#: js/AppManager.js:164
+msgid "Missing Applications"
+msgstr ""
 
-#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
-msgid "Version \"{0}\" of Tine 2.0 is available."
-msgstr "Доступна версия \"{0}\" Tine 2.0."
-
-#: js/widgets/VersionCheck.js:45
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr "Эта важное обновление должно быть установлено как можно быстрее!"
-
-#: js/widgets/VersionCheck.js:54
-msgid "Please consider updating!"
-msgstr "Пожалуйста, рассмотрите обновление!"
-
-#: Notes.php:363
-msgid "by"
-msgstr "у"
-
-#: Notes.php:370
-msgid "Changed fields:"
-msgstr "Измененные поля:"
+#: js/AppManager.js:165
+#, fuzzy
+msgid ""
+"There are no applications enabled for you. Please contact your administrator."
+msgstr ""
+"Сервер не ответил на Ваш запрос. Пожалуйста проверьте свою сеть или "
+"свяжитесь с Вашим администратором."
 
 #: Preference.php:96
 msgid "The timezone in which dates are shown in Tine 2.0."
@@ -1649,6 +1705,18 @@ msgstr ""
 #: Preference.php:112
 msgid "Show confirmation dialog on logout."
 msgstr ""
+
+#: Notes.php:363
+msgid "by"
+msgstr "у"
+
+#: Notes.php:370
+msgid "Changed fields:"
+msgstr "Измененные поля:"
+
+#: Frontend/Http.php:537
+msgid "Your session is not valid. You need to login again."
+msgstr "Время вашего сеанса истекло. Вам нужно зарегистрироваться снова. "
 
 #: Setup/setup.xml:2521
 msgid "note"
@@ -1689,6 +1757,38 @@ msgstr "изменено"
 #: Setup/setup.xml:2650
 msgid "record changed"
 msgstr "запись изменена"
+
+#~ msgid "Report bugs to tine20.org directly when they occur"
+#~ msgstr "Сообщайте об ошибках, когда они происходят, прямо на tine20.org"
+
+#~ msgid "Check tine20.org for new versions"
+#~ msgstr "Проверить новые версии на tine20.org"
+
+#~ msgid "Remove account"
+#~ msgstr "Удалить учётную запись"
+
+#~ msgid "shared"
+#~ msgstr "общие"
+
+#, fuzzy
+#~ msgid "Permission Denied"
+#~ msgstr "Разрешения"
+
+#, fuzzy
+#~ msgid "You don't have the required grant to select this {0}"
+#~ msgstr "Вы уверены, что хотите удалить {0}?"
+
+#~ msgid "is in"
+#~ msgstr "в"
+
+#~ msgid "remove record"
+#~ msgstr "удалить запись"
+
+#~ msgid "Search"
+#~ msgstr "Поиск"
+
+#~ msgid "Browse"
+#~ msgstr "Листать"
 
 #~ msgid "click to edit"
 #~ msgstr "нажмите, чтобы изменить"

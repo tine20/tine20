@@ -1,65 +1,3 @@
-#: Controller/Course.php:79
-msgid "teacher"
-msgstr ""
-
-#: Controller/Course.php:85
-msgid "Teacher"
-msgstr ""
-
-#: Controller/Course.php:86
-msgid "Teacher Account"
-msgstr ""
-
-#: Frontend/Json.php:240 js/CourseEditDialog.js:134 js/Models.js:42
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/CourseEditDialog.js:34
-msgid "Import course members"
-msgstr ""
-
-#: js/CourseEditDialog.js:150
-msgid "Course Name"
-msgstr ""
-
-#: js/CourseEditDialog.js:154 js/CourseEditDialog.js:161
-msgid "Course / School Type"
-msgstr ""
-
-#: js/CourseEditDialog.js:172
-msgid "Description"
-msgstr ""
-
-#: js/CourseEditDialog.js:178 js/CourseGridPanel.js:81
-msgid "Internet Access"
-msgstr ""
-
-#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:88
-msgid "Fileserver Access"
-msgstr ""
-
-#: js/CourseEditDialog.js:215
-msgid "Members"
-msgstr ""
-
-#: js/CourseEditDialog.js:241
-msgid "Login"
-msgstr ""
-
-#: js/CourseEditDialog.js:247
-msgid "Reset Password"
-msgstr ""
-
-#: js/CourseEditDialog.js:265
-msgid "Set new password"
-msgstr ""
-
-#: js/CourseEditDialog.js:265
-msgid "Please enter the new password:"
-msgstr ""
-
 #: js/CourseGridPanel.js:51
 msgid "Quick search"
 msgstr ""
@@ -70,6 +8,14 @@ msgstr ""
 
 #: js/CourseGridPanel.js:74
 msgid "Type"
+msgstr ""
+
+#: js/CourseGridPanel.js:81 js/CourseEditDialog.js:178
+msgid "Internet Access"
+msgstr ""
+
+#: js/CourseGridPanel.js:88 js/CourseEditDialog.js:184
+msgid "Fileserver Access"
 msgstr ""
 
 #: js/CourseGridPanel.js:113
@@ -104,6 +50,48 @@ msgstr ""
 msgid "All Courses"
 msgstr ""
 
+#: js/CourseEditDialog.js:34
+msgid "Import course members"
+msgstr ""
+
+#: js/CourseEditDialog.js:134 js/Models.js:42 Frontend/Json.php:240
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/CourseEditDialog.js:150
+msgid "Course Name"
+msgstr ""
+
+#: js/CourseEditDialog.js:154 js/CourseEditDialog.js:161
+msgid "Course / School Type"
+msgstr ""
+
+#: js/CourseEditDialog.js:172
+msgid "Description"
+msgstr ""
+
+#: js/CourseEditDialog.js:215
+msgid "Members"
+msgstr ""
+
+#: js/CourseEditDialog.js:241
+msgid "Login"
+msgstr ""
+
+#: js/CourseEditDialog.js:247
+msgid "Reset Password"
+msgstr ""
+
+#: js/CourseEditDialog.js:265
+msgid "Set new password"
+msgstr ""
+
+#: js/CourseEditDialog.js:265
+msgid "Please enter the new password:"
+msgstr ""
+
 #: js/Models.js:46
 msgid "record list"
 msgid_plural "record lists"
@@ -115,3 +103,15 @@ msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] ""
 msgstr[1] ""
+
+#: Controller/Course.php:79
+msgid "teacher"
+msgstr ""
+
+#: Controller/Course.php:85
+msgid "Teacher"
+msgstr ""
+
+#: Controller/Course.php:86
+msgid "Teacher Account"
+msgstr ""

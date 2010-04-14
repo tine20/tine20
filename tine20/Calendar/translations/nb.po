@@ -13,6 +13,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller.php:100
+#, python-format
+msgid "%s's personal calendar"
+msgstr "%s' personlige kalender"
+
 #: Acl/Rights.php:96
 msgid "manage shared calendars"
 msgstr "behandle delte kalendere"
@@ -29,148 +34,335 @@ msgstr "behandle resurser"
 msgid "All Rights to administrate resources"
 msgstr "Alle Rettigheter til Administrative resurser"
 
-#: Controller/EventNotifications.php:254
-msgid "Alarm for event \"%1$s\" at %2$s"
-msgstr "Alarm for hendelse \"%1$s\" på %2$s"
-
-#: Controller/EventNotifications.php:257
-msgid "Event invitation \"%1$s\" at %2$s"
-msgstr "Hendelse invitasjon  \"%1$s\" på %2$s"
-
-#: Controller/EventNotifications.php:260
-msgid "Event \"%1$s\" at %s has been canceled"
-msgstr "Hendelse  \"%1$s\" på %2$s har blitt avlyst"
-
-#: Controller/EventNotifications.php:265
-msgid "Event \"%1$s\" at %2$s has been rescheduled"
-msgstr "Hendelse  \"%1$s\" på %2$s har blitt flyttet"
-
-#: Controller/EventNotifications.php:269
-msgid "Event \"%1$s\" at %2$s has been updated"
-msgstr "Hendelse  \"%1$s\" på %2$s har blitt oppdatert"
-
-#: Controller/EventNotifications.php:279
-msgid "%1$s accepted event \"%2$s\" at %3$s"
-msgstr "%1$s godkjent hendelse \"%2$s\" på %3$s"
-
-#: Controller/EventNotifications.php:283
-msgid "%1$s declined event \"%2$s\" at %3$s"
-msgstr "%1$s avvist hendelse \"%2$s\" på %3$s"
-
-#: Controller/EventNotifications.php:287
-msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Foreløbig svar fra %1$s for hendelse \"%2$s\" at %3$s"
-
-#: Controller/EventNotifications.php:291
-msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Ingen svar fra %1$s for hendelse \"%2$s\" at %3$s"
-
-#: Controller/EventNotifications.php:295
-msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr "Deltager endringer for hendelse \"%1$s\" på %2$s"
-
-#: Controller.php:100
-#, python-format
-msgid "%s's personal calendar"
-msgstr "%s' personlige kalender"
-
-#: js/AdminPanel.js:46
-msgid "Manage Resources"
-msgstr "Behandle Resurser"
-
-#: js/AttendeeGridPanel.js:62 js/EventDetailsPanel.js:244 js/Model.js:286
-msgid "Attendee"
-msgstr "Deltager"
-
-#: js/AttendeeGridPanel.js:86
-msgid "Role"
-msgstr "Rolle"
-
-#: js/AttendeeGridPanel.js:95
-msgid "Quantity"
-msgstr "Mengde"
-
-#: js/AttendeeGridPanel.js:104
-msgid "This is the calendar where the attender has saved this event in"
-msgstr "Dette er kalenderen hvor deltager har lagret denne hendelsen i"
-
-#: js/AttendeeGridPanel.js:140
-msgid "Type"
-msgstr "Type"
-
-#: js/AttendeeGridPanel.js:147
-msgid "User"
-msgstr "Bruker"
-
-#: js/AttendeeGridPanel.js:148
-msgid "Group"
-msgstr "Gruppe"
-
-#: js/AttendeeGridPanel.js:149 js/Model.js:441
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] "Resurs"
-msgstr[1] "Resurser"
-
-#: js/AttendeeGridPanel.js:157 js/ResourceEditDialog.js:58
-#: js/ResourcesGridPanel.js:43
-msgid "Name"
-msgstr "Navn"
-
-#: js/AttendeeGridPanel.js:187 Model/Event.php:191
-msgid "Status"
-msgstr "Status"
-
-#: js/AttendeeGridPanel.js:194 js/AttendeeGridPanel.js:491
-#: Model/Attender.php:45
+#: Model/Attender.php:45 js/Model.js:442 js/AttendeeGridPanel.js:513
 msgid "No response"
 msgstr "Ingen svar"
 
-#: js/AttendeeGridPanel.js:195 js/AttendeeGridPanel.js:494
-#: Model/Attender.php:46
+#: Model/Attender.php:46 js/Model.js:443 js/AttendeeGridPanel.js:516
 msgid "Accepted"
 msgstr "Godkjent"
 
-#: js/AttendeeGridPanel.js:196 js/AttendeeGridPanel.js:497
-#: Model/Attender.php:47
+#: Model/Attender.php:47 js/Model.js:444 js/AttendeeGridPanel.js:519
 msgid "Declined"
 msgstr "Avvist"
 
-#: js/AttendeeGridPanel.js:197 js/AttendeeGridPanel.js:500
-#: Model/Attender.php:48
+#: Model/Attender.php:48 js/Model.js:445 js/AttendeeGridPanel.js:522
 msgid "Tentative"
 msgstr "Foreløpig"
 
-#: js/AttendeeGridPanel.js:298
-msgid "Remove Attender"
-msgstr "Fjern Deltaker"
+#: Model/Attender.php:167
+msgid "unknown"
+msgstr "ukjent"
 
-#: js/AttendeeGridPanel.js:393
-msgid "Click here to invite another attender..."
-msgstr "Trykk her for å invitere en annen deltager..."
+#: Model/Attender.php:313
+msgid ""
+"This contact has been automatically added by the system as an event attender"
+msgstr ""
+"Denne kontakten har blitt automatisk lagt til av systemet som en handligs "
+"deltager"
 
-#: js/AttendeeGridPanel.js:411 js/AttendeeGridPanel.js:429
-#: js/AttendeeGridPanel.js:442 js/AttendeeGridPanel.js:454 js/Model.js:302
-msgid "No Information"
-msgstr "Ingen Informasjon"
+#: Model/Attender.php:203
+msgid "unknown)"
+msgstr "ukjent)"
 
-#: js/AttendeeGridPanel.js:416
-msgid "(as a group member)"
-msgstr "(som et gruppe medlem)"
+#: Model/Event.php:195
+msgid "Start"
+msgstr "Start"
 
-#: js/AttendeeGridPanel.js:466
-msgid "Required"
-msgstr "Påkrevd"
+#: Model/Event.php:196
+msgid "End"
+msgstr "Slutt"
 
-#: js/AttendeeGridPanel.js:469
-msgid "Optional"
-msgstr "Valgfri"
+#: Model/Event.php:197 js/EventDetailsPanel.js:218
+msgid "Blocking"
+msgstr "Blokkerer"
+
+#: Model/Event.php:198
+msgid "Classification"
+msgstr "Klasifisering"
+
+#: Model/Event.php:199 js/ResourceEditDialog.js:74 js/EventEditDialog.js:198
+msgid "Description"
+msgstr "Beskrivelse"
+
+#: Model/Event.php:200 js/EventDetailsPanel.js:223 js/EventEditDialog.js:96
+#: js/ResourcesGridPanel.js:54
+msgid "Location"
+msgstr "Sted"
+
+#: Model/Event.php:201 js/EventDetailsPanel.js:227
+msgid "Organizer"
+msgstr "Organiserer"
+
+#: Model/Event.php:202
+msgid "Priority"
+msgstr "Prioritet"
+
+#: Model/Event.php:203 js/AttendeeGridPanel.js:182
+msgid "Status"
+msgstr "Status"
+
+#: Model/Event.php:204 js/EventDetailsPanel.js:172 js/EventEditDialog.js:89
+msgid "Summary"
+msgstr "Oppsumering"
+
+#: Model/Event.php:205
+msgid "Url"
+msgstr "Url"
+
+#: Model/Event.php:206
+msgid "Recurrance rule"
+msgstr "Gjentagelse regel"
+
+#: Model/Event.php:207
+msgid "Is all day event"
+msgstr "Er hele dagen hendelse"
+
+#: Model/Event.php:208
+msgid "Organizer timezone"
+msgstr "Organiserer tidssone"
+
+#: Model/Event.php:233
+msgid "Yes"
+msgstr "Ja"
+
+#: Model/Event.php:233
+msgid "No"
+msgstr "Nei"
+
+#: views/eventNotification.php:13
+msgid "Updates"
+msgstr "Oppdateringer"
+
+#: views/eventNotification.php:21
+msgid "%1$s changed from \"%2$s\" to \"%3$s\""
+msgstr "%1$s endret fra \"%2$s\" til \"%3$s\""
+
+#: views/eventNotification.php:28
+msgid "%1$s has been invited"
+msgstr "%1$s har blitt invitert"
+
+#: views/eventNotification.php:33
+msgid "%1$s has been removed"
+msgstr "%1$s har blitt fjernet"
+
+#: views/eventNotification.php:40
+msgid "%1$s accepted invitation"
+msgstr "%1$s har akseptert invitasjonen"
+
+#: views/eventNotification.php:44
+msgid "%1$s declined invitation"
+msgstr "%1$s har avvist invitasjonen"
+
+#: views/eventNotification.php:48
+msgid "Tentative response from %1$s"
+msgstr "Foreløbig svar fra %1$s"
+
+#: views/eventNotification.php:52
+msgid "No response from %1$s"
+msgstr "Ingen svar fra  %1$s"
+
+#: views/eventNotification.php:61
+msgid "Event details"
+msgstr "Hendelse detaljer"
 
 #: js/Calendar.js:36 js/Model.js:68 Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "Kalender"
 msgstr[1] "Kalendere"
+
+#: js/MainScreenCenterPanel.js:111
+msgid "Day"
+msgstr "Dag"
+
+#: js/MainScreenCenterPanel.js:120 js/PagingToolbar.js:276
+msgid "Week"
+msgstr "Uke"
+
+#: js/MainScreenCenterPanel.js:129
+msgid "Month"
+msgstr "Måned"
+
+#: js/MainScreenCenterPanel.js:324
+msgid "Please Change Selection"
+msgstr "Vennligst Endre Valg"
+
+#: js/MainScreenCenterPanel.js:325
+msgid ""
+"Your selection contains recurring events. Recuring events must be deleted "
+"seperatly!"
+msgstr ""
+"Dine valg inneholder gjentagende hendelser. Gjentagende hendelser må slettes "
+"separat!"
+
+#: js/MainScreenCenterPanel.js:339
+msgid "Confirm Deletion of Series"
+msgstr "Bekreft Sletting av Serie"
+
+#: js/MainScreenCenterPanel.js:340
+msgid "Do you really want to delete all events of this recurring event series?"
+msgstr ""
+"Vil du virkelig slette alle hendelser av denne gjentagende hendelses serien?"
+
+#: js/MainScreenCenterPanel.js:353 js/CalendarPanel.js:283
+msgid "Delete Event"
+msgstr "Slette Hendelse"
+
+#: js/MainScreenCenterPanel.js:356
+msgid "Delete whole series"
+msgstr "Slett hele serien"
+
+#: js/MainScreenCenterPanel.js:357
+msgid "Delete this and all future events"
+msgstr "Slett denne og alle framtidige hendelser"
+
+#: js/MainScreenCenterPanel.js:358
+msgid "Delete this event only"
+msgstr "Slette kun denne hendelsen"
+
+#: js/MainScreenCenterPanel.js:406
+msgid "Do you really want to delete this event?"
+msgid_plural "Do you really want to delete the {0} selected events?"
+msgstr[0] "Vil du virkelig slette denn hendelsen?"
+msgstr[1] "Vil du virkelig slette disse {0} hendelsene?"
+
+#: js/AttendeeStatusFilterModel.js:33
+msgid "Attendee Status"
+msgstr ""
+
+#: js/Model.js:64 js/Model.js:302
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Hendelse"
+msgstr[1] "Hendelser"
+
+#: js/Model.js:64 js/Model.js:302
+msgid "Events"
+msgstr "Hendelser"
+
+#: js/Model.js:68
+msgid "Calendars"
+msgstr "Kalendere"
+
+#: js/Model.js:171
+msgid "Quick search"
+msgstr ""
+
+#: js/Model.js:298
+msgid "Attender"
+msgid_plural "Attendee"
+msgstr[0] "Deltager"
+msgstr[1] "Deltagere"
+
+#: js/Model.js:298 js/EventDetailsPanel.js:244 js/AttendeeFilterModel.js:37
+#: js/AttendeeGridPanel.js:77
+msgid "Attendee"
+msgstr "Deltager"
+
+#: js/Model.js:314 js/AttendeeGridPanel.js:433 js/AttendeeGridPanel.js:451
+#: js/AttendeeGridPanel.js:464 js/AttendeeGridPanel.js:476
+msgid "No Information"
+msgstr "Ingen Informasjon"
+
+#: js/Model.js:472 js/AttendeeGridPanel.js:166
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] "Resurs"
+msgstr[1] "Resurser"
+
+#: js/Model.js:472
+msgid "Resources"
+msgstr "Resurser"
+
+#: js/CalendarSelectWidget.js:121
+msgid "Originally"
+msgstr "Orginalt"
+
+#: js/DaysView.js:90 js/MonthView.js:82
+msgid "New Event"
+msgstr "Ny Hendelse"
+
+#: js/DaysView.js:95
+msgid "{0}, the {1}. of {2}"
+msgstr "{0}, den {1}. av {2}"
+
+#: js/ResourceEditDialog.js:58 js/AttendeeGridPanel.js:174
+#: js/ResourcesGridPanel.js:43
+msgid "Name"
+msgstr "Navn"
+
+#: js/ResourceEditDialog.js:63 js/ResourcesGridPanel.js:49
+msgid "Email"
+msgstr "E-post"
+
+#: js/ResourceEditDialog.js:69 js/ResourceEditDialog.js:70
+msgid "Is a location"
+msgstr "Er et sted"
+
+#: js/ResourceEditDialog.js:75
+msgid "Enter description..."
+msgstr "Tast inn beskrivelse..."
+
+#: js/EventDetailsPanel.js:51
+msgid "Unknown calendar"
+msgstr "Ukjent kalender"
+
+#: js/EventDetailsPanel.js:62
+msgid "{0} {1} o'clock"
+msgstr "{0} {1} klokken"
+
+#: js/EventDetailsPanel.js:208 js/EventEditDialog.js:101
+msgid "Start Time"
+msgstr "Start Tid"
+
+#: js/EventDetailsPanel.js:213 js/EventEditDialog.js:116
+msgid "End Time"
+msgstr "Slutt Tid"
+
+#: js/MonthView.js:87 js/MainScreenLeftPanel.js:76
+msgid "WK"
+msgstr "U"
+
+#: js/MonthView.js:92
+msgid "{0} more..."
+msgstr "{0} mer..."
+
+#: js/AttendeeFilterModel.js:104
+msgid "Select Attendee"
+msgstr ""
+
+#: js/AdminPanel.js:46
+msgid "Manage Resources"
+msgstr "Behandle Resurser"
+
+#: js/EventEditDialog.js:124
+msgid "whole day"
+msgstr "hele dagen"
+
+#: js/EventEditDialog.js:132
+msgid "non-blocking"
+msgstr "ikke-blokert"
+
+#: js/EventEditDialog.js:157
+msgid "Private"
+msgstr ""
+
+#: js/EventEditDialog.js:212
+msgid "Enter description"
+msgstr "Tast inn beskrivelse"
+
+#: js/EventEditDialog.js:342
+msgid "End date is not valid"
+msgstr "Slutt dato er ikke gyldig"
+
+#: js/EventEditDialog.js:345
+msgid "End date must be after start date"
+msgstr "Slutt dato må være etter start dato"
+
+#: js/EventEditDialog.js:358
+msgid "Start date is not valid"
+msgstr "Start datoen er ikke gyldig"
 
 #: js/CalendarPanel.js:41
 msgid "Loading events, please wait..."
@@ -202,10 +394,6 @@ msgstr ""
 "Vil du virkelig oppdatere alle hendelser for denne gjentagende hendelses "
 "serien?"
 
-#: js/CalendarPanel.js:283 js/MainScreenCenterPanel.js:346
-msgid "Delete Event"
-msgstr "Slette Hendelse"
-
 #: js/CalendarPanel.js:286
 msgid "Update nothing"
 msgstr "Oppdater ingenting"
@@ -217,186 +405,6 @@ msgstr "Oppdater hele serien"
 #: js/CalendarPanel.js:288
 msgid "Update this event only"
 msgstr "Oppdater kun denne hendelsen"
-
-#: js/CalendarSelectTreePanel.js:43
-msgid "Resources {0}"
-msgstr "Resurser {0}"
-
-#: js/CalendarSelectWidget.js:121
-msgid "Originally"
-msgstr "Orginalt"
-
-#: js/DaysView.js:90 js/MonthView.js:82
-msgid "New Event"
-msgstr "Ny Hendelse"
-
-#: js/DaysView.js:95
-msgid "{0}, the {1}. of {2}"
-msgstr "{0}, den {1}. av {2}"
-
-#: js/EventDetailsPanel.js:51
-msgid "Unknown calendar"
-msgstr "Ukjent kalender"
-
-#: js/EventDetailsPanel.js:62
-msgid "{0} {1} o'clock"
-msgstr "{0} {1} klokken"
-
-#: js/EventDetailsPanel.js:172 js/EventEditDialog.js:89 Model/Event.php:192
-msgid "Summary"
-msgstr "Oppsumering"
-
-#: js/EventDetailsPanel.js:208 js/EventEditDialog.js:101
-msgid "Start Time"
-msgstr "Start Tid"
-
-#: js/EventDetailsPanel.js:213 js/EventEditDialog.js:116
-msgid "End Time"
-msgstr "Slutt Tid"
-
-#: js/EventDetailsPanel.js:218 Model/Event.php:185
-msgid "Blocking"
-msgstr "Blokkerer"
-
-#: js/EventDetailsPanel.js:223 js/EventEditDialog.js:96
-#: js/ResourcesGridPanel.js:54 Model/Event.php:188
-msgid "Location"
-msgstr "Sted"
-
-#: js/EventDetailsPanel.js:227 Model/Event.php:189
-msgid "Organizer"
-msgstr "Organiserer"
-
-#: js/EventEditDialog.js:124
-msgid "whole day"
-msgstr "hele dagen"
-
-#: js/EventEditDialog.js:132
-msgid "non-blocking"
-msgstr "ikke-blokert"
-
-#: js/EventEditDialog.js:157
-msgid "Private"
-msgstr ""
-
-#: js/EventEditDialog.js:198 js/ResourceEditDialog.js:74 Model/Event.php:187
-msgid "Description"
-msgstr "Beskrivelse"
-
-#: js/EventEditDialog.js:212
-msgid "Enter description"
-msgstr "Tast inn beskrivelse"
-
-#: js/EventEditDialog.js:342
-msgid "End date is not valid"
-msgstr "Slutt dato er ikke gyldig"
-
-#: js/EventEditDialog.js:345
-msgid "End date must be after start date"
-msgstr "Slutt dato må være etter start dato"
-
-#: js/EventEditDialog.js:358
-msgid "Start date is not valid"
-msgstr "Start datoen er ikke gyldig"
-
-#: js/MainScreenCenterPanel.js:95
-msgid "Show declined events"
-msgstr "Vis aviste hendelser"
-
-#: js/MainScreenCenterPanel.js:130
-msgid "Day"
-msgstr "Dag"
-
-#: js/MainScreenCenterPanel.js:139 js/PagingToolbar.js:276
-msgid "Week"
-msgstr "Uke"
-
-#: js/MainScreenCenterPanel.js:148
-msgid "Month"
-msgstr "Måned"
-
-#: js/MainScreenCenterPanel.js:317
-msgid "Please Change Selection"
-msgstr "Vennligst Endre Valg"
-
-#: js/MainScreenCenterPanel.js:318
-msgid ""
-"Your selection contains recurring events. Recuring events must be deleted "
-"seperatly!"
-msgstr ""
-"Dine valg inneholder gjentagende hendelser. Gjentagende hendelser må slettes "
-"separat!"
-
-#: js/MainScreenCenterPanel.js:332
-msgid "Confirm Deletion of Series"
-msgstr "Bekreft Sletting av Serie"
-
-#: js/MainScreenCenterPanel.js:333
-msgid "Do you really want to delete all events of this recurring event series?"
-msgstr ""
-"Vil du virkelig slette alle hendelser av denne gjentagende hendelses serien?"
-
-#: js/MainScreenCenterPanel.js:349
-msgid "Delete whole series"
-msgstr "Slett hele serien"
-
-#: js/MainScreenCenterPanel.js:350
-msgid "Delete this and all future events"
-msgstr "Slett denne og alle framtidige hendelser"
-
-#: js/MainScreenCenterPanel.js:351
-msgid "Delete this event only"
-msgstr "Slette kun denne hendelsen"
-
-#: js/MainScreenCenterPanel.js:399
-msgid "Do you really want to delete this event?"
-msgid_plural "Do you really want to delete the {0} selected events?"
-msgstr[0] "Vil du virkelig slette denn hendelsen?"
-msgstr[1] "Vil du virkelig slette disse {0} hendelsene?"
-
-#: js/MainScreenLeftPanel.js:75 js/MonthView.js:87
-msgid "WK"
-msgstr "U"
-
-#: js/Model.js:64 js/Model.js:290
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] "Hendelse"
-msgstr[1] "Hendelser"
-
-#: js/Model.js:64 js/Model.js:290
-msgid "Events"
-msgstr "Hendelser"
-
-#: js/Model.js:68
-msgid "Calendars"
-msgstr "Kalendere"
-
-#: js/Model.js:286
-msgid "Attender"
-msgid_plural "Attendee"
-msgstr[0] "Deltager"
-msgstr[1] "Deltagere"
-
-#: js/Model.js:441
-msgid "Resources"
-msgstr "Resurser"
-
-#: js/MonthView.js:92
-msgid "{0} more..."
-msgstr "{0} mer..."
-
-#: js/ResourceEditDialog.js:63 js/ResourcesGridPanel.js:49
-msgid "Email"
-msgstr "E-post"
-
-#: js/ResourceEditDialog.js:69 js/ResourceEditDialog.js:70
-msgid "Is a location"
-msgstr "Er et sted"
-
-#: js/ResourceEditDialog.js:75
-msgid "Enter description..."
-msgstr "Tast inn beskrivelse..."
 
 #: js/RrulePanel.js:29
 msgid "Recurrances"
@@ -491,82 +499,63 @@ msgstr ""
 msgid "of"
 msgstr "av"
 
-#: Model/Attender.php:167
-msgid "unknown"
-msgstr "ukjent"
+#: js/AttendeeGridPanel.js:103
+msgid "Role"
+msgstr "Rolle"
 
-#: Model/Attender.php:313
-msgid ""
-"This contact has been automatically added by the system as an event attender"
-msgstr ""
-"Denne kontakten har blitt automatisk lagt til av systemet som en handligs "
-"deltager"
+#: js/AttendeeGridPanel.js:112
+msgid "Quantity"
+msgstr "Mengde"
 
-#: Model/Attender.php:203
-msgid "unknown)"
-msgstr "ukjent)"
+#: js/AttendeeGridPanel.js:121
+msgid "This is the calendar where the attender has saved this event in"
+msgstr "Dette er kalenderen hvor deltager har lagret denne hendelsen i"
 
-#: Model/Event.php:183
-msgid "Start"
-msgstr "Start"
+#: js/AttendeeGridPanel.js:157
+msgid "Type"
+msgstr "Type"
 
-#: Model/Event.php:184
-msgid "End"
-msgstr "Slutt"
+#: js/AttendeeGridPanel.js:164
+msgid "User"
+msgstr "Bruker"
 
-#: Model/Event.php:186
-msgid "Classification"
-msgstr "Klasifisering"
+#: js/AttendeeGridPanel.js:165
+msgid "Group"
+msgstr "Gruppe"
 
-#: Model/Event.php:190
-msgid "Priority"
-msgstr "Prioritet"
+#: js/AttendeeGridPanel.js:320
+msgid "Remove Attender"
+msgstr "Fjern Deltaker"
 
-#: Model/Event.php:193
-msgid "Url"
-msgstr "Url"
+#: js/AttendeeGridPanel.js:415
+msgid "Click here to invite another attender..."
+msgstr "Trykk her for å invitere en annen deltager..."
 
-#: Model/Event.php:194
-msgid "Recurrance rule"
-msgstr "Gjentagelse regel"
+#: js/AttendeeGridPanel.js:438
+msgid "(as a group member)"
+msgstr "(som et gruppe medlem)"
 
-#: Model/Event.php:195
-msgid "Is all day event"
-msgstr "Er hele dagen hendelse"
+#: js/AttendeeGridPanel.js:488
+msgid "Required"
+msgstr "Påkrevd"
 
-#: Model/Event.php:196
-msgid "Organizer timezone"
-msgstr "Organiserer tidssone"
+#: js/AttendeeGridPanel.js:491
+msgid "Optional"
+msgstr "Valgfri"
 
-#: Model/Event.php:221
-msgid "Yes"
-msgstr "Ja"
-
-#: Model/Event.php:221
-msgid "No"
-msgstr "Nei"
-
-#: Preference.php:78
-msgid "Publish Free/Busy Information"
-msgstr "Utgi Ledig/Opptatt informasjon"
-
-#: Preference.php:79
-msgid "Allow all users to view your free/busy information"
-msgstr "Tillat alle brukere å se din ledig/opptatt informasjon"
-
-#: Preference.php:82
+#: Preference.php:72
 msgid "Default Calendar"
 msgstr "Standard Kalender"
 
-#: Preference.php:83
+#: Preference.php:73
 msgid "The default calendar for invitations and new events"
 msgstr "Standard kalenderen for invitasjoner og nye hendelser"
 
-#: Preference.php:86
+#: Preference.php:76
 msgid "Get Notification Emails"
 msgstr "Få Varslings E-post"
 
-#: Preference.php:87
+#: Preference.php:77
 msgid ""
 "The level of actions you want to be notified about. Please note that "
 "organizers will get notifications for all updates including attendee answers "
@@ -576,49 +565,68 @@ msgstr ""
 "varslinger for alle oppdateringer inkludert deltager svar hvis ikke dette "
 "valget er satt til \"Aldri\""
 
-#: Preference.php:90
+#: Preference.php:80
 msgid "Send Notifications Emails of own Actions"
 msgstr "Send Varslings E-post på egne Handligner"
 
-#: Preference.php:91
+#: Preference.php:81
 msgid "Get notifications emails for actions you did yourself"
 msgstr "Få varslings e-post for handligner du selv har gjort"
 
-#: views/eventNotification.php:13
-msgid "Updates"
-msgstr "Oppdateringer"
+#: Controller/EventNotifications.php:254
+msgid "Alarm for event \"%1$s\" at %2$s"
+msgstr "Alarm for hendelse \"%1$s\" på %2$s"
 
-#: views/eventNotification.php:21
-msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr "%1$s endret fra \"%2$s\" til \"%3$s\""
+#: Controller/EventNotifications.php:257
+msgid "Event invitation \"%1$s\" at %2$s"
+msgstr "Hendelse invitasjon  \"%1$s\" på %2$s"
 
-#: views/eventNotification.php:28
-msgid "%1$s has been invited"
-msgstr "%1$s har blitt invitert"
+#: Controller/EventNotifications.php:260
+msgid "Event \"%1$s\" at %2$s has been canceled"
+msgstr ""
 
-#: views/eventNotification.php:33
-msgid "%1$s has been removed"
-msgstr "%1$s har blitt fjernet"
+#: Controller/EventNotifications.php:265
+msgid "Event \"%1$s\" at %2$s has been rescheduled"
+msgstr "Hendelse  \"%1$s\" på %2$s har blitt flyttet"
 
-#: views/eventNotification.php:40
-msgid "%1$s accepted invitation"
-msgstr "%1$s har akseptert invitasjonen"
+#: Controller/EventNotifications.php:269
+msgid "Event \"%1$s\" at %2$s has been updated"
+msgstr "Hendelse  \"%1$s\" på %2$s har blitt oppdatert"
 
-#: views/eventNotification.php:44
-msgid "%1$s declined invitation"
-msgstr "%1$s har avvist invitasjonen"
+#: Controller/EventNotifications.php:279
+msgid "%1$s accepted event \"%2$s\" at %3$s"
+msgstr "%1$s godkjent hendelse \"%2$s\" på %3$s"
 
-#: views/eventNotification.php:48
-msgid "Tentative response from %1$s"
-msgstr "Foreløbig svar fra %1$s"
+#: Controller/EventNotifications.php:283
+msgid "%1$s declined event \"%2$s\" at %3$s"
+msgstr "%1$s avvist hendelse \"%2$s\" på %3$s"
 
-#: views/eventNotification.php:52
-msgid "No response from %1$s"
-msgstr "Ingen svar fra  %1$s"
+#: Controller/EventNotifications.php:287
+msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
+msgstr "Foreløbig svar fra %1$s for hendelse \"%2$s\" at %3$s"
 
-#: views/eventNotification.php:61
-msgid "Event details"
-msgstr "Hendelse detaljer"
+#: Controller/EventNotifications.php:291
+msgid "No response from %1$s for event \"%2$s\" at %3$s"
+msgstr "Ingen svar fra %1$s for hendelse \"%2$s\" at %3$s"
+
+#: Controller/EventNotifications.php:295
+msgid "Attendee changes for event \"%1$s\" at %2$s"
+msgstr "Deltager endringer for hendelse \"%1$s\" på %2$s"
+
+#~ msgid "Event \"%1$s\" at %s has been canceled"
+#~ msgstr "Hendelse  \"%1$s\" på %2$s har blitt avlyst"
+
+#~ msgid "Resources {0}"
+#~ msgstr "Resurser {0}"
+
+#~ msgid "Show declined events"
+#~ msgstr "Vis aviste hendelser"
+
+#~ msgid "Publish Free/Busy Information"
+#~ msgstr "Utgi Ledig/Opptatt informasjon"
+
+#~ msgid "Allow all users to view your free/busy information"
+#~ msgstr "Tillat alle brukere å se din ledig/opptatt informasjon"
 
 #~ msgid "Update Event"
 #~ msgstr "Oppdater Hendelse"

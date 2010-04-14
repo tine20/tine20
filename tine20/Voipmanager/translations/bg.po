@@ -13,35 +13,686 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Asterisk/ContextEditDialog.js:41 js/Asterisk/ContextGridPanel.js:76
-#: js/Asterisk/SipPeerEditDialog.js:48 js/Asterisk/SipPeerGridPanel.js:51
-#: js/Asterisk/VoicemailEditDialog.js:69 js/Snom/LocationEditDialog.js:42
-#: js/Snom/LocationGridPanel.js:131 js/Snom/PhoneEditDialog.js:292
-#: js/Snom/TemplateEditDialog.js:42
-msgid "Name"
-msgstr "Име"
+#: js/Snom/LineGridPanel.js:236 js/Models.js:279
+msgid "Line"
+msgid_plural "Lines"
+msgstr[0] "Линия"
+msgstr[1] "тон (звуков сигнал)"
 
-#: js/Asterisk/ContextEditDialog.js:49 js/Asterisk/ContextGridPanel.js:85
-#: js/Snom/LocationEditDialog.js:49 js/Snom/LocationGridPanel.js:137
-#: js/Snom/SettingEditDialog.js:121 js/Snom/SoftwareEditDialog.js:67
-#: js/Snom/SoftwareGridPanel.js:82 js/Snom/TemplateEditDialog.js:49
-#: js/Snom/TemplateGridPanel.js:82
-msgid "Description"
-msgstr "Описание"
+#: js/Snom/LineGridPanel.js:237
+msgid "Idle Text"
+msgstr "Свободен текст"
 
-#: js/Asterisk/ContextGridPanel.js:51 js/Asterisk/MeetmeGridPanel.js:51
-#: js/Asterisk/SipPeerGridPanel.js:50 js/Asterisk/VoicemailGridPanel.js:51
-#: js/Snom/LocationGridPanel.js:50 js/Snom/PhoneGridPanel.js:67
-#: js/Snom/SettingGridPanel.js:51 js/Snom/SoftwareGridPanel.js:51
-#: js/Snom/TemplateGridPanel.js:51
+#: js/Snom/TemplateGridPanel.js:51 js/Snom/SettingGridPanel.js:51
+#: js/Snom/PhoneGridPanel.js:67 js/Snom/SoftwareGridPanel.js:51
+#: js/Snom/LocationGridPanel.js:50 js/Asterisk/VoicemailGridPanel.js:51
+#: js/Asterisk/MeetmeGridPanel.js:51 js/Asterisk/ContextGridPanel.js:51
+#: js/Asterisk/SipPeerGridPanel.js:50
 msgid "Quick search"
 msgstr ""
 
-#: js/Asterisk/ContextGridPanel.js:69 js/Asterisk/MeetmeGridPanel.js:69
-#: js/Asterisk/VoicemailGridPanel.js:69 js/Snom/LocationGridPanel.js:124
-#: js/Snom/SoftwareGridPanel.js:69 js/Snom/TemplateGridPanel.js:69
+#: js/Snom/TemplateGridPanel.js:69 js/Snom/SoftwareGridPanel.js:69
+#: js/Snom/LocationGridPanel.js:124 js/Asterisk/VoicemailGridPanel.js:69
+#: js/Asterisk/MeetmeGridPanel.js:69 js/Asterisk/ContextGridPanel.js:69
 msgid "id"
 msgstr "идентификационен номер (id)"
+
+#: js/Snom/TemplateGridPanel.js:76 js/Snom/SettingGridPanel.js:76
+#: js/Snom/PhoneEditDialog.js:450 js/Snom/SoftwareGridPanel.js:76
+#: js/Snom/SoftwareEditDialog.js:61 js/Snom/SettingEditDialog.js:112
+#: js/Snom/SettingEditDialog.js:184 js/Asterisk/SipPeerGridPanel.js:77
+msgid "name"
+msgstr "име"
+
+#: js/Snom/TemplateGridPanel.js:82 js/Snom/LocationEditDialog.js:49
+#: js/Snom/TemplateEditDialog.js:49 js/Snom/SoftwareGridPanel.js:82
+#: js/Snom/SoftwareEditDialog.js:67 js/Snom/SettingEditDialog.js:121
+#: js/Snom/LocationGridPanel.js:137 js/Asterisk/ContextEditDialog.js:49
+#: js/Asterisk/ContextGridPanel.js:85
+msgid "Description"
+msgstr "Описание"
+
+#: js/Snom/TemplateGridPanel.js:88
+msgid "Keylayout Id"
+msgstr "Идентификационен номер (Id) на клавиатурният изглед (?)"
+
+#: js/Snom/TemplateGridPanel.js:95
+msgid "Settings Id"
+msgstr "Идентификационен номер (Id) на настройките"
+
+#: js/Snom/TemplateGridPanel.js:102
+msgid "Software Id"
+msgstr "Програмен идентификационен номер (Id)"
+
+#: js/Snom/LocationEditDialog.js:42 js/Snom/PhoneEditDialog.js:278
+#: js/Snom/TemplateEditDialog.js:42 js/Snom/LocationGridPanel.js:131
+#: js/Asterisk/VoicemailEditDialog.js:69 js/Asterisk/ContextEditDialog.js:41
+#: js/Asterisk/ContextGridPanel.js:76 js/Asterisk/SipPeerGridPanel.js:51
+#: js/Asterisk/SipPeerEditDialog.js:68
+msgid "Name"
+msgstr "Име"
+
+#: js/Snom/LocationEditDialog.js:55 js/Snom/LocationGridPanel.js:82
+msgid "Registrar"
+msgstr "Регистрация"
+
+#: js/Snom/LocationEditDialog.js:62
+msgid "Base Download URL"
+msgstr "Основен Download URL"
+
+#: js/Snom/LocationEditDialog.js:77 js/Snom/LocationGridPanel.js:75
+msgid "Update Policy"
+msgstr "Актуализира основна стойност"
+
+#: js/Snom/LocationEditDialog.js:98
+msgid "Firmware Interval"
+msgstr "Програмен интервал"
+
+#: js/Snom/LocationEditDialog.js:116
+msgid "tone_scheme"
+msgstr "тон-схема на позвъняване"
+
+#: js/Snom/LocationEditDialog.js:153
+msgid "date_us_format"
+msgstr "U.S. формат на датата"
+
+#: js/Snom/LocationEditDialog.js:163 js/Snom/LocationEditDialog.js:184
+#: js/Snom/PhoneEditDialog.js:461 js/Snom/PhoneEditDialog.js:500
+#: js/Snom/PhoneEditDialog.js:509 js/Snom/PhoneEditDialog.js:518
+#: js/Snom/PhoneEditDialog.js:527 js/Snom/PhoneEditDialog.js:536
+#: js/Snom/SettingEditDialog.js:199 js/Snom/SettingEditDialog.js:254
+#: js/Snom/SettingEditDialog.js:267 js/Snom/SettingEditDialog.js:280
+#: js/Snom/SettingEditDialog.js:293 js/Snom/SettingEditDialog.js:306
+#: js/Asterisk/VoicemailEditDialog.js:113 js/Asterisk/SipPeerEditDialog.js:161
+#: js/Asterisk/SipPeerEditDialog.js:172
+msgid "on"
+msgstr "включен"
+
+#: js/Snom/LocationEditDialog.js:164 js/Snom/LocationEditDialog.js:185
+#: js/Snom/PhoneEditDialog.js:464 js/Snom/PhoneEditDialog.js:501
+#: js/Snom/PhoneEditDialog.js:510 js/Snom/PhoneEditDialog.js:519
+#: js/Snom/PhoneEditDialog.js:528 js/Snom/PhoneEditDialog.js:537
+#: js/Snom/SettingEditDialog.js:202 js/Snom/SettingEditDialog.js:255
+#: js/Snom/SettingEditDialog.js:268 js/Snom/SettingEditDialog.js:281
+#: js/Snom/SettingEditDialog.js:294 js/Snom/SettingEditDialog.js:307
+#: js/Asterisk/VoicemailEditDialog.js:114 js/Asterisk/SipPeerEditDialog.js:161
+#: js/Asterisk/SipPeerEditDialog.js:172
+msgid "off"
+msgstr "изключен"
+
+#: js/Snom/LocationEditDialog.js:174
+msgid "time_24_format"
+msgstr "време - 24 часов формат"
+
+#: js/Snom/LocationEditDialog.js:194 js/Snom/LocationGridPanel.js:96
+msgid "NTP Server"
+msgstr "NTP сървъра"
+
+#: js/Snom/LocationEditDialog.js:211
+msgid "NTP Server Address"
+msgstr "NTP-сървър-адрес"
+
+#: js/Snom/LocationEditDialog.js:224
+msgid "NTP Refresh"
+msgstr "NTP - Актуализация"
+
+#: js/Snom/LocationEditDialog.js:231
+msgid "Timezone"
+msgstr "Часова зона"
+
+#: js/Snom/LocationEditDialog.js:256
+msgid "Enable admin mode"
+msgstr "Активирай администраторски режим"
+
+#: js/Snom/LocationEditDialog.js:268
+msgid "Admin Mode Password"
+msgstr "Парола на администраторският режим"
+
+#: js/Snom/LocationEditDialog.js:278
+msgid "Enable webserver"
+msgstr "Активира сървър"
+
+#: js/Snom/LocationEditDialog.js:305 js/Snom/LocationGridPanel.js:103
+msgid "Webserver Type"
+msgstr "Тип на вебсървъра"
+
+#: js/Snom/LocationEditDialog.js:352
+msgid "HTTP Port"
+msgstr "HTTP-Port"
+
+#: js/Snom/LocationEditDialog.js:366 js/Snom/LocationGridPanel.js:110
+msgid "HTTPS Port"
+msgstr "HTTPS Port"
+
+#: js/Snom/LocationEditDialog.js:387 js/Snom/LocationGridPanel.js:117
+msgid "HTTP User"
+msgstr "HTTP Потребител"
+
+#: js/Snom/LocationEditDialog.js:399
+msgid "HTTP Password"
+msgstr "HTTP-рарола"
+
+#: js/Snom/SettingGridPanel.js:69 js/Snom/PhoneGridPanel.js:85
+#: js/Asterisk/SipPeerGridPanel.js:70
+msgid "Id"
+msgstr "Id (Идентификатор)"
+
+#: js/Snom/SettingGridPanel.js:82 js/Snom/PhoneGridPanel.js:98
+msgid "description"
+msgstr "описание"
+
+#: js/Snom/SettingGridPanel.js:88 js/Snom/PhoneEditDialog.js:402
+#: js/Snom/SettingEditDialog.js:125
+msgid "web_language"
+msgstr "уеб_код"
+
+#: js/Snom/SettingGridPanel.js:95 js/Snom/PhoneEditDialog.js:420
+#: js/Snom/SettingEditDialog.js:147 js/Asterisk/SipPeerGridPanel.js:172
+msgid "language"
+msgstr "език"
+
+#: js/Snom/SettingGridPanel.js:102 js/Snom/PhoneEditDialog.js:444
+#: js/Snom/SettingEditDialog.js:175
+msgid "display_method"
+msgstr "стил на изписване"
+
+#: js/Snom/SettingGridPanel.js:109 js/Snom/PhoneEditDialog.js:467
+#: js/Snom/SettingEditDialog.js:206
+msgid "mwi_notification"
+msgstr "указание за  'Има съобщение '"
+
+#: js/Snom/SettingGridPanel.js:116 js/Snom/PhoneEditDialog.js:477
+#: js/Snom/SettingEditDialog.js:220
+msgid "mwi_dialtone"
+msgstr "избиращ тон за  'Има съобщение '"
+
+#: js/Snom/SettingGridPanel.js:123 js/Snom/PhoneEditDialog.js:486
+#: js/Snom/SettingEditDialog.js:233
+msgid "headset_device"
+msgstr "използване на слушалки"
+
+#: js/Snom/SettingGridPanel.js:130 js/Snom/PhoneEditDialog.js:495
+#: js/Snom/SettingEditDialog.js:246
+msgid "message_led_other"
+msgstr "съобщаващ LED за изпуснати обаждания"
+
+#: js/Snom/SettingGridPanel.js:137 js/Snom/PhoneEditDialog.js:504
+#: js/Snom/SettingEditDialog.js:259
+msgid "global_missed_counter"
+msgstr "глобален брояч на изпуснати обаждания"
+
+#: js/Snom/SettingGridPanel.js:144 js/Snom/PhoneEditDialog.js:513
+#: js/Snom/SettingEditDialog.js:272
+msgid "scroll_outgoing"
+msgstr "изписва кодовете на излизащи обаждания"
+
+#: js/Snom/SettingGridPanel.js:151 js/Snom/PhoneEditDialog.js:522
+#: js/Snom/SettingEditDialog.js:285
+msgid "show_local_line"
+msgstr "показва локалният код на набиране"
+
+#: js/Snom/SettingGridPanel.js:158 js/Snom/PhoneEditDialog.js:531
+#: js/Snom/SettingEditDialog.js:298
+msgid "show_call_status"
+msgstr "показва статус на позвъняванията"
+
+#: js/Snom/SettingGridPanel.js:165 js/Snom/PhoneEditDialog.js:456
+#: js/Snom/SettingEditDialog.js:191
+msgid "call_waiting"
+msgstr "почукване за чакащ разговор"
+
+#: js/Snom/PhoneEditDialog.js:225
+msgid "Lines"
+msgstr "Линии"
+
+#: js/Snom/PhoneEditDialog.js:263 js/Models.js:79
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] "Телефон"
+msgstr[1] "Телефона"
+
+#: js/Snom/PhoneEditDialog.js:282
+msgid "Phone Model"
+msgstr "Модел на телефона"
+
+#: js/Snom/PhoneEditDialog.js:293
+msgid "MAC Address"
+msgstr "MAC-адрес"
+
+#: js/Snom/PhoneEditDialog.js:327
+msgid "infos"
+msgstr "информации"
+
+#: js/Snom/PhoneEditDialog.js:342
+msgid "Current IP Address"
+msgstr "Актуален IP-адрес"
+
+#: js/Snom/PhoneEditDialog.js:349
+msgid "Firmware last checked at"
+msgstr "Програмата (firmware) е тествана последно на:"
+
+#: js/Snom/PhoneEditDialog.js:357
+msgid "Current Software Version"
+msgstr "Актуална рограмна версия:"
+
+#: js/Snom/PhoneEditDialog.js:364
+msgid "Settings Loaded at"
+msgstr "Настройките са заредени на:"
+
+#: js/Snom/PhoneEditDialog.js:384 js/Snom/TemplateEditDialog.js:68
+#: js/Snom/SettingEditDialog.js:92
+msgid "Settings"
+msgstr "Настройки"
+
+#: js/Snom/PhoneEditDialog.js:406 js/Snom/PhoneEditDialog.js:424
+#: js/Snom/PhoneEditDialog.js:448 js/Snom/PhoneEditDialog.js:460
+#: js/Snom/PhoneEditDialog.js:471 js/Snom/PhoneEditDialog.js:481
+#: js/Snom/PhoneEditDialog.js:490 js/Snom/PhoneEditDialog.js:499
+#: js/Snom/PhoneEditDialog.js:508 js/Snom/PhoneEditDialog.js:517
+#: js/Snom/PhoneEditDialog.js:526 js/Snom/PhoneEditDialog.js:535
+#: js/Snom/SettingEditDialog.js:132 js/Snom/SettingEditDialog.js:154
+#: js/Snom/SettingEditDialog.js:182 js/Snom/SettingEditDialog.js:198
+#: js/Snom/SettingEditDialog.js:213 js/Snom/SettingEditDialog.js:227
+#: js/Snom/SettingEditDialog.js:240 js/Snom/SettingEditDialog.js:253
+#: js/Snom/SettingEditDialog.js:266 js/Snom/SettingEditDialog.js:279
+#: js/Snom/SettingEditDialog.js:292 js/Snom/SettingEditDialog.js:305
+msgid "- factory default -"
+msgstr "първоначални настройки"
+
+#: js/Snom/PhoneEditDialog.js:449 js/Snom/SettingEditDialog.js:183
+msgid "whole url"
+msgstr "пълен URL"
+
+#: js/Snom/PhoneEditDialog.js:451 js/Snom/SettingEditDialog.js:185
+msgid "number"
+msgstr "номер"
+
+#: js/Snom/PhoneEditDialog.js:452 js/Snom/SettingEditDialog.js:186
+msgid "name + number"
+msgstr "име + номер"
+
+#: js/Snom/PhoneEditDialog.js:453 js/Snom/SettingEditDialog.js:187
+msgid "number + name"
+msgstr "номер + име"
+
+#: js/Snom/PhoneEditDialog.js:462 js/Snom/SettingEditDialog.js:200
+msgid "visual"
+msgstr "визуализиране"
+
+#: js/Snom/PhoneEditDialog.js:463 js/Snom/SettingEditDialog.js:201
+msgid "ringer"
+msgstr "тон (звуков сигнал)"
+
+#: js/Snom/PhoneEditDialog.js:472 js/Snom/SettingEditDialog.js:214
+msgid "silent"
+msgstr "беззвучно"
+
+#: js/Snom/PhoneEditDialog.js:473 js/Snom/SettingEditDialog.js:215
+msgid "beep"
+msgstr "beep-тон"
+
+#: js/Snom/PhoneEditDialog.js:474 js/Snom/SettingEditDialog.js:216
+msgid "reminder"
+msgstr "напомняне"
+
+#: js/Snom/PhoneEditDialog.js:482 js/Snom/SettingEditDialog.js:228
+msgid "normal"
+msgstr "нормален"
+
+#: js/Snom/PhoneEditDialog.js:483 js/Snom/SettingEditDialog.js:229
+msgid "stutter"
+msgstr "прекъсващ"
+
+#: js/Snom/PhoneEditDialog.js:491 js/Snom/SettingEditDialog.js:241
+msgid "none"
+msgstr "номера не отговаря"
+
+#: js/Snom/PhoneEditDialog.js:492 js/Snom/SettingEditDialog.js:242
+msgid "headset_rj"
+msgstr "вход за слушалки"
+
+#: js/Snom/PhoneEditDialog.js:551
+msgid "Users"
+msgstr "Потребители"
+
+#: js/Snom/PhoneGridPanel.js:43
+msgid "reset phones HTTP authentication"
+msgstr "върни телефонната HTTP-автентичност"
+
+#: js/Snom/PhoneGridPanel.js:50
+msgid "Open phones web gui"
+msgstr "Open phones web gui"
+
+#: js/Snom/PhoneGridPanel.js:92
+msgid "MAC address"
+msgstr "MAC Адрес"
+
+#: js/Snom/PhoneGridPanel.js:103 js/Voipmanager.js:116 js/Models.js:130
+msgid "Location"
+msgid_plural "Locations"
+msgstr[0] "Локация"
+msgstr[1] "Локации"
+
+#: js/Snom/PhoneGridPanel.js:112 js/Models.js:167
+msgid "Template"
+msgid_plural "Templates"
+msgstr[0] "Темплейт"
+msgstr[1] "Темплейтс"
+
+#: js/Snom/PhoneGridPanel.js:121
+msgid "IP Address"
+msgstr "IP адрес"
+
+#: js/Snom/PhoneGridPanel.js:127 js/Voipmanager.js:157 js/Models.js:205
+msgid "Software"
+msgid_plural "Softwares"
+msgstr[0] "Програма"
+msgstr[1] "Програми"
+
+#: js/Snom/PhoneGridPanel.js:133
+msgid "current model"
+msgstr "Употребяван модел"
+
+#: js/Snom/PhoneGridPanel.js:140
+msgid "redirect event"
+msgstr "отклонение"
+
+#: js/Snom/PhoneGridPanel.js:147
+msgid "redirect number"
+msgstr "отклонение към"
+
+#: js/Snom/PhoneGridPanel.js:154
+msgid "redirect time"
+msgstr "отклонение времето за връэка"
+
+#: js/Snom/PhoneGridPanel.js:161
+msgid "settings loaded at"
+msgstr "настройки заредени на "
+
+#: js/Snom/PhoneGridPanel.js:169
+msgid "last modified"
+msgstr "последни промени"
+
+#: js/Snom/TemplateEditDialog.js:56
+msgid "Software Version"
+msgstr "Програмна версия"
+
+#: js/Snom/TemplateEditDialog.js:79 js/Voipmanager.js:136
+msgid "Keylayout"
+msgstr "Клавиатурен изглед (легенда)"
+
+#: js/Snom/LocationGridPanel.js:68
+msgid "FW Interval"
+msgstr "FW Интервал"
+
+#: js/Snom/LocationGridPanel.js:89
+msgid "Admin Mode"
+msgstr "Администраторски режим"
+
+#: js/Snom/LocationGridPanel.js:143
+msgid "Filter Registrar"
+msgstr "Регистрация на филтъра"
+
+#: js/Snom/LocationGridPanel.js:150
+msgid "CP Dialoginfo"
+msgstr "CP диалогова информация"
+
+#: js/Snom/LocationGridPanel.js:157
+msgid "Pickup Indic."
+msgstr "Pickup Indic."
+
+#: js/Voipmanager.js:25
+msgid "Asterisk"
+msgstr "Asterisk"
+
+#: js/Voipmanager.js:32 js/Models.js:431
+msgid "SipPeer"
+msgid_plural "SipPeers"
+msgstr[0] "SipPeer"
+msgstr[1] "SipPeers"
+
+#: js/Voipmanager.js:42
+msgid "Dialplan"
+msgstr "Dialplan"
+
+#: js/Voipmanager.js:53 js/Models.js:465 js/Asterisk/VoicemailEditDialog.js:56
+#: js/Asterisk/SipPeerEditDialog.js:76
+msgid "Context"
+msgid_plural "Contexts"
+msgstr[0] "Контекст"
+msgstr[1] "Контекста"
+
+#: js/Voipmanager.js:63 js/Models.js:521
+msgid "Voicemail"
+msgid_plural "Voicemails"
+msgstr[0] "Гласова поща"
+msgstr[1] "Гласови пощи"
+
+#: js/Voipmanager.js:73 js/Models.js:556
+msgid "Meetme"
+msgid_plural "Meetmes"
+msgstr[0] "Meetme"
+msgstr[1] "Meetmes"
+
+#: js/Voipmanager.js:83
+msgid "Queues"
+msgstr "Поредица"
+
+#: js/Voipmanager.js:99
+msgid "Snom"
+msgstr "Snom"
+
+#: js/Voipmanager.js:106
+msgid "Phones"
+msgstr "Phones"
+
+#: js/Voipmanager.js:126
+msgid "Templates"
+msgstr "Темплейтс"
+
+#: js/Voipmanager.js:147 js/Models.js:336
+msgid "Setting"
+msgid_plural "Settings"
+msgstr[0] "Настройка"
+msgstr[1] "Настройки"
+
+#: js/Models.js:83
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "списък на телефони"
+msgstr[1] "списъка на телефони"
+
+#: js/Models.js:134
+msgid "locations list"
+msgid_plural "locations lists"
+msgstr[0] "Списък на локации"
+msgstr[1] "Списъка на локации"
+
+#: js/Models.js:171
+msgid "templates list"
+msgid_plural "templates lists"
+msgstr[0] "Списък на темплейтс"
+msgstr[1] "Списъка на темплейтс"
+
+#: js/Models.js:209
+msgid "softwares list"
+msgid_plural "softwares lists"
+msgstr[0] "Списък на програми"
+msgstr[1] "Списъка на програми"
+
+#: js/Models.js:238
+msgid "SoftwareImage"
+msgid_plural "SoftwareImages"
+msgstr[0] "SoftwareImage"
+msgstr[1] "SoftwareImages"
+
+#: js/Models.js:242
+msgid "softwareImages list"
+msgid_plural "softwareImages lists"
+msgstr[0] "списък на softwareImages"
+msgstr[1] "списъка на softwareImages"
+
+#: js/Models.js:283
+msgid "lines list"
+msgid_plural "lines lists"
+msgstr[0] "списък на линии"
+msgstr[1] "списъка на линии"
+
+#: js/Models.js:340
+msgid "setting list"
+msgid_plural "settings lists"
+msgstr[0] "Списък на настройки"
+msgstr[1] "Списъка на настройки"
+
+#: js/Models.js:435
+msgid "sipPeers list"
+msgid_plural "sipPeers lists"
+msgstr[0] "Списък на sipPeers"
+msgstr[1] "Списъка на sipPeers"
+
+#: js/Models.js:469
+msgid "contexts list"
+msgid_plural "contexts lists"
+msgstr[0] "Списък на контексти"
+msgstr[1] "Списъка на контексти"
+
+#: js/Models.js:525
+msgid "voicemails list"
+msgid_plural "voicemails lists"
+msgstr[0] "Списък на  гласови пощи"
+msgstr[1] "Списъка на  гласови пощи"
+
+#: js/Models.js:560
+msgid "meetmes list"
+msgid_plural "meetmes lists"
+msgstr[0] "списък на meetmes"
+msgstr[1] "списъка на meetmes"
+
+#: js/CallForwardPanel.js:86
+msgid "Forward immediately"
+msgstr ""
+
+#: js/CallForwardPanel.js:96 js/CallForwardPanel.js:139
+#: js/CallForwardPanel.js:181
+msgid "Mode"
+msgstr ""
+
+#: js/CallForwardPanel.js:120 js/CallForwardPanel.js:162
+#: js/CallForwardPanel.js:205
+msgid "Number"
+msgstr ""
+
+#: js/CallForwardPanel.js:129
+msgid "Forward busy"
+msgstr ""
+
+#: js/CallForwardPanel.js:171
+msgid "Forward delayed"
+msgstr ""
+
+#: js/CallForwardPanel.js:214
+msgid "Delay time"
+msgstr ""
+
+#: js/Asterisk/VoicemailGridPanel.js:76 js/Asterisk/SipPeerGridPanel.js:179
+msgid "mailbox"
+msgstr "мейлбокс"
+
+#: js/Asterisk/VoicemailGridPanel.js:82 js/Asterisk/SipPeerGridPanel.js:117
+msgid "context"
+msgstr "контекст"
+
+#: js/Asterisk/VoicemailGridPanel.js:88
+msgid "fullname"
+msgstr "Пълно име"
+
+#: js/Asterisk/VoicemailGridPanel.js:94 js/Asterisk/VoicemailEditDialog.js:84
+msgid "email"
+msgstr "Имейл"
+
+#: js/Asterisk/VoicemailGridPanel.js:100 js/Asterisk/VoicemailEditDialog.js:90
+msgid "pager"
+msgstr "пейджер"
+
+#: js/Asterisk/VoicemailGridPanel.js:106
+#: js/Asterisk/VoicemailEditDialog.js:120
+msgid "tz"
+msgstr "tz"
+
+#: js/Asterisk/VoicemailGridPanel.js:113
+#: js/Asterisk/VoicemailEditDialog.js:147
+msgid "attach"
+msgstr "прикрепи"
+
+#: js/Asterisk/VoicemailGridPanel.js:120
+#: js/Asterisk/VoicemailEditDialog.js:151
+msgid "saycid"
+msgstr "saycid"
+
+#: js/Asterisk/VoicemailGridPanel.js:127
+#: js/Asterisk/VoicemailEditDialog.js:126
+msgid "dialout"
+msgstr "извън избиране (dialout)"
+
+#: js/Asterisk/VoicemailGridPanel.js:134
+#: js/Asterisk/VoicemailEditDialog.js:132
+msgid "callback"
+msgstr "върнато позвънявяне"
+
+#: js/Asterisk/VoicemailGridPanel.js:141
+#: js/Asterisk/VoicemailEditDialog.js:155
+msgid "review"
+msgstr "преглед"
+
+#: js/Asterisk/VoicemailGridPanel.js:148
+#: js/Asterisk/VoicemailEditDialog.js:159
+msgid "operator"
+msgstr "оператор"
+
+#: js/Asterisk/VoicemailGridPanel.js:155
+#: js/Asterisk/VoicemailEditDialog.js:163
+msgid "envelope"
+msgstr "обвивка (envelope)"
+
+#: js/Asterisk/VoicemailGridPanel.js:162
+#: js/Asterisk/VoicemailEditDialog.js:138
+msgid "sayduration"
+msgstr "Продължителност (saydurationm)"
+
+#: js/Asterisk/VoicemailGridPanel.js:169
+#: js/Asterisk/VoicemailEditDialog.js:142
+msgid "saydurationm"
+msgstr "Продължителност м. (saydurationm)"
+
+#: js/Asterisk/VoicemailGridPanel.js:176
+#: js/Asterisk/VoicemailEditDialog.js:167
+msgid "sendvoicemail"
+msgstr "изпращане на гласов имейл"
+
+#: js/Asterisk/VoicemailGridPanel.js:183
+#: js/Asterisk/VoicemailEditDialog.js:171
+msgid "delete"
+msgstr "изтрий"
+
+#: js/Asterisk/VoicemailGridPanel.js:190
+#: js/Asterisk/VoicemailEditDialog.js:175
+msgid "nextaftercmd"
+msgstr "следващ след cmd (nextaftercmd)"
+
+#: js/Asterisk/VoicemailGridPanel.js:197
+#: js/Asterisk/VoicemailEditDialog.js:179
+msgid "forcename"
+msgstr "важащо име (forcename)"
+
+#: js/Asterisk/VoicemailGridPanel.js:204
+#: js/Asterisk/VoicemailEditDialog.js:183
+msgid "forcegreetings"
+msgstr "важащи обръщения (forcegreetings)"
+
+#: js/Asterisk/VoicemailGridPanel.js:211
+#: js/Asterisk/VoicemailEditDialog.js:187
+msgid "hidefromdir"
+msgstr "Скрит от директория"
 
 #: js/Asterisk/MeetmeEditDialog.js:41 js/Asterisk/MeetmeGridPanel.js:76
 msgid "confno"
@@ -55,104 +706,21 @@ msgstr "пин"
 msgid "adminpin"
 msgstr "администраторски пин"
 
-#: js/Asterisk/SipPeerEditDialog.js:41 js/Asterisk/VoicemailEditDialog.js:42
+#: js/Asterisk/VoicemailEditDialog.js:42 js/Asterisk/SipPeerEditDialog.js:61
 msgid "General"
 msgstr "Генерално (главно)"
 
-#: js/Asterisk/SipPeerEditDialog.js:56 js/Asterisk/VoicemailEditDialog.js:56
-#: js/Models.js:497 js/Voipmanager.js:53
-msgid "Context"
-msgid_plural "Contexts"
-msgstr[0] "Контекст"
-msgstr[1] "Контекста"
-
-#: js/Asterisk/SipPeerEditDialog.js:69
-msgid "Type"
-msgstr "Тип"
-
-#: js/Asterisk/SipPeerEditDialog.js:78
-msgid "friend"
-msgstr "приятел"
-
-#: js/Asterisk/SipPeerEditDialog.js:79
-msgid "user"
-msgstr "потребител"
-
-#: js/Asterisk/SipPeerEditDialog.js:80
-msgid "peer"
-msgstr "peer"
-
-#: js/Asterisk/SipPeerEditDialog.js:84
-msgid "Secret"
-msgstr "Тайна"
-
-#: js/Asterisk/SipPeerEditDialog.js:91
-msgid "Callerid"
-msgstr "id на позвънил (Callerid)"
-
-#: js/Asterisk/SipPeerEditDialog.js:98 js/Asterisk/VoicemailEditDialog.js:48
+#: js/Asterisk/VoicemailEditDialog.js:48 js/Asterisk/SipPeerEditDialog.js:118
 msgid "Mailbox"
 msgstr "Гласова поща (Мейлбокс)"
 
-#: js/Asterisk/SipPeerEditDialog.js:105
-msgid "Callgroup"
-msgstr "Група за обаждане"
+#: js/Asterisk/VoicemailEditDialog.js:76
+msgid "Password"
+msgstr "Парола"
 
-#: js/Asterisk/SipPeerEditDialog.js:112
-msgid "Pickup group"
-msgstr "Приета група (група за прием)"
-
-#: js/Asterisk/SipPeerEditDialog.js:119
-msgid "Accountcode"
-msgstr "Акаунт-код"
-
-#: js/Asterisk/SipPeerEditDialog.js:126
-msgid "Language"
-msgstr "Език"
-
-#: js/Asterisk/SipPeerEditDialog.js:133
-msgid "NAT"
-msgstr "NAT"
-
-#: js/Asterisk/SipPeerEditDialog.js:141 js/Asterisk/SipPeerEditDialog.js:152
-#: js/Asterisk/VoicemailEditDialog.js:114 js/Snom/LocationEditDialog.js:164
-#: js/Snom/LocationEditDialog.js:185 js/Snom/PhoneEditDialog.js:535
-#: js/Snom/PhoneEditDialog.js:572 js/Snom/PhoneEditDialog.js:581
-#: js/Snom/PhoneEditDialog.js:590 js/Snom/PhoneEditDialog.js:599
-#: js/Snom/PhoneEditDialog.js:608 js/Snom/SettingEditDialog.js:202
-#: js/Snom/SettingEditDialog.js:255 js/Snom/SettingEditDialog.js:268
-#: js/Snom/SettingEditDialog.js:281 js/Snom/SettingEditDialog.js:294
-#: js/Snom/SettingEditDialog.js:307
-msgid "off"
-msgstr "изключен"
-
-#: js/Asterisk/SipPeerEditDialog.js:141 js/Asterisk/SipPeerEditDialog.js:152
-#: js/Asterisk/VoicemailEditDialog.js:113 js/Snom/LocationEditDialog.js:163
-#: js/Snom/LocationEditDialog.js:184 js/Snom/PhoneEditDialog.js:532
-#: js/Snom/PhoneEditDialog.js:571 js/Snom/PhoneEditDialog.js:580
-#: js/Snom/PhoneEditDialog.js:589 js/Snom/PhoneEditDialog.js:598
-#: js/Snom/PhoneEditDialog.js:607 js/Snom/SettingEditDialog.js:199
-#: js/Snom/SettingEditDialog.js:254 js/Snom/SettingEditDialog.js:267
-#: js/Snom/SettingEditDialog.js:280 js/Snom/SettingEditDialog.js:293
-#: js/Snom/SettingEditDialog.js:306
-msgid "on"
-msgstr "включен"
-
-#: js/Asterisk/SipPeerEditDialog.js:144
-msgid "Qualify"
-msgstr "Упълномощение"
-
-#: js/Asterisk/SipPeerGridPanel.js:70 js/Snom/PhoneGridPanel.js:85
-#: js/Snom/SettingGridPanel.js:69
-msgid "Id"
-msgstr "Id (Идентификатор)"
-
-#: js/Asterisk/SipPeerGridPanel.js:77 js/Snom/PhoneEditDialog.js:521
-#: js/Snom/SettingEditDialog.js:112 js/Snom/SettingEditDialog.js:184
-#: js/Snom/SettingGridPanel.js:76 js/Snom/SoftwareEditDialog.js:61
-#: js/Snom/SoftwareGridPanel.js:76 js/Snom/TemplateGridPanel.js:76
-msgid "name"
-msgstr "име"
+#: js/Asterisk/VoicemailEditDialog.js:96
+msgid "Additional"
+msgstr "Допълнително"
 
 #: js/Asterisk/SipPeerGridPanel.js:83
 msgid "account code"
@@ -173,10 +741,6 @@ msgstr "id на позвъняващ"
 #: js/Asterisk/SipPeerGridPanel.js:110
 msgid "can reinvite"
 msgstr "възможна е повторна покана"
-
-#: js/Asterisk/SipPeerGridPanel.js:117 js/Asterisk/VoicemailGridPanel.js:82
-msgid "context"
-msgstr "контекст"
 
 #: js/Asterisk/SipPeerGridPanel.js:123
 msgid "default ip"
@@ -205,15 +769,6 @@ msgstr "ност"
 #: js/Asterisk/SipPeerGridPanel.js:165
 msgid "insecure"
 msgstr "несигурно"
-
-#: js/Asterisk/SipPeerGridPanel.js:172 js/Snom/PhoneEditDialog.js:491
-#: js/Snom/SettingEditDialog.js:147 js/Snom/SettingGridPanel.js:95
-msgid "language"
-msgstr "език"
-
-#: js/Asterisk/SipPeerGridPanel.js:179 js/Asterisk/VoicemailGridPanel.js:76
-msgid "mailbox"
-msgstr "мейлбокс"
 
 #: js/Asterisk/SipPeerGridPanel.js:185
 msgid "md5 secret"
@@ -324,631 +879,94 @@ msgstr "граница на обаждания"
 msgid "busy level"
 msgstr "заето ниво"
 
-#: js/Asterisk/VoicemailEditDialog.js:76
-msgid "Password"
-msgstr "Парола"
+#: js/Asterisk/SipPeerEditDialog.js:50
+msgid "Call Forwards"
+msgstr ""
 
-#: js/Asterisk/VoicemailEditDialog.js:84 js/Asterisk/VoicemailGridPanel.js:94
-msgid "email"
-msgstr "Имейл"
+#: js/Asterisk/SipPeerEditDialog.js:89
+msgid "Type"
+msgstr "Тип"
 
-#: js/Asterisk/VoicemailEditDialog.js:90 js/Asterisk/VoicemailGridPanel.js:100
-msgid "pager"
-msgstr "пейджер"
+#: js/Asterisk/SipPeerEditDialog.js:98
+msgid "friend"
+msgstr "приятел"
 
-#: js/Asterisk/VoicemailEditDialog.js:96
-msgid "Additional"
-msgstr "Допълнително"
+#: js/Asterisk/SipPeerEditDialog.js:99
+msgid "user"
+msgstr "потребител"
 
-#: js/Asterisk/VoicemailEditDialog.js:120
-#: js/Asterisk/VoicemailGridPanel.js:106
-msgid "tz"
-msgstr "tz"
+#: js/Asterisk/SipPeerEditDialog.js:100
+msgid "peer"
+msgstr "peer"
 
-#: js/Asterisk/VoicemailEditDialog.js:126
-#: js/Asterisk/VoicemailGridPanel.js:127
-msgid "dialout"
-msgstr "извън избиране (dialout)"
+#: js/Asterisk/SipPeerEditDialog.js:104
+msgid "Secret"
+msgstr "Тайна"
 
-#: js/Asterisk/VoicemailEditDialog.js:132
-#: js/Asterisk/VoicemailGridPanel.js:134
-msgid "callback"
-msgstr "върнато позвънявяне"
+#: js/Asterisk/SipPeerEditDialog.js:111
+msgid "Callerid"
+msgstr "id на позвънил (Callerid)"
 
-#: js/Asterisk/VoicemailEditDialog.js:138
-#: js/Asterisk/VoicemailGridPanel.js:162
-msgid "sayduration"
-msgstr "Продължителност (saydurationm)"
+#: js/Asterisk/SipPeerEditDialog.js:125
+msgid "Callgroup"
+msgstr "Група за обаждане"
 
-#: js/Asterisk/VoicemailEditDialog.js:142
-#: js/Asterisk/VoicemailGridPanel.js:169
-msgid "saydurationm"
-msgstr "Продължителност м. (saydurationm)"
+#: js/Asterisk/SipPeerEditDialog.js:132
+msgid "Pickup group"
+msgstr "Приета група (група за прием)"
 
-#: js/Asterisk/VoicemailEditDialog.js:147
-#: js/Asterisk/VoicemailGridPanel.js:113
-msgid "attach"
-msgstr "прикрепи"
+#: js/Asterisk/SipPeerEditDialog.js:139
+msgid "Accountcode"
+msgstr "Акаунт-код"
 
-#: js/Asterisk/VoicemailEditDialog.js:151
-#: js/Asterisk/VoicemailGridPanel.js:120
-msgid "saycid"
-msgstr "saycid"
+#: js/Asterisk/SipPeerEditDialog.js:146
+msgid "Language"
+msgstr "Език"
 
-#: js/Asterisk/VoicemailEditDialog.js:155
-#: js/Asterisk/VoicemailGridPanel.js:141
-msgid "review"
-msgstr "преглед"
+#: js/Asterisk/SipPeerEditDialog.js:153
+msgid "NAT"
+msgstr "NAT"
 
-#: js/Asterisk/VoicemailEditDialog.js:159
-#: js/Asterisk/VoicemailGridPanel.js:148
-msgid "operator"
-msgstr "оператор"
+#: js/Asterisk/SipPeerEditDialog.js:164
+msgid "Qualify"
+msgstr "Упълномощение"
 
-#: js/Asterisk/VoicemailEditDialog.js:163
-#: js/Asterisk/VoicemailGridPanel.js:155
-msgid "envelope"
-msgstr "обвивка (envelope)"
+#~ msgid "Owner"
+#~ msgid_plural "Owners"
+#~ msgstr[0] "Собственик"
+#~ msgstr[1] "Собственика"
 
-#: js/Asterisk/VoicemailEditDialog.js:167
-#: js/Asterisk/VoicemailGridPanel.js:176
-msgid "sendvoicemail"
-msgstr "изпращане на гласов имейл"
+#~ msgid "owners list"
+#~ msgid_plural "owners lists"
+#~ msgstr[0] "списък на собственици"
+#~ msgstr[1] "списъка на собственици"
 
-#: js/Asterisk/VoicemailEditDialog.js:171
-#: js/Asterisk/VoicemailGridPanel.js:183
-msgid "delete"
-msgstr "изтрий"
+#~ msgid "redirection"
+#~ msgstr "отклонена връзка"
 
-#: js/Asterisk/VoicemailEditDialog.js:175
-#: js/Asterisk/VoicemailGridPanel.js:190
-msgid "nextaftercmd"
-msgstr "следващ след cmd (nextaftercmd)"
+#~ msgid "redirect_event"
+#~ msgstr "причина за отклоняване"
 
-#: js/Asterisk/VoicemailEditDialog.js:179
-#: js/Asterisk/VoicemailGridPanel.js:197
-msgid "forcename"
-msgstr "важащо име (forcename)"
+#~ msgid "all"
+#~ msgstr "всички"
 
-#: js/Asterisk/VoicemailEditDialog.js:183
-#: js/Asterisk/VoicemailGridPanel.js:204
-msgid "forcegreetings"
-msgstr "важащи обръщения (forcegreetings)"
+#~ msgid "busy"
+#~ msgstr "заето"
 
-#: js/Asterisk/VoicemailEditDialog.js:187
-#: js/Asterisk/VoicemailGridPanel.js:211
-msgid "hidefromdir"
-msgstr "Скрит от директория"
+#~ msgid "time"
+#~ msgstr "време"
 
-#: js/Asterisk/VoicemailGridPanel.js:88
-msgid "fullname"
-msgstr "Пълно име"
+#~ msgid "redirect_number"
+#~ msgstr "отклонен номер"
 
-#: js/Models.js:82 js/Snom/PhoneEditDialog.js:277
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] "Телефон"
-msgstr[1] "Телефона"
+#~ msgid "redirect_time"
+#~ msgstr "превишаване на време за връзка (сек)"
 
-#: js/Models.js:86
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "списък на телефони"
-msgstr[1] "списъка на телефони"
+#~ msgid "lineactive"
+#~ msgstr "активна линия"
 
-#: js/Models.js:133 js/Snom/PhoneGridPanel.js:103 js/Voipmanager.js:116
-msgid "Location"
-msgid_plural "Locations"
-msgstr[0] "Локация"
-msgstr[1] "Локации"
-
-#: js/Models.js:137
-msgid "locations list"
-msgid_plural "locations lists"
-msgstr[0] "Списък на локации"
-msgstr[1] "Списъка на локации"
-
-#: js/Models.js:170 js/Snom/PhoneGridPanel.js:112
-msgid "Template"
-msgid_plural "Templates"
-msgstr[0] "Темплейт"
-msgstr[1] "Темплейтс"
-
-#: js/Models.js:174
-msgid "templates list"
-msgid_plural "templates lists"
-msgstr[0] "Списък на темплейтс"
-msgstr[1] "Списъка на темплейтс"
-
-#: js/Models.js:208 js/Snom/PhoneGridPanel.js:127 js/Voipmanager.js:157
-msgid "Software"
-msgid_plural "Softwares"
-msgstr[0] "Програма"
-msgstr[1] "Програми"
-
-#: js/Models.js:212
-msgid "softwares list"
-msgid_plural "softwares lists"
-msgstr[0] "Списък на програми"
-msgstr[1] "Списъка на програми"
-
-#: js/Models.js:241
-msgid "SoftwareImage"
-msgid_plural "SoftwareImages"
-msgstr[0] "SoftwareImage"
-msgstr[1] "SoftwareImages"
-
-#: js/Models.js:245
-msgid "softwareImages list"
-msgid_plural "softwareImages lists"
-msgstr[0] "списък на softwareImages"
-msgstr[1] "списъка на softwareImages"
-
-#: js/Models.js:279
-msgid "Line"
-msgid_plural "Lines"
-msgstr[0] "Линия"
-msgstr[1] "тон (звуков сигнал)"
-
-#: js/Models.js:283
-msgid "lines list"
-msgid_plural "lines lists"
-msgstr[0] "списък на линии"
-msgstr[1] "списъка на линии"
-
-#: js/Models.js:336 js/Voipmanager.js:147
-msgid "Setting"
-msgid_plural "Settings"
-msgstr[0] "Настройка"
-msgstr[1] "Настройки"
-
-#: js/Models.js:340
-msgid "setting list"
-msgid_plural "settings lists"
-msgstr[0] "Списък на настройки"
-msgstr[1] "Списъка на настройки"
-
-#: js/Models.js:381
-msgid "Owner"
-msgid_plural "Owners"
-msgstr[0] "Собственик"
-msgstr[1] "Собственика"
-
-#: js/Models.js:385
-msgid "owners list"
-msgid_plural "owners lists"
-msgstr[0] "списък на собственици"
-msgstr[1] "списъка на собственици"
-
-#: js/Models.js:463 js/Voipmanager.js:32
-msgid "SipPeer"
-msgid_plural "SipPeers"
-msgstr[0] "SipPeer"
-msgstr[1] "SipPeers"
-
-#: js/Models.js:467
-msgid "sipPeers list"
-msgid_plural "sipPeers lists"
-msgstr[0] "Списък на sipPeers"
-msgstr[1] "Списъка на sipPeers"
-
-#: js/Models.js:501
-msgid "contexts list"
-msgid_plural "contexts lists"
-msgstr[0] "Списък на контексти"
-msgstr[1] "Списъка на контексти"
-
-#: js/Models.js:553 js/Voipmanager.js:63
-msgid "Voicemail"
-msgid_plural "Voicemails"
-msgstr[0] "Гласова поща"
-msgstr[1] "Гласови пощи"
-
-#: js/Models.js:557
-msgid "voicemails list"
-msgid_plural "voicemails lists"
-msgstr[0] "Списък на  гласови пощи"
-msgstr[1] "Списъка на  гласови пощи"
-
-#: js/Models.js:588 js/Voipmanager.js:73
-msgid "Meetme"
-msgid_plural "Meetmes"
-msgstr[0] "Meetme"
-msgstr[1] "Meetmes"
-
-#: js/Models.js:592
-msgid "meetmes list"
-msgid_plural "meetmes lists"
-msgstr[0] "списък на meetmes"
-msgstr[1] "списъка на meetmes"
-
-#: js/Snom/LocationEditDialog.js:55 js/Snom/LocationGridPanel.js:82
-msgid "Registrar"
-msgstr "Регистрация"
-
-#: js/Snom/LocationEditDialog.js:62
-msgid "Base Download URL"
-msgstr "Основен Download URL"
-
-#: js/Snom/LocationEditDialog.js:77 js/Snom/LocationGridPanel.js:75
-msgid "Update Policy"
-msgstr "Актуализира основна стойност"
-
-#: js/Snom/LocationEditDialog.js:98
-msgid "Firmware Interval"
-msgstr "Програмен интервал"
-
-#: js/Snom/LocationEditDialog.js:116
-msgid "tone_scheme"
-msgstr "тон-схема на позвъняване"
-
-#: js/Snom/LocationEditDialog.js:153
-msgid "date_us_format"
-msgstr "U.S. формат на датата"
-
-#: js/Snom/LocationEditDialog.js:174
-msgid "time_24_format"
-msgstr "време - 24 часов формат"
-
-#: js/Snom/LocationEditDialog.js:194 js/Snom/LocationGridPanel.js:96
-msgid "NTP Server"
-msgstr "NTP сървъра"
-
-#: js/Snom/LocationEditDialog.js:211
-msgid "NTP Server Address"
-msgstr "NTP-сървър-адрес"
-
-#: js/Snom/LocationEditDialog.js:224
-msgid "NTP Refresh"
-msgstr "NTP - Актуализация"
-
-#: js/Snom/LocationEditDialog.js:231
-msgid "Timezone"
-msgstr "Часова зона"
-
-#: js/Snom/LocationEditDialog.js:256
-msgid "Enable admin mode"
-msgstr "Активирай администраторски режим"
-
-#: js/Snom/LocationEditDialog.js:268
-msgid "Admin Mode Password"
-msgstr "Парола на администраторският режим"
-
-#: js/Snom/LocationEditDialog.js:278
-msgid "Enable webserver"
-msgstr "Активира сървър"
-
-#: js/Snom/LocationEditDialog.js:305 js/Snom/LocationGridPanel.js:103
-msgid "Webserver Type"
-msgstr "Тип на вебсървъра"
-
-#: js/Snom/LocationEditDialog.js:352
-msgid "HTTP Port"
-msgstr "HTTP-Port"
-
-#: js/Snom/LocationEditDialog.js:366 js/Snom/LocationGridPanel.js:110
-msgid "HTTPS Port"
-msgstr "HTTPS Port"
-
-#: js/Snom/LocationEditDialog.js:387 js/Snom/LocationGridPanel.js:117
-msgid "HTTP User"
-msgstr "HTTP Потребител"
-
-#: js/Snom/LocationEditDialog.js:399
-msgid "HTTP Password"
-msgstr "HTTP-рарола"
-
-#: js/Snom/LocationGridPanel.js:68
-msgid "FW Interval"
-msgstr "FW Интервал"
-
-#: js/Snom/LocationGridPanel.js:89
-msgid "Admin Mode"
-msgstr "Администраторски режим"
-
-#: js/Snom/LocationGridPanel.js:143
-msgid "Filter Registrar"
-msgstr "Регистрация на филтъра"
-
-#: js/Snom/LocationGridPanel.js:150
-msgid "CP Dialoginfo"
-msgstr "CP диалогова информация"
-
-#: js/Snom/LocationGridPanel.js:157
-msgid "Pickup Indic."
-msgstr "Pickup Indic."
-
-#: js/Snom/PhoneEditDialog.js:296
-msgid "Phone Model"
-msgstr "Модел на телефона"
-
-#: js/Snom/PhoneEditDialog.js:311
-msgid "MAC Address"
-msgstr "MAC-адрес"
-
-#: js/Snom/PhoneEditDialog.js:345
-msgid "infos"
-msgstr "информации"
-
-#: js/Snom/PhoneEditDialog.js:360
-msgid "Current IP Address"
-msgstr "Актуален IP-адрес"
-
-#: js/Snom/PhoneEditDialog.js:367
-msgid "Firmware last checked at"
-msgstr "Програмата (firmware) е тествана последно на:"
-
-#: js/Snom/PhoneEditDialog.js:375
-msgid "Current Software Version"
-msgstr "Актуална рограмна версия:"
-
-#: js/Snom/PhoneEditDialog.js:382
-msgid "Settings Loaded at"
-msgstr "Настройките са заредени на:"
-
-#: js/Snom/PhoneEditDialog.js:392
-msgid "redirection"
-msgstr "отклонена връзка"
-
-#: js/Snom/PhoneEditDialog.js:407
-msgid "redirect_event"
-msgstr "причина за отклоняване"
-
-#: js/Snom/PhoneEditDialog.js:426
-msgid "all"
-msgstr "всички"
-
-#: js/Snom/PhoneEditDialog.js:427
-msgid "busy"
-msgstr "заето"
-
-#: js/Snom/PhoneEditDialog.js:428 js/Snom/PhoneEditDialog.js:562
-#: js/Snom/SettingEditDialog.js:241
-msgid "none"
-msgstr "номера не отговаря"
-
-#: js/Snom/PhoneEditDialog.js:429
-msgid "time"
-msgstr "време"
-
-#: js/Snom/PhoneEditDialog.js:433
-msgid "redirect_number"
-msgstr "отклонен номер"
-
-#: js/Snom/PhoneEditDialog.js:437
-msgid "redirect_time"
-msgstr "превишаване на време за връзка (сек)"
-
-#: js/Snom/PhoneEditDialog.js:455 js/Snom/SettingEditDialog.js:92
-#: js/Snom/TemplateEditDialog.js:68
-msgid "Settings"
-msgstr "Настройки"
-
-#: js/Snom/PhoneEditDialog.js:473 js/Snom/SettingEditDialog.js:125
-#: js/Snom/SettingGridPanel.js:88
-msgid "web_language"
-msgstr "уеб_код"
-
-#: js/Snom/PhoneEditDialog.js:477 js/Snom/PhoneEditDialog.js:495
-#: js/Snom/PhoneEditDialog.js:519 js/Snom/PhoneEditDialog.js:531
-#: js/Snom/PhoneEditDialog.js:542 js/Snom/PhoneEditDialog.js:552
-#: js/Snom/PhoneEditDialog.js:561 js/Snom/PhoneEditDialog.js:570
-#: js/Snom/PhoneEditDialog.js:579 js/Snom/PhoneEditDialog.js:588
-#: js/Snom/PhoneEditDialog.js:597 js/Snom/PhoneEditDialog.js:606
-#: js/Snom/SettingEditDialog.js:132 js/Snom/SettingEditDialog.js:154
-#: js/Snom/SettingEditDialog.js:182 js/Snom/SettingEditDialog.js:198
-#: js/Snom/SettingEditDialog.js:213 js/Snom/SettingEditDialog.js:227
-#: js/Snom/SettingEditDialog.js:240 js/Snom/SettingEditDialog.js:253
-#: js/Snom/SettingEditDialog.js:266 js/Snom/SettingEditDialog.js:279
-#: js/Snom/SettingEditDialog.js:292 js/Snom/SettingEditDialog.js:305
-msgid "- factory default -"
-msgstr "първоначални настройки"
-
-#: js/Snom/PhoneEditDialog.js:515 js/Snom/SettingEditDialog.js:175
-#: js/Snom/SettingGridPanel.js:102
-msgid "display_method"
-msgstr "стил на изписване"
-
-#: js/Snom/PhoneEditDialog.js:520 js/Snom/SettingEditDialog.js:183
-msgid "whole url"
-msgstr "пълен URL"
-
-#: js/Snom/PhoneEditDialog.js:522 js/Snom/SettingEditDialog.js:185
-msgid "number"
-msgstr "номер"
-
-#: js/Snom/PhoneEditDialog.js:523 js/Snom/SettingEditDialog.js:186
-msgid "name + number"
-msgstr "име + номер"
-
-#: js/Snom/PhoneEditDialog.js:524 js/Snom/SettingEditDialog.js:187
-msgid "number + name"
-msgstr "номер + име"
-
-#: js/Snom/PhoneEditDialog.js:527 js/Snom/SettingEditDialog.js:191
-#: js/Snom/SettingGridPanel.js:165
-msgid "call_waiting"
-msgstr "почукване за чакащ разговор"
-
-#: js/Snom/PhoneEditDialog.js:533 js/Snom/SettingEditDialog.js:200
-msgid "visual"
-msgstr "визуализиране"
-
-#: js/Snom/PhoneEditDialog.js:534 js/Snom/SettingEditDialog.js:201
-msgid "ringer"
-msgstr "тон (звуков сигнал)"
-
-#: js/Snom/PhoneEditDialog.js:538 js/Snom/SettingEditDialog.js:206
-#: js/Snom/SettingGridPanel.js:109
-msgid "mwi_notification"
-msgstr "указание за  'Има съобщение '"
-
-#: js/Snom/PhoneEditDialog.js:543 js/Snom/SettingEditDialog.js:214
-msgid "silent"
-msgstr "беззвучно"
-
-#: js/Snom/PhoneEditDialog.js:544 js/Snom/SettingEditDialog.js:215
-msgid "beep"
-msgstr "beep-тон"
-
-#: js/Snom/PhoneEditDialog.js:545 js/Snom/SettingEditDialog.js:216
-msgid "reminder"
-msgstr "напомняне"
-
-#: js/Snom/PhoneEditDialog.js:548 js/Snom/SettingEditDialog.js:220
-#: js/Snom/SettingGridPanel.js:116
-msgid "mwi_dialtone"
-msgstr "избиращ тон за  'Има съобщение '"
-
-#: js/Snom/PhoneEditDialog.js:553 js/Snom/SettingEditDialog.js:228
-msgid "normal"
-msgstr "нормален"
-
-#: js/Snom/PhoneEditDialog.js:554 js/Snom/SettingEditDialog.js:229
-msgid "stutter"
-msgstr "прекъсващ"
-
-#: js/Snom/PhoneEditDialog.js:557 js/Snom/SettingEditDialog.js:233
-#: js/Snom/SettingGridPanel.js:123
-msgid "headset_device"
-msgstr "използване на слушалки"
-
-#: js/Snom/PhoneEditDialog.js:563 js/Snom/SettingEditDialog.js:242
-msgid "headset_rj"
-msgstr "вход за слушалки"
-
-#: js/Snom/PhoneEditDialog.js:566 js/Snom/SettingEditDialog.js:246
-#: js/Snom/SettingGridPanel.js:130
-msgid "message_led_other"
-msgstr "съобщаващ LED за изпуснати обаждания"
-
-#: js/Snom/PhoneEditDialog.js:575 js/Snom/SettingEditDialog.js:259
-#: js/Snom/SettingGridPanel.js:137
-msgid "global_missed_counter"
-msgstr "глобален брояч на изпуснати обаждания"
-
-#: js/Snom/PhoneEditDialog.js:584 js/Snom/SettingEditDialog.js:272
-#: js/Snom/SettingGridPanel.js:144
-msgid "scroll_outgoing"
-msgstr "изписва кодовете на излизащи обаждания"
-
-#: js/Snom/PhoneEditDialog.js:593 js/Snom/SettingEditDialog.js:285
-#: js/Snom/SettingGridPanel.js:151
-msgid "show_local_line"
-msgstr "показва локалният код на набиране"
-
-#: js/Snom/PhoneEditDialog.js:602 js/Snom/SettingEditDialog.js:298
-#: js/Snom/SettingGridPanel.js:158
-msgid "show_call_status"
-msgstr "показва статус на позвъняванията"
-
-#: js/Snom/PhoneEditDialog.js:627
-msgid "lineactive"
-msgstr "активна линия"
-
-#: js/Snom/PhoneEditDialog.js:655
-msgid "sipCombo"
-msgstr "sipCombo"
-
-#: js/Snom/PhoneEditDialog.js:674
-msgid "Idle Text"
-msgstr "Свободен текст"
-
-#: js/Snom/PhoneEditDialog.js:707
-msgid "Lines"
-msgstr "Линии"
-
-#: js/Snom/PhoneEditDialog.js:722
-msgid "Users"
-msgstr "Потребители"
-
-#: js/Snom/PhoneGridPanel.js:43
-msgid "reset phones HTTP authentication"
-msgstr "върни телефонната HTTP-автентичност"
-
-#: js/Snom/PhoneGridPanel.js:50
-msgid "Open phones web gui"
-msgstr "Open phones web gui"
-
-#: js/Snom/PhoneGridPanel.js:92
-msgid "MAC address"
-msgstr "MAC Адрес"
-
-#: js/Snom/PhoneGridPanel.js:98 js/Snom/SettingGridPanel.js:82
-msgid "description"
-msgstr "описание"
-
-#: js/Snom/PhoneGridPanel.js:121
-msgid "IP Address"
-msgstr "IP адрес"
-
-#: js/Snom/PhoneGridPanel.js:133
-msgid "current model"
-msgstr "Употребяван модел"
-
-#: js/Snom/PhoneGridPanel.js:140
-msgid "redirect event"
-msgstr "отклонение"
-
-#: js/Snom/PhoneGridPanel.js:147
-msgid "redirect number"
-msgstr "отклонение към"
-
-#: js/Snom/PhoneGridPanel.js:154
-msgid "redirect time"
-msgstr "отклонение времето за връэка"
-
-#: js/Snom/PhoneGridPanel.js:161
-msgid "settings loaded at"
-msgstr "настройки заредени на "
-
-#: js/Snom/PhoneGridPanel.js:169
-msgid "last modified"
-msgstr "последни промени"
-
-#: js/Snom/TemplateEditDialog.js:56
-msgid "Software Version"
-msgstr "Програмна версия"
-
-#: js/Snom/TemplateEditDialog.js:79 js/Voipmanager.js:136
-msgid "Keylayout"
-msgstr "Клавиатурен изглед (легенда)"
-
-#: js/Snom/TemplateGridPanel.js:88
-msgid "Keylayout Id"
-msgstr "Идентификационен номер (Id) на клавиатурният изглед (?)"
-
-#: js/Snom/TemplateGridPanel.js:95
-msgid "Settings Id"
-msgstr "Идентификационен номер (Id) на настройките"
-
-#: js/Snom/TemplateGridPanel.js:102
-msgid "Software Id"
-msgstr "Програмен идентификационен номер (Id)"
-
-#: js/Voipmanager.js:25
-msgid "Asterisk"
-msgstr "Asterisk"
-
-#: js/Voipmanager.js:42
-msgid "Dialplan"
-msgstr "Dialplan"
-
-#: js/Voipmanager.js:83
-msgid "Queues"
-msgstr "Поредица"
-
-#: js/Voipmanager.js:99
-msgid "Snom"
-msgstr "Snom"
-
-#: js/Voipmanager.js:106
-msgid "Phones"
-msgstr "Phones"
-
-#: js/Voipmanager.js:126
-msgid "Templates"
-msgstr "Темплейтс"
+#~ msgid "sipCombo"
+#~ msgstr "sipCombo"
 
 #~ msgid "Sip Peer"
 #~ msgstr "Sip Peer"

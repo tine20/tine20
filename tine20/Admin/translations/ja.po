@@ -109,178 +109,119 @@ msgstr "アカウントの閲覧"
 msgid "view computers list and details"
 msgstr "アカウント一覧と詳細の閲覧"
 
-#: js/Admin.js:20 js/Users.js:493
-#, fuzzy
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "ユーザ"
-
-#: js/Admin.js:33
-msgid "Groups"
-msgstr "グループ"
-
-#: js/Admin.js:46
-msgid "Computers"
+#: js/SambaMachineGrid.js:60 js/SambaMachineEditDialog.js:38
+msgid "Computer Name"
 msgstr ""
 
-#: js/Admin.js:59
-msgid "Applications"
-msgstr "アプリケーション"
+#: js/SambaMachineGrid.js:61 js/SambaMachineGrid.js:91 js/Roles.js:204
+#: js/Groups.js:204 js/Groups.js:439 js/Tags.js:190 js/Tags.js:508
+#: js/user/GridPanel.js:96 js/RoleEditDialog.js:300
+msgid "Description"
+msgstr "説明"
 
-#: js/Admin.js:72
-msgid "Access Log"
-msgstr "アクセスログ"
+#: js/SambaMachineGrid.js:78 js/Roles.js:202 js/Groups.js:202
+#: js/user/GridPanel.js:158
+msgid "ID"
+msgstr "ID"
 
-#: js/Admin.js:85
-msgid "Shared Tags"
-msgstr "共有タグ"
-
-#: js/Admin.js:98
-msgid "Roles"
-msgstr "役割"
-
-#: js/Admin.js:133
-msgid "Admin"
-msgstr "管理者"
-
-#: js/Admin.js:284 js/Groups.js:51 js/Roles.js:45 js/Tags.js:58
-#: js/Users.js:176
-msgid "Confirm"
-msgstr "確認"
-
-#: js/Admin.js:284
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "本当に選択したアクセスログエントリを削除しますか？"
-
-#: js/Admin.js:397
-msgid "delete entry"
-msgstr "エントリの削除"
-
-#: js/Admin.js:398
-msgid "select all"
-msgstr "全て選択"
-
-#: js/Admin.js:433
-msgid "Display from:"
-msgstr "表示："
-
-#: js/Admin.js:437
-msgid "to:"
-msgstr "ＴＯ："
-
-#: js/Admin.js:442 js/Applications.js:160 js/Groups.js:151 js/Roles.js:149
-#: js/Tags.js:140 js/Users.js:236
-msgid "Search:"
-msgstr "検索："
-
-#: js/Admin.js:515
-msgid "invalid password"
-msgstr "パスワードが違います"
-
-#: js/Admin.js:519
-msgid "ambiguous username"
-msgstr "あいまいなユーザ名"
-
-#: js/Admin.js:523
-msgid "user not found"
-msgstr "ユーザが見つかりません"
-
-#: js/Admin.js:527
-msgid "failure"
-msgstr "失敗"
-
-#: js/Admin.js:531
-msgid "success"
-msgstr "性向"
-
-#: js/Admin.js:552
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "アクセスログエントリの表示 {0} - {1} 件中 {2}"
-
-#: js/Admin.js:553
-msgid "No access log entries to display"
-msgstr "表示するアクセスログエントリがありません"
-
-#: js/Admin.js:562
-msgid "Session ID"
-msgstr "セッションＩＤ"
-
-#: js/Admin.js:563 js/UserEditDialog.js:304
-msgid "Login Name"
-msgstr "ログイン名"
-
-#: js/Admin.js:564 js/Applications.js:235 js/Groups.js:203 js/Roles.js:203
-#: js/SambaMachineGrid.js:90 js/Tags.js:189
+#: js/SambaMachineGrid.js:85 js/Roles.js:203 js/Applications.js:239
+#: js/Groups.js:203 js/Tags.js:189 js/Admin.js:565
 msgid "Name"
 msgstr "名前"
 
-#: js/Admin.js:565
-msgid "IP Address"
-msgstr "ＩＰアドレス"
+#: js/Roles.js:45 js/Groups.js:51 js/Tags.js:58 js/Admin.js:285
+msgid "Confirm"
+msgstr "確認"
 
-#: js/Admin.js:566
-msgid "Login Time"
-msgstr "ログイン時間"
+#: js/Roles.js:45
+msgid "Do you really want to delete the selected roles?"
+msgstr "選択されたロールを本当に削除しますか？"
 
-#: js/Admin.js:567
-msgid "Logout Time"
-msgstr "ログアウト時間"
+#: js/Roles.js:62
+msgid "Deleting role(s)..."
+msgstr "ロールを削除しています..."
 
-#: js/Admin.js:568
-msgid "Account ID"
-msgstr "アカウントＩＤ"
+#: js/Roles.js:67 js/Groups.js:72 js/Groups.js:372 js/Tags.js:372
+#: js/RoleEditDialog.js:101 js/RoleEditDialog.js:129
+msgid "Failed"
+msgstr "失敗"
 
-#: js/Admin.js:569
-msgid "Result"
-msgstr "結果"
+#: js/Roles.js:67 js/RoleEditDialog.js:129
+msgid "Some error occurred while trying to delete the role."
+msgstr "ロールの削除中にエラーが発生しました"
 
-#: js/Applications.js:32
+#: js/Roles.js:100
+msgid "add role"
+msgstr "ロールの追加"
+
+#: js/Roles.js:108
+msgid "edit role"
+msgstr "ロールの編集"
+
+#: js/Roles.js:116
+msgid "delete role"
+msgstr "ロールの削除"
+
+#: js/Roles.js:149 js/Applications.js:164 js/Groups.js:151 js/Tags.js:140
+#: js/Admin.js:443
+msgid "Search:"
+msgstr "検索："
+
+#: js/Roles.js:191
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "ロールの表示 {0} - {1} 件中 {2}"
+
+#: js/Roles.js:192 js/Roles.js:247
+msgid "No roles to display"
+msgstr "表示するロールがありません"
+
+#: js/Applications.js:40
 #, fuzzy
 msgid "{0} Settings"
 msgstr "設定"
 
-#: js/Applications.js:137
+#: js/Applications.js:141
 msgid "enable application"
 msgstr "有効なアプリケーション"
 
-#: js/Applications.js:138
+#: js/Applications.js:142
 msgid "disable application"
 msgstr "無効なアプリケーション"
 
-#: js/Applications.js:139
+#: js/Applications.js:143
 msgid "settings"
 msgstr "設定"
 
-#: js/Applications.js:189 js/UserEditDialog.js:358
+#: js/Applications.js:193 js/user/EditDialog.js:372
 msgid "disabled"
 msgstr "無効"
 
-#: js/Applications.js:192 js/UserEditDialog.js:358
+#: js/Applications.js:196 js/user/EditDialog.js:372
 msgid "enabled"
 msgstr "有効"
 
-#: js/Applications.js:196
+#: js/Applications.js:200
 msgid "unknown status ({0})"
 msgstr "不明なステータス ({0})"
 
-#: js/Applications.js:224
+#: js/Applications.js:228
 msgid "Displaying application {0} - {1} of {2}"
 msgstr "アプリケーションの表示 {0} - {1} 件中 {2}"
 
-#: js/Applications.js:225
+#: js/Applications.js:229
 msgid "No applications to display"
 msgstr "表示するアプリケーションがありません"
 
-#: js/Applications.js:234
+#: js/Applications.js:238
 #, fuzzy
 msgid "Order"
 msgstr "オーダー"
 
-#: js/Applications.js:236 js/UserEditDialog.js:352 js/Users.js:296
+#: js/Applications.js:240 js/user/GridPanel.js:159 js/user/EditDialog.js:366
 msgid "Status"
 msgstr "ステータス"
 
-#: js/Applications.js:237
+#: js/Applications.js:241
 #, fuzzy
 msgid "Version"
 msgstr "バージョン"
@@ -292,11 +233,6 @@ msgstr "本当に選択したグループを削除しますか？"
 #: js/Groups.js:67
 msgid "Deleting group(s)..."
 msgstr "グループを削除しています..."
-
-#: js/Groups.js:72 js/Groups.js:372 js/RoleEditDialog.js:101
-#: js/RoleEditDialog.js:129 js/Roles.js:67 js/Tags.js:372 js/Users.js:196
-msgid "Failed"
-msgstr "失敗"
 
 #: js/Groups.js:72
 msgid "Some error occurred while trying to delete the group."
@@ -322,17 +258,7 @@ msgstr "グループの表示 {0} - {1} 件中 {2}"
 msgid "No groups to display"
 msgstr "表示するグループがありません"
 
-#: js/Groups.js:202 js/Roles.js:202 js/SambaMachineGrid.js:83 js/Users.js:295
-msgid "ID"
-msgstr "ID"
-
-#: js/Groups.js:204 js/Groups.js:439 js/RoleEditDialog.js:300 js/Roles.js:204
-#: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:96 js/Tags.js:190
-#: js/Tags.js:508
-msgid "Description"
-msgstr "説明"
-
-#: js/Groups.js:337 js/RoleEditDialog.js:64 js/Tags.js:327
+#: js/Groups.js:337 js/Tags.js:327 js/RoleEditDialog.js:64
 msgid "Please wait"
 msgstr "お待ちください"
 
@@ -344,11 +270,11 @@ msgstr "メンバーシップをアップデートしています"
 msgid "Could not save group."
 msgstr "グループを保存できませんでした"
 
-#: js/Groups.js:379 js/RoleEditDialog.js:108 js/Tags.js:377
+#: js/Groups.js:379 js/Tags.js:377 js/RoleEditDialog.js:108
 msgid "Errors"
 msgstr "エラー"
 
-#: js/Groups.js:379 js/RoleEditDialog.js:108 js/Tags.js:377
+#: js/Groups.js:379 js/Tags.js:377 js/RoleEditDialog.js:108
 msgid "Please fix the errors noted."
 msgstr "表示されているエラーを修正してください"
 
@@ -367,78 +293,6 @@ msgstr "新規グループの追加"
 #: js/Groups.js:490
 msgid "Edit Group \"{0}\""
 msgstr "グループの編集 \"{0}\""
-
-#: js/RoleEditDialog.js:101
-msgid "Could not save role."
-msgstr "ロールを保存できませんでした"
-
-#: js/RoleEditDialog.js:121
-msgid "Deleting role..."
-msgstr "ロールを削除しています..."
-
-#: js/RoleEditDialog.js:129 js/Roles.js:67
-msgid "Some error occurred while trying to delete the role."
-msgstr "ロールの削除中にエラーが発生しました"
-
-#: js/RoleEditDialog.js:253
-msgid "Members"
-msgstr "メンバー"
-
-#: js/RoleEditDialog.js:262
-msgid "Rights"
-msgstr "権限"
-
-#: js/RoleEditDialog.js:292
-msgid "Role Name"
-msgstr "ロール名"
-
-#: js/RoleEditDialog.js:334
-msgid "Loading Role..."
-msgstr "ロールをロードしています..."
-
-#: js/RoleEditDialog.js:334 js/Tags.js:547
-msgid "Please Wait"
-msgstr "お待ちください"
-
-#: js/RoleEditDialog.js:371
-msgid "Add New Role"
-msgstr "新規ロールの追加"
-
-#: js/RoleEditDialog.js:373
-msgid "Edit Role \"{0}\""
-msgstr "ロールの編集 \"{0}\""
-
-#: js/Roles.js:45
-msgid "Do you really want to delete the selected roles?"
-msgstr "選択されたロールを本当に削除しますか？"
-
-#: js/Roles.js:62
-msgid "Deleting role(s)..."
-msgstr "ロールを削除しています..."
-
-#: js/Roles.js:100
-msgid "add role"
-msgstr "ロールの追加"
-
-#: js/Roles.js:108
-msgid "edit role"
-msgstr "ロールの編集"
-
-#: js/Roles.js:116
-msgid "delete role"
-msgstr "ロールの削除"
-
-#: js/Roles.js:191
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "ロールの表示 {0} - {1} 件中 {2}"
-
-#: js/Roles.js:192 js/Roles.js:247
-msgid "No roles to display"
-msgstr "表示するロールがありません"
-
-#: js/SambaMachineEditDialog.js:38 js/SambaMachineGrid.js:65
-msgid "Computer Name"
-msgstr ""
 
 #: js/SambaMachineModel.js:40
 msgid "Computer"
@@ -514,6 +368,10 @@ msgstr "タグ名"
 msgid "Loading Tag..."
 msgstr "タグをロードしています..."
 
+#: js/Tags.js:547 js/RoleEditDialog.js:334
+msgid "Please Wait"
+msgstr "お待ちください"
+
 #: js/Tags.js:574
 msgid "Add New Tag"
 msgstr "タグの新規追加"
@@ -522,330 +380,467 @@ msgstr "タグの新規追加"
 msgid "Edit Tag \"{0}\""
 msgstr "タグの編集 \"{0}\""
 
-#: js/UserEditDialog.js:120
+#: js/Admin.js:20 js/user/GridPanel.js:95 js/user/Users.js:63
+#, fuzzy
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "ユーザ"
+
+#: js/Admin.js:33
+msgid "Groups"
+msgstr "グループ"
+
+#: js/Admin.js:46
+msgid "Roles"
+msgstr "役割"
+
+#: js/Admin.js:58
+msgid "Computers"
+msgstr ""
+
+#: js/Admin.js:71
+msgid "Applications"
+msgstr "アプリケーション"
+
+#: js/Admin.js:84
+msgid "Access Log"
+msgstr "アクセスログ"
+
+#: js/Admin.js:97
+msgid "Shared Tags"
+msgstr "共有タグ"
+
+#: js/Admin.js:133
+msgid "Admin"
+msgstr "管理者"
+
+#: js/Admin.js:285
+msgid "Do you really want to delete the selected access log entries?"
+msgstr "本当に選択したアクセスログエントリを削除しますか？"
+
+#: js/Admin.js:398
+msgid "delete entry"
+msgstr "エントリの削除"
+
+#: js/Admin.js:399
+msgid "select all"
+msgstr "全て選択"
+
+#: js/Admin.js:434
+msgid "Display from:"
+msgstr "表示："
+
+#: js/Admin.js:438
+msgid "to:"
+msgstr "ＴＯ："
+
+#: js/Admin.js:516
+msgid "invalid password"
+msgstr "パスワードが違います"
+
+#: js/Admin.js:520
+msgid "ambiguous username"
+msgstr "あいまいなユーザ名"
+
+#: js/Admin.js:524
+msgid "user not found"
+msgstr "ユーザが見つかりません"
+
+#: js/Admin.js:528
+msgid "failure"
+msgstr "失敗"
+
+#: js/Admin.js:532
+msgid "success"
+msgstr "性向"
+
+#: js/Admin.js:553
+msgid "Displaying access log entries {0} - {1} of {2}"
+msgstr "アクセスログエントリの表示 {0} - {1} 件中 {2}"
+
+#: js/Admin.js:554
+msgid "No access log entries to display"
+msgstr "表示するアクセスログエントリがありません"
+
+#: js/Admin.js:563
+msgid "Session ID"
+msgstr "セッションＩＤ"
+
+#: js/Admin.js:564 js/user/EditDialog.js:318
+msgid "Login Name"
+msgstr "ログイン名"
+
+#: js/Admin.js:566
+msgid "IP Address"
+msgstr "ＩＰアドレス"
+
+#: js/Admin.js:567
+msgid "Login Time"
+msgstr "ログイン時間"
+
+#: js/Admin.js:568
+msgid "Logout Time"
+msgstr "ログアウト時間"
+
+#: js/Admin.js:569
+msgid "Account ID"
+msgstr "アカウントＩＤ"
+
+#: js/Admin.js:570
+msgid "Result"
+msgstr "結果"
+
+#: js/user/GridPanel.js:53
+msgid "enable account"
+msgstr "アカウント有効"
+
+#: js/user/GridPanel.js:63
+msgid "disable account"
+msgstr "アカウント無効"
+
+#: js/user/GridPanel.js:73
+msgid "reset password"
+msgstr "パスワードリセット"
+
+#: js/user/GridPanel.js:160
+msgid "Displayname"
+msgstr "表示名"
+
+#: js/user/GridPanel.js:161
+msgid "Loginname"
+msgstr "ログイン名"
+
+#: js/user/GridPanel.js:162
+msgid "Last name"
+msgstr "姓"
+
+#: js/user/GridPanel.js:163
+msgid "First name"
+msgstr "名"
+
+#: js/user/GridPanel.js:164
+msgid "Email"
+msgstr "Eメール"
+
+#: js/user/GridPanel.js:165 js/user/EditDialog.js:354
+msgid "OpenID"
+msgstr ""
+
+#: js/user/GridPanel.js:166 js/user/EditDialog.js:408
+msgid "Last login at"
+msgstr "前回のログイン"
+
+#: js/user/GridPanel.js:167 js/user/EditDialog.js:412
+msgid "Last login from"
+msgstr "前回のログイン（From)"
+
+#: js/user/GridPanel.js:168
+msgid "Password changed"
+msgstr "パスワード変更"
+
+#: js/user/GridPanel.js:169 js/user/EditDialog.js:374
+msgid "Expires"
+msgstr "期間"
+
+#: js/user/GridPanel.js:228
+msgid "Set new password"
+msgstr "新しいパスワードの設定"
+
+#: js/user/GridPanel.js:228
+msgid "Please enter the new password:"
+msgstr "新しいパスワードを入力してください"
+
+#: js/user/EditDialog.js:134
 #, fuzzy
 msgid "Passwords do not match!"
 msgstr "パスワードが一致していません"
 
-#: js/UserEditDialog.js:160
+#: js/user/EditDialog.js:174
 msgid "Aliases"
 msgstr ""
 
-#: js/UserEditDialog.js:163
+#: js/user/EditDialog.js:177
 msgid "Email Alias"
 msgstr ""
 
-#: js/UserEditDialog.js:169
+#: js/user/EditDialog.js:183
 msgid "Add an alias address..."
 msgstr ""
 
-#: js/UserEditDialog.js:179
+#: js/user/EditDialog.js:193
 msgid "Forwards"
 msgstr ""
 
-#: js/UserEditDialog.js:182
+#: js/user/EditDialog.js:196
 msgid "Email Forward"
 msgstr ""
 
-#: js/UserEditDialog.js:188
+#: js/user/EditDialog.js:202
 msgid "Add a forward address..."
 msgstr ""
 
-#: js/UserEditDialog.js:211
+#: js/user/EditDialog.js:225
 #, fuzzy
 msgid "Password confirmation"
 msgstr "もう一度パスワードを入力してください"
 
-#: js/UserEditDialog.js:228
+#: js/user/EditDialog.js:242
 #, fuzzy
 msgid "Repeat password"
 msgstr "パスワードリセット"
 
-#: js/UserEditDialog.js:240
+#: js/user/EditDialog.js:254
 msgid "Cancel"
 msgstr ""
 
-#: js/UserEditDialog.js:247
+#: js/user/EditDialog.js:261
 msgid "Ok"
 msgstr ""
 
-#: js/UserEditDialog.js:273
+#: js/user/EditDialog.js:287
 msgid "Account"
 msgstr ""
 
-#: js/UserEditDialog.js:288
+#: js/user/EditDialog.js:302
 msgid "First Name"
 msgstr "名"
 
-#: js/UserEditDialog.js:298
+#: js/user/EditDialog.js:312
 msgid "Last Name"
 msgstr "姓"
 
-#: js/UserEditDialog.js:309
+#: js/user/EditDialog.js:323
 msgid "Password"
 msgstr "パスワード"
 
-#: js/UserEditDialog.js:313
+#: js/user/EditDialog.js:327
 msgid "no password set"
 msgstr "パスワードが設定されていません"
 
-#: js/UserEditDialog.js:334
+#: js/user/EditDialog.js:348
 msgid "Emailaddress"
 msgstr "Eメールアドレス"
 
-#: js/UserEditDialog.js:340 js/Users.js:302
-msgid "OpenID"
-msgstr ""
-
-#: js/UserEditDialog.js:346
+#: js/user/EditDialog.js:360
 msgid "Primary group"
 msgstr "プライマリーグループ"
 
-#: js/UserEditDialog.js:358
+#: js/user/EditDialog.js:372
 #, fuzzy
 msgid "expired"
 msgstr "期間"
 
-#: js/UserEditDialog.js:361 js/Users.js:306
-msgid "Expires"
-msgstr "期間"
-
-#: js/UserEditDialog.js:363 js/UserEditDialog.js:405 js/UserEditDialog.js:482
+#: js/user/EditDialog.js:376 js/user/EditDialog.js:418
+#: js/user/EditDialog.js:495
 msgid "never"
 msgstr "未"
 
-#: js/UserEditDialog.js:368
+#: js/user/EditDialog.js:381
 msgid "Visibility"
 msgstr ""
 
-#: js/UserEditDialog.js:374
+#: js/user/EditDialog.js:387
 #, fuzzy
 msgid "Display in addressbook"
 msgstr "表示名"
 
-#: js/UserEditDialog.js:374
+#: js/user/EditDialog.js:387
 msgid "Hide from addressbook"
 msgstr ""
 
-#: js/UserEditDialog.js:379 js/UserEditDialog.js:563
+#: js/user/EditDialog.js:392 js/user/EditDialog.js:584
 msgid "Information"
 msgstr ""
 
-#: js/UserEditDialog.js:395 js/Users.js:303
-msgid "Last login at"
-msgstr "前回のログイン"
-
-#: js/UserEditDialog.js:397 js/UserEditDialog.js:401
+#: js/user/EditDialog.js:410 js/user/EditDialog.js:414
 msgid "don't know"
 msgstr ""
 
-#: js/UserEditDialog.js:397 js/UserEditDialog.js:401 js/UserEditDialog.js:462
+#: js/user/EditDialog.js:410 js/user/EditDialog.js:414
+#: js/user/EditDialog.js:475
 msgid "never logged in"
 msgstr "ログインしていません"
 
-#: js/UserEditDialog.js:399 js/Users.js:304
-msgid "Last login from"
-msgstr "前回のログイン（From)"
-
-#: js/UserEditDialog.js:403
+#: js/user/EditDialog.js:416
 msgid "Password set"
 msgstr "パスワード設定"
 
-#: js/UserEditDialog.js:411
+#: js/user/EditDialog.js:424
 msgid "Fileserver"
 msgstr ""
 
-#: js/UserEditDialog.js:416
+#: js/user/EditDialog.js:429
 msgid "Unix"
 msgstr ""
 
-#: js/UserEditDialog.js:431
+#: js/user/EditDialog.js:444
 msgid "Home Directory"
 msgstr ""
 
-#: js/UserEditDialog.js:435
+#: js/user/EditDialog.js:448
 msgid "Login Shell"
 msgstr ""
 
-#: js/UserEditDialog.js:440
+#: js/user/EditDialog.js:453
 msgid "Windows"
 msgstr ""
 
-#: js/UserEditDialog.js:455
+#: js/user/EditDialog.js:468
 msgid "Home Drive"
 msgstr ""
 
-#: js/UserEditDialog.js:460
+#: js/user/EditDialog.js:473
 msgid "Logon Time"
 msgstr ""
 
-#: js/UserEditDialog.js:465
+#: js/user/EditDialog.js:478
 msgid "Home Path"
 msgstr ""
 
-#: js/UserEditDialog.js:470
+#: js/user/EditDialog.js:483
 msgid "Logoff Time"
 msgstr ""
 
-#: js/UserEditDialog.js:472
+#: js/user/EditDialog.js:485
 msgid "never logged off"
 msgstr ""
 
-#: js/UserEditDialog.js:475
+#: js/user/EditDialog.js:488
 msgid "Profile Path"
 msgstr ""
 
-#: js/UserEditDialog.js:480
+#: js/user/EditDialog.js:493
 msgid "Password Last Set"
 msgstr ""
 
-#: js/UserEditDialog.js:485
+#: js/user/EditDialog.js:498
 msgid "Logon Script"
 msgstr ""
 
-#: js/UserEditDialog.js:489
+#: js/user/EditDialog.js:502
 msgid "Password Can Change"
 msgstr ""
 
-#: js/UserEditDialog.js:491 js/UserEditDialog.js:495 js/UserEditDialog.js:499
+#: js/user/EditDialog.js:504 js/user/EditDialog.js:508
+#: js/user/EditDialog.js:512
 msgid "not set"
 msgstr ""
 
-#: js/UserEditDialog.js:493
+#: js/user/EditDialog.js:506
 msgid "Password Must Change"
 msgstr ""
 
-#: js/UserEditDialog.js:497
+#: js/user/EditDialog.js:510
 msgid "Kick Off Time"
 msgstr ""
 
-#: js/UserEditDialog.js:504
+#: js/user/EditDialog.js:517
 msgid "IMAP"
 msgstr ""
 
-#: js/UserEditDialog.js:511
+#: js/user/EditDialog.js:524
 msgid "Quota (MB)"
 msgstr ""
 
-#: js/UserEditDialog.js:525
+#: js/user/EditDialog.js:538
 msgid "Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:529
+#: js/user/EditDialog.js:546
 msgid "Current Mail Size"
 msgstr ""
 
-#: js/UserEditDialog.js:537
+#: js/user/EditDialog.js:554
 msgid "Sieve Quota (MB)"
 msgstr ""
 
-#: js/UserEditDialog.js:551
+#: js/user/EditDialog.js:568
 msgid "Sieve Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:555
+#: js/user/EditDialog.js:576
 msgid "Sieve Size"
 msgstr ""
 
-#: js/UserEditDialog.js:578
+#: js/user/EditDialog.js:599
 #, fuzzy
 msgid "Last Login"
 msgstr "前回のログイン"
 
-#: js/UserEditDialog.js:584
+#: js/user/EditDialog.js:605
 msgid "SMTP"
 msgstr ""
 
-#: js/UserEditDialog.js:600
+#: js/user/EditDialog.js:621
 msgid "Forward Only"
 msgstr ""
 
-#: js/Users.js:151
-msgid "Set new password"
-msgstr "新しいパスワードの設定"
-
-#: js/Users.js:151
-msgid "Please enter the new password:"
-msgstr "新しいパスワードを入力してください"
-
-#: js/Users.js:176
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "選択されたアカウントを本当に削除しますか？"
-
-#: js/Users.js:191
-msgid "Deleting account(s)..."
-msgstr "アカウントを削除しています..."
-
-#: js/Users.js:196
-msgid "Some error occurred while trying to delete the account(s)."
-msgstr "アカウントの削除中にエラーが発生しました"
-
-#: js/Users.js:282
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "アカウントの表示 {0} - {1} 件中 {2}"
-
-#: js/Users.js:283
-msgid "No accounts to display"
-msgstr "表示するアカウントがありません"
-
-#: js/Users.js:297
-msgid "Displayname"
-msgstr "表示名"
-
-#: js/Users.js:298
-msgid "Loginname"
-msgstr "ログイン名"
-
-#: js/Users.js:299
-msgid "Last name"
-msgstr "姓"
-
-#: js/Users.js:300
-msgid "First name"
-msgstr "名"
-
-#: js/Users.js:301
-msgid "Email"
-msgstr "Eメール"
-
-#: js/Users.js:305
-msgid "Password changed"
-msgstr "パスワード変更"
-
-#: js/Users.js:396
-msgid "add account"
-msgstr "アカウントの追加"
-
-#: js/Users.js:404
-msgid "edit account"
-msgstr "アカウントの編集"
-
-#: js/Users.js:412
-msgid "delete account"
-msgstr "アカウントの削除"
-
-#: js/Users.js:420
-msgid "enable account"
-msgstr "アカウント有効"
-
-#: js/Users.js:429
-msgid "disable account"
-msgstr "アカウント無効"
-
-#: js/Users.js:438
-msgid "reset password"
-msgstr "パスワードリセット"
-
-#: js/Users.js:519
+#: js/user/Users.js:106
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] ""
 
-#: js/Users.js:545
+#: js/user/Users.js:132
 #, fuzzy
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "Eメール"
+
+#: js/RoleEditDialog.js:101
+msgid "Could not save role."
+msgstr "ロールを保存できませんでした"
+
+#: js/RoleEditDialog.js:121
+msgid "Deleting role..."
+msgstr "ロールを削除しています..."
+
+#: js/RoleEditDialog.js:253
+msgid "Members"
+msgstr "メンバー"
+
+#: js/RoleEditDialog.js:262
+msgid "Rights"
+msgstr "権限"
+
+#: js/RoleEditDialog.js:292
+msgid "Role Name"
+msgstr "ロール名"
+
+#: js/RoleEditDialog.js:334
+msgid "Loading Role..."
+msgstr "ロールをロードしています..."
+
+#: js/RoleEditDialog.js:371
+msgid "Add New Role"
+msgstr "新規ロールの追加"
+
+#: js/RoleEditDialog.js:373
+msgid "Edit Role \"{0}\""
+msgstr "ロールの編集 \"{0}\""
+
+#~ msgid "Do you really want to delete the selected account(s)?"
+#~ msgstr "選択されたアカウントを本当に削除しますか？"
+
+#~ msgid "Deleting account(s)..."
+#~ msgstr "アカウントを削除しています..."
+
+#~ msgid "Some error occurred while trying to delete the account(s)."
+#~ msgstr "アカウントの削除中にエラーが発生しました"
+
+#~ msgid "Displaying accounts {0} - {1} of {2}"
+#~ msgstr "アカウントの表示 {0} - {1} 件中 {2}"
+
+#~ msgid "No accounts to display"
+#~ msgstr "表示するアカウントがありません"
+
+#~ msgid "add account"
+#~ msgstr "アカウントの追加"
+
+#~ msgid "edit account"
+#~ msgstr "アカウントの編集"
+
+#~ msgid "delete account"
+#~ msgstr "アカウントの削除"
 
 #~ msgid "Deleting group..."
 #~ msgstr "グループを削除しています..."
