@@ -2,137 +2,297 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2010-04-13 23:50+0100\n"
+"Last-Translator: Roberto Rossi <impiastro@gmail.com>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Italian\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: js/Phone.js:28 js/Phone.js:480 js/Phone.js:481
 msgid "Edit phone settings"
-msgstr ""
+msgstr "Modifica impostazioni telefono"
 
 #: js/Phone.js:58 js/Phone.js:255 js/Models.js:70
+#, fuzzy
 msgid "Phone"
 msgid_plural "Phones"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Telefono"
+msgstr[1] "Telefono"
 
 #: js/Phone.js:69
 msgid "Phones"
-msgstr ""
+msgstr "Telefoni"
 
 #: js/Phone.js:198
 msgid "Dial phone number"
-msgstr ""
+msgstr "Componi numero telefonico"
 
 #: js/Phone.js:278
 msgid "Line"
-msgstr ""
+msgstr "Linea"
 
 #: js/Phone.js:287
 msgid "Number"
-msgstr ""
+msgstr "Numero"
 
 #: js/Phone.js:296
 msgid "Cancel"
-msgstr ""
+msgstr "Cancella"
 
 #: js/Phone.js:306
 msgid "Dial"
-msgstr ""
+msgstr "Componi"
 
 #: js/Phone.js:326
 msgid "Error"
-msgstr ""
+msgstr "Errore"
 
 #: js/Phone.js:327
 msgid "Not possible to dial."
-msgstr ""
+msgstr "Non è possibile chiamare."
 
 #: js/Phone.js:470
 msgid "Dial number"
-msgstr ""
+msgstr "Componi numero"
 
 #: js/Phone.js:471
 msgid "Initiate a new outgoing call"
-msgstr ""
+msgstr "Inizia una nuova chiamata uscente"
 
 #: js/Phone.js:532
 msgid "Incoming call"
-msgstr ""
+msgstr "Chiamata entrante"
 
 #: js/Phone.js:536
 msgid "Outgoing call"
-msgstr ""
+msgstr "Chiamata uscente"
 
 #: js/Phone.js:544
 msgid "unknown number"
-msgstr ""
+msgstr "numero sconosciuto"
 
 #: js/Phone.js:569
 msgid "Search:"
-msgstr ""
+msgstr "Ricerca:"
 
 #: js/Phone.js:654
 msgid "Source or Destination"
-msgstr ""
+msgstr "Sorgente o Destinazione"
 
 #: js/Phone.js:670
 msgid "Displaying calls {0} - {1} of {2}"
-msgstr ""
+msgstr "Visualizzazione chiamate  {0} - {1} di {2}"
 
 #: js/Phone.js:671 js/Phone.js:715
 msgid "No calls to display"
-msgstr ""
+msgstr "Nessuna chiamata da visualizzare"
 
 #: js/Phone.js:681
 msgid "Direction"
-msgstr ""
+msgstr "Direzione"
 
 #: js/Phone.js:682
 msgid "Source"
-msgstr ""
+msgstr "Sorgente"
 
 #: js/Phone.js:683
 msgid "Caller Id"
-msgstr ""
+msgstr "Id Chiamante"
 
 #: js/Phone.js:684
 msgid "Destination"
-msgstr ""
+msgstr "Destinazione"
 
 #: js/Phone.js:685
 msgid "Start"
-msgstr ""
+msgstr "Inizio"
 
 #: js/Phone.js:686
 msgid "Connected"
-msgstr ""
+msgstr "Connesso"
 
 #: js/Phone.js:687
 msgid "Disconnected"
-msgstr ""
+msgstr "Disconnesso"
 
 #: js/Phone.js:688
 msgid "Duration"
-msgstr ""
+msgstr "Durata"
 
 #: js/Phone.js:689
 msgid "Ringing"
-msgstr ""
+msgstr "Squillo in corso"
 
 #: js/Phone.js:690
 msgid "Call ID"
-msgstr ""
+msgstr "ID Chiamata"
 
 #: js/Models.js:74
 msgid "phones list"
 msgid_plural "phones lists"
 msgstr[0] ""
 msgstr[1] ""
+
+#~ msgid "Name"
+#~ msgstr "Nome"
+
+#~ msgid "Phone Model"
+#~ msgstr "Modello Telefono"
+
+#~ msgid "MAC Address"
+#~ msgstr "Indirizzo MAC"
+
+#~ msgid "infos"
+#~ msgstr "informazioni"
+
+#~ msgid "Current IP Address"
+#~ msgstr "Indirizzo IP corrente"
+
+#~ msgid "Firmware last checked at"
+#~ msgstr "Ultimo Firmware controllato a"
+
+#~ msgid "Current Software Version"
+#~ msgstr "VersioneSoftware Attuale"
+
+#~ msgid "Settings Loaded at"
+#~ msgstr "Impostazioni Caricate  a"
+
+#~ msgid "redirection"
+#~ msgstr "redirezione"
+
+#~ msgid "redirect_event"
+#~ msgstr "evento_redirezione"
+
+#~ msgid "all"
+#~ msgstr "tutti"
+
+#~ msgid "busy"
+#~ msgstr "occupato"
+
+#~ msgid "none"
+#~ msgstr "nessuno"
+
+#~ msgid "time"
+#~ msgstr "tempo"
+
+#~ msgid "redirect_number"
+#~ msgstr "numero_redirezione"
+
+#~ msgid "redirect_time"
+#~ msgstr "tempo_redirezione"
+
+#~ msgid "Settings"
+#~ msgstr "Impostazioni"
+
+#~ msgid "web_language"
+#~ msgstr "linguaggio_web"
+
+#~ msgid "- factory default -"
+#~ msgstr "- impostazioni fabbrica - "
+
+#~ msgid "language"
+#~ msgstr "linguaggio"
+
+#~ msgid "display_method"
+#~ msgstr "metodo_visualizzazione"
+
+#~ msgid "whole url"
+#~ msgstr "url intero"
+
+#~ msgid "name"
+#~ msgstr "nome"
+
+#~ msgid "number"
+#~ msgstr "numero"
+
+#~ msgid "name + number"
+#~ msgstr "nome + numero"
+
+#~ msgid "number + name"
+#~ msgstr "numero + nome"
+
+#~ msgid "call_waiting"
+#~ msgstr "chiamata_inattesa"
+
+#~ msgid "on"
+#~ msgstr "attivo"
+
+#~ msgid "visual"
+#~ msgstr "visuale"
+
+#~ msgid "ringer"
+#~ msgstr "suoneria"
+
+#~ msgid "off"
+#~ msgstr "disattivo"
+
+#~ msgid "mwi_notification"
+#~ msgstr "notifica_mwi"
+
+#~ msgid "silent"
+#~ msgstr "silenzioso"
+
+#~ msgid "beep"
+#~ msgstr "beep"
+
+#~ msgid "reminder"
+#~ msgstr "reminder"
+
+#, fuzzy
+#~ msgid "mwi_dialtone"
+#~ msgstr "mwi_dialtone"
+
+#~ msgid "normal"
+#~ msgstr "normale"
+
+#, fuzzy
+#~ msgid "stutter"
+#~ msgstr "interruzione"
+
+#~ msgid "headset_device"
+#~ msgstr "dispositivo_cuffia"
+
+#~ msgid "headset_rj"
+#~ msgstr "dispositivo_rj"
+
+#, fuzzy
+#~ msgid "message_led_other"
+#~ msgstr "altro_messaggio_led"
+
+#, fuzzy
+#~ msgid "global_missed_counter"
+#~ msgstr "contatore_globale_chiamatemancate"
+
+#, fuzzy
+#~ msgid "scroll_outgoing"
+#~ msgstr "scroll_chiamateuscenti"
+
+#, fuzzy
+#~ msgid "show_local_line"
+#~ msgstr "visualizza_linea_locale"
+
+#~ msgid "show_call_status"
+#~ msgstr "visualizza_stato_chiamata"
+
+#~ msgid "lineactive"
+#~ msgstr "lineaattiva"
+
+#, fuzzy
+#~ msgid "sipCombo"
+#~ msgstr "sipCombo"
+
+#~ msgid "Idle Text"
+#~ msgstr "Testo Pronto"
+
+#~ msgid "Lines"
+#~ msgstr "Linee"
+
+#~ msgid "Users"
+#~ msgstr "Utenti"
+
+#~ msgid "Rights"
+#~ msgstr "Diritti"
