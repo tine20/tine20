@@ -36,6 +36,15 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      */
     protected $objects = array();
     
+    protected $_exampleXMLNotExisting = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+<Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>addressbook-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>0</FilterType><Truncation>2</Truncation><Conflict>0</Conflict></Options><Commands><Add><ClientId>1</ClientId><ApplicationData><Contacts:FileAs>ads2f, asdfadsf</Contacts:FileAs><Contacts:FirstName>asdf </Contacts:FirstName><Contacts:LastName>asdfasdfaasd </Contacts:LastName><Contacts:MobilePhoneNumber>+4312341234124</Contacts:MobilePhoneNumber><Contacts:Body>&#13;
+</Contacts:Body></ApplicationData></Add></Commands></Collection></Collections></Sync>';
+    
+    protected $_exampleXMLExisting = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+<Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>addressbook-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>0</FilterType><Truncation>2</Truncation><Conflict>0</Conflict></Options><Commands><Add><ClientId>1</ClientId><ApplicationData><Contacts:FileAs>Kneschke, Lars</Contacts:FileAs><Contacts:FirstName>Lars</Contacts:FirstName><Contacts:LastName>Kneschke</Contacts:LastName></ApplicationData></Add></Commands></Collection></Collections></Sync>';
+    
     /**
      * Runs the test methods of this class.
      *
@@ -133,6 +142,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
 //            'jpegphoto'             => file_get_contents(dirname(__FILE__) . '/../../Tinebase/ImageHelper/phpunit-logo.gif'),
             'container_id'          => $this->objects['containerWithSyncGrant']->id,
             'role'                  => 'Role',
+            'n_given'               => 'Lars',
             'n_family'              => 'Kneschke',
             'n_fileas'              => 'Kneschke, Lars',
         )); 
@@ -159,6 +169,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
 //            'jpegphoto'             => file_get_contents(dirname(__FILE__) . '/../../Tinebase/ImageHelper/phpunit-logo.gif'),
             'container_id'          => $this->objects['containerWithoutSyncGrant']->id,
             'role'                  => 'Role',
+            'n_given'               => 'Lars',
             'n_family'              => 'Kneschke',
             'n_fileas'              => 'Kneschke, Lars',
         )); 
@@ -371,9 +382,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test xml generation for IPhone
-     * 
-     * birthday must have 12 hours added
+     * test getChanged entries
      */
     public function testGetChanged()
     {
@@ -386,6 +395,27 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         #var_dump($entries);
         $this->assertContains($this->objects['contact']->getId(), $entries);
         $this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
+    }
+    
+    /**
+     * test search contacts
+     * 
+     */
+    public function testSearch()
+    {
+        $controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Zend_Date(null, null, 'de_DE'));
+
+        // search for non existing contact
+        $xml = new SimpleXMLElement($this->_exampleXMLNotExisting);
+        $existing = $controller->search('addressbook-root', $xml->Collections->Collection->Commands->Add->ApplicationData);
+        
+        $this->assertEquals(count($existing), 0);
+        
+        // search for existing contact
+        $xml = new SimpleXMLElement($this->_exampleXMLExisting);
+        $existing = $controller->search('addressbook-root', $xml->Collections->Collection->Commands->Add->ApplicationData);
+        
+        $this->assertEquals(count($existing), 1);
     }
 }
     
