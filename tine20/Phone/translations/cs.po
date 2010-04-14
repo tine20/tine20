@@ -15,285 +15,347 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Phone\n"
 
-#: js/Phone.js:28 js/Phone.js:480 js/Phone.js:481
+#: js/MyPhoneEditDialog.js:270 js/Phone.js:57 js/Phone.js:254
+msgid "Phone"
+msgstr "Telefon"
+
+#: js/MyPhoneEditDialog.js:285
+msgid "Name"
+msgstr "Název"
+
+#: js/MyPhoneEditDialog.js:289
+msgid "Phone Model"
+msgstr "Model telefonu"
+
+#: js/MyPhoneEditDialog.js:304
+msgid "MAC Address"
+msgstr "MAC adresa"
+
+#: js/MyPhoneEditDialog.js:338
+msgid "infos"
+msgstr "informace"
+
+#: js/MyPhoneEditDialog.js:353
+msgid "Current IP Address"
+msgstr "Současná IP adresa"
+
+#: js/MyPhoneEditDialog.js:360
+msgid "Firmware last checked at"
+msgstr "Firmware naposledy zkontrolován v"
+
+#: js/MyPhoneEditDialog.js:368
+msgid "Current Software Version"
+msgstr "Současná verze softwaru"
+
+#: js/MyPhoneEditDialog.js:375
+msgid "Settings Loaded at"
+msgstr "Nastavení načtena v"
+
+#: js/MyPhoneEditDialog.js:385 js/MyPhoneEditDialog.js:840
+msgid "redirection"
+msgstr "přesměrování"
+
+#: js/MyPhoneEditDialog.js:400 js/MyPhoneEditDialog.js:857
+msgid "redirect_event"
+msgstr "událost vedoucí k přesměrování"
+
+#: js/MyPhoneEditDialog.js:419 js/MyPhoneEditDialog.js:882
+msgid "all"
+msgstr "vše"
+
+#: js/MyPhoneEditDialog.js:420 js/MyPhoneEditDialog.js:883
+msgid "busy"
+msgstr "obsazeno"
+
+#: js/MyPhoneEditDialog.js:421 js/MyPhoneEditDialog.js:555
+#: js/MyPhoneEditDialog.js:884 js/MyPhoneEditDialog.js:1188
+msgid "none"
+msgstr "žádný"
+
+#: js/MyPhoneEditDialog.js:422 js/MyPhoneEditDialog.js:885
+msgid "time"
+msgstr "čas"
+
+#: js/MyPhoneEditDialog.js:426 js/MyPhoneEditDialog.js:896
+msgid "redirect_number"
+msgstr "přesměrování na číslo"
+
+#: js/MyPhoneEditDialog.js:430 js/MyPhoneEditDialog.js:908
+msgid "redirect_time"
+msgstr "interval v sekundách, po kterém dojde k přesměrování"
+
+#: js/MyPhoneEditDialog.js:448 js/MyPhoneEditDialog.js:932
+msgid "Settings"
+msgstr "Nastavení"
+
+#: js/MyPhoneEditDialog.js:466 js/MyPhoneEditDialog.js:964
+msgid "web_language"
+msgstr "jazyk webového rozhranní"
+
+#: js/MyPhoneEditDialog.js:470 js/MyPhoneEditDialog.js:488
+#: js/MyPhoneEditDialog.js:512 js/MyPhoneEditDialog.js:524
+#: js/MyPhoneEditDialog.js:535 js/MyPhoneEditDialog.js:545
+#: js/MyPhoneEditDialog.js:554 js/MyPhoneEditDialog.js:563
+#: js/MyPhoneEditDialog.js:572 js/MyPhoneEditDialog.js:581
+#: js/MyPhoneEditDialog.js:590 js/MyPhoneEditDialog.js:599
+#: js/MyPhoneEditDialog.js:979 js/MyPhoneEditDialog.js:1016
+#: js/MyPhoneEditDialog.js:1059 js/MyPhoneEditDialog.js:1095
+#: js/MyPhoneEditDialog.js:1125 js/MyPhoneEditDialog.js:1154
+#: js/MyPhoneEditDialog.js:1187 js/MyPhoneEditDialog.js:1215
+#: js/MyPhoneEditDialog.js:1243 js/MyPhoneEditDialog.js:1276
+#: js/MyPhoneEditDialog.js:1304 js/MyPhoneEditDialog.js:1332
+msgid "- factory default -"
+msgstr "- tovární nastavení -"
+
+#: js/MyPhoneEditDialog.js:484 js/MyPhoneEditDialog.js:1001
+msgid "language"
+msgstr "jazyk"
+
+#: js/MyPhoneEditDialog.js:508 js/MyPhoneEditDialog.js:1044
+msgid "display_method"
+msgstr "zobrazování příchozích a odchozích hovorů"
+
+#: js/MyPhoneEditDialog.js:513 js/MyPhoneEditDialog.js:1060
+msgid "whole url"
+msgstr "celé URL"
+
+#: js/MyPhoneEditDialog.js:514 js/MyPhoneEditDialog.js:1061
+msgid "name"
+msgstr "název"
+
+#: js/MyPhoneEditDialog.js:515 js/MyPhoneEditDialog.js:1062
+msgid "number"
+msgstr "číslo"
+
+#: js/MyPhoneEditDialog.js:516 js/MyPhoneEditDialog.js:1063
+msgid "name + number"
+msgstr "jméno + číslo"
+
+#: js/MyPhoneEditDialog.js:517 js/MyPhoneEditDialog.js:1064
+msgid "number + name"
+msgstr "číslo + jméno"
+
+#: js/MyPhoneEditDialog.js:520 js/MyPhoneEditDialog.js:1080
+msgid "call_waiting"
+msgstr "indikace čekajícího hovoru"
+
+#: js/MyPhoneEditDialog.js:525 js/MyPhoneEditDialog.js:564
+#: js/MyPhoneEditDialog.js:573 js/MyPhoneEditDialog.js:582
+#: js/MyPhoneEditDialog.js:591 js/MyPhoneEditDialog.js:600
+#: js/MyPhoneEditDialog.js:1096 js/MyPhoneEditDialog.js:1216
+#: js/MyPhoneEditDialog.js:1244 js/MyPhoneEditDialog.js:1277
+#: js/MyPhoneEditDialog.js:1305 js/MyPhoneEditDialog.js:1333
+msgid "on"
+msgstr "zapnuto"
+
+#: js/MyPhoneEditDialog.js:526 js/MyPhoneEditDialog.js:1097
+msgid "visual"
+msgstr "vizuální"
+
+#: js/MyPhoneEditDialog.js:527 js/MyPhoneEditDialog.js:1098
+msgid "ringer"
+msgstr "zvonek"
+
+#: js/MyPhoneEditDialog.js:528 js/MyPhoneEditDialog.js:565
+#: js/MyPhoneEditDialog.js:574 js/MyPhoneEditDialog.js:583
+#: js/MyPhoneEditDialog.js:592 js/MyPhoneEditDialog.js:601
+#: js/MyPhoneEditDialog.js:1099 js/MyPhoneEditDialog.js:1217
+#: js/MyPhoneEditDialog.js:1245 js/MyPhoneEditDialog.js:1278
+#: js/MyPhoneEditDialog.js:1306 js/MyPhoneEditDialog.js:1334
+msgid "off"
+msgstr "vypnuto"
+
+#: js/MyPhoneEditDialog.js:531 js/MyPhoneEditDialog.js:1110
+msgid "mwi_notification"
+msgstr "oznámení čekající zprávy"
+
+#: js/MyPhoneEditDialog.js:536 js/MyPhoneEditDialog.js:1126
+msgid "silent"
+msgstr "tichý"
+
+#: js/MyPhoneEditDialog.js:537 js/MyPhoneEditDialog.js:1127
+msgid "beep"
+msgstr "tónové znamení"
+
+#: js/MyPhoneEditDialog.js:538 js/MyPhoneEditDialog.js:1128
+msgid "reminder"
+msgstr "připomínka"
+
+#: js/MyPhoneEditDialog.js:541 js/MyPhoneEditDialog.js:1139
+msgid "mwi_dialtone"
+msgstr "vyzvánecí tón indikující čekající zprávu"
+
+#: js/MyPhoneEditDialog.js:546 js/MyPhoneEditDialog.js:1155
+msgid "normal"
+msgstr "normální"
+
+#: js/MyPhoneEditDialog.js:547 js/MyPhoneEditDialog.js:1156
+msgid "stutter"
+msgstr "přerušovaný"
+
+#: js/MyPhoneEditDialog.js:550 js/MyPhoneEditDialog.js:1172
+msgid "headset_device"
+msgstr "náhlavní zařízení"
+
+#: js/MyPhoneEditDialog.js:556 js/MyPhoneEditDialog.js:1189
+msgid "headset_rj"
+msgstr "výstup pro náhlavní soupravu"
+
+#: js/MyPhoneEditDialog.js:559 js/MyPhoneEditDialog.js:1200
+msgid "message_led_other"
+msgstr "indikace zmeškaných hovorů a stavů hovoru diodou hlasové pošty"
+
+#: js/MyPhoneEditDialog.js:568 js/MyPhoneEditDialog.js:1228
+msgid "global_missed_counter"
+msgstr "zobrazení zmeškaných hovorů pro všechny linky"
+
+#: js/MyPhoneEditDialog.js:577 js/MyPhoneEditDialog.js:1261
+msgid "scroll_outgoing"
+msgstr "procházení aktivními odchozími linkami pomocí navigačních kláves"
+
+#: js/MyPhoneEditDialog.js:586 js/MyPhoneEditDialog.js:1289
+msgid "show_local_line"
+msgstr "zobrazovat stav místní SIP linky"
+
+#: js/MyPhoneEditDialog.js:595 js/MyPhoneEditDialog.js:1317
+msgid "show_call_status"
+msgstr "zobrazovat stav hovoru"
+
+#: js/MyPhoneEditDialog.js:620
+msgid "lineactive"
+msgstr "aktivní linka"
+
+#: js/MyPhoneEditDialog.js:648
+msgid "sipCombo"
+msgstr "sipCombo"
+
+#: js/MyPhoneEditDialog.js:667
+msgid "Idle Text"
+msgstr "Text při nečinnosti"
+
+#: js/MyPhoneEditDialog.js:700
+msgid "Lines"
+msgstr "Linky"
+
+#: js/MyPhoneEditDialog.js:715
+msgid "Users"
+msgstr "Uživatelé"
+
+#: js/MyPhoneEditDialog.js:719
+msgid "Rights"
+msgstr "Práva"
+
+#: js/Phone.js:28 js/Phone.js:479 js/Phone.js:480
 msgid "Edit phone settings"
 msgstr "Editovat nastavení telefonu"
 
-#: js/Phone.js:58 js/Phone.js:255 js/Models.js:70
-#, fuzzy
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] "Telefon"
-msgstr[1] "Telefon"
-msgstr[2] "Telefon"
-
-#: js/Phone.js:69
+#: js/Phone.js:68
 msgid "Phones"
 msgstr "Telefony"
 
-#: js/Phone.js:198
+#: js/Phone.js:197
 msgid "Dial phone number"
 msgstr "Vytočit telefonní číslo"
 
-#: js/Phone.js:278
+#: js/Phone.js:277
 msgid "Line"
 msgstr "Linka"
 
-#: js/Phone.js:287
+#: js/Phone.js:286
 msgid "Number"
 msgstr "Číslo"
 
-#: js/Phone.js:296
+#: js/Phone.js:295
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: js/Phone.js:306
+#: js/Phone.js:305
 msgid "Dial"
 msgstr "Vytočit"
 
-#: js/Phone.js:326
+#: js/Phone.js:325
 msgid "Error"
 msgstr ""
 
-#: js/Phone.js:327
+#: js/Phone.js:326
 msgid "Not possible to dial."
 msgstr ""
 
-#: js/Phone.js:470
+#: js/Phone.js:469
 msgid "Dial number"
 msgstr "Vytočit číslo"
 
-#: js/Phone.js:471
+#: js/Phone.js:470
 msgid "Initiate a new outgoing call"
 msgstr "Zahájit nový odchozí hovor"
 
-#: js/Phone.js:532
+#: js/Phone.js:530
 msgid "Incoming call"
 msgstr "Příchozí hovor"
 
-#: js/Phone.js:536
+#: js/Phone.js:534
 msgid "Outgoing call"
 msgstr "Odchozí hovor"
 
-#: js/Phone.js:544
+#: js/Phone.js:542
 msgid "unknown number"
 msgstr "neznámé číslo"
 
-#: js/Phone.js:569
+#: js/Phone.js:567
 msgid "Search:"
 msgstr "Hledat:"
 
-#: js/Phone.js:654
+#: js/Phone.js:652
 msgid "Source or Destination"
 msgstr "Zdroj nebo cíl"
 
-#: js/Phone.js:670
+#: js/Phone.js:668
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Zobrazuji "
 
-#: js/Phone.js:671 js/Phone.js:715
+#: js/Phone.js:669 js/Phone.js:713
 msgid "No calls to display"
 msgstr "Žádné hovory ke zobrazení"
 
-#: js/Phone.js:681
+#: js/Phone.js:679
 msgid "Direction"
 msgstr "Směr"
 
-#: js/Phone.js:682
+#: js/Phone.js:680
 msgid "Source"
 msgstr "Zdroj"
 
-#: js/Phone.js:683
+#: js/Phone.js:681
 msgid "Caller Id"
 msgstr "ID volajícího"
 
-#: js/Phone.js:684
+#: js/Phone.js:682
 msgid "Destination"
 msgstr "Cíl"
 
-#: js/Phone.js:685
+#: js/Phone.js:683
 msgid "Start"
 msgstr "Začátek"
 
-#: js/Phone.js:686
+#: js/Phone.js:684
 msgid "Connected"
 msgstr "Spojený"
 
-#: js/Phone.js:687
+#: js/Phone.js:685
 msgid "Disconnected"
 msgstr "Odpojený"
 
-#: js/Phone.js:688
+#: js/Phone.js:686
 msgid "Duration"
 msgstr "Trvání"
 
-#: js/Phone.js:689
+#: js/Phone.js:687
 msgid "Ringing"
 msgstr "Vyzvání"
 
-#: js/Phone.js:690
+#: js/Phone.js:688
 msgid "Call ID"
 msgstr "ID hovoru"
-
-#: js/Models.js:74
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#~ msgid "Name"
-#~ msgstr "Název"
-
-#~ msgid "Phone Model"
-#~ msgstr "Model telefonu"
-
-#~ msgid "MAC Address"
-#~ msgstr "MAC adresa"
-
-#~ msgid "infos"
-#~ msgstr "informace"
-
-#~ msgid "Current IP Address"
-#~ msgstr "Současná IP adresa"
-
-#~ msgid "Firmware last checked at"
-#~ msgstr "Firmware naposledy zkontrolován v"
-
-#~ msgid "Current Software Version"
-#~ msgstr "Současná verze softwaru"
-
-#~ msgid "Settings Loaded at"
-#~ msgstr "Nastavení načtena v"
-
-#~ msgid "redirection"
-#~ msgstr "přesměrování"
-
-#~ msgid "redirect_event"
-#~ msgstr "událost vedoucí k přesměrování"
-
-#~ msgid "all"
-#~ msgstr "vše"
-
-#~ msgid "busy"
-#~ msgstr "obsazeno"
-
-#~ msgid "none"
-#~ msgstr "žádný"
-
-#~ msgid "time"
-#~ msgstr "čas"
-
-#~ msgid "redirect_number"
-#~ msgstr "přesměrování na číslo"
-
-#~ msgid "redirect_time"
-#~ msgstr "interval v sekundách, po kterém dojde k přesměrování"
-
-#~ msgid "Settings"
-#~ msgstr "Nastavení"
-
-#~ msgid "web_language"
-#~ msgstr "jazyk webového rozhranní"
-
-#~ msgid "- factory default -"
-#~ msgstr "- tovární nastavení -"
-
-#~ msgid "language"
-#~ msgstr "jazyk"
-
-#~ msgid "display_method"
-#~ msgstr "zobrazování příchozích a odchozích hovorů"
-
-#~ msgid "whole url"
-#~ msgstr "celé URL"
-
-#~ msgid "name"
-#~ msgstr "název"
-
-#~ msgid "number"
-#~ msgstr "číslo"
-
-#~ msgid "name + number"
-#~ msgstr "jméno + číslo"
-
-#~ msgid "number + name"
-#~ msgstr "číslo + jméno"
-
-#~ msgid "call_waiting"
-#~ msgstr "indikace čekajícího hovoru"
-
-#~ msgid "on"
-#~ msgstr "zapnuto"
-
-#~ msgid "visual"
-#~ msgstr "vizuální"
-
-#~ msgid "ringer"
-#~ msgstr "zvonek"
-
-#~ msgid "off"
-#~ msgstr "vypnuto"
-
-#~ msgid "mwi_notification"
-#~ msgstr "oznámení čekající zprávy"
-
-#~ msgid "silent"
-#~ msgstr "tichý"
-
-#~ msgid "beep"
-#~ msgstr "tónové znamení"
-
-#~ msgid "reminder"
-#~ msgstr "připomínka"
-
-#~ msgid "mwi_dialtone"
-#~ msgstr "vyzvánecí tón indikující čekající zprávu"
-
-#~ msgid "normal"
-#~ msgstr "normální"
-
-#~ msgid "stutter"
-#~ msgstr "přerušovaný"
-
-#~ msgid "headset_device"
-#~ msgstr "náhlavní zařízení"
-
-#~ msgid "headset_rj"
-#~ msgstr "výstup pro náhlavní soupravu"
-
-#~ msgid "message_led_other"
-#~ msgstr "indikace zmeškaných hovorů a stavů hovoru diodou hlasové pošty"
-
-#~ msgid "global_missed_counter"
-#~ msgstr "zobrazení zmeškaných hovorů pro všechny linky"
-
-#~ msgid "scroll_outgoing"
-#~ msgstr "procházení aktivními odchozími linkami pomocí navigačních kláves"
-
-#~ msgid "show_local_line"
-#~ msgstr "zobrazovat stav místní SIP linky"
-
-#~ msgid "show_call_status"
-#~ msgstr "zobrazovat stav hovoru"
-
-#~ msgid "lineactive"
-#~ msgstr "aktivní linka"
-
-#~ msgid "sipCombo"
-#~ msgstr "sipCombo"
-
-#~ msgid "Idle Text"
-#~ msgstr "Text při nečinnosti"
-
-#~ msgid "Lines"
-#~ msgstr "Linky"
-
-#~ msgid "Users"
-#~ msgstr "Uživatelé"
-
-#~ msgid "Rights"
-#~ msgstr "Práva"
 
 #~ msgid "enter searchfilter"
 #~ msgstr "zadejte hledaný výraz"

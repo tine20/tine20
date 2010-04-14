@@ -25,8 +25,8 @@ msgstr "legg til, rediger og slette produkter"
 msgid "Title"
 msgstr "Tittel"
 
-#: js/ContractEditDialog.js:109 js/ProductGridPanel.js:128
-#: js/ProductEditDialog.js:126
+#: js/ContractEditDialog.js:109 js/ProductEditDialog.js:126
+#: js/ProductGridPanel.js:128
 msgid "Description"
 msgstr "Beskrivelse"
 
@@ -49,42 +49,6 @@ msgstr "Kontrakts nummer"
 #: js/ContractGridPanel.js:119
 msgid "Status"
 msgstr "Status"
-
-#: js/Sales.js:94
-msgid "Products"
-msgstr "Produkter"
-
-#: js/Sales.js:99
-msgid "All Products"
-msgstr "Alle Produkter"
-
-#: js/Sales.js:104
-msgid "Contracts"
-msgstr "Kontrakter"
-
-#: js/Sales.js:109 js/Sales.js:144
-msgid "All Contracts"
-msgstr "Alle Kontrakter"
-
-#: js/ProductGridPanel.js:124
-msgid "Tags"
-msgstr "Merker"
-
-#: js/ProductGridPanel.js:125 js/ProductEditDialog.js:105
-msgid "Name"
-msgstr "Navn"
-
-#: js/ProductGridPanel.js:126 js/ProductEditDialog.js:118
-msgid "Manufacturer"
-msgstr "Produsent"
-
-#: js/ProductGridPanel.js:127 js/ProductEditDialog.js:122
-msgid "Category"
-msgstr "Kategori"
-
-#: js/ProductGridPanel.js:129 js/ProductEditDialog.js:111
-msgid "Price"
-msgstr "Pris"
 
 #: js/Models.js:41
 msgid "Product"
@@ -113,6 +77,42 @@ msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] "kontrakt liste"
 msgstr[1] "kontrakts lister"
+
+#: js/ProductEditDialog.js:105 js/ProductGridPanel.js:125
+msgid "Name"
+msgstr "Navn"
+
+#: js/ProductEditDialog.js:111 js/ProductGridPanel.js:129
+msgid "Price"
+msgstr "Pris"
+
+#: js/ProductEditDialog.js:118 js/ProductGridPanel.js:126
+msgid "Manufacturer"
+msgstr "Produsent"
+
+#: js/ProductEditDialog.js:122 js/ProductGridPanel.js:127
+msgid "Category"
+msgstr "Kategori"
+
+#: js/ProductGridPanel.js:124
+msgid "Tags"
+msgstr "Merker"
+
+#: js/Sales.js:94
+msgid "Products"
+msgstr "Produkter"
+
+#: js/Sales.js:99
+msgid "All Products"
+msgstr "Alle Produkter"
+
+#: js/Sales.js:104
+msgid "Contracts"
+msgstr "Kontrakter"
+
+#: js/Sales.js:109 js/Sales.js:144
+msgid "All Contracts"
+msgstr "Alle Kontrakter"
 
 #: Setup/setup.xml:243
 msgid "Shared Contracts"

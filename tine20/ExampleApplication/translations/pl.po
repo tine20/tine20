@@ -13,76 +13,59 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 
-#: Controller.php:97
-#, python-format
-msgid "%s's personal example records"
-msgstr ""
+#: js/ExampleApplication.js:29
+msgid "ExampleRecords"
+msgstr "Przykładowe wiersze"
 
-#: js/Model.js:33
-msgid "example record"
-msgid_plural "example records"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+#: js/ExampleApplication.js:34
+msgid "All ExampleRecords"
+msgstr "Wszystkie przykładowe wiersze"
 
-#: js/Model.js:37
-msgid "example record list"
-msgid_plural "example record lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/ExampleRecordEditDialog.js:89
-#, fuzzy
+#: js/ExampleRecordEditDialog.js:91 js/Models.js:36
 msgid "ExampleRecord"
-msgstr "Przykładowy wiersz"
+msgid_plural "ExampleRecords"
+msgstr[0] "Przykładowy wiersz"
+msgstr[1] "przykładowe wiersze"
+msgstr[2] "przykładowych wierszy"
 
-#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
+#: js/ExampleRecordEditDialog.js:108 js/ExampleRecordGridPanel.js:119
 msgid "Name"
 msgstr "Nazwa"
 
-#: js/ExampleApplication.js:27
-msgid "Example Application"
-msgstr ""
-
-#: js/ExampleRecordGridPanel.js:77
+#: js/ExampleRecordGridPanel.js:87
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
-#: js/ExampleRecordGridPanel.js:111
+#: js/ExampleRecordGridPanel.js:88
+msgid "Description"
+msgstr "Opis"
+
+#: js/ExampleRecordGridPanel.js:125
 msgid "Title"
 msgstr "Tytuł"
 
-#: js/ExampleRecordGridPanel.js:117
+#: js/ExampleRecordGridPanel.js:131
 msgid "Status"
 msgstr "Status"
 
-#: js/ExampleRecordGridPanel.js:124
+#: js/ExampleRecordGridPanel.js:138
 msgid "Budget"
 msgstr "Budżet"
 
-#: js/ExampleRecordGridPanel.js:148
+#: js/ExampleRecordGridPanel.js:162
 msgid "Show closed"
 msgstr "Pokaż zakończone"
+
+#: js/Models.js:40
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "lista aplikacji"
+msgstr[1] "listy aplikacji"
+msgstr[2] "list aplikacji"
 
 #: Setup/setup.xml:10
 msgid "ExampleApplication"
 msgstr "Przykładowa aplikacja"
-
-#~ msgid "ExampleRecords"
-#~ msgstr "Przykładowe wiersze"
-
-#~ msgid "All ExampleRecords"
-#~ msgstr "Wszystkie przykładowe wiersze"
-
-#~ msgid "Description"
-#~ msgstr "Opis"
-
-#~ msgid "record list"
-#~ msgid_plural "record lists"
-#~ msgstr[0] "lista aplikacji"
-#~ msgstr[1] "listy aplikacji"
-#~ msgstr[2] "list aplikacji"
 
 #~ msgid "Number"
 #~ msgstr "Ilość"

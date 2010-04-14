@@ -24,8 +24,8 @@ msgstr "ajouter, supprimer ou éditer un produit"
 msgid "Title"
 msgstr "Titre"
 
-#: js/ContractEditDialog.js:109 js/ProductGridPanel.js:128
-#: js/ProductEditDialog.js:126
+#: js/ContractEditDialog.js:109 js/ProductEditDialog.js:126
+#: js/ProductGridPanel.js:128
 msgid "Description"
 msgstr "Description"
 
@@ -48,42 +48,6 @@ msgstr "Numéro de contrat"
 #: js/ContractGridPanel.js:119
 msgid "Status"
 msgstr "Statut"
-
-#: js/Sales.js:94
-msgid "Products"
-msgstr "Produits"
-
-#: js/Sales.js:99
-msgid "All Products"
-msgstr "Tous les produits"
-
-#: js/Sales.js:104
-msgid "Contracts"
-msgstr "Contrats"
-
-#: js/Sales.js:109 js/Sales.js:144
-msgid "All Contracts"
-msgstr "Tous les contrats"
-
-#: js/ProductGridPanel.js:124
-msgid "Tags"
-msgstr "Marqueurs"
-
-#: js/ProductGridPanel.js:125 js/ProductEditDialog.js:105
-msgid "Name"
-msgstr "Nom"
-
-#: js/ProductGridPanel.js:126 js/ProductEditDialog.js:118
-msgid "Manufacturer"
-msgstr "Fabricant"
-
-#: js/ProductGridPanel.js:127 js/ProductEditDialog.js:122
-msgid "Category"
-msgstr "Categorie"
-
-#: js/ProductGridPanel.js:129 js/ProductEditDialog.js:111
-msgid "Price"
-msgstr "Prix"
 
 #: js/Models.js:41
 msgid "Product"
@@ -112,6 +76,42 @@ msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] "liste de contrats"
 msgstr[1] "listes de contrats"
+
+#: js/ProductEditDialog.js:105 js/ProductGridPanel.js:125
+msgid "Name"
+msgstr "Nom"
+
+#: js/ProductEditDialog.js:111 js/ProductGridPanel.js:129
+msgid "Price"
+msgstr "Prix"
+
+#: js/ProductEditDialog.js:118 js/ProductGridPanel.js:126
+msgid "Manufacturer"
+msgstr "Fabricant"
+
+#: js/ProductEditDialog.js:122 js/ProductGridPanel.js:127
+msgid "Category"
+msgstr "Categorie"
+
+#: js/ProductGridPanel.js:124
+msgid "Tags"
+msgstr "Marqueurs"
+
+#: js/Sales.js:94
+msgid "Products"
+msgstr "Produits"
+
+#: js/Sales.js:99
+msgid "All Products"
+msgstr "Tous les produits"
+
+#: js/Sales.js:104
+msgid "Contracts"
+msgstr "Contrats"
+
+#: js/Sales.js:109 js/Sales.js:144
+msgid "All Contracts"
+msgstr "Tous les contrats"
 
 #: Setup/setup.xml:243
 msgid "Shared Contracts"

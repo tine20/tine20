@@ -21,20 +21,24 @@ msgstr "administrar productos"
 msgid "add, edit and delete products"
 msgstr "agregar, editar y borrar productos"
 
-#: js/ContractEditDialog.js:103 js/ContractGridPanel.js:113
+#: js/ContractEditDialog.js:103
+#: js/ContractGridPanel.js:113
 msgid "Title"
 msgstr "Título"
 
-#: js/ContractEditDialog.js:109 js/ProductGridPanel.js:128
+#: js/ContractEditDialog.js:109
 #: js/ProductEditDialog.js:126
+#: js/ProductGridPanel.js:128
 msgid "Description"
 msgstr "Descripción"
 
-#: js/ContractEditDialog.js:110 js/ProductEditDialog.js:127
+#: js/ContractEditDialog.js:110
+#: js/ProductEditDialog.js:127
 msgid "Enter description..."
 msgstr "Escribir Descripción..."
 
-#: js/ContractGridPanel.js:63 js/Models.js:79
+#: js/ContractGridPanel.js:63
+#: js/Models.js:79
 msgid "Quick search"
 msgstr "Búsqueda Rápida"
 
@@ -49,42 +53,6 @@ msgstr "Número de Contrato"
 #: js/ContractGridPanel.js:119
 msgid "Status"
 msgstr "Estado"
-
-#: js/Sales.js:94
-msgid "Products"
-msgstr "Productos"
-
-#: js/Sales.js:99
-msgid "All Products"
-msgstr "Todos los Productos"
-
-#: js/Sales.js:104
-msgid "Contracts"
-msgstr "Contratos"
-
-#: js/Sales.js:109 js/Sales.js:144
-msgid "All Contracts"
-msgstr "Todos los Contratos"
-
-#: js/ProductGridPanel.js:124
-msgid "Tags"
-msgstr "Etiquetas"
-
-#: js/ProductGridPanel.js:125 js/ProductEditDialog.js:105
-msgid "Name"
-msgstr "Nombre"
-
-#: js/ProductGridPanel.js:126 js/ProductEditDialog.js:118
-msgid "Manufacturer"
-msgstr "Manufacturero"
-
-#: js/ProductGridPanel.js:127 js/ProductEditDialog.js:122
-msgid "Category"
-msgstr "Categoría"
-
-#: js/ProductGridPanel.js:129 js/ProductEditDialog.js:111
-msgid "Price"
-msgstr "Precio"
 
 #: js/Models.js:41
 msgid "Product"
@@ -114,6 +82,48 @@ msgid_plural "contracts lists"
 msgstr[0] "listado de contrato"
 msgstr[1] "listado de contratos"
 
+#: js/ProductEditDialog.js:105
+#: js/ProductGridPanel.js:125
+msgid "Name"
+msgstr "Nombre"
+
+#: js/ProductEditDialog.js:111
+#: js/ProductGridPanel.js:129
+msgid "Price"
+msgstr "Precio"
+
+#: js/ProductEditDialog.js:118
+#: js/ProductGridPanel.js:126
+msgid "Manufacturer"
+msgstr "Manufacturero"
+
+#: js/ProductEditDialog.js:122
+#: js/ProductGridPanel.js:127
+msgid "Category"
+msgstr "Categoría"
+
+#: js/ProductGridPanel.js:124
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: js/Sales.js:94
+msgid "Products"
+msgstr "Productos"
+
+#: js/Sales.js:99
+msgid "All Products"
+msgstr "Todos los Productos"
+
+#: js/Sales.js:104
+msgid "Contracts"
+msgstr "Contratos"
+
+#: js/Sales.js:109
+#: js/Sales.js:144
+msgid "All Contracts"
+msgstr "Todos los Contratos"
+
 #: Setup/setup.xml:243
 msgid "Shared Contracts"
 msgstr "Contratos Compartidos"
+

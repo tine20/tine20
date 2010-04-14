@@ -13,11 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s 的个人任务"
-
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
 msgstr ""
@@ -26,88 +21,49 @@ msgstr ""
 msgid "Create new shared tasks lists"
 msgstr ""
 
-#: Model/Task.php:183
-msgid "Due"
+#: Controller/Task.php:166
+msgid "Notification for Task "
 msgstr ""
 
-#: Model/Task.php:184
-msgid "Organizer"
-msgstr ""
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s 的个人任务"
 
-#: Model/Task.php:185
-#, fuzzy
-msgid "Description"
-msgstr "输入描述"
-
-#: Model/Task.php:186 js/TaskEditDialog.js:168 js/GridPanel.js:161
-msgid "Priority"
-msgstr "优先"
-
-#: Model/Task.php:187 js/TaskEditDialog.js:188 js/GridPanel.js:188
-#: js/Status.js:33
-msgid "Status"
-msgstr "状态"
-
-#: Model/Task.php:188 js/GridPanel.js:175
-msgid "Percent"
-msgstr "百分比"
-
-#: Model/Task.php:195 js/GridPanel.js:139
-msgid "Lead"
-msgstr ""
-
-#: Model/Task.php:201
-msgid "Telephone"
-msgstr ""
-
-#: Model/Task.php:202
-msgid "Email"
-msgstr ""
-
-#: js/Tasks.js:94
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "任务"
-
-#: js/Tasks.js:94
-msgid "Tasks"
-msgstr "任务"
-
-#: js/Tasks.js:98
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "要做的事项列表"
-
-#: js/Tasks.js:98
-msgid "to do lists"
-msgstr "to do 列表"
-
-#: js/TaskEditDialog.js:160 js/GridPanel.js:92 js/GridPanel.js:142
+#: js/EditDialog.js:173 js/GridPanel.js:94 js/GridPanel.js:171
 msgid "Summary"
 msgstr "摘要"
 
-#: js/TaskEditDialog.js:165
+#: js/EditDialog.js:178
 msgid "Due date"
 msgstr "过期日期"
 
-#: js/TaskEditDialog.js:171
+#: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:184
+msgid "Priority"
+msgstr "优先"
+
+#: js/EditDialog.js:184
 #, fuzzy
 msgid "Add Responsible ..."
 msgstr "有责任的"
 
-#: js/TaskEditDialog.js:178
+#: js/EditDialog.js:191
 msgid "Notes"
 msgstr "注释"
 
-#: js/TaskEditDialog.js:179
+#: js/EditDialog.js:192
 msgid "Enter description..."
 msgstr "输入描述"
 
-#: js/TaskEditDialog.js:184
+#: js/EditDialog.js:197
 msgid "Percentage"
 msgstr "百分比"
 
-#: js/TaskEditDialog.js:192 js/GridPanel.js:209
+#: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:185
+msgid "Status"
+msgstr "状态"
+
+#: js/EditDialog.js:205
 msgid "Completed"
 msgstr "完成的"
 
@@ -116,50 +72,85 @@ msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "你确实想删除选中的任务？"
 
-#: js/GridPanel.js:90
+#: js/GridPanel.js:93
 msgid "Quick search"
 msgstr ""
 
-#: js/GridPanel.js:93 js/GridPanel.js:153
+#: js/GridPanel.js:95 js/GridPanel.js:182
 msgid "Due Date"
 msgstr "过期日期"
 
-#: js/GridPanel.js:95 js/GridPanel.js:216
+#: js/GridPanel.js:96 js/GridPanel.js:238
 msgid "Responsible"
 msgstr "有责任的"
 
-#: js/GridPanel.js:119
+#: js/GridPanel.js:120
 msgid "Failed"
 msgstr "失败"
 
-#: js/GridPanel.js:119
+#: js/GridPanel.js:120
 msgid "Could not save task."
 msgstr "不能保存任务"
 
-#: js/GridPanel.js:138
+#: js/GridPanel.js:167
 #, fuzzy
 msgid "Tags"
 msgstr "任务"
 
-#: js/GridPanel.js:149
+#: js/GridPanel.js:168
+msgid "Lead"
+msgstr ""
+
+#: js/GridPanel.js:178
 msgid "Add a task..."
 msgstr "添加任务"
 
-#: js/GridPanel.js:202
+#: js/GridPanel.js:204 Model/Task.php:186
+msgid "Percent"
+msgstr "百分比"
+
+#: js/GridPanel.js:231
 msgid "Creation Time"
 msgstr "创建时间"
 
-#: js/GridPanel.js:265
+#: js/GridPanel.js:285
 msgid "Show closed"
 msgstr "显示关闭的"
 
-#: js/Status.js:187 Setup/setup.xml:339
+#: js/Status.js:45 Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "正在处理"
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
+#: js/Tasks.js:87
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "任务"
+
+#: js/Tasks.js:87
+msgid "Tasks"
+msgstr "任务"
+
+#: js/Tasks.js:91
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "要做的事项列表"
+
+#: js/Tasks.js:91
+msgid "to do lists"
+msgstr "to do 列表"
+
+#: Model/Task.php:181
+msgid "Due"
 msgstr ""
+
+#: Model/Task.php:182
+msgid "Organizer"
+msgstr ""
+
+#: Model/Task.php:183
+#, fuzzy
+msgid "Description"
+msgstr "输入描述"
 
 #: Setup/setup.xml:295
 msgid "NEEDS-ACTION"

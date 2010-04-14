@@ -13,11 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%ss persönliche Aufgaben"
-
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
 msgstr "Gemeinsame Aufgabenlisten verwalten"
@@ -26,88 +21,48 @@ msgstr "Gemeinsame Aufgabenlisten verwalten"
 msgid "Create new shared tasks lists"
 msgstr "Neue gemeinse Aufgabenliste anlegen"
 
-#: Model/Task.php:183
-msgid "Due"
-msgstr "Fälligkeit"
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Benachrichtigung für Aufgabe"
 
-#: Model/Task.php:184
-msgid "Organizer"
-msgstr "Organisator"
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%ss persönliche Aufgaben"
 
-#: Model/Task.php:185
-msgid "Description"
-msgstr "Beschreibung"
-
-#: Model/Task.php:186 js/TaskEditDialog.js:168 js/GridPanel.js:161
-msgid "Priority"
-msgstr "Priorität"
-
-#: Model/Task.php:187 js/TaskEditDialog.js:188 js/GridPanel.js:188
-#: js/Status.js:33
-msgid "Status"
-msgstr "Status"
-
-#: Model/Task.php:188 js/GridPanel.js:175
-msgid "Percent"
-msgstr "Prozent"
-
-#: Model/Task.php:195 js/GridPanel.js:139
-msgid "Lead"
-msgstr ""
-
-#: Model/Task.php:201
-msgid "Telephone"
-msgstr ""
-
-#: Model/Task.php:202
-msgid "Email"
-msgstr ""
-
-#: js/Tasks.js:94
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Aufgabe"
-msgstr[1] "Aufgaben"
-
-#: js/Tasks.js:94
-msgid "Tasks"
-msgstr "Aufgaben"
-
-#: js/Tasks.js:98
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "Aufgabenliste"
-msgstr[1] "Aufgabenlisten"
-
-#: js/Tasks.js:98
-msgid "to do lists"
-msgstr "Aufgabenlisten"
-
-#: js/TaskEditDialog.js:160 js/GridPanel.js:92 js/GridPanel.js:142
+#: js/EditDialog.js:173 js/GridPanel.js:94 js/GridPanel.js:171
 msgid "Summary"
 msgstr "Beschreibung"
 
-#: js/TaskEditDialog.js:165
+#: js/EditDialog.js:178
 msgid "Due date"
 msgstr "Fälligkeitsdatum"
 
-#: js/TaskEditDialog.js:171
+#: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:184
+msgid "Priority"
+msgstr "Priorität"
+
+#: js/EditDialog.js:184
 msgid "Add Responsible ..."
 msgstr "Verantwortlichen hinzufügen ..."
 
-#: js/TaskEditDialog.js:178
+#: js/EditDialog.js:191
 msgid "Notes"
 msgstr "Anmerkungen"
 
-#: js/TaskEditDialog.js:179
+#: js/EditDialog.js:192
 msgid "Enter description..."
 msgstr "Beschreibung eingeben..."
 
-#: js/TaskEditDialog.js:184
+#: js/EditDialog.js:197
 msgid "Percentage"
 msgstr "Prozent"
 
-#: js/TaskEditDialog.js:192 js/GridPanel.js:209
+#: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:185
+msgid "Status"
+msgstr "Status"
+
+#: js/EditDialog.js:205
 msgid "Completed"
 msgstr "Abgeschlossen"
 
@@ -117,49 +72,85 @@ msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 
-#: js/GridPanel.js:90
+#: js/GridPanel.js:93
 msgid "Quick search"
 msgstr "Schnellsuche"
 
-#: js/GridPanel.js:93 js/GridPanel.js:153
+#: js/GridPanel.js:95 js/GridPanel.js:182
 msgid "Due Date"
 msgstr "Fällig am"
 
-#: js/GridPanel.js:95 js/GridPanel.js:216
+#: js/GridPanel.js:96 js/GridPanel.js:238
 msgid "Responsible"
 msgstr "Verantwortlich"
 
-#: js/GridPanel.js:119
+#: js/GridPanel.js:120
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/GridPanel.js:119
+#: js/GridPanel.js:120
 msgid "Could not save task."
 msgstr "Konnte Aufgabe nicht speichern."
 
-#: js/GridPanel.js:138
+#: js/GridPanel.js:167
 msgid "Tags"
 msgstr "Tags"
 
-#: js/GridPanel.js:149
+#: js/GridPanel.js:168
+msgid "Lead"
+msgstr ""
+
+#: js/GridPanel.js:178
 msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
-#: js/GridPanel.js:202
+#: js/GridPanel.js:204 Model/Task.php:186
+msgid "Percent"
+msgstr "Prozent"
+
+#: js/GridPanel.js:231
 msgid "Creation Time"
 msgstr "Angelegt am"
 
-#: js/GridPanel.js:265
+#: js/GridPanel.js:285
 msgid "Show closed"
 msgstr "Geschlossene Aufgaben anzeigen"
 
-#: js/Status.js:187 Setup/setup.xml:339
+#: js/Status.js:45 Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "IN BEARBEITUNG"
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Benachrichtigung für Aufgabe"
+#: js/Tasks.js:87
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Aufgabe"
+msgstr[1] "Aufgaben"
+
+#: js/Tasks.js:87
+msgid "Tasks"
+msgstr "Aufgaben"
+
+#: js/Tasks.js:91
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "Aufgabenliste"
+msgstr[1] "Aufgabenlisten"
+
+#: js/Tasks.js:91
+msgid "to do lists"
+msgstr "Aufgabenlisten"
+
+#: Model/Task.php:181
+msgid "Due"
+msgstr "Fälligkeit"
+
+#: Model/Task.php:182
+msgid "Organizer"
+msgstr "Organisator"
+
+#: Model/Task.php:183
+msgid "Description"
+msgstr "Beschreibung"
 
 #: Setup/setup.xml:295
 msgid "NEEDS-ACTION"

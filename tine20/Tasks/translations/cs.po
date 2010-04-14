@@ -15,11 +15,6 @@ msgstr ""
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: ../../\n"
 
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "osobní úkoly uživatele %s"
-
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
 msgstr "spravovat sdílené seznamy úkolů"
@@ -28,90 +23,48 @@ msgstr "spravovat sdílené seznamy úkolů"
 msgid "Create new shared tasks lists"
 msgstr "Vytvořit nové sdílené seznamy úkolů"
 
-#: Model/Task.php:183
-msgid "Due"
-msgstr "Do"
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Upozornění na úkol"
 
-#: Model/Task.php:184
-msgid "Organizer"
-msgstr "Organizátor"
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "osobní úkoly uživatele %s"
 
-#: Model/Task.php:185
-msgid "Description"
-msgstr "Popis"
-
-#: Model/Task.php:186 js/TaskEditDialog.js:168 js/GridPanel.js:161
-msgid "Priority"
-msgstr "Priorita"
-
-#: Model/Task.php:187 js/TaskEditDialog.js:188 js/GridPanel.js:188
-#: js/Status.js:33
-msgid "Status"
-msgstr "Status"
-
-#: Model/Task.php:188 js/GridPanel.js:175
-msgid "Percent"
-msgstr "Procent"
-
-#: Model/Task.php:195 js/GridPanel.js:139
-msgid "Lead"
-msgstr ""
-
-#: Model/Task.php:201
-msgid "Telephone"
-msgstr ""
-
-#: Model/Task.php:202
-msgid "Email"
-msgstr ""
-
-#: js/Tasks.js:94
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Úkol"
-msgstr[1] "Úkoly"
-msgstr[2] "Úkolů"
-
-#: js/Tasks.js:94
-msgid "Tasks"
-msgstr "Úkoly"
-
-#: js/Tasks.js:98
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "seznam úkolů"
-msgstr[1] "seznamy úkolů"
-msgstr[2] "seznamů úkolů"
-
-#: js/Tasks.js:98
-msgid "to do lists"
-msgstr "seznamy úkolů"
-
-#: js/TaskEditDialog.js:160 js/GridPanel.js:92 js/GridPanel.js:142
+#: js/EditDialog.js:173 js/GridPanel.js:94 js/GridPanel.js:171
 msgid "Summary"
 msgstr "Přehled"
 
-#: js/TaskEditDialog.js:165
+#: js/EditDialog.js:178
 msgid "Due date"
 msgstr "Termín dokončení"
 
-#: js/TaskEditDialog.js:171
+#: js/EditDialog.js:181 js/GridPanel.js:190 Model/Task.php:184
+msgid "Priority"
+msgstr "Priorita"
+
+#: js/EditDialog.js:184
 msgid "Add Responsible ..."
 msgstr "Přidat zodpovědnou osobu ..."
 
-#: js/TaskEditDialog.js:178
+#: js/EditDialog.js:191
 msgid "Notes"
 msgstr "Poznámky"
 
-#: js/TaskEditDialog.js:179
+#: js/EditDialog.js:192
 msgid "Enter description..."
 msgstr "Zadejte popis..."
 
-#: js/TaskEditDialog.js:184
+#: js/EditDialog.js:197
 msgid "Percentage"
 msgstr "Procenta"
 
-#: js/TaskEditDialog.js:192 js/GridPanel.js:209
+#: js/EditDialog.js:201 js/GridPanel.js:217 Model/Task.php:185
+msgid "Status"
+msgstr "Status"
+
+#: js/EditDialog.js:205
 msgid "Completed"
 msgstr "Dokončený"
 
@@ -122,49 +75,87 @@ msgstr[0] "Opravdu chcete smazat vybraný úkol?"
 msgstr[1] "Opravdu chcete smazat vybrané úkoly?"
 msgstr[2] "Opravdu chcete smazat vybrané úkoly?"
 
-#: js/GridPanel.js:90
+#: js/GridPanel.js:93
 msgid "Quick search"
 msgstr "Rychlé hledání"
 
-#: js/GridPanel.js:93 js/GridPanel.js:153
+#: js/GridPanel.js:95 js/GridPanel.js:182
 msgid "Due Date"
 msgstr "Termín dokončení"
 
-#: js/GridPanel.js:95 js/GridPanel.js:216
+#: js/GridPanel.js:96 js/GridPanel.js:238
 msgid "Responsible"
 msgstr "Zodpovídá"
 
-#: js/GridPanel.js:119
+#: js/GridPanel.js:120
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/GridPanel.js:119
+#: js/GridPanel.js:120
 msgid "Could not save task."
 msgstr "Nepodařilo se uložit úkol."
 
-#: js/GridPanel.js:138
+#: js/GridPanel.js:167
 msgid "Tags"
 msgstr "Štítky"
 
-#: js/GridPanel.js:149
+#: js/GridPanel.js:168
+msgid "Lead"
+msgstr ""
+
+#: js/GridPanel.js:178
 msgid "Add a task..."
 msgstr "Přidat úkol..."
 
-#: js/GridPanel.js:202
+#: js/GridPanel.js:204 Model/Task.php:186
+msgid "Percent"
+msgstr "Procent"
+
+#: js/GridPanel.js:231
 msgid "Creation Time"
 msgstr "Čas vytvoření"
 
-#: js/GridPanel.js:265
+#: js/GridPanel.js:285
 msgid "Show closed"
 msgstr "Zobrazit uzavřené"
 
-#: js/Status.js:187 Setup/setup.xml:339
+#: js/Status.js:45 Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "ROZPRACOVANÝ"
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Upozornění na úkol"
+#: js/Tasks.js:87
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Úkol"
+msgstr[1] "Úkoly"
+msgstr[2] "Úkolů"
+
+#: js/Tasks.js:87
+msgid "Tasks"
+msgstr "Úkoly"
+
+#: js/Tasks.js:91
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "seznam úkolů"
+msgstr[1] "seznamy úkolů"
+msgstr[2] "seznamů úkolů"
+
+#: js/Tasks.js:91
+msgid "to do lists"
+msgstr "seznamy úkolů"
+
+#: Model/Task.php:181
+msgid "Due"
+msgstr "Do"
+
+#: Model/Task.php:182
+msgid "Organizer"
+msgstr "Organizátor"
+
+#: Model/Task.php:183
+msgid "Description"
+msgstr "Popis"
 
 #: Setup/setup.xml:295
 msgid "NEEDS-ACTION"
