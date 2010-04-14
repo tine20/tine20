@@ -255,20 +255,20 @@ abstract class ActiveSync_Controller_Abstract
     }
     
     /**
-     * search for existing entry
+     * search for existing entry in all syncable folders
      *
-     * @param unknown_type $_forlderId
-     * @param SimpleXMLElement $_data
+     * @param string            $_forlderId
+     * @param SimpleXMLElement  $_data
      * @return Tinebase_Record_Abstract
      */
     public function search($_folderId, SimpleXMLElement $_data)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId");
         
-        $filterArray   = $this->_toTineFilter($_data);
-        $filterArray[] = $this->_getContainerFilter($_folderId);
+        $filterArray  = $this->_toTineFilterArray($_data);
+        $filter       = new $this->_contentFilterClass($filterArray);
         
-        $filter = new $this->_contentFilterClass($filterArray);
+        $this->_getContainerFilter($filter, $_folderId);
         
         $foundEmtries = $this->_contentController->search($filter);
 
