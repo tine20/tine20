@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-13 13:46+0100\n"
+"PO-Revision-Date: 2010-04-14 21:45+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -10,40 +10,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: Controller.php:97
 #, python-format
 msgid "%s's personal example records"
-msgstr ""
+msgstr "%s's przykładowe, osobiste wiersze"
 
 #: js/Model.js:33
 msgid "example record"
 msgid_plural "example records"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "przykładowy wiersz"
+msgstr[1] "przykładowe wiersze"
+msgstr[2] "przykładowe wiersze"
 
 #: js/Model.js:37
 msgid "example record list"
 msgid_plural "example record lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "lista przykładowych wierszy"
+msgstr[1] "listy przykładowych wierszy"
+msgstr[2] "listy przykładowych wierszy"
 
 #: js/ExampleRecordEditDialog.js:89
-#, fuzzy
 msgid "ExampleRecord"
 msgstr "Przykładowy wiersz"
 
-#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
+#: js/ExampleRecordEditDialog.js:106
+#: js/ExampleRecordGridPanel.js:105
 msgid "Name"
 msgstr "Nazwa"
 
 #: js/ExampleApplication.js:27
 msgid "Example Application"
-msgstr ""
+msgstr "Przykładowa aplikacja"
 
 #: js/ExampleRecordGridPanel.js:77
 msgid "Quick search"
@@ -71,45 +70,33 @@ msgstr "Przykładowa aplikacja"
 
 #~ msgid "ExampleRecords"
 #~ msgstr "Przykładowe wiersze"
-
 #~ msgid "All ExampleRecords"
 #~ msgstr "Wszystkie przykładowe wiersze"
-
 #~ msgid "Description"
 #~ msgstr "Opis"
-
 #~ msgid "record list"
 #~ msgid_plural "record lists"
 #~ msgstr[0] "lista aplikacji"
 #~ msgstr[1] "listy aplikacji"
 #~ msgstr[2] "list aplikacji"
-
 #~ msgid "Number"
 #~ msgstr "Ilość"
-
 #~ msgid "Unit"
 #~ msgstr "Jednostka"
-
 #~ msgid "Unit Price"
 #~ msgstr "Cena jednostkowa"
-
 #~ msgid "Timesheets are billable"
 #~ msgstr "Karty godzin gotowe do przeliczenia"
-
 #~ msgid "closed"
 #~ msgstr "zakończone"
-
 #~ msgid "open"
 #~ msgstr "otwarte"
-
 #~ msgid "Billed"
 #~ msgstr "Przeliczone"
-
 #~ msgid "not yet billed"
 #~ msgstr "jeszcze nie przeliczone"
-
 #~ msgid "to bill"
 #~ msgstr "przelicz"
-
 #~ msgid "billed"
 #~ msgstr "przeliczone"
+

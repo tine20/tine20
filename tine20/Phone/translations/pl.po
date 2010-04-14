@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-01-13 14:04+0100\n"
+"PO-Revision-Date: 2010-04-14 21:51+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -10,15 +10,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/Phone.js:28 js/Phone.js:480 js/Phone.js:481
+#: js/Phone.js:28
+#: js/Phone.js:480
+#: js/Phone.js:481
 msgid "Edit phone settings"
 msgstr "Edytuj ustawienia telefonu"
 
-#: js/Phone.js:58 js/Phone.js:255 js/Models.js:70
-#, fuzzy
+#: js/Phone.js:58
+#: js/Phone.js:255
+#: js/Models.js:70
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
@@ -89,7 +91,8 @@ msgstr "Źródło albo cel"
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Wyświetlane połączenia {0} - {1} z {2}"
 
-#: js/Phone.js:671 js/Phone.js:715
+#: js/Phone.js:671
+#: js/Phone.js:715
 msgid "No calls to display"
 msgstr "Brak połączeń"
 
@@ -136,91 +139,64 @@ msgstr "ID połączenia"
 #: js/Models.js:74
 msgid "phones list"
 msgid_plural "phones lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "lista nr telefonów"
+msgstr[1] "listy nr telefonów"
+msgstr[2] "listy nr telefonów"
 
 #~ msgid "Name"
 #~ msgstr "Nazwa"
-
 #~ msgid "Phone Model"
 #~ msgstr "Model telefonu"
-
 #~ msgid "MAC Address"
 #~ msgstr "Adres sprzętowy (MAC)"
-
 #~ msgid "infos"
 #~ msgstr "Informacje"
-
 #~ msgid "Current IP Address"
 #~ msgstr "Obecny adres IP"
-
 #~ msgid "Firmware last checked at"
 #~ msgstr "Oprogramowanie wbudowane sprawdzono ostatnio"
-
 #~ msgid "Current Software Version"
 #~ msgstr "Obecna wersja oprogramowania"
-
 #~ msgid "Settings Loaded at"
 #~ msgstr "Ustawienia wczytane"
-
 #~ msgid "redirection"
 #~ msgstr "przekierowanie"
-
 #~ msgid "redirect_event"
 #~ msgstr "powód przekierowania"
-
 #~ msgid "all"
 #~ msgstr "wszystkie"
-
 #~ msgid "busy"
 #~ msgstr "zajęty"
-
 #~ msgid "none"
 #~ msgstr "brak"
-
 #~ msgid "time"
 #~ msgstr "czas"
-
 #~ msgid "redirect_number"
 #~ msgstr "Przekierowanie na numer"
-
 #~ msgid "redirect_time"
 #~ msgstr "Czas przekierowania"
-
 #~ msgid "Settings"
 #~ msgstr "Ustawienia"
-
 #~ msgid "web_language"
 #~ msgstr "język interfejsu WWW"
-
 #~ msgid "- factory default -"
 #~ msgstr "- domyśle ustawienia fabryczne -"
-
 #~ msgid "language"
 #~ msgstr "język"
-
 #~ msgid "display_method"
 #~ msgstr "metoda wyświetlania"
-
 #~ msgid "whole url"
 #~ msgstr "pełny URL"
-
 #~ msgid "name"
 #~ msgstr "nazwa"
-
 #~ msgid "number"
 #~ msgstr "numer"
-
 #~ msgid "name + number"
 #~ msgstr "nazwa + numer"
-
 #~ msgid "number + name"
 #~ msgstr "numer + nazwa"
-
 #~ msgid "call_waiting"
 #~ msgstr "Oczekujące połączenie"
-
 #~ msgid "on"
 #~ msgstr "wł."
 
@@ -228,75 +204,53 @@ msgstr[2] ""
 # Bevor Du hier eine Aenderung machst, sieh Dir bitte die deutsche Uebersetuzng an.
 #~ msgid "visual"
 #~ msgstr "wybieranie"
-
 # Before you'll make any changes here, please see the german translation.
 # Bevor Du hier eine Aenderung machst, sieh Dir bitte die deutsche Uebersetuzng an.
 #~ msgid "ringer"
 #~ msgstr "łączenie"
-
 #~ msgid "off"
 #~ msgstr "wył."
-
 #~ msgid "mwi_notification"
 #~ msgstr "Powiadomienie MWI"
-
 #~ msgid "silent"
 #~ msgstr "bezgłośnie"
-
 #~ msgid "beep"
 #~ msgstr "sygnał dźwiękowy"
-
 #~ msgid "reminder"
 #~ msgstr "przypomnienie"
-
 #~ msgid "mwi_dialtone"
 #~ msgstr "Sygnał MWI"
-
 #~ msgid "normal"
 #~ msgstr "normalny"
-
 #~ msgid "stutter"
 #~ msgstr "przerywany"
-
 #~ msgid "headset_device"
 #~ msgstr "Zestaw słuchawkowy"
-
 #~ msgid "headset_rj"
 #~ msgstr "Zestaw słuchawkowy RJ"
-
 #~ msgid "message_led_other"
 #~ msgstr "Inne LED"
-
 #, fuzzy
 #~ msgid "global_missed_counter"
 #~ msgstr "brakujący licznik"
-
 #~ msgid "scroll_outgoing"
 #~ msgstr "Przewijanie"
-
 #~ msgid "show_local_line"
 #~ msgstr "Pokaż mój numer"
-
 #~ msgid "show_call_status"
 #~ msgstr "Pokaż status połączenia"
-
 #~ msgid "lineactive"
 #~ msgstr "Łącze aktywne"
-
 #~ msgid "sipCombo"
 #~ msgstr "Wybieranie SIP"
-
 #~ msgid "Idle Text"
 #~ msgstr "Wiadomość, gdy wyłączony"
-
 #~ msgid "Lines"
 #~ msgstr "Łącza"
-
 #~ msgid "Users"
 #~ msgstr "Użytkownicy"
-
 #~ msgid "Rights"
 #~ msgstr "Uprawnienia"
-
 #~ msgid "enter searchfilter"
 #~ msgstr "wpisz szukaną frazę"
+
