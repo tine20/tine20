@@ -124,6 +124,7 @@ Tine.Tinebase.Model.Grant = Ext.data.Record.create([
     {name: 'account_id'},
     {name: 'account_type'},
     {name: 'account_name'},
+    {name: 'freebusyGrant',type: 'boolean'},
     {name: 'readGrant',    type: 'boolean'},
     {name: 'addGrant',     type: 'boolean'},
     {name: 'editGrant',    type: 'boolean'},
