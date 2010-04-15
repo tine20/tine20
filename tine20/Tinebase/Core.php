@@ -182,6 +182,7 @@ class Tinebase_Core
         }
 
         $server->handle();
+        self::getDbProfiling();
     }
 
     /******************************* APPLICATION ************************************/
@@ -597,8 +598,33 @@ class Tinebase_Core
             $db->table_prefix = SQL_TABLE_PREFIX;
 
             self::set(self::DB, $db);
+
         } else {
             die ('database section not found in central configuration file');
+        }
+    }
+
+    /**
+     * get db profiling
+     *
+     */
+    public static function getDbProfiling()
+    {
+        $config = self::getConfig()->database;
+
+        if ((bool) $config->profiler) {
+            $profiler = Zend_Db_Table::getDefaultAdapter()->getProfiler();
+
+            $data = array(
+                'totalNumQueries' => $profiler->getTotalNumQueries(),
+                'totalElapsedSec' => $profiler->getTotalElapsedSecs()
+            );
+
+            if ((bool) $config->queryProfiles) {
+                $data = array_merge($data, array('queryProfiles' => $profiler->getQueryProfiles()));
+            }
+
+            self::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($data, true));
         }
     }
 
