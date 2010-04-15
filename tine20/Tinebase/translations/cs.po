@@ -559,21 +559,21 @@ msgstr[2] "Skupin"
 msgid "Groups"
 msgstr "Skupiny"
 
-#: js/Models.js:273
+#: js/Models.js:274
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Models.js:306
+#: js/Models.js:307
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] "Přihlašovací údaje"
 msgstr[1] "Přihlašovací údaje"
 msgstr[2] "Přihlašovací údaje"
 
-#: js/Models.js:333
+#: js/Models.js:334
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Vztah"
