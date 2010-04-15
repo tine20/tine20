@@ -3,16 +3,14 @@
 
 // minimal configuration
 return array(
-	'database' => array(
-        'host'		=> 'ENTER DATABASE HOSTNAME',
-        'dbname'	=> 'ENTER DATABASE NAME',
-        'username'	=> 'ENTER DATABASE USERNAME',
-        'password'	=> 'ENTER DATABASE PASSWORD',
-        'adapter'	=> 'pdo_mysql',
-        'tableprefix'	=> 'tine20_',
-		'profiler' => false,
-		'queryProfiles' => false
-	),
+    'database' => array(
+        'host'          => 'ENTER DATABASE HOSTNAME',
+        'dbname'	    => 'ENTER DATABASE NAME',
+        'username'      => 'ENTER DATABASE USERNAME',
+        'password'      => 'ENTER DATABASE PASSWORD',
+        'adapter'       => 'pdo_mysql',
+        'tableprefix'   => 'tine20_',
+    ),
     'setupuser' => array(
         'username'      => 'tine20setup',
         'password'      => 'setup' 
