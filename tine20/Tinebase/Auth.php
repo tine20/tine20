@@ -108,7 +108,9 @@ class Tinebase_Auth
             'password' => '',
             'bindRequiresDn' => true,
             'baseDn' => '',
-            'accountCanonicalForm' => '2'
+            'accountCanonicalForm' => '2',
+            'accountDomainName' => '',
+            'accountDomainNameShort' => '',
          )
     );
     
