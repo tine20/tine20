@@ -201,19 +201,36 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
     
     /**
      * update function (-> 3.6)
-     * - clear all existing folder message caches
+     * - clear all existing folder message caches by dropping and recreating the caching tables
      */    
     public function update_5()
     {
-        // loop all folders
-        $folderBackend = new Felamimail_Backend_Folder();
-        $folders = $folderBackend->getAll();
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing all folder message caches ...');
-        foreach ($folders as $folder) {
-            if ($folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
-                Felamimail_Controller_Cache_Message::getInstance()->clear($folder);
+        // recreate all caching tables
+        $cachingTables = array(
+            'felamimail_cache_message_bcc',
+            'felamimail_cache_message_cc',
+            'felamimail_cache_message_flag',
+            'felamimail_cache_message_to',
+            'felamimail_cache_message',
+            'felamimail_folder',
+        );
+        
+        // get table schema data from setup.xml
+        $setupXml = Setup_Controller::getInstance()->getSetupXml('Felamimail');
+
+        // loop tables (disable foreign key checks for this)
+        $this->_db->query("SET FOREIGN_KEY_CHECKS=0");
+        foreach ($cachingTables as $table) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache table ' . $table . ' ...');
+            $this->_backend->dropTable($table);
+            foreach ($setupXml->tables[0] as $tableXML) {
+                if ($tableXML->name == $table) {
+                    $tableSchema = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
+                    $this->_backend->createTable($tableSchema);
+                }
             }
         }
+        $this->_db->query("SET FOREIGN_KEY_CHECKS=1");
         
         $this->setApplicationVersion('Felamimail', '3.6');
     }
