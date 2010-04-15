@@ -464,8 +464,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function loginFromPost($username, $password)
     {
         if (!empty($username)) {
-            // strip of everything after @ from username
-            list($username) = explode('@', $username);
+            Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::USERBACKEND, '', $_SERVER["HTTP_REFERER"])->value;
             
             // try to login user
             $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === TRUE); 
