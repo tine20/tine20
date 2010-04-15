@@ -131,7 +131,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchEvents($filter, $paging)
     {
-        return $this->_search($filter, $paging, Calendar_Controller_Event::getInstance(), 'Calendar_Model_EventFilter');
+        return $this->_search($filter, $paging, Calendar_Controller_Event::getInstance(), 'Calendar_Model_EventFilter', FALSE , Tinebase_Frontend_Json_Abstract::TOTALCOUNT_COUNTRESULT);
     }
     
     /**
