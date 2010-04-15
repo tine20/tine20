@@ -29,13 +29,6 @@ class Tinebase_Core
 	/**************** registry indexes *************************/
 
 	/**
-	 * Singleton instance
-	 *
-	 * @var Zend_Scheduler
-	 */
-	private static $_scheduler = null;
-
-	/**
 	 * constant for config registry index
 	 *
 	 */
@@ -930,23 +923,4 @@ class Tinebase_Core
 		}
 		return $sessionDir;
 	}
-
-	/**
-	 * Singleton instance
-	 *
-	 * @return Zend_Scheduler
-	 */
-	public static function getScheduler()
-	{
-		if (self::$_scheduler === null) {
-			self::$_scheduler = new Zend_Scheduler();
-			self::$_scheduler->setBackend(new Zend_Scheduler_Backend_Db(array(
-				'DbAdapter' => self::getDb(),
-				'tableName' => SQL_TABLE_PREFIX . 'scheduler'
-				)));
-		}
-		return self::$_scheduler;
-	}
-
-
 }
