@@ -9,7 +9,9 @@ return array(
         'username'	=> 'ENTER DATABASE USERNAME',
         'password'	=> 'ENTER DATABASE PASSWORD',
         'adapter'	=> 'pdo_mysql',
-        'tableprefix'	=> 'tine20_'
+        'tableprefix'	=> 'tine20_',
+		'profiler' => false,
+		'queryProfiles' => false
 	),
     'setupuser' => array(
         'username'      => 'tine20setup',
