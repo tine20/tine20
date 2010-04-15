@@ -22,6 +22,16 @@
 abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstract implements Tinebase_Frontend_Json_Interface
 {
     /**
+     * get totalcount from controller
+     */
+    const TOTALCOUNT_CONTROLLER  = 'controller';
+    
+    /**
+     * get totalcount by just counting resultset
+     */
+    const TOTALCOUNT_COUNTRESULT = 'countresult';
+    
+    /**
      * Returns registry data of the application.
      *
      * Each application has its own registry to supply static data to the client.
@@ -74,14 +84,15 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * Search for records matching given arguments
      *
-     * @param string $_filter json encoded
-     * @param string $_paging json encoded
+     * @param string                              $_filter json encoded
+     * @param string                              $_paging json encoded
      * @param Tinebase_Controller_SearchInterface $_controller the record controller
-     * @param string $_filterModel the class name of the filter model to use
-     * @param bool $_getRelations
+     * @param string                              $_filterModel the class name of the filter model to use
+     * @param bool                                $_getRelations
+     * @param string                              $_totalCountMethod
      * @return array
      */
-    protected function _search($_filter, $_paging, Tinebase_Controller_SearchInterface $_controller, $_filterModel, $_getRelations = FALSE)
+    protected function _search($_filter, $_paging, Tinebase_Controller_SearchInterface $_controller, $_filterModel, $_getRelations = FALSE, $_totalCountMethod = self::TOTALCOUNT_CONTROLLER)
     {
         $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : Zend_Json::decode($_filter);
         $decodedPagination = is_array($_paging) ? $_paging : Zend_Json::decode($_paging);
@@ -104,7 +115,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         
         return array(
             'results'       => $result,
-            'totalcount'    => $_controller->searchCount($filter),
+            'totalcount'    => $_totalCountMethod == self::TOTALCOUNT_CONTROLLER ? 
+                $_controller->searchCount($filter) :
+                count($result),
             'filter'        => $filter->toArray(TRUE),
         );
     }
