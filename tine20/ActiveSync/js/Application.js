@@ -57,13 +57,20 @@ Tine.ActiveSync.Application = Ext.extend(Tine.Tinebase.Application, {
                     handler: this.setDeviceContentFilter.createDelegate(this, [device, contentClass, filter])
                 });
             }, this);
-            if (! Ext.isEmpty(devices)) {
-                items.push({
-                    text: String.format(this.i18n._('Set as {0} Filter'), this.getTitle()),
-                    iconCls: this.getIconCls(),
-                    menu: menuItems
+            if (Ext.isEmpty(devices)) {
+                menuItems.push({
+                    text: this.i18n._('No ActiveSync Device registered'),
+                    disabled: true,
+                    checked: false,
+                    handler: Ext.emptyFn
                 });
             }
+            
+            items.push({
+                text: String.format(this.i18n._('Set as {0} Filter'), this.getTitle()),
+                iconCls: this.getIconCls(),
+                menu: menuItems
+            });
         }
         
         return items;
