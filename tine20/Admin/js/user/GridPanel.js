@@ -109,27 +109,23 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @return {Object}
      */
     getActionToolbarItems: function() {
-        return {
-            xtype: 'buttongroup',
-            columns: 3,
-            items: [
-                Ext.apply(new Ext.Button(this.actionEnable), {
-                    scale: 'medium',
-                    rowspan: 2,
-                    iconAlign: 'top'
-                }),
-                Ext.apply(new Ext.Button(this.actionDisable), {
-                    scale: 'medium',
-                    rowspan: 2,
-                    iconAlign: 'top'
-                }),
-                Ext.apply(new Ext.Button(this.actionResetPassword), {
-                    scale: 'medium',
-                    rowspan: 2,
-                    iconAlign: 'top'
-                })
-            ]
-        };
+        return [
+            Ext.apply(new Ext.Button(this.actionEnable), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            }),
+            Ext.apply(new Ext.Button(this.actionDisable), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            }),
+            Ext.apply(new Ext.Button(this.actionResetPassword), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            })
+        ];
     },
     
     /**
