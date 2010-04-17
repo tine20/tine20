@@ -163,13 +163,19 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
         this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
             text: this.app.i18n._('Show closed'),
             iconCls: 'action_showArchived',
-            field: 'showClosed'
+            field: 'showClosed',
+            scale: 'medium',
+            rowspan: 2,
+            iconAlign: 'top'
         });
         
         return [
-            new Ext.Toolbar.Separator(),
-            this.action_showClosedToggle,
-            this.exportButton
+            Ext.apply(new Ext.Button(this.exportButton), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            }),
+            this.action_showClosedToggle
         ];
     }    
 });
