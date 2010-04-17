@@ -240,25 +240,29 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
      * @return {Object}
      */
     getActionToolbarItems: function() {
-        return {
-            xtype: 'buttongroup',
-            columns: 3,
-            items: [
-                Ext.apply(new Ext.SplitButton(this.actions_callContact), {
-                    scale: 'medium',
-                    rowspan: 2,
-                    iconAlign: 'top',
-                    arrowAlign:'right'
-                }),
-                Ext.apply(new Ext.Button(this.actions_composeEmail), {
-                    scale: 'medium',
-                    rowspan: 2,
-                    iconAlign: 'top'
-                }),
-                this.actions_exportContact,
-                this.actions_import
-            ]
-        };
+        return [
+            Ext.apply(new Ext.SplitButton(this.actions_callContact), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top',
+                arrowAlign:'right'
+            }),
+            Ext.apply(new Ext.Button(this.actions_composeEmail), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            }),
+            Ext.apply(new Ext.Button(this.actions_exportContact), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            }),
+            Ext.apply(new Ext.Button(this.actions_import), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            })
+        ];
     },
     
     /**
