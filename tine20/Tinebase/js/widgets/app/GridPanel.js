@@ -513,11 +513,32 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
     
     getActionToolbar: function() {
         if (! this.actionToolbar) {
+            var defaultItems = [
+                Ext.apply(new Ext.Button(this.action_addInNewWindow), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top',
+                    arrowAlign:'right'
+                }),
+                Ext.apply(new Ext.Button(this.action_editInNewWindow), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top'
+                }),
+                Ext.apply(new Ext.Button(this.action_deleteRecord), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top'
+                })
+            ];
+            
+            var additionalItems = this.getActionToolbarItems();
+            
             this.actionToolbar = new Ext.Toolbar({
                 defaults: {height: 55},
                 items: [{
                     xtype: 'buttongroup',
-                    columns: 3,
+                    columns: defaultItems.length + (Ext.isArray(additionalItems) ? additionalItems.length : 0),
                     items: [
                         Ext.apply(new Ext.Button(this.action_addInNewWindow), {
                             scale: 'medium',
@@ -535,8 +556,8 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
                             rowspan: 2,
                             iconAlign: 'top'
                         })
-                    ]
-                }, this.getActionToolbarItems()]
+                    ].concat(Ext.isArray(additionalItems) ? additionalItems : [])
+                }].concat(Ext.isArray(additionalItems) ? [] : [additionalItems])
             });
             
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
