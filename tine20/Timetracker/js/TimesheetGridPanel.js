@@ -490,6 +490,13 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
                 ]
             }
         });
-        return ['-', this.exportButton];
+        
+        return [
+            Ext.apply(new Ext.Button(this.exportButton), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            })
+        ];
     } 
 });
