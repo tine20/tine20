@@ -96,6 +96,8 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
      * returns cached credentials
      *
      * @param Tinebase_Model_CredentialCache
+     * @trows Tinebase_Exception_InvalidArgument
+     * @trows Tinebase_Exception_NotFound
      */
     public function getCachedCredentials($_cache)
     {
