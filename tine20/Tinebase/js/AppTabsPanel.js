@@ -30,14 +30,9 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
     stateId: 'tinebase-mainscreen-apptabs',
     
     /**
-     * @cfg {Array} defaultTabs
+     * @cfg {Array} of Strings currentTab ids
      */
-    currentTabs: null/*
-        'Addressbook',
-        'Calendar',
-        'Felamimail',
-        'Tasks'
-    ]*/,
+    currentTabs: null,
     
     /**
      * init appTabsPanel
@@ -67,6 +62,11 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
         this.on('remove', this.onTabChange, this);
         
         this.supr().initComponent.call(this);
+        
+        // fake an access stack
+        for (var i=1, tabCount=this.items.getCount(); i<tabCount; i++) {
+            this.stack.add(this.items.get(i));
+        }
     },
 
     /**
