@@ -98,18 +98,14 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @return {Object}
      */
     getActionToolbarItems: function() {
-        return {
-            xtype: 'buttongroup',
-            columns: 1,
-            items: [
-                Ext.apply(new Ext.SplitButton(this.actions_exportLead), {
-                    scale: 'medium',
-                    rowspan: 2,
-                    iconAlign: 'top',
-                    arrowAlign:'right'
-                })
-            ]
-        };
+        return [
+            Ext.apply(new Ext.SplitButton(this.actions_exportLead), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top',
+                arrowAlign:'right'
+            })
+        ];
     },
     
     /**
