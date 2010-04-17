@@ -323,7 +323,11 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
             
             if ($userCredentialCache !== NULL) {
-                $credentialsBackend->getCachedCredentials($userCredentialCache);
+                try {
+                    $credentialsBackend->getCachedCredentials($userCredentialCache);
+                } catch (Exception $e) {
+                    return FALSE;
+                }
             } else {
                 Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
                     . ' Something went wrong with the CredentialsCache / use given imap username/password instead.'
