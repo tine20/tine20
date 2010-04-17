@@ -213,14 +213,20 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @param {Object} [defaultContainer]
      */
     getSelectedContainer: function(requiredGrant, defaultContainer) {
-        var container = defaultContainer;
+        var container = defaultContainer,
+            sm = this.getSelectionModel(),
+            selection = typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
         
-        var node = this.getSelectionModel().getSelectedNode();
-            
-        if (node && Tine.Tinebase.container.pathIsContainer(node.attributes.container.path)) {
-            if (! requiredGrant || this.hasGrant(requiredGrant, node)) {
-                container = node.attributes.container;
-            }
+        if (Ext.isArray(selection)) {
+            Ext.each(selection, function(node) {
+                if (node && Tine.Tinebase.container.pathIsContainer(node.attributes.container.path)) {
+                    if (! requiredGrant || this.hasGrant(node, requiredGrant)) {
+                        container = node.attributes.container;
+                        // take the first one
+                        return false;
+                    }
+                }
+            }, this);
         }
         
         return container;
@@ -257,7 +263,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     hasGrant: function(node, grant) {
         var attr = node.attributes;
-        return (attr.leaf && attr.container.account_grants[grant]);
+        return (attr && attr.leaf && attr.container.account_grants[grant]);
     },
     
     /**
