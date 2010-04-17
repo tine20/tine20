@@ -28,6 +28,11 @@ Ext.extend(Tine.Tasks.TreePanel , Tine.widgets.container.TreePanel, {
     getAddContainer: function() {
         var container = Tine.Tasks.registry.get('defaultContainer');
         return this.getSelectedContainer('addGrant', container);
+    },
+    
+    afterRender: function() {
+        this.supr().afterRender.apply(this, arguments);
+        this.selectContainerPath(Tine.Tinebase.container.getMyNodePath());
     }
 });
 
