@@ -558,19 +558,22 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var eventEls = event.ui.getEls();
         
         var bodyCls = event.get('is_all_day_event') ? 'cal-daysviewpanel-wholedayevent-body' : 'cal-daysviewpanel-event-body';
-        event.summaryEditor = new Ext.form.TextField({
+        event.summaryEditor = new Ext.form.TextArea({
             event: event,
             renderTo: eventEls[0].down('div[class=' + bodyCls + ']'),
-            width: '90%',
+            width: event.ui.getEls()[0].getWidth() -12,
+            height: event.ui.getEls()[0].getHeight() -18,
+            style: 'background-color: transparent; background: 0: border: 0;',
             value: this.newEventSummary,
+            enableKeyEvents: true,
             listeners: {
                 scope: this,
                 render: function(field) {
                     field.focus(true, 100);
                 },
                 blur: this.endEditSummary,
-                specialkey: this.endEditSummary/*,
-                keydown: this.endEditSummary*/
+                specialkey: this.endEditSummary,
+                keydown: this.endEditSummary
             }
             
         });
@@ -748,7 +751,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         if (! rz.durationEl) {
             rz.durationEl = rz.el.insertFirst({
                 'class': 'cal-daysviewpanel-event-rzduration',
-                'style': 'position: absolute; bottom: 3px; right: 2px;'
+                'style': 'position: absolute; bottom: 3px; right: 2px; z-index: 1000;'
             });
         }
         rz.durationEl.update(event.get('dtend').format(event.get('is_all_day_event') ? Ext.form.DateField.prototype.format : 'H:i'));
