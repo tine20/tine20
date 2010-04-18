@@ -270,6 +270,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             this.resizeable = new Ext.Resizable(eventEl, {
                 handles: 'e',
                 disableTrackOver: true,
+                dynamic: true,
                 //dynamic: !!this.event.isRangeAdd,
                 widthIncrement: Math.round(offsetWidth / view.numOfDays),
                 minWidth: Math.round(offsetWidth / view.numOfDays),
@@ -347,7 +348,8 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 this.resizeable = new Ext.Resizable(eventEl, {
                     handles: 's',
                     disableTrackOver: true,
-                    dynamic: !!this.event.isRangeAdd,
+                    dynamic: true,
+                    //dynamic: !!this.event.isRangeAdd,
                     heightIncrement: view.granularityUnitHeights/2,
                     listeners: {
                         scope: view,
