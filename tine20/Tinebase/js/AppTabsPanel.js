@@ -85,6 +85,12 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
                 floating: false,
                 columnWidth: 0.5,
                 hidden: false,
+                listeners: {
+	                scope: this,
+	                itemclick: function(item, e) {
+	                    this.menu.hide();
+	                }
+	            },
                 style: {
                     //'border-color': 'transparent'
                     'border': '0'
