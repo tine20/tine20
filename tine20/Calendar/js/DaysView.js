@@ -532,21 +532,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 }
             }, this);
             
-            // fix duration when mouse already has been moved
-//            event.ui.resizeable.onMouseMove = event.ui.resizeable.onMouseMove.createSequence(function(e, target) {
-//                var eventXY = e.getXY();
-//                
-//                if (event.get('is_all_day_event')) {
-//                    
-//                    //this.resizeElement();
-//                } else {
-//                    var height = eventXY[1] - this.proxy.getTop();
-//                    
-//                    this.proxy.setHeight(height);
-//                    this.resizeElement();
-//                }
-//            }, event.ui.resizeable);
-            
             var rzPos = event.get('is_all_day_event') ? 'east' : 'south';
             
             if (Ext.isIE) {
@@ -561,15 +546,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     abortCreateEvent: function(event) {
-        var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
-        
-        this.ds.suspendEvents();
         this.ds.remove(event);
-        this.ds.resumeEvents();
-        
-        registry.unregister(event);
-        this.removeEvent(event);
-        
         this.editing = false;
     },
     
