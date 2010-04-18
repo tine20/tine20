@@ -778,7 +778,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         if (rzInfo.diff != 0) {
             event.set('dtend', rzInfo.dtend);
         }
-
+        
+        if (event.summaryEditor) {
+            event.summaryEditor.setHeight(event.ui.getEls()[0].getHeight() -18);
+        }
+        
         // don't fire update events on rangeAdd
         if (rzInfo.diff != 0 && event != this.editing && ! event.isRangeAdd) {
             this.fireEvent('updateEvent', event);
