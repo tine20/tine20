@@ -533,19 +533,19 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             }, this);
             
             // fix duration when mouse already has been moved
-            event.ui.resizeable.onMouseMove = event.ui.resizeable.onMouseMove.createSequence(function(e, target) {
-                var eventXY = e.getXY();
-                
-                if (event.get('is_all_day_event')) {
-                    
-                    //this.resizeElement();
-                } else {
-                    var height = eventXY[1] - this.proxy.getTop();
-                    
-                    this.proxy.setHeight(height);
-                    this.resizeElement();
-                }
-            }, event.ui.resizeable);
+//            event.ui.resizeable.onMouseMove = event.ui.resizeable.onMouseMove.createSequence(function(e, target) {
+//                var eventXY = e.getXY();
+//                
+//                if (event.get('is_all_day_event')) {
+//                    
+//                    //this.resizeElement();
+//                } else {
+//                    var height = eventXY[1] - this.proxy.getTop();
+//                    
+//                    this.proxy.setHeight(height);
+//                    this.resizeElement();
+//                }
+//            }, event.ui.resizeable);
             
             var rzPos = event.get('is_all_day_event') ? 'east' : 'south';
             
@@ -763,13 +763,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             var rzInfo = ui.getRzInfo(this);
             
             this.durationEl.update(rzInfo.dtend.format(event.get('is_all_day_event') ? Ext.form.DateField.prototype.format : 'H:i'));
-        });
+        }, rz);
         
         event.ui.markDirty();
         
         // NOTE: Ext keeps proxy if element is not destroyed (diff !=0)
         if (! rz.durationEl) {
-            rz.durationEl = rz.proxy.insertFirst({
+            rz.durationEl = rz.el.insertFirst({
                 'class': 'cal-daysviewpanel-event-rzduration',
                 'style': 'position: absolute; bottom: 3px; right: 2px;'
             });
