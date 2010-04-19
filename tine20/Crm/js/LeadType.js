@@ -19,10 +19,35 @@ Ext.namespace('Tine.Crm', 'Tine.Crm.LeadType');
  * 
  * lead type model
  */ 
-Tine.Crm.LeadType.Model = Ext.data.Record.create([
+Tine.Crm.LeadType.Model = Tine.Tinebase.data.Record.create([
    {name: 'id', type: 'int'},
    {name: 'leadtype'}
-]);
+], {
+    appName: 'Crm',
+    modelName: 'LeadType',
+    idProperty: 'id',
+    titleProperty: 'leadtype',
+    // ngettext('Lead Type', 'Lead Types', n);
+    recordName: 'Lead Type',
+    recordsName: 'Lead Types'
+});
+
+/**
+ * @namespace Tine.Crm.LeadType
+ * 
+ * get default data for a new leadtype
+ *  
+ * @return {Object} default data
+ * @static
+ */ 
+Tine.Crm.LeadType.Model.getDefaultData = function() {
+    
+    var data = {
+        id: Math.random().toString().split('.')[1]
+    };
+    
+    return data;
+};
 
 /**
  * get lead type store

@@ -20,12 +20,37 @@ Ext.namespace('Tine.Crm', 'Tine.Crm.LeadState');
  * 
  * lead state model
  */ 
-Tine.Crm.LeadState.Model = Ext.data.Record.create([
-    {name: 'id'},
+Tine.Crm.LeadState.Model = Tine.Tinebase.data.Record.create([
+    {name: 'id', type: 'int'},
     {name: 'leadstate'},
-    {name: 'probability'},
+    {name: 'probability', type: 'int'},
     {name: 'endslead', type: 'boolean'}
-]);
+], {
+    appName: 'Crm',
+    modelName: 'LeadState',
+    idProperty: 'id',
+    titleProperty: 'leadstate',
+    // ngettext('Lead State', 'Lead States', n);
+    recordName: 'Lead State',
+    recordsName: 'Lead States'
+});
+
+/**
+ * @namespace Tine.Crm.LeadState
+ * 
+ * get default data for a new leadstate
+ *  
+ * @return {Object} default data
+ * @static
+ */ 
+Tine.Crm.LeadState.Model.getDefaultData = function() {
+    
+    var data = {
+        id: Math.random().toString().split('.')[1]
+    };
+    
+    return data;
+};
 
 /**
  * get lead state store

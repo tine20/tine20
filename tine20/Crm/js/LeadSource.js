@@ -19,10 +19,35 @@ Ext.namespace('Tine.Crm', 'Tine.Crm.LeadSource');
  * 
  * lead source model
  */ 
-Tine.Crm.LeadSource.Model = Ext.data.Record.create([
+Tine.Crm.LeadSource.Model = Tine.Tinebase.data.Record.create([
    {name: 'id', type: 'int'},
    {name: 'leadsource'}
-]);
+], {
+    appName: 'Crm',
+    modelName: 'LeadState',
+    idProperty: 'id',
+    titleProperty: 'leadsource',
+    // ngettext('Lead Source', 'Lead Sources', n);
+    recordName: 'Lead Source',
+    recordsName: 'Lead Sources'
+});
+
+/**
+ * @namespace Tine.Crm.LeadSource
+ * 
+ * get default data for a new leadsource
+ *  
+ * @return {Object} default data
+ * @static
+ */ 
+Tine.Crm.LeadSource.Model.getDefaultData = function() {
+    
+    var data = {
+        id: Math.random().toString().split('.')[1]
+    };
+    
+    return data;
+};
 
 /**
  * get lead source store
