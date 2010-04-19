@@ -45,9 +45,7 @@ Tine.Calendar.FilterPanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker,
  * @version     $Id$
  */
 Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
-    //stateEvents: ['expandnode', 'collapsenode', 'checkchange'],
-    //stateful: true,
-    //stateId: 'cal-calendartree-containers',
+
     recordClass: Tine.Calendar.Model.Event,
     ddGroup: 'cal-event',
     filterMode: 'filterToolbar',
@@ -97,5 +95,42 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
                 }
             }
         };
+    },
+    
+    /**
+     * called when events are droped on a calendar node
+     * 
+     * NOTE: atm. event panels only allow d&d for single events
+     * 
+     * @private
+     * @param  {Ext.Event} dropEvent
+     * @return {Boolean}
+     */
+    onBeforeNodeDrop: function(dropEvent) {
+        var containerData = dropEvent.target.attributes,
+            selection = dropEvent.data.selections,
+            abort = false;
+        
+        // @todo move this to dragOver
+        if (! containerData.account_grants.addGrant) {
+            abort = true;
+        }
+        
+        Ext.each(selection, function(event) {
+            // origin container will be moved if user is organizer of event
+            // otherwise only displycontainer will be moved
+            
+            // rethink: if the user has deleteGrant to orign calendar we also 
+            // could move orign without the user being organizer...
+            // we might need to have a look if the user 'sees' orign or display cal
+            
+            abort = true;
+        }, this);
+        
+        if (abort) {
+            return false;
+        }
+        
+        // send request
     }
 });
