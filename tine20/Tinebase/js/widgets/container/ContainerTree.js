@@ -149,6 +149,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         this.dropConfig = {
             ddGroup: this.ddGroup || 'TreeDD',
             appendOnly: this.ddAppendOnly === true,
+            /**
+             * @todo check acl!
+             */
             onNodeOver : function(n, dd, e, data) {
                 var node = n.node;
                 
