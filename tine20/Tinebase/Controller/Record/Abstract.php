@@ -716,10 +716,8 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAlarmSet(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting alarm time for ' . $this->_recordAlarmField 
-            . ' ' . print_r($_alarm->toArray(), TRUE)
-            //. print_r($_record->toArray(), TRUE)
-        );
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting alarm time for ' . $this->_recordAlarmField);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' alarm data: ' . print_r($_alarm->toArray(), TRUE));
         
         // check if alarm field is Zend_Date
         if (! $_alarm->alarm_time instanceof Zend_Date) {
