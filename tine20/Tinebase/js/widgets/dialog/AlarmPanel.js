@@ -6,7 +6,6 @@
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         add custom alarm datetime
  * TODO         make multiple alarms possible
  * TODO         add custom 'alarm time before' inputfield + combo (with min/day/week/...)
  * TODO         add combo with 'alarm for' single attender / all attendee (extend this panel in calendar?)
@@ -37,14 +36,15 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
     getFormItems: function() {
         
         this.customDateField = new Ext.ux.form.DateTimeField({
-            // TODO fix the height of the date + time fields
+	        fieldLabel: _('Custom Datetime'),
             name        : 'alarm_date',
-            disabled    : true,
-            columnWidth : 0.66
+            //disabled    : true,
+            anchor      : '90%'
         });
         
         this.alarmCombo = new Ext.form.ComboBox({
-            columnWidth     : 0.33,
+	        fieldLabel      : _('Send Alarm'),
+            anchor          : '90%',
             name            : 'alarm_time_before',
             typeAhead       : false,
             triggerAction   : 'all',
@@ -60,8 +60,8 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
                 ['30',      _('30 minutes before')],
                 ['60',      _('1 hour before')],
                 ['120',     _('2 hours before')],
-                ['1440',    _('1 day before')]
-                //['custom',  _('Custom datetime')]
+                ['1440',    _('1 day before')],
+                ['custom',  _('Custom datetime')]
             ],
             listeners       : {
                 scope: this,
@@ -73,7 +73,7 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
         });
         
         return {
-            layout: 'column',
+            layout: 'form',
             items: [
                 this.alarmCombo, 
                 this.customDateField
@@ -92,10 +92,20 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
         // set combo
         if (record.get('alarms') && record.get('alarms').length > 0) {
             // only get first alarm at the moment
+            //var alarm = new Tine.Tinebase.Model.Alarm(record.get('alarms')[0]);
             var alarm = record.get('alarms')[0];
-            this.alarmCombo.setValue(alarm.minutes_before);
+            var options = Ext.util.JSON.decode(alarm.options);
             
-            // TODO get custom date if set (and enable field)
+            if (options && options.custom /*&& options.custom == true*/) {
+                var date = Date.parseDate(alarm.alarm_time, Date.patterns.ISO8601Long);
+                // get custom date if set (and enable field)
+                this.customDateField.setValue(date);
+                this.customDateField.setDisabled(false);
+                this.alarmCombo.setValue('custom');
+            } else {
+                this.customDateField.setDisabled(true);
+                this.alarmCombo.setValue(alarm.minutes_before);
+            }
         }
     },
 
@@ -112,10 +122,13 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
         if (comboValue != 'none') {
             // update or create
             alarm = (record.get('alarms') && record.get('alarms').length > 0) ? record.get('alarms')[0] : {};
-            alarm.minutes_before = comboValue;
+            if (comboValue == 'custom') {
+                // set custom date if set
+                alarm.alarm_time = this.customDateField.getValue();
+            } else {
+                alarm.minutes_before = comboValue;
+            }
         }
-        
-        // TODO set custom date if set
         
         // we need to initialze alarms because stringcompare would detect no change of the arrays
         record.set('alarms', '');
