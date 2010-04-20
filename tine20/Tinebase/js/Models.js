@@ -243,7 +243,7 @@ Tine.Tinebase.Model.Alarm = Ext.data.Record.create([
     {name: 'id'             },
     {name: 'record_id'      },
     {name: 'model'          },
-    {name: 'alarm_time'     },
+    {name: 'alarm_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long     },
     {name: 'minutes_before' },
     {name: 'sent_time'      },
     {name: 'sent_status'    },
