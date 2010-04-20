@@ -717,15 +717,22 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _inspectAlarmSet(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm)
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting alarm time for ' . $this->_recordAlarmField 
-            //. ' ' . print_r($_alarm->toArray(), true)
-            //. print_r($_record->toArray(), true)
+            . ' ' . print_r($_alarm->toArray(), TRUE)
+            //. print_r($_record->toArray(), TRUE)
         );
         
         // check if alarm field is Zend_Date
-        if ($_record->{$this->_recordAlarmField} instanceof Zend_Date && isset($_alarm->minutes_before)) {
-            $_alarm->setTime($_record->{$this->_recordAlarmField});
+        if (! $_alarm->alarm_time instanceof Zend_Date) {
+            if ($_record->{$this->_recordAlarmField} instanceof Zend_Date && isset($_alarm->minutes_before)) {
+                $_alarm->setTime($_record->{$this->_recordAlarmField});
+            } else {
+                throw new Tinebase_Exception_InvalidArgument('Record has no alarm field, no alarm time set or minutes before are missing.');
+            }
         } else {
-            throw new Tinebase_Exception_InvalidArgument('Record has no alarm field or minutes before are missing.');
+            // save in options that we have a custom defined datetime for the alarm
+            $_alarm->options = Zend_Json::encode(array(
+                'custom'         => TRUE,
+            ));
         }
     }
     

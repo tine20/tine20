@@ -91,6 +91,21 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->_backend->deleteTasks(array($returned['id']));
     }
     
+
+    /**
+     * test create task with alarm
+     *
+     */
+    public function testCreateTaskWithAlarmTime()
+    {
+        $task = $this->_getTaskWithAlarm(array(
+            'alarm_time'    => Zend_Date::now()
+        ));
+        
+        $persistentTaskData = $this->_backend->saveTask($task->toArray());
+        $this->_checkAlarm($persistentTaskData);
+    }
+    
     /**
      * test create task with alarm
      *
@@ -101,12 +116,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         
         $persistentTaskData = $this->_backend->saveTask($task->toArray());
         $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
-        
-        // check if alarms are created / returned
-        $this->assertGreaterThan(0, count($loadedTaskData['alarms']));
-        $this->assertEquals('Tasks_Model_Task', $loadedTaskData['alarms'][0]['model']);
-        $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $loadedTaskData['alarms'][0]['sent_status']);
-        $this->assertTrue(array_key_exists('minutes_before', $loadedTaskData['alarms'][0]), 'minutes_before is missing');
+        $this->_checkAlarm($loadedTaskData);
         
         // try to send alarm
         $event = new Tinebase_Event_Async_Minutely();
@@ -122,6 +132,20 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($persistentTaskData['alarms']));
     }
 
+    /**
+     * check alarm of task
+     * 
+     * @param array $_taskData
+     */
+    protected function _checkAlarm($_taskData)
+    {
+        // check if alarms are created / returned
+        $this->assertGreaterThan(0, count($_taskData['alarms']));
+        $this->assertEquals('Tasks_Model_Task', $_taskData['alarms'][0]['model']);
+        $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $_taskData['alarms'][0]['sent_status']);
+        $this->assertTrue(array_key_exists('minutes_before', $_taskData['alarms'][0]), 'minutes_before is missing');
+    }
+    
     /**
      * test create task with automatic alarm
      *
@@ -337,19 +361,19 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * get task record
      *
+     * @param $_alarmData alarm settings
      * @return Tasks_Model_Task
      */
-    protected function _getTaskWithAlarm()
+    protected function _getTaskWithAlarm($_alarmData = NULL)
     {
         $task = new Tasks_Model_Task(array(
             'summary'       => 'minimal task with alarm by PHPUnit::Tasks_ControllerTest',
             'due'           => new Zend_Date()
         ));
-        $task->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
-            array(
-                'minutes_before'    => 0
-            ),
-        ), TRUE);
+        $alarmData = ($_alarmData !== NULL) ? $_alarmData : array(
+            'minutes_before'    => 0
+        );
+        $task->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array($alarmData), TRUE);
         return $task;
     }
     
