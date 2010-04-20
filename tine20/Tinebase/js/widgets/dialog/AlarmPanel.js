@@ -125,9 +125,8 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
             if (comboValue == 'custom') {
                 // set custom date if set
                 alarm.alarm_time = this.customDateField.getValue();
-            } else {
-                alarm.minutes_before = comboValue;
             }
+            alarm.minutes_before = comboValue;
         }
         
         // we need to initialze alarms because stringcompare would detect no change of the arrays

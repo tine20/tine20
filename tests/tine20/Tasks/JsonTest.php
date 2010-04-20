@@ -99,7 +99,8 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     public function testCreateTaskWithAlarmTime()
     {
         $task = $this->_getTaskWithAlarm(array(
-            'alarm_time'    => Zend_Date::now()
+            'alarm_time'        => Zend_Date::now(),
+            'minutes_before'    => 'custom',
         ));
         
         $persistentTaskData = $this->_backend->saveTask($task->toArray());

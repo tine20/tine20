@@ -701,7 +701,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         // if alarm time has been set, we don't need to calculate it and set minutes_before to 0
-        if ($_alarm->alarm_time instanceof Zend_Date) {
+        if ($_alarm->alarm_time instanceof Zend_Date && $_alarm->minutes_before == 'custom') {
             $_alarm->minutes_before = 0;
             $customDateTime = TRUE;
         } else {

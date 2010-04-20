@@ -720,7 +720,7 @@ abstract class Tinebase_Controller_Record_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' alarm data: ' . print_r($_alarm->toArray(), TRUE));
         
         // check if alarm field is Zend_Date
-        if (! $_alarm->alarm_time instanceof Zend_Date) {
+        if (! ($_alarm->alarm_time instanceof Zend_Date && $_alarm->minutes_before == 'custom')) {
             if ($_record->{$this->_recordAlarmField} instanceof Zend_Date && isset($_alarm->minutes_before)) {
                 $_alarm->setTime($_record->{$this->_recordAlarmField});
             } else {
