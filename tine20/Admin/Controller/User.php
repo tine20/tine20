@@ -26,11 +26,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 	protected $_userBackend = NULL;
 	
 	/**
-	 * @var bool
-	 */
-	protected $_manageSAM = FALSE;
-	
-	/**
 	 * @var Tinebase_SambaSAM_Ldap
 	 */
 	protected $_samBackend = NULL;
@@ -65,15 +60,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->_currentAccount = Tinebase_Core::getUser();        
         $this->_applicationName = 'Admin';
 		
-		$this->_userBackend = Tinebase_User::getInstance();
-
-		// manage samba sam?
-		if(Tinebase_User::getConfiguredBackend() == Tinebase_User::LDAP && isset(Tinebase_Core::getConfig()->samba)) {
-			$this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE); 
-			if ($this->_manageSAM) {
-				$this->_samBackend = Tinebase_SambaSAM::getInstance();
-			}
-		}
+        $this->_userBackend = Tinebase_User::getInstance();
 
         // manage email user settings
         if (Tinebase_EmailUser::manages(Tinebase_Model_Config::IMAP)) {
@@ -163,11 +150,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $user = $this->_userBackend->getUserById($_accountId, 'Tinebase_Model_FullUser');
         
-        if ($this->_manageSAM) {
-            $samUser = $this->_samBackend->getUserById($_accountId);
-            $user->sambaSAM = $samUser;
-        }
-        
         // add email user data here
         $user->emailUser = $this->_getEmailUser($user);
         
@@ -187,10 +169,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $result = $this->_userBackend->setStatus($_accountId, $_status);
         
-        if ($this->_manageSAM) {
-            $samResult = $this->_samBackend->setStatus($_accountId, $_status);
-        }
-
         return $result;
     }
     
@@ -220,10 +198,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             __METHOD__ . '::' . __LINE__ . 
             ' Set new password for user ' . $_account->accountLoginName . '. Must change:' . $_mustChange
         );
-        
-        if ($this->_manageSAM) {
-            $samResult = $this->_samBackend->setPassword($_account, $_password, TRUE, $_mustChange);
-        }
         
         $this->_setEmailUserPassword($_account->getId(), $_password);
         
@@ -263,11 +237,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $event->account = $account;
         Tinebase_Event::fireEvent($event);
         
-        if ($this->_manageSAM) {
-            $samResult = $this->_samBackend->updateUser($_account, $_account->sambaSAM);
-            $account->sambaSAM = $samResult;
-        }
-        
         // update email user settings
         $this->_updateEmailUser($account, $_account->emailUser);
         
@@ -299,11 +268,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $event = new Admin_Event_AddAccount();
         $event->account = $account;
         Tinebase_Event::fireEvent($event);
-        
-        if ($this->_manageSAM) {
-            $samResult = $this->_samBackend->addUser($account, $_account->sambaSAM);
-            $account->sambaSAM = $samResult;
-        }
         
         // create email user data here
         $this->_createEmailUser($account, $_account->emailUser);
@@ -344,9 +308,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             }
             
             $this->_userBackend->deleteUser($accountId);
-            if ($this->_manageSAM) {
-                $this->_samBackend->deleteUser($accountId);
-            }
         }
     }
     
