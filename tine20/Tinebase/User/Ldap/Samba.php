@@ -180,7 +180,7 @@ class Tinebase_User_Ldap_Samba
 	        );
 	        
 	        // count can not be 0 under normal conditions
-	        if(count($accounts) == 0) {
+	        if (count($accounts) == 0) {
 	            throw new Tinebase_Exception_NotFound('Account not found in LDAP: ' . $filter->toString());
 	        }
 	        
@@ -245,13 +245,13 @@ class Tinebase_User_Ldap_Samba
             array('uidnumber')
         );
         
-        if(count($users) == 0) {
+        if (count($users) == 0) {
             throw new Tinebase_Exception_NotFound('User not found! Filter: ' . $filter->toString());
         }
         
         $user = $users->getFirst();
         
-        if(empty($user['uidnumber'][0])) {
+        if (empty($user['uidnumber'][0])) {
             throw new Tinebase_Exception_NotFound('User has no uidnumber');
         }
         
@@ -277,13 +277,13 @@ class Tinebase_User_Ldap_Samba
             array('sambasid')
         );
         
-        if(count($groups) == 0) {
+        if (count($groups) == 0) {
             throw new Tinebase_Exception_NotFound('Group not found! Filter: ' . $filter->toString());
         }
         
         $group = $groups->getFirst();
         
-        if(empty($group['sambasid'][0])) {
+        if (empty($group['sambasid'][0])) {
             throw new Tinebase_Exception_NotFound('Group has no sambaSID');
         }
         
