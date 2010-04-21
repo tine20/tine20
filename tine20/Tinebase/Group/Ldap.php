@@ -42,6 +42,13 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     protected $_options;
     
     /**
+     * list of plugins 
+     * 
+     * @var array
+     */
+    protected $_plugins = array();
+    
+    /**
      * name of the ldap attribute which identifies a group uniquely
      * for example gidNumber, entryUUID, objectGUID
      * @var string
@@ -88,20 +95,48 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      *
      * @param  array $options Options used in connecting, binding, etc.
      */
-    public function __construct(array $_options) {
+    public function __construct(array $_options) 
+    {
+        if(empty($_options['userUUIDAttribute'])) {
+            $_options['userUUIDAttribute'] = 'entryUUID';
+        }
+        if(empty($_options['groupUUIDAttribute'])) {
+            $_options['groupUUIDAttribute'] = 'entryUUID';
+        }
+        if(empty($_options['baseDn'])) {
+            $_options['baseDn'] = $_options['userDn'];
+        }
+        if(empty($_options['userFilter'])) {
+            $_options['userFilter'] = 'objectclass=posixaccount';
+        }
+        if(empty($_options['userSearchScope'])) {
+            $_options['userSearchScope'] = Zend_Ldap::SEARCH_SCOPE_SUB;
+        }
+        if(empty($_options['groupFilter'])) {
+            $_options['groupFilter'] = 'objectclass=posixgroup';
+        }
+
+        if (isset($_options['requiredObjectClass'])) {
+            $this->_requiredObjectClass = (array)$_options['requiredObjectClass'];
+        }
+
         $this->_options = $_options;
-        
-        $this->_userUUIDAttribute  = isset($_options['userUUIDAttribute'])  ? strtolower($_options['userUUIDAttribute'])  : 'entryuuid';
-        $this->_groupUUIDAttribute = isset($_options['groupUUIDAttribute']) ? strtolower($_options['groupUUIDAttribute']) : 'entryuuid';
-        $this->_userBaseFilter     = isset($_options['userFilter'])         ? $_options['userFilter']         : 'objectclass=posixaccount';
-        $this->_groupBaseFilter    = isset($_options['groupFilter'])        ? $_options['groupFilter']        : 'objectclass=posixgroup';
-        $this->_groupSearchScope   = isset($_options['groupSearchScope'])   ? $_options['groupSearchScope']   : Zend_Ldap::SEARCH_SCOPE_SUB;
-        $this->_userSearchScope    = isset($_options['userSearchScope'])    ? $_options['userSearchScope']    : Zend_Ldap::SEARCH_SCOPE_SUB;
-        
+
+        $this->_userUUIDAttribute  = $this->_options['userUUIDAttribute'];
+        $this->_groupUUIDAttribute = $this->_options['groupUUIDAttribute'];
+        $this->_baseDn             = $this->_options['baseDn'];
+        $this->_userBaseFilter     = $this->_options['userFilter'];
+        $this->_userSearchScope    = $this->_options['userSearchScope'];
+        $this->_groupBaseFilter    = $this->_options['groupFilter'];
+                
         $this->_ldap = new Tinebase_Ldap($_options);
         $this->_ldap->bind();
         
         $this->_sql = new Tinebase_Group_Sql();
+        
+        foreach ($_options['plugins'] as $className) {
+            $this->_plugins[$className] = new $className($this->_ldap, $this->_options);
+        }
     }
         
     /**
@@ -452,7 +487,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             // to set the member attribute to the group dn itself for empty groups
             $ldapData['member']        = $dn;
         }
-        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
         foreach ($this->_plugins as $plugin) {
             $plugin->inspectAddGroup($_group, $ldapData);
         }
@@ -501,6 +536,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             'cn'          => $_group->name,
             'description' => $_group->description,
         );
+        
+        foreach ($this->_plugins as $plugin) {
+            $plugin->inspectUpdateGroup($_group, $ldapData);
+        }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
