@@ -138,18 +138,30 @@ class Tinebase_User
      */
     public static function factory($_backendType) 
     {
-        switch($_backendType) {
+        switch ($_backendType) {
             case self::LDAP:
                 $options = self::getBackendConfiguration();
+                
+                $options['plugins'] = array();
+                
+		        // manage samba sam?
+		        if (isset(Tinebase_Core::getConfig()->samba) && Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE) == true) {
+	                $options['plugins'][] = Tinebase_User_Ldap::PLUGIN_SAMBA;
+	                $options[Tinebase_User_Ldap::PLUGIN_SAMBA] = Tinebase_Core::getConfig()->samba->toArray(); 
+		        }
+                
                 $result  = new Tinebase_User_Ldap($options);
+                
                 break;
                 
             case self::SQL:
                 $result = new Tinebase_User_Sql();
+                
                 break;
             
             case self::TYPO3:
                 $result = new Tinebase_User_Typo3();
+                
                 break;
                 
             default:
