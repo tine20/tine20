@@ -11,16 +11,12 @@
  */
 
 /**
- * class Tinebase_SambaSAM_Ldap
+ * plugin to handle sambaSAM attributes
  * 
- * Samba Account Managing
- * 
- * todo: what about primaryGroupSID?
- *
  * @package Tinebase
  * @subpackage Samba
  */
-class Tinebase_User_Ldap_Samba
+class Tinebase_User_LdapPlugin_Samba
 {
 
     /**
