@@ -18,7 +18,7 @@
  */
 class Tinebase_User_Ldap extends Tinebase_User_Abstract
 {    
-	const PLUGIN_SAMBA = 'Tinebase_User_Ldap_Samba';
+	const PLUGIN_SAMBA = 'Tinebase_User_LdapPlugin_Samba';
 	
     /**
      * @var array
