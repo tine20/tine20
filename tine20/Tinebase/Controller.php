@@ -126,8 +126,7 @@ class Tinebase_Controller implements Tinebase_Event_Interface
      * change user password
      *
      * @param string $_oldPassword
-     * @param string $_newPassword1
-     * @param string $_newPassword2
+     * @param string $_newPassword
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_InvalidArgument
      */
