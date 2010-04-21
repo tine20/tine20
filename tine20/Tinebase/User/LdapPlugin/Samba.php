@@ -16,7 +16,7 @@
  * @package Tinebase
  * @subpackage User
  */
-class Tinebase_User_LdapPlugin_Samba
+class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interface
 {
 
     /**
