@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  Samba
+ * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -14,7 +14,7 @@
  * plugin to handle sambaSAM attributes
  * 
  * @package Tinebase
- * @subpackage Samba
+ * @subpackage User
  */
 class Tinebase_User_LdapPlugin_Samba
 {
