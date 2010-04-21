@@ -54,7 +54,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     protected $_userUUIDAttribute;
     
     /**
-     * direct mapping
+     * mapping of ldap attributes to class properties
      *
      * @var array
      */
@@ -127,22 +127,41 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function __construct(array $_options) 
     {
-        $this->_options = $_options;
-
-        if (isset($this->_options['requiredObjectClass'])) {
-            $this->_requiredObjectClass = (array)$this->_options['requiredObjectClass'];
+        if(empty($_options['userUUIDAttribute'])) {
+            $_options['userUUIDAttribute'] = 'entryUUID';
+        } 
+        if(empty($_options['groupUUIDAttribute'])) {
+            $_options['groupUUIDAttribute'] = 'entryUUID';
+        } 
+        if(empty($_options['baseDn'])) {
+            $_options['baseDn'] = $_options['userDn'];
+        } 
+        if(empty($_options['userFilter'])) {
+            $_options['userFilter'] = 'objectclass=posixaccount';
+        } 
+        if(empty($_options['userSearchScope'])) {
+            $_options['userSearchScope'] = Zend_Ldap::SEARCH_SCOPE_SUB;
+        } 
+        if(empty($_options['groupFilter'])) {
+            $_options['groupFilter'] = 'objectclass=posixgroup';
+        } 
+                
+        if (isset($_options['requiredObjectClass'])) {
+            $this->_requiredObjectClass = (array)$_options['requiredObjectClass'];
         }
         
-        $this->_userUUIDAttribute  = isset($_options['userUUIDAttribute'])  ? $_options['userUUIDAttribute']  : 'entryUUID';
-        $this->_groupUUIDAttribute = isset($_options['groupUUIDAttribute']) ? $_options['groupUUIDAttribute'] : 'entryUUID';
-        $this->_baseDn             = isset($_options['baseDn'])             ? $_options['baseDn']             : $_options['userDn'];
-        $this->_userBaseFilter     = isset($_options['userFilter'])         ? $_options['userFilter']         : 'objectclass=posixaccount';
-        $this->_userSearchScope    = isset($_options['userSearchScope'])    ? $_options['userSearchScope']    : Zend_Ldap::SEARCH_SCOPE_SUB;
-        $this->_groupBaseFilter    = isset($_options['groupFilter'])        ? $_options['groupFilter']        : 'objectclass=posixgroup';
+        $this->_options = $_options;
         
-        $this->_rowNameMapping['accountId'] = strtolower($this->_userUUIDAttribute);
+        $this->_userUUIDAttribute  = $this->_options['userUUIDAttribute'];
+        $this->_groupUUIDAttribute = $this->_options['groupUUIDAttribute'];
+        $this->_baseDn             = $this->_options['baseDn'];
+        $this->_userBaseFilter     = $this->_options['userFilter'];
+        $this->_userSearchScope    = $this->_options['userSearchScope'];
+        $this->_groupBaseFilter    = $this->_options['groupFilter'];
         
-        $this->_ldap = new Tinebase_Ldap($_options);
+        $this->_rowNameMapping['accountId'] = strtolower($this->_options['userUUIDAttribute']);
+        
+        $this->_ldap = new Tinebase_Ldap($this->_options);
         $this->_ldap->bind();
         
         $this->_sql = new Tinebase_User_Sql();
@@ -296,10 +315,15 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         } catch (Tinebase_Exception_NotFound $e) {
             // if not found we try to get the user from the ldap backend
             $fullUser = $this->getLdapUserByProperty($_property, $_accountId, 'Tinebase_Model_FullUser');
+            // and store the user in the sql cache
             $fullUser = $this->_sql->addUser($fullUser);
             
-            // fetch again to make sure the correct account class is used
+            // read again from sql backend to make sure the correct account class is used
             $user = $this->_sql->getUserByProperty('accountId', $fullUser, $_accountClass);
+        }
+        
+        foreach ($this->_plugins as $plugin) {
+            $plugin->inspectGetUserByProperty($user);
         }
         
         return $user;
@@ -491,7 +515,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     public function updateLdapUser(Tinebase_Model_FullUser $_account) 
     {
         $metaData = $this->_getMetaData($_account);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($metaData, true));
+        
         $ldapData = $this->_user2ldap($_account);
         
         // check if user has all required object classes. This is needed 
