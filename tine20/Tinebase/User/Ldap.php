@@ -25,6 +25,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     protected $_options = array();
 
+    /**
+     * list of plugins 
+     * 
+     * @var array
+     */
     protected $_plugins = array();
 
     /**
