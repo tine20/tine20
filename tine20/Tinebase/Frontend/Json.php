@@ -198,7 +198,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
         
         try {
-            Tinebase_Controller::getInstance()->changePassword($oldPassword, $newPassword, $newPassword);
+            Tinebase_Controller::getInstance()->changePassword($oldPassword, $newPassword, true);
         } catch (Tinebase_Exception $e) {
             $response = array(
                 'success'      => FALSE,
