@@ -29,11 +29,11 @@ class Tinebase_User_Ldap_Samba
     protected $_ldap = NULL;
 
     /**
-     * user properties mapping
+     * mapping of ldap attributes to class properties
      *
      * @var array
      */
-    protected $_userPropertyNameMapping = array(
+    protected $_rowNameMapping = array(
         'sid'              => 'sambasid', 
         'primaryGroupSID'  => 'sambaprimarygroupsid', 
         'acctFlags'        => 'sambaacctflags',
@@ -50,16 +50,6 @@ class Tinebase_User_Ldap_Samba
     );
     
     /**
-     * group properties mapping
-     *
-     * @var array
-     */
-    protected $_groupPropertyNameMapping = array(
-        'sid'              => 'sambasid', 
-        'groupType'        => 'sambagrouptype',
-    );
-
-    /**
      * objectclasses required for users
      *
      * @var array
@@ -69,18 +59,10 @@ class Tinebase_User_Ldap_Samba
     );
     
     /**
-     * objectclasses required for groups
-     *
-     * @var array
-     */
-    protected $_requiredGroupObjectClass = array(
-        'sambaGroupMapping'
-    );
-        
-    /**
      * the constructor
      *
-     * @param  array $options Options used in connecting, binding, etc.
+     * @param  Tinebase_Ldap  $_ldap    the ldap resource
+     * @param  array          $options  options used in connecting, binding, etc.
      */
     public function __construct(Tinebase_Ldap $_ldap, $_options = null) 
     {
@@ -100,15 +82,7 @@ class Tinebase_User_Ldap_Samba
      */
     public function inspectAddUser(Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
-        $_ldapData['objectclass'] = array_unique(array_merge($_ldapData['objectclass'], $this->_requiredUserObjectClass));
-        
-        // defaults
-        $_ldapData['sambasid']           = $this->_options[Tinebase_User_Ldap::PLUGIN_SAMBA]['sid'] . '-' . (2 * $_ldapData['uidnumber'] + 1000);
-        $_ldapData['sambaacctflags']     = $_user->accountStatus == 'disabled' ? '[UD         ]' : '[U          ]';
-        $_ldapData['sambapwdcanchange']  = 1;
-        $_ldapData['sambapwdmustchange'] = 2147483647;
-
-        $_ldapData['sambaprimarygroupsid'] = $this->getGroupById($_user->accountPrimaryGroup)->sid;
+        $this->_user2ldap($_user, $_ldapData);    
     }
     
     /**
@@ -119,7 +93,7 @@ class Tinebase_User_Ldap_Samba
      */
     public function inspectUpdateUser(Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
-        $this->inspectAddUser($_user, $_ldapData);
+        $this->_user2ldap($_user, $_ldapData);
     }
     
     public function inspectSetBlocked($_accountId, $_blockedUntilDate)
@@ -127,6 +101,12 @@ class Tinebase_User_Ldap_Samba
     	// does nothing
     }
     
+    /**
+     * inspect set expiry date
+     * 
+     * @param Zend_Date  $_expiryDate  the expirydate
+     * @param array      $_ldapData    the data to be written to ldap
+     */
     public function inspectExpiryDate($_expiryDate, array &$_ldapData)
     {
         if ($_expiryDate instanceof Zend_Date) {
@@ -137,6 +117,12 @@ class Tinebase_User_Ldap_Samba
         }
     }
     
+    /**
+     * inspect setStatus
+     * 
+     * @param string  $_status    the status
+     * @param array   $_ldapData  the data to be written to ldap
+     */
     public function inspectStatus($_status, array &$_ldapData)
     {
         $acctFlags = '[U          ]';
@@ -145,13 +131,23 @@ class Tinebase_User_Ldap_Samba
         $_ldapData['sambaacctflags'] = $acctFlags;    	
     }
     
+    /**
+     * inspect set password
+     * 
+     * @param string   $_loginName
+     * @param string   $_password
+     * @param boolean  $_encrypt
+     * @param boolean  $_mustChange
+     * @param array    $_ldapData    the data to be written to ldap
+     */
     public function inspectSetPassword($_loginName, $_password, $_encrypt, $_mustChange, array &$_ldapData)
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ENCRYPT ' . print_r($_loginName, true));
         if ($_encrypt !== true) {
             Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' can not transform crypted password into nt/lm samba password. Make sure to reset password for user ' . $_loginName);
         } else {
-            $_ldapData['sambantpassword'] = $this->_generateNTPassword($_password);
-            $_ldapData['sambalmpassword'] = $this->_generateLMPassword($_password);
+            $_ldapData['sambantpassword'] = Tinebase_User_Abstract::encryptPassword($_password, Tinebase_User_Abstract::ENCRYPT_NTPASSWORD);
+            $_ldapData['sambalmpassword'] = Tinebase_User_Abstract::encryptPassword($_password, Tinebase_User_Abstract::ENCRYPT_LMPASSWORD);
             $_ldapData['sambapwdlastset'] = Zend_Date::now()->getTimestamp();
             
             if ($_mustChange !== false) {
@@ -164,43 +160,182 @@ class Tinebase_User_Ldap_Samba
         }
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
     /**
-     * update user status
-     *
-     * @param   int         $_userId
-     * @param   string      $_status
+     * inspect get user by property
+     * 
+     * @param Tinebase_Model_User  $_user  the user object
      */
-    public function setStatus($_userId, $_status)
+    public function inspectGetUserByProperty(Tinebase_Model_User $_user)
     {
-        $metaData = $this->_getUserMetaData($_userId);
-        
-        $acctFlags = $this->getUserById($_userId)->acctFlags;
-        if (empty($currentFlags)) {
-            $acctFlags = '[U          ]';
-        }
-        $acctFlags[2] = $_status == 'disabled' ? 'D' : ' ';
-        $ldapData = array('sambaacctflags' => $acctFlags);
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
-        
-        $this->_ldap->update($metaData['dn'], $ldapData);
+    	if ($_user->has('sambaSAM')) {
+	        $filter = Zend_Ldap_Filter::equals(
+	            $this->_options['userUUIDAttribute'], Zend_Ldap::filterEscape($_user->getId())
+	        );
+	        
+            $accounts = $this->_ldap->search(
+	            $filter, 
+	            $this->_options['userDn'], 
+	            Zend_Ldap::SEARCH_SCOPE_SUB, 
+	            array_values($this->_rowNameMapping)
+	        );
+	        
+	        // count can not be 0 under normal conditions
+	        if(count($accounts) == 0) {
+	            throw new Tinebase_Exception_NotFound('Account not found in LDAP: ' . $filter->toString());
+	        }
+	        
+	        $_user->sambaSAM = $this->_ldap2User($accounts->getFirst());
+    	}
     }
-	
+    
+    /**
+     * Returns a user obj with raw data from ldap
+     *
+     * @param array $_userData
+     * @param string $_accountClass
+     * @return Tinebase_Record_Abstract
+     */
+    protected function _ldap2User($_userData, $_accountClass='Tinebase_Model_SAMUser')
+    {
+        $accountArray = array();
+        
+        foreach ($_userData as $key => $value) {
+            if (is_int($key)) {
+                continue;
+            }
+            $keyMapping = array_search($key, $this->_rowNameMapping);
+            if ($keyMapping !== FALSE) {
+                switch($keyMapping) {
+                    case 'pwdLastSet':
+                    case 'logonTime':
+                    case 'logoffTime':
+                    case 'kickoffTime':
+                    case 'pwdCanChange':
+                    case 'pwdMustChange':
+                        $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
+                        break;
+                    default: 
+                        $accountArray[$keyMapping] = $value[0];
+                        break;
+                }
+            }
+        }
+        
+        $accountObject = new $_accountClass($accountArray);
+        
+        return $accountObject;
+    }
+    
+    /**
+     * return uidnumber of user
+     * 
+     * @param string $_uid
+     * @return string
+     */
+    protected function _getUidNUmber($_uid)
+    {
+        $filter = Zend_Ldap_Filter::equals(
+            $this->_options['userUUIDAttribute'], Zend_Ldap::filterEscape($_uid)
+        );
+        
+        $users = $this->_ldap->search(
+            $filter, 
+            $this->_options['userDn'], 
+            $this->_options['userSearchScope'], 
+            array('uidnumber')
+        );
+        
+        if(count($users) == 0) {
+            throw new Tinebase_Exception_NotFound('User not found! Filter: ' . $filter->toString());
+        }
+        
+        $user = $users->getFirst();
+        
+        if(empty($user['uidnumber'][0])) {
+            throw new Tinebase_Exception_NotFound('User has no uidnumber');
+        }
+        
+        return $user['uidnumber'][0];
+    }
+    
+    /**
+     * return sid of group
+     * 
+     * @param string  $_groupId
+     * @return string the sid of the group 
+     */
+    protected function _getGroupSID($_groupId)
+    {
+        $filter = Zend_Ldap_Filter::equals(
+            $this->_options['groupUUIDAttribute'], Zend_Ldap::filterEscape($_groupId)
+        );
+        
+        $groups = $this->_ldap->search(
+            $filter, 
+            $this->_options['groupsDn'], 
+            Zend_Ldap::SEARCH_SCOPE_SUB, 
+            array('sambasid')
+        );
+        
+        if(count($groups) == 0) {
+            throw new Tinebase_Exception_NotFound('Group not found! Filter: ' . $filter->toString());
+        }
+        
+        $group = $groups->getFirst();
+        
+        if(empty($group['sambasid'][0])) {
+            throw new Tinebase_Exception_NotFound('Group has no sambaSID');
+        }
+        
+        return $group['sambasid'][0];
+    }
+        
+    /**
+     * convert objects with user data to ldap data array
+     * 
+     * @param Tinebase_Model_FullUser  $_user
+     * @param array                    $_ldapData  the data to be written to ldap
+     */
+    protected function _user2ldap(Tinebase_Model_FullUser $_user, array &$_ldapData)
+    {
+        if (isset($_ldapData['objectclass'])) {
+            $_ldapData['objectclass'] = array_unique(array_merge($_ldapData['objectclass'], $this->_requiredUserObjectClass));
+        }
+        if (isset($_ldapData['uidnumber'])) {
+            $uidNumber = $_ldapData['uidnumber'];
+        } else {
+            $uidNumber = $this->_getUidNUmber($_user->getId());
+        }
+        
+        $this->inspectExpiryDate(isset($_user->accountExpires) ? $_user->accountExpires : null, $_ldapData);
+        $this->inspectStatus($_user->accountStatus, $_ldapData);
+        
+        // defaults
+        $_ldapData['sambasid']             = $this->_options[Tinebase_User_Ldap::PLUGIN_SAMBA]['sid'] . '-' . (2 * $uidNumber + 1000);
+        $_ldapData['sambapwdcanchange']    = 1;
+        $_ldapData['sambapwdmustchange']   = 2147483647;
+        $_ldapData['sambaprimarygroupsid'] = $this->_getGroupSID($_user->accountPrimaryGroup);
+        
+        foreach ($_user->sambaSAM as $key => $value) {
+            if (array_key_exists($key, $this->_rowNameMapping)) {
+                switch ($key) {
+                    case 'pwdLastSet':
+                    case 'logonTime':
+                    case 'logoffTime':
+                    case 'kickoffTime':
+                    case 'pwdCanChange':
+                    case 'pwdMustChange':
+                    case 'acctFlags':
+                    case 'sid':
+                    case 'primaryGroupSID':
+                        // do nothing
+                        break;
+                        
+                    default:
+                        $_ldapData[$this->_rowNameMapping[$key]] = $value;
+                        break;
+                }
+            }
+        }
+    }
 }  
