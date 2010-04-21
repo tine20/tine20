@@ -75,7 +75,17 @@ class Tinebase_Group
         switch($_backendType) {
             case self::LDAP:
                 $options = Tinebase_User::getBackendConfiguration();
+                
+                $options['plugins'] = array();
+                
+                // manage samba sam?
+                if (isset(Tinebase_Core::getConfig()->samba) && Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE) == true) {
+                    $options['plugins'][] = Tinebase_Group_Ldap::PLUGIN_SAMBA;
+                    $options[Tinebase_Group_Ldap::PLUGIN_SAMBA] = Tinebase_Core::getConfig()->samba->toArray(); 
+                }
+                
                 $result = new Tinebase_Group_Ldap($options);
+                
                 break;
                 
             case self::SQL:
