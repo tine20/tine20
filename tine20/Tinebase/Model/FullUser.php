@@ -17,6 +17,9 @@
  * the usage of this datatype should be restricted to administrative tasks only
  * 
  * @package     Tinebase
+ * @property    string                  accountStatus
+ * @property    Tinebase_Model_SAMUser  sambaSAM        object holding samba settings
+ * @property    Zend_Date               accountExpires  date when account expires  
  * @subpackage  User
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User
