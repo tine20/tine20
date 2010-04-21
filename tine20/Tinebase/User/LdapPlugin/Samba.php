@@ -228,7 +228,7 @@ class Tinebase_User_LdapPlugin_Samba
      * @param string $_uid
      * @return string
      */
-    protected function _getUidNUmber($_uid)
+    protected function _getUidNumber($_uid)
     {
         $filter = Zend_Ldap_Filter::equals(
             $this->_options['userUUIDAttribute'], Zend_Ldap::filterEscape($_uid)
@@ -301,7 +301,7 @@ class Tinebase_User_LdapPlugin_Samba
         $this->inspectExpiryDate(isset($_user->accountExpires) ? $_user->accountExpires : null, $_ldapData);
         $this->inspectStatus($_user->accountStatus, $_ldapData);
         
-        $uidNumber = $this->_getUidNUmber($_user->getId());
+        $uidNumber = $this->_getUidNumber($_user->getId());
         
         $_ldapData['sambasid']             = $this->_options[Tinebase_User_Ldap::PLUGIN_SAMBA]['sid'] . '-' . (2 * $uidNumber + 1000);
         $_ldapData['sambapwdcanchange']    = 1;
