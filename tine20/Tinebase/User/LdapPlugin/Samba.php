@@ -138,7 +138,6 @@ class Tinebase_User_LdapPlugin_Samba
      */
     public function inspectSetPassword($_loginName, $_password, $_encrypt, $_mustChange, array &$_ldapData)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ENCRYPT ' . print_r($_loginName, true));
         if ($_encrypt !== true) {
             Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' can not transform crypted password into nt/lm samba password. Make sure to reset password for user ' . $_loginName);
         } else {
