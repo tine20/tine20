@@ -18,6 +18,8 @@
  */
 class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
 {
+    const PLUGIN_SAMBA = 'Tinebase_Group_LdapPlugin_Samba';
+    
     /**
      * the ldap backend
      *
@@ -246,22 +248,22 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             $memberUid[] = $memberMetadata['uid'];
         }
         
-        $data = array(
+        $ldapData = array(
             'memberuid' => $memberUid
         );
         
         if ($this->_options['useRfc2307bis']) {
             if (!empty($memberDn)) {
-                $data['member'] = $memberDn; // array of dn's
+                $ldapData['member'] = $memberDn; // array of dn's
             } else {
-                $data['member'] = $groupDn; // singöe dn
+                $ldapData['member'] = $groupDn; // singöe dn
             }
         }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        $this->_ldap->update($metaData['dn'], $data);
+        $this->_ldap->update($metaData['dn'], $ldapData);
     }
     
     /**
@@ -283,7 +285,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         }
         
         $groupDn = $this->_getDn($_groupId);
-        $data = array();
+        $ldapData = array();
         
         $accountMetaData = $this->_getAccountMetaData($_accountId);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " account meta data: " . print_r($accountMetaData, true));
@@ -302,7 +304,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
 
         if (count($groups) == 0) {
             // need to add memberuid
-            $data['memberuid'] = $accountMetaData['uid'];
+            $ldapData['memberuid'] = $accountMetaData['uid'];
         }
         
         
@@ -321,12 +323,12 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             
             if (count($groups) == 0) {
                 // need to add member
-                $data['member'] = $accountMetaData['dn'];
+                $ldapData['member'] = $accountMetaData['dn'];
             }
         }
                 
-        if (!empty($data)) {
-            $this->_ldap->addProperty($groupDn, $data);
+        if (!empty($ldapData)) {
+            $this->_ldap->addProperty($groupDn, $ldapData);
         }
         
         if ($this->_options['useRfc2307bis']) {
@@ -344,10 +346,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             );
             
             if (count($groups) > 0) {
-                $data = array (
+                $ldapData = array (
                     'member' => $groupDn
                 );
-                $this->_ldap->deleteProperty($groupDn, $data);
+                $this->_ldap->deleteProperty($groupDn, $ldapData);
             }
         }
         
@@ -379,7 +381,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         $memberUidNumbers = $this->getGroupMembers($_groupId);
         
-        $data = array(
+        $ldapData = array(
             'memberuid' => $accountMetaData['uid']
         );
         
@@ -392,14 +394,14 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
                 ); 
                 $this->_ldap->insertProperty($groupDn, $dataAdd);
             } else {
-                $data['member'] = $accountMetaData['dn'];
+                $ldapData['member'] = $accountMetaData['dn'];
             }
         }
             
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $groupDn);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        $this->_ldap->deleteProperty($groupDn, $data);
+        $this->_ldap->deleteProperty($groupDn, $ldapData);
         
         $this->_sql->removeGroupMember($_groupId, $_accountId);
     }
@@ -437,7 +439,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         );
                 
         $gidNumber = $this->_generateGidNumber();
-        $data = array(
+        $ldapData = array(
             'objectclass' => $objectClass,
             'gidnumber'   => $gidNumber,
             'cn'          => $_group->name,
@@ -445,15 +447,19 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         );
         
         if (isset($this->_options['useRfc2307bis']) && $this->_options['useRfc2307bis'] == true) {
-            $data['objectclass'][] = 'groupOfNames';
+            $ldapData['objectclass'][] = 'groupOfNames';
             // the member attribute can not be emtpy, seems to be common praxis 
             // to set the member attribute to the group dn itself for empty groups
-            $data['member']        = $dn;
+            $ldapData['member']        = $dn;
+        }
+        
+        foreach ($this->_plugins as $plugin) {
+            $plugin->inspectAddGroup($_group, $ldapData);
         }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
-        $this->_ldap->add($dn, $data);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        $this->_ldap->add($dn, $ldapData);
         
         $groupId = $this->_ldap->getEntry($dn, array($this->_groupUUIDAttribute));
         
@@ -491,14 +497,14 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     {
         $dn = $this->_getDn($_group->getId());
         
-        $data = array(
+        $ldapData = array(
             'cn'          => $_group->name,
             'description' => $_group->description,
         );
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
-        $this->_ldap->update($dn, $data);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        $this->_ldap->update($dn, $ldapData);
         
         $group = $this->getLdapGroupById($_group);
 
