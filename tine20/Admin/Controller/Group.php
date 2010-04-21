@@ -26,12 +26,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      * @var Admin_Controller_Group
      */
     private static $_instance = NULL;
-	
-	/**
-	 * @var bool
-	 */
-	protected $_manageSAM = false;
-	
+		
 	/**
 	 * @var Tinebase_SambaSAM_Ldap
 	 */
@@ -46,14 +41,6 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     {
         $this->_currentAccount = Tinebase_Core::getUser();        
         $this->_applicationName = 'Admin';
-        
-        // manage samba sam?
-		if(Tinebase_User::getConfiguredBackend() == Tinebase_User::LDAP && isset(Tinebase_Core::getConfig()->samba)) {
-			$this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false); 
-			if ($this->_manageSAM) {
-				$this->_samBackend = Tinebase_SambaSAM::getInstance();
-			}
-		}
     }
 
     /**
@@ -149,10 +136,6 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group['members']);
         }
         
-        if ($this->_manageSAM) {
-            $samResult = $this->_samBackend->addGroup($group);
-        }
-        
         $event = new Admin_Event_CreateGroup();
         $event->group = $group;
         Tinebase_Event::fireEvent($event);
@@ -184,10 +167,6 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         $group = Tinebase_Group::getInstance()->updateGroup($_group);
         
         Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group->members);
-        
-        if ($this->_manageSAM) {
-            $samResult = $this->_samBackend->updateGroup($group);
-        }
         
         $event = new Admin_Event_UpdateGroup();
         $event->group = $group;
@@ -266,10 +245,6 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         Tinebase_Event::fireEvent($eventBefore);
         
         Tinebase_Group::getInstance()->deleteGroups($_groupIds);
-        
-        if ($this->_manageSAM) {
-            $this->_samBackend->deleteGroups($_groupIds);
-        }
         
         $event = new Admin_Event_DeleteGroup();
         $event->groupIds = $_groupIds;
