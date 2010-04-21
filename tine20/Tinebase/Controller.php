@@ -131,7 +131,7 @@ class Tinebase_Controller implements Tinebase_Event_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function changePassword($_oldPassword, $_newPassword1, $_newPassword2)
+    public function changePassword($_oldPassword, $_newPassword)
     {
         //error_log(print_r(Tinebase_Core::getUser()->toArray(), true));
         
@@ -147,7 +147,7 @@ class Tinebase_Controller implements Tinebase_Event_Interface
             throw new Tinebase_Exception_InvalidArgument('Old password is wrong.');
         }
         
-        Tinebase_User::getInstance()->setPassword($loginName, $_newPassword1, $_newPassword2);
+        Tinebase_User::getInstance()->setPassword($loginName, $_newPassword);
     }
     
     /**
