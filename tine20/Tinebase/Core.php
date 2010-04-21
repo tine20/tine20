@@ -358,8 +358,13 @@ class Tinebase_Core
                 $logger->addFilter($filter);
 
                 // add more filters here
-                //$userFilter = new Tinebase_Log_Filter_User();
-                //$logger->addFilter($userFilter);
+                if (isset($loggerConfig->filter->user)) {
+                    $logger->addFilter(new Tinebase_Log_Filter_User($loggerConfig->filter->user));
+                }
+
+                if (isset($loggerConfig->filter->message)) {
+                    $logger->addFilter(new Zend_Log_Filter_Message($loggerConfig->filter->message));
+                }
 
             } catch (Exception $e) {
                 error_log("Tine 2.0 can't setup the configured logger! The Server responded: $e");
