@@ -50,7 +50,7 @@ class Tinebase_User_LdapPlugin_Samba
      *
      * @var array
      */
-    protected $_requiredUserObjectClass = array(
+    protected $_requiredObjectClass = array(
         'sambaSamAccount'
     );
     
@@ -295,7 +295,7 @@ class Tinebase_User_LdapPlugin_Samba
     protected function _user2ldap(Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
         if (isset($_ldapData['objectclass'])) {
-            $_ldapData['objectclass'] = array_unique(array_merge($_ldapData['objectclass'], $this->_requiredUserObjectClass));
+            $_ldapData['objectclass'] = array_unique(array_merge($_ldapData['objectclass'], $this->_requiredObjectClass));
         }
         if (isset($_ldapData['uidnumber'])) {
             $uidNumber = $_ldapData['uidnumber'];
