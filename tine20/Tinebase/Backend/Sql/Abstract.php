@@ -279,11 +279,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     }
     
     /**
-    * Search for records matching given filter
+     * Search for records matching given filter
      *
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param Tinebase_Model_Pagination $_pagination
-     * @param boolean $_onlyIds
+     * @param  Tinebase_Model_Filter_FilterGroup 	$_filter
+     * @param  Tinebase_Model_Pagination 			$_pagination
+     * @param  boolean 								$_onlyIds
      * @return Tinebase_Record_RecordSet|array
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)    
