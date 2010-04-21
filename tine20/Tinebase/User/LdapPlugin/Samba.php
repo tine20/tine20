@@ -297,16 +297,12 @@ class Tinebase_User_LdapPlugin_Samba
         if (isset($_ldapData['objectclass'])) {
             $_ldapData['objectclass'] = array_unique(array_merge($_ldapData['objectclass'], $this->_requiredObjectClass));
         }
-        if (isset($_ldapData['uidnumber'])) {
-            $uidNumber = $_ldapData['uidnumber'];
-        } else {
-            $uidNumber = $this->_getUidNUmber($_user->getId());
-        }
         
         $this->inspectExpiryDate(isset($_user->accountExpires) ? $_user->accountExpires : null, $_ldapData);
         $this->inspectStatus($_user->accountStatus, $_ldapData);
         
-        // defaults
+        $uidNumber = $this->_getUidNUmber($_user->getId());
+        
         $_ldapData['sambasid']             = $this->_options[Tinebase_User_Ldap::PLUGIN_SAMBA]['sid'] . '-' . (2 * $uidNumber + 1000);
         $_ldapData['sambapwdcanchange']    = 1;
         $_ldapData['sambapwdmustchange']   = 2147483647;
