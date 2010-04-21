@@ -487,7 +487,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             // to set the member attribute to the group dn itself for empty groups
             $ldapData['member']        = $dn;
         }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        
         foreach ($this->_plugins as $plugin) {
             $plugin->inspectAddGroup($_group, $ldapData);
         }
