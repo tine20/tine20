@@ -277,7 +277,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     public function getLdapUserByProperty($_property, $_accountId, $_accountClass = 'Tinebase_Model_User')
     {
         if (!array_key_exists($_property, $this->_rowNameMapping)) {
-            throw new Tinebase_Exception_InvalidArgument("invalid property $_property requested");
+            throw new Tinebase_Exception_NotFound("can't get user by property $_property. property not supported by ldap backend.");
         }
 
         switch($_property) {
