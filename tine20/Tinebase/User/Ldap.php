@@ -306,7 +306,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         }
 
         $result = $this->_ldap2User($accounts->getFirst(), $_accountClass);
-
+        
+        // append data from ldap plugins
+        foreach ($this->_plugins as $plugin) {
+            $plugin->inspectGetUserByProperty($result);
+        }
+        
         return $result;
     }
 
@@ -323,6 +328,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         try {
             // first we try the get the user from the sql backend
             $user = $this->_sql->getUserByProperty($_property, $_accountId, $_accountClass);
+
         } catch (Tinebase_Exception_NotFound $e) {
             // if not found we try to get the user from the ldap backend
             $fullUser = $this->getLdapUserByProperty($_property, $_accountId, 'Tinebase_Model_FullUser');
@@ -333,10 +339,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             $user = $this->_sql->getUserByProperty('accountId', $fullUser, $_accountClass);
         }
 
+        // append data from ldap plugins
         foreach ($this->_plugins as $plugin) {
             $plugin->inspectGetUserByProperty($user);
         }
-
+        
         return $user;
     }
 
@@ -678,14 +685,14 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
 
         $filter = Zend_Ldap_Filter::equals(
-        $this->_rowNameMapping['accountId'], Zend_Ldap::filterEscape($userId)
+            $this->_rowNameMapping['accountId'], Zend_Ldap::filterEscape($userId)
         );
 
         $result = $this->_ldap->search(
-        $filter,
-        $this->_baseDn,
-        $this->_userSearchScope,
-        array('objectclass')
+            $filter,
+            $this->_baseDn,
+            $this->_userSearchScope,
+            array('objectclass')
         );
 
         if (count($result) !== 1) {
