@@ -171,13 +171,15 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
 
         $this->_sql = new Tinebase_User_Sql();
 
-        foreach ($_options['plugins'] as $className) {
-            $plugin = new $className($this->_ldap, $this->_options);
-            if(! $plugin instanceof Tinebase_User_LdapPlugin_Interface) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . "Skipped plugin $className as it does NOT implement Tinebase_User_LdapPlugin_Interface");
-                continue;
+        if(array_key_exists('plugins', $_options)) {
+            foreach ($_options['plugins'] as $className) {
+                $plugin = new $className($this->_ldap, $this->_options);
+                if(! $plugin instanceof Tinebase_User_LdapPlugin_Interface) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . "Skipped plugin $className as it does NOT implement Tinebase_User_LdapPlugin_Interface");
+                    continue;
+                }
+                $this->_plugins[$className] = new $className($this->_ldap, $this->_options);
             }
-            $this->_plugins[$className] = new $className($this->_ldap, $this->_options);
         }
     }
 
@@ -211,26 +213,25 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     public function getLdapUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Model_User')
     {
         $filter = Zend_Ldap_Filter::andFilter(
-        Zend_Ldap_Filter::string($this->_userBaseFilter)
+            Zend_Ldap_Filter::string($this->_userBaseFilter)
         );
 
-        if ($_filter !== null) {
-            $filter = $filter->add(Zend_Ldap_Filter::orFilter(
-            Zend_Ldap_Filter::equals($this->_rowNameMapping['accountFirstName'], Zend_Ldap::filterEscape($_filter)),
-            Zend_Ldap_Filter::equals($this->_rowNameMapping['accountLastName'], Zend_Ldap::filterEscape($_filter)),
-            Zend_Ldap_Filter::equals($this->_rowNameMapping['accountLoginName'], Zend_Ldap::filterEscape($_filter))
-            )
-            );
+        if (!empty($_filter)) {
+            $filter = $filter->addFilter(Zend_Ldap_Filter::orFilter(
+                Zend_Ldap_Filter::equals($this->_rowNameMapping['accountFirstName'], Zend_Ldap::filterEscape($_filter)),
+                Zend_Ldap_Filter::equals($this->_rowNameMapping['accountLastName'], Zend_Ldap::filterEscape($_filter)),
+                Zend_Ldap_Filter::equals($this->_rowNameMapping['accountLoginName'], Zend_Ldap::filterEscape($_filter))
+            ));
         }
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  filterString: " . $filter);
 
         $accounts = $this->_ldap->search(
-        $filter,
-        $this->_baseDn,
-        $this->_userSearchScope,
-        array_values($this->_rowNameMapping),
-        $_sort !== null ? $this->_rowNameMapping[$_sort] : null
+            $filter,
+            $this->_baseDn,
+            $this->_userSearchScope,
+            array_values($this->_rowNameMapping),
+            $_sort !== null ? $this->_rowNameMapping[$_sort] : null
         );
 
         $result = new Tinebase_Record_RecordSet($_accountClass);
