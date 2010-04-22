@@ -13,6 +13,7 @@
 /**
  * class Tinebase_Model_SAMUser
  * 
+ * @property    string  acctFlags
  * @package     Tinebase
  * @subpackage  Samba
  */
