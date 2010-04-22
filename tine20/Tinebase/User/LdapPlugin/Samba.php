@@ -78,7 +78,7 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
      */
     public function inspectAddUser(Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
-        $this->_user2ldap($_user, $_ldapData);    
+        $this->_user2ldap('add', $_user, $_ldapData);    
     }
     
     /**
@@ -89,7 +89,7 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
      */
     public function inspectUpdateUser(Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
-        $this->_user2ldap($_user, $_ldapData);
+        $this->_user2ldap('update', $_user, $_ldapData);
     }
     
     public function inspectSetBlocked($_accountId, $_blockedUntilDate)
@@ -222,12 +222,12 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
     }
     
     /**
-     * return uidnumber of user
+     * return ldap entry of user
      * 
      * @param string $_uid
      * @return string
      */
-    protected function _getUidNumber($_uid)
+    protected function _getLdapEntry($_uid)
     {
         $filter = Zend_Ldap_Filter::equals(
             $this->_options['userUUIDAttribute'], Zend_Ldap::filterEscape($_uid)
@@ -236,21 +236,16 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
         $users = $this->_ldap->search(
             $filter, 
             $this->_options['userDn'], 
-            $this->_options['userSearchScope'], 
-            array('uidnumber')
+            $this->_options['userSearchScope'] 
         );
         
-        if (count($users) == 0) {
+        if (count($users) !== 1) {
             throw new Tinebase_Exception_NotFound('User not found! Filter: ' . $filter->toString());
         }
         
         $user = $users->getFirst();
         
-        if (empty($user['uidnumber'][0])) {
-            throw new Tinebase_Exception_NotFound('User has no uidnumber');
-        }
-        
-        return $user['uidnumber'][0];
+        return $user;
     }
     
     /**
@@ -288,24 +283,41 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
     /**
      * convert objects with user data to ldap data array
      * 
+     * @param string                   $_mode      add or update
      * @param Tinebase_Model_FullUser  $_user
      * @param array                    $_ldapData  the data to be written to ldap
      */
-    protected function _user2ldap(Tinebase_Model_FullUser $_user, array &$_ldapData)
+    protected function _user2ldap($_mode, Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
-        if (isset($_ldapData['objectclass'])) {
+        if($_mode == 'add') {
+            $uidNumber = $_ldapData['uidnumber'];
+            
+            if(isset($_user->sambaSAM->acctFlags)) {
+                $acctFlags = $_user->sambaSAM->acctFlags;
+            } else {
+                $acctFlags = '[U          ]';
+            }
+            
             $_ldapData['objectclass'] = array_unique(array_merge($_ldapData['objectclass'], $this->_requiredObjectClass));
+        } else {
+            $ldapEntry = $this->_getLdapEntry($_user->getId());
+            
+            $uidNumber = $ldapEntry['uidnumber'][0];
+            
+            if(isset($_user->sambaSAM->acctFlags)) {
+                $acctFlags = $_user->sambaSAM->acctFlags;
+            } else {
+                $acctFlags = $ldapEntry['sambaacctflags'][0];
+            }
+            
+            $_ldapData['objectclass'] = array_unique(array_merge($ldapEntry['objectclass'], $this->_requiredObjectClass));
         }
+        
+        $acctFlags[2] = ($_user->accountStatus == 'disabled') ? 'D' : ' ';
         
         $this->inspectExpiryDate(isset($_user->accountExpires) ? $_user->accountExpires : null, $_ldapData);
-        $this->inspectStatus($_user->accountStatus, $_ldapData);
-        
-        if(isset($_ldapData['uidnumber'])) {
-            $uidNumber = $_ldapData['uidnumber'];
-        } else {
-            $uidNumber = $this->_getUidNumber($_user->getId());
-        }
-        
+
+        $_ldapData['sambaacctflags']       = $acctFlags;
         $_ldapData['sambasid']             = $this->_options[Tinebase_User_Ldap::PLUGIN_SAMBA]['sid'] . '-' . (2 * $uidNumber + 1000);
         $_ldapData['sambapwdcanchange']    = 1;
         $_ldapData['sambapwdmustchange']   = 2147483647;
