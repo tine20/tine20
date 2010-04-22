@@ -254,7 +254,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
 
         // @todo implement limit, start, dir and status
         $select = $this->_getUserSelectObject()
-        ->limit($_limit, $_start);
+            ->limit($_limit, $_start);
 
         if ($_sort !== NULL) {
             $select->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
