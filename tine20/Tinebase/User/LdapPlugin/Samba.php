@@ -306,16 +306,6 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
     {
         $this->inspectExpiryDate(isset($_user->accountExpires) ? $_user->accountExpires : null, $_ldapData);
         
-        $_ldapData['sambaacctflags']       = $_user->sambaSAM->acctFlags;
-        $_ldapData['sambaacctflags'][2]    = ($_user->accountStatus == 'disabled') ? 'D' : ' ';
-        
-        $_ldapData['sambapwdcanchange']    = 1;
-        $_ldapData['sambapwdmustchange']   = 2147483647;
-        
-        if(isset($_ldapData['uidnumber'])) {
-            $_ldapData['sambasid']         = $this->_options[Tinebase_User_Ldap::PLUGIN_SAMBA]['sid'] . '-' . (2 * $_ldapData['uidnumber'] + 1000);
-        }
-        
         foreach ($_user->sambaSAM as $key => $value) {
             if (array_key_exists($key, $this->_rowNameMapping)) {
                 switch ($key) {
@@ -323,19 +313,34 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
                     case 'logonTime':
                     case 'logoffTime':
                     case 'kickoffTime':
-                    case 'pwdCanChange':
-                    case 'pwdMustChange':
-                    case 'acctFlags':
-                    case 'sid':
                         // do nothing
                         break;
                         
+                    case 'pwdCanChange':
+                        $_ldapData[$this->_rowNameMapping[$key]]     = 1;
+                        break;
+                        
+                    case 'pwdMustChange':
+                        $_ldapData[$this->_rowNameMapping[$key]]     = 2147483647;
+                        break;
+                        
+                    case 'sid':
+                        if(isset($_ldapData['uidnumber'])) {
+                            $_ldapData[$this->_rowNameMapping[$key]] = $this->_options[Tinebase_User_Ldap::PLUGIN_SAMBA]['sid'] . '-' . (2 * $_ldapData['uidnumber'] + 1000);
+                        }
+                        break;
+                        
+                    case 'acctFlags':
+                        $_ldapData[$this->_rowNameMapping[$key]]     = $_user->sambaSAM->acctFlags;;
+                        $_ldapData[$this->_rowNameMapping[$key]][2]  = ($_user->accountStatus == 'disabled') ? 'D' : ' ';
+                        break;
+                            
                     case 'primaryGroupSID':
-                        $_ldapData[$this->_rowNameMapping[$key]] = $this->_getGroupSID($_user->accountPrimaryGroup);
+                        $_ldapData[$this->_rowNameMapping[$key]]     = $this->_getGroupSID($_user->accountPrimaryGroup);
                         break;
                         
                     default:
-                        $_ldapData[$this->_rowNameMapping[$key]] = $value;
+                        $_ldapData[$this->_rowNameMapping[$key]]     = $value;
                         break;
                 }
             }
