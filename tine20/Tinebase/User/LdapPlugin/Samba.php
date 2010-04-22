@@ -174,15 +174,15 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
 	            array_values($this->_rowNameMapping)
 	        );
 	        
-	        // count can not be 0 under normal conditions
-	        if (count($accounts) == 0) {
+	        // must found exactly 1 entry
+	        if (count($accounts) !== 1) {
 	            throw new Tinebase_Exception_NotFound('Account not found in LDAP: ' . $filter->toString());
 	        }
 	        
 	        $_user->sambaSAM = $this->_ldap2User($accounts->getFirst());
-    	}
+    	}    	
     }
-    
+        
     /**
      * Returns a user obj with raw data from ldap
      *
@@ -216,9 +216,9 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
             }
         }
         
-        $accountObject = new $_accountClass($accountArray);
+        $userObject = new $_accountClass($accountArray);
         
-        return $accountObject;
+        return $userObject;
     }
     
     /**
