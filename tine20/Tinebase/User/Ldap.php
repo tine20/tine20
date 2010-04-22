@@ -290,15 +290,15 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         }
 
         $filter = Zend_Ldap_Filter::andFilter(
-        Zend_Ldap_Filter::string($this->_userBaseFilter),
-        Zend_Ldap_Filter::equals($this->_rowNameMapping[$_property], Zend_Ldap::filterEscape($value))
+            Zend_Ldap_Filter::string($this->_userBaseFilter),
+            Zend_Ldap_Filter::equals($this->_rowNameMapping[$_property], Zend_Ldap::filterEscape($value))
         );
 
         $accounts = $this->_ldap->search(
-        $filter,
-        $this->_baseDn,
-        $this->_userSearchScope,
-        array_values($this->_rowNameMapping)
+            $filter,
+            $this->_baseDn,
+            $this->_userSearchScope,
+            array_values($this->_rowNameMapping)
         );
 
         if (count($accounts) == 0) {
