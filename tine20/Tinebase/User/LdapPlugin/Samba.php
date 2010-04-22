@@ -78,7 +78,13 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
      */
     public function inspectAddUser(Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
-        $this->_user2ldap('add', $_user, $_ldapData);    
+        if(empty($_user->sambaSAM->acctFlags)) {
+            $_user->sambaSAM->acctFlags = '[U          ]';
+        }
+        
+        $_ldapData['objectclass'] = array_unique(array_merge($_ldapData['objectclass'], $this->_requiredObjectClass));
+    
+        $this->_user2ldap($_user, $_ldapData);    
     }
     
     /**
@@ -89,7 +95,17 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
      */
     public function inspectUpdateUser(Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
-        $this->_user2ldap('update', $_user, $_ldapData);
+        $ldapEntry = $this->_getLdapEntry($_user->getId());
+        
+        #$uidNumber = $ldapEntry['uidnumber'][0];
+        
+        if(empty($_user->sambaSAM->acctFlags)) {
+            $_user->sambaSAM->acctFlags = $ldapEntry['sambaacctflags'][0];
+        }
+        
+        $_ldapData['objectclass'] = array_unique(array_merge($ldapEntry['objectclass'], $this->_requiredObjectClass));
+        
+        $this->_user2ldap($_user, $_ldapData);
     }
     
     public function inspectSetBlocked($_accountId, $_blockedUntilDate)
@@ -283,45 +299,22 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
     /**
      * convert objects with user data to ldap data array
      * 
-     * @param string                   $_mode      add or update
      * @param Tinebase_Model_FullUser  $_user
      * @param array                    $_ldapData  the data to be written to ldap
      */
-    protected function _user2ldap($_mode, Tinebase_Model_FullUser $_user, array &$_ldapData)
+    protected function _user2ldap(Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
-        if($_mode == 'add') {
-            $uidNumber = $_ldapData['uidnumber'];
-            
-            if(isset($_user->sambaSAM->acctFlags)) {
-                $acctFlags = $_user->sambaSAM->acctFlags;
-            } else {
-                $acctFlags = '[U          ]';
-            }
-            
-            $_ldapData['objectclass'] = array_unique(array_merge($_ldapData['objectclass'], $this->_requiredObjectClass));
-        } else {
-            $ldapEntry = $this->_getLdapEntry($_user->getId());
-            
-            $uidNumber = $ldapEntry['uidnumber'][0];
-            
-            if(isset($_user->sambaSAM->acctFlags)) {
-                $acctFlags = $_user->sambaSAM->acctFlags;
-            } else {
-                $acctFlags = $ldapEntry['sambaacctflags'][0];
-            }
-            
-            $_ldapData['objectclass'] = array_unique(array_merge($ldapEntry['objectclass'], $this->_requiredObjectClass));
-        }
-        
-        $acctFlags[2] = ($_user->accountStatus == 'disabled') ? 'D' : ' ';
-        
         $this->inspectExpiryDate(isset($_user->accountExpires) ? $_user->accountExpires : null, $_ldapData);
-
-        $_ldapData['sambaacctflags']       = $acctFlags;
-        $_ldapData['sambasid']             = $this->_options[Tinebase_User_Ldap::PLUGIN_SAMBA]['sid'] . '-' . (2 * $uidNumber + 1000);
+        
+        $_ldapData['sambaacctflags']       = $_user->sambaSAM->acctFlags;
+        $_ldapData['sambaacctflags'][2]    = ($_user->accountStatus == 'disabled') ? 'D' : ' ';
+        
         $_ldapData['sambapwdcanchange']    = 1;
         $_ldapData['sambapwdmustchange']   = 2147483647;
-        $_ldapData['sambaprimarygroupsid'] = $this->_getGroupSID($_user->accountPrimaryGroup);
+        
+        if(isset($_ldapData['uidnumber'])) {
+            $_ldapData['sambasid']         = $this->_options[Tinebase_User_Ldap::PLUGIN_SAMBA]['sid'] . '-' . (2 * $_ldapData['uidnumber'] + 1000);
+        }
         
         foreach ($_user->sambaSAM as $key => $value) {
             if (array_key_exists($key, $this->_rowNameMapping)) {
@@ -334,8 +327,11 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
                     case 'pwdMustChange':
                     case 'acctFlags':
                     case 'sid':
-                    case 'primaryGroupSID':
                         // do nothing
+                        break;
+                        
+                    case 'primaryGroupSID':
+                        $_ldapData[$this->_rowNameMapping[$key]] = $this->_getGroupSID($_user->accountPrimaryGroup);
                         break;
                         
                     default:
