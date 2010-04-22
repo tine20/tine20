@@ -172,6 +172,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $this->_sql = new Tinebase_User_Sql();
 
         foreach ($_options['plugins'] as $className) {
+            $plugin = new $className($this->_ldap, $this->_options);
+            if(! $plugin instanceof Tinebase_User_LdapPlugin_Interface) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . "Skipped plugin $className as it does NOT implement Tinebase_User_LdapPlugin_Interface");
+                continue;
+            }
             $this->_plugins[$className] = new $className($this->_ldap, $this->_options);
         }
     }
