@@ -301,7 +301,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             array_values($this->_rowNameMapping)
         );
 
-        if (count($accounts) == 0) {
+        if (count($accounts) !== 1) {
             throw new Tinebase_Exception_NotFound('User with ' . $_property . ' =  ' . $value . ' not found.');
         }
 
