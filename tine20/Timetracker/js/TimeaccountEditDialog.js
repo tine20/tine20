@@ -227,7 +227,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 }),
                 new Ext.ux.grid.CheckColumn({
                     header: this.app.i18n._('View All'),
-                    tooltip: _('The grant to view Timesheetsof other users'),
+                    tooltip: _('The grant to view Timesheets of other users'),
                     dataIndex: 'view_all',
                     width: 55
                 }),
