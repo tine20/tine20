@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-31 20:42+0100\n"
-"PO-Revision-Date: 2010-01-18 17:19+0100\n"
+"PO-Revision-Date: 2010-04-23 13:05+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,8 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:54
+#: Export/Pdf.php:206
+#: js/widgets/tags/TagsPanel.js:54
 msgid "Tags"
 msgstr "Tags"
 
@@ -32,7 +33,7 @@ msgstr "Filter"
 
 #: Export/Ods.php:288
 msgid "Data"
-msgstr ""
+msgstr "Daten"
 
 #: Acl/Rights.php:134
 msgid "Report bugs"
@@ -40,7 +41,7 @@ msgstr "Fehler melden"
 
 #: Acl/Rights.php:135
 msgid "Report bugs to the software vendor directly when they occur."
-msgstr ""
+msgstr "Bugs an den Hersteller senden, sobald sie auftreten. "
 
 #: Acl/Rights.php:138
 msgid "Check version"
@@ -48,7 +49,7 @@ msgstr "Version prüfen"
 
 #: Acl/Rights.php:139
 msgid "Check for new versions of this software."
-msgstr ""
+msgstr "Prüfen, ob eine neuere Version dieser Software verfügbar ist."
 
 #: Acl/Rights/Abstract.php:65
 msgid "admin"
@@ -64,8 +65,7 @@ msgstr "Ausführen"
 
 #: Acl/Rights/Abstract.php:70
 msgid "run right description"
-msgstr ""
-"Das Ausführen-Recht benötigt man, um Zugriff auf die Applikation zu haben."
+msgstr "Das Ausführen-Recht benötigt man, um Zugriff auf die Applikation zu haben."
 
 #: js/ux/ConnectionStatus.js:57
 msgid "online"
@@ -75,8 +75,12 @@ msgstr "online"
 msgid "offline"
 msgstr "offline"
 
-#: js/ux/ConnectionStatus.js:59 User/Abstract.php:247 User/Abstract.php:248
-#: User/Abstract.php:249 User/Abstract.php:250 User/Abstract.php:251
+#: js/ux/ConnectionStatus.js:59
+#: User/Abstract.php:247
+#: User/Abstract.php:248
+#: User/Abstract.php:249
+#: User/Abstract.php:250
+#: User/Abstract.php:251
 msgid "unknown"
 msgstr "unbekannt"
 
@@ -104,8 +108,11 @@ msgstr "Auswahl umkehren"
 msgid "Software Version"
 msgstr "Software Version"
 
-#: js/ux/form/LayerCombo.js:194 js/MainMenu.js:235 js/ExceptionDialog.js:54
-#: js/widgets/EditRecord.js:136 js/widgets/tags/TagsMassAttachAction.js:86
+#: js/ux/form/LayerCombo.js:194
+#: js/MainMenu.js:235
+#: js/ExceptionDialog.js:54
+#: js/widgets/EditRecord.js:136
+#: js/widgets/tags/TagsMassAttachAction.js:86
 #: js/widgets/container/ContainerSelect.js:450
 #: js/widgets/dialog/PreferencesDialog.js:129
 #: js/widgets/dialog/EditDialog.js:183
@@ -113,8 +120,10 @@ msgstr "Software Version"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: js/ux/form/LayerCombo.js:199 js/MainMenu.js:241
-#: js/widgets/EditRecord.js:115 js/widgets/tags/TagsMassAttachAction.js:92
+#: js/ux/form/LayerCombo.js:199
+#: js/MainMenu.js:241
+#: js/widgets/EditRecord.js:115
+#: js/widgets/tags/TagsMassAttachAction.js:92
 #: js/widgets/container/ContainerSelect.js:459
 #: js/widgets/dialog/PreferencesDialog.js:121
 #: js/widgets/dialog/EditDialog.js:166
@@ -128,7 +137,7 @@ msgstr "Laden"
 
 #: js/ux/form/ImageField.js:70
 msgid "Click to edit"
-msgstr ""
+msgstr "Klicken zum editieren"
 
 #: js/ux/form/ImageField.js:112
 msgid "Not An Image"
@@ -136,23 +145,23 @@ msgstr "Keine Bild-Datei"
 
 #: js/ux/form/ImageField.js:112
 msgid "Please select an image file (gif/png/jpeg)"
-msgstr ""
+msgstr "Bitte wählen Sie eine Bilddatei (gif/png/jpeg)"
 
-#: js/ux/form/ImageField.js:146 js/widgets/grid/FileUploadGrid.js:90
+#: js/ux/form/ImageField.js:146
+#: js/widgets/grid/FileUploadGrid.js:90
 msgid "Upload Failed"
 msgstr "Fehler beim Hochladen"
 
 #: js/ux/form/ImageField.js:146
 msgid "Could not upload image. Please notify your Administrator"
-msgstr ""
-"Das Bild konnte nicht Hochgeladen werden. Bitte informieren Sie ihren "
-"Administrator"
+msgstr "Das Bild konnte nicht Hochgeladen werden. Bitte informieren Sie ihren Administrator"
 
 #: js/ux/form/ImageField.js:158
 msgid "Change Image"
 msgstr "Bild ändern"
 
-#: js/ux/form/ImageField.js:169 js/ux/form/ImageField.js:187
+#: js/ux/form/ImageField.js:169
+#: js/ux/form/ImageField.js:187
 msgid "Crop Image"
 msgstr "Bild zuschneiden"
 
@@ -170,9 +179,7 @@ msgstr "Fehler bei Bildverarbeitung"
 
 #: js/ux/form/ImageField.js:238
 msgid "Could not load image. Please notify your Administrator"
-msgstr ""
-"Das Bild konnte nicht geladen werden. Bitte informieren Sie ihren "
-"Administrator"
+msgstr "Das Bild konnte nicht geladen werden. Bitte informieren Sie ihren Administrator"
 
 #: js/ux/SearchField.js:41
 msgid "enter searchfilter"
@@ -203,14 +210,11 @@ msgid "Congratulations!"
 msgstr "Herzlichen Glückwunsch!"
 
 #: js/UserRegistration.js:167
-msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr ""
-"Sie haben alle benötigten Informationen eingegeben. Wenn Sie nun den Fertig "
-"Knopf drücken, wird ihnen eine Bestätigungsemail zugesandt."
+msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
+msgstr "Sie haben alle benötigten Informationen eingegeben. Wenn Sie nun den Fertig Knopf drücken, wird ihnen eine Bestätigungsemail zugesandt."
 
-#: js/ExceptionHandler.js:127 Frontend/Http.php:536
+#: js/ExceptionHandler.js:127
+#: Frontend/Http.php:536
 msgid "Authorisation Required"
 msgstr "Anmeldung erforderlich"
 
@@ -231,37 +235,24 @@ msgid "Not Found"
 msgstr "Nicht gefunden"
 
 #: js/ExceptionHandler.js:156
-msgid ""
-"Sorry, your request could not be completed because the required data could "
-"not be found. In most cases this means that someone already deleted the "
-"data. Please refresh your current view."
-msgstr ""
-"Ihre Anfrage konnte aufgrund von fehlenden Daten nicht beantwortet werden. "
-"In den meisten Fällen wurden diese Daten von einem anderen Benutzer "
-"gelöscht. Bitte aktualisieren Sie Ihre momentane Ansicht."
+msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
+msgstr "Ihre Anfrage konnte aufgrund von fehlenden Daten nicht beantwortet werden. In den meisten Fällen wurden diese Daten von einem anderen Benutzer gelöscht. Bitte aktualisieren Sie Ihre momentane Ansicht."
 
 #: js/ExceptionHandler.js:165
 msgid "Concurrent Updates"
 msgstr "Passende Updates"
 
 #: js/ExceptionHandler.js:166
-msgid ""
-"Someone else saved this record while you where editing the data. You need to "
-"reload and make your changes again."
-msgstr ""
-"Der Eintrag wurde von jemand anderem geändert während Sie daran arbeiteten. "
-"Sie müssen aktualisieren und die Änderungen erneut durchführen."
+msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
+msgstr "Der Eintrag wurde von jemand anderem geändert während Sie daran arbeiteten. Sie müssen aktualisieren und die Änderungen erneut durchführen."
 
 #: js/ExceptionHandler.js:176
 msgid "Service Unavailable"
-msgstr ""
+msgstr "Dienst nicht verfügbar"
 
 #: js/ExceptionHandler.js:177
-msgid ""
-"The server is currently unable to handle the request due to a temporary "
-"overloading or maintenance of the server. Please try again or contact your "
-"administrator."
-msgstr ""
+msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
+msgstr "Der Server kann Ihre Anfrage momentan nicht beantworten. Bitte versuchen Sie es später noch einmal oder kontaktieren Sie Ihren Administrator."
 
 #: js/ExceptionHandler.js:184
 msgid "Connection lost, please check your network!"
@@ -272,34 +263,24 @@ msgid "Timeout"
 msgstr "Zeitüberschreitung"
 
 #: js/ExceptionHandler.js:191
-msgid ""
-"Sorry, some timeout occured while processing your request. Please reload "
-"your browser, try again or contact your administrator."
-msgstr ""
-"Es ist eine Zeitüberschreitung beim Bearbeiten der Anfrage aufgetreten. "
-"Eventuell müssen Sie den Browser neu laden und es noch einmal versuchen."
+msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
+msgstr "Es ist eine Zeitüberschreitung beim Bearbeiten der Anfrage aufgetreten. Eventuell müssen Sie den Browser neu laden und es noch einmal versuchen."
 
 #: js/ExceptionHandler.js:200
 msgid "No Response"
 msgstr "Keine Antwort"
 
 #: js/ExceptionHandler.js:201
-msgid ""
-"Sorry, the Server did not respond any data. Please reload your browser, try "
-"again or contact your administrator."
-msgstr ""
-"Leider konnte der Server auf Ihre Anfrage nicht antworten. Bitte "
-"aktualisieren Sie Ihren Browser und versuchen Sie es anschliessend noch "
-"einmal. Im erneuten Fehlerfall kontaktieren Sie bitte Ihren Administrator."
+msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
+msgstr "Leider konnte der Server auf Ihre Anfrage nicht antworten. Bitte aktualisieren Sie Ihren Browser und versuchen Sie es anschliessend noch einmal. Im erneuten Fehlerfall kontaktieren Sie bitte Ihren Administrator."
 
 #: js/ExceptionHandler.js:210
 msgid "No Role Memberships"
-msgstr ""
+msgstr "Keine Mitgliedschaften in Rollen"
 
 #: js/ExceptionHandler.js:211
-msgid ""
-"Your user account has no role memberships. Please contact your administrator."
-msgstr ""
+msgid "Your user account has no role memberships. Please contact your administrator."
+msgstr "Ihr Benutzerkonto besitzt keine Mitgliedschaften in Rollen. Bitte kontaktieren Sie Ihren Administrator."
 
 #: js/data/Record.js:115
 msgid "Task"
@@ -327,19 +308,15 @@ msgstr "{0} anderer Benutzer"
 
 #: js/Container.js:133
 msgid "Internal {0}"
-msgstr ""
+msgstr "Internes {0}"
 
 #: js/Container.js:137
 msgid "My {0}"
 msgstr "Meine {0}"
 
 #: js/tineInit.js:577
-msgid ""
-"Fatal Error: Client self-update failed, please contact your administrator "
-"and/or restart/reload your browser."
-msgstr ""
-"Fataler Fehler: Client-Update fehlgeschlagen. Bitte kontaktieren Sie Ihren "
-"Administrator und aktualisieren Sie Ihre Browser-Ansicht."
+msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
+msgstr "Fataler Fehler: Client-Update fehlgeschlagen. Bitte kontaktieren Sie Ihren Administrator und aktualisieren Sie Ihre Browser-Ansicht."
 
 #: js/common.js:150
 msgid "{0} minute"
@@ -363,7 +340,8 @@ msgstr[1] "{0} Arbeitstage"
 msgid "User: {0}"
 msgstr "Benutzer: {0}"
 
-#: js/MainMenu.js:118 js/MainMenu.js:168
+#: js/MainMenu.js:118
+#: js/MainMenu.js:168
 msgid "About {0}"
 msgstr "Über {0}"
 
@@ -375,7 +353,8 @@ msgstr "Google Gears installieren"
 msgid "Debug Console (Ctrl + F11)"
 msgstr "Debug Konsole (Ctrl + F11)"
 
-#: js/MainMenu.js:136 js/widgets/dialog/PreferencesPanel.js:37
+#: js/MainMenu.js:136
+#: js/widgets/dialog/PreferencesPanel.js:37
 msgid "Preferences"
 msgstr "Einstellungen"
 
@@ -427,26 +406,23 @@ msgstr "Erfolg"
 msgid "Your password has been changed."
 msgstr "Ihr Passwort wurde geändert"
 
-#: js/MainMenu.js:269 js/MainMenu.js:279
+#: js/MainMenu.js:269
+#: js/MainMenu.js:279
 msgid "Failure"
 msgstr "Fehler"
 
 #: js/MainMenu.js:280
 msgid "The new passwords mismatch, please correct them."
-msgstr ""
-"Die neuen Passwörter stimmen nicht überein. Bitte wiederholen Sie die "
-"Eingabe."
+msgstr "Die neuen Passwörter stimmen nicht überein. Bitte wiederholen Sie die Eingabe."
 
 #: js/MainMenu.js:298
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-"Die Installation von Gears wird die Geschwindigkeit von Tine 2.0 erhöhen "
-"indem alle benötigten Dateien local auf dem Computer gespeichert werden."
+msgid "Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer."
+msgstr "Die Installation von Gears wird die Geschwindigkeit von Tine 2.0 erhöhen indem alle benötigten Dateien local auf dem Computer gespeichert werden."
 
-#: js/MainMenu.js:319 js/widgets/grid/PersistentFilterPicker.js:166
-#: js/widgets/app/GridPanel.js:911 js/widgets/dialog/EditDialog.js:440
+#: js/MainMenu.js:319
+#: js/widgets/grid/PersistentFilterPicker.js:166
+#: js/widgets/app/GridPanel.js:911
+#: js/widgets/dialog/EditDialog.js:440
 #: js/widgets/tree/ContextMenu.js:82
 msgid "Confirm"
 msgstr "Bestätigen"
@@ -459,19 +435,23 @@ msgstr "Wollen Sie sich wirklich Abmelden?"
 msgid "Logging you out..."
 msgstr "Sie werden abgemeldet..."
 
-#: js/MainMenu.js:333 js/LoginPanel.js:282
+#: js/MainMenu.js:333
+#: js/LoginPanel.js:282
 msgid "Please wait!"
 msgstr "Bitte warten!"
 
-#: js/LoginPanel.js:78 js/LoginPanel.js:111
+#: js/LoginPanel.js:78
+#: js/LoginPanel.js:111
 msgid "Login"
 msgstr "Anmelden"
 
-#: js/LoginPanel.js:87 js/widgets/dialog/CredentialsDialog.js:76
+#: js/LoginPanel.js:87
+#: js/widgets/dialog/CredentialsDialog.js:76
 msgid "Username"
 msgstr "Benutzername"
 
-#: js/LoginPanel.js:98 js/widgets/dialog/CredentialsDialog.js:80
+#: js/LoginPanel.js:98
+#: js/widgets/dialog/CredentialsDialog.js:80
 msgid "Password"
 msgstr "Passwort"
 
@@ -480,14 +460,8 @@ msgid "Tine 2.0 is made for you"
 msgstr "Tine 2.0 ist für Euch"
 
 #: js/LoginPanel.js:132
-msgid ""
-"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas "
-"and get help."
-msgstr ""
-"Tine 2.0 macht die Zusammenarbeit im Unternehmen einfacher und angenehmer. "
-"Helft uns, Tine 2.0 zu weiter zu Verbessern. Wir freuen uns über Eure Ideen "
-"und spannende Diskussionen."
+msgid "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
+msgstr "Tine 2.0 macht die Zusammenarbeit im Unternehmen einfacher und angenehmer. Helft uns, Tine 2.0 zu weiter zu Verbessern. Wir freuen uns über Eure Ideen und spannende Diskussionen."
 
 #: js/LoginPanel.js:138
 msgid "Tine 2.0 Homepage"
@@ -501,18 +475,15 @@ msgstr "Tine 2.0 Forum"
 msgid "about {0} minutes"
 msgstr "ungefähr {0} Minuten"
 
-#: js/LoginPanel.js:188 js/LoginPanel.js:342
+#: js/LoginPanel.js:188
+#: js/LoginPanel.js:342
 msgid "Tine 2.0 needs your help"
 msgstr "Tine 2.0 benötigt Deine Hilfe"
 
-#: js/LoginPanel.js:190 js/LoginPanel.js:344
-msgid ""
-"We regularly need your feedback to make the next Tine 2.0 releases fit your "
-"needs even better. Help us and yourself by participating:"
-msgstr ""
-"Wir brauchen regelmäßiges Feedback von Tine 2.0 Benutzern um die nächste "
-"Version noch besser an Eure Bedürfnisse anzupassen. Helft uns und Euch mit "
-"Eurer Teilnahme:"
+#: js/LoginPanel.js:190
+#: js/LoginPanel.js:344
+msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
+msgstr "Wir brauchen regelmäßiges Feedback von Tine 2.0 Benutzern um die nächste Version noch besser an Eure Bedürfnisse anzupassen. Helft uns und Euch mit Eurer Teilnahme:"
 
 #: js/LoginPanel.js:196
 msgid "participate!"
@@ -530,10 +501,13 @@ msgstr "Dauer"
 msgid "Logging you in..."
 msgstr "Sie werden angemeldet..."
 
-#: js/LoginPanel.js:270 js/widgets/grid/PersistentFilterPicker.js:168
+#: js/LoginPanel.js:270
+#: js/widgets/grid/PersistentFilterPicker.js:168
 #: js/widgets/grid/PersistentFilterPicker.js:192
-#: js/widgets/container/GrantsDialog.js:173 js/widgets/tree/ContextMenu.js:43
-#: js/widgets/tree/ContextMenu.js:84 js/widgets/tree/ContextMenu.js:140
+#: js/widgets/container/GrantsDialog.js:173
+#: js/widgets/tree/ContextMenu.js:43
+#: js/widgets/tree/ContextMenu.js:84
+#: js/widgets/tree/ContextMenu.js:140
 msgid "Please wait"
 msgstr "Bitte warten"
 
@@ -566,8 +540,8 @@ msgstr "Gruppen"
 #: js/Models.js:274
 msgid "Import"
 msgid_plural "Imports"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Import"
+msgstr[1] "Importe"
 
 #: js/Models.js:307
 msgid "Credentials"
@@ -581,7 +555,8 @@ msgid_plural "Relations"
 msgstr[0] "Verknüpfung"
 msgstr[1] "Anwendungen"
 
-#: js/ExceptionDialog.js:46 Frontend/Http.php:563
+#: js/ExceptionDialog.js:46
+#: Frontend/Http.php:563
 msgid "Abnormal End"
 msgstr "Programmabbruch"
 
@@ -589,7 +564,8 @@ msgstr "Programmabbruch"
 msgid "Send Report"
 msgstr "Bericht Senden"
 
-#: js/ExceptionDialog.js:71 Frontend/Http.php:564
+#: js/ExceptionDialog.js:71
+#: Frontend/Http.php:564
 msgid "An error occurred, the program ended abnormal."
 msgstr "Ein Fehler ist aufgetreten, dass Programm wurde unerwartet beendet."
 
@@ -598,15 +574,11 @@ msgid "The last action you made was potentially not performed correctly."
 msgstr "Ihre letzte Aktion wurde möglicherweise nicht korrekt ausgeführt."
 
 #: js/ExceptionDialog.js:73
-msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occurred."
-msgstr ""
-"Mit dem Senden eines Fehlerberichtes helfen Sie mit, die Software zu "
-"verbessern. Bitte beschreiben Sie, was genau Sie gemacht haben, bevor der "
-"Fehler aufgetreten ist. "
+msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
+msgstr "Mit dem Senden eines Fehlerberichtes helfen Sie mit, die Software zu verbessern. Bitte beschreiben Sie, was genau Sie gemacht haben, bevor der Fehler aufgetreten ist. "
 
-#: js/ExceptionDialog.js:79 js/widgets/tags/TagsPanel.js:595
+#: js/ExceptionDialog.js:79
+#: js/widgets/tags/TagsPanel.js:595
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -666,15 +638,18 @@ msgstr "Suche nach Gruppen ..."
 msgid "Name"
 msgstr "Name"
 
-#: js/widgets/EditRecord.js:126 js/widgets/dialog/EditDialog.js:175
+#: js/widgets/EditRecord.js:126
+#: js/widgets/dialog/EditDialog.js:175
 msgid "Apply"
 msgstr "Anwenden"
 
-#: js/widgets/EditRecord.js:146 js/widgets/dialog/EditDialog.js:192
+#: js/widgets/EditRecord.js:146
+#: js/widgets/dialog/EditDialog.js:192
 msgid "delete"
 msgstr "Löschen"
 
-#: js/widgets/EditRecord.js:185 js/widgets/dialog/EditDialog.js:232
+#: js/widgets/EditRecord.js:185
+#: js/widgets/dialog/EditDialog.js:232
 #: js/widgets/dialog/EditDialog.js:245
 msgid "Saved in"
 msgstr "Gespeichert in"
@@ -707,7 +682,8 @@ msgstr "Alle Filter zurücksetzen"
 msgid "start search"
 msgstr "Suche starten"
 
-#: js/widgets/grid/FilterToolbar.js:147 js/widgets/grid/FilterToolbar.js:690
+#: js/widgets/grid/FilterToolbar.js:147
+#: js/widgets/grid/FilterToolbar.js:690
 msgid "save filter"
 msgstr "Filter speichern"
 
@@ -731,7 +707,8 @@ msgstr "Zeige"
 msgid "Please enter a name for the filter"
 msgstr "Bitte den Namen für den Filter eingeben"
 
-#: js/widgets/grid/FilterToolbar.js:693 js/widgets/grid/FilterToolbar.js:696
+#: js/widgets/grid/FilterToolbar.js:693
+#: js/widgets/grid/FilterToolbar.js:696
 msgid "Filter not Saved"
 msgstr "Filter nicht gespeichert"
 
@@ -740,14 +717,11 @@ msgid "You have to supply a name for the filter!"
 msgstr "Sie sollten einen Namen für den Filter angeben!"
 
 #: js/widgets/grid/FilterToolbar.js:696
-msgid ""
-"You have to supply a shorter name! Names of saved filters can only be up to "
-"40 characters long."
-msgstr ""
-"Sie müssen einen kürzeren Namen eingeben! Der Name eines gespeicherten "
-"Filters darf maximal 40 Zeichen lang sein."
+msgid "You have to supply a shorter name! Names of saved filters can only be up to 40 characters long."
+msgstr "Sie müssen einen kürzeren Namen eingeben! Der Name eines gespeicherten Filters darf maximal 40 Zeichen lang sein."
 
-#: js/widgets/grid/FilterToolbar.js:699 js/widgets/TimezoneChooser.js:74
+#: js/widgets/grid/FilterToolbar.js:699
+#: js/widgets/TimezoneChooser.js:74
 #: js/widgets/LangChooser.js:64
 msgid "Please Wait"
 msgstr "Bitte Warten"
@@ -760,7 +734,8 @@ msgstr "Filter speichern"
 msgid "contains"
 msgstr "enthält"
 
-#: js/widgets/grid/FilterModel.js:153 js/widgets/container/FilterModel.js:130
+#: js/widgets/grid/FilterModel.js:153
+#: js/widgets/container/FilterModel.js:130
 #: js/widgets/container/FilterModel.js:134
 msgid "is equal to"
 msgstr "ist gleich"
@@ -783,7 +758,7 @@ msgstr "eines von"
 
 #: js/widgets/grid/FilterModel.js:158
 msgid "none of"
-msgstr ""
+msgstr "keines von"
 
 #: js/widgets/grid/FilterModel.js:159
 msgid "is before"
@@ -882,18 +857,16 @@ msgid "next year"
 msgstr "nächstes Jahr"
 
 #: js/widgets/grid/FileUploadGrid.js:91
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+msgstr "Datei konnte nicht hochgeladen werden. Eventuell ist sie zu groß. Bitte informieren Sie Ihren Administrator. Maximale Dateigröße: "
 
 #: js/widgets/grid/FileUploadGrid.js:115
 msgid "Add file"
-msgstr ""
+msgstr "Datei hinzufügen"
 
 #: js/widgets/grid/FileUploadGrid.js:126
 msgid "Remove file"
-msgstr ""
+msgstr "Datei entfernen"
 
 #: js/widgets/grid/PersistentFilterPicker.js:93
 msgid "My saved filters"
@@ -913,19 +886,19 @@ msgstr "Lösche Filter {0}"
 
 #: js/widgets/grid/PersistentFilterPicker.js:186
 msgid "Rename Filter"
-msgstr ""
+msgstr "Filter umbenennen"
 
 #: js/widgets/grid/PersistentFilterPicker.js:190
 msgid "New Name"
-msgstr ""
+msgstr "Neuer Name"
 
 #: js/widgets/grid/PersistentFilterPicker.js:190
 msgid "Please enter the new name for filter \"{0}\"?"
-msgstr ""
+msgstr "Bitte geben Sie einen neuen Namen für den Filter \"{0}\" ein."
 
 #: js/widgets/grid/PersistentFilterPicker.js:192
 msgid "Renaming Filter \"{0}\""
-msgstr ""
+msgstr "Benenne Filter \"{0}\" um"
 
 #: js/widgets/grid/QuickaddGridPanel.js:101
 msgid "Remove"
@@ -933,15 +906,15 @@ msgstr "Entfernen"
 
 #: js/widgets/grid/PickerGridPanel.js:121
 msgid "Remove record"
-msgstr ""
+msgstr "Entferne Eintrag"
 
 #: js/widgets/grid/PickerGridPanel.js:189
 msgid "Search for records ..."
-msgstr ""
+msgstr "Suche nach Einträgen ..."
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:175
 msgid "show details"
-msgstr ""
+msgstr "Details anzeigen"
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:176
 msgid "Always show advanced filters"
@@ -950,8 +923,8 @@ msgstr "Zeige erweiterte Filter immer an"
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:335
 msgid "Your view is limited by {0} criteria:"
 msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ihre Anzeige ist durch {0} Kriterium limitiert:"
+msgstr[1] "Ihre Anzeige ist durch {0} Kriterien limitiert:"
 
 #: js/widgets/tags/TagFilter.js:29
 msgid "Tag"
@@ -969,23 +942,28 @@ msgstr "Das Tag zu den folgenden Einträgen hinzufügen:"
 msgid "Select Tag"
 msgstr "Tag auswählen"
 
-#: js/widgets/tags/TagsPanel.js:89 js/widgets/tags/TagsPanel.js:114
+#: js/widgets/tags/TagsPanel.js:89
+#: js/widgets/tags/TagsPanel.js:114
 msgid "Add a new personal tag"
 msgstr "Neuen persönlichen Tag hinzufügen"
 
-#: js/widgets/tags/TagsPanel.js:92 js/widgets/tags/TagsPanel.js:117
+#: js/widgets/tags/TagsPanel.js:92
+#: js/widgets/tags/TagsPanel.js:117
 msgid "Add New Personal Tag"
 msgstr "Neuen persönlichen Tag hinzufügen"
 
-#: js/widgets/tags/TagsPanel.js:93 js/widgets/tags/TagsPanel.js:118
+#: js/widgets/tags/TagsPanel.js:93
+#: js/widgets/tags/TagsPanel.js:118
 msgid "Please note: You create a personal tag. Only you can see it!"
 msgstr "Bitte beachten: Einen persönlichen Tag können nur Sie sehen!"
 
-#: js/widgets/tags/TagsPanel.js:93 js/widgets/tags/TagsPanel.js:118
+#: js/widgets/tags/TagsPanel.js:93
+#: js/widgets/tags/TagsPanel.js:118
 msgid "Enter tag name:"
 msgstr "Tag-Namen eingeben:"
 
-#: js/widgets/tags/TagsPanel.js:137 js/widgets/tags/TagsPanel.js:445
+#: js/widgets/tags/TagsPanel.js:137
+#: js/widgets/tags/TagsPanel.js:445
 #: js/widgets/tags/TagsPanel.js:449
 msgid "personal"
 msgstr "Persönlich"
@@ -1004,7 +982,8 @@ msgstr[1] "Tags entfernen"
 msgid "Edit tag"
 msgstr "Tag bearbeiten"
 
-#: js/widgets/tags/TagsPanel.js:197 js/widgets/tags/TagsPanel.js:202
+#: js/widgets/tags/TagsPanel.js:197
+#: js/widgets/tags/TagsPanel.js:202
 msgid "Rename Tag"
 msgstr "Tag umbenennen"
 
@@ -1043,10 +1022,8 @@ msgstr[1] "Ausgewählte Tags wirklich löschen?"
 #: js/widgets/tags/TagsPanel.js:267
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] ""
-"Der ausgewählte Tag wird gelöscht und verschwindet bei allen Einträgen"
-msgstr[1] ""
-"Die ausgewählten Tags werden gelöscht und verschwinden bei allen Einträgen"
+msgstr[0] "Der ausgewählte Tag wird gelöscht und verschwindet bei allen Einträgen"
+msgstr[1] "Die ausgewählten Tags werden gelöscht und verschwinden bei allen Einträgen"
 
 #: js/widgets/tags/TagsPanel.js:271
 msgid "Please wait a moment..."
@@ -1058,8 +1035,10 @@ msgid_plural "Deleting Tags"
 msgstr[0] "Lösche Tag"
 msgstr[1] "Lösche Tags"
 
-#: js/widgets/tags/TagsPanel.js:287 js/widgets/tags/TagsPanel.js:397
-#: js/widgets/tags/TagsPanel.js:430 js/widgets/app/GridPanel.js:952
+#: js/widgets/tags/TagsPanel.js:287
+#: js/widgets/tags/TagsPanel.js:397
+#: js/widgets/tags/TagsPanel.js:430
+#: js/widgets/app/GridPanel.js:952
 #: js/widgets/dialog/EditDialog.js:452
 msgid "Failed"
 msgstr "Fehlgeschlagen"
@@ -1068,11 +1047,13 @@ msgstr "Fehlgeschlagen"
 msgid "Could not delete Tag(s)."
 msgstr "Konnte Tag(s) nicht löschen."
 
-#: js/widgets/tags/TagsPanel.js:349 js/widgets/tags/TagsPanel.js:411
+#: js/widgets/tags/TagsPanel.js:349
+#: js/widgets/tags/TagsPanel.js:411
 msgid "Notice"
 msgstr "Beachten Sie"
 
-#: js/widgets/tags/TagsPanel.js:350 js/widgets/tags/TagsPanel.js:412
+#: js/widgets/tags/TagsPanel.js:350
+#: js/widgets/tags/TagsPanel.js:412
 msgid "The minimum tag length is three."
 msgstr "Ein Tag muss mindestens aus 3 Zeichen bestehen."
 
@@ -1084,11 +1065,13 @@ msgstr "Konnte Tag nicht erzeugen."
 msgid "Could not update tag."
 msgstr "Konnte Tag nicht aktualisieren."
 
-#: js/widgets/tags/TagsPanel.js:464 js/widgets/tags/TagsPanel.js:522
+#: js/widgets/tags/TagsPanel.js:464
+#: js/widgets/tags/TagsPanel.js:522
 msgid "Enter tag name"
 msgstr "Tag-Name eingegeben"
 
-#: js/widgets/tags/TagsPanel.js:465 js/widgets/form/RecordPickerComboBox.js:59
+#: js/widgets/tags/TagsPanel.js:465
+#: js/widgets/form/RecordPickerComboBox.js:59
 msgid "Searching..."
 msgstr "Suche ..."
 
@@ -1102,11 +1085,11 @@ msgstr "Tag Name"
 
 #: js/widgets/container/FilterModel.js:130
 msgid "is personal of"
-msgstr ""
+msgstr "ist persönlich von"
 
 #: js/widgets/container/FilterModel.js:238
 msgid "Selected  {0}"
-msgstr ""
+msgstr "Ausgewählt {0}"
 
 #: js/widgets/container/GrantsDialog.js:53
 msgid "Folder"
@@ -1118,16 +1101,17 @@ msgstr "Lesen"
 
 #: js/widgets/container/GrantsDialog.js:93
 msgid "The grant to read records of this container"
-msgstr ""
+msgstr "Das Recht, Einträge in diesem Container zu lesen"
 
-#: js/widgets/container/GrantsDialog.js:98 js/widgets/ActivitiesPanel.js:156
+#: js/widgets/container/GrantsDialog.js:98
+#: js/widgets/ActivitiesPanel.js:156
 #: js/widgets/ActivitiesPanel.js:168
 msgid "Add"
 msgstr "Hinzufügen"
 
 #: js/widgets/container/GrantsDialog.js:99
 msgid "The grant to add records to this container"
-msgstr ""
+msgstr "Das Recht, Einträge zu diesem Container hinzuzufügen"
 
 #: js/widgets/container/GrantsDialog.js:104
 msgid "Edit"
@@ -1135,7 +1119,7 @@ msgstr "Editieren"
 
 #: js/widgets/container/GrantsDialog.js:105
 msgid "The grant to edit records in this container"
-msgstr ""
+msgstr "Das Recht, Einträge in diesem Container zu bearbeiten"
 
 #: js/widgets/container/GrantsDialog.js:110
 msgid "Delete"
@@ -1143,39 +1127,39 @@ msgstr "Löschen"
 
 #: js/widgets/container/GrantsDialog.js:111
 msgid "The grant to delete records in this container"
-msgstr ""
+msgstr "Das Recht, Einträge in diesem Container zu löschen"
 
 #: js/widgets/container/GrantsDialog.js:116
 msgid "Export"
-msgstr ""
+msgstr "Exportieren"
 
 #: js/widgets/container/GrantsDialog.js:117
 msgid "The grant to export records from this container"
-msgstr ""
+msgstr "Das Recht, Einträge in diesem Container zu exportieren"
 
 #: js/widgets/container/GrantsDialog.js:122
 msgid "Sync"
-msgstr ""
+msgstr "Sync"
 
 #: js/widgets/container/GrantsDialog.js:123
 msgid "The grant to synchronise records with this container"
-msgstr ""
+msgstr "Das Recht, Einträge in diesem Container zu synchronisieren"
 
 #: js/widgets/container/GrantsDialog.js:134
 msgid "Free Busy"
-msgstr ""
+msgstr "Frei / Belegt"
 
 #: js/widgets/container/GrantsDialog.js:135
 msgid "The grant to access free busy information of events in this calendar"
-msgstr ""
+msgstr "Das Recht, zu Termine in diesem Kalender Frei/Belegt-Informationen angezeigt zu bekommen"
 
 #: js/widgets/container/GrantsDialog.js:142
 msgid "Private"
-msgstr ""
+msgstr "Privat"
 
 #: js/widgets/container/GrantsDialog.js:143
 msgid "The grant to access records marked as private in this container"
-msgstr ""
+msgstr "Das Recht, private Einträge in diesem Container zu lesen"
 
 #: js/widgets/container/GrantsDialog.js:150
 msgid "Admin"
@@ -1183,7 +1167,7 @@ msgstr "Admin"
 
 #: js/widgets/container/GrantsDialog.js:151
 msgid "The grant to administrate this container"
-msgstr ""
+msgstr "Das Recht, diesen Container zu administrieren"
 
 #: js/widgets/container/GrantsDialog.js:173
 msgid "Updating Grants"
@@ -1203,7 +1187,7 @@ msgstr "Andere {0} wählen..."
 
 #: js/widgets/container/ContainerSelect.js:110
 msgid "Select a {0}"
-msgstr ""
+msgstr "Wählen Sie einen {0}"
 
 #: js/widgets/container/ContainerSelect.js:130
 msgid "Recently used {0}:"
@@ -1216,30 +1200,32 @@ msgstr "Bitte {0} auswählen"
 #: js/widgets/container/ContainerTree.js:124
 msgid "container"
 msgid_plural "containers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Container"
+msgstr[1] "Container"
 
 #: js/widgets/container/ContainerTree.js:400
 msgid "You are not allowed to select the {0} '{1}':"
-msgstr ""
+msgstr "Sie haben nicht das Recht, den {0} '{1}' auszuwählen:"
 
 #: js/widgets/container/ContainerTree.js:401
 msgid "{0} grant is required for desired action"
-msgstr ""
+msgstr "Das {0} Recht ist für diese Aktion erforderlich"
 
 #: js/widgets/container/ContainerTree.js:402
 msgid "Insufficient Grants"
-msgstr ""
+msgstr "Unzureichende Rechte"
 
 #: js/widgets/ActivitiesPanel.js:141
 msgid "Add a Note..."
 msgstr "Notiz hinzufügen"
 
-#: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:396
+#: js/widgets/ActivitiesPanel.js:156
+#: js/widgets/ActivitiesPanel.js:396
 msgid "Note"
 msgstr "Notiz"
 
-#: js/widgets/ActivitiesPanel.js:169 js/widgets/ActivitiesPanel.js:322
+#: js/widgets/ActivitiesPanel.js:169
+#: js/widgets/ActivitiesPanel.js:322
 msgid "Add new note"
 msgstr "Neue Notiz hinzufügen"
 
@@ -1247,7 +1233,8 @@ msgstr "Neue Notiz hinzufügen"
 msgid "Notes"
 msgstr "Notizen"
 
-#: js/widgets/ActivitiesPanel.js:264 js/widgets/ActivitiesPanel.js:321
+#: js/widgets/ActivitiesPanel.js:264
+#: js/widgets/ActivitiesPanel.js:321
 msgid "Add Note"
 msgstr "Notiz hinzufügen"
 
@@ -1259,7 +1246,8 @@ msgstr "Neue Notiz eingeben:"
 msgid "Add a {0} Note"
 msgstr "{0} Notiz hinzufügen"
 
-#: js/widgets/ActivitiesPanel.js:394 js/widgets/ActivitiesPanel.js:529
+#: js/widgets/ActivitiesPanel.js:394
+#: js/widgets/ActivitiesPanel.js:529
 msgid "Type"
 msgstr "Typ"
 
@@ -1287,7 +1275,8 @@ msgstr "Historie"
 msgid "Quick search"
 msgstr "Schnellsuche"
 
-#: js/widgets/ActivitiesPanel.js:524 js/widgets/ActivitiesPanel.js:525
+#: js/widgets/ActivitiesPanel.js:524
+#: js/widgets/ActivitiesPanel.js:525
 msgid "Time"
 msgstr "Zeit"
 
@@ -1301,9 +1290,7 @@ msgstr "Fehlerhafte Einstellungen"
 
 #: js/widgets/form/ConfigPanel.js:108
 msgid "You need to correct the red marked fields before config could be saved"
-msgstr ""
-"Sie müssen die rot markierten Felder korrigieren um die Konfiguration "
-"speichern zu können"
+msgstr "Sie müssen die rot markierten Felder korrigieren um die Konfiguration speichern zu können"
 
 #: js/widgets/form/ConfigPanel.js:133
 msgid "Transfering Configuration..."
@@ -1318,12 +1305,8 @@ msgid "Reload config"
 msgstr "Konfiguration neu laden"
 
 #: js/widgets/app/GridPanel.js:190
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-"Keine {0} gefunden. Versuchen Sie die Suchkriterien, Anzeigeoptionen oder "
-"{1} in denen Sie suchen zu ändern."
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "Keine {0} gefunden. Versuchen Sie die Suchkriterien, Anzeigeoptionen oder {1} in denen Sie suchen zu ändern."
 
 #: js/widgets/app/GridPanel.js:279
 msgid "Edit {0}"
@@ -1333,11 +1316,13 @@ msgstr "{0} bearbeiten"
 msgid "Copy {0}"
 msgstr "Kopiere {0}"
 
-#: js/widgets/app/GridPanel.js:301 js/widgets/tree/ContextMenu.js:214
+#: js/widgets/app/GridPanel.js:301
+#: js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
 msgstr "{0} hinzufügen"
 
-#: js/widgets/app/GridPanel.js:311 js/widgets/app/GridPanel.js:312
+#: js/widgets/app/GridPanel.js:311
+#: js/widgets/app/GridPanel.js:312
 #: js/widgets/app/GridPanel.js:314
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
@@ -1370,7 +1355,8 @@ msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Möchten Sie den ausgewählten Eintrag wirklich löschen?"
 msgstr[1] "Möchten Sie die ausgewählten Einträge wirklich löschen?"
 
-#: js/widgets/app/GridPanel.js:931 js/widgets/dialog/EditDialog.js:442
+#: js/widgets/app/GridPanel.js:931
+#: js/widgets/dialog/EditDialog.js:442
 msgid "Deleting {0}"
 msgstr "Lösche {0}"
 
@@ -1378,7 +1364,8 @@ msgstr "Lösche {0}"
 msgid " ... This may take a long time!"
 msgstr "... Das kann eine ganze Weile dauern!"
 
-#: js/widgets/app/GridPanel.js:952 js/widgets/dialog/EditDialog.js:452
+#: js/widgets/app/GridPanel.js:952
+#: js/widgets/dialog/EditDialog.js:452
 msgid "Could not delete {0}."
 msgstr "Konnte {0} nicht löschen."
 
@@ -1386,7 +1373,8 @@ msgstr "Konnte {0} nicht löschen."
 msgid "Saved filter"
 msgstr "Gespeicherte Filter"
 
-#: js/widgets/TimezoneChooser.js:34 Preference.php:95
+#: js/widgets/TimezoneChooser.js:34
+#: Preference.php:95
 msgid "Timezone"
 msgstr "Zeitzone"
 
@@ -1425,7 +1413,8 @@ msgstr "Lade ..."
 
 #: js/widgets/dialog/PreferencesDialog.js:284
 #: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:432 js/widgets/dialog/ImportDialog.js:203
+#: js/widgets/dialog/EditDialog.js:432
+#: js/widgets/dialog/ImportDialog.js:203
 msgid "Errors"
 msgstr "Fehler"
 
@@ -1442,7 +1431,8 @@ msgid "General Preferences"
 msgstr "Generelle Einstellungen"
 
 #: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:432 js/widgets/dialog/ImportDialog.js:203
+#: js/widgets/dialog/EditDialog.js:432
+#: js/widgets/dialog/ImportDialog.js:203
 msgid "Please fix the errors noted."
 msgstr "Bitte beheben Sie die gekennzeichneten Fehler"
 
@@ -1501,61 +1491,59 @@ msgstr "Möchten Sie diesen {0} wirklich löschen?"
 #: js/widgets/dialog/MultiOptionsDialog.js:23
 #: js/widgets/dialog/MultiOptionsDialog.js:70
 msgid "What would you like to do?"
-msgstr ""
+msgstr "Was würden Sie gerne tun?"
 
 #: js/widgets/dialog/MultiOptionsDialog.js:27
 #: js/widgets/dialog/MultiOptionsDialog.js:129
 msgid "You need to select an option!"
-msgstr ""
+msgstr "Sie müssen eine Option auswählen!"
 
 #: js/widgets/dialog/ImportDialog.js:86
 msgid "Files"
-msgstr ""
+msgstr "Dateien"
 
 #: js/widgets/dialog/ImportDialog.js:106
 msgid "Import definition"
-msgstr ""
+msgstr "Importdefinition"
 
 #: js/widgets/dialog/ImportDialog.js:118
 msgid "Import into {0}"
-msgstr ""
+msgstr "In {0} importieren"
 
 #: js/widgets/dialog/ImportDialog.js:129
 msgid "Dry run"
-msgstr ""
+msgstr "Probelauf"
 
 #: js/widgets/dialog/ImportDialog.js:146
 msgid "No files added"
-msgstr ""
+msgstr "Keine Dateien hochgeladen"
 
 #: js/widgets/dialog/ImportDialog.js:146
 msgid "You need to add files to import."
-msgstr ""
+msgstr "Sie müssen Dateien zum Importieren hochladen."
 
 #: js/widgets/dialog/ImportDialog.js:176
 msgid "Dry run results"
-msgstr ""
+msgstr "Probelauf-Ergebnis"
 
 #: js/widgets/dialog/ImportDialog.js:177
-msgid ""
-"Import test successful for {0} records, import test failed for {1} records."
-msgstr ""
+msgid "Import test successful for {0} records, import test failed for {1} records."
+msgstr "{0} Einträge erfolgreich importiert, {1} Einträge fehlerhaft"
 
 #: js/widgets/dialog/ImportDialog.js:181
 msgid "Import results"
-msgstr ""
+msgstr "Import-Ergebnis"
 
 #: js/widgets/dialog/ImportDialog.js:182
-msgid ""
-"Import successful for {0} records / import failed for {1} records / {2} "
-"duplicates found"
-msgstr ""
+msgid "Import successful for {0} records / import failed for {1} records / {2} duplicates found"
+msgstr "{0} Einträge erfolgreich importiert, {1} Einträge fehlerhaft, {2} Dubletten"
 
 #: js/widgets/dialog/PreferencesPanel.js:151
 msgid "There are no preferences for this application."
 msgstr "Es gibt derzeit keine Einstellungen für diese Anwendung."
 
-#: js/widgets/LangChooser.js:31 Preference.php:99
+#: js/widgets/LangChooser.js:31
+#: Preference.php:99
 msgid "Language"
 msgstr "Sprache"
 
@@ -1563,11 +1551,13 @@ msgstr "Sprache"
 msgid "setting new language..."
 msgstr "neue Sprache wird eingestellt..."
 
-#: js/widgets/VersionCheck.js:43 js/widgets/VersionCheck.js:52
+#: js/widgets/VersionCheck.js:43
+#: js/widgets/VersionCheck.js:52
 msgid "New version of Tine 2.0 available"
 msgstr "Eine neue Version von Tine 2.0 ist verfügbar."
 
-#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+#: js/widgets/VersionCheck.js:44
+#: js/widgets/VersionCheck.js:53
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr "Die Version \"{0}\" von Tine 2.0 ist verfügbar."
 
@@ -1591,7 +1581,8 @@ msgstr "Bitte den Namen für neue {0} eingeben:"
 msgid "No {0} added"
 msgstr "Kein {0} hinzugefügt"
 
-#: js/widgets/tree/ContextMenu.js:40 js/widgets/tree/ContextMenu.js:137
+#: js/widgets/tree/ContextMenu.js:40
+#: js/widgets/tree/ContextMenu.js:137
 msgid "You have to supply a {0} name!"
 msgstr "Sie sollten einen Namen für {0} angeben!"
 
@@ -1637,14 +1628,11 @@ msgstr "{0} neu laden"
 
 #: js/AppManager.js:164
 msgid "Missing Applications"
-msgstr ""
+msgstr "Fehlende Anwendungen"
 
 #: js/AppManager.js:165
-msgid ""
-"There are no applications enabled for you. Please contact your administrator."
-msgstr ""
-"Es sind keine Anwendungen aktiviert. Bitte wenden Sie sich an Ihren "
-"Administrator."
+msgid "There are no applications enabled for you. Please contact your administrator."
+msgstr "Es sind keine Anwendungen aktiviert. Bitte wenden Sie sich an Ihren Administrator."
 
 #: Preference.php:96
 msgid "The timezone in which dates are shown in Tine 2.0."
@@ -1667,18 +1655,16 @@ msgid "Window Type"
 msgstr "Fenstertyp"
 
 #: Preference.php:108
-msgid ""
-"You can choose between ExtJs style windows or normal Browser popup windows."
-msgstr ""
-"Sie können zwischen Extjs-Fenstern oder normalen Browserfenstern wählen."
+msgid "You can choose between ExtJs style windows or normal Browser popup windows."
+msgstr "Sie können zwischen Extjs-Fenstern oder normalen Browserfenstern wählen."
 
 #: Preference.php:111
 msgid "Confirm Logout"
-msgstr ""
+msgstr "Ausloggen bestätigen"
 
 #: Preference.php:112
 msgid "Show confirmation dialog on logout."
-msgstr ""
+msgstr "Bestätigungsdialog beim Ausloggen anzeigen."
 
 #: Notes.php:363
 msgid "by"
@@ -1734,77 +1720,56 @@ msgstr "Eintrag geändert"
 
 #~ msgid "Report bugs to tine20.org directly when they occur"
 #~ msgstr "Melden Sie Fehler direkt an tine20.org."
-
 #~ msgid "Check tine20.org for new versions"
 #~ msgstr "Bitte prüfen Sie tine20.org auf neue Versionen"
-
 #~ msgid "Sorry"
 #~ msgstr "Entschuldigung"
-
 #~ msgid "Remove account"
 #~ msgstr "Benutzer entfernen"
-
 #~ msgid "shared"
 #~ msgstr "geteilt"
-
 #~ msgid "Permission Denied"
 #~ msgstr "Zugriff verweigert"
-
 #~ msgid "You don't have the required grant to select this {0}"
 #~ msgstr "Sie haben nicht die Berechtigungen um {0} auszuwählen"
-
 #~ msgid "is in"
 #~ msgstr "ist in"
-
 #~ msgid "remove record"
 #~ msgstr "Eintrag entfernen"
-
 #~ msgid "Search"
 #~ msgstr "Suchen"
-
 #~ msgid "Browse"
 #~ msgstr "Blättern"
-
 #~ msgid "click to edit"
 #~ msgstr "Zum Ändern hier Klicken"
-
 #~ msgid "Plase select an image file (gif/png/jpeg)"
 #~ msgstr "Bitte wählen Sie eine gültige Bild-Datei (gif/png/jpeg)"
-
 #~ msgid "Please Select a Group"
 #~ msgstr "Bitte wählen Sie eine Gruppe aus"
-
 #~ msgid "Register"
 #~ msgstr "Registrieren"
-
 #~ msgid ""
 #~ "The server did not respond to your request. Please check your network or "
 #~ "contact your administrator."
 #~ msgstr ""
 #~ "Der Server konnte leider auf Ihre Anfrage nicht antworten. Bitte "
 #~ "überprüfen Sie Ihr Netzwerk oder kontaktieren Sie Ihren Administrator."
-
 #~ msgid "No response"
 #~ msgstr "Keine Antwort"
-
 #~ msgid ""
 #~ "We did not receive a response from the server. Your network could be down "
 #~ "or a timeout occurred."
 #~ msgstr ""
 #~ "Leider haben wir keine Antwort vom Server bekommen. Es könnte ein "
 #~ "Netzwerkfehler oder eine Zeitüberschreitung aufgetreten sein."
-
 #~ msgid "Permissions"
 #~ msgstr "Berechtigungen"
-
 #~ msgid "Could not save {0}."
 #~ msgstr "Konnte {0} nicht speichern."
-
 #~ msgid "add account"
 #~ msgstr "Benutzer hinzufügen"
-
 #~ msgid "nobody"
 #~ msgstr "niemand"
-
 #~ msgid "please select an account"
 #~ msgstr "Bitte wählen Sie einen Benutzer"
+

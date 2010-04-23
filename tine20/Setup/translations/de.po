@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-08 17:54+0100\n"
+"PO-Revision-Date: 2010-04-23 12:44+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -20,17 +20,21 @@ msgstr "Informationen"
 msgid "Setup Authentication"
 msgstr "Setup Authentifizierung"
 
-#: js/ConfigManagerPanel.js:67 js/EmailPanel.js:192
+#: js/ConfigManagerPanel.js:67
+#: js/EmailPanel.js:192
 msgid "Username"
 msgstr "Benutzername"
 
-#: js/ConfigManagerPanel.js:77 js/ConfigManagerPanel.js:113
-#: js/AuthenticationPanel.js:279 js/AuthenticationPanel.js:367
+#: js/ConfigManagerPanel.js:77
+#: js/ConfigManagerPanel.js:113
+#: js/AuthenticationPanel.js:279
+#: js/AuthenticationPanel.js:367
 #: js/EmailPanel.js:196
 msgid "Password"
 msgstr "Kennwort"
 
-#: js/ConfigManagerPanel.js:83 js/ConfigManagerPanel.js:103
+#: js/ConfigManagerPanel.js:83
+#: js/ConfigManagerPanel.js:103
 msgid "Database"
 msgstr "Datenbank"
 
@@ -38,12 +42,16 @@ msgstr "Datenbank"
 msgid "Adapter"
 msgstr "Adapter"
 
-#: js/ConfigManagerPanel.js:92 js/EmailPanel.js:188 js/EmailPanel.js:279
+#: js/ConfigManagerPanel.js:92
+#: js/EmailPanel.js:188
+#: js/EmailPanel.js:279
 msgid "Hostname"
 msgstr "Hostname"
 
-#: js/ConfigManagerPanel.js:97 js/AuthenticationPanel.js:272
-#: js/EmailPanel.js:201 js/EmailPanel.js:283
+#: js/ConfigManagerPanel.js:97
+#: js/AuthenticationPanel.js:272
+#: js/EmailPanel.js:201
+#: js/EmailPanel.js:283
 msgid "Port"
 msgstr "Port"
 
@@ -97,25 +105,26 @@ msgstr "Pfad für Sitzungs-Dateien"
 
 #: js/ConfigManagerPanel.js:181
 msgid "Addressbook Map panel"
-msgstr ""
+msgstr "Kartenfenster im Adressbuch"
 
 #: js/ConfigManagerPanel.js:184
 msgid "Map panel"
-msgstr ""
+msgstr "Kartenfenster"
 
 #: js/ConfigManagerPanel.js:195
 msgid "disabled"
-msgstr ""
+msgstr "deaktiviert"
 
 #: js/ConfigManagerPanel.js:195
 msgid "enabled"
-msgstr ""
+msgstr "aktiviert"
 
 #: js/ConfigManagerPanel.js:206
 msgid "Config file is not writable"
 msgstr "Konfigurationsdatei nicht schreibbar"
 
-#: js/ConfigManagerPanel.js:208 js/AuthenticationPanel.js:536
+#: js/ConfigManagerPanel.js:208
+#: js/AuthenticationPanel.js:536
 msgid "Save config"
 msgstr "Konfiguration speichern"
 
@@ -148,15 +157,11 @@ msgid "Delete all existing users and groups"
 msgstr "Lösche alle existierenden Benutzer und Gruppen"
 
 #: js/AuthenticationPanel.js:123
-msgid ""
-"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to "
-"LDAP ?"
-msgstr ""
-"Der Wechsel von SQL nach LDAP wird alle bestehenden Benutzer, Gruppen und "
-"Rollen Löschen. Möchten sie den Wechsel wirklich vornehmen?"
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgstr "Der Wechsel von SQL nach LDAP wird alle bestehenden Benutzer, Gruppen und Rollen Löschen. Möchten sie den Wechsel wirklich vornehmen?"
 
-#: js/AuthenticationPanel.js:186 js/AuthenticationPanel.js:207
+#: js/AuthenticationPanel.js:186
+#: js/AuthenticationPanel.js:207
 #: js/EmailPanel.js:156
 msgid "Backend"
 msgstr "backend"
@@ -177,15 +182,18 @@ msgstr "Initiales Admin Password"
 msgid "Password confirmation"
 msgstr "Passwort Bestätigung"
 
-#: js/AuthenticationPanel.js:268 js/AuthenticationPanel.js:359
+#: js/AuthenticationPanel.js:268
+#: js/AuthenticationPanel.js:359
 msgid "Host"
 msgstr "Host"
 
-#: js/AuthenticationPanel.js:276 js/AuthenticationPanel.js:364
+#: js/AuthenticationPanel.js:276
+#: js/AuthenticationPanel.js:364
 msgid "Login name"
 msgstr "Loginname"
 
-#: js/AuthenticationPanel.js:292 js/AuthenticationPanel.js:380
+#: js/AuthenticationPanel.js:292
+#: js/AuthenticationPanel.js:380
 msgid "Bind requires DN"
 msgstr "Verbindung benötigt DN"
 
@@ -201,11 +209,13 @@ msgstr "Kanonische Form der Benutzerkonten"
 msgid "Accounts storage"
 msgstr "Speicherort der Benutzerkonten"
 
-#: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:466
+#: js/AuthenticationPanel.js:328
+#: js/AuthenticationPanel.js:466
 msgid "Default user group name"
 msgstr "Standard Benutzer Gruppenname"
 
-#: js/AuthenticationPanel.js:332 js/AuthenticationPanel.js:469
+#: js/AuthenticationPanel.js:332
+#: js/AuthenticationPanel.js:469
 msgid "Default admin group name"
 msgstr "Standard Admin Gruppenname"
 
@@ -219,11 +229,11 @@ msgstr "Benutzer DN"
 
 #: js/AuthenticationPanel.js:387
 msgid "User Filter"
-msgstr ""
+msgstr "Benutzerfilter"
 
 #: js/AuthenticationPanel.js:399
 msgid "User Search Scope"
-msgstr ""
+msgstr "Benutzersuche-Bereich"
 
 #: js/AuthenticationPanel.js:403
 msgid "Groups DN"
@@ -231,11 +241,11 @@ msgstr "Gruppen DN"
 
 #: js/AuthenticationPanel.js:406
 msgid "Group Filter"
-msgstr ""
+msgstr "Gruppenfilter"
 
 #: js/AuthenticationPanel.js:418
 msgid "Group Search Scope"
-msgstr ""
+msgstr "Gruppensuche-Bereich"
 
 #: js/AuthenticationPanel.js:431
 msgid "Password encoding"
@@ -279,11 +289,11 @@ msgstr "Weiterleitungs Einstellungen"
 
 #: js/AuthenticationPanel.js:498
 msgid "Redirect Url (redirect to login screen if empty)"
-msgstr ""
+msgstr "Weiterleitungs-URL (Weiterleitung zum Login wenn leer)"
 
 #: js/AuthenticationPanel.js:510
 msgid "Redirect Always (if No, only redirect after logout)"
-msgstr ""
+msgstr "Immer Weiterleiten (Wenn Nein: nur nach dem ausloggen weiterleiten)"
 
 #: js/AuthenticationPanel.js:521
 msgid "Redirect to referring site, if exists"
@@ -297,8 +307,10 @@ msgstr "Konfiguration speichern und installieren"
 msgid "Passwords don't match"
 msgstr "Die Passwörter stimmen nicht überein"
 
-#: js/AuthenticationPanel.js:570 js/AuthenticationPanel.js:577
-#: js/AuthenticationPanel.js:581 js/AuthenticationPanel.js:592
+#: js/AuthenticationPanel.js:570
+#: js/AuthenticationPanel.js:577
+#: js/AuthenticationPanel.js:581
+#: js/AuthenticationPanel.js:592
 #: js/AuthenticationPanel.js:602
 msgid "Should not be empty"
 msgstr "Darf nicht leer sein"
@@ -331,7 +343,8 @@ msgstr "Status"
 msgid "Depends on"
 msgstr "Hängt ab von"
 
-#: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:207
+#: js/ApplicationGridPanel.js:82
+#: js/EnvCheckGridPanel.js:207
 msgid "Install application"
 msgstr "Anwendung installieren"
 
@@ -398,9 +411,7 @@ msgid "Performing Environment Checks..."
 msgstr "Führe Environment Prüfungen aus..."
 
 #: js/EnvCheckGridPanel.js:133
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "Keine {0} gefunden. Bitte überprüfen Sie ihre Filterkriterien"
 
 #: js/EnvCheckGridPanel.js:163
@@ -435,19 +446,24 @@ msgstr "Standard  SMTP"
 msgid "Imap"
 msgstr "Imap"
 
-#: js/EmailPanel.js:204 js/EmailPanel.js:286
+#: js/EmailPanel.js:204
+#: js/EmailPanel.js:286
 msgid "Secure Connection"
 msgstr "Sichere Verbindung"
 
-#: js/EmailPanel.js:215 js/EmailPanel.js:297 js/EmailPanel.js:313
+#: js/EmailPanel.js:215
+#: js/EmailPanel.js:297
+#: js/EmailPanel.js:313
 msgid "None"
 msgstr "Keine"
 
-#: js/EmailPanel.js:216 js/EmailPanel.js:298
+#: js/EmailPanel.js:216
+#: js/EmailPanel.js:298
 msgid "TLS"
 msgstr "TLS"
 
-#: js/EmailPanel.js:217 js/EmailPanel.js:299
+#: js/EmailPanel.js:217
+#: js/EmailPanel.js:299
 msgid "SSL"
 msgstr "SSL"
 
@@ -461,11 +477,11 @@ msgstr "Ja"
 
 #: js/EmailPanel.js:230
 msgid "Use system account"
-msgstr ""
+msgstr "Systemkonto benutzen"
 
 #: js/EmailPanel.js:233
 msgid "Append domain to login name"
-msgstr ""
+msgstr "Domäne an den Benutzernamen anhängen"
 
 #: js/EmailPanel.js:271
 msgid "Smtp"
@@ -485,11 +501,11 @@ msgstr "Klartext"
 
 #: js/EmailPanel.js:319
 msgid "Primary Domain"
-msgstr ""
+msgstr "Primäre Domäne"
 
 #: js/EmailPanel.js:323
 msgid "Secondary Domains (comma separated)"
-msgstr ""
+msgstr "Sekundäre Domänen (durch Komma getrennt)"
 
 #: js/EmailPanel.js:327
 msgid "Notifications service address"
@@ -497,11 +513,11 @@ msgstr "Notifikationsdienst Emailadresse"
 
 #: js/EmailPanel.js:331
 msgid "Notification Username"
-msgstr ""
+msgstr "Benachrichtigungs-Benutzername"
 
 #: js/EmailPanel.js:335
 msgid "Notification Password"
-msgstr ""
+msgstr "Benachrichtigungs-Passwort"
 
 #: js/EmailPanel.js:395
 msgid "MySql Hostname"
@@ -525,20 +541,16 @@ msgstr "MySql Port"
 
 #~ msgid "Domain"
 #~ msgstr "Domain"
-
 #~ msgid "Use as default account"
 #~ msgstr "Benutze den Standard Zugang"
-
 #~ msgid "Default account name"
 #~ msgstr "Name des Standard Zuganges"
-
 #~ msgid "Redirect Url (after Logout, redirect to login screen if empty)"
 #~ msgstr ""
 #~ "Weiterleitungs URL (Nach dem Logout. Standardverhalten ist der Login-"
 #~ "Bildschrim)"
-
 #~ msgid "Shit"
 #~ msgstr "Scheiße"
-
 #~ msgid "Where are the backup tapes"
 #~ msgstr "Wo sind nur die Backup Bänder"
+

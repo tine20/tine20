@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-06 10:21+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2010-04-23 12:40+0100\n"
+"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12,12 +12,15 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Phone.js:28 js/Phone.js:480 js/Phone.js:481
+#: js/Phone.js:28
+#: js/Phone.js:480
+#: js/Phone.js:481
 msgid "Edit phone settings"
 msgstr "Telefoneinstellungen bearbeiten"
 
-#: js/Phone.js:58 js/Phone.js:255 js/Models.js:70
-#, fuzzy
+#: js/Phone.js:58
+#: js/Phone.js:255
+#: js/Models.js:70
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
@@ -49,11 +52,11 @@ msgstr "Wählen"
 
 #: js/Phone.js:326
 msgid "Error"
-msgstr ""
+msgstr "Fehler"
 
 #: js/Phone.js:327
 msgid "Not possible to dial."
-msgstr ""
+msgstr "Wählen nicht möglich."
 
 #: js/Phone.js:470
 msgid "Dial number"
@@ -87,7 +90,8 @@ msgstr "Quelle oder Ziel"
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Anrufe  {0} - {1} of {2} anzeigen"
 
-#: js/Phone.js:671 js/Phone.js:715
+#: js/Phone.js:671
+#: js/Phone.js:715
 msgid "No calls to display"
 msgstr "Keine Anrufe"
 
@@ -134,161 +138,111 @@ msgstr "Anruf-ID"
 #: js/Models.js:74
 msgid "phones list"
 msgid_plural "phones lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Telefonliste"
+msgstr[1] "Telefonlisten"
 
 #~ msgid "Name"
 #~ msgstr "Name"
-
 #~ msgid "Phone Model"
 #~ msgstr "Telefon"
-
 #~ msgid "MAC Address"
 #~ msgstr "MAC Adresse"
-
 #~ msgid "infos"
 #~ msgstr "Informationen"
-
 #~ msgid "Current IP Address"
 #~ msgstr "Derzeitige IP Adresse"
-
 #~ msgid "Firmware last checked at"
 #~ msgstr "Letzter Firmware check"
-
 #~ msgid "Current Software Version"
 #~ msgstr "Derzeitige Software Version"
-
 #~ msgid "Settings Loaded at"
 #~ msgstr "Laden der Einstellungen"
-
 #~ msgid "redirection"
 #~ msgstr "Weiterleitung"
-
 #~ msgid "redirect_event"
 #~ msgstr "weiterleitungs anlass"
-
 #~ msgid "all"
 #~ msgstr "Alle"
-
 #~ msgid "busy"
 #~ msgstr "belegt"
-
 #~ msgid "none"
 #~ msgstr "Keine"
-
 #~ msgid "time"
 #~ msgstr "Zeit"
-
 #~ msgid "redirect_number"
 #~ msgstr "Weiterleitungs  Nummer"
-
 #~ msgid "redirect_time"
 #~ msgstr "Weiterleitungs Zeit"
-
 #~ msgid "Settings"
 #~ msgstr "Einstellungen"
-
 #~ msgid "web_language"
 #~ msgstr "Sprache des Web-Interfaces"
-
 #~ msgid "- factory default -"
 #~ msgstr "- Firmen Einstellungen -"
-
 #~ msgid "language"
 #~ msgstr "Sprache"
-
 #~ msgid "display_method"
 #~ msgstr "Anzeige Methode"
-
 #~ msgid "whole url"
 #~ msgstr "Vollständige URL"
-
 #~ msgid "name"
 #~ msgstr "Name"
-
 #~ msgid "number"
 #~ msgstr "Nummer"
-
 #~ msgid "name + number"
 #~ msgstr "Name + Nummer"
-
 #~ msgid "number + name"
 #~ msgstr "Nummer + Name"
-
 #~ msgid "call_waiting"
 #~ msgstr "Anruf Wartet"
-
 #~ msgid "on"
 #~ msgstr "An"
-
 #~ msgid "visual"
 #~ msgstr "Wählen"
-
 #~ msgid "ringer"
 #~ msgstr "Leitung"
-
 #~ msgid "off"
 #~ msgstr "Aus"
-
 #~ msgid "mwi_notification"
 #~ msgstr "MWI Benachrichtigung"
-
 #~ msgid "silent"
 #~ msgstr "Stumm"
-
 #~ msgid "beep"
 #~ msgstr "Signalton"
-
 #~ msgid "reminder"
 #~ msgstr "Erinnerung"
-
 #~ msgid "mwi_dialtone"
 #~ msgstr "MWI Klingelton"
-
 #~ msgid "normal"
 #~ msgstr "Normal"
-
 #~ msgid "stutter"
 #~ msgstr "Stutter"
-
 #~ msgid "headset_device"
 #~ msgstr "Headset Gerät"
-
 #~ msgid "headset_rj"
 #~ msgstr "Headset RJ"
-
 #~ msgid "message_led_other"
 #~ msgstr "Andere LED"
-
 #~ msgid "global_missed_counter"
 #~ msgstr "Genereller verpasst Zähler"
-
 #~ msgid "scroll_outgoing"
 #~ msgstr "Blättern"
-
 #~ msgid "show_local_line"
 #~ msgstr "Meine Nummer"
-
 #~ msgid "show_call_status"
 #~ msgstr "Anruf Status"
-
 #~ msgid "lineactive"
 #~ msgstr "Aktive Leitung"
-
 #~ msgid "sipCombo"
 #~ msgstr "SIP Auswahl"
-
 #~ msgid "Idle Text"
 #~ msgstr "Ruhezustands Nachricht"
-
 #~ msgid "Lines"
 #~ msgstr "Leitung"
-
 #~ msgid "Users"
 #~ msgstr "Benutzer"
-
 #~ msgid "Rights"
 #~ msgstr "Rechte"
-
 #~ msgid "enter searchfilter"
 #~ msgstr "Suchfilter eingeben"
+

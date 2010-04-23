@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-02 15:43+0100\n"
+"PO-Revision-Date: 2010-04-23 12:36+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -15,32 +15,32 @@ msgstr ""
 #: Controller.php:97
 #, python-format
 msgid "%s's personal example records"
-msgstr ""
+msgstr "%s persönliche Beispieleinträge"
 
 #: js/Model.js:33
 msgid "example record"
 msgid_plural "example records"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Beispieleintrag"
+msgstr[1] "Beispieleinträge"
 
 #: js/Model.js:37
 msgid "example record list"
 msgid_plural "example record lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Liste von Beispieleinträgen"
+msgstr[1] "Listen von Beispieleinträgen"
 
 #: js/ExampleRecordEditDialog.js:89
-#, fuzzy
 msgid "ExampleRecord"
 msgstr "BeispielEintrag"
 
-#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
+#: js/ExampleRecordEditDialog.js:106
+#: js/ExampleRecordGridPanel.js:105
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: js/ExampleApplication.js:27
 msgid "Example Application"
-msgstr ""
+msgstr "Beispielanwendung"
 
 #: js/ExampleRecordGridPanel.js:77
 msgid "Quick search"
@@ -68,44 +68,32 @@ msgstr "BeispielAnwendung"
 
 #~ msgid "ExampleRecords"
 #~ msgstr "BeispielEinträge"
-
 #~ msgid "All ExampleRecords"
 #~ msgstr "Alle BeispielEinträge"
-
 #~ msgid "Description"
 #~ msgstr "Beschreibung"
-
 #~ msgid "record list"
 #~ msgid_plural "record lists"
 #~ msgstr[0] "Eintrags Liste"
 #~ msgstr[1] "Eintrags Listen"
-
 #~ msgid "Number"
 #~ msgstr "Zahl"
-
 #~ msgid "Unit"
 #~ msgstr "Einheit"
-
 #~ msgid "Unit Price"
 #~ msgstr "Preis pro Einheit"
-
 #~ msgid "Timesheets are billable"
 #~ msgstr "Stundenzettel sind abrechenbar"
-
 #~ msgid "closed"
 #~ msgstr "geschlossen"
-
 #~ msgid "open"
 #~ msgstr "offen"
-
 #~ msgid "Billed"
 #~ msgstr "Berechnet"
-
 #~ msgid "not yet billed"
 #~ msgstr "noch nicht berechnet"
-
 #~ msgid "to bill"
 #~ msgstr "zu berechnen"
-
 #~ msgid "billed"
 #~ msgstr "berechnet"
+
