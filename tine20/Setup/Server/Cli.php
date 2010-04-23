@@ -44,7 +44,7 @@ class Setup_Server_Cli extends Setup_Server_Abstract
                 'update-s'              => 'Update applications [All] or comma separated list',             
                 'uninstall-s'           => 'Uninstall application [All] or comma separated list',
                 'list-s'                => 'List installed applications',
-                'import_accounts'       => 'Import user and groups from ldap',
+                'sync_accounts_from_ldap'       => 'Import user and groups from ldap',
                 #'username'             => 'Username [required]',              
                 #'password'             => 'Password [required]',              
             ));
@@ -55,7 +55,7 @@ class Setup_Server_Cli extends Setup_Server_Abstract
             exit;
         }
 
-        if (count($opts->toArray()) === 0 || $opts->h || (empty($opts->install) && empty($opts->update) && empty($opts->uninstall) && empty($opts->list) && empty($opts->import_accounts) && empty($opts->check_requirements) && empty($opts->setconfig))) {
+        if (count($opts->toArray()) === 0 || $opts->h || (empty($opts->install) && empty($opts->update) && empty($opts->uninstall) && empty($opts->list) && empty($opts->sync_accounts_from_ldap) && empty($opts->check_requirements) && empty($opts->setconfig))) {
             echo $opts->getUsageMessage();
             exit;
         }

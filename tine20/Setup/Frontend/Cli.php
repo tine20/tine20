@@ -55,7 +55,7 @@ class Setup_Frontend_Cli
             $this->_uninstall($_opts);
         } elseif(isset($_opts->list)) {
             $this->_listInstalled();
-        } elseif(isset($_opts->import_accounts)) {
+        } elseif(isset($_opts->sync_accounts_from_ldap)) {
             $this->_importAccounts($_opts);
         } elseif(isset($_opts->check_requirements)) {
             $this->_checkRequirements($_opts);
