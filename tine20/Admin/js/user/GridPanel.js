@@ -53,7 +53,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             text: this.app.i18n._('enable account'),
             allowMultiple: true,
             disabled: true,
-            handler: this.enableDisableButtonHandler.createDelegate(this),
+            handler: this.enableDisableButtonHandler.createDelegate(this, ['enabled']),
             iconCls: 'action_enable',
             actionUpdater: this.enableDisableActionUpdater.createDelegate(this, 'disabled', true)
         });
@@ -63,7 +63,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             text: this.app.i18n._('disable account'),
             allowMultiple: true,
             disabled: true,
-            handler: this.enableDisableButtonHandler.createDelegate(this),
+            handler: this.enableDisableButtonHandler.createDelegate(this, ['disabled']),
             iconCls: 'action_disable',
             actionUpdater: this.enableDisableActionUpdater.createDelegate(this, 'enabled', true)
         });
@@ -166,12 +166,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         ];
     },
     
-    enableDisableButtonHandler: function(_button, _event) {
-        var status = 'disabled';
-        if(_button.id == 'Admin_User_Action_Enable') {
-            status = 'enabled';
-        }
-        
+    enableDisableButtonHandler: function(status) {
         var accountIds = new Array();
         var selectedRows = this.grid.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
