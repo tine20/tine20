@@ -398,11 +398,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         // override record with returned data
                         this.record = record;
                         
-                        // update form with this new data
-                        // NOTE: We update the form also when window should be closed,
-                        //       cause sometimes security restrictions might prevent
-                        //       closing of native windows
-                        this.onRecordLoad();
+                        if (! (closeWindow && typeof this.window.cascade == 'function')) {
+                            // update form with this new data
+                            // NOTE: We update the form also when window should be closed,
+                            //       cause sometimes security restrictions might prevent
+                            //       closing of native windows
+                            this.onRecordLoad();
+                        }
                         this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
                         
                         // free 0 namespace if record got created
