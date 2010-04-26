@@ -396,14 +396,14 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         ));
         
         $events = $this->_controller->search($filter);
-        $this->assertEquals(1, count($events));
+        $this->assertEquals(1, count($events), 'event should be found, but is not');
         
         $attender = $persitentEvent->attendee[0];
         $attender->status = Calendar_Model_Attender::STATUS_DECLINED;
         $updatedPersistentEvent = $this->_controller->update($persitentEvent);
         
         $events = $this->_controller->search($filter);
-        $this->assertEquals(0, count($events));
+        $this->assertEquals(0, count($events), 'event should _not_ be found, but is');
         
     }
     
