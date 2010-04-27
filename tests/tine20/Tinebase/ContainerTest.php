@@ -338,6 +338,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $grants = $this->_instance->getGrantsOfRecords($records, $userId, 'container_id');
         
         $this->assertTrue($records[0]['container_id'] instanceof Tinebase_Model_Container, 'contaienr_id is not resolved');
+        $this->assertTrue(!empty($records[0]['container_id']['path']), 'path is not added');
         $this->assertGreaterThan(0, count($records[0]['container_id']['account_grants']));
         $this->assertEquals('internal', $records[0]['container_id']['type']);
     }
