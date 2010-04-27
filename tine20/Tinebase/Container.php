@@ -918,7 +918,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $row['id'] = $row['container_id'];
             $grantsArray = array_unique(explode(',', $row['account_grants']));
             $row['account_grants'] = $this->_getGrantsFromArray($grantsArray, $accountId)->toArray();
-            $containers[$row['id']] = $row;
+            $containers[$row['id']] = new Tinebase_Model_Container($row, TRUE);
         }
         
         // add container & grants to records
@@ -926,6 +926,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $containerId = $record[$_containerProperty];
             if (! is_array($containerId) && ! $containerId instanceof Tinebase_Record_Abstract && ! empty($containers[$containerId])) {
                 $record[$_containerProperty] = $containers[$containerId];
+                $record[$_containerProperty]['path'] = $containers[$containerId]->getPath();
             }
         }
     }
