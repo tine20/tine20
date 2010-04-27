@@ -109,6 +109,8 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
     onBeforeNodeDrop: function(dropEvent) {
         var containerData = dropEvent.target.attributes,
             selection = dropEvent.data.selections,
+            mainScreenPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel(),
+            calPanel = mainScreenPanel.getCalendarPanel(mainScreenPanel.activeView),
             abort = false;
         
         // @todo move this to dragOver
@@ -117,20 +119,25 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         }
         
         Ext.each(selection, function(event) {
-            // origin container will be moved if user is organizer of event
-            // otherwise only displycontainer will be moved
-            
-            // rethink: if the user has deleteGrant to orign calendar we also 
-            // could move orign without the user being organizer...
-            // we might need to have a look if the user 'sees' orign or display cal
-            
-            abort = true;
+            if (Tine.Tinebase.container.pathIsMyPersonalContainer(event.get('container_id').path)) {
+                // origin container will only be moved for personal events with their origin in
+                // a personal container of the current user
+                event.set('container_id', containerData.id);
+                calPanel.onUpdateEventAction(event);
+                
+                dropEvent.cancel = false;
+                dropEvent.dropNode = [];
+            } else {
+                // @todo move displaycal if curruser is attender
+                abort = true;
+            }
         }, this);
         
         if (abort) {
+            console.log('abort')
             return false;
         }
         
-        // send request
+//        return true;
     }
 });
