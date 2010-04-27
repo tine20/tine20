@@ -370,11 +370,12 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	                            allowBlank: false,
 	                            editable: false,
 	                            store: [['enabled', this.app.i18n._('enabled')],['disabled', this.app.i18n._('disabled')],['expired', this.app.i18n._('expired')]]
-	                        }, new Ext.ux.form.ClearableDateField({ 
+	                        }, {
+                                xtype: 'extuxclearabledatefield',
 	                            fieldLabel: this.app.i18n._('Expires'),
 	                            name: 'accountExpires',
 	                            emptyText: this.app.i18n._('never')
-	                        })
+	                        }
                         ], [
 							{
 	                            xtype: 'combo',
@@ -498,19 +499,22 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('Logon Script'),
                             name: 'logonScript',
                             columnWidth: .666
-                        }], [new Ext.ux.form.ClearableDateField({ 
+                        }], [{
+                            xtype: 'extuxclearabledatefield',
                             fieldLabel: this.app.i18n._('Password Can Change'),
                             name: 'pwdCanChange',
                             emptyText: this.app.i18n._('not set')
-                        }), new Ext.ux.form.ClearableDateField({ 
+                        }, {
+                            xtype: 'extuxclearabledatefield',
                             fieldLabel: this.app.i18n._('Password Must Change'),
                             name: 'pwdMustChange',
                             emptyText: this.app.i18n._('not set')
-                        }), new Ext.ux.form.ClearableDateField({ 
+                        }, {
+                            xtype: 'extuxclearabledatefield',
                             fieldLabel: this.app.i18n._('Kick Off Time'),
                             name: 'kickoffTime',
                             emptyText: this.app.i18n._('not set')
-                        })]]
+                        }]]
                     }]
                 }]
             }, {
