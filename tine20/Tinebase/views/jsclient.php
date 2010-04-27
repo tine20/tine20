@@ -21,7 +21,23 @@
     <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
 
     <!-- EXT JS -->
-    <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/ext-all.css" />
+        <?php
+        if(isset(Tinebase_Core::getConfig()->themes->default)) {
+			$path = Tinebase_Core::getConfig()->themes->themelist->get(Tinebase_Core::getConfig()->themes->default)->path;
+			if(1 || Tinebase_Core::getConfig()->themes->themelist->get(Tinebase_Core::getConfig()->themes->default)->useBlueAsBase==1) {
+				echo '<link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/ext-all.css" />';
+			} else {
+				echo '<link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/ext-all-notheme.css" />';
+			}
+			echo "\n".'<link rel="stylesheet" type="text/css" href="'.($path).'" />';
+			echo "\n";
+		} else {
+			echo '<link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/ext-all.css" />';
+			echo '<link rel="stylesheet" type="text/css" href="styles/tine20.css" />';
+		}
+	
+
+	?>
     
     <!--  http://extjs.com/forum/showthread.php?t=65694
     <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/xtheme-gray.css" /> -->
@@ -73,7 +89,6 @@
         
         if (Tinebase_Core::getConfig()->customMainscreenHeaders) {echo "\n" . Tinebase_Core::getConfig()->customMainscreenHeaders;}?>
         
-        <link rel="stylesheet" type="text/css" href="styles/tine20.css" />
 </head>
 <body>
     <noscript><p>You need to enable javascript to use <a href="http://www.tine20.org">Tine 2.0</a></p></noscript>

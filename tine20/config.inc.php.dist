@@ -15,5 +15,33 @@ return array(
         'username'      => 'tine20setup',
         'password'      => 'setup' 
     ),
+  /*'themes' => array(
+  	'default' => 0,
+  	'themelist' => array(
+		0 => array(
+			'name' =>'TineSkin',
+			'path' => 'styles/tine20.css',
+			'useBlueAsBase' => 1,
+		),
+		1 => array(
+			'name' =>'ExtJS Blue',
+			'path' => 'library/ExtJS/resources/css/xtheme-blue.css',
+		),
+		2 => array(
+			'name' =>'ExtJS Slate',
+			'path' => 'extjsthemes/xtheme-slate/css/xtheme-slate.css',
+			'useBlueAsBase' => 1,
+		),
+		3 => array(
+			'name' => 'ExtJS Slickness',
+			'path' => 'extjsthemes/xtheme-slickness/css/xtheme-slickness.css',
+			'useBlueAsBase' => 1,
+		),
+		4 => array(
+			'name' => 'ExtJS ProcessSkin_ext_3',
+			'path' => 'extjsthemes/ProcessSkin_ext_3/css/xtheme-tp.css',
+		),
+	)
+  ),*/
 );
 
