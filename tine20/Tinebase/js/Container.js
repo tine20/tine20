@@ -90,6 +90,19 @@ Tine.Tinebase.container = {
     },
     
     /**
+     * returns true if given path represents a personal container of current user
+     * 
+     * @param {String} path
+     * @return {Boolean}
+     */
+    pathIsMyPersonalContainer: function(path) {
+        var regExp = new RegExp('^' + Tine.Tinebase.container.getMyNodePath() + '\/([0-9a-z_\-]+)$');
+        var matches = path.match(regExp);
+        
+        return !!matches;
+    },
+    
+    /**
      * returns true if given path represents an (single) internal container
      * 
      * @static
