@@ -296,8 +296,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $recordArray = $_record->toArray();
 
         if ($_record->has('container_id')) {
-            $recordArray['container_id'] = Tinebase_Container::getInstance()->getContainerById($_record->container_id)->toArray();
+            $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
+            
+            $recordArray['container_id'] = $container->toArray();
             $recordArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $_record->container_id)->toArray();
+            $recordArray['container_id']['path'] = $container->getPath();
         }
 
         return $recordArray;
