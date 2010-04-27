@@ -60,7 +60,9 @@ Ext.ux.form.ClearableDateField = Ext.extend(Ext.form.DateField, {
     
     validateValue : function(value) {
         if(value !== this.emptyText && value !== undefined && value.length > '1'){
-            this.triggers[0].show();
+            if (Ext.isArray(this.triggers) && this.triggers[0] && typeof this.triggers[0].show == 'function') {
+                this.triggers[0].show();
+            }
         }      
       
         return true;
