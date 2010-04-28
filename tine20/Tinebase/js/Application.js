@@ -12,8 +12,8 @@ Ext.ns('Tine.Tinebase');
  * <p>Abstract base class for all Tine applications</p>
  * 
  * @namespace   Tine.Tinebase
- * @class Tine.Tinebase.Application
- * @extends Ext.util.Observable
+ * @class       Tine.Tinebase.Application
+ * @extends     Ext.util.Observable
  * @consturctor
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
