@@ -596,21 +596,21 @@ class ActiveSync_TimezoneConverter
      * Returns the standard and daylight transitions for the given {@param $_timezone}
      * and {@param $_year}.
      * 
-     * @param $_timezone
-     * @param $_startDate
+     * @param DateTimeZone $_timezone
+     * @param $_year
      * @return Array
      */
-    protected function _getTransitionsForTimezoneAndYear($_timezone, $_year)
+    protected function _getTransitionsForTimezoneAndYear(DateTimeZone $_timezone, $_year)
     {
         $standardTransition = null;
         $daylightTransition = null;
         
-        $start = mktime(0, 0, 0, 1, 1, $_year);
-        $end   = mktime(24, 0, 0, 12, 31, $_year);
+        #$start = mktime(0, 0, 0, 1, 1, $_year);
+        #$end   = mktime(24, 0, 0, 12, 31, $_year);
         
         //@todo Since php version 5.3 getTransitions accepts optional start and end parameters.
         //      Using them would probably result in a performance gain.
-        $transitions = $_timezone->getTransitions($start, $end);
+        $transitions = $_timezone->getTransitions();
         $index = 0;            //we need to access index counter outside of the foreach loop
         $transition = array(); //we need to access the transition counter outside of the foreach loop
         foreach ($transitions as $index => $transition) {
