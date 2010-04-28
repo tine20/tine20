@@ -62,11 +62,11 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
     /**
      * sets left panel aka tree panel in other apps
      */
-    setTreePanel: function() {
+    setWestPanel: function() {
         if (! this.treePanel) {
             this.treePanel = new Tine.Calendar.MainScreenLeftPanel({app: this.app});
         }
-        Tine.Calendar.MainScreen.superclass.setTreePanel.apply(this, arguments);
+        Tine.Calendar.MainScreen.superclass.setWestPanel.apply(this, arguments);
     },
     
     /**
@@ -87,7 +87,7 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
     /**
      * Set toolbar panel in Tinebase.MainScreen
      */
-    setToolbar: function() {
+    setNorthPanel: function() {
         if (! this.actionToolbar) {
             this.actionToolbar = this.contentPanel.getActionToolbar();
         }

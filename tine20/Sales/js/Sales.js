@@ -31,7 +31,7 @@ Tine.Sales.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     
     activeContentType: 'Product',
     
-    setContentPanel: function() {
+    setCenterPanel: function() {
         
         // which content panel?
         var type = this.activeContentType;
@@ -58,7 +58,7 @@ Tine.Sales.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     /**
      * sets toolbar in mainscreen
      */
-    setToolbar: function() {
+    setNorthPanel: function() {
         var type = this.activeContentType;
         
         if (! this[type + 'ActionToolbar']) {

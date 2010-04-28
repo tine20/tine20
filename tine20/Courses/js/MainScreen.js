@@ -19,9 +19,9 @@ Tine.Courses.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     /*
     show: function() {
         if(this.fireEvent("beforeshow", this) !== false){
-            this.setTreePanel();
-            this.setContentPanel();
-            this.setToolbar();
+            this.setWestPanel();
+            this.setCenterPanel();
+            this.setNorthPanel();
             this.updateMainToolbar();
             
             this.fireEvent('show', this);
@@ -29,7 +29,7 @@ Tine.Courses.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         return this;
     },*/
     
-    setContentPanel: function() {
+    setCenterPanel: function() {
         
         // which content panel?
         var type = this.activeContentType;
@@ -57,7 +57,7 @@ Tine.Courses.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     /**
      * sets toolbar in mainscreen
      */
-    setToolbar: function() {
+    setNorthPanel: function() {
         var type = this.activeContentType;
         
         if (! this[type + 'ActionToolbar']) {

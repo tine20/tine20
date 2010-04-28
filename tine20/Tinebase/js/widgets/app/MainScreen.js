@@ -5,7 +5,6 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
 Ext.ns('Tine.Tinebase.widgets.app');
 
@@ -67,9 +66,9 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
      */
     show: function() {
         if(this.fireEvent("beforeshow", this) !== false){
-            this.setTreePanel();
-            this.setContentPanel();
-            this.setToolbar();
+            this.setWestPanel();
+            this.setCenterPanel();
+            this.setNorthPanel();
             this.updateMainToolbar();
             
             this.fireEvent('show', this);
@@ -84,7 +83,7 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
     /**
      * sets tree panel in mainscreen
      */
-    setTreePanel: function() {
+    setWestPanel: function() {
         if(!this.treePanel) {
             this.treePanel = new Tine[this.app.appName].TreePanel({app: this.app});
         }
@@ -144,7 +143,7 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
     /**
      * sets content panel in mainscreen
      */
-    setContentPanel: function() {
+    setCenterPanel: function() {
         Tine.Tinebase.MainScreen.setActiveContentPanel(this.getContentPanel(), true);
     },
     
@@ -166,7 +165,7 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
     /**
      * sets toolbar in mainscreen
      */
-    setToolbar: function() {
+    setNorthPanel: function() {
         var type = this.activeContentType;
         
         if (! this[type + 'ActionToolbar']) {
