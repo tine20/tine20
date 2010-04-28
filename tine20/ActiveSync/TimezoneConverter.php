@@ -130,7 +130,8 @@ class ActiveSync_TimezoneConverter
 	 * @param Zend_Cache_Core | null $_cache
 	 * @return void
 	 */
-    public function setCache($_cache) {
+    public function setCache($_cache) 
+    {
     	if (!(is_null($_cache) || $_cache instanceof Zend_Cache_Core)) {
     		throw new ActiveSync_Exception('Invalid argument: $_cache has to be either an instance of Zend-Cache_Core or null');
     	}
@@ -143,7 +144,8 @@ class ActiveSync_TimezoneConverter
      * @param Zend_Log $_logger
      * @return void
      */
-    public function setLogger(Zend_Log $_logger) {
+    public function setLogger(Zend_Log $_logger) 
+    {
         $this->_logger = $_logger;
     }
 	
@@ -603,10 +605,13 @@ class ActiveSync_TimezoneConverter
         $standardTransition = null;
         $daylightTransition = null;
         
+        $start = mktime(0, 0, 0, 1, 1, $_year);
+        $end   = mktime(24, 0, 0, 12, 31, $_year);
+        
         //@todo Since php version 5.3 getTransitions accepts optional start and end parameters.
         //      Using them would probably result in a performance gain.
-        $transitions = $_timezone->getTransitions();
-        $index = 0; //we need to access index counter outside of the foreach loop
+        $transitions = $_timezone->getTransitions($start, $end);
+        $index = 0;            //we need to access index counter outside of the foreach loop
         $transition = array(); //we need to access the transition counter outside of the foreach loop
         foreach ($transitions as $index => $transition) {
             if (strftime('%Y', $transition['ts']) == $_year) {
