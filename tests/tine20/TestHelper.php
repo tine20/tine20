@@ -17,12 +17,6 @@
  */
 error_reporting( E_ALL | E_STRICT );
 
-
-/*
- * Set white / black lists
- */
-PHPUnit_Util_Filter::addDirectoryToFilter(dirname(__FILE__));
-
 /*
  * Set include path
  */
@@ -30,6 +24,14 @@ PHPUnit_Util_Filter::addDirectoryToFilter(dirname(__FILE__));
 define('PATH_TO_REAL_DIR', dirname(__FILE__). '/../../tine20');
 define('PATH_TO_TINE_LIBRARY', dirname(__FILE__). '/../../tine20/library');
 define('PATH_TO_TEST_DIR', dirname(__FILE__));
+
+/*
+ * Set white / black lists
+ */
+PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_TEST_DIR);
+PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_TINE_LIBRARY);
+PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Setup');
+PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Zend');
 
 $path = array(
     PATH_TO_REAL_DIR,
@@ -39,7 +41,6 @@ $path = array(
 );
         
 set_include_path(implode(PATH_SEPARATOR, $path));
-
 
 /**
  * Set up basic tine 2.0 environment
