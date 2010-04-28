@@ -17,19 +17,6 @@
  * @copyright  Copyright (c) 2006 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
- 
-
-/** Zend_Date */
-require_once 'Zend/Date.php';
-
-/** Zend_Scheduler_Exception */
-require_once 'Zend/Scheduler/Exception.php';
-
-/** Zend_Scheduler_Backend_Abstract */
-require_once 'Zend/Scheduler/Backend/Abstract.php';
-
-/** Zend_Scheduler_Task */
-require_once 'Zend/Scheduler/Task.php';
 
 /**
  * Automatic scheduler.
