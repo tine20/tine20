@@ -221,7 +221,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 </field>
                 <field>
                     <name>data</name>
-                    <type>longtext</type>
+                    <type>text</type>
                     <notnull>true</notnull>
                 </field>
                 <index>
