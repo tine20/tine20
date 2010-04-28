@@ -39,7 +39,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
 		
         Tinebase_Acl_Roles::getInstance()->createInitialRoles();
         
-        $this->_initTinebaseAlarmTask();
+        $this->_initTinebaseScheduler();
         
     	parent::_initialize($_application, $_options);
     }
@@ -121,7 +121,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         return $result;
     }
     
-    protected function _initTinebaseAlarmTask()
+    protected function _initTinebaseScheduler()
     {
         $request = new Zend_Controller_Request_Http(); 
         $request->setControllerName('Tinebase_Alarm');
