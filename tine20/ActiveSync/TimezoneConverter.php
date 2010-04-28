@@ -603,7 +603,7 @@ class ActiveSync_TimezoneConverter
         $standardTransition = null;
         $daylightTransition = null;
         
-        //@todo Since php version 3.3 getTransitions accepts optional start and end parameters.
+        //@todo Since php version 5.3 getTransitions accepts optional start and end parameters.
         //      Using them would probably result in a performance gain.
         $transitions = $_timezone->getTransitions();
         $index = 0; //we need to access index counter outside of the foreach loop
