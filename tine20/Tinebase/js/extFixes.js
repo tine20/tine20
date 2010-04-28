@@ -12,6 +12,19 @@ Ext.apply(Ext.form.VTypes, {
     }
 });
 
+Ext.applyIf(Ext.tree.MultiSelectionModel.prototype, {
+    /**
+     * implement convinience function as expected from grid selection models
+     * 
+     * @namespace {Ext.tree}
+     * @return {Node}
+     */
+    getSelectedNode: function() {
+        var selection = this.getSelectedNodes();
+        return Ext.isArray(selection) ? selection[0] : null
+    }
+});
+
 /**
  * fix timezone handling for date picker
  * 
