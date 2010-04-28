@@ -193,5 +193,68 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         }
         
         $this->setApplicationVersion('Tinebase', '3.7');
+    } 
+
+    /**
+     * update to 3.8
+     * - schedulers
+     */
+    public function update_7()
+    {
+        $declaration = new Setup_Backend_Schema_Table_Xml('
+         <table>
+            <name>schedulers</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <length>11</length>
+                    <autoincrement>true</autoincrement>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>data</name>
+                    <type>longtext</type>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>');
+        
+        $this->_backend->createTable($declaration);
+        $this->setTableVersion('scheduler', '1');
+        $this->setApplicationVersion('Tinebase', '3.8');
+        
+        $request = Zend_Controller_Request_Http(); 
+        $request->setControllerName('Tinebase_Alarm');
+        $request->setActionName('sendPendingAlarms');
+        $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');
+        
+        $task = new Tinebase_Scheduler_Task();
+        $task->setMonths("Jan-Dec");
+        $task->setWeekdays("Sun-Sat");
+        $task->setDays("1-31");
+        $task->setHours("0-23");
+        $task->setMinutes("0/1");
+        $task->setRequest($request);
+        
+        $scheduler = Tinebase_Core::getScheduler();
+        $scheduler->addTask('Tinebase_Alarm', $task);
+        $scheduler->run();
+        
     }    
+    
 }

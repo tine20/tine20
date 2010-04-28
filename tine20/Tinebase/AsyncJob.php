@@ -25,10 +25,10 @@ class Tinebase_AsyncJob
     protected $_backend;
     
     /**
-     * minutes till job is declared 'failed'
+     * default seconds till job is declared 'failed'
      *
-     */
-    const MINUTES_TILL_FAILURE = 10;
+     */    
+    const SECONDS_TILL_FAILURE = 300;
     
     /**
      * holds the instance of the singleton
@@ -89,9 +89,8 @@ class Tinebase_AsyncJob
         // check if job is running for a long time -> set status to Tinebase_Model_AsyncJob::STATUS_FAILURE
         if ($result) {
             $job = $jobs->getFirstRecord();
-            
-            if ($job->start_time->compare(Zend_Date::now()->subMinute(self::MINUTES_TILL_FAILURE)) == -1) {
-                // it seems that the old job ended (start time is older than MINUTES_TILL_FAILURE mins) -> start a new one
+            if (Zend_Date::now()->isLater($job->end_time)) {
+                // it seems that the old job ended (start time is older than SECONDS_TILL_FAILURE mins) -> start a new one
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Old ' . $_name . ' job is running too long. Finishing it now.');
                 
                 $this->finishJob($job, Tinebase_Model_AsyncJob::STATUS_FAILURE);
@@ -106,10 +105,14 @@ class Tinebase_AsyncJob
      * start new job
      *
      * @param string $_name
+     * @param int $timeout
      * @return Tinebase_Model_AsyncJob
      */
-    public function startJob($_name)
+    public function startJob($_name, $_timeout = self::SECONDS_TILL_FAILURE)
     {
+        $date = new Zend_Date();
+        $date->add($_timeout, Zend_Date::SECOND);
+        
         try {
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
@@ -117,8 +120,10 @@ class Tinebase_AsyncJob
             $job = new Tinebase_Model_AsyncJob(array(
                 'name'              => $_name,
                 'start_time'        => Zend_Date::now(),
+                'end_time'          => $date->toString('YYYY-MM-dd HH:mm:ss'),
                 'status'            => Tinebase_Model_AsyncJob::STATUS_RUNNING
             ));
+            
             $result = $this->_backend->create($job);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);

@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Controller implements Tinebase_Event_Interface
+class Tinebase_Controller
 {
     /**
      * holds the instance of the singleton
@@ -191,41 +191,5 @@ class Tinebase_Controller implements Tinebase_Event_Interface
             throw new Tinebase_Exception_UnexpectedValue("$_application returned invalid image.");
         }
         return $image;
-    }
-
-    /**
-     * event handler function
-     * 
-     * all events get routed through this function
-     *
-     * @param Tinebase_Event_Abstract $_eventObject the eventObject
-     */
-    public function handleEvents(Tinebase_Event_Abstract $_eventObject)
-    {
-        $eventName = get_class($_eventObject);
-        switch($eventName) {
-            case 'Tinebase_Event_Async_Minutely':
-                
-                // check if already running
-                if (! Tinebase_AsyncJob::getInstance()->jobIsRunning($eventName)) {
-                    
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No ' . $eventName . ' is running. Starting new one.');
-                
-                    $job = Tinebase_AsyncJob::getInstance()->startJob($eventName);
-                    try {
-                        Tinebase_Alarm::getInstance()->sendPendingAlarms();
-                        
-                        // save new status 'success'
-                        $job = Tinebase_AsyncJob::getInstance()->finishJob($job);
-                    } catch (Exception $e) {
-                        // save new status 'failure'
-                        $job = Tinebase_AsyncJob::getInstance()->finishJob($job, Tinebase_Model_AsyncJob::STATUS_FAILURE, $e->getMessage());
-                    }
-                    
-                } else {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Job ' . $eventName . ' is already running. Skipping event.');
-                }
-                break;
-        }
     }
 }

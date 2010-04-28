@@ -39,6 +39,8 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
 		
         Tinebase_Acl_Roles::getInstance()->createInitialRoles();
         
+        $this->_initTinebaseAlarmTask();
+        
     	parent::_initialize($_application, $_options);
     }
     
@@ -118,4 +120,26 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         
         return $result;
     }
+    
+    protected function _initTinebaseAlarmTask()
+    {
+        $request = Zend_Controller_Request_Http(); 
+        $request->setControllerName('Tinebase_Alarm');
+        $request->setActionName('sendPendingAlarms');
+        $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');
+        
+        $task = new Tinebase_Scheduler_Task();
+        $task->setMonths("Jan-Dec");
+        $task->setWeekdays("Sun-Sat");
+        $task->setDays("1-31");
+        $task->setHours("0-23");
+        $task->setMinutes("0/1");
+        $task->setRequest($request);
+        
+        $scheduler = Tinebase_Core::getScheduler();
+        $scheduler->addTask('Tinebase_Alarm', $task);
+        $scheduler->run();
+    }
+    
+    
 }

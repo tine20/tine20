@@ -94,7 +94,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             
         );
         
-        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
     
     /**

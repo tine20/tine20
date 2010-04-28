@@ -2504,7 +2504,38 @@
                     </reference>
                 </index>
             </declaration>
-        </table>        
+        </table>
+        <table>
+            <name>schedulers</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <length>11</length>
+                    <autoincrement>true</autoincrement>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>data</name>
+                    <type>longtext</type>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
     </tables>
     <defaultRecords>
        <record>

@@ -77,51 +77,74 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
      * @todo sort alarms (by model/...)?
      * @todo what to do about Tinebase_Model_Alarm::STATUS_FAILURE alarms?
      */
-    public function sendPendingAlarms()
-    {
-        // get all pending alarms
-        $filter = new Tinebase_Model_AlarmFilter(array(
-            array(
-                'field'     => 'alarm_time', 
-                'operator'  => 'before', 
-                'value'     => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
-            ),
-            array(
-                'field'     => 'sent_status', 
-                'operator'  => 'equals', 
-                'value'     => Tinebase_Model_Alarm::STATUS_PENDING // STATUS_FAILURE?
-            ),
-        ));
-        $alarms = $this->_backend->search($filter);
+    public function sendPendingAlarms($eventName)
+    {        
+        $eventName = $eventName['eventName'];
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending ' . count($alarms) . ' alarms.');
-        
-        // loop alarms and call sendAlarm in controllers
-        foreach ($alarms as $alarm) {
-            list($appName, $i, $itemName) = explode('_', $alarm->model);
-            $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
+        if (! Tinebase_AsyncJob::getInstance()->jobIsRunning($eventName)) {
             
-            if ($appController instanceof Tinebase_Controller_Alarm_Interface) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No ' . $eventName . ' is running. Starting new one.');
+ 
+            $job = Tinebase_AsyncJob::getInstance()->startJob($eventName);
+         
+            try { 
+                // get all pending alarms
+                $filter = new Tinebase_Model_AlarmFilter(array(
+                    array(
+                        'field'     => 'alarm_time', 
+                        'operator'  => 'before', 
+                        'value'     => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+                    ),
+                    array(
+                        'field'     => 'sent_status', 
+                        'operator'  => 'equals', 
+                        'value'     => Tinebase_Model_Alarm::STATUS_PENDING // STATUS_FAILURE?
+                    ),
+                ));
+            
+                $alarms = $this->_backend->search($filter);
+        
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending ' . count($alarms) . ' alarms.');
+        
+                // loop alarms and call sendAlarm in controllers
+                foreach ($alarms as $alarm) {
+                    list($appName, $i, $itemName) = explode('_', $alarm->model);
+                    $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
                 
-                $alarm->sent_time = Zend_Date::now();
-                
-                try {
-                    $appController->sendAlarm($alarm);
-                    $alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
+                    if ($appController instanceof Tinebase_Controller_Alarm_Interface) {
                     
-                } catch (Exception $e) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                        $alarm->sent_time = Zend_Date::now();
                     
-                    $alarm->sent_message = $e->getMessage();
-                    $alarm->sent_status = Tinebase_Model_Alarm::STATUS_FAILURE;
-                    //throw $e;
-                } 
-                
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating alarm status: ' . $alarm->sent_status);
-                
-                $this->update($alarm);
+                        try {
+                            $appController->sendAlarm($alarm);
+                            $alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
+                        
+                        } catch (Exception $e) {
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                        
+                            $alarm->sent_message = $e->getMessage();
+                            $alarm->sent_status = Tinebase_Model_Alarm::STATUS_FAILURE;
+                            //throw $e;
+                        } 
+                    
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating alarm status: ' . $alarm->sent_status);
+                    
+                        $this->update($alarm);
+                    }
+                }
+            
+                $job = Tinebase_AsyncJob::getInstance()->finishJob($job);
+            
+            } catch (Exception $e) {
+                // save new status 'failure'
+                $job = Tinebase_AsyncJob::getInstance()->finishJob($job, Tinebase_Model_AsyncJob::STATUS_FAILURE, $e->getMessage());
             }
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Job ' . $eventName . ' is already running. Skipping event.');           
+            
+        } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Job ' . $eventName . ' is already running. Skipping event.');
         }
     }
     

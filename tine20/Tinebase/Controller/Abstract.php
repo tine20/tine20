@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-abstract class Tinebase_Controller_Abstract
+abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Interface
 {
     /**
      * default settings
@@ -131,5 +131,18 @@ abstract class Tinebase_Controller_Abstract
             Zend_Json::encode($_settings), 
             $this->_applicationName
         );
+    }
+    
+    /**
+     * returns controller instance for given $_controllerName
+     * 
+     * @param string $_controllerName
+     * @return Tinebase_Controller
+     */
+    public static function getController($_controllerName)
+    {
+        if (!class_exists($_controllerName)) throw new Exception("Controller" . $_controllerName . "not found.");
+        if (!in_array('Tinebase_Controller_Interface', class_implements($_controllerName))) throw new Exception("Controller" . $_controllerName . "not implements Tinebase_Controller_Interface.");     
+        return call_user_method('getInstance', $_controllerName);
     }
 }
