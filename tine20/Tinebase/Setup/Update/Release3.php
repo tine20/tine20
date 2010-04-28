@@ -203,7 +203,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
     {
         $declaration = new Setup_Backend_Schema_Table_Xml('
          <table>
-            <name>schedulers</name>
+            <name>scheduler</name>
             <version>1</version>
             <declaration>
                 <field>
@@ -238,7 +238,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('scheduler', '1');
         $this->setApplicationVersion('Tinebase', '3.8');
         
-        $request = Zend_Controller_Request_Http(); 
+        $request = new Zend_Controller_Request_Http(); 
         $request->setControllerName('Tinebase_Alarm');
         $request->setActionName('sendPendingAlarms');
         $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');

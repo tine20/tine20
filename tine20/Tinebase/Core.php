@@ -87,7 +87,13 @@ class Tinebase_Core
      *
      */
     const PREFERENCES = 'preferences';
-
+    
+    /**
+     * constant for preferences registry
+     *
+     */
+    const SCHEDULER = 'scheduler';
+    
     /**
      * constant temp dir registry
      *
@@ -926,5 +932,25 @@ class Tinebase_Core
             $sessionDir .= DIRECTORY_SEPARATOR . $sessionDirName;
         }
         return $sessionDir;
+    }
+    
+    /**
+     * Singleton instance
+     *
+     * @return Zend_Scheduler
+     */
+    public static function getScheduler()
+    {
+        if (! self::get(self::SCHEDULER) instanceof Zend_Scheduler) {
+            $scheduler =  new Zend_Scheduler();
+            $scheduler->setBackend(new Zend_Scheduler_Backend_Db(array(
+                'DbAdapter' => self::getDb(),
+                'tableName' => SQL_TABLE_PREFIX . 'scheduler',
+                'taskClass' => 'Tinebase_Scheduler_Task'
+            )));
+            
+            self::set(self::SCHEDULER, $scheduler);
+        }
+        return $scheduler;
     }
 }
