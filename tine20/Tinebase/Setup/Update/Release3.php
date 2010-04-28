@@ -236,7 +236,6 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->_backend->createTable($declaration);
         $this->setTableVersion('scheduler', '1');
-        $this->setApplicationVersion('Tinebase', '3.8');
         
         $request = new Zend_Controller_Request_Http(); 
         $request->setControllerName('Tinebase_Alarm');
@@ -253,8 +252,8 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $scheduler = Tinebase_Core::getScheduler();
         $scheduler->addTask('Tinebase_Alarm', $task);
-        $scheduler->run();
         
+        $this->setApplicationVersion('Tinebase', '3.8');
     }    
     
 }
