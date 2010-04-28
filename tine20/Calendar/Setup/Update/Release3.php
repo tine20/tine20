@@ -94,54 +94,60 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_2()
     {
-        $tablePrefix = SQL_TABLE_PREFIX;
+        try {
+            Tinebase_Application::getInstance()-> getApplicationByName('ActiveSync');
         
-        // get all envets which came vom active sync without creator as attender
-        $stmt = $this->_db->query("
-        SELECT `cal_events`.`id`, `cal_events`.`created_by`, `contact`.`id` AS `contact_id`, `cal_events`.`container_id`, 
-            MAX(
-                `attendee`.`user_type` = 'user' 
-                AND `attendee`.`user_id` != `cal_events`.`created_by`
-            ) AS `creatorIsAttender` 
-        FROM `{$tablePrefix}cal_events` AS `cal_events`
-        INNER JOIN  `{$tablePrefix}acsync_content` AS `acsync_content` ON 
-            `acsync_content`.`class` = 'Calendar' 
-            AND `acsync_content`.`contentid` = `cal_events`.`id`
-            AND TIMESTAMP(`acsync_content`.`creation_time`) - TIMESTAMP(`cal_events`.`creation_time`) <= 0
-        LEFT JOIN `{$tablePrefix}cal_attendee` AS `attendee` ON `attendee`.`cal_event_id` = `cal_events`.`id`
-        LEFT JOIN `{$tablePrefix}addressbook` AS `contact` ON `contact`.`account_id` = `cal_events`.`created_by`
-        GROUP BY `cal_events`.`id`
-        HAVING `creatorIsAttender` = 0 OR `creatorIsAttender` IS NULL
-        ");
-        
-        $eventDatas = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        $attendeeBE = new Calendar_Backend_Sql_Attendee();
-        
-        foreach ($eventDatas as $eventData) {
-            try {
-                $attender = new Calendar_Model_Attender(array(
-                    'cal_event_id'         => $eventData['id'],
-                    'user_id'              => $eventData['contact_id'],
-                    'user_type'            => 'user',
-                    'role'                 => 'REQ',
-                    'quantity'             => 1,
-                    'status'               => 'ACCEPTED',
-                    'status_authkey'       => Tinebase_Record_Abstract::generateUID(),
-                    'displaycontainer_id'  => $eventData['container_id'],
-                ));
-                
-                // add attender
-                $attendeeBE->create($attender);
-                // set modification time
-                $this->_db->update($tablePrefix . 'cal_events', array(
-                    'last_modified_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-                    'last_modified_by' => $eventData['created_by'],
-                    'seq' => new Zend_Db_Expr("seq+1"),
-                ), "`id` = '{$eventData['id']}'");
-            } catch (Exception $e) {
-                // ignore...
+            $tablePrefix = SQL_TABLE_PREFIX;
+            
+            // get all envets which came vom active sync without creator as attender
+            $stmt = $this->_db->query("
+            SELECT `cal_events`.`id`, `cal_events`.`created_by`, `contact`.`id` AS `contact_id`, `cal_events`.`container_id`, 
+                MAX(
+                    `attendee`.`user_type` = 'user' 
+                    AND `attendee`.`user_id` != `cal_events`.`created_by`
+                ) AS `creatorIsAttender` 
+            FROM `{$tablePrefix}cal_events` AS `cal_events`
+            INNER JOIN  `{$tablePrefix}acsync_content` AS `acsync_content` ON 
+                `acsync_content`.`class` = 'Calendar' 
+                AND `acsync_content`.`contentid` = `cal_events`.`id`
+                AND TIMESTAMP(`acsync_content`.`creation_time`) - TIMESTAMP(`cal_events`.`creation_time`) <= 0
+            LEFT JOIN `{$tablePrefix}cal_attendee` AS `attendee` ON `attendee`.`cal_event_id` = `cal_events`.`id`
+            LEFT JOIN `{$tablePrefix}addressbook` AS `contact` ON `contact`.`account_id` = `cal_events`.`created_by`
+            GROUP BY `cal_events`.`id`
+            HAVING `creatorIsAttender` = 0 OR `creatorIsAttender` IS NULL
+            ");
+            
+            $eventDatas = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+            
+            $attendeeBE = new Calendar_Backend_Sql_Attendee();
+            
+            foreach ($eventDatas as $eventData) {
+                try {
+                    $attender = new Calendar_Model_Attender(array(
+                        'cal_event_id'         => $eventData['id'],
+                        'user_id'              => $eventData['contact_id'],
+                        'user_type'            => 'user',
+                        'role'                 => 'REQ',
+                        'quantity'             => 1,
+                        'status'               => 'ACCEPTED',
+                        'status_authkey'       => Tinebase_Record_Abstract::generateUID(),
+                        'displaycontainer_id'  => $eventData['container_id'],
+                    ));
+                    
+                    // add attender
+                    $attendeeBE->create($attender);
+                    // set modification time
+                    $this->_db->update($tablePrefix . 'cal_events', array(
+                        'last_modified_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+                        'last_modified_by' => $eventData['created_by'],
+                        'seq' => new Zend_Db_Expr("seq+1"),
+                    ), "`id` = '{$eventData['id']}'");
+                } catch (Exception $e) {
+                    // ignore...
+                }
             }
+        } catch (Exception $nfe) {
+            // active sync is not installed
         }
         
         $this->setApplicationVersion('Calendar', '3.3');
