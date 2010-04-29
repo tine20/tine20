@@ -24,7 +24,7 @@
     line-height: 16px;
     }
 .preview-panel-bold{
-font-weight: bold;
+	font-weight: bold;
 	}
 .preview-panel-image{
 	vertical-align:middle;
@@ -116,10 +116,10 @@ font-weight: bold;
     height: 4px;
     } 
 .preview-panel-adressbook-nobreak{
-min-width:1100px;
+	min-width:1075px;
 }
 .bordercorner_gray_1{
- background-image: url(../../../images/preview/bordercorner_gray_1.gif);
+ 	background-image: url(../../../images/preview/bordercorner_gray_1.gif);
     background-repeat: no-repeat;
     background-position: left top;
     position: absolute;
@@ -203,5 +203,5 @@ min-width:1100px;
 	padding: 5px;
 	}
 .preview-panel-timesheet-nobreak{
-min-width:900px;
-}
+	min-width:900px;
+	}

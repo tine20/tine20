@@ -451,7 +451,7 @@ Tine.Addressbook.ContactEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
-        height: 600,
+        height: 625,
         name: Tine.Addressbook.ContactEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Addressbook.ContactEditDialog',
         contentPanelConstructorConfig: config
