@@ -16,7 +16,7 @@ Tine.Courses.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     
     activeContentType: 'Course',
     
-    setCenterPanel: function() {
+    showCenterPanel: function() {
         
         // which content panel?
         var type = this.activeContentType;
@@ -44,7 +44,7 @@ Tine.Courses.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     /**
      * sets toolbar in mainscreen
      */
-    setNorthPanel: function() {
+    showNorthPanel: function() {
         var type = this.activeContentType;
         
         if (! this[type + 'ActionToolbar']) {

@@ -40,7 +40,7 @@ Tine.Setup.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     /**
      * set content panel
      */
-    setCenterPanel: function() {
+    showCenterPanel: function() {
         
         // which content panel?
         var panel = this.activePanel;
@@ -70,7 +70,7 @@ Tine.Setup.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     /**
      * sets toolbar in mainscreen
      */
-    setNorthPanel: function() {
+    showNorthPanel: function() {
         var panel = this.activePanel;
         
         if (! this[panel + 'ActionToolbar']) {

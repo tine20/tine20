@@ -18,7 +18,7 @@ Tine.Voipmanager.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     activeContentType: 'Phone',
     activeContentGroup: 'Snom',
     
-    setCenterPanel: function() {
+    showCenterPanel: function() {
         
         // which content panel?
         var type = this.activeContentType;
@@ -38,7 +38,7 @@ Tine.Voipmanager.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     /**
      * sets toolbar in mainscreen
      */
-    setNorthPanel: function() { 
+    showNorthPanel: function() { 
         var type = this.activeContentType;
         var group = this.activeContentGroup;
               
