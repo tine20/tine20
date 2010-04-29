@@ -951,6 +951,6 @@ class Tinebase_Core
             
             self::set(self::SCHEDULER, $scheduler);
         }
-        return $scheduler;
+        return self::get(self::SCHEDULER);
     }
 }
