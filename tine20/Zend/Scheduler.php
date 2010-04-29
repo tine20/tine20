@@ -107,6 +107,17 @@ class Zend_Scheduler
         $this->_backend = $backend;
     }
 
+    /**
+     * Return used Backend.
+     * 
+     * 
+     * @return Zend_Scheduler_Backend
+     */
+    public function getBackend()
+    {
+    	return $this->_backend;
+    }
+    
     /** 
      * Creates tasks from a Zend_Config configuration file.
      * 
