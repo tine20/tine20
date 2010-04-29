@@ -298,4 +298,14 @@ class Zend_Scheduler
     {
         throw new Zend_Scheduler_Exception('Only tasks may be serialized');
     }
+    
+    /**
+     * Save Task
+     */
+    public function saveTask()
+    {
+        if (! empty($this->_tasks)) {
+            $this->_backend->saveQueue($this->_tasks);
+        }
+    }
 }

@@ -138,6 +138,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         
         $scheduler = Tinebase_Core::getScheduler();
         $scheduler->addTask('Tinebase_Alarm', $task);
+        $scheduler->saveTask();
     }
     
     

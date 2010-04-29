@@ -32,6 +32,29 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests if a task can be saved.
+     */
+    public function testSaveTask()
+    {
+        $request = new Zend_Controller_Request_Http(); 
+        $request->setControllerName('Tinebase_Alarm');
+        $request->setActionName('sendPendingAlarms');
+        $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');
+        
+        $task = new Tinebase_Scheduler_Task();
+        $task->setMonths("Jan-Dec");
+        $task->setWeekdays("Sun-Sat");
+        $task->setDays("1-31");
+        $task->setHours("0-23");
+        $task->setMinutes("0/1");
+        $task->setRequest($request);
+        
+        $scheduler = Tinebase_Core::getScheduler();
+        $scheduler->addTask('Tinebase_Alarm_Test', $task);
+        $scheduler->saveTask();
+    }
+    
+    /**
      * Tests if a task can be added.
      */
     public function testCanAddTask()
@@ -360,4 +383,6 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($taskCount);
 
     }
+    
+    
 }

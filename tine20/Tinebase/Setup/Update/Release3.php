@@ -252,6 +252,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $scheduler = Tinebase_Core::getScheduler();
         $scheduler->addTask('Tinebase_Alarm', $task);
+        $scheduler->saveTask();
         
         $this->setApplicationVersion('Tinebase', '3.8');
     }    
