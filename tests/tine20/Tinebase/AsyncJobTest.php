@@ -34,33 +34,12 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
         $suite  = new PHPUnit_Framework_TestSuite('Tinebase_AsyncJobTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
-
-    public function testJobIsRunning()
-    {
-        $async = Tinebase_AsyncJob::getInstance();
-        $job = $async->startJob('Test_Job');
-        $this->assertTrue($async->jobIsRunning('Test_Job'));
-        $async->finishJob($job);
-    }
     
-    public function testjobIsNotRunning()
-    {
-        $async = Tinebase_AsyncJob::getInstance();
-        $this->assertFalse($async->jobIsRunning('Test_Job1'));
-    }
-    
+    /**
+     * test job can not start again
+     */
     public function testStartJob()
     {
-        /*
-        $async = Tinebase_AsyncJob::getInstance();
-        $job = $async->startJob('Test_Job', 10000);
-        $this->assertTrue($async->jobIsRunning('Test_Job'));
-        sleep(100);
-        $job = $async->startJob('Test_Job', 100);
-        $this->assertEquals('Tinebase_Model_AsyncJob', $async->startJob('Test_Job2'));
-        $async->finishJob($job);
-        */
-        //$this->assertEquals('Tinebase_Model_AsyncJob', $this->_async->startJob('Test_Job2'));   
     }
     
     /**
@@ -69,10 +48,7 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
-    
-    }
+    protected function setUp() {}
 
     /**
      * Tears down the fixture
@@ -80,10 +56,7 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
-       
-    }
+    protected function tearDown() {}
 }
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_AsyncJobTest::main') {
