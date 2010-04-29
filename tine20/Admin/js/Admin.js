@@ -617,7 +617,6 @@ Tine.Admin.AccessLog.Main = function() {
         show: function() {
             _showToolbar();
             _showGrid();    
-            this.updateMainToolbar();        
         },
         
         /**
@@ -628,11 +627,6 @@ Tine.Admin.AccessLog.Main = function() {
 	        limit: 50,
 	        sort: 'li',
 	        dir: 'DESC'
-	    },
-         
-        // @deprecated
-	    updateMainToolbar : function() 
-	    {
 	    }
     };
     

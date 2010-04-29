@@ -345,12 +345,6 @@ Tine.Admin.Applications.Main = function() {
         show: function() {
         	_showApplicationsToolbar();
             _showApplicationsGrid();        	
-            this.updateMainToolbar();        
-        },
-        
-        // @deprecated
-        updateMainToolbar : function() 
-        {
         }
     };
     

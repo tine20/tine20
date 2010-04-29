@@ -69,7 +69,6 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
             this.setWestPanel();
             this.setCenterPanel();
             this.setNorthPanel();
-            this.updateMainToolbar();
             
             this.fireEvent('show', this);
         }
@@ -173,12 +172,5 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
         }
         
         Tine.Tinebase.MainScreen.setActiveToolbar(this[type + 'ActionToolbar'], true);
-    },
-    /**
-     * updates main toolbar
-     * 
-     * @deprecated
-     */
-    updateMainToolbar : function() {
     }
 });

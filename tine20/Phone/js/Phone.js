@@ -754,15 +754,6 @@ Tine.Phone.Main = {
         Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
     },
 
-    /**
-     * update main toolbar
-     * 
-     * @deprecated
-     */
-    updateMainToolbar : function() 
-    {
-    },
-    
 	show: function(_node) 
 	{	
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
@@ -772,7 +763,6 @@ Tine.Phone.Main = {
             this.displayToolbar();
             this.store.load({});
             this.displayGrid();
-            this.updateMainToolbar();
         } else {
         	this.store.load({});
         }
