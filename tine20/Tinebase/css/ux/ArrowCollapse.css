@@ -1,0 +1,55 @@
+/* add some padding so it spaces nice and relative elements dn't get clipped */
+.ux-arrowcollapse {
+	position:relative;
+    padding-bottom:5px;
+    overflow:hidden;
+}
+
+.ux-arrowcollapse .x-tool-toggle {
+    background:#fff url(../../../library/ExtJS/resources/images/default/tree/arrows.gif) no-repeat -18px 0;
+    position: absolute;
+    top: 8px;
+    float: left;
+}
+
+.x-panel-collapsed .ux-arrowcollapse-header .x-tool-toggle {
+    background-position: -2px 0;
+}
+
+/* Simple blue border */
+.ux-arrowcollapse .ux-arrowcollapse-header {
+	line-height: 24px;
+    padding:0;
+    /*border-bottom:1px solid #c3daf9;*/
+}
+ 
+/* Position the text element so it appears over the border added above */
+.ux-arrowcollapse .ux-arrowcollapse-header-text {
+    font-size:11px;
+    font-family:tahoma,arial,sans-serif;
+    line-height:13px;
+    text-transform:uppercase;
+    position:relative;
+    left:5px;
+    top:5px;
+    padding:1px 5px 1px 20px;
+    color:#4e79b2;
+    /*background:#fff url(../../../library/ExtJS/resources/images/default/tree/arrows.gif) no-repeat 2px 0;
+    */
+    }
+ 
+/* Copied from x-plain (for IE + layouts to work) */
+.ux-arrowcollapse-body {
+    overflow:hidden;
+}
+ 
+/* Copied from x-plain (for IE + layouts to work) */
+.ux-arrowcollapse-bwrap {
+    overflow:hidden;
+    zoom:1;
+}
+ 
+/* Change the toggle icon when collapsed */
+.x-panel-collapsed .ux-arrowcollapse-header-text {
+    background-position: 2px -15px;
+}

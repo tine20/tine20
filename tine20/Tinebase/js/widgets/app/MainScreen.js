@@ -152,14 +152,20 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
             
                 items.push(Ext.apply(this.getContainerTreePanel(), {
                     title: containersName,
-                    collapsible: true
+                    collapsible: true,
+                    baseCls: 'ux-arrowcollapse',
+                    animCollapse: true,
+                    titleCollapse:true
                 }));
             }
             
             if (this.hasFavoritesPanel) {
                 items.push(Ext.apply(this.getFavoritesPanel(), {
                     title: _('Favorites'),
-                    collapsible: true
+                    collapsible: true,
+                    baseCls: 'ux-arrowcollapse',
+                    animCollapse: true,
+                    titleCollapse:true
                 }));
             }
             

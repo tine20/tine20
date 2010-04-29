@@ -343,6 +343,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     	   'Tinebase/css/ExtFixes.css',
     	   'Tinebase/css/Tinebase.css',
     	   'Tinebase/css/SmallForms.css',
+    	   'Tinebase/css/ux/ArrowCollapse.css',
     	   'Tinebase/css/ux/ConnectionStatus.css',
     	   'Tinebase/css/ux/Wizard.css',
     	   'Tinebase/css/ux/Percentage.css',
