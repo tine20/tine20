@@ -101,6 +101,8 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
      * @return {Ext.Panel}
      */
     getCenterPanel: function(contentType) {
+        contentType = contentType || this.getActiveContentType();
+        
         if (! this[contentType + 'GridPanel']) {
             this[contentType + 'GridPanel'] = new Tine[this.app.appName][contentType + 'GridPanel']({
                 app: this.app,
@@ -120,6 +122,8 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
      * @return {Ext.Panel}
      */
     getNorthPanel: function(contentType) {
+        contentType = contentType || this.getActiveContentType();
+        
         if (! this[contentType + 'ActionToolbar']) {
             this[contentType + 'ActionToolbar'] = this[contentType + 'GridPanel'].getActionToolbar();
         }
