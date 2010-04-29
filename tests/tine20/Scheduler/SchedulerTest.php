@@ -285,11 +285,15 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
         $controller->returnResponse(true);
         $controller->throwExceptions(true);
 
+        $request = new Zend_Controller_Request_Http();
+        $request->setControllerName('index');
+        $request->setActionName('index');
+        
         $scheduler = new Zend_Scheduler();
 
         $task = new Zend_Scheduler_Task();
         $task->setFrontController($controller);
-        $task->setRequest('/');
+        $task->setRequest($request);
         $scheduler->addTask('test', $task);
 
         $responses = $scheduler->run();
@@ -328,11 +332,8 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
      */
     public function testCanUseDbBackend()
     {
-        $backend = new Zend_Scheduler_Backend_Db(array(
-                'DbAdapter' => Tinebase_Core::getDb(),
-                'tableName' => 'tine20_scheduler',
-                'taskClass' => 'Tinebase_Scheduler_Task'
-        ));
+        $scheduler = Tinebase_Core::getScheduler();
+        $backend = $scheduler->getBackend();
         $tasks = $backend->loadQueue();
         $taskCount = (count($tasks) > 0);
         $this->assertTrue($taskCount);
