@@ -281,7 +281,8 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
     public function testCanDispatchTask()
     {
         $controller = Zend_Controller_Front::getInstance();
-        $controller->setControllerDirectory('controllers');
+        $controller->setControllerDirectory(dirname(__FILE__) . '/controllers');
+        
         $controller->returnResponse(true);
         $controller->throwExceptions(true);
 
