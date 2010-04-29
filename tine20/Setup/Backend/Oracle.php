@@ -11,7 +11,7 @@
  */
 
 /**
- * setup backend class for MySQL 5.0 +
+ * setup backend class for Oracle
  *
  * @package     Setup
  */
@@ -93,7 +93,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         }
         
        foreach ($_table->indices as $index) {    
-            if (empty($index->primary) && empty($index->unique)) {
+            if (empty($index->primary) && empty($index->unique) && !$index->foreign) {
                $this->addIndex($_table->name, $index);
             }
         }  
@@ -503,6 +503,8 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             }
         }
         
+        $buffer[] = 'VARCHAR2(' . $length . ')';
+        
         $additional = ''; 
         if ($_field->notnull === true) {
             $additional .= ' NOT NULL ';
@@ -515,7 +517,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             }
         }    
         
-        $buffer[] = 'VARCHAR2(' . $length . ')' . $additional . ', CONSTRAINT ' . $this->_db->quoteIdentifier($this->_getConstraintEnumName($_tableName, $_field->name)) . ' CHECK ("'. $_field->name . "\" IN ('" . implode("','", $values) . "'))";
+        $buffer[] = $additional . ', CONSTRAINT ' . $this->_db->quoteIdentifier($this->_getConstraintEnumName($_tableName, $_field->name)) . ' CHECK ("'. $_field->name . "\" IN ('" . implode("','", $values) . "'))";
 
         return $buffer;
     }
@@ -577,7 +579,8 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
 
         if (!empty($_key->referenceOnUpdate)) {
             //$snippet .= " ON UPDATE " . strtoupper($_key->referenceOnUpdate);
-            throw new Setup_Backend_Exception_NotImplemented('ON UPDATE CONSTRAINTS are not supported by Oracle adapter');
+            // comment for now, because we can't install if we throw exception (what ca we do with ON UPDATE?)
+            //throw new Setup_Backend_Exception_NotImplemented('ON UPDATE CONSTRAINTS are not supported by Oracle adapter');
         }
         
         $constraintName = $this->_sanititzeName(SQL_TABLE_PREFIX . 'fk_' . $_tableName . "_" . $_key->field);

@@ -38,6 +38,7 @@ class Setup_Backend_Factory
                     return self::factory('Mysql');
                     
                 case 'Zend_Db_Adapter_Oracle':
+                case 'Zend_Db_Adapter_Pdo_Oci':
                     return self::factory(Tinebase_Core::ORACLE);
                     
                 default:

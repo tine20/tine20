@@ -473,6 +473,9 @@ class Setup_Controller
         if (Setup_Core::isRegistered(Setup_Core::DB)) {
             try {
                 $applicationTable = Setup_Core::getDb()->describeTable(SQL_TABLE_PREFIX . 'applications');
+                if (empty($applicationTable)) {
+					$result = TRUE;
+				}
             } catch (Zend_Db_Statement_Exception $e) {
                 $result = TRUE;
             }
