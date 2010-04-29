@@ -17,7 +17,6 @@ Ext.ns('Tine.Tinebase.widgets.app');
  * @version     $Id$
  * 
  * @constructor
- * @todo refactor set/get tree stuff
  */
 Tine.Tinebase.widgets.app.MainScreen = function(config) {
     Ext.apply(this, config);
@@ -36,6 +35,15 @@ Tine.Tinebase.widgets.app.MainScreen = function(config) {
          */
         'show'
     );
+    
+    if (this.hasContainerTreePanel || this.hasContainerTreePanel === null) {
+        this.hasContainerTreePanel = true;
+    }
+    
+    if (this.hasFavoritesPanel || (this.hasFavoritesPanel === null && Tine[this.app.appName].FilterPanel)) {
+        this.hasFavoritesPanel = true;
+    }
+    
     Tine.Tinebase.widgets.app.MainScreen.superclass.constructor.call(this);
 };
 
@@ -128,15 +136,27 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
      */
     getWestPanel: function() {
         if (! this.westPanel) {
-            this.initWestPanelItems();
+            
             
             var items = [];
             if (this.hasContainerTreePanel) {
-                items.push(this.getContainerTreePanel());
+                var containerTreePanel = this.getContainerTreePanel();
+                
+                var containersName = containerTreePanel.recordClass ? 
+                    this.app.i18n._hidden(containerTreePanel.recordClass.getMeta('containersName')) :
+                    _('containers');
+            
+                items.push(Ext.apply(this.getContainerTreePanel(), {
+                    title: containersName,
+                    collapsible: true
+                }));
             }
             
             if (this.hasFavoritesPanel) {
-                items.push(this.getFavoritesPanel());
+                items.push(Ext.apply(this.getFavoritesPanel(), {
+                    title: _('Favorites'),
+                    collapsible: true
+                }));
             }
             
             this.westPanel = new Ext.Panel({
@@ -147,64 +167,28 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
         }
         
         return this.westPanel;
-//        if(!this.treePanel) {
-//            this.treePanel = new Tine[this.app.appName].TreePanel({app: this.app});
-//        }
-//        
-//        if(!this.filterPanel && Tine[this.app.appName].FilterPanel) {
-//            //console.log('creating filterPanel for ' + this.app.appName);
-//            this.filterPanel = new Tine[this.app.appName].FilterPanel({
-//                app: this.app,
-//                treePanel: this.treePanel
-//            });
-//        }
-//        
-//        if (this.filterPanel) {
-//            
-//            if (! this.leftTabPanel) {
-//                //console.log('creating leftTabPanel for ' + this.app.appName);
-//                var containersName = 'not found';
-//                if (this.treePanel.recordClass) {
-//                    var containersName = this.app.i18n.n_hidden(this.treePanel.recordClass.getMeta('containerName'), this.treePanel.recordClass.getMeta('containersName'), 50);
-//                }
-//                
-//                this.leftTabPanel = new Ext.TabPanel({
-//                    border: false,
-//                    activeItem: 0,
-//                    layoutOnTabChange: true,
-//                    autoScroll: true,
-//                    items: [{
-//                        title: containersName,
-//                        layout: 'fit',
-//                        items: this.treePanel,
-//                        autoScroll: true
-//                    }, {
-//                        title: _('Saved filter'),
-//                        layout: 'fit',
-//                        items: this.filterPanel,
-//                        autoScroll: true
-//                    }],
-//                    getPersistentFilterNode: this.filterPanel.getPersistentFilterNode.createDelegate(this.filterPanel)
-//                
-//                });
-//            }
-//            
-//            return this.leftTabPanel;
-//        } else {
-//            return this.treePanel;
-//        }
     },
     
+    /**
+     * returns containerTree panel
+     * 
+     * @return {Tine.Tinebase.widgets.ContainerTreePanel}
+     */
     getContainerTreePanel: function() {
-        if (! this.containerTreePanel) {
+        if (this.hasContainerTreePanel && !this.containerTreePanel) {
             this.containerTreePanel = new Tine[this.app.appName][this.containerTreePanelClassName]({app: this.app});
         }
         
         return this.containerTreePanel;
     },
     
+    /**
+     * returns favorites panel
+     * 
+     * @return {Ext.Panel}
+     */
     getFavoritesPanel: function() {
-        if (! this.favoritesPanel) {
+        if (this.hasFavoritesPanel && !this.favoritesPanel) {
             this.favoritesPanel = new Tine[this.app.appName][this.favoritesPanelClassName]({
                 app: this.app,
                 treePanel: this.containerTreePanel
@@ -212,19 +196,6 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
         }
         
         return this.favoritesPanel;
-    },
-    
-    /**
-     * initialize west panel items
-     */
-    initWestPanelItems: function() {
-        if (this.hasContainerTreePanel || this.hasContainerTreePanel === null) {
-            this.hasContainerTreePanel = true;
-        }
-        
-        if (this.hasFavoritesPanel || (this.hasFavoritesPanel === null && Tine[this.app.appName].FilterPanel)) {
-            this.hasFavoritesPanel = true;
-        }
     },
     
     /**
