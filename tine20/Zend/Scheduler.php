@@ -88,11 +88,9 @@ class Zend_Scheduler
             $backendName = ucfirst(strtolower($backend));
             if (in_array($backendName, self::$availableBackends)) {
                 $class = 'Zend_Scheduler_Backend_' . $backendName;
-                Zend_Loader::loadClass($class);
                 $backend = new $class($options);
             } else {
                 try { // to load user-implemented backend interface
-                    Zend_Loader::loadClass($backend);
                     $backend = new $backend($options);
                 } catch (Zend_Exception $e) {
                     throw new Zend_Scheduler_Exception('Invalid backend');
