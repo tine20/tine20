@@ -359,7 +359,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
         if (($version === null) || version_compare($version, '9.0.0', '>=')) {
             $sql = "SELECT TC.TABLE_NAME, TC.OWNER, TC.COLUMN_NAME, TC.DATA_TYPE,
                     TC.DATA_DEFAULT, TC.NULLABLE, TC.COLUMN_ID, TC.DATA_LENGTH,
-                    TC.DATA_SCALE, TC.DATA_PRECISION, C.CONSTRAINT_TYPE, CC.POSITION
+                    TC.DATA_SCALE, TC.DATA_PRECISION, C.CONSTRAINT_TYPE, CC.POSITION, TC.CHAR_LENGTH
                 FROM ALL_TAB_COLUMNS TC
                 LEFT JOIN (ALL_CONS_COLUMNS CC JOIN ALL_CONSTRAINTS C
                     ON (CC.CONSTRAINT_NAME = C.CONSTRAINT_NAME AND CC.TABLE_NAME = C.TABLE_NAME AND C.CONSTRAINT_TYPE = 'P'))
@@ -385,8 +385,8 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                 $bind[':SCNAME'] = $schemaName;
             }
             $sql="SELECT TC.TABLE_NAME, TC.OWNER, TC.COLUMN_NAME, TC.DATA_TYPE,
-                    TC.DATA_DEFAULT, TC.NULLABLE, TC.COLUMN_ID, TC.DATA_LENGTH,
-                    TC.DATA_SCALE, TC.DATA_PRECISION, CC.CONSTRAINT_TYPE, CC.POSITION
+                    TC.DATA_DEFAULT, TC.NULLABLE, TC.COLUMN_ID, TC.DATA_LENGTH, 
+                    TC.DATA_SCALE, TC.DATA_PRECISION, CC.CONSTRAINT_TYPE, CC.POSITION, TC.CHAR_LENGTH
                 FROM ALL_TAB_COLUMNS TC, ($subSql) CC
                 WHERE UPPER(TC.TABLE_NAME) = UPPER(:TBNAME)
                   AND TC.OWNER = CC.OWNER(+) AND TC.TABLE_NAME = CC.TABLE_NAME(+) AND TC.COLUMN_NAME = CC.COLUMN_NAME(+)";
@@ -415,6 +415,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
         $data_precision  = 9;
         $constraint_type = 10;
         $position        = 11;
+		$char_length     = 12;
 
         $desc = array();
         foreach ($result as $key => $row) {
@@ -435,7 +436,8 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                 'DATA_TYPE'        => $row[$data_type],
                 'DEFAULT'          => $row[$data_default],
                 'NULLABLE'         => (bool) ($row[$nullable] == 'Y'),
-                'LENGTH'           => $row[$data_length],
+                //'LENGTH'           => $row[$data_length], 
+				'LENGTH'           => $row[$char_length], 				
                 'SCALE'            => $row[$data_scale],
                 'PRECISION'        => $row[$data_precision],
                 'UNSIGNED'         => null, // @todo
