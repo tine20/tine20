@@ -531,7 +531,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         options.params.filter = [];
         
         // note, we can't use the 'normal' plugin approach here, cause we have to deal with n stores
-        //var calendarSelectionPlugin = this.app.getMainScreen().treePanel.getCalSelector().getFilterPlugin();
+        //var calendarSelectionPlugin = this.app.getMainScreen().getContainerTreePanel().getFilterPlugin();
         //calendarSelectionPlugin.onBeforeLoad.call(calendarSelectionPlugin, store, options);
         
         this.filterToolbar.onBeforeLoad.call(this.filterToolbar, store, options);
@@ -551,7 +551,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         this.filterToolbar.setValue(store.proxy.jsonReader.jsonData.filter);
         
         // update tree
-        Tine.Tinebase.appMgr.get('Calendar').getMainScreen().treePanel.getCalSelector().getFilterPlugin().setValue(store.proxy.jsonReader.jsonData.filter);
+        Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContainerTreePanel().getFilterPlugin().setValue(store.proxy.jsonReader.jsonData.filter);
     },
     
     refresh: function(refresh) {

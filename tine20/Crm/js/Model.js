@@ -95,13 +95,11 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
     
     // add default container
     var app = Tine.Tinebase.appMgr.get('Crm');
-    if (app.getMainScreen().treePanel) {
-        var treeNode = app.getMainScreen().treePanel.getSelectionModel().getSelectedNode();
-        if (treeNode && treeNode.attributes && treeNode.attributes.containerType == 'singleContainer') {
-            data.container_id = treeNode.attributes.container;
-        } else {
-            data.container_id = defaults.container_id;
-        }
+    var treeNode = app.getMainScreen().getContainerTreePanel().getSelectionModel().getSelectedNode();
+    if (treeNode && treeNode.attributes && treeNode.attributes.containerType == 'singleContainer') {
+        data.container_id = treeNode.attributes.container;
+    } else {
+        data.container_id = defaults.container_id;
     }
 
     return data;

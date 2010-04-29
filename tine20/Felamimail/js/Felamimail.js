@@ -450,9 +450,19 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
  * @class Tine.Felamimail.MainScreen
  * @extends Tine.Tinebase.widgets.app.MainScreen
  * 
- * MainScreen Definition (use default)
+ * MainScreen Definition
  */ 
-Tine.Felamimail.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
+Tine.Felamimail.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
+    
+    /**
+     * adapter fn to get folder tree panel
+     * 
+     * @return {Ext.tree.TreePanel}
+     */
+    getTreePanel: function() {
+        return this.getContainerTreePanel();
+    }
+});
 
 /**
  * get account store

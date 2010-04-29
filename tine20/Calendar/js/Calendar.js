@@ -59,15 +59,77 @@ Tine.Calendar.MainScreen = function(config) {
 
 Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
     
+    containerTreePanelClassName: 'CalendarSelectTreePanel',
+    
     /**
-     * sets left panel aka tree panel in other apps
+     * returns left panel aka tree panel in other apps
      */
-    showWestPanel: function() {
-        if (! this.treePanel) {
-            this.treePanel = new Tine.Calendar.MainScreenLeftPanel({app: this.app});
+    getWestPanel: function() {
+        
+        if (! this.westPanel) {
+            var orgWestPanel = this.supr().getWestPanel.apply(this, arguments);
+            
+            this.westPanel = new Ext.Panel({
+                cls: 'cal-tree',
+                border: false,
+                layout: 'border',
+                items: [{
+                    region: 'center',
+                    border: false,
+                    layout: 'hfit',
+                    items: orgWestPanel
+                }, {
+                    region: 'south',
+                    border: false,
+                    split: true,
+                    collapsible: true,
+                    collapseMode: 'mini',
+                    header: false,
+                    height: 190,
+                    cls: 'cal-datepicker-background',
+                    layout: 'hbox',
+                    layoutConfig: {
+                        align:'middle'
+                    },
+                    defaults: {border: false},
+                    items: [{
+                        flex: 1
+                    }, new Ext.DatePicker({
+                        flex: 0,
+                        width: 200,
+                        id :'cal-mainscreen-minical',
+                        plugins: [new Ext.ux.DatePickerWeekPlugin({
+                            weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._('WK'),
+                            inspectMonthPickerClick: function(btn, e) {
+                                if (e.getTarget('button')) {
+                                    var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
+                                    contentPanel.changeView('month', this.activeDate);
+                                    
+                                    return false;
+                                }
+                            }
+                        })],
+                        listeners: {
+                            scope: this, 
+                            select: function(picker, value, weekNumber) {
+                                var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
+                                contentPanel.changeView(weekNumber ? 'week' : 'day', value);
+                            },
+                            render2: function(picker) {
+                                // fix height of minipicker panel (south panel)
+                                var layout = this.layout;
+                                layout.south.el.setHeight(picker.el.getHeight());
+                                layout.layout();
+                            }
+                        }
+                    }), {flex: 1}]
+                }]
+            });
         }
-        Tine.Calendar.MainScreen.superclass.showWestPanel.apply(this, arguments);
+        
+        return this.westPanel;
     },
+    
     
     /**
      * Get content panel of calendar application

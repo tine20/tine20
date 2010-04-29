@@ -710,8 +710,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     },
                     scope: this,
                     success: function(result) {
-                        if (typeof this.app.getMainScreen().getTreePanel().getPersistentFilterNode == 'function') {
-                            var persistentFilterNode = this.app.getMainScreen().getTreePanel().getPersistentFilterNode();
+                        if (typeof this.app.getMainScreen().hasFavoritesPanel) {
+                            var persistentFilterNode = this.app.getMainScreen().getFavoritesPanel().getPersistentFilterNode();
                             
                             if (persistentFilterNode && persistentFilterNode.isExpanded()) {
                                 var filter = Ext.util.JSON.decode(result.responseText);

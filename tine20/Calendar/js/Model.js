@@ -148,7 +148,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         summary: '',
         dtstart: dtstart,
         dtend: dtstart.add(Date.HOUR, 1),
-        container_id: app.getMainScreen().treePanel.getAddCalendar(),
+        container_id: app.getMainScreen().getContainerTreePanel().getAddCalendar(),
         transp: 'OPAQUE',
         editGrant: true,
         organizer: Tine.Tinebase.registry.get('userContact'),

@@ -139,5 +139,33 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         }
         
 //        return true;
+    },
+    
+    /**
+     * returns a calendar to take for an add event action
+     * 
+     * @return {Tine.Model.Container}
+     */
+    getAddCalendar: function() {
+        var sm = this.getSelectionModel();
+        var selections =  typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
+            
+        var addCalendar = Tine.Calendar.registry.get('defaultCalendar');
+        
+        //active calendar
+        var activeNode = typeof sm.getActiveNode == 'function' ? sm.getActiveNode() : selections[0];
+        if (activeNode && this.hasGrant(activeNode, 'addGrant')) {
+            return activeNode.attributes.container;
+        }
+        
+        //first container with add grant
+        Ext.each(selections, function(node){
+            if (node && this.hasGrant(node, 'addGrant')) {
+                addCalendar = node.attributes.container;
+                return false;
+            }
+        }, this);
+        
+        return addCalendar
     }
 });

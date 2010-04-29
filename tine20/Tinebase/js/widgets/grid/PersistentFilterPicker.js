@@ -124,8 +124,8 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
         
         //this.app.getMainScreen().getCenterPanel().filterToolbar.setValue(filter.filters);
         
-        if (typeof this.app.getMainScreen().getTreePanel().activate == 'function') {
-            this.app.getMainScreen().getTreePanel().activate(0);
+        if (typeof this.app.getMainScreen().getContainerTreePanel().activate == 'function') {
+            this.app.getMainScreen().getContainerTreePanel().activate(0);
         }
     },
     
