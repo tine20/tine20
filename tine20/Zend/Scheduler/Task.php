@@ -354,9 +354,9 @@ class Zend_Scheduler_Task implements Zend_Scheduler_Task_Interface
         return $this->_requests;
     }
     
-    public function setFrontController()
+    public function setFrontController($frontController)
     {
-        $this->_frontController = Zend_Controller_Front::getInstance();
+        $this->_frontController = $frontController;
     }
     
     public function getFrontController()
