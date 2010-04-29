@@ -151,7 +151,6 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
     	}
     	    	
     	$class = $this->getTaskClass();
-        Zend_Loader::loadClass($class);
         
         foreach ($result as $item) {
             $data = Zend_Json::decode($item['data']);
