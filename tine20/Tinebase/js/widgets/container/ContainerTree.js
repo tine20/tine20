@@ -427,7 +427,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         var targetContainerId = dropEvent.target.id;
         
         // get selection filter from grid
-        var sm = this.app.getMainScreen().getContentPanel().getGrid().getSelectionModel();
+        var sm = this.app.getMainScreen().getCenterPanel().getGrid().getSelectionModel();
         if (sm.getCount() === 0) {
             return false;
         }

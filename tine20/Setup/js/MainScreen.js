@@ -63,7 +63,7 @@ Tine.Setup.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
      * 
      * @return {Ext.Panel}
      */
-    getContentPanel: function() {
+    getCenterPanel: function() {
         return this[this.activePanel];
     },
     

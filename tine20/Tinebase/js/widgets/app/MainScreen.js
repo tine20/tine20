@@ -45,44 +45,66 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
      * instance of the app object (required)
      */
     app: null,
+    
     /**
      * @cfg {String} activeContentType
      */
     activeContentType: '',
-    /**
-     * @property {Ext.Panel} treePanel
-     */
-    /**
-     * @property {Tine.widgets.app.GridPanel} gridPanel 
-     */
-    /**
-     * @property {Ext.Toolbar} actionToolbar
-     */
     
     /**
-     * shows/activates this app mainscreen
+     * returns active content type
      * 
-     * @return {Tine.Tinebase.widgets.app.MainScreen} this
+     * @return {String}
      */
-    show: function() {
-        if(this.fireEvent("beforeshow", this) !== false){
-            this.showWestPanel();
-            this.showCenterPanel();
-            this.showNorthPanel();
-            
-            this.fireEvent('show', this);
-        }
-        return this;
-    },
-    
-    onHide: function() {
-        
+    getActiveContentType: function() {
+        return this.activeContentType;
     },
     
     /**
-     * sets tree panel in mainscreen
+     * get center panel for given contentType
+     * 
+     * template method to be overridden by subclasses to modify default behaviour
+     * 
+     * @param {String} contentType
+     * @return {Ext.Panel}
      */
-    showWestPanel: function() {
+    getCenterPanel: function(contentType) {
+        if (! this[contentType + 'GridPanel']) {
+            this[contentType + 'GridPanel'] = new Tine[this.app.appName][contentType + 'GridPanel']({
+                app: this.app,
+                plugins: [this.treePanel.getFilterPlugin()]
+            });
+        }
+        
+        return this[contentType + 'GridPanel'];
+    },
+    
+    /**
+     * get north panel for given contentType
+     * 
+     * template method to be overridden by subclasses to modify default behaviour
+     * 
+     * @param {String} contentType
+     * @return {Ext.Panel}
+     */
+    getNorthPanel: function(contentType) {
+        console.log(this);
+        if (! this[contentType + 'ActionToolbar']) {
+            this[contentType + 'ActionToolbar'] = this[contentType + 'GridPanel'].getActionToolbar();
+        }
+        
+        return this[contentType + 'ActionToolbar'];
+    },
+    
+    /**
+     * get west panel for given contentType
+     * 
+     * template method to be overridden by subclasses to modify default behaviour
+     * 
+     * @param {String} contentType
+     * @return {Ext.Panel}
+     */
+    getWestPanel: function(contentType) {
         if(!this.treePanel) {
             this.treePanel = new Tine[this.app.appName].TreePanel({app: this.app});
         }
@@ -125,9 +147,9 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
                 });
             }
             
-            Tine.Tinebase.MainScreen.setActiveTreePanel(this.leftTabPanel, true);
+            return this.leftTabPanel;
         } else {
-            Tine.Tinebase.MainScreen.setActiveTreePanel(this.treePanel, true);
+            return this.treePanel;
         }
     },
     
@@ -140,37 +162,39 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
     },
     
     /**
-     * sets content panel in mainscreen
+     * shows/activates this app mainscreen
+     * 
+     * @return {Tine.Tinebase.widgets.app.MainScreen} this
      */
-    showCenterPanel: function() {
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this.getContentPanel(), true);
-    },
-    
-    
-    getContentPanel: function() {
-        // which content panel?
-        var type = this.activeContentType;
-        
-        if (! this[type + 'GridPanel']) {
-            this[type + 'GridPanel'] = new Tine[this.app.appName][type + 'GridPanel']({
-                app: this.app,
-                plugins: [this.treePanel.getFilterPlugin()]
-            });
+    show: function() {
+        if(this.fireEvent("beforeshow", this) !== false){
+            this.showWestPanel();
+            this.showCenterPanel();
+            this.showNorthPanel();
+            
+            this.fireEvent('show', this);
         }
-        
-        return this[type + 'GridPanel'];
+        return this;
     },
     
     /**
-     * sets toolbar in mainscreen
+     * shows center panel in mainscreen
+     */
+    showCenterPanel: function() {
+        Tine.Tinebase.MainScreen.setActiveContentPanel(this.getCenterPanel(this.getActiveContentType()), true);
+    },
+    
+    /**
+     * shows west panel in mainscreen
+     */
+    showWestPanel: function() {
+        Tine.Tinebase.MainScreen.setActiveTreePanel(this.getWestPanel(this.getActiveContentType()), true);
+    },
+    
+    /**
+     * shows north panel in mainscreen
      */
     showNorthPanel: function() {
-        var type = this.activeContentType;
-        
-        if (! this[type + 'ActionToolbar']) {
-            this[type + 'ActionToolbar'] = this[type + 'GridPanel'].getActionToolbar();
-        }
-        
-        Tine.Tinebase.MainScreen.setActiveToolbar(this[type + 'ActionToolbar'], true);
+        Tine.Tinebase.MainScreen.setActiveToolbar(this.getNorthPanel(this.getActiveContentType()), true);
     }
 });

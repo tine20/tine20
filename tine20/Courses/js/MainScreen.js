@@ -33,7 +33,7 @@ Tine.Courses.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         this[type + 'GridPanel'].store.load();
     },
     
-    getContentPanel: function() {
+    getCenterPanel: function() {
         // which content panel?
         //var type = this.activeContentType;
         

@@ -77,7 +77,7 @@ Ext.ux.WindowFactory.prototype = {
         c.height = c.height + 20;
         c.layout = c.layout || 'fit';
         
-        c.items = this.getContentPanel(c);
+        c.items = this.getCenterPanel(c);
         
         // we can only handle one window yet
         c.modal = true;
@@ -92,7 +92,7 @@ Ext.ux.WindowFactory.prototype = {
     /**
      * constructs window items from config properties
      */
-    getContentPanel: function(config) {
+    getCenterPanel: function(config) {
         var items;
         if (config.contentPanelConstructor) {
             config.contentPanelConstructorConfig = config.contentPanelConstructorConfig || {};

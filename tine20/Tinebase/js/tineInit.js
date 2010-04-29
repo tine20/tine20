@@ -239,7 +239,7 @@ Tine.Tinebase.tineInit = {
         window.document.title = c.title ? c.title : window.document.title;
         
         // finaly render the window contentes in a new card  
-        var card = Tine.WindowFactory.getContentPanel(c);
+        var card = Tine.WindowFactory.getCenterPanel(c);
         mainCardPanel.add(card);
         mainCardPanel.layout.setActiveItem(card.id);
         card.doLayout();

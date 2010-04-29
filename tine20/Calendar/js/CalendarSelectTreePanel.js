@@ -15,7 +15,7 @@ Tine.Calendar.FilterPanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker,
     storeOnBeforeload: function(store, options) {
         options.params.filter = this.getSelectionModel().getSelectedNode().attributes.filter.filters;
         
-        var cp = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
+        var cp = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
         var period = cp.getCalendarPanel(cp.activeView).getTopToolbar().getPeriod();
         
         // remove all existing period filters
@@ -59,7 +59,7 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
              * @return {Ext.Panel}
              */
             getGridPanel: function() {
-                return Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
+                return Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
             }
         });
         
@@ -109,7 +109,7 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
     onBeforeNodeDrop: function(dropEvent) {
         var containerData = dropEvent.target.attributes,
             selection = dropEvent.data.selections,
-            mainScreenPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel(),
+            mainScreenPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel(),
             calPanel = mainScreenPanel.getCalendarPanel(mainScreenPanel.activeView),
             abort = false;
         

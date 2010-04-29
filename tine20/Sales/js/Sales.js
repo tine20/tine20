@@ -48,7 +48,7 @@ Tine.Sales.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         this[type + 'GridPanel'].store.load();
     },
     
-    getContentPanel: function() {
+    getCenterPanel: function() {
         // which content panel?
         
         // we always return product grid panel as a quick hack for saving filters

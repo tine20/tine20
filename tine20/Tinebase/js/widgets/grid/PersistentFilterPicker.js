@@ -116,13 +116,13 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
      *       always the last listener, we directly remove the listener afterwards
      */
     onFilterSelect: function(filter) {
-        var store = this.app.getMainScreen().getContentPanel().getStore();
+        var store = this.app.getMainScreen().getCenterPanel().getStore();
         
         // NOTE: this can be removed when all instances of filterplugins are removed
         store.on('beforeload', this.storeOnBeforeload, this);
         store.load();
         
-        //this.app.getMainScreen().getContentPanel().filterToolbar.setValue(filter.filters);
+        //this.app.getMainScreen().getCenterPanel().filterToolbar.setValue(filter.filters);
         
         if (typeof this.app.getMainScreen().getTreePanel().activate == 'function') {
             this.app.getMainScreen().getTreePanel().activate(0);

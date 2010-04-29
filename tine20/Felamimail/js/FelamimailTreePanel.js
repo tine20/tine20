@@ -390,7 +390,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 
                 // TODO do not update if multiple messages are selected (this does not work if messages are moved!)
                 // TODO do not reload details panel
-                var contentPanel = this.app.getMainScreen().getContentPanel();
+                var contentPanel = this.app.getMainScreen().getCenterPanel();
                 if (contentPanel /*&& contentPanel.getGrid().getSelectionModel().getCount() <= 1*/) {
                     // update & preserve selection
                     contentPanel.loadData(true, true, true);

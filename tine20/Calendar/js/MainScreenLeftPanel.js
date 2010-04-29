@@ -44,7 +44,7 @@ Tine.Calendar.MainScreenLeftPanel = Ext.extend(Ext.Panel, {
         
         //this.calSelector.getSelectionModel().on('selectionchange', function(sm, node) {
         this.calSelector.getFilterPlugin().on('change', function() {
-            var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
+            var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
             if (contentPanel) {
                 contentPanel.refresh();
             }
@@ -76,7 +76,7 @@ Tine.Calendar.MainScreenLeftPanel = Ext.extend(Ext.Panel, {
                     weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._('WK'),
                     inspectMonthPickerClick: function(btn, e) {
                         if (e.getTarget('button')) {
-                            var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
+                            var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
                             contentPanel.changeView('month', this.activeDate);
                             
                             return false;
@@ -86,7 +86,7 @@ Tine.Calendar.MainScreenLeftPanel = Ext.extend(Ext.Panel, {
                 listeners: {
                     scope: this, 
                     select: function(picker, value, weekNumber) {
-                        var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
+                        var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
                         contentPanel.changeView(weekNumber ? 'week' : 'day', value);
                     },
                     render2: function(picker) {
