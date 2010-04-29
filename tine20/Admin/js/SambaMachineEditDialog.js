@@ -49,7 +49,7 @@ Tine.Admin.SambaMachineEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 300,
-        height: 70,
+        height: 100,
         name: Tine.Admin.SambaMachineEditDialog.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Admin.SambaMachineEditDialog',
         contentPanelConstructorConfig: config

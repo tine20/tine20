@@ -321,12 +321,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete users
      *
-     * @param   array $accountIds array of account ids
+     * @param   array $ids array of account ids
      * @return  array with success flag
      */
-    public function deleteUsers($accountIds)
+    public function deleteUsers($ids)
     {
-        Admin_Controller_User::getInstance()->delete($accountIds);
+        Admin_Controller_User::getInstance()->delete($ids);
         
         $result = array(
             'success' => TRUE

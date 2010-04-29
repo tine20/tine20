@@ -17,8 +17,11 @@ Ext.namespace('Tine.Admin.Groups');
 /*********************************** MAIN DIALOG ********************************************/
 
 Tine.Admin.Groups.Main = {
-    
-    
+        
+	// references to crated toolbar and grid panel
+	groupsToolbar: null,
+	gridPanel: null,
+		
     actions: {
         addGroup: null,
         editGroup: null,
@@ -125,6 +128,14 @@ Tine.Admin.Groups.Main = {
     },
     
     displayGroupsToolbar: function() {
+        
+    	// if toolbar was allready created set active toolbar and return
+    	if (this.groupsToolbar) 
+    	{
+    		Tine.Tinebase.MainScreen.setActiveToolbar(this.groupsToolbar, true);
+    		return;
+    	}
+    	
         var GroupsAdminQuickSearchField = new Ext.ux.SearchField({
             id: 'GroupsAdminQuickSearchField',
             width:240,
@@ -139,25 +150,49 @@ Tine.Admin.Groups.Main = {
             });
         }, this);
         
-        var groupsToolbar = new Ext.Toolbar({
+        this.groupsToolbar = new Ext.Toolbar({
             id: 'AdminGroupsToolbar',
             split: false,
-            height: 26,
-            items: [
-                this.actions.addGroup, 
-                this.actions.editGroup,
-                this.actions.deleteGroup,
-                '->', 
+            //height: 26,
+            items: [{
+				xtype: 'buttongroup',
+				columns: 5,
+				items: [
+					Ext.apply(new Ext.Button(this.actions.addGroup), {
+						scale: 'medium',
+						rowspan: 2,
+						iconAlign: 'top'
+					}), {xtype: 'tbspacer', width: 10},
+					Ext.apply(new Ext.Button(this.actions.editGroup), {
+						scale: 'medium',
+						rowspan: 2,
+						iconAlign: 'top'
+					}), {xtype: 'tbspacer', width: 10},
+					Ext.apply(new Ext.Button(this.actions.deleteGroup), {
+						scale: 'medium',
+						rowspan: 2,
+						iconAlign: 'top'
+					})
+				]
+			}, '->', 
                 this.translation.gettext('Search:'), 
                 ' ',
                 GroupsAdminQuickSearchField
             ]
         });
 
-        Tine.Tinebase.MainScreen.setActiveToolbar(groupsToolbar);
+        Tine.Tinebase.MainScreen.setActiveToolbar(this.groupsToolbar, true);
     },
 
     displayGroupsGrid: function() {
+    	
+    	// if grid panel was allready created set active content panel and return
+    	if (this.gridPanel)
+    	{
+    		Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
+    		return;
+    	}
+    	
         if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts') ) {
             this.actions.addGroup.setDisabled(false);
         }
@@ -229,7 +264,7 @@ Tine.Admin.Groups.Main = {
         }, this);
         
         // the gridpanel
-        var gridPanel = new Ext.grid.GridPanel({
+        this.gridPanel = new Ext.grid.GridPanel({
             id: 'AdminGroupsGrid',
             store: dataStore,
             cm: columnModel,
@@ -249,7 +284,7 @@ Tine.Admin.Groups.Main = {
             
         });
         
-        gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+        this.gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
@@ -266,7 +301,7 @@ Tine.Admin.Groups.Main = {
             contextMenu.showAt(_eventObject.getXY());
         }, this);
         
-        gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
+        this.gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
         	if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts') ) {
                 var record = _gridPar.getStore().getAt(_rowIndexPar);
                 //Tine.Admin.Groups.EditDialog.openWindow({group: record});
@@ -275,32 +310,27 @@ Tine.Admin.Groups.Main = {
         }, this);
 
         // add the grid to the layout
-        Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
+        Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
     },
     
     /**
      * update datastore with node values and load datastore
      */
-    loadData: function() {
+    loadData: function() 
+    {
         var dataStore = Ext.getCmp('AdminGroupsGrid').getStore();
-            
-        dataStore.load({
-            params:{
-                start:0, 
-                limit:50 
-            }
-        });
+        dataStore.load({ params: { start:0, limit:50 } });
     },
 
-    show: function() {
-        this.initComponent();
-        
-        var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
+    show: function() 
+    {	
+    	if (this.groupsToolbar === null || this.gridPanel === null) {
+        	this.initComponent();
+    	}
 
-        if(currentToolbar === false || currentToolbar.id != 'AdminGroupsToolbar') {
-            this.displayGroupsToolbar();
-            this.displayGroupsGrid();
-        }
+        this.displayGroupsToolbar();
+        this.displayGroupsGrid();
+
         this.loadData();
     },
     
@@ -480,7 +510,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     },
     
     onRecordLoad: function(response) {
-        this.getForm().findField('name').focus(false, 250);
+        this.getForm().findField('name').focus(false, 350);
         var recordData = Ext.util.JSON.decode(response.responseText);
         this.updateRecord(recordData);
 

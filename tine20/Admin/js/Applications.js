@@ -16,6 +16,10 @@ Ext.namespace('Tine.Admin.Applications');
 
 Tine.Admin.Applications.Main = function() {
 
+	// references to created toolbar and grid panel
+	var applicationToolbar = null;
+	var grid_applications = null;
+	
     /**
      * onclick handler for edit action
      * 
@@ -128,13 +132,20 @@ Tine.Admin.Applications.Main = function() {
             _options.params.filter = Ext.getCmp('ApplicationsAdminQuickSearchField').getValue();
         });        
         
-        ds_applications.load({params:{start:0, limit:50}});
+        //ds_applications.load({params:{start:0, limit:50}});
         
         return ds_applications;
     };
 
 	var _showApplicationsToolbar = function()
     {
+    	// if toolbar was allready created set active toolbar and return
+    	if (applicationToolbar)
+    	{
+    		Tine.Tinebase.MainScreen.setActiveToolbar(applicationToolbar, true);
+    		return;
+    	}
+    	
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
         
@@ -151,35 +162,51 @@ Tine.Admin.Applications.Main = function() {
             Ext.getCmp('gridAdminApplications').getStore().load({params:{start:0, limit:50}});
         });
         
-        var applicationToolbar = new Ext.Toolbar({
+        applicationToolbar = new Ext.Toolbar({
             id: 'toolbarAdminApplications',
             split: false,
-            height: 26,
-            items: [
-                _action_enable,
-                _action_disable,
-                '-',
-                _action_settings,
-                '->',
+            //height: 26,
+            items: [{
+				xtype: 'buttongroup',
+				columns: 7,
+				items: [
+					Ext.apply(new Ext.Button(_action_enable), {
+					scale: 'medium',
+					rowspan: 2,
+					iconAlign: 'top'
+					}), {xtype: 'tbspacer', width: 10},
+					Ext.apply(new Ext.Button(_action_disable), {
+						scale: 'medium',
+						rowspan: 2,
+						iconAlign: 'top'
+					}), {xtype: 'tbspacer', width: 10},
+					{xtype: 'tbseparator'}, {xtype: 'tbspacer', width: 10},
+					Ext.apply(new Ext.Button(_action_settings), {
+						scale: 'medium',
+						rowspan: 2,
+						iconAlign: 'top'
+					})
+				]
+			}, '->',
                 this.translation.gettext('Search:'), ' ',
-/*                new Ext.ux.SelectBox({
-                  listClass:'x-combo-list-small',
-                  width:90,
-                  value:'Starts with',
-                  id:'search-type',
-                  store: new Ext.data.SimpleStore({
-                    fields: ['text'],
-                    expandData: true,
-                    data : ['Starts with', 'Ends with', 'Any match']
-                  }),
-                  displayField: 'text'
-                }), */
+//				new Ext.ux.SelectBox({
+//                	listClass:'x-combo-list-small',
+//                  	width:90,
+//                  	value:'Starts with',
+//                  	id:'search-type',
+//                  	store: new Ext.data.SimpleStore({
+//                    	fields: ['text'],
+//                    	expandData: true,
+//                    	data : ['Starts with', 'Ends with', 'Any match']
+//                  	}),
+//                  	displayField: 'text'
+//                }),
                 ' ',
                 ApplicationsAdminQuickSearchField
             ]
         });
         
-        Tine.Tinebase.MainScreen.setActiveToolbar(applicationToolbar);
+        Tine.Tinebase.MainScreen.setActiveToolbar(applicationToolbar, true);
     };
     
     var _renderEnabled = function (_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
@@ -210,6 +237,12 @@ Tine.Admin.Applications.Main = function() {
 	 */
     var _showApplicationsGrid = function() 
     {
+    	// if grid panel was allready created set active content panel and return
+    	if (grid_applications) {
+    		Tine.Tinebase.MainScreen.setActiveContentPanel(grid_applications, true);
+    		return;
+    	}
+    	
         var ctxMenuGrid = new Ext.menu.Menu({
             items: [
                 _action_enable,
@@ -279,7 +312,7 @@ Tine.Admin.Applications.Main = function() {
             }
         });
                 
-        var grid_applications = new Ext.grid.GridPanel({
+        grid_applications = new Ext.grid.GridPanel({
         	id: 'gridAdminApplications',
             store: ds_applications,
             cm: cm_applications,
@@ -315,7 +348,7 @@ Tine.Admin.Applications.Main = function() {
             }
         });
         
-        Tine.Tinebase.MainScreen.setActiveContentPanel(grid_applications);
+        Tine.Tinebase.MainScreen.setActiveContentPanel(grid_applications, true);
         
         grid_applications.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
@@ -326,6 +359,12 @@ Tine.Admin.Applications.Main = function() {
                     _action_enable.setDisabled(false);
                     _action_disable.setDisabled(false);
                 }
+                
+                // don't allow to disable Admin, Tinebase or Addressbook as we can't deal with this yet
+				if(_grid.getSelectionModel().getSelected().get('name').toString().match(/Tinebase|Admin|Addressbook/)) {
+					_action_enable.setDisabled(true);
+					_action_disable.setDisabled(true);
+				}
             }
             ctxMenuGrid.showAt(_eventObject.getXY());
         }, this);
@@ -342,10 +381,26 @@ Tine.Admin.Applications.Main = function() {
     
     // public functions and variables
     return {
-        show: function() {
+        show: function() 
+        {
         	_showApplicationsToolbar();
-            _showApplicationsGrid();        	
-        }
+            _showApplicationsGrid();
+            
+            this.loadData();
+        },
+        
+	    loadData: function()
+	    {
+	        var dataStore = Ext.getCmp('gridAdminApplications').getStore();
+	        dataStore.load({ params: { start:0, limit:50 } });
+	    },
+	    
+	    reload: function() 
+		{
+		    if(Ext.ComponentMgr.all.containsKey('gridAdminApplications')) {
+		        setTimeout ("Ext.getCmp('gridAdminApplications').getStore().reload()", 200);
+		    }
+		}
     };
     
 }();

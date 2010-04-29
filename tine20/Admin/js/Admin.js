@@ -172,64 +172,39 @@ Tine.Admin = function() {
 
         	switch(_node.attributes.dataPanelType) {
                 case 'accesslog':
-                    if(currentToolbar !== false && currentToolbar.id == 'toolbarAdminAccessLog') {
-                        Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
-                    } else {
-                        Tine.Admin.AccessLog.Main.show();
-                    }
+					Tine.Admin.AccessLog.Main.show();
                     
                     break;
                     
                 case 'accounts':
                     Tine.Admin.user.show();
-//                    if(currentToolbar !== false && currentToolbar.id == 'AdminUserToolbar') {
-//                        Ext.getCmp('AdminUserGrid').getStore().load({params:{start:0, limit:50}});
-//                    } else {
-//                        Tine.Admin.user.Main.show();
-//                    }
-//                    
+                                        
                     break;
                     
                 case 'groups':
-                    if(currentToolbar !== false && currentToolbar.id == 'AdminGroupsToolbar') {
-                        Ext.getCmp('AdminGroupsGrid').getStore().load({params:{start:0, limit:50}});
-                    } else {
-                        Tine.Admin.Groups.Main.show();
-                    }
+ 	                Tine.Admin.Groups.Main.show();
                     
                     break;
                     
                 case 'computers':
                     Tine.Admin.sambaMachine.show();
+                    
                     break;
                     
                 case 'applications':
-                    if(currentToolbar !== false && currentToolbar.id == 'toolbarAdminApplications') {
-                    	Ext.getCmp('gridAdminApplications').getStore().load({params:{start:0, limit:50}});
-                    } else {
-                    	Tine.Admin.Applications.Main.show();
-                    }
+                   	Tine.Admin.Applications.Main.show();
                     
                     break;
                     
                 case 'sharedtags':
-                    if(currentToolbar !== false && currentToolbar.id == 'AdminTagsToolbar') {
-                        Ext.getCmp('AdminTagsGrid').getStore().load({params:{start:0, limit:50}});
-                    } else {
-                        Tine.Admin.Tags.Main.show();
-                    }
-                    
+					Tine.Admin.Tags.Main.show();
+                                        
                     break;
 
                 case 'roles':
-                    if(currentToolbar !== false && currentToolbar.id == 'AdminRolesToolbar') {
-                        Ext.getCmp('AdminRolesGrid').getStore().load({params:{start:0, limit:50}});
-                    } else {
-                        Tine.Admin.Roles.Main.show();
-                    }
+                   	Tine.Admin.Roles.Main.show();
                     
                     break;
-                    
             }
         }, this);
 
@@ -272,12 +247,16 @@ Tine.Admin = function() {
     
 }();
 
-/*********************************** TINE ADMIN ACCESS LOG  *******************************/
+/******************************************************************************************/
 /*********************************** TINE ADMIN ACCESS LOG  *******************************/
 
 Ext.namespace('Tine.Admin.AccessLog');
 Tine.Admin.AccessLog.Main = function() {
 
+	// references to created toolbar and grid panel
+	var toolbar = null;
+	var gridPanel = null;
+	
     /**
      * onclick handler for edit action
      */
@@ -385,13 +364,19 @@ Tine.Admin.AccessLog.Main = function() {
             _options.params.to     = to.format("Y-m-d\\T23:59:59");
         }, this);        
         
-        ds_accessLog.load({params:{start:0, limit:50}});
+        //ds_accessLog.load({params:{start:0, limit:50}});
         
         return ds_accessLog;
     };
 
     var _showToolbar = function()
     {
+    	// if toolbar was allready created set activate toolbar and return
+    	if (toolbar) {
+    		Tine.Tinebase.MainScreen.setActiveToolbar(toolbar, true);
+    		return;
+    	}
+    	
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
         
@@ -425,12 +410,21 @@ Tine.Admin.AccessLog.Main = function() {
             value:          currentDate
         });
         
-        var toolbar = new Ext.Toolbar({
+        toolbar = new Ext.Toolbar({
             id: 'toolbarAdminAccessLog',
             split: false,
-            height: 26,
-            items: [
-                _action_delete,'->',
+            //height: 26,
+            items: [{
+				xtype: 'buttongroup',
+				columns: 1,
+				items: [
+					Ext.apply(new Ext.Button(_action_delete), {
+						scale: 'medium',
+						rowspan: 2,
+						iconAlign: 'top'
+					})
+				]
+			}, '->',
                 this.translation.gettext('Display from:') + ' ',
                 ' ',
                 dateFrom,
@@ -441,24 +435,24 @@ Tine.Admin.AccessLog.Main = function() {
                 new Ext.Toolbar.Spacer(),
                 '-',
                 this.translation.gettext('Search:'), ' ',
-/*                new Ext.ux.SelectBox({
-                  listClass:'x-combo-list-small',
-                  width:90,
-                  value:'Starts with',
-                  id:'search-type',
-                  store: new Ext.data.SimpleStore({
-                    fields: ['text'],
-                    expandData: true,
-                    data : ['Starts with', 'Ends with', 'Any match']
-                  }),
-                  displayField: 'text'
-                }), */
+//				new Ext.ux.SelectBox({
+//					listClass:'x-combo-list-small',
+//                  	width:90,
+//                  	value:'Starts with',
+//                  	id:'search-type',
+//                  	store: new Ext.data.SimpleStore({
+//                    	fields: ['text'],
+//                    	expandData: true,
+//                    	data : ['Starts with', 'Ends with', 'Any match']
+//                  	}),
+//                  	displayField: 'text'
+//                }),
                 ' ',
                 AccessLogQuickSearchField
             ]
         });
         
-        Tine.Tinebase.MainScreen.setActiveToolbar(toolbar);
+        Tine.Tinebase.MainScreen.setActiveToolbar(toolbar, true);
         
         dateFrom.on('valid', function(_dateField) {
             var oldFrom = Ext.StoreMgr.get('adminApplications_accesslogStore').baseParams.from;
@@ -542,6 +536,13 @@ Tine.Admin.AccessLog.Main = function() {
      */
     var _showGrid = function() 
     {
+    	// if grid panel was allready created set active content panel and return
+    	if (gridPanel)
+    	{
+    		Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel, true);
+    		return;
+    	}
+    	
     	_action_delete.setDisabled(true);
     	
         var dataStore = _createDataStore();
@@ -564,8 +565,8 @@ Tine.Admin.AccessLog.Main = function() {
                 { header: this.translation.gettext('Login Name'), id: 'login_name', dataIndex: 'login_name'},
                 { header: this.translation.gettext('Name'), id: 'accountObject', dataIndex: 'accountObject', width: 170, sortable: false, renderer: Tine.Tinebase.common.usernameRenderer},
                 { header: this.translation.gettext('IP Address'), id: 'ip', dataIndex: 'ip', width: 150},
-                { header: this.translation.gettext('Login Time'), id: 'li', dataIndex: 'li', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
-                { header: this.translation.gettext('Logout Time'), id: 'lo', dataIndex: 'lo', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
+                { header: this.translation.gettext('Login Time'), id: 'li', dataIndex: 'li', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer},
+                { header: this.translation.gettext('Logout Time'), id: 'lo', dataIndex: 'lo', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer},
                 { header: this.translation.gettext('Account ID'), id: 'account_id', dataIndex: 'account_id', width: 70, hidden: true},
                 { header: this.translation.gettext('Result'), id: 'result', dataIndex: 'result', width: 110, renderer: _renderResult}
             ]
@@ -583,7 +584,7 @@ Tine.Admin.AccessLog.Main = function() {
             }
         });
         
-        var gridPanel = new Ext.grid.GridPanel({
+        gridPanel = new Ext.grid.GridPanel({
             id: 'gridAdminAccessLog',
             store: dataStore,
             cm: columnModel,
@@ -596,7 +597,7 @@ Tine.Admin.AccessLog.Main = function() {
             border: false
         });
         
-        Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
+        Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel, true);
 
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
@@ -607,17 +608,33 @@ Tine.Admin.AccessLog.Main = function() {
             _contextMenuGridAdminAccessLog.showAt(_eventObject.getXY());
         });
         
-/*        gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
-            var record = _gridPanel.getStore().getAt(_rowIndexPar);
-        });*/
+//		gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
+//        	var record = _gridPanel.getStore().getAt(_rowIndexPar);
+//        });
     };
         
     // public functions and variables
     return {
-        show: function() {
+        show: function() 
+        {
             _showToolbar();
-            _showGrid();    
+            _showGrid();   
+            
+            this.loadData();
         },
+        
+	    loadData: function()
+	    {
+	        var dataStore = Ext.getCmp('gridAdminAccessLog').getStore();
+	        dataStore.load({ params: { start:0, limit:50 } });
+	    },
+	    
+	    reload: function() 
+		{
+		    if(Ext.ComponentMgr.all.containsKey('gridAdminAccessLog')) {
+		        setTimeout ("Ext.getCmp('gridAdminAccessLog').getStore().reload()", 200);
+		    }
+		},
         
         /**
         * @cfg {Object} paging defaults

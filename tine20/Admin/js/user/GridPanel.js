@@ -26,6 +26,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     defaultSortInfo: {field: 'accountLoginName', direction: 'ASC'},
     evalGrants: false,
     gridConfig: {
+    	id: 'gridAdminUsers',
         loadMask: true,
         autoExpandColumn: 'accountDisplayName'
     },
@@ -154,15 +155,15 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             { header: this.app.i18n._('ID'), id: 'accountId', dataIndex: 'accountId', hidden: true, width: 50},
             { header: this.app.i18n._('Status'), id: 'accountStatus', dataIndex: 'accountStatus', hidden: this.isLdapBackend, width: 50, renderer: this.statusRenderer},
             { header: this.app.i18n._('Displayname'), id: 'accountDisplayName', dataIndex: 'accountDisplayName'},
-            { header: this.app.i18n._('Loginname'), id: 'accountLoginName', dataIndex: 'accountLoginName', width: 200},
+            { header: this.app.i18n._('Loginname'), id: 'accountLoginName', dataIndex: 'accountLoginName', width: 160},
             { header: this.app.i18n._('Last name'), id: 'accountLastName', dataIndex: 'accountLastName', hidden: true},
             { header: this.app.i18n._('First name'), id: 'accountFirstName', dataIndex: 'accountFirstName', hidden: true},
             { header: this.app.i18n._('Email'), id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200},
             { header: this.app.i18n._('OpenID'), id: 'openid', dataIndex: 'openid', width: 200, hidden: true},
-            { header: this.app.i18n._('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', hidden: this.isLdapBackend, width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
+            { header: this.app.i18n._('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', hidden: this.isLdapBackend, width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer},
             { header: this.app.i18n._('Last login from'), id: 'accountLastLoginfrom', hidden: this.isLdapBackend, dataIndex: 'accountLastLoginfrom'},
-            { header: this.app.i18n._('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
-            { header: this.app.i18n._('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer}
+            { header: this.app.i18n._('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer},
+            { header: this.app.i18n._('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer}
         ];
     },
     

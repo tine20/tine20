@@ -13,6 +13,10 @@
 Ext.namespace('Tine.Admin.Tags');
 Tine.Admin.Tags.Main = {
     
+	//  references to created toolbar and grid panel
+	tagsToolbar: null,
+	gridPanel: null,
+	
     actions: {
         addTag: null,
         editTag: null,
@@ -114,6 +118,13 @@ Tine.Admin.Tags.Main = {
     
     displayTagsToolbar: function()
     {
+    	// if toolbar was allready created set active toolbar and return
+    	if (this.tagsToolbar)
+    	{
+    		Tine.Tinebase.MainScreen.setActiveToolbar(this.tagsToolbar, true);
+    		return;
+    	}
+    	
         var TagsQuickSearchField = new Ext.ux.SearchField({
             id: 'TagsQuickSearchField',
             width:240,
@@ -128,26 +139,49 @@ Tine.Admin.Tags.Main = {
             });
         }, this);
         
-        var tagsToolbar = new Ext.Toolbar({
+        this.tagsToolbar = new Ext.Toolbar({
             id: 'AdminTagsToolbar',
             split: false,
-            height: 26,
-            items: [
-                this.actions.addTag, 
-                this.actions.editTag,
-                this.actions.deleteTag,
-                '->', 
+            //height: 26,
+            items: [{
+				xtype: 'buttongroup',
+				columns: 5,
+				items: [
+					Ext.apply(new Ext.Button(this.actions.addTag), {
+						scale: 'medium',
+						rowspan: 2,
+						iconAlign: 'top'
+					}), {xtype: 'tbspacer', width: 10},
+					Ext.apply(new Ext.Button(this.actions.editTag), {
+						scale: 'medium',
+						rowspan: 2,
+						iconAlign: 'top'
+					}), {xtype: 'tbspacer', width: 10},
+					Ext.apply(new Ext.Button(this.actions.deleteTag), {
+						scale: 'medium',
+						rowspan: 2,
+						iconAlign: 'top'
+					})
+				]
+			}, '->', 
                 this.translation.gettext('Search:'), 
                 ' ',
                 TagsQuickSearchField
             ]
         });
 
-        Tine.Tinebase.MainScreen.setActiveToolbar(tagsToolbar);
+        Tine.Tinebase.MainScreen.setActiveToolbar(this.tagsToolbar, true);
     },
 
     displayTagsGrid: function() 
     {
+    	// if grid panel was allready created set active content panel and return
+    	if (this.gridPanel)
+    	{
+    		Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
+    		return;
+    	}
+    	
         // the datastore
         var dataStore = new Ext.data.JsonStore({
             baseParams: {
@@ -215,7 +249,7 @@ Tine.Admin.Tags.Main = {
         }, this);
         
         // the gridpanel
-        var gridPanel = new Ext.grid.GridPanel({
+        this.gridPanel = new Ext.grid.GridPanel({
             id: 'AdminTagsGrid',
             store: dataStore,
             cm: columnModel,
@@ -232,10 +266,9 @@ Tine.Admin.Tags.Main = {
                 ignoreAdd: true,
                 emptyText: this.translation.gettext('No tags to display')
             })            
-            
         });
         
-        gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+        this.gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
@@ -252,7 +285,7 @@ Tine.Admin.Tags.Main = {
             contextMenu.showAt(_eventObject.getXY());
         }, this);
         
-        gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
+        this.gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             Tine.Admin.Tags.EditDialog.openWindow({
                 tag: record,
@@ -266,7 +299,7 @@ Tine.Admin.Tags.Main = {
         }, this);
 
         // add the grid to the layout
-        Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
+        Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
     },
     
     /**
@@ -275,25 +308,18 @@ Tine.Admin.Tags.Main = {
     loadData: function()
     {
         var dataStore = Ext.getCmp('AdminTagsGrid').getStore();
-            
-        dataStore.load({
-            params:{
-                start:0, 
-                limit:50 
-            }
-        });
+        dataStore.load({ params: { start:0, limit:50 } });
     },
 
     show: function() 
     {
-        this.initComponent();
-        
-        var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
-
-        if(currentToolbar === false || currentToolbar.id != 'AdminTagsToolbar') {
-            this.displayTagsToolbar();
-            this.displayTagsGrid();
+        if (this.tagsToolbar === null || this.gridPanel) {
+        	this.initComponent();
         }
+
+		this.displayTagsToolbar();
+        this.displayTagsGrid();
+
         this.loadData();
     },
     

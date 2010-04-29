@@ -336,7 +336,11 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                             // NOTE: we can't use Ext.Msg.prompt because field has to be of inputType: 'password'
                                             this.passwordConfirmWindow.show.defer(100, this.passwordConfirmWindow);
                                         }
-                                    }
+                                    },
+									destroy: function() {
+										// destroy password confirm window
+										this.passwordConfirmWindow.destroy();
+									}
                                 },
                                 validateValue : function(value){
                                     return this.passwordsMatch;

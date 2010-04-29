@@ -15,7 +15,10 @@ Ext.namespace('Tine.Admin.Roles');
 
 Tine.Admin.Roles.Main = {
     
-    
+	// references to crated toolbar and grid panel
+    rolesToolbar: null,
+    gridPanel: null,
+	
     actions: {
         addRole: null,
         editRole: null,
@@ -123,6 +126,14 @@ Tine.Admin.Roles.Main = {
     },
     
     displayRolesToolbar: function() {
+    	
+    	// if toolbar was allready created set active toolbar and return
+    	if (this.rolesToolbar)
+    	{
+    		Tine.Tinebase.MainScreen.setActiveToolbar(this.rolesToolbar, true);
+    		return;
+    	}
+    	
         var RolesQuickSearchField = new Ext.ux.SearchField({
             id: 'RolesQuickSearchField',
             width:240,
@@ -137,25 +148,50 @@ Tine.Admin.Roles.Main = {
             });
         }, this);
         
-        var rolesToolbar = new Ext.Toolbar({
+        this.rolesToolbar = new Ext.Toolbar({
             id: 'AdminRolesToolbar',
             split: false,
-            height: 26,
-            items: [
-                this.actions.addRole, 
-                this.actions.editRole,
-                this.actions.deleteRole,
-                '->', 
+            //height: 26,
+            items: [{
+            	// create buttongroup to be consistent
+				xtype: 'buttongroup',
+				columns: 5, 
+				items: [
+					Ext.apply(new Ext.Button(this.actions.addRole), {
+						scale: 'medium',
+						rowspan: 2,
+						iconAlign: 'top'
+					}), {xtype: 'tbspacer', width: 10},
+					Ext.apply(new Ext.Button(this.actions.editRole), {
+						scale: 'medium',
+						rowspan: 2,
+						iconAlign: 'top'
+					}), {xtype: 'tbspacer', width: 10},
+					Ext.apply(new Ext.Button(this.actions.deleteRole), {
+						scale: 'medium',
+						rowspan: 2,
+						iconAlign: 'top'
+					}), {xtype: 'tbspacer', width: 10}
+				]
+			}, '->', 
                 this.translation.gettext('Search:'), 
                 ' ',
                 RolesQuickSearchField
             ]
         });
 
-        Tine.Tinebase.MainScreen.setActiveToolbar(rolesToolbar);
+        Tine.Tinebase.MainScreen.setActiveToolbar(this.rolesToolbar, true);
     },
 
     displayRolesGrid: function() {
+    	
+    	// if grid panel was allready created set active content panel and return
+    	if (this.gridPanel)
+    	{
+    		Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
+    		return;
+    	}
+    	
         if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles') ) {
             this.actions.addRole.setDisabled(false);
         }    	
@@ -229,7 +265,7 @@ Tine.Admin.Roles.Main = {
         }, this);
         
         // the gridpanel
-        var gridPanel = new Ext.grid.GridPanel({
+        this.gridPanel = new Ext.grid.GridPanel({
             id: 'AdminRolesGrid',
             store: dataStore,
             cm: columnModel,
@@ -246,10 +282,9 @@ Tine.Admin.Roles.Main = {
                 ignoreAdd: true,
                 emptyText: this.translation.gettext('No roles to display')
             })            
-            
         });
         
-        gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+        this.gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
@@ -266,7 +301,7 @@ Tine.Admin.Roles.Main = {
             contextMenu.showAt(_eventObject.getXY());
         }, this);
         
-        gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
+        this.gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
         	if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles') ) {
                 var record = _gridPar.getStore().getAt(_rowIndexPar);
                 this.openEditWindow(record);
@@ -274,32 +309,27 @@ Tine.Admin.Roles.Main = {
         }, this);
 
         // add the grid to the layout
-        Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
+        Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
     },
     
     /**
      * update datastore with node values and load datastore
      */
-    loadData: function() {
+    loadData: function() 
+    {
         var dataStore = Ext.getCmp('AdminRolesGrid').getStore();
-            
-        dataStore.load({
-            params:{
-                start:0, 
-                limit:50 
-            }
-        });
+        dataStore.load({ params: { start:0, limit:50 } });
     },
 
-    show: function() {
-        this.initComponent();
-        
-        var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
-
-        if(currentToolbar === false || currentToolbar.id != 'AdminRolesToolbar') {
-            this.displayRolesToolbar();
-            this.displayRolesGrid();
+    show: function() 
+    {
+        if (this.rolesToolbar === null || this.gridPanel === null) {
+        	this.initComponent();
         }
+
+        this.displayRolesToolbar();
+        this.displayRolesGrid();
+
         this.loadData();
     },
     
