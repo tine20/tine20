@@ -120,8 +120,9 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->_checkAlarm($loadedTaskData);
         
         // try to send alarm
-        $event = new Tinebase_Event_Async_Minutely();
-        Tinebase_Event::fireEvent($event);
+        $scheduler = Tinebase_Core::getScheduler();
+        $scheduler->addTask('Tinebase_Alarm', $this->createTask());
+        $scheduler->run();
         
         // check alarm status
         $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
@@ -133,6 +134,23 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($persistentTaskData['alarms']));
     }
 
+    public function createTask()
+    {
+        $request = new Zend_Controller_Request_Http(); 
+        $request->setControllerName('Tinebase_Alarm');
+        $request->setActionName('sendPendingAlarms');
+        $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');
+        
+        $task = new Tinebase_Scheduler_Task();
+        $task->setMonths("Jan-Dec");
+        $task->setWeekdays("Sun-Sat");
+        $task->setDays("1-31");
+        $task->setHours("0-23");
+        $task->setMinutes("0/1");
+        $task->setRequest($request);
+        return $task;
+    }
+    
     /**
      * check alarm of task
      * 
