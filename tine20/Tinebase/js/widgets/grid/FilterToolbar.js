@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -165,7 +165,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }
         
         // automaticly enable saving
-        if (this.app && this.app.getMainScreen().filterPanel) {
+        if (this.app && this.app.getMainScreen().hasFavoritesPanel) {
             this.allowSaving = true;
         }
         
