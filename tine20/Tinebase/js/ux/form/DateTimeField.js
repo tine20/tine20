@@ -24,8 +24,10 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     },
     
     clearInvalid: function() {
-        this.dateField.clearInvalid();
-        this.timeField.clearInvalid();
+        if (this.dateField && this.timeField) {
+            this.dateField.clearInvalid();
+            this.timeField.clearInvalid();
+        }
     },
     
     clearTime: function() {
@@ -126,11 +128,11 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     },
     
     setDisabled: function(bool, what) {
-        if (what !== 'time') {
+        if (what !== 'time' && this.dateField) {
             this.dateField.setDisabled(bool);
         }
         
-        if (what !== 'date') {
+        if (what !== 'date' && this.timeField) {
             this.timeField.setDisabled(bool);
         }
     },
