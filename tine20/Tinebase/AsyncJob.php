@@ -109,10 +109,7 @@ class Tinebase_AsyncJob
      * @return Tinebase_Model_AsyncJob
      */
     public function startJob($_name, $_timeout = self::SECONDS_TILL_FAILURE)
-    {
-        $date = new Zend_Date();
-        $date->add($_timeout, Zend_Date::SECOND);
-        
+    {        
         try {
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
@@ -120,7 +117,7 @@ class Tinebase_AsyncJob
             $job = new Tinebase_Model_AsyncJob(array(
                 'name'              => $_name,
                 'start_time'        => Zend_Date::now(),
-                'end_time'          => $date->toString('YYYY-MM-dd HH:mm:ss'),
+                'end_time'          => Zend_Date::now()->add($_timeout, Zend_Date::SECOND)->toString('YYYY-MM-dd HH:mm:ss'),
                 'status'            => Tinebase_Model_AsyncJob::STATUS_RUNNING
             ));
             
