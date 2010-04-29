@@ -1,0 +1,18 @@
+/* NOT YET IN USE */
+body {
+    background: white;
+}
+
+.tine-viewport-maincardpanel {
+    display: none;
+}
+
+#tineMenu, #north-panel-2, #south, #west {
+    display: none;
+}
+
+
+
+
+
+
