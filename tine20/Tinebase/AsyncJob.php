@@ -84,7 +84,7 @@ class Tinebase_AsyncJob
         ));
         $jobs = $this->_backend->search($filter);
         
-        $result = (count($jobs) > 0);
+        $result = (count($jobs) > 0);     
         
         // check if job is running for a long time -> set status to Tinebase_Model_AsyncJob::STATUS_FAILURE
         if ($result) {
@@ -114,10 +114,13 @@ class Tinebase_AsyncJob
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
+            $date = Zend_Date::now();
+            $date->add($_timeout, Zend_Date::SECOND);
+            
             $job = new Tinebase_Model_AsyncJob(array(
                 'name'              => $_name,
                 'start_time'        => Zend_Date::now(),
-                'end_time'          => Zend_Date::now()->add($_timeout, Zend_Date::SECOND)->toString('YYYY-MM-dd HH:mm:ss'),
+                'end_time'          => $date->toString('YYYY-MM-dd HH:mm:ss'),
                 'status'            => Tinebase_Model_AsyncJob::STATUS_RUNNING
             ));
             
