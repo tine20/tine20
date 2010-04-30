@@ -36,10 +36,15 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test job can not start again
+     * test start stop job.
      */
-    public function testStartJob()
+    public function testStartStopJob()
     {
+        $async = Tinebase_AsyncJob::getInstance();
+        $job = $async->startJob('Test_Job');
+        $this->assertTrue($async->jobIsRunning('Test_Job'));
+        $async->finishJob($job);
+        $this->assertFalse($async->jobIsRunning('Test_Job'));
     }
     
     /**
