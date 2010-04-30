@@ -258,12 +258,7 @@ class Zend_Scheduler
         }
 
         // Load previously queued tasks
-        if ($this->_backend) {
-            $this->_tasks = array_merge(
-                $this->_tasks, 
-                $this->_backend->loadQueue()
-            );
-        }        
+        $this->_tasks = $this->mergeTasks();        
         
         if (empty($this->_tasks)) {
             return null;
@@ -300,12 +295,33 @@ class Zend_Scheduler
     }
     
     /**
-     * Save Task
+     * Merge Tasks from Backend and programmatically
+     * 
+     * @return null|Array of Zend_Scheduler_Task objects
+     */
+    private function mergeTasks()
+    {
+        if ($this->_backend) {
+            $this->_tasks = array_merge(
+                $this->_tasks, 
+                $this->_backend->loadQueue()
+            );
+        }
+        return $this->_tasks;
+    }
+    
+    /**
+     * Save Task in Backend
+     * 
+     * @return Boolean
      */
     public function saveTask()
     {
-        if (! empty($this->_tasks)) {
-            $this->_backend->saveQueue($this->_tasks);
+        $tasks = $this->mergeTasks();
+        if (! empty($tasks)) {
+            $this->_backend->saveQueue($tasks);
+            return true;
         }
+        return false;
     }
 }
