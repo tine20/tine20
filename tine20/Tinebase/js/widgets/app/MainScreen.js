@@ -84,6 +84,17 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
     hasFavoritesPanel: null,
     
     /**
+     * @cfg {Object} westPanelItemsDefauls
+     * defaults for west panel items
+     */
+    westPanelItemsDefauls: {
+        collapsible: true,
+        baseCls: 'ux-arrowcollapse',
+        animCollapse: true,
+        titleCollapse:true
+    },
+    
+    /**
      * returns active content type
      * 
      * @return {String}
@@ -140,8 +151,6 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
      */
     getWestPanel: function() {
         if (! this.westPanel) {
-            
-            
             var items = [];
             if (this.hasContainerTreePanel) {
                 var containerTreePanel = this.getContainerTreePanel();
@@ -151,28 +160,37 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
                     _('containers');
             
                 items.push(Ext.apply(this.getContainerTreePanel(), {
-                    title: containersName,
-                    collapsible: true,
-                    baseCls: 'ux-arrowcollapse',
-                    animCollapse: true,
-                    titleCollapse:true
-                }));
+                    title: containersName
+                }, this.westPanelItemsDefauls));
             }
             
             if (this.hasFavoritesPanel) {
                 items.push(Ext.apply(this.getFavoritesPanel(), {
-                    title: _('Favorites'),
-                    collapsible: true,
-                    baseCls: 'ux-arrowcollapse',
-                    animCollapse: true,
-                    titleCollapse:true
-                }));
+                    title: _('Favorites')
+                }, this.westPanelItemsDefauls));
             }
+            
+            var baseCls = this.westPanelItemsDefauls.baseCls;
+            var xsrollKiller = function(cmp) {
+                var panelEls = cmp.getEl().child('div[class^=' + baseCls + '-body]');
+                if (panelEls) {
+                    panelEls.applyStyles('overflow-x: hidden');
+                }
+            };
             
             this.westPanel = new Ext.Panel({
                 layout: 'hfit',
                 border: false,
-                items: items
+                items: items,
+                listeners: {
+                    scope: this,
+                    afterrender: function(cmp) {
+                        xsrollKiller(cmp);
+                        cmp.items.each(function(item){
+                            item.on('afterrender', xsrollKiller);
+                        }, this);
+                    }
+                }
             });
         }
         

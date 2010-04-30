@@ -273,13 +273,10 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     
     /**
      * @private
-     * 
-     * - kill x-scrollers
      * - select default path
      */
     afterRender: function() {
         Tine.widgets.container.TreePanel.superclass.afterRender.call(this);
-        this.getEl().first().first().applyStyles('overflow-x: hidden');
         // NOTE: selecting fires selectionChange... this breaks ftb if not rendered.
         //       As all searches return used filters, we don't need this anyway
         //this.selectContainerPath(this.getDefaultContainerPath());
