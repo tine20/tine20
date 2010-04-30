@@ -130,6 +130,10 @@ html, body {
     background-image:url(../../images/oxygen/16x16/places/link.png) !important;
 }
 
+.tinebase-tree-hide-collapsetool .x-tree-ec-icon {
+    background: 0;
+}
+
 /* ----- login dialog --------------------------------------------------------*/
 .tb-login-panel form {
     padding: 20px 10px 20px 20px;

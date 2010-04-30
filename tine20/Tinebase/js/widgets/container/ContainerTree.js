@@ -92,7 +92,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     requiredGrant: 'readGrant',
     
-    //iconCls: 'x-new-application',
+    useArrows: true,
     border: false,
     autoScroll: true,
     enableDrop: true,
@@ -132,6 +132,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         
         this.root = {
             path: '/',
+            cls: 'tinebase-tree-hide-collapsetool',
             expanded: true,
             children: [{
                 path: Tine.Tinebase.container.getMyNodePath(),
