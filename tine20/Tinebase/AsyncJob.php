@@ -120,7 +120,7 @@ class Tinebase_AsyncJob
             $job = new Tinebase_Model_AsyncJob(array(
                 'name'              => $_name,
                 'start_time'        => Zend_Date::now(),
-                'end_time'          => $date->toString('YYYY-MM-dd HH:mm:ss'),
+                'end_time'          => $date,
                 'status'            => Tinebase_Model_AsyncJob::STATUS_RUNNING
             ));
             
