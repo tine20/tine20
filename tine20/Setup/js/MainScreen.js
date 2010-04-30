@@ -82,5 +82,20 @@ Tine.Setup.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         // hide stuff in main menu
         Tine.Tinebase.MainScreen.getMainMenu().action_changePassword.setHidden(true);
         Tine.Tinebase.MainScreen.getMainMenu().action_showPreferencesDialog.setHidden(true);
+    },
+    
+    /**
+     * get west panel for given contentType
+     * 
+     * template method to be overridden by subclasses to modify default behaviour
+     * 
+     * @return {Ext.Panel}
+     */
+    getWestPanel: function() {
+        if (! this.westPanel) {
+            this.westPanel = new Tine.Setup.TreePanel();
+        }
+        
+        return this.westPanel;
     }
 });

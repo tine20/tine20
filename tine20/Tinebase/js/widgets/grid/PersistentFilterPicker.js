@@ -93,7 +93,7 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
             text: _('My saved filters'),
             id: '_persistentFilters',
             leaf: false,
-            expanded: false
+            expanded: true
         });
         
         this.getNodeById(this.filterMountId).appendChild(this.filterNode);

@@ -152,6 +152,12 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
     getWestPanel: function() {
         if (! this.westPanel) {
             var items = [];
+            if (this.hasFavoritesPanel) {
+                items.push(Ext.apply(this.getFavoritesPanel(), {
+                    title: _('Favorites')
+                }, this.westPanelItemsDefauls));
+            }
+            
             if (this.hasContainerTreePanel) {
                 var containerTreePanel = this.getContainerTreePanel();
                 
@@ -160,13 +166,8 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
                     _('containers');
             
                 items.push(Ext.apply(this.getContainerTreePanel(), {
-                    title: containersName
-                }, this.westPanelItemsDefauls));
-            }
-            
-            if (this.hasFavoritesPanel) {
-                items.push(Ext.apply(this.getFavoritesPanel(), {
-                    title: _('Favorites')
+                    title: containersName,
+                    collapsed: true
                 }, this.westPanelItemsDefauls));
             }
             
