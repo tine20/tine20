@@ -30,6 +30,8 @@ Tine.widgets.mainscreen.WestPanel = function(config) {
     }
     
     Tine.widgets.mainscreen.WestPanel.superclass.constructor.apply(this, arguments);
+    
+    this.on('add', this.onItemAdd, this);
 };
 
 Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
@@ -126,21 +128,30 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
             }, this.defaults));
         }
         
-        var baseCls = this.defaults.baseCls;
-        var xsrollKiller = function(cmp) {
-            var panelEls = cmp.getEl().child('div[class^=' + baseCls + '-body]');
-            if (panelEls) {
-                panelEls.applyStyles('overflow-x: hidden');
-            }
-        };
-        
-        this.on('afterrender', function(cmp) {
-            xsrollKiller(cmp);
-            cmp.items.each(function(item){
-                item.on('afterrender', xsrollKiller);
-            }, this);
-        }, this);
-        
         Tine.widgets.mainscreen.WestPanel.superclass.initComponent.apply(this, arguments);
+    },
+    
+    /**
+     * called when an item gets added to this panel
+     * 
+     * @param {WestPanel} westPanel
+     * @param {Ext.Component} cmp
+     * @param {Number} number
+     */
+    onItemAdd: function(westPanel, cmp, number) {
+        this.xsrollKiller(cmp);
+        cmp.on('afterrender', this.xsrollKiller, this);
+    },
+    
+    /**
+     * kill x scrollers of given component
+     * 
+     * @param {Ext.Component} cmp
+     */
+    xsrollKiller:  function(cmp) {
+        var panelEls = cmp.getEl().child('div[class^=' + this.defaults.baseCls + '-body]');
+        if (panelEls) {
+            panelEls.applyStyles('overflow-x: hidden');
+        }
     }
 });
