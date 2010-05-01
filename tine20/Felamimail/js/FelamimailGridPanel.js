@@ -213,6 +213,22 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             scope: this,
             disabled: ! Tine.Tinebase.common.hasRight('add_accounts', 'Felamimail')
         });
+         this.action_print = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Print Message'),
+            handler: this.onPrint,
+            disabled:true,
+            iconCls:'action_print',
+            scope:this
+         });
+         this.action_printPreview = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Print Preview'),
+            handler: this.onPrintPreview,
+            disabled:true,
+            iconCls:'action_printPreview',
+            scope:this
+         });
         
         this.actionUpdater.addActions([
             this.action_write,
@@ -222,7 +238,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             this.action_flag,
             this.action_markUnread,
             this.action_deleteRecord,
-            this.action_addAccount
+            this.action_addAccount,
+            this.action_print,
+            this.action_printPreview
         ]);
         
         /*
@@ -316,7 +334,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 defaults: {height: 55},
                 items: [{
                     xtype: 'buttongroup',
-                    columns: 7,
+                    columns: 9,
                     items: [
                         Ext.apply(new Ext.Button(this.action_write), {
                             scale: 'medium',
@@ -339,6 +357,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                             iconAlign: 'top'
                         }),
                         Ext.apply(new Ext.Button(this.action_deleteRecord), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        }),
+                        Ext.apply(new Ext.Button(this.action_print), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        }),
+                        Ext.apply(new Ext.Button(this.action_printPreview), {
                             scale: 'medium',
                             rowspan: 2,
                             iconAlign: 'top'
@@ -850,7 +878,38 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.store.load({});
         this.app.checkMailsDelayedTask.delay(10000);
     },
-    
+    onPrint:function() {
+        if(!Ext.get('felamimailPrintHelperIframe')) {
+            Ext.getBody().createChild({
+                id: 'felamimailPrintHelper',
+                tag:'div',
+                //style:'position:absolute;top:0px;width:100%;height:100%;',
+                children:[{
+                    tag:'iframe',
+                    id: 'felamimailPrintHelperIframe'
+                }]
+            });
+        }
+        buffer = '<html><head>';
+        buffer+= '<title>'+this.app.i18n._('Print Preview')+'</title>';
+        buffer+= '</head><body>';
+        buffer+= this.detailsPanel.getEl().child('.preview-panel-felamimail').dom.innerHTML;
+        buffer+= '</body></html>';
+        Ext.get('felamimailPrintHelperIframe').dom.contentWindow.document.documentElement.innerHTML = buffer;
+        Ext.get('felamimailPrintHelperIframe').dom.contentWindow.print();
+    },
+    onPrintPreview:function() {
+        buffer = '<html><head>';
+        buffer+= '<title>'+this.app.i18n._('Print Preview')+'</title>';
+        buffer+= '</head><body>';
+        buffer= this.detailsPanel.getEl().child('.preview-panel-felamimail').dom.innerHTML;
+        buffer+= '</body></html>';
+        win = window.open('about:blank',this.app.i18n._('Print Preview'),'width=500,height=500,scrollbars=yes,toolbar=yes,status=yes,menubar=yes');
+        win.document.open()
+        win.document.write(buffer);
+        win.document.close();
+        win.focus();
+    },
     /**
      * format headers
      * 

@@ -36,6 +36,14 @@
 }
 */
 
+.action_print {
+    background-image:url(../../images/oxygen/16x16/actions/document-print.png) !important;
+}
+
+.action_printPreview {
+    background-image:url(../../images/oxygen/16x16/actions/document-print-preview.png) !important;
+}
+
 .FelamimailIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
 }
