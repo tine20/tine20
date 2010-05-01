@@ -36,14 +36,6 @@ Tine.widgets.MainScreen = function(config) {
         'show'
     );
     
-    if (this.hasContainerTreePanel || this.hasContainerTreePanel === null) {
-        this.hasContainerTreePanel = true;
-    }
-    
-    if (this.hasFavoritesPanel || (this.hasFavoritesPanel === null && Tine[this.app.appName].FilterPanel)) {
-        this.hasFavoritesPanel = true;
-    }
-    
     Tine.widgets.MainScreen.superclass.constructor.call(this);
 };
 
@@ -67,41 +59,10 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
     centerPanelClassNameSuffix: 'GridPanel',
     
     /**
-     * @cfg {String} containerTreeClass
-     * name of container tree class in namespace of this app (defaults to TreePanel)
-     * the class name will be expanded to Tine[this.appName][this.containerTreePanelClassName]
+     * @cfg {Function} westPanelClass
+     * constructor of westpanel class 
      */
-    containerTreePanelClassName: 'TreePanel',
-    
-    /**
-     * @cfg {String} favoritesPanelClassName
-     * name of favorites class in namespace of this app (defaults to FilterPanel)
-     * the class name will be expanded to Tine[this.appName][this.favoritesPanelClassName]
-     */
-    favoritesPanelClassName: 'FilterPanel',
-    
-    /**
-     * @cfg {Bool} hasContainerTreePanel
-     * west panel has containerTreePanel (defaults to null -> autodetection)
-     */
-    hasContainerTreePanel: null,
-    
-    /**
-     * @cfg {Bool} hasFavoritesPanel
-     * west panel has favorites panel (defaults to null -> autodetection)
-     */
-    hasFavoritesPanel: null,
-    
-    /**
-     * @cfg {Object} westPanelItemsDefauls
-     * defaults for west panel items
-     */
-    westPanelItemsDefauls: {
-        collapsible: true,
-        baseCls: 'ux-arrowcollapse',
-        animCollapse: true,
-        titleCollapse:true
-    },
+    westPanelClass: Tine.widgets.mainscreen.WestPanel,
     
     /**
      * returns active content type
@@ -126,11 +87,20 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
         if (! this[contentType + this.centerPanelClassNameSuffix]) {
             this[contentType + this.centerPanelClassNameSuffix] = new Tine[this.app.appName][contentType + this.centerPanelClassNameSuffix]({
                 app: this.app,
-                plugins: [this.containerTreePanel.getFilterPlugin()]
+                plugins: [this.getContainerTreePanel().getFilterPlugin()]
             });
         }
         
         return this[contentType + this.centerPanelClassNameSuffix];
+    },
+    
+    /**
+     * convinience fn to get container tree panel from westpanel
+     * 
+     * @return {Tine.widgets.container.containerTreePanel}
+     */
+    getContainerTreePanel: function() {
+        return this.getWestPanel().getContainerTreePanel();
     },
     
     /**
@@ -160,80 +130,12 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
      */
     getWestPanel: function() {
         if (! this.westPanel) {
-            var items = [];
-            if (this.hasFavoritesPanel) {
-                items.push(Ext.apply(this.getFavoritesPanel(), {
-                    title: _('Favorites')
-                }, this.westPanelItemsDefauls));
-            }
-            
-            if (this.hasContainerTreePanel) {
-                var containerTreePanel = this.getContainerTreePanel();
-                
-                var containersName = containerTreePanel.recordClass ? 
-                    this.app.i18n._hidden(containerTreePanel.recordClass.getMeta('containersName')) :
-                    _('containers');
-            
-                items.push(Ext.apply(this.getContainerTreePanel(), {
-                    title: containersName,
-                    collapsed: true
-                }, this.westPanelItemsDefauls));
-            }
-            
-            var baseCls = this.westPanelItemsDefauls.baseCls;
-            var xsrollKiller = function(cmp) {
-                var panelEls = cmp.getEl().child('div[class^=' + baseCls + '-body]');
-                if (panelEls) {
-                    panelEls.applyStyles('overflow-x: hidden');
-                }
-            };
-            
-            this.westPanel = new Ext.Panel({
-                layout: 'hfit',
-                border: false,
-                items: items,
-                listeners: {
-                    scope: this,
-                    afterrender: function(cmp) {
-                        xsrollKiller(cmp);
-                        cmp.items.each(function(item){
-                            item.on('afterrender', xsrollKiller);
-                        }, this);
-                    }
-                }
+            this.westPanel = new this.westPanelClass({
+                app: this.app
             });
         }
         
         return this.westPanel;
-    },
-    
-    /**
-     * returns containerTree panel
-     * 
-     * @return {Tine.Tinebase.widgets.ContainerTreePanel}
-     */
-    getContainerTreePanel: function() {
-        if (this.hasContainerTreePanel && !this.containerTreePanel) {
-            this.containerTreePanel = new Tine[this.app.appName][this.containerTreePanelClassName]({app: this.app});
-        }
-        
-        return this.containerTreePanel;
-    },
-    
-    /**
-     * returns favorites panel
-     * 
-     * @return {Ext.Panel}
-     */
-    getFavoritesPanel: function() {
-        if (this.hasFavoritesPanel && !this.favoritesPanel) {
-            this.favoritesPanel = new Tine[this.app.appName][this.favoritesPanelClassName]({
-                app: this.app,
-                treePanel: this.containerTreePanel
-            });
-        }
-        
-        return this.favoritesPanel;
     },
     
     /**

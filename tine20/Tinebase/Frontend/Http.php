@@ -295,6 +295,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/tags/TagCombo.js',
             'Tinebase/js/widgets/tags/TagFilter.js',
             'Tinebase/js/widgets/tags/TagsMassAttachAction.js',
+            'Tinebase/js/widgets/mainscreen/WestPanel.js',
             'Tinebase/js/widgets/MainScreen.js',
             'Tinebase/js/widgets/CountryCombo.js',
             'Tinebase/js/widgets/ActivitiesPanel.js',        
