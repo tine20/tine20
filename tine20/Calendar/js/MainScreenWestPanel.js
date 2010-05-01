@@ -17,6 +17,7 @@ Tine.Calendar.MainScreenWestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel
     getAdditionalItems: function() {
         return [Ext.apply({
             title: _('Mini Calendar'),
+            forceLayout: true,
             border: false,
             layout: 'hbox',
             layoutConfig: {
