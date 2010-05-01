@@ -13,7 +13,7 @@ Ext.ns('Tine.Admin.user');
 /**
  * User grid panel
  */
-Tine.Admin.user.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * @property isLdapBackend
      * @type Boolean

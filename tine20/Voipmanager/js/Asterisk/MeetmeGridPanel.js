@@ -14,7 +14,7 @@ Ext.namespace('Tine.Voipmanager');
 /**
  * Meetme grid panel
  */
-Tine.Voipmanager.AsteriskMeetmeGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Voipmanager.AsteriskMeetmeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // model generics
     recordClass: Tine.Voipmanager.Model.AsteriskMeetme,
     evalGrants: false,

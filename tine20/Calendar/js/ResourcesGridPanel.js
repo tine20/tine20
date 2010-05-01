@@ -14,13 +14,13 @@ Ext.ns('Tine.Calendar');
 /**
  * @namespace Tine.Calendar
  * @class     Tine.Calendar.ResourcesGridPanel
- * @extends   Tine.Tinebase.widgets.app.GridPanel
+ * @extends   Tine.widgets.grid.GridPanel
  * Resources Grid Panel <br>
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
-Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // model generics
     recordClass: Tine.Calendar.Model.Resource,
     

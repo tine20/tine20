@@ -43,7 +43,7 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
      */
     sm: null,
     /**
-     * @cfg {Tine.Tinebase.widgets.app.GridPanel} gridPanel
+     * @cfg {Tine.widgets.grid.GridPanel} gridPanel
      * use this alternativly to sm
      */
     gridPanel: null,

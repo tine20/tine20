@@ -241,9 +241,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         this.fireEvent('changeview', this, view);
     },
     
-    getActionToolbar: Tine.Tinebase.widgets.app.GridPanel.prototype.getActionToolbar,
+    getActionToolbar: Tine.widgets.grid.GridPanel.prototype.getActionToolbar,
     
-    getActionToolbarItems: Tine.Tinebase.widgets.app.GridPanel.prototype.getActionToolbarItems,
+    getActionToolbarItems: Tine.widgets.grid.GridPanel.prototype.getActionToolbarItems,
     
     /**
      * returns all filter data for current view
@@ -257,9 +257,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         return options.params.filter;
     },
     
-    getCustomfieldFilters: Tine.Tinebase.widgets.app.GridPanel.prototype.getCustomfieldFilters,
+    getCustomfieldFilters: Tine.widgets.grid.GridPanel.prototype.getCustomfieldFilters,
     
-    getFilterToolbar: Tine.Tinebase.widgets.app.GridPanel.prototype.getFilterToolbar,
+    getFilterToolbar: Tine.widgets.grid.GridPanel.prototype.getFilterToolbar,
     
     /**
      * returns store of currently active view

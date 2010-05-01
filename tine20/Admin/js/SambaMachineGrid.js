@@ -29,7 +29,7 @@ Tine.Admin.sambaMachine.show = function() {
 /**
  * SambaMachine grid panel
  */
-Tine.Admin.SambaMachineGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Admin.SambaMachineGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // model generics
     recordClass: Tine.Admin.Model.SambaMachine,
     recordProxy: Tine.Admin.sambaMachineBackend,

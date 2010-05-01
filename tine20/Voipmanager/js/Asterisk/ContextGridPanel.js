@@ -14,7 +14,7 @@ Ext.namespace('Tine.Voipmanager');
 /**
  * Context grid panel
  */
-Tine.Voipmanager.AsteriskContextGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Voipmanager.AsteriskContextGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // model generics
     recordClass: Tine.Voipmanager.Model.AsteriskContext,
     evalGrants: false,

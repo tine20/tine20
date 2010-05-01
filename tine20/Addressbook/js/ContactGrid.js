@@ -16,7 +16,7 @@ Ext.namespace('Tine.Addressbook');
  * 
  * @namespace   Tine.Addressbook
  * @class       Tine.Addressbook.ContactGridPanel
- * @extends     Tine.Tinebase.widgets.app.GridPanel
+ * @extends     Tine.widgets.grid.GridPanel
  * 
  * <p>Contact Grid Panel</p>
  * <p><pre>
@@ -31,7 +31,7 @@ Ext.namespace('Tine.Addressbook');
  * @constructor
  * Create a new Tine.Addressbook.ContactGridPanel
  */
-Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * record class
      * @cfg {Tine.Addressbook.Model.Contact} recordClass

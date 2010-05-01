@@ -14,7 +14,7 @@ Ext.ns('Tine', 'Tine.Setup');
 /**
  * @namespace   Tine.Setup
  * @class       Tine.Setup.ApplicationGridPanel
- * @extends     Tine.Tinebase.widgets.app.GridPanel
+ * @extends     Tine.widgets.grid.GridPanel
  * 
  * <p>Application Setup Grid Panel</p>
  * <p></p>
@@ -28,7 +28,7 @@ Ext.ns('Tine', 'Tine.Setup');
  * @constructor
  * Create a new Tine.Setup.ApplicationGridPanel
  */
-Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
 	/**
 	 * @private

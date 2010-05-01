@@ -16,7 +16,7 @@ Ext.namespace('Tine.Tasks');
  * 
  * @namespace   Tine.Tasks
  * @class       Tine.Tasks.GridPanel
- * @extends     Tine.Tinebase.widgets.app.GridPanel
+ * @extends     Tine.widgets.grid.GridPanel
  * 
  * <p>Tasks Grid Panel</p>
  * <p><pre>
@@ -31,7 +31,7 @@ Ext.namespace('Tine.Tasks');
  * @constructor
  * Create a new Tine.Tasks.GridPanel
  */
-Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * record class
      * @cfg {Tine.Tasks.Task} recordClass

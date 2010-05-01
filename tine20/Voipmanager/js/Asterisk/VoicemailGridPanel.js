@@ -14,7 +14,7 @@ Ext.namespace('Tine.Voipmanager');
 /**
  * Voicemail grid panel
  */
-Tine.Voipmanager.AsteriskVoicemailGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Voipmanager.AsteriskVoicemailGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // model generics
     recordClass: Tine.Voipmanager.Model.AsteriskVoicemail,
     evalGrants: false,

@@ -10,7 +10,7 @@
  
  Ext.ns('Tine.RequestTracker');
  
- Tine.RequestTracker.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+ Tine.RequestTracker.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // model generics
     recordClass: Tine.RequestTracker.Model.Ticket,
     recordProxy: Tine.RequestTracker.ticketBackend,

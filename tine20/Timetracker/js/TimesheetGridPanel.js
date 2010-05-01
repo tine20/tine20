@@ -16,7 +16,7 @@ Ext.namespace('Tine.Timetracker');
  * 
  * @namespace   Tine.Timetracker
  * @class       Tine.Timetracker.TimesheetGridPanel
- * @extends     Tine.Tinebase.widgets.app.GridPanel
+ * @extends     Tine.widgets.grid.GridPanel
  * 
  * <p>Timesheet Grid Panel</p>
  * <p><pre>
@@ -31,7 +31,7 @@ Ext.namespace('Tine.Timetracker');
  * @constructor
  * Create a new Tine.Timetracker.TimesheetGridPanel
  */
-Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * record class
      * @cfg {Tine.Timetracker.Model.Timesheet} recordClass

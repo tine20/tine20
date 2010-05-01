@@ -16,7 +16,7 @@ Ext.namespace('Tine.Crm');
  * 
  * @namespace   Tine.Crm
  * @class       Tine.Crm.GridPanel
- * @extends     Tine.Tinebase.widgets.app.GridPanel
+ * @extends     Tine.widgets.grid.GridPanel
  * 
  * <p>Lead Grid Panel</p>
  * <p><pre>
@@ -34,7 +34,7 @@ Ext.namespace('Tine.Crm');
  * @constructor
  * Create a new Tine.Crm.GridPanel
  */
-Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * record class
      * @cfg {Tine.Crm.Model.Lead} recordClass

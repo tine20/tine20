@@ -1,22 +1,18 @@
 /*
  * Tine 2.0
  * 
- * @package     Tinebase
- * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
- 
-Ext.namespace('Tine.Tinebase.widgets.app');
+Ext.ns('Tine.widgets.grid');
 
 /**
  * tine 2.0 app grid panel widget
  * 
- * @namespace   Tine.Tinebase.widgets.app
- * @class       Tine.Tinebase.widgets.app.GridPanel
+ * @namespace   Tine.widgets.grid
+ * @class       Tine.widgets.grid.GridPanel
  * @extends     Ext.Panel
  * 
  * <p>Application Grid Panel</p>
@@ -33,7 +29,7 @@ Ext.namespace('Tine.Tinebase.widgets.app');
  * @constructor
  * Create a new GridPanel
  */
-Tine.Tinebase.widgets.app.GridPanel = function(config) {
+Tine.widgets.grid.GridPanel = function(config) {
     Ext.apply(this, config);
     
     
@@ -49,10 +45,10 @@ Tine.Tinebase.widgets.app.GridPanel = function(config) {
         this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel';
     }
         
-    Tine.Tinebase.widgets.app.GridPanel.superclass.constructor.call(this);
+    Tine.widgets.grid.GridPanel.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
+Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     /**
      * @cfg {Tine.Tinebase.Application} app
      * instance of the app object (required)
@@ -213,7 +209,7 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             }, this);
         }
         
-        Tine.Tinebase.widgets.app.GridPanel.superclass.initComponent.call(this);
+        Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
     },
     
     /**

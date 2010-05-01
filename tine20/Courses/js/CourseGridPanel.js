@@ -14,7 +14,7 @@ Ext.namespace('Tine.Courses');
 /**
  * Course grid panel
  */
-Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // model generics
     recordClass: Tine.Courses.Model.Course,
     evalGrants: false,

@@ -39,7 +39,7 @@ Tine.Tinebase.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     
     /**
      * @property grid
-     * @type Tine.Tinebase.widgets.app.GridPanel
+     * @type Tine.widgets.grid.GridPanel
      */
     grid: null,
 
@@ -92,7 +92,7 @@ Tine.Tinebase.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     /**
      * bind grid to details panel
      * 
-     * @param {Tine.Tinebase.widgets.app.GridPanel} grid
+     * @param {Tine.widgets.grid.GridPanel} grid
      */
     doBind: function(grid) {
         this.grid = grid;

@@ -16,7 +16,7 @@ Ext.namespace('Tine.Sales');
  * 
  * @namespace   Tine.Sales
  * @class       Tine.Sales.ContractGridPanel
- * @extends     Tine.Tinebase.widgets.app.GridPanel
+ * @extends     Tine.widgets.grid.GridPanel
  * 
  * <p>Contract Grid Panel</p>
  * <p><pre>
@@ -31,7 +31,7 @@ Ext.namespace('Tine.Sales');
  * @constructor
  * Create a new Tine.Sales.ContractGridPanel
  */
-Tine.Sales.ContractGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // model generics
     recordClass: Tine.Sales.Model.Contract,
     

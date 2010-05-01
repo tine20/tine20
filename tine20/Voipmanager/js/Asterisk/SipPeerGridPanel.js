@@ -14,7 +14,7 @@ Ext.namespace('Tine.Voipmanager');
 /**
  * SipPeers grid panel
  */
-Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // model generics
     recordClass: Tine.Voipmanager.Model.AsteriskSipPeer,
     evalGrants: false,

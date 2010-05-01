@@ -14,7 +14,7 @@ Ext.namespace('Tine.Voipmanager');
 /**
  * Context grid panel
  */
-Tine.Voipmanager.SnomSettingGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Voipmanager.SnomSettingGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // model generics
     recordClass: Tine.Voipmanager.Model.SnomSetting,
     evalGrants: false,

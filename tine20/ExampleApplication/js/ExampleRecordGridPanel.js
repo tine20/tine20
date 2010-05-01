@@ -13,7 +13,7 @@ Ext.ns('Tine.ExampleApplication');
  * 
  * @namespace   Tine.ExampleApplication
  * @class       Tine.ExampleApplication.ExampleRecordGridPanel
- * @extends     Tine.Tinebase.widgets.app.GridPanel
+ * @extends     Tine.widgets.grid.GridPanel
  * 
  * <p>ExampleRecord Grid Panel</p>
  * <p><pre>
@@ -28,7 +28,7 @@ Ext.ns('Tine.ExampleApplication');
  * @constructor
  * Create a new Tine.ExampleApplication.ExampleRecordGridPanel
  */
-Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * record class
      * @cfg {Tine.ExampleApplication.Model.ExampleRecord} recordClass
