@@ -31,7 +31,7 @@ Tine.widgets.mainscreen.WestPanel = function(config) {
     
     Tine.widgets.mainscreen.WestPanel.superclass.constructor.apply(this, arguments);
     
-    this.on('add', this.onItemAdd, this);
+    this.on('added', this.onItemAdd, this);
 };
 
 Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
@@ -128,6 +128,11 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
             }, this.defaults));
         }
         
+        // why the f* isn't this done by Ext?
+        Ext.each(this.items, function(item, idx) {
+            this.onItemAdd(this, item, idx)
+        }, this);
+        
         Tine.widgets.mainscreen.WestPanel.superclass.initComponent.apply(this, arguments);
     },
     
@@ -139,8 +144,13 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
      * @param {Number} number
      */
     onItemAdd: function(westPanel, cmp, number) {
-        this.xsrollKiller(cmp);
-        cmp.on('afterrender', this.xsrollKiller, this);
+        // kill x-scrollers
+        if (cmp.getEl()) {
+            this.xsrollKiller(cmp);
+        } else {
+            cmp.on('afterrender', this.xsrollKiller, this);
+        }
+        
     },
     
     /**
