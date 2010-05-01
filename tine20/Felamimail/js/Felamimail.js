@@ -453,8 +453,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
  * MainScreen Definition
  */ 
 Tine.Felamimail.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
-    westPanelClass: Tine.Felamimail.TreePanel,
-    
     /**
      * adapter fn to get folder tree panel
      * 
@@ -462,10 +460,6 @@ Tine.Felamimail.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
      */
     getTreePanel: function() {
         return this.getContainerTreePanel();
-    },
-    
-    getContainerTreePanel: function() {
-        return this.getWestPanel();
     }
 });
 

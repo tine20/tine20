@@ -239,9 +239,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
 
         var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
         this.expandPath('/root/' + defaultAccount + '/');
-        
-        // enable vertical scrolling
-        this.body.applyStyles('overflow-y: scroll');
     },
     
     /**
