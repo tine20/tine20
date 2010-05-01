@@ -76,6 +76,16 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
     border: false,
     
     /**
+     * called after the rendering process
+     */
+    afterRender: function() {
+        Tine.widgets.mainscreen.WestPanel.superclass.afterRender.apply(this, arguments);
+        
+        // enable vertical scrolling
+        this.body.applyStyles('overflow-y: scroll');
+    },
+    
+    /**
      * returns containerTree panel
      * 
      * @return {Tine.Tinebase.widgets.ContainerTreePanel}
