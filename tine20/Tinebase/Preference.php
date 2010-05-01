@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Preference.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
  */
@@ -162,6 +162,73 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
         }
         
         return $preference;
+    }
+    
+    /**
+     * overwrite this to add more special options for other apps
+     *
+     * - result array has to have the following format:
+     *  array(
+     *      array('value1', 'label1'),
+     *      array('value2', 'label2'),
+     *      ...
+     *  )
+     *
+     * @param string $_value
+     * @return array
+     *
+     * @todo add application title translations?
+     * @todo add timezone translations?
+     */
+    protected function _getSpecialOptions($_value)
+    {
+        $result = array();
+
+        switch ($_value) {
+
+            /****************** timezone options ************************/
+            case Tinebase_Preference::TIMEZONE:
+                $locale =  Tinebase_Core::get(Tinebase_Core::LOCALE);
+
+                $availableTimezonesTranslations = $locale->getTranslationList('citytotimezone');
+                $availableTimezones = DateTimeZone::listIdentifiers();
+                //foreach ($availableTimezones as $timezone) {
+                //    $result[] = array($timezone, array_key_exists($timezone, $availableTimezonesTranslations) ? $availableTimezonesTranslations[$timezone] : NULL);
+                //}
+
+                $result = $availableTimezones;
+                break;
+
+                /****************** locale options *************************/
+            case Tinebase_Preference::LOCALE:
+                $availableTranslations = Tinebase_Translation::getAvailableTranslations();
+                foreach ($availableTranslations as $lang) {
+                    $region = (!empty($lang['region'])) ? ' / ' . $lang['region'] : '';
+                    $result[] = array($lang['locale'], $lang['language'] . $region);
+                }
+                break;
+
+                /****************** application options ********************/
+            case Tinebase_Preference::DEFAULT_APP:
+                $applications = Tinebase_Application::getInstance()->getApplications();
+                foreach ($applications as $app) {
+                    if (
+                    $app->status == 'enabled'
+                    && $app->name != 'Tinebase'
+                    && Tinebase_Core::getUser()->hasRight($app->name, Tinebase_Acl_Rights_Abstract::RUN)
+                    ) {
+                        $result[] = array($app->name, $app->name);
+                    }
+                }
+                break;
+
+                /****************** default *********************************/
+            default:
+                $result = parent::_getSpecialOptions($_value);
+                break;
+        }
+
+        return $result;
     }
     
     /**
