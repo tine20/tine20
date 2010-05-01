@@ -72,25 +72,61 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
     layout: 'column',
     cls : 'x-portal',
     defaultType : 'portalcolumn',
-    
     border: false,
+
+    stateful: true,
+    stateEvents: ['collapse', 'expand', 'drop'],
     
     /**
-     * tempalte fn to initialize events
-     */
-    initEvents : function(){
-        Tine.widgets.mainscreen.WestPanel.superclass.initEvents.call(this);
-        this.dd = new Ext.ux.Portal.DropZone(this, this.dropConfig);
-    },
-    
-    /**
-     * called after the rendering process
+     * called after rendering process
      */
     afterRender: function() {
         Tine.widgets.mainscreen.WestPanel.superclass.afterRender.apply(this, arguments);
         
+        this.items.get(0).items.each(function(item, idx) {
+            // kill x-scrollers
+            if (item.getEl && item.getEl()) {
+                this.xsrollKiller(item);
+            } else {
+                item.on('afterrender', this.xsrollKiller, this);
+            }
+            
+            //bubble state events
+            item.enableBubble(['collapse', 'expand']);
+        }, this);
+        
         // enable vertical scrolling
         this.body.applyStyles('overflow-y: auto');
+    },
+    
+    /**
+     * applies state to cmp
+     * 
+     * @param {Object} state
+     */
+    applyState: function(state) {
+        var k=[], i=[];
+        this.items.get(0).items.each(function(item) {
+            i.push(item);
+            k.push(item.id);
+        }, this);
+        
+        Ext.each(state.order, function(position, idx) {
+            i[idx] = this.items.get(0).items.itemAt(position);
+            k[idx] = i[idx].id;
+        }, this);
+        
+        this.items.get(0).items.items = i;
+        this.items.get(0).keys = k;
+        this.items.get(0).items.fireEvent('sort', this.items.get(0).items);
+        
+        this.items.get(0).items.each(function(item, idx) {
+            if (item.getEl()) {
+                item[state.collapsed[idx] ? 'collapse' : 'expand'](false);
+            } else {
+                item.collapsed = !!state.collapsed[idx];
+            }
+        }, this);
     },
     
     /**
@@ -133,9 +169,28 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
     },
     
     /**
+     * gets state of this cmp
+     */
+    getState: function() {
+        var state = {
+            order: [],
+            collapsed: []
+        };
+        
+        this.items.get(0).items.each(function(item, idx) {
+            state.order.push(item.startPosition);
+            state.collapsed.push(item.collapsed);
+        }, this);
+        
+        return state;
+    },
+    
+    /**
      * inits this west panel
      */
     initComponent: function() {
+        this.stateId = this.app.appName + '-mainscreen-westpanel';
+        
         this.colItems = [];
         
         if (this.hasContainerTreePanel) {
@@ -174,6 +229,12 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
         
         this.colItems = this.colItems.concat(this.getAdditionalItems());
         
+        // save origianl/programatical position
+        // NOTE: this has to be done before applyState!
+        Ext.each(this.colItems, function(item, idx) {
+            item.startPosition = idx;
+        }, this);
+        
         this.items = {
             columnWidth: 1,
             items: this.colItems
@@ -182,18 +243,11 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
     },
     
     /**
-     * called after rendering process
+     * tempalte fn to initialize events
      */
-    afterRender: function() {
-        Tine.widgets.mainscreen.WestPanel.superclass.afterRender.apply(this, arguments);
-        this.items.get(0).items.each(function(item, idx) {
-            // kill x-scrollers
-            if (item.getEl && item.getEl()) {
-                this.xsrollKiller(item);
-            } else {
-                item.on('afterrender', this.xsrollKiller, this);
-            }
-        }, this);
+    initEvents : function(){
+        Tine.widgets.mainscreen.WestPanel.superclass.initEvents.call(this);
+        this.dd = new Ext.ux.Portal.DropZone(this, this.dropConfig);
     },
     
     /**
