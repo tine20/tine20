@@ -29,6 +29,8 @@ Tine.widgets.mainscreen.WestPanel = function(config) {
         this.hasFavoritesPanel = true;
     }
     
+    this.defaults = {};
+    
     Tine.widgets.mainscreen.WestPanel.superclass.constructor.apply(this, arguments);
     
     this.on('added', this.onItemAdd, this);
@@ -60,17 +62,6 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
      * west panel has favorites panel (defaults to null -> autodetection)
      */
     hasFavoritesPanel: null,
-    
-    /**
-     * @cfg {Object} defaults
-     * defaults for west panel items
-     */
-    defaults: {
-        collapsible: true,
-        baseCls: 'ux-arrowcollapse',
-        animCollapse: true,
-        titleCollapse:true
-    },
     
     layout: 'hfit',
     border: false,
@@ -119,11 +110,6 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
      */
     initComponent: function() {
         this.items = [];
-        if (this.hasFavoritesPanel) {
-            this.items.push(Ext.apply(this.getFavoritesPanel(), {
-                title: _('Favorites')
-            }, this.defaults));
-        }
         
         if (this.hasContainerTreePanel) {
             var containerTreePanel = this.getContainerTreePanel();
@@ -135,11 +121,26 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
             // recheck if container tree is a container tree as in apps not dealing
             // with containers we don't want a collapsed arrow header
             var isContainerTreePanel = typeof containerTreePanel.selectContainerPath === 'function';
-                
+            
+            if (isContainerTreePanel) {
+                this.defaults = {
+                    collapsible: true,
+                    baseCls: 'ux-arrowcollapse',
+                    animCollapse: true,
+                    titleCollapse:true
+                };
+            }
             
             this.items.push(Ext.apply(this.getContainerTreePanel(), {
                 title: isContainerTreePanel ? containersName : false,
                 collapsed: isContainerTreePanel
+            }, this.defaults));
+            
+        }
+        
+        if (this.hasFavoritesPanel) {
+            this.items.unshift(Ext.apply(this.getFavoritesPanel(), {
+                title: _('Favorites')
             }, this.defaults));
         }
         
