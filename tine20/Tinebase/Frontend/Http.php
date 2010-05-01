@@ -191,6 +191,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         return array(
         // base framework fixes
             'Tinebase/js/extFixes.js',
+        // official ux
+            'library/ExtJS/examples/ux/Portal.js',
+            'library/ExtJS/examples/ux/PortalColumn.js',
+            'library/ExtJS/examples/ux/Portlet.js',
         // gears
             'Tinebase/js/gears_init.js',
         // generic init to be included before parsing of the tine code

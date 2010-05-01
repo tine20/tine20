@@ -14,6 +14,23 @@ Tine.Calendar.MainScreenWestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel
     containerTreePanelClassName: 'CalendarSelectTreePanel',
     cls: 'cal-tree',
     
+    getAdditionalItems: function() {
+        return [Ext.apply({
+            title: _('Mini Calendar'),
+            border: false,
+            layout: 'hbox',
+            layoutConfig: {
+                align:'middle'
+            },
+            defaults: {border: false},
+            items: [{
+                flex: 1
+            }, this.getDatePicker(), {
+                flex: 1
+            }]
+        }, this.defaults)];
+    },
+    
     getDatePicker: function() {
         if (! this.datePicker) {
             this.datePicker = new Ext.DatePicker({
@@ -41,27 +58,5 @@ Tine.Calendar.MainScreenWestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel
         }
         
         return this.datePicker;
-    },
-    
-    /**
-     * inits this westpanel
-     */
-    initComponent: function() {
-        Tine.Calendar.MainScreenWestPanel.superclass.initComponent.apply(this, arguments);
-            
-        this.add(Ext.apply({
-                title: _('Mini Calendar'),
-                border: false,
-                layout: 'hbox',
-                layoutConfig: {
-                    align:'middle'
-                },
-                defaults: {border: false},
-                items: [{
-                    flex: 1
-                }, this.getDatePicker(), {
-                    flex: 1
-                }]
-        }, this.defaults));
     }
 });

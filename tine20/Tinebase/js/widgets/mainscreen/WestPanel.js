@@ -21,6 +21,14 @@ Ext.ns('Tine.widgets.mainscreen');
 Tine.widgets.mainscreen.WestPanel = function(config) {
     Ext.apply(this, config);
     
+    this.addEvents({
+        validatedrop:true,
+        beforedragover:true,
+        dragover:true,
+        beforedrop:true,
+        drop:true
+    });
+    
     if (this.hasContainerTreePanel || this.hasContainerTreePanel === null) {
         this.hasContainerTreePanel = true;
     }
@@ -32,8 +40,6 @@ Tine.widgets.mainscreen.WestPanel = function(config) {
     this.defaults = {};
     
     Tine.widgets.mainscreen.WestPanel.superclass.constructor.apply(this, arguments);
-    
-    this.on('added', this.onItemAdd, this);
 };
 
 Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
@@ -63,8 +69,19 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
      */
     hasFavoritesPanel: null,
     
-    layout: 'hfit',
+    layout: 'column',
+    cls : 'x-portal',
+    defaultType : 'portalcolumn',
+    
     border: false,
+    
+    /**
+     * tempalte fn to initialize events
+     */
+    initEvents : function(){
+        Tine.widgets.mainscreen.WestPanel.superclass.initEvents.call(this);
+        this.dd = new Ext.ux.Portal.DropZone(this, this.dropConfig);
+    },
     
     /**
      * called after the rendering process
@@ -74,6 +91,16 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
         
         // enable vertical scrolling
         this.body.applyStyles('overflow-y: auto');
+    },
+    
+    /**
+     * returns additional items for the westpanel
+     * template fn to be overrwiten by subclasses
+     * 
+     * @return {Array} of Ext.Panel
+     */
+    getAdditionalItems: function() {
+        return this.additionalItems || [];
     },
     
     /**
@@ -109,7 +136,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
      * inits this west panel
      */
     initComponent: function() {
-        this.items = [];
+        this.colItems = [];
         
         if (this.hasContainerTreePanel) {
             var containerTreePanel = this.getContainerTreePanel();
@@ -127,11 +154,12 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
                     collapsible: true,
                     baseCls: 'ux-arrowcollapse',
                     animCollapse: true,
-                    titleCollapse:true
+                    titleCollapse:true,
+                    draggable : true
                 };
             }
             
-            this.items.push(Ext.apply(this.getContainerTreePanel(), {
+            this.colItems.push(Ext.apply(this.getContainerTreePanel(), {
                 title: isContainerTreePanel ? containersName : false,
                 collapsed: isContainerTreePanel
             }, this.defaults));
@@ -139,34 +167,33 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
         }
         
         if (this.hasFavoritesPanel) {
-            this.items.unshift(Ext.apply(this.getFavoritesPanel(), {
+            this.colItems.unshift(Ext.apply(this.getFavoritesPanel(), {
                 title: _('Favorites')
             }, this.defaults));
         }
         
-        // why the f* isn't this done by Ext?
-        Ext.each(this.items, function(item, idx) {
-            this.onItemAdd(this, item, idx)
-        }, this);
+        this.colItems = this.colItems.concat(this.getAdditionalItems());
         
+        this.items = {
+            columnWidth: 1,
+            items: this.colItems
+        }
         Tine.widgets.mainscreen.WestPanel.superclass.initComponent.apply(this, arguments);
     },
     
     /**
-     * called when an item gets added to this panel
-     * 
-     * @param {WestPanel} westPanel
-     * @param {Ext.Component} cmp
-     * @param {Number} number
+     * called after rendering process
      */
-    onItemAdd: function(westPanel, cmp, number) {
-        // kill x-scrollers
-        if (cmp.getEl()) {
-            this.xsrollKiller(cmp);
-        } else {
-            cmp.on('afterrender', this.xsrollKiller, this);
-        }
-        
+    afterRender: function() {
+        Tine.widgets.mainscreen.WestPanel.superclass.afterRender.apply(this, arguments);
+        this.items.get(0).items.each(function(item, idx) {
+            // kill x-scrollers
+            if (item.getEl && item.getEl()) {
+                this.xsrollKiller(item);
+            } else {
+                item.on('afterrender', this.xsrollKiller, this);
+            }
+        }, this);
     },
     
     /**
