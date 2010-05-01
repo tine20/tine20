@@ -33,7 +33,6 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         return array(
             'Felamimail/js/Model.js',
             'Felamimail/js/FelamimailFolderStore.js',
-            'Felamimail/js/Felamimail.js',
             'Felamimail/js/FelamimailTreeContextMenu.js',
             'Felamimail/js/FelamimailTreeLoader.js',
             'Felamimail/js/FelamimailTreePanel.js',
@@ -43,6 +42,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Felamimail/js/FelamimailAccountEditDialog.js',
             'Addressbook/js/SearchCombo.js',
             'Felamimail/js/FelamimailRecipientGrid.js',
+            'Felamimail/js/Felamimail.js',
         );
     }
 
