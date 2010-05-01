@@ -60,14 +60,23 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
     activeContentType: '',
     
     /**
+     * @cfg {String} centerPanelClassName
+     * name of centerpanel class name suffix in namespace of this app (defaults to GridPanel)
+     * the class name will be expanded to Tine[this.appName][contentType + this.centerPanelClassNameSuffix]
+     */
+    centerPanelClassNameSuffix: 'GridPanel',
+    
+    /**
      * @cfg {String} containerTreeClass
      * name of container tree class in namespace of this app (defaults to TreePanel)
+     * the class name will be expanded to Tine[this.appName][this.containerTreePanelClassName]
      */
     containerTreePanelClassName: 'TreePanel',
     
     /**
      * @cfg {String} favoritesPanelClassName
      * name of favorites class in namespace of this app (defaults to FilterPanel)
+     * the class name will be expanded to Tine[this.appName][this.favoritesPanelClassName]
      */
     favoritesPanelClassName: 'FilterPanel',
     
@@ -114,14 +123,14 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
     getCenterPanel: function(contentType) {
         contentType = contentType || this.getActiveContentType();
         
-        if (! this[contentType + 'GridPanel']) {
-            this[contentType + 'GridPanel'] = new Tine[this.app.appName][contentType + 'GridPanel']({
+        if (! this[contentType + this.centerPanelClassNameSuffix]) {
+            this[contentType + this.centerPanelClassNameSuffix] = new Tine[this.app.appName][contentType + this.centerPanelClassNameSuffix]({
                 app: this.app,
                 plugins: [this.containerTreePanel.getFilterPlugin()]
             });
         }
         
-        return this[contentType + 'GridPanel'];
+        return this[contentType + this.centerPanelClassNameSuffix];
     },
     
     /**
@@ -136,7 +145,7 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
         contentType = contentType || this.getActiveContentType();
         
         if (! this[contentType + 'ActionToolbar']) {
-            this[contentType + 'ActionToolbar'] = this[contentType + 'GridPanel'].getActionToolbar();
+            this[contentType + 'ActionToolbar'] = this[contentType + this.centerPanelClassNameSuffix].getActionToolbar();
         }
         
         return this[contentType + 'ActionToolbar'];
