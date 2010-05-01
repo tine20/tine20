@@ -75,7 +75,7 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         $xlswriter->setSheetIndex(1);
         //$xlswriter->save('php://output');
         
-        $csvFilename = 'test.csv';
+        $csvFilename = tempnam(sys_get_temp_dir(), 'csvtest');
         $xlswriter->save($csvFilename);
         //$noteString = Tinebase_Translation::getTranslation('Tinebase')->_('created') . ' ' . Tinebase_Translation::getTranslation('Tinebase')->_('by');
         
