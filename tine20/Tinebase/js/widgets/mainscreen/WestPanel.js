@@ -82,7 +82,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
         Tine.widgets.mainscreen.WestPanel.superclass.afterRender.apply(this, arguments);
         
         // enable vertical scrolling
-        this.body.applyStyles('overflow-y: scroll');
+        this.body.applyStyles('overflow-y: auto');
     },
     
     /**
@@ -131,10 +131,15 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
             var containersName = containerTreePanel.recordClass ? 
                 this.app.i18n._hidden(containerTreePanel.recordClass.getMeta('containersName')) :
                 _('containers');
-        
+            
+            // recheck if container tree is a container tree as in apps not dealing
+            // with containers we don't want a collapsed arrow header
+            var isContainerTreePanel = typeof containerTreePanel.selectContainerPath === 'function';
+                
+            
             this.items.push(Ext.apply(this.getContainerTreePanel(), {
-                title: containersName,
-                collapsed: true
+                title: isContainerTreePanel ? containersName : false,
+                collapsed: isContainerTreePanel
             }, this.defaults));
         }
         
