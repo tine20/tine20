@@ -448,11 +448,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
 /**
  * @namespace Tine.Felamimail
  * @class Tine.Felamimail.MainScreen
- * @extends Tine.Tinebase.widgets.app.MainScreen
+ * @extends Tine.widgets.MainScreen
  * 
  * MainScreen Definition
  */ 
-Tine.Felamimail.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
+Tine.Felamimail.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     
     /**
      * adapter fn to get folder tree panel

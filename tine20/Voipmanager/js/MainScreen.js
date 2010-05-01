@@ -13,7 +13,7 @@
 Ext.ns('Tine.Voipmanager');
 
 // default mainscreen
-Tine.Voipmanager.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
+Tine.Voipmanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     
     activeContentType: 'Phone',
     activeContentGroup: 'Snom',

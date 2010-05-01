@@ -14,7 +14,7 @@ Ext.namespace('Tine.Sales');
 /**
  * @namespace Tine.Sales
  * @class Tine.Sales.MainScreen
- * @extends Tine.Tinebase.widgets.app.MainScreen
+ * @extends Tine.widgets.MainScreen
  * MainScreen of the Sales Application <br>
  * <pre>
  * TODO         generalize this
@@ -27,7 +27,7 @@ Ext.namespace('Tine.Sales');
  * @constructor
  * Constructs mainscreen of the Sales application
  */
-Tine.Sales.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
+Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     
     activeContentType: 'Product',
     

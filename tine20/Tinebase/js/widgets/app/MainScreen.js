@@ -6,11 +6,11 @@
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
-Ext.ns('Tine.Tinebase.widgets.app');
+Ext.ns('Tine.widgets');
 
 /**
- * @namespace   Tine.Tinebase.widgets.app
- * @class       Tine.Tinebase.widgets.app.MainScreen
+ * @namespace   Tine.widgets
+ * @class       Tine.widgets.MainScreen
  * @extends     Ext.util.Observable
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -18,7 +18,7 @@ Ext.ns('Tine.Tinebase.widgets.app');
  * 
  * @constructor
  */
-Tine.Tinebase.widgets.app.MainScreen = function(config) {
+Tine.widgets.MainScreen = function(config) {
     Ext.apply(this, config);
     
     this.addEvents(
@@ -44,10 +44,10 @@ Tine.Tinebase.widgets.app.MainScreen = function(config) {
         this.hasFavoritesPanel = true;
     }
     
-    Tine.Tinebase.widgets.app.MainScreen.superclass.constructor.call(this);
+    Tine.widgets.MainScreen.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
+Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
     /**
      * @cfg {Tine.Tinebase.Application} app
      * instance of the app object (required)
@@ -239,7 +239,7 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
     /**
      * shows/activates this app mainscreen
      * 
-     * @return {Tine.Tinebase.widgets.app.MainScreen} this
+     * @return {Tine.widgets.MainScreen} this
      */
     show: function() {
         if(this.fireEvent("beforeshow", this) !== false){

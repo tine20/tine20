@@ -11,4 +11,4 @@
  Ext.ns('Tine.RequestTracker');
  
  // default mainscreen
-Tine.RequestTracker.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
+Tine.RequestTracker.MainScreen = Tine.widgets.MainScreen;

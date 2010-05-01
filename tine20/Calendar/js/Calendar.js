@@ -40,7 +40,7 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
 /**
  * @namespace Tine.Calendar
  * @class Tine.Calendar.MainScreen
- * @extends Tine.Tinebase.widgets.app.MainScreen
+ * @extends Tine.widgets.MainScreen
  * MainScreen of the Calendar Application <br>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -57,7 +57,7 @@ Tine.Calendar.MainScreen = function(config) {
     Tine.Calendar.MainScreen.superclass.constructor.call(this);
 }
 
-Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
+Ext.extend(Tine.Calendar.MainScreen, Tine.widgets.MainScreen, {
     
     containerTreePanelClassName: 'CalendarSelectTreePanel',
     

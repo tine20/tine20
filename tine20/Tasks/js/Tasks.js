@@ -12,7 +12,7 @@
 Ext.namespace('Tine', 'Tine.Tasks');
 
 // default mainscreen
-Tine.Tasks.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
+Tine.Tasks.MainScreen = Tine.widgets.MainScreen;
 
 Tine.Tasks.TreePanel = function(config) {
     Ext.apply(this, config);

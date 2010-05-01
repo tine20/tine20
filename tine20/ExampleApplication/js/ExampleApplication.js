@@ -31,12 +31,12 @@ Tine.ExampleApplication.Application = Ext.extend(Tine.Tinebase.Application, {
 /**
  * @namespace   Tine.ExampleApplication
  * @class       Tine.ExampleApplication.MainScreen
- * @extends     Tine.Tinebase.widgets.app.MainScreen
+ * @extends     Tine.widgets.MainScreen
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
-Tine.ExampleApplication.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
+Tine.ExampleApplication.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     
     activeContentType: 'ExampleRecord'
 });

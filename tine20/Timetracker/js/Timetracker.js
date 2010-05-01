@@ -13,13 +13,13 @@ Ext.ns('Tine.Timetracker');
 /**
  * @namespace   Tine.Timetracker
  * @class       Tine.Timetracker.MainScreen
- * @extends     Tine.Tinebase.widgets.app.MainScreen
+ * @extends     Tine.widgets.MainScreen
  * MainScreen of the Timetracker Application <br>
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
-Tine.Timetracker.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
+Tine.Timetracker.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Timesheet'
 });
 

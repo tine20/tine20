@@ -12,7 +12,7 @@
 Ext.ns('Tine.Courses');
 
 // default mainscreen
-Tine.Courses.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
+Tine.Courses.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     
     activeContentType: 'Course',
     

@@ -14,7 +14,7 @@ Ext.namespace('Tine.Crm');
 /**
  * @namespace Tine.Crm
  * @class Tine.Crm.MainScreen
- * @extends Tine.Tinebase.widgets.app.MainScreen
+ * @extends Tine.widgets.MainScreen
  * MainScreen of the Crm Application <br>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -24,7 +24,7 @@ Ext.namespace('Tine.Crm');
  * @constructor
  * Constructs mainscreen of the crm application
  */
-Tine.Crm.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
+Tine.Crm.MainScreen = Tine.widgets.MainScreen;
 
 /**
  * @namespace Tine.Crm

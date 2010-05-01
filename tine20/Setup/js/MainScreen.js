@@ -14,7 +14,7 @@ Ext.ns('Tine', 'Tine.Setup');
 /**
  * @namespace   Tine.Setup
  * @class       Tine.Setup.MainScreen
- * @extends     Tine.Tinebase.widgets.app.MainScreen
+ * @extends     Tine.widgets.MainScreen
  * 
  * <p>MainScreen Definition</p>
  * 
@@ -27,7 +27,7 @@ Ext.ns('Tine', 'Tine.Setup');
  * @constructor
  * Create a new Tine.Setup.MainScreen
  */
-Tine.Setup.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
+Tine.Setup.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     
     /**
      * active panel

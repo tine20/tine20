@@ -33,13 +33,13 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
 /**
  * @namespace   Tine.Addressbook
  * @class       Tine.Addressbook.MainScreen
- * @extends     Tine.Tinebase.widgets.app.MainScreen
+ * @extends     Tine.widgets.MainScreen
  * MainScreen of the Addressbook Application <br>
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id: AttendeeGridPanel.js 9749 2009-08-05 09:08:34Z c.weiss@metaways.de $
  */
-Tine.Addressbook.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
+Tine.Addressbook.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Contact'
 });
 
