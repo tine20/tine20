@@ -3,13 +3,12 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * TODO use Ext.ux.file.Download
  */
- 
-Ext.namespace('Tine.widgets', 'Tine.widgets.grid');
+Ext.ns('Tine.widgets.grid');
 
 /**
  * @class Tine.widgets.grid.ExportButton
@@ -39,7 +38,7 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
      */
     exportFunction: null,
     /**
-     * @cfg {Tine.Tinebase.widgets.grid.FilterSelectionModel} sm
+     * @cfg {Tine.widgets.grid.FilterSelectionModel} sm
      */
     sm: null,
     /**

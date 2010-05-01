@@ -3,18 +3,16 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: DetailsPanel.js 10291 2009-09-02 14:08:36Z p.schuele@metaways.de $
- *
  */
- 
-Ext.namespace('Tine.Tinebase.widgets', 'Tine.Tinebase.widgets.grid');
+Ext.ns('Tine.widgets.grid');
 
 /**
  * quickadd grid panel
  * 
- * @namespace   Tine.Tinebase.widgets.grid
- * @class       Tine.Tinebase.widgets.grid.QuickaddGridPanel
+ * @namespace   Tine.widgets.grid
+ * @class       Tine.widgets.grid.QuickaddGridPanel
  * @extends     Ext.ux.grid.QuickaddGridPanel
  * 
  * <p>Grid Details Panel</p>
@@ -31,9 +29,9 @@ Ext.namespace('Tine.Tinebase.widgets', 'Tine.Tinebase.widgets.grid');
  * 
  * @param       {Object} config
  * @constructor
- * Create a new Tine.Tinebase.widgets.grid.QuickaddGridPanel
+ * Create a new Tine.widgets.grid.QuickaddGridPanel
  */
-Tine.Tinebase.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
+Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
     /**
      * @property recordClass
      */
@@ -71,7 +69,7 @@ Tine.Tinebase.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGr
             });
         }
 
-        Tine.Tinebase.widgets.grid.QuickaddGridPanel.superclass.initComponent.call(this);
+        Tine.widgets.grid.QuickaddGridPanel.superclass.initComponent.call(this);
         
         this.on('newentry', this.onNewentry, this);
     },

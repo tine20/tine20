@@ -91,7 +91,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     defaultPaging: null,
     /**
-     * @cfg {Tine.Tinebase.widgets.grid.DetailsPanel} detailsPanel
+     * @cfg {Tine.widgets.grid.DetailsPanel} detailsPanel
      * if set, it becomes rendered in region south 
      */
     detailsPanel: null,
@@ -370,7 +370,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initGrid: function() {
         // init sel model
-        this.selectionModel = new Tine.Tinebase.widgets.grid.FilterSelectionModel({
+        this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
             store: this.store
         });
         this.selectionModel.on('selectionchange', function(sm) {

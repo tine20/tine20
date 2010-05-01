@@ -114,7 +114,7 @@
     },
     
     initDetailsPanel: function() {
-        this.detailsPanel = new Tine.Tinebase.widgets.grid.DetailsPanel({
+        this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
             defaultHeight: 375,
             gridpanel: this,
             currentId: null,

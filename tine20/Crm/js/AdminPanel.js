@@ -229,11 +229,11 @@ Ext.namespace('Tine.Crm.Admin');
 /**
  * @namespace   Tine.Crm.Admin
  * @class       Tine.Crm.Admin.QuickaddGridPanel
- * @extends     Tine.Tinebase.widgets.grid.QuickaddGridPanel
+ * @extends     Tine.widgets.grid.QuickaddGridPanel
  * 
  * admin config option quickadd grid panel
  */
-Tine.Crm.Admin.QuickaddGridPanel = Ext.extend(Tine.Tinebase.widgets.grid.QuickaddGridPanel, {
+Tine.Crm.Admin.QuickaddGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
     /**
      * @private

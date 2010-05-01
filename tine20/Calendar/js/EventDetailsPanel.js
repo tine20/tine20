@@ -12,11 +12,11 @@ Ext.ns('Tine.Calendar');
 /**
  * @class Tine.Calendar.EventDetailsPanel
  * @namespace Tine.Calendar
- * @extends Tine.Tinebase.widgets.grid.DetailsPanel
+ * @extends Tine.widgets.grid.DetailsPanel
  * @author Cornelius Weiss <c.weiss@metaways.de>
  * @version $Id$
  */
-Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPanel, {
+Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     border: false,
     
     /**

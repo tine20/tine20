@@ -169,7 +169,7 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
             ])
         };
         
-        this.aliasesGrid = new Tine.Tinebase.widgets.grid.QuickaddGridPanel(
+        this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply(commonConfig, {
                 //title:this.app.i18n._('Aliases'),
                 cm: new Ext.grid.ColumnModel([{ 
@@ -188,7 +188,7 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
             })
         );
 
-        this.forwardsGrid = new Tine.Tinebase.widgets.grid.QuickaddGridPanel(
+        this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply(commonConfig, {
                 //title:this.app.i18n._('Forwards'),
                 cm: new Ext.grid.ColumnModel([{ 

@@ -297,7 +297,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initDetailsPanel: function() {
-        this.detailsPanel = new Tine.Tinebase.widgets.grid.DetailsPanel({
+        this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
             gridpanel: this,
             
             // use default Tpl for default and multi view

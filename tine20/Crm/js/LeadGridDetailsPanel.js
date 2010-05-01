@@ -14,7 +14,7 @@ Ext.namespace('Tine.Crm');
 /**
  * @namespace   Tine.Crm
  * @class       Tine.Crm.LeadGridDetailsPanel
- * @extends     Tine.Tinebase.widgets.grid.DetailsPanel
+ * @extends     Tine.widgets.grid.DetailsPanel
  * 
  * <p>Lead Grid Details Panel</p>
  * <p>
@@ -25,7 +25,7 @@ Ext.namespace('Tine.Crm');
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  */
-Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPanel, {
+Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     
     border: false,
     

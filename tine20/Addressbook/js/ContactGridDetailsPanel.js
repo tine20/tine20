@@ -16,9 +16,9 @@ Ext.namespace('Tine.Addressbook');
  * the details panel (shows contact details)
  * 
  * @class Tine.Felamimail.GridDetailsPanel
- * @extends Tine.Tinebase.widgets.grid.DetailsPanel
+ * @extends Tine.widgets.grid.DetailsPanel
  */
-Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPanel, {
+Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     
     il8n: null,
     felamimail: false,

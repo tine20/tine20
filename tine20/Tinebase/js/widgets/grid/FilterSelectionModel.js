@@ -1,24 +1,20 @@
 /*
  * Tine 2.0
  * 
- * @package     Tinebase
- * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
- 
-Ext.namespace('Tine.Tinebase.widgets.grid');
+Ext.ns('Tine.widgets.grid');
 
 /**
  * a row selection model capable to return filters
  * @constructor
- * @class Tine.Tinebase.widgets.grid.FilterSelectionModel
+ * @class Tine.widgets.grid.FilterSelectionModel
  * @extends Ext.grid.RowSelectionModel
  */
-Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelectionModel, {
+Tine.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelectionModel, {
     /**
      * @cfg {Ext.data.Store}
      */
@@ -84,7 +80,7 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
     selectAll: function(onlyPage) {
         this.isFilterSelect = !onlyPage;
         
-        Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.selectAll.call(this);
+        Tine.widgets.grid.FilterSelectionModel.superclass.selectAll.call(this);
     },
     
     /**
@@ -92,7 +88,7 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
      */
     onRefresh : function(){
         this.clearSelections(true);
-        Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.onRefresh.call(this);
+        Tine.widgets.grid.FilterSelectionModel.superclass.onRefresh.call(this);
     },
     
     /**
@@ -100,7 +96,7 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
      */
     onRemove : function(v, index, r){
         this.clearSelections(true);
-        Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.onRemove.call(this, v, index, r);
+        Tine.widgets.grid.FilterSelectionModel.superclass.onRemove.call(this, v, index, r);
     },
     
     /**
@@ -109,7 +105,7 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
      */
     deselectRow : function(index, preventViewNotify) {
         this.isFilterSelect = false;
-        Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.deselectRow.call(this, index, preventViewNotify);
+        Tine.widgets.grid.FilterSelectionModel.superclass.deselectRow.call(this, index, preventViewNotify);
     },
     
     /**
@@ -119,7 +115,7 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
         this.suspendEvents();
         this.isFilterSelect = false;
         
-        Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.clearSelections.call(this);
+        Tine.widgets.grid.FilterSelectionModel.superclass.clearSelections.call(this);
         
         this.resumeEvents();
         if (! silent) {
@@ -158,7 +154,7 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
      */
     getCount: function() {
         if(! this.isFilterSelect) {
-            return Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.getCount.call(this);
+            return Tine.widgets.grid.FilterSelectionModel.superclass.getCount.call(this);
         } else {
             return this.store.getTotalCount();
         }

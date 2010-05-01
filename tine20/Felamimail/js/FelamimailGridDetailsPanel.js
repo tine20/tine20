@@ -14,7 +14,7 @@ Ext.namespace('Tine.Felamimail');
 /**
  * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.GridDetailsPanel
- * @extends     Tine.Tinebase.widgets.grid.DetailsPanel
+ * @extends     Tine.widgets.grid.DetailsPanel
  * 
  * <p>Message Grid Details Panel</p>
  * <p>the details panel (shows message content)</p>
@@ -34,7 +34,7 @@ Ext.namespace('Tine.Felamimail');
  * @constructor
  * Create a new Tine.Felamimail.GridDetailsPanel
  */
- Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid.DetailsPanel, {
+ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     
     /**
      * config

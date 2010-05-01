@@ -3,18 +3,17 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
- 
-Ext.namespace('Tine.Tinebase.widgets', 'Tine.Tinebase.widgets.grid');
+Ext.namespace('Tine.Tinebase.widgets', 'Tine.widgets.grid');
 
 /**
  * grid details panel
  * 
- * @namespace   Tine.Tinebase.widgets.grid
- * @class       Tine.Tinebase.widgets.grid.DetailsPanel
+ * @namespace   Tine.widgets.grid
+ * @class       Tine.widgets.grid.DetailsPanel
  * @extends     Ext.Panel
  * 
  * <p>Grid Details Panel</p>
@@ -28,9 +27,9 @@ Ext.namespace('Tine.Tinebase.widgets', 'Tine.Tinebase.widgets.grid');
  * 
  * @param       {Object} config
  * @constructor
- * Create a new Tine.Tinebase.widgets.grid.DetailsPanel
+ * Create a new Tine.widgets.grid.DetailsPanel
  */
-Tine.Tinebase.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
+Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     /**
      * @cfg {Number} defaultHeight
      * default Heights
