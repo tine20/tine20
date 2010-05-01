@@ -97,6 +97,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                 cls: 'tine-mainscreen-centerpanel-west',
                 region: 'west',
                 id: 'west',
+                stateful: false,
                 layout: 'border',
                 split: true,
                 width: 200,
