@@ -48,6 +48,20 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test
+     * 
+     */
+    public function testIsJobRunning()
+    {
+        $async = Tinebase_AsyncJob::getInstance();
+        $job = $async->startJob('Test_Job1', 5);
+        sleep(3);
+        $this->assertTrue($async->jobIsRunning('Test_Job1'));
+        $async->finishJob($job);        
+    }
+    
+    
+    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
