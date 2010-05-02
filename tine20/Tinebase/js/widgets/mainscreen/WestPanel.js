@@ -11,23 +11,17 @@ Ext.ns('Tine.widgets.mainscreen');
 /**
  * @namespace   Tine.widgets.mainscreen
  * @class       Tine.widgets.mainscreen.WestPanel
- * @extends     Ext.Panel
+ * @extends     Ext.ux.Portal
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
+ * 
+ * @todo make save button working again -> move to here
  * 
  * @constructor
  */
 Tine.widgets.mainscreen.WestPanel = function(config) {
     Ext.apply(this, config);
-    
-    this.addEvents({
-        validatedrop:true,
-        beforedragover:true,
-        dragover:true,
-        beforedrop:true,
-        drop:true
-    });
     
     if (this.hasContainerTreePanel || this.hasContainerTreePanel === null) {
         this.hasContainerTreePanel = true;
@@ -42,7 +36,7 @@ Tine.widgets.mainscreen.WestPanel = function(config) {
     Tine.widgets.mainscreen.WestPanel.superclass.constructor.apply(this, arguments);
 };
 
-Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
+Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
     /**
      * @cfg {String} containerTreeClass
      * name of container tree class in namespace of this app (defaults to TreePanel)
@@ -83,7 +77,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
     afterRender: function() {
         Tine.widgets.mainscreen.WestPanel.superclass.afterRender.apply(this, arguments);
         
-        this.items.get(0).items.each(function(item, idx) {
+        this.getPortalColumn().items.each(function(item, idx) {
             // kill x-scrollers
             if (item.getEl && item.getEl()) {
                 this.xsrollKiller(item);
@@ -105,28 +99,27 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
      * @param {Object} state
      */
     applyState: function(state) {
-        var k=[], i=[];
-        this.items.get(0).items.each(function(item) {
-            i.push(item);
-            k.push(item.id);
-        }, this);
+        var collection = this.getPortalColumn().items,
+            c = new Array(collection.getCount()), k = collection.keys, items = collection.items;
         
         Ext.each(state.order, function(position, idx) {
-            i[idx] = this.items.get(0).items.itemAt(position);
-            k[idx] = i[idx].id;
+            c[idx] = {key: k[position], value: items[position], index: position};
         }, this);
         
-        this.items.get(0).items.items = i;
-        this.items.get(0).keys = k;
-        this.items.get(0).items.fireEvent('sort', this.items.get(0).items);
+        for(i = 0, len = c.length; i < len; i++){
+            items[i] = c[i].value;
+            k[i] = c[i].key;
+        }
+        collection.fireEvent('sort', collection);
         
-        this.items.get(0).items.each(function(item, idx) {
+        collection.each(function(item, idx) {
             if (item.getEl()) {
                 item[state.collapsed[idx] ? 'collapse' : 'expand'](false);
             } else {
                 item.collapsed = !!state.collapsed[idx];
             }
         }, this);
+        
     },
     
     /**
@@ -169,6 +162,67 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
     },
     
     /**
+     * returns the one and only portalcolumn of this west panel
+     * 
+     * @return {Ext.ux.PortalColumn}
+     */
+    getPortalColumn: function() {
+        if (! this.portalColumn) {
+            
+            var items = [];
+        
+            if (this.hasContainerTreePanel) {
+                var containerTreePanel = this.getContainerTreePanel();
+                
+                var containersName = containerTreePanel.recordClass ? 
+                    this.app.i18n._hidden(containerTreePanel.recordClass.getMeta('containersName')) :
+                    _('containers');
+                
+                // recheck if container tree is a container tree as in apps not dealing
+                // with containers we don't want a collapsed arrow header
+                var isContainerTreePanel = typeof containerTreePanel.selectContainerPath === 'function';
+                
+                if (isContainerTreePanel) {
+                    this.defaults = {
+                        collapsible: true,
+                        baseCls: 'ux-arrowcollapse',
+                        animCollapse: true,
+                        titleCollapse:true,
+                        draggable : true
+                    };
+                }
+                
+                items.push(Ext.apply(this.getContainerTreePanel(), {
+                    title: isContainerTreePanel ? containersName : false,
+                    collapsed: isContainerTreePanel
+                }, this.defaults));
+                
+            }
+            
+            if (this.hasFavoritesPanel) {
+                items.unshift(Ext.apply(this.getFavoritesPanel(), {
+                    title: _('Favorites')
+                }, this.defaults));
+            }
+            
+            items = items.concat(this.getAdditionalItems());
+            
+            // save origianl/programatical position
+            // NOTE: this has to be done before applyState!
+            Ext.each(items, function(item, idx) {
+                item.startPosition = idx;
+            }, this);
+        
+            this.portalColumn = new Ext.ux.PortalColumn({
+                columnWidth: 1,
+                items: items
+            });
+        }
+        
+        return this.portalColumn;
+    },
+    
+    /**
      * gets state of this cmp
      */
     getState: function() {
@@ -177,7 +231,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
             collapsed: []
         };
         
-        this.items.get(0).items.each(function(item, idx) {
+        this.getPortalColumn().items.each(function(item, idx) {
             state.order.push(item.startPosition);
             state.collapsed.push(item.collapsed);
         }, this);
@@ -191,63 +245,8 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.Panel, {
     initComponent: function() {
         this.stateId = this.app.appName + '-mainscreen-westpanel';
         
-        this.colItems = [];
-        
-        if (this.hasContainerTreePanel) {
-            var containerTreePanel = this.getContainerTreePanel();
-            
-            var containersName = containerTreePanel.recordClass ? 
-                this.app.i18n._hidden(containerTreePanel.recordClass.getMeta('containersName')) :
-                _('containers');
-            
-            // recheck if container tree is a container tree as in apps not dealing
-            // with containers we don't want a collapsed arrow header
-            var isContainerTreePanel = typeof containerTreePanel.selectContainerPath === 'function';
-            
-            if (isContainerTreePanel) {
-                this.defaults = {
-                    collapsible: true,
-                    baseCls: 'ux-arrowcollapse',
-                    animCollapse: true,
-                    titleCollapse:true,
-                    draggable : true
-                };
-            }
-            
-            this.colItems.push(Ext.apply(this.getContainerTreePanel(), {
-                title: isContainerTreePanel ? containersName : false,
-                collapsed: isContainerTreePanel
-            }, this.defaults));
-            
-        }
-        
-        if (this.hasFavoritesPanel) {
-            this.colItems.unshift(Ext.apply(this.getFavoritesPanel(), {
-                title: _('Favorites')
-            }, this.defaults));
-        }
-        
-        this.colItems = this.colItems.concat(this.getAdditionalItems());
-        
-        // save origianl/programatical position
-        // NOTE: this has to be done before applyState!
-        Ext.each(this.colItems, function(item, idx) {
-            item.startPosition = idx;
-        }, this);
-        
-        this.items = {
-            columnWidth: 1,
-            items: this.colItems
-        }
+        this.items = this.getPortalColumn();
         Tine.widgets.mainscreen.WestPanel.superclass.initComponent.apply(this, arguments);
-    },
-    
-    /**
-     * tempalte fn to initialize events
-     */
-    initEvents : function(){
-        Tine.widgets.mainscreen.WestPanel.superclass.initEvents.call(this);
-        this.dd = new Ext.ux.Portal.DropZone(this, this.dropConfig);
     },
     
     /**
