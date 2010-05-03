@@ -71,7 +71,7 @@ Ext.namespace('Tine.Felamimail');
     afterRender: function() {
         Tine.Felamimail.GridDetailsPanel.superclass.afterRender.apply(this, arguments);
         
-        this.body.on('click', this.onClick, this);
+        this.getSingleRecordPanel().on('click', this.onClick, this);
     },
     
     /**
@@ -119,8 +119,6 @@ Ext.namespace('Tine.Felamimail');
             });
             this.getLoadMask().show();
             
-        } else {
-            this.tpl.overwrite(body, record.data);
         }
     },
     

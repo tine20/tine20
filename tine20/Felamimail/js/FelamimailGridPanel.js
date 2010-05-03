@@ -806,21 +806,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * called before store queries for data
-     * - overwritten from parent to reset details panel currentId
-     * 
-     * @param  {Ext.data.Store} store
-     * @param  {Tine.Felamimail.Model.Message} record
-     * @param  {Operation} operation
-     * @return {Void}
-     */
-    onStoreBeforeload: function(store, record, operation) {
-        Tine.Felamimail.GridPanel.superclass.onStoreBeforeload.call(this, store, record, operation);
-        
-        this.detailsPanel.currentId = null;
-    },
-    
-    /**
      * called after a new set of Records has been loaded
      * 
      * @param  {Ext.data.Store} store
