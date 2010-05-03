@@ -49,11 +49,87 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     record: null,
     
     /**
+     * @property defaultInfosPanel holds panel for default information
+     * @type Ext.Panel
+     */
+    defaultInfosPanel: null,
+    
+    /**
+     * @property singleRecordPanel holds panel for single record details
+     * @type Ext.Panel
+     */
+    singleRecordPanel: null,
+    
+    /**
+     * @property multiRecordsPanel holds panel for multi selection aggregates/information
+     * @type Ext.Panel
+     */
+    multiRecordsPanel: null,
+            
+    /**
      * @private
      */
     border: false,
     autoScroll: true,
-    layout: 'fit',
+    layout: 'card',
+    activeItem: 0,
+    
+    /**
+     * get panel for default information
+     * 
+     * @return {Ext.Panel}
+     */
+    getDefaultInfosPanel: function() {
+        if (! this.defaultInfosPanel) {
+            this.defaultInfosPanel = new Ext.Panel(this.defaults);
+        }
+        return this.defaultInfosPanel;
+    },
+    
+    /**
+     * get panel for single record details
+     * 
+     * @return {Ext.Panel}
+     */
+    getSingleRecordPanel: function() {
+        if (! this.singleRecordPanel) {
+            this.singleRecordPanel = new Ext.Panel(this.defaults);
+        }
+        return this.singleRecordPanel;
+    },
+    
+    /**
+     * get panel for multi selection aggregates/information
+     * 
+     * @return {Ext.Panel}
+     */
+    getMultiRecordsPanel: function() {
+        if (! this.multiRecordsPanel) {
+            this.multiRecordsPanel = new Ext.Panel(this.defaults);
+        }
+        return this.multiRecordsPanel;
+    },
+        
+    /**
+     * inits this details panel
+     */
+    initComponent: function() {
+        this.defaults = this.defaults || {};
+        
+        Ext.applyIf(this.defaults, {
+            border: false,
+            autoScroll: true,
+            layout: 'fit'
+        });
+        
+        this.items = [
+            this.getDefaultInfosPanel(),
+            this.getSingleRecordPanel(),
+            this.getMultiRecordsPanel()
+        ];
+        
+        Tine.widgets.grid.DetailsPanel.superclass.initComponent.apply(this, arguments);
+    },
     
     /**
      * update template
@@ -117,14 +193,17 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     onDetailsUpdate: function(sm) {
         var count = sm.getCount();
         if (count === 0 || sm.isFilterSelect) {
-            this.showDefault(this.body);
+            this.layout.setActiveItem(this.getDefaultInfosPanel());
+            this.showDefault(this.getDefaultInfosPanel().body);
             this.record = null;
         } else if (count === 1) {
+            this.layout.setActiveItem(this.getSingleRecordPanel());
             this.record = sm.getSelected();
-            this.updateDetails(this.record, this.body);
+            this.updateDetails(this.record, this.getSingleRecordPanel().body);
         } else if (count > 1) {
+            this.layout.setActiveItem(this.getMultiRecordsPanel());
             this.record = sm.getSelected();
-        	this.showMulti(sm, this.body);
+        	this.showMulti(sm, this.getMultiRecordsPanel().body);
         }
     },
     

@@ -72,6 +72,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
+        /*
         this.defaultPanel = this.getDefaultPanel();
         this.eventDetailsPanel = this.getEventDetailsPanel();
         
@@ -88,6 +89,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         this.items = [
             this.cardPanel
         ];
+        */
         
         // TODO generalize this
         this.containerTpl = new Ext.XTemplate(
@@ -106,36 +108,40 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * 
      * @return {Ext.ux.display.DisplayPanel}
      */
-    getDefaultPanel: function() {
-        return new Ext.ux.display.DisplayPanel ({
-            layout: 'fit',
-            border: false,
-            items: [{
-                layout: 'hbox',
+    getDefaultInfosPanel: function() {
+        if (! this.defaultInfosPanel) {
+            this.defaultInfosPanel = new Ext.ux.display.DisplayPanel ({
+                layout: 'fit',
                 border: false,
-                defaults:{margins:'0 5 0 0'},
-                layoutConfig: {
-                    padding:'5',
-                    align:'stretch'
-                },
                 items: [{
-                    flex: 1,
+                    layout: 'hbox',
                     border: false,
-                    layout: 'ux.display',
+                    defaults:{margins:'0 5 0 0'},
                     layoutConfig: {
-                        background: 'solid',
-                        declaration: this.app.i18n.n_('Event', 'Events', 50)
-                    }
-                }, {
-                    flex: 1,
-                    border: false,
-                    layout: 'ux.display',
-                    layoutConfig: {
-                        background: 'border'
-                    }
+                        padding:'5',
+                        align:'stretch'
+                    },
+                    items: [{
+                        flex: 1,
+                        border: false,
+                        layout: 'ux.display',
+                        layoutConfig: {
+                            background: 'solid',
+                            declaration: this.app.i18n.n_('Event', 'Events', 50)
+                        }
+                    }, {
+                        flex: 1,
+                        border: false,
+                        layout: 'ux.display',
+                        layoutConfig: {
+                            background: 'border'
+                        }
+                    }]
                 }]
-            }]
-        });
+            });
+        }
+        
+        return this.defaultInfosPanel;
     },
     
     /**
@@ -143,121 +149,125 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * 
      * @return {Ext.ux.display.DisplayPanel}
      */
-    getEventDetailsPanel: function() {
-        return new Ext.ux.display.DisplayPanel ({
-            //xtype: 'displaypanel',
-            layout: 'fit',
-            border: false,
-            items: [{
-                layout: 'vbox',
+    getSingleRecordPanel: function() {
+        if (! this.singleRecordPanel) {
+            this.singleRecordPanel = new Ext.ux.display.DisplayPanel ({
+                //xtype: 'displaypanel',
+                layout: 'fit',
                 border: false,
-                layoutConfig: {
-                    align:'stretch'
-                },
                 items: [{
-                    layout: 'hbox',
-                    flex: 0,
-                    height: 16,
+                    layout: 'vbox',
                     border: false,
-                    style: 'padding-left: 5px; padding-right: 5px',
                     layoutConfig: {
                         align:'stretch'
                     },
                     items: [{
-                        flex: 1,
-                        xtype: 'ux.displayfield',
-                        name: 'summary',
-                        style: 'padding-top: 2px',
-                        cls: 'x-ux-display-header'
-                        //fieldLabel: this.app.i18n._('Summary')
-                    }, {
-                        flex: 1,
-                        xtype: 'ux.displayfield',
-                        style: 'text-align: right;',
-                        cls: 'x-ux-display-header',
-                        name: 'container_id',
-                        htmlEncode: false,
-                        renderer: this.containerRenderer.createDelegate(this)
-                    }]
-                }, {
-                    layout: 'hbox',
-                    flex: 1,
-                    border: false,
-                    layoutConfig: {
-                        padding:'5',
-                        align:'stretch'
-                    },
-                    defaults:{
-                        margins:'0 5 0 0'
-                    },
-                    items: [{
-                        flex: 2,
-                        layout: 'ux.display',
-                        labelWidth: 60,
-                        layoutConfig: {
-                            background: 'solid'
-                        },
-                        items: [{
-                            // TODO try to increase padding/margin of first element
-                            /*
-                            style: 'margin-top: 4px',
-                            labelStyle: 'margin-top: 4px',
-                            */
-                            xtype: 'ux.displayfield',
-                            name: 'dtstart',
-                            fieldLabel: this.app.i18n._('Start Time'),
-                            renderer: this.datetimeRenderer.createDelegate(this)
-                        }, {
-                            xtype: 'ux.displayfield',
-                            name: 'dtend',
-                            fieldLabel: this.app.i18n._('End Time'),
-                            renderer: this.datetimeRenderer.createDelegate(this)
-                        }, {
-                            xtype: 'ux.displayfield',
-                            name: 'transp',
-                            fieldLabel: this.app.i18n._('Blocking'),
-                            renderer: this.transpRenderer.createDelegate(this)
-                        }, {
-                            xtype: 'ux.displayfield',
-                            name: 'location',
-                            fieldLabel: this.app.i18n._('Location')
-                        }, {
-                            xtype: 'ux.displayfield',
-                            name: 'organizer',
-                            fieldLabel: this.app.i18n._('Organizer'),
-                            renderer: function(organizer) {
-                                return organizer && organizer.n_fn ? organizer.n_fn : '';
-                            }
-                        }]
-                    }, {
-                        flex: 2,
-                        layout: 'ux.display',
-                        labelAlign: 'top',
-                        autoScroll: true,
-                        layoutConfig: {
-                            background: 'solid'
-                        },
-                        items: [{
-                            xtype: 'ux.displayfield',
-                            name: 'attendee',
-                            nl2br: true,
-                            fieldLabel: this.app.i18n._('Attendee'),
-                            renderer: this.attendeeRenderer
-                        }]
-                    }, {
-                        flex: 3,
-                        layout: 'fit',
-                        
+                        layout: 'hbox',
+                        flex: 0,
+                        height: 16,
                         border: false,
+                        style: 'padding-left: 5px; padding-right: 5px',
+                        layoutConfig: {
+                            align:'stretch'
+                        },
                         items: [{
-                            cls: 'x-ux-display-background-border',
-                            xtype: 'ux.displaytextarea',
-                            name: 'description'
+                            flex: 1,
+                            xtype: 'ux.displayfield',
+                            name: 'summary',
+                            style: 'padding-top: 2px',
+                            cls: 'x-ux-display-header'
+                            //fieldLabel: this.app.i18n._('Summary')
+                        }, {
+                            flex: 1,
+                            xtype: 'ux.displayfield',
+                            style: 'text-align: right;',
+                            cls: 'x-ux-display-header',
+                            name: 'container_id',
+                            htmlEncode: false,
+                            renderer: this.containerRenderer.createDelegate(this)
+                        }]
+                    }, {
+                        layout: 'hbox',
+                        flex: 1,
+                        border: false,
+                        layoutConfig: {
+                            padding:'5',
+                            align:'stretch'
+                        },
+                        defaults:{
+                            margins:'0 5 0 0'
+                        },
+                        items: [{
+                            flex: 2,
+                            layout: 'ux.display',
+                            labelWidth: 60,
+                            layoutConfig: {
+                                background: 'solid'
+                            },
+                            items: [{
+                                // TODO try to increase padding/margin of first element
+                                /*
+                                style: 'margin-top: 4px',
+                                labelStyle: 'margin-top: 4px',
+                                */
+                                xtype: 'ux.displayfield',
+                                name: 'dtstart',
+                                fieldLabel: this.app.i18n._('Start Time'),
+                                renderer: this.datetimeRenderer.createDelegate(this)
+                            }, {
+                                xtype: 'ux.displayfield',
+                                name: 'dtend',
+                                fieldLabel: this.app.i18n._('End Time'),
+                                renderer: this.datetimeRenderer.createDelegate(this)
+                            }, {
+                                xtype: 'ux.displayfield',
+                                name: 'transp',
+                                fieldLabel: this.app.i18n._('Blocking'),
+                                renderer: this.transpRenderer.createDelegate(this)
+                            }, {
+                                xtype: 'ux.displayfield',
+                                name: 'location',
+                                fieldLabel: this.app.i18n._('Location')
+                            }, {
+                                xtype: 'ux.displayfield',
+                                name: 'organizer',
+                                fieldLabel: this.app.i18n._('Organizer'),
+                                renderer: function(organizer) {
+                                    return organizer && organizer.n_fn ? organizer.n_fn : '';
+                                }
+                            }]
+                        }, {
+                            flex: 2,
+                            layout: 'ux.display',
+                            labelAlign: 'top',
+                            autoScroll: true,
+                            layoutConfig: {
+                                background: 'solid'
+                            },
+                            items: [{
+                                xtype: 'ux.displayfield',
+                                name: 'attendee',
+                                nl2br: true,
+                                fieldLabel: this.app.i18n._('Attendee'),
+                                renderer: this.attendeeRenderer
+                            }]
+                        }, {
+                            flex: 3,
+                            layout: 'fit',
+                            
+                            border: false,
+                            items: [{
+                                cls: 'x-ux-display-background-border',
+                                xtype: 'ux.displaytextarea',
+                                name: 'description'
+                            }]
                         }]
                     }]
                 }]
-            }]
-        });
+            });
+        }
+        
+        return this.singleRecordPanel;
     },
     
     /**
@@ -267,29 +277,30 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * @param {Mixed} body
      */
     updateDetails: function(record, body) {
-        this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.eventDetailsPanel));
+        //this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.eventDetailsPanel));
         
-        this.eventDetailsPanel.loadRecord.defer(100, this.eventDetailsPanel, [record]);
-    },
-    
-    /**
-     * show default panel
-     * 
-     * @param {Mixed} body
-     */
-    showDefault: function(body) {
-        this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.defaultPanel));
-    },
-    
-    /**
-     * show template for multiple rows
-     * 
-     * @param {Ext.grid.RowSelectionModel} sm
-     * @param {Mixed} body
-     */
-    showMulti: function(sm, body) {
-        //if (this.multiTpl) {
-        //    this.multiTpl.overwrite(body);
-        //}
+        this.getSingleRecordPanel().loadRecord.defer(100, this.getSingleRecordPanel(), [record]);
+        //return this.supr().updateDetails.apply(this, arguments);
     }
+    
+//    /**
+//     * show default panel
+//     * 
+//     * @param {Mixed} body
+//     */
+//    showDefault: function(body) {
+//        this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.defaultPanel));
+//    },
+//    
+//    /**
+//     * show template for multiple rows
+//     * 
+//     * @param {Ext.grid.RowSelectionModel} sm
+//     * @param {Mixed} body
+//     */
+//    showMulti: function(sm, body) {
+//        //if (this.multiTpl) {
+//        //    this.multiTpl.overwrite(body);
+//        //}
+//    }
 });
