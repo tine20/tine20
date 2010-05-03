@@ -31,6 +31,31 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
         date_default_timezone_set('US/Pacific');
     }
 
+	/**
+     * Tests if a task can be saved.
+     */
+    public function testControllerParams()
+    {
+        
+        $request = new Zend_Controller_Request_Http(); 
+        $request->setControllerName('Addressbook_Controller_Contact');
+        $request->setActionName('getMultiple');
+        $request->setParam('personasContactIds', array(2, 3));
+        
+        $task = new Tinebase_Scheduler_Task();
+        $task->setMonths("Jan-Dec");
+        $task->setWeekdays("Sun-Sat");
+        $task->setDays("1-31");
+        $task->setHours("0-23");
+        $task->setMinutes("0/1");
+        $task->setRequest($request);
+        
+        $scheduler = Tinebase_Core::getScheduler();
+        $scheduler->addTask('Addressbook_Controller_Contact', $task);
+        $return = $scheduler->run();
+    	$this->assertEquals(2, count($return['Addressbook_Controller_Contact']));
+    }
+    
     /**
      * Tests if a task can be saved.
      */
@@ -325,6 +350,15 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($responses['test']), 'Received empty response');
     }
 
+    /**
+     * 
+     */
+    public function testCanRunTask()
+    {
+    	$scheduler = Tinebase_Core::getScheduler();
+    	$scheduler->run();
+    }
+    
     /**
      * Tests if a valid (i.e., included) backend can be loaded.
      */
