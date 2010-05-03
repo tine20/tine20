@@ -21,8 +21,8 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
     public function run()
     {
         foreach ($this->getRequests() as $request) {
-            $controller = Tinebase_Controller_Abstract::getController($request->getControllerName());
-            call_user_func(array($controller, $request->getActionName()), $request->getUserParams());
+        	$controller = Tinebase_Controller_Abstract::getController($request->getControllerName());
+            return call_user_func_array(array($controller, $request->getActionName()), $request->getUserParams());
         }
     }
 }
