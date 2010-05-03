@@ -75,8 +75,12 @@ Ext.ux.WindowFactory.prototype = {
     getExtWindow: function(c) {
         // add titleBar
         c.height = c.height + 20;
-        c.layout = c.layout || 'fit';
         
+        //limit the window size
+        c.height = Math.min(Ext.getBody().getBox().height, c.height);
+        c.width = Math.min(Ext.getBody().getBox().width, c.width);
+        
+        c.layout = c.layout || 'fit';
         c.items = this.getCenterPanel(c);
         
         // we can only handle one window yet
@@ -96,7 +100,7 @@ Ext.ux.WindowFactory.prototype = {
         var items;
         if (config.contentPanelConstructor) {
             config.contentPanelConstructorConfig = config.contentPanelConstructorConfig || {};
-            
+
             /*
              * IE fix for listeners
              * 
@@ -156,6 +160,11 @@ Ext.ux.WindowFactory.prototype = {
         
         // Names are only allowed to be alnum
         config.name = Ext.isString(config.name) ? config.name.replace(/[^a-zA-Z0-9_]/g, '') : config.name;
+        
+        if (! config.title && config.contentPanelConstructorConfig && config.contentPanelConstructorConfig.title) {
+        	config.title = config.contentPanelConstructorConfig.title;
+            delete config.contentPanelConstructorConfig.title;
+        }
         
         switch (windowType) {
             case 'Browser' :

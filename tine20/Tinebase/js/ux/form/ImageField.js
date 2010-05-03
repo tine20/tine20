@@ -181,14 +181,13 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                         items: cropper
                     });
                     
-                    var win = new Ext.Window({
+                    var win = Tine.WindowFactory.getWindow({
                         width: 320,
                         height: 320,
                         title: _('Crop Image'),
                         layout: 'fit',
                         items: dlg
                     });
-                    win.show();
                 }
             
             },{
@@ -218,7 +217,12 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             width: -1
         }).toString();
         
-        Tine.Tinebase.common.openWindow('showImage', url, 800, 600);
+        var window = Tine.WindowFactory.getWindow({
+        	url: url,
+        	name: 'showImage',
+            width: 800,
+            height: 600
+        });
     },
     
     updateImage: function() {

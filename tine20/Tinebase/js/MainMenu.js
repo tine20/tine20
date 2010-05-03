@@ -195,7 +195,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
      */
     onChangePassword: function() {
         
-        var passwordDialog = new Ext.Window({
+        var passwordDialog = Tine.WindowFactory.getWindow({
             title: String.format(_('Change Password For "{0}"'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName),
             id: 'changePassword_window',
             closeAction: 'close',
@@ -286,8 +286,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                     }                    
                 }]
             })
-        });
-        passwordDialog.show();  
+        }); 
     },
     
     /**

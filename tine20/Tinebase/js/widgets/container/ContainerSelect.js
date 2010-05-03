@@ -468,7 +468,19 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 			this.windowHeight = Ext.getBody().getHeight(true) * 0.7;
 		}
 
-        this.win = new Ext.Window({
+        this.tree = new Tine.widgets.container.TreePanel({
+        	allowMultiSelection: false,
+            containerName: this.TriggerField.containerName,
+            containersName: this.TriggerField.containersName,
+            appName: this.TriggerField.appName,
+            defaultContainer: this.TriggerField.defaultContainer,
+            requiredGrant: this.requiredGrant
+        });
+        
+        this.tree.on('click', this.onTreeNodeClick, this);
+        this.tree.on('dblclick', this.onTreeNoceDblClick, this);
+		
+        this.win = Tine.WindowFactory.getWindow({
             title: this.title,
             closeAction: 'close',
             modal: true,
@@ -484,24 +496,10 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
             buttons: [
                 this.cancleAction,
                 this.okAction
-            ]
+            ],
+            
+            items: [ this.tree ]
         });
-        
-        this.tree = new Tine.widgets.container.TreePanel({
-            allowMultiSelection: false,
-            containerName: this.TriggerField.containerName,
-            containersName: this.TriggerField.containersName,
-            appName: this.TriggerField.appName,
-            defaultContainer: this.TriggerField.defaultContainer,
-            requiredGrant: this.requiredGrant
-        });
-        
-        this.tree.on('click', this.onTreeNodeClick, this);
-        this.tree.on('dblclick', this.onTreeNoceDblClick, this);
-        
-        this.win.add(this.tree);
-        
-        this.win.show();
     },
     
     /**

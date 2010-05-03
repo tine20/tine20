@@ -72,7 +72,7 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     },
     
     handleClick: function() {
-        this.win = new Ext.Window({
+        this.win = Tine.WindowFactory.getWindow({
             layout: 'fit',
             width: 300,
             height: 150,
@@ -97,8 +97,6 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
                 }]
             }]
         });
-        
-        this.win.show();
     },
     
     onCancel: function() {

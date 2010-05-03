@@ -48,11 +48,6 @@ Tine.Calendar.AdminPanel = Ext.extend(Ext.TabPanel, {
         })];
         
         Tine.Calendar.AdminPanel.superclass.initComponent.call(this);
-    },
-    
-    onRender: function() {
-        this.supr().onRender.apply(this, arguments);
-        this.window.setTitle(this.windowTitle);
     }
 });
     

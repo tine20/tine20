@@ -24,10 +24,6 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.dialog');
  * TODO add app grid to show results when dry run is selected
  */
 Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    /**
-     * @cfg {String} title of window
-     */
-    windowTitle: '',
     
     /**
      * @private
@@ -55,11 +51,6 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         Tine.widgets.dialog.ImportDialog.superclass.initComponent.call(this);
-    },
-    
-    onRender: function() {
-        this.supr().onRender.apply(this, arguments);
-        this.window.setTitle(this.windowTitle);
     },
     
     /**

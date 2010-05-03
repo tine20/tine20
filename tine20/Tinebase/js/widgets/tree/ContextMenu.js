@@ -181,7 +181,7 @@ Tine.widgets.tree.ContextMenu = {
                 if (this.ctxNode) {
                     var node = this.ctxNode;
                     var window = Tine.widgets.container.GrantsDialog.openWindow({
-                        windowTitle: String.format(_('Manage Permissions for {0} "{1}"'), config.nodeName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
+                        title: String.format(_('Manage Permissions for {0} "{1}"'), config.nodeName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
                         containerName: config.nodeName,
                         grantContainer: node.attributes.container
                     });

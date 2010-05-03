@@ -42,22 +42,12 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Crm.Model.Settings,
     recordProxy: Tine.Crm.settingsBackend,
     evalGrants: false,
-
-    /**
-     * @cfg {String} title of window
-     */
-    windowTitle: '',
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      * @private
      */
     updateToolbars: function() {
-    },
-    
-    onRender: function() {
-        this.supr().onRender.apply(this, arguments);
-        this.window.setTitle(this.windowTitle);
     },
     
     /**

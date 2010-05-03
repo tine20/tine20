@@ -193,9 +193,9 @@ Tine.Phone.dialPhoneNumber = function(number) {
     	// open dialer box (with phone and lines selection)
         var dialerPanel = new Tine.Phone.DialerPanel({
             number: (number) ? number : null
-        });           
-        var dialer = new Ext.Window({
-            //title: this.translation._('Dial phone number'),
+        });
+        
+        var dialer = Tine.WindowFactory.getWindow({
             title: 'Dial phone number',
             id: 'dialerWindow',
             modal: true,
@@ -205,10 +205,8 @@ Tine.Phone.dialPhoneNumber = function(number) {
             plain:true,
             bodyStyle:'padding:5px;',
             closeAction: 'close',
-            items: [dialerPanel]        
+            items: [dialerPanel] 
         });
-    
-        dialer.show();          	
 	}
 };
 

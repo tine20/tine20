@@ -219,19 +219,13 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 
             });
             
-            this.conflictConfirmWin = new Ext.Window({
+            this.conflictConfirmWin = Tine.WindowFactory.getWindow({
                 modal: true,
-                width: Ext.isIE ? 350 : 'auto',
+                width: 350,
                 cls: 'x-window-dlg',
                 closable: false,
                 title: this.app.i18n._('Scheduling Conflict'),
-                html: '<div class="ext-mb-icon ext-mb-question"></div>' +
-                      '<div class="ext-mb-content"><span class="ext-mb-text"></span>' +
-                            '<div class = "cal-conflict-heading">' +
-                                this.app.i18n._('The following attendee are busy at the requested time:') + 
-                            '</div>' +
-                            busyAttendeeHTML +
-                      '<br /><div class="ext-mb-fix-cursor"></div></div>',
+
                 buttons: [{
                     text: this.app.i18n._('Ignore Conflict'),
                     scope: this,
@@ -247,9 +241,20 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                         this.view.fireEvent('dblclick', this.view, event);
                         this.conflictConfirmWin.close();
                     }
+                }],
+                
+                items: [{                	
+                	border: false,
+                	unstyled: true,
+                    html: '<div class="ext-mb-icon ext-mb-question"></div>' +
+                          '<div class="ext-mb-content"><span class="ext-mb-text"></span>' +
+                                '<div class = "cal-conflict-heading">' +
+                                    this.app.i18n._('The following attendee are busy at the requested time:') + 
+                                '</div>' +
+                                busyAttendeeHTML +
+                          '<br /><div class="ext-mb-fix-cursor"></div></div>'
                 }]
             });
-            this.conflictConfirmWin.show();
             
         } else {
             Tine.Tinebase.ExceptionHandler.handleRequestException(error);
@@ -280,7 +285,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             );
         } else if (event.isRecurInstance()) {
             this.deleteMethodWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
-                windowTitle: this.app.i18n._('Delete Event'),
+                title: this.app.i18n._('Update Event'),
                 scope: this,
                 options: [
                     {text: this.app.i18n._('Update nothing'), name: 'cancel'},

@@ -409,7 +409,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onImport: function(btn) {
         var popupWindow = Tine.widgets.dialog.ImportDialog.openWindow({
-            windowTitle: btn.getText(),
             appName: 'Addressbook',
             // update grid after import
             listeners: {

@@ -86,6 +86,10 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         
         this.windowManager = Ext.ux.PopupWindowMgr;
         Ext.ux.PopupWindow.superclass.initComponent.call(this);
+        
+        //limit the window size
+        this.width = Math.min(screen.availWidth, this.width);
+        this.height = Math.min(screen.availHeight, this.height);
 
         // open popup window first to save time
         this.popup = Tine.Tinebase.common.openWindow(this.name, this.url, this.width, this.height);

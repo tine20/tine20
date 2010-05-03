@@ -136,11 +136,6 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
     onCancel: function() {
         this.handler.call(this.scope, 'cancel');
         this.window.close();
-    },
-    
-    onRender: function() {
-        this.supr().onRender.apply(this, arguments);
-        this.window.setTitle(this.windowTitle);
     }
 });
 

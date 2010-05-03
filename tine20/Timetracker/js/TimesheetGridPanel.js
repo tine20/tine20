@@ -146,8 +146,9 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 anchor: '90%'
             }
         });
-        var win = new Ext.Window({
+        var win = Tine.WindowFactory.getWindow({
             title: String.format(_('Update {0} records'), sm.getCount()),
+            modal: true,
             width: 300,
             height: 150,
             layout: 'fit',
@@ -199,7 +200,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }
             }]
         });
-        win.show();
     },
     // END OF QUICK HACK
     
