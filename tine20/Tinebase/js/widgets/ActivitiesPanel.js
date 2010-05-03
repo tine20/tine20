@@ -260,17 +260,71 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
          * add a new note (show prompt)
          */
         addNote: function(_button, _event) {
-            Ext.Msg.prompt(
-                this.translation._('Add Note'),
-                this.translation._('Enter new note:'), 
-                function(btn, text) {
-                    if (btn == 'ok'){
-                        this.handlers.onNoteAdd(text, _button.typeId);
-                    }
-                }, 
-                this,
-                40 // height of input area
-            );            
+
+            this.formPanel = new Ext.FormPanel({
+                layout: 'form',
+                labelAlign: 'top',
+                border: true,
+                frame: true,
+                items:[{                    
+                    xtype: 'textarea',
+                    name: 'notification',
+                    fieldLabel: this.translation._('Enter new note:'),
+                    labelSeparator: '',
+                    anchor: '100% 100%'
+                }]
+            });
+            
+            this.onClose = function() {
+                this.window.close();
+            };
+
+            this.onCancel = function() {
+                this.onClose();
+            };
+
+            this.onOk = function() {
+                text = this.formPanel.getForm().findField('notification').getValue();
+                this.handlers.onNoteAdd(text, _button.typeId);
+                this.onClose();
+            };
+            
+            this.cancleAction = new Ext.Action({
+                text: _('Cancel'),
+                iconCls: 'action_cancel',
+                minWidth: 70,
+                handler: this.onCancel,
+                scope: this
+            });
+            
+            this.okAction = new Ext.Action({
+                text: _('Ok'),
+                iconCls: 'action_saveAndClose',
+                minWidth: 70,
+                handler: this.onOk,
+                scope: this
+            });
+           
+            this.window = Tine.WindowFactory.getWindow({
+                title: this.translation._('Add Note'),
+                width: 500,
+                height: 260,
+                modal: true,
+                
+                layout: 'fit',
+                buttonAlign: 'right',
+                plain: true,
+                bodyStyle: 'padding:5px;',
+                                
+                buttons: [
+                    this.cancleAction,
+                    this.okAction                                    
+                ],
+                
+                items: [
+                    this.formPanel
+                ]
+            });
         },       
         
         /**
