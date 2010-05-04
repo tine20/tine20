@@ -18,15 +18,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-/** Zend_Controller_Request_Abstract */
-require_once 'Zend/Controller/Request/Abstract.php';
-
-/** Zend_Controller_Router */
-require_once 'Zend/Controller/Router/Route.php';
-
-/** Zend_Scheduler_Task_Rule */
-require_once 'Zend/Scheduler/Task/Rule.php';
-
 /**
  * Automatic scheduler task.
  *
@@ -39,7 +30,9 @@ class Zend_Scheduler_Task implements Zend_Scheduler_Task_Interface
 {
     protected $_frontController = null;
     
-    /** @var Zend_Date Request time */
+    /** 
+     * @var Zend_Date Request time 
+     */
     protected $_time = null;
 
     /** @var string First time the task is allowed to run */
@@ -69,7 +62,18 @@ class Zend_Scheduler_Task implements Zend_Scheduler_Task_Interface
     {
         $this->setOptions($options);
     }
-
+    
+    /**
+     * static task getter
+     * 
+     * @param  array $options
+     * @return Zend_Scheduler_Task
+     */
+    public static function getTask(array $options = array())
+    {
+        return new Zend_Scheduler_Task($options);
+    }
+    
 	/**
      * Sets the Task options.
      * 
