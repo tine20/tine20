@@ -447,26 +447,29 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 
     },
     
-    createTreeNodes: function(_appList) {
+    createTreeNodes: function(appList) {
         // clear old childs
         var toRemove = [];
         this.rootNode.eachChild(function(node){
             toRemove.push(node);
         });
         
-        for(var i=0, j=_appList.length; i<j; i++){
+        for(var i=0, j=appList.length; i<j; i++){
             // don't duplicate tree nodes on 'apply changes'
             toRemove[i] ? toRemove[i].remove() : null;
             
-            var app = _appList[i];
-            if (app.name == 'Tinebase' /*|| app.status == 'disabled'*/) {
+            var appData = appList[i];
+            if (appData.name == 'Tinebase' /*|| appData.status == 'disabled'*/) {
                 continue;
             }
+            // get translated app title
+            var app = Tine.Tinebase.appMgr.get(appData.name)
+            var appTitle = (app) ? app.getTitle() : appData.name;
             
             this.rootNode.appendChild(new Ext.tree.TreeNode({
-                text: app.name,
-                id: app.id,
-                checked: this.anyContext || this.tag.get('contexts').indexOf(app.id) > -1,
+                text: appTitle,
+                id: appData.id,
+                checked: this.anyContext || this.tag.get('contexts').indexOf(appData.id) > -1,
                 leaf: true,
                 icon: "s.gif"
             }));
