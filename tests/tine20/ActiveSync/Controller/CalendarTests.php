@@ -148,7 +148,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         $this->objects['eventDaily'] = $eventDaily;
         
         ########### define test filter
-        $filterBackend = new Tinebase_PersistentFilter();
+        $filterBackend = new Tinebase_PersistentFilter_Backend_Sql();
         
         try {
             $filter = $filterBackend->getByProperty('Calendar Sync Test', 'name');
@@ -211,7 +211,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         ActiveSync_Controller_Device::getInstance()->delete($this->objects['devicePalm']);
         ActiveSync_Controller_Device::getInstance()->delete($this->objects['deviceIPhone']);
         
-        $filterBackend = new Tinebase_PersistentFilter();
+        $filterBackend = new Tinebase_PersistentFilter_Backend_Sql();
         $filterBackend->delete($this->objects['filter']->getId());
     }
     

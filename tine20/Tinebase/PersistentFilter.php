@@ -3,11 +3,11 @@
  * Tine 2.0
  *
  * @package     Tinebase
- * @subpackage  Backend
+ * @subpackage  PersistentFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Timesheet.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  * 
  * @todo        add account id to sql statements to check acl
  * 
@@ -15,19 +15,44 @@
 
 
 /**
- * backend for persistent filters
- *
- * @package     Timetracker
- * @subpackage  Backend
+ * persistent filter controller
  */
-class Tinebase_PersistentFilter extends Tinebase_Backend_Sql_Abstract
+class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
 {
     /**
-     * Table name without prefix
+     * application name
      *
      * @var string
      */
-    protected $_tableName = 'filter';
+    protected $_applicationName = 'Tinebase';
+    
+    /**
+     * check for container ACLs?
+     *
+     * @var boolean
+     */
+    protected $_doContainerACLChecks = FALSE;
+
+    /**
+     * do right checks - can be enabled/disabled by _setRightChecks
+     * 
+     * @var boolean
+     */
+    protected $_doRightChecks = FALSE;
+    
+    /**
+     * delete or just set is_delete=1 if record is going to be deleted
+     *
+     * @var boolean
+     */
+    protected $_purgeRecords = FALSE;
+    
+    /**
+     * ommit mod log for this records
+     * 
+     * @var boolean
+     */
+    protected $_ommitModLog = TRUE;
     
     /**
      * Model name
@@ -35,13 +60,43 @@ class Tinebase_PersistentFilter extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_modelName = 'Tinebase_Model_PersistentFilter';
+    
+    /**
+     * @var Tinebase_PersistentFilter
+     */
+    private static $_instance = NULL;
+    
+    
+    /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton 
+     */
+    private function __construct() {
+        $this->_backend         = new Tinebase_PersistentFilter_Backend_Sql();
+        $this->_currentAccount  = Tinebase_Core::getUser();
+    }
 
     /**
-     * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
-     *
-     * @var boolean
+     * don't clone. Use the singleton.
      */
-    protected $_modlogActive = TRUE;
+    private function __clone() 
+    {
+        
+    }
+    
+    /**
+     * singleton
+     *
+     * @return Tinebase_PersistentFilter
+     */
+    public static function getInstance() 
+    {
+        if (self::$_instance === NULL) {
+            self::$_instance = new Tinebase_PersistentFilter();
+        }
+        return self::$_instance;
+    }
     
     /**
      * returns persistent filter identified by id
@@ -51,49 +106,10 @@ class Tinebase_PersistentFilter extends Tinebase_Backend_Sql_Abstract
      */
     public static function getFilterById($_id)
     {
-        $obj = new Tinebase_PersistentFilter();
-        $persistentFilter = $obj->get($_id);
+        $persistentFilter = self::getInstance()->get($_id);
         
         return $persistentFilter->filters;
     }
     
-    /**
-     * converts record into raw data for adapter
-     *
-     * @param  Tinebase_Record_Abstract $_record
-     * @return array
-     */
-    protected function _recordToRawData($_record)
-    {
-        $rawData = $_record->toArray();
-        $rawData['filters'] = Zend_Json::encode($rawData['filters']);
-        
-        return $rawData;
-    }
     
-    /**
-     * converts raw data from adapter into a single record
-     *
-     * @param  array $_data
-     * @return Tinebase_Record_Abstract
-     */
-    protected function _rawDataToRecord(array $_rawData)
-    {
-        $_rawData['filters'] = Zend_Json::decode($_rawData['filters']);
-        return new $this->_modelName($_rawData, true);
-    }
-    
-    /**
-     * converts raw data from adapter into a set of records
-     *
-     * @param  array $_rawDatas of arrays
-     * @return Tinebase_Record_RecordSet
-     */
-    protected function _rawDataToRecordSet(array $_rawDatas)
-    {
-        foreach($_rawDatas as $idx => $rawData) {
-            $_rawDatas[$idx]['filters'] = Zend_Json::decode($rawData['filters']);
-        }
-        return new Tinebase_Record_RecordSet($this->_modelName, $_rawDatas, true);
-    }
 }

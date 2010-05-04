@@ -56,7 +56,7 @@ class ActiveSync_Controller_DeviceTests extends PHPUnit_Framework_TestCase
         $this->objects['device'] = ActiveSync_Controller_Device::getInstance()->create($testDevice);
         
         ########### define test filter
-        $filterBackend = new Tinebase_PersistentFilter();
+        $filterBackend = new Tinebase_PersistentFilter_Backend_Sql();
         
         try {
             $filter = $filterBackend->getByProperty('Sync Test', 'name');
@@ -90,7 +90,7 @@ class ActiveSync_Controller_DeviceTests extends PHPUnit_Framework_TestCase
     {
         ActiveSync_Controller_Device::getInstance()->delete($this->objects['device']);
         
-        $filterBackend = new Tinebase_PersistentFilter();
+        $filterBackend = new Tinebase_PersistentFilter_Backend_Sql();
         $filterBackend->delete($this->objects['filter']->getId());
     }
     
@@ -110,7 +110,6 @@ class ActiveSync_Controller_DeviceTests extends PHPUnit_Framework_TestCase
      */
     public function testSetDeviceContentFilter()
     {        
-        #$filter = Tinebase_PersistentFilter::getFilterById($_filterId);
         ActiveSync_Controller_Device::getInstance()->setDeviceContentFilter(
             $this->objects['device']->getId(), 
             ActiveSync_Controller::CLASS_CONTACTS, 

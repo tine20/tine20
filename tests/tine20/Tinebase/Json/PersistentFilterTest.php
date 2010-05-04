@@ -45,8 +45,10 @@ class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
     
     public function tearDown()
     {
+        // purge
+        $backend = new Tinebase_PersistentFilter_Backend_Sql();
         foreach (array_unique($this->_testFilterIds) as $filterId) {
-            $this->_uit->delete($filterId);
+            $backend->delete($filterId);
         }
     }
     

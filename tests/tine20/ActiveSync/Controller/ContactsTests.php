@@ -179,7 +179,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
 
         
         ########### define test filter
-        $filterBackend = new Tinebase_PersistentFilter();
+        $filterBackend = new Tinebase_PersistentFilter_Backend_Sql();
         
         try {
             $filter = $filterBackend->getByProperty('Contacts Sync Test', 'name');
@@ -240,7 +240,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         ActiveSync_Controller_Device::getInstance()->delete($this->objects['devicePalm']);
         ActiveSync_Controller_Device::getInstance()->delete($this->objects['deviceIPhone']);
         
-        $filterBackend = new Tinebase_PersistentFilter();
+        $filterBackend = new Tinebase_PersistentFilter_Backend_Sql();
         $filterBackend->delete($this->objects['filter']->getId());
     }
     

@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  Filter
+ * @subpackage  PersistentFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -19,11 +19,11 @@
 class Tinebase_Frontend_Json_PersistentFilter
 {
     /**
-     * persistent filter backend
+     * persistent filter controller
      *
      * @var Tinebase_PersistentFilter
      */
-    protected $_backend;
+    protected $_controller;
     
     /**
      * the constructor
@@ -31,7 +31,7 @@ class Tinebase_Frontend_Json_PersistentFilter
      */
     public function __construct()
     {
-        $this->_backend = new Tinebase_PersistentFilter();
+        $this->_controller = Tinebase_PersistentFilter::getInstance();
     }
     
     /**
@@ -45,7 +45,7 @@ class Tinebase_Frontend_Json_PersistentFilter
         $decodedFilter = is_array($filter) ? $filter : Zend_Json::decode($filter);
         $filter = new Tinebase_Model_PersistentFilterFilter(!empty($decodedFilter) ? $decodedFilter : array());
         
-        $persistentFilters = $this->_backend->search($filter, new Tinebase_Model_Pagination(array(
+        $persistentFilters = $this->_controller->search($filter, new Tinebase_Model_Pagination(array(
             'dir'       => 'ASC',
             'sort'      => array('name', 'creation_time')
         )));
@@ -59,7 +59,7 @@ class Tinebase_Frontend_Json_PersistentFilter
         
         return array(
             'results'       => $persistentFiltersData,
-            'totalcount'    => $this->_backend->searchCount($filter)
+            'totalcount'    => $this->_controller->searchCount($filter)
         );
     }
 
@@ -71,7 +71,7 @@ class Tinebase_Frontend_Json_PersistentFilter
      */
     public function get($filterId)
     {
-        $persistentFilter = $this->_backend->get($filterId);
+        $persistentFilter = $this->_controller->get($filterId);
         
         $persistentFilterData = $persistentFilter->toArray(FALSE);
         $persistentFilterData['filters'] = $persistentFilterData['filters']->toArray(TRUE);
@@ -88,9 +88,9 @@ class Tinebase_Frontend_Json_PersistentFilter
      */
     public function rename($filterId, $newName)
     {
-        $persistentFilter = $this->_backend->get($filterId);
+        $persistentFilter = $this->_controller->get($filterId);
         $persistentFilter->name = $newName;
-        $this->_backend->update($persistentFilter);
+        $this->_controller->update($persistentFilter);
         
         return $this->get($filterId);
     }
@@ -126,17 +126,17 @@ class Tinebase_Frontend_Json_PersistentFilter
             array('field' => 'name',            'operator' => 'equals', 'value' => $name),
             array('field' => 'application_id',  'operator' => 'equals', 'value' => $persistentFilter->application_id),
         ));
-        $existing = $this->_backend->search($searchFilter);
+        $existing = $this->_controller->search($searchFilter);
         
         if (count($existing) > 0) {
             $persistentFilter->setId($existing[0]->getId());
 
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($persistentFilter, 'update', $existing[0]);            
-            $persistentFilter = $this->_backend->update($persistentFilter);
+            $persistentFilter = $this->_controller->update($persistentFilter);
             
         } else {
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($persistentFilter, 'create');
-            $persistentFilter = $this->_backend->create($persistentFilter);
+            $persistentFilter = $this->_controller->create($persistentFilter);
         }
         
         return $this->get($persistentFilter->getId());
@@ -149,12 +149,12 @@ class Tinebase_Frontend_Json_PersistentFilter
      */
     public function delete($filterId) 
     {
-        $persistentFilter = $this->_backend->get($filterId);
+        $persistentFilter = $this->_controller->get($filterId);
         if (Tinebase_Core::getUser()->getId() != $persistentFilter->account_id) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to delete this filter.');
         }
         
-        $this->_backend->delete($filterId);
+        $this->_controller->delete($filterId);
 
         return array(
             'status'    => 'success'
