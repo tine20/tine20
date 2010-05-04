@@ -61,6 +61,13 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_purgeRecords = TRUE;
     
     /**
+     * ommit mod log for this records
+     * 
+     * @var boolean
+     */
+    protected $_ommitModLog = FALSE;
+    
+    /**
      * resolve customfields in search()
      *
      * @var boolean
@@ -357,7 +364,11 @@ abstract class Tinebase_Controller_Record_Abstract
                 $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
                 $modLog->manageConcurrentUpdates($_record, $currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
                 $modLog->setRecordMetaData($_record, 'update', $currentRecord);
-                $currentMods = $modLog->writeModLog($_record, $currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
+                if ($this->_ommitModLog !== TRUE) {
+                    $currentMods = $modLog->writeModLog($_record, $currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
+                } else {
+                    $currentMods = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
+                }
             }
             
             $this->_inspectUpdate($_record, $currentRecord);
