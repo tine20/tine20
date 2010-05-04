@@ -209,7 +209,21 @@ Tine.Admin.Applications.Main = function() {
         Tine.Tinebase.MainScreen.setActiveToolbar(applicationToolbar, true);
     };
     
-    var _renderEnabled = function (_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
+    /**
+     * translate and return app title
+     * 
+     * TODO try to generalize this fn as this gets used in Tags.js + RoleEditDialog.js as well 
+     *      -> this could be moved to Tine.Admin.Application after Admin js refactoring
+     */
+    var _renderTitle = function(appName) {
+        var app = Tine.Tinebase.appMgr.get(appName);
+        return (app) ? app.getTitle() : appName;
+    };
+
+    /**
+     * render enabled field (translate)
+     */
+    var _renderEnabled = function(_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
         var translation = new Locale.Gettext();
         translation.textdomain('Admin');
         
@@ -269,7 +283,7 @@ Tine.Admin.Applications.Main = function() {
             },
             columns: [
                 { header: this.translation.gettext('Order'),   id: 'order', dataIndex: 'order', width: 50},
-                { header: this.translation.gettext('Name'),    id: 'name', dataIndex: 'name'},
+                { header: this.translation.gettext('Name'),    id: 'name', dataIndex: 'name', renderer: _renderTitle},
                 { header: this.translation.gettext('Status'),  id: 'status', dataIndex: 'status', width: 150, renderer: _renderEnabled},
                 { header: this.translation.gettext('Version'), id: 'version', dataIndex: 'version', width: 70}
             ]
