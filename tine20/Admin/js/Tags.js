@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * TODO         split into two files (grid & edit dlg)
@@ -363,8 +363,8 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             // fetch contexts
             tag.data.contexts = [];
             var anycontext = true;
-            var confinePanel = Ext.getCmp('adminSharedTagsConfinePanel');
-            confinePanel.getRootNode().eachChild(function(node){
+            var contextPanel = Ext.getCmp('adminSharedTagsContextPanel');
+            contextPanel.getRootNode().eachChild(function(node){
                 if (node.attributes.checked) {
                     tag.data.contexts.push(node.id);
                 } else {
@@ -483,9 +483,9 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             draggable:false,
             allowDrop:false
         });
-        var confinePanel = new Ext.tree.TreePanel({
+        var contextPanel = new Ext.tree.TreePanel({
             title: this.translation.gettext('Context'),
-            id: 'adminSharedTagsConfinePanel',
+            id: 'adminSharedTagsContextPanel',
             rootVisible: true,
             border: false,
             root: this.rootNode
@@ -553,7 +553,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     plain: true,                    
                     items: [
                         this.rightsPanel, 
-                        confinePanel
+                        contextPanel
                     ]
                 }
             ]
