@@ -257,4 +257,40 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '3.8');
     }    
     
+    /**
+     * update to 3.9
+     * - manage shared favorites
+     */
+    public function update_8()
+    {
+        $appsWithFavorites = array(
+            'Addressbook',
+            'Calendar',
+            'Crm',
+            'Tasks',
+            'Timetracker',
+        );
+        
+        try {
+            $roles = Tinebase_Acl_Roles::getInstance();
+            $adminRole = $roles->getRoleByName('admin role');
+            
+            foreach($appsWithFavorites as $appName) {
+                try {
+                    $app = Tinebase_Application::getInstance()->getApplicationByName($appName);
+                    $roles->addSingleRight(
+                        $adminRole->getId(), 
+                        $app->getId(), 
+                        Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES
+                    );
+                } catch (Exception $nfe) {
+                    // app is not installed
+                }
+            }
+        } catch (Exception $nfe) {
+            Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . " default admin role not found -> MANAGE_SHARED_FAVORITES right is not assigned");
+        }
+        
+        $this->setApplicationVersion('Tinebase', '3.9');
+    }
 }
