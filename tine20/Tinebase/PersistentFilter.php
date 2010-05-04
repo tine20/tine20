@@ -111,5 +111,29 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
         return $persistentFilter->filters;
     }
     
+    /**
+     * inspect creation of one record
+     * 
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectCreate(Tinebase_Record_Interface $_record)
+    {
+        if (! Tinebase_Core::getUser()->hasRight($_record->application_id, Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES)) {
+            $_record->account_id = $this->_currentAccount->getId();
+        }
+    }
+    
+    /**
+     * inspect update of one record
+     * 
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectUpdate($_record, $_oldRecord)
+    {
+        
+    }
     
 }

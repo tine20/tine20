@@ -75,6 +75,7 @@ class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $addRights = array(
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS,
+            Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES,
             self::MANAGE_RESOURCES,
         );
         $allRights = array_merge($allRights, $addRights);
@@ -95,6 +96,10 @@ class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS => array(
                 'text'          => $translate->_('manage shared calendars'),
                 'description'   => $translate->_('Create new shared calendars'),
+            ),
+            Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES => array(
+                'text'          => $translate->_('manage shared calendars favorites'),
+                'description'   => $translate->_('Create or update shared calendars favorites'),
             ),
             self::MANAGE_RESOURCES => array(
                 'text'          => $translate->_('manage resources'),

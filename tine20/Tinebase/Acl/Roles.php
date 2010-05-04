@@ -101,8 +101,9 @@ class Tinebase_Acl_Roles
      * @throws  Tinebase_Exception_AccessDenied
      */
     public function hasRight($_application, $_accountId, $_right) 
-    {        
-        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
+    {   
+        $appId = Tinebase_Model_Application::convertApplicationIdToInt($_application);
+        $application = Tinebase_Application::getInstance()->getApplicationById($appId);
         if ($application->status != 'enabled') {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Application ' . $_application . ' is disabled!');
             return false;

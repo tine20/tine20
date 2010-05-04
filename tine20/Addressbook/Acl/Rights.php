@@ -77,7 +77,8 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array(
-            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
+            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS,
+            Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -97,6 +98,10 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS => array(
                 'text'          => $translate->_('manage shared addressbooks'),
                 'description'   => $translate->_('Create new shared addressbook folders'),
+            ),
+            Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES => array(
+                'text'          => $translate->_('manage shared addressbook favorites'),
+                'description'   => $translate->_('Create or update shared addressbook favorites'),
             ),
         );
         

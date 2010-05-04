@@ -85,6 +85,8 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
                 throw new Tinebase_Exception_InvalidArgument('No application id set.');
             }
             $applicationId = $_applicationId->id;
+        } elseif (is_string($_applicationId) && strlen($_applicationId) != 40) {
+            $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_applicationId)->getId();
         } else {
             $applicationId = $_applicationId;
         }

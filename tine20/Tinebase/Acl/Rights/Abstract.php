@@ -40,6 +40,13 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
     const MANAGE_SHARED_FOLDERS = 'manage_shared_folders';
     
     /**
+     * the right to manage shared favorites of an application
+     * 
+     * @staticvar string
+     */
+    const MANAGE_SHARED_FAVORITES = 'manage_shared_favorites';
+    
+    /**
      * get all possible application rights
      *
      * @return  array   all application rights

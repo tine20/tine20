@@ -77,7 +77,8 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array ( 
-            self::MANAGE_TIMEACCOUNTS
+            self::MANAGE_TIMEACCOUNTS,
+            Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -97,6 +98,10 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_TIMEACCOUNTS  => array(
                 'text'          => $translate->_('Manage timeaccounts'),
                 'description'   => $translate->_('Add, edit and delete timeaccounts'),
+            ),
+            Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES => array(
+                'text'          => $translate->_('manage shared timetracker favorites'),
+                'description'   => $translate->_('Create or update shared timetracker favorites'),
             ),
         );
         
