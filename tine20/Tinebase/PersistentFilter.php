@@ -119,9 +119,7 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectCreate(Tinebase_Record_Interface $_record)
     {
-        if (! Tinebase_Core::getUser()->hasRight($_record->application_id, Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES)) {
-            $_record->account_id = $this->_currentAccount->getId();
-        }
+        $this->_sanitizeAccountId($_record);
     }
     
     /**
@@ -133,7 +131,19 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectUpdate($_record, $_oldRecord)
     {
-        
+        $this->_sanitizeAccountId($_record);
     }
     
+    /**
+     * set account_id to currentAccount if user has no MANAGE_SHARED_FAVORITES right
+     * 
+     * @param  Tinebase_Record_Interface $_record
+     * @return void
+     */
+    protected function _sanitizeAccountId($_record)
+    {
+        if (! Tinebase_Core::getUser()->hasRight($_record->application_id, Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES)) {
+            $_record->account_id = $this->_currentAccount->getId();
+        }
+    }
 }
