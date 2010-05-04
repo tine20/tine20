@@ -7,6 +7,7 @@
  * @version     $Id$
  *
  * TODO         refactor this
+ * TODO         translate strings (enable/disable/settings)
  */
  
 Ext.namespace('Tine.Admin');
@@ -41,7 +42,7 @@ Tine.Admin.Applications.Main = function() {
     var _openSettingsWindow = function(appName) {
         Tine[appName].AdminPanel.openWindow({
             record: (Tine[appName].Model.Settings) ? new Tine[appName].Model.Settings(appName) : null,
-            title: String.format(_('{0} Settings'), appName),
+            title: String.format(_('{0} Settings'), translateAppTitle(appName)),
             listeners: {
                 scope: this,
                 'update': (Tine[appName].AdminPanel.onUpdate) ? Tine[appName].AdminPanel.onUpdate : Ext.emptyFn
@@ -215,7 +216,7 @@ Tine.Admin.Applications.Main = function() {
      * TODO try to generalize this fn as this gets used in Tags.js + RoleEditDialog.js as well 
      *      -> this could be moved to Tine.Admin.Application after Admin js refactoring
      */
-    var _renderTitle = function(appName) {
+    var translateAppTitle = function(appName) {
         var app = Tine.Tinebase.appMgr.get(appName);
         return (app) ? app.getTitle() : appName;
     };
@@ -283,7 +284,7 @@ Tine.Admin.Applications.Main = function() {
             },
             columns: [
                 { header: this.translation.gettext('Order'),   id: 'order', dataIndex: 'order', width: 50},
-                { header: this.translation.gettext('Name'),    id: 'name', dataIndex: 'name', renderer: _renderTitle},
+                { header: this.translation.gettext('Name'),    id: 'name', dataIndex: 'name', renderer: translateAppTitle},
                 { header: this.translation.gettext('Status'),  id: 'status', dataIndex: 'status', width: 150, renderer: _renderEnabled},
                 { header: this.translation.gettext('Version'), id: 'version', dataIndex: 'version', width: 70}
             ]
