@@ -459,7 +459,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             toRemove[i] ? toRemove[i].remove() : null;
             
             var appData = appList[i];
-            if (appData.name == 'Tinebase' /*|| appData.status == 'disabled'*/) {
+            if (appData.name == 'Tinebase') {
                 continue;
             }
             // get translated app title
@@ -547,7 +547,6 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     ]
                 },{
                     xtype: 'tabpanel',
-                    //autoHeight: true,
                     height: 300,
                     activeTab: 0,
                     deferredRender: false,
@@ -570,8 +569,6 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
-        
-        //this.title = title: 'Edit Tag ' + ,
         
         Ext.MessageBox.wait(this.translation._('Loading Tag...'), this.translation._('Please Wait'));
         Ext.Ajax.request({
