@@ -241,8 +241,8 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     /**
      * translate and return app title
      * 
-     * TODO try to generalize this fn as this gets used in Tags.js as well 
-     *      -> this could be moved to Tine.Admin.Application
+     * TODO try to generalize this fn as this gets used in Tags.js + Applications.js as well 
+     *      -> this could be moved to Tine.Admin.Application after Admin js refactoring
      */
     translateAppTitle: function(appName) {
         var app = Tine.Tinebase.appMgr.get(appName)
