@@ -90,6 +90,11 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_recordAlarmField = 'dtstart';
     
     /**
+     * @var Tinebase_Model_User
+     */
+    protected $_currentAccount = NULL;
+    
+    /**
      * returns controller for records of given model
      * 
      * @param string $_model
