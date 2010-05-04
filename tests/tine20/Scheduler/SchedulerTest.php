@@ -50,13 +50,13 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
         $request->setActionName('getMultiple');
         $request->setParam('personasContactIds', array(2, 3));
         
-        $task = new Tinebase_Scheduler_Task();
-        $task->setMonths("Jan-Dec");
-        $task->setWeekdays("Sun-Sat");
-        $task->setDays("1-31");
-        $task->setHours("0-23");
-        $task->setMinutes("0/1");
-        $task->setRequest($request);
+        $task = Tinebase_Scheduler_Task::getTask()
+            ->setMonths("Jan-Dec")
+            ->setWeekdays("Sun-Sat")
+            ->setDays("1-31")
+            ->setHours("0-23")
+            ->setMinutes("0/1")
+            ->setRequest($request);
         
         $scheduler = Tinebase_Core::getScheduler();
         $scheduler->addTask('Addressbook_Controller_Contact', $task);
