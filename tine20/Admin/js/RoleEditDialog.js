@@ -174,6 +174,11 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.rightsTreePanel.setRootNode(treeRoot);
     },
     
+    /**
+     * create nodes for rights tree (apps + app rights)
+     * 
+     * @return {Ext.tree.TreePanel}
+     */
     createRightsTreeNodes: function () {
         var treeRoot = this.rightsTreePanel.getRootNode();
         
