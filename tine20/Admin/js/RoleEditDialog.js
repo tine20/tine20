@@ -190,9 +190,10 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var expandNode = (this.allRights.length > 5) ? false : true;
         
         // add nodes to tree        
-        for(var i=0; i<this.allRights.length; i++) {
+        for (var i=0; i < this.allRights.length; i++) {
             // don't duplicate tree nodes on 'apply changes'
             toRemove[i] ? toRemove[i].remove() : null;
+            this.allRights[i].text = this.translateAppTitle(this.allRights[i].text);
             var node = new Ext.tree.TreeNode(this.allRights[i]);
             node.attributes.application_id = this.allRights[i].application_id;
             node.expanded = expandNode;
@@ -235,6 +236,17 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }     
         
         return this.rightsTreePanel;
+    },
+    
+    /**
+     * translate and return app title
+     * 
+     * TODO try to generalize this fn as this gets used in Tags.js as well 
+     *      -> this could be moved to Tine.Admin.Application
+     */
+    translateAppTitle: function(appName) {
+        var app = Tine.Tinebase.appMgr.get(appName)
+        return (app) ? app.getTitle() : appName;
     },
     
     /**
