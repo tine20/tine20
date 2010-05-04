@@ -161,8 +161,6 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
             if($count > 0) {
                 $newSyncKey = $this->_syncKey + 1;
             } else {
-                // test: don't return anything if $count = 0
-                return;
                 $newSyncKey = $this->_syncKey;
             }
             
