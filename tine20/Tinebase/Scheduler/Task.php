@@ -18,6 +18,17 @@
  */
 class Tinebase_Scheduler_Task extends Zend_Scheduler_Task 
 {
+    /**
+     * static task getter
+     * 
+     * @param  array $options
+     * @return Tinebase_Scheduler_Task
+     */
+    public static function getTask(array $options = array())
+    {
+        return new Tinebase_Scheduler_Task($options);
+    }
+    
     public function run()
     {
         foreach ($this->getRequests() as $request) {
