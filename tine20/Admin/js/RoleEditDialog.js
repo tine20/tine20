@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philip Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * TODO         refactor this (don't use Ext.getCmp, etc.)
@@ -194,9 +194,8 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             treeRoot.appendChild(node);
             
             // append children          
-            if ( this.allRights[i].children ) {
-            
-                for(var j=0; j < this.allRights[i].children.length; j++) {
+            if (this.allRights[i].children) {
+                for (var j=0; j < this.allRights[i].children.length; j++) {
                 
                     var childData = this.allRights[i].children[j];
                     childData.leaf = true;
@@ -208,34 +207,26 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     var child = new Ext.tree.TreeNode(childData);
                     child.attributes.right = childData.right;
                     
-                    // add onchange handler
-                    child.on('checkchange', function(_node, _checked) {
-                    
-                        // get parents application id
-                        var applicationId = _node.parentNode.attributes.application_id;
+                    child.on('checkchange', function(node, checked) {
+                        var applicationId = node.parentNode.attributes.application_id;
                     
                         // put it in the storage or remove it                        
-                        if ( _checked ) {
+                        if (checked) {
                             this.rightsDataStore.add (
                                 new Ext.data.Record({
-                                    //right: _node.text,
-                                    right: _node.attributes.right,
+                                    right: node.attributes.right,
                                     application_id: applicationId
                                 })
                             );
                         } else {
-                            var rightId = this.getRightId(applicationId,_node.attributes.right);
+                            var rightId = this.getRightId(applicationId,node.attributes.right);
                             this.rightsDataStore.remove ( this.rightsDataStore.getById(rightId) );                                                                                         
                         }   
-                        
-                        //console.log ( this.rightsDataStore );
-                        
                     },this);
                     
                     node.appendChild(child);                    
                 }       
             }
-            
         }     
         
         return this.rightsTreePanel;
