@@ -28,9 +28,17 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        date_default_timezone_set('US/Pacific');
+        
     }
-
+    
+    /**
+     * tears down the fixture
+     */
+    public function tearDown()
+    {
+        
+    }
+    
 	/**
      * Tests if a task can be saved.
      */
@@ -53,7 +61,7 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
         $scheduler = Tinebase_Core::getScheduler();
         $scheduler->addTask('Addressbook_Controller_Contact', $task);
         $return = $scheduler->run();
-    	$this->assertEquals(2, count($return['Addressbook_Controller_Contact']));
+        $this->assertEquals(2, count($return['Addressbook_Controller_Contact']));
     }
     
     /**
@@ -355,6 +363,8 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
      */
     public function testCanRunTask()
     {
+        $this->testSaveTask();
+        
     	$scheduler = Tinebase_Core::getScheduler();
     	$scheduler->run();
     }
