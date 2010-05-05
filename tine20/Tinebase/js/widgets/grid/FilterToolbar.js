@@ -164,7 +164,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }
         
         // automaticly enable saving
-        if (this.app && this.app.getMainScreen().hasFavoritesPanel) {
+        if (this.app && typeof this.app.getMainScreen().getWestPanel == 'function' && this.app.getMainScreen().getWestPanel().hasFavoritesPanel) {
             this.allowSaving = true;
         }
         
