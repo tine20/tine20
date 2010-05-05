@@ -29,77 +29,56 @@ class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
      */
     protected $_uit;
     
-    protected $_testFilterIds = array();
-    
     public function setUp()
     {
+        $this->tearDown();
         $this->_uit = new Tinebase_Frontend_Json_PersistentFilter();
-        
-        $this->_testFilterData = array(
-            array('field' => 'query', 'operator' => 'contains', 'value' => 'test'),
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => Tasks_Controller::getInstance()->getDefaultContainer()->getId()),
-            array('field' => 'organizer', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()),
-            array('field' => 'due', 'operator' => 'after', 'value' => '2010-03-20 18:00:00'),
-        );
     }
     
     public function tearDown()
     {
         // purge
         $backend = new Tinebase_PersistentFilter_Backend_Sql();
-        foreach (array_unique($this->_testFilterIds) as $filterId) {
-            $backend->delete($filterId);
-        }
+        
+        $toDeleteIds = $backend->search(new Tinebase_Model_PersistentFilterFilter(array(
+            array('field' => 'name',   'operator' => 'startswith', 'value' => 'PHPUnit'),
+        )), NULL, TRUE);
+        
+        $backend->delete($toDeleteIds);
     }
     
-    public function testSaveFilter()
+    /**
+     * test to save a persistent filter
+     */
+    public function testSaveFilter($filterData = NULL)
     {
-        $savedFilter = $this->_uit->save($this->_testFilterData, 'testFilter', 'Tasks_Model_Task');
-        $this->_testFilterIds[] = $savedFilter['id'];
+        $exampleFilterData = $filterData ? $filterData : self::getPersitentFilterData();
+        $savedFilterData = $this->_uit->savePersistentFilter(self::getPersitentFilterData());
         
-        $this->_assertSavedFilter($savedFilter);
+        $this->_assertSavedFilterData($exampleFilterData, $savedFilterData);
         
-        return $savedFilter;
+        return $savedFilterData;
     }
     
     public function testGetSimpleFilter()
     {
-        $savedFilter = $this->testSaveFilter();
-        $loadedFilter = $this->_uit->get($savedFilter['id']);
-        $this->_assertSavedFilter($loadedFilter);
-    }
-    
-    public function testRenameFilter()
-    {
-        $savedFilter = $this->testSaveFilter();
-        $this->_uit->rename($savedFilter['id'], 'renamedFilter');
-        
-        $loadedFilter = $this->_uit->get($savedFilter['id']);
-        $this->assertEquals('renamedFilter', $loadedFilter['name'], 'filter renameing failed');
-    }
-    
-    public function testOverwriteByName()
-    {
-        $givenQuery = $this->_getFilter('query', $this->_testFilterData);
-        $givenQuery['value'] = 'changed';
-        
-        $savedFilter = $this->testSaveFilter();
-        $overwrittenFilter = $this->_uit->save($this->_testFilterData, 'testFilter', 'Tasks_Model_Task');
-        
-        $loadedFilter = $this->_uit->get($savedFilter['id']);
-        $this->_assertSavedFilter($loadedFilter);
+        $exampleFilterData = self::getPersitentFilterData();
+        $savedFilterData = $this->testSaveFilter($exampleFilterData);
+        $loadedFilterData = $this->_uit->getPersistentFilter($savedFilterData['id']);
+        $this->_assertSavedFilterData($exampleFilterData, $loadedFilterData);
     }
     
     public function testTimezoneConversion()
     {
-        $savedFilter = $this->testSaveFilter();
+        $exampleFilterData = self::getPersitentFilterData();
+        $savedFilterData = $this->testSaveFilter($exampleFilterData);
         
         $testUserTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $testUserTimezone !== 'US/Pacific' ? 'US/Pacific' : 'UTC');
         
-        $originalDueDateFilter = $this->_getFilter('due', $this->_testFilterData);
-        $convertedDueDataFilter = $this->_getFilter('due', array_value('filters', $this->_uit->get($savedFilter['id'])));
-        
+        $originalDueDateFilter = $this->_getFilter('due', $exampleFilterData);
+        $convertedDueDataFilter = $this->_getFilter('due', $this->_uit->getPersistentFilter($savedFilterData['id']));
+
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $testUserTimezone);
         
         $this->assertNotEquals($originalDueDateFilter['value'], $convertedDueDataFilter['value']);
@@ -107,34 +86,59 @@ class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
     
     public function testSearchFilter()
     {
-        $savedFilter = $this->testSaveFilter();
+        $exampleFilterData = self::getPersitentFilterData();
+        $savedFilterData = $this->testSaveFilter($exampleFilterData);
         
         $filterData = array(
-            array('field' => 'model', 'operator' => 'equals', 'value' => 'Tasks_Model_TaskFilter'),
-            array('field' => 'id', 'operator' => 'equals', 'value' => $savedFilter['id'])
+            array('field' => 'model',   'operator' => 'equals', 'value' => 'Tasks_Model_TaskFilter'),
+            array('field' => 'id',      'operator' => 'equals', 'value' => $savedFilterData['id'])
         );
         
-        $searchResult = $this->_uit->search($filterData);
+        $searchResult = $this->_uit->searchPersistentFilter($filterData, NULL);
+
         $this->assertEquals(1, $searchResult['totalcount']);
-        $this->_assertSavedFilter($searchResult['results'][0]);
+        $this->_assertSavedFilterData($exampleFilterData, $searchResult['results'][0]);
     }
-    
+
+// obsolete tests
+//    public function testRenameFilter()
+//    {
+//        $savedFilter = $this->testSaveFilter();
+//        $this->_uit->rename($savedFilter['id'], 'renamedFilter');
+//        
+//        $loadedFilter = $this->_uit->get($savedFilter['id']);
+//        $this->assertEquals('renamedFilter', $loadedFilter['name'], 'filter renameing failed');
+//    }
+// 
+//    public function testOverwriteByName()
+//    {
+//        $givenQuery = $this->_getFilter('query', $this->_testFilterData);
+//        $givenQuery['value'] = 'changed';
+//        
+//        $savedFilter = $this->testSaveFilter();
+//        $overwrittenFilter = $this->_uit->savePersistentFilter($this->_testFilterData, 'testFilter', 'Tasks_Model_Task');
+//        
+//        $loadedFilter = $this->_uit->get($savedFilter['id']);
+//        $this->_assertSavedFilter($loadedFilter);
+//    }
+
     /**
      * assert saved filer matches expections for $this->_testFilterData
      * 
      * @param array $savedFilter
      * @return void
      */
-    protected function _assertSavedFilter($savedFilter)
+    protected function _assertSavedFilterData($expectedFilterData, $savedFilterData)
     {
-        $this->assertTrue(is_array($savedFilter), 'saved filter should be an array');
-        $this->assertEquals('testFilter',  $savedFilter['name'], 'name does not match');
         
-        $this->assertTrue(array_key_exists('filters', $savedFilter), 'saved filter data is not included');
-        $this->assertTrue(array_key_exists('name', $savedFilter), 'saved filter name is not included');
+        $this->assertTrue(is_array($savedFilterData), 'saved filter should be an array');
+        $this->assertEquals($expectedFilterData['name'],  $savedFilterData['name'], 'name does not match');
         
-        foreach($this->_testFilterData as $requestFilter) {
-            $responseFilter = $this->_getFilter($requestFilter['field'], $savedFilter['filters']);
+        $this->assertTrue(array_key_exists('filters', $savedFilterData), 'saved filter data is not included');
+        $this->assertTrue(array_key_exists('name', $savedFilterData), 'saved filter name is not included');
+        
+        foreach($expectedFilterData['filters'] as $requestFilter) {
+            $responseFilter = $this->_getFilter($requestFilter['field'], $savedFilterData);
             $this->assertTrue(is_array($responseFilter), 'filter is missing in response');
             $this->assertEquals($requestFilter['operator'], $responseFilter['operator'], 'operator missmatch');
             
@@ -160,6 +164,38 @@ class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * returns data for an example persisten filter
+     * 
+     * @return array
+     */
+    public static function getPersitentFilterData()
+    {
+        return array(
+            'name'              => 'PHPUnit testFilter',
+            'description'       => 'a test filter created by PHPUnit',
+            'account_id'        => Tinebase_Core::getUser()->getId(),
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
+            'model'             => 'Tasks_Model_TaskFilter',
+            'filters'           => array(
+                array('field' => 'query',        'operator' => 'contains',  'value' => 'test'),
+                array('field' => 'container_id', 'operator' => 'equals',    'value' => Tasks_Controller::getInstance()->getDefaultContainer()->getId()),
+                array('field' => 'organizer',    'operator' => 'equals',    'value' => Tinebase_Core::getUser()->getId()),
+                array('field' => 'due',          'operator' => 'after',     'value' => '2010-03-20 18:00:00'),
+            )
+        );
+    }
+    
+    /**
+     * returns an example persisten filter
+     * 
+     * @return Tinebase_Model_PersistentFilter
+     */
+    public static function getPersitentFilter()
+    {
+        return new Tinebase_Model_PersistentFilter(self::getPersitentFilterData());
+    }
+    
+    /**
      * returns first filter of given field in filtersetData
      * 
      * @param string $_field
@@ -168,7 +204,7 @@ class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
      */
     protected function &_getFilter($_field, $_filterData)
     {
-        foreach ($_filterData as &$filter) {
+        foreach ($_filterData['filters'] as &$filter) {
             if ($filter['field'] == $_field) {
                 return $filter;
             }

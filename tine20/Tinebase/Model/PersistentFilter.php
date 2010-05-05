@@ -84,13 +84,33 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data)
     {
-        list($appName, $ns, $modelName) = explode('_', $_data['model']);
-        
-        if (! $_data['filters'] instanceof Tinebase_Model_Filter_FilterGroup) {
+        if (isset($_data['filters']) && ! $_data['filters'] instanceof Tinebase_Model_Filter_FilterGroup) {
             $_data['filters'] = $this->getFilterGroup($_data['model'], $_data['filters']);
         }
         
         return parent::setFromArray($_data);
+    }
+    
+    /**
+     * wrapper for setFromJason which expects datetimes in array to be in
+     * users timezone and converts them to UTC
+     *
+     * @param  string $_data json encoded data
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
+     */
+    public function setFromJsonInUsersTimezone($_data)
+    {
+        if (isset($_data['filters']) && ! $_data['filters'] instanceof Tinebase_Model_Filter_FilterGroup) {
+            
+            $filtersData = $_data['filters'];
+            unset($_data['filters']);
+        }
+        
+        parent::setFromJsonInUsersTimezone($_data);
+        
+        if (isset($filtersData)) {
+            $this->filters = $this->getFilterGroup($_data['model'], $filtersData, TRUE);
+        }
     }
     
     /**

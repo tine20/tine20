@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  PersistentFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  */
@@ -14,150 +14,86 @@
  * Json Persistent Filter class
  * 
  * @package     Tinebase
- * @subpackage  Filter
+ * @subpackage  PersistentFilter
  */
-class Tinebase_Frontend_Json_PersistentFilter
+class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abstract
 {
-    /**
-     * persistent filter controller
-     *
-     * @var Tinebase_PersistentFilter
-     */
-    protected $_controller;
+    protected $_applicationName = 'Tinebase';
     
     /**
-     * the constructor
+     * Search for PersistentFilters matching given arguments
      *
-     */
-    public function __construct()
-    {
-        $this->_controller = Tinebase_PersistentFilter::getInstance();
-    }
-    
-    /**
-     * search for persistent filters (by application, user, ...)
-     *
-     * @param  array $filter
+     * @param array $filter
+     * @param array $paging
      * @return array
      */
-    public function search($filter)
+    public function searchPersistentFilter($filter, $paging)
     {
-        $decodedFilter = is_array($filter) ? $filter : Zend_Json::decode($filter);
-        $filter = new Tinebase_Model_PersistentFilterFilter(!empty($decodedFilter) ? $decodedFilter : array());
-        
-        $persistentFilters = $this->_controller->search($filter, new Tinebase_Model_Pagination(array(
-            'dir'       => 'ASC',
-            'sort'      => array('name', 'creation_time')
-        )));
-        
-        $persistentFiltersData = array();
-        foreach ($persistentFilters as $persistentFilter) {
-            $persistentFilterData = $persistentFilter->toArray(FALSE);
-            $persistentFilterData['filters'] = $persistentFilterData['filters']->toArray(TRUE);
-            $persistentFiltersData[] = $persistentFilterData;
-        }
-        
-        return array(
-            'results'       => $persistentFiltersData,
-            'totalcount'    => $this->_controller->searchCount($filter)
-        );
-    }
-
-    /**
-     * loads a persistent filter
-     *
-     * @param  string $filterId
-     * @return array persistent filter
-     */
-    public function get($filterId)
-    {
-        $persistentFilter = $this->_controller->get($filterId);
-        
-        $persistentFilterData = $persistentFilter->toArray(FALSE);
-        $persistentFilterData['filters'] = $persistentFilterData['filters']->toArray(TRUE);
-        
-        return $persistentFilterData;
+        return parent::_search($filter, $paging, Tinebase_PersistentFilter::getInstance(), 'Tinebase_Model_PersistentFilterFilter');
     }
     
     /**
-     * rename a saved filter
-     * 
-     * @param $filterId
-     * @param $newName
-     * @return array persistent filter
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
      */
-    public function rename($filterId, $newName)
+    public function getPersistentFilter($id)
     {
-        $persistentFilter = $this->_controller->get($filterId);
-        $persistentFilter->name = $newName;
-        $this->_controller->update($persistentFilter);
-        
-        return $this->get($filterId);
+        return $this->_get($id, Tinebase_PersistentFilter::getInstance());
+    }
+
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @return array created/updated record
+     */
+    public function savePersistentFilter($recordData)
+    {
+        return $this->_save($recordData, Tinebase_PersistentFilter::getInstance(), 'PersistentFilter');        
     }
     
     /**
-     * save persistent filter
+     * deletes existing records
      *
-     * @param  array  $filterData
-     * @param  string $name
-     * @param  string $model model name (Application_Model_Record)
-     * @return array persistent filter
-     * @throws Tinebase_Exception_InvalidArgument
+     * @param  array  $ids 
+     * @return string
      */
-    public function save($filterData, $name, $model) 
+    public function deletePersistentFilter($ids)
     {
-        $filterData = is_array($filterData) ? $filterData : Zend_Json::decode($filterData);
-        
-        
-        list($appName, $ns, $modelName) = explode('_', $model);
-        $filterModel = "{$appName}_Model_{$modelName}Filter";
-        
-        $persistentFilter = new Tinebase_Model_PersistentFilter();
-        $persistentFilter->setFromJsonInUsersTimezone(array(
-            'account_id'        => Tinebase_Core::getUser()->getId(),
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId(),
-            'model'             => $filterModel,
-            'filters'           => Tinebase_Model_PersistentFilter::getFilterGroup($filterModel, $filterData, TRUE),
-            'name'              => $name
-        ));
-        
-        // check if exists
-        $searchFilter = new Tinebase_Model_PersistentFilterFilter(array(
-            array('field' => 'name',            'operator' => 'equals', 'value' => $name),
-            array('field' => 'application_id',  'operator' => 'equals', 'value' => $persistentFilter->application_id),
-        ));
-        $existing = $this->_controller->search($searchFilter);
-        
-        if (count($existing) > 0) {
-            $persistentFilter->setId($existing[0]->getId());
-
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($persistentFilter, 'update', $existing[0]);            
-            $persistentFilter = $this->_controller->update($persistentFilter);
-            
-        } else {
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($persistentFilter, 'create');
-            $persistentFilter = $this->_controller->create($persistentFilter);
-        }
-        
-        return $this->get($persistentFilter->getId());
+        return $this->_delete($ids, Tinebase_PersistentFilter::getInstance());
     }
     
     /**
-     * delete persistent filter
+     * returns record prepared for json transport
      *
-     * @param string $filterId
+     * @param Tinebase_Record_Interface $_record
+     * @return array record data
      */
-    public function delete($filterId) 
+    protected function _recordToJson($_record)
     {
-        $persistentFilter = $this->_controller->get($filterId);
-        if (Tinebase_Core::getUser()->getId() != $persistentFilter->account_id) {
-            throw new Tinebase_Exception_AccessDenied('You are not allowed to delete this filter.');
+        $recordSet = new Tinebase_Record_RecordSet('Tinebase_Model_PersistentFilter', array($_record));
+        
+        return array_value(0, $this->_multipleRecordsToJson($recordSet));
+    }
+    
+    /**
+     * returns multiple records prepared for json transport
+     *
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Model_Filter_FilterGroup
+     * @return array data
+     */
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
+    {
+        $result = parent::_multipleRecordsToJson($_records, $_filter);
+        
+        foreach($result as $idx => $recordArray) {
+            $recordIdx = $_records->getIndexById($recordArray['id']);
+            $result[$idx]['filters'] = $_records[$recordIdx]->filters->toArray(TRUE);
         }
         
-        $this->_controller->delete($filterId);
-
-        return array(
-            'status'    => 'success'
-        );
+        return $result;
     }
 }
