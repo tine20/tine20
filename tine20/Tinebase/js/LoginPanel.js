@@ -103,7 +103,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     selectOnFocus: true,
                     value: this.defaultPassword
                 }],
-                buttonAlign: 'center',
+                buttonAlign: 'right',
                 buttons: [{
                     xtype: 'button',
                     width: 120,
