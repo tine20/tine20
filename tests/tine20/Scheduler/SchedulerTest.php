@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
- * @version     $Id: ControllerTest.php 4754 2008-09-30 13:34:35Z g.ciyiltepe@metaways.de $
+ * @version     $Id: SchedulerTest.php 4754 2008-09-30 13:34:35Z g.ciyiltepe@metaways.de $
  */
 
 /**
@@ -36,55 +36,9 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        
-    }
-    
-	/**
-     * Tests if a task can be saved.
-     */
-    public function testControllerParams()
-    {
-        
-        $request = new Zend_Controller_Request_Http(); 
-        $request->setControllerName('Addressbook_Controller_Contact');
-        $request->setActionName('getMultiple');
-        $request->setParam('personasContactIds', array(2, 3));
-        
-        $task = Tinebase_Scheduler_Task::getTask()
-            ->setMonths("Jan-Dec")
-            ->setWeekdays("Sun-Sat")
-            ->setDays("1-31")
-            ->setHours("0-23")
-            ->setMinutes("0/1")
-            ->setRequest($request);
-        
         $scheduler = Tinebase_Core::getScheduler();
-        $scheduler->addTask('Addressbook_Controller_Contact', $task);
-        $return = $scheduler->run();
-        $this->assertEquals(2, count($return['Addressbook_Controller_Contact']));
-    }
-    
-    /**
-     * Tests if a task can be saved.
-     */
-    public function testSaveTask()
-    {
-        $request = new Zend_Controller_Request_Http(); 
-        $request->setControllerName('Tinebase_Alarm');
-        $request->setActionName('sendPendingAlarms');
-        $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');
-        
-        $task = new Tinebase_Scheduler_Task();
-        $task->setMonths("Jan-Dec");
-        $task->setWeekdays("Sun-Sat");
-        $task->setDays("1-31");
-        $task->setHours("0-23");
-        $task->setMinutes("0/1");
-        $task->setRequest($request);
-        
-        $scheduler = Tinebase_Core::getScheduler();
-        $scheduler->addTask('Tinebase_Alarm_Test', $task);
-        $scheduler->saveTask();
+        $db = $scheduler->getBackend()->getDbAdapter();
+        $db->delete(SQL_TABLE_PREFIX.'scheduler');
     }
     
     /**
@@ -93,10 +47,8 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
     public function testCanAddTask()
     {
         $scheduler = new Zend_Scheduler();
-
         $task = new Zend_Scheduler_Task();
         $scheduler->addTask('test', $task);
-
         $this->assertTrue($scheduler->hasTask('test'), 'Task could not be added');
     }
 
@@ -357,17 +309,6 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(isset($responses['test']), 'Received empty response');
     }
-
-    /**
-     * 
-     */
-    public function testCanRunTask()
-    {
-        $this->testSaveTask();
-        
-    	$scheduler = Tinebase_Core::getScheduler();
-    	$scheduler->run();
-    }
     
     /**
      * Tests if a valid (i.e., included) backend can be loaded.
@@ -394,19 +335,6 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
         unset($queue);
     }
 
-    
-    /**
-     * Tests if the 'Db' backend is functional.
-     */
-    public function testCanUseDbBackend()
-    {
-        $scheduler = Tinebase_Core::getScheduler();
-        $backend = $scheduler->getBackend();
-        $tasks = $backend->loadQueue();
-        $taskCount = (count($tasks) > 0);
-        $this->assertTrue($taskCount);
-    }
-    
     /**
      * Tests any given backend.
      *
