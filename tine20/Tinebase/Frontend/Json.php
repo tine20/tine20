@@ -499,6 +499,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
             $user = Tinebase_Core::getUser();
+            
             $registryData += array(    
                 'currentAccount'    => $user->toArray(),
                 'userContact'       => Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId())->toArray(),
@@ -510,6 +511,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'changepw'          => Tinebase_User::getBackendConfiguration('changepw', true),
                 'mapPanel'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, TRUE)->value,
                 'confirmLogout'     => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
+                'persistentFilters' => Tinebase_Frontend_Json_PersistentFilter::getAllPersistentFilters()
             );
         }
         

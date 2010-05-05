@@ -68,17 +68,16 @@ class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abs
     /**
      * returns registry data of PersistentFilter.
      *
-     * @return mixed array 'variable name' => 'data'
+     * @return array
      */
-    public function getRegistryData()
+    public static function getAllPersistentFilters()
     {
-        $persistentFilters = $this->searchPersistentFilter(array(
-            array('field' => 'account_id',   'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()),
-        ), NULL);
-        
-        return array(
-            'persitentFilters' => $persistentFilters
-        );
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
+            $obj = new Tinebase_Frontend_Json_PersistentFilter();
+            return $obj->searchPersistentFilter(array(
+                array('field' => 'account_id',   'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()),
+            ), NULL);
+        }
     }
     
     /**

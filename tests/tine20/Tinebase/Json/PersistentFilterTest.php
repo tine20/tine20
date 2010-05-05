@@ -128,6 +128,23 @@ class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count(array_intersect($ids, array($persistentSharedFavirite->getId(), $savedFilterData['id']))));
     }
     
+    public function testInitialRegistry()
+    {
+        $exampleFilterData = self::getPersitentFilterData();
+        $savedFilterData = $this->testSaveFilter($exampleFilterData);
+        
+        $tfj = new Tinebase_Frontend_Json();
+        $allRegData = $tfj->getRegistryData();
+        
+        $this->assertTrue(array_key_exists('persistentFilters', $allRegData), 'persistentFilters is missing in $allRegData');
+        
+        $ids = array();
+        foreach($allRegData['persistentFilters']['results'] as $filterData) {
+            $ids[] = $filterData['id'];
+        }
+        
+        $this->assertEquals(1, count(array_intersect($ids, array($savedFilterData['id']))));
+    }
 // obsolete tests
 //    public function testRenameFilter()
 //    {
