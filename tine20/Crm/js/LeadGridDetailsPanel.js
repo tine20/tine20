@@ -157,6 +157,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         // we need to define the chart url
         Ext.chart.Chart.CHART_URL = 'library/ExtJS/resources/charts.swf';
         
+        /*
         this.defaultPanel = this.getDefaultPanel();
         this.leadDetailsPanel = this.getLeadGridDetailsPanel();
         
@@ -173,6 +174,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         this.items = [
             this.cardPanel
         ];
+        */
         
         // TODO generalize this
         this.containerTpl = new Ext.XTemplate(
@@ -193,80 +195,83 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * 
      * TODO add legend?
      */
-    getDefaultPanel: function() {
-        
-        return new Ext.ux.display.DisplayPanel({
-            layout: 'hbox',
-            border: false,
-            defaults:{
-                margins:'0 5 0 0',
-                padding: 2,
-                style: {
-                    cursor: 'crosshair'
+    getDefaultInfosPanel: function() {
+        if (! this.defaultInfosPanel) {
+            this.defaultInfosPanel = new Ext.ux.display.DisplayPanel({
+                layout: 'hbox',
+                border: false,
+                defaults:{
+                    margins:'0 5 0 0',
+                    padding: 2,
+                    style: {
+                        cursor: 'crosshair'
+                    },
+                    flex: 1,
+                    layout: 'ux.display',
+                    border: false
                 },
-                flex: 1,
-                layout: 'ux.display',
-                border: false
-            },
-            layoutConfig: {
-                padding:'5',
-                align:'stretch'
-            },
-            items: [{
                 layoutConfig: {
-                    background: 'border',
-                    declaration: this.app.i18n._('Leadstates')
+                    padding:'5',
+                    align:'stretch'
                 },
                 items: [{
+                    layoutConfig: {
+                        background: 'border',
+                        declaration: this.app.i18n._('Leadstates')
+                    },
+                    items: [{
+                        store: this.leadstatePiechartStore,
+                        xtype: 'piechart',
+                        dataField: 'total',
+                        categoryField: 'label'
+                    }]
+                }, {
+                    layoutConfig: {
+                        background: 'border',
+                        declaration: this.app.i18n._('Leadsources')
+                    },
+                    items: [{
+                        store: this.leadsourcePiechartStore,
+                        xtype: 'piechart',
+                        dataField: 'total',
+                        categoryField: 'label'
+                    }]
+                }, {
+                    layoutConfig: {
+                        background: 'border',
+                        declaration: this.app.i18n._('Leadtypes')
+                    },
+                    items: [{
+                        store: this.leadtypePiechartStore,
+                        xtype: 'piechart',
+                        dataField: 'total',
+                        categoryField: 'label'
+                    }]
+                }]
+                /*
+                    fieldLabel: this.app.i18n._('Leadstates'), // ??
+                    xtype: 'piechart',
                     store: this.leadstatePiechartStore,
-                    xtype: 'piechart',
                     dataField: 'total',
-                    categoryField: 'label'
-                }]
-            }, {
-                layoutConfig: {
-                    background: 'border',
-                    declaration: this.app.i18n._('Leadsources')
-                },
-                items: [{
-                    store: this.leadsourcePiechartStore,
-                    xtype: 'piechart',
-                    dataField: 'total',
-                    categoryField: 'label'
-                }]
-            }, {
-                layoutConfig: {
-                    background: 'border',
-                    declaration: this.app.i18n._('Leadtypes')
-                },
-                items: [{
-                    store: this.leadtypePiechartStore,
-                    xtype: 'piechart',
-                    dataField: 'total',
-                    categoryField: 'label'
-                }]
-            }]
-            /*
-                fieldLabel: this.app.i18n._('Leadstates'), // ??
-                xtype: 'piechart',
-                store: this.leadstatePiechartStore,
-                dataField: 'total',
-                categoryField: 'label',
-                backgroundColor: '#eeeeee' // ??
-                //extra styles get applied to the chart defaults
-                extraStyle: {
-                    legend: {
-                        //display: 'right',
-                        display: 'top',
-                        padding: 5,
-                        font: {
-                            family: 'Tahoma',
-                            size: 8
+                    categoryField: 'label',
+                    backgroundColor: '#eeeeee' // ??
+                    //extra styles get applied to the chart defaults
+                    extraStyle: {
+                        legend: {
+                            //display: 'right',
+                            display: 'top',
+                            padding: 5,
+                            font: {
+                                family: 'Tahoma',
+                                size: 8
+                            }
                         }
-                    }
-                } 
-            */               
-        });
+                    } 
+                */               
+            });
+        }
+        
+        return this.defaultInfosPanel;
     },
     
     /**
@@ -274,7 +279,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      */
     setPiechartStores: function(getFromRequest) {
         
-        if (! this.defaultPanel.isVisible()) {
+        if (! this.getDefaultInfosPanel().isVisible()) {
             return;
         }
         
@@ -389,6 +394,15 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     },
     
     /**
+     * get panel for multi selection aggregates/information
+     * 
+     * @return {Ext.Panel}
+     */
+    getMultiRecordsPanel: function() {
+        return this.getDefaultInfosPanel();
+    },
+    
+    /**
      * main lead details panel
      * 
      * @return {Ext.ux.display.DisplayPanel}
@@ -396,127 +410,131 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * TODO add tasks / products?
      * TODO add contact icons?
      */
-    getLeadGridDetailsPanel: function() {
-        return new Ext.ux.display.DisplayPanel ({
-            //xtype: 'displaypanel',
-            layout: 'fit',
-            border: false,
-            items: [{
-                layout: 'vbox',
+    getSingleRecordPanel: function() {
+        if (! this.singleRecordPanel) {
+            this.singleRecordPanel = new Ext.ux.display.DisplayPanel ({
+                //xtype: 'displaypanel',
+                layout: 'fit',
                 border: false,
-                layoutConfig: {
-                    align:'stretch'
-                },
-                items: [
-                    {
-                    layout: 'hbox',
-                    flex: 0,
-                    height: 16,
+                items: [{
+                    layout: 'vbox',
                     border: false,
-                    style: 'padding-left: 5px; padding-right: 5px',
                     layoutConfig: {
                         align:'stretch'
                     },
-                    items: [{
-                        flex: 1,
-                        xtype: 'ux.displayfield',
-                        cls: 'x-ux-display-header',
-                        //style: 'padding-top: 2px',
-                        name: 'lead_name'
-                    }, {
-                        flex: 1,
-                        xtype: 'ux.displayfield',
-                        style: 'text-align: right;',
-                        name: 'container_id',
-                        cls: 'x-ux-display-header',
-                        htmlEncode: false,
-                        renderer: this.containerRenderer.createDelegate(this)
-                    }]
-                }, {
-                    layout: 'hbox',
-                    flex: 1,
-                    border: false,
-                    layoutConfig: {
-                        padding:'5',
-                        align:'stretch'
-                    },
-                    defaults:{margins:'0 5 0 0'},
-                    items: [{
-                        flex: 1,
-                        layout: 'ux.display',
-                        labelWidth: 90,
-                        layoutConfig: {
-                            background: 'solid',
-                            declaration: this.app.i18n._('Status')
-                        },
-                        items: [{
-                            xtype: 'ux.displayfield',
-                            name: 'start',
-                            fieldLabel: this.app.i18n._('Start'),
-                            renderer: Tine.Tinebase.common.dateRenderer
-                        }, {
-                            xtype: 'ux.displayfield',
-                            name: 'end_scheduled',
-                            fieldLabel: this.app.i18n._('Estimated end'),
-                            renderer: Tine.Tinebase.common.dateRenderer
-                        }, {
-                            xtype: 'ux.displayfield',
-                            name: 'leadtype_id',
-                            fieldLabel: this.app.i18n._('Leadtype'),
-                            renderer: this.sourceTypeRenderer.createDelegate(this, [Tine.Crm.LeadType.getStore(), 'leadtype'], true)
-                        }, {
-                            xtype: 'ux.displayfield',
-                            name: 'leadsource_id',
-                            fieldLabel: this.app.i18n._('Leadsource'),
-                            renderer: this.sourceTypeRenderer.createDelegate(this, [Tine.Crm.LeadSource.getStore(), 'leadsource'], true)
-                        }]
-                    }, {
-                        flex: 1,
-                        layout: 'ux.display',
-                        labelAlign: 'top',
-                        autoScroll: true,
-                        //cls: 'contactIconPartner',
-                        layoutConfig: {
-                            background: 'solid'
-                            //declaration: this.app.i18n._('Partner')
-                        },
-                        items: [{
-                            xtype: 'ux.displayfield',
-                            name: 'partner',
-                            nl2br: true,
-                            htmlEncode: false,
-                            renderer: this.contactRenderer.createDelegate(this, ['PARTNER'])
-                        }]
-                    }, {
-                        flex: 1,
-                        layout: 'ux.display',
-                        labelAlign: 'top',
-                        autoScroll: true,
-                        //cls: 'contactIconCustomer',
-                        layoutConfig: {
-                            background: 'solid'
-                            //declaration: this.app.i18n._('Customer')
-                        },
-                        items: [{
-                            xtype: 'ux.displayfield',
-                            name: 'customer',
-                            nl2br: true,
-                            htmlEncode: false,
-                            renderer: this.contactRenderer.createDelegate(this, ['CUSTOMER'])
-                        }]
-                    }, {
-                        flex: 1,
-                        layout: 'fit',
+                    items: [
+                        {
+                        layout: 'hbox',
+                        flex: 0,
+                        height: 16,
                         border: false,
+                        style: 'padding-left: 5px; padding-right: 5px',
+                        layoutConfig: {
+                            align:'stretch'
+                        },
                         items: [{
-                            cls: 'x-ux-display-background-border',
-                            xtype: 'ux.displaytextarea',
-                            name: 'description'
+                            flex: 1,
+                            xtype: 'ux.displayfield',
+                            cls: 'x-ux-display-header',
+                            //style: 'padding-top: 2px',
+                            name: 'lead_name'
+                        }, {
+                            flex: 1,
+                            xtype: 'ux.displayfield',
+                            style: 'text-align: right;',
+                            name: 'container_id',
+                            cls: 'x-ux-display-header',
+                            htmlEncode: false,
+                            renderer: this.containerRenderer.createDelegate(this)
+                        }]
+                    }, {
+                        layout: 'hbox',
+                        flex: 1,
+                        border: false,
+                        layoutConfig: {
+                            padding:'5',
+                            align:'stretch'
+                        },
+                        defaults:{margins:'0 5 0 0'},
+                        items: [{
+                            flex: 1,
+                            layout: 'ux.display',
+                            labelWidth: 90,
+                            layoutConfig: {
+                                background: 'solid',
+                                declaration: this.app.i18n._('Status')
+                            },
+                            items: [{
+                                xtype: 'ux.displayfield',
+                                name: 'start',
+                                fieldLabel: this.app.i18n._('Start'),
+                                renderer: Tine.Tinebase.common.dateRenderer
+                            }, {
+                                xtype: 'ux.displayfield',
+                                name: 'end_scheduled',
+                                fieldLabel: this.app.i18n._('Estimated end'),
+                                renderer: Tine.Tinebase.common.dateRenderer
+                            }, {
+                                xtype: 'ux.displayfield',
+                                name: 'leadtype_id',
+                                fieldLabel: this.app.i18n._('Leadtype'),
+                                renderer: this.sourceTypeRenderer.createDelegate(this, [Tine.Crm.LeadType.getStore(), 'leadtype'], true)
+                            }, {
+                                xtype: 'ux.displayfield',
+                                name: 'leadsource_id',
+                                fieldLabel: this.app.i18n._('Leadsource'),
+                                renderer: this.sourceTypeRenderer.createDelegate(this, [Tine.Crm.LeadSource.getStore(), 'leadsource'], true)
+                            }]
+                        }, {
+                            flex: 1,
+                            layout: 'ux.display',
+                            labelAlign: 'top',
+                            autoScroll: true,
+                            //cls: 'contactIconPartner',
+                            layoutConfig: {
+                                background: 'solid'
+                                //declaration: this.app.i18n._('Partner')
+                            },
+                            items: [{
+                                xtype: 'ux.displayfield',
+                                name: 'partner',
+                                nl2br: true,
+                                htmlEncode: false,
+                                renderer: this.contactRenderer.createDelegate(this, ['PARTNER'])
+                            }]
+                        }, {
+                            flex: 1,
+                            layout: 'ux.display',
+                            labelAlign: 'top',
+                            autoScroll: true,
+                            //cls: 'contactIconCustomer',
+                            layoutConfig: {
+                                background: 'solid'
+                                //declaration: this.app.i18n._('Customer')
+                            },
+                            items: [{
+                                xtype: 'ux.displayfield',
+                                name: 'customer',
+                                nl2br: true,
+                                htmlEncode: false,
+                                renderer: this.contactRenderer.createDelegate(this, ['CUSTOMER'])
+                            }]
+                        }, {
+                            flex: 1,
+                            layout: 'fit',
+                            border: false,
+                            items: [{
+                                cls: 'x-ux-display-background-border',
+                                xtype: 'ux.displaytextarea',
+                                name: 'description'
+                            }]
                         }]
                     }]
                 }]
-            }]
-        });
+            });
+        }
+        
+        return this.singleRecordPanel
     },
     
     /**
@@ -526,9 +544,10 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * @param {Mixed} body
      */
     updateDetails: function(record, body) {
-        this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.leadDetailsPanel));
+        //this.supr().up
+        //this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.leadDetailsPanel));
         
-        this.leadDetailsPanel.loadRecord.defer(100, this.leadDetailsPanel, [record]);
+        this.getSingleRecordPanel().loadRecord.defer(100, this.getSingleRecordPanel(), [record]);
     },
     
     /**
@@ -537,7 +556,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * @param {Mixed} body
      */
     showDefault: function(body) {
-        this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.defaultPanel));
+        //this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.defaultPanel));
         
         // fill piechart stores from json data
         this.setPiechartStores.defer(500, this, [true]);
@@ -550,7 +569,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * @param {Mixed} body
      */
     showMulti: function(sm, body) {
-        this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.defaultPanel));
+        //this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.defaultPanel));
 
         // fill piechart stores from selection
         this.setPiechartStores.defer(1000, this, [false]);
