@@ -198,54 +198,58 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     getDefaultInfosPanel: function() {
         if (! this.defaultInfosPanel) {
             this.defaultInfosPanel = new Ext.ux.display.DisplayPanel({
-                layout: 'hbox',
+                layout: 'fit',
                 border: false,
-                defaults:{
-                    margins:'0 5 0 0',
-                    padding: 2,
-                    style: {
-                        cursor: 'crosshair'
-                    },
-                    flex: 1,
-                    layout: 'ux.display',
-                    border: false
-                },
-                layoutConfig: {
-                    padding:'5',
-                    align:'stretch'
-                },
                 items: [{
+                    layout: 'hbox',
+                    border: false,
+                    defaults:{
+                        margins:'0 5 0 0',
+                        padding: 2,
+                        style: {
+                            cursor: 'crosshair'
+                        },
+                        flex: 1,
+                        layout: 'ux.display',
+                        border: false
+                    },
                     layoutConfig: {
-                        background: 'border',
-                        declaration: this.app.i18n._('Leadstates')
+                        padding:'5',
+                        align:'stretch'
                     },
                     items: [{
-                        store: this.leadstatePiechartStore,
-                        xtype: 'piechart',
-                        dataField: 'total',
-                        categoryField: 'label'
-                    }]
-                }, {
-                    layoutConfig: {
-                        background: 'border',
-                        declaration: this.app.i18n._('Leadsources')
-                    },
-                    items: [{
-                        store: this.leadsourcePiechartStore,
-                        xtype: 'piechart',
-                        dataField: 'total',
-                        categoryField: 'label'
-                    }]
-                }, {
-                    layoutConfig: {
-                        background: 'border',
-                        declaration: this.app.i18n._('Leadtypes')
-                    },
-                    items: [{
-                        store: this.leadtypePiechartStore,
-                        xtype: 'piechart',
-                        dataField: 'total',
-                        categoryField: 'label'
+                        layoutConfig: {
+                            background: 'border',
+                            declaration: this.app.i18n._('Leadstates')
+                        },
+                        items: [{
+                            store: this.leadstatePiechartStore,
+                            xtype: 'piechart',
+                            dataField: 'total',
+                            categoryField: 'label'
+                        }]
+                    }, {
+                        layoutConfig: {
+                            background: 'border',
+                            declaration: this.app.i18n._('Leadsources')
+                        },
+                        items: [{
+                            store: this.leadsourcePiechartStore,
+                            xtype: 'piechart',
+                            dataField: 'total',
+                            categoryField: 'label'
+                        }]
+                    }, {
+                        layoutConfig: {
+                            background: 'border',
+                            declaration: this.app.i18n._('Leadtypes')
+                        },
+                        items: [{
+                            store: this.leadtypePiechartStore,
+                            xtype: 'piechart',
+                            dataField: 'total',
+                            categoryField: 'label'
+                        }]
                     }]
                 }]
                 /*
@@ -544,9 +548,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * @param {Mixed} body
      */
     updateDetails: function(record, body) {
-        //this.supr().up
-        //this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.leadDetailsPanel));
-        
         this.getSingleRecordPanel().loadRecord.defer(100, this.getSingleRecordPanel(), [record]);
     },
     
@@ -556,9 +557,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * @param {Mixed} body
      */
     showDefault: function(body) {
-        //this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.defaultPanel));
-        
-        // fill piechart stores from json data
         this.setPiechartStores.defer(500, this, [true]);
     },
     
@@ -569,9 +567,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * @param {Mixed} body
      */
     showMulti: function(sm, body) {
-        //this.cardPanel.layout.setActiveItem(this.cardPanel.items.getKey(this.defaultPanel));
-
-        // fill piechart stores from selection
         this.setPiechartStores.defer(1000, this, [false]);
     }
     
