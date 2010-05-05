@@ -205,7 +205,10 @@
     public function sendNotificationToAttender($_attender, $_event, $_updater, $_action, $_notificationLevel, $_updates=NULL)
     {
         if (! in_array($_attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))
-                || ! $_attender->getResolvedUser() instanceof Addressbook_Model_Contact
+            // 2010-05-05 disable for the moment
+            //  - for contacts prefs of organizer is taken, this leads to unpredictable results if notificaiton is send or not!
+            //  - users can not yet configure which user/contact should get notificaitons or not    
+            //|| ! $_attender->getResolvedUser() instanceof Addressbook_Model_Contact
         ) {
             // don't send notifications to non persons
             //   OR non resolvable attendee
