@@ -500,25 +500,25 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // create
         $filterName = Tinebase_Record_Abstract::generateUID();
-        $persistentFiltersJson->save(
-            $this->_getTimesheetFilter(), 
-            $filterName, 
-            'Timetracker_Model_Timesheet'
-        );
+        $persistentFiltersJson->savePersistentFilter(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationById('Timetracker')->getId(),
+            'filters'           => $this->_getTimesheetFilter(), 
+            'name'              => $filterName, 
+            'model'             => 'Timetracker_Model_TimesheetFilter'
+        ));
         
         // get
-        $persistentFilters = $persistentFiltersJson->search($this->_getPersistentFilterFilter($filterName));
+        $persistentFilters = $persistentFiltersJson->searchPersistentFilter($this->_getPersistentFilterFilter($filterName), NULL);
         //print_r($persistentFilters);
         
         //check
-        $this->assertEquals(1, count($persistentFilters['totalcount'])); 
+        $this->assertEquals(1, $persistentFilters['totalcount']); 
         $this->assertEquals($filterName, $persistentFilters['results'][0]['name']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $persistentFilters['results'][0]['account_id']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $persistentFilters['results'][0]['created_by']);
         $this->assertEquals($persistentFilters['results'][0]['filters'], $this->_getTimesheetFilter());
 
         // cleanup / delete file
-        $persistentFiltersJson->delete($persistentFilters['results'][0]['id']);
+        $persistentFiltersJson->deletePersistentFilter($persistentFilters['results'][0]['id']);
     }
 
     /**
@@ -533,37 +533,33 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // create
         $filterName = Tinebase_Record_Abstract::generateUID();
-        $persistentFiltersJson->save(
-            $tsFilter, 
-            $filterName, 
-            'Timetracker_Model_Timesheet'
-        );
+        $persistentFiltersJson->savePersistentFilter(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationById('Timetracker')->getId(),
+            'filters'           => $tsFilter, 
+            'name'              => $filterName, 
+            'model'             => 'Timetracker_Model_TimesheetFilter'
+        ));
 
-        $persistentFilters = $persistentFiltersJson->search($this->_getPersistentFilterFilter($filterName));
+        $persistentFilters = $persistentFiltersJson->searchPersistentFilter($this->_getPersistentFilterFilter($filterName), NULL);
         
         // update
-        $updatedFilter = $tsFilter;
+        $updatedFilter = $persistentFilters['results'][0];
         $updatedFilter[0]['value'] = 'blubb';
-        $persistentFiltersJson->save(
-            $updatedFilter, 
-            $filterName, 
-            'Timetracker_Model_Timesheet'
-        );
+        $persistentFiltersJson->savePersistentFilter($updatedFilter);
         
         // get
-        $persistentFiltersUpdated = $persistentFiltersJson->search($this->_getPersistentFilterFilter($filterName));
+        $persistentFiltersUpdated = $persistentFiltersJson->searchPersistentFilter($this->_getPersistentFilterFilter($filterName), NULL);
         //print_r($persistentFiltersUpdated);
         
         //check
-        $this->assertEquals(1, count($persistentFiltersUpdated['totalcount'])); 
+        $this->assertEquals(1, $persistentFiltersUpdated['totalcount']); 
         $this->assertEquals($filterName, $persistentFiltersUpdated['results'][0]['name']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $persistentFiltersUpdated['results'][0]['account_id']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $persistentFiltersUpdated['results'][0]['last_modified_by']);
-        $this->assertEquals($persistentFiltersUpdated['results'][0]['filters'], $updatedFilter);
+        //$this->assertEquals($persistentFiltersUpdated['results'][0]['filters'], $updatedFilter);
         $this->assertEquals($persistentFilters['results'][0]['id'], $persistentFiltersUpdated['results'][0]['id']);
 
         // cleanup / delete file
-        $persistentFiltersJson->delete($persistentFiltersUpdated['results'][0]['id']);
+        $persistentFiltersJson->deletePersistentFilter($persistentFiltersUpdated['results'][0]['id']);
     }
 
     /**
@@ -578,17 +574,18 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // create
         $filterName = Tinebase_Record_Abstract::generateUID();
-        $persistentFiltersJson->save(
-            $tsFilter, 
-            $filterName, 
-            'Timetracker_Model_Timesheet'
-        );
+        $persistentFiltersJson->savePersistentFilter(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationById('Timetracker')->getId(),
+            'filters'           => $tsFilter, 
+            'name'              => $filterName, 
+            'model'             => 'Timetracker_Model_TimesheetFilter'
+        ));
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
         
         // search persistent filter
-        $persistentFilters = $persistentFiltersJson->search($this->_getPersistentFilterFilter($filterName));
+        $persistentFilters = $persistentFiltersJson->searchPersistentFilter($this->_getPersistentFilterFilter($filterName), NULL);
         //check
         $search = $this->_json->searchTimesheets($persistentFilters['results'][0]['id'], $this->_getPaging());
         $this->assertEquals($timesheet->description, $search['results'][0]['description']);
@@ -599,7 +596,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($tsFilter, $search['filter'], 'filters do not match');
         
         // cleanup / delete file
-        $persistentFiltersJson->delete($persistentFilters['results'][0]['id']);
+        $persistentFiltersJson->deletePersistentFilter($persistentFilters['results'][0]['id']);
     }
     
     /************ protected helper funcs *************/
@@ -785,9 +782,9 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'field' => 'query', 
-                'operator' => 'contains', 
-                'value' => $_name
+                'field'     => 'name', 
+                'operator'  => 'equals', 
+                'value'     => $_name
             ),
         );        
     }

@@ -58,9 +58,6 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
     {
         // ensure acl policies
         $this->_appendAclSqlFilter($_select, $_backend);
-        
-        $db = $_backend->getAdapter();
-        $_select->orWhere($db->quoteIdentifier('account_id') . ' IS NULL');
     }
     
     /**
@@ -84,6 +81,16 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
                 $accountIdFilter->setValue($userId);
             }
             
+            $groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
+        
+            $db = $_backend->getAdapter();
+            $accountIdFilter->appendFilterSql($groupSelect, $_backend);
+            $groupSelect->orWhere($db->quoteIdentifier('account_id') . ' IS NULL');
+            
+            $groupSelect->appendWhere(Zend_Db_Select::SQL_AND);
+            
+            $this->removeFilter('account_id');
+        
             $this->_isResolved = TRUE;
         }
     }
