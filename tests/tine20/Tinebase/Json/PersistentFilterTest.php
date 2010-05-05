@@ -100,6 +100,34 @@ class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
         $this->_assertSavedFilterData($exampleFilterData, $searchResult['results'][0]);
     }
 
+    public function testSearchIncludesSharedFavorites()
+    {
+        $sharedFavorite = self::getPersitentFilter();
+        $sharedFavorite->name = 'PHPUnit shared filter';
+        $sharedFavorite->account_id = NULL;
+        
+        $backend = new Tinebase_PersistentFilter_Backend_Sql();
+        $persistentSharedFavirite = $backend->create($sharedFavorite);
+        
+        $exampleFilterData = self::getPersitentFilterData();
+        $savedFilterData = $this->testSaveFilter($exampleFilterData);
+        
+        $filterData = array(
+            array('field' => 'model',   'operator' => 'equals',     'value' => 'Tasks_Model_TaskFilter'),
+            array('field' => 'name',    'operator' => 'startswith', 'value' => 'PHPUnit'),
+        );
+        
+        $searchResult = $this->_uit->searchPersistentFilter($filterData, NULL);
+        
+        $this->assertGreaterThanOrEqual(2, $searchResult['totalcount']);
+        
+        $ids = array();
+        foreach($searchResult['results'] as $filterData) {
+            $ids[] = $filterData['id'];
+        }
+        $this->assertEquals(2, count(array_intersect($ids, array($persistentSharedFavirite->getId(), $savedFilterData['id']))));
+    }
+    
 // obsolete tests
 //    public function testRenameFilter()
 //    {

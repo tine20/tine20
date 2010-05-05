@@ -57,7 +57,10 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
     public function appendFilterSql($_select, $_backend)
     {
         // ensure acl policies
-        $this->_appendAclSqlFilter($_select);
+        $this->_appendAclSqlFilter($_select, $_backend);
+        
+        $db = $_backend->getAdapter();
+        $_select->orWhere($db->quoteIdentifier('account_id') . ' IS NULL');
     }
     
     /**
@@ -65,7 +68,7 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
      *
      * @param Zend_Db_Select $_select
      */
-    protected function _appendAclSqlFilter($_select) {
+    protected function _appendAclSqlFilter($_select, $_backend) {
         
         if (! $this->_isResolved) {
             

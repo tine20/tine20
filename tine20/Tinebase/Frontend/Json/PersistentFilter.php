@@ -66,6 +66,22 @@ class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abs
     }
     
     /**
+     * returns registry data of PersistentFilter.
+     *
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {
+        $persistentFilters = $this->searchPersistentFilter(array(
+            array('field' => 'account_id',   'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()),
+        ), NULL);
+        
+        return array(
+            'persitentFilters' => $persistentFilters
+        );
+    }
+    
+    /**
      * returns record prepared for json transport
      *
      * @param Tinebase_Record_Interface $_record
