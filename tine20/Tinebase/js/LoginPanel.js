@@ -64,14 +64,14 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         if (! this.loginPanel) {
             this.loginPanel = new Ext.FormPanel({
                 width: 460,
-                height: 270,
+                height: 250,
                 frame:true,
                 labelWidth: 90,
                 cls: 'tb-login-panel',
                 items: [{
                     cls: 'tb-login-lobobox',
                     border: false,
-                    html: '<a target="_blank" href="http://www.tine20.org/" border="0"><img src="' + this.loginLogo +'" /></a>'
+                    html: '<a target="_blank" href="' + Tine.weburl + '" border="0"><img src="' + this.loginLogo +'" /></a>'
                 }, {
                     xtype: 'label',
                     cls: 'tb-login-big-label',
@@ -87,6 +87,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     fieldLabel: _('Username'),
                     id: 'username',
                     name: 'username',
+                    allowBlank: false,
                     selectOnFocus: true,
                     value: this.defaultUsername,
                     listeners: {render: function(field){field.focus(false, 250);}}
@@ -101,11 +102,9 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     //allowBlank: false,
                     selectOnFocus: true,
                     value: this.defaultPassword
-                },{
-                    cls: 'tb-login-button-spacer',
-                    border: false,
-                    html: ''
-                }, {
+                }],
+                buttonAlign: 'center',
+                buttons: [{
                     xtype: 'button',
                     width: 120,
                     text: _('Login'),
@@ -135,8 +134,8 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     html: '&nbsp;'
                 }, {
                     html: '<ul>' + 
-                        '<li><a target="_blank" href="http://www.tine20.org/" border="0">' + _('Tine 2.0 Homepage') + '</a></li>' +
-                        '<li><a target="_blank" href="http://www.tine20.org/forum/" border="0">' + _('Tine 2.0 Forum') + '</a></li>' +
+                        '<li><a target="_blank" href="' + Tine.weburl + '" border="0">' + _('Tine 2.0 Homepage') + '</a></li>' +
+                        '<li><a target="_blank" href="' + Tine.weburl + 'forum/" border="0">' + _('Tine 2.0 Forum') + '</a></li>' +
                     '</ul>'
                 }
                 ]
@@ -295,6 +294,8 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     }
                 }
             });
+        } else {
+        	Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
         }
     },
     

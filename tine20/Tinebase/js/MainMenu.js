@@ -168,7 +168,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             title: String.format(_('About {0}'), Tine.title),
             msg: 
                 '<div class="tb-about-dlg">' +
-                    '<div class="tb-about-img"><a href="http://www.tine20.org" target="_blank"><img src="' + Tine.Tinebase.LoginPanel.prototype.loginLogo + '" /></a></div>' +
+                    '<div class="tb-about-img"><a href="' + Tine.weburl + '" target="_blank"><img src="' + Tine.Tinebase.LoginPanel.prototype.loginLogo + '" /></a></div>' +
                     '<div class="tb-about-version">Version: ' + version.codeName + '</div>' +
                     '<div class="tb-about-build">( ' + version.packageString + ' )</div>' +
                     '<div class="tb-about-copyright">Copyright: 2007-' + new Date().getFullYear() + '&nbsp;<a href="http://www.metaways.de" target="_blank">Metaways Infosystems GmbH</a></div>' +

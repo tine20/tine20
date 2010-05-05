@@ -70,6 +70,7 @@ Tine.clientVersion.releaseTime      = 'none';
  * @type String
  */
 Tine.title = 'Tine 2.0';
+Tine.weburl = 'http://www.tine20.org/';
 
 Ext.namespace('Tine.Tinebase');
 
@@ -161,7 +162,7 @@ Tine.Tinebase.tineInit = {
             layout: 'fit',
             width: 16,
             height: 16,
-            html: '<div class="loading-indicator" width="16px" height="16px">&#160;</div><div id="tine-viewport-poweredby" class="tine-viewport-poweredby" style="position: absolute;">Powered by: <a target="_blank" href="http://www.tine20.org">Tine 2.0</a></div>',
+            html: '<div class="loading-indicator" width="16px" height="16px">&#160;</div><div id="tine-viewport-poweredby" class="tine-viewport-poweredby" style="position: absolute;">Powered by: <a target="_blank" href="' + Tine.weburl + '">' + Tine.title + '</a></div>',
             listeners: {
                 scope: this,
                 render: centerSplash,

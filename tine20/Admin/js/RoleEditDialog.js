@@ -337,9 +337,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
         
-        //this.title = title: 'Edit Role ' + ,
-        
-        Ext.MessageBox.wait(this.translation._('Loading Role...'), this.translation._('Please Wait'));
+//        Ext.MessageBox.wait(this.translation._('Loading Role...'), this.translation._('Please Wait'));
         Ext.Ajax.request({
             scope: this,
             success: this.onRecordLoad,
@@ -370,6 +368,23 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         Tine.Admin.Groups.EditDialog.superclass.initComponent.call(this);
     },
     
+    onRender : function(ct, position){
+        Tine.widgets.dialog.EditDialog.superclass.onRender.call(this, ct, position);
+        
+        // generalized keybord map for edit dlgs
+        var map = new Ext.KeyMap(this.el, [
+            {
+                key: [10,13], // ctrl + return
+                ctrl: true,
+                fn: this.handlerApplyChanges.createDelegate(this, [true], true),
+                scope: this
+            }
+        ]);
+
+        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transfering {0}...'), this.translation.gettext('Role'))});
+       	this.loadMask.show();
+    },
+    
     onRecordLoad: function(response) {
         this.getForm().findField('name').focus(false, 250);
         var recordData = Ext.util.JSON.decode(response.responseText);
@@ -382,7 +397,9 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }
         
         this.getForm().loadRecord(this.role);
-        Ext.MessageBox.hide();
+//        Ext.MessageBox.hide();
+        
+        this.loadMask.hide();
     }
     
 });

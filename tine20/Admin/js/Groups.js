@@ -403,8 +403,6 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 },
                 scope: this 
             });
-                
-            
         } else {
             Ext.MessageBox.alert(this.translation.gettext('Errors'), this.translation.gettext('Please fix the errors noted.'));
         }
@@ -486,14 +484,17 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         //this.title = title: 'Edit Group ' + ,
         
-        Ext.Ajax.request({
-            scope: this,
-            success: this.onRecordLoad,
-            params: {
-                method: 'Admin.getGroup',
-                groupId: this.group.id
-            }
-        });
+        if (this.group.id !== 0)
+        {
+	        Ext.Ajax.request({
+	            scope: this,
+	            success: this.onRecordLoad,
+	            params: {
+	                method: 'Admin.getGroup',
+	                groupId: this.group.id
+	            }
+	        });
+        }
         
         this.membersStore = new Ext.data.JsonStore({
             root: 'results',
@@ -507,6 +508,25 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         this.items = this.getFormContents();
         Tine.Admin.Groups.EditDialog.superclass.initComponent.call(this);
+    },
+    
+    onRender : function(ct, position){
+        Tine.widgets.dialog.EditDialog.superclass.onRender.call(this, ct, position);
+        
+        // generalized keybord map for edit dlgs
+        var map = new Ext.KeyMap(this.el, [
+            {
+                key: [10,13], // ctrl + return
+                ctrl: true,
+                fn: this.handlerApplyChanges.createDelegate(this, [true], true),
+                scope: this
+            }
+        ]);
+
+        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transfering {0}...'), this.translation.gettext('Group'))});
+        if (this.group.id !== 0) {
+            this.loadMask.show();
+        }
     },
     
     onRecordLoad: function(response) {
@@ -523,6 +543,8 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.getForm().loadRecord(this.group);
         this.updateToolbarButtons();
         //Ext.MessageBox.hide();
+        
+        this.loadMask.hide();
     }
 });
 
