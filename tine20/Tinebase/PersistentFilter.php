@@ -8,14 +8,19 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- * 
- * @todo        add account id to sql statements to check acl
- * 
  */
 
 
 /**
  * persistent filter controller
+ * 
+ * @todo rework account_id to container_id to let Persistent_Filters be organised
+ *       in standard contaienr / grants way. This depends on container class to cope
+ *       with multiple models per app which is not yet implementet (2010-05-05)
+ * @todo rethink is_default. defaults should be handeld by preferences. Unfortunally
+ *       preferences can't cope yet with admin/nonadmin prefs. So the admin could 
+ *       define/force a faforite the user has no rights for ;-( (2010-05-05)
+ *      
  */
 class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
 {
