@@ -25,6 +25,13 @@
 class Tinebase_Model_User extends Tinebase_Record_Abstract
 {
     /**
+     * const to describe current account accountId independent
+     * 
+     * @var string
+     */
+    const CURRENTACCOUNT = 'currentAccount';
+    
+    /**
      * list of zend inputfilter
      * 
      * this filter get used when validating user generated content with Zend_Input_Filter

@@ -20,6 +20,13 @@
 class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 {
     /**
+     * const to describe contact of current account id independent
+     * 
+     * @var string
+     */
+    const CURRENTCONTACT = 'currentContact';
+    
+    /**
      * contact type: contact
      * 
      * @var string
