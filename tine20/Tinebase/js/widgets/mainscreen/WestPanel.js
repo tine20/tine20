@@ -106,7 +106,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
             c[idx] = {key: k[position], value: items[position], index: position};
         }, this);
         
-        for(i = 0, len = c.length; i < len; i++){
+        for(var i = 0, len = c.length; i < len; i++){
             items[i] = c[i].value;
             k[i] = c[i].key;
         }
