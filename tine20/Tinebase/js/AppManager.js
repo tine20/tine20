@@ -243,6 +243,12 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
         
         Ext.apply(mainScreen, {
             appPanel: appPanel,
+            getContainerTreePanel: function() {
+                return this.appPanel;
+            },
+            getWestPanel: function() {
+                return this.appPanel;
+            },
             show: function() {
                 Tine.Tinebase.MainScreen.setActiveTreePanel(appPanel, true);
                 appPanel.fireEvent('beforeexpand', appPanel);
