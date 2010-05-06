@@ -76,6 +76,12 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
         //Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($this->_value, true));
         foreach ($this->_value as $attenderValue) {
             if (in_array($attenderValue['user_type'], array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
+                
+                // transform CURRENTCONTACT
+                $attenderValue['user_id'] = $attenderValue['user_id'] == Addressbook_Model_Contact::CURRENTCONTACT ? 
+                    Tinebase_Core::getUser()->contact_id : 
+                    $attenderValue['user_id'];
+                
                 $attendee = array(
                     array(
                         'user_type' => Calendar_Model_Attender::USERTYPE_USER,
