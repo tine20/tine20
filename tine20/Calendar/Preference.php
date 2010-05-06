@@ -25,6 +25,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     const DEFAULTCALENDAR = 'defaultCalendar';
     
     /**
+     * default calendar filter
+     */
+    const DEFAULTPERSISTENTFILTER = 'defaultpersistentfilter';
+    
+    /**
      * general notification level
      */
     const NOTIFICATION_LEVEL = 'notificationLevel';
@@ -51,6 +56,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     {
         $allPrefs = array(
             self::DEFAULTCALENDAR,
+            self::DEFAULTPERSISTENTFILTER,
             self::NOTIFICATION_LEVEL,
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
         );
@@ -71,6 +77,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTCALENDAR  => array(
                 'label'         => $translate->_('Default Calendar'),
                 'description'   => $translate->_('The default calendar for invitations and new events'),
+            ),
+            self::DEFAULTPERSISTENTFILTER  => array(
+                'label'         => $translate->_('Default Favorite'),
+                'description'   => $translate->_('The default favorite which is loaded on calendar startup'),
             ),
             self::NOTIFICATION_LEVEL => array(
                 'label'         => $translate->_('Get Notification Emails'),
@@ -101,6 +111,15 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 $calendars          = Tinebase_Container::getInstance()->getPersonalContainer($accountId, 'Calendar', $accountId, 0, true);
                 $preference->value  = $calendars->getFirstRecord()->getId();
                 $preference->personal_only = TRUE;
+                break;
+            case self::DEFAULTPERSISTENTFILTER:
+                // @todo some static fn in pfilters controller
+                $pfilters = Tinebase_PersistentFilter::getInstance()->search(new Tinebase_Model_PersistentFilterFilter(array(
+                    array('field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()),
+                    array('field' => 'account_id',     'operator' => 'equals', 'value'  => $_accountId ? $_accountId : Tinebase_Core::getUser()->getId()),
+                )));
+                $preference->value          = $pfilters->filter('name', "All my events")->getFirstRecord()->getId();
+                $preference->personal_only  = TRUE;
                 break;
             case self::NOTIFICATION_LEVEL:
                 $translate = Tinebase_Translation::getTranslation($this->_application);
@@ -155,12 +174,24 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
         $result = array();
         switch($_value) {
             case self::DEFAULTCALENDAR:
-                // get all user accounts
+                // get all containers of current user
                 $calendars = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), 'Calendar', Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
                 
                 foreach ($calendars as $calendar) {
                     $result[] = array($calendar->getId(), $calendar->name);
                 }
+                break;
+            case self::DEFAULTPERSISTENTFILTER:
+                // @todo some static fn in pfilters controller
+                $i18n = Tinebase_Translation::getTranslation('Calendar');
+                $pfilters = Tinebase_PersistentFilter::getInstance()->search(new Tinebase_Model_PersistentFilterFilter(array(
+                    array('field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()),
+                    array('field' => 'account_id',     'operator' => 'equals', 'value'  => $_accountId ? $_accountId : Tinebase_Core::getUser()->getId()),
+                )));
+                foreach ($pfilters as $pfilter) {
+                    $result[] = array($pfilter->getId(), $i18n->translate($pfilter->name));
+                }
+                
                 break;
             default:
                 $result = parent::_getSpecialOptions($_value);
