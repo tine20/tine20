@@ -371,6 +371,24 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertEquals(0, count($searchResultData['results']));
     }
     
+    public function testMeAsAttenderFilter()
+    {
+        $eventData = $this->testCreateEvent();
+        
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'attender'    , 'operator' => 'equals', 'value' => array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'   => Addressbook_Model_Contact::CURRENTCONTACT,
+            ))
+        );
+        
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $resultEventData = $searchResultData['results'][0];
+        
+        $this->_assertJsonEvent($eventData, $resultEventData, 'failed to filter for me as attender');
+    }
+    
     /**
      * compare expected event data with test event
      *
