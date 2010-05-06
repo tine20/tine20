@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://ttine/skin/overlay.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://ttine/locale/ttine.dtd">
+<overlay id="ttine-overlay"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="helper.js" type="application/x-javascript;version=1.7" />
+  <script src="wbxml.js" type="application/x-javascript;version=1.7" />
+  <script src="ashttp.js" type="application/x-javascript;version=1.7" />
+  <script src="folder.js" type="application/x-javascript;version=1.7" />
+  <script src="config.js" type="application/x-javascript;version=1.7" />
+  <script src="ab.js" type="application/x-javascript;version=1.7" />
+  <script src="sync.js" type="application/x-javascript;version=1.7" />
+  <script src="errortxt.js" type="application/x-javascript;version=1.7" />
+  <script src="overlay.js" type="application/x-javascript;version=1.7" />
+
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="ttine-strings" src="chrome://ttine/locale/ttine.properties"/>
+  </stringbundleset>
+
+	<menupopup id="taskPopup">
+		<menuitem id="ttine-settings" label="&ttine.menuLabel;" 
+			oncommand="ttine.onMenuItemCommand(event);"/>
+	</menupopup>
+
+	<statusbar id="status-bar">
+		<statusbarpanel id="status-bar-thundertine"
+			class="statusbarpanel-iconic-text"
+			image="chrome://ttine/skin/ttine_inactive.png"
+			label="&ttine.statusLabel;"
+			tooltiptext="&ttine.statusTooltip;"
+			context="status-bar-popup"
+			onclick="ttine.onSync(event)"
+		/>
+	</statusbar>
+
+</overlay>

@@ -1,0 +1,45 @@
+<!ENTITY ttine.menuLabel "Tine 2.0 Sync Einstellungen...">
+<!ENTITY ttine.statusLabel "Sync Tine 2.0">
+<!ENTITY ttine.statusTooltip "Linksklick synchronisiert - Rechtsklick öffnet das Einstellungsfenster.">
+
+
+
+<!ENTITY ttine.prefwindowTitle "Tine 2.0 Sync Einstellungen...">
+<!ENTITY ttine.prefwindowToolbarHost "Host Einrichtung">
+<!ENTITY ttine.prefwindowToolbarContacts "Kontakte">
+<!ENTITY ttine.prefwindowToolbarAbout "Über">
+
+<!ENTITY ttine.prefwindowServer "ActiveSync Server-Einstellungen">
+<!ENTITY ttine.prefwindowHostPref "Tine 2.0 host (z.B. tine.example.com)">
+<!ENTITY ttine.prefwindowSSL "SSL verwenden">
+<!ENTITY ttine.prefwindowUsername "Benutzername">
+<!ENTITY ttine.prefwindowPassword "Passwort">
+<!ENTITY ttine.prefwindowSyncOptions "Synchronisierungs-Einstellungen">
+<!ENTITY ttine.prefwindowBeforeClose "Synchronisieren beim schließen von Thunderbird">
+<!ENTITY ttine.prefwindowInterval1 "synchronisiere alle ">
+<!ENTITY ttine.prefwindowInterval2 "Minuten">
+<!ENTITY ttine.prefwindowCheckFolder "überprüfe vor dem Synchronisieren die Ordner auf dem Server">
+<!ENTITY ttine.prefwindowLimitPicSize "Größe der Bilder beschränken (ActiveSync-Standard ~36 KB)">
+<!ENTITY ttine.prefwindowIPhone "Am Server als iPhone ausgeben">
+
+<!ENTITY ttine.prefwindowLocalBooks "lokale Addressbücher">
+<!ENTITY ttine.prefwindowAddNew "Addressbuch hinzufügen...">
+<!ENTITY ttine.prefwindowReinitialize "gewähltes Buch re-initialisieren">
+<!ENTITY ttine.prefwindowReinitializeText "Buch initialisieren: Wenn Sie ein Addressbuch neu initialisieren, 
+			das zuvor bereits synchronisiert wurde, führt das zu einem erneuten Abgleich aller bestehender
+			Kontakte. Manchmal ist dies erforderlich, damit alle Kontakte wieder synchronisiert werden,
+			es kann jedoch bei nicht-leeren Büchern zu Doppel-Einträgen führen.">
+<!ENTITY ttine.prefwindowRemoteFolders "entfernte Kontakt-Verzeichnisse">
+<!ENTITY ttine.prefwindowRemoteRefresh "Verzeichnisliste erneuern...">
+
+<!ENTITY ttine.prefwindowAbout1 "Diese Erweiterung gleicht die Kontakte aus einem Thunderbird Addressbuch mit
+	der Groupware Tine 2.0 (http://www.tine20.org/) ab. Dazu wird zwar das ActiveSync Protokoll verwendet, 
+	andere Groupware Server, die dieses Protokoll beherrschen, wurden aber nicht getestet. Möglicherweise 
+	funktiontiert mit diesen der Abgleich - oder auch nicht; es kann zum Verlust der Kontaktdaten kommen, 
+	jegliche Haftung dafür ist ausgeschlossen. ">
+<!ENTITY ttine.prefwindowAbout2 "Die Erweiterung steht unter der GPL 2.0 (und nur dieser). Fühlen Sie sich frei, 
+	die Erweiterung im Rahmen dieser Bedingungen zu ändern und/oder weiterzuverbreiten . ">
+<!ENTITY ttine.prefwindowAbout3 "Ich habe diese Erweiterung in meiner Freizeit geschrieben. Wenn Sie mir danken wollen,  
+	schreiben Sie eine E-Mail an thundertinesync@googlemail.com. Ich werde eine deutsche Kontonummer zurückschicken, an
+	die Sie einen kleinen Betrag überweisen können. Jede Spende ist willkommen, für mich ist der Gegenwert von zwei
+	Bier in Ihrer Stammkneipe in Ihrem Ort Anerkennung genug. Danke. ">

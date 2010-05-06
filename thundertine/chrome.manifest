@@ -1,0 +1,6 @@
+content	ttine	content/
+locale	ttine	en-US	locale/en-US/
+locale	ttine	de-DE	locale/de-DE/
+skin	ttine	classic/1.0	skin/
+overlay	chrome://messenger/content/messenger.xul	chrome://ttine/content/thunderbirdOverlay.xul
+style	chrome://global/content/customizeToolbar.xul	chrome://ttine/skin/overlay.css

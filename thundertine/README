@@ -1,0 +1,56 @@
+This document describes ThunderTine, an extension ("Add-On") to Mozilla
+Thunderbird, a mailer under the Mozilla Public Licence (MPL) which is 
+compatible to General Public Licence (GPL). The goal is synchronisation with
+Tine 2.0 groupware, which is also open source (AGPL), using the Microsoft
+ActiveSync protocol. 
+
+LEGAL NOTICE
+
+According to Microsoft their protocol "may be covered by patents". If so they
+are valid in US only. If you intend to use this extension in USA you should be
+aware of the conditions of patent law, especially if you plan to use it for
+commercial reasons. 
+
+Due to the patent law issue ThunderTine is licenced under GPL v2 ONLY. I have
+no idea how later versions of GPL are affected by patents. All I know is that
+later versions try to cover these questions, too. 
+
+FEATURES
+
+By now ThunderTine syncs one address book with Tine 2.0, either with a virtual
+contacts folder inside tine (which is made for dumb device) or with a selected
+folder (if you tell ThunderTine to pretend to be a iPhone). 
+
+There's no calender and tasks synchronisation by the time of writing.
+
+INSTALL
+
+For users: Download ttine.xpi and point your Thunderbird Add-On installer to
+the file. Restart Thunderbird and configure ThunderTine through its preferences
+dialog. 
+
+For developers: The xpi file is just a regular zip file. It contents the folder
+structure as you can see in SVN. To work with the sources the fastest track is
+installing the xpi first and then go to your thunderbird profile folder and 
+delete all files below extensions/thundertine@santa.noel. Now put all files
+from SVN into that folder. After a restart Thunderbird is working with the
+sources, not the xpi anymore. 
+
+DEVELOPER HINTS
+
+ThunderTine is 100% javascript. It makes use of additions that are related to
+Mozilla software but for experienced javascript developers it should be
+understandable. I myself am not a javascript specialist. 
+
+Look at the folder structure. Inside content the actual program files resident.
+In defaults you can find the default values for Thunderbird's registry. Locale
+is self-explanatory and skin holds the files for the user interface. 
+
+If you're working with linux (and MacOS X probably) you can use build.sh to create a xpi
+file from the sources. It will make the necessary changes to chrome.manifest
+and pack the rest into a jar which will find itself in folder chrome. All this
+will be inside a (new) ttine.xpi. 
+
+HISTORY
+
+0.1     Initial  Version: Sync contacts between Thunderbird and Tine 2.0

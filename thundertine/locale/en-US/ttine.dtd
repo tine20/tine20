@@ -1,0 +1,44 @@
+<!ENTITY ttine.menuLabel "Tine 2.0 Sync Preferences...">
+<!ENTITY ttine.statusLabel "Sync Tine 2.0">
+<!ENTITY ttine.statusTooltip "Left click to sync - right click for Options.">
+
+
+
+<!ENTITY ttine.prefwindowTitle "Tine 2.0 Sync Preferences...">
+<!ENTITY ttine.prefwindowToolbarHost "Host setup">
+<!ENTITY ttine.prefwindowToolbarContacts "Contacts">
+<!ENTITY ttine.prefwindowToolbarAbout "About">
+
+<!ENTITY ttine.prefwindowServer "ActiveSync server configuration">
+<!ENTITY ttine.prefwindowHostPref "Tine 2.0 host (e.g. tine.example.com)">
+<!ENTITY ttine.prefwindowSSL "use SSL">
+<!ENTITY ttine.prefwindowUsername "Username">
+<!ENTITY ttine.prefwindowPassword "Password">
+<!ENTITY ttine.prefwindowSyncOptions "Syncing Options">
+<!ENTITY ttine.prefwindowBeforeClose "Sync before Thunderbird closes">
+<!ENTITY ttine.prefwindowInterval1 "Sync every">
+<!ENTITY ttine.prefwindowInterval2 "minutes">
+<!ENTITY ttine.prefwindowCheckFolder "check remote folders before syncing">
+<!ENTITY ttine.prefwindowLimitPicSize "limit picture size (ActiveSync standard ~36 KB)">
+<!ENTITY ttine.prefwindowIPhone "pretend to be a iPhone">
+
+<!ENTITY ttine.prefwindowLocalBooks "local address books">
+<!ENTITY ttine.prefwindowAddNew "Add new address book...">
+<!ENTITY ttine.prefwindowReinitialize "re-initialize selected book">
+<!ENTITY ttine.prefwindowReinitializeText "Initialize book: If you choose an address book which has been used for syncing before, 
+			click initialize book to resync existing contacts. Otherwise some contacts may not be synced.
+			This can lead to duplicates in non-empty books.">
+<!ENTITY ttine.prefwindowRemoteFolders "remote contact folders">
+<!ENTITY ttine.prefwindowRemoteRefresh "refresh folder list...">
+
+<!ENTITY ttine.prefwindowAbout1 "This extension syncs Thunderbird's contacts against 
+	Tine 2.0 Groupware (http://www.tine20.org/) using ActiveSync protocol.
+	It is not tested against any other ActiveSync enabled server. It might work but it also might fail. 
+	You can loose your 	data with it. No warranty provided.">
+<!ENTITY ttine.prefwindowAbout2 "The extension is licenced under GPL 2.0 only. 
+	You're free to change the sources and redistribute them under these terms.">
+<!ENTITY ttine.prefwindowAbout3 "If you like this extension and want to thank me: 
+	Write an email to thundertinesync@googlemail.com. 
+	I will give you a german bank account number to which you can donate a little amount. 
+	Any amount is welcome - for me it is totally apropriate if you donate as much as two beers 
+	approximatly cost in your favourite pub at your place. Thank you.">

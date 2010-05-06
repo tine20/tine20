@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://ttine/locale/ttine.dtd">
+
+<prefwindow id="ThundertinePreferences"
+	title="&ttine.prefwindowTitle;"
+	minwidth="400"
+	minheight="480"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	onload="onopen();"
+	ondialogaccept="onclose(true);"
+	onunload="onclose();">
+
+  <prefpane id="paneThunderTineHost" label="&ttine.prefwindowToolbarHost;" image="chrome://ttine/skin/tine.png">
+	<preferences>
+		<preference id="hostPref" name="extensions.ttine.host" type="string"/>
+		<preference id="hostSslPref" name="extensions.ttine.hostSsl" type="bool"/>
+		<preference id="syncBeforeClosePref" name="extensions.ttine.syncBeforeClose" type="bool"/>
+		<preference id="checkFolderBeforePref" name="extensions.ttine.checkFolderBefore" type="bool"/>
+		<preference id="syncIntervalPref" name="extensions.ttine.syncInterval" type="int"/>
+		<preference id="userPref" name="extensions.ttine.user" type="string"/>
+		<preference id="contactsLimitPictureSizePref" name="extensions.ttine.contactsLimitPictureSize" type="bool"/>
+	</preferences>
+	<vbox>
+		<groupbox>
+			<caption label="&ttine.prefwindowServer;" />
+			<label control="host" value="&ttine.prefwindowHostPref;" />
+			<textbox preference="hostPref" id="host" />
+			<checkbox id="hostSsl" label="&ttine.prefwindowSSL;" preference="hostSslPref"/>
+			<label control="user" value="&ttine.prefwindowUsername;" />
+			<textbox id="user" preference="userPref" />
+			<label control="password" value="&ttine.prefwindowPassword;" />
+			<textbox id="password" type="password" />
+		</groupbox>
+		<groupbox>
+			<caption label="&ttine.prefwindowSyncOptions;" />
+			<checkbox label="&ttine.prefwindowBeforeClose;" preference="syncBeforeClosePref"/>
+			<hbox align="center">
+				<label value="&ttine.prefwindowInterval1;" />
+				<textbox preference="syncIntervalPref" id="syncInterval" min="5" size="2"/>
+				<label value="&ttine.prefwindowInterval2;" />
+			</hbox>
+			<checkbox label="&ttine.prefwindowCheckFolder;" preference="checkFolderBeforePref"/>
+			<checkbox label="&ttine.prefwindowLimitPicSize;" preference="contactsLimitPictureSizePref"/>
+		</groupbox>
+	</vbox>
+  </prefpane>
+
+  <prefpane id="paneThunderTineContacts" label="&ttine.prefwindowToolbarContacts;" image="chrome://ttine/skin/contacts.png">
+	<preferences>
+		<preference id="contactsLocalFolderPref" name="extensions.ttine.contactsLocalFolder" type="string"/>
+		<preference id="contactsRemoteFolderPref" name="extensions.ttine.contactsRemoteFolder" type="string"/>
+		<preference id="iPhonePref" name="extensions.ttine.iPhone" type="bool"/>
+	</preferences>
+	<vbox>
+		<groupbox>
+			<caption label="&ttine.prefwindowLocalBooks;" />
+			<listbox id="localContactsFolder" rows="3" preference="contactsLocalFolderPref"></listbox>
+			<hbox>
+				<button id="addLocalContactsFolder" label="&ttine.prefwindowAddNew;" oncommand="newAb();" />
+				<spacer flex="1" />
+				<button id="reinitLocalContactsFolder" label="&ttine.prefwindowReinitialize;" oncommand="reInit();" />
+			</hbox>
+			<label width="1" class="small-margin" crop="end">&ttine.prefwindowReinitializeText;
+			 </label>
+		</groupbox>
+		<groupbox>
+			<caption label="&ttine.prefwindowRemoteFolders;" />
+			<listbox id="remoteContactsFolder" rows="3"></listbox>
+			<checkbox id="iPhone" label="&ttine.prefwindowIPhone;" preference="iPhonePref" oncommand="remoteFolders();" />
+			<button id="remoteContactsFolderRefresh" label="&ttine.prefwindowRemoteRefresh;" oncommand="remoteFolders();" />
+		</groupbox>
+	</vbox>
+  </prefpane>
+
+  <prefpane id="paneThunderTineAbout" label="&ttine.prefwindowToolbarAbout;" image="chrome://ttine/skin/ttine.png">
+	<label width="1" class="small-margin" crop="end">&ttine.prefwindowAbout1;</label>
+	<separator class="groove-thin"/>
+	<label width="1" class="small-margin" crop="end">&ttine.prefwindowAbout2;</label>
+	<separator class="groove-thin"/>
+	<label width="1" class="small-margin" crop="end">&ttine.prefwindowAbout3;</label>
+  </prefpane>
+
+  <script src="ab.js" type="application/x-javascript;version=1.7" />
+  <script src="folder.js" type="application/x-javascript;version=1.7" />
+  <script src="ashttp.js" type="application/x-javascript;version=1.7" />
+  <script src="helper.js" type="application/x-javascript;version=1.7" />
+  <script src="wbxml.js" type="application/x-javascript;version=1.7" />
+  <script src="config.js" type="application/x-javascript;version=1.7" />
+  <script src="sync.js" type="application/x-javascript;version=1.7" />
+  <script src="options.js" type="application/x-javascript;version=1.7" />
+
+</prefwindow>
+
