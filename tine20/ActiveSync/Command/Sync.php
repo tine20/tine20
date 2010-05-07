@@ -159,6 +159,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($adds) . " entries to be added to server");
                 
                 foreach ($adds as $add) {
+                	Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add entry with clientId " . (string) $add->ClientId);
                     // search for existing entries if first sync
                     if($clientSyncKey == 1) {
                         $existing = $dataController->search($collectionId, $add->ApplicationData);
@@ -179,7 +180,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         $this->_collections[$folder->class][$collectionId]['added'][(string)$add->ClientId]['status'] = self::STATUS_SUCCESS;
                         $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $added->getId());
                     } catch (Exception $e) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to add entry " . $e);
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to add entry " . $e->getMessage());
                         $this->_collections[$folder->class][$collectionId]['added'][(string)$add->ClientId]['status'] = self::STATUS_SERVER_ERROR;
                     }
                 }
