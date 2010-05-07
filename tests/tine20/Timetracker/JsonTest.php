@@ -518,7 +518,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($persistentFilters['results'][0]['filters'], $this->_getTimesheetFilter());
 
         // cleanup / delete file
-        $persistentFiltersJson->deletePersistentFilter($persistentFilters['results'][0]['id']);
+        $persistentFiltersJson->deletePersistentFilters($persistentFilters['results'][0]['id']);
     }
 
     /**
@@ -559,7 +559,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($persistentFilters['results'][0]['id'], $persistentFiltersUpdated['results'][0]['id']);
 
         // cleanup / delete file
-        $persistentFiltersJson->deletePersistentFilter($persistentFiltersUpdated['results'][0]['id']);
+        $persistentFiltersJson->deletePersistentFilters($persistentFiltersUpdated['results'][0]['id']);
     }
 
     /**
@@ -596,7 +596,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($tsFilter, $search['filter'], 'filters do not match');
         
         // cleanup / delete file
-        $persistentFiltersJson->deletePersistentFilter($persistentFilters['results'][0]['id']);
+        $persistentFiltersJson->deletePersistentFilters($persistentFilters['results'][0]['id']);
     }
     
     /************ protected helper funcs *************/
