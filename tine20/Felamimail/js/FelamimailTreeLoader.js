@@ -12,7 +12,7 @@
 /**
  * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.TreeLoader
- * @extends     Ext.tree.TreeLoader
+ * @extends     Tine.widgets.tree.Loader
  * 
  * <p>Felamimail Account/Folder Tree Loader</p>
  * <p>
@@ -28,7 +28,7 @@
  * Create a new Tine.Felamimail.TreeLoader
  * 
  */
-Tine.Felamimail.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
+Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
 	
     /**
      * 
