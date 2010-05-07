@@ -12,7 +12,7 @@
 /**
  * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.TreeLoader
- * @extends     Tine.widgets.tree.Loader
+ * @extends     Ext.tree.TreeLoader
  * 
  * <p>Felamimail Account/Folder Tree Loader</p>
  * <p>
@@ -28,7 +28,7 @@
  * Create a new Tine.Felamimail.TreeLoader
  * 
  */
-Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
+Tine.Felamimail.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
 	
     /**
      * 
@@ -39,8 +39,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      * defaults to the loaded TreeNode.
      */
     requestData : function(node, callback, scope){
-        var folders = [];
-        
         if(this.fireEvent("beforeload", this, node, callback) !== false) {
             var fstore = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore();
             
