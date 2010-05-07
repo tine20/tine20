@@ -309,7 +309,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     },
     
     /**
-     * mail got dropped on folder node
+     * mail(s) got dropped on folder node
      * 
      * @param {Object} dropEvent
      * @private
@@ -333,7 +333,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             ids.push(dropEvent.data.selections[i].id);
         };
         
-        // move messages to folder
         Ext.Ajax.request({
             params: {
                 method: 'Felamimail.moveMessages',
@@ -342,9 +341,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             },
             scope: this,
             success: function(result, request) {
-                // update source folder
-                var newRecord = Tine.Felamimail.folderBackend.recordReader(result);
-                this.app.updateFolderInStore(newRecord);
+                var updatedSourceFolder = Tine.Felamimail.folderBackend.recordReader(result);
+                this.app.updateFolderInStore(updatedSourceFolder);
             }
         });
         
