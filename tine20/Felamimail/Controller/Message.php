@@ -323,14 +323,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * move messages to folder
      *
-     * @param array $_ids
+     * @param Felamimail_Model_MessageFilter $_filter
      * @param string $_targetFolderId
      * @return Felamimail_Model_Folder
      * 
      * @todo add cache_status MOVING/set to UPDATING?
      * @todo move messages in the cache?
+     * @todo split this fn and make sure all source folders get updated in cache
      */
-    public function moveMessages($_ids, $_targetFolderId)
+    public function moveMessages(Felamimail_Model_MessageFilter $_filter, $_targetFolderId)
     {
         if ($imapBackend = $this->_getBackendAndSelectFolder($_targetFolderId, $folder, FALSE)) {
             
@@ -341,16 +342,17 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 return $folder;
             }
             
-            $messages = $this->_backend->getMultiple($_ids);
+            $messages = $this->search($_filter);
             if (count($messages) == 0) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
-                    ' Messages not found: ' . print_r($_ids, TRUE));
+                    ' Messages not found for filter: ' . print_r($_filter->toArray(), TRUE));
             } else {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
                     ' Moving ' . count($messages) . ' messages to folder ' . $folder->globalname);
             }
             
-            $folderBackend  = new Felamimail_Backend_Folder();
+            // @todo move this loop and imap backend stuff to helper fn 
+            $folderBackend = new Felamimail_Backend_Folder();
             foreach ($messages as $message) {
                 // select source folder
                 if (! isset($sourceFolder) || $sourceFolder->getId() != $message->folder_id) {
@@ -365,7 +367,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
             
             // remove from cache db table
-            $this->_backend->delete($_ids);
+            $this->_backend->delete($messages->getArrayOfIds());
             
             // update source folder (cache_totalcount + unreadcount)
             $sourceFolder->cache_unreadcount = $this->_cacheController->getUnreadCount($sourceFolder);

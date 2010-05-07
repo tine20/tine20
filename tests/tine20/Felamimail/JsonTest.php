@@ -435,7 +435,9 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         // move
         $drafts = $this->_getFolder('Drafts');
-        $result = $this->_json->moveMessages(array($message['id']), $drafts->getId());
+        $result = $this->_json->moveMessages(array(array(
+            'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
+        )), $drafts->getId());
         
         // check if counts were decreased correctly
         $this->assertEquals($inbox['cache_totalcount'] - 1, $result['cache_totalcount']);
@@ -561,7 +563,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 $message = $mail;
             }
         }
-        $this->assertTrue(! empty($message));
+        $this->assertTrue(! empty($message), 'Sent message not found.');
         
         return $message;
     }
