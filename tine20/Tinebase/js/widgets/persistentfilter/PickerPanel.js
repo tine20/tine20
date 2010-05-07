@@ -55,8 +55,11 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @private
      */
     initComponent: function() {
+        this.store = Tine.widgets.persistentfilter.store.getPersistentFilterStore();
+        
         this.loader = new Tine.widgets.persistentfilter.PickerTreePanelLoader({
-            app: this.app
+            app: this.app,
+            store: this.store
         });
         
         if (! this.root) {
@@ -96,12 +99,6 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         });
         
         this.getNodeById(this.filterMountId).appendChild(this.filterNode);
-        
-        /*
-        if (this.filterMountId === '/') {
-            this.expandPath('///_persistentFilters');
-        }
-        */
     },
     
     /**
@@ -156,61 +153,75 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             return;
         }
         
+        var record = this.store.getById(node.id);
+        
         var menu = new Ext.menu.Menu({
             items: [{
                 text: _('Delete Filter'),
                 iconCls: 'action_delete',
-                scope: this,
-                handler: function() {
-                    Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the Filter "{0}"?'), node.text), function(_btn){
-                        if ( _btn == 'yes') {
-                            Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting Filter "{0}"' ), this.containerName , node.text));
-                            
-                            Ext.Ajax.request({
-                                params: {
-                                    method: 'Tinebase_PersistentFilter.delete',
-                                    filterId: node.id
-                                },
-                                scope: this,
-                                success: function(){
-                                    node.unselect();
-                                    node.remove();
-                                    Ext.MessageBox.hide();
-                                }
-                            });
-                        }
-                    }, this);
-                }
+                hidden: record.isShared(),
+                handler: this.onDeletePersistentFilter.createDelegate(this, [node, e])
             }, {
                 text: _('Rename Filter'),
                 iconCls: 'action_edit',
-                scope: this,
-                handler: function() {
-                    Ext.MessageBox.prompt(_('New Name'), String.format(_('Please enter the new name for filter "{0}"?'), node.text), function(_btn, _newName){
-                        if ( _btn == 'ok') {
-                            Ext.MessageBox.wait(_('Please wait'), String.format(_('Renaming Filter "{0}"' ), this.containerName , node.text));
-                            
-                            Ext.Ajax.request({
-                                params: {
-                                    method: 'Tinebase_PersistentFilter.rename',
-                                    filterId: node.id,
-                                    newName: _newName
-                                },
-                                scope: this,
-                                success: function(response) {
-                                    var pfilter = Ext.decode(response.responseText);
-                                    node.setText(_newName);
-                                    node.attributes.filter = pfilter;
-                                    Ext.MessageBox.hide();
-                                }
-                            });
-                        }
-                    }, this, false, node.text);
-                }
+                hidden: record.isShared(),
+                handler: this.onRenamePersistentFilter.createDelegate(this, [node, e])
             }].concat(this.getAdditionalCtxItems(node.attributes.filter))
         });
         menu.showAt(e.getXY());
+    },
+    
+    /**
+     * handler to deletet filter
+     * 
+     * @param {Ext.tree.TreeNode} node
+     */
+    onDeletePersistentFilter: function(node) {
+        Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the Filter "{0}"?'), node.text), function(_btn) {
+            if ( _btn == 'yes') {
+                Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting Filter "{0}"' ), this.containerName , node.text));
+                
+                var record = this.store.getById(node.id);
+                Tine.widgets.persistentfilter.model.persistentFilterProxy.deleteRecords([record], {
+                    scope: this,
+                    //failure: this.onProxyFail,
+                    success: function(){
+                        node.unselect();
+                        node.remove();
+                        this.store.remove(record);
+                        Ext.MessageBox.hide();
+                    }
+                });
+            }
+        }, this);
+    },
+    
+    /**
+     * handler to rename filter
+     * 
+     * @param {Ext.tree.TreeNode} node
+     */
+    onRenamePersistentFilter: function(node) {
+        Ext.MessageBox.prompt(_('New Name'), String.format(_('Please enter the new name for filter "{0}"?'), node.text), function(_btn, _newName){
+            if ( _btn == 'ok') {
+                Ext.MessageBox.wait(_('Please wait'), String.format(_('Renaming Filter "{0}"'), node.text));
+                
+                var record = this.store.getById(node.id);
+                record.set('name', _newName);
+                Tine.widgets.persistentfilter.model.persistentFilterProxy.saveRecord(record, {
+                    scope: this,
+                    //failure: this.onProxyFail,
+                    success: function(updatedRecord){
+                        node.setText(updatedRecord.get('name'));
+                        this.store.remove(record);
+                        this.store.addSorted(updatedRecord);
+                        Ext.MessageBox.hide();
+                    }
+                });
+            }
+        }, this, false, node.text);
     }
+    
 });
 
 /**
@@ -231,6 +242,11 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
 Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tree.Loader, {
     
     /**
+     * @cfg {Ext.data.Store} store
+     */
+    store: null,
+    
+    /**
      * 
      * @param {Ext.tree.TreeNode} node
      * @param {Function} callback Function to call after the node has been loaded. The
@@ -240,13 +256,11 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tr
      */
     requestData : function(node, callback, scope) {
         if(this.fireEvent("beforeload", this, node, callback) !== false) {
-            var store = Tine.widgets.persistentfilter.store.getPersistentFilterStore();
-            
-            var recordCollection = store.query('application_id', this.app.id);
+            var recordCollection = this.store.query('application_id', this.app.id);
             
             node.beginUpdate();
             recordCollection.each(function(record) {
-                var n = this.createNode(record.data);
+                var n = this.createNode(record.copy().data);
                 if (n) {
                     node.appendChild(n);
                 }
