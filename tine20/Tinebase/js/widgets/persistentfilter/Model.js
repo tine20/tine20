@@ -61,3 +61,20 @@ Tine.widgets.persistentfilter.model.PersistentFilter = Tine.Tinebase.data.Record
         return this.app && this.get('id') === app.getRegistry().get('preferences').get('defaultpersistentfilter');
     }
 });
+
+/**
+ * @namespace   Tine.widgets.persistentfilter
+ * @class       Tine.Tinebase.data.RecordProxy
+ * @singelton   Tine.widgets.persistentfilter.model.persistentFilterProxy
+ * 
+ * <p>Backend for Persistent Filter</p>
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @version     $Id$
+ */
+Tine.widgets.persistentfilter.model.persistentFilterProxy = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Tinebase_PersistentFilter',
+    modelName: 'PersistentFilter',
+    recordClass: Tine.widgets.persistentfilter.model.PersistentFilter
+});
