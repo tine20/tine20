@@ -113,12 +113,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 $preference->personal_only = TRUE;
                 break;
             case self::DEFAULTPERSISTENTFILTER:
-                // @todo some static fn in pfilters controller
-                $pfilters = Tinebase_PersistentFilter::getInstance()->search(new Tinebase_Model_PersistentFilterFilter(array(
-                    array('field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()),
-                    array('field' => 'account_id',     'operator' => 'equals', 'value'  => $_accountId ? $_accountId : Tinebase_Core::getUser()->getId()),
-                )));
-                $preference->value          = $pfilters->filter('name', "All my events")->getFirstRecord()->getId();
+                $preference->value          = Tinebase_PersistentFilter::getPreferenceValues('Calendar', $_accountId, "All my events");
                 $preference->personal_only  = TRUE;
                 break;
             case self::NOTIFICATION_LEVEL:
@@ -182,16 +177,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 }
                 break;
             case self::DEFAULTPERSISTENTFILTER:
-                // @todo some static fn in pfilters controller
-                $i18n = Tinebase_Translation::getTranslation('Calendar');
-                $pfilters = Tinebase_PersistentFilter::getInstance()->search(new Tinebase_Model_PersistentFilterFilter(array(
-                    array('field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()),
-                    array('field' => 'account_id',     'operator' => 'equals', 'value'  => $_accountId ? $_accountId : Tinebase_Core::getUser()->getId()),
-                )));
-                foreach ($pfilters as $pfilter) {
-                    $result[] = array($pfilter->getId(), $i18n->translate($pfilter->name));
-                }
-                
+                $result = Tinebase_PersistentFilter::getPreferenceValues('Calendar');
                 break;
             default:
                 $result = parent::_getSpecialOptions($_value);
