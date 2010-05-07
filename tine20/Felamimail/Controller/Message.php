@@ -324,15 +324,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * move messages to folder
      *
      * @param array $_ids
-     * @param string $_folderId
+     * @param string $_targetFolderId
      * @return Felamimail_Model_Folder
      * 
      * @todo add cache_status MOVING/set to UPDATING?
      * @todo move messages in the cache?
      */
-    public function moveMessages($_ids, $_folderId)
+    public function moveMessages($_ids, $_targetFolderId)
     {
-        if ($imapBackend = $this->_getBackendAndSelectFolder($_folderId, $folder, FALSE)) {
+        if ($imapBackend = $this->_getBackendAndSelectFolder($_targetFolderId, $folder, FALSE)) {
             
             if (! $folder->is_selectable) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
