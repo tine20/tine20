@@ -139,7 +139,8 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
             }
             return $result;
         } else {
-            return $pfilters->filter('name', $_returnDefaultId)->getFirstRecord()->getId();
+            $filter = $pfilters->filter('name', $_returnDefaultId)->getFirstRecord();
+            return $filter ? $filter->getId() : NULL;
         }
     }
     
