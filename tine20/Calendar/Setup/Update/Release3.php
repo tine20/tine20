@@ -174,21 +174,6 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
             )
         )));
         
-        // set this pfilter as defautl pref
-        $preference = new Tinebase_Model_Preference(array(
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-                'name'              => Calendar_Preference::DEFAULTPERSISTENTFILTER,
-                'value'             => $myEventsPFilter->getId(),
-                'account_id'        => '0',
-                'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
-                'options'           => '<?xml version="1.0" encoding="UTF-8"?>
-                    <options>
-                        <special>' . Calendar_Preference::DEFAULTPERSISTENTFILTER . '</special>
-                    </options>'
-            ));
-        Tinebase_Core::getPreference('Calendar')->create($preference);
-        
         $this->setApplicationVersion('Calendar', '3.4');
     }
 }
