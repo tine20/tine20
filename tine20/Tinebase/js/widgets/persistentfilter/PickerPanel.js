@@ -55,7 +55,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @private
      */
     initComponent: function() {
-        this.loader = new Tine.widgets.persistentfilter.PickerTreePanelLoader({});
+        this.loader = new Tine.widgets.persistentfilter.PickerTreePanelLoader({
+            app: this.app
+        });
         
         if (! this.root) {
             this.root = new Ext.tree.TreeNode({
@@ -227,9 +229,38 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
  * Create a new Tine.widgets.persistentfilter.PickerTreePanelLoader
  */
 Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tree.Loader, {
-    app: this.app,
-    filter: this.filter,
-    method: 'Tinebase_PersistentFilter.search',
+    
+    /**
+     * 
+     * @param {Ext.tree.TreeNode} node
+     * @param {Function} callback Function to call after the node has been loaded. The
+     * function is passed the TreeNode which was requested to be loaded.
+     * @param (Object) scope The cope (this reference) in which the callback is executed.
+     * defaults to the loaded TreeNode.
+     */
+    requestData : function(node, callback, scope) {
+        if(this.fireEvent("beforeload", this, node, callback) !== false) {
+            var store = Tine.widgets.persistentfilter.store.getPersistentFilterStore();
+            
+            var recordCollection = store.query('application_id', this.app.id);
+            
+            node.beginUpdate();
+            recordCollection.each(function(record) {
+                var n = this.createNode(record.data);
+                if (n) {
+                    node.appendChild(n);
+                }
+            }, this);
+            node.endUpdate();
+            
+            this.runCallback(callback, scope || node, [node]);
+
+        }  else {
+            // if the load is cancelled, make sure we notify
+            // the node that we are done
+            this.runCallback(callback, scope || node, []);
+        }
+    },
     
     inspectCreateNode: function(attr) {
         var isPersistentFilter = !!attr.model && !!attr.filters;
