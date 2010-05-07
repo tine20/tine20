@@ -145,8 +145,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             saveFilter: new Ext.Button({
                 tooltip: _('save filter'),
                 iconCls: 'action_saveFilter',
-                scope: this,
-                handler: this.onSaveFilter
+                handler: this.app.getMainScreen().getWestPanel().getFavoritesPanel().saveFilter.createDelegate(this.app.getMainScreen().getWestPanel().getFavoritesPanel())
             })
         };
     },
@@ -682,57 +681,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.supressEvents = false;
         this.onFilterRowsChange();
         
-    },
-    
-    onSaveFilter: function() {
-        var name = '';
-        Ext.MessageBox.prompt(_('save filter'), _('Please enter a name for the filter'), function(btn, value) {
-            if (btn == 'ok') {
-                if (! value) {
-                    Ext.Msg.alert(_('Filter not Saved'), _('You have to supply a name for the filter!'));
-                    return;
-                } else if (value.length > 40) {
-                    Ext.Msg.alert(_('Filter not Saved'), _('You have to supply a shorter name! Names of saved filters can only be up to 40 characters long.'));
-                    return;
-                }
-                Ext.Msg.wait(_('Please Wait'), _('Saving filter'));
-                
-                var recordClass = this.recordClass || this.store.reader.recordType;
-                var model = recordClass.getMeta('appName') + '_Model_' + recordClass.getMeta('modelName');
-                
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Tinebase_PersistentFilter.save',
-                        filterData: this.getAllFilterData(),
-                        name: value,
-                        model: model
-                    },
-                    scope: this,
-                    success: function(result) {
-                        if (typeof this.app.getMainScreen().hasFavoritesPanel) {
-                            var persistentFilterNode = this.app.getMainScreen().getFavoritesPanel().getPersistentFilterNode();
-                            
-                            if (persistentFilterNode && persistentFilterNode.isExpanded()) {
-                                var filter = Ext.util.JSON.decode(result.responseText);
-                                
-                                var existingNode = persistentFilterNode.findChild('id', filter.id);
-                                if (existingNode) {
-                                    existingNode.attributes.filter = filter;
-                                } else {
-                                    var newNode = persistentFilterNode.getOwnerTree().loader.createNode(filter);
-                                    persistentFilterNode.appendChild(newNode);
-                                }
-                                
-                            }
-                        }
-                        Ext.Msg.hide();
-                        
-                        // reload grid store
-                        this.onFilterChange();
-                    }
-                });
-            }
-        }, this, false, name);
     },
     
     /**
