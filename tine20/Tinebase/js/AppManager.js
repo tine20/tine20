@@ -137,6 +137,24 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
     },
     
     /**
+     * returns appObject
+     * 
+     * @param {String} applicationId
+     * @return {Tine.Application}
+     */
+    getById: function(applicationId) {
+        var appObj = null;
+        Ext.each(Tine.Tinebase.registry.get('userApplications'), function(rawApp) {
+            if (rawApp.id === applicationId) {
+                appObj = this.get(rawApp.appName);
+                return false;
+            }
+        }, this);
+        
+        return appObj;
+    },
+    
+    /**
      * returns currently activated app
      * @return {Tine.Application}
      */
