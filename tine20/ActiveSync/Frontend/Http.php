@@ -69,12 +69,12 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         // same header like Exchange 2003
         header("MS-Server-ActiveSync: 8.1");
-        header("MS-ASProtocolVersions: 2.5, 12.0");
+        header("MS-ASProtocolVersions: 2.5,12.0");
         # version 12.1 breaks the Motorola Milestone
         #header("MS-ASProtocolVersions: 2.5,12.0,12.1");
         # no Notify(SMS AUTD)
         #header("MS-ASProtocolCommands: Sync,SendMail,SmartForward,SmartReply,GetAttachment,GetHierarchy,CreateCollection,DeleteCollection,MoveCollection,FolderSync,FolderCreate,FolderDelete,FolderUpdate,MoveItems,GetItemEstimate,MeetingResponse,ResolveRecipients,ValidateCert,Provision,Search,Ping");
-        header("MS-ASProtocolCommands: FolderCreate,FolderDelete,FolderSync,FolderUpdate,GetItemEstimate,MeetingResponse,Provision,ResolveRecipientsPing,SendMail,Search,Settings,SmartReply,Sync");
+        header("MS-ASProtocolCommands: FolderCreate,FolderDelete,FolderSync,FolderUpdate,GetItemEstimate,MeetingResponse,Provision,ResolveRecipients,Ping,SendMail,Search,Settings,SmartReply,Sync");
     }
     
     /**
