@@ -43,15 +43,6 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     rootVisible: false,
 
     /**
-     * returns persistent filter tree node
-     * 
-     * @return {Ext.tree.AsyncTreeNode}
-     */
-    getPersistentFilterNode: function() {
-        return this.filterNode;
-    },
-    
-    /**
      * @private
      */
     initComponent: function() {
@@ -75,7 +66,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         this.on('click', function(node) {
             if (node.attributes.isPersistentFilter) {
                 node.select();
-                this.onFilterSelect(node.attributes.filter);
+                this.onFilterSelect();
             } else if (node.id == '_persistentFilters') {
                 node.expand();
                 return false;
@@ -111,14 +102,12 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      *       remove all filter data and paste our filter id. To ensure we are
      *       always the last listener, we directly remove the listener afterwards
      */
-    onFilterSelect: function(filter) {
+    onFilterSelect: function() {
         var store = this.app.getMainScreen().getCenterPanel().getStore();
         
         // NOTE: this can be removed when all instances of filterplugins are removed
         store.on('beforeload', this.storeOnBeforeload, this);
         store.load();
-        
-        //this.app.getMainScreen().getCenterPanel().filterToolbar.setValue(filter.filters);
         
         if (typeof this.app.getMainScreen().getContainerTreePanel().activate == 'function') {
             this.app.getMainScreen().getContainerTreePanel().activate(0);
@@ -126,7 +115,10 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     },
     
     storeOnBeforeload: function(store, options) {
-        options.params.filter = this.getSelectionModel().getSelectedNode().attributes.filter.filters;
+        var node = this.getSelectionModel().getSelectedNode();
+        var record = this.store.getById(node.id);
+        
+        options.params.filter = record.get('filters');
         store.un('beforeload', this.storeOnBeforeload, this);
     },
     
@@ -148,6 +140,28 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         return items;
     },
     
+    /**
+     * returns filter toolbar of mainscreen center panel of app this picker panel belongs to
+     */
+    getFilterToolbar: function() {
+        return this.app.getMainScreen().getCenterPanel().filterToolbar;
+    },
+    
+    /**
+     * returns persistent filter tree node
+     * 
+     * @return {Ext.tree.AsyncTreeNode}
+     */
+    getPersistentFilterNode: function() {
+        return this.filterNode;
+    },
+    
+    /**
+     * handler for ctxmenu clicks on tree nodes
+     * 
+     * @param {Ext.tree.TreeNode} node
+     * @param {Ext.EventObject} e
+     */
     onContextMenu: function(node, e) {
         if (! node.attributes.isPersistentFilter) {
             return;
@@ -220,6 +234,69 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 });
             }
         }, this, false, node.text);
+    },
+    
+    saveFilter: function() {
+        var ftb = this.getFilterToolbar();
+        
+        var name = '';
+        Ext.MessageBox.prompt(_('save filter'), _('Please enter a name for the filter'), function(btn, value) {
+            if (btn == 'ok') {
+                if (! value) {
+                    Ext.Msg.alert(_('Filter not Saved'), _('You have to supply a name for the filter!'));
+                    return;
+                } else if (value.length > 40) {
+                    Ext.Msg.alert(_('Filter not Saved'), _('You have to supply a shorter name! Names of saved filters can only be up to 40 characters long.'));
+                    return;
+                }
+                Ext.Msg.wait(_('Please Wait'), _('Saving filter'));
+                
+                var existingRecordIdx = this.store.findExact('name', value);
+                var existingRecord = existingRecordIdx ? this.store.getAt(existingRecordIdx) : null;
+                if (existingRecord) {
+                    if (existingRecord.isShared()) {
+                        Ext.Msg.alert(_('Filter not Saved'), _('Overwriteing system filters is not yet supported'));
+                        return;
+                    }
+                    this.store.remove(existingRecord);
+                }
+                
+                var recordClass = this.recordClass || ftb.store.reader.recordType;
+                var model = recordClass.getMeta('appName') + '_Model_' + recordClass.getMeta('modelName') + 'Filter';
+                
+                var record = new Tine.widgets.persistentfilter.model.PersistentFilter({
+                    id:             existingRecord ? existingRecord.id : 0,
+                    application_id: this.app.id,
+                    account_id:     Tine.Tinebase.registry.get('currentAccount').accountId,
+                    model:          model,
+                    filters:        ftb.getAllFilterData(),
+                    name:           value,
+                    description:    ''
+                });
+                
+                Tine.widgets.persistentfilter.model.persistentFilterProxy.saveRecord(record, {
+                    scope: this,
+                    //failure: this.onProxyFail,
+                    success: function(savedRecord){
+                        var persistentFilterNode = this.getPersistentFilterNode();
+                        
+                        if (persistentFilterNode && persistentFilterNode.isExpanded()) {
+                            var existingNode = persistentFilterNode.findChild('id', savedRecord.id);
+                            if (! existingNode) {
+                                var newNode = this.loader.createNode(savedRecord.data);
+                                persistentFilterNode.appendChild(newNode);
+                            }
+                        }
+                        this.store.addSorted(savedRecord);
+                        
+                        Ext.Msg.hide();
+                        
+                        // reload grid store
+                        ftb.onFilterChange();
+                    }
+                });
+            }
+        }, this, false, name);
     }
     
 });
