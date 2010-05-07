@@ -34,7 +34,7 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
     
     /**
      * @cfg {String} appName
-     * untranslated application name (requierd)
+     * untranslated application name (required)
      */
     appName: null,
     
