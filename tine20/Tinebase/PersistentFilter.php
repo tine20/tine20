@@ -117,6 +117,33 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * helper fn for prefereces
+     * 
+     * @param  string $_appName
+     * @param  string $_accountId
+     * @param  string $_returnDefaultId only return id of default identified by given name
+     * @return array|string filterId => translated name
+     */
+    public static function getPreferenceValues($_appName, $_accountId = NULL, $_returnDefaultId = NULL)
+    {
+        $i18n = Tinebase_Translation::getTranslation($_appName);
+        $pfilters = self::getInstance()->search(new Tinebase_Model_PersistentFilterFilter(array(
+            array('field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName($_appName)->getId()),
+            array('field' => 'account_id',     'operator' => 'equals', 'value'  => $_accountId ? $_accountId : Tinebase_Core::getUser()->getId()),
+        )));
+        
+        if (! $_returnDefaultId) {
+            $result = array();
+            foreach ($pfilters as $pfilter) {
+                $result[] = array($pfilter->getId(), $i18n->translate($pfilter->name));
+            }
+            return $result;
+        } else {
+            return $pfilters->filter('name', $_returnDefaultId)->getFirstRecord()->getId();
+        }
+    }
+    
+    /**
      * inspect creation of one record
      * 
      * @param   Tinebase_Record_Interface $_record
