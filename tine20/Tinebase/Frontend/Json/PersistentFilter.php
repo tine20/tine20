@@ -60,7 +60,7 @@ class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abs
      * @param  array  $ids 
      * @return string
      */
-    public function deletePersistentFilter($ids)
+    public function deletePersistentFilters($ids)
     {
         return $this->_delete($ids, Tinebase_PersistentFilter::getInstance());
     }
