@@ -25,4 +25,23 @@ class Crm_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Crm', '3.1');
     }
+    
+    /**
+     * create default persistent filters
+     */
+    public function update_1()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        
+        $myEventsPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
+            'name'              => Crm_Preference::DEFAULTPERSISTENTFILTER_NAME,
+            'description'       => "All contacts I have read grants for", // _("All contacts I have read grants for")
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId(),
+            'model'             => 'Crm_Model_LeadFilter',
+            'filters'           => array(),
+        )));
+        
+        $this->setApplicationVersion('Crm', '3.2');
+    }
 }

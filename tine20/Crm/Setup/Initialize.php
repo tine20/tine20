@@ -33,6 +33,21 @@ class Crm_Setup_Initialize extends Setup_Initialize
             $userRole->getId(), 
             $_application->getId(), 
             Crm_Acl_Rights::MANAGE_LEADS
-        );                
+        );
+        $this->_initializeFavorites(); 
+    }
+    
+    protected function _initializeFavorites()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        
+        $myEventsPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
+            'name'              => Crm_Preference::DEFAULTPERSISTENTFILTER_NAME,
+            'description'       => "All contacts I have read grants for", // _("All contacts I have read grants for")
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId(),
+            'model'             => 'Crm_Model_LeadFilter',
+            'filters'           => array(),
+        )));
     }
 }

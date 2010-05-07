@@ -27,6 +27,17 @@ class Crm_Preference extends Tinebase_Preference_Abstract
     const NOTIFICATION_LEVEL = 'notificationLevel';
 
     /**
+     * default persistent filter
+     */
+    const DEFAULTPERSISTENTFILTER = 'defaultpersistentfilter';
+    
+    /**
+     * have name of default favorite an a central palce
+     * _("All leads")
+     */
+    const DEFAULTPERSISTENTFILTER_NAME = "All leads";
+    
+    /**
      * send notifications of own updates
      */
     const SEND_NOTIFICATION_OF_OWN_ACTIONS = 'sendnotificationsofownactions';
@@ -48,6 +59,7 @@ class Crm_Preference extends Tinebase_Preference_Abstract
         $allPrefs = array(
             //self::NOTIFICATION_LEVEL,
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
+            self::DEFAULTPERSISTENTFILTER,
         );
             
         return $allPrefs;
@@ -72,6 +84,10 @@ class Crm_Preference extends Tinebase_Preference_Abstract
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS => array(
                 'label'         => $translate->_('Send Notifications Emails for own actions'),
                 'description'   => $translate->_('Get notifications emails for actions you did yourself'),
+            ),
+            self::DEFAULTPERSISTENTFILTER  => array(
+                'label'         => $translate->_('Default Favorite'),
+                'description'   => $translate->_('The default favorite which is loaded on crm startup'),
             ),
         );
         
@@ -126,10 +142,34 @@ class Crm_Preference extends Tinebase_Preference_Abstract
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
                 break;
+            case self::DEFAULTPERSISTENTFILTER:
+                $preference->value          = Tinebase_PersistentFilter::getPreferenceValues('Crm', $_accountId, self::DEFAULTPERSISTENTFILTER_NAME);
+                $preference->personal_only  = TRUE;
+                break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
         }
         
         return $preference;
+    }
+    
+    /**
+     * get special options
+     *
+     * @param string $_value
+     * @return array
+     */
+    protected function _getSpecialOptions($_value)
+    {
+        $result = array();
+        switch($_value) {
+            case self::DEFAULTPERSISTENTFILTER:
+                $result = Tinebase_PersistentFilter::getPreferenceValues('Crm');
+                break;
+            default:
+                $result = parent::_getSpecialOptions($_value);
+        }
+        
+        return $result;
     }
 }

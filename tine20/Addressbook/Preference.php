@@ -34,6 +34,7 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
      * _("All contacts")
      */
     const DEFAULTPERSISTENTFILTER_NAME = "All contacts";
+    
     /**
      * @var string application
      */
