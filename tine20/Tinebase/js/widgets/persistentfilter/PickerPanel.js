@@ -8,6 +8,21 @@
  */
 Ext.ns('Tine.widgets.persistentfilter');
 
+/**
+ * @namespace   Tine.widgets.persistentfilter
+ * @class       Tine.widgets.persistentfilter.PickerPanel
+ * @extends     Ext.tree.TreePanel
+ * 
+ * <p>PersistentFilter Picker Panel</p>
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.widgets.persistentfilter.PickerPanel
+ */
 Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     
     /**
@@ -40,24 +55,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @private
      */
     initComponent: function() {
-        this.loader = new Tine.widgets.tree.Loader({
-            app: this.app,
-            filter: this.filter,
-            method: 'Tinebase_PersistentFilter.search',
-            inspectCreateNode: function(attr) {
-                var isPersistentFilter = !!attr.model && !!attr.filters;
-                
-                if (isPersistentFilter) {
-                    Ext.apply(attr, {
-                        isPersistentFilter: isPersistentFilter,
-                        text: Ext.util.Format.htmlEncode(attr.name),
-                        id: attr.id,
-                        leaf: attr.leaf === false ? attr.leaf : true,
-                        filter: Ext.copyTo({}, attr, 'id, name, filters')
-                    });
-                }
-            }
-        });
+        this.loader = new Tine.widgets.persistentfilter.PickerTreePanelLoader({});
         
         if (! this.root) {
             this.root = new Ext.tree.TreeNode({
@@ -211,5 +209,39 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         });
         menu.showAt(e.getXY());
     }
+});
+
+/**
+ * @namespace   Tine.widgets.persistentfilter
+ * @class       Tine.widgets.persistentfilter.PickerTreePanelLoader
+ * @extends     Tine.widgets.tree.Loader
+ * 
+ * <p>PersistentFilter Picker Panel Tree Loader</p>
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.widgets.persistentfilter.PickerTreePanelLoader
+ */
+Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tree.Loader, {
+    app: this.app,
+    filter: this.filter,
+    method: 'Tinebase_PersistentFilter.search',
     
+    inspectCreateNode: function(attr) {
+        var isPersistentFilter = !!attr.model && !!attr.filters;
+        
+        if (isPersistentFilter) {
+            Ext.apply(attr, {
+                isPersistentFilter: isPersistentFilter,
+                text: Ext.util.Format.htmlEncode(attr.name),
+                id: attr.id,
+                leaf: attr.leaf === false ? attr.leaf : true,
+                filter: Ext.copyTo({}, attr, 'id, name, filters')
+            });
+        }
+    }
 });

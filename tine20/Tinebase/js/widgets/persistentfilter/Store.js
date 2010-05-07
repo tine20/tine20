@@ -8,11 +8,28 @@
  */
 Ext.ns('Tine.widgets.persistentfilter.store');
 
+/**
+ * @namespace   Tine.widgets.persistentfilter
+ * @class       Tine.widgets.persistentfilter.store.PersistentFilterStore
+ * @extends     Ext.data.ArrayStore
+ * 
+ * <p>Store for Persistent Filter Records</p>
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.widgets.persistentfilter.store.PersistentFilterStore
+ */
 Tine.widgets.persistentfilter.store.PersistentFilterStore = Ext.extend(Ext.data.ArrayStore, {
 
 });
 
 /**
+ * @namespace   Tine.widgets.persistentfilter
+ * 
  * get store of all persistent filters
  * 
  * @static

@@ -10,7 +10,19 @@ Ext.ns('Tine.widgets.persistentfilter.model');
 
 
 /**
- * Model of a container
+ * @namespace   Tine.widgets.persistentfilter
+ * @class       Tine.widgets.persistentfilter.model.PersistentFilter
+ * @extends     Tine.Tinebase.data.Record
+ * 
+ * <p>Model of a Persistent Filter</p>
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @version     $Id$
+ * 
+ * @param       {Object} data
+ * @constructor
+ * Create a new Tine.widgets.persistentfilter.model.PersistentFilter Record
  */
 Tine.widgets.persistentfilter.model.PersistentFilter = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'},
