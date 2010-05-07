@@ -41,7 +41,7 @@ Tine.Tasks.FilterPanel = function(config) {
     Tine.Tasks.FilterPanel.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.Tasks.FilterPanel, Tine.widgets.grid.PersistentFilterPicker, {
+Ext.extend(Tine.Tasks.FilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'Tasks_Model_TaskFilter'}]
 });
 

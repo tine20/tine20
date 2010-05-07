@@ -24,7 +24,7 @@ Tine.Timetracker.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
 });
 
 
-Tine.Timetracker.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
+Tine.Timetracker.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
     
     filter: [{field: 'model', operator: 'equals', value: 'Timetracker_Model_TimesheetFilter'}],
     

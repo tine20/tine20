@@ -5,11 +5,10 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
-Ext.ns('Tine.widgets.grid');
+Ext.ns('Tine.widgets.persistentfilter');
 
-Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
+Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     
     /**
      * @cfg {application}
@@ -68,7 +67,7 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
             });
         }
         
-        Tine.widgets.grid.PersistentFilterPicker.superclass.initComponent.call(this);
+        Tine.widgets.persistentfilter.PickerPanel.superclass.initComponent.call(this);
         
         this.on('click', function(node) {
             if (node.attributes.isPersistentFilter) {
@@ -87,7 +86,7 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
      * @private
      */
     afterRender: function() {
-        Tine.widgets.grid.PersistentFilterPicker.superclass.afterRender.call(this);
+        Tine.widgets.persistentfilter.PickerPanel.superclass.afterRender.call(this);
         
         this.filterNode = new Ext.tree.AsyncTreeNode({
             text: _('My saved filters'),

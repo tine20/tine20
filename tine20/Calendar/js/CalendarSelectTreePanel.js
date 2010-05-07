@@ -9,7 +9,7 @@
 
 Ext.ns('Tine.Calendar');
 
-Tine.Calendar.FilterPanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
+Tine.Calendar.FilterPanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'Calendar_Model_EventFilter'}],
     
     storeOnBeforeload: function(store, options) {

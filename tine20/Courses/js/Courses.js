@@ -11,7 +11,7 @@
  
 Ext.namespace('Tine.Courses');
 
-Tine.Courses.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
+Tine.Courses.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
     
     filter: [{field: 'model', operator: 'equals', value: 'Courses_Model_CourseFilter'}],
 
@@ -87,7 +87,7 @@ Tine.Courses.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
     }
 });
 
-//Tine.Courses.FilterPanel = Tine.widgets.grid.PersistentFilterPicker
+//Tine.Courses.FilterPanel = Tine.widgets.persistentfilter.PickerPanel
 
 /**
  * default backend

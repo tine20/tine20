@@ -53,7 +53,7 @@ Ext.extend(Tine.Crm.TreePanel , Tine.widgets.container.TreePanel);
 /**
  * @namespace Tine.Crm
  * @class Tine.Crm.FilterPanel
- * @extends Tine.widgets.grid.PersistentFilterPicker
+ * @extends Tine.widgets.persistentfilter.PickerPanel
  * Crm Filter Panel<br>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -66,7 +66,7 @@ Tine.Crm.FilterPanel = function(config) {
     Tine.Crm.FilterPanel.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.Crm.FilterPanel, Tine.widgets.grid.PersistentFilterPicker, {
+Ext.extend(Tine.Crm.FilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'Crm_Model_LeadFilter'}]
 });
 

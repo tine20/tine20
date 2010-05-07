@@ -72,13 +72,13 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
 /**
  * @namespace Tine.Sales
  * @class Tine.Sales.TreePanel
- * @extends Tine.widgets.grid.PersistentFilterPicker
+ * @extends Tine.widgets.persistentfilter.PickerPanel
  * 
  * <pre>
  * TODO         generalize this
  * </pre>
  */ 
-Tine.Sales.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker,{
+Tine.Sales.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel,{
     
     filter: [{field: 'model', operator: 'equals', value: 'Sales_Model_ProductFilter'}],
     
