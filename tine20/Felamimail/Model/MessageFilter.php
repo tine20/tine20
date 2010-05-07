@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:FolderFilter.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  *
  * @todo        replace some 'custom' filters with normal filter classes
@@ -31,9 +31,10 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'query'                => array(
-            'filter' => 'Tinebase_Model_Filter_Query', 
-            'options' => array('fields' => array('subject', 'from'))
+        'id'            => array('filter' => 'Tinebase_Model_Filter_Id'), 
+        'query'         => array(
+            'filter'        => 'Tinebase_Model_Filter_Query', 
+            'options'       => array('fields' => array('subject', 'from'))
         ),
         'folder_id'     => array('filter' => 'Tinebase_Model_Filter_Id'), 
         'subject'       => array('filter' => 'Tinebase_Model_Filter_Text'), 
