@@ -237,7 +237,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->_backend->createTable($declaration);
         $this->setTableVersion('scheduler', '1');
         
-        $request = new Zend_Controller_Request_Http(); 
+        $request = new Zend_Controller_Request_Simple(); 
         $request->setControllerName('Tinebase_Alarm');
         $request->setActionName('sendPendingAlarms');
         $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');

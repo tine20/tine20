@@ -108,8 +108,8 @@ class Tinebase_Frontend_Cli
         }
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
-        $event = new Tinebase_Event_Async_Minutely();
-        Tinebase_Event::fireEvent($event);
+        $scheduler = Tinebase_Core::getScheduler();
+        $scheduler->run();
         
         return TRUE;
     }

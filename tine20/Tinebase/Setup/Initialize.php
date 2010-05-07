@@ -123,7 +123,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
     
     protected function _initTinebaseScheduler()
     {
-        $request = new Zend_Controller_Request_Http(); 
+        $request = new Zend_Controller_Request_Simple(); 
         $request->setControllerName('Tinebase_Alarm');
         $request->setActionName('sendPendingAlarms');
         $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');
