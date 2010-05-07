@@ -308,7 +308,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/grid/FilterToolbarQuickFilterPlugin.js',
             'Tinebase/js/widgets/grid/FilterSelectionModel.js',
             'Tinebase/js/widgets/grid/ForeignRecordFilter.js',
-            'Tinebase/js/widgets/grid/PersistentFilterPicker.js',
             'Tinebase/js/widgets/grid/QuickaddGridPanel.js',
             'Tinebase/js/widgets/grid/FileUploadGrid.js',
             'Tinebase/js/widgets/grid/PickerGridPanel.js',
@@ -330,6 +329,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/form/ConfigPanel.js',
             'Tinebase/js/widgets/persistentfilter/Model.js',
             'Tinebase/js/widgets/persistentfilter/Store.js',
+            'Tinebase/js/widgets/persistentfilter/PickerPanel.js',
         // yui stuff
             //'../yui/build/dragdrop/dragdrop-min.js',
             //'../yui/build/resize/resize-beta-min.js',
