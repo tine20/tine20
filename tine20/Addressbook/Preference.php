@@ -24,7 +24,16 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
      */
     const DEFAULTADDRESSBOOK = 'defaultAddressbook';
 
-
+    /**
+     * default persistent filter
+     */
+    const DEFAULTPERSISTENTFILTER = 'defaultpersistentfilter';
+    
+    /**
+     * have name of default favorite an a central palce
+     * _("All contacts")
+     */
+    const DEFAULTPERSISTENTFILTER_NAME = "All contacts";
     /**
      * @var string application
      */
@@ -40,7 +49,8 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
     public function getAllApplicationPreferences()
     {
         $allPrefs = array(
-            self::DEFAULTADDRESSBOOK
+            self::DEFAULTADDRESSBOOK,
+            self::DEFAULTPERSISTENTFILTER,
         );
             
         return $allPrefs;
@@ -59,6 +69,10 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTADDRESSBOOK  => array(
                 'label'         => $translate->_('Default Addressbook'),
                 'description'   => $translate->_('The default addressbook for new contacts'),
+            ),
+            self::DEFAULTPERSISTENTFILTER  => array(
+                'label'         => $translate->_('Default Favorite'),
+                'description'   => $translate->_('The default favorite which is loaded on addressbook startup'),
             ),
         );
         
@@ -82,6 +96,10 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
                 $preference->value  = $addressbooks->getFirstRecord()->getId();
                 $preference->personal_only = TRUE;
                 
+                break;
+            case self::DEFAULTPERSISTENTFILTER:
+                $preference->value          = Tinebase_PersistentFilter::getPreferenceValues('Addressbook', $_accountId, self::DEFAULTPERSISTENTFILTER_NAME);
+                $preference->personal_only  = TRUE;
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
@@ -108,6 +126,9 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
                 foreach ($addressbooks as $addressbook) {
                     $result[] = array($addressbook->getId(), $addressbook->name);
                 }
+                break;
+            case self::DEFAULTPERSISTENTFILTER:
+                $result = Tinebase_PersistentFilter::getPreferenceValues('Addressbook');
                 break;
             default:
                 $result = parent::_getSpecialOptions($_value);

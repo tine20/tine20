@@ -32,7 +32,23 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         Tinebase_Group::getInstance()->importGroupMembers(); //import groups members(ldap)
 
         parent::_initialize($_application, $_options);
+        $this->_initializeFavorites();
     }
+    
+    protected function _initializeFavorites()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        
+        $myEventsPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
+            'name'              => Addressbook_Preference::DEFAULTPERSISTENTFILTER_NAME,
+            'description'       => "All contacts I have read grants for", // _("All contacts I have read grants for")
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'             => 'Addressbook_Model_ContactFilter',
+            'filters'           => array(),
+        )));
+    }
+    
     /**
      * Override method because this app requires special rights
      * @see tine20/Setup/Setup_Initialize#_createInitialRights($_application)
