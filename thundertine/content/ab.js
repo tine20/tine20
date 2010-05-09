@@ -68,9 +68,16 @@ var ab = {
 	// Anniversary isn't supported by Tine 2.0
 	// Birthday
 	if (field=='Birthday') {
-		ret = card.getProperty("BirthYear", "0000")+'-'+card.getProperty("BirthMonth", "00")+'-'+card.getProperty("BirthDay", "00")+"T00:00:00.000Z";
-		if (ret == '0000-00-00T00:00:00.000Z')
+		ret = card.getProperty("BirthYear", "0000")+'-'+card.getProperty("BirthMonth", "00")+'-'+card.getProperty("BirthDay", "00");
+		if (ret == '0000-00-00')
 			ret = '';
+		else {
+			// Tine 2.0 manipulates dates from iPhones (subtract 12 hours)
+			if (config.deviceType == 'iPhone')
+				ret = ret + "T12:00:00.000Z";
+			else
+				ret = ret + "T00:00:00.000Z";
+		}
 	}
 	// Picture
 	else if (field=='Picture') {
