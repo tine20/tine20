@@ -221,7 +221,6 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * @param {Ext.Button} btn
      */
     onDetailsToggle: function(btn) {
-        console.log('tooble');
         this.ftb[btn.pressed ? 'show' : 'hide']();
         
         // cares for resizing
