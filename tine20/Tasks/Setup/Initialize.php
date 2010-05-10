@@ -4,9 +4,9 @@
  * 
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: TineInitial.php 9535 2009-07-20 10:30:05Z p.schuele@metaways.de $
+ * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
+ * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: Initialize.php 9535 2010-05-10 10:30:05Z g.ciyiltepe@metaways.de $
  *
  */
 
@@ -23,9 +23,8 @@ class Tasks_Setup_Initialize extends Setup_Initialize
      * 
      * @todo make hard coded role name ('user role') configurable
      */
-    protected function _createInitialRights(Tinebase_Model_Application $_application)
+    protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
-        parent::_createInitialRights($_application);
         $this->_initializeFavorites(); 
     }
     
@@ -39,7 +38,12 @@ class Tasks_Setup_Initialize extends Setup_Initialize
             'account_id'        => NULL,
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
             'model'             => 'Tasks_Model_TaskFilter',
-            'filters'           => array(),
+            'filters'           => array(
+                array('condition' => 'OR', 'filters' => array(
+                    'field' => 'container_id', 'operator' => 'equals', 'value' => '/personal/'.Tinebase_Model_User::CURRENTACCOUNT,
+                    'field' => 'organizer', 'operator'  => 'equals', 'value'   => Tinebase_Model_User::CURRENTACCOUNT
+                ))
+            )
         )));
     }
 }

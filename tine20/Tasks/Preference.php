@@ -5,7 +5,7 @@
  * @package     Task
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Preference.php 14231 2010-05-07 06:54:28Z g.ciyiltepe@metaways.de $
  */
 

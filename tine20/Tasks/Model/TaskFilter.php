@@ -53,25 +53,15 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
      * @return void
      * 
      * @todo    add status & organizer filters
-     *
+     */
     public function appendFilterSql($_select, $_backend)
     {
-        $db = Tinebase_Core::getDb();
+        $gs = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
+        $adapter = $_backend->getAdapter();
         
-        $showClosed = false;
-        foreach ($this->_customData as $customData) {
-            if ($customData['field'] == 'showClosed' && $customData['value'] == true) {
-                $showClosed = true;
-            }
+        foreach ($this->_value as $value) {
+            
         }
-        
-        if($showClosed){
-            // nothing to filter
-        } else {
-            $where = $db->quoteInto($db->quoteIdentifier('status.status_is_open') . ' = ?', 1, Zend_Db::INT_TYPE) .
-                     ' OR ' . $db->quoteIdentifier('tasks.status_id') . ' IS NULL';
-            $_select->where($where);
-        }
+        $gs->appendWhere(Zend_Db_Select::SQL_OR);
     }
-    */
 }
