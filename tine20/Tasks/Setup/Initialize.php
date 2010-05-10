@@ -18,10 +18,11 @@
 class Tasks_Setup_Initialize extends Setup_Initialize
 {
     /**
-     * Override method because this app requires special rights
-     * @see tine20/Setup/Setup_Initialize#_createInitialRights($_application)
-     * 
-     * @todo make hard coded role name ('user role') configurable
+     * initialize application
+     *
+     * @param Tinebase_Model_Application $_application
+     * @param array | optional $_options
+     * @return void
      */
     protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
