@@ -24,7 +24,6 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
     border      : true,
     frame       : true,
     autoScroll  : true,
-    autoHeight  : true,
     
     initComponent: function() {
         this.title = _('Alarms');
@@ -36,19 +35,21 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
     getFormItems: function() {
         
         this.customDateField = new Ext.ux.form.DateTimeField({
-	        fieldLabel: _('Custom Datetime'),
+	        fieldLabel  : _('Custom Datetime'),
+            lazyRender  : false,
             name        : 'alarm_date',
-            //disabled    : true,
-            anchor      : '90%'
+            width       : 300,
+            style       : 'margin-left: 25px',
+            hidden      : true
         });
         
         this.alarmCombo = new Ext.form.ComboBox({
+            columnWidth     : .33,
 	        fieldLabel      : _('Send Alarm'),
-            anchor          : '90%',
             name            : 'alarm_time_before',
             typeAhead       : false,
             triggerAction   : 'all',
-            lazyRender      : true,
+            lazyRender      : false,
             editable        : false,
             mode            : 'local',
             forceSelection  : true,
@@ -67,15 +68,31 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
                 scope: this,
                 select: function(combo, record, index) {
                     // enable datetime field if custom is selected
-                    this.customDateField.setDisabled(record.data.field1 != 'custom');
+                    if (record.data.field1 === 'custom') {
+                        this.customDateField.show();
+                        // fix strange GC issue
+                        this.customDateField.el.applyStyles('display: inline;')
+                    } else {
+                        this.customDateField.hide();
+                    }
+                },
+                beforeselect: function(combo, record, index) {
+                    // preset a usefull value
+                    this.dtField = 'dtstart';
+                    if (this.dtField && record.data.field1 === 'custom') {
+                        var date = this.record.get(this.dtField);
+                        if (Ext.isDate(date)) {
+                            this.customDateField.setValue(date.add(Date.MINUTE, -1 * Ext.isNumber(combo.getValue()) ? combo.getValue() : 0));
+                        }
+                    }
                 }
             }
         });
         
         return {
-            layout: 'form',
+            layout: 'column',
             items: [
-                this.alarmCombo, 
+                this.alarmCombo,
                 this.customDateField
             ]
         };
@@ -100,10 +117,11 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
                 var date = Date.parseDate(alarm.alarm_time, Date.patterns.ISO8601Long);
                 // get custom date if set (and enable field)
                 this.customDateField.setValue(date);
-                this.customDateField.setDisabled(false);
+                console.log('show');
+                this.customDateField.show();
                 this.alarmCombo.setValue('custom');
             } else {
-                this.customDateField.setDisabled(true);
+                this.customDateField.hide();
                 this.alarmCombo.setValue(alarm.minutes_before);
             }
         }
