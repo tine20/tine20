@@ -372,7 +372,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                     exception.request = jsonrpcoptions.jsonData;
                     exception.response = response.responseText;
                     
-                    Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+                    this.handleRequestException(exception);
                 }
             }
         };
@@ -382,5 +382,14 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         }
         
         return Ext.Ajax.request(requestOptions);
+    },
+    
+    /**
+     * default exception handler
+     * 
+     * @param {Object} exception
+     */
+    handleRequestException: function(exception) {
+        Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
     }
 });
