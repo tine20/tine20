@@ -53,7 +53,7 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
      * @return void
      * 
      * @todo    add status & organizer filters
-     */
+     *
     public function appendFilterSql($_select, $_backend)
     {
         $gs = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
@@ -63,5 +63,5 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
             
         }
         $gs->appendWhere(Zend_Db_Select::SQL_OR);
-    }
+    }*/
 }
