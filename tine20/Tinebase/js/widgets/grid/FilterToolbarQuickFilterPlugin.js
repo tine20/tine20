@@ -141,6 +141,8 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         this.ftb.onFieldChange   = this.ftb.onFieldChange.createSequence(this.onFieldChange, this);
         this.ftb.deleteFilter    = this.ftb.deleteFilter.createInterceptor(this.onBeforeDeleteFilter, this);
         this.ftb.setValue        = this.ftb.setValue.createSequence(this.onSetValue, this);
+        this.ftb.onRender        = this.ftb.onRender.createSequence(this.onRender, this);
+        
         
         //this.ftb.onFilterRowsChange = this.ftb.onFilterRowsChange.createInterceptor(this.onFilterRowsChange, this);
         this.ftb.getQuickFilterField = this.getQuickFilterField.createDelegate(this);
@@ -168,13 +170,30 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             }
         });
         
+        var stateful = !! this.ftb.recordClass;
+        // autogenerate stateId
+        if (stateful) {
+            var stateId = this.ftb.recordClass.getMeta('appName') + '-' + this.ftb.recordClass.getMeta('recordName') + '-FilterToolbar-QuickfilterPlugin';
+        }
+        
         this.detailsToggleBtn = new Ext.Button({
             style: {'margin-top': '2px'},
             enableToggle: true,
             text: _('show details'),
             tooltip: _('Always show advanced filters'),
             scope: this,
-            handler: this.onDetailsToggle
+            handler: this.onDetailsToggle,
+            stateful: stateful,
+            stateId : stateful ? stateId : null,
+            getState: function() {
+                return {detailsButtonPressed: this.pressed};
+            },
+            applyState: function(state) {
+                if (state.detailsButtonPressed) {
+                    this.toggle(state.detailsButtonPressed);
+                }
+            },
+            stateEvents: ['toggle']
         });
         
         this.ftb.hide();
@@ -202,6 +221,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * @param {Ext.Button} btn
      */
     onDetailsToggle: function(btn) {
+        console.log('tooble');
         this.ftb[btn.pressed ? 'show' : 'hide']();
         
         // cares for resizing
@@ -276,6 +296,15 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
     onQuickFilterTrigger: function() {
         this.ftb.onFiltertrigger.call(this.ftb);
         this.ftb.onFilterRowsChange.call(this.ftb);
+    },
+    
+    /**
+     * called after onRender is called for the filter toolbar
+     * 
+     * @param {Array} filters
+     */
+    onRender: function() {
+        this.onDetailsToggle(this.detailsToggleBtn);
     },
     
     /**
