@@ -155,7 +155,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         if (this.hasFavoritesPanel && !this.favoritesPanel) {
             this.favoritesPanel = new Tine[this.app.appName][this.favoritesPanelClassName]({
                 app: this.app,
-                treePanel: this.containerTreePanel
+                treePanel: this.getContainerTreePanel()
             });
         }
         
