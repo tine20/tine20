@@ -20,53 +20,14 @@ Ext.namespace('Tine.Sales');
  * TODO         generalize this
  * </pre>
  * 
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
  * @constructor
  * Constructs mainscreen of the Sales application
  */
 Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
-    
-    activeContentType: 'Product',
-    
-    showCenterPanel: function() {
-        
-        // which content panel?
-        var type = this.activeContentType;
-        
-        if (! this[type + 'GridPanel']) {
-            this[type + 'GridPanel'] = new Tine[this.app.appName][type + 'GridPanel']({
-                app: this.app,
-                plugins: [this.getWestPanel().getContainerTreePanel().getFilterPlugin()]
-            });
-            
-        }
-        
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this[type + 'GridPanel'], true);
-        this[type + 'GridPanel'].store.load();
-    },
-    
-    getCenterPanel: function() {
-        // which content panel?
-        
-        // we always return product grid panel as a quick hack for saving filters
-        return this['Product' + 'GridPanel'];
-    },
-    
-    /**
-     * sets toolbar in mainscreen
-     */
-    showNorthPanel: function() {
-        var type = this.activeContentType;
-        
-        if (! this[type + 'ActionToolbar']) {
-            this[type + 'ActionToolbar'] = this[type + 'GridPanel'].actionToolbar;
-        }
-        
-        Tine.Tinebase.MainScreen.setActiveToolbar(this[type + 'ActionToolbar'], true);
-    }
+    activeContentType: 'Product'
 });
 
 /**

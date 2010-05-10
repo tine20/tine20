@@ -76,7 +76,7 @@ Tine.Sales.Model.Product.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Sales');
     
     return [
-        {label: _('Quick search'), field: 'query',    operators: ['contains']},
+        {label: _('Quick search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Product name'),   field: 'name' },
         {filtertype: 'tinebase.tag', app: app}
     ];
