@@ -106,12 +106,14 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         var store = this.app.getMainScreen().getCenterPanel().getStore();
         
         // NOTE: this can be removed when all instances of filterplugins are removed
-        store.on('beforeload', this.storeOnBeforeload.createDelegate(this, [persistentFilter], true));
-        store.load();
+        store.on('beforeload', this.storeOnBeforeload, this);
+        store.load({
+            persistentFilter: persistentFilter
+        });
     },
     
-    storeOnBeforeload: function(store, options, persistentFilter) {
-        options.params.filter = persistentFilter.get('filters');
+    storeOnBeforeload: function(store, options) {
+        options.params.filter = options.persistentFilter.get('filters');
         store.un('beforeload', this.storeOnBeforeload, this);
     },
     
