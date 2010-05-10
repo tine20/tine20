@@ -67,10 +67,10 @@ class Tasks_Setup_Update_Release3 extends Setup_Update_Abstract
             'account_id'        => NULL,
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
             'model'             => 'Tasks_Model_TaskFilter',
-            'filters'           => array('condition' => 'OR', 'filters' => array(
-                'field' => 'container_id', 'operator' => 'equals', 'value' => '/personal/'.Tinebase_Model_User::CURRENTACCOUNT,
-                'field' => 'organizer', 'operator'  => 'equals', 'value'   => Tinebase_Model_User::CURRENTACCOUNT
-             ))
+            'filters'           => array( array('condition' => 'OR', 'filters' => array(
+                array('field' => 'container_id', 'operator' => 'equals', 'value' => '/personal/' . Tinebase_Model_User::CURRENTACCOUNT),
+                array('field' => 'organizer',    'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT),
+             )))
         )));
         
         $this->setApplicationVersion('Tasks', '3.2');
