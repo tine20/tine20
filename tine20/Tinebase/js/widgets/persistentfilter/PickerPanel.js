@@ -90,6 +90,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         if (this.filterMountId !== null) {
             this.getNodeById(this.filterMountId).appendChild(this.filterNode);
         }
+        
+        // due to dependencies isues we need to wait after render
+        this.getFilterToolbar().on('change', this.onFilterChange, this);
     },
     
     /**
@@ -111,10 +114,16 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             persistentFilter: persistentFilter
         });
     },
-    
     storeOnBeforeload: function(store, options) {
         options.params.filter = options.persistentFilter.get('filters');
         store.un('beforeload', this.storeOnBeforeload, this);
+    },
+    
+    /**
+     * called on filtertrigger of filter toolbar
+     */
+    onFilterChange: function() {
+        this.getSelectionModel().clearSelections();
     },
     
     /**
@@ -292,6 +301,23 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 });
             }
         }, this, false, name);
+    },
+    
+    /**
+     * select given persistent filter
+     * 
+     * @param {model.PersistentFilter} persistentFilter
+     */
+    selectFilter: function(persistentFilter) {
+        this.onFilterSelect(persistentFilter);
+        
+        var node = this.getNodeById(persistentFilter.id);
+        if (node) {
+            this.getSelectionModel().select(node);
+        } else {
+            // mark for selection
+            this.getLoader().selectedFilterId = persistentFilter.id;
+        }
     }
     
 });
@@ -317,6 +343,11 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tr
      * @cfg {Ext.data.Store} store
      */
     store: null,
+    
+    /**
+     * @cfg {String} selectedFilterId id to autoselect
+     */
+    selectedFilterId: null,
     
     /**
      * 
@@ -356,6 +387,7 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tr
                 isPersistentFilter: isPersistentFilter,
                 text: Ext.util.Format.htmlEncode(this.app.i18n._hidden(attr.name)),
                 qtip: Ext.util.Format.htmlEncode(attr.description ? this.app.i18n._hidden(attr.description) : ''),
+                selected: attr.id === this.selectedFilterId,
                 id: attr.id,
                 leaf: attr.leaf === false ? attr.leaf : true/*,
                 filter: Ext.copyTo({}, attr, 'id, name, filters')*/
