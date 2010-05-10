@@ -39,7 +39,7 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
         if (! this[type + 'GridPanel']) {
             this[type + 'GridPanel'] = new Tine[this.app.appName][type + 'GridPanel']({
                 app: this.app,
-                plugins: [this.getContainerTreePanel().getFilterPlugin()]
+                plugins: [this.getWestPanel().getContainerTreePanel().getFilterPlugin()]
             });
             
         }
