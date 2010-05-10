@@ -343,7 +343,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     initStore: function() {
         if (this.recordProxy) {
             this.store = new Ext.data.Store({
-                autoLoad: true,
+                //autoLoad: true,
                 fields: this.recordClass,
                 proxy: this.recordProxy,
                 reader: this.recordProxy.getReader(),
@@ -358,9 +358,22 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
         } else {
             this.store = new Tine.Tinebase.data.RecordStore({
-                autoLoad: true,
+                //autoLoad: true,
                 recordClass: this.recordClass
             });
+        }
+    },
+    
+    /**
+     * preform the initial load of grid data
+     */
+    initialLoad: function() {
+        var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName);
+        var favoritesPanel  = this.app.getMainScreen().getWestPanel().getFavoritesPanel();
+        if (defaultFavorite && favoritesPanel) {
+            favoritesPanel.onFilterSelect(defaultFavorite);
+        } else {
+            this.store.load();
         }
     },
     
@@ -454,6 +467,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.updateOnSelectionChange = true;
         }, this);
         
+    },
+    
+    /**
+     * executed after outer panel rendering process
+     */
+    afterRender: function() {
+        Tine.widgets.grid.GridPanel.superclass.afterRender.apply(this, arguments);
+        this.initialLoad();
     },
     
     /**
