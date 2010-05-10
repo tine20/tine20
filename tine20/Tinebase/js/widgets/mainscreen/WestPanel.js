@@ -19,6 +19,7 @@ Ext.ns('Tine.widgets.mainscreen');
  * @todo make save button working again -> move to here
  * 
  * @constructor
+ * @xtype       tine.widgets.mainscreen.westpanel
  */
 Tine.widgets.mainscreen.WestPanel = function(config) {
     Ext.apply(this, config);
@@ -162,6 +163,16 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
     },
     
     /**
+     * returns filter plugin of west panel for given content type
+     * 
+     * @param {String} contentType
+     * @return {Tine.widgets.grid.FilterPlugin}
+     */
+    getFilterPlugin: function(contentType) {
+        return this.getContainerTreePanel().getFilterPlugin();
+    },
+    
+    /**
      * returns the one and only portalcolumn of this west panel
      * 
      * @return {Ext.ux.PortalColumn}
@@ -261,3 +272,5 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         }
     }
 });
+
+Ext.reg('tine.widgets.mainscreen.westpanel', Tine.widgets.mainscreen.WestPanel);
