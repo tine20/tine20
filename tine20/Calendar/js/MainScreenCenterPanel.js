@@ -168,9 +168,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             items: [this.getCalendarPanel(this.activeView)]
         }];
         
-        // preload data
-        this.getCalendarPanel(this.activeView).getStore().load({});
-        
         // add detail panel
         if (this.detailsPanel) {
             this.items.push({
@@ -658,6 +655,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             
             this.calendarPanels[which].getSelectionModel().on('selectionchange', this.updateEventActions, this);
             this.calendarPanels[which].on('keydown', this.onKeyDown, this);
+            
+            this.calendarPanels[which].on('render', function() {
+                var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName);
+                var favoritesPanel  = this.app.getMainScreen().getWestPanel().getFavoritesPanel();
+                favoritesPanel.selectFilter(defaultFavorite);
+            }, this);
         }
         
         return this.calendarPanels[which];

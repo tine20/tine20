@@ -13,7 +13,7 @@ Tine.Calendar.FilterPanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel
     filter: [{field: 'model', operator: 'equals', value: 'Calendar_Model_EventFilter'}],
     
     storeOnBeforeload: function(store, options) {
-        options.params.filter = this.getSelectionModel().getSelectedNode().attributes.filter.filters;
+        options.params.filter = this.store.getById(this.getSelectionModel().getSelectedNode().id).get('filters');
         
         var cp = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
         var period = cp.getCalendarPanel(cp.activeView).getTopToolbar().getPeriod();

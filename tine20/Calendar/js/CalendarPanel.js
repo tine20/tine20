@@ -378,6 +378,8 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     onRender: function(ct, position) {
         Tine.Calendar.CalendarPanel.superclass.onRender.apply(this, arguments);
         
+        this.loadMask = new Ext.LoadMask(this.body, {msg: this.loadMaskText});
+        
         var c = this.body;
         this.el.addClass('cal-panel');
         this.view.init(this);
@@ -402,7 +404,6 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     afterRender : function(){
         Tine.Calendar.CalendarPanel.superclass.afterRender.call(this);
         
-        this.loadMask = new Ext.LoadMask(this.body, {msg: this.loadMaskText});
         this.view.layout();
         this.view.afterRender();
         
