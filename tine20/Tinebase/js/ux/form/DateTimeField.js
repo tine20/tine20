@@ -40,6 +40,19 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         
     },
     
+    combineDateTime: function(date, time) {
+        date = Ext.isDate(date) ? date : new Date.clearTime();
+        
+        if (Ext.isDate(time)) {
+            date = date.clone();
+            date.clearTime();
+            date = date.add(Date.HOUR, time.getHours());
+            date = date.add(Date.MINUTE, time.getMinutes());
+        }
+        
+        return date;
+    },
+    
     getName: function() {
         return this.name;
     },
@@ -49,11 +62,8 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         // this is odd, why doesn't Ext.form.TimeField a Date datatype?
         var time = Date.parseDate(this.timeField.getValue(), this.timeField.format);
         
-        if (Ext.isDate(date) && Ext.isDate(time)) {
-            date = date.clone();
-            date.clearTime();
-            date = date.add(Date.HOUR, time.getHours());
-            date = date.add(Date.MINUTE, time.getMinutes());
+        if (Ext.isDate(date)) {
+            date = this.combineDateTime(date, time);
         }
         
         return date;
@@ -73,11 +83,13 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         this.el.applyStyles('overflow:visible;');
         
         this.dateField = new Ext.form.DateField({
+            lazyRender:false,
             renderTo: this.el,
             readOnly: this.readOnly,
             hideTrigger: this.hideTrigger,
             disabled: this.disabled,
             tabIndex: this.tabIndex == -1 ? this.tabIndex : false,
+            value: this.value,
             listeners: {
                 scope: this,
                 change: this.onDateChange,
@@ -86,11 +98,13 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         });
         
         this.timeField = new Ext.form.TimeField({
+            lazyRender:false,
             renderTo: this.el,
             readOnly: this.readOnly,
             hideTrigger: this.hideTrigger,
             disabled: this.disabled,
             tabIndex: this.tabIndex == -1 ? this.tabIndex : false,
+            value: this.value,
             listeners: {
                 scope: this,
                 change: this.onTimeChange,
@@ -145,8 +159,12 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
             this.lastValues.push(value);
         }
         
-        this.dateField.setValue(value);
-        this.timeField.setValue(value);
+        if (this.dateField && this.timeField) {
+            this.dateField.setValue(value);
+            this.timeField.setValue(value);
+        }
+        
+        this.value = value;
     },
     
     undo: function() {
