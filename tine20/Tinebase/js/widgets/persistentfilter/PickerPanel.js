@@ -123,7 +123,8 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         store.on('beforeload', this.storeOnBeforeload, this);
         store.load();
         
-        if (typeof this.app.getMainScreen().getWestPanel().getContainerTreePanel().activate == 'function') {
+        if (typeof this.app.getMainScreen().getWestPanel().getContainerTreePanel === 'function' && 
+            typeof this.app.getMainScreen().getWestPanel().getContainerTreePanel().activate == 'function') {
             this.app.getMainScreen().getWestPanel().getContainerTreePanel().activate(0);
         }
     },
