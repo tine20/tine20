@@ -13,14 +13,8 @@ Ext.ns('Tine.widgets.persistentfilter');
  * @class       Tine.widgets.persistentfilter.PickerPanel
  * @extends     Ext.tree.TreePanel
  * 
- * <p>PersistentFilter Picker Panel</p><br />
- <br />
- The picker panel can operate in tree modes:
- <ul>
-   <li><b></b> </li>
- </ul>
- 
- *
+ * <p>PersistentFilter Picker Panel</p>
+ * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @version     $Id$
