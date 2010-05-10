@@ -459,7 +459,7 @@ Tine.Felamimail.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
      * @return {Ext.tree.TreePanel}
      */
     getTreePanel: function() {
-        return this.getContainerTreePanel();
+        return this.getWestPanel().getContainerTreePanel();
     }
 });
 
