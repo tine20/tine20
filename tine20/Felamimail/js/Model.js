@@ -225,6 +225,29 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
 Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Felamimail',
     modelName: 'Folder',
-    recordClass: Tine.Felamimail.Model.Folder
+    recordClass: Tine.Felamimail.Model.Folder,
+    
+    /**
+     * generic exception handler for this proxy
+     * 
+     * @todo move all 902 exception handling here!
+     * @todo invent requery on 902 with cred. dialog
+     * 
+     * @param {Tine.Exception} exception
+     */
+    handleRequestException: function(exception) {
+        
+        var app = Tine.Tinebase.appMgr.get(this.appName);
+        if (exception && exception.code == 902) {
+            Ext.Msg.show({
+               title:   app.i18n._('Error'),
+               msg:     exception.message ? exception.message : app.i18n._('No connection to IMAP server.'),
+               icon:    Ext.MessageBox.ERROR,
+               buttons: Ext.Msg.OK
+            });
+        } else {
+            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+        }
+    }
 });
 
