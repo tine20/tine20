@@ -59,10 +59,10 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
     centerPanelClassNameSuffix: 'GridPanel',
     
     /**
-     * @cfg {Function} westPanelClass
+     * @cfg {Function} westPanelXType
      * constructor of westpanel class 
      */
-    westPanelClass: Tine.widgets.mainscreen.WestPanel,
+    westPanelXType: 'tine.widgets.mainscreen.westpanel',
     
     /**
      * returns active content type
@@ -87,7 +87,8 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
         if (! this[contentType + this.centerPanelClassNameSuffix]) {
             this[contentType + this.centerPanelClassNameSuffix] = new Tine[this.app.appName][contentType + this.centerPanelClassNameSuffix]({
                 app: this.app,
-                plugins: [this.getContainerTreePanel().getFilterPlugin()]
+                //plugins: [this.getContainerTreePanel().getFilterPlugin()]
+                plugins: [this.getWestPanel().getFilterPlugin(contentType)]
             });
         }
         
@@ -98,10 +99,11 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
      * convinience fn to get container tree panel from westpanel
      * 
      * @return {Tine.widgets.container.containerTreePanel}
-     */
+     *
     getContainerTreePanel: function() {
         return this.getWestPanel().getContainerTreePanel();
     },
+    */
     
     /**
      * get north panel for given contentType
@@ -130,9 +132,9 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
      */
     getWestPanel: function() {
         if (! this.westPanel) {
-            this.westPanel = new this.westPanelClass({
+            this.westPanel = Ext.ComponentMgr.create({
                 app: this.app
-            });
+            }, this.westPanelXType);
         }
         
         return this.westPanel;
