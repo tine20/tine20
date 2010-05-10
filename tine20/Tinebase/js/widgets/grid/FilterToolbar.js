@@ -145,7 +145,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             saveFilter: new Ext.Button({
                 tooltip: _('save filter'),
                 iconCls: 'action_saveFilter',
-                handler: this.app.getMainScreen().getWestPanel().getFavoritesPanel().saveFilter.createDelegate(this.app.getMainScreen().getWestPanel().getFavoritesPanel())
+                handler: this.onSaveFilter.createDelegate(this)
             })
         };
     },
@@ -187,6 +187,13 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         // arrange static action buttons
         this.onFilterRowsChange();
+    },
+    
+    /**
+     * save filterset as persisten filter
+     */
+    onSaveFilter: function() {
+        this.app.getMainScreen().getWestPanel().getFavoritesPanel().saveFilter.createDelegate(this.app.getMainScreen().getWestPanel().getFavoritesPanel())
     },
     
     /**
