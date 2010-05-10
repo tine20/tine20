@@ -209,6 +209,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+            app: this.app,
             allowSaving: true,
             filterModels: [
                 //{label: _('Quick search'),    field: 'query',    operators: ['contains']}, // query only searches description
