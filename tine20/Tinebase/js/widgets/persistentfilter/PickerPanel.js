@@ -368,10 +368,11 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tr
         if (isPersistentFilter) {
             Ext.apply(attr, {
                 isPersistentFilter: isPersistentFilter,
-                text: Ext.util.Format.htmlEncode(attr.name),
+                text: Ext.util.Format.htmlEncode(this.app.i18n._hidden(attr.name)),
+                qtip: Ext.util.Format.htmlEncode(attr.description ? this.app.i18n._hidden(attr.description) : ''),
                 id: attr.id,
-                leaf: attr.leaf === false ? attr.leaf : true,
-                filter: Ext.copyTo({}, attr, 'id, name, filters')
+                leaf: attr.leaf === false ? attr.leaf : true/*,
+                filter: Ext.copyTo({}, attr, 'id, name, filters')*/
             });
         }
     }
