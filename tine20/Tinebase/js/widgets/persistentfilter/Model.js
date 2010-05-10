@@ -69,9 +69,10 @@ Tine.widgets.persistentfilter.model.PersistentFilter = Tine.Tinebase.data.Record
  * @return      {model.PersistentFilter} or null
  */
 Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite = function(appName) {
-    var app = Tine.Tinebase.appMgr.get(appName);
-    
-    var defaultFavoriteId = app.getRegistry().get('preferences').get('defaultpersistentfilter');
+    var app = Tine.Tinebase.appMgr.get(appName),
+        appPrefs = app.getRegistry().get('preferences'),
+        defaultFavoriteId = appPrefs ? appPrefs.get('defaultpersistentfilter') : null;
+   
     return defaultFavoriteId ? Tine.widgets.persistentfilter.store.getPersistentFilterStore().getById(defaultFavoriteId) : null
 };
 
