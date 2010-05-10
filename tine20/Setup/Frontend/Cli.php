@@ -57,6 +57,8 @@ class Setup_Frontend_Cli
             $this->_listInstalled();
         } elseif(isset($_opts->sync_accounts_from_ldap)) {
             $this->_importAccounts($_opts);
+        } elseif(isset($_opts->egw14import)) {
+            $this->_egw14Import($_opts);
         } elseif(isset($_opts->check_requirements)) {
             $this->_checkRequirements($_opts);
         } elseif(isset($_opts->setconfig)) {
@@ -265,6 +267,17 @@ class Setup_Frontend_Cli
         
         // import group memberships
         Tinebase_Group::getInstance()->importGroupMembers();
+    }
+    
+    /**
+     * import from egw14
+     * 
+     * @param Zend_Console_Getopt $_opts
+     */
+    protected function _egw14Import(Zend_Console_Getopt $_opts)
+    {
+        $importer = new Setup_Import_Egw14();
+        $importer->import();
     }
     
     /**

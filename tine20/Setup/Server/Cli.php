@@ -29,22 +29,23 @@ class Setup_Server_Cli extends Setup_Server_Abstract
         try {
             $opts = new Zend_Console_Getopt(
             array(
-                'help|h'                => 'Display this help Message',
-                'verbose|v'             => 'Output messages',
-                'config|c=w'            => 'Path to config.inc.php file',
-                'setconfig'             => 'Update config. To specify the key and value, append \' -- configKey="your_key" configValue="your config value"\'
+                'help|h'                    => 'Display this help Message',
+                'verbose|v'                 => 'Output messages',
+                'config|c=w'                => 'Path to config.inc.php file',
+                'setconfig'                 => 'Update config. To specify the key and value, append \' -- configKey="your_key" configValue="your config value"\'
                          Examples:
                            setup.php --setconfig -- configkey=sample1 configvalue=value11
                            setup.php --setconfig -- configkey=sample2 configvalue=arrayKey1:Value1,arrayKey2:value2',
-                'check_requirements'    => 'Check if all requirements are met to install and run tine20',
+                'check_requirements'        => 'Check if all requirements are met to install and run tine20',
             
-                'install-s'             => 'Install applications [All] or comma separated list;'
+                'install-s'                 => 'Install applications [All] or comma separated list;'
                     . ' To specify the login name and login password of the admin user that is created during installation, append \' -- adminLoginName="admin" adminPassword="password"\''
                     . ' To add imap or smtp settings, append (for example) \' -- imap="host:mail.example.org,port:143,dbmail_host:localhost" smtp="ssl:tls"\'',
-                'update-s'              => 'Update applications [All] or comma separated list',             
-                'uninstall-s'           => 'Uninstall application [All] or comma separated list',
-                'list-s'                => 'List installed applications',
-                'sync_accounts_from_ldap'       => 'Import user and groups from ldap',
+                'update-s'                  => 'Update applications [All] or comma separated list',             
+                'uninstall-s'               => 'Uninstall application [All] or comma separated list',
+                'list-s'                    => 'List installed applications',
+                'sync_accounts_from_ldap'   => 'Import user and groups from ldap',
+                'egw14import'               => 'Import user and groups from egw14'
                 #'username'             => 'Username [required]',              
                 #'password'             => 'Password [required]',              
             ));
@@ -55,7 +56,7 @@ class Setup_Server_Cli extends Setup_Server_Abstract
             exit;
         }
 
-        if (count($opts->toArray()) === 0 || $opts->h || (empty($opts->install) && empty($opts->update) && empty($opts->uninstall) && empty($opts->list) && empty($opts->sync_accounts_from_ldap) && empty($opts->check_requirements) && empty($opts->setconfig))) {
+        if (count($opts->toArray()) === 0 || $opts->h || (empty($opts->install) && empty($opts->update) && empty($opts->uninstall) && empty($opts->list) && empty($opts->sync_accounts_from_ldap) && empty($opts->egw14import) && empty($opts->check_requirements) && empty($opts->setconfig))) {
             echo $opts->getUsageMessage();
             exit;
         }
