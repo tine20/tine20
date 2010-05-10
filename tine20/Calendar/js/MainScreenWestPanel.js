@@ -9,6 +9,19 @@
 
 Ext.ns('Tine.Calendar');
 
+/**
+ * Calendar west panel
+ * 
+ * @namespace   Tine.Calendar
+ * @class       Tine.Calendar.MainScreenWestPanel
+ * @extends     Tine.widgets.mainscreen.WestPanel
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
+ * 
+ * @constructor
+ * @xtype       tine.calendar.mainscreenwestpanel
+ */
 Tine.Calendar.MainScreenWestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel, {
     
     containerTreePanelClassName: 'CalendarSelectTreePanel',
@@ -61,3 +74,5 @@ Tine.Calendar.MainScreenWestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel
         return this.datePicker;
     }
 });
+
+Ext.reg('tine.calendar.mainscreenwestpanel', Tine.Calendar.MainScreenWestPanel);

@@ -60,7 +60,7 @@ Tine.Calendar.MainScreen = function(config) {
 Ext.extend(Tine.Calendar.MainScreen, Tine.widgets.MainScreen, {
     
     
-    westPanelClass: Tine.Calendar.MainScreenWestPanel,
+    westPanelXType: 'tine.calendar.mainscreenwestpanel',
     
     /**
      * Get content panel of calendar application
