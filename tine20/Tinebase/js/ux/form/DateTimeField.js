@@ -70,6 +70,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         this.el.id = this.getId();
         this.el = Ext.get(this.el);
         ct.dom.insertBefore(this.el.dom, position);
+        this.el.applyStyles('overflow:visible;');
         
         this.dateField = new Ext.form.DateField({
             renderTo: this.el,
