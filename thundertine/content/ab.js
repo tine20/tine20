@@ -68,16 +68,27 @@ var ab = {
 	// Anniversary isn't supported by Tine 2.0
 	// Birthday
 	if (field=='Birthday') {
-		ret = card.getProperty("BirthYear", "0000")+'-'+card.getProperty("BirthMonth", "00")+'-'+card.getProperty("BirthDay", "00");
-		if (ret == '0000-00-00')
-			ret = '';
-		else {
+		if (card.getProperty("BirthYear", "0") >0 && card.getProperty("BirthMonth", "0") >0 && card.getProperty("BirthDay", "0") >0) {
+			var aHours = 0;
 			// Tine 2.0 manipulates dates from iPhones (subtract 12 hours)
 			if (config.deviceType == 'iPhone')
-				ret = ret + "T12:00:00.000Z";
-			else
-				ret = ret + "T00:00:00.000Z";
+				aHours = 12;
+			var dLoc = new Date(
+				card.getProperty("BirthYear", "0000"),
+				(card.getProperty("BirthMonth", "01") -1), // Month in js is from 0 to 11
+				card.getProperty("BirthDay", "00"),
+				aHours,00,00,000
+			);
+			var rYear = dLoc.getUTCFullYear();
+			var rMonth = dLoc.getUTCMonth()+1;
+				if (rMonth<10) rMonth = '0'+rMonth;
+			var rDay = (dLoc.getUTCDate()>9) ? dLoc.getUTCDate() : '0'+dLoc.getUTCDate();
+			var rHour = (dLoc.getUTCHours()>9) ? dLoc.getUTCHours() : '0'+dLoc.getUTCHours();
+			var rMinute = (dLoc.getUTCMinutes()>9) ? dLoc.getUTCMinutes() : '0'+dLoc.getUTCMinutes();
+			var ret = rYear+'-'+rMonth+'-'+rDay+'T'+rHour+':'+rMinute+':00.000Z';
 		}
+		else
+			var ret = ''; 
 	}
 	// Picture
 	else if (field=='Picture') {
@@ -113,9 +124,16 @@ var ab = {
 
   setSpecialAbValue: function(card, tbField, asValue) {
 	if (tbField=='Birthday' && asValue != '') {
-		card.setProperty("BirthYear", asValue.substr(0,4) );
-		card.setProperty("BirthMonth", asValue.substr(5,2) );
-		card.setProperty("BirthDay", asValue.substr(8,2) );
+		var asDate = new Date(asValue.substr(0,4), asValue.substr(5,2)-1, asValue.substr(8,2), asValue.substr(11,2), asValue.substr(14,2) );
+		var locDate = new Date(asDate.getTime() + (asDate.getTimezoneOffset() * 60000 * -1));
+		var aMonth = (locDate.getMonth()+1);
+		if (aMonth<10) aMonth = '0' + aMonth;
+		var aDay = locDate.getDate();
+		if (aDay < 10) aDay = '0' + aDay;
+		tbDate = locDate.getFullYear() + '-' + aMonth + '-' + aDay; 
+		card.setProperty("BirthYear", tbDate.substr(0,4) );
+		card.setProperty("BirthMonth", tbDate.substr(5,2) );
+		card.setProperty("BirthDay", tbDate.substr(8,2) );
 	}
 	else if (tbField=='Picture') { 
 		// delete image
