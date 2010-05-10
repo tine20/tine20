@@ -213,23 +213,35 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this,
             disabled: ! Tine.Tinebase.common.hasRight('add_accounts', 'Felamimail')
         });
-         this.action_print = new Ext.Action({
+        this.action_print = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Print Message'),
             handler: this.onPrint,
             disabled:true,
             iconCls:'action_print',
             scope:this
-         });
-         this.action_printPreview = new Ext.Action({
+        });
+        this.action_printPreview = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Print Preview'),
             handler: this.onPrintPreview,
             disabled:true,
             iconCls:'action_printPreview',
             scope:this
-         });
-        
+        });
+        this.action_printMenu = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Print Message'),
+            disabled:true,
+            iconCls:'action_print',
+            scope:this,
+            menu:{
+                items:[
+                    this.action_print,
+                    this.action_printPreview
+                ]
+            }
+        });
         this.actionUpdater.addActions([
             this.action_write,
             this.action_reply,
@@ -239,6 +251,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_markUnread,
             this.action_deleteRecord,
             this.action_addAccount,
+            this.action_printMenu,
             this.action_print,
             this.action_printPreview
         ]);
@@ -334,7 +347,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 defaults: {height: 55},
                 items: [{
                     xtype: 'buttongroup',
-                    columns: 9,
+                    columns: 8,
                     items: [
                         Ext.apply(new Ext.Button(this.action_write), {
                             scale: 'medium',
@@ -361,15 +374,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             rowspan: 2,
                             iconAlign: 'top'
                         }),
-                        Ext.apply(new Ext.Button(this.action_print), {
+                        Ext.apply(new Ext.Button(this.action_printMenu), {
                             scale: 'medium',
                             rowspan: 2,
-                            iconAlign: 'top'
-                        }),
-                        Ext.apply(new Ext.Button(this.action_printPreview), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
+                            iconAlign:'top',
+                            arrowAlign:'right'
                         }),
                         this.action_flag,
                         this.action_addAccount,
