@@ -373,7 +373,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (defaultFavorite && favoritesPanel) {
             favoritesPanel.onFilterSelect(defaultFavorite);
         } else {
-            this.store.load();
+            this.store.load.defer(10, this.store);
         }
     },
     
