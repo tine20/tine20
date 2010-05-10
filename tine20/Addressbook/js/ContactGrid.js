@@ -19,8 +19,6 @@ Ext.namespace('Tine.Addressbook');
  * @extends     Tine.widgets.grid.GridPanel
  * 
  * <p>Contact Grid Panel</p>
- * <p><pre>
- * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
