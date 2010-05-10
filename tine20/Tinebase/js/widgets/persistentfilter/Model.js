@@ -56,11 +56,24 @@ Tine.widgets.persistentfilter.model.PersistentFilter = Tine.Tinebase.data.Record
      * @return {Boolean}
      */
     isDefault: function() {
-        var app = Tine.appMgr.getById(this.get('application_id'));
+        var app = Tine.Tinebase.appMgr.getById(this.get('application_id'));
         
         return this.app && this.get('id') === app.getRegistry().get('preferences').get('defaultpersistentfilter');
     }
 });
+
+/**
+ * @namespace   Tine.widgets.persistentfilter
+ * 
+ * @param       {String} appName
+ * @return      {model.PersistentFilter} or null
+ */
+Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite = function(appName) {
+    var app = Tine.Tinebase.appMgr.get(appName);
+    
+    var defaultFavoriteId = app.getRegistry().get('preferences').get('defaultpersistentfilter');
+    return defaultFavoriteId ? Tine.widgets.persistentfilter.store.getPersistentFilterStore().getById(defaultFavoriteId) : null
+};
 
 /**
  * @namespace   Tine.widgets.persistentfilter
