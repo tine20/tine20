@@ -13,8 +13,14 @@ Ext.ns('Tine.widgets.persistentfilter');
  * @class       Tine.widgets.persistentfilter.PickerPanel
  * @extends     Ext.tree.TreePanel
  * 
- * <p>PersistentFilter Picker Panel</p>
- * 
+ * <p>PersistentFilter Picker Panel</p><br />
+ <br />
+ The picker panel can operate in tree modes:
+ <ul>
+   <li><b></b> </li>
+ </ul>
+ 
+ *
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @version     $Id$
@@ -29,11 +35,13 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @cfg {application}
      */
     app: null,
+    
     /**
      * @cfg {String} filterMountId
-     * mount point of persitant filter folder
+     * mount point of persistent filter folder (defaults to null -> root node)
      */
-    filterMountId: '/',
+    filterMountId: null,
+    
     
     /**
      * @private
@@ -53,13 +61,24 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             store: this.store
         });
         
-        if (! this.root) {
-            this.root = new Ext.tree.TreeNode({
-                id: '/',
-                leaf: false,
-                expanded: true
-            });
+        this.filterNode = new Ext.tree.AsyncTreeNode({
+            text: _('My saved filters'),
+            id: '_persistentFilters',
+            leaf: false,
+            expanded: true
+        });
+        
+        if (this.filterMountId === null) {
+            this.root = this.filterNode;
         }
+        
+//        if (! this.root) {
+//            this.root = new Ext.tree.TreeNode({
+//                id: '/',
+//                leaf: false,
+//                expanded: true
+//            });
+//        }
         
         Tine.widgets.persistentfilter.PickerPanel.superclass.initComponent.call(this);
         
@@ -82,14 +101,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     afterRender: function() {
         Tine.widgets.persistentfilter.PickerPanel.superclass.afterRender.call(this);
         
-        this.filterNode = new Ext.tree.AsyncTreeNode({
-            text: _('My saved filters'),
-            id: '_persistentFilters',
-            leaf: false,
-            expanded: true
-        });
-        
-        this.getNodeById(this.filterMountId).appendChild(this.filterNode);
+        if (this.filterMountId !== null) {
+            this.getNodeById(this.filterMountId).appendChild(this.filterNode);
+        }
     },
     
     /**
@@ -109,8 +123,8 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         store.on('beforeload', this.storeOnBeforeload, this);
         store.load();
         
-        if (typeof this.app.getMainScreen().getContainerTreePanel().activate == 'function') {
-            this.app.getMainScreen().getContainerTreePanel().activate(0);
+        if (typeof this.app.getMainScreen().getWestPanel().getContainerTreePanel().activate == 'function') {
+            this.app.getMainScreen().getWestPanel().getContainerTreePanel().activate(0);
         }
     },
     
