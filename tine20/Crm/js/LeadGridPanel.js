@@ -150,6 +150,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         return new Tine.widgets.grid.FilterToolbar({
             filterModels: filters,
+            recordClass: this.recordClass,
             defaultFilter: 'query',
             filters: [
                 {field: 'leadstate_id', operator: 'notin', value: Tine.Crm.LeadState.getClosedStatus()}

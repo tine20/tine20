@@ -32,7 +32,7 @@ Ext.extend(Tine.Tasks.TreePanel , Tine.widgets.container.TreePanel, {
     
     afterRender: function() {
         this.supr().afterRender.apply(this, arguments);
-        this.selectContainerPath(Tine.Tinebase.container.getMyNodePath());
+        //this.selectContainerPath(Tine.Tinebase.container.getMyNodePath());
     }
 });
 
