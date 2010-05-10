@@ -66,20 +66,12 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             this.root = this.filterNode;
         }
         
-//        if (! this.root) {
-//            this.root = new Ext.tree.TreeNode({
-//                id: '/',
-//                leaf: false,
-//                expanded: true
-//            });
-//        }
-        
         Tine.widgets.persistentfilter.PickerPanel.superclass.initComponent.call(this);
         
         this.on('click', function(node) {
             if (node.attributes.isPersistentFilter) {
                 node.select();
-                this.onFilterSelect();
+                this.onFilterSelect(this.store.getById(node.id));
             } else if (node.id == '_persistentFilters') {
                 node.expand();
                 return false;
@@ -107,27 +99,19 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      *       we need a litte hack to only present a filterid.
      *       
      *       When a filter is selected, we register ourselve as latest beforeload,
-     *       remove all filter data and paste our filter id. To ensure we are
+     *       remove all filter data and paste our filter data. To ensure we are
      *       always the last listener, we directly remove the listener afterwards
      */
-    onFilterSelect: function() {
+    onFilterSelect: function(persistentFilter) {
         var store = this.app.getMainScreen().getCenterPanel().getStore();
         
         // NOTE: this can be removed when all instances of filterplugins are removed
-        store.on('beforeload', this.storeOnBeforeload, this);
+        store.on('beforeload', this.storeOnBeforeload.createDelegate(this, [persistentFilter], true));
         store.load();
-        
-        if (typeof this.app.getMainScreen().getWestPanel().getContainerTreePanel === 'function' && 
-            typeof this.app.getMainScreen().getWestPanel().getContainerTreePanel().activate == 'function') {
-            this.app.getMainScreen().getWestPanel().getContainerTreePanel().activate(0);
-        }
     },
     
-    storeOnBeforeload: function(store, options) {
-        var node = this.getSelectionModel().getSelectedNode();
-        var record = this.store.getById(node.id);
-        
-        options.params.filter = record.get('filters');
+    storeOnBeforeload: function(store, options, persistentFilter) {
+        options.params.filter = persistentFilter.get('filters');
         store.un('beforeload', this.storeOnBeforeload, this);
     },
     
