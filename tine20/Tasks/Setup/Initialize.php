@@ -17,4 +17,29 @@
  */
 class Tasks_Setup_Initialize extends Setup_Initialize
 {
+    /**
+     * Override method because this app requires special rights
+     * @see tine20/Setup/Setup_Initialize#_createInitialRights($_application)
+     * 
+     * @todo make hard coded role name ('user role') configurable
+     */
+    protected function _createInitialRights(Tinebase_Model_Application $_application)
+    {
+        parent::_createInitialRights($_application);
+        $this->_initializeFavorites(); 
+    }
+    
+    protected function _initializeFavorites()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        
+        $myEventsPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
+            'name'              => Tasks_Preference::DEFAULTPERSISTENTFILTER_NAME,
+            'description'       => "All my tasks", // _("All my tasks")
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
+            'model'             => 'Tasks_Model_TaskFilter',
+            'filters'           => array(),
+        )));
+    }
 }
