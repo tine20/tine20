@@ -27,7 +27,7 @@
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
-        this.plugins.push(this.app.getMainScreen().getContainerTreePanel().getFilterPlugin());
+        this.plugins.push(this.app.getMainScreen().getWestPanel().getContainerTreePanel().getFilterPlugin());
         
         this.initDetailsPanel();
         

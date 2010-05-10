@@ -531,7 +531,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         options.params.filter = [];
         
         // note, we can't use the 'normal' plugin approach here, cause we have to deal with n stores
-        //var calendarSelectionPlugin = this.app.getMainScreen().getContainerTreePanel().getFilterPlugin();
+        //var calendarSelectionPlugin = this.app.getMainScreen().getWestPanel().getContainerTreePanel().getFilterPlugin();
         //calendarSelectionPlugin.onBeforeLoad.call(calendarSelectionPlugin, store, options);
         
         this.filterToolbar.onBeforeLoad.call(this.filterToolbar, store, options);

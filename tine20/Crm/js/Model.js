@@ -95,7 +95,7 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
     
     // add default container
     var app = Tine.Tinebase.appMgr.get('Crm');
-    var treeNode = app.getMainScreen().getContainerTreePanel().getSelectionModel().getSelectedNode();
+    var treeNode = app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectionModel().getSelectedNode();
     if (treeNode && treeNode.attributes && treeNode.attributes.containerType == 'singleContainer') {
         data.container_id = treeNode.attributes.container;
     } else {

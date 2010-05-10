@@ -120,7 +120,7 @@ Tine.Addressbook.Model.Contact.getDefaultData = function() {
     
     var app = Tine.Tinebase.appMgr.get('Addressbook');
     
-    //var treeNode = app.getMainScreen().getContainerTreePanel().getSelectionModel().getSelectedNode();
+    //var treeNode = app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectionModel().getSelectedNode();
     var treeNode = Ext.getCmp('Addressbook_Tree') ? Ext.getCmp('Addressbook_Tree').getSelectionModel().getSelectedNode() : null;
     if (treeNode && treeNode.attributes && treeNode.attributes.containerType == 'singleContainer') {
         data.container_id = treeNode.attributes.container;
