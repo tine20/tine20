@@ -193,7 +193,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * save filterset as persisten filter
      */
     onSaveFilter: function() {
-        this.app.getMainScreen().getWestPanel().getFavoritesPanel().saveFilter.createDelegate(this.app.getMainScreen().getWestPanel().getFavoritesPanel())
+        this.app.getMainScreen().getWestPanel().getFavoritesPanel().saveFilter();
     },
     
     /**
