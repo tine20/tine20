@@ -10,6 +10,7 @@
  
 Ext.ns('Tine.Timetracker');
 
+
 /**
  * @namespace   Tine.Timetracker
  * @class       Tine.Timetracker.MainScreen
@@ -18,12 +19,25 @@ Ext.ns('Tine.Timetracker');
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
+ * 
+ * @constructor
  */
 Tine.Timetracker.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
-    activeContentType: 'Timesheet'
+    activeContentType: 'Timesheet',
+    westPanelXType: 'tine.timetracker.treepanel'
 });
 
-
+/**
+ * @namespace   Tine.Timetracker
+ * @class       Tine.Timetracker.TreePanel
+ * @extends     Tine.widgets.persistentfilter.PickerPanel
+ * 
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @version     $Id$
+ * 
+ * @constructor
+ * @xtype       tine.timetracker.treepanel
+ */
 Tine.Timetracker.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
     
     filter: [{field: 'model', operator: 'equals', value: 'Timetracker_Model_TimesheetFilter'}],
@@ -103,8 +117,14 @@ Tine.Timetracker.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPane
         }
         
         return this.filterPlugin;
+    },
+    
+    getFavoritesPanel: function() {
+        return this;
     }
 });
+
+Ext.reg('tine.timetracker.treepanel', Tine.Timetracker.TreePanel);
 
 
 /**
