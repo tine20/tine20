@@ -25,6 +25,7 @@ class Tasks_Setup_Initialize extends Setup_Initialize
      */
     protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
+        parent::_initialize($_application, $_options);
         $this->_initializeFavorites(); 
     }
     
@@ -38,10 +39,10 @@ class Tasks_Setup_Initialize extends Setup_Initialize
             'account_id'        => NULL,
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
             'model'             => 'Tasks_Model_TaskFilter',
-            'filters'           => array('condition' => 'OR', 'filters' => array(
-                'field' => 'container_id', 'operator' => 'equals', 'value' => '/personal/' . Tinebase_Model_User::CURRENTACCOUNT,
-                'field' => 'organizer', 'operator'  => 'equals', 'value'   => Tinebase_Model_User::CURRENTACCOUNT
-             ))
+            'filters'           => array( array('condition' => 'OR', 'filters' => array(
+                array('field' => 'container_id', 'operator' => 'equals', 'value' => '/personal/' . Tinebase_Model_User::CURRENTACCOUNT),
+                array('field' => 'organizer',    'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT),
+             )))
         )));
     }
 }
