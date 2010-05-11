@@ -129,11 +129,15 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         this.el.setStyle({'position': 'relative'});
         
         this.dateField.wrap.setStyle({'position': 'absolute'});
-        this.dateField.setWidth(w * 0.55 -5);
+        var dateFieldWidth = Math.abs(w * 0.55 -5);
+        this.dateField.setWidth(dateFieldWidth);
+        this.dateField.wrap.setWidth(dateFieldWidth);
         
         this.timeField.wrap.setStyle({'position': 'absolute'});
-        this.timeField.setWidth(w * 0.45);
-        this.timeField.wrap.setLeft(this.dateField.getWidth() + 5);
+        var timeFieldWidth = Math.abs(w * 0.45);
+        this.timeField.setWidth(timeFieldWidth);
+        this.timeField.wrap.setWidth(timeFieldWidth);
+        this.timeField.wrap.setLeft(dateFieldWidth + 5);
     },
     
     onTimeChange: function() {
