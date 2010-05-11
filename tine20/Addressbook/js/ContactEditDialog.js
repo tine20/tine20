@@ -58,12 +58,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 layout: 'border',
                 items: [{
                     region: 'center',
-                    layout: 'hfit',
+                    layout: 'border',
                     items: [{
-                        xtype: 'expanderfieldset',
-                        collapsible: true,
+                        xtype: 'fieldset',
+                        region: 'north',
+                        autoHeight: true,
                         title: this.app.i18n._('Personal Information'),
-                        items: [{
                             items: [{
                                 xtype: 'panel',
                                 layout: 'fit',
@@ -72,7 +72,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                     width: '90px',
                                     height: '120px',
                                     right: '10px',
-                                    top: Ext.isGecko ? '6px' : '0px',
+                                    top: Ext.isGecko ? '7px' : '19px',
                                     'z-index': 100
                                 },
                                 items: [new Ext.ux.form.ImageField({
@@ -143,27 +143,25 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                     xtype: 'datefield',
                                     fieldLabel: this.app.i18n._('Birthday'),
                                     name: 'bday'
-                                }]]
-                            }
-                        ]}, {
-                            xtype: 'columnform',
-                            items:[[{
-                                columnWidth: .4,
-                                fieldLabel: this.app.i18n._('Suffix'), 
-                                name:'n_suffix'
-                            }, {
-                                columnWidth: .4,
-                                fieldLabel: this.app.i18n._('Job Role'), 
-                                name:'role'
-                            }, {
-                                columnWidth: .2,
-                                fieldLabel: this.app.i18n._('Room'), 
-                                name:'room'
-                            }]]
-                        }]
+                                }]/* move to seperate tab, [{
+                                    columnWidth: .4,
+                                    fieldLabel: this.app.i18n._('Suffix'), 
+                                    name:'n_suffix'
+                                }, {
+                                    columnWidth: .4,
+                                    fieldLabel: this.app.i18n._('Job Role'), 
+                                    name:'role'
+                                }, {
+                                    columnWidth: .2,
+                                    fieldLabel: this.app.i18n._('Room'), 
+                                    name:'room'
+                                }]*/]
+                            }]
                     }, {
                         xtype: 'fieldset',
+                        region: 'center',
                         title: this.app.i18n._('Contact Information'),
+                        autoScroll: true,
                         items: [{
                             xtype: 'columnform',
                             items: [[{
@@ -224,9 +222,11 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         }]
                     }, {
                         xtype: 'tabpanel',
+                        region: 'south',
                         border: false,
                         deferredRender:false,
                         height: 124,
+                        split: true,
                         activeTab: 0,
                         defaults: {
                             frame: true
@@ -451,7 +451,7 @@ Tine.Addressbook.ContactEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
-        height: 625,
+        height: 600,
         name: Tine.Addressbook.ContactEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Addressbook.ContactEditDialog',
         contentPanelConstructorConfig: config
