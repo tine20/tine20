@@ -81,9 +81,10 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
                     this.dtField = 'dtstart';
                     if (this.dtField && record.data.field1 === 'custom') {
                         var date = this.record.get(this.dtField);
-                        if (Ext.isDate(date)) {
-                            this.customDateField.setValue(date.add(Date.MINUTE, -1 * Ext.isNumber(combo.getValue()) ? combo.getValue() : 0));
+                        if (! Ext.isDate(date)) {
+                            date = new Date().add(Date.DAY, 1);
                         }
+                        this.customDateField.setValue(date.add(Date.MINUTE, -1 * Ext.isNumber(combo.getValue()) ? combo.getValue() : 0));
                     }
                 }
             }
