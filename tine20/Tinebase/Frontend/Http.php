@@ -189,6 +189,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         //'extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js';
         return array(
+        // other libs
+            'library/flashsniffer/flashsniffer.js',
         // base framework fixes
             'Tinebase/js/extFixes.js',
         // official ux (but backported)
