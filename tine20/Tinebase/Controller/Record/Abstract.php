@@ -795,7 +795,9 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAlarmGet(Tinebase_Record_Abstract $_record)
     {
-        $_record->alarms->setMinutesBefore($_record->{$this->_recordAlarmField});
+        if ($record->{$this->_recordAlarmField} instanceof Zend_Date) {
+            $_record->alarms->setMinutesBefore($_record->{$this->_recordAlarmField});
+        }
     }
     
     /**
