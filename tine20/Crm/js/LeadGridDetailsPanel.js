@@ -154,9 +154,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             id: 'id'
         });
         
-        // we need to define the chart url
-        Ext.chart.Chart.CHART_URL = 'library/ExtJS/resources/charts.swf';
-        
         /*
         this.defaultPanel = this.getDefaultPanel();
         this.leadDetailsPanel = this.getLeadGridDetailsPanel();
