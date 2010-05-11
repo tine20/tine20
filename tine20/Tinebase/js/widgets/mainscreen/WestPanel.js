@@ -199,7 +199,8 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                         baseCls: 'ux-arrowcollapse',
                         animCollapse: true,
                         titleCollapse:true,
-                        draggable : true
+                        draggable : true,
+                        autoScroll: false
                     };
                 }
                 
