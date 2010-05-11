@@ -213,14 +213,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this,
             disabled: ! Tine.Tinebase.common.hasRight('add_accounts', 'Felamimail')
         });
-        this.action_print = new Ext.Action({
-            requiredGrant: 'readGrant',
-            text: this.app.i18n._('Print Message'),
-            handler: this.onPrint,
-            disabled:true,
-            iconCls:'action_print',
-            scope:this
-        });
         this.action_printPreview = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Print Preview'),
@@ -229,15 +221,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             iconCls:'action_printPreview',
             scope:this
         });
-        this.action_printMenu = new Ext.Action({
+        this.action_print = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Print Message'),
+            handler: this.onPrint,
             disabled:true,
             iconCls:'action_print',
             scope:this,
             menu:{
                 items:[
-                    this.action_print,
                     this.action_printPreview
                 ]
             }
@@ -251,7 +243,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_markUnread,
             this.action_deleteRecord,
             this.action_addAccount,
-            this.action_printMenu,
             this.action_print,
             this.action_printPreview
         ]);
@@ -374,7 +365,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             rowspan: 2,
                             iconAlign: 'top'
                         }),
-                        Ext.apply(new Ext.Button(this.action_printMenu), {
+                        Ext.apply(new Ext.SplitButton(this.action_print), {
                             scale: 'medium',
                             rowspan: 2,
                             iconAlign:'top',
