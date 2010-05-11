@@ -70,7 +70,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
 	        'description'          => str_pad('',1000,'.'),
 	        'geo'                  => 0.2345,
 	        'location'             => 'here and there',
-	        'organizer'            => 4,
+	        'organizer'            => Tinebase_Core::getUser()->getId(),
 	        'priority'             => 2,
 	        //'status_id'            => 2,
 	        'summary'              => 'our fist test task',

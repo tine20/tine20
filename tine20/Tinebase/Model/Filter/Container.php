@@ -164,8 +164,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                     $containerData = array_merge($containerData, Tinebase_Container::getInstance()->getContainerById($containerId)->toArray());
                 } else if (($ownerId = Tinebase_Model_Container::pathIsPersonalNode($path))) {
                     // transform current user 
-                    $ownerId = $ownerId == Tinebase_Model_User::CURRENTACCOUNT ? Tinebase_Core::getUser()->getId() : $ownerId;
-                    
+                    $ownerId = $ownerId == "/personal/" . Tinebase_Model_User::CURRENTACCOUNT ? "/personal/" . Tinebase_Core::getUser()->getId() : $ownerId;                    
                     $owner = Tinebase_User::getInstance()->getUserById($ownerId);
                     $containerData['name']  = $owner->accountDisplayName;
                     $containerData['owner'] = $owner->toArray();
@@ -206,7 +205,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
         }
         
         // transform current user 
-        $_value = $_value == Tinebase_Model_User::CURRENTACCOUNT ? Tinebase_Core::getUser()->getId() : $_value;
+        $_value = $_value == "/personal/" . Tinebase_Model_User::CURRENTACCOUNT ? "/personal/" . Tinebase_Core::getUser()->getId() : $_value;
     }
     
     /**

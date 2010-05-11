@@ -32,6 +32,7 @@ class Tasks_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tasks All Tests');
         $suite->addTest(Tasks_Backend_AllTests::suite());
         $suite->addTestSuite('Tasks_ControllerTest');
+        $suite->addTestSuite('Tasks_Model_TaskFilterTest');
         $suite->addTestSuite('Tasks_JsonTest');
         return $suite;
     }
