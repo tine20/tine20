@@ -259,8 +259,9 @@ class OpenDocument_Document
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tempDir));
         
         foreach ($iterator as $fullFilename => $cur) {
-            $fullFilename2 = str_replace('\\', '/', substr($fullFilename, strlen($tempDir)+1));
-            $zip->addFile($fullFilename, $fullFilename2);
+            // the second parameter of the addFile function needs always the unix directory separator
+            $localname = str_replace('\\', '/', substr($fullFilename, strlen($tempDir)+1));
+            $zip->addFile($fullFilename, $localname);
         }
 
         $zip->close();
