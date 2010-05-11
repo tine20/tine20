@@ -4,8 +4,8 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  *
  */
  
@@ -71,7 +71,7 @@ Ext.namespace('Tine.Felamimail');
     afterRender: function() {
         Tine.Felamimail.GridDetailsPanel.superclass.afterRender.apply(this, arguments);
         
-        this.getSingleRecordPanel().on('click', this.onClick, this);
+        this.body.on('click', this.onClick, this);
     },
     
     /**
@@ -268,7 +268,7 @@ Ext.namespace('Tine.Felamimail');
             'a[class=tinebase-email-link]',
             'span[class=tinebase-addtocontacts-link]',
             'span[class=tinebase-showheaders-link]'
-        ];          
+        ];
         
         // find the correct target
         for (var i=0, target=null, selector=''; i < selectors.length; i++) {
