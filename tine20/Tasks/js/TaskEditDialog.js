@@ -127,6 +127,27 @@ Ext.namespace('Tine.Tasks');
     },
     
     /**
+     * checks if form data is valid
+     * 
+     * @return {Boolean}
+     */
+    isValid: function() {
+        isValid = true;
+        
+        var dueField = this.getForm().findField('due'),
+            dueDate = dueField.getValue(),
+            alarmValue = parseInt(this.alarmPanel.alarmCombo.getValue(), 10);
+            
+        if (Ext.isNumber(alarmValue) && ! Ext.isDate(dueDate)) {
+            dueField.markInvalid(this.app.i18n._('You have to supply a due date, because an alarm ist set!'));
+            
+            isValid = false;
+        }
+        
+        return isValid && Tine.Tasks.TaskEditDialog.superclass.isValid.apply(this, arguments);
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
