@@ -117,7 +117,6 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
                 var date = Date.parseDate(alarm.alarm_time, Date.patterns.ISO8601Long);
                 // get custom date if set (and enable field)
                 this.customDateField.setValue(date);
-                console.log('show');
                 this.customDateField.show();
                 this.alarmCombo.setValue('custom');
             } else {
