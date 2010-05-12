@@ -200,7 +200,8 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     public static function pathIsPersonalNode($_path)
     {
         if (preg_match("/^\/personal\/([0-9a-z_\-]+)$/i", $_path, $matches)) {
-            return $matches[1];
+            // transform current user 
+            return $matches[1] == Tinebase_Model_User::CURRENTACCOUNT ? Tinebase_Core::getUser()->getId() : $matches[1];
         }
         
         return false;
