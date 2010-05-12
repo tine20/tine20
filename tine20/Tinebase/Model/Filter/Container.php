@@ -203,9 +203,6 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                 $_value = $_value['id'];
             }
         }
-        
-        // transform current user 
-        $_value = $_value == "/personal/" . Tinebase_Model_User::CURRENTACCOUNT ? "/personal/" . Tinebase_Core::getUser()->getId() : $_value;
     }
     
     /**
