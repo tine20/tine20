@@ -32,6 +32,7 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
+        'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name'))),
         'application_id' => array('filter' => 'Tinebase_Model_Filter_Id'),
         'account_id'     => array('filter' => 'Tinebase_Model_Filter_Id'),
