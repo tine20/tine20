@@ -131,7 +131,20 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     	    return;
     	}
     	
-        $fbInfo = $this->getFreeBusyInfo($_event->dtstart, $_event->dtend, $_event->attendee, $ignoreUIDs);
+    	$eventSet = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($_event));
+    	
+    	if (! empty($_event->rrule)) {
+    	    $checkUntil = clone $_event->dtstart;
+    	    $checkUntil->add(1, Zend_Date::YEAR);
+    	    Calendar_Model_Rrule::mergeRecuranceSet($eventSet, $_event->dtstart, $checkUntil);
+    	}
+    	
+    	$periods = array();
+    	foreach($eventSet as $event) {
+    	    $periods[] = array('from' => $event->dtstart, 'until' => $event->dtend);
+    	}
+    	
+        $fbInfo = $this->getFreeBusyInfo($periods, $_event->attendee, $ignoreUIDs);
         //Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($fbInfo->toArray(), true));
         
         if (count($fbInfo) > 0) {
@@ -218,13 +231,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * 
      * @todo merge overlapping events to one freebusy entry
      * 
-     * @param  Zend_Date                                            $_from
-     * @param  Zend_Date                                            $_until
+     * @param  array of array with from and until                   $_periods
      * @param  Tinebase_Record_RecordSet of Calendar_Model_Attender $_attendee
      * @param  array of UIDs                                        $_ignoreUIDs
      * @return Tinebase_Record_RecordSet of Calendar_Model_FreeBusy
      */
-    public function getFreeBusyInfo($_from, $_until, $_attendee, $_ignoreUIDs = array())
+    public function getFreeBusyInfo($_periods, $_attendee, $_ignoreUIDs = array())
     {
         $fbInfoSet = new Tinebase_Record_RecordSet('Calendar_Model_FreeBusy');
         
@@ -233,14 +245,34 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $groupmembers = $attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
         $groupmembers->user_type = Calendar_Model_Attender::USERTYPE_USER;
         
-        $filter = new Calendar_Model_EventFilter(array(
-            array('field' => 'period',   'operator' => 'within', 'value' => array('from' => $_from, 'until' => $_until)),
+        // base filter data
+        $filterData = array(
             array('field' => 'attender', 'operator' => 'in',     'value' => $_attendee),
             array('field' => 'transp',   'operator' => 'equals', 'value' => Calendar_Model_Event::TRANSP_OPAQUE)
-        ));
+        );
+        
+        // add all periods to filterdata
+        $periodFilters = array();
+        foreach ($_periods as $period) {
+            $periodFilters[] = array(
+                'field' => 'period', 
+                'operator' => 'within', 
+                'value' => array(
+                    'from' => $period['from'], 
+                    'until' => $period['until']
+            ));
+        }
+        $filterData[] = array('condition' => 'OR', 'filters' => $periodFilters);
+        
+        // finaly create filter
+        $filter = new Calendar_Model_EventFilter($filterData);
         
         $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
-        Calendar_Model_Rrule::mergeRecuranceSet($events, $_from, $_until);
+        
+        foreach ($_periods as $period) {
+            Calendar_Model_Rrule::mergeRecuranceSet($events, $period['from'], $period['until']);
+        }
+        
         //Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($events->toArray(), true));
         
         // create a typemap
@@ -258,11 +290,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         foreach($events as $event) {
         	// skip events with ignoreUID
         	if (in_array($event->uid, $_ignoreUIDs)) {
-        	    continue;
-        	}
-        	
-        	// skip recuring base events
-        	if ($event->dtend->isEarlier($_from)) {
         	    continue;
         	}
         	
@@ -331,7 +358,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function searchFreeTime($_from, $_until, $_attendee/*, $_constains, $_mode*/)
     {
-        $fbInfoSet = $this->getFreeBusyInfo($_from, $_until, $_attendee);
+        $fbInfoSet = $this->getFreeBusyInfo(array(array('from' => $_from, 'until' => $_until)), $_attendee);
         
         $fromTs = $_from->getTimestamp();
         $untilTs = $_until->getTimestamp();
