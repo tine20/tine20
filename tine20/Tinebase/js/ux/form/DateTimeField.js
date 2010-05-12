@@ -58,6 +58,10 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     },
     
     getValue: function() {
+        if (! this.dateField) {
+            return this.value;
+        }
+        
         var date = this.dateField.getValue();
         // this is odd, why doesn't Ext.form.TimeField a Date datatype?
         var time = Date.parseDate(this.timeField.getValue(), this.timeField.format);
