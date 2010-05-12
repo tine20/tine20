@@ -37,27 +37,28 @@ Tine.ActiveSync.Application = Ext.extend(Tine.Tinebase.Application, {
      * 
      * @todo rework this to be event/hook 
      * 
-     * @param {} picker
-     * @param {} filter
+     * @param {Tine.widgets.persistentfilter.PickerPanel} picker
+     * @param {Tine.widgets.persistentfilter.model.PersistentFilter} filter
      */
     getPersistentFilterPickerCtxItems: function(picker, filter) {
         var items = [];
         
         if (picker.app.appName.match(/Addressbook|Calendar|Email|Tasks/)) {
-            var devices =  this.getRegistry().get('userDevices');
+            var devices =  Tine.ActiveSync.getDeviceStore();
+            console.log(devices);
             var menuItems = ['<b class="x-menu-title">' + this.i18n._('Select a Device') +'</b>'];
             
-            Ext.each(devices, function(device) {
+            devices.each(function(device) {
                 var contentClass = Tine.ActiveSync.Model.getContentClass(picker.app.appName);
                 
                 menuItems.push({
-                    text: Ext.util.Format.htmlEncode(device.friendlyname || device.useragent),
-                    checked: device[Ext.util.Format.lowercase(contentClass) + 'filter_id'] === filter.id,
+                    text: Ext.util.Format.htmlEncode(device.getTitle()),
+                    checked: device.get([Ext.util.Format.lowercase(contentClass) + 'filter_id']) === filter.id,
                     //iconCls: 'activesync-device-standard',
-                    handler: this.setDeviceContentFilter.createDelegate(this, [device, contentClass, filter])
+                    handler: this.setDeviceContentFilter.createDelegate(this, [device, contentClass, filter], true)
                 });
             }, this);
-            if (Ext.isEmpty(devices)) {
+            if (! devices.getCount()) {
                 menuItems.push({
                     text: this.i18n._('No ActiveSync Device registered'),
                     disabled: true,
@@ -77,17 +78,40 @@ Tine.ActiveSync.Application = Ext.extend(Tine.Tinebase.Application, {
         
     },
     
-    setDeviceContentFilter: function(device, contentClass, filter) {
-        
-        Tine.ActiveSync.setDeviceContentFilter(device.id, contentClass, filter.id, function(response) {
-            device[Ext.util.Format.lowercase(contentClass) + 'filter_id'] = filter.id; 
-            
-            Ext.Msg.alert(this.i18n._('Set Sync Filter'), String.format(
-                this.i18n._('{0} filter for device "{1}" is now "{2}"'),
-                    this.getTitle(),
-                    Ext.util.Format.htmlEncode(device.friendlyname || device.useragent),
-                    Ext.util.Format.htmlEncode(filter.name)
-            ));
-        }, this);
+    /**
+     * persitently set filter for device
+     * 
+     * @param {Ext.Action} btn
+     * @param {Ext.EventObject} e
+     * @param {Tine.ActiveSync.Model.Device} device
+     * @param {} contentClass
+     * @param {Tine.widgets.persistentfilter.model.PersistentFilter} filter
+     */
+    setDeviceContentFilter: function(btn, e, device, contentClass, filter) {
+        if (btn.checked) {
+            // if btn was checked, we need to reset filter
+            Tine.ActiveSync.setDeviceContentFilter(device.id, contentClass, null, function(response) {
+                device.set([Ext.util.Format.lowercase(contentClass) + 'filter_id'], null);  
+                
+                Ext.Msg.alert(this.i18n._('Resetted Sync Filter'), String.format(
+                    this.i18n._('{0} filter for device "{1}" is now "{2}"'),
+                        this.getTitle(),
+                        Ext.util.Format.htmlEncode(device.getTitle()),
+                        this.i18n._('resetted')
+                ));
+                
+            }, this);
+        } else {
+            Tine.ActiveSync.setDeviceContentFilter(device.id, contentClass, filter.id, function(response) {
+                device.set([Ext.util.Format.lowercase(contentClass) + 'filter_id'], filter.id); 
+                
+                Ext.Msg.alert(this.i18n._('Set Sync Filter'), String.format(
+                    this.i18n._('{0} filter for device "{1}" is now "{2}"'),
+                        this.getTitle(),
+                        Ext.util.Format.htmlEncode(device.getTitle()),
+                        Ext.util.Format.htmlEncode(filter.get('name'))
+                ));
+            }, this);
+        }
     }
 });
