@@ -53,6 +53,10 @@ if (window.google && google.gears) {
  * don't fill the ext stats
  */
 Ext.BLANK_IMAGE_URL = "library/ExtJS/resources/images/default/s.gif";
+
+/**
+ * don't fill yahoo stats
+ */
 Ext.chart.Chart.CHART_URL = 'library/ExtJS/resources/charts.swf';
 
 /**
