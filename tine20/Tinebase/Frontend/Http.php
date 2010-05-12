@@ -234,7 +234,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/form/IconTextField.js',
             'Tinebase/js/ux/form/MirrorTextField.js',
             'Tinebase/js/ux/form/ColumnFormPanel.js',
-            'Tinebase/js/ux/form/ExpandFieldSet.js',
             'Tinebase/js/ux/form/LayerCombo.js',
             'Tinebase/js/ux/form/ClearableComboBox.js',
             'Tinebase/js/ux/form/ClearableTextField.js',
