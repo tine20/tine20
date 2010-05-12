@@ -131,6 +131,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * @TODO: make this a hooking approach!
      * 
+     * @param {model.PersistentFilter}
      * @return {Array}
      */
     getAdditionalCtxItems: function(filter) {
@@ -184,7 +185,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 iconCls: 'action_edit',
                 hidden: record.isShared(),
                 handler: this.onRenamePersistentFilter.createDelegate(this, [node, e])
-            }].concat(this.getAdditionalCtxItems(node.attributes.filter))
+            }].concat(this.getAdditionalCtxItems(record))
         });
         menu.showAt(e.getXY());
     },
