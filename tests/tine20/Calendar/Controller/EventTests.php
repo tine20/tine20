@@ -200,7 +200,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         ));
         $persistentEvent = $this->_controller->create($event);
         
-        $fbinfo = $this->_controller->getFreeBusyInfo($persistentEvent->dtstart, $persistentEvent->dtend, $persistentEvent->attendee);
+        $fbinfo = $this->_controller->getFreeBusyInfo(array(array('from' => $persistentEvent->dtstart, 'until' => $persistentEvent->dtend)), $persistentEvent->attendee);
         $this->assertGreaterThanOrEqual(2, count($fbinfo));
         
         return $persistentEvent;
