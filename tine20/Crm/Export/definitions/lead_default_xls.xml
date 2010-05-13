@@ -8,6 +8,7 @@
     <!-- Sadly, phpexcel does not support some of the formulas/diagrams in this template at the moment -->
     <!--template>crm_lead_export_unsupported.xls</template-->
     <reader>autodetection</reader>
+    <!-- Excel5 writer only supports sum up to 15000 rows-->
     <writer>Excel2007</writer>
     <description>default xls lead export definition</description>
     <columns>
@@ -101,6 +102,11 @@
             <field>id</field>
             <header>Container ID</header>
             <type>container_id</type>
+        </column>
+        <column>
+            <identifier>open_tasks</identifier>
+            <header>Open Tasks</header>
+            <type>open_tasks</type>
         </column>
     </columns>
 </config>
