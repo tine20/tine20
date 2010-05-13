@@ -293,4 +293,40 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '3.9');
     }
+    
+    /**
+     * update to 3.10
+     * - add missing indexes for notes table
+     */
+    public function update_9()
+    {
+        // add index and foreign key again
+        $this->_backend->addIndex('notes', new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>record_id</name>
+                <field>
+                    <name>record_id</name>
+                </field>
+            </index>
+        '));
+         
+        $this->_backend->addIndex('notes', new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>record_model</name>
+                <field>
+                    <name>record_model</name>
+                </field>
+            </index>
+        '));
+         
+        $this->_backend->addIndex('notes', new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>record_backend</name>
+                <field>
+                    <name>record_backend</name>
+                </field>
+            </index>
+        ')); 
+        $this->setApplicationVersion('Tinebase', '3.10');
+    }
 }
