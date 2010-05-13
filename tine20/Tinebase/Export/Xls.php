@@ -114,6 +114,10 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
         $xlsFormat = ($this->_config->writer) ? $this->_config->writer : 'Excel5';
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating and sending xls to client (Format: ' . $xlsFormat . ').');
         $xlswriter = PHPExcel_IOFactory::createWriter($this->_excelObject, $xlsFormat);
+        
+        // precalcualting formula values costs tons of time, because sum formulas are like SUM C1:C65000
+        $xlswriter->setPreCalculateFormulas(FALSE);
+        
         $xlswriter->save('php://output');
     }
     
