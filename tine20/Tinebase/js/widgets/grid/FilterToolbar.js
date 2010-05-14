@@ -143,7 +143,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 }
             }),
             saveFilter: new Ext.Button({
-                tooltip: _('save filter'),
+                tooltip: _('save as favorite'),
                 iconCls: 'action_saveFilter',
                 handler: this.onSaveFilter.createDelegate(this)
             })

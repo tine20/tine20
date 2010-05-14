@@ -56,7 +56,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         });
         
         this.filterNode = new Ext.tree.AsyncTreeNode({
-            text: _('My saved filters'),
+            text: _('My favorites'),
             id: '_persistentFilters',
             leaf: false,
             expanded: true
@@ -176,12 +176,12 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         
         var menu = new Ext.menu.Menu({
             items: [{
-                text: _('Delete Filter'),
+                text: _('Delete Favorite'),
                 iconCls: 'action_delete',
                 hidden: record.isShared(),
                 handler: this.onDeletePersistentFilter.createDelegate(this, [node, e])
             }, {
-                text: _('Rename Filter'),
+                text: _('Rename Favorite'),
                 iconCls: 'action_edit',
                 hidden: record.isShared(),
                 handler: this.onRenamePersistentFilter.createDelegate(this, [node, e])
@@ -196,9 +196,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {Ext.tree.TreeNode} node
      */
     onDeletePersistentFilter: function(node) {
-        Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the Filter "{0}"?'), node.text), function(_btn) {
+        Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the favorite "{0}"?'), node.text), function(_btn) {
             if ( _btn == 'yes') {
-                Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting Filter "{0}"' ), this.containerName , node.text));
+                Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting Favorite "{0}"' ), this.containerName , node.text));
                 
                 var record = this.store.getById(node.id);
                 Tine.widgets.persistentfilter.model.persistentFilterProxy.deleteRecords([record], {
@@ -221,9 +221,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {Ext.tree.TreeNode} node
      */
     onRenamePersistentFilter: function(node) {
-        Ext.MessageBox.prompt(_('New Name'), String.format(_('Please enter the new name for filter "{0}"?'), node.text), function(_btn, _newName){
+        Ext.MessageBox.prompt(_('New Name'), String.format(_('Please enter the new name for favorite "{0}"?'), node.text), function(_btn, _newName){
             if ( _btn == 'ok') {
-                Ext.MessageBox.wait(_('Please wait'), String.format(_('Renaming Filter "{0}"'), node.text));
+                Ext.MessageBox.wait(_('Please wait'), String.format(_('Renaming Favorite "{0}"'), node.text));
                 
                 var record = this.store.getById(node.id);
                 record.set('name', _newName);
@@ -245,22 +245,22 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         var ftb = this.getFilterToolbar();
         
         var name = '';
-        Ext.MessageBox.prompt(_('save filter'), _('Please enter a name for the filter'), function(btn, value) {
+        Ext.MessageBox.prompt(_('save filter'), _('Please enter a name for the favorite'), function(btn, value) {
             if (btn == 'ok') {
                 if (! value) {
-                    Ext.Msg.alert(_('Filter not Saved'), _('You have to supply a name for the filter!'));
+                    Ext.Msg.alert(_('Favorite not Saved'), _('You have to supply a name for the favorite!'));
                     return;
                 } else if (value.length > 40) {
-                    Ext.Msg.alert(_('Filter not Saved'), _('You have to supply a shorter name! Names of saved filters can only be up to 40 characters long.'));
+                    Ext.Msg.alert(_('Favorite not Saved'), _('You have to supply a shorter name! Names of favorite can only be up to 40 characters long.'));
                     return;
                 }
-                Ext.Msg.wait(_('Please Wait'), _('Saving filter'));
+                Ext.Msg.wait(_('Please Wait'), _('Saving favorite'));
                 
                 var existingRecordIdx = this.store.findExact('name', value);
                 var existingRecord = existingRecordIdx ? this.store.getAt(existingRecordIdx) : null;
                 if (existingRecord) {
                     if (existingRecord.isShared()) {
-                        Ext.Msg.alert(_('Filter not Saved'), _('Overwriteing system filters is not yet supported'));
+                        Ext.Msg.alert(_('Favorite not Saved'), _('Overwriteing system favorites is not yet supported'));
                         return;
                     }
                     this.store.remove(existingRecord);
