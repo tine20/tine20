@@ -45,6 +45,9 @@ class Calendar_Setup_Initialize extends Setup_Initialize
                     'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                     'user_id'   => Addressbook_Model_Contact::CURRENTCONTACT,
                 )),
+                array('field' => 'attender_status', 'operator' => 'notin', 'value' => array(
+                    'DECLINED'
+                ))
             )
         )));
     }

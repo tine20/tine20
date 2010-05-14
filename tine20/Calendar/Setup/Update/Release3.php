@@ -176,4 +176,27 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Calendar', '3.4');
     }
+    
+    /**
+     * add attendee status to default persistent filter
+     */
+    public function update_4()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $defaultFavorite = $pfe->getByProperty('All my events', 'name');
+        $defaultFavorite->bypassFilters = TRUE;
+        
+        $defaultFavorite->filters = array(
+            array('field' => 'attender'    , 'operator' => 'equals', 'value' => array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'   => Addressbook_Model_Contact::CURRENTCONTACT,
+            )),
+            array('field' => 'attender_status', 'operator' => 'notin', 'value' => array(
+                'DECLINED'
+            ))
+        );
+        $pfe->update($defaultFavorite);
+        
+        $this->setApplicationVersion('Calendar', '3.5');
+    }
 }
