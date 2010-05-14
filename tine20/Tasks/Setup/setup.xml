@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tasks</name>
-    <version>3.2</version>
+    <version>3.3</version>
     <order>30</order>
     <depends>
         <application>Admin</application>

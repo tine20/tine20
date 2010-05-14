@@ -74,4 +74,24 @@ class Tasks_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tasks', '3.2');
     }
+    
+    /**
+     * add status to default persistent filter
+     */
+    public function update_2()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $defaultFavorite = $pfe->getByProperty(Tasks_Preference::DEFAULTPERSISTENTFILTER_NAME, 'name');
+        $defaultFavorite->bypassFilters = TRUE;
+        
+        $closedStatus = Tasks_Controller_Status::getInstance()->getAllStatus()->filter('status_is_open', 0);
+        
+        $defaultFavorite->filters =  array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => '/personal/' . Tinebase_Model_User::CURRENTACCOUNT),
+            array('field' => 'status_id',    'operator' => 'notin',  'value' => $closedStatus->getId()),
+        );
+        $pfe->update($defaultFavorite);
+        
+        $this->setApplicationVersion('Tasks', '3.3');
+    }
 }

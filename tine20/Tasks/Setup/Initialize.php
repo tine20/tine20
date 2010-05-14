@@ -34,7 +34,9 @@ class Tasks_Setup_Initialize extends Setup_Initialize
     {
         $pfe = new Tinebase_PersistentFilter_Backend_Sql();
         
-        $myEventsPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
+        $closedStatus = Tasks_Controller_Status::getInstance()->getAllStatus()->filter('status_is_open', 0);
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(array(
             'name'              => Tasks_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All my tasks", // _("All my tasks")
             'account_id'        => NULL,
@@ -42,7 +44,8 @@ class Tasks_Setup_Initialize extends Setup_Initialize
             'model'             => 'Tasks_Model_TaskFilter',
             'filters'           => array(
                 array('field' => 'container_id', 'operator' => 'equals', 'value' => '/personal/' . Tinebase_Model_User::CURRENTACCOUNT),
-             )
+                array('field' => 'status_id',    'operator' => 'notin',  'value' => $closedStatus->getId()),
+            )
         )));
     }
 }
