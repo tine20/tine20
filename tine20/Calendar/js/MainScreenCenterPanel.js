@@ -556,6 +556,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         panel.getStore().load({
             refresh: refresh
         });
+        
+        // clear favorites
+        Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getFavoritesPanel().getSelectionModel().clearSelections();
     },
     
     updateEventActions: function() {
