@@ -7,7 +7,6 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$ 
- *
  */
 
 /**
@@ -25,13 +24,6 @@ class Setup_Import_Egw14
      */
     protected $oldTablePrefix = "egw_";
 
-    /**
-     * group id mapping
-     *
-     * @var array
-     */
-    protected $_groupIdMapping = array();
-    
     /**
      * country mapping
      * 
@@ -54,15 +46,10 @@ class Setup_Import_Egw14
             
     /**
      * the constructor 
-     *
-     * @param   string $_importAccountName [OPTIONAL]
      */
-    public function __construct($_importAccountName = 'tine20admin')
+    public function __construct()
     {
-        // set import user current account
-        echo "adding import user<br/>";
-        $account = Tinebase_User::getInstance()->getFullUserByLoginName($_importAccountName);
-        Setup_Core::set('currentAccount', $account);
+        
     }
     
     /**
@@ -74,7 +61,7 @@ class Setup_Import_Egw14
         $this->importGroups();
         $this->importAccounts();
         $this->importGroupMembers();
-        $this->importAddressbook();
+        //$this->importAddressbook();
     }
     
     /**
@@ -95,7 +82,7 @@ class Setup_Import_Egw14
         $accounts = $accountsTable->fetchAll($where);
         
         foreach($accounts as $account) {
-            $tineAccount = new Tinebase_Model_FullUser(array(
+            $user = new Tinebase_Model_FullUser(array(
                 'accountId'                 => $account->account_id,
                 'accountLoginName'          => $account->account_lid,
                 'accountLastLogin'          => $account->account_lastlogin > 0 ? new Zend_Date($account->account_lastlogin, Zend_Date::TIMESTAMP) : NULL,
@@ -111,9 +98,19 @@ class Setup_Import_Egw14
                 'accountEmailAddress'       => 'Emailaddress'
             ));
             
-            Tinebase_User_Sql::getInstance()->addUser($tineAccount);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' user: ' . print_r($user->toArray(), true));
+            $user->sanitizeAccountPrimaryGroup();
+            $user = Tinebase_User::getInstance()->addOrUpdateUser($user);
+            
+            Tinebase_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
+            
+            // @still todo
+            // import contactdata(phone, address, fax, birthday. photo)
+            //$contact = $this->_getContactFromBackend($user);
+            //Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL)->update($contact);
         }
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' import users done');
     }
 
     /**
@@ -132,19 +129,17 @@ class Setup_Import_Egw14
         $groups = $groupsTable->fetchAll($where);
         
         foreach($groups as $group) {
-            $tineGroup = new Tinebase_Model_Group(array(
-                'id'            => $group->account_id,
+            $groupObject = new Tinebase_Model_Group(array(
+                'id'            => abs($group->account_id),
                 'name'          => $group->account_lid,
-                'description'   => 'imported from eGroupWare 1.4'
+                'description'   => 'imported by Tine 2.0 group importer'
             ));
             
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' add group: ' . print_r($groupObject->toArray(), TRUE));
             try {
-                Tinebase_Group_Sql::getInstance()->addGroup($tineGroup);
-            } catch (Zend_Db_Statement_Exception $zse) {
-                // remove id and save id in mapping table
-                $tineGroup->id = NULL;
-                $newGroup = Tinebase_Group_Sql::getInstance()->addGroup($tineGroup);
-                $this->_groupIdMapping[$group->account_id] = $newGroup->getId();
+                Tinebase_Group::getInstance()->addGroup($groupObject);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .' Could not add group: ' . $groupObject->name . ' Error message: ' . $e->getMessage());
             }
         }
         
@@ -168,12 +163,9 @@ class Setup_Import_Egw14
         
         foreach($groupMembers as $member) {
             $groupId = abs($member->acl_location);
-            if (isset($this->_groupIdMapping[$groupId])) {
-                $groupId = $this->_groupIdMapping[$groupId];
-            }
-            Tinebase_Group_Sql::getInstance()->addGroupMember($groupId, $member->acl_account);
+            
+            Tinebase_Group::getInstance()->addGroupMember($groupId, $member->acl_account);
         }
-        
     }
     
     /**
