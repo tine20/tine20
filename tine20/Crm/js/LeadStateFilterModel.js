@@ -121,14 +121,12 @@ Tine.Crm.LeadStateFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo, {
      */
     setValue: function(value) {
         value = Ext.isArray(value) ? value : [value];
-        console.log(value);
         
         var statusStore = Tine.Crm.LeadState.getStore();
         var statusText = [];
         this.currentValue = [];
         
         Tine.Crm.LeadState.getStore().each(function(status) {
-            console.log(status);
             var id = status.get('id');
             var name = status.get('leadstate');
             Ext.each(value, function(valueId) {
