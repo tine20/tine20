@@ -121,18 +121,23 @@ Tine.Crm.LeadStateFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo, {
      */
     setValue: function(value) {
         value = Ext.isArray(value) ? value : [value];
+        console.log(value);
         
         var statusStore = Tine.Crm.LeadState.getStore();
         var statusText = [];
         this.currentValue = [];
         
         Tine.Crm.LeadState.getStore().each(function(status) {
+            console.log(status);
             var id = status.get('id');
             var name = status.get('leadstate');
-            if (value.indexOf(id) >= 0) {
-                statusText.push(name);
-                this.currentValue.push(id);
-            }
+            Ext.each(value, function(valueId) {
+                // NOTE: no type match id's might be int or string and should match anyway!
+                if (valueId == id) {
+                    statusText.push(name);
+                    this.currentValue.push(id);
+                }
+            }, this);
         }, this);
         
         this.setRawValue(statusText.join(', '));
