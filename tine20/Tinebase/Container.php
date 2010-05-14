@@ -575,6 +575,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
 
         $users = Tinebase_User::getInstance()->getMultiple($userIds);
+        $users->sort('accountDisplayName');
         
         return $users;
     }
