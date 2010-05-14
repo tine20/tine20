@@ -285,9 +285,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             // any account should have at least one personal folder
             if(empty($result)) {
                 $personalContainer = $this->getDefaultContainer($_accountId, $_application);
-                $result = ($_onlyIds) ? 
-                    array($personalContainer->getId()) : 
-                    new Tinebase_Record_RecordSet('Tinebase_Model_Container', $personalContainers);
+                if ($personalContainer instanceof Tinebase_Model_Container) {
+                    $result = ($_onlyIds) ? 
+                        array($personalContainer->getId()) : 
+                        new Tinebase_Record_RecordSet('Tinebase_Model_Container', $personalContainers);
+                }
             }
             
             // save result and tag it with 'container'
