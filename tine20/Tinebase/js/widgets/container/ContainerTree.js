@@ -495,7 +495,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             // finally select the selected node, as filtertrigger clears all selections
             sm.suspendEvents();
             Ext.each(nodes, function(node) {
-                sm.select(node);
+                sm.select(node, Ext.EventObject, true);
             }, this);
             sm.resumeEvents();
         }
