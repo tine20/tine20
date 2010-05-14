@@ -436,7 +436,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         // if no containers where found,  maybe something went wrong when creating the initial folder
         // let's check if the controller of the application has a function to create the needed folders
         if(empty($containersData) and $accountId === $ownerId) {
-            $application = Tinebase_Core::getApplicationInstance($application);
+            $application = Tinebase_Core::getApplicationInstance($application->name);
             
             if($application instanceof Tinebase_Container_Interface) {
                 return $application->createPersonalFolder($accountId);
