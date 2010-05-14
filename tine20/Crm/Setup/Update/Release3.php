@@ -44,4 +44,24 @@ class Crm_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Crm', '3.2');
     }
+    
+    /**
+     * add status to default persistent filter
+     */
+    public function update_2()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $defaultFavorite = $pfe->getByProperty(Crm_Preference::DEFAULTPERSISTENTFILTER_NAME, 'name');
+        $defaultFavorite->bypassFilters = TRUE;
+        
+        $closedStatus = Crm_Controller::getInstance()->getSettings()->getEndedLeadstates(TRUE);
+        
+        return;
+        $defaultFavorite->filters =  array(
+            array('field' => 'leadstate_id',    'operator' => 'notin',  'value' => $closedStatus),
+        );
+        $pfe->update($defaultFavorite);
+        
+        $this->setApplicationVersion('Crm', '3.3');
+    }
 }

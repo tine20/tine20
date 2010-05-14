@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Crm</name>
-    <version>3.2</version>
+    <version>3.3</version>
     <order>20</order>
     <depends>
         <application>Admin</application>
