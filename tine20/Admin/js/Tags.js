@@ -493,6 +493,11 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             border: false,
             root: this.rootNode
         });
+        // sort nodes in context panel by text property
+        new Ext.tree.TreeSorter(contextPanel, {
+            folderSort: true,
+            dir: "asc"
+        });        
         
         this.rightsPanel = new Tine.widgets.account.PickerGridPanel({
             title: this.translation.gettext('Account Rights'),

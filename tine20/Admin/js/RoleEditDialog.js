@@ -163,6 +163,12 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             border: false
         });
         
+        // sort nodes by text property
+        new Ext.tree.TreeSorter(this.rightsTreePanel, {
+            folderSort: true,
+            dir: "asc"
+        });        
+        
         // set the root node
         var treeRoot = new Ext.tree.TreeNode({
             text: 'root',

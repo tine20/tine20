@@ -68,6 +68,12 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
         // add all apps
         var allApps = Tine.Tinebase.appMgr.getAll();
 
+        // sort nodes by translated title (text property)
+        new Ext.tree.TreeSorter(this, {
+            folderSort: true,
+            dir: "asc"
+        });        
+
         // console.log(allApps);
         allApps.each(function(app) {
             var node = new Ext.tree.TreeNode({
