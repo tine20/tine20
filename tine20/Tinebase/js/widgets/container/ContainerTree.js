@@ -280,6 +280,10 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         // NOTE: selecting fires selectionChange... this breaks ftb if not rendered.
         //       As all searches return used filters, we don't need this anyway
         //this.selectContainerPath(this.getDefaultContainerPath());
+        
+        if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
+            this.filterPlugin.getGridPanel().filterToolbar.on('change', this.onFilterChange, this);
+        }
     },
     
     /**
@@ -453,12 +457,19 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     },
     
     /**
+     * called on filtertrigger of filter toolbar
+     */
+    onFilterChange: function() {
+        this.getSelectionModel().clearSelections();
+    },
+    
+    /**
      * called when tree selection changes
      * 
      * @param {} sm
      * @param {} node
      */
-    onSelectionChange: function(sm, node) {
+    onSelectionChange: function(sm, nodes) {
         if (this.filterMode == 'gridFilter' && this.filterPlugin) {
             this.filterPlugin.onFilterChange();
         }
@@ -480,6 +491,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             ftb.addFilter(new ftb.record(containerFilter));
         
             ftb.onFiltertrigger();
+            
+            // finally select the selected node, as filtertrigger clears all selections
+            sm.suspendEvents();
+            Ext.each(nodes, function(node) {
+                sm.select(node);
+            }, this);
+            sm.resumeEvents();
         }
     },
     
