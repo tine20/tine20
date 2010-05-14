@@ -77,7 +77,7 @@ class Crm_Model_Config extends Tinebase_Record_Abstract
      * 
      * @todo add to generic config/settings model
      */
-    function getOptionById($_id, $_property, $_idProperty = 'id')
+    public function getOptionById($_id, $_property, $_idProperty = 'id')
     {
         if ($this->has($_property) && isset($this->$_property) && is_array($this->$_property)) {
             foreach ($this->$_property as $sub) {
@@ -88,6 +88,23 @@ class Crm_Model_Config extends Tinebase_Record_Abstract
         }
         
         return array();
+    }
+    
+    /**
+     * get an array of leadstates with property endslead set to 1
+     * 
+     * @param bool $_onlyIds
+     * @return array
+     */
+    public function getEndedLeadstates($_onlyIds = FALSE) {
+        $result = array();
+        foreach($this->leadstates as $leadstate) {
+            if ($leadstate['endslead']) {
+                $result[] = $_onlyIds ? $leadstate['id'] : $leadstate;
+            }
+        }
+        
+        return $result;
     }
     
 } // end of Crm_Model_Config
