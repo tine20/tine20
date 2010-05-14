@@ -9,8 +9,30 @@
 
 Ext.ns('Tine.Calendar');
 
+/**
+ * @namespace   Tine.Calendar
+ * @class       Tine.Calendar.FilterPanel
+ * @extends     Tine.widgets.persistentfilter.PickerPanel
+ * 
+ * <p>Calendar Favorietes Panel</p>
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Calendar.FilterPanel
+ */
 Tine.Calendar.FilterPanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'Calendar_Model_EventFilter'}],
+    
+    /**
+     * returns filter toolbar of mainscreen center panel of app this picker panel belongs to
+     */
+    getFilterToolbar: function() {
+        return this.app.getMainScreen().getCenterPanel().filterToolbar;
+    },
     
     storeOnBeforeload: function(store, options) {
         options.params.filter = this.store.getById(this.getSelectionModel().getSelectedNode().id).get('filters');
