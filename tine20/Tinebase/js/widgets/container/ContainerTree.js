@@ -542,6 +542,11 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
      * @param {Array} all filters
      */
     setValue: function(filters) {
+        // only set filters if gridFilter mode
+        if (this.treePanel.filterMode !== 'gridFilter') {
+            return null;
+        }
+        
         var sm = this.treePanel.getSelectionModel();
         
         // clear all selections
@@ -553,7 +558,6 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
             }
             
             this.treePanel.getSelectionModel().suspendEvents();
-            //this.treePanel.getSelectionModel().filterPluginSetValue = true;
             this.selectValue(filter.value);
         }, this);
     },
@@ -572,7 +576,6 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
                 
                 if (allValuesExpanded) {
                     this.treePanel.getSelectionModel().resumeEvents();
-                    //this.treePanel.getSelectionModel().filterPluginSetValue = false;
                 }
             }.createDelegate(this), true)
         }, this);
