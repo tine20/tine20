@@ -825,12 +825,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         
         if ($_ignoreAcl !== TRUE) {
-            $currUserGrant = $grants
-                ->filter('account_id', Tinebase_Core::getUser()->getId())
-                ->filter('account_type', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
-                ->getFirstRecord();
-                
-            if (! $currUserGrant || ! $currUserGrant->{Tinebase_Model_Grants::GRANT_ADMIN}) {
+            if (TRUE !== $this->hasGrant(Tinebase_Core::getUser()->getId(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
                 throw new Tinebase_Exception_AccessDenied('Permission to get grants of container denied.');
             }
         }
