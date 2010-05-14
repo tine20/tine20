@@ -167,18 +167,20 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 iconCls: 'action_saveAndClose',
                 scope: this,
                 handler: function() {
+                    var field = input.name,
+                        value = input.getValue();
+                        update = {},
+                    update[field] = value;
+                    
                     win.close();
                     this.grid.loadMask.show();
                     
-                    var update = {};
-                    update[input.name] = input.getValue();
-                    
                     // some adjustments
-                    if (input.name == 'is_cleared' && !update[input.name]) {
+                    if (field == 'is_cleared' && !update[field]) {
                         // reset billed_in field
                         update.billed_in = '';
                     }
-                    if (input.name == 'billed_in' && update[input.name].length > 0) {
+                    if (field == 'billed_in' && update[field].length > 0) {
                         // set is cleard dynamically
                         update.is_cleared = true;
                     }
