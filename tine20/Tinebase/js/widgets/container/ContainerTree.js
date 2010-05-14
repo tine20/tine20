@@ -477,10 +477,12 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             // get filterToolbar
             var ftb = this.filterPlugin.getGridPanel().filterToolbar;
             
-            // remove all ftb container filters
+            // remove all ftb container and /toberemoved/ filters
             ftb.supressEvents = true;
             ftb.filterStore.each(function(filter) {
-                if (filter.get('field') === 'container_id') {
+                var field = filter.get('field');
+                // @todo find criteria what to remove
+                if (field === 'container_id' || field === 'attender') {
                     ftb.deleteFilter(filter);
                 }
             }, this);
