@@ -56,7 +56,6 @@ class Crm_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $closedStatus = Crm_Controller::getInstance()->getSettings()->getEndedLeadstates(TRUE);
         
-        return;
         $defaultFavorite->filters =  array(
             array('field' => 'leadstate_id',    'operator' => 'notin',  'value' => $closedStatus),
         );
