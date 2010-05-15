@@ -293,18 +293,18 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         	    continue;
         	}
         	
-        	// check if event is conflicting one of the given periods
-        	$conflicts = FALSE;
-        	foreach($_periods as $period) {
-        	    if ($event->dtstart->isEarlier($period['until']) && $event->dtend->isLater($period['from'])) {
-        	        $conflicts = TRUE;
+            // check if event is conflicting one of the given periods
+            $conflicts = FALSE;
+            foreach($_periods as $period) {
+                if ($event->dtstart->isEarlier($period['until']) && $event->dtend->isLater($period['from'])) {
+                    $conflicts = TRUE;
         	        break;
-        	    }
-        	}
+                }
+            }
         	if (! $conflicts) {
-        	    continue;
-        	}
-        	
+                continue;
+            }
+            
         	// map groupmembers to users
         	$groupmembers = $event->attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
             $groupmembers->user_type = Calendar_Model_Attender::USERTYPE_USER;
