@@ -630,12 +630,18 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 /* on     */ "{$this->_db->quoteIdentifier('owner.account_id')} = {$this->_db->quoteIdentifier('contacts.account_id')}",
                 /* select */ array()
             )
+            ->join(array(
+                /* table  */ 'accounts' => SQL_TABLE_PREFIX . 'accounts'),
+                /* on     */ "{$this->_db->quoteIdentifier('owner.account_id')} = {$this->_db->quoteIdentifier('accounts.id')}",
+                /* select */ array()
+            )
             ->where("{$this->_db->quoteIdentifier('owner.account_id')} != ?", $accountId)
             ->where("{$this->_db->quoteIdentifier('owner.account_grant')} = ?", Tinebase_Model_Grants::GRANT_ADMIN)
             
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $application->getId())
             ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_PERSONAL)
             ->where("{$this->_db->quoteIdentifier('container.is_deleted')} = ?", 0, Zend_Db::INT_TYPE)
+            ->where("{$this->_db->quoteIdentifier('accounts.status')} = ?", 'enabled')
             
             ->order('contacts.n_fileas')
             ->group('owner.account_id');
