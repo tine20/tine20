@@ -305,7 +305,7 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
     protected function _user2ldap(Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
         $this->inspectExpiryDate(isset($_user->accountExpires) ? $_user->accountExpires : null, $_ldapData);
-        
+
         foreach ($_user->sambaSAM as $key => $value) {
             if (array_key_exists($key, $this->_rowNameMapping)) {
                 switch ($key) {
@@ -313,6 +313,7 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
                     case 'logonTime':
                     case 'logoffTime':
                     case 'kickoffTime':
+                    case 'sid':
                         // do nothing
                         break;
                         
@@ -322,12 +323,6 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
                         
                     case 'pwdMustChange':
                         $_ldapData[$this->_rowNameMapping[$key]]     = 2147483647;
-                        break;
-                        
-                    case 'sid':
-                        if(isset($_ldapData['uidnumber'])) {
-                            $_ldapData[$this->_rowNameMapping[$key]] = $this->_options[Tinebase_User_Ldap::PLUGIN_SAMBA]['sid'] . '-' . (2 * $_ldapData['uidnumber'] + 1000);
-                        }
                         break;
                         
                     case 'acctFlags':
@@ -344,6 +339,10 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
                         break;
                 }
             }
+        }
+        
+        if(isset($_ldapData['uidnumber'])) {
+            $_ldapData['sambasid'] = $this->_options[Tinebase_User_Ldap::PLUGIN_SAMBA]['sid'] . '-' . (2 * $_ldapData['uidnumber'] + 1000);
         }
     }
 }  
