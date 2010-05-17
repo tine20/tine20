@@ -593,6 +593,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $containerData = $this->_getOtherUsersContainerData($_accountId, $_application, $_grant, $_ignoreACL);
         
+        Tinebase_Core::getLogger()->err(print_r($containerData, TRUE));
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $containerData);
         
         return $result;
@@ -622,8 +623,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             )
             ->join(array(
                 /* table  */ 'container' => SQL_TABLE_PREFIX . 'container'), 
-                /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
-                /* select */ array()
+                /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')}"
             )
             ->join(array(
                 /* table  */ 'contacts' => SQL_TABLE_PREFIX . 'addressbook'),
