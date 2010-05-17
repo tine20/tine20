@@ -252,6 +252,8 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             $containerIds = $this->_resolveContainerNode('personal', $ownerId);
         } else {
             $node = $_path == '/' ? 'all' : substr($_path, 1);
+            $node = $node === 'personal' ? 'otherUsers' : $node;
+
             $containerIds = $this->_resolveContainerNode($node);
         }
         
