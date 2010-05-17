@@ -25,11 +25,11 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         #'BodyTruncated'     => 'bodytruncated',
         #'Categories'        => 'categories',
         #'Category'          => 'category',
-        'Complete'          => 'completed',
+        #'Complete'          => 'completed',
         #'DateCompleted'     => 'datecompleted',
         #'DueDate'           => 'duedate',
-        'UtcDueDate'        => 'due',
-        'Importance'        => 'priority',
+        #'UtcDueDate'        => 'due',
+        #'Importance'        => 'priority',
         #'Recurrence'        => 'recurrence',
         #'Type'              => 'type',
         #'Start'             => 'start',
@@ -47,8 +47,14 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         #'Sensitivity'       => 'sensitivity',
         #'StartDate'         => 'startdate',
         #'UtcStartDate'      => 'utcstartdate',
-        'Subject'           => 'summary',
         #'Rtf'               => 'rtf'
+        'Cc'                => 'cc',
+        'DateReceived'      => 'received',
+        'From'              => 'from',
+        #'Sender'            => 'sender',
+        'Subject'           => 'subject',
+        'To'                => 'to'
+    
     );
     
     protected $_folders = array(
@@ -58,38 +64,54 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             'displayName'   => 'Inbox',
             'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_INBOX
         ),
-        'Sent' => array(
-            'folderId'      => 'Sent',
-            'parentId'      => 0,
-            'displayName'   => 'Sent',
-            'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_SENTMAIL
-        ),
-        'Drafts' => array(
-            'folderId'      => 'Drafts',
-            'parentId'      => 0,
-            'displayName'   => 'Drafts',
-            'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_DRAFTS
-        ),
-        'Trash' => array(
-            'folderId'      => 'Trash',
-            'parentId'      => 0,
-            'displayName'   => 'Trash',
-            'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_DELETEDITEMS
-        ),
-        'Test' => array(
-            'folderId'      => 'Test',
-            'parentId'      => 0,
-            'displayName'   => 'Test',
-            'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_MAIL_USER_CREATED
-        ),
+        #'Sent' => array(
+        #    'folderId'      => 'Sent',
+        #    'parentId'      => 0,
+        #    'displayName'   => 'Sent',
+        #    'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_SENTMAIL
+        #),
+        #'Drafts' => array(
+        #    'folderId'      => 'Drafts',
+        #    'parentId'      => 0,
+        #    'displayName'   => 'Drafts',
+        #    'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_DRAFTS
+        #),
+        #'Trash' => array(
+        #    'folderId'      => 'Trash',
+        #    'parentId'      => 0,
+        #    'displayName'   => 'Trash',
+        #    'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_DELETEDITEMS
+        #),
+        #'Test' => array(
+        #    'folderId'      => 'Test',
+        #    'parentId'      => 0,
+        #    'displayName'   => 'Test',
+        #    'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_MAIL_USER_CREATED
+        #),
     );
     
     /**
-     * Enter description here...
-     *
-     * @var Felamimail_Backend_Imap
+     * filter types
      */
-    protected $_imapBackend;
+    const FILTER_NOTHING        = 0;
+    const FILTER_1_DAY_BACK     = 1;
+    const FILTER_3_DAYS_BACK    = 2;
+    const FILTER_1_WEEK_BACK    = 3;
+    const FILTER_2_WEEKS_BACK   = 4;
+    const FILTER_1_MONTH_BACK   = 5;
+    
+    /**
+     * available filters
+     * 
+     * @var array
+     */
+    protected $_filterArray = array(
+        self::FILTER_1_DAY_BACK,
+        self::FILTER_3_DAYS_BACK,
+        self::FILTER_1_WEEK_BACK,
+        self::FILTER_2_WEEKS_BACK,
+        self::FILTER_1_MONTH_BACK,
+    );
     
     /**
      * felamimail message controller
@@ -128,56 +150,14 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      * 
      * @var string
      */
-    protected $_filterProperty = 'emailfilter_id';        
-    
+    protected $_filterProperty = 'emailfilter_id';
+            
     /**
-     * the constructor
-     *
-     * @param Zend_Date $_syncTimeStamp
+     * field to sort search results by
+     * 
+     * @var string
      */
-    public function __construct(ActiveSync_Model_Device $_device, Zend_Date $_syncTimeStamp)
-    {
-    	#parent::__construct($_device, $_syncTimeStamp);
-        if(empty($this->_applicationName)) {
-            throw new Tinebase_Exception_UnexpectedValue('$this->_applicationName can not be empty');
-        }
-        
-        if(empty($this->_modelName)) {
-            throw new Tinebase_Exception_UnexpectedValue('$this->_modelName can not be empty');
-        }
-        
-        if(empty($this->_defaultFolderType)) {
-            throw new Tinebase_Exception_UnexpectedValue('$this->_defaultFolderType can not be empty');
-        }
-        
-        if(empty($this->_folderType)) {
-            throw new Tinebase_Exception_UnexpectedValue('$this->_folderType can not be empty');
-        }
-                
-        if(empty($this->_specialFolderName)) {
-            $this->_specialFolderName = strtolower($this->_applicationName) . '-root';
-        }
-        
-        $this->_device              = $_device;
-        $this->_syncTimeStamp       = $_syncTimeStamp;
-        #$this->_contentFilterClass  = $this->_applicationName . '_Model_' . $this->_modelName . 'Filter';
-        #$this->_contentController   = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
-        
-        #$this->_messageController = Felamimail_Controller_Message::getInstance();
-        #$this->_folderController = Felamimail_Controller_Folder::getInstance();                
-    }
-    
-    /**
-     * get estimate of add or changed entries
-     *
-     * @param Zend_Date $_startTimeStamp
-     * @param Zend_Date $_endTimeStamp
-     * @return int total count of changed items
-     */
-    public function getItemEstimate($_startTimeStamp = NULL, $_endTimeStamp = NULL)
-    {
-        return 0;
-    }
+    protected $_sortField = 'received';
     
     /**
      * get all entries changed between to dates
@@ -208,7 +188,43 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " serverId " . $_serverId);
         
-        $message = $this->_messageController->getMessage($_folderId, $_serverId);
+        $data = $this->_contentController->getCompleteMessage($_serverId, TRUE, FALSE);
+                
+        foreach($this->_mapping as $key => $value) {
+            if(!empty($data->$value) || $data->$value == 0) {
+                $nodeContent = null;
+                
+                switch($value) {
+                    case 'received':
+                        $nodeContent = $data->$value->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z';
+                        break;
+                        
+                    default:
+                        $nodeContent = $data->$value;
+                        break;
+                }
+                
+                // skip empty elements
+                if($nodeContent === null || $nodeContent == '') {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Value for $key is empty. Skip element.");
+                    continue;
+                }
+                
+                // create a new DOMElement ...
+                $node = new DOMElement($key, null, 'uri:Email');
+
+                // ... append it to parent node aka append it to the document ...
+                $_xmlNode->appendChild($node);
+                
+                // ... and now add the content (DomText takes care of special chars)
+                $node->appendChild(new DOMText($nodeContent));
+            }
+        }
+        
+        #$_xmlNode->appendChild(new DOMElement('Body', 'Körper', 'uri:Email'));
+        $_xmlNode->appendChild(new DOMElement('MessageClass', 'IPM.Note', 'uri:Email'));
+        
+        return;
         
         foreach($message->getHeaders() as $headerName => $headerValue) {
             switch($headerName) {
@@ -320,15 +336,20 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      *
      * @return array
      */
-    public function getServerEntries($_folderId, $_filterType)
+    protected function _getServerEntries($_folderId, $_filterType)
     {
-    	return array();
-    	
-        $foundEntries = $this->_messageController->getUid($_folderId, 1, INF);
-                
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEntries) . ' entries');
-            
-        return $foundEntries;
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " get server entries for folder " . $_folderId);
+        
+        $filter = new $this->_contentFilterClass();
+        
+        $this->_getContentFilter($filter, $_filterType);
+        $this->_getContainerFilter($filter, $_folderId);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter " . print_r($filter->toArray(), true));
+        
+        $messages = $this->_contentController->search($filter, null, false, true);
+        
+    	return $messages;    	
     }
     
     /**
@@ -425,7 +446,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             }
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
         
         return $filterArray;
     }
@@ -437,7 +458,49 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      */
     public function getSupportedFolders()
     {
-        return $this->_folders;
+        $folderController = Felamimail_Controller_Folder::getInstance();
+        
+        $filter = new Felamimail_Model_FolderFilter(array(
+            array(
+                'field'     => 'account_id',
+                'operator'  => 'equals',
+                'value'     => Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}
+            )
+        ));
+        
+        $folders = $folderController->search($filter);
+
+        $result = array();
+        
+        foreach($folders as $folder) {
+            #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " folder " . print_r($folder->toArray(), true));
+            if(empty($folder['parent'])) {
+                $result[$folder['id']] = array(
+                    'folderId'      => $folder['id'],
+                    'parentId'      => 0,
+                    'displayName'   => $folder['localname'],
+                    'type'          => $this->_getFolderType($folder['localname'])
+                );
+            }
+        }
+        
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " folder result " . print_r($result, true));
+        
+        return $result;
+    }
+    
+    /**
+     * set activesync foldertype
+     * 
+     * @param string $_folderName
+     */
+    protected function _getFolderType($_folderName)
+    {
+        if(strtoupper($_folderName) == 'INBOX') {
+            return ActiveSync_Command_FolderSync::FOLDERTYPE_INBOX;
+        } else {
+            return ActiveSync_Command_FolderSync::FOLDERTYPE_MAIL_USER_CREATED;
+        }
     }
     
     /**
@@ -448,10 +511,65 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      */
     public function getFolder($_folderId)
     {
-        if(!array_key_exists($_folderId, $this->_folders)) {
+        $folders = $this->getSupportedFolders();
+        
+        if(!array_key_exists($_folderId, $folders)) {
             throw new ActiveSync_Exception_FolderNotFound('folder not found. ' . $_folderId);
         }
         
-        return $this->_folders[$_folderId];
+        return $folders[$_folderId];
+    }
+    
+    /**
+     * return contentfilter object
+     * 
+     * @param $_filterType
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    protected function _getContentFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_filterType)
+    {
+        #$_filter->addFilter(new Tinebase_Model_Filter_Text('recurid', 'isnull', null));
+        
+        if(in_array($_filterType, $this->_filterArray)) {
+            switch($_filterType) {
+                case self::FILTER_1_DAY_BACK:
+                    $received = Zend_Date::now()->subDay(1);
+                    break;
+                case self::FILTER_3_DAYS_BACK:
+                    $received = Zend_Date::now()->subDay(3);
+                    break;
+                case self::FILTER_1_WEEK_BACK:
+                    $received = Zend_Date::now()->subWeek(1);
+                    break;
+                case self::FILTER_2_WEEKS_BACK:
+                    $received = Zend_Date::now()->subWeek(2);
+                    break;
+                case self::FILTER_1_MONTH_BACK:
+                    $received = Zend_Date::now()->subMonth(2);
+                    break;
+            }
+            
+            // add period filter
+            $_filter->addFilter(new Tinebase_Model_Filter_DateTime('received', 'after', $received->get(Tinebase_Record_Abstract::ISO8601LONG)));
+        }
+    }
+    
+    protected function _getContainerFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_containerId)
+    {
+        #$_filter->addFilter(
+        $_filter->createFilter(
+            'account_id', 
+            'equals', 
+            Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}
+        );
+        #);
+        
+        $_filter->addFilter($_filter->createFilter(
+            'folder_id', 
+            'equals', 
+            $_containerId
+        ));  
+
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter " . print_r($_filter->toArray(), true));
     }
 }
