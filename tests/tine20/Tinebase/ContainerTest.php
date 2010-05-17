@@ -371,44 +371,20 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testGetNotDisabledUsers()
-    {        
-        $user1 = new Tinebase_Model_FullUser(array(
-            'accountId'             => 100,
-            'accountLoginName'      => 'user1',
-            'accountStatus'         => 'enabled',
-            'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->getId(),
-            'accountLastName'       => 'Tine 2.0',
-            'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'user1@metaways.de'
-        )); 
+    {
+        $user1 = Tinebase_User::getInstance()->getUserByLoginName('jsmith');
+        $user2 = Tinebase_User::getInstance()->getUserByLoginName('pwulf');
         
-        $user2 = new Tinebase_Model_FullUser(array(
-            'accountId'             => 101,
-            'accountLoginName'      => 'user2',
-            'accountStatus'         => 'enabled',
-            'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->getId(),
-            'accountLastName'       => 'Tine 2.0',
-            'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'user2@metaways.de'
-        )); 
+        Tinebase_User::getInstance()->setStatus($user2, 'enabled');
         
-        $account = Tinebase_User::getInstance()->addUser($user1);
-        $account1 = Tinebase_User::getInstance()->addUser($user2);
-        
-        /*
-        Tinebase_User::getInstance()->setStatus($account1, 'disabled');
-        $account1 = Tinebase_User::getInstance()->getFullUserById($account1->accountId);
-        $this->assertEquals('disabled', $account1->accountStatus);
-        */
+        $container = Tinebase_Container::getInstance()->getPersonalContainer($user1, 'Calendar', $user1, Tinebase_Model_Grants::GRANT_READ);
         
         $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
         $newGrants->addRecord(
             new Tinebase_Model_Grants(
                 array(
-                    'account_id'    => $account->accountId,
-                    'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                    'account_id'    => $user1->accountId,
+                    'account_type'  => 'user',
                     Tinebase_Model_Grants::GRANT_READ     => true,
                     Tinebase_Model_Grants::GRANT_ADD      => true,
                     Tinebase_Model_Grants::GRANT_EDIT     => true,
@@ -417,23 +393,50 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
-         
-        $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => 'containerTest' . Tinebase_Record_Abstract::generateUID(),
-            'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'backend'        => 'Sql'
-        )), $newGrants, TRUE, $account);
+        $newGrants->addRecord(
+            new Tinebase_Model_Grants(
+                array(
+                    'account_id'    => $user2->accountId,
+                    'account_type'  => 'user',
+                    Tinebase_Model_Grants::GRANT_READ     => true,
+                    Tinebase_Model_Grants::GRANT_ADD      => true,
+                    Tinebase_Model_Grants::GRANT_EDIT     => true,
+                    Tinebase_Model_Grants::GRANT_DELETE   => true,
+                    Tinebase_Model_Grants::GRANT_ADMIN    => true
+                )
+            )
+        );
         
-        $otherUsers = Tinebase_Container::getInstance()->getOtherUsers($account, 'Calendar', array(
+        Tinebase_Container::getInstance()->setGrants($container->getFirstRecord()->id, $newGrants, TRUE);        
+        
+        $otherUsers = Tinebase_Container::getInstance()->getOtherUsers($user1, 'Calendar', array(
             Tinebase_Model_Grants::GRANT_READ
         ));
         
-        //$this->assertEquals(0, $otherUsers->filter('accountId', $account1)->count());
+        $this->assertEquals(1, $otherUsers->filter('accountId', $user2->accountId)->count());
         
-        Tinebase_Container::getInstance()->deleteContainer($container->getId(), TRUE);
-        Tinebase_User::getInstance()->deleteUser($account);
-        Tinebase_User::getInstance()->deleteUser($account1);
+        Tinebase_User::getInstance()->setStatus($user2, 'disabled');
+        
+        $otherUsers = Tinebase_Container::getInstance()->getOtherUsers($user1, 'Calendar', array(
+            Tinebase_Model_Grants::GRANT_READ
+        ));
+        
+        Tinebase_User::getInstance()->setStatus($user2, 'enabled');        
+        
+        $this->assertEquals(0, $otherUsers->filter('accountId', $user2->accountId)->count());
+    }
+    
+    /**
+     * get other users container
+     *
+     */
+    public function testGetOtherUsersContainer()
+    {
+        $user1 = Tinebase_User::getInstance()->getUserByLoginName('jsmith');
+        $otherUsers = Tinebase_Container::getInstance()->getOtherUsersContainer($user1, 'Calendar', array(
+            Tinebase_Model_Grants::GRANT_READ
+        ));
+        $this->assertTrue($otherUsers->getRecordClassName() === 'Tinebase_Model_Container');
     }
     
 }		
