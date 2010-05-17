@@ -458,9 +458,14 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     
     /**
      * called on filtertrigger of filter toolbar
+     * clears selection silently
      */
     onFilterChange: function() {
-        this.getSelectionModel().clearSelections();
+        var sm = this.getSelectionModel();
+        
+        sm.suspendEvents();
+        sm.clearSelections();
+        sm.resumeEvents();
     },
     
     /**
