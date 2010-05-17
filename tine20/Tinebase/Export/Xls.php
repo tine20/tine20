@@ -151,6 +151,38 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
     }
     
     /**
+     * get cell value
+     * 
+     * @param Zend_Config $_field
+     * @param Tinebase_Record_Interface $_record
+     * @param string $_cellType
+     * @return string
+     */
+    protected function _getCellValue(Zend_Config $_field, Tinebase_Record_Interface $_record, &$_cellType)
+    {
+        switch($_field->type) {
+            case 'datetime':
+            case 'date':
+                if ($_record->{$_field->identifier} instanceof Zend_Date) {
+                    $result = PHPExcel_Shared_Date::PHPToExcel($_record->{$_field->identifier}->getTimestamp());
+                } else {
+                    $result = $_record->{$_field->identifier};
+                }
+                
+                // empty date cells, get displayed as 30.12.1899
+                if(empty($result)) {
+                    $result = NULL;
+                }
+                break;
+            default:
+                $result = parent::_getCellValue($_field, $_record, $_cellType);
+                break;
+        }
+        
+        return $result;
+    }
+    
+    /**
      * set properties
      * 
      * @return void
