@@ -42,7 +42,7 @@ class Wbxml_Dtd_ActiveSync_CodePage2 extends Wbxml_Dtd_ActiveSync_Abstract
         'Subject'               => 0x14,
         'Read'                  => 0x15,
         'To'                    => 0x16,
-        'CC'                    => 0x17,
+        'Cc'                    => 0x17,
         'From'                  => 0x18,
         'ReplyTo'               => 0x19,
 /*        'Department'            => 0x1a,
