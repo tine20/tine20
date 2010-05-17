@@ -329,4 +329,20 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         ')); 
         $this->setApplicationVersion('Tinebase', '3.10');
     }
+    
+    /**
+     * update to 3.11
+     * - change length of last_login_from
+     */
+    public function update_10()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>last_login_from</name>
+                <type>text</type>
+                <length>39</length>
+            </field>');
+        $this->_backend->alterCol('accounts', $declaration, 'last_login_from');
+        $this->setApplicationVersion('Tinebase', '3.11');
+    }
 }
