@@ -294,15 +294,7 @@ abstract class ActiveSync_Controller_Abstract
             'in', 
             $containerIds, 
             array('applicationName' => $this->_applicationName)
-        ));
-        
-        #$filter = array(
-        #    'field'     => 'container_id',
-        #    'operator'  => 'in',
-        #    'value'     => $containerIds
-        #);
-        
-        #return $filter;
+        ));        
     }
     
     /**
