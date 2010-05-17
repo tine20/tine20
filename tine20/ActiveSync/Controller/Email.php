@@ -369,9 +369,9 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         if(isset($xmlData->Read)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Id: $_id set read flag: $xmlData->Read");
             if((int)$xmlData->Read === 1) {
-                $this->_messageController->addFlags(1, $_collectionId, $_id, array(Zend_Mail_Storage::FLAG_SEEN));
+                #$this->_messageController->addFlags(1, $_collectionId, $_id, array(Zend_Mail_Storage::FLAG_SEEN));
             } else {
-                $this->_messageController->clearFlags(1, $_collectionId, $_id, array(Zend_Mail_Storage::FLAG_SEEN));
+                #$this->_messageController->clearFlags(1, $_collectionId, $_id, array(Zend_Mail_Storage::FLAG_SEEN));
             }
         }
         
