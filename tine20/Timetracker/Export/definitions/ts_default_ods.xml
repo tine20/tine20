@@ -6,6 +6,7 @@
     <plugin>Timetracker_Export_Ods_Timesheet</plugin>
     <template>timesheet_export_default.ots</template>
     <description>default ods timesheet export definition</description>
+    <header>1</header>
     <columns>
         <column>
             <identifier>start_date</identifier>
