@@ -184,7 +184,7 @@ class Tinebase_Core
                 $_REQUEST['method'] = 'Tinebase.userInfoPage';
             }
             
-            if(isset($_REQUEST['openid.action'])) {
+            if(isset($_REQUEST['openid_action']) && !isset($_REQUEST['method'])) {
                 $_REQUEST['method'] = 'Tinebase.openId';
             }
 
