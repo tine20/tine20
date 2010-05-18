@@ -274,6 +274,19 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->objects['updatedContact']->adr_one_locality, $contact->adr_one_locality);
         $this->assertEquals($this->objects['updatedContact']->n_given." ".$this->objects['updatedContact']->n_family, $contact->n_fn);
+        
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'last_modified_by', 'operator' => 'equals', 'value' => Zend_Registry::get('currentAccount')->getId())
+        ));
+        $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $this->assertTrue($count > 0);
+        
+        $date = Zend_Date::now();
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'last_modified_time', 'operator' => 'equals', 'value' => $date->toString('yyyy-MM-dd'))
+        ));
+        $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $this->assertTrue($count > 0);
     }
 
     /**
@@ -332,5 +345,28 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($folder));
         $folder = Addressbook_Controller::getInstance()->createPersonalFolder($account->getId());
         $this->assertEquals(1, count($folder));
+    }
+    
+    public function testWeek()
+    {
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'creation_time', 'operator' => 'inweek',   'value' => 0),
+            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
+            array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
+        ));
+        $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $this->assertTrue($count > 0);
+    }
+    
+    public function tesCreationTime()
+    {
+        $date = Zend_Date::now();
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'creation_time', 'operator' => 'equals',   'value' => $date->toString('yyyy-MM-dd')),
+            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
+            array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
+        ));
+        $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $this->assertTrue($count > 0);
     }
 }

@@ -235,7 +235,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
         
         // check
-        $count = $tasks['totalcount'];
+        $count = count($tasks['totalcount']);
         $this->assertGreaterThan(0, $count);
         
         // delete task
@@ -402,9 +402,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      * @return Tasks_Model_Task
      */
     protected function _getFilter()
-    {
-        $date = new Zend_Date();
-        
+    {        
         // define filter
         return array(
             array('field' => 'container_id', 'operator' => 'specialNode', 'value' => 'all'),

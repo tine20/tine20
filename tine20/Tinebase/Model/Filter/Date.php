@@ -71,7 +71,11 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
          
         // append query to select object
         foreach ((array)$this->_opSqlMap[$this->_operator]['sqlop'] as $num => $operator) {
-            $_select->where($field . $operator, $value[$num]);
+            if (get_parent_class($this) === 'Tinebase_Model_Filter_Date') {
+                $_select->where($field . $operator, $value[$num]);
+            } else {
+                $_select->where("DATE({$field})" . $operator, $value[$num]);
+            }
         }
     }
     
@@ -188,22 +192,24 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     $value = '';
             }        
         } elseif ($_operator === 'inweek') {
+            $date = new Zend_Date();
+            
             if ($_value > 52) {
                 $_value = 52;
+            } elseif ($_value < 1) {
+                $_value = $date->toString(Zend_Date::WEEK);
             }
             
-            $date = new Zend_Date();
             $date->setWeek($_value)
                  ->setWeekDay(1);
             
             $value = array(
                 $date->toString($this->_dateFormat), 
                 $date->setWeekDay(7)->toString($this->_dateFormat), 
-            );                 
+            );
         } else  {
             $value = substr($_value, 0, 10);
         }
-        
         return $value;
     }
 }

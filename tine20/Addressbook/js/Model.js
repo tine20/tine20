@@ -161,7 +161,11 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
         {label: app.i18n._('Street') + ' (' + app.i18n._('Private Address') + ')',      field: 'adr_two_street',     defaultOperator: 'equals'},
         {label: app.i18n._('Postal Code') + ' (' + app.i18n._('Private Address') + ')', field: 'adr_two_postalcode', defaultOperator: 'equals'},
         {label: app.i18n._('City') + ' (' + app.i18n._('Private Address') + ')',        field: 'adr_two_locality'},
-        {label: app.i18n._('Type'), defaultValue: 'contact', valueType: 'combo',        field: 'type',               store: typeStore}
+        {label: app.i18n._('Type'), defaultValue: 'contact', valueType: 'combo',        field: 'type',               store: typeStore},
+        {label: app.i18n._('Last modified'),                                            field: 'last_modified_time', valueType: 'date'},
+        {label: app.i18n._('Last modifier'),                                            field: 'last_modified_by', valueType: 'user'},
+        {label: app.i18n._('Creation Time'),                                            field: 'creation_time', valueType: 'date'},
+        {label: app.i18n._('Creator'),                                                  field: 'created_by', valueType: 'user'}
     ];
 };
     
