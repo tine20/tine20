@@ -531,21 +531,26 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         #$_filter->addFilter(new Tinebase_Model_Filter_Text('recurid', 'isnull', null));
         
         if(in_array($_filterType, $this->_filterArray)) {
+            $today = Zend_Date::now()
+                ->setHour(0)
+                ->setMinute(0)
+                ->setSecond(0);
+                
             switch($_filterType) {
                 case self::FILTER_1_DAY_BACK:
-                    $received = Zend_Date::now()->subDay(1);
+                    $received = $today->subDay(1);
                     break;
                 case self::FILTER_3_DAYS_BACK:
-                    $received = Zend_Date::now()->subDay(3);
+                    $received = $today->subDay(3);
                     break;
                 case self::FILTER_1_WEEK_BACK:
-                    $received = Zend_Date::now()->subWeek(1);
+                    $received = $today->subWeek(1);
                     break;
                 case self::FILTER_2_WEEKS_BACK:
-                    $received = Zend_Date::now()->subWeek(2);
+                    $received = $today->subWeek(2);
                     break;
                 case self::FILTER_1_MONTH_BACK:
-                    $received = Zend_Date::now()->subMonth(2);
+                    $received = $today->subMonth(2);
                     break;
             }
             
