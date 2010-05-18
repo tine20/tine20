@@ -288,13 +288,8 @@ abstract class ActiveSync_Controller_Abstract
         } elseif(array_key_exists($_containerId, $syncableContainers)) {
             $containerIds = array($_containerId);        
         }
-                
-        $_filter->addFilter(new Tinebase_Model_Filter_Container(
-            'container_id', 
-            'in', 
-            $containerIds, 
-            array('applicationName' => $this->_applicationName)
-        ));        
+
+        $_filter->addFilter($_filter->createFilter('container_id', 'in', $containerIds));
     }
     
     /**
@@ -364,6 +359,7 @@ abstract class ActiveSync_Controller_Abstract
             $pagination = null;
         }
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " assembled {$this->_contentFilterClass}: " . print_r($filter->toArray(), TRUE));
         $result = $this->_contentController->search($filter, $pagination, false, true, 'sync');
         
         return $result;
