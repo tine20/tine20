@@ -333,5 +333,19 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, count($data['Phones']), 'more than 1 phone expected');
         $this->assertGreaterThan(0, count($data['Phones'][0]['lines']), 'no lines attached');
         $this->assertEquals('user phone', $data['Phones'][0]['description'], 'no description');
-    }        
+    }
+    
+    // we need some moks for asterisk backends...
+    public function _testDialNumber()
+    {
+        $number = '+494031703167';
+        $phoneId = $this->_objects['phone']->getId();
+        $lineId = $this->_objects['line']->getId();
+        
+        $status = $this->_json->dialNumber($number, $phoneId, $lineId);
+        
+        $this->assertType('Array', $status);
+        $this->assertTrue(array_key_exists('success', $status));
+        $this->assertTrue($status['success']);
+    }
 }		
