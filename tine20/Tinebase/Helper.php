@@ -117,11 +117,11 @@ function removeDir($_dir)
 {
     $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($_dir), RecursiveIteratorIterator::CHILD_FIRST);
     foreach ($iterator as $fullFilename => $cur) {
-        if (is_dir($fullFilename)) {
+        if (is_dir($fullFilename) && substr($fullFilename, -1) !== '.') {
             rmdir($fullFilename);
-        } else {
+        } elseif (is_file($fullFilename)) {
             unlink($fullFilename);
         }
     }
-    rmdir($_dir);
+    if (is_dir($_dir)) rmdir($_dir);
 }
