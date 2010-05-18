@@ -46,7 +46,7 @@ class Phone_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $currentAccount = Tinebase_Core::getUser()->toArray();
         
         if (!empty($phoneId)) {
-            $snomPhone = Voipmanager_Controller_MyPhone::getInstance()->getMyPhone($phoneId, $currentAccount['accountId']);
+            $snomPhone = Phone_Controller_MyPhone::getInstance()->get($phoneId);
             //unset($phone->lines);
 
             $_phoneData = $snomPhone->toArray();

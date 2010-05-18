@@ -96,7 +96,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
             
         } else {
             // use given phone and line ids
-            $phone = Voipmanager_Controller_MyPhone::getInstance()->getMyPhone($_phoneId, $accountId);
+            $phone = Phone_Controller_MyPhone::getInstance()->get($_phoneId);
             $line = $phone->lines[$phone->lines->getIndexById($_lineId)];
             $asteriskLineId = $line->asteriskline_id; 
         }
