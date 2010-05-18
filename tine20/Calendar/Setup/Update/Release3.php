@@ -161,7 +161,7 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
         $pfe = new Tinebase_PersistentFilter_Backend_Sql();
         
         $myEventsPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
-            'name'              => "All my events", // _("All my events")
+            'name'              => Calendar_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All events I attend", // _("All events I attend")
             'account_id'        => NULL,
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
@@ -183,7 +183,7 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
     public function update_4()
     {
         $pfe = new Tinebase_PersistentFilter_Backend_Sql();
-        $defaultFavorite = $pfe->getByProperty('All my events', 'name');
+        $defaultFavorite = $pfe->getByProperty(Calendar_Preference::DEFAULTPERSISTENTFILTER_NAME, 'name');
         $defaultFavorite->bypassFilters = TRUE;
         
         $defaultFavorite->filters = array(

@@ -35,7 +35,7 @@ class Calendar_Setup_Initialize extends Setup_Initialize
         $pfe = new Tinebase_PersistentFilter_Backend_Sql();
         
         $myEventsPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
-            'name'              => "All my events", // _("All my events")
+            'name'              => Calendar_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All events I attend", // _("All events I attend")
             'account_id'        => NULL,
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
