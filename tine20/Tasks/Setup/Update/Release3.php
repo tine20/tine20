@@ -63,7 +63,7 @@ class Tasks_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $myEventsPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
             'name'              => Tasks_Preference::DEFAULTPERSISTENTFILTER_NAME,
-            'description'       => "All my tasks", // _("All my tasks")
+            'description'       => "All tasks of my taskslists", // _("All tasks of my taskslists")
             'account_id'        => NULL,
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
             'model'             => 'Tasks_Model_TaskFilter',
