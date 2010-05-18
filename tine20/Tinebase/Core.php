@@ -183,6 +183,10 @@ class Tinebase_Core
             } elseif (isset($_SERVER['REDIRECT_USERINFOPAGE']) && $_SERVER['REDIRECT_USERINFOPAGE'] == 'true') {
                 $_REQUEST['method'] = 'Tinebase.userInfoPage';
             }
+            
+            if(isset($_REQUEST['openid.action'])) {
+                $_REQUEST['method'] = 'Tinebase.openId';
+            }
 
             $server = new Tinebase_Server_Http();
         }
