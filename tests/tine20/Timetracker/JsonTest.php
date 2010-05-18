@@ -444,17 +444,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         Tinebase_Core::getPreference('Timetracker')->setValue(Timetracker_Preference::TSODSEXPORTCONFIG, 'ts_default_ods');
         $this->_exportTsOds();
     }
-
-    /**
-     * try to export Timesheets (as ods) with given ods template
-     * - this is no real json test
-     * 
-     */
-    public function testExportTimesheetsOdsWithTemplate()
-    {
-        Tinebase_Core::getPreference('Timetracker')->setValue(Timetracker_Preference::TSODSEXPORTCONFIG, 'ts_template_ods');
-        $this->_exportTsOds();
-    }
     
     /**
      * try to export Timeaccounts (as ods)
