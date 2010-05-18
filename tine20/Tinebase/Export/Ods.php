@@ -307,6 +307,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             case 'percentage':
                 $result = OpenDocument_SpreadSheet_Cell::TYPE_PERCENTAGE;
                 break;
+            case 'float':
             case 'number':
                 $result = OpenDocument_SpreadSheet_Cell::TYPE_FLOAT;
                 break;
