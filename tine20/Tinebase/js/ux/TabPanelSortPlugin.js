@@ -9,7 +9,9 @@
  */
 
 
+
 Ext.ns('Ext.ux');
+
 
 /**
  * @class SortPlugin
@@ -20,7 +22,65 @@ Ext.ux.TabPanelSortPlugin = function(config) {
 };
 
 Ext.ux.TabPanelSortPlugin.prototype = {
-	
-	
-	
+    /**
+     * tabpanel
+     * @type object
+     */
+    tabpanel: null,
+    
+    /**
+     * init
+     * @param {} cmp
+     */
+    init: function(cmp){
+        this.tabpanel = cmp;
+        
+        this.handler = null;
+        this.scope = null;
+
+        this.tabpanel.on('render', function(v) {
+            dragZone = new Ext.dd.DragZone(v.getEl(), {
+                getDragData: function(e) {
+                    var sourceEl = e.getTarget('li[class^=x-tab]', 10);
+                
+                    if (sourceEl) {
+                        d = sourceEl.cloneNode(true);
+                        d.id = Ext.id();
+                        return {
+                            ddel: d,
+                            sourceEl: sourceEl,
+                            repairXY: Ext.fly(sourceEl).getXY()
+                        };
+                    };
+                },
+                
+                getRepairXY: function() {
+                    return this.dragData.repairXY;
+                }
+            });
+            
+            dropZone = new Ext.dd.DropZone(v.getEl(), {
+                getTargetFromEvent: function(e) {
+                    return e.getTarget('ul[class^=x-tab]', 10);
+                },
+        
+                onNodeOver : function(target, dd, e, data){
+                    return Ext.dd.DropZone.prototype.dropAllowed;
+                },
+        
+                onNodeOut : function(target, dd, e, data){
+                    
+                },
+                
+                onNodeDrop : function(target, dd, e, data){
+                    
+                    
+                    return true;
+                }
+            });
+            
+        });
+    }
 };
+           
+
