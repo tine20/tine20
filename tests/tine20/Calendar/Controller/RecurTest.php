@@ -4,9 +4,9 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id: EventTests.php 14014 2010-04-26 08:43:54Z c.weiss@metaways.de $
+ * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
+ * @version     $Id: RecurTest.php 14014 2010-04-26 08:43:54Z g.ciyiltepe@metaways.de $
  */
 
 /**
@@ -26,14 +26,9 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Calendar_Controller_EventTests extends Calendar_TestCase
 {
     /**
-     * @var Calendar_Controller_Event controller unter test
+     * @var Calendar_Controller_Event controller
      */
     protected $_controller;
-    
-    /**
-     * @var Tinebase_Model_Container
-     */
-    protected $_testCalendar;
     
     public function setUp()
     {
@@ -42,89 +37,64 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     }
     
     /**
-     * 
+     * Conflict between an existing and recurring event when create the event
      */
-    public function testCreateConflictBetweenReplayAndExistEvent()
+    public function testCreateConflictBetweenRecurAndExistEvent()
     {
         $event = $this->_getEvent();
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
         ));
-        $event = $this->_controller->create($event);
+        $this->_controller->create($event);
 
-        $event1 = $this->_getReplayEvent();
+        $event1 = $this->_getRecurEvent();
         $event1->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
         ));
         
-        try {
-            $event1 = $this->_controller->create($event1, TRUE);
-        } catch (Calendar_Exception_AttendeeBusy $busyException) {
-            $fbData = $busyException->toArray();
-            $this->assertGreaterThanOrEqual(2, count($fbData['freebusyinfo']));
-        }        
+        $this->setExpectedException('Calendar_Exception_AttendeeBusy');
+        $this->_controller->create($event1, TRUE);
     }
     
     /**
-     * 
+     * Conflict between an existing and recurring event when update the event
      */
-    public function testUpdateConflictBetweenReplayAndExistEvent()
+    public function testUpdateConflictBetweenRecurAndExistEvent()
     {
         $event = $this->_getEvent();
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
         ));
-        $event = $this->_controller->create($event);
+        $this->_controller->create($event);
 
-        $event1 = $this->_getReplayEvent();
+        $event1 = $this->_getRecurEvent();
         $event1->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
         ));
         
         $event1 = $this->_controller->create($event1);
-        $event1->summary = 'Lunchtime';
+        $event1->rrule = "FREQ=DAILY;INTERVAL=2";
         
-        try {
-            $event1 = $this->_controller->update($event1, TRUE);
-        } catch (Calendar_Exception_AttendeeBusy $busyException) {
-            $fbData = $busyException->toArray();
-            $this->assertGreaterThanOrEqual(2, count($fbData['freebusyinfo']));
-        }        
-    }
-    
-    /**
-     * returns a simple event
-     *
-     * @return Calendar_Model_Event
-     */
-    protected function _getEvent()
-    {
-        return new Calendar_Model_Event(array(
-            'summary'     => 'Mittagspause',
-            'dtstart'     => '2010-07-06 13:00:00',
-            'dtend'       => '2010-07-06 13:30:00',
-            'description' => 'Wieslaw Brudzinski: Das Gesetz garantiert zwar die Mittagspause, aber nicht das Mittagessen...',
-            'container_id' => $this->_testCalendar->getId(),
-            Tinebase_Model_Grants::GRANT_EDIT    => true,
-        ));
+        $this->setExpectedException('Calendar_Exception_AttendeeBusy');
+        $this->_controller->update($event1, TRUE);
     }
     
    /**
-     * returns a simple replay event
+     * returns a simple recure event
      *
      * @return Calendar_Model_Event
      */
-    protected function _getReplayEvent()
+    protected function _getRecurEvent()
     {
         return new Calendar_Model_Event(array(
-            'summary'     => 'Mittagspause',
-            'dtstart'     => '2010-06-06 13:00:00',
-            'dtend'       => '2010-06-06 13:30:00',
-            'description' => 'Wieslaw Brudzinski: Das Gesetz garantiert zwar die Mittagspause, aber nicht das Mittagessen...',
+            'summary'     => 'Breakfast',
+            'dtstart'     => '2009-03-01 06:00:00',
+            'dtend'       => '2009-03-01 06:15:00',
+            'description' => 'Breakfast',
             'rrule'       => 'FREQ=DAILY;INTERVAL=1',    
             'container_id' => $this->_testCalendar->getId(),
             Tinebase_Model_Grants::GRANT_EDIT    => true,

@@ -403,7 +403,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function update(Tinebase_Record_Interface $_record, $_checkBusyConficts = FALSE)
     {
-    	try {
+        try {
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
@@ -415,10 +415,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
                         
 	            if ($_checkBusyConficts) {
-	                // only do free/busy check if start/endtime changed  or attendee added
+	                // only do free/busy check if start/endtime changed  or attendee added or rrule changed
 	                if (   ! $event->dtstart->equals($_record->dtstart) || 
 	                       ! $event->dtend->equals($_record->dtend) ||
-	                       count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0 // attendee add
+	                       count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0 || 
+	                       $event->rrule != $_record->rrule // attendee add
                        ) {
     	                
 	                    // ensure that all attendee are free
