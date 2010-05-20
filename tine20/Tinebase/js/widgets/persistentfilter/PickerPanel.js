@@ -70,6 +70,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         
         this.on('click', function(node) {
             if (node.attributes.isPersistentFilter) {
+                this.getFilterToolbar().fireEvent('change', this.getFilterToolbar());
                 node.select();
                 this.onFilterSelect(this.store.getById(node.id));
             } else if (node.id == '_persistentFilters') {
@@ -310,6 +311,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {model.PersistentFilter} persistentFilter
      */
     selectFilter: function(persistentFilter) {
+        this.getFilterToolbar().fireEvent('change', this.getFilterToolbar());
         var node = this.getNodeById(persistentFilter.id);
         if (node) {
             this.getSelectionModel().select(node);
