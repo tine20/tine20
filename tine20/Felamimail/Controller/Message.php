@@ -297,6 +297,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $_message->flags .= ' ' . $flag;
                 $this->_backend->addFlag($_message, $flag);
             }
+            $this->_backend->updateMultiple(
+                $_message->getId(), 
+                array(
+                    'timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+                )
+            );
         }
     }
     
