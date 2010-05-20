@@ -562,8 +562,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             event: event,
             renderTo: eventEls[0].down('div[class=' + bodyCls + ']'),
             width: event.ui.getEls()[0].getWidth() -12,
-            height: event.ui.getEls()[0].getHeight() -18,
-            style: 'background-color: transparent; background: 0: border: 0;',
+            height: Math.max(12, event.ui.getEls()[0].getHeight() -18),
+            style: 'background-color: transparent; background: 0: border: 0; position: absolute; top: 0px;',
             value: this.newEventSummary,
             enableKeyEvents: true,
             listeners: {
