@@ -41,6 +41,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
      */
     public function testCreateConflictBetweenRecurAndExistEvent()
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ');
         $event = $this->_getEvent();
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
@@ -64,6 +65,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     public function testUpdateConflictBetweenRecurAndExistEvent()
     {
         $event = $this->_getEvent();
+        $event->dtstart = '2010-05-20 06:00:00';
+        $event->dtend = '2010-05-20 06:15:00';
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
@@ -84,6 +87,48 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     }
     
    /**
+     * Conflict between an existing and recurring event when update the event
+     */
+    public function testUpdateConflictBetweenRecurAndExistEvent1()
+    {
+        $event = $this->_getRecurEvent();
+        $event->rrule = "FREQ=MONTHLY;INTERVAL=1;BYDAY=3TH";
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+        ));
+        
+        $this->_controller->create($event);
+        
+        $exception = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Abendessen',
+            'dtstart'       => '2010-05-27 06:00:00',
+            'dtend'         => '2010-05-27 06:15:00',
+            'container_id'  => $this->_testCalendar->getId(),
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+        
+        $exception->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+        ));
+        
+        $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $this->_controller->createRecurException($exception);
+        
+        $from = new Zend_Date('2010-05-17 06:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2010-05-23 06:15:00', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until))
+        )));
+        
+        Calendar_Model_Rrule::mergeRecuranceSet($events, $from, $until);
+       
+    }
+    
+   /**
      * returns a simple recure event
      *
      * @return Calendar_Model_Event
@@ -92,8 +137,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         return new Calendar_Model_Event(array(
             'summary'     => 'Breakfast',
-            'dtstart'     => '2009-03-01 06:00:00',
-            'dtend'       => '2009-03-01 06:15:00',
+            'dtstart'     => '2010-05-20 06:00:00',
+            'dtend'       => '2010-05-20 06:15:00',
             'description' => 'Breakfast',
             'rrule'       => 'FREQ=DAILY;INTERVAL=1',    
             'container_id' => $this->_testCalendar->getId(),
