@@ -13,6 +13,8 @@
 /**
  * main authentication class
  * 
+ * @todo 2010-05-20 cweiss: the default option handling looks like a big mess -> someone needs to tidy up here!
+ * 
  * @package     Tinebase
  * @subpackage  Auth 
  */
@@ -108,6 +110,7 @@ class Tinebase_Auth
             'password' => '',
             'bindRequiresDn' => true,
             'baseDn' => '',
+            'accountFilterFormat' => NULL,
             'accountCanonicalForm' => '2',
             'accountDomainName' => '',
             'accountDomainNameShort' => '',
@@ -327,6 +330,8 @@ class Tinebase_Auth
             $config[$backendType] = ($_getConfiguredBackend && $backendType == self::getConfiguredBackend() ? self::getBackendConfiguration() : array());
             if (is_array($config[$backendType])) {
                 foreach ($backendConfig as $key => $value) {
+                    // 2010-05-20 cweiss Zend_Ldap changed and does not longer throw exceptions
+                    // on unsupported values, we might skip this cleanup here.
                     if (! array_key_exists($key, $config[$backendType])) {
                         $config[$backendType][$key] = $value;
                     }
