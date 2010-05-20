@@ -288,6 +288,14 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         $expectedGroupName = Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY);
         $this->assertEquals($expectedGroupName, $group->name);
     }
+    
+    public function testSetGroupMemberships()
+    {
+        $currentGroupMemberships = Tinebase_Core::getUser()->getGroupMemberships();
+        //Tinebase_Group::getInstance()->setGroupMemberships($currentGroupMemberships);
+        $newGroupMemberships = Tinebase_Core::getUser()->getGroupMemberships();
+    }
+    
 }
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_GroupTest::main') {
