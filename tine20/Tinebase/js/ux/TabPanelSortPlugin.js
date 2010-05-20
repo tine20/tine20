@@ -38,8 +38,8 @@ Ext.ux.TabPanelSortPlugin.prototype = {
         this.handler = null;
         this.scope = null;
 
-        this.tabpanel.on('render', function(v) {
-            dragZone = new Ext.dd.DragZone(v.getEl(), {
+        this.tabpanel.on('render', function(tabpanel) {
+            var dragZone = new Ext.dd.DragZone(tabpanel.header, {
                 getDragData: function(e) {
                     var sourceEl = e.getTarget('li[class^=x-tab]', 10);
                 
@@ -59,7 +59,7 @@ Ext.ux.TabPanelSortPlugin.prototype = {
                 }
             });
             
-            dropZone = new Ext.dd.DropZone(v.getEl(), {
+            var dropZone = new Ext.dd.DropZone(tabpanel.header, {
                 getTargetFromEvent: function(e) {
                     return e.getTarget('ul[class^=x-tab]', 10);
                 },
@@ -72,14 +72,19 @@ Ext.ux.TabPanelSortPlugin.prototype = {
                     
                 },
                 
-                onNodeDrop : function(target, dd, e, data){
-                    
-                    
-                    return true;
-                }
+                onNodeDrop : this.onNodeDrop.createDelegate(this)
             });
             
         });
+    
+        
+    },
+    
+    
+    onNodeDrop : function(target, dd, e, data){
+        
+        
+        return true;  
     }
 };
            
