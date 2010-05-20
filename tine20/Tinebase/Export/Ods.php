@@ -301,6 +301,9 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
             case 'datetime':
                 $result = OpenDocument_SpreadSheet_Cell::TYPE_DATE;
                 break;
+            case 'time':
+                $result = OpenDocument_SpreadSheet_Cell::TYPE_TIME;
+                break;
             case 'currency':
                 $result = OpenDocument_SpreadSheet_Cell::TYPE_CURRENCY;
                 break;
