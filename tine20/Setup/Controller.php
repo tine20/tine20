@@ -318,10 +318,13 @@ class Setup_Controller
                 list($fromMajorVersion, $fromMinorVersion) = explode('.', $_application->version);
         
                 $minor = $fromMinorVersion;
-               
-                if(file_exists(ucfirst($_application->name) . '/Setup/Update/Release' . $_majorVersion . '.php')) {
-                    $className = ucfirst($_application->name) . '_Setup_Update_Release' . $_majorVersion;
                 
+                $className = ucfirst($_application->name) . '_Setup_Update_Release' . $_majorVersion;
+                if(! class_exists($className)) {
+                    Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                        . " update class {$className} does not exists, skipping release {$_majorVersion} for app {$_application->name}"
+                    );
+                } else {
                     $update = new $className($this->_backend);
                 
                     $classMethods = get_class_methods($update);
