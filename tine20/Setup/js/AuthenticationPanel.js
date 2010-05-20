@@ -295,6 +295,9 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         name: 'authentication_Ldap_baseDn',
                         fieldLabel: this.app.i18n._('Base DN')
                     }, {
+                        name: 'authentication_Ldap_accountFilterFormat',
+                        fieldLabel: this.app.i18n._('Search filter')
+                    }, {
                         name: 'authentication_Ldap_accountCanonicalForm',
                         fieldLabel: this.app.i18n._('Account canonical form')
                     }, {
