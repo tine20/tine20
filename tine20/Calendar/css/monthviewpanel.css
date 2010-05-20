@@ -180,6 +180,7 @@ cal-monthview-wkcell-header {
 .cal-monthview-alldayevent-summary {
     white-space: nowrap;
     overflow: hidden;
+    min-height: 12px;
     /*overflow: visible; */
 }
 
