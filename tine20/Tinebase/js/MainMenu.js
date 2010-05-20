@@ -24,6 +24,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
      */
     showMainMenu: false,    
     style: {'padding': '0px 2px'},
+    cls: 'tbar-mainmenu',
     
     /**
      * @type Array

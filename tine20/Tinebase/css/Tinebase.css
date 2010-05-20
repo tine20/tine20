@@ -260,7 +260,13 @@ html, body {
 }
 
 /* ----- mainmenu ------------------------------------------------------------*/
-.tine-mainscreen-mainmenu .x-toolbar,
+.tine-mainscreen-mainmenu .x-toolbar {
+    background-image: url(../../images/tbar-menu-bg.gif);
+    border: 0;
+    margin-top: -1px;
+    height: 18px;
+}
+
 .tine-mainscreen-mainmenu .x-toolbar .x-btn td {
     background: none;
     border: 0;
@@ -279,6 +285,9 @@ html, body {
 	background-image:url(../../images/favicon.png) !important;
 }
 
+.tine-mainscreen-apptabs .x-tab-strip-wrap {
+	padding-top: 2px;
+}
 
 .tine-mainscreen-apptabspanel-menu-tabel .x-tab-left {
     background-image: url(../../images/tabs_sprite_slope_right.gif);

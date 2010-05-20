@@ -57,7 +57,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             html: '<div class="tine-mainscreen-topbox-left"></div><div class="tine-mainscreen-topbox-middle"></div><div class="tine-mainscreen-topbox-right"></div>'
         }, {
             cls: 'tine-mainscreen-mainmenu',
-            height: 20,
+            height: 18,
             layout: 'fit',
             border: false,
             items: this.getMainMenu()
@@ -65,7 +65,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             cls: 'tine-mainscreen-apptabs',
             hidden: this.appPickerStyle != 'tabs',
             border: false,
-            height: Ext.isGecko ? 22 : 20,
+            height: Ext.isGecko ? 24 : 22,
             items: new Tine.Tinebase.AppTabsPanel({
                 plain: true
             })
