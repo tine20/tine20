@@ -279,14 +279,25 @@ html, body {
 	background-image:url(../../images/favicon.png) !important;
 }
 
+
+.tine-mainscreen-apptabspanel-menu-tabel .x-tab-left {
+    background-image: url(../../images/tabs_sprite_slope_right.gif);
+    padding-right: 24px;
+}
+
 .tine-mainscreen-apptabspanel-menu-tabel {
-    margin-right: 5px;
+    margin-right: -10px;
+}
+
+.x-tab-strip .tine-mainscreen-apptabspanel-menu-tabel span.x-tab-strip-text {
+    padding-right: 10px;
 }
 
 .x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel a.x-tab-strip-close,
 .x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel a.x-tab-strip-close:hover {
     background-image:url("../../library/ExtJS/resources/images/default/button/arrow.gif");
     top: 6px;
+    right: 19px;
 }
 
 /* ----- appchooser panel-----------------------------------------------------*/
