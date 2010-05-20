@@ -38,52 +38,51 @@ Ext.ux.TabPanelSortPlugin.prototype = {
         this.handler = null;
         this.scope = null;
 
-        this.tabpanel.on('render', function(tabpanel) {
-            var dragZone = new Ext.dd.DragZone(tabpanel.header, {
-                getDragData: function(e) {
-                    var sourceEl = e.getTarget('li[class^=x-tab]', 10);
-                
-                    if (sourceEl) {
-                        d = sourceEl.cloneNode(true);
-                        d.id = Ext.id();
-                        return {
-                            ddel: d,
-                            sourceEl: sourceEl,
-                            repairXY: Ext.fly(sourceEl).getXY()
-                        };
-                    };
-                },
-                
-                getRepairXY: function() {
-                    return this.dragData.repairXY;
-                }
-            });
-            
-            var dropZone = new Ext.dd.DropZone(tabpanel.header, {
-                getTargetFromEvent: function(e) {
-                    return e.getTarget('ul[class^=x-tab]', 10);
-                },
-        
-                onNodeOver : function(target, dd, e, data){
-                    return Ext.dd.DropZone.prototype.dropAllowed;
-                },
-        
-                onNodeOut : function(target, dd, e, data){
-                    
-                },
-                
-                onNodeDrop : this.onNodeDrop.createDelegate(this)
-            });
-            
-        });
+        this.tabpanel.on('render', this.onRender, this);
+    },
     
+    onRender: function(tabpanel) {
+        var dragZone = new Ext.dd.DragZone(tabpanel.header, {
+            getDragData: function(e) {
+                var sourceEl = e.getTarget('li[class^=x-tab]', 10);
+            
+                if (sourceEl) {
+                    d = sourceEl.cloneNode(true);
+                    d.id = Ext.id();
+                    return {
+                        ddel: d,
+                        sourceEl: sourceEl,
+                        repairXY: Ext.fly(sourceEl).getXY()
+                    };
+                };
+            },
+            
+            getRepairXY: function() {
+                return this.dragData.repairXY;
+            }
+        });
         
+        var dropZone = new Ext.dd.DropZone(tabpanel.header, {
+            getTargetFromEvent: function(e) {
+                return e.getTarget('ul[class^=x-tab]', 10);
+            },
+    
+            onNodeOver : function(target, dd, e, data){
+                return Ext.dd.DropZone.prototype.dropAllowed;
+            },
+    
+            onNodeOut : function(target, dd, e, data){
+                
+            },
+            
+            onNodeDrop : this.onNodeDrop.createDelegate(this)
+        });
     },
     
     
-    onNodeDrop : function(target, dd, e, data){
+    onNodeDrop: function(target, dd, e, data){
         
-        
+
         return true;  
     }
 };
