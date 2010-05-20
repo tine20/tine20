@@ -18,7 +18,8 @@
  * @package     Calendar
  * @subpackage  Setup
  */
-class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract {
+class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
+{
     
     /**
      * @var Zend_Date
