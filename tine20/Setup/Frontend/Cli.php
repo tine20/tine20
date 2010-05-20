@@ -278,7 +278,22 @@ class Setup_Frontend_Cli
      */
     protected function _egw14Import(Zend_Console_Getopt $_opts)
     {
-        $importer = new Setup_Import_Egw14();
+        list($host, $username, $password, $dbname, $charset) = $_opts->getRemainingArgs();
+        
+        $egwDb = Zend_Db::factory('PDO_MYSQL', array(
+            'host'     => $host,
+            'username' => $username,
+            'password' => $password,
+            'dbname'   => $dbname
+        ));
+        $egwDb->query("SET NAMES $charset");
+        
+        $writer = new Zend_Log_Writer_Stream('php://output');
+        $logger = new Zend_Log($writer);
+
+        $config = new Zend_Config(array());
+        
+        $importer = new Tinebase_Setup_Import_Egw14($egwDb, $config, $logger);
         $importer->import();
     }
     

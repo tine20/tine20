@@ -45,7 +45,10 @@ class Setup_Server_Cli extends Setup_Server_Abstract
                 'uninstall-s'               => 'Uninstall application [All] or comma separated list',
                 'list-s'                    => 'List installed applications',
                 'sync_accounts_from_ldap'   => 'Import user and groups from ldap',
-                'egw14import'               => 'Import user and groups from egw14'
+                'egw14import'               => 'Import user and groups from egw14
+                         Examples: 
+                          setup.php --egw14import egwdbhost egwdbuser egwdbpass egwdbname latin1
+                          setup.php --egw14import egwdbhost egwdbuser egwdbpass egwdbname utf8'
                 #'username'             => 'Username [required]',              
                 #'password'             => 'Password [required]',              
             ));
