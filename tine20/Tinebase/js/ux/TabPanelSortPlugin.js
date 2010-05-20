@@ -28,6 +28,7 @@ Ext.ux.TabPanelSortPlugin.prototype = {
      */
     tabpanel: null,
     
+    
     /**
      * init
      * @param {} cmp
@@ -41,17 +42,23 @@ Ext.ux.TabPanelSortPlugin.prototype = {
         this.tabpanel.on('render', this.onRender, this);
     },
     
+    
+    /**
+     * onRender defines dragZone and dropZone
+     * 
+     * @param {} tabpanel
+     */
     onRender: function(tabpanel) {
         var dragZone = new Ext.dd.DragZone(tabpanel.header, {
             getDragData: function(e) {
-                var target = this.tabpanel.findTargets(e);
-            
+                var target = tabpanel.findTargets(e);
+
                 if (target.el) {
-                    d = el.cloneNode(true);
+                    d = target.el.cloneNode(true);
                     d.id = Ext.id();
                     return Ext.apply(target, {
                         ddel: d,
-                        repairXY: Ext.fly(sourceEl).getXY()
+                        repairXY: Ext.fly(target.el).getXY()
                     });
                 };
             },
@@ -67,6 +74,9 @@ Ext.ux.TabPanelSortPlugin.prototype = {
             },
     
             onNodeOver : function(target, dd, e, data){
+            	//@TODO: calculate position
+            	data.position = 2;
+            	//@TODO: separation line
                 return Ext.dd.DropZone.prototype.dropAllowed;
             },
     
@@ -79,11 +89,18 @@ Ext.ux.TabPanelSortPlugin.prototype = {
     },
     
     
+    /**
+     * onNodeDrop determines that a DragSource has been dropped onto the drop node
+     * 
+     * @param {} target
+     * @param {} dd
+     * @param {} e
+     * @param {} data
+     * @return {Boolean}
+     */
     onNodeDrop: function(target, dd, e, data){
-        
+    	this.tabpanel.insert(data.position, data.item);
 
         return true;  
     }
 };
-           
-
