@@ -24,6 +24,6 @@ class OpenDocument_Shared_Time
             return "PT{$matches[1]}H{$matches[2]}M{$matches[3]}S";
         }
         
-        return "";
+        return NULL;
     }
 }
