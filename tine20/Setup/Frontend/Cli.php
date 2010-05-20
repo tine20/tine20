@@ -47,6 +47,8 @@ class Setup_Frontend_Cli
      */
     public function handle(Zend_Console_Getopt $_opts)
     {
+        Setup_Core::set(Setup_Core::USER, 'setupuser');
+        
         if(isset($_opts->install)) {
             $this->_install($_opts);
         } elseif(isset($_opts->update)) {
