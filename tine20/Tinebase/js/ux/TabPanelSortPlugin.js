@@ -44,16 +44,15 @@ Ext.ux.TabPanelSortPlugin.prototype = {
     onRender: function(tabpanel) {
         var dragZone = new Ext.dd.DragZone(tabpanel.header, {
             getDragData: function(e) {
-                var sourceEl = e.getTarget('li[class^=x-tab]', 10);
+                var target = this.tabpanel.findTargets(e);
             
-                if (sourceEl) {
-                    d = sourceEl.cloneNode(true);
+                if (target.el) {
+                    d = el.cloneNode(true);
                     d.id = Ext.id();
-                    return {
+                    return Ext.apply(target, {
                         ddel: d,
-                        sourceEl: sourceEl,
                         repairXY: Ext.fly(sourceEl).getXY()
-                    };
+                    });
                 };
             },
             
