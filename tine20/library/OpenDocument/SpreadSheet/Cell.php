@@ -21,6 +21,7 @@ class OpenDocument_SpreadSheet_Cell
 {
     const TYPE_CURRENCY   = 'currency';
     const TYPE_DATE       = 'date';
+    const TYPE_TIME       = 'time';
     const TYPE_FLOAT      = 'float';
     const TYPE_PERCENTAGE = 'percentage';
     const TYPE_STRING     = 'string';
@@ -54,6 +55,15 @@ class OpenDocument_SpreadSheet_Cell
                     
                 case self::TYPE_DATE:
                     $cellElement->addAttribute('office:date-value', self::_encodeValue($_value), OpenDocument_Document::NS_OFFICE);
+                    break;
+                    
+                case self::TYPE_TIME:
+                    $odfTime = OpenDocument_Shared_Time::ISO2ODF($_value);
+                    if ($odfTime) {
+                        $cellElement->addAttribute('office:time-value', self::_encodeValue($odfTime), OpenDocument_Document::NS_OFFICE);
+                    } else {
+                        $cellElement->addAttribute('office:value', self::_encodeValue($_value), OpenDocument_Document::NS_OFFICE);
+                    }
                     break;
                     
                 case self::TYPE_CURRENCY:
