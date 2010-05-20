@@ -72,6 +72,8 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
              */ 
             'forcePersonalCalendarGrants' => FALSE,
         ));
+        
         $importer = new Calendar_Setup_Import_Egw14($egwDb, $config, $logger);
+        $importer->import();
     }
 }

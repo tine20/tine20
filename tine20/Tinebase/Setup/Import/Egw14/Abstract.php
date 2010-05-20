@@ -82,6 +82,11 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
     }
     
     /**
+     * do the import
+     */
+    abstract public function import();
+    
+    /**
      * converts egw date to Zend_Date
      * 
      * @param  int $_egwTS

@@ -79,18 +79,12 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
         32 => Calendar_Model_Rrule::WDAY_FRIDAY,
         64 => Calendar_Model_Rrule::WDAY_SATURDAY,
     );
-    
+
     /**
-     * constructs a calendar import for egw14 data
-     * 
-     * @param Zend_Db_Adapter_Abstract  $_egwDb
-     * @param Zend_Config               $_config
-     * @param Zend_Log                  $_log
+     * do the import 
      */
-    public function __construct($_egwDb, $_config, $_log)
+    public function import()
     {
-        parent::__construct($_egwDb, $_config, $_log);
-        
         $this->_migrationStartTime = Zend_Date::now();
         $this->_calEventBackend = new Calendar_Backend_Sql();
         
