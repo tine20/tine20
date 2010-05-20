@@ -247,6 +247,16 @@ class OpenDocument_Document
             file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'META-INF/manifest.xml', $this->_manifest);
         }
         
+        // ObjectReplacements
+//        $images = $this->_document->xpath('//draw:image');
+//        foreach($images as $image) {
+//            $image_sxe = dom_import_simplexml($image);
+//            $image_sxe->parentNode->removeChild($image_sxe);
+//        }
+//        
+//        $images = $this->_document->xpath('//draw:image');
+//        Tinebase_Core::getLogger()->err(print_r($images, TRUE));
+        
         file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'content.xml', $this->_document->saveXML());
         file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'styles.xml', $this->_styles);
         
