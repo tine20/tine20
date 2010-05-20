@@ -86,11 +86,15 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->_controller->update($event1, TRUE);
     }
     
-   /**
-     * Conflict between an existing and recurring event when update the event
+    /**
+     * check that fake clones of dates of persistent exceptions are left out in recur set calculation
      */
-    public function testUpdateConflictBetweenRecurAndExistEvent1()
+    public function testRecurSetCalcLeafOutPersistentExceptionDates()
     {
+        // month 
+        $from = new Zend_Date('2010-06-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2010-06-31 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        
         $event = $this->_getRecurEvent();
         $event->rrule = "FREQ=MONTHLY;INTERVAL=1;BYDAY=3TH";
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
@@ -98,34 +102,31 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
         ));
         
-        $this->_controller->create($event);
+        $persistentRecurEvent = $this->_controller->create($event);
         
-        $exception = new Calendar_Model_Event(array(
-            'uid'           => Tinebase_Record_Abstract::generateUID(),
-            'summary'       => 'Abendessen',
-            'dtstart'       => '2010-05-27 06:00:00',
-            'dtend'         => '2010-05-27 06:15:00',
-            'container_id'  => $this->_testCalendar->getId(),
-            Tinebase_Model_Grants::GRANT_EDIT     => true,
-        ));
+        // get first recurrance
+        $eventSet = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($persistentRecurEvent));
+        Calendar_Model_Rrule::mergeRecuranceSet($eventSet, 
+            new Zend_Date('2010-06-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG),
+            new Zend_Date('2010-06-31 23:59:59', Tinebase_Record_Abstract::ISO8601LONG)
+        );
+        $firstRecurrance = $eventSet[1];
         
-        $exception->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
-        ));
+        // create exception of this first occurance: 17.6. -> 24.06.
+        $firstRecurrance->dtstart->add(1, Zend_Date::WEEK);
+        $firstRecurrance->dtend->add(1, Zend_Date::WEEK);
         
-        $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
-        $this->_controller->createRecurException($exception);
+        // fetch weekview 14.06 - 20.06.
+        $from = new Zend_Date('2010-06-14 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2010-06-20 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'uid', 'operator' => 'equals', 'value' => $persistentRecurEvent->uid),
+            array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until),
+        ))));
+        Calendar_Model_Rrule::mergeRecuranceSet($weekviewEvents, $from, $until);
         
-        $from = new Zend_Date('2010-05-17 06:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2010-05-23 06:15:00', Tinebase_Record_Abstract::ISO8601LONG);
-        
-        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until))
-        )));
-        
-        Calendar_Model_Rrule::mergeRecuranceSet($events, $from, $until);
-       
+        // make shure the 17.6. is not in the set
+        $this->assertEquals(1, count($weekviewEvents), '17.6. is an exception date and must not be part of this weekview');
     }
     
    /**
