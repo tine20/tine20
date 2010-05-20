@@ -188,7 +188,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " serverId " . $_serverId);
         
-        $data = $this->_contentController->getCompleteMessage($_serverId, TRUE, FALSE);
+        $data = $this->_contentController->get($_serverId);
                 
         foreach($this->_mapping as $key => $value) {
             if(!empty($data->$value) || $data->$value == 0) {
