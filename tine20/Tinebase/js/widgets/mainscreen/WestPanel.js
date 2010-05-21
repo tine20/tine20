@@ -107,9 +107,11 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
             c[idx] = {key: k[position], value: items[position], index: position};
         }, this);
         
-        for(var i = 0, len = c.length; i < len; i++){
-            items[i] = c[i].value;
-            k[i] = c[i].key;
+        for(var i = 0, len = collection.length; i < len; i++){
+            if (c[i]) {
+                items[i] = c[i].value;
+                k[i] = c[i].key;
+            }
         }
         collection.fireEvent('sort', collection);
         
@@ -212,9 +214,21 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
             }
             
             if (this.hasFavoritesPanel) {
+                // favorites panel
                 items.unshift(Ext.apply(this.getFavoritesPanel(), {
                     title: _('Favorites')
                 }, this.defaults));
+                
+                // save as favorite btn
+                items.unshift(new Ext.Toolbar({
+                    buttonAlign : 'center',
+                    items: [{
+                        xtype: 'button',
+                        text: _('Save current view as Favorite'),
+                        iconCls: 'action_saveFilter',
+                        handler: this.getFavoritesPanel().saveFilter.createDelegate(this.getFavoritesPanel())
+                    }]
+                }));
             }
             
             items = items.concat(this.getAdditionalItems());
