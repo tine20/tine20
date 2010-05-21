@@ -274,6 +274,18 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract implements Tinebase_User
      * @param   string  $_accountId
      * @return Tinebase_Model_User the user object
      */
+    public function getSyncAbleUserByProperty($_property, $_accountId, $_accountClass = 'Tinebase_Model_User')
+    {
+        return $this->getLdapUserByProperty($_property, $_accountId, $_accountClass);
+    }
+    
+    /**
+     * get user by login name
+     *
+     * @param   string  $_property
+     * @param   string  $_accountId
+     * @return Tinebase_Model_User the user object
+     */
     public function getLdapUserByProperty($_property, $_accountId, $_accountClass = 'Tinebase_Model_User')
     {
         if (!array_key_exists($_property, $this->_rowNameMapping)) {
@@ -505,6 +517,19 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract implements Tinebase_User
     }
 
     /**
+     * updates an existing user in sql backend only
+     *
+     * @param  Tinebase_Model_FullUser  $_account
+     * @return Tinebase_Model_FullUser
+     */
+    public function updateLocalUser(Tinebase_Model_FullUser $_account)
+    {
+        $user = $this->_sql->updateUser($_account);
+
+        return $user;
+    }
+    
+    /**
      * updates an existing user
      *
      * @todo check required objectclasses?
@@ -563,6 +588,19 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract implements Tinebase_User
         return $user;
     }
 
+    /**
+     * adds a new user to sql backend only
+     *
+     * @param  Tinebase_Model_FullUser  $_account
+     * @return Tinebase_Model_FullUser
+     */
+    public function addLocalUser(Tinebase_Model_FullUser $_account)
+    {
+        $user = $this->_sql->addUser($_account);
+
+        return $user;
+    }
+    
     /**
      * adds a new user
      *
@@ -874,15 +912,15 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract implements Tinebase_User
                             $accountArray[$keyMapping] = 'enabled';
                         }
                         break;
-                    case 'accountPrimaryGroup':
-                        try {
-                            $accountArray[$keyMapping] = Tinebase_Group::getInstance()->resolveGIdNumberToUUId($value[0]);
-                        } catch (Tinebase_Exception_NotFound $e) {
-                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to resolve group Id ' . $value[0]);
-                            $errors = true;
-                        }
-
-                        break;
+                    #case 'accountPrimaryGroup':
+                    #    try {
+                    #        $accountArray[$keyMapping] = Tinebase_Group::getInstance()->resolveGIdNumberToUUId($value[0]);
+                    #    } catch (Tinebase_Exception_NotFound $e) {
+                    #        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to resolve group Id ' . $value[0]);
+                    #        $errors = true;
+                    #    }
+                    #
+                    #    break;
                     default:
                         $accountArray[$keyMapping] = $value[0];
                         break;
@@ -894,9 +932,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract implements Tinebase_User
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not instantiate account object for ldap user ' . print_r($_userData, 1));
             $accountObject = null;
         } else {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' AccountData ' . print_r($accountArray, true));
             $accountObject = new $_accountClass($accountArray);
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' AccountData ' . print_r($accountObject->toArray(), true));
         }
 
         return $accountObject;
