@@ -260,16 +260,24 @@ html, body {
 }
 
 /* ----- mainmenu ------------------------------------------------------------*/
+/*
 .tine-mainscreen-mainmenu .x-toolbar {
     background-image: url(../../images/tbar-menu-bg.gif);
     border: 0;
     margin-top: -1px;
     height: 18px;
 }
+*/
+
+.tine-mainscreen-mainmenu .x-toolbar {
+    background-color:#cedff5;
+    border: none;
+    background-image: url(../../library/ExtJS/resources/images/default/tabs/tab-strip-bg.gif);
+}
 
 .tine-mainscreen-mainmenu .x-toolbar .x-btn td {
     background: none;
-    border: 0;
+    border: none;
 }
 
 .tine-mainscreen-mainmenu .x-toolbar-ct {
@@ -285,9 +293,22 @@ html, body {
 	background-image:url(../../images/favicon.png) !important;
 }
 
+.tine-mainscreen-apptabs .x-tab-strip-wrap ul.x-tab-strip-top {
+    background-color:#cedff5;
+    background-image: url(../../library/ExtJS/resources/images/default/tabs/tab-strip-btm-bg.gif);
+    border-bottom-color:#8db2e3;
+    background-position: 0px -4px;
+}
+
+.tine-mainscreen-apptabs .x-tab-panel-header {
+	border: none;
+}
+
+/*
 .tine-mainscreen-apptabs .x-tab-strip-wrap {
 	padding-top: 2px;
 }
+*/
 
 .tine-mainscreen-apptabspanel-menu-tabel .x-tab-left {
     background-image: url(../../images/tabs_sprite_slope_right.gif);

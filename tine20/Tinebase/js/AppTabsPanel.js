@@ -113,6 +113,9 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
         
         this.menuTabEl = Ext.get(this.getTabEl(0));
         this.menuTabEl.addClass('tine-mainscreen-apptabspanel-menu-tabel');
+        
+        // remove plain style
+        this.header.removeClass('x-tab-panel-header-plain');
     },
     
     /**
