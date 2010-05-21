@@ -224,7 +224,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                     buttonAlign : 'center',
                     items: [{
                         xtype: 'button',
-                        text: _('Save current view as Favorite'),
+                        text: _('Save current view as favorite'),
                         iconCls: 'action_saveFilter',
                         handler: this.getFavoritesPanel().saveFilter.createDelegate(this.getFavoritesPanel())
                     }]
