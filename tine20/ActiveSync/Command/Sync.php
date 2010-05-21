@@ -37,6 +37,10 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     
     const CONFLICT_OVERWRITE_SERVER                     = 0;
     const CONFLICT_OVERWRITE_PIM                        = 1;
+    
+    const MIMESUPPORT_DONT_SEND_MIME                    = 0;
+    const MIMESUPPORT_SMIME_ONLY                        = 1;
+    const MIMESUPPORT_SEND_MIME                         = 2;
 
     /**
      * An error occurred while setting the notification GUID. = 10
@@ -140,7 +144,9 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 'deleted'       => array(),
                 'forceAdd'      => array(),
                 'forceChange'   => array(),
-                'filterType'    => isset($xmlCollection->Options) && isset($xmlCollection->Options->FilterType) ? (int)$xmlCollection->Options->FilterType : 0
+                'toBeFetched'   => array(),
+                'filterType'    => isset($xmlCollection->Options) && isset($xmlCollection->Options->FilterType) ? (int)$xmlCollection->Options->FilterType : 0,
+                'mimeSupport'   => isset($xmlCollection->Options) && isset($xmlCollection->Options->MIMESupport) ? (int)$xmlCollection->Options->MIMESupport : self::MIMESUPPORT_DONT_SEND_MIME
             );
             $this->_collections[$folder->class][$collectionId] = $collectionData;
             
@@ -226,7 +232,19 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                     $this->_collections[$folder->class][$collectionId]['deleted'][$serverId] = self::STATUS_SUCCESS;
                     $this->_deleteContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
                 }
+            }
+                        
+            // handle deletes, but only if not first sync
+            if($clientSyncKey > 1 && isset($xmlCollection->Commands->Fetch)) {
+                $fetches = $xmlCollection->Commands->Fetch;
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($fetches) . " entries to be fetched from server");
+                foreach ($fetches as $fetch) {
+                    $serverId = (string)$fetch->ServerId;
+                    
+                    $this->_collections[$folder->class][$collectionId]['toBeFetched'][$serverId] = $serverId;
+                }
             }            
+            
         }        
     }    
     
@@ -299,10 +317,33 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         }
                     }
                     
+                    $dataController = ActiveSync_Controller::dataFactory($collectionData['class'], $this->_device, $this->_syncTimeStamp);
+                    
+                    // sent response for to be fetched entries
+                    if(!empty($collectionData['toBeFetched'])) {
+                        if($responses === NULL) {
+                            $responses = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Responses'));
+                        }
+                        foreach($collectionData['toBeFetched'] as $serverId) {
+                            $fetch = $responses->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Fetch'));
+                            $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
+
+                            
+                            try {
+                                $applicationData = $this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData');
+                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId, true);
+                                
+                                $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
+                                
+                                $fetch->appendChild($applicationData);
+                            } catch (Exception $e) {
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
+                                $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_OBJECT_NOT_FOUND));
+                            }
+                        }
+                    }
+                    
                     if($collectionData['getChanges'] === true) {
-                        $dataController = ActiveSync_Controller::dataFactory($collectionData['class'], $this->_device, $this->_syncTimeStamp);
-                        
-                        
                         if($newSyncKey === 1) {
                             // all entries available
                             $serverAdds    = $dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']);
@@ -392,7 +433,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 
                                 $this->_totalCount++;
                             } catch (Exception $e) {
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml (maybe access denied) " . $e->getMessage());
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                             }
                             // mark as send to the client, even the conversion to xml might have failed                 
                             $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $serverId);              
@@ -418,7 +459,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 
                                 $this->_totalCount++;
                             } catch (Exception $e) {
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml (maybe access denied) " . $e->getMessage());
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                             } 
                             unset($serverChanges[$id]);    
                         }
@@ -442,7 +483,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 
                                 $this->_totalCount++;
                             } catch (Exception $e) {
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml (maybe access denied) " . $e->getMessage());
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                             }
                             unset($serverDeletes[$id]);    
                         }
