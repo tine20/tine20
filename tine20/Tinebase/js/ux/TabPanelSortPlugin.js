@@ -52,6 +52,8 @@ Ext.ux.TabPanelSortPlugin.prototype = {
     init: function(cmp){
         this.tabpanel = cmp;
         
+        this.ddel = document.createElement('div');
+        
         this.tabpanel.addEvents(
             /**
              * @event tabsort
@@ -97,12 +99,11 @@ Ext.ux.TabPanelSortPlugin.prototype = {
         if (target.el) {
             this.pos = this.tabpanel.items.indexOf(target.item);
             
-            var d = target.el.cloneNode(true);
-            d.id = Ext.id();
+            Ext.get(this.ddel).update(Ext.DomQuery.selectNode('span[class^=x-tab-strip-text]', target.el).innerHTML);
             
             return Ext.apply(target, {
                 pos: this.pos,
-                ddel: d,
+                ddel: this.ddel,
                 repairXY: Ext.fly(target.el).getXY()
             });
         };
