@@ -116,6 +116,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         collection.fireEvent('sort', collection);
         
         collection.each(function(item, idx) {
+            if (typeof item.addButton == 'function') return;
             if (item.getEl()) {
                 item[state.collapsed[idx] ? 'collapse' : 'expand'](false);
             } else {
