@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Group
  */
-class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
+class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Group_Interface_SyncAble
 {
     const PLUGIN_SAMBA = 'Tinebase_Group_LdapPlugin_Samba';
     
@@ -826,6 +826,17 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
                 }
             }
         }        
+    }
+    
+    /**
+     * resolve groupid(for example ldap gidnumber) to uuid(for example ldap entryuuid)
+     *
+     * @param   string  $_groupId
+     * @return  string  the uuid for groupid
+     */
+    public function resolveSyncAbleGidToUUid($_groupId)
+    {
+        return $this->resolveGIdNumberToUUId($_groupId);
     }
     
     /**
