@@ -236,12 +236,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
         this.actionUpdater.addActions([
             this.action_write,
+            this.action_deleteRecord,
             this.action_reply,
             this.action_replyAll,
             this.action_forward,
             this.action_flag,
             this.action_markUnread,
-            this.action_deleteRecord,
             this.action_addAccount,
             this.action_print,
             this.action_printPreview
@@ -345,6 +345,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             rowspan: 2,
                             iconAlign: 'top'
                         }),
+                        Ext.apply(new Ext.Button(this.action_deleteRecord), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        }),
                         Ext.apply(new Ext.Button(this.action_reply), {
                             scale: 'medium',
                             rowspan: 2,
@@ -356,11 +361,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             iconAlign: 'top'
                         }),
                         Ext.apply(new Ext.Button(this.action_forward), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        }),
-                        Ext.apply(new Ext.Button(this.action_deleteRecord), {
                             scale: 'medium',
                             rowspan: 2,
                             iconAlign: 'top'
