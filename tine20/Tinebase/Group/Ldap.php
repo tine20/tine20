@@ -184,6 +184,17 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
     }
 
     /**
+     * get syncable group by id directly from sync backend
+     * 
+     * @param  $_groupId  the groupid
+     * @return Tinebase_Model_Group
+     */
+    public function getSyncAbleGroupById($_groupId)
+    {
+        return $this->getLdapGroupById($_groupId);
+    }
+    
+    /**
      * get group by id directly from ldap
      * 
      * @param $_groupId
@@ -441,6 +452,19 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
         $this->_sql->removeGroupMember($_groupId, $_accountId);
     }
         
+    /**
+     * create a new group in Tine 2.0 database only
+     *
+     * @param  Tinebase_Model_Group  $_group
+     * @return Tinebase_Model_Group
+     */
+    public function addLocalGroup(Tinebase_Model_Group $_group) 
+    {
+        $group = $this->_sql->addGroup($_group);
+        
+        return $group;
+    }
+    
     /**
      * create a new group
      *
