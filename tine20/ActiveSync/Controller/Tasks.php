@@ -101,7 +101,15 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      */
     protected $_filterProperty = 'tasksfilter_id';        
     
-    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId)
+    /**
+     * append task data to xml element
+     *
+     * @param DOMElement  $_xmlNode   the parrent xml node
+     * @param string      $_folderId  the local folder id
+     * @param string      $_serverId  the local entry id
+     * @param boolean     $_withBody  retrieve body of entry
+     */
+    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, $_withBody = false)
     {
         $data = $this->_contentController->get($_serverId);
         

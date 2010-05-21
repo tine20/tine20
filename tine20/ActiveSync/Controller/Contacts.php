@@ -124,14 +124,14 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
     protected $_sortField = 'n_fileas';
     
     /**
-     * append contact to xml parent node
+     * append contact data to xml element
      *
-     * @param DOMDocument $_xmlDocument
-     * @param DOMElement $_xmlNode
-     * @param $_folderId
-     * @param string $_serverId
+     * @param DOMElement  $_xmlNode   the parrent xml node
+     * @param string      $_folderId  the local folder id
+     * @param string      $_serverId  the local entry id
+     * @param boolean     $_withBody  retrieve body of entry
      */
-    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId)
+    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, $_withBody = false)
     {
         $data = $this->_contentController->get($_serverId);
         

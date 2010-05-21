@@ -380,5 +380,13 @@ abstract class ActiveSync_Controller_Abstract
     
     abstract protected function _toTineFilterArray(SimpleXMLElement $_data);
     
-    abstract public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId);    
+    /**
+     * append entry data to xml element
+     *
+     * @param DOMElement  $_xmlNode   the parrent xml node
+     * @param string      $_folderId  the local folder id
+     * @param string      $_serverId  the local entry id
+     * @param boolean     $_withBody  retrieve body of entry
+     */
+    abstract public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, $_withBody = false);    
 }

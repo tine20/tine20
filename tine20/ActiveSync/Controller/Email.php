@@ -20,6 +20,7 @@
 class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract 
 {
     protected $_mapping = array(
+        'Body'              => 'body',
         'Cc'                => 'cc',
         'DateReceived'      => 'received',
         'From'              => 'from',
@@ -137,22 +138,22 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     }
     
     /**
+     * append email data to xml element
      *
-     * @todo proper entity handling
-     * 
-     * $node = $_xmlDocument->createElementNS('uri:Contacts', $key);
-     * $node->appendChild(new DOMText($nodeContent));
-     *         
-     * $_xmlNode->appendChild($node);
-     *
-     * (non-PHPdoc)
-     * @see ActiveSync/Controller/ActiveSync_Controller_Abstract#appendXML($_xmlDocument, $_xmlNode, $_folderId, $_serverId)
+     * @param DOMElement  $_xmlNode   the parrent xml node
+     * @param string      $_folderId  the local folder id
+     * @param string      $_serverId  the local entry id
+     * @param boolean     $_withBody  retrieve body of entry
      */
-    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId)
+    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, $_withBody = false)
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append email " . $_serverId);
-        
-        $data = $this->_contentController->get($_serverId);
+
+        if($_withBody === true) {
+            $data = $this->_contentController->getCompleteMessage($_serverId);
+        } else {
+            $data = $this->_contentController->get($_serverId);
+        }
                 
         foreach($this->_mapping as $key => $value) {
             if(!empty($data->$value) || $data->$value == 0) {

@@ -201,15 +201,17 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     protected $_filterProperty = 'calendarfilter_id';
         
     /**
-     * append contact to xml parent node
+     * append event data to xml element
      *
      * @todo handle BusyStatus
      * @todo handle TimeZone data
-     * @param DOMDocument $_xmlDocument
-     * @param DOMElement $_xmlNode
-     * @param string $_serverId
+     * 
+     * @param DOMElement  $_xmlNode   the parrent xml node
+     * @param string      $_folderId  the local folder id
+     * @param string      $_serverId  the local entry id
+     * @param boolean     $_withBody  retrieve body of entry
      */
-    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId)
+    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, $_withBody = false)
     {
         $data = $this->_contentController->get($_serverId);
         
