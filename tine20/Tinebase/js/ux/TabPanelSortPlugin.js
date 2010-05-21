@@ -74,6 +74,17 @@ Ext.ux.TabPanelSortPlugin.prototype = {
             },
     
             onNodeOver : function(target, dd, e, data){
+            	/*
+            	for (var i=0; i<tabpanel.items.length; i++) {
+                    var tabMiddle = (tabpanel.items.itemAt(i).tabEl.clientWidth) / 2;
+                    var tabLeft = new Ext.Element(tabpanel.items.itemAt(i).tabEl).getX();
+                    if (e.getPageX() <= (tabLeft + tabMiddle)) {
+                    	console.log('left');
+                    } else {
+                    	console.log('right');
+                    }
+            	}
+                */
             	//@TODO: calculate position
             	data.position = 2;
             	//@TODO: separation line
@@ -100,7 +111,9 @@ Ext.ux.TabPanelSortPlugin.prototype = {
      */
     onNodeDrop: function(target, dd, e, data){
     	this.tabpanel.insert(data.position, data.item);
-
+        data.el.insertBefore(this.tabpanel.items.itemAt(2).tabEl);
+        
+//console.log(this.tabpanel.items.itemAt(2).tabEl);
         return true;  
     }
 };
