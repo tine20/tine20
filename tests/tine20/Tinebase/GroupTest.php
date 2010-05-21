@@ -292,8 +292,9 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
     public function testSetGroupMemberships()
     {
         $currentGroupMemberships = Tinebase_Core::getUser()->getGroupMemberships();
-        //Tinebase_Group::getInstance()->setGroupMemberships($currentGroupMemberships);
+        Tinebase_Group::getInstance()->setGroupMemberships(Tinebase_Core::getUser(), $currentGroupMemberships);
         $newGroupMemberships = Tinebase_Core::getUser()->getGroupMemberships();
+        $this->assertEquals($currentGroupMemberships, $newGroupMemberships);
     }
     
 }

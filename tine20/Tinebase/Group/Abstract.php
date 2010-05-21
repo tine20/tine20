@@ -164,5 +164,37 @@ abstract class Tinebase_Group_Abstract
         }
         return $this->getGroupByName($defaultGroupName);        
     }
+    
+    /**
+     * set all groups an account is member of
+     *
+     * @param mixed $_accountId the account as integer or Tinebase_Model_User
+     * @param array $_groupIds
+     * @return void
+     */
+    public function setGroupMemberships($_auccountId, array $_groupIds)
+    {
+        if (empty($_auccountId)) {
+            throw new Tinebase_Exception_InvalidArgument('No accountId');
+        }
+        
+        if (count($_groupIds) <= 0) {
+            throw new Tinebase_Exception_InvalidArgument('No groupIds');
+        }
+        
+        $user = Tinebase_User::getInstance()->getUserById($_auccountId);
+        $groupMemberships = $user->getGroupMemberships();
+        
+        $removeGroupMemberships = array_diff($groupMemberships, $_groupIds);
+        $addGroupMemberships = array_diff($_groupIds, $groupMemberships);
+        
+        foreach ($addGroupMemberships as $groupId) {
+            $this->addGroupMember($groupId, $_auccountId);
+        }
+        
+        foreach ($removeGroupMemberships as $groupId) {
+            $this->removeGroupMember($groupId, $_auccountId);
+        }
+    }
  }
  
