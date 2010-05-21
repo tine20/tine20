@@ -116,7 +116,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         collection.fireEvent('sort', collection);
         
         collection.each(function(item, idx) {
-            if (typeof item.addButton == 'function') return;
+            if (typeof item.addFill === 'function') return;
             if (item.getEl()) {
                 item[state.collapsed[idx] ? 'collapse' : 'expand'](false);
             } else {
@@ -260,7 +260,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         
         this.getPortalColumn().items.each(function(item, idx) {
             state.order.push(item.startPosition);
-            state.collapsed.push(item.collapsed);
+            state.collapsed.push(!!item.collapsed);
         }, this);
         
         return state;
