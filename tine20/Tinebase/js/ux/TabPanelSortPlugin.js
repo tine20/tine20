@@ -5,11 +5,7 @@
  * @author      Frank Wiechmann <f.wiechmann@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
-
-
-
 Ext.ns('Ext.ux');
 
 
@@ -28,6 +24,11 @@ Ext.ux.TabPanelSortPlugin.prototype = {
      */
     tabpanel: null,
     
+    /**
+     * current position
+     * @type Number
+     */
+    pos: null,
     
     /**
      * init
@@ -50,56 +51,55 @@ Ext.ux.TabPanelSortPlugin.prototype = {
      */
     onRender: function(tabpanel) {
         var dragZone = new Ext.dd.DragZone(tabpanel.header, {
-            getDragData: function(e) {
-                var target = tabpanel.findTargets(e);
-
-                if (target.el) {
-                    d = target.el.cloneNode(true);
-                    d.id = Ext.id();
-                    return Ext.apply(target, {
-                        ddel: d,
-                        repairXY: Ext.fly(target.el).getXY()
-                    });
-                };
-            },
-            
+            getDragData: this.getDragData.createDelegate(this),
             getRepairXY: function() {
                 return this.dragData.repairXY;
             }
         });
         
         var dropZone = new Ext.dd.DropZone(tabpanel.header, {
+            onNodeOver : this.onNodeOver.createDelegate(this),
+            onNodeDrop : this.onNodeDrop.createDelegate(this),
             getTargetFromEvent: function(e) {
                 return e.getTarget('ul[class^=x-tab]', 10);
-            },
-    
-            onNodeOver : function(target, dd, e, data){
-                /*
-                for (var i=0; i<tabpanel.items.length; i++) {
-                    var tabMiddle = (tabpanel.items.itemAt(i).tabEl.clientWidth) / 2;
-                    var tabLeft = new Ext.Element(tabpanel.items.itemAt(i).tabEl).getX();
-                    if (e.getPageX() <= (tabLeft + tabMiddle)) {
-                        //console.log('left');
-                    } else {
-                        //console.log('right');
-                    }
-                }
-                */
-
-                //@TODO: calculate position
-                data.position = 4;
-                //@TODO: separation line
-                return Ext.dd.DropZone.prototype.dropAllowed;
-            },
-    
-            onNodeOut : function(target, dd, e, data){
-                
-            },
-            
-            onNodeDrop : this.onNodeDrop.createDelegate(this)
+            }
         });
     },
     
+    getDragData: function(e) {
+        var target = this.tabpanel.findTargets(e);
+
+        if (target.el) {
+            this.pos = this.tabpanel.items.indexOf(target.item);
+            
+            var d = target.el.cloneNode(true);
+            d.id = Ext.id();
+            
+            return Ext.apply(target, {
+                pos: this.pos,
+                ddel: d,
+                repairXY: Ext.fly(target.el).getXY()
+            });
+        };
+    },
+    
+    onNodeOver : function(target, dd, e, data){
+        var target = this.tabpanel.findTargets(e);
+        if (target.el) {
+            this.pos = this.tabpanel.items.indexOf(target.item);
+            var box = Ext.fly(target.el).getBox(),
+                side = (e.getXY()[0] > box.x + box.width/2) ? 'r' : 'l';
+            
+            if (this.pos > data.pos && side === 'l') {
+                this.pos = --this.pos;
+            } else if (this.pos < data.pos && side === 'r') {
+                this.pos = ++this.pos;
+            }
+        }
+        
+        //@TODO: separation line
+        return Ext.dd.DropZone.prototype.dropAllowed;
+    },
     
     /**
      * onNodeDrop determines that a DragSource has been dropped onto the drop node
@@ -112,17 +112,18 @@ Ext.ux.TabPanelSortPlugin.prototype = {
      */
     onNodeDrop: function(target, dd, e, data){
         
-        if (data.position == (this.tabpanel.items.length)-1) {
-            Ext.fly(data.el).insertAfter(this.tabpanel.items.itemAt(data.position).tabEl);
+        if (this.pos == (this.tabpanel.items.length)-1) {
+            Ext.fly(data.el).insertAfter(this.tabpanel.items.itemAt(this.pos).tabEl);
         } else {
-            if (this.tabpanel.items.indexOf(data.item) < data.position) {
-                Ext.fly(data.el).insertBefore(this.tabpanel.items.itemAt(data.position+1).tabEl);
+            if (this.tabpanel.items.indexOf(data.item) < this.pos) {
+                Ext.fly(data.el).insertBefore(this.tabpanel.items.itemAt(this.pos+1).tabEl);
             } else {
-                Ext.fly(data.el).insertBefore(this.tabpanel.items.itemAt(data.position).tabEl);
+                Ext.fly(data.el).insertBefore(this.tabpanel.items.itemAt(this.pos).tabEl);
             }
         }
-        this.tabpanel.insert(data.position, data.item);
-
+        
+        this.tabpanel.items.remove(data.item);
+        this.tabpanel.items.insert(this.pos, data.item);
         return true;  
     }
 };
