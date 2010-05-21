@@ -245,6 +245,12 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     saveFilter: function() {
         var ftb = this.getFilterToolbar();
         
+        // recheck that current ftb is saveable
+        if (! ftb.allowSaving) {
+            Ext.Msg.alert(_('Could not save Favorite'), _('Your current view does not support favorites'));
+            return;
+        }
+        
         var name = '';
         Ext.MessageBox.prompt(_('save filter'), _('Please enter a name for the favorite'), function(btn, value) {
             if (btn == 'ok') {
