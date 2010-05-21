@@ -329,7 +329,9 @@ class Tinebase_User
     
     /**
      * syncronize user from syncbackend to local sql backend
-     * @param $_username
+     * 
+     * @todo sync secondary group memberships
+     * @param  string  $_username  the login id of the user to synchronize
      */
     public static function syncUser($_username)
     {
@@ -340,9 +342,7 @@ class Tinebase_User
         
         $user->accountPrimaryGroup = $groupBackend->resolveGIdNumberToUUId($user->accountPrimaryGroup);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  user object: " . print_r($user->toArray(), true));
-        
-        // validate primary group exists
+        // make sure primary group exists
         try {
             $group = $groupBackend->getGroupById($user->accountPrimaryGroup);
         } catch (Tinebase_Exception_Record_NotDefined $tern) {
@@ -350,6 +350,14 @@ class Tinebase_User
             $group = $groupBackend->addLocalGroup($group);
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  group object: " . print_r($group->toArray(), true));
+        // update or create user in local sql backend
+        try {
+            $userBackend->getUserByProperty('accountId', $user);
+            $user = $userBackend->updateLocalUser($user);
+        } catch (Tinebase_Exception_NotFound $ten) {
+            $user = $userBackend->addLocalUser($user);
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  synced user object: " . print_r($user->toArray(), true));
     }
 }
