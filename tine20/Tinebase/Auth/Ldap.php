@@ -19,29 +19,6 @@
 class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap implements Tinebase_Auth_Interface
 {    
     /**
-     * the list of attributes to fetch from ldap
-     *
-     * @var array
-     */
-    protected $accountAttributes = array(
-        'uid',
-        'dn',
-        'givenName',
-        'sn',
-        'mail',
-        'uidNumber',
-        'gidNumber',
-        'shadowExpire'
-    );
-
-    /**
-     * $_resultRow - Results of database authentication query
-     *
-     * @var array
-     */
-    protected $_resultRow = null;
-    
-    /**
      * Constructor
      *
      * @param  array  $options  An array of arrays of Zend_Ldap options
