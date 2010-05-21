@@ -74,20 +74,19 @@ Ext.ux.TabPanelSortPlugin.prototype = {
             },
     
             onNodeOver : function(target, dd, e, data){
-            	/*
-            	for (var i=0; i<tabpanel.items.length; i++) {
+                for (var i=0; i<tabpanel.items.length; i++) {
                     var tabMiddle = (tabpanel.items.itemAt(i).tabEl.clientWidth) / 2;
                     var tabLeft = new Ext.Element(tabpanel.items.itemAt(i).tabEl).getX();
                     if (e.getPageX() <= (tabLeft + tabMiddle)) {
-                    	console.log('left');
+                        //console.log('left');
                     } else {
-                    	console.log('right');
+                        //console.log('right');
                     }
-            	}
-                */
-            	//@TODO: calculate position
-            	data.position = 2;
-            	//@TODO: separation line
+                }
+
+                //@TODO: calculate position
+                data.position = 4;
+                //@TODO: separation line
                 return Ext.dd.DropZone.prototype.dropAllowed;
             },
     
@@ -110,10 +109,17 @@ Ext.ux.TabPanelSortPlugin.prototype = {
      * @return {Boolean}
      */
     onNodeDrop: function(target, dd, e, data){
-    	this.tabpanel.insert(data.position, data.item);
-        data.el.insertBefore(this.tabpanel.items.itemAt(2).tabEl);
-        
-//console.log(this.tabpanel.items.itemAt(2).tabEl);
+        this.tabpanel.insert(data.position, data.item);
+        if (data.position == (this.tabpanel.items.length)-1) {
+            Ext.fly(data.el).insertAfter(this.tabpanel.items.itemAt(data.position).tabEl);
+        } else {
+            if (this.tabpanel.items.indexOf(data.item) < data.position) {
+                Ext.fly(data.el).insertBefore(this.tabpanel.items.itemAt(data.position+1).tabEl);
+            } else {
+                Ext.fly(data.el).insertBefore(this.tabpanel.items.itemAt(data.position).tabEl);
+            }
+        }
+
         return true;  
     }
 };
