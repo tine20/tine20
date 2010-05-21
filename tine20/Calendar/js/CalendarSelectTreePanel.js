@@ -85,7 +85,23 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
             }
         });
         
+        this.on('beforeclick', this.onBeforeClick, this);
+        
         this.supr().initComponent.call(this);
+    },
+    
+    /**
+     * dissalow loading of all and otherUsers node
+     * 
+     * @param {Ext.tree.TreeNode} node
+     * @param {Ext.EventObject} e
+     * @return {Boolean}
+     */
+    onBeforeClick: function(node, e) {
+        if (node.attributes.path.match(/^\/$|^\/personal$/)) {
+            this.onClick(node, e);
+            return false;
+        }
     },
     
     /**
