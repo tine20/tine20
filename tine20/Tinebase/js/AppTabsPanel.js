@@ -22,11 +22,22 @@ Ext.ns('Tine.Tinebase');
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
-Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
+Tine.Tinebase.AppTabsPanel = function(config) {
+    Ext.apply(this, config);
+    this.plugins = [new Ext.ux.TabPanelSortPlugin({
+        dropZoneConfig: {
+            getTargetFromEvent: this.getTargetFromEvent.createDelegate(this)
+        }
+    })];
+    
+    Tine.Tinebase.AppTabsPanel.superclass.constructor.call(this, config);
+};
+
+Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
     activeTab: 1,
     
     stateful: true,
-    stateEvents: ['add', 'remove', 'tabchange'],
+    stateEvents: ['add', 'remove', 'tabchange', 'tabsort'],
     stateId: 'tinebase-mainscreen-apptabs',
     
     /**
@@ -58,6 +69,7 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
         
         Tine.Tinebase.appMgr.on('activate', this.onActivateApp, this);
         this.on('beforetabchange', this.onBeforeTabChange, this);
+        this.on('tabsort', this.onTabChange, this);
         this.on('add', this.onTabChange, this);
         this.on('remove', this.onTabChange, this);
         
@@ -160,6 +172,22 @@ Tine.Tinebase.AppTabsPanel = Ext.extend(Ext.TabPanel, {
         return tabItems;
     },
     
+    /**
+     * deny drop on menuEl
+     * @param {} e
+     * @return {}
+     */
+    getTargetFromEvent: function(e) {
+        var target = e.getTarget('ul[class^=x-tab]', 10)
+            li = this.findTargets(e);
+            
+        if (li.el && li.el == this.menuTabEl.dom) {
+            return false;
+        }
+        
+        return target;
+    },
+            
     /**
      * get tabs state
      * 
