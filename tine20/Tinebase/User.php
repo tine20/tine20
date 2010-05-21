@@ -326,4 +326,30 @@ class Tinebase_User
             return self::$_backendConfigurationDefaults;
         }
     }
+    
+    /**
+     * syncronize user from syncbackend to local sql backend
+     * @param $_username
+     */
+    public static function syncUser($_username)
+    {
+        $userBackend  = Tinebase_User::getInstance();
+        $groupBackend = Tinebase_Group::getInstance();
+        
+        $user = $userBackend->getSyncAbleUserByProperty('accountLoginName', $_username, 'Tinebase_Model_FullUser');
+        
+        $user->accountPrimaryGroup = $groupBackend->resolveGIdNumberToUUId($user->accountPrimaryGroup);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  user object: " . print_r($user->toArray(), true));
+        
+        // validate primary group exists
+        try {
+            $group = $groupBackend->getGroupById($user->accountPrimaryGroup);
+        } catch (Tinebase_Exception_Record_NotDefined $tern) {
+            $group = $groupBackend->getSyncAbleGroupById($user->accountPrimaryGroup);
+            $group = $groupBackend->addLocalGroup($group);
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  group object: " . print_r($group->toArray(), true));
+    }
 }
