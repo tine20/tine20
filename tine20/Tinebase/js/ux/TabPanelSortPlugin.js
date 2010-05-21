@@ -52,9 +52,15 @@ Ext.ux.TabPanelSortPlugin.prototype = {
     init: function(cmp){
         this.tabpanel = cmp;
         
-        this.handler = null;
-        this.scope = null;
-
+        this.tabpanel.addEvents(
+            /**
+             * @event tabsort
+             * Fired when tabs where resorted
+             * @param {Ext.TabPanel}
+             */
+            'tabsort'
+        );
+        
         this.tabpanel.on('render', this.onRender, this);
     },
     
@@ -159,6 +165,8 @@ Ext.ux.TabPanelSortPlugin.prototype = {
         
         this.tabpanel.items.remove(data.item);
         this.tabpanel.items.insert(this.pos, data.item);
+        
+        this.tabpanel.fireEvent('tabsort', this.tabpanel);
         return true;  
     },
     
