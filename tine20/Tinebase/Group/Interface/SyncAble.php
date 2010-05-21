@@ -25,4 +25,20 @@ interface Tinebase_Group_Interface_SyncAble
      * @return  string  the uuid for groupid
      */
     public function resolveSyncAbleGidToUUid($_groupId);
+    
+    /**
+     * get syncable group by id directly from sync backend
+     * 
+     * @param  $_groupId  the groupid
+     * @return Tinebase_Model_Group
+     */
+    public function getSyncAbleGroupById($_groupId);
+
+    /**
+     * create a new group in Tine 2.0 database only
+     *
+     * @param  Tinebase_Model_Group  $_group
+     * @return Tinebase_Model_Group
+     */
+    public function addLocalGroup(Tinebase_Model_Group $_group); 
 }
