@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  User
  */
-class Tinebase_User_Ldap extends Tinebase_User_Abstract
+class Tinebase_User_Ldap extends Tinebase_User_Abstract implements Tinebase_User_Interface_SyncAble
 {
     const PLUGIN_SAMBA = 'Tinebase_User_LdapPlugin_Samba';
 
@@ -1040,14 +1040,14 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         }
 
         $filter = Zend_Ldap_Filter::equals(
-        'uidnumber', Zend_Ldap::filterEscape($_uidNumber)
+            'uidnumber', Zend_Ldap::filterEscape($_uidNumber)
         );
 
         $userId = $this->_ldap->search(
-        $filter,
-        $this->_baseDn,
-        $this->_userSearchScope,
-        array($this->_userUUIDAttribute)
+            $filter,
+            $this->_baseDn,
+            $this->_userSearchScope,
+            array($this->_userUUIDAttribute)
         )->getFirst();
 
         return $userId[strtolower($this->_userUUIDAttribute)][0];
@@ -1066,14 +1066,14 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         }
 
         $filter = Zend_Ldap_Filter::equals(
-        $this->_userUUIDAttribute, Zend_Ldap::filterEscape($_uuid)
+            $this->_userUUIDAttribute, Zend_Ldap::filterEscape($_uuid)
         );
 
         $groupId = $this->_ldap->search(
-        $filter,
-        $this->_options['userDn'],
-        $this->_userSearchScope,
-        array('uidnumber')
+            $filter,
+            $this->_options['userDn'],
+            $this->_userSearchScope,
+            array('uidnumber')
         )->getFirst();
 
         return $groupId['uidnumber'][0];
