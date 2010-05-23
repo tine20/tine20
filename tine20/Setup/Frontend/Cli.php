@@ -262,13 +262,10 @@ class Setup_Frontend_Cli
     protected function _importAccounts(Zend_Console_Getopt $_opts)
     {
         // import groups
-        Tinebase_Group::getInstance()->importGroups();
+        Tinebase_Group::syncGroups();
         
         // import users
-        Tinebase_User::getInstance()->importUsers();
-        
-        // import group memberships
-        Tinebase_Group::getInstance()->importGroupMembers();
+        Tinebase_User::syncUsers();
     }
     
     /**
