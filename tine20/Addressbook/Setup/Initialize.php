@@ -27,10 +27,17 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      */
     public function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
-        $initialAdminUserOptions = $this->_parseInitialAdminUserOptions($_options);
-        Tinebase_User::getInstance()->importUsers($initialAdminUserOptions); //import users(ldap)/create initial users(sql)
-        Tinebase_Group::getInstance()->importGroupMembers(); //import groups members(ldap)
+        #$initialAdminUserOptions = $this->_parseInitialAdminUserOptions($_options);
+        #Tinebase_User::getInstance()->importUsers($initialAdminUserOptions); //import users(ldap)/create initial users(sql)
+        #Tinebase_Group::getInstance()->importGroupMembers(); //import groups members(ldap)
 
+        if(Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
+            // import users
+            Tinebase_User::syncUsers();
+        } else {
+            $initialAdminUserOptions = $this->_parseInitialAdminUserOptions($_options);
+            Tinebase_User::createInitialAccounts($initialAdminUserOptions);
+        }
         parent::_initialize($_application, $_options);
         $this->_initializeFavorites();
     }
