@@ -102,4 +102,96 @@ class Tinebase_Group
         
         return $result;
     }
+    
+    /**
+     * syncronize groupmemberships for given $_username from syncbackend to local sql backend
+     * 
+     * @todo sync secondary group memberships
+     * @param  mixed  $_username  the login id of the user to synchronize
+     */
+    public static function syncMemberships($_username)
+    {
+        if($_username instanceof Tinebase_Model_FullUser) {
+            $username = $_username->accountLoginName;
+        } else {
+            $username = $_username;
+        }
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  sync group memberships for: " . $username);
+        
+        $userBackend  = Tinebase_User::getInstance();
+        $groupBackend = Tinebase_Group::getInstance();
+        
+        $user = $userBackend->getUserByProperty('accountLoginName', $username, 'Tinebase_Model_FullUser');        
+        
+        $membershipsSyncBackend = $groupBackend->getGroupMembershipsFromSyncBackend($user);
+        $membershipsSqlBackend  = $groupBackend->getGroupMemberships($user);
+        
+        $newGroupMemberships     = array_diff($membershipsSyncBackend, $membershipsSqlBackend);
+        $removedGroupMemberships = array_diff($membershipsSqlBackend, $membershipsSyncBackend);
+        
+        // add user to new groups
+        foreach($newGroupMemberships as $groupId) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  add user to groupId " . $groupId);
+            // create empty group if needed
+            try {
+                $group = $groupBackend->getGroupById($groupId);
+            } catch (Tinebase_Exception_Record_NotDefined $tern) {
+                $group = $groupBackend->getGroupByIdFromSyncBackend($groupId);
+                $group = $groupBackend->addLocalGroup($group);
+            }
+            $groupBackend->addGroupMemberInSqlBackend($groupId, $user);
+        }
+        
+        // remove user from groups as needed
+        foreach($removedGroupMemberships as $groupId) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  remove user from groupId " . $groupId);
+            $groupBackend->removeGroupMemberFromSqlBackend($groupId, $user);
+        }
+    }
+    
+    /**
+     * import groups from sync backend
+     *
+     */
+    public static function syncGroups()
+    {
+        $groupBackend = Tinebase_Group::getInstance();
+        
+        $groups = $groupBackend->getGroupsFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
+
+        foreach($groups as $group) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' import users done');
+            // update or create user in local sql backend
+            try {
+                $groupBackend->getGroupById($group);
+                $group = $groupBackend->updateLocalGroup($group);
+            } catch (Tinebase_Exception_Record_NotDefined $tern) {
+                $group = $groupBackend->addLocalGroup($group);
+            }
+        }
+    }
+    
+    /**
+     * create initial groups
+     * 
+     * Method is called during Setup Initialization
+     */
+    public static function createInitialGroups()
+    {
+        // add the admin group
+        $adminGroup = new Tinebase_Model_Group(array(
+            'name'          => Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY),
+            'description'   => 'Group of administrative accounts'
+        ));
+        Tinebase_Group::getInstance()->addGroup($adminGroup);
+
+        // add the user group
+        $userGroup = new Tinebase_Model_Group(array(
+            'name'          => Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY),
+            'description'   => 'Group of user accounts'
+        ));
+        Tinebase_Group::getInstance()->addGroup($userGroup);
+    }
+    
 }
