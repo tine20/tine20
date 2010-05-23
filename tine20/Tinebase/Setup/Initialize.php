@@ -35,10 +35,14 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
             Setup_Controller::getInstance()->saveEmailConfig($data);
         }
         
-        Tinebase_Group::getInstance()->importGroups(); //import groups(ldap)/create initial groups(sql)
-		
-        Tinebase_Acl_Roles::getInstance()->createInitialRoles();
+        // import groups(ldap)/create initial groups(sql)
+        if(Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
+            Tinebase_Group::syncGroups();
+        } else {
+            Tinebase_Group::createInitialGroups();
+        }
         
+        Tinebase_Acl_Roles::getInstance()->createInitialRoles();
         $this->_initTinebaseScheduler();
         
     	parent::_initialize($_application, $_options);
