@@ -234,12 +234,16 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * set the status of the user
      *
-     * @param int $_accountId
-     * @param unknown_type $_status
+     * @param mixed   $_accountId
+     * @param string  $_status
      * @return unknown
      */
     public function setStatus($_accountId, $_status)
     {
+        if($this instanceof Tinebase_User_Interface_SyncAble) {
+            $this->setStatusInSyncBackend($_accountId, $_status);
+        }
+        
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         switch($_status) {
@@ -271,11 +275,15 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * sets/unsets expiry date 
      *
-     * @param     int         $_accountId
-     * @param     Zend_Date     $_expiryDate set to NULL to disable expirydate
+     * @param     mixed      $_accountId
+     * @param     Zend_Date  $_expiryDate set to NULL to disable expirydate
     */
     public function setExpiryDate($_accountId, $_expiryDate)
     {
+        if($this instanceof Tinebase_User_Interface_SyncAble) {
+            $this->setExpiryDateInSyncBackend($_accountId, $_expiryDate);
+        }
+        
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         if($_expiryDate instanceof Zend_Date) {
@@ -298,11 +306,15 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * sets blocked until date 
      *
-     * @param     int         $_accountId
-     * @param     Zend_Date     $_blockedUntilDate set to NULL to disable blockedDate
+     * @param  mixed      $_accountId
+     * @param  Zend_Date  $_blockedUntilDate set to NULL to disable blockedDate
     */
     public function setBlockedDate($_accountId, $_blockedUntilDate)
     {
+        if($this instanceof Tinebase_User_Interface_SyncAble) {
+            $this->setBlockedDateInSyncBackend($_accountId, $_blockedUntilDate);
+        }
+        
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         if($_blockedUntilDate instanceof Zend_Date) {
@@ -351,36 +363,53 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * 
      * this function updates an user 
      *
-     * @param Tinebase_Model_FullUser $_account
+     * @param Tinebase_Model_FullUser $_user
      * @return Tinebase_Model_FullUser
      */
-    public function updateUser(Tinebase_Model_FullUser $_account)
+    public function updateUser(Tinebase_Model_FullUser $_user)
     {
-        if(!$_account->isValid()) {
+        if($this instanceof Tinebase_User_Interface_SyncAble) {
+            $this->updateUserInSyncBackend($_user);
+        }
+        
+        return $this->updateUserInSqlBackend($_user);
+    }
+    
+    /**
+     * updates an user
+     * 
+     * this function updates an user 
+     *
+     * @param Tinebase_Model_FullUser $_user
+     * @return Tinebase_Model_FullUser
+     */
+    public function updateUserInSqlBackend(Tinebase_Model_FullUser $_user)
+    {
+        if(!$_user->isValid()) {
             throw(new Exception('invalid user object'));
         }
 
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_account);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_user);
 
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $accountData = array(
-            'login_name'        => $_account->accountLoginName,
-            'status'            => $_account->accountStatus,
-            'expires_at'        => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
-            'primary_group_id'  => $_account->accountPrimaryGroup,
-            'home_dir'          => $_account->accountHomeDirectory,
-            'login_shell'       => $_account->accountLoginShell,
-            'openid'            => $_account->openid,
-            'visibility'        => $_account->visibility,
+            'login_name'        => $_user->accountLoginName,
+            'status'            => $_user->accountStatus,
+            'expires_at'        => ($_user->accountExpires instanceof Zend_Date ? $_user->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
+            'primary_group_id'  => $_user->accountPrimaryGroup,
+            'home_dir'          => $_user->accountHomeDirectory,
+            'login_shell'       => $_user->accountLoginShell,
+            'openid'            => $_user->openid,
+            'visibility'        => $_user->visibility,
         );
         
         $contactData = array(
-            'n_family'      => $_account->accountLastName,
-            'n_given'       => $_account->accountFirstName,
-            'n_fn'          => $_account->accountFullName,
-            'n_fileas'      => $_account->accountDisplayName,
-            'email'         => $_account->accountEmailAddress
+            'n_family'      => $_user->accountLastName,
+            'n_given'       => $_user->accountFirstName,
+            'n_fn'          => $_user->accountFullName,
+            'n_fileas'      => $_user->accountDisplayName,
+            'email'         => $_user->accountEmailAddress
         );
 
         try {
@@ -413,42 +442,58 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * add an user
      * 
-     * this function adds an user 
-     *
-     * @param Tinebase_Model_FullUser $_account
-     * @todo fix $contactData['container_id'] = 1;
-     * @return Tinebase_Model_FullUser
+     * @param   Tinebase_Model_FullUser  $_user
+     * @return  Tinebase_Model_FullUser
      */
-    public function addUser(Tinebase_Model_FullUser $_account)
+    public function addUser(Tinebase_Model_FullUser $_user)
     {
-        if(!$_account->isValid()) {
+        if($this instanceof Tinebase_User_Interface_SyncAble) {
+            $userFromSyncBackend = $this->addUserToSyncBackend($_user);
+            // set accountId for sql backend sql backend
+            $_user->accountId = $userFromSyncBackend->getId();
+        }
+        
+        return $this->addUserInSqlBackend($_user);
+    }
+    
+    /**
+     * add an user
+     * 
+     * @todo fix $contactData['container_id'] = 1;
+     *
+     * @param   Tinebase_Model_FullUser  $_user
+     * @return  Tinebase_Model_FullUser
+     */
+    public function addUserInSqlBackend(Tinebase_Model_FullUser $_user)
+    {
+        if(!$_user->isValid()) {
             throw(new Exception('invalid user object'));
         }
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
-        if(!isset($_account->accountId)) {
-            $accountId = $_account->generateUID();
-            $_account->setId($accountId);
+        if(!isset($_user->accountId)) {
+            $userId = $_user->generateUID();
+            $_user->setId($userId);
         }
         
         $accountData = array(
-            'id'                => $_account->accountId,
-            'login_name'        => $_account->accountLoginName,
-            'status'            => $_account->accountStatus,
-            'expires_at'        => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
-            'primary_group_id'  => $_account->accountPrimaryGroup,
-            'home_dir'          => $_account->accountHomeDirectory,
-            'login_shell'       => $_account->accountLoginShell,
-            'openid'            => $_account->openid 
+            'id'                => $_user->accountId,
+            'login_name'        => $_user->accountLoginName,
+            'status'            => $_user->accountStatus,
+            'expires_at'        => ($_user->accountExpires instanceof Zend_Date ? $_user->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
+            'primary_group_id'  => $_user->accountPrimaryGroup,
+            'home_dir'          => $_user->accountHomeDirectory,
+            'login_shell'       => $_user->accountLoginShell,
+            'openid'            => $_user->openid 
         );
         
         $contact = new Addressbook_Model_Contact(array(
-            'n_family'      => $_account->accountLastName,
-            'n_given'       => $_account->accountFirstName,
-            'n_fn'          => $_account->accountFullName,
-            'n_fileas'      => $_account->accountDisplayName,
-            'email'         => $_account->accountEmailAddress
+            'n_family'      => $_user->accountLastName,
+            'n_given'       => $_user->accountFirstName,
+            'n_fn'          => $_user->accountFullName,
+            'n_fileas'      => $_user->accountDisplayName,
+            'email'         => $_user->accountEmailAddress
         ));
 
         try {
@@ -457,7 +502,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             // add new user
             $accountsTable->insert($accountData);
             
-            $contact->account_id = $_account->getId();
+            $contact->account_id = $_user->getId();
             //$contact->tid = 'n';
             $contact->container_id = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL)->getId();
             
@@ -475,50 +520,65 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw($e);
         }
         
-        return $this->getUserById($_account->getId(), 'Tinebase_Model_FullUser');
+        return $this->getUserById($_user->getId(), 'Tinebase_Model_FullUser');
     }
     
     /**
      * add or update an user
      *
-     * @param Tinebase_Model_FullUser $_account
+     * @param  Tinebase_Model_FullUser  $_user
      * @return Tinebase_Model_FullUser
      */
-    public function addOrUpdateUser(Tinebase_Model_FullUser $_account)
+    /*public function addOrUpdateUser(Tinebase_Model_FullUser $_user)
     {
         $result = null;
         try {
-            $existingUser = $this->getUserByLoginName($_account->accountLoginName);
-            $updatedUser = $_account;
+            $existingUser = $this->getUserByLoginName($_user->accountLoginName);
+            $updatedUser = $_user;
             $updatedUser->setId($existingUser->getId());
             $result = $this->updateUser($updatedUser);
         } catch (Tinebase_Exception_NotFound $e) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Could not get user by loginName "' . $_account->accountLoginName . '": ' . $e->getMessage() . ' => creating new user');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Could not get user by loginName "' . $_user->accountLoginName . '": ' . $e->getMessage() . ' => creating new user');
             try {
-                $result = $this->addUser($_account);
+                $result = $this->addUser($_user);
             } catch (Exception $e) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .' Failed to add user: ' . print_r($_account->toArray() . 'Error: ' . $e->getMessage(), TRUE));
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .' Failed to add user: ' . print_r($_user->toArray() . 'Error: ' . $e->getMessage(), TRUE));
             }
         }
         
         return $result;
         
+    }*/
+    
+    /**
+     * delete a user
+     *
+     * @param  mixed  $_userId
+     */
+    public function deleteUser($_userId)
+    {
+        $this->deleteUserInSqlBackend($_userId);
+        
+        if($this instanceof Tinebase_User_Interface_SyncAble) {
+            $this->deleteUserInSyncBackend($_userId);
+        }
     }
     
     /**
      * delete a user
      *
-     * @param int $_accountId
+     * @param  mixed  $_userId
      */
-    public function deleteUser($_accountId)
+    public function deleteUserInSqlBackend($_userId)
     {   
-        if ($_accountId instanceof Tinebase_Model_FullUser) {
-            $accountId = $_accountId->getId();
-            $account = $_accountId;
+        if ($_userId instanceof Tinebase_Model_FullUser) {
+            $accountId = $_userId->getId();
+            $account = $_userId;
         } else {
-            $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+            $accountId = Tinebase_Model_User::convertUserIdToInt($_userId);
             $account = $this->getFullUserById($accountId);
         }
+        
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
         $groupMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
@@ -630,7 +690,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * 
      * @return void
      */
-    public function importUsers($_options = null)
+    /*public function importUsers($_options = null)
     {
         $_options['adminFirstName'] = isset($_options['adminFirstName']) ? $_options['adminFirstName'] : 'Tine 2.0';
         $_options['adminLastName']  = isset($_options['adminLastName'])  ? $_options['adminLastName']  : 'Admin Account';
@@ -641,7 +701,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $userGroup  = $groupsBackend->getDefaultGroup();
         
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial admin user(' . $_options['adminLoginName'] . ')');
-
 
         $account = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => $_options['adminLoginName'],
@@ -662,5 +721,5 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         // add the admin account to all groups
         Tinebase_Group::getInstance()->addGroupMember($adminGroup, $account);
         Tinebase_Group::getInstance()->addGroupMember($userGroup, $account);
-    }
+    }*/
 }

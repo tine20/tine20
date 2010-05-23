@@ -495,25 +495,25 @@ abstract class Tinebase_User_Abstract
     /**
      * updates an existing user
      *
-     * @param Tinebase_Model_FullUser $_account
-     * @return Tinebase_Model_FullUser
+     * @param   Tinebase_Model_FullUser  $_user
+     * @return  Tinebase_Model_FullUser
      */
-    abstract public function updateUser(Tinebase_Model_FullUser $_account);
+    abstract public function updateUser(Tinebase_Model_FullUser $_user);
 
     /**
      * adds a new user
      *
-     * @param Tinebase_Model_FullUser $_account
-     * @return Tinebase_Model_FullUser
+     * @param   Tinebase_Model_FullUser  $_user
+     * @return  Tinebase_Model_FullUser
      */
-    abstract public function addUser(Tinebase_Model_FullUser $_account);
+    abstract public function addUser(Tinebase_Model_FullUser $_user);
     
     /**
      * delete an user
      *
-     * @param int $_accountId
+     * @param  mixed  $_userId
      */
-    abstract public function deleteUser($_accountId);
+    abstract public function deleteUser($_userId);
 
     /**
      * delete multiple users
