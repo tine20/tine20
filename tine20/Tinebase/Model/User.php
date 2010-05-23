@@ -21,6 +21,7 @@
  * 
  * @package     Tinebase
  * @subpackage  User
+ * @property    string  accountId
  */
 class Tinebase_Model_User extends Tinebase_Record_Abstract
 {
