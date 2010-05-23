@@ -69,9 +69,13 @@ class Tinebase_Controller
         
         if ($authResult->isValid()) {
             $accountsController = Tinebase_User::getInstance();
+            $groupsController   = Tinebase_Group::getInstance();
             try {
                 if ($accountsController instanceof Tinebase_User_Interface_SyncAble) {
                     Tinebase_User::syncUser($_username);
+                }
+                if ($groupsController instanceof Tinebase_Group_Interface_SyncAble) {
+                    Tinebase_Group::syncMemberships($_username);
                 }
                 $account = $accountsController->getFullUserByLoginName($authResult->getIdentity());
             } catch (Tinebase_Exception_NotFound $e) {
