@@ -330,15 +330,23 @@ class Tinebase_User
     /**
      * syncronize user from syncbackend to local sql backend
      * 
-     * @todo sync secondary group memberships
-     * @param  string  $_username  the login id of the user to synchronize
+     * @param  mixed  $_username  the login id of the user to synchronize
+     * return Tinebase_Model_FullUser
      */
     public static function syncUser($_username)
     {
+        if($_username instanceof Tinebase_Model_FullUser) {
+            $username = $_username->accountLoginName;
+        } else {
+            $username = $_username;
+        }
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  sync user data for: " . $username);
+        
         $userBackend  = Tinebase_User::getInstance();
         $groupBackend = Tinebase_Group::getInstance();
         
-        $user = $userBackend->getSyncAbleUserByProperty('accountLoginName', $_username, 'Tinebase_Model_FullUser');
+        $user = $userBackend->getUserByPropertyFromSyncBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
         
         $user->accountPrimaryGroup = $groupBackend->resolveGIdNumberToUUId($user->accountPrimaryGroup);
         
@@ -346,18 +354,108 @@ class Tinebase_User
         try {
             $group = $groupBackend->getGroupById($user->accountPrimaryGroup);
         } catch (Tinebase_Exception_Record_NotDefined $tern) {
-            $group = $groupBackend->getSyncAbleGroupById($user->accountPrimaryGroup);
+            $group = $groupBackend->getGroupByIdFromSyncBackend($user->accountPrimaryGroup);
             $group = $groupBackend->addLocalGroup($group);
         }
         
         // update or create user in local sql backend
         try {
             $userBackend->getUserByProperty('accountId', $user);
-            $user = $userBackend->updateLocalUser($user);
+            $user = $userBackend->updateUserInSqlBackend($user);
         } catch (Tinebase_Exception_NotFound $ten) {
-            $user = $userBackend->addLocalUser($user);
+            $user = $userBackend->addUserInSqlBackend($user);
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  synced user object: " . print_r($user->toArray(), true));
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  synced user object: " . print_r($user->toArray(), true));
+            
+        // import contactdata(phone, address, fax, birthday. photo)
+        $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        
+        $contact = $addressbook->getByUserId($user->getId());
+        $userBackend->updateContactFromSyncBackend($user, $contact);
+        $addressbook->update($contact);
+        
+        return $user;
+    }
+    
+    /**
+     * import users from sync backend
+     *
+     */
+    public static function syncUsers()
+    {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' start synchronizing users');
+        
+        $users = Tinebase_User::getInstance()->getUsersFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
+
+        foreach($users as $user) {
+            $user = self::syncUser($user);
+            Tinebase_Group::syncMemberships($user);
+        }
+
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' finnished synchronizing users');
+    }
+    
+    /**
+     * create initial admin account
+     * 
+     * Method is called during Setup Initialization
+     *
+     * @param array | optional $_options [hash that may contain override values for admin user name and password]
+     * 
+     * @example $_options may contain the following keys:
+     * <pre>
+     * $options = array(
+     *  'admin_login_name' => 'admin',
+     *  'admin_login_password' => 'lars',
+     *  'admin_first_name' => 'Tine 2.0',
+     *  'admin_last_name' => 'Admin Account',
+     * );
+     * </pre>
+     * 
+     * @return void
+     */
+    public static function createInitialAccounts($_options)
+    {
+        $_options['adminFirstName'] = isset($_options['adminFirstName']) ? $_options['adminFirstName'] : 'Tine 2.0';
+        $_options['adminLastName']  = isset($_options['adminLastName'])  ? $_options['adminLastName']  : 'Admin Account';
+
+        // get admin & user groups
+        $userBackend   = Tinebase_User::factory(Tinebase_User::SQL);
+        $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
+        
+        $adminGroup = $groupsBackend->getDefaultAdminGroup();
+        $userGroup  = $groupsBackend->getDefaultGroup();
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial admin user(' . $_options['adminLoginName'] . ')');
+
+        $user = new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => $_options['adminLoginName'],
+            'accountStatus'         => 'enabled',
+            'accountPrimaryGroup'   => $userGroup->getId(),
+            'accountLastName'       => $_options['adminLastName'],
+            'accountDisplayName'    => $_options['adminLastName'] . ', ' . $_options['adminFirstName'],
+            'accountFirstName'      => $_options['adminFirstName'],
+            'accountExpires'        => NULL,
+            'accountEmailAddress'   => NULL,
+        ));
+
+        #$groupsBackend->addOrUpdateUser($account);
+        // update or create user in local sql backend
+        try {
+            $userBackend->getUserByProperty('accountId', $_options['adminLoginName']);
+            $user = $userBackend->updateUserInSqlBackend($user);
+        } catch (Tinebase_Exception_NotFound $ten) {
+            $user = $userBackend->addUserInSqlBackend($user);
+        }
+        
+        Tinebase_Core::set('currentAccount', $user);
+        // set the password for the account
+        Tinebase_User::getInstance()->setPassword($_options['adminLoginName'], $_options['adminPassword']);
+
+        // add the admin account to all groups
+        Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
+        Tinebase_Group::getInstance()->addGroupMember($userGroup, $user);
+        
     }
 }
