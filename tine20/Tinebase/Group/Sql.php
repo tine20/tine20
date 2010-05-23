@@ -145,11 +145,21 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     /**
      * add a new groupmember to a group
      *
-     * @param int $_groupId
-     * @param int $_accountId
-     * @return void
+     * @param  string  $_groupId
+     * @param  string  $_accountId
      */
     public function addGroupMember($_groupId, $_accountId)
+    {
+        return $this->addGroupMemberInSqlBackend($_groupId, $_accountId);
+    }
+    
+    /**
+     * add a new groupmember to a group
+     *
+     * @param  string  $_groupId
+     * @param  string  $_accountId
+     */
+    public function addGroupMemberInSqlBackend($_groupId, $_accountId)
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
@@ -169,21 +179,34 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             // account is already member of this group
         }
     }
-        
+    
     /**
      * remove one groupmember from the group
      *
-     * @param int $_groupId
-     * @param int $_accountId
+     * @param  mixed  $_groupId
+     * @param  mixed  $_accountId
+     * 
      * @return void
      */
     public function removeGroupMember($_groupId, $_accountId)
+    {
+        return $this->removeGroupMemberFromSqlBackend($_groupId, $_accountId);
+    }
+    
+    /**
+     * remove one groupmember from the group
+     *
+     * @param  mixed  $_groupId
+     * @param  mixed  $_accountId
+     * 
+     * @return void
+     */
+    public function removeGroupMemberFromSqlBackend($_groupId, $_accountId)
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         $where = array(
-        
             $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . '= ?', $groupId),
             $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . '= ?', $accountId),
         );
@@ -400,35 +423,12 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     }
     
     /**
-     * create initial groups
-     * 
-     * Method is called during Setup Initialization
-     * Methodname must euqal to LDAP equivalent {@see Tinebase_USer_Ldap::importGroups}
-     */
-    public function importGroups()
-    {
-        // add the admin group
-        $adminGroup = new Tinebase_Model_Group(array(
-            'name'          => Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY),
-            'description'   => 'Group of administrative accounts'
-        ));
-        $this->addGroup($adminGroup);
-
-        // add the user group
-        $userGroup = new Tinebase_Model_Group(array(
-            'name'          => Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY),
-            'description'   => 'Group of user accounts'
-        ));
-        $this->addGroup($userGroup);
-    }
-    
-    /**
      * Method called by {@see Addressbook_Setup_Initialize::_initilaize()}
      * 
      * @param $_options
      * @return unknown_type
      */
-    public function importGroupMembers($_options = null)
+    public function __importGroupMembers($_options = null)
     {
         //nothing to do
     }

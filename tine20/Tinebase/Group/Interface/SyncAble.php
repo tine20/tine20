@@ -32,7 +32,7 @@ interface Tinebase_Group_Interface_SyncAble
      * @param  $_groupId  the groupid
      * @return Tinebase_Model_Group
      */
-    public function getSyncAbleGroupById($_groupId);
+    public function getGroupByIdFromSyncBackend($_groupId);
 
     /**
      * create a new group in Tine 2.0 database only
@@ -40,5 +40,27 @@ interface Tinebase_Group_Interface_SyncAble
      * @param  Tinebase_Model_Group  $_group
      * @return Tinebase_Model_Group
      */
-    public function addLocalGroup(Tinebase_Model_Group $_group); 
+    public function addLocalGroup(Tinebase_Model_Group $_group);
+     
+    /**
+     * get groupmemberships of user
+     * 
+     * @param   Tinebase_Model_User  $_user
+     * @return  array
+     */
+    public function getGroupMembershipsFromSyncBackend(Tinebase_Model_User $_user);
+    
+    /**
+     * get list of groups from syncbackend
+     *
+     * @todo make filtering working. Allways returns all groups
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Group
+     */
+    public function getGroupsFromSyncBackend($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL);
 }
