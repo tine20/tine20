@@ -355,7 +355,7 @@ class Tinebase_User
             $group = $groupBackend->getGroupById($user->accountPrimaryGroup);
         } catch (Tinebase_Exception_Record_NotDefined $tern) {
             $group = $groupBackend->getGroupByIdFromSyncBackend($user->accountPrimaryGroup);
-            $group = $groupBackend->addLocalGroup($group);
+            $group = $groupBackend->addGroupInSyncBackend($group);
         }
         
         // update or create user in local sql backend
@@ -375,6 +375,9 @@ class Tinebase_User
         $userBackend->updateContactFromSyncBackend($user, $contact);
         $addressbook->update($contact);
         
+        // sync group memberships
+        Tinebase_Group::syncMemberships($user);
+        
         return $user;
     }
     
@@ -390,7 +393,6 @@ class Tinebase_User
 
         foreach($users as $user) {
             $user = self::syncUser($user);
-            Tinebase_Group::syncMemberships($user);
         }
 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' finnished synchronizing users');
