@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Group
  */
-class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Group_Interface_SyncAble
+class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_Interface_SyncAble
 {
     const PLUGIN_SAMBA = 'Tinebase_Group_LdapPlugin_Samba';
     
@@ -26,13 +26,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
      * @var Tinebase_Ldap
      */
     protected $_ldap;
-    
-    /**
-     * the sql group backend
-     * 
-     * @var Tinebase_Group_Sql
-     */
-    protected $_sql;
     
     /**
      * ldap config options
@@ -97,6 +90,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
      */
     public function __construct(array $_options) 
     {
+        parent::__construct();
+        
         if(empty($_options['userUUIDAttribute'])) {
             $_options['userUUIDAttribute'] = 'entryUUID';
         }
@@ -140,68 +135,13 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
     }
         
     /**
-     * return all groups an account is member of
-     *
-     * @param mixed $_accountId the account as integer or Tinebase_Model_User
-     * @return array
-     */
-    public function getGroupMemberships($_accountId)
-    {
-        return $this->_sql->getGroupMemberships($_accountId);        
-    }
-    
-    /**
-     * get list of groupmembers 
-     *
-     * @param   string $_groupId
-     * @return  array with account ids
-     */
-    public function getGroupMembers($_groupId)
-    {
-        return $this->_sql->getGroupMembers($_groupId);
-    }
-
-    /**
-     * get group by name
-     *
-     * @param   string $_name
-     * @return  Tinebase_Model_Group
-     */
-    public function getGroupByName($_name)
-    {        
-        return $this->_sql->getGroupByName($_name);
-    }
-    
-    /**
-     * get group by id
-     *
-     * @param string $_groupId the group id
-     * @return Tinebase_Model_Group
-     */
-    public function getGroupById($_groupId)
-    {   
-        return $this->_sql->getGroupById($_groupId);
-    }
-
-    /**
-     * get syncable group by id directly from sync backend
+     * get syncable group by id from sync backend
      * 
-     * @param  string  $_groupId  the groupid
+     * @param  mixed  $_groupId  the groupid
      * 
      * @return Tinebase_Model_Group
      */
     public function getGroupByIdFromSyncBackend($_groupId)
-    {
-        return $this->getLdapGroupById($_groupId);
-    }
-    
-    /**
-     * get group by id directly from ldap
-     * 
-     * @param $_groupId
-     * @return Tinebase_Model_Group
-     */
-    public function getLdapGroupById($_groupId)
     {   
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
 
@@ -233,30 +173,16 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
     }
     
     /**
-     * get list of groups
-     *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
-     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Group
-     */
-    public function getGroups($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
-    {
-        return $this->_sql->getGroups($_filter, $_sort, $_dir, $_start, $_limit);        
-    }
-    
-    /**
      * get list of groups from syncbackend
      *
      * @todo make filtering working. Allways returns all groups
      *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
+     * @param  string  $_filter
+     * @param  string  $_sort
+     * @param  string  $_dir
+     * @param  int     $_start
+     * @param  int     $_limit
+     * 
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Group
      */
     public function getGroupsFromSyncBackend($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
@@ -280,51 +206,18 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
             )); 
 
             $result->addRecord($groupObject);
-            
-            #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' add group: ' . print_r($groupObject->toArray(), TRUE));
-            #try {
-            #    $this->_sql->addGroup($groupObject, $group[strtolower($this->_groupUUIDAttribute)][0]);
-            #} catch (Exception $e) {
-            #    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .' Could not add group: ' . $groupObject->name . ' Error message: ' . $e->getMessage());
-            #}
         }
         
         return $result;
     }
     
     /**
-     * Get multiple groups
+     * replace all current groupmembers with the new groupmembers list in sync backend
      *
-     * @param  string|array $_ids Ids
-     * @return Tinebase_Record_RecordSet
+     * @param  string  $_groupId
+     * @param  array   $_groupMembers array of ids
      */
-    public function getMultiple($_ids) 
-    {
-        return $this->_sql->getMultiple($_ids);
-    }
-    
-    /**
-     * replace all current groupmembers with the new groupmembers list
-     *
-     * @param string $_groupId
-     * @param array $_groupMembers array of ids
-     * @return unknown
-     */
-    public function setGroupMembers($_groupId, $_groupMembers) 
-    {
-        $this->setLdapGroupMembers($_groupId, $_groupMembers);
-        
-        $this->_sql->setGroupMembers($_groupId, $_groupMembers);
-    }
-    
-    /**
-     * replace all current groupmembers with the new groupmembers list in ldap only
-     *
-     * @param string $_groupId
-     * @param array $_groupMembers array of ids
-     * @return unknown
-     */
-    public function setLdapGroupMembers($_groupId, $_groupMembers) 
+    public function setGroupMembersInSyncBackend($_groupId, $_groupMembers) 
     {
         $metaData = $this->_getMetaData($_groupId);
         $membersMetaDatas = $this->_getAccountsMetaData((array)$_groupMembers);
@@ -359,43 +252,29 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
     }
     
     /**
-     * add a new groupmember to a group
+     * replace all current groupmemberships of user in sync backend
      *
-     * @deprecated
-     *
-     * @param  string  $_groupId
-     * @param  string  $_accountId
+     * @param  mixed  $_userId
+     * @param  mixed  $_groupIds
+     * 
+     * @return array
      */
-    public function addGroupMemberInSqlBackend($_groupId, $_accountId)
+    public function setGroupMembershipsInSyncBackend($_userId, $_groupIds)
     {
-        return $this->_sql->addGroupMemberInSqlBackend($_groupId, $_accountId);
+        throw new Tinebase_Exception_NotImplemented('Not yet implemented');
+        
+        return $this->getGroupMembershipsFromSyncBackend($_userId);
     }
     
     /**
-     * remove one groupmember from the group
-     *
-     * @deprecated
+     * add a new groupmember to group in sync backend
      *
      * @param  mixed  $_groupId
-     * @param  mixed  $_accountId
-     * 
-     * @return void
+     * @param  mixed  $_accountId string or user object
      */
-    public function removeGroupMemberFromSqlBackend($_groupId, $_accountId)
+    public function addGroupMemberInSyncBackend($_groupId, $_accountId) 
     {
-        return $this->_sql->removeGroupMemberFromSqlBackend($_groupId, $_accountId);
-    }
-    
-    /**
-     * add a new groupmember to the group
-     *
-     * @param string $_groupId
-     * @param mixed $_accountId string or user object
-     * @return void
-     */
-    public function addGroupMember($_groupId, $_accountId) 
-    {
-        $userId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        $userId  = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $memberships = $this->getGroupMemberships($_accountId);
@@ -472,20 +351,17 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
                 $this->_ldap->deleteProperty($groupDn, $ldapData);
             }
         }
-        
-        $this->_sql->addGroupMember($_groupId, $_accountId);
     }
 
     /**
-     * remove one member from the group
+     * remove one member from the group in sync backend
      *
-     * @param string $_groupId
-     * @param mixed $_accountId
-     * @return void
+     * @param  mixed  $_groupId
+     * @param  mixed  $_accountId
      */
-    public function removeGroupMember($_groupId, $_accountId) 
+    public function removeGroupMemberInSyncBackend($_groupId, $_accountId) 
     {
-        $userId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        $userId  = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $memberships = $this->getGroupMemberships($_accountId);
@@ -522,48 +398,17 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
         $this->_ldap->deleteProperty($groupDn, $ldapData);
-        
-        $this->_sql->removeGroupMember($_groupId, $_accountId);
     }
         
+    
     /**
-     * create a new group in Tine 2.0 database only
+     * create a new group in sync backend
      *
      * @param  Tinebase_Model_Group  $_group
+     * 
      * @return Tinebase_Model_Group
      */
-    public function addLocalGroup(Tinebase_Model_Group $_group) 
-    {
-        $group = $this->_sql->addGroup($_group);
-        
-        return $group;
-    }
-    
-    /**
-     * create a new group
-     *
-     * @param Tinebase_Model_Group $_group
-     * @return Tinebase_Model_Group
-     */
-    public function addGroup(Tinebase_Model_Group $_group) 
-    {
-        $ldapGroup = $this->addLdapGroup($_group);
-        
-        $_group->id = $ldapGroup->getId();
-        
-        // add group to sql backend too
-        $group = $this->_sql->addGroup($_group);
-        
-        return $group;
-    }
-    
-    /**
-     * create a new group
-     *
-     * @param Tinebase_Model_Group $_group
-     * @return Tinebase_Model_Group
-     */
-    public function addLdapGroup(Tinebase_Model_Group $_group) 
+    public function addGroupInSyncBackend(Tinebase_Model_Group $_group) 
     {
         $dn = $this->_generateDn($_group);
         $objectClass = array(
@@ -598,49 +443,19 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
         
         $groupId = $groupId[strtolower($this->_groupUUIDAttribute)][0];
         
-        $group = $this->getLdapGroupById($groupId);
+        $group = $this->getGroupByIdFromSyncBackend($groupId);
                 
         return $group;
     }
     
     /**
-     * updates an existing group
+     * updates an existing group in sync backend
      *
-     * @param Tinebase_Model_Group $_group
+     * @param  Tinebase_Model_Group  $_group
+     * 
      * @return Tinebase_Model_Group
      */
-    public function updateGroup(Tinebase_Model_Group $_group) 
-    {
-        // update group in ldap backend
-        $group = $this->updateLdapGroup($_group);
-        
-        // update group in sql backend too
-        $group = $this->_sql->updateGroup($group);
-        
-        return $group;
-    }
-    
-    /**
-     * updates an existing group
-     *
-     * @param Tinebase_Model_Group $_group
-     * @return Tinebase_Model_Group
-     */
-    public function updateLocalGroup(Tinebase_Model_Group $_group) 
-    {
-        // update group in sql backend too
-        $group = $this->_sql->updateGroup($_group);
-        
-        return $group;
-    }
-    
-    /**
-     * updates an existing group in ldap only
-     *
-     * @param Tinebase_Model_Group $_group
-     * @return Tinebase_Model_Group
-     */
-    public function updateLdapGroup(Tinebase_Model_Group $_group) 
+    public function updateGroupInSyncBackend(Tinebase_Model_Group $_group) 
     {
         $dn = $this->_getDn($_group->getId());
         
@@ -657,18 +472,17 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         $this->_ldap->update($dn, $ldapData);
         
-        $group = $this->getLdapGroupById($_group);
+        $group = $this->getGroupByIdFromSyncBackend($_group);
 
         return $group;
     }
     
     /**
-     * delete one or more groups
+     * delete one or more groups in sync backend
      *
-     * @param mixed $_groupId
-     * @return void
+     * @param  mixed   $_groupId
      */
-    public function deleteGroups($_groupId) 
+    public function deleteGroupsInSyncBackend($_groupId) 
     {
         $groupIds = array();
         
@@ -681,9 +495,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
         }
         
         foreach ($groupIds as $groupId) {
-            // delete group in sql first(foreign keys)
-            $this->_sql->deleteGroups($groupId);
-            
             $dn = $this->_getDn($groupId);
             $this->_ldap->delete($dn);
         }
@@ -773,8 +584,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
             $filterArray[] = Zend_Ldap_Filter::equals($this->_userUUIDAttribute, Zend_Ldap::filterEscape($accountId));
         }
         $filter = new Zend_Ldap_Filter_Or($filterArray);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $filter: ' . $filter);
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $filter: ' . $filter);
         
         // fetch all dns at once
         $accounts = $this->_ldap->search(
@@ -878,62 +689,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
     }
     
     /**
-     * import groupmembers from ldap to sql
-     * 
-     * @return void
-     */
-    public function __importGroupMembers()
-    {
-        $groups = $this->getGroups();
-        
-        foreach ($groups as $group) {
-            $groupId = Tinebase_Model_Group::convertGroupIdToInt($group);     
-
-            $filter = Zend_Ldap_Filter::equals(
-                $this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId)
-            );
-            
-            $groupMembers = $this->_ldap->search(
-                $filter, 
-                $this->_options['groupsDn'], 
-                $this->_groupSearchScope, 
-                array('member', 'memberuid')
-            )->getFirst();
-
-            if (count($groupMembers) == 0) {
-                // group not found => nothing to import
-                continue;
-            }
-
-            if (isset($groupMembers['member'])) {
-                unset($groupMembers['member']['count']);
-                foreach ($groupMembers['member'] as $dn) {
-                    try {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' read ldap data for dn: ' . $dn);
-                        $accountData = $this->_ldap->getEntry($dn, array('uidnumber'));
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ldap data returned: ' . print_r($accountData, true));
-                        $memberId = Tinebase_User::getInstance()->resolveUIdNumberToUUId($accountData['uidnumber'][0]);
-                        
-                        // add account to sql backend
-                        $this->_sql->addGroupMember($groupId, $memberId);
-                    } catch (Exception $e) {
-                        // ignore ldap errors
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .' user not found: ' . $e->getMessage());
-                    }
-                }
-            } elseif (isset($groupMembers['memberuid'])) {
-                unset($groupMembers['memberuid']['count']);
-                foreach ((array)$groupMembers['memberuid'] as $loginName) {
-                    $account = Tinebase_User::getInstance()->getUserByLoginName($loginName);
-                    $memberId = $account->getId();
-                    
-                    $this->_sql->addGroupMember($groupId, $memberId);
-                }
-            }
-        }        
-    }
-    
-    /**
      * resolve groupid(for example ldap gidnumber) to uuid(for example ldap entryuuid)
      *
      * @param   string  $_groupId
@@ -1000,10 +755,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract implements Tinebase_Gr
     }
     
     /**
-     * get groupmemberships of user
+     * get groupmemberships of user from sync backend
      * 
      * @param   Tinebase_Model_User  $_user
-     * @return  array
+     * @return  array  list of group ids
      */
     public function getGroupMembershipsFromSyncBackend(Tinebase_Model_User $_user)
     {
