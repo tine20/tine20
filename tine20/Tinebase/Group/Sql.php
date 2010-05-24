@@ -113,10 +113,25 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     /**
      * replace all current groupmembers with the new groupmembers list
      *
-     * @param int $_groupId
-     * @param array $_groupMembers
+     * @param  mixed  $_groupId
+     * @param  array  $_groupMembers
      */
     public function setGroupMembers($_groupId, $_groupMembers)
+    {
+        if($this instanceof Tinebase_Group_Interface_SyncAble) {
+            $this->setGroupMembersInSyncBackend($_groupId, $_groupMembers);
+        }
+        
+        $this->setGroupMembersInSqlBackend($_groupId, $_groupMembers);
+    }
+     
+    /**
+     * replace all current groupmembers with the new groupmembers list
+     *
+     * @param  mixed  $_groupId
+     * @param  array  $_groupMembers
+     */
+    public function setGroupMembersInSqlBackend($_groupId, $_groupMembers)
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
@@ -141,7 +156,62 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         // invalidate cache (no memcached support yet)
         Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('group'));
     }
-
+    
+    /**
+     * set all groups an account is member of
+     *
+     * @param  mixed  $_userId    the userid as string or Tinebase_Model_User
+     * @param  mixed  $_groupIds
+     * 
+     * @return array
+     */
+    public function setGroupMemberships($_userId, $_groupIds)
+    {
+        if($this instanceof Tinebase_Group_Interface_SyncAble) {
+            $this->setGroupMembershipsInSyncBackend($_userId, $_groupIds);
+        }
+        
+        return $this->setGroupMembershipsInSqlBackend($_userId, $_groupIds);
+    }
+    
+    /**
+     * replace all current groupmemberships of user in sql backend
+     *
+     * @param  mixed  $_userId
+     * @param  mixed  $_groupIds
+     * 
+     * @return array
+     */
+    public function setGroupMembershipsInSqlBackend($_userId, $_groupIds)
+    {
+        if(count($_groupIds) === 0) {
+            throw new Tinebase_Exception_InvalidArgument('user must belong to at least one group');
+        }
+        
+        $userId = Tinebase_Model_user::convertUserIdToInt($_userId);
+        
+        // remove old memberships
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $userId);
+        $this->groupMembersTable->delete($where);
+        
+        $db = Tinebase_Core::getDb();
+        $stmt = $db->prepare('INSERT INTO ' . SQL_TABLE_PREFIX . 'group_members (group_id, account_id) VALUES (?,?)');
+        
+        // add new members
+        foreach ($_groupIds as $groupId) {
+            $groupId = Tinebase_Model_Group::convertGroupIdToInt($groupId); 
+            $stmt->execute(array(
+                $groupId, 
+                $userId
+            ));
+        }
+        
+        // invalidate cache (no memcached support yet)
+        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('group'));
+        
+        return $this->getGroupMemberships($_userId);
+    }
+    
     /**
      * add a new groupmember to a group
      *
@@ -150,7 +220,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function addGroupMember($_groupId, $_accountId)
     {
-        return $this->addGroupMemberInSqlBackend($_groupId, $_accountId);
+        if($this instanceof Tinebase_Group_Interface_SyncAble) {
+            $this->addGroupMemberInSyncBackend($_groupId, $_accountId);
+        }
+        
+        $this->addGroupMemberInSqlBackend($_groupId, $_accountId);
     }
     
     /**
@@ -161,7 +235,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function addGroupMemberInSqlBackend($_groupId, $_accountId)
     {
-        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
+        $groupId   = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
 
         $data = array(
@@ -185,11 +259,13 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      *
      * @param  mixed  $_groupId
      * @param  mixed  $_accountId
-     * 
-     * @return void
      */
     public function removeGroupMember($_groupId, $_accountId)
     {
+        if($this instanceof Tinebase_Group_Interface_SyncAble) {
+            $this->removeGroupMemberInSyncBackend($_groupId, $_accountId);
+        }
+        
         return $this->removeGroupMemberFromSqlBackend($_groupId, $_accountId);
     }
     
@@ -198,12 +274,10 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      *
      * @param  mixed  $_groupId
      * @param  mixed  $_accountId
-     * 
-     * @return void
      */
     public function removeGroupMemberFromSqlBackend($_groupId, $_accountId)
     {
-        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
+        $groupId   = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         $where = array(
@@ -220,11 +294,29 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     /**
      * create a new group
      *
-     * @param   string $_groupName
+     * @param   Tinebase_Model_Group  $_group
+     * 
+     * @return  Tinebase_Model_Group
+     */
+    public function addGroup(Tinebase_Model_Group $_group)
+    {
+        if($this instanceof Tinebase_Group_Interface_SyncAble) {
+            $groupFromSyncBackend = $this->addGroupInSyncBackend($_group);
+            $_group->setId($groupFromSyncBackend->getId());
+        }
+        
+        return $this->addGroupInSqlBackend($_group);
+    }
+    
+    /**
+     * create a new group in sql backend
+     *
+     * @param   Tinebase_Model_Group  $_group
+     * 
      * @return  Tinebase_Model_Group
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function addGroup(Tinebase_Model_Group $_group)
+    public function addGroupInSqlBackend(Tinebase_Model_Group $_group)
     {
         if(!$_group->isValid()) {
             throw new Tinebase_Exception_Record_Validation('invalid group object');
@@ -252,10 +344,26 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     /**
      * create a new group
      *
-     * @param string $_groupName
-     * @return unknown
+     * @param  Tinebase_Model_Group  $_group
+     * 
+     * @return Tinebase_Model_Group
      */
     public function updateGroup(Tinebase_Model_Group $_group)
+    {
+        if($this instanceof Tinebase_Group_Interface_SyncAble) {
+            $this->updateGroupInSyncBackend($_group);
+        }
+        
+        return $this->updateGroupInSqlBackend($_group);
+    }
+    
+    /**
+     * create a new group in sync backend
+     *
+     * @param  Tinebase_Model_Group  $_group
+     * @return Tinebase_Model_Group
+     */
+    public function updateGroupInSqlBackend(Tinebase_Model_Group $_group)
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_group);
         
@@ -274,8 +382,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     /**
      * delete groups
      *
-     * @param   int|Tinebase_Model_Group $_groupId
-     * @return  void
+     * @param   mixed $_groupId
+
      * @throws  Tinebase_Exception_Backend
      */
     public function deleteGroups($_groupId)
@@ -297,6 +405,10 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $this->groupMembersTable->delete($where);
             $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $groupIds);
             $this->groupsTable->delete($where);
+            
+            if($this instanceof Tinebase_Group_Interface_SyncAble) {
+                $this->deleteGroupsInSyncBackend($groupIds);
+            }
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
