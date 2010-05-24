@@ -29,7 +29,7 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
 	 * @var Admin_Backend_SambaMachine_Ldap
 	 */
 	protected $_backend = NULL;
-
+	
     /**
      * holds the instance of the singleton
      *
@@ -67,7 +67,10 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
         
         $ldapOptions = Tinebase_User::getBackendConfiguration();
         $sambaOptions = Tinebase_Core::getConfig()->samba->toArray();
-        $sambaOptions['machineGroup'] = isset($sambaOptions['machineGroup']) ? $sambaOptions['machineGroup'] : 'Domain Computers';
+        
+        $options = array_merge($ldapOptions, $sambaOptions);
+        
+        $options['machineGroup'] = isset($options['machineGroup']) ? $options['machineGroup'] : 'Domain Computers';
          
         $this->_options = array_merge($ldapOptions, $sambaOptions);
         
@@ -238,7 +241,8 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
     protected function _setMachineNames($_record)
     {
         $computerName = preg_replace('/\$$/', '', $_record->accountLoginName);
-        $_record->accountLoginName = $computerName . '$';
+        
+        $_record->accountLoginName    = $computerName . '$';
         $_record->accountLastName     = $computerName;
         $_record->accountFullName     = 'Computer ' . $computerName;
         $_record->accountDisplayName  = 'Computer ' . $computerName;
