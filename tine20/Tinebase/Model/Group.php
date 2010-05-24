@@ -15,6 +15,10 @@
  * 
  * @package     Tinebase
  * @subpackage  Group
+ * @property    string  id
+ * @property    string  name
+ * @property    string  name
+ * @property    array   members
  */
 class Tinebase_Model_Group extends Tinebase_Record_Abstract
 {
