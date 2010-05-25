@@ -8,11 +8,25 @@
  * @version     $Id:Phone.css 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
  *
  */
+
  
 .PhoneIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;
 }
+.x-btn-medium .PhoneIconCls {
+    background-image:url(../../images/oxygen/22x22/apps/kcall.png) !important;
+}
+.x-btn-large .PhoneIconCls {
+    background-image:url(../../images/oxygen/32x32/apps/kcall.png) !important;
+}
+
 
 .action_DialNumber {
     background-image:url(../../images/oxygen/16x16/devices/audio-headset.png) !important;
+}
+.x-btn-medium .action_DialNumber {
+    background-image:url(../../images/oxygen/22x22/devices/audio-headset.png) !important;
+}
+.x-btn-large .action_DialNumber {
+    background-image:url(../../images/oxygen/32x32/devices/audio-headset.png) !important;
 }
