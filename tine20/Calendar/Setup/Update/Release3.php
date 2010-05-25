@@ -199,4 +199,22 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Calendar', '3.5');
     }
+    
+    /**
+     * add all exceptions to exdate of baseevent
+     */
+    public function update_5()
+    {
+        // get all event uid's from event with exceptions
+        $tablePrefix = SQL_TABLE_PREFIX;
+        
+        $this->_db->query("
+            INSERT INTO `{$tablePrefix}cal_exdate` SELECT UUID() AS `id`, `calids`.`id` AS `cal_event_id`, SUBSTRING(`cal_events`.`recurid`, -19) AS `exdate`
+            FROM `{$tablePrefix}cal_events` AS `cal_events`
+            LEFT JOIN `{$tablePrefix}cal_events` AS `calids` ON (`cal_events`.`uid` = `calids`.`uid` AND `calids`.`recurid` IS NULL)
+            WHERE `cal_events`.`recurid` IS NOT NULL
+        ");
+        
+        $this->setApplicationVersion('Calendar', '3.6');
+    }
 }
