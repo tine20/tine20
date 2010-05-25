@@ -9,6 +9,13 @@
  *
  */
  
+ 
 .SalesIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kcalc.png) !important;
+}
+.x-btn-medium .SalesIconCls {
+    background-image:url(../../images/oxygen/22x22/apps/kcalc.png) !important;
+}
+.x-btn-large .SalesIconCls {
+    background-image:url(../../images/oxygen/32x32/apps/kcalc.png) !important;
 }
