@@ -89,7 +89,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     name: 'username',
                     allowBlank: false,
                     selectOnFocus: true,
-                    value: this.defaultUsername,
+                    value: this.defaultUsername ? this.defaultUsername : undefined,
                     listeners: {render: function(field){field.focus(false, 250);}}
                 }, {
                     xtype: 'textfield',
