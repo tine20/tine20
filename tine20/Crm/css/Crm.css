@@ -1,86 +1,69 @@
 .CrmIconCls {
     background-image:url(../../images/oxygen/16x16/actions/datashowchart.png) !important;
 }
-
-.actionPrev {
-    background-image:url(../../images/oxygen/16x16/actions/arrow-left.png) !important;
+.x-btn-medium .CrmIconCls {
+    background-image:url(../../images/oxygen/22x22/actions/datashowchart.png) !important;
+}
+.x-btn-large .CrmIconCls {
+    background-image:url(../../images/oxygen/32x32/actions/datashowchart.png) !important;
 }
 
-.actionNext {
-    background-image:url(../../images/oxygen/16x16/actions/arrow-right.png) !important;
-}
-
-.action1DayView {
-    background-image:url(../../images/oxygen/16x16/actions/1day.png) !important;
-}
-
-.action5DaysView {
-    background-image:url(../../images/oxygen/16x16/actions/5days.png) !important;
-}
-
-.action7DaysView {
-    background-image:url(../../images/oxygen/16x16/actions/7days.png) !important;
-}
-
-.actionMonthview {
-    background-image:url(../../images/oxygen/16x16/actions/month.png) !important;
-}
 
 .actionAdd {
     /* background-image:url(../../images/oxygen/16x16/actions/edit-add.png) !important; */
     background-image:url(../../images/oxygen/16x16/actions/list-add.png) !important;
 }
+.x-btn-medium .actionAdd {
+    /* background-image:url(../../images/oxygen/22x22/actions/edit-add.png) !important; */
+    background-image:url(../../images/oxygen/22x22/actions/list-add.png) !important;
+}
+.x-btn-large .actionAdd {
+    /* background-image:url(../../images/oxygen/32x32/actions/edit-add.png) !important; */
+    background-image:url(../../images/oxygen/32x32/actions/list-add.png) !important;
+}
+
 
 .actionRemove {
     background-image:url(../../images/oxygen/16x16/actions/list-remove.png) !important;
 }
+.x-btn-medium .actionRemove {
+    background-image:url(../../images/oxygen/22x22/actions/list-remove.png) !important;
+}
+.x-btn-large .actionRemove {
+    background-image:url(../../images/oxygen/32x32/actions/list-remove.png) !important;
+}
+
 
 .actionAddTask {
     background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
 }
+.x-btn-medium .actionAddTask {
+    background-image:url(../../images/oxygen/22x22/actions/todo.png) !important;
+}
+.x-btn-large .actionAddTask {
+    background-image:url(../../images/oxygen/32x32/actions/todo.png) !important;
+}
+
 
 .actionEdit {
     background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
 }
+.x-btn-medium .actionEdit {
+    background-image:url(../../images/oxygen/22x22/actions/edit.png) !important;
+}
+.x-btn-large .actionEdit {
+    background-image:url(../../images/oxygen/32x32/actions/edit.png) !important;
+}
+
 
 .actionDelete {
     background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
 }
-
-.actionDisplayEvents {
-    background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
+.x-btn-medium .actionDelete {
+    background-image:url(../../images/oxygen/22x22/actions/edit-delete.png) !important;
 }
-
-.actionSaveAndClose {
-    background-image:url(../../images/oxygen/16x16/actions/document-save.png) !important;
-}
-
-.actionApplyChanges {
-    background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
-}
-
-.filterSearch {
-    background-image:url(../../images/oxygen/16x16/actions/search-filter.png) !important;
-}
-
-.repeatAction {
-    background-image:url(../../images/oxygen/16x16/actions/xdays.png) !important;
-}
-
-.showEndedLeadsAction {
-    background-image:url(../../images/oxygen/16x16/actions/ark-extract.png) !important;
-}
-
-.hideEndedLeadsAction {
-    background-image:url(../../images/oxygen/16x16/actions/ark-delete.png) !important;
-}
-
-.showDetailsAction {
-    background-image:url(../../images/oxygen/16x16/actions/fileview-detailed.png) !important;
-}
-
-.hideDetailsAction {
-    background-image:url(../../images/oxygen/16x16/actions/fileview-column.png) !important;
+.x-btn-large .actionDelete {
+    background-image:url(../../images/oxygen/32x32/actions/edit-delete.png) !important;
 }
 
 
@@ -136,17 +119,39 @@
 	position: relative;
 }
 
+
 .contactIconResponsible {
     background-image:url(../../images/oxygen/16x16/apps/preferences-desktop-user.png) !important;
 }
+.x-btn-medium .contactIconResponsible {
+    background-image:url(../../images/oxygen/22x22/apps/preferences-desktop-user.png) !important;
+}
+.x-btn-large .contactIconResponsible {
+    background-image:url(../../images/oxygen/32x32/apps/preferences-desktop-user.png) !important;
+}
+
 
 .contactIconCustomer {
     background-image:url(../../images/oxygen/16x16/apps/system-users.png) !important;
 }
+.x-btn-medium .contactIconCustomer {
+    background-image:url(../../images/oxygen/22x22/apps/system-users.png) !important;
+}
+.x-btn-large .contactIconCustomer {
+    background-image:url(../../images/oxygen/32x32/apps/system-users.png) !important;
+}
+
 
 .contactIconPartner {
     background-image:url(../../images/oxygen/16x16/actions/view-process-own.png) !important;
 }
+.x-btn-medium .contactIconPartner {
+    background-image:url(../../images/oxygen/22x22/actions/view-process-own.png) !important;
+}
+.x-btn-large .contactIconPartner {
+    background-image:url(../../images/oxygen/32x32/actions/view-process-own.png) !important;
+}
+
 
 .productSummary {
     background: transparent none repeat;
