@@ -806,7 +806,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $config->set('HTML.DefinitionID', 'purify message body contents'); 
         $config->set('HTML.DefinitionRev', 1);
         $config->set('Cache.SerializerPath', $path);
-
+        $config->set('HTML.ForbiddenElements', array('img'));
+        
         // add target="_blank" to anchors
         $def = $config->getHTMLDefinition(true);
         $a = $def->addBlankElement('a');
