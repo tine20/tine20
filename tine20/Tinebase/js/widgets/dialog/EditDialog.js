@@ -295,6 +295,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         if (this.fireEvent('load', this) !== false) {
             this.getForm().loadRecord(this.record);
+            this.getForm().clearInvalid();
             this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
             
             this.loadMask.hide();
