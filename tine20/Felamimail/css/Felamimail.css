@@ -1,56 +1,112 @@
-.action_email_new {
-    background-image:url(../../images/oxygen/16x16/actions/mail-new.png) !important;
-}
-
 .action_email_flag {
     background-image:url(../../images/oxygen/16x16/actions/flag-red.png) !important;
 }
+.x-btn-medium .action_email_flag {
+    background-image:url(../../images/oxygen/22x22/actions/flag-red.png) !important;
+}
+.x-btn-large .action_email_flag {
+    background-image:url(../../images/oxygen/32x32/actions/flag-red.png) !important;
+}
+
 
 .action_email_reply {
     background-image:url(../../images/oxygen/16x16/actions/mail-reply-sender.png) !important;
 }
+.x-btn-medium .action_email_reply {
+    background-image:url(../../images/oxygen/22x22/actions/mail-reply-sender.png) !important;
+}
+.x-btn-large .action_email_reply {
+    background-image:url(../../images/oxygen/32x32/actions/mail-reply-sender.png) !important;
+}
+
 
 .action_email_replyAll {
     background-image:url(../../images/oxygen/16x16/actions/mail-reply-all.png) !important;
 }
+.x-btn-medium .action_email_replyAll {
+    background-image:url(../../images/oxygen/22x22/actions/mail-reply-all.png) !important;
+}
+.x-btn-large .action_email_replyAll {
+    background-image:url(../../images/oxygen/32x32/actions/mail-reply-all.png) !important;
+}
+
 
 .action_email_forward {
     background-image:url(../../images/oxygen/16x16/actions/mail-forward.png) !important;
 }
+.x-btn-medium .action_email_forward {
+    background-image:url(../../images/oxygen/22x22/actions/mail-forward.png) !important;
+}
+.x-btn-large .action_email_forward {
+    background-image:url(../../images/oxygen/32x32/actions/mail-forward.png) !important;
+}
+
 
 .action_update_cache {
 	background-image:url(../../images/oxygen/16x16/actions/mail-receive.png) !important;
 }
+.x-btn-medium .action_update_cache {
+    background-image:url(../../images/oxygen/22x22/actions/mail-receive.png) !important;
+}
+.x-btn-large .action_update_cache {
+    background-image:url(../../images/oxygen/32x32/actions/mail-receive.png) !important;
+}
+
 
 .action_mark_unread {
     background-image:url(../../images/oxygen/16x16/actions/mail-mark-unread.png) !important;
 }
+.x-btn-medium .action_mark_unread {
+    background-image:url(../../images/oxygen/22x22/actions/mail-mark-unread.png) !important;
+}
+.x-btn-large .action_mark_unread {
+    background-image:url(../../images/oxygen/32x32/actions/mail-mark-unread.png) !important;
+}
 	
-/*
-.action_email_previuosMessage {
-    background-image:url(../../images/oxygen/16x16/actions/find-previous.png) !important;
-}
-
-.action_email_nextMessage {
-    background-image:url(../../images/oxygen/16x16/actions/find-next.png) !important;
-}
-*/
 
 .action_print {
     background-image:url(../../images/oxygen/16x16/actions/document-print.png) !important;
 }
+.x-btn-medium .action_print {
+    background-image:url(../../images/oxygen/22x22/actions/document-print.png) !important;
+}
+.x-btn-large .action_print {
+    background-image:url(../../images/oxygen/32x32/actions/document-print.png) !important;
+}
+
 
 .action_printPreview {
     background-image:url(../../images/oxygen/16x16/actions/document-print-preview.png) !important;
 }
+.x-btn-medium .action_printPreview {
+    background-image:url(../../images/oxygen/22x22/actions/document-print-preview.png) !important;
+}
+.x-btn-large .action_printPreview {
+    background-image:url(../../images/oxygen/32x32/actions/document-print-preview.png) !important;
+}
+
 
 .FelamimailIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
 }
+.x-btn-medium .FelamimailIconCls {
+    background-image:url(../../images/oxygen/22x22/apps/kmail.png) !important;
+}
+.x-btn-large .FelamimailIconCls {
+    background-image:url(../../images/oxygen/32x32/apps/kmail.png) !important;
+}
+
 
 .action_folder_emptytrash {
     background-image:url(../../images/oxygen/16x16/actions/emptytrash.png) !important;
 }
+.x-btn-medium .action_folder_emptytrash {
+    background-image:url(../../images/oxygen/22x22/actions/emptytrash.png) !important;
+}
+.x-btn-large .action_folder_emptytrash {
+    background-image:url(../../images/oxygen/32x32/actions/emptytrash.png) !important;
+}
+
 
 /***** flag classes ******/
 
