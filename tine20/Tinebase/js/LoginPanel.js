@@ -152,7 +152,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             }),
             reader: new Ext.data.JsonReader({
                 root: 'survey'
-            }, ['title', 'subtitle', 'duration', 'langs', 'link', 'enddate', 'htmlmessage'])
+            }, ['title', 'subtitle', 'duration', 'langs', 'link', 'enddate', 'htmlmessage', 'version'])
         });
         
         ds.on('load', function(store, records) {
@@ -177,8 +177,10 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 this.getSurveyData(function(survey) {
                     if (typeof survey.get == 'function') {
                         var enddate = Date.parseDate(survey.get('enddate'), Date.patterns.ISO8601Long);
+                        var version = survey.get('version');
                         
-                        if (Ext.isDate(enddate) && enddate.getTime() > new Date().getTime()) {
+                        if (Ext.isDate(enddate) && enddate.getTime() > new Date().getTime() && 
+                            Tine.clientVersion.packageString.indexOf(version) === 0) {
                             survey.data.lang_duration = String.format(_('about {0} minutes'), survey.data.duration);
                             survey.data.link = 'https://versioncheck.officespot20.com/surveyCheck/surveyCheck.php?participate';
                             
