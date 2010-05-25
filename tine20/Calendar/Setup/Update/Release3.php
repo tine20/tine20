@@ -211,7 +211,7 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->_db->query("
             INSERT INTO `{$tablePrefix}cal_exdate` SELECT UUID() AS `id`, `calids`.`id` AS `cal_event_id`, SUBSTRING(`cal_events`.`recurid`, -19) AS `exdate`
             FROM `{$tablePrefix}cal_events` AS `cal_events`
-            LEFT JOIN `{$tablePrefix}cal_events` AS `calids` ON (`cal_events`.`uid` = `calids`.`uid` AND `calids`.`recurid` IS NULL)
+            JOIN `{$tablePrefix}cal_events` AS `calids` ON (`cal_events`.`uid` = `calids`.`uid` AND `calids`.`recurid` IS NULL)
             WHERE `cal_events`.`recurid` IS NOT NULL
         ");
         
