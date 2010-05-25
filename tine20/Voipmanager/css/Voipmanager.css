@@ -1,37 +1,101 @@
 .action_enable {
     background-image:url(../../images/oxygen/16x16/actions/dialog-apply.png) !important;
 }
+.x-btn-medium .action_enable {
+    background-image:url(../../images/oxygen/22x22/actions/dialog-apply.png) !important;
+}
+.x-btn-large .action_enable {
+    background-image:url(../../images/oxygen/32x32/actions/dialog-apply.png) !important;
+}
+
 
 .action_disable {
     background-image:url(../../images/oxygen/16x16/actions/dialog-cancel.png) !important;
 }
+.x-btn-medium .action_disable {
+    background-image:url(../../images/oxygen/22x22/actions/dialog-cancel.png) !important;
+}
+.x-btn-large .action_disable {
+    background-image:url(../../images/oxygen/32x32/actions/dialog-cancel.png) !important;
+}
+
 
 .action_settings {
     background-image:url(../../images/oxygen/16x16/actions/view-choose.png) !important;
 }
+.x-btn-medium .action_settings {
+    background-image:url(../../images/oxygen/22x22/actions/view-choose.png) !important;
+}
+.x-btn-large .action_settings {
+    background-image:url(../../images/oxygen/32x32/actions/view-choose.png) !important;
+}
+
 
 .action_permissions {
     background-image:url(../../images/oxygen/16x16/status/dialog-password.png) !important;
 }
+.x-btn-medium .action_permissions {
+    background-image:url(../../images/oxygen/22x22/status/dialog-password.png) !important;
+}
+.x-btn-large .action_permissions {
+    background-image:url(../../images/oxygen/32x32/status/dialog-password.png) !important;
+}
+
 
 .action_add {
     background-image:url(../../images/oxygen/16x16/actions/list-add.png) !important;
 }
+.x-btn-medium .action_add {
+    background-image:url(../../images/oxygen/22x22/actions/list-add.png) !important;
+}
+.x-btn-large .action_add {
+    background-image:url(../../images/oxygen/32x32/actions/list-add.png) !important;
+}
+
 
 .action_addGroup {
     background-image:url(../../images/oxygen/16x16/actions/add-users.png) !important;
 }
+.x-btn-medium .action_addGroup {
+    background-image:url(../../images/oxygen/22x22/actions/add-users.png) !important;
+}
+.x-btn-large .action_addGroup {
+    background-image:url(../../images/oxygen/32x32/actions/add-users.png) !important;
+}
+
 
 .action_resetHttpClientInfo {
     background-image:url(../../images/oxygen/16x16/actions/document-export.png) !important;
 }
+.x-btn-medium .action_resetHttpClientInfo {
+    background-image:url(../../images/oxygen/22x22/actions/document-export.png) !important;
+}
+.x-btn-large .action_resetHttpClientInfo {
+    background-image:url(../../images/oxygen/32x32/actions/document-export.png) !important;
+}
+
 
 .action_openPhonesWebGui {
     background-image:url(../../images/oxygen/16x16/apps/internet-web-browser.png) !important;
 }
+.x-btn-medium .action_openPhonesWebGui {
+    background-image:url(../../images/oxygen/22x22/apps/internet-web-browser.png) !important;
+}
+.x-btn-large .action_openPhonesWebGui {
+    background-image:url(../../images/oxygen/32x32/apps/internet-web-browser.png) !important;
+}
+
+
 .VoipmanagerIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;
 }
+.x-btn-medium .VoipmanagerIconCls {
+    background-image:url(../../images/oxygen/22x22/apps/kcall.png) !important;
+}
+.x-btn-large .VoipmanagerIconCls {
+    background-image:url(../../images/oxygen/32x32/apps/kcall.png) !important;
+}
+
 
 .cboxmiddle {
     vertical-align: middle;
