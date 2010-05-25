@@ -230,15 +230,11 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     {
         //compute recurset
         $candidates = $_events->filter('rrule', "/^FREQ.*/", TRUE);
-        $virtualExdates = Calendar_Controller_Event::getInstance()->getRecurVirtualExdates($_events, $_from, $_until);
         
         $fakeId = microtime();
         foreach ($candidates as $candidate) {
             try {
                 $exceptions = $_events->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
-                
-                // merge virtual exdates of current event to exceptions
-                $exceptions->merge($virtualExdates->filter('recurid', "/^{$candidate->uid}-.*/", TRUE));
                 
                 $recurSet = Calendar_Model_Rrule::computeRecuranceSet($candidate, $exceptions, $_from, $_until);
                 foreach ($recurSet as $event) {

@@ -667,38 +667,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         )));
     }
     
-    /**
-     * get all virtual exdates for given set of events
-     * 
-     * Virtual exdates are dates of the persistent excpetions not found by the current
-     * search query due to scoping/filtering issues. These events must be treatan as
-     * exdates(fallouts) for recuring calculations
-     * 
-     * @param  Tinebase_Record_RecordSet $_events
-     * @param  Zend_Date $_from
-     * @param  Zend_Date $_until
-     * @return Tinebase_Record_RecordSet of events (virtual exdates (fallouts))
-     */
-    public function getRecurVirtualExdates($_events, $_from = NULL, $_until = NULL)
-    {
-        $filterData = array(
-            array('field' => 'uid',     'operator' => 'in',      'value' => array_unique($_events->uid)),
-            array('field' => 'recurid', 'operator' => 'notnull', 'value' => NULL),
-            array('field' => 'id',      'operator' => 'notin',   'value' => array_unique($_events->id)),
-        );
-        
-        if ($_from && $_until) {
-            $filterData[] = array('field' => 'period', 'operator' => 'within', 'value' => array(
-                'from'  => $_from,
-                'until' => $_until
-            ));
-        }
-        
-        $virtualExceptionEvents = $this->_backend->search(new Calendar_Model_EventFilter($filterData));
-        
-        return $virtualExceptionEvents;
-    }
-    
     /****************************** overwritten functions ************************/
     
     /**
