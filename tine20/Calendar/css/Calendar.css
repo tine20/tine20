@@ -1,31 +1,69 @@
 .CalendarIconCls {
     background-image:url(../../images/oxygen/16x16/apps/korganizer.png);
 }
+.x-btn-medium .CalendarIconCls {
+    background-image:url(../../images/oxygen/22x22/apps/korganizer.png);
+}
+.x-btn-large .CalendarIconCls {
+    background-image:url(../../images/oxygen/32x32/apps/korganizer.png);
+}
+
 
 .cal-today-action {
     background-image:url(../../images/oxygen/16x16/actions/go-jump-today.png) !important;
 }
+.x-btn-medium .cal-today-action {
+    background-image:url(../../images/oxygen/22x22/actions/go-jump-today.png) !important;
+}
+.x-btn-large .cal-today-action {
+    background-image:url(../../images/oxygen/32x32/actions/go-jump-today.png) !important;
+}
+
 
 .cal-day-view {
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-day.png) !important;
 }
-
-.cal-upcoming-days-view {
-    background-image:url(../../images/oxygen/16x16/actions/view-calendar-upcoming-days.png) !important;
+.x-btn-medium .cal-day-view {
+    background-image:url(../../images/oxygen/22x22/actions/view-calendar-day.png) !important;
 }
+.x-btn-large .cal-day-view {
+    background-image:url(../../images/oxygen/32x32/actions/view-calendar-day.png) !important;
+}
+
 
 .cal-week-view {
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-week.png) !important;
 }
+.x-btn-medium .cal-week-view {
+    background-image:url(../../images/oxygen/22x22/actions/view-calendar-week.png) !important;
+}
+.x-btn-large .cal-week-view {
+    background-image:url(../../images/oxygen/32x32/actions/view-calendar-week.png) !important;
+}
+
 
 .cal-month-view {
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-month.png) !important;
 }
+.x-btn-medium .cal-month-view {
+    background-image:url(../../images/oxygen/22x22/actions/view-calendar-month.png) !important;
+}
+.x-btn-large .cal-month-view {
+    background-image:url(../../images/oxygen/32x32/actions/view-calendar-month.png) !important;
+}
+
 
 .cal-resource {
     background-image:url(../../images/oxygen/16x16/devices/video-projector.png) !important;
 }
-    
+.x-btn-medium .cal-resource {
+    background-image:url(../../images/oxygen/22x22/devices/video-projector.png) !important;
+}
+.x-btn-large .cal-resource {
+    background-image:url(../../images/oxygen/32x32/devices/video-projector.png) !important;
+}
+
+
 .cal-attendee-type-resource {
     background-image:url(../../images/oxygen/16x16/devices/video-projector.png) !important;
     background-position:2px 2px;
