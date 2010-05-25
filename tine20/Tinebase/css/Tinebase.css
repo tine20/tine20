@@ -11,6 +11,9 @@ html, body {
 .action_edit {
     background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
 }
+.x-btn-medium .action_edit {
+    background-image:url(../../images/oxygen/22x22/actions/edit.png) !important;
+}
 
 .action_editcopy {
     background-image:url(../../images/oxygen/16x16/actions/edit-copy.png) !important;
@@ -22,6 +25,9 @@ html, body {
 
 .action_delete {
     background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
+}
+.x-btn-medium .action_delete {
+    background-image:url(../../images/oxygen/22x22/actions/edit-delete.png) !important;
 }
 
 .action_duplicate {
@@ -91,13 +97,21 @@ html, body {
 .action_originalImage {
     background-image:url(../../images/oxygen/16x16/mimetypes/image-jpeg2000.png) !important;
 }
+
 .action_export {
     background-image:url(../../images/oxygen/16x16/actions/file-export.png) !important;
+}
+.x-btn-medium .action_export {
+    background-image:url(../../images/oxygen/22x22/actions/file-export.png) !important;
 }
 
 .action_import {
     background-image:url(../../images/oxygen/16x16/actions/view-sort-ascending.png) !important;
-}   
+}
+.x-btn-medium .action_import {
+    background-image:url(../../images/oxygen/22x22/actions/view-sort-ascending.png) !important;
+}
+
 .action_preferences {
     background-image:url(../../images/oxygen/16x16/actions/exec.png) !important;
 }   
@@ -111,6 +125,9 @@ html, body {
 
 .action_composeEmail {
     background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
+}
+.x-btn-medium .action_composeEmail {
+    background-image:url(../../images/oxygen/22x22/apps/kmail.png) !important;
 }
 
 .tinebase-action-export-xls {
