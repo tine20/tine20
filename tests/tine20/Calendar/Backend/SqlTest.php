@@ -15,7 +15,7 @@
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Backend_SqlTests::main');
+    define('PHPUnit_MAIN_METHOD', 'Calendar_Backend_SqlTest::main');
 }
 
 /**
@@ -23,7 +23,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  * 
  * @package     Calendar
  */
-class Calendar_Backend_SqlTests extends Calendar_TestCase
+class Calendar_Backend_SqlTest extends Calendar_TestCase
 {
     
     public function testCreateEvent()
@@ -286,6 +286,6 @@ class Calendar_Backend_SqlTests extends Calendar_TestCase
 }
     
 
-if (PHPUnit_MAIN_METHOD == 'Calendar_Backend_SqlTests::main') {
-    Calendar_Backend_SqlTests::main();
+if (PHPUnit_MAIN_METHOD == 'Calendar_Backend_SqlTest::main') {
+    Calendar_Backend_SqlTest::main();
 }
