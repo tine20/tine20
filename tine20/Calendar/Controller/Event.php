@@ -531,19 +531,21 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * 
      * @param  Calendar_Model_Event  $_event
      * @param  bool                  $_deleteInstance
-     * @param  bool                  $_deleteAllFollowing (technically croppes rrule_until)
+     * @param  bool                  $_allFollowing
      * @param  bool                  $_checkBusyConficts
      * @return Calendar_Model_Event  exception Event | updated baseEvent
      */
-    public function createRecurException($_event, $_deleteInstance = FALSE, $_deleteAllFollowing = FALSE, $_checkBusyConficts = FALSE)
+    public function createRecurException($_event, $_deleteInstance = FALSE, $_allFollowing = FALSE, $_checkBusyConficts = FALSE)
     {
         // NOTE: recurid is computed by rrule recur computations and therefore is already part of the event.
         if (empty($_event->recurid)) {
             throw new Exception('recurid must be present to create exceptions!');
         }
         
+        $exdate = new Zend_Date(substr($_event->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
         $baseEvent = $this->getRecurBaseEvent($_event);
         
+        // just do attender status update if user has no edit grant
         if ($this->_doContainerACLChecks && !$baseEvent->{Tinebase_Model_Grants::GRANT_EDIT}) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: '{$baseEvent->getId()}'. Only creating exception for attendee status");
             if ($_event->attendee instanceof Tinebase_Record_RecordSet) {
@@ -557,78 +559,78 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             return $this->get($exceptionAttender->cal_event_id);
         }
         
-        if (! $_deleteInstance) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating persistent exception for: '{$_event->recurid}'");
+        // we do notifications ourself
+        $sendNotifications = $this->_sendNotifications;
+        $this->_sendNotifications = FALSE;
+        
+        if ($_allFollowing) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " shorten rrule_until for: '{$_event->recurid}'");
+            $notificationAction = 'changed';
             
-            $_event->setId(NULL);
-            unset($_event->rrule);
-            unset($_event->exdate);
+            $rrule = Calendar_Model_Rrule::getRruleFromString($baseEvent->rrule);
+            $rrule->until = $exdate->addDay(-1);
             
-            if ($_event->attendee instanceof Tinebase_Record_RecordSet) {
-                $_event->attendee->setId(NULL);
-            }
-            
-            if ($_event->notes instanceof Tinebase_Record_RecordSet) {
-                $_event->notes->setId(NULL);
-            }
-            
-            if ($_event->alarms instanceof Tinebase_Record_RecordSet) {
-                $_event->alarms->setId(NULL);
-            }
-            
-            // mhh how to preserv the attendee status stuff
-            $event = $this->create($_event, $_checkBusyConficts);
-            
-            // we need to touch the recur base event, so that sync action find the updates
-            $this->update($baseEvent, FALSE);
-            
-            return $event;
-            
+            $baseEvent->rrule = (string) $rrule;
         } else {
-            $exdate = new Zend_Date(substr($_event->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " adding exdate for: '{$_event->recurid}'");
+            $notificationAction = 'deleted';
             
-            if ($_deleteAllFollowing) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " shorten rrule_until for: '{$_event->recurid}'");
-                
-                $rrule = Calendar_Model_Rrule::getRruleFromString($baseEvent->rrule);
-                $rrule->until = $exdate->addDay(-1);
-                
-                $baseEvent->rrule = (string) $rrule;
+            if (is_array($baseEvent->exdate)) {
+                $exdates = $baseEvent->exdate;
+                array_push($exdates, $exdate);
+                $baseEvent->exdate = $exdates;
             } else {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " deleting recur instance: '{$_event->recurid}'");
-                
-                if (is_array($baseEvent->exdate)) {
-                    $exdates = $baseEvent->exdate;
-                    array_push($exdates, $exdate);
-                    $baseEvent->exdate = $exdates;
-                } else {
-                    $baseEvent->exdate = array($exdate);
-                }
+                $baseEvent->exdate = array($exdate);
             }
-            
-            $sendNotifications = $this->_sendNotifications;
-            $this->_sendNotifications = FALSE;
-                
-            $updatedEvent = $this->update($baseEvent, FALSE);
-            
-            $this->_sendNotifications = $sendNotifications;
-            
-            // send notifications
-            if ($this->_sendNotifications) {
-                // NOTE: recur exception is a fake event from client. 
-                //       this might lead to problems, so we wrap the calls
-                try {
-                    $_event->attendee->bypassFilters = TRUE;
-                    $_event->created_by = $baseEvent->created_by;
-                    
-                    $this->sendNotifications($_event, $this->_currentAccount, 'deleted');
-                } catch (Exception $e) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " could not send notification {$e->getMessage()}");
-                }
-            }
-            
-            return $updatedEvent;
         }
+        $updatedBaseEvent = $this->update($baseEvent, FALSE);
+        
+        if (! $_deleteInstance) {
+            if ($_allFollowing) {
+                throw new Exception('not yet implemented!');
+            } else {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating persistent exception for: '{$_event->recurid}'");
+                $notificationAction = 'created';
+                
+                $_event->setId(NULL);
+                unset($_event->rrule);
+                unset($_event->exdate);
+                
+                if ($_event->attendee instanceof Tinebase_Record_RecordSet) {
+                    $_event->attendee->setId(NULL);
+                }
+                
+                if ($_event->notes instanceof Tinebase_Record_RecordSet) {
+                    $_event->notes->setId(NULL);
+                }
+                
+                if ($_event->alarms instanceof Tinebase_Record_RecordSet) {
+                    $_event->alarms->setId(NULL);
+                }
+                
+                // mhh how to preserv the attendee status stuff
+                $persistentExceptionEvent = $this->create($_event, $_checkBusyConficts);
+            }
+        }
+        
+        $this->_sendNotifications = $sendNotifications;
+        $notificationEvent = $notificationAction == 'created' ? $persistentExceptionEvent :  $updatedBaseEvent;
+        
+        // send notifications
+        if ($this->_sendNotifications) {
+            // NOTE: recur exception is a fake event from client. 
+            //       this might lead to problems, so we wrap the calls
+            try {
+                $_event->attendee->bypassFilters = TRUE;
+                $_event->created_by = $baseEvent->created_by;
+                
+                $this->sendNotifications($notificationEvent, $this->_currentAccount, $notificationAction);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " could not send notification {$e->getMessage()}");
+            }
+        }
+        
+        return $notificationEvent;
     }
     
     /**

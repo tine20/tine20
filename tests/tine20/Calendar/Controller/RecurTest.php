@@ -115,6 +115,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         // create exception of this first occurance: 17.6. -> 24.06.
         $firstRecurrance->dtstart->add(1, Zend_Date::WEEK);
         $firstRecurrance->dtend->add(1, Zend_Date::WEEK);
+        $this->_controller->createRecurException($firstRecurrance);
         
         // fetch weekview 14.06 - 20.06.
         $from = new Zend_Date('2010-06-14 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);

@@ -696,7 +696,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persitentException = $this->_controller->createRecurException($exception);
         
         $persitentEvent = $this->_controller->get($persitentEvent->getId());
-        $this->assertNull($persitentEvent->exdate);
+        $this->assertEquals(1, count($persitentEvent->exdate));
+        
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'uid',     'operator' => 'equals', 'value' => $persitentEvent->uid),
         )));
