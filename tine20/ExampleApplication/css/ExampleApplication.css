@@ -12,3 +12,9 @@
 .ExampleApplicationIconCls {
     background-image:url(../../images/oxygen/16x16/actions/document-open-recent.png) !important;
 }
+.x-btn-medium .ExampleApplicationIconCls {
+    background-image:url(../../images/oxygen/22x22/actions/document-open-recent.png) !important;
+}
+.x-btn-large .ExampleApplicationIconCls {
+    background-image:url(../../images/oxygen/32x32/actions/document-open-recent.png) !important;
+}
