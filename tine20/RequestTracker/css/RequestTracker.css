@@ -11,6 +11,12 @@
 .RequestTrackerIconCls {
     background-image:url(../../images/oxygen/16x16/actions/news-subscribe.png) !important;
 }
+.x-btn-medium .RequestTrackerIconCls {
+    background-image:url(../../images/oxygen/22x22/actions/news-subscribe.png) !important;
+}
+.x-btn-large .RequestTrackerIconCls {
+    background-image:url(../../images/oxygen/32x32/actions/news-subscribe.png) !important;
+}
 
 .RequestTracker-History {
     /*padding: 2px;*/
