@@ -9,50 +9,123 @@
  *
  */
  
-.SetupIconCls {
-    background-image:url(../../images/oxygen/16x16/apps/package-utilities.png) !important;
-}
 
 .setup_info {
     background-image:url(../../images/oxygen/16x16/actions/help-about.png) !important;
 }
+.x-btn-medium .setup_info {
+    background-image:url(../../images/oxygen/22x22/actions/help-about.png) !important;
+}
+.x-btn-large .setup_info {
+    background-image:url(../../images/oxygen/32x32/actions/help-about.png) !important;
+}
+
 
 .setup_action_install {
     background-image:url(../../images/oxygen/16x16/actions/list-add.png) !important;
 }
+.x-btn-medium .setup_action_install {
+    background-image:url(../../images/oxygen/22x22/actions/list-add.png) !important;
+}
+.x-btn-large .setup_action_install {
+    background-image:url(../../images/oxygen/32x32/actions/list-add.png) !important;
+}
+
 
 .setup_action_uninstall {
     background-image:url(../../images/oxygen/16x16/actions/list-remove.png) !important;
 }
+.x-btn-medium .setup_action_uninstall {
+    background-image:url(../../images/oxygen/22x22/actions/list-remove.png) !important;
+}
+.x-btn-large .setup_action_uninstall {
+    background-image:url(../../images/oxygen/32x32/actions/list-remove.png) !important;
+}
+
 
 .setup_action_update {
     background-image:url(../../images/oxygen/16x16/apps/system-software-update.png) !important;
 }
+.x-btn-medium .setup_action_update {
+    background-image:url(../../images/oxygen/22x22/apps/system-software-update.png) !important;
+}
+.x-btn-large .setup_action_update {
+    background-image:url(../../images/oxygen/32x32/apps/system-software-update.png) !important;
+}
+
 
 .setup_checks_success {
     background-image:url(../../images/oxygen/16x16/actions/dialog-ok-apply.png) !important;
 }
+.x-btn-medium .setup_checks_success {
+    background-image:url(../../images/oxygen/22x22/actions/dialog-ok-apply.png) !important;
+}
+.x-btn-large .setup_checks_success {
+    background-image:url(../../images/oxygen/32x32/actions/dialog-ok-apply.png) !important;
+}
+
 
 .setup_checks_fail {
     background-image:url(../../images/oxygen/16x16/actions/dialog-error.png) !important;
 }
+.x-btn-medium .setup_checks_fail {
+    background-image:url(../../images/oxygen/22x22/actions/dialog-error.png) !important;
+}
+.x-btn-large .setup_checks_fail {
+    background-image:url(../../images/oxygen/32x32/actions/dialog-error.png) !important;
+}
+
 
 .setup_authentication_manager {
     background-image:url(../../images/oxygen/16x16/status/dialog-password.png) !important;
 }
+.x-btn-medium .setup_authentication_manager {
+    background-image:url(../../images/oxygen/22x22/status/dialog-password.png) !important;
+}
+.x-btn-large .setup_authentication_manager {
+    background-image:url(../../images/oxygen/32x32/status/dialog-password.png) !important;
+}
+
 
 .setup_config_manager {
     background-image:url(../../images/oxygen/16x16/apps/package-utilities.png) !important;
 }
+.x-btn-medium .setup_config_manager {
+    background-image:url(../../images/oxygen/22x22/apps/package-utilities.png) !important;
+}
+.x-btn-large .setup_config_manager {
+    background-image:url(../../images/oxygen/32x32/apps/package-utilities.png) !important;
+}
+
 
 .setup_application_manager {
     background-image:url(../../images/oxygen/16x16/apps/systemtray.png) !important;
 }
+.x-btn-medium .setup_application_manager {
+    background-image:url(../../images/oxygen/22x22/apps/systemtray.png) !important;
+}
+.x-btn-large .setup_application_manager {
+    background-image:url(../../images/oxygen/32x32/apps/systemtray.png) !important;
+}
+
 
 .setup_action_save_config {
     background-image:url(../../images/oxygen/16x16/actions/document-save.png) !important;
 }
+.x-btn-medium .setup_action_save_config {
+    background-image:url(../../images/oxygen/22x22/actions/document-save.png) !important;
+}
+.x-btn-large .setup_action_save_config {
+    background-image:url(../../images/oxygen/32x32/actions/document-save.png) !important;
+}
+
 
 .setup_action_download_config {
     background-image:url(../../images/oxygen/16x16/actions/mail-get.png) !important;
+}
+.x-btn-medium .setup_action_download_config {
+    background-image:url(../../images/oxygen/22x22/actions/mail-get.png) !important;
+}
+.x-btn-large .setup_action_download_config {
+    background-image:url(../../images/oxygen/32x32/actions/mail-get.png) !important;
 }
