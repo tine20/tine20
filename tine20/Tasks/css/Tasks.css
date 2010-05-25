@@ -8,10 +8,18 @@
  * @version     $Id$
  *
  */
+
  
 .TasksIconCls {
     background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
 }
+.x-btn-medium .TasksIconCls {
+    background-image:url(../../images/oxygen/22x22/actions/todo.png) !important;
+}
+.x-btn-large .TasksIconCls {
+    background-image:url(../../images/oxygen/32x32/actions/todo.png) !important;
+}
+
 
 .TasksMainGridStatus {
     width: 12px;
