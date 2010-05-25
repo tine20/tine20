@@ -72,8 +72,7 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
         
         $options['machineGroup'] = isset($options['machineGroup']) ? $options['machineGroup'] : 'Domain Computers';
          
-        $this->_options = array_merge($ldapOptions, $sambaOptions);
-        
+        $this->_options = $options;
 
         $this->_currentAccount = Tinebase_Core::getUser();        
         $this->_applicationName = 'Admin';
