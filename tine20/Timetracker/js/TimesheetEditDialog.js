@@ -140,6 +140,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         name: 'timeaccount_id',
                         listeners: {
                             scope: this,
+                            render: function(field){field.focus(false, 250);},
                             select: this.onTimeaccountUpdate
                         }
                     })], [{
