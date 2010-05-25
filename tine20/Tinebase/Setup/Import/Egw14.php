@@ -78,7 +78,7 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                 'accountPrimaryGroup'       => abs($account->account_primary_group),
                 'accountLastName'           => $account->n_family ? $account->n_family : 'Lastname',
                 'accountFirstName'          => $account->n_given ? $account->n_given : 'Firstname',
-                'accountEmailAddress'       => $account->email
+                'accountEmailAddress'       => $account->email ? $account->email : $account->contact_email
             ));
             
             $this->_log->DEBUG(__METHOD__ . '::' . __LINE__ .' user: ' . print_r($user->toArray(), true));
