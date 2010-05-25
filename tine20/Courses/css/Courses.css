@@ -12,3 +12,9 @@
 .CoursesIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kbruch.png) !important;
 }
+.x-btn-medium .CoursesIconCls {
+    background-image:url(../../images/oxygen/22x22/apps/kbruch.png) !important;
+}
+.x-btn-large .CoursesIconCls {
+    background-image:url(../../images/oxygen/32x32/apps/kbruch.png) !important;
+}
