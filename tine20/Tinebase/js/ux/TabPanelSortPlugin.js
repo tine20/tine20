@@ -52,8 +52,6 @@ Ext.ux.TabPanelSortPlugin.prototype = {
     init: function(cmp){
         this.tabpanel = cmp;
         
-        this.ddel = document.createElement('div');
-        
         this.tabpanel.addEvents(
             /**
              * @event tabsort
@@ -86,6 +84,19 @@ Ext.ux.TabPanelSortPlugin.prototype = {
     },
     
     /**
+     * gets static ddel
+     * 
+     * @return {Ext.Element}
+     */
+    getDDEl: function() {
+        if (! this.ddel) {
+            this.ddel = Ext.get(document.createElement('div'));
+        }
+        
+        return this.ddel;
+    },
+    
+    /**
      * Called when a mousedown occurs in this container. Looks in {@link Ext.dd.Registry}
      * for a valid target to drag based on the mouse down. Override this method
      * to provide your own lookup logic (e.g. finding a child by class name). Make sure your returned
@@ -99,11 +110,12 @@ Ext.ux.TabPanelSortPlugin.prototype = {
         if (target.el) {
             this.pos = this.tabpanel.items.indexOf(target.item);
             
-            Ext.get(this.ddel).update(Ext.DomQuery.selectNode('span[class^=x-tab-strip-text]', target.el).innerHTML);
+            var ddel = this.getDDEl();
+            ddel.update(Ext.DomQuery.selectNode('span[class^=x-tab-strip-text]', target.el).innerHTML);
             
             return Ext.apply(target, {
                 pos: this.pos,
-                ddel: this.ddel,
+                ddel: ddel.dom,
                 repairXY: Ext.fly(target.el).getXY()
             });
         };
@@ -131,8 +143,10 @@ Ext.ux.TabPanelSortPlugin.prototype = {
                 side = (e.getXY()[0] > box.x + box.width/2) ? 'r' : 'l';
             
             if (this.pos > data.pos && side === 'l') {
+//                Ext.fly(data.el).insertBefore(target.el);
                 this.pos = --this.pos;
             } else if (this.pos < data.pos && side === 'r') {
+//                Ext.fly(data.el).insertAfter(target.el);
                 this.pos = ++this.pos;
             }
         }
@@ -153,7 +167,6 @@ Ext.ux.TabPanelSortPlugin.prototype = {
      * @return {Boolean} True if the drop was valid, else false
      */
     onNodeDrop: function(target, dd, e, data){
-        
         if (this.pos == (this.tabpanel.items.length)-1) {
             Ext.fly(data.el).insertAfter(this.tabpanel.items.itemAt(this.pos).tabEl);
         } else {
