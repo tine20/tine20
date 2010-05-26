@@ -558,11 +558,23 @@ Tine.Phone.Main = {
         
         var toolbar = new Ext.Toolbar({
             id: 'Phone_Toolbar',
-            split: false,
-            height: 26,
-            items: [
-                this.actions.dialNumber, 
-                this.actions.editPhoneSettings,
+            //split: false,
+            items: [{
+                xtype: 'buttongroup',
+                columns: 2,
+                items: [
+                    Ext.apply(new Ext.Button(this.actions.dialNumber), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    }),
+                    Ext.apply(new Ext.Button(this.actions.editPhoneSettings), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    })
+                ]
+            },
                 '->', 
                 this.translation._('Search:'), 
                 ' ',
