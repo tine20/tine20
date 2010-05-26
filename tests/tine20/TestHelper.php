@@ -34,8 +34,8 @@ PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Setup');
 PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Zend');
 
 $path = array(
+    PATH_TO_TEST_DIR,
     PATH_TO_REAL_DIR,
-	PATH_TO_TEST_DIR,
 	PATH_TO_TINE_LIBRARY,
     get_include_path(),
 );
