@@ -51,7 +51,7 @@ $autoloader->setFallbackAutoloader(true);
 
 
 // get config
-$configData = include('phpunitconfig.inc.php');
+$configData = @include('phpunitconfig.inc.php');
 if($configData === false) {
     $configData = include('config.inc.php');
 }
