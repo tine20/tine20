@@ -43,13 +43,13 @@
 
 
 .action_addGroup {
-    background-image:url(../../images/oxygen/16x16/actions/add-users.png) !important;
+    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
 }
 .x-btn-medium .action_addGroup {
-    background-image:url(../../images/oxygen/22x22/actions/add-users.png) !important;
+    background-image:url(../../images/oxygen/22x22/actions/users.png) !important;
 }
 .x-btn-large .action_addGroup {
-    background-image:url(../../images/oxygen/32x32/actions/add-users.png) !important;
+    background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
 }
 
 
