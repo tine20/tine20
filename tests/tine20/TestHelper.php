@@ -51,11 +51,11 @@ $autoloader->setFallbackAutoloader(true);
 
 
 // get config
-if(file_exists(dirname(__FILE__) . '/config.inc.php')) {
-    $config = new Zend_Config(require dirname(__FILE__) . '/config.inc.php');
-} else {
-    throw new Exception("Couldn't find config.inc.php! \n");
+$configData = include('config.inc.php');
+if($configData === false) {
+    die ('central configuration file config.inc.php not found in includepath: ' . get_include_path());
 }
+$config = new Zend_Config($configData);
 
 Zend_Registry::set('testConfig', $config);
 
