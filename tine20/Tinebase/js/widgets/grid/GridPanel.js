@@ -532,32 +532,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     
     getActionToolbar: function() {
         if (! this.actionToolbar) {
-            var defaultItems = [
-                Ext.apply(new Ext.Button(this.action_addInNewWindow), {
-                    scale: 'medium',
-                    rowspan: 2,
-                    iconAlign: 'top',
-                    arrowAlign:'right'
-                }),
-                Ext.apply(new Ext.Button(this.action_editInNewWindow), {
-                    scale: 'medium',
-                    rowspan: 2,
-                    iconAlign: 'top'
-                }),
-                Ext.apply(new Ext.Button(this.action_deleteRecord), {
-                    scale: 'medium',
-                    rowspan: 2,
-                    iconAlign: 'top'
-                })
-            ];
-            
             var additionalItems = this.getActionToolbarItems();
             
             this.actionToolbar = new Ext.Toolbar({
                 //defaults: {height: 55},
                 items: [{
                     xtype: 'buttongroup',
-                    columns: defaultItems.length + (Ext.isArray(additionalItems) ? additionalItems.length : 0),
+                    columns: 3 + (Ext.isArray(additionalItems) ? additionalItems.length : 0),
                     items: [
                         Ext.apply(new Ext.Button(this.action_addInNewWindow), {
                             scale: 'medium',

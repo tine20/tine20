@@ -249,17 +249,15 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 scale: 'medium',
                 rowspan: 2,
                 iconAlign: 'top'
-            }),
-            Ext.apply(new Ext.Button(this.actions_exportContact), {
-                scale: 'medium',
-                rowspan: 2,
-                iconAlign: 'top'
-            }),
-            Ext.apply(new Ext.Button(this.actions_import), {
-                scale: 'medium',
-                rowspan: 2,
-                iconAlign: 'top'
-            })
+            }),{
+                xtype: 'buttongroup',
+                columns: 1,
+                frame: false,
+                items: [
+                    this.actions_exportContact,
+                    this.actions_import
+                ]
+            }
         ];
     },
     
