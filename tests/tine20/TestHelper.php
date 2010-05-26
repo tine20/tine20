@@ -34,8 +34,8 @@ PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Setup');
 PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Zend');
 
 $path = array(
-    PATH_TO_TEST_DIR,
     PATH_TO_REAL_DIR,
+    PATH_TO_TEST_DIR,
 	PATH_TO_TINE_LIBRARY,
     get_include_path(),
 );
@@ -51,7 +51,10 @@ $autoloader->setFallbackAutoloader(true);
 
 
 // get config
-$configData = include('config.inc.php');
+$configData = include('phpunitconfig.inc.php');
+if($configData === false) {
+    $configData = include('config.inc.php');
+}
 if($configData === false) {
     die ('central configuration file config.inc.php not found in includepath: ' . get_include_path());
 }
