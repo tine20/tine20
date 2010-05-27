@@ -636,7 +636,13 @@ class Tinebase_Core
             );
 
             if ((bool) $config->queryProfiles) {
-                $data = array_merge($data, array('queryProfiles' => $profiler->getQueryProfiles()));
+                $data['queryProfiles'] = array();
+                foreach($profiler->getQueryProfiles() as $profile) {
+                    $data['queryProfiles'][] = array(
+                        'query'       => $profile->getQuery(),
+                        'elapsedSecs' => $profile->getElapsedSecs(),
+                    );
+                }
             }
 
             self::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($data, true));
