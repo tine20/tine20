@@ -101,21 +101,65 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * Gets one entry (by property)
+     *
+     * @param  mixed  $_value
+     * @param  string $_property
+     * @param  bool   $_getDeleted
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_NotFound
+     * 
+     * @todo move resolveRecordCustomFields to abstract record controller get() fn
+     */
+    public function getByProperty($_value, $_property = 'name', $_getDeleted = FALSE) 
+    {
+        //$pagination = new Tinebase_Model_Pagination(array('limit' => 1));
+        $filters = new Calendar_Model_EventFilter();
+        
+        $filter = new Tinebase_Model_Filter_Text($_property, 'equals', $_value);
+        $filters->addFilter($filter);
+        
+        // for get operations we need to take all attendee into account
+        $filters->addFilter($filters->createFilter('attender', 'specialNode', 'all'));
+        
+        $resultSet = $this->search($filters, NULL, FALSE, $_getDeleted);
+        
+        switch (count($resultSet)) {
+            case 0: 
+                throw new Tinebase_Exception_NotFound($this->_modelName . " record with $_property " . $_value . ' not found!');
+                break;
+            case 1: 
+                $result = $resultSet->getFirstRecord();
+                break;
+            default:
+                throw new Tinebase_Exception_UnexpectedValue(' in total ' . count($resultSet) . ' where found. But only one should!');
+        }
+        
+        // get custom fields
+        if ($result->has('customfields')) {
+            Tinebase_CustomField::getInstance()->resolveRecordCustomFields($result);
+        }
+        
+        return $result;
+    }
+    
+    /**
      * Calendar optimized search function
      *
      * @param  Tinebase_Model_Filter_FilterGroup    $_filter
      * @param  Tinebase_Model_Pagination            $_pagination
      * @param  boolean                              $_onlyIds
+     * @param  bool   $_getDeleted
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)    
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE, $_getDeleted = FALSE)    
     {
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination();
         }
         
         // we use a subselect to reduce data amount where grants etc. have to be computed for
-        $subselect = parent::_getSelect();
+        $subselect = parent::_getSelect('*', $_getDeleted);
         
         $subselect->joinLeft(
             /* table  */ array('exdate' => $this->_tablePrefix . 'cal_exdate'), 
@@ -233,7 +277,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         // NOTE: 2010-04 the behaviour changed. Now, only the attendee the client filters for are 
         //       taken into account for grants calculation 
         $attendeeWhere = FALSE;
-        if ($_attenderFilter) {
+        if ($_attenderFilter instanceof Calendar_Model_AttenderFilter) {
             $attedeeSelect = $this->_db->select();
             $_attenderFilter->appendFilterSql($attedeeSelect, $this);
             $attendeeWhere = ' AND ' . array_value(0, $attedeeSelect->getPart(Zend_Db_Select::SQL_WHERE));
