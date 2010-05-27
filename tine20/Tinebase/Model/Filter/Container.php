@@ -122,7 +122,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             
             // transform id to path
             if (strpos($v, '/') === FALSE) {
-                $v = Tinebase_Container::getInstance()->getContainerById($v)->getPath();
+                $v = Tinebase_Container::getInstance()->getContainerById($v, TRUE)->getPath();
             }
             $value[] = $v;
         }
@@ -161,7 +161,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             foreach((array) $this->_value as $path) {
                 $containerData = array('path' => $path);
                 if (($containerId = Tinebase_Model_Container::pathIsContainer($path))) {
-                    $containerData = array_merge($containerData, Tinebase_Container::getInstance()->getContainerById($containerId)->toArray());
+                    $containerData = array_merge($containerData, Tinebase_Container::getInstance()->getContainerById($containerId, TRUE)->toArray());
                 } else if (($ownerId = Tinebase_Model_Container::pathIsPersonalNode($path))) {
                     // transform current user 
                     $ownerId = $ownerId == "/personal/" . Tinebase_Model_User::CURRENTACCOUNT ? "/personal/" . Tinebase_Core::getUser()->getId() : $ownerId;                    
