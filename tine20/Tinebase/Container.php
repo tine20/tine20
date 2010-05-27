@@ -307,21 +307,23 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @todo what about grant checking here???
      * 
      * @param   int|Tinebase_Model_Container $_containerId the id of the container
+     * @param   bool                         $_getDeleted get deleted records
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getContainerById($_containerId)
+    public function getContainerById($_containerId, $_getDeleted = FALSE)
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
+        $cacheId = 'getContainerById' . $containerId . (int)$_getDeleted;
         // load from cache
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-        $result = $cache->load('getContainerById' . $containerId);
+        $result = $cache->load($cacheId);
 
         if(!$result) {
-            $result = $this->get($containerId);
+            $result = $this->get($containerId, $_getDeleted);
 
-            $cache->save($result, 'getContainerById' . $containerId);
+            $cache->save($cacheId);
         }
         
         return $result;
