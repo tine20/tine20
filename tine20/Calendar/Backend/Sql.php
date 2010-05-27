@@ -103,9 +103,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * Calendar optimized search function
      *
-     * @param  Tinebase_Model_Filter_FilterGroup 	$_filter
-     * @param  Tinebase_Model_Pagination 			$_pagination
-     * @param  boolean 								$_onlyIds
+     * @param  Tinebase_Model_Filter_FilterGroup    $_filter
+     * @param  Tinebase_Model_Pagination            $_pagination
+     * @param  boolean                              $_onlyIds
      * @return Tinebase_Record_RecordSet|array
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)    
@@ -114,53 +114,48 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $_pagination = new Tinebase_Model_Pagination();
         }
         
-        // build query
-        $selectCols = ($_onlyIds) ? $this->_tableName . '.id' : '*';
-        
         // we use a subselect to reduce data amount where grants etc. have to be computed for
         $subselect = parent::_getSelect();
         
-        // add period filter to subselect and remove it from outer filters
-        $periodFilter = $_filter->getFilter('period');
-        if ($periodFilter) {
-        	$groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($subselect);
-        	$periodFilter->appendFilterSql($groupSelect, $this);
-        	$groupSelect->appendWhere(Tinebase_Model_Filter_FilterGroup::CONDITION_AND);
-        	
-        	$_filter->removeFilter('period');
-        }
-        
-        $select = $this->_db->select();
-
-        $select->from(array($this->_tableName => new Zend_Db_Expr("({$subselect->__toString()})")), $selectCols);
-        
-        // only take limited set of attendee into account for grants computation
-        $attenderFilter = $_filter->getFilter('attender');
-        if (! $attenderFilter) {
-        	$attenderFilter = new Calendar_Model_AttenderFilter('attender', 'equals', array(
-        	   'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-        	   'user_id'   =>  Tinebase_Core::getUser()->getId()
-        	));
-        }
-        $this->_appendEffectiveGrantCalculationSql($select, $attenderFilter);
-        
-        $select->joinLeft(
+        $subselect->joinLeft(
             /* table  */ array('exdate' => $this->_tablePrefix . 'cal_exdate'), 
             /* on     */ $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
             /* select */ array('exdate' => 'GROUP_CONCAT( DISTINCT ' . $this->_db->quoteIdentifier('exdate.exdate') . ')'));
         
+        // this attendee join has nothing to do with grants but is here for attendee/status/... filters
+        $subselect->joinLeft(
+            /* table  */ array('attendee' => $this->_tablePrefix . 'cal_attendee'),
+            /* on     */ $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier('cal_events.id'),
+            /* select */ array());
         
-        $this->_addFilter($select, $_filter);
-        $_pagination->appendPaginationSql($select);
-        
-        $select->group($this->_tableName . '.' . 'id');
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-        
-        // re add period to not spoild the flow
-        if ($periodFilter) {
-        	$_filter->addFilter($periodFilter);
+        // remove grantsfilter here as we need it in the main select
+        $grantsFilter = $_filter->getFilter('grants');
+        if ($grantsFilter) {
+            $_filter->removeFilter('grants');
         }
-        // get records
+        
+        $this->_addFilter($subselect, $_filter);
+        $_pagination->appendPaginationSql($subselect);
+        $subselect->group($this->_tableName . '.' . 'id');
+        
+        $select = $this->_db->select();
+        $selectCols = ($_onlyIds) ? $this->_tableName . '.id' : '*';
+        $select->from(array($this->_tableName => new Zend_Db_Expr("({$subselect->__toString()})")), $selectCols);
+        
+        // append grants filters : only take limited set of attendee into account for grants computation
+        $attenderFilter = $_filter->getFilter('attender');
+        if (! $attenderFilter) {
+            $attenderFilter = new Calendar_Model_AttenderFilter('attender', 'equals', array(
+               'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+               'user_id'   =>  Tinebase_Core::getUser()->getId()
+            ));
+        }
+        $this->_appendEffectiveGrantCalculationSql($select, $attenderFilter);
+        if ($grantsFilter) {
+            $grantsFilter->appendFilterSql($select, $this);
+        }
+        $select->group($this->_tableName . '.' . 'id');
+        
         $stmt = $this->_db->query($select);
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
@@ -228,19 +223,13 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     protected function _appendEffectiveGrantCalculationSql($_select, $_attenderFilter = NULL)
     {
-        // this attendee join has nothing to do with grants but is here for attendee/status/... filters
-        $_select->joinLeft(
-            /* table  */ array('attendee' => $this->_tablePrefix . 'cal_attendee'),
-            /* on     */ $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier('cal_events.id'),
-            /* select */ array());
-
         // groupmemberships of current user, needed to compute phys and inherited grants
         $_select->joinLeft(
             /* table  */ array('groupmemberships' => $this->_tablePrefix . 'group_members'), 
             /* on     */ $this->_db->quoteInto($this->_db->quoteIdentifier('groupmemberships.account_id') . ' = ?' , Tinebase_Core::getUser()->getId()),
             /* select */ array());
         
-        // grantsattendee joins the attendee we need to compute the curr users effective grants
+        // attendee joins the attendee we need to compute the curr users effective grants
         // NOTE: 2010-04 the behaviour changed. Now, only the attendee the client filters for are 
         //       taken into account for grants calculation 
         $attendeeWhere = FALSE;
@@ -251,15 +240,15 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
         
         $_select->joinLeft(
-            /* table  */ array('grantsattendee' => $this->_tablePrefix . 'cal_attendee'),
-            /* on     */ $this->_db->quoteIdentifier('grantsattendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier('cal_events.id') . 
+            /* table  */ array('attendee' => $this->_tablePrefix . 'cal_attendee'),
+            /* on     */ $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier('cal_events.id') . 
                             $attendeeWhere,
             /* select */ array());
         
         $_select->joinLeft(
             /* table  */ array('attendeecontacts' => $this->_tablePrefix . 'addressbook'), 
-            /* on     */ $this->_db->quoteIdentifier('attendeecontacts.id') . ' = ' . $this->_db->quoteIdentifier('grantsattendee.user_id') . 
-                            ' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('grantsattendee.user_type') . '= ?', Calendar_Model_Attender::USERTYPE_USER),
+            /* on     */ $this->_db->quoteIdentifier('attendeecontacts.id') . ' = ' . $this->_db->quoteIdentifier('attendee.user_id') . 
+                            ' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . '= ?', Calendar_Model_Attender::USERTYPE_USER),
             /* select */ array());
         
         $_select->joinLeft(
@@ -269,7 +258,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $_select->joinLeft(
             /* table  */ array('dispgrants' => $this->_tablePrefix . 'container_acl'), 
-            /* on     */ $this->_db->quoteIdentifier('dispgrants.container_id') . ' = ' . $this->_db->quoteIdentifier('grantsattendee.displaycontainer_id') . 
+            /* on     */ $this->_db->quoteIdentifier('dispgrants.container_id') . ' = ' . $this->_db->quoteIdentifier('attendee.displaycontainer_id') . 
                            ' AND ' . $this->_getContainGrantCondition('dispgrants', 'groupmemberships'),
             /* select */ array());
         
@@ -350,7 +339,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         // attendee get read and private grants implicitly
         if (in_array($_requiredGrant, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_PRIVATE))) {
-            $readCond = $this->_db->quoteInto($this->_db->quoteIdentifier('grantsattendee.user_type') . ' = ?', Calendar_Model_Attender::USERTYPE_USER) . 
+            $readCond = $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . ' = ?', Calendar_Model_Attender::USERTYPE_USER) . 
                    ' AND ' .  $this->_db->quoteIdentifier('attendeecontacts.account_id') . ' = ' . $this->_db->quote($accountId);
             
             $sql = "($sql) OR ($readCond)";
