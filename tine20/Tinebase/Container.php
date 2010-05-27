@@ -315,7 +315,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
-        $cacheId = 'getContainerById' . $containerId . (int)$_getDeleted;
+        $cacheId = 'getContainerById' . $containerId . 'd' . (int)$_getDeleted;
+
         // load from cache
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
         $result = $cache->load($cacheId);
@@ -323,7 +324,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         if(!$result) {
             $result = $this->get($containerId, $_getDeleted);
 
-            $cache->save($cacheId);
+            $cache->save($result, $cacheId, array('container'));
         }
         
         return $result;
