@@ -42,22 +42,27 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                 $this->_value = $_value;
                 break;
             case 'specialNode' :
-                // only allResource support yet
-                if ($_value !== 'allResources') {
-                    throw new Tinebase_Exception_UnexpectedValue('specialNode not supported.');
-                }
-                
-                $this->_value = array();
-                $resources = Calendar_Controller_Resource::getInstance()->getAll();
-                foreach ($resources as $resource) {
-                    $this->_value[] = array(
-                        'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
-                        'user_id'   => $resource->getId()
-                    );
+                switch ($_value) {
+                    case 'all':
+                        $this->_value = $_value;
+                        break;
+                    case 'allResources':
+                        $this->_value = array();
+                        $resources = Calendar_Controller_Resource::getInstance()->getAll();
+                        foreach ($resources as $resource) {
+                            $this->_value[] = array(
+                                'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                                'user_id'   => $resource->getId()
+                            );
+                        }
+                        break;
+                    default:
+                        throw new Tinebase_Exception_UnexpectedValue('specialNode not supported.');
+                        break;
                 }
         }
         
-        if (! $this->_value instanceof Tinebase_Record_RecordSet) {
+        if ($this->_value !== 'all' && ! $this->_value instanceof Tinebase_Record_RecordSet) {
             $this->_value = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $this->_value);
         }
     }
@@ -70,6 +75,11 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
+        if ($this->_value === 'all') {
+            $_select->where('1=1');
+            return;
+        }
+        
         $gs = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
         $adapter = $_backend->getAdapter();
         
