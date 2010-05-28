@@ -138,7 +138,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $record = new $modelClass(array(), TRUE);
         $record->setFromJsonInUsersTimezone($_recordData);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "recordData: ". print_r($record->toArray(), true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "recordData: ". print_r($record->toArray(), true));
         
         $method = (empty($record->$_identifier)) ? 'create' : 'update';
         $args = array_merge(array($record), $_additionalArguments);
@@ -260,7 +260,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $result['duplicatecount']   += $importResult['duplicatecount'];
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
         
         return $result;
     }
@@ -319,7 +319,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             return array();
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records, true));
         
         // get acls for records
         if ($_records[0]->has('container_id')) {
