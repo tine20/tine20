@@ -60,7 +60,7 @@ class Tinebase_SambaSAM
     {
 		if (self::$_instance === NULL) {
             $backendType = self::getConfiguredBackend();
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' samba sam backend: ' . $backendType);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' samba sam backend: ' . $backendType);
             
             self::$_instance = self::factory($backendType);
         }
