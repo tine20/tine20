@@ -130,7 +130,7 @@ class Tasks_Setup_MigrateFromTine14
                 
             } catch (Tinebase_Exception_Record_Validation $e) {
                 $validation_errors = $Task20->getValidationErrors(); 
-                Tinebase_Core::getLogger()->debug(
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     'Could not migrate Infolog with info_id ' . $infolog->info_id . "\n" . 
                     'Tasks_Setup_MigrateFromTine14::infolog2Task: ' . $e->getMessage() . "\n" .
                     "Tasks_Model_Task::validation_errors: \n" .
