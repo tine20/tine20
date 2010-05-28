@@ -784,7 +784,7 @@ class Setup_Controller
      */
     protected function _updateRedirectSettings($_data)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, 1));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, 1));
         $keys = array(Tinebase_Model_Config::REDIRECTURL, Tinebase_Model_Config::REDIRECTALWAYS, Tinebase_Model_Config::REDIRECTTOREFERRER);
         foreach ($keys as $key) {
             if (array_key_exists($key, $_data)) {
@@ -987,7 +987,7 @@ class Setup_Controller
         $applications = array();
         foreach($_applications as $applicationName) {       	
             if ($this->isInstalled($applicationName)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skipping installation of application {$applicationName} because it is already installed");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skipping installation of application {$applicationName} because it is already installed");
             } else {
                 $applications[$applicationName] = $this->getSetupXml($applicationName);
             }
