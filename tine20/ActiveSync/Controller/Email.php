@@ -130,7 +130,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             ));
         }
         
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter " . print_r($filter->toArray(), true));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter " . print_r($filter->toArray(), true));
         
         $result = $this->_contentController->search($filter, NULL, false, true, 'sync');
         
@@ -251,7 +251,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         $this->_getContentFilter($filter, $_filterType);
         $this->_getContainerFilter($filter, $_folderId);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter " . print_r($filter->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter " . print_r($filter->toArray(), true));
         
         $messages = $this->_contentController->search($filter, null, false, true);
         
@@ -273,7 +273,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         $xmlData = $_data->children('uri:Email');
         
         if(isset($xmlData->Read)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Id: $_id set read flag: $xmlData->Read");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Id: $_id set read flag: $xmlData->Read");
             if((int)$xmlData->Read === 1) {
                 #$this->_messageController->addFlags(1, $_collectionId, $_id, array(Zend_Mail_Storage::FLAG_SEEN));
             } else {
@@ -325,7 +325,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         // contact should be valid now
         $task->isValid();
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactData " . print_r($task->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactData " . print_r($task->toArray(), true));
         
         return $task;
     }
@@ -352,7 +352,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             }
         }
         
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
         
         return $filterArray;
     }
@@ -389,7 +389,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             }
         }
         
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " folder result " . print_r($result, true));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " folder result " . print_r($result, true));
         
         return $result;
     }
@@ -484,6 +484,6 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             $_containerId
         ));  
 
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter " . print_r($_filter->toArray(), true));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter " . print_r($_filter->toArray(), true));
     }
 }
