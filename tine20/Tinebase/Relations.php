@@ -120,8 +120,8 @@ class Tinebase_Relations
                     'notes',
                 )
             )) {
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($current->related_record->toArray(), true));
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($update->related_record->toArray(), true));
+                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($current->related_record->toArray(), true));
+                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($update->related_record->toArray(), true));
                 $this->_setAppRecord($update);
             }
             
@@ -150,7 +150,7 @@ class Tinebase_Relations
      */
     public function getRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_ignoreACL = FALSE)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' backend: '$_backend' " 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' backend: '$_backend' " 
             // . 'ids: ' . print_r((array)$_id, true)
         );
     
@@ -240,7 +240,7 @@ class Tinebase_Relations
         }
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . ucfirst($method) . ' ' . $_relation->related_model . ' record.');
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_relation->toArray(), TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_relation->toArray(), TRUE));
         
         $record = $appController->$method($_relation->related_record);
         $_relation->related_id = $record->getId();
@@ -307,7 +307,7 @@ class Tinebase_Relations
                     $_relations[$relationIndex]->related_record = $records[$recordIndex];
                 } else {
                     // delete relation from set, as READ ACL is abviously not granted 
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                         " removing $relation->related_model $relation->related_backend $relation->related_id (ACL)");
                     unset($_relations[$relationIndex]);
                 }
