@@ -26,7 +26,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
      */
     public function authenticate()
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to authenticate '. $this->_identity);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to authenticate '. $this->_identity);
         
         $result = parent::authenticate();
         
@@ -34,7 +34,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
             // username and password are correct, let's do some additional tests
             
             if($this->_resultRow['status'] != 'enabled') {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Account: '. $this->_identity . ' is disabled');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Account: '. $this->_identity . ' is disabled');
                 // account is disabled
                 $authResult['code'] = Zend_Auth_Result::FAILURE_UNCATEGORIZED;
                 $authResult['messages'][] = 'Account disabled.';
@@ -44,15 +44,15 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
             //if(($this->_resultRow['expires_at'] !== NULL) && $this->_resultRow['expires_at'] < Zend_Date::now()->getTimestamp()) {
             if(($this->_resultRow['expires_at'] !== NULL) && Zend_Date::now()->isLater($this->_resultRow['expires_at'])) {
                 // account is expired
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Account: '. $this->_identity . ' is expired');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Account: '. $this->_identity . ' is expired');
                 $authResult['code'] = Zend_Auth_Result::FAILURE_UNCATEGORIZED;
                 $authResult['messages'][] = 'Account expired.';
                 return new Zend_Auth_Result($authResult['code'], $result->getIdentity(), $authResult['messages']);
             }
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Authentication of '. $this->_identity . ' succeeded');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Authentication of '. $this->_identity . ' succeeded');
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Authentication of '. $this->_identity . ' failed');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Authentication of '. $this->_identity . ' failed');
         }
         
         return $result;
