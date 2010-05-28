@@ -163,7 +163,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $_property) . ' = ?', $_value)
                ->limit(1);
 
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
@@ -173,7 +173,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             throw new Tinebase_Exception_NotFound($this->_modelName . " record with $_property " . $_value . ' not found!');
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
         $result = $this->_rawDataToRecord($queryResult);
                
         // get custom fields
@@ -237,7 +237,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 $select->where($this->_db->quoteIdentifier($this->_tableName . '.container_id') . ' in (?) /* add acl in getMultiple */', (array) $_containerIds);
             }
         }
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
@@ -266,12 +266,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $select = $this->_getSelect();
         $select->order($orderBy . ' ' . $_orderDirection);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, true));
         
         $result = $this->_rawDataToRecordSet($queryResult);
         
@@ -299,7 +299,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $this->_addFilter($select, $_filter);
         $_pagination->appendPaginationSql($select);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         // get records
         $stmt = $this->_db->query($select);
@@ -330,13 +330,13 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $select = $this->_getSelect();
             $this->_addFilter($select, $_filter);
             $countSelect = $this->_db->select()->from($select, array('count' => 'COUNT(*)'));
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $countSelect->__toString());
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $countSelect->__toString());
             
             $result = $this->_db->fetchOne($countSelect);
         } else {
             $select = $this->_getSelect(array('count' => 'COUNT(*)'));
             $this->_addFilter($select, $_filter);
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
             $result = $this->_db->fetchOne($select);
         }
@@ -476,8 +476,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 $ids[] = $recordArray[$identifier];
             } else {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Fields mismatch.');
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(array_keys($firstRecordArray), TRUE));
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(array_keys($recordArray), TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(array_keys($firstRecordArray), TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(array_keys($recordArray), TRUE));
             }
         }
         
@@ -541,7 +541,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
 
         if (empty($_ids)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No records updated.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No records updated.');
             return 0;
         }
         $identifier = $this->_getRecordIdentifier();
@@ -555,7 +555,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' IN (?)', $_ids),
         );
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
         
         return $this->_db->update($this->_tablePrefix . $this->_tableName, $recordArray, $where);        
     }
