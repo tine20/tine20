@@ -27,7 +27,7 @@ class Voipmanager_Server_Asterisk extends Tinebase_Server_Abstract
     public function handle()
     {        
         $this->_initFramework();
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is Asterisk curl request: ' . print_r($_REQUEST, true));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is Asterisk curl request: ' . print_r($_REQUEST, true));
         
         if(Tinebase_Controller::getInstance()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $_SERVER['REMOTE_ADDR']) === true) {
             $server = new Tinebase_Http_Server();
@@ -49,18 +49,18 @@ class Voipmanager_Server_Asterisk extends Tinebase_Server_Abstract
                 } else {
                     $action = $_REQUEST['action'];
                 }
-                #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' action: ' . $action);
+                #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' action: ' . $action);
                 
                 $method = ucfirst(substr($action, 1));
                 $_REQUEST['method'] = $class . '.handle' . $method;
             }
 
-            #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' action: ' . print_r($_REQUEST, true));
+            #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' action: ' . print_r($_REQUEST, true));
             $server->handle($_REQUEST);
 
             Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' auth failed ');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' auth failed ');
         }
     }
 }
