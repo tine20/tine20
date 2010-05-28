@@ -118,7 +118,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
             // get all timeaccounts user has required grants for
             $result = array();
             foreach ($this->_requiredGrants as $grant) {
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value:' . $this->_value);
+                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value:' . $this->_value);
                 if ($grant != Timetracker_Model_TimeaccountGrants::BOOK_OWN) {
                     $result = array_merge($result, Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl($grant, TRUE));
                 }
