@@ -245,7 +245,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function getContainerByACL($_accountId, $_application, $_grant, $_onlyIds = FALSE, $_ignoreACL = FALSE)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' app: ' . $_application . ' / account: ' . $_accountId . ' / grant:' . implode('', (array)$_grant));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' app: ' . $_application . ' / account: ' . $_accountId . ' / grant:' . implode('', (array)$_grant));
         
         $accountId     = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
@@ -974,7 +974,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             }
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting grants for container id ' . $containerId . ' ...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting grants for container id ' . $containerId . ' ...');
         
         $container = $this->getContainerById($containerId);
        
@@ -1036,7 +1036,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 1);                
             } catch (Exception $e) {
                 // no user account set
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'No user account set. Error: ' . $e->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'No user account set. Error: ' . $e->getMessage());
             }
             $cache->remove('getContainerById' . $_containerId);
             $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
