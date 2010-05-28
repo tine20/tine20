@@ -113,7 +113,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         
         // send
         if(! empty($_recipient->email)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Send notification email to ' . $_recipient->email);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Send notification email to ' . $_recipient->email);
             $mail->addTo($_recipient->email, $_recipient->n_fileas);
             Tinebase_Smtp::getInstance()->sendMessage($mail);
         } else {
