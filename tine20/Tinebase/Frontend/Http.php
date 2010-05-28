@@ -139,7 +139,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
         // display openId trust form
         } else if (isset($_GET['openid_action']) && $_GET['openid_action'] === 'trust') {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " display openId trust screen");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " display openId trust screen");
             $view = new Zend_View();
             $view->setScriptPath('Tinebase/views');
 
@@ -457,7 +457,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
 
-        Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Update/Setup required!');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Update/Setup required!');
 
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('update.php');
@@ -608,7 +608,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 		// update registration table and get username / account values
 		$account = Tinebase_User_Registration::getInstance()->activateUser( $id );
 
-		Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' activated account for ' . $account['accountLoginName']);
+		if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' activated account for ' . $account['accountLoginName']);
 		
 		$view = new Zend_View();
         $view->title="Tine 2.0 User Activation";
