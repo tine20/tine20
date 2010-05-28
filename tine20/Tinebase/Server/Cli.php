@@ -69,7 +69,7 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract
         
         $opts = Tinebase_Core::get('opts');
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->method) ? $opts->method : 'EMPTY'));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->method) ? $opts->method : 'EMPTY'));
 
         $tinebaseServer = new Tinebase_Frontend_Cli();
         if ($opts->method !== 'Tinebase.triggerAsyncEvents') {
