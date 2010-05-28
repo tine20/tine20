@@ -95,7 +95,7 @@ class Tinebase_Frontend_Cli
      */
     public function triggerAsyncEvents($_opts)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Triggering async events from CLI.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Triggering async events from CLI.');
         
         try {
             $cronuser = Tinebase_User::getInstance()->getFullUserByLoginName($_opts->username);
@@ -103,7 +103,7 @@ class Tinebase_Frontend_Cli
             // get user for cronjob from config / set default admin group
             $cronuserId = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::CRONUSERID)->value;
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Setting user with id ' . $cronuserId . ' as cronuser.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Setting user with id ' . $cronuserId . ' as cronuser.');
             $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
         }
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
