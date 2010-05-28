@@ -294,7 +294,7 @@ abstract class Tinebase_User_Abstract
                 
                 $userName = strtolower(self::replaceSpechialChars(substr($_account->accountFirstName, 0, $i+1) . $_account->accountLastName));
                 if (! $this->userNameExists($userName)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName);
                     return $userName;
                 }
             }
@@ -303,7 +303,7 @@ abstract class Tinebase_User_Abstract
         $numSuffix = 1;
         while(true) {
             if (! $this->userNameExists($userName . $numSuffix)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName . $numSuffix);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName . $numSuffix);
                 return $userName . $numSuffix;
             }
             $numSuffix++;
