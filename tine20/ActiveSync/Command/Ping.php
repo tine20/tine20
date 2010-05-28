@@ -92,7 +92,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                         
                         $folders[] = $folder;                
                     } catch (Exception $e) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
                         $status = self::STATUS_FOLDER_NOT_FOUND;
                         break;
                     }
@@ -109,7 +109,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
         $secondsLeft = $intervalEnd;
         $folders = unserialize($this->_device->pingfolder);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Folders to monitor($lifeTime / $intervalStart / $intervalEnd / $status): " . print_r($folders, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Folders to monitor($lifeTime / $intervalStart / $intervalEnd / $status): " . print_r($folders, true));
         
         if($status === self::STATUS_NO_CHANGES_FOUND) {
 
@@ -118,7 +118,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
             do {
                 foreach((array) $folders as $folder) {
                     $dataController = ActiveSync_Controller::dataFactory($folder['folderType'], $this->_device, $this->_syncTimeStamp);
-                    #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($folder, true));
+                    #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($folder, true));
                     try {
                         $syncState = $controller->getSyncState($this->_device, $folder['folderType'], $folder['serverEntryId']);
                         //$count = $dataController->getItemEstimate($syncState->lastsync);
@@ -137,7 +137,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                         }
                     } catch (ActiveSync_Exception_SyncStateNotFound $e) {
                         // folder got never synchronized to client
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
                     }
                 }
                 
@@ -153,7 +153,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                 
                 sleep(self::PING_TIMEOUT);
                 $secondsLeft = $intervalEnd - mktime();
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " seconds left: " . $secondsLeft);
+                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " seconds left: " . $secondsLeft);
             } while($secondsLeft > 0);
         }
         
