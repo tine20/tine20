@@ -239,7 +239,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function setState($name, $value)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting state: {$name} -> {$value}");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting state: {$name} -> {$value}");
         Tinebase_State::getInstance()->setState($name, $value);
     }
     
@@ -255,10 +255,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $inTag = new Tinebase_Model_Tag($tag);
         
         if (strlen($inTag->getId()) < 40) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' creating tag: ' . print_r($inTag->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' creating tag: ' . print_r($inTag->toArray(), true));
             $outTag = Tinebase_Tags::getInstance()->createTag($inTag);
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' updating tag: ' .print_r($inTag->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' updating tag: ' .print_r($inTag->toArray(), true));
             $outTag = Tinebase_Tags::getInstance()->updateTag($inTag);
         }
         return $outTag->toArray();
@@ -536,7 +536,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $jsonAppName = $application->name . '_Frontend_Json';
                 
                 if(class_exists($jsonAppName)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting registry data for app ' . $application->name);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting registry data for app ' . $application->name);
                     
                     $applicationJson = new $jsonAppName;
                     
@@ -566,7 +566,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         return $registryData;
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' returning registry data by dying to avoid servers success property to be part of the registry.');
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' returning registry data by dying to avoid servers success property to be part of the registry.');
         //die(Zend_Json::encode($registryData));
     }
 
@@ -628,7 +628,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // check if application has preference class
         if ($backend = Tinebase_Core::getPreference($applicationName)) {
             
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filter->toArray(), true));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filter->toArray(), true));
             
             $paging = new Tinebase_Model_Pagination(array(
                 'dir'       => 'ASC',
@@ -647,7 +647,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
             
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
             
             $result = $this->_multipleRecordsToJson($records);
 
@@ -682,8 +682,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $decodedData = is_array($data) ? $data : Zend_Json::decode($data);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedData, true));
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($adminMode, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedData, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($adminMode, true));
         
         $result = array();
         foreach ($decodedData as $applicationName => $data) {
@@ -723,7 +723,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
                 
             } else {
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
+                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
 
                 // set user prefs
                 foreach ($data as $name => $value) {
