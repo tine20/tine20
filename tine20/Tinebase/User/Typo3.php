@@ -170,7 +170,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
         $t3users = $this->_getUsersFromBackend(NULL, 'Tinebase_Model_FullUser');
         
         foreach($t3users as $user) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' user: ' . print_r($user->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' user: ' . print_r($user->toArray(), true));
             $user->sanitizeAccountPrimaryGroup();
             $user = $this->_sqlUserBackend->addOrUpdateUser($user);
             if (!$user instanceof Tinebase_Model_FullUser) {
