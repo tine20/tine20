@@ -298,6 +298,6 @@ class OpenDocument_Document
             $domStyles->appendChild($newStyle);        
         }
         
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $styles[0]->generateXML());
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $styles[0]->generateXML());
     }
 }
