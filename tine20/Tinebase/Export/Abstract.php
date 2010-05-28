@@ -182,7 +182,7 @@ abstract class Tinebase_Export_Abstract
     protected function _getRecords()
     {
         // get records by filter (ensure export acl first)
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting records using filter: ' . print_r($this->_filter->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting records using filter: ' . print_r($this->_filter->toArray(), TRUE));
         $pagination = (! empty($this->_sortInfo)) ? new Tinebase_Model_Pagination($this->_sortInfo) : NULL;
         $records = $this->_controller->search($this->_filter, $pagination, $this->_getRelations, FALSE, 'export');
         
@@ -191,7 +191,7 @@ abstract class Tinebase_Export_Abstract
         // resolve stuff
         $this->_resolveRecords($records);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), TRUE));
         
         return $records;
     }
@@ -213,7 +213,7 @@ abstract class Tinebase_Export_Abstract
         // resolve users
         foreach ($this->_userFields as $field) {
             if (in_array($field, $types)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resolving users for ' . $field);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resolving users for ' . $field);
                 Tinebase_User::getInstance()->resolveMultipleUsers($_records, $field, TRUE);
             }
         }
@@ -323,7 +323,7 @@ abstract class Tinebase_Export_Abstract
     {
         $result = NULL;
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_field->toArray(), TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_field->toArray(), TRUE));
         
         if (in_array($_field->type, $this->_specialFields)) {
             // special field handling
@@ -463,7 +463,7 @@ abstract class Tinebase_Export_Abstract
      */
     protected function _addNotes(Tinebase_Record_Abstract $_record)
     {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->notes->toArray(), true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->notes->toArray(), true));
         
         $resultArray = array();
         foreach ($_record->notes as $note) {
@@ -502,8 +502,8 @@ abstract class Tinebase_Export_Abstract
         
         // check for replacements
         if (isset($_fieldConfig->replace) && isset($_fieldConfig->replace->patterns) && isset($_fieldConfig->replace->replacements)) {
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_fieldConfig->replace->patterns->toArray(), true));
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_fieldConfig->replace->replacements->toArray(), true));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_fieldConfig->replace->patterns->toArray(), true));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_fieldConfig->replace->replacements->toArray(), true));
             $patterns =     (count($_fieldConfig->replace->patterns->pattern) > 1)          
                 ? $_fieldConfig->replace->patterns->pattern->toArray()          
                 : $_fieldConfig->replace->patterns->toArray();
@@ -515,7 +515,7 @@ abstract class Tinebase_Export_Abstract
 
         // check for matches
         if (isset($_fieldConfig->match)) {
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_fieldConfig->match, true));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_fieldConfig->match, true));
             preg_match($_fieldConfig->match, $value, $matches);
             $value = (isset($matches[1])) ? $matches[1] : '';
         }
