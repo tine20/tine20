@@ -113,7 +113,7 @@ class Setup_Server_Json extends Setup_Server_Abstract
             $response->setVersion($version);
         }
     
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $exception);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $exception);
         
         return $response;
     }
