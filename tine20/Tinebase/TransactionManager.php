@@ -81,9 +81,9 @@ class Tinebase_TransactionManager
      */
     public function startTransaction($_transactionable)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  startTransaction request");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  startTransaction request");
         if (! in_array($_transactionable, $this->_openTransactionables)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  new transactionable. Starting transaction on this resource");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  new transactionable. Starting transaction on this resource");
             if ($_transactionable instanceof Zend_Db_Adapter_Abstract) {
                 $_transactionable->query("SET AUTOCOMMIT=0;");
                 $_transactionable->beginTransaction();
@@ -96,7 +96,7 @@ class Tinebase_TransactionManager
         
         $transactionId = Tinebase_Record_Abstract::generateUID();
         array_push($this->_openTransactions, $transactionId);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  queued transaction with id $transactionId");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  queued transaction with id $transactionId");
         
         return $transactionId;
     }
@@ -109,7 +109,7 @@ class Tinebase_TransactionManager
      */
     public function commitTransaction($_transactionId)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  commitTransaction request for $_transactionId");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  commitTransaction request for $_transactionId");
          $transactionIdx = array_search($_transactionId, $this->_openTransactions);
          if ($transactionIdx !== false) {
              unset($this->_openTransactions[$transactionIdx]);
@@ -117,7 +117,7 @@ class Tinebase_TransactionManager
          
          $numOpenTransactions = count($this->_openTransactions);
          if ($numOpenTransactions === 0) {
-             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  no more open transactions in queue commiting all transactionables");
+             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  no more open transactions in queue commiting all transactionables");
              foreach ($this->_openTransactionables as $transactionableIdx => $transactionable) {
                  if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
                      $transactionable->commit();
@@ -127,7 +127,7 @@ class Tinebase_TransactionManager
              $this->_openTransactionables = array();
              $this->_openTransactions = array();
          } else {
-             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  commiting defered, as there are still $numOpenTransactions in the queue");
+             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  commiting defered, as there are still $numOpenTransactions in the queue");
          }
     }
     
@@ -138,7 +138,7 @@ class Tinebase_TransactionManager
      */
     public function rollBack()
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  rollBack request, rollBack all transactionables");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  rollBack request, rollBack all transactionables");
         foreach ($this->_openTransactionables as $transactionable) {
         if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
                 $transactionable->rollBack();
