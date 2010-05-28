@@ -138,7 +138,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
             ->from($this->_tablePrefix . 'snom_phones_acl', array('snom_phone_id'))
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $_accountId));            
 
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);      
