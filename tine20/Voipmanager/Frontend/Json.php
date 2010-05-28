@@ -180,7 +180,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             unset($recordData[$field]);
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, true));
         
         $phone = new Voipmanager_Model_Snom_Phone($recordData);
         
@@ -197,7 +197,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
         $phone->settings = $phoneSettings;
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($phoneSettings->toArray(), true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($phoneSettings->toArray(), true));
         
         if (empty($phone->id)) {
             $phone = Voipmanager_Controller_Snom_Phone::getInstance()->create($phone);
