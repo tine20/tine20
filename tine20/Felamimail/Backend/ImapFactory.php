@@ -41,7 +41,7 @@ class Felamimail_Backend_ImapFactory
             }
             
             // we need to instantiate a new imap backend
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Connecting to server ' . $imapConfig['host'] . ':' . $imapConfig['port'] 
                 . ' (' . ((array_key_exists('ssl', $imapConfig)) ? $imapConfig['ssl'] : 'none') . ')'
                 . ' with username ' . $imapConfig['user']);
