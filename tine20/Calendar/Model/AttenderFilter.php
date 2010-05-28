@@ -83,7 +83,7 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
         $gs = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
         $adapter = $_backend->getAdapter();
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($this->_value, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($this->_value, true));
         foreach ($this->_value as $attenderValue) {
             if (in_array($attenderValue['user_type'], array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
                 
