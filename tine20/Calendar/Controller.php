@@ -54,7 +54,7 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
      */
     public function handleEvents(Tinebase_Event_Abstract $_eventObject)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
         
         switch(get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
@@ -69,16 +69,16 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
                 break;
                 
             case 'Admin_Event_UpdateGroup':
-                Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') updated group ' . $_eventObject->group->name);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') updated group ' . $_eventObject->group->name);
                 Calendar_Controller_Event::getInstance()->onUpdateGroup($_eventObject->group->getId());
                 break;
             case 'Admin_Event_AddGroupMember':
-                Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') add groupmember ' . (string) $_eventObject->userId . ' to group ' . (string) $_eventObject->groupId);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') add groupmember ' . (string) $_eventObject->userId . ' to group ' . (string) $_eventObject->groupId);
                 Calendar_Controller_Event::getInstance()->onUpdateGroup($_eventObject->groupId);
                 break;
                 
             case 'Admin_Event_RemoveGroupMember':
-                Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') removed groupmember ' . (string) $_eventObject->userId . ' from group ' . (string) $_eventObject->groupId);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') removed groupmember ' . (string) $_eventObject->userId . ' from group ' . (string) $_eventObject->groupId);
                 Calendar_Controller_Event::getInstance()->onUpdateGroup($_eventObject->groupId);
                 break;
         }
