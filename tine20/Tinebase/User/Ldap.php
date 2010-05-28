@@ -341,8 +341,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $plugin->inspectSetPassword($_loginName, $_password, $_encrypt, false, $ldapData);
         }
 
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
 
         $this->_ldap->update($metaData['dn'], $ldapData);
     }
@@ -373,7 +373,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $plugin->inspectStatus($_status, $ldapData);
         }
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " {$metaData['dn']}  $ldapData: " . print_r($ldapData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " {$metaData['dn']}  $ldapData: " . print_r($ldapData, true));
 
         $this->_ldap->update($metaData['dn'], $ldapData);
     }
@@ -401,7 +401,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $plugin->inspectExpiryDate($_expiryDate, $ldapData);
         }
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " {$metaData['dn']}  $ldapData: " . print_r($ldapData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " {$metaData['dn']}  $ldapData: " . print_r($ldapData, true));
 
         $this->_ldap->update($metaData['dn'], $ldapData);
     }
@@ -454,8 +454,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         // no need to update this attribute, it's not allowed to change and even might not be updateable
         unset($ldapData[strtolower($this->_userUUIDAttribute)]);
 
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
 
         $this->_ldap->update($metaData['dn'], $ldapData);
 
@@ -483,8 +483,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $plugin->inspectAddUser($_user, $ldapData);
         }
 
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
 
         $this->_ldap->add($dn, $ldapData);
 
@@ -492,7 +492,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         $userId = $userId[strtolower($this->_userUUIDAttribute)][0];
 
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' new ldap userid: ' . $userId);
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' new ldap userid: ' . $userId);
 
         $user = $this->getUserByPropertyFromSyncBackend('accountId', $userId, 'Tinebase_Model_FullUser');
 
@@ -612,7 +612,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         }
         sort($allUidNumbers);
 
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  Existing uidnumbers " . print_r($allUidNumbers, true));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  Existing uidnumbers " . print_r($allUidNumbers, true));
         $minUidNumber = isset($this->_options['minUserId']) ? $this->_options['minUserId'] : 1000;
         $maxUidNumber = isset($this->_options['maxUserId']) ? $this->_options['maxUserId'] : 65000;
 
@@ -651,7 +651,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $userData = $this->_ldap->getEntry($userData['dn']);
         
         $this->_ldap2Contact($userData, $_contact);
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  synced user object: " . print_r($_contact->toArray(), true));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  synced user object: " . print_r($_contact->toArray(), true));
     }
 
     /**
@@ -766,9 +766,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $ldapData = array();
 
         foreach ($_user as $key => $value) {
-            #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $key => $value");
+            #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $key => $value");
             $ldapProperty = array_key_exists($key, $this->_rowNameMapping) ? $this->_rowNameMapping[$key] : false;
-            #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $ldapProperty");
+            #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $ldapProperty");
             if ($ldapProperty) {
                 switch ($key) {
                     case 'accountLastPasswordChange':
