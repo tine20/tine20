@@ -46,14 +46,14 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
         $select->where($this->_db->quoteIdentifier('id') . ' = ?', $_fileId)
                ->where($this->_db->quoteIdentifier('session_id') . ' = ?', session_id());
 
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
                 
         if (!$queryResult) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Could not fetch row with id $_fileId from temp_files table.");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Could not fetch row with id $_fileId from temp_files table.");
             return NULL;
         }
 
@@ -79,7 +79,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
         }
         
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-            Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " XMLHttpRequest style upload");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " XMLHttpRequest style upload");
             
             $name =       $_SERVER['HTTP_X_FILE_NAME'];
             $size = (int) $_SERVER['HTTP_X_FILE_SIZE'];
@@ -90,9 +90,9 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
                 throw new Tinebase_Exception_NotFound('No valid upload file found or some other error occurred while uploading! ');
             }
             
-            Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " successfully created tempfile at {$path}");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " successfully created tempfile at {$path}");
         } else {
-            Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " Plain old form style upload");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " Plain old form style upload");
             
             $uploadedFile = $_FILES['file'];
             
@@ -126,7 +126,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
            'size'        => !empty($size) ? $size : filesize($path),
         ));
         
-        Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " tempfile data: " . print_r($tempFile->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " tempfile data: " . print_r($tempFile->toArray(), TRUE));
         $this->create($tempFile);
         
         return $tempFile;
