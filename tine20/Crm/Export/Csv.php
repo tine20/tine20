@@ -50,7 +50,7 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
             'dir' => 'ASC',
         ));
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
         
         $leads = Crm_Controller_Lead::getInstance()->search($_filter, $pagination, TRUE, FALSE, 'export');
         if (count($leads) < 1) {
