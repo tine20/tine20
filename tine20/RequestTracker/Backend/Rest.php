@@ -107,11 +107,11 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
         $this->_appendPagination($_pagination);
         
         $this->_httpClient->setParameterGet('format', 'l');
-        Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' about to query ' . $this->_config->rest->url . "/REST/1.0/search/ticket/");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' about to query ' . $this->_config->rest->url . "/REST/1.0/search/ticket/");
         $response = $this->_httpClient->request();
         
-        Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' request :' . $this->_httpClient->getLastRequest());
-        //Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' response :' . $response->asString());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' request :' . $this->_httpClient->getLastRequest());
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' response :' . $response->asString());
         
         $tickets = $this->_rawDataToRecords($response->getBody());
         $this->_searchCountCache = count($tickets);
@@ -152,8 +152,8 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
         $this->_httpClient->setMethod(Zend_Http_Client::GET);
         $response = $this->_httpClient->request();
         
-        Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' request :' . $this->_httpClient->getLastRequest());
-        //Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' response :' . $response->asString());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' request :' . $this->_httpClient->getLastRequest());
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' response :' . $response->asString());
         
         $ticket->History = $this->_rawDataToHistory($response->getBody());
         
@@ -324,7 +324,7 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
                 $dataArray['Content'] = $matches[1];
             }
             
-            //Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' History Type :' . $dataArray['Type']);
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' History Type :' . $dataArray['Type']);
             $history->addRecord(new RequestTracker_Model_TicketHistoryItem($dataArray));
         }
         
@@ -364,7 +364,7 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
                             } else {
                                 $status = array_slice(RequestTracker_Model_Ticket::$status, $idx, count(RequestTracker_Model_Ticket::$status));
                             }
-                            Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' filter for status :' . print_r($status, true));
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' filter for status :' . print_r($status, true));
                             $parms[] = "(status = '" .implode("' OR status = '", $status) . "')";
                             break;
                         }
