@@ -90,7 +90,7 @@ class Tinebase_EmailUser
     public static function getInstance($_configType = Tinebase_Model_Config::IMAP) 
     {
         $backendType = self::getConfiguredBackend($_configType);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Email user backend: ' . $backendType);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Email user backend: ' . $backendType);
         
         return self::factory($backendType);
     }
@@ -150,7 +150,7 @@ class Tinebase_EmailUser
         $result = '';        
         
         $config = self::getConfig($_configType);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, TRUE));
         
         if (isset($config['backend'])) {
             $backend = ucfirst(strtolower($config['backend']));
