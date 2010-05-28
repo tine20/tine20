@@ -116,7 +116,7 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
             $stmt = $this->_db->query($select);
             $queryResult = $stmt->fetchAll();
     
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($queryResult, TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($queryResult, TRUE));
             
             // insert values into products table
             $productsBackend = new Tinebase_Backend_Sql('Sales_Model_Product', 'sales_products');
@@ -148,7 +148,7 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
             $stmt = $this->_db->query($select);
             $queryResult = $stmt->fetchAll();
     
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($queryResult, TRUE));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($queryResult, TRUE));
             
             // insert values into relations table
             $relationsBackend = new Tinebase_Relation_Backend_Sql();
@@ -183,7 +183,7 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
                     $remark = $updateRelation->remark;
                     $remark['quantity'] = $remark['quantity'] + 1;
                     $updateRelation->remark = $remark;
-                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($updateRelation->toArray(), TRUE));
+                    //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($updateRelation->toArray(), TRUE));
                     $relationsBackend->updateRelation($updateRelation);
                 }
             }
