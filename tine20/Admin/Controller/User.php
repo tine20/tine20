@@ -294,7 +294,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " about to remove user with id: {$accountId}");
             
             $memberships = $groupsBackend->getGroupMemberships($accountId);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removing user from groups: " . print_r($memberships, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removing user from groups: " . print_r($memberships, true));
             
             foreach ((array)$memberships as $groupId) {
                 $groupsBackend->removeGroupMember($groupId, $accountId);
@@ -384,7 +384,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $_emailUser = new Tinebase_Model_EmailUser();
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->emailUser->toArray(), true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->emailUser->toArray(), true));
         
         // update email user data here
         if ($this->_manageImapEmailUser) {
