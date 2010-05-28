@@ -48,7 +48,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
                 </options>'
         ));
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($windowStylePref->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($windowStylePref->toArray(), TRUE));
         
         Tinebase_Core::getPreference()->create($windowStylePref);
         
