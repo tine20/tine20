@@ -121,7 +121,7 @@ class Tinebase_User
 		
         if (self::$_instance === NULL) {
             $backendType = self::getConfiguredBackend();
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' accounts backend: ' . $backendType);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' accounts backend: ' . $backendType);
             
             self::$_instance = self::factory($backendType);
         }
@@ -366,7 +366,7 @@ class Tinebase_User
             $user = $userBackend->addUserInSqlBackend($user);
         }
         
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  synced user object: " . print_r($user->toArray(), true));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  synced user object: " . print_r($user->toArray(), true));
             
         // import contactdata(phone, address, fax, birthday. photo)
         $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
@@ -395,7 +395,7 @@ class Tinebase_User
             $user = self::syncUser($user);
         }
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' finnished synchronizing users');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' finnished synchronizing users');
     }
     
     /**
