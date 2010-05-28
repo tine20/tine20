@@ -127,7 +127,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function __construct(array $_data = array(), $_condition='', $_options = array())
     {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
         $this->_setOptions($_options);
         
         $this->_concatenationCondition = $_condition == self::CONDITION_OR ? self::CONDITION_OR : self::CONDITION_AND;
@@ -157,7 +157,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 $fieldModel = (isset($this->_filterModel[$filterData['field']])) ? $this->_filterModel[$filterData['field']] : '';
                 
                 if (empty($fieldModel)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' skipping filter (no filter model defined) ' . print_r($filterData, true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' skipping filter (no filter model defined) ' . print_r($filterData, true));
                 
                 } elseif (array_key_exists('filter', $fieldModel) && array_key_exists('value', $filterData)) {
                     // create a 'single' filter
@@ -220,7 +220,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function createFilter($_field, $_operator, $_value)
     {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating filter: $_field $_operator " . print_r($_value, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating filter: $_field $_operator " . print_r($_value, true));
         
         if (empty($this->_filterModel[$_field])) {
             throw new Tinebase_Exception_NotFound('no such field (' . $_field . ') in this filter model');
