@@ -191,7 +191,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         if (! $attenderFilter) {
             $attenderFilter = new Calendar_Model_AttenderFilter('attender', 'equals', array(
                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-               'user_id'   =>  Tinebase_Core::getUser()->getId()
+               'user_id'   =>  Tinebase_Core::getUser()->contact_id
             ));
         }
         $this->_appendEffectiveGrantCalculationSql($select, $attenderFilter);
