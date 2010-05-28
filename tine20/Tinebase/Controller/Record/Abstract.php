@@ -259,7 +259,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('create');
     	
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(),true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(),true));
         
         try {
             $db = $this->_backend->getAdapter();
@@ -502,7 +502,7 @@ abstract class Tinebase_Controller_Record_Abstract
         $ids = $this->search($_filter, NULL, FALSE, TRUE);
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($ids) . ' records ...');
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($ids, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($ids, true));
         
         return $this->delete($ids);
     }
@@ -646,7 +646,7 @@ abstract class Tinebase_Controller_Record_Abstract
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
         if (! $this->_doContainerACLChecks) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Container ACL disabled for ' . $_filter->getModelName() . '.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Container ACL disabled for ' . $_filter->getModelName() . '.');
             return TRUE;
         }
         
@@ -659,7 +659,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         
         // set grants according to action
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting filter grants for action ' . $_action);
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting filter grants for action ' . $_action);
         switch ($_action) {
             case 'get':
                 $_filter->setRequiredGrants(array(
@@ -733,7 +733,7 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _inspectAlarmSet(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm)
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting alarm time for ' . $this->_recordAlarmField);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' alarm data: ' . print_r($_alarm->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' alarm data: ' . print_r($_alarm->toArray(), TRUE));
         
         // check if alarm field is Zend_Date
         if (! ($_alarm->alarm_time instanceof Zend_Date && $_alarm->minutes_before == 'custom')) {
@@ -807,7 +807,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _deleteAlarmsForIds($_recordIds)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . " Deleting alarms for records " . print_r($_recordIds, TRUE)
         );
         
