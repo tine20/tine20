@@ -215,7 +215,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     {
         $data = $this->_contentController->get($_serverId);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " calendar data " . print_r($data->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " calendar data " . print_r($data->toArray(), true));
         
         foreach($this->_mapping as $key => $value) {
             $nodeContent = null;
@@ -263,7 +263,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 
         
         if(!empty($data->rrule)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " calendar rrule " . $data->rrule);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " calendar rrule " . $data->rrule);
             $rrule = Calendar_Model_Rrule::getRruleFromString($data->rrule);
             
             $recurrence = $_xmlNode->appendChild(new DOMElement('Recurrence', null, 'uri:Calendar'));
@@ -495,7 +495,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 $event->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
             }
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " timezone data " . $event->originator_tz);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " timezone data " . $event->originator_tz);
         }
         
         // handle attendees
@@ -521,7 +521,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $newAttendee = array();
             
             foreach($xmlData->Attendees->Attendee as $attendee) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee email " . $attendee->Email);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee email " . $attendee->Email);
 
                 // search contact from addressbook using the emailaddress
                 $filterArray = array(
@@ -548,7 +548,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 $contacts = $addressbook->search(new Addressbook_Model_ContactFilter($filterArray));
                 
                 if(count($contacts) > 0) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
                     $contactId = $contacts->getFirstRecord()->getId();
                 } else {
                     $contactData = array(
@@ -556,22 +556,22 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                         'email'       => (string)$attendee->Email,
                         'n_family'    => (string)$attendee->Name,
                     );
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contactData, true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contactData, true));
                     $contact = new Addressbook_Model_Contact($contactData);
                     $contactId = $addressbook->create($contact)->getId();
                 }
                 $newAttendee[$contactId] = $contactId;
                 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactId " . $contactId);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactId " . $contactId);
                 
                 // find out if the contact_id is already attending the event
                 $matchingAttendee = $event->attendee
                     ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
                     ->filter('user_id', $contactId);
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . count($matchingAttendee));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . count($matchingAttendee));
                 
                 if(count($matchingAttendee) == 0) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee not found, adding as new");
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee not found, adding as new");
                     $newAttender = new Calendar_Model_Attender(array(
                         'user_id'   => $contactId,
                         'user_type' => Calendar_Model_Attender::USERTYPE_USER,
@@ -589,7 +589,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     
                     $event->attendee->addRecord($newAttender);
                 } else {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating attendee");
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating attendee");
                     $currentAttendee = $matchingAttendee->getFirstRecord();
                     if(isset($attendee->AttendeeType)) {
                         $currentAttendee->role = $this->_attendeeTypeMapping[(int)$attendee->AttendeeType];
@@ -602,7 +602,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             
             foreach($event->attendee as $index => $attender) {
                 if(!isset($newAttendee[$attender->user_id])) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removed attender from event " . $attender->user_id);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removed attender from event " . $attender->user_id);
                     unset($event->attendee[$index]);
                 }
             }
@@ -684,7 +684,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         // event should be valid now
         $event->isValid();
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " eventData " . print_r($event->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " eventData " . print_r($event->toArray(), true));
         
         return $event;
     }
@@ -711,7 +711,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
         
         return $filterArray;
     }
