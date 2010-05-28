@@ -242,7 +242,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     $event->setId('fakeid' . $candidate->uid . $fakeId++);
                 }
             } catch (Exception $e) {
-               Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not compute recurSet of event: {$candidate->getId()} ");
+               if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not compute recurSet of event: {$candidate->getId()} ");
                continue;
             }
         }
@@ -275,7 +275,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $until = clone $from;
         
         if ($_from->isEarlier($_event->dtstart)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' from is ealier dtstart -> given event is next occurrence');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' from is ealier dtstart -> given event is next occurrence');
             return $_event;
         }
         
@@ -283,7 +283,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $attempts = 0;
         while (TRUE) {
             if ($rrule->until instanceof Zend_Date && $from->isLater($rrule->until)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' passed rrule_until -> no furthor occurrences');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' passed rrule_until -> no furthor occurrences');
                 return NULL;
             }
             
@@ -292,12 +292,12 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $attempts++;
             
             if (count($recurSet) > 0) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found next occurrence after $attempts attempt(s)");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found next occurrence after $attempts attempt(s)");
                 break;
             }
             
             if ($attempts > count($_exceptions) + 5) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not find the next occurrence after $attempts attempts, giving up");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not find the next occurrence after $attempts attempts, giving up");
                 return NULL;
             }
             
