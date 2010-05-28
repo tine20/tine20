@@ -103,7 +103,7 @@ class Timetracker_Model_TimeaccountIdFilter extends Tinebase_Model_Filter_Abstra
      */
     public function appendFilterSql($_select, $_backend)
     {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' op:' . $this->_operator);
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' op:' . $this->_operator);
         
         // don't filter by timeaccount_id if the user has the MANAGE_TIMEACCOUNTS right and don't want to filter by specific id's
         if (Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE) 
@@ -154,7 +154,7 @@ class Timetracker_Model_TimeaccountIdFilter extends Tinebase_Model_Filter_Abstra
     protected function _resolve()
     {
         if ($this->_isResolved) {
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' already resolved');
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' already resolved');
             return;
         }
 
@@ -165,12 +165,12 @@ class Timetracker_Model_TimeaccountIdFilter extends Tinebase_Model_Filter_Abstra
             // get all timeaccounts user has required grants for
             $result = array();
             foreach ($this->_requiredGrants as $grant) {
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value:' . $this->_value);
+                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value:' . $this->_value);
                 $result = array_merge($result, Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl($grant, TRUE));
             }
             $result = array_unique($result);
             
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, TRUE));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, TRUE));
             
             // finally compute timeaccount_ids which match the filter and required grants
             switch ($this->_operator) {
