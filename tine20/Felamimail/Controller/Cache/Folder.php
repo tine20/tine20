@@ -141,8 +141,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             }
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($account->toArray(), true));
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($folders, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($account->toArray(), true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($folders, true));
         
         // get folder recordset and sort it
         $result = $this->_getOrCreateFolders($folders, $account, $_folderName);
@@ -180,7 +180,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                     array($this->_backend->get($_folderId))
                 );
                 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating folder ' . $folders->getFirstRecord()->globalname);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating folder ' . $folders->getFirstRecord()->globalname);
                 
             } else if ($_folders !== NULL) {
                 if ($_folders instanceof Tinebase_Record_RecordSet) {
@@ -245,8 +245,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             }
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting status and values for folder ' . $_folder->globalname);
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cache folder status: ' . print_r($_folder->toArray(), TRUE));
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapFolderValues, TRUE));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cache folder status: ' . print_r($_folder->toArray(), TRUE));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapFolderValues, TRUE));
             
             // check validity
             if ($_folder->imap_uidvalidity != 0 && $_folder->imap_uidvalidity != $imapFolderValues['uidvalidity']) {
@@ -309,8 +309,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             $systemFolders[5] = strtolower($_account->trash_folder);
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemFolders, TRUE));
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_folders, TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemFolders, TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_folders, TRUE));
         
         // do some mapping and save folder in db (if it doesn't exist
         foreach ($_folders as $folderData) {
@@ -324,7 +324,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 $folder->is_selectable = ($folderData['isSelectable'] == '1');
                 $folder->has_children = ($folderData['hasChildren'] == '1');
                 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding cached folder ' . $folderData['globalName']);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding cached folder ' . $folderData['globalName']);
                 
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // create new folder
@@ -347,7 +347,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                         'delimiter'         => $folderData['delimiter']
                     ));
                     
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding new folder ' . $folderData['globalName'] . ' to cache.');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding new folder ' . $folderData['globalName'] . ' to cache.');
                     $folder = $this->_backend->create($folder);
                 }
             }
