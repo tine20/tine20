@@ -165,7 +165,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $groupId = $this->_config->{$configField};
         $groupController = Admin_Controller_Group::getInstance();
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting $_type to $_access for " . print_r($_members, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting $_type to $_access for " . print_r($_members, true));
         
         // add or remove members to or from internet/fileserver groups (defined in config.inc.php)
         foreach ($_members as $memberId) {
@@ -240,7 +240,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $groupNamePrefix = $i18n->_('Course') . '-';
         $group->name = $groupNamePrefix . $course->name;
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($group->toArray(), true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($group->toArray(), true));
         
         if (empty($group->id)) {
             $savedGroup         = $this->_groupController->create($group);
