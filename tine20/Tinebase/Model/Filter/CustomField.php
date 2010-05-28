@@ -63,7 +63,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Text
         
         $value = $this->_replaceWildcards($this->_value['value']);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding custom field filter: ' . print_r($this->_value, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding custom field filter: ' . print_r($this->_value, true));
         
         $db = Tinebase_Core::getDb();
         $idProperty = $db->quoteIdentifier($this->_options['idProperty']);
