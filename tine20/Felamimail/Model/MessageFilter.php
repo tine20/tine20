@@ -106,6 +106,6 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
             }
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
     }
 }
