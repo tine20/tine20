@@ -92,13 +92,13 @@ abstract class ActiveSync_Command_Wbxml
         try {
             $decoder = new Wbxml_Decoder($inputStream);
             $this->_inputDom = $decoder->decode();
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " decoded wbxml content: " . $this->_inputDom->saveXML());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " decoded wbxml content: " . $this->_inputDom->saveXML());
         } catch(Wbxml_Exception_UnexpectedEndOfFile $e) {
             $this->_inputDom = NULL;
         }
         
         $this->_syncTimeStamp = Zend_Date::now();
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " sync timestamp: " . $this->_syncTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " sync timestamp: " . $this->_syncTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG));
         
         $dtd = DOMImplementation::createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
         $this->_outputDom = DOMImplementation::createDocument($this->_defaultNameSpace, $this->_documentElement, $dtd);
@@ -126,7 +126,7 @@ abstract class ActiveSync_Command_Wbxml
             Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
         
         $outputStream = fopen("php://temp", 'r+');
         
