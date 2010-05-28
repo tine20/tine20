@@ -66,7 +66,7 @@ class Setup_Server_Cli extends Setup_Server_Abstract
 
         $this->_initFramework();
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->mode) ? $opts->mode : 'EMPTY'));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->mode) ? $opts->mode : 'EMPTY'));
         
         $setupServer = new Setup_Frontend_Cli();
         #$setupServer->authenticate($opts->username, $opts->password);
