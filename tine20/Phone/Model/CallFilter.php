@@ -65,7 +65,7 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
         
         if (! $this->_isResolved) {
             
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), true));    
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), true));    
         
             $phoneIdFilter = $this->_findFilter('phone_id');
             
