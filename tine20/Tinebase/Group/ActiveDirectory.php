@@ -55,7 +55,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
             
             $filter = "(&(objectclass=user)(sAMAccountName=$memberuid))";
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
             
             $groupMemberships = $this->_ldap->fetchAll($this->_options['userDn'], $filter, array('memberOf'));
             
@@ -179,7 +179,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
             $filter = 'objectclass=group';
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
         
         $groups = $this->_ldap->fetchAll($this->_options['groupsDn'], $filter, array('cn','description','objectGUID'), 'cn');
         
@@ -221,8 +221,8 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
         } else {
             $data = array('memberuid' => $memberUid);
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
             
             $this->_ldap->updateProperty($metaData['dn'], $data);
         }
@@ -243,7 +243,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
         $accountMetaData = $this->_getAccountMetaData($_accountId);
         
         if (in_array($accountMetaData['uidNumber'], $memberUidNumbers)) {
-             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skipp adding group member, as {$accountMetaData['uid']} is already in group $dn");
+             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skipp adding group member, as {$accountMetaData['uid']} is already in group $dn");
              return;
         }
         
@@ -260,8 +260,8 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
             }
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
         
         $this->_ldap->insertProperty($dn, $data);
     }
@@ -281,7 +281,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
         $accountMetaData = $this->_getAccountMetaData($_accountId);
         
         if (! in_array($accountMetaData['uidNumber'], $memberUidNumbers)) {
-             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skipp removing group member, as {$accountMetaData['uid']} is not in group $dn");
+             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skipp removing group member, as {$accountMetaData['uid']} is not in group $dn");
              return;
         }
         
@@ -299,8 +299,8 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
             }
         }
             
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
         
         $this->_ldap->deleteProperty($dn, $data);
     }
@@ -337,8 +337,8 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
             $data['member']      = $memberDn;
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
         
         if (array_search($data['objectclass'], $metaData['objectClass']) === false) {
             // NOTE: structual object classes can't be changed
@@ -386,8 +386,8 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
             'description' => $_group->description,
         );
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
         $this->_ldap->insert($dn, $data);
         
         return $this->getGroupById($gidNumber);
@@ -408,8 +408,8 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
             'description' => $_group->description,
         );
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
         $this->_ldap->update($dn, $data);
         
         return $this->getGroupById($_group->getId());
@@ -473,7 +473,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
             throw new Exception("group with id $groupId not found");
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($metaData, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($metaData, true));
         return $metaData;
     }
     
@@ -553,7 +553,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
             $allGidNumbers[] = $groupData['gidnumber'][0];
         }
         sort($allGidNumbers);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  Existing gidnumbers " . print_r($allGidNumbers, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  Existing gidnumbers " . print_r($allGidNumbers, true));
         
         $numGroups = count($allGidNumbers);
         if ($numGroups == 0 || $allGidNumbers[$numGroups-1] < $this->_options['minGroupId']) {
