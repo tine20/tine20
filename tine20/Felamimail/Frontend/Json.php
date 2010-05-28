@@ -248,7 +248,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $message = new Felamimail_Model_Message();
         $message->setFromJsonInUsersTimezone($recordData);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r(Zend_Json::decode($recordData), TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r(Zend_Json::decode($recordData), TRUE));
         
         try {
             $result = Felamimail_Controller_Message::getInstance()->sendMessage($message);
@@ -369,7 +369,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             echo $response;
             
             $size = ob_get_length();
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Content-Size: ' . $size);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Content-Size: ' . $size);
             
             /**
              * we set a special content-type to avoid compressing the output by mod_deflate
