@@ -146,7 +146,7 @@ class Zend_Service_Nominatim
         $this->_httpClient->setParameterGet('format', 'xml');
         $this->_httpClient->setParameterGet('addressdetails', 1);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Connecting to Nominating with uri ' . $url);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Connecting to Nominating with uri ' . $url);
         
         $response = $this->_httpClient->request();
         
