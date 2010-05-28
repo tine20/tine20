@@ -131,7 +131,7 @@ class Tinebase_Auth
      */
     private function __construct() {
         $backendType = self::getConfiguredBackend();
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' authentication backend: ' . $backendType);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' authentication backend: ' . $backendType);
         $this->_backend = Tinebase_Auth_Factory::factory($backendType);
     }
     
