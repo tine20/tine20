@@ -55,7 +55,7 @@ class Tinebase_Group
         if (self::$_instance === NULL) {
             $backendType = Tinebase_User::getConfiguredBackend();
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' groups backend: ' . $backendType);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' groups backend: ' . $backendType);
 
             self::$_instance = self::factory($backendType);
         }
@@ -144,7 +144,7 @@ class Tinebase_Group
             }
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' group memberships: ' . print_r($membershipsSyncBackend, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' group memberships: ' . print_r($membershipsSyncBackend, TRUE));
         
         $groupBackend->setGroupMembershipsInSqlBackend($user, $membershipsSyncBackend);
     }
