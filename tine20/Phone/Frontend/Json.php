@@ -35,7 +35,7 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function dialNumber($number, $phoneId, $lineId)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Dialing number $number with $phoneId (line $lineId)");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Dialing number $number with $phoneId (line $lineId)");
         
         Phone_Controller::getInstance()->dialNumber($number, $phoneId, $lineId);
         
