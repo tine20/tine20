@@ -198,7 +198,7 @@ abstract class ActiveSync_Controller_Abstract
      */
     public function add($_folderId, SimpleXMLElement $_data)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add entry");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add entry");
         
         $entry = $this->_toTineModel($_data);
         $entry->creation_time = $this->_syncTimeStamp;
@@ -210,7 +210,7 @@ abstract class ActiveSync_Controller_Abstract
             
         $entry = $this->_contentController->create($entry);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " added entry id " . $entry->getId());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " added entry id " . $entry->getId());
 
         return $entry;
     }
@@ -225,7 +225,7 @@ abstract class ActiveSync_Controller_Abstract
      */
     public function change($_folderId, $_id, SimpleXMLElement $_data)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId Id: $_id");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId Id: $_id");
         
         $oldEntry = $this->_contentController->get($_id); 
         
@@ -234,7 +234,7 @@ abstract class ActiveSync_Controller_Abstract
         
         $entry = $this->_contentController->update($entry);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updated entry id " . $entry->getId());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updated entry id " . $entry->getId());
 
         return $entry;
     }
@@ -247,11 +247,11 @@ abstract class ActiveSync_Controller_Abstract
      */
     public function delete($_folderId, $_id)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " ColectionId: $_folderId Id: $_id");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " ColectionId: $_folderId Id: $_id");
         
         $this->_contentController->delete($_id);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " deleted entry id " . $_id);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " deleted entry id " . $_id);
     }
     
     /**
@@ -263,7 +263,7 @@ abstract class ActiveSync_Controller_Abstract
      */
     public function search($_folderId, SimpleXMLElement $_data)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId");
         
         $filterArray  = $this->_toTineFilterArray($_data);
         $filter       = new $this->_contentFilterClass($filterArray);
@@ -272,7 +272,7 @@ abstract class ActiveSync_Controller_Abstract
         
         $foundEmtries = $this->_contentController->search($filter);
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEmtries));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEmtries));
             
         return $foundEmtries;
     }
@@ -359,7 +359,7 @@ abstract class ActiveSync_Controller_Abstract
             $pagination = null;
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " assembled {$this->_contentFilterClass}: " . print_r($filter->toArray(), TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " assembled {$this->_contentFilterClass}: " . print_r($filter->toArray(), TRUE));
         $result = $this->_contentController->search($filter, $pagination, false, true, 'sync');
         
         return $result;
