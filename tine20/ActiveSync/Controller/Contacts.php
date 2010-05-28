@@ -384,7 +384,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         // contact should be valid now
         $contact->isValid();
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactData " . print_r($contact->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactData " . print_r($contact->toArray(), true));
         
         return $contact;
     }
@@ -411,7 +411,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
             }
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
         
         return $filterArray;
     }
