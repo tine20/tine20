@@ -119,7 +119,7 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
                 'description'   => null
             )); 
 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' add group: ' . print_r($groupObject->toArray(), TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' add group: ' . print_r($groupObject->toArray(), TRUE));
             try {
                 parent::addGroup($groupObject);
             } catch (Exception $e) {
