@@ -322,7 +322,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             throw new Tinebase_Exception_Record_Validation('invalid group object');
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Creating new group ' . $_group->name 
             //. print_r($_group->toArray(), true)
         );
@@ -425,7 +425,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     public function deleteAllGroups()
     {
         $groups = $this->getGroups();
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($groups) .' users');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($groups) .' users');
         $this->deleteGroups($groups);
     }
     
