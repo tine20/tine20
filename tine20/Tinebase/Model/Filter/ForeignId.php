@@ -42,7 +42,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
      * @param array $_value
      */
     public function setValue($_value) {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, true));
         
         $this->_filterGroup = new $this->_options['filtergroup']((array)$_value, $this->_operator, $this->_options);
         $this->_controller = call_user_func($this->_options['controller'] . '::getInstance');
