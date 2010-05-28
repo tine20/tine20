@@ -71,7 +71,7 @@ class ActiveSync_Command_FolderDelete extends ActiveSync_Command_Wbxml
         $this->_syncKey     = (int)$xml->SyncKey;
         $this->_serverId    = (string)$xml->ServerId;
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey");        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey");        
     }
     
     /**
