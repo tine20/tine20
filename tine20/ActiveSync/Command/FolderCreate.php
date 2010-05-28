@@ -75,7 +75,7 @@ class ActiveSync_Command_FolderCreate extends ActiveSync_Command_Wbxml
         $this->_displayName = (string)$xml->DisplayName;
         $this->_type        = (int)$xml->Type;
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey");        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey");        
         
         switch((int)$xml->Type) {
             case ActiveSync_Command_FolderSync::FOLDERTYPE_CALENDAR_USER_CREATED:
