@@ -243,14 +243,14 @@ class Tinebase_Timemachine_ModificationLog
         }
         
         if($_curRecord->last_modified_time instanceof Zend_Date && !$_curRecord->last_modified_time->equals($_newRecord->last_modified_time)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  concurrent updates: current record last updated '" .
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  concurrent updates: current record last updated '" .
                 $_curRecord->last_modified_time . "' where record to be updated was last updated '" . $_newRecord->last_modified_time . "'");
             
             $loggedMods = $this->getModifications($appName, $_id,
                     $_model, $_backend, $_newRecord->last_modified_time, $_curRecord->last_modified_time);
             // effective modifications made to the record after current user got his record
             $diffs = $this->computeDiff($loggedMods);
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " during the concurrent update, the following changes have been made: " .
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " during the concurrent update, the following changes have been made: " .
                 print_r($diffs->toArray(),true));
             
             // we loop over the diffs! -> changes over fields which have no diff in storage are not in the loop!
@@ -260,11 +260,11 @@ class Tinebase_Timemachine_ModificationLog
                     throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
                 }
                 if ($_newRecord[$diff->modified_attribute] == $diff->new_value) { 
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user updated to same value for field '" .
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user updated to same value for field '" .
                     $diff->modified_attribute . "', nothing to do.");
                     $resolved->addRecord($diff);
                 } elseif ($_newRecord[$diff->modified_attribute]  == $diff->old_value) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " merge current value into update data, as it was not changed in update request.");
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " merge current value into update data, as it was not changed in update request.");
                     $_newRecord[$diff->modified_attribute] = $diff->new_value;
                     $resolved->addRecord($diff);
                 } else {
@@ -325,7 +325,7 @@ class Tinebase_Timemachine_ModificationLog
         foreach ($diffs as $field => $newValue) {
             if(! in_array($field, $toOmmit)) {
                 $curValue = $_curRecord->$field;
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " field '$field' changed from '$curValue' to '$newValue'");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " field '$field' changed from '$curValue' to '$newValue'");
                 
                 $modLogEntry->modified_attribute = $field;
                 $modLogEntry->old_value = $curValue;
