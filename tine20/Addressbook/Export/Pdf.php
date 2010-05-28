@@ -130,7 +130,7 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
             unlink($tmpPath);
         } catch (Exception $e) {
             // gif images are not supported yet by zf (or some other error)
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->__toString());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->__toString());
             $contactPhoto = NULL;
         }
         
