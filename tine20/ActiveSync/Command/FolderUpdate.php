@@ -75,7 +75,7 @@ class ActiveSync_Command_FolderUpdate extends ActiveSync_Command_Wbxml
         $this->_displayName = (string)$xml->DisplayName;
         $this->_serverId    = (string)$xml->ServerId;
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey parentId $this->_parentId name $this->_displayName");        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey parentId $this->_parentId name $this->_displayName");        
     }
     
     /**
