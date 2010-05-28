@@ -94,7 +94,7 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
             throw new Tinebase_Exception_Record_Validation('minutes_before is needed to set the alarm_time!');
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Calculating alarm_time ...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Calculating alarm_time ...');
         
         $date = clone $_date;
         
@@ -108,7 +108,7 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
      */
     public function setMinutesBefore(Zend_Date $_date)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), TRUE));
         
         $dtStartTS = $_date->getTimestamp();
         $alarmTimeTS = $this->alarm_time->getTimestamp();
@@ -119,6 +119,6 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
             $this->minutes_before = ($dtStartTS - $alarmTimeTS) / 60;
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' result: ' . $this->minutes_before);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' result: ' . $this->minutes_before);
     }
 }
