@@ -138,7 +138,7 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
             return $false;
         }
                 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
         
         try {
             Tinebase_User::getInstance()->getUserByProperty(Tinebase_User_Abstract::PROPERTY_OPENID, $localPart);
@@ -307,7 +307,7 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
             throw new Tinebase_Exception_InvalidArgument("invalid id: $id supplied");
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
         
         try {
             $account = Tinebase_User::getInstance()->getUserByProperty(Tinebase_User_Abstract::PROPERTY_OPENID, $localPart, 'Tinebase_Model_FullUser');
