@@ -191,7 +191,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
         
         // add header (replace placeholders)
         if (isset($this->_config->headers)) {
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
             
             $patterns = array(
                 '/\{date\}/', 
@@ -259,7 +259,7 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
                 }
                 */
                 
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($field->toArray(), true));
+                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($field->toArray(), true));
             }        
             $i++;
         }
