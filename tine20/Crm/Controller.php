@@ -83,7 +83,7 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
      */
     public function handleEvents(Tinebase_Event_Abstract $_eventObject)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
         
         switch(get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
@@ -189,7 +189,7 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
      */
     public function saveSettings($_settings)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating Crm Settings: ' . print_r($_settings->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating Crm Settings: ' . print_r($_settings->toArray(), TRUE));
         
         foreach ($_settings->toArray() as $field => $value) {
             if ($field == 'id') {
