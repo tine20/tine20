@@ -46,7 +46,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
             // fire 'before import' event
             Tinebase_Event::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
             
             // generate passwd (use accountLoginName or password from options or password from csv in this order)
             $password = $record->accountLoginName;
