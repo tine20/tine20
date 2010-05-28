@@ -269,8 +269,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         // calculate migration
         $toAdd    = array_diff_key($convertEmailMap, $currentEmailMap);
         $toDelete = array_diff_key($currentEmailMap, $convertEmailMap);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee to add " . print_r($toAdd, true));
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee to delete " . print_r($toAdd, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee to add " . print_r($toAdd, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee to delete " . print_r($toAdd, true));
         
         // delete attendee from set
         foreach ($toDelete as $email => $attenderId) {
@@ -288,7 +288,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         	)));
         	
             if(count($contacts) > 0) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
                 
                 $contactId = NULL;
                 $accountIdMap = $contacts->account_id;
@@ -296,12 +296,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 // prefer account over contact
                 foreach ($accountIdMap as $contactMapId => $accountMapId) {
                     $contactId = $accountMapId;
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taking contact with account with id " . $accountMapId);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taking contact with account with id " . $accountMapId);
                 }
                 
                 if (! $contactId) {
                 	$contactId = $contacts->getFirstRecord()->getId();
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taking contact with id " . $contactId);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taking contact with id " . $contactId);
                     
                 }
                 
@@ -316,12 +316,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     'email'       => (string) $email,
                     'n_family'    => array_value(0, explode('@', (string) $email)),
                 );
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contactData, true));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contactData, true));
                 $contact = new Addressbook_Model_Contact($contactData);
                 
                 $contactId = $addressbook->create($contact)->getId();
             } else {
-            	Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " discarding attender " . $email);
+            	if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " discarding attender " . $email);
             	
             	$contactId = NULL;
             }
@@ -436,7 +436,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             switch ($type) {
                 case self::USERTYPE_USER:
                 case self::USERTYPE_GROUPMEMBER:
-                    //Tinebase_Core::getLogger()->debug(print_r(array_unique($ids), true));
+                    //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r(array_unique($ids), true));
                     $typeMap[$type] = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($ids), TRUE);
                     break;
                 case self::USERTYPE_GROUP:
