@@ -828,6 +828,29 @@ class Tinebase_Core
     }
 
     /**
+     * get configured loglevel
+     * 
+     * @return Int
+     */
+    public static function getLogLevel()
+    {
+        $config = self::getConfig();
+        
+        return isset($config->logger) && $config->logger->priority ? (int)$config->logger->priority : Zend_Log::EMERG;
+    }
+    
+    /**
+     * check if given loglevel should be logged
+     * 
+     * @param  int $_prio
+     * @return bool
+     */
+    public static function isLogLevel($_prio)
+    {
+        return self::getLogLevel() >= $_prio;
+    }
+    
+    /**
      * get config from the registry
      *
      * @return Zend_Log the logger
