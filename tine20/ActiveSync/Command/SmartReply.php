@@ -57,7 +57,7 @@ class ActiveSync_Command_SmartReply extends ActiveSync_Command_SendMail
 
         $this->_incomingMessage = new Zend_Mail_Message(array('raw' => $rawMessage));
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . $this->_saveInSent . " message: " . $rawMessage);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . $this->_saveInSent . " message: " . $rawMessage);
         
     }    
     
