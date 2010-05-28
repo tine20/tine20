@@ -538,7 +538,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $updatedUser->setId($existingUser->getId());
             $result = $this->updateUser($updatedUser);
         } catch (Tinebase_Exception_NotFound $e) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Could not get user by loginName "' . $_user->accountLoginName . '": ' . $e->getMessage() . ' => creating new user');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Could not get user by loginName "' . $_user->accountLoginName . '": ' . $e->getMessage() . ' => creating new user');
             try {
                 $result = $this->addUser($_user);
             } catch (Exception $e) {
@@ -616,7 +616,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error while deleting account ' . $e->__toString());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error while deleting account ' . $e->__toString());
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw($e);
         }
@@ -641,7 +641,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function deleteAllUsers()
     {
         $users = $this->getUsers();
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($users) .' users');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($users) .' users');
         foreach ( $users as $user ) {
             $this->deleteUser($user);
         }
