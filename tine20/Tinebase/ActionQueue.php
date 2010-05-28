@@ -104,7 +104,7 @@
                 'action' => $action,
                 'params' => $params
             ));
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $message);
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $message);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not create message for action: '{$action}'");
             return;
