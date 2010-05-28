@@ -92,8 +92,8 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     protected function _getDateValues($_operator, $_value)
     {
         if ($_operator === 'within') {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting "within" filter: ' . $_value);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Timezone: ' . date_default_timezone_get());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting "within" filter: ' . $_value);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Timezone: ' . date_default_timezone_get());
             
             $date = new Zend_Date();
             
