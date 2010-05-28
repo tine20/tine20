@@ -91,7 +91,7 @@ class Setup_Update_Abstract
         $stmt = $select->query();
         $rows = $stmt->fetchAll();
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         $result = ( isset($rows[0]['version']) ) ? $rows[0]['version'] : 0; 
         
