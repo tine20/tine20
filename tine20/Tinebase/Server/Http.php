@@ -73,7 +73,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract
                 if ($setupController->setupRequired()) {
                     $server->handle(array('method' => 'Tinebase.setupRequired'));
                 } else {                
-                    Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
                     $server->handle(array('method' => 'Tinebase.exception'));
                 }
             }
