@@ -218,7 +218,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         if (! in_array($_updater->accountId, $recipients)) {
             $recipients[] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_currentAccount->getId())->getId();
         }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $plain);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $plain);
         Tinebase_Notification::getInstance()->send($this->_currentAccount, $recipients, $subject, $plain, $html, array($attachment));
     }
     
@@ -244,7 +244,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         
         // if no responsibles are defined, send message to all readers of container
         if (empty($recipients)) {
-            Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' no responsibles found for lead: ' . 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' no responsibles found for lead: ' . 
                 $_lead->getId() . ' sending notification to all people having read access to container ' . $_lead->container_id);
                 
             $containerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_lead->container_id, TRUE);
