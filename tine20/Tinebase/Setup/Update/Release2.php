@@ -114,7 +114,7 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
             
             //override default settings with config.inc.php settings
             if (!empty($config['accounts'][$config['accounts']['backend']])) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config: ' . print_r($config['accounts'][$config['accounts']['backend']], TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config: ' . print_r($config['accounts'][$config['accounts']['backend']], TRUE));
                 Tinebase_User::setBackendConfiguration($config['accounts'][$config['accounts']['backend']]);
             } 
             
@@ -205,7 +205,7 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
             
             //override default settings with config.inc.php settings
             if (!empty($config['authentication'][$config['authentication']['backend']])) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config: ' . print_r($config['authentication'][$config['authentication']['backend']], TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config: ' . print_r($config['authentication'][$config['authentication']['backend']], TRUE));
                 Tinebase_Auth::setBackendConfiguration($config['authentication'][$config['authentication']['backend']]);
             }
 
