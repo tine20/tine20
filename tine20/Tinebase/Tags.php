@@ -122,7 +122,7 @@ class Tinebase_Tags
                 Tinebase_Model_TagRight::applyAclSql($select, $_right);
             }
             
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
             
             foreach ($this->_db->fetchAssoc($select) as $tagArray){
                 $tags->addRecord(new Tinebase_Model_Tag($tagArray, true));
@@ -347,7 +347,7 @@ class Tinebase_Tags
         Tinebase_Model_TagRight::applyAclSql($select, $_right, 'tagging.tag_id');
         
         $queryResult = $this->_db->fetchAll($select);
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
         
         // argh: Tinebase_Model_Tag has no record_id
         /*
@@ -388,7 +388,7 @@ class Tinebase_Tags
         $toAttach = array_diff($tagsToSet, $currentTags);
         $toDetach = array_diff($currentTags, $tagsToSet);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Attaching tags: ' . print_r($toAttach, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Attaching tags: ' . print_r($toAttach, true));
         
         // manage tags
         $appId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
@@ -425,7 +425,7 @@ class Tinebase_Tags
      */
     public function attachTagToMultipleRecords($_filter, $_tag)
     {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), TRUE));
         
         // check/create tag on the fly
         $tags = $this->_createTagsOnTheFly(array($_tag));
@@ -485,7 +485,7 @@ class Tinebase_Tags
      */
     protected function _createTagsOnTheFly($_mixedTags)
     {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' creating tags on the fly: ' . print_r($_mixedTags, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' creating tags on the fly: ' . print_r($_mixedTags, true));
         
         $tagIds = array();
         foreach ($_mixedTags as $tag) {
@@ -611,7 +611,7 @@ class Tinebase_Tags
             $apps = 'any';
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' got tag contexts: ' .$apps);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' got tag contexts: ' .$apps);
         return explode(',', $apps);
     }
     
@@ -623,7 +623,7 @@ class Tinebase_Tags
      */
     public function purgeContexts($_tagId)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' removing contexts for tag ' . $_tagId);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' removing contexts for tag ' . $_tagId);
         
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId);
         $this->_db->delete(SQL_TABLE_PREFIX . 'tags_context', $where);
@@ -646,7 +646,7 @@ class Tinebase_Tags
             $_contexts = array(0);
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting tag contexts: ' . print_r($_contexts, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting tag contexts: ' . print_r($_contexts, true));
         
         foreach ($_contexts as $context) {
             $this->_db->insert(SQL_TABLE_PREFIX . 'tags_context', array(
