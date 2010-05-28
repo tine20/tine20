@@ -37,7 +37,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract
             return;
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is ActiveSync request.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is ActiveSync request.');
         
         try {
             $activeSync = Tinebase_Application::getInstance()->getApplicationByName('ActiveSync');
@@ -92,7 +92,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract
                     $parameters = $this->_getRequestParameters();
                 }
                 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' REQUEST ' . print_r($parameters, true));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' REQUEST ' . print_r($parameters, true));
                 
                 $syncFrontend->handlePost($_SERVER['PHP_AUTH_USER'], $parameters['deviceId'], $parameters['deviceType'], $parameters['command'], $parameters['protocolVersion']);
                 break;
@@ -140,7 +140,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract
         $result['policyKey']        = $this->_readString($stream);
         $result['deviceType']       = $this->_readString($stream);
         
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' REQUEST ' . print_r($result, true));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' REQUEST ' . print_r($result, true));
 
         return $result;
     }
