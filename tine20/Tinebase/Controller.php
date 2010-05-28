@@ -144,7 +144,7 @@ class Tinebase_Controller
         }
         
         $loginName = Tinebase_Core::getUser()->accountLoginName;
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " change password for $loginName");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " change password for $loginName");
         
         if (!Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
             throw new Tinebase_Exception_InvalidArgument('Old password is wrong.');
