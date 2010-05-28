@@ -93,7 +93,7 @@ class Tinebase_Group_LdapPlugin_Samba
      */
     protected function _group2ldap(Tinebase_Model_Group $_group, array &$_ldapData)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ENCRYPT ' . print_r($_ldapData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ENCRYPT ' . print_r($_ldapData, true));
         if (isset($_ldapData['objectclass'])) {
             $_ldapData['objectclass'] = array_unique(array_merge($_ldapData['objectclass'], $this->_requiredObjectClass));
         }
