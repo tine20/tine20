@@ -185,7 +185,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         try {
             $imap = Felamimail_Backend_ImapFactory::factory($account);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to create new folder: ' . $globalname);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to create new folder: ' . $globalname);
             $imap->createFolder($_folderName, (empty($_parentFolder)) ? NULL : $_parentFolder, $this->_delimiter);
 
             // create new folder
@@ -200,7 +200,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             
         } catch (Zend_Mail_Storage_Exception $zmse) {
             // perhaps the folder already exists
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Could not create new folder: ' . $globalname . ' (' . $zmse->getMessage() . ')');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Could not create new folder: ' . $globalname . ' (' . $zmse->getMessage() . ')');
             
             // reload folder cache of parent
             $parentSubs = $this->_cacheController->update($_accountId, $_parentFolder);
@@ -278,7 +278,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         array_pop($globalNameParts);
         $newGlobalName = implode($this->_delimiter, $globalNameParts) . $this->_delimiter . $_newLocalName;
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $_oldGlobalName . ' -> ' . $newGlobalName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $_oldGlobalName . ' -> ' . $newGlobalName);
         
         $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
         $imap->renameFolder($_oldGlobalName, $newGlobalName);
@@ -300,7 +300,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         foreach ($subfolders as $subfolder) {
             if ($newGlobalName != $subfolder->globalname) {
                 $newSubfolderGlobalname = str_replace($_oldGlobalName, $newGlobalName, $subfolder->globalname);
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $subfolder->globalname . ' -> ' . $newSubfolderGlobalname);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $subfolder->globalname . ' -> ' . $newSubfolderGlobalname);
                 $subfolder->globalname = $newSubfolderGlobalname;
                 $this->update($subfolder);
             }
@@ -399,11 +399,11 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Sorting subfolders of "' . $_parentFolder . '".');
 
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_folders->globalname, TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_folders->globalname, TRUE));
         
         foreach ($this->_systemFolders as $systemFolderName) {
             $folders = $_folders->filter('globalname', '@^' . $systemFolderName . '$@i', TRUE);
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $systemFolderName . ' => ' . print_r($folders->toArray(), TRUE));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $systemFolderName . ' => ' . print_r($folders->toArray(), TRUE));
             if (count($folders) > 0) {
                 $sortedFolders->addRecord($folders->getFirstRecord());
             }
@@ -415,7 +415,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             }
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($sortedFolders->globalname, TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($sortedFolders->globalname, TRUE));
         
         return $sortedFolders;
     }
@@ -444,7 +444,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         }
         
         if ($folder->has_children != $value) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set new has_children value for folder ' . $_globalname . ': ' . $value); 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set new has_children value for folder ' . $_globalname . ': ' . $value); 
             $folder->has_children = $value;
             $folder = $this->update($folder);
         }
