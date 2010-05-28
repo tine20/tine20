@@ -123,7 +123,7 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Tinebase_User::getInstance()->resolveMultipleUsers($_records, 'organizer', true);
         }
         
-        //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
         return parent::_multipleRecordsToJson($_records);
     }    
     
