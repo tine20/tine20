@@ -98,7 +98,7 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
         $xml = simplexml_import_dom($this->_inputDom);
         $this->_syncKey = (int)$xml->SyncKey;
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey");        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey");        
     }
     
     /**
@@ -143,7 +143,7 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
                     // added entries
                     $serverDiff = array_diff($allServerEntries, $allClientEntries);
                     foreach($serverDiff as $folderId) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add $class $folderId");
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add $class $folderId");
                         $adds[$class][$folderId] = $folders[$folderId];
                         $count++;
                     }
@@ -151,7 +151,7 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
                     // deleted entries
                     $serverDiff = array_diff($allClientEntries, $allServerEntries);
                     foreach($serverDiff as $folderId) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " delete $class $folderId");
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " delete $class $folderId");
                         $deletes[$class][$folderId] = $folderId;
                         $count++;
                     }
@@ -171,7 +171,7 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
             $changes = $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Changes'));            
             $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Count', $count));
             foreach($adds as $class => $folders) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $class");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $class");
                 foreach((array)$folders as $folder) {
                     $add = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Add'));
                     $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folder['folderId']));
@@ -184,7 +184,7 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
             }
             
             foreach($deletes as $class => $folders) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $class");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $class");
                 foreach((array)$folders as $folderId) {
                     $delete = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Delete'));
                     $delete->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folderId));
