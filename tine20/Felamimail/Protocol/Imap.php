@@ -205,7 +205,7 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
 
         $result = array();
         while (!$this->readLine($tokens, $tag)) {
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($tokens, TRUE));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($tokens, TRUE));
             
             $nsNames = array('personal', 'other', 'shared');
             $index = 0;
