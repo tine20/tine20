@@ -236,7 +236,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $userFilter = $_filter->createFilter('user_id', 'equals', $this->_currentAccount->getId());
             $_filter->addFilter($userFilter);
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding user_id filter.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding user_id filter.');
         }
     }
 
@@ -258,14 +258,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
         
         if (! $_record->user || ! $_record->password) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No username or password given for new account.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No username or password given for new account.');
             return;    
         }
         
         // add imap & smtp credentials
         $_record->credentials_id = $this->_createCredentials($_record->user, $_record->password);
         if ($_record->smtp_user && $_record->smtp_password) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Create SMTP credentials.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Create SMTP credentials.');
             $_record->smtp_credentials_id = $this->_createCredentials($_record->smtp_user, $_record->smtp_password);
         } else {
             $_record->smtp_credentials_id = $_record->credentials_id;
@@ -348,7 +348,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             
             if ($_record->smtp_user && $_record->smtp_password) {
                 // create extra smtp credentials
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update/create SMTP credentials.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update/create SMTP credentials.');
                 $_record->smtp_credentials_id = $this->_createCredentials($_record->smtp_user, $_record->smtp_password);
                 
             } else if (
@@ -403,7 +403,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     public function changeCredentials($_accountId, $_username, $_password)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Changing credentials for account id ' . $_accountId);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Changing credentials for account id ' . $_accountId);
         
         // get account and set pwd
         $account = $this->get($_accountId);
@@ -456,7 +456,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         // get imap server capabilities and save delimiter / personal namespace in account
         $capabilities = $_imapBackend->getCapabilityAndNamespace();
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($capabilities, TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($capabilities, TRUE));
         
         if (isset($capabilities['namespace'])) {
             $_account->delimiter     = $capabilities['namespace']['personal']['delimiter'];
@@ -467,14 +467,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             if ($_account->ns_personal == 'NIL') {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No personal namespace available!');
             } else {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting personal namespace: "' . $_account->ns_personal . '"');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting personal namespace: "' . $_account->ns_personal . '"');
             }
             
         } else if ($_delimiter !== NULL) {
             // get delimiter from params
             if ($_delimiter != $_account->delimiter) {
                 $_account->delimiter = $_delimiter;
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting new delimiter: ' . $_delimiter);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting new delimiter: ' . $_delimiter);
             }
         }
         
@@ -552,7 +552,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $systemAccount->getId();
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Created new system account "' . $systemAccount->name . '".');
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemAccount->toArray(), TRUE));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemAccount->toArray(), TRUE));
             
         } else {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not create system account for user ' . $fullUser->accountLoginName . '. No email address given.');
@@ -570,7 +570,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _createCredentials($_username = NULL, $_password = NULL)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Create new account credentials for username ' . $_username);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Create new account credentials for username ' . $_username);
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
             $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
@@ -619,7 +619,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             }
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->toArray(), TRUE)); 
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->toArray(), TRUE)); 
     }
     
     /**
