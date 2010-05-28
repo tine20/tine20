@@ -226,7 +226,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         // contact should be valid now
         $task->isValid();
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taskData " . print_r($task->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taskData " . print_r($task->toArray(), true));
         
         return $task;
     }
@@ -251,7 +251,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
             }
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
         
         return $filterArray;
     }
@@ -329,7 +329,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                         ->getAllStatus()
                         ->filter('status_is_open', 1);
 
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter by status ids " . print_r($status->getArrayOfIds(), true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter by status ids " . print_r($status->getArrayOfIds(), true));
                     
                     $_filter->addFilter(new Tinebase_Model_Filter_Int(
                         'status_id', 
