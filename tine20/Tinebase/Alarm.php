@@ -83,7 +83,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         
         if (! Tinebase_AsyncJob::getInstance()->jobIsRunning($eventName)) {
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No ' . $eventName . ' is running. Starting new one.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No ' . $eventName . ' is running. Starting new one.');
  
             $job = Tinebase_AsyncJob::getInstance()->startJob($eventName);
          
@@ -104,7 +104,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             
                 $alarms = $this->_backend->search($filter);
         
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending ' . count($alarms) . ' alarms.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending ' . count($alarms) . ' alarms.');
         
                 // loop alarms and call sendAlarm in controllers
                 foreach ($alarms as $alarm) {
@@ -128,7 +128,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                             //throw $e;
                         } 
                     
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating alarm status: ' . $alarm->sent_status);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating alarm status: ' . $alarm->sent_status);
                     
                         $this->update($alarm);
                     }
@@ -141,10 +141,10 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                 $job = Tinebase_AsyncJob::getInstance()->finishJob($job, Tinebase_Model_AsyncJob::STATUS_FAILURE, $e->getMessage());
             }
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Job ' . $eventName . ' is already running. Skipping event.');           
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Job ' . $eventName . ' is already running. Skipping event.');           
             
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Job ' . $eventName . ' is already running. Skipping event.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Job ' . $eventName . ' is already running. Skipping event.');
         }
     }
     
@@ -166,7 +166,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             $recordId = $_recordId;
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' id:" . print_r((array)$recordId, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' id:" . print_r((array)$recordId, true));
     
         $filter = new Tinebase_Model_AlarmFilter(array(
             array(
