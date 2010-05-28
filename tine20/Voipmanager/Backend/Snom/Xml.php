@@ -77,10 +77,10 @@ class Voipmanager_Backend_Snom_Xml
     
     protected function _appendLocationSettings(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
         $snomLocation     = new Voipmanager_Backend_Snom_Location($this->_db);        
         $locationSettings = $snomLocation->get($_phone->location_id);
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localtion_id " . print_r($locationSettings, true));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localtion_id " . print_r($locationSettings, true));
         $locationSettings = $locationSettings->toArray();
         
         unset($locationSettings['id']);
@@ -113,7 +113,7 @@ class Voipmanager_Backend_Snom_Xml
         $child = $_xml->addChild('user_dp_str1');
         $child->addAttribute('perm', 'RW');
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
     }
     
     protected function _appendPhoneUrls(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
@@ -306,7 +306,7 @@ class Voipmanager_Backend_Snom_Xml
      */
     public function getConfig(Voipmanager_Model_Snom_Phone $_phone)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " phone " . print_r($_phone->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " phone " . print_r($_phone->toArray(), true));
         
         if (!$_phone->isValid()) {
             throw new Voipmanager_Exception_Validation('invalid phone');
@@ -346,7 +346,7 @@ class Voipmanager_Backend_Snom_Xml
         $dialPlan = $xml->addChild('dialplan');
         $this->_appendDialPlan($_phone, $dialPlan);
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $xml->asXML());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $xml->asXML());
         
         return $xml->asXML();
     }
