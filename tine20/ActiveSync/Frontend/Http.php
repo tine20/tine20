@@ -89,7 +89,7 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function handlePost($_user, $_deviceId, $_deviceType, $_command, $_version)
     {
         #if(!isset($_SERVER['HTTP_X_MS_POLICYKEY']) && $_command != 'Ping') {
-        #    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " X-MS-POLICYKEY missing (" . $_command. ')');
+        #    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " X-MS-POLICYKEY missing (" . $_command. ')');
         #    header("HTTP/1.1 400 header X-MS-POLICYKEY not found");
         #    return;
         #}
@@ -101,7 +101,7 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         $userAgent = array_key_exists('HTTP_USER_AGENT', $_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : $_deviceType;
         $policyKey = array_key_exists('HTTP_X_MS_POLICYKEY', $_SERVER) ? (int)$_SERVER['HTTP_X_MS_POLICYKEY'] : null; 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Agent: $userAgent  PolicyKey: $policyKey ASVersion: $_version Command: $_command");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Agent: $userAgent  PolicyKey: $policyKey ASVersion: $_version Command: $_command");
         
         $device = ActiveSync_Controller::getInstance()->getUserDevice($_deviceId, $_deviceType, $userAgent, $_version);
         
@@ -113,7 +113,7 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             }
     
             $className = 'ActiveSync_Command_' . $_command;
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " class name: $className");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " class name: $className");
             $command = new $className($device);
             
             $command->handle();
