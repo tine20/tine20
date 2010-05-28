@@ -148,12 +148,12 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
             $_resource = fopen($_filename, 'r');
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Importing from file ' . $_filename);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Importing from file ' . $_filename);
         
         // get headline
         if (isset($this->_options['headline']) && $this->_options['headline']) {
             $headline = $this->_getRawData($_resource);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got headline: ' . implode(', ', $headline));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got headline: ' . implode(', ', $headline));
         } else {
             $headline = array();
         }
@@ -181,7 +181,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                         // merge additional values (like group id, container id ...)
                         $recordData = array_merge($recordData, $this->_addData($recordData));
                         
-                        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, true));
+                        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, true));
                         
                         // import record into tine!
                         $importedRecord = $this->_importRecord($recordData, $result);
@@ -190,7 +190,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                 } catch (Exception $e) {
                     // don't add incorrect record (name missing for example)
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
                     $result['failcount']++;
                 }
             }
@@ -222,7 +222,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
             // $this->_options['escape']
         );
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($lineData, TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($lineData, TRUE));
         if (is_array($lineData) && count($lineData) == 1) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Only got 1 field in line. Wrong delimiter?');
         }
@@ -331,7 +331,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      */
     protected function _importRecord($_recordData, &$_result)
     {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recordData, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recordData, true));
         
         $record = new $this->_modelName($_recordData, TRUE);
         
@@ -344,7 +344,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                     $existingRecords = $this->_controller->search($this->_getDuplicateSearchFilter($record), NULL, FALSE, TRUE);
                     if (count($existingRecords) > 0) {
                         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Duplicate found: ' . $existingRecords[0]);
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
                         $_result['duplicatecount']++;
                         return;
                     }
@@ -363,7 +363,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
             $_result['totalcount']++;
             
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
             throw new Tinebase_Exception_Record_Validation('Imported record is invalid.');
         }
     }
@@ -459,7 +459,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                         'color'         => '#000099'
                     ));
                     
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create new tag: ' . print_r($newTag->toArray(), true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create new tag: ' . print_r($newTag->toArray(), true));
                     
                     $newTag = Tinebase_Tags::getInstance()->createTag($newTag);
                     
