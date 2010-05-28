@@ -53,7 +53,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
          // quote field identifier
          $field = $this->_getQuotedFieldName($_backend);
          
-         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_value, TRUE));
+         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_value, TRUE));
          
          if (empty($this->_value)) {
              // prevent sql error
