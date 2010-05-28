@@ -130,7 +130,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         
         // set fonts
         if (!empty($config->fontpath) && file_exists($config->fontpath)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' use font file: ' . $config->fontpath);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' use font file: ' . $config->fontpath);
                          
             $boldpath = $config->get('fontboldpath', $config->fontpath);
             $embed = ($config->fontembed) ? 0 : Zend_Pdf_Font::EMBED_DONT_EMBED;
@@ -139,7 +139,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             $this->_font = Zend_Pdf_Font::fontWithPath($config->fontpath, $embed);
             $this->_fontBold = Zend_Pdf_Font::fontWithPath($boldpath, $embed);
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' use zend_pdf font: ' . $this->_fontName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' use zend_pdf font: ' . $this->_fontName);
             
             $this->_font = Zend_Pdf_Font::fontWithName($this->_fontName);
             $this->_fontBold = Zend_Pdf_Font::fontWithName($this->_fontNameBold);
@@ -287,7 +287,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         // increase page number
         $this->_pageNumber++;
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created PDF export page for record: ' . print_r($_record, TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created PDF export page for record: ' . print_r($_record, TRUE));
     }			
 
     /**
@@ -523,7 +523,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             $icon = Zend_Pdf_Image::imageWithPath($iconFilename);
             $this->pages[$this->_pageNumber]->drawImage($icon, $_xPos-170, $_yPos-6, $_xPos-154, $_yPos + 10);                            
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' icon file not found: ' . $iconFilename);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' icon file not found: ' . $iconFilename);
         }
     }
 }
