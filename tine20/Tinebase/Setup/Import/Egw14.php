@@ -85,8 +85,15 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
             
             // save user
             $user->sanitizeAccountPrimaryGroup();
-            $user = Tinebase_User::getInstance()->addOrUpdateUser($user);
             
+            // update or create user
+            try {
+                Tinebase_User::getInstance()->getUserByProperty('accountId', $user->accountId);
+                $user = Tinebase_User::getInstance()->updateUser($user);
+            } catch (Tinebase_Exception_NotFound $ten) {
+                $user = Tinebase_User::getInstance()->addUser($user);
+            }
+        
             // (re)set password
             Tinebase_User::getInstance()->setPassword($account->account_lid, $account->account_pwd, FALSE);
             
