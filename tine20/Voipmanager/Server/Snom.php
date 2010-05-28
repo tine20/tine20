@@ -31,7 +31,7 @@ class Voipmanager_Server_Snom extends Tinebase_Server_Abstract
         }
         
         $this->_initFramework();
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is snom xml request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is snom xml request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
         
         $server = new Tinebase_Http_Server();
         $server->setClass('Voipmanager_Frontend_Snom', 'Voipmanager');
