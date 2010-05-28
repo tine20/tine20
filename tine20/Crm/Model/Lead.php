@@ -202,7 +202,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                             $data['related_backend'] = 'Sql';
                             break;                    
                         default:
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, TRUE)); 
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, TRUE)); 
                             throw new Crm_Exception_UnexpectedValue('Relation type ' . $relation['type'] . ' not supported.');
                     }
     
