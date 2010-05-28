@@ -123,7 +123,7 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
             $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');                        
         }        
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         return $select; 
     }
