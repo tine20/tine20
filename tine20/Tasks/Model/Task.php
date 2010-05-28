@@ -129,7 +129,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data)
     {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
         
         if (empty($_data['geo'])) {
             $_data['geo'] = NULL;
@@ -147,7 +147,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
             $_data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', $_data['alarms'], TRUE);
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
         parent::setFromArray($_data);
     }
     
@@ -177,7 +177,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         $status = Tasks_Controller_Status::getInstance()->getTaskStatus($this->status_id);
         $organizerName = ($this->organizer) ? $this->organizer->accountDisplayName : '';
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), TRUE));
         
         $text = $this->summary . "\n\n" 
             . $translate->_('Due')          . ': ' . $dueDateString         . "\n" 
@@ -205,7 +205,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
             }
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $text);
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $text);
             
         return $text;
     }
