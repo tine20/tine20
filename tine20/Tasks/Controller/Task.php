@@ -147,7 +147,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
         $oldCheckValue = $this->_doContainerACLChecks;
         $this->_doContainerACLChecks = FALSE;
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . " About to send alarm " . print_r($_alarm->toArray(), TRUE)
         );
 
@@ -170,10 +170,10 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
             
             // send message
             if ($organizerContact->email && ! empty($organizerContact->email)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to send alarm email to ' . $organizerContact->email);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to send alarm email to ' . $organizerContact->email);
                 $notificationsBackend->send(NULL, $organizerContact, $messageSubject, $messageBody);
             } else {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Organizer has no email address.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Organizer has no email address.');
             }
         } catch (Exception $e) {
             $this->_doContainerACLChecks = $oldCheckValue;
@@ -201,11 +201,11 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
         }
 
         if (count($_record->alarms) > 0) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Do not overwrite existing alarm.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Do not overwrite existing alarm.');
             return;
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add automatic alarms / minutes before: ' . implode(',', $automaticAlarms));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add automatic alarms / minutes before: ' . implode(',', $automaticAlarms));
         foreach ($automaticAlarms as $minutesBefore) {
             $_record->alarms->addRecord(new Tinebase_Model_Alarm(array(
                 'minutes_before' => $minutesBefore,
