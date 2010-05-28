@@ -143,7 +143,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 $folder->cache_job_startuid = $folder->cache_job_lowestuid; 
             }
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder values before import: ' . print_r($folder->toArray(), TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder values before import: ' . print_r($folder->toArray(), TRUE));
             
             // remove old \Recent flag from cached messages
             $this->_backend->clearFlag($folder->getId(), Zend_Mail_Storage::FLAG_RECENT, 'folder');
@@ -175,14 +175,14 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                             $stepLowestUid = max($folder->cache_job_lowestuid - $this->_uidStepWidth, $folder->cache_uidnext);
                             $stepHighestUid = $folder->cache_job_lowestuid - 1;
                             $uids = $imap->getUidbyUid($stepLowestUid, $stepHighestUid);
-                            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
+                            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
                             //    . ' new uids from IMAP server: ' . $stepHighestUid . ' - ' . $stepLowestUid);
                                 
                         } else {
                             // imap servers without uidnext
                             $stepLowestUid = $folder->cache_uidnext;
                             $uids = $imap->getUid($folder->cache_uidnext, $folder->cache_job_lowestuid);
-                            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
+                            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
                             //    . ' new uids from IMAP server: ' . ($folder->cache_uidnext) . ' - ' . $folder->cache_job_lowestuid);
                         }
                         
@@ -192,7 +192,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     if (! empty($uids)) {
                         $nextUids = array_splice($uids, 0, min($this->_importCountPerStep, count($uids)));
                         
-                        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Importing uids: ' . print_r($nextUids, TRUE));
+                        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Importing uids: ' . print_r($nextUids, TRUE));
                         $messages = $imap->getSummary($nextUids);
                         $count += $this->_addMessages($messages, $folder);
                         
@@ -200,7 +200,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         
                         // set stepwidth back to normal
                         if ($this->_uidStepWidth > self::DEFAULT_UID_STEPWIDTH) {
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting uid stepwidth back to normal: ' . self::DEFAULT_UID_STEPWIDTH);
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting uid stepwidth back to normal: ' . self::DEFAULT_UID_STEPWIDTH);
                             $this->_uidStepWidth = self::DEFAULT_UID_STEPWIDTH;
                         }
 
@@ -209,7 +209,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         
                         // increase stepwidth
                         $this->_uidStepWidth *= 10;
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No new messages found, increasing uid stepwidth to ' . $this->_uidStepWidth);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No new messages found, increasing uid stepwidth to ' . $this->_uidStepWidth);
                     }
                     
                     $timeLeft = ($folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
@@ -248,14 +248,14 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             // some error with the imap server
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getTraceAsString());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getTraceAsString());
             $folder->imap_status = Felamimail_Model_Folder::IMAP_STATUS_DISCONNECT;
             $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
         }
 
         // update and return folder
         $folder = $this->_updateFolderStatus($folder);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder values after import: ' . print_r($folder->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder values after import: ' . print_r($folder->toArray(), TRUE));
         return $folder;
     }
     
@@ -365,7 +365,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      */
     protected function _isUpdateAllowed(Felamimail_Model_Folder $_folder)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Checking folder status of ' . $_folder->globalname . ' ...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Checking folder status of ' . $_folder->globalname . ' ...');
         
         // check imap connection
         if ($_folder->imap_status == Felamimail_Model_Folder::IMAP_STATUS_DISCONNECT) {
@@ -421,7 +421,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                             $_folder->cache_uidnext = $_folder->imap_uidnext;
                         }
                     }
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Actions estimate: ' . $_folder->cache_job_actions_estimate);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Actions estimate: ' . $_folder->cache_job_actions_estimate);
                     
                 } else if ($_folder->cache_job_actions_done > $_folder->cache_job_actions_estimate) {
                     // sanitize actions
@@ -443,7 +443,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         }
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . $message . ' Updating folder status now. Time: ' . $_folder->cache_timestamp);
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_folder->toArray(), TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_folder->toArray(), TRUE));
         
         return Felamimail_Controller_Folder::getInstance()->update($_folder);
     }
@@ -468,8 +468,8 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             $message = $value['message'];
             $subject = '';
             
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($message, true));
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' caching message ' . $message->subject);
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($message, true));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' caching message ' . $message->subject);
             
             try {
                 $cachedMessage = new Felamimail_Model_Message(array(
@@ -518,7 +518,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     }
                 }
                 
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cachedMessage->toArray(), true));
+                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cachedMessage->toArray(), true));
                 
                 $createdMessage = $this->_backend->create($cachedMessage);
                 
@@ -538,7 +538,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     '. Error: ' . $zme->getMessage()
                 );
             } catch (Zend_Db_Statement_Exception $zdse) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                     ' Failed to create cache entry for msg ' . $uid . ' | ' . $subject .
                     '. Error: ' . $zdse->getMessage()
                 );
@@ -551,7 +551,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         }
         
         $_folder->cache_totalcount += $count;
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Added ' . $count . ' messages to DB.');
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Added ' . $count . ' messages to DB.');
         
         return $count;
     }
@@ -567,7 +567,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
     protected function _syncDeletedMessages(Felamimail_Model_Folder $_folder, $_time, Felamimail_Backend_ImapProxy $_imap)
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Syncing deleted messages in folder ' . $_folder->globalname);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' before deleted sync: ' . print_r($_folder->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' before deleted sync: ' . print_r($_folder->toArray(), TRUE));
         
         // update folder with estimate / actions
         $_folder->cache_job_actions_estimate += abs($_folder->cache_totalcount - $_folder->imap_totalcount);
@@ -584,7 +584,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 array('field' => 'messageuid',  'operator' => 'less',   'value' => $_folder->cache_job_lowestuid),
             )), new Tinebase_Model_Pagination(array('start' => $start, 'limit' => $stepSize, 'sort' => 'messageuid')));
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($messages) 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($messages) 
                 . ' message(s) from cache beginning with uid ' . $_folder->cache_job_lowestuid);
             
             // get messageuids
@@ -592,14 +592,14 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 $cacheUids = $messages->messageuid;
                 
                 // query mailserver
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Query uids from imap server.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Query uids from imap server.');
                 $imapUids = $_imap->getUidbyUid($cacheUids);
                 
                 // delete uids not on mailserver from cache
                 $toDeleteUids = array_diff($cacheUids, $imapUids);
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cacheUids, TRUE));
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapUids, TRUE));
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($toDeleteUids, TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cacheUids, TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapUids, TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($toDeleteUids, TRUE));
                 
                 if (! empty($toDeleteUids)) {
                     $this->_backend->deleteByProperty($toDeleteUids, 'messageuid', 'in');
@@ -611,12 +611,12 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 $_folder->cache_totalcount -= $numberDeleted;
                 $_folder->cache_job_lowestuid = min($cacheUids);
                 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $numberDeleted . ' messages from cache.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $numberDeleted . ' messages from cache.');
             }
             
             // check if we are done
             if (count($messages) < $stepSize) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No more messages in cache with uid lower than ' . $_folder->cache_job_lowestuid);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No more messages in cache with uid lower than ' . $_folder->cache_job_lowestuid);
                 $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
                 if ($_folder->cache_totalcount > $_folder->imap_totalcount) {
                     // sanitize folder totalcount
@@ -675,7 +675,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         $date->addHour($matches[2]);
                     }
                     
-                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($matches, true));
+                    //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($matches, true));
                 }
             }
         }
