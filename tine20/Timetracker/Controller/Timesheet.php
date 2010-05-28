@@ -138,7 +138,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                     throw new Timetracker_Exception_Deadline();
                 }
             } else {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Valid date: ' . $startDate . ' >= ' . $date);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Valid date: ' . $startDate . ' >= ' . $date);
             }
         }
     }
@@ -190,7 +190,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             return TRUE;
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' action: ' . print_r($_action, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' action: ' . print_r($_action, true));
         
         // only TA managers are allowed to alter TS of closed TAs
         if ($_action != 'get') {
@@ -199,13 +199,13 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 return FALSE;
             }
             
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($timeaccount->toArray(), true));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($timeaccount->toArray(), true));
             
             // check if timeaccount->is_billable is false => set default in fieldGrants to 0 and allow only managers to change it
             if (!$timeaccount->is_billable) {
                 $this->_fieldGrants['is_billable']['default'] = 0;
                 $this->_fieldGrants['is_billable']['requiredGrant'] = Timetracker_Model_TimeaccountGrants::MANAGE_ALL;
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_fieldGrants, true));
+                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_fieldGrants, true));
             }
         }
         
