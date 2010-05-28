@@ -28,7 +28,7 @@ class Setup_Server_Http extends Setup_Server_Abstract
     public function handle()
     {
         $this->_initFramework();
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
         
         $setupServer = new Setup_Frontend_Http();
         #$setupServer->authenticate($opts->username, $opts->password);
