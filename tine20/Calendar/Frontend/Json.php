@@ -202,7 +202,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $recurInstance = new Calendar_Model_Event(array(), TRUE);
         $recurInstance->setFromJsonInUsersTimezone($recordData);
         
-        //Tinebase_Core::getLogger()->debug(print_r($recurInstance->toArray(), true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($recurInstance->toArray(), true));
         
         $baseEvent = Calendar_Controller_Event::getInstance()->updateRecurSeries($recurInstance, $checkBusyConficts);
         
@@ -249,7 +249,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             // get/resolve alarms
             Calendar_Controller_Event::getInstance()->getAlarms($_records);
 	        
-            //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
 	        
 	        // merge recurset
 	        $period = $_filter->getFilter('period');
@@ -258,7 +258,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	        }
     	}
           
-        //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
         return parent::_multipleRecordsToJson($_records);
     }
     
