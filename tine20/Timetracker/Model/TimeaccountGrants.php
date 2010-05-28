@@ -183,7 +183,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
         Tinebase_Container::getInstance()->getGrantsOfRecords($_timeaccounts, $_accountId);
         
         foreach ($_timeaccounts as $timeaccount) {
-            //Tinebase_Core::getLogger()->debug(print_r($timeaccount->toArray(), true));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($timeaccount->toArray(), true));
             
             if (isset($timeaccount->container_id['account_grants']) && is_array($timeaccount->container_id['account_grants'])) {
                 $containerGrantsArray = $timeaccount->container_id['account_grants'];
@@ -203,7 +203,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
             } 
             //$timeaccount->container_id = $timeaccount->container_id['id'];
             
-            //Tinebase_Core::getLogger()->debug(print_r($_timeaccounts->toArray(), true));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($_timeaccounts->toArray(), true));
         }
         
     }
@@ -255,7 +255,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
      */
     public static function getTimeaccountsByAcl($_grant, $_onlyIds = FALSE)
     {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get grant: ' . print_r($_grant, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get grant: ' . print_r($_grant, true));
         
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
         $cacheId = convertCacheId('getTimeaccountsByAcl' . Tinebase_Core::getUser()->getId() . $_grant . $_onlyIds);
@@ -270,7 +270,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
                 TRUE
             );
             
-            // Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' got containers: ' . print_r($containerIds, true));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' got containers: ' . print_r($containerIds, true));
             
             $filter = new Tinebase_Model_Filter_FilterGroup(array());
             $filter->addFilter(new Tinebase_Model_Filter_Container('container_id', 'in', $containerIds, array(
