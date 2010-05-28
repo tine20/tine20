@@ -30,7 +30,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
     	    $this->_initFramework();
     	    $exception = FALSE;
 	    } catch (Exception $exception) {
-	        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' initFramework exception: ' . $exception);
+	        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' initFramework exception: ' . $exception);
             
 	        // handle all kind of session exceptions as 'Not Authorised'
 	        if ($exception instanceof Zend_Session_Exception) {
@@ -45,14 +45,14 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
         
         $json = file_get_contents('php://input');
         if (substr($json, 0, 1) == '[') {
-        	Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' batched request'); 
+        	if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' batched request'); 
         	$isBatchedRequest = true;
         	$requests = Zend_Json::decode($json);
         } else {
         	$isBatchedRequest = false;
         	$requests = array(Zend_Json::decode($json));
         }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. rawdata: ' . print_r($requests, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. rawdata: ' . print_r($requests, true));
         $response = array();
         foreach ($requests as $requestOptions) {
         	$request = new Zend_Json_Server_Request();
@@ -93,7 +93,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             // register additional Json apis only available for authorised users
             if (Zend_Auth::getInstance()->hasIdentity()) {
                 
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user data: " . print_r(Tinebase_Core::getUser()->toArray(), true));
+                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user data: " . print_r(Tinebase_Core::getUser()->toArray(), true));
                 
                 $applicationParts = explode('.', $method);
                 $applicationName = ucfirst($applicationParts[0]);
@@ -112,7 +112,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                             try {
                                 $server->setClass($applicationName.'_Frontend_Json', $applicationName);
                             } catch (Exception $e) {
-                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Failed to add JSON API for application '$applicationName' Exception: \n". $e);
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Failed to add JSON API for application '$applicationName' Exception: \n". $e);
                             }
                         }
                         break;
@@ -154,7 +154,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             $response->setVersion($version);
         }
     
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $exception);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $exception);
         
         return $response;
     }
