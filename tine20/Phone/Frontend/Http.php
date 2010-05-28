@@ -77,7 +77,7 @@ class Phone_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 
             $_phoneData = array_merge($_phoneSettingsData,$_phoneData);
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_phoneData, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_phoneData, true));
             
             // encode the data arrays
             $encodedSnomPhone = Zend_Json::encode($_phoneData);
