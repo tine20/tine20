@@ -199,7 +199,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
                 ->setDescription('Export for ' . $this->_applicationName . ', generated using PHP classes.')
                 ->setKeywords("tine20 openxml php")
                 ->setCreated(Zend_Date::now()->get());
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_excelObject->getProperties(), true));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_excelObject->getProperties(), true));
         }
     }
     
@@ -229,7 +229,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
         $i = 0;
         foreach ($_records as $record) {
             
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
             
             $columnId = 0;
             
@@ -241,7 +241,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
                 
                 // add formula
                 if ($field->formula) {
-                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding formula: ' . $field->formula);
+                    //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding formula: ' . $field->formula);
                     $cellValue = $field->formula;
                 }
                 
