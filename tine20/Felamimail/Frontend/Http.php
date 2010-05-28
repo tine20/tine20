@@ -54,7 +54,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function downloadAttachment($messageId, $partId)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Downloading Attachment ' . $partId . ' of message with id ' . $messageId
         );
         
@@ -65,7 +65,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             if ($part !== NULL) {
                 $headers = $part->getHeaders();
                 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                     . ' Attachment headers:' . print_r($headers, true)
                 );
                 
