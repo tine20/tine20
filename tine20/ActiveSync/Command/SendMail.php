@@ -51,7 +51,7 @@ class ActiveSync_Command_SendMail
             )
         );
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . $this->_saveInSent);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . $this->_saveInSent);
         
     }    
     
@@ -78,7 +78,7 @@ class ActiveSync_Command_SendMail
         
         $message->from = $accounts[0];
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " content_type: " . $message->content_type);
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " content_type: " . $message->content_type);
         
         Felamimail_Controller_Message::getInstance()->sendMessage($message);
     }
