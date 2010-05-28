@@ -68,8 +68,8 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
         // set emailGID
         $this->_options['emailGID'] = 1208394888;
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Binding to ldap server ' . $ldapOptions['host']);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($ldapOptions, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Binding to ldap server ' . $ldapOptions['host']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($ldapOptions, TRUE));
         
         $this->_ldap = new Tinebase_Ldap($ldapOptions);
         $this->_ldap->bind();
@@ -83,7 +83,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
      */
     public function getUserById($_userId) 
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Trying to get ldap user with id ' . $_userId);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Trying to get ldap user with id ' . $_userId);
         
         $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
         $filter = Zend_Ldap_Filter::equals(
@@ -103,7 +103,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
         
         $user = $this->_ldap2User($accounts->getFirst());
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), TRUE));
         
         return $user;
     }
@@ -125,8 +125,8 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
         
         $ldapData['objectclass'] = array_unique(array_merge($metaData['objectclass'], $this->_requiredObjectClass));
                 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
         $this->_ldap->update($metaData['dn'], $ldapData);
         
@@ -156,8 +156,8 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
             }
         }
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
         $this->_ldap->update($metaData['dn'], $ldapData);
         
