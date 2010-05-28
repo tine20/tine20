@@ -165,7 +165,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($adds) . " entries to be added to server");
                 
                 foreach ($adds as $add) {
-                	Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add entry with clientId " . (string) $add->ClientId);
+                	if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add entry with clientId " . (string) $add->ClientId);
                     // search for existing entries if first sync
                     if($clientSyncKey == 1) {
                         $existing = $dataController->search($collectionId, $add->ApplicationData);
