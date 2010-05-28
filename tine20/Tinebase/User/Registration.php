@@ -55,7 +55,7 @@ class Tinebase_User_Registration
         if(isset(Tinebase_Core::getConfig()->registration)) {
             $this->_config = Tinebase_Core::getConfig()->registration;
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! ');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! ');
         }
         // create table objects and get db adapter
         $this->_registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
@@ -134,7 +134,7 @@ class Tinebase_User_Registration
      */
     public function registerUser ($regData, $_sendMail = true)
     { 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' call registerUser with regData: ' . print_r($regData, true));
         
         // validate unique username
@@ -188,7 +188,7 @@ class Tinebase_User_Registration
             TinebaseCore::getLogger()->debug("this account expires in $timeToAdd hours ...");
             $regData['accountExpires']->add($timeToAdd, Zend_Date::TIMES);
         } else {
-            Tinebase_Core::getLogger()->debug("this account never expires.");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug("this account never expires.");
             $regData['accountExpires'] = NULL;
         }
         // get model & save user data (account & contact) via the User and Addressbook controllers
@@ -196,7 +196,7 @@ class Tinebase_User_Registration
         Tinebase_User::getInstance()->addUser($account);
         Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' saved user ' . $regData['accountLoginName']);
         // generate password and save it
         $regData['password'] = $this->generatePassword();
@@ -266,7 +266,7 @@ class Tinebase_User_Registration
         $mail->setFrom('webmaster@tine20.org', 'Tine 2.0 Webmaster');
         $result = false;
         if (! empty($recipientEmail)) { 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' send registration email to ' . $recipientEmail);
             $mail->addTo($recipientEmail, $recipientName);
             if ($mail->send()) {
@@ -321,7 +321,7 @@ class Tinebase_User_Registration
         $mail->addHeader('X-MailGenerator', 'Tine 2.0');
         $mail->setFrom('webmaster@tine20.org', 'Tine 2.0 Webmaster');
         if (! empty($recipientEmail)) { 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' send lost password email to ' . $recipientEmail);
             $mail->addTo($recipientEmail, $recipientName);
             $mail->send();
@@ -486,14 +486,14 @@ class Tinebase_User_Registration
         if ($row === false) {
             throw (new Tinebase_Exception_Record_NotDefined('registration entry not found error'));
         } 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             "Tinebase_Model_Registration::row values: \n" . print_r($row, true));
         try {
             $registration = new Tinebase_Model_Registration();
             $registration->setFromArray($row);
         } catch (Exception $e) {
             $validationErrors = $registration->getValidationErrors(); 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 $e->getMessage() . "\n" . "Tinebase_Model_Registration::validation_errors: \n" . 
                 print_r($validationErrors, true));
             throw ($e);
