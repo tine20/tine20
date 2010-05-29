@@ -155,7 +155,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         //'Reminder'          => 'alarms',
         //'Sensitivity'       => 'class',
         'Subject'           => 'summary',
-        'Body'              => 'description',
+        //'Body'              => 'description',
         'StartTime'         => 'dtstart',
         //'UID'               => 'uid',             // not used outside from Tine 2.0
         //'MeetingStatus'     => 'status_id',
@@ -248,6 +248,33 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 
                 // ... and now add the content (DomText takes care of special chars)
                 $node->appendChild(new DOMText($nodeContent));
+            }
+        }
+        
+        if(!empty($data->description)) {
+            if (version_compare($this->_device->acsversion, '12.0', '>=') === true) {
+                $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:AirSyncBase'));
+                
+                $body->appendChild(new DOMElement('Type', 1, 'uri:AirSyncBase'));
+                
+                // create a new DOMElement ...
+                $dataTag = new DOMElement('Data', null, 'uri:AirSyncBase');
+
+                // ... append it to parent node aka append it to the document ...
+                $body->appendChild($dataTag);
+                
+                // ... and now add the content (DomText takes care of special chars)
+                $dataTag->appendChild(new DOMText($data->description));
+            } else {
+                // create a new DOMElement ...
+                $node = new DOMElement('Body', null, 'uri:Calendar');
+
+                // ... append it to parent node aka append it to the document ...
+                $_xmlNode->appendChild($node);
+                
+                // ... and now add the content (DomText takes care of special chars)
+                $node->appendChild(new DOMText($data->description));
+                
             }
         }
            
@@ -439,7 +466,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $event = new Calendar_Model_Event(array(), true);
         }
         
-        $xmlData = $_data->children('uri:Calendar');
+        $xmlData     = $_data->children('uri:Calendar');
+        $airSyncBase = $_data->children('uri:AirSyncBase');
 
         foreach($this->_mapping as $fieldName => $value) {
             switch($value) {
@@ -460,6 +488,17 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     }
                     break;
             }
+        }
+        
+        // get body
+        if (isset($xmlData->body)) {
+            // ActiveSync 2.5
+            $event->description = (string)$xmlData->body;
+        } elseif(isset($airSyncBase->Body)) {
+            // ActiveSync >= 12.0
+            $event->description = (string)$airSyncBase->Body->Data;
+        } else {
+            $event->description = null;
         }
         
         // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in AS
