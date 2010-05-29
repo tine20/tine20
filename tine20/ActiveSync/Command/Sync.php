@@ -41,6 +41,11 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     const MIMESUPPORT_DONT_SEND_MIME                    = 0;
     const MIMESUPPORT_SMIME_ONLY                        = 1;
     const MIMESUPPORT_SEND_MIME                         = 2;
+    
+    const BODY_TYPE_PLAIN_TEXT                          = 1;
+    const BODY_TYPE_HTML                                = 2;
+    const BODY_TYPE_RTF                                 = 3;
+    const BODY_TYPE_MIME                                = 4;
 
     /**
      * An error occurred while setting the notification GUID. = 10
@@ -145,9 +150,21 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 'forceAdd'      => array(),
                 'forceChange'   => array(),
                 'toBeFetched'   => array(),
-                'filterType'    => isset($xmlCollection->Options) && isset($xmlCollection->Options->FilterType) ? (int)$xmlCollection->Options->FilterType : 0,
-                'mimeSupport'   => isset($xmlCollection->Options) && isset($xmlCollection->Options->MIMESupport) ? (int)$xmlCollection->Options->MIMESupport : self::MIMESUPPORT_DONT_SEND_MIME
             );
+            
+            // process options
+            if(isset($xmlCollection->Options)) {
+                $collectionData['filterType']  = isset($xmlCollection->Options->FilterType)  ? (int)$xmlCollection->Options->FilterType  : 0;
+                $collectionData['mimeSupport'] = isset($xmlCollection->Options->MIMESupport) ? (int)$xmlCollection->Options->MIMESupport : self::MIMESUPPORT_DONT_SEND_MIME;
+
+                // try to fetch element from AirSyncBase:BodyPreference
+                $airSyncBase = $xmlCollection->Options->children('uri:AirSyncBase');
+                
+                if (isset($airSyncBase->BodyPreference)) {
+                    $collectionData['bodyPreferenceType'] = (int) $airSyncBase->BodyPreference->Type;
+                }
+            }
+            
             $this->_collections[$folder->class][$collectionId] = $collectionData;
             
             if($clientSyncKey === 0 || $this->_controller->validateSyncKey($this->_device, $clientSyncKey, $folder->class, $collectionId) !== true) {
