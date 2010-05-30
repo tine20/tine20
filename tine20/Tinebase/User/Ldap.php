@@ -460,7 +460,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $this->_ldap->update($metaData['dn'], $ldapData);
 
         // refetch user from ldap backend
-        $user = $this->getLdapUserByProperty('accountId', $_account, 'Tinebase_Model_FullUser');
+        $user = $this->getUserByPropertyFromSyncBackend('accountId', $_account, 'Tinebase_Model_FullUser');
 
         return $user;
     }
