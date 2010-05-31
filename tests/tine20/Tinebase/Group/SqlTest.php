@@ -150,6 +150,67 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
 
         $group = $this->_backend->getGroupById($this->objects['initialGroup']);
     }
+    
+    
+    public function testSetGroupMembershipsWithRecordset()
+    {
+        $groups[] = new Tinebase_Model_Group(array(
+            'name'          => 'tine20phpunit1',
+            'description'   => 'group1'
+        )); 
+        
+        $groups[] = new Tinebase_Model_Group(array(
+            'name'          => 'tine20phpunit2',
+            'description'   => 'group2'
+        ));
+        
+        $groupdId1 = $this->_backend->addGroup($groups[0]);
+        $groupdId2 = $this->_backend->addGroup($groups[1]);
+        
+        $accountId = Tinebase_Core::getUser()->getId();
+        $_groupIds = new Tinebase_Record_RecordSet('Tinebase_Model_Group', $groups);
+        $this->_backend->setGroupMembershipsInSqlBackend($accountId, $_groupIds);
+        
+        $getGroupMembersArray = $this->_backend->getGroupMembers($groupdId1);
+        $this->assertTrue(in_array($accountId, $getGroupMembersArray));
+        
+        $getGroupMembersArray = $this->_backend->getGroupMembers($groupdId2);
+        $this->assertTrue(in_array($accountId, $getGroupMembersArray));
+        
+        $this->_backend->deleteGroups(array($groupdId1, $groupdId2));
+        
+    }
+    
+    public function testSetGroupMembershipsWithArray()
+    {
+        $groups[] = new Tinebase_Model_Group(array(
+            'name'          => 'tine20phpunit1',
+            'description'   => 'group1'
+        )); 
+        
+        $groups[] = new Tinebase_Model_Group(array(
+            'name'          => 'tine20phpunit2',
+            'description'   => 'group2'
+        ));
+        
+        $groupId1 = $this->_backend->addGroup($groups[0]);
+        $groupId2 = $this->_backend->addGroup($groups[1]);
+        
+        
+        $accountId = Tinebase_Core::getUser()->getId();
+        $this->_backend->setGroupMembershipsInSqlBackend($accountId, array($groupId1->id, $groupId2->id, $groupId1->id));
+        
+        $getGroupMembersArray = $this->_backend->getGroupMembers($groupId1);
+        $this->assertTrue(in_array($accountId, $getGroupMembersArray));
+        
+        $getGroupMembersArray = $this->_backend->getGroupMembers($groupId2);
+        $this->assertTrue(in_array($accountId, $getGroupMembersArray));
+        
+        
+        $this->_backend->deleteGroups(array($groupId1, $groupId2));
+        
+        
+    }
 }		
 	
 

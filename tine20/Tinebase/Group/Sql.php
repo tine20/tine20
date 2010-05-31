@@ -183,7 +183,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * @return array
      */
     public function setGroupMembershipsInSqlBackend($_userId, $_groupIds)
-    {
+    {        
+        if ($_groupIds instanceof Tinebase_Record_RecordSet) {
+            $_groupIds = $_groupIds->getArrayOfIds();
+        }
+        
         if(count($_groupIds) === 0) {
             throw new Tinebase_Exception_InvalidArgument('user must belong to at least one group');
         }
@@ -198,8 +202,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $stmt = $db->prepare('INSERT INTO ' . SQL_TABLE_PREFIX . 'group_members (group_id, account_id) VALUES (?,?)');
         
         // add new members
-        foreach ($_groupIds as $groupId) {
-            $groupId = Tinebase_Model_Group::convertGroupIdToInt($groupId); 
+        foreach (array_unique($_groupIds) as $groupId) {
             $stmt->execute(array(
                 $groupId, 
                 $userId
