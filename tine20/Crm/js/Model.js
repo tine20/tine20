@@ -58,7 +58,7 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create([
     recordName: 'Lead',
     recordsName: 'Leads',
     containerProperty: 'container_id',
-    // ngettext('lead list', 'lead lists', n);
+    // ngettext('lead list', 'lead lists', n); gettext('lead lists');
     containerName: 'lead list',
     containersName: 'lead lists',
     getTitle: function() {
