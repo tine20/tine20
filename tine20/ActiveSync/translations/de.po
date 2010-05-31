@@ -32,8 +32,7 @@ msgstr "Als {0} Filter Setzen"
 msgid "Resetted Sync Filter"
 msgstr "Sync Filter zurückgesetzt"
 
-#: js/Application.js:97
-#: js/Application.js:109
+#: js/Application.js:97 js/Application.js:109
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
 msgstr "{0} Filter für das Gerät \"{1}\" ist jetzt \"{2}\""
 
@@ -62,4 +61,3 @@ msgstr "Standard Policy"
 #: Setup/setup.xml:470
 msgid "Default Policy installed during setup"
 msgstr "Standard Policy aus dem Setup Prozess"
-

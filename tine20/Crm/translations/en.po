@@ -531,5 +531,5 @@ msgid "The default favorite which is loaded on crm startup"
 msgstr "The default favorite which is loaded on crm startup"
 
 #: Setup/Initialize.php:48 Setup/Update/Release3.php:38
-msgid "All contacts I have read grants for"
-msgstr "All contacts I have read grants for"
+msgid "All leads I have read grants for"
+msgstr "All leads I have read grants for"
