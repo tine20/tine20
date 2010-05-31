@@ -2,63 +2,64 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ActiveSync\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"PO-Revision-Date: 2010-05-31 21:26+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: German\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: js/Application.js:32
 msgid "Active Sync"
-msgstr ""
+msgstr "Active Sync"
 
 #: js/Application.js:49
 msgid "Select a Device"
-msgstr ""
+msgstr "Gerät auswählen"
 
 #: js/Application.js:63
 msgid "No ActiveSync Device registered"
-msgstr ""
+msgstr "Kein ActiveSync Gerät verfügbar"
 
 #: js/Application.js:71
 msgid "Set as {0} Filter"
-msgstr ""
+msgstr "Als {0} Filter Setzen"
 
 #: js/Application.js:96
 msgid "Resetted Sync Filter"
-msgstr ""
+msgstr "Sync Filter zurückgesetzt"
 
-#: js/Application.js:97 js/Application.js:109
+#: js/Application.js:97
+#: js/Application.js:109
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr ""
+msgstr "{0} Filter für das Gerät \"{1}\" ist jetzt \"{2}\""
 
 #: js/Application.js:100
 msgid "resetted"
-msgstr ""
+msgstr "zurückgesetzt"
 
 #: js/Application.js:108
 msgid "Set Sync Filter"
-msgstr ""
+msgstr "Setze Sync Filter"
 
 #: js/Model.js:47
 msgid "Device"
 msgid_plural "Devices"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Gerät"
+msgstr[1] "Geräte"
 
 #: js/Model.js:47
 msgid "Devices"
-msgstr ""
+msgstr "Geräte"
 
 #: Setup/setup.xml:465
 msgid "Default Policy"
-msgstr ""
+msgstr "Standard Policy"
 
 #: Setup/setup.xml:470
 msgid "Default Policy installed during setup"
-msgstr ""
+msgstr "Standard Policy aus dem Setup Prozess"
+
