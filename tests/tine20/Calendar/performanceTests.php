@@ -46,6 +46,36 @@ class Calendar_performanceTests extends PHPUnit_Framework_TestCase
         $this->_json = new Calendar_Frontend_Json();
     }
     
+    public function testGetEvent()
+    {
+        $user = Tinebase_User::getInstance()->getFullUsers('')->getFirstRecord();
+        
+        echo "getting month view for {$user->accountDisplayName}\n";
+        $filterData = array(
+            array('field' => 'container_id', 'operator' => 'in', 'value' => array(
+                '/personal/' . $user->getId(),
+                '/shared'
+            )),
+            array('field' => 'period', 'operator' => 'within', 'value' => array(
+                'from'  => '2010-03-01 00:00:00',
+                'until' => '2010-04-01 00:00:00'
+            )),
+        );
+        $filter = new Calendar_Model_EventFilter($filterData);
+        $eventIds = Calendar_Controller_Event::getInstance()->search($filter, NULL, FALSE, TRUE);
+        
+        foreach ($eventIds as $id) {
+            $time_start = microtime(true);
+            
+            Calendar_Controller_Event::getInstance()->get($id);
+            
+            $time_end = microtime(true);
+            $time = $time_end - $time_start;
+            echo "getting event {$id} took {$time} seconds\n";
+        }
+        
+    }
+    
     public function testSearchEvents()
     {
         $allUsers = Tinebase_User::getInstance()->getFullUsers('');
@@ -68,9 +98,10 @@ class Calendar_performanceTests extends PHPUnit_Framework_TestCase
                 )),
             );
             
-            //$filter = new Calendar_Model_EventFilter($filterData);
-            //Calendar_Controller_Event::getInstance()->search($filter, NULL, FALSE);
-            $this->_json->searchEvents($filterData, array());
+            $filter = new Calendar_Model_EventFilter($filterData);
+            $events = Calendar_Controller_Event::getInstance()->search($filter, NULL, FALSE);
+            
+            //$this->_json->searchEvents($filterData, array());
             $numSearches += 1;
             
         }
