@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-04-23 12:40+0100\n"
-"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2010-05-31 21:53+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12,11 +12,13 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Models.js:70 js/Phone.js:58 js/Phone.js:253
+#: js/Models.js:70
+#: js/Phone.js:58
+#: js/Phone.js:253
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
-msgstr[1] "Telefon"
+msgstr[1] "Telefone"
 
 #: js/Models.js:74
 msgid "phones list"
@@ -24,7 +26,9 @@ msgid_plural "phones lists"
 msgstr[0] "Telefonliste"
 msgstr[1] "Telefonlisten"
 
-#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
+#: js/Phone.js:28
+#: js/Phone.js:478
+#: js/Phone.js:479
 msgid "Edit phone settings"
 msgstr "Telefoneinstellungen bearbeiten"
 
@@ -88,7 +92,8 @@ msgstr "Quelle oder Ziel"
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Anrufe  {0} - {1} of {2} anzeigen"
 
-#: js/Phone.js:681 js/Phone.js:725
+#: js/Phone.js:681
+#: js/Phone.js:725
 msgid "No calls to display"
 msgstr "Keine Anrufe"
 
