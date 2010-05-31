@@ -53,6 +53,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     protected $_recordBasedGrants = array(
         Tinebase_Model_Grants::GRANT_READ, 
+        Tinebase_Model_Grants::GRANT_SYNC, 
+        Tinebase_Model_Grants::GRANT_EXPORT, 
         Tinebase_Model_Grants::GRANT_EDIT, 
         Tinebase_Model_Grants::GRANT_DELETE, 
         Tinebase_Model_Grants::GRANT_PRIVATE
@@ -388,8 +390,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         // organizer gets all other grants implicitly
         $sql = $this->_db->quoteIdentifier('cal_events.organizer') . " = " . $this->_db->quote($contactId);
         
-        // attendee get read and private grants implicitly
-        if (in_array($_requiredGrant, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_PRIVATE))) {
+        // attendee get read, sync, export and private grants implicitly
+        if (in_array($_requiredGrant, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_EXPORT, Tinebase_Model_Grants::GRANT_PRIVATE))) {
             $readCond = $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . ' = ?', Calendar_Model_Attender::USERTYPE_USER) . 
                    ' AND ' .  $this->_db->quoteIdentifier('attendeecontacts.account_id') . ' = ' . $this->_db->quote($accountId);
             

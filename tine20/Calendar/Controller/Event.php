@@ -897,6 +897,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             case 'delete':
                 $hasGrant = (bool) $_record->hasGrant(Tinebase_Model_Grants::GRANT_DELETE);
                 break;
+            case 'sync':
+                $hasGrant = (bool) $_record->hasGrant(Tinebase_Model_Grants::GRANT_SYNC);
+                break;
+            case 'export':
+                $hasGrant = (bool) $_record->hasGrant(Tinebase_Model_Grants::GRANT_EXPORT);
+                break;
         }
         
         if (!$hasGrant) {

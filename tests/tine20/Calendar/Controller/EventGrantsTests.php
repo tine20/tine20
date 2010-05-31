@@ -272,6 +272,26 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testSearchGrantsActionGet()
     {
+        $events = $this->_testSearchGrantsActionForAction('get');
+        
+        $this->assertEquals(1, count($events), 'testuser has implicit readGrant, but serach for action get found no event');
+    }
+    
+    /**
+     * tests if search deals with record based grants correctly for 'get' action
+     * 
+     *  -> test user is attendee -> implicit SYNC GRANT
+     *  
+     */
+    public function testSearchGrantsActionSync()
+    {
+        $events = $this->_testSearchGrantsActionForAction('sync');
+        
+        $this->assertEquals(1, count($events), 'testuser has implicit syncGrant, but serach for action sync found no event');
+    }
+    
+    protected function _testSearchGrantsActionForAction($_action)
+    {
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright');
         
         // for shure, this is esoteric, but it enshures that record GRANTS are in charge
@@ -291,9 +311,9 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         
         $events = $this->_uit->search(new Calendar_Model_EventFilter(array(
             array('field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent->getId())
-        )), NULL, FALSE, FALSE, 'get');
+        )), NULL, FALSE, FALSE, $_action);
         
-        $this->assertEquals(1, count($events), 'testuser has implicit readGrant, but serach for action get found no event');
+        return $events;
     }
     
     /**

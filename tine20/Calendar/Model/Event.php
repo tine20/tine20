@@ -107,6 +107,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     
         // grant helper fields
         Tinebase_Model_Grants::GRANT_READ    => array('allowEmpty' => true),
+        Tinebase_Model_Grants::GRANT_SYNC    => array('allowEmpty' => true),
+        Tinebase_Model_Grants::GRANT_EXPORT  => array('allowEmpty' => true),
         Tinebase_Model_Grants::GRANT_EDIT    => array('allowEmpty' => true),
         Tinebase_Model_Grants::GRANT_DELETE  => array('allowEmpty' => true),
         Tinebase_Model_Grants::GRANT_PRIVATE => array('allowEmpty' => true),
@@ -136,6 +138,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     protected $_modlogOmmitFields = array(
         Tinebase_Model_Grants::GRANT_READ,
+        Tinebase_Model_Grants::GRANT_SYNC,
+        Tinebase_Model_Grants::GRANT_EXPORT,
         Tinebase_Model_Grants::GRANT_EDIT,
         Tinebase_Model_Grants::GRANT_DELETE,
         Tinebase_Model_Grants::GRANT_PRIVATE,
