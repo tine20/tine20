@@ -189,10 +189,17 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         // append grants filters : only take limited set of attendee into account for grants computation
         $attenderFilter = $_filter->getFilter('attender');
         if (! $attenderFilter) {
-            $attenderFilter = new Calendar_Model_AttenderFilter('attender', 'equals', array(
-               'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-               'user_id'   =>  Tinebase_Core::getUser()->contact_id
-            ));
+            // if a container filter is set, take owners of personal containers (solve secretary scenario)
+            $containerFilter = $_filter->getFilter('container_id');
+            if ($containerFilter && $containerFilter instanceof Calendar_Model_CalendarFilter) {
+                $attenderFilter = $containerFilter->getRelatedAttendeeFilter();
+            } else {
+                $attenderFilter = new Calendar_Model_AttenderFilter('attender', 'equals', array(
+                   'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                   'user_id'   =>  Tinebase_Core::getUser()->contact_id
+                ));
+            }
+            
         }
         $this->_appendEffectiveGrantCalculationSql($select, $attenderFilter);
         if ($grantsFilter) {

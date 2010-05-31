@@ -144,11 +144,32 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      * reads an event of the personal calendar of rwright
      *  -> sclever is attender -> testuser has readGrant for scelver
      */
-    public function testGrantsByInheritedAttendeeContainerGrants()
+    public function testGrantsByInheritedAttendeeContainerGrantsGet()
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'sclever');
         
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        
+        $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+        $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_EDIT});
+        $this->assertFalse((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_DELETE});
+    }
+    
+    /**
+     * searches an event of the personal calendar of rwright
+     *  -> sclever is attender -> testuser has readGrant for scelver
+     */
+    public function testGrantsByInheritedAttendeeContainerGrantsSearch()
+    {
+        $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'sclever');
+        
+        $loadedEvent = $this->_uit->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => "/personal/{$this->_personas['sclever']->getId()}"),
+            array('field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent->getId())
+        )))->getFirstRecord();
+        
+        $this->assertEquals(1, count($loadedEvent), 'event not found with search action!');
+        $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_READ}, 'event not readable');
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
         $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_EDIT});
         $this->assertFalse((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_DELETE});
