@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2010-04-23 12:45+0100\n"
-"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2010-05-31 22:01+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,11 +23,11 @@ msgstr "Neue gemeinse Aufgabenliste anlegen"
 
 #: Acl/Rights.php:94
 msgid "manage shared tasks favorites"
-msgstr ""
+msgstr "Gemeinsame Aufgaben Favoriten verwalten"
 
 #: Acl/Rights.php:95
 msgid "Create or update shared tasks favorites"
-msgstr ""
+msgstr "Gemeinsame Aufgaben Favoriten erstellen oder bearbeiten"
 
 #: Controller/Task.php:166
 msgid "Notification for Task "
@@ -48,15 +48,19 @@ msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 msgid "Quick search"
 msgstr "Schnellsuche"
 
-#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
+#: js/GridPanel.js:93
+#: js/GridPanel.js:144
+#: js/TaskEditDialog.js:181
 msgid "Summary"
 msgstr "Beschreibung"
 
-#: js/GridPanel.js:94 js/GridPanel.js:155
+#: js/GridPanel.js:94
+#: js/GridPanel.js:155
 msgid "Due Date"
 msgstr "Fällig am"
 
-#: js/GridPanel.js:96 js/GridPanel.js:218
+#: js/GridPanel.js:96
+#: js/GridPanel.js:218
 msgid "Responsible"
 msgstr "Verantwortlich"
 
@@ -72,7 +76,8 @@ msgstr "Konnte Aufgabe nicht speichern."
 msgid "Tags"
 msgstr "Tags"
 
-#: js/GridPanel.js:141 Model/Task.php:195
+#: js/GridPanel.js:141
+#: Model/Task.php:195
 msgid "Lead"
 msgstr "Lead"
 
@@ -80,15 +85,20 @@ msgstr "Lead"
 msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
-#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
+#: js/GridPanel.js:163
+#: js/TaskEditDialog.js:189
+#: Model/Task.php:186
 msgid "Priority"
 msgstr "Priorität"
 
-#: js/GridPanel.js:177 Model/Task.php:188
+#: js/GridPanel.js:177
+#: Model/Task.php:188
 msgid "Percent"
 msgstr "Prozent"
 
-#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
+#: js/GridPanel.js:190
+#: js/Status.js:33
+#: js/TaskEditDialog.js:209
 #: Model/Task.php:187
 msgid "Status"
 msgstr "Status"
@@ -97,7 +107,8 @@ msgstr "Status"
 msgid "Creation Time"
 msgstr "Angelegt am"
 
-#: js/GridPanel.js:211 js/TaskEditDialog.js:213
+#: js/GridPanel.js:211
+#: js/TaskEditDialog.js:213
 msgid "Completed"
 msgstr "Abgeschlossen"
 
@@ -105,13 +116,14 @@ msgstr "Abgeschlossen"
 msgid "Show closed"
 msgstr "Geschlossene Aufgaben anzeigen"
 
-#: js/Status.js:187 Setup/setup.xml:339
+#: js/Status.js:187
+#: Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "IN BEARBEITUNG"
 
 #: js/TaskEditDialog.js:142
 msgid "You have to supply a due date, because an alarm ist set!"
-msgstr ""
+msgstr "Sie müssen ein Fälligkeitsdatum angeben, da ein Alarm gesetzt wurde!"
 
 #: js/TaskEditDialog.js:186
 msgid "Due date"
@@ -175,19 +187,20 @@ msgstr "Email"
 
 #: Preference.php:29
 msgid "All my tasks"
-msgstr ""
+msgstr "Alle meine Aufgaben"
 
 #: Preference.php:65
 msgid "Default Favorite"
-msgstr ""
+msgstr "Standard Favorit"
 
 #: Preference.php:66
 msgid "The default favorite which is loaded on Tasks startup"
-msgstr ""
+msgstr "Der Standart Favorit der beim öffnen der Aufgabenlisten geladen wird"
 
-#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
+#: Setup/Initialize.php:41
+#: Setup/Update/Release3.php:66
 msgid "All tasks of my taskslists"
-msgstr ""
+msgstr "Alle Aufgaben auf meinen Aufgabenlisten"
 
 #: Setup/setup.xml:295
 msgid "NEEDS-ACTION"
@@ -200,3 +213,4 @@ msgstr "ERLEDIGT"
 #: Setup/setup.xml:361
 msgid "CANCELLED"
 msgstr "ZURÜCKGESTELLT"
+
