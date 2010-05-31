@@ -231,7 +231,6 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         //compute recurset
         $candidates = $_events->filter('rrule', "/^FREQ.*/", TRUE);
         
-        $fakeId = microtime();
         foreach ($candidates as $candidate) {
             try {
                 $exceptions = $_events->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
@@ -239,7 +238,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 $recurSet = Calendar_Model_Rrule::computeRecuranceSet($candidate, $exceptions, $_from, $_until);
                 foreach ($recurSet as $event) {
                     $_events->addRecord($event);
-                    $event->setId('fakeid' . $candidate->uid . $fakeId++);
+                    $event->setId('fakeid' . $candidate->uid . $candidate->dtstart->getTimeStamp());
                 }
             } catch (Exception $e) {
                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not compute recurSet of event: {$candidate->getId()} ");
