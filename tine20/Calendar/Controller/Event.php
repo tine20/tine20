@@ -169,6 +169,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
+            $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
+            $_record->originator_tz = $_record->originator_tz ? $_record->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+            
             // we need to resolve groupmembers before free/busy checking
             Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
             
@@ -724,18 +727,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             'recurid'        => $_record->recurid,
             'custom'         => $customDateTime,
         ));
-    }
-    
-    /**
-     * inspect creation of one record
-     * 
-     * @param   Tinebase_Record_Interface $_record
-     * @return  void
-     */
-    protected function _inspectCreate(Tinebase_Record_Interface $_record)
-    {
-        $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
-        $_record->originator_tz = $_record->originator_tz ? $_record->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
     }
     
     /**
