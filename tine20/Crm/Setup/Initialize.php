@@ -45,7 +45,7 @@ class Crm_Setup_Initialize extends Setup_Initialize
         
         $pfe->create(new Tinebase_Model_PersistentFilter(array(
             'name'              => Crm_Preference::DEFAULTPERSISTENTFILTER_NAME,
-            'description'       => "All contacts I have read grants for", // _("All contacts I have read grants for")
+            'description'       => "All leads I have read grants for", // _("All leads I have read grants for")
             'account_id'        => NULL,
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId(),
             'model'             => 'Crm_Model_LeadFilter',
