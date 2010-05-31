@@ -467,6 +467,10 @@ msgstr[0] "lista zapytań"
 msgstr[1] "listy zapytań"
 msgstr[2] "listy zapytań"
 
+#: js/Model.js:61
+msgid "lead lists"
+msgstr ""
+
 #: js/Model.js:131
 msgid "Settings"
 msgid_plural "Settings"

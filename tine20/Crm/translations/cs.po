@@ -465,6 +465,10 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
+#: js/Model.js:61
+msgid "lead lists"
+msgstr ""
+
 #: js/Model.js:131
 msgid "Settings"
 msgid_plural "Settings"

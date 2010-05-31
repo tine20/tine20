@@ -12,9 +12,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Models.js:70
-#: js/Phone.js:58
-#: js/Phone.js:253
+#: js/Models.js:70 js/Phone.js:58 js/Phone.js:253
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
@@ -26,9 +24,7 @@ msgid_plural "phones lists"
 msgstr[0] "Telefonliste"
 msgstr[1] "Telefonlisten"
 
-#: js/Phone.js:28
-#: js/Phone.js:478
-#: js/Phone.js:479
+#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
 msgid "Edit phone settings"
 msgstr "Telefoneinstellungen bearbeiten"
 
@@ -92,8 +88,7 @@ msgstr "Quelle oder Ziel"
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Anrufe  {0} - {1} of {2} anzeigen"
 
-#: js/Phone.js:681
-#: js/Phone.js:725
+#: js/Phone.js:681 js/Phone.js:725
 msgid "No calls to display"
 msgstr "Keine Anrufe"
 

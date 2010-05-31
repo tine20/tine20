@@ -48,19 +48,15 @@ msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 msgid "Quick search"
 msgstr "Schnellsuche"
 
-#: js/GridPanel.js:93
-#: js/GridPanel.js:144
-#: js/TaskEditDialog.js:181
+#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
 msgid "Summary"
 msgstr "Beschreibung"
 
-#: js/GridPanel.js:94
-#: js/GridPanel.js:155
+#: js/GridPanel.js:94 js/GridPanel.js:155
 msgid "Due Date"
 msgstr "Fällig am"
 
-#: js/GridPanel.js:96
-#: js/GridPanel.js:218
+#: js/GridPanel.js:96 js/GridPanel.js:218
 msgid "Responsible"
 msgstr "Verantwortlich"
 
@@ -76,8 +72,7 @@ msgstr "Konnte Aufgabe nicht speichern."
 msgid "Tags"
 msgstr "Tags"
 
-#: js/GridPanel.js:141
-#: Model/Task.php:195
+#: js/GridPanel.js:141 Model/Task.php:195
 msgid "Lead"
 msgstr "Lead"
 
@@ -85,20 +80,15 @@ msgstr "Lead"
 msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
-#: js/GridPanel.js:163
-#: js/TaskEditDialog.js:189
-#: Model/Task.php:186
+#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
 msgid "Priority"
 msgstr "Priorität"
 
-#: js/GridPanel.js:177
-#: Model/Task.php:188
+#: js/GridPanel.js:177 Model/Task.php:188
 msgid "Percent"
 msgstr "Prozent"
 
-#: js/GridPanel.js:190
-#: js/Status.js:33
-#: js/TaskEditDialog.js:209
+#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
 #: Model/Task.php:187
 msgid "Status"
 msgstr "Status"
@@ -107,8 +97,7 @@ msgstr "Status"
 msgid "Creation Time"
 msgstr "Angelegt am"
 
-#: js/GridPanel.js:211
-#: js/TaskEditDialog.js:213
+#: js/GridPanel.js:211 js/TaskEditDialog.js:213
 msgid "Completed"
 msgstr "Abgeschlossen"
 
@@ -116,8 +105,7 @@ msgstr "Abgeschlossen"
 msgid "Show closed"
 msgstr "Geschlossene Aufgaben anzeigen"
 
-#: js/Status.js:187
-#: Setup/setup.xml:339
+#: js/Status.js:187 Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "IN BEARBEITUNG"
 
@@ -197,8 +185,7 @@ msgstr "Standard Favorit"
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr "Der Standart Favorit der beim öffnen der Aufgabenlisten geladen wird"
 
-#: Setup/Initialize.php:41
-#: Setup/Update/Release3.php:66
+#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
 msgid "All tasks of my taskslists"
 msgstr "Alle Aufgaben auf meinen Aufgabenlisten"
 
@@ -213,4 +200,3 @@ msgstr "ERLEDIGT"
 #: Setup/setup.xml:361
 msgid "CANCELLED"
 msgstr "ZURÜCKGESTELLT"
-
