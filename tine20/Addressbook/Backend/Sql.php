@@ -156,7 +156,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @todo    move visibility='displayed' check to contact filter
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
-    {
+    {        
         $select = parent::_getSelect($_cols, $_getDeleted);
         
         $select->joinLeft(
@@ -164,7 +164,14 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* on     */ $this->_db->quoteIdentifier('account.id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.account_id'),
             /* select */ array()
         );
-        $select->where("ISNULL(account_id) OR (NOT ISNULL(account_id) AND visibility='displayed')");
+        
+        if (Tinebase_Core::getUser() instanceof Tinebase_Model_FullUser) {
+            $where = "ISNULL(account_id) OR (NOT ISNULL(account_id) AND (visibility='displayed' OR account_id = '".Tinebase_Core::getUser()->getId()."'))";
+        } else {
+            $where = "ISNULL(account_id) OR (NOT ISNULL(account_id) AND visibility='displayed')";
+        }
+        
+        $select->where($where);        
         
         if ($_cols == '*' || array_key_exists('jpegphoto', (array)$_cols)) {
             $select->joinLeft(
