@@ -13,3 +13,52 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: js/Application.js:32
+msgid "Active Sync"
+msgstr ""
+
+#: js/Application.js:49
+msgid "Select a Device"
+msgstr ""
+
+#: js/Application.js:63
+msgid "No ActiveSync Device registered"
+msgstr ""
+
+#: js/Application.js:71
+msgid "Set as {0} Filter"
+msgstr ""
+
+#: js/Application.js:96
+msgid "Resetted Sync Filter"
+msgstr ""
+
+#: js/Application.js:97 js/Application.js:109
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr ""
+
+#: js/Application.js:100
+msgid "resetted"
+msgstr ""
+
+#: js/Application.js:108
+msgid "Set Sync Filter"
+msgstr ""
+
+#: js/Model.js:47
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:47
+msgid "Devices"
+msgstr ""
+
+#: Setup/setup.xml:465
+msgid "Default Policy"
+msgstr ""
+
+#: Setup/setup.xml:470
+msgid "Default Policy installed during setup"
+msgstr ""

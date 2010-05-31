@@ -86,10 +86,8 @@ msgid "Missing Applications"
 msgstr "Missing Applications"
 
 #: js/AppManager.js:183
-msgid ""
-"There are no applications enabled for you. Please contact your administrator."
-msgstr ""
-"There are no applications enabled for you. Please contact your administrator."
+msgid "There are no applications enabled for you. Please contact your administrator."
+msgstr "There are no applications enabled for you. Please contact your administrator."
 
 #: js/common.js:150
 msgid "{0} minute"
@@ -160,12 +158,8 @@ msgid "The last action you made was potentially not performed correctly."
 msgstr "The last action you made was potentially not performed correctly."
 
 #: js/ExceptionDialog.js:73
-msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occurred."
-msgstr ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occurred."
+msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
+msgstr "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
 
 #: js/ExceptionDialog.js:79 js/widgets/tags/TagsPanel.js:595
 msgid "Description"
@@ -216,40 +210,24 @@ msgid "Not Found"
 msgstr "Not Found"
 
 #: js/ExceptionHandler.js:156
-msgid ""
-"Sorry, your request could not be completed because the required data could "
-"not be found. In most cases this means that someone already deleted the "
-"data. Please refresh your current view."
-msgstr ""
-"Sorry, your request could not be completed because the required data could "
-"not be found. In most cases this means that someone already deleted the "
-"data. Please refresh your current view."
+msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
+msgstr "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
 
 #: js/ExceptionHandler.js:165
 msgid "Concurrent Updates"
 msgstr "Concurrent Updates"
 
 #: js/ExceptionHandler.js:166
-msgid ""
-"Someone else saved this record while you where editing the data. You need to "
-"reload and make your changes again."
-msgstr ""
-"Someone else saved this record while you where editing the data. You need to "
-"reload and make your changes again."
+msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
+msgstr "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
 
 #: js/ExceptionHandler.js:176
 msgid "Service Unavailable"
 msgstr "Service Unavailable"
 
 #: js/ExceptionHandler.js:177
-msgid ""
-"The server is currently unable to handle the request due to a temporary "
-"overloading or maintenance of the server. Please try again or contact your "
-"administrator."
-msgstr ""
-"The server is currently unable to handle the request due to a temporary "
-"overloading or maintenance of the server. Please try again or contact your "
-"administrator."
+msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
+msgstr "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
 
 #: js/ExceptionHandler.js:184
 msgid "Connection lost, please check your network!"
@@ -260,34 +238,24 @@ msgid "Timeout"
 msgstr "Timeout"
 
 #: js/ExceptionHandler.js:191
-msgid ""
-"Sorry, some timeout occured while processing your request. Please reload "
-"your browser, try again or contact your administrator."
-msgstr ""
-"Sorry, some timeout occured while processing your request. Please reload "
-"your browser, try again or contact your administrator."
+msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
+msgstr "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
 
 #: js/ExceptionHandler.js:200
 msgid "No Response"
 msgstr "No Response"
 
 #: js/ExceptionHandler.js:201
-msgid ""
-"Sorry, the Server did not respond any data. Please reload your browser, try "
-"again or contact your administrator."
-msgstr ""
-"Sorry, the Server did not respond any data. Please reload your browser, try "
-"again or contact your administrator."
+msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
+msgstr "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
 
 #: js/ExceptionHandler.js:210
 msgid "No Role Memberships"
 msgstr "No Role Memberships"
 
 #: js/ExceptionHandler.js:211
-msgid ""
-"Your user account has no role memberships. Please contact your administrator."
-msgstr ""
-"Your user account has no role memberships. Please contact your administrator."
+msgid "Your user account has no role memberships. Please contact your administrator."
+msgstr "Your user account has no role memberships. Please contact your administrator."
 
 #: js/LoginPanel.js:78 js/LoginPanel.js:110
 msgid "Login"
@@ -306,14 +274,8 @@ msgid "Tine 2.0 is made for you"
 msgstr "Tine 2.0 is made for you"
 
 #: js/LoginPanel.js:131
-msgid ""
-"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas "
-"and get help."
-msgstr ""
-"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas "
-"and get help."
+msgid "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
+msgstr "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
 
 #: js/LoginPanel.js:137
 msgid "Tine 2.0 Homepage"
@@ -332,12 +294,8 @@ msgid "Tine 2.0 needs your help"
 msgstr "Tine 2.0 needs your help"
 
 #: js/LoginPanel.js:191 js/LoginPanel.js:347
-msgid ""
-"We regularly need your feedback to make the next Tine 2.0 releases fit your "
-"needs even better. Help us and yourself by participating:"
-msgstr ""
-"We regularly need your feedback to make the next Tine 2.0 releases fit your "
-"needs even better. Help us and yourself by participating:"
+msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
+msgstr "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
 
 #: js/LoginPanel.js:197
 msgid "participate!"
@@ -481,12 +439,8 @@ msgid "The new passwords mismatch, please correct them."
 msgstr "The new passwords mismatch, please correct them."
 
 #: js/MainMenu.js:298
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
+msgid "Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer."
+msgstr "Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer."
 
 #: js/MainMenu.js:319 js/widgets/dialog/EditDialog.js:443
 #: js/widgets/grid/GridPanel.js:932
@@ -532,12 +486,8 @@ msgstr[0] "Relation"
 msgstr[1] "Relations"
 
 #: js/tineInit.js:578
-msgid ""
-"Fatal Error: Client self-update failed, please contact your administrator "
-"and/or restart/reload your browser."
-msgstr ""
-"Fatal Error: Client self-update failed, please contact your administrator "
-"and/or restart/reload your browser."
+msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
+msgstr "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
 
 #: js/UserRegistration.js:33
 msgid "Registration Wizard"
@@ -564,12 +514,8 @@ msgid "Congratulations!"
 msgstr "Congratulations!"
 
 #: js/UserRegistration.js:167
-msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
+msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
+msgstr "You have entered all needed information. If you press the Finish button we will send you the registration email."
 
 #: js/ux/ConnectionStatus.js:57
 msgid "online"
@@ -1017,22 +963,16 @@ msgid "Dry run results"
 msgstr "Dry run results"
 
 #: js/widgets/dialog/ImportDialog.js:168
-msgid ""
-"Import test successful for {0} records, import test failed for {1} records."
-msgstr ""
-"Import test successful for {0} records, import test failed for {1} records."
+msgid "Import test successful for {0} records, import test failed for {1} records."
+msgstr "Import test successful for {0} records, import test failed for {1} records."
 
 #: js/widgets/dialog/ImportDialog.js:172
 msgid "Import results"
 msgstr "Import results"
 
 #: js/widgets/dialog/ImportDialog.js:173
-msgid ""
-"Import successful for {0} records / import failed for {1} records / {2} "
-"duplicates found"
-msgstr ""
-"Import successful for {0} records / import failed for {1} records / {2} "
-"duplicates found"
+msgid "Import successful for {0} records / import failed for {1} records / {2} duplicates found"
+msgstr "Import successful for {0} records / import failed for {1} records / {2} duplicates found"
 
 #: js/widgets/dialog/LinkPanel.js:48
 msgid "Links"
@@ -1101,12 +1041,8 @@ msgid "Searching..."
 msgstr "Searching..."
 
 #: js/widgets/grid/FileUploadGrid.js:87
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+msgstr "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 
 #: js/widgets/grid/FileUploadGrid.js:111
 msgid "Add file"
@@ -1283,12 +1219,8 @@ msgstr[0] "Your view is limited by {0} criteria:"
 msgstr[1] "Your view is limited by {0} criterias:"
 
 #: js/widgets/grid/GridPanel.js:186
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 
 #: js/widgets/grid/GridPanel.js:275
 msgid "Edit {0}"
@@ -1445,12 +1377,8 @@ msgid "You have to supply a name for the favorite!"
 msgstr "You have to supply a name for the favorite!"
 
 #: js/widgets/persistentfilter/PickerPanel.js:261
-msgid ""
-"You have to supply a shorter name! Names of favorite can only be up to 40 "
-"characters long."
-msgstr ""
-"You have to supply a shorter name! Names of favorite can only be up to 40 "
-"characters long."
+msgid "You have to supply a shorter name! Names of favorite can only be up to 40 characters long."
+msgstr "You have to supply a shorter name! Names of favorite can only be up to 40 characters long."
 
 #: js/widgets/persistentfilter/PickerPanel.js:264
 msgid "Saving favorite"
@@ -1720,10 +1648,8 @@ msgid "Window Type"
 msgstr "Window Type"
 
 #: Preference.php:108
-msgid ""
-"You can choose between ExtJs style windows or normal Browser popup windows."
-msgstr ""
-"You can choose between ExtJs style windows or normal Browser popup windows."
+msgid "You can choose between ExtJs style windows or normal Browser popup windows."
+msgstr "You can choose between ExtJs style windows or normal Browser popup windows."
 
 #: Preference.php:111
 msgid "Confirm Logout"

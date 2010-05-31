@@ -12,129 +12,12 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/Phone.js:28
-#: js/Phone.js:480
-#: js/Phone.js:481
-msgid "Edit phone settings"
-msgstr "Edytuj ustawienia telefonu"
-
-#: js/Phone.js:58
-#: js/Phone.js:255
-#: js/Models.js:70
+#: js/Models.js:70 js/Phone.js:58 js/Phone.js:253
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
 msgstr[1] "Telefon"
 msgstr[2] "Telefon"
-
-#: js/Phone.js:69
-msgid "Phones"
-msgstr "Telefony"
-
-#: js/Phone.js:198
-msgid "Dial phone number"
-msgstr "Wybierz numer telefonu"
-
-#: js/Phone.js:278
-msgid "Line"
-msgstr "Łącze"
-
-#: js/Phone.js:287
-msgid "Number"
-msgstr "Numer"
-
-#: js/Phone.js:296
-msgid "Cancel"
-msgstr "Anuluj"
-
-#: js/Phone.js:306
-msgid "Dial"
-msgstr "Wybieranie"
-
-#: js/Phone.js:326
-msgid "Error"
-msgstr "Błąd"
-
-#: js/Phone.js:327
-msgid "Not possible to dial."
-msgstr "Nie można nawiązać połączenia."
-
-#: js/Phone.js:470
-msgid "Dial number"
-msgstr "Wybierz numer"
-
-#: js/Phone.js:471
-msgid "Initiate a new outgoing call"
-msgstr "Zestaw nowe połączenie wychodzące"
-
-#: js/Phone.js:532
-msgid "Incoming call"
-msgstr "Połączenie przychodzące"
-
-#: js/Phone.js:536
-msgid "Outgoing call"
-msgstr "Połączenie wychodzące"
-
-#: js/Phone.js:544
-msgid "unknown number"
-msgstr "nieznany numer"
-
-#: js/Phone.js:569
-msgid "Search:"
-msgstr "Znajdź:"
-
-#: js/Phone.js:654
-msgid "Source or Destination"
-msgstr "Źródło albo cel"
-
-#: js/Phone.js:670
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Wyświetlane połączenia {0} - {1} z {2}"
-
-#: js/Phone.js:671
-#: js/Phone.js:715
-msgid "No calls to display"
-msgstr "Brak połączeń"
-
-#: js/Phone.js:681
-msgid "Direction"
-msgstr "Kierunek"
-
-#: js/Phone.js:682
-msgid "Source"
-msgstr "Źródło"
-
-#: js/Phone.js:683
-msgid "Caller Id"
-msgstr "Własny numer telefonu"
-
-#: js/Phone.js:684
-msgid "Destination"
-msgstr "Rozmówca"
-
-#: js/Phone.js:685
-msgid "Start"
-msgstr "Start"
-
-#: js/Phone.js:686
-msgid "Connected"
-msgstr "Połączony"
-
-#: js/Phone.js:687
-msgid "Disconnected"
-msgstr "Rozłączony"
-
-#: js/Phone.js:688
-msgid "Duration"
-msgstr "Czas połączenia"
-
-#: js/Phone.js:689
-msgid "Ringing"
-msgstr "Dzwoni"
-
-#: js/Phone.js:690
-msgid "Call ID"
-msgstr "ID połączenia"
 
 #: js/Models.js:74
 msgid "phones list"
@@ -143,60 +26,198 @@ msgstr[0] "lista nr telefonów"
 msgstr[1] "listy nr telefonów"
 msgstr[2] "listy nr telefonów"
 
+#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
+msgid "Edit phone settings"
+msgstr "Edytuj ustawienia telefonu"
+
+#: js/Phone.js:69
+msgid "Phones"
+msgstr "Telefony"
+
+#: js/Phone.js:276
+msgid "Line"
+msgstr "Łącze"
+
+#: js/Phone.js:285
+msgid "Number"
+msgstr "Numer"
+
+#: js/Phone.js:294
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: js/Phone.js:304
+msgid "Dial"
+msgstr "Wybieranie"
+
+#: js/Phone.js:324
+msgid "Error"
+msgstr "Błąd"
+
+#: js/Phone.js:325
+msgid "Not possible to dial."
+msgstr "Nie można nawiązać połączenia."
+
+#: js/Phone.js:468
+msgid "Dial number"
+msgstr "Wybierz numer"
+
+#: js/Phone.js:469
+msgid "Initiate a new outgoing call"
+msgstr "Zestaw nowe połączenie wychodzące"
+
+#: js/Phone.js:530
+msgid "Incoming call"
+msgstr "Połączenie przychodzące"
+
+#: js/Phone.js:534
+msgid "Outgoing call"
+msgstr "Połączenie wychodzące"
+
+#: js/Phone.js:542
+msgid "unknown number"
+msgstr "nieznany numer"
+
+#: js/Phone.js:579
+msgid "Search:"
+msgstr "Znajdź:"
+
+#: js/Phone.js:664
+msgid "Source or Destination"
+msgstr "Źródło albo cel"
+
+#: js/Phone.js:680
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Wyświetlane połączenia {0} - {1} z {2}"
+
+#: js/Phone.js:681 js/Phone.js:725
+msgid "No calls to display"
+msgstr "Brak połączeń"
+
+#: js/Phone.js:691
+msgid "Direction"
+msgstr "Kierunek"
+
+#: js/Phone.js:692
+msgid "Source"
+msgstr "Źródło"
+
+#: js/Phone.js:693
+msgid "Caller Id"
+msgstr "Własny numer telefonu"
+
+#: js/Phone.js:694
+msgid "Destination"
+msgstr "Rozmówca"
+
+#: js/Phone.js:695
+msgid "Start"
+msgstr "Start"
+
+#: js/Phone.js:696
+msgid "Connected"
+msgstr "Połączony"
+
+#: js/Phone.js:697
+msgid "Disconnected"
+msgstr "Rozłączony"
+
+#: js/Phone.js:698
+msgid "Duration"
+msgstr "Czas połączenia"
+
+#: js/Phone.js:699
+msgid "Ringing"
+msgstr "Dzwoni"
+
+#: js/Phone.js:700
+msgid "Call ID"
+msgstr "ID połączenia"
+
+#~ msgid "Dial phone number"
+#~ msgstr "Wybierz numer telefonu"
+
 #~ msgid "Name"
 #~ msgstr "Nazwa"
+
 #~ msgid "Phone Model"
 #~ msgstr "Model telefonu"
+
 #~ msgid "MAC Address"
 #~ msgstr "Adres sprzętowy (MAC)"
+
 #~ msgid "infos"
 #~ msgstr "Informacje"
+
 #~ msgid "Current IP Address"
 #~ msgstr "Obecny adres IP"
+
 #~ msgid "Firmware last checked at"
 #~ msgstr "Oprogramowanie wbudowane sprawdzono ostatnio"
+
 #~ msgid "Current Software Version"
 #~ msgstr "Obecna wersja oprogramowania"
+
 #~ msgid "Settings Loaded at"
 #~ msgstr "Ustawienia wczytane"
+
 #~ msgid "redirection"
 #~ msgstr "przekierowanie"
+
 #~ msgid "redirect_event"
 #~ msgstr "powód przekierowania"
+
 #~ msgid "all"
 #~ msgstr "wszystkie"
+
 #~ msgid "busy"
 #~ msgstr "zajęty"
+
 #~ msgid "none"
 #~ msgstr "brak"
+
 #~ msgid "time"
 #~ msgstr "czas"
+
 #~ msgid "redirect_number"
 #~ msgstr "Przekierowanie na numer"
+
 #~ msgid "redirect_time"
 #~ msgstr "Czas przekierowania"
+
 #~ msgid "Settings"
 #~ msgstr "Ustawienia"
+
 #~ msgid "web_language"
 #~ msgstr "język interfejsu WWW"
+
 #~ msgid "- factory default -"
 #~ msgstr "- domyśle ustawienia fabryczne -"
+
 #~ msgid "language"
 #~ msgstr "język"
+
 #~ msgid "display_method"
 #~ msgstr "metoda wyświetlania"
+
 #~ msgid "whole url"
 #~ msgstr "pełny URL"
+
 #~ msgid "name"
 #~ msgstr "nazwa"
+
 #~ msgid "number"
 #~ msgstr "numer"
+
 #~ msgid "name + number"
 #~ msgstr "nazwa + numer"
+
 #~ msgid "number + name"
 #~ msgstr "numer + nazwa"
+
 #~ msgid "call_waiting"
 #~ msgstr "Oczekujące połączenie"
+
 #~ msgid "on"
 #~ msgstr "wł."
 
@@ -204,53 +225,75 @@ msgstr[2] "listy nr telefonów"
 # Bevor Du hier eine Aenderung machst, sieh Dir bitte die deutsche Uebersetuzng an.
 #~ msgid "visual"
 #~ msgstr "wybieranie"
+
 # Before you'll make any changes here, please see the german translation.
 # Bevor Du hier eine Aenderung machst, sieh Dir bitte die deutsche Uebersetuzng an.
 #~ msgid "ringer"
 #~ msgstr "łączenie"
+
 #~ msgid "off"
 #~ msgstr "wył."
+
 #~ msgid "mwi_notification"
 #~ msgstr "Powiadomienie MWI"
+
 #~ msgid "silent"
 #~ msgstr "bezgłośnie"
+
 #~ msgid "beep"
 #~ msgstr "sygnał dźwiękowy"
+
 #~ msgid "reminder"
 #~ msgstr "przypomnienie"
+
 #~ msgid "mwi_dialtone"
 #~ msgstr "Sygnał MWI"
+
 #~ msgid "normal"
 #~ msgstr "normalny"
+
 #~ msgid "stutter"
 #~ msgstr "przerywany"
+
 #~ msgid "headset_device"
 #~ msgstr "Zestaw słuchawkowy"
+
 #~ msgid "headset_rj"
 #~ msgstr "Zestaw słuchawkowy RJ"
+
 #~ msgid "message_led_other"
 #~ msgstr "Inne LED"
+
 #, fuzzy
 #~ msgid "global_missed_counter"
 #~ msgstr "brakujący licznik"
+
 #~ msgid "scroll_outgoing"
 #~ msgstr "Przewijanie"
+
 #~ msgid "show_local_line"
 #~ msgstr "Pokaż mój numer"
+
 #~ msgid "show_call_status"
 #~ msgstr "Pokaż status połączenia"
+
 #~ msgid "lineactive"
 #~ msgstr "Łącze aktywne"
+
 #~ msgid "sipCombo"
 #~ msgstr "Wybieranie SIP"
+
 #~ msgid "Idle Text"
 #~ msgstr "Wiadomość, gdy wyłączony"
+
 #~ msgid "Lines"
 #~ msgstr "Łącza"
+
 #~ msgid "Users"
 #~ msgstr "Użytkownicy"
+
 #~ msgid "Rights"
 #~ msgstr "Uprawnienia"
+
 #~ msgid "enter searchfilter"
 #~ msgstr "wpisz szukaną frazę"
-

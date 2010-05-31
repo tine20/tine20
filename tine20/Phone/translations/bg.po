@@ -12,130 +12,129 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Phone.js:28 js/Phone.js:480 js/Phone.js:481
-msgid "Edit phone settings"
-msgstr "Редактирай условията на телефонниране"
-
-#: js/Phone.js:58 js/Phone.js:255 js/Models.js:70
+#: js/Models.js:70 js/Phone.js:58 js/Phone.js:253
 #, fuzzy
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Телефон"
 msgstr[1] "Телефон"
 
-#: js/Phone.js:69
-msgid "Phones"
-msgstr "Телефони"
-
-#: js/Phone.js:198
-msgid "Dial phone number"
-msgstr "Набран телефонен номер"
-
-#: js/Phone.js:278
-msgid "Line"
-msgstr "Линия"
-
-#: js/Phone.js:287
-msgid "Number"
-msgstr "Номер"
-
-#: js/Phone.js:296
-msgid "Cancel"
-msgstr "Прекъсване"
-
-#: js/Phone.js:306
-msgid "Dial"
-msgstr "Набиране"
-
-#: js/Phone.js:326
-msgid "Error"
-msgstr ""
-
-#: js/Phone.js:327
-msgid "Not possible to dial."
-msgstr ""
-
-#: js/Phone.js:470
-msgid "Dial number"
-msgstr "Набран номер"
-
-#: js/Phone.js:471
-msgid "Initiate a new outgoing call"
-msgstr "Въведи ново изходящо обаждане"
-
-#: js/Phone.js:532
-msgid "Incoming call"
-msgstr "Влизащи позвънявания"
-
-#: js/Phone.js:536
-msgid "Outgoing call"
-msgstr "Излизащи позвънявания"
-
-#: js/Phone.js:544
-msgid "unknown number"
-msgstr "непознат номер"
-
-#: js/Phone.js:569
-msgid "Search:"
-msgstr "Търси:"
-
-#: js/Phone.js:654
-msgid "Source or Destination"
-msgstr "Източник или предназначение"
-
-#: js/Phone.js:670
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Намерени позвънявания {0} - {1} от{2}"
-
-#: js/Phone.js:671 js/Phone.js:715
-msgid "No calls to display"
-msgstr "Няма намерении позвънявания"
-
-#: js/Phone.js:681
-msgid "Direction"
-msgstr "Направление"
-
-#: js/Phone.js:682
-msgid "Source"
-msgstr "Източник"
-
-#: js/Phone.js:683
-msgid "Caller Id"
-msgstr "Идентификатор на обаждащият се"
-
-#: js/Phone.js:684
-msgid "Destination"
-msgstr "Предназначение"
-
-#: js/Phone.js:685
-msgid "Start"
-msgstr "Старт"
-
-#: js/Phone.js:686
-msgid "Connected"
-msgstr "Свързан"
-
-#: js/Phone.js:687
-msgid "Disconnected"
-msgstr "Несвързан (прекъсната връзка)"
-
-#: js/Phone.js:688
-msgid "Duration"
-msgstr "Продължителност"
-
-#: js/Phone.js:689
-msgid "Ringing"
-msgstr "Позвъняване"
-
-#: js/Phone.js:690
-msgid "Call ID"
-msgstr "Идентификатор (ID) на обаждането"
-
 #: js/Models.js:74
 msgid "phones list"
 msgid_plural "phones lists"
 msgstr[0] ""
 msgstr[1] ""
+
+#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
+msgid "Edit phone settings"
+msgstr "Редактирай условията на телефонниране"
+
+#: js/Phone.js:69
+msgid "Phones"
+msgstr "Телефони"
+
+#: js/Phone.js:276
+msgid "Line"
+msgstr "Линия"
+
+#: js/Phone.js:285
+msgid "Number"
+msgstr "Номер"
+
+#: js/Phone.js:294
+msgid "Cancel"
+msgstr "Прекъсване"
+
+#: js/Phone.js:304
+msgid "Dial"
+msgstr "Набиране"
+
+#: js/Phone.js:324
+msgid "Error"
+msgstr ""
+
+#: js/Phone.js:325
+msgid "Not possible to dial."
+msgstr ""
+
+#: js/Phone.js:468
+msgid "Dial number"
+msgstr "Набран номер"
+
+#: js/Phone.js:469
+msgid "Initiate a new outgoing call"
+msgstr "Въведи ново изходящо обаждане"
+
+#: js/Phone.js:530
+msgid "Incoming call"
+msgstr "Влизащи позвънявания"
+
+#: js/Phone.js:534
+msgid "Outgoing call"
+msgstr "Излизащи позвънявания"
+
+#: js/Phone.js:542
+msgid "unknown number"
+msgstr "непознат номер"
+
+#: js/Phone.js:579
+msgid "Search:"
+msgstr "Търси:"
+
+#: js/Phone.js:664
+msgid "Source or Destination"
+msgstr "Източник или предназначение"
+
+#: js/Phone.js:680
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Намерени позвънявания {0} - {1} от{2}"
+
+#: js/Phone.js:681 js/Phone.js:725
+msgid "No calls to display"
+msgstr "Няма намерении позвънявания"
+
+#: js/Phone.js:691
+msgid "Direction"
+msgstr "Направление"
+
+#: js/Phone.js:692
+msgid "Source"
+msgstr "Източник"
+
+#: js/Phone.js:693
+msgid "Caller Id"
+msgstr "Идентификатор на обаждащият се"
+
+#: js/Phone.js:694
+msgid "Destination"
+msgstr "Предназначение"
+
+#: js/Phone.js:695
+msgid "Start"
+msgstr "Старт"
+
+#: js/Phone.js:696
+msgid "Connected"
+msgstr "Свързан"
+
+#: js/Phone.js:697
+msgid "Disconnected"
+msgstr "Несвързан (прекъсната връзка)"
+
+#: js/Phone.js:698
+msgid "Duration"
+msgstr "Продължителност"
+
+#: js/Phone.js:699
+msgid "Ringing"
+msgstr "Позвъняване"
+
+#: js/Phone.js:700
+msgid "Call ID"
+msgstr "Идентификатор (ID) на обаждането"
+
+#~ msgid "Dial phone number"
+#~ msgstr "Набран телефонен номер"
 
 #~ msgid "Name"
 #~ msgstr "Име"

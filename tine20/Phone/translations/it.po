@@ -12,130 +12,129 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Phone.js:28 js/Phone.js:480 js/Phone.js:481
-msgid "Edit phone settings"
-msgstr "Modifica impostazioni telefono"
-
-#: js/Phone.js:58 js/Phone.js:255 js/Models.js:70
+#: js/Models.js:70 js/Phone.js:58 js/Phone.js:253
 #, fuzzy
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefono"
 msgstr[1] "Telefono"
 
-#: js/Phone.js:69
-msgid "Phones"
-msgstr "Telefoni"
-
-#: js/Phone.js:198
-msgid "Dial phone number"
-msgstr "Componi numero telefonico"
-
-#: js/Phone.js:278
-msgid "Line"
-msgstr "Linea"
-
-#: js/Phone.js:287
-msgid "Number"
-msgstr "Numero"
-
-#: js/Phone.js:296
-msgid "Cancel"
-msgstr "Cancella"
-
-#: js/Phone.js:306
-msgid "Dial"
-msgstr "Componi"
-
-#: js/Phone.js:326
-msgid "Error"
-msgstr "Errore"
-
-#: js/Phone.js:327
-msgid "Not possible to dial."
-msgstr "Non è possibile chiamare."
-
-#: js/Phone.js:470
-msgid "Dial number"
-msgstr "Componi numero"
-
-#: js/Phone.js:471
-msgid "Initiate a new outgoing call"
-msgstr "Inizia una nuova chiamata uscente"
-
-#: js/Phone.js:532
-msgid "Incoming call"
-msgstr "Chiamata entrante"
-
-#: js/Phone.js:536
-msgid "Outgoing call"
-msgstr "Chiamata uscente"
-
-#: js/Phone.js:544
-msgid "unknown number"
-msgstr "numero sconosciuto"
-
-#: js/Phone.js:569
-msgid "Search:"
-msgstr "Ricerca:"
-
-#: js/Phone.js:654
-msgid "Source or Destination"
-msgstr "Sorgente o Destinazione"
-
-#: js/Phone.js:670
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Visualizzazione chiamate  {0} - {1} di {2}"
-
-#: js/Phone.js:671 js/Phone.js:715
-msgid "No calls to display"
-msgstr "Nessuna chiamata da visualizzare"
-
-#: js/Phone.js:681
-msgid "Direction"
-msgstr "Direzione"
-
-#: js/Phone.js:682
-msgid "Source"
-msgstr "Sorgente"
-
-#: js/Phone.js:683
-msgid "Caller Id"
-msgstr "Id Chiamante"
-
-#: js/Phone.js:684
-msgid "Destination"
-msgstr "Destinazione"
-
-#: js/Phone.js:685
-msgid "Start"
-msgstr "Inizio"
-
-#: js/Phone.js:686
-msgid "Connected"
-msgstr "Connesso"
-
-#: js/Phone.js:687
-msgid "Disconnected"
-msgstr "Disconnesso"
-
-#: js/Phone.js:688
-msgid "Duration"
-msgstr "Durata"
-
-#: js/Phone.js:689
-msgid "Ringing"
-msgstr "Squillo in corso"
-
-#: js/Phone.js:690
-msgid "Call ID"
-msgstr "ID Chiamata"
-
 #: js/Models.js:74
 msgid "phones list"
 msgid_plural "phones lists"
 msgstr[0] ""
 msgstr[1] ""
+
+#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
+msgid "Edit phone settings"
+msgstr "Modifica impostazioni telefono"
+
+#: js/Phone.js:69
+msgid "Phones"
+msgstr "Telefoni"
+
+#: js/Phone.js:276
+msgid "Line"
+msgstr "Linea"
+
+#: js/Phone.js:285
+msgid "Number"
+msgstr "Numero"
+
+#: js/Phone.js:294
+msgid "Cancel"
+msgstr "Cancella"
+
+#: js/Phone.js:304
+msgid "Dial"
+msgstr "Componi"
+
+#: js/Phone.js:324
+msgid "Error"
+msgstr "Errore"
+
+#: js/Phone.js:325
+msgid "Not possible to dial."
+msgstr "Non è possibile chiamare."
+
+#: js/Phone.js:468
+msgid "Dial number"
+msgstr "Componi numero"
+
+#: js/Phone.js:469
+msgid "Initiate a new outgoing call"
+msgstr "Inizia una nuova chiamata uscente"
+
+#: js/Phone.js:530
+msgid "Incoming call"
+msgstr "Chiamata entrante"
+
+#: js/Phone.js:534
+msgid "Outgoing call"
+msgstr "Chiamata uscente"
+
+#: js/Phone.js:542
+msgid "unknown number"
+msgstr "numero sconosciuto"
+
+#: js/Phone.js:579
+msgid "Search:"
+msgstr "Ricerca:"
+
+#: js/Phone.js:664
+msgid "Source or Destination"
+msgstr "Sorgente o Destinazione"
+
+#: js/Phone.js:680
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Visualizzazione chiamate  {0} - {1} di {2}"
+
+#: js/Phone.js:681 js/Phone.js:725
+msgid "No calls to display"
+msgstr "Nessuna chiamata da visualizzare"
+
+#: js/Phone.js:691
+msgid "Direction"
+msgstr "Direzione"
+
+#: js/Phone.js:692
+msgid "Source"
+msgstr "Sorgente"
+
+#: js/Phone.js:693
+msgid "Caller Id"
+msgstr "Id Chiamante"
+
+#: js/Phone.js:694
+msgid "Destination"
+msgstr "Destinazione"
+
+#: js/Phone.js:695
+msgid "Start"
+msgstr "Inizio"
+
+#: js/Phone.js:696
+msgid "Connected"
+msgstr "Connesso"
+
+#: js/Phone.js:697
+msgid "Disconnected"
+msgstr "Disconnesso"
+
+#: js/Phone.js:698
+msgid "Duration"
+msgstr "Durata"
+
+#: js/Phone.js:699
+msgid "Ringing"
+msgstr "Squillo in corso"
+
+#: js/Phone.js:700
+msgid "Call ID"
+msgstr "ID Chiamata"
+
+#~ msgid "Dial phone number"
+#~ msgstr "Componi numero telefonico"
 
 #~ msgid "Name"
 #~ msgstr "Nome"

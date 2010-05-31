@@ -15,11 +15,7 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Phone\n"
 
-#: js/Phone.js:28 js/Phone.js:480 js/Phone.js:481
-msgid "Edit phone settings"
-msgstr "Editovat nastavení telefonu"
-
-#: js/Phone.js:58 js/Phone.js:255 js/Models.js:70
+#: js/Models.js:70 js/Phone.js:58 js/Phone.js:253
 #, fuzzy
 msgid "Phone"
 msgid_plural "Phones"
@@ -27,120 +23,123 @@ msgstr[0] "Telefon"
 msgstr[1] "Telefon"
 msgstr[2] "Telefon"
 
-#: js/Phone.js:69
-msgid "Phones"
-msgstr "Telefony"
-
-#: js/Phone.js:198
-msgid "Dial phone number"
-msgstr "Vytočit telefonní číslo"
-
-#: js/Phone.js:278
-msgid "Line"
-msgstr "Linka"
-
-#: js/Phone.js:287
-msgid "Number"
-msgstr "Číslo"
-
-#: js/Phone.js:296
-msgid "Cancel"
-msgstr "Zrušit"
-
-#: js/Phone.js:306
-msgid "Dial"
-msgstr "Vytočit"
-
-#: js/Phone.js:326
-msgid "Error"
-msgstr ""
-
-#: js/Phone.js:327
-msgid "Not possible to dial."
-msgstr ""
-
-#: js/Phone.js:470
-msgid "Dial number"
-msgstr "Vytočit číslo"
-
-#: js/Phone.js:471
-msgid "Initiate a new outgoing call"
-msgstr "Zahájit nový odchozí hovor"
-
-#: js/Phone.js:532
-msgid "Incoming call"
-msgstr "Příchozí hovor"
-
-#: js/Phone.js:536
-msgid "Outgoing call"
-msgstr "Odchozí hovor"
-
-#: js/Phone.js:544
-msgid "unknown number"
-msgstr "neznámé číslo"
-
-#: js/Phone.js:569
-msgid "Search:"
-msgstr "Hledat:"
-
-#: js/Phone.js:654
-msgid "Source or Destination"
-msgstr "Zdroj nebo cíl"
-
-#: js/Phone.js:670
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Zobrazuji "
-
-#: js/Phone.js:671 js/Phone.js:715
-msgid "No calls to display"
-msgstr "Žádné hovory ke zobrazení"
-
-#: js/Phone.js:681
-msgid "Direction"
-msgstr "Směr"
-
-#: js/Phone.js:682
-msgid "Source"
-msgstr "Zdroj"
-
-#: js/Phone.js:683
-msgid "Caller Id"
-msgstr "ID volajícího"
-
-#: js/Phone.js:684
-msgid "Destination"
-msgstr "Cíl"
-
-#: js/Phone.js:685
-msgid "Start"
-msgstr "Začátek"
-
-#: js/Phone.js:686
-msgid "Connected"
-msgstr "Spojený"
-
-#: js/Phone.js:687
-msgid "Disconnected"
-msgstr "Odpojený"
-
-#: js/Phone.js:688
-msgid "Duration"
-msgstr "Trvání"
-
-#: js/Phone.js:689
-msgid "Ringing"
-msgstr "Vyzvání"
-
-#: js/Phone.js:690
-msgid "Call ID"
-msgstr "ID hovoru"
-
 #: js/Models.js:74
 msgid "phones list"
 msgid_plural "phones lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
+msgid "Edit phone settings"
+msgstr "Editovat nastavení telefonu"
+
+#: js/Phone.js:69
+msgid "Phones"
+msgstr "Telefony"
+
+#: js/Phone.js:276
+msgid "Line"
+msgstr "Linka"
+
+#: js/Phone.js:285
+msgid "Number"
+msgstr "Číslo"
+
+#: js/Phone.js:294
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: js/Phone.js:304
+msgid "Dial"
+msgstr "Vytočit"
+
+#: js/Phone.js:324
+msgid "Error"
+msgstr ""
+
+#: js/Phone.js:325
+msgid "Not possible to dial."
+msgstr ""
+
+#: js/Phone.js:468
+msgid "Dial number"
+msgstr "Vytočit číslo"
+
+#: js/Phone.js:469
+msgid "Initiate a new outgoing call"
+msgstr "Zahájit nový odchozí hovor"
+
+#: js/Phone.js:530
+msgid "Incoming call"
+msgstr "Příchozí hovor"
+
+#: js/Phone.js:534
+msgid "Outgoing call"
+msgstr "Odchozí hovor"
+
+#: js/Phone.js:542
+msgid "unknown number"
+msgstr "neznámé číslo"
+
+#: js/Phone.js:579
+msgid "Search:"
+msgstr "Hledat:"
+
+#: js/Phone.js:664
+msgid "Source or Destination"
+msgstr "Zdroj nebo cíl"
+
+#: js/Phone.js:680
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Zobrazuji "
+
+#: js/Phone.js:681 js/Phone.js:725
+msgid "No calls to display"
+msgstr "Žádné hovory ke zobrazení"
+
+#: js/Phone.js:691
+msgid "Direction"
+msgstr "Směr"
+
+#: js/Phone.js:692
+msgid "Source"
+msgstr "Zdroj"
+
+#: js/Phone.js:693
+msgid "Caller Id"
+msgstr "ID volajícího"
+
+#: js/Phone.js:694
+msgid "Destination"
+msgstr "Cíl"
+
+#: js/Phone.js:695
+msgid "Start"
+msgstr "Začátek"
+
+#: js/Phone.js:696
+msgid "Connected"
+msgstr "Spojený"
+
+#: js/Phone.js:697
+msgid "Disconnected"
+msgstr "Odpojený"
+
+#: js/Phone.js:698
+msgid "Duration"
+msgstr "Trvání"
+
+#: js/Phone.js:699
+msgid "Ringing"
+msgstr "Vyzvání"
+
+#: js/Phone.js:700
+msgid "Call ID"
+msgstr "ID hovoru"
+
+#~ msgid "Dial phone number"
+#~ msgstr "Vytočit telefonní číslo"
 
 #~ msgid "Name"
 #~ msgstr "Název"

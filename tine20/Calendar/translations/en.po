@@ -211,8 +211,7 @@ msgstr "Confirm Update of Series"
 
 #: js/CalendarPanel.js:274
 msgid "Do you really want to update all events of this recurring event series?"
-msgstr ""
-"Do you really want to update all events of this recurring event series?"
+msgstr "Do you really want to update all events of this recurring event series?"
 
 #: js/CalendarPanel.js:288
 msgid "Update Event"
@@ -324,12 +323,8 @@ msgid "Please Change Selection"
 msgstr "Please Change Selection"
 
 #: js/MainScreenCenterPanel.js:322
-msgid ""
-"Your selection contains recurring events. Recuring events must be deleted "
-"seperatly!"
-msgstr ""
-"Your selection contains recurring events. Recuring events must be deleted "
-"seperatly!"
+msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
+msgstr "Your selection contains recurring events. Recuring events must be deleted seperatly!"
 
 #: js/MainScreenCenterPanel.js:336
 msgid "Confirm Deletion of Series"
@@ -337,8 +332,7 @@ msgstr "Confirm Deletion of Series"
 
 #: js/MainScreenCenterPanel.js:337
 msgid "Do you really want to delete all events of this recurring event series?"
-msgstr ""
-"Do you really want to delete all events of this recurring event series?"
+msgstr "Do you really want to delete all events of this recurring event series?"
 
 #: js/MainScreenCenterPanel.js:350
 msgid "Delete Event"
@@ -512,10 +506,8 @@ msgid "unknown"
 msgstr "unknown"
 
 #: Model/Attender.php:313
-msgid ""
-"This contact has been automatically added by the system as an event attender"
-msgstr ""
-"This contact has been automatically added by the system as an event attender"
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr "This contact has been automatically added by the system as an event attender"
 
 #: Model/Attender.php:203
 msgid "unknown)"
@@ -586,14 +578,8 @@ msgid "Get Notification Emails"
 msgstr "Get Notification Emails"
 
 #: Preference.php:93
-msgid ""
-"The level of actions you want to be notified about. Please note that "
-"organizers will get notifications for all updates including attendee answers "
-"unless this preference is set to \"Never\""
-msgstr ""
-"The level of actions you want to be notified about. Please note that "
-"organizers will get notifications for all updates including attendee answers "
-"unless this preference is set to \"Never\""
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgstr "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
 
 #: Preference.php:96
 msgid "Send Notifications Emails of own Actions"

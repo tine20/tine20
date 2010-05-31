@@ -12,6 +12,248 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
+#: js/ApplicationGridPanel.js:67
+msgid "Name"
+msgstr "Název"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Enabled"
+msgstr "Povoleno"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Order"
+msgstr "Pořadí"
+
+#: js/ApplicationGridPanel.js:70
+msgid "Installed Version"
+msgstr "Nainstalovaná verze"
+
+#: js/ApplicationGridPanel.js:71
+msgid "Available Version"
+msgstr "Dostupná verze"
+
+#: js/ApplicationGridPanel.js:72
+msgid "Status"
+msgstr "Stav"
+
+#: js/ApplicationGridPanel.js:73
+msgid "Depends on"
+msgstr "Závisí na"
+
+#: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:207
+msgid "Install application"
+msgstr "Instalovat aplikaci"
+
+#: js/ApplicationGridPanel.js:91
+msgid "Uninstall application"
+msgstr "Odinstalovat aplikaci"
+
+#: js/ApplicationGridPanel.js:100
+msgid "Update application"
+msgstr "Aktualizovat aplikaci"
+
+#: js/ApplicationGridPanel.js:109
+msgid "Go to {0} login"
+msgstr "Jít na příhlášení do {0}"
+
+#: js/ApplicationGridPanel.js:172
+msgid "uninstall"
+msgstr "odinstalovat"
+
+#: js/ApplicationGridPanel.js:172
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Opravdu chcete aplikaci/e odinstalovat?"
+
+#: js/ApplicationGridPanel.js:232
+msgid "This may take a while"
+msgstr "Tato operace může chvíli trvat"
+
+#: js/ApplicationGridPanel.js:262
+msgid "Dependency Violation"
+msgstr "Porušení závislosti"
+
+#: js/AuthenticationPanel.js:123
+msgid "Delete all existing users and groups"
+msgstr "Smazat všechny stávající uživatele a skupiny"
+
+#: js/AuthenticationPanel.js:123
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgstr "Přechod z SQL na LDAP smaže všechny stávající uživatelské účty, skupiny a role. Opravdu chcete změnit backend pro uložení účtů na LDAP?"
+
+#: js/AuthenticationPanel.js:186 js/AuthenticationPanel.js:207
+#: js/EmailPanel.js:156
+msgid "Backend"
+msgstr "Backend"
+
+#: js/AuthenticationPanel.js:220
+msgid "Authentication provider"
+msgstr "Poskytovatel autentikace"
+
+#: js/AuthenticationPanel.js:243
+msgid "Initial admin login name"
+msgstr "Počáteční přihlašovací jméno administrátora"
+
+#: js/AuthenticationPanel.js:248
+msgid "Initial admin Password"
+msgstr "Počáteční heslo administrátora"
+
+#: js/AuthenticationPanel.js:253
+msgid "Password confirmation"
+msgstr "Potvrzení hesla"
+
+#: js/AuthenticationPanel.js:268 js/AuthenticationPanel.js:368
+msgid "Host"
+msgstr "Server"
+
+#: js/AuthenticationPanel.js:272 js/ConfigManagerPanel.js:97
+#: js/EmailPanel.js:201 js/EmailPanel.js:283
+msgid "Port"
+msgstr "Port"
+
+#: js/AuthenticationPanel.js:276 js/AuthenticationPanel.js:373
+msgid "Login name"
+msgstr "Přihlašovací jméno"
+
+#: js/AuthenticationPanel.js:279 js/AuthenticationPanel.js:376
+#: js/ConfigManagerPanel.js:77 js/ConfigManagerPanel.js:113
+#: js/EmailPanel.js:196
+msgid "Password"
+msgstr "Heslo"
+
+#: js/AuthenticationPanel.js:292 js/AuthenticationPanel.js:389
+msgid "Bind requires DN"
+msgstr "Připojení vyžaduje DN"
+
+#: js/AuthenticationPanel.js:296
+msgid "Base DN"
+msgstr "Základní DN"
+
+#: js/AuthenticationPanel.js:299
+msgid "Search filter"
+msgstr ""
+
+#: js/AuthenticationPanel.js:302
+msgid "Account canonical form"
+msgstr "Kanonická forma účtu"
+
+#: js/AuthenticationPanel.js:305
+msgid "Account domain name "
+msgstr ""
+
+#: js/AuthenticationPanel.js:308
+msgid "Account domain short name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:316
+msgid "Accounts storage"
+msgstr "Uložení účtů"
+
+#: js/AuthenticationPanel.js:337 js/AuthenticationPanel.js:475
+msgid "Default user group name"
+msgstr "Jméno výchozí skupiny pro uživatele"
+
+#: js/AuthenticationPanel.js:341 js/AuthenticationPanel.js:478
+msgid "Default admin group name"
+msgstr "Jméno výchozí skupiny pro administrátory"
+
+#: js/AuthenticationPanel.js:354
+msgid "User can change password"
+msgstr "Uživatel si může měnit heslo"
+
+#: js/AuthenticationPanel.js:393
+msgid "User DN"
+msgstr "DN uživatele"
+
+#: js/AuthenticationPanel.js:396
+msgid "User Filter"
+msgstr ""
+
+#: js/AuthenticationPanel.js:408
+msgid "User Search Scope"
+msgstr ""
+
+#: js/AuthenticationPanel.js:412
+msgid "Groups DN"
+msgstr "DN pro skupiny"
+
+#: js/AuthenticationPanel.js:415
+msgid "Group Filter"
+msgstr ""
+
+#: js/AuthenticationPanel.js:427
+msgid "Group Search Scope"
+msgstr ""
+
+#: js/AuthenticationPanel.js:440
+msgid "Password encoding"
+msgstr "Kódování hesla"
+
+#: js/AuthenticationPanel.js:453
+msgid "Use Rfc 2307 bis"
+msgstr "Používat Rfc 2307 bis"
+
+#: js/AuthenticationPanel.js:457
+msgid "Min User Id"
+msgstr "Minimální Id uživatele"
+
+#: js/AuthenticationPanel.js:460
+msgid "Max User Id"
+msgstr "Maximální Id uživatele"
+
+#: js/AuthenticationPanel.js:463
+msgid "Min Group Id"
+msgstr "Minimální Id skupiny"
+
+#: js/AuthenticationPanel.js:466
+msgid "Max Group Id"
+msgstr "Maximální Id skupiny"
+
+#: js/AuthenticationPanel.js:469
+msgid "Group UUID Attribute name"
+msgstr "Název atributu pro UUID skupiny"
+
+#: js/AuthenticationPanel.js:472
+msgid "User UUID Attribute name"
+msgstr "Název atributu pro UUID uživatele"
+
+#: js/AuthenticationPanel.js:490
+msgid "Allow user to change her password?"
+msgstr "Povolit uživateli změnu jeho hesla?"
+
+#: js/AuthenticationPanel.js:499
+msgid "Redirect Settings"
+msgstr "Nastavení přesměrování"
+
+#: js/AuthenticationPanel.js:507
+msgid "Redirect Url (redirect to login screen if empty)"
+msgstr ""
+
+#: js/AuthenticationPanel.js:519
+msgid "Redirect Always (if No, only redirect after logout)"
+msgstr ""
+
+#: js/AuthenticationPanel.js:530
+msgid "Redirect to referring site, if exists"
+msgstr "Přesměrovat na odkazovaný web, pokud existuje"
+
+#: js/AuthenticationPanel.js:543
+msgid "Save config and install"
+msgstr "Uložit konfiguraci a instalovat"
+
+#: js/AuthenticationPanel.js:545 js/ConfigManagerPanel.js:208
+msgid "Save config"
+msgstr "Uložit konfiguraci"
+
+#: js/AuthenticationPanel.js:569
+msgid "Passwords don't match"
+msgstr "Hesla se neshodují"
+
+#: js/AuthenticationPanel.js:579 js/AuthenticationPanel.js:586
+#: js/AuthenticationPanel.js:590 js/AuthenticationPanel.js:601
+#: js/AuthenticationPanel.js:611
+msgid "Should not be empty"
+msgstr ""
+
 #: js/ConfigManagerPanel.js:60
 msgid "Informations"
 msgstr "Informace"
@@ -24,12 +266,6 @@ msgstr "Přihlášení do instalačního programu"
 msgid "Username"
 msgstr "Uživatelské jméno"
 
-#: js/ConfigManagerPanel.js:77 js/ConfigManagerPanel.js:113
-#: js/AuthenticationPanel.js:279 js/AuthenticationPanel.js:367
-#: js/EmailPanel.js:196
-msgid "Password"
-msgstr "Heslo"
-
 #: js/ConfigManagerPanel.js:83 js/ConfigManagerPanel.js:103
 msgid "Database"
 msgstr "Databáze"
@@ -41,11 +277,6 @@ msgstr "Adaptér"
 #: js/ConfigManagerPanel.js:92 js/EmailPanel.js:188 js/EmailPanel.js:279
 msgid "Hostname"
 msgstr "Název nebo adresa počítače"
-
-#: js/ConfigManagerPanel.js:97 js/AuthenticationPanel.js:272
-#: js/EmailPanel.js:201 js/EmailPanel.js:283
-msgid "Port"
-msgstr "Port"
 
 #: js/ConfigManagerPanel.js:108
 msgid "User"
@@ -115,316 +346,9 @@ msgstr ""
 msgid "Config file is not writable"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:208 js/AuthenticationPanel.js:536
-msgid "Save config"
-msgstr "Uložit konfiguraci"
-
 #: js/ConfigManagerPanel.js:223
 msgid "Download config file"
 msgstr "Stáhnout konfigurační soubor"
-
-#: js/TermsPanel.js:31
-msgid "I have read the license agreement and accept it"
-msgstr "Přečetl(a) jsem si licenční ujednání a souhlasím"
-
-#: js/TermsPanel.js:38
-msgid "License Agreement"
-msgstr "Licenční ujednání"
-
-#: js/TermsPanel.js:57
-msgid "I have read the privacy agreement and accept it"
-msgstr "Přečetl(a) jsem si ujednání o ochraně soukromí a souhlasím"
-
-#: js/TermsPanel.js:64
-msgid "Privacy Agreement"
-msgstr "Ujednání o ochraně soukromí"
-
-#: js/TermsPanel.js:81
-msgid "Accept Terms and Conditions"
-msgstr "Přijmout podmínky"
-
-#: js/AuthenticationPanel.js:123
-msgid "Delete all existing users and groups"
-msgstr "Smazat všechny stávající uživatele a skupiny"
-
-#: js/AuthenticationPanel.js:123
-msgid ""
-"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to "
-"LDAP ?"
-msgstr ""
-"Přechod z SQL na LDAP smaže všechny stávající uživatelské účty, skupiny a "
-"role. Opravdu chcete změnit backend pro uložení účtů na LDAP?"
-
-#: js/AuthenticationPanel.js:186 js/AuthenticationPanel.js:207
-#: js/EmailPanel.js:156
-msgid "Backend"
-msgstr "Backend"
-
-#: js/AuthenticationPanel.js:220
-msgid "Authentication provider"
-msgstr "Poskytovatel autentikace"
-
-#: js/AuthenticationPanel.js:243
-msgid "Initial admin login name"
-msgstr "Počáteční přihlašovací jméno administrátora"
-
-#: js/AuthenticationPanel.js:248
-msgid "Initial admin Password"
-msgstr "Počáteční heslo administrátora"
-
-#: js/AuthenticationPanel.js:253
-msgid "Password confirmation"
-msgstr "Potvrzení hesla"
-
-#: js/AuthenticationPanel.js:268 js/AuthenticationPanel.js:359
-msgid "Host"
-msgstr "Server"
-
-#: js/AuthenticationPanel.js:276 js/AuthenticationPanel.js:364
-msgid "Login name"
-msgstr "Přihlašovací jméno"
-
-#: js/AuthenticationPanel.js:292 js/AuthenticationPanel.js:380
-msgid "Bind requires DN"
-msgstr "Připojení vyžaduje DN"
-
-#: js/AuthenticationPanel.js:296
-msgid "Base DN"
-msgstr "Základní DN"
-
-#: js/AuthenticationPanel.js:299
-msgid "Account canonical form"
-msgstr "Kanonická forma účtu"
-
-#: js/AuthenticationPanel.js:307
-msgid "Accounts storage"
-msgstr "Uložení účtů"
-
-#: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:466
-msgid "Default user group name"
-msgstr "Jméno výchozí skupiny pro uživatele"
-
-#: js/AuthenticationPanel.js:332 js/AuthenticationPanel.js:469
-msgid "Default admin group name"
-msgstr "Jméno výchozí skupiny pro administrátory"
-
-#: js/AuthenticationPanel.js:345
-msgid "User can change password"
-msgstr "Uživatel si může měnit heslo"
-
-#: js/AuthenticationPanel.js:384
-msgid "User DN"
-msgstr "DN uživatele"
-
-#: js/AuthenticationPanel.js:387
-msgid "User Filter"
-msgstr ""
-
-#: js/AuthenticationPanel.js:399
-msgid "User Search Scope"
-msgstr ""
-
-#: js/AuthenticationPanel.js:403
-msgid "Groups DN"
-msgstr "DN pro skupiny"
-
-#: js/AuthenticationPanel.js:406
-msgid "Group Filter"
-msgstr ""
-
-#: js/AuthenticationPanel.js:418
-msgid "Group Search Scope"
-msgstr ""
-
-#: js/AuthenticationPanel.js:431
-msgid "Password encoding"
-msgstr "Kódování hesla"
-
-#: js/AuthenticationPanel.js:444
-msgid "Use Rfc 2307 bis"
-msgstr "Používat Rfc 2307 bis"
-
-#: js/AuthenticationPanel.js:448
-msgid "Min User Id"
-msgstr "Minimální Id uživatele"
-
-#: js/AuthenticationPanel.js:451
-msgid "Max User Id"
-msgstr "Maximální Id uživatele"
-
-#: js/AuthenticationPanel.js:454
-msgid "Min Group Id"
-msgstr "Minimální Id skupiny"
-
-#: js/AuthenticationPanel.js:457
-msgid "Max Group Id"
-msgstr "Maximální Id skupiny"
-
-#: js/AuthenticationPanel.js:460
-msgid "Group UUID Attribute name"
-msgstr "Název atributu pro UUID skupiny"
-
-#: js/AuthenticationPanel.js:463
-msgid "User UUID Attribute name"
-msgstr "Název atributu pro UUID uživatele"
-
-#: js/AuthenticationPanel.js:481
-msgid "Allow user to change her password?"
-msgstr "Povolit uživateli změnu jeho hesla?"
-
-#: js/AuthenticationPanel.js:490
-msgid "Redirect Settings"
-msgstr "Nastavení přesměrování"
-
-#: js/AuthenticationPanel.js:498
-msgid "Redirect Url (redirect to login screen if empty)"
-msgstr ""
-
-#: js/AuthenticationPanel.js:510
-msgid "Redirect Always (if No, only redirect after logout)"
-msgstr ""
-
-#: js/AuthenticationPanel.js:521
-msgid "Redirect to referring site, if exists"
-msgstr "Přesměrovat na odkazovaný web, pokud existuje"
-
-#: js/AuthenticationPanel.js:534
-msgid "Save config and install"
-msgstr "Uložit konfiguraci a instalovat"
-
-#: js/AuthenticationPanel.js:560
-msgid "Passwords don't match"
-msgstr "Hesla se neshodují"
-
-#: js/AuthenticationPanel.js:570 js/AuthenticationPanel.js:577
-#: js/AuthenticationPanel.js:581 js/AuthenticationPanel.js:592
-#: js/AuthenticationPanel.js:602
-msgid "Should not be empty"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:67
-msgid "Name"
-msgstr "Název"
-
-#: js/ApplicationGridPanel.js:68
-msgid "Enabled"
-msgstr "Povoleno"
-
-#: js/ApplicationGridPanel.js:69
-msgid "Order"
-msgstr "Pořadí"
-
-#: js/ApplicationGridPanel.js:70
-msgid "Installed Version"
-msgstr "Nainstalovaná verze"
-
-#: js/ApplicationGridPanel.js:71
-msgid "Available Version"
-msgstr "Dostupná verze"
-
-#: js/ApplicationGridPanel.js:72
-msgid "Status"
-msgstr "Stav"
-
-#: js/ApplicationGridPanel.js:73
-msgid "Depends on"
-msgstr "Závisí na"
-
-#: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:207
-msgid "Install application"
-msgstr "Instalovat aplikaci"
-
-#: js/ApplicationGridPanel.js:91
-msgid "Uninstall application"
-msgstr "Odinstalovat aplikaci"
-
-#: js/ApplicationGridPanel.js:100
-msgid "Update application"
-msgstr "Aktualizovat aplikaci"
-
-#: js/ApplicationGridPanel.js:109
-msgid "Go to {0} login"
-msgstr "Jít na příhlášení do {0}"
-
-#: js/ApplicationGridPanel.js:172
-msgid "uninstall"
-msgstr "odinstalovat"
-
-#: js/ApplicationGridPanel.js:172
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Opravdu chcete aplikaci/e odinstalovat?"
-
-#: js/ApplicationGridPanel.js:232
-msgid "This may take a while"
-msgstr "Tato operace může chvíli trvat"
-
-#: js/ApplicationGridPanel.js:262
-msgid "Dependency Violation"
-msgstr "Porušení závislosti"
-
-#: js/Setup.js:55
-msgid "Terms and Conditions"
-msgstr "Podmínky a ujednání"
-
-#: js/Setup.js:60
-msgid "Setup Checks"
-msgstr "Instalační kontroly"
-
-#: js/Setup.js:66
-msgid "Config Manager"
-msgstr "Správce konfigurace"
-
-#: js/Setup.js:72
-msgid "Authentication/Accounts"
-msgstr "Autentikace/Účty"
-
-#: js/Setup.js:78
-msgid "Email"
-msgstr "Email"
-
-#: js/Setup.js:84
-msgid "Application Manager"
-msgstr "Správce aplikací"
-
-#: js/Setup.js:187
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Aplikace"
-msgstr[1] "Aplikace"
-msgstr[2] "Aplikací"
-
-#: js/EnvCheckGridPanel.js:92
-msgid "Performing Environment Checks..."
-msgstr "Provádím test prostředí"
-
-#: js/EnvCheckGridPanel.js:133
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-"Nenalezeno {0}. Zkuste prosím změnit kritéria filtru, volby zobrazení nebo "
-"{1} ve kterém hledáte."
-
-#: js/EnvCheckGridPanel.js:163
-msgid "Check"
-msgstr "Kontrola"
-
-#: js/EnvCheckGridPanel.js:164
-msgid "Result"
-msgstr "Výsledek"
-
-#: js/EnvCheckGridPanel.js:165
-msgid "Error"
-msgstr "Chyba"
-
-#: js/EnvCheckGridPanel.js:183
-msgid "Run setup tests"
-msgstr "Spustit instalační testy"
-
-#: js/EnvCheckGridPanel.js:192
-msgid "Ignore setup tests"
-msgstr "Ignorovat instalační testy"
 
 #: js/EmailPanel.js:160
 msgid "Standard IMAP"
@@ -526,6 +450,85 @@ msgstr "Heslo k MySQL databázi"
 msgid "MySql Port"
 msgstr "Port MySQL"
 
+#: js/EnvCheckGridPanel.js:92
+msgid "Performing Environment Checks..."
+msgstr "Provádím test prostředí"
+
+#: js/EnvCheckGridPanel.js:133
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "Nenalezeno {0}. Zkuste prosím změnit kritéria filtru, volby zobrazení nebo {1} ve kterém hledáte."
+
+#: js/EnvCheckGridPanel.js:163
+msgid "Check"
+msgstr "Kontrola"
+
+#: js/EnvCheckGridPanel.js:164
+msgid "Result"
+msgstr "Výsledek"
+
+#: js/EnvCheckGridPanel.js:165
+msgid "Error"
+msgstr "Chyba"
+
+#: js/EnvCheckGridPanel.js:183
+msgid "Run setup tests"
+msgstr "Spustit instalační testy"
+
+#: js/EnvCheckGridPanel.js:192
+msgid "Ignore setup tests"
+msgstr "Ignorovat instalační testy"
+
+#: js/Setup.js:55
+msgid "Terms and Conditions"
+msgstr "Podmínky a ujednání"
+
+#: js/Setup.js:60
+msgid "Setup Checks"
+msgstr "Instalační kontroly"
+
+#: js/Setup.js:66
+msgid "Config Manager"
+msgstr "Správce konfigurace"
+
+#: js/Setup.js:72
+msgid "Authentication/Accounts"
+msgstr "Autentikace/Účty"
+
+#: js/Setup.js:78
+msgid "Email"
+msgstr "Email"
+
+#: js/Setup.js:84
+msgid "Application Manager"
+msgstr "Správce aplikací"
+
+#: js/Setup.js:187
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Aplikace"
+msgstr[1] "Aplikace"
+msgstr[2] "Aplikací"
+
+#: js/TermsPanel.js:31
+msgid "I have read the license agreement and accept it"
+msgstr "Přečetl(a) jsem si licenční ujednání a souhlasím"
+
+#: js/TermsPanel.js:38
+msgid "License Agreement"
+msgstr "Licenční ujednání"
+
+#: js/TermsPanel.js:57
+msgid "I have read the privacy agreement and accept it"
+msgstr "Přečetl(a) jsem si ujednání o ochraně soukromí a souhlasím"
+
+#: js/TermsPanel.js:64
+msgid "Privacy Agreement"
+msgstr "Ujednání o ochraně soukromí"
+
+#: js/TermsPanel.js:81
+msgid "Accept Terms and Conditions"
+msgstr "Přijmout podmínky"
+
 #~ msgid "Domain"
 #~ msgstr "Doména"
 
@@ -536,9 +539,7 @@ msgstr "Port MySQL"
 #~ msgstr "Název výchozího účtu"
 
 #~ msgid "Redirect Url (after Logout, redirect to login screen if empty)"
-#~ msgstr ""
-#~ "URL pro přesměrování (ponecháte-li prázdné, bude uživatel po odhlášení "
-#~ "vrácen na přihlašovací obrazovku)"
+#~ msgstr "URL pro přesměrování (ponecháte-li prázdné, bude uživatel po odhlášení vrácen na přihlašovací obrazovku)"
 
 #~ msgid "Invalid configuration"
 #~ msgstr "Neplatná konfigurace"
@@ -549,8 +550,7 @@ msgstr "Port MySQL"
 #~ msgid "Where are the backup tapes"
 #~ msgstr "Kde jsou zálohovací pásky"
 
-#~ msgid ""
-#~ "You need to correct the red marked fields before config could be saved"
+#~ msgid "You need to correct the red marked fields before config could be saved"
 #~ msgstr "Než bude konfigurace uložena, musíte opravit červeně označená pole"
 
 #~ msgid "Transfering Configuration..."

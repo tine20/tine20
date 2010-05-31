@@ -14,18 +14,148 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-Bookmarks: 0,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
+#: Acl/Rights.php:90
+msgid "manage shared task lists"
+msgstr "Edytuj wspólną listę zadań"
+
+#: Acl/Rights.php:91
+msgid "Create new shared tasks lists"
+msgstr "Utwórz nową, wspólną listę zadań"
+
+#: Acl/Rights.php:94
+msgid "manage shared tasks favorites"
+msgstr ""
+
+#: Acl/Rights.php:95
+msgid "Create or update shared tasks favorites"
+msgstr ""
+
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Powiadomienie o zadaniu"
+
 #: Controller.php:97
 #, python-format
 msgid "%s's personal tasks"
 msgstr "%s's zadań własnych"
 
-#: Acl/Rights.php:89
-msgid "manage shared task lists"
-msgstr "Edytuj wspólną listę zadań"
+#: js/GridPanel.js:56
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Czy na pewno chcesz usunąć zaznaczone zadanie?"
+msgstr[1] "Czy na pewno chcesz usunąć zaznaczone zadania?"
+msgstr[2] "Czy na pewno chcesz usunąć zaznaczone zadania?"
 
-#: Acl/Rights.php:90
-msgid "Create new shared tasks lists"
-msgstr "Utwórz nową, wspólną listę zadań"
+#: js/GridPanel.js:91
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
+
+#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
+msgid "Summary"
+msgstr "Streszczenie"
+
+#: js/GridPanel.js:94 js/GridPanel.js:155
+msgid "Due Date"
+msgstr "Data zakończenia"
+
+#: js/GridPanel.js:96 js/GridPanel.js:218
+msgid "Responsible"
+msgstr "Osoba odpowiedzialna"
+
+#: js/GridPanel.js:121
+msgid "Failed"
+msgstr "Próba nieudana"
+
+#: js/GridPanel.js:121
+msgid "Could not save task."
+msgstr "Zapisanie zadania było niemożliwe."
+
+#: js/GridPanel.js:140
+msgid "Tags"
+msgstr "Znaczniki"
+
+#: js/GridPanel.js:141 Model/Task.php:195
+msgid "Lead"
+msgstr "Zapytanie wstępne"
+
+#: js/GridPanel.js:151
+msgid "Add a task..."
+msgstr "Dodaj zadanie..."
+
+#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
+msgid "Priority"
+msgstr "Priorytet"
+
+#: js/GridPanel.js:177 Model/Task.php:188
+msgid "Percent"
+msgstr "W procentach"
+
+#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
+#: Model/Task.php:187
+msgid "Status"
+msgstr "Status"
+
+#: js/GridPanel.js:204
+msgid "Creation Time"
+msgstr "Czas utworzenia"
+
+#: js/GridPanel.js:211 js/TaskEditDialog.js:213
+msgid "Completed"
+msgstr "Zakończone dnia"
+
+#: js/GridPanel.js:267
+msgid "Show closed"
+msgstr "Pokaż zakończone"
+
+#: js/Status.js:187 Setup/setup.xml:339
+msgid "IN-PROCESS"
+msgstr "W OPRACOWANIU"
+
+#: js/TaskEditDialog.js:142
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr ""
+
+#: js/TaskEditDialog.js:186
+msgid "Due date"
+msgstr "Data ukończenia"
+
+#: js/TaskEditDialog.js:192
+msgid "Add Responsible ..."
+msgstr "Dodaj osobę odpowiedzialną..."
+
+#: js/TaskEditDialog.js:199
+msgid "Notes"
+msgstr "Notatki"
+
+#: js/TaskEditDialog.js:200
+msgid "Enter description..."
+msgstr "Wprowadź opis..."
+
+#: js/TaskEditDialog.js:205
+msgid "Percentage"
+msgstr "Procentowo"
+
+#: js/Tasks.js:99
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Zadanie"
+msgstr[1] "zadania"
+msgstr[2] "zadań"
+
+#: js/Tasks.js:99
+msgid "Tasks"
+msgstr "Zadania"
+
+#: js/Tasks.js:103
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "lista zadań"
+msgstr[1] "listy zadań"
+msgstr[2] "listy zadań"
+
+#: js/Tasks.js:103
+msgid "to do lists"
+msgstr "listy zadań"
 
 #: Model/Task.php:183
 msgid "Due"
@@ -39,29 +169,6 @@ msgstr "Notatnik elektroniczny"
 msgid "Description"
 msgstr "Opis"
 
-#: Model/Task.php:186
-#: js/TaskEditDialog.js:168
-#: js/GridPanel.js:161
-msgid "Priority"
-msgstr "Priorytet"
-
-#: Model/Task.php:187
-#: js/TaskEditDialog.js:188
-#: js/GridPanel.js:188
-#: js/Status.js:33
-msgid "Status"
-msgstr "Status"
-
-#: Model/Task.php:188
-#: js/GridPanel.js:175
-msgid "Percent"
-msgstr "W procentach"
-
-#: Model/Task.php:195
-#: js/GridPanel.js:139
-msgid "Lead"
-msgstr "Zapytanie wstępne"
-
 #: Model/Task.php:201
 msgid "Telephone"
 msgstr "Telefon"
@@ -70,112 +177,21 @@ msgstr "Telefon"
 msgid "Email"
 msgstr "E-mail"
 
-#: js/Tasks.js:94
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Zadanie"
-msgstr[1] "zadania"
-msgstr[2] "zadań"
+#: Preference.php:29
+msgid "All my tasks"
+msgstr ""
 
-#: js/Tasks.js:94
-msgid "Tasks"
-msgstr "Zadania"
+#: Preference.php:65
+msgid "Default Favorite"
+msgstr ""
 
-#: js/Tasks.js:98
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "lista zadań"
-msgstr[1] "listy zadań"
-msgstr[2] "listy zadań"
+#: Preference.php:66
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr ""
 
-#: js/Tasks.js:98
-msgid "to do lists"
-msgstr "listy zadań"
-
-#: js/TaskEditDialog.js:160
-#: js/GridPanel.js:92
-#: js/GridPanel.js:142
-msgid "Summary"
-msgstr "Streszczenie"
-
-#: js/TaskEditDialog.js:165
-msgid "Due date"
-msgstr "Data ukończenia"
-
-#: js/TaskEditDialog.js:171
-msgid "Add Responsible ..."
-msgstr "Dodaj osobę odpowiedzialną..."
-
-#: js/TaskEditDialog.js:178
-msgid "Notes"
-msgstr "Notatki"
-
-#: js/TaskEditDialog.js:179
-msgid "Enter description..."
-msgstr "Wprowadź opis..."
-
-#: js/TaskEditDialog.js:184
-msgid "Percentage"
-msgstr "Procentowo"
-
-#: js/TaskEditDialog.js:192
-#: js/GridPanel.js:209
-msgid "Completed"
-msgstr "Zakończone dnia"
-
-#: js/GridPanel.js:56
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Czy na pewno chcesz usunąć zaznaczone zadanie?"
-msgstr[1] "Czy na pewno chcesz usunąć zaznaczone zadania?"
-msgstr[2] "Czy na pewno chcesz usunąć zaznaczone zadania?"
-
-#: js/GridPanel.js:90
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
-
-#: js/GridPanel.js:93
-#: js/GridPanel.js:153
-msgid "Due Date"
-msgstr "Data zakończenia"
-
-#: js/GridPanel.js:95
-#: js/GridPanel.js:216
-msgid "Responsible"
-msgstr "Osoba odpowiedzialna"
-
-#: js/GridPanel.js:119
-msgid "Failed"
-msgstr "Próba nieudana"
-
-#: js/GridPanel.js:119
-msgid "Could not save task."
-msgstr "Zapisanie zadania było niemożliwe."
-
-#: js/GridPanel.js:138
-msgid "Tags"
-msgstr "Znaczniki"
-
-#: js/GridPanel.js:149
-msgid "Add a task..."
-msgstr "Dodaj zadanie..."
-
-#: js/GridPanel.js:202
-msgid "Creation Time"
-msgstr "Czas utworzenia"
-
-#: js/GridPanel.js:265
-msgid "Show closed"
-msgstr "Pokaż zakończone"
-
-#: js/Status.js:187
-#: Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "W OPRACOWANIU"
-
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Powiadomienie o zadaniu"
+#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
+msgid "All tasks of my taskslists"
+msgstr ""
 
 #: Setup/setup.xml:295
 msgid "NEEDS-ACTION"
@@ -191,53 +207,75 @@ msgstr "ODWOŁANE"
 
 #~ msgid "to to list"
 #~ msgstr "Lista zadań"
+
 #~ msgid "Tasks) "
 #~ msgstr "Zadania)"
+
 #~ msgid "Could not delete task(s)."
 #~ msgstr "Usunięcie zadania / zdań było niemożliwe."
+
 #~ msgid "Edit task"
 #~ msgstr "Edytuj zadanie"
+
 #~ msgid "Add task"
 #~ msgstr "Dodaj zadanie"
+
 #~ msgid "Delete task"
 #~ msgid_plural "Delete tasks"
 #~ msgstr[0] "Usuń zadanie"
 #~ msgstr[1] "Usuń zadania"
 #~ msgstr[2] "Usuń zadania"
+
 #~ msgid "Enter searchfilter"
 #~ msgstr "wpisz szukaną frazę"
+
 #~ msgid "Search:"
 #~ msgstr "Znajdź:"
+
 #~ msgid "Displaying tasks {0} - {1} of {2}"
 #~ msgstr "Wyświetlane zadania {0} - {1} z {2}"
+
 #~ msgid "No tasks to display"
 #~ msgstr "Brak zadań"
+
 #~ msgid "No Tasks to display"
 #~ msgstr "Brak zadań"
+
 #~ msgid "Loading Task..."
 #~ msgstr "Ładowanie zadania..."
+
 #~ msgid "Please Wait"
 #~ msgstr "Proszę czekać"
+
 #~ msgid "Add New Task"
 #~ msgstr "Dodaj nowe zadanie"
+
 #~ msgid "Edit Task \"{0}\""
 #~ msgstr "Edytuj zadanie \"{0}\""
+
 #~ msgid "Please wait"
 #~ msgstr "Proszę czekać"
+
 #~ msgid "Saving Task"
 #~ msgstr "Zapisywanie zadania"
+
 #~ msgid "Errors"
 #~ msgstr "Błędy"
+
 #~ msgid "Please fix the errors noted."
 #~ msgstr "Proszę poprawić wskazane błędy."
+
 #~ msgid "Confirm"
 #~ msgstr "Potwierdzenie"
+
 #~ msgid "Do you really want to delete this task?"
 #~ msgstr "Czy na pewno chcesz usunąć to zadanie?"
+
 #~ msgid "Please wait a moment..."
 #~ msgstr "Proszę chwileczkę poczekać …"
+
 #~ msgid "Enter short name..."
 #~ msgstr "wpisz swoją nazwę..."
+
 #~ msgid "Saved in"
 #~ msgstr "Zapisz w"
-

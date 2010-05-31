@@ -505,12 +505,8 @@ msgid "Email Update Interval"
 msgstr "Email Update Interval"
 
 #: Preference.php:102
-msgid ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
-msgstr ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
+msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
+msgstr "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
 
 #: Preference.php:105
 msgid "Use in Addressbook"

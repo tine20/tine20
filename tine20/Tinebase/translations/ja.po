@@ -12,25 +12,21 @@ msgstr ""
 "X-Poedit-Language: Japanese\n"
 "X-Poedit-Country: JAPAN\n"
 
-#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:54
-msgid "Tags"
-msgstr "タグ"
+#: Acl/Rights/Abstract.php:72
+msgid "admin"
+msgstr "管理者"
 
-#: Export/Pdf.php:428
-msgid "Created by"
-msgstr "作成者"
+#: Acl/Rights/Abstract.php:73
+msgid "admin right description"
+msgstr "管理者の正しい記述"
 
-#: Export/Pdf.php:482
-msgid "Activities"
-msgstr "アクティビティ"
+#: Acl/Rights/Abstract.php:76
+msgid "run"
+msgstr "実行"
 
-#: Export/Ods.php:204
-msgid "Filter"
-msgstr ""
-
-#: Export/Ods.php:288
-msgid "Data"
-msgstr ""
+#: Acl/Rights/Abstract.php:77
+msgid "run right description"
+msgstr "正しい記述の実行"
 
 #: Acl/Rights.php:134
 msgid "Report bugs"
@@ -48,280 +44,50 @@ msgstr "バージョンを調べる"
 msgid "Check for new versions of this software."
 msgstr ""
 
-#: Acl/Rights/Abstract.php:65
-msgid "admin"
-msgstr "管理者"
-
-#: Acl/Rights/Abstract.php:66
-msgid "admin right description"
-msgstr "管理者の正しい記述"
-
-#: Acl/Rights/Abstract.php:69
-msgid "run"
-msgstr "実行"
-
-#: Acl/Rights/Abstract.php:70
-msgid "run right description"
-msgstr "正しい記述の実行"
-
-#: js/ux/ConnectionStatus.js:57
-msgid "online"
-msgstr "オンライン"
-
-#: js/ux/ConnectionStatus.js:58
-msgid "offline"
-msgstr "オフライン"
-
-#: js/ux/ConnectionStatus.js:59 User/Abstract.php:247 User/Abstract.php:248
-#: User/Abstract.php:249 User/Abstract.php:250 User/Abstract.php:251
-msgid "unknown"
-msgstr "不明"
-
-#: js/ux/grid/PagingToolbar.js:45
-msgid "{0} selected"
-msgstr "{0} が選択されています"
-
-#: js/ux/grid/PagingToolbar.js:46
-msgid "Unselect all"
-msgstr "全て選択しない"
-
-#: js/ux/grid/PagingToolbar.js:47
-msgid "Select all visible ({0} records)"
-msgstr "表示しているものを全て選択 ({0} 件)"
-
-#: js/ux/grid/PagingToolbar.js:48
-msgid "Select all pages ({0} records)"
-msgstr "全ページ選択 ({0} 件)"
-
-#: js/ux/grid/PagingToolbar.js:49
-msgid "Toggle selection"
-msgstr "トグル選択"
-
-#: js/ux/form/RecordsComboBox.js:27
-msgid "Software Version"
-msgstr "ソフトウェアバージョン"
-
-#: js/ux/form/LayerCombo.js:194 js/MainMenu.js:235 js/ExceptionDialog.js:54
-#: js/widgets/EditRecord.js:136 js/widgets/tags/TagsMassAttachAction.js:86
-#: js/widgets/container/ContainerSelect.js:450
-#: js/widgets/dialog/PreferencesDialog.js:129
-#: js/widgets/dialog/EditDialog.js:183
-#: js/widgets/dialog/MultiOptionsDialog.js:98
-msgid "Cancel"
-msgstr "キャンセル"
-
-#: js/ux/form/LayerCombo.js:199 js/MainMenu.js:241
-#: js/widgets/EditRecord.js:115 js/widgets/tags/TagsMassAttachAction.js:92
-#: js/widgets/container/ContainerSelect.js:459
-#: js/widgets/dialog/PreferencesDialog.js:121
-#: js/widgets/dialog/EditDialog.js:166
-#: js/widgets/dialog/MultiOptionsDialog.js:91
-msgid "Ok"
-msgstr "OK"
-
-#: js/ux/form/ImageField.js:67
-msgid "Loading"
-msgstr "Loading"
-
-#: js/ux/form/ImageField.js:70
-msgid "Click to edit"
+#: Export/Ods.php:204
+msgid "Filter"
 msgstr ""
 
-#: js/ux/form/ImageField.js:112
-msgid "Not An Image"
-msgstr "画像なし"
-
-#: js/ux/form/ImageField.js:112
-msgid "Please select an image file (gif/png/jpeg)"
+#: Export/Ods.php:288
+msgid "Data"
 msgstr ""
 
-#: js/ux/form/ImageField.js:146 js/widgets/grid/FileUploadGrid.js:90
-msgid "Upload Failed"
-msgstr "アップロードに失敗しました。"
+#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:54
+msgid "Tags"
+msgstr "タグ"
 
-#: js/ux/form/ImageField.js:146
-msgid "Could not upload image. Please notify your Administrator"
-msgstr "画像のアップロードに失敗しました。管理者に連絡してください。"
+#: Export/Pdf.php:428
+msgid "Created by"
+msgstr "作成者"
 
-#: js/ux/form/ImageField.js:158
-msgid "Change Image"
-msgstr "イメージの変更"
+#: Export/Pdf.php:482
+msgid "Activities"
+msgstr "アクティビティ"
 
-#: js/ux/form/ImageField.js:169 js/ux/form/ImageField.js:187
-msgid "Crop Image"
-msgstr "Crop Image"
-
-#: js/ux/form/ImageField.js:195
-msgid "Delete Image"
-msgstr "イメージの削除"
-
-#: js/ux/form/ImageField.js:204
-msgid "Show Original Image"
-msgstr ""
-
-#: js/ux/form/ImageField.js:238
-msgid "Image Failed"
-msgstr "Image Failed"
-
-#: js/ux/form/ImageField.js:238
-msgid "Could not load image. Please notify your Administrator"
-msgstr "イメージを読み込めません。管理者に連絡してください。"
-
-#: js/ux/SearchField.js:41
-msgid "enter searchfilter"
-msgstr "サーチフィルタの入力"
-
-#: js/UserRegistration.js:33
-msgid "Registration Wizard"
-msgstr "登録ウィザード"
-
-#: js/UserRegistration.js:86
-msgid "Given name"
-msgstr "名"
-
-#: js/UserRegistration.js:97
-msgid "Family name"
-msgstr "姓"
-
-#: js/UserRegistration.js:108
-msgid "Login name"
-msgstr "ログイン名"
-
-#: js/UserRegistration.js:121
-msgid "Emailaddress"
-msgstr "Emailアドレス"
-
-#: js/UserRegistration.js:167
-msgid "Congratulations!"
-msgstr "おめでとうございます！"
-
-#: js/UserRegistration.js:167
-msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr ""
-"全ての必要情報を入力してください。Finishボタンを押すと登録情報を電子メールで"
-"送付します。"
-
-#: js/ExceptionHandler.js:127 Frontend/Http.php:536
+#: Frontend/Http.php:544 js/ExceptionHandler.js:127
 msgid "Authorisation Required"
 msgstr "要認証"
 
-#: js/ExceptionHandler.js:128
-msgid "Your session timed out. You need to login again."
-msgstr "セッションタイムアウトしました。再ログインしてください。"
+#: Frontend/Http.php:545
+msgid "Your session is not valid. You need to login again."
+msgstr "セッションが正しくありません。もう一度ログインしてください"
 
-#: js/ExceptionHandler.js:145
-msgid "Insufficient Rights"
-msgstr "不十分な権利"
+#: Frontend/Http.php:571 js/ExceptionDialog.js:46
+msgid "Abnormal End"
+msgstr "以上終了"
 
-#: js/ExceptionHandler.js:146
-msgid "Sorry, you are not permitted to perform this action"
-msgstr "この操作をする権限がありません。"
+#: Frontend/Http.php:572 js/ExceptionDialog.js:71
+msgid "An error occurred, the program ended abnormal."
+msgstr "エラーが発生し、プログラムが異常終了しました"
 
-#: js/ExceptionHandler.js:155
+#: js/AppManager.js:182
+msgid "Missing Applications"
+msgstr ""
+
+#: js/AppManager.js:183
 #, fuzzy
-msgid "Not Found"
-msgstr "許可されていません"
-
-#: js/ExceptionHandler.js:156
-msgid ""
-"Sorry, your request could not be completed because the required data could "
-"not be found. In most cases this means that someone already deleted the "
-"data. Please refresh your current view."
-msgstr ""
-
-#: js/ExceptionHandler.js:165
-msgid "Concurrent Updates"
-msgstr "アップデートの発生"
-
-#: js/ExceptionHandler.js:166
-msgid ""
-"Someone else saved this record while you where editing the data. You need to "
-"reload and make your changes again."
-msgstr ""
-"レコード編集中に誰かが同じレコードを編集したようです。画面を再ロードしてもう"
-"一度編集しなおしてください。"
-
-#: js/ExceptionHandler.js:176
-msgid "Service Unavailable"
-msgstr ""
-
-#: js/ExceptionHandler.js:177
-msgid ""
-"The server is currently unable to handle the request due to a temporary "
-"overloading or maintenance of the server. Please try again or contact your "
-"administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:184
-msgid "Connection lost, please check your network!"
-msgstr "コネクションに失敗しました。ネットワーク接続を確認してください。"
-
-#: js/ExceptionHandler.js:190
-msgid "Timeout"
-msgstr ""
-
-#: js/ExceptionHandler.js:191
-msgid ""
-"Sorry, some timeout occured while processing your request. Please reload "
-"your browser, try again or contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:200
-msgid "No Response"
-msgstr ""
-
-#: js/ExceptionHandler.js:201
-msgid ""
-"Sorry, the Server did not respond any data. Please reload your browser, try "
-"again or contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:210
-msgid "No Role Memberships"
-msgstr ""
-
-#: js/ExceptionHandler.js:211
-msgid ""
-"Your user account has no role memberships. Please contact your administrator."
-msgstr ""
-
-#: js/data/Record.js:115
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "タスク"
-
-#: js/data/Record.js:119
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "ＴｏＤｏリスト"
-
-#: js/Container.js:130
-msgid "All {0}"
-msgstr "全ての {0}"
-
-#: js/Container.js:131
-msgid "Shared {0}"
-msgstr "共有 {0}"
-
-#: js/Container.js:132
-msgid "Other Users {0}"
-msgstr "他のユーザの{0}"
-
-#: js/Container.js:133
-msgid "Internal {0}"
-msgstr ""
-
-#: js/Container.js:137
-msgid "My {0}"
-msgstr "マイ {0}"
-
-#: js/tineInit.js:577
-msgid ""
-"Fatal Error: Client self-update failed, please contact your administrator "
-"and/or restart/reload your browser."
-msgstr ""
+msgid "There are no applications enabled for you. Please contact your administrator."
+msgstr "サーバが応答しません。ネットワーク接続を確認し、システム管理者に連絡してください。"
 
 #: js/common.js:150
 msgid "{0} minute"
@@ -338,239 +104,56 @@ msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "営業日"
 
-#: js/MainMenu.js:74
-msgid "User: {0}"
-msgstr "ユーザ: {0}"
+#: js/Container.js:143
+msgid "All {0}"
+msgstr "全ての {0}"
 
-#: js/MainMenu.js:118 js/MainMenu.js:168
-#, fuzzy
-msgid "About {0}"
-msgstr "追加 {0}"
+#: js/Container.js:144
+msgid "Shared {0}"
+msgstr "共有 {0}"
 
-#: js/MainMenu.js:124
-msgid "Install Google Gears"
-msgstr "Google Gearsをインストールする"
+#: js/Container.js:145
+msgid "Other Users {0}"
+msgstr "他のユーザの{0}"
 
-#: js/MainMenu.js:130
-msgid "Debug Console (Ctrl + F11)"
+#: js/Container.js:146
+msgid "Internal {0}"
 msgstr ""
 
-#: js/MainMenu.js:136 js/widgets/dialog/PreferencesPanel.js:37
-msgid "Preferences"
-msgstr "プレファレンス"
+#: js/Container.js:150
+msgid "My {0}"
+msgstr "マイ {0}"
 
-#: js/MainMenu.js:142
-msgid "Change password"
-msgstr "パスワードの変更"
+#: js/data/Record.js:115
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "タスク"
 
-#: js/MainMenu.js:149
-msgid "Logout"
-msgstr "ログアウト"
+#: js/data/Record.js:119
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "ＴｏＤｏリスト"
 
-#: js/MainMenu.js:150
-#, fuzzy
-msgid "Logout from {0}"
-msgstr "Tine2.0からログアウトする"
-
-#: js/MainMenu.js:183
-msgid "About Tine 2.0"
-msgstr ""
-
-#: js/MainMenu.js:199
-msgid "Change Password For \"{0}\""
-msgstr "パスワードを変更しました　\"{0}\""
-
-#: js/MainMenu.js:223
-msgid "Old Password"
-msgstr "古いパスワード"
-
-#: js/MainMenu.js:227
-msgid "New Password"
-msgstr "新しいパスワード"
-
-#: js/MainMenu.js:231
-msgid "Repeat new Password"
-msgstr "もう一度パスワードを入力してください"
-
-#: js/MainMenu.js:250
-msgid "Please Wait!"
-msgstr "お待ちください。"
-
-#: js/MainMenu.js:251
-msgid "changing password..."
-msgstr "パスワードを変更しています..."
-
-#: js/MainMenu.js:262
-msgid "Success"
-msgstr "成功しました"
-
-#: js/MainMenu.js:263
-msgid "Your password has been changed."
-msgstr "パスワードは変更されました"
-
-#: js/MainMenu.js:269 js/MainMenu.js:279
-msgid "Failure"
-msgstr "失敗しました"
-
-#: js/MainMenu.js:280
-msgid "The new passwords mismatch, please correct them."
-msgstr "新しいパスワードが一致しません。正しく入力し直してください。"
-
-#: js/MainMenu.js:298
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-"このコンピュータにGearsをインストールすると、必要なファイルをキャッシュするこ"
-"とによってTine2.0の性能が向上するでしょう。"
-
-#: js/MainMenu.js:319 js/widgets/grid/PersistentFilterPicker.js:166
-#: js/widgets/app/GridPanel.js:911 js/widgets/dialog/EditDialog.js:440
-#: js/widgets/tree/ContextMenu.js:82
-msgid "Confirm"
-msgstr "確認"
-
-#: js/MainMenu.js:319
-msgid "Are you sure you want to logout?"
-msgstr "ログアウトしますか？"
-
-#: js/MainMenu.js:333
-msgid "Logging you out..."
-msgstr "ログアウトしています..."
-
-#: js/MainMenu.js:333 js/LoginPanel.js:282
-msgid "Please wait!"
-msgstr "お待ちください"
-
-#: js/LoginPanel.js:78 js/LoginPanel.js:111
-msgid "Login"
-msgstr "ログイン"
-
-#: js/LoginPanel.js:87 js/widgets/dialog/CredentialsDialog.js:76
-msgid "Username"
-msgstr "ユーザ名"
-
-#: js/LoginPanel.js:98 js/widgets/dialog/CredentialsDialog.js:80
-msgid "Password"
-msgstr "パスワード"
-
-#: js/LoginPanel.js:130
-msgid "Tine 2.0 is made for you"
-msgstr ""
-
-#: js/LoginPanel.js:132
-msgid ""
-"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas "
-"and get help."
-msgstr ""
-
-#: js/LoginPanel.js:138
-msgid "Tine 2.0 Homepage"
-msgstr ""
-
-#: js/LoginPanel.js:139
-msgid "Tine 2.0 Forum"
-msgstr ""
-
-#: js/LoginPanel.js:183
-msgid "about {0} minutes"
-msgstr ""
-
-#: js/LoginPanel.js:188 js/LoginPanel.js:342
-msgid "Tine 2.0 needs your help"
-msgstr ""
-
-#: js/LoginPanel.js:190 js/LoginPanel.js:344
-msgid ""
-"We regularly need your feedback to make the next Tine 2.0 releases fit your "
-"needs even better. Help us and yourself by participating:"
-msgstr ""
-
-#: js/LoginPanel.js:196
-msgid "participate!"
-msgstr ""
-
-#: js/LoginPanel.js:218
-msgid "Languages"
-msgstr ""
-
-#: js/LoginPanel.js:219
-msgid "Duration"
-msgstr ""
-
-#: js/LoginPanel.js:270
-msgid "Logging you in..."
-msgstr "ログインしています..."
-
-#: js/LoginPanel.js:270 js/widgets/grid/PersistentFilterPicker.js:168
-#: js/widgets/grid/PersistentFilterPicker.js:192
-#: js/widgets/container/GrantsDialog.js:173 js/widgets/tree/ContextMenu.js:43
-#: js/widgets/tree/ContextMenu.js:84 js/widgets/tree/ContextMenu.js:140
-msgid "Please wait"
-msgstr "お待ちください"
-
-#: js/LoginPanel.js:282
-#, fuzzy
-msgid "Login successful. Loading {0}..."
-msgstr "ログイン成功.Tine 2.0をロードしています..."
-
-#: js/LoginPanel.js:287
-msgid "Login failure"
-msgstr "ログインに失敗しました"
-
-#: js/LoginPanel.js:288
-msgid "Your username and/or your password are wrong!!!"
-msgstr "ユーザ名またはパスワードが違います"
-
-#: js/LoginPanel.js:312
-msgid "Please enter your login data"
-msgstr "ログイン情報を入力してください。"
-
-#: js/Models.js:74
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-
-#: js/Models.js:74
-msgid "Groups"
-msgstr ""
-
-#: js/Models.js:274
-msgid "Import"
-msgid_plural "Imports"
-msgstr[0] ""
-
-#: js/Models.js:307
-msgid "Credentials"
-msgid_plural "Credentials"
-msgstr[0] ""
-
-#: js/Models.js:334
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] ""
-
-#: js/ExceptionDialog.js:46 Frontend/Http.php:563
-msgid "Abnormal End"
-msgstr "以上終了"
+#: js/ExceptionDialog.js:54 js/MainMenu.js:236 js/ux/form/LayerCombo.js:194
+#: js/widgets/ActivitiesPanel.js:293
+#: js/widgets/container/ContainerSelect.js:450
+#: js/widgets/dialog/EditDialog.js:183
+#: js/widgets/dialog/MultiOptionsDialog.js:98
+#: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
+#: js/widgets/tags/TagsMassAttachAction.js:86
+msgid "Cancel"
+msgstr "キャンセル"
 
 #: js/ExceptionDialog.js:62
 msgid "Send Report"
 msgstr "レポートの送付"
-
-#: js/ExceptionDialog.js:71 Frontend/Http.php:564
-msgid "An error occurred, the program ended abnormal."
-msgstr "エラーが発生し、プログラムが異常終了しました"
 
 #: js/ExceptionDialog.js:72
 msgid "The last action you made was potentially not performed correctly."
 msgstr "あなたの最後の動作は正しく実行されなかった可能性があります"
 
 #: js/ExceptionDialog.js:73
-msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occurred."
+msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
 msgstr ""
 
 #: js/ExceptionDialog.js:79 js/widgets/tags/TagsPanel.js:595
@@ -607,6 +190,419 @@ msgstr "レポートは送信されました。ご協力ありがとうござい
 msgid "Please restart your browser now!"
 msgstr "ログイン情報を入力してください。"
 
+#: js/ExceptionHandler.js:128
+msgid "Your session timed out. You need to login again."
+msgstr "セッションタイムアウトしました。再ログインしてください。"
+
+#: js/ExceptionHandler.js:145
+msgid "Insufficient Rights"
+msgstr "不十分な権利"
+
+#: js/ExceptionHandler.js:146
+msgid "Sorry, you are not permitted to perform this action"
+msgstr "この操作をする権限がありません。"
+
+#: js/ExceptionHandler.js:155
+#, fuzzy
+msgid "Not Found"
+msgstr "許可されていません"
+
+#: js/ExceptionHandler.js:156
+msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
+msgstr ""
+
+#: js/ExceptionHandler.js:165
+msgid "Concurrent Updates"
+msgstr "アップデートの発生"
+
+#: js/ExceptionHandler.js:166
+msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
+msgstr "レコード編集中に誰かが同じレコードを編集したようです。画面を再ロードしてもう一度編集しなおしてください。"
+
+#: js/ExceptionHandler.js:176
+msgid "Service Unavailable"
+msgstr ""
+
+#: js/ExceptionHandler.js:177
+msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:184
+msgid "Connection lost, please check your network!"
+msgstr "コネクションに失敗しました。ネットワーク接続を確認してください。"
+
+#: js/ExceptionHandler.js:190
+msgid "Timeout"
+msgstr ""
+
+#: js/ExceptionHandler.js:191
+msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:200
+msgid "No Response"
+msgstr ""
+
+#: js/ExceptionHandler.js:201
+msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:210
+msgid "No Role Memberships"
+msgstr ""
+
+#: js/ExceptionHandler.js:211
+msgid "Your user account has no role memberships. Please contact your administrator."
+msgstr ""
+
+#: js/LoginPanel.js:78 js/LoginPanel.js:110
+msgid "Login"
+msgstr "ログイン"
+
+#: js/LoginPanel.js:87 js/widgets/dialog/CredentialsDialog.js:68
+msgid "Username"
+msgstr "ユーザ名"
+
+#: js/LoginPanel.js:99 js/widgets/dialog/CredentialsDialog.js:72
+msgid "Password"
+msgstr "パスワード"
+
+#: js/LoginPanel.js:129
+msgid "Tine 2.0 is made for you"
+msgstr ""
+
+#: js/LoginPanel.js:131
+msgid "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
+msgstr ""
+
+#: js/LoginPanel.js:137
+msgid "Tine 2.0 Homepage"
+msgstr ""
+
+#: js/LoginPanel.js:138
+msgid "Tine 2.0 Forum"
+msgstr ""
+
+#: js/LoginPanel.js:184
+msgid "about {0} minutes"
+msgstr ""
+
+#: js/LoginPanel.js:189 js/LoginPanel.js:345
+msgid "Tine 2.0 needs your help"
+msgstr ""
+
+#: js/LoginPanel.js:191 js/LoginPanel.js:347
+msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
+msgstr ""
+
+#: js/LoginPanel.js:197
+msgid "participate!"
+msgstr ""
+
+#: js/LoginPanel.js:219
+msgid "Languages"
+msgstr ""
+
+#: js/LoginPanel.js:220
+msgid "Duration"
+msgstr ""
+
+#: js/LoginPanel.js:271
+msgid "Logging you in..."
+msgstr "ログインしています..."
+
+#: js/LoginPanel.js:271 js/widgets/container/GrantsDialog.js:168
+#: js/widgets/persistentfilter/PickerPanel.js:202
+#: js/widgets/persistentfilter/PickerPanel.js:227
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:84
+#: js/widgets/tree/ContextMenu.js:140
+msgid "Please wait"
+msgstr "お待ちください"
+
+#: js/LoginPanel.js:283
+#, fuzzy
+msgid "Login successful. Loading {0}..."
+msgstr "ログイン成功.Tine 2.0をロードしています..."
+
+#: js/LoginPanel.js:283 js/MainMenu.js:333
+msgid "Please wait!"
+msgstr "お待ちください"
+
+#: js/LoginPanel.js:288
+msgid "Login failure"
+msgstr "ログインに失敗しました"
+
+#: js/LoginPanel.js:289
+msgid "Your username and/or your password are wrong!!!"
+msgstr "ユーザ名またはパスワードが違います"
+
+#: js/LoginPanel.js:300 js/widgets/dialog/CredentialsDialog.js:116
+#: js/widgets/dialog/EditDialog.js:435 js/widgets/dialog/ImportDialog.js:194
+#: js/widgets/dialog/PreferencesDialog.js:284
+msgid "Errors"
+msgstr "エラー"
+
+#: js/LoginPanel.js:300 js/widgets/dialog/CredentialsDialog.js:116
+#: js/widgets/dialog/EditDialog.js:435 js/widgets/dialog/ImportDialog.js:194
+msgid "Please fix the errors noted."
+msgstr "表示されているエラー項目を修正してくだささい。"
+
+#: js/LoginPanel.js:315
+msgid "Please enter your login data"
+msgstr "ログイン情報を入力してください。"
+
+#: js/MainMenu.js:75
+msgid "User: {0}"
+msgstr "ユーザ: {0}"
+
+#: js/MainMenu.js:119 js/MainMenu.js:169
+#, fuzzy
+msgid "About {0}"
+msgstr "追加 {0}"
+
+#: js/MainMenu.js:125
+msgid "Install Google Gears"
+msgstr "Google Gearsをインストールする"
+
+#: js/MainMenu.js:131
+msgid "Debug Console (Ctrl + F11)"
+msgstr ""
+
+#: js/MainMenu.js:137 js/widgets/dialog/PreferencesPanel.js:37
+msgid "Preferences"
+msgstr "プレファレンス"
+
+#: js/MainMenu.js:143
+msgid "Change password"
+msgstr "パスワードの変更"
+
+#: js/MainMenu.js:150
+msgid "Logout"
+msgstr "ログアウト"
+
+#: js/MainMenu.js:151
+#, fuzzy
+msgid "Logout from {0}"
+msgstr "Tine2.0からログアウトする"
+
+#: js/MainMenu.js:184
+msgid "About Tine 2.0"
+msgstr ""
+
+#: js/MainMenu.js:200
+msgid "Change Password For \"{0}\""
+msgstr "パスワードを変更しました　\"{0}\""
+
+#: js/MainMenu.js:224
+msgid "Old Password"
+msgstr "古いパスワード"
+
+#: js/MainMenu.js:228
+msgid "New Password"
+msgstr "新しいパスワード"
+
+#: js/MainMenu.js:232
+msgid "Repeat new Password"
+msgstr "もう一度パスワードを入力してください"
+
+#: js/MainMenu.js:242 js/ux/form/LayerCombo.js:199
+#: js/widgets/ActivitiesPanel.js:301
+#: js/widgets/container/ContainerSelect.js:459
+#: js/widgets/dialog/EditDialog.js:166
+#: js/widgets/dialog/MultiOptionsDialog.js:91
+#: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
+#: js/widgets/tags/TagsMassAttachAction.js:92
+msgid "Ok"
+msgstr "OK"
+
+#: js/MainMenu.js:251
+msgid "Please Wait!"
+msgstr "お待ちください。"
+
+#: js/MainMenu.js:252
+msgid "changing password..."
+msgstr "パスワードを変更しています..."
+
+#: js/MainMenu.js:263
+msgid "Success"
+msgstr "成功しました"
+
+#: js/MainMenu.js:264
+msgid "Your password has been changed."
+msgstr "パスワードは変更されました"
+
+#: js/MainMenu.js:270 js/MainMenu.js:280
+msgid "Failure"
+msgstr "失敗しました"
+
+#: js/MainMenu.js:281
+msgid "The new passwords mismatch, please correct them."
+msgstr "新しいパスワードが一致しません。正しく入力し直してください。"
+
+#: js/MainMenu.js:298
+msgid "Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer."
+msgstr "このコンピュータにGearsをインストールすると、必要なファイルをキャッシュすることによってTine2.0の性能が向上するでしょう。"
+
+#: js/MainMenu.js:319 js/widgets/dialog/EditDialog.js:443
+#: js/widgets/grid/GridPanel.js:932
+#: js/widgets/persistentfilter/PickerPanel.js:200
+#: js/widgets/tree/ContextMenu.js:82
+msgid "Confirm"
+msgstr "確認"
+
+#: js/MainMenu.js:319
+msgid "Are you sure you want to logout?"
+msgstr "ログアウトしますか？"
+
+#: js/MainMenu.js:333
+msgid "Logging you out..."
+msgstr "ログアウトしています..."
+
+#: js/Models.js:72
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+
+#: js/Models.js:72
+msgid "Groups"
+msgstr ""
+
+#: js/Models.js:272
+msgid "Import"
+msgid_plural "Imports"
+msgstr[0] ""
+
+#: js/Models.js:305
+msgid "Credentials"
+msgid_plural "Credentials"
+msgstr[0] ""
+
+#: js/Models.js:332
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] ""
+
+#: js/tineInit.js:578
+msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
+msgstr ""
+
+#: js/UserRegistration.js:33
+msgid "Registration Wizard"
+msgstr "登録ウィザード"
+
+#: js/UserRegistration.js:86
+msgid "Given name"
+msgstr "名"
+
+#: js/UserRegistration.js:97
+msgid "Family name"
+msgstr "姓"
+
+#: js/UserRegistration.js:108
+msgid "Login name"
+msgstr "ログイン名"
+
+#: js/UserRegistration.js:121
+msgid "Emailaddress"
+msgstr "Emailアドレス"
+
+#: js/UserRegistration.js:167
+msgid "Congratulations!"
+msgstr "おめでとうございます！"
+
+#: js/UserRegistration.js:167
+msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
+msgstr "全ての必要情報を入力してください。Finishボタンを押すと登録情報を電子メールで送付します。"
+
+#: js/ux/ConnectionStatus.js:57
+msgid "online"
+msgstr "オンライン"
+
+#: js/ux/ConnectionStatus.js:58
+msgid "offline"
+msgstr "オフライン"
+
+#: js/ux/ConnectionStatus.js:59 User/Abstract.php:266 User/Abstract.php:267
+#: User/Abstract.php:268 User/Abstract.php:269 User/Abstract.php:270
+msgid "unknown"
+msgstr "不明"
+
+#: js/ux/form/ImageField.js:67
+msgid "Loading"
+msgstr "Loading"
+
+#: js/ux/form/ImageField.js:70
+msgid "Click to edit"
+msgstr ""
+
+#: js/ux/form/ImageField.js:112
+msgid "Not An Image"
+msgstr "画像なし"
+
+#: js/ux/form/ImageField.js:112
+msgid "Please select an image file (gif/png/jpeg)"
+msgstr ""
+
+#: js/ux/form/ImageField.js:146 js/widgets/grid/FileUploadGrid.js:86
+msgid "Upload Failed"
+msgstr "アップロードに失敗しました。"
+
+#: js/ux/form/ImageField.js:146
+msgid "Could not upload image. Please notify your Administrator"
+msgstr "画像のアップロードに失敗しました。管理者に連絡してください。"
+
+#: js/ux/form/ImageField.js:158
+msgid "Change Image"
+msgstr "イメージの変更"
+
+#: js/ux/form/ImageField.js:169 js/ux/form/ImageField.js:187
+msgid "Crop Image"
+msgstr "Crop Image"
+
+#: js/ux/form/ImageField.js:194
+msgid "Delete Image"
+msgstr "イメージの削除"
+
+#: js/ux/form/ImageField.js:203
+msgid "Show Original Image"
+msgstr ""
+
+#: js/ux/form/ImageField.js:242
+msgid "Image Failed"
+msgstr "Image Failed"
+
+#: js/ux/form/ImageField.js:242
+msgid "Could not load image. Please notify your Administrator"
+msgstr "イメージを読み込めません。管理者に連絡してください。"
+
+#: js/ux/form/RecordsComboBox.js:27
+msgid "Software Version"
+msgstr "ソフトウェアバージョン"
+
+#: js/ux/grid/PagingToolbar.js:45
+msgid "{0} selected"
+msgstr "{0} が選択されています"
+
+#: js/ux/grid/PagingToolbar.js:46
+msgid "Unselect all"
+msgstr "全て選択しない"
+
+#: js/ux/grid/PagingToolbar.js:47
+msgid "Select all visible ({0} records)"
+msgstr "表示しているものを全て選択 ({0} 件)"
+
+#: js/ux/grid/PagingToolbar.js:48
+msgid "Select all pages ({0} records)"
+msgstr "全ページ選択 ({0} 件)"
+
+#: js/ux/grid/PagingToolbar.js:49
+msgid "Toggle selection"
+msgstr "トグル選択"
+
+#: js/ux/SearchField.js:41
+msgid "enter searchfilter"
+msgstr "サーチフィルタの入力"
+
 #: js/widgets/account/PickerGridPanel.js:146
 #, fuzzy
 msgid "Search User"
@@ -640,18 +636,769 @@ msgstr "検索しています。"
 msgid "Name"
 msgstr "名前"
 
-#: js/widgets/EditRecord.js:126 js/widgets/dialog/EditDialog.js:175
+#: js/widgets/ActivitiesPanel.js:141
+msgid "Add a Note..."
+msgstr "ノートの追加"
+
+#: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:168
+#: js/widgets/container/GrantsDialog.js:93
+msgid "Add"
+msgstr "追加"
+
+#: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:450
+msgid "Note"
+msgstr "ノート"
+
+#: js/widgets/ActivitiesPanel.js:169 js/widgets/ActivitiesPanel.js:376
+msgid "Add new note"
+msgstr "新しいノート"
+
+#: js/widgets/ActivitiesPanel.js:200
+msgid "Notes"
+msgstr "ノート"
+
+#: js/widgets/ActivitiesPanel.js:272
+msgid "Enter new note:"
+msgstr "新しいノートの入力："
+
+#: js/widgets/ActivitiesPanel.js:309 js/widgets/ActivitiesPanel.js:375
+msgid "Add Note"
+msgstr "ノートの追加"
+
+#: js/widgets/ActivitiesPanel.js:362
+msgid "Add a {0} Note"
+msgstr " {0} ノートの追加"
+
+#: js/widgets/ActivitiesPanel.js:448 js/widgets/ActivitiesPanel.js:583
+msgid "Type"
+msgstr "タイプ"
+
+#: js/widgets/ActivitiesPanel.js:451
+msgid "Created By"
+msgstr "作成者"
+
+#: js/widgets/ActivitiesPanel.js:452
+msgid "Timestamp"
+msgstr "時刻"
+
+#: js/widgets/ActivitiesPanel.js:466
+msgid "Displaying history records {0} - {1} of {2}"
+msgstr "履歴の表示 {0} - {1} 件中 {2}"
+
+#: js/widgets/ActivitiesPanel.js:467
+msgid "No history to display"
+msgstr "履歴を表示しない"
+
+#: js/widgets/ActivitiesPanel.js:565
+msgid "History"
+msgstr "履歴"
+
+#: js/widgets/ActivitiesPanel.js:577
+msgid "Quick search"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:578 js/widgets/ActivitiesPanel.js:579
+msgid "Time"
+msgstr "時間"
+
+#: js/widgets/ActivitiesPanel.js:581
+msgid "User"
+msgstr "ユーザ"
+
+#: js/widgets/container/ContainerSelect.js:107
+msgid "choose other {0}..."
+msgstr "他を選択 {0}..."
+
+#: js/widgets/container/ContainerSelect.js:110
+msgid "Select a {0}"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:130
+msgid "Recently used {0}:"
+msgstr "最近利用した　{0}:"
+
+#: js/widgets/container/ContainerSelect.js:447
+msgid "please select a {0}"
+msgstr " {0}　を選択してください"
+
+#: js/widgets/container/ContainerTree.js:124
+msgid "container"
+msgid_plural "containers"
+msgstr[0] ""
+
+#: js/widgets/container/ContainerTree.js:412
+msgid "You are not allowed to select the {0} '{1}':"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:413
+msgid "{0} grant is required for desired action"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:414
+msgid "Insufficient Grants"
+msgstr ""
+
+#: js/widgets/container/FilterModel.js:130
+msgid "is personal of"
+msgstr ""
+
+#: js/widgets/container/FilterModel.js:130
+#: js/widgets/container/FilterModel.js:134 js/widgets/grid/FilterModel.js:152
+msgid "is equal to"
+msgstr "と等しい"
+
+#: js/widgets/container/FilterModel.js:238
+msgid "Selected  {0}"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:53
+msgid "Folder"
+msgstr "フォルダー"
+
+#: js/widgets/container/GrantsDialog.js:87
+msgid "Read"
+msgstr "読込"
+
+#: js/widgets/container/GrantsDialog.js:88
+msgid "The grant to read records of this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:94
+msgid "The grant to add records to this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:99
+msgid "Edit"
+msgstr "編集"
+
+#: js/widgets/container/GrantsDialog.js:100
+msgid "The grant to edit records in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:105
+msgid "Delete"
+msgstr "削除"
+
+#: js/widgets/container/GrantsDialog.js:106
+msgid "The grant to delete records in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:111
+msgid "Export"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:112
+msgid "The grant to export records from this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:117
+msgid "Sync"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:118
+msgid "The grant to synchronise records with this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:129
+msgid "Free Busy"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:130
+msgid "The grant to access free busy information of events in this calendar"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:137
+msgid "Private"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:138
+msgid "The grant to access records marked as private in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:145
+msgid "Admin"
+msgstr "管理者"
+
+#: js/widgets/container/GrantsDialog.js:146
+msgid "The grant to administrate this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:168
+msgid "Updating Grants"
+msgstr "Grantsのアップデート"
+
+#: js/widgets/container/GrantsDialog.js:198
+msgid "Error"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:199
+msgid "You are not allowed to remove all admins for this container!"
+msgstr ""
+
+#: js/widgets/customfields/CustomfieldsPanel.js:64
+msgid "Custom Fields"
+msgstr "カスタムフィールド"
+
+#: js/widgets/customfields/CustomfieldsPanel.js:71
+#: js/widgets/customfields/CustomfieldsPanel.js:86
+#, fuzzy
+msgid "General"
+msgstr "普通"
+
+#: js/widgets/customfields/CustomfieldsPanel.js:108
+msgid "There are no custom fields yet"
+msgstr "カスタムフィールドがありません"
+
+#: js/widgets/dialog/AlarmPanel.js:29
+msgid "Alarms"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:38
+msgid "Custom Datetime"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:48
+msgid "Send Alarm"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:58
+#, fuzzy
+msgid "None"
+msgstr "ノート"
+
+#: js/widgets/dialog/AlarmPanel.js:59
+#, fuzzy
+msgid "0 minutes before"
+msgstr "の前"
+
+#: js/widgets/dialog/AlarmPanel.js:60
+#, fuzzy
+msgid "15 minutes before"
+msgstr "の前"
+
+#: js/widgets/dialog/AlarmPanel.js:61
+#, fuzzy
+msgid "30 minutes before"
+msgstr "の前"
+
+#: js/widgets/dialog/AlarmPanel.js:62
+#, fuzzy
+msgid "1 hour before"
+msgstr "の前"
+
+#: js/widgets/dialog/AlarmPanel.js:63
+#, fuzzy
+msgid "2 hours before"
+msgstr "の前"
+
+#: js/widgets/dialog/AlarmPanel.js:64
+#, fuzzy
+msgid "1 day before"
+msgstr "の前"
+
+#: js/widgets/dialog/AlarmPanel.js:65
+msgid "Custom datetime"
+msgstr ""
+
+#: js/widgets/dialog/EditDialog.js:175 js/widgets/EditRecord.js:126
 msgid "Apply"
 msgstr "適用"
 
-#: js/widgets/EditRecord.js:146 js/widgets/dialog/EditDialog.js:192
+#: js/widgets/dialog/EditDialog.js:192 js/widgets/EditRecord.js:146
 msgid "delete"
 msgstr "削除"
 
-#: js/widgets/EditRecord.js:185 js/widgets/dialog/EditDialog.js:232
-#: js/widgets/dialog/EditDialog.js:245
+#: js/widgets/dialog/EditDialog.js:232 js/widgets/dialog/EditDialog.js:245
+#: js/widgets/EditRecord.js:185
 msgid "Saved in"
 msgstr "保存する"
+
+#: js/widgets/dialog/EditDialog.js:291
+msgid "Add New {0}"
+msgstr "新しい {0}　を追加する"
+
+#: js/widgets/dialog/EditDialog.js:293
+msgid "Edit {0} \"{1}\""
+msgstr "編集　{0} \"{1}\""
+
+#: js/widgets/dialog/EditDialog.js:334
+msgid "Transfering {0}..."
+msgstr "移行しています　{0}..."
+
+#: js/widgets/dialog/EditDialog.js:443
+msgid "Do you really want to delete this {0}?"
+msgstr "本当に削除しますか？ {0}?"
+
+#: js/widgets/dialog/EditDialog.js:445 js/widgets/grid/GridPanel.js:952
+msgid "Deleting {0}"
+msgstr "{0}　を削除しています"
+
+#: js/widgets/dialog/EditDialog.js:455 js/widgets/grid/GridPanel.js:973
+#: js/widgets/tags/TagsPanel.js:287 js/widgets/tags/TagsPanel.js:397
+#: js/widgets/tags/TagsPanel.js:430
+msgid "Failed"
+msgstr "失敗"
+
+#: js/widgets/dialog/EditDialog.js:455 js/widgets/grid/GridPanel.js:973
+msgid "Could not delete {0}."
+msgstr " {0}を削除できません"
+
+#: js/widgets/dialog/ImportDialog.js:77
+msgid "Files"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:97
+msgid "Import definition"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:109
+msgid "Import into {0}"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:120
+msgid "Dry run"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:137
+msgid "No files added"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:137
+msgid "You need to add files to import."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:167
+msgid "Dry run results"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:168
+msgid "Import test successful for {0} records, import test failed for {1} records."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:172
+msgid "Import results"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:173
+msgid "Import successful for {0} records / import failed for {1} records / {2} duplicates found"
+msgstr ""
+
+#: js/widgets/dialog/LinkPanel.js:48
+#, fuzzy
+msgid "Links"
+msgstr "ログイン"
+
+#: js/widgets/dialog/MultiOptionsDialog.js:23
+#: js/widgets/dialog/MultiOptionsDialog.js:70
+msgid "What would you like to do?"
+msgstr ""
+
+#: js/widgets/dialog/MultiOptionsDialog.js:27
+#: js/widgets/dialog/MultiOptionsDialog.js:129
+msgid "You need to select an option!"
+msgstr ""
+
+#: js/widgets/dialog/PreferencesDialog.js:137
+msgid "Admin Mode"
+msgstr ""
+
+#: js/widgets/dialog/PreferencesDialog.js:173
+msgid "Applications"
+msgstr ""
+
+#: js/widgets/dialog/PreferencesDialog.js:200
+msgid "Edit Preferences"
+msgstr ""
+
+#: js/widgets/dialog/PreferencesDialog.js:201
+msgid "Loading ..."
+msgstr ""
+
+#: js/widgets/dialog/PreferencesDialog.js:284
+msgid "Saving of preferences failed."
+msgstr ""
+
+#: js/widgets/dialog/PreferencesPanel.js:151
+msgid "There are no preferences for this application."
+msgstr ""
+
+#: js/widgets/dialog/PreferencesTreePanel.js:60
+msgid "General Preferences"
+msgstr ""
+
+#: js/widgets/form/ConfigPanel.js:108
+msgid "Invalid configuration"
+msgstr ""
+
+#: js/widgets/form/ConfigPanel.js:108
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr ""
+
+#: js/widgets/form/ConfigPanel.js:133
+#, fuzzy
+msgid "Transfering Configuration..."
+msgstr "移行しています　{0}..."
+
+#: js/widgets/form/ConfigPanel.js:229
+#, fuzzy
+msgid "Save config"
+msgstr "保存する"
+
+#: js/widgets/form/ConfigPanel.js:239
+msgid "Reload config"
+msgstr ""
+
+#: js/widgets/form/RecordPickerComboBox.js:59 js/widgets/tags/TagsPanel.js:465
+msgid "Searching..."
+msgstr "検索しています。"
+
+#: js/widgets/grid/FileUploadGrid.js:87
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:111
+msgid "Add file"
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:122
+msgid "Remove file"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:151
+msgid "contains"
+msgstr "contains"
+
+#: js/widgets/grid/FilterModel.js:153
+msgid "is greater than"
+msgstr "より大きい"
+
+#: js/widgets/grid/FilterModel.js:154
+msgid "is less than"
+msgstr "より少ない"
+
+#: js/widgets/grid/FilterModel.js:155
+msgid "is not"
+msgstr "ではない"
+
+#: js/widgets/grid/FilterModel.js:156
+#, fuzzy
+msgid "one of"
+msgstr "ノート"
+
+#: js/widgets/grid/FilterModel.js:157
+msgid "none of"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:158
+msgid "is before"
+msgstr "の前"
+
+#: js/widgets/grid/FilterModel.js:159
+msgid "is after"
+msgstr "の後"
+
+#: js/widgets/grid/FilterModel.js:160
+msgid "is within"
+msgstr "の中に"
+
+#: js/widgets/grid/FilterModel.js:161
+#, fuzzy
+msgid "is in week no."
+msgstr "今週"
+
+#: js/widgets/grid/FilterModel.js:162
+msgid "starts with"
+msgstr "から始まる"
+
+#: js/widgets/grid/FilterModel.js:163
+msgid "ends with"
+msgstr "で終る"
+
+#: js/widgets/grid/FilterModel.js:204
+msgid "select a operator"
+msgstr "オペレータの選択"
+
+#: js/widgets/grid/FilterModel.js:315
+#, fuzzy
+msgid "Search Account ..."
+msgstr "検索しています。"
+
+#: js/widgets/grid/FilterModel.js:437
+msgid "today"
+msgstr "今日"
+
+#: js/widgets/grid/FilterModel.js:438
+msgid "yesterday"
+msgstr "昨日"
+
+#: js/widgets/grid/FilterModel.js:439
+msgid "this week"
+msgstr "今週"
+
+#: js/widgets/grid/FilterModel.js:440
+msgid "last week"
+msgstr "先週"
+
+#: js/widgets/grid/FilterModel.js:441
+msgid "the week before last"
+msgstr "先々週"
+
+#: js/widgets/grid/FilterModel.js:442
+msgid "this month"
+msgstr "今月"
+
+#: js/widgets/grid/FilterModel.js:443
+msgid "last month"
+msgstr "先月"
+
+#: js/widgets/grid/FilterModel.js:444
+msgid "this quarter"
+msgstr "今四半期"
+
+#: js/widgets/grid/FilterModel.js:445
+msgid "last quarter"
+msgstr "前四半期"
+
+#: js/widgets/grid/FilterModel.js:446
+msgid "this year"
+msgstr "今年"
+
+#: js/widgets/grid/FilterModel.js:447
+msgid "last year"
+msgstr "去年"
+
+#: js/widgets/grid/FilterModel.js:451
+msgid "tomorrow"
+msgstr "明日"
+
+#: js/widgets/grid/FilterModel.js:452
+msgid "next week"
+msgstr "来週"
+
+#: js/widgets/grid/FilterModel.js:453
+msgid "next month"
+msgstr "今月"
+
+#: js/widgets/grid/FilterModel.js:454
+msgid "next quarter"
+msgstr "来四半期"
+
+#: js/widgets/grid/FilterModel.js:455
+msgid "next year"
+msgstr "来年"
+
+#: js/widgets/grid/FilterToolbar.js:126
+msgid "add new filter"
+msgstr "新しいフィルタの追加"
+
+#: js/widgets/grid/FilterToolbar.js:132
+msgid "reset all filters"
+msgstr "全てのフィルタのリセット"
+
+#: js/widgets/grid/FilterToolbar.js:138
+msgid "start search"
+msgstr "検索の開始"
+
+#: js/widgets/grid/FilterToolbar.js:146
+msgid "save as favorite"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:235
+msgid "select a field"
+msgstr "フィールドの選択"
+
+#: js/widgets/grid/FilterToolbar.js:260
+msgid "Delete this filter"
+msgstr "フィルターの削除"
+
+#: js/widgets/grid/FilterToolbar.js:291
+msgid "and"
+msgstr "かつ"
+
+#: js/widgets/grid/FilterToolbar.js:310
+msgid "Show"
+msgstr "見る"
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
+msgid "show details"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:183
+msgid "Always show advanced filters"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:362
+msgid "Your view is limited by {0} criteria:"
+msgid_plural "Your view is limited by {0} criterias:"
+msgstr[0] ""
+
+#: js/widgets/grid/GridPanel.js:186
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr " {0} が見つかりません。フィルターの変更、表示オプションの変更か {1} 再検索をしてください"
+
+#: js/widgets/grid/GridPanel.js:275
+msgid "Edit {0}"
+msgstr "編集 {0}"
+
+#: js/widgets/grid/GridPanel.js:286
+msgid "Copy {0}"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:297 js/widgets/tree/ContextMenu.js:214
+msgid "Add {0}"
+msgstr "追加 {0}"
+
+#: js/widgets/grid/GridPanel.js:307 js/widgets/grid/GridPanel.js:308
+#: js/widgets/grid/GridPanel.js:310
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] "削除"
+
+#: js/widgets/grid/GridPanel.js:404
+msgid "Displaying records {0} - {1} of {2}"
+msgstr "レコードの表示{0} - {1}　件中 {2}"
+
+#: js/widgets/grid/GridPanel.js:405
+msgid "No {0} to display"
+msgstr "表示する {0} がありません"
+
+#: js/widgets/grid/GridPanel.js:602
+#, fuzzy
+msgid "Tagging"
+msgstr "タグ"
+
+#: js/widgets/grid/GridPanel.js:912
+msgid "Not Allowed"
+msgstr "許可されていません"
+
+#: js/widgets/grid/GridPanel.js:913
+msgid "You are not allowed to delete all pages at once"
+msgstr "全てのページを一度に削除する権限がありません。"
+
+#: js/widgets/grid/GridPanel.js:931
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
+msgstr[0] "選択したレコードを本当に削除しますか？"
+
+#: js/widgets/grid/GridPanel.js:954
+msgid " ... This may take a long time!"
+msgstr ""
+
+#: js/widgets/grid/PickerGridPanel.js:117
+msgid "Remove record"
+msgstr ""
+
+#: js/widgets/grid/PickerGridPanel.js:185
+msgid "Search for records ..."
+msgstr ""
+
+#: js/widgets/grid/QuickaddGridPanel.js:99
+msgid "Remove"
+msgstr ""
+
+#: js/widgets/LangChooser.js:31 Preference.php:99
+msgid "Language"
+msgstr "言語"
+
+#: js/widgets/LangChooser.js:64
+msgid "setting new language..."
+msgstr "新しい言語を設定しています..."
+
+#: js/widgets/LangChooser.js:64 js/widgets/persistentfilter/PickerPanel.js:264
+#: js/widgets/TimezoneChooser.js:74
+msgid "Please Wait"
+msgstr "お待ちください"
+
+#: js/widgets/mainscreen/WestPanel.js:193
+msgid "containers"
+msgstr ""
+
+#: js/widgets/mainscreen/WestPanel.js:220
+msgid "Favorites"
+msgstr ""
+
+#: js/widgets/mainscreen/WestPanel.js:228
+msgid "Save current view as favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/Model.js:40
+msgid "Favorite"
+msgid_plural "Favorites"
+msgstr[0] ""
+
+#: js/widgets/persistentfilter/Model.js:40
+msgid "Events"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:59
+msgid "My favorites"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:180
+msgid "Delete Favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:185
+msgid "Rename Favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:200
+msgid "Do you really want to delete the favorite \"{0}\"?"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:202
+msgid "Deleting Favorite \"{0}\""
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:225
+msgid "New Name"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:225
+msgid "Please enter the new name for favorite \"{0}\"?"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:227
+msgid "Renaming Favorite \"{0}\""
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:250
+msgid "Could not save Favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:250
+msgid "Your current view does not support favorites"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:255
+msgid "save filter"
+msgstr "フィルタの保存"
+
+#: js/widgets/persistentfilter/PickerPanel.js:255
+msgid "Please enter a name for the favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:258
+#: js/widgets/persistentfilter/PickerPanel.js:261
+#: js/widgets/persistentfilter/PickerPanel.js:270
+msgid "Favorite not Saved"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:258
+msgid "You have to supply a name for the favorite!"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:261
+msgid "You have to supply a shorter name! Names of favorite can only be up to 40 characters long."
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:264
+msgid "Saving favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:270
+msgid "Overwriteing system favorites is not yet supported"
+msgstr ""
 
 #: js/widgets/Priority.js:23
 msgid "low"
@@ -669,263 +1416,9 @@ msgstr "高"
 msgid "urgent"
 msgstr "緊急"
 
-#: js/widgets/grid/FilterToolbar.js:127
-msgid "add new filter"
-msgstr "新しいフィルタの追加"
-
-#: js/widgets/grid/FilterToolbar.js:133
-msgid "reset all filters"
-msgstr "全てのフィルタのリセット"
-
-#: js/widgets/grid/FilterToolbar.js:139
-msgid "start search"
-msgstr "検索の開始"
-
-#: js/widgets/grid/FilterToolbar.js:147 js/widgets/grid/FilterToolbar.js:690
-msgid "save filter"
-msgstr "フィルタの保存"
-
-#: js/widgets/grid/FilterToolbar.js:230
-msgid "select a field"
-msgstr "フィールドの選択"
-
-#: js/widgets/grid/FilterToolbar.js:255
-msgid "Delete this filter"
-msgstr "フィルターの削除"
-
-#: js/widgets/grid/FilterToolbar.js:286
-msgid "and"
-msgstr "かつ"
-
-#: js/widgets/grid/FilterToolbar.js:305
-msgid "Show"
-msgstr "見る"
-
-#: js/widgets/grid/FilterToolbar.js:690
-msgid "Please enter a name for the filter"
-msgstr "フィルター名を入力してください"
-
-#: js/widgets/grid/FilterToolbar.js:693 js/widgets/grid/FilterToolbar.js:696
-msgid "Filter not Saved"
-msgstr "フィルターは保存されませんでした"
-
-#: js/widgets/grid/FilterToolbar.js:693
-msgid "You have to supply a name for the filter!"
-msgstr "フィルターに名前を付けてください"
-
-#: js/widgets/grid/FilterToolbar.js:696
-msgid ""
-"You have to supply a shorter name! Names of saved filters can only be up to "
-"40 characters long."
-msgstr ""
-
-#: js/widgets/grid/FilterToolbar.js:699 js/widgets/TimezoneChooser.js:74
-#: js/widgets/LangChooser.js:64
-msgid "Please Wait"
-msgstr "お待ちください"
-
-#: js/widgets/grid/FilterToolbar.js:699
-msgid "Saving filter"
-msgstr "フィルタの保存"
-
-#: js/widgets/grid/FilterModel.js:152
-msgid "contains"
-msgstr "contains"
-
-#: js/widgets/grid/FilterModel.js:153 js/widgets/container/FilterModel.js:130
-#: js/widgets/container/FilterModel.js:134
-msgid "is equal to"
-msgstr "と等しい"
-
-#: js/widgets/grid/FilterModel.js:154
-msgid "is greater than"
-msgstr "より大きい"
-
-#: js/widgets/grid/FilterModel.js:155
-msgid "is less than"
-msgstr "より少ない"
-
-#: js/widgets/grid/FilterModel.js:156
-msgid "is not"
-msgstr "ではない"
-
-#: js/widgets/grid/FilterModel.js:157
-#, fuzzy
-msgid "one of"
-msgstr "ノート"
-
-#: js/widgets/grid/FilterModel.js:158
-msgid "none of"
-msgstr ""
-
-#: js/widgets/grid/FilterModel.js:159
-msgid "is before"
-msgstr "の前"
-
-#: js/widgets/grid/FilterModel.js:160
-msgid "is after"
-msgstr "の後"
-
-#: js/widgets/grid/FilterModel.js:161
-msgid "is within"
-msgstr "の中に"
-
-#: js/widgets/grid/FilterModel.js:162
-#, fuzzy
-msgid "is in week no."
-msgstr "今週"
-
-#: js/widgets/grid/FilterModel.js:163
-msgid "starts with"
-msgstr "から始まる"
-
-#: js/widgets/grid/FilterModel.js:164
-msgid "ends with"
-msgstr "で終る"
-
-#: js/widgets/grid/FilterModel.js:205
-msgid "select a operator"
-msgstr "オペレータの選択"
-
-#: js/widgets/grid/FilterModel.js:316
-#, fuzzy
-msgid "Search Account ..."
-msgstr "検索しています。"
-
-#: js/widgets/grid/FilterModel.js:438
-msgid "today"
-msgstr "今日"
-
-#: js/widgets/grid/FilterModel.js:439
-msgid "yesterday"
-msgstr "昨日"
-
-#: js/widgets/grid/FilterModel.js:440
-msgid "this week"
-msgstr "今週"
-
-#: js/widgets/grid/FilterModel.js:441
-msgid "last week"
-msgstr "先週"
-
-#: js/widgets/grid/FilterModel.js:442
-msgid "the week before last"
-msgstr "先々週"
-
-#: js/widgets/grid/FilterModel.js:443
-msgid "this month"
-msgstr "今月"
-
-#: js/widgets/grid/FilterModel.js:444
-msgid "last month"
-msgstr "先月"
-
-#: js/widgets/grid/FilterModel.js:445
-msgid "this quarter"
-msgstr "今四半期"
-
-#: js/widgets/grid/FilterModel.js:446
-msgid "last quarter"
-msgstr "前四半期"
-
-#: js/widgets/grid/FilterModel.js:447
-msgid "this year"
-msgstr "今年"
-
-#: js/widgets/grid/FilterModel.js:448
-msgid "last year"
-msgstr "去年"
-
-#: js/widgets/grid/FilterModel.js:452
-msgid "tomorrow"
-msgstr "明日"
-
-#: js/widgets/grid/FilterModel.js:453
-msgid "next week"
-msgstr "来週"
-
-#: js/widgets/grid/FilterModel.js:454
-msgid "next month"
-msgstr "今月"
-
-#: js/widgets/grid/FilterModel.js:455
-msgid "next quarter"
-msgstr "来四半期"
-
-#: js/widgets/grid/FilterModel.js:456
-msgid "next year"
-msgstr "来年"
-
-#: js/widgets/grid/FileUploadGrid.js:91
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:115
-msgid "Add file"
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:126
-msgid "Remove file"
-msgstr ""
-
-#: js/widgets/grid/PersistentFilterPicker.js:93
-msgid "My saved filters"
-msgstr "マイフィルター"
-
-#: js/widgets/grid/PersistentFilterPicker.js:162
-msgid "Delete Filter"
-msgstr "フィルタの削除"
-
-#: js/widgets/grid/PersistentFilterPicker.js:166
-msgid "Do you really want to delete the Filter \"{0}\"?"
-msgstr "本当にフィルターを削除しますか \"{0}\"?"
-
-#: js/widgets/grid/PersistentFilterPicker.js:168
-msgid "Deleting Filter \"{0}\""
-msgstr "フィルターを削除しています \"{0}\""
-
-#: js/widgets/grid/PersistentFilterPicker.js:186
-msgid "Rename Filter"
-msgstr ""
-
-#: js/widgets/grid/PersistentFilterPicker.js:190
-msgid "New Name"
-msgstr ""
-
-#: js/widgets/grid/PersistentFilterPicker.js:190
-msgid "Please enter the new name for filter \"{0}\"?"
-msgstr ""
-
-#: js/widgets/grid/PersistentFilterPicker.js:192
-msgid "Renaming Filter \"{0}\""
-msgstr ""
-
-#: js/widgets/grid/QuickaddGridPanel.js:101
-msgid "Remove"
-msgstr ""
-
-#: js/widgets/grid/PickerGridPanel.js:121
-msgid "Remove record"
-msgstr ""
-
-#: js/widgets/grid/PickerGridPanel.js:189
-msgid "Search for records ..."
-msgstr ""
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:175
-msgid "show details"
-msgstr ""
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:176
-msgid "Always show advanced filters"
-msgstr ""
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:335
-msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] ""
+#: js/widgets/tags/TagCombo.js:44
+msgid "tag name"
+msgstr "タグ名"
 
 #: js/widgets/tags/TagFilter.js:29
 msgid "Tag"
@@ -1027,12 +1520,6 @@ msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "タグの削除"
 
-#: js/widgets/tags/TagsPanel.js:287 js/widgets/tags/TagsPanel.js:397
-#: js/widgets/tags/TagsPanel.js:430 js/widgets/app/GridPanel.js:952
-#: js/widgets/dialog/EditDialog.js:452
-msgid "Failed"
-msgstr "失敗"
-
 #: js/widgets/tags/TagsPanel.js:287
 msgid "Could not delete Tag(s)."
 msgstr "タグを削除できませんでした"
@@ -1057,301 +1544,9 @@ msgstr "タグを更新できません"
 msgid "Enter tag name"
 msgstr "タグ名を入力してください"
 
-#: js/widgets/tags/TagsPanel.js:465 js/widgets/form/RecordPickerComboBox.js:59
-msgid "Searching..."
-msgstr "検索しています。"
-
 #: js/widgets/tags/TagsPanel.js:599
 msgid "Color"
 msgstr "Color"
-
-#: js/widgets/tags/TagCombo.js:44
-msgid "tag name"
-msgstr "タグ名"
-
-#: js/widgets/container/FilterModel.js:130
-msgid "is personal of"
-msgstr ""
-
-#: js/widgets/container/FilterModel.js:238
-msgid "Selected  {0}"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:53
-msgid "Folder"
-msgstr "フォルダー"
-
-#: js/widgets/container/GrantsDialog.js:92
-msgid "Read"
-msgstr "読込"
-
-#: js/widgets/container/GrantsDialog.js:93
-msgid "The grant to read records of this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:98 js/widgets/ActivitiesPanel.js:156
-#: js/widgets/ActivitiesPanel.js:168
-msgid "Add"
-msgstr "追加"
-
-#: js/widgets/container/GrantsDialog.js:99
-msgid "The grant to add records to this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:104
-msgid "Edit"
-msgstr "編集"
-
-#: js/widgets/container/GrantsDialog.js:105
-msgid "The grant to edit records in this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:110
-msgid "Delete"
-msgstr "削除"
-
-#: js/widgets/container/GrantsDialog.js:111
-msgid "The grant to delete records in this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:116
-msgid "Export"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:117
-msgid "The grant to export records from this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:122
-msgid "Sync"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:123
-msgid "The grant to synchronise records with this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:134
-msgid "Free Busy"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:135
-msgid "The grant to access free busy information of events in this calendar"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:142
-msgid "Private"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:143
-msgid "The grant to access records marked as private in this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:150
-msgid "Admin"
-msgstr "管理者"
-
-#: js/widgets/container/GrantsDialog.js:151
-msgid "The grant to administrate this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:173
-msgid "Updating Grants"
-msgstr "Grantsのアップデート"
-
-#: js/widgets/container/GrantsDialog.js:203
-msgid "Error"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:204
-msgid "You are not allowed to remove all admins for this container!"
-msgstr ""
-
-#: js/widgets/container/ContainerSelect.js:107
-msgid "choose other {0}..."
-msgstr "他を選択 {0}..."
-
-#: js/widgets/container/ContainerSelect.js:110
-msgid "Select a {0}"
-msgstr ""
-
-#: js/widgets/container/ContainerSelect.js:130
-msgid "Recently used {0}:"
-msgstr "最近利用した　{0}:"
-
-#: js/widgets/container/ContainerSelect.js:447
-msgid "please select a {0}"
-msgstr " {0}　を選択してください"
-
-#: js/widgets/container/ContainerTree.js:124
-msgid "container"
-msgid_plural "containers"
-msgstr[0] ""
-
-#: js/widgets/container/ContainerTree.js:400
-msgid "You are not allowed to select the {0} '{1}':"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:401
-msgid "{0} grant is required for desired action"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:402
-msgid "Insufficient Grants"
-msgstr ""
-
-#: js/widgets/ActivitiesPanel.js:141
-msgid "Add a Note..."
-msgstr "ノートの追加"
-
-#: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:396
-msgid "Note"
-msgstr "ノート"
-
-#: js/widgets/ActivitiesPanel.js:169 js/widgets/ActivitiesPanel.js:322
-msgid "Add new note"
-msgstr "新しいノート"
-
-#: js/widgets/ActivitiesPanel.js:200
-msgid "Notes"
-msgstr "ノート"
-
-#: js/widgets/ActivitiesPanel.js:264 js/widgets/ActivitiesPanel.js:321
-msgid "Add Note"
-msgstr "ノートの追加"
-
-#: js/widgets/ActivitiesPanel.js:265
-msgid "Enter new note:"
-msgstr "新しいノートの入力："
-
-#: js/widgets/ActivitiesPanel.js:308
-msgid "Add a {0} Note"
-msgstr " {0} ノートの追加"
-
-#: js/widgets/ActivitiesPanel.js:394 js/widgets/ActivitiesPanel.js:529
-msgid "Type"
-msgstr "タイプ"
-
-#: js/widgets/ActivitiesPanel.js:397
-msgid "Created By"
-msgstr "作成者"
-
-#: js/widgets/ActivitiesPanel.js:398
-msgid "Timestamp"
-msgstr "時刻"
-
-#: js/widgets/ActivitiesPanel.js:412
-msgid "Displaying history records {0} - {1} of {2}"
-msgstr "履歴の表示 {0} - {1} 件中 {2}"
-
-#: js/widgets/ActivitiesPanel.js:413
-msgid "No history to display"
-msgstr "履歴を表示しない"
-
-#: js/widgets/ActivitiesPanel.js:511
-msgid "History"
-msgstr "履歴"
-
-#: js/widgets/ActivitiesPanel.js:523
-msgid "Quick search"
-msgstr ""
-
-#: js/widgets/ActivitiesPanel.js:524 js/widgets/ActivitiesPanel.js:525
-msgid "Time"
-msgstr "時間"
-
-#: js/widgets/ActivitiesPanel.js:527
-msgid "User"
-msgstr "ユーザ"
-
-#: js/widgets/form/ConfigPanel.js:108
-msgid "Invalid configuration"
-msgstr ""
-
-#: js/widgets/form/ConfigPanel.js:108
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr ""
-
-#: js/widgets/form/ConfigPanel.js:133
-#, fuzzy
-msgid "Transfering Configuration..."
-msgstr "移行しています　{0}..."
-
-#: js/widgets/form/ConfigPanel.js:229
-#, fuzzy
-msgid "Save config"
-msgstr "保存する"
-
-#: js/widgets/form/ConfigPanel.js:239
-msgid "Reload config"
-msgstr ""
-
-#: js/widgets/app/GridPanel.js:190
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-" {0} が見つかりません。フィルターの変更、表示オプションの変更か {1} 再検索を"
-"してください"
-
-#: js/widgets/app/GridPanel.js:279
-msgid "Edit {0}"
-msgstr "編集 {0}"
-
-#: js/widgets/app/GridPanel.js:290
-msgid "Copy {0}"
-msgstr ""
-
-#: js/widgets/app/GridPanel.js:301 js/widgets/tree/ContextMenu.js:214
-msgid "Add {0}"
-msgstr "追加 {0}"
-
-#: js/widgets/app/GridPanel.js:311 js/widgets/app/GridPanel.js:312
-#: js/widgets/app/GridPanel.js:314
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] "削除"
-
-#: js/widgets/app/GridPanel.js:393
-msgid "Displaying records {0} - {1} of {2}"
-msgstr "レコードの表示{0} - {1}　件中 {2}"
-
-#: js/widgets/app/GridPanel.js:394
-msgid "No {0} to display"
-msgstr "表示する {0} がありません"
-
-#: js/widgets/app/GridPanel.js:581
-#, fuzzy
-msgid "Tagging"
-msgstr "タグ"
-
-#: js/widgets/app/GridPanel.js:891
-msgid "Not Allowed"
-msgstr "許可されていません"
-
-#: js/widgets/app/GridPanel.js:892
-msgid "You are not allowed to delete all pages at once"
-msgstr "全てのページを一度に削除する権限がありません。"
-
-#: js/widgets/app/GridPanel.js:910
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "選択したレコードを本当に削除しますか？"
-
-#: js/widgets/app/GridPanel.js:931 js/widgets/dialog/EditDialog.js:442
-msgid "Deleting {0}"
-msgstr "{0}　を削除しています"
-
-#: js/widgets/app/GridPanel.js:933
-msgid " ... This may take a long time!"
-msgstr ""
-
-#: js/widgets/app/GridPanel.js:952 js/widgets/dialog/EditDialog.js:452
-msgid "Could not delete {0}."
-msgstr " {0}を削除できません"
-
-#: js/widgets/app/MainScreen.js:120
-msgid "Saved filter"
-msgstr "フィルタの保存"
 
 #: js/widgets/TimezoneChooser.js:34 Preference.php:95
 msgid "Timezone"
@@ -1360,200 +1555,6 @@ msgstr "タイムゾーン"
 #: js/widgets/TimezoneChooser.js:74
 msgid "setting new timezone..."
 msgstr "新しいタイムゾーンを設定しています。"
-
-#: js/widgets/customfields/CustomfieldsPanel.js:64
-msgid "Custom Fields"
-msgstr "カスタムフィールド"
-
-#: js/widgets/customfields/CustomfieldsPanel.js:71
-#: js/widgets/customfields/CustomfieldsPanel.js:86
-#, fuzzy
-msgid "General"
-msgstr "普通"
-
-#: js/widgets/customfields/CustomfieldsPanel.js:108
-msgid "There are no custom fields yet"
-msgstr "カスタムフィールドがありません"
-
-#: js/widgets/dialog/PreferencesDialog.js:137
-msgid "Admin Mode"
-msgstr ""
-
-#: js/widgets/dialog/PreferencesDialog.js:173
-msgid "Applications"
-msgstr ""
-
-#: js/widgets/dialog/PreferencesDialog.js:200
-msgid "Edit Preferences"
-msgstr ""
-
-#: js/widgets/dialog/PreferencesDialog.js:201
-msgid "Loading ..."
-msgstr ""
-
-#: js/widgets/dialog/PreferencesDialog.js:284
-#: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:432 js/widgets/dialog/ImportDialog.js:203
-msgid "Errors"
-msgstr "エラー"
-
-#: js/widgets/dialog/PreferencesDialog.js:284
-msgid "Saving of preferences failed."
-msgstr ""
-
-#: js/widgets/dialog/LinkPanel.js:48
-#, fuzzy
-msgid "Links"
-msgstr "ログイン"
-
-#: js/widgets/dialog/PreferencesTreePanel.js:60
-msgid "General Preferences"
-msgstr ""
-
-#: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:432 js/widgets/dialog/ImportDialog.js:203
-msgid "Please fix the errors noted."
-msgstr "表示されているエラー項目を修正してくだささい。"
-
-#: js/widgets/dialog/AlarmPanel.js:35
-msgid "Alarms"
-msgstr ""
-
-#: js/widgets/dialog/AlarmPanel.js:46
-msgid "Send Alarm"
-msgstr ""
-
-#: js/widgets/dialog/AlarmPanel.js:56
-#, fuzzy
-msgid "None"
-msgstr "ノート"
-
-#: js/widgets/dialog/AlarmPanel.js:57
-#, fuzzy
-msgid "0 minutes before"
-msgstr "の前"
-
-#: js/widgets/dialog/AlarmPanel.js:58
-#, fuzzy
-msgid "15 minutes before"
-msgstr "の前"
-
-#: js/widgets/dialog/AlarmPanel.js:59
-#, fuzzy
-msgid "30 minutes before"
-msgstr "の前"
-
-#: js/widgets/dialog/AlarmPanel.js:60
-#, fuzzy
-msgid "1 hour before"
-msgstr "の前"
-
-#: js/widgets/dialog/AlarmPanel.js:61
-#, fuzzy
-msgid "2 hours before"
-msgstr "の前"
-
-#: js/widgets/dialog/AlarmPanel.js:62
-#, fuzzy
-msgid "1 day before"
-msgstr "の前"
-
-#: js/widgets/dialog/EditDialog.js:291
-msgid "Add New {0}"
-msgstr "新しい {0}　を追加する"
-
-#: js/widgets/dialog/EditDialog.js:293
-msgid "Edit {0} \"{1}\""
-msgstr "編集　{0} \"{1}\""
-
-#: js/widgets/dialog/EditDialog.js:333
-msgid "Transfering {0}..."
-msgstr "移行しています　{0}..."
-
-#: js/widgets/dialog/EditDialog.js:440
-msgid "Do you really want to delete this {0}?"
-msgstr "本当に削除しますか？ {0}?"
-
-#: js/widgets/dialog/MultiOptionsDialog.js:23
-#: js/widgets/dialog/MultiOptionsDialog.js:70
-msgid "What would you like to do?"
-msgstr ""
-
-#: js/widgets/dialog/MultiOptionsDialog.js:27
-#: js/widgets/dialog/MultiOptionsDialog.js:129
-msgid "You need to select an option!"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:86
-msgid "Files"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:106
-msgid "Import definition"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:118
-msgid "Import into {0}"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:129
-msgid "Dry run"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:146
-msgid "No files added"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:146
-msgid "You need to add files to import."
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:176
-msgid "Dry run results"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:177
-msgid ""
-"Import test successful for {0} records, import test failed for {1} records."
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:181
-msgid "Import results"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:182
-msgid ""
-"Import successful for {0} records / import failed for {1} records / {2} "
-"duplicates found"
-msgstr ""
-
-#: js/widgets/dialog/PreferencesPanel.js:151
-msgid "There are no preferences for this application."
-msgstr ""
-
-#: js/widgets/LangChooser.js:31 Preference.php:99
-msgid "Language"
-msgstr "言語"
-
-#: js/widgets/LangChooser.js:64
-msgid "setting new language..."
-msgstr "新しい言語を設定しています..."
-
-#: js/widgets/VersionCheck.js:43 js/widgets/VersionCheck.js:52
-msgid "New version of Tine 2.0 available"
-msgstr "Tine 2.0の新バージョンが有効です。"
-
-#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
-msgid "Version \"{0}\" of Tine 2.0 is available."
-msgstr "Version \"{0}\" のTine 2.0が利用できます"
-
-#: js/widgets/VersionCheck.js:45
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr "緊急アップデートです。早急にインストールしてください。"
-
-#: js/widgets/VersionCheck.js:54
-msgid "Please consider updating!"
-msgstr "アップデートを考慮してください!"
 
 #: js/widgets/tree/ContextMenu.js:37
 msgid "New {0}"
@@ -1612,17 +1613,29 @@ msgstr "権限管理"
 msgid "Reload {0}"
 msgstr "名前の変更　{0}"
 
-#: js/AppManager.js:164
-msgid "Missing Applications"
-msgstr ""
+#: js/widgets/VersionCheck.js:43 js/widgets/VersionCheck.js:52
+msgid "New version of Tine 2.0 available"
+msgstr "Tine 2.0の新バージョンが有効です。"
 
-#: js/AppManager.js:165
-#, fuzzy
-msgid ""
-"There are no applications enabled for you. Please contact your administrator."
-msgstr ""
-"サーバが応答しません。ネットワーク接続を確認し、システム管理者に連絡してくだ"
-"さい。"
+#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+msgid "Version \"{0}\" of Tine 2.0 is available."
+msgstr "Version \"{0}\" のTine 2.0が利用できます"
+
+#: js/widgets/VersionCheck.js:45
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr "緊急アップデートです。早急にインストールしてください。"
+
+#: js/widgets/VersionCheck.js:54
+msgid "Please consider updating!"
+msgstr "アップデートを考慮してください!"
+
+#: Notes.php:363
+msgid "by"
+msgstr "の"
+
+#: Notes.php:370
+msgid "Changed fields:"
+msgstr "変更されたフィールド:"
 
 #: Preference.php:96
 msgid "The timezone in which dates are shown in Tine 2.0."
@@ -1645,8 +1658,7 @@ msgid "Window Type"
 msgstr ""
 
 #: Preference.php:108
-msgid ""
-"You can choose between ExtJs style windows or normal Browser popup windows."
+msgid "You can choose between ExtJs style windows or normal Browser popup windows."
 msgstr ""
 
 #: Preference.php:111
@@ -1657,57 +1669,72 @@ msgstr ""
 msgid "Show confirmation dialog on logout."
 msgstr ""
 
-#: Notes.php:363
-msgid "by"
-msgstr "の"
-
-#: Notes.php:370
-msgid "Changed fields:"
-msgstr "変更されたフィールド:"
-
-#: Frontend/Http.php:537
-msgid "Your session is not valid. You need to login again."
-msgstr "セッションが正しくありません。もう一度ログインしてください"
-
-#: Setup/setup.xml:2521
+#: Setup/setup.xml:2570
 msgid "note"
 msgstr "ノート"
 
-#: Setup/setup.xml:2526
+#: Setup/setup.xml:2575
 msgid "default note type"
 msgstr "標準ノートタイプ"
 
-#: Setup/setup.xml:2552
+#: Setup/setup.xml:2601
 msgid "telephone"
 msgstr "電話"
 
-#: Setup/setup.xml:2557
+#: Setup/setup.xml:2606
 msgid "telephone call"
 msgstr "通話"
 
-#: Setup/setup.xml:2583
+#: Setup/setup.xml:2632
 msgid "email"
 msgstr "Eメール"
 
-#: Setup/setup.xml:2588
+#: Setup/setup.xml:2637
 msgid "email contact"
 msgstr "Eメールコンタクト"
 
-#: Setup/setup.xml:2614
+#: Setup/setup.xml:2663
 msgid "created"
 msgstr "作成されました"
 
-#: Setup/setup.xml:2619
+#: Setup/setup.xml:2668
 msgid "record created"
 msgstr "レコードが作製されました"
 
-#: Setup/setup.xml:2645
+#: Setup/setup.xml:2694
 msgid "changed"
 msgstr "変更されました"
 
-#: Setup/setup.xml:2650
+#: Setup/setup.xml:2699
 msgid "record changed"
 msgstr "レコードが変更されました"
+
+#~ msgid "Please enter a name for the filter"
+#~ msgstr "フィルター名を入力してください"
+
+#~ msgid "Filter not Saved"
+#~ msgstr "フィルターは保存されませんでした"
+
+#~ msgid "You have to supply a name for the filter!"
+#~ msgstr "フィルターに名前を付けてください"
+
+#~ msgid "Saving filter"
+#~ msgstr "フィルタの保存"
+
+#~ msgid "My saved filters"
+#~ msgstr "マイフィルター"
+
+#~ msgid "Delete Filter"
+#~ msgstr "フィルタの削除"
+
+#~ msgid "Do you really want to delete the Filter \"{0}\"?"
+#~ msgstr "本当にフィルターを削除しますか \"{0}\"?"
+
+#~ msgid "Deleting Filter \"{0}\""
+#~ msgstr "フィルターを削除しています \"{0}\""
+
+#~ msgid "Saved filter"
+#~ msgstr "フィルタの保存"
 
 #~ msgid "Check tine20.org for new versions"
 #~ msgstr "tine20.orgで新しいバージョンのチェック"
@@ -1747,12 +1774,8 @@ msgstr "レコードが変更されました"
 #~ msgid "Register"
 #~ msgstr "登録者"
 
-#~ msgid ""
-#~ "The server did not respond to your request. Please check your network or "
-#~ "contact your administrator."
-#~ msgstr ""
-#~ "サーバが応答しません。ネットワーク接続を確認し、システム管理者に連絡してく"
-#~ "ださい。"
+#~ msgid "The server did not respond to your request. Please check your network or contact your administrator."
+#~ msgstr "サーバが応答しません。ネットワーク接続を確認し、システム管理者に連絡してください。"
 
 #~ msgid "Permissions"
 #~ msgstr "権限"

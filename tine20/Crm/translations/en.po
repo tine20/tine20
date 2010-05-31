@@ -281,20 +281,12 @@ msgid "Cellphone"
 msgstr "Cellphone"
 
 #: js/LeadEditDialog.js:260
-msgid ""
-"You do not have the run right for the Tasks application or it is not "
-"activated."
-msgstr ""
-"You do not have the run right for the Tasks application or it is not "
-"activated."
+msgid "You do not have the run right for the Tasks application or it is not activated."
+msgstr "You do not have the run right for the Tasks application or it is not activated."
 
 #: js/LeadEditDialog.js:271
-msgid ""
-"You do not have the run right for the Sales application or it is not "
-"activated."
-msgstr ""
-"You do not have the run right for the Sales application or it is not "
-"activated."
+msgid "You do not have the run right for the Sales application or it is not activated."
+msgstr "You do not have the run right for the Sales application or it is not activated."
 
 #: js/LeadEditDialog.js:282 js/Model.js:57
 msgid "Lead"

@@ -17,30 +17,17 @@ msgstr ""
 msgid "%s's personal example records"
 msgstr "%s persönliche Beispieleinträge"
 
-#: js/Model.js:33
-msgid "example record"
-msgid_plural "example records"
-msgstr[0] "Beispieleintrag"
-msgstr[1] "Beispieleinträge"
-
-#: js/Model.js:37
-msgid "example record list"
-msgid_plural "example record lists"
-msgstr[0] "Liste von Beispieleinträgen"
-msgstr[1] "Listen von Beispieleinträgen"
+#: js/ExampleApplication.js:27
+msgid "Example Application"
+msgstr "Beispielanwendung"
 
 #: js/ExampleRecordEditDialog.js:89
 msgid "ExampleRecord"
 msgstr "BeispielEintrag"
 
-#: js/ExampleRecordEditDialog.js:106
-#: js/ExampleRecordGridPanel.js:105
+#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
 msgid "Name"
 msgstr "Name"
-
-#: js/ExampleApplication.js:27
-msgid "Example Application"
-msgstr "Beispielanwendung"
 
 #: js/ExampleRecordGridPanel.js:77
 msgid "Quick search"
@@ -62,38 +49,62 @@ msgstr "Budget"
 msgid "Show closed"
 msgstr "Zeige geschlossene"
 
+#: js/Model.js:33
+msgid "example record"
+msgid_plural "example records"
+msgstr[0] "Beispieleintrag"
+msgstr[1] "Beispieleinträge"
+
+#: js/Model.js:37
+msgid "example record list"
+msgid_plural "example record lists"
+msgstr[0] "Liste von Beispieleinträgen"
+msgstr[1] "Listen von Beispieleinträgen"
+
 #: Setup/setup.xml:10
 msgid "ExampleApplication"
 msgstr "BeispielAnwendung"
 
 #~ msgid "ExampleRecords"
 #~ msgstr "BeispielEinträge"
+
 #~ msgid "All ExampleRecords"
 #~ msgstr "Alle BeispielEinträge"
+
 #~ msgid "Description"
 #~ msgstr "Beschreibung"
+
 #~ msgid "record list"
 #~ msgid_plural "record lists"
 #~ msgstr[0] "Eintrags Liste"
 #~ msgstr[1] "Eintrags Listen"
+
 #~ msgid "Number"
 #~ msgstr "Zahl"
+
 #~ msgid "Unit"
 #~ msgstr "Einheit"
+
 #~ msgid "Unit Price"
 #~ msgstr "Preis pro Einheit"
+
 #~ msgid "Timesheets are billable"
 #~ msgstr "Stundenzettel sind abrechenbar"
+
 #~ msgid "closed"
 #~ msgstr "geschlossen"
+
 #~ msgid "open"
 #~ msgstr "offen"
+
 #~ msgid "Billed"
 #~ msgstr "Berechnet"
+
 #~ msgid "not yet billed"
 #~ msgstr "noch nicht berechnet"
+
 #~ msgid "to bill"
 #~ msgstr "zu berechnen"
+
 #~ msgid "billed"
 #~ msgstr "berechnet"
-

@@ -13,8 +13,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Model.js:42
-#: js/TicketGridPanel.js:43
+#: js/Model.js:42 js/TicketGridPanel.js:43
 msgid "Ticket"
 msgid_plural "Tickets"
 msgstr[0] "Boleto"
@@ -52,33 +51,27 @@ msgstr "Rechazado"
 msgid "Deleted"
 msgstr "Borrado"
 
-#: js/StatusCombo.js:51
-#: js/TicketGridPanel.js:96
+#: js/StatusCombo.js:51 js/TicketGridPanel.js:96
 msgid "Status"
 msgstr "Estado"
 
-#: js/TicketGridPanel.js:44
-#: js/TicketGridPanel.js:69
+#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:69
 msgid "Ticket ID"
 msgstr "Id de Boleto"
 
-#: js/TicketGridPanel.js:45
-#: js/TicketGridPanel.js:72
+#: js/TicketGridPanel.js:45 js/TicketGridPanel.js:72
 msgid "Queue"
 msgstr "Colas"
 
-#: js/TicketGridPanel.js:46
-#: js/TicketGridPanel.js:78
+#: js/TicketGridPanel.js:46 js/TicketGridPanel.js:78
 msgid "Subject"
 msgstr "Tema"
 
-#: js/TicketGridPanel.js:47
-#: js/TicketGridPanel.js:84
+#: js/TicketGridPanel.js:47 js/TicketGridPanel.js:84
 msgid "Requestors"
 msgstr "Solicitantes"
 
-#: js/TicketGridPanel.js:48
-#: js/TicketGridPanel.js:90
+#: js/TicketGridPanel.js:48 js/TicketGridPanel.js:90
 msgid "Owner"
 msgstr "Propietario"
 
@@ -97,4 +90,3 @@ msgstr "Debido"
 #: js/TreePanel.js:24
 msgid "All Queues"
 msgstr "Todas las colas"
-

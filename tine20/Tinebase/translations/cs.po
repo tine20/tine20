@@ -16,25 +16,21 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Tinebase\n"
 
-#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:54
-msgid "Tags"
-msgstr "Štítky"
+#: Acl/Rights/Abstract.php:72
+msgid "admin"
+msgstr "administrovat"
 
-#: Export/Pdf.php:428
-msgid "Created by"
-msgstr "Vytvořil(a)"
+#: Acl/Rights/Abstract.php:73
+msgid "admin right description"
+msgstr "popis práva na administraci"
 
-#: Export/Pdf.php:482
-msgid "Activities"
-msgstr "Činnosti"
+#: Acl/Rights/Abstract.php:76
+msgid "run"
+msgstr "spustit"
 
-#: Export/Ods.php:204
-msgid "Filter"
-msgstr "Filtr"
-
-#: Export/Ods.php:288
-msgid "Data"
-msgstr ""
+#: Acl/Rights/Abstract.php:77
+msgid "run right description"
+msgstr "popis práva na spuštění"
 
 #: Acl/Rights.php:134
 msgid "Report bugs"
@@ -52,288 +48,49 @@ msgstr "Zkontrolovat verzi"
 msgid "Check for new versions of this software."
 msgstr ""
 
-#: Acl/Rights/Abstract.php:65
-msgid "admin"
-msgstr "administrovat"
+#: Export/Ods.php:204
+msgid "Filter"
+msgstr "Filtr"
 
-#: Acl/Rights/Abstract.php:66
-msgid "admin right description"
-msgstr "popis práva na administraci"
-
-#: Acl/Rights/Abstract.php:69
-msgid "run"
-msgstr "spustit"
-
-#: Acl/Rights/Abstract.php:70
-msgid "run right description"
-msgstr "popis práva na spuštění"
-
-#: js/ux/ConnectionStatus.js:57
-msgid "online"
-msgstr "online"
-
-#: js/ux/ConnectionStatus.js:58
-msgid "offline"
-msgstr "offline"
-
-#: js/ux/ConnectionStatus.js:59 User/Abstract.php:247 User/Abstract.php:248
-#: User/Abstract.php:249 User/Abstract.php:250 User/Abstract.php:251
-msgid "unknown"
-msgstr "neznámý"
-
-#: js/ux/grid/PagingToolbar.js:45
-msgid "{0} selected"
-msgstr "vybráno {0}"
-
-#: js/ux/grid/PagingToolbar.js:46
-msgid "Unselect all"
-msgstr "Zrušit výběr"
-
-#: js/ux/grid/PagingToolbar.js:47
-msgid "Select all visible ({0} records)"
-msgstr "Vybrat všechny viditelné ({0} záznamů)"
-
-#: js/ux/grid/PagingToolbar.js:48
-msgid "Select all pages ({0} records)"
-msgstr "Vybrat všechny stránky  ({0} záznamů)"
-
-#: js/ux/grid/PagingToolbar.js:49
-msgid "Toggle selection"
-msgstr "Invertovat výběr"
-
-#: js/ux/form/RecordsComboBox.js:27
-msgid "Software Version"
-msgstr "Verze softwaru"
-
-#: js/ux/form/LayerCombo.js:194 js/MainMenu.js:235 js/ExceptionDialog.js:54
-#: js/widgets/EditRecord.js:136 js/widgets/tags/TagsMassAttachAction.js:86
-#: js/widgets/container/ContainerSelect.js:450
-#: js/widgets/dialog/PreferencesDialog.js:129
-#: js/widgets/dialog/EditDialog.js:183
-#: js/widgets/dialog/MultiOptionsDialog.js:98
-msgid "Cancel"
-msgstr "Storno"
-
-#: js/ux/form/LayerCombo.js:199 js/MainMenu.js:241
-#: js/widgets/EditRecord.js:115 js/widgets/tags/TagsMassAttachAction.js:92
-#: js/widgets/container/ContainerSelect.js:459
-#: js/widgets/dialog/PreferencesDialog.js:121
-#: js/widgets/dialog/EditDialog.js:166
-#: js/widgets/dialog/MultiOptionsDialog.js:91
-msgid "Ok"
-msgstr "OK"
-
-#: js/ux/form/ImageField.js:67
-msgid "Loading"
-msgstr "Načítám"
-
-#: js/ux/form/ImageField.js:70
-msgid "Click to edit"
+#: Export/Ods.php:288
+msgid "Data"
 msgstr ""
 
-#: js/ux/form/ImageField.js:112
-msgid "Not An Image"
-msgstr "Není obrázek"
+#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:54
+msgid "Tags"
+msgstr "Štítky"
 
-#: js/ux/form/ImageField.js:112
-msgid "Please select an image file (gif/png/jpeg)"
-msgstr ""
+#: Export/Pdf.php:428
+msgid "Created by"
+msgstr "Vytvořil(a)"
 
-#: js/ux/form/ImageField.js:146 js/widgets/grid/FileUploadGrid.js:90
-msgid "Upload Failed"
-msgstr "Aktualizace se nezdařila"
+#: Export/Pdf.php:482
+msgid "Activities"
+msgstr "Činnosti"
 
-#: js/ux/form/ImageField.js:146
-msgid "Could not upload image. Please notify your Administrator"
-msgstr "Nemohu uploadovat obrázek. Upozorněte prosím svého administrátora"
-
-#: js/ux/form/ImageField.js:158
-msgid "Change Image"
-msgstr "Změnit obrázek"
-
-#: js/ux/form/ImageField.js:169 js/ux/form/ImageField.js:187
-msgid "Crop Image"
-msgstr "Oříznout obrázek"
-
-#: js/ux/form/ImageField.js:195
-msgid "Delete Image"
-msgstr "Smazat obrázek"
-
-#: js/ux/form/ImageField.js:204
-msgid "Show Original Image"
-msgstr "Zobrazit původní obrázek"
-
-#: js/ux/form/ImageField.js:238
-msgid "Image Failed"
-msgstr "Obrázek se nezdařil"
-
-#: js/ux/form/ImageField.js:238
-msgid "Could not load image. Please notify your Administrator"
-msgstr "Nemohu načíst obrázek. Upozorněte prosím svého administrátora"
-
-#: js/ux/SearchField.js:41
-msgid "enter searchfilter"
-msgstr "zadejte hledaný výraz"
-
-#: js/UserRegistration.js:33
-msgid "Registration Wizard"
-msgstr "Průvodce registrací"
-
-#: js/UserRegistration.js:86
-msgid "Given name"
-msgstr "Křestní jméno"
-
-#: js/UserRegistration.js:97
-msgid "Family name"
-msgstr "Příjmení"
-
-#: js/UserRegistration.js:108
-msgid "Login name"
-msgstr "Přihlašovací jméno"
-
-#: js/UserRegistration.js:121
-msgid "Emailaddress"
-msgstr "Emailová adresa"
-
-#: js/UserRegistration.js:167
-msgid "Congratulations!"
-msgstr "Gratulujeme!"
-
-#: js/UserRegistration.js:167
-msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr ""
-"Zadal(a) jste všechny potřebné informace. Až kliknete na tlačítko Dokončit, "
-"pošleme Vám registrační e-mail."
-
-#: js/ExceptionHandler.js:127 Frontend/Http.php:536
+#: Frontend/Http.php:544 js/ExceptionHandler.js:127
 msgid "Authorisation Required"
 msgstr "Je vyžadována autorizace"
 
-#: js/ExceptionHandler.js:128
-msgid "Your session timed out. You need to login again."
-msgstr "Vaše relace vypršela. Musíte se přihlásit znovu."
+#: Frontend/Http.php:545
+msgid "Your session is not valid. You need to login again."
+msgstr "Vaše relace je neplatná. Musíte se přihlásit znovu."
 
-#: js/ExceptionHandler.js:145
-msgid "Insufficient Rights"
-msgstr "Nedostatečná oprávnění"
+#: Frontend/Http.php:571 js/ExceptionDialog.js:46
+msgid "Abnormal End"
+msgstr "Abnormální ukončení"
 
-#: js/ExceptionHandler.js:146
-msgid "Sorry, you are not permitted to perform this action"
-msgstr "Lituji, nemáte oprávnění k této akci."
+#: Frontend/Http.php:572 js/ExceptionDialog.js:71
+msgid "An error occurred, the program ended abnormal."
+msgstr "Došlo k chybě, program se neukončil korektně."
 
-#: js/ExceptionHandler.js:155
-msgid "Not Found"
-msgstr "Nebylo nalezeno"
-
-#: js/ExceptionHandler.js:156
-msgid ""
-"Sorry, your request could not be completed because the required data could "
-"not be found. In most cases this means that someone already deleted the "
-"data. Please refresh your current view."
-msgstr ""
-"Lituji, Váš požadavek nemohl být dokončen protože požadovaná data nebyla "
-"nalezena. Ve většině případů to znamená, že je někdo již smazal. Obnovte "
-"prosím aktuální zobrazení."
-
-#: js/ExceptionHandler.js:165
-msgid "Concurrent Updates"
-msgstr "Kolidující aktualizace"
-
-#: js/ExceptionHandler.js:166
-msgid ""
-"Someone else saved this record while you where editing the data. You need to "
-"reload and make your changes again."
-msgstr ""
-"Někdo jiný záznam uložil v době, kdy jste editoval(a) údaje. Musíte záznam "
-"znovu načíst a opětovně provést Vaše změny."
-
-#: js/ExceptionHandler.js:176
-msgid "Service Unavailable"
+#: js/AppManager.js:182
+msgid "Missing Applications"
 msgstr ""
 
-#: js/ExceptionHandler.js:177
-msgid ""
-"The server is currently unable to handle the request due to a temporary "
-"overloading or maintenance of the server. Please try again or contact your "
-"administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:184
-msgid "Connection lost, please check your network!"
-msgstr "Spojení přerušeno, zkontrolujte prosím Vaší síť."
-
-#: js/ExceptionHandler.js:190
-msgid "Timeout"
-msgstr ""
-
-#: js/ExceptionHandler.js:191
-msgid ""
-"Sorry, some timeout occured while processing your request. Please reload "
-"your browser, try again or contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:200
-msgid "No Response"
-msgstr ""
-
-#: js/ExceptionHandler.js:201
-msgid ""
-"Sorry, the Server did not respond any data. Please reload your browser, try "
-"again or contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:210
-msgid "No Role Memberships"
-msgstr ""
-
-#: js/ExceptionHandler.js:211
-msgid ""
-"Your user account has no role memberships. Please contact your administrator."
-msgstr ""
-
-#: js/data/Record.js:115
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Úkol"
-msgstr[1] "Úkoly"
-msgstr[2] "Úkolů"
-
-#: js/data/Record.js:119
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "seznam úkolů"
-msgstr[1] "seznamy úkolů"
-msgstr[2] "seznamů úkolů"
-
-#: js/Container.js:130
-msgid "All {0}"
-msgstr "Všechny {0}"
-
-#: js/Container.js:131
-msgid "Shared {0}"
-msgstr "Sdílené {0}"
-
-#: js/Container.js:132
-msgid "Other Users {0}"
-msgstr "{0} ostatních uživatelů"
-
-#: js/Container.js:133
-msgid "Internal {0}"
-msgstr ""
-
-#: js/Container.js:137
-msgid "My {0}"
-msgstr "Moje {0}"
-
-#: js/tineInit.js:577
-msgid ""
-"Fatal Error: Client self-update failed, please contact your administrator "
-"and/or restart/reload your browser."
-msgstr ""
-"Kritická chyba: aktualizace klienta selhala, kontaltujte prosím svého "
-"administrátora a/nebo restartujte prohlížeč."
+#: js/AppManager.js:183
+msgid "There are no applications enabled for you. Please contact your administrator."
+msgstr "Nemáte povoleny žádné aplikace. Kontaktujte prosím administrátora."
 
 #: js/common.js:150
 msgid "{0} minute"
@@ -356,254 +113,61 @@ msgstr[0] "{0} pracovní den"
 msgstr[1] "{0} pracovní dny"
 msgstr[2] "{0} pracovních dní"
 
-#: js/MainMenu.js:74
-msgid "User: {0}"
-msgstr "Uživatel: {0}"
+#: js/Container.js:143
+msgid "All {0}"
+msgstr "Všechny {0}"
 
-#: js/MainMenu.js:118 js/MainMenu.js:168
-msgid "About {0}"
-msgstr "O {0}"
+#: js/Container.js:144
+msgid "Shared {0}"
+msgstr "Sdílené {0}"
 
-#: js/MainMenu.js:124
-msgid "Install Google Gears"
-msgstr "Instalovat Google Gears"
+#: js/Container.js:145
+msgid "Other Users {0}"
+msgstr "{0} ostatních uživatelů"
 
-#: js/MainMenu.js:130
-msgid "Debug Console (Ctrl + F11)"
-msgstr "Ladící konzole (Ctrl + F11)"
-
-#: js/MainMenu.js:136 js/widgets/dialog/PreferencesPanel.js:37
-msgid "Preferences"
-msgstr "Předvolby"
-
-#: js/MainMenu.js:142
-msgid "Change password"
-msgstr "Změnit heslo"
-
-#: js/MainMenu.js:149
-msgid "Logout"
-msgstr "Odhlásit"
-
-#: js/MainMenu.js:150
-msgid "Logout from {0}"
-msgstr "Odhlásit z {0}"
-
-#: js/MainMenu.js:183
-msgid "About Tine 2.0"
-msgstr "O aplikaci Tine 2.0"
-
-#: js/MainMenu.js:199
-msgid "Change Password For \"{0}\""
-msgstr "Změnit heslo pro \"{0}\""
-
-#: js/MainMenu.js:223
-msgid "Old Password"
-msgstr "Staré heslo"
-
-#: js/MainMenu.js:227
-msgid "New Password"
-msgstr "Nové heslo"
-
-#: js/MainMenu.js:231
-msgid "Repeat new Password"
-msgstr "Zopakujte nové heslo"
-
-#: js/MainMenu.js:250
-msgid "Please Wait!"
-msgstr "Čekejte prosím!"
-
-#: js/MainMenu.js:251
-msgid "changing password..."
-msgstr "měním heslo..."
-
-#: js/MainMenu.js:262
-msgid "Success"
-msgstr "Podařilo se"
-
-#: js/MainMenu.js:263
-msgid "Your password has been changed."
-msgstr "Vaše heslo bylo změněno."
-
-#: js/MainMenu.js:269 js/MainMenu.js:279
-msgid "Failure"
-msgstr "Došlo k chybě"
-
-#: js/MainMenu.js:280
-msgid "The new passwords mismatch, please correct them."
-msgstr "Nová hesla se neshodují, opravte je prosím."
-
-#: js/MainMenu.js:298
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
+#: js/Container.js:146
+msgid "Internal {0}"
 msgstr ""
-"Instalace Google Gears zvýší výkon Tine 2.0 diky lokálnímu kešování všech "
-"potřebných souborů na tomto počítači."
 
-#: js/MainMenu.js:319 js/widgets/grid/PersistentFilterPicker.js:166
-#: js/widgets/app/GridPanel.js:911 js/widgets/dialog/EditDialog.js:440
-#: js/widgets/tree/ContextMenu.js:82
-msgid "Confirm"
-msgstr "Potvrdit"
+#: js/Container.js:150
+msgid "My {0}"
+msgstr "Moje {0}"
 
-#: js/MainMenu.js:319
-msgid "Are you sure you want to logout?"
-msgstr "Určitě se chcete odhlásit?"
+#: js/data/Record.js:115
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Úkol"
+msgstr[1] "Úkoly"
+msgstr[2] "Úkolů"
 
-#: js/MainMenu.js:333
-msgid "Logging you out..."
-msgstr "Odhlašuji Vás..."
+#: js/data/Record.js:119
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "seznam úkolů"
+msgstr[1] "seznamy úkolů"
+msgstr[2] "seznamů úkolů"
 
-#: js/MainMenu.js:333 js/LoginPanel.js:282
-msgid "Please wait!"
-msgstr "Čekejte prosím!"
-
-#: js/LoginPanel.js:78 js/LoginPanel.js:111
-msgid "Login"
-msgstr "Přihlásit"
-
-#: js/LoginPanel.js:87 js/widgets/dialog/CredentialsDialog.js:76
-msgid "Username"
-msgstr "Uživatelské jméno"
-
-#: js/LoginPanel.js:98 js/widgets/dialog/CredentialsDialog.js:80
-msgid "Password"
-msgstr "Heslo"
-
-#: js/LoginPanel.js:130
-msgid "Tine 2.0 is made for you"
-msgstr "Tine 2.0 byl vytvořen pro Vás"
-
-#: js/LoginPanel.js:132
-msgid ""
-"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas "
-"and get help."
-msgstr ""
-"Tine 2.0 se snaží udělat pracovní spolupráci jednodušší a zábavnější - "
-"takovou jakou potřebujete! Budeme rádi, když nám sdělíte své připomínky, "
-"podělíte se s námi o nápady na zlepšení a pomůžete nám."
-
-#: js/LoginPanel.js:138
-msgid "Tine 2.0 Homepage"
-msgstr "Domovská stránka Tine 2.0"
-
-#: js/LoginPanel.js:139
-msgid "Tine 2.0 Forum"
-msgstr "Diskusní fórum Tine 2.0"
-
-#: js/LoginPanel.js:183
-msgid "about {0} minutes"
-msgstr "asi {0} minut"
-
-#: js/LoginPanel.js:188 js/LoginPanel.js:342
-msgid "Tine 2.0 needs your help"
-msgstr "Tine 2.0 potřebuje Vaši pomoc"
-
-#: js/LoginPanel.js:190 js/LoginPanel.js:344
-msgid ""
-"We regularly need your feedback to make the next Tine 2.0 releases fit your "
-"needs even better. Help us and yourself by participating:"
-msgstr ""
-"Aby mohla další vydání Tine 2.0 ještě lépe splňovat Vaše požadavky, "
-"potřebujeme od Vás pravidelně dostávat zpětnou vazbu. Pomůžete sobě i nám, "
-"když se zapojíte:"
-
-#: js/LoginPanel.js:196
-msgid "participate!"
-msgstr "zapojte se!"
-
-#: js/LoginPanel.js:218
-msgid "Languages"
-msgstr "Jazyky"
-
-#: js/LoginPanel.js:219
-msgid "Duration"
-msgstr "Trvání"
-
-#: js/LoginPanel.js:270
-msgid "Logging you in..."
-msgstr "Přihlašuji Vás..."
-
-#: js/LoginPanel.js:270 js/widgets/grid/PersistentFilterPicker.js:168
-#: js/widgets/grid/PersistentFilterPicker.js:192
-#: js/widgets/container/GrantsDialog.js:173 js/widgets/tree/ContextMenu.js:43
-#: js/widgets/tree/ContextMenu.js:84 js/widgets/tree/ContextMenu.js:140
-msgid "Please wait"
-msgstr "Čekejte prosím"
-
-#: js/LoginPanel.js:282
-msgid "Login successful. Loading {0}..."
-msgstr "Přihlášení bylo úspěšné. Načítám {0}..."
-
-#: js/LoginPanel.js:287
-msgid "Login failure"
-msgstr "Chybné přihlášení"
-
-#: js/LoginPanel.js:288
-msgid "Your username and/or your password are wrong!!!"
-msgstr "Vaše uživatelské jméno a/nebo heslo je chybné!!!"
-
-#: js/LoginPanel.js:312
-msgid "Please enter your login data"
-msgstr "Zadejte prosím Vaše přihlašovací údaje"
-
-#: js/Models.js:74
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Skupina"
-msgstr[1] "Skupiny"
-msgstr[2] "Skupin"
-
-#: js/Models.js:74
-msgid "Groups"
-msgstr "Skupiny"
-
-#: js/Models.js:274
-msgid "Import"
-msgid_plural "Imports"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Models.js:307
-msgid "Credentials"
-msgid_plural "Credentials"
-msgstr[0] "Přihlašovací údaje"
-msgstr[1] "Přihlašovací údaje"
-msgstr[2] "Přihlašovací údaje"
-
-#: js/Models.js:334
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] "Vztah"
-msgstr[1] "Vztahy"
-msgstr[2] "Vztahů"
-
-#: js/ExceptionDialog.js:46 Frontend/Http.php:563
-msgid "Abnormal End"
-msgstr "Abnormální ukončení"
+#: js/ExceptionDialog.js:54 js/MainMenu.js:236 js/ux/form/LayerCombo.js:194
+#: js/widgets/ActivitiesPanel.js:293
+#: js/widgets/container/ContainerSelect.js:450
+#: js/widgets/dialog/EditDialog.js:183
+#: js/widgets/dialog/MultiOptionsDialog.js:98
+#: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
+#: js/widgets/tags/TagsMassAttachAction.js:86
+msgid "Cancel"
+msgstr "Storno"
 
 #: js/ExceptionDialog.js:62
 msgid "Send Report"
 msgstr "Odeslat hlášení"
 
-#: js/ExceptionDialog.js:71 Frontend/Http.php:564
-msgid "An error occurred, the program ended abnormal."
-msgstr "Došlo k chybě, program se neukončil korektně."
-
 #: js/ExceptionDialog.js:72
 msgid "The last action you made was potentially not performed correctly."
-msgstr ""
-"Je možné, že poslední akce, kterou jste provedl(a), neproběhla korektně."
+msgstr "Je možné, že poslední akce, kterou jste provedl(a), neproběhla korektně."
 
 #: js/ExceptionDialog.js:73
-msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occurred."
-msgstr ""
-"Pomozte prosím vylepšit tento software a upozorněte prodejce. Do hlášení "
-"uveďte stručný popis to co jste dělal(a), když došlo k chybě."
+msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
+msgstr "Pomozte prosím vylepšit tento software a upozorněte prodejce. Do hlášení uveďte stručný popis to co jste dělal(a), když došlo k chybě."
 
 #: js/ExceptionDialog.js:79 js/widgets/tags/TagsPanel.js:595
 msgid "Description"
@@ -637,6 +201,423 @@ msgstr "Vaše hlášení bylo odesláno. Děkujeme za Vaši spolupráci."
 msgid "Please restart your browser now!"
 msgstr "Nyní prosím zrestartujte svůj prohlížeč!"
 
+#: js/ExceptionHandler.js:128
+msgid "Your session timed out. You need to login again."
+msgstr "Vaše relace vypršela. Musíte se přihlásit znovu."
+
+#: js/ExceptionHandler.js:145
+msgid "Insufficient Rights"
+msgstr "Nedostatečná oprávnění"
+
+#: js/ExceptionHandler.js:146
+msgid "Sorry, you are not permitted to perform this action"
+msgstr "Lituji, nemáte oprávnění k této akci."
+
+#: js/ExceptionHandler.js:155
+msgid "Not Found"
+msgstr "Nebylo nalezeno"
+
+#: js/ExceptionHandler.js:156
+msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
+msgstr "Lituji, Váš požadavek nemohl být dokončen protože požadovaná data nebyla nalezena. Ve většině případů to znamená, že je někdo již smazal. Obnovte prosím aktuální zobrazení."
+
+#: js/ExceptionHandler.js:165
+msgid "Concurrent Updates"
+msgstr "Kolidující aktualizace"
+
+#: js/ExceptionHandler.js:166
+msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
+msgstr "Někdo jiný záznam uložil v době, kdy jste editoval(a) údaje. Musíte záznam znovu načíst a opětovně provést Vaše změny."
+
+#: js/ExceptionHandler.js:176
+msgid "Service Unavailable"
+msgstr ""
+
+#: js/ExceptionHandler.js:177
+msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:184
+msgid "Connection lost, please check your network!"
+msgstr "Spojení přerušeno, zkontrolujte prosím Vaší síť."
+
+#: js/ExceptionHandler.js:190
+msgid "Timeout"
+msgstr ""
+
+#: js/ExceptionHandler.js:191
+msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:200
+msgid "No Response"
+msgstr ""
+
+#: js/ExceptionHandler.js:201
+msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:210
+msgid "No Role Memberships"
+msgstr ""
+
+#: js/ExceptionHandler.js:211
+msgid "Your user account has no role memberships. Please contact your administrator."
+msgstr ""
+
+#: js/LoginPanel.js:78 js/LoginPanel.js:110
+msgid "Login"
+msgstr "Přihlásit"
+
+#: js/LoginPanel.js:87 js/widgets/dialog/CredentialsDialog.js:68
+msgid "Username"
+msgstr "Uživatelské jméno"
+
+#: js/LoginPanel.js:99 js/widgets/dialog/CredentialsDialog.js:72
+msgid "Password"
+msgstr "Heslo"
+
+#: js/LoginPanel.js:129
+msgid "Tine 2.0 is made for you"
+msgstr "Tine 2.0 byl vytvořen pro Vás"
+
+#: js/LoginPanel.js:131
+msgid "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
+msgstr "Tine 2.0 se snaží udělat pracovní spolupráci jednodušší a zábavnější - takovou jakou potřebujete! Budeme rádi, když nám sdělíte své připomínky, podělíte se s námi o nápady na zlepšení a pomůžete nám."
+
+#: js/LoginPanel.js:137
+msgid "Tine 2.0 Homepage"
+msgstr "Domovská stránka Tine 2.0"
+
+#: js/LoginPanel.js:138
+msgid "Tine 2.0 Forum"
+msgstr "Diskusní fórum Tine 2.0"
+
+#: js/LoginPanel.js:184
+msgid "about {0} minutes"
+msgstr "asi {0} minut"
+
+#: js/LoginPanel.js:189 js/LoginPanel.js:345
+msgid "Tine 2.0 needs your help"
+msgstr "Tine 2.0 potřebuje Vaši pomoc"
+
+#: js/LoginPanel.js:191 js/LoginPanel.js:347
+msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
+msgstr "Aby mohla další vydání Tine 2.0 ještě lépe splňovat Vaše požadavky, potřebujeme od Vás pravidelně dostávat zpětnou vazbu. Pomůžete sobě i nám, když se zapojíte:"
+
+#: js/LoginPanel.js:197
+msgid "participate!"
+msgstr "zapojte se!"
+
+#: js/LoginPanel.js:219
+msgid "Languages"
+msgstr "Jazyky"
+
+#: js/LoginPanel.js:220
+msgid "Duration"
+msgstr "Trvání"
+
+#: js/LoginPanel.js:271
+msgid "Logging you in..."
+msgstr "Přihlašuji Vás..."
+
+#: js/LoginPanel.js:271 js/widgets/container/GrantsDialog.js:168
+#: js/widgets/persistentfilter/PickerPanel.js:202
+#: js/widgets/persistentfilter/PickerPanel.js:227
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:84
+#: js/widgets/tree/ContextMenu.js:140
+msgid "Please wait"
+msgstr "Čekejte prosím"
+
+#: js/LoginPanel.js:283
+msgid "Login successful. Loading {0}..."
+msgstr "Přihlášení bylo úspěšné. Načítám {0}..."
+
+#: js/LoginPanel.js:283 js/MainMenu.js:333
+msgid "Please wait!"
+msgstr "Čekejte prosím!"
+
+#: js/LoginPanel.js:288
+msgid "Login failure"
+msgstr "Chybné přihlášení"
+
+#: js/LoginPanel.js:289
+msgid "Your username and/or your password are wrong!!!"
+msgstr "Vaše uživatelské jméno a/nebo heslo je chybné!!!"
+
+#: js/LoginPanel.js:300 js/widgets/dialog/CredentialsDialog.js:116
+#: js/widgets/dialog/EditDialog.js:435 js/widgets/dialog/ImportDialog.js:194
+#: js/widgets/dialog/PreferencesDialog.js:284
+msgid "Errors"
+msgstr "Chyby"
+
+#: js/LoginPanel.js:300 js/widgets/dialog/CredentialsDialog.js:116
+#: js/widgets/dialog/EditDialog.js:435 js/widgets/dialog/ImportDialog.js:194
+msgid "Please fix the errors noted."
+msgstr "Opravte prosím uvedené chyby."
+
+#: js/LoginPanel.js:315
+msgid "Please enter your login data"
+msgstr "Zadejte prosím Vaše přihlašovací údaje"
+
+#: js/MainMenu.js:75
+msgid "User: {0}"
+msgstr "Uživatel: {0}"
+
+#: js/MainMenu.js:119 js/MainMenu.js:169
+msgid "About {0}"
+msgstr "O {0}"
+
+#: js/MainMenu.js:125
+msgid "Install Google Gears"
+msgstr "Instalovat Google Gears"
+
+#: js/MainMenu.js:131
+msgid "Debug Console (Ctrl + F11)"
+msgstr "Ladící konzole (Ctrl + F11)"
+
+#: js/MainMenu.js:137 js/widgets/dialog/PreferencesPanel.js:37
+msgid "Preferences"
+msgstr "Předvolby"
+
+#: js/MainMenu.js:143
+msgid "Change password"
+msgstr "Změnit heslo"
+
+#: js/MainMenu.js:150
+msgid "Logout"
+msgstr "Odhlásit"
+
+#: js/MainMenu.js:151
+msgid "Logout from {0}"
+msgstr "Odhlásit z {0}"
+
+#: js/MainMenu.js:184
+msgid "About Tine 2.0"
+msgstr "O aplikaci Tine 2.0"
+
+#: js/MainMenu.js:200
+msgid "Change Password For \"{0}\""
+msgstr "Změnit heslo pro \"{0}\""
+
+#: js/MainMenu.js:224
+msgid "Old Password"
+msgstr "Staré heslo"
+
+#: js/MainMenu.js:228
+msgid "New Password"
+msgstr "Nové heslo"
+
+#: js/MainMenu.js:232
+msgid "Repeat new Password"
+msgstr "Zopakujte nové heslo"
+
+#: js/MainMenu.js:242 js/ux/form/LayerCombo.js:199
+#: js/widgets/ActivitiesPanel.js:301
+#: js/widgets/container/ContainerSelect.js:459
+#: js/widgets/dialog/EditDialog.js:166
+#: js/widgets/dialog/MultiOptionsDialog.js:91
+#: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
+#: js/widgets/tags/TagsMassAttachAction.js:92
+msgid "Ok"
+msgstr "OK"
+
+#: js/MainMenu.js:251
+msgid "Please Wait!"
+msgstr "Čekejte prosím!"
+
+#: js/MainMenu.js:252
+msgid "changing password..."
+msgstr "měním heslo..."
+
+#: js/MainMenu.js:263
+msgid "Success"
+msgstr "Podařilo se"
+
+#: js/MainMenu.js:264
+msgid "Your password has been changed."
+msgstr "Vaše heslo bylo změněno."
+
+#: js/MainMenu.js:270 js/MainMenu.js:280
+msgid "Failure"
+msgstr "Došlo k chybě"
+
+#: js/MainMenu.js:281
+msgid "The new passwords mismatch, please correct them."
+msgstr "Nová hesla se neshodují, opravte je prosím."
+
+#: js/MainMenu.js:298
+msgid "Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer."
+msgstr "Instalace Google Gears zvýší výkon Tine 2.0 diky lokálnímu kešování všech potřebných souborů na tomto počítači."
+
+#: js/MainMenu.js:319 js/widgets/dialog/EditDialog.js:443
+#: js/widgets/grid/GridPanel.js:932
+#: js/widgets/persistentfilter/PickerPanel.js:200
+#: js/widgets/tree/ContextMenu.js:82
+msgid "Confirm"
+msgstr "Potvrdit"
+
+#: js/MainMenu.js:319
+msgid "Are you sure you want to logout?"
+msgstr "Určitě se chcete odhlásit?"
+
+#: js/MainMenu.js:333
+msgid "Logging you out..."
+msgstr "Odhlašuji Vás..."
+
+#: js/Models.js:72
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Skupina"
+msgstr[1] "Skupiny"
+msgstr[2] "Skupin"
+
+#: js/Models.js:72
+msgid "Groups"
+msgstr "Skupiny"
+
+#: js/Models.js:272
+msgid "Import"
+msgid_plural "Imports"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Models.js:305
+msgid "Credentials"
+msgid_plural "Credentials"
+msgstr[0] "Přihlašovací údaje"
+msgstr[1] "Přihlašovací údaje"
+msgstr[2] "Přihlašovací údaje"
+
+#: js/Models.js:332
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] "Vztah"
+msgstr[1] "Vztahy"
+msgstr[2] "Vztahů"
+
+#: js/tineInit.js:578
+msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
+msgstr "Kritická chyba: aktualizace klienta selhala, kontaltujte prosím svého administrátora a/nebo restartujte prohlížeč."
+
+#: js/UserRegistration.js:33
+msgid "Registration Wizard"
+msgstr "Průvodce registrací"
+
+#: js/UserRegistration.js:86
+msgid "Given name"
+msgstr "Křestní jméno"
+
+#: js/UserRegistration.js:97
+msgid "Family name"
+msgstr "Příjmení"
+
+#: js/UserRegistration.js:108
+msgid "Login name"
+msgstr "Přihlašovací jméno"
+
+#: js/UserRegistration.js:121
+msgid "Emailaddress"
+msgstr "Emailová adresa"
+
+#: js/UserRegistration.js:167
+msgid "Congratulations!"
+msgstr "Gratulujeme!"
+
+#: js/UserRegistration.js:167
+msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
+msgstr "Zadal(a) jste všechny potřebné informace. Až kliknete na tlačítko Dokončit, pošleme Vám registrační e-mail."
+
+#: js/ux/ConnectionStatus.js:57
+msgid "online"
+msgstr "online"
+
+#: js/ux/ConnectionStatus.js:58
+msgid "offline"
+msgstr "offline"
+
+#: js/ux/ConnectionStatus.js:59 User/Abstract.php:266 User/Abstract.php:267
+#: User/Abstract.php:268 User/Abstract.php:269 User/Abstract.php:270
+msgid "unknown"
+msgstr "neznámý"
+
+#: js/ux/form/ImageField.js:67
+msgid "Loading"
+msgstr "Načítám"
+
+#: js/ux/form/ImageField.js:70
+msgid "Click to edit"
+msgstr ""
+
+#: js/ux/form/ImageField.js:112
+msgid "Not An Image"
+msgstr "Není obrázek"
+
+#: js/ux/form/ImageField.js:112
+msgid "Please select an image file (gif/png/jpeg)"
+msgstr ""
+
+#: js/ux/form/ImageField.js:146 js/widgets/grid/FileUploadGrid.js:86
+msgid "Upload Failed"
+msgstr "Aktualizace se nezdařila"
+
+#: js/ux/form/ImageField.js:146
+msgid "Could not upload image. Please notify your Administrator"
+msgstr "Nemohu uploadovat obrázek. Upozorněte prosím svého administrátora"
+
+#: js/ux/form/ImageField.js:158
+msgid "Change Image"
+msgstr "Změnit obrázek"
+
+#: js/ux/form/ImageField.js:169 js/ux/form/ImageField.js:187
+msgid "Crop Image"
+msgstr "Oříznout obrázek"
+
+#: js/ux/form/ImageField.js:194
+msgid "Delete Image"
+msgstr "Smazat obrázek"
+
+#: js/ux/form/ImageField.js:203
+msgid "Show Original Image"
+msgstr "Zobrazit původní obrázek"
+
+#: js/ux/form/ImageField.js:242
+msgid "Image Failed"
+msgstr "Obrázek se nezdařil"
+
+#: js/ux/form/ImageField.js:242
+msgid "Could not load image. Please notify your Administrator"
+msgstr "Nemohu načíst obrázek. Upozorněte prosím svého administrátora"
+
+#: js/ux/form/RecordsComboBox.js:27
+msgid "Software Version"
+msgstr "Verze softwaru"
+
+#: js/ux/grid/PagingToolbar.js:45
+msgid "{0} selected"
+msgstr "vybráno {0}"
+
+#: js/ux/grid/PagingToolbar.js:46
+msgid "Unselect all"
+msgstr "Zrušit výběr"
+
+#: js/ux/grid/PagingToolbar.js:47
+msgid "Select all visible ({0} records)"
+msgstr "Vybrat všechny viditelné ({0} záznamů)"
+
+#: js/ux/grid/PagingToolbar.js:48
+msgid "Select all pages ({0} records)"
+msgstr "Vybrat všechny stránky  ({0} záznamů)"
+
+#: js/ux/grid/PagingToolbar.js:49
+msgid "Toggle selection"
+msgstr "Invertovat výběr"
+
+#: js/ux/SearchField.js:41
+msgid "enter searchfilter"
+msgstr "zadejte hledaný výraz"
+
 #: js/widgets/account/PickerGridPanel.js:146
 msgid "Search User"
 msgstr "Hledat uživatele"
@@ -665,18 +646,764 @@ msgstr "Hledat skupiny..."
 msgid "Name"
 msgstr "Jméno"
 
-#: js/widgets/EditRecord.js:126 js/widgets/dialog/EditDialog.js:175
+#: js/widgets/ActivitiesPanel.js:141
+msgid "Add a Note..."
+msgstr "Přidat poznámku..."
+
+#: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:168
+#: js/widgets/container/GrantsDialog.js:93
+msgid "Add"
+msgstr "Přidat"
+
+#: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:450
+msgid "Note"
+msgstr "Poznámka"
+
+#: js/widgets/ActivitiesPanel.js:169 js/widgets/ActivitiesPanel.js:376
+msgid "Add new note"
+msgstr "Přidat novou poznámku"
+
+#: js/widgets/ActivitiesPanel.js:200
+msgid "Notes"
+msgstr "Poznámky"
+
+#: js/widgets/ActivitiesPanel.js:272
+msgid "Enter new note:"
+msgstr "Zadejte novou poznámku:"
+
+#: js/widgets/ActivitiesPanel.js:309 js/widgets/ActivitiesPanel.js:375
+msgid "Add Note"
+msgstr "Přidat poznámku"
+
+#: js/widgets/ActivitiesPanel.js:362
+msgid "Add a {0} Note"
+msgstr "Přidat {0} poznámku..."
+
+#: js/widgets/ActivitiesPanel.js:448 js/widgets/ActivitiesPanel.js:583
+msgid "Type"
+msgstr "Typ"
+
+#: js/widgets/ActivitiesPanel.js:451
+msgid "Created By"
+msgstr "Vytvořil(a)"
+
+#: js/widgets/ActivitiesPanel.js:452
+msgid "Timestamp"
+msgstr "Časové razítko"
+
+#: js/widgets/ActivitiesPanel.js:466
+msgid "Displaying history records {0} - {1} of {2}"
+msgstr "Zobrazuji záznamy historie {0} - {1} z {2}"
+
+#: js/widgets/ActivitiesPanel.js:467
+msgid "No history to display"
+msgstr "Žádná historie ke zobrazení"
+
+#: js/widgets/ActivitiesPanel.js:565
+msgid "History"
+msgstr "Historie"
+
+#: js/widgets/ActivitiesPanel.js:577
+msgid "Quick search"
+msgstr "Rychlé hledání"
+
+#: js/widgets/ActivitiesPanel.js:578 js/widgets/ActivitiesPanel.js:579
+msgid "Time"
+msgstr "Čas"
+
+#: js/widgets/ActivitiesPanel.js:581
+msgid "User"
+msgstr "Uživatel"
+
+#: js/widgets/container/ContainerSelect.js:107
+msgid "choose other {0}..."
+msgstr "vyberte jiné {0}..."
+
+#: js/widgets/container/ContainerSelect.js:110
+msgid "Select a {0}"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:130
+msgid "Recently used {0}:"
+msgstr "Naposledy použité {0}:"
+
+#: js/widgets/container/ContainerSelect.js:447
+msgid "please select a {0}"
+msgstr "vyberte prosím  {0}"
+
+#: js/widgets/container/ContainerTree.js:124
+msgid "container"
+msgid_plural "containers"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/widgets/container/ContainerTree.js:412
+msgid "You are not allowed to select the {0} '{1}':"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:413
+msgid "{0} grant is required for desired action"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:414
+msgid "Insufficient Grants"
+msgstr ""
+
+#: js/widgets/container/FilterModel.js:130
+msgid "is personal of"
+msgstr ""
+
+#: js/widgets/container/FilterModel.js:130
+#: js/widgets/container/FilterModel.js:134 js/widgets/grid/FilterModel.js:152
+msgid "is equal to"
+msgstr "je roven"
+
+#: js/widgets/container/FilterModel.js:238
+msgid "Selected  {0}"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:53
+msgid "Folder"
+msgstr "Složka"
+
+#: js/widgets/container/GrantsDialog.js:87
+msgid "Read"
+msgstr "Číst"
+
+#: js/widgets/container/GrantsDialog.js:88
+msgid "The grant to read records of this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:94
+msgid "The grant to add records to this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:99
+msgid "Edit"
+msgstr "Editovat"
+
+#: js/widgets/container/GrantsDialog.js:100
+msgid "The grant to edit records in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:105
+msgid "Delete"
+msgstr "Smazat"
+
+#: js/widgets/container/GrantsDialog.js:106
+msgid "The grant to delete records in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:111
+msgid "Export"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:112
+msgid "The grant to export records from this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:117
+msgid "Sync"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:118
+msgid "The grant to synchronise records with this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:129
+msgid "Free Busy"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:130
+msgid "The grant to access free busy information of events in this calendar"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:137
+msgid "Private"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:138
+msgid "The grant to access records marked as private in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:145
+msgid "Admin"
+msgstr "Administrace"
+
+#: js/widgets/container/GrantsDialog.js:146
+msgid "The grant to administrate this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:168
+msgid "Updating Grants"
+msgstr "Aktualizuji oprávnění"
+
+#: js/widgets/container/GrantsDialog.js:198
+msgid "Error"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:199
+msgid "You are not allowed to remove all admins for this container!"
+msgstr ""
+
+#: js/widgets/customfields/CustomfieldsPanel.js:64
+msgid "Custom Fields"
+msgstr "Uživatelské položky"
+
+#: js/widgets/customfields/CustomfieldsPanel.js:71
+#: js/widgets/customfields/CustomfieldsPanel.js:86
+msgid "General"
+msgstr "Obecné"
+
+#: js/widgets/customfields/CustomfieldsPanel.js:108
+msgid "There are no custom fields yet"
+msgstr "Zatím nejsou žádné uživatelské položky"
+
+#: js/widgets/dialog/AlarmPanel.js:29
+msgid "Alarms"
+msgstr "Alarmy"
+
+#: js/widgets/dialog/AlarmPanel.js:38
+msgid "Custom Datetime"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:48
+msgid "Send Alarm"
+msgstr "Poslat alarm"
+
+#: js/widgets/dialog/AlarmPanel.js:58
+msgid "None"
+msgstr "Žádný"
+
+#: js/widgets/dialog/AlarmPanel.js:59
+msgid "0 minutes before"
+msgstr "0 minut před"
+
+#: js/widgets/dialog/AlarmPanel.js:60
+msgid "15 minutes before"
+msgstr "15 minut před"
+
+#: js/widgets/dialog/AlarmPanel.js:61
+msgid "30 minutes before"
+msgstr "30 minut před"
+
+#: js/widgets/dialog/AlarmPanel.js:62
+msgid "1 hour before"
+msgstr "1 hodinu před"
+
+#: js/widgets/dialog/AlarmPanel.js:63
+msgid "2 hours before"
+msgstr "2 hodiny před"
+
+#: js/widgets/dialog/AlarmPanel.js:64
+msgid "1 day before"
+msgstr "1 den před"
+
+#: js/widgets/dialog/AlarmPanel.js:65
+msgid "Custom datetime"
+msgstr ""
+
+#: js/widgets/dialog/EditDialog.js:175 js/widgets/EditRecord.js:126
 msgid "Apply"
 msgstr "Použít"
 
-#: js/widgets/EditRecord.js:146 js/widgets/dialog/EditDialog.js:192
+#: js/widgets/dialog/EditDialog.js:192 js/widgets/EditRecord.js:146
 msgid "delete"
 msgstr "smazat"
 
-#: js/widgets/EditRecord.js:185 js/widgets/dialog/EditDialog.js:232
-#: js/widgets/dialog/EditDialog.js:245
+#: js/widgets/dialog/EditDialog.js:232 js/widgets/dialog/EditDialog.js:245
+#: js/widgets/EditRecord.js:185
 msgid "Saved in"
 msgstr "Uloženo v"
+
+#: js/widgets/dialog/EditDialog.js:291
+msgid "Add New {0}"
+msgstr "Přidat nový {0}"
+
+#: js/widgets/dialog/EditDialog.js:293
+msgid "Edit {0} \"{1}\""
+msgstr "Editovat {0} \"{1}\""
+
+#: js/widgets/dialog/EditDialog.js:334
+msgid "Transfering {0}..."
+msgstr "Přesouvám {0}..."
+
+#: js/widgets/dialog/EditDialog.js:443
+msgid "Do you really want to delete this {0}?"
+msgstr "Opravdu chcete smazat {0}?"
+
+#: js/widgets/dialog/EditDialog.js:445 js/widgets/grid/GridPanel.js:952
+msgid "Deleting {0}"
+msgstr "Mažu {0}"
+
+#: js/widgets/dialog/EditDialog.js:455 js/widgets/grid/GridPanel.js:973
+#: js/widgets/tags/TagsPanel.js:287 js/widgets/tags/TagsPanel.js:397
+#: js/widgets/tags/TagsPanel.js:430
+msgid "Failed"
+msgstr "Nepodařilo se"
+
+#: js/widgets/dialog/EditDialog.js:455 js/widgets/grid/GridPanel.js:973
+msgid "Could not delete {0}."
+msgstr "Nepodařilo se smazat {0}."
+
+#: js/widgets/dialog/ImportDialog.js:77
+msgid "Files"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:97
+msgid "Import definition"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:109
+msgid "Import into {0}"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:120
+msgid "Dry run"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:137
+msgid "No files added"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:137
+msgid "You need to add files to import."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:167
+msgid "Dry run results"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:168
+msgid "Import test successful for {0} records, import test failed for {1} records."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:172
+msgid "Import results"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:173
+msgid "Import successful for {0} records / import failed for {1} records / {2} duplicates found"
+msgstr ""
+
+#: js/widgets/dialog/LinkPanel.js:48
+msgid "Links"
+msgstr "Odkazy"
+
+#: js/widgets/dialog/MultiOptionsDialog.js:23
+#: js/widgets/dialog/MultiOptionsDialog.js:70
+msgid "What would you like to do?"
+msgstr ""
+
+#: js/widgets/dialog/MultiOptionsDialog.js:27
+#: js/widgets/dialog/MultiOptionsDialog.js:129
+msgid "You need to select an option!"
+msgstr ""
+
+#: js/widgets/dialog/PreferencesDialog.js:137
+msgid "Admin Mode"
+msgstr "Režim administrace"
+
+#: js/widgets/dialog/PreferencesDialog.js:173
+msgid "Applications"
+msgstr "Aplikace"
+
+#: js/widgets/dialog/PreferencesDialog.js:200
+msgid "Edit Preferences"
+msgstr "Editovat předvolby"
+
+#: js/widgets/dialog/PreferencesDialog.js:201
+msgid "Loading ..."
+msgstr "Nahrávám ..."
+
+#: js/widgets/dialog/PreferencesDialog.js:284
+msgid "Saving of preferences failed."
+msgstr "Uložení předvoleb se nezdařilo."
+
+#: js/widgets/dialog/PreferencesPanel.js:151
+msgid "There are no preferences for this application."
+msgstr "Pro tuto aplikaci nejsou žádné předvolby."
+
+#: js/widgets/dialog/PreferencesTreePanel.js:60
+msgid "General Preferences"
+msgstr "Obecné předvolby"
+
+#: js/widgets/form/ConfigPanel.js:108
+msgid "Invalid configuration"
+msgstr "Neplatná konfigurace"
+
+#: js/widgets/form/ConfigPanel.js:108
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr "Před uložením konfigurace musíte opravit červeně označená pole"
+
+#: js/widgets/form/ConfigPanel.js:133
+msgid "Transfering Configuration..."
+msgstr "Přesouvám konfiguraci..."
+
+#: js/widgets/form/ConfigPanel.js:229
+msgid "Save config"
+msgstr "Uložit konfiguraci"
+
+#: js/widgets/form/ConfigPanel.js:239
+msgid "Reload config"
+msgstr ""
+
+#: js/widgets/form/RecordPickerComboBox.js:59 js/widgets/tags/TagsPanel.js:465
+msgid "Searching..."
+msgstr "Vyhledávám..."
+
+#: js/widgets/grid/FileUploadGrid.js:87
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:111
+msgid "Add file"
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:122
+msgid "Remove file"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:151
+msgid "contains"
+msgstr "obsahuje"
+
+#: js/widgets/grid/FilterModel.js:153
+msgid "is greater than"
+msgstr "je větší než"
+
+#: js/widgets/grid/FilterModel.js:154
+msgid "is less than"
+msgstr "je menší než"
+
+#: js/widgets/grid/FilterModel.js:155
+msgid "is not"
+msgstr "není"
+
+#: js/widgets/grid/FilterModel.js:156
+msgid "one of"
+msgstr "jeden z"
+
+#: js/widgets/grid/FilterModel.js:157
+msgid "none of"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:158
+msgid "is before"
+msgstr "je před"
+
+#: js/widgets/grid/FilterModel.js:159
+msgid "is after"
+msgstr "je po"
+
+#: js/widgets/grid/FilterModel.js:160
+msgid "is within"
+msgstr "je v"
+
+#: js/widgets/grid/FilterModel.js:161
+msgid "is in week no."
+msgstr "je v týdnu č."
+
+#: js/widgets/grid/FilterModel.js:162
+msgid "starts with"
+msgstr "začíná s"
+
+#: js/widgets/grid/FilterModel.js:163
+msgid "ends with"
+msgstr "končí s"
+
+#: js/widgets/grid/FilterModel.js:204
+msgid "select a operator"
+msgstr "vyberte operátor"
+
+#: js/widgets/grid/FilterModel.js:315
+msgid "Search Account ..."
+msgstr "Hledat účet ..."
+
+#: js/widgets/grid/FilterModel.js:437
+msgid "today"
+msgstr "dnes"
+
+#: js/widgets/grid/FilterModel.js:438
+msgid "yesterday"
+msgstr "včera"
+
+#: js/widgets/grid/FilterModel.js:439
+msgid "this week"
+msgstr "tento týden"
+
+#: js/widgets/grid/FilterModel.js:440
+msgid "last week"
+msgstr "minulý týden"
+
+#: js/widgets/grid/FilterModel.js:441
+msgid "the week before last"
+msgstr "předminulý týden"
+
+#: js/widgets/grid/FilterModel.js:442
+msgid "this month"
+msgstr "tento měsíc"
+
+#: js/widgets/grid/FilterModel.js:443
+msgid "last month"
+msgstr "minulý měsíc"
+
+#: js/widgets/grid/FilterModel.js:444
+msgid "this quarter"
+msgstr "toto čtvrtletí"
+
+#: js/widgets/grid/FilterModel.js:445
+msgid "last quarter"
+msgstr "minulé čtvrtletí"
+
+#: js/widgets/grid/FilterModel.js:446
+msgid "this year"
+msgstr "letos"
+
+#: js/widgets/grid/FilterModel.js:447
+msgid "last year"
+msgstr "loni"
+
+#: js/widgets/grid/FilterModel.js:451
+msgid "tomorrow"
+msgstr "zítra"
+
+#: js/widgets/grid/FilterModel.js:452
+msgid "next week"
+msgstr "příští týden"
+
+#: js/widgets/grid/FilterModel.js:453
+msgid "next month"
+msgstr "příští měsíc"
+
+#: js/widgets/grid/FilterModel.js:454
+msgid "next quarter"
+msgstr "příští čtvrtletí"
+
+#: js/widgets/grid/FilterModel.js:455
+msgid "next year"
+msgstr "příští rok"
+
+#: js/widgets/grid/FilterToolbar.js:126
+msgid "add new filter"
+msgstr "zadat nový filtr"
+
+#: js/widgets/grid/FilterToolbar.js:132
+msgid "reset all filters"
+msgstr "resetovat všechny filtry"
+
+#: js/widgets/grid/FilterToolbar.js:138
+msgid "start search"
+msgstr "zahájit hledání"
+
+#: js/widgets/grid/FilterToolbar.js:146
+msgid "save as favorite"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:235
+msgid "select a field"
+msgstr "vybrat pole"
+
+#: js/widgets/grid/FilterToolbar.js:260
+msgid "Delete this filter"
+msgstr "Smazat filtr"
+
+#: js/widgets/grid/FilterToolbar.js:291
+msgid "and"
+msgstr "a"
+
+#: js/widgets/grid/FilterToolbar.js:310
+msgid "Show"
+msgstr "Zobrazit"
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
+msgid "show details"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:183
+msgid "Always show advanced filters"
+msgstr "Vždy zobrazovat rozšířené filtry"
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:362
+msgid "Your view is limited by {0} criteria:"
+msgid_plural "Your view is limited by {0} criterias:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/widgets/grid/GridPanel.js:186
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "Nebyly nalezeny žádné {0}. Zkuste prosím změnit kritéria filtru, volby zobrazování nebo {1} ve kterém hledáte."
+
+#: js/widgets/grid/GridPanel.js:275
+msgid "Edit {0}"
+msgstr "Editovat {0}"
+
+#: js/widgets/grid/GridPanel.js:286
+msgid "Copy {0}"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:297 js/widgets/tree/ContextMenu.js:214
+msgid "Add {0}"
+msgstr "Přidat {0}"
+
+#: js/widgets/grid/GridPanel.js:307 js/widgets/grid/GridPanel.js:308
+#: js/widgets/grid/GridPanel.js:310
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] "Smazat {0}"
+msgstr[1] "Smazat {0}"
+msgstr[2] "Smazat {0}"
+
+#: js/widgets/grid/GridPanel.js:404
+msgid "Displaying records {0} - {1} of {2}"
+msgstr "Zobrazuji záznamy {0} - {1} z {2}"
+
+#: js/widgets/grid/GridPanel.js:405
+msgid "No {0} to display"
+msgstr "Žádné {0} ke zobrazení"
+
+#: js/widgets/grid/GridPanel.js:602
+msgid "Tagging"
+msgstr "Štítkování"
+
+#: js/widgets/grid/GridPanel.js:912
+msgid "Not Allowed"
+msgstr "Není povoleno"
+
+#: js/widgets/grid/GridPanel.js:913
+msgid "You are not allowed to delete all pages at once"
+msgstr "Nemáte oprávnění smazat všechny stránky najednou."
+
+#: js/widgets/grid/GridPanel.js:931
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
+msgstr[0] "Opravdu chcete smazat vybraný záznam"
+msgstr[1] "Opravdu chcete smazat vybrané záznamy"
+msgstr[2] "Opravdu chcete smazat vybrané záznamy"
+
+#: js/widgets/grid/GridPanel.js:954
+msgid " ... This may take a long time!"
+msgstr "... Toto může trvat dlouho!"
+
+#: js/widgets/grid/PickerGridPanel.js:117
+msgid "Remove record"
+msgstr ""
+
+#: js/widgets/grid/PickerGridPanel.js:185
+msgid "Search for records ..."
+msgstr ""
+
+#: js/widgets/grid/QuickaddGridPanel.js:99
+msgid "Remove"
+msgstr "Odstranit"
+
+#: js/widgets/LangChooser.js:31 Preference.php:99
+msgid "Language"
+msgstr "Jazyk"
+
+#: js/widgets/LangChooser.js:64
+msgid "setting new language..."
+msgstr "nastavuji nový jazyk..."
+
+#: js/widgets/LangChooser.js:64 js/widgets/persistentfilter/PickerPanel.js:264
+#: js/widgets/TimezoneChooser.js:74
+msgid "Please Wait"
+msgstr "Čekejte prosím"
+
+#: js/widgets/mainscreen/WestPanel.js:193
+msgid "containers"
+msgstr ""
+
+#: js/widgets/mainscreen/WestPanel.js:220
+msgid "Favorites"
+msgstr ""
+
+#: js/widgets/mainscreen/WestPanel.js:228
+msgid "Save current view as favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/Model.js:40
+msgid "Favorite"
+msgid_plural "Favorites"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/widgets/persistentfilter/Model.js:40
+msgid "Events"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:59
+msgid "My favorites"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:180
+msgid "Delete Favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:185
+msgid "Rename Favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:200
+msgid "Do you really want to delete the favorite \"{0}\"?"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:202
+msgid "Deleting Favorite \"{0}\""
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:225
+msgid "New Name"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:225
+msgid "Please enter the new name for favorite \"{0}\"?"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:227
+msgid "Renaming Favorite \"{0}\""
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:250
+msgid "Could not save Favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:250
+msgid "Your current view does not support favorites"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:255
+msgid "save filter"
+msgstr "uložit filtr"
+
+#: js/widgets/persistentfilter/PickerPanel.js:255
+msgid "Please enter a name for the favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:258
+#: js/widgets/persistentfilter/PickerPanel.js:261
+#: js/widgets/persistentfilter/PickerPanel.js:270
+msgid "Favorite not Saved"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:258
+msgid "You have to supply a name for the favorite!"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:261
+msgid "You have to supply a shorter name! Names of favorite can only be up to 40 characters long."
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:264
+msgid "Saving favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:270
+msgid "Overwriteing system favorites is not yet supported"
+msgstr ""
 
 #: js/widgets/Priority.js:23
 msgid "low"
@@ -694,264 +1421,9 @@ msgstr "vysoká"
 msgid "urgent"
 msgstr "urgentní"
 
-#: js/widgets/grid/FilterToolbar.js:127
-msgid "add new filter"
-msgstr "zadat nový filtr"
-
-#: js/widgets/grid/FilterToolbar.js:133
-msgid "reset all filters"
-msgstr "resetovat všechny filtry"
-
-#: js/widgets/grid/FilterToolbar.js:139
-msgid "start search"
-msgstr "zahájit hledání"
-
-#: js/widgets/grid/FilterToolbar.js:147 js/widgets/grid/FilterToolbar.js:690
-msgid "save filter"
-msgstr "uložit filtr"
-
-#: js/widgets/grid/FilterToolbar.js:230
-msgid "select a field"
-msgstr "vybrat pole"
-
-#: js/widgets/grid/FilterToolbar.js:255
-msgid "Delete this filter"
-msgstr "Smazat filtr"
-
-#: js/widgets/grid/FilterToolbar.js:286
-msgid "and"
-msgstr "a"
-
-#: js/widgets/grid/FilterToolbar.js:305
-msgid "Show"
-msgstr "Zobrazit"
-
-#: js/widgets/grid/FilterToolbar.js:690
-msgid "Please enter a name for the filter"
-msgstr "Zadejte prosím název filtru"
-
-#: js/widgets/grid/FilterToolbar.js:693 js/widgets/grid/FilterToolbar.js:696
-msgid "Filter not Saved"
-msgstr "Filtr nebyl uložen"
-
-#: js/widgets/grid/FilterToolbar.js:693
-msgid "You have to supply a name for the filter!"
-msgstr "Musíte zadat název filtru!"
-
-#: js/widgets/grid/FilterToolbar.js:696
-msgid ""
-"You have to supply a shorter name! Names of saved filters can only be up to "
-"40 characters long."
-msgstr ""
-"Musíte zadat kratší název! Názvy uložených filtrů smí být nejvýše 40 znaků "
-"dlouhé."
-
-#: js/widgets/grid/FilterToolbar.js:699 js/widgets/TimezoneChooser.js:74
-#: js/widgets/LangChooser.js:64
-msgid "Please Wait"
-msgstr "Čekejte prosím"
-
-#: js/widgets/grid/FilterToolbar.js:699
-msgid "Saving filter"
-msgstr "Ukládám filtr"
-
-#: js/widgets/grid/FilterModel.js:152
-msgid "contains"
-msgstr "obsahuje"
-
-#: js/widgets/grid/FilterModel.js:153 js/widgets/container/FilterModel.js:130
-#: js/widgets/container/FilterModel.js:134
-msgid "is equal to"
-msgstr "je roven"
-
-#: js/widgets/grid/FilterModel.js:154
-msgid "is greater than"
-msgstr "je větší než"
-
-#: js/widgets/grid/FilterModel.js:155
-msgid "is less than"
-msgstr "je menší než"
-
-#: js/widgets/grid/FilterModel.js:156
-msgid "is not"
-msgstr "není"
-
-#: js/widgets/grid/FilterModel.js:157
-msgid "one of"
-msgstr "jeden z"
-
-#: js/widgets/grid/FilterModel.js:158
-msgid "none of"
-msgstr ""
-
-#: js/widgets/grid/FilterModel.js:159
-msgid "is before"
-msgstr "je před"
-
-#: js/widgets/grid/FilterModel.js:160
-msgid "is after"
-msgstr "je po"
-
-#: js/widgets/grid/FilterModel.js:161
-msgid "is within"
-msgstr "je v"
-
-#: js/widgets/grid/FilterModel.js:162
-msgid "is in week no."
-msgstr "je v týdnu č."
-
-#: js/widgets/grid/FilterModel.js:163
-msgid "starts with"
-msgstr "začíná s"
-
-#: js/widgets/grid/FilterModel.js:164
-msgid "ends with"
-msgstr "končí s"
-
-#: js/widgets/grid/FilterModel.js:205
-msgid "select a operator"
-msgstr "vyberte operátor"
-
-#: js/widgets/grid/FilterModel.js:316
-msgid "Search Account ..."
-msgstr "Hledat účet ..."
-
-#: js/widgets/grid/FilterModel.js:438
-msgid "today"
-msgstr "dnes"
-
-#: js/widgets/grid/FilterModel.js:439
-msgid "yesterday"
-msgstr "včera"
-
-#: js/widgets/grid/FilterModel.js:440
-msgid "this week"
-msgstr "tento týden"
-
-#: js/widgets/grid/FilterModel.js:441
-msgid "last week"
-msgstr "minulý týden"
-
-#: js/widgets/grid/FilterModel.js:442
-msgid "the week before last"
-msgstr "předminulý týden"
-
-#: js/widgets/grid/FilterModel.js:443
-msgid "this month"
-msgstr "tento měsíc"
-
-#: js/widgets/grid/FilterModel.js:444
-msgid "last month"
-msgstr "minulý měsíc"
-
-#: js/widgets/grid/FilterModel.js:445
-msgid "this quarter"
-msgstr "toto čtvrtletí"
-
-#: js/widgets/grid/FilterModel.js:446
-msgid "last quarter"
-msgstr "minulé čtvrtletí"
-
-#: js/widgets/grid/FilterModel.js:447
-msgid "this year"
-msgstr "letos"
-
-#: js/widgets/grid/FilterModel.js:448
-msgid "last year"
-msgstr "loni"
-
-#: js/widgets/grid/FilterModel.js:452
-msgid "tomorrow"
-msgstr "zítra"
-
-#: js/widgets/grid/FilterModel.js:453
-msgid "next week"
-msgstr "příští týden"
-
-#: js/widgets/grid/FilterModel.js:454
-msgid "next month"
-msgstr "příští měsíc"
-
-#: js/widgets/grid/FilterModel.js:455
-msgid "next quarter"
-msgstr "příští čtvrtletí"
-
-#: js/widgets/grid/FilterModel.js:456
-msgid "next year"
-msgstr "příští rok"
-
-#: js/widgets/grid/FileUploadGrid.js:91
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:115
-msgid "Add file"
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:126
-msgid "Remove file"
-msgstr ""
-
-#: js/widgets/grid/PersistentFilterPicker.js:93
-msgid "My saved filters"
-msgstr "Moje uložené filtry"
-
-#: js/widgets/grid/PersistentFilterPicker.js:162
-msgid "Delete Filter"
-msgstr "Smazat filtr"
-
-#: js/widgets/grid/PersistentFilterPicker.js:166
-msgid "Do you really want to delete the Filter \"{0}\"?"
-msgstr "Opravdu chcete smazat filtr \"{0}\"?"
-
-#: js/widgets/grid/PersistentFilterPicker.js:168
-msgid "Deleting Filter \"{0}\""
-msgstr "Mažu filtr \"{0}\""
-
-#: js/widgets/grid/PersistentFilterPicker.js:186
-msgid "Rename Filter"
-msgstr ""
-
-#: js/widgets/grid/PersistentFilterPicker.js:190
-msgid "New Name"
-msgstr ""
-
-#: js/widgets/grid/PersistentFilterPicker.js:190
-msgid "Please enter the new name for filter \"{0}\"?"
-msgstr ""
-
-#: js/widgets/grid/PersistentFilterPicker.js:192
-msgid "Renaming Filter \"{0}\""
-msgstr ""
-
-#: js/widgets/grid/QuickaddGridPanel.js:101
-msgid "Remove"
-msgstr "Odstranit"
-
-#: js/widgets/grid/PickerGridPanel.js:121
-msgid "Remove record"
-msgstr ""
-
-#: js/widgets/grid/PickerGridPanel.js:189
-msgid "Search for records ..."
-msgstr ""
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:175
-msgid "show details"
-msgstr ""
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:176
-msgid "Always show advanced filters"
-msgstr "Vždy zobrazovat rozšířené filtry"
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:335
-msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+#: js/widgets/tags/TagCombo.js:44
+msgid "tag name"
+msgstr "název štítku"
 
 #: js/widgets/tags/TagFilter.js:29
 msgid "Tag"
@@ -1061,12 +1533,6 @@ msgstr[0] "Mažu štítek"
 msgstr[1] "Mažu štítky"
 msgstr[2] "Mažu štítky"
 
-#: js/widgets/tags/TagsPanel.js:287 js/widgets/tags/TagsPanel.js:397
-#: js/widgets/tags/TagsPanel.js:430 js/widgets/app/GridPanel.js:952
-#: js/widgets/dialog/EditDialog.js:452
-msgid "Failed"
-msgstr "Nepodařilo se"
-
 #: js/widgets/tags/TagsPanel.js:287
 msgid "Could not delete Tag(s)."
 msgstr "Nepodařilo se smazat štítek/štítky."
@@ -1091,304 +1557,9 @@ msgstr "Nepodařilo se aktualizovat štítek."
 msgid "Enter tag name"
 msgstr "Zadejte název štítku"
 
-#: js/widgets/tags/TagsPanel.js:465 js/widgets/form/RecordPickerComboBox.js:59
-msgid "Searching..."
-msgstr "Vyhledávám..."
-
 #: js/widgets/tags/TagsPanel.js:599
 msgid "Color"
 msgstr "Barva"
-
-#: js/widgets/tags/TagCombo.js:44
-msgid "tag name"
-msgstr "název štítku"
-
-#: js/widgets/container/FilterModel.js:130
-msgid "is personal of"
-msgstr ""
-
-#: js/widgets/container/FilterModel.js:238
-msgid "Selected  {0}"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:53
-msgid "Folder"
-msgstr "Složka"
-
-#: js/widgets/container/GrantsDialog.js:92
-msgid "Read"
-msgstr "Číst"
-
-#: js/widgets/container/GrantsDialog.js:93
-msgid "The grant to read records of this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:98 js/widgets/ActivitiesPanel.js:156
-#: js/widgets/ActivitiesPanel.js:168
-msgid "Add"
-msgstr "Přidat"
-
-#: js/widgets/container/GrantsDialog.js:99
-msgid "The grant to add records to this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:104
-msgid "Edit"
-msgstr "Editovat"
-
-#: js/widgets/container/GrantsDialog.js:105
-msgid "The grant to edit records in this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:110
-msgid "Delete"
-msgstr "Smazat"
-
-#: js/widgets/container/GrantsDialog.js:111
-msgid "The grant to delete records in this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:116
-msgid "Export"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:117
-msgid "The grant to export records from this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:122
-msgid "Sync"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:123
-msgid "The grant to synchronise records with this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:134
-msgid "Free Busy"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:135
-msgid "The grant to access free busy information of events in this calendar"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:142
-msgid "Private"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:143
-msgid "The grant to access records marked as private in this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:150
-msgid "Admin"
-msgstr "Administrace"
-
-#: js/widgets/container/GrantsDialog.js:151
-msgid "The grant to administrate this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:173
-msgid "Updating Grants"
-msgstr "Aktualizuji oprávnění"
-
-#: js/widgets/container/GrantsDialog.js:203
-msgid "Error"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:204
-msgid "You are not allowed to remove all admins for this container!"
-msgstr ""
-
-#: js/widgets/container/ContainerSelect.js:107
-msgid "choose other {0}..."
-msgstr "vyberte jiné {0}..."
-
-#: js/widgets/container/ContainerSelect.js:110
-msgid "Select a {0}"
-msgstr ""
-
-#: js/widgets/container/ContainerSelect.js:130
-msgid "Recently used {0}:"
-msgstr "Naposledy použité {0}:"
-
-#: js/widgets/container/ContainerSelect.js:447
-msgid "please select a {0}"
-msgstr "vyberte prosím  {0}"
-
-#: js/widgets/container/ContainerTree.js:124
-msgid "container"
-msgid_plural "containers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/widgets/container/ContainerTree.js:400
-msgid "You are not allowed to select the {0} '{1}':"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:401
-msgid "{0} grant is required for desired action"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:402
-msgid "Insufficient Grants"
-msgstr ""
-
-#: js/widgets/ActivitiesPanel.js:141
-msgid "Add a Note..."
-msgstr "Přidat poznámku..."
-
-#: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:396
-msgid "Note"
-msgstr "Poznámka"
-
-#: js/widgets/ActivitiesPanel.js:169 js/widgets/ActivitiesPanel.js:322
-msgid "Add new note"
-msgstr "Přidat novou poznámku"
-
-#: js/widgets/ActivitiesPanel.js:200
-msgid "Notes"
-msgstr "Poznámky"
-
-#: js/widgets/ActivitiesPanel.js:264 js/widgets/ActivitiesPanel.js:321
-msgid "Add Note"
-msgstr "Přidat poznámku"
-
-#: js/widgets/ActivitiesPanel.js:265
-msgid "Enter new note:"
-msgstr "Zadejte novou poznámku:"
-
-#: js/widgets/ActivitiesPanel.js:308
-msgid "Add a {0} Note"
-msgstr "Přidat {0} poznámku..."
-
-#: js/widgets/ActivitiesPanel.js:394 js/widgets/ActivitiesPanel.js:529
-msgid "Type"
-msgstr "Typ"
-
-#: js/widgets/ActivitiesPanel.js:397
-msgid "Created By"
-msgstr "Vytvořil(a)"
-
-#: js/widgets/ActivitiesPanel.js:398
-msgid "Timestamp"
-msgstr "Časové razítko"
-
-#: js/widgets/ActivitiesPanel.js:412
-msgid "Displaying history records {0} - {1} of {2}"
-msgstr "Zobrazuji záznamy historie {0} - {1} z {2}"
-
-#: js/widgets/ActivitiesPanel.js:413
-msgid "No history to display"
-msgstr "Žádná historie ke zobrazení"
-
-#: js/widgets/ActivitiesPanel.js:511
-msgid "History"
-msgstr "Historie"
-
-#: js/widgets/ActivitiesPanel.js:523
-msgid "Quick search"
-msgstr "Rychlé hledání"
-
-#: js/widgets/ActivitiesPanel.js:524 js/widgets/ActivitiesPanel.js:525
-msgid "Time"
-msgstr "Čas"
-
-#: js/widgets/ActivitiesPanel.js:527
-msgid "User"
-msgstr "Uživatel"
-
-#: js/widgets/form/ConfigPanel.js:108
-msgid "Invalid configuration"
-msgstr "Neplatná konfigurace"
-
-#: js/widgets/form/ConfigPanel.js:108
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr "Před uložením konfigurace musíte opravit červeně označená pole"
-
-#: js/widgets/form/ConfigPanel.js:133
-msgid "Transfering Configuration..."
-msgstr "Přesouvám konfiguraci..."
-
-#: js/widgets/form/ConfigPanel.js:229
-msgid "Save config"
-msgstr "Uložit konfiguraci"
-
-#: js/widgets/form/ConfigPanel.js:239
-msgid "Reload config"
-msgstr ""
-
-#: js/widgets/app/GridPanel.js:190
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-"Nebyly nalezeny žádné {0}. Zkuste prosím změnit kritéria filtru, volby "
-"zobrazování nebo {1} ve kterém hledáte."
-
-#: js/widgets/app/GridPanel.js:279
-msgid "Edit {0}"
-msgstr "Editovat {0}"
-
-#: js/widgets/app/GridPanel.js:290
-msgid "Copy {0}"
-msgstr ""
-
-#: js/widgets/app/GridPanel.js:301 js/widgets/tree/ContextMenu.js:214
-msgid "Add {0}"
-msgstr "Přidat {0}"
-
-#: js/widgets/app/GridPanel.js:311 js/widgets/app/GridPanel.js:312
-#: js/widgets/app/GridPanel.js:314
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] "Smazat {0}"
-msgstr[1] "Smazat {0}"
-msgstr[2] "Smazat {0}"
-
-#: js/widgets/app/GridPanel.js:393
-msgid "Displaying records {0} - {1} of {2}"
-msgstr "Zobrazuji záznamy {0} - {1} z {2}"
-
-#: js/widgets/app/GridPanel.js:394
-msgid "No {0} to display"
-msgstr "Žádné {0} ke zobrazení"
-
-#: js/widgets/app/GridPanel.js:581
-msgid "Tagging"
-msgstr "Štítkování"
-
-#: js/widgets/app/GridPanel.js:891
-msgid "Not Allowed"
-msgstr "Není povoleno"
-
-#: js/widgets/app/GridPanel.js:892
-msgid "You are not allowed to delete all pages at once"
-msgstr "Nemáte oprávnění smazat všechny stránky najednou."
-
-#: js/widgets/app/GridPanel.js:910
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "Opravdu chcete smazat vybraný záznam"
-msgstr[1] "Opravdu chcete smazat vybrané záznamy"
-msgstr[2] "Opravdu chcete smazat vybrané záznamy"
-
-#: js/widgets/app/GridPanel.js:931 js/widgets/dialog/EditDialog.js:442
-msgid "Deleting {0}"
-msgstr "Mažu {0}"
-
-#: js/widgets/app/GridPanel.js:933
-msgid " ... This may take a long time!"
-msgstr "... Toto může trvat dlouho!"
-
-#: js/widgets/app/GridPanel.js:952 js/widgets/dialog/EditDialog.js:452
-msgid "Could not delete {0}."
-msgstr "Nepodařilo se smazat {0}."
-
-#: js/widgets/app/MainScreen.js:120
-msgid "Saved filter"
-msgstr "Uložený filtr"
 
 #: js/widgets/TimezoneChooser.js:34 Preference.php:95
 msgid "Timezone"
@@ -1397,191 +1568,6 @@ msgstr "Časové pásmo"
 #: js/widgets/TimezoneChooser.js:74
 msgid "setting new timezone..."
 msgstr "nastavuji nové časové pásmo..."
-
-#: js/widgets/customfields/CustomfieldsPanel.js:64
-msgid "Custom Fields"
-msgstr "Uživatelské položky"
-
-#: js/widgets/customfields/CustomfieldsPanel.js:71
-#: js/widgets/customfields/CustomfieldsPanel.js:86
-msgid "General"
-msgstr "Obecné"
-
-#: js/widgets/customfields/CustomfieldsPanel.js:108
-msgid "There are no custom fields yet"
-msgstr "Zatím nejsou žádné uživatelské položky"
-
-#: js/widgets/dialog/PreferencesDialog.js:137
-msgid "Admin Mode"
-msgstr "Režim administrace"
-
-#: js/widgets/dialog/PreferencesDialog.js:173
-msgid "Applications"
-msgstr "Aplikace"
-
-#: js/widgets/dialog/PreferencesDialog.js:200
-msgid "Edit Preferences"
-msgstr "Editovat předvolby"
-
-#: js/widgets/dialog/PreferencesDialog.js:201
-msgid "Loading ..."
-msgstr "Nahrávám ..."
-
-#: js/widgets/dialog/PreferencesDialog.js:284
-#: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:432 js/widgets/dialog/ImportDialog.js:203
-msgid "Errors"
-msgstr "Chyby"
-
-#: js/widgets/dialog/PreferencesDialog.js:284
-msgid "Saving of preferences failed."
-msgstr "Uložení předvoleb se nezdařilo."
-
-#: js/widgets/dialog/LinkPanel.js:48
-msgid "Links"
-msgstr "Odkazy"
-
-#: js/widgets/dialog/PreferencesTreePanel.js:60
-msgid "General Preferences"
-msgstr "Obecné předvolby"
-
-#: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:432 js/widgets/dialog/ImportDialog.js:203
-msgid "Please fix the errors noted."
-msgstr "Opravte prosím uvedené chyby."
-
-#: js/widgets/dialog/AlarmPanel.js:35
-msgid "Alarms"
-msgstr "Alarmy"
-
-#: js/widgets/dialog/AlarmPanel.js:46
-msgid "Send Alarm"
-msgstr "Poslat alarm"
-
-#: js/widgets/dialog/AlarmPanel.js:56
-msgid "None"
-msgstr "Žádný"
-
-#: js/widgets/dialog/AlarmPanel.js:57
-msgid "0 minutes before"
-msgstr "0 minut před"
-
-#: js/widgets/dialog/AlarmPanel.js:58
-msgid "15 minutes before"
-msgstr "15 minut před"
-
-#: js/widgets/dialog/AlarmPanel.js:59
-msgid "30 minutes before"
-msgstr "30 minut před"
-
-#: js/widgets/dialog/AlarmPanel.js:60
-msgid "1 hour before"
-msgstr "1 hodinu před"
-
-#: js/widgets/dialog/AlarmPanel.js:61
-msgid "2 hours before"
-msgstr "2 hodiny před"
-
-#: js/widgets/dialog/AlarmPanel.js:62
-msgid "1 day before"
-msgstr "1 den před"
-
-#: js/widgets/dialog/EditDialog.js:291
-msgid "Add New {0}"
-msgstr "Přidat nový {0}"
-
-#: js/widgets/dialog/EditDialog.js:293
-msgid "Edit {0} \"{1}\""
-msgstr "Editovat {0} \"{1}\""
-
-#: js/widgets/dialog/EditDialog.js:333
-msgid "Transfering {0}..."
-msgstr "Přesouvám {0}..."
-
-#: js/widgets/dialog/EditDialog.js:440
-msgid "Do you really want to delete this {0}?"
-msgstr "Opravdu chcete smazat {0}?"
-
-#: js/widgets/dialog/MultiOptionsDialog.js:23
-#: js/widgets/dialog/MultiOptionsDialog.js:70
-msgid "What would you like to do?"
-msgstr ""
-
-#: js/widgets/dialog/MultiOptionsDialog.js:27
-#: js/widgets/dialog/MultiOptionsDialog.js:129
-msgid "You need to select an option!"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:86
-msgid "Files"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:106
-msgid "Import definition"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:118
-msgid "Import into {0}"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:129
-msgid "Dry run"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:146
-msgid "No files added"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:146
-msgid "You need to add files to import."
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:176
-msgid "Dry run results"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:177
-msgid ""
-"Import test successful for {0} records, import test failed for {1} records."
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:181
-msgid "Import results"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:182
-msgid ""
-"Import successful for {0} records / import failed for {1} records / {2} "
-"duplicates found"
-msgstr ""
-
-#: js/widgets/dialog/PreferencesPanel.js:151
-msgid "There are no preferences for this application."
-msgstr "Pro tuto aplikaci nejsou žádné předvolby."
-
-#: js/widgets/LangChooser.js:31 Preference.php:99
-msgid "Language"
-msgstr "Jazyk"
-
-#: js/widgets/LangChooser.js:64
-msgid "setting new language..."
-msgstr "nastavuji nový jazyk..."
-
-#: js/widgets/VersionCheck.js:43 js/widgets/VersionCheck.js:52
-msgid "New version of Tine 2.0 available"
-msgstr "K dispozici je nová verze Tine 2.0"
-
-#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
-msgid "Version \"{0}\" of Tine 2.0 is available."
-msgstr "K dispozici je Tine 2.0 verze \"{0}\"."
-
-#: js/widgets/VersionCheck.js:45
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr "Jedná se o kritickou aktualizaci a musí být nainstalována co nejdříve!"
-
-#: js/widgets/VersionCheck.js:54
-msgid "Please consider updating!"
-msgstr "Zvažte prosím aktualizaci!"
 
 #: js/widgets/tree/ContextMenu.js:37
 msgid "New {0}"
@@ -1639,14 +1625,29 @@ msgstr "Spravovat oprávnění"
 msgid "Reload {0}"
 msgstr "Znovu načíst {0}"
 
-#: js/AppManager.js:164
-msgid "Missing Applications"
-msgstr ""
+#: js/widgets/VersionCheck.js:43 js/widgets/VersionCheck.js:52
+msgid "New version of Tine 2.0 available"
+msgstr "K dispozici je nová verze Tine 2.0"
 
-#: js/AppManager.js:165
-msgid ""
-"There are no applications enabled for you. Please contact your administrator."
-msgstr "Nemáte povoleny žádné aplikace. Kontaktujte prosím administrátora."
+#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+msgid "Version \"{0}\" of Tine 2.0 is available."
+msgstr "K dispozici je Tine 2.0 verze \"{0}\"."
+
+#: js/widgets/VersionCheck.js:45
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr "Jedná se o kritickou aktualizaci a musí být nainstalována co nejdříve!"
+
+#: js/widgets/VersionCheck.js:54
+msgid "Please consider updating!"
+msgstr "Zvažte prosím aktualizaci!"
+
+#: Notes.php:363
+msgid "by"
+msgstr "(kým)"
+
+#: Notes.php:370
+msgid "Changed fields:"
+msgstr "Změněné položky"
 
 #: Preference.php:96
 msgid "The timezone in which dates are shown in Tine 2.0."
@@ -1669,11 +1670,8 @@ msgid "Window Type"
 msgstr "Typ okna"
 
 #: Preference.php:108
-msgid ""
-"You can choose between ExtJs style windows or normal Browser popup windows."
-msgstr ""
-"Můžete si vybrat mezi okny ve stylu ExtJs a normálními vyskakovacími okny "
-"webového prohlížeče."
+msgid "You can choose between ExtJs style windows or normal Browser popup windows."
+msgstr "Můžete si vybrat mezi okny ve stylu ExtJs a normálními vyskakovacími okny webového prohlížeče."
 
 #: Preference.php:111
 msgid "Confirm Logout"
@@ -1683,57 +1681,75 @@ msgstr ""
 msgid "Show confirmation dialog on logout."
 msgstr ""
 
-#: Notes.php:363
-msgid "by"
-msgstr "(kým)"
-
-#: Notes.php:370
-msgid "Changed fields:"
-msgstr "Změněné položky"
-
-#: Frontend/Http.php:537
-msgid "Your session is not valid. You need to login again."
-msgstr "Vaše relace je neplatná. Musíte se přihlásit znovu."
-
-#: Setup/setup.xml:2521
+#: Setup/setup.xml:2570
 msgid "note"
 msgstr "poznámka"
 
-#: Setup/setup.xml:2526
+#: Setup/setup.xml:2575
 msgid "default note type"
 msgstr "výchozí typ poznámky"
 
-#: Setup/setup.xml:2552
+#: Setup/setup.xml:2601
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:2557
+#: Setup/setup.xml:2606
 msgid "telephone call"
 msgstr "telefonní hovor"
 
-#: Setup/setup.xml:2583
+#: Setup/setup.xml:2632
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:2588
+#: Setup/setup.xml:2637
 msgid "email contact"
 msgstr "emailový kontakt"
 
-#: Setup/setup.xml:2614
+#: Setup/setup.xml:2663
 msgid "created"
 msgstr "vytvořeno"
 
-#: Setup/setup.xml:2619
+#: Setup/setup.xml:2668
 msgid "record created"
 msgstr "záznam byl vytvořen"
 
-#: Setup/setup.xml:2645
+#: Setup/setup.xml:2694
 msgid "changed"
 msgstr "změněno"
 
-#: Setup/setup.xml:2650
+#: Setup/setup.xml:2699
 msgid "record changed"
 msgstr "záznam byl změněn"
+
+#~ msgid "Please enter a name for the filter"
+#~ msgstr "Zadejte prosím název filtru"
+
+#~ msgid "Filter not Saved"
+#~ msgstr "Filtr nebyl uložen"
+
+#~ msgid "You have to supply a name for the filter!"
+#~ msgstr "Musíte zadat název filtru!"
+
+#~ msgid "You have to supply a shorter name! Names of saved filters can only be up to 40 characters long."
+#~ msgstr "Musíte zadat kratší název! Názvy uložených filtrů smí být nejvýše 40 znaků dlouhé."
+
+#~ msgid "Saving filter"
+#~ msgstr "Ukládám filtr"
+
+#~ msgid "My saved filters"
+#~ msgstr "Moje uložené filtry"
+
+#~ msgid "Delete Filter"
+#~ msgstr "Smazat filtr"
+
+#~ msgid "Do you really want to delete the Filter \"{0}\"?"
+#~ msgstr "Opravdu chcete smazat filtr \"{0}\"?"
+
+#~ msgid "Deleting Filter \"{0}\""
+#~ msgstr "Mažu filtr \"{0}\""
+
+#~ msgid "Saved filter"
+#~ msgstr "Uložený filtr"
 
 #~ msgid "Report bugs to tine20.org directly when they occur"
 #~ msgstr "Hlásit chyby přímo na tine20.org jakmile k nim dojde"
@@ -1788,22 +1804,14 @@ msgstr "záznam byl změněn"
 #~ msgid "Register"
 #~ msgstr "Registrovat"
 
-#~ msgid ""
-#~ "The server did not respond to your request. Please check your network or "
-#~ "contact your administrator."
-#~ msgstr ""
-#~ "Server neodpověděl na Váš požadavek. Zkontrolujte prosím své síťové "
-#~ "připojení nebo kontaktujte administrátora."
+#~ msgid "The server did not respond to your request. Please check your network or contact your administrator."
+#~ msgstr "Server neodpověděl na Váš požadavek. Zkontrolujte prosím své síťové připojení nebo kontaktujte administrátora."
 
 #~ msgid "No response"
 #~ msgstr "Žádná odpověď"
 
-#~ msgid ""
-#~ "We did not receive a response from the server. Your network could be down "
-#~ "or a timeout occurred."
-#~ msgstr ""
-#~ "Neobdrželi jsme žádnou odpověď ze serveru. Můžete mít problém na síti "
-#~ "nebo byl překročen časový limit."
+#~ msgid "We did not receive a response from the server. Your network could be down or a timeout occurred."
+#~ msgstr "Neobdrželi jsme žádnou odpověď ze serveru. Můžete mít problém na síti nebo byl překročen časový limit."
 
 #~ msgid "Permissions"
 #~ msgstr "Oprávnění"

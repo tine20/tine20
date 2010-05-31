@@ -27,8 +27,7 @@ msgstr "manage accounts"
 
 #: Acl/Rights.php:179
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"add and edit users and groups, add group members, change user passwords"
+msgstr "add and edit users and groups, add group members, change user passwords"
 
 #: Acl/Rights.php:182
 msgid "manage applications"
@@ -43,10 +42,8 @@ msgid "manage roles"
 msgstr "manage roles"
 
 #: Acl/Rights.php:187
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"add and edit roles, add new members to roles, add application rights to roles"
+msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgstr "add and edit roles, add new members to roles, add application rights to roles"
 
 #: Acl/Rights.php:190
 msgid "manage shared tags"
