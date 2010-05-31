@@ -43,6 +43,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ');
         $event = $this->_getEvent();
+        $event->dtstart = '2010-05-20 06:00:00';
+        $event->dtend = '2010-05-20 06:15:00';
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
