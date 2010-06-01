@@ -54,8 +54,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            $_requests = $requests;
             if (isset($requests[0]["params"]["password"])) {
-                $_requests = $requests;
                 $_requests[0]["params"]["password"] = "*******";
             }
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. rawdata: ' . print_r($_requests, true));
