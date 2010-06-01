@@ -195,6 +195,10 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         
         this.dtEnd = this.event.get('dtend');
         
+        if (this.event.get('editGrant')) {
+            this.extraCls = 'cal-daysviewpanel-event-editgrant';
+        }
+        
         // 00:00 in users timezone is a spechial case where the user expects
         // something like 24:00 and not 00:00
         if (this.dtEnd.format('H:i') == '00:00') {

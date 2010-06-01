@@ -236,10 +236,13 @@
 	position: absolute;
     top: -1px;
     height: 14px;
-    cursor: move;
     background-color: #808080;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+}
+
+.cal-daysviewpanel-event-editgrant .cal-daysviewpanel-event-header {
+    cursor: move;
 }
 
 .ext-gecko .cal-daysviewpanel-event-header {
