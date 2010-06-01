@@ -402,7 +402,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         }
         
         // delete logs
-        $this->_backend->deleteAccessLogEntries($deleteLogIds);
+        if (!empty($deleteLogIds)) {
+            $this->_backend->deleteAccessLogEntries($deleteLogIds);
+        }
         
         // check total count
         $accessLogs = $this->_backend->getAccessLogEntries($from->get(Tinebase_Record_Abstract::ISO8601LONG), $to->get(Tinebase_Record_Abstract::ISO8601LONG), 'tine20admin', $paging);

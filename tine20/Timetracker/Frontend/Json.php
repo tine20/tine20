@@ -297,6 +297,15 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveTimeaccount($recordData)
     {
+        $title = trim($recordData['title']);
+        if (empty($title)) {
+            $result = array(
+                'errors'            => 'invalid title',
+                'errorMessage'      => 'title is required.',
+                'status'            => 'failure'
+            );
+            return $result;
+        }
         return $this->_save($recordData, $this->_timeaccountController, 'Timeaccount');        
     }
     
