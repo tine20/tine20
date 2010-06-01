@@ -168,6 +168,8 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
         $groupdId2 = $this->_backend->addGroup($groups[1]);
         
         $accountId = Tinebase_Core::getUser()->getId();
+        $oldGroupMemberships = Tinebase_Core::getUser()->getGroupMemberships();
+        
         $_groupIds = new Tinebase_Record_RecordSet('Tinebase_Model_Group', $groups);
         $this->_backend->setGroupMembershipsInSqlBackend($accountId, $_groupIds);
         
@@ -177,6 +179,7 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
         $getGroupMembersArray = $this->_backend->getGroupMembers($groupdId2);
         $this->assertTrue(in_array($accountId, $getGroupMembersArray));
         
+        $this->_backend->setGroupMembershipsInSqlBackend($accountId, $oldGroupMemberships);
         $this->_backend->deleteGroups(array($groupdId1, $groupdId2));
         
     }
@@ -198,6 +201,8 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
         
         
         $accountId = Tinebase_Core::getUser()->getId();
+        $oldGroupMemberships = Tinebase_Core::getUser()->getGroupMemberships();
+        
         $this->_backend->setGroupMembershipsInSqlBackend($accountId, array($groupId1->id, $groupId2->id, $groupId1->id));
         
         $getGroupMembersArray = $this->_backend->getGroupMembers($groupId1);
@@ -206,6 +211,7 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
         $getGroupMembersArray = $this->_backend->getGroupMembers($groupId2);
         $this->assertTrue(in_array($accountId, $getGroupMembersArray));
         
+        $this->_backend->setGroupMembershipsInSqlBackend($accountId, $oldGroupMemberships);
         
         $this->_backend->deleteGroups(array($groupId1, $groupId2));
         
