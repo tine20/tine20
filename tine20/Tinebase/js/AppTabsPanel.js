@@ -25,6 +25,9 @@ Ext.ns('Tine.Tinebase');
 Tine.Tinebase.AppTabsPanel = function(config) {
     Ext.apply(this, config);
     this.plugins = [new Ext.ux.TabPanelSortPlugin({
+        dragZoneConfig: {
+            onBeforeDrag: this.onBeforeDrag.createDelegate(this) 
+        },
         dropZoneConfig: {
             getTargetFromEvent: this.getTargetFromEvent.createDelegate(this)
         }
@@ -170,6 +173,15 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
         }, this);
         
         return tabItems;
+    },
+    
+    /**
+     * deny drag on menuEl
+     * @param {} e
+     * @return {}
+     */
+    onBeforeDrag: function(data, e) {
+        return e.getTarget('li[class*=mainscreen-apptabspanel-menu-tabel]', 10) ? false : true;
     },
     
     /**

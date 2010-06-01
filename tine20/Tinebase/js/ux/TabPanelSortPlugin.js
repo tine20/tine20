@@ -71,12 +71,12 @@ Ext.ux.TabPanelSortPlugin.prototype = {
      * @param {Ext.TabPanel} tabpanel
      */
     onRender: function(tabpanel) {
-        var dragZone = new Ext.dd.DragZone(tabpanel.header, Ext.apply({
+        this.dragZone = new Ext.dd.DragZone(tabpanel.header, Ext.apply({
             getDragData: this.getDragData.createDelegate(this),
             getRepairXY: this.getRepairXY.createDelegate(this)
         }, this.dragZoneConfig || {}));
         
-        var dropZone = new Ext.dd.DropZone(tabpanel.header, Ext.apply({
+        this.dropZone = new Ext.dd.DropZone(tabpanel.header, Ext.apply({
             onNodeOver : this.onNodeOver.createDelegate(this),
             onNodeDrop : this.onNodeDrop.createDelegate(this),
             getTargetFromEvent: this.getTargetFromEvent.createDelegate(this)
@@ -190,8 +190,8 @@ Ext.ux.TabPanelSortPlugin.prototype = {
      * @param {EventObject} e The mouse up event
      * @return {Array} The xy location (e.g. [100, 200])
      */
-    getRepairXY: function() {
-        return this.dragData.repairXY;
+    getRepairXY: function(e) {
+        return this.dragZone.dragData.repairXY;
     },
     
     /**
