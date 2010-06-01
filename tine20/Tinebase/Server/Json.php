@@ -52,7 +52,15 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
         	$isBatchedRequest = false;
         	$requests = array(Zend_Json::decode($json));
         }
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. rawdata: ' . print_r($requests, true));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            if (isset($requests[0]["params"]["password"])) {
+                $_requests = $requests;
+                $_requests[0]["params"]["password"] = "*******";
+            }
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. rawdata: ' . print_r($_requests, true));
+        } 
+        
         $response = array();
         foreach ($requests as $requestOptions) {
         	$request = new Zend_Json_Server_Request();
