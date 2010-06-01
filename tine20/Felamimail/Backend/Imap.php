@@ -53,6 +53,13 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         $this->_protocol = new Felamimail_Protocol_Imap();
         
+        if(!isset($params->port)) {
+            $params->port = null;
+        }
+        if(!isset($params->ssl)) {
+            $params->ssl = null;
+        }
+        
         $this->connectAndLogin($params);
         
         $this->selectFolder(isset($params->folder) ? $params->folder : 'INBOX');
@@ -167,7 +174,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     public function getMessage($id)
     {
         $data = $this->_protocol->fetch(array('FLAGS', 'RFC822.HEADER'), $id, null, $this->_useUid);
-        $header = $this->_getHeader($data['RFC822.HEADER'], $id, $spaces);
+        $header = $this->_fixHeader($data['RFC822.HEADER'], $id, $spaces);
 
         $flags = array();
         foreach ($data['FLAGS'] as $flag) {
@@ -329,14 +336,21 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function getSummary($from, $to = null)
     {
-        $summary = $this->_protocol->fetch(array('FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE'), $from, $to, $this->_useUid);
+        $summary = $this->_protocol->fetch(array('UID', 'FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE', 'BODYSTRUCTURE'), $from, $to, $this->_useUid);
         
         //print_r($summary);
+        
+        // fetch returns a different structure when fetching one or multiple messages
+        if($to === null) {
+            $summary = array(
+                $from => $summary
+            );
+        }
         
         $messages = array();
         
         foreach($summary as $id => $data) {
-            $header = $this->_getHeader($data['RFC822.HEADER'], $id, $spaces);
+            $header = $this->_fixHeader($data['RFC822.HEADER'], $id, $spaces);
     
             $flags = array();
             foreach ($data['FLAGS'] as $flag) {
@@ -489,7 +503,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * @param int $_leadingSpaces
      * @return string
      */
-    protected function _getHeader($_header, $_messageId, &$_leadingSpaces = 0)
+    protected function _fixHeader($_header, $_messageId, &$_leadingSpaces = 0)
     {
         // check for valid header at first line (this is done again in Zend_Mime_Decode)
         $firstline = strtok($_header, "\n");
