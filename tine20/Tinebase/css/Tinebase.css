@@ -476,7 +476,7 @@ html, body {
 .tine-mainscreen-mainmenu .x-toolbar {
     background-color: #EBF3FD;
     border: none;
-    background-image: url(../../images/apptabs-bg.gif);
+    background-image: url(../../images/apptabs-bg.png);
 }
 
 .tine-mainscreen-mainmenu .x-toolbar .x-btn td {
@@ -499,7 +499,7 @@ html, body {
 
 .tine-mainscreen-apptabs .x-tab-strip-wrap ul.x-tab-strip-top {
     background-color:#EBF3FD;
-    background-image: url(../../images/apptabs-bg.gif);
+    background-image: url(../../images/apptabs-bg.png);
     border-bottom-color:#8db2e3;
     background-position: 0px -20px;
 }
