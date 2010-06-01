@@ -97,7 +97,7 @@ cal-monthview-wkcell-header {
 	/*overflow: hidden;*/
 }
 
-.cal-monthview-eventslice .cal-event-active {
+.cal-monthview-eventslice .cal-monthview-event-editgrant {
     cursor: move;
 }
 
