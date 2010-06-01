@@ -891,7 +891,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
         registry.unregister(event);
         this.removeEvent(event);
-        
+        this.getSelectionModel().unselect(event);
         this.layout();
     },
     

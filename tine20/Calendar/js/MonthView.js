@@ -756,6 +756,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     onRemove : function(ds, event, index, isUpdate){
         this.parallelEventsRegistry.unregister(event);
         this.removeEvent(event);
+        this.getSelectionModel().unselect(event);
     },
     
     /**
