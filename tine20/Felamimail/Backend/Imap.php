@@ -336,12 +336,12 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function getSummary($from, $to = null)
     {
-        $summary = $this->_protocol->fetch(array('UID', 'FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE', 'BODYSTRUCTURE'), $from, $to, $this->_useUid);
+        $summary = $this->_protocol->fetch(array('FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE'), $from, $to, $this->_useUid);
         
         //print_r($summary);
         
         // fetch returns a different structure when fetching one or multiple messages
-        if($to === null) {
+        if($to === null && ctype_digit($from)) {
             $summary = array(
                 $from => $summary
             );
@@ -362,16 +362,67 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             } else {
                 $key = $id;
             }
+            
             $messages[$key] = array(
-                'message' => new $this->_messageClass(array(
+                'message'  => new $this->_messageClass(array(
                     'handler' => $this, 
-                    'id' => $id, 
+                    'id'      => $id, 
                     'headers' => $header, 
-                    'flags' => $flags,
-                    'spaces' => $spaces,
+                    'flags'   => $flags,
+                    'spaces'  => $spaces,
                 )),
                 'received' => $data['INTERNALDATE'],
-                'size' => $data['RFC822.SIZE'],
+                'size'     => $data['RFC822.SIZE']
+            );
+        }
+        
+        return $messages;
+    }
+    
+    /**
+     * get messages summary
+     *
+     * @param int $from
+     * @param int|null $to
+     * @return array with $this->_messageClass (Felamimail_Message)
+     */
+    public function getSummaryLars($from, $to = null)
+    {
+        $this->_useUid = true;
+        $summary = $this->_protocol->fetch(array('UID', 'FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE', 'BODYSTRUCTURE'), $from, $to, $this->_useUid);
+                
+        // fetch returns a different structure when fetching one or multiple messages
+        if($to === null && ctype_digit($from)) {
+            $summary = array(
+                $from => $summary
+            );
+        }
+        
+        $messages = array();
+        
+        foreach($summary as $id => $data) {
+            $header = $this->_fixHeader($data['RFC822.HEADER'], $id, $spaces);
+            Zend_Mime_Decode::splitMessage($header, $header, $null);
+            
+            $flags = array();
+            foreach ($data['FLAGS'] as $flag) {
+                $flags[] = isset(self::$_knownFlags[$flag]) ? self::$_knownFlags[$flag] : $flag;
+            }
+    
+            if($this->_useUid === true) {
+                $key = $data['UID'];
+            } else {
+                $key = $id;
+            }
+            
+            
+            $messages[$key] = array(
+                'header'    => $header,
+                'flags'     => $flags,
+                'received'  => $data['INTERNALDATE'],
+                'size'      => $data['RFC822.SIZE'],
+                'structure' => $data['BODYSTRUCTURE'],
+                'uid'       => $data['UID']
             );
         }
         
