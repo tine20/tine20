@@ -639,7 +639,8 @@ Tine.Tinebase.tineInit = {
      * initialise state provider
      */
     initState: function() {
-        if (Tine.Tinebase.tineInit.stateful === true) {
+        // NOTE: IE is as always pain in the ass! cross window issues prohibit serialisation of state objects
+        if (Tine.Tinebase.tineInit.stateful === true &&  !Ext.isIE) {
             if (window.isMainWindow) {
                 Ext.state.Manager.setProvider(new Tine.Tinebase.StateProvider());
             } else {
