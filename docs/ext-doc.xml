@@ -55,14 +55,21 @@
         <source src="../tine20/Tinebase/js/data/Record.js"/>
         <source src="../tine20/Tinebase/js/data/RecordStore.js"/>
         <source src="../tine20/Tinebase/js/data/RecordProxy.js"/>
-        <source src="../tine20/Tinebase/js/widgets/account/PickerGridPanel.js"/>
-        <source src="../tine20/Tinebase/js/widgets/app/GridPanel.js"/>
-        <source src="../tine20/Tinebase/js/widgets/customfields/CustomfieldsPanel.js"/>
-        <source src="../tine20/Tinebase/js/widgets/customfields/CustomfieldSearchCombo.js"/>
-        <source src="../tine20/Tinebase/js/widgets/dialog/LinkPanel.js"/>
-        <source src="../tine20/Tinebase/js/widgets/grid/DetailsPanel.js"/>
-        <source src="../tine20/Tinebase/js/widgets/grid/QuickaddGridPanel.js"/>
-        <source src="../tine20/Tinebase/js/widgets/form/" match="*.js"/>
+
+        <source src="../tine20/Tinebase/js/widgets/account/" match="*.js"/>
+		<source src="../tine20/Tinebase/js/widgets/container/" match="*.js"/>
+		<source src="../tine20/Tinebase/js/widgets/customfields/" match="*.js"/>
+		<source src="../tine20/Tinebase/js/widgets/dialog/" match="*.js"/>
+		<source src="../tine20/Tinebase/js/widgets/form/" match="*.js"/>
+		<source src="../tine20/Tinebase/js/widgets/grid/" match="*.js"/>
+		<source src="../tine20/Tinebase/js/widgets/mainscreen/" match="*.js"/>
+		<source src="../tine20/Tinebase/js/widgets/persistentfilter/" match="*.js"/>
+		<source src="../tine20/Tinebase/js/widgets/tags/" match="*.js"/>
+		<source src="../tine20/Tinebase/js/widgets/tree/" match="*.js"/>
+        
+        
+		
+		
         <source src="../tine20/Addressbook/js/ContactGrid.js"/>
         <source src="../tine20/Addressbook/js/SearchCombo.js"/>
         <source src="../tine20/Admin/js/UserEditDialog.js"/>
@@ -87,7 +94,9 @@
         <source src="../tine20/ExampleApplication/js/ExampleRecordEditDialog.js"/>
         <source src="../tine20/Felamimail/js" match="*.js"/>
         <source src="../tine20/Sales/js" match="*.js"/>
+<!--
         <source src="../tine20/Setup/js" match="*.js"/>
+-->
         <source src="../tine20/Tasks/js/EditDialog.js"/>
         <source src="../tine20/Tasks/js/GridPanel.js"/>
         <source src="../tine20/Timetracker/js/TimesheetGridPanel.js"/>
