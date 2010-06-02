@@ -289,6 +289,7 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
     {name: 'role'},
     {name: 'quantity'},
     {name: 'status'},
+    {name: 'status_authkey'},
     {name: 'displaycontainer_id'}
 ], {
     appName: 'Calendar',
