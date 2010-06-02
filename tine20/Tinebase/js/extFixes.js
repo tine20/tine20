@@ -12,6 +12,15 @@ Ext.apply(Ext.form.VTypes, {
     }
 });
 
+/**
+ * fix textfield allowBlank validation
+ */
+Ext.override(Ext.form.TextField, {
+    validator:function(text){
+        return this.allowBlank!==false || Ext.util.Format.trim(text).length > 0;
+    }
+});
+
 Ext.applyIf(Ext.tree.MultiSelectionModel.prototype, {
     /**
      * implement convinience function as expected from grid selection models
