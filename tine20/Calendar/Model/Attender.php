@@ -426,7 +426,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 
                 // remove status_authkey when editGrant for displaycontainer_id is missing
                 if ( is_scalar($attender['displaycontainer_id']) || ! (bool) $attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT]) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug('clearing status_authkey for '. print_r($attender->toArray(), TRUE));
+                    //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug('clearing status_authkey for '. print_r($attender->toArray(), TRUE));
                     $attender->status_authkey = NULL;
                 }
             }
