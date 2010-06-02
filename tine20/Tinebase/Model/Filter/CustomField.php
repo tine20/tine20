@@ -59,7 +59,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Text
         }
         
         // make sure $correlationName is a string
-        $correlationName = $this->_value['cfId'] . 'cf';
+        $correlationName = Tinebase_Record_Abstract::generateUID() . $this->_value['cfId'] . 'cf';
         
         $value = $this->_replaceWildcards($this->_value['value']);
         
