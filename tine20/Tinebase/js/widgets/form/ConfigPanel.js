@@ -9,7 +9,7 @@
  *
  */
  
-Ext.namespace('Tine.Tinebase.widgets.form');
+Ext.ns('Tine.Tinebase.widgets.form');
  
 /**
  * Configuration Panel

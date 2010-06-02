@@ -11,7 +11,7 @@
 Ext.ns('Tine.widgets', 'Tine.widgets.customfields');
 
 /**
- * Customfields Panel
+ * CustomfieldsSearchCombo
  * 
  * @namespace   Tine.Tinebase.widgets.customfields
  * @class       Tine.Tinebase.widgets.customfields.CustomfieldSearchCombo

@@ -12,14 +12,15 @@
  * TODO         add icons from apps
  */
 
-Ext.namespace('Tine.widgets');
-
-Ext.namespace('Tine.widgets.dialog');
+Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
 
 /**
  * preferences card panel
  * -> this panel is filled with the preferences subpanels containing the pref stores for the apps
  * 
+ * @namespace   Tine.widgets.dialog
+ * @class       Tine.widgets.dialog.PreferencesCardPanel
+ * @extends     Ext.Panel
  */
 Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
     

@@ -7,14 +7,15 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Tine.widgets', 'Tine.widgets.tree');
+Ext.ns('Tine.widgets', 'Tine.widgets.tree');
 
 /**
  * generic tree loader for tine trees
  * - calls json method with a filter to return children of a node
  * 
- * @class Tine.widgets.tree.Loader
- * @extends Ext.tree.TreeLoader
+ * @namespace   Tine.widgets.tree
+ * @class       Tine.widgets.tree.Loader
+ * @extends     Ext.tree.TreeLoader
  */
 Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
     /**

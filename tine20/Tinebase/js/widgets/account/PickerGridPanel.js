@@ -10,7 +10,7 @@
  *
  */
 
-Ext.namespace('Tine.widgets.account');
+Ext.ns('Tine.widgets.account');
 
 /**
  * Account Picker GridPanel
@@ -30,8 +30,7 @@ Ext.namespace('Tine.widgets.account');
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  * 
  * @param       {Object} config
- * @constructor
- * Create a new Tine.widgets.account.PickerGridPanel
+ * @constructor Create a new Tine.widgets.account.PickerGridPanel
  */
 Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
     /**

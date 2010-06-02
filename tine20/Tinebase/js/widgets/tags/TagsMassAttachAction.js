@@ -8,8 +8,7 @@
  *
  */
  
-Ext.namespace('Tine.widgets', 'Tine.widgets.tags');
-
+Ext.ns('Tine.widgets', 'Tine.widgets.tags');
 
 Tine.widgets.tags.TagsMassAttachAction = function(config) {
     config.text = config.text ? config.text : _('Add Tag');
@@ -20,6 +19,11 @@ Tine.widgets.tags.TagsMassAttachAction = function(config) {
     Tine.widgets.tags.TagsMassAttachAction.superclass.constructor.call(this, config);
 };
 
+/**
+ * @namespace   Tine.widgets.tags
+ * @class       Tine.widgets.tags.TagsMassAttachAction
+ * @extends     Ext.Action
+ */
 Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     
     /**

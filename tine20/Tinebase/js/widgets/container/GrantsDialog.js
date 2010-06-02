@@ -11,6 +11,7 @@ Ext.ns('Tine.widgets', 'Tine.widgets.container');
 /**
  * Container Grants dialog
  * 
+ * @namespace   Tine.widgets.container
  * @class       Tine.widgets.container.GrantsDialog
  * @extends     Tine.widgets.dialog.EditDialog
  * @author      Philipp Schuele <p.schuele@metaways.de>

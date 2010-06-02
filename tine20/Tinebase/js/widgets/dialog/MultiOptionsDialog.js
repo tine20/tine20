@@ -1,5 +1,5 @@
 
-Ext.namespace('Tine.widgets.dialog');
+Ext.ns('Tine.widgets.dialog');
 
 Tine.widgets.dialog.MultiOptionsDialog = function(config) {
     
@@ -9,6 +9,11 @@ Tine.widgets.dialog.MultiOptionsDialog = function(config) {
     this.scope = config.scope || window;
 };
 
+/**
+ * @namespace   Tine.widgets.dialog
+ * @class       Tine.widgets.dialog.MultiOptionsDialog
+ * @extends     Ext.FormPanel
+ */
 Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
     /**
      * @cfg {Array} options

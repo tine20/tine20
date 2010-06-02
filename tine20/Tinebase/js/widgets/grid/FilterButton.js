@@ -10,8 +10,9 @@
 Ext.ns('Tine.widgets.grid');
 
 /**
- * @class Tine.widgets.grid.FilterButton
- * @extends Ext.Button
+ * @namespace   Tine.widgets.grid
+ * @class       Tine.widgets.grid.FilterButton
+ * @extends     Ext.Button
  * <p>Toggle Button to be used as filter</p>
  * @constructor
  */

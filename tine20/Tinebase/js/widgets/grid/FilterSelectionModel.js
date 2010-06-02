@@ -11,8 +11,9 @@ Ext.ns('Tine.widgets.grid');
 /**
  * a row selection model capable to return filters
  * @constructor
- * @class Tine.widgets.grid.FilterSelectionModel
- * @extends Ext.grid.RowSelectionModel
+ * @namespace   Tine.widgets.grid
+ * @class       Tine.widgets.grid.FilterSelectionModel
+ * @extends     Ext.grid.RowSelectionModel
  */
 Tine.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelectionModel, {
     /**

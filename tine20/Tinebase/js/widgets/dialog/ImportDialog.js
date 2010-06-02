@@ -10,16 +10,16 @@
  * 
  */
 
-Ext.namespace('Tine.widgets', 'Tine.widgets.dialog');
+Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
 
 /**
  * Generic 'Import' dialog
- */
-/**
- * @class Tine.widgets.dialog.ImportPanel
- * @extends Tine.widgets.dialog.EditDialog
+ *
+ * @namespace   Tine.widgets.dialog
+ * @class       Tine.widgets.dialog.ImportDialog
+ * @extends     Tine.widgets.dialog.EditDialog
  * @constructor
- * @param {Object} config The configuration options.
+ * @param       {Object} config The configuration options.
  * 
  * TODO add app grid to show results when dry run is selected
  */

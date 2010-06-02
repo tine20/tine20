@@ -24,8 +24,7 @@ Ext.ns('Tine.widgets.grid');
  * 
  * @param       {Object} config
  * 
- * @constructor
- * Create a new  Tine.widgets.grid.FileUploadGrid
+ * @constructor Create a new  Tine.widgets.grid.FileUploadGrid
  */
 Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     

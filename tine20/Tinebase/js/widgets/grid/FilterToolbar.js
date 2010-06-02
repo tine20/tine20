@@ -9,8 +9,9 @@
 Ext.ns('Tine.widgets.grid');
 
 /**
- * @class Tine.widgets.grid.FilterToolbar
- * @extends Ext.Panel
+ * @namespace   Tine.widgets.grid
+ * @class       Tine.widgets.grid.FilterToolbar
+ * @extends     Ext.Panel
  * 
  * <br>Usage:<br>
      <pre><code>

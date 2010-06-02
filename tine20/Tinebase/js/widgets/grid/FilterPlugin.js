@@ -9,8 +9,9 @@
 Ext.ns('Tine.widgets.grid');
 
 /**
- * @class Tine.widgets.grid.FilterPlugin
- * @extends Ext.util.Observable
+ * @namespace   Tine.widgets.grid
+ * @class       Tine.widgets.grid.FilterPlugin
+ * @extends     Ext.util.Observable
  * <p>Base class for all grid filter plugins.</p>
  * @constructor
  */

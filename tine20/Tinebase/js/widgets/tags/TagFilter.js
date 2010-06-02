@@ -8,8 +8,13 @@
  *
  */
 
-Ext.namespace('Tine.widgets', 'Tine.widgets.tags');
+Ext.ns('Tine.widgets', 'Tine.widgets.tags');
 
+/**
+ * @namespace   Tine.widgets.tags
+ * @class       Tine.widgets.tags.TagFilter
+ * @extends     Tine.widgets.grid.FilterModel
+ */
 Tine.widgets.tags.TagFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**
      * @cfg {Tine.Tinebase.Application} app

@@ -11,8 +11,9 @@
 Ext.ns('Tine.widgets.grid');
 
 /**
- * @class Tine.widgets.grid.ExportButton
- * @extends Ext.Button
+ * @namespace   Tine.widgets.grid
+ * @class       Tine.widgets.grid.ExportButton
+ * @extends     Ext.Button
  * <p>export button</p>
  * @constructor
  */

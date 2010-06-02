@@ -9,8 +9,13 @@
  * TODO         use new filter syntax in onBeforeQuery when TagFilter is refactored and extends Tinebase_Model_Filter_FilterGroup 
  */
  
-Ext.namespace('Tine.widgets', 'Tine.widgets.tags');
+Ext.ns('Tine.widgets', 'Tine.widgets.tags');
 
+/**
+ * @namespace   Tine.widgets.tags
+ * @class       Tine.widgets.tags.TagCombo
+ * @extends     Ext.ux.form.ClearableComboBox
+ */
 Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     /**
      * @cfg {Tine.Tinebase.Application} app

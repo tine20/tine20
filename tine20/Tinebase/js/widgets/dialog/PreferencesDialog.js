@@ -12,18 +12,16 @@
  * @todo        use proxy store?
  */
 
-Ext.namespace('Tine.widgets');
-
-Ext.namespace('Tine.widgets.dialog');
+Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
 
 /**
  * 'Edit Preferences' dialog
- */
-/**
- * @class Tine.widgets.dialog.Preferences
- * @extends Ext.FormPanel
+ *
+ * @namespace   Tine.widgets.dialog
+ * @class       Tine.widgets.dialog.Preferences
+ * @extends     Ext.FormPanel
  * @constructor
- * @param {Object} config The configuration options.
+ * @param       {Object} config The configuration options.
  */
 Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     /**

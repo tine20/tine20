@@ -12,13 +12,14 @@
  * @todo        add button: set default value(s)
  */
 
-Ext.namespace('Tine.widgets');
-
-Ext.namespace('Tine.widgets.dialog');
+Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
 
 /**
  * preferences application tree panel
  * 
+ * @namespace   Tine.widgets.dialog
+ * @class       Tine.widgets.dialog.PreferencesTreePanel
+ * @extends     Ext.tree.TreePanel
  */
 Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
 

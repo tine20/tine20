@@ -15,7 +15,11 @@
 Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
 
 /**
- * Alarm panel
+ * Alarm Panel
+ * 
+ * @namespace   Tine.widgets.dialog
+ * @class       Tine.widgets.dialog.AlarmPanel
+ * @extends     Ext.Panel
  */
 Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
     

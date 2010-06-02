@@ -12,7 +12,12 @@
 Ext.ns('Tine.widgets', 'Tine.widgets.customfields');
 
 /**
- * Customfields panel
+ * CustomfieldsCombo
+ * 
+ * @namespace   Tine.widgets.customfields
+ * @class       Tine.widgets.customfields.CustomfieldsCombo
+ * @extends     Ext.form.ComboBox
+ * 
  */
 Tine.widgets.customfields.CustomfieldsCombo = Ext.extend(Ext.form.ComboBox, {
     

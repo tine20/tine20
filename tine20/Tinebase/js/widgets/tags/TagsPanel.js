@@ -9,10 +9,14 @@
  * TODO make initial color work again in Ext.menu.ColorMenu
  */
  
-Ext.namespace('Tine.widgets', 'Tine.widgets.tags');
+Ext.ns('Tine.widgets', 'Tine.widgets.tags');
 
 /**
  * Class for a single tag panel
+ * 
+ * @namespace   Tine.widgets.tags
+ * @class       Tine.widgets.tags.TagPanel
+ * @extends     Ext.Panel
  */
 Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     /**

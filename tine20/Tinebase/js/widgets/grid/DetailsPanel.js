@@ -7,7 +7,7 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Tine.Tinebase.widgets', 'Tine.widgets.grid');
+Ext.ns('Tine.Tinebase.widgets', 'Tine.widgets.grid');
 
 /**
  * grid details panel

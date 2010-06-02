@@ -12,6 +12,7 @@ Ext.ns('Tine.widgets.dialog');
  * Generic 'Edit Record' dialog
  * Base class for all 'Edit Record' dialogs
  * 
+ * @namespace   Tine.widgets.dialog
  * @class       Tine.widgets.dialog.EditDialog
  * @extends     Ext.FormPanel
  * @author      Cornelius Weiss <c.weiss@metaways.de>

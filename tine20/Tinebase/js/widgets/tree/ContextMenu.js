@@ -7,7 +7,7 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Tine.widgets', 'Tine.widgets.tree');
+Ext.ns('Tine.widgets', 'Tine.widgets.tree');
 
 /**
  * returns generic tree context menu with

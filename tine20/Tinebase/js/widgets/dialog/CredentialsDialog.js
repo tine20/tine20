@@ -10,16 +10,16 @@
  * 
  */
 
-Ext.namespace('Tine.widgets', 'Tine.widgets.dialog');
+Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
 
 /**
  * Generic 'Credentials' dialog
- */
-/**
- * @class Tine.widgets.dialog.CredentialsPanel
- * @extends Tine.widgets.dialog.EditDialog
+ * 
+ * @namespace   Tine.widgets.dialog
+ * @class       Tine.widgets.dialog.CredentialsDialog
+ * @extends     Tine.widgets.dialog.EditDialog
  * @constructor
- * @param {Object} config The configuration options.
+ * @param       {Object} config The configuration options.
  */
 Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 

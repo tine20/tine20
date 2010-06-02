@@ -11,7 +11,7 @@ Ext.ns('Tine.widgets', 'Tine.widgets.container');
 /**
  * Container select ComboBox widget
  * 
- * @namespace Tine.widgets.container
+ * @namespace   Tine.widgets.container
  * @class       Tine.widgets.container.selectionComboBox
  * @extends     Ext.form.ComboBox
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -45,7 +45,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     containerName: 'container',
     /**
-     * @cfg {string} containerName
+     * @cfg {string} containersName
      * name of container (plural)
      */
     containersName: 'containers',
@@ -69,7 +69,9 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * grant which is required to select leaf node(s)
      */
     requiredGrant: 'readGrant',
-    
+    /**
+     *  @cfg {Number} trigger2width
+     */
     trigger2width: 100,
     
     // private
