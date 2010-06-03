@@ -8,7 +8,7 @@
  *
  */
  
-Ext.namespace('Tine', 'Tine.Tinebase');
+Ext.ns('Tine', 'Tine.Tinebase');
 
 /**
  * @namespace Tine.Tinebase
