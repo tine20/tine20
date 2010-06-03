@@ -225,27 +225,26 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 cls: 'x-window-dlg',
                 closable: false,
                 title: this.app.i18n._('Scheduling Conflict'),
-
-                buttons: [{
-                    text: this.app.i18n._('Ignore Conflict'),
-                    scope: this,
-                    handler: function() {
-                        this.onAddEvent(event, false);
-                        this.conflictConfirmWin.close();
-                    }
-                }, {
-                    text: this.app.i18n._('Edit Event'),
-                    scope: this,
-                    handler: function() {
-                        this.view.getSelectionModel().select(event);
-                        this.view.fireEvent('dblclick', this.view, event);
-                        this.conflictConfirmWin.close();
-                    }
-                }],
                 
-                items: [{                	
+                items: [{
                 	border: false,
                 	unstyled: true,
+                    buttons: [{
+                        text: this.app.i18n._('Ignore Conflict'),
+                        scope: this,
+                        handler: function() {
+                            this.onAddEvent(event, false);
+                            this.conflictConfirmWin.close();
+                        }
+                    }, {
+                        text: this.app.i18n._('Edit Event'),
+                        scope: this,
+                        handler: function() {
+                            this.view.getSelectionModel().select(event);
+                            this.view.fireEvent('dblclick', this.view, event);
+                            this.conflictConfirmWin.close();
+                        }
+                    }],
                     html: '<div class="ext-mb-icon ext-mb-question"></div>' +
                           '<div class="ext-mb-content"><span class="ext-mb-text"></span>' +
                                 '<div class = "cal-conflict-heading">' +
