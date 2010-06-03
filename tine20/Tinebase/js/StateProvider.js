@@ -8,8 +8,13 @@
  *
  */
  
-Ext.namespace('Tine.Tinebase');
+Ext.ns('Tine.Tinebase');
 
+/**
+ * @namespace   Tine.Tinebase
+ * @class       Tine.Tinebase.StateProvider
+ * @extends     Ext.state.Provider
+ */
 Tine.Tinebase.StateProvider = function(config) {
     Tine.Tinebase.StateProvider.superclass.constructor.call(this);
     Ext.apply(this, config);
