@@ -9,8 +9,13 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Tine', 'Tine.Tinebase');
+Ext.ns('Tine', 'Tine.Tinebase');
 
+/**
+ * @namespace   Tine.Tinebase
+ * @class       Tine.Tinebase.UserRegistration
+ * @extends     Ext.Window
+ */
 Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
     name: 'userRegistration',
     
