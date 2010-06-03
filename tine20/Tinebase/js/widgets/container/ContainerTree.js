@@ -10,7 +10,7 @@ Ext.ns('Tine.widgets', 'Tine.widgets.container');
 
 /**
  * @namespace   Tine.widgets.container
- * @class       Tine.containerTreePanel
+ * @class       Tine.widgets.container.TreePanel
  * @extends     Ext.tree.TreePanel
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$

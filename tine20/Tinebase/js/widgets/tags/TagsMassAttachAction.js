@@ -10,6 +10,11 @@
  
 Ext.ns('Tine.widgets', 'Tine.widgets.tags');
 
+/**
+ * @namespace   Tine.widgets.tags
+ * @class       Tine.widgets.tags.TagsMassAttachAction
+ * @extends     Ext.Action
+ */
 Tine.widgets.tags.TagsMassAttachAction = function(config) {
     config.text = config.text ? config.text : _('Add Tag');
     config.iconCls = 'action_tag';
@@ -19,11 +24,6 @@ Tine.widgets.tags.TagsMassAttachAction = function(config) {
     Tine.widgets.tags.TagsMassAttachAction.superclass.constructor.call(this, config);
 };
 
-/**
- * @namespace   Tine.widgets.tags
- * @class       Tine.widgets.tags.TagsMassAttachAction
- * @extends     Ext.Action
- */
 Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     
     /**

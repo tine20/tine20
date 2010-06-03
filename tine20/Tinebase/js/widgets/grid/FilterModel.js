@@ -13,6 +13,9 @@ Ext.ns('Tine.widgets.grid');
 /**
  * Model of filter
  * 
+ * @namespace   Tine.widgets.grid
+ * @class       Tine.widgets.grid.FilterModel
+ * @extends     Ext.Component
  * @constructor
  */
 Tine.widgets.grid.FilterModel = function(config) {
@@ -29,11 +32,7 @@ Tine.widgets.grid.FilterModel = function(config) {
     );
     
 };
-/**
- * @namespace   Tine.widgets.grid
- * @class       Tine.widgets.grid.FilterModel
- * @extends     Ext.Component
- */
+
 Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
     /**
      * @cfg {String} label for the filter
