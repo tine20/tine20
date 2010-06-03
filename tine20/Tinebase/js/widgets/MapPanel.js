@@ -8,10 +8,14 @@
  *
  */
  
-Ext.namespace('Tine.widgets');
+Ext.ns('Tine.widgets');
 
 /**
  * Widget to display maps
+ *
+ * @namespace   Tine.widgets
+ * @class       Tine.widgets.MapPanel
+ * @extends     GeoExt.MapPanel
  */
 Tine.widgets.MapPanel = Ext.extend(GeoExt.MapPanel, {
 	zoom: 4,

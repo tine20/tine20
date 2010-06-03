@@ -9,12 +9,16 @@
  * TODO         add to extdoc
  */
  
-Ext.namespace('Tine.widgets', 'Tine.widgets.activities');
+Ext.ns('Tine.widgets', 'Tine.widgets.activities');
 
 /************************* panel *********************************/
 
 /**
  * Class for a single activities panel
+ * 
+ * @namespace   Tine.widgets.activities
+ * @class       Tine.widgets.activities.ActivitiesPanel
+ * @extends     Ext.Panel
  */
 Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
     /**
@@ -23,7 +27,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
     app: '',
     
     /**
-     * @cfg
+     * @cfg {Boolean}
      */
     showAddNoteForm: true,
     
@@ -246,6 +250,9 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
 /**
  * button for adding notes
  * 
+ * @namespace   Tine.widgets.activities
+ * @class       Tine.widgets.activities.ActivitiesAddButton
+ * @extends     Ext.SplitButton
  */
 Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
 
@@ -391,6 +398,11 @@ Ext.reg('widget-activitiesaddbutton', Tine.widgets.activities.ActivitiesAddButto
  * Class for a activities tab with notes/activities grid
  * 
  * TODO add more filters to filter toolbar
+ * 
+ * 
+ * @namespace   Tine.widgets.activities
+ * @class       Tine.widgets.activities.ActivitiesTabPanel
+ * @extends     Ext.Panel
  */
 Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
 

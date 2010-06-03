@@ -10,11 +10,13 @@
  *
  */
 
-Ext.namespace('Tine.widgets');
+Ext.ns('Tine.widgets');
 
 /**
  * check if newer version of Tine 2.0 is available
- * @class Tine.widgets.VersionCheck
+ * 
+ * @namespace   Tine.widgets
+ * @class       Tine.widgets.VersionCheck
  * @constructor
  */
 Tine.widgets.VersionCheck = function() {

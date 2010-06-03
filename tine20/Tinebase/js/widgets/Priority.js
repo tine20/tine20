@@ -9,9 +9,7 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Tine.widgets');
-
-Ext.namespace('Tine.widgets.Priority');
+Ext.ns('Tine.widgets', 'Tine.widgets.Priority');
 
 Tine.widgets.Priority.getStore = function() {
     if (! Tine.widgets.Priority.store) {
@@ -31,6 +29,11 @@ Tine.widgets.Priority.getStore = function() {
     return Tine.widgets.Priority.store;
 };
 
+/**
+ * @namespace   Tine.widgets.Priority 
+ * @class       Tine.widgets.Priority.Combo
+ * @extends     Ext.form.ComboBox
+ */
 Tine.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
     /**
      * @cfg {bool} autoExpand Autoexpand comboBox on focus.

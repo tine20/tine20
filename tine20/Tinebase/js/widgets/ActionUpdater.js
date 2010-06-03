@@ -7,7 +7,7 @@
  * @version     $Id$
  */
  
- Ext.namespace('Tine', 'Tine.widgets');
+ Ext.ns('Tine', 'Tine.widgets');
  
  Tine.widgets.ActionUpdater = function(config) {
     config = config || {};
@@ -17,7 +17,7 @@
     Ext.apply(this, config);
     this.addActions(actions);
  };
- 
+
  Tine.widgets.ActionUpdater.prototype = {
     /**
      * @cfg {Array|Toolbar} actions

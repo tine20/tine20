@@ -8,10 +8,14 @@
  *
  */
  
-Ext.namespace('Tine.widgets');
+Ext.ns('Tine.widgets');
 
 /**
  * Widget for country selection
+ *
+ * @namespace   Tine.widgets
+ * @class       Tine.widgets.CountryCombo
+ * @extends     Ext.form.ComboBox
  */
 Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
     fieldLabel: 'Country',

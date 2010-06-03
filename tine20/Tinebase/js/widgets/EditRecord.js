@@ -11,13 +11,15 @@
  * @deprecated  use EditDialog instead. This class will be removed when all
  *              dialogs are moved to the EditDialog widget
  */
-Ext.namespace('Tine.widgets');
-
-Ext.namespace('Tine.widgets.dialog');
+ 
+Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
 
 /**
  * Generic 'Edit Record' dialog
  *
+ * @namespace   Tine.widgets.dialog
+ * @class       Tine.widgets.dialog.EditRecord
+ * @extends     Ext.FormPanel
  */
 Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 	/**

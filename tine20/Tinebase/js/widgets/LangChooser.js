@@ -8,10 +8,14 @@
  *
  */
 
-Ext.namespace('Tine.widgets');
+Ext.ns('Tine.widgets');
 
 /**
  * lang chooser widget
+ *
+ * @namespace   Tine.widgets
+ * @class       Tine.widgets.LangChooser
+ * @extends     Ext.form.ComboBox
  */
 Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
     

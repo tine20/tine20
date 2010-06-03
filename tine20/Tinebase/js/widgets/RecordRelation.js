@@ -8,7 +8,7 @@
  *
  */
 
-Ext.namespace('Tine.Tinebase.Model');
+Ext.ns('Tine.Tinebase.Model');
 
 Egw.Tinebase.Model.Relation = Ext.data.Record.create([
     {name: 'identifier'                                       },

@@ -9,10 +9,14 @@
  * @deprecated  is replaced by preferences dialog / do we need this elsewhere?
  */
 
-Ext.namespace('Tine.widgets');
+Ext.ns('Tine.widgets');
 
 /**
  * timezone chooser widget
+ *
+ * @namespace   Tine.widgets
+ * @class       Tine.widgets.TimezoneChooser
+ * @extends     Ext.form.ComboBox
  */
 Tine.widgets.TimezoneChooser = Ext.extend(Ext.form.ComboBox, {
     
