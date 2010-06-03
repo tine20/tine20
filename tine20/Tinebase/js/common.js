@@ -9,7 +9,7 @@
  * @version     $Id: Common.js 4995 2008-10-20 10:20:01Z c.weiss@metaways.de $
  */
  
-Ext.namespace('Tine', 'Tine.Tinebase');
+Ext.ns('Tine', 'Tine.Tinebase');
 
 /**
  * static common helpers
