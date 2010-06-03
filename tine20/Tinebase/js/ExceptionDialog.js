@@ -8,8 +8,13 @@
  *
  */
  
- Ext.namespace('Tine', 'Tine.Tinebase');
+ Ext.ns('Tine', 'Tine.Tinebase');
  
+ /**
+  * @namespace  Tine.Tinebase
+  * @class      Tine.Tinebase.ExceptionDialog
+  * @extends    Ext.Window
+  */
 Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
     
     width: 400,
