@@ -39,6 +39,7 @@ class Calendar_AllTests
         $suite->addTestSuite('Calendar_Controller_EventTests');
         $suite->addTestSuite('Calendar_Controller_EventGrantsTests');
         $suite->addTestSuite('Calendar_Controller_EventNotificationsTests');
+        $suite->addTestSuite('Calendar_Controller_RecurTest');
         $suite->addTestSuite('Calendar_JsonTests');
         return $suite;
     }
