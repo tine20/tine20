@@ -22,7 +22,7 @@ Example html code to include Tine 2.0 login box on an external webpage
 </html>
 */
 
-Ext.namespace('Tine20.login');
+Ext.ns('Tine20.login');
 
 /**
  * @namespace   Tine20
