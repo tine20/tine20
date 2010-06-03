@@ -9,8 +9,8 @@
 Ext.ns('Tine.Tinebase');
 
 /**
- * @class       Tine.Tinebase.LoginPanel
  * @namespace   Tine.Tinebase
+ * @class       Tine.Tinebase.LoginPanel
  * @extends     Ext.Panel
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
