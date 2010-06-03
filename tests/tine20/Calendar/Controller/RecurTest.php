@@ -15,7 +15,7 @@
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Controller_EventTests::main');
+    define('PHPUnit_MAIN_METHOD', 'Calendar_Controller_RecurTest::main');
 }
 
 /**
@@ -23,7 +23,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  * 
  * @package     Calendar
  */
-class Calendar_Controller_EventTests extends Calendar_TestCase
+class Calendar_Controller_RecurTest extends Calendar_TestCase
 {
     /**
      * @var Calendar_Controller_Event controller
@@ -152,6 +152,6 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 }
     
 
-if (PHPUnit_MAIN_METHOD == 'Calendar_Controller_EventTests::main') {
-    Calendar_Controller_EventTests::main();
+if (PHPUnit_MAIN_METHOD == 'Calendar_Controller_RecurTest::main') {
+    Calendar_Controller_RecurTest::main();
 }
