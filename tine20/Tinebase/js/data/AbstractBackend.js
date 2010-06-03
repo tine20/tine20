@@ -10,13 +10,14 @@
  *
  */
  
-Ext.namespace('Tine.Tinebase.data');
+Ext.ns('Tine.Tinebase.data');
 
 /**
  * Abstract Backdend for an model/datatype of an application
  * 
- * @class Tine.Tinebase.data.AbstractBackend
- * @extends Ext.data.DataProxy
+ * @namespace   Tine.Tinebase.data
+ * @class       Tine.Tinebase.data.AbstractBackend
+ * @extends     Ext.data.DataProxy
  * @constructor 
  */
 Tine.Tinebase.data.AbstractBackend = function(config) {

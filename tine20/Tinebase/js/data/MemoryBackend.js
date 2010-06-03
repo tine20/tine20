@@ -1,3 +1,9 @@
+
+/**
+ * @namespace   Tine.Tinebase.data
+ * @class       Tine.Tinebase.data.MemoryBackend
+ * @extends     Tine.Tinebase.data.AbstractBackend
+ */
 Tine.Tinebase.data.MemoryBackend = function(config) {
     Tine.Tinebase.data.MemoryBackend.superclass.constructor.call(this);
     Ext.apply(this, config);

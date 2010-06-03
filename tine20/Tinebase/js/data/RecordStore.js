@@ -9,16 +9,16 @@
  
 /**
  * @namespace Tine.Tinebase.data
- * @author    Cornelius Weiss <c.weiss@metaways.de>
- * @version   $Id$
  * @class     Tine.Tinebase.data.RecordStore
  * @extends   Ext.data.Store
+ * @author    Cornelius Weiss <c.weiss@metaways.de>
+ * @version   $Id$
+ * 
  * Small helper class to create an {@link Ext.data.Store} configured with an
  * {@link Ext.data.DirectProxy} and {@link Ext.data.JsonReader} to make interacting
  * with an {@link Ext.Direct} Server-side {@link Ext.ux.direct.ZendFrameworkProvider} easier.
  * 
  * @xtype     tinerecordstore
- * 
  * @constructor
  * @param {Object} config config object
  */

@@ -8,14 +8,14 @@
  *
  */
  
-Ext.namespace('Tine.Tinebase.data');
+Ext.ns('Tine.Tinebase.data');
 
 /**
  * @namespace   Tine.Tinebase.data
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  * @class       Tine.Tinebase.data.RecordProxy
  * @extends     Ext.data.DataProxy
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
  * 
  * Generic record proxy for an model/datatype of an application
  * 

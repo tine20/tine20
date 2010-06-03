@@ -11,6 +11,11 @@
  
 Ext.ns('Tine.Tinebase.sync');
 
+/**
+ * @namespace   Tine.Tinebase.sync
+ * @class       Tine.Tinebase.sync.Ping
+ * @extends     Ext.util.Observable
+ */
 Tine.Tinebase.sync.Ping = function(config) {
     Ext.apply(this, config);
     Tine.Tinebase.sync.Ping.superclass.constructor.call(this);
