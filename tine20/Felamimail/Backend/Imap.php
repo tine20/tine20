@@ -196,15 +196,12 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     public function getRawContent($id, $part = null)
     {
         if ($part !== null) {
-            // TODO: implement
-            /**
-             * @see Zend_Mail_Storage_Exception
-             */
-            require_once 'Zend/Mail/Storage/Exception.php';
-            throw new Zend_Mail_Storage_Exception('not implemented');
+            $item = "BODY[$part]";
+        } else {
+            $item = 'RFC822.TEXT';
         }
-
-        return $this->_protocol->fetch('RFC822.TEXT', $id, null, $this->_useUid);
+        
+        return $this->_protocol->fetch($item, $id, null, $this->_useUid);
     }
     
     /**
@@ -341,7 +338,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         //print_r($summary);
         
         // fetch returns a different structure when fetching one or multiple messages
-        if($to === null && ctype_digit($from)) {
+        if($to === null && ctype_digit("$from")) {
             $summary = array(
                 $from => $summary
             );
@@ -379,6 +376,11 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         return $messages;
     }
     
+    public function getBody($id, $part)
+    {
+        
+    }
+    
     /**
      * get messages summary
      *
@@ -388,11 +390,11 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function getSummaryLars($from, $to = null)
     {
-        $this->_useUid = true;
+        $this->_useUid = false;
         $summary = $this->_protocol->fetch(array('UID', 'FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE', 'BODYSTRUCTURE'), $from, $to, $this->_useUid);
                 
         // fetch returns a different structure when fetching one or multiple messages
-        if($to === null && ctype_digit($from)) {
+        if($to === null && ctype_digit("$from")) {
             $summary = array(
                 $from => $summary
             );
@@ -403,6 +405,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         foreach($summary as $id => $data) {
             $header = $this->_fixHeader($data['RFC822.HEADER'], $id, $spaces);
             Zend_Mime_Decode::splitMessage($header, $header, $null);
+            
+            $structure = $this->_parseStructure($data['BODYSTRUCTURE']);
             
             $flags = array();
             foreach ($data['FLAGS'] as $flag) {
@@ -421,12 +425,212 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
                 'flags'     => $flags,
                 'received'  => $data['INTERNALDATE'],
                 'size'      => $data['RFC822.SIZE'],
-                'structure' => $data['BODYSTRUCTURE'],
+                'structure' => $structure,
                 'uid'       => $data['UID']
             );
         }
         
         return $messages;
+    }
+
+    /**
+     * 
+     * Enter description here ...
+     * @param unknown_type $_structure
+     * @param unknown_type $_partId
+     */
+    protected function _parseStructure($_structure, $_partId = null)
+    {
+        if(is_array($_structure[0])) {
+            $structure = $this->_parseStructureMultiPart($_structure, $_partId);
+        } else {
+            $structure = $this->_parseStructureNonMultiPart($_structure, $_partId);
+        }
+        
+        return $structure;
+    }
+    
+    /**
+     * 
+     * Enter description here ...
+     * @param unknown_type $_structure
+     * @param unknown_type $_partId
+     */
+    protected function _parseStructureMultiPart($_structure, $_partId)
+    {
+        $structure = array(
+            'partId'      => $_partId,
+            'contentType' => null,
+            'type'        => null,
+            'subType'     => null,
+            'parts'       => array(),
+            'parameters'  => array(),
+            'disposition' => null,
+            'language'    => null,
+            'location'    => null
+        );
+        
+        $index = 0;
+        
+        // all arrays until the first non array value are parts
+        foreach($_structure as $part) {
+            if (!is_array($part)) {
+                break;
+            }
+            $index++;
+            
+            $partId = ($_partId === null) ? $index : $_partId . '.' . $index;
+            $structure['parts'][$partId] = $this->_parseStructure($part, $partId);
+            
+        }
+        
+        // content type
+        $type    = 'MULTIPART';
+        $subType = strtoupper(trim($_structure[$index], ' "'));
+        $structure['contentType'] = $type . '/' . $subType;
+        $structure['type']        = $type;
+        $structure['subType']     = $subType;
+        
+        // body parameters
+        if(is_array($_structure[$index+1])) {
+            $parameters = array();
+            for($i=0; $i<count($_structure[$index+1]); $i++) {
+                $key   = strtolower(trim($_structure[$index+1][$i], ' "'));
+                $value = strtolower(trim($_structure[$index+1][++$i], ' "'));
+                $parameters[$key] = $value;
+            }
+            $structure['parameters'] = $parameters; 
+        }
+        
+        // body disposition
+        if($_structure[$index+2] != 'NIL') {
+            $structure['disposition'] = strtolower($index+2); 
+        }
+        
+        // body language
+        if($_structure[$index+3] != 'NIL') {
+            $structure['language'] = strtolower($index+3); 
+        }
+        
+        // body location
+        if($_structure[$index+4] != 'NIL') {
+            $structure['location'] = strtolower($index+4); 
+        }
+        
+        return $structure;
+    }
+    
+    /**
+     * 
+     * Enter description here ...
+     * @param unknown_type $_structure
+     * @param unknown_type $_partId
+     */
+    protected function _parseStructureNonMultiPart($_structure, $_partId)
+    {
+        $structure = array(
+            'partId'      => $_partId,
+            'contentType' => null,
+            'type'        => null,
+            'subType'     => null,
+            'parameters'  => array(),
+            'id'          => null,
+            'description' => null,
+            'encoding'    => null,
+            'size'        => null,
+            'lines'       => null,
+            'disposition' => null,
+            'language'    => null,
+            'location'    => null
+        );
+        
+        /** basic fields begin **/
+        
+        // contentType
+        $type    = strtoupper(trim($_structure[0], ' "'));
+        $subType = strtoupper(trim($_structure[1], ' "'));
+        $structure['contentType'] = $type . '/' . $subType;
+        $structure['type']        = $type;
+        $structure['subType']     = $subType;
+        
+        // body parameters
+        if(is_array($_structure[2])) {
+            $parameters = array();
+            for($i=0; $i<count($_structure[2]); $i++) {
+                $key   = strtolower(trim($_structure[2][$i], ' "'));
+                $value = strtolower(trim($_structure[2][++$i], ' "'));
+                $parameters[$key] = $value;
+            }
+            $structure['parameters'] = $parameters; 
+        }
+        
+        // body id
+        if($_structure[3] != 'NIL') {
+            $structure['id'] = $_structure[3]; 
+        }
+        
+        // body description
+        if($_structure[4] != 'NIL') {
+            $structure['description'] = $_structure[4]; 
+        }
+        
+        // body encoding
+        if($_structure[5] != 'NIL') {
+            $structure['encoding'] = strtolower($_structure[5]); 
+        }
+        
+        // body size
+        if($_structure[6] != 'NIL') {
+            $structure['size'] = strtolower($_structure[6]); 
+        }
+        
+        /** basic fields end **/
+        $index = 7;
+        
+        if($type == 'MESSAGE' && $subType == 'RFC822') {
+            // messages envelope
+            $structure['messageEnvelop'] = $_structure[7];
+            
+            // messages strcuture
+            $structure['messageStruture'] = $this->_parseStructure($_structure[8], $_partId);
+            
+            // messages strcuture
+            $structure['messageLines'] = $_structure[9];
+            
+            // index of the first element containing extension data 
+            $index = 10;
+        } elseif($type == 'TEXT') {
+            if($_structure[7] != 'NIL') {
+                $structure['lines'] = $_structure[7]; 
+            }
+            // index of the first element containing extension data 
+            $index = 8;
+        }
+        
+        // body md5
+        if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL') {
+            $structure['md5'] = strtolower($index); 
+        }
+        $index++;
+        
+        // body disposition
+        if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL') {
+            $structure['disposition'] = strtolower($index); 
+        }
+        $index++;
+        
+        // body language
+        if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL') {
+            $structure['language'] = strtolower($index); 
+        }
+        $index++;
+        
+        // body location
+        if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL') {
+            $structure['location'] = strtolower($index); 
+        }
+        
+        return $structure;
     }
     
     /**
