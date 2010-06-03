@@ -1,78 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doc>
-
-    <!--
-
-    Source section (required)
-
-        Use <source> to specify directory with JavaScript source files to be
-        processed or just one JS file. Directories are processed recursively.
-
-        Attributes:
-
-            src: (required) - source directory name or file name
-            match: (optional) - wildcard for the files. Default: "*.js"
-            skipHidden: (optional) - True to skip processing files and
-                                                   directories with hidden attribute.
-                                                   Default: true.
-
-
-
-    Custom tags section(optional)
-
-            Tags to be added to the list of custom tags, for every
-            "documantable item" i.e. class, cfg, property, event.
-             Custom tag list is accessible in XSLT-template and has two
-              properties: title and value.
-
-                name: (required) tag name. ex: "author" => "@author"
-                title: (optional) title of custom tag
-                format: (optional) pattern string used for formatting value
-
-                Usage example:
-
-                XML: <tag name="author" title="Author"/>
-                JS:    /**
-                          * @class MyClass
-                          * @author I'm the
-                          * author
-                          */
-
-                  XSLT:
-                  <xsl:if test="customTags">
-                    <b><xsl:value-of select="customTags/title"/></b> :
-                    <xsl:value-of select="customTags/value"/>
-                  </xsl:if>
-
-                  Resulting HTML:
-                  <b>Author</b>:I'm the author
-
-        -->
-
     <sources>
         <!-- <source src="../tine20/library/ExtJS/src" match="*.js"/> -->
-        <!-- <source src="../tine20/Tinebase/js/tineInit.js"/> -->
-        <source src="../tine20/Tinebase/js/data/Record.js"/>
-        <source src="../tine20/Tinebase/js/data/RecordStore.js"/>
-        <source src="../tine20/Tinebase/js/data/RecordProxy.js"/>
 
-        <source src="../tine20/Tinebase/js/widgets/account/" match="*.js"/>
-		<source src="../tine20/Tinebase/js/widgets/container/" match="*.js"/>
-		<source src="../tine20/Tinebase/js/widgets/customfields/" match="*.js"/>
-		<source src="../tine20/Tinebase/js/widgets/dialog/" match="*.js"/>
-		<source src="../tine20/Tinebase/js/widgets/form/" match="*.js"/>
-		<source src="../tine20/Tinebase/js/widgets/grid/" match="*.js"/>
-		<source src="../tine20/Tinebase/js/widgets/mainscreen/" match="*.js"/>
-		<source src="../tine20/Tinebase/js/widgets/persistentfilter/" match="*.js"/>
-		<source src="../tine20/Tinebase/js/widgets/tags/" match="*.js"/>
-		<source src="../tine20/Tinebase/js/widgets/tree/" match="*.js"/>
-        
-        
-		
-		
+
+		<source src="../tine20/Tinebase/js/" match="*.js"/>
+
+
         <source src="../tine20/Addressbook/js/ContactGrid.js"/>
         <source src="../tine20/Addressbook/js/SearchCombo.js"/>
-        <source src="../tine20/Admin/js/UserEditDialog.js"/>
+        <!-- <source src="../tine20/Admin/js/UserEditDialog.js"/> -->
         <!-- <source src="../tine20/Calendar/js" match="*.js"/> -->
         <source src="../tine20/Calendar/js/AttendeeGridPanel.js"/>
         <source src="../tine20/Calendar/js/Calendar.js"/>
@@ -94,10 +31,8 @@
         <source src="../tine20/ExampleApplication/js/ExampleRecordEditDialog.js"/>
         <source src="../tine20/Felamimail/js" match="*.js"/>
         <source src="../tine20/Sales/js" match="*.js"/>
-<!--
-        <source src="../tine20/Setup/js" match="*.js"/>
--->
-        <source src="../tine20/Tasks/js/EditDialog.js"/>
+		<!-- <source src="../tine20/Setup/js" match="*.js"/> -->
+        <!-- <source src="../tine20/Tasks/js/EditDialog.js"/> -->
         <source src="../tine20/Tasks/js/GridPanel.js"/>
         <source src="../tine20/Timetracker/js/TimesheetGridPanel.js"/>
         <source src="../tine20/Timetracker/js/TimeaccountGridPanel.js"/>
@@ -108,6 +43,6 @@
         <tag name="license" title="License"/>
         <tag name="version" title="Version"/>
         <tag name="note" format="&lt;i&gt;NOTE: {0}&lt;/i&gt;"/>
-        <tag name="demo" title="Demo" format="&lt;a href=&quot;{0}&quot;&gt;{0}&lt;/a&gt;" />        
-    </tags>
+        <tag name="demo" title="Demo" format="&lt;a href=&quot;{0}&quot;&gt;{0}&lt;/a&gt;" />   
+	</tags>
 </doc>
