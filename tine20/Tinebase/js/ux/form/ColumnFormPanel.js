@@ -8,10 +8,11 @@
  *
  */
  
-Ext.namespace('Ext.ux', 'Ext.ux.form');
+Ext.ns('Ext.ux', 'Ext.ux.form');
 
 /**
- * @class Ext.ux.form.ColumnFormPanel
+ * @namespace   Ext.ux.form
+ * @class       Ext.ux.form.ColumnFormPanel
  * @description
  * Helper Class for creating form panels with a horizontal layout. This class could be directly
  * created using the new keyword or by specifying the xtype: 'columnform'
@@ -49,9 +50,7 @@ var p = new Ext.ux.form.ColumnFormPanel({
 </code></pre>
  */
 Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
-    /**
-     * @cfg
-     */
+
     formDefaults: {
         xtype:'icontextfield',
         anchor: '100%',

@@ -8,10 +8,11 @@
  *
  */
  
-Ext.namespace('Ext.ux.form');
+Ext.ns('Ext.ux.form');
 
 /**
- * @class Ext.ux.form.ImageField
+ * @namespace   Ext.ux.form
+ * @class       Ext.ux.form.ImageField
  * 
  * <p>A field which displayes a image of the given url and optionally supplies upload
  * button with the feature to display the newly uploaded image on the fly</p>
@@ -246,7 +247,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     }
 });
 
-Ext.namespace('Ext.ux.util');
+Ext.ns('Ext.ux.util');
 
 /**
  * this class represents an image URL

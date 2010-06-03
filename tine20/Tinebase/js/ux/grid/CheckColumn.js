@@ -9,7 +9,7 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Ext.ux', 'Ext.ux.grid');
+Ext.ns('Ext.ux', 'Ext.ux.grid');
 
 /**
  * Class for having a checkbox in a girds column.
@@ -24,7 +24,9 @@ Ext.namespace('Ext.ux', 'Ext.ux.grid');
     ...
  ]);
  * </code></pre>
- * @class Ext.ux.grid.CheckColumn
+ * 
+ * @namespace   Ext.ux.grid
+ * @class       Ext.ux.grid.CheckColumn
  */
 Ext.ux.grid.CheckColumn = function(config){
     Ext.apply(this, config);

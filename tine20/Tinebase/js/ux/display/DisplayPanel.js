@@ -10,11 +10,12 @@
 Ext.ns('Ext.ux.display');
 
 /**
- * @class Ext.ux.display.DisplayPanel
- * @namespace Ext.ux.display
- * @extends Ext.form.FormPanel
- * @author Cornelius Weiss <c.weiss@metaways.de>
- * @version $Id$
+ * @class       Ext.ux.display.DisplayPanel
+ * @namespace   Ext.ux.display
+ * @extends     Ext.form.FormPanel
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
  * 
  * <b>Panel for displaying information on record basis.</b>
  */

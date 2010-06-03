@@ -8,10 +8,14 @@
  *
  */
  
-Ext.namespace('Ext.ux', 'Ext.ux.form');
+Ext.ns('Ext.ux', 'Ext.ux.form');
 
 /**
  * A DateField with a secondary trigger button that clears the contents of the DateField
+ *
+ * @namespace   Ext.ux.form
+ * @class       Ext.ux.form.ClearableDateField
+ * @extends     Ext.form.DateField
  */
 Ext.ux.form.ClearableDateField = Ext.extend(Ext.form.DateField, {
     initComponent : function(){

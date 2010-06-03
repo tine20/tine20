@@ -8,8 +8,13 @@
  *
  */
  
-Ext.namespace('Ext.ux.form');
+Ext.ns('Ext.ux.form');
 
+/**
+ * @namespace   Ext.ux.form
+ * @class       Ext.ux.form.ImageCropper
+ * @extends     Ext.Component
+ */
 Ext.ux.form.ImageCropper = function(config) {
     Ext.apply(this, config);
 

@@ -10,11 +10,11 @@
 Ext.ns('Ext.ux.layout');
 
 /**
- * @class Ext.ux.layout.DisplayLayout
- * @namespace Ext.ux.layout
- * @extends Ext.layout.FormLayout
- * @author Cornelius Weiss <c.weiss@metaways.de>
- * @version $Id$
+ * @namespace   Ext.ux.layout
+ * @class       Ext.ux.layout.DisplayLayout
+ * @extends     Ext.layout.FormLayout
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
  * 
  * <b>Layout for displaying information in a displaypanel</b>
  */

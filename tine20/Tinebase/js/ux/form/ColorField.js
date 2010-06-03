@@ -8,17 +8,17 @@
  *
  */
  
-Ext.namespace('Ext.ux', 'Ext.ux.form');
+Ext.ns('Ext.ux', 'Ext.ux.form');
 
 /**
- * @namespace Ext.ux.form
- * @class Ext.ux.form.ColorField
- * @extends Ext.form.TriggerField
+ * @namespace   Ext.ux.form
+ * @class       Ext.ux.form.ColorField
+ * @extends     Ext.form.TriggerField
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * 
  * Provides a color input field with a {@link Ext.menu.ColorMenu} dropdown.
- * @constructor
- * Create a new ColorField
+ * @constructor Create a new ColorField
  * @param {Object} config
  * @xtype colorfield
  */

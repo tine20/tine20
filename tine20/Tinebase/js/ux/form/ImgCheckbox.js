@@ -11,6 +11,12 @@
  */
 
 Ext.ns('Ext.ux.form');
+
+/**
+ * @namespace   Ext.ux.form
+ * @class       Ext.ux.form.ImgCheckbox
+ * @extends     Ext.form.Checkbox
+ */
 Ext.ux.form.ImgCheckbox = Ext.extend(Ext.form.Checkbox, {
     
     // initial value for cls class used for TRUE case

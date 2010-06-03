@@ -8,8 +8,13 @@
  *
  */
  
-Ext.namespace('Ext.ux.file');
+Ext.ns('Ext.ux.file');
 
+/**
+ * @namespace   Ext.ux.file
+ * @class       Ext.ux.file.Download
+ * @extends     Ext.util.Observable
+ */
 Ext.ux.file.Download = function(config) {
     config = config || {};
     Ext.apply(this, config);

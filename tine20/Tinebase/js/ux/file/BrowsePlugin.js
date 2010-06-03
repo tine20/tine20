@@ -6,11 +6,12 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Ext.ux.file');
+Ext.ns('Ext.ux.file');
 
 /**
- * @class Ext.ux.file.BrowsePlugin
- * @param {Object} config Configuration options
+ * @namespace   Ext.ux.file
+ * @class       Ext.ux.file.BrowsePlugin
+ * @param       {Object} config Configuration options
  */
 Ext.ux.file.BrowsePlugin = function(config) {
     Ext.apply(this, config);

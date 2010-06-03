@@ -10,11 +10,12 @@
 Ext.ns('Ext.ux.display');
 
 /**
- * @class Ext.ux.display.DisplayField
- * @namespace Ext.ux.display
- * @extends Ext.form.DisplayField
- * @author Cornelius Weiss <c.weiss@metaways.de>
- * @version $Id$
+ * @class       Ext.ux.display.DisplayField
+ * @namespace   Ext.ux.display
+ * @extends     Ext.form.DisplayField
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
  * 
  * <b>Field for displaying information in a displaypanel</b>
  */

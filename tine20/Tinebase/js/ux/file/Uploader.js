@@ -8,12 +8,15 @@
  *
  */
  
-Ext.namespace('Ext.ux.file');
+Ext.ns('Ext.ux.file');
 
 /**
  * a simple file uploader
- * 
  * objects of this class represent a single file uplaod
+ * 
+ * @namespace   Ext.ux.file
+ * @class       Ext.ux.file.Uploader
+ * @extends     Ext.util.Observable
  */
 Ext.ux.file.Uploader = function(config) {
     Ext.apply(this, config);

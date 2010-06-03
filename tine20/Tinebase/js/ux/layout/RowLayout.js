@@ -9,8 +9,10 @@
 Ext.ns('Ext.ux.layout');
 
 /**
- * @class Ext.ux.layout.RowLayout
- * @extends Ext.layout.ContainerLayout
+ * @namespace   Ext.ux.layout
+ * @class       Ext.ux.layout.RowLayout
+ * @extends     Ext.layout.ContainerLayout
+ * 
  * <p>This is the layout style of choice for creating structural layouts in a multi-row format where the height of
  * each row can be specified as a percentage or fixed height.  Row widths can also be fixed, percentage or auto.
  * This class is intended to be extended or created via the layout:'ux.row' {@link Ext.Container#layout} config,

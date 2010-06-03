@@ -9,10 +9,14 @@
  * @todo        switch lock and trigger icons (because only the trigger icon has a round upper right corner)
  */
  
-Ext.namespace('Ext.ux', 'Ext.ux.form');
+Ext.ns('Ext.ux', 'Ext.ux.form');
 
 /**
  * Generic widget for a twin trigger combo field
+ *
+ * @namespace   Ext.ux.form
+ * @class       Ext.ux.form.LockCombo
+ * @extends     Ext.form.ComboBox
  */
 Ext.ux.form.LockCombo = Ext.extend(Ext.form.ComboBox, {
     /**

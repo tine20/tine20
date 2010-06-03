@@ -8,7 +8,7 @@
  *
  */
 
-Ext.namespace('Ext.ux.form');
+Ext.ns('Ext.ux.form');
 
 /**
  * A ComboBox with a (Ext.data.JsonStore) store that loads its data from a record in this format:
@@ -34,7 +34,11 @@ Ext.namespace('Ext.ux.form');
  *      sortInfo: {field: 'name', dir: 'ASC'}
  *   })
  * }
- */ 
+ *
+ * @namespace   Ext.ux.form 
+ * @class       Ext.ux.form.RecordsComboBox
+ * @extends     Ext.form.ComboBox
+ */
 Ext.ux.form.RecordsComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * default config

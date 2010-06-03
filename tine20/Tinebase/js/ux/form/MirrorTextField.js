@@ -9,7 +9,7 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Ext.ux', 'Ext.ux.form');
+Ext.ns('Ext.ux', 'Ext.ux.form');
 
 /**
  * Class for creating equal text-fields multiple times in a form.
@@ -35,6 +35,10 @@ Ext.namespace('Ext.ux', 'Ext.ux.form');
      ]
  });
  * </code></pre>
+ * 
+ * @namespace   Ext.ux.form
+ * @class       Ext.ux.form.MirrorTextField
+ * @extends     Ext.ux.form.IconTextField
  */
 Ext.ux.form.MirrorTextField = Ext.extend(Ext.ux.form.IconTextField, {
     /**

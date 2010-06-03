@@ -11,9 +11,10 @@
 Ext.ns('Ext.ux', 'Ext.ux.tree');
 
 /**
- * @namespace Ext.ux.tree
- * @class Ext.ux.tree.CheckboxSelectionModel
- * @extends Ext.util.Observable
+ * @namespace   Ext.ux.tree
+ * @class       Ext.ux.tree.CheckboxSelectionModel
+ * @extends     Ext.util.Observable
+ * 
  * Ceckbox multi selection for a TreePanel.
  */
 Ext.ux.tree.CheckboxSelectionModel = function(config){

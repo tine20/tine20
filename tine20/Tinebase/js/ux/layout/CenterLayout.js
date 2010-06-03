@@ -9,8 +9,10 @@
 Ext.ns('Ext.ux.layout');
 
 /**
- * @class Ext.ux.layout.CenterLayout
- * @extends Ext.layout.FitLayout
+ * @namespace   Ext.ux.layout
+ * @class       Ext.ux.layout.CenterLayout
+ * @extends     Ext.layout.FitLayout
+ * 
  * <p>This is a very simple layout style used to center contents within a container.  This layout works within
  * nested containers and can also be used as expected as a Viewport layout to center the page layout.</p>
  * <p>As a subclass of FitLayout, CenterLayout expects to have a single child panel of the container that uses 

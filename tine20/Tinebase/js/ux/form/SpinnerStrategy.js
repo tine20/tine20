@@ -11,8 +11,12 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/***
+/**
  * Abstract Strategy
+ *
+ * @namespace   Ext.ux.form.Spinner
+ * @class       Ext.ux.form.Spinner.Strategy
+ * @extends     Ext.util.Observable
  */
 Ext.ux.form.Spinner.Strategy = function(config){
 	Ext.apply(this, config);
@@ -54,8 +58,12 @@ Ext.extend(Ext.ux.form.Spinner.Strategy, Ext.util.Observable, {
 	
 });
 
-/***
+/**
  * Concrete Strategy: Numbers
+ * 
+ * @namespace   Ext.ux.form.Spinner
+ * @class       Ext.ux.form.Spinner.NumberStrategy
+ * @extends     Ext.ux.form.Spinner.Strategy
  */
 Ext.ux.form.Spinner.NumberStrategy = function(config){
 	Ext.ux.form.Spinner.NumberStrategy.superclass.constructor.call(this, config);
@@ -102,8 +110,12 @@ Ext.extend(Ext.ux.form.Spinner.NumberStrategy, Ext.ux.form.Spinner.Strategy, {
 });
 
 
-/***
+/**
  * Concrete Strategy: Date
+ *
+ * @namespace   Ext.ux.form.Spinner
+ * @class       Ext.ux.form.Spinner.DateStrategy
+ * @extends     Ext.ux.form.Spinner.Strategy
  */
 Ext.ux.form.Spinner.DateStrategy = function(config){
 	Ext.ux.form.Spinner.DateStrategy.superclass.constructor.call(this, config);
@@ -156,8 +168,12 @@ Ext.extend(Ext.ux.form.Spinner.DateStrategy, Ext.ux.form.Spinner.Strategy, {
 });
 
 
-/***
+/**
  * Concrete Strategy: Time
+ *
+ * @namespace   Ext.ux.form.Spinner
+ * @class       Ext.ux.form.Spinner.TimeStrategy
+ * @extends     Ext.ux.form.Spinner.DateStrategy
  */
 Ext.ux.form.Spinner.TimeStrategy = function(config){
 	Ext.ux.form.Spinner.TimeStrategy.superclass.constructor.call(this, config);

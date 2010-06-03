@@ -6,6 +6,11 @@
  * http://extjs.com/license
  */
  
+/**
+ * @namespace   Ext.ux.grid
+ * @class       Ext.ux.grid.RowExpander
+ * @extends     Ext.util.Observable
+ */
 Ext.ux.grid.RowExpander = function(config){
     Ext.apply(this, config);
 

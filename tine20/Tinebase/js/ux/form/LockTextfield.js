@@ -8,10 +8,14 @@
  *
  */
  
-Ext.namespace('Ext.ux', 'Ext.ux.form');
+Ext.ns('Ext.ux', 'Ext.ux.form');
 
 /**
  * Generic widget for a twin trigger textfield
+ *
+ * @namespace   Ext.ux.form
+ * @class       Ext.ux.form.LockTextfield
+ * @extends     Ext.form.TriggerField
  */
 Ext.ux.form.LockTextfield = Ext.extend(Ext.form.TriggerField, {
     hiddenFieldId: '',

@@ -9,7 +9,7 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Ext.ux', 'Ext.ux.form');
+Ext.ns('Ext.ux', 'Ext.ux.form');
 
 /**
  * Class for creating text-fields with an icon in front of the label.
@@ -21,6 +21,10 @@ Ext.namespace('Ext.ux', 'Ext.ux.form');
      name: 'email',
  });
  * </code></pre>
+ * 
+ * @namespace   Ext.ux.form
+ * @class       Ext.ux.form.IconTextField
+ * @extends     Ext.form.TextField
  */
 Ext.ux.form.IconTextField = Ext.extend(Ext.form.TextField, {
     /**

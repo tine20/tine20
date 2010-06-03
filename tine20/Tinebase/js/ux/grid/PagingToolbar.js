@@ -16,8 +16,12 @@ Ext.ns('Ext.ux.grid');
 /**
  * Paging toolbar with build in selection support
  * 
+ *
+ * @namespace   Ext.ux.grid
+ * @class       Ext.ux.grid.PagingToolbar
+ * @extends     Ext.PagingToolbar
  * @constructor
- * @param {Object} config
+ * @param       {Object} config
  */
 Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
     /**

@@ -11,7 +11,7 @@ Ext.ns('Ext.ux', 'Ext.ux.direct');
 
 /**
  * @namespace   Ext.ux.direct
- * @class       Ext.ux.ZendFrameworkProvider
+ * @class       Ext.ux.direct.ZendFrameworkProvider
  * @extends     Ext.direct.RemotingProvider
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)

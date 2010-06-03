@@ -8,12 +8,15 @@
  *
  */
  
-Ext.namespace('Ext.ux', 'Ext.ux.form');
+Ext.ns('Ext.ux', 'Ext.ux.form');
 
 /**
  * A ComboBox with a secondary trigger button that clears the contents of the ComboBox
  * 
- */ 
+ * @namespace   Ext.ux.form
+ * @class       Ext.ux.form.ClearableComboBox
+ * @extends     Ext.form.ComboBox
+ */
 Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
     initComponent : function(){
         Ext.ux.form.ClearableComboBox.superclass.initComponent.call(this);

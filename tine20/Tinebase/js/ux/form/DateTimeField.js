@@ -8,10 +8,14 @@
  *
  */
  
-Ext.namespace('Ext.ux', 'Ext.ux.form');
+Ext.ns('Ext.ux', 'Ext.ux.form');
 
 /**
  * A combination of datefield and timefield
+ * 
+ * @namespace   Ext.ux.form
+ * @class       Ext.ux.form.DateTimeField
+ * @extends     Ext.form.Field
  */
 Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     autoEl: 'div',

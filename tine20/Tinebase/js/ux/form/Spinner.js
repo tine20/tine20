@@ -13,16 +13,21 @@
 
 /**
   * Ext.ux.form.Spinner Class
-	*
-	* @author  Steven Chim
-	* @version Spinner.js 2008-08-27 v0.35
+  *
+  * @author  Steven Chim
+  * @version Spinner.js 2008-08-27 v0.35
   *
   * @class Ext.ux.form.Spinner
   * @extends Ext.form.TriggerField
   */
 
-Ext.namespace("Ext.ux.form");
+Ext.ns("Ext.ux.form");
 
+/**
+ * @namespace   Ext.ux.form
+ * @class       Ext.ux.form.Spinner
+ * @extends     Ext.form.TriggerField
+ */
 Ext.ux.form.Spinner = function(config){
 	Ext.ux.form.Spinner.superclass.constructor.call(this, config);
 	this.addEvents({

@@ -9,7 +9,7 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Ext.ux', 'Ext.ux.grid');
+Ext.ns('Ext.ux', 'Ext.ux.grid');
 
 /**
  * Class for creating a edittable grid with quick add row on top.
@@ -38,6 +38,10 @@ Ext.namespace('Ext.ux', 'Ext.ux.grid');
      ]
  });
  * </code></pre>
+ *
+ * @namespace   Ext.ux.grid
+ * @class       Ext.ux.grid.QuickaddGridPanel
+ * @extends     Ext.grid.EditorGridPanel
  */
 Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 	/**

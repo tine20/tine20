@@ -20,7 +20,7 @@
  *
  */
 
-Ext.namespace('Ext.ux.grid');
+Ext.ns('Ext.ux.grid');
 
 /**
  * Renders a menu button to the upper right corner of the grid this plugin is
@@ -30,8 +30,9 @@ Ext.namespace('Ext.ux.grid');
  * Note that you have to set the enableHdMenu-property of the bound grid to
  * "false" so this plugin does not interfere with the header menus of the grid's view.
  *
- * @class Ext.ux.grid.GridViewMenuPlugin
- * @extends Object
+ * @namespace   Ext.ux.grid
+ * @class       Ext.ux.grid.GridViewMenuPlugin
+ * @extends     Object
  * @constructor
  *
  * @author Thorsten Suckow-Homberg <ts@siteartwork.de>

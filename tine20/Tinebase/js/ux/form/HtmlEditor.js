@@ -11,6 +11,11 @@
  */
 Ext.ns('Ext.ux.form.HtmlEditor');
 
+/**
+ * @namespace   Ext.ux.form.HtmlEditor
+ * @class       Ext.ux.form.HtmlEditor.MidasCommand
+ * @extends     Ext.util.Observable
+ */
 Ext.ux.form.HtmlEditor.MidasCommand = Ext.extend(Ext.util.Observable, {
     // private
     init: function(cmp){
@@ -86,9 +91,11 @@ Ext.ux.form.HtmlEditor.MidasCommand = Ext.extend(Ext.util.Observable, {
     }
 });
 /**
- * @author Shea Frederick - http://www.vinylfox.com
- * @class Ext.ux.form.HtmlEditor.Divider
- * @extends Ext.util.Observable
+ * @namespace   Ext.ux.form.HtmlEditor
+ * @class       Ext.ux.form.HtmlEditor.Divider
+ * @extends     Ext.util.Observable
+ * @author      Shea Frederick - http://www.vinylfox.com
+ * 
  * <p>A plugin that creates a divider on the HtmlEditor. Used for separating additional buttons.</p>
  */
 Ext.ux.form.HtmlEditor.Divider = Ext.extend(Ext.util.Observable, {
@@ -103,9 +110,11 @@ Ext.ux.form.HtmlEditor.Divider = Ext.extend(Ext.util.Observable, {
     }
 });
 /**
- * @author Shea Frederick - http://www.vinylfox.com
- * @class Ext.ux.form.HtmlEditor.IndentOutdent
- * @extends Ext.ux.form.HtmlEditor.MidasCommand
+ * @namespace   Ext.ux.form.HtmlEditor
+ * @class       Ext.ux.form.HtmlEditor.IndentOutdent
+ * @extends     Ext.ux.form.HtmlEditor.MidasCommand
+ * @author      Shea Frederick - http://www.vinylfox.com
+ * 
  * <p>A plugin that creates two buttons on the HtmlEditor for indenting and outdenting of selected text.</p>
  */
 Ext.ux.form.HtmlEditor.IndentOutdent = Ext.extend(Ext.ux.form.HtmlEditor.MidasCommand, {
@@ -125,9 +134,11 @@ Ext.ux.form.HtmlEditor.IndentOutdent = Ext.extend(Ext.ux.form.HtmlEditor.MidasCo
     }]
 });
 /**
- * @author Shea Frederick - http://www.vinylfox.com
- * @class Ext.ux.form.HtmlEditor.RemoveFormat
- * @extends Ext.ux.form.HtmlEditor.MidasCommand
+ * @namespace   Ext.ux.form.HtmlEditor
+ * @class       Ext.ux.form.HtmlEditor.RemoveFormat
+ * @extends     Ext.ux.form.HtmlEditor.MidasCommand
+ * @author      Shea Frederick - http://www.vinylfox.com
+ * 
  * <p>A plugin that creates a button on the HtmlEditor that will remove all formatting on selected text.</p>
  */
 Ext.ux.form.HtmlEditor.RemoveFormat = Ext.extend(Ext.ux.form.HtmlEditor.MidasCommand, {
@@ -141,9 +152,11 @@ Ext.ux.form.HtmlEditor.RemoveFormat = Ext.extend(Ext.ux.form.HtmlEditor.MidasCom
     }]
 });
 /**
- * @author Shea Frederick - http://www.vinylfox.com
- * @class Ext.ux.form.HtmlEditor.SubSuperScript
- * @extends Ext.ux.form.HtmlEditor.MidasCommand
+ * @namespace   Ext.ux.form.HtmlEditor
+ * @class       Ext.ux.form.HtmlEditor.SubSuperScript
+ * @extends     Ext.ux.form.HtmlEditor.MidasCommand
+ * @author      Shea Frederick - http://www.vinylfox.com
+ * 
  * <p>A plugin that creates two buttons on the HtmlEditor for superscript and subscripting of selected text.</p>
  */
 Ext.ux.form.HtmlEditor.SubSuperScript = Ext.extend(Ext.ux.form.HtmlEditor.MidasCommand, {
@@ -165,9 +178,11 @@ Ext.ux.form.HtmlEditor.SubSuperScript = Ext.extend(Ext.ux.form.HtmlEditor.MidasC
     }]
 });
 /**
- * @author Shea Frederick - http://www.vinylfox.com
- * @class Ext.ux.form.HtmlEditor.SpecialCharacters
- * @extends Ext.util.Observable
+ * @namespace   Ext.ux.form.HtmlEditor
+ * @class       Ext.ux.form.HtmlEditor.SpecialCharacters
+ * @extends     Ext.util.Observable
+ * @author      Shea Frederick - http://www.vinylfox.com
+ * 
  * <p>A plugin that creates a button on the HtmlEditor for inserting special characters.</p>
  */
 Ext.ux.form.HtmlEditor.SpecialCharacters = Ext.extend(Ext.util.Observable, {
@@ -264,9 +279,11 @@ Ext.ux.form.HtmlEditor.SpecialCharacters = Ext.extend(Ext.util.Observable, {
     }
 });
 /**
- * @author Shea Frederick - http://www.vinylfox.com
- * @class Ext.ux.form.HtmlEditor.Table
- * @extends Ext.util.Observable
+ * @namespace   Ext.ux.form.HtmlEditor
+ * @class       Ext.ux.form.HtmlEditor.Table
+ * @extends     Ext.util.Observable
+ * @author      Shea Frederick - http://www.vinylfox.com
+ * 
  * <p>A plugin that creates a button on the HtmlEditor for making simple tables.</p>
  */
 Ext.ux.form.HtmlEditor.Table = Ext.extend(Ext.util.Observable, {
@@ -384,9 +401,11 @@ Ext.ux.form.HtmlEditor.Table = Ext.extend(Ext.util.Observable, {
     }
 });
 /**
- * @author Shea Frederick - http://www.vinylfox.com
- * @class Ext.ux.form.HtmlEditor.Word
- * @extends Ext.util.Observable
+ * @namespace   Ext.ux.form.HtmlEditor
+ * @class       Ext.ux.form.HtmlEditor.Word
+ * @extends     Ext.util.Observable
+ * @author      Shea Frederick - http://www.vinylfox.com
+ * 
  * <p>A plugin that creates a button on the HtmlEditor for pasting text from Word without all the jibberish html.</p>
  */
 Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
@@ -493,10 +512,13 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
         });
 		
     }
-});/**
- * @author Shea Frederick - http://www.vinylfox.com
- * @class Ext.ux.form.HtmlEditor.HR
- * @extends Ext.util.Observable
+});
+/**
+ * @namespace   Ext.ux.form.HtmlEditor
+ * @class       Ext.ux.form.HtmlEditor.HR
+ * @extends     Ext.util.Observable
+ * @author      Shea Frederick - http://www.vinylfox.com
+ * 
  * <p>A plugin that creates a button on the HtmlEditor for inserting a horizontal rule.</p>
  */
 Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
