@@ -9,12 +9,12 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Ext.ux');
+Ext.ns('Ext.ux');
 
 /**
- * @class Ext.ux.ConnectionStatus
+ * @namespace   Ext.ux
+ * @class       Ext.ux.ConnectionStatus
  * @constructor
- * 
  */
 Ext.ux.ConnectionStatus = function(config) {
     Ext.apply(this, config);

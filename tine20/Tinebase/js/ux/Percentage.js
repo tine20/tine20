@@ -17,11 +17,14 @@ if (Ext.grid.GridView.prototype.cellSelectorDepth < 6) {
     Ext.grid.GridView.prototype.cellSelectorDepth = 6;
 }
 
-Ext.namespace('Ext.ux');
+Ext.ns('Ext.ux');
 
 /**
  * Percentage select combo box
  * 
+ * @namespace   Ext.ux
+ * @class       Ext.ux.PercentCombo
+ * @extends     Ext.form.ComboBox
  */
 Ext.ux.PercentCombo = Ext.extend(Ext.form.ComboBox, {
     /**

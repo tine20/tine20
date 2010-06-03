@@ -8,10 +8,14 @@
  *
  */
  
-Ext.namespace('Ext.ux');
+Ext.ns('Ext.ux');
 
 /**
  * Generic widget for a twintriggerd search field
+ * 
+ * @namespace   Ext.ux
+ * @class       Ext.ux.SearchField
+ * @extends     Ext.form.TwinTriggerField
  */
 Ext.ux.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     /**

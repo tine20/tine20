@@ -1,5 +1,5 @@
    
-Ext.namespace('Ext.ux');
+Ext.ns('Ext.ux');
 
 Ext.ux.MessageBox = function(){
     var msgCt;

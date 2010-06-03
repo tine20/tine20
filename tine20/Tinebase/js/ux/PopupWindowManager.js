@@ -9,8 +9,10 @@
  
 
 /**
- * @class Ext.ux.PopupWindowGroup
  * An object that represents a group of {@link Ext.ux.PopupWindow}
+ * 
+ * @namespace   Ext.ux
+ * @class       Ext.ux.PopupWindowGroup
  * @constructor
  */
 Ext.ux.PopupWindowGroup = function(config) {

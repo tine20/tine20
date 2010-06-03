@@ -13,12 +13,12 @@
  * 
  * http://extjs.com/blog/2008/07/01/integrating-google-maps-api-with-extjs/
  */
-Ext.namespace('Ext.ux');
+Ext.ns('Ext.ux');
  
 /**
- *
- * @class GMapPanel
- * @extends Ext.Panel
+ * @namespace   Ext.ux
+ * @class       Ext.ux.GMapPanel
+ * @extends     Ext.Panel
  */
 Ext.ux.GMapPanel = Ext.extend(Ext.Panel, {
     initComponent : function(){

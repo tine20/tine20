@@ -8,7 +8,7 @@
  *
  */
  
-Ext.namespace('Ext.ux');
+Ext.ns('Ext.ux');
 
 /**
  * Class for handling of native browser popup window.
@@ -22,6 +22,10 @@ Ext.namespace('Ext.ux');
      url:index.php?method=Tasks.editTask&taskId=5
  });
  * </code></pre>
+ * 
+ * @namespace   Ext.ux
+ * @class       Ext.ux.PopupWindow
+ * @extends     Ext.Component
  */
 Ext.ux.PopupWindow = function(config) {
     Ext.apply(this, config);
@@ -30,9 +34,9 @@ Ext.ux.PopupWindow = function(config) {
 
 Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
 	/**
-	 * @cfg 
-	 * @param {String} url
-	 * @desc  url to open
+	 * @cfg    {String}
+	 * @param  {String} url
+	 * @desc   url to open
 	 */
 	url: null,
 	/**

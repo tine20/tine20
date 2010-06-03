@@ -7,11 +7,12 @@
  *
  */
  
-Ext.namespace('Ext.ux');
+Ext.ns('Ext.ux');
 
 /**
- * @class Ext.ux.ButtonLockedToggle & Ext.ux.tbButtonLockedToggle
- * @extends Ext.Button
+ * @namespace   Ext.ux
+ * @class       Ext.ux.ButtonLockedToggle & Ext.ux.tbButtonLockedToggle
+ * @extends     Ext.Button
  * @description
  * The normal button, when enableToggle is used and toggleGroup is set correctly, still allows the user
  * to toggle off the toggled button by pressing on it. This class overrides the toggle-method so that

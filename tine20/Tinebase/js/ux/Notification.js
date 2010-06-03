@@ -12,7 +12,7 @@
  * TODO         activate default notifications?
  */    
  
-Ext.namespace('Ext.ux.Notification');
+Ext.ns('Ext.ux.Notification');
     
 Ext.ux.Notification = function(){
     /*

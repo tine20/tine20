@@ -5,7 +5,7 @@
  * @version     $Id$
  */
 
-Ext.namespace('Ext.ux'); 
+Ext.ns('Ext.ux'); 
 
 
 Date.prototype.getFirstDateOfWeek = function(){
@@ -18,7 +18,11 @@ Date.prototype.getFirstDateOfWeek = function(){
     return value;
 };
 
-
+/**
+ * @namespace   Ext.ux
+ * @class       Ext.ux.DatePickerRange
+ * @extends     Ext.DatePicker
+ */
 Ext.ux.DatePickerRange = Ext.extend(Ext.DatePicker, { 
     selectionMode:'month',
     setSelectionMode:function(mode){

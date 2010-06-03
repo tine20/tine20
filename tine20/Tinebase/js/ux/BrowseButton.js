@@ -7,11 +7,12 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Ext.ux.form');
+Ext.ns('Ext.ux.form');
 
 /**
- * @class Ext.ux.form.BrowseButton
- * @extends Ext.Button
+ * @namespace   Ext.ux.form
+ * @class       Ext.ux.form.BrowseButton
+ * @extends     Ext.Button
  */
 Ext.ux.BrowseButton = Ext.extend(Ext.Button, {
 

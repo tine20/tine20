@@ -4,11 +4,14 @@
  *
  * @class Ext.ux.Wizard
  */
-Ext.namespace('Ext.ux');
+Ext.ns('Ext.ux');
 
 /**
  * Ext.ux.Wizard Extension Class
- * @extends Ext.Panel
+ * 
+ * @namespace   Ext.ux
+ * @class       Ext.ux.Wizard
+ * @extends     Ext.Panel
  * @constructor
  * @param {Object} config Configuration options
  */

@@ -8,14 +8,13 @@
  *
  */
  
-Ext.namespace('Ext.ux');
+Ext.ns('Ext.ux');
 
 /**
- * @class Ext.ux.WindowFactory
+ * @namespace   Ext.ux
+ * @class       Ext.ux.WindowFactory
  * @contructor
- * 
- */
-/**
+ *
  * @cfg {String} windowType type of window {Ext|Browser|Air}
  */
 Ext.ux.WindowFactory = function(config) {

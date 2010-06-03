@@ -10,8 +10,8 @@ Ext.ns('Ext.ux');
 
 
 /**
- * @class       SortPlugin
  * @namespace   Ext.ux
+ * @class       Ext.ux.TabPanelSortPlugin
  * 
  * @constructor
  * @param {Object} config Configurations options
