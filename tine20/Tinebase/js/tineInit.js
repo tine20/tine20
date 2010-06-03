@@ -639,9 +639,9 @@ Tine.Tinebase.tineInit = {
      * initialise state provider
      */
     initState: function() {
-        // NOTE: IE is as always pain in the ass! cross window issues prohibit serialisation of state objects
-        if (Tine.Tinebase.tineInit.stateful === true &&  !Ext.isIE) {
-            if (window.isMainWindow) {
+        if (Tine.Tinebase.tineInit.stateful === true) {
+            if (window.isMainWindow || Ext.isIE) {
+                // NOTE: IE is as always pain in the ass! cross window issues prohibit serialisation of state objects
                 Ext.state.Manager.setProvider(new Tine.Tinebase.StateProvider());
             } else {
                 var mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
