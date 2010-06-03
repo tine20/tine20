@@ -135,7 +135,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     	
     	if (! empty($_event->rrule)) {
     	    $checkUntil = clone $_event->dtstart;
-    	    $checkUntil->add(1, Zend_Date::YEAR);
+    	    $checkUntil->add(1, Zend_Date::MONTH);
     	    Calendar_Model_Rrule::mergeRecuranceSet($eventSet, $_event->dtstart, $checkUntil);
     	}
     	
