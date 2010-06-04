@@ -22,6 +22,7 @@
  * @property    array   $to             the to receipients
  * @property    array   $cc             the cc receipients
  * @property    array   $bcc            the bcc receipients
+ * @property    array   $structure      the message structure
  */
 class Felamimail_Model_Message extends Tinebase_Record_Abstract
 {
@@ -101,6 +102,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'flags'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'timestamp'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'body'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'structure'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'headers'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'content_type'          => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,
