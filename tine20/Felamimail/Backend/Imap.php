@@ -331,7 +331,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * @param int|null $to
      * @return array with $this->_messageClass (Felamimail_Message)
      */
-    public function getSummary($from, $to = null)
+    public function getSummaryOld($from, $to = null)
     {
         $summary = $this->_protocol->fetch(array('FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE'), $from, $to, $this->_useUid);
         
@@ -388,9 +388,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * @param int|null $to
      * @return array with $this->_messageClass (Felamimail_Message)
      */
-    public function getSummaryLars($from, $to = null)
+    public function getSummary($from, $to = null)
     {
-        $this->_useUid = false;
         $summary = $this->_protocol->fetch(array('UID', 'FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE', 'BODYSTRUCTURE'), $from, $to, $this->_useUid);
                 
         // fetch returns a different structure when fetching one or multiple messages
