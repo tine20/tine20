@@ -289,16 +289,19 @@ Tine.Admin.Groups.Main = {
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
             }
-            var contextMenu = new Ext.menu.Menu({
-                id:'ctxMenuGroups', 
-                items: [
-                    this.actions.editGroup,
-                    this.actions.deleteGroup,
-                    '-',
-                    this.actions.addGroup 
-                ]
-            });
-            contextMenu.showAt(_eventObject.getXY());
+            
+            if (! this.contextMenu) {
+	            this.contextMenu = new Ext.menu.Menu({
+	                id: 'ctxMenuGroups', 
+	                items: [
+	                    this.actions.editGroup,
+	                    this.actions.deleteGroup,
+	                    '-',
+	                    this.actions.addGroup 
+	                ]
+	            });
+            }
+            this.contextMenu.showAt(_eventObject.getXY());
         }, this);
         
         this.gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {

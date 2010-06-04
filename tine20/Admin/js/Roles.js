@@ -289,16 +289,19 @@ Tine.Admin.Roles.Main = {
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
             }
-            var contextMenu = new Ext.menu.Menu({
-                id:'ctxMenuRoles', 
-                items: [
-                    this.actions.editRole,
-                    this.actions.deleteRole,
-                    '-',
-                    this.actions.addRole 
-                ]
-            });
-            contextMenu.showAt(_eventObject.getXY());
+            
+            if (! this.contextMenu) {
+	            this.contextMenu = new Ext.menu.Menu({
+	                id: 'ctxMenuRoles', 
+	                items: [
+	                    this.actions.editRole,
+	                    this.actions.deleteRole,
+	                    '-',
+	                    this.actions.addRole 
+	                ]
+	            });
+            }
+            this.contextMenu.showAt(_eventObject.getXY());
         }, this);
         
         this.gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {

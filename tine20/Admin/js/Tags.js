@@ -273,16 +273,19 @@ Tine.Admin.Tags.Main = {
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
             }
-            var contextMenu = new Ext.menu.Menu({
-                id:'ctxMenuTags', 
-                items: [
-                    this.actions.editTag,
-                    this.actions.deleteTag,
-                    '-',
-                    this.actions.addTag 
-                ]
-            });
-            contextMenu.showAt(_eventObject.getXY());
+            
+            if (! this.contextMenu) {
+	            this.contextMenu = new Ext.menu.Menu({
+	                id: 'ctxMenuTags', 
+	                items: [
+	                    this.actions.editTag,
+	                    this.actions.deleteTag,
+	                    '-',
+	                    this.actions.addTag 
+	                ]
+	            });
+            }
+            this.contextMenu.showAt(_eventObject.getXY());
         }, this);
         
         this.gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
