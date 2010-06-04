@@ -10,8 +10,13 @@
  *
  */
 
-Ext.namespace('Tine.Admin.sambaMachine');
+Ext.ns('Tine.Admin.sambaMachine');
 
+/**
+ * @namespace   Tine.Admin.sambaMachine
+ * @class       Tine.Admin.SambaMachineEditDialog
+ * @extends     Tine.widgets.dialog.EditDialog
+ */
 Tine.Admin.SambaMachineEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**

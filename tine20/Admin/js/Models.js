@@ -12,9 +12,9 @@
 Ext.ns('Tine.Admin.Model');
 
 /**
- * @namespace Tine.Admin.Model
- * @class Tine.Admin.Model.TagRight
- * @extends Ext.data.Record
+ * @namespace   Tine.Admin.Model
+ * @class       Tine.Admin.Model.TagRight
+ * @extends     Ext.data.Record
  * 
  * TagRight Record Definition
  */ 

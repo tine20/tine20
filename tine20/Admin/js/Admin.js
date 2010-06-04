@@ -9,7 +9,7 @@
  * @todo        refactor this (split file, use new windows, ...)
  */
  
-Ext.namespace('Tine.Admin');
+Ext.ns('Tine.Admin');
 
 Tine.Admin = function() {
 	
@@ -250,7 +250,7 @@ Tine.Admin = function() {
 /******************************************************************************************/
 /*********************************** TINE ADMIN ACCESS LOG  *******************************/
 
-Ext.namespace('Tine.Admin.AccessLog');
+Ext.ns('Tine.Admin.AccessLog');
 Tine.Admin.AccessLog.Main = function() {
 
 	// references to created toolbar and grid panel

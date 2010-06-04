@@ -10,8 +10,7 @@
  * TODO         translate strings (enable/disable/settings)
  */
  
-Ext.namespace('Tine.Admin');
-Ext.namespace('Tine.Admin.Applications');
+Ext.ns('Tine.Admin', 'Tine.Admin.Applications');
 
 /*********************************** MAIN DIALOG ********************************************/
 

@@ -12,7 +12,7 @@
  * TODO         refactor this (don't use Ext.getCmp, etc.)
  */
 
-Ext.namespace('Tine.Admin.Groups');
+Ext.ns('Tine.Admin.Groups');
 
 /*********************************** MAIN DIALOG ********************************************/
 
@@ -347,6 +347,11 @@ Tine.Admin.Groups.Main = {
 
 /*********************************** EDIT DIALOG ********************************************/
 
+/**
+ * @namespace   Tine.Admin.Groups
+ * @class       Tine.Admin.Groups.EditDialog
+ * @extends     Tine.widgets.dialog.EditRecord
+ */
 Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     /**
      * var group

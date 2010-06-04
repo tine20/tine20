@@ -10,7 +10,7 @@
  *
  */
 
-Ext.namespace('Tine.Admin.Model');
+Ext.ns('Tine.Admin.Model');
 
 Tine.Admin.Model.sambaMachineArray = [
     { name: 'accountId'            },

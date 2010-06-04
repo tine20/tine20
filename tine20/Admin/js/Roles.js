@@ -9,7 +9,7 @@
  * @todo        refactor this (don't use Ext.getCmp, etc.)
  */
  
-Ext.namespace('Tine.Admin.Roles');
+Ext.ns('Tine.Admin.Roles');
 
 /*********************************** MAIN DIALOG ********************************************/
 

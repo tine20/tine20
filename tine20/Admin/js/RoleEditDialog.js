@@ -11,6 +11,11 @@
  
 Ext.ns('Tine.Admin.Roles');
 
+/**
+ * @namespace   Tine.Admin.Roles
+ * @class       Tine.Admin.Roles.EditDialog
+ * @extends     Tine.widgets.dialog.EditRecord
+ */
 Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 
     /**

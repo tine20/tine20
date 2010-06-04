@@ -12,6 +12,10 @@ Ext.ns('Tine.Admin.user');
 
 /**
  * User grid panel
+ * 
+ * @namespace   Tine.Admin.user
+ * @class       Tine.Admin.user.GridPanel
+ * @extends     Tine.widgets.grid.GridPanel
  */
 Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**

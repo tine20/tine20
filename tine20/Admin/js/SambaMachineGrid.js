@@ -28,6 +28,10 @@ Tine.Admin.sambaMachine.show = function() {
 
 /**
  * SambaMachine grid panel
+ *
+ * @namespace   Tine.Admin.sambaMachine
+ * @class       Tine.Admin.SambaMachineGridPanel
+ * @extends     Tine.widgets.grid.GridPanel
  */
 Tine.Admin.SambaMachineGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // model generics

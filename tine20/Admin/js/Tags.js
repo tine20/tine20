@@ -10,7 +10,7 @@
  * TODO         fix autoheight in edit dlg (use border layout?)
  */
  
-Ext.namespace('Tine.Admin.Tags');
+Ext.ns('Tine.Admin.Tags');
 Tine.Admin.Tags.Main = {
     
 	//  references to created toolbar and grid panel
@@ -333,6 +333,11 @@ Tine.Admin.Tags.Main = {
 
 /*********************************** EDIT DIALOG ********************************************/
 
+/**
+ * @namespace   Tine.Admin.Tags
+ * @class       Tine.Admin.Tags.EditDialog
+ * @extends     Tine.widgets.dialog.EditRecord
+ */
 Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     
     /**
