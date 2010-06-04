@@ -465,7 +465,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         
         $count = 0;
         foreach ($_messages as $uid => $value) {
-            $message = $value['message'];
             $subject = '';
             
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($message, true));
@@ -473,12 +472,12 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             
             try {
                 $cachedMessage = new Felamimail_Model_Message(array(
-                    'messageuid'    => $uid,
+                    'messageuid'    => $value['uid'],
                     'folder_id'     => $_folder->getId(),
                     'timestamp'     => Zend_Date::now(),
                     'received'      => $this->_convertDate($value['received'], Felamimail_Model_Message::DATE_FORMAT_RECEIVED),
                     'size'          => $value['size'],
-                    'flags'         => $message->getFlags(),
+                    'flags'         => $value['flags'],
                 ));
                 
                 // try to get optional fields
@@ -486,24 +485,29 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     try {
                         switch ($field) {
                             case 'subject':
-                                $cachedMessage->subject = Felamimail_Message::convertText($message->subject);
+                                $cachedMessage->subject = Felamimail_Message::convertText($value['header']['subject']);
                                 $subject = $cachedMessage->subject;
                                 break;
                             case 'content_type':
-                                $cachedMessage->content_type = $message->contentType;
+                                $cachedMessage->content_type = $value['structure']['contentType'];
                                 break;
                             case 'from':
-                                $cachedMessage->from = Felamimail_Message::convertText($message->from, TRUE, 256);
+                                $cachedMessage->from = Felamimail_Message::convertText($value['header']['from'], TRUE, 256);
                                 // unquote meta chars
                                 $cachedMessage->from = preg_replace("/\\\\([\[\]\*\?\+\.\^\$\(\)]+)/", "$1", $cachedMessage->from);
                                 break;
                             case 'sent':
-                                $cachedMessage->sent = $this->_convertDate($message->date);
+                                if(array_key_exists('date', $value['header'])) {
+                                    $cachedMessage->sent = $this->_convertDate($value['header']['date']);
+                                } elseif (array_key_exists('resent-date', $value['header'])) {
+                                    $cachedMessage->sent = $this->_convertDate($value['header']['resent-date']);
+                                }
+                                
                                 break;
                             default:
                                 if (in_array($field, array('to', 'cc', 'bcc'))) {
                                     // need to check if field is set in message first
-                                    $cachedMessage->{$field} = (isset($message->{$field})) ? $this->_convertAddresses($message->{$field}) : array();
+                                    $cachedMessage->{$field} = (isset($value['header'][$field])) ? $this->_convertAddresses($value['header'][$field]) : array();
                                 }
                         }
                     } catch (Zend_Mail_Exception $zme) {
@@ -532,11 +536,11 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 $count++;
                 $_folder->cache_job_actions_done++;
                 
-            } catch (Zend_Mail_Exception $zme) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
-                    ' Could not parse message ' . $uid . ' | ' . $subject .
-                    '. Error: ' . $zme->getMessage()
-                );
+            #} catch (Zend_Mail_Exception $zme) {
+            #    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
+            #        ' Could not parse message ' . $uid . ' | ' . $subject .
+            #        '. Error: ' . $zme->getMessage()
+            #    );
             } catch (Zend_Db_Statement_Exception $zdse) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                     ' Failed to create cache entry for msg ' . $uid . ' | ' . $subject .
