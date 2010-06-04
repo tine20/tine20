@@ -61,42 +61,28 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
             if ($tokens[1] != 'FETCH') {
                 continue;
             }
+            
+            $data = array();
+            while (key($tokens[2]) !== null) {
+                $data[current($tokens[2])] = next($tokens[2]);
+                next($tokens[2]);
+            }
+            
             // ignore other messages
             // with UID FETCH we get the ID and NOT the UID as $tokens[0]
             #if ($to === null && !is_array($from) && $tokens[0] != $from) {
             #    continue;
             #}
-            // if we only want one item we return that one directly
-            if (count($items) == 1) {
-                if ($tokens[2][0] == $items[0]) {
-                    $data = $tokens[2][1];
-                } else {
-                    // maybe the server send an other field we didn't wanted
-                    $count = count($tokens[2]);
-                    // we start with 2, because 0 was already checked
-                    for ($i = 2; $i < $count; $i += 2) {
-                        if ($tokens[2][$i] != $items[0]) {
-                            continue;
-                        }
-                        $data = $tokens[2][$i + 1];
-                        break;
-                    }
-                }
-            } else {
-                $data = array();
-                while (key($tokens[2]) !== null) {
-                    $data[current($tokens[2])] = next($tokens[2]);
-                    next($tokens[2]);
-                }
-            }
+            
             // if we want only one message we can ignore everything else and just return
             if ($to === null && !is_array($from) && (($uid !== true && $tokens[0] == $from) || ($uid === true && $data['UID'] == $from))) {
                 // we still need to read all lines
                 while (!$this->readLine($tokens, $tag));
-                return $data;
+                return (count($items) == 1) ? $data[$items[0]] : $data;
             }
+            
             $messageId = $uid === true ? $data['UID'] : $tokens[0];
-            $result[$messageId] = $data;
+            $result[$messageId] = (count($items) == 1) ? $data[$items[0]] : $data;
         }
 
         if ($to === null && !is_array($from)) {
