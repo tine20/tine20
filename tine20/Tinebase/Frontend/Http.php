@@ -196,7 +196,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/PortalColumn.js',
             'Tinebase/js/ux/Portlet.js',
         // gears
-            'Tinebase/js/gears_init.js',
+        //    'Tinebase/js/gears_init.js',
         // generic init to be included before parsing of the tine code
             'Tinebase/js/extInit.js',
         // Locale support

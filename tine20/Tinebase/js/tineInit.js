@@ -28,7 +28,7 @@ Ext.onReady(function() {
             Tine.Tinebase.tineInit.initState();
             Tine.Tinebase.tineInit.initWindowMgr();
             Tine.Tinebase.tineInit.onLangFilesLoad();
-            Tine.Tinebase.tineInit.checkSelfUpdate();
+            //Tine.Tinebase.tineInit.checkSelfUpdate();
             Tine.Tinebase.tineInit.renderWindow();
         }
     };
@@ -574,6 +574,7 @@ Tine.Tinebase.tineInit = {
                 return;
                 
             } else {
+                cp.clear('clientreload');
                 new Ext.LoadMask(Ext.getBody(), {
                     msg: _('Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser.'),
                     msgCls: ''
