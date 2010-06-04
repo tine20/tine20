@@ -295,7 +295,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                         if (persistentFilterNode && persistentFilterNode.isExpanded()) {
                             var existingNode = persistentFilterNode.findChild('id', savedRecord.id);
                             if (! existingNode) {
-                                var newNode = this.loader.createNode(savedRecord.data);
+                                var newNode = this.loader.createNode(savedRecord.copy().data);
                                 persistentFilterNode.appendChild(newNode);
                             }
                         }
