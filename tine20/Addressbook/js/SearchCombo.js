@@ -10,7 +10,7 @@
  *
  */
 
-Ext.namespace('Tine.Addressbook');
+Ext.ns('Tine.Addressbook');
 
 /**
  * contact selection combo box

@@ -10,13 +10,14 @@
  * TODO         add preference for sending mails with felamimail or mailto?
  */
  
-Ext.namespace('Tine.Addressbook');
+Ext.ns('Tine.Addressbook');
 
 /**
  * the details panel (shows contact details)
  * 
- * @class Tine.Felamimail.GridDetailsPanel
- * @extends Tine.widgets.grid.DetailsPanel
+ * @namespace   Tine.Addressbook
+ * @class       Tine.Addressbook.ContactGridDetailsPanel
+ * @extends     Tine.widgets.grid.DetailsPanel
  */
 Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     

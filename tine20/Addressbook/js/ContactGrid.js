@@ -9,7 +9,7 @@
  *
  */
  
-Ext.namespace('Tine.Addressbook');
+Ext.ns('Tine.Addressbook');
 
 /**
  * Contact grid panel

@@ -12,9 +12,9 @@
 Ext.ns('Tine.Addressbook');
 
 /**
- * @namespace Tine.Addressbook
- * @class Tine.Addressbook.EventEditDialog
- * @extends Tine.widgets.dialog.EditDialog
+ * @namespace   Tine.Addressbook
+ * @class       Tine.Addressbook.ContactEditDialog
+ * @extends     Tine.widgets.dialog.EditDialog
  * Addressbook Edit Dialog <br>
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
