@@ -296,4 +296,56 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     {
         return $this->_foreignTables;
     }
+    
+    /**
+     * converts record into raw data for adapter
+     *
+     * @param  Tinebase_Record_Abstract $_record
+     * @return array
+     */
+    protected function _recordToRawData($_record)
+    {
+        $result = parent::_recordToRawData($_record);
+        
+        if(isset($result['structure'])) {
+            $result['structure'] = Zend_Json::encode($result['structure']);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * converts raw data from adapter into a single record
+     *
+     * @param  array $_rawData
+     * @return Tinebase_Record_Abstract
+     */
+    protected function _rawDataToRecord(array $_rawData)
+    {
+        if(isset($_rawData['structure'])) {
+            $_rawData['structure'] = Zend_Json::decode($_rawData['structure']);
+        }
+        
+        $result = parent::_rawDataToRecord($_rawData);
+                
+        return $result;
+    }
+    
+    /**
+     * converts raw data from adapter into a set of records
+     *
+     * @param  array $_rawDatas of arrays
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _rawDataToRecordSet(array $_rawDatas)
+    {
+        foreach($_rawDatas as &$_rawData) {
+            if(isset($_rawData['structure'])) {
+                $_rawData['structure'] = Zend_Json::decode($_rawData['structure']);
+            }
+        }
+        $result = parent::_rawDataToRecordSet($_rawDatas);
+        
+        return $result;
+    }
 }
