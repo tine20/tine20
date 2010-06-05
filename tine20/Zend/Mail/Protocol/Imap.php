@@ -210,6 +210,8 @@ class Zend_Mail_Protocol_Imap
                 array_push($stack, $tokens);
                 $tokens = array();
                 $token = substr($token, 1);
+                $line  = substr($line, 1);
+                $pos--;
             }
             if ($token[0] == '"') {
                 if (preg_match('%^"((.|\\\\|\\")*?)" *%', $line, $matches)) {
@@ -822,9 +824,9 @@ class Zend_Mail_Protocol_Imap
      * @internal
      * @return array message ids
      */
-    public function search(array $params)
+    public function search(array $params, $uid = false)
     {
-        $response = $this->requestAndResponse('SEARCH', $params);
+        $response = $this->requestAndResponse($uid ? 'UID SEARCH' : 'SEARCH', $params);
         if (!$response) {
             return $response;
         }
