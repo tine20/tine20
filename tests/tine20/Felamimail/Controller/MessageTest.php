@@ -42,6 +42,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected $_createdMessages = array();
     
     /**
+     * @var Felamimail_Backend_Imap
+     */
+    protected $_imap = NULL;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -62,7 +67,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
-        $this->_controller = Felamimail_Controller_Message::getInstance();        
+        $this->_controller = Felamimail_Controller_Message::getInstance();  
+        $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
     }
 
     /**
@@ -326,7 +332,113 @@ Christian Hoffmann
         // delete message
         $this->_controller->delete($message->getId());
     }
-
+    public function testBodyStructureTextPlain()
+    {
+        $expectedStructure = array(
+            'partId'      => null,
+            'contentType' => 'TEXT/PLAIN',
+            'type'        => 'TEXT',
+            'subType'     => 'PLAIN',
+            'parameters'  => array (
+                'charset' => 'iso-8859-1'
+            ),
+            'id'          => '', 
+            'description' => '',
+            'encoding'    => '7bit',
+            'size'        => 388,
+            'lines'       => 18,
+            'disposition' => '',
+            'language'    => '',
+            'location'    => '',
+            
+        );
+        
+        $this->_appendMessage('text_plain.eml', 'INBOX');
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage text/plain'
+        ));
+        
+        $this->assertGreaterThanOrEqual(1, count($result), 'no messages found matching HEADER X-Tine20TestMessage text/plain');
+        
+        $message = $this->_imap->getSummary($result[0]);
+        
+        $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
+        
+        foreach($result as $messageUid) {
+            $this->_imap->removeMessage($messageUid);
+        }
+    }
+    
+    public function testBodyStructureMultipartAlternative()
+    {
+        $expectedStructure = array(
+            'partId'      => null,
+            'contentType' => 'MULTIPART/ALTERNATIVE',
+            'type'        => 'MULTIPART',
+            'subType'     => 'ALTERNATIVE',
+            'parts'       => array(
+                1 => array(
+                    'partId'      => 1,
+                    'contentType' => 'TEXT/PLAIN',
+                    'type'        => 'TEXT',
+                    'subType'     => 'PLAIN',
+                    'parameters'  => array (
+                        'charset' => 'iso-8859-1'
+                    ),
+                    'id'          => '', 
+                    'description' => '',
+                    'encoding'    => 'quoted-printable',
+                    'size'        => 1726,
+                    'lines'       => 50,
+                    'disposition' => '',
+                    'language'    => '',
+                    'location'    => '',
+                ),
+                2 => array(
+                    'partId'      => 2,
+                    'contentType' => 'TEXT/HTML',
+                    'type'        => 'TEXT',
+                    'subType'     => 'HTML',
+                    'parameters'  => array (
+                        'charset' => 'iso-8859-1'
+                    ),
+                    'id'          => '', 
+                    'description' => '',
+                    'encoding'    => 'quoted-printable',
+                    'size'        => 10713,
+                    'lines'       => 173,
+                    'disposition' => '',
+                    'language'    => '',
+                    'location'    => '',
+                )
+            ),
+            'parameters'  => array (
+                'boundary' => '=_m192h4woyec67braywzx'
+            ),
+            'disposition' => '',
+            'language'    => '',
+            'location'    => '',
+            
+        );
+        
+        $this->_appendMessage('multipart_alternative.eml', 'INBOX');
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/alternative'
+        ));
+        
+        $this->assertGreaterThanOrEqual(1, count($result), 'no messages found matching HEADER X-Tine20TestMessage multipart/alternative');
+        
+        $message = $this->_imap->getSummary($result[0]);
+        
+        $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
+        
+        foreach($result as $messageUid) {
+            $this->_imap->removeMessage($messageUid);
+        }
+    }
+    
     /**
      * test some mail
      *

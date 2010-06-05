@@ -93,6 +93,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $this->_controller->clear($this->_folder);
     }
 
+    
     /**
      * test clear message cache
      *
@@ -200,5 +201,18 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         }
 
         return $folder;
+    }
+    
+    /**
+     * append message (from given filename) to folder
+     *
+     * @param string $_filename
+     * @param string $_folder
+     */
+    protected function _appendMessage($_filename, $_folder)
+    {
+        $mailAsString = file_get_contents(dirname(dirname(dirname(__FILE__))) . '/files/' . $_filename);
+        Felamimail_Backend_ImapFactory::factory($this->_account->getId())
+            ->appendMessage($mailAsString, $_folder);
     }
 }
