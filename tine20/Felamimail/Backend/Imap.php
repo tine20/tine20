@@ -225,6 +225,21 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     }
     
     /**
+     * do a search request
+     *
+     * This method is currently marked as internal as the API might change and is not
+     * safe if you don't take precautions.
+     *
+     * @return array message ids
+     */
+    public function search(array $params)
+    {
+        $result = $this->_protocol->search($params, $this->_useUid);
+        
+        return $result;
+    }
+    
+    /**
      * add flags
      *
      * @param int $id
@@ -429,7 +444,13 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             );
         }
         
-        return $messages;
+        if($to === null && ctype_digit("$from")) {
+            // only one message requested
+            return $messages[$from];
+        } else {
+            // multiple messages requested
+            return $messages;
+        }
     }
 
     /**
@@ -482,38 +503,52 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             $structure['parts'][$partId] = $this->_parseStructure($part, $partId);
             
         }
-        
+
         // content type
         $type    = 'MULTIPART';
-        $subType = strtoupper(trim($_structure[$index], ' "'));
+        $subType = strtoupper($_structure[$index]);
         $structure['contentType'] = $type . '/' . $subType;
         $structure['type']        = $type;
         $structure['subType']     = $subType;
+        $index++;
         
         // body parameters
-        if(is_array($_structure[$index+1])) {
+        if(is_array($_structure[$index])) {
             $parameters = array();
-            for($i=0; $i<count($_structure[$index+1]); $i++) {
-                $key   = strtolower(trim($_structure[$index+1][$i], ' "'));
-                $value = strtolower(trim($_structure[$index+1][++$i], ' "'));
+            for($i=0; $i<count($_structure[$index]); $i++) {
+                $key   = strtolower($_structure[$index][$i]);
+                $value = strtolower($_structure[$index][++$i]);
                 $parameters[$key] = $value;
             }
             $structure['parameters'] = $parameters; 
         }
+        $index++;
         
         // body disposition
-        if($_structure[$index+2] != 'NIL') {
-            $structure['disposition'] = strtolower($index+2); 
+        if($_structure[$index] != 'NIL') {
+            $structure['disposition']['type'] = $_structure[$index][0];
+            
+            if($_structure[$index][1] != 'NIL') {
+                $parameters = array();
+                for($i=0; $i<count($_structure[$index][1]); $i++) {
+                    $key   = strtolower($_structure[$index][1][$i]);
+                    $value = strtolower($_structure[$index][1][++$i]);
+                    $parameters[$key] = $value;
+                }
+                $structure['disposition']['parameters'] = $parameters;
+            }
         }
+        $index++;
         
         // body language
-        if($_structure[$index+3] != 'NIL') {
-            $structure['language'] = strtolower($index+3); 
+        if($_structure[$index] != 'NIL') {
+            $structure['language'] = $_structure[$index]; 
         }
+        $index++;
         
         // body location
-        if($_structure[$index+4] != 'NIL') {
-            $structure['location'] = strtolower($index+4); 
+        if($_structure[$index] != 'NIL') {
+            $structure['location'] = strtolower($_structure[$index]); 
         }
         
         return $structure;
@@ -546,8 +581,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         /** basic fields begin **/
         
         // contentType
-        $type    = strtoupper(trim($_structure[0], ' "'));
-        $subType = strtoupper(trim($_structure[1], ' "'));
+        $type    = strtoupper($_structure[0]);
+        $subType = strtoupper($_structure[1]);
         $structure['contentType'] = $type . '/' . $subType;
         $structure['type']        = $type;
         $structure['subType']     = $subType;
@@ -556,8 +591,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         if(is_array($_structure[2])) {
             $parameters = array();
             for($i=0; $i<count($_structure[2]); $i++) {
-                $key   = strtolower(trim($_structure[2][$i], ' "'));
-                $value = strtolower(trim($_structure[2][++$i], ' "'));
+                $key   = strtolower($_structure[2][$i]);
+                $value = strtolower($_structure[2][++$i]);
                 $parameters[$key] = $value;
             }
             $structure['parameters'] = $parameters; 
@@ -608,25 +643,35 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         // body md5
         if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL') {
-            $structure['md5'] = strtolower($index); 
+            $structure['md5'] = strtolower($_structure[$index]); 
         }
         $index++;
         
         // body disposition
         if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL') {
-            $structure['disposition'] = strtolower($index); 
+            $structure['disposition']['type'] = $_structure[$index][0];
+            
+            if($_structure[$index][1] != 'NIL') {
+                $parameters = array();
+                for($i=0; $i<count($_structure[$index][1]); $i++) {
+                    $key   = strtolower($_structure[$index][1][$i]);
+                    $value = strtolower($_structure[$index][1][++$i]);
+                    $parameters[$key] = $value;
+                }
+                $structure['disposition']['parameters'] = $parameters;
+            }
         }
         $index++;
         
         // body language
         if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL') {
-            $structure['language'] = strtolower($index); 
+            $structure['language'] = strtolower($_structure[$index]); 
         }
         $index++;
         
         // body location
         if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL') {
-            $structure['location'] = strtolower($index); 
+            $structure['location'] = strtolower($_structure[$index]); 
         }
         
         return $structure;
