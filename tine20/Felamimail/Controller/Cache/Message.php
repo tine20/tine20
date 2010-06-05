@@ -449,6 +449,62 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
     }
     
     /**
+     * add one message to cache
+     * 
+     * @param  array                    $_message
+     * @param  Felamimail_Model_Folder  $_folder
+     * @return Felamimail_Model_Message
+     */
+    public function addMessage(array $_message, Felamimail_Model_Folder $_folder)
+    {
+        $messageData = array(
+            'messageuid'    => $_message['uid'],
+            'folder_id'     => $_folder->getId(),
+            'timestamp'     => Zend_Date::now(),
+            'received'      => $this->_convertDate($_message['received'], Felamimail_Model_Message::DATE_FORMAT_RECEIVED),
+            'size'          => $_message['size'],
+            'flags'         => $_message['flags'],
+            'structure'     => $_message['structure'],
+            'content_type'  => isset($_message['structure']['contentType']) ? $_message['structure']['contentType'] : 'TEXT/PLAIN',
+            'subject'       => Felamimail_Message::convertText($_message['header']['subject']),
+            'from'          => Felamimail_Message::convertText($_message['header']['from'], TRUE, 256)
+        );
+        
+        if(array_key_exists('date', $_message['header'])) {
+            $messageData['sent'] = $this->_convertDate($_message['header']['date']);
+        } elseif (array_key_exists('resent-date', $_message['header'])) {
+            $messageData['sent'] = $this->_convertDate($_message['header']['resent-date']);
+        }
+        
+        foreach (array('to', 'cc', 'bcc') as $field) {
+            if (isset($value['header'][$field])) {
+                $messageData[$field] = $this->_convertAddresses($value['header'][$field]);
+            }
+        }
+        
+        $bodyParts = $this->getBodyPartIds($_message['structure']);
+        
+        #if(count($bodyParts) === 0) {var_dump($value); }
+        
+        if (isset($bodyParts['text'])) {
+            $messageData['text_partid'] = $bodyParts['text'];
+        }
+        if (isset($bodyParts['html'])) {
+            $messageData['html_partid'] = $bodyParts['html'];
+        }
+        
+        $cachedMessage = new Felamimail_Model_Message($messageData);
+        
+        $createdMessage = $this->_backend->create($cachedMessage);
+        
+        if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags)) {
+            $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
+        }
+
+        return $createdMessage;
+    }
+    
+    /**
      * add messages to cache and increase folder counts
      *
      * @param array $_messages
@@ -464,99 +520,20 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         $exceptionFields = array('subject', 'to', 'cc', 'bcc', 'content_type', 'from', 'sent');
         
         $count = 0;
-        foreach ($_messages as $uid => $value) {
-            $subject = '';
-            
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($message, true));
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' caching message ' . $message->subject);
-            
-            try {
-                $cachedMessage = new Felamimail_Model_Message(array(
-                    'messageuid'    => $value['uid'],
-                    'folder_id'     => $_folder->getId(),
-                    'timestamp'     => Zend_Date::now(),
-                    'received'      => $this->_convertDate($value['received'], Felamimail_Model_Message::DATE_FORMAT_RECEIVED),
-                    'size'          => $value['size'],
-                    'flags'         => $value['flags'],
-                    'structure'     => $value['structure']
-                ));
-                
-                // try to get optional fields
-                foreach ($exceptionFields as $field) {
-                    try {
-                        switch ($field) {
-                            case 'subject':
-                                $cachedMessage->subject = Felamimail_Message::convertText($value['header']['subject']);
-                                $subject = $cachedMessage->subject;
-                                break;
-                            case 'content_type':
-                                $cachedMessage->content_type = $value['structure']['contentType'];
-                                break;
-                            case 'from':
-                                $cachedMessage->from = Felamimail_Message::convertText($value['header']['from'], TRUE, 256);
-                                // unquote meta chars
-                                $cachedMessage->from = preg_replace("/\\\\([\[\]\*\?\+\.\^\$\(\)]+)/", "$1", $cachedMessage->from);
-                                break;
-                            case 'sent':
-                                if(array_key_exists('date', $value['header'])) {
-                                    $cachedMessage->sent = $this->_convertDate($value['header']['date']);
-                                } elseif (array_key_exists('resent-date', $value['header'])) {
-                                    $cachedMessage->sent = $this->_convertDate($value['header']['resent-date']);
-                                }
-                                
-                                break;
-                            default:
-                                if (in_array($field, array('to', 'cc', 'bcc'))) {
-                                    // need to check if field is set in message first
-                                    $cachedMessage->{$field} = (isset($value['header'][$field])) ? $this->_convertAddresses($value['header'][$field]) : array();
-                                }
-                        }
-                    } catch (Zend_Mail_Exception $zme) {
-                        // no 'subject', 'to', 'cc', 'bcc', from, sent or content_type available
-                        if (in_array($field, array('to', 'cc', 'bcc'))) {
-                            $cachedMessage->{$field} = array();
-                        } else if ($field == 'sent') {
-                            $cachedMessage->{$field} = new Zend_Date(0);
-                        } else {
-                            $cachedMessage->{$field} = '';
-                        }
-                    }
-                }
-                
-                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cachedMessage->toArray(), true));
-                
-                $createdMessage = $this->_backend->create($cachedMessage);
+        foreach ($_messages as $uid => $message) {
+                $this->addMessage($message, $_folder);
                 
                 // count unseen and Zend_Mail_Storage::FLAG_RECENT 
-                if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags)) {
+                if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags'])) {
                     $_folder->cache_recentcount++;
                     $_folder->cache_unreadcount++;
-                    $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
                 }
                 
                 $count++;
                 $_folder->cache_job_actions_done++;
-                
-            #} catch (Zend_Mail_Exception $zme) {
-            #    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
-            #        ' Could not parse message ' . $uid . ' | ' . $subject .
-            #        '. Error: ' . $zme->getMessage()
-            #    );
-            } catch (Zend_Db_Statement_Exception $zdse) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-                    ' Failed to create cache entry for msg ' . $uid . ' | ' . $subject .
-                    '. Error: ' . $zdse->getMessage()
-                );
-            } catch (Zend_Date_Exception $zde) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
-                    ' Could not parse message ' . $uid . ' | ' . $subject .
-                    '. Error: ' . $zde->getMessage()
-                );
-            }
         }
         
         $_folder->cache_totalcount += $count;
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Added ' . $count . ' messages to DB.');
         
         return $count;
     }
@@ -687,7 +664,55 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         
         return $date;
     }
+    
+    public function getBodyPartIds(array $_structure)
+    {
+        $result = array();
+        
+        if ($_structure['type'] == 'TEXT') {
+            $result = array_merge($result, $this->_parseText($_structure));
+        } elseif($_structure['type'] == 'MULTIPART') {
+            $result = array_merge($result, $this->_parseMultipart($_structure));
+        }
+        
+        return $result;
+    }
+    
+    protected function _parseText(array $_structure)
+    {
+        $result = array();
 
+        if (isset($_structure['disposition']['type']) && $_structure['disposition']['type'] == 'attachment') {
+            return $result;
+        }
+        
+        if ($_structure['subType'] == 'PLAIN') {
+            $result['text'] = !empty($_structure['partId']) ? $_structure['partId'] : 1;
+        } elseif($_structure['subType'] == 'HTML') {
+            $result['html'] = !empty($_structure['partId']) ? $_structure['partId'] : 1;
+        }
+        
+        return $result;
+    }
+    
+    protected function _parseMultipart(array $_structure)
+    {
+        $result = array();
+        
+        if ($_structure['subType'] == 'ALTERNATIVE' || $_structure['subType'] == 'MIXED' || 
+            $_structure['subType'] == 'SIGNED' || $_structure['subType'] == 'RELATED') {
+            foreach($_structure['parts'] as $part) {
+                $result = array_merge($result, $this->getBodyPartIds($part));
+            }
+        } else {
+            // ignore other types for now
+            #var_dump($_structure);
+            #throw new Exception('unsupported multipart');    
+        }
+        
+        return $result;
+    }
+    
     /**
      * convert addresses into array with name/address
      *
