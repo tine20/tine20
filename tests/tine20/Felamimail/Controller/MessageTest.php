@@ -332,6 +332,7 @@ Christian Hoffmann
         // delete message
         $this->_controller->delete($message->getId());
     }
+    
     public function testBodyStructureTextPlain()
     {
         $expectedStructure = array(
@@ -363,11 +364,11 @@ Christian Hoffmann
         
         $message = $this->_imap->getSummary($result[0]);
         
-        $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
-        
         foreach($result as $messageUid) {
             $this->_imap->removeMessage($messageUid);
         }
+        
+        $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
     }
     
     public function testBodyStructureMultipartAlternative()
@@ -432,11 +433,11 @@ Christian Hoffmann
         
         $message = $this->_imap->getSummary($result[0]);
         
-        $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
-        
         foreach($result as $messageUid) {
             $this->_imap->removeMessage($messageUid);
         }
+        
+        $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
     }
     
     /**
