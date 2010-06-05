@@ -539,6 +539,25 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $result;
     }
     
+    public function getMessageBody($_messageId, $_partId, $_contentType)
+    {
+        if (! $_messageId instanceof Felamimail_Model_Message) {
+            $message = $this->_backend->get($_messageId);
+        } else {
+            $message = $_messageId;
+        }
+        
+        $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
+        
+        if ($imapBackend === null) {
+            throw new Felamimail_Exception('failed to get imap backend');
+        }
+        
+        $body = $imapBackend->getRawContent($message->messageuid, $_partId);
+        
+        return $body;
+    }
+    
     /**
      * get attachments of message
      *
@@ -654,18 +673,18 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param boolean                   $_select
      * @param Felamimail_Backend_ImapProxy   $_imapBackend
      * @return NULL|Felamimail_Backend_ImapProxy
+     * 
+     * @todo refactor exception handling
      */
     protected function _getBackendAndSelectFolder($_folderId = NULL, &$_folder = NULL, $_select = TRUE, Felamimail_Backend_ImapProxy $_imapBackend = NULL)
     {
-        $imapBackend = $_imapBackend;
-        
         if ($_folder === NULL || empty($_folder)) {
             $folderBackend  = new Felamimail_Backend_Folder();
             $_folder = $folderBackend->get($_folderId);
         }
         
         try {
-            $imapBackend = ($imapBackend === NULL) ? Felamimail_Backend_ImapFactory::factory($_folder->account_id) : $imapBackend;
+            $imapBackend = ($_imapBackend === NULL) ? Felamimail_Backend_ImapFactory::factory($_folder->account_id) : $_imapBackend;
             if ($_select && $imapBackend->getCurrentFolder() != $_folder->globalname) {
                 $backendFolderValues = $imapBackend->selectFolder($_folder->globalname);
             }
@@ -673,6 +692,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             // no imap connection
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
+            
+            return null;
         }
         
         return $imapBackend;
