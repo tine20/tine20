@@ -103,6 +103,9 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'timestamp'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'body'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'structure'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'text_partid'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'html_partid'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'has_attachment'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'headers'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'content_type'          => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,
