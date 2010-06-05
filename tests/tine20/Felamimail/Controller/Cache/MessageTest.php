@@ -181,7 +181,84 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
             $this->assertGreaterThan(0, $result->cache_job_lowestuid, 'lowest job uid was not reset');
         }
     }
+    
+    public function testGetBodyPartIdMultipartAlternative()
+    {
+        $this->_appendMessage('multipart_alternative.eml', 'INBOX');
         
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/alternative'
+        ));
+        
+        $message = $this->_imap->getSummary($result[0]);
+        
+        foreach($result as $messageUid) {
+            $this->_imap->removeMessage($messageUid);
+        }
+        
+        $partIds = $this->_controller->getBodyPartIds($message['structure']);
+
+        $this->assertEquals(array('html' => 2, 'text' => 1), $partIds, 'did not found all partIds');
+    }
+        
+    public function testGetBodyPartIdMultipartMixed()
+    {
+        $this->_appendMessage('multipart_mixed.eml', 'INBOX');
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/mixed'
+        ));
+        
+        $message = $this->_imap->getSummary($result[0]);
+        
+        foreach($result as $messageUid) {
+            $this->_imap->removeMessage($messageUid);
+        }
+        
+        $partIds = $this->_controller->getBodyPartIds($message['structure']);
+
+        $this->assertEquals(array('text' => 1), $partIds, 'did not found all partIds');
+    }
+    
+    public function testGetBodyPartIdMultipartSigned()
+    {
+        $this->_appendMessage('multipart_signed.eml', 'INBOX');
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/signed'
+        ));
+        
+        $message = $this->_imap->getSummary($result[0]);
+        
+        foreach($result as $messageUid) {
+            $this->_imap->removeMessage($messageUid);
+        }
+        
+        $partIds = $this->_controller->getBodyPartIds($message['structure']);
+
+        $this->assertEquals(array('text' => 1), $partIds, 'did not found all partIds');
+    }
+    
+    public function testGetBodyPartIdMultipartRelated()
+    {
+        $this->_appendMessage('multipart_related.eml', 'INBOX');
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/related'
+        ));
+        
+        $message = $this->_imap->getSummary($result[0]);
+        
+        foreach($result as $messageUid) {
+            $this->_imap->removeMessage($messageUid);
+        }
+        
+        $partIds = $this->_controller->getBodyPartIds($message['structure']);
+
+        $this->assertEquals(array('text' => 1, 'html' => '2.1'), $partIds, 'did not found all partIds');
+    }
+    
+    
     /**
      * get folder
      *
