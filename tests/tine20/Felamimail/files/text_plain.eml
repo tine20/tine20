@@ -28,6 +28,7 @@ List-Unsubscribe: <mailto:gentoo-dev+unsubscribe@lists.gentoo.org>
 List-Subscribe: <mailto:gentoo-dev+subscribe@lists.gentoo.org>
 List-Id: Gentoo Linux mail <gentoo-dev.gentoo.org>
 X-BeenThere: gentoo-dev@lists.gentoo.org
+X-Tine20TestMessage: text/plain
 Reply-to: gentoo-dev@lists.gentoo.org
 To: gentoo-dev@lists.gentoo.org
 Subject: Re: [gentoo-dev] `paludis --info' is not like `emerge --info'
