@@ -257,8 +257,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(array('text' => 1, 'html' => '2.1'), $partIds, 'did not found all partIds');
     }
-    
-    
+        
     /**
      * get folder
      *

@@ -47,6 +47,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected $_imap = NULL;
     
     /**
+     * @var Felamimail_Controller_Cache_Message
+     */
+    protected $_cache;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -66,9 +71,10 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
+        $this->_account    = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_controller = Felamimail_Controller_Message::getInstance();  
-        $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
+        $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
+        $this->_cache      = Felamimail_Controller_Cache_Message::getInstance();
     }
 
     /**
@@ -439,6 +445,24 @@ Christian Hoffmann
         
         $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
     }
+    
+    public function testGetBodyMultipartRelated()
+    {
+        $this->_appendMessage('multipart_related.eml', 'INBOX');
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/related'
+        ));
+        $message = $this->_imap->getSummary($result[0]);
+        
+        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        
+        $this->_createdMessages[] = $cachedMessage;
+
+        $body = $this->_controller->getMessageBody($cachedMessage, $cachedMessage->text_partid, 'text/plain');
+        
+        $this->assertContains('w=FCrde', $body);
+    }
+    
     
     /**
      * test some mail
