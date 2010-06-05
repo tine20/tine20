@@ -35,6 +35,13 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected $_account = NULL;
     
     /**
+     * keep track of created messages
+     * 
+     * @var array
+     */
+    protected $_createdMessages = array();
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -66,9 +73,74 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {        
+        foreach($this->_createdMessages as $message) {
+            echo "Remove message $message->subject" . PHP_EOL;
+            $this->_controller->delete($message);
+        }
     }
 
     /********************************* test funcs *************************************/
+    
+    /**
+     * test adding a message
+     */
+    public function testAddMessage()
+    {
+        $testMessage = new Felamimail_Model_Message(array(
+            'subject'       => 'PHPUnit test message',
+            'messageuid'    => 987654321,
+            'folder_id'     => $this->_getFolder()->getId(),
+            'timestamp'     => Zend_Date::now(),
+            'received'      => new Zend_Date('Fri, 6 Mar 2009 20:00:36 +0100', Zend_Date::RFC_2822, 'en_US'),
+            'size'          => 30,
+            'flags'         => array('\Seen'),
+            'structure'     => array(1,2,3,4)
+        ));
+        $message = $this->_controller->create($testMessage);
+        
+        $this->_createdMessages[] = $message;
+
+        $this->assertEquals($testMessage->structure, $message->structure);
+    }
+
+    /**
+     * test getting multiple messages
+     */
+    public function testGetMultipleMessages()
+    {
+        $testMessage1 = new Felamimail_Model_Message(array(
+            'subject'       => 'PHPUnit test message 1',
+            'messageuid'    => 987654321,
+            'folder_id'     => $this->_getFolder()->getId(),
+            'timestamp'     => Zend_Date::now(),
+            'received'      => new Zend_Date('Fri, 6 Mar 2009 20:00:36 +0100', Zend_Date::RFC_2822, 'en_US'),
+            'size'          => 30,
+            'flags'         => array('\Seen'),
+            'structure'     => array(1,2,3,4)
+        ));
+        $message1 = $this->_controller->create($testMessage1);
+        $this->_createdMessages[] = $message1;
+        
+        $testMessage2 = new Felamimail_Model_Message(array(
+            'subject'       => 'PHPUnit test message 2',
+            'messageuid'    => 987654322,
+            'folder_id'     => $this->_getFolder()->getId(),
+            'timestamp'     => Zend_Date::now(),
+            'received'      => new Zend_Date('Fri, 6 Mar 2009 20:00:36 +0100', Zend_Date::RFC_2822, 'en_US'),
+            'size'          => 30,
+            'flags'         => array('\Seen'),
+            'structure'     => array(1,2,3,4)
+        ));
+        $message2 = $this->_controller->create($testMessage2);
+        $this->_createdMessages[] = $message2;
+        
+        $messages = $this->_controller->getMultiple(array(
+            $message1->getId(),
+            $message2->getId()
+        ));
+        
+        $this->assertEquals($messages[0]->structure, $testMessage1->structure);
+    }
     
     /**
      * test search with cache
@@ -337,5 +409,26 @@ Christian Hoffmann
         return new Felamimail_Model_MessageFilter(array(
             array('field' => 'folder_id', 'operator' => 'equals', 'value' => $_folderId)
         ));
+    }
+    
+    /**
+     * get folder
+     *
+     * @return Felamimail_Model_Folder
+     */
+    protected function _getFolder($_folderName = 'INBOX')
+    {
+        $filter = new Felamimail_Model_FolderFilter(array(
+            array('field' => 'globalname', 'operator' => 'equals', 'value' => '',),
+            array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())
+        ));
+        $result = Felamimail_Controller_Folder::getInstance()->search($filter);
+        $folder = $result->filter('localname', $_folderName)->getFirstRecord();
+        if (empty($folder)) {
+            print_r($result->toArray()); 
+            throw new Exception('folder not found');
+        }
+
+        return $folder;
     }
 }
