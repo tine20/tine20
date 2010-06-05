@@ -234,4 +234,49 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Felamimail', '3.6');
     }
+    
+    /**
+     * update function (-> 3.7)
+     * - add field to felamimail_folder table for better caching 
+     */    
+    public function update_6()
+    {
+        // add new cols
+        $this->_backend->addCol('felamimail_cache_message', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>structure</name>
+                <type>blob</type>
+                <notnull>true</notnull>
+            </field>'
+        ));
+        
+        $this->_backend->addCol('felamimail_cache_message', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>has_attachment</name>
+                <type>boolean</type>
+                <default>false</default>
+                <notnull>true</notnull>
+            </field>'
+        ));
+        
+        $this->_backend->addCol('felamimail_cache_message', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>text_partid</name>
+                <type>text</type>
+                <length>128</length>
+            </field>'
+        ));
+        
+        $this->_backend->addCol('felamimail_cache_message', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>html_partid</name>
+                <type>text</type>
+                <length>128</length>
+            </field>'
+        ));
+        
+        $this->setTableVersion('felamimail_cache_message', '2');
+        $this->setApplicationVersion('Felamimail', '3.7');
+    }
+    
 }

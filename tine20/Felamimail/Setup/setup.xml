@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>3.6</version>
+    <version>3.7</version>
     <order>30</order>
     <status>enabled</status>
     <depends>
@@ -344,7 +344,7 @@
         </table>
         <table>
             <name>felamimail_cache_message</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -376,6 +376,31 @@
                     <name>from</name>
                     <type>text</type>
                     <length>256</length>
+                </field>
+                <field>
+                    <name>structure</name>
+                    <type>blob</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>has_attachment</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>text_partid</name>
+                    <type>text</type>
+                    <length>128</length>
+                </field>
+                <field>
+                    <name>html_partid</name>
+                    <type>text</type>
+                    <length>128</length>
+                </field>
+                <field>
+                    <name>priority</name>
+                    <type>integer</type>
                 </field>
                 <field>
                     <name>received</name>
