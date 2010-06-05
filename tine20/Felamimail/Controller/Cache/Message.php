@@ -478,6 +478,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     'received'      => $this->_convertDate($value['received'], Felamimail_Model_Message::DATE_FORMAT_RECEIVED),
                     'size'          => $value['size'],
                     'flags'         => $value['flags'],
+                    'structure'     => $value['structure']
                 ));
                 
                 // try to get optional fields
