@@ -465,7 +465,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             'size'          => $_message['size'],
             'flags'         => $_message['flags'],
             'structure'     => $_message['structure'],
-            'content_type'  => isset($_message['structure']['contentType']) ? $_message['structure']['contentType'] : 'TEXT/PLAIN',
+            'content_type'  => isset($_message['structure']['contentType']) ? $_message['structure']['contentType'] : Zend_Mime::TYPE_TEXT,
             'subject'       => Felamimail_Message::convertText($_message['header']['subject']),
             'from'          => Felamimail_Message::convertText($_message['header']['from'], TRUE, 256)
         );
@@ -674,9 +674,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
     {
         $result = array();
         
-        if ($_structure['type'] == 'TEXT') {
+        if ($_structure['type'] == 'text') {
             $result = array_merge($result, $this->_parseText($_structure));
-        } elseif($_structure['type'] == 'MULTIPART') {
+        } elseif($_structure['type'] == 'multipart') {
             $result = array_merge($result, $this->_parseMultipart($_structure));
         }
         
@@ -691,9 +691,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             return $result;
         }
         
-        if ($_structure['subType'] == 'PLAIN') {
+        if ($_structure['subType'] == 'plain') {
             $result['text'] = !empty($_structure['partId']) ? $_structure['partId'] : 1;
-        } elseif($_structure['subType'] == 'HTML') {
+        } elseif($_structure['subType'] == 'html') {
             $result['html'] = !empty($_structure['partId']) ? $_structure['partId'] : 1;
         }
         
@@ -704,8 +704,8 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
     {
         $result = array();
         
-        if ($_structure['subType'] == 'ALTERNATIVE' || $_structure['subType'] == 'MIXED' || 
-            $_structure['subType'] == 'SIGNED' || $_structure['subType'] == 'RELATED') {
+        if ($_structure['subType'] == 'alternative' || $_structure['subType'] == 'mixed' || 
+            $_structure['subType'] == 'signed' || $_structure['subType'] == 'related') {
             foreach($_structure['parts'] as $part) {
                 $result = array_merge($result, $this->getBodyPartIds($part));
             }
