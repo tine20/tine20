@@ -516,21 +516,26 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      */
     protected function _addMessages($_messages, $_folder)
     {
-        // set fields with try / catch blocks
-        $exceptionFields = array('subject', 'to', 'cc', 'bcc', 'content_type', 'from', 'sent');
-        
         $count = 0;
         foreach ($_messages as $uid => $message) {
-                $this->addMessage($message, $_folder);
-                
-                // count unseen and Zend_Mail_Storage::FLAG_RECENT 
-                if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags'])) {
-                    $_folder->cache_recentcount++;
-                    $_folder->cache_unreadcount++;
+                try {
+                    $this->addMessage($message, $_folder);
+                    
+                    // count unseen and Zend_Mail_Storage::FLAG_RECENT 
+                    if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags'])) {
+                        $_folder->cache_recentcount++;
+                        $_folder->cache_unreadcount++;
+                    }
+                    
+                    $count++;
+                    $_folder->cache_job_actions_done++;
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                        ' Failed to create cache entry for msg ' . $message['uid'] . ' | ' . $message['header']['subject'] .
+                        '. Error: ' . $zdse->getMessage()
+                    );
+                        
                 }
-                
-                $count++;
-                $_folder->cache_job_actions_done++;
         }
         
         $_folder->cache_totalcount += $count;
