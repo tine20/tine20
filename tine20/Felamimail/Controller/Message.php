@@ -547,6 +547,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $_messageId;
         }
         
+        $partStructure = $this->_getPartStructure($message['structure'], $_partId);
+        
+        #var_dump($partStructure);
+        
         $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
         
         if ($imapBackend === null) {
@@ -556,6 +560,28 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $body = $imapBackend->getRawContent($message->messageuid, $_partId);
         
         return $body;
+    }
+    
+    /**
+     * 
+     * @param  array   $_messageStructure
+     * @param  string  $_partId            the part id to search for
+     * @return array
+     */
+    protected function _getPartStructure(array $_messageStructure, $_partId)
+    {
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveArrayIterator($_messageStructure),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+        
+        foreach($iterator as $key => $value) {
+            if($key == $_partId) {
+                return $value;
+            }
+        }
+        
+        throw new Felamimail_Exception("structure for partId $_partId not found");
     }
     
     /**
@@ -955,6 +981,34 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         $result = strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $_content));
         $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
+        
+        return $result;
+    }
+    
+    /**
+     * decode mail part content
+     *
+     * @param Zend_Mail_Part $_part
+     * @param array $_headers
+     * @return string
+     */
+    protected function _decodePart($_part, $_structure)
+    {
+        if ($_headers === NULL) {
+            $_headers = $_part->getHeaders();
+        }
+        
+        $result = $_part->getContent();
+        if (isset($_headers['content-transfer-encoding'])) {
+            switch (strtolower($_headers['content-transfer-encoding'])) {
+                case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
+                    $result = quoted_printable_decode($result);
+                    break;
+                case Zend_Mime::ENCODING_BASE64:
+                    $result = base64_decode($result);
+                    break;
+            }
+        }
         
         return $result;
     }
