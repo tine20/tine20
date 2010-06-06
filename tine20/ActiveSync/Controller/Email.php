@@ -195,10 +195,10 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         $isTruncacted = 0;
         
         if($_withBody === false) {
-            $messageBody  = substr($messageBody, 0, 1000);
+            $messageBody  = iconv_substr($messageBody, 0, 1000);
             $isTruncacted = 1;
         }
-            
+        
         if(version_compare($this->_device->acsversion, '12.0', '>=')) {
             $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:AirSyncBase'));
             $body->appendChild(new DOMElement('Type', 1, 'uri:AirSyncBase'));
