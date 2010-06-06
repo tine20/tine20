@@ -20,7 +20,7 @@
 class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract 
 {
     protected $_mapping = array(
-        'Body'              => 'body',
+        #'Body'              => 'body',
         'Cc'                => 'cc',
         'DateReceived'      => 'received',
         'From'              => 'from',
@@ -99,6 +99,11 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     protected $_sortField = 'received';
     
     /**
+     * @var Felamimail_Controller_Message
+     */
+    protected $_contentController;
+    
+    /**
      * get all entries changed between to dates
      *
      * @param unknown_type $_field
@@ -148,13 +153,9 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, $_withBody = false)
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append email " . $_serverId);
-
-        if($_withBody === true) {
-            $data = $this->_contentController->getCompleteMessage($_serverId);
-        } else {
-            $data = $this->_contentController->get($_serverId);
-        }
-                
+        
+        $data = $this->_contentController->get($_serverId);
+                        
         foreach($this->_mapping as $key => $value) {
             if(!empty($data->$value) || $data->$value == 0) {
                 $nodeContent = null;
@@ -175,11 +176,8 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                     continue;
                 }
                 
-                // create a new DOMElement ...
-                $node = new DOMElement($key, null, 'uri:Email');
-
                 // ... append it to parent node aka append it to the document ...
-                $_xmlNode->appendChild($node);
+                $node = $_xmlNode->appendChild(new DOMElement($key, null, 'uri:Email'));
                 
                 // ... and now add the content (DomText takes care of special chars)
                 $node->appendChild(new DOMText($nodeContent));
@@ -193,7 +191,33 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             $_xmlNode->appendChild(new DOMElement('Read', 0, 'uri:Email'));
         }
         
+        $messageBody  = $this->_contentController->getMessageBody($_serverId, $data['text_partid'], 'text/plain');
+        $isTruncacted = 0;
+        
+        if($_withBody === false) {
+            $messageBody  = substr($messageBody, 0, 1000);
+            $isTruncacted = 1;
+        }
+            
+        if(version_compare($this->_device->acsversion, '12.0', '>=')) {
+            $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:AirSyncBase'));
+            $body->appendChild(new DOMElement('Type', 1, 'uri:AirSyncBase'));
+            $body->appendChild(new DOMElement('Truncated', $isTruncacted, 'uri:AirSyncBase'));
+            $body->appendChild(new DOMElement('EstimatedDataSize', $data->size, 'uri:AirSyncBase'));
+            $body->appendChild(new DOMElement('NativeBodyType', 1, 'uri:AirSyncBase'));
+            
+            $data = $body->appendChild(new DOMElement('Data', null, 'uri:AirSyncBase'));
+            $body->appendChild(new DOMText($messageBody));
+        } else {
+            $_xmlNode->appendChild(new DOMElement('BodyTruncated', $isTruncacted, 'uri:Email'));
+            $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:Email'));
+            $body->appendChild(new DOMText($messageBody));
+        }
+        
+        
         $_xmlNode->appendChild(new DOMElement('MessageClass', 'IPM.Note', 'uri:Email'));
+        $_xmlNode->appendChild(new DOMElement('ContentClass', 'urn:content-classes:message', 'uri:Email'));
+        // NativeBodyType
         
         return;
         /*
