@@ -549,15 +549,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $partStructure = $this->_getPartStructure($message['structure'], $_partId);
         
-        #var_dump($partStructure);
-        
         $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
         
         if ($imapBackend === null) {
             throw new Felamimail_Exception('failed to get imap backend');
         }
         
-        $body = $imapBackend->getRawContent($message->messageuid, $_partId);
+        $rawBody = $imapBackend->getRawContent($message->messageuid, $_partId);
+        $body    = $this->_decodePart($rawBody, $partStructure);
         
         return $body;
     }
@@ -570,6 +569,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _getPartStructure(array $_messageStructure, $_partId)
     {
+        // maybe we want the first part
+        if($_messageStructure['partId'] == $_partId) {
+            return $_messageStructure;
+        }
+        
         $iterator = new RecursiveIteratorIterator(
             new RecursiveArrayIterator($_messageStructure),
             RecursiveIteratorIterator::SELF_FIRST
@@ -988,26 +992,29 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * decode mail part content
      *
-     * @param Zend_Mail_Part $_part
-     * @param array $_headers
+     * @param  string  $_part
+     * @param  array   $_structure
      * @return string
      */
     protected function _decodePart($_part, $_structure)
     {
-        if ($_headers === NULL) {
-            $_headers = $_part->getHeaders();
+        switch ($_structure['encoding']) {
+            case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
+                $result = quoted_printable_decode($_part);
+                break;
+            case Zend_Mime::ENCODING_BASE64:
+                $result = base64_decode($_part);
+                break;
+            default:
+                // return undecoded
+                $result = $_part; 
+                break;     
         }
         
-        $result = $_part->getContent();
-        if (isset($_headers['content-transfer-encoding'])) {
-            switch (strtolower($_headers['content-transfer-encoding'])) {
-                case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
-                    $result = quoted_printable_decode($result);
-                    break;
-                case Zend_Mime::ENCODING_BASE64:
-                    $result = base64_decode($result);
-                    break;
-            }
+        $charset = isset($_structure['parameters']['charset']) ? $_structure['parameters']['charset'] : 'iso-8859-1';
+
+        if($charset != 'utf-8') {
+            $result = iconv($charset, 'utf-8', $result);
         }
         
         return $result;
