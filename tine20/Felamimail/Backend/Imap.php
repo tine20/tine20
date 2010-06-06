@@ -420,7 +420,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             $header = $this->_fixHeader($data['RFC822.HEADER'], $id, $spaces);
             Zend_Mime_Decode::splitMessage($header, $header, $null);
             
-            $structure = $this->_parseStructure($data['BODYSTRUCTURE']);
+            $structure = $this->parseStructure($data['BODYSTRUCTURE']);
             
             $flags = array();
             foreach ($data['FLAGS'] as $flag) {
@@ -459,12 +459,16 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * @param unknown_type $_structure
      * @param unknown_type $_partId
      */
-    protected function _parseStructure($_structure, $_partId = null)
+    public function parseStructure($_structure, $_partId = null)
     {
         if(is_array($_structure[0])) {
             $structure = $this->_parseStructureMultiPart($_structure, $_partId);
         } else {
             $structure = $this->_parseStructureNonMultiPart($_structure, $_partId);
+        }
+        
+        if($structure['partId'] === null && empty($structure['parts'])) {
+            $structure['partId'] = 1;
         }
         
         return $structure;
@@ -500,7 +504,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             $index++;
             
             $partId = ($_partId === null) ? $index : $_partId . '.' . $index;
-            $structure['parts'][$partId] = $this->_parseStructure($part, $partId);
+            $structure['parts'][$partId] = $this->parseStructure($part, $partId);
             
         }
 
@@ -626,7 +630,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             $structure['messageEnvelop'] = $_structure[7];
             
             // messages strcuture
-            $structure['messageStruture'] = $this->_parseStructure($_structure[8], $_partId);
+            $structure['messageStruture'] = $this->parseStructure($_structure[8], $_partId);
             
             // messages strcuture
             $structure['messageLines'] = $_structure[9];
