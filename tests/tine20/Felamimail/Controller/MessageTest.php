@@ -342,10 +342,10 @@ Christian Hoffmann
     public function testBodyStructureTextPlain()
     {
         $expectedStructure = array(
-            'partId'      => null,
-            'contentType' => 'TEXT/PLAIN',
-            'type'        => 'TEXT',
-            'subType'     => 'PLAIN',
+            'partId'      => 1,
+            'contentType' => 'text/plain',
+            'type'        => 'text',
+            'subType'     => 'plain',
             'parameters'  => array (
                 'charset' => 'iso-8859-1'
             ),
@@ -381,15 +381,15 @@ Christian Hoffmann
     {
         $expectedStructure = array(
             'partId'      => null,
-            'contentType' => 'MULTIPART/ALTERNATIVE',
-            'type'        => 'MULTIPART',
-            'subType'     => 'ALTERNATIVE',
+            'contentType' => 'multipart/alternative',
+            'type'        => 'multipart',
+            'subType'     => 'alternative',
             'parts'       => array(
                 1 => array(
                     'partId'      => 1,
-                    'contentType' => 'TEXT/PLAIN',
-                    'type'        => 'TEXT',
-                    'subType'     => 'PLAIN',
+                    'contentType' => 'text/plain',
+                    'type'        => 'text',
+                    'subType'     => 'plain',
                     'parameters'  => array (
                         'charset' => 'iso-8859-1'
                     ),
@@ -404,9 +404,9 @@ Christian Hoffmann
                 ),
                 2 => array(
                     'partId'      => 2,
-                    'contentType' => 'TEXT/HTML',
-                    'type'        => 'TEXT',
-                    'subType'     => 'HTML',
+                    'contentType' => 'text/html',
+                    'type'        => 'text',
+                    'subType'     => 'html',
                     'parameters'  => array (
                         'charset' => 'iso-8859-1'
                     ),
@@ -458,9 +458,26 @@ Christian Hoffmann
         
         $this->_createdMessages[] = $cachedMessage;
 
-        $body = $this->_controller->getMessageBody($cachedMessage, $cachedMessage->text_partid, 'text/plain');
+        $body = $this->_controller->getMessageBody($cachedMessage, $cachedMessage->text_partid, Zend_Mime::TYPE_TEXT);
         
-        $this->assertContains('w=FCrde', $body);
+        $this->assertContains('würde', $body);
+    }
+    
+    public function testGetBodyPlainText()
+    {
+        $this->_appendMessage('text_plain.eml', 'INBOX');
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage text/plain'
+        ));
+        $message = $this->_imap->getSummary($result[0]);
+        
+        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        
+        $this->_createdMessages[] = $cachedMessage;
+
+        $body = $this->_controller->getMessageBody($cachedMessage, $cachedMessage->text_partid, Zend_Mime::TYPE_TEXT);
+        
+        $this->assertContains('a converter script be written to', $body);
     }
     
     
