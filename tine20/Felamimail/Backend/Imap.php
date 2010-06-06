@@ -505,8 +505,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         }
 
         // content type
-        $type    = 'MULTIPART';
-        $subType = strtoupper($_structure[$index]);
+        $type    = 'multipart';
+        $subType = strtolower($_structure[$index]);
         $structure['contentType'] = $type . '/' . $subType;
         $structure['type']        = $type;
         $structure['subType']     = $subType;
@@ -581,8 +581,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         /** basic fields begin **/
         
         // contentType
-        $type    = strtoupper($_structure[0]);
-        $subType = strtoupper($_structure[1]);
+        $type    = strtolower($_structure[0]);
+        $subType = strtolower($_structure[1]);
         $structure['contentType'] = $type . '/' . $subType;
         $structure['type']        = $type;
         $structure['subType']     = $subType;
@@ -621,7 +621,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         /** basic fields end **/
         $index = 7;
         
-        if($type == 'MESSAGE' && $subType == 'RFC822') {
+        if($type == 'message' && $subType == 'rfc822') {
             // messages envelope
             $structure['messageEnvelop'] = $_structure[7];
             
@@ -633,7 +633,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             
             // index of the first element containing extension data 
             $index = 10;
-        } elseif($type == 'TEXT') {
+        } elseif($type == 'text') {
             if($_structure[7] != 'NIL') {
                 $structure['lines'] = $_structure[7]; 
             }
