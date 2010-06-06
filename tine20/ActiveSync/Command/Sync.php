@@ -253,6 +253,13 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         
             // handle deletes, but only if not first sync
             if($clientSyncKey > 1 && isset($xmlCollection->Commands->Fetch)) {
+                // the default value for GetChanges is 1. If the phone don't want the changes it must set GetChanges to 0
+                // unfortunately the iPhone dont set GetChanges to 0 when fetching email body, but is confused when we send
+                // changes
+                if (! isset($xmlCollection->GetChanges)) {
+                    $this->_collections[$folder->class][$collectionId]['getChanges'] = false;
+                }
+                
                 $fetches = $xmlCollection->Commands->Fetch;
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($fetches) . " entries to be fetched from server");
                 foreach ($fetches as $fetch) {
