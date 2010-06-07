@@ -172,14 +172,14 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     // get summary and add messages
                     if (empty($uids)) {
                         if ($folder->imap_uidnext) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' fetching with a stepwidth of: ' . $this->_uidStepWidth);
+                            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' fetching with a stepwidth of: ' . $this->_uidStepWidth);
                             
                             $stepLowestUid = max($folder->cache_job_lowestuid - $this->_uidStepWidth, $folder->cache_uidnext);
                             $stepHighestUid = $folder->cache_job_lowestuid - 1;
                             $uids = $imap->getUidbyUid($stepLowestUid, $stepHighestUid);
                             
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
-                                . ' new uids from IMAP server: ' . $stepHighestUid . ' - ' . $stepLowestUid);
+                            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
+                            //    . ' new uids from IMAP server: ' . $stepHighestUid . ' - ' . $stepLowestUid);
                             
                             // adjust stepwidth for next run
                             $this->_uidStepWidth = max(2*$this->_importCountPerStep, round($this->_uidStepWidth * max(1/$this->_importCountPerStep, $this->_importCountPerStep / max(1, count($uids)))));
@@ -533,6 +533,11 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         '. Error: ' . $zdse->getMessage()
                     );
                         
+                } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
+                        ' Failed to create cache entry for msg ' . $message['uid'] . ' | ' . $message['header']['subject'] .
+                        $e
+                    );
                 }
         }
         
