@@ -303,8 +303,12 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                     
                                     
                 } else {
-                    $newSyncKey = $collectionData['syncKey'] + 1;
-                    
+                    if($collectionData['getChanges'] === false && !empty($collectionData['toBeFetched'])) {
+                        // keep synckey during fetch requests
+                        $newSyncKey = $collectionData['syncKey'];
+                    } else {
+                        $newSyncKey = $collectionData['syncKey'] + 1;
+                    }
                     // collection header
                     $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
