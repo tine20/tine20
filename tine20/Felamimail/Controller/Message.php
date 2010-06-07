@@ -539,7 +539,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $result;
     }
     
-    public function getMessageBody($_messageId, $_partId, $_contentType)
+    public function getMessageBody($_messageId, $_contentType)
     {
         if (! $_messageId instanceof Felamimail_Model_Message) {
             $message = $this->_backend->get($_messageId);
@@ -547,7 +547,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $_messageId;
         }
         
-        $partStructure = $this->_getPartStructure($message['structure'], $_partId);
+        $partId = null;
+        
+        if($_contentType == Zend_Mime::TYPE_HTML) {
+            $partId = !empty($message['html_partid']) ? $message['html_partid'] : $message['text_partid'];
+        } else {
+            $partId = !empty($message['text_partid']) ? $message['text_partid'] : $message['html_partid'];
+        }
+        
+        if(empty($partId)) {
+            return '';
+        }
+        
+        $partStructure = $this->_getPartStructure($message['structure'], $partId);
         
         $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
         
@@ -555,8 +567,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             throw new Felamimail_Exception('failed to get imap backend');
         }
         
-        $rawBody = $imapBackend->getRawContent($message->messageuid, $_partId);
-        $body    = $this->_decodePart($rawBody, $partStructure);
+        $rawBody = $imapBackend->getRawContent($message->messageuid, $partId);
+        $body    = $this->_decodePart($rawBody, $partStructure, $_contentType);
         
         return $body;
     }
@@ -994,9 +1006,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param  string  $_part
      * @param  array   $_structure
+     * @param  string  $_contentType
      * @return string
      */
-    protected function _decodePart($_part, $_structure)
+    protected function _decodePart($_part, $_structure, $_contentType)
     {
         switch ($_structure['encoding']) {
             case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
@@ -1015,6 +1028,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         if($charset != 'utf-8') {
             $result = iconv($charset, 'utf-8', $result);
+        }
+        
+        if($_structure['contentType'] != $_contentType) {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Conversion between content type needs to get implemented!');
         }
         
         return $result;
