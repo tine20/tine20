@@ -477,8 +477,8 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         }
         
         foreach (array('to', 'cc', 'bcc') as $field) {
-            if (isset($value['header'][$field])) {
-                $messageData[$field] = $this->_convertAddresses($value['header'][$field]);
+            if (isset($_message['header'][$field])) {
+                $messageData[$field] = $this->_convertAddresses($_message['header'][$field]);
             }
         }
         
