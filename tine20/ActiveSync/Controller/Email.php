@@ -191,7 +191,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             $_xmlNode->appendChild(new DOMElement('Read', 0, 'uri:Email'));
         }
         
-        $messageBody  = $this->_contentController->getMessageBody($_serverId, $data['text_partid'], 'text/plain');
+        $messageBody  = $this->_contentController->getMessageBody($_serverId, Zend_Mime::TYPE_TEXT);
         $isTruncacted = 0;
         
         if($_withBody === false) {
