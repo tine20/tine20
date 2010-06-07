@@ -446,6 +446,84 @@ Christian Hoffmann
         $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
     }
     
+    public function testBodyStructureMultipartMixed()
+    {
+        $expectedStructure = array(
+            'partId'      => null,
+            'contentType' => 'multipart/mixed',
+            'type'        => 'multipart',
+            'subType'     => 'mixed',
+            'parts'       => array(
+                1 => array(
+                    'partId'      => 1,
+                    'contentType' => 'text/plain',
+                    'type'        => 'text',
+                    'subType'     => 'plain',
+                    'parameters'  => array (
+                        'charset' => 'us-ascii'
+                    ),
+                    'id'          => null, 
+                    'description' => null,
+                    'encoding'    => '7bit',
+                    'size'        => 3896,
+                    'lines'       => 62,
+                    'disposition' => array(
+                        'type'    => 'inline'
+                    ),
+                    'language'    => '',
+                    'location'    => '',
+                ),
+                2 => array(
+                    'partId'      => 2,
+                    'contentType' => 'text/plain',
+                    'type'        => 'text',
+                    'subType'     => 'plain',
+                    'parameters'  => array (
+                        'charset' => 'us-ascii'
+                    ),
+                    'id'          => '', 
+                    'description' => '',
+                    'encoding'    => '7bit',
+                    'size'        => 2787,
+                    'lines'       => 53,
+                    'disposition' => array(
+                        'type'    => 'attachment',
+                        'parameters' => array(
+                            'filename' => 'add-removals.1239580800.log'
+                        )
+                    ),
+                    'language'    => '',
+                    'location'    => '',
+                )
+            ),
+            'parameters'  => array (
+                'boundary' => '0f1p//8prickk4mwrobbat28989323553773'
+            ),
+            'disposition' => array(
+                'type'    => 'inline'
+            ),
+            'language'    => '',
+            'location'    => '',
+            
+        );
+        
+        $this->_appendMessage('multipart_mixed.eml', 'INBOX');
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/mixed'
+        ));
+        
+        $this->assertGreaterThanOrEqual(1, count($result), 'no messages found matching HEADER X-Tine20TestMessage multipart/alternative');
+        
+        $message = $this->_imap->getSummary($result[0]);
+        
+        foreach($result as $messageUid) {
+            $this->_imap->removeMessage($messageUid);
+        }
+        
+        $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
+    }
+    
     public function testGetBodyMultipartRelated()
     {
         $this->_appendMessage('multipart_related.eml', 'INBOX');
