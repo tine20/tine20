@@ -21,11 +21,6 @@
 class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
 {
     /**
-     * default uid stepwidth
-     */
-    const DEFAULT_UID_STEPWIDTH = 10000;
-    
-    /**
      * application name (is needed in checkRight())
      *
      * @var string
@@ -42,7 +37,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      *
      * @var integer
      */
-    protected $_uidStepWidth = 10000;
+    protected $_uidStepWidth = NULL;
     
     /**
      * number of imported messages in one caching step
@@ -161,6 +156,11 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             
             $count = 0;
             $uids = array();
+            
+            // preset uid stepwidth;
+            $uidDensity = round($folder->imap_uidnext / $folder->imap_totalcount);
+            $this->_uidStepWidth = $this->_importCountPerStep * $uidDensity;
+            
             if ($folder->imap_uidnext != $folder->cache_uidnext) {
                 while (
                     // more messages to add ?
@@ -172,12 +172,17 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     // get summary and add messages
                     if (empty($uids)) {
                         if ($folder->imap_uidnext) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' fetching with a stepwidth of: ' . $this->_uidStepWidth);
+                            
                             $stepLowestUid = max($folder->cache_job_lowestuid - $this->_uidStepWidth, $folder->cache_uidnext);
                             $stepHighestUid = $folder->cache_job_lowestuid - 1;
                             $uids = $imap->getUidbyUid($stepLowestUid, $stepHighestUid);
-                            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
-                            //    . ' new uids from IMAP server: ' . $stepHighestUid . ' - ' . $stepLowestUid);
-                                
+                            
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
+                                . ' new uids from IMAP server: ' . $stepHighestUid . ' - ' . $stepLowestUid);
+                            
+                            // adjust stepwidth for next run
+                            $this->_uidStepWidth = max(2*$this->_importCountPerStep, round($this->_uidStepWidth * max(1/$this->_importCountPerStep, $this->_importCountPerStep / max(1, count($uids)))));
                         } else {
                             // imap servers without uidnext
                             $stepLowestUid = $folder->cache_uidnext;
@@ -197,19 +202,8 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         $count += $this->_addMessages($messages, $folder);
                         
                         $folder->cache_job_lowestuid = ($folder->imap_uidnext) ? min($nextUids) : ($folder->imap_totalcount - $folder->cache_totalcount);
-                        
-                        // set stepwidth back to normal
-                        if ($this->_uidStepWidth > self::DEFAULT_UID_STEPWIDTH) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting uid stepwidth back to normal: ' . self::DEFAULT_UID_STEPWIDTH);
-                            $this->_uidStepWidth = self::DEFAULT_UID_STEPWIDTH;
-                        }
-
                     } else {
                         $folder->cache_job_lowestuid = $stepLowestUid;
-                        
-                        // increase stepwidth
-                        $this->_uidStepWidth *= 10;
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No new messages found, increasing uid stepwidth to ' . $this->_uidStepWidth);
                     }
                     
                     $timeLeft = ($folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
