@@ -472,6 +472,10 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         
         foreach (array('to', 'cc', 'bcc') as $field) {
             if (isset($_message['header'][$field])) {
+                // if sender set the headers twice we only use the first
+                if(is_array($_message['header'][$field])) {
+                    $_message['header'][$field] = $_message['header'][$field][0];
+                }
                 $messageData[$field] = $this->_convertAddresses($_message['header'][$field]);
             }
         }
