@@ -172,7 +172,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                 
                 // skip empty elements
                 if($nodeContent === null || $nodeContent == '') {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Value for $key is empty. Skip element.");
+                    //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Value for $key is empty. Skip element.");
                     continue;
                 }
                 
