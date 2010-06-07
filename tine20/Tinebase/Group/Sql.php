@@ -175,15 +175,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     }
     
     /**
-     * replace all current groupmemberships of user in sql backend
+     * set all groups an user is member of
      *
-     * @param  mixed  $_userId
+     * @param  mixed  $_usertId   the account as integer or Tinebase_Model_User
      * @param  mixed  $_groupIds
-     * 
      * @return array
      */
-    public function setGroupMembershipsInSqlBackend($_userId, $_groupIds)
-    {        
+    public function setGroupMembershipsInSqlBackend($_userId, array $_groupIds)
+    {
         if ($_groupIds instanceof Tinebase_Record_RecordSet) {
             $_groupIds = $_groupIds->getArrayOfIds();
         }
@@ -194,25 +193,20 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         
         $userId = Tinebase_Model_user::convertUserIdToInt($_userId);
         
-        // remove old memberships
-        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $userId);
-        $this->groupMembersTable->delete($where);
+        $groupMemberships = $this->getGroupMemberships($userId);
         
-        $db = Tinebase_Core::getDb();
-        $stmt = $db->prepare('INSERT INTO ' . SQL_TABLE_PREFIX . 'group_members (group_id, account_id) VALUES (?,?)');
+        $removeGroupMemberships = array_diff($groupMemberships, $_groupIds);
+        $addGroupMemberships    = array_diff($_groupIds, $groupMemberships);
         
-        // add new members
-        foreach (array_unique($_groupIds) as $groupId) {
-            $stmt->execute(array(
-                $groupId, 
-                $userId
-            ));
+        foreach ($addGroupMemberships as $groupId) {
+            $this->addGroupMember($groupId, $userId);
         }
         
-        // invalidate cache (no memcached support yet)
-        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('group'));
+        foreach ($removeGroupMemberships as $groupId) {
+            $this->removeGroupMember($groupId, $usertId);
+        }
         
-        return $this->getGroupMemberships($_userId);
+        return $this->getGroupMemberships($userId);
     }
     
     /**
