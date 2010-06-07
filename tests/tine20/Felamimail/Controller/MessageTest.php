@@ -458,7 +458,7 @@ Christian Hoffmann
         
         $this->_createdMessages[] = $cachedMessage;
 
-        $body = $this->_controller->getMessageBody($cachedMessage, $cachedMessage->text_partid, Zend_Mime::TYPE_TEXT);
+        $body = $this->_controller->getMessageBody($cachedMessage, Zend_Mime::TYPE_TEXT);
         
         $this->assertContains('würde', $body);
     }
@@ -475,7 +475,7 @@ Christian Hoffmann
         
         $this->_createdMessages[] = $cachedMessage;
 
-        $body = $this->_controller->getMessageBody($cachedMessage, $cachedMessage->text_partid, Zend_Mime::TYPE_TEXT);
+        $body = $this->_controller->getMessageBody($cachedMessage, Zend_Mime::TYPE_TEXT);
         
         $this->assertContains('a converter script be written to', $body);
     }
@@ -493,6 +493,24 @@ Christian Hoffmann
         $this->_createdMessages[] = $cachedMessage;
         
         $this->assertContains('gentoo-dev@lists.gentoo.org', $cachedMessage->to[0]['email']);
+    }
+    
+    /**
+     * test adding message with duplicate to: header
+     */
+    public function testAddMessageToCache2()
+    {
+        $this->_appendMessage('text_plain2.eml', 'INBOX');
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage text/plain'
+        ));
+        $message = $this->_imap->getSummary($result[0]);
+        
+        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        
+        $this->_createdMessages[] = $cachedMessage;
+        
+        $this->assertContains('c.weiss@metaways.de', $cachedMessage->to[0]['email']);
     }
     
     /**
