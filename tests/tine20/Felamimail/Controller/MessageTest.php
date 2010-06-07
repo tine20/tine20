@@ -480,6 +480,20 @@ Christian Hoffmann
         $this->assertContains('a converter script be written to', $body);
     }
     
+    public function testAddMessageToCache()
+    {
+        $this->_appendMessage('text_plain.eml', 'INBOX');
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage text/plain'
+        ));
+        $message = $this->_imap->getSummary($result[0]);
+        
+        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        
+        $this->_createdMessages[] = $cachedMessage;
+        
+        $this->assertContains('gentoo-dev@lists.gentoo.org', $cachedMessage->to[0]['email']);
+    }
     
     /**
      * test some mail
