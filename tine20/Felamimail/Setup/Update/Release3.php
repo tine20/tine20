@@ -241,6 +241,9 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
      */    
     public function update_6()
     {
+        // clear cache
+        $this->update_5();
+        
         // add new cols
         $this->_backend->addCol('felamimail_cache_message', new Setup_Backend_Schema_Field_Xml(
             '<field>
