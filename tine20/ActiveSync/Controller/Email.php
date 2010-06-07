@@ -185,7 +185,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         }
         
         // read flag
-        if(preg_match('/\\Seen/', $data->flags)) {
+        if (preg_match('/\\Seen/', $data->flags)) {
             $_xmlNode->appendChild(new DOMElement('Read', 1, 'uri:Email'));                 
         } else {
             $_xmlNode->appendChild(new DOMElement('Read', 0, 'uri:Email'));
@@ -194,24 +194,27 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         $messageBody  = $this->_contentController->getMessageBody($_serverId, Zend_Mime::TYPE_TEXT);
         $isTruncacted = 0;
         
-        if($_withBody === false) {
-            $messageBody  = iconv_substr($messageBody, 0, 1000);
-            $isTruncacted = 1;
-        }
+        if (!empty($messageBody)) {
+            if ($_withBody === false) {
+                $messageBody  = iconv_substr($messageBody, 0, 2000);
+                $isTruncacted = 1;
+            }
         
-        if(version_compare($this->_device->acsversion, '12.0', '>=')) {
-            $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:AirSyncBase'));
-            $body->appendChild(new DOMElement('Type', 1, 'uri:AirSyncBase'));
-            $body->appendChild(new DOMElement('Truncated', $isTruncacted, 'uri:AirSyncBase'));
-            $body->appendChild(new DOMElement('EstimatedDataSize', $data->size, 'uri:AirSyncBase'));
-            $body->appendChild(new DOMElement('NativeBodyType', 1, 'uri:AirSyncBase'));
-            
-            $data = $body->appendChild(new DOMElement('Data', null, 'uri:AirSyncBase'));
-            $body->appendChild(new DOMText($messageBody));
-        } else {
-            $_xmlNode->appendChild(new DOMElement('BodyTruncated', $isTruncacted, 'uri:Email'));
-            $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:Email'));
-            $body->appendChild(new DOMText($messageBody));
+            if (version_compare($this->_device->acsversion, '12.0', '>=')) {
+                $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:AirSyncBase'));
+                $body->appendChild(new DOMElement('Type', 1, 'uri:AirSyncBase'));
+                $body->appendChild(new DOMElement('Truncated', $isTruncacted, 'uri:AirSyncBase'));
+                $body->appendChild(new DOMElement('EstimatedDataSize', $data->size, 'uri:AirSyncBase'));
+                
+                $dataTag = $body->appendChild(new DOMElement('Data', null, 'uri:AirSyncBase'));
+                $dataTag->appendChild(new DOMText($messageBody));
+                
+                $_xmlNode->appendChild(new DOMElement('NativeBodyType', 1, 'uri:AirSyncBase'));
+            } else {
+                $_xmlNode->appendChild(new DOMElement('BodyTruncated', $isTruncacted, 'uri:Email'));
+                $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:Email'));
+                $body->appendChild(new DOMText($messageBody));
+            }
         }
         
         
