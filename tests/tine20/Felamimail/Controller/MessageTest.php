@@ -86,7 +86,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {        
         foreach($this->_createdMessages as $message) {
-            echo "Remove message $message->subject" . PHP_EOL;
+            #echo "Remove message $message->subject" . PHP_EOL;
             $this->_controller->delete($message);
         }
     }
