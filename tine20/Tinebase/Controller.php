@@ -57,27 +57,29 @@ class Tinebase_Controller
     /**
      * create new user session
      *
-     * @param   string $_username
+     * @param   string $_loginname
      * @param   string $_password
      * @param   string $_ipAddress
      * @return  bool
      * @throws  Tinebase_Exception_NotFound
      */
-    public function login($_username, $_password, $_ipAddress)
+    public function login($_loginname, $_password, $_ipAddress)
     {
-        $authResult = Tinebase_Auth::getInstance()->authenticate($_username, $_password);
+        $authResult = Tinebase_Auth::getInstance()->authenticate($_loginname, $_password);
         
         if ($authResult->isValid()) {
+            $accountName = $authResult->getIdentity();
+            
             $accountsController = Tinebase_User::getInstance();
             $groupsController   = Tinebase_Group::getInstance();
             try {
                 if ($accountsController instanceof Tinebase_User_Interface_SyncAble) {
-                    Tinebase_User::syncUser($_username);
+                    Tinebase_User::syncUser($accountName);
                 }
-                $account = $accountsController->getFullUserByLoginName($authResult->getIdentity());
+                $account = $accountsController->getFullUserByLoginName($accountName);
             } catch (Tinebase_Exception_NotFound $e) {
                 Zend_Session::destroy();
-                throw new Tinebase_Exception_NotFound('Account ' . $authResult->getIdentity() . ' not found in account storage.');
+                throw new Tinebase_Exception_NotFound('Account ' . $accountName . ' not found in account storage.');
             }
             
             Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
@@ -91,7 +93,7 @@ class Tinebase_Controller
             Tinebase_Core::set(Tinebase_Core::USER, $account);
             Tinebase_Core::getSession()->currentAccount = $account;
             
-            $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($_username, $_password);
+            $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($accountName, $_password);
             Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
             
             $account->setLoginTime($_ipAddress);
@@ -108,7 +110,7 @@ class Tinebase_Controller
         } else {
             Tinebase_AccessLog::getInstance()->addLoginEntry(
                 session_id(),
-                $_username,
+                $_loginname,
                 $_ipAddress,
                 $authResult->getCode()
            );
