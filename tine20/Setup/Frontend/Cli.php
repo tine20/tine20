@@ -265,7 +265,7 @@ class Setup_Frontend_Cli
         Tinebase_Group::syncGroups();
         
         // import users
-        Tinebase_User::syncUsers();
+        Tinebase_User::syncUsers(true);
     }
     
     /**
