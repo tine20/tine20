@@ -267,9 +267,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * 
      * @param {Tine.Felamimail.Model.Folder} folderData
      * @return {Tine.Felamimail.Model.Folder}
-     * 
-     * TODO iterate record fields -> do it like this:
-     * Ext.copyTo({}, attr, Tine.Tinebase.Model.Container.getFieldNames()); 
      */
     updateFolderInStore: function(newFolder) {
         
@@ -284,9 +281,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             'cache_job_actions_estimate','cache_job_actions_done'];
 
         // update folder store
+        folder.beginEdit();
         for (var j = 0; j < fieldsToUpdate.length; j++) {
             folder.set(fieldsToUpdate[j], newFolder.get(fieldsToUpdate[j]));
         }
+        folder.endEdit();
         
         return folder;
     },
