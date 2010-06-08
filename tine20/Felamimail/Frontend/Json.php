@@ -144,8 +144,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /***************************** messages funcs *******************************/
     
     /**
-     * search messages
-     * - use output buffer mechanism to update incomplete cache
+     * search messages in message cache
      *
      * @param  array $filter
      * @param  array $paging
@@ -159,11 +158,11 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * update cache
+     * update message cache
      * - use session/writeClose to update incomplete cache and allow following requests
      *
-     * @param string $folderId id of active folder
-     * @param integer $time update time in seconds
+     * @param  string  $folderId id of active folder
+     * @param  integer $time     update time in seconds
      * @return array
      */
     public function updateMessageCache($folderId, $time)
