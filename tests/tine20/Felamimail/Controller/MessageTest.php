@@ -580,7 +580,7 @@ Christian Hoffmann
     {
         $this->_appendMessage('text_plain2.eml', 'INBOX');
         $result = $this->_imap->search(array(
-            'HEADER X-Tine20TestMessage text/plain'
+            'HEADER X-Tine20TestMessage text_plain2.eml'
         ));
         $message = $this->_imap->getSummary($result[0]);
         
@@ -589,6 +589,7 @@ Christian Hoffmann
         $this->_createdMessages[] = $cachedMessage;
         
         $this->assertContains('c.weiss@metaways.de', $cachedMessage->to[0]['email']);
+        $this->assertContains('online', $cachedMessage->subject);
     }
     
     /**
