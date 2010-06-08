@@ -194,7 +194,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         $messageBody  = $this->_contentController->getMessageBody($_serverId, Zend_Mime::TYPE_TEXT);
         $isTruncacted = 0;
         
-        if (!empty($messageBody)) {
+        if ($messageBody === null || $messageBody == '') {
             if ($_withBody === false) {
                 $messageBody  = iconv_substr($messageBody, 0, 2000);
                 $isTruncacted = 1;
