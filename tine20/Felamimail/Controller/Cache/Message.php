@@ -473,8 +473,8 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             'flags'         => $_message['flags'],
             'structure'     => $_message['structure'],
             'content_type'  => isset($_message['structure']['contentType']) ? $_message['structure']['contentType'] : Zend_Mime::TYPE_TEXT,
-            'subject'       => Felamimail_Message::convertText($_message['header']['subject']),
-            'from'          => Felamimail_Message::convertText($_message['header']['from'], TRUE, 256)
+            'subject'       => isset($_message['header']['subject']) ? Felamimail_Message::convertText($_message['header']['subject']) : '',
+            'from'          => isset($_message['header']['from']) ? Felamimail_Message::convertText($_message['header']['from'], TRUE, 256) : null
         );
         
         if (array_key_exists('date', $_message['header'])) {
