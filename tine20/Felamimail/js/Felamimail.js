@@ -370,8 +370,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             });
             //console.log(candidates);
             if (candidates.getCount() > 0) {
-                folder = candidates.first();
-                result = folder.id;
+                result = candidates.first().id;
             }
         }
         
