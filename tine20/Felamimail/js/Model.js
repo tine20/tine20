@@ -212,7 +212,24 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
     recordsName: 'Folders',
     // ngettext('record list', 'record lists', n);
     containerName: 'Folder list',
-    containersName: 'Folder lists'
+    containersName: 'Folder lists',
+    
+    /**
+     * is this folder the currently selected folder
+     * 
+     * @return {Boolean}
+     */
+    isCurrentSelection: function() {
+        if (Tine.Tinebase.appMgr.get(this.appName).getMainScreen().getTreePanel()) {
+            // get active node
+            var node = Tine.Tinebase.appMgr.get(this.appName).getMainScreen().getTreePanel().getSelectionModel().getSelectedNode();
+            if (node && node.attributes.folder_id) {
+                return node.id == this.id;
+            }
+        }
+        
+        return false;
+    }
 });
 
 /**
