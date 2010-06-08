@@ -333,7 +333,7 @@ class Tinebase_User
      * @param  mixed  $_username  the login id of the user to synchronize
      * return Tinebase_Model_FullUser
      */
-    public static function syncUser($_username)
+    public static function syncUser($_username, $_syncContactData = false)
     {
         if($_username instanceof Tinebase_Model_FullUser) {
             $username = $_username->accountLoginName;
@@ -367,13 +367,15 @@ class Tinebase_User
         }
         
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  synced user object: " . print_r($user->toArray(), true));
-            
+
         // import contactdata(phone, address, fax, birthday. photo)
-        $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-        
-        $contact = $addressbook->getByUserId($user->getId());
-        $userBackend->updateContactFromSyncBackend($user, $contact);
-        $addressbook->update($contact);
+        if($_syncContactData === true) {
+            $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+            
+            $contact = $addressbook->getByUserId($user->getId());
+            $userBackend->updateContactFromSyncBackend($user, $contact);
+            $addressbook->update($contact);
+        }
         
         // sync group memberships
         Tinebase_Group::syncMemberships($user);
@@ -385,7 +387,7 @@ class Tinebase_User
      * import users from sync backend
      *
      */
-    public static function syncUsers()
+    public static function syncUsers($_syncContactData = false)
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' start synchronizing users');
         
@@ -393,7 +395,7 @@ class Tinebase_User
 
         foreach($users as $user) {
             try {
-                $user = self::syncUser($user);
+                $user = self::syncUser($user, $_syncContactData);
             } catch (Tinebase_Exception_NotFound $ten) {
                 Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " User {$user->accountLoginName} not synced: " . $ten->getMessage());
             }
