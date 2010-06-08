@@ -440,6 +440,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * TODO show totalcount?
      */
     updateCachingProgress: function(folder) {
+        // remove all other progess bars
+        Ext.select('span[class=felamimail-node-progress]', this.getEl()).remove();
         
         // get node ui
         var node = this.getNodeById(folder.id);
@@ -447,6 +449,11 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             return;
         }
         var nodeUI = node.getUI();
+        
+        // only show progress for current selection
+        if (! folder.isCurrentSelection()) {
+            return;
+        }
         
         // insert caching progress element
         //if (folder.get('cache_status') == 'complete' || folder.get('cache_job_actions_estimate') == 0) {
