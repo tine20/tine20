@@ -643,41 +643,45 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      */
     protected function _convertDate($_dateString, $_format = Zend_Date::RFC_2822)
     {
-        if ($_format == Zend_Date::RFC_2822) {
-
-            // strip of timezone information for example: (CEST)
-            $dateString = preg_replace('/( [+-]{1}\d{4}) \(.*\)$/', '${1}', $_dateString);
-            
-            // append dummy weekday if missing
-            if(preg_match('/^(\d{1,2})\s(\w{3})\s(\d{4})\s(\d{2}):(\d{2}):{0,1}(\d{0,2})\s([+-]{1}\d{4})$/', $dateString)) {
-                $dateString = 'xxx, ' . $dateString;
-            }
-            
-            try {
-                // Fri,  6 Mar 2009 20:00:36 +0100
-                $date = new Zend_Date($dateString, Zend_Date::RFC_2822, 'en_US');
-            } catch (Zend_Date_Exception $e) {
-                // Fri,  6 Mar 2009 20:00:36 CET
-                $date = new Zend_Date($dateString, Felamimail_Model_Message::DATE_FORMAT, 'en_US');
-            }
-
-        } else {
-            
-            $date = new Zend_Date($_dateString, $_format, 'en_US');
-            
-            if ($_format == Felamimail_Model_Message::DATE_FORMAT_RECEIVED) {
+        try {
+            if ($_format == Zend_Date::RFC_2822) {
+    
+                // strip of timezone information for example: (CEST)
+                $dateString = preg_replace('/( [+-]{1}\d{4}) \(.*\)$/', '${1}', $_dateString);
                 
-                if (preg_match('/ ([+-]{1})(\d{2})\d{2}$/', $_dateString, $matches)) {
-                    // add / sub from zend date ?
-                    if ($matches[1] == '+') {
-                        $date->subHour($matches[2]);
-                    } else {
-                        $date->addHour($matches[2]);
-                    }
+                // append dummy weekday if missing
+                if(preg_match('/^(\d{1,2})\s(\w{3})\s(\d{4})\s(\d{2}):(\d{2}):{0,1}(\d{0,2})\s([+-]{1}\d{4})$/', $dateString)) {
+                    $dateString = 'xxx, ' . $dateString;
+                }
+                
+                try {
+                    // Fri,  6 Mar 2009 20:00:36 +0100
+                    $date = new Zend_Date($dateString, Zend_Date::RFC_2822, 'en_US');
+                } catch (Zend_Date_Exception $e) {
+                    // Fri,  6 Mar 2009 20:00:36 CET
+                    $date = new Zend_Date($dateString, Felamimail_Model_Message::DATE_FORMAT, 'en_US');
+                }
+    
+            } else {
+                
+                $date = new Zend_Date($_dateString, $_format, 'en_US');
+                
+                if ($_format == Felamimail_Model_Message::DATE_FORMAT_RECEIVED) {
                     
-                    //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($matches, true));
+                    if (preg_match('/ ([+-]{1})(\d{2})\d{2}$/', $_dateString, $matches)) {
+                        // add / sub from zend date ?
+                        if ($matches[1] == '+') {
+                            $date->subHour($matches[2]);
+                        } else {
+                            $date->addHour($matches[2]);
+                        }
+                        
+                        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($matches, true));
+                    }
                 }
             }
+        } catch (Zend_Date_Exception $zde) {
+            $date = new Zend_Date(0, Zend_Date::TIMESTAMP);
         }
         
         return $date;
