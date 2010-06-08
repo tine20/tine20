@@ -539,7 +539,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $result;
     }
     
-    public function getMessageBody($_messageId, $_contentType)
+    public function getMessageBody($_messageId, $_contentType, $_readOnly = false)
     {
         if (! $_messageId instanceof Felamimail_Model_Message) {
             $message = $this->_backend->get($_messageId);
@@ -567,7 +567,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             throw new Felamimail_Exception('failed to get imap backend');
         }
         
-        $rawBody = $imapBackend->getRawContent($message->messageuid, $partId);
+        $rawBody = $imapBackend->getRawContent($message->messageuid, $partId, $_readOnly);
         $body    = $this->_decodePart($rawBody, $partStructure, $_contentType);
         
         return $body;
