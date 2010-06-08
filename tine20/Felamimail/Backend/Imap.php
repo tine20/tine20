@@ -189,16 +189,23 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      *
      * @param  int               $id   number of message
      * @param  null|array|string $part path to part or null for messsage content
+     * @param  boolean           $peek use BODY.PEEK to not set the seen flag
      * @return string raw content
      * @throws Zend_Mail_Protocol_Exception
      * @throws Zend_Mail_Storage_Exception
      */
-    public function getRawContent($id, $part = null)
+    public function getRawContent($id, $part = null, $peek = false)
     {
-        if ($part !== null) {
-            $item = "BODY[$part]";
+        if ($peek === false) {
+            $bodyCommand = 'BODY';
         } else {
-            $item = 'RFC822.TEXT';
+            $bodyCommand = 'BODY.PEEK';
+        }
+        
+        if ($part !== null) {
+            $item = $bodyCommand . "[$part]";
+        } else {
+            $item = $bodyCommand . '[TEXT]';
         }
         
         return $this->_protocol->fetch($item, $id, null, $this->_useUid);
