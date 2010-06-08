@@ -33,7 +33,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
 
         if(Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
             // import users
-            Tinebase_User::syncUsers();
+            Tinebase_User::syncUsers(true);
         } else {
             $initialAdminUserOptions = $this->_parseInitialAdminUserOptions($_options);
             Tinebase_User::createInitialAccounts($initialAdminUserOptions);
