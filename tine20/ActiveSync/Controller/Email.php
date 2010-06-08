@@ -241,6 +241,8 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         $messageBody  = $this->_contentController->getMessageBody($_serverId, $mimeType);
         if($truncateAt !== null && strlen($messageBody) > $truncateAt) {
             $messageBody  = substr($messageBody, 0, $truncateAt);
+            // maybe the last character is no unicode character anymore
+            $messageBody  = iconv('utf-8', 'utf-8//IGNORE');
             $isTruncacted = 1;
         } else {
             $isTruncacted = 0;
