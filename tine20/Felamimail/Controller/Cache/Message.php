@@ -328,12 +328,18 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
     /**
      * get unread count for folder
      * 
+     * @todo FIXME: result can get negative when cache is updating
+     * 
      * @param Felamimail_Model_Folder $_folder
      * @return integer
      */
     public function getUnreadCount(Felamimail_Model_Folder $_folder)
     {
         $result = $_folder->cache_totalcount - $this->_backend->seenCountByFolderId($_folder->getId());
+        
+        // make sure $result can't get negative
+        $result = ($result < 0) ? 0 : $result;
+        
         return $result;
     }
     
