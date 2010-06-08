@@ -211,7 +211,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      * @param string      $_serverId  the local entry id
      * @param boolean     $_withBody  retrieve body of entry
      */
-    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, $_withBody = false)
+    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options)
     {
         $data = $this->_contentController->get($_serverId);
         

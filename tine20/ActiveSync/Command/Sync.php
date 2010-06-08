@@ -154,14 +154,21 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
             
             // process options
             if(isset($xmlCollection->Options)) {
-                $collectionData['filterType']  = isset($xmlCollection->Options->FilterType)  ? (int)$xmlCollection->Options->FilterType  : 0;
-                $collectionData['mimeSupport'] = isset($xmlCollection->Options->MIMESupport) ? (int)$xmlCollection->Options->MIMESupport : self::MIMESUPPORT_DONT_SEND_MIME;
+                $collectionData['filterType']     = isset($xmlCollection->Options->FilterType)     ? (int)$xmlCollection->Options->FilterType     : 0;
+                $collectionData['mimeSupport']    = isset($xmlCollection->Options->MIMESupport)    ? (int)$xmlCollection->Options->MIMESupport    : self::MIMESUPPORT_DONT_SEND_MIME;
+                $collectionData['mimeTruncation'] = isset($xmlCollection->Options->MIMETruncation) ? (int)$xmlCollection->Options->MIMETruncation : 8;
 
                 // try to fetch element from AirSyncBase:BodyPreference
                 $airSyncBase = $xmlCollection->Options->children('uri:AirSyncBase');
                 
                 if (isset($airSyncBase->BodyPreference)) {
+                    // required
                     $collectionData['bodyPreferenceType'] = (int) $airSyncBase->BodyPreference->Type;
+                    
+                    // optional
+                    if (isset($airSyncBase->BodyPreference->TruncationSize)) {
+                        $collectionData['truncationSize'] = (int) $airSyncBase->BodyPreference->TruncationSize;
+                    }
                 }
             }
             
@@ -359,7 +366,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             
                             try {
                                 $applicationData = $this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData');
-                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId, true);
+                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId, $collectionData);
                                 
                                 $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
                                 
@@ -453,7 +460,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 
                                 $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                                 $applicationData = $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
-                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId);
+                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId, $collectionData);
         
                                 $commands->appendChild($add);
                                 
@@ -481,7 +488,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 
                                 $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                                 $applicationData = $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
-                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId);
+                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId, $collectionData);
         
                                 $commands->appendChild($change);
                                 

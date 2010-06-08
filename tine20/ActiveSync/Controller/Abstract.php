@@ -388,5 +388,5 @@ abstract class ActiveSync_Controller_Abstract
      * @param string      $_serverId  the local entry id
      * @param boolean     $_withBody  retrieve body of entry
      */
-    abstract public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, $_withBody = false);    
+    abstract public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options);    
 }

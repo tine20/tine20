@@ -150,7 +150,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      * @param string      $_serverId  the local entry id
      * @param boolean     $_withBody  retrieve body of entry
      */
-    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, $_withBody = false)
+    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options)
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append email " . $_serverId);
         
@@ -191,27 +191,75 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             $_xmlNode->appendChild(new DOMElement('Read', 0, 'uri:Email'));
         }
         
-        $messageBody  = $this->_contentController->getMessageBody($_serverId, Zend_Mime::TYPE_TEXT);
-        $isTruncacted = 0;
+        // get prefered mime type of the message
+        $mimeType = Zend_Mime::TYPE_TEXT;
         
-        if ($messageBody === null || $messageBody == '') {
-            if ($_withBody === false) {
-                $messageBody  = iconv_substr($messageBody, 0, 2000);
-                $isTruncacted = 1;
+        if (array_key_exists('bodyPreferenceType', $_options)) {
+            if ($_options['bodyPreferenceType'] === 2) {
+                $mimeType = Zend_Mime::TYPE_HTML;
             }
+        } elseif (array_key_exists('mimeSupport', $_options)) {
+            if ($_options['mimeSupport'] === 2) {
+                $mimeType = Zend_Mime::TYPE_HTML;
+            }
+        }
         
+        // get truncation
+        $truncateAt = null;
+        
+        if (array_key_exists('truncationSize', $_options)) {
+            $truncateAt = $_options['truncationSize'];
+        } elseif ($_options['mimeSupport'] < 8) {
+            switch($_options['mimeSupport']) {
+                case 0:
+                    $truncateAt = 0;
+                    break;
+                case 1:
+                    $truncateAt = 4096;
+                    break;
+                case 2:
+                    $truncateAt = 5120;
+                    break;
+                case 3:
+                    $truncateAt = 7168;
+                    break;
+                case 4:
+                    $truncateAt = 10240;
+                    break;
+                case 5:
+                    $truncateAt = 20480;
+                    break;
+                case 6:
+                    $truncateAt = 51200;
+                    break;
+                case 7:
+                    $truncateAt = 102400;
+                    break;
+            }
+        }
+        
+        $messageBody  = $this->_contentController->getMessageBody($_serverId, $mimeType);
+        if($truncateAt !== null && strlen($messageBody) > $truncateAt) {
+            $messageBody  = substr($messageBody, 0, $truncateAt);
+            $isTruncacted = 1;
+        } else {
+            $isTruncacted = 0;
+        }
+        
+        if (strlen($messageBody) > 0) {
             if (version_compare($this->_device->acsversion, '12.0', '>=')) {
                 $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:AirSyncBase'));
-                $body->appendChild(new DOMElement('Type', 1, 'uri:AirSyncBase'));
+                $body->appendChild(new DOMElement('Type', $mimeType == Zend_Mime::TYPE_HTML ? 2 : 1, 'uri:AirSyncBase'));
                 $body->appendChild(new DOMElement('Truncated', $isTruncacted, 'uri:AirSyncBase'));
                 $body->appendChild(new DOMElement('EstimatedDataSize', $data->size, 'uri:AirSyncBase'));
                 
                 $dataTag = $body->appendChild(new DOMElement('Data', null, 'uri:AirSyncBase'));
                 $dataTag->appendChild(new DOMText($messageBody));
                 
-                $_xmlNode->appendChild(new DOMElement('NativeBodyType', 1, 'uri:AirSyncBase'));
+                $_xmlNode->appendChild(new DOMElement('NativeBodyType', $mimeType == Zend_Mime::TYPE_HTML ? 2 : 1, 'uri:AirSyncBase'));
             } else {
                 $_xmlNode->appendChild(new DOMElement('BodyTruncated', $isTruncacted, 'uri:Email'));
+                
                 $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:Email'));
                 $body->appendChild(new DOMText($messageBody));
             }
