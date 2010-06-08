@@ -451,6 +451,13 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      */
     public function addMessage(array $_message, Felamimail_Model_Folder $_folder)
     {
+        // remove duplicate headers (which can't be set twice in real life)
+        foreach (array('date', 'from', 'to', 'cc', 'bcc', 'subject') as $field) {
+            if (isset($_message['header'][$field]) && is_array($_message['header'][$field])) {
+                $_message['header'][$field] = $_message['header'][$field][0];
+            }
+        }
+        
         $messageData = array(
             'messageuid'    => $_message['uid'],
             'folder_id'     => $_folder->getId(),
@@ -464,7 +471,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             'from'          => Felamimail_Message::convertText($_message['header']['from'], TRUE, 256)
         );
         
-        if(array_key_exists('date', $_message['header'])) {
+        if (array_key_exists('date', $_message['header'])) {
             $messageData['sent'] = $this->_convertDate($_message['header']['date']);
         } elseif (array_key_exists('resent-date', $_message['header'])) {
             $messageData['sent'] = $this->_convertDate($_message['header']['resent-date']);
@@ -473,9 +480,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         foreach (array('to', 'cc', 'bcc') as $field) {
             if (isset($_message['header'][$field])) {
                 // if sender set the headers twice we only use the first
-                if(is_array($_message['header'][$field])) {
-                    $_message['header'][$field] = $_message['header'][$field][0];
-                }
                 $messageData[$field] = $this->_convertAddresses($_message['header'][$field]);
             }
         }
