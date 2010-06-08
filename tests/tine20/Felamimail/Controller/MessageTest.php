@@ -593,6 +593,24 @@ Christian Hoffmann
     }
     
     /**
+     * test adding message with duplicate to: headerr
+     */
+    public function testAddMessageToCache3()
+    {
+        $this->_appendMessage('empty_date_header.eml', 'INBOX');
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage empty_date_header.eml'
+        ));
+        $message = $this->_imap->getSummary($result[0]);
+        
+        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        
+        $this->_createdMessages[] = $cachedMessage;
+        
+        $this->assertEquals(0, $cachedMessage->sent->getTimestamp());
+    }
+    
+    /**
      * test some mail
      *
      */
