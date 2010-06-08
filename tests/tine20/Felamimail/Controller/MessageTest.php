@@ -593,7 +593,7 @@ Christian Hoffmann
     }
     
     /**
-     * test adding message with duplicate to: headerr
+     * test adding message with empty date header
      */
     public function testAddMessageToCache3()
     {
