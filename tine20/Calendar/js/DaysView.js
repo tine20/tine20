@@ -703,7 +703,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             var event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), {
                 id: newId,
                 dtstart: dtStart, 
-                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24).add(Date.SECOND, -1) : dtStart.add(Date.MINUTE, this.timeGranularity/2),
+                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24).add(Date.SECOND, -1) : dtStart.add(Date.MINUTE, 2*this.timeGranularity/2),
                 is_all_day_event: dtStart.is_all_day_event
             }), newId);
             event.isRangeAdd = true;
