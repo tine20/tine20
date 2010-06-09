@@ -1025,7 +1025,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $charset = isset($_structure['parameters']['charset']) ? $_structure['parameters']['charset'] : 'iso-8859-1';
-
+        if($charset == 'utf8') {
+            $charset = 'utf-8';
+        }
+        
         $result = iconv($charset, 'utf-8//IGNORE', $result);
         
         if($_structure['contentType'] != $_contentType) {
