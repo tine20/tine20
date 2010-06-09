@@ -541,6 +541,26 @@ Christian Hoffmann
         $this->assertContains('würde', $body);
     }
     
+    /**
+     * test reading a message without setting the \Seen flag
+     */
+    public function testGetBodyMultipartRelatedReadOnly()
+    {
+        $this->_appendMessage('multipart_related.eml', 'INBOX');
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/related'
+        ));
+        $message = $this->_imap->getSummary($result[0]);
+        
+        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        
+        $this->_createdMessages[] = $cachedMessage;
+
+        $body = $this->_controller->getMessageBody($cachedMessage, Zend_Mime::TYPE_TEXT, true);
+        
+        $this->assertContains('würde', $body);
+    }
+    
     public function testGetBodyPlainText()
     {
         $this->_appendMessage('text_plain.eml', 'INBOX');

@@ -90,7 +90,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         // clear message cache
-        $this->_controller->clear($this->_folder);
+        #$this->_controller->clear($this->_folder);
     }
 
     
