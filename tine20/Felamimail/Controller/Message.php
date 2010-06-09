@@ -289,7 +289,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $imapBackend->addFlags($_message->messageuid, array_intersect($_flags, array_keys(self::$_allowedFlags)));
             } catch (Zend_Mail_Storage_Exception $zmse) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                    . ' Could not save flags: '
+                    . ' Could not set flags on imap server: '
                     . $zmse->getMessage()
                 );
             }                
