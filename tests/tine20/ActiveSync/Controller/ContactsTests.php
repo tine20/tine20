@@ -289,7 +289,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         
         $controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Zend_Date(null, null, 'de_DE'));   	
         
-    	$controller->appendXML($testNode, null, $this->objects['contact']->getId());
+    	$controller->appendXML($testNode, null, $this->objects['contact']->getId(), array());
     	
     	// offset birthday 0 hours and namespace === uri:Contacts
     	$this->assertEquals(Tinebase_Translation::getCountryNameByRegionCode('DE'), @$testDom->getElementsByTagNameNS('uri:Contacts', 'BusinessCountry')->item(0)->nodeValue, $testDom->saveXML());
@@ -320,7 +320,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         
         $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));     
         
-        $controller->appendXML($appData, null, $this->objects['contact']->getId());
+        $controller->appendXML($appData, null, $this->objects['contact']->getId(), array());
         
         // offset birthday 12 hours and namespace === uri:Contacts
         $this->assertEquals('1975-01-02T15:00:00.000Z', @$testDom->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDom->saveXML());
