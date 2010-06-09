@@ -181,7 +181,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * @param  mixed  $_groupIds
      * @return array
      */
-    public function setGroupMembershipsInSqlBackend($_userId, array $_groupIds)
+    public function setGroupMembershipsInSqlBackend($_userId, $_groupIds)
     {
         if ($_groupIds instanceof Tinebase_Record_RecordSet) {
             $_groupIds = $_groupIds->getArrayOfIds();
@@ -203,7 +203,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         }
         
         foreach ($removeGroupMemberships as $groupId) {
-            $this->removeGroupMember($groupId, $usertId);
+            $this->removeGroupMember($groupId, $userId);
         }
         
         return $this->getGroupMemberships($userId);
