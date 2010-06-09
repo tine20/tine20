@@ -242,7 +242,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         if($truncateAt !== null && strlen($messageBody) > $truncateAt) {
             $messageBody  = substr($messageBody, 0, $truncateAt);
             // maybe the last character is no unicode character anymore
-            $messageBody  = iconv('utf-8', 'utf-8//IGNORE');
+            $messageBody  = iconv('utf-8', 'utf-8//IGNORE', $messageBody);
             $isTruncacted = 1;
         } else {
             $isTruncacted = 0;
@@ -352,9 +352,9 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         if(isset($xmlData->Read)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Id: $_id set read flag: $xmlData->Read");
             if((int)$xmlData->Read === 1) {
-                #$this->_messageController->addFlags(1, $_collectionId, $_id, array(Zend_Mail_Storage::FLAG_SEEN));
+                $this->_contentController->addFlags($_id, array(Zend_Mail_Storage::FLAG_SEEN));
             } else {
-                #$this->_messageController->clearFlags(1, $_collectionId, $_id, array(Zend_Mail_Storage::FLAG_SEEN));
+                $this->_contentController->clearFlags($_id, array(Zend_Mail_Storage::FLAG_SEEN));
             }
         }
         
