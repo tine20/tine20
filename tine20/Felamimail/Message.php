@@ -262,9 +262,13 @@ class Felamimail_Message extends Zend_Mail_Message
      */
     protected function _decode($_charset, $_content)
     {
+        if($_charset == 'utf8') {
+            $_charset = 'utf-8';
+        }
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " message body: iconv() from " . $_charset . " to utf-8.");
         
-        $result = iconv($_charset, 'utf-8', $_content);
+        $result = iconv($_charset, 'utf-8//IGNORE', $_content);
         
         return $result;
     }
