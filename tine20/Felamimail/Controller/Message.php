@@ -1038,10 +1038,25 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $result = iconv($charset, 'utf-8//IGNORE', $result);
         
         if($_structure['contentType'] != $_contentType) {
-            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Conversion between content type needs to get implemented!');
+            $this->_convertContentType($_structure['contentType'], $_contentType, $result);
         }
         
         return $result;
+    }
+
+    /**
+     * convert between contenttypes (text/plain => text/html for example)
+     * @param unknown_type $_from
+     * @param unknown_type $_to
+     * @param unknown_type $_text
+     */
+    protected function _convertContentType($_from, $_to, &$_text)
+    {
+        if($_from == Zend_Mime::TYPE_TEXT && $_to == Zend_Mime::TYPE_HTML) {
+            $_text = nl2br(htmlspecialchars($_text, ENT_COMPAT, 'utf-8'));
+        } else {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Conversion between content type $_from to $_to not yet implemented!");
+        }
     }
     
     /**
