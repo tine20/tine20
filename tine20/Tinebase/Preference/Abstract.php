@@ -126,7 +126,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     {
         $accountId = (Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : '0';
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get user preference "' . $_preferenceName . '" for account id ' . $accountId);
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get user preference "' . $_preferenceName . '" for account id ' . $accountId);
 
         try {
             $result = $this->getValueForUser(
