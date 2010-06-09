@@ -283,10 +283,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add flags: ' . print_r($_flags, TRUE));
         
+        if (! $_message instanceof Felamimail_Model_Message) {
+            $message = $this->_backend->get($_message);
+        } else {
+            $message = $_message;
+        }
+        
         // save each flag in backend, cache db and message record
-        if ($imapBackend = $this->_getBackendAndSelectFolder($_message->folder_id, $_folder)) {
+        if ($imapBackend = $this->_getBackendAndSelectFolder($message->folder_id, $_folder)) {
             try {
-                $imapBackend->addFlags($_message->messageuid, array_intersect($_flags, array_keys(self::$_allowedFlags)));
+                $imapBackend->addFlags($message->messageuid, array_intersect($_flags, array_keys(self::$_allowedFlags)));
             } catch (Zend_Mail_Storage_Exception $zmse) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                     . ' Could not set flags on imap server: '
@@ -294,11 +300,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 );
             }                
             foreach ($_flags as $flag) {
-                $_message->flags .= ' ' . $flag;
-                $this->_backend->addFlag($_message, $flag);
+                $message->flags .= ' ' . $flag;
+                $this->_backend->addFlag($message, $flag);
             }
             $this->_backend->updateMultiple(
-                $_message->getId(), 
+                $message->getId(), 
                 array(
                     'timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
                 )
