@@ -253,6 +253,44 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         fieldLabel: this.app.i18n._('Password confirmation'),
                         disabled: !setupRequired,
                         tabIndex: 4
+                    }, {
+                        inputType: 'text',
+                        xtype: 'combo',
+                        width: 300,
+                        listWidth: 300,
+                        mode: 'local',
+                        forceSelection: true,
+                        allowEmpty: false,
+                        triggerAction: 'all',
+                        selectOnFocus:true,
+                        store: [['1', 'Yes'], ['0','No']],
+                        name: 'authentication_Sql_tryUsernameSplit',
+                        fieldLabel: this.app.i18n._('Try to split username'),
+                        value: '1'
+                    }, {
+                        inputType: 'text',
+                        xtype: 'combo',
+                        width: 300,
+                        listWidth: 300,
+                        mode: 'local',
+                        forceSelection: true,
+                        allowEmpty: false,
+                        triggerAction: 'all',
+                        selectOnFocus:true,
+                        store: [['2', 'ACCTNAME_FORM_USERNAME'], ['3','ACCTNAME_FORM_BACKSLASH'], ['4','ACCTNAME_FORM_PRINCIPAL']],
+                        name: 'authentication_Sql_accountCanonicalForm',
+                        fieldLabel: this.app.i18n._('Account canonical form'),
+                        value: '2'
+                    }, {
+                        name: 'authentication_Sql_accountDomainName',
+                        fieldLabel: this.app.i18n._('Account domain name '),
+                        inputType: 'text',
+                        tabIndex: 7
+                    }, {
+                        name: 'authentication_Sql_accountDomainNameShort',
+                        fieldLabel: this.app.i18n._('Account domain short name'),
+                        inputType: 'text',
+                        tabIndex: 8
                     } ]
                 }, {
                     id: this.authProviderIdPrefix + 'Ldap',
@@ -280,7 +318,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         inputType: 'password'
                     }, {
                         xtype: 'combo',
-                        width: 283, //late rendering bug
+                        width: 300,
                         listWidth: 300,
                         mode: 'local',
                         forceSelection: true,
@@ -298,8 +336,18 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         name: 'authentication_Ldap_accountFilterFormat',
                         fieldLabel: this.app.i18n._('Search filter')
                     }, {
+                        xtype: 'combo',
+                        width: 300,
+                        listWidth: 300,
+                        mode: 'local',
+                        forceSelection: true,
+                        allowEmpty: false,
+                        triggerAction: 'all',
+                        selectOnFocus:true,
+                        store: [['2', 'ACCTNAME_FORM_USERNAME'], ['3','ACCTNAME_FORM_BACKSLASH'], ['4','ACCTNAME_FORM_PRINCIPAL']],
                         name: 'authentication_Ldap_accountCanonicalForm',
-                        fieldLabel: this.app.i18n._('Account canonical form')
+                        fieldLabel: this.app.i18n._('Account canonical form'),
+                        value: '2'
                     }, {
                         name: 'authentication_Ldap_accountDomainName',
                         fieldLabel: this.app.i18n._('Account domain name ')
@@ -342,7 +390,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         //allowEmpty: false
                     }, {
                         xtype: 'combo',
-                        width: 300, //late rendering bug
+                        width: 300,
                         listWidth: 300,
                         mode: 'local',
                         forceSelection: true,
@@ -377,7 +425,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         inputType: 'password'
                     }, {
                         xtype: 'combo',
-                        width: 283, //late rendering bug
+                        width: 300,
                         listWidth: 300,
                         mode: 'local',
                         forceSelection: true,
@@ -396,7 +444,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         fieldLabel: this.app.i18n._('User Filter')
                     }, {
                         xtype: 'combo',
-                        width: 283, //late rendering bug
+                        width: 300,
                         listWidth: 300,
                         mode: 'local',
                         forceSelection: true,
@@ -415,7 +463,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         fieldLabel: this.app.i18n._('Group Filter')
                     }, {
                         xtype: 'combo',
-                        width: 283, //late rendering bug
+                        width: 300,
                         listWidth: 300,
                         mode: 'local',
                         forceSelection: true,
@@ -428,7 +476,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         value: '1'
                     }, {
                         xtype: 'combo',
-                        width: 283, //late rendering bug
+                        width: 300,
                         listWidth: 300,
                         mode: 'local',
                         forceSelection: true,
@@ -441,7 +489,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         value: 'CRYPT'
                     }, {
                         xtype: 'combo',
-                        width: 283, //late rendering bug
+                        width: 300,
                         listWidth: 300,
                         mode: 'local',
                         forceSelection: true,
@@ -478,7 +526,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         fieldLabel: this.app.i18n._('Default admin group name')
                     }, {
                         xtype: 'combo',
-                        width: 283, //late rendering bug
+                        width: 300,
                         listWidth: 300,
                         mode: 'local',
                         forceSelection: true,
