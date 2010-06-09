@@ -55,6 +55,13 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
 
         $this->sendRequest($uid ? 'UID FETCH' : 'FETCH', array($set, $itemList), $tag);
         
+        // BODY.PEEK gets returned as BODY
+        foreach($items as &$item) {
+            if (substr($item, 0, 9) == 'BODY.PEEK') {
+                $item = 'BODY' . substr($item, 9);
+            } 
+        }
+        
         $result = array();
         while (!$this->readLine($tokens, $tag)) {
             // ignore other responses
