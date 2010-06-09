@@ -265,7 +265,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         
         $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));     
         
-        $controller->appendXML($appData, null, $this->objects['event']->getId());
+        $controller->appendXML($appData, null, $this->objects['event']->getId(), array());
         
         // namespace === uri:Calendar
         $endTime = $this->objects['event']->dtend->toString('yyyyMMddTHHmmss') . 'Z';
@@ -305,7 +305,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         
         $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));     
         
-        $controller->appendXML($appData, null, $this->objects['eventDaily']->getId());
+        $controller->appendXML($appData, null, $this->objects['eventDaily']->getId(), array());
         
         // namespace === uri:Calendar
         $this->assertEquals(ActiveSync_Controller_Calendar::RECUR_TYPE_DAILY, @$testDom->getElementsByTagNameNS('uri:Calendar', 'Type')->item(0)->nodeValue, $testDom->saveXML());
