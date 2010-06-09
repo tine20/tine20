@@ -193,7 +193,14 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
                     this.toggle(state.detailsButtonPressed);
                 }
             },
-            stateEvents: ['toggle']
+            stateEvents: ['toggle'],
+            listeners: {
+                scope: this,
+                render: function() {
+                    // limit width of this.criteriaText
+                    this.criteriaText.setWidth(this.quickFilterGroup.getWidth() - this.detailsToggleBtn.getWidth());
+                }
+            }
         });
         
         this.ftb.hide();
