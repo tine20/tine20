@@ -68,5 +68,14 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             border : false,
             items  : this.actionToolbar
         });
+    },
+    
+    /**
+     * preform the initial load of grid data
+     */
+    initialLoad: function() {
+        this.store.load.defer(10, this.store, [
+            typeof this.autoLoad == 'object' ?
+                this.autoLoad : undefined]);
     }
 });
