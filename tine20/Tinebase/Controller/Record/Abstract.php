@@ -203,6 +203,10 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($record->has('alarms')) {
                 $this->getAlarms($record);
             }
+            
+            if ($this->_resolveCustomFields) {
+	            Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record);
+	        }   
         }
         
         return $record;    
@@ -229,6 +233,10 @@ abstract class Tinebase_Controller_Record_Abstract
     	   : NULL;
         $records = $this->_backend->getMultiple($_ids, $containerIds);
         
+        if ($this->_resolveCustomFields) {
+            Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($records);
+        }
+        
         return $records;
     }    
     
@@ -243,7 +251,14 @@ abstract class Tinebase_Controller_Record_Abstract
     public function getAll($_orderBy = 'id', $_orderDirection = 'ASC') 
     {
     	$this->_checkRight('get');
-        return $this->_backend->getAll($_orderBy, $_orderDirection);
+        
+        $records = $this->_backend->getAll($_orderBy, $_orderDirection);
+        
+        if ($this->_resolveCustomFields) {
+            Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($records);
+        }
+        
+        return $records;
     }
     
     /*************** add / update / delete lead *****************/    

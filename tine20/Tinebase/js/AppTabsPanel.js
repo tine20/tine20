@@ -48,6 +48,28 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
      */
     currentTabs: null,
     
+    // private
+    findTargets : function(e){
+        var item = null,
+            itemEl = e.getTarget('li:not(.x-tab-edge)', this.strip);
+
+        if(itemEl){
+            item = this.getComponent(itemEl.id.split(this.idDelimiter)[1]);
+            if(item && item.disabled){
+                return {
+                    close : null,
+                    item : null,
+                    el : null
+                };
+            }
+        }
+        return {
+            close : e.getTarget('.x-tab-strip-close', this.strip),
+            item : item,
+            el : itemEl
+        };
+    },
+    
     /**
      * init appTabsPanel
      */
