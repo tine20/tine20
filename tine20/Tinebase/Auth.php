@@ -103,6 +103,9 @@ class Tinebase_Auth
      */
     private static $_backendConfigurationDefaults = array(
         self::SQL => array(
+            'accountCanonicalForm' => '2',
+            'accountDomainName' => '',
+            'accountDomainNameShort' => '',
         ),
         self::LDAP => array(
             'host' => '',
