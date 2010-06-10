@@ -930,10 +930,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         // add container & grants to records
         foreach ($_records as &$record) {
-            $containerId = $record[$_containerProperty];
-            if (! is_array($containerId) && ! $containerId instanceof Tinebase_Record_Abstract && ! empty($containers[$containerId])) {
-                $record[$_containerProperty] = $containers[$containerId];
-                $record[$_containerProperty]['path'] = $containers[$containerId]->getPath();
+            try {
+                $containerId = $record[$_containerProperty];
+                if (! is_array($containerId) && ! $containerId instanceof Tinebase_Record_Abstract && ! empty($containers[$containerId])) {
+                    $record[$_containerProperty] = $containers[$containerId];
+                    $record[$_containerProperty]['path'] = $containers[$containerId]->getPath();
+                }
+            } catch (Exception $e) {
+                // if path is not determinable, sktip this container
+                $_records->removeRecord($record);
             }
         }
     }
