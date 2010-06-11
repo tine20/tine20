@@ -97,19 +97,14 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     enableDrop: true,
     ddGroup: 'mailToTreeDDGroup',
     border: false,
-    // somehow this does not work as expected (only allow nodes as drop target)
-    //dropConfig: {appendOnly:true},
 	
     /**
      * init
      * @private
      */
     initComponent: function() {
-        
-        // register with folder store (onUpdate)
-        // TODO unregister from folder store (on destroy)
+        // get folder store
         this.folderStore = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore();
-        this.folderStore.on('update', this.onUpdateFolderStore, this);
     	
         // init tree loader
         this.loader = new Tine.Felamimail.TreeLoader({
@@ -126,6 +121,9 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             leaf: false,
             id: 'root'
         });
+        
+        // add account nodes
+        this.initAccounts();
         
         // init drop zone
         this.dropConfig = {
@@ -145,26 +143,21 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             }
         }
         
-        // add account nodes and context menu
-        // TODO use Ext.apply
-        this.initAccounts();
+        // init context menu TODO use Ext.apply
         var initCtxMenu = Tine.Felamimail.setTreeContextMenus.createDelegate(this);
         initCtxMenu();
         
-        // init delayed tasks
-        this.updateMessagesTask = new Ext.util.DelayedTask(this.updateMessages, this);
-        this.updateFoldersTask = new Ext.util.DelayedTask(this.updateFolders, this);
-        
-        // call parent::initComponent
-    	Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
-
-    	// add handlers
+    	// add listeners
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforenodedrop, this);
         this.on('append', this.onAppend, this);
         this.on('containeradd', this.onFolderAdd, this);
         this.on('containerdelete', this.onFolderDelete, this);
+        this.folderStore.on('update', this.onUpdateFolderStore, this);
+        
+        // call parent::initComponent
+        Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
 	},
     
     /**
@@ -359,6 +352,13 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 appendedNode.fireEvent('click', appendedNode);
             }, appendedNode.ui);
         }
+    },
+    
+    /**
+     * cleanup on destruction
+     */
+    onDestroy: function() {
+        this.folderStore.un('update', this.onUpdateFolderStore, this);
     },
     
     /**
