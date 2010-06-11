@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-09 21:36+0100\n"
+"PO-Revision-Date: 2010-06-11 22:24+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
-msgstr "Edytuj wspólną listę zadań"
+msgstr "edytowanie wspólnej listy zadań"
 
 #: Acl/Rights.php:91
 msgid "Create new shared tasks lists"
@@ -24,7 +24,7 @@ msgstr "Utwórz nową, wspólną listę zadań"
 
 #: Acl/Rights.php:94
 msgid "manage shared tasks favorites"
-msgstr "zarządzaj ulubionymi ze wspólnych zadań"
+msgstr "zarządzanie ulubionymi ze wspólnych zadań"
 
 #: Acl/Rights.php:95
 msgid "Create or update shared tasks favorites"
@@ -150,7 +150,7 @@ msgstr "Procentowo"
 #: js/Tasks.js:99
 msgid "Task"
 msgid_plural "Tasks"
-msgstr[0] "Zadanie"
+msgstr[0] "zadanie"
 msgstr[1] "zadania"
 msgstr[2] "zadań"
 
