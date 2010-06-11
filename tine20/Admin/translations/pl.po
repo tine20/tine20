@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-09 21:14+0100\n"
+"PO-Revision-Date: 2010-06-11 21:59+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,15 +15,15 @@ msgstr ""
 
 #: Acl/Rights.php:174
 msgid "manage access log"
-msgstr "edytuj dziennik logowania"
+msgstr "edytowanie dziennika logowania"
 
 #: Acl/Rights.php:175
 msgid "delete access log entries"
-msgstr "usuń wpisy z dziennika logowania"
+msgstr "usuwanie wpisów z dziennika logowania"
 
 #: Acl/Rights.php:178
 msgid "manage accounts"
-msgstr "edytuj konta użytkowników"
+msgstr "edytowanie kont użytkowników"
 
 #: Acl/Rights.php:179
 msgid "add and edit users and groups, add group members, change user passwords"
@@ -31,7 +31,7 @@ msgstr "dodaj i edytuj użytkowników oraz grupy, zmień hasła użytkowników, 
 
 #: Acl/Rights.php:182
 msgid "manage applications"
-msgstr "edytuj aplikacje"
+msgstr "edytowanie aplikacji"
 
 #: Acl/Rights.php:183
 msgid "enable and disable applications, edit application settings"
@@ -41,7 +41,7 @@ msgstr "włącz lub wyłącz aplikacje, edytuj ustawienia aplikacji"
 # Das Wort "roles" koennte missverstanden werden. Das Wort "funkcje" passt besser.
 #: Acl/Rights.php:186
 msgid "manage roles"
-msgstr "edytuj funkcje"
+msgstr "edytowanie funkcji"
 
 #: Acl/Rights.php:187
 msgid "add and edit roles, add new members to roles, add application rights to roles"
@@ -49,7 +49,7 @@ msgstr "dodaj nowych użytkowników do funkcji, dodaj i edytuj funkcje, przypisz
 
 #: Acl/Rights.php:190
 msgid "manage shared tags"
-msgstr "edytuj wspólne znaczniki"
+msgstr "edytowanie wspólnych znaczników"
 
 #: Acl/Rights.php:191
 msgid "add, delete and edit shared tags"
@@ -57,7 +57,7 @@ msgstr "dodaj, usuń i edytuj wspólne znaczniki"
 
 #: Acl/Rights.php:194
 msgid "manage computers"
-msgstr "edytuj listę komputerów"
+msgstr "edytowanie listy komputerów"
 
 #: Acl/Rights.php:195
 msgid "add, delete and edit (samba) computers"
@@ -65,56 +65,56 @@ msgstr "dodaj, usuń i edytuj komputery (Samba)"
 
 #: Acl/Rights.php:198
 msgid "view access log"
-msgstr "wyświetl dziennik logowania"
+msgstr "wyświetlanie dziennika logowania"
 
 # The other possibility would be: "Podgląd listy wpisów z dziennika logowania".
 # Die andere Moeglichkeit waere: "Podgląd listy wpisów z dziennika logowania".
 #: Acl/Rights.php:199
 msgid "view access log list"
-msgstr "wyświetl wpisy z dziennika logowania"
+msgstr "wyświetlanie wpisów z dziennika logowania"
 
 # We don't really need the word "użytkowników" here.
 # Das Wort "użytkowników" braucht man hier nicht undebingt.
 #: Acl/Rights.php:202
 msgid "view accounts"
-msgstr "wyświetl konta użytkowników"
+msgstr "wyświetlanie kont użytkowników"
 
 # We don't really need the word "użytkowników" here.
 # Das Wort "użytkowników" wird hier nicht unbedingt benoetigt.
 #: Acl/Rights.php:203
 msgid "view accounts list and details"
-msgstr "wyświetl listę kont użytkowników i szczegóły"
+msgstr "wyświetlanie listy kont użytkowników i szczegółów"
 
 #: Acl/Rights.php:206
 msgid "view applications"
-msgstr "wyświetl aplikacje"
+msgstr "wyświetlanie aplikacji"
 
 #: Acl/Rights.php:207
 msgid "view applications list and details"
-msgstr "wyświetl listę aplikacji i szczegóły"
+msgstr "wyświetlanie listy aplikacji i szczegółów"
 
 #: Acl/Rights.php:210
 msgid "view roles"
-msgstr "wyświetl funkcje"
+msgstr "wyświetlanie funkcji"
 
 #: Acl/Rights.php:211
 msgid "view roles list and details"
-msgstr "wyświetl listę pełnionych funkcji i szczegóły"
+msgstr "wyświetlanie listy pełnionych funkcji i szczegółów"
 
 #: Acl/Rights.php:214
 msgid "view computers"
-msgstr "wyświetl listę komputerów"
+msgstr "wyświetlanie listy komputerów"
 
 #: Acl/Rights.php:215
 msgid "view computers list and details"
-msgstr "wyświetl listę komputerów i szczegóły"
+msgstr "wyświetlanie listy komputerów i szczegółów"
 
 #: js/Admin.js:20
 #: js/user/GridPanel.js:96
 #: js/user/Users.js:66
 msgid "User"
 msgid_plural "Users"
-msgstr[0] "Użytkownik"
+msgstr[0] "użytkownika"
 msgstr[1] "użytkowników"
 msgstr[2] "użytkowników"
 
@@ -442,7 +442,7 @@ msgstr "Uprawnienia"
 
 #: js/RoleEditDialog.js:306
 msgid "Role Name"
-msgstr "Nazwę funkcji"
+msgstr "Nazwa funkcji"
 
 #: js/RoleEditDialog.js:346
 msgid "Loading Role..."
@@ -455,7 +455,7 @@ msgstr "Proszę czekać"
 
 #: js/RoleEditDialog.js:390
 msgid "Role"
-msgstr "Funkcja"
+msgstr "funkcji"
 
 #: js/RoleEditDialog.js:400
 msgid "Add New Role"
@@ -504,7 +504,7 @@ msgstr "Nazwa komputera"
 #: js/SambaMachineModel.js:40
 msgid "Computer"
 msgid_plural "Computers"
-msgstr[0] "Komputer"
+msgstr[0] "komputer"
 msgstr[1] "komputery"
 msgstr[2] "komputerów"
 
