@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-09 21:24+0100\n"
+"PO-Revision-Date: 2010-06-11 21:28+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -14,19 +14,19 @@ msgstr ""
 
 #: Acl/Rights.php:107
 msgid "manage email accounts"
-msgstr "edytuj konta e-mail"
+msgstr "edycja kont pocztowych"
 
 #: Acl/Rights.php:108
 msgid "Edit and delete email accounts"
-msgstr "Edytuj i usuwaj konta e-mail"
+msgstr "edycja i usuwanie kont pocztowych"
 
 #: Acl/Rights.php:111
 msgid "Add email accounts"
-msgstr "Dodawaj konta e-mail"
+msgstr "dodawanie kont pocztowych"
 
 #: Acl/Rights.php:112
 msgid "Create new email accounts"
-msgstr "Twórz nowe konta e-mail"
+msgstr "tworzenie nowych kont pocztowych"
 
 #: Controller/Message.php:1031
 #: js/FelamimailGridDetailsPanel.js:134
@@ -43,11 +43,11 @@ msgstr "Wiadomość"
 
 #: js/Felamimail.js:59
 msgid "Email"
-msgstr "E-mail"
+msgstr "Poczta"
 
 #: js/Felamimail.js:146
 msgid "New mails"
-msgstr "Nowe e-maile"
+msgstr "Nowe wiadomości"
 
 #: js/Felamimail.js:147
 msgid "You got {0} new mail(s) in Folder {1}."
@@ -92,7 +92,7 @@ msgstr "Nazwa konta"
 
 #: js/FelamimailAccountEditDialog.js:123
 msgid "User Email"
-msgstr "E-mail użytkownika"
+msgstr "Poczta użytkownika"
 
 #: js/FelamimailAccountEditDialog.js:128
 msgid "User Name (From)"
@@ -558,7 +558,7 @@ msgstr "Zastosuj w książce adresowej"
 
 #: Preference.php:106
 msgid "Compose Emails from the Addressbook with Felamimail."
-msgstr "Użyj Felamimail do tworzenia wiadomości pocztowych z Książki adresowej."
+msgstr "Użyj Felamimail do tworzenia wiadomości pocztowych w oparciu o książkę adresową."
 
 #: Preference.php:109
 msgid "Use for NOTES"
