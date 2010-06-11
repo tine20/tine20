@@ -76,6 +76,7 @@ Tine.weburl = 'http://www.tine20.org/';
  * quiet logging in release mode
  */
 Ext.LOGLEVEL = Tine.clientVersion.buildType == 'RELEASE' ? 0 : 7;
+Tine.log = Ext.ux.log;
 
 Ext.namespace('Tine.Tinebase');
 
