@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-09 21:40+0100\n"
+"PO-Revision-Date: 2010-06-11 21:46+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 
 #: Acl/Rights.php:97
 msgid "manage shared calendars"
-msgstr "edytuj wspólne kalendarze"
+msgstr "edytowanie wspólnych kalendarzy"
 
 #: Acl/Rights.php:98
 msgid "Create new shared calendars"
@@ -22,7 +22,7 @@ msgstr "Utwórz nowe, wspólne kalendarze"
 
 #: Acl/Rights.php:101
 msgid "manage shared calendars favorites"
-msgstr "zarządzaj ulubionymi ze wspólnego kalendarza"
+msgstr "zarządzanie ulubionymi ze wspólnego kalendarza"
 
 #: Acl/Rights.php:102
 msgid "Create or update shared calendars favorites"
@@ -30,7 +30,7 @@ msgstr "Utwórz albo uaktualnij ulubione ze wspólnego kalendarza"
 
 #: Acl/Rights.php:105
 msgid "manage resources"
-msgstr "edytuj zasoby"
+msgstr "edytowanie zasobów"
 
 #: Acl/Rights.php:106
 msgid "All Rights to administrate resources"
@@ -177,7 +177,7 @@ msgstr "Brak odpowiedzi"
 #: js/Model.js:443
 #: Model/Attender.php:46
 msgid "Accepted"
-msgstr "zaakceptowane"
+msgstr "Zaakceptowane"
 
 #: js/AttendeeGridPanel.js:519
 #: js/Model.js:444
@@ -401,9 +401,9 @@ msgstr "TK"
 #: js/Model.js:302
 msgid "Event"
 msgid_plural "Events"
-msgstr[0] "Termin"
+msgstr[0] "termin"
 msgstr[1] "terminy"
-msgstr[2] "terminów"
+msgstr[2] "Terminów"
 
 #: js/Model.js:64
 #: js/Model.js:302
@@ -511,9 +511,8 @@ msgstr "W każdy {0} miesiąc"
 #: js/RrulePanel.js:463
 #: js/RrulePanel.js:594
 #: js/RrulePanel.js:644
-#, fuzzy
 msgid "at the"
-msgstr "o"
+msgstr "dzień:"
 
 #: js/RrulePanel.js:433
 #: js/RrulePanel.js:613
@@ -547,7 +546,7 @@ msgstr "W każdy {0} rok"
 #: js/RrulePanel.js:684
 #: js/RrulePanel.js:696
 msgid "of"
-msgstr " "
+msgstr "miesiąc:"
 
 #: Model/Attender.php:167
 msgid "unknown"
