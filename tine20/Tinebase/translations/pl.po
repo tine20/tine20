@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-09 22:11+0100\n"
+"PO-Revision-Date: 2010-06-11 22:07+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 
 #: Acl/Rights/Abstract.php:72
 msgid "admin"
-msgstr "administrator"
+msgstr "administrowanie"
 
 #: Acl/Rights/Abstract.php:73
 msgid "admin right description"
@@ -23,7 +23,7 @@ msgstr "opis uprawnień administratora"
 
 #: Acl/Rights/Abstract.php:76
 msgid "run"
-msgstr "uruchom"
+msgstr "uruchamianie"
 
 # Before you'll make a change here, please see the german translation.
 # Bevor Du hier eine Aenderung machst, sieh Dir bitte die deutsche Uebersetzung an.
@@ -33,7 +33,7 @@ msgstr "Aby uzyskać dostęp do aplikacji, trzeba mieć uprawnienia do wykonywan
 
 #: Acl/Rights.php:134
 msgid "Report bugs"
-msgstr "Raport błędów"
+msgstr "raportowanie błędów"
 
 #: Acl/Rights.php:135
 msgid "Report bugs to the software vendor directly when they occur."
@@ -41,7 +41,7 @@ msgstr "Zgłoś błędy do dostawcy oprogramowania w chwili ich wystąpienia"
 
 #: Acl/Rights.php:138
 msgid "Check version"
-msgstr "Sprawdź wersję"
+msgstr "sprawdzanie wersji"
 
 #: Acl/Rights.php:139
 msgid "Check for new versions of this software."
@@ -62,7 +62,7 @@ msgstr "Znaczniki"
 
 #: Export/Pdf.php:428
 msgid "Created by"
-msgstr "Utworzone przez"
+msgstr "Utworzono poprzez"
 
 #: Export/Pdf.php:482
 msgid "Activities"
@@ -130,7 +130,7 @@ msgstr "{0} innych użytkowników"
 
 #: js/Container.js:146
 msgid "Internal {0}"
-msgstr "Wewnętrzny {0}"
+msgstr "Wewnętrzne {0}"
 
 #: js/Container.js:150
 msgid "My {0}"
@@ -754,7 +754,7 @@ msgstr "Użytkownik"
 
 #: js/widgets/container/ContainerSelect.js:107
 msgid "choose other {0}..."
-msgstr "wybierz z: {0}..."
+msgstr "Wybierz z: {0}..."
 
 #: js/widgets/container/ContainerSelect.js:110
 msgid "Select a {0}"
@@ -1241,7 +1241,7 @@ msgstr "Resetuj filtry"
 
 #: js/widgets/grid/FilterToolbar.js:138
 msgid "start search"
-msgstr "znajdź"
+msgstr "Znajdź"
 
 #: js/widgets/grid/FilterToolbar.js:146
 msgid "save as favorite"
@@ -1274,9 +1274,9 @@ msgstr "Zawsze pokazuj zaawansowane filtry"
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:362
 msgid "Your view is limited by {0} criteria:"
 msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] "Widok jest ograniczony przez kryterium:"
-msgstr[1] "widoki są ograniczone przez kryteria:"
-msgstr[2] "widoki są ograniczone przez kryteria:"
+msgstr[0] "Widok jest ograniczony przez {1} kryterium"
+msgstr[1] "Widoki są ograniczone {0} kryteriami"
+msgstr[2] "Widoki są ograniczone {0} kryteriami"
 
 #: js/widgets/grid/GridPanel.js:186
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
@@ -1310,7 +1310,7 @@ msgstr "Wyświetlane wiersze {0} - {1} z {2}"
 
 #: js/widgets/grid/GridPanel.js:405
 msgid "No {0} to display"
-msgstr "{0} nie istnieją"
+msgstr "{0} niezdefiniowane"
 
 #: js/widgets/grid/GridPanel.js:602
 msgid "Tagging"
@@ -1372,7 +1372,7 @@ msgstr "Ulubione"
 
 #: js/widgets/mainscreen/WestPanel.js:228
 msgid "Save current view as favorite"
-msgstr "Zapisz bieżący widok jako ulubione"
+msgstr "Zapisz bieżący widok w ulubionych"
 
 #: js/widgets/persistentfilter/Model.js:40
 msgid "Favorite"
@@ -1431,7 +1431,7 @@ msgstr "Zapisz filtr"
 
 #: js/widgets/persistentfilter/PickerPanel.js:255
 msgid "Please enter a name for the favorite"
-msgstr "Proszę wpisać nazwę do ulubionych"
+msgstr "Proszę dodać nazwę do ulubionych"
 
 #: js/widgets/persistentfilter/PickerPanel.js:258
 #: js/widgets/persistentfilter/PickerPanel.js:261
