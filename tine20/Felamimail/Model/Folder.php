@@ -89,18 +89,18 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'localname'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'globalname'            => array(Zend_Filter_Input::ALLOW_EMPTY => false),  // global name is the path from root folder
-        'parent'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),   // global name of parent folder
-        'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'default'),
-        'delimiter'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_selectable'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
-        'has_children'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'recent'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'system_folder'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'id'                     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'localname'              => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'globalname'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),  // global name is the path from root folder
+        'parent'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),   // global name of parent folder
+        'account_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'default'),
+        'delimiter'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'is_selectable'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
+        'has_children'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'recent'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'system_folder'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // imap values
-        'imap_status'           => array(
+        'imap_status'            => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => self::CACHE_STATUS_EMPTY, 
             'InArray' => array(
@@ -108,12 +108,12 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
                 self::IMAP_STATUS_DISCONNECT,
             )
         ),
-        'imap_uidnext'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
-        'imap_uidvalidity'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'imap_totalcount'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'imap_timestamp'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'imap_uidnext'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
+        'imap_uidvalidity'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'imap_totalcount'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'imap_timestamp'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // cache values 
-        'cache_status'          => array(
+        'cache_status'           => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => self::CACHE_STATUS_EMPTY, 
             'InArray' => array(
@@ -124,15 +124,15 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
                 self::CACHE_STATUS_DELETING
             )
         ),
-        'cache_uidnext'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
-        'cache_totalcount'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'cache_recentcount'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'cache_unreadcount'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'cache_timestamp'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'cache_job_lowestuid'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'cache_job_startuid'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'cache_job_actions_estimate'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'cache_job_actions_done'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_uidnext'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
+        'cache_totalcount'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_recentcount'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_unreadcount'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_timestamp'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'cache_job_lowestuid'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_job_startuid'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_job_actions_estimate' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_job_actions_done' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     );
     
     /**
