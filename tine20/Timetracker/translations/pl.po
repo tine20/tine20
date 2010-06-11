@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-09 21:53+0100\n"
+"PO-Revision-Date: 2010-06-11 22:40+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 
 #: Acl/Rights.php:99
 msgid "Manage timeaccounts"
-msgstr "Edytuj konta godzin"
+msgstr "edytowanie kont godzin"
 
 #: Acl/Rights.php:100
 msgid "Add, edit and delete timeaccounts"
@@ -22,7 +22,7 @@ msgstr "Dodawaj, edytuj i usuwaj konta godzin"
 
 #: Acl/Rights.php:103
 msgid "manage shared timetracker favorites"
-msgstr "zarządzaj wspólnymi ulubionymi z kart godzin"
+msgstr "zarządzanie wspólnymi ulubionymi z kart godzin"
 
 #: Acl/Rights.php:104
 msgid "Create or update shared timetracker favorites"
@@ -394,7 +394,7 @@ msgstr "Wszystkie karty godzin"
 
 #: js/TimesheetGridPanel.js:343
 msgid "Billable Timesheets"
-msgstr "Ilość kart godzin gotowych do przeliczenia"
+msgstr "Karty godzin gotowe do przeliczenia"
 
 #: js/TimesheetGridPanel.js:344
 msgid "Total Time"
