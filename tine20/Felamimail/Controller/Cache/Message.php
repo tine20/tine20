@@ -158,8 +158,8 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             $uids = array();
             
             // preset uid stepwidth;
-            $uidDensity = round($folder->imap_uidnext / min(1, $folder->imap_totalcount));
-            $this->_uidStepWidth = $this->_importCountPerStep * min(1, $uidDensity);
+            $uidDensity = round($folder->imap_uidnext / max(1, $folder->imap_totalcount));
+            $this->_uidStepWidth = $this->_importCountPerStep * max(1, $uidDensity);
             
             if ($folder->imap_uidnext != $folder->cache_uidnext) {
                 while (
