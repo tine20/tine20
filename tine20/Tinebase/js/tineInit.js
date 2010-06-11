@@ -72,6 +72,11 @@ Tine.clientVersion.releaseTime      = 'none';
 Tine.title = 'Tine 2.0';
 Tine.weburl = 'http://www.tine20.org/';
 
+/**
+ * quiet logging in release mode
+ */
+Ext.LOGLEVEL = Tine.clientVersion.buildType == 'RELEASE' ? 0 : 7;
+
 Ext.namespace('Tine.Tinebase');
 
 /**
