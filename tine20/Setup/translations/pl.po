@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-09 21:26+0100\n"
+"PO-Revision-Date: 2010-06-11 19:10+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -346,7 +346,7 @@ msgstr "Ścieżka do plików sesji"
 
 #: js/ConfigManagerPanel.js:181
 msgid "Addressbook Map panel"
-msgstr "Mapa Książki adresowej"
+msgstr "Mapa książki adresowej"
 
 #: js/ConfigManagerPanel.js:184
 msgid "Map panel"
