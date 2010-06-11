@@ -107,6 +107,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * @param {} success
      * 
      * TODO this could be obsolete, try to make it work without the initial load
+     * TODO 2010-06-11 cweiss: how the hack could a folder be selected bofore this store is loaded???
      */
     onStoreInitialLoad: function(record, options, success) {
         var folderName = 'INBOX';
