@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-09 21:39+0100\n"
+"PO-Revision-Date: 2010-06-11 21:43+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 # Es gibt kein Wort "leads" im Polnischen. Ich denke, wir koennen es durch "zapytania" oder "zapytania ofertowe" ersetzen. Ich meine etwas, womit einen weiteren Prozess anfangen kann.
 #: Acl/Rights.php:107
 msgid "manage leads"
-msgstr "Edytuj zapytania"
+msgstr "edytowanie zapytań"
 
 #: Acl/Rights.php:108
 msgid "add, edit and delete leads"
@@ -25,7 +25,7 @@ msgstr "dodaj, edytuj i usuń zapytania"
 
 #: Acl/Rights.php:111
 msgid "manage shared lead folders"
-msgstr "edytuj wspólne katalogi zapytań"
+msgstr "edytowanie wspólnych katalogów zapytań"
 
 #: Acl/Rights.php:112
 msgid "Create new shared lead folders"
@@ -33,7 +33,7 @@ msgstr "Utwórz nowe, wspólne katalogi zapytań"
 
 #: Acl/Rights.php:115
 msgid "manage shared leads favorites"
-msgstr "zarządzaj ulubionymi, wspólnymi zapytaniami"
+msgstr "zarządzanie ulubionymi, wspólnymi zapytaniami"
 
 #: Acl/Rights.php:116
 msgid "Create or update shared leads favorites"
