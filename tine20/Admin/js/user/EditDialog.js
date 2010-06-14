@@ -146,6 +146,206 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * Initi Fileserver tab items
+     * 
+     * @return {Array} - array ff fileserver tab items
+     */
+    initFileserver: function() {
+    	
+    	if (this.ldapBackend) {
+
+    		return [{
+                title: this.app.i18n._('Unix'),
+                autoHeight: true,
+                xtype: 'fieldset',
+                checkboxToggle: false,
+                layout: 'hfit',
+                items: [{
+                    xtype: 'columnform',
+                    labelAlign: 'top',
+                    formDefaults: {
+                        xtype:'textfield',
+                        anchor: '100%',
+                        labelSeparator: '',
+                        columnWidth: .333
+                    },
+                    items: [[{
+                        fieldLabel: this.app.i18n._('Home Directory'),
+                        name: 'accountHomeDirectory',
+                        columnWidth: .666
+                    }, {
+                        fieldLabel: this.app.i18n._('Login Shell'),
+                        name: 'accountLoginShell'
+                    }]]
+                }]
+            }, {
+                title: this.app.i18n._('Windows'),
+                autoHeight: true,
+                xtype: 'fieldset',
+                checkboxToggle: false,
+                layout: 'hfit',
+                items: [{
+                    xtype: 'columnform',
+                    labelAlign: 'top',
+                    formDefaults: {
+                        xtype:'textfield',
+                        anchor: '100%',
+                        labelSeparator: '',
+                        columnWidth: .333
+                    },
+                    items: [[{
+                        fieldLabel: this.app.i18n._('Home Drive'),
+                        name: 'homeDrive',
+                        columnWidth: .666
+                    }, {
+                        xtype: 'displayfield',
+                        fieldLabel: this.app.i18n._('Logon Time'),
+                        name: 'logonTime',
+                        emptyText: this.app.i18n._('never logged in'),
+                        style: this.displayFieldStyle
+                    }], [{
+                        fieldLabel: this.app.i18n._('Home Path'),
+                        name: 'homePath',
+                        columnWidth: .666
+                    }, {
+                        xtype: 'displayfield',
+                        fieldLabel: this.app.i18n._('Logoff Time'),
+                        name: 'logoffTime',
+                        emptyText: this.app.i18n._('never logged off'),
+                        style: this.displayFieldStyle
+                    }], [{
+                        fieldLabel: this.app.i18n._('Profile Path'),
+                        name: 'profilePath',
+                        columnWidth: .666
+                    }, {
+                        xtype: 'displayfield',
+                        fieldLabel: this.app.i18n._('Password Last Set'),
+                        name: 'pwdLastSet',
+                        emptyText: this.app.i18n._('never'),
+                        style: this.displayFieldStyle
+                    }], [{
+                        fieldLabel: this.app.i18n._('Logon Script'),
+                        name: 'logonScript',
+                        columnWidth: .666
+                    }], [{
+                        xtype: 'extuxclearabledatefield',
+                        fieldLabel: this.app.i18n._('Password Can Change'),
+                        name: 'pwdCanChange',
+                        emptyText: this.app.i18n._('not set')
+                    }, {
+                        xtype: 'extuxclearabledatefield',
+                        fieldLabel: this.app.i18n._('Password Must Change'),
+                        name: 'pwdMustChange',
+                        emptyText: this.app.i18n._('not set')
+                    }, {
+                        xtype: 'extuxclearabledatefield',
+                        fieldLabel: this.app.i18n._('Kick Off Time'),
+                        name: 'kickoffTime',
+                        emptyText: this.app.i18n._('not set')
+                    }]]
+                }]
+            }];
+    	}
+    	
+    	return [];
+    },
+    
+    /**
+     * Init IMAP tab items
+     * 
+     * @return {Array} - array of IMAP tab items
+     */
+    initImap: function() {
+    	
+    	if (Tine.Admin.registry.get('manageImapEmailUser')) {
+    		
+    		return [{
+                title: this.app.i18n._('Quota (MB)'),
+                autoHeight: true,
+                xtype: 'fieldset',
+                checkboxToggle: true,
+                layout: 'hfit',
+                items: [{
+                    xtype: 'columnform',
+                    labelAlign: 'top',
+                    formDefaults: {
+                        xtype: 'textfield',
+                        anchor: '100%',
+                        columnWidth: .666
+                    },
+                    items: [[{
+                        fieldLabel: this.app.i18n._('Quota'),
+                        name: 'emailMailQuota',
+                        xtype:'uxspinner',
+                        strategy: new Ext.ux.form.Spinner.NumberStrategy({
+                            incrementValue : 10,
+                            allowDecimals : false
+                        })
+                    }], [{
+                        fieldLabel: this.app.i18n._('Current Mail Size'),
+                        name: 'emailMailSize',
+                        xtype:'displayfield',
+                        style: this.displayFieldStyle
+                    }]
+                    ]
+                }]
+            }, {
+                title: this.app.i18n._('Sieve Quota (MB)'),
+                autoHeight: true,
+                xtype: 'fieldset',
+                checkboxToggle: true,
+                layout: 'hfit',
+                items: [{
+                    xtype: 'columnform',
+                    labelAlign: 'top',
+                    formDefaults: {
+                        xtype: 'textfield',
+                        anchor: '100%',
+                        columnWidth: .666
+                    },
+                    items: [[{
+                        fieldLabel: this.app.i18n._('Sieve Quota'),
+                        name: 'emailSieveQuota',
+                        xtype:'uxspinner',
+                        strategy: new Ext.ux.form.Spinner.NumberStrategy({
+                            incrementValue : 10,
+                            allowDecimals : false
+                        })
+                    }], [{
+                        fieldLabel: this.app.i18n._('Sieve Size'),
+                        name: 'emailSieveSize',
+                        xtype:'displayfield',
+                        style: this.displayFieldStyle
+                    }]
+                    ]
+                }]
+            }, {
+                title: this.app.i18n._('Information'),
+                autoHeight: true,
+                xtype: 'fieldset',
+                checkboxToggle: false,
+                layout: 'hfit',
+                items: [{
+                    xtype: 'columnform',
+                    labelAlign: 'top',
+                    formDefaults: {
+                        xtype: 'displayfield',
+                        anchor: '100%',
+                        columnWidth: .666,
+                        style: this.displayFieldStyle
+                    },
+                    items: [[{
+                        fieldLabel: this.app.i18n._('Last Login'),
+                        name: 'emailLastLogin'
+                    }]]
+                }]
+            }];
+    	}
+    	
+    	return [];
+    },
+    
+    /**
      * @private
      * 
      * init email grids
@@ -153,59 +353,76 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * TODO     add ctx menu
      * TODO     make border work
      */
-    initEmailGrids: function() {
+    initSmtp: function() {
         
-        var commonConfig = {
-            autoExpandColumn:'email',
-            quickaddMandatory: 'email',
-            //border: true,
-            frame: false,
-            useBBar: true,
-            dataField: 'email',
-            height: 200,
-            columnWidth: .5,
-            recordClass: Ext.data.Record.create([
-                { name: 'email' }
-            ])
-        };
+    	if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
+    	
+    		 var commonConfig = {
+	            autoExpandColumn:'email',
+	            quickaddMandatory: 'email',
+	            //border: true,
+	            frame: false,
+	            useBBar: true,
+	            dataField: 'email',
+	            height: 200,
+	            columnWidth: .5,
+	            recordClass: Ext.data.Record.create([
+	                { name: 'email' }
+	            ])
+	        };
+    		
+    		this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
+	            Ext.apply(commonConfig, {
+	                //title:this.app.i18n._('Aliases'),
+	                cm: new Ext.grid.ColumnModel([{ 
+	                    id:'email', 
+	                    header: this.app.i18n._('Email Alias'), 
+	                    dataIndex: 'email', 
+	                    width: 300, 
+	                    hideable: false, 
+	                    sortable: true,
+	                    quickaddField: new Ext.form.TextField({
+	                        emptyText: this.app.i18n._('Add an alias address...'),
+	                        vtype: 'email'
+	                    }),
+	                    editor: new Ext.form.TextField({allowBlank: false}) 
+	                }])
+	            })
+	        );
+	        this.aliasesGrid.render(document.body);
+	
+	        this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
+	            Ext.apply(commonConfig, {
+	                //title:this.app.i18n._('Forwards'),
+	                cm: new Ext.grid.ColumnModel([{ 
+	                    id:'email', 
+	                    header: this.app.i18n._('Email Forward'), 
+	                    dataIndex: 'email', 
+	                    width: 300, 
+	                    hideable: false, 
+	                    sortable: true,
+	                    quickaddField: new Ext.form.TextField({
+	                        emptyText: this.app.i18n._('Add a forward address...'),
+	                        vtype: 'email'
+	                    }),
+	                    editor: new Ext.form.TextField({allowBlank: false}) 
+	                }])
+	            })
+	        );
+	        this.forwardsGrid.render(document.body);
+	        
+	        return [
+	            [this.aliasesGrid, this.forwardsGrid],
+	        [{
+	            fieldLabel: this.app.i18n._('Forward Only'),
+	            name: 'emailForwardOnly',
+	            xtype:'checkbox',
+	            columnWidth: .666,
+	            readOnly: false
+	        }]];
+        }
         
-        this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
-            Ext.apply(commonConfig, {
-                //title:this.app.i18n._('Aliases'),
-                cm: new Ext.grid.ColumnModel([{ 
-                    id:'email', 
-                    header: this.app.i18n._('Email Alias'), 
-                    dataIndex: 'email', 
-                    width: 300, 
-                    hideable: false, 
-                    sortable: true,
-                    quickaddField: new Ext.form.TextField({
-                        emptyText: this.app.i18n._('Add an alias address...'),
-                        vtype: 'email'
-                    }),
-                    editor: new Ext.form.TextField({allowBlank: false}) 
-                }])
-            })
-        );
-
-        this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
-            Ext.apply(commonConfig, {
-                //title:this.app.i18n._('Forwards'),
-                cm: new Ext.grid.ColumnModel([{ 
-                    id:'email', 
-                    header: this.app.i18n._('Email Forward'), 
-                    dataIndex: 'email', 
-                    width: 300, 
-                    hideable: false, 
-                    sortable: true,
-                    quickaddField: new Ext.form.TextField({
-                        emptyText: this.app.i18n._('Add a forward address...'),
-                        vtype: 'email'
-                    }),
-                    editor: new Ext.form.TextField({allowBlank: false}) 
-                }])
-            })
-        );
+        return [];
     },
     
     /**
@@ -213,13 +430,11 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getFormItems: function() {
         
-        var displayFieldStyle = {
+        this.displayFieldStyle = {
             border: 'silver 1px solid',
             padding: '3px',
             height: '11px'
         };
-        
-        this.initEmailGrids();
         
         this.passwordConfirmWindow = new Ext.Window({
             title: this.app.i18n._('Password confirmation'),
@@ -407,7 +622,7 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	                        anchor: '100%',
 	                        labelSeparator: '',
 	                        columnWidth: .333,
-                    		style: displayFieldStyle
+                    		style: this.displayFieldStyle
 	                    },
 	                    items: [[{
 		                        fieldLabel: this.app.i18n._('Last login at'),
@@ -430,186 +645,16 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 disabled: !this.ldapBackend,
                 border: false,
                 frame: true,
-                items: [{
-                    title: this.app.i18n._('Unix'),
-                    autoHeight: true,
-                    xtype: 'fieldset',
-                    checkboxToggle: false,
-                    layout: 'hfit',
-                    items: [{
-                        xtype: 'columnform',
-                        labelAlign: 'top',
-                        formDefaults: {
-                            xtype:'textfield',
-                            anchor: '100%',
-                            labelSeparator: '',
-                            columnWidth: .333
-                        },
-                        items: [[{
-                            fieldLabel: this.app.i18n._('Home Directory'),
-                            name: 'accountHomeDirectory',
-                            columnWidth: .666
-                        }, {
-                            fieldLabel: this.app.i18n._('Login Shell'),
-                            name: 'accountLoginShell'
-                        }]]
-                    }]
-                }, {
-                    title: this.app.i18n._('Windows'),
-                    autoHeight: true,
-                    xtype: 'fieldset',
-                    checkboxToggle: false,
-                    layout: 'hfit',
-                    items: [{
-                        xtype: 'columnform',
-                        labelAlign: 'top',
-                        formDefaults: {
-                            xtype:'textfield',
-                            anchor: '100%',
-                            labelSeparator: '',
-                            columnWidth: .333
-                        },
-                        items: [[{
-                            fieldLabel: this.app.i18n._('Home Drive'),
-                            name: 'homeDrive',
-                            columnWidth: .666
-                        }, {
-                            xtype: 'displayfield',
-                            fieldLabel: this.app.i18n._('Logon Time'),
-                            name: 'logonTime',
-                            emptyText: this.app.i18n._('never logged in'),
-                            style: displayFieldStyle
-                        }], [{
-                            fieldLabel: this.app.i18n._('Home Path'),
-                            name: 'homePath',
-                            columnWidth: .666
-                        }, {
-                            xtype: 'displayfield',
-                            fieldLabel: this.app.i18n._('Logoff Time'),
-                            name: 'logoffTime',
-                            emptyText: this.app.i18n._('never logged off'),
-                            style: displayFieldStyle
-                        }], [{
-                            fieldLabel: this.app.i18n._('Profile Path'),
-                            name: 'profilePath',
-                            columnWidth: .666
-                        }, {
-                            xtype: 'displayfield',
-                            fieldLabel: this.app.i18n._('Password Last Set'),
-                            name: 'pwdLastSet',
-                            emptyText: this.app.i18n._('never'),
-                            style: displayFieldStyle
-                        }], [{
-                            fieldLabel: this.app.i18n._('Logon Script'),
-                            name: 'logonScript',
-                            columnWidth: .666
-                        }], [{
-                            xtype: 'extuxclearabledatefield',
-                            fieldLabel: this.app.i18n._('Password Can Change'),
-                            name: 'pwdCanChange',
-                            emptyText: this.app.i18n._('not set')
-                        }, {
-                            xtype: 'extuxclearabledatefield',
-                            fieldLabel: this.app.i18n._('Password Must Change'),
-                            name: 'pwdMustChange',
-                            emptyText: this.app.i18n._('not set')
-                        }, {
-                            xtype: 'extuxclearabledatefield',
-                            fieldLabel: this.app.i18n._('Kick Off Time'),
-                            name: 'kickoffTime',
-                            emptyText: this.app.i18n._('not set')
-                        }]]
-                    }]
-                }]
+                items: this.initFileserver()
             }, {
-                    title: this.app.i18n._('IMAP'),
-                    disabled: ! Tine.Admin.registry.get('manageImapEmailUser'),
-                    autoScroll: true,
-                    border: false,
-                    frame: true,
-                    layout: 'hfit',
-                    items: [{
-                        title: this.app.i18n._('Quota (MB)'),
-                        autoHeight: true,
-                        xtype: 'fieldset',
-                        checkboxToggle: true,
-                        layout: 'hfit',
-                        items: [{
-                            xtype: 'columnform',
-                            labelAlign: 'top',
-                            formDefaults: {
-                                xtype: 'textfield',
-                                anchor: '100%',
-                                columnWidth: .666
-                            },
-                            items: [[{
-                                fieldLabel: this.app.i18n._('Quota'),
-                                name: 'emailMailQuota',
-                                xtype:'uxspinner',
-                                strategy: new Ext.ux.form.Spinner.NumberStrategy({
-                                    incrementValue : 10,
-                                    allowDecimals : false
-                                })
-                            }], [{
-                                fieldLabel: this.app.i18n._('Current Mail Size'),
-                                name: 'emailMailSize',
-                                xtype:'displayfield',
-                                style: displayFieldStyle
-                            }]
-                            ]
-                        }]
-                    }, {
-                        title: this.app.i18n._('Sieve Quota (MB)'),
-                        autoHeight: true,
-                        xtype: 'fieldset',
-                        checkboxToggle: true,
-                        layout: 'hfit',
-                        items: [{
-                            xtype: 'columnform',
-                            labelAlign: 'top',
-                            formDefaults: {
-                                xtype: 'textfield',
-                                anchor: '100%',
-                                columnWidth: .666
-                            },
-                            items: [[{
-                                fieldLabel: this.app.i18n._('Sieve Quota'),
-                                name: 'emailSieveQuota',
-                                xtype:'uxspinner',
-                                strategy: new Ext.ux.form.Spinner.NumberStrategy({
-                                    incrementValue : 10,
-                                    allowDecimals : false
-                                })
-                            }], [{
-                                fieldLabel: this.app.i18n._('Sieve Size'),
-                                name: 'emailSieveSize',
-                                xtype:'displayfield',
-                                style: displayFieldStyle
-                            }]
-                            ]
-                        }]
-                    }, {
-                        title: this.app.i18n._('Information'),
-                        autoHeight: true,
-                        xtype: 'fieldset',
-                        checkboxToggle: false,
-                        layout: 'hfit',
-                        items: [{
-                            xtype: 'columnform',
-                            labelAlign: 'top',
-                            formDefaults: {
-                                xtype: 'displayfield',
-                                anchor: '100%',
-                                columnWidth: .666,
-                                style: displayFieldStyle
-                            },
-                            items: [[{
-                                fieldLabel: this.app.i18n._('Last Login'),
-                                name: 'emailLastLogin'
-                            }]]
-                        }]
-                    }]
-                }, {
+                title: this.app.i18n._('IMAP'),
+                disabled: ! Tine.Admin.registry.get('manageImapEmailUser'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                layout: 'hfit',
+                items: this.initImap()
+			}, {
                 title: this.app.i18n._('SMTP'),
                 disabled: ! Tine.Admin.registry.get('manageSmtpEmailUser'),
                 border: false,
@@ -623,15 +668,7 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     columnWidth: .333,
                     readOnly: true
                 },
-                items: [
-                    [this.aliasesGrid, this.forwardsGrid],
-                [{
-                    fieldLabel: this.app.i18n._('Forward Only'),
-                    name: 'emailForwardOnly',
-                    xtype:'checkbox',
-                    columnWidth: .666,
-                    readOnly: false
-                }]]
+                items: this.initSmtp()
             }]
         };
     }
