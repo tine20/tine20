@@ -70,11 +70,11 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 );
                 
                 preg_match(Felamimail_Model_Message::ATTACHMENT_FILENAME_REGEXP, $headers['content-disposition'], $matches);
-                $filename = (isset($matches[0])) ? $matches[0] : 'filename'; 
+                $filename = (isset($matches[1])) ? $matches[1] : 'attachment'; 
                 
                 header("Pragma: public");
                 header("Cache-Control: max-age=0");
-                header('Content-Disposition: attachment; ' . $filename);
+                header('Content-Disposition: attachment; filename="' . $filename . '"');
                 header("Content-Description: email attachment");
                 header("Content-type: " . $headers['content-type']);
                  
