@@ -103,21 +103,25 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      */
     public function update($_folder, $_time = 10)
     {
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->get($_folder);
         
         // check fencing and invalid cache/imap status here
         if (! $this->_isUpdateAllowed($folder)) {
+            Tinebase_TransactionManager::getInstance()->rollBack($transactionId);
             return $folder;
         }
         
+        $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
+        $folder = $this->_updateFolderStatus($folder);
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        
+        
+        // fill message cache (from the top) / init time / update folder (cache_timestamp, status, estimate)
         try {
             ///////////////////////////// get imap backend and init stuff
             
             $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
-
-            // fill message cache (from the top) / init time / update folder (cache_timestamp, status, estimate)
-            $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
-            $folder = $this->_updateFolderStatus($folder);
                         
             $folder->cache_recentcount = 0;
             $timeLeft = TRUE;
