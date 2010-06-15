@@ -38,70 +38,70 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
      *                      if items of messages are fetchted it's returned as (msgno => (name => value))
      * @throws Zend_Mail_Protocol_Exception
      */
-    public function fetch($items, $from, $to = null, $uid = false)
-    {
-        if (is_array($from)) {
-            $set = implode(',', $from);
-        } else if ($to === null) {
-            $set = (int)$from;
-        } else if ($to === INF) {
-            $set = (int)$from . ':*';
-        } else {
-            $set = (int)$from . ':' . (int)$to;
-        }
-
-        $items = (array)$items;
-        $itemList = $this->escapeList($items);
-
-        $this->sendRequest($uid ? 'UID FETCH' : 'FETCH', array($set, $itemList), $tag);
-        
-        // BODY.PEEK gets returned as BODY
-        foreach($items as &$item) {
-            if (substr($item, 0, 9) == 'BODY.PEEK') {
-                $item = 'BODY' . substr($item, 9);
-            } 
-        }
-        
-        $result = array();
-        while (!$this->readLine($tokens, $tag)) {
-            // ignore other responses
-            if ($tokens[1] != 'FETCH') {
-                continue;
-            }
-            
-            $data = array();
-            while (key($tokens[2]) !== null) {
-                $data[current($tokens[2])] = next($tokens[2]);
-                next($tokens[2]);
-            }
-            
-            // ignore other messages
-            // with UID FETCH we get the ID and NOT the UID as $tokens[0]
-            #if ($to === null && !is_array($from) && $tokens[0] != $from) {
-            #    continue;
-            #}
-            
-            // if we want only one message we can ignore everything else and just return
-            if ($to === null && !is_array($from) && (($uid !== true && $tokens[0] == $from) || ($uid === true && $data['UID'] == $from))) {
-                // we still need to read all lines
-                while (!$this->readLine($tokens, $tag));
-                return (count($items) == 1) ? $data[$items[0]] : $data;
-            }
-            
-            $messageId = $uid === true ? $data['UID'] : $tokens[0];
-            $result[$messageId] = (count($items) == 1) ? $data[$items[0]] : $data;
-        }
-
-        if ($to === null && !is_array($from)) {
-            /**
-             * @see Zend_Mail_Protocol_Exception
-             */
-            require_once 'Zend/Mail/Protocol/Exception.php';
-            throw new Zend_Mail_Protocol_Exception('the single id was not found in response');
-        }
-
-        return $result;
-    }
+//    public function fetch($items, $from, $to = null, $uid = false)
+//    {
+//        if (is_array($from)) {
+//            $set = implode(',', $from);
+//        } else if ($to === null) {
+//            $set = (int)$from;
+//        } else if ($to === INF) {
+//            $set = (int)$from . ':*';
+//        } else {
+//            $set = (int)$from . ':' . (int)$to;
+//        }
+//
+//        $items = (array)$items;
+//        $itemList = $this->escapeList($items);
+//
+//        $this->sendRequest($uid ? 'UID FETCH' : 'FETCH', array($set, $itemList), $tag);
+//        
+//        // BODY.PEEK gets returned as BODY
+//        foreach($items as &$item) {
+//            if (substr($item, 0, 9) == 'BODY.PEEK') {
+//                $item = 'BODY' . substr($item, 9);
+//            } 
+//        }
+//        
+//        $result = array();
+//        while (!$this->readLine($tokens, $tag)) {
+//            // ignore other responses
+//            if ($tokens[1] != 'FETCH') {
+//                continue;
+//            }
+//            
+//            $data = array();
+//            while (key($tokens[2]) !== null) {
+//                $data[current($tokens[2])] = next($tokens[2]);
+//                next($tokens[2]);
+//            }
+//            
+//            // ignore other messages
+//            // with UID FETCH we get the ID and NOT the UID as $tokens[0]
+//            #if ($to === null && !is_array($from) && $tokens[0] != $from) {
+//            #    continue;
+//            #}
+//            
+//            // if we want only one message we can ignore everything else and just return
+//            if ($to === null && !is_array($from) && (($uid !== true && $tokens[0] == $from) || ($uid === true && $data['UID'] == $from))) {
+//                // we still need to read all lines
+//                while (!$this->readLine($tokens, $tag));
+//                return (count($items) == 1) ? $data[$items[0]] : $data;
+//            }
+//            
+//            $messageId = $uid === true ? $data['UID'] : $tokens[0];
+//            $result[$messageId] = (count($items) == 1) ? $data[$items[0]] : $data;
+//        }
+//
+//        if ($to === null && !is_array($from)) {
+//            /**
+//             * @see Zend_Mail_Protocol_Exception
+//             */
+//            require_once 'Zend/Mail/Protocol/Exception.php';
+//            throw new Zend_Mail_Protocol_Exception('the single id was not found in response');
+//        }
+//
+//        return $result;
+//    }
     
     /**
      * set flags
