@@ -77,6 +77,14 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
     modelName: null,
     
     /**
+     * Aborts any outstanding request.
+     * @param {Number} transactionId (Optional) defaults to the last transaction
+     */
+    abort : function(transactionId) {
+        Ext.Ajax.abort(transactionId);
+    },
+    
+    /**
      * loads a single 'full featured' record
      * 
      * @param   {Ext.data.Record} record
