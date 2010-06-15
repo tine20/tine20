@@ -97,14 +97,14 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
                 return true;
             }
             
-            if (this.activeApp && this.fireEvent('beforedeactivate', this.activeApp) === false) {
+            if (this.activeApp && (this.fireEvent('beforedeactivate', this.activeApp) === false || this.activeApp.onBeforeDeActivate() === false)) {
                 return false;
             }
             var activeApp = this.activeApp;
             this.activeApp = null;
             this.fireEvent('deactivate', activeApp);
             
-            if (this.fireEvent('beforeactivate', app) === false) {
+            if (this.fireEvent('beforeactivate', app) === false || app.onBeforeActivate() === false) {
                 return false;
             }
             
