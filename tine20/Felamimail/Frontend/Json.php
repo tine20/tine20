@@ -109,7 +109,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * update folder status (unreadcount/totalcount/cache status?)
+     * update folder status
      *
      * @param string $accountId
      * @param array  $folderIds
