@@ -96,7 +96,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     {
         $this->_currentFolder = $globalName;
         if (!$result = $this->_protocol->select($this->_currentFolder)) {
-            $this->_currentFolder = '';
+            $this->_currentFolder = null;
             /**
              * @see Zend_Mail_Storage_Exception
              */
@@ -110,13 +110,27 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     /**
      * examine given folder
      * 
+     * - overwritten to get results (UIDNEXT, UIDVALIDITY, ...)
+     *
+     * folder must be selectable!
+     *
      * @param  Zend_Mail_Storage_Folder|string $globalName global name of folder or instance for subfolder
      * @return array with folder values
+     * @throws Zend_Mail_Storage_Exception
+     * @throws Zend_Mail_Protocol_Exception
      */
     public function examineFolder($globalName)
     {
         $this->_currentFolder = $globalName;
-        $result = $this->_protocol->examine($this->_currentFolder);        
+        if (!$result = $this->_protocol->examine($this->_currentFolder)) {
+            $this->_currentFolder = null;
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('cannot change folder, maybe it does not exist');
+        }
+        
         return $result;
     }
     

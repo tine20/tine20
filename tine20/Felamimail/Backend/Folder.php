@@ -64,55 +64,34 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
      * @param  string  $_folderId  the folderid
      * @return array
      */
-    protected function _getFolderCounter($_folderId)
+    public function getFolderCounter($_folderId)
     {
+        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
         // fetch total count
-        $cols = array('cache_totalcount' => new Zend_Db_Expr('COUNT(*)'));
+        $cols = array('cache_totalcount' => new Zend_Db_Expr('COUNT(id)'));
         $select = $this->_db->select()
             ->from(array('felamimail_cache_message' => $this->_tablePrefix . 'felamimail_cache_message'), $cols)
-            ->where($this->_db->quoteIdentifier('felamimail_cache_message.folder_id') . ' = ?', $_folderId);
+            ->where($this->_db->quoteIdentifier('felamimail_cache_message.folder_id') . ' = ?', $folderId);
         
         $stmt = $this->_db->query($select);
         $totalCount = $stmt->fetchColumn(0);
         $stmt->closeCursor();
         
-        // get unseen count
+        // get seen count
+        $cols = array('cache_totalcount' => new Zend_Db_Expr('COUNT(id)'));
+        $select = $this->_db->select()
+            ->from(array('felamimail_cache_message' => $this->_tablePrefix . 'felamimail_cache_message'), $cols)
+            ->where($this->_db->quoteIdentifier('felamimail_cache_message.folder_id') . ' = ?', $folderId);
         
-        // get recent count
+        $stmt = $this->_db->query($select);
+        $seenCount = $stmt->fetchColumn(0);
+        $stmt->closeCursor();
+        
         
         return array(
-            'cache_totalcount' => $totalCount
+            'cache_totalcount'  => $totalCount,
+            'cache_unreadcount' => $totalCount - $seenCount
         );
-    }
-    
-    /**
-     * converts raw data from adapter into a single record
-     *
-     * @param  array $_rawData
-     * @return Tinebase_Record_Abstract
-     */
-    protected function _rawDataToRecord(array $_rawData)
-    {
-        $folderCounter = $this->_getFolderCounter($_rawData['id']);
-
-        $rawData = array_merge($_rawData, $folderCounter);
-        
-        return parent::_rawDataToRecord($rawData);
-    }
-    
-    /**
-     * converts raw data from adapter into a set of records
-     *
-     * @param  array $_rawDatas of arrays
-     * @return Tinebase_Record_RecordSet
-     */
-    protected function _rawDataToRecordSet(array $_rawDatas)
-    {
-        foreach($_rawDatas as &$rawData) {
-            $folderCounter = $this->_getFolderCounter($rawData['id']);
-            $rawData = array_merge($rawData, $folderCounter);
-        }
-        return parent::_rawDataToRecordSet($_rawDatas);
     }
     
     /**
@@ -125,10 +104,9 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
     {
         $result = parent::_recordToRawData($_record);
 
-        // some columns got joined from another table and can't be written
-        unset($result['cache_totalcount']);
-        unset($result['cache_recentcount']);
-        unset($result['cache_unreadcount']);
+        // don't write this value as it requires a schema update
+        // see: Felamimail_Controller_Cache_Folder::getIMAPFolderCounter
+        unset($result['cache_uidvalidity']);
         
         return $result;
     }

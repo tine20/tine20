@@ -228,10 +228,139 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      */
     public function updateFolderStatus(Felamimail_Model_Folder $_folder, $_imap)
     {
-        // check fencing
-        if (!Felamimail_Controller_Cache_Message::getInstance()->updateAllowed($_folder)) {
-            return $this->_backend->get($_folder);
+        return Felamimail_Controller_Cache_Message::getInstance()->update($_folder, 1);
+        
+        #// check fencing
+        #if (!Felamimail_Controller_Cache_Message::getInstance()->updateAllowed($_folder)) {
+        #    return $this->_backend->get($_folder);
+        #}
+        
+        if ($_imap && $_imap instanceof Felamimail_Backend_ImapProxy) {
+            
+            // get folder values / status from imap server
+            try {
+                $imapFolderValues = $_imap->selectFolder($_folder->globalname);
+            } catch (Zend_Mail_Storage_Exception $zmse) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Folder ' . $_folder->globalname . ' not found ... Error: ' . $zmse->getMessage());
+                // delete folder from cache if it no longer exists
+                return;
+            }
+            
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting status and values for folder ' . $_folder->globalname);
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cache folder status: ' . print_r($_folder->toArray(), TRUE));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapFolderValues, TRUE));
+            
+            // check validity
+            if ($_folder->imap_uidvalidity != 0 && $_folder->imap_uidvalidity != $imapFolderValues['uidvalidity']) {
+                // uidvalidity has changed => we need to drop all cached messages
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Message cache of folder ' . $_folder->globalname . ' is invalid. uidvalidity changed');
+                $_folder = Felamimail_Controller_Cache_Message::getInstance()->clear($_folder);
+            
+            } else {
+                $_folder->imap_totalcount   = $imapFolderValues['exists'];
+                $_folder->imap_status       = Felamimail_Model_Folder::IMAP_STATUS_OK;
+                $_folder->imap_uidvalidity  = $imapFolderValues['uidvalidity'];
+                if (! array_key_exists('uidnext', $imapFolderValues)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Non-standard IMAP server. Trying to guess uidnext by getting all Uids. Maybe it does not work.');
+                    $_folder->imap_uidnext = 0;
+                } else {
+                    $_folder->imap_uidnext = $imapFolderValues['uidnext'];
+                }
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cache folder status: ' . print_r($_folder->toArray(), TRUE));
+                // update cache status if we need to do something
+                if ($_folder->imap_totalcount != $_folder->cache_totalcount || $_folder->imap_uidnext != $_folder->cache_uidnext) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Cache of folder ' . $_folder->globalname . ' is incomplete.');
+                    $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
+                }
+            }
+            
+        } else {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' IMAP connection lost while getting folder status for ' . $_folder->globalname);
+            $_folder->imap_status        = Felamimail_Model_Folder::IMAP_STATUS_DISCONNECT;
         }
+        
+        // update folder in cache
+        $_folder->imap_timestamp = Zend_Date::now();
+        return $this->_backend->update($_folder);
+    }
+    
+    /**
+     * get folder status/values from imap server and update folder cache record in database
+     * 
+     * @param Felamimail_Model_Folder $_folder
+     * @param Felamimail_Backend_Imap|boolean $_imap
+     * @return Felamimail_Model_Folder
+     * 
+     * @todo delete folder from cache if it no longer exists
+     */
+    public function getIMAPFolderCounter(Felamimail_Model_Folder $_folder)
+    {
+        $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->get($_folder);
+        
+        $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
+        
+        // get folder values / status from imap server
+        $counter = $imap->examineFolder($folder->globalname);
+            
+        // check validity
+        $folder->cache_uidvalidity = $folder->imap_uidvalidity;
+        $folder->imap_uidvalidity  = $counter['uidvalidity'];
+        $folder->imap_totalcount   = $counter['exists'];
+        $folder->imap_status       = Felamimail_Model_Folder::IMAP_STATUS_OK;
+        $folder->imap_timestamp    = Zend_Date::now();
+        
+        if (! array_key_exists('uidnext', $counter)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Non-standard IMAP server. Trying to guess uidnext by getting all Uids. Maybe it does not work.');
+            $folder->imap_uidnext = 0;
+        } else {
+            $folder->imap_uidnext = $counter['uidnext'];
+        }
+                    
+        return $folder;
+    }
+    
+    /**
+     * get folder status/values from imap server and update folder cache record in database
+     * 
+     * @param Felamimail_Model_Folder $_folder
+     * @param Felamimail_Backend_Imap|boolean $_imap
+     * @return Felamimail_Model_Folder
+     * 
+     * @todo delete folder from cache if it no longer exists
+     */
+    public function getCacheFolderCounter(Felamimail_Model_Folder $_folder)
+    {
+        $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->get($_folder);
+        return $folder;
+        $counter = $this->_backend->getFolderCounter($_folder);
+        
+        $folder->cache_totalcount  = $counter['cache_totalcount'];
+        $folder->cache_unreadcount = $counter['cache_unreadcount'];
+
+        // not used anymore
+        $folder->cache_recentcount = 0;
+        
+        return $folder;
+    }
+    
+    /**
+     * get folder status/values from imap server and update folder cache record in database
+     * 
+     * @param Felamimail_Model_Folder $_folder
+     * @param Felamimail_Backend_Imap|boolean $_imap
+     * @return Felamimail_Model_Folder
+     * 
+     * @todo delete folder from cache if it no longer exists
+     */
+    public function updateFolderCounters(Felamimail_Model_Folder $_folder, $_imap)
+    {
+        return Felamimail_Controller_Cache_Message::getInstance()->update($folder, 1);
+        
+        #// check fencing
+        #if (!Felamimail_Controller_Cache_Message::getInstance()->updateAllowed($_folder)) {
+        #    return $this->_backend->get($_folder);
+        #}
         
         if ($_imap && $_imap instanceof Felamimail_Backend_ImapProxy) {
             
