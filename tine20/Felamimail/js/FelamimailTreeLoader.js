@@ -29,7 +29,7 @@
  * 
  */
 Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
-	
+    
     /**
      * 
      * @param {Ext.tree.TreeNode} node
@@ -39,6 +39,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      * defaults to the loaded TreeNode.
      */
     requestData : function(node, callback, scope){
+        
         if(this.fireEvent("beforeload", this, node, callback) !== false) {
             var fstore = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore();
             
@@ -47,7 +48,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
                 if (data) {
                     node.beginUpdate();
                     data.each(function(folderRecord) {
-                        var n = this.createNode(folderRecord.data);
+                        var n = this.createNode(folderRecord.copy().data);
                         if (n) {
                             node.appendChild(n);
                         }
@@ -63,7 +64,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             this.runCallback(callback, scope || node, []);
         }
     },
-   
+    
     /**
      * @private
      * 
@@ -72,42 +73,27 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     inspectCreateNode: function(attr) {
         var account = Tine.Felamimail.loadAccountStore().getById(attr.account_id);
         
-        // check for account setting
-        attr.has_children = (
-            account 
-            && account.get('has_children_support') 
-            && account.get('has_children_support') == '1'
-        ) ? attr.has_children : true;
-        attr.has_children = (attr.has_children == '0') ? false : attr.has_children;
+        // NOTE cweiss 2010-06-15 this has to be precomputed on server side!
+        attr.has_children = (account && account.get('has_children_support')) ? attr.has_children : true;
         
-        //var qtiptext = this.app.i18n._('Totalcount') + ': ' + attr.totalcount 
+        //var qtiptext = this.app.i18n._('Totalcount') + ': ' + attr.cache_totalcount 
         //    + ' / ' + this.app.i18n._('Cache') + ': ' + attr.cache_status;
+        console.log(attr.has_children);
         Ext.apply(attr, {
-    		leaf: false,
+    		leaf: !attr.has_children,
+            expandable: attr.has_children,
+            cls: 'x-tree-node-collapsed',
     		text: attr.localname,
             folder_id: attr.id,
     		folderNode: true,
-            allowDrop: true,
+            allowDrop: true
             //qtip: qtiptext,
-            systemFolder: (attr.system_folder == '1'),
-            unreadcount: attr.cache_unreadcount,
-            totalcount: attr.cache_totalcount,
-            
-            // if it has no children, it shouldn't have an expand icon 
-            expandable: attr.has_children,
-            expanded: ! attr.has_children
     	});
         
-        // if it has no children, it shouldn't have an expand icon 
-        if (! attr.has_children) {
-            attr.children = [];
-            attr.cls = 'x-tree-node-collapsed';
-        }
-
         // show standard folders icons 
         if (account) {
             if (account.get('trash_folder') == attr.globalname) {
-                if (attr.totalcount > 0) {
+                if (attr.cache_totalcount > 0) {
                     attr.cls = 'felamimail-node-trash-full';
                 } else {
                     attr.cls = 'felamimail-node-trash';

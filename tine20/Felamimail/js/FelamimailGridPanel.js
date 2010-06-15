@@ -524,7 +524,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             if (record.data.flags === null || ! record.data.flags.match(regexp)) {
                 //console.log('markasread');
                 record.data.flags += ' \\Seen';
-                this.app.getMainScreen().getTreePanel().updateUnreadCount(-1);
+                this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
                 Ext.get(this.grid.getView().getRow(rowIndex)).removeClass('flag_unread');
             }
         }
@@ -861,7 +861,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         */
         
         this.store.load({});
-        this.app.checkMailsDelayedTask.delay(10000);
+        //this.app.checkMailsDelayedTask.delay(10000);
     },
     onPrint:function() {
         if(!Ext.get('felamimailPrintHelperIframe')) {

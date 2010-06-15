@@ -151,7 +151,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforenodedrop, this);
-        this.on('append', this.onAppend, this);
         this.on('containeradd', this.onFolderAdd, this);
         this.on('containerdelete', this.onFolderDelete, this);
         this.folderStore.on('update', this.onUpdateFolderStore, this);
@@ -226,12 +225,27 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     
     /**
      * @private
+     * 
+     * expand default account and select INBOX
      */
     afterRender: function() {
         Tine.Felamimail.TreePanel.superclass.afterRender.call(this);
 
         var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
-        this.expandPath('/root/' + defaultAccount + '/');
+        this.expandPath('/root/' + defaultAccount + '/', null, function(sucess, parentNode) {
+            Ext.each(parentNode.childNodes, function(node) {
+                // NOTE: depends on rendering order of grid and tree
+                if (Ext.util.Format.lowercase(node.attributes.localname) == 'inbox') {
+                    if (Tine.Tinebase.appMgr.get('Felamimail').getMainScreen().getCenterPanel().getGrid().rendered) {
+                        node.fireEvent('click', node);
+                    } else {
+                        node.select();
+                    }
+                    return false;
+                }
+            }, this);
+            
+        });
     },
     
     /**
@@ -254,7 +268,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             this.filterPlugin.onFilterChange();
             
             // updateFolderStatus
-            this.app.updateFolderStatus(node.attributes.globalname);
+            this.app.updateFolderStatus(this.app.getFolderStore().getById(node.id));
         }
     },
     
@@ -339,22 +353,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     },
     
     /**
-     * on append node
-     * 
-     * @param {} tree
-     * @param {} node
-     * @param {} appendedNode
-     * @param {} index
-     */
-    onAppend: function(tree, node, appendedNode, index) {
-        if (Ext.util.Format.lowercase(appendedNode.attributes.localname) == 'inbox') {
-            appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
-                appendedNode.fireEvent('click', appendedNode);
-            }, appendedNode.ui);
-        }
-    },
-    
-    /**
      * cleanup on destruction
      */
     onDestroy: function() {
@@ -378,7 +376,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             var selectedNode = this.getSelectionModel().getSelectedNode();
             
             // check if grid has to be updated
-            if (selectedNode.id == record.id) {
+            if (selectedNode && selectedNode.id == record.id) {
                 //console.log('update grid');
                 
                 // TODO do not update if multiple messages are selected (this does not work if messages are moved!)
@@ -390,17 +388,20 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 }
             }
         }
-            
-        if (record.isModified('cache_unreadcount')) {
-            //console.log('update unread');
-            this.updateUnreadCount(null, changes.cache_unreadcount, this.getNodeById(record.id));
-        }
+        
+        this.updateUnreadCount(record);
+        //this.updateCachingProgress(record);
+        
+//        if (record.isModified('cache_unreadcount')) {
+//            //console.log('update unread');
+//            this.updateUnreadCount(null, changes.cache_unreadcount, this.getNodeById(record.id));
+//        }
         
         // update pie / progress
-        if (record.isModified('cache_status') || record.isModified('cache_job_actions_done')) {
-            //console.log('update progress');
-            this.updateCachingProgress(record);
-        }
+//        if (record.isModified('cache_status') || record.isModified('cache_job_actions_done')) {
+//            //console.log('update progress');
+//            this.updateCachingProgress(record);
+//        }
 
         // silent commit
         record.commit(true);
@@ -433,7 +434,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * 
      * @param {} folder
      * 
-     * TODO show if disconnected
+     * TODO show if disconnected -> account
      * TODO make css style work for class felamimail-node-progress 
      * TODO show initial incomplete status? 
      * TODO show pie progress?
@@ -478,35 +479,36 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     },
     
     /**
+     * decrement unread count of currently selected folder
+     */
+    decrementCurrentUnreadCount: function() {
+        var store  = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore(),
+            node   = this.getSelectionModel().getSelectedNode(),
+            folder = node ? store.getById(node.id) : null;
+            
+        if (folder) {
+            folder.set('cache_unreadcount', --folder.get('cache_unreadcount'));
+        }
+    },
+    
+    /**
      * update unread count of a folder node (use selected node per default)
      * 
-     * @param {Number} change
-     * @param {Number} unreadcount [optional]
-     * @param {Ext.tree.AsyncTreeNode} node [optional]
+     * @param {Tine.Felamimail.Model.Folder} folder
      */
-    updateUnreadCount: function(change, unreadcount, node) {
-        
-        if (! node) {
-            var node = this.getSelectionModel().getSelectedNode();
-        }
-        
-        if (! change ) {
-            change = Number(unreadcount) - Number(node.attributes.unreadcount);
-        }
-        
-        if (Number(change) != 0) {
-            node.attributes.unreadcount = Number(node.attributes.unreadcount) + Number(change);
+    updateUnreadCount: function(folder) {
+        var count = folder.get('cache_unreadcount'),
+            node = this.getNodeById(folder.id),
+            ui = node ? node.getUI() : null;
             
-            if (node.attributes.unreadcount > 0) {
-                node.setText(node.attributes.localname + ' (' + node.attributes.unreadcount + ')');
-            } else {
+        if (node && node.rendered) {
+            if (count === 0) {
                 node.setText(node.attributes.localname);
+                ui.removeClass('felamimail-node-unread');
+            } else {
+                node.setText(node.attributes.localname + ' (' + count + ')');
+                ui.addClass('felamimail-node-unread');
             }
-        }
-        
-        node.getUI().removeClass('felamimail-node-unread');
-        if (node.attributes.unreadcount > 0) {
-            node.getUI().addClass('felamimail-node-unread');
         }
     },
     

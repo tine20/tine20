@@ -86,7 +86,7 @@ Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'sent_folder' },
     { name: 'trash_folder' },
     { name: 'intelligent_folders' },
-    { name: 'has_children_support' },
+    { name: 'has_children_support', type: 'bool' },
     { name: 'sort_folders' },
     { name: 'delimiter' },
     { name: 'display_format' },
@@ -188,7 +188,7 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
       { name: 'parent' },
       { name: 'parent_path' }, // /accountid/folderid/...
       { name: 'account_id' },
-      { name: 'has_children' },
+      { name: 'has_children',       type: 'bool' },
       { name: 'imap_status' },
       { name: 'imap_timestamp',     type: 'date', dateFormat: Date.patterns.ISO8601Long },
       { name: 'imap_uidnext',       type: 'int' },
@@ -245,6 +245,60 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
     recordClass: Tine.Felamimail.Model.Folder,
     
     /**
+     * update folderStatus for given folderIds of given account
+     * 
+     * @param   {String} accountId
+     * @param   {Array} folderIds
+     * @return  {Number} Ext.Ajax transaction id
+     */
+    updateFolderStatus: function(accountId, folderIds, options) {
+        options = options || {};
+        options.params = options.params || {};
+        
+        var p = options.params;
+        
+        p.method = this.appName + '.updateFolderStatus';
+        p.accountId = accountId;
+        p.folderIds = folderIds;
+        
+        options.beforeSuccess = function(response) {
+            return [this.jsonReader.read(response).records];
+        };
+        
+        // increase timeout as this can take a longer (1 minute)
+        options.timeout = 60000;
+                
+        return this.doXHTTPRequest(options);
+    },
+    
+    /**
+     * update message cache of given folder for given execution time
+     * 
+     * @param   {String} folderId
+     * @param   {Number} executionTime (seconds)
+     * @return  {Number} Ext.Ajax transaction id
+     */
+    updateMessageCache: function(folderId, executionTime, options) {
+        options = options || {};
+        options.params = options.params || {};
+        
+        var p = options.params;
+        
+        p.method = this.appName + '.updateMessageCache';
+        p.folderId = folderId;
+        p.time = executionTime;
+        
+        options.beforeSuccess = function(response) {
+            return [this.recordReader(response)];
+        };
+        
+        // double the timeout
+        options.timeout = executionTime * 2000;
+                
+        return this.doXHTTPRequest(options);
+    },
+    
+    /**
      * generic exception handler for this proxy
      * 
      * @todo move all 902 exception handling here!
@@ -253,6 +307,8 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
      * @param {Tine.Exception} exception
      */
     handleRequestException: function(exception) {
+        Tine.log.err('request exception :');
+        console.log(exception);
         
         var app = Tine.Tinebase.appMgr.get(this.appName);
         if (exception && exception.code == 902) {
@@ -266,5 +322,52 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
             Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
         }
     }
+    
+//    /**
+//     * handle failure to show credentials dialog if imap login failed
+//     * 
+//     * @param {String}  response
+//     * @param {Object}  options
+//     * @param {Node}    node optional account node
+//     * @param {Boolean} handleException
+//     */
+//    handleFailure: function(response, options) {
+//        var responseText = Ext.util.JSON.decode(response.responseText);
+//        
+//        if (responseText.data.code == 902) {
+//            
+//            var jsonData = Ext.util.JSON.decode(options.jsonData);
+//            var accountId = (jsonData.params.accountId) ? jsonData.params.accountId : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+//            var account = Tine.Felamimail.loadAccountStore().getById(accountId);
+//                        
+//            if (! Tine.Felamimail.credentialsDialog) {
+//                Tine.Felamimail.credentialsDialog = Tine.widgets.dialog.CredentialsDialog.openWindow({
+//                    title: String.format(this.i18n._('IMAP Credentials for {0}'), account.get('name')),
+//                    appName: 'Felamimail',
+//                    credentialsId: accountId,
+//                    i18nRecordName: this.i18n._('Credentials'),
+//                    recordClass: Tine.Tinebase.Model.Credentials,
+//                    listeners: {
+//                        scope: this,
+//                        'update': function(data) {
+//                            this.checkMails();
+//                        }
+//                    }
+//                });
+//            }
+//            
+//        } else {
+//            Ext.Msg.show({
+//               title:   this.i18n._('Error'),
+//               msg:     (responseText.data.message) ? responseText.data.message : this.i18n._('No connection to IMAP server.'),
+//               icon:    Ext.MessageBox.ERROR,
+//               buttons: Ext.Msg.OK
+//            });
+//
+//            // TODO call default exception handler on specific exceptions?
+//            //var exception = responseText.data ? responseText.data : responseText;
+//            //Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+//        }
+//    },
 });
 
