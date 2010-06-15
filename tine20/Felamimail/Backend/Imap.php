@@ -410,9 +410,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * @param int|null $to
      * @return array with $this->_messageClass (Felamimail_Message)
      */
-    public function getSummary($from, $to = null)
+    public function getSummary($from, $to = null, $_useUid = null)
     {
-        $summary = $this->_protocol->fetch(array('UID', 'FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE', 'BODYSTRUCTURE'), $from, $to, $this->_useUid);
+        $useUid = ($_useUid === null) ? $this->_useUid : (bool) $_useUid;
+        $summary = $this->_protocol->fetch(array('UID', 'FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE', 'BODYSTRUCTURE'), $from, $to, $useUid);
                 
         // fetch returns a different structure when fetching one or multiple messages
         if($to === null && ctype_digit("$from")) {
@@ -689,6 +690,18 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     }
     
     /**
+     * validates that messageUid still exists on imap server 
+     * @param $from
+     * @param $to
+     */
+    public function messageUidExists($from, $to = null)
+    {
+        $result = $this->_protocol->fetch('UID', $from, $to, true);
+        
+        return $result;
+    }
+    
+    /**
      * get uids by uid
      * 
      * @param int $from
@@ -697,7 +710,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function getUidbyUid($from, $to = null)
     {
-        $result = $this->_protocol->fetch('UID', $from, $to, $this->_useUid);
+        $result = $this->_protocol->fetch('UID', $from, $to, true);
         
         // @todo check if this is really needed
         // sanitize result, sometimes the fetch command can return wrong results :(
@@ -715,6 +728,33 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         }
         
         return array_values($result);
+    }
+    
+    public function resolveMessageSequence($from, $to = null)
+    {
+        $result = $this->_protocol->fetch('UID', $from, $to, false);
+        
+        return $result;
+    }
+    
+    public function resolveMessageUid($from, $to = null)
+    {
+        // we always need to ask for multiple values(array), because that's the only way to retrieve the message sequence 
+        if ($to === null && !is_array($from)) {
+            $from = (array) $from;
+        }
+        
+        $result = $this->_protocol->fetch('UID', $from, $to, true);
+        
+        if (count($result) === 0) {
+            throw new Zend_Mail_Protocol_Exception('the single id was not found in response');
+        }
+        
+        if ($to === null && count($from) === 1) {
+            return key($result);
+        } else {
+            return array_keys($result);
+        }
     }
     
     /**
