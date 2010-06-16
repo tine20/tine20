@@ -1054,8 +1054,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         if($_from == Zend_Mime::TYPE_TEXT && $_to == Zend_Mime::TYPE_HTML) {
             $_text = nl2br(htmlspecialchars($_text, ENT_COMPAT, 'utf-8'));
+            $_text = '<html><body>' . $_text . '</body></html>';
         } else {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Conversion between content type $_from to $_to not yet implemented!");
+            $_text = preg_replace('/\<br *\/*\>/', "\r\n", $_text);
+            $_text = strip_tags($_text);
         }
     }
     
