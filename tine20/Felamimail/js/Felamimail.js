@@ -131,11 +131,45 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     },
     
     /**
+     * executed when  updateFolderStatus or updateMessageCache requests fail
+     * 
+     * NOTE: We show the error dlg only for the first error
+     * NOTE: by chance, the updtes always operate on a single account ;-)
+     * 
+     * @param {Object} exception
+     */
+    onBackgroundRequestFail: function(exception) {
+        var accountId   = Ext.decode(exception.request).params.accountId,
+            account     = accountId ? Tine.Felamimail.loadAccountStore().getById(accountId): null,
+            imapStatus  = account ? account.get('imap_status') : null;
+            
+        if (account) {
+            account.setLastIMAPException(exception);
+            
+            if (imapStatus !== 'failure') {
+                Tine.Felamimail.folderBackend.handleRequestException(exception);
+            }
+        }
+        
+        Tine.log.info('background update failed (' + exception.message + ') -> will check mails again in "' + this.updateInterval/1000 + '" seconds');
+        this.checkMailsDelayedTask.delay(this.updateInterval);
+    },
+    
+    /**
+     * executed right before this app gets activated
+     */
+    onBeforeActivate: function() {
+        Tine.log.info('activating felamimail now');
+        // abort preloading/old actions and force frech fetch
+        this.checkMailsDelayedTask.delay(0);
+    },
+    
+    /**
      * on update folder
      * 
-     * @param {} store
-     * @param {} record
-     * @param {} operation
+     * @param {Tine.Felamimail.FolderStore} store
+     * @param {Tine.Felamimail.Model.Folder} record
+     * @param {String} operation
      */
     onUpdateFolder: function(store, record, operation) {
         
@@ -149,15 +183,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     changes.cache_recentcount, record.get('localname'))
             );
         }
-    },
-    
-    /**
-     * executed right before this app gets activated
-     */
-    onBeforeActivate: function() {
-        Tine.log.info('activating felamimail now');
-        // abort preloading/old actions and force frech fetch
-        this.checkMailsDelayedTask.delay(0);
     },
     
     /**
@@ -190,7 +215,9 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             
             this.updateFolderTransactionId = Tine.Felamimail.folderBackend.updateFolderStatus(accountId, folderIds, {
                 scope: this,
+                failure: this.onBackgroundRequestFail,
                 success: function(folders) {
+                    Tine.Felamimail.loadAccountStore().getById(accountId).setLastIMAPException(null);
                     this.getFolderStore().updateFolder(folders);
                     this.updateMessageCache(folder);
                 }
@@ -229,7 +256,9 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         
         this.updateMessageCacheTransactionId = Tine.Felamimail.folderBackend.updateMessageCache(folder.id, executionTime, {
             scope: this,
+            failure: this.onBackgroundRequestFail,
             success: function(folder) {
+                Tine.Felamimail.loadAccountStore().getById(folder.get('account_id')).setLastIMAPException(null);
                 this.getFolderStore().updateFolder(folder);
                 this.checkMailsDelayedTask.delay(0);
             }

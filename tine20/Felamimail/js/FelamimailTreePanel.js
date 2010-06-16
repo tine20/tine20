@@ -166,6 +166,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     initAccounts: function() {
         this.accountStore = Tine.Felamimail.loadAccountStore();
         this.accountStore.each(this.addAccount, this);
+        this.accountStore.on('update', this.onAccountStoreUpdate, this);
     },
     
    /**
@@ -246,6 +247,19 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             }, this);
             
         });
+    },
+    
+    /**
+     * called when an account record updates
+     * 
+     * @param {Ext.data.JsonStore} store
+     * @param {Tine.Felamimail.Model.Account} record
+     * @param {String} action
+     */
+    onAccountStoreUpdate: function(store, record, action) {
+        var imapStatus = record.get('imap_status');
+        
+        Tine.log.info('Account ' + record.id + ' updated with imap_status: ' + imapStatus);
     },
     
     /**

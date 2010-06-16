@@ -6,10 +6,8 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
- 
-Ext.ns('Tine.Felamimail', 'Tine.Felamimail.Model');
+Ext.ns('Tine.Felamimail.Model');
 
 /**
  * @namespace Tine.Felamimail.Model
@@ -68,9 +66,27 @@ Tine.Felamimail.Model.Message.getDefaultData = function() {
 };
 
 /**
- * Account model fields
- */
-Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
+ * @namespace Tine.Felamimail
+ * @class Tine.Felamimail.messageBackend
+ * @extends Tine.Tinebase.data.RecordProxy
+ * 
+ * Message Backend
+ */ 
+Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Felamimail',
+    modelName: 'Message',
+    recordClass: Tine.Felamimail.Model.Message
+});
+
+
+/**
+ * @namespace Tine.Felamimail.Model
+ * @class Tine.Felamimail.Model.Account
+ * @extends Tine.Tinebase.data.Record
+ * 
+ * Account Record Definition
+ */ 
+Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create([
     { name: 'id' },
     { name: 'user_id' },
     { name: 'name' },
@@ -83,6 +99,7 @@ Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'organization' },
     { name: 'port' },
     { name: 'ssl' },
+    { name: 'imap_status' }, // client only {success|failure}
     { name: 'sent_folder' },
     { name: 'trash_folder' },
     { name: 'intelligent_folders' },
@@ -98,29 +115,7 @@ Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'smtp_ssl' },
     { name: 'smtp_user' },
     { name: 'smtp_password' }
-]);
-
-/**
- * @namespace Tine.Felamimail
- * @class Tine.Felamimail.messageBackend
- * @extends Tine.Tinebase.data.RecordProxy
- * 
- * Message Backend
- */ 
-Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
-    appName: 'Felamimail',
-    modelName: 'Message',
-    recordClass: Tine.Felamimail.Model.Message
-});
-
-/**
- * @namespace Tine.Felamimail.Model
- * @class Tine.Felamimail.Model.Account
- * @extends Tine.Tinebase.data.Record
- * 
- * Account Record Definition
- */ 
-Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Felamimail.Model.AccountArray, {
+], {
     appName: 'Felamimail',
     modelName: 'Account',
     idProperty: 'id',
@@ -131,10 +126,31 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Felamimail
     containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
     containerName: 'Account list',
-    containersName: 'Account lists' /*,
-    getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('title')) : false;
-    } */
+    containersName: 'Account lists',
+    
+    /**
+     * @type Object
+     */
+    lastIMAPException: null,
+    
+    /**
+     * get the last IMAP exception
+     * 
+     * @return {Object}
+     */
+    getLastIMAPException: function() {
+        return this.lastIMAPException;
+    },
+    
+    /**
+     * set or clear IMAP exception and update imap_state
+     * 
+     * @param {Object} exception
+     */
+    setLastIMAPException: function(exception) {
+        this.lastIMAPException = exception;
+        this.set('imap_status', exception ? 'failure' : 'success');
+    }
 });
 
 /**
@@ -311,77 +327,66 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
      * @param {Tine.Exception} exception
      */
     handleRequestException: function(exception) {
-        Tine.log.err('request exception :');
-        console.log(exception);
+        Tine.log.warn('request exception :');
+        Tine.log.warn(exception);
+        
+        var app = Tine.Tinebase.appMgr.get('Felamimail');
         
         switch(exception.code) {
-            case 902: // Felamimail_Exception_InvalidCredentials
+            case 910: // Felamimail_Exception_IMAP
+                //break;
+                
+            case 911: // Felamimail_Exception_IMAPServiceUnavailable
+                Ext.Msg.show({
+                   title:   app.i18n._('IMAP Error'),
+                   msg:     exception.message ? exception.message : app.i18n._('No connection to IMAP server.'),
+                   icon:    Ext.MessageBox.ERROR,
+                   buttons: Ext.Msg.OK
+                });
                 break;
                 
-            case 903: // Felamimail_Exception_ServiceUnavailable
+            case 912: // Felamimail_Exception_IMAPInvalidCredentials
+                var accountId   = Ext.decode(exception.request).params.accountId,
+                    account     = accountId ? Tine.Felamimail.loadAccountStore().getById(accountId): null,
+                    imapStatus  = account ? account.get('imap_status') : null;
+                    
+                if (account) {
+                    console.log(account);
+                    Tine.Felamimail.credentialsDialog = Tine.widgets.dialog.CredentialsDialog.openWindow({
+                        title: String.format(app.i18n._('IMAP Credentials for {0}'), account.get('name')),
+                        appName: 'Felamimail',
+                        credentialsId: accountId,
+                        i18nRecordName: app.i18n._('Credentials'),
+                        recordClass: Tine.Tinebase.Model.Credentials,
+                        // WTF? Why don't we have a username here?
+//                        record: new Tine.Tinebase.Model.Credentials({
+//                            id: account.id,
+//                            username: account.get('user')
+//                        }),
+                        listeners: {
+                            scope: this,
+                            'update': function(data) {
+                                app.checkMailsDelayedTask.delay(0);
+                            }
+                        }
+                    });
+                    break;
+                }
+                // fallthrough
+                
+            case 920: // Felamimail_Exception_SMTP
+                Ext.Msg.show({
+                   title:   app.i18n._('SMTP Error'),
+                   msg:     exception.message ? exception.message : app.i18n._('No connection to SMTP server.'),
+                   icon:    Ext.MessageBox.ERROR,
+                   buttons: Ext.Msg.OK
+                });
                 break;
                 
             default:
+                Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
                 break;
         }
-        var app = Tine.Tinebase.appMgr.get(this.appName);
-        if (exception && exception.code == 902) {
-            Ext.Msg.show({
-               title:   app.i18n._('Error'),
-               msg:     exception.message ? exception.message : app.i18n._('No connection to IMAP server.'),
-               icon:    Ext.MessageBox.ERROR,
-               buttons: Ext.Msg.OK
-            });
-        } else {
-            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
-        }
     }
-    
-//    /**
-//     * handle failure to show credentials dialog if imap login failed
-//     * 
-//     * @param {String}  response
-//     * @param {Object}  options
-//     * @param {Node}    node optional account node
-//     * @param {Boolean} handleException
-//     */
-//    handleFailure: function(response, options) {
-//        var responseText = Ext.util.JSON.decode(response.responseText);
-//        
-//        if (responseText.data.code == 902) {
-//            
-//            var jsonData = Ext.util.JSON.decode(options.jsonData);
-//            var accountId = (jsonData.params.accountId) ? jsonData.params.accountId : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
-//            var account = Tine.Felamimail.loadAccountStore().getById(accountId);
-//                        
-//            if (! Tine.Felamimail.credentialsDialog) {
-//                Tine.Felamimail.credentialsDialog = Tine.widgets.dialog.CredentialsDialog.openWindow({
-//                    title: String.format(this.i18n._('IMAP Credentials for {0}'), account.get('name')),
-//                    appName: 'Felamimail',
-//                    credentialsId: accountId,
-//                    i18nRecordName: this.i18n._('Credentials'),
-//                    recordClass: Tine.Tinebase.Model.Credentials,
-//                    listeners: {
-//                        scope: this,
-//                        'update': function(data) {
-//                            this.checkMails();
-//                        }
-//                    }
-//                });
-//            }
-//            
-//        } else {
-//            Ext.Msg.show({
-//               title:   this.i18n._('Error'),
-//               msg:     (responseText.data.message) ? responseText.data.message : this.i18n._('No connection to IMAP server.'),
-//               icon:    Ext.MessageBox.ERROR,
-//               buttons: Ext.Msg.OK
-//            });
-//
-//            // TODO call default exception handler on specific exceptions?
-//            //var exception = responseText.data ? responseText.data : responseText;
-//            //Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
-//        }
-//    },
 });
 
