@@ -59,7 +59,7 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-     * get folder counter like total, unseen and recent count
+     * get folder cache counter like total and unseen
      *  
      * @param  string  $_folderId  the folderid
      * @return array
@@ -67,8 +67,9 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
     public function getFolderCounter($_folderId)
     {
         $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+        
         // fetch total count
-        $cols = array('cache_totalcount' => new Zend_Db_Expr('COUNT(id)'));
+        $cols = array('cache_totalcount' => new Zend_Db_Expr('COUNT(*)'));
         $select = $this->_db->select()
             ->from(array('felamimail_cache_message' => $this->_tablePrefix . 'felamimail_cache_message'), $cols)
             ->where($this->_db->quoteIdentifier('felamimail_cache_message.folder_id') . ' = ?', $folderId);
@@ -80,21 +81,15 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         // get seen count
         $select = $this->_db->select()
             ->from(array(
-                'felamimail_cache_message' => $this->_tablePrefix . 'felamimail_cache_message'), 
-                array('cache_totalcount' => new Zend_Db_Expr('COUNT(id)'))
-            )
-            ->join(array(
                 'felamimail_cache_message_flag' => $this->_tablePrefix . 'felamimail_cache_message_flag'), 
-                'felamimail_cache_message.id = felamimail_cache_message_flag.message_id',
-                array('flag')
+                array('cache_totalcount' => new Zend_Db_Expr('COUNT(*)'))
             )
-            ->where($this->_db->quoteIdentifier('felamimail_cache_message.folder_id') . ' = ?', $folderId)
+            ->where($this->_db->quoteIdentifier('felamimail_cache_message_flag.folder_id') . ' = ?', $folderId)
             ->where($this->_db->quoteIdentifier('felamimail_cache_message_flag.flag') . ' = ?', '\\Seen');
         
         $stmt = $this->_db->query($select);
         $seenCount = $stmt->fetchColumn(0);
         $stmt->closeCursor();
-        
         
         return array(
             'cache_totalcount'  => $totalCount,
