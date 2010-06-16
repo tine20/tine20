@@ -277,6 +277,16 @@ abstract class ActiveSync_Controller_Abstract
         return $foundEmtries;
     }
     
+    /**
+     * used by the mail backend only. Used to update the folder cache
+     * 
+     * @param  string  $_folderId
+     */
+    public function updateCache($_folderId)
+    {
+        // does nothing by default
+    }
+    
     protected function _getContainerFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_containerId)
     {
         $syncableContainers = $this->_getSyncableFolders();
