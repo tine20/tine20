@@ -494,9 +494,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (flags.match(/Passed/)) {
             icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: _('Forwarded')});
         }   
-        if (flags.match(/Recent/)) {
-            icons.push({src: 'images/oxygen/16x16/actions/knewstuff.png', qtip: _('Recent')});
-        }   
+//        if (flags.match(/Recent/)) {
+//            icons.push({src: 'images/oxygen/16x16/actions/knewstuff.png', qtip: _('Recent')});
+//        }   
         
         var result = '';
         for (var i=0; i < icons.length; i++) {
