@@ -5,19 +5,19 @@
  * @package     Felamimail
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  *
  */
 
 /**
- * Felamimail_Exception_InvalidCredentials
+ * Service Unavailable Exception
  * 
  * @package     Felamimail
  * @subpackage  Exception
  */
-class Felamimail_Exception_InvalidCredentials extends Felamimail_Exception
+class Felamimail_Exception_IMAPServiceUnavailable extends Felamimail_Exception_IMAP
 {
     /**
      * construct
@@ -26,7 +26,7 @@ class Felamimail_Exception_InvalidCredentials extends Felamimail_Exception
      * @param integer $_code
      * @return void
      */
-    public function __construct($_message = 'Invalid Credentials.', $_code = 902) {
+    public function __construct($_message = 'IMAP service unavailable.', $_code = 911) {
         parent::__construct($_message, $_code);
     }
 }

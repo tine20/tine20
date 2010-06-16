@@ -444,7 +444,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                     . '(' . $zmpe->getMessage() . ')'
                 );
                 return $_account;
-            } catch (Felamimail_Exception_InvalidCredentials $zmpe) {
+            } catch (Felamimail_Exception_IMAPInvalidCredentials $zmpe) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                     . ' Wrong user credentials ... '
                     . '(' . $zmpe->getMessage() . ')'

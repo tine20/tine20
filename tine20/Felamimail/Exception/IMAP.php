@@ -6,18 +6,18 @@
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  *
  */
 
 /**
- * ServiceUnavailable Exception
+ * General IMAP Exception
  * 
  * @package     Felamimail
  * @subpackage  Exception
  */
-class Felamimail_Exception_ServiceUnavailable extends Felamimail_Exception
+class Felamimail_Exception_IMAP extends Felamimail_Exception
 {
     /**
      * construct
@@ -26,7 +26,7 @@ class Felamimail_Exception_ServiceUnavailable extends Felamimail_Exception
      * @param integer $_code
      * @return void
      */
-    public function __construct($_message = 'IMAP service unavailable or some unrecognized server error.', $_code = 903) {
+    public function __construct($_message = 'General IMAP error.', $_code = 910) {
         parent::__construct($_message, $_code);
     }
 }

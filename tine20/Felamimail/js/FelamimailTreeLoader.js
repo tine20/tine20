@@ -78,17 +78,17 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         
         //var qtiptext = this.app.i18n._('Totalcount') + ': ' + attr.cache_totalcount 
         //    + ' / ' + this.app.i18n._('Cache') + ': ' + attr.cache_status;
-        console.log(attr.has_children);
         Ext.apply(attr, {
     		leaf: !attr.has_children,
             expandable: attr.has_children,
             cls: 'x-tree-node-collapsed',
-    		text: attr.localname,
             folder_id: attr.id,
     		folderNode: true,
-            allowDrop: true
+            allowDrop: true,
+            text: this.app.i18n._hidden(attr.localname)
             //qtip: qtiptext,
     	});
+        
         
         // show standard folders icons 
         if (account) {

@@ -189,6 +189,7 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
       { name: 'parent_path' }, // /accountid/folderid/...
       { name: 'account_id' },
       { name: 'has_children',       type: 'bool' },
+      { name: 'system_folder',      type: 'bool' },
       { name: 'imap_status' },
       { name: 'imap_timestamp',     type: 'date', dateFormat: Date.patterns.ISO8601Long },
       { name: 'imap_uidnext',       type: 'int' },
@@ -203,6 +204,9 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
       { name: 'cache_job_actions_estimate',     type: 'int' },
       { name: 'cache_job_actions_done',         type: 'int' }
 ], {
+    // translations for system folder:
+    // _('INBOX') _('Drafts') _('Sent') _('Templates') _('Junk') _('Trash')
+
     appName: 'Felamimail',
     modelName: 'Folder',
     idProperty: 'id',
@@ -310,6 +314,16 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
         Tine.log.err('request exception :');
         console.log(exception);
         
+        switch(exception.code) {
+            case 902: // Felamimail_Exception_InvalidCredentials
+                break;
+                
+            case 903: // Felamimail_Exception_ServiceUnavailable
+                break;
+                
+            default:
+                break;
+        }
         var app = Tine.Tinebase.appMgr.get(this.appName);
         if (exception && exception.code == 902) {
             Ext.Msg.show({
