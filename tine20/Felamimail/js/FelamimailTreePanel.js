@@ -471,13 +471,13 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             //Ext.select('div[class^=felamimail-node-statusbox-]').setDisplayed(false);
             
             // update unreadcount
-            Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-unread]', nodeEl)).update(unreadcount).setVisible(cacheStatus === 'complete' || (cacheStatus === 'pending' && !isSelected));
+            Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-unread]', nodeEl)).update(unreadcount).setVisible(!isSelected || (isSelected && cacheStatus !== 'pending' && cacheStatus !== 'incomplete'));
             ui[unreadcount === 0 ? 'removeClass' : 'addClass']('felamimail-node-unread');
             
             // update progress
-            Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-progress]', nodeEl)).update(progress).setVisible(cacheStatus !== 'complete' && cacheStatus !== 'pending' && isSelected);
+            Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-progress]', nodeEl)).update(progress).setVisible(isSelected && cacheStatus === 'incomplete');
             
-            Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-loader]', nodeEl)).setVisible(cacheStatus === 'pending' && isSelected);
+            Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-loader]', nodeEl)).setVisible(isSelected && cacheStatus === 'pending');
         }
     },
     
