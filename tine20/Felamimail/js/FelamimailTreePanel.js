@@ -167,7 +167,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     initAccounts: function() {
         this.accountStore = Tine.Felamimail.loadAccountStore();
         this.accountStore.each(this.addAccount, this);
-        this.accountStore.on('update', this.onAccountStoreUpdate, this);
+        this.accountStore.on('update', this.onAccountUpdate, this);
     },
     
    /**
@@ -257,10 +257,25 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {Tine.Felamimail.Model.Account} record
      * @param {String} action
      */
-    onAccountStoreUpdate: function(store, record, action) {
-        var imapStatus = record.get('imap_status');
-        
+    onAccountUpdate: function(store, record, action) {
+        var imapStatus = record.get('imap_status'),
+            node = this.getNodeById(record.id),
+            ui = node ? node.getUI() : null,
+            nodeEl = ui ? ui.getEl() : null;
+            
         Tine.log.info('Account ' + record.id + ' updated with imap_status: ' + imapStatus);
+        if (node && node.ui.rendered) {
+            var statusEl = Ext.get(Ext.DomQuery.selectNode('span[class=felamimail-node-accountfailure]', nodeEl));
+            if (! statusEl) {
+                // create statusEl on the fly
+                statusEl = Ext.DomHelper.insertAfter(ui.elNode.lastChild, {'tag': 'span', 'class': 'felamimail-node-accountfailure'}, true);
+                statusEl.on('click', function() {
+                    Tine.Felamimail.folderBackend.handleRequestException(record.getLastIMAPException());
+                }, this);
+            }
+            
+            statusEl.setVisible(imapStatus === 'failure');
+        }
     },
     
     /**
