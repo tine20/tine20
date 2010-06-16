@@ -36,10 +36,11 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
     
     /**
      * init record to edit
-     * 
-     * - overwritten: we don't have a record here 
      */
     initRecord: function() {
+        if (this.record && typeof this.record.beginEdit != 'function') {
+            this.onRecordLoad();
+        }
     },
 
     /**
