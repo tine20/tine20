@@ -105,12 +105,13 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
     {
         $folder = Felamimail_Controller_Folder::getInstance()->get($_folder);
         
-        // check fencing and invalid cache/imap status here
+        
+        // check if we are allowed to update message cache?
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         if ($this->updateAllowed($folder) !== true) {
             Tinebase_TransactionManager::getInstance()->rollBack($transactionId);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " update of folder {$folder->globalname} currently not allowed");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " update of folder {$folder->globalname} currently not allowed. do nothing!");
             return $folder;
         }
         
