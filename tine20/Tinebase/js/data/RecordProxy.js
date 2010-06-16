@@ -364,22 +364,22 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
             },
             // note incoming options are implicitly jsonprc converted
             failure: function (response, jsonrpcoptions) {
+                var responseData = Ext.decode(response.responseText),
+                    exception = responseData.data ? responseData.data : responseData;
+                    
+                exception.request = jsonrpcoptions.jsonData;
+                exception.response = response.responseText;
+                
                 if (typeof options.failure == 'function') {
                     var args = [];
                     if (typeof options.beforeFailure == 'function') {
                         args = options.beforeFailure.call(this, response);
                     } else {
-                        var responseData = Ext.decode(response.responseText);
-                        args = [responseData.data ? responseData.data : responseData];
+                        args = [exception];
                     }
                 
                     options.failure.apply(options.scope, args);
                 } else {
-                    var responseData = Ext.decode(response.responseText);
-                    var exception = responseData.data ? responseData.data : responseData;
-                    exception.request = jsonrpcoptions.jsonData;
-                    exception.response = response.responseText;
-                    
                     this.handleRequestException(exception);
                 }
             }
