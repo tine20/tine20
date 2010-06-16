@@ -150,10 +150,7 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
             this.remove(record);
         }, this);
         
-        var index = this.queriesDone.findIndex('value', value);
-        if (index >= 0) {
-            this.queriesDone.removeAt(index);
-        }
+        var index = this.queriesDone.remove(this.getKey(field, value));
     },
     
     /**
