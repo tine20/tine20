@@ -193,14 +193,17 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         
         // get prefered mime type of the message
         $mimeType = Zend_Mime::TYPE_TEXT;
-        
-        if (array_key_exists('bodyPreferenceType', $_options)) {
-            if ($_options['bodyPreferenceType'] === 2) {
-                $mimeType = Zend_Mime::TYPE_HTML;
-            }
-        } elseif (array_key_exists('mimeSupport', $_options)) {
-            if ($_options['mimeSupport'] === 2) {
-                $mimeType = Zend_Mime::TYPE_HTML;
+
+        // Currently I have no idea how to send html emails to AS 2.5 devices
+        if (version_compare($this->_device->acsversion, '12.0', '>=')) {
+            if (array_key_exists('bodyPreferenceType', $_options)) {
+                if ($_options['bodyPreferenceType'] === 2) {
+                    $mimeType = Zend_Mime::TYPE_HTML;
+                }
+            } elseif (array_key_exists('mimeSupport', $_options)) {
+                if ($_options['mimeSupport'] === 2) {
+                    $mimeType = Zend_Mime::TYPE_HTML;
+                }
             }
         }
         
@@ -470,6 +473,17 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         
         return $result;
     }
+    
+    /**
+     * used by the mail backend only. Used to update the folder cache
+     * 
+     * @param  string  $_folderId
+     */
+    public function updateCache($_folderId)
+    {
+        Felamimail_Controller_Cache_Message::getInstance()->update($_folderId, 5);
+    }
+        
     
     /**
      * set activesync foldertype
