@@ -487,7 +487,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             folder = node ? store.getById(node.id) : null;
             
         if (folder) {
-            folder.set('cache_unreadcount', --folder.get('cache_unreadcount'));
+            folder.set('cache_unreadcount', parseInt(folder.get('cache_unreadcount'), 10) -1);
         }
     },
     
