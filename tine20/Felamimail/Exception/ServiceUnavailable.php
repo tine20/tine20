@@ -26,7 +26,7 @@ class Felamimail_Exception_ServiceUnavailable extends Felamimail_Exception
      * @param integer $_code
      * @return void
      */
-    public function __construct($_message = 'IMAP service unavailable or some unrecognized server error.', $_code = 03) {
+    public function __construct($_message = 'IMAP service unavailable or some unrecognized server error.', $_code = 903) {
         parent::__construct($_message, $_code);
     }
 }
