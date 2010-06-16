@@ -115,11 +115,5 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         if ('Junk' == attr.globalname) {
             attr.cls = 'felamimail-node-junk';
         }
-
-        // add unread class to node
-        if (attr.cache_unreadcount > 0) {
-            attr.text = attr.text + ' (' + attr.cache_unreadcount + ')';
-            attr.cls = attr.cls + ' felamimail-node-unread'; // x-tree-node-collapsed';
-        }
     }
 });

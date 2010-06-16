@@ -132,9 +132,10 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
         Ext.each(records, function(record) {
             // compute paths
             var parent_path = options.path;
+            record.beginEdit();
             record.set('parent_path', parent_path);
             record.set('path', parent_path + '/' + record.id);
-            
+            record.endEdit();
         }, this);
     },
     

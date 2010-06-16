@@ -151,6 +151,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforenodedrop, this);
+        this.on('append', this.onAppend, this);
         this.on('containeradd', this.onFolderAdd, this);
         this.on('containerdelete', this.onFolderDelete, this);
         this.folderStore.on('update', this.onUpdateFolderStore, this);
@@ -260,6 +261,29 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         var imapStatus = record.get('imap_status');
         
         Tine.log.info('Account ' + record.id + ' updated with imap_status: ' + imapStatus);
+    },
+    
+    /**
+     * on append node
+     * 
+     * render status box
+     * 
+     * @param {Tine.Felamimail.TreePanel} tree
+     * @param {Ext.Tree.TreeNode} node
+     * @param {Ext.Tree.TreeNode} appendedNode
+     * @param {Number} index
+     */
+    onAppend: function(tree, node, appendedNode, index) {
+        appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
+            Ext.DomHelper.insertAfter(this.elNode.lastChild, {'tag': 'span', 'class': 'felamimail-node-statusbox', cn: [
+                {'tag': 'div', 'class': 'felamimail-node-statusbox-loader'},
+                {'tag': 'div', 'class': 'felamimail-node-statusbox-progress'},
+                {'tag': 'div', 'class': 'felamimail-node-statusbox-unread'}
+            ]});
+            
+            var app = Tine.Tinebase.appMgr.get('Felamimail');
+            app.getMainScreen().getTreePanel().updateFolderStatus(app.getFolderStore().getById(appendedNode.id));
+        }, appendedNode.ui);
     },
     
     /**
@@ -381,7 +405,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {} operation
      */
     onUpdateFolderStore: function(store, record, operation) {
+        Tine.log.info('Account "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
         
+        
+        //////// @TODO review this
         var changes = record.getChanges();
         //console.log(changes);
 
@@ -403,21 +430,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             }
         }
         
-        this.updateUnreadCount(record);
-        //this.updateCachingProgress(record);
+        this.updateFolderStatus(record);
         
-//        if (record.isModified('cache_unreadcount')) {
-//            //console.log('update unread');
-//            this.updateUnreadCount(null, changes.cache_unreadcount, this.getNodeById(record.id));
-//        }
-        
-        // update pie / progress
-//        if (record.isModified('cache_status') || record.isModified('cache_job_actions_done')) {
-//            //console.log('update progress');
-//            this.updateCachingProgress(record);
-//        }
-
-        // silent commit
         record.commit(true);
     },
     
@@ -442,55 +456,31 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     },
     
     /********************* helpers *****************************/
-
-    /**
-     * update progress pie
-     * 
-     * @param {} folder
-     * 
-     * TODO show if disconnected -> account
-     * TODO make css style work for class felamimail-node-progress 
-     * TODO show initial incomplete status? 
-     * TODO show pie progress?
-     * TODO show totalcount?
-     */
-    updateCachingProgress: function(folder) {
-        // remove all other progess bars
-        Ext.select('span[class=felamimail-node-progress]', this.getEl()).remove();
-        
-        // get node ui
-        var node = this.getNodeById(folder.id);
-        if (! node) {
-            return;
-        }
-        var nodeUI = node.getUI();
-        
-        // only show progress for current selection
-        if (! folder.isCurrentSelection()) {
-            return;
-        }
-        
-        // insert caching progress element
-        //if (folder.get('cache_status') == 'complete' || folder.get('cache_job_actions_estimate') == 0) {
-        if (folder.get('cache_status') == 'complete') {
-            //var html = '<i> / ' + folder.get('cache_totalcount') + '</i>';;
-            var html = '';
-        } else if (folder.get('cache_job_actions_estimate') == 0) {
-            var html = '<i>0 %</i>';
-        } else {
-            var number = folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 100;
-            var html = '<i>' + number.toFixed(0) + ' %</i>';
-        }
-        
-        var domEl = {tag: 'span', html: html, cls: 'felamimail-node-progress'};
-
-        var progressEl = Ext.DomQuery.select('span[class=felamimail-node-progress]', nodeUI.getEl());
-        if (progressEl[0]) {
-            Ext.DomHelper.overwrite(progressEl[0], html);
-        } else {
-            Ext.DomHelper.insertAfter(nodeUI.getTextEl(), domEl);
+    
+    updateFolderStatus: function(folder) {
+        var unreadcount = folder.get('cache_unreadcount'),
+            progress    = folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 100
+            node        = this.getNodeById(folder.id),
+            ui = node ? node.getUI() : null,
+            nodeEl = ui ? ui.getEl() : null,
+            cacheStatus = folder.get('cache_status'),
+            isSelected = folder.isCurrentSelection();
+            
+        if (node && node.ui.rendered) {
+            // hide all
+            //Ext.select('div[class^=felamimail-node-statusbox-]').setDisplayed(false);
+            
+            // update unreadcount
+            Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-unread]', nodeEl)).update(unreadcount).setVisible(cacheStatus === 'complete' || (cacheStatus === 'pending' && !isSelected));
+            ui[unreadcount === 0 ? 'removeClass' : 'addClass']('felamimail-node-unread');
+            
+            // update progress
+            Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-progress]', nodeEl)).update(progress).setVisible(cacheStatus !== 'complete' && cacheStatus !== 'pending' && isSelected);
+            
+            Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-loader]', nodeEl)).setVisible(cacheStatus === 'pending' && isSelected);
         }
     },
+    
     
     /**
      * decrement unread count of currently selected folder
@@ -502,27 +492,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             
         if (folder) {
             folder.set('cache_unreadcount', parseInt(folder.get('cache_unreadcount'), 10) -1);
-        }
-    },
-    
-    /**
-     * update unread count of a folder node (use selected node per default)
-     * 
-     * @param {Tine.Felamimail.Model.Folder} folder
-     */
-    updateUnreadCount: function(folder) {
-        var count = folder.get('cache_unreadcount'),
-            node = this.getNodeById(folder.id),
-            ui = node ? node.getUI() : null;
-            
-        if (node && node.rendered) {
-            if (count === 0) {
-                node.setText(node.attributes.localname);
-                ui.removeClass('felamimail-node-unread');
-            } else {
-                node.setText(node.attributes.localname + ' (' + count + ')');
-                ui.addClass('felamimail-node-unread');
-            }
         }
     },
     

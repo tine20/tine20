@@ -55,12 +55,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     updateInterval: null,
     
     /**
-     * transaction id of current update folder request
-     * @type Number
-     */
-    updateFolderTransactionId: null,
-    
-    /**
      * transaction id of current update message cache request
      * @type Number
      */
@@ -191,29 +185,39 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * @param {Tine.Felamimail.Model.Folder} [folder]
      */
     updateFolderStatus: function(folder) {
-        Tine.log.info('updateFolderStatus for folder "' + (folder ? folder.get('path') : '--') + '"');
+        Tine.log.info('updateFolderStatus for folder "' + (folder ? folder.get('localname') : '--') + '"');
         
-        var folderIds  = folder ? [folder.get('id')] : [],
+        var folders,
+            folderIds = [],
+            folderNames = [],
+            accountId = folder ? folder.get('account_id') : this.getActiveAccount().id;
+        
+        //folderIds = folder ? [folders.add(folder, folder.id).id] : [],
             accountId = folder ? folder.get('account_id') : this.getActiveAccount().id;
             
-        if (Ext.isEmpty(folderIds)) {
+        if (folder) {
+            folders = new Ext.util.MixedCollection();
+            folders.add(folder.id, folder);
+        } else {
             Tine.log.debug('no folder given, assembling list of folder to update status for');
-            this.getFolderStore().queryBy(function(record) {
+            folders = this.getFolderStore().queryBy(function(record) {
                 var timestamp = record.get('imap_timestamp');
                 return (record.get('account_id') == accountId && (timestamp == '' || timestamp.getElapsed() > this.updateInterval));
-            }, this).each(function(f) {folderIds.push(f.get('id'))}, this);
+            }, this);
         }
+        
+        folders.each(function(f) {
+            f.set('cache_status', 'pending');
+            folderIds.push(f.get('id'));
+            folderNames.push(f.get('localname'));
+        }, this);
+        
         
         // don't update if we got no folder ids 
         if (folderIds.length > 0) {
-            Tine.log.debug('fetching status for folder(s) ' + folderIds.join(', '));
+            Tine.log.debug('fetching status for folder(s) ' + folderNames.join(', '));
             
-            // cancel old request
-            if (this.updateFolderTransactionId) {
-                Tine.Felamimail.folderBackend.abort(this.updateFolderTransactionId);
-            }
-            
-            this.updateFolderTransactionId = Tine.Felamimail.folderBackend.updateFolderStatus(accountId, folderIds, {
+            Tine.Felamimail.folderBackend.updateFolderStatus(accountId, folderIds, {
                 scope: this,
                 failure: this.onBackgroundRequestFail,
                 success: function(folders) {
