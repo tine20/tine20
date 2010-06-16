@@ -140,6 +140,12 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         if (account) {
             account.setLastIMAPException(exception);
             
+            this.getFolderStore().each(function(folder) {
+                if (folder.get('account_id') === accountId) {
+                    folder.set('cache_status', 'disconnect');
+                }
+            }, this);
+            
             if (imapStatus !== 'failure') {
                 Tine.Felamimail.folderBackend.handleRequestException(exception);
             }
