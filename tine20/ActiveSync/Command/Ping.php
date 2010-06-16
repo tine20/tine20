@@ -222,12 +222,14 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
         }
 
         $allClientEntries   = $contentStateBackend->getClientState($this->_device, $_collectionData['class'], $_collectionData['collectionId']);
-        $allServerEntries   = $_dataController->getServerEntries($_collectionData['collectionId'], $filterType);    
+        
+        $_dataController->updateCache($_collectionData['collectionId']);
+        $allServerEntries   = $_dataController->getServerEntries($_collectionData['collectionId'], $filterType);
+            
         $addedEntries       = array_diff($allServerEntries, $allClientEntries);
         $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
-        
         $changedEntries     = $_dataController->getChanged($_collectionData['collectionId'], $_lastSyncTimeStamp);
-        #Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " changed entries: {$_collectionData['collectionId']} " . count($changedEntries));
+        
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
     

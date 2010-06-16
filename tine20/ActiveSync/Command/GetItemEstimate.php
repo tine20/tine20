@@ -194,10 +194,12 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
         $contentStateBackend  = new ActiveSync_Backend_ContentState();
         
         $allClientEntries   = $contentStateBackend->getClientState($this->_device, $_collectionData['class'], $_collectionData['collectionId']);
+        
+        $_dataController->updateCache($_collectionData['collectionId']);
         $allServerEntries   = $_dataController->getServerEntries($_collectionData['collectionId'], $_collectionData['filterType']);    
+        
         $addedEntries       = array_diff($allServerEntries, $allClientEntries);
         $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
-        
         $changedEntries     = $_dataController->getChanged($_collectionData['collectionId'], $_lastSyncTimeStamp, $this->_syncTimeStamp);
         
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
