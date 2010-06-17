@@ -26,14 +26,12 @@ class ActiveSync_Command_MoveItems extends ActiveSync_Command_Wbxml
     protected $_defaultNameSpace    = 'uri:Move';
     protected $_documentElement     = 'Moves';
     
-    protected $_classes             = array('Contacts', 'Tasks', 'Email', 'Calendar');
-    
     /**
      * instance of ActiveSync_Controller
      *
      * @var ActiveSync_Controller
      */
-    protected $_controller;
+    #protected $_controller;
     
     /**
      * list of items to move
@@ -47,13 +45,13 @@ class ActiveSync_Command_MoveItems extends ActiveSync_Command_Wbxml
      *
      * @param ActiveSync_Model_Device $_device
      */
-    public function __construct(ActiveSync_Model_Device $_device)
-    {
-        parent::__construct($_device);
-        
-        $this->_controller           = ActiveSync_Controller::getInstance();
-
-    }
+    #public function __construct(ActiveSync_Model_Device $_device)
+    #{
+    #    parent::__construct($_device);
+    #    
+    #    #$this->_controller           = ActiveSync_Controller::getInstance();
+    #
+    #}
     
     /**
      * parse MoveItems request
@@ -80,13 +78,26 @@ class ActiveSync_Command_MoveItems extends ActiveSync_Command_Wbxml
      */
     public function getResponse()
     {
+        $folderStateBackend   = new ActiveSync_Backend_FolderState();
+        
         $moves = $this->_outputDom->documentElement;
         
         foreach ($this->_moves as $move) {
             $response = $moves->appendChild($this->_outputDom->createElementNS('uri:Move', 'Response'));
             $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'SrcMsgId', $move['srcMsgId']));
-            $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'Status', ActiveSync_Command_MoveItems::STATUS_SUCCESS));
-            $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'DstMsgId', $move['srcMsgId']));
+            
+            try {
+                $folder         = $folderStateBackend->getByProperty($move['srcFldId'], 'folderid');
+                $dataController = ActiveSync_Controller::dataFactory($folder->class, $this->_device, $this->_syncTimeStamp);
+                $newId          = $dataController->moveItem($move['srcFldId'], $move['srcMsgId'], $move['dstFldId']);
+                
+                $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'Status', ActiveSync_Command_MoveItems::STATUS_SUCCESS));
+                $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'DstMsgId', $newId));
+            } catch (Tinebase_Exception_NotFound $e) {
+                $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'Status', ActiveSync_Command_MoveItems::STATUS_INVALID_SOURCE));
+            } catch (Exception $e) {
+                $response->appendChild($this->_outputDom->createElementNS('uri:Move', 'Status', ActiveSync_Command_MoveItems::STATUS_INVALID_DESTINATION));
+            }
         }
         
         parent::getResponse();
