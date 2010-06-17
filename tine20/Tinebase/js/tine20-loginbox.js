@@ -40,7 +40,7 @@ Tine20.login = {
      */
     detectBrowserLanguage : function () {
         var result = 'en';
-        var userLanguage;
+        var userLanguage ='';
 
         if (navigator.userLanguage) {// Explorer
             userLanguage = navigator.userLanguage;
