@@ -179,7 +179,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * @param {Object} exception
      */
     onBackgroundRequestFail: function(exception) {
-        var accountId   = Ext.decode(exception.request).params.accountId,
+        var currentRequestFolder = this.folderStore.query('cache_status', 'pending').first();
+        var accountId   = currentRequestFolder.get('account_id'),
             account     = accountId ? Tine.Felamimail.loadAccountStore().getById(accountId): null,
             imapStatus  = account ? account.get('imap_status') : null;
             
@@ -218,7 +219,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * @param {String} operation
      */
     onUpdateFolder: function(store, record, operation) {
-        Tine.log.info('Account "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
+        Tine.log.info('folder "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
         
         var changes = record.getChanges();
         
