@@ -102,7 +102,47 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         }
         
         Tine.log.info('checking mails now: ' + new Date());
-        this.updateFolderStatus();
+        
+        var node = this.getMainScreen().getTreePanel().getSelectionModel().getSelectedNode(),
+            candidates = this.folderStore.queryBy(function(record) {
+                var timestamp = record.get('imap_timestamp');
+                return record.get('cache_status') !== 'complete' || timestamp == '' || timestamp.getElapsed() > this.updateInterval;
+            }, this),
+            folder = candidates.first();
+        
+        if (candidates.get(node.id)) {
+            // if current selection is a candidate, take this one!
+            folder = candidates.get(node.id);
+        }
+        
+        if (folder) {
+            var executionTime = folder.isCurrentSelection() ? 10 : Math.min(this.updateInterval, 120);
+            Tine.log.debug('updateing message cache for folder "' + folder.get('localname') + '" with ' + executionTime + ' seconds execution time');
+            
+            folder.set('cache_status', 'pending');
+            
+            // cancel old request
+            if (this.updateMessageCacheTransactionId && Tine.Felamimail.folderBackend.isLoading(this.updateMessageCacheTransactionId)) {
+                Tine.log.debug('aborting current update message request');
+                Tine.Felamimail.folderBackend.abort(this.updateMessageCacheTransactionId);
+                this.folderStore.query('cache_status', 'pending').each(function(f){f.set('cache_status', 'uncomplete');});
+            }
+            
+            this.updateMessageCacheTransactionId = Tine.Felamimail.folderBackend.updateMessageCache(folder.id, executionTime, {
+                scope: this,
+                failure: this.onBackgroundRequestFail,
+                success: function(folder) {
+                    Tine.Felamimail.loadAccountStore().getById(folder.get('account_id')).setLastIMAPException(null);
+                    this.getFolderStore().updateFolder(folder);
+                    this.checkMailsDelayedTask.delay(0);
+                }
+            });
+        } else {
+            Tine.log.info('nothing more to do -> will check mails again in "' + this.updateInterval/1000 + '" seconds');
+            if (this.updateInterval > 0) {
+                this.checkMailsDelayedTask.delay(this.updateInterval);
+            }
+        }
     },
     
     /**
@@ -184,133 +224,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     changes.cache_recentcount, record.get('localname'))
             );
         }
-    },
-    
-    /**
-     * update folder status of all visible / all node in one level or one folder(s)
-     * 
-     * @param {Tine.Felamimail.Model.Folder} [folder]
-     */
-    updateFolderStatus: function(folder) {
-        Tine.log.info('updateFolderStatus for folder "' + (folder ? folder.get('localname') : '--') + '"');
-        
-        var folders,
-            folderIds = [],
-            folderNames = [],
-            accountId = folder ? folder.get('account_id') : this.getActiveAccount().id;
-        
-        //folderIds = folder ? [folders.add(folder, folder.id).id] : [],
-            accountId = folder ? folder.get('account_id') : this.getActiveAccount().id;
-            
-        if (folder) {
-            folders = new Ext.util.MixedCollection();
-            folders.add(folder.id, folder);
-        } else {
-            Tine.log.debug('no folder given, assembling list of folder to update status for');
-            folders = this.getFolderStore().queryBy(function(record) {
-                var timestamp = record.get('imap_timestamp');
-                return (record.get('account_id') == accountId && (timestamp == '' || timestamp.getElapsed() > this.updateInterval));
-            }, this);
-        }
-        
-        folders.each(function(f) {
-            f.set('cache_status', 'pending');
-            folderIds.push(f.get('id'));
-            folderNames.push(f.get('localname'));
-        }, this);
-            
-        // don't update if we got no folder ids 
-        if (folderIds.length > 0) {
-            Tine.log.debug('fetching status for folder(s) ' + folderNames.join(', '));
-            
-            Tine.Felamimail.folderBackend.updateFolderStatus(accountId, folderIds, {
-                scope: this,
-                failure: this.onBackgroundRequestFail,
-                success: function(folders) {
-                    Tine.Felamimail.loadAccountStore().getById(accountId).setLastIMAPException(null);
-                    this.getFolderStore().updateFolder(folders);
-                    this.updateMessageCache(folder);
-                }
-            });
-        } else {
-            Tine.log.debug('no folders update needed');
-            this.updateMessageCache();
-        }
-    },
-    
-    /**
-     * update folder status of all visible / all node in one level or one folder(s)
-     * 
-     * @param {Tine.Felamimail.Model.Folder} [folder] force message cache update for this folder
-     * @return boolean true if caching is complete
-     */
-    updateMessageCache: function(folder) {
-        Tine.log.info('updateMessageCache for folder "' + (folder ? folder.get('localname') : '--') + '"');
-        
-        folder = folder ? folder : this.getNextFolderToUpdate();
-        if (! folder) {
-            Tine.log.info('nothing more to do -> will check mails again in "' + this.updateInterval/1000 + '" seconds');
-            if (this.updateInterval > 0) {
-                this.checkMailsDelayedTask.delay(this.updateInterval);
-            }
-            
-            return true;
-        }
-        
-        var executionTime = folder.isCurrentSelection() ? 10 : Math.min(this.updateInterval, 120);
-        Tine.log.debug('updateing message cache for folder ' + folder.get('localname') + ' with ' + executionTime + ' seconds execution time');
-        
-        // cancel old request
-        if (Tine.Felamimail.folderBackend.isLoading(this.updateMessageCacheTransactionId)) {
-            Tine.log.debug('aborting current update message request');
-            Tine.Felamimail.folderBackend.abort(this.updateMessageCacheTransactionId);
-        }
-        
-        this.updateMessageCacheTransactionId = Tine.Felamimail.folderBackend.updateMessageCache(folder.id, executionTime, {
-            scope: this,
-            failure: this.onBackgroundRequestFail,
-            success: function(folder) {
-                Tine.Felamimail.loadAccountStore().getById(folder.get('account_id')).setLastIMAPException(null);
-                this.getFolderStore().updateFolder(folder);
-                this.checkMailsDelayedTask.delay(0);
-            }
-        });
-        return false;
-    },
-   
-    /**
-     * get next folder for update message cache
-     * 
-     * @return {Tine.Felamimail.Model.Folder|null}
-     */
-    getNextFolderToUpdate: function() {
-        var account = this.getActiveAccount();
-        
-        if (account !== null) {
-            // look for folder to update
-            var candidates = this.folderStore.queryBy(function(record) {
-                return (
-                    record.get('account_id') == account.id 
-                    && record.get('cache_status') !== 'complete'
-                );
-            });
-            
-            if (candidates.getCount() > 0) {
-                // if current selection is a candidate, take this one!
-                if (this.getMainScreen().getTreePanel()) {
-                    // get active node
-                    var node = this.getMainScreen().getTreePanel().getSelectionModel().getSelectedNode();
-                    if (node && node.attributes.folder_id && candidates.get(node.id)) {
-                        return candidates.get(node.id);
-                    }
-                }
-                
-                // else take the first one
-                return candidates.first();
-            }
-        }
-        
-        return null;
     },
     
     /**
