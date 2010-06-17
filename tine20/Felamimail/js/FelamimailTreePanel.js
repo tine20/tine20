@@ -268,11 +268,12 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     onAppend: function(tree, node, appendedNode, index) {
         appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
-            Ext.DomHelper.insertAfter(this.elNode.lastChild, {'tag': 'span', 'class': 'felamimail-node-statusbox', cn: [
-                {'tag': 'div', 'class': 'felamimail-node-statusbox-loader'},
-                {'tag': 'div', 'class': 'felamimail-node-statusbox-progress'},
-                {'tag': 'div', 'class': 'felamimail-node-statusbox-unread'}
-            ]});
+            Ext.DomHelper.insertAfter(this.elNode.lastChild, [
+                //{'tag': 'div', 'class': 'felamimail-node-statusbox-loader'},
+                //{'tag': 'span', 'class': 'felamimail-node-statusbox-progress'},
+                //{'tag': 'span', 'class': 'felamimail-node-statusbox-unread'}
+                
+            ]);
             
             var app = Tine.Tinebase.appMgr.get('Felamimail');
             app.getMainScreen().getTreePanel().updateFolderStatus(app.getFolderStore().getById(appendedNode.id));
@@ -309,8 +310,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         if (node.id && node.id != '/' && node.attributes.globalname != '') {
             this.filterPlugin.onFilterChange();
             
-            // updateFolderStatus
-            this.app.updateFolderStatus(this.app.getFolderStore().getById(node.id));
+            this.app.checkMailsDelayedTask.delay(0);
         }
     },
     
@@ -480,7 +480,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     updateFolderStatus: function(folder) {
         var unreadcount = folder.get('cache_unreadcount'),
-            progress    = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 20) * 5,
+            progress    = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 10) * 5,
             node        = this.getNodeById(folder.id),
             ui = node ? node.getUI() : null,
             nodeEl = ui ? ui.getEl() : null,
@@ -492,13 +492,13 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             //Ext.select('div[class^=felamimail-node-statusbox-]').setDisplayed(false);
             
             // update unreadcount
-            Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-unread]', nodeEl)).update(unreadcount).setVisible(!isSelected || (isSelected && cacheStatus !== 'pending' && cacheStatus !== 'incomplete'));
-            ui[unreadcount === 0 ? 'removeClass' : 'addClass']('felamimail-node-unread');
+            //Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-unread]', nodeEl)).update(unreadcount);//.setVisible(!isSelected || (isSelected && cacheStatus !== 'pending' && cacheStatus !== 'incomplete'));
+            //ui[unreadcount === 0 ? 'removeClass' : 'addClass']('felamimail-node-unread');
             
             // update progress
-            Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-progress]', nodeEl)).update(progress + ' %').setVisible(isSelected && cacheStatus === 'incomplete');
+            //Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-progress]', nodeEl)).setStyle('background-position', progress + '%');//.setVisible(isSelected && cacheStatus !== 'complete');
             
-            Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-loader]', nodeEl)).setVisible(isSelected && cacheStatus === 'pending');
+            //Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-loader]', nodeEl)).setVisible(isSelected && cacheStatus === 'pending');
         }
     },
     
