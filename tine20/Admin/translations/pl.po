@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-11 21:59+0100\n"
+"PO-Revision-Date: 2010-06-17 11:35+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -403,7 +403,7 @@ msgstr "Nazwę grupy"
 #: js/RoleEditDialog.js:390
 #: js/Tags.js:612
 msgid "Transfering {0}..."
-msgstr "Transmisja {0}..."
+msgstr "Transfer {0}..."
 
 #: js/Groups.js:526
 msgid "Group"
@@ -897,56 +897,79 @@ msgstr[2] "E-maile użytkowników"
 
 #~ msgid "Do you really want to delete the selected account(s)?"
 #~ msgstr "Czy na pewno chcesz usunąć zaznaczone konto(a)?"
+
 #~ msgid "Deleting account(s)..."
 #~ msgstr "Usuwanie kont(a)..."
+
 #~ msgid "Some error occurred while trying to delete the account(s)."
 #~ msgstr "Podczas próby usunięcia kont(a) wystąpił błąd."
+
 #~ msgid "Displaying accounts {0} - {1} of {2}"
 #~ msgstr "Wyświetlane konta {0} - {1} z {2}"
+
 #~ msgid "No accounts to display"
 #~ msgstr "Brak kont użytkowników"
+
 #~ msgid "add account"
 #~ msgstr "Dodaj konto"
+
 #~ msgid "edit account"
 #~ msgstr "Edytuj konto"
+
 #~ msgid "delete account"
 #~ msgstr "Usuń konto"
+
 #~ msgid "Deleting group..."
 #~ msgstr "Usuwanie grupy…"
+
 #~ msgid "Email UID"
 #~ msgstr "E-mail UID"
+
 #~ msgid "Email GID"
 #~ msgstr "E-mail GID"
+
 #~ msgid "Email Username"
 #~ msgstr "E-mail Użytkownik"
 
 #, fuzzy
 #~ msgid "Current Sieve Size"
 #~ msgstr "Obecny rozmiar Sieve"
+
 #~ msgid "enter searchfilter"
 #~ msgstr "wpisz szukaną frazę"
+
 #~ msgid "remove account"
 #~ msgstr "Usuń konto"
+
 #~ msgid "Role members"
 #~ msgstr "Przypisani do funkcji"
+
 #~ msgid "Deleting tag..."
 #~ msgstr "Usuwanie znacznika..."
+
 #~ msgid "name"
 #~ msgstr "nazwa"
+
 #~ msgid "status"
 #~ msgstr "status"
+
 #~ msgid "Deleting account..."
 #~ msgstr "Usuwanie konta …"
+
 #~ msgid "Some error occurred while trying to delete the account."
 #~ msgstr "Podczas próby usunięcia konta wystąpił błąd."
+
 #~ msgid "Saving User Account"
 #~ msgstr "Zapisywanie konta użytkownika"
+
 #~ msgid "Could not save user account."
 #~ msgstr "Zapisanie konta użytkownika było niemożliwe."
+
 #~ msgid "Add New User Account"
 #~ msgstr "Utwórz nowego użytkownika"
+
 #~ msgid "Edit User Account \"{0}\""
 #~ msgstr "Edytuj konto użytkownika \"{0}\""
+
 #~ msgid "Forward"
 #~ msgstr "Prześlij dalej"
-
