@@ -20,7 +20,7 @@
  * @subpackage  ActiveSync
  */
  
-abstract class ActiveSync_Controller_Abstract
+abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_Interface
 {
     /**
      * information about the current device
@@ -145,6 +145,21 @@ abstract class ActiveSync_Controller_Abstract
      * @return array
      */
     abstract public function getSupportedFolders();
+    
+    /**
+     * (non-PHPdoc)
+     * @see ActiveSync/Controller/ActiveSync_Controller_Interface#moveItem()
+     */
+    public function moveItem($_srcFolder, $_srcItem, $_dstFolder)
+    {
+        $item = $this->_contentController->get($_srcItem);
+        
+        $item->container_id = $_dstFolder;
+        
+        $item = $this->_contentController->update($item);
+        
+        return $item->getId();
+    }
     
     /**
      * get folder identified by $_folderId

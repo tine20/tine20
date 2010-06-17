@@ -212,8 +212,8 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         
         if (array_key_exists('truncationSize', $_options)) {
             $truncateAt = $_options['truncationSize'];
-        } elseif ($_options['mimeSupport'] < 8) {
-            switch($_options['mimeSupport']) {
+        } elseif ($_options['mimeTruncation'] < 8) {
+            switch($_options['mimeTruncation']) {
                 case 0:
                     $truncateAt = 0;
                     break;
@@ -472,6 +472,25 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " folder result " . print_r($result, true));
         
         return $result;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see ActiveSync/Controller/ActiveSync_Controller_Interface#moveItem()
+     */
+    public function moveItem($_srcFolder, $_srcItem, $_dstFolder)
+    {
+        $filter = new Felamimail_Model_MessageFilter(array(
+            array(
+                'field'     => 'id',
+                'operator'  => 'equals',
+                'value'     => $_srcItem
+            )
+        ));
+        
+        Felamimail_Controller_Message::getInstance()->moveMessages($filter, $_dstFolder);
+        
+        return $_srcItem;
     }
     
     /**
