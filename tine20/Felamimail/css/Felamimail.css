@@ -279,34 +279,27 @@
 	right: 0px;
 }
 
-.felamimail-node-statusbox .felamimail-node-statusbox-loader {
-    width: 16px;
+.felamimail-node-statusbox-progress {
+	width: 16px;
     height: 16px;
-    background-image:url(../../images/wait.gif);
-    visibility: hidden;
-    
+    margin-top: 1px;
+    background-image:url(../../images/progress-pie.gif);
+    background-repeat: no-repeat;
+    vertical-align: top;
+    margin-right: 5px;
 }
 
-.felamimail-node-statusbox .felamimail-node-statusbox-progress {
-	font-weight: normal;
-    font-style: italic;
-    visibility: visible;
-    position: absolute;
-    top: 0px;
-    right: 5px;
-}
-
-.felamimail-node-statusbox .felamimail-node-statusbox-unread {
+.felamimail-node-statusbox-unread {
     border-radius: 8px;
-    background-color: #878785;
-    color: white;
-	line-height: 14px;
-	margin-top: 2px;
+    background-color: #D9E8FB;
+    color: black;
+	line-height: 16px;
+	margin-top: 1px;
 	padding: 0px 5px;
-	visibility: visible;
-    position: absolute;
-    top: 0px;
-    right: 5px;
+}
+
+.x-tree-selected .felamimail-node-statusbox-unread {
+	background-color: #FFFFFF;
 }
 
 .felamimail-node-accountfailure {
