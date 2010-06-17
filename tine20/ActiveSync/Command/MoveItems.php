@@ -27,31 +27,11 @@ class ActiveSync_Command_MoveItems extends ActiveSync_Command_Wbxml
     protected $_documentElement     = 'Moves';
     
     /**
-     * instance of ActiveSync_Controller
-     *
-     * @var ActiveSync_Controller
-     */
-    #protected $_controller;
-    
-    /**
      * list of items to move
      * 
      * @var array
      */
     protected $_moves = array();
-    
-    /**
-     * the constructor
-     *
-     * @param ActiveSync_Model_Device $_device
-     */
-    #public function __construct(ActiveSync_Model_Device $_device)
-    #{
-    #    parent::__construct($_device);
-    #    
-    #    #$this->_controller           = ActiveSync_Controller::getInstance();
-    #
-    #}
     
     /**
      * parse MoveItems request
