@@ -116,17 +116,23 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         }
         
         if (folder) {
+            if (this.updateMessageCacheTransactionId && Tine.Felamimail.folderBackend.isLoading(this.updateMessageCacheTransactionId)) {
+                var currentRequestFolder = this.folderStore.query('cache_status', 'pending').first();
+                
+                if (currentRequestFolder !== folder) {
+                    Tine.log.debug('aborting current update message request');
+                    Tine.Felamimail.folderBackend.abort(this.updateMessageCacheTransactionId);
+                    currentRequestFolder.set('cache_status', 'uncomplete');
+                } else {
+                    Tine.log.debug('updateing message cache for folder "' + folder.get('localname') + '" is in progress');
+                    return;
+                }
+            }
+            
             var executionTime = folder.isCurrentSelection() ? 10 : Math.min(this.updateInterval, 120);
             Tine.log.debug('updateing message cache for folder "' + folder.get('localname') + '" with ' + executionTime + ' seconds execution time');
             
             folder.set('cache_status', 'pending');
-            
-            // cancel old request
-            if (this.updateMessageCacheTransactionId && Tine.Felamimail.folderBackend.isLoading(this.updateMessageCacheTransactionId)) {
-                Tine.log.debug('aborting current update message request');
-                Tine.Felamimail.folderBackend.abort(this.updateMessageCacheTransactionId);
-                this.folderStore.query('cache_status', 'pending').each(function(f){f.set('cache_status', 'uncomplete');});
-            }
             
             this.updateMessageCacheTransactionId = Tine.Felamimail.folderBackend.updateMessageCache(folder.id, executionTime, {
                 scope: this,
