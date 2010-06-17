@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-11 22:07+0100\n"
+"PO-Revision-Date: 2010-06-17 14:42+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -275,7 +275,7 @@ msgstr "Twoje konto nie jest przypisane do funkcji. Proszę się skontaktować z
 #: js/LoginPanel.js:78
 #: js/LoginPanel.js:110
 msgid "Login"
-msgstr "Zaloguj"
+msgstr "Zaloguj się"
 
 #: js/LoginPanel.js:87
 #: js/widgets/dialog/CredentialsDialog.js:68
@@ -799,7 +799,7 @@ msgstr "równa się"
 
 #: js/widgets/container/FilterModel.js:238
 msgid "Selected  {0}"
-msgstr "Zaznaczono {0}"
+msgstr "Zaznaczone {0}"
 
 #: js/widgets/container/GrantsDialog.js:53
 msgid "Folder"
@@ -968,7 +968,7 @@ msgstr "Edytuj {0} \"{1}\""
 
 #: js/widgets/dialog/EditDialog.js:334
 msgid "Transfering {0}..."
-msgstr "Transmisja {0}..."
+msgstr "Dodawanie {0}..."
 
 #: js/widgets/dialog/EditDialog.js:443
 msgid "Do you really want to delete this {0}?"
@@ -1014,7 +1014,7 @@ msgstr "Nie dodano plików"
 
 #: js/widgets/dialog/ImportDialog.js:137
 msgid "You need to add files to import."
-msgstr "Należy dodać pliki przeznaczone do zaimportowania"
+msgstr "Należy dodać plik(i) z danymi do zaimportowania"
 
 #: js/widgets/dialog/ImportDialog.js:167
 msgid "Dry run results"
@@ -1274,9 +1274,9 @@ msgstr "Zawsze pokazuj zaawansowane filtry"
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:362
 msgid "Your view is limited by {0} criteria:"
 msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] "Widok jest ograniczony przez {1} kryterium"
-msgstr[1] "Widoki są ograniczone {0} kryteriami"
-msgstr[2] "Widoki są ograniczone {0} kryteriami"
+msgstr[0] "Widok ograniczony przez kryterium:"
+msgstr[1] "Widoki ograniczone {0} kryteriami:"
+msgstr[2] "Widoki ograniczone {0} kryteriami:"
 
 #: js/widgets/grid/GridPanel.js:186
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
@@ -1786,82 +1786,120 @@ msgstr "wiersz zmieniony"
 
 #~ msgid "Please enter a name for the filter"
 #~ msgstr "Proszę wprowadzić nazwę filtra"
+
 #~ msgid "Filter not Saved"
 #~ msgstr "Filtr nie został zapisany"
+
 #~ msgid "You have to supply a name for the filter!"
 #~ msgstr "Musisz wprowadzić nazwę filtra!"
+
 #~ msgid "You have to supply a shorter name! Names of saved filters can only be up to 40 characters long."
 #~ msgstr "Musisz wprowadzić krótszą nazwę! Nazwy zapisanych filtrów nie mogą przekraczać 40 znaków."
+
 #~ msgid "Saving filter"
 #~ msgstr "Zapisywanie filtra"
+
 #~ msgid "My saved filters"
 #~ msgstr "Moje filtry"
+
 #~ msgid "Delete Filter"
 #~ msgstr "Usuń filtr"
+
 #~ msgid "Do you really want to delete the Filter \"{0}\"?"
 #~ msgstr "Czy na pewno chcesz usunąć filtr \"{0}\"?"
+
 #~ msgid "Deleting Filter \"{0}\""
 #~ msgstr "Usuwanie filtra \"{0}\""
+
 #~ msgid "Rename Filter"
 #~ msgstr "Zmień nazwę filtra"
+
 #~ msgid "Please enter the new name for filter \"{0}\"?"
 #~ msgstr "Proszę wprowadzić nową nazwę filtra \"{0}\"."
+
 #~ msgid "Renaming Filter \"{0}\""
 #~ msgstr "Zmienianie nazwy filtra \"{0}\""
+
 #~ msgid "Saved filter"
 #~ msgstr "filtry"
+
 #~ msgid "Report bugs to tine20.org directly when they occur"
 #~ msgstr "W przypadku wystąpienia błędów, prosimy o zgłaszanie ich bezpośrednio do tine20.org"
+
 #~ msgid "Check tine20.org for new versions"
 #~ msgstr "Sprawdź na stronach tine20.org, czy są nowe wersje Tine"
+
 #~ msgid "Sorry"
 #~ msgstr "Przykro mi"
+
 #~ msgid "Remove account"
 #~ msgstr "usuń konto"
+
 #~ msgid "shared"
 #~ msgstr "wspólnych"
+
 #~ msgid "Permission Denied"
 #~ msgstr "Brak uprawnień"
+
 #~ msgid "You don't have the required grant to select this {0}"
 #~ msgstr "Nie masz wymaganych uprawnień, aby usunąć {0}"
+
 #~ msgid "Import successful for {0} records, import failed for {1} records."
 #~ msgstr "Udany import {0} wierszy, nieudany import {1} wierszy."
+
 #~ msgid "is in"
 #~ msgstr "jest w"
+
 #~ msgid "remove record"
 #~ msgstr "usuń wiersz"
+
 #~ msgid "Search"
 #~ msgstr "Znajdź"
+
 #~ msgid "Browse"
 #~ msgstr "Przeszukaj"
+
 #~ msgid "click to edit"
 #~ msgstr "kliknij, aby edytować"
+
 #~ msgid "Plase select an image file (gif/png/jpeg)"
 #~ msgstr "Proszę wybrać plik graficzny (gif/png/jpeg)"
+
 #~ msgid "Please Select a Group"
 #~ msgstr "Proszę zaznaczyć grupę"
+
 #~ msgid "Register"
 #~ msgstr "Zarejestruj się"
+
 #~ msgid "The server did not respond to your request. Please check your network or contact your administrator."
 #~ msgstr "Serwer nie odpowiedział na Twoje zapytanie. Proszę sprawdzić połączenie sieciowe albo skontaktować się ze swoim administratorem."
+
 #~ msgid "Permissions"
 #~ msgstr "Uprawnienia"
+
 #~ msgid "Could not save {0}."
 #~ msgstr "Zapisanie było niemożliwe {0}."
+
 #~ msgid "add account"
 #~ msgstr "dodaj konto"
+
 #~ msgid "nobody"
 #~ msgstr "brak"
+
 #~ msgid "please select an account"
 #~ msgstr "Proszę zaznaczyć konto"
+
 #~ msgid "loading new language..."
 #~ msgstr "ładowanie nowego języka..."
+
 #~ msgid "Export Date"
 #~ msgstr "Data eksportu"
+
 #~ msgid "Login successful. Loading Tine 2.0..."
 #~ msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
+
 #~ msgid "Logout from Tine 2.0"
 #~ msgstr "Wylogowanie z Tine 2.0"
+
 #~ msgid "Our Forum for questions and ideas"
 #~ msgstr "Nasze forum do zadawania pytań i wpisywania sugestii"
-
