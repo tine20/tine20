@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-11 22:36+0100\n"
+"PO-Revision-Date: 2010-06-17 14:26+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -200,19 +200,19 @@ msgstr "Id"
 #: js/Snom/SoftwareGridPanel.js:76
 #: js/Snom/TemplateGridPanel.js:76
 msgid "name"
-msgstr "nazwa"
+msgstr "Nazwa"
 
 #: js/Asterisk/SipPeerGridPanel.js:83
 msgid "account code"
-msgstr "kod konta"
+msgstr "Kod konta"
 
 #: js/Asterisk/SipPeerGridPanel.js:90
 msgid "ama flags"
-msgstr "flagi AMA"
+msgstr "Flagi AMA"
 
 #: js/Asterisk/SipPeerGridPanel.js:97
 msgid "call group"
-msgstr "grupa rozmówców"
+msgstr "Grupa rozmówców"
 
 #: js/Asterisk/SipPeerGridPanel.js:104
 msgid "caller id"
@@ -220,40 +220,40 @@ msgstr "ID rozmówcy"
 
 #: js/Asterisk/SipPeerGridPanel.js:110
 msgid "can reinvite"
-msgstr "możliwe ponowne zaproszenie"
+msgstr "Ponowne zaproszenie"
 
 #: js/Asterisk/SipPeerGridPanel.js:117
 #: js/Asterisk/VoicemailGridPanel.js:82
 msgid "context"
-msgstr "kontekst"
+msgstr "Kontekst"
 
 #: js/Asterisk/SipPeerGridPanel.js:123
 msgid "default ip"
-msgstr "domyślne IP"
+msgstr "Domyślny IP"
 
 #: js/Asterisk/SipPeerGridPanel.js:130
 msgid "dtmf mode"
-msgstr "tryb DTMF"
+msgstr "Tryb DTMF"
 
 #: js/Asterisk/SipPeerGridPanel.js:137
 msgid "from user"
-msgstr "od użytkownika"
+msgstr "Od użytkownika"
 
 #: js/Asterisk/SipPeerGridPanel.js:144
 msgid "from domain"
-msgstr "z domeny"
+msgstr "Z domeny"
 
 #: js/Asterisk/SipPeerGridPanel.js:151
 msgid "full contact"
-msgstr "pełny kontakt"
+msgstr "Pełny kontakt"
 
 #: js/Asterisk/SipPeerGridPanel.js:158
 msgid "host"
-msgstr "nazwa komputera"
+msgstr "Komputer"
 
 #: js/Asterisk/SipPeerGridPanel.js:165
 msgid "insecure"
-msgstr "nieszyfrowane"
+msgstr "Nieszyfrowane"
 
 #: js/Asterisk/SipPeerGridPanel.js:172
 #: js/Snom/PhoneEditDialog.js:420
@@ -265,11 +265,11 @@ msgstr "Język"
 #: js/Asterisk/SipPeerGridPanel.js:179
 #: js/Asterisk/VoicemailGridPanel.js:76
 msgid "mailbox"
-msgstr "skrzynka pocztowa"
+msgstr "Skrzynka pocztowa"
 
 #: js/Asterisk/SipPeerGridPanel.js:185
 msgid "md5 secret"
-msgstr "szyfrowanie md5"
+msgstr "Szyfrowanie md5"
 
 #: js/Asterisk/SipPeerGridPanel.js:192
 msgid "nat"
@@ -277,27 +277,27 @@ msgstr "NAT"
 
 #: js/Asterisk/SipPeerGridPanel.js:199
 msgid "deny"
-msgstr "odrzuć"
+msgstr "Odrzuć"
 
 #: js/Asterisk/SipPeerGridPanel.js:206
 msgid "permit"
-msgstr "zezwól"
+msgstr "Zezwól"
 
 #: js/Asterisk/SipPeerGridPanel.js:213
 msgid "mask"
-msgstr "maskuj"
+msgstr "Maskuj"
 
 #: js/Asterisk/SipPeerGridPanel.js:220
 msgid "pickup group"
-msgstr "grupa odbiorców"
+msgstr "Grupa odbiorców"
 
 #: js/Asterisk/SipPeerGridPanel.js:226
 msgid "port"
-msgstr "port"
+msgstr "Port"
 
 #: js/Asterisk/SipPeerGridPanel.js:233
 msgid "qualify"
-msgstr "jakość"
+msgstr "Jakość"
 
 #: js/Asterisk/SipPeerGridPanel.js:240
 msgid "restrict cid"
@@ -313,27 +313,27 @@ msgstr "rtp hold timeout"
 
 #: js/Asterisk/SipPeerGridPanel.js:261
 msgid "secret"
-msgstr "poufne"
+msgstr "Poufne"
 
 #: js/Asterisk/SipPeerGridPanel.js:268
 msgid "type"
-msgstr "typ"
+msgstr "Typ"
 
 #: js/Asterisk/SipPeerGridPanel.js:274
 msgid "defaultuser"
-msgstr "domyślny użytkownik"
+msgstr "Domyślny użytkownik"
 
 #: js/Asterisk/SipPeerGridPanel.js:281
 msgid "disallow"
-msgstr "zablokuj"
+msgstr "Zablokuj"
 
 #: js/Asterisk/SipPeerGridPanel.js:288
 msgid "allow"
-msgstr "zezwól"
+msgstr "Zezwól"
 
 #: js/Asterisk/SipPeerGridPanel.js:295
 msgid "music on hold"
-msgstr "muzyka w kolejce"
+msgstr "Muzyka w kolejce"
 
 #: js/Asterisk/SipPeerGridPanel.js:302
 #, fuzzy
@@ -342,40 +342,39 @@ msgstr "reg seconds"
 
 #: js/Asterisk/SipPeerGridPanel.js:309
 msgid "ip address"
-msgstr "adres IP"
+msgstr "Adres IP"
 
 #: js/Asterisk/SipPeerGridPanel.js:316
-#, fuzzy
 msgid "reg exten"
 msgstr "reg exten"
 
 #: js/Asterisk/SipPeerGridPanel.js:323
 msgid "can call forward"
-msgstr "przekazanie połączenia"
+msgstr "Przekazanie połączenia"
 
 #: js/Asterisk/SipPeerGridPanel.js:330
 msgid "set var"
-msgstr "ustaw zmienną"
+msgstr "Ustaw zmienną"
 
 #: js/Asterisk/SipPeerGridPanel.js:337
 msgid "notify ringing"
-msgstr "powiadom o próbie połączenia"
+msgstr "Powiadom o próbie połączenia"
 
 #: js/Asterisk/SipPeerGridPanel.js:344
 msgid "use client code"
-msgstr "użyj kodu klienta"
+msgstr "Użyj kodu klienta"
 
 #: js/Asterisk/SipPeerGridPanel.js:351
 msgid "auth user"
-msgstr "autoryzuj użytkownika"
+msgstr "Autoryzuj użytkownika"
 
 #: js/Asterisk/SipPeerGridPanel.js:358
 msgid "call limit"
-msgstr "limit połączeń"
+msgstr "Limit połączeń"
 
 #: js/Asterisk/SipPeerGridPanel.js:365
 msgid "busy level"
-msgstr "poziom dostępności"
+msgstr "Poziom dostępności"
 
 #: js/Asterisk/VoicemailEditDialog.js:76
 msgid "Password"
@@ -533,7 +532,7 @@ msgid "Location"
 msgid_plural "Locations"
 msgstr[0] "Lokalizacja"
 msgstr[1] "lokalizacje"
-msgstr[2] "lokalizacji"
+msgstr[2] "lokalizacje"
 
 #: js/Models.js:134
 msgid "locations list"
@@ -548,7 +547,7 @@ msgid "Template"
 msgid_plural "Templates"
 msgstr[0] "Szablon"
 msgstr[1] "szablony"
-msgstr[2] "szablonów"
+msgstr[2] "szablony"
 
 #: js/Models.js:171
 msgid "templates list"
@@ -996,7 +995,7 @@ msgstr "Adres sprzętowy (MAC)"
 #: js/Snom/PhoneGridPanel.js:98
 #: js/Snom/SettingGridPanel.js:82
 msgid "description"
-msgstr "opis"
+msgstr "Opis"
 
 #: js/Snom/PhoneGridPanel.js:121
 msgid "IP Address"
@@ -1004,27 +1003,27 @@ msgstr "Adres IP"
 
 #: js/Snom/PhoneGridPanel.js:133
 msgid "current model"
-msgstr "obecny model"
+msgstr "Obecny model"
 
 #: js/Snom/PhoneGridPanel.js:140
 msgid "redirect event"
-msgstr "przekierowane połączenie"
+msgstr "Przekierowane połączenie"
 
 #: js/Snom/PhoneGridPanel.js:147
 msgid "redirect number"
-msgstr "przekierowanie na numer"
+msgstr "Przekierowanie na numer"
 
 #: js/Snom/PhoneGridPanel.js:154
 msgid "redirect time"
-msgstr "czas przekierowania"
+msgstr "Czas przekierowania"
 
 #: js/Snom/PhoneGridPanel.js:161
 msgid "settings loaded at"
-msgstr "ustawienia załadowane"
+msgstr "Ustawienia załadowane"
 
 #: js/Snom/PhoneGridPanel.js:169
 msgid "last modified"
-msgstr "ostatnio zmieniane"
+msgstr "Ostatnio zmieniane"
 
 #: js/Snom/TemplateEditDialog.js:56
 msgid "Software Version"
@@ -1073,51 +1072,72 @@ msgid "Templates"
 msgstr "Szablony"
 
 #~ msgid "Owner"
+
 #~ msgid_plural "Owners"
 #~ msgstr[0] "Właściciel"
 #~ msgstr[1] "właścicieli"
 #~ msgstr[2] "właścicieli"
+
 #~ msgid "owners list"
+
 #~ msgid_plural "owners lists"
 #~ msgstr[0] "lista właścicieli"
 #~ msgstr[1] "listy właścicieli"
 #~ msgstr[2] "listy właścicieli"
+
 #~ msgid "redirection"
 #~ msgstr "przekierowanie"
+
 #~ msgid "redirect_event"
 #~ msgstr "powód przekierowania"
+
 #~ msgid "all"
 #~ msgstr "wszystkie"
+
 #~ msgid "busy"
 #~ msgstr "zajęty"
+
 #~ msgid "time"
 #~ msgstr "czas"
+
 #~ msgid "redirect_number"
 #~ msgstr "przekierowanie na numer"
+
 #~ msgid "redirect_time"
 #~ msgstr "czas przekierowania"
+
 #~ msgid "lineactive"
 #~ msgstr "Łącze aktywne"
+
 #~ msgid "sipCombo"
 #~ msgstr "Wybieranie SIP"
+
 #~ msgid "Sip Peer"
 #~ msgstr "Komputer SIP"
+
 #~ msgid "Rights"
 #~ msgstr "Uprawnienia"
+
 #~ msgid "username"
 #~ msgstr "użytkownik"
+
 #~ msgid "edit myphone"
 #~ msgstr "Edytuj mój numer"
+
 #~ msgid "Search: "
 #~ msgstr "Znajdź:"
+
 #~ msgid "Displaying myphones {0} - {1} of {2}"
 #~ msgstr "Wyświetl moje numery  {0} - {1} z {2}"
+
 #~ msgid "No myphones to display"
 #~ msgstr "Brak numerów"
+
 #~ msgid "add context"
 #~ msgstr "Dodaj kontekst"
+
 #~ msgid "delete context"
 #~ msgstr "Usuń kontekst"
+
 #~ msgid "Context: "
 #~ msgstr "Kontekst:"
-
