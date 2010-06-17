@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-11 21:48+0100\n"
+"PO-Revision-Date: 2010-06-17 12:40+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -494,7 +494,7 @@ msgstr "Wybierz kontakt"
 
 #: js/ContactGridDetailsPanel.js:155
 msgid "Private"
-msgstr "Prywatny"
+msgstr "Prywatne"
 
 #: js/ContactGridDetailsPanel.js:178
 msgid "Info"
@@ -570,14 +570,17 @@ msgid "Ms"
 msgstr "Pani"
 
 #~ msgid "addressbook"
+
 #~ msgid_plural "addressbooks"
 #~ msgstr[0] "Książka adresowa"
 #~ msgstr[1] "książki adresowe"
 #~ msgstr[2] "książki adresowe"
+
 #~ msgid "addressbooks"
 #~ msgstr "książki adresowe"
+
 #~ msgid "contacts"
 #~ msgstr "kontakty"
+
 #~ msgid "export as pdf"
 #~ msgstr "eksportuj jako pdf"
-
