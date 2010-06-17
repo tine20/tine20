@@ -148,6 +148,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         initCtxMenu();
         
     	// add listeners
+        this.on('beforeclick', this.onBeforeClick, this);
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforenodedrop, this);
@@ -236,17 +237,11 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
         this.expandPath('/root/' + defaultAccount + '/', null, function(sucess, parentNode) {
             Ext.each(parentNode.childNodes, function(node) {
-                // NOTE: depends on rendering order of grid and tree
                 if (Ext.util.Format.lowercase(node.attributes.localname) == 'inbox') {
-                    if (Tine.Tinebase.appMgr.get('Felamimail').getMainScreen().getCenterPanel().getGrid().rendered) {
-                        node.fireEvent('click', node);
-                    } else {
-                        node.select();
-                    }
+                    node.select();
                     return false;
                 }
             }, this);
-            
         });
     },
     
@@ -258,24 +253,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {String} action
      */
     onAccountUpdate: function(store, record, action) {
-        var imapStatus = record.get('imap_status'),
-            node = this.getNodeById(record.id),
-            ui = node ? node.getUI() : null,
-            nodeEl = ui ? ui.getEl() : null;
-            
-        Tine.log.info('Account ' + record.id + ' updated with imap_status: ' + imapStatus);
-        if (node && node.ui.rendered) {
-            var statusEl = Ext.get(Ext.DomQuery.selectNode('span[class=felamimail-node-accountfailure]', nodeEl));
-            if (! statusEl) {
-                // create statusEl on the fly
-                statusEl = Ext.DomHelper.insertAfter(ui.elNode.lastChild, {'tag': 'span', 'class': 'felamimail-node-accountfailure'}, true);
-                statusEl.on('click', function() {
-                    Tine.Felamimail.folderBackend.handleRequestException(record.getLastIMAPException());
-                }, this);
-            }
-            
-            statusEl.setVisible(imapStatus === 'failure');
-        }
+        this.updateAccountStatus(record);
     },
     
     /**
@@ -299,6 +277,17 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             var app = Tine.Tinebase.appMgr.get('Felamimail');
             app.getMainScreen().getTreePanel().updateFolderStatus(app.getFolderStore().getById(appendedNode.id));
         }, appendedNode.ui);
+    },
+    
+    /**
+     * on before click hanlder -> accounts not yet clickable
+     * 
+     * @param {Ext.tree.AsyncTreeNode} node
+     */
+    onBeforeClick: function(node) {
+        if (Tine.Felamimail.loadAccountStore().getById(node.id)) {
+            return false;
+        }
     },
     
     /**
@@ -415,39 +404,25 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     /**
      * folder store gets updated -> update grid/tree and show notifications
      * 
-     * @param {} store
-     * @param {} record
-     * @param {} operation
+     * @param {Tine.Felamimail.FolderStore} store
+     * @param {Tine.Felamimail.Model.Folder} record
+     * @param {String} operation
      */
     onUpdateFolderStore: function(store, record, operation) {
-        Tine.log.info('Account "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
+        var selectedNode = this.getSelectionModel().getSelectedNode();
         
-        
-        //////// @TODO review this
-        var changes = record.getChanges();
-        //console.log(changes);
-
-        // cache count changed
-        if (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done')) {
-            var selectedNode = this.getSelectionModel().getSelectedNode();
-            
-            // check if grid has to be updated
-            if (selectedNode && selectedNode.id == record.id) {
+        // TODO move this to grid panel
+        if (selectedNode && selectedNode.id == record.id && (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done'))) {
+            var contentPanel = contentPanel = this.app.getMainScreen().getCenterPanel();
+            if (contentPanel) {
                 //console.log('update grid');
-                
                 // TODO do not update if multiple messages are selected (this does not work if messages are moved!)
                 // TODO do not reload details panel
-                var contentPanel = this.app.getMainScreen().getCenterPanel();
-                if (contentPanel /*&& contentPanel.getGrid().getSelectionModel().getCount() <= 1*/) {
-                    // update & preserve selection
-                    contentPanel.loadData(true, true, true);
-                }
+                contentPanel.loadData(true, true, true);
             }
         }
-        
+            
         this.updateFolderStatus(record);
-        
-        record.commit(true);
     },
     
     /**
@@ -472,9 +447,40 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     
     /********************* helpers *****************************/
     
+    /**
+     * updates account status icon in this tree
+     * 
+     * @param {Tine.Felamimail.Model.Account} account
+     */
+    updateAccountStatus: function(account) {
+        var imapStatus = account.get('imap_status'),
+            node = this.getNodeById(account.id),
+            ui = node ? node.getUI() : null,
+            nodeEl = ui ? ui.getEl() : null;
+            
+        Tine.log.info('Account ' + account.id + ' updated with imap_status: ' + imapStatus);
+        if (node && node.ui.rendered) {
+            var statusEl = Ext.get(Ext.DomQuery.selectNode('span[class=felamimail-node-accountfailure]', nodeEl));
+            if (! statusEl) {
+                // create statusEl on the fly
+                statusEl = Ext.DomHelper.insertAfter(ui.elNode.lastChild, {'tag': 'span', 'class': 'felamimail-node-accountfailure'}, true);
+                statusEl.on('click', function() {
+                    Tine.Felamimail.folderBackend.handleRequestException(account.getLastIMAPException());
+                }, this);
+            }
+            
+            statusEl.setVisible(imapStatus === 'failure');
+        }
+    },
+    
+    /**
+     * updates folder staus icons/info in this tree
+     * 
+     * @param {Tine.Felamimail.Model.Folder} folder
+     */
     updateFolderStatus: function(folder) {
         var unreadcount = folder.get('cache_unreadcount'),
-            progress    = folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 100
+            progress    = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 20) * 5,
             node        = this.getNodeById(folder.id),
             ui = node ? node.getUI() : null,
             nodeEl = ui ? ui.getEl() : null,
@@ -490,12 +496,11 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             ui[unreadcount === 0 ? 'removeClass' : 'addClass']('felamimail-node-unread');
             
             // update progress
-            Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-progress]', nodeEl)).update(progress).setVisible(isSelected && cacheStatus === 'incomplete');
+            Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-progress]', nodeEl)).update(progress + ' %').setVisible(isSelected && cacheStatus === 'incomplete');
             
             Ext.fly(Ext.DomQuery.selectNode('div[class=felamimail-node-statusbox-loader]', nodeEl)).setVisible(isSelected && cacheStatus === 'pending');
         }
     },
-    
     
     /**
      * decrement unread count of currently selected folder
@@ -536,6 +541,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             listeners: {
                 scope: this,
                 load: function(node) {
+                    var account = Tine.Felamimail.loadAccountStore().getById(node.id);
+                    this.updateAccountStatus(account);
                     
                     // add 'intelligent' folders
                     if (node.attributes.intelligent_folders == 1) {
