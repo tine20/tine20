@@ -110,7 +110,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }, this),
             folder = candidates.first();
         
-        if (candidates.get(node.id)) {
+        if (node && candidates.get(node.id)) {
             // if current selection is a candidate, take this one!
             folder = candidates.get(node.id);
         }
