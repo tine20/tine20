@@ -174,7 +174,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * executed when  updateFolderStatus or updateMessageCache requests fail
      * 
      * NOTE: We show the error dlg only for the first error
-     * NOTE: by chance, the updtes always operate on a single account ;-)
      * 
      * @param {Object} exception
      */
