@@ -124,13 +124,13 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     Tine.Felamimail.folderBackend.abort(this.updateMessageCacheTransactionId);
                     currentRequestFolder.set('cache_status', 'uncomplete');
                 } else {
-                    Tine.log.debug('updateing message cache for folder "' + folder.get('localname') + '" is in progress');
+                    Tine.log.debug('a request updateing message cache for folder "' + folder.get('localname') + '" is in progress -> wait for request to return');
                     return;
                 }
             }
             
             var executionTime = folder.isCurrentSelection() ? 10 : Math.min(this.updateInterval, 120);
-            Tine.log.debug('updateing message cache for folder "' + folder.get('localname') + '" with ' + executionTime + ' seconds execution time');
+            Tine.log.debug('updateing message cache for folder "' + folder.get('localname') + '" with ' + executionTime + ' seconds max execution time');
             
             folder.set('cache_status', 'pending');
             
@@ -140,6 +140,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 success: function(folder) {
                     Tine.Felamimail.loadAccountStore().getById(folder.get('account_id')).setLastIMAPException(null);
                     this.getFolderStore().updateFolder(folder);
+                    
+                    if (folder.get('cache_status') === 'updating') {
+                        Tine.log.debug('updateing message cache for folder "' + folder.get('localname') + '" is in progress on the server (folder is locked)');
+                        return this.checkMailsDelayedTask.delay(10000);
+                    }
                     this.checkMailsDelayedTask.delay(0);
                 }
             });
