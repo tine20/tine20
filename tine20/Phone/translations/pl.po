@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-11 22:32+0100\n"
+"PO-Revision-Date: 2010-06-17 14:30+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -18,8 +18,8 @@ msgstr ""
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "telefon"
-msgstr[1] "Telefon"
-msgstr[2] "Telefon"
+msgstr[1] "telefony"
+msgstr[2] "telefony"
 
 #: js/Models.js:74
 msgid "phones list"
@@ -101,7 +101,7 @@ msgstr "Brak połączeń"
 
 #: js/Phone.js:691
 msgid "Direction"
-msgstr "Kierunek"
+msgstr "Kierunkowy"
 
 #: js/Phone.js:692
 msgid "Source"
@@ -117,7 +117,7 @@ msgstr "Rozmówca"
 
 #: js/Phone.js:695
 msgid "Start"
-msgstr "Start"
+msgstr "Zestawienie połączenia"
 
 #: js/Phone.js:696
 msgid "Connected"
@@ -141,60 +141,88 @@ msgstr "ID połączenia"
 
 #~ msgid "Dial phone number"
 #~ msgstr "Wybierz numer telefonu"
+
 #~ msgid "Name"
 #~ msgstr "Nazwa"
+
 #~ msgid "Phone Model"
 #~ msgstr "Model telefonu"
+
 #~ msgid "MAC Address"
 #~ msgstr "Adres sprzętowy (MAC)"
+
 #~ msgid "infos"
 #~ msgstr "Informacje"
+
 #~ msgid "Current IP Address"
 #~ msgstr "Obecny adres IP"
+
 #~ msgid "Firmware last checked at"
 #~ msgstr "Oprogramowanie wbudowane sprawdzono ostatnio"
+
 #~ msgid "Current Software Version"
 #~ msgstr "Obecna wersja oprogramowania"
+
 #~ msgid "Settings Loaded at"
 #~ msgstr "Ustawienia wczytane"
+
 #~ msgid "redirection"
 #~ msgstr "przekierowanie"
+
 #~ msgid "redirect_event"
 #~ msgstr "powód przekierowania"
+
 #~ msgid "all"
 #~ msgstr "wszystkie"
+
 #~ msgid "busy"
 #~ msgstr "zajęty"
+
 #~ msgid "none"
 #~ msgstr "brak"
+
 #~ msgid "time"
 #~ msgstr "czas"
+
 #~ msgid "redirect_number"
 #~ msgstr "Przekierowanie na numer"
+
 #~ msgid "redirect_time"
 #~ msgstr "Czas przekierowania"
+
 #~ msgid "Settings"
 #~ msgstr "Ustawienia"
+
 #~ msgid "web_language"
 #~ msgstr "język interfejsu WWW"
+
 #~ msgid "- factory default -"
 #~ msgstr "- domyśle ustawienia fabryczne -"
+
 #~ msgid "language"
 #~ msgstr "język"
+
 #~ msgid "display_method"
 #~ msgstr "metoda wyświetlania"
+
 #~ msgid "whole url"
 #~ msgstr "pełny URL"
+
 #~ msgid "name"
 #~ msgstr "nazwa"
+
 #~ msgid "number"
 #~ msgstr "numer"
+
 #~ msgid "name + number"
 #~ msgstr "nazwa + numer"
+
 #~ msgid "number + name"
 #~ msgstr "numer + nazwa"
+
 #~ msgid "call_waiting"
 #~ msgstr "Oczekujące połączenie"
+
 #~ msgid "on"
 #~ msgstr "wł."
 
@@ -231,24 +259,33 @@ msgstr "ID połączenia"
 #, fuzzy
 #~ msgid "global_missed_counter"
 #~ msgstr "brakujący licznik"
+
 #~ msgid "scroll_outgoing"
 #~ msgstr "Przewijanie"
+
 #~ msgid "show_local_line"
 #~ msgstr "Pokaż mój numer"
+
 #~ msgid "show_call_status"
 #~ msgstr "Pokaż status połączenia"
+
 #~ msgid "lineactive"
 #~ msgstr "Łącze aktywne"
+
 #~ msgid "sipCombo"
 #~ msgstr "Wybieranie SIP"
+
 #~ msgid "Idle Text"
 #~ msgstr "Wiadomość, gdy wyłączony"
+
 #~ msgid "Lines"
 #~ msgstr "Łącza"
+
 #~ msgid "Users"
 #~ msgstr "Użytkownicy"
+
 #~ msgid "Rights"
 #~ msgstr "Uprawnienia"
+
 #~ msgid "enter searchfilter"
 #~ msgstr "wpisz szukaną frazę"
-
