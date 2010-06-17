@@ -146,7 +146,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 }
             }, this);
             
-            if (imapStatus !== 'failure') {
+            if (imapStatus !== 'failure' && Tine.Tinebase.appMgr.getActive() === this) {
                 Tine.Felamimail.folderBackend.handleRequestException(exception);
             }
         }
@@ -172,6 +172,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * @param {String} operation
      */
     onUpdateFolder: function(store, record, operation) {
+        Tine.log.info('Account "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
         
         var changes = record.getChanges();
         
@@ -217,8 +218,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             folderIds.push(f.get('id'));
             folderNames.push(f.get('localname'));
         }, this);
-        
-        
+            
         // don't update if we got no folder ids 
         if (folderIds.length > 0) {
             Tine.log.debug('fetching status for folder(s) ' + folderNames.join(', '));
@@ -233,6 +233,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 }
             });
         } else {
+            Tine.log.debug('no folders update needed');
             this.updateMessageCache();
         }
     },
@@ -244,7 +245,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * @return boolean true if caching is complete
      */
     updateMessageCache: function(folder) {
-        Tine.log.info('updateMessageCache for folder "' + (folder ? folder.get('path') : '--') + '"');
+        Tine.log.info('updateMessageCache for folder "' + (folder ? folder.get('localname') : '--') + '"');
         
         folder = folder ? folder : this.getNextFolderToUpdate();
         if (! folder) {
@@ -257,10 +258,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         }
         
         var executionTime = folder.isCurrentSelection() ? 10 : Math.min(this.updateInterval, 120);
-        Tine.log.debug('updateing message cache for folder ' + folder.id + ' with ' + executionTime + ' seconds execution time');
+        Tine.log.debug('updateing message cache for folder ' + folder.get('localname') + ' with ' + executionTime + ' seconds execution time');
         
         // cancel old request
-        if (this.updateMessageCacheTransactionId) {
+        if (Tine.Felamimail.folderBackend.isLoading(this.updateMessageCacheTransactionId)) {
+            Tine.log.debug('aborting current update message request');
             Tine.Felamimail.folderBackend.abort(this.updateMessageCacheTransactionId);
         }
         
@@ -289,7 +291,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             var candidates = this.folderStore.queryBy(function(record) {
                 return (
                     record.get('account_id') == account.id 
-                    && (record.get('cache_status') == 'incomplete' || record.get('cache_status') == 'invalid')
+                    && record.get('cache_status') !== 'complete'
                 );
             });
             
