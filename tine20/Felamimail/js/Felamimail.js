@@ -122,7 +122,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 if (currentRequestFolder !== folder) {
                     Tine.log.debug('aborting current update message request');
                     Tine.Felamimail.folderBackend.abort(this.updateMessageCacheTransactionId);
-                    currentRequestFolder.set('cache_status', 'uncomplete');
+                    currentRequestFolder.set('cache_status', 'incomplete');
                 } else {
                     Tine.log.debug('a request updateing message cache for folder "' + folder.get('localname') + '" is in progress -> wait for request to return');
                     return;

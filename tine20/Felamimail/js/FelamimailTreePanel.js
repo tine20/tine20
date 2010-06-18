@@ -495,7 +495,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             ui[unreadcount === 0 ? 'removeClass' : 'addClass']('felamimail-node-unread');
             
             // update progress
-            Ext.fly(Ext.DomQuery.selectNode('img[class=felamimail-node-statusbox-progress]', nodeEl)).setStyle('background-position', progress + '%').setVisible(isSelected && cacheStatus === 'uncomplete');
+            Ext.fly(Ext.DomQuery.selectNode('img[class=felamimail-node-statusbox-progress]', nodeEl)).setStyle('background-position', progress + '%').setVisible(isSelected && cacheStatus === 'incomplete');
         }
     },
     
