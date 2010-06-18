@@ -312,8 +312,8 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
             return [this.recordReader(response)];
         };
         
-        // double the timeout
-        options.timeout = executionTime * 2000;
+        // give 5 times more before timeout
+        options.timeout = executionTime * 5000;
                 
         return this.doXHTTPRequest(options);
     },
