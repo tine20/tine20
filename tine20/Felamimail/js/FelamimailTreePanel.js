@@ -124,7 +124,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         
         // add account nodes
         this.initAccounts();
-        
         // init drop zone
         this.dropConfig = {
             ddGroup: this.ddGroup || 'TreeDD',
@@ -169,6 +168,32 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.accountStore = Tine.Felamimail.loadAccountStore();
         this.accountStore.each(this.addAccount, this);
         this.accountStore.on('update', this.onAccountUpdate, this);
+    },
+    
+    /**
+     * init extra tool tips
+     */
+    initToolTips: function() {
+        this.folderTip = new Ext.ToolTip({
+            target: this.getEl(),
+            delegate: 'a.x-tree-node-anchor',
+            renderTo: document.body,
+            listeners: {beforeshow: this.updateFolderTip.createDelegate(this)}
+        });
+        
+        this.folderProgressTip = new Ext.ToolTip({
+            target: this.getEl(),
+            delegate: '.felamimail-node-statusbox-progress',
+            renderTo: document.body,
+            listeners: {beforeshow: this.updateProgressTip.createDelegate(this)}
+        });
+        
+        this.folderProgressTip = new Ext.ToolTip({
+            target: this.getEl(),
+            delegate: '.felamimail-node-statusbox-unread',
+            renderTo: document.body,
+            listeners: {beforeshow: this.updateUnreadTip.createDelegate(this)}
+        });
     },
     
    /**
@@ -233,7 +258,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     afterRender: function() {
         Tine.Felamimail.TreePanel.superclass.afterRender.call(this);
-
+        this.initToolTips();
+        
         var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
         this.expandPath('/root/' + defaultAccount + '/', null, function(sucess, parentNode) {
             Ext.each(parentNode.childNodes, function(node) {
@@ -447,6 +473,16 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     /********************* helpers *****************************/
     
     /**
+     * returns tree node id the given el is child of
+     * 
+     * @param  {HTMLElement} el
+     * @return {String}
+     */
+    getElsParentsNodeId: function(el) {
+        return Ext.fly(el, '_treeEvents').up('div[class^=x-tree-node-el]').getAttribute('tree-node-id', 'ext');
+    },
+    
+    /**
      * updates account status icon in this tree
      * 
      * @param {Tine.Felamimail.Model.Account} account
@@ -487,16 +523,66 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             isSelected = folder.isCurrentSelection();
             
         if (node && node.ui.rendered) {
-            // hide all
-            //Ext.select('div[class^=felamimail-node-statusbox-]').setDisplayed(false);
-            
             // update unreadcount
             Ext.fly(Ext.DomQuery.selectNode('span[class=felamimail-node-statusbox-unread]', nodeEl)).update(unreadcount).setVisible(unreadcount > 0);
             ui[unreadcount === 0 ? 'removeClass' : 'addClass']('felamimail-node-unread');
             
             // update progress
-            Ext.fly(Ext.DomQuery.selectNode('img[class=felamimail-node-statusbox-progress]', nodeEl)).setStyle('background-position', progress + '%').setVisible(isSelected && cacheStatus !== 'complete' && progress !== 100);
+            var pie = Ext.get(Ext.DomQuery.selectNode('img[class=felamimail-node-statusbox-progress]', nodeEl)).setStyle('background-position', progress + '%').setVisible(isSelected && cacheStatus !== 'complete' && cacheStatus !== 'disconnect' && progress !== 100);
         }
+    },
+    
+    /**
+     * updates the given tip
+     * @param {Ext.Tooltip} tip
+     */
+    updateFolderTip: function(tip) {
+        var folderId = this.getElsParentsNodeId(tip.triggerElement),
+            folder = this.app.getFolderStore().getById(folderId),
+            account = Tine.Felamimail.loadAccountStore().getById(folderId);
+            
+        if (folder) {
+            var info = [
+                '<table>',
+                    '<tr>',
+                        '<td>', this.app.i18n._('Total Messages:'), '</td>',
+                        '<td>', folder.get('cache_totalcount'), '</td>',
+                    '</tr>',
+                    '<tr>',
+                        '<td>', this.app.i18n._('Unread Messages:'), '</td>',
+                        '<td>', folder.get('cache_unreadcount'), '</td>',
+                    '</tr>',
+                '</table>'
+            ];
+            tip.body.dom.innerHTML = info.join('');
+        } else {
+            return false;
+        }
+    },
+    
+    /**
+     * updates the given tip
+     * @param {Ext.Tooltip} tip
+     */
+    updateProgressTip: function(tip) {
+        var folderId = this.getElsParentsNodeId(tip.triggerElement),
+            folder = this.app.getFolderStore().getById(folderId),
+            progress = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 100);
+            
+        tip.body.dom.innerHTML = String.format(this.app.i18n._('Fetching messages... ({0}% done)'), progress);
+    },
+    
+    /**
+     * updates the given tip
+     * @param {Ext.Tooltip} tip
+     */
+    updateUnreadTip: function(tip) {
+        var folderId = this.getElsParentsNodeId(tip.triggerElement),
+            folder = this.app.getFolderStore().getById(folderId),
+            count = folder.get('cache_unreadcount');
+            
+            
+        tip.body.dom.innerHTML = String.format(this.app.i18n.n_('{0} unread message', '{0} unread messages', count), count);
     },
     
     /**

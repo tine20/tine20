@@ -6,7 +6,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
  
 /**
@@ -76,8 +75,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         // NOTE cweiss 2010-06-15 this has to be precomputed on server side!
         attr.has_children = (account && account.get('has_children_support')) ? attr.has_children : true;
         
-        //var qtiptext = this.app.i18n._('Totalcount') + ': ' + attr.cache_totalcount 
-        //    + ' / ' + this.app.i18n._('Cache') + ': ' + attr.cache_status;
         Ext.apply(attr, {
     		leaf: !attr.has_children,
             expandable: attr.has_children,
@@ -86,7 +83,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     		folderNode: true,
             allowDrop: true,
             text: this.app.i18n._hidden(attr.localname)
-            //qtip: qtiptext,
     	});
         
         
