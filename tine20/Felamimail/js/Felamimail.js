@@ -178,7 +178,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     /**
      * executed when  updateFolderStatus or updateMessageCache requests fail
      * 
-     * NOTE: We show the error dlg only for the first error
+     * NOTE: We show the credential error dlg and this only for the first error
      * 
      * @param {Object} exception
      */
@@ -197,7 +197,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 }
             }, this);
             
-            if (imapStatus !== 'failure' && Tine.Tinebase.appMgr.getActive() === this) {
+            if (exception.code == 912 && imapStatus !== 'failure' && Tine.Tinebase.appMgr.getActive() === this) {
                 Tine.Felamimail.folderBackend.handleRequestException(exception);
             }
         }
