@@ -129,8 +129,8 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         
         $initialCacheStatus = $folder->cache_status;
         
-        // reset cache counter when transitioning from Felamimail_Model_Folder::CACHE_STATUS_COMPLETE
-        if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
+        // reset cache counter when transitioning from Felamimail_Model_Folder::CACHE_STATUS_COMPLETE or 
+        if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE || $folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
             $folder->cache_job_actions_estimate = 0;
             $folder->cache_job_actions_done     = 0;
         }
@@ -159,7 +159,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         
         $cacheMessageSequence = null;
         $imapMessageSequence  = null;
-        $messageSequence      = null;
+        
                 
         $timeStart   = microtime(true);
         $timeElapsed = 0;
@@ -168,6 +168,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
             $lastFailedUid   = null;
+            $messageSequence = null;
             
             // at which sequence is the message with the highest messageUid?
             while($messageSequence === null) {
@@ -192,7 +193,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         $folder->cache_totalcount--;
                     }
                 } else {
-                    $imapMessageSequence = 1;
+                    $imapMessageSequence = 0;
                     $messageSequence = 1;
                 }
                 
@@ -219,7 +220,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             // how many messages to remove?
             $messagesToRemoveFromCache = $cacheMessageSequence - $imapMessageSequence;
             
-            if ($initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
+            if ($initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE || $initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
                 $folder->cache_job_actions_estimate += $messagesToRemoveFromCache;
             }
             
@@ -287,7 +288,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         // add new messages to cache
         if ($folder->imap_totalcount > 0 && $imapMessageSequence < $folder->imap_totalcount) {
                         
-            if ($initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
+            if ($initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE || $initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
                 $folder->cache_job_actions_estimate += $folder->imap_totalcount - $imapMessageSequence;
             }
             
@@ -331,7 +332,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         // maybe there are some messages missing before $imapMessageSequence
         if ($folder->imap_totalcount > 0 && $folder->cache_totalcount < $folder->imap_totalcount) {
             
-            if ($initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
+            if ($initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE || $initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
                 $folder->cache_job_actions_estimate += $folder->imap_totalcount - $folder->cache_totalcount;
             }
             
@@ -747,19 +748,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         ) {
             return false;
         }
-        
-        #if ($_folder->cache_timestamp->compare(Zend_Date::now()->subMinute(5)) == -1) {
-        #    // it seems that the old import process ended (timestamp is older than 5 mins) -> commence
-        #    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-        #        . ' Old initial import process ended without finishing: '
-        #        . $_folder->cache_timestamp->toString() . ' / ' . Zend_Date::now()->subMinute(5)->get() 
-        #        . ' Starting new import for folder ' 
-        #        . $_folder->globalname . ' ... '
-        #    );
-        #    return FALSE;
-        #    
-        #}
-                
+                        
         return true;
     }
     
