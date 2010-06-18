@@ -178,7 +178,7 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
                 }
             }, this);
             folder.endEdit();
-            
+            folder.commit();
             return folder;
         }
     }

@@ -279,7 +279,9 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {String} action
      */
     onAccountUpdate: function(store, record, action) {
-        this.updateAccountStatus(record);
+        if (action === Ext.data.Record.EDIT) {
+            this.updateAccountStatus(record);
+        }
     },
     
     /**
@@ -434,20 +436,22 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {String} operation
      */
     onUpdateFolderStore: function(store, record, operation) {
-        var selectedNode = this.getSelectionModel().getSelectedNode();
-        
-        // TODO move this to grid panel
-        if (selectedNode && selectedNode.id == record.id && (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done'))) {
-            var contentPanel = contentPanel = this.app.getMainScreen().getCenterPanel();
-            if (contentPanel) {
-                //console.log('update grid');
-                // TODO do not update if multiple messages are selected (this does not work if messages are moved!)
-                // TODO do not reload details panel
-                contentPanel.loadData(true, true, true);
-            }
-        }
+        if (operation === Ext.data.Record.EDIT) {
+            var selectedNode = this.getSelectionModel().getSelectedNode();
             
-        this.updateFolderStatus(record);
+            // TODO move this to grid panel
+            if (selectedNode && selectedNode.id == record.id && (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done'))) {
+                var contentPanel = contentPanel = this.app.getMainScreen().getCenterPanel();
+                if (contentPanel) {
+                    //console.log('update grid');
+                    // TODO do not update if multiple messages are selected (this does not work if messages are moved!)
+                    // TODO do not reload details panel
+                    contentPanel.loadData(true, true, true);
+                }
+            }
+                
+            this.updateFolderStatus(record);
+        }
     },
     
     /**
@@ -520,15 +524,16 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             ui = node ? node.getUI() : null,
             nodeEl = ui ? ui.getEl() : null,
             cacheStatus = folder.get('cache_status'),
+            lastCacheStatus = folder.modified ? folder.modified.cache_status : null,
             isSelected = folder.isCurrentSelection();
-            
+        
         if (node && node.ui.rendered) {
             // update unreadcount
             Ext.fly(Ext.DomQuery.selectNode('span[class=felamimail-node-statusbox-unread]', nodeEl)).update(unreadcount).setVisible(unreadcount > 0);
             ui[unreadcount === 0 ? 'removeClass' : 'addClass']('felamimail-node-unread');
             
             // update progress
-            var pie = Ext.get(Ext.DomQuery.selectNode('img[class=felamimail-node-statusbox-progress]', nodeEl)).setStyle('background-position', progress + '%').setVisible(isSelected && cacheStatus !== 'complete' && cacheStatus !== 'disconnect' && progress !== 100);
+            var pie = Ext.get(Ext.DomQuery.selectNode('img[class=felamimail-node-statusbox-progress]', nodeEl)).setStyle('background-position', progress + '%').setVisible(isSelected && cacheStatus !== 'complete' && cacheStatus !== 'disconnect' && progress !== 100 && lastCacheStatus !== 'complete');
         }
     },
     
@@ -595,6 +600,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             
         if (folder) {
             folder.set('cache_unreadcount', parseInt(folder.get('cache_unreadcount'), 10) -1);
+            folder.commit();
         }
     },
     

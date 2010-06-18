@@ -150,6 +150,7 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create([
     setLastIMAPException: function(exception) {
         this.lastIMAPException = exception;
         this.set('imap_status', exception ? 'failure' : 'success');
+        this.commit();
     }
 });
 

@@ -123,6 +123,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     Tine.log.debug('aborting current update message request');
                     Tine.Felamimail.folderBackend.abort(this.updateMessageCacheTransactionId);
                     currentRequestFolder.set('cache_status', 'incomplete');
+                    currentRequestFolder.commit();
                 } else {
                     Tine.log.debug('a request updateing message cache for folder "' + folder.get('localname') + '" is in progress -> wait for request to return');
                     return;
@@ -133,6 +134,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             Tine.log.debug('updateing message cache for folder "' + folder.get('localname') + '" with ' + executionTime + ' seconds max execution time');
             
             folder.set('cache_status', 'pending');
+            folder.commit();
             
             this.updateMessageCacheTransactionId = Tine.Felamimail.folderBackend.updateMessageCache(folder.id, executionTime, {
                 scope: this,
@@ -194,6 +196,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             this.getFolderStore().each(function(folder) {
                 if (folder.get('account_id') === accountId) {
                     folder.set('cache_status', 'disconnect');
+                    folder.commit();
                 }
             }, this);
             
@@ -223,17 +226,19 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * @param {String} operation
      */
     onUpdateFolder: function(store, record, operation) {
-        Tine.log.info('folder "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
-        
-        var changes = record.getChanges();
-        
-        if (record.isModified('cache_recentcount') && changes.cache_recentcount > 0) {
-            //console.log('show notification');
-            Ext.ux.Notification.show(
-                this.i18n._('New mails'), 
-                String.format(this.i18n._('You got {0} new mail(s) in Folder {1}.'), 
-                    changes.cache_recentcount, record.get('localname'))
-            );
+        if (operation === Ext.data.Record.EDIT) {
+            Tine.log.info('folder "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
+            
+            var changes = record.getChanges();
+            
+            if (record.isModified('cache_recentcount') && changes.cache_recentcount > 0) {
+                //console.log('show notification');
+                Ext.ux.Notification.show(
+                    this.i18n._('New mails'), 
+                    String.format(this.i18n._('You got {0} new mail(s) in Folder {1}.'), 
+                        changes.cache_recentcount, record.get('localname'))
+                );
+            }
         }
     },
     
