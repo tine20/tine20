@@ -161,10 +161,11 @@
     padding: 0px 0px;
 }
 
+/* if this is realy wantet, limit this to the grid this is wanted!!!
 .x-grid3-cell-inner, .x-grid3-hd-inner {
     white-space: normal;
 }
-
+*/
 
 .lowPadding {
     padding-left: 1px;
