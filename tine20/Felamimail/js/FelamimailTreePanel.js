@@ -479,7 +479,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     updateFolderStatus: function(folder) {
         var unreadcount = folder.get('cache_unreadcount'),
-            progress    = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 10) * 5,
+            progress    = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 10) * 10,
             node        = this.getNodeById(folder.id),
             ui = node ? node.getUI() : null,
             nodeEl = ui ? ui.getEl() : null,
@@ -495,7 +495,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             ui[unreadcount === 0 ? 'removeClass' : 'addClass']('felamimail-node-unread');
             
             // update progress
-            Ext.fly(Ext.DomQuery.selectNode('img[class=felamimail-node-statusbox-progress]', nodeEl)).setStyle('background-position', progress + '%').setVisible(isSelected && cacheStatus === 'incomplete');
+            Ext.fly(Ext.DomQuery.selectNode('img[class=felamimail-node-statusbox-progress]', nodeEl)).setStyle('background-position', progress + '%').setVisible(isSelected && cacheStatus !== 'complete' && progress !== 100);
         }
     },
     
