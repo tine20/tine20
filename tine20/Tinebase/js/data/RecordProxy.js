@@ -81,9 +81,18 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
      * @param {Number} transactionId (Optional) defaults to the last transaction
      */
     abort : function(transactionId) {
-        Ext.Ajax.abort(transactionId);
+        return Ext.Ajax.abort(transactionId);
     },
     
+    /**
+     * Determine whether this object has a request outstanding.
+     * @param {Number} transactionId (Optional) defaults to the last transaction
+     * @return {Boolean} True if there is an outstanding request.
+     */
+    isLoading : function(transId){
+        return Ext.Ajax.isLoading(transId);
+    },
+        
     /**
      * loads a single 'full featured' record
      * 
