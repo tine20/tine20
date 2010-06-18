@@ -104,7 +104,6 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create([
     { name: 'trash_folder' },
     { name: 'intelligent_folders' },
     { name: 'has_children_support', type: 'bool' },
-    { name: 'sort_folders' },
     { name: 'delimiter' },
     { name: 'display_format' },
     { name: 'ns_personal' },

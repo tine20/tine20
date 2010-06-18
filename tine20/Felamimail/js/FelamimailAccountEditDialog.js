@@ -66,7 +66,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     case 'signature':
                     case 'intelligent_folders':
                     case 'has_children_support':
-                    case 'sort_folders':
                         break;
                     default:
                         item.setDisabled(true);
@@ -298,21 +297,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     store: [
                         ['html', this.app.i18n._('HTML')],
                         ['plain',  this.app.i18n._('Plain Text')]
-                    ]
-                }, {
-                    fieldLabel: this.app.i18n._('Sort Folders'),
-                    name: 'sort_folders',
-                    typeAhead     : false,
-                    triggerAction : 'all',
-                    lazyRender    : true,
-                    editable      : false,
-                    mode          : 'local',
-                    forceSelection: true,
-                    value: '0',
-                    xtype: 'combo',
-                    store: [
-                        ['0', this.app.i18n._('No')],
-                        ['1',  this.app.i18n._('Yes')]
                     ]
                 }]]
             }]            

@@ -136,9 +136,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         // sort folders
         $account = Felamimail_Controller_Account::getInstance()->get($filterValues['account_id']);
-        if ($account->sort_folders) {
-            $result = $this->_sortFolders($result, $filterValues['globalname']);
-        }
+        $result = $this->_sortFolders($result, $filterValues['globalname']);
         
         return $result;
     }
