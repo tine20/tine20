@@ -70,9 +70,6 @@ Ext.QuickTips.init();
 Ext.grid.ColumnModel.defaultRenderer = Ext.util.Format.htmlEncode;
 Ext.grid.Column.prototype.renderer = function(value) {
     var result = Ext.util.Format.htmlEncode(value);
-    if (result != null) {
-        result = result.replace(/ /g, '&nbsp;');
-    }
     return result;
 };
 

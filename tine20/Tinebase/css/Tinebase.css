@@ -570,6 +570,10 @@ html, body {
     /* background-color: '#efb5b5'; */
 }
 
+.x-grid3-cell-inner, .x-grid3-hd-inner {
+    white-space: nowrap;
+}
+
 /******** downloads ***********/
 
 .tinebase-download-link{
