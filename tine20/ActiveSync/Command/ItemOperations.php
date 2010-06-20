@@ -75,7 +75,7 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
     }
     
     /**
-     * generate MoveItems response
+     * generate ItemOperations response
      * 
      */
     public function getResponse()
