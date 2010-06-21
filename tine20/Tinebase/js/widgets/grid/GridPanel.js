@@ -91,6 +91,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     defaultPaging: null,
     /**
+     * @cfg {Object} pagingConfig
+     * additional paging config
+     */
+    pagingConfig: null,
+    /**
      * @cfg {Tine.widgets.grid.DetailsPanel} detailsPanel
      * if set, it becomes rendered in region south 
      */
@@ -397,7 +402,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }, this);
         
         // we allways have a paging toolbar
-        this.pagingToolbar = new Ext.ux.grid.PagingToolbar({
+        this.pagingToolbar = new Ext.ux.grid.PagingToolbar(Ext.apply({
             pageSize: 50,
             store: this.store,
             displayInfo: true,
@@ -405,7 +410,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             emptyMsg: String.format(Tine.Tinebase.translation._("No {0} to display"), this.i18nRecordsName),
             displaySelectionHelper: true,
             sm: this.selectionModel
-        });
+        }, this.pagingConfig));
         // mark next grid refresh as paging-refresh
         this.pagingToolbar.on('beforechange', function() {
             this.grid.getView().isPagingRefresh = true;
