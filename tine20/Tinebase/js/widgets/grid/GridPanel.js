@@ -509,7 +509,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
         
         if (preserveSelection) {
-            var oldSelection = this.grid.getSelectionModel().getSelections();
+            var oldSelection = this.grid.getSelectionModel().getSelections(),
+                oldRow = oldSelection.length === 1 ? this.getStore().indexOfId(oldSelection[0].id) : null;
         
             opts.callback = opts.callback.createSequence(function(records, options, success) {
                 var sm = this.grid.getSelectionModel();
@@ -519,6 +520,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     var row = store.indexOfId(record.id);
                     if (row >= 0) {
                         sm.selectRow(row, true);
+                    } else if (oldRow !== null) {
+                        // if row is not existing, select the next one
+                        sm.selectRow(oldRow);
                     }
                 }, this);
             }, this);
@@ -961,6 +965,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {msg: message});
                 }
                 this.deleteMask.show();
+            } else {
+                this.pagingToolbar.refresh.disable();
             }
             
             var options = {
@@ -968,12 +974,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 success: function() {
                     if (this.showDeleteMask) {
                         this.deleteMask.hide();
+                    } else {
+                        this.pagingToolbar.refresh.show();
                     }
                     this.onAfterDelete();
                 },
                 failure: function () {
                     if (this.showDeleteMask) {
                         this.deleteMask.hide();
+                    } else {
+                        this.pagingToolbar.refresh.show();
                     }
                     Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), i18nItems)); 
                 }
@@ -996,6 +1006,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * - reload the store
      */
     onAfterDelete: function() {
-        this.loadData(true, false, true);
+        this.loadData(true, true, true);
     }
 });
