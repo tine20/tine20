@@ -92,27 +92,35 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     
     
     /**
-     * check mails delayed task
+     * check mails
+     * 
+     * if no folder is given, we find next folder to update ourself
+     * 
+     * @param {Tine.Felamimail.Model.Folder} [folder] 
      */
-    checkMails: function() {
+    checkMails: function(folder) {
+        this.checkMailsDelayedTask.cancel();
+        
         if (! this.getFolderStore().getCount() && this.defaultAccount) {
             Tine.log.debug('no folders in store yet, fetching first level...');
-            this.getFolderStore().asyncQuery('parent_path', '/' + this.defaultAccount, this.checkMails.createDelegate(this), [], this, this.getFolderStore());
+            this.getFolderStore().asyncQuery('parent_path', '/' + this.defaultAccount, this.checkMails.createDelegate(this, []), [], this, this.getFolderStore());
             return;
         }
         
-        Tine.log.info('checking mails now: ' + new Date());
+        Tine.log.info('checking mails' + (folder ? ' for folder ' + folder.get('localname') : '') + ' now: ' + new Date());
         
-        var node = this.getMainScreen().getTreePanel().getSelectionModel().getSelectedNode(),
-            candidates = this.folderStore.queryBy(function(record) {
-                var timestamp = record.get('imap_timestamp');
-                return record.get('cache_status') !== 'complete' || timestamp == '' || timestamp.getElapsed() > this.updateInterval;
-            }, this),
-            folder = candidates.first();
-        
-        if (node && candidates.get(node.id)) {
-            // if current selection is a candidate, take this one!
-            folder = candidates.get(node.id);
+        if (! folder) {
+            var node = this.getMainScreen().getTreePanel().getSelectionModel().getSelectedNode(),
+                candidates = this.folderStore.queryBy(function(record) {
+                    var timestamp = record.get('imap_timestamp');
+                    return record.get('cache_status') !== 'complete' || timestamp == '' || timestamp.getElapsed() > this.updateInterval;
+                }, this),
+                folder = candidates.first();
+            
+            if (node && candidates.get(node.id)) {
+                // if current selection is a candidate, take this one!
+                folder = candidates.get(node.id);
+            }
         }
         
         if (folder) {
