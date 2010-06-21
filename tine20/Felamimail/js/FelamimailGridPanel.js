@@ -250,26 +250,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_printPreview
         ]);
         
-        /*
-        this.actions = [
-            this.action_write,
-            this.action_reply,
-            this.action_replyAll,
-            this.action_forward,
-            this.action_flag,
-            this.action_markUnread,
-            this.action_deleteRecord,
-            '-',
-            this.action_addAccount,
-            '->',
-            this.filterToolbar.getQuickFilterField()
-        ];
-        
-        this.actionToolbar = new Ext.Toolbar({
-            split: false,
-            items: this.actions
-        });
-        */
         this.contextMenu = new Ext.menu.Menu({
             items: [
                 this.action_reply,
@@ -320,22 +300,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     getActionToolbar: function() {
-        /*
-        this.actions = [
-            this.action_write,
-            this.action_reply,
-            this.action_replyAll,
-            this.action_forward,
-            this.action_flag,
-            this.action_markUnread,
-            this.action_deleteRecord,
-            '-',
-            this.action_addAccount,
-            '->',
-            this.filterToolbar.getQuickFilterField()
-        ];
-        */
-        
         if (! this.actionToolbar) {
             this.actionToolbar = new Ext.Toolbar({
                 defaults: {height: 55},
@@ -869,23 +833,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         });        
     },
-
-    /**
-     * get update folder status after delete
-     * 
-     * TODO make marking of deleted messages work (how? use onDeleteRecords?)
-     */
-    onAfterDelete: function() {
-        /*
-        var selectedRows = this.grid.getSelectionModel().getSelections();
-        for (var i = 0; i < selectedRows.length; i++) {
-            Ext.get(this.grid.getView().getRow(i)).addClass('flag_deleted');
-        }
-        */
-        
-        this.store.load({});
-        //this.app.checkMailsDelayedTask.delay(10000);
-    },
+    
     onPrint:function() {
         if(!Ext.get('felamimailPrintHelperIframe')) {
             Ext.getBody().createChild({
@@ -906,6 +854,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.get('felamimailPrintHelperIframe').dom.contentWindow.document.documentElement.innerHTML = buffer;
         Ext.get('felamimailPrintHelperIframe').dom.contentWindow.print();
     },
+    
     onPrintPreview:function() {
         buffer = '<html><head>';
         buffer+= '<title>'+this.app.i18n._('Print Preview')+'</title>';
@@ -918,6 +867,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         win.document.close();
         win.focus();
     },
+    
     /**
      * format headers
      * 
