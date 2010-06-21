@@ -361,6 +361,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         var requestOptions = {
             scope: this,
             params: options.params,
+            callback: options.callback,
             success: function(response) {
                 if (typeof options.success == 'function') {
                     var args = [];
