@@ -101,156 +101,160 @@ msgstr " Mot de passe administrateur initial"
 msgid "Password confirmation"
 msgstr "Confirmation du mot de passe"
 
-#: js/AuthenticationPanel.js:268 js/AuthenticationPanel.js:368
+#: js/AuthenticationPanel.js:268
+msgid "Try to split username"
+msgstr ""
+
+#: js/AuthenticationPanel.js:282 js/AuthenticationPanel.js:349
+msgid "Account canonical form"
+msgstr "Forme canonique du compte"
+
+#: js/AuthenticationPanel.js:286 js/AuthenticationPanel.js:353
+msgid "Account domain name "
+msgstr ""
+
+#: js/AuthenticationPanel.js:291 js/AuthenticationPanel.js:356
+msgid "Account domain short name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:306 js/AuthenticationPanel.js:416
 msgid "Host"
 msgstr "Nom d'hôte"
 
-#: js/AuthenticationPanel.js:272 js/ConfigManagerPanel.js:97
+#: js/AuthenticationPanel.js:310 js/ConfigManagerPanel.js:97
 #: js/EmailPanel.js:201 js/EmailPanel.js:283
 msgid "Port"
 msgstr "Port"
 
-#: js/AuthenticationPanel.js:276 js/AuthenticationPanel.js:373
+#: js/AuthenticationPanel.js:314 js/AuthenticationPanel.js:421
 msgid "Login name"
 msgstr "Login"
 
-#: js/AuthenticationPanel.js:279 js/AuthenticationPanel.js:376
+#: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:424
 #: js/ConfigManagerPanel.js:77 js/ConfigManagerPanel.js:113
 #: js/EmailPanel.js:196
 msgid "Password"
 msgstr "Mot de passe"
 
-#: js/AuthenticationPanel.js:292 js/AuthenticationPanel.js:389
+#: js/AuthenticationPanel.js:330 js/AuthenticationPanel.js:437
 msgid "Bind requires DN"
 msgstr "La connexion nécessite un DN "
 
-#: js/AuthenticationPanel.js:296
+#: js/AuthenticationPanel.js:334
 msgid "Base DN"
 msgstr "Base DN"
 
-#: js/AuthenticationPanel.js:299
+#: js/AuthenticationPanel.js:337
 msgid "Search filter"
 msgstr ""
 
-#: js/AuthenticationPanel.js:302
-msgid "Account canonical form"
-msgstr "Forme canonique du compte"
-
-#: js/AuthenticationPanel.js:305
-msgid "Account domain name "
-msgstr ""
-
-#: js/AuthenticationPanel.js:308
-msgid "Account domain short name"
-msgstr ""
-
-#: js/AuthenticationPanel.js:316
+#: js/AuthenticationPanel.js:364
 msgid "Accounts storage"
 msgstr "Stockage des comptes"
 
-#: js/AuthenticationPanel.js:337 js/AuthenticationPanel.js:475
+#: js/AuthenticationPanel.js:385 js/AuthenticationPanel.js:523
 msgid "Default user group name"
 msgstr "Nom du groupe utilisateur par défaut"
 
-#: js/AuthenticationPanel.js:341 js/AuthenticationPanel.js:478
+#: js/AuthenticationPanel.js:389 js/AuthenticationPanel.js:526
 msgid "Default admin group name"
 msgstr "Nom du groupe administrateur par défaut"
 
-#: js/AuthenticationPanel.js:354
+#: js/AuthenticationPanel.js:402
 msgid "User can change password"
 msgstr "L'utilisateur peut changer de mot de passe"
 
-#: js/AuthenticationPanel.js:393
+#: js/AuthenticationPanel.js:441
 msgid "User DN"
 msgstr "User DN"
 
-#: js/AuthenticationPanel.js:396
+#: js/AuthenticationPanel.js:444
 msgid "User Filter"
 msgstr ""
 
-#: js/AuthenticationPanel.js:408
+#: js/AuthenticationPanel.js:456
 msgid "User Search Scope"
 msgstr ""
 
-#: js/AuthenticationPanel.js:412
+#: js/AuthenticationPanel.js:460
 msgid "Groups DN"
 msgstr "Groups DN"
 
-#: js/AuthenticationPanel.js:415
+#: js/AuthenticationPanel.js:463
 msgid "Group Filter"
 msgstr ""
 
-#: js/AuthenticationPanel.js:427
+#: js/AuthenticationPanel.js:475
 msgid "Group Search Scope"
 msgstr ""
 
-#: js/AuthenticationPanel.js:440
+#: js/AuthenticationPanel.js:488
 msgid "Password encoding"
 msgstr "Encodage du mot de passe"
 
-#: js/AuthenticationPanel.js:453
+#: js/AuthenticationPanel.js:501
 msgid "Use Rfc 2307 bis"
 msgstr "Utiliser la  Rfc 2307 bis"
 
-#: js/AuthenticationPanel.js:457
+#: js/AuthenticationPanel.js:505
 msgid "Min User Id"
 msgstr "UUID minimum"
 
-#: js/AuthenticationPanel.js:460
+#: js/AuthenticationPanel.js:508
 msgid "Max User Id"
 msgstr "UUID maximun"
 
-#: js/AuthenticationPanel.js:463
+#: js/AuthenticationPanel.js:511
 msgid "Min Group Id"
 msgstr "GUID minimum"
 
-#: js/AuthenticationPanel.js:466
+#: js/AuthenticationPanel.js:514
 msgid "Max Group Id"
 msgstr "GUID maximun"
 
-#: js/AuthenticationPanel.js:469
+#: js/AuthenticationPanel.js:517
 msgid "Group UUID Attribute name"
 msgstr "Nom d'attribut de groupe (GUID)"
 
-#: js/AuthenticationPanel.js:472
+#: js/AuthenticationPanel.js:520
 msgid "User UUID Attribute name"
 msgstr "Nome d'attribut utilisateur (UUID) "
 
-#: js/AuthenticationPanel.js:490
+#: js/AuthenticationPanel.js:538
 msgid "Allow user to change her password?"
 msgstr "Autoriser l'utilisateur à changer de mot de passe?"
 
-#: js/AuthenticationPanel.js:499
+#: js/AuthenticationPanel.js:547
 msgid "Redirect Settings"
 msgstr "Paramètres de redirection "
 
-#: js/AuthenticationPanel.js:507
+#: js/AuthenticationPanel.js:555
 msgid "Redirect Url (redirect to login screen if empty)"
 msgstr ""
 
-#: js/AuthenticationPanel.js:519
+#: js/AuthenticationPanel.js:567
 msgid "Redirect Always (if No, only redirect after logout)"
 msgstr ""
 
-#: js/AuthenticationPanel.js:530
+#: js/AuthenticationPanel.js:578
 msgid "Redirect to referring site, if exists"
 msgstr "Redirection vers le site de référence, s'il existe"
 
-#: js/AuthenticationPanel.js:543
+#: js/AuthenticationPanel.js:591
 msgid "Save config and install"
 msgstr "Enregistrer la configuration et installer"
 
-#: js/AuthenticationPanel.js:545 js/ConfigManagerPanel.js:208
+#: js/AuthenticationPanel.js:593 js/ConfigManagerPanel.js:208
 msgid "Save config"
 msgstr "Enregistrer la configuration"
 
-#: js/AuthenticationPanel.js:569
+#: js/AuthenticationPanel.js:617
 msgid "Passwords don't match"
 msgstr "Les mots de passes ne correspondent pas!"
 
-#: js/AuthenticationPanel.js:579 js/AuthenticationPanel.js:586
-#: js/AuthenticationPanel.js:590 js/AuthenticationPanel.js:601
-#: js/AuthenticationPanel.js:611
+#: js/AuthenticationPanel.js:627 js/AuthenticationPanel.js:634
+#: js/AuthenticationPanel.js:638 js/AuthenticationPanel.js:649
+#: js/AuthenticationPanel.js:659
 msgid "Should not be empty"
 msgstr ""
 

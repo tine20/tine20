@@ -87,7 +87,7 @@ msgid "Manage Resources"
 msgstr "Administrar Recursos"
 
 #: js/AttendeeFilterModel.js:37 js/AttendeeGridPanel.js:77
-#: js/EventDetailsPanel.js:251 js/Model.js:298
+#: js/EventDetailsPanel.js:251 js/Model.js:299
 msgid "Attendee"
 msgstr "Asistentes"
 
@@ -119,7 +119,7 @@ msgstr "Usuario"
 msgid "Group"
 msgstr "Grupo"
 
-#: js/AttendeeGridPanel.js:166 js/Model.js:472
+#: js/AttendeeGridPanel.js:166 js/Model.js:473
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Recurso"
@@ -143,7 +143,7 @@ msgid "Click here to invite another attender..."
 msgstr "Haga clic aquí para invitar a otro asistente..."
 
 #: js/AttendeeGridPanel.js:433 js/AttendeeGridPanel.js:451
-#: js/AttendeeGridPanel.js:464 js/AttendeeGridPanel.js:476 js/Model.js:314
+#: js/AttendeeGridPanel.js:464 js/AttendeeGridPanel.js:476 js/Model.js:315
 msgid "No Information"
 msgstr "Sin Información"
 
@@ -159,19 +159,19 @@ msgstr "Requerido"
 msgid "Optional"
 msgstr "Opcional"
 
-#: js/AttendeeGridPanel.js:513 js/Model.js:442 Model/Attender.php:45
+#: js/AttendeeGridPanel.js:513 js/Model.js:443 Model/Attender.php:45
 msgid "No response"
 msgstr "No hay respuesta"
 
-#: js/AttendeeGridPanel.js:516 js/Model.js:443 Model/Attender.php:46
+#: js/AttendeeGridPanel.js:516 js/Model.js:444 Model/Attender.php:46
 msgid "Accepted"
 msgstr "Aceptado"
 
-#: js/AttendeeGridPanel.js:519 js/Model.js:444 Model/Attender.php:47
+#: js/AttendeeGridPanel.js:519 js/Model.js:445 Model/Attender.php:47
 msgid "Declined"
 msgstr "Rechazado"
 
-#: js/AttendeeGridPanel.js:522 js/Model.js:445 Model/Attender.php:48
+#: js/AttendeeGridPanel.js:522 js/Model.js:446 Model/Attender.php:48
 msgid "Tentative"
 msgstr "Tentativo"
 
@@ -193,39 +193,39 @@ msgstr "Cargando eventos, por favor espere..."
 msgid "Scheduling Conflict"
 msgstr "Conflicto de Planificación"
 
-#: js/CalendarPanel.js:230
+#: js/CalendarPanel.js:233
 msgid "Ignore Conflict"
 msgstr "Ignorar Conflicto"
 
-#: js/CalendarPanel.js:237
+#: js/CalendarPanel.js:240
 msgid "Edit Event"
 msgstr "Editar Evento"
 
-#: js/CalendarPanel.js:252
+#: js/CalendarPanel.js:251
 msgid "The following attendee are busy at the requested time:"
 msgstr "El siguiente asistente se encuentra ocupado para la fecha solicitada:"
 
-#: js/CalendarPanel.js:273
+#: js/CalendarPanel.js:272
 msgid "Confirm Update of Series"
 msgstr "Confirmar Actualización de la Serie"
 
-#: js/CalendarPanel.js:274
+#: js/CalendarPanel.js:273
 msgid "Do you really want to update all events of this recurring event series?"
 msgstr "¿Está seguro que quiere actualizar todos los eventos para esta serie de eventos repetitivos?"
 
-#: js/CalendarPanel.js:288
+#: js/CalendarPanel.js:287
 msgid "Update Event"
 msgstr "Actualizar Evento"
 
-#: js/CalendarPanel.js:291
+#: js/CalendarPanel.js:290
 msgid "Update nothing"
 msgstr "No actualizar"
 
-#: js/CalendarPanel.js:292
+#: js/CalendarPanel.js:291
 msgid "Update whole series"
 msgstr "Actualizar toda la serie"
 
-#: js/CalendarPanel.js:293
+#: js/CalendarPanel.js:292
 msgid "Update this event only"
 msgstr "Actualizar este evento solamente"
 
@@ -364,13 +364,13 @@ msgstr ""
 msgid "WK"
 msgstr "SEM"
 
-#: js/Model.js:64 js/Model.js:302
+#: js/Model.js:64 js/Model.js:303
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Evento"
 msgstr[1] "Eventos"
 
-#: js/Model.js:64 js/Model.js:302
+#: js/Model.js:64 js/Model.js:303
 msgid "Events"
 msgstr "Eventos"
 
@@ -382,13 +382,13 @@ msgstr "Calendarios"
 msgid "Quick search"
 msgstr ""
 
-#: js/Model.js:298
+#: js/Model.js:299
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Asistente"
 msgstr[1] "Asistentes"
 
-#: js/Model.js:472
+#: js/Model.js:473
 msgid "Resources"
 msgstr "Recursos"
 

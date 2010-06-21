@@ -179,7 +179,7 @@ msgid "Last Name"
 msgstr "Příjmení"
 
 #: js/ContactEditDialog.js:120 js/ContactEditDialog.js:385
-#: js/ContactGrid.js:98 js/ContactGridDetailsPanel.js:131 js/Model.js:151
+#: js/ContactGrid.js:98 js/ContactGridDetailsPanel.js:132 js/Model.js:151
 #: Setup/setup.xml:608
 msgid "Company"
 msgstr "Firma"
@@ -205,18 +205,18 @@ msgid "Contact Information"
 msgstr "Kontaktní informace"
 
 #: js/ContactEditDialog.js:168 js/ContactGrid.js:114
-#: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
+#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
 #: js/Model.js:152
 msgid "Phone"
 msgstr "Telefon"
 
 #: js/ContactEditDialog.js:172 js/ContactGrid.js:115
-#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
+#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
 msgid "Mobile"
 msgstr "Mobil"
 
 #: js/ContactEditDialog.js:176 js/ContactGrid.js:116
-#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
+#: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
 msgid "Fax"
 msgstr "Fax"
 
@@ -232,8 +232,8 @@ msgstr "Mobil (privátní)"
 msgid "Fax (private)"
 msgstr "Fax (privátní)"
 
-#: js/ContactEditDialog.js:192 js/ContactGridDetailsPanel.js:142
-#: js/ContactGridDetailsPanel.js:166
+#: js/ContactEditDialog.js:192 js/ContactGridDetailsPanel.js:143
+#: js/ContactGridDetailsPanel.js:167
 msgid "E-Mail"
 msgstr "E-mail"
 
@@ -242,7 +242,7 @@ msgid "E-Mail (private)"
 msgstr "E-mail (privátní)"
 
 #: js/ContactEditDialog.js:203 js/ContactGrid.js:123
-#: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
+#: js/ContactGridDetailsPanel.js:145 js/ContactGridDetailsPanel.js:169
 msgid "Web"
 msgstr "WWW"
 
@@ -419,19 +419,19 @@ msgstr "Privátní mobil"
 msgid "Internal Contact"
 msgstr "Interní kontakt"
 
-#: js/ContactGridDetailsPanel.js:62 js/Model.js:99
+#: js/ContactGridDetailsPanel.js:63 js/Model.js:99
 msgid "Contacts"
 msgstr "Kontakty"
 
-#: js/ContactGridDetailsPanel.js:65
+#: js/ContactGridDetailsPanel.js:66
 msgid "Select contact"
 msgstr "Vyberte kontakt"
 
-#: js/ContactGridDetailsPanel.js:155
+#: js/ContactGridDetailsPanel.js:156
 msgid "Private"
 msgstr "Soukromé"
 
-#: js/ContactGridDetailsPanel.js:178
+#: js/ContactGridDetailsPanel.js:179
 msgid "Info"
 msgstr "Informace"
 

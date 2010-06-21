@@ -17,31 +17,31 @@ msgstr ""
 msgid "Active Sync"
 msgstr "Active Sync"
 
-#: js/Application.js:49
+#: js/Application.js:48
 msgid "Select a Device"
 msgstr "Select a Device"
 
-#: js/Application.js:63
+#: js/Application.js:62
 msgid "No ActiveSync Device registered"
 msgstr "No ActiveSync Device registered"
 
-#: js/Application.js:71
+#: js/Application.js:70
 msgid "Set as {0} Filter"
 msgstr "Set as {0} Filter"
 
-#: js/Application.js:96
+#: js/Application.js:95
 msgid "Resetted Sync Filter"
 msgstr "Resetted Sync Filter"
 
-#: js/Application.js:97 js/Application.js:109
+#: js/Application.js:96 js/Application.js:108
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
 msgstr "{0} filter for device \"{1}\" is now \"{2}\""
 
-#: js/Application.js:100
+#: js/Application.js:99
 msgid "resetted"
 msgstr "resetted"
 
-#: js/Application.js:108
+#: js/Application.js:107
 msgid "Set Sync Filter"
 msgstr "Set Sync Filter"
 

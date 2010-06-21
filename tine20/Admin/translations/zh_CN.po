@@ -101,7 +101,7 @@ msgstr "浏览电脑"
 msgid "view computers list and details"
 msgstr "浏览电脑列表和细节"
 
-#: js/Admin.js:20 js/user/GridPanel.js:96 js/user/Users.js:66
+#: js/Admin.js:20 js/user/GridPanel.js:100 js/user/Users.js:66
 #, fuzzy
 msgid "User"
 msgid_plural "Users"
@@ -159,7 +159,7 @@ msgstr "显示从："
 msgid "to:"
 msgstr "到："
 
-#: js/Admin.js:437 js/Applications.js:192 js/Groups.js:178 js/Roles.js:177
+#: js/Admin.js:437 js/Applications.js:191 js/Groups.js:178 js/Roles.js:177
 #: js/Tags.js:167
 msgid "Search:"
 msgstr "搜索："
@@ -196,12 +196,12 @@ msgstr "没有访问日志条目要显示"
 msgid "Session ID"
 msgstr "会话 ID"
 
-#: js/Admin.js:565 js/user/EditDialog.js:318
+#: js/Admin.js:565 js/user/EditDialog.js:533
 msgid "Login Name"
 msgstr "登录名"
 
-#: js/Admin.js:566 js/Applications.js:287 js/Groups.js:238 js/Roles.js:239
-#: js/SambaMachineGrid.js:89 js/Tags.js:223
+#: js/Admin.js:566 js/Applications.js:286 js/Groups.js:238 js/Roles.js:239
+#: js/SambaMachineGrid.js:93 js/Tags.js:223
 msgid "Name"
 msgstr "名字"
 
@@ -225,52 +225,52 @@ msgstr "账户 ID"
 msgid "Result"
 msgstr "结果"
 
-#: js/Applications.js:45
+#: js/Applications.js:44
 msgid "{0} Settings"
 msgstr "{0}设置"
 
-#: js/Applications.js:153
+#: js/Applications.js:152
 msgid "enable application"
 msgstr "启用程序"
 
-#: js/Applications.js:154
+#: js/Applications.js:153
 msgid "disable application"
 msgstr "关闭程序"
 
-#: js/Applications.js:155
+#: js/Applications.js:154
 msgid "settings"
 msgstr "设置"
 
-#: js/Applications.js:235 js/user/EditDialog.js:376
+#: js/Applications.js:234 js/user/EditDialog.js:591
 msgid "disabled"
 msgstr "关闭的"
 
-#: js/Applications.js:238 js/user/EditDialog.js:376
+#: js/Applications.js:237 js/user/EditDialog.js:591
 msgid "enabled"
 msgstr "启用的"
 
-#: js/Applications.js:242
+#: js/Applications.js:241
 msgid "unknown status ({0})"
 msgstr "未知状态({0})"
 
-#: js/Applications.js:276
+#: js/Applications.js:275
 msgid "Displaying application {0} - {1} of {2}"
 msgstr "显示程序 {0} - {1} of {2}"
 
-#: js/Applications.js:277
+#: js/Applications.js:276
 msgid "No applications to display"
 msgstr "没有程序要显示"
 
-#: js/Applications.js:286
+#: js/Applications.js:285
 #, fuzzy
 msgid "Order"
 msgstr "顺序"
 
-#: js/Applications.js:288 js/user/EditDialog.js:370 js/user/GridPanel.js:156
+#: js/Applications.js:287 js/user/EditDialog.js:585 js/user/GridPanel.js:160
 msgid "Status"
 msgstr "状态"
 
-#: js/Applications.js:289
+#: js/Applications.js:288
 #, fuzzy
 msgid "Version"
 msgstr "版本"
@@ -283,8 +283,8 @@ msgstr "真的要删除选中的组？"
 msgid "Deleting group(s)..."
 msgstr "删除组..."
 
-#: js/Groups.js:75 js/Groups.js:402 js/RoleEditDialog.js:101
-#: js/RoleEditDialog.js:129 js/Roles.js:70 js/Tags.js:398
+#: js/Groups.js:75 js/Groups.js:410 js/RoleEditDialog.js:106
+#: js/RoleEditDialog.js:134 js/Roles.js:70 js/Tags.js:406
 msgid "Failed"
 msgstr "失败"
 
@@ -312,102 +312,102 @@ msgstr "显示组 {0} - {1} of {2}"
 msgid "No groups to display"
 msgstr "没有组要显示"
 
-#: js/Groups.js:237 js/Roles.js:238 js/SambaMachineGrid.js:82
-#: js/user/GridPanel.js:155
+#: js/Groups.js:237 js/Roles.js:238 js/SambaMachineGrid.js:86
+#: js/user/GridPanel.js:159
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:239 js/Groups.js:467 js/RoleEditDialog.js:314 js/Roles.js:240
-#: js/SambaMachineGrid.js:65 js/SambaMachineGrid.js:95 js/Tags.js:224
-#: js/Tags.js:542 js/user/GridPanel.js:97
+#: js/Groups.js:239 js/Groups.js:475 js/RoleEditDialog.js:319 js/Roles.js:240
+#: js/SambaMachineGrid.js:69 js/SambaMachineGrid.js:99 js/Tags.js:224
+#: js/Tags.js:550 js/user/GridPanel.js:101
 msgid "Description"
 msgstr "描述"
 
-#: js/Groups.js:367 js/RoleEditDialog.js:64 js/Tags.js:353
+#: js/Groups.js:375 js/RoleEditDialog.js:69 js/Tags.js:361
 msgid "Please wait"
 msgstr "请稍等"
 
-#: js/Groups.js:367 js/RoleEditDialog.js:64
+#: js/Groups.js:375 js/RoleEditDialog.js:69
 msgid "Updating Memberships"
 msgstr "更新会员身份"
 
-#: js/Groups.js:402
+#: js/Groups.js:410
 msgid "Could not save group."
 msgstr "不能保存组"
 
-#: js/Groups.js:407 js/RoleEditDialog.js:108 js/Tags.js:403
+#: js/Groups.js:415 js/RoleEditDialog.js:113 js/Tags.js:411
 msgid "Errors"
 msgstr "错误"
 
-#: js/Groups.js:407 js/RoleEditDialog.js:108 js/Tags.js:403
+#: js/Groups.js:415 js/RoleEditDialog.js:113 js/Tags.js:411
 msgid "Please fix the errors noted."
 msgstr "请修复标明的错误"
 
-#: js/Groups.js:438
+#: js/Groups.js:446
 msgid "Group Members"
 msgstr "组成员"
 
-#: js/Groups.js:460
+#: js/Groups.js:468
 msgid "Group Name"
 msgstr "组名"
 
-#: js/Groups.js:526 js/RoleEditDialog.js:390 js/Tags.js:612
+#: js/Groups.js:534 js/RoleEditDialog.js:395 js/Tags.js:620
 msgid "Transfering {0}..."
 msgstr ""
 
-#: js/Groups.js:526
+#: js/Groups.js:534
 msgid "Group"
 msgstr ""
 
-#: js/Groups.js:538
+#: js/Groups.js:546
 msgid "Add new group"
 msgstr "添加新组"
 
-#: js/Groups.js:540
+#: js/Groups.js:548
 msgid "Edit Group \"{0}\""
 msgstr "编辑组\"{0}\""
 
-#: js/RoleEditDialog.js:101
+#: js/RoleEditDialog.js:106
 msgid "Could not save role."
 msgstr "不能保存角色"
 
-#: js/RoleEditDialog.js:121
+#: js/RoleEditDialog.js:126
 msgid "Deleting role..."
 msgstr "删除角色..."
 
-#: js/RoleEditDialog.js:129 js/Roles.js:70
+#: js/RoleEditDialog.js:134 js/Roles.js:70
 msgid "Some error occurred while trying to delete the role."
 msgstr "当试图删除角色是发生错误"
 
-#: js/RoleEditDialog.js:267
+#: js/RoleEditDialog.js:272
 msgid "Members"
 msgstr "成员"
 
-#: js/RoleEditDialog.js:276
+#: js/RoleEditDialog.js:281
 msgid "Rights"
 msgstr "权限"
 
-#: js/RoleEditDialog.js:306
+#: js/RoleEditDialog.js:311
 msgid "Role Name"
 msgstr "角色名"
 
-#: js/RoleEditDialog.js:346
+#: js/RoleEditDialog.js:351
 msgid "Loading Role..."
 msgstr "加载角色"
 
-#: js/RoleEditDialog.js:346 js/Tags.js:578
+#: js/RoleEditDialog.js:351 js/Tags.js:586
 msgid "Please Wait"
 msgstr "请稍等"
 
-#: js/RoleEditDialog.js:390
+#: js/RoleEditDialog.js:395
 msgid "Role"
 msgstr ""
 
-#: js/RoleEditDialog.js:400
+#: js/RoleEditDialog.js:405
 msgid "Add New Role"
 msgstr "添加新角色"
 
-#: js/RoleEditDialog.js:402
+#: js/RoleEditDialog.js:407
 msgid "Edit Role \"{0}\""
 msgstr "编辑角色 \"{0}\""
 
@@ -439,7 +439,7 @@ msgstr "显示角色{0} - {1} of {2}"
 msgid "No roles to display"
 msgstr "没有角色要显示"
 
-#: js/SambaMachineEditDialog.js:38 js/SambaMachineGrid.js:64
+#: js/SambaMachineEditDialog.js:43 js/SambaMachineGrid.js:68
 msgid "Computer Name"
 msgstr "电脑名"
 
@@ -476,55 +476,55 @@ msgstr "显示标签{0} - {1} of {2}"
 msgid "No tags to display"
 msgstr "没有标签要显示"
 
-#: js/Tags.js:222 js/Tags.js:548
+#: js/Tags.js:222 js/Tags.js:556
 msgid "Color"
 msgstr "颜色"
 
-#: js/Tags.js:353
+#: js/Tags.js:361
 msgid "Updating Tag"
 msgstr "更新标签..."
 
-#: js/Tags.js:398
+#: js/Tags.js:406
 msgid "Could not save tag."
 msgstr "不能保存标签"
 
-#: js/Tags.js:484
+#: js/Tags.js:492
 msgid "Allowed Contexts"
 msgstr "允许的上下文"
 
-#: js/Tags.js:490
+#: js/Tags.js:498
 msgid "Context"
 msgstr "上下文"
 
-#: js/Tags.js:503
+#: js/Tags.js:511
 msgid "Account Rights"
 msgstr "账户权限"
 
-#: js/Tags.js:511
+#: js/Tags.js:519
 msgid "View"
 msgstr "视图"
 
-#: js/Tags.js:516
+#: js/Tags.js:524
 msgid "Use"
 msgstr "使用"
 
-#: js/Tags.js:535
+#: js/Tags.js:543
 msgid "Tag Name"
 msgstr "标签名"
 
-#: js/Tags.js:578
+#: js/Tags.js:586
 msgid "Loading Tag..."
 msgstr "加载标签..."
 
-#: js/Tags.js:612
+#: js/Tags.js:620
 msgid "Tag"
 msgstr ""
 
-#: js/Tags.js:622
+#: js/Tags.js:630
 msgid "Add New Tag"
 msgstr "添加新标签"
 
-#: js/Tags.js:624
+#: js/Tags.js:632
 msgid "Edit Tag \"{0}\""
 msgstr "编辑标签\"{0}\""
 
@@ -533,281 +533,281 @@ msgstr "编辑标签\"{0}\""
 msgid "Passwords do not match!"
 msgstr "密码不匹配！"
 
-#: js/user/EditDialog.js:174
-msgid "Aliases"
-msgstr "别名"
-
-#: js/user/EditDialog.js:177
-msgid "Email Alias"
-msgstr "电子邮件别名"
-
-#: js/user/EditDialog.js:183
-msgid "Add an alias address..."
-msgstr "添加别名地址..."
-
-#: js/user/EditDialog.js:193
-msgid "Forwards"
-msgstr "转发"
-
-#: js/user/EditDialog.js:196
-msgid "Email Forward"
-msgstr "转发电子邮件"
-
-#: js/user/EditDialog.js:202
-msgid "Add a forward address..."
-msgstr "添加转发地址..."
-
-#: js/user/EditDialog.js:225
-msgid "Password confirmation"
-msgstr "密码确认"
-
-#: js/user/EditDialog.js:242
-msgid "Repeat password"
-msgstr "再输一遍密码"
-
-#: js/user/EditDialog.js:254
-msgid "Cancel"
-msgstr "取消"
-
-#: js/user/EditDialog.js:261
-msgid "Ok"
-msgstr "确认"
-
-#: js/user/EditDialog.js:287
-msgid "Account"
-msgstr "账户"
-
-#: js/user/EditDialog.js:302
-msgid "First Name"
-msgstr "名"
-
-#: js/user/EditDialog.js:312
-msgid "Last Name"
-msgstr "姓"
-
-#: js/user/EditDialog.js:323
-msgid "Password"
-msgstr "密码"
-
-#: js/user/EditDialog.js:327
-msgid "no password set"
-msgstr "没有设置密码"
-
-#: js/user/EditDialog.js:352
-msgid "Emailaddress"
-msgstr "电子邮件地址"
-
-#: js/user/EditDialog.js:358 js/user/GridPanel.js:162
-msgid "OpenID"
-msgstr "开放 ID"
-
-#: js/user/EditDialog.js:364
-msgid "Primary group"
-msgstr "基本组"
-
-#: js/user/EditDialog.js:376
-#, fuzzy
-msgid "expired"
-msgstr "过期"
-
-#: js/user/EditDialog.js:379 js/user/GridPanel.js:166
-msgid "Expires"
-msgstr "过期"
-
-#: js/user/EditDialog.js:381 js/user/EditDialog.js:423
-#: js/user/EditDialog.js:500
-msgid "never"
-msgstr "从不"
-
-#: js/user/EditDialog.js:386
-msgid "Visibility"
-msgstr "可见度"
-
-#: js/user/EditDialog.js:392
-msgid "Display in addressbook"
-msgstr "在地址本中显示"
-
-#: js/user/EditDialog.js:392
-msgid "Hide from addressbook"
-msgstr "从地址本中隐藏"
-
-#: js/user/EditDialog.js:397 js/user/EditDialog.js:592
-msgid "Information"
-msgstr "信息"
-
-#: js/user/EditDialog.js:413 js/user/GridPanel.js:163
-msgid "Last login at"
-msgstr "上次登录时间"
-
-#: js/user/EditDialog.js:415 js/user/EditDialog.js:419
-msgid "don't know"
-msgstr "不知道"
-
-#: js/user/EditDialog.js:415 js/user/EditDialog.js:419
-#: js/user/EditDialog.js:480
-msgid "never logged in"
-msgstr "从未登录"
-
-#: js/user/EditDialog.js:417 js/user/GridPanel.js:164
-msgid "Last login from"
-msgstr "上次登录于"
-
-#: js/user/EditDialog.js:421
-msgid "Password set"
-msgstr "密码设置"
-
-#: js/user/EditDialog.js:429
-msgid "Fileserver"
-msgstr "文件服务器"
-
-#: js/user/EditDialog.js:434
+#: js/user/EditDialog.js:158
 msgid "Unix"
 msgstr "Unix"
 
-#: js/user/EditDialog.js:449
+#: js/user/EditDialog.js:173
 msgid "Home Directory"
 msgstr "Home 目录"
 
-#: js/user/EditDialog.js:453
+#: js/user/EditDialog.js:177
 msgid "Login Shell"
 msgstr "登录 Shell"
 
-#: js/user/EditDialog.js:458
+#: js/user/EditDialog.js:182
 msgid "Windows"
 msgstr "视窗"
 
-#: js/user/EditDialog.js:473
+#: js/user/EditDialog.js:197
 msgid "Home Drive"
 msgstr "Home 盘"
 
-#: js/user/EditDialog.js:478
+#: js/user/EditDialog.js:202
 #, fuzzy
 msgid "Logon Time"
 msgstr "登录时间"
 
-#: js/user/EditDialog.js:483
+#: js/user/EditDialog.js:204 js/user/EditDialog.js:630
+#: js/user/EditDialog.js:634
+msgid "never logged in"
+msgstr "从未登录"
+
+#: js/user/EditDialog.js:207
 msgid "Home Path"
 msgstr "Home 路径"
 
-#: js/user/EditDialog.js:488
+#: js/user/EditDialog.js:212
 #, fuzzy
 msgid "Logoff Time"
 msgstr "登出时间"
 
-#: js/user/EditDialog.js:490
+#: js/user/EditDialog.js:214
 msgid "never logged off"
 msgstr "从未登出"
 
-#: js/user/EditDialog.js:493
+#: js/user/EditDialog.js:217
 msgid "Profile Path"
 msgstr "Profile 路径"
 
-#: js/user/EditDialog.js:498
+#: js/user/EditDialog.js:222
 msgid "Password Last Set"
 msgstr "最后密码设置"
 
-#: js/user/EditDialog.js:503
+#: js/user/EditDialog.js:224 js/user/EditDialog.js:596
+#: js/user/EditDialog.js:638
+msgid "never"
+msgstr "从不"
+
+#: js/user/EditDialog.js:227
 msgid "Logon Script"
 msgstr "登录脚本"
 
-#: js/user/EditDialog.js:508
+#: js/user/EditDialog.js:232
 msgid "Password Can Change"
 msgstr "密码可以修改"
 
-#: js/user/EditDialog.js:510 js/user/EditDialog.js:515
-#: js/user/EditDialog.js:520
+#: js/user/EditDialog.js:234 js/user/EditDialog.js:239
+#: js/user/EditDialog.js:244
 msgid "not set"
 msgstr "没设置"
 
-#: js/user/EditDialog.js:513
+#: js/user/EditDialog.js:237
 msgid "Password Must Change"
 msgstr "密码必须修改"
 
-#: js/user/EditDialog.js:518
+#: js/user/EditDialog.js:242
 msgid "Kick Off Time"
 msgstr "开始时间"
 
-#: js/user/EditDialog.js:525
-msgid "IMAP"
-msgstr "IMAP"
-
-#: js/user/EditDialog.js:532
+#: js/user/EditDialog.js:263
 msgid "Quota (MB)"
 msgstr ""
 
-#: js/user/EditDialog.js:546
+#: js/user/EditDialog.js:277
 msgid "Quota"
 msgstr "额度"
 
-#: js/user/EditDialog.js:554
+#: js/user/EditDialog.js:285
 msgid "Current Mail Size"
 msgstr "当前邮件大小"
 
-#: js/user/EditDialog.js:562
+#: js/user/EditDialog.js:293
 msgid "Sieve Quota (MB)"
 msgstr ""
 
-#: js/user/EditDialog.js:576
+#: js/user/EditDialog.js:307
 msgid "Sieve Quota"
 msgstr "筛子额度"
 
-#: js/user/EditDialog.js:584
+#: js/user/EditDialog.js:315
 msgid "Sieve Size"
 msgstr ""
 
-#: js/user/EditDialog.js:607
+#: js/user/EditDialog.js:323 js/user/EditDialog.js:612
+msgid "Information"
+msgstr "信息"
+
+#: js/user/EditDialog.js:338
 msgid "Last Login"
 msgstr "上次登录"
 
-#: js/user/EditDialog.js:613
-msgid "SMTP"
-msgstr "SMTP"
+#: js/user/EditDialog.js:376
+msgid "Aliases"
+msgstr "别名"
 
-#: js/user/EditDialog.js:629
+#: js/user/EditDialog.js:379
+msgid "Email Alias"
+msgstr "电子邮件别名"
+
+#: js/user/EditDialog.js:385
+msgid "Add an alias address..."
+msgstr "添加别名地址..."
+
+#: js/user/EditDialog.js:396
+msgid "Forwards"
+msgstr "转发"
+
+#: js/user/EditDialog.js:399
+msgid "Email Forward"
+msgstr "转发电子邮件"
+
+#: js/user/EditDialog.js:405
+msgid "Add a forward address..."
+msgstr "添加转发地址..."
+
+#: js/user/EditDialog.js:417
 msgid "Forward Only"
 msgstr "只转发"
 
-#: js/user/GridPanel.js:54
+#: js/user/EditDialog.js:440
+msgid "Password confirmation"
+msgstr "密码确认"
+
+#: js/user/EditDialog.js:457
+msgid "Repeat password"
+msgstr "再输一遍密码"
+
+#: js/user/EditDialog.js:469
+msgid "Cancel"
+msgstr "取消"
+
+#: js/user/EditDialog.js:476
+msgid "Ok"
+msgstr "确认"
+
+#: js/user/EditDialog.js:502
+msgid "Account"
+msgstr "账户"
+
+#: js/user/EditDialog.js:517
+msgid "First Name"
+msgstr "名"
+
+#: js/user/EditDialog.js:527
+msgid "Last Name"
+msgstr "姓"
+
+#: js/user/EditDialog.js:538
+msgid "Password"
+msgstr "密码"
+
+#: js/user/EditDialog.js:542
+msgid "no password set"
+msgstr "没有设置密码"
+
+#: js/user/EditDialog.js:567
+msgid "Emailaddress"
+msgstr "电子邮件地址"
+
+#: js/user/EditDialog.js:573 js/user/GridPanel.js:166
+msgid "OpenID"
+msgstr "开放 ID"
+
+#: js/user/EditDialog.js:579
+msgid "Primary group"
+msgstr "基本组"
+
+#: js/user/EditDialog.js:591
+#, fuzzy
+msgid "expired"
+msgstr "过期"
+
+#: js/user/EditDialog.js:594 js/user/GridPanel.js:170
+msgid "Expires"
+msgstr "过期"
+
+#: js/user/EditDialog.js:601
+msgid "Visibility"
+msgstr "可见度"
+
+#: js/user/EditDialog.js:607
+msgid "Display in addressbook"
+msgstr "在地址本中显示"
+
+#: js/user/EditDialog.js:607
+msgid "Hide from addressbook"
+msgstr "从地址本中隐藏"
+
+#: js/user/EditDialog.js:628 js/user/GridPanel.js:167
+msgid "Last login at"
+msgstr "上次登录时间"
+
+#: js/user/EditDialog.js:630 js/user/EditDialog.js:634
+msgid "don't know"
+msgstr "不知道"
+
+#: js/user/EditDialog.js:632 js/user/GridPanel.js:168
+msgid "Last login from"
+msgstr "上次登录于"
+
+#: js/user/EditDialog.js:636
+msgid "Password set"
+msgstr "密码设置"
+
+#: js/user/EditDialog.js:644
+msgid "Fileserver"
+msgstr "文件服务器"
+
+#: js/user/EditDialog.js:650
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/user/EditDialog.js:658
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/user/GridPanel.js:58
 msgid "enable account"
 msgstr "开启账户"
 
-#: js/user/GridPanel.js:64
+#: js/user/GridPanel.js:68
 msgid "disable account"
 msgstr "关闭账户"
 
-#: js/user/GridPanel.js:74
+#: js/user/GridPanel.js:78
 msgid "reset password"
 msgstr "重置密码"
 
-#: js/user/GridPanel.js:157
+#: js/user/GridPanel.js:161
 msgid "Displayname"
 msgstr "显示名"
 
-#: js/user/GridPanel.js:158
+#: js/user/GridPanel.js:162
 msgid "Loginname"
 msgstr "登录名"
 
-#: js/user/GridPanel.js:159
+#: js/user/GridPanel.js:163
 msgid "Last name"
 msgstr "姓"
 
-#: js/user/GridPanel.js:160
+#: js/user/GridPanel.js:164
 msgid "First name"
 msgstr "名"
 
-#: js/user/GridPanel.js:161
+#: js/user/GridPanel.js:165
 msgid "Email"
 msgstr "电子邮件"
 
-#: js/user/GridPanel.js:165
+#: js/user/GridPanel.js:169
 msgid "Password changed"
 msgstr "密码已修改"
 
-#: js/user/GridPanel.js:220
+#: js/user/GridPanel.js:224
 msgid "Set new password"
 msgstr "设置新密码"
 
-#: js/user/GridPanel.js:220
+#: js/user/GridPanel.js:224
 msgid "Please enter the new password:"
 msgstr "请输入新密码"
 

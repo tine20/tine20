@@ -86,7 +86,7 @@ msgid "Manage Resources"
 msgstr ""
 
 #: js/AttendeeFilterModel.js:37 js/AttendeeGridPanel.js:77
-#: js/EventDetailsPanel.js:251 js/Model.js:298
+#: js/EventDetailsPanel.js:251 js/Model.js:299
 msgid "Attendee"
 msgstr "Участник"
 
@@ -118,7 +118,7 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:166 js/Model.js:472
+#: js/AttendeeGridPanel.js:166 js/Model.js:473
 #, fuzzy
 msgid "Resource"
 msgid_plural "Resources"
@@ -144,7 +144,7 @@ msgid "Click here to invite another attender..."
 msgstr "Нажмите здесь, чтобы пригласить другого участника..."
 
 #: js/AttendeeGridPanel.js:433 js/AttendeeGridPanel.js:451
-#: js/AttendeeGridPanel.js:464 js/AttendeeGridPanel.js:476 js/Model.js:314
+#: js/AttendeeGridPanel.js:464 js/AttendeeGridPanel.js:476 js/Model.js:315
 msgid "No Information"
 msgstr "Нет информации"
 
@@ -160,19 +160,19 @@ msgstr "Необходимый"
 msgid "Optional"
 msgstr "Дополнительный"
 
-#: js/AttendeeGridPanel.js:513 js/Model.js:442 Model/Attender.php:45
+#: js/AttendeeGridPanel.js:513 js/Model.js:443 Model/Attender.php:45
 msgid "No response"
 msgstr "Без ответа"
 
-#: js/AttendeeGridPanel.js:516 js/Model.js:443 Model/Attender.php:46
+#: js/AttendeeGridPanel.js:516 js/Model.js:444 Model/Attender.php:46
 msgid "Accepted"
 msgstr "Принято"
 
-#: js/AttendeeGridPanel.js:519 js/Model.js:444 Model/Attender.php:47
+#: js/AttendeeGridPanel.js:519 js/Model.js:445 Model/Attender.php:47
 msgid "Declined"
 msgstr "Отклонено"
 
-#: js/AttendeeGridPanel.js:522 js/Model.js:445 Model/Attender.php:48
+#: js/AttendeeGridPanel.js:522 js/Model.js:446 Model/Attender.php:48
 msgid "Tentative"
 msgstr "Предполагается"
 
@@ -195,40 +195,40 @@ msgstr "Загрузка событий, пожалуйста, подождит�
 msgid "Scheduling Conflict"
 msgstr ""
 
-#: js/CalendarPanel.js:230
+#: js/CalendarPanel.js:233
 msgid "Ignore Conflict"
 msgstr ""
 
-#: js/CalendarPanel.js:237
+#: js/CalendarPanel.js:240
 #, fuzzy
 msgid "Edit Event"
 msgstr "Обновить событие"
 
-#: js/CalendarPanel.js:252
+#: js/CalendarPanel.js:251
 msgid "The following attendee are busy at the requested time:"
 msgstr ""
 
-#: js/CalendarPanel.js:273
+#: js/CalendarPanel.js:272
 msgid "Confirm Update of Series"
 msgstr "Подтвердите обновление серии"
 
-#: js/CalendarPanel.js:274
+#: js/CalendarPanel.js:273
 msgid "Do you really want to update all events of this recurring event series?"
 msgstr ""
 
-#: js/CalendarPanel.js:288
+#: js/CalendarPanel.js:287
 msgid "Update Event"
 msgstr "Обновить событие"
 
-#: js/CalendarPanel.js:291
+#: js/CalendarPanel.js:290
 msgid "Update nothing"
 msgstr "Ничего не обновлять"
 
-#: js/CalendarPanel.js:292
+#: js/CalendarPanel.js:291
 msgid "Update whole series"
 msgstr "Обновить всю серию"
 
-#: js/CalendarPanel.js:293
+#: js/CalendarPanel.js:292
 msgid "Update this event only"
 msgstr "Обновить только это событие"
 
@@ -368,14 +368,14 @@ msgstr ""
 msgid "WK"
 msgstr "НЕД"
 
-#: js/Model.js:64 js/Model.js:302
+#: js/Model.js:64 js/Model.js:303
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Событие"
 msgstr[1] "События"
 msgstr[2] "Событий"
 
-#: js/Model.js:64 js/Model.js:302
+#: js/Model.js:64 js/Model.js:303
 msgid "Events"
 msgstr "События"
 
@@ -387,14 +387,14 @@ msgstr "Календари"
 msgid "Quick search"
 msgstr ""
 
-#: js/Model.js:298
+#: js/Model.js:299
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Участник"
 msgstr[1] "Участника"
 msgstr[2] "Участников"
 
-#: js/Model.js:472
+#: js/Model.js:473
 #, fuzzy
 msgid "Resources"
 msgstr "Повторения"

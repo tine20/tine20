@@ -50,19 +50,15 @@ msgstr[2] "Czy na pewno chcesz usunąć zaznaczone zadania?"
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
-#: js/GridPanel.js:93
-#: js/GridPanel.js:144
-#: js/TaskEditDialog.js:181
+#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
 msgid "Summary"
 msgstr "Streszczenie"
 
-#: js/GridPanel.js:94
-#: js/GridPanel.js:155
+#: js/GridPanel.js:94 js/GridPanel.js:155
 msgid "Due Date"
 msgstr "Data zakończenia"
 
-#: js/GridPanel.js:96
-#: js/GridPanel.js:218
+#: js/GridPanel.js:96 js/GridPanel.js:218
 msgid "Responsible"
 msgstr "Osoba odpowiedzialna"
 
@@ -78,8 +74,7 @@ msgstr "Zapisanie zadania było niemożliwe."
 msgid "Tags"
 msgstr "Znaczniki"
 
-#: js/GridPanel.js:141
-#: Model/Task.php:195
+#: js/GridPanel.js:141 Model/Task.php:195
 msgid "Lead"
 msgstr "Zapytanie wstępne"
 
@@ -87,20 +82,15 @@ msgstr "Zapytanie wstępne"
 msgid "Add a task..."
 msgstr "Dodaj zadanie..."
 
-#: js/GridPanel.js:163
-#: js/TaskEditDialog.js:189
-#: Model/Task.php:186
+#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
 msgid "Priority"
 msgstr "Priorytet"
 
-#: js/GridPanel.js:177
-#: Model/Task.php:188
+#: js/GridPanel.js:177 Model/Task.php:188
 msgid "Percent"
 msgstr "W procentach"
 
-#: js/GridPanel.js:190
-#: js/Status.js:33
-#: js/TaskEditDialog.js:209
+#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
 #: Model/Task.php:187
 msgid "Status"
 msgstr "Status"
@@ -109,8 +99,7 @@ msgstr "Status"
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/GridPanel.js:211
-#: js/TaskEditDialog.js:213
+#: js/GridPanel.js:211 js/TaskEditDialog.js:213
 msgid "Completed"
 msgstr "Zakończone dnia"
 
@@ -118,8 +107,7 @@ msgstr "Zakończone dnia"
 msgid "Show closed"
 msgstr "Pokaż zakończone"
 
-#: js/Status.js:187
-#: Setup/setup.xml:339
+#: js/Status.js:187 Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "W OPRACOWANIU"
 
@@ -201,8 +189,7 @@ msgstr "Domyślne ulubione"
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr "Domyślne ulubione zadanie ładowane przy uruchamianiu zadań"
 
-#: Setup/Initialize.php:41
-#: Setup/Update/Release3.php:66
+#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
 msgid "All tasks of my taskslists"
 msgstr "Wszystkie zadania z mojej listy zadań"
 
@@ -220,53 +207,75 @@ msgstr "ODWOŁANE"
 
 #~ msgid "to to list"
 #~ msgstr "Lista zadań"
+
 #~ msgid "Tasks) "
 #~ msgstr "Zadania)"
+
 #~ msgid "Could not delete task(s)."
 #~ msgstr "Usunięcie zadania / zdań było niemożliwe."
+
 #~ msgid "Edit task"
 #~ msgstr "Edytuj zadanie"
+
 #~ msgid "Add task"
 #~ msgstr "Dodaj zadanie"
+
 #~ msgid "Delete task"
 #~ msgid_plural "Delete tasks"
 #~ msgstr[0] "Usuń zadanie"
 #~ msgstr[1] "Usuń zadania"
 #~ msgstr[2] "Usuń zadania"
+
 #~ msgid "Enter searchfilter"
 #~ msgstr "wpisz szukaną frazę"
+
 #~ msgid "Search:"
 #~ msgstr "Znajdź:"
+
 #~ msgid "Displaying tasks {0} - {1} of {2}"
 #~ msgstr "Wyświetlane zadania {0} - {1} z {2}"
+
 #~ msgid "No tasks to display"
 #~ msgstr "Brak zadań"
+
 #~ msgid "No Tasks to display"
 #~ msgstr "Brak zadań"
+
 #~ msgid "Loading Task..."
 #~ msgstr "Ładowanie zadania..."
+
 #~ msgid "Please Wait"
 #~ msgstr "Proszę czekać"
+
 #~ msgid "Add New Task"
 #~ msgstr "Dodaj nowe zadanie"
+
 #~ msgid "Edit Task \"{0}\""
 #~ msgstr "Edytuj zadanie \"{0}\""
+
 #~ msgid "Please wait"
 #~ msgstr "Proszę czekać"
+
 #~ msgid "Saving Task"
 #~ msgstr "Zapisywanie zadania"
+
 #~ msgid "Errors"
 #~ msgstr "Błędy"
+
 #~ msgid "Please fix the errors noted."
 #~ msgstr "Proszę poprawić wskazane błędy."
+
 #~ msgid "Confirm"
 #~ msgstr "Potwierdzenie"
+
 #~ msgid "Do you really want to delete this task?"
 #~ msgstr "Czy na pewno chcesz usunąć to zadanie?"
+
 #~ msgid "Please wait a moment..."
 #~ msgstr "Proszę chwileczkę poczekać …"
+
 #~ msgid "Enter short name..."
 #~ msgstr "wpisz swoją nazwę..."
+
 #~ msgid "Saved in"
 #~ msgstr "Zapisz w"
-

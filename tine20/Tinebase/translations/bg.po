@@ -53,7 +53,7 @@ msgstr "Филтър"
 msgid "Data"
 msgstr ""
 
-#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:54
+#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:58
 msgid "Tags"
 msgstr "Категории"
 
@@ -65,19 +65,19 @@ msgstr "Обработен/създаден от "
 msgid "Activities"
 msgstr "Операции"
 
-#: Frontend/Http.php:544 js/ExceptionHandler.js:127
+#: Frontend/Http.php:546 js/ExceptionHandler.js:127
 msgid "Authorisation Required"
 msgstr "Изискано упълномощаване"
 
-#: Frontend/Http.php:545
+#: Frontend/Http.php:547
 msgid "Your session is not valid. You need to login again."
 msgstr "Лимита на сесията е преминат. Трябва да се регистрирате наново."
 
-#: Frontend/Http.php:571 js/ExceptionDialog.js:46
+#: Frontend/Http.php:573 js/ExceptionDialog.js:51
 msgid "Abnormal End"
 msgstr "Програмен срив"
 
-#: Frontend/Http.php:572 js/ExceptionDialog.js:71
+#: Frontend/Http.php:574 js/ExceptionDialog.js:76
 msgid "An error occurred, the program ended abnormal."
 msgstr "Грешка, водеща до рограмен срив."
 
@@ -139,57 +139,57 @@ msgid_plural "to do lists"
 msgstr[0] "списък със задачи"
 msgstr[1] "списъка със задачи"
 
-#: js/ExceptionDialog.js:54 js/MainMenu.js:236 js/ux/form/LayerCombo.js:194
-#: js/widgets/ActivitiesPanel.js:293
-#: js/widgets/container/ContainerSelect.js:450
-#: js/widgets/dialog/EditDialog.js:183
-#: js/widgets/dialog/MultiOptionsDialog.js:98
-#: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
-#: js/widgets/tags/TagsMassAttachAction.js:86
+#: js/ExceptionDialog.js:59 js/MainMenu.js:236 js/ux/form/LayerCombo.js:194
+#: js/widgets/ActivitiesPanel.js:300
+#: js/widgets/container/ContainerSelect.js:452
+#: js/widgets/dialog/EditDialog.js:184
+#: js/widgets/dialog/MultiOptionsDialog.js:103
+#: js/widgets/dialog/PreferencesDialog.js:127 js/widgets/EditRecord.js:138
+#: js/widgets/tags/TagsMassAttachAction.js:90
 msgid "Cancel"
 msgstr "Прекъсни"
 
-#: js/ExceptionDialog.js:62
+#: js/ExceptionDialog.js:67
 msgid "Send Report"
 msgstr "Изпрати рапорт"
 
-#: js/ExceptionDialog.js:72
+#: js/ExceptionDialog.js:77
 msgid "The last action you made was potentially not performed correctly."
 msgstr "Възможно е вашата последна операция до не е изпълнена коректно."
 
-#: js/ExceptionDialog.js:73
+#: js/ExceptionDialog.js:78
 msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
 msgstr "Изпращайки протокол Вие подпомагате усавършенстването на програмата. Моля опишете вашите стъпки преди настъпването на грешката."
 
-#: js/ExceptionDialog.js:79 js/widgets/tags/TagsPanel.js:595
+#: js/ExceptionDialog.js:84 js/widgets/tags/TagsPanel.js:599
 msgid "Description"
 msgstr "Описание"
 
-#: js/ExceptionDialog.js:87
+#: js/ExceptionDialog.js:92
 msgid "Send Contact Information"
 msgstr "Изпраща информация на контакта"
 
-#: js/ExceptionDialog.js:104
+#: js/ExceptionDialog.js:109
 msgid "Details:"
 msgstr "Детайли:"
 
-#: js/ExceptionDialog.js:132
+#: js/ExceptionDialog.js:137
 msgid "Sending report..."
 msgstr "Изпраща рапорт..."
 
-#: js/ExceptionDialog.js:132
+#: js/ExceptionDialog.js:137
 msgid "Please wait a moment"
 msgstr "Моля изчакайте малко"
 
-#: js/ExceptionDialog.js:174
+#: js/ExceptionDialog.js:179
 msgid "Transmission Completed"
 msgstr "Край на изпращането"
 
-#: js/ExceptionDialog.js:175
+#: js/ExceptionDialog.js:180
 msgid "Your report has been sent. Thanks for your contribution"
 msgstr "Вашият протокол е изпратен. Блегодарим Ви за съдействието."
 
-#: js/ExceptionDialog.js:175
+#: js/ExceptionDialog.js:180
 msgid "Please restart your browser now!"
 msgstr "Моля рестартирайте сега Вашия браузър!"
 
@@ -261,11 +261,11 @@ msgstr ""
 msgid "Login"
 msgstr "Вход"
 
-#: js/LoginPanel.js:87 js/widgets/dialog/CredentialsDialog.js:68
+#: js/LoginPanel.js:87 js/widgets/dialog/CredentialsDialog.js:69
 msgid "Username"
 msgstr "Потребителско име"
 
-#: js/LoginPanel.js:99 js/widgets/dialog/CredentialsDialog.js:72
+#: js/LoginPanel.js:99 js/widgets/dialog/CredentialsDialog.js:73
 msgid "Password"
 msgstr "Парола"
 
@@ -313,7 +313,7 @@ msgstr ""
 msgid "Logging you in..."
 msgstr "Вашите входни данни се обработват..."
 
-#: js/LoginPanel.js:271 js/widgets/container/GrantsDialog.js:168
+#: js/LoginPanel.js:271 js/widgets/container/GrantsDialog.js:169
 #: js/widgets/persistentfilter/PickerPanel.js:202
 #: js/widgets/persistentfilter/PickerPanel.js:227
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:84
@@ -338,14 +338,14 @@ msgstr "Неуспешен вход"
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Вашето(-ите) потребителско име или(и) парола е (са) грешни!!!"
 
-#: js/LoginPanel.js:300 js/widgets/dialog/CredentialsDialog.js:116
-#: js/widgets/dialog/EditDialog.js:435 js/widgets/dialog/ImportDialog.js:194
-#: js/widgets/dialog/PreferencesDialog.js:284
+#: js/LoginPanel.js:300 js/widgets/dialog/CredentialsDialog.js:117
+#: js/widgets/dialog/EditDialog.js:436 js/widgets/dialog/ImportDialog.js:194
+#: js/widgets/dialog/PreferencesDialog.js:282
 msgid "Errors"
 msgstr "Грешки"
 
-#: js/LoginPanel.js:300 js/widgets/dialog/CredentialsDialog.js:116
-#: js/widgets/dialog/EditDialog.js:435 js/widgets/dialog/ImportDialog.js:194
+#: js/LoginPanel.js:300 js/widgets/dialog/CredentialsDialog.js:117
+#: js/widgets/dialog/EditDialog.js:436 js/widgets/dialog/ImportDialog.js:194
 msgid "Please fix the errors noted."
 msgstr "Моля отстранете отбелязаните грешки."
 
@@ -370,7 +370,7 @@ msgstr "Инсталира Гоогел-Гиерс (Google Gears - помощн�
 msgid "Debug Console (Ctrl + F11)"
 msgstr ""
 
-#: js/MainMenu.js:137 js/widgets/dialog/PreferencesPanel.js:37
+#: js/MainMenu.js:137 js/widgets/dialog/PreferencesPanel.js:38
 msgid "Preferences"
 msgstr "Настройки"
 
@@ -408,12 +408,12 @@ msgid "Repeat new Password"
 msgstr "Повтори новата парола"
 
 #: js/MainMenu.js:242 js/ux/form/LayerCombo.js:199
-#: js/widgets/ActivitiesPanel.js:301
-#: js/widgets/container/ContainerSelect.js:459
-#: js/widgets/dialog/EditDialog.js:166
-#: js/widgets/dialog/MultiOptionsDialog.js:91
-#: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
-#: js/widgets/tags/TagsMassAttachAction.js:92
+#: js/widgets/ActivitiesPanel.js:308
+#: js/widgets/container/ContainerSelect.js:461
+#: js/widgets/dialog/EditDialog.js:167
+#: js/widgets/dialog/MultiOptionsDialog.js:96
+#: js/widgets/dialog/PreferencesDialog.js:119 js/widgets/EditRecord.js:117
+#: js/widgets/tags/TagsMassAttachAction.js:96
 msgid "Ok"
 msgstr "Ok"
 
@@ -445,8 +445,8 @@ msgstr "Новито пароли не съвпадат. Моля задай п�
 msgid "Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer."
 msgstr "Инсталирането на Гиерс (Gears) ще провери актуалното състояние на Tine 2.0 и ще кочи всички необходими полета  на вашия компютър."
 
-#: js/MainMenu.js:319 js/widgets/dialog/EditDialog.js:443
-#: js/widgets/grid/GridPanel.js:932
+#: js/MainMenu.js:319 js/widgets/dialog/EditDialog.js:444
+#: js/widgets/grid/GridPanel.js:941
 #: js/widgets/persistentfilter/PickerPanel.js:200
 #: js/widgets/tree/ContextMenu.js:82
 msgid "Confirm"
@@ -489,35 +489,35 @@ msgid_plural "Relations"
 msgstr[0] "Зарежда"
 msgstr[1] "Зарежда"
 
-#: js/tineInit.js:578
+#: js/tineInit.js:585
 msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
 msgstr "Фатална гришка: пропаднал Client self-update, моля свържете се с Вашият администратор и/или рестартирайте вашия броузър."
 
-#: js/UserRegistration.js:33
+#: js/UserRegistration.js:38
 msgid "Registration Wizard"
 msgstr "Упътване за влизане"
 
-#: js/UserRegistration.js:86
+#: js/UserRegistration.js:91
 msgid "Given name"
 msgstr "Собствено име"
 
-#: js/UserRegistration.js:97
+#: js/UserRegistration.js:102
 msgid "Family name"
 msgstr "Фамилия"
 
-#: js/UserRegistration.js:108
+#: js/UserRegistration.js:113
 msgid "Login name"
 msgstr "Потребителско име"
 
-#: js/UserRegistration.js:121
+#: js/UserRegistration.js:126
 msgid "Emailaddress"
 msgstr "Имейл"
 
-#: js/UserRegistration.js:167
+#: js/UserRegistration.js:172
 msgid "Congratulations!"
 msgstr "Поздравления!"
 
-#: js/UserRegistration.js:167
+#: js/UserRegistration.js:172
 msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
 msgstr "Вие зададохте необходимата информация. След като натиснете бутона `Край` ще Ви бъде изпратеп регистрационен имейл."
 
@@ -534,51 +534,51 @@ msgstr "локален режим на работа"
 msgid "unknown"
 msgstr "неоппределен"
 
-#: js/ux/form/ImageField.js:67
+#: js/ux/form/ImageField.js:68
 msgid "Loading"
 msgstr "Зарежда"
 
-#: js/ux/form/ImageField.js:70
+#: js/ux/form/ImageField.js:71
 msgid "Click to edit"
 msgstr ""
 
-#: js/ux/form/ImageField.js:112
+#: js/ux/form/ImageField.js:113
 msgid "Not An Image"
 msgstr "Не е снимка (изображение)"
 
-#: js/ux/form/ImageField.js:112
+#: js/ux/form/ImageField.js:113
 msgid "Please select an image file (gif/png/jpeg)"
 msgstr ""
 
-#: js/ux/form/ImageField.js:146 js/widgets/grid/FileUploadGrid.js:86
+#: js/ux/form/ImageField.js:147 js/widgets/grid/FileUploadGrid.js:85
 msgid "Upload Failed"
 msgstr "Неуспешено зареждане (Upload)"
 
-#: js/ux/form/ImageField.js:146
+#: js/ux/form/ImageField.js:147
 msgid "Could not upload image. Please notify your Administrator"
 msgstr "Неуспешено зареждане (Upload) на снимка. Моля обърнете се към Вашият администратор."
 
-#: js/ux/form/ImageField.js:158
+#: js/ux/form/ImageField.js:159
 msgid "Change Image"
 msgstr "Замени снимка"
 
-#: js/ux/form/ImageField.js:169 js/ux/form/ImageField.js:187
+#: js/ux/form/ImageField.js:170 js/ux/form/ImageField.js:188
 msgid "Crop Image"
 msgstr "Обрежи снимка"
 
-#: js/ux/form/ImageField.js:194
+#: js/ux/form/ImageField.js:195
 msgid "Delete Image"
 msgstr "Изтрий снимка"
 
-#: js/ux/form/ImageField.js:203
+#: js/ux/form/ImageField.js:204
 msgid "Show Original Image"
 msgstr "Показва оригинална снимка"
 
-#: js/ux/form/ImageField.js:242
+#: js/ux/form/ImageField.js:243
 msgid "Image Failed"
 msgstr "Грешка при обработка на снимка"
 
-#: js/ux/form/ImageField.js:242
+#: js/ux/form/ImageField.js:243
 msgid "Could not load image. Please notify your Administrator"
 msgstr "Неуспешено зареждане (Upload) на снимка. Моля обърнете се към Вашият администратор."
 
@@ -586,145 +586,145 @@ msgstr "Неуспешено зареждане (Upload) на снимка. Мо
 msgid "Software Version"
 msgstr "Версия на програмата"
 
-#: js/ux/grid/PagingToolbar.js:45
+#: js/ux/grid/PagingToolbar.js:49
 msgid "{0} selected"
 msgstr "{0} селектиран"
 
-#: js/ux/grid/PagingToolbar.js:46
+#: js/ux/grid/PagingToolbar.js:50
 msgid "Unselect all"
 msgstr "Освободи от селекция"
 
-#: js/ux/grid/PagingToolbar.js:47
+#: js/ux/grid/PagingToolbar.js:51
 msgid "Select all visible ({0} records)"
 msgstr "Селектирай всички видими ({0} записи)"
 
-#: js/ux/grid/PagingToolbar.js:48
+#: js/ux/grid/PagingToolbar.js:52
 msgid "Select all pages ({0} records)"
 msgstr "Селектирай всички страници ({0} записи)"
 
-#: js/ux/grid/PagingToolbar.js:49
+#: js/ux/grid/PagingToolbar.js:53
 msgid "Toggle selection"
 msgstr "Обърни селекцията"
 
-#: js/ux/SearchField.js:41
+#: js/ux/SearchField.js:45
 msgid "enter searchfilter"
 msgstr "задай филтър на търсене"
 
-#: js/widgets/account/PickerGridPanel.js:146
+#: js/widgets/account/PickerGridPanel.js:145
 #, fuzzy
 msgid "Search User"
 msgstr "Търси"
 
-#: js/widgets/account/PickerGridPanel.js:152
+#: js/widgets/account/PickerGridPanel.js:151
 #, fuzzy
 msgid "Search Group"
 msgstr "Търси..."
 
-#: js/widgets/account/PickerGridPanel.js:158
+#: js/widgets/account/PickerGridPanel.js:157
 #, fuzzy
 msgid "Add Anyone"
 msgstr "Добави записка"
 
-#: js/widgets/account/PickerGridPanel.js:166
+#: js/widgets/account/PickerGridPanel.js:165
 #, fuzzy
 msgid "Anyone"
 msgstr "Записка"
 
-#: js/widgets/account/PickerGridPanel.js:213
+#: js/widgets/account/PickerGridPanel.js:212
 msgid "Search for users ..."
 msgstr ""
 
-#: js/widgets/account/PickerGridPanel.js:233
+#: js/widgets/account/PickerGridPanel.js:232
 #, fuzzy
 msgid "Search for groups ..."
 msgstr "Търси..."
 
-#: js/widgets/account/PickerGridPanel.js:249
+#: js/widgets/account/PickerGridPanel.js:248
 msgid "Name"
 msgstr "Име"
 
-#: js/widgets/ActivitiesPanel.js:141
+#: js/widgets/ActivitiesPanel.js:145
 msgid "Add a Note..."
 msgstr "Добави записка"
 
-#: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:168
-#: js/widgets/container/GrantsDialog.js:93
+#: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:172
+#: js/widgets/container/GrantsDialog.js:94
 msgid "Add"
 msgstr "Добави "
 
-#: js/widgets/ActivitiesPanel.js:156 js/widgets/ActivitiesPanel.js:450
+#: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:462
 msgid "Note"
 msgstr "Записка"
 
-#: js/widgets/ActivitiesPanel.js:169 js/widgets/ActivitiesPanel.js:376
+#: js/widgets/ActivitiesPanel.js:173 js/widgets/ActivitiesPanel.js:383
 msgid "Add new note"
 msgstr "Добави нова записка"
 
-#: js/widgets/ActivitiesPanel.js:200
+#: js/widgets/ActivitiesPanel.js:204
 msgid "Notes"
 msgstr "Записки"
 
-#: js/widgets/ActivitiesPanel.js:272
+#: js/widgets/ActivitiesPanel.js:279
 msgid "Enter new note:"
 msgstr "Задай нова записка"
 
-#: js/widgets/ActivitiesPanel.js:309 js/widgets/ActivitiesPanel.js:375
+#: js/widgets/ActivitiesPanel.js:316 js/widgets/ActivitiesPanel.js:382
 msgid "Add Note"
 msgstr "Добави записка"
 
-#: js/widgets/ActivitiesPanel.js:362
+#: js/widgets/ActivitiesPanel.js:369
 msgid "Add a {0} Note"
 msgstr "Добави {0} бележка"
 
-#: js/widgets/ActivitiesPanel.js:448 js/widgets/ActivitiesPanel.js:583
+#: js/widgets/ActivitiesPanel.js:460 js/widgets/ActivitiesPanel.js:595
 msgid "Type"
 msgstr "Тип"
 
-#: js/widgets/ActivitiesPanel.js:451
+#: js/widgets/ActivitiesPanel.js:463
 msgid "Created By"
 msgstr "Зададен/Обработен от"
 
-#: js/widgets/ActivitiesPanel.js:452
+#: js/widgets/ActivitiesPanel.js:464
 msgid "Timestamp"
 msgstr "Дата"
 
-#: js/widgets/ActivitiesPanel.js:466
+#: js/widgets/ActivitiesPanel.js:478
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr "Покажи история на записите {0} - {1} от {2}"
 
-#: js/widgets/ActivitiesPanel.js:467
+#: js/widgets/ActivitiesPanel.js:479
 msgid "No history to display"
 msgstr "Няма намерена история"
 
-#: js/widgets/ActivitiesPanel.js:565
+#: js/widgets/ActivitiesPanel.js:577
 msgid "History"
 msgstr "История"
 
-#: js/widgets/ActivitiesPanel.js:577
+#: js/widgets/ActivitiesPanel.js:589
 msgid "Quick search"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:578 js/widgets/ActivitiesPanel.js:579
+#: js/widgets/ActivitiesPanel.js:590 js/widgets/ActivitiesPanel.js:591
 msgid "Time"
 msgstr "Време"
 
-#: js/widgets/ActivitiesPanel.js:581
+#: js/widgets/ActivitiesPanel.js:593
 msgid "User"
 msgstr "Потребител"
 
-#: js/widgets/container/ContainerSelect.js:107
+#: js/widgets/container/ContainerSelect.js:109
 msgid "choose other {0}..."
 msgstr "избери други {0}..."
 
-#: js/widgets/container/ContainerSelect.js:110
+#: js/widgets/container/ContainerSelect.js:112
 msgid "Select a {0}"
 msgstr ""
 
-#: js/widgets/container/ContainerSelect.js:130
+#: js/widgets/container/ContainerSelect.js:132
 msgid "Recently used {0}:"
 msgstr "Наскоро използвани {0}:"
 
-#: js/widgets/container/ContainerSelect.js:447
+#: js/widgets/container/ContainerSelect.js:449
 msgid "please select a {0}"
 msgstr "моля селектирайте {0}"
 
@@ -751,7 +751,7 @@ msgid "is personal of"
 msgstr ""
 
 #: js/widgets/container/FilterModel.js:130
-#: js/widgets/container/FilterModel.js:134 js/widgets/grid/FilterModel.js:152
+#: js/widgets/container/FilterModel.js:134 js/widgets/grid/FilterModel.js:155
 msgid "is equal to"
 msgstr "равно на"
 
@@ -759,87 +759,87 @@ msgstr "равно на"
 msgid "Selected  {0}"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:53
+#: js/widgets/container/GrantsDialog.js:54
 msgid "Folder"
 msgstr "Папка"
 
-#: js/widgets/container/GrantsDialog.js:87
+#: js/widgets/container/GrantsDialog.js:88
 msgid "Read"
 msgstr "Четене"
 
-#: js/widgets/container/GrantsDialog.js:88
+#: js/widgets/container/GrantsDialog.js:89
 msgid "The grant to read records of this container"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:94
+#: js/widgets/container/GrantsDialog.js:95
 msgid "The grant to add records to this container"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:99
+#: js/widgets/container/GrantsDialog.js:100
 msgid "Edit"
 msgstr "Редакция"
 
-#: js/widgets/container/GrantsDialog.js:100
+#: js/widgets/container/GrantsDialog.js:101
 msgid "The grant to edit records in this container"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:105
+#: js/widgets/container/GrantsDialog.js:106
 msgid "Delete"
 msgstr "Изтриване"
 
-#: js/widgets/container/GrantsDialog.js:106
+#: js/widgets/container/GrantsDialog.js:107
 msgid "The grant to delete records in this container"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:111
+#: js/widgets/container/GrantsDialog.js:112
 msgid "Export"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:112
+#: js/widgets/container/GrantsDialog.js:113
 msgid "The grant to export records from this container"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:117
+#: js/widgets/container/GrantsDialog.js:118
 msgid "Sync"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:118
+#: js/widgets/container/GrantsDialog.js:119
 msgid "The grant to synchronise records with this container"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:129
+#: js/widgets/container/GrantsDialog.js:130
 msgid "Free Busy"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:130
+#: js/widgets/container/GrantsDialog.js:131
 msgid "The grant to access free busy information of events in this calendar"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:137
+#: js/widgets/container/GrantsDialog.js:138
 msgid "Private"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:138
+#: js/widgets/container/GrantsDialog.js:139
 msgid "The grant to access records marked as private in this container"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:145
+#: js/widgets/container/GrantsDialog.js:146
 msgid "Admin"
 msgstr "Администратор"
 
-#: js/widgets/container/GrantsDialog.js:146
+#: js/widgets/container/GrantsDialog.js:147
 msgid "The grant to administrate this container"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:168
+#: js/widgets/container/GrantsDialog.js:169
 msgid "Updating Grants"
 msgstr "Актуализира права"
 
-#: js/widgets/container/GrantsDialog.js:198
+#: js/widgets/container/GrantsDialog.js:199
 msgid "Error"
 msgstr ""
 
-#: js/widgets/container/GrantsDialog.js:199
+#: js/widgets/container/GrantsDialog.js:200
 msgid "You are not allowed to remove all admins for this container!"
 msgstr ""
 
@@ -857,90 +857,90 @@ msgstr "нормален"
 msgid "There are no custom fields yet"
 msgstr "За сега няма дорълнителни полета"
 
-#: js/widgets/dialog/AlarmPanel.js:29
+#: js/widgets/dialog/AlarmPanel.js:33
 msgid "Alarms"
 msgstr "Аларми"
 
-#: js/widgets/dialog/AlarmPanel.js:38
+#: js/widgets/dialog/AlarmPanel.js:42
 msgid "Custom Datetime"
 msgstr ""
 
-#: js/widgets/dialog/AlarmPanel.js:48
+#: js/widgets/dialog/AlarmPanel.js:52
 msgid "Send Alarm"
 msgstr "Аларма за изпращане"
 
-#: js/widgets/dialog/AlarmPanel.js:58
+#: js/widgets/dialog/AlarmPanel.js:62
 msgid "None"
 msgstr "Няма"
 
-#: js/widgets/dialog/AlarmPanel.js:59
+#: js/widgets/dialog/AlarmPanel.js:63
 msgid "0 minutes before"
 msgstr "преди 0 минути"
 
-#: js/widgets/dialog/AlarmPanel.js:60
+#: js/widgets/dialog/AlarmPanel.js:64
 msgid "15 minutes before"
 msgstr "преди 15 минути"
 
-#: js/widgets/dialog/AlarmPanel.js:61
+#: js/widgets/dialog/AlarmPanel.js:65
 msgid "30 minutes before"
 msgstr "преди 30 минути"
 
-#: js/widgets/dialog/AlarmPanel.js:62
+#: js/widgets/dialog/AlarmPanel.js:66
 msgid "1 hour before"
 msgstr "преди 1 час"
 
-#: js/widgets/dialog/AlarmPanel.js:63
+#: js/widgets/dialog/AlarmPanel.js:67
 msgid "2 hours before"
 msgstr "преди 2 часа"
 
-#: js/widgets/dialog/AlarmPanel.js:64
+#: js/widgets/dialog/AlarmPanel.js:68
 msgid "1 day before"
 msgstr "преди 1 ден"
 
-#: js/widgets/dialog/AlarmPanel.js:65
+#: js/widgets/dialog/AlarmPanel.js:69
 msgid "Custom datetime"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:175 js/widgets/EditRecord.js:126
+#: js/widgets/dialog/EditDialog.js:176 js/widgets/EditRecord.js:128
 msgid "Apply"
 msgstr "Добави "
 
-#: js/widgets/dialog/EditDialog.js:192 js/widgets/EditRecord.js:146
+#: js/widgets/dialog/EditDialog.js:193 js/widgets/EditRecord.js:148
 msgid "delete"
 msgstr "изтрий"
 
-#: js/widgets/dialog/EditDialog.js:232 js/widgets/dialog/EditDialog.js:245
-#: js/widgets/EditRecord.js:185
+#: js/widgets/dialog/EditDialog.js:233 js/widgets/dialog/EditDialog.js:246
+#: js/widgets/EditRecord.js:187
 msgid "Saved in"
 msgstr "Съхранен в"
 
-#: js/widgets/dialog/EditDialog.js:291
+#: js/widgets/dialog/EditDialog.js:292
 msgid "Add New {0}"
 msgstr "Добави нов {0}"
 
-#: js/widgets/dialog/EditDialog.js:293
+#: js/widgets/dialog/EditDialog.js:294
 msgid "Edit {0} \"{1}\""
 msgstr "Редактирай {0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:334
+#: js/widgets/dialog/EditDialog.js:335
 msgid "Transfering {0}..."
 msgstr "Трансферира {0}..."
 
-#: js/widgets/dialog/EditDialog.js:443
+#: js/widgets/dialog/EditDialog.js:444
 msgid "Do you really want to delete this {0}?"
 msgstr "Наистина ли желаете да изтриете тези {0}?"
 
-#: js/widgets/dialog/EditDialog.js:445 js/widgets/grid/GridPanel.js:952
+#: js/widgets/dialog/EditDialog.js:446 js/widgets/grid/GridPanel.js:961
 msgid "Deleting {0}"
 msgstr "Изтрива {0}"
 
-#: js/widgets/dialog/EditDialog.js:455 js/widgets/grid/GridPanel.js:973
-#: js/widgets/tags/TagsPanel.js:287 js/widgets/tags/TagsPanel.js:397
-#: js/widgets/tags/TagsPanel.js:430
+#: js/widgets/dialog/EditDialog.js:456 js/widgets/grid/GridPanel.js:988
+#: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:401
+#: js/widgets/tags/TagsPanel.js:434
 msgid "Failed"
 msgstr "Грешка"
 
-#: js/widgets/dialog/EditDialog.js:455 js/widgets/grid/GridPanel.js:973
+#: js/widgets/dialog/EditDialog.js:456 js/widgets/grid/GridPanel.js:988
 msgid "Could not delete {0}."
 msgstr "Не може да изтрие {0}."
 
@@ -989,41 +989,41 @@ msgstr ""
 msgid "Links"
 msgstr "Вход"
 
-#: js/widgets/dialog/MultiOptionsDialog.js:23
-#: js/widgets/dialog/MultiOptionsDialog.js:70
+#: js/widgets/dialog/MultiOptionsDialog.js:28
+#: js/widgets/dialog/MultiOptionsDialog.js:75
 msgid "What would you like to do?"
 msgstr ""
 
-#: js/widgets/dialog/MultiOptionsDialog.js:27
-#: js/widgets/dialog/MultiOptionsDialog.js:129
+#: js/widgets/dialog/MultiOptionsDialog.js:32
+#: js/widgets/dialog/MultiOptionsDialog.js:134
 msgid "You need to select an option!"
 msgstr ""
 
-#: js/widgets/dialog/PreferencesDialog.js:137
+#: js/widgets/dialog/PreferencesDialog.js:135
 msgid "Admin Mode"
 msgstr "Администраторски режим"
 
-#: js/widgets/dialog/PreferencesDialog.js:173
+#: js/widgets/dialog/PreferencesDialog.js:171
 msgid "Applications"
 msgstr "Програми"
 
-#: js/widgets/dialog/PreferencesDialog.js:200
+#: js/widgets/dialog/PreferencesDialog.js:198
 msgid "Edit Preferences"
 msgstr "Редактира настройки"
 
-#: js/widgets/dialog/PreferencesDialog.js:201
+#: js/widgets/dialog/PreferencesDialog.js:199
 msgid "Loading ..."
 msgstr "Зарежда..."
 
-#: js/widgets/dialog/PreferencesDialog.js:284
+#: js/widgets/dialog/PreferencesDialog.js:282
 msgid "Saving of preferences failed."
 msgstr "Неуспешно запаметяване на настройките."
 
-#: js/widgets/dialog/PreferencesPanel.js:151
+#: js/widgets/dialog/PreferencesPanel.js:152
 msgid "There are no preferences for this application."
 msgstr "За сега няма настройки за тази програма."
 
-#: js/widgets/dialog/PreferencesTreePanel.js:60
+#: js/widgets/dialog/PreferencesTreePanel.js:61
 msgid "General Preferences"
 msgstr "Основни настройки"
 
@@ -1049,174 +1049,174 @@ msgstr "Съхранен в"
 msgid "Reload config"
 msgstr ""
 
-#: js/widgets/form/RecordPickerComboBox.js:59 js/widgets/tags/TagsPanel.js:465
+#: js/widgets/form/RecordPickerComboBox.js:59 js/widgets/tags/TagsPanel.js:469
 msgid "Searching..."
 msgstr "Търси..."
 
-#: js/widgets/grid/FileUploadGrid.js:87
+#: js/widgets/grid/FileUploadGrid.js:86
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:111
+#: js/widgets/grid/FileUploadGrid.js:110
 msgid "Add file"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:122
+#: js/widgets/grid/FileUploadGrid.js:121
 msgid "Remove file"
 msgstr ""
 
-#: js/widgets/grid/FilterModel.js:151
+#: js/widgets/grid/FilterModel.js:154
 msgid "contains"
 msgstr "съдържа"
 
-#: js/widgets/grid/FilterModel.js:153
+#: js/widgets/grid/FilterModel.js:156
 msgid "is greater than"
 msgstr "по-голямо от"
 
-#: js/widgets/grid/FilterModel.js:154
+#: js/widgets/grid/FilterModel.js:157
 msgid "is less than"
 msgstr "по-малко от"
 
-#: js/widgets/grid/FilterModel.js:155
+#: js/widgets/grid/FilterModel.js:158
 msgid "is not"
 msgstr "не е"
 
-#: js/widgets/grid/FilterModel.js:156
+#: js/widgets/grid/FilterModel.js:159
 #, fuzzy
 msgid "one of"
 msgstr "Записка"
 
-#: js/widgets/grid/FilterModel.js:157
+#: js/widgets/grid/FilterModel.js:160
 msgid "none of"
 msgstr ""
 
-#: js/widgets/grid/FilterModel.js:158
+#: js/widgets/grid/FilterModel.js:161
 msgid "is before"
 msgstr "преди"
 
-#: js/widgets/grid/FilterModel.js:159
+#: js/widgets/grid/FilterModel.js:162
 msgid "is after"
 msgstr "следващ"
 
-#: js/widgets/grid/FilterModel.js:160
+#: js/widgets/grid/FilterModel.js:163
 msgid "is within"
 msgstr "вътре"
 
-#: js/widgets/grid/FilterModel.js:161
+#: js/widgets/grid/FilterModel.js:164
 #, fuzzy
 msgid "is in week no."
 msgstr "тази седмица"
 
-#: js/widgets/grid/FilterModel.js:162
+#: js/widgets/grid/FilterModel.js:165
 msgid "starts with"
 msgstr "започва с"
 
-#: js/widgets/grid/FilterModel.js:163
+#: js/widgets/grid/FilterModel.js:166
 msgid "ends with"
 msgstr "завършва на"
 
-#: js/widgets/grid/FilterModel.js:204
+#: js/widgets/grid/FilterModel.js:207
 msgid "select a operator"
 msgstr "Селектирай оператор"
 
-#: js/widgets/grid/FilterModel.js:315
+#: js/widgets/grid/FilterModel.js:318
 #, fuzzy
 msgid "Search Account ..."
 msgstr "Търси..."
 
-#: js/widgets/grid/FilterModel.js:437
+#: js/widgets/grid/FilterModel.js:440
 msgid "today"
 msgstr "днес"
 
-#: js/widgets/grid/FilterModel.js:438
+#: js/widgets/grid/FilterModel.js:441
 msgid "yesterday"
 msgstr "вчера"
 
-#: js/widgets/grid/FilterModel.js:439
+#: js/widgets/grid/FilterModel.js:442
 msgid "this week"
 msgstr "тази седмица"
 
-#: js/widgets/grid/FilterModel.js:440
+#: js/widgets/grid/FilterModel.js:443
 msgid "last week"
 msgstr "предишната седмица"
 
-#: js/widgets/grid/FilterModel.js:441
+#: js/widgets/grid/FilterModel.js:444
 msgid "the week before last"
 msgstr "предпоследната седмица"
 
-#: js/widgets/grid/FilterModel.js:442
+#: js/widgets/grid/FilterModel.js:445
 msgid "this month"
 msgstr "този месец"
 
-#: js/widgets/grid/FilterModel.js:443
+#: js/widgets/grid/FilterModel.js:446
 msgid "last month"
 msgstr "предишният месец"
 
-#: js/widgets/grid/FilterModel.js:444
+#: js/widgets/grid/FilterModel.js:447
 msgid "this quarter"
 msgstr "това четиримесичие"
 
-#: js/widgets/grid/FilterModel.js:445
+#: js/widgets/grid/FilterModel.js:448
 msgid "last quarter"
 msgstr "предишното четиримесичие"
 
-#: js/widgets/grid/FilterModel.js:446
+#: js/widgets/grid/FilterModel.js:449
 msgid "this year"
 msgstr "тази година"
 
-#: js/widgets/grid/FilterModel.js:447
+#: js/widgets/grid/FilterModel.js:450
 msgid "last year"
 msgstr "предишната година"
 
-#: js/widgets/grid/FilterModel.js:451
+#: js/widgets/grid/FilterModel.js:454
 msgid "tomorrow"
 msgstr "утре"
 
-#: js/widgets/grid/FilterModel.js:452
+#: js/widgets/grid/FilterModel.js:455
 msgid "next week"
 msgstr "следващата седмица"
 
-#: js/widgets/grid/FilterModel.js:453
+#: js/widgets/grid/FilterModel.js:456
 msgid "next month"
 msgstr "следващият месец"
 
-#: js/widgets/grid/FilterModel.js:454
+#: js/widgets/grid/FilterModel.js:457
 msgid "next quarter"
 msgstr "следващото четиримесичие"
 
-#: js/widgets/grid/FilterModel.js:455
+#: js/widgets/grid/FilterModel.js:458
 msgid "next year"
 msgstr "следващата година"
 
-#: js/widgets/grid/FilterToolbar.js:126
+#: js/widgets/grid/FilterToolbar.js:127
 msgid "add new filter"
 msgstr "Добови филтър"
 
-#: js/widgets/grid/FilterToolbar.js:132
+#: js/widgets/grid/FilterToolbar.js:133
 msgid "reset all filters"
 msgstr "игнорирай всички филтри"
 
-#: js/widgets/grid/FilterToolbar.js:138
+#: js/widgets/grid/FilterToolbar.js:139
 msgid "start search"
 msgstr "започни търсене"
 
-#: js/widgets/grid/FilterToolbar.js:146
+#: js/widgets/grid/FilterToolbar.js:147
 msgid "save as favorite"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:235
+#: js/widgets/grid/FilterToolbar.js:236
 msgid "select a field"
 msgstr "селектирай поле"
 
-#: js/widgets/grid/FilterToolbar.js:260
+#: js/widgets/grid/FilterToolbar.js:261
 msgid "Delete this filter"
 msgstr "Изтрий филтър"
 
-#: js/widgets/grid/FilterToolbar.js:291
+#: js/widgets/grid/FilterToolbar.js:292
 msgid "and"
 msgstr "и"
 
-#: js/widgets/grid/FilterToolbar.js:310
+#: js/widgets/grid/FilterToolbar.js:311
 msgid "Show"
 msgstr "Покажи"
 
@@ -1228,63 +1228,63 @@ msgstr ""
 msgid "Always show advanced filters"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:362
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:369
 msgid "Your view is limited by {0} criteria:"
 msgid_plural "Your view is limited by {0} criterias:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:186
+#: js/widgets/grid/GridPanel.js:191
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "Няма {0} намерени. Моля оритайте до промените Вашите критерий на търсене, опции на показване или {1} в които търсите."
 
-#: js/widgets/grid/GridPanel.js:275
+#: js/widgets/grid/GridPanel.js:280
 msgid "Edit {0}"
 msgstr "Редакция {0}"
 
-#: js/widgets/grid/GridPanel.js:286
+#: js/widgets/grid/GridPanel.js:291
 msgid "Copy {0}"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:297 js/widgets/tree/ContextMenu.js:214
+#: js/widgets/grid/GridPanel.js:302 js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
 msgstr "Добавяне {0}"
 
-#: js/widgets/grid/GridPanel.js:307 js/widgets/grid/GridPanel.js:308
-#: js/widgets/grid/GridPanel.js:310
+#: js/widgets/grid/GridPanel.js:312 js/widgets/grid/GridPanel.js:313
+#: js/widgets/grid/GridPanel.js:315
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Изтриване {0}"
 msgstr[1] "Изтривания {0}"
 
-#: js/widgets/grid/GridPanel.js:404
+#: js/widgets/grid/GridPanel.js:409
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Покажи записи {0} - {1} от {2}"
 
-#: js/widgets/grid/GridPanel.js:405
+#: js/widgets/grid/GridPanel.js:410
 msgid "No {0} to display"
 msgstr "Няма намерени {0}"
 
-#: js/widgets/grid/GridPanel.js:602
+#: js/widgets/grid/GridPanel.js:611
 #, fuzzy
 msgid "Tagging"
 msgstr "Таг"
 
-#: js/widgets/grid/GridPanel.js:912
+#: js/widgets/grid/GridPanel.js:921
 msgid "Not Allowed"
 msgstr "Непозволено"
 
-#: js/widgets/grid/GridPanel.js:913
+#: js/widgets/grid/GridPanel.js:922
 msgid "You are not allowed to delete all pages at once"
 msgstr "Вие нямате необходите права да изтриете всички страници наведнъж"
 
-#: js/widgets/grid/GridPanel.js:931
+#: js/widgets/grid/GridPanel.js:940
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Наистина ли желаете да изтриете записа"
 msgstr[1] "Наистина ли желаете да изтриете записите"
 
-#: js/widgets/grid/GridPanel.js:954
+#: js/widgets/grid/GridPanel.js:963
 msgid " ... This may take a long time!"
 msgstr "... това може да продължи дълго!"
 
@@ -1300,16 +1300,16 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: js/widgets/LangChooser.js:31 Preference.php:99
+#: js/widgets/LangChooser.js:35 Preference.php:99
 msgid "Language"
 msgstr "Език"
 
-#: js/widgets/LangChooser.js:64
+#: js/widgets/LangChooser.js:68
 msgid "setting new language..."
 msgstr "задава нов език..."
 
-#: js/widgets/LangChooser.js:64 js/widgets/persistentfilter/PickerPanel.js:264
-#: js/widgets/TimezoneChooser.js:74
+#: js/widgets/LangChooser.js:68 js/widgets/persistentfilter/PickerPanel.js:264
+#: js/widgets/TimezoneChooser.js:78
 msgid "Please Wait"
 msgstr "Моля изчакайте"
 
@@ -1405,164 +1405,164 @@ msgstr ""
 msgid "Overwriteing system favorites is not yet supported"
 msgstr ""
 
-#: js/widgets/Priority.js:23
+#: js/widgets/Priority.js:21
 msgid "low"
 msgstr "нисък"
 
-#: js/widgets/Priority.js:24
+#: js/widgets/Priority.js:22
 msgid "normal"
 msgstr "нормален"
 
-#: js/widgets/Priority.js:25
+#: js/widgets/Priority.js:23
 msgid "high"
 msgstr "високо"
 
-#: js/widgets/Priority.js:26
+#: js/widgets/Priority.js:24
 msgid "urgent"
 msgstr "важно"
 
-#: js/widgets/tags/TagCombo.js:44
+#: js/widgets/tags/TagCombo.js:49
 msgid "tag name"
 msgstr "име на таг"
 
-#: js/widgets/tags/TagFilter.js:29
+#: js/widgets/tags/TagFilter.js:34
 msgid "Tag"
 msgstr "Таг"
 
-#: js/widgets/tags/TagsMassAttachAction.js:15
+#: js/widgets/tags/TagsMassAttachAction.js:19
 #, fuzzy
 msgid "Add Tag"
 msgstr "Добави "
 
-#: js/widgets/tags/TagsMassAttachAction.js:69
+#: js/widgets/tags/TagsMassAttachAction.js:73
 msgid "Attach the following tag to all selected items:"
 msgstr ""
 
-#: js/widgets/tags/TagsMassAttachAction.js:80
+#: js/widgets/tags/TagsMassAttachAction.js:84
 #, fuzzy
 msgid "Select Tag"
 msgstr "Изтрий таг"
 
-#: js/widgets/tags/TagsPanel.js:89 js/widgets/tags/TagsPanel.js:114
+#: js/widgets/tags/TagsPanel.js:93 js/widgets/tags/TagsPanel.js:118
 msgid "Add a new personal tag"
 msgstr "Добави нов собствен таг"
 
-#: js/widgets/tags/TagsPanel.js:92 js/widgets/tags/TagsPanel.js:117
+#: js/widgets/tags/TagsPanel.js:96 js/widgets/tags/TagsPanel.js:121
 msgid "Add New Personal Tag"
 msgstr "Добави нов собствен таг"
 
-#: js/widgets/tags/TagsPanel.js:93 js/widgets/tags/TagsPanel.js:118
+#: js/widgets/tags/TagsPanel.js:97 js/widgets/tags/TagsPanel.js:122
 msgid "Please note: You create a personal tag. Only you can see it!"
 msgstr "Моля ВНИМАНИЕ: Вие създадохте нов собствен таг. Имайте пред вид, че само вие можете да го видите!"
 
-#: js/widgets/tags/TagsPanel.js:93 js/widgets/tags/TagsPanel.js:118
+#: js/widgets/tags/TagsPanel.js:97 js/widgets/tags/TagsPanel.js:122
 msgid "Enter tag name:"
 msgstr "Задай име на таг"
 
-#: js/widgets/tags/TagsPanel.js:137 js/widgets/tags/TagsPanel.js:445
-#: js/widgets/tags/TagsPanel.js:449
+#: js/widgets/tags/TagsPanel.js:141 js/widgets/tags/TagsPanel.js:449
+#: js/widgets/tags/TagsPanel.js:453
 msgid "personal"
 msgstr "личен"
 
-#: js/widgets/tags/TagsPanel.js:159
+#: js/widgets/tags/TagsPanel.js:163
 msgid "No Tags to display"
 msgstr "Няма намерени тагове"
 
-#: js/widgets/tags/TagsPanel.js:182
+#: js/widgets/tags/TagsPanel.js:186
 msgid "Detach tag"
 msgid_plural "Detach tags"
 msgstr[0] "Изтрий таг"
 msgstr[1] "Изтрий тагове"
 
-#: js/widgets/tags/TagsPanel.js:192
+#: js/widgets/tags/TagsPanel.js:196
 msgid "Edit tag"
 msgstr "Задай таг"
 
-#: js/widgets/tags/TagsPanel.js:197 js/widgets/tags/TagsPanel.js:202
+#: js/widgets/tags/TagsPanel.js:201 js/widgets/tags/TagsPanel.js:206
 msgid "Rename Tag"
 msgstr "Промени име на таг"
 
-#: js/widgets/tags/TagsPanel.js:202
+#: js/widgets/tags/TagsPanel.js:206
 msgid "Please enter a new name:"
 msgstr "Моля задайте ново име"
 
-#: js/widgets/tags/TagsPanel.js:211
+#: js/widgets/tags/TagsPanel.js:215
 msgid "Edit Description"
 msgstr "Задай описание"
 
-#: js/widgets/tags/TagsPanel.js:216
+#: js/widgets/tags/TagsPanel.js:220
 msgid "Description for tag"
 msgstr "Описание на таг"
 
-#: js/widgets/tags/TagsPanel.js:216
+#: js/widgets/tags/TagsPanel.js:220
 msgid "Please enter new description:"
 msgstr "Моля задайте ново описание:"
 
-#: js/widgets/tags/TagsPanel.js:225
+#: js/widgets/tags/TagsPanel.js:229
 msgid "Change Color"
 msgstr "Смени цвят"
 
-#: js/widgets/tags/TagsPanel.js:253
+#: js/widgets/tags/TagsPanel.js:257
 msgid "Delete Tag"
 msgid_plural "Delete Tags"
 msgstr[0] "Изтрий таг"
 msgstr[1] "Изтрий тагове"
 
-#: js/widgets/tags/TagsPanel.js:266
+#: js/widgets/tags/TagsPanel.js:270
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] "Наистина ли желаете да изтриете селектираният таг?"
 msgstr[1] "Наистина ли желаете да изтриете селектираните тагове?"
 
-#: js/widgets/tags/TagsPanel.js:267
+#: js/widgets/tags/TagsPanel.js:271
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] "Селектираният таг ще бъде изтрит и от всички останали записи"
 msgstr[1] "Селектираните тагове ще бъде изтрит и от всички останали записи"
 
-#: js/widgets/tags/TagsPanel.js:271
+#: js/widgets/tags/TagsPanel.js:275
 msgid "Please wait a moment..."
 msgstr "Моля изчакайте"
 
-#: js/widgets/tags/TagsPanel.js:271
+#: js/widgets/tags/TagsPanel.js:275
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "Изтрива таг"
 msgstr[1] "Изтрива тагове"
 
-#: js/widgets/tags/TagsPanel.js:287
+#: js/widgets/tags/TagsPanel.js:291
 msgid "Could not delete Tag(s)."
 msgstr "Неуспешно изтриване на тага(-овете)"
 
-#: js/widgets/tags/TagsPanel.js:349 js/widgets/tags/TagsPanel.js:411
+#: js/widgets/tags/TagsPanel.js:353 js/widgets/tags/TagsPanel.js:415
 msgid "Notice"
 msgstr "Бележка"
 
-#: js/widgets/tags/TagsPanel.js:350 js/widgets/tags/TagsPanel.js:412
+#: js/widgets/tags/TagsPanel.js:354 js/widgets/tags/TagsPanel.js:416
 msgid "The minimum tag length is three."
 msgstr "Минималната дължина на един таг е 3 знака."
 
-#: js/widgets/tags/TagsPanel.js:397
+#: js/widgets/tags/TagsPanel.js:401
 msgid "Could not create tag."
 msgstr "Тага не беше създаден."
 
-#: js/widgets/tags/TagsPanel.js:430
+#: js/widgets/tags/TagsPanel.js:434
 msgid "Could not update tag."
 msgstr "Тага не бе актуализиран."
 
-#: js/widgets/tags/TagsPanel.js:464 js/widgets/tags/TagsPanel.js:522
+#: js/widgets/tags/TagsPanel.js:468 js/widgets/tags/TagsPanel.js:526
 msgid "Enter tag name"
 msgstr "Задай име на таг"
 
-#: js/widgets/tags/TagsPanel.js:599
+#: js/widgets/tags/TagsPanel.js:603
 msgid "Color"
 msgstr "Цвят"
 
-#: js/widgets/TimezoneChooser.js:34 Preference.php:95
+#: js/widgets/TimezoneChooser.js:38 Preference.php:95
 msgid "Timezone"
 msgstr "Часова зона"
 
-#: js/widgets/TimezoneChooser.js:74
+#: js/widgets/TimezoneChooser.js:78
 msgid "setting new timezone..."
 msgstr "поставя нова часова зона..."
 
@@ -1622,19 +1622,19 @@ msgstr "Управление и обработка на правата"
 msgid "Reload {0}"
 msgstr "Презареждане {0}"
 
-#: js/widgets/VersionCheck.js:43 js/widgets/VersionCheck.js:52
+#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
 msgid "New version of Tine 2.0 available"
 msgstr "Предлага се нова версия на Tine 2.0"
 
-#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+#: js/widgets/VersionCheck.js:46 js/widgets/VersionCheck.js:55
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr "Версия \"{0}\" на Tine 2.0 е на разположение."
 
-#: js/widgets/VersionCheck.js:45
+#: js/widgets/VersionCheck.js:47
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "Това е един нестабилен ъпдейт и трябва да бъде инсталиран възможно най-бързо!"
 
-#: js/widgets/VersionCheck.js:54
+#: js/widgets/VersionCheck.js:56
 msgid "Please consider updating!"
 msgstr "Внимание - актуализира!"
 

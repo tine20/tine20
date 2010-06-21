@@ -173,7 +173,7 @@ msgid "Last Name"
 msgstr "姓"
 
 #: js/ContactEditDialog.js:120 js/ContactEditDialog.js:385
-#: js/ContactGrid.js:98 js/ContactGridDetailsPanel.js:131 js/Model.js:151
+#: js/ContactGrid.js:98 js/ContactGridDetailsPanel.js:132 js/Model.js:151
 #: Setup/setup.xml:608
 msgid "Company"
 msgstr "公司"
@@ -199,18 +199,18 @@ msgid "Contact Information"
 msgstr "联系人信息"
 
 #: js/ContactEditDialog.js:168 js/ContactGrid.js:114
-#: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
+#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
 #: js/Model.js:152
 msgid "Phone"
 msgstr "电话"
 
 #: js/ContactEditDialog.js:172 js/ContactGrid.js:115
-#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
+#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
 msgid "Mobile"
 msgstr "手机"
 
 #: js/ContactEditDialog.js:176 js/ContactGrid.js:116
-#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
+#: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
 msgid "Fax"
 msgstr "传真"
 
@@ -226,8 +226,8 @@ msgstr "手机（个人）"
 msgid "Fax (private)"
 msgstr "传真（个人）"
 
-#: js/ContactEditDialog.js:192 js/ContactGridDetailsPanel.js:142
-#: js/ContactGridDetailsPanel.js:166
+#: js/ContactEditDialog.js:192 js/ContactGridDetailsPanel.js:143
+#: js/ContactGridDetailsPanel.js:167
 msgid "E-Mail"
 msgstr "电子邮件"
 
@@ -236,7 +236,7 @@ msgid "E-Mail (private)"
 msgstr "电子邮件（个人）"
 
 #: js/ContactEditDialog.js:203 js/ContactGrid.js:123
-#: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
+#: js/ContactGridDetailsPanel.js:145 js/ContactGridDetailsPanel.js:169
 msgid "Web"
 msgstr "网址"
 
@@ -415,19 +415,19 @@ msgstr "私人手机"
 msgid "Internal Contact"
 msgstr "内部联系人"
 
-#: js/ContactGridDetailsPanel.js:62 js/Model.js:99
+#: js/ContactGridDetailsPanel.js:63 js/Model.js:99
 msgid "Contacts"
 msgstr "联系人"
 
-#: js/ContactGridDetailsPanel.js:65
+#: js/ContactGridDetailsPanel.js:66
 msgid "Select contact"
 msgstr "选择联系人"
 
-#: js/ContactGridDetailsPanel.js:155
+#: js/ContactGridDetailsPanel.js:156
 msgid "Private"
 msgstr "私人"
 
-#: js/ContactGridDetailsPanel.js:178
+#: js/ContactGridDetailsPanel.js:179
 msgid "Info"
 msgstr "信息"
 

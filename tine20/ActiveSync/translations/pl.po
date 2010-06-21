@@ -16,32 +16,31 @@ msgstr ""
 msgid "Active Sync"
 msgstr "Active Sync"
 
-#: js/Application.js:49
+#: js/Application.js:48
 msgid "Select a Device"
 msgstr "Wybierz urządzenie"
 
-#: js/Application.js:63
+#: js/Application.js:62
 msgid "No ActiveSync Device registered"
 msgstr "Usługa ActiveSync niezarejestrowana"
 
-#: js/Application.js:71
+#: js/Application.js:70
 msgid "Set as {0} Filter"
 msgstr "Ustaw jako filtr {0}"
 
-#: js/Application.js:96
+#: js/Application.js:95
 msgid "Resetted Sync Filter"
 msgstr "Zresetowany filtr synchronizacji"
 
-#: js/Application.js:97
-#: js/Application.js:109
+#: js/Application.js:96 js/Application.js:108
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
 msgstr "Filtrem {0} dla urządzenia \"{1}\"  jest teraz \"{2}\""
 
-#: js/Application.js:100
+#: js/Application.js:99
 msgid "resetted"
 msgstr "zresetowane"
 
-#: js/Application.js:108
+#: js/Application.js:107
 msgid "Set Sync Filter"
 msgstr "Ustaw filtr synchronizacji"
 
@@ -63,4 +62,3 @@ msgstr "Domyślna polityka"
 #: Setup/setup.xml:470
 msgid "Default Policy installed during setup"
 msgstr "Domyślna polityka określona podczas definiowania ustawień"
-
