@@ -120,8 +120,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             {field: 'folder_id'}
         );
         
-        Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
+        this.pagingConfig = {
+            doRefresh: this.doRefresh.createDelegate(this)
+        };
         
+        Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         this.grid.getSelectionModel().on('rowselect', this.onRowSelection, this);
     },
     
@@ -504,6 +507,26 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         return result;
+    },
+    
+    /**
+     * executed when user clicks refresh btn
+     */
+    doRefresh: function() {
+        var tree = this.app.getMainScreen().getTreePanel(),
+            node = tree ? tree.getSelectionModel().getSelectedNode() : null,
+            folder = node ? this.app.getFolderStore().getById(node.id) : null,
+            refresh = this.pagingToolbar.refresh;
+            
+            if (folder) {
+                refresh.disable();
+                Tine.log.info('user forced mail check for folder "' + folder.get('localname') + '"');
+                this.app.checkMails(folder, function() {
+                    refresh.enable();
+                });
+            } else {
+                this.doLoad();
+            }
     },
     
     /**

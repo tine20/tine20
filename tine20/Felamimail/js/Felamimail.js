@@ -98,7 +98,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * 
      * @param {Tine.Felamimail.Model.Folder} [folder] 
      */
-    checkMails: function(folder) {
+    checkMails: function(folder, callback) {
         this.checkMailsDelayedTask.cancel();
         
         if (! this.getFolderStore().getCount() && this.defaultAccount) {
@@ -146,6 +146,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             
             this.updateMessageCacheTransactionId = Tine.Felamimail.folderBackend.updateMessageCache(folder.id, executionTime, {
                 scope: this,
+                callback: callback,
                 failure: this.onBackgroundRequestFail,
                 success: function(folder) {
                     Tine.Felamimail.loadAccountStore().getById(folder.get('account_id')).setLastIMAPException(null);
