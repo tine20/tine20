@@ -846,7 +846,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }]
             });
         }
-        buffer = '<html><head>';
+        var buffer = '<html><head>';
         buffer+= '<title>'+this.app.i18n._('Print Preview')+'</title>';
         buffer+= '</head><body>';
         buffer+= this.detailsPanel.getEl().child('.preview-panel-felamimail').dom.innerHTML;
@@ -856,12 +856,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     onPrintPreview:function() {
-        buffer = '<html><head>';
+        var buffer = '<html><head>';
         buffer+= '<title>'+this.app.i18n._('Print Preview')+'</title>';
         buffer+= '</head><body>';
         buffer= this.detailsPanel.getEl().child('.preview-panel-felamimail').dom.innerHTML;
         buffer+= '</body></html>';
-        win = window.open('about:blank',this.app.i18n._('Print Preview'),'width=500,height=500,scrollbars=yes,toolbar=yes,status=yes,menubar=yes');
+        var win = window.open('about:blank',this.app.i18n._('Print Preview'),'width=500,height=500,scrollbars=yes,toolbar=yes,status=yes,menubar=yes');
         win.document.open()
         win.document.write(buffer);
         win.document.close();
