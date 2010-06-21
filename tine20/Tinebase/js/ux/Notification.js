@@ -9,6 +9,7 @@
  * 
  * TODO         play sound
  * TODO         add webkit notifications -> this has to be resolved first: http://code.google.com/p/chromium/issues/detail?id=31736
+ *              http://dev.w3.org/2006/webapi/WebNotifications/publish/
  * TODO         activate default notifications?
  */    
  
