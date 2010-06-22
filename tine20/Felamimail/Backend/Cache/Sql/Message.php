@@ -175,15 +175,23 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     /**
      * remove flag from message / all messages in a folder
      *
-     * @param string $_foreignId
-     * @param string $_flag
-     * @param string $_type message|folder
+     * @param mixed $_messages
+     * @param mixed $_flag
      */
-    public function clearFlag($_foreignId, $_flag, $_type = 'message')
+    public function clearFlag($_messages, $_flag)
     {
+        if ($_messages instanceof Tinebase_Record_RecordSet) {
+            $messageIds = $_messages->getArrayOfIds();
+        } elseif ($_messages instanceof Felamimail_Model_Message) {
+            $messageIds = $_messages->getId();
+        } else {
+            // single id or array of ids
+            $messageIds = $_messages;
+        }
+        
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($_type . '_id') . ' = ?', $_foreignId),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('flag') . ' = ?', $_flag)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('message_id') . ' IN (?)', $messageIds),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('flag') . ' IN (?)', $_flag)
         );
         
         $this->_db->delete($this->_tablePrefix . $this->_foreignTables['flags'], $where);
