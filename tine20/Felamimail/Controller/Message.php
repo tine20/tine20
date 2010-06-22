@@ -101,105 +101,131 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     
     /************************* overwritten funcs *************************/
     
-    /**
-     * delete messages from imap (or move to trash folder)
-     * 
-     * @param Tinebase_Record_RecordSet $_messagesToDelete
-     * @return void
-     * 
-     * @todo    allow to configure if messages should be moved to trash
-     * @todo    move this to cache controller?
-     */
-    public function deleteMessagesFromImapServer(Tinebase_Record_RecordSet $_messagesToDelete)
-    {
-        if (count($_messagesToDelete) == 0) {
-            return;
-        }
-        
-        // sort messages by folder id
-        $_messagesToDelete->sort('folder_id');
-        
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($_messagesToDelete) . ' messages.');
-        
-        // loop messages / only get imap backend and account in the first iteration of the loop
-        $imapBackend = NULL;
-        $folder = NULL;
-        $updatedFolders = array();
-        $oldCacheStatus = array();
-        foreach($_messagesToDelete as $message) {
-            if ($imapBackend = $this->_getBackendAndSelectFolder($message->folder_id, $folder, TRUE, $imapBackend)) {
-                
-                // get account and trash folder name (only the first time)
-                if (! isset($account)) {
-                    $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
-                    $trashFolder = ($account->trash_folder && ! empty($account->trash_folder)) ? $account->trash_folder : 'Trash';
-                }
-                
-                // don't update cache while deleting in a single folder / @todo do this for all folders with messages to delete?
-                if (! isset($updatedFolders[$folder->getId()])) {
-                    $oldCacheStatus[$folder->getId()] = $folder->cache_status;
-                    $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_DELETING;
-                    $updatedFolders[$folder->getId()] = Felamimail_Controller_Folder::getInstance()->update($folder);
-                }
-                
-                if ($folder->globalname == $trashFolder) {
-                    
-                    // only delete if in Trash
-                    try {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Removing message " . $message->messageuid . ' from ' . $folder->globalname);
-                        
-                        $imapBackend->removeMessage($message->messageuid);
-
-                    } catch (Zend_Mail_Storage_Exception $zmse) {
-                        Tinebase_Core::getLogger()->warn(
-                            __METHOD__ . '::' . __LINE__ 
-                            . ' Could not delete message. Maybe it has already been deleted. Message: ' 
-                            . $zmse->getMessage()
-                        );
-                    }
-                    
-                } else {
-                    try {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Moving message '" 
-                            . $message->messageuid . "' from " . $folder->globalname . " to $trashFolder."
-                        );
-                        
-                        // move to trash folder (create folder if it does not exist)
-                        if ($account->trash_folder && ! empty($account->trash_folder)) {
-                            $this->_createFolderIfNotExists($account, $trashFolder);
-                        }
-                        $imapBackend->moveMessage($message->messageuid, $trashFolder);
-                        
-                    } catch (Zend_Mail_Storage_Exception $zmse) {
-                        
-                        if ($zmse->getMessage() == 'cannot copy message, does the folder exist?') {
-                            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-                                . " Trash folder '$trashFolder' does not exist. " 
-                                . " Deleting message instead."
-                            );
-                            try {
-                                $imapBackend->removeMessage($message->messageuid);
-                            } catch (Zend_Mail_Storage_Exception $zmseRemove) {
-                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $zmseRemove->getMessage());
-                            }
-                        } else {
-                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $zmse->getMessage());
-                        }
-                    }
-                }
-            }
-        }
-        
-        // reset old cache status and set new unread count
-        foreach ($updatedFolders as $folderId => $updatedFolder) {
-            $updatedFolder->cache_status = $oldCacheStatus[$folderId];
-            $updatedFolder->cache_totalcount = $this->_cacheController->getTotalCount($updatedFolder);
-            $updatedFolder->cache_unreadcount = $this->_cacheController->getUnreadCount($updatedFolder);
-            $updatedFolder = Felamimail_Controller_Folder::getInstance()->update($updatedFolder);
-            
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder ' . $updatedFolder->globalname . ' after delete: ' . print_r($updatedFolder->toArray(), TRUE));
-        }
-    }
+//    /**
+//     * delete messages from imap (or move to trash folder)
+//     * 
+//     * @param Tinebase_Record_RecordSet $_messagesToDelete
+//     * @return void
+//     * 
+//     * @todo    allow to configure if messages should be moved to trash
+//     * @todo    move this to cache controller?
+//     */
+//    public function deleteMessagesFromImapServer(Tinebase_Record_RecordSet $_messagesToDelete)
+//    {
+//        if (count($_messagesToDelete) == 0) {
+//            return;
+//        }
+//        
+//        // sort messages by folder id
+//        $_messagesToDelete->sort('folder_id');
+//        
+//        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($_messagesToDelete) . ' messages.');
+//        
+//        // loop messages / only get imap backend and account in the first iteration of the loop
+//        
+//        $updatedFolders = array();
+//        $oldCacheStatus = array();
+//        
+//        $lastFolderId   = null;
+//        $lastAccountId  = null;
+//        
+//        $folder         = null;
+//        $imapBackend    = null;
+//        $imapMessageUids = array();
+//        
+//        foreach ($_messagesToDelete as $message) {
+//            $imapMessageUids[] = $message->messageuid;
+//            
+//            #if ($account)
+//            
+//            if ($lastFolderId != $message->folder_id) {
+//                if($imapBackend !== null && count($imapMessageUids) > 0) {
+//                    $imapBackend->removeMessage($imapMessageUids);
+//                }
+//                
+//                $imapBackend    = $this->_getBackendAndSelectFolder($message->folder_id, $folder);
+//                $lastFolderId   = $message->folder_id;
+//                $imapMessageUids = array();
+//                
+//                $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
+//                $trashFolder = ($account->trash_folder && ! empty($account->trash_folder)) ? $account->trash_folder : 'Trash';
+//            }
+//            
+//            continue;
+//            
+//            if ($imapBackend = $this->_getBackendAndSelectFolder($message->folder_id, $folder, TRUE, $imapBackend)) {
+//                
+//                // get account and trash folder name (only the first time)
+//                if (! isset($account)) {
+//                    $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
+//                    $trashFolder = ($account->trash_folder && ! empty($account->trash_folder)) ? $account->trash_folder : 'Trash';
+//                }
+//                
+//                // don't update cache while deleting in a single folder / @todo do this for all folders with messages to delete?
+//                if (! isset($updatedFolders[$folder->getId()])) {
+//                    $oldCacheStatus[$folder->getId()] = $folder->cache_status;
+//                    $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_DELETING;
+//                    $updatedFolders[$folder->getId()] = Felamimail_Controller_Folder::getInstance()->update($folder);
+//                }
+//                
+//                if ($folder->globalname == $trashFolder) {
+//                    
+//                    // only delete if in Trash
+//                    try {
+//                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Removing message " . $message->messageuid . ' from ' . $folder->globalname);
+//                        
+//                        $imapBackend->removeMessage($message->messageuid);
+//
+//                    } catch (Zend_Mail_Storage_Exception $zmse) {
+//                        Tinebase_Core::getLogger()->warn(
+//                            __METHOD__ . '::' . __LINE__ 
+//                            . ' Could not delete message. Maybe it has already been deleted. Message: ' 
+//                            . $zmse->getMessage()
+//                        );
+//                    }
+//                    
+//                } else {
+//                    try {
+//                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Moving message '" 
+//                            . $message->messageuid . "' from " . $folder->globalname . " to $trashFolder."
+//                        );
+//                        
+//                        // move to trash folder (create folder if it does not exist)
+//                        if ($account->trash_folder && ! empty($account->trash_folder)) {
+//                            $this->_createFolderIfNotExists($account, $trashFolder);
+//                        }
+//                        $imapBackend->moveMessage($message->messageuid, $trashFolder);
+//                        
+//                    } catch (Zend_Mail_Storage_Exception $zmse) {
+//                        
+//                        if ($zmse->getMessage() == 'cannot copy message, does the folder exist?') {
+//                            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+//                                . " Trash folder '$trashFolder' does not exist. " 
+//                                . " Deleting message instead."
+//                            );
+//                            try {
+//                                $imapBackend->removeMessage($message->messageuid);
+//                            } catch (Zend_Mail_Storage_Exception $zmseRemove) {
+//                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $zmseRemove->getMessage());
+//                            }
+//                        } else {
+//                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $zmse->getMessage());
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        
+//        #// reset old cache status and set new unread count
+//        #foreach ($updatedFolders as $folderId => $updatedFolder) {
+//        #    $updatedFolder->cache_status = $oldCacheStatus[$folderId];
+//        #    $updatedFolder->cache_totalcount = $this->_cacheController->getTotalCount($updatedFolder);
+//        #    $updatedFolder->cache_unreadcount = $this->_cacheController->getUnreadCount($updatedFolder);
+//        #    $updatedFolder = Felamimail_Controller_Folder::getInstance()->update($updatedFolder);
+//        #    
+//        #    //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder ' . $updatedFolder->globalname . ' after delete: ' . print_r($updatedFolder->toArray(), TRUE));
+//        #}
+//    }
     
     /************************* other public funcs *************************/
     
@@ -271,45 +297,63 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * add flags to message
+     * add flags to messages
      *
-     * @param Felamimail_Model_Message  $_message
+     * @param mixed                     $_message
      * @param array                     $_flags
-     * @param Felamimail_Model_Folder   $_folder [optional]
      * 
      * @todo update folder status if message unread/read
      */
-    public function addFlags($_message, $_flags, $_folder = NULL)
+    public function addFlags($_messages, $_flags)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add flags: ' . print_r($_flags, TRUE));
         
-        if (! $_message instanceof Felamimail_Model_Message) {
-            $message = $this->_backend->get($_message);
+        if ($_messages instanceof Tinebase_Record_RecordSet) {
+            $messagesToFlag = $_messages;
+        } elseif ($_messages instanceof Felamimail_Model_Message) {
+            $messagesToFlag = new Tinebase_Record_RecordSet('Felamimail_Model_Message', array($_messages));
         } else {
-            $message = $_message;
+            $messagesToFlag = $this->_backend->getMultiple($_messages);
         }
         
-        // save each flag in backend, cache db and message record
-        if ($imapBackend = $this->_getBackendAndSelectFolder($message->folder_id, $_folder)) {
-            try {
-                $imapBackend->addFlags($message->messageuid, array_intersect($_flags, array_keys(self::$_allowedFlags)));
-            } catch (Zend_Mail_Storage_Exception $zmse) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                    . ' Could not set flags on imap server: '
-                    . $zmse->getMessage()
-                );
-            }                
+        $messagesToFlag->sort('folder_id');
+        
+        $lastFolderId = null;
+        $imapBackend  = null;
+        
+        foreach ($messagesToFlag as $message) {
+            if($imapBackend !== null && ($lastFolderId != $message->folder_id || count($imapMessageUids) >= 50)) {
+                $imapBackend->addFlags($imapMessageUids, array_intersect($_flags, array_keys(self::$_allowedFlags)));
+                $imapMessageUids = array();
+            }
+            
+            if ($lastFolderId != $message->folder_id) {
+                $imapBackend    = $this->_getBackendAndSelectFolder($message->folder_id);
+                $lastFolderId   = $message->folder_id;
+            }
+            
+            $imapMessageUids[] = $message->messageuid;
+            
+        }
+        
+        if($imapBackend !== null && count($imapMessageUids) > 0) {
+            $imapBackend->addFlags($imapMessageUids, array_intersect($_flags, array_keys(self::$_allowedFlags)));
+        }    
+
+        // store flags in local cache
+        foreach($messagesToFlag as $message) {
             foreach ($_flags as $flag) {
-                $message->flags .= ' ' . $flag;
                 $this->_backend->addFlag($message, $flag);
             }
-            $this->_backend->updateMultiple(
-                $message->getId(), 
-                array(
-                    'timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
-                )
-            );
         }
+        
+        // mark message as changed in the cache backend
+        $this->_backend->updateMultiple(
+            $messagesToFlag->getArrayOfIds(), 
+            array(
+                'timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+            )
+        );
     }
     
     /**
