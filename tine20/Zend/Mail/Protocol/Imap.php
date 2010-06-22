@@ -675,7 +675,7 @@ class Zend_Mail_Protocol_Imap
      * @return bool|array new flags if $silent is false, else true or false depending on success
      * @throws Zend_Mail_Protocol_Exception
      */
-    public function store(array $flags, $from, $to = null, $mode = null, $silent = true)
+    public function store(array $flags, $from, $to = null, $mode = null, $silent = true, $uid = false)
     {
         $item = 'FLAGS';
         if ($mode == '+' || $mode == '-') {
@@ -691,8 +691,8 @@ class Zend_Mail_Protocol_Imap
             $set .= ':' . ($to == INF ? '*' : (int)$to);
         }
 
-        $result = $this->requestAndResponse('STORE', array($set, $item, $flags), $silent);
-
+        $result = $this->requestAndResponse($uid ? 'UID STORE' : 'STORE', array($set, $item, $flags), $silent);
+        
         if ($silent) {
             return $result ? true : false;
         }

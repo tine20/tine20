@@ -24,20 +24,20 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
      */
     const TIMEOUT_CONNECTION = 20;
 
-    /**
-     * fetch one or more items of one or more messages
-     *
-     * @param  string|array $items items to fetch from message(s) as string (if only one item)
-     *                             or array of strings
-     * @param  int          $from  message for items or start message if $to !== null
-     * @param  int|null     $to    if null only one message ($from) is fetched, else it's the
-     *                             last message, INF means last message avaible
-     * @return string|array if only one item of one message is fetched it's returned as string
-     *                      if items of one message are fetched it's returned as (name => value)
-     *                      if one items of messages are fetched it's returned as (msgno => value)
-     *                      if items of messages are fetchted it's returned as (msgno => (name => value))
-     * @throws Zend_Mail_Protocol_Exception
-     */
+//    /**
+//     * fetch one or more items of one or more messages
+//     *
+//     * @param  string|array $items items to fetch from message(s) as string (if only one item)
+//     *                             or array of strings
+//     * @param  int          $from  message for items or start message if $to !== null
+//     * @param  int|null     $to    if null only one message ($from) is fetched, else it's the
+//     *                             last message, INF means last message avaible
+//     * @return string|array if only one item of one message is fetched it's returned as string
+//     *                      if items of one message are fetched it's returned as (name => value)
+//     *                      if one items of messages are fetched it's returned as (msgno => value)
+//     *                      if items of messages are fetchted it's returned as (msgno => (name => value))
+//     * @throws Zend_Mail_Protocol_Exception
+//     */
 //    public function fetch($items, $from, $to = null, $uid = false)
 //    {
 //        if (is_array($from)) {
@@ -103,51 +103,51 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
 //        return $result;
 //    }
     
-    /**
-     * set flags
-     *
-     * @param  array       $flags  flags to set, add or remove - see $mode
-     * @param  int         $from   message for items or start message if $to !== null
-     * @param  int|null    $to     if null only one message ($from) is fetched, else it's the
-     *                             last message, INF means last message avaible
-     * @param  string|null $mode   '+' to add flags, '-' to remove flags, everything else sets the flags as given
-     * @param  bool        $silent if false the return values are the new flags for the wanted messages
-     * @return bool|array new flags if $silent is false, else true or false depending on success
-     * @throws Zend_Mail_Protocol_Exception
-     */
-    public function store(array $flags, $from, $to = null, $mode = null, $silent = true, $uid = false)
-    {
-        $item = 'FLAGS';
-        if ($mode == '+' || $mode == '-') {
-            $item = $mode . $item;
-        }
-        if ($silent) {
-            $item .= '.SILENT';
-        }
-
-        $flags = $this->escapeList($flags);
-        $set = (int)$from;
-        if ($to != null) {
-            $set .= ':' . (is_infinite($to) ? '*' : (int)$to);
-        }
-
-        $result = $this->requestAndResponse($uid ? 'UID STORE' : 'STORE', array($set, $item, $flags), $silent);
-
-        if ($silent) {
-            return $result ? true : false;
-        }
-
-        $tokens = $result;
-        $result = array();
-        foreach ($tokens as $token) {
-            if ($token[1] != 'FETCH' || $token[2][0] != 'FLAGS') {
-                continue;
-            }
-            $result[$token[0]] = $token[2][1];
-        }
-
-        return $result;
-    }
+//    /**
+//     * set flags
+//     *
+//     * @param  array       $flags  flags to set, add or remove - see $mode
+//     * @param  int         $from   message for items or start message if $to !== null
+//     * @param  int|null    $to     if null only one message ($from) is fetched, else it's the
+//     *                             last message, INF means last message avaible
+//     * @param  string|null $mode   '+' to add flags, '-' to remove flags, everything else sets the flags as given
+//     * @param  bool        $silent if false the return values are the new flags for the wanted messages
+//     * @return bool|array new flags if $silent is false, else true or false depending on success
+//     * @throws Zend_Mail_Protocol_Exception
+//     */
+//    public function store(array $flags, $from, $to = null, $mode = null, $silent = true, $uid = false)
+//    {
+//        $item = 'FLAGS';
+//        if ($mode == '+' || $mode == '-') {
+//            $item = $mode . $item;
+//        }
+//        if ($silent) {
+//            $item .= '.SILENT';
+//        }
+//
+//        $flags = $this->escapeList($flags);
+//        $set = (int)$from;
+//        if ($to != null) {
+//            $set .= ':' . (is_infinite($to) ? '*' : (int)$to);
+//        }
+//
+//        $result = $this->requestAndResponse($uid ? 'UID STORE' : 'STORE', array($set, $item, $flags), $silent);
+//
+//        if ($silent) {
+//            return $result ? true : false;
+//        }
+//
+//        $tokens = $result;
+//        $result = array();
+//        foreach ($tokens as $token) {
+//            if ($token[1] != 'FETCH' || $token[2][0] != 'FLAGS') {
+//                continue;
+//            }
+//            $result[$token[0]] = $token[2][1];
+//        }
+//
+//        return $result;
+//    }
     
     /**
      * Examine and select have the same response. The common code for both
