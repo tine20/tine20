@@ -686,9 +686,15 @@ class Zend_Mail_Protocol_Imap
         }
 
         $flags = $this->escapeList($flags);
-        $set = (int)$from;
-        if ($to != null) {
-            $set .= ':' . ($to == INF ? '*' : (int)$to);
+        
+        if (is_array($from)) {
+            $set = implode(',', $from);
+        } else if ($to === null) {
+            $set = (int)$from;
+        } else if ($to === INF) {
+            $set = (int)$from . ':*';
+        } else {
+            $set = (int)$from . ':' . (int)$to;
         }
 
         $result = $this->requestAndResponse($uid ? 'UID STORE' : 'STORE', array($set, $item, $flags), $silent);
