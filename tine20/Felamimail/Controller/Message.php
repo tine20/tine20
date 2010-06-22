@@ -323,6 +323,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $lastFolderId = null;
         $imapBackend  = null;
         
+        // set flags on imap server
         foreach ($messagesToFlag as $message) {
             if($imapBackend !== null && ($lastFolderId != $message->folder_id || count($imapMessageUids) >= 50)) {
                 $imapBackend->addFlags($imapMessageUids, array_intersect($_flags, array_keys(self::$_allowedFlags)));
@@ -342,6 +343,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $imapBackend->addFlags($imapMessageUids, array_intersect($_flags, array_keys(self::$_allowedFlags)));
         }    
 
+        // set flags in local database
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         // store flags in local cache
         foreach($messagesToFlag as $message) {
             foreach ($_flags as $flag) {
@@ -356,6 +360,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 'timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
             )
         );
+        
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
     }
     
     /**
