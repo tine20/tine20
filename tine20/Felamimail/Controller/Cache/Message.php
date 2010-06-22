@@ -493,170 +493,170 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         return $result;
     }
     
-    /**
-     * update message cache
-     * 
-     * @param string|Felamimail_Model_Folder $_folder
-     * @param integer $_time in seconds
-     * @return Felamimail_Model_Folder folder status (in cache)
-     */
-    public function update_old($_folder, $_time = 10)
-    {
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->get($_folder);
-        
-        // check fencing and invalid cache/imap status here
-        if (! $this->updateAllowed($folder)) {
-            Tinebase_TransactionManager::getInstance()->rollBack($transactionId);
-            return $folder;
-        }
-        
-        $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
-        $folder = $this->_updateFolderStatus($folder);
-        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-        
-        
-        // fill message cache (from the top) / init time / update folder (cache_timestamp, status, estimate)
-        try {
-            ///////////////////////////// get imap backend and init stuff
-            
-            $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
-                        
-            $folder->cache_recentcount = 0;
-            $timeLeft = TRUE;
-            
-            // @todo this should be initialized by the model/clear()
-            if (! $folder->cache_uidnext) {
-                $folder->cache_uidnext = 1;
-            }
-            
-            if (
-            // fresh import run
-                $folder->cache_job_lowestuid == 0
-            // if initial import is running, we should check if new messages arrived
-            // @todo think about adding a second job_start_uid that we can use as cache_uidnext for the recent new mails
-                || ($folder->imap_uidnext && $folder->cache_uidnext == 1 && $folder->cache_job_startuid != $folder->imap_uidnext)
-            ) {
-                $folder->cache_job_lowestuid = ($folder->imap_uidnext) ? $folder->imap_uidnext : $folder->imap_totalcount;
-                $folder->cache_job_startuid = $folder->cache_job_lowestuid; 
-            }
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder values before import: ' . print_r($folder->toArray(), TRUE));
-            
-            // remove old \Recent flag from cached messages
-            $this->_backend->clearFlag($folder->getId(), Zend_Mail_Storage::FLAG_RECENT, 'folder');
-            
-            ///////////////////////////// get missing uids from imap
-             
-            // select folder and get all missing message uids from cache_job_lowestuid (imap_uidnext) to cache_uidnext
-            $imap->selectFolder($folder->globalname);
-            
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . ' Try to get message uids from ' . ($folder->cache_job_lowestuid - 1) . ' to ' . $folder->cache_uidnext . ' from imap server.'
-            );
-
-            ///////////////////////////// main message import loop
-            
-            $count = 0;
-            $uids = array();
-            
-            // preset uid stepwidth;
-            $uidDensity = round($folder->imap_uidnext / max(1, $folder->imap_totalcount));
-            $this->_uidStepWidth = $this->_importCountPerStep * max(1, $uidDensity);
-            
-            if ($folder->imap_uidnext != $folder->cache_uidnext) {
-                while (
-                    // more messages to add ?
-                    $folder->cache_job_lowestuid > $folder->cache_uidnext &&
-                    $timeLeft &&
-                    // initial import (this should not run until lowest uid reaches 1)
-                    ($folder->cache_uidnext != 1 || $folder->imap_totalcount > $folder->cache_totalcount)
-                ) {
-                    // get summary and add messages
-                    if (empty($uids)) {
-                        if ($folder->imap_uidnext) {
-                            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' fetching with a stepwidth of: ' . $this->_uidStepWidth);
-                            
-                            $stepLowestUid = max($folder->cache_job_lowestuid - $this->_uidStepWidth, $folder->cache_uidnext);
-                            $stepHighestUid = $folder->cache_job_lowestuid - 1;
-                            $uids = $imap->getUidbyUid($stepLowestUid, $stepHighestUid);
-                            
-                            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
-                            //    . ' new uids from IMAP server: ' . $stepHighestUid . ' - ' . $stepLowestUid);
-                            
-                            // adjust stepwidth for next run
-                            $this->_uidStepWidth = max(2*$this->_importCountPerStep, round($this->_uidStepWidth * max(1/$this->_importCountPerStep, $this->_importCountPerStep / max(1, count($uids)))));
-                        } else {
-                            // imap servers without uidnext
-                            $stepLowestUid = $folder->cache_uidnext;
-                            $uids = $imap->getUid($folder->cache_uidnext, $folder->cache_job_lowestuid);
-                            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
-                            //    . ' new uids from IMAP server: ' . ($folder->cache_uidnext) . ' - ' . $folder->cache_job_lowestuid);
-                        }
-                        
-                        $uids = $this->_getMissingUids($folder, $uids);
-                        
-                        rsort($uids, SORT_NUMERIC);
-                    }
-                    
-                    if (! empty($uids)) {
-                        $nextUids = array_splice($uids, 0, min($this->_importCountPerStep, count($uids)));
-                        
-                        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Importing uids: ' . print_r($nextUids, TRUE));
-                        $messages = $imap->getSummary($nextUids);
-                        $count += $this->_addMessages($messages, $folder);
-                        
-                        $folder->cache_job_lowestuid = ($folder->imap_uidnext) ? min($nextUids) : ($folder->imap_totalcount - $folder->cache_totalcount);
-                    } else {
-                        $folder->cache_job_lowestuid = $stepLowestUid;
-                    }
-                    
-                    $timeLeft = ($folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
-                }
-            }
-            
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Finished import run  ... Time: ' . Zend_Date::now()->toString() 
-                . ' Added messages to cache (new/recent): ' . $count . ' / ' . $folder->cache_recentcount);
-            
-            ///////////////////////////// sync deleted messages or start again to add recent messages
-                
-            if ($timeLeft) {
-                if ($folder->cache_totalcount > $folder->imap_totalcount) {
-                    // sync deleted if we still got time left and totalcounts mismatch
-                    $this->_syncDeletedMessages($folder, $_time, $imap);
-                } else {
-                    $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
-                }
-            }
-            
-            // need to start again, we did not import some messages -> invalidate cache
-            if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $folder->cache_totalcount < $folder->imap_totalcount) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Need to start import again ... :(');
-                $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INVALID;
-            }
-                
-            ///////////////////////////// finished with import run
-            
-            if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
-                $folder->cache_uidnext = $folder->imap_uidnext;
-                $folder->cache_job_lowestuid = 0;
-            } else if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING) {
-                $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
-            }
-            
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            // some error with the imap server
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getTraceAsString());
-            $folder->imap_status = Felamimail_Model_Folder::IMAP_STATUS_DISCONNECT;
-            $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
-        }
-
-        // update and return folder
-        $folder = $this->_updateFolderStatus($folder);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder values after import: ' . print_r($folder->toArray(), TRUE));
-        return $folder;
-    }
+//    /**
+//     * update message cache
+//     * 
+//     * @param string|Felamimail_Model_Folder $_folder
+//     * @param integer $_time in seconds
+//     * @return Felamimail_Model_Folder folder status (in cache)
+//     */
+//    public function update_old($_folder, $_time = 10)
+//    {
+//        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+//        $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->get($_folder);
+//        
+//        // check fencing and invalid cache/imap status here
+//        if (! $this->updateAllowed($folder)) {
+//            Tinebase_TransactionManager::getInstance()->rollBack($transactionId);
+//            return $folder;
+//        }
+//        
+//        $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
+//        $folder = $this->_updateFolderStatus($folder);
+//        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+//        
+//        
+//        // fill message cache (from the top) / init time / update folder (cache_timestamp, status, estimate)
+//        try {
+//            ///////////////////////////// get imap backend and init stuff
+//            
+//            $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
+//                        
+//            $folder->cache_recentcount = 0;
+//            $timeLeft = TRUE;
+//            
+//            // @todo this should be initialized by the model/clear()
+//            if (! $folder->cache_uidnext) {
+//                $folder->cache_uidnext = 1;
+//            }
+//            
+//            if (
+//            // fresh import run
+//                $folder->cache_job_lowestuid == 0
+//            // if initial import is running, we should check if new messages arrived
+//            // @todo think about adding a second job_start_uid that we can use as cache_uidnext for the recent new mails
+//                || ($folder->imap_uidnext && $folder->cache_uidnext == 1 && $folder->cache_job_startuid != $folder->imap_uidnext)
+//            ) {
+//                $folder->cache_job_lowestuid = ($folder->imap_uidnext) ? $folder->imap_uidnext : $folder->imap_totalcount;
+//                $folder->cache_job_startuid = $folder->cache_job_lowestuid; 
+//            }
+//            
+//            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder values before import: ' . print_r($folder->toArray(), TRUE));
+//            
+//            // remove old \Recent flag from cached messages
+//            $this->_backend->clearFlag($folder->getId(), Zend_Mail_Storage::FLAG_RECENT, 'folder');
+//            
+//            ///////////////////////////// get missing uids from imap
+//             
+//            // select folder and get all missing message uids from cache_job_lowestuid (imap_uidnext) to cache_uidnext
+//            $imap->selectFolder($folder->globalname);
+//            
+//            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+//                . ' Try to get message uids from ' . ($folder->cache_job_lowestuid - 1) . ' to ' . $folder->cache_uidnext . ' from imap server.'
+//            );
+//
+//            ///////////////////////////// main message import loop
+//            
+//            $count = 0;
+//            $uids = array();
+//            
+//            // preset uid stepwidth;
+//            $uidDensity = round($folder->imap_uidnext / max(1, $folder->imap_totalcount));
+//            $this->_uidStepWidth = $this->_importCountPerStep * max(1, $uidDensity);
+//            
+//            if ($folder->imap_uidnext != $folder->cache_uidnext) {
+//                while (
+//                    // more messages to add ?
+//                    $folder->cache_job_lowestuid > $folder->cache_uidnext &&
+//                    $timeLeft &&
+//                    // initial import (this should not run until lowest uid reaches 1)
+//                    ($folder->cache_uidnext != 1 || $folder->imap_totalcount > $folder->cache_totalcount)
+//                ) {
+//                    // get summary and add messages
+//                    if (empty($uids)) {
+//                        if ($folder->imap_uidnext) {
+//                            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' fetching with a stepwidth of: ' . $this->_uidStepWidth);
+//                            
+//                            $stepLowestUid = max($folder->cache_job_lowestuid - $this->_uidStepWidth, $folder->cache_uidnext);
+//                            $stepHighestUid = $folder->cache_job_lowestuid - 1;
+//                            $uids = $imap->getUidbyUid($stepLowestUid, $stepHighestUid);
+//                            
+//                            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
+//                            //    . ' new uids from IMAP server: ' . $stepHighestUid . ' - ' . $stepLowestUid);
+//                            
+//                            // adjust stepwidth for next run
+//                            $this->_uidStepWidth = max(2*$this->_importCountPerStep, round($this->_uidStepWidth * max(1/$this->_importCountPerStep, $this->_importCountPerStep / max(1, count($uids)))));
+//                        } else {
+//                            // imap servers without uidnext
+//                            $stepLowestUid = $folder->cache_uidnext;
+//                            $uids = $imap->getUid($folder->cache_uidnext, $folder->cache_job_lowestuid);
+//                            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($uids) 
+//                            //    . ' new uids from IMAP server: ' . ($folder->cache_uidnext) . ' - ' . $folder->cache_job_lowestuid);
+//                        }
+//                        
+//                        $uids = $this->_getMissingUids($folder, $uids);
+//                        
+//                        rsort($uids, SORT_NUMERIC);
+//                    }
+//                    
+//                    if (! empty($uids)) {
+//                        $nextUids = array_splice($uids, 0, min($this->_importCountPerStep, count($uids)));
+//                        
+//                        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Importing uids: ' . print_r($nextUids, TRUE));
+//                        $messages = $imap->getSummary($nextUids);
+//                        $count += $this->_addMessages($messages, $folder);
+//                        
+//                        $folder->cache_job_lowestuid = ($folder->imap_uidnext) ? min($nextUids) : ($folder->imap_totalcount - $folder->cache_totalcount);
+//                    } else {
+//                        $folder->cache_job_lowestuid = $stepLowestUid;
+//                    }
+//                    
+//                    $timeLeft = ($folder->cache_timestamp->compare(Zend_Date::now()->subSecond($_time)) == 1);
+//                }
+//            }
+//            
+//            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Finished import run  ... Time: ' . Zend_Date::now()->toString() 
+//                . ' Added messages to cache (new/recent): ' . $count . ' / ' . $folder->cache_recentcount);
+//            
+//            ///////////////////////////// sync deleted messages or start again to add recent messages
+//                
+//            if ($timeLeft) {
+//                if ($folder->cache_totalcount > $folder->imap_totalcount) {
+//                    // sync deleted if we still got time left and totalcounts mismatch
+//                    $this->_syncDeletedMessages($folder, $_time, $imap);
+//                } else {
+//                    $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
+//                }
+//            }
+//            
+//            // need to start again, we did not import some messages -> invalidate cache
+//            if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $folder->cache_totalcount < $folder->imap_totalcount) {
+//                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Need to start import again ... :(');
+//                $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INVALID;
+//            }
+//                
+//            ///////////////////////////// finished with import run
+//            
+//            if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
+//                $folder->cache_uidnext = $folder->imap_uidnext;
+//                $folder->cache_job_lowestuid = 0;
+//            } else if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING) {
+//                $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
+//            }
+//            
+//        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+//            // some error with the imap server
+//            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
+//            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getTraceAsString());
+//            $folder->imap_status = Felamimail_Model_Folder::IMAP_STATUS_DISCONNECT;
+//            $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
+//        }
+//
+//        // update and return folder
+//        $folder = $this->_updateFolderStatus($folder);
+//        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder values after import: ' . print_r($folder->toArray(), TRUE));
+//        return $folder;
+//    }
     
     /**
      * this function returns all messsageUids which are not yet in the local cache
