@@ -104,27 +104,24 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * get complete message by id
      *
-     * @param string|Felamimail_Model_Message $_id
-     * @param int $_containerId
-     * @return Tinebase_Record_Interface
+     * @param string|Felamimail_Model_Message  $_id
+     * @param boolean                          $_setSeen
+     * @return Felamimail_Model_Message
      */
     public function getCompleteMessage($_id, $_setSeen = FALSE)
     {
         if ($_id instanceof Felamimail_Model_Message) {
             $message = $_id;
         } else {
-            $message = parent::get($_id);
+            $message = $this->get($_id);
         }
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting message ' . $message->messageuid );
-        
-        // increase timeout to 1 minute
-        Tinebase_Core::setExecutionLifeTime(120);
-        
-        #$imapBackend = $this->_getBackendAndSelectFolder($message->folder_id, $folder);
-        $folder = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
+            ' Getting message ' . $message->messageuid 
+        );
             
         // get account
+        $folder = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
         
         // add body
@@ -142,7 +139,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // set \Seen flag
         if ($_setSeen && preg_match('/\\Seen/', $message->flags) === 0) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Add \Seen flag to msg uid ' . $message->messageuid);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' Add \Seen flag to msg uid ' . $message->messageuid
+            );
             $this->addFlags($message, Zend_Mail_Storage::FLAG_SEEN);
         }
 
@@ -488,8 +487,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     public function getMessagePart($_id, $_partId)
     {
-        $result         = NULL;
-        $message        = parent::get($_id);
+        if ($_id instanceof Felamimail_Model_Message) {
+            $message = $_id;
+        } else {
+            $message = $this->get($_id);
+        }
+        
         $partStructure  = $this->_getPartStructure($message->structure, $_partId); 
         
         $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
@@ -513,7 +516,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $part->language    = $partStructure['language'];
         if (is_array($partStructure['disposition'])) {
             $part->disposition = $partStructure['disposition']['type'];
-            $part->filename    = array_key_exists('filename', $partStructure['disposition']['parameters']) ? $partStructure['disposition']['parameters']['filename'] : null;
+            if (array_key_exists('parameters', $partStructure['disposition'])) {
+                $part->filename    = array_key_exists('filename', $partStructure['disposition']['parameters']) ? $partStructure['disposition']['parameters']['filename'] : null;
+            }
         }
         
         return $part;
@@ -521,10 +526,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     
     public function getMessageBody($_messageId, $_contentType, $_readOnly = false)
     {
-        if (! $_messageId instanceof Felamimail_Model_Message) {
-            $message = $this->_backend->get($_messageId);
-        } else {
+        if ($_messageId instanceof Felamimail_Model_Message) {
             $message = $_messageId;
+        } else {
+            $message = $this->get($_messageId);
         }
         
         $cache = Tinebase_Core::get('cache');
@@ -547,14 +552,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $partStructure = $this->_getPartStructure($message['structure'], $partId);
         
-        $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
+        $bodyPart = $this->getMessagePart($message, $partId);
         
-        if ($imapBackend === null) {
-            throw new Felamimail_Exception('failed to get imap backend');
-        }
+        $body = $this->_convertCharset($bodyPart, $partStructure);
         
-        $rawBody = $imapBackend->getRawContent($message->messageuid, $partId, $_readOnly);
-        $body    = $this->_decodePart($rawBody, $partStructure, $_contentType);
+        $body = $this->_convertContentType($partStructure['contentType'], $_contentType, $body);
         
         if($_contentType != Zend_Mime::TYPE_TEXT) {
             $body = $this->_purifyBodyContent($body);
@@ -636,7 +638,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         if ($_structure['contentType'] == Zend_Mime::MULTIPART_MIXED) {
             foreach ($_structure['parts'] as $part) {
-                if (is_array($part['disposition']) && ($part['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT || $part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE)) {
+                if (is_array($part['disposition']) && 
+                    ($part['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && $part['type'] != 'text'))) {
+                    
                     if (array_key_exists('parameters', $part['disposition']) && array_key_exists('filename', $part['disposition']['parameters'])) {
                         $filename = $part['disposition']['parameters']['filename'];
                     } elseif (is_array($part['parameters']) && array_key_exists('name', $part['parameters'])) {
@@ -896,85 +900,52 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * decode mail part content
+     * convert charset
      *
-     * @param  string  $_part
-     * @param  array   $_structure
-     * @param  string  $_contentType
+     * @param  Zend_Mime_Part  $_part
+     * @param  array           $_structure
+     * @param  string          $_contentType
      * @return string
      */
-    protected function _decodePart($_part, $_structure, $_contentType)
+    protected function _convertCharset(Zend_Mime_Part $_part, $_structure)
     {
-        switch ($_structure['encoding']) {
-            case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
-                $result = quoted_printable_decode($_part);
-                break;
-            case Zend_Mime::ENCODING_BASE64:
-                $result = base64_decode($_part);
-                break;
-            default:
-                // return undecoded
-                $result = $_part; 
-                break;     
-        }
-        
-        $charset = isset($_structure['parameters']['charset']) ? $_structure['parameters']['charset'] : 'iso-8859-1';
+        $charset = isset($_structure['parameters']['charset']) ? $_structure['parameters']['charset'] : 'iso-8859-15';
         if($charset == 'utf8') {
             $charset = 'utf-8';
         }
         
-        $result = iconv($charset, 'utf-8//IGNORE', $result);
-        
-        if($_structure['contentType'] != $_contentType) {
-            $this->_convertContentType($_structure['contentType'], $_contentType, $result);
+        // check if charset is supported by iconv
+        if (!iconv($charset, 'utf-8', '')) {
+            $charset = 'iso-8859-15';
         }
         
-        return $result;
+        $_part->appendFilter("convert.iconv.$charset/utf-8//IGNORE");
+        
+        return $_part->getContent();
     }
-
+    
     /**
      * convert between contenttypes (text/plain => text/html for example)
      * @param unknown_type $_from
      * @param unknown_type $_to
      * @param unknown_type $_text
      */
-    protected function _convertContentType($_from, $_to, &$_text)
+    protected function _convertContentType($_from, $_to, $_text)
     {
+        // nothing todo
+        if($_from == $_to) {
+            return $_text;
+        }
+        
         if($_from == Zend_Mime::TYPE_TEXT && $_to == Zend_Mime::TYPE_HTML) {
-            $_text = htmlspecialchars($_text, ENT_COMPAT, 'utf-8');
-            $_text = $this->_addHtmlMarkup($_text);
+            $text = htmlspecialchars($_text, ENT_COMPAT, 'utf-8');
+            $text = $this->_addHtmlMarkup($text);
         } else {
-            $_text = preg_replace('/\<br *\/*\>/', "\r\n", $_text);
-            $_text = strip_tags($_text);
-        }
-    }
-    
-    /**
-     * decode mail part content
-     *
-     * @param Zend_Mail_Part $_part
-     * @param array $_headers
-     * @return string
-     */
-    protected function _decodePartContent(Zend_Mail_Part $_part, $_headers = NULL)
-    {
-        if ($_headers === NULL) {
-            $_headers = $_part->getHeaders();
+            $text = preg_replace('/\<br *\/*\>/', "\r\n", $_text);
+            $text = strip_tags($text);
         }
         
-        $result = $_part->getContent();
-        if (isset($_headers['content-transfer-encoding'])) {
-            switch (strtolower($_headers['content-transfer-encoding'])) {
-                case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
-                    $result = quoted_printable_decode($result);
-                    break;
-                case Zend_Mime::ENCODING_BASE64:
-                    $result = base64_decode($result);
-                    break;
-            }
-        }
-        
-        return $result;
+        return $text;
     }
     
     /**
