@@ -308,7 +308,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add flags: ' . print_r($_flags, TRUE));
         
-        if ($_messages instanceof Tinebase_Record_RecordSet) {
+        if ($_messages instanceof Felamimail_Model_MessageFilter) {
+            $messagesToFlag = $this->search($_messages);
+        } elseif ($_messages instanceof Tinebase_Record_RecordSet) {
             $messagesToFlag = $_messages;
         } elseif ($_messages instanceof Felamimail_Model_Message) {
             $messagesToFlag = new Tinebase_Record_RecordSet('Felamimail_Model_Message', array($_messages));
