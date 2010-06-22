@@ -47,7 +47,7 @@ interface Tinebase_Backend_Interface
     public function get($_id, $_getDeleted = FALSE);
     
     /**
-     * Returns a set of contacts identified by their id's
+     * Returns a set of records identified by their id's
      * 
      * @param  string|array $_id Ids
      * @param array $_containerIds all allowed container ids that are added to getMultiple query
