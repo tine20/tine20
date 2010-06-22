@@ -922,53 +922,55 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags)) {
             $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
         }
+        
+        // store in local cache if received during the last day
+        if($createdMessage->received->compare(Zend_Date::now()->subDay(1)) == 1) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
+                ' prefetch imap message to local cache ' . $createdMessage->getId()
+            );            
+            Felamimail_Controller_Message::getInstance()->getCompleteMessage($createdMessage);
+        }
 
         return $createdMessage;
     }
     
-    /**
-     * add messages to cache and increase folder counts
-     *
-     * @param array $_messages
-     * @param Felamimail_Model_Folder $_folder
-     * @return integer count
-     * 
-     * @todo use this or _addMessagesPrepared?
-     * @todo get replyTo & inReplyTo?
-     */
-    protected function _addMessages($_messages, $_folder)
-    {
-        $count = 0;
-        foreach ($_messages as $uid => $message) {
-                try {
-                    $this->addMessage($message, $_folder);
-                    
-                    // count unseen and Zend_Mail_Storage::FLAG_RECENT 
-                    if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags'])) {
-                        $_folder->cache_recentcount++;
-                        $_folder->cache_unreadcount++;
-                    }
-                    
-                    $count++;
-                    $_folder->cache_job_actions_done++;
-                #} catch (Zend_Db_Statement_Exception $zdse) {
-                #    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-                #        ' Failed to create cache entry for msg ' . $message['uid'] . ' | ' . $message['header']['subject'] .
-                #        '. Error: ' . $zdse->getMessage()
-                #    );
-                #        
-                } catch (Exception $e) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
-                        ' Failed to create cache entry for msg ' . $message['uid'] . ' | ' . $message['header']['subject'] .
-                        $e
-                    );
-                }
-        }
-        
-        $_folder->cache_totalcount += $count;
-        
-        return $count;
-    }
+//    /**
+//     * add messages to cache and increase folder counts
+//     *
+//     * @param array $_messages
+//     * @param Felamimail_Model_Folder $_folder
+//     * @return integer count
+//     * 
+//     * @todo use this or _addMessagesPrepared?
+//     * @todo get replyTo & inReplyTo?
+//     */
+//    protected function _addMessages($_messages, $_folder)
+//    {
+//        $count = 0;
+//        foreach ($_messages as $uid => $message) {
+//                try {
+//                    $this->addMessage($message, $_folder);
+//                    
+//                    // count unseen and Zend_Mail_Storage::FLAG_RECENT 
+//                    if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags'])) {
+//                        $_folder->cache_recentcount++;
+//                        $_folder->cache_unreadcount++;
+//                    }
+//                    
+//                    $count++;
+//                    $_folder->cache_job_actions_done++;
+//                } catch (Exception $e) {
+//                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
+//                        ' Failed to create cache entry for msg ' . $message['uid'] . ' | ' . $message['header']['subject'] .
+//                        $e
+//                    );
+//                }
+//        }
+//        
+//        $_folder->cache_totalcount += $count;
+//        
+//        return $count;
+//    }
     
     /**
      * sync deleted messages
