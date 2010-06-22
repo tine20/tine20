@@ -311,10 +311,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function clearFlag($ids, $flag)
     {
-        foreach ($ids as $id) {
-            $message = Felamimail_Controller_Message::getInstance()->get($id);
-            Felamimail_Controller_Message::getInstance()->clearFlags($message, array($flag));
-        }
+        Felamimail_Controller_Message::getInstance()->clearFlags($ids, array($flag));
         
         return array('status' => 'success');
     }
