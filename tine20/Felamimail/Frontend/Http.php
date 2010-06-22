@@ -49,8 +49,8 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * download email attachment
      *
-     * @param string $messageId
-     * @param integer $partId
+     * @param  string  $messageId
+     * @param  string  $partId
      */
     public function downloadAttachment($messageId, $partId)
     {
@@ -62,35 +62,18 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         try {
             $part = Felamimail_Controller_Message::getInstance()->getMessagePart($messageId, $partId);
             
-            if ($part !== NULL) {
-                $headers = $part->getHeaders();
-                
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' Attachment headers:' . print_r($headers, true)
-                );
-                
-                preg_match(Felamimail_Model_Message::ATTACHMENT_FILENAME_REGEXP, $headers['content-disposition'], $matches);
-                $filename = (isset($matches[1])) ? $matches[1] : 'attachment'; 
-                
+            if ($part instanceof Zend_Mime_Part) {
                 header("Pragma: public");
+                header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
                 header("Cache-Control: max-age=0");
-                header('Content-Disposition: attachment; filename="' . $filename . '"');
-                header("Content-Description: email attachment");
-                header("Content-type: " . $headers['content-type']);
-                 
-                $content = $part->getContent();
-                switch (strtolower($headers['content-transfer-encoding'])) {
-                    case 'base64':
-                        $content = base64_decode($content);
-                        break;
-                    case 'quoted-printable':
-                        $content = quoted_printable_decode($content);
-                        break;
-                }
-                echo $content;
+                header('Content-Disposition: attachment; filename="' . $part->filename . '"');
+                header("Content-Description: " . (!empty($part->description)) ? $part->description : "email attachment");
+                header("Content-Type: " . $part->type);
+
+                fpassthru($part->getDecodedStream());
             }
         } catch (Exception $e) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $e->getMessage());
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' failed to get attachment. ' . $e->getMessage());
         }
         exit;
     }
