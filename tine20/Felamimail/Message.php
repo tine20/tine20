@@ -49,90 +49,6 @@ class Felamimail_Message extends Zend_Mail_Message
     }
     
     /**
-     * get message body
-     *
-     * @param string $_contentType
-     * @return string
-     * 
-     * @todo    add possibility to get ascii text even if it is a html mail
-     */
-    public function getBody($_contentType)
-    {
-        $part = null;
-        
-        if ($this->isMultipart()) {
-            foreach (new RecursiveIteratorIterator($this) as $messagePart) {
-                try {
-                    $contentType    = $messagePart->getHeaderField('content-type', 0);
-                    if (strtolower($contentType) == strtolower($_contentType)) {
-                        $part = $messagePart;
-                        break;
-                    } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $_contentType != $contentType");
-                    }
-                    
-                } catch (Zend_Mail_Exception $zme) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " No content-type header found.");
-                    
-                    if ($_contentType == Zend_Mime::TYPE_TEXT) {
-                        $part = $messagePart;
-                        break;
-                    }
-                }
-            }
-        } else {
-            $part = $this;
-        }
-        
-        if ($part === null) {
-            return "no text part found";
-        }
-        
-        $content = $part->getContent();
-        
-        if ($this->_leadingSpaces > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Removing ' . $this->_leadingSpaces . ' leading spaces from message.');
-            $content = preg_replace("/^[\s]{1," . $this->_leadingSpaces . "}/m", "", $content);
-        }
-        
-        try {
-            $encoding       = $part->getHeaderField('content-transfer-encoding');
-        } catch(Zend_Mail_Exception $e) {
-            $encoding       = null;
-        }
-        
-        switch (strtolower($encoding)) {
-            case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
-                $content = quoted_printable_decode($content);
-                break;
-            case Zend_Mime::ENCODING_BASE64:
-                $content = base64_decode($content);
-                break;
-        }
-        
-        
-        try {
-            $charset = $part->getHeaderField('content-type', 'charset');
-            // remove specialchars, spaces and quotes from charset string
-            $charset = trim(htmlspecialchars_decode(strtolower($charset)), "\x22\x27\x20");
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " header charset: " . $charset);
-        } catch(Zend_Mail_Exception $e) {
-            $charset = '';
-        }
-        
-        if (empty($charset)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no charset header found. assume iso-8859-1");
-            $charset        = 'iso-8859-1';            
-        }
-        
-        if ($charset != 'utf-8') {
-            $content = $this->_decode($charset, $content);
-        }
-        
-        return $content;
-    }
-    
-    /**
      * parse address list
      *
      * @param unknown_type $_adressList
@@ -251,25 +167,25 @@ class Felamimail_Message extends Zend_Mail_Message
         return $message;
     }
     
-    /**
-     * our own decode (and utf-8 encode) function
-     *
-     * @param string $_charset
-     * @param string $_content
-     * @return string
-     * 
-     * @todo catch iconv errors and try different charsets
-     */
-    protected function _decode($_charset, $_content)
-    {
-        if($_charset == 'utf8') {
-            $_charset = 'utf-8';
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " message body: iconv() from " . $_charset . " to utf-8.");
-        
-        $result = iconv($_charset, 'utf-8//IGNORE', $_content);
-        
-        return $result;
-    }
+//    /**
+//     * our own decode (and utf-8 encode) function
+//     *
+//     * @param string $_charset
+//     * @param string $_content
+//     * @return string
+//     * 
+//     * @todo catch iconv errors and try different charsets
+//     */
+//    protected function _decode($_charset, $_content)
+//    {
+//        if($_charset == 'utf8') {
+//            $_charset = 'utf-8';
+//        }
+//        
+//        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " message body: iconv() from " . $_charset . " to utf-8.");
+//        
+//        $result = iconv($_charset, 'utf-8//IGNORE', $_content);
+//        
+//        return $result;
+//    }
 }
