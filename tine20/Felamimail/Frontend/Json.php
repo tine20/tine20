@@ -313,7 +313,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         Felamimail_Controller_Message::getInstance()->clearFlags($ids, array($flag));
         
-        return array('status' => 'success');
+        return array(
+            'status' => 'success'
+        );
     }
     
     /**
