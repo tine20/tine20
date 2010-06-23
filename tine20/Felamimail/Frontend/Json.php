@@ -250,41 +250,41 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
 
-    /**
-     * set flag of messages
-     *
-     * @param  array $ids
-     * @param  array $flag
-     * @return array
-     */
-    public function setFlag($ids, $flag)
-    {
-        return $this->addFlags($ids, $flag);
-        
-        /*
-        if (! empty($flag)) {
-            foreach ($ids as $id) {
-                $message = Felamimail_Controller_Message::getInstance()->get($id);
-                Felamimail_Controller_Message::getInstance()->addFlags($message, (array) $flag);
-            }
-        } else {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No flag set in request.');
-        }
-        
-        return array('status' => 'success');
-        */
-    }
+//    /**
+//     * set flag of messages
+//     *
+//     * @param  array $ids
+//     * @param  array $flags
+//     * @return array
+//     */
+//    public function setFlags($ids, $flags)
+//    {
+//        return $this->addFlags($ids, $flag);
+//        
+//        /*
+//        if (! empty($flag)) {
+//            foreach ($ids as $id) {
+//                $message = Felamimail_Controller_Message::getInstance()->get($id);
+//                Felamimail_Controller_Message::getInstance()->addFlags($message, (array) $flag);
+//            }
+//        } else {
+//            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No flag set in request.');
+//        }
+//        
+//        return array('status' => 'success');
+//        */
+//    }
 
     /**
-     * set flag of messages
+     * add given flags to given messages
      *
-     * @param  array $ids
-     * @param  array $flag
+     * @param  array        $ids
+     * @param  string|array $flags
      * @return array
      */
-    public function addFlags($ids, $flag)
+    public function addFlags($ids, $flags)
     {
-        Felamimail_Controller_Message::getInstance()->addFlags($ids, (array) $flag);
+        Felamimail_Controller_Message::getInstance()->addFlags($ids, (array) $flags);
         
         return array(
             'status' => 'success'
@@ -292,15 +292,15 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * clear flag of messages
+     * clear given flags from given messages
      *
-     * @param array  $ids
-     * @param string $flag
+     * @param array         $ids
+     * @param string|array  $flags
      * @return array
      */
-    public function clearFlag($ids, $flag)
+    public function clearFlags($ids, $flags)
     {
-        Felamimail_Controller_Message::getInstance()->clearFlags($ids, array($flag));
+        Felamimail_Controller_Message::getInstance()->clearFlags($ids, (array) $flags);
         
         return array(
             'status' => 'success'
