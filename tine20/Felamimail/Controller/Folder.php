@@ -166,6 +166,31 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     }
     
     /**
+     * get saved folder record by backend and globalname
+     *
+     * @param string $_accountId
+     * @param string $_globalName
+     * @return Felamimail_Model_Folder
+     */
+    public function getByBackendAndGlobalName($_accountId, $_globalName)
+    {
+        $filter = new Felamimail_Model_FolderFilter(array(
+            array('field' => 'account_id', 'operator' => 'equals', 'value' => $_accountId),
+            array('field' => 'globalname', 'operator' => 'equals', 'value' => $_globalName),
+        ));
+        
+        $folders = $this->_backend->search($filter);
+        
+        if (count($folders) > 0) {
+            $result = $folders->getFirstRecord();
+        } else {
+            throw new Tinebase_Exception_NotFound("Folder $_globalName not found.");
+        }
+        
+        return $result;
+    }
+        
+    /**
      * create folder
      *
      * @param string $_folderName to create
@@ -250,7 +275,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         }
         
         try {
-            $folder = $this->_backend->getByBackendAndGlobalName($_accountId, $_folderName);
+            $folder = $this->getByBackendAndGlobalName($_accountId, $_folderName);
             $this->_backend->delete($folder->getId());
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleted folder ' . $_folderName);
             $this->_updateHasChildren($_accountId, $folder->parent);
@@ -284,7 +309,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         // rename folder in db
         try {
-            $folder = $this->_backend->getByBackendAndGlobalName($_accountId, $_oldGlobalName);
+            $folder = $this->getByBackendAndGlobalName($_accountId, $_oldGlobalName);
             $folder->globalname = $newGlobalName;
             $folder->localname = $_newLocalName;
             $folder = $this->update($folder);
@@ -432,7 +457,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             return NULL;
         }
 
-        $folder = $this->_backend->getByBackendAndGlobalName($_accountId, $_globalname);
+        $folder = $this->getByBackendAndGlobalName($_accountId, $_globalname);
         if ($_value === NULL) {
             // check if folder has children by searching in db
             $subfolders = $this->getSubfolders($_accountId, $_globalname);

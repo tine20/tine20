@@ -34,31 +34,6 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
     protected $_modelName = 'Felamimail_Model_Folder';
 
     /**
-     * get saved folder record by backend and globalname
-     *
-     * @param string $_accountId
-     * @param string $_globalName
-     * @return Felamimail_Model_Folder
-     */
-    public function getByBackendAndGlobalName($_accountId, $_globalName)
-    {
-        $filter = new Felamimail_Model_FolderFilter(array(
-            array('field' => 'account_id', 'operator' => 'equals', 'value' => $_accountId),
-            array('field' => 'globalname', 'operator' => 'equals', 'value' => $_globalName),
-        ));
-        
-        $folders = $this->search($filter);
-        
-        if (count($folders) > 0) {
-            $result = $folders->getFirstRecord();
-        } else {
-            throw new Tinebase_Exception_NotFound("Folder $_globalName not found.");
-        }
-        
-        return $result;
-    }
-    
-    /**
      * get folder cache counter like total and unseen
      *  
      * @param  string  $_folderId  the folderid
