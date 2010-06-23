@@ -225,6 +225,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
+        if (in_array(Zend_Mail_Storage::FLAG_SEEN, $flags)) {
+            
+        }
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' set flags on cache');
     }
     
