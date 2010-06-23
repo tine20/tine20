@@ -923,13 +923,14 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
         }
         
-        // store in local cache if received during the last day
-        if($createdMessage->received->compare(Zend_Date::now()->subDay(1)) == 1) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
-                ' prefetch imap message to local cache ' . $createdMessage->getId()
-            );            
-            Felamimail_Controller_Message::getInstance()->getCompleteMessage($createdMessage);
-        }
+        # store in local cache if received during the last day
+        # disabled again for performance reason
+        #if($createdMessage->received->compare(Zend_Date::now()->subDay(1)) == 1) {
+        #    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
+        #        ' prefetch imap message to local cache ' . $createdMessage->getId()
+        #    );            
+        #    Felamimail_Controller_Message::getInstance()->getCompleteMessage($createdMessage);
+        #}
 
         return $createdMessage;
     }
