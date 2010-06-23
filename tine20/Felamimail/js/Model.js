@@ -50,30 +50,50 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
     },
     
     /**
-     * @property seenExp
-     * @type RegExp
-     */
-    seenExp: new RegExp('[ \,]*\\\\Seen'),
-    
-    /**
-     * checks if message is seen
+     * check if message has given flag
      * 
-     * @return {Bool}
+     * @param  {String} flag
+     * @return {Boolean}
      */
-    isSeen: function() {
-        var flags = this.get('flags');
-        return !! flags.match(this.seenExp);
+    hasFlag: function(flag) {
+        var flags = this.get('flags') || [];
+        return flags.indexOf(flag) >= 0;
     },
     
     /**
-     * flag message as seen
+     * adds given flag to message
      * 
-     * @return {void}
+     * @param  {String} flag
+     * @return {Boolean} false if flag was already set before, else true
      */
-    setSeen: function() {
-        if (! this.isSeen()) {
-            this.set('flags', this.get('flags') + ' \\Seen');
+    addFlag: function(flag) {
+        if (! this.hasFlag(flag)) {
+            var flags = Ext.unique(this.get('flags') || []);
+            flags.push(flag);
+            
+            this.set('flags', flags);
+            return true;
         }
+        
+        return false;
+    },
+    
+    /**
+     * clears given flag from message
+     * 
+     * @param {String} flag
+     * @return {Boolean} false if flag was not set before, else true
+     */
+    clearFlag: function(flag) {
+        if (this.hasFlag(flag)) {
+            var flags = Ext.unique(this.get('flags'));
+            flags.remove(flag);
+            
+            this.set('flags', flags);
+            return true;
+        }
+        
+        return false;
     }
 });
 
@@ -128,33 +148,33 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
         return this.doXHTTPRequest(options);
     },
     
-    /**
-     * sets the given flag(s) 
-     * 
-     * @param {String/Array/Filter} ids
-     * @param {String/Array} flag
-     * @param {} options
-     */
-    setFlag: function(ids, flag, options) {
-        options = options || {};
-        options.params = options.params || {};
-        
-        var p = options.params;
-        
-        p.method = this.appName + '.setFlag';
-        p.ids = ids;
-        p.flag = flag;
-        
-        return this.doXHTTPRequest(options);
-    },
+//    /**
+//     * sets the given flag(s) to the given messages
+//     * 
+//     * @param {String/Array/Filter} ids
+//     * @param {String/Array} flag
+//     * @param {} options
+//     */
+//    setFlags: function(ids, flags, options) {
+//        options = options || {};
+//        options.params = options.params || {};
+//        
+//        var p = options.params;
+//        
+//        p.method = this.appName + '.setFlag';
+//        p.ids = ids;
+//        p.flag = flag;
+//        
+//        return this.doXHTTPRequest(options);
+//    },
     
     /**
-     * set flag of messages
+     * add given flags to given messages
      *
-     * @param  array ids
-     * @param  array flag
+     * @param  {String/Array} ids
+     * @param  {String/Array} flags
      */
-    addFlags: function(ids, flag, options)
+    addFlags: function(ids, flags, options)
     {
         options = options || {};
         options.params = options.params || {};
@@ -163,27 +183,27 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
         
         p.method = this.appName + '.addFlags';
         p.ids = ids;
-        p.flag = flag;
+        p.flags = flags;
         
         return this.doXHTTPRequest(options);
     },
     
     /**
-     * clear flag of messages
+     * clear given flags from given messages
      *
-     * @param array  ids
-     * @param string flag
+     * @param  {String/Array} ids
+     * @param  {String/Array} flags
      */
-    clearFlag: function(ids, flag, options)
+    clearFlags: function(ids, flags, options)
     {
         options = options || {};
         options.params = options.params || {};
         
         var p = options.params;
         
-        p.method = this.appName + '.clearFlag';
+        p.method = this.appName + '.clearFlags';
         p.ids = ids;
-        p.flag = flag;
+        p.flags = flags;
         
         return this.doXHTTPRequest(options);
     }
