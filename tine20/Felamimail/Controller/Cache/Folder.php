@@ -133,7 +133,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             }
             
             // update has children
-            $parentFolder = $this->_backend->getByBackendAndGlobalName($_accountId, $_folderName);
+            $parentFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_accountId, $_folderName);
             $hasChildren = (empty($folders)) ? 0 : 1;
             if ($hasChildren != $parentFolder->has_children) {
                 $parentFolder->has_children = $hasChildren;
