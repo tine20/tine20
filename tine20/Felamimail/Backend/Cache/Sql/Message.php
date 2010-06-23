@@ -334,6 +334,10 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             $_rawData['structure'] = Zend_Json::decode($_rawData['structure']);
         }
         
+        if(isset($_rawData['flags'])) {
+            $_rawData['flags'] = explode(',', $_rawData['flags']);
+        }
+        
         $result = parent::_rawDataToRecord($_rawData);
                 
         return $result;
@@ -350,6 +354,10 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         foreach($_rawDatas as &$_rawData) {
             if(isset($_rawData['structure'])) {
                 $_rawData['structure'] = Zend_Json::decode($_rawData['structure']);
+            }
+            
+            if(isset($_rawData['flags'])) {
+                $_rawData['flags'] = explode(',', $_rawData['flags']);
             }
         }
         $result = parent::_rawDataToRecordSet($_rawDatas);
