@@ -138,11 +138,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         // set \Seen flag
-        if ($_setSeen && preg_match('/\\Seen/', $message->flags) === 0) {
+        if ($_setSeen && !in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                 ' Add \Seen flag to msg uid ' . $message->messageuid
             );
             $this->addFlags($message, Zend_Mail_Storage::FLAG_SEEN);
+            $message->flags[] = Zend_Mail_Storage::FLAG_SEEN;
         }
 
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
@@ -381,10 +382,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $imapBackend->removeMessage($imapMessageUids);
         }    
 
-        // set flags in local database
+        // delete messages in local cache
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
-        // store flags in local cache
         $this->_backend->delete($messages->getArrayOfIds());
                 
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
