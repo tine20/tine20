@@ -51,6 +51,29 @@ Tine.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelectionModel, 
     },
     
     /**
+     * get current selection as collection
+     * 
+     * @return {Ext.util.MixedCollection}
+     */
+    getSelectionsCollection: function() {
+        this.selections;
+    },
+    
+    /**
+     * returns ids of currently visible page
+     * 
+     * @return {Array}
+     */
+    getCurrentPageIds: function() {
+        var ids = [];
+        this.store.each(function(record) {
+            ids.push(record.id);
+        }, this);
+        
+        return ids;
+    },
+    
+    /**
      * gets filter data of all filter plugins
      * 
      * NOTE: As we can't find all filter plugins directly we need a litte hack 
