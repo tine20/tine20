@@ -56,7 +56,7 @@ Tine.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelectionModel, 
      * @return {Ext.util.MixedCollection}
      */
     getSelectionsCollection: function() {
-        this.selections;
+        return this.selections;
     },
     
     /**
