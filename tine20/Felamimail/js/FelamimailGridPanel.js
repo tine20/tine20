@@ -82,20 +82,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     getViewRowClass: function(record, index) {
-        var flags = record.get('flags');
-        //console.log(flags);
         var className = '';
-        if(flags !== null) {
-            if (flags.match(/Flagged/)) {
-                className += ' flag_flagged';
-            }
-            if (flags.match(/Deleted/)) {
-                className += ' flag_deleted';
-            }
+        
+        if (record.hasFlag('\\Flagged')) {
+            className += ' flag_flagged';
         }
-        if (flags === null || flags.match(/Seen/) === null) {
+        if (record.hasFlag('\\Deleted')) {
+            className += ' flag_deleted';
+        }
+        if (! record.hasFlag('\\Seen')) {
             className += ' flag_unread';
         }
+        
         return className;
     },
     
@@ -177,22 +175,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_flag = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Toggle Flag'),
-            handler: this.onToggleFlag,
-            flag: 'Flagged',
+            handler: this.onToggleFlag.createDelegate(this, ['\\Flagged'], true),
             iconCls: 'action_email_flag',
             allowMultiple: true,
-            scope: this,
             disabled: true
         });
         
         this.action_markUnread = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Mark read/unread'),
-            handler: this.onToggleFlag,
-            flag: 'Seen',
+            handler: this.onToggleFlag.createDelegate(this, ['\\Seen'], true),
             iconCls: 'action_mark_unread',
             allowMultiple: true,
-            scope: this,
             disabled: true
         });
         
@@ -449,26 +443,23 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * 
      * TODO  use spacer if first flag(s) is/are not set?
      */
-    flagRenderer: function(flags) {
-        if (!flags) {
-            return '';
-        }
-        
-        var icons = [];
-        if (flags.match(/Answered/)) {
+    flagRenderer: function(value, metadata, record) {
+        var icons = [],
+            result = '';
+            
+        if (record.hasFlag('\\Answered')) {
             icons.push({src: 'images/oxygen/16x16/actions/mail-reply-sender.png', qtip: _('Answered')});
         }   
-        if (flags.match(/Passed/)) {
+        if (record.hasFlag('\\Passed')) {
             icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: _('Forwarded')});
         }   
-//        if (flags.match(/Recent/)) {
+//        if (record.hasFlag('\\Recent')) {
 //            icons.push({src: 'images/oxygen/16x16/actions/knewstuff.png', qtip: _('Recent')});
 //        }   
         
-        var result = '';
-        for (var i=0; i < icons.length; i++) {
-            result = result + '<img class="FelamimailFlagIcon" src="' + icons[i].src + '" ext:qtip="' + icons[i].qtip + '">';
-        }
+        Ext.each(icons, function(icon) {
+            result += '<img class="FelamimailFlagIcon" src="' + icon.src + '" ext:qtip="' + icon.qtip + '">';
+        }, this);
         
         return result;
     },
@@ -494,26 +485,55 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * update class and unread count in tree on select
-     * - mark mail as read
-     * - check if it was unread -> update tree and remove \Seen flag
+     * move selected messages to given folder
      * 
-     * @param {SelectionModel} selModel
-     * @param {Number} rowIndex
-     * @param {Tine.Felamimail.Model.Message} r
+     * @param {} folder
      */
-    onRowSelection: function(selModel, rowIndex, record) {
-        // toggle read/seen flag of mail (only if 1 selected row)
-        if (selModel.getCount() == 1) {
-            //console.log(record.data.flags);
+    moveSelectedMessages: function(folder) {
+        var sm = this.getGrid().getSelectionModel(),
+            msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection();
+        
+        msgs.each(function(msg) {
             
-            var regexp = new RegExp('[ \,]*\\\\Seen');
-            if (record.data.flags === null || ! record.data.flags.match(regexp)) {
-                //console.log('markasread');
-                record.data.flags += ' \\Seen';
-                this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
-                Ext.get(this.grid.getView().getRow(rowIndex)).removeClass('flag_unread');
-            }
+        }, this);
+        
+        Ext.each(messageIds, function(messageId) {
+            this.getStore().getById(messageId)
+        }, this);
+        // if folder != current folder
+        // gray out selected messages / hide or delete
+        // start moving -> update unread count of folder
+        // update grid afterwards
+    },
+    
+    /**
+     * delete messages handler
+     * 
+     * @return {void}
+     */
+    onDeleteRecords: function() {
+        var trashId = this.app.getActiveAccount().get('trash_folder'),
+            trash = trashId ? this.app.getFolderStore.getById(trashId) : null;
+            
+        return trash ? this.moveSelectedMessages(trash) : this.deleteSelectedMessages();
+    },
+
+    /**
+     * called when a row gets selected
+     * 
+     * @param {SelectionModel} sm
+     * @param {Number} rowIndex
+     * @param {Tine.Felamimail.Model.Message} record
+     * @param {Boolean} now
+     */
+    onRowSelection: function(sm, rowIndex, record, now) {
+        if (! now) {
+            return this.onRowSelection.defer(3000, this, [sm, rowIndex, record, true]);
+        }
+        
+        if (sm.getCount() == 1 && sm.isIdSelected(record.id) && !record.hasFlag('\\Seen')) {
+            record.addFlag('\\Seen');
+            //this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
         }
     },
     
@@ -528,6 +548,29 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onRowDblClick: function(grid, row, e) {
         return false;
     }, 
+    
+    /**
+     * called when the store gets updated
+     * 
+     * NOTE: we only allow updateing flags
+     */
+    onStoreUpdate: function(store, record, operation) {
+        if (operation === Ext.data.Record.EDIT && record.isModified('flags')) {
+            var oldFlags = record.modified.flags,
+                newFlags = record.get('flags'),
+                added = newFlags.diff(oldFlags),
+                cleared = oldFlags.diff(newFlags);
+                
+            if (! Ext.isEmpty(added)) {
+                this.recordProxy.addFlags([record.id], added);
+            }
+            
+            if (! Ext.isEmpty(cleared)) {
+                this.recordProxy.clearFlags([record.id], cleared);
+            }
+            record.commit()
+        }
+    },
     
     /**
      * key down handler
@@ -701,95 +744,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * 
      * @param {Button} button
      * @param {Event} event
+     * @param {String} flag
      */
-    onToggleFlag: function(button, event) {
-        
-        var messages = this.grid.getSelectionModel().getSelections();
-        
-        if (messages.length == 0) {
-            return;
-        }
-        
-        var regexp = new RegExp('[ \,]*\\\\' + button.flag);
-        var flagRegexp = new RegExp(button.flag);
-        
-        // check if set or clear flag and init some vars
-        //var flagged = (messages[0].get('flags') !== null && messages[0].get('flags').match(/Flagged/) !== null);
-        var flagged = (messages[0].get('flags') !== null && messages[0].get('flags').match(flagRegexp) !== null);
-
-        if (button.flag == 'Flagged') {
-            var flagClass = 'flag_flagged';
-            //var method = (flagged) ? 'clearFlag' : 'setFlag';
-        } else if (button.flag == 'Seen') {
-            var flagClass = 'flag_unread';
-            //var method = (flagged) ? 'setFlag' : 'clearFlag';
-        }
-        
-        var method = (flagged) ? 'clearFlag' : 'setFlag';
-        
-        // loop messages and update flags
-        var toUpdateIds = [];
-        var index = 0;
-        for (var i = 0; i < messages.length; ++i) {
-            index = this.store.indexOfId(messages[i].data.id);
-            if (flagged) {
-                
-                // update class
-                if (button.flag == 'Seen') {
-                    Ext.get(this.grid.getView().getRow(index)).addClass(flagClass);
-                } else {
-                    Ext.get(this.grid.getView().getRow(index)).removeClass(flagClass);
-                }
-                
-                // remove flag
-                if (messages[i].data.flags !== null) {
-                    messages[i].data.flags = messages[i].data.flags.replace(regexp, '');
-                    
-                    // PUSH
-                    toUpdateIds.push(messages[i].data.id);
-                }
-                
-            } else {
-                
-                // update class
-                if (button.flag == 'Seen') {
-                    Ext.get(this.grid.getView().getRow(index)).removeClass(flagClass);
-                } else {
-                    Ext.get(this.grid.getView().getRow(index)).addClass(flagClass);
-                }
-
-                // add flag
-                if (messages[i].data.flags === null) {
-                    messages[i].data.flags = '\\' + button.flag;
-                } else if (! messages[i].data.flags.match(regexp)) {
-                    messages[i].data.flags = messages[i].data.flags + ',\\' + button.flag;
-                }
-                
-                // PUSH
-                toUpdateIds.push(messages[i].data.id);
-            }
-        }
-                
-        if (toUpdateIds.length > 0) {
-            Ext.Ajax.request({
-                params: {
-                    method: 'Felamimail.' + method,
-                    ids: toUpdateIds,
-                    flag: '\\' + button.flag
-                },
-                success: function(_result, _request) {
-                    // TODO update folder store
-                    //this.app.getMainScreen().getTreePanel().updateFolderStatus();
-                },
-                failure: function(result, request){
-                    Ext.MessageBox.alert(
-                        this.app.i18n._('Failed'), 
-                        this.app.i18n._('Some error occured while trying to update the messages.')
-                    );
-                },
-                scope: this
-            });
-        }
+    onToggleFlag: function(btn, e, flag) {
+        var sm = this.getGrid().getSelectionModel(),
+            msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection();
+            
+        msgs.each(function(msg) {
+            msg[msg.hasFlag(flag) ? 'clearFlag' : 'addFlag'](flag);
+        }, this);
     },
     
     /**
