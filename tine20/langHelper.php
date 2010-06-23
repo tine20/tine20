@@ -70,7 +70,7 @@ if ($opts->wipe) {
             echo "Processing $appName po files \n";
         }
         
-        `cd $translationPath 
+        `cd "$translationPath" 
         rm *`;
     }
 }
@@ -126,7 +126,7 @@ if ($opts->mo) {
 
 if ($opts->c || $opts->package) {
     // remove translation backups of msgmerge
-    `cd $tine20path
+    `cd "$tine20path"
     find . -type f -iname "*.po~" -exec rm {} \;`;
 }
 if ($opts->statistics) {
@@ -194,7 +194,7 @@ function generatePOTFiles($_verbose)
         }
         $appPath = "$translationPath/../";
         
-        `cd $appPath 
+        `cd "$appPath" 
         touch translations/template.pot 
         find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.xml" | xgettext --force-po --omit-header -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f - 2> /dev/null`;
         
@@ -220,7 +220,7 @@ function potmerge($_verbose)
         }
         generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$translationPath/en.po",  $_verbose);
         $enHeader = file_get_contents("$translationPath/en.po");
-        `cd $translationPath
+        `cd "$translationPath"
          msgen template.pot >> en.po $msgDebug`;
          
         foreach ($langs as $langCode) {
@@ -244,7 +244,7 @@ function potmerge($_verbose)
             if ($_verbose) {
                echo $poFile . ": ";
             }
-            `cd $translationPath
+            `cd "$translationPath"
              msgmerge --no-fuzzy-matching --no-wrap $poFile template.pot $msgDebug -o $poFile`;
         }
     }
@@ -343,7 +343,7 @@ function msgfmt ($_verbose)
                     echo "Processing $appName/$poFile \n";
                 }
                 // create mo file
-                `cd $translationPath
+                `cd "$translationPath"
                 msgfmt -o $langName.mo $poFile`;
             }
         }
@@ -360,7 +360,7 @@ function buildpackage($_verbose)
     $zipFile = "$tine20path/translations.zip";
     if (file_exists($zipFile)) `rm $zipFile`;
     foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
-        `cd $tine20path
+        `cd "$tine20path"
         zip $zipFile  $appName/translations/* `;
     }
 }
@@ -658,12 +658,12 @@ function svnAdd($_locale)
 {
     foreach (Tinebase_Translation::getTranslationDirs() as $dir) {
         if (file_exists("$dir/$_locale.po")) {
-            `cd $dir
-            svn add $dir/$_locale.po`;
+            `cd "$dir"
+            svn add "$dir/$_locale.po"`;
         }
         if (file_exists("$dir/$_locale.mo")) {
-            `cd $dir
-            svn add $dir/$_locale.mo`;
+            `cd "$dir"
+            svn add "$dir/$_locale.mo"`;
         }
     }
 }

@@ -101,129 +101,71 @@ msgstr "浏览电脑"
 msgid "view computers list and details"
 msgstr "浏览电脑列表和细节"
 
-#: js/Admin.js:20 js/user/GridPanel.js:100 js/user/Users.js:66
-#, fuzzy
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "用户"
+#: js/SambaMachineGrid.js:68 js/SambaMachineEditDialog.js:43
+msgid "Computer Name"
+msgstr "电脑名"
 
-#: js/Admin.js:33
-msgid "Groups"
-msgstr "组"
+#: js/SambaMachineGrid.js:69 js/SambaMachineGrid.js:99 js/Roles.js:240
+#: js/Groups.js:239 js/Groups.js:475 js/Tags.js:224 js/Tags.js:550
+#: js/user/GridPanel.js:101 js/RoleEditDialog.js:319
+msgid "Description"
+msgstr "描述"
 
-#: js/Admin.js:46
-msgid "Roles"
-msgstr "角色"
+#: js/SambaMachineGrid.js:86 js/Roles.js:238 js/Groups.js:237
+#: js/user/GridPanel.js:159
+msgid "ID"
+msgstr "ID"
 
-#: js/Admin.js:58
-msgid "Computers"
-msgstr "电脑"
-
-#: js/Admin.js:71
-msgid "Applications"
-msgstr "应用程序"
-
-#: js/Admin.js:84
-msgid "Access Log"
-msgstr "访问日志"
-
-#: js/Admin.js:97
-msgid "Shared Tags"
-msgstr "共享的标签"
-
-#: js/Admin.js:133
-msgid "Admin"
-msgstr "管理"
-
-#: js/Admin.js:264 js/Groups.js:54 js/Roles.js:48 js/Tags.js:62
-msgid "Confirm"
-msgstr "确认"
-
-#: js/Admin.js:264
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "真的想删除选中的访问日志条目？"
-
-#: js/Admin.js:383
-msgid "delete entry"
-msgstr "删除条目"
-
-#: js/Admin.js:384
-msgid "select all"
-msgstr "全选"
-
-#: js/Admin.js:428
-msgid "Display from:"
-msgstr "显示从："
-
-#: js/Admin.js:432
-msgid "to:"
-msgstr "到："
-
-#: js/Admin.js:437 js/Applications.js:191 js/Groups.js:178 js/Roles.js:177
-#: js/Tags.js:167
-msgid "Search:"
-msgstr "搜索："
-
-#: js/Admin.js:510
-msgid "invalid password"
-msgstr "无效的密码"
-
-#: js/Admin.js:514
-msgid "ambiguous username"
-msgstr "不清楚的用户名"
-
-#: js/Admin.js:518
-msgid "user not found"
-msgstr "没有发现用户"
-
-#: js/Admin.js:522
-msgid "failure"
-msgstr "失败"
-
-#: js/Admin.js:526
-msgid "success"
-msgstr "成功"
-
-#: js/Admin.js:554
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "显示访问日志条目 {0} - {1} of {2}"
-
-#: js/Admin.js:555
-msgid "No access log entries to display"
-msgstr "没有访问日志条目要显示"
-
-#: js/Admin.js:564
-msgid "Session ID"
-msgstr "会话 ID"
-
-#: js/Admin.js:565 js/user/EditDialog.js:533
-msgid "Login Name"
-msgstr "登录名"
-
-#: js/Admin.js:566 js/Applications.js:286 js/Groups.js:238 js/Roles.js:239
-#: js/SambaMachineGrid.js:93 js/Tags.js:223
+#: js/SambaMachineGrid.js:93 js/Roles.js:239 js/Applications.js:286
+#: js/Groups.js:238 js/Tags.js:223 js/Admin.js:566
 msgid "Name"
 msgstr "名字"
 
-#: js/Admin.js:567
-msgid "IP Address"
-msgstr "IP 地址"
+#: js/Roles.js:48 js/Groups.js:54 js/Tags.js:62 js/Admin.js:264
+msgid "Confirm"
+msgstr "确认"
 
-#: js/Admin.js:568
-msgid "Login Time"
-msgstr "登录时间"
+#: js/Roles.js:48
+msgid "Do you really want to delete the selected roles?"
+msgstr "真的想删除选中的角色？"
 
-#: js/Admin.js:569
-msgid "Logout Time"
-msgstr "登出时间"
+#: js/Roles.js:65
+msgid "Deleting role(s)..."
+msgstr "删除角色 ..."
 
-#: js/Admin.js:570
-msgid "Account ID"
-msgstr "账户 ID"
+#: js/Roles.js:70 js/Groups.js:75 js/Groups.js:410 js/Tags.js:406
+#: js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
+msgid "Failed"
+msgstr "失败"
 
-#: js/Admin.js:571
-msgid "Result"
-msgstr "结果"
+#: js/Roles.js:70 js/RoleEditDialog.js:134
+msgid "Some error occurred while trying to delete the role."
+msgstr "当试图删除角色是发生错误"
+
+#: js/Roles.js:103
+msgid "add role"
+msgstr "添加角色"
+
+#: js/Roles.js:111
+msgid "edit role"
+msgstr "编辑角色"
+
+#: js/Roles.js:119
+msgid "delete role"
+msgstr "删除角色"
+
+#: js/Roles.js:177 js/Applications.js:191 js/Groups.js:178 js/Tags.js:167
+#: js/Admin.js:437
+msgid "Search:"
+msgstr "搜索："
+
+#: js/Roles.js:227
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "显示角色{0} - {1} of {2}"
+
+#: js/Roles.js:228 js/Roles.js:283
+msgid "No roles to display"
+msgstr "没有角色要显示"
 
 #: js/Applications.js:44
 msgid "{0} Settings"
@@ -266,7 +208,7 @@ msgstr "没有程序要显示"
 msgid "Order"
 msgstr "顺序"
 
-#: js/Applications.js:287 js/user/EditDialog.js:585 js/user/GridPanel.js:160
+#: js/Applications.js:287 js/user/GridPanel.js:160 js/user/EditDialog.js:585
 msgid "Status"
 msgstr "状态"
 
@@ -282,11 +224,6 @@ msgstr "真的要删除选中的组？"
 #: js/Groups.js:70
 msgid "Deleting group(s)..."
 msgstr "删除组..."
-
-#: js/Groups.js:75 js/Groups.js:410 js/RoleEditDialog.js:106
-#: js/RoleEditDialog.js:134 js/Roles.js:70 js/Tags.js:406
-msgid "Failed"
-msgstr "失败"
 
 #: js/Groups.js:75
 msgid "Some error occurred while trying to delete the group."
@@ -312,18 +249,7 @@ msgstr "显示组 {0} - {1} of {2}"
 msgid "No groups to display"
 msgstr "没有组要显示"
 
-#: js/Groups.js:237 js/Roles.js:238 js/SambaMachineGrid.js:86
-#: js/user/GridPanel.js:159
-msgid "ID"
-msgstr "ID"
-
-#: js/Groups.js:239 js/Groups.js:475 js/RoleEditDialog.js:319 js/Roles.js:240
-#: js/SambaMachineGrid.js:69 js/SambaMachineGrid.js:99 js/Tags.js:224
-#: js/Tags.js:550 js/user/GridPanel.js:101
-msgid "Description"
-msgstr "描述"
-
-#: js/Groups.js:375 js/RoleEditDialog.js:69 js/Tags.js:361
+#: js/Groups.js:375 js/Tags.js:361 js/RoleEditDialog.js:69
 msgid "Please wait"
 msgstr "请稍等"
 
@@ -335,11 +261,11 @@ msgstr "更新会员身份"
 msgid "Could not save group."
 msgstr "不能保存组"
 
-#: js/Groups.js:415 js/RoleEditDialog.js:113 js/Tags.js:411
+#: js/Groups.js:415 js/Tags.js:411 js/RoleEditDialog.js:113
 msgid "Errors"
 msgstr "错误"
 
-#: js/Groups.js:415 js/RoleEditDialog.js:113 js/Tags.js:411
+#: js/Groups.js:415 js/Tags.js:411 js/RoleEditDialog.js:113
 msgid "Please fix the errors noted."
 msgstr "请修复标明的错误"
 
@@ -351,7 +277,7 @@ msgstr "组成员"
 msgid "Group Name"
 msgstr "组名"
 
-#: js/Groups.js:534 js/RoleEditDialog.js:395 js/Tags.js:620
+#: js/Groups.js:534 js/Tags.js:620 js/RoleEditDialog.js:395
 msgid "Transfering {0}..."
 msgstr ""
 
@@ -366,82 +292,6 @@ msgstr "添加新组"
 #: js/Groups.js:548
 msgid "Edit Group \"{0}\""
 msgstr "编辑组\"{0}\""
-
-#: js/RoleEditDialog.js:106
-msgid "Could not save role."
-msgstr "不能保存角色"
-
-#: js/RoleEditDialog.js:126
-msgid "Deleting role..."
-msgstr "删除角色..."
-
-#: js/RoleEditDialog.js:134 js/Roles.js:70
-msgid "Some error occurred while trying to delete the role."
-msgstr "当试图删除角色是发生错误"
-
-#: js/RoleEditDialog.js:272
-msgid "Members"
-msgstr "成员"
-
-#: js/RoleEditDialog.js:281
-msgid "Rights"
-msgstr "权限"
-
-#: js/RoleEditDialog.js:311
-msgid "Role Name"
-msgstr "角色名"
-
-#: js/RoleEditDialog.js:351
-msgid "Loading Role..."
-msgstr "加载角色"
-
-#: js/RoleEditDialog.js:351 js/Tags.js:586
-msgid "Please Wait"
-msgstr "请稍等"
-
-#: js/RoleEditDialog.js:395
-msgid "Role"
-msgstr ""
-
-#: js/RoleEditDialog.js:405
-msgid "Add New Role"
-msgstr "添加新角色"
-
-#: js/RoleEditDialog.js:407
-msgid "Edit Role \"{0}\""
-msgstr "编辑角色 \"{0}\""
-
-#: js/Roles.js:48
-msgid "Do you really want to delete the selected roles?"
-msgstr "真的想删除选中的角色？"
-
-#: js/Roles.js:65
-msgid "Deleting role(s)..."
-msgstr "删除角色 ..."
-
-#: js/Roles.js:103
-msgid "add role"
-msgstr "添加角色"
-
-#: js/Roles.js:111
-msgid "edit role"
-msgstr "编辑角色"
-
-#: js/Roles.js:119
-msgid "delete role"
-msgstr "删除角色"
-
-#: js/Roles.js:227
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "显示角色{0} - {1} of {2}"
-
-#: js/Roles.js:228 js/Roles.js:283
-msgid "No roles to display"
-msgstr "没有角色要显示"
-
-#: js/SambaMachineEditDialog.js:43 js/SambaMachineGrid.js:68
-msgid "Computer Name"
-msgstr "电脑名"
 
 #: js/SambaMachineModel.js:40
 msgid "Computer"
@@ -516,6 +366,10 @@ msgstr "标签名"
 msgid "Loading Tag..."
 msgstr "加载标签..."
 
+#: js/Tags.js:586 js/RoleEditDialog.js:351
+msgid "Please Wait"
+msgstr "请稍等"
+
 #: js/Tags.js:620
 msgid "Tag"
 msgstr ""
@@ -527,6 +381,176 @@ msgstr "添加新标签"
 #: js/Tags.js:632
 msgid "Edit Tag \"{0}\""
 msgstr "编辑标签\"{0}\""
+
+#: js/Admin.js:20 js/user/GridPanel.js:100 js/user/Users.js:66
+#, fuzzy
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "用户"
+
+#: js/Admin.js:33
+msgid "Groups"
+msgstr "组"
+
+#: js/Admin.js:46
+msgid "Roles"
+msgstr "角色"
+
+#: js/Admin.js:58
+msgid "Computers"
+msgstr "电脑"
+
+#: js/Admin.js:71
+msgid "Applications"
+msgstr "应用程序"
+
+#: js/Admin.js:84
+msgid "Access Log"
+msgstr "访问日志"
+
+#: js/Admin.js:97
+msgid "Shared Tags"
+msgstr "共享的标签"
+
+#: js/Admin.js:133
+msgid "Admin"
+msgstr "管理"
+
+#: js/Admin.js:264
+msgid "Do you really want to delete the selected access log entries?"
+msgstr "真的想删除选中的访问日志条目？"
+
+#: js/Admin.js:383
+msgid "delete entry"
+msgstr "删除条目"
+
+#: js/Admin.js:384
+msgid "select all"
+msgstr "全选"
+
+#: js/Admin.js:428
+msgid "Display from:"
+msgstr "显示从："
+
+#: js/Admin.js:432
+msgid "to:"
+msgstr "到："
+
+#: js/Admin.js:510
+msgid "invalid password"
+msgstr "无效的密码"
+
+#: js/Admin.js:514
+msgid "ambiguous username"
+msgstr "不清楚的用户名"
+
+#: js/Admin.js:518
+msgid "user not found"
+msgstr "没有发现用户"
+
+#: js/Admin.js:522
+msgid "failure"
+msgstr "失败"
+
+#: js/Admin.js:526
+msgid "success"
+msgstr "成功"
+
+#: js/Admin.js:554
+msgid "Displaying access log entries {0} - {1} of {2}"
+msgstr "显示访问日志条目 {0} - {1} of {2}"
+
+#: js/Admin.js:555
+msgid "No access log entries to display"
+msgstr "没有访问日志条目要显示"
+
+#: js/Admin.js:564
+msgid "Session ID"
+msgstr "会话 ID"
+
+#: js/Admin.js:565 js/user/EditDialog.js:533
+msgid "Login Name"
+msgstr "登录名"
+
+#: js/Admin.js:567
+msgid "IP Address"
+msgstr "IP 地址"
+
+#: js/Admin.js:568
+msgid "Login Time"
+msgstr "登录时间"
+
+#: js/Admin.js:569
+msgid "Logout Time"
+msgstr "登出时间"
+
+#: js/Admin.js:570
+msgid "Account ID"
+msgstr "账户 ID"
+
+#: js/Admin.js:571
+msgid "Result"
+msgstr "结果"
+
+#: js/user/GridPanel.js:58
+msgid "enable account"
+msgstr "开启账户"
+
+#: js/user/GridPanel.js:68
+msgid "disable account"
+msgstr "关闭账户"
+
+#: js/user/GridPanel.js:78
+msgid "reset password"
+msgstr "重置密码"
+
+#: js/user/GridPanel.js:161
+msgid "Displayname"
+msgstr "显示名"
+
+#: js/user/GridPanel.js:162
+msgid "Loginname"
+msgstr "登录名"
+
+#: js/user/GridPanel.js:163
+msgid "Last name"
+msgstr "姓"
+
+#: js/user/GridPanel.js:164
+msgid "First name"
+msgstr "名"
+
+#: js/user/GridPanel.js:165
+msgid "Email"
+msgstr "电子邮件"
+
+#: js/user/GridPanel.js:166 js/user/EditDialog.js:573
+msgid "OpenID"
+msgstr "开放 ID"
+
+#: js/user/GridPanel.js:167 js/user/EditDialog.js:628
+msgid "Last login at"
+msgstr "上次登录时间"
+
+#: js/user/GridPanel.js:168 js/user/EditDialog.js:632
+msgid "Last login from"
+msgstr "上次登录于"
+
+#: js/user/GridPanel.js:169
+msgid "Password changed"
+msgstr "密码已修改"
+
+#: js/user/GridPanel.js:170 js/user/EditDialog.js:594
+msgid "Expires"
+msgstr "过期"
+
+#: js/user/GridPanel.js:224
+msgid "Set new password"
+msgstr "设置新密码"
+
+#: js/user/GridPanel.js:224
+msgid "Please enter the new password:"
+msgstr "请输入新密码"
 
 #: js/user/EditDialog.js:134
 #, fuzzy
@@ -710,10 +734,6 @@ msgstr "没有设置密码"
 msgid "Emailaddress"
 msgstr "电子邮件地址"
 
-#: js/user/EditDialog.js:573 js/user/GridPanel.js:166
-msgid "OpenID"
-msgstr "开放 ID"
-
 #: js/user/EditDialog.js:579
 msgid "Primary group"
 msgstr "基本组"
@@ -721,10 +741,6 @@ msgstr "基本组"
 #: js/user/EditDialog.js:591
 #, fuzzy
 msgid "expired"
-msgstr "过期"
-
-#: js/user/EditDialog.js:594 js/user/GridPanel.js:170
-msgid "Expires"
 msgstr "过期"
 
 #: js/user/EditDialog.js:601
@@ -739,17 +755,9 @@ msgstr "在地址本中显示"
 msgid "Hide from addressbook"
 msgstr "从地址本中隐藏"
 
-#: js/user/EditDialog.js:628 js/user/GridPanel.js:167
-msgid "Last login at"
-msgstr "上次登录时间"
-
 #: js/user/EditDialog.js:630 js/user/EditDialog.js:634
 msgid "don't know"
 msgstr "不知道"
-
-#: js/user/EditDialog.js:632 js/user/GridPanel.js:168
-msgid "Last login from"
-msgstr "上次登录于"
 
 #: js/user/EditDialog.js:636
 msgid "Password set"
@@ -767,50 +775,6 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
-#: js/user/GridPanel.js:58
-msgid "enable account"
-msgstr "开启账户"
-
-#: js/user/GridPanel.js:68
-msgid "disable account"
-msgstr "关闭账户"
-
-#: js/user/GridPanel.js:78
-msgid "reset password"
-msgstr "重置密码"
-
-#: js/user/GridPanel.js:161
-msgid "Displayname"
-msgstr "显示名"
-
-#: js/user/GridPanel.js:162
-msgid "Loginname"
-msgstr "登录名"
-
-#: js/user/GridPanel.js:163
-msgid "Last name"
-msgstr "姓"
-
-#: js/user/GridPanel.js:164
-msgid "First name"
-msgstr "名"
-
-#: js/user/GridPanel.js:165
-msgid "Email"
-msgstr "电子邮件"
-
-#: js/user/GridPanel.js:169
-msgid "Password changed"
-msgstr "密码已修改"
-
-#: js/user/GridPanel.js:224
-msgid "Set new password"
-msgstr "设置新密码"
-
-#: js/user/GridPanel.js:224
-msgid "Please enter the new password:"
-msgstr "请输入新密码"
-
 #: js/user/Users.js:109
 msgid "Samba User"
 msgid_plural "Samba Users"
@@ -820,6 +784,42 @@ msgstr[0] "Samba 用户"
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "电子邮件用户"
+
+#: js/RoleEditDialog.js:106
+msgid "Could not save role."
+msgstr "不能保存角色"
+
+#: js/RoleEditDialog.js:126
+msgid "Deleting role..."
+msgstr "删除角色..."
+
+#: js/RoleEditDialog.js:272
+msgid "Members"
+msgstr "成员"
+
+#: js/RoleEditDialog.js:281
+msgid "Rights"
+msgstr "权限"
+
+#: js/RoleEditDialog.js:311
+msgid "Role Name"
+msgstr "角色名"
+
+#: js/RoleEditDialog.js:351
+msgid "Loading Role..."
+msgstr "加载角色"
+
+#: js/RoleEditDialog.js:395
+msgid "Role"
+msgstr ""
+
+#: js/RoleEditDialog.js:405
+msgid "Add New Role"
+msgstr "添加新角色"
+
+#: js/RoleEditDialog.js:407
+msgid "Edit Role \"{0}\""
+msgstr "编辑角色 \"{0}\""
 
 #~ msgid "Do you really want to delete the selected account(s)?"
 #~ msgstr "真的想删除选中的账户？"

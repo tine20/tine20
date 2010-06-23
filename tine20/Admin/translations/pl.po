@@ -109,132 +109,77 @@ msgstr "wyświetlanie listy komputerów"
 msgid "view computers list and details"
 msgstr "wyświetlanie listy komputerów i szczegółów"
 
-#: js/Admin.js:20 js/user/GridPanel.js:100 js/user/Users.js:66
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "użytkownika"
-msgstr[1] "użytkowników"
-msgstr[2] "użytkowników"
+#: js/SambaMachineGrid.js:68 js/SambaMachineEditDialog.js:43
+msgid "Computer Name"
+msgstr "Nazwa komputera"
 
-#: js/Admin.js:33
-msgid "Groups"
-msgstr "Grupy"
+#: js/SambaMachineGrid.js:69 js/SambaMachineGrid.js:99 js/Roles.js:240
+#: js/Groups.js:239 js/Groups.js:475 js/Tags.js:224 js/Tags.js:550
+#: js/user/GridPanel.js:101 js/RoleEditDialog.js:319
+msgid "Description"
+msgstr "Opis"
 
-# The word "Roles" could not be clearly understood. The word "Funkcje" is the better choice.
-# Das Wort "Roles" koennte missverstanden werden. Das Wort "Funkcje" passt besser.
-#: js/Admin.js:46
-msgid "Roles"
-msgstr "Funkcje"
+#: js/SambaMachineGrid.js:86 js/Roles.js:238 js/Groups.js:237
+#: js/user/GridPanel.js:159
+msgid "ID"
+msgstr "ID"
 
-#: js/Admin.js:58
-msgid "Computers"
-msgstr "Komputery"
-
-#: js/Admin.js:71
-msgid "Applications"
-msgstr "Aplikacje"
-
-#: js/Admin.js:84
-msgid "Access Log"
-msgstr "Dziennik logowania"
-
-#: js/Admin.js:97
-msgid "Shared Tags"
-msgstr "Wspólne znaczniki"
-
-#: js/Admin.js:133
-msgid "Admin"
-msgstr "Administrator"
-
-#: js/Admin.js:264 js/Groups.js:54 js/Roles.js:48 js/Tags.js:62
-msgid "Confirm"
-msgstr "Potwierdź"
-
-#: js/Admin.js:264
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Czy na pewno chcesz usunąć wybrane wpisy z dziennika logowania?"
-
-#: js/Admin.js:383
-msgid "delete entry"
-msgstr "Usuń wpis"
-
-#: js/Admin.js:384
-msgid "select all"
-msgstr "zaznacz wszystko"
-
-#: js/Admin.js:428
-msgid "Display from:"
-msgstr "Wyświetl od:"
-
-#: js/Admin.js:432
-msgid "to:"
-msgstr "do:"
-
-#: js/Admin.js:437 js/Applications.js:191 js/Groups.js:178 js/Roles.js:177
-#: js/Tags.js:167
-msgid "Search:"
-msgstr "Znajdź:"
-
-#: js/Admin.js:510
-msgid "invalid password"
-msgstr "nieprawidłowe hasło"
-
-#: js/Admin.js:514
-msgid "ambiguous username"
-msgstr "wieloznaczna nazwa użytkownika"
-
-#: js/Admin.js:518
-msgid "user not found"
-msgstr "użytkownik nie istnieje"
-
-#: js/Admin.js:522
-msgid "failure"
-msgstr "błąd"
-
-#: js/Admin.js:526
-msgid "success"
-msgstr "zakończone sukcesem"
-
-#: js/Admin.js:554
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Wyświetl wpisy z dziennika logowania {0} - {1} z {2}"
-
-#: js/Admin.js:555
-msgid "No access log entries to display"
-msgstr "Brak wpisów w dzienniku logowania"
-
-#: js/Admin.js:564
-msgid "Session ID"
-msgstr "ID sesji"
-
-#: js/Admin.js:565 js/user/EditDialog.js:533
-msgid "Login Name"
-msgstr "Login"
-
-#: js/Admin.js:566 js/Applications.js:286 js/Groups.js:238 js/Roles.js:239
-#: js/SambaMachineGrid.js:93 js/Tags.js:223
+#: js/SambaMachineGrid.js:93 js/Roles.js:239 js/Applications.js:286
+#: js/Groups.js:238 js/Tags.js:223 js/Admin.js:566
 msgid "Name"
 msgstr "Nazwa"
 
-#: js/Admin.js:567
-msgid "IP Address"
-msgstr "Adres IP"
+#: js/Roles.js:48 js/Groups.js:54 js/Tags.js:62 js/Admin.js:264
+msgid "Confirm"
+msgstr "Potwierdź"
 
-#: js/Admin.js:568
-msgid "Login Time"
-msgstr "Czas zalogowania"
+#: js/Roles.js:48
+msgid "Do you really want to delete the selected roles?"
+msgstr "Czy na pewno chcesz usunąć wybrane funkcje?"
 
-#: js/Admin.js:569
-msgid "Logout Time"
-msgstr "Czas wylogowania"
+#: js/Roles.js:65
+msgid "Deleting role(s)..."
+msgstr "Usuwanie funkcji…"
 
-#: js/Admin.js:570
-msgid "Account ID"
-msgstr "ID użytkownika"
+# The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
+# Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
+#: js/Roles.js:70 js/Groups.js:75 js/Groups.js:410 js/Tags.js:406
+#: js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
+msgid "Failed"
+msgstr "Próba nieudana"
 
-#: js/Admin.js:571
-msgid "Result"
-msgstr "Wynik"
+# The word "Roli" could not be clearly understood. The word "funkcji" is the better choice.
+# Das Wort "Roli" koennte missverstanden werden. Das Wort "funkcji" passt besser.
+#: js/Roles.js:70 js/RoleEditDialog.js:134
+msgid "Some error occurred while trying to delete the role."
+msgstr "Podczas próby usunięcia funkcji wystąpił błąd."
+
+#: js/Roles.js:103
+msgid "add role"
+msgstr "Dodaj funkcję"
+
+#: js/Roles.js:111
+msgid "edit role"
+msgstr "Edytuj funkcję"
+
+#: js/Roles.js:119
+msgid "delete role"
+msgstr "Usuń funkcję"
+
+#: js/Roles.js:177 js/Applications.js:191 js/Groups.js:178 js/Tags.js:167
+#: js/Admin.js:437
+msgid "Search:"
+msgstr "Znajdź:"
+
+# The word "Role" could not be clearly understood. The word "Funkcji" is a better choice.
+# Das Wort "Role" koennte missverstanden werden. Das Wort "Funkcji" passt besser.
+#: js/Roles.js:227
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Wyświetlane funkcje {0} - {1} z {2}"
+
+#: js/Roles.js:228 js/Roles.js:283
+msgid "No roles to display"
+msgstr "Brak funkcji"
 
 #: js/Applications.js:44
 msgid "{0} Settings"
@@ -276,7 +221,7 @@ msgstr "Brak aplikacji"
 msgid "Order"
 msgstr "Kolejność"
 
-#: js/Applications.js:287 js/user/EditDialog.js:585 js/user/GridPanel.js:160
+#: js/Applications.js:287 js/user/GridPanel.js:160 js/user/EditDialog.js:585
 msgid "Status"
 msgstr "Status"
 
@@ -291,13 +236,6 @@ msgstr "Czy na pewno chcesz usunąć wybrane grupy?"
 #: js/Groups.js:70
 msgid "Deleting group(s)..."
 msgstr "Usuwanie grup(y)..."
-
-# The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
-# Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
-#: js/Groups.js:75 js/Groups.js:410 js/RoleEditDialog.js:106
-#: js/RoleEditDialog.js:134 js/Roles.js:70 js/Tags.js:406
-msgid "Failed"
-msgstr "Próba nieudana"
 
 #: js/Groups.js:75
 msgid "Some error occurred while trying to delete the group."
@@ -323,18 +261,7 @@ msgstr "Wyświetlane grupy {0} - {1} z {2}"
 msgid "No groups to display"
 msgstr "Brak grup"
 
-#: js/Groups.js:237 js/Roles.js:238 js/SambaMachineGrid.js:86
-#: js/user/GridPanel.js:159
-msgid "ID"
-msgstr "ID"
-
-#: js/Groups.js:239 js/Groups.js:475 js/RoleEditDialog.js:319 js/Roles.js:240
-#: js/SambaMachineGrid.js:69 js/SambaMachineGrid.js:99 js/Tags.js:224
-#: js/Tags.js:550 js/user/GridPanel.js:101
-msgid "Description"
-msgstr "Opis"
-
-#: js/Groups.js:375 js/RoleEditDialog.js:69 js/Tags.js:361
+#: js/Groups.js:375 js/Tags.js:361 js/RoleEditDialog.js:69
 msgid "Please wait"
 msgstr "Proszę czekać"
 
@@ -346,11 +273,11 @@ msgstr "Aktualizacja uczestnictwa"
 msgid "Could not save group."
 msgstr "Zapisanie grupy było niemożliwe."
 
-#: js/Groups.js:415 js/RoleEditDialog.js:113 js/Tags.js:411
+#: js/Groups.js:415 js/Tags.js:411 js/RoleEditDialog.js:113
 msgid "Errors"
 msgstr "Błędy"
 
-#: js/Groups.js:415 js/RoleEditDialog.js:113 js/Tags.js:411
+#: js/Groups.js:415 js/Tags.js:411 js/RoleEditDialog.js:113
 msgid "Please fix the errors noted."
 msgstr "Proszę poprawić wskazane błędy."
 
@@ -362,7 +289,7 @@ msgstr "Uczestnicy przypisani do grupy"
 msgid "Group Name"
 msgstr "Nazwę grupy"
 
-#: js/Groups.js:534 js/RoleEditDialog.js:395 js/Tags.js:620
+#: js/Groups.js:534 js/Tags.js:620 js/RoleEditDialog.js:395
 msgid "Transfering {0}..."
 msgstr "Transfer {0}..."
 
@@ -377,86 +304,6 @@ msgstr "Dodaj nową grupę"
 #: js/Groups.js:548
 msgid "Edit Group \"{0}\""
 msgstr "Edytuj grupę \"{0}\""
-
-#: js/RoleEditDialog.js:106
-msgid "Could not save role."
-msgstr "Zapisanie funkcji było niemożliwe."
-
-#: js/RoleEditDialog.js:126
-msgid "Deleting role..."
-msgstr "Usuwanie funkcji…"
-
-# The word "Roli" could not be clearly understood. The word "funkcji" is the better choice.
-# Das Wort "Roli" koennte missverstanden werden. Das Wort "funkcji" passt besser.
-#: js/RoleEditDialog.js:134 js/Roles.js:70
-msgid "Some error occurred while trying to delete the role."
-msgstr "Podczas próby usunięcia funkcji wystąpił błąd."
-
-#: js/RoleEditDialog.js:272
-msgid "Members"
-msgstr "Uczestnicy"
-
-#: js/RoleEditDialog.js:281
-msgid "Rights"
-msgstr "Uprawnienia"
-
-#: js/RoleEditDialog.js:311
-msgid "Role Name"
-msgstr "Nazwa funkcji"
-
-#: js/RoleEditDialog.js:351
-msgid "Loading Role..."
-msgstr "Ładowanie funkcji…"
-
-#: js/RoleEditDialog.js:351 js/Tags.js:586
-msgid "Please Wait"
-msgstr "Proszę czekać"
-
-#: js/RoleEditDialog.js:395
-msgid "Role"
-msgstr "funkcji"
-
-#: js/RoleEditDialog.js:405
-msgid "Add New Role"
-msgstr "Dodaj nową funkcję"
-
-#: js/RoleEditDialog.js:407
-msgid "Edit Role \"{0}\""
-msgstr "Edytuj funkcję \"{0}\""
-
-#: js/Roles.js:48
-msgid "Do you really want to delete the selected roles?"
-msgstr "Czy na pewno chcesz usunąć wybrane funkcje?"
-
-#: js/Roles.js:65
-msgid "Deleting role(s)..."
-msgstr "Usuwanie funkcji…"
-
-#: js/Roles.js:103
-msgid "add role"
-msgstr "Dodaj funkcję"
-
-#: js/Roles.js:111
-msgid "edit role"
-msgstr "Edytuj funkcję"
-
-#: js/Roles.js:119
-msgid "delete role"
-msgstr "Usuń funkcję"
-
-# The word "Role" could not be clearly understood. The word "Funkcji" is a better choice.
-# Das Wort "Role" koennte missverstanden werden. Das Wort "Funkcji" passt besser.
-#: js/Roles.js:227
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Wyświetlane funkcje {0} - {1} z {2}"
-
-#: js/Roles.js:228 js/Roles.js:283
-msgid "No roles to display"
-msgstr "Brak funkcji"
-
-#: js/SambaMachineEditDialog.js:43 js/SambaMachineGrid.js:68
-msgid "Computer Name"
-msgstr "Nazwa komputera"
 
 #: js/SambaMachineModel.js:40
 msgid "Computer"
@@ -533,6 +380,10 @@ msgstr "Nazwę znacznika"
 msgid "Loading Tag..."
 msgstr "Ładowanie znacznika …"
 
+#: js/Tags.js:586 js/RoleEditDialog.js:351
+msgid "Please Wait"
+msgstr "Proszę czekać"
+
 #: js/Tags.js:620
 msgid "Tag"
 msgstr "Znacznik"
@@ -544,6 +395,179 @@ msgstr "Dodaj nowy znacznik"
 #: js/Tags.js:632
 msgid "Edit Tag \"{0}\""
 msgstr "Edytuj znacznik \"{0}\""
+
+#: js/Admin.js:20 js/user/GridPanel.js:100 js/user/Users.js:66
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "użytkownika"
+msgstr[1] "użytkowników"
+msgstr[2] "użytkowników"
+
+#: js/Admin.js:33
+msgid "Groups"
+msgstr "Grupy"
+
+# The word "Roles" could not be clearly understood. The word "Funkcje" is the better choice.
+# Das Wort "Roles" koennte missverstanden werden. Das Wort "Funkcje" passt besser.
+#: js/Admin.js:46
+msgid "Roles"
+msgstr "Funkcje"
+
+#: js/Admin.js:58
+msgid "Computers"
+msgstr "Komputery"
+
+#: js/Admin.js:71
+msgid "Applications"
+msgstr "Aplikacje"
+
+#: js/Admin.js:84
+msgid "Access Log"
+msgstr "Dziennik logowania"
+
+#: js/Admin.js:97
+msgid "Shared Tags"
+msgstr "Wspólne znaczniki"
+
+#: js/Admin.js:133
+msgid "Admin"
+msgstr "Administrator"
+
+#: js/Admin.js:264
+msgid "Do you really want to delete the selected access log entries?"
+msgstr "Czy na pewno chcesz usunąć wybrane wpisy z dziennika logowania?"
+
+#: js/Admin.js:383
+msgid "delete entry"
+msgstr "Usuń wpis"
+
+#: js/Admin.js:384
+msgid "select all"
+msgstr "zaznacz wszystko"
+
+#: js/Admin.js:428
+msgid "Display from:"
+msgstr "Wyświetl od:"
+
+#: js/Admin.js:432
+msgid "to:"
+msgstr "do:"
+
+#: js/Admin.js:510
+msgid "invalid password"
+msgstr "nieprawidłowe hasło"
+
+#: js/Admin.js:514
+msgid "ambiguous username"
+msgstr "wieloznaczna nazwa użytkownika"
+
+#: js/Admin.js:518
+msgid "user not found"
+msgstr "użytkownik nie istnieje"
+
+#: js/Admin.js:522
+msgid "failure"
+msgstr "błąd"
+
+#: js/Admin.js:526
+msgid "success"
+msgstr "zakończone sukcesem"
+
+#: js/Admin.js:554
+msgid "Displaying access log entries {0} - {1} of {2}"
+msgstr "Wyświetl wpisy z dziennika logowania {0} - {1} z {2}"
+
+#: js/Admin.js:555
+msgid "No access log entries to display"
+msgstr "Brak wpisów w dzienniku logowania"
+
+#: js/Admin.js:564
+msgid "Session ID"
+msgstr "ID sesji"
+
+#: js/Admin.js:565 js/user/EditDialog.js:533
+msgid "Login Name"
+msgstr "Login"
+
+#: js/Admin.js:567
+msgid "IP Address"
+msgstr "Adres IP"
+
+#: js/Admin.js:568
+msgid "Login Time"
+msgstr "Czas zalogowania"
+
+#: js/Admin.js:569
+msgid "Logout Time"
+msgstr "Czas wylogowania"
+
+#: js/Admin.js:570
+msgid "Account ID"
+msgstr "ID użytkownika"
+
+#: js/Admin.js:571
+msgid "Result"
+msgstr "Wynik"
+
+#: js/user/GridPanel.js:58
+msgid "enable account"
+msgstr "Włącz konto"
+
+#: js/user/GridPanel.js:68
+msgid "disable account"
+msgstr "Wyłącz konto"
+
+#: js/user/GridPanel.js:78
+msgid "reset password"
+msgstr "Zresetuj hasło"
+
+#: js/user/GridPanel.js:161
+msgid "Displayname"
+msgstr "Wyświetlana nazwa"
+
+#: js/user/GridPanel.js:162
+msgid "Loginname"
+msgstr "Login"
+
+#: js/user/GridPanel.js:163
+msgid "Last name"
+msgstr "Nazwisko"
+
+#: js/user/GridPanel.js:164
+msgid "First name"
+msgstr "Imię"
+
+#: js/user/GridPanel.js:165
+msgid "Email"
+msgstr "E-mail"
+
+#: js/user/GridPanel.js:166 js/user/EditDialog.js:573
+msgid "OpenID"
+msgstr "ID uwierzytelnienia"
+
+#: js/user/GridPanel.js:167 js/user/EditDialog.js:628
+msgid "Last login at"
+msgstr "Czas ostatniego logowania"
+
+#: js/user/GridPanel.js:168 js/user/EditDialog.js:632
+msgid "Last login from"
+msgstr "Ostatnie zalogowanie z adresu"
+
+#: js/user/GridPanel.js:169
+msgid "Password changed"
+msgstr "Hasło zostało zmienione"
+
+#: js/user/GridPanel.js:170 js/user/EditDialog.js:594
+msgid "Expires"
+msgstr "Konto wygasa"
+
+#: js/user/GridPanel.js:224
+msgid "Set new password"
+msgstr "Zdefiniuj nowe hasło"
+
+#: js/user/GridPanel.js:224
+msgid "Please enter the new password:"
+msgstr "Proszę wprowadzić nowe hasło:"
 
 #: js/user/EditDialog.js:134
 msgid "Passwords do not match!"
@@ -727,10 +751,6 @@ msgstr "brak hasła"
 msgid "Emailaddress"
 msgstr "Adres e-mail"
 
-#: js/user/EditDialog.js:573 js/user/GridPanel.js:166
-msgid "OpenID"
-msgstr "ID uwierzytelnienia"
-
 #: js/user/EditDialog.js:579
 msgid "Primary group"
 msgstr "Grupa nadrzędna"
@@ -738,10 +758,6 @@ msgstr "Grupa nadrzędna"
 #: js/user/EditDialog.js:591
 msgid "expired"
 msgstr "wygasło"
-
-#: js/user/EditDialog.js:594 js/user/GridPanel.js:170
-msgid "Expires"
-msgstr "Konto wygasa"
 
 #: js/user/EditDialog.js:601
 msgid "Visibility"
@@ -755,17 +771,9 @@ msgstr "Wyświetlaj w książce adresowej"
 msgid "Hide from addressbook"
 msgstr "Ukryj w książce adresowej"
 
-#: js/user/EditDialog.js:628 js/user/GridPanel.js:167
-msgid "Last login at"
-msgstr "Czas ostatniego logowania"
-
 #: js/user/EditDialog.js:630 js/user/EditDialog.js:634
 msgid "don't know"
 msgstr "nie znam"
-
-#: js/user/EditDialog.js:632 js/user/GridPanel.js:168
-msgid "Last login from"
-msgstr "Ostatnie zalogowanie z adresu"
 
 #: js/user/EditDialog.js:636
 msgid "Password set"
@@ -783,50 +791,6 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
-#: js/user/GridPanel.js:58
-msgid "enable account"
-msgstr "Włącz konto"
-
-#: js/user/GridPanel.js:68
-msgid "disable account"
-msgstr "Wyłącz konto"
-
-#: js/user/GridPanel.js:78
-msgid "reset password"
-msgstr "Zresetuj hasło"
-
-#: js/user/GridPanel.js:161
-msgid "Displayname"
-msgstr "Wyświetlana nazwa"
-
-#: js/user/GridPanel.js:162
-msgid "Loginname"
-msgstr "Login"
-
-#: js/user/GridPanel.js:163
-msgid "Last name"
-msgstr "Nazwisko"
-
-#: js/user/GridPanel.js:164
-msgid "First name"
-msgstr "Imię"
-
-#: js/user/GridPanel.js:165
-msgid "Email"
-msgstr "E-mail"
-
-#: js/user/GridPanel.js:169
-msgid "Password changed"
-msgstr "Hasło zostało zmienione"
-
-#: js/user/GridPanel.js:224
-msgid "Set new password"
-msgstr "Zdefiniuj nowe hasło"
-
-#: js/user/GridPanel.js:224
-msgid "Please enter the new password:"
-msgstr "Proszę wprowadzić nowe hasło:"
-
 #: js/user/Users.js:109
 msgid "Samba User"
 msgid_plural "Samba Users"
@@ -840,6 +804,42 @@ msgid_plural "Email Users"
 msgstr[0] "E-mail użytkownika"
 msgstr[1] "E-maile użytkowników"
 msgstr[2] "E-maile użytkowników"
+
+#: js/RoleEditDialog.js:106
+msgid "Could not save role."
+msgstr "Zapisanie funkcji było niemożliwe."
+
+#: js/RoleEditDialog.js:126
+msgid "Deleting role..."
+msgstr "Usuwanie funkcji…"
+
+#: js/RoleEditDialog.js:272
+msgid "Members"
+msgstr "Uczestnicy"
+
+#: js/RoleEditDialog.js:281
+msgid "Rights"
+msgstr "Uprawnienia"
+
+#: js/RoleEditDialog.js:311
+msgid "Role Name"
+msgstr "Nazwa funkcji"
+
+#: js/RoleEditDialog.js:351
+msgid "Loading Role..."
+msgstr "Ładowanie funkcji…"
+
+#: js/RoleEditDialog.js:395
+msgid "Role"
+msgstr "funkcji"
+
+#: js/RoleEditDialog.js:405
+msgid "Add New Role"
+msgstr "Dodaj nową funkcję"
+
+#: js/RoleEditDialog.js:407
+msgid "Edit Role \"{0}\""
+msgstr "Edytuj funkcję \"{0}\""
 
 #~ msgid "Do you really want to delete the selected account(s)?"
 #~ msgstr "Czy na pewno chcesz usunąć zaznaczone konto(a)?"

@@ -15,6 +15,11 @@ msgstr ""
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: ../../\n"
 
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "osobní úkoly uživatele %s"
+
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr "spravovat sdílené seznamy úkolů"
@@ -31,110 +36,42 @@ msgstr ""
 msgid "Create or update shared tasks favorites"
 msgstr ""
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Upozornění na úkol"
+#: Model/Task.php:183
+msgid "Due"
+msgstr "Do"
 
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "osobní úkoly uživatele %s"
+#: Model/Task.php:184
+msgid "Organizer"
+msgstr "Organizátor"
 
-#: js/GridPanel.js:56
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Opravdu chcete smazat vybraný úkol?"
-msgstr[1] "Opravdu chcete smazat vybrané úkoly?"
-msgstr[2] "Opravdu chcete smazat vybrané úkoly?"
+#: Model/Task.php:185
+msgid "Description"
+msgstr "Popis"
 
-#: js/GridPanel.js:91
-msgid "Quick search"
-msgstr "Rychlé hledání"
-
-#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
-msgid "Summary"
-msgstr "Přehled"
-
-#: js/GridPanel.js:94 js/GridPanel.js:155
-msgid "Due Date"
-msgstr "Termín dokončení"
-
-#: js/GridPanel.js:96 js/GridPanel.js:218
-msgid "Responsible"
-msgstr "Zodpovídá"
-
-#: js/GridPanel.js:121
-msgid "Failed"
-msgstr "Nepodařilo se"
-
-#: js/GridPanel.js:121
-msgid "Could not save task."
-msgstr "Nepodařilo se uložit úkol."
-
-#: js/GridPanel.js:140
-msgid "Tags"
-msgstr "Štítky"
-
-#: js/GridPanel.js:141 Model/Task.php:195
-msgid "Lead"
-msgstr ""
-
-#: js/GridPanel.js:151
-msgid "Add a task..."
-msgstr "Přidat úkol..."
-
-#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
+#: Model/Task.php:186 js/TaskEditDialog.js:189 js/GridPanel.js:163
 msgid "Priority"
 msgstr "Priorita"
 
-#: js/GridPanel.js:177 Model/Task.php:188
-msgid "Percent"
-msgstr "Procent"
-
-#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
-#: Model/Task.php:187
+#: Model/Task.php:187 js/TaskEditDialog.js:209 js/GridPanel.js:190
+#: js/Status.js:33
 msgid "Status"
 msgstr "Status"
 
-#: js/GridPanel.js:204
-msgid "Creation Time"
-msgstr "Čas vytvoření"
+#: Model/Task.php:188 js/GridPanel.js:177
+msgid "Percent"
+msgstr "Procent"
 
-#: js/GridPanel.js:211 js/TaskEditDialog.js:213
-msgid "Completed"
-msgstr "Dokončený"
-
-#: js/GridPanel.js:267
-msgid "Show closed"
-msgstr "Zobrazit uzavřené"
-
-#: js/Status.js:187 Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "ROZPRACOVANÝ"
-
-#: js/TaskEditDialog.js:142
-msgid "You have to supply a due date, because an alarm ist set!"
+#: Model/Task.php:195 js/GridPanel.js:141
+msgid "Lead"
 msgstr ""
 
-#: js/TaskEditDialog.js:186
-msgid "Due date"
-msgstr "Termín dokončení"
+#: Model/Task.php:201
+msgid "Telephone"
+msgstr ""
 
-#: js/TaskEditDialog.js:192
-msgid "Add Responsible ..."
-msgstr "Přidat zodpovědnou osobu ..."
-
-#: js/TaskEditDialog.js:199
-msgid "Notes"
-msgstr "Poznámky"
-
-#: js/TaskEditDialog.js:200
-msgid "Enter description..."
-msgstr "Zadejte popis..."
-
-#: js/TaskEditDialog.js:205
-msgid "Percentage"
-msgstr "Procenta"
+#: Model/Task.php:202
+msgid "Email"
+msgstr ""
 
 #: js/Tasks.js:99
 msgid "Task"
@@ -158,25 +95,84 @@ msgstr[2] "seznamů úkolů"
 msgid "to do lists"
 msgstr "seznamy úkolů"
 
-#: Model/Task.php:183
-msgid "Due"
-msgstr "Do"
-
-#: Model/Task.php:184
-msgid "Organizer"
-msgstr "Organizátor"
-
-#: Model/Task.php:185
-msgid "Description"
-msgstr "Popis"
-
-#: Model/Task.php:201
-msgid "Telephone"
+#: js/TaskEditDialog.js:142
+msgid "You have to supply a due date, because an alarm ist set!"
 msgstr ""
 
-#: Model/Task.php:202
-msgid "Email"
-msgstr ""
+#: js/TaskEditDialog.js:181 js/GridPanel.js:93 js/GridPanel.js:144
+msgid "Summary"
+msgstr "Přehled"
+
+#: js/TaskEditDialog.js:186
+msgid "Due date"
+msgstr "Termín dokončení"
+
+#: js/TaskEditDialog.js:192
+msgid "Add Responsible ..."
+msgstr "Přidat zodpovědnou osobu ..."
+
+#: js/TaskEditDialog.js:199
+msgid "Notes"
+msgstr "Poznámky"
+
+#: js/TaskEditDialog.js:200
+msgid "Enter description..."
+msgstr "Zadejte popis..."
+
+#: js/TaskEditDialog.js:205
+msgid "Percentage"
+msgstr "Procenta"
+
+#: js/TaskEditDialog.js:213 js/GridPanel.js:211
+msgid "Completed"
+msgstr "Dokončený"
+
+#: js/GridPanel.js:56
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Opravdu chcete smazat vybraný úkol?"
+msgstr[1] "Opravdu chcete smazat vybrané úkoly?"
+msgstr[2] "Opravdu chcete smazat vybrané úkoly?"
+
+#: js/GridPanel.js:91
+msgid "Quick search"
+msgstr "Rychlé hledání"
+
+#: js/GridPanel.js:94 js/GridPanel.js:155
+msgid "Due Date"
+msgstr "Termín dokončení"
+
+#: js/GridPanel.js:96 js/GridPanel.js:218
+msgid "Responsible"
+msgstr "Zodpovídá"
+
+#: js/GridPanel.js:121
+msgid "Failed"
+msgstr "Nepodařilo se"
+
+#: js/GridPanel.js:121
+msgid "Could not save task."
+msgstr "Nepodařilo se uložit úkol."
+
+#: js/GridPanel.js:140
+msgid "Tags"
+msgstr "Štítky"
+
+#: js/GridPanel.js:151
+msgid "Add a task..."
+msgstr "Přidat úkol..."
+
+#: js/GridPanel.js:204
+msgid "Creation Time"
+msgstr "Čas vytvoření"
+
+#: js/GridPanel.js:267
+msgid "Show closed"
+msgstr "Zobrazit uzavřené"
+
+#: js/Status.js:187 Setup/setup.xml:339
+msgid "IN-PROCESS"
+msgstr "ROZPRACOVANÝ"
 
 #: Preference.php:29
 msgid "All my tasks"
@@ -190,7 +186,11 @@ msgstr ""
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr ""
 
-#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Upozornění na úkol"
+
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
 msgid "All tasks of my taskslists"
 msgstr ""
 

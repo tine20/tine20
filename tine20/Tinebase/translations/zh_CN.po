@@ -13,21 +13,26 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: Acl/Rights/Abstract.php:72
-msgid "admin"
-msgstr "管理"
+#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:58
+msgid "Tags"
+msgstr "标签"
 
-#: Acl/Rights/Abstract.php:73
-msgid "admin right description"
-msgstr "管理权限描述"
+#: Export/Pdf.php:428
+msgid "Created by"
+msgstr "创建者"
 
-#: Acl/Rights/Abstract.php:76
-msgid "run"
-msgstr "运行"
+#: Export/Pdf.php:482
+msgid "Activities"
+msgstr "活动"
 
-#: Acl/Rights/Abstract.php:77
-msgid "run right description"
-msgstr "运行权限描述"
+#: Export/Ods.php:204
+#, fuzzy
+msgid "Filter"
+msgstr "失败"
+
+#: Export/Ods.php:288
+msgid "Data"
+msgstr ""
 
 #: Acl/Rights.php:134
 msgid "Report bugs"
@@ -45,153 +50,162 @@ msgstr "检查版本"
 msgid "Check for new versions of this software."
 msgstr ""
 
-#: Export/Ods.php:204
-#, fuzzy
-msgid "Filter"
-msgstr "失败"
+#: Acl/Rights/Abstract.php:72
+msgid "admin"
+msgstr "管理"
 
-#: Export/Ods.php:288
-msgid "Data"
-msgstr ""
+#: Acl/Rights/Abstract.php:73
+msgid "admin right description"
+msgstr "管理权限描述"
 
-#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:58
-msgid "Tags"
-msgstr "标签"
+#: Acl/Rights/Abstract.php:76
+msgid "run"
+msgstr "运行"
 
-#: Export/Pdf.php:428
-msgid "Created by"
-msgstr "创建者"
+#: Acl/Rights/Abstract.php:77
+msgid "run right description"
+msgstr "运行权限描述"
 
-#: Export/Pdf.php:482
-msgid "Activities"
-msgstr "活动"
+#: js/ux/ConnectionStatus.js:57
+msgid "online"
+msgstr "在线"
 
-#: Frontend/Http.php:546 js/ExceptionHandler.js:127
-msgid "Authorisation Required"
-msgstr "需要授权"
+#: js/ux/ConnectionStatus.js:58
+msgid "offline"
+msgstr "离线"
 
-#: Frontend/Http.php:547
-msgid "Your session is not valid. You need to login again."
-msgstr "会话无效，需要重新登录"
+#: js/ux/ConnectionStatus.js:59 User/Abstract.php:266 User/Abstract.php:267
+#: User/Abstract.php:268 User/Abstract.php:269 User/Abstract.php:270
+msgid "unknown"
+msgstr "未知"
 
-#: Frontend/Http.php:573 js/ExceptionDialog.js:51
-msgid "Abnormal End"
-msgstr "非正常结束"
+#: js/ux/grid/PagingToolbar.js:49
+msgid "{0} selected"
+msgstr "选择了 {0}"
 
-#: Frontend/Http.php:574 js/ExceptionDialog.js:76
-msgid "An error occurred, the program ended abnormal."
-msgstr "有错误发生，程序非正常终止"
+#: js/ux/grid/PagingToolbar.js:50
+msgid "Unselect all"
+msgstr "清除所有选择"
 
-#: js/AppManager.js:182
-msgid "Missing Applications"
-msgstr ""
+#: js/ux/grid/PagingToolbar.js:51
+msgid "Select all visible ({0} records)"
+msgstr "选择所有可视的 ({0} 记录)"
 
-#: js/AppManager.js:183
-#, fuzzy
-msgid "There are no applications enabled for you. Please contact your administrator."
-msgstr "服务器没有响应你的请求，请检查网络或联系管理员。"
+#: js/ux/grid/PagingToolbar.js:52
+msgid "Select all pages ({0} records)"
+msgstr "选择所有页面({0} 记录)"
 
-#: js/common.js:150
-msgid "{0} minute"
-msgid_plural "{0} minutes"
-msgstr[0] "{0} 分钟"
+#: js/ux/grid/PagingToolbar.js:53
+msgid "Toggle selection"
+msgstr "切换选择"
 
-#: js/common.js:151
-msgid "{0} hour"
-msgid_plural "{0} hours"
-msgstr[0] "{0}小时"
+#: js/ux/form/RecordsComboBox.js:27
+msgid "Software Version"
+msgstr "软件版本"
 
-#: js/common.js:152
-msgid "{0} workday"
-msgid_plural "{0} workdays"
-msgstr[0] "{0}工作日"
-
-#: js/Container.js:143
-msgid "All {0}"
-msgstr "所有{0}"
-
-#: js/Container.js:144
-msgid "Shared {0}"
-msgstr "共享的{0}"
-
-#: js/Container.js:145
-msgid "Other Users {0}"
-msgstr "其它用户{0}"
-
-#: js/Container.js:146
-msgid "Internal {0}"
-msgstr ""
-
-#: js/Container.js:150
-msgid "My {0}"
-msgstr "我的 {0}"
-
-#: js/data/Record.js:115
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "任务"
-
-#: js/data/Record.js:119
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "要做的事项列表"
-
-#: js/ExceptionDialog.js:59 js/MainMenu.js:236 js/ux/form/LayerCombo.js:194
-#: js/widgets/ActivitiesPanel.js:300
+#: js/ux/form/LayerCombo.js:194 js/MainMenu.js:236 js/ExceptionDialog.js:59
+#: js/widgets/EditRecord.js:138 js/widgets/tags/TagsMassAttachAction.js:90
 #: js/widgets/container/ContainerSelect.js:452
+#: js/widgets/ActivitiesPanel.js:300
+#: js/widgets/dialog/PreferencesDialog.js:127
 #: js/widgets/dialog/EditDialog.js:184
 #: js/widgets/dialog/MultiOptionsDialog.js:103
-#: js/widgets/dialog/PreferencesDialog.js:127 js/widgets/EditRecord.js:138
-#: js/widgets/tags/TagsMassAttachAction.js:90
 msgid "Cancel"
 msgstr "取消"
 
-#: js/ExceptionDialog.js:67
-msgid "Send Report"
-msgstr "发送报告"
+#: js/ux/form/LayerCombo.js:199 js/MainMenu.js:242
+#: js/widgets/EditRecord.js:117 js/widgets/tags/TagsMassAttachAction.js:96
+#: js/widgets/container/ContainerSelect.js:461
+#: js/widgets/ActivitiesPanel.js:308
+#: js/widgets/dialog/PreferencesDialog.js:119
+#: js/widgets/dialog/EditDialog.js:167
+#: js/widgets/dialog/MultiOptionsDialog.js:96
+msgid "Ok"
+msgstr "确认"
 
-#: js/ExceptionDialog.js:77
-msgid "The last action you made was potentially not performed correctly."
-msgstr "最后的动作可能没有正确执行"
+#: js/ux/form/ImageField.js:68
+msgid "Loading"
+msgstr "正加载"
 
-#: js/ExceptionDialog.js:78
-#, fuzzy
-msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
-msgstr "请协助改进本软件并通知供应商，并包含一个关于在哪里有什么错误发生的简短的描述。"
-
-#: js/ExceptionDialog.js:84 js/widgets/tags/TagsPanel.js:599
-msgid "Description"
-msgstr "描述"
-
-#: js/ExceptionDialog.js:92
-msgid "Send Contact Information"
+#: js/ux/form/ImageField.js:71
+msgid "Click to edit"
 msgstr ""
 
-#: js/ExceptionDialog.js:109
-#, fuzzy
-msgid "Details:"
-msgstr "显示细节："
+#: js/ux/form/ImageField.js:113
+msgid "Not An Image"
+msgstr "不是图像"
 
-#: js/ExceptionDialog.js:137
-msgid "Sending report..."
-msgstr "正发送报告..."
+#: js/ux/form/ImageField.js:113
+msgid "Please select an image file (gif/png/jpeg)"
+msgstr ""
 
-#: js/ExceptionDialog.js:137
-msgid "Please wait a moment"
-msgstr "请稍等一会儿"
+#: js/ux/form/ImageField.js:147 js/widgets/grid/FileUploadGrid.js:85
+msgid "Upload Failed"
+msgstr "上载失败"
 
-#: js/ExceptionDialog.js:179
-msgid "Transmission Completed"
-msgstr "发送完成"
+#: js/ux/form/ImageField.js:147
+msgid "Could not upload image. Please notify your Administrator"
+msgstr "不能上载图像，请通知你的管理员"
 
-#: js/ExceptionDialog.js:180
-msgid "Your report has been sent. Thanks for your contribution"
-msgstr "报告已经发送，谢谢你的贡献"
+#: js/ux/form/ImageField.js:159
+msgid "Change Image"
+msgstr "修改图像"
 
-#: js/ExceptionDialog.js:180
-#, fuzzy
-msgid "Please restart your browser now!"
-msgstr "请输入登录数据"
+#: js/ux/form/ImageField.js:170 js/ux/form/ImageField.js:188
+msgid "Crop Image"
+msgstr "修剪图像"
+
+#: js/ux/form/ImageField.js:195
+msgid "Delete Image"
+msgstr "删除图像"
+
+#: js/ux/form/ImageField.js:204
+msgid "Show Original Image"
+msgstr ""
+
+#: js/ux/form/ImageField.js:243
+msgid "Image Failed"
+msgstr "图像失败"
+
+#: js/ux/form/ImageField.js:243
+msgid "Could not load image. Please notify your Administrator"
+msgstr "不能加载图像，请通知你的管理员"
+
+#: js/ux/SearchField.js:45
+msgid "enter searchfilter"
+msgstr "输入搜索过滤器"
+
+#: js/UserRegistration.js:38
+msgid "Registration Wizard"
+msgstr "注册向导"
+
+#: js/UserRegistration.js:91
+msgid "Given name"
+msgstr "名"
+
+#: js/UserRegistration.js:102
+msgid "Family name"
+msgstr "姓"
+
+#: js/UserRegistration.js:113
+msgid "Login name"
+msgstr "登录名"
+
+#: js/UserRegistration.js:126
+msgid "Emailaddress"
+msgstr "电子邮件地址"
+
+#: js/UserRegistration.js:172
+msgid "Congratulations!"
+msgstr "恭喜！"
+
+#: js/UserRegistration.js:172
+msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
+msgstr "你已经输入了所需信息，如果你按完成按钮我们将给你发送注册邮件。"
+
+#: js/ExceptionHandler.js:127 Frontend/Http.php:547
+msgid "Authorisation Required"
+msgstr "需要授权"
 
 #: js/ExceptionHandler.js:128
 msgid "Your session timed out. You need to login again."
@@ -258,101 +272,54 @@ msgstr ""
 msgid "Your user account has no role memberships. Please contact your administrator."
 msgstr ""
 
-#: js/LoginPanel.js:78 js/LoginPanel.js:110
-msgid "Login"
-msgstr "登录"
+#: js/data/Record.js:115
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "任务"
 
-#: js/LoginPanel.js:87 js/widgets/dialog/CredentialsDialog.js:69
-msgid "Username"
-msgstr "用户名"
+#: js/data/Record.js:119
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "要做的事项列表"
 
-#: js/LoginPanel.js:99 js/widgets/dialog/CredentialsDialog.js:73
-msgid "Password"
-msgstr "密码"
+#: js/Container.js:143
+msgid "All {0}"
+msgstr "所有{0}"
 
-#: js/LoginPanel.js:129
-msgid "Tine 2.0 is made for you"
+#: js/Container.js:144
+msgid "Shared {0}"
+msgstr "共享的{0}"
+
+#: js/Container.js:145
+msgid "Other Users {0}"
+msgstr "其它用户{0}"
+
+#: js/Container.js:146
+msgid "Internal {0}"
 msgstr ""
 
-#: js/LoginPanel.js:131
-msgid "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
+#: js/Container.js:150
+msgid "My {0}"
+msgstr "我的 {0}"
+
+#: js/tineInit.js:585
+msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
 msgstr ""
 
-#: js/LoginPanel.js:137
-msgid "Tine 2.0 Homepage"
-msgstr ""
+#: js/common.js:150
+msgid "{0} minute"
+msgid_plural "{0} minutes"
+msgstr[0] "{0} 分钟"
 
-#: js/LoginPanel.js:138
-msgid "Tine 2.0 Forum"
-msgstr ""
+#: js/common.js:151
+msgid "{0} hour"
+msgid_plural "{0} hours"
+msgstr[0] "{0}小时"
 
-#: js/LoginPanel.js:184
-msgid "about {0} minutes"
-msgstr ""
-
-#: js/LoginPanel.js:189 js/LoginPanel.js:345
-msgid "Tine 2.0 needs your help"
-msgstr ""
-
-#: js/LoginPanel.js:191 js/LoginPanel.js:347
-msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
-msgstr ""
-
-#: js/LoginPanel.js:197
-msgid "participate!"
-msgstr ""
-
-#: js/LoginPanel.js:219
-msgid "Languages"
-msgstr ""
-
-#: js/LoginPanel.js:220
-msgid "Duration"
-msgstr ""
-
-#: js/LoginPanel.js:271
-msgid "Logging you in..."
-msgstr "正在登录 ..."
-
-#: js/LoginPanel.js:271 js/widgets/container/GrantsDialog.js:169
-#: js/widgets/persistentfilter/PickerPanel.js:202
-#: js/widgets/persistentfilter/PickerPanel.js:227
-#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:84
-#: js/widgets/tree/ContextMenu.js:140
-msgid "Please wait"
-msgstr "请等待"
-
-#: js/LoginPanel.js:283
-#, fuzzy
-msgid "Login successful. Loading {0}..."
-msgstr "登录成功，正加载 Tine 2.0 ..."
-
-#: js/LoginPanel.js:283 js/MainMenu.js:333
-msgid "Please wait!"
-msgstr "请等待！"
-
-#: js/LoginPanel.js:288
-msgid "Login failure"
-msgstr "登录失败"
-
-#: js/LoginPanel.js:289
-msgid "Your username and/or your password are wrong!!!"
-msgstr "你的用户名或者密码有误！！！"
-
-#: js/LoginPanel.js:300 js/widgets/dialog/CredentialsDialog.js:117
-#: js/widgets/dialog/EditDialog.js:436 js/widgets/dialog/ImportDialog.js:194
-#: js/widgets/dialog/PreferencesDialog.js:282
-msgid "Errors"
-msgstr "错误"
-
-#: js/LoginPanel.js:300 js/widgets/dialog/CredentialsDialog.js:117
-#: js/widgets/dialog/EditDialog.js:436 js/widgets/dialog/ImportDialog.js:194
-msgid "Please fix the errors noted."
-msgstr "请修改注释的错误。"
-
-#: js/LoginPanel.js:315
-msgid "Please enter your login data"
-msgstr "请输入登录数据"
+#: js/common.js:152
+msgid "{0} workday"
+msgid_plural "{0} workdays"
+msgstr[0] "{0}工作日"
 
 #: js/MainMenu.js:75
 msgid "User: {0}"
@@ -409,16 +376,6 @@ msgstr "新密码"
 msgid "Repeat new Password"
 msgstr "重复新密码"
 
-#: js/MainMenu.js:242 js/ux/form/LayerCombo.js:199
-#: js/widgets/ActivitiesPanel.js:308
-#: js/widgets/container/ContainerSelect.js:461
-#: js/widgets/dialog/EditDialog.js:167
-#: js/widgets/dialog/MultiOptionsDialog.js:96
-#: js/widgets/dialog/PreferencesDialog.js:119 js/widgets/EditRecord.js:117
-#: js/widgets/tags/TagsMassAttachAction.js:96
-msgid "Ok"
-msgstr "确认"
-
 #: js/MainMenu.js:251
 msgid "Please Wait!"
 msgstr "请等待"
@@ -447,9 +404,8 @@ msgstr "新密码不匹配，请纠正"
 msgid "Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer."
 msgstr "安装 Gears 可以通过缓存所有需要的文件到本地电脑来提高 Tine 2.0 的性能"
 
-#: js/MainMenu.js:319 js/widgets/dialog/EditDialog.js:444
-#: js/widgets/grid/GridPanel.js:941
-#: js/widgets/persistentfilter/PickerPanel.js:200
+#: js/MainMenu.js:319 js/widgets/persistentfilter/PickerPanel.js:200
+#: js/widgets/grid/GridPanel.js:941 js/widgets/dialog/EditDialog.js:444
 #: js/widgets/tree/ContextMenu.js:82
 msgid "Confirm"
 msgstr "确认"
@@ -461,6 +417,101 @@ msgstr "确实想登出？"
 #: js/MainMenu.js:333
 msgid "Logging you out..."
 msgstr "正在登出 ..."
+
+#: js/MainMenu.js:333 js/LoginPanel.js:283
+msgid "Please wait!"
+msgstr "请等待！"
+
+#: js/LoginPanel.js:78 js/LoginPanel.js:110
+msgid "Login"
+msgstr "登录"
+
+#: js/LoginPanel.js:87 js/widgets/dialog/CredentialsDialog.js:69
+msgid "Username"
+msgstr "用户名"
+
+#: js/LoginPanel.js:99 js/widgets/dialog/CredentialsDialog.js:73
+msgid "Password"
+msgstr "密码"
+
+#: js/LoginPanel.js:129
+msgid "Tine 2.0 is made for you"
+msgstr ""
+
+#: js/LoginPanel.js:131
+msgid "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
+msgstr ""
+
+#: js/LoginPanel.js:137
+msgid "Tine 2.0 Homepage"
+msgstr ""
+
+#: js/LoginPanel.js:138
+msgid "Tine 2.0 Forum"
+msgstr ""
+
+#: js/LoginPanel.js:184
+msgid "about {0} minutes"
+msgstr ""
+
+#: js/LoginPanel.js:189 js/LoginPanel.js:345
+msgid "Tine 2.0 needs your help"
+msgstr ""
+
+#: js/LoginPanel.js:191 js/LoginPanel.js:347
+msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
+msgstr ""
+
+#: js/LoginPanel.js:197
+msgid "participate!"
+msgstr ""
+
+#: js/LoginPanel.js:219
+msgid "Languages"
+msgstr ""
+
+#: js/LoginPanel.js:220
+msgid "Duration"
+msgstr ""
+
+#: js/LoginPanel.js:271
+msgid "Logging you in..."
+msgstr "正在登录 ..."
+
+#: js/LoginPanel.js:271 js/widgets/persistentfilter/PickerPanel.js:202
+#: js/widgets/persistentfilter/PickerPanel.js:227
+#: js/widgets/container/GrantsDialog.js:169 js/widgets/tree/ContextMenu.js:43
+#: js/widgets/tree/ContextMenu.js:84 js/widgets/tree/ContextMenu.js:140
+msgid "Please wait"
+msgstr "请等待"
+
+#: js/LoginPanel.js:283
+#, fuzzy
+msgid "Login successful. Loading {0}..."
+msgstr "登录成功，正加载 Tine 2.0 ..."
+
+#: js/LoginPanel.js:288
+msgid "Login failure"
+msgstr "登录失败"
+
+#: js/LoginPanel.js:289
+msgid "Your username and/or your password are wrong!!!"
+msgstr "你的用户名或者密码有误！！！"
+
+#: js/LoginPanel.js:300 js/widgets/dialog/PreferencesDialog.js:282
+#: js/widgets/dialog/CredentialsDialog.js:117
+#: js/widgets/dialog/EditDialog.js:436 js/widgets/dialog/ImportDialog.js:194
+msgid "Errors"
+msgstr "错误"
+
+#: js/LoginPanel.js:300 js/widgets/dialog/CredentialsDialog.js:117
+#: js/widgets/dialog/EditDialog.js:436 js/widgets/dialog/ImportDialog.js:194
+msgid "Please fix the errors noted."
+msgstr "请修改注释的错误。"
+
+#: js/LoginPanel.js:315
+msgid "Please enter your login data"
+msgstr "请输入登录数据"
 
 #: js/Models.js:72
 msgid "Group"
@@ -487,126 +538,144 @@ msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "正加载"
 
-#: js/tineInit.js:585
-msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
+#: js/ExceptionDialog.js:51 Frontend/Http.php:574
+msgid "Abnormal End"
+msgstr "非正常结束"
+
+#: js/ExceptionDialog.js:67
+msgid "Send Report"
+msgstr "发送报告"
+
+#: js/ExceptionDialog.js:76 Frontend/Http.php:575
+msgid "An error occurred, the program ended abnormal."
+msgstr "有错误发生，程序非正常终止"
+
+#: js/ExceptionDialog.js:77
+msgid "The last action you made was potentially not performed correctly."
+msgstr "最后的动作可能没有正确执行"
+
+#: js/ExceptionDialog.js:78
+#, fuzzy
+msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
+msgstr "请协助改进本软件并通知供应商，并包含一个关于在哪里有什么错误发生的简短的描述。"
+
+#: js/ExceptionDialog.js:84 js/widgets/tags/TagsPanel.js:599
+msgid "Description"
+msgstr "描述"
+
+#: js/ExceptionDialog.js:92
+msgid "Send Contact Information"
 msgstr ""
 
-#: js/UserRegistration.js:38
-msgid "Registration Wizard"
-msgstr "注册向导"
+#: js/ExceptionDialog.js:109
+#, fuzzy
+msgid "Details:"
+msgstr "显示细节："
 
-#: js/UserRegistration.js:91
-msgid "Given name"
-msgstr "名"
+#: js/ExceptionDialog.js:137
+msgid "Sending report..."
+msgstr "正发送报告..."
 
-#: js/UserRegistration.js:102
-msgid "Family name"
-msgstr "姓"
+#: js/ExceptionDialog.js:137
+msgid "Please wait a moment"
+msgstr "请稍等一会儿"
 
-#: js/UserRegistration.js:113
-msgid "Login name"
-msgstr "登录名"
+#: js/ExceptionDialog.js:179
+msgid "Transmission Completed"
+msgstr "发送完成"
 
-#: js/UserRegistration.js:126
-msgid "Emailaddress"
-msgstr "电子邮件地址"
+#: js/ExceptionDialog.js:180
+msgid "Your report has been sent. Thanks for your contribution"
+msgstr "报告已经发送，谢谢你的贡献"
 
-#: js/UserRegistration.js:172
-msgid "Congratulations!"
-msgstr "恭喜！"
+#: js/ExceptionDialog.js:180
+#, fuzzy
+msgid "Please restart your browser now!"
+msgstr "请输入登录数据"
 
-#: js/UserRegistration.js:172
-msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
-msgstr "你已经输入了所需信息，如果你按完成按钮我们将给你发送注册邮件。"
+#: js/widgets/persistentfilter/Model.js:40
+msgid "Favorite"
+msgid_plural "Favorites"
+msgstr[0] ""
 
-#: js/ux/ConnectionStatus.js:57
-msgid "online"
-msgstr "在线"
-
-#: js/ux/ConnectionStatus.js:58
-msgid "offline"
-msgstr "离线"
-
-#: js/ux/ConnectionStatus.js:59 User/Abstract.php:266 User/Abstract.php:267
-#: User/Abstract.php:268 User/Abstract.php:269 User/Abstract.php:270
-msgid "unknown"
-msgstr "未知"
-
-#: js/ux/form/ImageField.js:68
-msgid "Loading"
-msgstr "正加载"
-
-#: js/ux/form/ImageField.js:71
-msgid "Click to edit"
+#: js/widgets/persistentfilter/Model.js:40
+msgid "Events"
 msgstr ""
 
-#: js/ux/form/ImageField.js:113
-msgid "Not An Image"
-msgstr "不是图像"
-
-#: js/ux/form/ImageField.js:113
-msgid "Please select an image file (gif/png/jpeg)"
+#: js/widgets/persistentfilter/PickerPanel.js:59
+msgid "My favorites"
 msgstr ""
 
-#: js/ux/form/ImageField.js:147 js/widgets/grid/FileUploadGrid.js:85
-msgid "Upload Failed"
-msgstr "上载失败"
-
-#: js/ux/form/ImageField.js:147
-msgid "Could not upload image. Please notify your Administrator"
-msgstr "不能上载图像，请通知你的管理员"
-
-#: js/ux/form/ImageField.js:159
-msgid "Change Image"
-msgstr "修改图像"
-
-#: js/ux/form/ImageField.js:170 js/ux/form/ImageField.js:188
-msgid "Crop Image"
-msgstr "修剪图像"
-
-#: js/ux/form/ImageField.js:195
-msgid "Delete Image"
-msgstr "删除图像"
-
-#: js/ux/form/ImageField.js:204
-msgid "Show Original Image"
+#: js/widgets/persistentfilter/PickerPanel.js:180
+msgid "Delete Favorite"
 msgstr ""
 
-#: js/ux/form/ImageField.js:243
-msgid "Image Failed"
-msgstr "图像失败"
+#: js/widgets/persistentfilter/PickerPanel.js:185
+msgid "Rename Favorite"
+msgstr ""
 
-#: js/ux/form/ImageField.js:243
-msgid "Could not load image. Please notify your Administrator"
-msgstr "不能加载图像，请通知你的管理员"
+#: js/widgets/persistentfilter/PickerPanel.js:200
+msgid "Do you really want to delete the favorite \"{0}\"?"
+msgstr ""
 
-#: js/ux/form/RecordsComboBox.js:27
-msgid "Software Version"
-msgstr "软件版本"
+#: js/widgets/persistentfilter/PickerPanel.js:202
+msgid "Deleting Favorite \"{0}\""
+msgstr ""
 
-#: js/ux/grid/PagingToolbar.js:49
-msgid "{0} selected"
-msgstr "选择了 {0}"
+#: js/widgets/persistentfilter/PickerPanel.js:225
+msgid "New Name"
+msgstr ""
 
-#: js/ux/grid/PagingToolbar.js:50
-msgid "Unselect all"
-msgstr "清除所有选择"
+#: js/widgets/persistentfilter/PickerPanel.js:225
+msgid "Please enter the new name for favorite \"{0}\"?"
+msgstr ""
 
-#: js/ux/grid/PagingToolbar.js:51
-msgid "Select all visible ({0} records)"
-msgstr "选择所有可视的 ({0} 记录)"
+#: js/widgets/persistentfilter/PickerPanel.js:227
+msgid "Renaming Favorite \"{0}\""
+msgstr ""
 
-#: js/ux/grid/PagingToolbar.js:52
-msgid "Select all pages ({0} records)"
-msgstr "选择所有页面({0} 记录)"
+#: js/widgets/persistentfilter/PickerPanel.js:250
+msgid "Could not save Favorite"
+msgstr ""
 
-#: js/ux/grid/PagingToolbar.js:53
-msgid "Toggle selection"
-msgstr "切换选择"
+#: js/widgets/persistentfilter/PickerPanel.js:250
+msgid "Your current view does not support favorites"
+msgstr ""
 
-#: js/ux/SearchField.js:45
-msgid "enter searchfilter"
-msgstr "输入搜索过滤器"
+#: js/widgets/persistentfilter/PickerPanel.js:255
+msgid "save filter"
+msgstr "保存过滤器"
+
+#: js/widgets/persistentfilter/PickerPanel.js:255
+msgid "Please enter a name for the favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:258
+#: js/widgets/persistentfilter/PickerPanel.js:261
+#: js/widgets/persistentfilter/PickerPanel.js:270
+msgid "Favorite not Saved"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:258
+msgid "You have to supply a name for the favorite!"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:261
+msgid "You have to supply a shorter name! Names of favorite can only be up to 40 characters long."
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:264
+#: js/widgets/TimezoneChooser.js:78 js/widgets/LangChooser.js:68
+msgid "Please Wait"
+msgstr "请等待"
+
+#: js/widgets/persistentfilter/PickerPanel.js:264
+msgid "Saving favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:270
+msgid "Overwriteing system favorites is not yet supported"
+msgstr ""
 
 #: js/widgets/account/PickerGridPanel.js:145
 #, fuzzy
@@ -641,443 +710,75 @@ msgstr "搜索..."
 msgid "Name"
 msgstr "名子"
 
-#: js/widgets/ActivitiesPanel.js:145
-msgid "Add a Note..."
-msgstr "添加一个注释..."
-
-#: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:172
-#: js/widgets/container/GrantsDialog.js:94
-msgid "Add"
-msgstr "添加"
-
-#: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:462
-msgid "Note"
-msgstr "注释"
-
-#: js/widgets/ActivitiesPanel.js:173 js/widgets/ActivitiesPanel.js:383
-msgid "Add new note"
-msgstr "添加新注释"
-
-#: js/widgets/ActivitiesPanel.js:204
-msgid "Notes"
-msgstr "注释"
-
-#: js/widgets/ActivitiesPanel.js:279
-msgid "Enter new note:"
-msgstr "输入新注释："
-
-#: js/widgets/ActivitiesPanel.js:316 js/widgets/ActivitiesPanel.js:382
-msgid "Add Note"
-msgstr "添加注释"
-
-#: js/widgets/ActivitiesPanel.js:369
-msgid "Add a {0} Note"
-msgstr "添加一个 {0} 注释"
-
-#: js/widgets/ActivitiesPanel.js:460 js/widgets/ActivitiesPanel.js:595
-msgid "Type"
-msgstr "类型"
-
-#: js/widgets/ActivitiesPanel.js:463
-msgid "Created By"
-msgstr "创建者"
-
-#: js/widgets/ActivitiesPanel.js:464
-msgid "Timestamp"
-msgstr "时间戳"
-
-#: js/widgets/ActivitiesPanel.js:478
-msgid "Displaying history records {0} - {1} of {2}"
-msgstr "显示历史记录 {0} - {1} of {2}"
-
-#: js/widgets/ActivitiesPanel.js:479
-msgid "No history to display"
-msgstr "没有历史要显示"
-
-#: js/widgets/ActivitiesPanel.js:577
-msgid "History"
-msgstr "历史"
-
-#: js/widgets/ActivitiesPanel.js:589
-msgid "Quick search"
-msgstr ""
-
-#: js/widgets/ActivitiesPanel.js:590 js/widgets/ActivitiesPanel.js:591
-msgid "Time"
-msgstr "时间"
-
-#: js/widgets/ActivitiesPanel.js:593
-msgid "User"
-msgstr "用户"
-
-#: js/widgets/container/ContainerSelect.js:109
-msgid "choose other {0}..."
-msgstr "选择其它的{0}..."
-
-#: js/widgets/container/ContainerSelect.js:112
-msgid "Select a {0}"
-msgstr ""
-
-#: js/widgets/container/ContainerSelect.js:132
-msgid "Recently used {0}:"
-msgstr "当前使用的 {0}:"
-
-#: js/widgets/container/ContainerSelect.js:449
-msgid "please select a {0}"
-msgstr "请选择一个{0}"
-
-#: js/widgets/container/ContainerTree.js:124
-msgid "container"
-msgid_plural "containers"
-msgstr[0] ""
-
-#: js/widgets/container/ContainerTree.js:412
-msgid "You are not allowed to select the {0} '{1}':"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:413
-msgid "{0} grant is required for desired action"
-msgstr ""
-
-#: js/widgets/container/ContainerTree.js:414
-msgid "Insufficient Grants"
-msgstr ""
-
-#: js/widgets/container/FilterModel.js:130
-msgid "is personal of"
-msgstr ""
-
-#: js/widgets/container/FilterModel.js:130
-#: js/widgets/container/FilterModel.js:134 js/widgets/grid/FilterModel.js:155
-msgid "is equal to"
-msgstr "等于"
-
-#: js/widgets/container/FilterModel.js:238
-msgid "Selected  {0}"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:54
-msgid "Folder"
-msgstr "文件夹"
-
-#: js/widgets/container/GrantsDialog.js:88
-msgid "Read"
-msgstr "读"
-
-#: js/widgets/container/GrantsDialog.js:89
-msgid "The grant to read records of this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:95
-msgid "The grant to add records to this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:100
-msgid "Edit"
-msgstr "编辑"
-
-#: js/widgets/container/GrantsDialog.js:101
-msgid "The grant to edit records in this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:106
-msgid "Delete"
-msgstr "删除"
-
-#: js/widgets/container/GrantsDialog.js:107
-msgid "The grant to delete records in this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:112
-msgid "Export"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:113
-msgid "The grant to export records from this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:118
-msgid "Sync"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:119
-msgid "The grant to synchronise records with this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:130
-msgid "Free Busy"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:131
-msgid "The grant to access free busy information of events in this calendar"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:138
-msgid "Private"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:139
-msgid "The grant to access records marked as private in this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:146
-msgid "Admin"
-msgstr "管理"
-
-#: js/widgets/container/GrantsDialog.js:147
-msgid "The grant to administrate this container"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:169
-msgid "Updating Grants"
-msgstr "正在更新权限"
-
-#: js/widgets/container/GrantsDialog.js:199
-msgid "Error"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:200
-msgid "You are not allowed to remove all admins for this container!"
-msgstr ""
-
-#: js/widgets/customfields/CustomfieldsPanel.js:64
-msgid "Custom Fields"
-msgstr "定制字段"
-
-#: js/widgets/customfields/CustomfieldsPanel.js:71
-#: js/widgets/customfields/CustomfieldsPanel.js:86
-#, fuzzy
-msgid "General"
-msgstr "正常"
-
-#: js/widgets/customfields/CustomfieldsPanel.js:108
-msgid "There are no custom fields yet"
-msgstr "没有定制字段"
-
-#: js/widgets/dialog/AlarmPanel.js:33
-msgid "Alarms"
-msgstr ""
-
-#: js/widgets/dialog/AlarmPanel.js:42
-msgid "Custom Datetime"
-msgstr ""
-
-#: js/widgets/dialog/AlarmPanel.js:52
-msgid "Send Alarm"
-msgstr ""
-
-#: js/widgets/dialog/AlarmPanel.js:62
-#, fuzzy
-msgid "None"
-msgstr "注释"
-
-#: js/widgets/dialog/AlarmPanel.js:63
-#, fuzzy
-msgid "0 minutes before"
-msgstr "是以前"
-
-#: js/widgets/dialog/AlarmPanel.js:64
-#, fuzzy
-msgid "15 minutes before"
-msgstr "是以前"
-
-#: js/widgets/dialog/AlarmPanel.js:65
-#, fuzzy
-msgid "30 minutes before"
-msgstr "是以前"
-
-#: js/widgets/dialog/AlarmPanel.js:66
-#, fuzzy
-msgid "1 hour before"
-msgstr "是以前"
-
-#: js/widgets/dialog/AlarmPanel.js:67
-#, fuzzy
-msgid "2 hours before"
-msgstr "是以前"
-
-#: js/widgets/dialog/AlarmPanel.js:68
-#, fuzzy
-msgid "1 day before"
-msgstr "是以前"
-
-#: js/widgets/dialog/AlarmPanel.js:69
-msgid "Custom datetime"
-msgstr ""
-
-#: js/widgets/dialog/EditDialog.js:176 js/widgets/EditRecord.js:128
+#: js/widgets/EditRecord.js:128 js/widgets/dialog/EditDialog.js:176
 msgid "Apply"
 msgstr "应用"
 
-#: js/widgets/dialog/EditDialog.js:193 js/widgets/EditRecord.js:148
+#: js/widgets/EditRecord.js:148 js/widgets/dialog/EditDialog.js:193
 msgid "delete"
 msgstr "删除"
 
-#: js/widgets/dialog/EditDialog.js:233 js/widgets/dialog/EditDialog.js:246
-#: js/widgets/EditRecord.js:187
+#: js/widgets/EditRecord.js:187 js/widgets/dialog/EditDialog.js:233
+#: js/widgets/dialog/EditDialog.js:246
 msgid "Saved in"
 msgstr "保存到"
 
-#: js/widgets/dialog/EditDialog.js:292
-msgid "Add New {0}"
-msgstr "添加新的{0}"
+#: js/widgets/Priority.js:21
+msgid "low"
+msgstr "低"
 
-#: js/widgets/dialog/EditDialog.js:294
-msgid "Edit {0} \"{1}\""
-msgstr "编辑{0} \"{1}\""
+#: js/widgets/Priority.js:22
+msgid "normal"
+msgstr "正常"
 
-#: js/widgets/dialog/EditDialog.js:335
-msgid "Transfering {0}..."
-msgstr "正传递{0}..."
+#: js/widgets/Priority.js:23
+msgid "high"
+msgstr "高"
 
-#: js/widgets/dialog/EditDialog.js:444
-msgid "Do you really want to delete this {0}?"
-msgstr "真的想删除这个{0}？"
+#: js/widgets/Priority.js:24
+msgid "urgent"
+msgstr "紧急"
 
-#: js/widgets/dialog/EditDialog.js:446 js/widgets/grid/GridPanel.js:961
-msgid "Deleting {0}"
-msgstr "正删除{0}"
+#: js/widgets/grid/FilterToolbar.js:127
+msgid "add new filter"
+msgstr "添加新的过滤器"
 
-#: js/widgets/dialog/EditDialog.js:456 js/widgets/grid/GridPanel.js:988
-#: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:401
-#: js/widgets/tags/TagsPanel.js:434
-msgid "Failed"
-msgstr "失败"
+#: js/widgets/grid/FilterToolbar.js:133
+msgid "reset all filters"
+msgstr "重置所有的过滤器"
 
-#: js/widgets/dialog/EditDialog.js:456 js/widgets/grid/GridPanel.js:988
-msgid "Could not delete {0}."
-msgstr "不能删除{0}"
+#: js/widgets/grid/FilterToolbar.js:139
+msgid "start search"
+msgstr "开始搜索"
 
-#: js/widgets/dialog/ImportDialog.js:77
-msgid "Files"
+#: js/widgets/grid/FilterToolbar.js:147
+msgid "save as favorite"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:97
-msgid "Import definition"
-msgstr ""
+#: js/widgets/grid/FilterToolbar.js:236
+msgid "select a field"
+msgstr "选择一个字段"
 
-#: js/widgets/dialog/ImportDialog.js:109
-msgid "Import into {0}"
-msgstr ""
+#: js/widgets/grid/FilterToolbar.js:261
+msgid "Delete this filter"
+msgstr "删除这个过滤器"
 
-#: js/widgets/dialog/ImportDialog.js:120
-msgid "Dry run"
-msgstr ""
+#: js/widgets/grid/FilterToolbar.js:292
+msgid "and"
+msgstr "和"
 
-#: js/widgets/dialog/ImportDialog.js:137
-msgid "No files added"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:137
-msgid "You need to add files to import."
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:167
-msgid "Dry run results"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:168
-msgid "Import test successful for {0} records, import test failed for {1} records."
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:172
-msgid "Import results"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:173
-msgid "Import successful for {0} records / import failed for {1} records / {2} duplicates found"
-msgstr ""
-
-#: js/widgets/dialog/LinkPanel.js:48
-#, fuzzy
-msgid "Links"
-msgstr "登录"
-
-#: js/widgets/dialog/MultiOptionsDialog.js:28
-#: js/widgets/dialog/MultiOptionsDialog.js:75
-msgid "What would you like to do?"
-msgstr ""
-
-#: js/widgets/dialog/MultiOptionsDialog.js:32
-#: js/widgets/dialog/MultiOptionsDialog.js:134
-msgid "You need to select an option!"
-msgstr ""
-
-#: js/widgets/dialog/PreferencesDialog.js:135
-#, fuzzy
-msgid "Admin Mode"
-msgstr "管理"
-
-#: js/widgets/dialog/PreferencesDialog.js:171
-#, fuzzy
-msgid "Applications"
-msgstr "正加载"
-
-#: js/widgets/dialog/PreferencesDialog.js:198
-#, fuzzy
-msgid "Edit Preferences"
-msgstr "参考"
-
-#: js/widgets/dialog/PreferencesDialog.js:199
-#, fuzzy
-msgid "Loading ..."
-msgstr "正加载"
-
-#: js/widgets/dialog/PreferencesDialog.js:282
-msgid "Saving of preferences failed."
-msgstr ""
-
-#: js/widgets/dialog/PreferencesPanel.js:152
-#, fuzzy
-msgid "There are no preferences for this application."
-msgstr "没有定制字段"
-
-#: js/widgets/dialog/PreferencesTreePanel.js:61
-#, fuzzy
-msgid "General Preferences"
-msgstr "参考"
-
-#: js/widgets/form/ConfigPanel.js:108
-msgid "Invalid configuration"
-msgstr ""
-
-#: js/widgets/form/ConfigPanel.js:108
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr ""
-
-#: js/widgets/form/ConfigPanel.js:133
-#, fuzzy
-msgid "Transfering Configuration..."
-msgstr "正传递{0}..."
-
-#: js/widgets/form/ConfigPanel.js:229
-#, fuzzy
-msgid "Save config"
-msgstr "保存到"
-
-#: js/widgets/form/ConfigPanel.js:239
-msgid "Reload config"
-msgstr ""
-
-#: js/widgets/form/RecordPickerComboBox.js:59 js/widgets/tags/TagsPanel.js:469
-msgid "Searching..."
-msgstr "搜索..."
-
-#: js/widgets/grid/FileUploadGrid.js:86
-msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:110
-msgid "Add file"
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:121
-msgid "Remove file"
-msgstr ""
+#: js/widgets/grid/FilterToolbar.js:311
+msgid "Show"
+msgstr "显示"
 
 #: js/widgets/grid/FilterModel.js:154
 msgid "contains"
 msgstr "包含"
+
+#: js/widgets/grid/FilterModel.js:155 js/widgets/container/FilterModel.js:130
+#: js/widgets/container/FilterModel.js:134
+msgid "is equal to"
+msgstr "等于"
 
 #: js/widgets/grid/FilterModel.js:156
 msgid "is greater than"
@@ -1198,51 +899,6 @@ msgstr "下个季度"
 msgid "next year"
 msgstr "明年"
 
-#: js/widgets/grid/FilterToolbar.js:127
-msgid "add new filter"
-msgstr "添加新的过滤器"
-
-#: js/widgets/grid/FilterToolbar.js:133
-msgid "reset all filters"
-msgstr "重置所有的过滤器"
-
-#: js/widgets/grid/FilterToolbar.js:139
-msgid "start search"
-msgstr "开始搜索"
-
-#: js/widgets/grid/FilterToolbar.js:147
-msgid "save as favorite"
-msgstr ""
-
-#: js/widgets/grid/FilterToolbar.js:236
-msgid "select a field"
-msgstr "选择一个字段"
-
-#: js/widgets/grid/FilterToolbar.js:261
-msgid "Delete this filter"
-msgstr "删除这个过滤器"
-
-#: js/widgets/grid/FilterToolbar.js:292
-msgid "and"
-msgstr "和"
-
-#: js/widgets/grid/FilterToolbar.js:311
-msgid "Show"
-msgstr "显示"
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
-msgid "show details"
-msgstr ""
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:183
-msgid "Always show advanced filters"
-msgstr ""
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:369
-msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] ""
-
 #: js/widgets/grid/GridPanel.js:191
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "没有找到 {0}，请修改过滤条件，视图选项或搜索词 {1}"
@@ -1291,8 +947,38 @@ msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "真的想删除选中的记录？"
 
+#: js/widgets/grid/GridPanel.js:961 js/widgets/dialog/EditDialog.js:446
+msgid "Deleting {0}"
+msgstr "正删除{0}"
+
 #: js/widgets/grid/GridPanel.js:963
 msgid " ... This may take a long time!"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:988 js/widgets/tags/TagsPanel.js:291
+#: js/widgets/tags/TagsPanel.js:401 js/widgets/tags/TagsPanel.js:434
+#: js/widgets/dialog/EditDialog.js:456
+msgid "Failed"
+msgstr "失败"
+
+#: js/widgets/grid/GridPanel.js:988 js/widgets/dialog/EditDialog.js:456
+msgid "Could not delete {0}."
+msgstr "不能删除{0}"
+
+#: js/widgets/grid/FileUploadGrid.js:86
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:110
+msgid "Add file"
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:121
+msgid "Remove file"
+msgstr ""
+
+#: js/widgets/grid/QuickaddGridPanel.js:99
+msgid "Remove"
 msgstr ""
 
 #: js/widgets/grid/PickerGridPanel.js:117
@@ -1303,133 +989,18 @@ msgstr ""
 msgid "Search for records ..."
 msgstr ""
 
-#: js/widgets/grid/QuickaddGridPanel.js:99
-msgid "Remove"
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
+msgid "show details"
 msgstr ""
 
-#: js/widgets/LangChooser.js:35 Preference.php:99
-msgid "Language"
-msgstr "语言"
-
-#: js/widgets/LangChooser.js:68
-msgid "setting new language..."
-msgstr "设置新语言..."
-
-#: js/widgets/LangChooser.js:68 js/widgets/persistentfilter/PickerPanel.js:264
-#: js/widgets/TimezoneChooser.js:78
-msgid "Please Wait"
-msgstr "请等待"
-
-#: js/widgets/mainscreen/WestPanel.js:193
-msgid "containers"
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:183
+msgid "Always show advanced filters"
 msgstr ""
 
-#: js/widgets/mainscreen/WestPanel.js:220
-msgid "Favorites"
-msgstr ""
-
-#: js/widgets/mainscreen/WestPanel.js:228
-msgid "Save current view as favorite"
-msgstr ""
-
-#: js/widgets/persistentfilter/Model.js:40
-msgid "Favorite"
-msgid_plural "Favorites"
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:369
+msgid "Your view is limited by {0} criteria:"
+msgid_plural "Your view is limited by {0} criterias:"
 msgstr[0] ""
-
-#: js/widgets/persistentfilter/Model.js:40
-msgid "Events"
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:59
-msgid "My favorites"
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:180
-msgid "Delete Favorite"
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:185
-msgid "Rename Favorite"
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:200
-msgid "Do you really want to delete the favorite \"{0}\"?"
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:202
-msgid "Deleting Favorite \"{0}\""
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:225
-msgid "New Name"
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:225
-msgid "Please enter the new name for favorite \"{0}\"?"
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:227
-msgid "Renaming Favorite \"{0}\""
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:250
-msgid "Could not save Favorite"
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:250
-msgid "Your current view does not support favorites"
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:255
-msgid "save filter"
-msgstr "保存过滤器"
-
-#: js/widgets/persistentfilter/PickerPanel.js:255
-msgid "Please enter a name for the favorite"
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:258
-#: js/widgets/persistentfilter/PickerPanel.js:261
-#: js/widgets/persistentfilter/PickerPanel.js:270
-msgid "Favorite not Saved"
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:258
-msgid "You have to supply a name for the favorite!"
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:261
-msgid "You have to supply a shorter name! Names of favorite can only be up to 40 characters long."
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:264
-msgid "Saving favorite"
-msgstr ""
-
-#: js/widgets/persistentfilter/PickerPanel.js:270
-msgid "Overwriteing system favorites is not yet supported"
-msgstr ""
-
-#: js/widgets/Priority.js:21
-msgid "low"
-msgstr "低"
-
-#: js/widgets/Priority.js:22
-msgid "normal"
-msgstr "正常"
-
-#: js/widgets/Priority.js:23
-msgid "high"
-msgstr "高"
-
-#: js/widgets/Priority.js:24
-msgid "urgent"
-msgstr "紧急"
-
-#: js/widgets/tags/TagCombo.js:49
-msgid "tag name"
-msgstr "标签名"
 
 #: js/widgets/tags/TagFilter.js:34
 msgid "Tag"
@@ -1555,9 +1126,245 @@ msgstr "不能更新标签"
 msgid "Enter tag name"
 msgstr "输入标签名"
 
+#: js/widgets/tags/TagsPanel.js:469 js/widgets/form/RecordPickerComboBox.js:59
+msgid "Searching..."
+msgstr "搜索..."
+
 #: js/widgets/tags/TagsPanel.js:603
 msgid "Color"
 msgstr "颜色"
+
+#: js/widgets/tags/TagCombo.js:49
+msgid "tag name"
+msgstr "标签名"
+
+#: js/widgets/mainscreen/WestPanel.js:193
+msgid "containers"
+msgstr ""
+
+#: js/widgets/mainscreen/WestPanel.js:220
+msgid "Favorites"
+msgstr ""
+
+#: js/widgets/mainscreen/WestPanel.js:228
+msgid "Save current view as favorite"
+msgstr ""
+
+#: js/widgets/container/FilterModel.js:130
+msgid "is personal of"
+msgstr ""
+
+#: js/widgets/container/FilterModel.js:238
+msgid "Selected  {0}"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:54
+msgid "Folder"
+msgstr "文件夹"
+
+#: js/widgets/container/GrantsDialog.js:88
+msgid "Read"
+msgstr "读"
+
+#: js/widgets/container/GrantsDialog.js:89
+msgid "The grant to read records of this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:94 js/widgets/ActivitiesPanel.js:160
+#: js/widgets/ActivitiesPanel.js:172
+msgid "Add"
+msgstr "添加"
+
+#: js/widgets/container/GrantsDialog.js:95
+msgid "The grant to add records to this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:100
+msgid "Edit"
+msgstr "编辑"
+
+#: js/widgets/container/GrantsDialog.js:101
+msgid "The grant to edit records in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:106
+msgid "Delete"
+msgstr "删除"
+
+#: js/widgets/container/GrantsDialog.js:107
+msgid "The grant to delete records in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:112
+msgid "Export"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:113
+msgid "The grant to export records from this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:118
+msgid "Sync"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:119
+msgid "The grant to synchronise records with this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:130
+msgid "Free Busy"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:131
+msgid "The grant to access free busy information of events in this calendar"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:138
+msgid "Private"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:139
+msgid "The grant to access records marked as private in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:146
+msgid "Admin"
+msgstr "管理"
+
+#: js/widgets/container/GrantsDialog.js:147
+msgid "The grant to administrate this container"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:169
+msgid "Updating Grants"
+msgstr "正在更新权限"
+
+#: js/widgets/container/GrantsDialog.js:199
+msgid "Error"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:200
+msgid "You are not allowed to remove all admins for this container!"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:109
+msgid "choose other {0}..."
+msgstr "选择其它的{0}..."
+
+#: js/widgets/container/ContainerSelect.js:112
+msgid "Select a {0}"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:132
+msgid "Recently used {0}:"
+msgstr "当前使用的 {0}:"
+
+#: js/widgets/container/ContainerSelect.js:449
+msgid "please select a {0}"
+msgstr "请选择一个{0}"
+
+#: js/widgets/container/ContainerTree.js:124
+msgid "container"
+msgid_plural "containers"
+msgstr[0] ""
+
+#: js/widgets/container/ContainerTree.js:412
+msgid "You are not allowed to select the {0} '{1}':"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:413
+msgid "{0} grant is required for desired action"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:414
+msgid "Insufficient Grants"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:145
+msgid "Add a Note..."
+msgstr "添加一个注释..."
+
+#: js/widgets/ActivitiesPanel.js:160 js/widgets/ActivitiesPanel.js:462
+msgid "Note"
+msgstr "注释"
+
+#: js/widgets/ActivitiesPanel.js:173 js/widgets/ActivitiesPanel.js:383
+msgid "Add new note"
+msgstr "添加新注释"
+
+#: js/widgets/ActivitiesPanel.js:204
+msgid "Notes"
+msgstr "注释"
+
+#: js/widgets/ActivitiesPanel.js:279
+msgid "Enter new note:"
+msgstr "输入新注释："
+
+#: js/widgets/ActivitiesPanel.js:316 js/widgets/ActivitiesPanel.js:382
+msgid "Add Note"
+msgstr "添加注释"
+
+#: js/widgets/ActivitiesPanel.js:369
+msgid "Add a {0} Note"
+msgstr "添加一个 {0} 注释"
+
+#: js/widgets/ActivitiesPanel.js:460 js/widgets/ActivitiesPanel.js:595
+msgid "Type"
+msgstr "类型"
+
+#: js/widgets/ActivitiesPanel.js:463
+msgid "Created By"
+msgstr "创建者"
+
+#: js/widgets/ActivitiesPanel.js:464
+msgid "Timestamp"
+msgstr "时间戳"
+
+#: js/widgets/ActivitiesPanel.js:478
+msgid "Displaying history records {0} - {1} of {2}"
+msgstr "显示历史记录 {0} - {1} of {2}"
+
+#: js/widgets/ActivitiesPanel.js:479
+msgid "No history to display"
+msgstr "没有历史要显示"
+
+#: js/widgets/ActivitiesPanel.js:577
+msgid "History"
+msgstr "历史"
+
+#: js/widgets/ActivitiesPanel.js:589
+msgid "Quick search"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:590 js/widgets/ActivitiesPanel.js:591
+msgid "Time"
+msgstr "时间"
+
+#: js/widgets/ActivitiesPanel.js:593
+msgid "User"
+msgstr "用户"
+
+#: js/widgets/form/ConfigPanel.js:108
+msgid "Invalid configuration"
+msgstr ""
+
+#: js/widgets/form/ConfigPanel.js:108
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr ""
+
+#: js/widgets/form/ConfigPanel.js:133
+#, fuzzy
+msgid "Transfering Configuration..."
+msgstr "正传递{0}..."
+
+#: js/widgets/form/ConfigPanel.js:229
+#, fuzzy
+msgid "Save config"
+msgstr "保存到"
+
+#: js/widgets/form/ConfigPanel.js:239
+msgid "Reload config"
+msgstr ""
 
 #: js/widgets/TimezoneChooser.js:38 Preference.php:95
 msgid "Timezone"
@@ -1566,6 +1373,200 @@ msgstr "时区"
 #: js/widgets/TimezoneChooser.js:78
 msgid "setting new timezone..."
 msgstr "设置新时区"
+
+#: js/widgets/customfields/CustomfieldsPanel.js:64
+msgid "Custom Fields"
+msgstr "定制字段"
+
+#: js/widgets/customfields/CustomfieldsPanel.js:71
+#: js/widgets/customfields/CustomfieldsPanel.js:86
+#, fuzzy
+msgid "General"
+msgstr "正常"
+
+#: js/widgets/customfields/CustomfieldsPanel.js:108
+msgid "There are no custom fields yet"
+msgstr "没有定制字段"
+
+#: js/widgets/dialog/PreferencesDialog.js:135
+#, fuzzy
+msgid "Admin Mode"
+msgstr "管理"
+
+#: js/widgets/dialog/PreferencesDialog.js:171
+#, fuzzy
+msgid "Applications"
+msgstr "正加载"
+
+#: js/widgets/dialog/PreferencesDialog.js:198
+#, fuzzy
+msgid "Edit Preferences"
+msgstr "参考"
+
+#: js/widgets/dialog/PreferencesDialog.js:199
+#, fuzzy
+msgid "Loading ..."
+msgstr "正加载"
+
+#: js/widgets/dialog/PreferencesDialog.js:282
+msgid "Saving of preferences failed."
+msgstr ""
+
+#: js/widgets/dialog/LinkPanel.js:48
+#, fuzzy
+msgid "Links"
+msgstr "登录"
+
+#: js/widgets/dialog/PreferencesTreePanel.js:61
+#, fuzzy
+msgid "General Preferences"
+msgstr "参考"
+
+#: js/widgets/dialog/AlarmPanel.js:33
+msgid "Alarms"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:42
+msgid "Custom Datetime"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:52
+msgid "Send Alarm"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:62
+#, fuzzy
+msgid "None"
+msgstr "注释"
+
+#: js/widgets/dialog/AlarmPanel.js:63
+#, fuzzy
+msgid "0 minutes before"
+msgstr "是以前"
+
+#: js/widgets/dialog/AlarmPanel.js:64
+#, fuzzy
+msgid "15 minutes before"
+msgstr "是以前"
+
+#: js/widgets/dialog/AlarmPanel.js:65
+#, fuzzy
+msgid "30 minutes before"
+msgstr "是以前"
+
+#: js/widgets/dialog/AlarmPanel.js:66
+#, fuzzy
+msgid "1 hour before"
+msgstr "是以前"
+
+#: js/widgets/dialog/AlarmPanel.js:67
+#, fuzzy
+msgid "2 hours before"
+msgstr "是以前"
+
+#: js/widgets/dialog/AlarmPanel.js:68
+#, fuzzy
+msgid "1 day before"
+msgstr "是以前"
+
+#: js/widgets/dialog/AlarmPanel.js:69
+msgid "Custom datetime"
+msgstr ""
+
+#: js/widgets/dialog/EditDialog.js:292
+msgid "Add New {0}"
+msgstr "添加新的{0}"
+
+#: js/widgets/dialog/EditDialog.js:294
+msgid "Edit {0} \"{1}\""
+msgstr "编辑{0} \"{1}\""
+
+#: js/widgets/dialog/EditDialog.js:335
+msgid "Transfering {0}..."
+msgstr "正传递{0}..."
+
+#: js/widgets/dialog/EditDialog.js:444
+msgid "Do you really want to delete this {0}?"
+msgstr "真的想删除这个{0}？"
+
+#: js/widgets/dialog/MultiOptionsDialog.js:28
+#: js/widgets/dialog/MultiOptionsDialog.js:75
+msgid "What would you like to do?"
+msgstr ""
+
+#: js/widgets/dialog/MultiOptionsDialog.js:32
+#: js/widgets/dialog/MultiOptionsDialog.js:134
+msgid "You need to select an option!"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:77
+msgid "Files"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:97
+msgid "Import definition"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:109
+msgid "Import into {0}"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:120
+msgid "Dry run"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:137
+msgid "No files added"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:137
+msgid "You need to add files to import."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:167
+msgid "Dry run results"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:168
+msgid "Import test successful for {0} records, import test failed for {1} records."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:172
+msgid "Import results"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:173
+msgid "Import successful for {0} records / import failed for {1} records / {2} duplicates found"
+msgstr ""
+
+#: js/widgets/dialog/PreferencesPanel.js:152
+#, fuzzy
+msgid "There are no preferences for this application."
+msgstr "没有定制字段"
+
+#: js/widgets/LangChooser.js:35 Preference.php:99
+msgid "Language"
+msgstr "语言"
+
+#: js/widgets/LangChooser.js:68
+msgid "setting new language..."
+msgstr "设置新语言..."
+
+#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
+msgid "New version of Tine 2.0 available"
+msgstr "Tine 2.0新版本可用"
+
+#: js/widgets/VersionCheck.js:46 js/widgets/VersionCheck.js:55
+msgid "Version \"{0}\" of Tine 2.0 is available."
+msgstr "Tine 2.0 的  \"{0}\"  版可用。"
+
+#: js/widgets/VersionCheck.js:47
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr "这是重要的更新，必需尽快安装！"
+
+#: js/widgets/VersionCheck.js:56
+msgid "Please consider updating!"
+msgstr "请考虑更新！"
 
 #: js/widgets/tree/ContextMenu.js:37
 msgid "New {0}"
@@ -1624,29 +1625,14 @@ msgstr "管理许可"
 msgid "Reload {0}"
 msgstr "修改{0}的名字"
 
-#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
-msgid "New version of Tine 2.0 available"
-msgstr "Tine 2.0新版本可用"
+#: js/AppManager.js:182
+msgid "Missing Applications"
+msgstr ""
 
-#: js/widgets/VersionCheck.js:46 js/widgets/VersionCheck.js:55
-msgid "Version \"{0}\" of Tine 2.0 is available."
-msgstr "Tine 2.0 的  \"{0}\"  版可用。"
-
-#: js/widgets/VersionCheck.js:47
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr "这是重要的更新，必需尽快安装！"
-
-#: js/widgets/VersionCheck.js:56
-msgid "Please consider updating!"
-msgstr "请考虑更新！"
-
-#: Notes.php:363
-msgid "by"
-msgstr "由"
-
-#: Notes.php:370
-msgid "Changed fields:"
-msgstr "已修改的字段："
+#: js/AppManager.js:183
+#, fuzzy
+msgid "There are no applications enabled for you. Please contact your administrator."
+msgstr "服务器没有响应你的请求，请检查网络或联系管理员。"
 
 #: Preference.php:96
 msgid "The timezone in which dates are shown in Tine 2.0."
@@ -1680,6 +1666,18 @@ msgstr ""
 #: Preference.php:112
 msgid "Show confirmation dialog on logout."
 msgstr ""
+
+#: Notes.php:363
+msgid "by"
+msgstr "由"
+
+#: Notes.php:370
+msgid "Changed fields:"
+msgstr "已修改的字段："
+
+#: Frontend/Http.php:548
+msgid "Your session is not valid. You need to login again."
+msgstr "会话无效，需要重新登录"
 
 #: Setup/setup.xml:2570
 msgid "note"

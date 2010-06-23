@@ -17,9 +17,19 @@ msgstr ""
 msgid "%s's personal example records"
 msgstr ""
 
-#: js/ExampleApplication.js:27
-msgid "Example Application"
-msgstr ""
+#: js/Model.js:33
+msgid "example record"
+msgid_plural "example records"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Model.js:37
+msgid "example record list"
+msgid_plural "example record lists"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: js/ExampleRecordEditDialog.js:89
 #, fuzzy
@@ -28,6 +38,10 @@ msgstr "Ukázkový záznam"
 
 #: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
 msgid "Name"
+msgstr ""
+
+#: js/ExampleApplication.js:27
+msgid "Example Application"
 msgstr ""
 
 #: js/ExampleRecordGridPanel.js:77
@@ -49,20 +63,6 @@ msgstr "Rozpočet"
 #: js/ExampleRecordGridPanel.js:148
 msgid "Show closed"
 msgstr "Zobrazit uzavřené"
-
-#: js/Model.js:33
-msgid "example record"
-msgid_plural "example records"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Model.js:37
-msgid "example record list"
-msgid_plural "example record lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: Setup/setup.xml:10
 msgid "ExampleApplication"

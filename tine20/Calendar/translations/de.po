@@ -12,6 +12,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller.php:100
+#, python-format
+msgid "%s's personal calendar"
+msgstr "%ss persönlicher Kalender"
+
 #: Acl/Rights.php:97
 msgid "manage shared calendars"
 msgstr "Gemeinsame Kalender Verwalten"
@@ -36,274 +41,140 @@ msgstr "Ressourcen Verwalten"
 msgid "All Rights to administrate resources"
 msgstr "Alle Rechte um Ressourcen zu Administrieren"
 
-#: Controller/EventNotifications.php:257
-msgid "Alarm for event \"%1$s\" at %2$s"
-msgstr "Termin-Erinnerung für \"%1$s\" am %2$s"
-
-#: Controller/EventNotifications.php:260
-msgid "Event invitation \"%1$s\" at %2$s"
-msgstr "Einladung zum Termin  \"%1$s\" am %2$s"
-
-#: Controller/EventNotifications.php:263
-msgid "Event \"%1$s\" at %2$s has been canceled"
-msgstr "Termin \"%1$s\" am %2$s wurde abgesagt"
-
-#: Controller/EventNotifications.php:268
-msgid "Event \"%1$s\" at %2$s has been rescheduled"
-msgstr "Der Termin \"%1$s\" am %2$s wurde verlegt"
-
-#: Controller/EventNotifications.php:272
-msgid "Event \"%1$s\" at %2$s has been updated"
-msgstr "Der Termin \"%1$s\" wurde %2$s verändert"
-
-#: Controller/EventNotifications.php:282
-msgid "%1$s accepted event \"%2$s\" at %3$s"
-msgstr "Zusage von %1$s für den Termin \"%2$s\" am  %3$s"
-
-#: Controller/EventNotifications.php:286
-msgid "%1$s declined event \"%2$s\" at %3$s"
-msgstr "Absage von %1$s für den Termin \"%2$s\" am  %3$s"
-
-#: Controller/EventNotifications.php:290
-msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Vorläufige Zusage von %1$s für den Termin \"%2$s\" am  %3$s"
-
-#: Controller/EventNotifications.php:294
-msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Keine Antwort von %1$s für den Termin \"%2$s\" am  %3$s"
-
-#: Controller/EventNotifications.php:298
-msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr "Geänderte Teilnehmer beim Termin  \"%1$s\" am %2$s"
-
-#: Controller.php:100
-#, python-format
-msgid "%s's personal calendar"
-msgstr "%ss persönlicher Kalender"
-
-#: js/AdminPanel.js:46
-msgid "Manage Resources"
-msgstr "Verwalte Ressourcen"
-
-#: js/AttendeeFilterModel.js:37 js/AttendeeGridPanel.js:77
-#: js/EventDetailsPanel.js:251 js/Model.js:299
-msgid "Attendee"
-msgstr "Teilnehmer"
-
-#: js/AttendeeFilterModel.js:104
-msgid "Select Attendee"
-msgstr "Teilnehmer auswählen"
-
-#: js/AttendeeGridPanel.js:103
-msgid "Role"
-msgstr "Rolle"
-
-#: js/AttendeeGridPanel.js:112
-msgid "Quantity"
-msgstr "Anzahl"
-
-#: js/AttendeeGridPanel.js:121
-msgid "This is the calendar where the attender has saved this event in"
-msgstr "In diesem Kalender wurde der Termin vom Teilnehmer gespeichert."
-
-#: js/AttendeeGridPanel.js:157
-msgid "Type"
-msgstr "Typ"
-
-#: js/AttendeeGridPanel.js:164
-msgid "User"
-msgstr "Benutzer"
-
-#: js/AttendeeGridPanel.js:165
-msgid "Group"
-msgstr "Gruppe"
-
-#: js/AttendeeGridPanel.js:166 js/Model.js:473
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] "Ressource"
-msgstr[1] "Ressourcen"
-
-#: js/AttendeeGridPanel.js:174 js/ResourceEditDialog.js:58
-#: js/ResourcesGridPanel.js:43
-msgid "Name"
-msgstr "Name"
-
-#: js/AttendeeGridPanel.js:182 Model/Event.php:207
-msgid "Status"
-msgstr "Status"
-
-#: js/AttendeeGridPanel.js:320
-msgid "Remove Attender"
-msgstr "Teilnehmer/in entfernen"
-
-#: js/AttendeeGridPanel.js:415
-msgid "Click here to invite another attender..."
-msgstr "Klicken Sie hier, um neue Teilnehmer einzuladen..."
-
-#: js/AttendeeGridPanel.js:433 js/AttendeeGridPanel.js:451
-#: js/AttendeeGridPanel.js:464 js/AttendeeGridPanel.js:476 js/Model.js:315
-msgid "No Information"
-msgstr "Keine Angabe"
-
-#: js/AttendeeGridPanel.js:438
-msgid "(as a group member)"
-msgstr "(als Gruppenmitglied)"
-
-#: js/AttendeeGridPanel.js:488
-msgid "Required"
-msgstr "Erforderlich"
-
-#: js/AttendeeGridPanel.js:491
-msgid "Optional"
-msgstr "Freiwillig"
-
-#: js/AttendeeGridPanel.js:513 js/Model.js:443 Model/Attender.php:45
+#: Model/Attender.php:45 js/Model.js:443 js/AttendeeGridPanel.js:513
 msgid "No response"
 msgstr "Keine Antwort"
 
-#: js/AttendeeGridPanel.js:516 js/Model.js:444 Model/Attender.php:46
+#: Model/Attender.php:46 js/Model.js:444 js/AttendeeGridPanel.js:516
 msgid "Accepted"
 msgstr "Zugesagt"
 
-#: js/AttendeeGridPanel.js:519 js/Model.js:445 Model/Attender.php:47
+#: Model/Attender.php:47 js/Model.js:445 js/AttendeeGridPanel.js:519
 msgid "Declined"
 msgstr "Abgesagt"
 
-#: js/AttendeeGridPanel.js:522 js/Model.js:446 Model/Attender.php:48
+#: Model/Attender.php:48 js/Model.js:446 js/AttendeeGridPanel.js:522
 msgid "Tentative"
 msgstr "Vielleicht"
 
-#: js/AttendeeStatusFilterModel.js:33
-msgid "Attendee Status"
-msgstr "Teilnehmerstatus"
+#: Model/Attender.php:167
+msgid "unknown"
+msgstr "unbekannt"
+
+#: Model/Attender.php:313
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr "Dieser Kontakt wurde automatisch bei der Syncronisation angelegt"
+
+#: Model/Attender.php:203
+msgid "unknown)"
+msgstr "unbekannt)"
+
+#: Model/Event.php:199
+msgid "Start"
+msgstr "Start"
+
+#: Model/Event.php:200
+msgid "End"
+msgstr "Ende"
+
+#: Model/Event.php:201 js/EventDetailsPanel.js:225
+msgid "Blocking"
+msgstr "Blockierend"
+
+#: Model/Event.php:202
+msgid "Classification"
+msgstr "Klassifikation"
+
+#: Model/Event.php:203 js/ResourceEditDialog.js:74 js/EventEditDialog.js:198
+msgid "Description"
+msgstr "Beschreibung"
+
+#: Model/Event.php:204 js/EventDetailsPanel.js:230 js/EventEditDialog.js:96
+#: js/ResourcesGridPanel.js:54
+msgid "Location"
+msgstr "Ort"
+
+#: Model/Event.php:205 js/EventDetailsPanel.js:234
+msgid "Organizer"
+msgstr "Organisator"
+
+#: Model/Event.php:206
+msgid "Priority"
+msgstr "Priorität"
+
+#: Model/Event.php:207 js/AttendeeGridPanel.js:182
+msgid "Status"
+msgstr "Status"
+
+#: Model/Event.php:208 js/EventDetailsPanel.js:179 js/EventEditDialog.js:89
+msgid "Summary"
+msgstr "Thema"
+
+#: Model/Event.php:209
+msgid "Url"
+msgstr "Url"
+
+#: Model/Event.php:210
+msgid "Recurrance rule"
+msgstr "Wiederholungsregel"
+
+#: Model/Event.php:211
+msgid "Is all day event"
+msgstr "Ganztages-Termin"
+
+#: Model/Event.php:212
+msgid "Organizer timezone"
+msgstr "Zeitzone des Organisators"
+
+#: Model/Event.php:237
+msgid "Yes"
+msgstr "Ja"
+
+#: Model/Event.php:237
+msgid "No"
+msgstr "Nein"
+
+#: views/eventNotification.php:13
+msgid "Updates"
+msgstr "Änderungen"
+
+#: views/eventNotification.php:21
+msgid "%1$s changed from \"%2$s\" to \"%3$s\""
+msgstr "%1$s wurde von  \"%2$s\" auf \"%3$s\" geändert"
+
+#: views/eventNotification.php:28
+msgid "%1$s has been invited"
+msgstr "%1$s wurde eingeladen"
+
+#: views/eventNotification.php:33
+msgid "%1$s has been removed"
+msgstr "%1$s wurde entfernt"
+
+#: views/eventNotification.php:40
+msgid "%1$s accepted invitation"
+msgstr "%1$s hat zugesagt"
+
+#: views/eventNotification.php:44
+msgid "%1$s declined invitation"
+msgstr "%1$s hat abgesagt"
+
+#: views/eventNotification.php:48
+msgid "Tentative response from %1$s"
+msgstr "%1$s hat vorläufig zugesagt"
+
+#: views/eventNotification.php:52
+msgid "No response from %1$s"
+msgstr "Keine Antwort von  %1$s"
+
+#: views/eventNotification.php:61
+msgid "Event details"
+msgstr "Termin Details"
 
 #: js/Calendar.js:36 js/Model.js:68 Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "Kalender"
 msgstr[1] "Kalender"
-
-#: js/CalendarPanel.js:41
-msgid "Loading events, please wait..."
-msgstr "Bitte warten, Termine werden übertragen...."
-
-#: js/CalendarPanel.js:227
-msgid "Scheduling Conflict"
-msgstr "Terminüberschneidung"
-
-#: js/CalendarPanel.js:233
-msgid "Ignore Conflict"
-msgstr "Überschneidung ignorieren"
-
-#: js/CalendarPanel.js:240
-msgid "Edit Event"
-msgstr "Termin bearbeiten"
-
-#: js/CalendarPanel.js:251
-msgid "The following attendee are busy at the requested time:"
-msgstr "Die folgenden Teilnehmer sind zur angegebenen Zeit beschäftigt:"
-
-#: js/CalendarPanel.js:272
-msgid "Confirm Update of Series"
-msgstr "Bestätigung der Terminreihe"
-
-#: js/CalendarPanel.js:273
-msgid "Do you really want to update all events of this recurring event series?"
-msgstr "Möchten Sie wirklich alle Termine dieser Reihe aktualisieren?"
-
-#: js/CalendarPanel.js:287
-msgid "Update Event"
-msgstr "Termin aktualisieren"
-
-#: js/CalendarPanel.js:290
-msgid "Update nothing"
-msgstr "Nichts aktualisieren"
-
-#: js/CalendarPanel.js:291
-msgid "Update whole series"
-msgstr "Die ganze Reihe aktualisieren"
-
-#: js/CalendarPanel.js:292
-msgid "Update this event only"
-msgstr "Nur diesen Termin aktualisieren"
-
-#: js/CalendarSelectWidget.js:121
-msgid "Originally"
-msgstr "Ursprungskalender"
-
-#: js/DaysView.js:90 js/MonthView.js:82
-msgid "New Event"
-msgstr "Neuer Termin"
-
-#: js/DaysView.js:95
-msgid "{0}, the {1}. of {2}"
-msgstr "{0}, der {1}. {2}"
-
-#: js/EventDetailsPanel.js:51
-msgid "Unknown calendar"
-msgstr "Unbekannter Kalender"
-
-#: js/EventDetailsPanel.js:62
-msgid "{0} {1} o'clock"
-msgstr "{0} {1} Uhr"
-
-#: js/EventDetailsPanel.js:179 js/EventEditDialog.js:89 Model/Event.php:208
-msgid "Summary"
-msgstr "Thema"
-
-#: js/EventDetailsPanel.js:215 js/EventEditDialog.js:101
-msgid "Start Time"
-msgstr "Beginn"
-
-#: js/EventDetailsPanel.js:220 js/EventEditDialog.js:116
-msgid "End Time"
-msgstr "Ende"
-
-#: js/EventDetailsPanel.js:225 Model/Event.php:201
-msgid "Blocking"
-msgstr "Blockierend"
-
-#: js/EventDetailsPanel.js:230 js/EventEditDialog.js:96
-#: js/ResourcesGridPanel.js:54 Model/Event.php:204
-msgid "Location"
-msgstr "Ort"
-
-#: js/EventDetailsPanel.js:234 Model/Event.php:205
-msgid "Organizer"
-msgstr "Organisator"
-
-#: js/EventEditDialog.js:124
-msgid "whole day"
-msgstr "ganztägig"
-
-#: js/EventEditDialog.js:132
-msgid "non-blocking"
-msgstr "nicht-blockierend"
-
-#: js/EventEditDialog.js:157
-msgid "Private"
-msgstr "Privat"
-
-#: js/EventEditDialog.js:198 js/ResourceEditDialog.js:74 Model/Event.php:203
-msgid "Description"
-msgstr "Beschreibung"
-
-#: js/EventEditDialog.js:212
-msgid "Enter description"
-msgstr "Bitte geben Sie eine Beschreibung an."
-
-#: js/EventEditDialog.js:342
-msgid "End date is not valid"
-msgstr "Endzeitpunkt ist ungültig."
-
-#: js/EventEditDialog.js:345
-msgid "End date must be after start date"
-msgstr "Der Endzeitpunkt muss nach dem Zeitpunkt des Beginns liegen"
-
-#: js/EventEditDialog.js:358
-msgid "Start date is not valid"
-msgstr "Zeitpunkt den Beginns ist ungültig."
 
 #: js/MainScreenCenterPanel.js:111
 msgid "Day"
@@ -355,13 +226,9 @@ msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Möchten Sie diesen Termin wirklich löschen?"
 msgstr[1] "Möchten Sie die ausgewählten Termine wirklich löschen?"
 
-#: js/MainScreenWestPanel.js:32
-msgid "Mini Calendar"
-msgstr "Mini Kalender"
-
-#: js/MainScreenWestPanel.js:54 js/MonthView.js:87
-msgid "WK"
-msgstr "KW"
+#: js/AttendeeStatusFilterModel.js:33
+msgid "Attendee Status"
+msgstr "Teilnehmerstatus"
 
 #: js/Model.js:64 js/Model.js:303
 msgid "Event"
@@ -387,13 +254,50 @@ msgid_plural "Attendee"
 msgstr[0] "Teilnehmer/in"
 msgstr[1] "Teilnehmende"
 
+#: js/Model.js:299 js/EventDetailsPanel.js:251 js/AttendeeFilterModel.js:37
+#: js/AttendeeGridPanel.js:77
+msgid "Attendee"
+msgstr "Teilnehmer"
+
+#: js/Model.js:315 js/AttendeeGridPanel.js:433 js/AttendeeGridPanel.js:451
+#: js/AttendeeGridPanel.js:464 js/AttendeeGridPanel.js:476
+msgid "No Information"
+msgstr "Keine Angabe"
+
+#: js/Model.js:473 js/AttendeeGridPanel.js:166
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] "Ressource"
+msgstr[1] "Ressourcen"
+
 #: js/Model.js:473
 msgid "Resources"
 msgstr "Ressourcen"
 
-#: js/MonthView.js:92
-msgid "{0} more..."
-msgstr "{0} weitere..."
+#: js/CalendarSelectWidget.js:121
+msgid "Originally"
+msgstr "Ursprungskalender"
+
+#: js/DaysView.js:90 js/MonthView.js:82
+msgid "New Event"
+msgstr "Neuer Termin"
+
+#: js/DaysView.js:95
+msgid "{0}, the {1}. of {2}"
+msgstr "{0}, der {1}. {2}"
+
+#: js/MainScreenWestPanel.js:32
+msgid "Mini Calendar"
+msgstr "Mini Kalender"
+
+#: js/MainScreenWestPanel.js:54 js/MonthView.js:87
+msgid "WK"
+msgstr "KW"
+
+#: js/ResourceEditDialog.js:58 js/AttendeeGridPanel.js:174
+#: js/ResourcesGridPanel.js:43
+msgid "Name"
+msgstr "Name"
 
 #: js/ResourceEditDialog.js:63 js/ResourcesGridPanel.js:49
 msgid "Email"
@@ -406,6 +310,106 @@ msgstr "Ist ein Ort"
 #: js/ResourceEditDialog.js:75
 msgid "Enter description..."
 msgstr "Bitte geben Sie eine Beschreibung an."
+
+#: js/EventDetailsPanel.js:51
+msgid "Unknown calendar"
+msgstr "Unbekannter Kalender"
+
+#: js/EventDetailsPanel.js:62
+msgid "{0} {1} o'clock"
+msgstr "{0} {1} Uhr"
+
+#: js/EventDetailsPanel.js:215 js/EventEditDialog.js:101
+msgid "Start Time"
+msgstr "Beginn"
+
+#: js/EventDetailsPanel.js:220 js/EventEditDialog.js:116
+msgid "End Time"
+msgstr "Ende"
+
+#: js/MonthView.js:92
+msgid "{0} more..."
+msgstr "{0} weitere..."
+
+#: js/AttendeeFilterModel.js:104
+msgid "Select Attendee"
+msgstr "Teilnehmer auswählen"
+
+#: js/AdminPanel.js:46
+msgid "Manage Resources"
+msgstr "Verwalte Ressourcen"
+
+#: js/EventEditDialog.js:124
+msgid "whole day"
+msgstr "ganztägig"
+
+#: js/EventEditDialog.js:132
+msgid "non-blocking"
+msgstr "nicht-blockierend"
+
+#: js/EventEditDialog.js:157
+msgid "Private"
+msgstr "Privat"
+
+#: js/EventEditDialog.js:212
+msgid "Enter description"
+msgstr "Bitte geben Sie eine Beschreibung an."
+
+#: js/EventEditDialog.js:342
+msgid "End date is not valid"
+msgstr "Endzeitpunkt ist ungültig."
+
+#: js/EventEditDialog.js:345
+msgid "End date must be after start date"
+msgstr "Der Endzeitpunkt muss nach dem Zeitpunkt des Beginns liegen"
+
+#: js/EventEditDialog.js:358
+msgid "Start date is not valid"
+msgstr "Zeitpunkt den Beginns ist ungültig."
+
+#: js/CalendarPanel.js:41
+msgid "Loading events, please wait..."
+msgstr "Bitte warten, Termine werden übertragen...."
+
+#: js/CalendarPanel.js:227
+msgid "Scheduling Conflict"
+msgstr "Terminüberschneidung"
+
+#: js/CalendarPanel.js:233
+msgid "Ignore Conflict"
+msgstr "Überschneidung ignorieren"
+
+#: js/CalendarPanel.js:240
+msgid "Edit Event"
+msgstr "Termin bearbeiten"
+
+#: js/CalendarPanel.js:251
+msgid "The following attendee are busy at the requested time:"
+msgstr "Die folgenden Teilnehmer sind zur angegebenen Zeit beschäftigt:"
+
+#: js/CalendarPanel.js:272
+msgid "Confirm Update of Series"
+msgstr "Bestätigung der Terminreihe"
+
+#: js/CalendarPanel.js:273
+msgid "Do you really want to update all events of this recurring event series?"
+msgstr "Möchten Sie wirklich alle Termine dieser Reihe aktualisieren?"
+
+#: js/CalendarPanel.js:287
+msgid "Update Event"
+msgstr "Termin aktualisieren"
+
+#: js/CalendarPanel.js:290
+msgid "Update nothing"
+msgstr "Nichts aktualisieren"
+
+#: js/CalendarPanel.js:291
+msgid "Update whole series"
+msgstr "Die ganze Reihe aktualisieren"
+
+#: js/CalendarPanel.js:292
+msgid "Update this event only"
+msgstr "Nur diesen Termin aktualisieren"
 
 #: js/RrulePanel.js:29
 msgid "Recurrances"
@@ -500,57 +504,49 @@ msgstr "Jedes {0}. Jahr"
 msgid "of"
 msgstr " "
 
-#: Model/Attender.php:167
-msgid "unknown"
-msgstr "unbekannt"
+#: js/AttendeeGridPanel.js:103
+msgid "Role"
+msgstr "Rolle"
 
-#: Model/Attender.php:313
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "Dieser Kontakt wurde automatisch bei der Syncronisation angelegt"
+#: js/AttendeeGridPanel.js:112
+msgid "Quantity"
+msgstr "Anzahl"
 
-#: Model/Attender.php:203
-msgid "unknown)"
-msgstr "unbekannt)"
+#: js/AttendeeGridPanel.js:121
+msgid "This is the calendar where the attender has saved this event in"
+msgstr "In diesem Kalender wurde der Termin vom Teilnehmer gespeichert."
 
-#: Model/Event.php:199
-msgid "Start"
-msgstr "Start"
+#: js/AttendeeGridPanel.js:157
+msgid "Type"
+msgstr "Typ"
 
-#: Model/Event.php:200
-msgid "End"
-msgstr "Ende"
+#: js/AttendeeGridPanel.js:164
+msgid "User"
+msgstr "Benutzer"
 
-#: Model/Event.php:202
-msgid "Classification"
-msgstr "Klassifikation"
+#: js/AttendeeGridPanel.js:165
+msgid "Group"
+msgstr "Gruppe"
 
-#: Model/Event.php:206
-msgid "Priority"
-msgstr "Priorität"
+#: js/AttendeeGridPanel.js:320
+msgid "Remove Attender"
+msgstr "Teilnehmer/in entfernen"
 
-#: Model/Event.php:209
-msgid "Url"
-msgstr "Url"
+#: js/AttendeeGridPanel.js:415
+msgid "Click here to invite another attender..."
+msgstr "Klicken Sie hier, um neue Teilnehmer einzuladen..."
 
-#: Model/Event.php:210
-msgid "Recurrance rule"
-msgstr "Wiederholungsregel"
+#: js/AttendeeGridPanel.js:438
+msgid "(as a group member)"
+msgstr "(als Gruppenmitglied)"
 
-#: Model/Event.php:211
-msgid "Is all day event"
-msgstr "Ganztages-Termin"
+#: js/AttendeeGridPanel.js:488
+msgid "Required"
+msgstr "Erforderlich"
 
-#: Model/Event.php:212
-msgid "Organizer timezone"
-msgstr "Zeitzone des Organisators"
-
-#: Model/Event.php:237
-msgid "Yes"
-msgstr "Ja"
-
-#: Model/Event.php:237
-msgid "No"
-msgstr "Nein"
+#: js/AttendeeGridPanel.js:491
+msgid "Optional"
+msgstr "Freiwillig"
 
 #: Preference.php:34
 msgid "All my events"
@@ -588,45 +584,49 @@ msgstr "Sende Benachrichtigungen über eigene Änderungen"
 msgid "Get notifications emails for actions you did yourself"
 msgstr "Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
 
-#: Setup/Initialize.php:39 Setup/Update/Release3.php:165
+#: Controller/EventNotifications.php:257
+msgid "Alarm for event \"%1$s\" at %2$s"
+msgstr "Termin-Erinnerung für \"%1$s\" am %2$s"
+
+#: Controller/EventNotifications.php:260
+msgid "Event invitation \"%1$s\" at %2$s"
+msgstr "Einladung zum Termin  \"%1$s\" am %2$s"
+
+#: Controller/EventNotifications.php:263
+msgid "Event \"%1$s\" at %2$s has been canceled"
+msgstr "Termin \"%1$s\" am %2$s wurde abgesagt"
+
+#: Controller/EventNotifications.php:268
+msgid "Event \"%1$s\" at %2$s has been rescheduled"
+msgstr "Der Termin \"%1$s\" am %2$s wurde verlegt"
+
+#: Controller/EventNotifications.php:272
+msgid "Event \"%1$s\" at %2$s has been updated"
+msgstr "Der Termin \"%1$s\" wurde %2$s verändert"
+
+#: Controller/EventNotifications.php:282
+msgid "%1$s accepted event \"%2$s\" at %3$s"
+msgstr "Zusage von %1$s für den Termin \"%2$s\" am  %3$s"
+
+#: Controller/EventNotifications.php:286
+msgid "%1$s declined event \"%2$s\" at %3$s"
+msgstr "Absage von %1$s für den Termin \"%2$s\" am  %3$s"
+
+#: Controller/EventNotifications.php:290
+msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
+msgstr "Vorläufige Zusage von %1$s für den Termin \"%2$s\" am  %3$s"
+
+#: Controller/EventNotifications.php:294
+msgid "No response from %1$s for event \"%2$s\" at %3$s"
+msgstr "Keine Antwort von %1$s für den Termin \"%2$s\" am  %3$s"
+
+#: Controller/EventNotifications.php:298
+msgid "Attendee changes for event \"%1$s\" at %2$s"
+msgstr "Geänderte Teilnehmer beim Termin  \"%1$s\" am %2$s"
+
+#: Setup/Update/Release3.php:165 Setup/Initialize.php:39
 msgid "All events I attend"
 msgstr "Alle Termine an denen ich teilnehme"
-
-#: views/eventNotification.php:13
-msgid "Updates"
-msgstr "Änderungen"
-
-#: views/eventNotification.php:21
-msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr "%1$s wurde von  \"%2$s\" auf \"%3$s\" geändert"
-
-#: views/eventNotification.php:28
-msgid "%1$s has been invited"
-msgstr "%1$s wurde eingeladen"
-
-#: views/eventNotification.php:33
-msgid "%1$s has been removed"
-msgstr "%1$s wurde entfernt"
-
-#: views/eventNotification.php:40
-msgid "%1$s accepted invitation"
-msgstr "%1$s hat zugesagt"
-
-#: views/eventNotification.php:44
-msgid "%1$s declined invitation"
-msgstr "%1$s hat abgesagt"
-
-#: views/eventNotification.php:48
-msgid "Tentative response from %1$s"
-msgstr "%1$s hat vorläufig zugesagt"
-
-#: views/eventNotification.php:52
-msgid "No response from %1$s"
-msgstr "Keine Antwort von  %1$s"
-
-#: views/eventNotification.php:61
-msgid "Event details"
-msgstr "Termin Details"
 
 #~ msgid "Event \"%1$s\" at %s has been canceled"
 #~ msgstr "Der Termin \"%1$s\" am %s wurde abgesagt"

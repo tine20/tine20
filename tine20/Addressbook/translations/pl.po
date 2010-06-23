@@ -13,26 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-# If the translated text is too long we can just write over the whole sentence without the word 'shared' like: "Zarządzaj książkami adresowymi".
-# Wenn der uebersetzte Text zu lang ist, wir koennen den gesamten Satz einfach ohne das Wort 'shared' ueberschreiben: "Zarządzaj książkami adresowymi".
-#: Acl/Rights.php:99
-msgid "manage shared addressbooks"
-msgstr "edytowanie wspólnych książek adresowych"
-
-# It is also possible to use "wspólne" instead of "współdzielone".
-# Es is auch moeglich, "wspólne" statt "współdzielone" zu verwenden.
-#: Acl/Rights.php:100
-msgid "Create new shared addressbook folders"
-msgstr "Utwórz nowe, wspólne książki adresowe"
-
-#: Acl/Rights.php:103
-msgid "manage shared addressbook favorites"
-msgstr "zarządzanie ulubionymi ze wspólnej książki adresowej"
-
-#: Acl/Rights.php:104
-msgid "Create or update shared addressbook favorites"
-msgstr "Utwórz albo uaktualnij ulubione ze wspólnej książki adresowej"
-
 #: Controller.php:96
 #, python-format
 msgid "%s's personal addressbook"
@@ -102,8 +82,8 @@ msgstr "Telefon sekretarki"
 msgid "Private Contact Data"
 msgstr "Prywatne dane kontaktowe"
 
-#: Export/Pdf.php:89 js/ContactEditDialog.js:258 js/Model.js:161
-#: js/Model.js:162 js/Model.js:163
+#: Export/Pdf.php:89 js/Model.js:161 js/Model.js:162 js/Model.js:163
+#: js/ContactEditDialog.js:258
 msgid "Private Address"
 msgstr "Adres prywatny"
 
@@ -131,15 +111,35 @@ msgstr "Prywatny URL"
 msgid "Other Data"
 msgstr "Inne dane"
 
-#: Export/Pdf.php:115 js/ContactEditDialog.js:144 js/ContactGrid.js:128
-#: js/Model.js:157
+#: Export/Pdf.php:115 js/Model.js:157 js/ContactEditDialog.js:144
+#: js/ContactGrid.js:128
 msgid "Birthday"
 msgstr "Urodziny"
 
-#: Export/Pdf.php:118 js/ContactEditDialog.js:139 js/ContactGrid.js:100
-#: js/Model.js:153
+#: Export/Pdf.php:118 js/Model.js:153 js/ContactEditDialog.js:139
+#: js/ContactGrid.js:100
 msgid "Job Title"
 msgstr "Stanowisko"
+
+# If the translated text is too long we can just write over the whole sentence without the word 'shared' like: "Zarządzaj książkami adresowymi".
+# Wenn der uebersetzte Text zu lang ist, wir koennen den gesamten Satz einfach ohne das Wort 'shared' ueberschreiben: "Zarządzaj książkami adresowymi".
+#: Acl/Rights.php:99
+msgid "manage shared addressbooks"
+msgstr "edytowanie wspólnych książek adresowych"
+
+# It is also possible to use "wspólne" instead of "współdzielone".
+# Es is auch moeglich, "wspólne" statt "współdzielone" zu verwenden.
+#: Acl/Rights.php:100
+msgid "Create new shared addressbook folders"
+msgstr "Utwórz nowe, wspólne książki adresowe"
+
+#: Acl/Rights.php:103
+msgid "manage shared addressbook favorites"
+msgstr "zarządzanie ulubionymi ze wspólnej książki adresowej"
+
+#: Acl/Rights.php:104
+msgid "Create or update shared addressbook favorites"
+msgstr "Utwórz albo uaktualnij ulubione ze wspólnej książki adresowej"
 
 #: js/Addressbook.js:29 js/Model.js:103
 msgid "Addressbook"
@@ -151,6 +151,132 @@ msgstr[2] "książki adresowe"
 #: js/Addressbook.js:54 Setup/setup.xml:546
 msgid "Internal Contacts"
 msgstr "Kontakty wewnętrzne"
+
+#: js/ContactGridDetailsPanel.js:63 js/Model.js:99
+msgid "Contacts"
+msgstr "Kontakty"
+
+#: js/ContactGridDetailsPanel.js:66
+msgid "Select contact"
+msgstr "Wybierz kontakt"
+
+#: js/ContactGridDetailsPanel.js:132 js/Model.js:151
+#: js/ContactEditDialog.js:120 js/ContactEditDialog.js:385
+#: js/ContactGrid.js:98 Setup/setup.xml:608
+msgid "Company"
+msgstr "Firma"
+
+#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
+#: js/Model.js:152 js/ContactEditDialog.js:168 js/ContactGrid.js:114
+msgid "Phone"
+msgstr "Telefon"
+
+#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
+#: js/ContactEditDialog.js:172 js/ContactGrid.js:115
+msgid "Mobile"
+msgstr "Komórka"
+
+#: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
+#: js/ContactEditDialog.js:176 js/ContactGrid.js:116
+msgid "Fax"
+msgstr "Faks"
+
+#: js/ContactGridDetailsPanel.js:143 js/ContactGridDetailsPanel.js:167
+#: js/ContactEditDialog.js:192
+msgid "E-Mail"
+msgstr "E-mail"
+
+#: js/ContactGridDetailsPanel.js:145 js/ContactGridDetailsPanel.js:169
+#: js/ContactEditDialog.js:203 js/ContactGrid.js:123
+msgid "Web"
+msgstr "WWW"
+
+#: js/ContactGridDetailsPanel.js:156
+msgid "Private"
+msgstr "Prywatne"
+
+#: js/ContactGridDetailsPanel.js:179
+msgid "Info"
+msgstr "Informacja"
+
+#: js/SearchCombo.js:92
+msgid "Searching..."
+msgstr "Wyszukiwanie..."
+
+#: js/Model.js:99 js/Model.js:144
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "kontakt"
+msgstr[1] "kontakty"
+msgstr[2] "kontaktów"
+
+#: js/Model.js:103
+msgid "Addressbooks"
+msgstr "książki adresowe"
+
+#: js/Model.js:144
+msgid "User Account"
+msgstr "Konto użytkownika"
+
+#: js/Model.js:147
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
+
+#: js/Model.js:149 js/ContactEditDialog.js:104 js/ContactGrid.js:95
+msgid "First Name"
+msgstr "Imię"
+
+#: js/Model.js:150 js/ContactEditDialog.js:112 js/ContactEditDialog.js:385
+#: js/ContactGrid.js:94
+msgid "Last Name"
+msgstr "Nazwisko"
+
+#: js/Model.js:154 js/ContactEditDialog.js:152 js/ContactGrid.js:101
+msgid "Job Role"
+msgstr "Pełniona funkcja"
+
+#: js/Model.js:155 js/ContactGrid.js:125
+msgid "Note"
+msgstr "Notatka"
+
+#: js/Model.js:158 js/Model.js:161 js/ContactEditDialog.js:238
+#: js/ContactEditDialog.js:261 js/ContactGrid.js:103
+msgid "Street"
+msgstr "Ulica"
+
+#: js/Model.js:158 js/Model.js:159 js/Model.js:160 js/ContactEditDialog.js:235
+msgid "Company Address"
+msgstr "Adres firmy"
+
+#: js/Model.js:159 js/Model.js:162 js/ContactEditDialog.js:247
+#: js/ContactEditDialog.js:270
+msgid "Postal Code"
+msgstr "Kod pocztowy"
+
+#: js/Model.js:160 js/Model.js:163 js/ContactEditDialog.js:250
+#: js/ContactEditDialog.js:273 js/ContactGrid.js:104
+msgid "City"
+msgstr "Miasto"
+
+#: js/Model.js:164 js/ContactGrid.js:92
+msgid "Type"
+msgstr "Ikona"
+
+#: js/Model.js:165
+msgid "Last modified"
+msgstr "Ostatnio zmieniono"
+
+#: js/Model.js:166
+msgid "Last modifier"
+msgstr "Ostatnio zmienione przez"
+
+#: js/Model.js:167 js/ContactGrid.js:129
+msgid "Creation Time"
+msgstr "Utworzono"
+
+#: js/Model.js:168
+msgid "Creator"
+msgstr "Utworzył(a)"
 
 #: js/ContactEditDialog.js:36 js/ContactEditDialog.js:43
 msgid "Map"
@@ -168,24 +294,9 @@ msgstr "Forma grzecznościowa"
 msgid "Title"
 msgstr "Tytuł"
 
-#: js/ContactEditDialog.js:104 js/ContactGrid.js:95 js/Model.js:149
-msgid "First Name"
-msgstr "Imię"
-
 #: js/ContactEditDialog.js:108
 msgid "Middle Name"
 msgstr "Drugie imię"
-
-#: js/ContactEditDialog.js:112 js/ContactEditDialog.js:385
-#: js/ContactGrid.js:94 js/Model.js:150
-msgid "Last Name"
-msgstr "Nazwisko"
-
-#: js/ContactEditDialog.js:120 js/ContactEditDialog.js:385
-#: js/ContactGrid.js:98 js/ContactGridDetailsPanel.js:132 js/Model.js:151
-#: Setup/setup.xml:608
-msgid "Company"
-msgstr "Firma"
 
 #: js/ContactEditDialog.js:125 js/ContactGrid.js:99
 msgid "Unit"
@@ -199,31 +310,11 @@ msgstr "Wyświetlana nazwa"
 msgid "Suffix"
 msgstr "Dopełnienie nazwiska (Sufix)"
 
-#: js/ContactEditDialog.js:152 js/ContactGrid.js:101 js/Model.js:154
-msgid "Job Role"
-msgstr "Pełniona funkcja"
-
 # I think, it would be better, if we use the plural form "Informacje" instead of "Informacja".
 # Ich denke, es waere besser, wenn wir die Pluralform "Informacje" anstatt von "Informacja" verwenden.
 #: js/ContactEditDialog.js:163
 msgid "Contact Information"
 msgstr "Informacje kontaktowe"
-
-#: js/ContactEditDialog.js:168 js/ContactGrid.js:114
-#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
-#: js/Model.js:152
-msgid "Phone"
-msgstr "Telefon"
-
-#: js/ContactEditDialog.js:172 js/ContactGrid.js:115
-#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
-msgid "Mobile"
-msgstr "Komórka"
-
-#: js/ContactEditDialog.js:176 js/ContactGrid.js:116
-#: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
-msgid "Fax"
-msgstr "Faks"
 
 #: js/ContactEditDialog.js:180 js/ContactGrid.js:119
 msgid "Phone (private)"
@@ -237,28 +328,9 @@ msgstr "Komórka (prywatna)"
 msgid "Fax (private)"
 msgstr "Faks (prywatny)"
 
-#: js/ContactEditDialog.js:192 js/ContactGridDetailsPanel.js:143
-#: js/ContactGridDetailsPanel.js:167
-msgid "E-Mail"
-msgstr "E-mail"
-
 #: js/ContactEditDialog.js:197
 msgid "E-Mail (private)"
 msgstr "E-mail (prywatny)"
-
-#: js/ContactEditDialog.js:203 js/ContactGrid.js:123
-#: js/ContactGridDetailsPanel.js:145 js/ContactGridDetailsPanel.js:169
-msgid "Web"
-msgstr "WWW"
-
-#: js/ContactEditDialog.js:235 js/Model.js:158 js/Model.js:159 js/Model.js:160
-msgid "Company Address"
-msgstr "Adres firmy"
-
-#: js/ContactEditDialog.js:238 js/ContactEditDialog.js:261
-#: js/ContactGrid.js:103 js/Model.js:158 js/Model.js:161
-msgid "Street"
-msgstr "Ulica"
 
 #: js/ContactEditDialog.js:241 js/ContactEditDialog.js:264
 msgid "Street 2"
@@ -268,16 +340,6 @@ msgstr "Ulica 2"
 #: js/ContactGrid.js:105
 msgid "Region"
 msgstr "Województwo"
-
-#: js/ContactEditDialog.js:247 js/ContactEditDialog.js:270 js/Model.js:159
-#: js/Model.js:162
-msgid "Postal Code"
-msgstr "Kod pocztowy"
-
-#: js/ContactEditDialog.js:250 js/ContactEditDialog.js:273
-#: js/ContactGrid.js:104 js/Model.js:160 js/Model.js:163
-msgid "City"
-msgstr "Miasto"
 
 #: js/ContactEditDialog.js:254 js/ContactEditDialog.js:277
 #: js/ContactGrid.js:107
@@ -299,10 +361,6 @@ msgstr "Eksportuj jako PDF"
 #: js/ContactEditDialog.js:385
 msgid "Either {0} or {1} must be given"
 msgstr "Należy wprowadzić {0} albo {1}"
-
-#: js/ContactGrid.js:92 js/Model.js:164
-msgid "Type"
-msgstr "Ikona"
 
 #: js/ContactGrid.js:93
 msgid "Tags"
@@ -352,10 +410,6 @@ msgstr "E-mail (prywatny)"
 msgid "URL (private)"
 msgstr "URL (prywatny)"
 
-#: js/ContactGrid.js:125 js/Model.js:155
-msgid "Note"
-msgstr "Notatka"
-
 #: js/ContactGrid.js:126
 msgid "Timezone"
 msgstr "Strefa czasowa"
@@ -363,10 +417,6 @@ msgstr "Strefa czasowa"
 #: js/ContactGrid.js:127
 msgid "Geo"
 msgstr "Położenie geograficzne"
-
-#: js/ContactGrid.js:129 js/Model.js:167
-msgid "Creation Time"
-msgstr "Utworzono"
 
 #: js/ContactGrid.js:130
 msgid "Last Modified Time"
@@ -430,57 +480,6 @@ msgstr "Komórka prywatna"
 msgid "Internal Contact"
 msgstr "Kontakty wewnętrzne"
 
-#: js/ContactGridDetailsPanel.js:63 js/Model.js:99
-msgid "Contacts"
-msgstr "Kontakty"
-
-#: js/ContactGridDetailsPanel.js:66
-msgid "Select contact"
-msgstr "Wybierz kontakt"
-
-#: js/ContactGridDetailsPanel.js:156
-msgid "Private"
-msgstr "Prywatne"
-
-#: js/ContactGridDetailsPanel.js:179
-msgid "Info"
-msgstr "Informacja"
-
-#: js/Model.js:99 js/Model.js:144
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "kontakt"
-msgstr[1] "kontakty"
-msgstr[2] "kontaktów"
-
-#: js/Model.js:103
-msgid "Addressbooks"
-msgstr "książki adresowe"
-
-#: js/Model.js:144
-msgid "User Account"
-msgstr "Konto użytkownika"
-
-#: js/Model.js:147
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
-
-#: js/Model.js:165
-msgid "Last modified"
-msgstr "Ostatnio zmieniono"
-
-#: js/Model.js:166
-msgid "Last modifier"
-msgstr "Ostatnio zmienione przez"
-
-#: js/Model.js:168
-msgid "Creator"
-msgstr "Utworzył(a)"
-
-#: js/SearchCombo.js:92
-msgid "Searching..."
-msgstr "Wyszukiwanie..."
-
 #: Preference.php:34
 msgid "All contacts"
 msgstr "Wszystkie kontakty"
@@ -501,7 +500,7 @@ msgstr "Domyślny ulubiony"
 msgid "The default favorite which is loaded on addressbook startup"
 msgstr "Domyślny ulubiony adres ładowany podczas otwierania skrzynki adresowej"
 
-#: Setup/Initialize.php:51 Setup/Update/Release3.php:38
+#: Setup/Update/Release3.php:38 Setup/Initialize.php:51
 msgid "All contacts I have read grants for"
 msgstr "Wszystkie kontakty, które wolno mi czytać"
 

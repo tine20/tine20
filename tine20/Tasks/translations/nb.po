@@ -13,6 +13,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s's personlige oppgaver"
+
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr "behandle delte oppgaver lister"
@@ -29,109 +34,42 @@ msgstr ""
 msgid "Create or update shared tasks favorites"
 msgstr ""
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Varslinger for Oppgaver"
+#: Model/Task.php:183
+msgid "Due"
+msgstr "Utløper"
 
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s's personlige oppgaver"
+#: Model/Task.php:184
+msgid "Organizer"
+msgstr "Planlegger"
 
-#: js/GridPanel.js:56
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Vil du virkelig slette valgt oppgave?"
-msgstr[1] "Vil du virkelig slette valgte oppgaver?"
+#: Model/Task.php:185
+msgid "Description"
+msgstr "Beskrivelse"
 
-#: js/GridPanel.js:91
-msgid "Quick search"
-msgstr "Hurtig søk"
-
-#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
-msgid "Summary"
-msgstr "Oppsumering"
-
-#: js/GridPanel.js:94 js/GridPanel.js:155
-msgid "Due Date"
-msgstr "Utløps Dato"
-
-#: js/GridPanel.js:96 js/GridPanel.js:218
-msgid "Responsible"
-msgstr "Ansvarlig"
-
-#: js/GridPanel.js:121
-msgid "Failed"
-msgstr "Feilet"
-
-#: js/GridPanel.js:121
-msgid "Could not save task."
-msgstr "Klarte ikke å lagre oppgave."
-
-#: js/GridPanel.js:140
-msgid "Tags"
-msgstr "Merker"
-
-#: js/GridPanel.js:141 Model/Task.php:195
-msgid "Lead"
-msgstr ""
-
-#: js/GridPanel.js:151
-msgid "Add a task..."
-msgstr "Legg til en oppgave..."
-
-#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
+#: Model/Task.php:186 js/TaskEditDialog.js:189 js/GridPanel.js:163
 msgid "Priority"
 msgstr "Prioritet"
 
-#: js/GridPanel.js:177 Model/Task.php:188
-msgid "Percent"
-msgstr "Prosent"
-
-#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
-#: Model/Task.php:187
+#: Model/Task.php:187 js/TaskEditDialog.js:209 js/GridPanel.js:190
+#: js/Status.js:33
 msgid "Status"
 msgstr "Status"
 
-#: js/GridPanel.js:204
-msgid "Creation Time"
-msgstr "Opprettelses Tid"
+#: Model/Task.php:188 js/GridPanel.js:177
+msgid "Percent"
+msgstr "Prosent"
 
-#: js/GridPanel.js:211 js/TaskEditDialog.js:213
-msgid "Completed"
-msgstr "Fullført"
-
-#: js/GridPanel.js:267
-msgid "Show closed"
-msgstr "Vis lukkede"
-
-#: js/Status.js:187 Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "I-PROSESS"
-
-#: js/TaskEditDialog.js:142
-msgid "You have to supply a due date, because an alarm ist set!"
+#: Model/Task.php:195 js/GridPanel.js:141
+msgid "Lead"
 msgstr ""
 
-#: js/TaskEditDialog.js:186
-msgid "Due date"
-msgstr "Utløps dato"
+#: Model/Task.php:201
+msgid "Telephone"
+msgstr ""
 
-#: js/TaskEditDialog.js:192
-msgid "Add Responsible ..."
-msgstr "Legg til Ansvarlige ..."
-
-#: js/TaskEditDialog.js:199
-msgid "Notes"
-msgstr "Notater"
-
-#: js/TaskEditDialog.js:200
-msgid "Enter description..."
-msgstr "Tast inn beskrivelse..."
-
-#: js/TaskEditDialog.js:205
-msgid "Percentage"
-msgstr "Prosent"
+#: Model/Task.php:202
+msgid "Email"
+msgstr ""
 
 #: js/Tasks.js:99
 msgid "Task"
@@ -153,25 +91,83 @@ msgstr[1] "å gjøre lister"
 msgid "to do lists"
 msgstr "å gjøre lister"
 
-#: Model/Task.php:183
-msgid "Due"
-msgstr "Utløper"
-
-#: Model/Task.php:184
-msgid "Organizer"
-msgstr "Planlegger"
-
-#: Model/Task.php:185
-msgid "Description"
-msgstr "Beskrivelse"
-
-#: Model/Task.php:201
-msgid "Telephone"
+#: js/TaskEditDialog.js:142
+msgid "You have to supply a due date, because an alarm ist set!"
 msgstr ""
 
-#: Model/Task.php:202
-msgid "Email"
-msgstr ""
+#: js/TaskEditDialog.js:181 js/GridPanel.js:93 js/GridPanel.js:144
+msgid "Summary"
+msgstr "Oppsumering"
+
+#: js/TaskEditDialog.js:186
+msgid "Due date"
+msgstr "Utløps dato"
+
+#: js/TaskEditDialog.js:192
+msgid "Add Responsible ..."
+msgstr "Legg til Ansvarlige ..."
+
+#: js/TaskEditDialog.js:199
+msgid "Notes"
+msgstr "Notater"
+
+#: js/TaskEditDialog.js:200
+msgid "Enter description..."
+msgstr "Tast inn beskrivelse..."
+
+#: js/TaskEditDialog.js:205
+msgid "Percentage"
+msgstr "Prosent"
+
+#: js/TaskEditDialog.js:213 js/GridPanel.js:211
+msgid "Completed"
+msgstr "Fullført"
+
+#: js/GridPanel.js:56
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Vil du virkelig slette valgt oppgave?"
+msgstr[1] "Vil du virkelig slette valgte oppgaver?"
+
+#: js/GridPanel.js:91
+msgid "Quick search"
+msgstr "Hurtig søk"
+
+#: js/GridPanel.js:94 js/GridPanel.js:155
+msgid "Due Date"
+msgstr "Utløps Dato"
+
+#: js/GridPanel.js:96 js/GridPanel.js:218
+msgid "Responsible"
+msgstr "Ansvarlig"
+
+#: js/GridPanel.js:121
+msgid "Failed"
+msgstr "Feilet"
+
+#: js/GridPanel.js:121
+msgid "Could not save task."
+msgstr "Klarte ikke å lagre oppgave."
+
+#: js/GridPanel.js:140
+msgid "Tags"
+msgstr "Merker"
+
+#: js/GridPanel.js:151
+msgid "Add a task..."
+msgstr "Legg til en oppgave..."
+
+#: js/GridPanel.js:204
+msgid "Creation Time"
+msgstr "Opprettelses Tid"
+
+#: js/GridPanel.js:267
+msgid "Show closed"
+msgstr "Vis lukkede"
+
+#: js/Status.js:187 Setup/setup.xml:339
+msgid "IN-PROCESS"
+msgstr "I-PROSESS"
 
 #: Preference.php:29
 msgid "All my tasks"
@@ -185,7 +181,11 @@ msgstr ""
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr ""
 
-#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Varslinger for Oppgaver"
+
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
 msgid "All tasks of my taskslists"
 msgstr ""
 

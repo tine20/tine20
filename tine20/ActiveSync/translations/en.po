@@ -13,6 +13,16 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: js/Model.js:47
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Device"
+msgstr[1] "Devices"
+
+#: js/Model.js:47
+msgid "Devices"
+msgstr "Devices"
+
 #: js/Application.js:32
 msgid "Active Sync"
 msgstr "Active Sync"
@@ -44,16 +54,6 @@ msgstr "resetted"
 #: js/Application.js:107
 msgid "Set Sync Filter"
 msgstr "Set Sync Filter"
-
-#: js/Model.js:47
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Device"
-msgstr[1] "Devices"
-
-#: js/Model.js:47
-msgid "Devices"
-msgstr "Devices"
 
 #: Setup/setup.xml:465
 msgid "Default Policy"
