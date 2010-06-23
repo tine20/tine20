@@ -749,14 +749,19 @@ class Zend_Mail_Protocol_Imap
      * @return bool success
      * @throws Zend_Mail_Protocol_Exception
      */
-    public function copy($folder, $from, $to = null)
+    public function copy($folder, $from, $to = null, $uid = false)
     {
-        $set = (int)$from;
-        if ($to != null) {
-            $set .= ':' . ($to == INF ? '*' : (int)$to);
+        if (is_array($from)) {
+            $set = implode(',', $from);
+        } else if ($to === null) {
+            $set = (int)$from;
+        } else if ($to === INF) {
+            $set = (int)$from . ':*';
+        } else {
+            $set = (int)$from . ':' . (int)$to;
         }
-
-        return $this->requestAndResponse('COPY', array($set, $this->escapeString($folder)), true);
+        
+        return $this->requestAndResponse($uid ? 'UID COPY' : 'COPY', array($set, $this->escapeString($folder)), true);
     }
 
     /**

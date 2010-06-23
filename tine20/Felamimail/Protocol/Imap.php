@@ -264,27 +264,6 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
     }
     
     /**
-     * copy message set from current folder to other folder
-     *
-     * - overwritten to use UID COPY
-     * 
-     * @param string   $folder destination folder
-     * @param int|null $to     if null only one message ($from) is fetched, else it's the
-     *                         last message, INF means last message avaible
-     * @return bool success
-     * @throws Zend_Mail_Protocol_Exception
-     */
-    public function copy($folder, $from, $to = null, $uid = false)
-    {
-        $set = (int)$from;
-        if ($to != null) {
-            $set .= ':' . (is_infinite($to) ? '*' : (int)$to);
-        }
-
-        return $this->requestAndResponse($uid ? 'UID COPY' : 'COPY', array($set, $this->escapeString($folder)), true);
-    }
-    
-    /**
      * Open connection to IMAP server
      * - overwritten to adjust connection timeout (static late binding/timeout is defined as constant) :(
      *
