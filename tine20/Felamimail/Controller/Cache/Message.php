@@ -121,7 +121,8 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         
         // get imap connection and select folder
         $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
-        $imap->examineFolder($folder->globalname);
+        // expunge function does also select the folder
+        $imap->expunge($folder->globalname);
         
         $folderCache = Felamimail_Controller_Cache_Folder::getInstance();
 
@@ -381,6 +382,38 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $folder->cache_status);           
                 }
             }
+        }
+        
+        // lets update message flags if some time is left
+        if ($timeElapsed < $_time) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' start updating flags'
+            );
+            for ($i=$folder->cache_totalcount; $i > 0; $i -= $this->_importCountPerStep) {
+                $firstMessageSequence = ($i-$this->_importCountPerStep) >= 0 ? $i-$this->_importCountPerStep : 0;
+                $cachedMessages = $this->_getCachedMessagesChunked($folder, $firstMessageSequence);
+
+                $flags = $imap->getFlags($cachedMessages->messageuid);
+
+                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+                
+                foreach ($cachedMessages as $cachedMessage) {
+                    if (array_key_exists($cachedMessage->messageuid, $flags)) {
+                        $newFlags = array_key_exists('flags', $flags[$cachedMessage->messageuid]) ? $flags[$cachedMessage->messageuid]['flags'] : arary();
+                        $this->_backend->setFlags($cachedMessage, $newFlags);
+                    }
+                }
+                
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                
+                $timeElapsed = round(((microtime(true)) - $timeStart));
+                if($timeElapsed > $_time) {
+                    break;
+                }
+            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' updating flags finished'
+            );
         }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $folder->cache_status);     
