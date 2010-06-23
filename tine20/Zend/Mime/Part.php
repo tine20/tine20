@@ -46,6 +46,7 @@ class Zend_Mime_Part {
     public $language;
     protected $_content;
     protected $_isStream = false;
+    protected $_filters = array();
 
 
     /**
@@ -96,7 +97,6 @@ class Zend_Mime_Part {
             throw new Zend_Mime_Exception('Attempt to get a stream from a string part');
         }
 
-        //stream_filter_remove(); // ??? is that right?
         switch ($this->encoding) {
             case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
                 $filter = stream_filter_append(
@@ -122,7 +122,24 @@ class Zend_Mime_Part {
                 break;
             default:
         }
+        
+        foreach ($this->_filters as $filter) {
+            $filter = stream_filter_append(
+                $this->_content,
+                $filter,
+                STREAM_FILTER_READ
+            );
+            if (!is_resource($filter)) {
+                require_once 'Zend/Mime/Exception.php';
+                throw new Zend_Mime_Exception("Failed to append $filter filter");
+            }
+        }
         return $this->_content;
+    }
+    
+    public function appendFilter($filter)
+    {
+        $this->_filters[] = $filter;
     }
 
     /**
