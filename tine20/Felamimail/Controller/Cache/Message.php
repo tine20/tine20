@@ -389,7 +389,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                 ' start updating flags'
             );
-            for ($i=$folder->cache_totalcount; $i > 0; $i -= $this->_importCountPerStep) {
+            for ($i=$folder->cache_totalcount; $i > $folder->cache_totalcount - 100; $i -= $this->_importCountPerStep) {
                 $firstMessageSequence = ($i-$this->_importCountPerStep) >= 0 ? $i-$this->_importCountPerStep : 0;
                 $cachedMessages = $this->_getCachedMessagesChunked($folder, $firstMessageSequence);
 
