@@ -625,7 +625,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $cache = Tinebase_Core::get('cache');
         $cacheId = 'getMessageBody' . $message->getId();
         if ($cache->test($cacheId)) {
-            return $cache->load($cacheId);
+        #    return $cache->load($cacheId);
         }
         
         $partId = null;
@@ -644,9 +644,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $bodyPart = $this->getMessagePart($message, $partId);
         
-        $body = $this->_convertCharset($bodyPart, $partStructure);
+        $this->_appendCharsetFilter($bodyPart, $partStructure);
         
-        $body = $this->_convertContentType($partStructure['contentType'], $_contentType, $body);
+        $body = $this->_convertContentType($partStructure['contentType'], $_contentType, $bodyPart->getContent());
         
         if($_contentType != Zend_Mime::TYPE_TEXT) {
             $body = $this->_purifyBodyContent($body);
@@ -995,9 +995,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param  Zend_Mime_Part  $_part
      * @param  array           $_structure
      * @param  string          $_contentType
-     * @return string
      */
-    protected function _convertCharset(Zend_Mime_Part $_part, $_structure)
+    protected function _appendCharsetFilter(Zend_Mime_Part $_part, $_structure)
     {
         $charset = isset($_structure['parameters']['charset']) ? $_structure['parameters']['charset'] : 'iso-8859-15';
         if($charset == 'utf8') {
@@ -1005,13 +1004,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         // check if charset is supported by iconv
-        if (!iconv($charset, 'utf-8', '')) {
+        if (iconv($charset, 'utf-8', '') === false) {
             $charset = 'iso-8859-15';
         }
         
         $_part->appendFilter("convert.iconv.$charset/utf-8//IGNORE");
-        
-        return $_part->getContent();
     }
     
     /**
