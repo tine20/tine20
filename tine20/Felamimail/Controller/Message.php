@@ -999,8 +999,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected function _appendCharsetFilter(Zend_Mime_Part $_part, $_structure)
     {
         $charset = isset($_structure['parameters']['charset']) ? $_structure['parameters']['charset'] : 'iso-8859-15';
-        if($charset == 'utf8') {
+        
+        if ($charset == 'utf8') {
             $charset = 'utf-8';
+        }
+        
+        if (strpos($charset, '.') !== false) {
+            $charset = 'iso-8859-15';
         }
         
         // check if charset is supported by iconv
