@@ -181,6 +181,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 
         $lastFolderId = null;
         $imapBackend  = null;
+        $folderIds    = array();
         
         // set flags on imap server
         foreach ($messagesToFlag as $message) {
@@ -193,6 +194,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             if ($lastFolderId != $message->folder_id) {
                 $imapBackend    = $this->_getBackendAndSelectFolder($message->folder_id);
                 $lastFolderId   = $message->folder_id;
+                $folderIds[]    = $message->folder_id;
             }
             
             $imapMessageUids[] = $message->messageuid;
@@ -226,7 +228,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
         if (in_array(Zend_Mail_Storage::FLAG_SEEN, $flags)) {
-            
+            foreach ($folderIds as $folderId) {
+                Felamimail_Controller_Cache_Message::getInstance()->update($folderId);
+            }
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' set flags on cache');
@@ -263,6 +267,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 
         $lastFolderId = null;
         $imapBackend  = null;
+        $folderIds    = array();
         
         // set flags on imap server
         foreach ($messagesToFlag as $message) {
@@ -275,6 +280,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             if ($lastFolderId != $message->folder_id) {
                 $imapBackend    = $this->_getBackendAndSelectFolder($message->folder_id);
                 $lastFolderId   = $message->folder_id;
+                $folderIds[]    = $message->folder_id;
             }
             
             $imapMessageUids[] = $message->messageuid;
@@ -304,6 +310,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         );
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        
+        if (in_array(Zend_Mail_Storage::FLAG_SEEN, $flags)) {
+            foreach ($folderIds as $folderId) {
+                Felamimail_Controller_Cache_Message::getInstance()->update($folderId);
+            }
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cleared flags on cache');
     }
