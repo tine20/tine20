@@ -401,23 +401,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             return false;
         }
         
-        var targetFolderId = dropEvent.target.attributes.folder_id;
-        var gridSm = this.app.getMainScreen().getCenterPanel().getGrid().getSelectionModel();
-        var filter = gridSm.getSelectionFilter();
-        
-        Ext.Ajax.request({
-            params: {
-                method: 'Felamimail.moveMessages',
-                targetFolderId: targetFolderId,
-                filterData: filter
-            },
-            scope: this,
-            success: function(result, request) {
-                var updatedSourceFolder = Tine.Felamimail.folderBackend.recordReader(result);
-                this.app.updateFolderInStore(updatedSourceFolder);
-            }
-        });
-        
+        var targetFolderId = dropEvent.target.attributes.folder_id,
+            targetFolder = this.app.getFolderStore().getById(targetFolderId);
+                
+        this.app.getMainScreen().getCenterPanel().moveSelectedMessages(targetFolder);
         return true;
     },
     
@@ -441,7 +428,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             
             // TODO move this to grid panel
             if (selectedNode && selectedNode.id == record.id && (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done'))) {
-                var contentPanel = contentPanel = this.app.getMainScreen().getCenterPanel();
+                var contentPanel = this.app.getMainScreen().getCenterPanel();
                 if (contentPanel) {
                     //console.log('update grid');
                     // TODO do not update if multiple messages are selected (this does not work if messages are moved!)
@@ -542,6 +529,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {Ext.Tooltip} tip
      */
     updateFolderTip: function(tip) {
+        //console.log(Ext.EventObject);
+        //if (Ext.EventObject.mousedown)
         var folderId = this.getElsParentsNodeId(tip.triggerElement),
             folder = this.app.getFolderStore().getById(folderId),
             account = Tine.Felamimail.loadAccountStore().getById(folderId);
