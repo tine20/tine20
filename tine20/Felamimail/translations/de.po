@@ -71,7 +71,7 @@ msgstr "Posteingang"
 msgid "Drafts"
 msgstr "Entwürfe"
 
-#: js/Model.js:356 js/FelamimailGridPanel.js:396
+#: js/Model.js:356 js/FelamimailGridPanel.js:412
 msgid "Sent"
 msgstr "Gesendet"
 
@@ -120,52 +120,52 @@ msgstr "SMTP Fehler"
 msgid "No connection to SMTP server."
 msgstr "Keine Verbindung zum SMTP Server"
 
-#: js/FelamimailTreePanel.js:400
+#: js/FelamimailTreePanel.js:402
 msgid "Invalid drop target"
 msgstr "Ungültiger Ordner"
 
-#: js/FelamimailTreePanel.js:400
+#: js/FelamimailTreePanel.js:402
 msgid "Could not move message(s)."
 msgstr "Konnte Nachricht(en) nicht verschieben."
 
-#: js/FelamimailTreePanel.js:542
+#: js/FelamimailTreePanel.js:544
 msgid "Total Messages:"
 msgstr "Nachrichten Insgesammt:"
 
-#: js/FelamimailTreePanel.js:546
+#: js/FelamimailTreePanel.js:548
 msgid "Unread Messages:"
 msgstr "Ungelesene Nachrichten:"
 
-#: js/FelamimailTreePanel.js:566
+#: js/FelamimailTreePanel.js:568
 #, fuzzy, python-format
 msgid "Fetching messages... ({0}% done)"
 msgstr "Hohle Nachrichten ({0}% erledigt)"
 
-#: js/FelamimailTreePanel.js:629 js/FelamimailTreePanel.js:634
-#: js/FelamimailTreePanel.js:645
+#: js/FelamimailTreePanel.js:637 js/FelamimailTreePanel.js:642
+#: js/FelamimailTreePanel.js:653
 msgid "Marked"
 msgstr "Markiert"
 
-#: js/FelamimailTreePanel.js:635
+#: js/FelamimailTreePanel.js:643
 msgid "Contains marked messages"
 msgstr "Enthält markierte Nachrichten"
 
-#: js/FelamimailTreePanel.js:650
+#: js/FelamimailTreePanel.js:658
 msgid "Unread"
 msgstr "Ungelesen"
 
-#: js/FelamimailTreePanel.js:651
+#: js/FelamimailTreePanel.js:659
 msgid "Contains unread messages"
 msgstr "Enthält ungelesene Nachrichten"
 
-#: js/FelamimailGridDetailsPanel.js:134 js/FelamimailGridPanel.js:268
-#: js/FelamimailGridPanel.js:377 js/FelamimailMessageEditDialog.js:302
+#: js/FelamimailGridDetailsPanel.js:134 js/FelamimailGridPanel.js:284
+#: js/FelamimailGridPanel.js:393 js/FelamimailMessageEditDialog.js:302
 #: Controller/Message.php:1086
 msgid "Subject"
 msgstr "Betreff"
 
-#: js/FelamimailGridDetailsPanel.js:135 js/FelamimailGridPanel.js:269
-#: js/FelamimailGridPanel.js:383 js/FelamimailMessageEditDialog.js:279
+#: js/FelamimailGridDetailsPanel.js:135 js/FelamimailGridPanel.js:285
+#: js/FelamimailGridPanel.js:399 js/FelamimailMessageEditDialog.js:279
 msgid "From"
 msgstr "Von"
 
@@ -193,113 +193,113 @@ msgstr "Anhänge"
 msgid "No Messages found or the cache is empty."
 msgstr "Keine Nachrichten gefunden oder Emailcache leer."
 
-#: js/FelamimailGridPanel.js:139
+#: js/FelamimailGridPanel.js:155
 msgid "Write"
 msgstr "Verfassen"
 
-#: js/FelamimailGridPanel.js:148
+#: js/FelamimailGridPanel.js:164
 msgid "Reply"
 msgstr "Antworten"
 
-#: js/FelamimailGridPanel.js:158
+#: js/FelamimailGridPanel.js:174
 msgid "Reply To All"
 msgstr "Allen antworten"
 
-#: js/FelamimailGridPanel.js:168
+#: js/FelamimailGridPanel.js:184
 msgid "Forward"
 msgstr "Weiterleiten"
 
-#: js/FelamimailGridPanel.js:177
+#: js/FelamimailGridPanel.js:193
 msgid "Toggle Flag"
 msgstr "Markieren"
 
-#: js/FelamimailGridPanel.js:186
+#: js/FelamimailGridPanel.js:202
 msgid "Mark read/unread"
 msgstr "(Un)gelesen markieren"
 
-#: js/FelamimailGridPanel.js:196 js/FelamimailGridPanel.js:197
-#: js/FelamimailGridPanel.js:199
+#: js/FelamimailGridPanel.js:212 js/FelamimailGridPanel.js:213
+#: js/FelamimailGridPanel.js:215
 msgid "Delete"
 msgstr "Löschen"
 
-#: js/FelamimailGridPanel.js:207
+#: js/FelamimailGridPanel.js:223
 msgid "Add Account"
 msgstr "Konto hinzufügen"
 
-#: js/FelamimailGridPanel.js:215 js/FelamimailGridPanel.js:860
-#: js/FelamimailGridPanel.js:870 js/FelamimailGridPanel.js:874
+#: js/FelamimailGridPanel.js:231 js/FelamimailGridPanel.js:884
+#: js/FelamimailGridPanel.js:894 js/FelamimailGridPanel.js:898
 msgid "Print Preview"
 msgstr "Druck Vorschau"
 
-#: js/FelamimailGridPanel.js:223
+#: js/FelamimailGridPanel.js:239
 msgid "Print Message"
 msgstr "Nachricht drucken"
 
-#: js/FelamimailGridPanel.js:267
+#: js/FelamimailGridPanel.js:283
 msgid "Subject/From"
 msgstr "Betreff/Von"
 
-#: js/FelamimailGridPanel.js:270 js/FelamimailGridPanel.js:389
+#: js/FelamimailGridPanel.js:286 js/FelamimailGridPanel.js:405
 msgid "To"
 msgstr "An"
 
-#: js/FelamimailGridPanel.js:271
+#: js/FelamimailGridPanel.js:287
 msgid "Cc"
 msgstr "Kopie"
 
-#: js/FelamimailGridPanel.js:272
+#: js/FelamimailGridPanel.js:288
 msgid "Bcc"
 msgstr "Blindkopie"
 
-#: js/FelamimailGridPanel.js:273 js/FelamimailGridPanel.js:404
+#: js/FelamimailGridPanel.js:289 js/FelamimailGridPanel.js:420
 msgid "Received"
 msgstr "Empfangen"
 
-#: js/FelamimailGridPanel.js:358
+#: js/FelamimailGridPanel.js:374
 msgid "Id"
 msgstr "Id"
 
-#: js/FelamimailGridPanel.js:411
+#: js/FelamimailGridPanel.js:427
 msgid "Size"
 msgstr "Größe"
 
-#: js/FelamimailGridPanel.js:451
+#: js/FelamimailGridPanel.js:467
 msgid "Answered"
 msgstr "Beantwortet"
 
-#: js/FelamimailGridPanel.js:454
+#: js/FelamimailGridPanel.js:470
 msgid "Forwarded"
 msgstr "Weitergeleitet"
 
-#: js/FelamimailGridPanel.js:457
+#: js/FelamimailGridPanel.js:473
 msgid "Recent"
 msgstr "Neu"
 
-#: js/FelamimailGridPanel.js:651
+#: js/FelamimailGridPanel.js:675
 msgid "Error"
 msgstr "Fehler"
 
-#: js/FelamimailGridPanel.js:651
+#: js/FelamimailGridPanel.js:675
 msgid "No Account configured"
 msgstr "Kein Konto eingerichtet"
 
-#: js/FelamimailGridPanel.js:703
+#: js/FelamimailGridPanel.js:727
 msgid "wrote"
 msgstr "geschriebn"
 
-#: js/FelamimailGridPanel.js:705
+#: js/FelamimailGridPanel.js:729
 msgid "Re: "
 msgstr "Aw: "
 
-#: js/FelamimailGridPanel.js:712
+#: js/FelamimailGridPanel.js:736
 msgid "Original Message"
 msgstr "Originalnachricht"
 
-#: js/FelamimailGridPanel.js:720
+#: js/FelamimailGridPanel.js:744
 msgid "Original message"
 msgstr "Originalnachricht"
 
-#: js/FelamimailGridPanel.js:724
+#: js/FelamimailGridPanel.js:748
 msgid "Fwd: "
 msgstr "Fwd:"
 
