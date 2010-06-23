@@ -423,7 +423,56 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             return $messages;
         }
     }
-
+    
+    /**
+     * get messages flags
+     *
+     * @param int $from
+     * @param int|null $to
+     * @return array of flags
+     */
+    public function getFlags($from, $to = null, $_useUid = null)
+    {
+        $useUid = ($_useUid === null) ? $this->_useUid : (bool) $_useUid;
+        $summary = $this->_protocol->fetch(array('UID', 'FLAGS'), $from, $to, $useUid);
+                
+        // fetch returns a different structure when fetching one or multiple messages
+        if($to === null && ctype_digit("$from")) {
+            $summary = array(
+                $from => $summary
+            );
+        }
+        
+        $messages = array();
+        
+        foreach($summary as $id => $data) {
+            $flags = array();
+            foreach ($data['FLAGS'] as $flag) {
+                $flags[] = isset(self::$_knownFlags[$flag]) ? self::$_knownFlags[$flag] : $flag;
+            }
+    
+            if($this->_useUid === true) {
+                $key = $data['UID'];
+            } else {
+                $key = $id;
+            }
+            
+            
+            $messages[$key] = array(
+                'flags'     => $flags,
+                'uid'       => $data['UID']
+            );
+        }
+        
+        if($to === null && ctype_digit("$from")) {
+            // only one message requested
+            return $messages[$from];
+        } else {
+            // multiple messages requested
+            return $messages;
+        }
+    }
+    
     /**
      * 
      * Enter description here ...
@@ -807,6 +856,19 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             require_once 'Zend/Mail/Storage/Exception.php';
             throw new Zend_Mail_Storage_Exception('cannot set \Deleted flags');
         }
+        $this->_protocol->expunge();
+    }
+    
+    /**
+     * remove all messages marked as deleted
+     * 
+     * @param string $globalName
+     * @return void
+     * @throws Zend_Mail_Storage_Exception
+     */
+    public function expunge($globalName)
+    {
+        $this->selectFolder($globalName);
         $this->_protocol->expunge();
     }
     
