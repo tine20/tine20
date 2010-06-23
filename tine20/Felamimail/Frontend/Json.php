@@ -189,34 +189,23 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_recordToJson($message);
     }
     
-//    /**
-//     * deletes existing messages
-//     *
-//     * @param  array $ids  message ids
-//     * @return string
-//     * @return array
-//     * 
-//     * @todo only add flag to messages that should be deleted and delete them on server when updating cache?
-//     */
-//    public function deleteMessages($ids)
-//    {
-//        #$deletedRecords = Felamimail_Controller_Message::getInstance()->delete($ids);
-//        #$this->_backgroundDelete($deletedRecords);
-//        Felamimail_Controller_Message::getInstance()->delete($ids);
-//    }
-
-//    /**
-//     * deletes existing messages by filter
-//     *
-//     * @param  array $filter
-//     * @return array
-//     */
-//    public function deleteMessagesByFilter($filter)
-//    {
-//        $filter = new Felamimail_Model_MessageFilter($filter);
-//        $deletedRecords = Felamimail_Controller_Message::getInstance()->deleteByFilter($filter);
-//        $this->_backgroundDelete($deletedRecords);
-//    }
+    /**
+     * deletes existing messages
+     *
+     * @param  array $ids  message ids
+     * @return string
+     * @return array
+     * 
+     * @todo only add flag to messages that should be deleted and delete them on server when updating cache?
+     */
+    public function deleteMessages($ids)
+    {
+        Felamimail_Controller_Message::getInstance()->delete($ids);
+        
+        return array(
+            'status'    => 'success'
+        );
+    }
 
     /**
      * move messsages to folder
