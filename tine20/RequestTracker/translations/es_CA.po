@@ -1,0 +1,92 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - RequestTracker\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: CANADA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: js/Model.js:42 js/TicketGridPanel.js:43
+msgid "Ticket"
+msgid_plural "Tickets"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/StatusCombo.js:26
+msgid "New"
+msgstr ""
+
+#: js/StatusCombo.js:27
+msgid "Open"
+msgstr ""
+
+#: js/StatusCombo.js:28
+msgid "Stalled"
+msgstr ""
+
+#: js/StatusCombo.js:29
+msgid "Waiting"
+msgstr ""
+
+#: js/StatusCombo.js:30
+msgid "Pending"
+msgstr ""
+
+#: js/StatusCombo.js:31
+msgid "Resolved"
+msgstr ""
+
+#: js/StatusCombo.js:32
+msgid "Rejected"
+msgstr ""
+
+#: js/StatusCombo.js:33
+msgid "Deleted"
+msgstr ""
+
+#: js/StatusCombo.js:51 js/TicketGridPanel.js:96
+msgid "Status"
+msgstr ""
+
+#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:69
+msgid "Ticket ID"
+msgstr ""
+
+#: js/TicketGridPanel.js:45 js/TicketGridPanel.js:72
+msgid "Queue"
+msgstr ""
+
+#: js/TicketGridPanel.js:46 js/TicketGridPanel.js:78
+msgid "Subject"
+msgstr ""
+
+#: js/TicketGridPanel.js:47 js/TicketGridPanel.js:84
+msgid "Requestors"
+msgstr ""
+
+#: js/TicketGridPanel.js:48 js/TicketGridPanel.js:90
+msgid "Owner"
+msgstr ""
+
+#: js/TicketGridPanel.js:50
+msgid "Description"
+msgstr ""
+
+#: js/TicketGridPanel.js:102
+msgid "Final Priority"
+msgstr ""
+
+#: js/TicketGridPanel.js:108
+msgid "Due"
+msgstr ""
+
+#: js/TreePanel.js:24
+msgid "All Queues"
+msgstr ""

@@ -47,6 +47,7 @@ class Tinebase_Translation
         'de',      // German               Cornelius Weiss <c.weiss@metaways.de>
         'en',      // English              Cornelius Weiss <c.weiss@metaways.de>
         'es',      // Spanish              Enrique Palacios <enriquepalaciosc@gmail.com>
+        'es_CA',   // Catalan              Damià Verger - JUG Països Catalans <dverger@joomla.cat>
         'fr',      // French               Rémi Peltier <rpeltier@agglo-clermont.fr>
         'it',      // Italian              Roberto Rossi <impiastro@gmail.com>
         'ja',      // Japanese             Yuuki Kitamura <ykitamura@clasi-co.jp>

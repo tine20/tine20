@@ -1,0 +1,202 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Tasks\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: CANADA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr ""
+
+#: Acl/Rights.php:90
+msgid "manage shared task lists"
+msgstr ""
+
+#: Acl/Rights.php:91
+msgid "Create new shared tasks lists"
+msgstr ""
+
+#: Acl/Rights.php:94
+msgid "manage shared tasks favorites"
+msgstr ""
+
+#: Acl/Rights.php:95
+msgid "Create or update shared tasks favorites"
+msgstr ""
+
+#: Model/Task.php:183
+msgid "Due"
+msgstr ""
+
+#: Model/Task.php:184
+msgid "Organizer"
+msgstr ""
+
+#: Model/Task.php:185
+msgid "Description"
+msgstr ""
+
+#: Model/Task.php:186 js/TaskEditDialog.js:189 js/GridPanel.js:163
+msgid "Priority"
+msgstr ""
+
+#: Model/Task.php:187 js/TaskEditDialog.js:209 js/GridPanel.js:190
+#: js/Status.js:33
+msgid "Status"
+msgstr ""
+
+#: Model/Task.php:188 js/GridPanel.js:177
+msgid "Percent"
+msgstr ""
+
+#: Model/Task.php:195 js/GridPanel.js:141
+msgid "Lead"
+msgstr ""
+
+#: Model/Task.php:201
+msgid "Telephone"
+msgstr ""
+
+#: Model/Task.php:202
+msgid "Email"
+msgstr ""
+
+#: js/Tasks.js:99
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Tasks.js:99
+msgid "Tasks"
+msgstr ""
+
+#: js/Tasks.js:103
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Tasks.js:103
+msgid "to do lists"
+msgstr ""
+
+#: js/TaskEditDialog.js:142
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr ""
+
+#: js/TaskEditDialog.js:181 js/GridPanel.js:93 js/GridPanel.js:144
+msgid "Summary"
+msgstr ""
+
+#: js/TaskEditDialog.js:186
+msgid "Due date"
+msgstr ""
+
+#: js/TaskEditDialog.js:192
+msgid "Add Responsible ..."
+msgstr ""
+
+#: js/TaskEditDialog.js:199
+msgid "Notes"
+msgstr ""
+
+#: js/TaskEditDialog.js:200
+msgid "Enter description..."
+msgstr ""
+
+#: js/TaskEditDialog.js:205
+msgid "Percentage"
+msgstr ""
+
+#: js/TaskEditDialog.js:213 js/GridPanel.js:211
+msgid "Completed"
+msgstr ""
+
+#: js/GridPanel.js:56
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/GridPanel.js:91
+msgid "Quick search"
+msgstr ""
+
+#: js/GridPanel.js:94 js/GridPanel.js:155
+msgid "Due Date"
+msgstr ""
+
+#: js/GridPanel.js:96 js/GridPanel.js:218
+msgid "Responsible"
+msgstr ""
+
+#: js/GridPanel.js:121
+msgid "Failed"
+msgstr ""
+
+#: js/GridPanel.js:121
+msgid "Could not save task."
+msgstr ""
+
+#: js/GridPanel.js:140
+msgid "Tags"
+msgstr ""
+
+#: js/GridPanel.js:151
+msgid "Add a task..."
+msgstr ""
+
+#: js/GridPanel.js:204
+msgid "Creation Time"
+msgstr ""
+
+#: js/GridPanel.js:267
+msgid "Show closed"
+msgstr ""
+
+#: js/Status.js:187 Setup/setup.xml:339
+msgid "IN-PROCESS"
+msgstr ""
+
+#: Preference.php:29
+msgid "All my tasks"
+msgstr ""
+
+#: Preference.php:65
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:66
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr ""
+
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr ""
+
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+msgid "All tasks of my taskslists"
+msgstr ""
+
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr ""
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr ""
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr ""

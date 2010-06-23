@@ -1,0 +1,134 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Phone\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: CANADA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
+msgid "Edit phone settings"
+msgstr ""
+
+#: js/Phone.js:58 js/Phone.js:253 js/Models.js:70
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Phone.js:69
+msgid "Phones"
+msgstr ""
+
+#: js/Phone.js:276
+msgid "Line"
+msgstr ""
+
+#: js/Phone.js:285
+msgid "Number"
+msgstr ""
+
+#: js/Phone.js:294
+msgid "Cancel"
+msgstr ""
+
+#: js/Phone.js:304
+msgid "Dial"
+msgstr ""
+
+#: js/Phone.js:324
+msgid "Error"
+msgstr ""
+
+#: js/Phone.js:325
+msgid "Not possible to dial."
+msgstr ""
+
+#: js/Phone.js:468
+msgid "Dial number"
+msgstr ""
+
+#: js/Phone.js:469
+msgid "Initiate a new outgoing call"
+msgstr ""
+
+#: js/Phone.js:530
+msgid "Incoming call"
+msgstr ""
+
+#: js/Phone.js:534
+msgid "Outgoing call"
+msgstr ""
+
+#: js/Phone.js:542
+msgid "unknown number"
+msgstr ""
+
+#: js/Phone.js:579
+msgid "Search:"
+msgstr ""
+
+#: js/Phone.js:664
+msgid "Source or Destination"
+msgstr ""
+
+#: js/Phone.js:680
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr ""
+
+#: js/Phone.js:681 js/Phone.js:725
+msgid "No calls to display"
+msgstr ""
+
+#: js/Phone.js:691
+msgid "Direction"
+msgstr ""
+
+#: js/Phone.js:692
+msgid "Source"
+msgstr ""
+
+#: js/Phone.js:693
+msgid "Caller Id"
+msgstr ""
+
+#: js/Phone.js:694
+msgid "Destination"
+msgstr ""
+
+#: js/Phone.js:695
+msgid "Start"
+msgstr ""
+
+#: js/Phone.js:696
+msgid "Connected"
+msgstr ""
+
+#: js/Phone.js:697
+msgid "Disconnected"
+msgstr ""
+
+#: js/Phone.js:698
+msgid "Duration"
+msgstr ""
+
+#: js/Phone.js:699
+msgid "Ringing"
+msgstr ""
+
+#: js/Phone.js:700
+msgid "Call ID"
+msgstr ""
+
+#: js/Models.js:74
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] ""
+msgstr[1] ""
