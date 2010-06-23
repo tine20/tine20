@@ -185,7 +185,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         }
         
         // read flag
-        if (preg_match('/\\Seen/', $data->flags)) {
+        if (in_array('\Seen', $data->flags)) {
             $_xmlNode->appendChild(new DOMElement('Read', 1, 'uri:Email'));                 
         } else {
             $_xmlNode->appendChild(new DOMElement('Read', 0, 'uri:Email'));
