@@ -67,7 +67,6 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
                 header("Cache-Control: max-age=0");
                 header('Content-Disposition: attachment; filename="' . $part->filename . '"');
-                header("Content-Description: " . (!empty($part->description)) ? $part->description : "email attachment");
                 header("Content-Type: " . $part->type);
 
                 fpassthru($part->getDecodedStream());
