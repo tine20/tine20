@@ -128,6 +128,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.dropConfig = {
             ddGroup: this.ddGroup || 'TreeDD',
             appendOnly: this.ddAppendOnly === true,
+            notifyEnter : function() {this.isDropSensitive = true;}.createDelegate(this),
+            notifyOut : function() {this.isDropSensitive = false;}.createDelegate(this),
             onNodeOver : function(n, dd, e, data) {
                 var node = n.node;
                 
@@ -535,7 +537,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             folder = this.app.getFolderStore().getById(folderId),
             account = Tine.Felamimail.loadAccountStore().getById(folderId);
             
-        if (folder) {
+        if (folder && !this.isDropSensitive) {
             var info = [
                 '<table>',
                     '<tr>',
@@ -562,8 +564,11 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         var folderId = this.getElsParentsNodeId(tip.triggerElement),
             folder = this.app.getFolderStore().getById(folderId),
             progress = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 100);
-            
-        tip.body.dom.innerHTML = String.format(this.app.i18n._('Fetching messages... ({0}% done)'), progress);
+        if (! this.isDropSensitive) {
+            tip.body.dom.innerHTML = String.format(this.app.i18n._('Fetching messages... ({0}% done)'), progress);
+        } else {
+            return false;
+        }
     },
     
     /**
@@ -575,8 +580,11 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             folder = this.app.getFolderStore().getById(folderId),
             count = folder.get('cache_unreadcount');
             
-            
-        tip.body.dom.innerHTML = String.format(this.app.i18n.n_('{0} unread message', '{0} unread messages', count), count);
+        if (! this.isDropSensitive) {
+            tip.body.dom.innerHTML = String.format(this.app.i18n.n_('{0} unread message', '{0} unread messages', count), count);
+        } else {
+            return false;
+        }
     },
     
     /**
