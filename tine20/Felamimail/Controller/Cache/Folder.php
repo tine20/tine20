@@ -340,7 +340,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                     $folderData['localName'] = mb_convert_encoding($folderData['localName'], "utf-8", "UTF7-IMAP");
                 }
                 
-                $folder = $this->_backend->getByBackendAndGlobalName($_account->getId(), $folderData['globalName']);
+                $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_account->getId(), $folderData['globalName']);
                 $folder->is_selectable = ($folderData['isSelectable'] == '1');
                 $folder->has_children = ($folderData['hasChildren'] == '1');
                 
