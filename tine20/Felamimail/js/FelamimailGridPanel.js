@@ -127,6 +127,22 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
+     * skip initial till we know the INBOX id
+     */
+    initialLoad: function() {
+        var accountId = this.app.getActiveAccount().id,
+            inbox = this.app.getFolderStore().queryBy(function(record) {
+                return record.get('account_id') === accountId && record.get('localname') === 'INBOX';
+            }, this).first();
+            
+        if (! inbox) {
+            this.initialLoad.defer(100, this, arguments);
+        }
+        
+        return Tine.Felamimail.GridPanel.superclass.initialLoad.apply(this, arguments);
+    },
+    
+    /**
      * init actions with actionToolbar, contextMenu and actionUpdater
      * 
      * @private
@@ -490,7 +506,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     deleteSelectedMessages: function() {
         var sm = this.getGrid().getSelectionModel(),
             filter = sm.getSelectionFilter(),
-            msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection();
+            msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection(),
+            lastIdx = this.getStore().indexOf(msgs.last()),
+            nextRecord = this.getStore().getAt(++lastIdx);
         
         msgs.each(function(msg) {
             var isSeen = msg.hasFlag('\\Seen'),
@@ -502,9 +520,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, this);
         
         this.pagingToolbar.refresh.disable();
+        sm.selectRecords([nextRecord]);
+        
         Tine.Felamimail.messageBackend.addFlags(filter, '\\Deleted', { 
             callback: function() {
-                this.loadData(true, true, false);
+                this.loadData(true, false, true);
             }.createDelegate(this)
         });
     },
@@ -522,7 +542,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         var sm = this.getGrid().getSelectionModel(),
             filter = sm.getSelectionFilter(),
-            msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection();
+            msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection(),
+            lastIdx = this.getStore().indexOf(msgs.last()),
+            nextRecord = this.getStore().getAt(++lastIdx);
         
         msgs.each(function(msg) {
             var isSeen = msg.hasFlag('\\Seen'),
@@ -535,10 +557,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, this);
         
         this.pagingToolbar.refresh.disable();
+        sm.selectRecords([nextRecord]);
+        
         Tine.Felamimail.messageBackend.moveMessages(filter, folder.id, { 
             callback: function() {
                 folder.set('cache_status', 'incomplete');
-                this.loadData(true, true, false);
+                this.loadData(true, false, true);
             }.createDelegate(this)
         });
     },
