@@ -309,7 +309,6 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         
         try {
             $deletedRecords = $this->_contentController->delete($_id);
-            $this->_contentController->deleteMessagesFromImapServer($deletedRecords);
         } catch (Zend_Mail_Storage_Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
         }
@@ -355,9 +354,9 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         if(isset($xmlData->Read)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Id: $_id set read flag: $xmlData->Read");
             if((int)$xmlData->Read === 1) {
-                $this->_contentController->addFlags($_id, array(Zend_Mail_Storage::FLAG_SEEN));
+                $this->_contentController->addFlags($_id, Zend_Mail_Storage::FLAG_SEEN);
             } else {
-                $this->_contentController->clearFlags($_id, array(Zend_Mail_Storage::FLAG_SEEN));
+                $this->_contentController->clearFlags($_id, Zend_Mail_Storage::FLAG_SEEN);
             }
         }
         
