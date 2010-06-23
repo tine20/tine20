@@ -646,7 +646,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $this->_appendCharsetFilter($bodyPart, $partStructure);
         
-        $body = $this->_convertContentType($partStructure['contentType'], $_contentType, $bodyPart->getContent());
+        $body = $this->_convertContentType($partStructure['contentType'], $_contentType, $bodyPart->getDecodedContent());
         
         if($_contentType != Zend_Mime::TYPE_TEXT) {
             $body = $this->_purifyBodyContent($body);
@@ -1004,6 +1004,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $charset = 'utf-8';
         }
         
+        // the stream filter does not like charsets with a dot in its name
+        // stream_filter_append(): unable to create or locate filter "convert.iconv.ansi_x3.4-1968/utf-8//IGNORE"
         if (strpos($charset, '.') !== false) {
             $charset = 'iso-8859-15';
         }
@@ -1013,7 +1015,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $charset = 'iso-8859-15';
         }
         
-        $_part->appendFilter("convert.iconv.$charset/utf-8//IGNORE");
+        $_part->appendDecodeFilter("convert.iconv.$charset/utf-8//IGNORE");
     }
     
     /**
