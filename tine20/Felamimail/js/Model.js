@@ -47,6 +47,33 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
     containersName: 'Message lists',
     getTitle: function() {
         return this.get('number') ? (this.get('number') + ' ' + this.get('title')) : false;
+    },
+    
+    /**
+     * @property seenExp
+     * @type RegExp
+     */
+    seenExp: new RegExp('[ \,]*\\\\Seen'),
+    
+    /**
+     * checks if message is seen
+     * 
+     * @return {Bool}
+     */
+    isSeen: function() {
+        var flags = this.get('flags');
+        return !! flags.match(this.seenExp);
+    },
+    
+    /**
+     * flag message as seen
+     * 
+     * @return {void}
+     */
+    setSeen: function() {
+        if (! this.isSeen()) {
+            this.set('flags', this.get('flags') + ' \\Seen');
+        }
     }
 });
 
@@ -75,7 +102,91 @@ Tine.Felamimail.Model.Message.getDefaultData = function() {
 Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Felamimail',
     modelName: 'Message',
-    recordClass: Tine.Felamimail.Model.Message
+    recordClass: Tine.Felamimail.Model.Message,
+    
+    /**
+     * move messsages to folder
+     *
+     * @param  array $filterData filter data
+     * @param  string $targetFolderId
+     * @return  {Number} Ext.Ajax transaction id
+     */
+    moveMessages: function(filter, targetFolderId, options) {
+        options = options || {};
+        options.params = options.params || {};
+        
+        var p = options.params;
+        
+        p.method = this.appName + '.moveMessages';
+        p.filterData = filter;
+        p.targetFolderId = targetFolderId;
+        
+        options.beforeSuccess = function(response) {
+            return [Tine.Felamimail.folderBackend.recordReader(response)];
+        };
+        
+        return this.doXHTTPRequest(options);
+    },
+    
+    /**
+     * sets the given flag(s) 
+     * 
+     * @param {String/Array/Filter} ids
+     * @param {String/Array} flag
+     * @param {} options
+     */
+    setFlag: function(ids, flag, options) {
+        options = options || {};
+        options.params = options.params || {};
+        
+        var p = options.params;
+        
+        p.method = this.appName + '.setFlag';
+        p.ids = ids;
+        p.flag = flag;
+        
+        return this.doXHTTPRequest(options);
+    },
+    
+    /**
+     * set flag of messages
+     *
+     * @param  array ids
+     * @param  array flag
+     */
+    addFlags: function(ids, flag, options)
+    {
+        options = options || {};
+        options.params = options.params || {};
+        
+        var p = options.params;
+        
+        p.method = this.appName + '.addFlags';
+        p.ids = ids;
+        p.flag = flag;
+        
+        return this.doXHTTPRequest(options);
+    },
+    
+    /**
+     * clear flag of messages
+     *
+     * @param array  ids
+     * @param string flag
+     */
+    clearFlag: function(ids, flag, options)
+    {
+        options = options || {};
+        options.params = options.params || {};
+        
+        var p = options.params;
+        
+        p.method = this.appName + '.clearFlag';
+        p.ids = ids;
+        p.flag = flag;
+        
+        return this.doXHTTPRequest(options);
+    }
 });
 
 
