@@ -160,8 +160,8 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     public function addFlag($_message, $_flag)
     {
         if (empty($_flag)) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Not setting empty flag.');
-            return FALSE;
+            // nothing todo
+            return;
         }
         
         $data = array(
@@ -171,7 +171,42 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         );
         $this->_db->insert($this->_tablePrefix . $this->_foreignTables['flags'], $data);
     }
+    
+    /**
+     * set flags of message
+     *
+     * @param  mixed         $_messages
+     * @param  string|array  $_flags
+     */
+    public function setFlags($_messages, $_flags)
+    {
+        if ($_messages instanceof Tinebase_Record_RecordSet) {
+            $messages = $_messages;
+        } elseif ($_messages instanceof Felamimail_Model_Message) {
+            $messages = new Tinebase_Record_RecordSet('Felamimail_Model_Message', array($_messages));;
+        } else {
+            throw new Tinebase_Exception_UnexpectedValue('$_messages must be instance of Felamimail_Model_Message');
+        }
+        
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('message_id') . ' IN (?)', $messages->getArrayOfIds())
+        );
+        $this->_db->delete($this->_tablePrefix . $this->_foreignTables['flags'], $where);
+        
+        $flags = (array) $_flags;
 
+        foreach ($flags as $flag) {
+            foreach ($messages as $message) {
+                $data = array(
+                    'flag'          => $flag,
+                    'message_id'    => $message->getId(),
+                    'folder_id'     => $message->folder_id
+                );
+                $this->_db->insert($this->_tablePrefix . $this->_foreignTables['flags'], $data);
+            }
+        }
+    }
+    
     /**
      * remove flag from message / all messages in a folder
      *
