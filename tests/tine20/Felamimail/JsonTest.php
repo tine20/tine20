@@ -493,7 +493,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     {
         Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
         $folderBackend = new Felamimail_Backend_Folder();
-        $folder = $folderBackend->getByBackendAndGlobalName($this->_account->getId(), $_name);
+        $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $_name);
         
         return $folder;
     }
