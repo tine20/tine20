@@ -483,8 +483,7 @@ msgstr "Preferit per defecte"
 #: Preference.php:76
 #, fuzzy
 msgid "The default favorite which is loaded on addressbook startup"
-msgstr ""
-"El preferit per defecte que es carrega a l'inici de la llibreta d'adreces"
+msgstr "El preferit per defecte que es carrega a l'inici de la llibreta d'adreces"
 
 #: Setup/Update/Release3.php:38 Setup/Initialize.php:51
 msgid "All contacts I have read grants for"

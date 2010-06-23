@@ -62,11 +62,8 @@ msgid "unknown"
 msgstr "desconegut"
 
 #: Model/Attender.php:313
-msgid ""
-"This contact has been automatically added by the system as an event attender"
-msgstr ""
-"El sistema ha afegit automàticament aquest contacte com a organitzador de "
-"l'esdeveniment"
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr "El sistema ha afegit automàticament aquest contacte com a organitzador de l'esdeveniment"
 
 #: Model/Attender.php:203
 msgid "unknown)"
@@ -196,12 +193,8 @@ msgid "Please Change Selection"
 msgstr "Canvieu la selecció"
 
 #: js/MainScreenCenterPanel.js:322
-msgid ""
-"Your selection contains recurring events. Recuring events must be deleted "
-"seperatly!"
-msgstr ""
-"Aquesta selecció conté esdeveniments recurrents. Els esdeveniments "
-"recurrents s'han d'eliminar per separat!"
+msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
+msgstr "Aquesta selecció conté esdeveniments recurrents. Els esdeveniments recurrents s'han d'eliminar per separat!"
 
 #: js/MainScreenCenterPanel.js:336
 msgid "Confirm Deletion of Series"
@@ -209,9 +202,7 @@ msgstr "Confirma eliminació de sèries"
 
 #: js/MainScreenCenterPanel.js:337
 msgid "Do you really want to delete all events of this recurring event series?"
-msgstr ""
-"Esteu segur que voleu eliminar tots els esdeveniments d'aquestes sèries "
-"d'esdeveniments recurrents?"
+msgstr "Esteu segur que voleu eliminar tots els esdeveniments d'aquestes sèries d'esdeveniments recurrents?"
 
 #: js/MainScreenCenterPanel.js:350
 msgid "Delete Event"
@@ -403,9 +394,7 @@ msgstr "Confirma actualització de sèries"
 
 #: js/CalendarPanel.js:273
 msgid "Do you really want to update all events of this recurring event series?"
-msgstr ""
-"Esteu segur que voleu actualitzar tots els esdeveniments d'aquestes sèries "
-"d'esdeveniments recurrents?"
+msgstr "Esteu segur que voleu actualitzar tots els esdeveniments d'aquestes sèries d'esdeveniments recurrents?"
 
 #: js/CalendarPanel.js:287
 msgid "Update Event"
@@ -585,14 +574,8 @@ msgid "Get Notification Emails"
 msgstr "Rep correus electrònics de notificació"
 
 #: Preference.php:93
-msgid ""
-"The level of actions you want to be notified about. Please note that "
-"organizers will get notifications for all updates including attendee answers "
-"unless this preference is set to \"Never\""
-msgstr ""
-"El nivell de les accions de les quals voleu que se us notifiqui. Observeu "
-"que els organitzadors rebran notificacions de tota actualització incloent "
-"les respostes dels assistents a menys que establiu aquesta opció a \"Mai\""
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgstr "El nivell de les accions de les quals voleu que se us notifiqui. Observeu que els organitzadors rebran notificacions de tota actualització incloent les respostes dels assistents a menys que establiu aquesta opció a \"Mai\""
 
 #: Preference.php:96
 msgid "Send Notifications Emails of own Actions"

@@ -148,14 +148,8 @@ msgid "Delete all existing users and groups"
 msgstr "Elimina tots els usuaris i grups existents"
 
 #: js/AuthenticationPanel.js:123
-msgid ""
-"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to "
-"LDAP ?"
-msgstr ""
-"El canvi d'SQL a LDAP eliminarà tots els comptes d'usuari, els grups i els "
-"rols existents. Esteu segur que voleu canviar l'administració "
-"d'emmagatzematge de comptes a LDAP?"
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgstr "El canvi d'SQL a LDAP eliminarà tots els comptes d'usuari, els grups i els rols existents. Esteu segur que voleu canviar l'administració d'emmagatzematge de comptes a LDAP?"
 
 #: js/AuthenticationPanel.js:186 js/AuthenticationPanel.js:207
 #: js/EmailPanel.js:156
@@ -296,15 +290,11 @@ msgstr "Configuració de redireccionament"
 
 #: js/AuthenticationPanel.js:555
 msgid "Redirect Url (redirect to login screen if empty)"
-msgstr ""
-"Url on redirigir (es redirigeix a la pantalla d'inici de sessió si ho deixeu "
-"buit)"
+msgstr "Url on redirigir (es redirigeix a la pantalla d'inici de sessió si ho deixeu buit)"
 
 #: js/AuthenticationPanel.js:567
 msgid "Redirect Always (if No, only redirect after logout)"
-msgstr ""
-"Sempre es redirigeix (si poseu No, només es redirigirà després d'un "
-"tancament de sessió)"
+msgstr "Sempre es redirigeix (si poseu No, només es redirigirà després d'un tancament de sessió)"
 
 #: js/AuthenticationPanel.js:578
 msgid "Redirect to referring site, if exists"
@@ -419,12 +409,8 @@ msgid "Performing Environment Checks..."
 msgstr "Es realitzen comprovacions d'entorn..."
 
 #: js/EnvCheckGridPanel.js:133
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-"No s'ha trobat cap {0}. Proveu a canviar els criteris de cerca, les opcions "
-"de visualització o el {1} en què cerqueu."
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "No s'ha trobat cap {0}. Proveu a canviar els criteris de cerca, les opcions de visualització o el {1} en què cerqueu."
 
 #: js/EnvCheckGridPanel.js:163
 msgid "Check"

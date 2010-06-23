@@ -526,21 +526,15 @@ msgstr "Compte de correu electrònic per defecte"
 
 #: Preference.php:98
 msgid "The default email account to use when sending mails."
-msgstr ""
-"Compte de correu electrònic a utilitzar per defecte per a l'enviament de "
-"correus."
+msgstr "Compte de correu electrònic a utilitzar per defecte per a l'enviament de correus."
 
 #: Preference.php:101
 msgid "Email Update Interval"
 msgstr "Interval d'actualització de correu electrònic"
 
 #: Preference.php:102
-msgid ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
-msgstr ""
-"Amb quina periodicitat hauria el Felamimail de comprovar si hi ha nous "
-"correus electrònics (en minuts). \"0\" significa mai."
+msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
+msgstr "Amb quina periodicitat hauria el Felamimail de comprovar si hi ha nous correus electrònics (en minuts). \"0\" significa mai."
 
 #: Preference.php:105
 msgid "Use in Addressbook"
@@ -548,8 +542,7 @@ msgstr "Utilitza-ho a la llibreta d'adreces"
 
 #: Preference.php:106
 msgid "Compose Emails from the Addressbook with Felamimail."
-msgstr ""
-"Redacta correus electrònics des de la llibreta d'adreces amb el Felamimail."
+msgstr "Redacta correus electrònics des de la llibreta d'adreces amb el Felamimail."
 
 #: Preference.php:109
 msgid "Use for NOTES"

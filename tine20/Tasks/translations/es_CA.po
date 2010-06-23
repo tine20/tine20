@@ -92,8 +92,7 @@ msgstr "llistes de coses a fer"
 
 #: js/TaskEditDialog.js:142
 msgid "You have to supply a due date, because an alarm ist set!"
-msgstr ""
-"Heu de proporcionar una data de venciment, perquè s'estableix una alarma!"
+msgstr "Heu de proporcionar una data de venciment, perquè s'estableix una alarma!"
 
 #: js/TaskEditDialog.js:181 js/GridPanel.js:93 js/GridPanel.js:144
 msgid "Summary"

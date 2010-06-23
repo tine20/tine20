@@ -331,20 +331,12 @@ msgid "Defaults"
 msgstr "Valors per defecte"
 
 #: js/LeadEditDialog.js:260
-msgid ""
-"You do not have the run right for the Tasks application or it is not "
-"activated."
-msgstr ""
-"No disposeu dels permisos per a executar l'aplicació Tasques o bé aquesta no "
-"es troba activada."
+msgid "You do not have the run right for the Tasks application or it is not activated."
+msgstr "No disposeu dels permisos per a executar l'aplicació Tasques o bé aquesta no es troba activada."
 
 #: js/LeadEditDialog.js:271
-msgid ""
-"You do not have the run right for the Sales application or it is not "
-"activated."
-msgstr ""
-"No disposeu dels permisos per a executar l'aplicació Vendes o bé aquesta no "
-"es troba activada."
+msgid "You do not have the run right for the Sales application or it is not activated."
+msgstr "No disposeu dels permisos per a executar l'aplicació Vendes o bé aquesta no es troba activada."
 
 #: js/LeadEditDialog.js:309
 msgid "Enter short name"

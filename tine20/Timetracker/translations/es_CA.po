@@ -293,8 +293,7 @@ msgstr "Gestiona la comptabilització/liquidació"
 
 #: js/TimeaccountEditDialog.js:242
 msgid "The grant to manage clearing of Timesheets"
-msgstr ""
-"Permís per a gestionar la comptabilització/liquidació dels fulls de temps"
+msgstr "Permís per a gestionar la comptabilització/liquidació dels fulls de temps"
 
 #: js/TimeaccountEditDialog.js:248
 msgid "The grant to export Timesheets of Timeaccount"
@@ -396,8 +395,7 @@ msgstr "Configuració de l'exportació a ODS dels fulls de temps"
 
 #: Preference.php:66
 msgid "Use this configuration for the timesheet ODS export."
-msgstr ""
-"Utilitza aquesta configuració per a l'exportació a ODS del full de temps."
+msgstr "Utilitza aquesta configuració per a l'exportació a ODS del full de temps."
 
 #: Preference.php:117
 msgid "default"

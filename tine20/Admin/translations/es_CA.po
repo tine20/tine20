@@ -26,9 +26,7 @@ msgstr "gestiona comptes"
 
 #: Acl/Rights.php:179
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"afegeix i edita usuaris i grups, afegeix membres a un grup, canvia "
-"contrasenyes d'usuaris"
+msgstr "afegeix i edita usuaris i grups, afegeix membres a un grup, canvia contrasenyes d'usuaris"
 
 #: Acl/Rights.php:182
 msgid "manage applications"
@@ -36,19 +34,15 @@ msgstr "gestiona aplicacions"
 
 #: Acl/Rights.php:183
 msgid "enable and disable applications, edit application settings"
-msgstr ""
-"habilita i inhabilita aplicacions, edita els paràmetres d'una aplicació"
+msgstr "habilita i inhabilita aplicacions, edita els paràmetres d'una aplicació"
 
 #: Acl/Rights.php:186
 msgid "manage roles"
 msgstr "gestiona rols"
 
 #: Acl/Rights.php:187
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"afegeix i edita rols, afegeix nous membres a un rol, associa permisos "
-"d'aplicació a un rol"
+msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgstr "afegeix i edita rols, afegeix nous membres a un rol, associa permisos d'aplicació a un rol"
 
 #: Acl/Rights.php:190
 msgid "manage shared tags"
@@ -422,9 +416,7 @@ msgstr "Administració"
 
 #: js/Admin.js:264
 msgid "Do you really want to delete the selected access log entries?"
-msgstr ""
-"Esteu segur que voleu eliminar les entrades del registre d'accessos "
-"seleccionades?"
+msgstr "Esteu segur que voleu eliminar les entrades del registre d'accessos seleccionades?"
 
 #: js/Admin.js:383
 msgid "delete entry"
