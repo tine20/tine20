@@ -303,6 +303,62 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cleared flags on cache');
     }
     
+    public function delete($_ids)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete messages: ' . print_r($_ids, TRUE));
+        
+        if ($_ids instanceof Felamimail_Model_MessageFilter) {
+            $messages = $this->search($_ids);
+        } elseif ($_ids instanceof Tinebase_Record_RecordSet) {
+            $messages = $_ids;
+        } elseif ($_ids instanceof Felamimail_Model_Message) {
+            $messages = new Tinebase_Record_RecordSet('Felamimail_Model_Message', array($_ids));
+        } else {
+            $messages = $this->_backend->getMultiple($_ids);
+        }
+        
+        $messages->sort('folder_id');
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' retrieved messages from cache');
+                
+        $lastFolderId = null;
+        $imapBackend  = null;
+        
+        // delete messages on imap server
+        foreach ($messages as $message) {
+            if($imapBackend !== null && ($lastFolderId != $message->folder_id || count($imapMessageUids) >= 50)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete messages on imap server');
+                $imapBackend->removeMessage($imapMessageUids);
+                $imapMessageUids = array();
+            }
+            
+            if ($lastFolderId != $message->folder_id) {
+                $imapBackend    = $this->_getBackendAndSelectFolder($message->folder_id);
+                $lastFolderId   = $message->folder_id;
+            }
+            
+            $imapMessageUids[] = $message->messageuid;
+            
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete messages on imap server');
+        
+        if($imapBackend !== null && count($imapMessageUids) > 0) {
+            $imapBackend->removeMessage($imapMessageUids);
+        }    
+
+        // set flags in local database
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
+        // store flags in local cache
+        $this->_backend->delete($messages->getArrayOfIds());
+                
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' deleted messages on cache');
+        
+    }
+    
     /**
      * move messages to folder
      *
