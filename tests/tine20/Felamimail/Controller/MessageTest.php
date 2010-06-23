@@ -463,7 +463,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         
-        $this->assertEquals('9563', $message->size);
+        $this->assertEquals('9606', $message->size);
         $this->assertContains("Automated Package Removal", $message->subject);
         $this->assertContains('\Seen', $message->flags);
     }
