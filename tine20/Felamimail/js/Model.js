@@ -32,6 +32,7 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'content_type' },
       { name: 'attachments' },
       { name: 'original_id' },
+      { name: 'folder_id' },
       { name: 'note' }
     ], {
     appName: 'Felamimail',
