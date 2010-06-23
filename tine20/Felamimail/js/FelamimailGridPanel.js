@@ -485,25 +485,62 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * move selected messages to given folder
-     * 
-     * @param {} folder
+     * permanently delete selected messages
      */
-    moveSelectedMessages: function(folder) {
+    deleteSelectedMessages: function() {
         var sm = this.getGrid().getSelectionModel(),
+            filter = sm.getSelectionFilter(),
             msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection();
         
         msgs.each(function(msg) {
-            
+            var isSeen = msg.hasFlag('\\Seen'),
+                folder = this.app.getFolderStore().getById(msg.get('folder_id')),
+                diff = isSeen ? 0 : -1;
+                
+           folder.set('cache_unreadcount', folder.get('cache_unreadcount') - diff);
+           this.getStore().remove(msg);    
         }, this);
         
-        Ext.each(messageIds, function(messageId) {
-            this.getStore().getById(messageId)
+        this.pagingToolbar.refresh.disable();
+        Tine.Felamimail.messageBackend.addFlags(filter, '\\Deleted', { 
+            callback: function() {
+                this.loadData(true, true, false);
+            }.createDelegate(this)
+        });
+    },
+    
+    /**
+     * move selected messages to given folder
+     * 
+     * @param {Tine.Felamimail.Model.Folder} folder
+     */
+    moveSelectedMessages: function(folder) {
+        if (folder.isCurrentSelection()) {
+            // nothing to do ;-)
+            return
+        }
+        
+        var sm = this.getGrid().getSelectionModel(),
+            filter = sm.getSelectionFilter(),
+            msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection();
+        
+        msgs.each(function(msg) {
+            var isSeen = msg.hasFlag('\\Seen'),
+                currFolder = this.app.getFolderStore().getById(msg.get('folder_id')),
+                diff = isSeen ? 0 : 1;
+                
+           currFolder.set('cache_unreadcount', currFolder.get('cache_unreadcount') - diff);
+           folder.set('cache_unreadcount', folder.get('cache_unreadcount') + diff);
+           this.getStore().remove(msg);    
         }, this);
-        // if folder != current folder
-        // gray out selected messages / hide or delete
-        // start moving -> update unread count of folder
-        // update grid afterwards
+        
+        this.pagingToolbar.refresh.disable();
+        Tine.Felamimail.messageBackend.moveMessages(filter, folder.id, { 
+            callback: function() {
+                folder.set('cache_status', 'incomplete');
+                this.loadData(true, true, false);
+            }.createDelegate(this)
+        });
     },
     
     /**
@@ -512,8 +549,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {void}
      */
     onDeleteRecords: function() {
-        var trashId = this.app.getActiveAccount().get('trash_folder'),
-            trash = trashId ? this.app.getFolderStore.getById(trashId) : null;
+        var trashName = this.app.getActiveAccount().get('trash_folder'),
+            accountId = this.app.getActiveAccount().id,
+            trash = trashName ? this.app.getFolderStore().queryBy(function(record) {
+                return record.get('account_id') === accountId && record.get('localname') === trashName;
+            }, this).first() : null;
             
         return trash ? this.moveSelectedMessages(trash) : this.deleteSelectedMessages();
     },
