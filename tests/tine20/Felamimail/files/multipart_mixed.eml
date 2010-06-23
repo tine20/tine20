@@ -120,7 +120,7 @@ GnuPG FP   : 11AC BA4F 4778 E3F6 E4ED  F38E B27B 944E 3488 4E85
 
 --0F1p//8PRICkK4MWrobbat28989323553773
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="add-removals.1239580800.log"
+Content-Disposition: attachment; filename="add-removals.1239580800.log"; foobar="Test =?ISO-8859-15?Q?Subj=E4ct?="
 
 Removed Packages:
 games-action/parsec,removed,mr_bones_,2009-04-06 04:56:46

@@ -189,7 +189,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             'type'        => 'text',
             'subType'     => 'plain',
             'parameters'  => array (
-                'charset' => 'iso-8859-1'
+                'charset' => 'ISO-8859-1'
             ),
             'id'          => '', 
             'description' => '',
@@ -331,6 +331,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                     'disposition' => array(
                         'type'    => 'attachment',
                         'parameters' => array(
+                            'foobar'   => 'Test Subjäct',
                             'filename' => 'add-removals.1239580800.log'
                         )
                     ),
@@ -339,7 +340,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                 )
             ),
             'parameters'  => array (
-                'boundary' => '0f1p//8prickk4mwrobbat28989323553773'
+                'boundary' => '0F1p//8PRICkK4MWrobbat28989323553773'
             ),
             'disposition' => array(
                 'type'    => 'inline'
@@ -464,6 +465,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('9563', $message->size);
         $this->assertContains("Automated Package Removal", $message->subject);
+        $this->assertContains('\Seen', $message->flags);
     }
     
     public function testAddMessageToCache()
