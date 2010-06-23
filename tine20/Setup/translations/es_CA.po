@@ -2,176 +2,181 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Damià Verger <dverger@joomla.cat>\n"
+"Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Spanish\n"
-"X-Poedit-Country: CANADA\n"
-"X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: Catalan\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
 #: js/ConfigManagerPanel.js:60
 msgid "Informations"
-msgstr ""
+msgstr "Informacions"
 
 #: js/ConfigManagerPanel.js:64
 msgid "Setup Authentication"
-msgstr ""
+msgstr "Estableix l'autenticació"
 
 #: js/ConfigManagerPanel.js:67 js/EmailPanel.js:192
 msgid "Username"
-msgstr ""
+msgstr "Nom d'usuari"
 
 #: js/ConfigManagerPanel.js:77 js/ConfigManagerPanel.js:113
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:424
 #: js/EmailPanel.js:196
 msgid "Password"
-msgstr ""
+msgstr "Contrasenya"
 
 #: js/ConfigManagerPanel.js:83 js/ConfigManagerPanel.js:103
 msgid "Database"
-msgstr ""
+msgstr "Base de dades"
 
 #: js/ConfigManagerPanel.js:87
 msgid "Adapter"
-msgstr ""
+msgstr "Adaptador"
 
 #: js/ConfigManagerPanel.js:92 js/EmailPanel.js:188 js/EmailPanel.js:279
 msgid "Hostname"
-msgstr ""
+msgstr "Nom de l'amfitrió"
 
 #: js/ConfigManagerPanel.js:97 js/AuthenticationPanel.js:310
 #: js/EmailPanel.js:201 js/EmailPanel.js:283
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: js/ConfigManagerPanel.js:108
 msgid "User"
-msgstr ""
+msgstr "Usuari"
 
 #: js/ConfigManagerPanel.js:118
 msgid "Prefix"
-msgstr ""
+msgstr "Prefix"
 
 #: js/ConfigManagerPanel.js:123
 msgid "Logging"
-msgstr ""
+msgstr "Registre d'esdeveniments"
 
 #: js/ConfigManagerPanel.js:129
 msgid "Filename"
-msgstr ""
+msgstr "Nom de fitxer"
 
 #: js/ConfigManagerPanel.js:142
 msgid "Priority"
-msgstr ""
+msgstr "Prioritat"
 
 #: js/ConfigManagerPanel.js:146
 msgid "Caching"
-msgstr ""
+msgstr "Emmagatzematge cau"
 
 #: js/ConfigManagerPanel.js:152
 msgid "Path"
-msgstr ""
+msgstr "Camí"
 
 #: js/ConfigManagerPanel.js:156
 msgid "Lifetime (seconds)"
-msgstr ""
+msgstr "temps de vida (segons)"
 
 #: js/ConfigManagerPanel.js:163
 msgid "Temporary files"
-msgstr ""
+msgstr "Fitxers temporals"
 
 #: js/ConfigManagerPanel.js:168
 msgid "Temporary Files Path"
-msgstr ""
+msgstr "Camí als fitxers temporals"
 
 #: js/ConfigManagerPanel.js:172
 msgid "Session files"
-msgstr ""
+msgstr "Fitxers de sessió"
 
 #: js/ConfigManagerPanel.js:177
 msgid "Session Files Path"
-msgstr ""
+msgstr "Camí als fitxers de sessió"
 
 #: js/ConfigManagerPanel.js:181
 msgid "Addressbook Map panel"
-msgstr ""
+msgstr "Tauler Mapa de llibreta d'adreces"
 
 #: js/ConfigManagerPanel.js:184
 msgid "Map panel"
-msgstr ""
+msgstr "Tauler Mapa"
 
 #: js/ConfigManagerPanel.js:195
 msgid "disabled"
-msgstr ""
+msgstr "inhabilitat"
 
 #: js/ConfigManagerPanel.js:195
 msgid "enabled"
-msgstr ""
+msgstr "habilitat"
 
 #: js/ConfigManagerPanel.js:206
 msgid "Config file is not writable"
-msgstr ""
+msgstr "El fitxer de configuració no es pot escriure"
 
 #: js/ConfigManagerPanel.js:208 js/AuthenticationPanel.js:593
 msgid "Save config"
-msgstr ""
+msgstr "Desa la configuració"
 
 #: js/ConfigManagerPanel.js:223
 msgid "Download config file"
-msgstr ""
+msgstr "Descarrega el fitxer de configuració"
 
 #: js/TermsPanel.js:31
 msgid "I have read the license agreement and accept it"
-msgstr ""
+msgstr "He llegit i acceptat l'acord de llicència"
 
 #: js/TermsPanel.js:38
 msgid "License Agreement"
-msgstr ""
+msgstr "Acord de llicència"
 
 #: js/TermsPanel.js:57
 msgid "I have read the privacy agreement and accept it"
-msgstr ""
+msgstr "He llegit i acceptat l'acord de privadesa"
 
 #: js/TermsPanel.js:64
 msgid "Privacy Agreement"
-msgstr ""
+msgstr "Acord de privadesa"
 
 #: js/TermsPanel.js:81
 msgid "Accept Terms and Conditions"
-msgstr ""
+msgstr "Accepta els termes i condicions"
 
 #: js/AuthenticationPanel.js:123
 msgid "Delete all existing users and groups"
-msgstr ""
+msgstr "Elimina tots els usuaris i grups existents"
 
 #: js/AuthenticationPanel.js:123
-msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgid ""
+"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
+"and Roles. Do you really want to switch the accounts storage backend to "
+"LDAP ?"
 msgstr ""
+"El canvi d'SQL a LDAP eliminarà tots els comptes d'usuari, els grups i els "
+"rols existents. Esteu segur que voleu canviar l'administració "
+"d'emmagatzematge de comptes a LDAP?"
 
 #: js/AuthenticationPanel.js:186 js/AuthenticationPanel.js:207
 #: js/EmailPanel.js:156
 msgid "Backend"
-msgstr ""
+msgstr "Administració"
 
 #: js/AuthenticationPanel.js:220
 msgid "Authentication provider"
-msgstr ""
+msgstr "Proveïdor d'autenticació"
 
 #: js/AuthenticationPanel.js:243
 msgid "Initial admin login name"
-msgstr ""
+msgstr "Nom d'inici de sessió administratiu inicial"
 
 #: js/AuthenticationPanel.js:248
 msgid "Initial admin Password"
-msgstr ""
+msgstr "Contrasenya administrativa inicial"
 
 #: js/AuthenticationPanel.js:253
 msgid "Password confirmation"
-msgstr ""
+msgstr "Confirmació de la contrasenya"
 
 #: js/AuthenticationPanel.js:268
 msgid "Try to split username"
@@ -179,356 +184,364 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:282 js/AuthenticationPanel.js:349
 msgid "Account canonical form"
-msgstr ""
+msgstr "Forma canònica del compte"
 
 #: js/AuthenticationPanel.js:286 js/AuthenticationPanel.js:353
 msgid "Account domain name "
-msgstr ""
+msgstr "Nom de domini del compte"
 
 #: js/AuthenticationPanel.js:291 js/AuthenticationPanel.js:356
 msgid "Account domain short name"
-msgstr ""
+msgstr "Nom curt de domini del compte"
 
 #: js/AuthenticationPanel.js:306 js/AuthenticationPanel.js:416
 msgid "Host"
-msgstr ""
+msgstr "Amfitrió"
 
 #: js/AuthenticationPanel.js:314 js/AuthenticationPanel.js:421
 msgid "Login name"
-msgstr ""
+msgstr "Nom d'inici de sessió"
 
 #: js/AuthenticationPanel.js:330 js/AuthenticationPanel.js:437
 msgid "Bind requires DN"
-msgstr ""
+msgstr "La vinculació requereix DN"
 
 #: js/AuthenticationPanel.js:334
 msgid "Base DN"
-msgstr ""
+msgstr "DN base"
 
 #: js/AuthenticationPanel.js:337
 msgid "Search filter"
-msgstr ""
+msgstr "Filtre de cerca"
 
 #: js/AuthenticationPanel.js:364
 msgid "Accounts storage"
-msgstr ""
+msgstr "Emmagatzematge de comptes"
 
 #: js/AuthenticationPanel.js:385 js/AuthenticationPanel.js:523
 msgid "Default user group name"
-msgstr ""
+msgstr "Nom de grup d'usuari per defecte"
 
 #: js/AuthenticationPanel.js:389 js/AuthenticationPanel.js:526
 msgid "Default admin group name"
-msgstr ""
+msgstr "Nom de grup d'administració per defecte"
 
 #: js/AuthenticationPanel.js:402
 msgid "User can change password"
-msgstr ""
+msgstr "L'usuari pot canviar la contrasenya"
 
 #: js/AuthenticationPanel.js:441
 msgid "User DN"
-msgstr ""
+msgstr "DN d'usuari"
 
 #: js/AuthenticationPanel.js:444
 msgid "User Filter"
-msgstr ""
+msgstr "Filtre d'usuari"
 
 #: js/AuthenticationPanel.js:456
 msgid "User Search Scope"
-msgstr ""
+msgstr "Abast de la cerca d'usuari"
 
 #: js/AuthenticationPanel.js:460
 msgid "Groups DN"
-msgstr ""
+msgstr "DN de grups"
 
 #: js/AuthenticationPanel.js:463
 msgid "Group Filter"
-msgstr ""
+msgstr "Filtre de grup"
 
 #: js/AuthenticationPanel.js:475
 msgid "Group Search Scope"
-msgstr ""
+msgstr "Abast de la cerca de grup"
 
 #: js/AuthenticationPanel.js:488
 msgid "Password encoding"
-msgstr ""
+msgstr "Codificació de la contrasenya"
 
 #: js/AuthenticationPanel.js:501
 msgid "Use Rfc 2307 bis"
-msgstr ""
+msgstr "Utilitza Rfc 2307 bis"
 
 #: js/AuthenticationPanel.js:505
 msgid "Min User Id"
-msgstr ""
+msgstr "Identificador d'usuari mínim"
 
 #: js/AuthenticationPanel.js:508
 msgid "Max User Id"
-msgstr ""
+msgstr "Identificador d'usuari màxim"
 
 #: js/AuthenticationPanel.js:511
 msgid "Min Group Id"
-msgstr ""
+msgstr "Identificador de grup mínim"
 
 #: js/AuthenticationPanel.js:514
 msgid "Max Group Id"
-msgstr ""
+msgstr "Identificador de grup màxim"
 
 #: js/AuthenticationPanel.js:517
 msgid "Group UUID Attribute name"
-msgstr ""
+msgstr "Nom d'atribut UUID de grup"
 
 #: js/AuthenticationPanel.js:520
 msgid "User UUID Attribute name"
-msgstr ""
+msgstr "Nom d'atribut UUID d'usuari"
 
 #: js/AuthenticationPanel.js:538
 msgid "Allow user to change her password?"
-msgstr ""
+msgstr "Permet que l'usuari canviï la seva contrasenya?"
 
 #: js/AuthenticationPanel.js:547
 msgid "Redirect Settings"
-msgstr ""
+msgstr "Configuració de redireccionament"
 
 #: js/AuthenticationPanel.js:555
 msgid "Redirect Url (redirect to login screen if empty)"
 msgstr ""
+"Url on redirigir (es redirigeix a la pantalla d'inici de sessió si ho deixeu "
+"buit)"
 
 #: js/AuthenticationPanel.js:567
 msgid "Redirect Always (if No, only redirect after logout)"
 msgstr ""
+"Sempre es redirigeix (si poseu No, només es redirigirà després d'un "
+"tancament de sessió)"
 
 #: js/AuthenticationPanel.js:578
 msgid "Redirect to referring site, if exists"
-msgstr ""
+msgstr "Si existeix, es redirigeix al lloc referent"
 
 #: js/AuthenticationPanel.js:591
 msgid "Save config and install"
-msgstr ""
+msgstr "Desa la configuració i instal·la"
 
 #: js/AuthenticationPanel.js:617
 msgid "Passwords don't match"
-msgstr ""
+msgstr "Les contrasenyes no coincideixen"
 
 #: js/AuthenticationPanel.js:627 js/AuthenticationPanel.js:634
 #: js/AuthenticationPanel.js:638 js/AuthenticationPanel.js:649
 #: js/AuthenticationPanel.js:659
 msgid "Should not be empty"
-msgstr ""
+msgstr "No pot ser buit"
 
 #: js/ApplicationGridPanel.js:67
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: js/ApplicationGridPanel.js:68
 msgid "Enabled"
-msgstr ""
+msgstr "Habilitat"
 
 #: js/ApplicationGridPanel.js:69
 msgid "Order"
-msgstr ""
+msgstr "Ordre"
 
 #: js/ApplicationGridPanel.js:70
 msgid "Installed Version"
-msgstr ""
+msgstr "Versió instal·lada"
 
 #: js/ApplicationGridPanel.js:71
 msgid "Available Version"
-msgstr ""
+msgstr "Versió disponible"
 
 #: js/ApplicationGridPanel.js:72
 msgid "Status"
-msgstr ""
+msgstr "Estat"
 
 #: js/ApplicationGridPanel.js:73
 msgid "Depends on"
-msgstr ""
+msgstr "Depèn de"
 
 #: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:207
 msgid "Install application"
-msgstr ""
+msgstr "Instal·la aplicació"
 
 #: js/ApplicationGridPanel.js:91
 msgid "Uninstall application"
-msgstr ""
+msgstr "Desinstal·la aplicació"
 
 #: js/ApplicationGridPanel.js:100
 msgid "Update application"
-msgstr ""
+msgstr "Actualitza aplicació"
 
 #: js/ApplicationGridPanel.js:109
 msgid "Go to {0} login"
-msgstr ""
+msgstr "Vés a l'inici de sessió de {0}"
 
 #: js/ApplicationGridPanel.js:172
 msgid "uninstall"
-msgstr ""
+msgstr "desinstal·la"
 
 #: js/ApplicationGridPanel.js:172
 msgid "Do you really want to uninstall the application(s)?"
-msgstr ""
+msgstr "Esteu segur que voleu deinstal·lar l'aplicació o aplicacions?"
 
 #: js/ApplicationGridPanel.js:232
 msgid "This may take a while"
-msgstr ""
+msgstr "Això pot tardar una estona"
 
 #: js/ApplicationGridPanel.js:262
 msgid "Dependency Violation"
-msgstr ""
+msgstr "S'ha produït una violació de dependències"
 
 #: js/Setup.js:55
 msgid "Terms and Conditions"
-msgstr ""
+msgstr "Termes i condicions"
 
 #: js/Setup.js:60
 msgid "Setup Checks"
-msgstr ""
+msgstr "Proves de configuració"
 
 #: js/Setup.js:66
 msgid "Config Manager"
-msgstr ""
+msgstr "Gestor de configuracions"
 
 #: js/Setup.js:72
 msgid "Authentication/Accounts"
-msgstr ""
+msgstr "Autenticació/Comptes"
 
 #: js/Setup.js:78
 msgid "Email"
-msgstr ""
+msgstr "Correu electrònic"
 
 #: js/Setup.js:84
 msgid "Application Manager"
-msgstr ""
+msgstr "Gestor d'aplicacions"
 
 #: js/Setup.js:187
 msgid "Application"
 msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Aplicació"
+msgstr[1] "Aplicacions"
 
 #: js/EnvCheckGridPanel.js:92
 msgid "Performing Environment Checks..."
-msgstr ""
+msgstr "Es realitzen comprovacions d'entorn..."
 
 #: js/EnvCheckGridPanel.js:133
-msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgid ""
+"No {0} where found. Please try to change your filter-criteria, view-options "
+"or the {1} you search in."
 msgstr ""
+"No s'ha trobat cap {0}. Proveu a canviar els criteris de cerca, les opcions "
+"de visualització o el {1} en què cerqueu."
 
 #: js/EnvCheckGridPanel.js:163
 msgid "Check"
-msgstr ""
+msgstr "Comprova"
 
 #: js/EnvCheckGridPanel.js:164
 msgid "Result"
-msgstr ""
+msgstr "Resultat"
 
 #: js/EnvCheckGridPanel.js:165
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 #: js/EnvCheckGridPanel.js:183
 msgid "Run setup tests"
-msgstr ""
+msgstr "Executa proves de configuració"
 
 #: js/EnvCheckGridPanel.js:192
 msgid "Ignore setup tests"
-msgstr ""
+msgstr "Ignora les proves de configuració"
 
 #: js/EmailPanel.js:160
 msgid "Standard IMAP"
-msgstr ""
+msgstr "IMAP estàndard"
 
 #: js/EmailPanel.js:170
 msgid "Standard SMTP"
-msgstr ""
+msgstr "SMTP estàndard"
 
 #: js/EmailPanel.js:180
 msgid "Imap"
-msgstr ""
+msgstr "Imap"
 
 #: js/EmailPanel.js:204 js/EmailPanel.js:286
 msgid "Secure Connection"
-msgstr ""
+msgstr "Connexió segura"
 
 #: js/EmailPanel.js:215 js/EmailPanel.js:297 js/EmailPanel.js:313
 msgid "None"
-msgstr ""
+msgstr "Cap"
 
 #: js/EmailPanel.js:216 js/EmailPanel.js:298
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 #: js/EmailPanel.js:217 js/EmailPanel.js:299
 msgid "SSL"
-msgstr ""
+msgstr "SSL"
 
 #: js/EmailPanel.js:228
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: js/EmailPanel.js:228
 msgid "Yes"
-msgstr ""
+msgstr "Sí"
 
 #: js/EmailPanel.js:230
 msgid "Use system account"
-msgstr ""
+msgstr "Utilitza el compte de sistema"
 
 #: js/EmailPanel.js:233
 msgid "Append domain to login name"
-msgstr ""
+msgstr "Afegeix el domini al nom d'inici de sessió"
 
 #: js/EmailPanel.js:271
 msgid "Smtp"
-msgstr ""
+msgstr "Smtp"
 
 #: js/EmailPanel.js:302
 msgid "Authentication"
-msgstr ""
+msgstr "Autenticació"
 
 #: js/EmailPanel.js:314
 msgid "Login"
-msgstr ""
+msgstr "Inici de sessió"
 
 #: js/EmailPanel.js:315
 msgid "Plain"
-msgstr ""
+msgstr "Pla"
 
 #: js/EmailPanel.js:319
 msgid "Primary Domain"
-msgstr ""
+msgstr "Domini primari"
 
 #: js/EmailPanel.js:323
 msgid "Secondary Domains (comma separated)"
-msgstr ""
+msgstr "Dominis secundaris (separats per comes)"
 
 #: js/EmailPanel.js:327
 msgid "Notifications service address"
-msgstr ""
+msgstr "Adreça del servei de notificacions"
 
 #: js/EmailPanel.js:331
 msgid "Notification Username"
-msgstr ""
+msgstr "Nom d'usuari de notificació"
 
 #: js/EmailPanel.js:335
 msgid "Notification Password"
-msgstr ""
+msgstr "Contrasenya de notificació"
 
 #: js/EmailPanel.js:395
 msgid "MySql Hostname"
-msgstr ""
+msgstr "Nom de l'amfitrió MySql"
 
 #: js/EmailPanel.js:398
 msgid "MySql Database"
-msgstr ""
+msgstr "Base de dades MySql"
 
 #: js/EmailPanel.js:401
 msgid "MySql User"
-msgstr ""
+msgstr "Usuari MySql"
 
 #: js/EmailPanel.js:404
 msgid "MySql Password"
-msgstr ""
+msgstr "Contrasenya MySql"
 
 #: js/EmailPanel.js:408
 msgid "MySql Port"
-msgstr ""
+msgstr "Port MySql"
