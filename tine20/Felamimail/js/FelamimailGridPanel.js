@@ -533,7 +533,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         if (sm.getCount() == 1 && sm.isIdSelected(record.id) && !record.hasFlag('\\Seen')) {
             record.addFlag('\\Seen');
-            //this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
+            Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
+            this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
         }
     },
     
@@ -552,22 +553,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * called when the store gets updated
      * 
-     * NOTE: we only allow updateing flags
+     * NOTE: we only allow updateing flags BUT the actual updating is done 
+     *       directly from the UI fn's to support IMAP optimised bulk actions
      */
     onStoreUpdate: function(store, record, operation) {
         if (operation === Ext.data.Record.EDIT && record.isModified('flags')) {
-            var oldFlags = record.modified.flags,
-                newFlags = record.get('flags'),
-                added = newFlags.diff(oldFlags),
-                cleared = oldFlags.diff(newFlags);
-                
-            if (! Ext.isEmpty(added)) {
-                this.recordProxy.addFlags([record.id], added);
-            }
-            
-            if (! Ext.isEmpty(cleared)) {
-                this.recordProxy.clearFlags([record.id], cleared);
-            }
             record.commit()
         }
     },
@@ -748,11 +738,28 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onToggleFlag: function(btn, e, flag) {
         var sm = this.getGrid().getSelectionModel(),
-            msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection();
-            
+            filter = sm.getSelectionFilter(),
+            msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection(),
+            action = msgs.first().hasFlag(flag) ? 'clear' : 'add';
+        
+        
+        // mark messages in UI
         msgs.each(function(msg) {
-            msg[msg.hasFlag(flag) ? 'clearFlag' : 'addFlag'](flag);
+            // update unreadcount
+            if (flag === '\\Seen') {
+                var isSeen = msg.hasFlag('\\Seen'),
+                    folder = this.app.getFolderStore().getById(msg.get('folder_id')),
+                    diff = (action === 'clear' && isSeen) ? 1 :
+                           (action === 'add' && ! isSeen) ? -1 : 0;
+                           
+                   folder.set('cache_unreadcount', folder.get('cache_unreadcount') + diff);
+            }
+            
+            msg[action + 'Flag'](flag);
         }, this);
+        
+        // do request
+        Tine.Felamimail.messageBackend[action+ 'Flags'](filter, flag);
     },
     
     /**
