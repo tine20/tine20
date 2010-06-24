@@ -549,6 +549,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                         '<td>', this.app.i18n._('Unread Messages:'), '</td>',
                         '<td>', folder.get('cache_unreadcount'), '</td>',
                     '</tr>',
+                    '<tr>',
+                        '<td>', this.app.i18n._('Name on Server:'), '</td>',
+                        '<td>', folder.get('globalname'), '</td>',
+                    '</tr>',
                 '</table>'
             ];
             tip.body.dom.innerHTML = info.join('');
