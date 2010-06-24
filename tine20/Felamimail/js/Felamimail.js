@@ -96,7 +96,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * 
      * if no folder is given, we find next folder to update ourself
      * 
-     * @param {Tine.Felamimail.Model.Folder} [folder] 
+     * @param {Tine.Felamimail.Model.Folder} [folder]
+     * @param {Function} [callback]
      */
     checkMails: function(folder, callback) {
         this.checkMailsDelayedTask.cancel();
@@ -237,6 +238,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     onUpdateFolder: function(store, record, operation) {
         if (operation === Ext.data.Record.EDIT) {
             Tine.log.info('folder "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
+            
+            // as soon as we get a folder with status != complete we need to trigger checkmail soon!
+            if (['complete', 'pending'].indexOf(record.get('cache_status')) === -1) {
+                this.checkMailsDelayedTask.delay(1000);
+            }
             
             var changes = record.getChanges();
             
