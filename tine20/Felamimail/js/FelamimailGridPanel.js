@@ -524,7 +524,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         Tine.Felamimail.messageBackend.addFlags(filter, '\\Deleted', { 
             callback: function() {
-                this.loadData(true, false, true);
+                this.loadData(true, true, true);
             }.createDelegate(this)
         });
     },
@@ -562,7 +562,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Felamimail.messageBackend.moveMessages(filter, folder.id, { 
             callback: function() {
                 folder.set('cache_status', 'incomplete');
-                this.loadData(true, false, true);
+                this.loadData(true, true, true);
             }.createDelegate(this)
         });
     },
