@@ -359,26 +359,27 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     onContextMenu: function(node, event) {
         this.ctxNode = node;
         
-        if (! node.attributes.folderNode) {
+        var folder = this.app.getFolderStore().getById(node.id),
+            account = folder ? Tine.Felamimail.loadAccountStore().getById(folder.get('account_id')) :
+                               Tine.Felamimail.loadAccountStore().getById(node.id);
+        
+        if (! folder) {
             // edit/remove account
-            if (node.attributes.account_id !== 'default') {
+            if (account.get('ns_personal') !== 'default') {
                 
                 // check account personal namespace -> disable 'add folder' if namespace is other than root 
                 this.contextMenuAccount.items.each(function(item) {
                     if (item.iconCls == 'action_add') {
-                        item.setDisabled(node.attributes.ns_personal != '');
+                        item.setDisabled(account.get('ns_personal') != '');
                     }
                 });
                 
                 this.contextMenuAccount.showAt(event.getXY());
             }
         } else {
-            
-            var account = Tine.Felamimail.loadAccountStore().getById(node.attributes.account_id);
-            
-            if (account && node.attributes.globalname == account.get('trash_folder') || node.attributes.globalname.match(/junk/i)) {
+            if (folder.get('globalname') === account.get('trash_folder') || folder.get('globalname').match(/junk/i)) {
                 this.contextMenuTrash.showAt(event.getXY());
-            } else if (node.attributes.systemFolder) {
+            } else if (folder.get('system_folder')) {
                 this.contextMenuSystemFolder.showAt(event.getXY());    
             } else {
                 this.contextMenuUserFolder.showAt(event.getXY());

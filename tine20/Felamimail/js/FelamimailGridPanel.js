@@ -576,7 +576,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var trashName = this.app.getActiveAccount().get('trash_folder'),
             accountId = this.app.getActiveAccount().id,
             trash = trashName ? this.app.getFolderStore().queryBy(function(record) {
-                return record.get('account_id') === accountId && record.get('localname') === trashName;
+                return record.get('account_id') === accountId && record.get('globalname') === trashName;
             }, this).first() : null;
             
         return trash ? this.moveSelectedMessages(trash) : this.deleteSelectedMessages();

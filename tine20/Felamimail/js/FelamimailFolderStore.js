@@ -149,9 +149,8 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
         var toRemove = this.query(field, value);
         toRemove.each(function(record) {
             this.remove(record);
+            this.queriesDone.remove(this.getKey(field, record.get(field)));
         }, this);
-        
-        var index = this.queriesDone.remove(this.getKey(field, value));
     },
     
     /**

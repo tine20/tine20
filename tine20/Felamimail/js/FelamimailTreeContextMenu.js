@@ -160,27 +160,28 @@ Tine.Felamimail.setTreeContextMenus = function() {
     */
 
     var reloadFolderCacheAction = {
-        text: String.format(_('Update {0} Cache'), this.app.i18n._('Folder')),
+        text: this.app.i18n._('Reload Folder List'),
         iconCls: 'action_update_cache',
         scope: this,
         handler: function() {
             if (this.ctxNode) {
+                var folder = this.app.getFolderStore().getById(this.ctxNode.id),
+                    account = folder ? Tine.Felamimail.loadAccountStore().getById(folder.get('account_id')) :
+                                       Tine.Felamimail.loadAccountStore().getById(this.ctxNode.id);
                 this.ctxNode.getUI().addClass("x-tree-node-loading");
                 // call update folder cache
                 Ext.Ajax.request({
                     params: {
                         method: 'Felamimail.updateFolderCache',
-                        accountId: this.ctxNode.attributes.account_id,
-                        folderName: this.ctxNode.attributes.globalname
+                        accountId: account.id,
+                        folderName: folder ? folder.get('globalname') : ''
                     },
                     scope: this,
                     success: function(result, request){
                         this.ctxNode.getUI().removeClass("x-tree-node-loading");
                         // clear query to query server again and reload subfolders
-                        var parentFolder = this.folderStore.getById(this.ctxNode.id);
-                        this.folderStore.resetQueryAndRemoveRecords('parent_path', (parentFolder) ? parentFolder.get('path') : '/' + this.ctxNode.attributes.account_id);
-                        this.ctxNode.reload(function(callback) {
-                        });
+                        this.folderStore.resetQueryAndRemoveRecords('parent_path', (folder ? folder.get('path') : '/') + account.id);
+                        this.ctxNode.reload();
                     },
                     failure: function() {
                         this.ctxNode.getUI().removeClass("x-tree-node-loading");
@@ -192,7 +193,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
     // mutual config options
     
     var config = {
-        nodeName: this.app.i18n._('Folder'),
+        nodeName: this.app.i18n.n_('Folder', 'Folders', 1),
         scope: this,
         backend: 'Felamimail',
         backendModel: 'Folder'
@@ -200,24 +201,24 @@ Tine.Felamimail.setTreeContextMenus = function() {
     
     // system folder ctx menu
 
-    config.actions = ['add', reloadFolderCacheAction /*, updateCacheConfigAction, reloadFolderAction*/];
+    config.actions = ['add'];
     this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // user folder ctx menu
 
-    config.actions = ['add', 'rename', reloadFolderCacheAction, /*updateCacheConfigAction, reloadFolderAction, */'delete'];
+    config.actions = ['add', 'rename', 'delete'];
     this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // trash ctx menu
     
-    config.actions = ['add', emptyFolderAction, reloadFolderCacheAction /*, reloadFolderAction*/];
+    config.actions = ['add', emptyFolderAction];
     this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // account ctx menu
     
     this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
-        nodeName: this.app.i18n._('Account'),
-        actions: [editAccountAction, addFolderToRootAction/*, 'reload' */, 'delete'],
+        nodeName: this.app.i18n.n_('Account', 'Accounts', 1),
+        actions: [editAccountAction, 'delete', addFolderToRootAction, reloadFolderCacheAction],
         scope: this,
         backend: 'Felamimail',
         backendModel: 'Account'
