@@ -804,7 +804,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var sm = this.getGrid().getSelectionModel(),
             filter = sm.getSelectionFilter(),
             msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection(),
-            action = msgs.first().hasFlag(flag) ? 'clear' : 'add';
+            seen = 0;
+            
+        // switch all msgs to one state -> toogle most of them
+        msgs.each(function(msg) {
+            seen += msg.hasFlag('\\Seen') ? 1 : 0;
+        });
+        var action = seen >= msgs.getCount()/2 ? 'clear' : 'add';
         
         
         // mark messages in UI
