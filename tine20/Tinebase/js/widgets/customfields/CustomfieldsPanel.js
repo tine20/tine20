@@ -75,6 +75,7 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
                     name: 'customfield_' + def.get('name'),
                     xtype: (def.get('value_search') == 1) ? 'customfieldsearchcombo' : def.get('type'),
                     customfieldId: def.id,
+                    maxLength: def.get('length'),
                     anchor: '95%'
                 };
                 
