@@ -101,8 +101,7 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(($inboxFolder->has_children == 0), 'has children');
         
         // check if entry is created/exists in db
-        $folderBackend = new Felamimail_Backend_Folder();
-        $folder = $folderBackend->getByBackendAndGlobalName($this->_account->getId(), 'INBOX');
+        $folder = $this->_controller->getByBackendAndGlobalName($this->_account->getId(), 'INBOX');
         //print_r($folder->toArray());
         $this->assertTrue(!empty($folder->id));
         $this->assertEquals('INBOX', $folder->localname);
