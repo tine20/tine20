@@ -55,8 +55,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * name of the folder to use for tests
      * @var string
      */
-    protected $_testFolderName = 'INBOX';
-    #protected $_testFolderName = 'Junk';
+    #protected $_testFolderName = 'INBOX';
+    protected $_testFolderName = 'Junk';
     
     /**
      * Runs the test methods of this class.
@@ -449,6 +449,35 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertContains(Zend_Mime::ENCODING_BASE64, $part->encoding);
     }
     
+    /**
+     * validate fetching a complete message
+     */
+    public function testGetCompleteMessage2()
+    {
+        $this->_appendMessage('multipart_related.eml', $this->_testFolderName);
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/related'
+        ));
+        $message = $this->_imap->getSummary($result[0]);
+        
+        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        
+        $this->_createdMessages[] = $cachedMessage;
+        
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        #var_dump($message);
+        $this->assertEquals('1', $message->text_partid);
+        $this->assertEquals('2.1', $message->html_partid);
+        $this->assertEquals('38455', $message->size);
+        $this->assertContains("Tine 2.0 bei Metaways", $message->subject);
+        $this->assertContains('\Seen', $message->flags);
+        $this->assertContains('Autovervollständigung', $message->body);
+        $this->assertEquals('moz-screenshot-83.png', $message->attachments[0]["filename"]);
+    }
+    
+    /**
+     * validate fetching a complete message
+     */
     public function testGetCompleteMessage()
     {
         $this->_appendMessage('multipart_mixed.eml', $this->_testFolderName);
@@ -463,9 +492,13 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         
+        $this->assertEquals('1', $message->text_partid);
+        $this->assertEquals(null, $message->html_partid);
         $this->assertEquals('9606', $message->size);
         $this->assertContains("Automated Package Removal", $message->subject);
         $this->assertContains('\Seen', $message->flags);
+        $this->assertContains('11AC BA4F 4778 E3F6 E4ED  F38E B27B 944E 3488 4E85', $message->body);
+        $this->assertEquals('add-removals.1239580800.log', $message->attachments[0]["filename"]);
     }
     
     public function testAddMessageToCache()
