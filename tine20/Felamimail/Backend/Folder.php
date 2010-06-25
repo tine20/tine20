@@ -86,6 +86,47 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         // see: Felamimail_Controller_Cache_Folder::getIMAPFolderCounter
         unset($result['cache_uidvalidity']);
         
+        // can't be set directly, can only incremented or decremented via updateFolderCounter
+        unset($result['cache_totalcount']);
+        unset($result['cache_unreadcount']);
+        
+        // not needed at all. we must fetch this value from the imap server anyway
+        unset($result['imap_totalcount']);
+        
         return $result;
+    }
+    
+    /**
+     * increment/decrement folder counter on sql backend
+     * 
+     * @param  mixed  $_folderId
+     * @param  array  $_counters
+     */
+    public function updateFolderCounter($_folderId, array $_counters)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " " . print_r($_counters, true));        
+        if (empty($_counters)) {
+            return; // nothing todo
+        }
+        
+        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+        
+        $data = array();
+        
+        foreach ($_counters as $counter => $value) {
+            if ($value{0} == '+' || $value{0} == '-') {
+                // increment or decrement values
+                $data[$counter] = new Zend_Db_Expr($this->_db->quoteIdentifier($counter) . ' ' . $value{0} . ' ' . substr($value, 1));
+            } else {
+                // set values
+                $data[$counter] = (int)$value;
+            }
+        }
+        
+        $where  = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $folderId),
+        );
+        
+        $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
     }
 }
