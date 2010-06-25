@@ -5,7 +5,7 @@
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * @todo        move $this->_db calls to backend class
@@ -1160,7 +1160,7 @@ class Setup_Controller
                 
                 try {
                     $this->_backend->dropTable($table);
-                    if ($_application != 'Tinebase') {
+                    if ($_application->name != 'Tinebase') {
                         Tinebase_Application::getInstance()->removeApplicationTable($_application, $table);
                     }
                     unset($applicationTables[$key]);
@@ -1171,7 +1171,7 @@ class Setup_Controller
                     Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " Could not drop table $table - " . $message);
                     
                     // remove app table if table not found in db
-                    if (preg_match('/SQLSTATE\[42S02\]: Base table or view not found/', $message) && $_application != 'Tinebase') {
+                    if (preg_match('/SQLSTATE\[42S02\]: Base table or view not found/', $message) && $_application->name != 'Tinebase') {
                         Tinebase_Application::getInstance()->removeApplicationTable($_application, $table);
                         unset($applicationTables[$key]);
                     }
@@ -1183,20 +1183,11 @@ class Setup_Controller
             }
         } while (count($applicationTables) > 0);
                 
-        if ($_application != 'Tinebase') {
-            // delete containers and config options for app
-            Tinebase_Application::getInstance()->removeApplicationConfigAndContainer($_application->name);
+        if ($_application->name != 'Tinebase') {
+            // delete containers, config options and other data for app
+            Tinebase_Application::getInstance()->removeApplicationData($_application);
             
-            // remove application from table of installed applications
-            $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_application);
-            $where = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . '= ?', $applicationId)
-            );
-            
-            $this->_db->delete(SQL_TABLE_PREFIX . 'role_rights', $where);        
-            $this->_db->delete(SQL_TABLE_PREFIX . 'container', $where);
-            $this->_db->delete(SQL_TABLE_PREFIX . 'importexport_definition', $where);
-                    
+            // remove application from table of installed applications                    
             Tinebase_Application::getInstance()->deleteApplication($_application);
         }
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Removed app: " . $_application->name);

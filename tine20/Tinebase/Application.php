@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  *
@@ -390,8 +390,10 @@ class Tinebase_Application
      */
     public function deleteApplication($_applicationId)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Removing app ' . $_applicationId . ' from applications table.');
+        
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
-                
+        
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . '= ?', $applicationId)
         );
@@ -436,24 +438,49 @@ class Tinebase_Application
     
     
     /**
-     * delete containers and configs of application
+     * delete containers, configs and other data of an application
      * 
-     * @param string $_applicationName
+     * NOTE: if a table with foreign key constraints to applications is added, we need to make sure that the data is deleted here 
+     * 
+     * @param Tinebase_Model_Application $_applicationName
      * @return void
      */
-    public function removeApplicationConfigAndContainer($_applicationName)
+    public function removeApplicationData(Tinebase_Model_Application $_application)
     {
-        $application = $this->getApplicationByName($_applicationName);
+        $dataToDelete = array(
+            'container'     => array('tablename' => ''),
+            'config'        => array('tablename' => ''),
+            'rights'        => array('tablename' => 'role_rights'),
+            'definitions'   => array('tablename' => 'importexport_definition'),
+            'filter'        => array('tablename' => 'filter'),
+        );
+        $countMessage = ' Deleted';
         
-        // delete container
-        $containersDeleted = Tinebase_Container::getInstance()->deleteContainerByApplicationId($application->getId());
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . '= ?', $_application->getId())
+        );        
+        foreach ($dataToDelete as $dataType => $info) {
+            switch ($dataType) {
+                case 'container':
+                    $count = Tinebase_Container::getInstance()->deleteContainerByApplicationId($_application->getId());
+                    break;
+                case 'config':
+                    $count = Tinebase_Config::getInstance()->deleteConfigByApplicationId($_application->getId());
+                    break;
+                default:
+                    if (array_key_exists('tablename', $info) && ! empty($info['tablename'])) {
+                        $count = $this->_db->delete(SQL_TABLE_PREFIX . $info['tablename'], $where);
+                    } else {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No tablename defined for ' . $dataType);
+                        $count = 0;
+                    }
+            }
+            $countMessage .= ' ' . $count . ' ' . $dataType . '(s) /';
+        }
         
-        // delete config
-        $configsDeleted = Tinebase_Config::getInstance()->deleteConfigByApplicationId($application->getId());
-        
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $containersDeleted . ' containers and ' 
-            . $configsDeleted . ' config settings for application ' . $_applicationName);
-    }
+        $countMessage .= ' for application ' . $_application->name;
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . $countMessage);
+    }            
     
     /**
      * clean cache
