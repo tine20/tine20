@@ -208,10 +208,10 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-     * remove flag from message / all messages in a folder
+     * remove flag from messages
      *
-     * @param mixed $_messages
-     * @param mixed $_flag
+     * @param  mixed  $_messages
+     * @param  mixed  $_flag
      */
     public function clearFlag($_messages, $_flag)
     {
@@ -235,12 +235,14 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     /**
      * delete all cached messages for one folder
      *
-     * @param string $_folderId
+     * @param  mixed  $_folderId
      */
     public function deleteByFolderId($_folderId)
     {
+        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+        
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $_folderId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $folderId)
         );
         
         $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
@@ -249,53 +251,61 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     /**
      * get count of cached messages by folder (id) 
      *
-     * @param string $_folderId
+     * @param  mixed  $_folderId
      * @return integer
      */
     public function searchCountByFolderId($_folderId)
     {
+        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+        
         $filter = new Felamimail_Model_MessageFilter(array(
-            array('field' => 'folder_id', 'operator' => 'equals', 'value' => $_folderId)
+            array('field' => 'folder_id', 'operator' => 'equals', 'value' => $folderId)
         ));
         
         $count = $this->searchCount($filter);
+        
         return $count;
     }
     
     /**
      * get count of seen cached messages by folder (id) 
      *
-     * @param string $_folderId
+     * @param  mixed  $_folderId
      * @return integer
      * 
      */
     public function seenCountByFolderId($_folderId)
     {
+        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+        
         $select = $this->_db->select();
         $select->from(
             array($this->_foreignTables['flags'] => $this->_tablePrefix . $this->_foreignTables['flags']), 
             array('count' => 'COUNT(DISTINCT message_id)')
         )->where(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $_folderId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $folderId)
         )->where(
             $this->_db->quoteInto($this->_db->quoteIdentifier('flag') . ' = ?', '\Seen')
         );
 
-        $seenCount = $this->_db->fetchOne($select);        
+        $seenCount = $this->_db->fetchOne($select);
+                
         return $seenCount;
     }
     
     /**
      * get messageuids by folder (id)
      *
-     * @param string $_folderId
+     * @param  mixed  $_folderId
      * @return array
      */
     public function getMessageuidsByFolderId($_folderId)
     {
+        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+        
         $select = $this->_db->select();
         $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $this->_tableName . '.messageuid')
-                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $_folderId));
+                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $folderId));
                 //->order($this->_tableName . '.messageuid ASC');
         
         $stmt = $this->_db->query($select);
@@ -312,8 +322,8 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     /**
      * delete messages with given messageuids by folder (id)
      *
-     * @param array $_msguids
-     * @param string $_folderId
+     * @param  array  $_msguids
+     * @param  mixed  $_folderId
      * @return integer number of deleted rows
      */
     public function deleteMessageuidsByFolderId($_msguids, $_folderId)
@@ -322,9 +332,11 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             return FALSE;
         }
         
+        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+        
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('messageuid') . ' IN (?)', $_msguids),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $_folderId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $folderId)
         );
         
         return $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
