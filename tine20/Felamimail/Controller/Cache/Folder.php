@@ -269,23 +269,15 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * 
      * @param Felamimail_Model_Folder $_folder
      * @param Felamimail_Backend_Imap|boolean $_imap
-     * @return Felamimail_Model_Folder
+     * @return array  counters of totcal count and unread count
      * 
      * @todo delete folder from cache if it no longer exists
      */
     public function getCacheFolderCounter(Felamimail_Model_Folder $_folder)
     {
-        $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->get($_folder);
+        $result = $this->_backend->getFolderCounter($_folder);
         
-        $counter = $this->_backend->getFolderCounter($_folder);
-        
-        $folder->cache_totalcount  = $counter['cache_totalcount'];
-        $folder->cache_unreadcount = $counter['cache_unreadcount'];
-
-        // not used anymore
-        $folder->cache_recentcount = 0;
-        
-        return $folder;
+        return $result;
     }
     
     /**
