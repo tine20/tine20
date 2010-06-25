@@ -320,9 +320,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cleared flags on cache');
     }
     
+    /**
+     * delete messages in cache backend and on imap server
+     * @param  mixed  $_ids
+     */
     public function delete($_ids)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete messages: ' . print_r($_ids, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete messages: ' . count($_ids));
         
         if ($_ids instanceof Felamimail_Model_MessageFilter) {
             $messages = $this->search($_ids);
@@ -336,8 +340,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $messages->sort('folder_id');
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' retrieved messages from cache');
-                
         $lastAccountId = null;
         $lastFolderId  = null;
         $imapBackend   = null;
@@ -415,10 +417,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param  mixed  $_messages
      * @param  mixed  $_targetFolder
      * @return Felamimail_Model_Folder
-     * 
-     * @todo add cache_status MOVING/set to UPDATING?
-     * @todo move messages in the cache?
-     * @todo split this fn and make sure all source folders get updated in cache
      */
     public function moveMessages($_messages, $_targetFolder)
     {
@@ -435,7 +433,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' move messages: ' . count($messages) . ' to ' . $targetFolder->globalname
+            ' move ' . count($messages) . ' messages to ' . $targetFolder->globalname
         );
         
         $messages->sort('folder_id');
@@ -767,11 +765,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         $attachments = array();
         
-        if ($_structure['contentType'] == Zend_Mime::MULTIPART_MIXED) {
+        if ($_structure['contentType'] == Zend_Mime::MULTIPART_ALTERNATIVE) {
+            // check for multipart related
             foreach ($_structure['parts'] as $part) {
-                if (is_array($part['disposition']) && 
-                    ($part['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && $part['type'] != 'text'))) {
-                    
+                $attachments = array_merge($attachments, $this->getAttachments($part));
+            }
+        } elseif ($_structure['contentType'] == Zend_Mime::MULTIPART_MIXED || $_structure['contentType'] == Zend_Mime::MULTIPART_RELATED) {
+            foreach ($_structure['parts'] as $part) {
+                if (is_array($part['disposition']) &&
+                    ($part['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $part['disposition'])))
+                ) {
                     if (array_key_exists('parameters', $part['disposition']) && array_key_exists('filename', $part['disposition']['parameters'])) {
                         $filename = $part['disposition']['parameters']['filename'];
                     } elseif (is_array($part['parameters']) && array_key_exists('name', $part['parameters'])) {

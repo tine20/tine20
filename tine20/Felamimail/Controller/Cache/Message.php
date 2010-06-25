@@ -1116,7 +1116,8 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
     {
         $result = array();
 
-        if (isset($_structure['disposition']['type']) && $_structure['disposition']['type'] == 'attachment') {
+        if (isset($_structure['disposition']['type']) && 
+            ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT || ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $_structure['disposition'])))) {
             return $result;
         }
         
