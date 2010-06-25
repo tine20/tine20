@@ -120,14 +120,19 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
     },
     
     /**
-     * new entry event
+     * new entry event -> add new record to store
      * 
      * @param {Object} recordData
      * @return {Boolean}
      */
     onNewentry: function(recordData) {
-        // add new record to store
-        var newRecord = new this.recordClass(Ext.apply(this.recordClass.getDefaultData(), recordData));
+        var initialData = null;
+        if (Ext.isFunction(this.recordClass.getDefaultData)) {
+            initialData = Ext.apply(this.recordClass.getDefaultData(), recordData);
+        } else {
+            initialData = recordData;
+        }
+        var newRecord = new this.recordClass(initialData);
         this.store.insert(0 , newRecord);
         return true;
     },
