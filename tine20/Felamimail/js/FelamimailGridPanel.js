@@ -592,7 +592,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onRowSelection: function(sm, rowIndex, record, now) {
         if (! now) {
-            return this.onRowSelection.defer(3000, this, [sm, rowIndex, record, true]);
+            return this.onRowSelection.defer(250, this, [sm, rowIndex, record, true]);
         }
         
         if (sm.getCount() == 1 && sm.isIdSelected(record.id) && !record.hasFlag('\\Seen')) {
