@@ -168,6 +168,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $messagesToFlag = $this->search($_messages);
         } elseif ($_messages instanceof Tinebase_Record_RecordSet) {
             $messagesToFlag = $this->_backend->getMultiple($_messages->getArrayOfIds());
+        } elseif ($_messages instanceof Felamimail_Model_Message) {
+            $messagesToFlag = $this->_backend->getMultiple($_messages->getId());
         } else {
             $messagesToFlag = $this->_backend->getMultiple($_messages);
         }
@@ -252,6 +254,25 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * append a new message to given folder
+     *
+     * @param  string  $_folder   name of target folder
+     * @param  string  $_message  full message content
+     * @param  array   $_flags    flags for new message
+     * @param  string  $_date     date for new message
+     * @return bool success
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function appendMessage($_folder, $_message, $_flags = null, $_date = null)
+    {
+        $folder  = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->get($_folder);
+        $message = (is_resource($_message)) ? stream_get_contents($_message) : $_message;
+        $flags   = ($_flags !== null) ? (array) $_flags : null;
+        
+        Felamimail_Backend_ImapFactory::factory($folder->account_id)->appendMessage($message, $folder->globalname, $flags);
+    }
+    
+    /**
      * clear message flag(s)
      *
      * @param mixed                     $_messages
@@ -269,6 +290,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $messagesToFlag = $this->search($_messages);
         } elseif ($_messages instanceof Tinebase_Record_RecordSet) {
             $messagesToFlag = $this->_backend->getMultiple($_messages->getArrayOfIds());
+        } elseif ($_messages instanceof Felamimail_Model_Message) {
+            $messagesToFlag = $this->_backend->getMultiple($_messages->getId());
         } else {
             $messagesToFlag = $this->_backend->getMultiple($_messages);
         }
@@ -365,6 +388,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $messages = $this->search($_ids);
         } elseif ($_ids instanceof Tinebase_Record_RecordSet) {
             $messages = $this->_backend->getMultiple($_ids->getArrayOfIds());
+        } elseif ($_ids instanceof Felamimail_Model_Message) {
+            $messages = $this->_backend->getMultiple($_ids->getId());
         } else {
             $messages = $this->_backend->getMultiple($_ids);
         }
@@ -486,6 +511,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $messages = $this->search($_messages);
         } elseif ($_messages instanceof Tinebase_Record_RecordSet) {
             $messages = $this->_backend->getMultiple($_messages->getArrayOfIds());
+        } elseif ($_messages instanceof Felamimail_Model_Message) {
+            $messages = $this->_backend->getMultiple($_messages->getId());
         } else {
             $messages = $this->_backend->getMultiple($_messages);
         }
