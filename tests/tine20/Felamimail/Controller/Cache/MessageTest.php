@@ -138,9 +138,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         #$this->assertGreaterThan(-1, Zend_Date::now()->compare($updatedFolder->imap_timestamp), 'timestamp incorrect'); // later or equals
         
         // update message cache
-        $updatedFolder = $this->_controller->update($this->_folder, 0);
-        
-        print_r($updatedFolder->toArray());
+        $updatedFolder = $this->_controller->update($this->_folder, 30);
         
         // check folder status after update
         if ($updatedFolder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
