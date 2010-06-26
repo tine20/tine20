@@ -52,6 +52,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected $_cache;
     
     /**
+     * @var Felamimail_Model_Folder
+     */
+    protected $_folder = NULL;
+    
+    /**
      * name of the folder to use for tests
      * @var string
      */
@@ -83,6 +88,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
         $this->_imap->selectFolder($this->_testFolderName);
         $this->_cache      = Felamimail_Controller_Cache_Message::getInstance();
+        $this->_folder     = $this->_getFolder($this->_testFolderName);
     }
 
     /**
@@ -106,24 +112,26 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMultipleMessages()
     {
-        $this->_appendMessage('multipart_related.eml', $this->_testFolderName);
+        $this->_appendMessage('multipart_related.eml', $this->_folder);
+        
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage multipart/related'
         ));
         $message = $this->_imap->getSummary($result[0]);
         
-        $message1 = $this->_cache->addMessage($message, $this->_getFolder());
+        $message1 = $this->_cache->addMessage($message, $this->_folder);
         
         $this->_createdMessages[] = $message1;
 
         
-        $this->_appendMessage('text_plain.eml', $this->_testFolderName);
+        $this->_appendMessage('text_plain.eml', $this->_folder);
+        
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage text/plain'
         ));
         $message = $this->_imap->getSummary($result[0]);
         
-        $message2 = $this->_cache->addMessage($message, $this->_getFolder());
+        $message2 = $this->_cache->addMessage($message, $this->_folder);
         
         $this->_createdMessages[] = $message2;
         
@@ -153,7 +161,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         Felamimail_Controller_Folder::getInstance()->emptyFolder($folder->getId());
         
         // append message
-        $this->_appendMessage('text_plain.eml', $this->_testFolderName);
+        $this->_appendMessage('text_plain.eml', $this->_folder);
         
         // search messages in inbox
         $folder = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $folder->getId())->getFirstRecord();
@@ -202,7 +210,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             
         );
         
-        $this->_appendMessage('text_plain.eml', $this->_testFolderName);
+        $this->_appendMessage('text_plain.eml', $this->_folder);
         
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage text/plain'
@@ -271,7 +279,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             
         );
         
-        $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
+        $this->_appendMessage('multipart_alternative.eml', $this->_folder);
         
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage multipart/alternative'
@@ -350,7 +358,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             
         );
         
-        $this->_appendMessage('multipart_mixed.eml', $this->_testFolderName);
+        $this->_appendMessage('multipart_mixed.eml', $this->_folder);
         
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage multipart/mixed'
@@ -369,13 +377,14 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     public function testGetBodyMultipartRelated()
     {
-        $this->_appendMessage('multipart_related.eml', $this->_testFolderName);
+        $this->_appendMessage('multipart_related.eml', $this->_folder);
+        
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage multipart/related'
         ));
         $message = $this->_imap->getSummary($result[0]);
         
-        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
         
         $this->_createdMessages[] = $cachedMessage;
 
@@ -389,13 +398,14 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBodyMultipartRelatedReadOnly()
     {
-        $this->_appendMessage('multipart_related.eml', $this->_testFolderName);
+        $this->_appendMessage('multipart_related.eml', $this->_folder);
+        
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage multipart/related'
         ));
         $message = $this->_imap->getSummary($result[0]);
         
-        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
         
         $this->_createdMessages[] = $cachedMessage;
 
@@ -406,13 +416,14 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     public function testGetBodyPlainText()
     {
-        $this->_appendMessage('text_plain.eml', $this->_testFolderName);
+        $this->_appendMessage('text_plain.eml', $this->_folder);
+        
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage text/plain'
         ));
         $message = $this->_imap->getSummary($result[0]);
         
-        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
         
         $this->_createdMessages[] = $cachedMessage;
 
@@ -423,13 +434,14 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     public function testGetBodyPart()
     {
-        $this->_appendMessage('multipart_related.eml', $this->_testFolderName);
+        $this->_appendMessage('multipart_related.eml', $this->_folder);
+        
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage multipart/related'
         ));
         $message = $this->_imap->getSummary($result[0]);
         
-        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
         
         $this->_createdMessages[] = $cachedMessage;
         
@@ -454,13 +466,14 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCompleteMessage2()
     {
-        $this->_appendMessage('multipart_related.eml', $this->_testFolderName);
+        $this->_appendMessage('multipart_related.eml', $this->_folder);
+        
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage multipart/related'
         ));
         $message = $this->_imap->getSummary($result[0]);
         
-        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
         
         $this->_createdMessages[] = $cachedMessage;
         
@@ -480,13 +493,14 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCompleteMessage()
     {
-        $this->_appendMessage('multipart_mixed.eml', $this->_testFolderName);
+        $this->_appendMessage('multipart_mixed.eml', $this->_folder);
+        
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage multipart/mixed'
         ));
         $message = $this->_imap->getSummary($result[0]);
         
-        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
         
         $this->_createdMessages[] = $cachedMessage;
         
@@ -503,13 +517,15 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     public function testAddMessageToCache()
     {
-        $this->_appendMessage('text_plain.eml', $this->_testFolderName);
+        $this->_appendMessage('text_plain.eml', $this->_folder);
+        
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage text/plain'
         ));
+        
         $message = $this->_imap->getSummary($result[0]);
         
-        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
         
         $this->_createdMessages[] = $cachedMessage;
         
@@ -521,13 +537,14 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testAddMessageToCache2()
     {
-        $this->_appendMessage('text_plain2.eml', $this->_testFolderName);
+        $this->_appendMessage('text_plain2.eml', $this->_folder);
+        
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage text_plain2.eml'
         ));
         $message = $this->_imap->getSummary($result[0]);
         
-        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
         
         $this->_createdMessages[] = $cachedMessage;
         
@@ -540,13 +557,14 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testAddMessageToCache3()
     {
-        $this->_appendMessage('empty_date_header.eml', $this->_testFolderName);
+        $this->_appendMessage('empty_date_header.eml', $this->_folder);
+        
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage empty_date_header.eml'
         ));
         $message = $this->_imap->getSummary($result[0]);
         
-        $cachedMessage = $this->_cache->addMessage($message, $this->_getFolder());
+        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
         
         $this->_createdMessages[] = $cachedMessage;
         
@@ -612,16 +630,28 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * append message (from given filename) to folder
+     * append message (from given filename) to imap server only
+     *
+     * @param string $_filename
+     * @param string $_folder
+     */
+    #protected function _appendMessage($_filename, $_folder)
+    #{
+    #    $mailAsString = file_get_contents(dirname(dirname(__FILE__)) . '/files/' . $_filename);
+    #    Felamimail_Backend_ImapFactory::factory($this->_account->getId())
+    #        ->appendMessage($mailAsString, $_folder);
+    #}
+    
+    /**
+     * append message (from given filename) to cache
      *
      * @param string $_filename
      * @param string $_folder
      */
     protected function _appendMessage($_filename, $_folder)
     {
-        $mailAsString = file_get_contents(dirname(dirname(__FILE__)) . '/files/' . $_filename);
-        Felamimail_Backend_ImapFactory::factory($this->_account->getId())
-            ->appendMessage($mailAsString, $_folder);
+        $message = fopen(dirname(dirname(__FILE__)) . '/files/' . $_filename, 'r');
+        $this->_controller->appendMessage($_folder, $message);
     }
     
     /**
