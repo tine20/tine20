@@ -89,10 +89,7 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         // can't be set directly, can only incremented or decremented via updateFolderCounter
         unset($result['cache_totalcount']);
         unset($result['cache_unreadcount']);
-        
-        // not needed at all. we must fetch this value from the imap server anyway
-        unset($result['imap_totalcount']);
-        
+                
         return $result;
     }
     
