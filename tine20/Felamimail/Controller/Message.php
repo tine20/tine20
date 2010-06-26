@@ -564,7 +564,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         foreach($messages as $message) {
-            if (!in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
+            if (!is_array($message->flags) || !in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
                 // count messages with seen flag for the first time
                 $folderIds[$message->folder_id]['decrementUnreadCounter']++;
             }
