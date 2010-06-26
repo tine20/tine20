@@ -49,8 +49,8 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
      * name of the folder to use for tests
      * @var string
      */
-    protected $_testFolderName = 'INBOX';
-    #protected $_testFolderName = 'Junk';
+    #protected $_testFolderName = 'INBOX';
+    protected $_testFolderName = 'Junk';
     
     /**
      * Runs the test methods of this class.
@@ -151,9 +151,39 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($updatedFolder->imap_uidnext, $updatedFolder->cache_uidnext, 'uidnext values should be equal');
             $this->assertNotEquals($updatedFolder->imap_totalcount, $updatedFolder->cache_totalcount, 'totalcounts should not be equal');
             $this->assertGreaterThan(-1, Zend_Date::now()->compare($updatedFolder->cache_timestamp), 'timestamp incorrect'); // later or equals
-            $this->assertNotEquals(0, $updatedFolder->cache_job_actions_done, 'done/estimate wrong');
-            $this->assertNotEquals(0, $updatedFolder->cache_job_actions_estimate, 'done/estimate wrong');
+            $this->assertNotEquals(0, $updatedFolder->cache_job_actions_done, 'done wrong');
+            $this->assertNotEquals(0, $updatedFolder->cache_job_actions_estimate, 'estimate wrong');
         }
+    }
+    
+    /**
+     * test update of message cache counters only
+     */
+    public function testUpdateCountersOnly()
+    {
+        // update message cache
+        $updatedFolder = $this->_controller->update($this->_folder, 30);
+        
+        $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/alternative'
+        ));
+        
+        // update message cache
+        $updatedFolder = $this->_controller->update($this->_folder, 0);
+        
+        foreach($result as $messageUid) {
+            $this->_imap->removeMessage($messageUid);
+        }
+        
+        // check folder status after update
+        $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE, $updatedFolder->cache_status);
+        $this->assertEquals($updatedFolder->imap_uidnext, $updatedFolder->cache_uidnext, 'uidnext values should be equal');
+        $this->assertNotEquals($updatedFolder->imap_totalcount, $updatedFolder->cache_totalcount, 'totalcounts should not be equal');
+        $this->assertGreaterThan(-1, Zend_Date::now()->compare($updatedFolder->cache_timestamp), 'timestamp incorrect'); // later or equals
+        $this->assertEquals(0, $updatedFolder->cache_job_actions_done, 'done wrong');
+        $this->assertNotEquals(0, $updatedFolder->cache_job_actions_estimate, 'estimate wrong');
     }
     
 //    /**
