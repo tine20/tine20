@@ -213,7 +213,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         foreach($messagesToFlag as $message) {
             foreach ($flags as $flag) {
-                if (!in_array($flag, $message->flags)) {
+                if (!is_array($message->flags) || !in_array($flag, $message->flags)) {
                     $this->_backend->addFlag($message, $flag);
                     if ($flag == Zend_Mail_Storage::FLAG_SEEN) {
                         // count messages with seen flag for the first time
