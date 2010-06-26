@@ -49,8 +49,8 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
      * name of the folder to use for tests
      * @var string
      */
-    #protected $_testFolderName = 'INBOX';
-    protected $_testFolderName = 'Junk';
+    protected $_testFolderName = 'INBOX';
+    #protected $_testFolderName = 'Junk';
     
     /**
      * Runs the test methods of this class.
