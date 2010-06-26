@@ -116,7 +116,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         
         // check if empty
         $this->assertEquals(0, $count);
-        $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE, $this->_folder->cache_status);
+        $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_EMPTY, $this->_folder->cache_status);
         $this->assertEquals(0, $this->_folder->cache_job_actions_estimate);
     }
 
@@ -128,26 +128,34 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         // get folder and update folder status
-        $folders = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $this->_folder->getId());
-        $updatedFolder = $folders->getFirstRecord();
+        #$folders = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $this->_folder->getId());
+        #$updatedFolder = $folders->getFirstRecord();
         
         // check folder status update
-        $this->assertEquals(Felamimail_Model_Folder::IMAP_STATUS_OK, $updatedFolder->imap_status);
-        $this->assertGreaterThan(0, $updatedFolder->imap_uidnext);
-        $this->assertGreaterThan(0, $updatedFolder->imap_uidvalidity);
-        $this->assertGreaterThan(-1, Zend_Date::now()->compare($updatedFolder->imap_timestamp), 'timestamp incorrect'); // later or equals
+        #$this->assertEquals(Felamimail_Model_Folder::IMAP_STATUS_OK, $updatedFolder->imap_status);
+        #$this->assertGreaterThan(0, $updatedFolder->imap_uidnext);
+        #$this->assertGreaterThan(0, $updatedFolder->imap_uidvalidity);
+        #$this->assertGreaterThan(-1, Zend_Date::now()->compare($updatedFolder->imap_timestamp), 'timestamp incorrect'); // later or equals
         
         // update message cache
-        $result = $this->_controller->update($updatedFolder, 30);
+        $updatedFolder = $this->_controller->update($this->_folder, 0);
         
-        //print_r($result->toArray());
+        print_r($updatedFolder->toArray());
         
         // check folder status after update
-        $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_COMPLETE, $result->cache_status, 'cache status should be complete');
-        $this->assertEquals($updatedFolder->imap_uidnext, $result->cache_uidnext, 'uidnext values should be equal');
-        $this->assertEquals($updatedFolder->imap_totalcount, $result->cache_totalcount, 'totalcounts should be equal');
-        $this->assertGreaterThan(-1, Zend_Date::now()->compare($result->cache_timestamp), 'timestamp incorrect'); // later or equals
-        $this->assertEquals($result->cache_job_actions_estimate, $result->cache_job_actions_done, 'done/estimate wrong');
+        if ($updatedFolder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
+            $this->assertEquals($updatedFolder->imap_uidnext, $updatedFolder->cache_uidnext, 'uidnext values should be equal');
+            $this->assertEquals($updatedFolder->imap_totalcount, $updatedFolder->cache_totalcount, 'totalcounts should be equal');
+            $this->assertGreaterThan(-1, Zend_Date::now()->compare($updatedFolder->cache_timestamp), 'timestamp incorrect'); // later or equals
+            $this->assertEquals(0, $updatedFolder->cache_job_actions_done, 'done/estimate wrong');
+            $this->assertEquals(0, $updatedFolder->cache_job_actions_estimate, 'done/estimate wrong');
+        } else {
+            $this->assertEquals($updatedFolder->imap_uidnext, $updatedFolder->cache_uidnext, 'uidnext values should be equal');
+            $this->assertNotEquals($updatedFolder->imap_totalcount, $updatedFolder->cache_totalcount, 'totalcounts should not be equal');
+            $this->assertGreaterThan(-1, Zend_Date::now()->compare($updatedFolder->cache_timestamp), 'timestamp incorrect'); // later or equals
+            $this->assertNotEquals(0, $updatedFolder->cache_job_actions_done, 'done/estimate wrong');
+            $this->assertNotEquals(0, $updatedFolder->cache_job_actions_estimate, 'done/estimate wrong');
+        }
     }
     
 //    /**
