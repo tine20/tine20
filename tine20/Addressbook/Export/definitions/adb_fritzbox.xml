@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_Contact</model>
+    <name>adb_fritzbox</name>
+    <type>export</type>
+    <plugin>Addressbook_Export_FritzBox</plugin>
+    <description>Export for AVM FritzBox</description>
+    <definitionFilename>adb_fritzbox.xml</definitionFilename>
+</config>
