@@ -804,13 +804,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var sm = this.getGrid().getSelectionModel(),
             filter = sm.getSelectionFilter(),
             msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection(),
-            seen = 0;
+            flagCount = 0;
             
         // switch all msgs to one state -> toogle most of them
         msgs.each(function(msg) {
-            seen += msg.hasFlag('\\Seen') ? 1 : 0;
+            flagCount += msg.hasFlag(flag) ? 1 : 0;
         });
-        var action = seen >= Math.round(msgs.getCount()/2) ? 'clear' : 'add';
+        var action = flagCount >= Math.round(msgs.getCount()/2) ? 'clear' : 'add';
         
         
         // mark messages in UI
