@@ -69,7 +69,7 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
      */
     addFlag: function(flag) {
         if (! this.hasFlag(flag)) {
-            var flags = Ext.unique(this.get('flags') || []);
+            var flags = Ext.unique(this.get('flags'));
             flags.push(flag);
             
             this.set('flags', flags);
