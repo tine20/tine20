@@ -694,9 +694,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
             var selectedRecord = selectedRows[0];
             
-            if (! selectedRecord.data.headers['content-type']) {
+            if (! selectedRecord.get('body') === undefined) {
                 // record is not / not fully loaded -> defer
-                // TODO check if details panel is loading?
                 this.detailsPanel.onDetailsUpdate(selModel);
                 this.onEditInNewWindow.defer(500, this, [button, event]);
                 return;
