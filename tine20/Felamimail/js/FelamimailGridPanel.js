@@ -810,7 +810,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         msgs.each(function(msg) {
             seen += msg.hasFlag('\\Seen') ? 1 : 0;
         });
-        var action = seen >= msgs.getCount()/2 ? 'clear' : 'add';
+        var action = seen >= Math.round(msgs.getCount()/2) ? 'clear' : 'add';
         
         
         // mark messages in UI
