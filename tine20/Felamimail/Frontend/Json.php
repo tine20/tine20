@@ -183,6 +183,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getMessage($id)
     {
+        // close session to allow other requests
+        Zend_Session::writeClose(true);
+        
         $controller = Felamimail_Controller_Message::getInstance();
         $message = $controller->getCompleteMessage($id, false);
         
