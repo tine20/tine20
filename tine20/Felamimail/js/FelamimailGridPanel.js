@@ -53,6 +53,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     detailsPanel: null,
     
     /**
+     * transaction id of current delete message request
+     * @type Number
+     */
+    deleteTransactionId: null,
+    
+    /**
      * @private model cfg
      */
     evalGrants: false,
@@ -522,10 +528,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.pagingToolbar.refresh.disable();
         sm.selectRecords([nextRecord]);
         
-        Tine.Felamimail.messageBackend.addFlags(filter, '\\Deleted', { 
-            callback: function() {
-                this.loadData(true, true, true);
-            }.createDelegate(this)
+        this.deleteTransactionId = Tine.Felamimail.messageBackend.addFlags(filter, '\\Deleted', { 
+            callback: this.onAfterDelete.createDelegate(this, [])
         });
     },
     
@@ -559,12 +563,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.pagingToolbar.refresh.disable();
         sm.selectRecords([nextRecord]);
         
-        Tine.Felamimail.messageBackend.moveMessages(filter, folder.id, { 
-            callback: function() {
-                folder.set('cache_status', 'incomplete');
-                this.loadData(true, true, true);
-            }.createDelegate(this)
+        this.deleteTransactionId = Tine.Felamimail.messageBackend.moveMessages(filter, folder.id, { 
+            callback: this.onAfterDelete.createDelegate(this, [folder])
         });
+    },
+    
+    onAfterDelete: function(folder) {
+        if (folder) {
+            folder.set('cache_status', 'incomplete');
+        }
+        if (! this.deleteTransactionId || ! Tine.Felamimail.messageBackend.isLoading(this.deleteTransactionId)) {
+            this.loadData(true, true, true);
+        }
     },
     
     /**
