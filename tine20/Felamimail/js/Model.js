@@ -38,17 +38,14 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
     appName: 'Felamimail',
     modelName: 'Message',
     idProperty: 'id',
-    titleProperty: 'title',
+    titleProperty: 'subject',
     // ngettext('Message', 'Messages', n);
     recordName: 'Message',
     recordsName: 'Messages',
-    containerProperty: 'container_id',
-    // ngettext('record list', 'record lists', n);
-    containerName: 'Message list',
-    containersName: 'Message lists',
-    getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('title')) : false;
-    },
+    containerProperty: 'folder_id',
+    // ngettext('Folder', 'Folders', n);
+    containerName: 'Folder',
+    containersName: 'Folders',
     
     /**
      * check if message has given flag
