@@ -850,6 +850,10 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         $cachedMessage = new Felamimail_Model_Message($messageData);
         
         $createdMessage = $this->_backend->create($cachedMessage);
+
+        // store haeders in cache / we need them later anyway
+        $cacheId = 'getMessageHeaders' . $createdMessage->getId();
+        Tinebase_Core::get('cache')->save($_message['header'], $cacheId, array('getMessageHeaders'));
         
         #if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags)) {
         #    $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
