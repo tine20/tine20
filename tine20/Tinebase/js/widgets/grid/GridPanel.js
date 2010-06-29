@@ -820,8 +820,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 if (!this.grid.editing && !this.grid.adding && !this.action_deleteRecord.isDisabled()) {
                     this.onDeleteRecords.call(this);
                 }
+                e.preventDefault();
             }
-            e.preventDefault();
         }
     },
     
