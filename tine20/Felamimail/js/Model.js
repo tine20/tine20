@@ -27,7 +27,7 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'received', type: 'date', dateFormat: Date.patterns.ISO8601Long },
       { name: 'flags' },
       { name: 'size' },
-      { name: 'body' },
+      { name: 'body',     defaultValue: undefined },
       { name: 'headers' },
       { name: 'content_type' },
       { name: 'attachments' },
