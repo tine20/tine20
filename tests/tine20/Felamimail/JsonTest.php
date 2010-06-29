@@ -318,9 +318,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         if ($result['cache_status'] == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
             $this->assertEquals($result['imap_uidnext'], $result['cache_uidnext'], 'uidnext values should be equal');
             $this->assertEquals($result['imap_totalcount'], $result['cache_totalcount'], 'totalcounts should be equal');
-        } else {
+        } else if ($result['cache_status'] == Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
             $this->assertEquals($result['imap_uidnext'], $result['cache_uidnext'], 'uidnext values should be equal');
-            $this->assertNotEquals($result['imap_totalcount'], $result['cache_totalcount'], 'totalcounts should be not equal');
+            $this->assertNotEquals(0, $result['cache_job_actions_estimate']);
+            // check if this assertion does work correctly 
+            $this->assertNotEquals($result['imap_totalcount'], $result['cache_totalcount'], 'totalcounts should be not equal: ' . print_r($result, TRUE));
         }
     }
     
