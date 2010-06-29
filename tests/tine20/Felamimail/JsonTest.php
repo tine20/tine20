@@ -304,41 +304,30 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test update message cache
      */
-    /*
     public function testUpdateMessageCache()
     {
         $messageToSend = $this->_getMessageData();
         $message = $this->_json->saveMessage($messageToSend);
+        $this->_messagesSent = TRUE;
         
-        // get inbox status
-        $result = $this->_json->updateFolderStatus($this->_account->getId(), array());
-        $testFolder = array();
-        foreach ($result['results'] as $folder) {
-            if ($folder['globalname'] == ) {
-                $testFolder = $folder;
-                break;
-            }
-        }
-        $this->assertTrue(! empty($testFolder), 'inbox not found');
+        $inbox = $this->_getFolder('INBOX');
         
         // update message cache and check result
-        $result = $this->_json->updateMessageCache($testFolder['id'], 10);
+        $result = $this->_json->updateMessageCache($inbox['id'], 30);
         
-        $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_COMPLETE, $result['cache_status'], 'cache status should be complete');
-        $this->assertEquals($testFolder['imap_uidnext'], $result['cache_uidnext'], 'uidnext values should be equal');
-        $this->assertEquals($testFolder['imap_totalcount'], $result['cache_totalcount'], 'totalcounts should be equal');
-                
-        // delete message from inbox and clear cache
-        $this->_deleteMessage($messageToSend['subject']);
-        Felamimail_Controller_Cache_Message::getInstance()->clear($testFolder['id']);
+        if ($result['cache_status'] == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
+            $this->assertEquals($result['imap_uidnext'], $result['cache_uidnext'], 'uidnext values should be equal');
+            $this->assertEquals($result['imap_totalcount'], $result['cache_totalcount'], 'totalcounts should be equal');
+        } else {
+            $this->assertEquals($result['imap_uidnext'], $result['cache_uidnext'], 'uidnext values should be equal');
+            $this->assertNotEquals($result['imap_totalcount'], $result['cache_totalcount'], 'totalcounts should be not equal');
+        }
     }
-    */
     
     /**
      * test send message
      *
      */
-    /*
     public function testSendMessage()
     {
         // set email to unittest@tine20.org
@@ -355,6 +344,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $messageToSend['note'] = 1;
         //print_r($messageToSend);
         $returned = $this->_json->saveMessage($messageToSend);
+        $this->_messagesSent = TRUE;
         
         //sleep(10);
         
@@ -374,10 +364,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($message['subject'],  $messageToSend['subject']);
         $this->assertEquals($message['to'],       $messageToSend['to'][0], 'recipient not found');
         
-        // delete message from inbox & sent
-        $this->_json->deleteMessages($message['id']);
-        $this->_deleteMessage($messageToSend['subject']);
-
         // check if email note has been added to contact(s)
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
         $emailNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('email');
@@ -394,13 +380,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, count($emailNoteIds), 'no email notes found');
         Tinebase_Notes::getInstance()->deleteNotes($emailNoteIds);
     }
-    */
     
     /**
      * try to get a message from imap server (with complete body, attachments, etc)
      *
      */
-    /*
     public function testGetMessage()
     {
         $message = $this->_sendMessage();     
@@ -410,46 +394,35 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         // check
         $this->assertGreaterThan(0, preg_match('/aaaaaä/', $message['body']));
-        
-        // delete
-        $this->_deleteMessage($message['subject']);
     }
-    */
     
     /**
      * test flags
      * 
      */
-    /*
     public function testSetAndClearFlags()
     {
         $message = $this->_sendMessage();
         
         // add flag
-        $this->_json->setFlag(array($message['id']), '\\Flagged');
+        $this->_json->addFlags(array($message['id']), Zend_Mail_Storage::FLAG_FLAGGED);
         
         // check flags
         $message = $this->_json->getMessage($message['id']);
-        $this->assertTrue(preg_match('/\\Flagged/', $message['flags']) > 0);
+        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_FLAGGED, $message['flags']));
         
         // remove flag
-        $this->_json->clearFlag(array($message['id']), '\\Flagged');
+        $this->_json->clearFlags(array($message['id']), Zend_Mail_Storage::FLAG_FLAGGED);
         
         // check flags
         $message = $this->_json->getMessage($message['id']);
-        $this->assertTrue(preg_match('/\\Flagged/', $message['flags']) == 0);
-        
-        // delete
-        $this->_deleteMessage($message['subject']);
+        $this->assertFalse(in_array(Zend_Mail_Storage::FLAG_FLAGGED, $message['flags']));
     }
-    */
     
     /**
      * test reply mail
      * 
-     * @todo check In-Reply-To header
      */
-    /*
     public function testReplyMessage()
     {
         $message = $this->_sendMessage();
@@ -458,6 +431,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $replyMessage['flags']      = '\\Answered';
         $replyMessage['subject']    = 'Re: ' . $message['subject'];
         $replyMessage['original_id']= $message['id'];
+        $replyMessage['headers']    = array('X-Tine20TestMessage' => 'jsontest');
         $returned                   = $this->_json->saveMessage($replyMessage);
         
         $result = $this->_getMessages();
@@ -477,41 +451,32 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(! empty($originalMessage), 'original message not found');
         
         // check answered flag
-        $this->assertTrue(preg_match("/\\\\Answered/", $originalMessage['flags']) > 0, 'could not find flag');
-        
-        // delete
-        $this->_deleteMessage($message['subject']);
-        $this->_deleteMessage($replyMessage['subject']);
+        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_ANSWERED, $originalMessage['flags'], 'could not find flag'));
     }
-    */
     
     /**
      * test move
+     * 
+     * @todo activate again
      */
     /*
     public function testMoveMessage()
     {
         $message = $this->_sendMessage();
-        $result = $this->_json->updateFolderStatus($this->_account->getId(), '');
-        $testFolder = array();
-        foreach ($result['results'] as $folder) {
-            if ($folder['globalname'] == ) {
-                $testFolder = $folder;
-                break;
-            }
-        }
+        $inbox = $this->_getFolder('INBOX');
+        $inbox = $this->_json->updateMessageCache($inbox['id'], 30);        
         
         // move
-        $drafts = $this->_getFolder('Drafts');
+        $testFolder = $this->_getFolder($this->_testFolderName);
         $result = $this->_json->moveMessages(array(array(
             'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
-        )), $drafts->getId());
+        )), $testFolder->getId());
         
         // check if counts were decreased correctly
-        $this->assertEquals($testFolder['cache_totalcount'] - 1, $result['cache_totalcount']);
-        $this->assertEquals($testFolder['cache_unreadcount'] - 1, $result['cache_unreadcount']);
+        $this->assertEquals($inbox['cache_totalcount'] - 1, $result['cache_totalcount']);
+        $this->assertEquals($inbox['cache_unreadcount'] - 1, $result['cache_unreadcount']);
         
-        $result = $this->_getMessages('Drafts');
+        $result = $this->_getMessages($this->_testFolderName);
         $movedMessage = array();
         foreach ($result['results'] as $mail) {
             if ($mail['subject'] == $message['subject']) {
@@ -519,9 +484,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             }
         }
         $this->assertTrue(! empty($movedMessage), 'moved message not found');
-        
-        // delete
-        $this->_deleteMessage($message['subject'], 'Drafts');
     }
     */
     
@@ -598,24 +560,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         return $account;
     }
-
-    /**
-     * delete message
-     *
-     * @param string $_messageuid
-     * @param string $_folderName
-     */
-    /*
-    protected function _deleteMessage($_messageuid, $_folderName) 
-    {
-        $testFolder = $this->_getFolder($_folderName);
-        $filter = $this->_getMessageFilter($testFolder->getId(), $_messageuid);
-        $result = $this->_json->searchMessages($filter, '');
-        foreach ($result['results'] as $mail) {
-            $this->_json->deleteMessages($mail['id']);
-        }
-    }
-    */
     
     /**
      * send message and return message array
@@ -648,7 +592,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * @param string $_folderName
      * @return array
      */
-    protected function _getMessages($_folderName)
+    protected function _getMessages($_folderName = 'INBOX')
     {
         $folder = $this->_getFolder($_folderName);
         $filter = $this->_getMessageFilter($folder->getId());
