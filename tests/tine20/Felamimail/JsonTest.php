@@ -196,59 +196,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($result));
     }
     
-    /**
-     * testUpdateFolderStatus
-     *
-     * @deprecated
-     */
-    /*
-    public function testUpdateFolderStatus()
-    {
-        $result = $this->_json->updateFolderStatus($this->_account->getId(), '');
-        $inbox = array();
-        foreach ($result['results'] as $folder) {
-            if ($folder['globalname'] == 'INBOX') {
-                $inbox = $folder;
-                break;
-            }
-        }
-        $this->assertTrue(! empty($inbox), 'INBOX folder not found');
-        print_r($inbox);
-        
-        // check if single folder returns the same result
-        $result = $this->_json->updateFolderStatus($this->_account->getId(), array($inbox['id']));
-        // timestamps can be different
-        $unsetFields = array('imap_timestamp', 'cache_timestamp');
-        foreach ($unsetFields as $field) {
-            unset($inbox[$field]);
-            unset($result['results'][0][$field]);
-        }
-        //$this->assertEquals($inbox, $result['results'][0], 'single folder update should return the same result');
-        
-        // save some values and send mail
-        $oldTotalCount = $inbox['imap_totalcount'];
-        
-        $messageToSend = $this->_getMessageData();
-        $message = $this->_json->saveMessage($messageToSend);
-        $this->_messagesSent = TRUE; 
-        
-        // get inbox status again
-        $result = $this->_json->updateFolderStatus($this->_account->getId(), '');
-        $inbox = array();
-        foreach ($result['results'] as $folder) {
-            if ($folder['globalname'] == 'INBOX') {
-                $inbox = $folder;
-                break;
-            }
-        }
-        
-        print_r($inbox);
-        // inbox imap count should be +1 and cache status incomplete
-        $this->assertEquals($oldTotalCount+1, $inbox['imap_totalcount']);
-        $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE, $inbox['cache_status']);
-    }
-    */
-    
     /*********************** accounts tests **************************/
     
     /**
