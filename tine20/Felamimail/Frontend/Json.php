@@ -108,25 +108,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_recordToJson($result);
     }
     
-    /**
-     * update folder status
-     *
-     * @param string $accountId
-     * @param array  $folderIds
-     * @return array
-     */
-    public function updateFolderStatus($accountId, $folderIds)
-    {
-        // close session to allow other requests
-        Zend_Session::writeClose(true);
-        
-        $folderIds = (empty($folderIds)) ? NULL : $folderIds;
-        $folders = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($accountId, $folderIds);
-        
-        return array(
-            'results' => $this->_multipleRecordsToJson($folders)
-        );
-    }
     
     /**
      * update folder cache
