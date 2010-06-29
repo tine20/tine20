@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  * @todo        add test for a really big folder (subscribe mailing list?) and start 2-3 import jobs
  */
@@ -123,20 +123,9 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     /**
      * test update message cache
      *
-     * @todo move update folder status stuff to  Felamimail_Controller_Cache_FolderTest ?
      */
     public function testUpdate()
     {
-        // get folder and update folder status
-        #$folders = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $this->_folder->getId());
-        #$updatedFolder = $folders->getFirstRecord();
-        
-        // check folder status update
-        #$this->assertEquals(Felamimail_Model_Folder::IMAP_STATUS_OK, $updatedFolder->imap_status);
-        #$this->assertGreaterThan(0, $updatedFolder->imap_uidnext);
-        #$this->assertGreaterThan(0, $updatedFolder->imap_uidvalidity);
-        #$this->assertGreaterThan(-1, Zend_Date::now()->compare($updatedFolder->imap_timestamp), 'timestamp incorrect'); // later or equals
-        
         // update message cache
         $updatedFolder = $this->_controller->update($this->_folder, 30);
         
@@ -185,76 +174,6 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $updatedFolder->cache_job_actions_done, 'done wrong');
         $this->assertNotEquals(0, $updatedFolder->cache_job_actions_estimate, 'estimate wrong');
     }
-    
-//    /**
-//     * test update message cache
-//     *
-//     * @todo move update folder status stuff to  Felamimail_Controller_Cache_FolderTest ?
-//     */
-//    public function testUpdate2()
-//    {
-//        $this->_appendMessage('multipart_mixed.eml', $this->_testFolderName);
-//        
-//        $result = $this->_imap->search(array(
-//            'HEADER X-Tine20TestMessage multipart/mixed'
-//        ));
-//        
-//        $message = $this->_imap->getSummary($result[0]);
-//        
-//        $part = $this->_controller->getBodyPartIds($message['structure']);
-//        
-//        $part = Felamimail_Controller_Message::getInstance()->getMessagePart('', 2);
-//        
-//        foreach($result as $messageUid) {
-//            $this->_imap->removeMessage($messageUid);
-//        }
-//        
-//        $partIds = $this->_controller->getBodyPartIds($message['structure']);
-//
-//        $this->assertEquals(array('text' => 1), $partIds, 'did not found all partIds');
-//    }
-    
-//    /**
-//     * test sync of deleted messages
-//     *
-//     */
-//    public function testSyncDelete()
-//    {
-//        return;
-//        // update cache
-//        $folders = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $this->_folder->getId());
-//        $updatedFolder = $folders->getFirstRecord();
-//        $resultBeforeDelete = $this->_controller->update($updatedFolder);
-//        
-//        // delete message on the imap server
-//        $messages = Felamimail_Controller_Message::getInstance()->search(new Felamimail_Model_MessageFilter(array(
-//            array('field' => 'folder_id', 'operator' => 'equals', 'value' => $this->_folder->getId()),
-//            array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId()),
-//        )));
-//        $this->_imap->selectFolder($this->_folder->globalname);
-//        foreach ($messages as $message) {
-//            //echo 'removing message ' . $message->messageuid . "\n";
-//            $this->_imap->removeMessage($message->messageuid);
-//        }
-//        
-//        // run update again
-//        $folders = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $this->_folder->getId());
-//        $updatedFolder = $folders->getFirstRecord();
-//        $result = $this->_controller->update($updatedFolder, 30);
-//        
-//        // check folder status after update
-//        //print_r($result->toArray());
-//        $this->assertGreaterThan($resultBeforeDelete->cache_job_actions_estimate, $result->cache_job_actions_estimate, 'job estimate not increased');
-//        if ($result->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
-//            $this->assertEquals($result->cache_job_actions_estimate, $result->cache_job_actions_done, 'done/estimate wrong');
-//            $this->assertEquals(0, $result->cache_job_lowestuid, 'lowest job uid was not reset');
-//            $this->assertEquals($result->imap_totalcount, $result->cache_totalcount, 'totalcounts should be equal');
-//            $this->assertTrue($result->cache_unreadcount <= $result->cache_totalcount, 'unreadcount was not decreased');
-//        } else {
-//            $this->assertNotEquals($result->cache_job_actions_estimate, $result->cache_job_actions_done, 'done/estimate wrong');
-//            $this->assertGreaterThan(0, $result->cache_job_lowestuid, 'lowest job uid was not reset');
-//        }
-//    }
     
     public function testGetBodyPartIdMultipartAlternative()
     {
