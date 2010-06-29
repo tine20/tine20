@@ -4,11 +4,9 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:AllTests.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
- * 
- * @todo        activate all test suites
  */
 
 /**
