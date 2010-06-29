@@ -56,8 +56,8 @@ Ext.namespace('Tine.Felamimail');
         
         // use default Tpl for default and multi view
         this.defaultTpl = new Ext.XTemplate(
-            '<div class="preview-panel-felamimail-body">',
-                '<div class="Mail-Body-Content"></div>',
+            '<div class="preview-panel-felamimail">',
+                '<div class="preview-panel-felamimail-body">{[values ? values.msg : ""]}</div>',
             '</div>'
         );
         
@@ -107,13 +107,9 @@ Ext.namespace('Tine.Felamimail');
                 // TODO show empty message
                 // failure: Tine.Felamimail.Application.handleFailure
                 failure: function() {
-                    /*
-                    this.tpl.overwrite(body, {
-                        body: 'FAILURE',
-                        headers: 'unknown',
-                        to: 'unknown'
+                    this.defaultTpl.overwrite(body, {
+                        msg: this.i18n._('Could not load message')
                     });
-                    */
                     this.getLoadMask().hide();
                 }
             });
