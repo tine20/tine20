@@ -188,7 +188,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     },
     
     /**
-     * executed when  updateFolderStatus or updateMessageCache requests fail
+     * executed when updateMessageCache requests fail
      * 
      * NOTE: We show the credential error dlg and this only for the first error
      * 
