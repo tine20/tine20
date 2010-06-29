@@ -4,9 +4,9 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  */
 
@@ -163,8 +163,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         // append message
         $this->_appendMessage('text_plain.eml', $this->_folder);
         
-        // search messages in inbox
-        $folder = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $folder->getId())->getFirstRecord();
+        // search messages in test folder
         Felamimail_Controller_Cache_Message::getInstance()->update($folder);
         $result = $this->_controller->search($this->_getFilter($folder->getId()));
         
@@ -617,7 +616,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $this->_testFolderName);
         
         // search messages in inbox
-        $folder = Felamimail_Controller_Cache_Folder::getInstance()->updateStatus($this->_account->getId(), NULL, $folder->getId())->getFirstRecord();
         Felamimail_Controller_Cache_Message::getInstance()->update($folder);
         $result = $this->_controller->search($this->_getFilter($folder->getId()));
         
@@ -628,19 +626,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         // return result
         return $result->getFirstRecord();        
     }
-    
-    /**
-     * append message (from given filename) to imap server only
-     *
-     * @param string $_filename
-     * @param string $_folder
-     */
-    #protected function _appendMessage($_filename, $_folder)
-    #{
-    #    $mailAsString = file_get_contents(dirname(dirname(__FILE__)) . '/files/' . $_filename);
-    #    Felamimail_Backend_ImapFactory::factory($this->_account->getId())
-    #        ->appendMessage($mailAsString, $_folder);
-    #}
     
     /**
      * append message (from given filename) to cache
