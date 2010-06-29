@@ -394,33 +394,6 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
     recordClass: Tine.Felamimail.Model.Folder,
     
     /**
-     * update folderStatus for given folderIds of given account
-     * 
-     * @param   {String} accountId
-     * @param   {Array} folderIds
-     * @return  {Number} Ext.Ajax transaction id
-     */
-//    updateFolderStatus: function(accountId, folderIds, options) {
-//        options = options || {};
-//        options.params = options.params || {};
-//        
-//        var p = options.params;
-//        
-//        p.method = this.appName + '.updateFolderStatus';
-//        p.accountId = accountId;
-//        p.folderIds = folderIds;
-//        
-//        options.beforeSuccess = function(response) {
-//            return [this.jsonReader.read(response).records];
-//        };
-//        
-//        // increase timeout as this can take a longer (1 minute)
-//        options.timeout = 60000;
-//                
-//        return this.doXHTTPRequest(options);
-//    },
-    
-    /**
      * update message cache of given folder for given execution time
      * 
      * @param   {String} folderId
