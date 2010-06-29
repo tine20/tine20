@@ -377,12 +377,14 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      */
     protected function _rawDataToRecord(array $_rawData)
     {
-        if(isset($_rawData['structure'])) {
+        if (isset($_rawData['structure'])) {
             $_rawData['structure'] = Zend_Json::decode($_rawData['structure']);
         }
         
-        if(isset($_rawData['flags'])) {
+        if (isset($_rawData['flags'])) {
             $_rawData['flags'] = explode(',', $_rawData['flags']);
+        } else {
+            $_rawData['flags'] = array();
         }
         
         $result = parent::_rawDataToRecord($_rawData);
