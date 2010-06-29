@@ -159,9 +159,14 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * @param string $_folderId [optional]
      * @return Tinebase_Record_RecordSet with updated folder status
      * @throws Felamimail_Exception
+     * 
+     * @deprecated no longer used
+     * @todo remove function usage from unittests
      */
     public function updateStatus($_accountId, $_folders = NULL, $_folderId = NULL)
     {
+        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' This function is deprecated. Do not use it any more.'); 
+        
         if (empty($_accountId)) {
             throw new Felamimail_Exception("Account id is required");
         }
