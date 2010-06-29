@@ -828,7 +828,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $rawHeaders = $imapBackend->getRawContent($message->messageuid, 'HEADER', $_readOnly);
-        $headers = iconv_mime_decode_headers($rawHeaders, ICONV_MIME_DECODE_CONTINUE_ON_ERROR);
+        Zend_Mime_Decode::splitMessage($rawHeaders, $headers, $null);
         
         $cache->save($headers, $cacheId, array('getMessageHeaders'));
         
