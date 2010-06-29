@@ -289,6 +289,10 @@
     margin-right: 5px;
 }
 
+.ext-gecko .felamimail-node-statusbox-unread {
+    -moz-border-radius: 8px;
+}
+
 .felamimail-node-statusbox-unread {
     border-radius: 8px;
     background-color: #D9E8FB;
