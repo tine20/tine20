@@ -604,6 +604,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @todo what has to be set in the 'In-Reply-To' header?
      * @todo add name for to/cc/bcc
+     * @todo move $mail creation to extra function
      */
     public function sendMessage(Felamimail_Model_Message $_message)
     {
@@ -683,6 +684,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $mail->addHeader('Organization', $account->organization);
         }
         
+        // add other headers
+        foreach ($_message->headers as $key => $value) {
+            $mail->addHeader($key, $value);
+        }
+        
         // set transport + send mail
         $smtpConfig = $account->getSmtpConfig();
         if (! empty($smtpConfig)) {
@@ -721,6 +727,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $_id
      * @param string $_partId (the part id, can look like this: 1.3.2 -> returns the second part of third part of first part...)
      * @return Zend_Mime_Part
+     * 
+     * @todo make it possible to get complete message (CONTENT_TYPE_MESSAGE_RFC822)
      */
     public function getMessagePart($_id, $_partId)
     {
@@ -1047,6 +1055,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     if ($_originalMessage === NULL) {
                         throw new Felamimail_Exception('No original message available for forward!');
                     } else {
+                        // @todo use $imap->getRawContent(messageuid, NULL) or getMessagePart with content type CONTENT_TYPE_MESSAGE_RFC822
+                        // @todo add test for this
                         $originalMessage = $this->getCompleteMessage($_originalMessage, false);
                     }
                     
@@ -1061,6 +1071,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $rawContent);
                     
                     $part->disposition = 'attachment; filename="' . $attachment['name'] . '"';
+                    // @todo decode content first and remove this
                     $part->encoding = Zend_Mime::ENCODING_7BIT;
                     
                 } else {
