@@ -82,7 +82,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         this.defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
         Tine.log.debug('default account is "' + this.defaultAccount);
         
-        if (Tine.Tinebase.appMgr.getActive() != this && this.updateInterval) {
+        if (window.isMainWindow && Tine.Tinebase.appMgr.getActive() != this && this.updateInterval) {
             var delayTime = this.updateInterval/20;
             
             Tine.log.debug('start preloading mails in "' + delayTime/1000 + '" seconds');
