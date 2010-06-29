@@ -207,7 +207,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             $imap = FALSE;
         }
         
-        // return status of all folders
+        // call update message cache to return status of all folders
         foreach ($folders as $folder) {
             $folder = Felamimail_Controller_Cache_Message::getInstance()->update($folder, 1);
         }
