@@ -166,8 +166,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * @param Felamimail_Model_Folder $_folder
      * @param Felamimail_Backend_Imap|boolean $_imap
      * @return Felamimail_Model_Folder
-     * 
-     * @todo delete folder from cache if it no longer exists
      */
     public function updateFolderStatus(Felamimail_Model_Folder $_folder, $_imap)
     {
@@ -180,8 +178,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * @param Felamimail_Model_Folder $_folder
      * @param Felamimail_Backend_Imap|boolean $_imap
      * @return Felamimail_Model_Folder
-     * 
-     * @todo delete folder from cache if it no longer exists
      */
     public function getIMAPFolderCounter(Felamimail_Model_Folder $_folder)
     {
@@ -215,8 +211,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * @param Felamimail_Model_Folder $_folder
      * @param Felamimail_Backend_Imap|boolean $_imap
      * @return array  counters of totcal count and unread count
-     * 
-     * @todo delete folder from cache if it no longer exists
      */
     public function getCacheFolderCounter(Felamimail_Model_Folder $_folder)
     {
@@ -231,8 +225,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * @param Felamimail_Model_Folder $_folder
      * @param Felamimail_Backend_Imap|boolean $_imap
      * @return Felamimail_Model_Folder
-     * 
-     * @todo delete folder from cache if it no longer exists
      */
     public function updateFolderCounters(Felamimail_Model_Folder $_folder, $_imap)
     {
@@ -313,6 +305,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         }
         
         // remove folders that exist no longer on the imap server
+        // @todo move this to another place (async services? mark as deleted?)
         $filter = new Felamimail_Model_FolderFilter(array(
             array('field' => 'parent',      'operator' => 'equals', 'value' => $_parentFolder),
             array('field' => 'account_id',  'operator' => 'equals', 'value' => $_account->getId()),
