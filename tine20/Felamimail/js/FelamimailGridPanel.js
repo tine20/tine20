@@ -472,7 +472,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (record.hasFlag('\\Answered')) {
             icons.push({src: 'images/oxygen/16x16/actions/mail-reply-sender.png', qtip: _('Answered')});
         }   
-        if (record.hasFlag('\\Passed')) {
+        if (record.hasFlag('Passed')) {
             icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: _('Forwarded')});
         }   
 //        if (record.hasFlag('\\Recent')) {
