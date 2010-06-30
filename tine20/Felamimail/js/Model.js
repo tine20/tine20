@@ -215,7 +215,7 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
  * 
  * Account Record Definition
  */ 
-Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create([
+Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
     { name: 'user_id' },
     { name: 'name' },
@@ -243,7 +243,7 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create([
     { name: 'smtp_ssl' },
     { name: 'smtp_user' },
     { name: 'smtp_password' }
-], {
+]), {
     appName: 'Felamimail',
     modelName: 'Account',
     idProperty: 'id',
