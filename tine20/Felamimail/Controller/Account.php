@@ -425,6 +425,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Backend_ImapProxy $_imapBackend
      * @param string $_delimiter
      * @return Felamimail_Model_Account
+     * 
+     * @todo remove imapBackend (+ exception handling at the top) and delimiter (get delimiter from INBOX folder) params  
      */
     public function updateCapabilities($_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL, $_delimiter = NULL)
     {
