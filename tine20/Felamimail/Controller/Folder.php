@@ -11,6 +11,7 @@
  * 
  * @todo        use other/shared namespaces
  * @todo        translate standard folder names
+ * @todo        extend Tinebase_Controller_Record Abstract and add modlog fields and acl
  */
 
 /**
@@ -164,6 +165,17 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     {
         return $this->_backend->get($_id);
     }
+
+    /**
+     * get multiple folders
+     * 
+     * @param string|array $_ids
+     * @return Tinebase_RecordSet
+     */
+    public function getMultiple($_ids)
+    {
+        return $this->_backend->getMultiple($_ids);
+    }
     
     /**
      * get saved folder record by backend and globalname
@@ -288,6 +300,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         }
         
         try {
+            // @todo delete messages from cache
             $folder = $this->getByBackendAndGlobalName($_accountId, $_folderName);
             $this->_backend->delete($folder->getId());
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleted folder ' . $_folderName);
