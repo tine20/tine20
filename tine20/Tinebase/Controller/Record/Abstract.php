@@ -862,7 +862,11 @@ abstract class Tinebase_Controller_Record_Abstract
         } elseif ($_mixed instanceof Tinebase_Record_RecordSet) {
             $result = ($_refresh) ? $this->_backend->getMultiple($_mixed->getArrayOfIds()) : $_mixed;
         } elseif ($_mixed instanceof Tinebase_Record_Abstract) {
-            $result = $this->_backend->getMultiple($_mixed->getId());
+            if ($_refresh) {
+                $result = $this->_backend->getMultiple($_mixed->getId());
+            } else {
+                $result = new Tinebase_Record_RecordSet(get_class($_mixed), array($_mixed));
+            }
         } elseif (is_string($_mixed) || is_array($_mixed)) {
             $result = $this->_backend->getMultiple($_mixed);
         } else {
