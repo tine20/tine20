@@ -476,15 +476,24 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
 
         $result = array();
         
-        foreach($folders as $folder) {
-            if(empty($folder['parent'])) {
-                $result[$folder['id']] = array(
-                    'folderId'      => $folder['id'],
-                    'parentId'      => 0,
-                    'displayName'   => $folder['localname'],
-                    'type'          => $this->_getFolderType($folder['localname'])
-                );
+        foreach ($folders as $folder) {
+            if (!empty($folder['parent'])) {
+                try {
+                    $parent   = $folderController->getByBackendAndGlobalName($folder->account_id, $folder->parent);
+                    $parentId = $parent->getId();
+                } catch (Tinebase_Exception_NotFound $ten) {
+                    continue;
+                }
+            } else {
+                $parentId = 0;
             }
+            
+            $result[$folder['id']] = array(
+                'folderId'      => $folder['id'],
+                'parentId'      => $parentId,
+                'displayName'   => $folder['localname'],
+                'type'          => $this->_getFolderType($folder['localname'])
+            );
         }
         
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " folder result " . print_r($result, true));
