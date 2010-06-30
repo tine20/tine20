@@ -139,7 +139,6 @@ Ext.namespace('Tine.Felamimail');
                     + this.i18n._('Attachments') + '")]}</div>',
                 '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values.headers, values.attachments, values.content_type)]}</div>',
             '</div>',{
-            treePanel: this.grid.app.getMainScreen().getTreePanel(),
             encode: function(value) {
                 if (value) {
                     var encoded = Ext.util.Format.htmlEncode(value);
@@ -194,7 +193,7 @@ Ext.namespace('Tine.Felamimail');
                         // should be already purified ... but just as precaution
                         value = Ext.util.Format.stripScripts(value);
                     } else {
-                        if (this.treePanel.getActiveAccount().get('display_format') == 'plain') {
+                        if (Tine.Tinebase.appMgr.get('Felamimail').getMainScreen().getTreePanel().getActiveAccount().get('display_format') == 'plain') {
                             value = Ext.util.Format.htmlEncode(value);
                         }
                         value = Ext.util.Format.nl2br(value);
