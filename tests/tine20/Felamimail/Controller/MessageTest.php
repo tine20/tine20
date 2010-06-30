@@ -486,6 +486,30 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertContains('Autovervollständigung', $message->body);
         $this->assertEquals('moz-screenshot-83.png', $message->attachments[0]["filename"]);
     }
+
+    /**
+     * test forward with attachment
+     * 
+     * @todo implement
+     */
+    public function testForwardMessageWithAttachment()
+    {
+        /*
+        $this->_appendMessage('multipart_related.eml', $this->_folder);
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/related'
+        ));
+        $message = $this->_imap->getSummary($result[0]);
+        
+        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
+        */
+        // forward message
+        /*
+        $message = set original id = $cachedMessage->getId()
+        $this->_controller->sendMessage($message)
+        */
+    }
     
     /**
      * validate fetching a complete message
