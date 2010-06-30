@@ -230,7 +230,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' set flags on cache');
         
-        $affectedFolders = $this->_updateFolderCounts($folderIds);
+        $affectedFolders = $this->_updateFolderCounts($folderIds, 'addFlags');
         return $affectedFolders;
     }
     
@@ -310,7 +310,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cleared flags on cache');
         
-        $affectedFolders = $this->_updateFolderCounts($folderIds, '+');
+        $affectedFolders = $this->_updateFolderCounts($folderIds, 'clearFlags');
         return $affectedFolders;
     }
     
@@ -407,27 +407,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
-        // @todo return list of affected folders
-        /*
-        foreach ($folderIds as $folderId => $counter) {
-            $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
-            if ($folder->cache_unreadcount < $counter['decrementUnreadCounter'] || $folder->cache_totalcount < $counter['decrementMessagesCounter']) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
-                    ' folder counters dont match => refresh counters'
-                );
-                $updatedCounters = Felamimail_Controller_Cache_Folder::getInstance()->getCacheFolderCounter($folder);
-                Felamimail_Controller_Folder::getInstance()->updateFolderCounter($folder, $updatedCounters);
-            } else {
-                Felamimail_Controller_Folder::getInstance()->updateFolderCounter($folder, array(
-                    'cache_totalcount'  => "-" . $counter['decrementMessagesCounter'],
-                    'cache_unreadcount' => "-" . $counter['decrementUnreadCounter']
-                ));
-            }
-        }
-        */
-        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' deleted messages on cache');
         
+        $affectedFolders = $this->_updateFolderCounts($folderIds, 'delete');
+        return $affectedFolders;
     }
     
     /**
@@ -500,24 +483,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
-        // @todo return list of affected folders
-        foreach ($folderIds as $folderId => $counter) {
-            $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
-            if ($folder->cache_unreadcount < $counter['decrementUnreadCounter'] || $folder->cache_totalcount < $counter['decrementMessagesCounter']) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
-                    ' folder counters dont match => refresh counters'
-                );
-                $updatedCounters = Felamimail_Controller_Cache_Folder::getInstance()->getCacheFolderCounter($folder);
-                Felamimail_Controller_Folder::getInstance()->updateFolderCounter($folder, $updatedCounters);
-            } else {
-                Felamimail_Controller_Folder::getInstance()->updateFolderCounter($folder, array(
-                    'cache_totalcount'  => "-" . $counter['decrementMessagesCounter'],
-                    'cache_unreadcount' => "-" . $counter['decrementUnreadCounter']
-                ));
-            }
-        }
-                
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' deleted messages on cache');
+        
+        // @todo return list of affected folders
+        $affectedFolders = $this->_updateFolderCounts($folderIds, 'move');
         
         return Felamimail_Controller_Folder::getInstance()->get($targetFolder);
     }
@@ -852,34 +821,45 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * update folder counts and returns list of affected folders
      * 
      * @param array $_folderCounter (folderId => unreadcounter)
-     * @param string $_mode increment (+) or decrement (-)
+     * @param string $_mode addFlags|clearFlags|delete|move
      * @return Tinebase_Record_RecordSet of affected folders
      */
-    protected function _updateFolderCounts($_folderCounter, $_mode = '-')
+    protected function _updateFolderCounts($_folderCounter, $_mode)
     {
-        foreach ($_folderCounter as $folderId => $unreadCounter) {
+        foreach ($_folderCounter as $folderId => $counter) {
             $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
             switch ($_mode) {
-                case '-':
-                    $errorCondition = ($folder->cache_unreadcount < $unreadCounter);
+                case 'addFlags':
+                    $errorCondition = ($folder->cache_unreadcount < $counter);
+                    $updatedCounters = array(
+                        'cache_unreadcount' => "-$counter",
+                    );
                     break;
-                case '+':
-                    $errorCondition = ($folder->cache_unreadcount + $unreadCounter > $folder->cache_totalcount);
+                case 'clearFlags':
+                    $errorCondition = ($folder->cache_unreadcount + $counter > $folder->cache_totalcount);
+                    $updatedCounters = array(
+                        'cache_unreadcount' => "+$counter",
+                    );
+                    break;
+                case 'delete':
+                case 'move':
+                    $errorCondition = ($folder->cache_unreadcount < $counter['decrementUnreadCounter'] || $folder->cache_totalcount < $counter['decrementMessagesCounter']);
+                    $updatedCounters = array(
+                        'cache_totalcount'  => "-" . $counter['decrementMessagesCounter'],
+                        'cache_unreadcount' => "-" . $counter['decrementUnreadCounter']
+                    );
                     break;
             }
             
             if ($errorCondition) {
-                // something went wrong => recalculate unread counter
+                // something went wrong => recalculate counter
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
                     ' folder counters dont match => refresh counters'
                 );
                 $updatedCounters = Felamimail_Controller_Cache_Folder::getInstance()->getCacheFolderCounter($folder);
-                Felamimail_Controller_Folder::getInstance()->updateFolderCounter($folder, $updatedCounters);
-            } else {
-                Felamimail_Controller_Folder::getInstance()->updateFolderCounter($folder, array(
-                    'cache_unreadcount' => $_mode + '$unreadCounter',
-                ));
             }
+            
+            Felamimail_Controller_Folder::getInstance()->updateFolderCounter($folder, $updatedCounters);
         }
         
         return Felamimail_Controller_Folder::getInstance()->getMultiple(array_keys($_folderCounter));
