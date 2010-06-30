@@ -20,12 +20,10 @@ Ext.namespace('Tine.Felamimail');
  * 
  * <p>Message Grid Panel</p>
  * <p><pre>
- * TODO         mark to delete / to move messages
  * TODO         add flagged/'starred' filter
  * TODO         add show source code function
  * TODO         make doubleclick work again: show mail in new window (no edit dialog)
  * TODO         add pdf export
- * TODO         make 'from' column non-(line-)breaking
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -589,7 +587,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 return record.get('account_id') === accountId && record.get('globalname') === trashName;
             }, this).first() : null;
             
-        return trash ? this.moveSelectedMessages(trash) : this.deleteSelectedMessages();
+        return trash && !trash.isCurrentSelection() ? this.moveSelectedMessages(trash) : this.deleteSelectedMessages();
     },
 
     /**
