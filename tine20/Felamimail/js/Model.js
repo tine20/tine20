@@ -436,8 +436,6 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
         
         switch(exception.code) {
             case 910: // Felamimail_Exception_IMAP
-                //break;
-                
             case 911: // Felamimail_Exception_IMAPServiceUnavailable
                 Ext.Msg.show({
                    title:   app.i18n._('IMAP Error'),
@@ -453,7 +451,6 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
                     imapStatus  = account ? account.get('imap_status') : null;
                     
                 if (account) {
-                    console.log(account);
                     Tine.Felamimail.credentialsDialog = Tine.widgets.dialog.CredentialsDialog.openWindow({
                         title: String.format(app.i18n._('IMAP Credentials for {0}'), account.get('name')),
                         appName: 'Felamimail',
@@ -472,10 +469,19 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
                             }
                         }
                     });
-                    break;
+                } else {
+                    exception.code = 910;
+                    return this.handleRequestException(exception);
                 }
-                // fallthrough
-                
+                break;
+            case 913: // Felamimail_Exception_IMAPFolderNotFound
+                Ext.Msg.show({
+                   title:   app.i18n._('IMAP Error'),
+                   msg:     app.i18n._('One of your folders was deleted from an other client, please reload you browser'),
+                   icon:    Ext.MessageBox.ERROR,
+                   buttons: Ext.Msg.OK
+                });
+                break;
             case 920: // Felamimail_Exception_SMTP
                 Ext.Msg.show({
                    title:   app.i18n._('SMTP Error'),
