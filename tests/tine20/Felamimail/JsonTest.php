@@ -6,9 +6,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
- * @todo        add tests for attachments
  */
 
 /**
@@ -97,24 +96,27 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->_createdFolders as $foldername) {
-            Felamimail_Controller_Folder::getInstance()->delete($this->_account->getId(), $foldername);
+        foreach ($this->_createdFolders as $folderName) {
+            Felamimail_Controller_Folder::getInstance()->delete($this->_account->getId(), $folderName);
         }
         
         if (! empty($this->_foldersToClear)) {
-            // delete test messages from imap
             $imap = Felamimail_Backend_ImapFactory::factory($this->_account);
             
-            foreach ($this->_foldersToClear as $folder) {
-                $imap->selectFolder($folder);
+            foreach ($this->_foldersToClear as $folderName) {
+                // delete test messages from given folders on imap server (search by special header)
+                $imap->selectFolder($folderName);
                 $result = $imap->search(array(
                     'HEADER X-Tine20TestMessage jsontest'
                 ));
                 //print_r($result);
-                
-                foreach($result as $messageUid) {
+                foreach ($result as $messageUid) {
                     $imap->removeMessage($messageUid);
                 }
+                
+                // clear message cache
+                $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $folderName);
+                Felamimail_Controller_Cache_Message::getInstance()->clear($folder);
             }
         }
     }
@@ -345,24 +347,20 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test flags
+     * test flags (add + clear)
      * 
      */
     public function testSetAndClearFlags()
     {
         $message = $this->_sendMessage();
         
-        // add flag
         $this->_json->addFlags(array($message['id']), Zend_Mail_Storage::FLAG_FLAGGED);
         
-        // check flags
         $message = $this->_json->getMessage($message['id']);
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_FLAGGED, $message['flags']));
         
-        // remove flag
         $this->_json->clearFlags(array($message['id']), Zend_Mail_Storage::FLAG_FLAGGED);
         
-        // check flags
         $message = $this->_json->getMessage($message['id']);
         $this->assertFalse(in_array(Zend_Mail_Storage::FLAG_FLAGGED, $message['flags']));
     }
@@ -475,7 +473,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     protected function _getFolder($_name)
     {
         Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
-        $folderBackend = new Felamimail_Backend_Folder();
         $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $_name);
         
         return $folder;
