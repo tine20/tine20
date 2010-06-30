@@ -151,6 +151,16 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
     }
     
     /**
+     * delete folder(s) from cache
+     * 
+     * @param string|array $_id
+     */
+    public function delete($_id)
+    {
+        $this->_backend->delete($_id);
+    }
+    
+    /**
      * get folder status/values from imap server and update folder cache record in database
      * 
      * @param Felamimail_Model_Folder $_folder
@@ -311,8 +321,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         if (count($cachedFolderIds) > count($result)) {
             // remove folders from cache
             $noLongerExistingIds = array_diff($cachedFolderIds, $result->getArrayOfIds());
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing ' . count($noLongerExistingIds) . ' no longer existing folder from cache.');
-            $this->_backend->delete($noLongerExistingIds);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing ' . count($noLongerExistingIds) . ' no longer existing folder from cache.');
+            $this->delete($noLongerExistingIds);
         }
         
         return $result;
