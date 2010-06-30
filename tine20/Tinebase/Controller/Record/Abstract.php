@@ -839,4 +839,36 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $this->_doRightChecks = (bool) $_value;
     }
+    
+    /**
+     * convert input to recordset
+     * 
+     * input can have the following datatypes:
+     * - Tinebase_Model_Filter_FilterGroup
+     * - Tinebase_Record_RecordSet
+     * - Tinebase_Record_Abstract
+     * - string (single id)
+     * - array (multiple ids)
+     * 
+     * @param mixed $_mixed
+     * @param boolean $_refresh if this is TRUE, refresh the recordset by calling getMultiple
+     * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _convertToRecordSet($_mixed, $_refresh = FALSE)
+    {
+        if ($_mixed instanceof Tinebase_Model_Filter_FilterGroup) {
+            $result = $this->search($_mixed);
+        } elseif ($_mixed instanceof Tinebase_Record_RecordSet) {
+            $result = ($_refresh) ? $this->_backend->getMultiple($_mixed->getArrayOfIds()) : $_mixed;
+        } elseif ($_mixed instanceof Tinebase_Record_Abstract) {
+            $result = $this->_backend->getMultiple($_mixed->getId());
+        } elseif (is_string($_mixed) || is_array($_mixed)) {
+            $result = $this->_backend->getMultiple($_mixed);
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('Wrong type.');
+        }
+        
+        return $result;
+    }
 }
