@@ -35,16 +35,15 @@ class ActiveSync_Backend_FolderState extends Tinebase_Backend_Sql_Abstract
     protected $_modelName = 'ActiveSync_Model_FolderState';
         
     /**
-     * delete all stored folderId's for given device and class
+     * delete all stored folderId's for given device
      *
      * @param ActiveSync_Model_Device $_deviceId
      * @param string $_class
      */
-    public function resetState(ActiveSync_Model_Device $_deviceId, $_class)
+    public function resetState(ActiveSync_Model_Device $_deviceId)
     {
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?', $_deviceId->getId()),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('class') . ' = ?', $_class)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?', $_deviceId->getId())
         );
         
         $this->_db->delete(SQL_TABLE_PREFIX . $this->_tableName, $where);
