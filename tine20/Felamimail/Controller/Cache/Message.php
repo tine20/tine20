@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add body of messages of last week (?) to cache?
  */
 
 /**
@@ -100,12 +99,13 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      * @param string|Felamimail_Model_Folder $_folder
      * @param integer $_time in seconds
      * @return Felamimail_Model_Folder folder status (in cache)
+     * @throws Felamimail_Exception_IMAPFolderNotFound
+     * @throws Felamimail_Exception
      */
     public function update($_folder, $_time = 10)
     {
         // always read folder from database
         $folder = Felamimail_Controller_Folder::getInstance()->get($_folder);
-        
         
         // check if we are allowed to update message cache?
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -117,12 +117,16 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         }
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-
-        
         
         // get imap connection, select folder and purge messages with \Deleted flag 
         $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
-        $imap->expunge($folder->globalname);
+        try {
+            $imap->expunge($folder->globalname);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing no longer existing folder ' . $folder->globalname . ' from cache.');
+            Felamimail_Controller_Cache_Folder::getInstance()->delete($folder->getId());
+            throw new Felamimail_Exception_IMAPFolderNotFound();
+        }
         
         $folderCache = Felamimail_Controller_Cache_Folder::getInstance();
 
@@ -156,7 +160,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         
         $cacheMessageSequence = null;
         $imapMessageSequence  = null;
-        
                 
         $timeStart   = microtime(true);
         $timeElapsed = 0;

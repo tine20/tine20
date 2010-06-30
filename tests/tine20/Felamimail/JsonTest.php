@@ -187,11 +187,17 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         // update cache and check if folder is found
         $result = $this->_json->updateFolderCache($this->_account->getId(), $this->_testFolderName);
+        $testfolder = $result[0];
         $this->assertGreaterThan(0, count($result));
-        $this->assertEquals($this->_testFolderName . $this->_account->delimiter . 'test', $result[0]['globalname']);
+        $this->assertEquals($this->_testFolderName . $this->_account->delimiter . 'test', $testfolder['globalname']);
         
         // delete folder directly on imap server
         $imap->removeFolder($this->_testFolderName . $this->_account->delimiter . 'test');
+        $this->_createdFolders = array();
+        
+        // try to update message cache of nonexistant folder
+        $this->setExpectedException('Felamimail_Exception_IMAPFolderNotFound');
+        $removedTestfolder = $this->_json->updateMessageCache($testfolder['id'], 1);
         
         // update cache and check if folder is deleted
         $result = $this->_json->updateFolderCache($this->_account->getId(), $this->_testFolderName);
