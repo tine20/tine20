@@ -101,6 +101,8 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      * @return Felamimail_Model_Folder folder status (in cache)
      * @throws Felamimail_Exception_IMAPFolderNotFound
      * @throws Felamimail_Exception
+     * 
+     * @todo split this in multiple functions
      */
     public function update($_folder, $_time = 10)
     {
@@ -446,6 +448,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Cache status cache total count: {$folder->cache_totalcount} imap total count: {$folder->imap_totalcount} cache sequence: $cacheMessageSequence imap sequence: $imapMessageSequence");
         
+        // @todo move this to another place (updateFlags)
 //        // lets update message flags if some time is left
 //        if ($timeElapsed < $_time) {
 //            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
