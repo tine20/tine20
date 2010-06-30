@@ -45,7 +45,7 @@ class Felamimail_Backend_ImapProxy
      *   - folder select this folder [optional, default = 'INBOX']
      *
      * @param  array $params mail reader specific parameters
-     * @throws Felamimail_Exception_InvalidCredentials
+     * @throws Felamimail_Exception_IMAPInvalidCredentials
      * @return void
      */
     public function __construct($params)
@@ -55,7 +55,7 @@ class Felamimail_Backend_ImapProxy
         }
 
         if (!isset($params->user)) {
-            throw new Felamimail_Exception_InvalidCredentials('Need at least user in params.');
+            throw new Felamimail_Exception_IMAPInvalidCredentials('Need at least user in params.');
         }
         
         $params->host     = isset($params->host)     ? $params->host     : 'localhost';
