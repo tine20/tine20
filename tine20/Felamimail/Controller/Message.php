@@ -831,38 +831,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * 
-     * @param  array   $_messageStructure
-     * @param  string  $_partId            the part id to search for
-     * @return array
-     */
-    protected function _getPartStructure(array $_messageStructure, $_partId)
-    {
-        // maybe we want no part at all => just return the whole structure
-        if($_partId == null) {
-            return $_messageStructure;
-        }
-        
-        // maybe we want the first part => just return the whole structure
-        if($_messageStructure['partId'] == $_partId) {
-            return $_messageStructure;
-        }
-                
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveArrayIterator($_messageStructure),
-            RecursiveIteratorIterator::SELF_FIRST
-        );
-        
-        foreach($iterator as $key => $value) {
-            if($key == $_partId) {
-                return $value;
-            }
-        }
-        
-        throw new Felamimail_Exception("structure for partId $_partId not found");
-    }
-    
-    /**
      * get attachments of message
      *
      * @param  array  $_structure
@@ -905,6 +873,38 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /************************* protected funcs *************************/
+    
+    /**
+     * 
+     * @param  array   $_messageStructure
+     * @param  string  $_partId            the part id to search for
+     * @return array
+     */
+    protected function _getPartStructure(array $_messageStructure, $_partId)
+    {
+        // maybe we want no part at all => just return the whole structure
+        if($_partId == null) {
+            return $_messageStructure;
+        }
+        
+        // maybe we want the first part => just return the whole structure
+        if($_messageStructure['partId'] == $_partId) {
+            return $_messageStructure;
+        }
+                
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveArrayIterator($_messageStructure),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+        
+        foreach($iterator as $key => $value) {
+            if($key == $_partId) {
+                return $value;
+            }
+        }
+        
+        throw new Felamimail_Exception("structure for partId $_partId not found");
+    }
     
     /**
      * get imap backend and folder (and select folder)
