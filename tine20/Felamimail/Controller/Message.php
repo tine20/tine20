@@ -310,7 +310,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cleared flags on cache');
         
-        $affectedFolders = $this->_updateFolderCounts($folderIds);
+        $affectedFolders = $this->_updateFolderCounts($folderIds, '+');
         return $affectedFolders;
     }
     
@@ -408,6 +408,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
         // @todo return list of affected folders
+        /*
         foreach ($folderIds as $folderId => $counter) {
             $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
             if ($folder->cache_unreadcount < $counter['decrementUnreadCounter'] || $folder->cache_totalcount < $counter['decrementMessagesCounter']) {
@@ -423,6 +424,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 ));
             }
         }
+        */
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' deleted messages on cache');
         
