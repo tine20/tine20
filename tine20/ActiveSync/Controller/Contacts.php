@@ -131,7 +131,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      * @param string      $_serverId  the local entry id
      * @param boolean     $_withBody  retrieve body of entry
      */
-    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options)
+    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options, $_neverTruncate = false)
     {
         $data = $this->_contentController->get($_serverId);
         

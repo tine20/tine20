@@ -413,5 +413,5 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      * @param string      $_serverId  the local entry id
      * @param boolean     $_withBody  retrieve body of entry
      */
-    abstract public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options);    
+    abstract public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options, $_neverTruncate = false);    
 }

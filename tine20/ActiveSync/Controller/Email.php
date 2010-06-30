@@ -150,9 +150,9 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      * @param string      $_serverId  the local entry id
      * @param boolean     $_withBody  retrieve body of entry
      */
-    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options)
+    public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options = array(), $_neverTruncate = false)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append email " . $_serverId);
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append email " . $_serverId/* . ' options ' . print_r($_options, true)*/);
         
         $data = $this->_contentController->get($_serverId);
                         
@@ -191,57 +191,65 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             $_xmlNode->appendChild(new DOMElement('Read', 0, 'uri:Email'));
         }
         
-        // get prefered mime type of the message
-        $mimeType = Zend_Mime::TYPE_TEXT;
-
-        // Currently I have no idea how to send html emails to AS 2.5 devices
-        if (version_compare($this->_device->acsversion, '12.0', '>=')) {
-            if (array_key_exists('bodyPreferenceType', $_options)) {
-                if ($_options['bodyPreferenceType'] === 2) {
-                    $mimeType = Zend_Mime::TYPE_HTML;
-                }
-            } elseif (array_key_exists('mimeSupport', $_options)) {
-                if ($_options['mimeSupport'] === 2) {
-                    $mimeType = Zend_Mime::TYPE_HTML;
-                }
-            }
-        }
-        
         // get truncation
         $truncateAt = null;
         
-        if (array_key_exists('truncationSize', $_options)) {
-            $truncateAt = $_options['truncationSize'];
-        } elseif ($_options['mimeTruncation'] < 8) {
-            switch($_options['mimeTruncation']) {
-                case 0:
-                    $truncateAt = 0;
-                    break;
-                case 1:
-                    $truncateAt = 4096;
-                    break;
-                case 2:
-                    $truncateAt = 5120;
-                    break;
-                case 3:
-                    $truncateAt = 7168;
-                    break;
-                case 4:
-                    $truncateAt = 10240;
-                    break;
-                case 5:
-                    $truncateAt = 20480;
-                    break;
-                case 6:
-                    $truncateAt = 51200;
-                    break;
-                case 7:
-                    $truncateAt = 102400;
-                    break;
+        if ($_options['mimeSupport'] == 2 && (version_compare($this->_device->acsversion, '12.0', '<=') || isset($_options['bodyPreferences'][4]))) {
+            if ($_neverTruncate === false && isset($_options['bodyPreferences'][4]) && isset($_options['bodyPreferences'][4]['truncationSize'])) {
+                $truncateAt = $_options['bodyPreferences'][4]['truncationSize'];
+            }
+            $airSyncBaseType = 4;
+        } elseif (isset($_options['bodyPreferences'][2])) {
+            if ($_neverTruncate === false && isset($_options['bodyPreferences'][2]['truncationSize'])) {
+                $truncateAt = $_options['bodyPreferences'][2]['truncationSize'];
+            }
+            $airSyncBaseType = 2;
+        } else {
+            if ($_neverTruncate === false && isset($_options['bodyPreferences'][1]) && isset($_options['bodyPreferences'][1]['truncationSize'])) {
+                $truncateAt = $_options['bodyPreferences'][1]['truncationSize'];
+            }
+            $airSyncBaseType = 1;
+        }
+        
+        if ($_neverTruncate === false) {
+            if ($_options['mimeTruncation'] < 8) {
+                switch($_options['mimeTruncation']) {
+                    case 0:
+                        $truncateAt = 0;
+                        break;
+                    case 1:
+                        $truncateAt = 4096;
+                        break;
+                    case 2:
+                        $truncateAt = 5120;
+                        break;
+                    case 3:
+                        $truncateAt = 7168;
+                        break;
+                    case 4:
+                        $truncateAt = 10240;
+                        break;
+                    case 5:
+                        $truncateAt = 20480;
+                        break;
+                    case 6:
+                        $truncateAt = 51200;
+                        break;
+                    case 7:
+                        $truncateAt = 102400;
+                        break;
+                }
             }
         }
         
-        $messageBody  = $this->_contentController->getMessageBody($_serverId, $mimeType, true);
+        if ($airSyncBaseType == 4) {
+            // getMessagePart will return Zend_Mime_Part
+            $messageBody = $this->_contentController->getMessagePart($_serverId);
+            $messageBody = stream_get_contents($messageBody->getRawStream()); 
+        } else {
+            $messageBody = $this->_contentController->getMessageBody($_serverId, $airSyncBaseType = 2 ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT, true);
+        }
+        
         if($truncateAt !== null && strlen($messageBody) > $truncateAt) {
             $messageBody  = substr($messageBody, 0, $truncateAt);
             // maybe the last character is no unicode character anymore
@@ -254,24 +262,35 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         if (strlen($messageBody) > 0) {
             if (version_compare($this->_device->acsversion, '12.0', '>=')) {
                 $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:AirSyncBase'));
-                $body->appendChild(new DOMElement('Type', $mimeType == Zend_Mime::TYPE_HTML ? 2 : 1, 'uri:AirSyncBase'));
+                $body->appendChild(new DOMElement('Type', $airSyncBaseType, 'uri:AirSyncBase'));
                 $body->appendChild(new DOMElement('Truncated', $isTruncacted, 'uri:AirSyncBase'));
                 $body->appendChild(new DOMElement('EstimatedDataSize', $data->size, 'uri:AirSyncBase'));
                 
                 $dataTag = $body->appendChild(new DOMElement('Data', null, 'uri:AirSyncBase'));
                 $dataTag->appendChild(new DOMText($messageBody));
                 
-                $_xmlNode->appendChild(new DOMElement('NativeBodyType', $mimeType == Zend_Mime::TYPE_HTML ? 2 : 1, 'uri:AirSyncBase'));
+                $_xmlNode->appendChild(new DOMElement('NativeBodyType', $airSyncBaseType, 'uri:AirSyncBase'));
             } else {
-                $_xmlNode->appendChild(new DOMElement('BodyTruncated', $isTruncacted, 'uri:Email'));
-                
-                $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:Email'));
-                $body->appendChild(new DOMText($messageBody));
+                if ($airSyncBaseType == 4) {
+                    $_xmlNode->appendChild(new DOMElement('MIMETruncated', $isTruncacted, 'uri:Email'));
+                    
+                    $body = $_xmlNode->appendChild(new DOMElement('MIMEData', null, 'uri:Email'));
+                    $body->appendChild(new DOMText($messageBody));
+                    
+                } else {
+                    $_xmlNode->appendChild(new DOMElement('BodyTruncated', $isTruncacted, 'uri:Email'));
+                    
+                    $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:Email'));
+                    $body->appendChild(new DOMText($messageBody));
+                }
             }
         }
         
-        
-        $_xmlNode->appendChild(new DOMElement('MessageClass', 'IPM.Note', 'uri:Email'));
+        if ($airSyncBaseType == 4) {
+            $_xmlNode->appendChild(new DOMElement('MessageClass', 'IPM.Note.SMIME', 'uri:Email'));
+        } else {
+            $_xmlNode->appendChild(new DOMElement('MessageClass', 'IPM.Note', 'uri:Email'));
+        }
         $_xmlNode->appendChild(new DOMElement('ContentClass', 'urn:content-classes:message', 'uri:Email'));
         // NativeBodyType
         
