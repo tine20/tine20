@@ -160,5 +160,6 @@ Tine.Timetracker.Model.TimeaccountGrant = Ext.data.Record.create([
     {name: 'view_all',        type: 'boolean'},
     {name: 'book_all',        type: 'boolean'},
     {name: 'manage_billable', type: 'boolean'},
+    {name: 'exportGrant',     type: 'boolean'},
     {name: 'manage_all',      type: 'boolean'}
 ]);

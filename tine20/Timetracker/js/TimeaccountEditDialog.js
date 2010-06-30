@@ -246,7 +246,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 new Ext.ux.grid.CheckColumn({
                     header:this.app.i18n. _('Export'),
                     tooltip: _('The grant to export Timesheets of Timeaccount'),
-                    dataIndex: 'export',
+                    dataIndex: 'exportGrant',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
