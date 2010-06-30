@@ -1043,9 +1043,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                         throw new Felamimail_Exception('No original message available for forward!');
                     }
                     
+                    // @todo do decoding and check if getMessagePart delivers the original message correctly as Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
                     $part = $this->getMessagePart($_originalMessage, 'TEXT');
                     $part->disposition = 'attachment; filename="' . $attachment['name'] . '"';
                     
+                    // @deprecated code follows
                     /*
                     if ($_originalMessage === NULL) {
                         throw new Felamimail_Exception('No original message available for forward!');
