@@ -205,7 +205,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             foreach ($flags as $flag) {
                 if (!is_array($message->flags) || !in_array($flag, $message->flags)) {
                     if ($flag == Zend_Mail_Storage::FLAG_DELETED) {
-                        $this->delete($message->getId());
+                        $this->_cacheController->delete($message->getId());
                         $messagesToFlag->removeRecord($message);
                     } else {
                         $this->_backend->addFlag($message, $flag);
@@ -317,9 +317,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * delete messages in cache backend and on imap server
      * @param  mixed  $_ids
+     * 
+     * @deprecated this is legacy code
      */
     public function delete($_ids)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' This function is deprecated!');
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete messages: ' . count($_ids));
         
         // we always need to read the messages from cache to get the current flags
@@ -1024,7 +1027,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Message $_originalMessage
      * @throws Felamimail_Exception if max attachment size exceeded or no originalMessage available for forward
      * 
-     * @todo use getMessagePart() for attachments / messages
+     * @todo use getMessagePart() for attachments?
      */
     protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, $_originalMessage = NULL)
     {
@@ -1036,6 +1039,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 
                 if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
                     
+                    if ($_originalMessage === NULL) {
+                        throw new Felamimail_Exception('No original message available for forward!');
+                    }
+                    
+                    $part = $this->getMessagePart($_originalMessage, 'TEXT');
+                    $part->disposition = 'attachment; filename="' . $attachment['name'] . '"';
+                    
+                    /*
                     if ($_originalMessage === NULL) {
                         throw new Felamimail_Exception('No original message available for forward!');
                     } else {
@@ -1057,6 +1068,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     $part->disposition = 'attachment; filename="' . $attachment['name'] . '"';
                     // @todo decode content first and remove this
                     $part->encoding = Zend_Mime::ENCODING_7BIT;
+                    */
                     
                 } else {
                     if (! array_key_exists('path', $attachment)) {
