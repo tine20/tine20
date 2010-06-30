@@ -242,7 +242,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * @param string $_parentFolder
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      * 
-     * @todo    replace mb_convert_encoding with iconv or something like that
      * @todo    move delete sync to extra function
      */
     protected function _getOrCreateFolders(array $_folders, $_account, $_parentFolder)
@@ -267,6 +266,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 // decode folder name
                 if (extension_loaded('mbstring')) {
                     $folderData['localName'] = mb_convert_encoding($folderData['localName'], "utf-8", "UTF7-IMAP");
+                } else if (extension_loaded('imap')) {
+                    $folderData['localName'] = iconv('ISO-8859-1', 'utf-8', imap_utf7_decode($folderData['localName']));
                 }
                 
                 $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_account->getId(), $folderData['globalName']);
