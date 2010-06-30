@@ -213,19 +213,15 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * @throws Zend_Mail_Protocol_Exception
      * @throws Zend_Mail_Storage_Exception
      */
-    public function getRawContent($id, $part = null, $peek = false)
+    public function getRawContent($id, $part = 'TEXT', $peek = false)
     {
         if ($peek === false) {
-            $bodyCommand = 'BODY';
+            $item = 'BODY';
         } else {
-            $bodyCommand = 'BODY.PEEK';
+            $item = 'BODY.PEEK';
         }
         
-        if ($part !== null) {
-            $item = $bodyCommand . "[$part]";
-        } else {
-            $item = $bodyCommand . '[TEXT]';
-        }
+        $item = $item . "[$part]";
         
         return $this->_protocol->fetch($item, $id, null, $this->_useUid);
     }

@@ -732,7 +732,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @todo make it possible to get complete message (CONTENT_TYPE_MESSAGE_RFC822)
      */
-    public function getMessagePart($_id, $_partId)
+    public function getMessagePart($_id, $_partId = null)
     {
         if ($_id instanceof Felamimail_Model_Message) {
             $message = $_id;
@@ -740,7 +740,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $this->get($_id);
         }
         
-        $partStructure  = $this->_getPartStructure($message->structure, $_partId); 
+        $partStructure  = $this->_getPartStructure($message->structure, $_partId);
         
         $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
         
@@ -803,14 +803,18 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $this->_appendCharsetFilter($bodyPart, $partStructure);
         
-        $body = $this->_convertContentType($partStructure['contentType'], $_contentType, $bodyPart->getDecodedContent());
+        $body = $bodyPart->getDecodedContent();
         
         if($_contentType != Zend_Mime::TYPE_TEXT) {
             $body = $this->_purifyBodyContent($body);
         }
         
-        $body = $this->_replaceUriAndSpaces($body);
-        $body = $this->_replaceEmails($body);
+        $body = $this->_convertContentType($partStructure['contentType'], $_contentType, $body);
+        
+        if($bodyPart->type == Zend_Mime::TYPE_TEXT && $_contentType == Zend_Mime::TYPE_HTML) {
+            $body = $this->_replaceUriAndSpaces($body);
+            $body = $this->_replaceEmails($body);
+        }
         
         $cache->save($body, $cacheId, array('getMessageBody'));
         
@@ -853,11 +857,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _getPartStructure(array $_messageStructure, $_partId)
     {
-        // maybe we want the first part
-        if($_messageStructure['partId'] == $_partId) {
+        // maybe we want no part at all => just return the whole structure
+        if($_partId == null) {
             return $_messageStructure;
         }
         
+        // maybe we want the first part => just return the whole structure
+        if($_messageStructure['partId'] == $_partId) {
+            return $_messageStructure;
+        }
+                
         $iterator = new RecursiveIteratorIterator(
             new RecursiveArrayIterator($_messageStructure),
             RecursiveIteratorIterator::SELF_FIRST
