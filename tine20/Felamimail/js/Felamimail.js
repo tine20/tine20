@@ -339,7 +339,9 @@ Tine.Felamimail.getSignature = function(id) {
         
     var result = '';
     
-    if (! id || id == 'default') {
+    if (! id) {
+        id = Tine.Tinebase.appMgr.get('Felamimail').getMainScreen().getTreePanel().getActiveAccount().id
+    } else if (id === 'default') {
         id = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
     }
     
