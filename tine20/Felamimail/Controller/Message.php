@@ -779,7 +779,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $body = $bodyPart->getDecodedContent();
         
-        if($_contentType != Zend_Mime::TYPE_TEXT) {
+        if($bodyPart->type != Zend_Mime::TYPE_TEXT) {
             $body = $this->_purifyBodyContent($body);
         }
         
