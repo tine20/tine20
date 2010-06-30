@@ -134,10 +134,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * skip initial till we know the INBOX id
      */
     initialLoad: function() {
-        var accountId = this.app.getActiveAccount().id,
-            inbox = this.app.getFolderStore().queryBy(function(record) {
+        var account = this.app.getActiveAccount(),
+            accountId = account ? account.id : null,
+            inbox = accountId ? this.app.getFolderStore().queryBy(function(record) {
                 return record.get('account_id') === accountId && record.get('localname') === 'INBOX';
-            }, this).first();
+            }, this).first() : null;
             
         if (! inbox) {
             this.initialLoad.defer(100, this, arguments);
