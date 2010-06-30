@@ -156,8 +156,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param mixed                     $_message
      * @param array                     $_flags
-     * 
-     * @todo update folder status if message unread/read
      */
     public function addFlags($_messages, $_flags)
     {
@@ -199,7 +197,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
             
             $imapMessageUids[] = $message->messageuid;
-            
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' set flags on imap server');
@@ -214,10 +211,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         foreach($messagesToFlag as $message) {
             foreach ($flags as $flag) {
                 if (!is_array($message->flags) || !in_array($flag, $message->flags)) {
-                    $this->_backend->addFlag($message, $flag);
-                    if ($flag == Zend_Mail_Storage::FLAG_SEEN) {
-                        // count messages with seen flag for the first time
-                        $folderIds[$message->folder_id]++;
+                    if ($flag == Zend_Mail_Storage::FLAG_DELETED) {
+                        $this->delete($message->getId());
+                        $messagesToFlag->removeRecord($message);
+                    } else {
+                        $this->_backend->addFlag($message, $flag);
+                        if ($flag == Zend_Mail_Storage::FLAG_SEEN) {
+                            // count messages with seen flag for the first time
+                            $folderIds[$message->folder_id]++;
+                        }
                     }
                 }
             }

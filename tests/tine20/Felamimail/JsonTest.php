@@ -353,10 +353,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test flags (add + clear)
+     * test flags (add + clear + deleted)
      * 
      */
-    public function testSetAndClearFlags()
+    public function testAddAndClearFlags()
     {
         $message = $this->_sendMessage();
         
@@ -369,6 +369,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $message = $this->_json->getMessage($message['id']);
         $this->assertFalse(in_array(Zend_Mail_Storage::FLAG_FLAGGED, $message['flags']));
+
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->_json->addFlags(array($message['id']), Zend_Mail_Storage::FLAG_DELETED);
+        $this->_json->getMessage($message['id']);
     }
     
     /**
