@@ -697,7 +697,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $cache = Tinebase_Core::get('cache');
-        $cacheId = 'getMessageBody' . $message->getId();
+        $cacheId = 'getMessageBody_' . $message->getId() . substr($_contentType, -4);
+        
         if ($cache->test($cacheId)) {
             return $cache->load($cacheId);
         }
