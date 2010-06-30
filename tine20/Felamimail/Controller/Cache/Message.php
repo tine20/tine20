@@ -175,7 +175,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             $decrementMessagesCounter = 0;
             $decrementUnreadCounter   = 0;
             
-            while($messageSequence === null) {
+            while ($messageSequence === null) {
                 $latestMessage = $this->_getLatestMessage($folder);
                 
                 if($latestMessage instanceof Felamimail_Model_Message) {
@@ -198,7 +198,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         
                         $folder->cache_totalcount--;
                         $decrementMessagesCounter++;
-                        if (!in_array(Zend_Mail_Storage::FLAG_SEEN, $latestMessage->flags)) {
+                        if (! $this->_hasSeenFlag($latestMessage)) {
                             $decrementUnreadCounter++;
                         }
                     }
@@ -274,7 +274,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                             $folder->cache_job_actions_done++;
                             $folder->cache_totalcount--;
                             $decrementMessagesCounter++;
-                            if (!in_array(Zend_Mail_Storage::FLAG_SEEN, $messageToBeDeleted->flags)) {
+                            if (! $this->_hasSeenFlag($messageToBeDeleted)) {
                                 $decrementUnreadCounter++;
                             }
                             
@@ -348,7 +348,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         $folder->cache_totalcount++;
                         $folder->cache_job_actions_done++;
                         $incrementMessagesCounter++;
-                        if (!in_array(Zend_Mail_Storage::FLAG_SEEN, $addedMessage->flags)) {
+                        if (! $this->_hasSeenFlag($addedMessage)) {
                             $incrementUnreadCounter++;
                         }
                     }
@@ -417,7 +417,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                             $folder->cache_totalcount++;
                             $folder->cache_job_actions_done++;
                             $incrementMessagesCounter++;
-                            if (!in_array(Zend_Mail_Storage::FLAG_SEEN, $addedMessage->flags)) {
+                            if (! $this->_hasSeenFlag($addedMessage)) {
                                 $incrementUnreadCounter++;
                             }
                         }
@@ -861,14 +861,14 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         $cacheId = 'getMessageHeaders' . $createdMessage->getId();
         Tinebase_Core::get('cache')->save($_message['header'], $cacheId, array('getMessageHeaders'));
         
-        #if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags)) {
+        #if (! $this->_hasSeenFlag($cachedMessage)) {
         #    $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
         #}
         
         if ($_updateFolderCounter == true) {
             Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
                 'cache_totalcount'  => "+1",
-                'cache_unreadcount' => (! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags)) ? '+1' : '+0',
+                'cache_unreadcount' => (! $this->_hasSeenFlag($cachedMessage)) ? '+1' : '+0',
             ));
         }
         
@@ -1006,5 +1006,16 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             }
         }
         return $result;
+    }
+    
+    /**
+     * check if message has \SEEN flag
+     * 
+     * @param Felamimail_Model_Message $_message
+     * @return boolean
+     */
+    protected function _hasSeenFlag($_message)
+    {
+        return (is_array($_message->flags) && in_array(Zend_Mail_Storage::FLAG_SEEN, $_message->flags));
     }
 }
