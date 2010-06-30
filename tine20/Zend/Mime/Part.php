@@ -84,6 +84,23 @@ class Zend_Mime_Part {
     }
 
     /**
+     * if this was created with a stream, return a stream for
+     * reading the content. very useful for large file attachments.
+     *
+     * @return stream
+     * @throws Zend_Mime_Exception if not a stream or unable to append filter
+     */
+    public function getRawStream()
+    {
+        if (!$this->_isStream) {
+            require_once 'Zend/Mime/Exception.php';
+            throw new Zend_Mime_Exception('Attempt to get a stream from a string part');
+        }
+
+        return $this->_content;
+    }
+    
+    /**
      * if this was created with a stream, return a filtered stream for
      * reading the content. very useful for large file attachments.
      *
@@ -185,6 +202,7 @@ class Zend_Mime_Part {
                 throw new Zend_Mime_Exception("Failed to append $filter filter");
             }
         }
+        
         return $this->_content;
     }
     
