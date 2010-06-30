@@ -513,6 +513,16 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
     }
     
     /**
+     * delete message(s) from cache
+     * 
+     * @param string|array $_id
+     */
+    public function delete($_id)
+    {
+        $this->_backend->delete($_id);
+    }
+    
+    /**
      * get message with highest messageUid from cache 
      * 
      * @param  mixed  $_folderId
