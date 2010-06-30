@@ -162,15 +162,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add flags: ' . print_r($_flags, TRUE));
         
         // we always need to read the messages from cache to get the current flags
-        if ($_messages instanceof Felamimail_Model_MessageFilter) {
-            $messagesToFlag = $this->search($_messages);
-        } elseif ($_messages instanceof Tinebase_Record_RecordSet) {
-            $messagesToFlag = $this->_backend->getMultiple($_messages->getArrayOfIds());
-        } elseif ($_messages instanceof Felamimail_Model_Message) {
-            $messagesToFlag = $this->_backend->getMultiple($_messages->getId());
-        } else {
-            $messagesToFlag = $this->_backend->getMultiple($_messages);
-        }
+        $messagesToFlag = $this->_convertToRecordSet($_messages, TRUE);
         
         $messagesToFlag->sort('folder_id');
         
@@ -280,36 +272,26 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param mixed                     $_messages
      * @param array                     $_flags
      * @param Felamimail_Model_Folder   $_folder [optional]
-     * 
-     * @todo update folder status if message unread/read
      */
     public function clearFlags($_messages, $_flags, $_folder = NULL)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' clear flags: ' . print_r($_flags, TRUE));
         
         // we always need to read the messages from cache to get the current flags
-        if ($_messages instanceof Felamimail_Model_MessageFilter) {
-            $messagesToFlag = $this->search($_messages);
-        } elseif ($_messages instanceof Tinebase_Record_RecordSet) {
-            $messagesToFlag = $this->_backend->getMultiple($_messages->getArrayOfIds());
-        } elseif ($_messages instanceof Felamimail_Model_Message) {
-            $messagesToFlag = $this->_backend->getMultiple($_messages->getId());
-        } else {
-            $messagesToFlag = $this->_backend->getMultiple($_messages);
-        }
+        $messagesToUnflag = $this->_convertToRecordSet($_messages, TRUE);
         
-        $messagesToFlag->sort('folder_id');
+        $messagesToUnflag->sort('folder_id');
         
         $flags = (array) $_flags;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' retrieved ' . count($messagesToFlag) . ' messages from cache');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' retrieved ' . count($messagesToUnflag) . ' messages from cache');
                 
         $lastFolderId = null;
         $imapBackend  = null;
         $folderIds    = array();
         
         // set flags on imap server
-        foreach ($messagesToFlag as $message) {
+        foreach ($messagesToUnflag as $message) {
             if($imapBackend !== null && ($lastFolderId != $message->folder_id || count($imapMessageUids) >= 50)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' clear flags on imap server');
                 $imapBackend->clearFlags($imapMessageUids, array_intersect($flags, array_keys(self::$_allowedFlags)));
@@ -338,7 +320,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         // store flags in local cache
-        foreach($messagesToFlag as $message) {
+        foreach($messagesToUnflag as $message) {
             if (in_array(Zend_Mail_Storage::FLAG_SEEN, $flags) && in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
                 // count messages with seen flag for the first time
                 $folderIds[$message->folder_id]++;
@@ -349,7 +331,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // mark message as changed in the cache backend
         $this->_backend->updateMultiple(
-            $messagesToFlag->getArrayOfIds(), 
+            $messagesToUnflag->getArrayOfIds(), 
             array(
                 'timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
             )
@@ -386,15 +368,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete messages: ' . count($_ids));
         
         // we always need to read the messages from cache to get the current flags
-        if ($_ids instanceof Felamimail_Model_MessageFilter) {
-            $messages = $this->search($_ids);
-        } elseif ($_ids instanceof Tinebase_Record_RecordSet) {
-            $messages = $this->_backend->getMultiple($_ids->getArrayOfIds());
-        } elseif ($_ids instanceof Felamimail_Model_Message) {
-            $messages = $this->_backend->getMultiple($_ids->getId());
-        } else {
-            $messages = $this->_backend->getMultiple($_ids);
-        }
+        $messages = $this->_convertToRecordSet($_ids, TRUE);
                 
         $messages->sort('folder_id');
         
@@ -509,15 +483,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     public function moveMessages($_messages, $_targetFolder)
     {
         // we always need to read the messages from cache to get the current flags
-        if ($_messages instanceof Felamimail_Model_MessageFilter) {
-            $messages = $this->search($_messages);
-        } elseif ($_messages instanceof Tinebase_Record_RecordSet) {
-            $messages = $this->_backend->getMultiple($_messages->getArrayOfIds());
-        } elseif ($_messages instanceof Felamimail_Model_Message) {
-            $messages = $this->_backend->getMultiple($_messages->getId());
-        } else {
-            $messages = $this->_backend->getMultiple($_messages);
-        }
+        $messages = $this->_convertToRecordSet($_messages, TRUE);
                 
         $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
         
@@ -771,6 +737,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $part;
     }
     
+    /**
+     * get message body
+     * 
+     * @param string|Felamimail_Model_Message $_messageId
+     * @param string $_contentType
+     * @param boolean $_readOnly
+     * @return string
+     */
     public function getMessageBody($_messageId, $_contentType, $_readOnly = false)
     {
         if ($_messageId instanceof Felamimail_Model_Message) {
@@ -821,6 +795,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $body;
     }
     
+    /**
+     * get message headers
+     * 
+     * @param string|Felamimail_Model_Message $_messageId
+     * @param boolean $_readOnly
+     * @return array
+     */
     public function getMessageHeaders($_messageId, $_readOnly = false)
     {
         if (! $_messageId instanceof Felamimail_Model_Message) {
@@ -1051,7 +1032,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Message $_originalMessage
      * @throws Felamimail_Exception if max attachment size exceeded or no originalMessage available for forward
      * 
-     * @todo use php://temp for BIG attachments / messages
+     * @todo use getMessagePart() for attachments / messages
      */
     protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, $_originalMessage = NULL)
     {
@@ -1193,10 +1174,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * convert between contenttypes (text/plain => text/html for example)
-     * @param unknown_type $_from
-     * @param unknown_type $_to
-     * @param unknown_type $_text
+     * convert between content types (text/plain => text/html for example)
+     * 
+     * @param string $_from
+     * @param string $_to
+     * @param string $_text
+     * @return string
      */
     protected function _convertContentType($_from, $_to, $_text)
     {
