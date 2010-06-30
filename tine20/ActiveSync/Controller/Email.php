@@ -247,7 +247,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             $messageBody = $this->_contentController->getMessagePart($_serverId);
             $messageBody = stream_get_contents($messageBody->getRawStream()); 
         } else {
-            $messageBody = $this->_contentController->getMessageBody($_serverId, $airSyncBaseType = 2 ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT, true);
+            $messageBody = $this->_contentController->getMessageBody($_serverId, $airSyncBaseType == 2 ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT, true);
         }
         
         if($truncateAt !== null && strlen($messageBody) > $truncateAt) {
