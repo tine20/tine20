@@ -120,11 +120,9 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
             $count = 0;
             
             if($this->_syncKey == 0) {
+                $this->_folderStateBackend->resetState($this->_device);
+                
                 foreach($this->_classes as $class) {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " class: $class");
-                    
-                    $this->_folderStateBackend->resetState($this->_device, $class);
-                    
                     $dataController = ActiveSync_Controller::dataFactory($class, $this->_device, $this->_syncTimeStamp);
                     foreach($dataController->getSupportedFolders() as $folderId => $folder) {
                         $adds[$class][$folderId] = $folder;
@@ -171,15 +169,15 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
             $changes = $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Changes'));            
             $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Count', $count));
             foreach($adds as $class => $folders) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $class");
                 foreach((array)$folders as $folder) {
                     $add = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Add'));
                     $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folder['folderId']));
                     $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ParentId', $folder['parentId']));
                     $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'DisplayName', $folder['displayName']));
                     $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Type', $folder['type']));
-                    
                     $this->_addFolderState($class, $folder['folderId']);
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $class => " . $folder['folderId']);
                 }
             }
             
