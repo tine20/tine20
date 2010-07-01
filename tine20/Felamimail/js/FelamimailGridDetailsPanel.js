@@ -43,6 +43,7 @@ Ext.namespace('Tine.Felamimail');
     defaultHeight: 300,
     currentId: null,
     record: null,
+    app: null,
     i18n: null,
     
     /**
@@ -137,8 +138,9 @@ Ext.namespace('Tine.Felamimail');
                 '</div>',
                 '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments, "' 
                     + this.i18n._('Attachments') + '")]}</div>',
-                '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values.headers, values.attachments, values.content_type)]}</div>',
+                '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values)]}</div>',
             '</div>',{
+            app: this.app,
             encode: function(value) {
                 if (value) {
                     var encoded = Ext.util.Format.htmlEncode(value);
@@ -181,22 +183,11 @@ Ext.namespace('Tine.Felamimail');
                 return result;
             },
             
-            showBody: function(value, headers, attachments, content_type) {
-                if (value) {
-                    // check body content type and header content types
-                    if (content_type != 'text/plain' && headers['content-type']
-                        && (headers['content-type'].match(/text\/html/) 
-                            || headers['content-type'].match(/multipart\/alternative/)
-                            //|| headers['content-type'].match(/multipart\/signed/)
-                        )
-                    ) {
-                        // should be already purified ... but just as precaution
-                        value = Ext.util.Format.stripScripts(value);
-                    } else {
-                        if (Tine.Tinebase.appMgr.get('Felamimail').getMainScreen().getTreePanel().getActiveAccount().get('display_format') == 'plain') {
-                            value = Ext.util.Format.htmlEncode(value);
-                        }
-                        value = Ext.util.Format.nl2br(value);
+            showBody: function(body, messageData) {
+                body = body || '';
+                if (body) {
+                    if (this.app.getActiveAccount().get('display_format') == 'plain') {
+                        body = Ext.util.Format.nl2br(body);
                     }
                     
                     // add images inline
@@ -210,11 +201,8 @@ Ext.namespace('Tine.Felamimail');
                         value = value + '<hr>' + inlineAttachments;
                     }
                     */
-                    
-                } else {
-                    return '';
-                }
-                return value;
+                }                    
+                return body;
             },
             
             showHeaders: function(qtip) {

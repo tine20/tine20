@@ -310,6 +310,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.detailsPanel = new Tine.Felamimail.GridDetailsPanel({
             gridpanel: this,
             grid: this,
+            app: this.app,
             i18n: this.app.i18n
         });
     },
@@ -713,7 +714,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             recordData.id = recordId;
             recordData.original_id = selectedRecord.id;
             
-            var body = (selectedRecord.data.headers['content-type'].match(/text\/html/)) 
+            var body = (selectedRecord.get('content_type').match(/text\/html/)) 
                 ? selectedRecord.get('body')
                 : Ext.util.Format.nl2br(selectedRecord.get('body'));
                 
