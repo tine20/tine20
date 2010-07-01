@@ -104,9 +104,6 @@ Ext.namespace('Tine.Felamimail');
                     this.getEl().down('div').down('div').scrollTo('top', 0, false);
                     this.getLoadMask().hide();
                 },
-                // TODO show credentials dialog here if password failure
-                // TODO show empty message
-                // failure: Tine.Felamimail.Application.handleFailure
                 failure: function() {
                     this.defaultTpl.overwrite(body, {
                         msg: this.i18n._('Could not load message')
