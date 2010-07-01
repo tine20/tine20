@@ -704,13 +704,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
             var selectedRecord = selectedRows[0];
             
-            if (! selectedRecord.get('body') === undefined) {
-                // record is not / not fully loaded -> defer
-                this.detailsPanel.onDetailsUpdate(selModel);
-                this.onEditInNewWindow.defer(500, this, [button, event]);
-                return;
-            }
-            
             recordData.id = recordId;
             recordData.original_id = selectedRecord.id;
             
