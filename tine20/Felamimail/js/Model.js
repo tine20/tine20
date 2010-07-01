@@ -76,6 +76,10 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
         return false;
     },
     
+    bodyIsFetched: function() {
+        return this.get('body') !== undefined;
+    },
+    
     /**
      * clears given flag from message
      * 
@@ -146,25 +150,27 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
         return this.doXHTTPRequest(options);
     },
     
-//    /**
-//     * sets the given flag(s) to the given messages
-//     * 
-//     * @param {String/Array/Filter} ids
-//     * @param {String/Array} flag
-//     * @param {} options
-//     */
-//    setFlags: function(ids, flags, options) {
-//        options = options || {};
-//        options.params = options.params || {};
-//        
-//        var p = options.params;
-//        
-//        p.method = this.appName + '.setFlag';
-//        p.ids = ids;
-//        p.flag = flag;
-//        
-//        return this.doXHTTPRequest(options);
-//    },
+    /**
+     * fetches body into given message
+     * 
+     * @param {Message} message
+     */
+    fetchBody: function(message, callback) {
+        this.loadRecord(message, {
+            timeout: 120000, // 2 minutes
+            callback: function(options, success, response) {
+                var msgData = Ext.decode(response.responseText);
+                Ext.copyTo(message.data, msgData, 'body, flags, headers, attachments, to, cc, bcc, received');
+                if(Ext.isFunction(callback)){
+                    callback(message);
+                } else{
+                    Ext.callback(callback[success ? 'success' : 'failure'], callback.scope, [message]);
+                    Ext.callback(callback.callback, callback.scope, [message]);
+                }
+            }
+        });
+    },
+
     
     /**
      * add given flags to given messages

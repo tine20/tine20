@@ -83,36 +83,20 @@ Ext.namespace('Tine.Felamimail');
      * @private
      */
     updateDetails: function(record, body) {
-        // check if new record has been selected
+        
+        if (! record.bodyIsFetched()) {
+            Tine.Felamimail.messageBackend.fetchBody(record, this.updateDetails.createDelegate(this, [record, body]));
+            this.getLoadMask().show();
+            return;
+        }
+        
+        // check if new record has been selected to prevent scroll hopping
         if (record.id !== this.currentId) {                
             this.currentId = record.id;
-            Tine.Felamimail.messageBackend.loadRecord(record, {
-                timeout: 120000, // 2 minutes
-                scope: this,
-                success: function(message) {
-                    // save more values?
-                    record.data.body        = message.data.body;                            
-                    record.data.flags       = message.data.flags;
-                    record.data.headers     = message.data.headers;
-                    record.data.attachments = message.data.attachments;
-                    record.data.to          = message.data.to;
-                    record.data.cc          = message.data.cc;
-                    record.data.bcc         = message.data.bcc;
-                    record.data.received    = message.data.received;
-                    
-                    this.tpl.overwrite(body, message.data);
-                    this.getEl().down('div').down('div').scrollTo('top', 0, false);
-                    this.getLoadMask().hide();
-                },
-                failure: function() {
-                    this.defaultTpl.overwrite(body, {
-                        msg: this.i18n._('Could not load message')
-                    });
-                    this.getLoadMask().hide();
-                }
-            });
-            this.getLoadMask().show();
             
+            this.tpl.overwrite(body, record.data);
+            this.getEl().down('div').down('div').scrollTo('top', 0, false);
+            this.getLoadMask().hide();
         }
     },
     
