@@ -795,10 +795,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
         } elseif ($_structure['contentType'] == Zend_Mime::MULTIPART_MIXED || $_structure['contentType'] == Zend_Mime::MULTIPART_RELATED) {
             foreach ($_structure['parts'] as $part) {
-                if (is_array($part['disposition']) &&
-                    ($part['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $part['disposition'])))
+                if ((is_array($part['disposition']) &&
+                    ($part['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $part['disposition']))) ||
+                    $part["contentType"] == 'message/rfc822')
                 ) {
-                    if (array_key_exists('parameters', $part['disposition']) && array_key_exists('filename', $part['disposition']['parameters'])) {
+                    if (is_array($part['disposition']) && array_key_exists('parameters', $part['disposition']) && array_key_exists('filename', $part['disposition']['parameters'])) {
                         $filename = $part['disposition']['parameters']['filename'];
                     } elseif (is_array($part['parameters']) && array_key_exists('name', $part['parameters'])) {
                         $filename = $part['parameters']['name'];
