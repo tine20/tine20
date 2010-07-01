@@ -6,7 +6,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
- *
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -158,18 +157,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             requiredGrant: 'addGrant',
             actionType: 'add',
             text: this.app.i18n._('Write'),
-            handler: this.onEditInNewWindow,
-            iconCls: this.app.appName + 'IconCls',
-            scope: this
+            handler: this.onMessageCompose.createDelegate(this),
+            iconCls: this.app.appName + 'IconCls'
         });
 
         this.action_reply = new Ext.Action({
             requiredGrant: 'readGrant',
             actionType: 'reply',
             text: this.app.i18n._('Reply'),
-            handler: this.onEditInNewWindow,
+            handler: this.onMessageReplyTo.createDelegate(this, [false]),
             iconCls: 'action_email_reply',
-            scope: this,
             disabled: true
         });
 
@@ -177,9 +174,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             requiredGrant: 'readGrant',
             actionType: 'replyAll',
             text: this.app.i18n._('Reply To All'),
-            handler: this.onEditInNewWindow,
+            handler: this.onMessageReplyTo.createDelegate(this, [true]),
             iconCls: 'action_email_replyAll',
-            scope: this,
             disabled: true
         });
 
@@ -187,9 +183,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             requiredGrant: 'readGrant',
             actionType: 'forward',
             text: this.app.i18n._('Forward'),
-            handler: this.onEditInNewWindow,
+            handler: this.onMessageForward.createDelegate(this),
             iconCls: 'action_email_forward',
-            scope: this,
             disabled: true
         });
 
@@ -568,6 +563,42 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
     },
     
+    /**
+     * executed after a msg compose
+     * 
+     * @param {String} composedMsg
+     * @param {String} action
+     * @param {Array}  [affectedMsgs]  messages affected 
+     * 
+     */
+    onAfterCompose: function(composedMsg, action, affectedMsgs) {
+        composedMsg = Ext.isString(composedMsg) ? new this.recordClass(Ext.decode(composedMsg)) : composedMsg;
+        console.log(composedMsg);
+        console.log(action);
+        console.log(affectedMsgs);
+        /*
+        // mark send folders cache status incomplete
+        var folder = this.app.getFolderStore().getById(sendFolderId);
+        if (folder) {
+            folder.set('cache_status', 'incomplete');
+        }
+        
+        // silently add flag
+        if (Ext.isArray(addFlags)) {
+            Ext.each(affectedMsgs, function(msg) {
+                Ext.each(addFlags, function(flag) {
+                    msg.addFlag(flag);
+                }, this);
+            }, this);
+        }
+        */
+    },
+    
+    /**
+     * executed after msg delete
+     * 
+     * @param {Tine.Felamimail.Model.Folder} [folder]
+     */
     onAfterDelete: function(folder) {
         if (folder) {
             folder.set('cache_status', 'incomplete');
@@ -575,6 +606,55 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (! this.deleteTransactionId || ! Tine.Felamimail.messageBackend.isLoading(this.deleteTransactionId)) {
             this.loadData(true, true, true);
         }
+    },
+    
+    /**
+     * compse new message handler
+     */
+    onMessageCompose: function() {
+        Tine.Felamimail.MessageEditDialog.openWindow({
+            listeners: {
+                'update': this.onAfterCompose.createDelegate(this, ['compose'], 1)
+            }
+        });
+    },
+    
+    /**
+     * forward message(s) handler
+     */
+    onMessageForward: function() {
+        var sm = this.getGrid().getSelectionModel(),
+            msgs = sm.getSelections(),
+            msgsData = [];
+            
+        Ext.each(msgs, function(msg) {msgsData.push(Ext.encode(msg.data))}, this);
+        
+        if (sm.getCount() > 0) {
+            Tine.Felamimail.MessageEditDialog.openWindow({
+                forwardMsgs : msgsData,
+                listeners: {
+                    'update': this.onAfterCompose.createDelegate(this, ['forward', msgs], 1)
+                }
+            });
+        }
+    },
+    
+    /**
+     * reply message handler
+     * 
+     * @param {bool} toAll
+     */
+    onMessageReplyTo: function(toAll) {
+        var sm = this.getGrid().getSelectionModel(),
+            msg = sm.getSelected();
+            
+        Tine.Felamimail.MessageEditDialog.openWindow({
+            replyTo : Ext.encode(msg.data),
+            replyToAll: toAll,
+            listeners: {
+                'update': this.onAfterCompose.createDelegate(this, ['reply', [msg]], 1)
+            }
+        });
     },
     
     /**
@@ -621,7 +701,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Event} e
      */
     onRowDblClick: function(grid, row, e) {
-        return false;
+        Tine.Felamimail.MessageDisplayDialog.openWindow({
+            record: this.grid.getSelectionModel().getSelected()
+        });
     }, 
     
     /**
@@ -667,131 +749,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         Tine.Felamimail.GridPanel.superclass.onKeyDown.call(this, e);
-    },
-    
-    /**
-     * generic edit in new window handler
-     * - overwritten parent func
-     * - action type edit: reply/replyAll/forward
-     * 
-     * @param {Button} button
-     * @param {Event} event
-     */
-    onEditInNewWindow: function(button, event) {
-        
-        // check if account available first
-        if (Tine.Felamimail.loadAccountStore().getCount() == 0) {
-            // no account -> show message
-            Ext.Msg.alert(this.app.i18n._('Error'), this.app.i18n._('No Account configured'));
-            return;
-        }
-        
-        var recordData = this.recordClass.getDefaultData();
-        var recordId = 0;
-        var selModel = this.grid.getSelectionModel();
-        
-        // set selected account as from
-        recordData.from = this.app.getMainScreen().getTreePanel().getActiveAccount().data.id;
-        
-        if (    button.actionType == 'reply'
-            ||  button.actionType == 'replyAll'
-            ||  button.actionType == 'forward'
-        ) {
-            // reply / forward
-            var selectedRows = selModel.getSelections();
-            if (selectedRows.length == 0) {
-                return;
-            }
-            var selectedRecord = selectedRows[0];
-            
-            recordData.id = recordId;
-            recordData.original_id = selectedRecord.id;
-            
-            var body = (selectedRecord.get('content_type').match(/text\/html/)) 
-                ? selectedRecord.get('body')
-                : Ext.util.Format.nl2br(selectedRecord.get('body'));
-                
-            recordData.cc = [];
-            recordData.to = [];
-            switch (button.actionType) {
-                case 'replyAll':
-                    recordData.cc = selectedRecord.get('cc');
-                    recordData.to = selectedRecord.get('to');
-                    // fallthrough
-                case 'reply':
-                    if (selectedRecord.data.headers['reply-to']) {
-                        // use reply-to header if available
-                        recordData.to.push(selectedRecord.data.headers['reply-to']);
-                    } else {
-                        recordData.to.push(selectedRecord.get('from'));
-                    }
-                    
-                    recordData.body = '<br/>' + Ext.util.Format.htmlEncode(selectedRecord.get('from')) + ' ' + _('wrote') + ':<br/>'
-                        + '<blockquote class="felamimail-body-blockquote">' + body + '</blockquote><br/>';
-                    recordData.subject = _('Re: ') + selectedRecord.get('subject');
-                    recordData.flags = '\\Answered';
-                    break;
-                case 'forward':
-                    if (selectedRecord.get('attachments').length > 0) {
-                        // add message/rfc822 attachment if original message has attachments
-                        recordData.attachments = [{
-                            //name: this.app.i18n._('Original Message'),
-                            name: Ext.util.Format.ellipsis(selectedRecord.get('subject'), 40),
-                            type: 'message/rfc822',
-                            size: selectedRecord.get('size')
-                        }];
-                        recordData.body = '<br/>';
-                    } else {
-                        // only show original message in body if it has no attachments
-                        recordData.body = '<br/>-----' + _('Original message') + '-----<br/>'
-                            + this.formatHeaders(selectedRecord.get('headers'), false, true) + '<br/><br/>'
-                            + body + '<br/>';
-                    }
-                    recordData.subject = _('Fwd: ') + selectedRecord.get('subject');
-                    recordData.flags = 'Passed';
-                    break;
-            }
-            
-        } else if (button.actionType == 'edit') {
-            
-            // show existing email
-            var selectedRows = selModel.getSelections();
-            if (selectedRows.length == 0) {
-                return;
-            }
-            var selectedRecord = selectedRows[0];
-            recordId = selectedRecord.id;
-            recordData.id = recordId;
-        
-        } else {
-            
-            // new email
-            recordData.body = '<br/>';
-        }
-        
-        // add signature
-        recordData.body += Tine.Felamimail.getSignature();
-        
-        var record = new this.recordClass(recordData, recordId);
-        
-        var popupWindow = Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow({
-            record: record,
-            listeners: {
-                scope: this,
-                'update': function(record) {
-                    this.store.load({});
-                    // TODO it would be better to select the record after the store has been reloaded but somehow this doesn't work
-                    //if (selectedRecord) {
-                    //    this.grid.getSelectionModel().selectRecords.defer(200, this, [[selectedRecord]]);
-                    //}
-                }
-            }
-        });
-        
-        // workaround for the problem that the actions are not disabled even when the store has been reloaded 
-        //  and no record is selected
-        // @see TODO above
-        selModel.clearSelections();
     },
     
     /**

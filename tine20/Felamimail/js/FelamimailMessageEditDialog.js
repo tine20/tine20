@@ -33,6 +33,56 @@ Ext.namespace('Tine.Felamimail');
  * Create a new MessageEditDialog
  */
  Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+    /**
+     * @cfg {Array/String} bcc
+     * initial config for bcc
+     */
+    bcc: null,
+    
+    /**
+     * @cfg {String} body
+     */
+    body: '',
+    
+    /**
+     * @cfg {Array/String} cc
+     * initial config for cc
+     */
+    cc: null,
+    
+    /**
+     * @cfg {Array} of Tine.Felamimail.Model.Message (optionally encoded)
+     * messages to forward
+     */
+    forwardMsgs: null,
+    
+    /**
+     * @cfg {String} from account_id
+     * the accout id this message is send from
+     */
+    from: null,
+    
+    /**
+     * @cfg {Tine.Felamimail.Model.Message} (optionally encoded)
+     * message to reply to
+     */
+    replyTo: null,
+    
+    /**
+     * @cfg {Boolean} (defaults to false)
+     */
+    replyToAll: false,
+    
+    /**
+     * @cfg {String} subject
+     */
+    subject: '',
+    
+    /**
+     * @cfg {Array/String} to
+     * initial config for to
+     */
+    to: null,
     
     /**
      * @private
@@ -56,17 +106,153 @@ Ext.namespace('Tine.Felamimail');
     },
     
     /**
-     * init record to edit
-     * 
-     * - overwritten to allow initialization from grid/onEditInNewWindow 
-     * 
      * @private
      */
     initRecord: function() {
-        if (this.record.id) {
-            Tine.Felamimail.MessageEditDialog.superclass.initRecord.call(this);
-        } else {
-            this.onRecordLoad();
+        this.decodeMsgs();
+        
+        if (! this.record) {
+            this.record = new this.recordClass({});
+        }
+        
+        this.initFrom();
+        this.initRecipients();
+        this.initSubject();
+        //this.initAttachements();
+        this.initBody();
+        
+        // legacy handling:...
+        if (this.replyTo) {
+            this.record.set('flags', '\\Answered');
+            this.record.set('original_id', this.replyTo.id);
+        } else if (this.forwardMsgs) {
+            this.record.set('flags', 'Passed');
+            this.record.set('original_id', this.forwardMsgs[0].id);
+        }
+        
+    },
+    
+    initAttachements: function() {
+        
+    },
+    
+    /**
+     * inits body from reply/forward/template
+     * 
+     * @param {Tine.Felamimail.Model.Message} [message] optional self callback when body needs to be fetched
+     */
+    initBody: function(message) {
+        if (! this.body) {
+            message = this.replyTo ? this.replyTo : 
+                      this.forwardMsgs && this.forwardMsgs.length === 1 ? this.forwardMsgs[0] :
+                      null;
+                      
+            if (message) {
+                if (! message.bodyIsFetched()) {
+                    return this.recordProxy.fetchBody(record, this.initBody.createDelegate(this, [message]));
+                }
+                
+                this.body = message.get('body');
+                
+                if (Tine.Felamimail.loadAccountStore().getById(this.record.get('from')).get('display_format') == 'plain') {
+                    this.body = Ext.util.Format.nl2br(this.body);
+                }
+                
+                if (this.replyTo) {
+                    this.body = '<br/>' + Ext.util.Format.htmlEncode(this.replyTo.get('from')) + ' ' + this.app.i18n._('wrote') + ':<br/>'
+                         + '<blockquote class="felamimail-body-blockquote">' + this.body + '</blockquote><br/>';
+                } else if (this.forwardMsgs && this.forwardMsgs.length === 1) {
+                    this.body = '<br/>-----' + this.app.i18n._('Original message') + '-----<br/>'
+                        + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true) + '<br/><br/>'
+                        + this.body + '<br/>';
+                }
+                            
+            }
+        }
+        
+        this.record.set('body', this.body + Tine.Felamimail.getSignature(this.record.get('from')));
+        delete this.body;
+        this.onRecordLoad();
+    },
+    
+    /**
+     * inits / sets sender of message
+     */
+    initFrom: function() {
+        if (! this.from) {
+            var folderId = this.replyTo ? this.replyTo.get('folder_id') : 
+                           this.forwardMsgs ? this.forwardMsgs[0].get('folder_id') : null,
+                accountId = folderId ? this.app.getFolderStore().getById(folderId) : null;
+                
+            this.from = accountId || this.app.getActiveAccount().id;
+        }
+        
+        this.record.set('from', this.from);
+        delete this.from;
+    },
+    
+    /**
+     * inits to/cc/bcc
+     */
+    initRecipients: function() {
+        if (this.replyTo) {
+            var replyTo = this.replyTo.get('headers')['reply-to'];
+            
+            this.to = [replyTo ? replyTo : this.replyTo.get('headers')['from']];
+                
+            if (this.replyToAll) {
+                this.to = this.to.concat(this.replyTo.get('to'));
+                this.cc = this.replyTo.get('cc');
+            } else {
+                
+            }
+        }
+        
+        Ext.each(['to', 'cc', 'bcc'], function(field) {
+            this[field] = Ext.isArray(this[field]) ? this[field] : Ext.isString(this[field]) ? [this[field]] : [];
+            this.record.set(field, this[field]);
+            delete this[field];
+        }, this);
+    },
+    
+    /**
+     * sets / inits subject
+     */
+    initSubject: function() {
+        if (! this.subject) {
+            if (this.replyTo) {
+                this.subject = this.app.i18n._('Re:') + ' ' +  this.replyTo.get('subject');
+            } else if (this.forwardMsgs) {
+                this.subject =  this.app.i18n._('Fwd:') + ' ';
+                this.subject += this.forwardMsgs.length === 1 ?
+                    this.forwardMsgs[0].get('subject') :
+                    String.format(this.app.i18n._('{0} Message', '{0} Messages', this.forwardMsgs.length));
+            }
+        }
+        
+        this.record.set('subject', this.subject);
+        delete this.subject;
+    },
+    
+    /**
+     * decode this.replyTo / this.forwardMsgs from interwindow json transport
+     */
+    decodeMsgs: function() {
+        if (Ext.isString(this.record)) {
+            this.recordClass = new this.recordClass(Ext.decode(this.record));
+        }
+        
+        if (Ext.isString(this.replyTo)) {
+            this.replyTo = new this.recordClass(Ext.decode(this.replyTo));
+        }
+        
+        if (Ext.isArray(this.forwardMsgs) && Ext.isString(this.forwardMsgs[0])) {
+            var msgs = [];
+            Ext.each(this.forwardMsgs, function(msg) {
+                msgs.push(new this.recordClass(Ext.decode(msg)));
+            }, this);
+            
+            this.forwardMsgs = msgs;
         }
     },
     
@@ -301,7 +487,7 @@ Ext.namespace('Tine.Felamimail');
                         xtype:'textfield',
                         fieldLabel: this.app.i18n._('Subject'),
                         name: 'subject',
-                        allowBlank: false,
+                        //allowBlank: false,
                         enableKeyEvents: true,
                         anchor: '100%',
                         listeners: {
@@ -366,11 +552,11 @@ Ext.namespace('Tine.Felamimail');
  * @return  {Ext.ux.Window}
  */
 Tine.Felamimail.MessageEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
+    //var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 700,
-        name: Tine.Felamimail.MessageEditDialog.prototype.windowNamePrefix + id,
+        name: Tine.Felamimail.MessageEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.MessageEditDialog',
         contentPanelConstructorConfig: config
     });
