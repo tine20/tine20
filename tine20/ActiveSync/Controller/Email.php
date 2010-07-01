@@ -462,6 +462,10 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      */
     public function getSupportedFolders()
     {
+        // update folder cache
+        Felamimail_Controller_Cache_Folder::getInstance()->update(Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT});
+        
+        // get folders
         $folderController = Felamimail_Controller_Folder::getInstance();
         
         $filter = new Felamimail_Model_FolderFilter(array(
@@ -472,7 +476,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             )
         ));
         
-        $folders = $folderController->search($filter);
+        $folders = $folderController->getSubfolders(Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, '');
 
         $result = array();
         
