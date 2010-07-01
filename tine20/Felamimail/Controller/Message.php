@@ -974,7 +974,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             . '</style>'
             . '</head>'
             . '<body>'
-            . $_body
+            . nl2br($_body)
             . '</body></html>';
             
         return $result;
