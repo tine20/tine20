@@ -457,7 +457,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         // init various grid / sm listeners
         this.grid.on('keydown',     this.onKeyDown,     this);
-        this.grid.on('rowclick',    this.onRowClick,    this);
         this.grid.on('rowdblclick', this.onRowDblClick, this);
         
         this.grid.on('rowcontextmenu', function(grid, row, e) {
@@ -760,7 +759,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onStoreBeforeload: function(store, options) {
         options.params = options.params || {};
-        
         // allways start with an empty filter set!
         // this is important for paging and sort header!
         options.params.filter = [];
@@ -822,38 +820,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
                 e.preventDefault();
             }
-        }
-    },
-    
-    /**
-     * row click handler
-     * 
-     */
-    onRowClick: function(grid, row, e) {
-        /* TODO check if we need this in IE
-        // hack to get percentage editor working
-        var cell = Ext.get(grid.getView().getCell(row,1));
-        var dom = cell.child('div:last');
-        while (cell.first()) {
-            cell = cell.first();
-            cell.on('click', function(e){
-                e.stopPropagation();
-                grid.fireEvent('celldblclick', grid, row, 1, e);
-            });
-        }
-        */
-        
-        // fix selection of one record if shift/ctrl key is not pressed any longer
-        if(e.button === 0 && !e.shiftKey && !e.ctrlKey) {
-            var sm = grid.getSelectionModel();
-            
-            if (sm.getCount() == 1 && sm.isSelected(row)) {
-                return;
-            }
-            
-            sm.clearSelections();
-            sm.selectRow(row, false);
-            grid.view.focusRow(row);
         }
     },
     
