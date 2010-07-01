@@ -109,6 +109,11 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         // always read folder from database
         $folder = Felamimail_Controller_Folder::getInstance()->get($_folder);
         
+        if($folder->is_selectable == false) {
+            // nothing to be done
+            return $folder;
+        }
+        
         // check if we are allowed to update message cache?
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
@@ -122,14 +127,15 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         
         // get imap connection, select folder and purge messages with \Deleted flag 
         $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
+        
         try {
             $imap->expunge($folder->globalname);
         } catch (Zend_Mail_Storage_Exception $zmse) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing no longer existing folder ' . $folder->globalname . ' from cache.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing no longer existing folder ' . $folder->globalname . ' from cache. ' .$zmse->getMessage() );
             Felamimail_Controller_Cache_Folder::getInstance()->delete($folder->getId());
             throw new Felamimail_Exception_IMAPFolderNotFound();
         }
-        
+                
         $folderCache = Felamimail_Controller_Cache_Folder::getInstance();
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " status of folder {$folder->globalname}: {$folder->cache_status}");
