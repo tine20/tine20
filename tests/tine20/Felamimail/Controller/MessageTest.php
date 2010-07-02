@@ -777,13 +777,13 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->_controller->sendMessage($forwardMessage);
         
         $forwardedMessage = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, 'INBOX');
-        $forwardedMessage = $this->_controller->getCompleteMessage($forwardedMessage);
+        $completeForwardedMessage = $this->_controller->getCompleteMessage($forwardedMessage);
         
         //print_r($forwardedMessage->toArray());
         
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardedMessage['structure']['parts'][2]['contentType']);
         $this->assertEquals($cachedMessage->subject . '.eml', $forwardedMessage['structure']['parts'][2]['parameters']['name']);
-        $this->assertEquals($cachedMessage->subject . '.eml', $forwardedMessage->attachments[0]['filename']);
+        $this->assertEquals($cachedMessage->subject . '.eml', $completeForwardedMessage->attachments[0]['filename']);
     }    
     
     /********************************* protected helper funcs *************************************/
