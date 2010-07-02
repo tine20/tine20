@@ -707,35 +707,35 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         return true;
     }
     
-    /**
-     * get unread count for folder
-     * 
-     * @todo FIXME: result can get negative when cache is updating
-     * 
-     * @param Felamimail_Model_Folder $_folder
-     * @return integer
-     */
-    public function getUnreadCount(Felamimail_Model_Folder $_folder)
-    {
-        $result = $_folder->cache_totalcount - $this->_backend->seenCountByFolderId($_folder->getId());
-        
-        // make sure $result can't get negative
-        $result = ($result < 0) ? 0 : $result;
-        
-        return $result;
-    }
+//    /**
+//     * get unread count for folder
+//     * 
+//     * @todo FIXME: result can get negative when cache is updating
+//     * 
+//     * @param Felamimail_Model_Folder $_folder
+//     * @return integer
+//     */
+//    public function getUnreadCount(Felamimail_Model_Folder $_folder)
+//    {
+//        $result = $_folder->cache_totalcount - $this->_backend->seenCountByFolderId($_folder->getId());
+//        
+//        // make sure $result can't get negative
+//        $result = ($result < 0) ? 0 : $result;
+//        
+//        return $result;
+//    }
     
-    /**
-     * get total count for folder
-     * 
-     * @param Felamimail_Model_Folder $_folder
-     * @return integer
-     */
-    public function getTotalCount(Felamimail_Model_Folder $_folder)
-    {
-        $result = $this->_backend->searchCountByFolderId($_folder->getId());
-        return $result;
-    }
+//    /**
+//     * get total count for folder
+//     * 
+//     * @param Felamimail_Model_Folder $_folder
+//     * @return integer
+//     */
+//    public function getTotalCount(Felamimail_Model_Folder $_folder)
+//    {
+//        $result = $this->_backend->searchCountByFolderId($_folder->getId());
+//        return $result;
+//    }
     
     /***************************** protected funcs *******************************/
     
@@ -792,6 +792,10 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         }
         
         $cachedMessage = new Felamimail_Model_Message($messageData);
+        
+        $attachments = Felamimail_Controller_Message::getInstance()->getAttachments($cachedMessage);
+        
+        $cachedMessage->has_attachment =  (count($attachments) > 0) ? true : false;
         
         $createdMessage = $this->_backend->create($cachedMessage);
 
