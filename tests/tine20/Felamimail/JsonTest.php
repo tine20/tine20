@@ -222,7 +222,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             }
         }
         $this->assertTrue(! empty($default));
-        $this->assertEquals(143, $result['port']);
+        $this->assertEquals('mail.metaways.net', $result['host']);
     }
     
     /**
