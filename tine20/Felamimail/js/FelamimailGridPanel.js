@@ -572,26 +572,22 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * 
      */
     onAfterCompose: function(composedMsg, action, affectedMsgs) {
-        composedMsg = Ext.isString(composedMsg) ? new this.recordClass(Ext.decode(composedMsg)) : composedMsg;
-        console.log(composedMsg);
-        console.log(action);
-        console.log(affectedMsgs);
-        /*
         // mark send folders cache status incomplete
-        var folder = this.app.getFolderStore().getById(sendFolderId);
-        if (folder) {
-            folder.set('cache_status', 'incomplete');
+        composedMsg = Ext.isString(composedMsg) ? new this.recordClass(Ext.decode(composedMsg)) : composedMsg;
+        
+        var composerAccount = Tine.Felamimail.loadAccountStore().getById(composedMsg.get('from')),
+            sendFolderId = composerAccount ? composerAccount.getSendFolderId() : null,
+            sendFolder = sendFolderId ? this.app.getFolderStore().getById(sendFolderId) : null;
+            
+        if (sendFolder) {
+            sendFolder.set('cache_status', 'incomplete');
         }
         
-        // silently add flag
-        if (Ext.isArray(addFlags)) {
+        if (Ext.isArray(affectedMsgs) && ['reply', 'forward'].indexOf(action) !== -1) {
             Ext.each(affectedMsgs, function(msg) {
-                Ext.each(addFlags, function(flag) {
-                    msg.addFlag(flag);
-                }, this);
+                msg.addFlag(action === 'reply' ? '\\Answered' : 'Passed');
             }, this);
         }
-        */
     },
     
     /**
@@ -663,11 +659,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {void}
      */
     onDeleteRecords: function() {
-        var trashName = this.app.getActiveAccount().get('trash_folder'),
-            accountId = this.app.getActiveAccount().id,
-            trash = trashName ? this.app.getFolderStore().queryBy(function(record) {
-                return record.get('account_id') === accountId && record.get('globalname') === trashName;
-            }, this).first() : null;
+        var account = this.app.getActiveAccount(),
+            trashId = account.getTrashFolderId(),
+            trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
             
         return trash && !trash.isCurrentSelection() ? this.moveSelectedMessages(trash) : this.deleteSelectedMessages();
     },
