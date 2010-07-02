@@ -754,7 +754,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     /**
      * test forward with attachment
      * 
-     * @todo check attachments of forwarded message
      */
     public function testForwardMessageWithAttachment()
     {
@@ -778,13 +777,13 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->_controller->sendMessage($forwardMessage);
         
         $forwardedMessage = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, 'INBOX');
-        //$attachments = $this->_controller->getCompleteMessage($forwardedMessage, 2);
+        $forwardedMessage = $this->_controller->getCompleteMessage($forwardedMessage);
         
         //print_r($forwardedMessage->toArray());
-        //print_r($attachments);
         
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardedMessage['structure']['parts'][2]['contentType']);
         $this->assertEquals($cachedMessage->subject . '.eml', $forwardedMessage['structure']['parts'][2]['parameters']['name']);
+        $this->assertEquals($cachedMessage->subject . '.eml', $forwardedMessage->attachments[0]['filename']);
     }    
     
     /********************************* protected helper funcs *************************************/
@@ -808,14 +807,17 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * search message by header (X-Tine20TestMessage) and add it to cache
      * 
      * @param string $_testHeaderValue
+     * @param string $_folderName
      * @return Felamimail_Model_Message
      */
-    protected function _searchAndCacheMessage($_testHeaderValue, $_folder = NULL) 
+    protected function _searchAndCacheMessage($_testHeaderValue, $_folderName = NULL) 
     {
-        if ($_folder !== NULL) {
-            $this->_imap->selectFolder($_folder);
+        if ($_folderName !== NULL) {
+            $this->_imap->selectFolder($_folderName);
+            $folder = $this->_getFolder($_folderName);
         } else {
             $this->_imap->selectFolder($this->_testFolderName);
+            $folder = $this->_folder;
         }
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage ' . $_testHeaderValue
@@ -823,7 +825,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, count($result), 'No messages with HEADER X-Tine20TestMessage: ' . $_testHeaderValue . ' found.');
         $message = $this->_imap->getSummary($result[0]);
         
-        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
+        $cachedMessage = $this->_cache->addMessage($message, $folder);
         $this->_createdMessages[] = $cachedMessage;
         
         return $cachedMessage;
