@@ -767,7 +767,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             'from'          => $this->_account->getId(),
             'subject'       => 'test forward',
             'to'            => array('unittest@tine20.org'),
-            //'to'            => array('pschuele@gmail.com'),
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822),
             'original_id'   => $cachedMessage->getId(),

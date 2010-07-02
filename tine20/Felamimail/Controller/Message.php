@@ -1193,8 +1193,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                         $attachment['size'] = $_originalMessage->size;
                     }
                     $attachment['name'] .= '.eml';
-                    // @todo is this needed?
-                    $part->disposition = 'attachment; filename="' . $attachment['name'];
                     
                 } else {
                     if (! array_key_exists('path', $attachment)) {
@@ -1204,10 +1202,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     
                     // get contents from uploaded files
                     $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
-                    $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
                     $part->encoding = Zend_Mime::ENCODING_BASE64;
                 }
                 
+                $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
                 $part->filename = $attachment['name'];
                 $part->type = $attachment['type'] . '; name="' . $attachment['name'] . '"';
                 
