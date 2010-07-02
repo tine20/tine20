@@ -210,8 +210,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * @param  null|array|string $part path to part or null for messsage content
      * @param  boolean           $peek use BODY.PEEK to not set the seen flag
      * @return string raw content
-     * @throws Zend_Mail_Protocol_Exception
-     * @throws Zend_Mail_Storage_Exception
+     * @throws Felamimail_Exception_IMAPMessageNotFound
+     * @throws Felamimail_Exception_IMAP
      */
     public function getRawContent($id, $part = 'TEXT', $peek = false)
     {
@@ -223,7 +223,17 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         $item = $item . "[$part]";
         
-        return $this->_protocol->fetch($item, $id, null, $this->_useUid);
+        try {
+            $result = $this->_protocol->fetch($item, $id, null, $this->_useUid);
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            if ($zmpe->getMessage() == 'the single id was not found in response') {
+                throw new Felamimail_Exception_IMAPMessageNotFound('Message with id ' . $id . ' not found on IMAP server.');
+            } else {
+                throw new Felamimail_Exception_IMAP($zmpe->getMessage());
+            }
+        }
+        
+        return $result;
     }
     
     /**

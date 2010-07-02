@@ -721,15 +721,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
         
-        try {
-            $rawBody = $imapBackend->getRawContent($message->messageuid, $_partId, true);
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            if ($zmpe->getMessage() == 'the single id was not found in response') {
-                throw new Felamimail_Exception_IMAPMessageNotFound('Message with uid ' . $message->messageuid . ' not found on IMAP server.');
-            } else {
-                throw new Felamimail_Exception_IMAP($zmpe->getMessage());
-            }
-        }
+        $rawBody = $imapBackend->getRawContent($message->messageuid, $_partId, true);
         
         $stream = fopen("php://temp", 'r+');
         fputs($stream, $rawBody);
