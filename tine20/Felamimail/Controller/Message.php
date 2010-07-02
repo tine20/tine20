@@ -660,19 +660,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // add recipients
         if (isset($_message->to)) {
             foreach ($_message->to as $to) {
-                $mail->addTo($to, $to);
+                $mail->addTo($to);
                 $_nonPrivateRecipients[] = $to;
             }
         }
         if (isset($_message->cc)) {
             foreach ($_message->cc as $cc) {
-                $mail->addCc($cc, $cc);
+                $mail->addCc($cc);
                 $_nonPrivateRecipients[] = $cc;
             }
         }
         if (isset($_message->bcc)) {
             foreach ($_message->bcc as $bcc) {
-                $mail->addBcc($bcc, $bcc);
+                $mail->addBcc($bcc);
             }
         }
         
