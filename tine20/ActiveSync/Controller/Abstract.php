@@ -257,10 +257,11 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     /**
      * delete entry
      *
-     * @param string $_collectionId
-     * @param string $_id
+     * @param  string  $_collectionId
+     * @param  string  $_id
+     * @param  array   $_options
      */
-    public function delete($_folderId, $_id)
+    public function delete($_folderId, $_id, $_options)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " ColectionId: $_folderId Id: $_id");
         

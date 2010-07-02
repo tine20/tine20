@@ -319,10 +319,11 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     /**
      * delete entry
      *
-     * @param string $_collectionId
-     * @param string $_id
+     * @param  string  $_collectionId
+     * @param  string  $_id
+     * @param  array   $_options
      */
-    public function delete($_collectionId, $_id)
+    public function delete($_collectionId, $_id, $_options)
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " ColectionId: $_collectionId Id: $_id");
         

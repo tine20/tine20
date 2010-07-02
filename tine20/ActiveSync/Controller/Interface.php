@@ -23,6 +23,15 @@
 interface ActiveSync_Controller_Interface
 {
     /**
+     * delete entry
+     *
+     * @param  string  $_collectionId
+     * @param  string  $_id
+     * @param  array   $_options
+     */
+    public function delete($_folderId, $_id, $_options);
+    
+    /**
      * move item from one folder to another
      * 
      * @param  string  $_srcFolder
