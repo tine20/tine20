@@ -325,15 +325,21 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      */
     public function delete($_collectionId, $_id, $_options)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " ColectionId: $_collectionId Id: $_id");
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " delete ColectionId: $_collectionId Id: $_id");
         
-        try {
-            $deletedRecords = $this->_contentController->delete($_id);
-        } catch (Zend_Mail_Storage_Exception $e) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
+        $folder  = Felamimail_Controller_Folder::getInstance()->get($_collectionId);
+        $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
+        
+        if ($_options['deletesAsMoves'] === true && !empty($account->trash_folder)) {
+            // move message to trash folder
+            $trashFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account, $account->trash_folder);
+            $this->_contentController->moveMessages($_id, $trashFolder);
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " moved entry $_id to trash folder");
+        } else {
+            // set delete flag
+            $this->_contentController->addFlags($_id, Zend_Mail_Storage::FLAG_DELETED);
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " deleted entry " . $_id);
         }
-        
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " deleted entry id " . $_id);
     }
     
     /**
