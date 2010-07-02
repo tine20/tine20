@@ -753,25 +753,39 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     /**
      * test forward with attachment
+     * 
+     * @todo check attachments of forwarded message
      */
     public function testForwardMessageWithAttachment()
     {
         $cachedMessage = $this->_messageTestHelper('multipart_related.eml', 'multipart/related');
         
+        //print_r($cachedMessage->toArray());
+        
         // forward message
         $forwardMessage = new Felamimail_Model_Message(array(
-            'from'      => $this->_account->getId(),
-            'subject'   => 'test forward',
-            'to'        => array('unittest@tine20.org'),
-            'body'      => 'aaaaaä <br>',
-            'headers'   => array('X-Tine20TestMessage' => 'message/rfc822'),
+            'from'          => $this->_account->getId(),
+            'subject'       => 'test forward',
+            'to'            => array('unittest@tine20.org'),
+            //'to'            => array('pschuele@gmail.com'),
+            'body'          => 'aaaaaä <br>',
+            'headers'       => array('X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822),
             'original_id'   => $cachedMessage->getId(),
+            'attachments'   => array(array(
+                'type'  => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
+                'name'  => $cachedMessage->subject,
+            )),
         ));
         $this->_controller->sendMessage($forwardMessage);
         
-        $forwardMessage = $this->_searchAndCacheMessage('message/rfc822', 'INBOX');
+        $forwardedMessage = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, 'INBOX');
+        //$attachments = $this->_controller->getCompleteMessage($forwardedMessage, 2);
         
-        //print_r($forwardMessage->toArray());
+        //print_r($forwardedMessage->toArray());
+        //print_r($attachments);
+        
+        $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardedMessage['structure']['parts'][2]['contentType']);
+        $this->assertEquals($cachedMessage->subject . '.eml', $forwardedMessage['structure']['parts'][2]['parameters']['name']);
     }    
     
     /********************************* protected helper funcs *************************************/
@@ -857,7 +871,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $result = Felamimail_Controller_Folder::getInstance()->search($filter);
         $folder = $result->filter('localname', $folderName)->getFirstRecord();
         if (empty($folder)) {
-            print_r($result->toArray()); 
+            //print_r($result->toArray()); 
             throw new Exception('folder not found');
         }
 

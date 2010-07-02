@@ -98,7 +98,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return self::$_instance;
     }
     
-    /************************* other public funcs *************************/
     public function parseHeaders(Felamimail_Model_Message $_message, array $_headers)
     {
         // remove duplicate headers (which can't be set twice in real life)
@@ -708,8 +707,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $_id
      * @param string $_partId (the part id, can look like this: 1.3.2 -> returns the second part of third part of first part...)
      * @return Zend_Mime_Part
-     * 
-     * @todo make it possible to get complete message (CONTENT_TYPE_MESSAGE_RFC822)
      */
     public function getMessagePart($_id, $_partId = null)
     {
@@ -746,6 +743,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $part->filename    = array_key_exists('filename', $partStructure['disposition']['parameters']) ? $partStructure['disposition']['parameters']['filename'] : null;
             }
         }
+        
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' part structure: ' . print_r($partStructure, TRUE));
         
         return $part;
     }
@@ -1169,7 +1168,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Message $_originalMessage
      * @throws Felamimail_Exception if max attachment size exceeded or no originalMessage available for forward
      * 
-     * @todo use getMessagePart() for attachments?
+     * @todo use getMessagePart() for attachments too?
      */
     protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, $_originalMessage = NULL)
     {
@@ -1187,39 +1186,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                         throw new Felamimail_Exception('No original message available for forward!');
                     }
                     
-                    // @todo do decoding and check if getMessagePart delivers the original message correctly as Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
                     $part = $this->getMessagePart($_originalMessage);
-                    $part->disposition = 'attachment; filename="' . $attachment['name'] . '"';
+                    $part->decodeContent();
                     
                     if (! array_key_exists('size', $attachment) || empty($attachment['size']) ) {
                         $attachment['size'] = $_originalMessage->size;
                     }
-                    
-                    
-                    // @deprecated code follows
-                    /*
-                    if ($_originalMessage === NULL) {
-                        throw new Felamimail_Exception('No original message available for forward!');
-                    } else {
-                        // @todo use $imap->getRawContent(messageuid, NULL) or getMessagePart with content type CONTENT_TYPE_MESSAGE_RFC822
-                        // @todo add test for this
-                        $originalMessage = $this->getCompleteMessage($_originalMessage, false);
-                    }
-                    
-                    // add complete original message as attachment
-                    $headers = '';
-                    foreach ($originalMessage->message->getHeaders() as $key => $value) {
-                        $headers .= "$key: $value" . Zend_Mime::LINEEND;
-                    }
-                    $rawContent = $headers . Zend_Mime::LINEEND . $originalMessage->message->getContent();
-                    $part = new Zend_Mime_Part($rawContent);
-                    
-                    //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $rawContent);
-                    
-                    $part->disposition = 'attachment; filenam, 'TEXT'e="' . $attachment['name'] . '"';
-                    // @todo decode content first and remove this
-                    $part->encoding = Zend_Mime::ENCODING_7BIT;
-                    */
+                    $attachment['name'] .= '.eml';
+                    // @todo is this needed?
+                    $part->disposition = 'attachment; filename="' . $attachment['name'];
                     
                 } else {
                     if (! array_key_exists('path', $attachment)) {
@@ -1229,11 +1204,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     
                     // get contents from uploaded files
                     $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
-                    $part->filename = $attachment['name'];
                     $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
                     $part->encoding = Zend_Mime::ENCODING_BASE64;
                 }
                 
+                $part->filename = $attachment['name'];
                 $part->type = $attachment['type'] . '; name="' . $attachment['name'] . '"';
                 
                 // check size
