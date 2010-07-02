@@ -110,7 +110,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'headers'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'content_type'          => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,
-            Zend_Filter_Input::DEFAULT_VALUE => self::CONTENT_TYPE_HTML,
+            Zend_Filter_Input::DEFAULT_VALUE => self::CONTENT_TYPE_PLAIN,
             'InArray' => array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN)
         ),
         'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
