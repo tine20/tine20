@@ -215,6 +215,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function getRawContent($id, $part = 'TEXT', $peek = false)
     {
+        if ($part === NULL) {
+            $part = 'TEXT';
+        }
+        
         if ($peek === false) {
             $item = 'BODY';
         } else {
