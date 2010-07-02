@@ -955,6 +955,8 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      * 
      * @param Felamimail_Model_Message $_message
      * @return boolean
+     * 
+     * @todo move to Felamimail_Model_Message
      */
     protected function _hasSeenFlag($_message)
     {
