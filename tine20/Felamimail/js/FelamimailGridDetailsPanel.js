@@ -91,12 +91,11 @@ Ext.namespace('Tine.Felamimail');
         }
         
         // check if new record has been selected to prevent scroll hopping
-        if (record.id !== this.currentId) {                
+        if (record.id !== this.currentId && record === this.record) {                
             this.currentId = record.id;
-            
             this.tpl.overwrite(body, record.data);
-            this.getEl().down('div').down('div').scrollTo('top', 0, false);
             this.getLoadMask().hide();
+            this.getEl().down('div').down('div').scrollTo('top', 0, false);
         }
     },
     
