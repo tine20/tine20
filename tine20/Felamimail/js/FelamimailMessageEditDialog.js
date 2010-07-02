@@ -288,10 +288,6 @@ Ext.namespace('Tine.Felamimail');
         }
         this.window.setTitle(title);
         
-        if (this.record.id && this.record.get('content_type') && this.record.get('content_type').match(/text\/plain/)) {
-            this.record.data.body = Ext.util.Format.nl2br(this.record.data.body);
-        }
-        
         this.getForm().loadRecord(this.record);
         
         this.loadMask.hide();
