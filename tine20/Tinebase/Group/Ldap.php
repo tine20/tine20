@@ -585,7 +585,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         }
         $filter = new Zend_Ldap_Filter_Or($filterArray);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $filter: ' . $filter);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $filter: ' . $filter . ' count: ' . count($filterArray));
         
         // fetch all dns at once
         $accounts = $this->_ldap->search(
@@ -595,8 +595,18 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             array('uid', $this->_userUUIDAttribute, 'objectclass')
         );
         
-        if (count($accounts) != count($_accountIds)) {
-            throw new Exception("Some dn's are missing");
+        if (count($_accountIds) != count($accounts)) {
+            $wantedAccountIds    = array();
+            $retrievedAccountIds = array();
+            
+            foreach ($_accountIds as $accountId) {
+                $wantedAccountIds[] = Tinebase_Model_User::convertUserIdToInt($accountId);
+            }
+            foreach ($accounts as $account) {
+                $retrievedAccountIds[] = $account[$this->_userUUIDAttribute][0];
+            }
+            
+            throw new Exception("Some dn's are missing. "  . print_r(array_diff($wantedAccountIds, $retrievedAccountIds), true));
         }
         
         $result = array();
