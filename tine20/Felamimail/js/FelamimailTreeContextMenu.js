@@ -62,7 +62,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
                 success: function(result, request){
                     if (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id) {
                         var newRecord = Tine.Felamimail.folderBackend.recordReader(result);
-                        this.app.updateFolderInStore(newRecord);
+                        this.app.getFolderStore().updateFolder(newRecord);
                     }
                     this.ctxNode.getUI().removeClass("x-tree-node-loading");
                 },
