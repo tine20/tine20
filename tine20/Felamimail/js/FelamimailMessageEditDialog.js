@@ -42,7 +42,7 @@ Ext.namespace('Tine.Felamimail');
     /**
      * @cfg {String} body
      */
-    body: '',
+    msgBody: '',
     
     /**
      * @cfg {Array/String} cc
@@ -143,38 +143,38 @@ Ext.namespace('Tine.Felamimail');
      */
     initBody: function(message) {
         if (! this.record.get('body')) {
-            if (! this.body) {
+            if (! this.msgBody) {
                 message = this.replyTo ? this.replyTo : 
                           this.forwardMsgs && this.forwardMsgs.length === 1 ? this.forwardMsgs[0] :
                           null;
                           
                 if (message) {
                     if (! message.bodyIsFetched()) {
-                        return this.recordProxy.fetchBody(record, this.initBody.createDelegate(this, [message]));
+                        return this.recordProxy.fetchBody(message, this.initBody.createDelegate(this, [message]));
                     }
                     
-                    this.body = message.get('body');
+                    this.msgBody = message.get('body');
                     
                     if (Tine.Felamimail.loadAccountStore().getById(this.record.get('from')).get('display_format') == 'plain') {
-                        this.body = Ext.util.Format.nl2br(this.body);
+                        this.msgBody = Ext.util.Format.nl2br(this.msgBody);
                     }
                     
                     if (this.replyTo) {
-                        this.body = '<br/>' + Ext.util.Format.htmlEncode(this.replyTo.get('from')) + ' ' + this.app.i18n._('wrote') + ':<br/>'
-                             + '<blockquote class="felamimail-body-blockquote">' + this.body + '</blockquote><br/>';
+                        this.msgBody = '<br/>' + Ext.util.Format.htmlEncode(this.replyTo.get('from')) + ' ' + this.app.i18n._('wrote') + ':<br/>'
+                             + '<blockquote class="felamimail-body-blockquote">' + this.msgBody + '</blockquote><br/>';
                     } else if (this.forwardMsgs && this.forwardMsgs.length === 1) {
-                        this.body = '<br/>-----' + this.app.i18n._('Original message') + '-----<br/>'
+                        this.msgBody = '<br/>-----' + this.app.i18n._('Original message') + '-----<br/>'
                             + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true) + '<br/><br/>'
-                            + this.body + '<br/>';
+                            + this.msgBody + '<br/>';
                     }
                                 
                 }
             }
         
-            this.record.set('body', this.body + Tine.Felamimail.getSignature(this.record.get('from')));
+            this.record.set('body', this.msgBody + Tine.Felamimail.getSignature(this.record.get('from')));
         }
         
-        delete this.body;
+        delete this.msgBody;
         this.onRecordLoad();
     },
     
