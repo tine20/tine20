@@ -1,0 +1,459 @@
+Received: from [10.133.2.101] (laplkneschke.hh.metaways.de [10.133.2.101])
+	by mx03.metaways.net (Postfix) with ESMTPSA id 9443B1E0BC
+	for <l.kneschke@metaways.de>; Thu,  1 Jul 2010 19:59:49 +0200 (CEST)
+Message-ID: <4C2CD791.7060405@metaways.de>
+Date: Thu, 01 Jul 2010 19:59:45 +0200
+From: Lars Kneschke <l.kneschke@metaways.de>
+X-Tine20TestMessage: multipart/rfc2822-2
+User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.1.9)
+	Gecko/20100423 Thunderbird/3.0.4
+To: l.kneschke@metaways.de
+Subject: Fwd: Re: [zf-contributors] Proposal: Zend_Grid
+Return-Path: l.kneschke@metaways.de
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary=------------000407060307010506080606
+
+This is a multi-part message in MIME format.
+--------------000407060307010506080606
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Test Test
+
+Forwarded message with RFC822 => multipart/signed => multipart/alternative
+
+
+--------------000407060307010506080606
+Content-Type: message/rfc822;
+ name="Re: [zf-contributors] Proposal: Zend_Grid.eml"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="Re: [zf-contributors] Proposal: Zend_Grid.eml"
+
+Received: from lists.zend.com (lease587-D13-COLO7-SPSC.jupiterhosting.com [64.255.169.37])
+	by mx03.metaways.net (Postfix) with SMTP id 25D0E1E169
+	for <l.kneschke@metaways.de>; Thu,  1 Jul 2010 18:37:00 +0200 (CEST)
+Received: (qmail 26243 invoked by uid 505); 1 Jul 2010 16:30:18 -0000
+Mailing-List: contact zf-contributors@lists.zend.com; run by ezmlm
+Precedence: bulk
+X-No-Archive: yes
+List-Post: <mailto:zf-contributors@lists.zend.com>
+List-Help: <mailto:zf-contributors-help@lists.zend.com>
+List-Unsubscribe: <mailto:zf-contributors-unsubscribe@lists.zend.com>
+List-Subscribe: <mailto:zf-contributors-subscribe@lists.zend.com>
+Delivered-To: mailing list zf-contributors@lists.zend.com
+Received: (qmail 26229 invoked from network); 1 Jul 2010 16:30:17 -0000
+From: Bento Vilas Boas <geral@petala-azul.com>
+In-Reply-To: <4C267D00.5030901@kokx.nl>
+Date: Thu, 1 Jul 2010 17:30:08 +0100
+Cc: zf-contributors@lists.zend.com
+Message-Id: <B76BD2CC-1DB4-4CBB-B670-3243E6B697A3@petala-azul.com>
+References: <AE31B38C-0E25-47C7-ABB5-39F9CE5B4688@petala-azul.com>
+	<4C267D00.5030901@kokx.nl>
+To: Pieter Kokx <pieter@kokx.nl>
+X-Mailer: Apple Mail (2.1081)
+X-AntiAbuse: This header was added to track abuse, please include it with
+	any abuse report
+X-AntiAbuse: Primary Hostname - gamma.connectserver.org
+X-AntiAbuse: Original Domain - lists.zend.com
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - petala-azul.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-pstn-neptune: 0/0/0.00/0
+X-pstn-levels: (S:99.90000/99.90000 CV:99.9000 FC:95.5390 LC:95.5390
+	R:95.9108 P:95.9108 M:88.1613 C:98.6951 )
+X-pstn-settings: 1 (0.1500:0.1500) cv gt3 gt2 gt1 p m c
+X-pstn-addresses: from <geral@petala-azul.com> [1630/79]
+Subject: Re: [zf-contributors] Proposal: Zend_Grid
+X-Spam-Status: No, score=-0.0 required=5.0 tests=HTML_MESSAGE,SPF_HELO_PASS,
+	SPF_PASS autolearn=disabled version=3.2.4
+X-Spam-Checker-Version: SpamAssassin 3.2.4 (2008-01-01) on
+	mail03.metaways.net
+Return-Path: zf-contributors-return-1625-l.kneschke=metaways.de@lists.zend.com
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary=Apple-Mail-2--953102368;
+	protocol="application/pkcs7-signature"; micalg=sha1
+
+
+--Apple-Mail-2--953102368
+Content-Type: multipart/alternative;
+	boundary=Apple-Mail-1--953102414
+
+
+--Apple-Mail-1--953102414
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=iso-8859-1
+
+Hi Pieter,
+
+1 - ZF 2.0. That's the target. This proposal only has a few days, =
+although project exists a long time.=20
+
+2 - This component, from the feedback I have, will mostly be used on =
+back-offices where we need a lot more options then just display a table =
+full of data and pagination.
+
+Most users need to generate reports, export data to excel, and CSV =
+files. I tend to agree with that the scope of component is not "only" =
+display that, as we may also=20
+perform CRUD operations with it. However, crud operations make use of =
+using Zend_Form. No custom code is added (apart from decorators, =
+although it's use is optional).
+
+Being able to display data from different sources is (was??!!) a big =
+challenge. I'm working on projects where I need to display data from =
+XML, DB, CSV and json and present=20
+them in tables, pdf or charts. In a single case I read a CSV file from a =
+shared location, that is edit from some person that I don't even know =
+the name, and deploy the result as XML.
+
+And with this component I only need two lines for doing that=20
+
+3 - About Ajax built-in support. The main reason why this is included is =
+because the only thing that changes from a Ajax interface to a non ajax =
+Interface are links.=20
+You can customize some events it the current ajax implementation.=20
+
+You can also create your own renderer with ajax support. There is one =
+that renderers in jqGrid.
+
+4 - That being said. This is a personal project, although I've a few =
+people contributing with code, like doctrine and jqGrid. This is just =
+the first step. Present the component to the community.
+
+And now we need to discuss this project. If makes sense to include it, =
+if we need to strip some functions that should be responsibility of =
+user, if we need to break this into one or more parts
+so we can have a well defined scope.=20
+
+I'm totally open to users opinions and criticism. This is just the =
+beginning...
+
+Best Regards,
+Bento Vilas Boas
+
+
+
+A 2010/06/26, =E0s 23:19, Pieter Kokx escreveu:
+
+> Hi Bento,
+>=20
+> First I'd like to point out that your list of features looks very =
+comprehensive. This makes me a bit concerned about the scope of the =
+component. For instance; it doesn't look right to me that the component =
+itself has built-in AJAX support. Rather, the user should be able to =
+build this support himself easily.
+>=20
+> Besides that, I would also like to note you that we're currently =
+starting to develop ZF 2.0. And because there is no certainity if there =
+will be a ZF 1.11 or not, you might also want to take a look to ZF 2.0 =
+development.
+> --
+> Best Regards,
+>=20
+> Pieter Kokx
+> PHP Developer
+> Zend Framework Community Review Team
+>=20
+> On 26-06-10 23:35, Bento Vilas Boas wrote:
+>>=20
+>> Hi,
+>>=20
+>> My name is Bento Vilas Boas and I'm the actual lead developer of =
+ZFDatagrid ( http://zfdatagrid.com ) project, that aims to bring to Zend =
+Framework a easy to use, yet, full feature grid.
+>>=20
+>> My idea is to convert the actual project into Zend Framework ( google =
+project page http://code.google.com/p/zfdatagrid/ ).
+>>=20
+>> Which Features:
+>>=20
+>> Multiples sources
+>> CRUD operations with bulk add/edit/remove options and auto-validation =
+from tables definition
+>> PRG Form Processing
+>> Templates
+>> Multiples renders (Table, PDF, Print, Xml, Excel, etc, etc)
+>> Extra columns
+>> Extra rows
+>> Aggregate Expressions
+>> Horizontal splitting of records
+>> Multiple instances per page
+>> Custom Filters
+>> Auto-filters based on field definition (enum, set, etc, etc)
+>> Mass actions
+>> Cache
+>> Content format plugins
+>> Ajax
+>> Conditional Field Rendering
+>> Render specific parts of grid
+>> Sorting results
+>> Auto-paging. Change number of results per page
+>> Save params in session (Filters, Order, Page, Records per page)
+>> Detailed view of records
+>> Internationalization
+>> Decorators
+>> Callbacks
+>> Routing
+>>=20
+>> I've created a proposal =
+http://framework.zend.com/wiki/display/ZFPROP/Zend_Grid+-+Bento+Vilas+Boas=
+ . I will try to post some class skeletons (mostly Source Interface), =
+but I'm having a hard time with that.
+>>=20
+>> With this component is my intention to facilitate data display =
+(source independent) and also provide CRUD operations.=20
+>>=20
+>> Please let me know your opinion, and how this project can be =
+improved. All comments are welcome.
+>>=20
+>>=20
+>> Best Regards,
+>> Bento Vilas Boas
+>> _______________________________________
+>> http://zfdatagrid.com - ZFDatagrid project page
+>> http://mip-project.org - "So others may rise"
+>> =20
+
+
+--Apple-Mail-1--953102414
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html;
+	charset=iso-8859-1
+
+<html><head></head><body style=3D"word-wrap: break-word; =
+-webkit-nbsp-mode: space; -webkit-line-break: after-white-space; ">Hi =
+Pieter,<div><br></div><div>1 - ZF 2.0. That's the target. This proposal =
+only has a few days, although project exists a long =
+time.&nbsp;<br><div><br></div><div>2 - This component, from the feedback =
+I have, will mostly be used on back-offices where we need a lot more =
+options then just display a table full of data and =
+pagination.</div><div><br></div><div>Most users need to generate =
+reports, export data to excel, and CSV files. I tend to agree with that =
+the scope of component is not "only" display that, as we may =
+also&nbsp;</div><div>perform CRUD operations with it. However, crud =
+operations make use of using Zend_Form. No custom code is added (apart =
+from decorators, although it's use is =
+optional).</div><div><br></div><div>Being able to display data from =
+different sources is (was??!!) a big challenge. I'm working on projects =
+where I need to display data from XML, DB, CSV and json and =
+present&nbsp;</div><div>them in tables, pdf or charts. In a single case =
+I read a CSV file from a shared location, that is edit from some person =
+that I don't even know the name, and deploy the result as =
+XML.</div><div><br></div><div>And with this component I only need two =
+lines for doing that&nbsp;</div><div><br></div><div>3 - About Ajax =
+built-in support. The main reason why this is included is because the =
+only thing that changes from a Ajax interface to a non ajax Interface =
+are links.&nbsp;</div><div>You can customize some events it the current =
+ajax implementation.&nbsp;</div><div><br></div><div>You can also create =
+your own renderer with ajax support.&nbsp;There is one that renderers in =
+jqGrid.</div><div><br></div><div>4 - That being said. This is a personal =
+project, although I've a few people contributing with code, like =
+doctrine and jqGrid. This is just the first step. Present the component =
+to the community.</div><div><br></div><div>And now we need to discuss =
+this project. If makes sense to include it, if we need to strip some =
+functions that should be responsibility of user, if we need to break =
+this into one or more parts</div><div>so we can have a well defined =
+scope.&nbsp;</div><div><br></div><div>I'm totally open to users opinions =
+and criticism. This is just the =
+beginning...</div><div><br></div><div><div>Best Regards,</div><div>Bento =
+Vilas Boas</div><div><br></div></div><div><br></div><div><br><div><div>A =
+2010/06/26, =E0s 23:19, Pieter Kokx escreveu:</div><br =
+class=3D"Apple-interchange-newline"><blockquote type=3D"cite">
+<div text=3D"#000000" bgcolor=3D"#ffffff">
+Hi Bento,<br>
+<br>
+First I'd like to point out that your list of features looks very
+comprehensive. This makes me a bit concerned about the scope of the
+component. For instance; it doesn't look right to me that the component
+itself has built-in AJAX support. Rather, the user should be able to
+build this support himself easily.<br>
+<br>
+Besides that, I would also like to note you that we're currently
+starting to develop ZF 2.0. And because there is no certainity if there
+will be a ZF 1.11 or not, you might also want to take a look to ZF 2.0
+development.<br>
+<pre class=3D"moz-signature" cols=3D"72">--
+Best Regards,
+
+Pieter Kokx
+PHP Developer
+Zend Framework Community Review Team
+</pre>
+<br>
+On 26-06-10 23:35, Bento Vilas Boas wrote:
+<blockquote =
+cite=3D"mid:AE31B38C-0E25-47C7-ABB5-39F9CE5B4688@petala-azul.com" =
+type=3D"cite">Hi,
+  <div><br>
+  </div>
+  <div>My name is Bento Vilas Boas and I'm the actual lead developer of
+ZFDatagrid ( <a moz-do-not-send=3D"true" =
+href=3D"http://zfdatagrid.com/">http://zfdatagrid.com</a>
+) project, that aims to bring to Zend Framework a easy to use, yet,
+full feature grid.</div>
+  <div><br>
+  </div>
+  <div>My idea is to convert the actual project into Zend Framework (
+google project page&nbsp;<a moz-do-not-send=3D"true" =
+href=3D"http://code.google.com/p/zfdatagrid/">http://code.google.com/p/zfd=
+atagrid/</a>
+).</div>
+  <div><br>
+  </div>
+  <div>Which Features:</div>
+  <div><br>
+  </div>
+  <div>
+  <ul>
+    <li>Multiples sources</li>
+    <li>CRUD operations with bulk add/edit/remove options and
+auto-validation from tables definition</li>
+    <li>PRG Form Processing</li>
+    <li>Templates</li>
+    <li>Multiples renders (Table, PDF, Print, Xml, Excel, etc, etc)</li>
+    <li>Extra columns</li>
+    <li>Extra rows</li>
+    <li>Aggregate Expressions</li>
+    <li>Horizontal splitting of records</li>
+    <li>Multiple instances per page</li>
+    <li>Custom Filters</li>
+    <li>Auto-filters based on field definition (enum, set, etc, =
+etc)</li>
+    <li>Mass actions</li>
+    <li>Cache</li>
+    <li>Content format plugins</li>
+    <li>Ajax</li>
+    <li>Conditional Field Rendering</li>
+    <li>Render specific parts of grid</li>
+    <li>Sorting results</li>
+    <li>Auto-paging. Change number of results per page</li>
+    <li>Save params in session (Filters, Order, Page, Records per =
+page)</li>
+    <li>Detailed view of records</li>
+    <li>Internationalization</li>
+    <li>Decorators</li>
+    <li>Callbacks</li>
+    <li>Routing</li>
+  </ul>
+  <div><br>
+  </div>
+  </div>
+  <div>I've created a proposal&nbsp;<a moz-do-not-send=3D"true" =
+href=3D"http://framework.zend.com/wiki/display/ZFPROP/Zend_Grid+-+Bento+Vi=
+las+Boas">http://framework.zend.com/wiki/display/ZFPROP/Zend_Grid+-+Bento+=
+Vilas+Boas</a>
+. I will try to post some class skeletons (mostly Source Interface),
+but I'm having a hard time with that.</div>
+  <div><br>
+  </div>
+  <div>With this component is my intention to facilitate data display
+(source independent) and also provide CRUD operations.&nbsp;</div>
+  <div><br>
+  </div>
+  <div>Please let me know your opinion, and how this project can be
+improved. All comments are welcome.</div>
+  <div><br>
+  </div>
+  <div><br>
+  </div>
+  <div>
+  <div>Best Regards,</div>
+  <div>Bento Vilas Boas</div>
+  <div>_______________________________________</div>
+  </div>
+  <div><a moz-do-not-send=3D"true" =
+href=3D"http://zfdatagrid.com/">http://zfdatagrid.com</a>
+- ZFDatagrid project page</div>
+  <div>
+  <div id=3D"mip"><a moz-do-not-send=3D"true" =
+href=3D"http://mip-project.org/">http://mip-project.org</a>
+-&nbsp;"So others may rise"</div>
+  </div>
+  <div>&nbsp;</div>
+</blockquote>
+</div>
+
+</blockquote></div><br></div></div></body></html>=
+
+--Apple-Mail-1--953102414--
+
+--Apple-Mail-2--953102368
+Content-Disposition: attachment;
+	filename=smime.p7s
+Content-Type: application/pkcs7-signature;
+	name=smime.p7s
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIJnTCCBEYw
+ggOvoAMCAQICEGb9R+PCGeToms2Z3fU6yyQwDQYJKoZIhvcNAQEFBQAwXzELMAkGA1UEBhMCVVMx
+FzAVBgNVBAoTDlZlcmlTaWduLCBJbmMuMTcwNQYDVQQLEy5DbGFzcyAxIFB1YmxpYyBQcmltYXJ5
+IENlcnRpZmljYXRpb24gQXV0aG9yaXR5MB4XDTA1MTAyODAwMDAwMFoXDTE1MTAyNzIzNTk1OVow
+gd0xCzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5WZXJpU2lnbiwgSW5jLjEfMB0GA1UECxMWVmVyaVNp
+Z24gVHJ1c3QgTmV0d29yazE7MDkGA1UECxMyVGVybXMgb2YgdXNlIGF0IGh0dHBzOi8vd3d3LnZl
+cmlzaWduLmNvbS9ycGEgKGMpMDUxHjAcBgNVBAsTFVBlcnNvbmEgTm90IFZhbGlkYXRlZDE3MDUG
+A1UEAxMuVmVyaVNpZ24gQ2xhc3MgMSBJbmRpdmlkdWFsIFN1YnNjcmliZXIgQ0EgLSBHMjCCASIw
+DQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMnfrOfq+PgDFMQAktXBfjbCPO98chXLwKuMPRyV
+zm8eECw/AO2XJua2x+atQx0/pIdHR0w+VPhs+Mf8sZ69MHC8l7EDBeqV8a1AxUR6SwWi8mD81zpl
+Yu//EHuiVrvFTnAt1qIfPO2wQuhejVchrKaZ2RHp0hoHwHRHQgv8xTTq/ea6JNEdCBU3otdzzwFB
+L2OyOj++pRpu9MlKWz2VphW7NQIZ+dTvvI8OcXZZu0u2Ptb8Whb01g6J8kn+bAztFenZiHWcec5g
+J925rXXOL3OVekA6hXVJsLjfaLyrzROChRFQo+A8C67AClPN1zBvhTJGG+RJEMJs4q8fef/btLUC
+AwEAAaOB/zCB/DASBgNVHRMBAf8ECDAGAQH/AgEAMEQGA1UdIAQ9MDswOQYLYIZIAYb4RQEHFwEw
+KjAoBggrBgEFBQcCARYcaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3JwYTALBgNVHQ8EBAMCAQYw
+EQYJYIZIAYb4QgEBBAQDAgEGMC4GA1UdEQQnMCWkIzAhMR8wHQYDVQQDExZQcml2YXRlTGFiZWwz
+LTIwNDgtMTU1MB0GA1UdDgQWBBQRfV4ZfTwE32ps1qKKGj8x2DuUUjAxBgNVHR8EKjAoMCagJKAi
+hiBodHRwOi8vY3JsLnZlcmlzaWduLmNvbS9wY2ExLmNybDANBgkqhkiG9w0BAQUFAAOBgQA8o9oC
+YzrEk6qrctPcrVA4HgyeFkqIt+7r2f8PjZWg1rv6aguuYYTYaEeJ70+ssh9JQZtJM3aTi55uuUMc
+YL3C3Ioth8FFwBFyBBprJCpsb+f8BxMp0Hc6I+f1wYVoGb/GAVQgGa41gsxiPGEJxvTV67APpp8z
+hZrTcY5Qj5ndYjCCBU8wggQ3oAMCAQICEBQRK4XJ7uzxU8Fcx3/w4kwwDQYJKoZIhvcNAQEFBQAw
+gd0xCzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5WZXJpU2lnbiwgSW5jLjEfMB0GA1UECxMWVmVyaVNp
+Z24gVHJ1c3QgTmV0d29yazE7MDkGA1UECxMyVGVybXMgb2YgdXNlIGF0IGh0dHBzOi8vd3d3LnZl
+cmlzaWduLmNvbS9ycGEgKGMpMDUxHjAcBgNVBAsTFVBlcnNvbmEgTm90IFZhbGlkYXRlZDE3MDUG
+A1UEAxMuVmVyaVNpZ24gQ2xhc3MgMSBJbmRpdmlkdWFsIFN1YnNjcmliZXIgQ0EgLSBHMjAeFw0x
+MDA2MjQwMDAwMDBaFw0xMTA2MjQyMzU5NTlaMIIBGDEXMBUGA1UEChMOVmVyaVNpZ24sIEluYy4x
+HzAdBgNVBAsTFlZlcmlTaWduIFRydXN0IE5ldHdvcmsxRjBEBgNVBAsTPXd3dy52ZXJpc2lnbi5j
+b20vcmVwb3NpdG9yeS9SUEEgSW5jb3JwLiBieSBSZWYuLExJQUIuTFREKGMpOTgxHjAcBgNVBAsT
+FVBlcnNvbmEgTm90IFZhbGlkYXRlZDEzMDEGA1UECxMqRGlnaXRhbCBJRCBDbGFzcyAxIC0gTmV0
+c2NhcGUgRnVsbCBTZXJ2aWNlMRkwFwYDVQQDFBBCZW50byBWaWxhcyBCb2FzMSQwIgYJKoZIhvcN
+AQkBFhVnZXJhbEBwZXRhbGEtYXp1bC5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIB
+AQD9PgKAX8LGt3MgiMxv3neuUnmIkYc9Sz9mT/nkrLAFMywDcpQMYFWL7hRejFOG4FUJxjQv+C6S
+c2Ret/puMLeSdaPIZIwIsG+rbcFOjY0CcfWnU9wPQ8Q4VAHxYDZpFA3w/7RQckFsdtRKF3ZfHfbK
+ddV6CXSCmEL7MWEFV04nR0ftn7Uz51iasURFl0dh7+vZz7peTILGu/TcOQn4mxwxZsNStQ600U+6
+FsDOCEU6h5W9sjeXNTTPCmMdYUdlJ71BJrvm2Wc9ItrMm3FZZMGxtpbp9/mOy14EyPOiwCtL3FxE
+d0sAIAijI/O3WIBiEbFVtaav6niD1xcr54fLHX3VAgMBAAGjgcwwgckwCQYDVR0TBAIwADBEBgNV
+HSAEPTA7MDkGC2CGSAGG+EUBBxcBMCowKAYIKwYBBQUHAgEWHGh0dHBzOi8vd3d3LnZlcmlzaWdu
+LmNvbS9ycGEwCwYDVR0PBAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUFBwMEBggrBgEFBQcDAjBKBgNV
+HR8EQzBBMD+gPaA7hjlodHRwOi8vSW5kQzFEaWdpdGFsSUQtY3JsLnZlcmlzaWduLmNvbS9JbmRD
+MURpZ2l0YWxJRC5jcmwwDQYJKoZIhvcNAQEFBQADggEBAJaAr/ZpmGb2N3DkU+Bt8xl1rGheT8bx
+R4k0WW8KmAApLRAjnnAv/LhaxCllJZlFalWn21kQ9Hu1h6Tbob+uwCqEb4QSGY+OYRpPVA5+ZSt+
+zYUlmwqqVxGuYbbBSiPbCWl00rHI20bzdoeSU+8KffJ3mGfMmuC4KmyAWqcRHftA9vu373xzbpiA
+cleNQ5YufFu7L5vl6wbqWpXHSrP9RBGwQKKi8FzUNqKLikkOhU+7VieC+5BmMQgvC9Sbf7tePLQ2
+ZR1gln8eqcF3/93kR7tlazWpuD+oCVQuq9musIFUr3n/6yTGb/Rw9EGpnc6dloz7QzbgiQCox9X2
+3/BZNVYxggSLMIIEhwIBATCB8jCB3TELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDlZlcmlTaWduLCBJ
+bmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3b3JrMTswOQYDVQQLEzJUZXJtcyBvZiB1
+c2UgYXQgaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3JwYSAoYykwNTEeMBwGA1UECxMVUGVyc29u
+YSBOb3QgVmFsaWRhdGVkMTcwNQYDVQQDEy5WZXJpU2lnbiBDbGFzcyAxIEluZGl2aWR1YWwgU3Vi
+c2NyaWJlciBDQSAtIEcyAhAUESuFye7s8VPBXMd/8OJMMAkGBSsOAwIaBQCgggJtMBgGCSqGSIb3
+DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTEwMDcwMTE2MzAwOFowIwYJKoZIhvcN
+AQkEMRYEFI9SzXsxaTX5E3Dah05NQkJHByGqMIIBAwYJKwYBBAGCNxAEMYH1MIHyMIHdMQswCQYD
+VQQGEwJVUzEXMBUGA1UEChMOVmVyaVNpZ24sIEluYy4xHzAdBgNVBAsTFlZlcmlTaWduIFRydXN0
+IE5ldHdvcmsxOzA5BgNVBAsTMlRlcm1zIG9mIHVzZSBhdCBodHRwczovL3d3dy52ZXJpc2lnbi5j
+b20vcnBhIChjKTA1MR4wHAYDVQQLExVQZXJzb25hIE5vdCBWYWxpZGF0ZWQxNzA1BgNVBAMTLlZl
+cmlTaWduIENsYXNzIDEgSW5kaXZpZHVhbCBTdWJzY3JpYmVyIENBIC0gRzICEBQRK4XJ7uzxU8Fc
+x3/w4kwwggEFBgsqhkiG9w0BCRACCzGB9aCB8jCB3TELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDlZl
+cmlTaWduLCBJbmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3b3JrMTswOQYDVQQLEzJU
+ZXJtcyBvZiB1c2UgYXQgaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3JwYSAoYykwNTEeMBwGA1UE
+CxMVUGVyc29uYSBOb3QgVmFsaWRhdGVkMTcwNQYDVQQDEy5WZXJpU2lnbiBDbGFzcyAxIEluZGl2
+aWR1YWwgU3Vic2NyaWJlciBDQSAtIEcyAhAUESuFye7s8VPBXMd/8OJMMA0GCSqGSIb3DQEBAQUA
+BIIBAF+vDlWxLRCIJq9XHacXrfP1Dzqy/weIvhuFfXLiQVX1BY93pW9gVVlII8+NXAEDyEqb2H+z
+m1zfMV3b/t3Cs5FWJKu3+qfNzmjyzgqf3MmTdikoVIS9uBqS14RssUGAYKagvyo+nPle3fPU7V07
+hPMHlpCEfYZHpBtS0ywPr5NudrA+q2MJHy/uThnH80WKdx3OK3DZspDZ5olDcYt1vqOYuIfE8d4Q
+uMwJTO+zufro1/b1auetSu3raF8vsTFo4i79RtnKybgat88yeSmsBrwmJGFiNK2EbOvcMjdiLf8w
+Lwde1+CUOu9biIHF/ne42Pzz7AHgjXuhvXDM/N+GtioAAAAAAAA=
+
+--Apple-Mail-2--953102368--
+
+--------------000407060307010506080606--

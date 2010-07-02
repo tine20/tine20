@@ -374,6 +374,114 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
     }
     
+    public function testBodyStructureMultipartMixedWithMessageRFC822()
+    {
+        $expectedStructure = array(
+            'partId'      => null,
+            'contentType' => 'multipart/mixed',
+            'type'        => 'multipart',
+            'subType'     => 'mixed',
+            'parts'       => array(
+                1 => array(
+                    'partId'      => 1,
+                    'contentType' => 'text/plain',
+                    'type'        => 'text',
+                    'subType'     => 'plain',
+                    'parameters'  => array (
+                        'charset' => 'ISO-8859-1',
+                        'format'  => 'flowed'
+                    ),
+                    'id'          => null, 
+                    'description' => null,
+                    'encoding'    => '7bit',
+                    'size'        => 49,
+                    'lines'       => 5,
+                    'disposition' => null,
+                    'language'    => '',
+                    'location'    => '',
+                ),
+                2 => array(
+                    'partId'      => 2,
+                    'contentType' => 'message/rfc822',
+                    'type'        => 'message',
+                    'subType'     => 'rfc822',
+                    'parameters'  => array (
+                        'name'    => '[Officespot-cs-svn] r15209 - trunk/tine20/Tinebase.eml'
+                    ),
+                    'id'          => '', 
+                    'description' => '',
+                    'encoding'    => '7bit',
+                    'size'        => 4121,
+                    'lines'       => null,
+                    'disposition' => null,
+                    'language'    => null,
+                    'location'    => null,
+                    'messageEnvelop' => array(
+                        'Wed, 30 Jun 2010 13:20:09 +0200',
+                        '[Officespot-cs-svn] r15209 - trunk/tine20/Tinebase',
+                        array(array(
+                            'NIL', 'NIL', 'c.weiss', 'metaways.de'
+                        )),
+                        array(array(
+                            'NIL', 'NIL', 'c.weiss', 'metaways.de'
+                        )),
+                        array(array(
+                            'NIL', 'NIL', 'c.weiss', 'metaways.de'
+                        )),
+                        array(array(
+                            'NIL', 'NIL', 'officespot-cs-svn', 'lists.sourceforge.net'
+                        )),
+                        'NIL',
+                        'NIL',
+                        'NIL',
+                        '<20100630112010.06CD21C059@publicsvn.hsn.metaways.net>'
+                    ),
+                    'messageStruture' => array(
+                        'partId'  => 2,
+                        'contentType' => 'text/plain',
+                        'type'        => 'text',
+                        'subType'     => 'plain',
+                        'parameters'  => array (
+                            'charset' => 'us-ascii'
+                        ),
+                        'id'          => null, 
+                        'description' => null,
+                        'encoding'    => '7bit',
+                        'size'        => 1562,
+                        'lines'       => 34,
+                        'disposition' => null,
+                        'language'    => '',
+                        'location'    => '',
+                    ),
+                    'messageLines'    => 81,
+                )
+            ),
+            'parameters'  => array (
+                'boundary' => '------------040506070905080909080505'
+            ),
+            'disposition' => null,
+            'language'    => '',
+            'location'    => '',
+            
+        );
+        
+        $this->_appendMessage('multipart_rfc2822.eml', $this->_folder);
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/rfc2822'
+        ));
+        
+        $this->assertGreaterThanOrEqual(1, count($result), 'no messages found matching HEADER X-Tine20TestMessage multipart/rfc2822');
+        
+        $message = $this->_imap->getSummary($result[0]);
+        
+        foreach($result as $messageUid) {
+            $this->_imap->removeMessage($messageUid);
+        }
+        
+        $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
+    }
+    
     public function testGetBodyMultipartRelated()
     {
         $this->_appendMessage('multipart_related.eml', $this->_folder);
@@ -387,7 +495,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $this->_createdMessages[] = $cachedMessage;
 
-        $body = $this->_controller->getMessageBody($cachedMessage, Zend_Mime::TYPE_TEXT);
+        $body = $this->_controller->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT);
         
         $this->assertContains('würde', $body);
     }
@@ -408,7 +516,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $this->_createdMessages[] = $cachedMessage;
 
-        $body = $this->_controller->getMessageBody($cachedMessage, Zend_Mime::TYPE_TEXT, true);
+        $body = $this->_controller->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT, true);
         
         $this->assertContains('würde', $body);
     }
@@ -426,7 +534,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $this->_createdMessages[] = $cachedMessage;
 
-        $body = $this->_controller->getMessageBody($cachedMessage, Zend_Mime::TYPE_TEXT);
+        $body = $this->_controller->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT);
         
         $this->assertContains('a converter script be written to', $body);
     }
@@ -477,7 +585,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->_createdMessages[] = $cachedMessage;
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
-        
+        #var_dump($message->toArray());
         $this->assertEquals('1', $message->text_partid);
         $this->assertEquals(null, $message->html_partid);
         $this->assertEquals('9606', $message->size);
@@ -536,6 +644,86 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertContains('\Seen', $message->flags);
         $this->assertContains('Autovervollständigung', $message->body);
         $this->assertEquals('moz-screenshot-83.png', $message->attachments[0]["filename"]);
+    }
+    
+    /**
+     * validate fetching a complete message
+     */
+    public function testGetCompleteMessage3()
+    {
+        $this->_appendMessage('multipart_rfc2822.eml', $this->_folder);
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/rfc2822'
+        ));
+        $message = $this->_imap->getSummary($result[0]);
+        
+        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
+        
+        $this->_createdMessages[] = $cachedMessage;
+        
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        #var_dump($message);
+        #$this->assertEquals('1', $message->text_partid);
+        #$this->assertEquals('2.1', $message->html_partid);
+        #$this->assertEquals('38455', $message->size);
+        #$this->assertContains("Tine 2.0 bei Metaways", $message->subject);
+        #$this->assertContains('\Seen', $message->flags);
+        #$this->assertContains('Autovervollständigung', $message->body);
+        #$this->assertEquals('moz-screenshot-83.png', $message->attachments[0]["filename"]);
+    }
+    
+    /**
+     * validate fetching a complete message
+     */
+    public function testGetMessageRFC822()
+    {
+        $this->_appendMessage('multipart_rfc2822.eml', $this->_folder);
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/rfc2822'
+        ));
+        $message = $this->_imap->getSummary($result[0]);
+        
+        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
+        
+        $this->_createdMessages[] = $cachedMessage;
+        
+        $message = $this->_controller->getCompleteMessage($cachedMessage, 2);
+        #var_dump($message->toArray());
+        #$this->assertEquals('1', $message->text_partid);
+        #$this->assertEquals('2.1', $message->html_partid);
+        $this->assertEquals('4121', $message->size);
+        $this->assertContains("[Officespot-cs-svn] r15209 - trunk/tine20/Tinebase", $message->subject);
+        $this->assertContains('getLogger()-&gt;debug', $message->body);
+        #$this->assertEquals('moz-screenshot-83.png', $message->attachments[0]["filename"]);
+    }
+    
+    /**
+     * validate fetching a complete message
+     */
+    public function testGetMessageRFC822_2()
+    {
+        $this->_appendMessage('multipart_rfc2822-2.eml', $this->_folder);
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/rfc2822-2'
+        ));
+        $message = $this->_imap->getSummary($result[0]);
+        
+        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
+        
+        $this->_createdMessages[] = $cachedMessage;
+        
+        $message = $this->_controller->getCompleteMessage($cachedMessage, 2);
+        #var_dump($message->toArray());
+        #$this->assertEquals('1', $message->text_partid);
+        #$this->assertEquals('2.1', $message->html_partid);
+        $this->assertEquals('19131', $message->size);
+        $this->assertContains("Proposal: Zend_Grid", $message->subject);
+        #$this->assertContains('\Seen', $message->flags);
+        $this->assertContains('Bento Vilas Boas wrote', $message->body);
+        $this->assertEquals('smime.p7s', $message->attachments[0]["filename"]);
     }
     
     public function testAddMessageToCache()
@@ -602,7 +790,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         /*
         $message = $this->_messageTestHelper('forwarded.eml');
-        $completeMessage = $this->_controller->getCompleteMessage($message->getId(), TRUE);
+        $completeMessage = $this->_controller->getCompleteMessage($message->getId(), null, TRUE);
         
         echo 'subject: ' . $message->subject . "\n";
         echo 'from: ' . $message->from . "\n";
