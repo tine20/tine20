@@ -99,6 +99,40 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /************************* other public funcs *************************/
+    public function parseHeaders(Felamimail_Model_Message $_message, array $_headers)
+    {
+        // remove duplicate headers (which can't be set twice in real life)
+        foreach (array('date', 'from', 'to', 'cc', 'bcc', 'subject') as $field) {
+            if (isset($_headers[$field]) && is_array($_headers[$field])) {
+                $_headers[$field] = $_headers[$field][0];
+            }
+        }
+        
+        
+        $_message->subject = (isset($_headers['subject'])) ? Felamimail_Message::convertText($_headers['subject']) : null;
+        $_message->from    = (isset($_headers['from']))    ? Felamimail_Message::convertText($_headers['from'], TRUE, 256) : null;
+        
+        if (array_key_exists('date', $_headers)) {
+            $_message->sent = $this->_convertDate($_headers['date']);
+        } elseif (array_key_exists('resent-date', $_headers)) {
+            $_message->sent = $this->_convertDate($_headers['resent-date']);
+        }
+        
+        foreach (array('to', 'cc', 'bcc') as $field) {
+            if (isset($_headers[$field])) {
+                // if sender set the headers twice we only use the first
+                $_message->$field = $this->_convertAddresses($_headers[$field]);
+            }
+        }
+        
+        #var_dump($_message->toArray());
+    }
+    
+    public function parseStructure(Felamimail_Model_Message $_message, array $_structure)
+    {
+        $_message->structure     = $_structure;
+        $_message->content_type  = isset($_structure['contentType']) ? $_structure['contentType'] : Zend_Mime::TYPE_TEXT;
+    }
     
     /**
      * get complete message by id
@@ -107,7 +141,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param boolean                          $_setSeen
      * @return Felamimail_Model_Message
      */
-    public function getCompleteMessage($_id, $_setSeen = FALSE)
+    public function getCompleteMessage($_id, $_partId = null, $_setSeen = FALSE)
     {
         if ($_id instanceof Felamimail_Model_Message) {
             $message = $_id;
@@ -118,23 +152,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
             ' Getting message ' . $message->messageuid 
         );
-            
+        
         // get account
         $folder = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
-        
-        // add body
         $mimeType = $account->display_format == 'html' ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT;
-        $message->body = $this->getMessageBody($message, $mimeType, true);
         
-        // add header
-        $message->headers = $this->getMessageHeaders($_id, true);
-        
-        // add attachments / belongs to cache function 
-        $message->attachments = $this->getAttachments($message['structure']);
-        if ($message->has_attachment == false && count($message->attachments) > 0) {
-            $message->has_attachment = true;
-        }
+        $headers     = $this->getMessageHeaders($message, $_partId, true);
+        $body        = $this->getMessageBody($message, $_partId, $mimeType, true);
+        $attachments = $this->getAttachments($message, $_partId);
         
         // set \Seen flag
         if ($_setSeen && !in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
@@ -144,7 +170,32 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $this->addFlags($message, Zend_Mail_Storage::FLAG_SEEN);
             $message->flags[] = Zend_Mail_Storage::FLAG_SEEN;
         }
+        
+        if ($_partId === null) {
+            $message->body        = $body;
+            $message->headers     = $headers;
+            $message->attachments = $attachments;
+        } else {
+            // create new object for rfc822 message
+            $structure = $this->_getPartStructure($message->structure, $_partId);
+            
+            $message = new Felamimail_Model_Message(array(
+                'messageuid'  => $message->messageuid,
+                'folder_id'   => $message->folder_id,
+                'received'    => $message->received,
+                'size'        => $structure['size'],
+                'partid'      => $_partId,
+                'body'        => $body,
+                'headers'     => $headers,
+                'attachments' => $attachments
+            ));
 
+            $this->parseHeaders($message, $headers);
+            
+            $structure = array_key_exists('messageStruture', $structure) ? $structure['messageStruture'] : $structure;
+            $this->parseStructure($message, $structure);
+        }
+        
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
         
         return $message;
@@ -700,7 +751,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param boolean $_readOnly
      * @return string
      */
-    public function getMessageBody($_messageId, $_contentType, $_readOnly = false)
+    public function getMessageBody($_messageId, $_partId, $_contentType, $_readOnly = false)
     {
         if ($_messageId instanceof Felamimail_Model_Message) {
             $message = $_messageId;
@@ -709,46 +760,47 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $cache = Tinebase_Core::get('cache');
-        $cacheId = 'getMessageBody_' . $message->getId() . substr($_contentType, -4);
+        $cacheId = 'getMessageBody_' . $message->getId() . str_replace('.', '', $_partId) . substr($_contentType, -4);
         
         if ($cache->test($cacheId)) {
             return $cache->load($cacheId);
         }
         
-        $partId = null;
+        $structure = $this->_getPartStructure($message->structure, $_partId);
+        $structure = array_key_exists('messageStruture', $structure) ? $structure['messageStruture'] : $structure;
+        $bodyParts = $this->getBodyParts($structure, $_contentType);
         
-        if($_contentType == Zend_Mime::TYPE_HTML) {
-            $partId = !empty($message['html_partid']) ? $message['html_partid'] : $message['text_partid'];
-        } else {
-            $partId = !empty($message['text_partid']) ? $message['text_partid'] : $message['html_partid'];
-        }
-        
-        if(empty($partId)) {
+        if(empty($bodyParts)) {
             return '';
         }
         
-        $partStructure = $this->_getPartStructure($message['structure'], $partId);
+        $messageBody = '';
         
-        $bodyPart = $this->getMessagePart($message, $partId);
-        
-        $this->_appendCharsetFilter($bodyPart, $partStructure);
-        
-        $body = $bodyPart->getDecodedContent();
-        
-        if($bodyPart->type != Zend_Mime::TYPE_TEXT) {
-            $body = $this->_purifyBodyContent($body);
+        foreach ($bodyParts as $partId => $partStructure) {
+            $bodyPart = $this->getMessagePart($message, $partId);
+            
+            $this->_appendCharsetFilter($bodyPart, $partStructure);
+            
+            $body = $bodyPart->getDecodedContent();
+            
+            if($partStructure['contentType'] != Zend_Mime::TYPE_TEXT) {
+                $body = $this->_purifyBodyContent($body);
+            }
+            
+            $body = $this->_convertContentType($partStructure['contentType'], $_contentType, $body);
+            
+            if($bodyPart->type == Zend_Mime::TYPE_TEXT && $_contentType == Zend_Mime::TYPE_HTML) {
+                $body = $this->_replaceUriAndSpaces($body);
+                $body = $this->_replaceEmails($body);
+            }
+            
+            $messageBody .= $body;
         }
         
-        $body = $this->_convertContentType($partStructure['contentType'], $_contentType, $body);
         
-        if($bodyPart->type == Zend_Mime::TYPE_TEXT && $_contentType == Zend_Mime::TYPE_HTML) {
-            $body = $this->_replaceUriAndSpaces($body);
-            $body = $this->_replaceEmails($body);
-        }
+        $cache->save($messageBody, $cacheId, array('getMessageBody'));
         
-        $cache->save($body, $cacheId, array('getMessageBody'));
-        
-        return $body;
+        return $messageBody;
     }
     
     /**
@@ -758,7 +810,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param boolean $_readOnly
      * @return array
      */
-    public function getMessageHeaders($_messageId, $_readOnly = false)
+    public function getMessageHeaders($_messageId, $_partId = null, $_readOnly = false)
     {
         if (! $_messageId instanceof Felamimail_Model_Message) {
             $message = $this->_backend->get($_messageId);
@@ -767,7 +819,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $cache = Tinebase_Core::get('cache');
-        $cacheId = 'getMessageHeaders' . $message->getId();
+        $cacheId = 'getMessageHeaders' . $message->getId() . str_replace('.', '', $_partId);
         if ($cache->test($cacheId)) {
             return $cache->load($cacheId);
         }
@@ -778,7 +830,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             throw new Felamimail_Exception('failed to get imap backend');
         }
         
-        $rawHeaders = $imapBackend->getRawContent($message->messageuid, 'HEADER', $_readOnly);
+        $section = ($_partId === null) ?  'HEADER' : $_partId . '.HEADER';
+        
+        $rawHeaders = $imapBackend->getRawContent($message->messageuid, $section, $_readOnly);
         Zend_Mime_Decode::splitMessage($rawHeaders, $headers, $null);
         
         $cache->save($headers, $cacheId, array('getMessageHeaders'));
@@ -793,40 +847,113 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @return array
      * 
      */
-    public function getAttachments(array $_structure)
+    public function getAttachments($_messageId, $_partId = null)
     {
+        if (! $_messageId instanceof Felamimail_Model_Message) {
+            $message = $this->_backend->get($_messageId);
+        } else {
+            $message = $_messageId;
+        }
+        
+        $structure = $this->_getPartStructure($message->structure, $_partId);
+        $structure = array_key_exists('messageStruture', $structure) ? $structure['messageStruture'] : $structure;
+
         $attachments = array();
         
-        if ($_structure['contentType'] == Zend_Mime::MULTIPART_ALTERNATIVE) {
-            // check for multipart related
-            foreach ($_structure['parts'] as $part) {
-                $attachments = array_merge($attachments, $this->getAttachments($part));
-            }
-        } elseif ($_structure['contentType'] == Zend_Mime::MULTIPART_MIXED || $_structure['contentType'] == Zend_Mime::MULTIPART_RELATED) {
-            foreach ($_structure['parts'] as $part) {
-                if ((is_array($part['disposition']) &&
-                    ($part['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $part['disposition']))) ||
-                    $part["contentType"] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822)
+        if (!array_key_exists('parts', $structure)) {
+            return $attachments;
+        }
+        
+        foreach ($structure['parts'] as $part) {
+            if ($part['type'] == 'multipart') {
+                $attachments = $attachments + $this->getAttachments($message, $part['partId']);
+            } else {
+                if ($part['type'] == 'text' && 
+                    (!is_array($part['disposition']) || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && !array_key_exists("parameters", $part['disposition'])))
                 ) {
-                    if (is_array($part['disposition']) && array_key_exists('parameters', $part['disposition']) && array_key_exists('filename', $part['disposition']['parameters'])) {
-                        $filename = $part['disposition']['parameters']['filename'];
-                    } elseif (is_array($part['parameters']) && array_key_exists('name', $part['parameters'])) {
-                        $filename = $part['parameters']['name'];
-                    } else {
-                        $filename = 'Part ' . $part['partId'];
-                    }
-                    $attachments[] = array( 
-                        'content-type' => $part['contentType'], 
-                        'filename'     => $filename,
-                        'partId'       => $part['partId'],
-                        'size'         => $part['size'],
-                        'description'  => $part['description']
-                    );
+                    continue;
                 }
+                
+                if (is_array($part['disposition']) && array_key_exists('parameters', $part['disposition']) && array_key_exists('filename', $part['disposition']['parameters'])) {
+                    $filename = $part['disposition']['parameters']['filename'];
+                } elseif (is_array($part['parameters']) && array_key_exists('name', $part['parameters'])) {
+                    $filename = $part['parameters']['name'];
+                } else {
+                    $filename = 'Part ' . $part['partId'];
+                }
+                $attachments[] = array( 
+                    'content-type' => $part['contentType'], 
+                    'filename'     => $filename,
+                    'partId'       => $part['partId'],
+                    'size'         => $part['size'],
+                    'description'  => $part['description']
+                );
             }
-        };
+        }
         
         return $attachments;
+    }
+    
+    public function getBodyParts(array $_structure, $_preferedMimeType = Zend_Mime::TYPE_HTML)
+    {
+        $bodyParts = array();
+        
+        if (array_key_exists('parts', $_structure)) {
+            $bodyParts = $bodyParts + $this->_parseMultipart($_structure, $_preferedMimeType);
+        } else {
+            $bodyParts = $bodyParts + $this->_parseSinglePart($_structure, $_preferedMimeType);
+        }
+        
+        return $bodyParts;
+    }
+    
+    protected function _parseSinglePart(array $_structure, $_preferedMimeType)
+    {
+        $result = array();
+
+        if ($_structure['type'] != 'text') {
+            return $result;
+        }
+        
+        if (isset($_structure['disposition']['type']) && 
+            ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT ||
+             // threat as attachment if structure contains parameters 
+             ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $_structure['disposition']))
+            )
+           ) {
+            return $result;
+        }
+
+        $partId = !empty($_structure['partId']) ? $_structure['partId'] : 1;
+        
+        $result[$partId] = $_structure;
+
+        return $result;
+    }
+    
+    protected function _parseMultipart(array $_structure, $_preferedMimeType)
+    {
+        $result = array();
+        
+        if ($_structure['subType'] == 'alternative') {
+            $alternativeType = $_preferedMimeType == Zend_Mime::TYPE_HTML ? Zend_Mime::TYPE_TEXT : Zend_Mime::TYPE_HTML;
+            
+            foreach ($_structure['parts'] as $part) {
+                $foundParts[$part['contentType']] = $part['partId'];
+            }
+            
+            if (array_key_exists($_preferedMimeType, $foundParts)) {
+                $result[$foundParts[$_preferedMimeType]] = $_structure['parts'][$foundParts[$_preferedMimeType]];
+            } elseif (array_key_exists($alternativeType, $foundParts)) {
+                $result[$foundParts[$alternativeType]]   = $_structure['parts'][$foundParts[$alternativeType]];
+            }
+        } else {
+            foreach($_structure['parts'] as $part) {
+                $result = $result + $this->getBodyParts($part, $_preferedMimeType);
+            }
+        }
+        
+        return $result;
     }
     
     /************************* protected funcs *************************/
@@ -1311,4 +1438,78 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 			$Felamimail_Controller_Folder = Felamimail_Controller_Folder::getInstance()->create($_account->id, $folderName);
 		}
 	}
+	
+    /**
+     * convert date from sent/received
+     *
+     * @param string $_dateString
+     * @param string $_format default: 'Thu, 21 Dec 2000 16:01:07 +0200' (Zend_Date::RFC_2822)
+     * @return Zend_Date
+     */
+    protected function _convertDate($_dateString, $_format = Zend_Date::RFC_2822)
+    {
+        try {
+            if ($_format == Zend_Date::RFC_2822) {
+    
+                // strip of timezone information for example: (CEST)
+                $dateString = preg_replace('/( [+-]{1}\d{4}) \(.*\)$/', '${1}', $_dateString);
+                
+                // append dummy weekday if missing
+                if(preg_match('/^(\d{1,2})\s(\w{3})\s(\d{4})\s(\d{2}):(\d{2}):{0,1}(\d{0,2})\s([+-]{1}\d{4})$/', $dateString)) {
+                    $dateString = 'xxx, ' . $dateString;
+                }
+                
+                try {
+                    // Fri,  6 Mar 2009 20:00:36 +0100
+                    $date = new Zend_Date($dateString, Zend_Date::RFC_2822, 'en_US');
+                } catch (Zend_Date_Exception $e) {
+                    // Fri,  6 Mar 2009 20:00:36 CET
+                    $date = new Zend_Date($dateString, Felamimail_Model_Message::DATE_FORMAT, 'en_US');
+                }
+    
+            } else {
+                
+                $date = new Zend_Date($_dateString, $_format, 'en_US');
+                
+                if ($_format == Felamimail_Model_Message::DATE_FORMAT_RECEIVED) {
+                    
+                    if (preg_match('/ ([+-]{1})(\d{2})\d{2}$/', $_dateString, $matches)) {
+                        // add / sub from zend date ?
+                        if ($matches[1] == '+') {
+                            $date->subHour($matches[2]);
+                        } else {
+                            $date->addHour($matches[2]);
+                        }
+                        
+                        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($matches, true));
+                    }
+                }
+            }
+        } catch (Zend_Date_Exception $zde) {
+            $date = new Zend_Date(0, Zend_Date::TIMESTAMP);
+        }
+        
+        return $date;
+    }
+    
+    /**
+     * convert addresses into array with name/address
+     *
+     * @param string $_addresses
+     * @return array
+     */
+    protected function _convertAddresses($_addresses)
+    {
+        $result = array();
+        if (!empty($_addresses)) {
+            $addresses = Felamimail_Message::parseAdresslist($_addresses);
+            if (is_array($addresses)) {
+                foreach($addresses as $address) {
+                    $result[] = array('email' => $address['address'], 'name' => $address['name']);
+                }
+            }
+        }
+        return $result;
+    }
+    
 }
