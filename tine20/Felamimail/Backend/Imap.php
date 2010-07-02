@@ -207,7 +207,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * Get raw content of message or part
      *
      * @param  int               $id   number of message
-     * @param  null|array|string $part path to part or null for messsage content
+     * @param  null|array|string $part path to part, TEXT for message content or null for headers and body (@see http://www.faqs.org/rfcs/rfc3501.html / 6.4.5.  FETCH Command)  
      * @param  boolean           $peek use BODY.PEEK to not set the seen flag
      * @return string raw content
      * @throws Felamimail_Exception_IMAPMessageNotFound
@@ -215,10 +215,6 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function getRawContent($id, $part = 'TEXT', $peek = false)
     {
-        if ($part === NULL) {
-            $part = 'TEXT';
-        }
-        
         if ($peek === false) {
             $item = 'BODY';
         } else {
