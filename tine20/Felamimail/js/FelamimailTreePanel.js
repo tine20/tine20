@@ -673,7 +673,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             }
         });
         
+        // we don't want appending folder effects
+        this.suspendEvents();
         this.root.appendChild(node);
+        this.resumeEvents();
     },
     
     /**

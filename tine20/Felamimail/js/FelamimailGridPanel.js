@@ -810,11 +810,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 'update': function(record) {
                     var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
                     
-                    // add to tree / store
-                    var treePanel = this.app.getMainScreen().getTreePanel();
-                    treePanel.addAccount(account);
-                    treePanel.accountStore.add([account]);
-                    
                     // add to registry
                     Tine.Felamimail.registry.get('preferences').replace('defaultEmailAccount', account.id);
                     // need to do this because store could be unitialized yet
@@ -822,6 +817,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     registryAccounts.results.push(account.data);
                     registryAccounts.totalcount++;
                     Tine.Felamimail.registry.replace('accounts', registryAccounts);
+                    
+                    // add to tree / store
+                    var treePanel = this.app.getMainScreen().getTreePanel();
+                    treePanel.addAccount(account);
+                    treePanel.accountStore.add([account]);
                 }
             }
         });        
