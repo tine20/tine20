@@ -598,8 +598,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         // add other headers
-        foreach ($_message->headers as $key => $value) {
-            $mail->addHeader($key, $value);
+        if (! empty($_message->headers) && is_array($_message->headers)) {
+            foreach ($_message->headers as $key => $value) {
+                $mail->addHeader($key, $value);
+            }
         }
         
         // set transport + send mail
@@ -655,7 +657,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
         
-        $rawBody = $imapBackend->getRawContent($message->messageuid, $_partId, true);
+        try {
+            $rawBody = $imapBackend->getRawContent($message->messageuid, $_partId, true);
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            if ($zmpe->getMessage() == 'the single id was not found in response') {
+                throw Felamimail_Exception_IMAPMessageNotFound('Message with uid ' . $message->messageuid . ' not found on IMAP server.');
+            } else {
+                throw Felamimail_Exception_IMAP($zmpe->getMessage());
+            }
+        }
         
         $stream = fopen("php://temp", 'r+');
         fputs($stream, $rawBody);
