@@ -19,6 +19,8 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
     autoScroll: false,
     
     initComponent: function() {
+        this.addEvents('remove');
+        
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         this.i18n = this.app.i18n;
         
@@ -32,7 +34,7 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
     initActions: function() {
         this.action_deleteRecord = new Ext.Action({
             text: this.app.i18n._('Delete'),
-            handler: this.onMessageDelete.createDelegate(this),
+            handler: this.onMessageDelete.createDelegate(this, [false]),
             iconCls: 'action_delete'
         });
         
@@ -133,9 +135,33 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         this.fireEvent('update', composedMsg, action, affectedMsgs);
     },
     
+    /**
+     * executed after deletion of this message
+     */
+    onAfterDelete: function() {
+        this.fireEvent('remove', Ext.encode(this.record.data));
+        this.window.close();
+    },
     
-    onMessageDelete: function() {
-        
+    /**
+     * delete message handler
+     */
+    onMessageDelete: function(force) {
+        var mainApp = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
+            accountId = this.record.get('account_id'),
+            account = Tine.Felamimail.loadAccountStore().getById(accountId),
+            trashId = account ? account.getTrashFolderId() : null;
+            
+        this.loadMask.show();
+        if (trashId) {
+            Tine.Felamimail.messageBackend.moveMessages(this.record.id, trashId, { 
+                callback: this.onAfterDelete.createDelegate(this, ['move'])
+            });
+        } else {
+            Tine.Felamimail.messageBackend.addFlags(this.record.id, '\\Deleted', { 
+                callback: this.onAfterDelete.createDelegate(this, ['flag'])
+            });
+        }
     },
     
     /**
