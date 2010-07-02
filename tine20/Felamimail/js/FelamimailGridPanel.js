@@ -612,6 +612,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (folder) {
             folder.set('cache_status', 'incomplete');
         }
+        
         if (! this.deleteTransactionId || ! Tine.Felamimail.messageBackend.isLoading(this.deleteTransactionId)) {
             this.loadData(true, true, true);
         }
@@ -711,7 +712,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Felamimail.MessageDisplayDialog.openWindow({
             record: this.grid.getSelectionModel().getSelected(),
             listeners: {
-                'update': this.onAfterCompose.createDelegate(this)
+                scope: this,
+                'update': this.onAfterCompose,
+                'remove': function(msgData) {
+                    var msg = this.getStore().getById(Ext.decode(msgData).id);
+                        accountId = msg ? msg.get('account_id') : null,
+                        account = accountId ? Tine.Felamimail.loadAccountStore().getById(accountId) : null,
+                        trashId = account ? account.getTrashFolderId() : null,
+                        trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
+                        
+                    this.getStore().remove(msg);
+                    this.onAfterDelete(trash);
+                }
             }
         });
     }, 
