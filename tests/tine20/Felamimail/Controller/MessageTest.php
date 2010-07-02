@@ -754,6 +754,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     /**
      * test forward with attachment
      * 
+     * @todo add encoding check / i.e. by comparing original and rfc822 msg
      */
     public function testForwardMessageWithAttachment()
     {
