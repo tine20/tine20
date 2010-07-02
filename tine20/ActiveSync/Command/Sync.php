@@ -142,6 +142,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 'class'           => isset($xmlCollection->Class) ? (string)$xmlCollection->Class : null,
                 'collectionId'    => $collectionId,
                 'windowSize'      => isset($xmlCollection->WindowSize) ? (int)$xmlCollection->WindowSize : 100,
+                'deletesAsMoves'  => isset($xmlCollection->DeletesAsMoves) ? true : false,
                 'getChanges'      => isset($xmlCollection->GetChanges) && (string)$xmlCollection->GetChanges === '0' ? false : true,
                 'added'           => array(),
                 'changed'         => array(),
