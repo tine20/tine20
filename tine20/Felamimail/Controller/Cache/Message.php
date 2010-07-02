@@ -247,6 +247,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 
                 for ($i=$begin; $i > 0; $i -= $this->_importCountPerStep) {
                     $firstMessageSequence = ($i-$this->_importCountPerStep) >= 0 ? $i-$this->_importCountPerStep : 0;
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " fetching from $firstMessageSequence");
                     $cachedMessages = $this->_getCachedMessagesChunked($folder, $firstMessageSequence);
                     $cachedMessages->addIndices(array('messageuid'));
                     
@@ -306,6 +307,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     }
                 }
                 
+                if ($firstMessageSequence === 0) {
+                    $folder->cache_job_startuid = 0;
+                }
             }
         }
         
