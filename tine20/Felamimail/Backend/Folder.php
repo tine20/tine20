@@ -89,9 +89,12 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         
         $where  = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $folderData['id']),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('cache_timestamp') . ' = ?', $folderData['cache_timestamp']),
             $this->_db->quoteInto($this->_db->quoteIdentifier('cache_status') . ' = ?', $folderData['cache_status']),
         );
+        
+        if (!empty($folderData['cache_timestamp'])) {
+            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('cache_timestamp') . ' = ?', $folderData['cache_timestamp']);
+        }
         
         $affectedRows = $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
         
