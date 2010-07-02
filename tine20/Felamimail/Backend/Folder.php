@@ -73,6 +73,36 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * try to lock a folder
+     * 
+     * @param  Felamimail_Model_Folder  $_folder  the folder to lock
+     * @return bool  true if locking was successful, false if locking was not possible
+     */
+    public function lockFolder(Felamimail_Model_Folder $_folder)
+    {
+        $folderData = $_folder->toArray();
+        
+        $data = array(
+            'cache_timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'cache_status'    => Felamimail_Model_Folder::CACHE_STATUS_UPDATING
+        );
+        
+        $where  = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $folderData['id']),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('cache_timestamp') . ' = ?', $folderData['cache_timestamp']),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('cache_status') . ' = ?', $folderData['cache_status']),
+        );
+        
+        $affectedRows = $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
+        
+        if ($affectedRows !== 1) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
      * converts record into raw data for adapter
      *
      * @param  Tinebase_Record_Abstract $_record
