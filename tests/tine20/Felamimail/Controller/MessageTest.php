@@ -523,17 +523,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     public function testGetBodyPlainText()
     {
-        $this->_appendMessage('text_plain.eml', $this->_folder);
+        $cachedMessage = $this->_messageTestHelper('text_plain.eml', 'text/plain');
         
-        $result = $this->_imap->search(array(
-            'HEADER X-Tine20TestMessage text/plain'
-        ));
-        $message = $this->_imap->getSummary($result[0]);
-        
-        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
-        
-        $this->_createdMessages[] = $cachedMessage;
-
         $body = $this->_controller->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT);
         
         $this->assertContains('a converter script be written to', $body);
@@ -595,29 +586,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('add-removals.1239580800.log', $message->attachments[0]["filename"]);
     }
 
-    /**
-     * test forward with attachment
-     * 
-     * @todo implement
-     */
-    public function testForwardMessageWithAttachment()
-    {
-        /*
-        $this->_appendMessage('multipart_related.eml', $this->_folder);
-        
-        $result = $this->_imap->search(array(
-            'HEADER X-Tine20TestMessage multipart/related'
-        ));
-        $message = $this->_imap->getSummary($result[0]);
-        
-        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
-        */
-        // forward message
-        /*
-        $message = set original id = $cachedMessage->getId()
-        $this->_controller->sendMessage($message)
-        */
-    }
     
     /**
      * validate fetching a complete message
@@ -782,61 +750,31 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $cachedMessage->sent->getTimestamp());
     }
     
-    /**
-     * test some mail
-     *
-     */
-    public function testMessage()
-    {
-        /*
-        $message = $this->_messageTestHelper('forwarded.eml');
-        $completeMessage = $this->_controller->getCompleteMessage($message->getId(), null, TRUE);
-        
-        echo 'subject: ' . $message->subject . "\n";
-        echo 'from: ' . $message->from . "\n";
-        echo $completeMessage->body;
-        
-        //$attachments = $completeMessage->attachments;
-        
-        // do checks
-        //$this->assertEquals('[gentoo-dev] Last rites: dev-php5/pecl-zip', $message->subject);
-        //$this->assertEquals('Christian Hoffmann <hoffie@gentoo.org>', $message->from);
-        //$this->assertEquals('multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary=------------enig43E7BAD372988B39EC5ECE0B', $completeMessage->headers['content-type']);
-        //$this->assertEquals('signature.asc', $attachments[0]['filename']);
-        //$this->assertEquals('', $completeMessage->body);
-        
-        // delete message
-        $this->_controller->delete($message->getId());
-        */
-    }
     
     /********************************* protected helper funcs *************************************/
     
-    protected function _messageTestHelper($_filename)
+    /**
+     * helper function
+     * - appends message from file
+     * - adds appended message to cache
+     * 
+     * @param string $_filename
+     * @param string $_testHeaderValue
+     * @return Felamimail_Model_Message
+     */
+    protected function _messageTestHelper($_filename, $_testHeaderValue = 'multipart/related')
     {
-        // get inbox folder id and empty folder
-        Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
-        $folderBackend = new Felamimail_Backend_Folder();
-        $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $this->_testFolderName);
-        Felamimail_Controller_Folder::getInstance()->emptyFolder($folder->getId());
-                
-        $this->_appendMessage($_filename, $this->_testFolderName);
+        $this->_appendMessage($_filename, $this->_folder);
         
-        // get inbox folder id
-        Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
-        $folderBackend = new Felamimail_Backend_Folder();
-        $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $this->_testFolderName);
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage ' . $_testHeaderValue
+        ));
+        $message = $this->_imap->getSummary($result[0]);
         
-        // search messages in inbox
-        Felamimail_Controller_Cache_Message::getInstance()->update($folder);
-        $result = $this->_controller->search($this->_getFilter($folder->getId()));
+        $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
+        $this->_createdMessages[] = $cachedMessage;
         
-        //print_r($result->toArray());
-        
-        $this->assertTrue(! empty($result));
-        
-        // return result
-        return $result->getFirstRecord();        
+        return $cachedMessage;
     }
     
     /**
