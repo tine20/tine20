@@ -347,26 +347,44 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($folder));
     }
     
-    public function testWeek()
+    /**
+     * test in week operator of creation time filter
+     */
+    public function testCreationTimeWeekOperator()
     {
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
+            array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
+        ));
+        $count1 = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'creation_time', 'operator' => 'inweek',   'value' => 0),
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
-        $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
-        $this->assertTrue($count > 0);
+        $count2 = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $this->assertEquals($count1, $count2);
     }
     
-    public function tesCreationTime()
+    /**
+     * test equals operator of creation time filter
+     */
+    public function testCreationTimeEqualsOperator()
     {
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
+            array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
+        ));
+        $count1 = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        
         $date = Zend_Date::now();
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'creation_time', 'operator' => 'equals',   'value' => $date->toString('yyyy-MM-dd')),
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
-        $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
-        $this->assertTrue($count > 0);
+        $count2 = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $this->assertEquals($count1, $count2);
     }
 }
