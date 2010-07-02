@@ -11,7 +11,6 @@
  * 
  * @todo        parse mail body and add <a> to telephone numbers?
  * @todo        check html purifier config (allow some tags/attributes?)
- * @todo        improve handling of BIG (rfc822) messages (don't read the whole content?) -> php://temp stream
  */
 
 /**
@@ -797,7 +796,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             foreach ($_structure['parts'] as $part) {
                 if ((is_array($part['disposition']) &&
                     ($part['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $part['disposition']))) ||
-                    $part["contentType"] == 'message/rfc822')
+                    $part["contentType"] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822)
                 ) {
                     if (is_array($part['disposition']) && array_key_exists('parameters', $part['disposition']) && array_key_exists('filename', $part['disposition']['parameters'])) {
                         $filename = $part['disposition']['parameters']['filename'];
