@@ -14,6 +14,9 @@
 /**
  * class to hold Folder data
  * 
+ * @property  string  account_id
+ * @property  string  localname
+ * @property  string  globalname
  * @package     Felamimail
  */
 class Felamimail_Model_Folder extends Tinebase_Record_Abstract
