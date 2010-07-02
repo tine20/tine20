@@ -11,55 +11,143 @@
         <header>{user}</header>
     </headers>
     <columns>
+        <!--column>
+            <identifier>account_id</identifier>
+        </column-->
         <column>
-            <identifier>n_fn</identifier>
-            <header>Full Name</header>
-            <type>string</type>
-        </column>
-        <column>
-            <identifier>org_name</identifier>
-            <header>Organization</header>
-            <type>string</type>
-        </column>
-        <column>
-            <identifier>tel_work</identifier>
-            <header>Telephone (Work)</header>
-            <type>string</type>
-        </column>
-        <column>
-            <identifier>tel_cell</identifier>
-            <header>Telephone (Cellphone)</header>
-            <type>string</type>
-        </column>
-        <column>
-            <identifier>tel_fax</identifier>
-            <header>Telephone (Fax)</header>
-            <type>string</type>
-        </column>
-        <column>
-            <identifier>email</identifier>
-            <header>Email</header>
-            <type>string</type>
-        </column>
-        <column>
-            <identifier>adr_one_street</identifier>
-            <header>Street</header>
-            <type>string</type>
-        </column>
-        <column>
-            <identifier>adr_one_postalcode</identifier>
-            <header>Postal Code</header>
-            <type>string</type>
+            <identifier>adr_one_countryname</identifier>
         </column>
         <column>
             <identifier>adr_one_locality</identifier>
-            <header>Locality</header>
-            <type>string</type>
+        </column>
+            <column>
+            <identifier>adr_one_postalcode</identifier>
         </column>
         <column>
-            <identifier>adr_one_countryname</identifier>
-            <header>Country</header>
-            <type>string</type>
+            <identifier>adr_one_region</identifier>
+        </column>
+        <column>
+            <identifier>adr_one_street</identifier>
+        </column>
+        <column>
+            <identifier>adr_one_street2</identifier>
+        </column>
+        <column>
+            <identifier>adr_two_countryname</identifier>
+        </column>
+        <column>
+            <identifier>adr_two_locality</identifier>
+        </column>
+        <column>
+            <identifier>adr_two_postalcode</identifier>
+        </column>
+        <column>
+            <identifier>adr_two_region</identifier>
+        </column>
+        <column>
+            <identifier>adr_two_street</identifier>
+        </column>
+        <column>
+            <identifier>adr_two_street2</identifier>
+        </column>
+        <column>
+            <identifier>assistent</identifier>
+        </column>
+        <column>
+            <identifier>bday</identifier>
+        </column>
+        <column>
+            <identifier>calendar_uri</identifier>
+        </column>
+        <column>
+            <identifier>email</identifier>
+        </column>
+        <column>
+            <identifier>email_home</identifier>
+        </column>
+        <column>
+            <identifier>freebusy_uri</identifier>
+        </column>
+        <column>
+            <identifier>note</identifier>
+        </column>
+        <column>
+            <identifier>container_id</identifier>
+        </column>
+        <column>
+            <identifier>pubkey</identifier>
+        </column>
+        <column>
+            <identifier>role</identifier>
+        </column>
+        <column>
+            <identifier>room</identifier>
+        </column>
+        <column>
+            <identifier>salutation_id</identifier>
+        </column>
+        <column>
+            <identifier>title</identifier>
+        </column>
+        <column>
+            <identifier>tz</identifier>
+        </column>
+        <column>
+            <identifier>url</identifier>
+        </column>
+        <column>
+            <identifier>url_home</identifier>
+        </column>
+        <column>
+            <identifier>n_family</identifier>
+        </column>
+        <column>
+            <identifier>n_fileas</identifier>
+        </column>
+        <column>
+            <identifier>n_fn</identifier>
+        </column>
+        <column>
+            <identifier>n_given n_middle</identifier>
+        </column>
+        <column>
+            <identifier>n_prefix</identifier>
+        </column>
+        <column>
+            <identifier>n_suffix</identifier>
+        </column>
+        <column>
+            <identifier>org_name</identifier>
+        </column>
+        <column>
+            <identifier>org_unit</identifier>
+        </column>
+        <column>
+            <identifier>tel_assistent</identifier>
+        </column>
+        <column>
+            <identifier>tel_car tel_cell</identifier>
+        </column>
+        <column>
+            <identifier>tel_cell_private</identifier>
+        </column>
+        <column>
+            <identifier>tel_fax tel_fax_home</identifier>
+        </column>
+        <column>
+            <identifier>tel_home</identifier>
+        </column>
+        <column>
+            <identifier>tel_pager</identifier>
+        </column>
+        <column>
+            <identifier>tel_work</identifier>
+        </column>
+        <column>
+            <identifier>lon</identifier>
+        </column>
+        <column>
+            <identifier>lat</identifier>
         </column>
     </columns>
 </config>
