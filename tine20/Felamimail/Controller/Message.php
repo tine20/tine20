@@ -963,7 +963,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * update folder counts and returns list oZend_Cache_Frontend|f affected folders
+     * update folder counts and returns list of affected folders
      * 
      * @param array $_folderCounter (folderId => unreadcounter)
      * @param string $_mode addFlags|clearFlags|delete|move
