@@ -861,6 +861,16 @@ class Tinebase_Core
     }
 
     /**
+     * get cache from the registry
+     *
+     * @return Zend_Cache_Core the cache
+     */
+    public static function getCache()
+    {
+        return self::get(self::CACHE);
+    }
+        
+    /**
      * get session namespace from the registry
      *
      * @return Zend_Session_Namespace tinebase session namespace
