@@ -257,10 +257,10 @@ Ext.namespace('Tine.Felamimail');
             this.replyTo = new this.recordClass(Ext.decode(this.replyTo));
         }
         
-        if (Ext.isArray(this.forwardMsgs) && Ext.isString(this.forwardMsgs[0])) {
+        if (Ext.isString(this.forwardMsgs)) {
             var msgs = [];
-            Ext.each(this.forwardMsgs, function(msg) {
-                msgs.push(new this.recordClass(Ext.decode(msg)));
+            Ext.each(Ext.decode(this.forwardMsgs), function(msg) {
+                msgs.push(new this.recordClass(msg));
             }, this);
             
             this.forwardMsgs = msgs;
