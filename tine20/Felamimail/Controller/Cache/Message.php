@@ -451,6 +451,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     }
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $folder->cache_status);           
                 }
+                if ($messageSequenceStart === 1) {
+                    $folder->cache_job_lowestuid = 0;
+                }
             }
         }
         
