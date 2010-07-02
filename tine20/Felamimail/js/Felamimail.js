@@ -337,11 +337,12 @@ Tine.Felamimail.loadAccountStore = function(reload) {
  */
 Tine.Felamimail.getSignature = function(id) {
         
-    var result = '';
+    var result = '',
+        activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getMainScreen().getTreePanel().getActiveAccount();
+        
+    id = id || activeAccount ? activeAccount.id : 'default';
     
-    if (! id) {
-        id = Tine.Tinebase.appMgr.get('Felamimail').getMainScreen().getTreePanel().getActiveAccount().id
-    } else if (id === 'default') {
+    if (id === 'default') {
         id = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
     }
     
