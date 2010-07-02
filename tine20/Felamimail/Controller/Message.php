@@ -649,6 +649,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             ? $_account->from 
             : substr($_account->email, 0, strpos($_account->email, '@'));
         // quote meta chars such as []\ etc
+        //$from = quotemeta($from);
         $from = quotemeta($from);
         $mail->setFrom($_account->email, $from);
 
@@ -692,6 +693,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // add other headers
         if (! empty($_message->headers) && is_array($_message->headers)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding custom headers: ' . print_r($_message->headers, TRUE));
             foreach ($_message->headers as $key => $value) {
                 $mail->addHeader($key, $value);
             }
@@ -1177,6 +1179,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $size = 0;
             foreach ($_message->attachments as $attachment) {
                 
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($attachment, TRUE));
+                
                 if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
                     
                     if ($_originalMessage === NULL) {
@@ -1184,8 +1188,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     }
                     
                     // @todo do decoding and check if getMessagePart delivers the original message correctly as Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
-                    $part = $this->getMessagePart($_originalMessage, 'TEXT');
+                    $part = $this->getMessagePart($_originalMessage);
                     $part->disposition = 'attachment; filename="' . $attachment['name'] . '"';
+                    
+                    if (! array_key_exists('size', $attachment) || empty($attachment['size']) ) {
+                        $attachment['size'] = $_originalMessage->size;
+                    }
+                    
                     
                     // @deprecated code follows
                     /*
@@ -1207,7 +1216,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     
                     //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $rawContent);
                     
-                    $part->disposition = 'attachment; filename="' . $attachment['name'] . '"';
+                    $part->disposition = 'attachment; filenam, 'TEXT'e="' . $attachment['name'] . '"';
                     // @todo decode content first and remove this
                     $part->encoding = Zend_Mime::ENCODING_7BIT;
                     */
