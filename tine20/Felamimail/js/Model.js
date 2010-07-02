@@ -279,7 +279,7 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
      * -> needed as trash is saved as globname :(
      */
     getSendFolderId: function() {
-        var app = Tine.Tinebase.appMgr.get('Felamimail'),
+        var app = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
             sendName = this.get('sent_folder'),
             accountId = this.id,
             send = sendName ? app.getFolderStore().queryBy(function(record) {
@@ -294,7 +294,7 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
      * -> needed as trash is saved as globname :(
      */
     getTrashFolderId: function() {
-        var app = Tine.Tinebase.appMgr.get('Felamimail'),
+        var app = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
             trashName = this.get('trash_folder'),
             accountId = this.id,
             trash = trashName ? app.getFolderStore().queryBy(function(record) {
