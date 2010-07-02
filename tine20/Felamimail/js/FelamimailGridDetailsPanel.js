@@ -83,15 +83,19 @@ Ext.namespace('Tine.Felamimail');
      * @private
      */
     updateDetails: function(record, body) {
+        if (record.id === this.currentId) {
+            // nothing to do
+            return;
+        }
         
         if (! record.bodyIsFetched()) {
             Tine.Felamimail.messageBackend.fetchBody(record, this.updateDetails.createDelegate(this, [record, body]));
+            this.defaultTpl.overwrite(body, {msg: ''});
             this.getLoadMask().show();
             return;
         }
         
-        // check if new record has been selected to prevent scroll hopping
-        if (record.id !== this.currentId && record === this.record) {                
+        if (record === this.record) {                
             this.currentId = record.id;
             this.tpl.overwrite(body, record.data);
             this.getLoadMask().hide();
