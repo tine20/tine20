@@ -739,6 +739,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 	 * NOTE: As the HTML servers have no singletons, we need to create a unique
 	 * instance here. This might get relaxed wiht php 5.3 with static functions
 	 * 
+	 * TODO directory read method is sistem dependant so order of inclusion may vary and
+	 * this can lead to error
+	 * 
 	 * @param  array apps to exclude
 	 * @return array 
 	 */
@@ -750,16 +753,27 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 	    $tinebaseHttp = new Tinebase_Frontend_Http();
         $cssFiles = $tinebaseHttp->getCssFilesToInclude();
         $jsFiles  = $tinebaseHttp->getJsFilesToInclude();
+		
+		// Admin second
+	    $adminHttp = new Admin_Frontend_Http();
+        $cssFiles = array_merge($cssFiles, $adminHttp->getCssFilesToInclude()); 
+        $jsFiles  = array_merge($jsFiles, $adminHttp->getJsFilesToInclude());
+		
+		// Addressbook third
+	    $addressbookHttp = new Addressbook_Frontend_Http();
+        $cssFiles = array_merge($cssFiles, $addressbookHttp->getCssFilesToInclude());
+        $jsFiles  = array_merge($jsFiles, $addressbookHttp->getJsFilesToInclude());
         
         $_exclude[]  = '.';
         $_exclude[]  = 'Tinebase';
+		$_exclude[]  = 'Admin';
+		$_exclude[]  = 'Addressbook';
         $_exclude[]  = 'Setup';
-        
-        	    
+                	    
         $d = dir($tine20path);
 	    while (false !== ($appName = $d->read())) {
             if ($appName{0} != '.' && is_dir("$tine20path/$appName") && !in_array($appName, $_exclude)) {
-                if (file_exists("$tine20path/$appName/Frontend/Http.php")) {
+				if (file_exists("$tine20path/$appName/Frontend/Http.php")) {
                     
                     $httpClass = $appName . "_Frontend_Http";
                     $instance = new $httpClass();
