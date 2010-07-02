@@ -235,7 +235,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             if ($lastFolderId != $message->folder_id) {
                 $imapBackend              = $this->_getBackendAndSelectFolder($message->folder_id);
                 $lastFolderId             = $message->folder_id;
-                $folderIds[$lastFolderId] = 0;
+                $folderIds[$lastFolderId] = array(
+                    'decrementMessagesCounter' => 0, 
+                    'decrementUnreadCounter'   => 0
+                );
             }
             
             $imapMessageUids[] = $message->messageuid;
@@ -252,16 +255,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         foreach($messagesToFlag as $message) {
             foreach ($flags as $flag) {
-                if (!is_array($message->flags) || !in_array($flag, $message->flags)) {
-                    if ($flag == Zend_Mail_Storage::FLAG_DELETED) {
-                        $this->_cacheController->delete($message->getId());
-                        $messagesToFlag->removeRecord($message);
-                    } else {
-                        $this->_backend->addFlag($message, $flag);
-                        if ($flag == Zend_Mail_Storage::FLAG_SEEN) {
-                            // count messages with seen flag for the first time
-                            $folderIds[$message->folder_id]++;
-                        }
+                if ($flag == Zend_Mail_Storage::FLAG_DELETED) {
+                    if (is_array($message->flags) && !in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
+                        $folderIds[$message->folder_id]['decrementUnreadCounter']++;
+                    }
+                    $folderIds[$message->folder_id]['decrementMessagesCounter']++;
+                    
+                    $this->_backend->delete($message->getId());
+                    $messagesToFlag->removeRecord($message);
+                } elseif (!is_array($message->flags) || !in_array($flag, $message->flags)) {
+                    $this->_backend->addFlag($message, $flag);
+                    if ($flag == Zend_Mail_Storage::FLAG_SEEN) {
+                        // count messages with seen flag for the first time
+                        $folderIds[$message->folder_id]['decrementUnreadCounter']++;
                     }
                 }
             }
@@ -280,6 +286,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' set flags on cache');
         
         $affectedFolders = $this->_updateFolderCounts($folderIds, 'addFlags');
+        
         return $affectedFolders;
     }
     
@@ -974,18 +981,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         foreach ($_folderCounter as $folderId => $counter) {
             $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
             switch ($_mode) {
-                case 'addFlags':
-                    $errorCondition = ($folder->cache_unreadcount < $counter);
-                    $updatedCounters = array(
-                        'cache_unreadcount' => "-$counter",
-                    );
-                    break;
+                #case 'addFlags':
+                #    $errorCondition = ($folder->cache_unreadcount < $counter);
+                #    $updatedCounters = array(
+                #        'cache_unreadcount' => "-$counter",
+                #    );
+                #    break;
                 case 'clearFlags':
                     $errorCondition = ($folder->cache_unreadcount + $counter > $folder->cache_totalcount);
                     $updatedCounters = array(
                         'cache_unreadcount' => "+$counter",
                     );
                     break;
+                case 'addFlags':
                 case 'delete':
                 case 'move':
                     $errorCondition = ($folder->cache_unreadcount < $counter['decrementUnreadCounter'] || $folder->cache_totalcount < $counter['decrementMessagesCounter']);
