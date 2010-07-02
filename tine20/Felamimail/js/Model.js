@@ -277,6 +277,36 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     },
     
     /**
+     * returns sendfolder id
+     * -> needed as trash is saved as globname :(
+     */
+    getSendFolderId: function() {
+        var app = Tine.Tinebase.appMgr.get('Felamimail'),
+            sendName = this.get('sent_folder'),
+            accountId = this.id,
+            send = sendName ? app.getFolderStore().queryBy(function(record) {
+                return record.get('account_id') === accountId && record.get('globalname') === sendName;
+            }, this).first() : null;
+            
+        return send ? send.id : null;
+    },
+    
+    /**
+     * returns trashfolder id
+     * -> needed as trash is saved as globname :(
+     */
+    getTrashFolderId: function() {
+        var app = Tine.Tinebase.appMgr.get('Felamimail'),
+            trashName = this.get('trash_folder'),
+            accountId = this.id,
+            trash = trashName ? app.getFolderStore().queryBy(function(record) {
+                return record.get('account_id') === accountId && record.get('globalname') === trashName;
+            }, this).first() : null;
+            
+        return trash ? trash.id : null;
+    },
+    
+    /**
      * set or clear IMAP exception and update imap_state
      * 
      * @param {Object} exception
