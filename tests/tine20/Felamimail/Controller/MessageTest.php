@@ -750,6 +750,29 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $cachedMessage->sent->getTimestamp());
     }
     
+    /**
+     * test forward with attachment
+     */
+    public function testForwardMessageWithAttachment()
+    {
+        /*
+        $cachedMessage = $this->_messageTestHelper('multipart_related.eml', 'multipart/related');
+        
+        // forward message
+        $forwardMessage = new Felamimail_Model_Message(array(
+            'from'      => $this->_account->getId(),
+            'subject'   => 'test forward',
+            'to'        => array('unittest@tine20.org'),
+            'body'      => 'aaaaaä <br>',
+            'headers'   => array('X-Tine20TestMessage' => 'message/rfc822'),
+            'original_id'   => $cachedMessage->getId(),
+        ));
+        $this->_controller->sendMessage($message);
+        
+        $forwardedMessage = $this->_searchAndCacheMessage('message/rfc822');
+        */
+    }    
+    
     /********************************* protected helper funcs *************************************/
     
     /**
