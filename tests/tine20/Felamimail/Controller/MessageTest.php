@@ -756,7 +756,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testForwardMessageWithAttachment()
     {
-        /*
         $cachedMessage = $this->_messageTestHelper('multipart_related.eml', 'multipart/related');
         
         // forward message
@@ -768,10 +767,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             'headers'   => array('X-Tine20TestMessage' => 'message/rfc822'),
             'original_id'   => $cachedMessage->getId(),
         ));
-        $this->_controller->sendMessage($message);
+        $this->_controller->sendMessage($forwardMessage);
         
-        $forwardedMessage = $this->_searchAndCacheMessage('message/rfc822');
-        */
+        $forwardMessage = $this->_searchAndCacheMessage('message/rfc822', 'INBOX');
+        
+        //print_r($forwardMessage->toArray());
     }    
     
     /********************************* protected helper funcs *************************************/
@@ -785,7 +785,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * @param string $_testHeaderValue
      * @return Felamimail_Model_Message
      */
-    protected function _messageTestHelper($_filename, $_testHeaderValue = 'multipart/related')
+    protected function _messageTestHelper($_filename, $_testHeaderValue)
     {
         $this->_appendMessage($_filename, $this->_folder);
         return $this->_searchAndCacheMessage($_testHeaderValue);
@@ -797,11 +797,17 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * @param string $_testHeaderValue
      * @return Felamimail_Model_Message
      */
-    protected function _searchAndCacheMessage($_testHeaderValue = 'multipart/related')
+    protected function _searchAndCacheMessage($_testHeaderValue, $_folder = NULL) 
     {
+        if ($_folder !== NULL) {
+            $this->_imap->selectFolder($_folder);
+        } else {
+            $this->_imap->selectFolder($this->_testFolderName);
+        }
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage ' . $_testHeaderValue
         ));
+        $this->assertGreaterThan(0, count($result), 'No messages with HEADER X-Tine20TestMessage: ' . $_testHeaderValue . ' found.');
         $message = $this->_imap->getSummary($result[0]);
         
         $cachedMessage = $this->_cache->addMessage($message, $this->_folder);
