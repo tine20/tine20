@@ -575,6 +575,19 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         // mark send folders cache status incomplete
         composedMsg = Ext.isString(composedMsg) ? new this.recordClass(Ext.decode(composedMsg)) : composedMsg;
         
+        // NOTE: if affected messages is decoded, we need to fetch the originals out of our store
+        if (Ext.isString(affectedMsgs)) {
+            var msgs = [],
+                store = this.getStore();
+            Ext.each(Ext.decode(affectedMsgs), function(msgData) {
+                var msg = store.getById(msgData.id);
+                if (msg) {
+                    msgs.push(msg);
+                }
+            }, this);
+            affectedMsgs = msgs;
+        }
+        
         var composerAccount = Tine.Felamimail.loadAccountStore().getById(composedMsg.get('from')),
             sendFolderId = composerAccount ? composerAccount.getSendFolderId() : null,
             sendFolder = sendFolderId ? this.app.getFolderStore().getById(sendFolderId) : null;
@@ -623,11 +636,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             msgs = sm.getSelections(),
             msgsData = [];
             
-        Ext.each(msgs, function(msg) {msgsData.push(Ext.encode(msg.data))}, this);
+        Ext.each(msgs, function(msg) {msgsData.push(msg.data)}, this);
         
         if (sm.getCount() > 0) {
             Tine.Felamimail.MessageEditDialog.openWindow({
-                forwardMsgs : msgsData,
+                forwardMsgs : Ext.encode(msgsData),
                 listeners: {
                     'update': this.onAfterCompose.createDelegate(this, ['forward', msgs], 1)
                 }
@@ -696,7 +709,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onRowDblClick: function(grid, row, e) {
         Tine.Felamimail.MessageDisplayDialog.openWindow({
-            record: this.grid.getSelectionModel().getSelected()
+            record: this.grid.getSelectionModel().getSelected(),
+            listeners: {
+                'update': this.onAfterCompose.createDelegate(this)
+            }
         });
     }, 
     
@@ -722,21 +738,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             switch (e.getKey()) {
                 case e.N:
                 case e.M:
-                    this.onEditInNewWindow({
-                        actionType: 'add'
-                    }, e);
+                    this.onMessageCompose();
                     e.preventDefault();
                     break;
                 case e.R:
-                    this.onEditInNewWindow({
-                        actionType: 'reply'
-                    }, e);
+                    this.onMessageReplyTo();
                     e.preventDefault();
                     break;
                 case e.L:
-                    this.onEditInNewWindow({
-                        actionType: 'forward'
-                    }, e);
+                    this.onMessageForward();
                     e.preventDefault();
                     break;
             }
