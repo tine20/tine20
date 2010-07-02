@@ -489,6 +489,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
            
         if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING) {
             $folder->cache_status               = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
+            $folder->cache_timestamp            = Zend_Date::now();
             $folder->cache_uidnext              = $folder->imap_uidnext;
             $folder->cache_job_actions_estimate = 0;
             $folder->cache_job_actions_done     = 0;
