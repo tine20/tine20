@@ -750,7 +750,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $cachedMessage->sent->getTimestamp());
     }
     
-    
     /********************************* protected helper funcs *************************************/
     
     /**
@@ -765,7 +764,17 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected function _messageTestHelper($_filename, $_testHeaderValue = 'multipart/related')
     {
         $this->_appendMessage($_filename, $this->_folder);
-        
+        return $this->_searchAndCacheMessage($_testHeaderValue);
+    }
+    
+    /**
+     * search message by header (X-Tine20TestMessage) and add it to cache
+     * 
+     * @param string $_testHeaderValue
+     * @return Felamimail_Model_Message
+     */
+    protected function _searchAndCacheMessage($_testHeaderValue = 'multipart/related')
+    {
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage ' . $_testHeaderValue
         ));
