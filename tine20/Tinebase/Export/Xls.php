@@ -210,7 +210,8 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
     {
         $columnId = 0;
         foreach($this->_config->columns->column as $field) {
-            $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow($columnId++, $this->_currentRowIndex, $field->header);
+            $headerValue = ($field->header) ? $field->header : $field->identifier;
+            $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow($columnId++, $this->_currentRowIndex, $headerValue);
         }
         
         $this->_currentRowIndex++;
@@ -252,8 +253,10 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract
             $this->_currentRowIndex++;
         }
         
-        // save number of records
-        $this->_excelObject->setActiveSheetIndex(0);
-        $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow(5, 2, count($_records));
+        // save number of records (only if we have more than 1 sheets / records are on the second sheet by default)
+        if ($this->_excelObject->getSheetCount() > 1) {
+            $this->_excelObject->setActiveSheetIndex(0);
+            $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow(5, 2, count($_records));
+        }
     }
 }
