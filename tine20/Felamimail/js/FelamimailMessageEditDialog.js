@@ -142,35 +142,38 @@ Ext.namespace('Tine.Felamimail');
      * @param {Tine.Felamimail.Model.Message} [message] optional self callback when body needs to be fetched
      */
     initBody: function(message) {
-        if (! this.body) {
-            message = this.replyTo ? this.replyTo : 
-                      this.forwardMsgs && this.forwardMsgs.length === 1 ? this.forwardMsgs[0] :
-                      null;
-                      
-            if (message) {
-                if (! message.bodyIsFetched()) {
-                    return this.recordProxy.fetchBody(record, this.initBody.createDelegate(this, [message]));
+        if (! this.record.get('body')) {
+            if (! this.body) {
+                message = this.replyTo ? this.replyTo : 
+                          this.forwardMsgs && this.forwardMsgs.length === 1 ? this.forwardMsgs[0] :
+                          null;
+                          
+                if (message) {
+                    if (! message.bodyIsFetched()) {
+                        return this.recordProxy.fetchBody(record, this.initBody.createDelegate(this, [message]));
+                    }
+                    
+                    this.body = message.get('body');
+                    
+                    if (Tine.Felamimail.loadAccountStore().getById(this.record.get('from')).get('display_format') == 'plain') {
+                        this.body = Ext.util.Format.nl2br(this.body);
+                    }
+                    
+                    if (this.replyTo) {
+                        this.body = '<br/>' + Ext.util.Format.htmlEncode(this.replyTo.get('from')) + ' ' + this.app.i18n._('wrote') + ':<br/>'
+                             + '<blockquote class="felamimail-body-blockquote">' + this.body + '</blockquote><br/>';
+                    } else if (this.forwardMsgs && this.forwardMsgs.length === 1) {
+                        this.body = '<br/>-----' + this.app.i18n._('Original message') + '-----<br/>'
+                            + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true) + '<br/><br/>'
+                            + this.body + '<br/>';
+                    }
+                                
                 }
-                
-                this.body = message.get('body');
-                
-                if (Tine.Felamimail.loadAccountStore().getById(this.record.get('from')).get('display_format') == 'plain') {
-                    this.body = Ext.util.Format.nl2br(this.body);
-                }
-                
-                if (this.replyTo) {
-                    this.body = '<br/>' + Ext.util.Format.htmlEncode(this.replyTo.get('from')) + ' ' + this.app.i18n._('wrote') + ':<br/>'
-                         + '<blockquote class="felamimail-body-blockquote">' + this.body + '</blockquote><br/>';
-                } else if (this.forwardMsgs && this.forwardMsgs.length === 1) {
-                    this.body = '<br/>-----' + this.app.i18n._('Original message') + '-----<br/>'
-                        + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true) + '<br/><br/>'
-                        + this.body + '<br/>';
-                }
-                            
             }
+        
+            this.record.set('body', this.body + Tine.Felamimail.getSignature(this.record.get('from')));
         }
         
-        this.record.set('body', this.body + Tine.Felamimail.getSignature(this.record.get('from')));
         delete this.body;
         this.onRecordLoad();
     },
@@ -179,15 +182,17 @@ Ext.namespace('Tine.Felamimail');
      * inits / sets sender of message
      */
     initFrom: function() {
-        if (! this.from) {
-            var folderId = this.replyTo ? this.replyTo.get('folder_id') : 
-                           this.forwardMsgs ? this.forwardMsgs[0].get('folder_id') : null,
-                accountId = folderId ? this.app.getFolderStore().getById(folderId) : null;
-                
-            this.from = accountId || this.app.getActiveAccount().id;
+        if (! this.record.get('from')) {
+            if (! this.from) {
+                var folderId = this.replyTo ? this.replyTo.get('folder_id') : 
+                               this.forwardMsgs ? this.forwardMsgs[0].get('folder_id') : null,
+                    accountId = folderId ? this.app.getFolderStore().getById(folderId) : null;
+                    
+                this.from = accountId || this.app.getActiveAccount().id;
+            }
+            
+            this.record.set('from', this.from);
         }
-        
-        this.record.set('from', this.from);
         delete this.from;
     },
     
@@ -209,8 +214,10 @@ Ext.namespace('Tine.Felamimail');
         }
         
         Ext.each(['to', 'cc', 'bcc'], function(field) {
-            this[field] = Ext.isArray(this[field]) ? this[field] : Ext.isString(this[field]) ? [this[field]] : [];
-            this.record.set(field, this[field]);
+            if (! this.record.get(field)) {
+                this[field] = Ext.isArray(this[field]) ? this[field] : Ext.isString(this[field]) ? [this[field]] : [];
+                this.record.set(field, this[field]);
+            }
             delete this[field];
         }, this);
     },
@@ -219,18 +226,20 @@ Ext.namespace('Tine.Felamimail');
      * sets / inits subject
      */
     initSubject: function() {
-        if (! this.subject) {
-            if (this.replyTo) {
-                this.subject = this.app.i18n._('Re:') + ' ' +  this.replyTo.get('subject');
-            } else if (this.forwardMsgs) {
-                this.subject =  this.app.i18n._('Fwd:') + ' ';
-                this.subject += this.forwardMsgs.length === 1 ?
-                    this.forwardMsgs[0].get('subject') :
-                    String.format(this.app.i18n._('{0} Message', '{0} Messages', this.forwardMsgs.length));
+        if (! this.record.get('subject')) {
+            if (! this.subject) {
+                if (this.replyTo) {
+                    this.subject = this.app.i18n._('Re:') + ' ' +  this.replyTo.get('subject');
+                } else if (this.forwardMsgs) {
+                    this.subject =  this.app.i18n._('Fwd:') + ' ';
+                    this.subject += this.forwardMsgs.length === 1 ?
+                        this.forwardMsgs[0].get('subject') :
+                        String.format(this.app.i18n._('{0} Message', '{0} Messages', this.forwardMsgs.length));
+                }
             }
+            this.record.set('subject', this.subject);
         }
         
-        this.record.set('subject', this.subject);
         delete this.subject;
     },
     
