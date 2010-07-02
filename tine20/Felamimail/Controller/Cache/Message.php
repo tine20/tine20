@@ -114,16 +114,10 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             return $folder;
         }
         
-        // check if we are allowed to update message cache?
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-
-        if ($this->updateAllowed($folder) !== true) {
-            Tinebase_TransactionManager::getInstance()->rollBack($transactionId);
+        if (Felamimail_Controller_Cache_Folder::getInstance()->updateAllowed($folder) !== true) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " update of folder {$folder->globalname} currently not allowed. do nothing!");
             return $folder;
         }
-        
-        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
         // get imap connection, select folder and purge messages with \Deleted flag 
         $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
@@ -247,9 +241,11 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             
             if ($timeElapsed < $_time) {
             
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " $messagesToRemoveFromCache message to remove from cache");
+                $begin = $folder->cache_job_startuid > 0 ? $folder->cache_job_startuid : $folder->cache_totalcount;
+                 
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " $messagesToRemoveFromCache message to remove from cache. starting at $begin");
                 
-                for ($i=$folder->cache_totalcount; $i > 0; $i -= $this->_importCountPerStep) {
+                for ($i=$begin; $i > 0; $i -= $this->_importCountPerStep) {
                     $firstMessageSequence = ($i-$this->_importCountPerStep) >= 0 ? $i-$this->_importCountPerStep : 0;
                     $cachedMessages = $this->_getCachedMessagesChunked($folder, $firstMessageSequence);
                     $cachedMessages->addIndices(array('messageuid'));
@@ -298,12 +294,14 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                     }
                     
                     if ($messagesToRemoveFromCache <= 0) {
+                        $folder->cache_job_startuid = 0;
                         $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
                         break;
                     }
                      
                     $timeElapsed = round(((microtime(true)) - $timeStart));
                     if($timeElapsed > $_time) {
+                        $folder->cache_job_startuid = $i;
                         break;
                     }
                 }
@@ -687,25 +685,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         return $folder;
     }
     
-    /**
-     * check if folder cache is updating atm
-     * 
-     * @param Felamimail_Model_Folder $_folder
-     * @return boolean
-     * 
-     * @todo we should check the time of the last update to dynamically decide if process could have died
-     */
-    public function updateAllowed(Felamimail_Model_Folder $_folder)
-    {
-        // if cache status is CACHE_STATUS_UPDATING and timestamp is less than 5 minutes ago, don't update
-        if ($_folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING &&
-            ($_folder->cache_timestamp instanceof Zend_Date && $_folder->cache_timestamp->compare(Zend_Date::now()->subMinute(5)) == 1)
-        ) {
-            return false;
-        }
-                        
-        return true;
-    }
     
 //    /**
 //     * get unread count for folder
