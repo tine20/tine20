@@ -100,7 +100,7 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
                 $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId',     $fetch['serverId']));
                 
                 $properties = $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Properties'));
-                $dataController->appendXML($properties, $fetch['collectionId'], $fetch['serverId'], $fetch);
+                $dataController->appendXML($properties, $fetch['collectionId'], $fetch['serverId'], $fetch, true);
                 
             } catch (Tinebase_Exception_NotFound $e) {
                 $response->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', ActiveSync_Command_ItemOperations::STATUS_ITEM_FAILED_CONVERSION));
