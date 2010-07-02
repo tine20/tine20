@@ -579,6 +579,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         #var_dump($message->toArray());
         $this->assertEquals('1', $message->text_partid);
+        $this->assertEquals('1', $message->has_attachment);
         $this->assertEquals(null, $message->html_partid);
         $this->assertEquals('9606', $message->size);
         $this->assertContains("Automated Package Removal", $message->subject);
@@ -605,8 +606,9 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->_createdMessages[] = $cachedMessage;
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
-        #var_dump($message);
+        #var_dump($message->toArray());
         $this->assertEquals('1', $message->text_partid);
+        $this->assertEquals('1', $message->has_attachment);
         $this->assertEquals('2.1', $message->html_partid);
         $this->assertEquals('38455', $message->size);
         $this->assertContains("Tine 2.0 bei Metaways", $message->subject);
@@ -632,14 +634,14 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->_createdMessages[] = $cachedMessage;
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
-        #var_dump($message);
+        #var_dump($message->toArray());
         #$this->assertEquals('1', $message->text_partid);
         #$this->assertEquals('2.1', $message->html_partid);
-        #$this->assertEquals('38455', $message->size);
-        #$this->assertContains("Tine 2.0 bei Metaways", $message->subject);
-        #$this->assertContains('\Seen', $message->flags);
-        #$this->assertContains('Autovervollständigung', $message->body);
-        #$this->assertEquals('moz-screenshot-83.png', $message->attachments[0]["filename"]);
+        $this->assertEquals('multipart/mixed', $message->content_type);
+        $this->assertEquals('5377', $message->size);
+        $this->assertContains("Fwd: [Officespot-cs-svn] r15209 - trunk/tine20/Tinebase", $message->subject);
+        $this->assertContains('est for parsing forwarded email', $message->body);
+        $this->assertEquals('message/rfc822', $message->attachments[0]["content-type"]);
     }
     
     /**
