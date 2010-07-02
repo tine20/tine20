@@ -565,10 +565,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * send one message through smtp
      * 
      * @param Felamimail_Model_Message $_message
-     * 
-     * @todo what has to be set in the 'In-Reply-To' header?
-     * @todo add name for to/cc/bcc
-     * @todo move $mail creation to extra function
+     * @return Felamimail_Model_Message
      */
     public function sendMessage(Felamimail_Model_Message $_message)
     {
@@ -587,73 +584,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($account->toArray(), TRUE));
         
-        // create new mail to send
-        $mail = new Tinebase_Mail('UTF-8');
-        
-        // build mail content
-        if ($_message->content_type == Felamimail_Model_Message::CONTENT_TYPE_HTML) {
-            $mailBodyText = $this->_removeHtml($_message->body);
-            $mail->setBodyText($mailBodyText);
-            $mail->setBodyHtml($this->_addHtmlMarkup($_message->body));
-        } else {
-            $mail->setBodyText($_message->body);
-        }
-        
-        
-        // set from
-        $from = (isset($account->from) && ! empty($account->from)) 
-            ? $account->from 
-            : substr($account->email, 0, strpos($account->email, '@'));
-        // quote meta chars such as []\ etc
-        $from = quotemeta($from);
-        $mail->setFrom($account->email, $from);
-
-        // set in reply to
-        if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $originalMessage !== NULL) {
-            $mail->addHeader('In-Reply-To', $originalMessage->messageuid);
-        }
-        
-        $nonPrivateRecipients = array();
-        
-        // add recipients
-        if (isset($_message->to)) {
-            foreach ($_message->to as $to) {
-                $mail->addTo($to, $to);
-                $nonPrivateRecipients[] = $to;
-            }
-        }
-        if (isset($_message->cc)) {
-            foreach ($_message->cc as $cc) {
-                $mail->addCc($cc, $cc);
-                $nonPrivateRecipients[] = $cc;
-            }
-        }
-        if (isset($_message->bcc)) {
-            foreach ($_message->bcc as $bcc) {
-                $mail->addBcc($bcc, $bcc);
-            }
-        }
-        
-        // set subject
-        $mail->setSubject($_message->subject);
-        
-        // add attachments
-        $this->_addAttachments($mail, $_message, $originalMessage);
-        
-        // add user agent
-        $mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
-        
-        // set organization
-        if (isset($account->organization) && ! empty($account->organization)) {
-            $mail->addHeader('Organization', $account->organization);
-        }
-        
-        // add other headers
-        if (! empty($_message->headers) && is_array($_message->headers)) {
-            foreach ($_message->headers as $key => $value) {
-                $mail->addHeader($key, $value);
-            }
-        }
+        $mail = $this->_createMailForSending($_message, $account, $nonPrivateRecipients, $originalMessage);
         
         // set transport + send mail
         $smtpConfig = $account->getSmtpConfig();
@@ -667,10 +598,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             // add email notes to contacts (only to/cc)
             if ($_message->note) {
-                $this->_addEmailNote($nonPrivateRecipients, $_message->subject, $mailBodyText);
+                $this->_addEmailNote($nonPrivateRecipients, $_message->subject, $mail->getBodyText(TRUE));
             }
         
-            // append mail to sent folder 
+            // append mail to sent folder nonPrivateRecipients
             $this->_saveInSent($transport, $account);
             
             // add reply/forward flags if set
@@ -685,6 +616,88 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         return $_message;
+    }
+    
+    /**
+     * create new mail for sending via SMTP
+     * 
+     * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Account $_account
+     * @param array $_nonPrivateRecipients
+     * @param Felamimail_Model_Message $_originalMessage
+     * @return Tinebase_Mail
+     * 
+     * @todo what has to be set in the 'In-Reply-To' header?
+     * @todo add name for to/cc/bcc
+     */
+    protected function _createMailForSending(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, &$_nonPrivateRecipients = array(), Felamimail_Model_Message $_originalMessage = NULL)
+    {
+        // create new mail to send
+        $mail = new Tinebase_Mail('UTF-8');
+        
+        // build mail content
+        if ($_message->content_type == Felamimail_Model_Message::CONTENT_TYPE_HTML) {
+            $mailBodyText = $this->_removeHtml($_message->body);
+            $mail->setBodyText($mailBodyText);
+            $mail->setBodyHtml($this->_addHtmlMarkup($_message->body));
+        } else {
+            $mail->setBodyText($_message->body);
+        }
+        
+        // set from
+        $from = (isset($_account->from) && ! empty($_account->from)) 
+            ? $_account->from 
+            : substr($_account->email, 0, strpos($_account->email, '@'));
+        // quote meta chars such as []\ etc
+        $from = quotemeta($from);
+        $mail->setFrom($_account->email, $from);
+
+        // set in reply to
+        if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $_originalMessage !== NULL) {
+            $mail->addHeader('In-Reply-To', $_originalMessage->messageuid);
+        }
+        
+        // add recipients
+        if (isset($_message->to)) {
+            foreach ($_message->to as $to) {
+                $mail->addTo($to, $to);
+                $_nonPrivateRecipients[] = $to;
+            }
+        }
+        if (isset($_message->cc)) {
+            foreach ($_message->cc as $cc) {
+                $mail->addCc($cc, $cc);
+                $_nonPrivateRecipients[] = $cc;
+            }
+        }
+        if (isset($_message->bcc)) {
+            foreach ($_message->bcc as $bcc) {
+                $mail->addBcc($bcc, $bcc);
+            }
+        }
+        
+        // set subject
+        $mail->setSubject($_message->subject);
+        
+        // add attachments
+        $this->_addAttachments($mail, $_message, $_originalMessage);
+        
+        // add user agent
+        $mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
+        
+        // set organization
+        if (isset($_account->organization) && ! empty($_account->organization)) {
+            $mail->addHeader('Organization', $_account->organization);
+        }
+        
+        // add other headers
+        if (! empty($_message->headers) && is_array($_message->headers)) {
+            foreach ($_message->headers as $key => $value) {
+                $mail->addHeader($key, $value);
+            }
+        }
+        
+        return $mail;
     }
     
     /**
@@ -956,10 +969,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $result;
     }
     
-    /************************* protected funcs *************************/
-    
     /**
-     * update folder counts and returns list of affected folders
+     * update folder counts and returns list oZend_Cache_Frontend|f affected folders
      * 
      * @param array $_folderCounter (folderId => unreadcounter)
      * @param string $_mode addFlags|clearFlags|delete|move
