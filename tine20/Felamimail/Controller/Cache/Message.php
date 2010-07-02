@@ -308,7 +308,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 }
                 
                 if ($firstMessageSequence === 0) {
-                    $folder->cache_job_startuid = 0;
                     $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
                 }
             }
@@ -454,7 +453,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                 }
                 
                 if ($messageSequenceStart === 1) {
-                    $folder->cache_job_lowestuid = 0;
                     $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
                 }
             }
@@ -503,6 +501,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             $folder->cache_job_actions_estimate = 0;
             $folder->cache_job_actions_done     = 0;
             $folder->cache_job_lowestuid        = 0;
+            $folder->cache_job_startuid         = 0;
         }
         
         if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && ($folder->cache_totalcount != $folder->imap_totalcount)) {
