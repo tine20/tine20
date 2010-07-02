@@ -276,7 +276,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 foreach ($deletes as $delete) {
                     $serverId = (string)$delete->ServerId;
                     try {
-                        $dataController->delete($collectionId, $serverId);
+                        $dataController->delete($collectionId, $serverId, $collectionData);
                     } catch(Tinebase_Exception_NotFound $e) {
                         Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but entry was not found');
                     } catch (Tinebase_Exception $e) {
