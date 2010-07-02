@@ -167,8 +167,17 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // close session to allow other requests
         Zend_Session::writeClose(true);
         
+        if (strpos($id, '_') !== false) {
+            list($messageId, $partId) = explode('_', $id);
+        } else {
+            $messageId = $id;
+            $partId    = null;
+        }
+        
         $controller = Felamimail_Controller_Message::getInstance();
-        $message = $controller->getCompleteMessage($id, false);
+        
+        $message = $controller->getCompleteMessage($messageId, $partId, false);
+        $message->id = $id;
         
         return $this->_recordToJson($message);
     }
