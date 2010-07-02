@@ -8,6 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
+ * @todo        make use of _messageTestHelper to kill code duplication
  */
 
 /**
