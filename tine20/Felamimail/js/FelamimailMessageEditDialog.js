@@ -112,7 +112,7 @@ Ext.namespace('Tine.Felamimail');
         this.decodeMsgs();
         
         if (! this.record) {
-            this.record = new this.recordClass({});
+            this.record = new this.recordClass(Tine.Felamimail.Model.Message.getDefaultData(), 0);
         }
         
         this.initFrom();
@@ -184,11 +184,13 @@ Ext.namespace('Tine.Felamimail');
     initFrom: function() {
         if (! this.record.get('from')) {
             if (! this.from) {
-                var folderId = this.replyTo ? this.replyTo.get('folder_id') : 
+                var mainApp = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
+                    folderId = this.replyTo ? this.replyTo.get('folder_id') : 
                                this.forwardMsgs ? this.forwardMsgs[0].get('folder_id') : null,
-                    accountId = folderId ? this.app.getFolderStore().getById(folderId) : null;
+                    folder = folderId ? mainApp.getFolderStore().getById(folderId) : null
+                    accountId = folder ? folder.get('account_id') : null;
                     
-                this.from = accountId || this.app.getActiveAccount().id;
+                this.from = accountId || mainApp.getActiveAccount().id;
             }
             
             this.record.set('from', this.from);
