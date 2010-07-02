@@ -366,8 +366,8 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     /**
      * update existing entry
      *
-     * @param unknown_type $_collectionId
-     * @param string $_id
+     * @param  string  $_collectionId
+     * @param  string  $_id
      * @param SimpleXMLElement $_data
      * @return Tinebase_Record_Abstract
      */
@@ -384,6 +384,10 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             } else {
                 $this->_contentController->clearFlags($_id, Zend_Mail_Storage::FLAG_SEEN);
             }
+            
+            $message = $this->_contentController->get($_id);
+            $message->timestamp = $this->_syncTimeStamp;
+            $this->_contentController->update($message);
         }
         
         return;
