@@ -312,4 +312,14 @@ class Zend_Mime_Part {
 
         return $res;
     }
+    
+    /**
+     * decode mime part content
+     * 
+     * @return void
+     */
+    public function decodeContent()
+    {
+        $this->_content = $this->getDecodedStream();
+    }
 }
