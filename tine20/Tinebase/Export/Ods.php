@@ -216,7 +216,8 @@ class Tinebase_Export_Ods extends Tinebase_Export_Abstract
         // add table headline
         $row = $table->appendRow();
         foreach($this->_config->columns->column as $field) {
-            $cell = $row->appendCell($field->header, OpenDocument_SpreadSheet_Cell::TYPE_STRING);
+            $headerValue = ($field->header) ? $field->header : $field->identifier;
+            $cell = $row->appendCell($headerValue, OpenDocument_SpreadSheet_Cell::TYPE_STRING);
             $cell->setStyle('ceHeader');
         }
     }
