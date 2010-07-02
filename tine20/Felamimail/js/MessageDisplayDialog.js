@@ -22,33 +22,62 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         this.i18n = this.app.i18n;
         
-        // far to complicated for a service release
-        //this.initToolbar();
+        this.initActions();
+        this.initToolbar();
         
         this.supr().initComponent.apply(this, arguments);
         
     },
     
-    initToolbar: function() {
-        this.actionUpdater = new Tine.widgets.ActionUpdater({
-            evalGrants: false
+    initActions: function() {
+        this.action_deleteRecord = new Ext.Action({
+            text: this.app.i18n._('Delete'),
+            handler: this.onMessageDelete.createDelegate(this),
+            iconCls: 'action_delete'
+        });
+        
+        this.action_reply = new Ext.Action({
+            text: this.app.i18n._('Reply'),
+            handler: this.onMessageReplyTo.createDelegate(this, [false]),
+            iconCls: 'action_email_reply'
         });
 
-        // use actions from gridPanel
-        this.onAddAccount = this.onToggleFlag = Ext.emptyFn;
-        this.onEditInNewWindow = Tine.Felamimail.GridPanel.prototype.onEditInNewWindow;
-        this.onDeleteRecords = Tine.Felamimail.GridPanel.prototype.onDeleteRecords;
-        this.onPrintPreview = Tine.Felamimail.GridPanel.prototype.onPrintPreview;
-        this.onPrint = Tine.Felamimail.GridPanel.prototype.onPrint;
-        Tine.Felamimail.GridPanel.prototype.initActions.call(this);
-        this.actionUpdater.updateActions(this.record);
+        this.action_replyAll = new Ext.Action({
+            text: this.app.i18n._('Reply To All'),
+            handler: this.onMessageReplyTo.createDelegate(this, [true]),
+            iconCls: 'action_email_replyAll'
+        });
+
+        this.action_forward = new Ext.Action({
+            text: this.app.i18n._('Forward'),
+            handler: this.onMessageForward.createDelegate(this),
+            iconCls: 'action_email_forward'
+        });
         
+        this.action_print = new Ext.Action({
+            text: this.app.i18n._('Print Message'),
+            handler: this.onMessagePrint.createDelegate(this),
+            iconCls:'action_print',
+            menu:{
+                items:[
+                    new Ext.Action({
+                        text: this.app.i18n._('Print Preview'),
+                        handler: this.onMessagePrintPreview.createDelegate(this),
+                        iconCls:'action_printPreview'
+                    })
+                ]
+            }
+        });
+        
+    },
+    
+    initToolbar: function() {
         // use toolbar from gridPanel
         this.tbar = new Ext.Toolbar({
             defaults: {height: 55},
             items: [{
                 xtype: 'buttongroup',
-                columns: 8,
+                columns: 5,
                 items: [
                     Ext.apply(new Ext.Button(this.action_deleteRecord), {
                         scale: 'medium',
@@ -90,6 +119,56 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
     showMessage: function() {
         this.layout.setActiveItem(this.getSingleRecordPanel());
         this.updateDetails(this.record, this.getSingleRecordPanel().body);
+    },
+    
+    /**
+     * executed after a msg compose
+     * 
+     * @param {String} composedMsg
+     * @param {String} action
+     * @param {Array}  [affectedMsgs]  messages affected 
+     * 
+     */
+    onAfterCompose: function(composedMsg, action, affectedMsgs) {
+        this.fireEvent('update', composedMsg, action, affectedMsgs);
+    },
+    
+    
+    onMessageDelete: function() {
+        
+    },
+    
+    /**
+     * reply message handler
+     */
+    onMessageReplyTo: function(toAll) {
+        Tine.Felamimail.MessageEditDialog.openWindow({
+            replyTo : Ext.encode(this.record.data),
+            replyToAll: toAll,
+            listeners: {
+                'update': this.onAfterCompose.createDelegate(this, ['reply', Ext.encode([this.record.data])], 1)
+            }
+        });
+    },
+    
+    /**
+     * forward message handler
+     */
+    onMessageForward: function() {
+        Tine.Felamimail.MessageEditDialog.openWindow({
+            forwardMsgs : Ext.encode([this.record.data]),
+            listeners: {
+                'update': this.onAfterCompose.createDelegate(this, ['forward', Ext.encode([this.record.data])], 1)
+            }
+        });
+    },
+    
+    onMessagePrint: function() {
+        
+    },
+    
+    onMessagePrintPreview: function() {
+        
     }
 });
 
