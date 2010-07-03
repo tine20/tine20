@@ -41,7 +41,8 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
      */
     public function handle()
     {
-        $xml = simplexml_import_dom($this->_inputDom);
+        $xml = new SimpleXMLElement($this->_inputDom->saveXML());
+        #$xml = simplexml_import_dom($this->_inputDom);
         
         if (isset($xml->Fetch)) {
             foreach ($xml->Fetch as $fetch) {
@@ -49,12 +50,13 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
                     'store' => (string)$fetch->Store
                 );
                 
-                // try to fetch element from AirSyncBase:BodyPreference
+                // try to fetch element from namespace AirSync
                 $airSync = $fetch->children('uri:AirSync');
                 $fetchArray['collectionId'] = (string)$airSync->CollectionId;
                 $fetchArray['serverId']     = (string)$airSync->ServerId;
                 
                 if (isset($fetch->Options)) {
+                    // try to fetch element from namespace AirSyncBase
                     $airSyncBase = $fetch->Options->children('uri:AirSyncBase');
                     
                     if (isset($airSyncBase->BodyPreference)) {

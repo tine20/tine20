@@ -143,7 +143,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 'collectionId'    => $collectionId,
                 'windowSize'      => isset($xmlCollection->WindowSize) ? (int)$xmlCollection->WindowSize : 100,
                 'deletesAsMoves'  => isset($xmlCollection->DeletesAsMoves) ? true : false,
-                'getChanges'      => isset($xmlCollection->GetChanges) && (string)$xmlCollection->GetChanges === '0' ? false : true,
+                'getChanges'      => isset($xmlCollection->GetChanges) ? true : false,
                 'added'           => array(),
                 'changed'         => array(),
                 'deleted'         => array(),
@@ -260,7 +260,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         $this->_collections[$folder->class][$collectionId]['forceChange'][$serverId] = $serverId;
                     } catch (Tinebase_Exception_NotFound $e) {
                         // entry does not exist anymore, will get deleted automaticly
-                        $this->_collections[$folder->class][$collectionId]['changed'][$serverId] = self::STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT;
+                        $this->_collections[$folder->class][$collectionId]['changed'][$serverId] = self::STATUS_OBJECT_NOT_FOUND;
                     } catch (Exception $e) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to update entry " . $e);
                         // something went wrong while trying to update the entry
@@ -356,12 +356,15 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                     
                     $this->_contentStateBackend->resetState($this->_device, $collectionData['class'], $collectionData['collectionId']);
                 } else {
-                    if($collectionData['getChanges'] === false && !empty($collectionData['toBeFetched'])) {
+                    #if ($collectionData['getChanges'] === false && !empty($collectionData['toBeFetched'])) {
+                    if (empty($collectionData['added']) && empty($collectionData['changed']) && empty($collectionData['deleted']) && $collectionData['getChanges'] === false) {
                         // keep synckey during fetch requests
                         $newSyncKey = $collectionData['syncKey'];
                     } else {
                         $newSyncKey = $collectionData['syncKey'] + 1;
                     }
+                    
+                    
                     // collection header
                     $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData['class']));
