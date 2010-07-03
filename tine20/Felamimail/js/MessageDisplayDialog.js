@@ -35,7 +35,8 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         this.action_deleteRecord = new Ext.Action({
             text: this.app.i18n._('Delete'),
             handler: this.onMessageDelete.createDelegate(this, [false]),
-            iconCls: 'action_delete'
+            iconCls: 'action_delete',
+            disabled: this.record.id.match(/_/)
         });
         
         this.action_reply = new Ext.Action({
