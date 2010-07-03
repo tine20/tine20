@@ -50,7 +50,7 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
                 );
                 
                 // try to fetch element from AirSyncBase:BodyPreference
-                $airSync = $xmlCollection->Options->children('uri:AirSync');
+                $airSync = $fetch->children('uri:AirSync');
                 $fetchArray['collectionId'] = (string)$airSync->CollectionId;
                 $fetchArray['serverId']     = (string)$airSync->ServerId;
                 
