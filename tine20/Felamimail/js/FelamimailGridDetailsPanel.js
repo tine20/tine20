@@ -120,8 +120,7 @@ Ext.namespace('Tine.Felamimail');
                     '{[this.showRecipients(values.headers)]}',
                     '{[this.showHeaders("' + this.i18n._('Show or hide header information') + '")]}',
                 '</div>',
-                '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments, "' 
-                    + this.i18n._('Attachments') + '")]}</div>',
+                '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments, values)]}</div>',
                 '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values)]}</div>',
             '</div>',{
             app: this.app,
@@ -209,13 +208,14 @@ Ext.namespace('Tine.Felamimail');
                 }
             },
             
-            showAttachments: function(value, text) {
-                var result = (value.length > 0) ? '<b>' + text + ':</b> ' : '';
-                for (var i=0, id; i < value.length; i++) {
-                    id = Ext.id() + ':' + value[i].partId;
-                    result += '<span id="' + id + '" class="tinebase-download-link">' 
-                        + '<i>' + value[i].filename + '</i>' 
-                        + ' (' + Ext.util.Format.fileSize(value[i].size) + ')</span> ';
+            showAttachments: function(attachements, messageData) {
+                var result = (attachements.length > 0) ? '<b>' + this.app.i18n._('Attachments') + ':</b> ' : '';
+                
+                for (var i=0, id, cls; i < attachements.length; i++) {
+                    //cls = attachements[i]['content-type'] === 'message/rfc822' ? 'tinebase-message-rfc822-link' : 'tinebase-download-link';
+                    result += '<span id="' + Ext.id() + ':' + i + '" class="tinebase-download-link">' 
+                        + '<i>' + attachements[i].filename + '</i>' 
+                        + ' (' + Ext.util.Format.fileSize(attachements[i].size) + ')</span> ';
                 }
                 
                 return result;
@@ -248,6 +248,32 @@ Ext.namespace('Tine.Felamimail');
         
         switch (selector) {
             
+            case 'span[class=tinebase-download-link]':
+                var idx = target.id.split(':')[1];
+                    attachment = this.record.get('attachments')[idx];
+                    
+                if (attachment['content-type'] === 'message/rfc822') {
+                    // display message
+                    Tine.Felamimail.MessageDisplayDialog.openWindow({
+                        record: new Tine.Felamimail.Model.Message({
+                            id: this.record.id + '_' + attachment.partId
+                        })
+                    });
+                    
+                } else {
+                    // download attachment
+                    new Ext.ux.file.Download({
+                        params: {
+                            requestType: 'HTTP',
+                            method: 'Felamimail.downloadAttachment',
+                            messageId: this.record.id,
+                            partId: attachment.partId
+                        }
+                    }).start();
+                }
+                
+                break;
+                
             case 'span[class=tinebase-download-link]':
                 // download attachment
                 var partId = target.id.split(':')[1];
