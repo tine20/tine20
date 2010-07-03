@@ -148,13 +148,17 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
      */
     onMessageDelete: function(force) {
         var mainApp = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
-            accountId = this.record.get('account_id'),
+            folderId = this.record.get('folder_id'),
+            folder = mainApp.getFolderStore().getById(folderId),
+            accountId = folder ? folder.get('account_id') : null,
             account = Tine.Felamimail.loadAccountStore().getById(accountId),
             trashId = account ? account.getTrashFolderId() : null;
             
         this.loadMask.show();
         if (trashId) {
-            Tine.Felamimail.messageBackend.moveMessages(this.record.id, trashId, { 
+            var filter = [{field: 'id', operator: 'equals', value: this.record.id}];
+            
+            Tine.Felamimail.messageBackend.moveMessages(filter, trashId, { 
                 callback: this.onAfterDelete.createDelegate(this, ['move'])
             });
         } else {

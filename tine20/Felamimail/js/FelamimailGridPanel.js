@@ -716,7 +716,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 'update': this.onAfterCompose,
                 'remove': function(msgData) {
                     var msg = this.getStore().getById(Ext.decode(msgData).id);
-                        accountId = msg ? msg.get('account_id') : null,
+                        folderId = msg ? msg.get('folder_id') : null,
+                        folder = folderId ? this.app.getFolderStore().getById(folderId) : null,
+                        accountId = folder ? folder.get('account_id') : null,
                         account = accountId ? Tine.Felamimail.loadAccountStore().getById(accountId) : null,
                         trashId = account ? account.getTrashFolderId() : null,
                         trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
