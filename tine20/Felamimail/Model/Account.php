@@ -234,8 +234,10 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     {
         $this->resolveCredentials(FALSE, TRUE, TRUE);
         
-        // add values from config to empty fields
-        $result = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        if ($this->type == self::TYPE_SYSTEM) {
+            // add values from config to empty fields
+            $result = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        }
         
         if ($this->smtp_hostname) {
             $result['hostname'] = $this->smtp_hostname; 
