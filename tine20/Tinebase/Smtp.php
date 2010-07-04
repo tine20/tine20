@@ -60,7 +60,7 @@ class Tinebase_Smtp
                 unset($config['ssl']);
             }
             
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting SMTP transport. Hostname: ' . $config['hostname']);
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting default SMTP transport. Hostname: ' . $config['hostname']);
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($config, TRUE));
             
             self::setDefaultTransport(new Zend_Mail_Transport_Smtp($config['hostname'], $config));
