@@ -368,7 +368,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         'cache_unreadcount' => "+$incrementUnreadCounter",
                     ));
                     
-                    if ($messageSequenceStart == $folder->imap_totalcount) {
+                    if ($messageSequenceEnd == $folder->imap_totalcount) {
                         $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
                     }
                     
