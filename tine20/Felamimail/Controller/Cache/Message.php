@@ -368,10 +368,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         'cache_unreadcount' => "+$incrementUnreadCounter",
                     ));
                     
-                    if ($messageSequenceEnd == $folder->imap_totalcount) {
-                        $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
-                    }
-                    
                     $messageSequenceStart = $messageSequenceEnd + 1;
                     
                     $timeElapsed = round(((microtime(true)) - $timeStart));
@@ -379,6 +375,10 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
                         break;
                     }
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $folder->cache_status);           
+                }
+                
+                if ($messageSequenceEnd == $folder->imap_totalcount) {
+                    $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
                 }
             }
         }
