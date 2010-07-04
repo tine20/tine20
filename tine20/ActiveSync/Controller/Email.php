@@ -292,7 +292,6 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             $_xmlNode->appendChild(new DOMElement('MessageClass', 'IPM.Note', 'uri:Email'));
         }
         $_xmlNode->appendChild(new DOMElement('ContentClass', 'urn:content-classes:message', 'uri:Email'));
-        // NativeBodyType
         
         return;
         /*
