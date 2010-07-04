@@ -200,9 +200,11 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         }
         
         // add domain
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
-        if (isset($imapConfig['domain']) && ! empty($imapConfig['domain'])) {
-            $result['user'] .= '@' . $imapConfig['domain'];
+        if ($this->type == self::TYPE_SYSTEM) {
+            $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+            if (isset($imapConfig['domain']) && ! empty($imapConfig['domain'])) {
+                $result['user'] .= '@' . $imapConfig['domain'];
+            }
         }
         
         // overwrite settings with config.inc.php values if set
