@@ -300,14 +300,18 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     onAppend: function(tree, node, appendedNode, index) {
         appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
-            Ext.DomHelper.insertAfter(this.elNode.lastChild, {tag: 'span', 'class': 'felamimail-node-statusbox', cn:[
-                {'tag': 'img', 'src': Ext.BLANK_IMAGE_URL, 'class': 'felamimail-node-statusbox-progress'},
-                {'tag': 'span', 'class': 'felamimail-node-statusbox-unread'}
+            var app = Tine.Tinebase.appMgr.get('Felamimail'),
+                folder = app.getFolderStore().getById(appendedNode.id);
                 
-            ]});
-            
-            var app = Tine.Tinebase.appMgr.get('Felamimail');
-            app.getMainScreen().getTreePanel().updateFolderStatus(app.getFolderStore().getById(appendedNode.id));
+            if (folder) {
+                Ext.DomHelper.insertAfter(this.elNode.lastChild, {tag: 'span', 'class': 'felamimail-node-statusbox', cn:[
+                    {'tag': 'img', 'src': Ext.BLANK_IMAGE_URL, 'class': 'felamimail-node-statusbox-progress'},
+                    {'tag': 'span', 'class': 'felamimail-node-statusbox-unread'}
+                    
+                ]});
+                
+                app.getMainScreen().getTreePanel().updateFolderStatus(folder);
+            }
         }, appendedNode.ui);
     },
     
