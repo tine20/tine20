@@ -472,8 +472,22 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      */
     public function getSupportedFolders()
     {
+        if (!Tinebase_Core::getUser()->hasRight('Felamimail', Tinebase_Acl_Rights::RUN)) {
+            // no folders
+            return array();
+        }
+        
+        $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
+        
+        try {
+            $account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
+        } catch (Tinebase_Exception_NotFound $ten) {
+            // no folders
+            return array();
+        }
+    
         // update folder cache
-        Felamimail_Controller_Cache_Folder::getInstance()->update(Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT});
+        Felamimail_Controller_Cache_Folder::getInstance()->update($account);
         
         // get folders
         $folderController = Felamimail_Controller_Folder::getInstance();
@@ -482,11 +496,11 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             array(
                 'field'     => 'account_id',
                 'operator'  => 'equals',
-                'value'     => Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}
+                'value'     => $account->getId()
             )
         ));
         
-        $folders = $folderController->getSubfolders(Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, '');
+        $folders = $folderController->getSubfolders($account->getId(), '');
 
         $result = array();
         
