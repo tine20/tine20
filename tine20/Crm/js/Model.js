@@ -79,12 +79,14 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create([
 Tine.Crm.Model.Lead.getDefaultData = function() {
     
     var defaults = Tine.Crm.registry.get('defaults');
+    var app = Tine.Tinebase.appMgr.get('Crm');
     
     var data = {
         start: new Date().clearTime(),
         leadstate_id: defaults.leadstate_id,
         leadtype_id: defaults.leadtype_id,
         leadsource_id: defaults.leadsource_id,
+        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', defaults.container_id),
         probability: 0,
         turnover: 0,
         relations: [{
@@ -93,15 +95,6 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
         }]
     };
     
-    // add default container
-    var app = Tine.Tinebase.appMgr.get('Crm');
-    var treeNode = app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectionModel().getSelectedNode();
-    if (treeNode && treeNode.attributes && treeNode.attributes.containerType == 'singleContainer') {
-        data.container_id = treeNode.attributes.container;
-    } else {
-        data.container_id = defaults.container_id;
-    }
-
     return data;
 };
 
