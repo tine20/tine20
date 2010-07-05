@@ -45,19 +45,22 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         this.action_reply = new Ext.Action({
             text: this.app.i18n._('Reply'),
             handler: this.onMessageReplyTo.createDelegate(this, [false]),
-            iconCls: 'action_email_reply'
+            iconCls: 'action_email_reply',
+            disabled: this.record.id.match(/_/)
         });
 
         this.action_replyAll = new Ext.Action({
             text: this.app.i18n._('Reply To All'),
             handler: this.onMessageReplyTo.createDelegate(this, [true]),
-            iconCls: 'action_email_replyAll'
+            iconCls: 'action_email_replyAll',
+            disabled: this.record.id.match(/_/)
         });
 
         this.action_forward = new Ext.Action({
             text: this.app.i18n._('Forward'),
             handler: this.onMessageForward.createDelegate(this),
-            iconCls: 'action_email_forward'
+            iconCls: 'action_email_forward',
+            disabled: this.record.id.match(/_/)
         });
         
         this.action_print = new Ext.Action({
