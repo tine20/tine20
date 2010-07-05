@@ -479,6 +479,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     protected function _updateHasChildren($_accountId, $_globalname, $_value = NULL) 
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
+        
         if ($_globalname !== '' || ! $account->has_children_support) {
             return NULL;
         }
@@ -514,6 +515,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             array('field' => 'globalname', 'operator' => 'startswith',  'value' => $_globalname),
             array('field' => 'account_id', 'operator' => 'equals',      'value' => $_accountId),
         ));
+        
         return $this->_backend->search($filter);
     }
 }
