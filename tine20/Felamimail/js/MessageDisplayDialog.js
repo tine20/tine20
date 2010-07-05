@@ -24,6 +24,9 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         this.i18n = this.app.i18n;
         
+        // trick onPrint/onPrintPreview
+        this.detailsPanel = this;
+        
         this.initActions();
         this.initToolbar();
         
@@ -194,13 +197,8 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         });
     },
     
-    onMessagePrint: function() {
-        
-    },
-    
-    onMessagePrintPreview: function() {
-        
-    }
+    onMessagePrint: Tine.Felamimail.GridPanel.prototype.onPrint,
+    onMessagePrintPreview: Tine.Felamimail.GridPanel.prototype.onPrintPreview
 });
 
 Tine.Felamimail.MessageDisplayDialog.openWindow = function (config) {
