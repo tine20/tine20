@@ -134,8 +134,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 var node = n.node;
                 
                 // auto node expand check (only for non-account nodes)
-                if(node.attributes.allowDrop && node.hasChildNodes() && !node.isExpanded()){
+                if(!this.expandProcId && node.attributes.allowDrop && node.hasChildNodes() && !node.isExpanded()){
                     this.queueExpand(node);
+                } else if (! node.attributes.allowDrop) {
+                    this.cancelExpand();
                 }
                 return node.attributes.allowDrop ? 'tinebase-tree-drop-move' : false;
             },
