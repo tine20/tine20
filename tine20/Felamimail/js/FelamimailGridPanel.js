@@ -56,6 +56,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     deleteTransactionId: null,
     
     /**
+     * @property deleteQueue - array of ids with messages currently being deleted
+     * @type Array
+     */
+    deleteQueue: null,
+    
+    /**
      * @private model cfg
      */
     evalGrants: false,
@@ -125,6 +131,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             doRefresh: this.doRefresh.createDelegate(this)
         };
         
+        this.deleteQueue = [];
+        
         Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         this.grid.getSelectionModel().on('rowselect', this.onRowSelection, this);
     },
@@ -141,6 +149,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
         if (! inbox) {
             this.initialLoad.defer(100, this, arguments);
+            return;
         }
         
         return Tine.Felamimail.GridPanel.superclass.initialLoad.apply(this, arguments);
@@ -508,6 +517,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var sm = this.getGrid().getSelectionModel(),
             filter = sm.getSelectionFilter(),
             msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection(),
+            msgsIds = [],
             lastIdx = this.getStore().indexOf(msgs.last()),
             nextRecord = this.getStore().getAt(++lastIdx);
         
@@ -517,14 +527,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 diff = isSeen ? 0 : -1;
                 
            folder.set('cache_unreadcount', folder.get('cache_unreadcount') - diff);
+           
+           msgsIds.push(msg.id);
            this.getStore().remove(msg);    
         }, this);
         
+        this.deleteQueue = this.deleteQueue.concat(msgsIds);
         this.pagingToolbar.refresh.disable();
         sm.selectRecords([nextRecord]);
         
         this.deleteTransactionId = Tine.Felamimail.messageBackend.addFlags(filter, '\\Deleted', { 
-            callback: this.onAfterDelete.createDelegate(this, [])
+            callback: this.onAfterDelete.createDelegate(this, [msgsIds])
         });
     },
     
@@ -542,6 +555,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var sm = this.getGrid().getSelectionModel(),
             filter = sm.getSelectionFilter(),
             msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection(),
+            msgsIds = [],
             lastIdx = this.getStore().indexOf(msgs.last()),
             nextRecord = this.getStore().getAt(++lastIdx);
         
@@ -552,14 +566,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 
            currFolder.set('cache_unreadcount', currFolder.get('cache_unreadcount') - diff);
            folder.set('cache_unreadcount', folder.get('cache_unreadcount') + diff);
+           
+           msgsIds.push(msg.id);
            this.getStore().remove(msg);    
         }, this);
         
+        this.deleteQueue = this.deleteQueue.concat(msgsIds);
         this.pagingToolbar.refresh.disable();
         sm.selectRecords([nextRecord]);
         
         this.deleteTransactionId = Tine.Felamimail.messageBackend.moveMessages(filter, folder.id, { 
-            callback: this.onAfterDelete.createDelegate(this, [folder])
+            callback: this.onAfterDelete.createDelegate(this, [msgsIds, folder])
         });
     },
     
@@ -606,13 +623,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * executed after msg delete
      * 
+     * @param {Array} [ids]
      * @param {Tine.Felamimail.Model.Folder} [folder]
      */
-    onAfterDelete: function(folder) {
+    onAfterDelete: function(ids, folder) {
         if (folder) {
             folder.set('cache_status', 'incomplete');
         }
         
+        Ext.each(Ext.unique(ids), function(id) {
+            this.deleteQueue.remove(id);
+        }, this);
+
         if (! this.deleteTransactionId || ! Tine.Felamimail.messageBackend.isLoading(this.deleteTransactionId)) {
             this.loadData(true, true, true);
         }
@@ -724,7 +746,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
                         
                     this.getStore().remove(msg);
-                    this.onAfterDelete(trash);
+                    this.onAfterDelete(null, trash);
                 }
             }
         });
@@ -810,6 +832,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
+     * called before store queries for data
+     */
+    onStoreBeforeload: function(store, options) {
+        this.supr().onStoreBeforeload.apply(this, arguments);
+        
+        if (! Ext.isEmpty(this.deleteQueue)) {
+            options.params.filter.push({field: 'id', operator: 'notin', value: this.deleteQueue});
+        }
+    },
+    
+    /**
      * called after a new set of Records has been loaded
      * 
      * @param  {Ext.data.Store} store
@@ -818,6 +851,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {Void}
      */
     onStoreLoad: function(store, records, options) {
+        if (! Ext.isEmpty(this.deleteQueue)) {
+            
+            // don't display msgs in delete queue
+            Ext.each(this.deleteQueue, function(id) {
+                var msg = store.getById(id);
+                if (msg) {
+                    store.remove(msg);
+                }
+            }, this);
+        }
     },
         
     /**
