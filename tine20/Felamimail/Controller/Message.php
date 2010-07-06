@@ -655,8 +655,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $from = (isset($_account->from) && ! empty($_account->from)) 
             ? $_account->from 
             : substr($_account->email, 0, strpos($_account->email, '@'));
-        // quote meta chars such as []\ etc
-        $from = quoted_printable_encode($from);
         
         $mail->setFrom($_account->email, $from);
 
