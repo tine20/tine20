@@ -26,7 +26,8 @@ class Felamimail_Exception_IMAPMessageNotFound extends Felamimail_Exception_IMAP
      * @param integer $_code
      * @return void
      */
-    public function __construct($_message = 'Message not found on IMAP server.', $_code = 914) {
+    #public function __construct($_message = 'Message not found on IMAP server.', $_code = 914) {
+    public function __construct($_message = 'Message not found on IMAP server.', $_code = 404) {
         parent::__construct($_message, $_code);
     }
 }
