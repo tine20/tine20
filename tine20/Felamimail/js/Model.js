@@ -508,6 +508,7 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
                     return this.handleRequestException(exception);
                 }
                 break;
+                
             case 913: // Felamimail_Exception_IMAPFolderNotFound
                 Ext.Msg.show({
                    title:   app.i18n._('IMAP Error'),
@@ -516,6 +517,11 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
                    buttons: Ext.Msg.OK
                 });
                 break;
+                
+            case 914: // Felamimail_Exception_IMAPMessageNotFound
+                // do nothing, this exceptions are handled by fetchBody itselv
+                break;
+                
             case 920: // Felamimail_Exception_SMTP
                 Ext.Msg.show({
                    title:   app.i18n._('SMTP Error'),
