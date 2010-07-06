@@ -46,6 +46,8 @@ Ext.namespace('Tine.Felamimail');
     app: null,
     i18n: null,
     
+    fetchBodyTransactionId: null,
+    
     /**
      * init
      * @private
@@ -89,7 +91,13 @@ Ext.namespace('Tine.Felamimail');
         }
         
         if (! record.bodyIsFetched()) {
-            Tine.Felamimail.messageBackend.fetchBody(record, this.updateDetails.createDelegate(this, [record, body]));
+            // cancel old request first
+            if (this.fetchBodyTransactionId && ! Tine.Felamimail.messageBackend.isLoading(this.fetchBodyTransactionId)) {
+                Tine.log.debug('Tine.Felamimail.GridDetailsPanel::updateDetails canceling current fetchBody request');
+                Tine.Felamimail.messageBackend.abort(this.fetchBodyTransactionId);
+            }
+            this.fetchBodyTransactionId = Tine.Felamimail.messageBackend.fetchBody(record, this.updateDetails.createDelegate(this, [record, body]));
+
             this.defaultTpl.overwrite(body, {msg: ''});
             this.getLoadMask().show();
             return;
