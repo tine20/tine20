@@ -362,6 +362,8 @@ class Tinebase_Core
                 $priority = (int)$loggerConfig->priority;
 
                 $writer = new Zend_Log_Writer_Stream($filename);
+                $formatter = new Tinebase_Log_Formatter_Session();
+                $writer->setFormatter($formatter);
                 $logger->addWriter($writer);
 
                 $filter = new Zend_Log_Filter_Priority($priority);
