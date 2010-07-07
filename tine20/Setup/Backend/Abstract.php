@@ -105,7 +105,20 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
         
         return $version[0]['version'];
     }
-        
+    
+    /**
+     * truncate table in database
+     * 
+     * @param string tableName
+     */
+    public function truncateTable($_tableName)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Truncate table ' . $_tableName);
+        $statement = "TRUNCATE TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
+        $this->execQueryVoid($statement);
+    }
+    
+    
     /**
      * check's a given application version
      *
