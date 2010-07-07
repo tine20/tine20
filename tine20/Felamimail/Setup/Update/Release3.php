@@ -252,4 +252,63 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setApplicationVersion('Felamimail', '3.7');
     }
     
+    /**
+     * update function (-> 3.8)
+     * - drop message cache 
+     */    
+    public function update_7()
+    {
+        $this->_clearMessageCache();
+        
+        $this->setApplicationVersion('Felamimail', '3.8');
+    }
+
+    /**
+     * clear message cache tables and reset folder status
+     */
+    protected function _clearMessageCache()
+    {
+        $cachingTables = array(
+            'felamimail_cache_message_bcc',
+            'felamimail_cache_message_cc',
+            'felamimail_cache_message_flag',
+            'felamimail_cache_message_to',
+            'felamimail_cache_message'
+        );
+        
+        
+        // look all folders for updates
+        $data = array(
+            'cache_timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'cache_status'    => Felamimail_Model_Folder::CACHE_STATUS_UPDATING,
+        );
+        $update = $this->_db->update(SQL_TABLE_PREFIX . 'felamimail_folder', $data);
+        
+        
+        // truncate tables (disable foreign key checks for this)
+        $this->_db->query("SET AUTOCOMMIT=0");
+        $this->_db->query("SET FOREIGN_KEY_CHECKS=0");
+        
+        foreach ($cachingTables as $table) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Truncate cache table ' . $table . ' ...');
+            $this->_backend->truncateTable($table);
+        }
+        
+        $this->_db->query("SET FOREIGN_KEY_CHECKS=1");
+        $this->_db->query("SET AUTOCOMMIT=1");
+
+        
+        // unlook all folders for updates and reset folder counters
+        $data = array(
+            'cache_timestamp'   => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'cache_status'      => Felamimail_Model_Folder::CACHE_STATUS_EMPTY,
+            'cache_uidnext'     => 1,
+            'cache_job_actions_estimate' => 0,
+            'cache_job_actions_done' => 0,
+            'cache_totalcount'  => 0,
+            'cache_recentcount' => 0,
+            'cache_unreadcount' => 0
+        );
+        $update = $this->_db->update(SQL_TABLE_PREFIX . 'felamimail_folder', $data);
+    }
 }
