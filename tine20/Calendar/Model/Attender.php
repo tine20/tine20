@@ -395,8 +395,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * resolves given attendee for json representation
      *
      * @param Tinebase_Record_RecordSet $_attendee 
+     * @param bool                      $_resolveDisplayContainers
      */
-    public static function resolveAttendee($_eventAttendee) {
+    public static function resolveAttendee($_eventAttendee, $_resolveDisplayContainers = TRUE) {
         $eventAttendee = $_eventAttendee instanceof Tinebase_Record_RecordSet ? array($_eventAttendee) : $_eventAttendee;
         
         // build type map 
@@ -406,7 +407,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             // resolve displaycontainers only if they are present...
             // ... they are not when used in filter context
             $displaycontainerId = $attendee->displaycontainer_id;
-            if (! empty($displaycontainerId) && $displaycontainerId[0]) {
+            if ($_resolveDisplayContainers && ! empty($displaycontainerId) && $displaycontainerId[0]) {
                 Tinebase_Container::getInstance()->getGrantsOfRecords($attendee, Tinebase_Core::getUser(), 'displaycontainer_id');
             }
             
