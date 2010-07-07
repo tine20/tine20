@@ -84,9 +84,10 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         }
         $readAbleContainer = array_unique($readAbleContainer);
         
-        $filter = new Addressbook_Model_ContactFilter();
-        $filter->container = $readAbleContainer;
-        $filter->query = $query;
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'query', 'operator' => 'contains', 'value' => $query),
+            array('field' => 'container', 'operator' => 'in', 'value' => $readAbleContainer)
+        ));
         
         $contacts = $contactsBackend->search($filter, new Tinebase_Model_Pagination());
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' found ' . count($contacts) . ' contacts');
