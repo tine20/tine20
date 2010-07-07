@@ -208,7 +208,7 @@ Tine.Voipmanager.SnomPhoneGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     url: 'index.php',
                     params: {
                         method: 'Voipmanager.resetHttpClientInfo',
-                        _phoneIds: phoneIds
+                        phoneIds: phoneIds
                     },
                     text: 'sending HTTP Client Info to phone(s)...',
                     success: function(_result, _request){
