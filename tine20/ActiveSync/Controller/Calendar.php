@@ -350,6 +350,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         }
         
         if(count($data->attendee) > 0) {
+            // fill attendee cache
+            Calendar_Model_Attender::resolveAttendee($data->attendee, FALSE);
+            
             $attendees = null;
             
             foreach($data->attendee as $attenderObject) {
