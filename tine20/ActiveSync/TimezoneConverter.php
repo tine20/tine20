@@ -381,19 +381,22 @@ class ActiveSync_TimezoneConverter
         	return false;
         }
 
-        $standardBias = ($_standardTransition['offset']/60)*-1;
-               
+        $standardOffset = ($_offsets['bias'] + $_offsets['standardBias']) * 60 * -1;
+        
         //check each condition in a single if statement and break the chain when one condition is not met - for performance reasons            
-        if ($standardBias == ($_offsets['bias']+$_offsets['standardBias']) ) {
-            
-        	if (empty($_offsets['daylightMonth']) && (empty($_daylightTransition) || empty($_daylightTransition['isdst']))) {
+        if ($standardOffset == $_standardTransition['offset'] ) {
+
+            if (empty($_offsets['daylightMonth']) && (empty($_daylightTransition) || empty($_daylightTransition['isdst']))) {
         		//No DST
         		return true;
         	}
         	
-            $daylightBias = ($_daylightTransition['offset']/60)*-1 - $standardBias;
-            if ($daylightBias == $_offsets['daylightBias']) {
-                
+            $daylightOffset = ($_offsets['bias'] + $_offsets['daylightBias']) * 60 * -1;
+            
+            // the milestone is sending a positive value for daylightBias while it should send a negative value
+            $daylightOffsetMilestone = ($_offsets['bias'] + ($_offsets['daylightBias'] * -1) ) * 60 * -1;
+            
+            if ($daylightOffset == $_daylightTransition['offset'] || $daylightOffsetMilestone == $_daylightTransition['offset']) {
                 $standardParsed = getdate($_standardTransition['ts']);
                 $daylightParsed = getdate($_daylightTransition['ts']);
 
@@ -401,12 +404,13 @@ class ActiveSync_TimezoneConverter
                     $daylightParsed['mon'] == $_offsets['daylightMonth'] &&
                     $standardParsed['wday'] == $_offsets['standardDayOfWeek'] &&
                     $daylightParsed['wday'] == $_offsets['daylightDayOfWeek'] ) 
-                    {
+                {
                         return $this->_isNthOcurrenceOfWeekdayInMonth($_daylightTransition['ts'], $_offsets['daylightDay']) &&
                                $this->_isNthOcurrenceOfWeekdayInMonth($_standardTransition['ts'], $_offsets['standardDay']);
                 }
             }
         }
+        
         return false;
     }
 	
@@ -605,17 +609,20 @@ class ActiveSync_TimezoneConverter
         $standardTransition = null;
         $daylightTransition = null;
         
-        #$start = mktime(0, 0, 0, 1, 1, $_year);
-        #$end   = mktime(24, 0, 0, 12, 31, $_year);
+        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+            // Since php version 5.3.0 getTransitions accepts optional start and end parameters.
+            $start = mktime(0, 0, 0, 12, 1, $_year - 1);
+            $end   = mktime(24, 0, 0, 12, 31, $_year);
+            $transitions = $_timezone->getTransitions($start, $end);
+        } else {
+            $transitions = $_timezone->getTransitions();
+        }
         
-        //@todo Since php version 5.3 getTransitions accepts optional start and end parameters.
-        //      Using them would probably result in a performance gain.
-        $transitions = $_timezone->getTransitions();
         $index = 0;            //we need to access index counter outside of the foreach loop
         $transition = array(); //we need to access the transition counter outside of the foreach loop
         foreach ($transitions as $index => $transition) {
             if (strftime('%Y', $transition['ts']) == $_year) {
-                if (isset($transitions[$index+1]) && strftime('%Y', $transition['ts']) == strftime('%Y', $transitions[$index+1]['ts'])) {
+                if (isset($transitions[$index+1]) && strftime('%Y', $transitions[$index]['ts']) == strftime('%Y', $transitions[$index+1]['ts'])) {
                     $daylightTransition = $transition['isdst'] ? $transition : $transitions[$index+1];
                     $standardTransition = $transition['isdst'] ? $transitions[$index+1] : $transition;
                 } else {
@@ -623,8 +630,7 @@ class ActiveSync_TimezoneConverter
                     $standardTransition = $transition['isdst'] ? null : $transition;
                 }
                 break;
-            }
-            elseif ($index == count($transitions) -1) {
+            } elseif ($index == count($transitions) -1) {
                 $standardTransition = $transition;
             }
         }
