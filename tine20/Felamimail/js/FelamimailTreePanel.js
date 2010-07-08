@@ -515,7 +515,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     updateFolderStatus: function(folder) {
         var unreadcount = folder.get('cache_unreadcount'),
-            progress    = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 10) * 10,
+            progress    = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 10) * 10 || 0,
             node        = this.getNodeById(folder.id),
             ui = node ? node.getUI() : null,
             nodeEl = ui ? ui.getEl() : null,
