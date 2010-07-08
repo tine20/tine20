@@ -281,7 +281,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function doFreeBusyCleanup()
     {
-    	if ($this->{Tinebase_Model_Grants::GRANT_READ} || $this->{Tinebase_Model_Grants::GRANT_EDIT}) {
+    	if ($this->hasGrant(Tinebase_Model_Grants::GRANT_READ)) {
     	   return;
     	}
     	
