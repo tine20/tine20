@@ -265,6 +265,21 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     }
     
     /**
+     * search an private event of pwulf
+     *  -> test user has no private grant -> must be freebusy cleaned!
+     */
+    public function testPrivateCleanup()
+    {
+        $persistentEvent = $this->_createEventInPersonasCalendar('pwulf', 'pwulf', 'pwulf', Calendar_Model_Event::CLASS_PRIVATE);
+        
+        $events = $this->_uit->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent->getId())
+        )), NULL, FALSE, FALSE);
+        
+        $this->assertTrue($events[0]->summary == '');
+    }
+    
+    /**
      * tests if search deals with record based grants correctly for 'get' action
      * 
      *  -> test user is attendee -> implicit READ GRANT
