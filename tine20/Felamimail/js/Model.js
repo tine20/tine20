@@ -526,6 +526,7 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
                 });
                 break;
                 
+            case 404: 
             case 914: // Felamimail_Exception_IMAPMessageNotFound
                 // do nothing, this exceptions are handled by fetchBody itselv
                 break;
