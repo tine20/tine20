@@ -412,6 +412,14 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
         }
         
         return false;
+    },
+    
+    /**
+     * returns true if current folder needs an update
+     */
+    needsUpdate: function(updateInterval) {
+        var timestamp = this.get('imap_timestamp');
+        return this.get('cache_status') !== 'complete' || timestamp == '' || timestamp.getElapsed() > updateInterval;
     }
 });
 

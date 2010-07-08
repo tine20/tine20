@@ -110,18 +110,9 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         
         Tine.log.info('checking mails' + (folder ? ' for folder ' + folder.get('localname') : '') + ' now: ' + new Date());
         
+        // if no folder is given, see if there is a folder to check in the folderstore
         if (! folder) {
-            var node = this.getMainScreen().getTreePanel().getSelectionModel().getSelectedNode(),
-                candidates = this.folderStore.queryBy(function(record) {
-                    var timestamp = record.get('imap_timestamp');
-                    return record.get('cache_status') !== 'complete' || timestamp == '' || timestamp.getElapsed() > this.updateInterval;
-                }, this),
-                folder = candidates.first();
-            
-            if (node && candidates.get(node.id)) {
-                // if current selection is a candidate, take this one!
-                folder = candidates.get(node.id);
-            }
+            folder = this.getNextFolderToUpdate();
         }
         
         if (folder) {
@@ -155,7 +146,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     
                     if (folder.get('cache_status') === 'updating') {
                         Tine.log.debug('updateing message cache for folder "' + folder.get('localname') + '" is in progress on the server (folder is locked)');
-                        return this.checkMailsDelayedTask.delay(10000);
+                        return this.checkMailsDelayedTask.delay(this.updateInterval);
                     }
                     this.checkMailsDelayedTask.delay(0);
                 }
@@ -185,6 +176,49 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         }
         
         return this.folderStore;
+    },
+    
+    /**
+     * gets next folder which needs to be checked for mails
+     * 
+     * @return {Model.Folder/null}
+     */
+    getNextFolderToUpdate: function() {
+        var currNode = this.getMainScreen().getTreePanel().getSelectionModel().getSelectedNode(),
+            currFolder = currNode ? this.getFolderStore().getById(currNode.id) : null;
+        
+        // current selection has highes prio!
+        if (currFolder && currFolder.needsUpdate(this.updateInterval)) {
+            return currFolder;
+        }
+        
+        // check if inboxes need updates
+        var inboxes = this.folderStore.queryBy(function(folder) {
+            return Ext.util.Format.lowercase(folder.get('localname')) === 'inbox' && folder.needsUpdate(this.updateInterval);
+        }, this);
+        if (inboxes.getCount() > 0) {
+            return inboxes.first();
+        }
+        
+        // check for incompletes
+        var incompletes = this.folderStore.queryBy(function(folder) {
+            return folder.get('cache_status') !== 'complete';
+        }, this);
+        if (incompletes.getCount() > 0) {
+            return incompletes.first();
+        }
+        
+        // check for outdated
+        var outdated = this.folderStore.queryBy(function(folder) {
+            var timestamp = folder.get('imap_timestamp');
+            return timestamp == '' || timestamp.getElapsed() > this.updateInterval;
+        }, this);
+        if (outdated.getCount() > 0) {
+            return outdated.first();
+        }
+        
+        // nothing to update
+        return null;
     },
     
     /**
