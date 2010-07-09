@@ -23,13 +23,6 @@
 class ActiveSync_Command_SmartReply extends ActiveSync_Command_SendMail
 {
     /**
-     * the incoming mail
-     *
-     * @var Zend_Mail_Message
-     */
-    protected $_incomingMessage;
-    
-    /**
      * save copy in sent folder
      *
      * @var boolean
@@ -49,43 +42,28 @@ class ActiveSync_Command_SmartReply extends ActiveSync_Command_SendMail
      */
     public function handle()
     {
-        $this->_saveInSent      = (bool)$_GET['SaveInSent'] == 'T';
+        parent::handle();
+        
         $this->_collectionId    = $_GET['CollectionId'];
         $this->_itemId          = $_GET['ItemId'];
         
-        $rawMessage = file_get_contents("php://input"); 
-
-        $this->_incomingMessage = new Zend_Mail_Message(array('raw' => $rawMessage));
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . $this->_saveInSent . " message: " . $rawMessage);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . " collectionId: " . $this->_collectionId . " itemId: " . $this->_itemId
+        );
         
     }    
     
     /**
      * this function generates the response for the client
+     * 
+     * @return void
      */
     public function getResponse()
     {
-        $currentUser = Tinebase_Core::getUser();
+        $replyBody = Felamimail_Controller_Message::getInstance()->getMessageBody($this->_itemId, null, 'text/plain');
         
-        if(empty($currentUser->accountEmailAddress)) {
-            throw new Exception('no email address set for current user');
-        }
+        $mail = Tinebase_Mail::createFromZMM($this->_incomingMessage, $replyBody);
         
-        $mail = new Tinebase_Mail();
-        
-        $mail->setFrom($currentUser->accountEmailAddress, $currentUser->accountDisplayName);
-        
-        $this->_addHeaders($mail);
-        
-        if($this->_incomingMessage->isMultipart() === true) {
-            foreach (new RecursiveIteratorIterator($this->_incomingMessage) as $part) {
-                $this->_addPart($mail, $part);
-            }    
-        } else {
-            $this->_addPart($mail, $this->_incomingMessage);
-        }
-        
-        Tinebase_Smtp::getInstance()->sendMessage($mail);
+        Felamimail_Controller_Message::getInstance()->sendZendMail($this->_account, $mail, $this->_saveInSent);        
     }    
 }
