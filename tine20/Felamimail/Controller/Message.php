@@ -659,7 +659,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
             
             // send message via smtp
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to send message via SMTP ...' . print_r($smtpConfig, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to send message via SMTP ...');
             Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' successful.');
             
