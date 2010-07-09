@@ -23,6 +23,12 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
     /**************************** application preferences/settings *****************/
     
     /**
+     * application picker style pref const
+     *
+     */
+    const APP_PICKER_STYLE = 'appPickerStyle';
+    
+    /**
      * timezone pref const
      *
      */
@@ -70,6 +76,7 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
     {
         $allPrefs = ($this->_application == 'Tinebase') 
             ? array(
+                self::APP_PICKER_STYLE,
                 self::TIMEZONE,
                 self::LOCALE,
                 self::DEFAULT_APP,
@@ -91,6 +98,10 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
         $translate = Tinebase_Translation::getTranslation($this->_application);
 
         $prefDescriptions = array(            
+            self::APP_PICKER_STYLE  => array(
+                'label'         => $translate->_('Application picker style'),
+                'description'   => $translate->_('Application picker style'),
+            ),
             self::TIMEZONE  => array(
                 'label'         => $translate->_('Timezone'),
                 'description'   => $translate->_('The timezone in which dates are shown in Tine 2.0.'),
@@ -127,6 +138,20 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
         $preference = $this->_getDefaultBasePreference($_preferenceName);
         
         switch($_preferenceName) {
+            case self::APP_PICKER_STYLE:
+                $preference->value      = 'tabs';
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <label>Tabs</label>
+                            <value>tabs</value>
+                        </option>
+                        <option>
+                            <label>Pile</label>
+                            <value>pile</value>
+                        </option>
+                    </options>';
+                break;
             case self::TIMEZONE:
                 $preference->value      = 'Europe/Berlin';
                 break;
