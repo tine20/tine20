@@ -35,6 +35,12 @@ class ActiveSync_Command_SendMail
      * @var boolean
      */
     protected $_saveInSent;
+    
+    /**
+     * 
+     * @var Felamimail_Model_Account
+     */
+    protected $_account;
         
     /**
      * process the XML file and add, change, delete or fetches data 
@@ -43,6 +49,15 @@ class ActiveSync_Command_SendMail
      */
     public function handle()
     {
+        $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
+        
+        try {
+            $this->_account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
+        } catch (Tinebase_Exception_NotFound $ten) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no email account configured");
+            throw new ActiveSync_Exception('no email account configured');
+        }
+        
         $this->_saveInSent = (bool)$_GET['SaveInSent'] == 'T';
         
         $this->_incomingMessage = new Zend_Mail_Message(
@@ -68,19 +83,9 @@ class ActiveSync_Command_SendMail
             throw new ActiveSync_Exception('no email address set for current user');
         }
         
-        $message = Felamimail_Message::createMessageFromZendMailMessage($this->_incomingMessage);
+        $mail = Tinebase_Mail::createFromZMM($this->_incomingMessage);
         
-        $accounts = Felamimail_Controller_Account::getInstance()->search(null, null, null, true);
-        
-        if(count($accounts) == 0) {
-            throw new ActiveSync_Exception('no email account found');
-        }
-        
-        $message->from = $accounts[0];
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " content_type: " . $message->content_type);
-        
-        Felamimail_Controller_Message::getInstance()->sendMessage($message);
+        Felamimail_Controller_Message::getInstance()->sendZendMail($this->_account, $mail, $this->_saveInSent);        
     }
     
     /**
