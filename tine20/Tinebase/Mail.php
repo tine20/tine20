@@ -41,18 +41,16 @@ class Tinebase_Mail extends Zend_Mail
         
         if ($_zmm->headerExists('content-transfer-encoding')) {
             $mp->encoding = $_zmm->getHeader('content-transfer-encoding');
-            
-            // create decoded stream
-            $mp = new Zend_Mime_Part($mp->getDecodedStream());
-            $mp->encoding = $_zmm->getHeader('content-transfer-encoding');
+            $mp->decodeContent();
+        } else {
+            $mp->encoding = Zend_Mime::ENCODING_7BIT;
         }
         
-        if ($_replyBody !== null) {
+        // append old body when no multipart/mixed
+        if ($_replyBody !== null && $_zmm->headerExists('content-transfer-encoding')) {
             $contentStream = fopen("php://temp", 'r+');
             
-            fputs($contentStream, $mp->getContent());
-            
-            fputs($contentStream, "\r\n\r\n-------------------------------------------------------\r\n\r\n");
+            stream_copy_to_stream($mp->getRawStream(), $contentStream);
             
             fputs($contentStream, $_replyBody);
             
