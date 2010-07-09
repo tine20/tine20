@@ -60,6 +60,9 @@ class ActiveSync_Command_SmartForward extends ActiveSync_Command_SendMail
     public function getResponse()
     {
         $rfc822 = Felamimail_Controller_Message::getInstance()->getMessagePart($this->_itemId);
+        $rfc822->type = Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822;
+        $rfc822->filename = 'forwarded email.eml';
+        $rfc822->encoding = Zend_Mime::ENCODING_7BIT;
         
         $mail = Tinebase_Mail::createFromZMM($this->_incomingMessage);
         
