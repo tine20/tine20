@@ -58,6 +58,10 @@ class ActiveSync_Command_SendMail
             throw new ActiveSync_Exception('no email account configured');
         }
         
+        if(empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+            throw new ActiveSync_Exception('no email address set for current user');
+        }
+        
         $this->_saveInSent = (bool)$_GET['SaveInSent'] == 'T';
         
         $this->_incomingMessage = new Zend_Mail_Message(
@@ -77,12 +81,6 @@ class ActiveSync_Command_SendMail
      */
     public function getResponse()
     {
-        $currentUser = Tinebase_Core::getUser();
-        
-        if(empty($currentUser->accountEmailAddress)) {
-            throw new ActiveSync_Exception('no email address set for current user');
-        }
-        
         $mail = Tinebase_Mail::createFromZMM($this->_incomingMessage);
         
         Felamimail_Controller_Message::getInstance()->sendZendMail($this->_account, $mail, $this->_saveInSent);        
