@@ -28,9 +28,10 @@ class Tinebase_Mail extends Zend_Mail
      * create Tinebase_Mail from Zend_Mail_Message
      * 
      * @param  Zend_Mail_Message  $_zmm
+     * @param  string             $_replyBody
      * @return Tinebase_Mail
      */
-    public static function createFromZMM(Zend_Mail_Message $_zmm)
+    public static function createFromZMM(Zend_Mail_Message $_zmm, $_replyBody = null)
     {
         $contentStream = fopen("php://temp", 'r+');
         fputs($contentStream, $_zmm->getContent());
@@ -43,6 +44,22 @@ class Tinebase_Mail extends Zend_Mail
             
             // create decoded stream
             $mp = new Zend_Mime_Part($mp->getDecodedStream());
+            $mp->encoding = $_zmm->getHeader('content-transfer-encoding');
+        }
+        
+        if ($_replyBody !== null) {
+            $contentStream = fopen("php://temp", 'r+');
+            
+            fputs($contentStream, $mp->getContent());
+            
+            fputs($contentStream, "\r\n\r\n-------------------------------------------------------\r\n\r\n");
+            
+            fputs($contentStream, $_replyBody);
+            
+            rewind($contentStream);
+            
+            // create decoded stream
+            $mp = new Zend_Mime_Part($contentStream);
             $mp->encoding = $_zmm->getHeader('content-transfer-encoding');
         }
         
