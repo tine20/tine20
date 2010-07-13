@@ -44,14 +44,12 @@ Tine.widgets.customfields.CustomfieldSearchCombo = Ext.extend(Ext.form.ComboBox,
     /**
      * config
      */
-    typeAhead: true,
     forceSelection: false,
     triggerAction: 'all',
     minChars: 1,
     pageSize: 10,
     displayField: 'value',
     valueField: 'value',
-    blurOnSelect: false,
     
     /**
      * @private
@@ -95,7 +93,7 @@ Tine.widgets.customfields.CustomfieldSearchCombo = Ext.extend(Ext.form.ComboBox,
         this.store.baseParams.filter = [
             {field: 'customfield_id',   operator: 'equals',     value: this.customfieldId },
             {field: 'value',            operator: 'group',      value: '' },
-            {field: 'value',            operator: 'startswith', value: qevent.query }
+            {field: 'value',            operator: 'contains', value: qevent.query }
         ];
     }
 });
