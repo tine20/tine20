@@ -162,7 +162,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
                 id: 'name',
                 dataIndex: 'name',
                 width: 300,
-                header: 'name',
+                header: _('name'),
                 renderer: function(value, metadata, record) {
                     var val = value;
                     if (record.get('status') !== 'complete') {
@@ -177,14 +177,14 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
                 id: 'size',
                 dataIndex: 'size',
                 width: 70,
-                header: 'size',
+                header: _('size'),
                 renderer: Ext.util.Format.fileSize
             },{
                 resizable: true,
                 id: 'type',
                 dataIndex: 'type',
                 width: 70,
-                header: 'type'
+                header: _('type')
                 // TODO show type icon?
                 //renderer: Ext.util.Format.fileSize
             }
