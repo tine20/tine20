@@ -62,6 +62,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected $_cacheController = NULL;
     
     /**
+     * message backend
+     *
+     * @var Felamimail_Backend_Cache_Sql_Message
+     */
+    protected $_backend = NULL;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton
@@ -1562,4 +1569,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $result;
     }
     
+    /**
+     * check if message has \SEEN flag
+     * 
+     * @param Felamimail_Model_Message $_message
+     * @return boolean
+     * 
+     * @todo move to Felamimail_Model_Message
+     */
+    protected function _hasSeenFlag($_message)
+    {
+        return (is_array($_message->flags) && in_array(Zend_Mail_Storage::FLAG_SEEN, $_message->flags));
+    }    
 }
