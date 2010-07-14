@@ -655,13 +655,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $index = 7;
         
         if($type == 'message' && $subType == 'rfc822') {
-            // messages envelope
             $structure['messageEnvelop'] = $_structure[7];
-            
-            // messages strcuture
-            $structure['messageStruture'] = $this->parseStructure($_structure[8], $_partId);
-            
-            // messages strcuture
+            $structure['messageStructure'] = $this->parseStructure($_structure[8], $_partId);
             $structure['messageLines'] = $_structure[9];
             
             // index of the first element containing extension data 
@@ -810,19 +805,15 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     /**
      * copy an existing message
      *
-     * @param  int                             $id     number of message
+     * @param  int|array                       $id     number of message(s)
      * @param  string|Zend_Mail_Storage_Folder $folder name or instance of targer folder
      * @return null
-     * @throws Zend_Mail_Storage_Exception
+     * @throws Felamimail_Exception_IMAPFolderNotFound
      */
     public function copyMessage($id, $folder)
     {
         if (!$this->_protocol->copy($folder, $id, null, $this->_useUid)) {
-            /**
-             * @see Zend_Mail_Storage_Exception
-             */
-            require_once 'Zend/Mail/Storage/Exception.php';
-            throw new Zend_Mail_Storage_Exception('cannot copy message, does the folder exist?');
+            throw new Felamimail_Exception_IMAPFolderNotFound('Cannot copy message, does the target folder "' . $folder . '" exist?');
         }
     }
     
