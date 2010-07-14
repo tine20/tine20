@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        reorder functions / think about public/protected
  * @todo        parse mail body and add <a> to telephone numbers?
  * @todo        check html purifier config (allow some tags/attributes?)
  */
@@ -105,6 +106,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return self::$_instance;
     }
     
+    /**
+     * parse headers
+     * 
+     * @param Felamimail_Model_Message $_message
+     * @param array $_headers
+     * @return void
+     */
     public function parseHeaders(Felamimail_Model_Message $_message, array $_headers)
     {
         // remove duplicate headers (which can't be set twice in real life)
@@ -134,6 +142,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         #var_dump($_message->toArray());
     }
     
+    /**
+     * parse message structure
+     * 
+     * @param Felamimail_Model_Message $_message
+     * @param array $_structure
+     * @return void
+     */
     public function parseStructure(Felamimail_Model_Message $_message, array $_structure)
     {
         $_message->structure     = $_structure;
@@ -768,7 +783,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $messageBody .= $body;
         }
         
-        
         $cache->save($messageBody, $cacheId, array('getMessageBody'));
         
         return $messageBody;
@@ -865,6 +879,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $attachments;
     }
     
+    /**
+     * get body parts
+     * 
+     * @param array $_structure
+     * @param string $_preferedMimeType
+     * @return array
+     */
     public function getBodyParts(array $_structure, $_preferedMimeType = Zend_Mime::TYPE_HTML)
     {
         $bodyParts = array();
@@ -878,6 +899,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $bodyParts;
     }
     
+    /**
+     * parse single part message
+     * 
+     * @param array $_structure
+     * @param string $_preferedMimeType
+     * @return array
+     */
     protected function _parseSinglePart(array $_structure, $_preferedMimeType)
     {
         $result = array();
@@ -902,6 +930,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $result;
     }
     
+    /**
+     * parse multipart message
+     * 
+     * @param array $_structure
+     * @param string $_preferedMimeType
+     * @return array
+     */
     protected function _parseMultipart(array $_structure, $_preferedMimeType)
     {
         $result = array();
@@ -922,6 +957,49 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             foreach($_structure['parts'] as $part) {
                 $result = $result + $this->getBodyParts($part, $_preferedMimeType);
             }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * get body part ids
+     * 
+     * @param array $_structure
+     * @return array
+     */
+    protected function _getBodyPartIds(array $_structure)
+    {
+        $result = array();
+        
+        if ($_structure['type'] == 'text') {
+            $result = array_merge($result, $this->_parseText($_structure));
+        } elseif($_structure['type'] == 'multipart') {
+            $result = array_merge($result, $this->_parseMultipart($_structure));
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * parse text
+     * 
+     * @param array $_structure
+     * @return array
+     */
+    protected function _parseText(array $_structure)
+    {
+        $result = array();
+
+        if (isset($_structure['disposition']['type']) && 
+            ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT || ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $_structure['disposition'])))) {
+            return $result;
+        }
+        
+        if ($_structure['subType'] == 'plain') {
+            $result['text'] = !empty($_structure['partId']) ? $_structure['partId'] : 1;
+        } elseif($_structure['subType'] == 'html') {
+            $result['html'] = !empty($_structure['partId']) ? $_structure['partId'] : 1;
         }
         
         return $result;
@@ -1464,8 +1542,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param Felamimail_Model_Message $_message
      * @return boolean
-     * 
-     * @todo move to Felamimail_Model_Message
      */
     protected function _hasSeenFlag($_message)
     {
