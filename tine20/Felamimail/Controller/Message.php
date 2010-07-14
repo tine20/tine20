@@ -377,109 +377,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $affectedFolders;
     }
     
-//    /**
-//     * delete messages in cache backend and on imap server
-//     * @param  mixed  $_ids
-//     * 
-//     * @deprecated this is legacy code
-//     * @todo remove finaly
-//     */
-//    private function delete($_ids)
-//    {
-//        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' This function is deprecated!');
-//        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete messages: ' . count($_ids));
-//        
-//        // we always need to read the messages from cache to get the current flags
-//        $messages = $this->_convertToRecordSet($_ids, TRUE);
-//                
-//        $messages->sort('folder_id');
-//        
-//        $lastAccountId = null;
-//        $lastFolderId  = null;
-//        $imapBackend   = null;
-//        $imapAccount   = null;
-//        $folderIds    = array();
-//        
-//        // delete messages on imap server
-//        foreach ($messages as $message) {
-//            if($imapBackend !== null && ($lastFolderId != $message->folder_id || count($imapMessageUids) >= 50)) {
-//                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete messages on imap server');
-//                if (!empty($imapAccount->trash_folder)) {
-//                    try {
-//                        $trashFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($imapAccount, $imapAccount->trash_folder);
-//                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-//                            ' move messages to trash.'
-//                        );
-//                        $imapBackend->copyMessage($imapMessageUids, $imapAccount->trash_folder);
-//                    } catch (Tinebase_Exception_NotFound $ten) {
-//                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
-//                            ' trash folder does not exist! cant move messages.'
-//                        );
-//                    }
-//                }
-//                $imapBackend->removeMessage($imapMessageUids);
-//                
-//                $imapMessageUids = array();
-//            }
-//            
-//            if ($lastFolderId != $message->folder_id) {
-//                $imapBackend              = $this->_getBackendAndSelectFolder($message->folder_id, $selectedFolder);
-//                $lastFolderId             = $message->folder_id;
-//                $folderIds[$lastFolderId] = array(
-//                    'decrementMessagesCounter' => 0, 
-//                    'decrementUnreadCounter' => 0
-//                );
-//                
-//                if ($lastAccountId != $selectedFolder->account_id) {
-//                    $imapAccount = $account = Felamimail_Controller_Account::getInstance()->get($selectedFolder->account_id);
-//                    $lastAccountId = $selectedFolder->account_id;
-//                }
-//            }
-//            
-//            $imapMessageUids[] = $message->messageuid;
-//            
-//        }
-//        
-//        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete messages on imap server');
-//        
-//        if($imapBackend !== null && count($imapMessageUids) > 0) {
-//            if (!empty($imapAccount->trash_folder)) {
-//                try {
-//                    $trashFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($imapAccount, $imapAccount->trash_folder);
-//                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-//                        ' move messages to trash.'
-//                    );
-//                    $imapBackend->copyMessage($imapMessageUids, $imapAccount->trash_folder);
-//                } catch (Tinebase_Exception_NotFound $ten) {
-//                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
-//                        ' trash folder does not exist! cant move messages.'
-//                    );
-//                }
-//            }
-//            $imapBackend->removeMessage($imapMessageUids);
-//        }    
-//
-//        // delete messages in local cache
-//        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-//        
-//        foreach($messages as $message) {
-//            if (!in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
-//                // count messages with seen flag for the first time
-//                $folderIds[$message->folder_id]['decrementUnreadCounter']++;
-//            }
-//            $folderIds[$message->folder_id]['decrementMessagesCounter']++;
-//            
-//            $this->_backend->delete($messages->getId());
-//        }
-//        
-//        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-//        
-//        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' deleted messages on cache');
-//        
-//        $affectedFolders = $this->_updateFolderCounts($folderIds, 'delete');
-//        return $affectedFolders;
-//    }
-    
     /**
      * move messages to folder
      *
@@ -639,6 +536,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param  Zend_Mail  $_message
      * @param  bool       $_saveInSent
      * @return Zend_Mail
+     * 
+     * @todo add email note again?
      */
     public function sendZendMail($_accountId, Zend_Mail $_message, $_saveInSent = null)
     {
@@ -652,9 +551,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // get account
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         
-        // get original message
-        #$originalMessage = ($_message->original_id) ? $this->get($_message->original_id) : NULL;
-
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($account->toArray(), TRUE));
         
@@ -671,22 +567,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' successful.');
             
             // add email notes to contacts (only to/cc)
-            #if ($_message->note) {
-            #    $this->_addEmailNote($nonPrivateRecipients, $_message->subject, $mail->getBodyText(TRUE));
-            #}
+            /*
+            if ($_message->note) {
+                $this->_addEmailNote($nonPrivateRecipients, $_message->subject, $mail->getBodyText(TRUE));
+            }
+            */
         
             // append mail to sent folder nonPrivateRecipients
             if ($_saveInSent == true) {
                 $this->_saveInSent($transport, $account);
             }
-            
-            // add reply/forward flags if set
-            #if (! empty($_message->flags) 
-            #    && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
-            #    && $originalMessage !== NULL
-            #) {
-            #    $this->addFlags($originalMessage, array($_message->flags));
-            #}
         } else {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message, no smtp config found.');
         }
@@ -998,7 +888,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         if (isset($_structure['disposition']['type']) && 
             ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT ||
-             // threat as attachment if structure contains parameters 
+             // treat as attachment if structure contains parameters 
              ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $_structure['disposition']))
             )
            ) {
