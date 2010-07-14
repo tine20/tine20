@@ -226,6 +226,58 @@ class Felamimail_Message extends Zend_Mail_Message
     }
     
     /**
+     * replace uris with links and more than one space with &nbsp;
+     *
+     * @param string $_content
+     * @return string
+     */
+    public static function replaceUriAndSpaces($_content) 
+    {
+        // uris
+        $pattern = '@(https?://|ftp://)([^\s<>\)]+)@';
+        $result = preg_replace($pattern, "<a href=\"\\1\\2\" target=\"_blank\">\\1\\2</a>", $_content);
+        
+        // spaces
+        #$result = preg_replace('/( {2,}|^ )/em', 'str_repeat("&nbsp;", strlen("\1"))', $result);
+        
+        return $result;
+    }
+
+    /**
+     * replace emails with links
+     *
+     * @param string $_content
+     * @return string
+     * 
+     * @todo try to skip email address that are already embedded in an url (such as unsubscription links with ?email=blabla@aha.com) 
+     */
+    public static function replaceEmails($_content) 
+    {
+        // add anchor to email addresses (remove mailto hrefs first)
+        $mailtoPattern = '/<a[="a-z\-0-9 ]*href="mailto:([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})"[^>]*>.*<\/a>/iU';
+        $result = preg_replace($mailtoPattern, "\\1", $_content);
+        
+        //$emailPattern = '/(?<!mailto:)([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i';
+        $result = preg_replace(Felamimail_Model_Message::EMAIL_ADDRESS_REGEXP, "<a href=\"#\" id=\"123:\\1\" class=\"tinebase-email-link\">\\1</a>", $result);
+        
+        return $result;
+    }
+        
+    /**
+     * remove all html entities
+     *
+     * @param string $_content
+     * @return string
+     */
+    public static function removeHtml($_content)
+    {
+        $result = strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $_content));
+        $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
+        
+        return $result;
+    }
+    
+    /**
      * create Felamimail message from Zend_Mail_Message
      * 
      * @param Zend_Mail_Message $_zendMailMessage
