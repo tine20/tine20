@@ -257,7 +257,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' set flags on cache');
         
-        $affectedFolders = $this->_updateFolderCounts($folderIds, 'addFlags');
+        $affectedFolders = $this->_updateFolderCounts($folderIds);
         
         return $affectedFolders;
     }
@@ -298,7 +298,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             if ($lastFolderId != $message->folder_id) {
                 $imapBackend              = $this->_getBackendAndSelectFolder($message->folder_id);
                 $lastFolderId             = $message->folder_id;
-                $folderIds[$lastFolderId] = 0;
+                $folderIds[$lastFolderId] = array(
+                    'incrementUnreadCounter' => 0
+                );
             }
             
             $imapMessageUids[] = $message->messageuid;
@@ -320,7 +322,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         foreach($messagesToUnflag as $message) {
             if (in_array(Zend_Mail_Storage::FLAG_SEEN, $flags) && in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
                 // count messages with seen flag for the first time
-                $folderIds[$message->folder_id]++;
+                $folderIds[$message->folder_id]['incrementUnreadCounter']++;
             }
             
             $this->_backend->clearFlag($message, $flags);
@@ -338,7 +340,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cleared flags on cache');
         
-        $affectedFolders = $this->_updateFolderCounts($folderIds, 'clearFlags');
+        $affectedFolders = $this->_updateFolderCounts($folderIds);
         return $affectedFolders;
     }
     
@@ -415,7 +417,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' deleted messages on cache');
         
         // @todo return list of affected folders
-        $affectedFolders = $this->_updateFolderCounts($folderIds, 'move');
+        $affectedFolders = $this->_updateFolderCounts($folderIds);
         
         return Felamimail_Controller_Folder::getInstance()->get($targetFolder);
     }
@@ -424,31 +426,29 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * update folder counts and returns list of affected folders
      * 
      * @param array $_folderCounter (folderId => unreadcounter)
-     * @param string $_mode addFlags|clearFlags|delete|move
      * @return Tinebase_Record_RecordSet of affected folders
-     * 
-     * @todo remove $_mode param & switch statement -> check folderCounter array for keys instead
+     * @throws Felamimail_Exception
      */
-    protected function _updateFolderCounts($_folderCounter, $_mode)
+    protected function _updateFolderCounts($_folderCounter)
     {
         foreach ($_folderCounter as $folderId => $counter) {
             $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
-            switch ($_mode) {
-                case 'clearFlags':
-                    $errorCondition = ($folder->cache_unreadcount + $counter > $folder->cache_totalcount);
-                    $updatedCounters = array(
-                        'cache_unreadcount' => "+$counter",
-                    );
-                    break;
-                case 'addFlags':
-                case 'delete':
-                case 'move':
-                    $errorCondition = ($folder->cache_unreadcount < $counter['decrementUnreadCounter'] || $folder->cache_totalcount < $counter['decrementMessagesCounter']);
-                    $updatedCounters = array(
-                        'cache_totalcount'  => "-" . $counter['decrementMessagesCounter'],
-                        'cache_unreadcount' => "-" . $counter['decrementUnreadCounter']
-                    );
-                    break;
+            
+            // get error condition and update array by checking $counter keys
+            if (array_key_exists('incrementUnreadCounter', $counter)) {
+                // this is only used in clearFlags() atm
+                $errorCondition = ($folder->cache_unreadcount + $counter['incrementUnreadCounter'] > $folder->cache_totalcount);
+                $updatedCounters = array(
+                    'cache_unreadcount' => '+' . $counter['incrementUnreadCounter'],
+                );
+            } else if (array_key_exists('decrementMessagesCounter', $counter) && array_key_exists('decrementUnreadCounter', $counter)) {
+                $errorCondition = ($folder->cache_unreadcount < $counter['decrementUnreadCounter'] || $folder->cache_totalcount < $counter['decrementMessagesCounter']);
+                $updatedCounters = array(
+                    'cache_totalcount'  => '-' . $counter['decrementMessagesCounter'],
+                    'cache_unreadcount' => '-' . $counter['decrementUnreadCounter']
+                );
+            } else {
+                throw new Felamimail_Exception('Wrong folder counter given: ' . print_r($_folderCounter, TRUE));
             }
             
             if ($errorCondition) {
