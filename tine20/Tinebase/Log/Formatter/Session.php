@@ -20,7 +20,7 @@ class Tinebase_Log_Formatter_Session extends Zend_Log_Formatter_Simple
         }
         
         $user = Tinebase_Core::getUser();
-        $userName = $user ? $user->accountDisplayName : '-- none --';
+        $userName = ($user && is_object($user)) ? $user->accountDisplayName : '-- none --';
         $output = parent::format($event);
         
         return self::$_sessionId . " $userName - $output";
