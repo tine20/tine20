@@ -1036,18 +1036,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param array $_folderCounter (folderId => unreadcounter)
      * @param string $_mode addFlags|clearFlags|delete|move
      * @return Tinebase_Record_RecordSet of affected folders
+     * 
+     * @todo remove $_mode param & switch statement -> check folderCounter array for keys instead
      */
     protected function _updateFolderCounts($_folderCounter, $_mode)
     {
         foreach ($_folderCounter as $folderId => $counter) {
             $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
             switch ($_mode) {
-                #case 'addFlags':
-                #    $errorCondition = ($folder->cache_unreadcount < $counter);
-                #    $updatedCounters = array(
-                #        'cache_unreadcount' => "-$counter",
-                #    );
-                #    break;
                 case 'clearFlags':
                     $errorCondition = ($folder->cache_unreadcount + $counter > $folder->cache_totalcount);
                     $updatedCounters = array(
