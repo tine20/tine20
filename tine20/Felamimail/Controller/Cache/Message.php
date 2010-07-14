@@ -510,7 +510,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         return $folder;
     }
     
-    
     /**
      * get message with highest messageUid from cache 
      * 
@@ -670,7 +669,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         return $folder;
     }
     
-    
     /**
      * add one message to cache
      * 
@@ -695,14 +693,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         ));
 
         $messageToCache->parseHeaders($_message['header']);
-        
-        $bodyParts = $this->getBodyPartIds($_message['structure']);
-        if (isset($bodyParts['text'])) {
-            $messageToCache->text_partid = $bodyParts['text'];
-        }
-        if (isset($bodyParts['html'])) {
-            $messageToCache->html_partid = $bodyParts['html'];
-        }
+        $messageToCache->parseBodyParts();
         
         $attachments = $this->getAttachments($messageToCache);
         

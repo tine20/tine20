@@ -166,22 +166,22 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     /**
      * parse message structure
      * 
-     * @param array $_structure
      * @return void
      */
-    public function parseStructure(array $_structure)
+    public function parseStructure()
     {
-        $this->structure     = $_structure;
-        $this->content_type  = isset($_structure['contentType']) ? $_structure['contentType'] : Zend_Mime::TYPE_TEXT;
+        $this->structure     = $this->structure;
+        $this->content_type  = isset($this->structure['contentType']) ? $this->structure['contentType'] : Zend_Mime::TYPE_TEXT;
     }
     
     /**
      * get message part structure
      * 
-     * @param  string  $_partId            the part id to search for
+     * @param  string  $_partId                 the part id to search for
+     * @param  boolean $_useMessageStructure    if you want to get only the messageStructure part
      * @return array
      */
-    public function getPartStructure($_partId)
+    public function getPartStructure($_partId, $_useMessageStructure = TRUE)
     {
         // maybe we want no part at all => just return the whole structure
         if($_partId == null) {
@@ -200,11 +200,196 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         
         foreach ($iterator as $key => $value) {
             if ($key == $_partId) {
-                return $value;
+                $result = ($_useMessageStructure && array_key_exists('messageStructure', $value)) ? $value['messageStructure'] : $value;
+                return $result;
             }
         }
         
         throw new Felamimail_Exception("Structure for partId $_partId not found!");
+    }
+    
+    /**
+     * get body parts
+     * 
+     * @param array $_structure
+     * @param string $_preferedMimeType
+     * @return array
+     */
+    public function getBodyParts($_structure = NULL, $_preferedMimeType = Zend_Mime::TYPE_HTML)
+    {
+        $bodyParts = array();
+        $structure = ($_structure !== NULL) ? $_structure : $this->structure;
+        
+        if (! is_array($structure)) {
+            throw new Felamimail_Exception('Structure should be an array (' . $structure . ')');
+        }
+        
+        if (array_key_exists('parts', $structure)) {
+            $bodyParts = $bodyParts + $this->_parseMultipart($structure, $_preferedMimeType);
+        } else {
+            $bodyParts = $bodyParts + $this->_parseSinglePart($structure);
+        }
+        
+        return $bodyParts;
+    }
+    
+    /**
+     * parse single part message
+     * 
+     * @param array $_structure
+     * @return array
+     */
+    protected function _parseSinglePart(array $_structure)
+    {
+        $result = array();
+        
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
+
+        if ($_structure['type'] != 'text') {
+            return $result;
+        }
+        
+        if ($this->_partIsAttachment($_structure)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Part is attachment: ' . $_structure['disposition']);
+            return $result;
+        }
+
+        $partId = !empty($_structure['partId']) ? $_structure['partId'] : 1;
+        
+        $result[$partId] = $_structure;
+
+        return $result;
+    }
+    
+    /**
+     * checks if part is attachment
+     * 
+     * @param array $_structure
+     * @return boolean
+     */
+    protected function _partIsAttachment(array $_structure)
+    {
+        return (
+            isset($_structure['disposition']['type']) && 
+                ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT ||
+                // treat as attachment if structure contains parameters 
+                ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $_structure['disposition'])
+            )
+        ));
+    }
+    
+    /**
+     * parse multipart message
+     * 
+     * @param array $_structure
+     * @param string $_preferedMimeType
+     * @return array
+     */
+    protected function _parseMultipart(array $_structure, $_preferedMimeType = Zend_Mime::TYPE_HTML)
+    {
+        $result = array();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
+        
+        if ($_structure['subType'] == 'alternative') {
+            $alternativeType = $_preferedMimeType == Zend_Mime::TYPE_HTML ? Zend_Mime::TYPE_TEXT : Zend_Mime::TYPE_HTML;
+            
+            foreach ($_structure['parts'] as $part) {
+                $foundParts[$part['contentType']] = $part['partId'];
+            }
+            
+            if (array_key_exists($_preferedMimeType, $foundParts)) {
+                $result[$foundParts[$_preferedMimeType]] = $_structure['parts'][$foundParts[$_preferedMimeType]];
+            } elseif (array_key_exists($alternativeType, $foundParts)) {
+                $result[$foundParts[$alternativeType]]   = $_structure['parts'][$foundParts[$alternativeType]];
+            }
+        } else {
+            foreach ($_structure['parts'] as $part) {
+                $result = $result + $this->getBodyParts($part, $_preferedMimeType);
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * parse structure to get text_partid and html_partid
+     */
+    public function parseBodyParts()
+    {
+        $bodyParts = $this->_getBodyPartIds($this->structure);
+        if (isset($bodyParts['text'])) {
+            $this->text_partid = $bodyParts['text'];
+        }
+        if (isset($bodyParts['html'])) {
+            $this->html_partid = $bodyParts['html'];
+        }
+    }
+    
+    /**
+     * get body part ids
+     * 
+     * @param array $_structure
+     * @return array
+     */
+    protected function _getBodyPartIds(array $_structure)
+    {
+        $result = array();
+        
+        if ($_structure['type'] == 'text') {
+            $result = array_merge($result, $this->_getTextPartId($_structure));
+        } elseif($_structure['type'] == 'multipart') {
+            $result = array_merge($result, $this->_getMultipartIds($_structure));
+        }
+        
+        return $result;
+    }
+
+    /**
+     * get multipart ids
+     * 
+     * @param array $_structure
+     * @return array
+     */
+    protected function _getMultipartIds(array $_structure)
+    {
+        $result = array();
+        
+        if ($_structure['subType'] == 'alternative' || $_structure['subType'] == 'mixed' || 
+            $_structure['subType'] == 'signed' || $_structure['subType'] == 'related') {
+            foreach ($_structure['parts'] as $part) {
+                $result = array_merge($result, $this->_getBodyPartIds($part));
+            }
+        } else {
+            // ignore other types for now
+            #var_dump($_structure);
+            #throw new Exception('unsupported multipart');    
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * get text part id
+     * 
+     * @param array $_structure
+     * @return array
+     */
+    protected function _getTextPartId(array $_structure)
+    {
+        $result = array();
+
+        if ($this->_partIsAttachment($_structure)) {
+            return $result;
+        }
+        
+        if ($_structure['subType'] == 'plain') {
+            $result['text'] = !empty($_structure['partId']) ? $_structure['partId'] : 1;
+        } elseif($_structure['subType'] == 'html') {
+            $result['html'] = !empty($_structure['partId']) ? $_structure['partId'] : 1;
+        }
+        
+        return $result;
     }
     
     /**
