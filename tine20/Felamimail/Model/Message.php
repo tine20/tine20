@@ -164,6 +164,50 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     }
     
     /**
+     * parse message structure
+     * 
+     * @param array $_structure
+     * @return void
+     */
+    public function parseStructure(array $_structure)
+    {
+        $this->structure     = $_structure;
+        $this->content_type  = isset($_structure['contentType']) ? $_structure['contentType'] : Zend_Mime::TYPE_TEXT;
+    }
+    
+    /**
+     * get message part structure
+     * 
+     * @param  string  $_partId            the part id to search for
+     * @return array
+     */
+    public function getPartStructure($_partId)
+    {
+        // maybe we want no part at all => just return the whole structure
+        if($_partId == null) {
+            return $this->structure;
+        }
+        
+        // maybe we want the first part => just return the whole structure
+        if($this->structure['partId'] == $_partId) {
+            return $this->structure;
+        }
+                
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveArrayIterator($this->structure),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+        
+        foreach ($iterator as $key => $value) {
+            if ($key == $_partId) {
+                return $value;
+            }
+        }
+        
+        throw new Felamimail_Exception("Structure for partId $_partId not found!");
+    }
+    
+    /**
      * fills a record from json data
      *
      * @param array $recordData
