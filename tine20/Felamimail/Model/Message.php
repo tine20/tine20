@@ -132,6 +132,38 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     );
     
     /**
+     * parse headers and set 'date', 'from', 'to', 'cc', 'bcc', 'subject' fields
+     * 
+     * @param array $_headers
+     * @return void
+     */
+    public function parseHeaders(array $_headers)
+    {
+        // remove duplicate headers (which can't be set twice in real life)
+        foreach (array('date', 'from', 'to', 'cc', 'bcc', 'subject') as $field) {
+            if (isset($_headers[$field]) && is_array($_headers[$field])) {
+                $_headers[$field] = $_headers[$field][0];
+            }
+        }
+        
+        $this->subject = (isset($_headers['subject'])) ? Felamimail_Message::convertText($_headers['subject']) : null;
+        $this->from    = (isset($_headers['from']))    ? Felamimail_Message::convertText($_headers['from'], TRUE, 256) : null;
+        
+        if (array_key_exists('date', $_headers)) {
+            $this->sent = Felamimail_Message::convertDate($_headers['date']);
+        } elseif (array_key_exists('resent-date', $_headers)) {
+            $this->sent = Felamimail_Message::convertDate($_headers['resent-date']);
+        }
+        
+        foreach (array('to', 'cc', 'bcc') as $field) {
+            if (isset($_headers[$field])) {
+                // if sender set the headers twice we only use the first
+                $this->$field = Felamimail_Message::convertAddresses($_headers[$field]);
+            }
+        }
+    }
+    
+    /**
      * fills a record from json data
      *
      * @param array $recordData

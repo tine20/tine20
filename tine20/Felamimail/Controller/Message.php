@@ -107,42 +107,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * parse headers
-     * 
-     * @param Felamimail_Model_Message $_message
-     * @param array $_headers
-     * @return void
-     * 
-     * @todo move this to Felamimail_Model_Message
-     */
-    public function parseHeaders(Felamimail_Model_Message $_message, array $_headers)
-    {
-        // remove duplicate headers (which can't be set twice in real life)
-        foreach (array('date', 'from', 'to', 'cc', 'bcc', 'subject') as $field) {
-            if (isset($_headers[$field]) && is_array($_headers[$field])) {
-                $_headers[$field] = $_headers[$field][0];
-            }
-        }
-        
-        $_message->subject = (isset($_headers['subject'])) ? Felamimail_Message::convertText($_headers['subject']) : null;
-        $_message->from    = (isset($_headers['from']))    ? Felamimail_Message::convertText($_headers['from'], TRUE, 256) : null;
-        
-        // @todo generalize this (it is duplicated in cache controller)
-        if (array_key_exists('date', $_headers)) {
-            $_message->sent = Felamimail_Message::convertDate($_headers['date']);
-        } elseif (array_key_exists('resent-date', $_headers)) {
-            $_message->sent = Felamimail_Message::convertDate($_headers['resent-date']);
-        }
-        
-        foreach (array('to', 'cc', 'bcc') as $field) {
-            if (isset($_headers[$field])) {
-                // if sender set the headers twice we only use the first
-                $_message->$field = Felamimail_Message::convertAddresses($_headers[$field]);
-            }
-        }
-    }
-    
-    /**
      * parse message structure
      * 
      * @param Felamimail_Model_Message $_message
@@ -213,7 +177,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 'attachments' => $attachments
             ));
 
-            $this->parseHeaders($message, $headers);
+            $message->parseHeaders($headers);
             
             $structure = array_key_exists('messageStructure', $structure) ? $structure['messageStructure'] : $structure;
             $this->parseStructure($message, $structure);
@@ -825,7 +789,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param  array  $_structure
      * @return array
-     * 
      */
     public function getAttachments($_messageId, $_partId = null)
     {
