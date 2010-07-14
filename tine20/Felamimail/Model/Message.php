@@ -132,6 +132,16 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     );
     
     /**
+     * check if message has \SEEN flag
+     * 
+     * @return boolean
+     */
+    public function hasSeenFlag()
+    {
+        return (is_array($this->flags) && in_array(Zend_Mail_Storage::FLAG_SEEN, $this->flags));
+    }    
+    
+    /**
      * parse headers and set 'date', 'from', 'to', 'cc', 'bcc', 'subject' fields
      * 
      * @param array $_headers

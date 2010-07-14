@@ -184,7 +184,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                         
                         $folder->cache_totalcount--;
                         $decrementMessagesCounter++;
-                        if (! $this->_hasSeenFlag($latestMessage)) {
+                        if (! $latestMessage->hasSeenFlag()) {
                             $decrementUnreadCounter++;
                         }
                     }
@@ -263,7 +263,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                             $folder->cache_job_actions_done++;
                             $folder->cache_totalcount--;
                             $decrementMessagesCounter++;
-                            if (! $this->_hasSeenFlag($messageToBeDeleted)) {
+                            if (! $messageToBeDeleted->hasSeenFlag()) {
                                 $decrementUnreadCounter++;
                             }
                             
@@ -341,7 +341,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                         $folder->cache_totalcount++;
                         $folder->cache_job_actions_done++;
                         $incrementMessagesCounter++;
-                        if (! $this->_hasSeenFlag($addedMessage)) {
+                        if (! $addedMessage->hasSeenFlag()) {
                             $incrementUnreadCounter++;
                         }
                     }
@@ -410,7 +410,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                             $folder->cache_totalcount++;
                             $folder->cache_job_actions_done++;
                             $incrementMessagesCounter++;
-                            if (! $this->_hasSeenFlag($addedMessage)) {
+                            if (! $addedMessage->hasSeenFlag()) {
                                 $incrementUnreadCounter++;
                             }
                         }
@@ -705,14 +705,14 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $cacheId = 'getMessageHeaders' . $createdMessage->getId();
         Tinebase_Core::get('cache')->save($_message['header'], $cacheId, array('getMessageHeaders'));
         
-        #if (! $this->_hasSeenFlag($messageToCache)) {
+        #if (! $messageToCache->hasSeenFlag()) {
         #    $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
         #}
         
         if ($_updateFolderCounter == true) {
             Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
                 'cache_totalcount'  => "+1",
-                'cache_unreadcount' => (! $this->_hasSeenFlag($messageToCache)) ? '+1' : '+0',
+                'cache_unreadcount' => (! $messageToCache->hasSeenFlag()) ? '+1' : '+0',
             ));
         }
         

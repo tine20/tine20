@@ -1143,17 +1143,4 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 			$Felamimail_Controller_Folder = Felamimail_Controller_Folder::getInstance()->create($_account->id, $folderName);
 		}
 	}
-	
-    /**
-     * check if message has \SEEN flag
-     * 
-     * @param Felamimail_Model_Message $_message
-     * @return boolean
-     * 
-     * @todo move this to Felamimail_Model_Message
-     */
-    protected function _hasSeenFlag($_message)
-    {
-        return (is_array($_message->flags) && in_array(Zend_Mail_Storage::FLAG_SEEN, $_message->flags));
-    }    
 }
