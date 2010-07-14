@@ -182,23 +182,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_recordToJson($message);
     }
     
-    /**
-     * deletes existing messages
-     *
-     * @param  array $ids  message ids
-     * @return string
-     * @return array
-     * 
-     * @todo only add flag to messages that should be deleted and delete them on server when updating cache?
-     */
-    public function deleteMessages($ids)
-    {
-        Felamimail_Controller_Message::getInstance()->delete($ids);
-        
-        return array(
-            'status'    => 'success'
-        );
-    }
 
     /**
      * move messsages to folder
@@ -243,30 +226,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
 
-//    /**
-//     * set flag of messages
-//     *
-//     * @param  array $ids
-//     * @param  array $flags
-//     * @return array
-//     */
-//    public function setFlags($ids, $flags)
-//    {
-//        return $this->addFlags($ids, $flag);
-//        
-//        /*
-//        if (! empty($flag)) {
-//            foreach ($ids as $id) {
-//                $message = Felamimail_Controller_Message::getInstance()->get($id);
-//                Felamimail_Controller_Message::getInstance()->addFlags($message, (array) $flag);
-//            }
-//        } else {
-//            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No flag set in request.');
-//        }
-//        
-//        return array('status' => 'success');
-//        */
-//    }
 
     /**
      * add given flags to given messages
@@ -329,70 +288,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return parent::_recordToJson($_record);
     }
     
-//    /**
-//     * delete messages (as background process)
-//     * 
-//     * @param array $_result
-//     * @param Tinebase_Record_RecordSet $_messagesToDelete
-//     * @return void
-//     * 
-//     * @todo    generalize this?
-//     */
-//    protected function _backgroundDelete(Tinebase_Record_RecordSet $_messagesToDelete)
-//    {
-//        Tinebase_Core::setExecutionLifeTime(600); // 10 minutes
-//        $result = array(
-//            'status'    => 'success'
-//        );
-//        
-//        if (headers_sent()) {
-//            // don't do background processing if headers were already sent
-//            Felamimail_Controller_Message::getInstance()->deleteMessagesFromImapServer($_messagesToDelete);
-//            return $result;
-//        } else {
-//        
-//            // use output buffer
-//            ignore_user_abort();
-//            header("Connection: close");
-//            
-//            ob_start();
-//    
-//            // output here (kind of hack to get request id and build response)
-//            $request = new Zend_Json_Server_Request_Http();
-//            $response = new Zend_Json_Server_Response_Http();
-//            if (null !== ($id = $request->getId())) {
-//                $response->setId($id);
-//            }
-//            if (null !== ($version = $request->getVersion())) {
-//                $response->setVersion($version);
-//            }
-//            $response->setResult($result);
-//            echo $response;
-//            
-//            $size = ob_get_length();
-//            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Content-Size: ' . $size);
-//            
-//            /**
-//             * we set a special content-type to avoid compressing the output by mod_deflate
-//             * the browser is closing the connection after he has received  Content-Length bytes
-//             * if the output get's compressed, the browser waits until the php process finnishes 
-//             */
-//            header("Content-Length: $size");
-//            header("Content-Type: application/json-nodeflate");
-//
-//            ob_end_flush(); // Strange behaviour, will not work
-//            flush();
-//            Zend_Session::writeClose(true);
-//    
-//            // update rest of cache here
-//            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting background delete of ' . count($_messagesToDelete) . ' messages ...');
-//            Felamimail_Controller_Message::getInstance()->deleteMessagesFromImapServer($_messagesToDelete);
-//    
-//            // don't output anything else ('null' or something like that)
-//            die();
-//        }
-//    }
-    
+
     /***************************** accounts funcs *******************************/
     
     /**
