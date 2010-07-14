@@ -636,10 +636,10 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testGetBodyPartIdMultipartAlternative()
     {
         $cachedMessage = $this->_messageTestHelper('multipart_alternative.eml', 'multipart/alternative');
-        
-        $partIds = $this->_controller->getBodyPartIds($cachedMessage['structure']);
+        $cachedMessage->parseBodyParts();
 
-        $this->assertEquals(array('html' => 2, 'text' => 1), $partIds, 'did not find all partIds');
+        $this->assertEquals(1, $cachedMessage->text_partid, 'did not find all partIds');
+        $this->assertEquals(2, $cachedMessage->html_partid, 'did not find all partIds');
     }
         
     /**
@@ -648,10 +648,9 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testGetBodyPartIdMultipartMixed()
     {
         $cachedMessage = $this->_messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
-        
-        $partIds = $this->_controller->getBodyPartIds($cachedMessage['structure']);
+        $cachedMessage->parseBodyParts();
 
-        $this->assertEquals(array('text' => 1), $partIds, 'did not find all partIds');
+        $this->assertEquals(1, $cachedMessage->text_partid, 'did not find all partIds');
     }
     
     /**
@@ -660,10 +659,9 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testGetBodyPartIdMultipartSigned()
     {
         $cachedMessage = $this->_messageTestHelper('multipart_signed.eml', 'multipart/signed');
-        
-        $partIds = $this->_controller->getBodyPartIds($cachedMessage['structure']);
+        $cachedMessage->parseBodyParts();
 
-        $this->assertEquals(array('text' => 1), $partIds, 'did not find all partIds');
+        $this->assertEquals(1, $cachedMessage->text_partid, 'did not find all partIds');
     }
     
     /**
@@ -672,10 +670,10 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testGetBodyPartIdMultipartRelated()
     {
         $cachedMessage = $this->_messageTestHelper('multipart_related.eml', 'multipart/related');
-        
-        $partIds = $this->_controller->getBodyPartIds($cachedMessage['structure']);
+        $cachedMessage->parseBodyParts();
 
-        $this->assertEquals(array('text' => 1, 'html' => '2.1'), $partIds, 'did not find all partIds');
+        $this->assertEquals(1, $cachedMessage->text_partid, 'did not find all partIds');
+        $this->assertEquals('2.1', $cachedMessage->html_partid, 'did not find all partIds');
     }
             
     /********************************* protected helper funcs *************************************/
