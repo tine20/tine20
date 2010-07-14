@@ -906,7 +906,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $_preferedMimeType
      * @return array
      */
-    protected function _parseSinglePart(array $_structure, $_preferedMimeType)
+    protected function _parseSinglePart(array $_structure, $_preferedMimeType = Zend_Mime::TYPE_HTML)
     {
         $result = array();
 
@@ -937,7 +937,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $_preferedMimeType
      * @return array
      */
-    protected function _parseMultipart(array $_structure, $_preferedMimeType)
+    protected function _parseMultipart(array $_structure, $_preferedMimeType = Zend_Mime::TYPE_HTML)
     {
         $result = array();
         
