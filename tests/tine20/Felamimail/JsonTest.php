@@ -565,10 +565,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $folder = $this->_getFolder($_folderName);
         $filter = $this->_getMessageFilter($folder->getId());
         // update cache
-        $folder = Felamimail_Controller_Cache_Message::getInstance()->update($folder, 10);
+        $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10);
         $i = 0;
         while ($folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $i < 10) {
-            $folder = Felamimail_Controller_Cache_Message::getInstance()->update($folder, 10);
+            $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10);
             $i++;
         }
         $result = $this->_json->searchMessages($filter, '');

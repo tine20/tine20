@@ -84,10 +84,6 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
         
         $this->_folder = $this->_getFolder($this->_testFolderName);
-        
-        // send mail
-        #$mailAsString = file_get_contents(dirname(dirname(dirname(__FILE__))) . '/files/multipart_alternative.eml');
-        #$this->_imap->appendMessage($mailAsString, $this->_folder->globalname);
     }
 
     /**
@@ -101,7 +97,6 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         // clear message cache
         #$this->_controller->clear($this->_folder);
     }
-
     
     /**
      * test clear message cache
@@ -127,7 +122,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         // update message cache
-        $updatedFolder = $this->_controller->update($this->_folder, 30);
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
         
         // check folder status after update
         if ($updatedFolder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
@@ -151,7 +146,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     public function testUpdateCountersOnly()
     {
         // update message cache
-        $updatedFolder = $this->_controller->update($this->_folder, 30);
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
         
         $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
         
@@ -160,7 +155,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         ));
         
         // update message cache
-        $updatedFolder = $this->_controller->update($this->_folder, 0);
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 0);
         
         foreach($result as $messageUid) {
             $this->_imap->removeMessage($messageUid);
@@ -174,83 +169,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $updatedFolder->cache_job_actions_done, 'done wrong');
         $this->assertNotEquals(0, $updatedFolder->cache_job_actions_estimate, 'estimate wrong');
     }
-    
-    public function testGetBodyPartIdMultipartAlternative()
-    {
-        $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
-        
-        $result = $this->_imap->search(array(
-            'HEADER X-Tine20TestMessage multipart/alternative'
-        ));
-        
-        $message = $this->_imap->getSummary($result[0]);
-        
-        foreach($result as $messageUid) {
-            $this->_imap->removeMessage($messageUid);
-        }
-        
-        $partIds = $this->_controller->getBodyPartIds($message['structure']);
 
-        $this->assertEquals(array('html' => 2, 'text' => 1), $partIds, 'did not found all partIds');
-    }
-        
-    public function testGetBodyPartIdMultipartMixed()
-    {
-        $this->_appendMessage('multipart_mixed.eml', $this->_testFolderName);
-        
-        $result = $this->_imap->search(array(
-            'HEADER X-Tine20TestMessage multipart/mixed'
-        ));
-        
-        $message = $this->_imap->getSummary($result[0]);
-        
-        foreach($result as $messageUid) {
-            $this->_imap->removeMessage($messageUid);
-        }
-        
-        $partIds = $this->_controller->getBodyPartIds($message['structure']);
-
-        $this->assertEquals(array('text' => 1), $partIds, 'did not found all partIds');
-    }
-    
-    public function testGetBodyPartIdMultipartSigned()
-    {
-        $this->_appendMessage('multipart_signed.eml', $this->_testFolderName);
-        
-        $result = $this->_imap->search(array(
-            'HEADER X-Tine20TestMessage multipart/signed'
-        ));
-        
-        $message = $this->_imap->getSummary($result[0]);
-        
-        foreach($result as $messageUid) {
-            $this->_imap->removeMessage($messageUid);
-        }
-        
-        $partIds = $this->_controller->getBodyPartIds($message['structure']);
-
-        $this->assertEquals(array('text' => 1), $partIds, 'did not found all partIds');
-    }
-    
-    public function testGetBodyPartIdMultipartRelated()
-    {
-        $this->_appendMessage('multipart_related.eml', $this->_testFolderName);
-        
-        $result = $this->_imap->search(array(
-            'HEADER X-Tine20TestMessage multipart/related'
-        ));
-        
-        $message = $this->_imap->getSummary($result[0]);
-        
-        foreach($result as $messageUid) {
-            $this->_imap->removeMessage($messageUid);
-        }
-        
-        $partIds = $this->_controller->getBodyPartIds($message['structure']);
-
-        $this->assertEquals(array('text' => 1, 'html' => '2.1'), $partIds, 'did not found all partIds');
-    }
-        
     /**
      * get folder
      *

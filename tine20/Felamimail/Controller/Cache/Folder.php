@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        this should extend Felamimail_Controller_Folder (like Felamimail_Controller_Cache_Message)
  * @todo        add cleanup routine for deleted (by other clients)/outofdate folders?
  */
 
@@ -170,7 +171,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      */
     public function updateFolderStatus(Felamimail_Model_Folder $_folder, $_imap)
     {
-        return Felamimail_Controller_Cache_Message::getInstance()->update($_folder, 1);
+        return Felamimail_Controller_Cache_Message::getInstance()->updateCache($_folder, 1);
     }
     
     /**
@@ -229,7 +230,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      */
     public function updateFolderCounters(Felamimail_Model_Folder $_folder, $_imap)
     {
-        return Felamimail_Controller_Cache_Message::getInstance()->update($folder, 1);
+        return Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 1);
     }
     
     

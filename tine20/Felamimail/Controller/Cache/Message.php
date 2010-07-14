@@ -17,15 +17,8 @@
  * @package     Felamimail
  * @subpackage  Controller
  */
-class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
+class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
 {
-    /**
-     * application name (is needed in checkRight())
-     *
-     * @var string
-     */
-    protected $_applicationName = 'Felamimail';
-    
     /**
      * @var default charset
      */
@@ -44,13 +37,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      * @var integer
      */
     protected $_importCountPerStep = 50;
-    
-    /**
-     * message backend
-     *
-     * @var Felamimail_Backend_Cache_Sql_Message
-     */
-    protected $_backend = NULL;
     
     /**
      * holds the instance of the singleton
@@ -104,7 +90,7 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      * 
      * @todo split this in multiple functions
      */
-    public function update($_folder, $_time = 10)
+    public function updateCache($_folder, $_time = 10)
     {
         // always read folder from database
         $folder = Felamimail_Controller_Folder::getInstance()->get($_folder);
@@ -313,7 +299,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             }
         }
         
-        #$folder = Felamimail_Controller_Folder::getInstance()->update($folder);
         $cacheMessageSequence = $folder->cache_totalcount;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Cache status cache total count: {$folder->cache_totalcount} imap total count: {$folder->imap_totalcount} cache sequence: $cacheMessageSequence imap sequence: $imapMessageSequence");
@@ -525,15 +510,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         return $folder;
     }
     
-    /**
-     * delete message(s) from cache
-     * 
-     * @param string|array $_id
-     */
-    public function delete($_id)
-    {
-        $this->_backend->delete($_id);
-    }
     
     /**
      * get message with highest messageUid from cache 
@@ -668,6 +644,8 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
      *
      * @param string|Felamimail_Model_Folder $_folder
      * @return Felamimail_Model_Folder
+     * 
+     * @todo rename to clearCache
      */
     public function clear($_folder)
     {
@@ -694,38 +672,6 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         return $folder;
     }
     
-    
-//    /**
-//     * get unread count for folder
-//     * 
-//     * @todo FIXME: result can get negative when cache is updating
-//     * 
-//     * @param Felamimail_Model_Folder $_folder
-//     * @return integer
-//     */
-//    public function getUnreadCount(Felamimail_Model_Folder $_folder)
-//    {
-//        $result = $_folder->cache_totalcount - $this->_backend->seenCountByFolderId($_folder->getId());
-//        
-//        // make sure $result can't get negative
-//        $result = ($result < 0) ? 0 : $result;
-//        
-//        return $result;
-//    }
-    
-//    /**
-//     * get total count for folder
-//     * 
-//     * @param Felamimail_Model_Folder $_folder
-//     * @return integer
-//     */
-//    public function getTotalCount(Felamimail_Model_Folder $_folder)
-//    {
-//        $result = $this->_backend->searchCountByFolderId($_folder->getId());
-//        return $result;
-//    }
-    
-    /***************************** protected funcs *******************************/
     
     /**
      * add one message to cache
@@ -781,9 +727,9 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
         
         $cachedMessage = new Felamimail_Model_Message($messageData);
         
-        $attachments = Felamimail_Controller_Message::getInstance()->getAttachments($cachedMessage);
+        $attachments = $this->getAttachments($cachedMessage);
         
-        $cachedMessage->has_attachment =  (count($attachments) > 0) ? true : false;
+        $cachedMessage->has_attachment = (count($attachments) > 0) ? true : false;
         
         $createdMessage = $this->_backend->create($cachedMessage);
 
@@ -809,145 +755,10 @@ class Felamimail_Controller_Cache_Message extends Tinebase_Controller_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
                 ' prefetch imap message to local cache ' . $createdMessage->getId()
             );            
-            Felamimail_Controller_Message::getInstance()->getCompleteMessage($createdMessage);
+            $this->getCompleteMessage($createdMessage);
         }
         */
 
         return $createdMessage;
-    }        
-    
-    /**
-     * convert date from sent/received
-     *
-     * @param string $_dateString
-     * @param string $_format default: 'Thu, 21 Dec 2000 16:01:07 +0200' (Zend_Date::RFC_2822)
-     * @return Zend_Date
-     */
-    protected function _convertDate($_dateString, $_format = Zend_Date::RFC_2822)
-    {
-        try {
-            if ($_format == Zend_Date::RFC_2822) {
-    
-                // strip of timezone information for example: (CEST)
-                $dateString = preg_replace('/( [+-]{1}\d{4}) \(.*\)$/', '${1}', $_dateString);
-                
-                // append dummy weekday if missing
-                if(preg_match('/^(\d{1,2})\s(\w{3})\s(\d{4})\s(\d{2}):(\d{2}):{0,1}(\d{0,2})\s([+-]{1}\d{4})$/', $dateString)) {
-                    $dateString = 'xxx, ' . $dateString;
-                }
-                
-                try {
-                    // Fri,  6 Mar 2009 20:00:36 +0100
-                    $date = new Zend_Date($dateString, Zend_Date::RFC_2822, 'en_US');
-                } catch (Zend_Date_Exception $e) {
-                    // Fri,  6 Mar 2009 20:00:36 CET
-                    $date = new Zend_Date($dateString, Felamimail_Model_Message::DATE_FORMAT, 'en_US');
-                }
-    
-            } else {
-                
-                $date = new Zend_Date($_dateString, $_format, 'en_US');
-                
-                if ($_format == Felamimail_Model_Message::DATE_FORMAT_RECEIVED) {
-                    
-                    if (preg_match('/ ([+-]{1})(\d{2})\d{2}$/', $_dateString, $matches)) {
-                        // add / sub from zend date ?
-                        if ($matches[1] == '+') {
-                            $date->subHour($matches[2]);
-                        } else {
-                            $date->addHour($matches[2]);
-                        }
-                        
-                        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($matches, true));
-                    }
-                }
-            }
-        } catch (Zend_Date_Exception $zde) {
-            $date = new Zend_Date(0, Zend_Date::TIMESTAMP);
-        }
-        
-        return $date;
-    }
-    
-    public function getBodyPartIds(array $_structure)
-    {
-        $result = array();
-        
-        if ($_structure['type'] == 'text') {
-            $result = array_merge($result, $this->_parseText($_structure));
-        } elseif($_structure['type'] == 'multipart') {
-            $result = array_merge($result, $this->_parseMultipart($_structure));
-        }
-        
-        return $result;
-    }
-    
-    protected function _parseText(array $_structure)
-    {
-        $result = array();
-
-        if (isset($_structure['disposition']['type']) && 
-            ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT || ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $_structure['disposition'])))) {
-            return $result;
-        }
-        
-        if ($_structure['subType'] == 'plain') {
-            $result['text'] = !empty($_structure['partId']) ? $_structure['partId'] : 1;
-        } elseif($_structure['subType'] == 'html') {
-            $result['html'] = !empty($_structure['partId']) ? $_structure['partId'] : 1;
-        }
-        
-        return $result;
-    }
-    
-    protected function _parseMultipart(array $_structure)
-    {
-        $result = array();
-        
-        if ($_structure['subType'] == 'alternative' || $_structure['subType'] == 'mixed' || 
-            $_structure['subType'] == 'signed' || $_structure['subType'] == 'related') {
-            foreach($_structure['parts'] as $part) {
-                $result = array_merge($result, $this->getBodyPartIds($part));
-            }
-        } else {
-            // ignore other types for now
-            #var_dump($_structure);
-            #throw new Exception('unsupported multipart');    
-        }
-        
-        return $result;
-    }
-    
-    /**
-     * convert addresses into array with name/address
-     *
-     * @param string $_addresses
-     * @return array
-     */
-    protected function _convertAddresses($_addresses)
-    {
-        $result = array();
-        if (!empty($_addresses)) {
-            $addresses = Felamimail_Message::parseAdresslist($_addresses);
-            if (is_array($addresses)) {
-                foreach($addresses as $address) {
-                    $result[] = array('email' => $address['address'], 'name' => $address['name']);
-                }
-            }
-        }
-        return $result;
-    }
-    
-    /**
-     * check if message has \SEEN flag
-     * 
-     * @param Felamimail_Model_Message $_message
-     * @return boolean
-     * 
-     * @todo move to Felamimail_Model_Message
-     */
-    protected function _hasSeenFlag($_message)
-    {
-        return (is_array($_message->flags) && in_array(Zend_Mail_Storage::FLAG_SEEN, $_message->flags));
     }
 }

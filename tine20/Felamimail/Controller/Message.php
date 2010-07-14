@@ -756,7 +756,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $structure = array_key_exists('messageStructure', $structure) ? $structure['messageStructure'] : $structure;
         $bodyParts = $this->getBodyParts($structure, $_contentType);
         
-        if(empty($bodyParts)) {
+        if (empty($bodyParts)) {
             return '';
         }
         
@@ -880,6 +880,39 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * get message part structure
+     * 
+     * @param  array   $_messageStructure
+     * @param  string  $_partId            the part id to search for
+     * @return array
+     */
+    protected function _getPartStructure(array $_messageStructure, $_partId)
+    {
+        // maybe we want no part at all => just return the whole structure
+        if($_partId == null) {
+            return $_messageStructure;
+        }
+        
+        // maybe we want the first part => just return the whole structure
+        if($_messageStructure['partId'] == $_partId) {
+            return $_messageStructure;
+        }
+                
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveArrayIterator($_messageStructure),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+        
+        foreach ($iterator as $key => $value) {
+            if ($key == $_partId) {
+                return $value;
+            }
+        }
+        
+        throw new Felamimail_Exception("structure for partId $_partId not found");
+    }
+    
+    /**
      * get body parts
      * 
      * @param array $_structure
@@ -893,7 +926,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (array_key_exists('parts', $_structure)) {
             $bodyParts = $bodyParts + $this->_parseMultipart($_structure, $_preferedMimeType);
         } else {
-            $bodyParts = $bodyParts + $this->_parseSinglePart($_structure, $_preferedMimeType);
+            $bodyParts = $bodyParts + $this->_parseSinglePart($_structure);
         }
         
         return $bodyParts;
@@ -906,20 +939,18 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $_preferedMimeType
      * @return array
      */
-    protected function _parseSinglePart(array $_structure, $_preferedMimeType = Zend_Mime::TYPE_HTML)
+    protected function _parseSinglePart(array $_structure)
     {
         $result = array();
+        
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
 
         if ($_structure['type'] != 'text') {
             return $result;
         }
         
-        if (isset($_structure['disposition']['type']) && 
-            ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT ||
-             // treat as attachment if structure contains parameters 
-             ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $_structure['disposition']))
-            )
-           ) {
+        if ($this->_partIsAttachment($_structure)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Part is attachment: ' . $_structure['disposition']);
             return $result;
         }
 
@@ -928,6 +959,23 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $result[$partId] = $_structure;
 
         return $result;
+    }
+    
+    /**
+     * checks if part is attachment
+     * 
+     * @param array $_structure
+     * @return boolean
+     */
+    protected function _partIsAttachment(array $_structure)
+    {
+        return (
+            isset($_structure['disposition']['type']) && 
+                ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT ||
+                // treat as attachment if structure contains parameters 
+                ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $_structure['disposition'])
+            )
+        ));
     }
     
     /**
@@ -940,6 +988,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected function _parseMultipart(array $_structure, $_preferedMimeType = Zend_Mime::TYPE_HTML)
     {
         $result = array();
+        
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
         
         if ($_structure['subType'] == 'alternative') {
             $alternativeType = $_preferedMimeType == Zend_Mime::TYPE_HTML ? Zend_Mime::TYPE_TEXT : Zend_Mime::TYPE_HTML;
@@ -954,7 +1004,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $result[$foundParts[$alternativeType]]   = $_structure['parts'][$foundParts[$alternativeType]];
             }
         } else {
-            foreach($_structure['parts'] as $part) {
+            foreach ($_structure['parts'] as $part) {
                 $result = $result + $this->getBodyParts($part, $_preferedMimeType);
             }
         }
@@ -968,31 +1018,54 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param array $_structure
      * @return array
      */
-    protected function _getBodyPartIds(array $_structure)
+    public function getBodyPartIds(array $_structure)
     {
         $result = array();
         
         if ($_structure['type'] == 'text') {
-            $result = array_merge($result, $this->_parseText($_structure));
+            $result = array_merge($result, $this->_getTextPartId($_structure));
         } elseif($_structure['type'] == 'multipart') {
-            $result = array_merge($result, $this->_parseMultipart($_structure));
+            $result = array_merge($result, $this->_getMultipartIds($_structure));
+        }
+        
+        return $result;
+    }
+
+    /**
+     * get multipart ids
+     * 
+     * @param array $_structure
+     * @return array
+     */
+    protected function _getMultipartIds(array $_structure)
+    {
+        $result = array();
+        
+        if ($_structure['subType'] == 'alternative' || $_structure['subType'] == 'mixed' || 
+            $_structure['subType'] == 'signed' || $_structure['subType'] == 'related') {
+            foreach ($_structure['parts'] as $part) {
+                $result = array_merge($result, $this->getBodyPartIds($part));
+            }
+        } else {
+            // ignore other types for now
+            #var_dump($_structure);
+            #throw new Exception('unsupported multipart');    
         }
         
         return $result;
     }
     
     /**
-     * parse text
+     * get text part id
      * 
      * @param array $_structure
      * @return array
      */
-    protected function _parseText(array $_structure)
+    protected function _getTextPartId(array $_structure)
     {
         $result = array();
 
-        if (isset($_structure['disposition']['type']) && 
-            ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT || ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $_structure['disposition'])))) {
+        if ($this->_partIsAttachment($_structure)) {
             return $result;
         }
         
@@ -1048,38 +1121,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         return Felamimail_Controller_Folder::getInstance()->getMultiple(array_keys($_folderCounter));
-    }
-    
-    /**
-     * 
-     * @param  array   $_messageStructure
-     * @param  string  $_partId            the part id to search for
-     * @return array
-     */
-    protected function _getPartStructure(array $_messageStructure, $_partId)
-    {
-        // maybe we want no part at all => just return the whole structure
-        if($_partId == null) {
-            return $_messageStructure;
-        }
-        
-        // maybe we want the first part => just return the whole structure
-        if($_messageStructure['partId'] == $_partId) {
-            return $_messageStructure;
-        }
-                
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveArrayIterator($_messageStructure),
-            RecursiveIteratorIterator::SELF_FIRST
-        );
-        
-        foreach($iterator as $key => $value) {
-            if($key == $_partId) {
-                return $value;
-            }
-        }
-        
-        throw new Felamimail_Exception("structure for partId $_partId not found");
     }
     
     /**

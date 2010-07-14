@@ -151,7 +151,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // close session to allow other requests
         Zend_Session::writeClose(true);
         
-        $folder = Felamimail_Controller_Cache_Message::getInstance()->update($folderId, $time);
+        $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folderId, $time);
         
         return $this->_recordToJson($folder);
     }

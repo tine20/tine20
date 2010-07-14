@@ -9,6 +9,7 @@
  * @version     $Id$
  * 
  * @todo        make use of _messageTestHelper to kill code duplication
+ * @todo        add phpdoc
  */
 
 /**
@@ -158,14 +159,14 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $this->_testFolderName);
         
         // clear cache and empty folder
-        Felamimail_Controller_Cache_Message::getInstance()->clear($folder->getId());
+        $this->_cache->clear($folder->getId());
         Felamimail_Controller_Folder::getInstance()->emptyFolder($folder->getId());
         
         // append message
         $this->_appendMessage('text_plain.eml', $this->_folder);
         
         // search messages in test folder
-        Felamimail_Controller_Cache_Message::getInstance()->update($folder);
+        $this->_cache->updateCache($folder);
         $result = $this->_controller->search($this->_getFilter($folder->getId()));
         
         //print_r($result->toArray());
@@ -186,7 +187,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->_controller->delete($firstMessage->getId());
         
         // clear cache
-        Felamimail_Controller_Cache_Message::getInstance()->clear($folder->getId());
+        $this->_cache->clear($folder->getId());
     }
     
     public function testBodyStructureTextPlain()
@@ -437,7 +438,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                         'NIL',
                         '<20100630112010.06CD21C059@publicsvn.hsn.metaways.net>'
                     ),
-                    'messageStruture' => array(
+                    'messageStructure' => array(
                         'partId'  => 2,
                         'contentType' => 'text/plain',
                         'type'        => 'text',
@@ -607,9 +608,9 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         #var_dump($message->toArray());
-        $this->assertEquals('1', $message->text_partid);
-        $this->assertEquals('1', $message->has_attachment);
-        $this->assertEquals('2.1', $message->html_partid);
+        $this->assertEquals('1', $message->text_partid, 'no text part found');
+        $this->assertEquals('1', $message->has_attachment, 'no attachments found');
+        $this->assertEquals('2.1', $message->html_partid, 'no html part found');
         $this->assertEquals('38455', $message->size);
         $this->assertContains("Tine 2.0 bei Metaways", $message->subject);
         $this->assertContains('\Seen', $message->flags);
@@ -693,7 +694,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('19131', $message->size);
         $this->assertContains("Proposal: Zend_Grid", $message->subject);
         #$this->assertContains('\Seen', $message->flags);
-        $this->assertContains('Bento Vilas Boas wrote', $message->body);
+        $this->assertContains('Bento Vilas Boas wrote', $message->body ,'string not found in body: ' . $message->body);
         $this->assertEquals('smime.p7s', $message->attachments[0]["filename"]);
     }
     
@@ -789,6 +790,82 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($cachedMessage->subject . '.eml', $completeForwardedMessage->attachments[0]['filename']);
     }    
     
+    public function testGetBodyPartIdMultipartAlternative()
+    {
+        $this->_appendMessage('multipart_alternative.eml', $this->_folder);
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/alternative'
+        ));
+        
+        $message = $this->_imap->getSummary($result[0]);
+        
+        foreach($result as $messageUid) {
+            $this->_imap->removeMessage($messageUid);
+        }
+        
+        $partIds = $this->_controller->getBodyPartIds($message['structure']);
+
+        $this->assertEquals(array('html' => 2, 'text' => 1), $partIds, 'did not found all partIds');
+    }
+        
+    public function testGetBodyPartIdMultipartMixed()
+    {
+        $this->_appendMessage('multipart_mixed.eml', $this->_folder);
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/mixed'
+        ));
+        
+        $message = $this->_imap->getSummary($result[0]);
+        
+        foreach($result as $messageUid) {
+            $this->_imap->removeMessage($messageUid);
+        }
+        
+        $partIds = $this->_controller->getBodyPartIds($message['structure']);
+
+        $this->assertEquals(array('text' => 1), $partIds, 'did not found all partIds');
+    }
+    
+    public function testGetBodyPartIdMultipartSigned()
+    {
+        $this->_appendMessage('multipart_signed.eml', $this->_folder);
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/signed'
+        ));
+        
+        $message = $this->_imap->getSummary($result[0]);
+        
+        foreach($result as $messageUid) {
+            $this->_imap->removeMessage($messageUid);
+        }
+        
+        $partIds = $this->_controller->getBodyPartIds($message['structure']);
+
+        $this->assertEquals(array('text' => 1), $partIds, 'did not found all partIds');
+    }
+    
+    public function testGetBodyPartIdMultipartRelated()
+    {
+        $this->_appendMessage('multipart_related.eml', $this->_folder);
+        
+        $result = $this->_imap->search(array(
+            'HEADER X-Tine20TestMessage multipart/related'
+        ));
+        
+        $message = $this->_imap->getSummary($result[0]);
+        
+        foreach($result as $messageUid) {
+            $this->_imap->removeMessage($messageUid);
+        }
+        
+        $partIds = $this->_controller->getBodyPartIds($message['structure']);
+
+        $this->assertEquals(array('text' => 1, 'html' => '2.1'), $partIds, 'did not found all partIds');
+    }
+            
     /********************************* protected helper funcs *************************************/
     
     /**
