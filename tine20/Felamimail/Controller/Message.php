@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        reorder functions / think about public/protected
  * @todo        parse mail body and add <a> to telephone numbers?
  * @todo        check html purifier config (allow some tags/attributes?)
  */
@@ -422,6 +421,51 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * update folder counts and returns list of affected folders
+     * 
+     * @param array $_folderCounter (folderId => unreadcounter)
+     * @param string $_mode addFlags|clearFlags|delete|move
+     * @return Tinebase_Record_RecordSet of affected folders
+     * 
+     * @todo remove $_mode param & switch statement -> check folderCounter array for keys instead
+     */
+    protected function _updateFolderCounts($_folderCounter, $_mode)
+    {
+        foreach ($_folderCounter as $folderId => $counter) {
+            $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
+            switch ($_mode) {
+                case 'clearFlags':
+                    $errorCondition = ($folder->cache_unreadcount + $counter > $folder->cache_totalcount);
+                    $updatedCounters = array(
+                        'cache_unreadcount' => "+$counter",
+                    );
+                    break;
+                case 'addFlags':
+                case 'delete':
+                case 'move':
+                    $errorCondition = ($folder->cache_unreadcount < $counter['decrementUnreadCounter'] || $folder->cache_totalcount < $counter['decrementMessagesCounter']);
+                    $updatedCounters = array(
+                        'cache_totalcount'  => "-" . $counter['decrementMessagesCounter'],
+                        'cache_unreadcount' => "-" . $counter['decrementUnreadCounter']
+                    );
+                    break;
+            }
+            
+            if ($errorCondition) {
+                // something went wrong => recalculate counter
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
+                    ' folder counters dont match => refresh counters'
+                );
+                $updatedCounters = Felamimail_Controller_Cache_Folder::getInstance()->getCacheFolderCounter($folder);
+            }
+            
+            Felamimail_Controller_Folder::getInstance()->updateFolderCounter($folder, $updatedCounters);
+        }
+        
+        return Felamimail_Controller_Folder::getInstance()->getMultiple(array_keys($_folderCounter));
+    }
+    
+    /**
      * append a new message to given folder
      *
      * @param  string|Felamimail_Model_Folder  $_folder   id of target folder
@@ -493,6 +537,105 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         return $_message;
+    }
+    
+    /**
+     * add email notes to contacts with email addresses in $_recipients
+     *
+     * @param array $_recipients
+     * @param string $_subject
+     * 
+     * @todo add email home (when we have OR filters)
+     * @todo add link to message in sent folder?
+     */
+    protected function _addEmailNote($_recipients, $_subject, $_body)
+    {
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recipients, TRUE));
+        
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'email', 'operator' => 'in', 'value' => $_recipients)
+            // OR: array('field' => 'email_home', 'operator' => 'in', 'value' => $_recipients)
+        ));
+        $contacts = Addressbook_Controller_Contact::getInstance()->search($filter);
+        
+        if (count($contacts)) {
+        
+            $translate = Tinebase_Translation::getTranslation($this->_applicationName);
+            
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding email notes to ' . count($contacts) . ' contacts.');
+            
+            $noteText = $translate->_('Subject') . ':' . $_subject . "\n\n" . $translate->_('Body') . ':' . substr($_body, 0, 4096);
+            
+            foreach ($contacts as $contact) {
+                $note = new Tinebase_Model_Note(array(
+                    'note_type_id'           => Tinebase_Notes::getInstance()->getNoteTypeByName('email')->getId(),
+                    'note'                   => $noteText,
+                    'record_id'              => $contact->getId(),
+                    'record_model'           => 'Addressbook_Model_Contact',
+                ));
+                
+                Tinebase_Notes::getInstance()->addNote($note);
+            }
+        } else {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no contacts to add notes to.');
+        }
+    }
+    
+    
+    /**
+     * append mail to send folder
+     * 
+     * @param Felamimail_Transport $_transport
+     * @param Felamimail_Model_Account $_account
+     * @return void
+     */
+    protected function _saveInSent(Felamimail_Transport $_transport, Felamimail_Model_Account $_account)
+    {
+        try {
+            $mailAsString = $_transport->getHeaders() . Zend_Mime::LINEEND . $_transport->getBody();
+            
+            if (($_account->sent_folder && ! empty($_account->sent_folder))) {
+                $sentFolder = $_account->sent_folder;
+                $this->_createFolderIfNotExists($_account, $sentFolder);
+            } else {
+                $sentFolder = 'Sent';
+            }
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to save message in sent folder ...');
+            Felamimail_Backend_ImapFactory::factory($_account)->appendMessage($mailAsString, $sentFolder);
+            
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' Saved sent message in "' . $sentFolder . '".'
+            );
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                . ' Could not save sent message in "' . $sentFolder . '".'
+                . ' Please check if a folder with this name exists.'
+                . '(' . $zmpe->getMessage() . ')'
+            );
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                . ' Could not save sent message in "' . $sentFolder . '".'
+                . ' Please check if a folder with this name exists.'
+                . '(' . $zmse->getMessage() . ')'
+            );
+        }
+    }   
+    
+    /**
+     * insert folder in imap if not exist
+     *
+     * @param Felamimail_Model_Account $_account
+     * @return boolean
+     * 
+     * @todo add test for this
+     */
+    protected function _createFolderIfNotExists(Felamimail_Model_Account $_account, $folderName){
+        $imap = Felamimail_Backend_ImapFactory::factory($_account);
+        if ($imap->getFolderStatus($folderName) === false){
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no Sent Folder, trying to add it.');
+            $Felamimail_Controller_Folder = Felamimail_Controller_Folder::getInstance()->create($_account->id, $folderName);
+        }
     }
     
     /**
@@ -626,6 +769,66 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * add attachments to mail
+     *
+     * @param Tinebase_Mail $_mail
+     * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Message $_originalMessage
+     * @throws Felamimail_Exception if max attachment size exceeded or no originalMessage available for forward
+     * 
+     * @todo use getMessagePart() for attachments too?
+     */
+    protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, $_originalMessage = NULL)
+    {
+        $maxSize = (self::MAX_ATTACHMENT_SIZE == 0) ? convertToBytes(ini_get('upload_max_filesize')) : self::MAX_ATTACHMENT_SIZE;
+        
+        if (isset($_message->attachments)) {
+            $size = 0;
+            foreach ($_message->attachments as $attachment) {
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($attachment, TRUE));
+                
+                if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
+                    
+                    if ($_originalMessage === NULL) {
+                        throw new Felamimail_Exception('No original message available for forward!');
+                    }
+                    
+                    $part = $this->getMessagePart($_originalMessage);
+                    $part->decodeContent();
+                    
+                    if (! array_key_exists('size', $attachment) || empty($attachment['size']) ) {
+                        $attachment['size'] = $_originalMessage->size;
+                    }
+                    $attachment['name'] .= '.eml';
+                    
+                } else {
+                    if (! array_key_exists('path', $attachment)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find attachment.');
+                        continue;
+                    }
+                    
+                    // get contents from uploaded files
+                    $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
+                    $part->encoding = Zend_Mime::ENCODING_BASE64;
+                }
+                
+                $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
+                $part->filename = $attachment['name'];
+                $part->type = $attachment['type'] . '; name="' . $attachment['name'] . '"';
+                
+                // check size
+                $size += $attachment['size'];
+                if ($size > $maxSize) {
+                    throw new Felamimail_Exception('Allowed attachment size exceeded! Tried to attach ' . $size . ' bytes.');
+                }
+                
+                $_mail->addAttachment($part);
+            }
+        }
+    }
+    
+    /**
      * get message part
      *
      * @param string $_id
@@ -732,6 +935,73 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * convert charset
+     *
+     * @param  Zend_Mime_Part  $_part
+     * @param  array           $_structure
+     * @param  string          $_contentType
+     */
+    protected function _appendCharsetFilter(Zend_Mime_Part $_part, $_structure)
+    {
+        $charset = isset($_structure['parameters']['charset']) ? $_structure['parameters']['charset'] : 'iso-8859-15';
+        
+        if ($charset == 'utf8') {
+            $charset = 'utf-8';
+        }
+        
+        // the stream filter does not like charsets with a dot in its name
+        // stream_filter_append(): unable to create or locate filter "convert.iconv.ansi_x3.4-1968/utf-8//IGNORE"
+        if (strpos($charset, '.') !== false) {
+            $charset = 'iso-8859-15';
+        }
+        
+        // check if charset is supported by iconv
+        if (iconv($charset, 'utf-8', '') === false) {
+            $charset = 'iso-8859-15';
+        }
+        
+        $_part->appendDecodeFilter("convert.iconv.$charset/utf-8//IGNORE");
+    }
+    
+    /**
+     * use html purifier to remove 'bad' tags/attributes from html body
+     *
+     * @param string $_content
+     * @return string
+     */
+    protected function _purifyBodyContent($_content)
+    {
+        $purifierFilename = 'HTMLPurifier' . DIRECTORY_SEPARATOR . 'HTMLPurifier.auto.php'; 
+        if (! file_exists(dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . $purifierFilename) ) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' HTML purifier not found. Mail body could not be purified. Proceed at your own risk!');
+            return $_content;
+        }
+        
+        $config = Tinebase_Core::getConfig();
+        $path = ($config->caching && $config->caching->active && $config->caching->path) 
+            ? $config->caching->path : Tinebase_Core::getTempDir();
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Purifying html body. (cache path: ' . $path .')');
+        
+        require_once $purifierFilename;
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('HTML.DefinitionID', 'purify message body contents'); 
+        $config->set('HTML.DefinitionRev', 1);
+        $config->set('Cache.SerializerPath', $path);
+        $config->set('HTML.ForbiddenElements', array('img'));
+        
+        // add target="_blank" to anchors
+        $def = $config->getHTMLDefinition(true);
+        $a = $def->addBlankElement('a');
+        $a->attr_transform_post[] = new Felamimail_HTMLPurifier_AttrTransform_AValidator();
+        
+        $purifier = new HTMLPurifier($config);
+        $content = $purifier->purify($_content);
+        
+        return $content;
+    }
+    
+    /**
      * get message headers
      * 
      * @param string|Felamimail_Model_Message $_messageId
@@ -766,6 +1036,38 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $cache->save($headers, $cacheId, array('getMessageHeaders'));
         
         return $headers;
+    }
+    
+    /**
+     * get imap backend and folder (and select folder)
+     *
+     * @param string                    $_folderId
+     * @param Felamimail_Backend_Folder &$_folder
+     * @param boolean                   $_select
+     * @param Felamimail_Backend_ImapProxy   $_imapBackend
+     * @throws Felamimail_Exception_IMAPServiceUnavailable
+     * @return Felamimail_Backend_ImapProxy
+     * 
+     * @todo refactor exception handling
+     */
+    protected function _getBackendAndSelectFolder($_folderId = NULL, &$_folder = NULL, $_select = TRUE, Felamimail_Backend_ImapProxy $_imapBackend = NULL)
+    {
+        if ($_folder === NULL || empty($_folder)) {
+            $folderBackend  = new Felamimail_Backend_Folder();
+            $_folder = $folderBackend->get($_folderId);
+        }
+        
+        try {
+            $imapBackend = ($_imapBackend === NULL) ? Felamimail_Backend_ImapFactory::factory($_folder->account_id) : $_imapBackend;
+            if ($_select && $imapBackend->getCurrentFolder() != $_folder->globalname) {
+                $backendFolderValues = $imapBackend->selectFolder($_folder->globalname);
+            }
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            // no imap connection
+            throw new Felamimail_Exception_IMAPServiceUnavailable();
+        }
+        
+        return $imapBackend;
     }
     
     /**
@@ -819,328 +1121,4 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         return $attachments;
     }
-    
-    /**
-     * update folder counts and returns list of affected folders
-     * 
-     * @param array $_folderCounter (folderId => unreadcounter)
-     * @param string $_mode addFlags|clearFlags|delete|move
-     * @return Tinebase_Record_RecordSet of affected folders
-     * 
-     * @todo remove $_mode param & switch statement -> check folderCounter array for keys instead
-     */
-    protected function _updateFolderCounts($_folderCounter, $_mode)
-    {
-        foreach ($_folderCounter as $folderId => $counter) {
-            $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
-            switch ($_mode) {
-                case 'clearFlags':
-                    $errorCondition = ($folder->cache_unreadcount + $counter > $folder->cache_totalcount);
-                    $updatedCounters = array(
-                        'cache_unreadcount' => "+$counter",
-                    );
-                    break;
-                case 'addFlags':
-                case 'delete':
-                case 'move':
-                    $errorCondition = ($folder->cache_unreadcount < $counter['decrementUnreadCounter'] || $folder->cache_totalcount < $counter['decrementMessagesCounter']);
-                    $updatedCounters = array(
-                        'cache_totalcount'  => "-" . $counter['decrementMessagesCounter'],
-                        'cache_unreadcount' => "-" . $counter['decrementUnreadCounter']
-                    );
-                    break;
-            }
-            
-            if ($errorCondition) {
-                // something went wrong => recalculate counter
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
-                    ' folder counters dont match => refresh counters'
-                );
-                $updatedCounters = Felamimail_Controller_Cache_Folder::getInstance()->getCacheFolderCounter($folder);
-            }
-            
-            Felamimail_Controller_Folder::getInstance()->updateFolderCounter($folder, $updatedCounters);
-        }
-        
-        return Felamimail_Controller_Folder::getInstance()->getMultiple(array_keys($_folderCounter));
-    }
-    
-    /**
-     * get imap backend and folder (and select folder)
-     *
-     * @param string                    $_folderId
-     * @param Felamimail_Backend_Folder &$_folder
-     * @param boolean                   $_select
-     * @param Felamimail_Backend_ImapProxy   $_imapBackend
-     * @throws Felamimail_Exception_IMAPServiceUnavailable
-     * @return Felamimail_Backend_ImapProxy
-     * 
-     * @todo refactor exception handling
-     */
-    protected function _getBackendAndSelectFolder($_folderId = NULL, &$_folder = NULL, $_select = TRUE, Felamimail_Backend_ImapProxy $_imapBackend = NULL)
-    {
-        if ($_folder === NULL || empty($_folder)) {
-            $folderBackend  = new Felamimail_Backend_Folder();
-            $_folder = $folderBackend->get($_folderId);
-        }
-        
-        try {
-            $imapBackend = ($_imapBackend === NULL) ? Felamimail_Backend_ImapFactory::factory($_folder->account_id) : $_imapBackend;
-            if ($_select && $imapBackend->getCurrentFolder() != $_folder->globalname) {
-                $backendFolderValues = $imapBackend->selectFolder($_folder->globalname);
-            }
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            // no imap connection
-            throw new Felamimail_Exception_IMAPServiceUnavailable();
-        }
-        
-        return $imapBackend;
-    }
-    
-    /**
-     * extract values from folder filter
-     *
-     * @param Felamimail_Model_MessageFilter $_filter
-     * @return array (assoc) with filter values
-     */
-    protected function _extractFilter(Felamimail_Model_MessageFilter $_filter)
-    {
-        $result = array('folder_id' => '', 'flags' => '');
-        
-        $filters = $_filter->toArray();
-        foreach($filters as $filter) {
-            if (in_array($filter['field'], array_keys($result)) || ! empty($filter['value'])) {
-                $result[$filter['field']] = $filter['value'];
-            }
-        }
-        
-        return $result;
-    }
-
-    /**
-     * use html purifier to remove 'bad' tags/attributes from html body
-     *
-     * @param string $_content
-     * @return string
-     */
-    protected function _purifyBodyContent($_content)
-    {
-        $purifierFilename = 'HTMLPurifier' . DIRECTORY_SEPARATOR . 'HTMLPurifier.auto.php'; 
-        if (! file_exists(dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . $purifierFilename) ) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' HTML purifier not found. Mail body could not be purified. Proceed at your own risk!');
-            return $_content;
-        }
-        
-        $config = Tinebase_Core::getConfig();
-        $path = ($config->caching && $config->caching->active && $config->caching->path) 
-            ? $config->caching->path : Tinebase_Core::getTempDir();
-
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Purifying html body. (cache path: ' . $path .')');
-        
-        require_once $purifierFilename;
-        $config = HTMLPurifier_Config::createDefault();
-        $config->set('HTML.DefinitionID', 'purify message body contents'); 
-        $config->set('HTML.DefinitionRev', 1);
-        $config->set('Cache.SerializerPath', $path);
-        $config->set('HTML.ForbiddenElements', array('img'));
-        
-        // add target="_blank" to anchors
-        $def = $config->getHTMLDefinition(true);
-        $a = $def->addBlankElement('a');
-        $a->attr_transform_post[] = new Felamimail_HTMLPurifier_AttrTransform_AValidator();
-        
-        $purifier = new HTMLPurifier($config);
-        $content = $purifier->purify($_content);
-        
-        return $content;
-    }
-    
-    /**
-     * add attachments to mail
-     *
-     * @param Tinebase_Mail $_mail
-     * @param Felamimail_Model_Message $_message
-     * @param Felamimail_Model_Message $_originalMessage
-     * @throws Felamimail_Exception if max attachment size exceeded or no originalMessage available for forward
-     * 
-     * @todo use getMessagePart() for attachments too?
-     */
-    protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, $_originalMessage = NULL)
-    {
-        $maxSize = (self::MAX_ATTACHMENT_SIZE == 0) ? convertToBytes(ini_get('upload_max_filesize')) : self::MAX_ATTACHMENT_SIZE;
-        
-        if (isset($_message->attachments)) {
-            $size = 0;
-            foreach ($_message->attachments as $attachment) {
-                
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($attachment, TRUE));
-                
-                if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
-                    
-                    if ($_originalMessage === NULL) {
-                        throw new Felamimail_Exception('No original message available for forward!');
-                    }
-                    
-                    $part = $this->getMessagePart($_originalMessage);
-                    $part->decodeContent();
-                    
-                    if (! array_key_exists('size', $attachment) || empty($attachment['size']) ) {
-                        $attachment['size'] = $_originalMessage->size;
-                    }
-                    $attachment['name'] .= '.eml';
-                    
-                } else {
-                    if (! array_key_exists('path', $attachment)) {
-                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find attachment.');
-                        continue;
-                    }
-                    
-                    // get contents from uploaded files
-                    $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
-                    $part->encoding = Zend_Mime::ENCODING_BASE64;
-                }
-                
-                $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
-                $part->filename = $attachment['name'];
-                $part->type = $attachment['type'] . '; name="' . $attachment['name'] . '"';
-                
-                // check size
-                $size += $attachment['size'];
-                if ($size > $maxSize) {
-                    throw new Felamimail_Exception('Allowed attachment size exceeded! Tried to attach ' . $size . ' bytes.');
-                }
-                
-                $_mail->addAttachment($part);
-            }
-        }
-    }
-    
-    /**
-     * convert charset
-     *
-     * @param  Zend_Mime_Part  $_part
-     * @param  array           $_structure
-     * @param  string          $_contentType
-     * 
-     * @todo move this to Felamimail_Model_Message
-     */
-    protected function _appendCharsetFilter(Zend_Mime_Part $_part, $_structure)
-    {
-        $charset = isset($_structure['parameters']['charset']) ? $_structure['parameters']['charset'] : 'iso-8859-15';
-        
-        if ($charset == 'utf8') {
-            $charset = 'utf-8';
-        }
-        
-        // the stream filter does not like charsets with a dot in its name
-        // stream_filter_append(): unable to create or locate filter "convert.iconv.ansi_x3.4-1968/utf-8//IGNORE"
-        if (strpos($charset, '.') !== false) {
-            $charset = 'iso-8859-15';
-        }
-        
-        // check if charset is supported by iconv
-        if (iconv($charset, 'utf-8', '') === false) {
-            $charset = 'iso-8859-15';
-        }
-        
-        $_part->appendDecodeFilter("convert.iconv.$charset/utf-8//IGNORE");
-    }
-    
-    /**
-     * add email notes to contacts with email addresses in $_recipients
-     *
-     * @param array $_recipients
-     * @param string $_subject
-     * 
-     * @todo add email home (when we have OR filters)
-     * @todo add link to message in sent folder?
-     */
-    protected function _addEmailNote($_recipients, $_subject, $_body)
-    {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recipients, TRUE));
-        
-        $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'email', 'operator' => 'in', 'value' => $_recipients)
-            // OR: array('field' => 'email_home', 'operator' => 'in', 'value' => $_recipients)
-        ));
-        $contacts = Addressbook_Controller_Contact::getInstance()->search($filter);
-        
-        if (count($contacts)) {
-        
-            $translate = Tinebase_Translation::getTranslation($this->_applicationName);
-            
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding email notes to ' . count($contacts) . ' contacts.');
-            
-            $noteText = $translate->_('Subject') . ':' . $_subject . "\n\n" . $translate->_('Body') . ':' . substr($_body, 0, 4096);
-            
-            foreach ($contacts as $contact) {
-                $note = new Tinebase_Model_Note(array(
-                    'note_type_id'           => Tinebase_Notes::getInstance()->getNoteTypeByName('email')->getId(),
-                    'note'                   => $noteText,
-                    'record_id'              => $contact->getId(),
-                    'record_model'           => 'Addressbook_Model_Contact',
-                ));
-                
-                Tinebase_Notes::getInstance()->addNote($note);
-            }
-        } else {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no contacts to add notes to.');
-        }
-    }
-    
-    /**
-     * append mail to send folder
-     * 
-     * @param Felamimail_Transport $_transport
-     * @param Felamimail_Model_Account $_account
-     * @return void
-     */
-    protected function _saveInSent(Felamimail_Transport $_transport, Felamimail_Model_Account $_account)
-    {
-        try {
-            $mailAsString = $_transport->getHeaders() . Zend_Mime::LINEEND . $_transport->getBody();
-            
-            if (($_account->sent_folder && ! empty($_account->sent_folder))) {
-                $sentFolder = $_account->sent_folder;
-                $this->_createFolderIfNotExists($_account, $sentFolder);
-            } else {
-                $sentFolder = 'Sent';
-            }
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to save message in sent folder ...');
-            Felamimail_Backend_ImapFactory::factory($_account)->appendMessage($mailAsString, $sentFolder);
-            
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . ' Saved sent message in "' . $sentFolder . '".'
-            );
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                . ' Could not save sent message in "' . $sentFolder . '".'
-                . ' Please check if a folder with this name exists.'
-                . '(' . $zmpe->getMessage() . ')'
-            );
-        } catch (Zend_Mail_Storage_Exception $zmse) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                . ' Could not save sent message in "' . $sentFolder . '".'
-                . ' Please check if a folder with this name exists.'
-                . '(' . $zmse->getMessage() . ')'
-            );
-        }
-    }	
-    
-	/**
-	 * insert folder in imap if not exist
-	 *
-	 * @param Felamimail_Model_Account $_account
-	 * @return boolean
-	 * 
-	 * @todo add test for this
-	 */
-	protected function _createFolderIfNotExists(Felamimail_Model_Account $_account, $folderName){
-		$imap = Felamimail_Backend_ImapFactory::factory($_account);
-		if($imap->getFolderStatus($folderName) === false){
-			Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no Sent Folder, trying to add it.');
-			$Felamimail_Controller_Folder = Felamimail_Controller_Folder::getInstance()->create($_account->id, $folderName);
-		}
-	}
 }
