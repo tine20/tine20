@@ -191,7 +191,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
             $this->parseHeaders($message, $headers);
             
-            $structure = array_key_exists('messageStruture', $structure) ? $structure['messageStruture'] : $structure;
+            $structure = array_key_exists('messageStructure', $structure) ? $structure['messageStructure'] : $structure;
             $this->parseStructure($message, $structure);
         }
         
@@ -841,7 +841,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $structure = $this->_getPartStructure($message->structure, $_partId);
-        $structure = array_key_exists('messageStruture', $structure) ? $structure['messageStruture'] : $structure;
+        $structure = array_key_exists('messageStructure', $structure) ? $structure['messageStructure'] : $structure;
         $bodyParts = $this->getBodyParts($structure, $_contentType);
         
         if(empty($bodyParts)) {
@@ -930,7 +930,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $structure = $this->_getPartStructure($message->structure, $_partId);
-        $structure = array_key_exists('messageStruture', $structure) ? $structure['messageStruture'] : $structure;
+        $structure = array_key_exists('messageStructure', $structure) ? $structure['messageStructure'] : $structure;
 
         $attachments = array();
         
