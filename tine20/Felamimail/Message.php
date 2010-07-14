@@ -111,6 +111,12 @@ class Felamimail_Message extends Zend_Mail_Message
         return $string;
     }
     
+    /**
+     * create Felamimail message from Zend_Mail_Message
+     * 
+     * @param Zend_Mail_Message $_zendMailMessage
+     * @return Felamimail_Model_Message
+     */
     public static function createMessageFromZendMailMessage(Zend_Mail_Message $_zendMailMessage)
     {
         $message = new Felamimail_Model_Message();
@@ -166,26 +172,4 @@ class Felamimail_Message extends Zend_Mail_Message
         
         return $message;
     }
-    
-//    /**
-//     * our own decode (and utf-8 encode) function
-//     *
-//     * @param string $_charset
-//     * @param string $_content
-//     * @return string
-//     * 
-//     * @todo catch iconv errors and try different charsets
-//     */
-//    protected function _decode($_charset, $_content)
-//    {
-//        if($_charset == 'utf8') {
-//            $_charset = 'utf-8';
-//        }
-//        
-//        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " message body: iconv() from " . $_charset . " to utf-8.");
-//        
-//        $result = iconv($_charset, 'utf-8//IGNORE', $_content);
-//        
-//        return $result;
-//    }
 }
