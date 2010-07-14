@@ -185,6 +185,59 @@ class Felamimail_Message extends Zend_Mail_Message
     }
     
     /**
+     * convert between content types (text/plain => text/html for example)
+     * 
+     * @param string $_from
+     * @param string $_to
+     * @param string $_text
+     * @return string
+     */
+    public static function convertContentType($_from, $_to, $_text)
+    {
+        // nothing todo
+        if($_from == $_to) {
+            return $_text;
+        }
+        
+        if($_from == Zend_Mime::TYPE_TEXT && $_to == Zend_Mime::TYPE_HTML) {
+            $text = htmlspecialchars($_text, ENT_COMPAT, 'utf-8');
+            $text = self::addHtmlMarkup($text);
+        } else {
+            $text = preg_replace('/\<br *\/*\>/', "\r\n", $_text);
+            $text = strip_tags($text);
+        }
+        
+        return $text;
+    }
+    
+    /**
+     * add html markup to message body
+     *
+     * @param string $_body
+     * @return string
+     */
+    public static function addHtmlMarkup($_body)
+    {
+        $result = '<html>'
+            . '<head>'
+            . '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
+            . '<title></title>'
+            . '<style type="text/css">'
+                . '.felamimail-body-blockquote {'
+                    . 'margin: 5px 10px 0 3px;'
+                    . 'padding-left: 10px;'
+                    . 'border-left: 2px solid #000088;'
+                . '} '
+            . '</style>'
+            . '</head>'
+            . '<body>'
+            . nl2br($_body)
+            . '</body></html>';
+            
+        return $result;
+    }
+    
+    /**
      * create Felamimail message from Zend_Mail_Message
      * 
      * @param Zend_Mail_Message $_zendMailMessage

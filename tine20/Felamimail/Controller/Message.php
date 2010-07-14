@@ -615,7 +615,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if ($_message->content_type == Felamimail_Model_Message::CONTENT_TYPE_HTML) {
             $mailBodyText = $this->_removeHtml($_message->body);
             $mail->setBodyText($mailBodyText);
-            $mail->setBodyHtml($this->_addHtmlMarkup($_message->body));
+            $mail->setBodyHtml(Felamimail_Message::addHtmlMarkup($_message->body));
         } else {
             $mail->setBodyText($_message->body);
         }
@@ -768,7 +768,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $body = $this->_purifyBodyContent($body);
             }
             
-            $body = $this->_convertContentType($partStructure['contentType'], $_contentType, $body);
+            $body = Felamimail_Message::convertContentType($partStructure['contentType'], $_contentType, $body);
             
             if($bodyPart->type == Zend_Mime::TYPE_TEXT && $_contentType == Zend_Mime::TYPE_HTML) {
                 $body = $this->_replaceUriAndSpaces($body);
@@ -1187,34 +1187,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * add html markup to message body
-     *
-     * @param string $_body
-     * @return string
-     */
-    protected function _addHtmlMarkup($_body)
-    {
-        $result = '<html>'
-            . '<head>'
-            . '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
-            . '<title></title>'
-            . '<style type="text/css">'
-                . '.felamimail-body-blockquote {'
-                    . 'margin: 5px 10px 0 3px;'
-                    . 'padding-left: 10px;'
-                    . 'border-left: 2px solid #000088;'
-                . '} '
-            . '</style>'
-            . '</head>'
-            . '<body>'
-            . nl2br($_body)
-            . '</body></html>';
-            
-        return $result;
-    }
-    
-    
-    /**
      * use html purifier to remove 'bad' tags/attributes from html body
      *
      * @param string $_content
@@ -1317,6 +1289,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param string $_content
      * @return string
+     * 
+     * @todo move to Felamimail_Message
      */
     protected function _replaceUriAndSpaces($_content) 
     {
@@ -1337,6 +1311,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @return string
      * 
      * @todo try to skip email address that are already embedded in an url (such as unsubscription links with ?email=blabla@aha.com) 
+     * @todo move to Felamimail_Message
      */
     protected function _replaceEmails($_content) 
     {
@@ -1355,6 +1330,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param string $_content
      * @return string
+     * 
+     * @todo move to Felamimail_Message
      */
     protected function _removeHtml($_content)
     {
@@ -1393,34 +1370,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $_part->appendDecodeFilter("convert.iconv.$charset/utf-8//IGNORE");
-    }
-    
-    /**
-     * convert between content types (text/plain => text/html for example)
-     * 
-     * @param string $_from
-     * @param string $_to
-     * @param string $_text
-     * @return string
-     * 
-     * @todo move this to Felamimail_Message
-     */
-    protected function _convertContentType($_from, $_to, $_text)
-    {
-        // nothing todo
-        if($_from == $_to) {
-            return $_text;
-        }
-        
-        if($_from == Zend_Mime::TYPE_TEXT && $_to == Zend_Mime::TYPE_HTML) {
-            $text = htmlspecialchars($_text, ENT_COMPAT, 'utf-8');
-            $text = $this->_addHtmlMarkup($text);
-        } else {
-            $text = preg_replace('/\<br *\/*\>/', "\r\n", $_text);
-            $text = strip_tags($text);
-        }
-        
-        return $text;
     }
     
     /**
@@ -1467,6 +1416,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     
     /**
      * append mail to send folder
+     * 
      * @param Felamimail_Transport $_transport
      * @param Felamimail_Model_Account $_account
      * @return void
