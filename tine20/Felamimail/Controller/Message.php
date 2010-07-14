@@ -127,16 +127,17 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $_message->subject = (isset($_headers['subject'])) ? Felamimail_Message::convertText($_headers['subject']) : null;
         $_message->from    = (isset($_headers['from']))    ? Felamimail_Message::convertText($_headers['from'], TRUE, 256) : null;
         
+        // @todo generalize this (it is duplicated in cache controller)
         if (array_key_exists('date', $_headers)) {
-            $_message->sent = $this->_convertDate($_headers['date']);
+            $_message->sent = Felamimail_Message::convertDate($_headers['date']);
         } elseif (array_key_exists('resent-date', $_headers)) {
-            $_message->sent = $this->_convertDate($_headers['resent-date']);
+            $_message->sent = Felamimail_Message::convertDate($_headers['resent-date']);
         }
         
         foreach (array('to', 'cc', 'bcc') as $field) {
             if (isset($_headers[$field])) {
                 // if sender set the headers twice we only use the first
-                $_message->$field = $this->_convertAddresses($_headers[$field]);
+                $_message->$field = Felamimail_Message::convertAddresses($_headers[$field]);
             }
         }
     }
@@ -1519,83 +1520,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 		}
 	}
 	
-    /**
-     * convert date from sent/received
-     *
-     * @param string $_dateString
-     * @param string $_format default: 'Thu, 21 Dec 2000 16:01:07 +0200' (Zend_Date::RFC_2822)
-     * @return Zend_Date
-     * 
-     * @todo move this to Felamimail_Message
-     */
-    protected function _convertDate($_dateString, $_format = Zend_Date::RFC_2822)
-    {
-        try {
-            if ($_format == Zend_Date::RFC_2822) {
-    
-                // strip of timezone information for example: (CEST)
-                $dateString = preg_replace('/( [+-]{1}\d{4}) \(.*\)$/', '${1}', $_dateString);
-                
-                // append dummy weekday if missing
-                if(preg_match('/^(\d{1,2})\s(\w{3})\s(\d{4})\s(\d{2}):(\d{2}):{0,1}(\d{0,2})\s([+-]{1}\d{4})$/', $dateString)) {
-                    $dateString = 'xxx, ' . $dateString;
-                }
-                
-                try {
-                    // Fri,  6 Mar 2009 20:00:36 +0100
-                    $date = new Zend_Date($dateString, Zend_Date::RFC_2822, 'en_US');
-                } catch (Zend_Date_Exception $e) {
-                    // Fri,  6 Mar 2009 20:00:36 CET
-                    $date = new Zend_Date($dateString, Felamimail_Model_Message::DATE_FORMAT, 'en_US');
-                }
-    
-            } else {
-                
-                $date = new Zend_Date($_dateString, $_format, 'en_US');
-                
-                if ($_format == Felamimail_Model_Message::DATE_FORMAT_RECEIVED) {
-                    
-                    if (preg_match('/ ([+-]{1})(\d{2})\d{2}$/', $_dateString, $matches)) {
-                        // add / sub from zend date ?
-                        if ($matches[1] == '+') {
-                            $date->subHour($matches[2]);
-                        } else {
-                            $date->addHour($matches[2]);
-                        }
-                        
-                        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($matches, true));
-                    }
-                }
-            }
-        } catch (Zend_Date_Exception $zde) {
-            $date = new Zend_Date(0, Zend_Date::TIMESTAMP);
-        }
-        
-        return $date;
-    }
-    
-    /**
-     * convert addresses into array with name/address
-     *
-     * @param string $_addresses
-     * @return array
-     * 
-     * @todo move this to Felamimai_Message
-     */
-    protected function _convertAddresses($_addresses)
-    {
-        $result = array();
-        if (!empty($_addresses)) {
-            $addresses = Felamimail_Message::parseAdresslist($_addresses);
-            if (is_array($addresses)) {
-                foreach($addresses as $address) {
-                    $result[] = array('email' => $address['address'], 'name' => $address['name']);
-                }
-            }
-        }
-        return $result;
-    }
-    
     /**
      * check if message has \SEEN flag
      * 

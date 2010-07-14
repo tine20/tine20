@@ -694,7 +694,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             'messageuid'    => $_message['uid'],
             'folder_id'     => $_folder->getId(),
             'timestamp'     => Zend_Date::now(),
-            'received'      => $this->_convertDate($_message['received'], Felamimail_Model_Message::DATE_FORMAT_RECEIVED),
+            'received'      => Felamimail_Message::convertDate($_message['received'], Felamimail_Model_Message::DATE_FORMAT_RECEIVED),
             'size'          => $_message['size'],
             'flags'         => $_message['flags'],
             'structure'     => $_message['structure'],
@@ -704,15 +704,15 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         );
         
         if (array_key_exists('date', $_message['header'])) {
-            $messageData['sent'] = $this->_convertDate($_message['header']['date']);
+            $messageData['sent'] = Felamimail_Message::convertDate($_message['header']['date']);
         } elseif (array_key_exists('resent-date', $_message['header'])) {
-            $messageData['sent'] = $this->_convertDate($_message['header']['resent-date']);
+            $messageData['sent'] = Felamimail_Message::convertDate($_message['header']['resent-date']);
         }
         
         foreach (array('to', 'cc', 'bcc') as $field) {
             if (isset($_message['header'][$field])) {
                 // if sender set the headers twice we only use the first
-                $messageData[$field] = $this->_convertAddresses($_message['header'][$field]);
+                $messageData[$field] = Felamimail_Message::convertAddresses($_message['header'][$field]);
             }
         }
         
