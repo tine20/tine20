@@ -112,6 +112,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Message $_message
      * @param array $_headers
      * @return void
+     * 
+     * @todo move this to Felamimail_Model_Message
      */
     public function parseHeaders(Felamimail_Model_Message $_message, array $_headers)
     {
@@ -121,7 +123,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $_headers[$field] = $_headers[$field][0];
             }
         }
-        
         
         $_message->subject = (isset($_headers['subject'])) ? Felamimail_Message::convertText($_headers['subject']) : null;
         $_message->from    = (isset($_headers['from']))    ? Felamimail_Message::convertText($_headers['from'], TRUE, 256) : null;
@@ -138,8 +139,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $_message->$field = $this->_convertAddresses($_headers[$field]);
             }
         }
-        
-        #var_dump($_message->toArray());
     }
     
     /**
@@ -148,6 +147,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Message $_message
      * @param array $_structure
      * @return void
+     * 
+     * @todo move this to Felamimail_Model_Message
      */
     public function parseStructure(Felamimail_Model_Message $_message, array $_structure)
     {
@@ -552,7 +553,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param  bool       $_saveInSent
      * @return Zend_Mail
      * 
-     * @todo add email note again?
+     * @todo remove code duplication by generalizing the send functions 
      */
     public function sendZendMail($_accountId, Zend_Mail $_message, $_saveInSent = null)
     {
@@ -581,14 +582,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' successful.');
             
-            // add email notes to contacts (only to/cc)
-            /*
-            if ($_message->note) {
-                $this->_addEmailNote($nonPrivateRecipients, $_message->subject, $mail->getBodyText(TRUE));
-            }
-            */
-        
-            // append mail to sent folder nonPrivateRecipients
+            // append mail to sent folder
             if ($_saveInSent == true) {
                 $this->_saveInSent($transport, $account);
             }
@@ -885,6 +879,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param  array   $_messageStructure
      * @param  string  $_partId            the part id to search for
      * @return array
+     * 
+     * @todo move this to Felamimail_Model_Message
      */
     protected function _getPartStructure(array $_messageStructure, $_partId)
     {
@@ -918,6 +914,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param array $_structure
      * @param string $_preferedMimeType
      * @return array
+     * 
+     * @todo move this to Felamimail_Model_Message
      */
     public function getBodyParts(array $_structure, $_preferedMimeType = Zend_Mime::TYPE_HTML)
     {
@@ -938,6 +936,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param array $_structure
      * @param string $_preferedMimeType
      * @return array
+     * 
+     * @todo move this to Felamimail_Model_Message
      */
     protected function _parseSinglePart(array $_structure)
     {
@@ -966,6 +966,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param array $_structure
      * @return boolean
+     * 
+     * @todo move this to Felamimail_Model_Message
      */
     protected function _partIsAttachment(array $_structure)
     {
@@ -984,6 +986,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param array $_structure
      * @param string $_preferedMimeType
      * @return array
+     * 
+     * @todo move this to Felamimail_Model_Message
      */
     protected function _parseMultipart(array $_structure, $_preferedMimeType = Zend_Mime::TYPE_HTML)
     {
@@ -1017,6 +1021,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param array $_structure
      * @return array
+     * 
+     * @todo move this to Felamimail_Model_Message
      */
     public function getBodyPartIds(array $_structure)
     {
@@ -1036,6 +1042,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param array $_structure
      * @return array
+     * 
+     * @todo move this to Felamimail_Model_Message
      */
     protected function _getMultipartIds(array $_structure)
     {
@@ -1060,6 +1068,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param array $_structure
      * @return array
+     * 
+     * @todo move this to Felamimail_Model_Message
      */
     protected function _getTextPartId(array $_structure)
     {
@@ -1359,6 +1369,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param  Zend_Mime_Part  $_part
      * @param  array           $_structure
      * @param  string          $_contentType
+     * 
+     * @todo move this to Felamimail_Model_Message
      */
     protected function _appendCharsetFilter(Zend_Mime_Part $_part, $_structure)
     {
@@ -1389,6 +1401,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $_to
      * @param string $_text
      * @return string
+     * 
+     * @todo move this to Felamimail_Message
      */
     protected function _convertContentType($_from, $_to, $_text)
     {
@@ -1511,6 +1525,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $_dateString
      * @param string $_format default: 'Thu, 21 Dec 2000 16:01:07 +0200' (Zend_Date::RFC_2822)
      * @return Zend_Date
+     * 
+     * @todo move this to Felamimail_Message
      */
     protected function _convertDate($_dateString, $_format = Zend_Date::RFC_2822)
     {
@@ -1563,6 +1579,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param string $_addresses
      * @return array
+     * 
+     * @todo move this to Felamimai_Message
      */
     protected function _convertAddresses($_addresses)
     {
@@ -1583,6 +1601,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param Felamimail_Model_Message $_message
      * @return boolean
+     * 
+     * @todo move this to Felamimail_Model_Message
      */
     protected function _hasSeenFlag($_message)
     {
