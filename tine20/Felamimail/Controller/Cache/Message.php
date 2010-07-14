@@ -644,8 +644,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      *
      * @param string|Felamimail_Model_Folder $_folder
      * @return Felamimail_Model_Folder
-     * 
-     * @todo rename to clearCache
      */
     public function clear($_folder)
     {
@@ -680,17 +678,12 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * @param  Felamimail_Model_Folder  $_folder
      * @param  bool                     $_updateFolderCounter
      * @return Felamimail_Model_Message
+     * 
+     * @todo think about adding the recent flag again
      */
     public function addMessage(array $_message, Felamimail_Model_Folder $_folder, $_updateFolderCounter = true)
     {
-        // remove duplicate headers (which can't be set twice in real life)
-        foreach (array('date', 'from', 'to', 'cc', 'bcc', 'subject') as $field) {
-            if (isset($_message['header'][$field]) && is_array($_message['header'][$field])) {
-                $_message['header'][$field] = $_message['header'][$field][0];
-            }
-        }
-        
-        $messageData = array(
+        $messageToCache = new Felamimail_Model_Message(array(
             'messageuid'    => $_message['uid'],
             'folder_id'     => $_folder->getId(),
             'timestamp'     => Zend_Date::now(),
@@ -699,52 +692,36 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             'flags'         => $_message['flags'],
             'structure'     => $_message['structure'],
             'content_type'  => isset($_message['structure']['contentType']) ? $_message['structure']['contentType'] : Zend_Mime::TYPE_TEXT,
-            'subject'       => isset($_message['header']['subject']) ? Felamimail_Message::convertText($_message['header']['subject']) : '',
-            'from'          => isset($_message['header']['from']) ? Felamimail_Message::convertText($_message['header']['from'], TRUE, 256) : null
-        );
-        
-        if (array_key_exists('date', $_message['header'])) {
-            $messageData['sent'] = Felamimail_Message::convertDate($_message['header']['date']);
-        } elseif (array_key_exists('resent-date', $_message['header'])) {
-            $messageData['sent'] = Felamimail_Message::convertDate($_message['header']['resent-date']);
-        }
-        
-        foreach (array('to', 'cc', 'bcc') as $field) {
-            if (isset($_message['header'][$field])) {
-                // if sender set the headers twice we only use the first
-                $messageData[$field] = Felamimail_Message::convertAddresses($_message['header'][$field]);
-            }
-        }
+        ));
+
+        $messageToCache->parseHeaders($_message['header']);
         
         $bodyParts = $this->getBodyPartIds($_message['structure']);
-        
         if (isset($bodyParts['text'])) {
-            $messageData['text_partid'] = $bodyParts['text'];
+            $messageToCache->text_partid = $bodyParts['text'];
         }
         if (isset($bodyParts['html'])) {
-            $messageData['html_partid'] = $bodyParts['html'];
+            $messageToCache->html_partid = $bodyParts['html'];
         }
         
-        $cachedMessage = new Felamimail_Model_Message($messageData);
+        $attachments = $this->getAttachments($messageToCache);
         
-        $attachments = $this->getAttachments($cachedMessage);
+        $messageToCache->has_attachment = (count($attachments) > 0) ? true : false;
         
-        $cachedMessage->has_attachment = (count($attachments) > 0) ? true : false;
-        
-        $createdMessage = $this->_backend->create($cachedMessage);
+        $createdMessage = $this->_backend->create($messageToCache);
 
         // store haeders in cache / we need them later anyway
         $cacheId = 'getMessageHeaders' . $createdMessage->getId();
         Tinebase_Core::get('cache')->save($_message['header'], $cacheId, array('getMessageHeaders'));
         
-        #if (! $this->_hasSeenFlag($cachedMessage)) {
+        #if (! $this->_hasSeenFlag($messageToCache)) {
         #    $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
         #}
         
         if ($_updateFolderCounter == true) {
             Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
                 'cache_totalcount'  => "+1",
-                'cache_unreadcount' => (! $this->_hasSeenFlag($cachedMessage)) ? '+1' : '+0',
+                'cache_unreadcount' => (! $this->_hasSeenFlag($messageToCache)) ? '+1' : '+0',
             ));
         }
         
