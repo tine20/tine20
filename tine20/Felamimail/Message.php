@@ -5,10 +5,9 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        remove leading spaces in multipart messages
  */
 
 /**
@@ -19,13 +18,6 @@
  */
 class Felamimail_Message extends Zend_Mail_Message
 {
-    /**
-     * number of leading spaces
-     * 
-     * @var int
-     */
-    protected $_leadingSpaces = 0;
-    
     /**
      * Public constructor
      *
@@ -40,11 +32,7 @@ class Felamimail_Message extends Zend_Mail_Message
         if (isset($params['uid'])) {
             $this->_useUid = (bool)$params['uid'];
         }
-        
-        if (isset($params['spaces'])) {
-            $this->_leadingSpaces = $params['spaces'];
-        }
-        
+
         parent::__construct($params);
     }
     
