@@ -300,8 +300,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         }
         
         try {
-            // @todo delete messages from cache
             $folder = $this->getByBackendAndGlobalName($_accountId, $_folderName);
+            Felamimail_Controller_Message::getInstance()->deleteByFolder($folder);
             $this->_backend->delete($folder->getId());
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleted folder ' . $_folderName);
             $this->_updateHasChildren($_accountId, $folder->parent);
