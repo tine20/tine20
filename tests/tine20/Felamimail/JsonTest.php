@@ -302,21 +302,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $returned = $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', 'Sent');
         
-        //sleep(10);
-        
         // check if message is in sent folder
-        $result = $this->_getMessages('Sent');
-        //print_r($result);
-        
-        $message = array(); 
-        foreach ($result['results'] as $mail) {
-            if ($mail['subject'] == $messageToSend['subject']) {
-                $message = $mail;
-            }
-        }
-        //print_r($message);
-        $this->assertGreaterThan(0, $result['totalcount'], 'folder is empty');
-        $this->assertTrue(! empty($message));
+        $message = $this->_searchForMessageBySubject($messageToSend['subject'], 'Sent');
         $this->assertEquals($message['subject'],  $messageToSend['subject']);
         $this->assertEquals($message['to'],       $messageToSend['to'][0], 'recipient not found');
         
@@ -386,7 +373,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->addFlags(array($message['id']), Zend_Mail_Storage::FLAG_DELETED);
         $this->_json->getMessage($message['id']);
     }
-    
+
     /**
      * test reply mail
      * 
@@ -575,5 +562,28 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         //print_r($result);
         
         return $result;
+    }
+    
+    /**
+     * search for message defined by subject in folder
+     * 
+     * @param string $_subject
+     * @param string $_folderName
+     * @return string message data
+     */
+    protected function _searchForMessageBySubject($_subject, $_folderName = 'INBOX')
+    {
+        $result = $this->_getMessages($_folderName);
+        
+        $message = array();
+        foreach ($result['results'] as $mail) {
+            if ($mail['subject'] == $_subject) {
+                $message = $mail;
+            }
+        }
+        $this->assertGreaterThan(0, $result['totalcount'], 'folder is empty');
+        $this->assertTrue(! empty($message), 'Message not found');
+        
+        return $message;
     }
 }
