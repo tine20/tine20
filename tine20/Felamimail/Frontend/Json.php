@@ -230,13 +230,23 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * add given flags to given messages
      *
-     * @param  array        $ids
+     * @param  array        $filterData
      * @param  string|array $flags
      * @return array
+     * 
+     * @todo remove legacy code
+     * @todo return $affectedFolders to client
      */
-    public function addFlags($ids, $flags)
+    public function addFlags($filterData, $flags)
     {
-        Felamimail_Controller_Message::getInstance()->addFlags($ids, (array) $flags);
+        // as long as we get array of ids or filter data from the client, we need to do this legacy handling (1 dimensional -> ids / 2 dimensional -> filter data)
+        if (! empty($filterData) && is_array($filterData[0])) {
+            $filter = new Felamimail_Model_MessageFilter(array());
+            $filter->setFromArrayInUsersTimezone($filterData);
+        } else {
+            $filter = $filterData;
+        }
+        $affectedFolders = Felamimail_Controller_Message::getInstance()->addFlags($filter, (array) $flags);
         
         return array(
             'status' => 'success'
@@ -246,13 +256,23 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * clear given flags from given messages
      *
-     * @param array         $ids
+     * @param array         $filterData
      * @param string|array  $flags
      * @return array
+     * 
+     * @todo remove legacy code
+     * @todo return $affectedFolders to client
      */
-    public function clearFlags($ids, $flags)
+    public function clearFlags($filterData, $flags)
     {
-        Felamimail_Controller_Message::getInstance()->clearFlags($ids, (array) $flags);
+        // as long as we get array of ids or filter data from the client, we need to do this legacy handling (1 dimensional -> ids / 2 dimensional -> filter data)
+        if (! empty($filterData) && is_array($filterData[0])) {
+            $filter = new Felamimail_Model_MessageFilter(array());
+            $filter->setFromArrayInUsersTimezone($filterData);
+        } else {
+            $filter = $filterData;
+        }
+        $affectedFolders = Felamimail_Controller_Message::getInstance()->clearFlags($filter, (array) $flags);
         
         return array(
             'status' => 'success'

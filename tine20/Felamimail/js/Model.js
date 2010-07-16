@@ -118,6 +118,8 @@ Tine.Felamimail.Model.Message.getDefaultData = function() {
  * @extends Tine.Tinebase.data.RecordProxy
  * 
  * Message Backend
+ * 
+ * TODO make clear/addFlags send filter as param instead of array of ids
  */ 
 Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Felamimail',
