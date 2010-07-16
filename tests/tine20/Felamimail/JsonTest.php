@@ -375,6 +375,32 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * test delete from trash
+     */
+    public function testDeleteFromTrashWithFilter()
+    {
+        $message = $this->_sendMessage();
+        $this->_foldersToClear = array('INBOX', 'Sent', 'Trash');
+        
+        $trash = $this->_getFolder('Trash');
+        $result = $this->_json->moveMessages(array(array(
+            'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
+        )), $trash->getId());
+
+        $messageInTrash = $this->_searchForMessageBySubject($message['subject'], 'Trash');
+        
+        // delete messages in trash with filter
+        $this->_json->addFlags(array(array(
+            'field' => 'folder_id', 'operator' => 'equals', 'value' => $trash->getId()
+        ), array(
+            'field' => 'id', 'operator' => 'in', 'value' => array($messageInTrash['id'])
+        )), Zend_Mail_Storage::FLAG_DELETED);
+        
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->_json->getMessage($messageInTrash['id']);
+    }
+    
+    /**
      * test reply mail
      * 
      */
