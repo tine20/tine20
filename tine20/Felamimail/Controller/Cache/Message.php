@@ -279,6 +279,38 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     }
     
     /**
+     * get message with highest messageUid from cache 
+     * 
+     * @param  mixed  $_folderId
+     * @return Felamimail_Model_Message
+     */
+    protected function _getLatestMessage($_folderId) 
+    {
+        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+        
+        $filter = new Felamimail_Model_MessageFilter(array(
+            array(
+                'field'    => 'folder_id', 
+                'operator' => 'equals', 
+                'value'    => $folderId
+            )
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'limit' => 1,
+            'sort'  => 'messageuid',
+            'dir'   => 'DESC'
+        ));
+        
+        $result = $this->_backend->search($filter, $pagination);
+        
+        if(count($result) === 0) {
+            return null;
+        }
+        
+        return $result[0];
+    }
+    
+    /**
      * do we have time left for update (updates elapsed time)?
      * 
      * @return boolean
@@ -391,6 +423,35 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $_folder->cache_status);      
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache actions to be done yet: ' . ($_folder->cache_job_actions_estimate - $_folder->cache_job_actions_done));        
+    }
+    
+    /**
+     * get message with highest messageUid from cache 
+     * 
+     * @param  mixed  $_folderId
+     * @return array
+     */
+    protected function _getCachedMessagesChunked($_folderId, $_firstMessageSequnce) 
+    {
+        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+        
+        $filter = new Felamimail_Model_MessageFilter(array(
+            array(
+                'field'    => 'folder_id', 
+                'operator' => 'equals', 
+                'value'    => $folderId
+            )
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'start' => $_firstMessageSequnce,
+            'limit' => $this->_importCountPerStep,
+            'sort'  => 'messageuid',
+            'dir'   => 'ASC'
+        ));
+        
+        $result = $this->_backend->search($filter, $pagination);
+        
+        return $result;
     }
     
     /**
@@ -549,6 +610,67 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     }
     
     /**
+     * add one message to cache
+     * 
+     * @param  array                    $_message
+     * @param  Felamimail_Model_Folder  $_folder
+     * @param  bool                     $_updateFolderCounter
+     * @return Felamimail_Model_Message
+     * 
+     * @todo think about adding the recent flag again
+     */
+    public function addMessage(array $_message, Felamimail_Model_Folder $_folder, $_updateFolderCounter = true)
+    {
+        $messageToCache = new Felamimail_Model_Message(array(
+            'messageuid'    => $_message['uid'],
+            'folder_id'     => $_folder->getId(),
+            'timestamp'     => Zend_Date::now(),
+            'received'      => Felamimail_Message::convertDate($_message['received'], Felamimail_Model_Message::DATE_FORMAT_RECEIVED),
+            'size'          => $_message['size'],
+            'flags'         => $_message['flags'],
+            'structure'     => $_message['structure'],
+            'content_type'  => isset($_message['structure']['contentType']) ? $_message['structure']['contentType'] : Zend_Mime::TYPE_TEXT,
+        ));
+
+        $messageToCache->parseHeaders($_message['header']);
+        $messageToCache->parseBodyParts();
+        
+        $attachments = $this->getAttachments($messageToCache);
+        
+        $messageToCache->has_attachment = (count($attachments) > 0) ? true : false;
+        
+        $createdMessage = $this->_backend->create($messageToCache);
+
+        // store haeders in cache / we need them later anyway
+        $cacheId = 'getMessageHeaders' . $createdMessage->getId();
+        Tinebase_Core::get('cache')->save($_message['header'], $cacheId, array('getMessageHeaders'));
+        
+        #if (! $messageToCache->hasSeenFlag()) {
+        #    $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
+        #}
+        
+        if ($_updateFolderCounter == true) {
+            Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
+                'cache_totalcount'  => "+1",
+                'cache_unreadcount' => (! $messageToCache->hasSeenFlag()) ? '+1' : '+0',
+            ));
+        }
+        
+        /*
+        # store in local cache if received during the last day
+        # disabled again for performance reason
+        if($createdMessage->received->compare(Zend_Date::now()->subDay(1)) == 1) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
+                ' prefetch imap message to local cache ' . $createdMessage->getId()
+            );            
+            $this->getCompleteMessage($createdMessage);
+        }
+        */
+
+        return $createdMessage;
+    }
+    
+    /**
      * update folder status and counters
      * 
      * @param Felamimail_Model_Folder $_folder
@@ -581,67 +703,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $_folder = Felamimail_Controller_Folder::getInstance()->update($_folder);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder values after import of all messages: ' . print_r($_folder->toArray(), TRUE));
-    }
-    
-    /**
-     * get message with highest messageUid from cache 
-     * 
-     * @param  mixed  $_folderId
-     * @return Felamimail_Model_Message
-     */
-    protected function _getLatestMessage($_folderId) 
-    {
-        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
-        
-        $filter = new Felamimail_Model_MessageFilter(array(
-            array(
-                'field'    => 'folder_id', 
-                'operator' => 'equals', 
-                'value'    => $folderId
-            )
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'limit' => 1,
-            'sort'  => 'messageuid',
-            'dir'   => 'DESC'
-        ));
-        
-        $result = $this->_backend->search($filter, $pagination);
-        
-        if(count($result) === 0) {
-            return null;
-        }
-        
-        return $result[0];
-    }
-    
-    /**
-     * get message with highest messageUid from cache 
-     * 
-     * @param  mixed  $_folderId
-     * @return array
-     */
-    protected function _getCachedMessagesChunked($_folderId, $_firstMessageSequnce) 
-    {
-        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
-        
-        $filter = new Felamimail_Model_MessageFilter(array(
-            array(
-                'field'    => 'folder_id', 
-                'operator' => 'equals', 
-                'value'    => $folderId
-            )
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'start' => $_firstMessageSequnce,
-            'limit' => $this->_importCountPerStep,
-            'sort'  => 'messageuid',
-            'dir'   => 'ASC'
-        ));
-        
-        $result = $this->_backend->search($filter, $pagination);
-        
-        return $result;
     }
     
     /**
@@ -740,67 +801,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $folder = Felamimail_Controller_Folder::getInstance()->update($folder);
                 
         return $folder;
-    }
-    
-    /**
-     * add one message to cache
-     * 
-     * @param  array                    $_message
-     * @param  Felamimail_Model_Folder  $_folder
-     * @param  bool                     $_updateFolderCounter
-     * @return Felamimail_Model_Message
-     * 
-     * @todo think about adding the recent flag again
-     */
-    public function addMessage(array $_message, Felamimail_Model_Folder $_folder, $_updateFolderCounter = true)
-    {
-        $messageToCache = new Felamimail_Model_Message(array(
-            'messageuid'    => $_message['uid'],
-            'folder_id'     => $_folder->getId(),
-            'timestamp'     => Zend_Date::now(),
-            'received'      => Felamimail_Message::convertDate($_message['received'], Felamimail_Model_Message::DATE_FORMAT_RECEIVED),
-            'size'          => $_message['size'],
-            'flags'         => $_message['flags'],
-            'structure'     => $_message['structure'],
-            'content_type'  => isset($_message['structure']['contentType']) ? $_message['structure']['contentType'] : Zend_Mime::TYPE_TEXT,
-        ));
-
-        $messageToCache->parseHeaders($_message['header']);
-        $messageToCache->parseBodyParts();
-        
-        $attachments = $this->getAttachments($messageToCache);
-        
-        $messageToCache->has_attachment = (count($attachments) > 0) ? true : false;
-        
-        $createdMessage = $this->_backend->create($messageToCache);
-
-        // store haeders in cache / we need them later anyway
-        $cacheId = 'getMessageHeaders' . $createdMessage->getId();
-        Tinebase_Core::get('cache')->save($_message['header'], $cacheId, array('getMessageHeaders'));
-        
-        #if (! $messageToCache->hasSeenFlag()) {
-        #    $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
-        #}
-        
-        if ($_updateFolderCounter == true) {
-            Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
-                'cache_totalcount'  => "+1",
-                'cache_unreadcount' => (! $messageToCache->hasSeenFlag()) ? '+1' : '+0',
-            ));
-        }
-        
-        /*
-        # store in local cache if received during the last day
-        # disabled again for performance reason
-        if($createdMessage->received->compare(Zend_Date::now()->subDay(1)) == 1) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
-                ' prefetch imap message to local cache ' . $createdMessage->getId()
-            );            
-            $this->getCompleteMessage($createdMessage);
-        }
-        */
-
-        return $createdMessage;
     }
     
     /**
