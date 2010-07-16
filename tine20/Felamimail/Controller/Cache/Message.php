@@ -784,7 +784,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache of ' . $folder->globalname);
         
-        $this->_backend->deleteByFolderId($folder);
+        $this->deleteByFolder($folder);
         
         $folder->cache_timestamp        = Zend_Date::now();
         $folder->cache_uidnext          = 1;

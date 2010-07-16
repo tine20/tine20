@@ -1121,4 +1121,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         return $attachments;
     }
+    
+    /**
+     * delete messages from cache by folder
+     * 
+     * @param $_folder
+     */
+    public function deleteByFolder(Felamimail_Model_Folder $_folder)
+    {
+        $this->_backend->deleteByFolderId($_folder);
+    }
 }
