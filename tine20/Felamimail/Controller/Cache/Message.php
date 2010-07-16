@@ -108,7 +108,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     }
     
     /**
-     * update message ca_initUpdateche
+     * update message cache
      * 
      * @param string $_folder
      * @param integer $_time in seconds
@@ -146,14 +146,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             
             if ($this->_initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE || $this->_initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
                 $folder->cache_job_actions_estimate += $messagesToRemoveFromCache;
-            }        try {
-            $imap->expunge($folder->globalname);
-        } catch (Zend_Mail_Storage_Exception $zmse) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing no longer existing folder ' . $folder->globalname . ' from cache. ' .$zmse->getMessage() );
-            Felamimail_Controller_Cache_Folder::getInstance()->delete($folder->getId());
-            throw new Felamimail_Exception_IMAPFolderNotFound();
-        }
-            
+            }        
             
             $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
             
