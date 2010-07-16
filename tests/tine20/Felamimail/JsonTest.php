@@ -355,7 +355,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $message = $this->_sendMessage();
         $inboxBefore = $this->_getFolder('INBOX');
         
-        $this->_json->addFlags(array($message['id']), Zend_Mail_Storage::FLAG_SEEN);
+        $this->_json->addFlags($message['id'], Zend_Mail_Storage::FLAG_SEEN);
         
         // check if unread count got decreased
         $inboxAfter = $this->_getFolder('INBOX');
