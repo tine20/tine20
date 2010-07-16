@@ -134,7 +134,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $this->_initUpdate($folder);
         
-        $this->_getMaxMessageSequence($folder, $imap);
+        $this->_updateMessageSequence($folder, $imap);
         
         // if the latest message on the cache has a different sequence number then on the imap server
         // then some messages before the latest message(from the cache) got deleted
@@ -517,11 +517,12 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     }
     
     /**
-     * at which sequence is the message with the highest messageUid?
+     * at which sequence is the message with the highest messageUid (cache + imap)?
+     * 
      * @param Felamimail_Model_Folder $_folder
      * @param Felamimail_Backend_ImapProxy $_imap
      */
-    protected function _getMaxMessageSequence(Felamimail_Model_Folder $_folder, Felamimail_Backend_ImapProxy $_imap)
+    protected function _updateMessageSequence(Felamimail_Model_Folder $_folder, Felamimail_Backend_ImapProxy $_imap)
     {
         if ($_folder->imap_totalcount > 0) { 
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
