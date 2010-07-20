@@ -78,7 +78,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
      * @return Tinebase_Model_ImportExportDefinition
      * @throws Tinebase_Exception_NotFound
      */
-    public function getFromFile($_filename, $_applicationId, $_name = 'import_definition')
+    public function getFromFile($_filename, $_applicationId, $_name = NULL)
     {
         if (file_exists($_filename)) {
             
@@ -87,7 +87,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                     
             $definition = new Tinebase_Model_ImportExportDefinition(array(
                 'application_id'    => $_applicationId,
-                'name'              => $_name,
+                'name'              => ($_name !== NULL) ? $_name : $config->name,
                 'description'       => $config->description,
                 'type'              => $config->type,
                 'model'             => $config->model,
@@ -123,5 +123,58 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         unlink($tmpfname);
         
         return $config;
+    }
+    
+    /**
+     * update existing definition or create new from file
+     * 
+     * @param string $_filename
+     * @param Tinebase_Model_Application $_application
+     * @param string $_name
+     * @param boolean $_suppressException
+     * @return Tinebase_Model_ImportExportDefinition
+     */
+    public function updateOrCreateFromFilename($_filename, $_application, $_name = NULL, $_suppressException = FALSE)
+    {
+        // create definition
+        try {
+            $definition = $this->getFromFile(
+                $_filename, 
+                $_application->getId(), 
+                $_name
+            );
+            
+            // @todo remove path from filename here instead of just using the name
+            $definition->filename = $definition->name . '.xml';
+
+            // try to get definition and update if it exists
+            try {
+                $existing = $this->getByName($definition->name);
+                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating definition: ' . $definition->name);
+                $copyFields = array('filename', 'plugin_options', 'description');
+                foreach ($copyFields as $field) {
+                    $existing->{$field} = $definition->{$field};
+                }
+                $result = $this->update($existing);
+                
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // does not exist
+                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating import/export definion from file: ' . $_filename);
+                $result = $this->create($definition);
+            }
+            
+        } catch (Tinebase_Exception_Record_Validation $erv) {
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Not installing import/export definion: ' . $erv->getMessage());
+            if (! $_suppressException) {
+                throw $erv;
+            }
+        }  catch (Zend_Db_Statement_Exception $zdse) {
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Not installing import/export definion: ' . $zdse->getMessage());
+            if (! $_suppressException) {
+                throw $zdse;
+            }
+        } 
+        
+        return $result;
     }
 }
