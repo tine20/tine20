@@ -469,6 +469,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No personal namespace available!');
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting personal namespace: "' . $_account->ns_personal . '"');
+                // update sent/trash folders
+                if (! empty($_account->ns_personal) && ! preg_match('/$' . $_account->ns_personal . '/', $_account->sent_folder) && ! preg_match('/$' . $_account->ns_personal . '/', $_account->trash_folder)) {
+                    $_account->sent_folder = $_account->ns_personal . $_account->sent_folder;
+                    $_account->trash_folder = $_account->ns_personal . $_account->trash_folder;
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated sent/trash folder names: ' . $_account->sent_folder .' / ' . $_account->trash_folder);
+                }
             }
             
         } else if ($_delimiter !== NULL) {
