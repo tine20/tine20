@@ -1103,7 +1103,7 @@ class Setup_Controller
             if (file_exists($path)) {
                 foreach (new DirectoryIterator($path) as $item) {
                     $filename = $path . DIRECTORY_SEPARATOR . $item->getFileName();
-                    if (preg_match("/\.xml/", $_filename)) {
+                    if (preg_match("/\.xml/", $filename)) {
                         Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename($filename, $_application, preg_replace("/\.xml/", '', $item->getFileName()), TRUE);
                     }
                 }
