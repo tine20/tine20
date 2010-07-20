@@ -209,44 +209,50 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
      */    
     public function update_5()
     {
-        // recreate all caching tables
-        $cachingTables = array(
-            'felamimail_cache_message_bcc',
-            'felamimail_cache_message_cc',
-            'felamimail_cache_message_flag',
-            'felamimail_cache_message_to',
-            'felamimail_cache_message',
-            'felamimail_folder',
-        );
-        
-        // get table schema data from setup.xml
-        $setupXml = Setup_Controller::getInstance()->getSetupXml('Felamimail');
-
-        // loop tables (disable foreign key checks for this)
-        $this->_db->query("SET FOREIGN_KEY_CHECKS=0");
-        foreach ($cachingTables as $table) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache table ' . $table . ' ...');
-            $this->_backend->dropTable($table);
-            foreach ($setupXml->tables[0] as $tableXML) {
-                if ($tableXML->name == $table) {
-                    $tableSchema = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
-                    $this->_backend->createTable($tableSchema);
-                }
-            }
-        }
-        $this->_db->query("SET FOREIGN_KEY_CHECKS=1");
-        
+        $this->_clearMessageCache();
+                
         $this->setApplicationVersion('Felamimail', '3.6');
     }
     
     /**
      * update function (-> 3.7)
-     * - add field to felamimail_folder table for better caching 
+     * - add new fields to felamimail_cache_message table 
      */    
     public function update_6()
     {
-        // clear cache + install new schema
-        $this->update_5();
+        $this->_clearMessageCache();
+        
+        $newFields = array(
+            '<field>
+                <name>structure</name>
+                <type>blob</type>
+                <notnull>true</notnull>
+            </field>',
+            '<field>
+                <name>has_attachment</name>
+                <type>boolean</type>
+                <default>false</default>
+                <notnull>true</notnull>
+            </field>',
+            '<field>
+                <name>text_partid</name>
+                <type>text</type>
+                <length>128</length>
+            </field>',
+            '<field>
+                <name>html_partid</name>
+                <type>text</type>
+                <length>128</length>
+            </field>',
+            '<field>
+                <name>priority</name>
+                <type>integer</type>
+            </field>'
+        );
+        
+        foreach ($newFields as $col) {
+            $this->_backend->addCol('felamimail_cache_message', new Setup_Backend_Schema_Field_Xml($col));
+        }
         
         $this->setTableVersion('felamimail_cache_message', '2');
         $this->setApplicationVersion('Felamimail', '3.7');
@@ -276,14 +282,12 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
             'felamimail_cache_message'
         );
         
-        
-        // look all folders for updates
+        // lock all folders for updates
         $data = array(
             'cache_timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'cache_status'    => Felamimail_Model_Folder::CACHE_STATUS_UPDATING,
         );
         $update = $this->_db->update(SQL_TABLE_PREFIX . 'felamimail_folder', $data);
-        
         
         // truncate tables (disable foreign key checks for this)
         $this->_db->query("SET AUTOCOMMIT=0");
@@ -296,9 +300,8 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->_db->query("SET FOREIGN_KEY_CHECKS=1");
         $this->_db->query("SET AUTOCOMMIT=1");
-
         
-        // unlook all folders for updates and reset folder counters
+        // unlock all folders for updates and reset folder counters
         $data = array(
             'cache_timestamp'   => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'cache_status'      => Felamimail_Model_Folder::CACHE_STATUS_EMPTY,
