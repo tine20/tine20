@@ -157,8 +157,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         if ($record->type == Felamimail_Model_Account::TYPE_SYSTEM) {
             $this->_addSystemAccountValues($record);
-            // @todo remove that / it shouldn't be needed here
-            //$this->_addUserValues($record, Tinebase_User::getInstance()->getFullUserById($this->_currentAccount->getId()));
         }
         
         return $record;    
@@ -427,6 +425,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @return Felamimail_Model_Account
      * 
      * @todo remove imapBackend (+ exception handling at the top) and delimiter (get delimiter from INBOX folder) params  
+	 * @todo only get all capabilities once (the first time this account connects) / only update namespaces and delimiter later
      */
     public function updateCapabilities($_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL, $_delimiter = NULL)
     {
@@ -646,5 +645,4 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_user->getId());
         $_account->organization = $contact->org_name;
     }
-    
 }

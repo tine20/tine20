@@ -102,6 +102,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             $folders = $imap->getFolders('', '%');
             
             // get imap server capabilities and save delimiter / personal namespace in account
+            // @ŧodo remove that?
             Felamimail_Controller_Account::getInstance()->updateCapabilities(
                 $account, 
                 $imap, 
