@@ -1103,32 +1103,8 @@ class Setup_Controller
             if (file_exists($path)) {
                 foreach (new DirectoryIterator($path) as $item) {
                     $filename = $path . DIRECTORY_SEPARATOR . $item->getFileName();
-                    if (preg_match("/\.xml/", $filename)) {
-                        
-                        // create definition
-                        try {
-                            $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
-                                $filename, 
-                                $_application->getId(), 
-                                preg_replace("/\.xml/", '', $item->getFileName())
-                            );
-
-                            // try to get definition and update if it exists
-                            try {
-                                $existing = Tinebase_ImportExportDefinition::getInstance()->getByName($definition->name);
-                                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Not installing import/export definion because it already exists');
-                            } catch (Tinebase_Exception_NotFound $tenf) {
-                                // does not exist
-                                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating import/export definion from file: ' . $item->getFileName());
-                                $definition->filename = $item->getFileName();
-                                Tinebase_ImportExportDefinition::getInstance()->create($definition);
-                            }
-                            
-                        } catch (Tinebase_Exception_Record_Validation $erv) {
-                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Not installing import/export definion: ' . $erv->getMessage());
-                        }  catch (Zend_Db_Statement_Exception $zdse) {
-                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Not installing import/export definion: ' . $zdse->getMessage());
-                        } 
+                    if (preg_match("/\.xml/", $_filename)) {
+                        Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename($filename, $_application, preg_replace("/\.xml/", '', $item->getFileName()), TRUE);
                     }
                 }
             }
