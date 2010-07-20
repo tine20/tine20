@@ -88,7 +88,7 @@
                     <name>has_children_support</name>
                     <type>boolean</type>
                 </field>
-                <field> <!-- depricated, remove with next schema update -->
+                <field> <!-- deprecated, remove with next schema update -->
                     <name>sort_folders</name>
                     <type>boolean</type>
                 </field>
