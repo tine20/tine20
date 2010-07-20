@@ -48,6 +48,50 @@ class Tinebase_Frontend_Cli_Abstract
     }
     
     /**
+     * update or create import/export definition
+     * 
+     * @param Zend_Console_Getopt $_opts
+     * @return boolean
+     */
+    public function updateImportExportDefinition(Zend_Console_Getopt $_opts)
+    {
+        $defs = $_opts->getRemainingArgs();
+        if (empty($defs)) {
+            echo "No definition given.\n";
+            return FALSE;
+        }
+        
+        if (! $this->_checkAdminRight()) {
+            return FALSE; 
+        }
+        
+        $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        
+        foreach ($defs as $definitionFilename) {
+            Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename($definitionFilename, $application);
+            echo "Imported " . $definitionFilename . " successfully.\n";
+        }
+        
+        return TRUE;
+    }
+    
+    /**
+     * check admin right of application
+     * 
+     * @return boolean
+     */
+    protected function _checkAdminRight()
+    {
+        // check if admin for tinebase
+        if (! Tinebase_Core::getUser()->hasRight($this->_applicationName, Tinebase_Acl_Rights::ADMIN)) {
+            echo "No permission.\n";
+            return FALSE;
+        }
+        
+        return TRUE;
+    }
+    
+    /**
      * import records
      *
      * @param Zend_Console_Getopt $_opts
