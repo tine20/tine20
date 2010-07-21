@@ -54,7 +54,9 @@ class Felamimail_Message extends Zend_Mail_Message
         
         foreach ($addresses as $key => $address) {
             if (preg_match('/(.*)<(.+@[^@]+)>/', $address, $matches)) {
-                $addresses[$key] = array('name' => trim(trim($matches[1]), '"'), 'address' => trim($matches[2]));
+                $name = trim(trim($matches[1]), '"');
+                $address = trim($matches[2]);
+                $addresses[$key] = array('name' => substr($name, 0, 250), 'address' => $address);
             } else {
                 $addresses[$key] = array('name' => null, 'address' => $address);
             }
