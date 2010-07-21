@@ -300,6 +300,7 @@
 	line-height: 16px;
 	margin-top: 1px;
 	padding: 0px 5px;
+	margin-right: 10px;
 }
 
 .x-tree-selected .felamimail-node-statusbox-unread {
@@ -312,6 +313,7 @@
 	width: 16px;
     height: 16px;
     background-image:url(../../images/warning.gif);
+    margin-right: 10px;
 }
 
 /***** email composing dialog ******/
