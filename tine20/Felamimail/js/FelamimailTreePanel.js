@@ -19,7 +19,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>Account/Folder Tree Panel</p>
  * <p>Tree of Accounts with folders</p>
  * <pre>
- * TODO         use pie for progress
  * low priority:
  * TODO         make inbox/drafts/templates configurable in account
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
@@ -29,7 +28,7 @@ Ext.namespace('Tine.Felamimail');
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  * @param       {Object} config
  * @constructor
