@@ -160,7 +160,10 @@ class Felamimail_Message extends Zend_Mail_Message
             $addresses = self::parseAdresslist($_addresses);
             if (is_array($addresses)) {
                 foreach($addresses as $address) {
-                    $result[] = array('email' => $address['address'], 'name' => $address['name']);
+                    $result[] = array(
+                        'email' => $address['address'], 
+                        'name' =>  $address['name']
+                    );
                 }
             }
         }
