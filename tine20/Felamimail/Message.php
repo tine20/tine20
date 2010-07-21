@@ -83,9 +83,6 @@ class Felamimail_Message extends Zend_Mail_Message
             }
         }
         
-        // strip off any non printable control characters
-        $string = preg_replace('/[\x01-\x08,\x0A-\x0C,\x0E-\x1F]/', null, $string);
-        
         if ($_ellipsis > 0 && strlen($string) > $_ellipsis) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' String to long, cutting it to ' . $_ellipsis . ' chars.');
             $string = substr($string, 0, $_ellipsis);
