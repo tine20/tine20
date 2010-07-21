@@ -490,7 +490,7 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
                 break;
                 
             case 912: // Felamimail_Exception_IMAPInvalidCredentials
-                var accountId   = Ext.decode(exception.request).params.accountId,
+                var accountId   = this.getAccountIdFromRequest(exception.request),
                     account     = accountId ? Tine.Felamimail.loadAccountStore().getById(accountId): null,
                     imapStatus  = account ? account.get('imap_status') : null;
                     
@@ -502,6 +502,7 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
                         i18nRecordName: app.i18n._('Credentials'),
                         recordClass: Tine.Tinebase.Model.Credentials,
                         // WTF? Why don't we have a username here?
+                        // -> because of the credentials cache: username + password are encrypted
 //                        record: new Tine.Tinebase.Model.Credentials({
 //                            id: account.id,
 //                            username: account.get('user')
@@ -546,6 +547,27 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
                 Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
                 break;
         }
+    },
+    
+    /**
+     * get account id from request (it can be in filter params)
+     * 
+     * @param {String} request
+     * @return String|Bool
+     */
+    getAccountIdFromRequest: function(request) {
+        var decodedRequest = Ext.decode(request); 
+        if (decodedRequest.params.accountId) {
+            return decodedRequest.params.accountId;
+        } else if (decodedRequest.params.filter) {
+            for (var i=0; i < decodedRequest.params.filter.length; i++) {
+                if (decodedRequest.params.filter[i].field == 'account_id') {
+                    return decodedRequest.params.filter[i].value;
+                }
+            }
+        }
+        
+        return false;
     }
 });
 
