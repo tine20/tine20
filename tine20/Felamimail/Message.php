@@ -80,16 +80,11 @@ class Felamimail_Message extends Zend_Mail_Message
             $string = preg_replace('/(=[1-9,a-f]{2})/e', "strtoupper('\\1')", $string);
             if ($_isHeader) {
                 $string = iconv_mime_decode($string, 2);
-            } else {
-                //$string = base64_decode($string);
-                
-                /*
-                $string = preg_replace("/\=([A-F][A-F0-9])/","%$1",$string);
-                $string = urldecode($string);
-                $string = utf8_encode($string);
-                */                
             }
         }
+        
+        // strip off any non printable control characters
+        $string = preg_replace('/[\x01-\x08,\x0A-\x0C,\x0E-\x1F]/', null, $string);
         
         if ($_ellipsis > 0 && strlen($string) > $_ellipsis) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' String to long, cutting it to ' . $_ellipsis . ' chars.');
