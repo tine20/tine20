@@ -579,7 +579,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $index++;
         
         // body location
-        if($_structure[$index] != 'NIL') {
+        if (isset($_structure[$index]) && $_structure[$index] != 'NIL') {
             $structure['location'] = strtolower($_structure[$index]); 
         }
         
