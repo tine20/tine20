@@ -424,33 +424,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param string $_delimiter
      * @return Felamimail_Model_Account
      * 
-     * @todo remove imapBackend (+ exception handling at the top) and delimiter (get delimiter from INBOX folder) params  
 	 * @todo only get all capabilities once (the first time this account connects) / only update namespaces and delimiter later
      */
     public function updateCapabilities($_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL, $_delimiter = NULL)
     {
         if ($_imapBackend === NULL) {
-            try {
-                $_imapBackend = Felamimail_Backend_ImapFactory::factory($_account);
-            } catch (Zend_Mail_Storage_Exception $zmse) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                    . ' Wrong user credentials ... '
-                    . '(' . $zmse->getMessage() . ')'
-                );
-                return $_account;
-            } catch (Zend_Mail_Protocol_Exception $zmpe) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                    . ' No connection to imap server ...'
-                    . '(' . $zmpe->getMessage() . ')'
-                );
-                return $_account;
-            } catch (Felamimail_Exception_IMAPInvalidCredentials $zmpe) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                    . ' Wrong user credentials ... '
-                    . '(' . $zmpe->getMessage() . ')'
-                );
-                return $_account;
-            }
+            $_imapBackend = Felamimail_Backend_ImapFactory::factory($_account);
         }
         
         // get imap server capabilities and save delimiter / personal namespace in account
