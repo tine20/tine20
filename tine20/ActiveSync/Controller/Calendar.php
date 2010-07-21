@@ -224,9 +224,15 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 
                 switch($value) {
                     case 'dtend':
+                        if ($data->is_all_day_event == true) {
+                            $startDateClone = clone $data->dtstart;
+                            $nodeContent = $startDateClone->addHour(24)->toString('yyyyMMddTHHmmss') . 'Z';
+                        } else {
+                            $nodeContent = $data->dtend->toString('yyyyMMddTHHmmss') . 'Z';
+                        }
+                        break;
                     case 'dtstart':
-                        $nodeContent = $data->$value->toString('yyyyMMddTHHmmss') . 'Z';
-                        #$_xmlNode->appendChild(new DOMElement($key, $date, 'uri:Calendar'));
+                        $nodeContent = $data->dtstart->toString('yyyyMMddTHHmmss') . 'Z';
                         break;
                     default:
                         $nodeContent = $data->$value;
@@ -245,6 +251,11 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
 
                 // ... append it to parent node aka append it to the document ...
                 $_xmlNode->appendChild($node);
+                
+                // strip off any non printable control characters
+                if (!ctype_print($nodeContent)) {
+                    $nodeContent = preg_replace('/[\x01-\x08,\x0A-\x0C,\x0E-\x1F]/', null, $nodeContent);
+                }
                 
                 // ... and now add the content (DomText takes care of special chars)
                 $node->appendChild(new DOMText($nodeContent));
@@ -477,8 +488,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 case 'dtend':
                 case 'dtstart':
                     if(isset($xmlData->$fieldName)) {
-                        $timeStamp = $this->_convertISOToTs((string)$xmlData->$fieldName);
-                        $event->$value = new Zend_Date($timeStamp, NULL);
+                        $event->$value = $this->_convertISOToZendDate((string)$xmlData->$fieldName);
                     } else {
                         $event->$value = null;
                     }
@@ -491,6 +501,14 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     }
                     break;
             }
+        }
+        
+        if ($event->is_all_day_event == true) {
+            $event->dtend = clone $event->dtstart;
+            $event->dtend
+                ->addHour(24);
+                #->addMinute(59)
+                #->addSecond(59);
         }
         
         // get body
@@ -710,8 +728,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $rrule->interval = isset($xmlData->Recurrence->Interval) ? (int)$xmlData->Recurrence->Interval : 1;
             
             if(isset($xmlData->Recurrence->Until)) {
-                $timeStamp = $this->_convertISOToTs((string)$xmlData->Recurrence->Until);
-                $rrule->until = new Zend_Date($timeStamp, NULL);
+                $rrule->until = $this->_convertISOToZendDate((string)$xmlData->Recurrence->Until);
             } else {
                 $rrule->until = null;
             }            
@@ -775,7 +792,27 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         }
         
         list($match, $year, $month, $day, $hour, $minute, $second) = $matches;
-        return  mktime($hour, $minute, $second, $month, $day, $year);
+        
+        return mktime($hour, $minute, $second, $month, $day, $year);
+    }
+    
+    /**
+     * converts an iso formated date into Zend_Date
+     *
+     * @param  string  $_iso  Zend_Date::ISO8601 representation of a datetime filed
+     * @return Zend_Date
+     */
+    protected function _convertISOToZendDate($_iso)
+    {
+        $matches = array();
+        
+        preg_match("/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/", $_iso, $matches);
+
+        if (count($matches) !== 7) {
+            throw new Tinebase_Exception_UnexpectedValue("invalid date format $_iso");
+        }
+        
+        return new Zend_Date($_iso, Zend_Date::ISO_8601);
     }
     
     /**
