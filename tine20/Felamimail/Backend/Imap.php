@@ -679,11 +679,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL') {
             $structure['disposition']['type'] = $_structure[$index][0];
             
-            
-            if(isset( $_structure[$index][1] ) && $_structure[$index][1] != 'NIL') {
-//
-                ///if ( Tinebase_Core::isLogLevel( Zend_Log::DEBUG)) Tinebase_Core::getLogger( )->debug( __METHOD__ . '::' . __LINE__ . " " . print_r( $_structure[$index][1], TRUE)); 
-
+            if (isset($_structure[$index][1]) && $_structure[$index][1] != 'NIL') {
                 $parameters = array();
                 for($i=0; $i<count($_structure[$index][1]); $i++) {
                     $key   = strtolower($_structure[$index][1][$i]);
