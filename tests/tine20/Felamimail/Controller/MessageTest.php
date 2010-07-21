@@ -531,14 +531,25 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->_messageTestHelper('multipart_rfc2822.eml', 'multipart/rfc2822');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
-        #var_dump($message->toArray());
-        #$this->assertEquals('1', $message->text_partid);
-        #$this->assertEquals('2.1', $message->html_partid);
         $this->assertEquals('multipart/mixed', $message->content_type);
         $this->assertEquals('5377', $message->size);
         $this->assertContains("Fwd: [Officespot-cs-svn] r15209 - trunk/tine20/Tinebase", $message->subject);
         $this->assertContains('est for parsing forwarded email', $message->body);
         $this->assertEquals('message/rfc822', $message->attachments[0]["content-type"]);
+    }
+
+    /**
+     * validate fetching a complete message from amazon
+     */
+    public function testGetCompleteMessageAmazon()
+    {
+        $cachedMessage = $this->_messageTestHelper('Amazon.eml', 'multipart/amazon');
+        
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        #var_dump($message->toArray());
+        $this->assertEquals('multipart/alternative', $message->content_type);
+        $this->assertContains('Samsung Wave S8500 Smartphone', $message->subject);
+        $this->assertContains('Sie suchen Produkte aus der Kategorie Elektronik &amp; Foto?', $message->body);
     }
     
     /**
@@ -549,13 +560,9 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->_messageTestHelper('multipart_rfc2822.eml', 'multipart/rfc2822');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage, 2);
-        #var_dump($message->toArray());
-        #$this->assertEquals('1', $message->text_partid);
-        #$this->assertEquals('2.1', $message->html_partid);
         $this->assertEquals('4121', $message->size);
         $this->assertContains("[Officespot-cs-svn] r15209 - trunk/tine20/Tinebase", $message->subject);
         $this->assertContains('getLogger()-&gt;debug', $message->body);
-        #$this->assertEquals('moz-screenshot-83.png', $message->attachments[0]["filename"]);
     }
     
     /**
