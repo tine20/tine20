@@ -66,13 +66,14 @@ class ActiveSync_Command_SendMail
         
         $emailStream = fopen("php://input", 'r');
 
-        // activate this to get verbose debug of the incoming mail
         /*
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             $debugStream = fopen("php://temp", 'r+');
             stream_copy_to_stream($emailStream, $debugStream);
-            rewind($emailStream);
+            rewind($debugStream);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
+            rewind($debugStream);
+            $emailStream = $debugStream;
         }
         */
         
@@ -83,7 +84,6 @@ class ActiveSync_Command_SendMail
         );
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . $this->_saveInSent);
-        
     }    
     
     /**
