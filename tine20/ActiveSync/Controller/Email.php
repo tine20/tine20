@@ -179,6 +179,11 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                 // ... append it to parent node aka append it to the document ...
                 $node = $_xmlNode->appendChild(new DOMElement($key, null, 'uri:Email'));
                 
+                // strip off any non printable control characters
+                if (!ctype_print($nodeContent)) {
+                    $nodeContent = preg_replace('/[\x00-\x08,\x0B,\x0C,\x0E-\x1F]/', null, $nodeContent);
+                }
+                
                 // ... and now add the content (DomText takes care of special chars)
                 $node->appendChild(new DOMText($nodeContent));
             }
@@ -253,7 +258,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         if($truncateAt !== null && strlen($messageBody) > $truncateAt) {
             $messageBody  = substr($messageBody, 0, $truncateAt);
             // maybe the last character is no unicode character anymore
-            $messageBody  = iconv('utf-8', 'utf-8//IGNORE', $messageBody);
+            $messageBody  = @iconv('utf-8', 'utf-8//IGNORE', $messageBody);
             $isTruncacted = 1;
         } else {
             $isTruncacted = 0;
