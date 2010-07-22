@@ -33,14 +33,14 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
         this.initTemplate();
         this.initDefaultTemplate();
         
-        Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
+        Tine.Addressbook.ContactGridDetailsPanel.superclass.initComponent.call(this);
     },
 
     /**
      * add on click event after render
      */
     afterRender: function() {
-        Tine.Felamimail.GridDetailsPanel.superclass.afterRender.apply(this, arguments);
+        Tine.Addressbook.ContactGridDetailsPanel.superclass.afterRender.apply(this, arguments);
         
         if (this.felamimail === true) {
             this.body.on('click', this.onClick, this);
