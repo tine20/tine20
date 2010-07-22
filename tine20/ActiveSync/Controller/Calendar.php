@@ -254,7 +254,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 
                 // strip off any non printable control characters
                 if (!ctype_print($nodeContent)) {
-                    $nodeContent = preg_replace('/[\x01-\x08,\x0A-\x0C,\x0E-\x1F]/', null, $nodeContent);
+                    $nodeContent = preg_replace('/[\x00-\x08,\x0B,\x0C,\x0E-\x1F]/', null, $nodeContent);
                 }
                 
                 // ... and now add the content (DomText takes care of special chars)
@@ -349,9 +349,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     break;
             }
             
-            if ($rrule->freq != Calendar_Model_Rrule::FREQ_YEARLY) {
-                $recurrence->appendChild(new DOMElement('Interval', $rrule->interval, 'uri:Calendar'));
-            }
+            // required field
+            $recurrence->appendChild(new DOMElement('Interval', $rrule->interval, 'uri:Calendar'));
             
             if($rrule->until instanceof Zend_Date) {
                 $recurrence->appendChild(new DOMElement('Until', $rrule->until->toString('yyyyMMddTHHmmss') . 'Z', 'uri:Calendar'));
