@@ -470,6 +470,22 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(! empty($movedMessage), 'moved message not found');
     }
     
+    /*********************** folder tests ****************************/
+    
+    /**
+     * get vacation sieve script
+     * 
+     * @todo finish
+     */
+    public function testGetVacation()
+    {
+        $result = $this->_json->getSieveVacation($this->_account->getId());
+        
+        //print_r($result);
+        
+        $this->assertEquals($this->_account->getId(), $result['account_id']);
+    }
+    
     /************************ protected functions ****************************/
     
     /**
