@@ -24,7 +24,7 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    //protected $_identifier = 'id';    
+    protected $_identifier = 'id';    
     
     /**
      * application the record belongs to
@@ -43,6 +43,23 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'vacation'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
+        'addresses'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'days'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'enabled'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'reason'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'vacationObject'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
     );
+    
+    /**
+     * set from sieve vacation
+     * 
+     * @param Felamimail_Sieve_Vacation $fsv
+     */
+    public function setFromFSV(Felamimail_Sieve_Vacation $fsv)
+    {
+        $this->setFromArray($fsv->toArray());
+        $this->vacationObject = $fsv;
+    }
 }
