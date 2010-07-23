@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        finish
  */
 
 /**
@@ -24,7 +25,7 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    //protected $_identifier = 'id';    
+    protected $_identifier = 'id';    
     
     /**
      * application the record belongs to
