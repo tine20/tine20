@@ -28,9 +28,16 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     protected $_applicationName = 'Felamimail';
     
     /**
-     * Sieve Rule backend
+     * Sieve Script backend
      *
      * @var Felamimail_Sieve_Script
+     */
+    protected $_scriptBackend = NULL;
+    
+    /**
+     * Sieve backend
+     *
+     * @var Felamimail_Backend_Sieve
      */
     protected $_backend = NULL;
     
@@ -48,7 +55,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     private function __construct() {
         $this->_currentAccount = Tinebase_Core::getUser();
-        $this->_backend = new Felamimail_Sieve_Script();
+        $this->_scriptBackend = new Felamimail_Sieve_Script();
     }
     
     /**
@@ -76,13 +83,36 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     /**
      * get vacation for account
      * 
-     * @param string $_accountId
+     * @param string|Felamimail_Model_Account $_accountId
      * @return Felamimail_Model_Sieve_Vacation
      * 
-     * @todo implement
+     * @todo finish implementation
      */
     public function getVacation($_accountId)
     {
+        //$this->_setSieveBackendAndAuthenticate($_accountId);
+        //$scripts = $this->_backend->listScripts();
+
+        //print_r($scripts);
+        
+        //$script->parseScript($vacationScript);
+        //$vacation = $script->getVacation();
+        $result = new Felamimail_Model_Sieve_Vacation(array(
+            'account_id'    => $_accountId
+        ));
+        //$result->setFromFSV($vacation);
+        
+        return $result;
+    }
+    
+    /**
+     * init and connect to sieve backend + authenticate with imap user of account
+     * 
+     * @param string|Felamimail_Model_Account $_accountId
+     */
+    protected function _setSieveBackendAndAuthenticate($_accountId)
+    {
+        $this->_backend = Felamimail_Backend_SieveFactory::factory($_accountId);
     }
     
     /**
@@ -92,10 +122,13 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * @param Felamimail_Model_Sieve_Vacation $_vacation
      * @return Felamimail_Model_Sieve_Vacation
      * 
-     * @todo implement
+     * @todo finish implementation
      */
     public function setVacation($_accountId, Felamimail_Model_Sieve_Vacation $_vacation)
     {
+        //$this->_setSieveBackendAndAuthenticate($_accountId);
+        
+        return $this->getVacation($_accountId);
     }
 
     /**
