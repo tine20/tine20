@@ -6,12 +6,12 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Factory.php 7539 2009-04-01 11:01:13Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  */
 
 /**
- * An instance of the imap backendclass should be created using this class
+ * An instance of the imap backend class should be created using this class
  * 
  * @package     Felamimail
  */
