@@ -196,6 +196,24 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             $_xmlNode->appendChild(new DOMElement('Read', 0, 'uri:Email'));
         }
         
+        // attachments?
+        if ($data->has_attachment == true) {
+            $attachments = $this->_contentController->getAttachments($data);
+            
+            if (count($attachments) > 0) {
+                $tagAttachments = $_xmlNode->appendChild(new DOMElement('Attachments', null, 'uri:AirSyncBase'));
+                
+                foreach ($attachments as $attachment) {
+                    $tagAttachment = $tagAttachments->appendChild(new DOMElement('Attachment', null, 'uri:AirSyncBase'));
+                    
+                    $tagAttachment->appendChild(new DOMElement('DisplayName', $attachment['filename'], 'uri:AirSyncBase'));
+                    $tagAttachment->appendChild(new DOMElement('FileReference', $_serverId . '-' . $attachment['partId'], 'uri:AirSyncBase'));
+                    $tagAttachment->appendChild(new DOMElement('Method', 1, 'uri:AirSyncBase'));
+                    $tagAttachment->appendChild(new DOMElement('EstimatedDataSize', $attachment['size'], 'uri:AirSyncBase'));
+                }
+            }
+        }
+        
         // get truncation
         $truncateAt = null;
         
