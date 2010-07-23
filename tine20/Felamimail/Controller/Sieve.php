@@ -90,10 +90,10 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     public function getVacation($_accountId)
     {
-        //$this->_setSieveBackendAndAuthenticate($_accountId);
-        //$scripts = $this->_backend->listScripts();
+        $this->_setSieveBackendAndAuthenticate($_accountId);
+        $scripts = $this->_backend->listScripts();
 
-        //print_r($scripts);
+        print_r($scripts);
         
         //$script->parseScript($vacationScript);
         //$vacation = $script->getVacation();
@@ -101,6 +101,8 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             'account_id'    => $_accountId
         ));
         //$result->setFromFSV($vacation);
+        
+        $this->_backend->logout();
         
         return $result;
     }
