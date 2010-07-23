@@ -43,17 +43,17 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'addresses'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'addresses'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
         'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'days'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'enabled'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'days'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 7),
+        'enabled'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'reason'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'vacationObject'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
     );
     
     /**
-     * set from sieve vacation
+     * set from sieve vacation object
      * 
      * @param Felamimail_Sieve_Vacation $fsv
      */
@@ -61,5 +61,27 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
     {
         $this->setFromArray($fsv->toArray());
         $this->vacationObject = $fsv;
+    }
+    
+    /**
+     * get sieve vacation object
+     * 
+     * @return Felamimail_Sieve_Vacation
+     */
+    public function getFSV()
+    {
+        $fsv = new Felamimail_Sieve_Vacation();
+        
+        $fsv->setEnabled($this->enabled)
+            ->setDays($this->days)
+            ->setSubject($this->subject)
+            ->setFrom($this->from)
+            ->setReason($this->reason);
+        foreach ($this->addresses as $address) {
+            $fsv->addAddress($address);
+        }
+        
+        $this->vacationObject = $fsv;
+        return $fsv;
     }
 }
