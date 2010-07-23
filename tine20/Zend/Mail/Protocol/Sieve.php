@@ -280,15 +280,12 @@ class Zend_Mail_Protocol_Sieve
      */
     public function readLine(&$tokens = array(), $dontParse = false)
     {
-        $line = $this->_nextLine($tag);
+        $line = $this->_nextLine();
         if (!$dontParse) {
             $tokens = $this->_decodeLine($line);
         } else {
             $tokens = $line;
         }
-
-        // if tag is wanted tag we might be at the end of a multiline response
-        return $tag == $wantedTag;
     }
     
     /**
