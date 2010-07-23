@@ -58,15 +58,19 @@ class Felamimail_Sieve_Vacation
      * the mime type of the generated message
      * 
      * @var string
+     * 
+     * unused atm
      */
-    protected $_mime;
+    //protected $_mime;
     
     /**
      * the unique identifier of the vacaction message
      * 
      * @var string
+     * 
+     * unused atm
      */
-    protected $_handle;
+    //protected $_handle;
     
     /**
      * the subject for the vacation message
@@ -210,5 +214,22 @@ class Felamimail_Sieve_Vacation
         } else {
             return '"' . str_replace('"', '\""', $string) . '"';
         }
+    }
+    
+    /**
+     * return values as array
+     * 
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'addresses'             => $this->_addresses,
+            'subject'               => $this->_subject,
+            'from'                  => $this->_from,
+            'days'                  => $this->_days,
+            'enabled'               => $this->_enabled,
+            'reason'                => $this->_reason,        
+        );
     }
 }
