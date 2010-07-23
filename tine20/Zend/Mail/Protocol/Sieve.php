@@ -272,11 +272,7 @@ class Zend_Mail_Protocol_Sieve
      *
      * @param  array|string  $tokens    decoded tokens are returned by reference, if $dontParse
      *                                  is true the unparsed line is returned here
-     * @param  string        $wantedTag check for this tag for response code. Default '*' is
-     *                                  continuation tag.
      * @param  bool          $dontParse if true only the unparsed line is returned $tokens
-     * @return bool if returned tag matches wanted tag
-     * @throws Zend_Mail_Protocol_Exception
      */
     public function readLine(&$tokens = array(), $dontParse = false)
     {
