@@ -370,6 +370,67 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return array('status' => ($result) ? 'success' : 'failure');
     }
     
+    /***************************** sieve funcs *******************************/
+    
+    /**
+     * get sieve vacation for account 
+     *
+     * @param  string $accountId
+     * @return array
+     */
+    public function getSieveVacation($accountId)
+    {
+        $record = Felamimail_Controller_Sieve::getInstance()->getVacation($accountId);
+        
+        return $this->_recordToJson($record);
+    }
+
+    /**
+     * set sieve vacation for account 
+     *
+     * @param  string $accountId
+     * @param  array $vacationData
+     * @return array
+     */
+    public function setSieveVacation($accountId, $vacationData)
+    {
+        $record = new Felamimail_Model_Sieve_Vacation(array(), TRUE);
+        $record->setFromJsonInUsersTimezone($vacationData);
+        
+        $record = Felamimail_Controller_Sieve::getInstance()->setVacation($accountId, $record);
+        
+        return $this->_recordToJson($record);
+    }
+    
+    /**
+     * get sieve rules for account 
+     *
+     * @param  string $accountId
+     * @return array
+     */
+    public function getSieveRules($accountId)
+    {
+        $records = Felamimail_Controller_Sieve::getInstance()->getRules($accountId);
+        
+        return $this->_multipleRecordsToJson($records);
+    }
+
+    /**
+     * set sieve rules for account 
+     *
+     * @param  string $accountId
+     * @return array
+     * 
+     * @todo add set from json?
+     */
+    public function setSieveRules($accountId, $rulesData)
+    {
+        $records = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_Rule', $rulesData);
+        $records = Felamimail_Controller_Sieve::getInstance()->setRules($accountId, $records);
+        
+        return $this->_multipleRecordsToJson($records);
+    }
+
     /***************************** other funcs *******************************/
     
 	/**
