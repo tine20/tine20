@@ -81,4 +81,18 @@ class Addressbook_Controller_Salutation extends Tinebase_Controller_Abstract
 
         return $result;    
     }
+    
+    /**
+     * get salutation by id
+     *
+     * @param string $_id
+     * @return Tinebase_Record_RecordSet of subtype Addressbook_Model_Salutation
+     * 
+     */
+    public function getSalutation($_id)
+    {
+        $result = $this->_backend->get($_id);
+
+        return $result;    
+    }
 }
