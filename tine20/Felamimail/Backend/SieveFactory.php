@@ -32,7 +32,7 @@ class Felamimail_Backend_SieveFactory
     {
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         
-        if (! isset(self::$_backends[$accountId])) {
+        if (! isset(self::$_backends[$account->getId()])) {
             // get imap config from account to connect with sieve server
             $sieveConfig = $account->getSieveConfig();
             
@@ -46,4 +46,4 @@ class Felamimail_Backend_SieveFactory
         
         return self::$_backends[$account->getId()];
     }
-}    
+}

@@ -294,10 +294,14 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      */
     public function getSieveConfig()
     {
+        $this->resolveCredentials(FALSE);
+        
         $result = array(
-            'host'  => $this->host, // use imap hostname
-            'port'  => 2000, 
-            'ssl'   => 'TLS',
+            'host'      => $this->host, // use imap hostname
+            'port'      => 2000, 
+            'ssl'       => 'TLS',
+            'username'  => $this->user,
+            'password'  => $this->password,
         );
         
         return $result;

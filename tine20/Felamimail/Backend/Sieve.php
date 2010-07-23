@@ -17,12 +17,12 @@
  * @package     Felamimail
  * @subpackage  Backend
  */
-class Felamimail_Backend_Sieve extends Zend_Mail_Transport_Sieve
+class Felamimail_Backend_Sieve extends Zend_Mail_Protocol_Sieve
 {
     /**
      * Public constructor
      *
-     * @param  array $_config sieve config (host/port/ssl)
+     * @param  array $_config sieve config (host/port/ssl/username/password)
      */
     public function __construct($_config)
     {
@@ -30,5 +30,7 @@ class Felamimail_Backend_Sieve extends Zend_Mail_Transport_Sieve
         $_config['ssl'] = (array_key_exists('ssl', $_config)) ? $_config['ssl'] : FALSE;
         
         parent::__construct($_config['host'], $_config['port'], $_config['ssl']);
+        
+        $this->authenticate($_config['username'], $_config['password']);
     }
 }
