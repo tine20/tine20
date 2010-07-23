@@ -286,6 +286,24 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     }
 
     /**
+     * get sieve config array
+     *
+     * @return array
+     * 
+     * @todo save sieve config in db / add validators
+     */
+    public function getSieveConfig()
+    {
+        $result = array(
+            'host'  => $this->host, // use imap hostname
+            'port'  => 2000, 
+            'ssl'   => 'TLS',
+        );
+        
+        return $result;
+    }
+    
+    /**
      * to array
      *
      * @param boolean $_recursive
