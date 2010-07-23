@@ -299,10 +299,14 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         $result = array(
             'host'      => $this->host, // use imap hostname
             'port'      => 2000, 
-            'ssl'       => 'TLS',
+            //'ssl'       => 'TLS',
+            'ssl'       => FALSE,
             'username'  => $this->user,
             'password'  => $this->password,
         );
+        
+        // overwrite with settings in config
+        $result = array_merge($result, Tinebase_Config::getInstance()->getConfigAsArray('sieve', 'Tinebase', array()));
         
         return $result;
     }
