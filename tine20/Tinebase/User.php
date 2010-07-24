@@ -355,7 +355,7 @@ class Tinebase_User
             $group = $groupBackend->getGroupById($user->accountPrimaryGroup);
         } catch (Tinebase_Exception_Record_NotDefined $tern) {
             $group = $groupBackend->getGroupByIdFromSyncBackend($user->accountPrimaryGroup);
-            $group = $groupBackend->addGroupInSyncBackend($group);
+            $group = $groupBackend->addGroupInSqlBackend($group);
         }
         
         // update or create user in local sql backend
