@@ -147,6 +147,24 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      *
      * @param DOMElement  $_xmlNode   the parrent xml node
      * @param string      $_folderId  the local folder id
+     */
+    public function appendFileReference(DOMElement $_xmlNode, $_fileReference)
+    {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append fileReference " . $_serverId/* . ' options ' . print_r($_options, true)*/);
+        
+        list($messageId, $partId) = explode('-', $_fileReference, 2);
+        
+        $file = $this->_contentController->getMessagePart($messageId, $partId);
+        
+        $_xmlNode->appendChild(new DOMElement('ContentType', $file->type, 'uri:AirSyncBase'));
+        $_xmlNode->appendChild(new DOMElement('Data', $file->getContent(), 'uri:ItemOperations'));  
+    }
+    
+    /**
+     * append email data to xml element
+     *
+     * @param DOMElement  $_xmlNode   the parrent xml node
+     * @param string      $_folderId  the local folder id
      * @param string      $_serverId  the local entry id
      * @param boolean     $_withBody  retrieve body of entry
      */
