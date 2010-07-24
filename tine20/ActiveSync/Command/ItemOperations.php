@@ -52,8 +52,18 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
                 
                 // try to fetch element from namespace AirSync
                 $airSync = $fetch->children('uri:AirSync');
-                $fetchArray['collectionId'] = (string)$airSync->CollectionId;
-                $fetchArray['serverId']     = (string)$airSync->ServerId;
+                
+                if (isset($airSync->CollectionId)) {
+                    $fetchArray['collectionId'] = (string)$airSync->CollectionId;
+                    $fetchArray['serverId']     = (string)$airSync->ServerId;
+                }
+                
+                // try to fetch element from namespace AirSyncBase
+                $airSyncBase = $fetch->children('uri:AirSyncBase');
+                
+                if (isset($airSyncBase->FileReference)) {
+                    $fetchArray['fileReference'] = (string)$airSyncBase->FileReference;
+                }
                 
                 if (isset($fetch->Options)) {
                     // try to fetch element from namespace AirSyncBase
@@ -94,16 +104,21 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
             $fetchTag = $response->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Fetch'));
             
             try {
-                $folder         = $folderStateBackend->getByProperty($fetch['collectionId'], 'folderid');
-                $dataController = ActiveSync_Controller::dataFactory($folder->class, $this->_device, $this->_syncTimeStamp);
+                $dataController = ActiveSync_Controller::dataFactory($fetch['store'], $this->_device, $this->_syncTimeStamp);
                 
                 $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', ActiveSync_Command_ItemOperations::STATUS_SUCCESS));
-                $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $fetch['collectionId']));
-                $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId',     $fetch['serverId']));
-                
-                $properties = $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Properties'));
-                $dataController->appendXML($properties, $fetch['collectionId'], $fetch['serverId'], $fetch, true);
-                
+                if (isset($fetch['collectionId'])) {
+                    $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $fetch['collectionId']));
+                    $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId',     $fetch['serverId']));
+                    
+                    $properties = $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Properties'));
+                    $dataController->appendXML($properties, $fetch['collectionId'], $fetch['serverId'], $fetch, true);
+                } elseif (isset($fetch['fileReference'])) {
+                    $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSyncBase', 'FileReference', $fetch['fileReference']));
+                    
+                    $properties = $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Properties'));
+                    $dataController->appendFileReference($properties, $fetch['fileReference']);
+                }
             } catch (Tinebase_Exception_NotFound $e) {
                 $response->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', ActiveSync_Command_ItemOperations::STATUS_ITEM_FAILED_CONVERSION));
             } catch (Exception $e) {
