@@ -761,17 +761,14 @@ class Setup_Controller
                 $roles = Tinebase_Acl_Roles::getInstance();
                 $roles->deleteAllRoles();
                 
-                Tinebase_Group::getInstance()->importGroups();
+                Tinebase_User::syncUsers(true); //import users(ldap)/create initial users(sql)
+                
                 $roles->createInitialRoles();
                 $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
                 foreach ($applications as $application)
                 {
                      Setup_Initialize::initializeApplicationRights($application);
                 }
-                
-                Tinebase_User::getInstance()->importUsers(); //import users(ldap)/create initial users(sql)
-                Tinebase_Group::getInstance()->importGroupMembers(); //import groups members(ldap)
-                
             }
         }
     }
