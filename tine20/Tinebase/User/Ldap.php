@@ -152,14 +152,14 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         $this->_options = $_options;
 
-        $this->_userUUIDAttribute  = $this->_options['userUUIDAttribute'];
-        $this->_groupUUIDAttribute = $this->_options['groupUUIDAttribute'];
+        $this->_userUUIDAttribute  = strtolower($this->_options['userUUIDAttribute']);
+        $this->_groupUUIDAttribute = strtolower($this->_options['groupUUIDAttribute']);
         $this->_baseDn             = $this->_options['baseDn'];
         $this->_userBaseFilter     = $this->_options['userFilter'];
         $this->_userSearchScope    = $this->_options['userSearchScope'];
         $this->_groupBaseFilter    = $this->_options['groupFilter'];
 
-        $this->_rowNameMapping['accountId'] = strtolower($this->_options['userUUIDAttribute']);
+        $this->_rowNameMapping['accountId'] = $this->_userUUIDAttribute;
 
         $this->_ldap = new Tinebase_Ldap($this->_options);
         $this->_ldap->bind();
@@ -452,7 +452,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         }
 
         // no need to update this attribute, it's not allowed to change and even might not be updateable
-        unset($ldapData[strtolower($this->_userUUIDAttribute)]);
+        unset($ldapData[$this->_userUUIDAttribute]);
 
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
@@ -490,7 +490,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         $userId = $this->_ldap->getEntry($dn, array($this->_userUUIDAttribute));
 
-        $userId = $userId[strtolower($this->_userUUIDAttribute)][0];
+        $userId = $userId[$this->_userUUIDAttribute][0];
 
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' new ldap userid: ' . $userId);
 
@@ -806,7 +806,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
     public function resolveUIdNumberToUUId($_uidNumber)
     {
-        if (strtolower($this->_userUUIDAttribute) == 'uidnumber') {
+        if ($this->_userUUIDAttribute == 'uidnumber') {
             return $_uidNumber;
         }
 
@@ -821,7 +821,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             array($this->_userUUIDAttribute)
         )->getFirst();
 
-        return $userId[strtolower($this->_userUUIDAttribute)][0];
+        return $userId[$this->_userUUIDAttribute][0];
     }
 
     /**
@@ -832,7 +832,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function resolveUUIdToUIdNumber($_uuid)
     {
-        if (strtolower($this->_groupUUIDAttribute) == 'uidnumber') {
+        if ($this->_groupUUIDAttribute == 'uidnumber') {
             return $_uuid;
         }
 

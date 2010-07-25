@@ -117,8 +117,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
 
         $this->_options = $_options;
 
-        $this->_userUUIDAttribute  = $this->_options['userUUIDAttribute'];
-        $this->_groupUUIDAttribute = $this->_options['groupUUIDAttribute'];
+        $this->_userUUIDAttribute  = strtolower($this->_options['userUUIDAttribute']);
+        $this->_groupUUIDAttribute = strtolower($this->_options['groupUUIDAttribute']);
         $this->_baseDn             = $this->_options['baseDn'];
         $this->_userBaseFilter     = $this->_options['userFilter'];
         $this->_userSearchScope    = $this->_options['userSearchScope'];
@@ -164,7 +164,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         $group = $groups->getFirst();
         
         $result = new Tinebase_Model_Group(array(
-            'id'            => $group[strtolower($this->_groupUUIDAttribute)][0],
+            'id'            => $group[$this->_groupUUIDAttribute][0],
             'name'          => $group['cn'][0],
             'description'   => isset($group['description'][0]) ? $group['description'][0] : '' 
         ));
@@ -200,7 +200,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         foreach ($groups as $group) {
             $groupObject = new Tinebase_Model_Group(array(
-                'id'            => $group[strtolower($this->_groupUUIDAttribute)][0],
+                'id'            => $group[$this->_groupUUIDAttribute][0],
                 'name'          => $group['cn'][0],
                 'description'   => isset($group['description'][0]) ? $group['description'][0] : null
             )); 
@@ -441,7 +441,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         $groupId = $this->_ldap->getEntry($dn, array($this->_groupUUIDAttribute));
         
-        $groupId = $groupId[strtolower($this->_groupUUIDAttribute)][0];
+        $groupId = $groupId[$this->_groupUUIDAttribute][0];
         
         $group = $this->getGroupByIdFromSyncBackend($groupId);
                 
@@ -717,7 +717,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function resolveGIdNumberToUUId($_gidNumber)
     {
-        if (strtolower($this->_groupUUIDAttribute) == 'gidnumber') {
+        if ($this->_groupUUIDAttribute == 'gidnumber') {
             return $_gidNumber;
         }
         
@@ -735,7 +735,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if ($groupId == null) {
             throw new Tinebase_Exception_NotFound('LDAP group with (gidnumber=' . $_gidNumber . ') not found');
         }
-        return $groupId[strtolower($this->_groupUUIDAttribute)][0];
+        return $groupId[$this->_groupUUIDAttribute][0];
     }
     
     /**
@@ -746,7 +746,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function resolveUUIdToGIdNumber($_uuid)
     {
-        if (strtolower($this->_groupUUIDAttribute) == 'gidnumber') {
+        if ($this->_groupUUIDAttribute == 'gidnumber') {
             return $_uuid;
         }
         
@@ -794,7 +794,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         foreach ($groups as $group) {
             $groupObject = new Tinebase_Model_Group(array(
-                'id'            => $group[strtolower($this->_groupUUIDAttribute)][0],
+                'id'            => $group[$this->_groupUUIDAttribute][0],
                 'name'          => $group['cn'][0],
                 'description'   => isset($group['description'][0]) ? $group['description'][0] : null
             )); 
@@ -806,7 +806,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         $memberships = array();
         
         foreach ($groups as $group) {
-            $memberships[] = $group[strtolower($this->_groupUUIDAttribute)][0];
+            $memberships[] = $group[$this->_groupUUIDAttribute][0];
         }
         
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' group memberships: ' . print_r($memberships, TRUE));
