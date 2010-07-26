@@ -150,14 +150,14 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      */
     public function appendFileReference(DOMElement $_xmlNode, $_fileReference)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append fileReference " . $_serverId/* . ' options ' . print_r($_options, true)*/);
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append fileReference " . $_fileReference/* . ' options ' . print_r($_options, true)*/);
         
         list($messageId, $partId) = explode('-', $_fileReference, 2);
         
         $file = $this->_contentController->getMessagePart($messageId, $partId);
         
         $_xmlNode->appendChild(new DOMElement('ContentType', $file->type, 'uri:AirSyncBase'));
-        $_xmlNode->appendChild(new DOMElement('Data', $file->getContent(), 'uri:ItemOperations'));  
+        $_xmlNode->appendChild(new DOMElement('Data', $file->getDecodedContent(), 'uri:ItemOperations'));  
     }
     
     /**
