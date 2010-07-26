@@ -65,3 +65,4 @@ Ext.ux.form.ClearableTextField = Ext.extend(Ext.form.TriggerField, {
         return ret;
     }
 });
+Ext.reg('extuxclearabletextfield', Ext.ux.form.ClearableTextField);

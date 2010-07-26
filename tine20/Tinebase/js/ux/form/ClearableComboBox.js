@@ -86,5 +86,5 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
             this.triggers[0].show();
         }
     }
-
 });
+Ext.reg('extuxclearablecombofield', Ext.ux.form.ClearableComboBox);
