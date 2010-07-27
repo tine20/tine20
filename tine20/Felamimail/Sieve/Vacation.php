@@ -180,12 +180,12 @@ class Felamimail_Sieve_Vacation
     public function __toString() 
     {
         $days      = ":days $this->_days ";
-        $from      = !empty($this->_from) ? ":from $this->_from " : null;
+        $from      = !empty($this->_from) ? ":from {$this->_quoteString($this->_from)} " : null;
         $addresses = count($this->_addresses) > 0 ? ":addresses {$this->_quoteString($this->_addresses)} " : null;
         
         if(!empty($this->_subject)) {
             $subject = iconv_mime_encode(null, $this->_subject, array('scheme' => 'Q'));
-            $subject = ':subject ' . substr($subject, 2) . ' ';
+            $subject = ':subject ' . $this->_quoteString(substr($subject, 2)) . ' ';
         } else {
             $subject = null;
         }
