@@ -190,11 +190,22 @@ class Felamimail_Sieve_Script
         $this->addRule($rule);
     }
     
+    /**
+     * add rule to script
+     * 
+     * @param Felamimail_Sieve_Rule $rule
+     * @return Felamimail_Sieve_Vacation
+     */
     public function addRule(Felamimail_Sieve_Rule $rule)
     {
         $this->_rules[$rule->getId()] = $rule;
     }
     
+    /**
+     * get sieve script as string
+     * 
+     * @return string
+     */
     public function getSieve()
     {
         $pseudoScript = null;
@@ -207,7 +218,6 @@ class Felamimail_Sieve_Script
             if($rule->isEnabled() === true) {
                 $rules .= sprintf("%s %s", ($rules === null) ? 'if' : 'elsif', $rule);
             }
-            file_put_contents('/tmp/delme.txt', $this->_escapeChars(serialize($rule)));
             $pseudoScript .= '#SieveRule' . $this->_escapeChars(serialize($rule)) . "\r\n";
         }        
         
@@ -219,16 +229,24 @@ class Felamimail_Sieve_Script
         
         $sieve = $header . "\r\n\r\n" . $rules . $vacation . "\r\n\r\n" . $pseudoScript;
         
-        #file_put_contents('/tmp/delme.txt', $sieve);
-        
         return $sieve;
     }
     
+    /**
+     * set vacation
+     * 
+     * @param Felamimail_Sieve_Vacation $vacation
+     */
     public function setVacation(Felamimail_Sieve_Vacation $vacation)
     {
         $this->_vacation = $vacation;
     }
     
+    /**
+     * parse sieve parts and set vacation
+     * 
+     * @param array $parts
+     */
     protected function _parseSmartSieveVacation($parts)
     {
         $vacation = new Felamimail_Sieve_Vacation();
