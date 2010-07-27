@@ -235,7 +235,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         // get truncation
         $truncateAt = null;
         
-        if ($_options['mimeSupport'] == 2 && (version_compare($this->_device->acsversion, '12.0', '<=') || isset($_options['bodyPreferences'][4]))) {
+        if (isset($_options['mimeSupport']) && $_options['mimeSupport'] == 2 && (version_compare($this->_device->acsversion, '12.0', '<=') || isset($_options['bodyPreferences'][4]))) {
             if ($_neverTruncate === false && isset($_options['bodyPreferences'][4]) && isset($_options['bodyPreferences'][4]['truncationSize'])) {
                 $truncateAt = $_options['bodyPreferences'][4]['truncationSize'];
             }
