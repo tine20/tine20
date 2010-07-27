@@ -229,7 +229,10 @@ class Zend_Mail_Protocol_Sieve
                         $line .= $this->_nextLine();
                     }
                     $tokens[] = $token;
-                    $line = trim($line) . ' ';
+                    $line = trim($line);
+                    if(!empty($line)) {
+                        $line = $line . ' ';
+                    }
                     continue;
                 }
             }
