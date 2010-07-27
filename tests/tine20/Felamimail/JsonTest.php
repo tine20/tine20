@@ -60,7 +60,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_foldersToClear = array();
-    
+
     /**
      * Runs the test methods of this class.
      *
@@ -473,19 +473,35 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /*********************** folder tests ****************************/
     
     /**
-     * get vacation sieve script
+     * set and get vacation sieve script
      * 
-     * @todo finish
      */
-    public function testGetVacation()
+    public function testGetSetVacation()
     {
-        /*
-        $result = $this->_json->getSieveVacation($this->_account->getId());
+        // use another name for test script
+        Felamimail_Controller_Sieve::getInstance()->setScriptName('Felamimail_Unittest');
         
-        //print_r($result);
+        // delete script first
+        Felamimail_Controller_Sieve::getInstance()->deleteScript($this->_account->getId());
         
-        $this->assertEquals($this->_account->getId(), $result['account_id']);
-        */
+        $vacationData = array(
+            'account_id'            => $this->_account->getId(),
+            'addresses'             => array(),
+            'subject'               => 'unittest vacation subject',
+            'from'                  => $this->_account->email,
+            'days'                  => 7,
+            'enabled'               => TRUE,
+            'reason'                => 'unittest vacation message',
+        );
+        $resultSet = $this->_json->setSieveVacation($this->_account->getId(), $vacationData);
+        
+        unset($resultSet['vacationObject']);
+        $this->assertEquals($vacationData, $resultSet);
+        
+        $resultGet = $this->_json->getSieveVacation($this->_account->getId());
+
+        unset($resultGet['vacationObject']);
+        $this->assertEquals($vacationData, $resultGet);
     }
     
     /************************ protected functions ****************************/
