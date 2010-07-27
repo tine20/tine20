@@ -133,8 +133,6 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
         
         $sieveScript = $script->getSieve();
         
-        print_r($sieveScript);
-        
         $this->assertContains(':days 8', $sieveScript);
         $this->assertContains(':from "sieve@example.com"', $sieveScript);
         $this->assertContains(':addresses ["info@example.com"]', $sieveScript);
