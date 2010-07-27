@@ -207,6 +207,7 @@ class Felamimail_Sieve_Script
             if($rule->isEnabled() === true) {
                 $rules .= sprintf("%s %s", ($rules === null) ? 'if' : 'elsif', $rule);
             }
+            file_put_contents('/tmp/delme.txt', $this->_escapeChars(serialize($rule)));
             $pseudoScript .= '#SieveRule' . $this->_escapeChars(serialize($rule)) . "\r\n";
         }        
         
@@ -216,7 +217,11 @@ class Felamimail_Sieve_Script
         }
         $pseudoScript .= '#SieveVacation' . $this->_escapeChars(serialize($this->_vacation)) . "\r\n";
         
-        return $header . "\r\n\r\n" . $rules . $vacation . "\r\n\r\n" . $pseudoScript;
+        $sieve = $header . "\r\n\r\n" . $rules . $vacation . "\r\n\r\n" . $pseudoScript;
+        
+        #file_put_contents('/tmp/delme.txt', $sieve);
+        
+        return $sieve;
     }
     
     public function setVacation(Felamimail_Sieve_Vacation $vacation)
@@ -249,8 +254,8 @@ class Felamimail_Sieve_Script
      */
     protected function _unescapeChars($string)
     {
-        $search = array('\n', '\&');
-        $replace = array("\r\n", "&");
+        $search = array('\n', '\&', '\O\0');
+        $replace = array("\r\n", "&", "\x00");
         $string = str_replace($search, $replace, $string);
 
         return $string;
@@ -264,8 +269,8 @@ class Felamimail_Sieve_Script
      */
     protected function _escapeChars($string)
     {
-        $search = array("\r\n");
-        $replace = array('\n');
+        $search = array("\r\n", "\x00");
+        $replace = array('\n', '\O\0');
         $string = str_replace($search, $replace, $string);
 
         return $string;
