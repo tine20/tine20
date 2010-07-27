@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        add __destruct with $_backend->logout()?
  */
 
 /**
@@ -23,8 +24,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * script name
      *
      */
-    //const SCRIPT_NAME = 'felamimail2.0';
-    const SCRIPT_NAME = 'felamimail';
+    protected $_scriptName = 'felamimail2.0';
     
     /**
      * application name (is needed in checkRight())
@@ -106,8 +106,6 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             $result->setFromFSV($script->getVacation());
         }
         
-        $this->_backend->logout();
-        
         return $result;
     }
     
@@ -122,16 +120,16 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $scripts = $this->_backend->listScripts();
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting list of SIEVE scripts.');
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($scripts, TRUE));
    
-        //print_r($scripts);
+        if (count($scripts) > 0 && array_key_exists($this->_scriptName, $scripts)) {
         
-        if (count($scripts) > 0 && array_key_exists(self::SCRIPT_NAME, $scripts)) {
-        
-            $scriptName = $scripts[self::SCRIPT_NAME]['name'];
+            $scriptName = $scripts[$this->_scriptName]['name'];
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get Tine 2.0 script: ' . $scriptName);
             
             $script = $this->_backend->getScript($scriptName);
+            echo $script;
             $result = new Felamimail_Sieve_Script($script);
             
         } else {
@@ -167,15 +165,42 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $fsv = $_vacation->getFSV();
         
         $script = $this->_getSieveScript($_accountId);
-        
         $fss = new Felamimail_Sieve_Script($script);
         $fss->setVacation($fsv);
         
-        $this->_backend->putScript(self::SCRIPT_NAME, $fss->getSieve());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Put updated vacation SIEVE script ' . $this->_scriptName);
+        
+        $scriptToPut = $fss->getSieve();
+        //echo $scriptToPut;
+        $this->_backend->putScript($this->_scriptName, $scriptToPut);
         
         return $this->getVacation($_accountId);
     }
 
+    /**
+     * set sieve script name
+     * 
+     * @param string $_name
+     */
+    public function setScriptName($_name)
+    {
+        $this->_scriptName = $_name;
+    }
+    
+    /**
+     * delete sieve script
+     * 
+     * @param string $_accountId
+     */
+    public function deleteScript($_accountId)
+    {
+        $this->_setSieveBackendAndAuthenticate($_accountId);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Delete SIEVE script ' . $this->_scriptName);
+        
+        $this->_backend->deleteScript($this->_scriptName);
+    }
+    
     /**
      * get rules for account
      * 
