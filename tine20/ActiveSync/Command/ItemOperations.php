@@ -92,6 +92,14 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
      */
     public function getResponse()
     {
+        // add aditional namespaces for contacts, tasks and email
+        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts'    , 'uri:Contacts');
+        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Tasks'       , 'uri:Tasks');
+        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Email'       , 'uri:Email');
+        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Calendar'    , 'uri:Calendar');
+        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSyncBase' , 'uri:AirSyncBase');
+        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSync'     , 'uri:AirSync');
+        
         $folderStateBackend   = new ActiveSync_Backend_FolderState();
         
         $itemOperations = $this->_outputDom->documentElement;
@@ -106,18 +114,22 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
             try {
                 $dataController = ActiveSync_Controller::dataFactory($fetch['store'], $this->_device, $this->_syncTimeStamp);
                 
-                $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', ActiveSync_Command_ItemOperations::STATUS_SUCCESS));
                 if (isset($fetch['collectionId'])) {
+                    $properties = $this->_outputDom->createElementNS('uri:ItemOperations', 'Properties');
+                    $dataController->appendXML($properties, $fetch['collectionId'], $fetch['serverId'], $fetch, true);
+                    
+                    $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', ActiveSync_Command_ItemOperations::STATUS_SUCCESS));
                     $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $fetch['collectionId']));
                     $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId',     $fetch['serverId']));
+                    $fetchTag->appendChild($properties);
                     
-                    $properties = $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Properties'));
-                    $dataController->appendXML($properties, $fetch['collectionId'], $fetch['serverId'], $fetch, true);
                 } elseif (isset($fetch['fileReference'])) {
-                    $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSyncBase', 'FileReference', $fetch['fileReference']));
-                    
-                    $properties = $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Properties'));
+                    $properties = $this->_outputDom->createElementNS('uri:ItemOperations', 'Properties');
                     $dataController->appendFileReference($properties, $fetch['fileReference']);
+                    
+                    $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', ActiveSync_Command_ItemOperations::STATUS_SUCCESS));
+                    $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSyncBase', 'FileReference', $fetch['fileReference']));
+                    $fetchTag->appendChild($properties);
                 }
             } catch (Tinebase_Exception_NotFound $e) {
                 $response->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', ActiveSync_Command_ItemOperations::STATUS_ITEM_FAILED_CONVERSION));
