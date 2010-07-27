@@ -146,6 +146,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * 
      * @param array $_headers
      * @return void
+     * 
+     * @todo save from values in from_email/from_name (see http://www.tine20.org/bugtracker/view.php?id=2870)
      */
     public function parseHeaders(array $_headers)
     {
@@ -168,6 +170,14 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             if (isset($_headers[$field])) {
                 // if sender set the headers twice we only use the first
                 $this->$field = Felamimail_Message::convertAddresses($_headers[$field]);
+                if ($field == 'from') {
+                    // as we don't save the from field as array yet, we have to make sure that it is converted to a string
+                    if (count($this->from) > 0 && array_key_exists('email', $this->from[0])) {
+                        $this->from = (array_key_exists('name', $this->from[0])) ? $this->from[0]['name'] . '<' . $this->from[0]['email'] . '>' : $this->from[0]['email'];
+                    } else {
+                        $this->from = '';
+                    }
+                }
             }
         }
     }
