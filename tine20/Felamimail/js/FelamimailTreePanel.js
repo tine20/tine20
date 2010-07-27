@@ -371,11 +371,13 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         if (! folder) {
             // edit/remove account
             if (account.get('ns_personal') !== 'default') {
-                
                 // check account personal namespace -> disable 'add folder' if namespace is other than root 
                 this.contextMenuAccount.items.each(function(item) {
                     if (item.iconCls == 'action_add') {
                         item.setDisabled(account.get('ns_personal') != '');
+                    }
+                    if (item.iconCls == 'action_email_replyAll') {
+                        item.setDisabled(account.get('sieve_hostname') == null || account.get('sieve_hostname') == '');
                     }
                 });
                 

@@ -143,6 +143,38 @@ Tine.Felamimail.setTreeContextMenus = function() {
             });
         }
     };
+
+    var editSieveAction = {
+        text: this.app.i18n._('Set Vacation Message'),
+        iconCls: 'action_email_replyAll',
+        scope: this,
+        handler: function() {
+            var record = this.accountStore.getById(this.ctxNode.attributes.account_id);
+            
+            // TODO add Tine.Felamimail.SieveEditDialog
+            /*
+            var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
+                record: record,
+                listeners: {
+                    scope: this,
+                    'update': function(record) {
+                        var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
+                        
+                        // update tree node + store
+                        this.ctxNode.setText(account.get('name'));
+                        this.ctxNode.attributes.intelligent_folders = account.get('intelligent_folders');
+                        this.accountStore.reload();
+                        
+                        // reload tree node + remove all folders of this account from store ?
+                        this.folderStore.resetQueryAndRemoveRecords('parent_path', '/' + this.ctxNode.attributes.account_id);
+                        this.ctxNode.reload(function(callback) {
+                        });
+                    }
+                }
+            });
+            */
+        }
+    };
     
     // inactive
     /*
@@ -218,7 +250,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
     
     this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
         nodeName: this.app.i18n.n_('Account', 'Accounts', 1),
-        actions: [editAccountAction, 'delete', addFolderToRootAction, reloadFolderCacheAction],
+        actions: [editAccountAction, 'delete', addFolderToRootAction, reloadFolderCacheAction, editSieveAction],
         scope: this,
         backend: 'Felamimail',
         backendModel: 'Account'
