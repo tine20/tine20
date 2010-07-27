@@ -157,7 +157,6 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         }
         
         $this->subject = (isset($_headers['subject'])) ? Felamimail_Message::convertText($_headers['subject']) : null;
-        $this->from    = (isset($_headers['from']))    ? Felamimail_Message::convertText($_headers['from'], TRUE, 256) : null;
         
         if (array_key_exists('date', $_headers)) {
             $this->sent = Felamimail_Message::convertDate($_headers['date']);
@@ -165,7 +164,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $this->sent = Felamimail_Message::convertDate($_headers['resent-date']);
         }
         
-        foreach (array('to', 'cc', 'bcc') as $field) {
+        foreach (array('to', 'cc', 'bcc', 'from') as $field) {
             if (isset($_headers[$field])) {
                 // if sender set the headers twice we only use the first
                 $this->$field = Felamimail_Message::convertAddresses($_headers[$field]);
