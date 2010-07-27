@@ -197,12 +197,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // set flags on imap server
         foreach ($messagesToFlag as $message) {
-            if($imapBackend !== null && ($lastFolderId != $message->folder_id || count($imapMessageUids) >= 50)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set flags on imap server.');
-                $imapBackend->addFlags($imapMessageUids, array_intersect($flags, array_keys(self::$_allowedFlags)));
+            
+            // write flags on imap (if folder changes or count messages > 50)
+            if ($imapBackend !== null && ($lastFolderId != $message->folder_id || count($imapMessageUids) >= 50)) {
+                $this->_addFlagsOnImap($imapMessageUids, $flags, $imapBackend);
                 $imapMessageUids = array();
             }
             
+            // init new folder
             if ($lastFolderId != $message->folder_id) {
                 $imapBackend              = $this->_getBackendAndSelectFolder($message->folder_id);
                 $lastFolderId             = $message->folder_id;
@@ -215,10 +217,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $imapMessageUids[] = $message->messageuid;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set flags on imap server.');
-        
-        if($imapBackend !== null && count($imapMessageUids) > 0) {
-            $imapBackend->addFlags($imapMessageUids, array_intersect($flags, array_keys(self::$_allowedFlags)));
+        // write remaining flags
+        if ($imapBackend !== null && count($imapMessageUids) > 0) {
+            $this->_addFlagsOnImap($imapMessageUids, $flags, $imapBackend);
         }    
 
         // set flags in local database
@@ -259,6 +260,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $affectedFolders = $this->_updateFolderCounts($folderIds);
         
         return $affectedFolders;
+    }
+    
+    /**
+     * add flags on imap server
+     * 
+     * @param array $_uids
+     * @param array $_flags
+     * @param Felamimail_Backend_ImapProxy $_imap
+     */
+    protected function _addFlagsOnImap($_uids, $_flags, Felamimail_Backend_ImapProxy $_imap)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set flags on imap server for ' . count($_uids) . ' messages.');
+        $_imap->addFlags($_uids, array_intersect($_flags, array_keys(self::$_allowedFlags)));
     }
     
     /**
