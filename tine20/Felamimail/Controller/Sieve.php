@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        move sieve backend to Felamimail/Backend ?
  */
 
 /**
@@ -90,17 +89,49 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     public function getVacation($_accountId)
     {
-        $this->_setSieveBackendAndAuthenticate($_accountId);
-        $scripts = $this->_backend->listScripts();
-
-        print_r($scripts);
+        $script = $this->_getSieveScript($_accountId);
         
-        //$script->parseScript($vacationScript);
-        //$vacation = $script->getVacation();
         $result = new Felamimail_Model_Sieve_Vacation(array(
             'account_id'    => $_accountId
         ));
-        //$result->setFromFSV($vacation);
+            
+        if ($script !== NULL) {
+            $result->setFromFSV($script->getVacation());
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * get sieve script for account
+     * 
+     * @param string $_accountId
+     * @return NULL|Felamimail_Sieve_Script
+     */
+    protected function _getSieveScript($_accountId)
+    {
+        $this->_setSieveBackendAndAuthenticate($_accountId);
+        
+        $scripts = $this->_backend->listScripts();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting list of SIEVE scripts.');
+   
+        //print_r($scripts);
+        
+        if (count($scripts) > 0 && array_key_exists(Felamimail_Model_Sieve_Vacation::SCRIPT_NAME, $scripts)) {
+        
+            $scriptName = $scripts[Felamimail_Model_Sieve_Vacation::SCRIPT_NAME]['name'];
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get Tine 2.0 script: ' . $scriptName);
+            
+            $script = $this->_backend->getScript($scriptName);
+            $result = new Felamimail_Sieve_Script($script);
+            
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No Tine 2.0 SIEVE scripts found.');
+            
+            $result = NULL;
+        }
         
         $this->_backend->logout();
         
