@@ -33,6 +33,13 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
     const SMTP = 'smtp';
 
     /**
+     * sieve conf name
+     * 
+     * @var string
+     */
+    const SIEVE = 'sieve';
+
+    /**
      * authentication backend config
      * 
      * @var string
