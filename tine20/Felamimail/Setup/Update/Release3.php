@@ -268,6 +268,38 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Felamimail', '3.8');
     }
+    
+    /**
+     * update function (-> 3.9)
+     * - add sieve config fields to account
+     */    
+    public function update_8()
+    {
+        $newFields = array(
+                '<field>
+                    <name>sieve_hostname</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>',
+                '<field>
+                    <name>sieve_port</name>
+                    <type>integer</type>
+                </field>',
+                '<field>
+                    <name>sieve_ssl</name>
+                    <type>enum</type>
+                    <value>none</value>
+                    <value>TLS</value>
+                </field>'
+        );
+        
+        foreach ($newFields as $col) {
+            $this->_backend->addCol('felamimail_account', new Setup_Backend_Schema_Field_Xml($col));
+        }
+        
+        $this->setTableVersion('felamimail_account', '10');
+        $this->setApplicationVersion('Felamimail', '3.9');
+    }    
 
     /**
      * clear message cache tables and reset folder status

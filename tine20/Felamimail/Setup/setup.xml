@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>3.8</version>
+    <version>3.9</version>
     <order>30</order>
     <status>enabled</status>
     <depends>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>9</version>
+            <version>10</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -150,6 +150,21 @@
                     <name>smtp_credentials_id</name>
                     <type>text</type>
                     <length>40</length>
+                </field>
+                <field>
+                    <name>sieve_hostname</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>sieve_port</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>sieve_ssl</name>
+                    <type>enum</type>
+                    <value>none</value>
+                    <value>TLS</value>
                 </field>
                 <field>
                     <name>created_by</name>

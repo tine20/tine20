@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  * @todo        update account credentials if user password changed
  * @todo        use generic (JSON encoded) field for 'other' settings like folder names
@@ -126,6 +126,17 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'smtp_credentials_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'smtp_user'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'smtp_password'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // sieve config
+        'sieve_port'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 2000),
+        'sieve_hostname'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'sieve_ssl'=> array(
+            Zend_Filter_Input::ALLOW_EMPTY => true, 
+            Zend_Filter_Input::DEFAULT_VALUE => 'tls',
+            'InArray' => array(self::SECURE_NONE, self::SECURE_TLS)
+        ),
+        //'sieve_credentials_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        //'sieve_user'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        //'sieve_password'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -290,23 +301,23 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      *
      * @return array
      * 
-     * @todo save sieve config in db / add validators
+     * @todo add sieve credentials? this uses imap credentials atm.
      */
     public function getSieveConfig()
     {
         $this->resolveCredentials(FALSE);
         
         $result = array(
-            'host'      => $this->host, // use imap hostname
-            'port'      => 2000, 
-            //'ssl'       => 'TLS',
-            'ssl'       => FALSE,
+            'host'      => $this->sieve_hostname,
+            'port'      => $this->sieve_port, 
+            'ssl'       => ($this->sieve_ssl && $this->sieve_ssl !== self::SECURE_NONE) ? $this->sieve_ssl : FALSE,
             'username'  => $this->user,
             'password'  => $this->password,
         );
         
-        // overwrite with settings in config
-        $result = array_merge($result, Tinebase_Config::getInstance()->getConfigAsArray('sieve', 'Tinebase', array()));
+        if ($this->type == self::TYPE_SYSTEM) {
+            $result = array_merge($result, Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SIEVE));
+        }
         
         return $result;
     }
