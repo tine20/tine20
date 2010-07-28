@@ -664,7 +664,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     public function sendZendMail($_accountId, Zend_Mail $_mail, $_saveInSent = null)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' Sending message with subject ' . $_message->getSubject() 
+            ' Sending message with subject ' . $_mail->getSubject() 
         );
 
         // increase execution time (sending message with attachments can take a long time)
@@ -673,15 +673,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // get account
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($account->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
         
-        $_mail->clearFrom();
         // set from
+        $_mail->clearFrom();
         $from = (isset($account->from) && ! empty($account->from)) 
             ? $account->from 
             : Tinebase_Core::getUser()->accountFullName;
         $_mail->setFrom($account->email, $from);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' From: ' . $_mail->getFrom());
         
         // add user agent
         $_mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
@@ -690,6 +691,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (isset($account->organization) && ! empty($account->organization)) {
             $_mail->addHeader('Organization', $account->organization);
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
         
         // set transport + send mail
         $smtpConfig = $account->getSmtpConfig();
