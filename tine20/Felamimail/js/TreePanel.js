@@ -371,6 +371,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         if (! folder) {
             // edit/remove account
             if (account.get('ns_personal') !== 'default') {
+                Tine.log.debug(account);
                 // check account personal namespace -> disable 'add folder' if namespace is other than root 
                 this.contextMenuAccount.items.each(function(item) {
                     if (item.iconCls == 'action_add') {

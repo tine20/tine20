@@ -574,3 +574,55 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
     }
 });
 
+/**
+ * @namespace Tine.Felamimail.Model
+ * @class Tine.Felamimail.Model.Vacation
+ * @extends Tine.Tinebase.data.Record
+ * 
+ * Vacation Record Definition
+ */ 
+Tine.Felamimail.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+    { name: 'id' },
+    { name: 'account_id' },
+    { name: 'reason' },
+    { name: 'enabled' },
+    { name: 'days' }
+]), {
+    appName: 'Felamimail',
+    modelName: 'Vacation',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('Vacation', 'Vacations', n);
+    recordName: 'Vacation',
+    recordsName: 'Vacations',
+    //containerProperty: 'container_id',
+    // ngettext('record list', 'record lists', n);
+    containerName: 'Vacation list',
+    containersName: 'Vacation lists'    
+});
+
+/**
+ * get default data for account
+ * 
+ * @return {Object}
+ */
+Tine.Felamimail.Model.Vacation.getDefaultData = function() { 
+    return {
+        days: 7
+    };
+};
+
+/**
+ * @namespace Tine.Felamimail
+ * @class Tine.Felamimail.accountBackend
+ * @extends Tine.Tinebase.data.RecordProxy
+ * 
+ * Vacation Backend
+ */ 
+Tine.Felamimail.vacationBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Felamimail',
+    modelName: 'Vacation',
+    recordClass: Tine.Felamimail.Model.Vacation
+});
+
+

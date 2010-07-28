@@ -144,17 +144,16 @@ Tine.Felamimail.setTreeContextMenus = function() {
         }
     };
 
-    var editSieveAction = {
+    var editVacationAction = {
         text: this.app.i18n._('Set Vacation Message'),
         iconCls: 'action_email_replyAll',
         scope: this,
         handler: function() {
             var record = this.accountStore.getById(this.ctxNode.attributes.account_id);
             
-            // TODO add Tine.Felamimail.SieveEditDialog
-            /*
-            var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
-                record: record,
+            var popupWindow = Tine.Felamimail.VacationEditDialog.openWindow({
+                record: record
+                /*
                 listeners: {
                     scope: this,
                     'update': function(record) {
@@ -171,8 +170,8 @@ Tine.Felamimail.setTreeContextMenus = function() {
                         });
                     }
                 }
+                */
             });
-            */
         }
     };
     
@@ -250,7 +249,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
     
     this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
         nodeName: this.app.i18n.n_('Account', 'Accounts', 1),
-        actions: [editAccountAction, 'delete', addFolderToRootAction, reloadFolderCacheAction, editSieveAction],
+        actions: [editAccountAction, 'delete', addFolderToRootAction, reloadFolderCacheAction, editVacationAction],
         scope: this,
         backend: 'Felamimail',
         backendModel: 'Account'

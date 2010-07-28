@@ -40,6 +40,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Felamimail/js/GridPanel.js',
             'Felamimail/js/MessageDisplayDialog.js',
             'Felamimail/js/MessageEditDialog.js',
+            'Felamimail/js/VacationEditDialog.js',
             'Felamimail/js/AccountEditDialog.js',
             'Addressbook/js/SearchCombo.js',
             'Felamimail/js/RecipientGrid.js',
