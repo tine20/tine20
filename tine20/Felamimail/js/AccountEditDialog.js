@@ -17,7 +17,9 @@ Ext.namespace('Tine.Felamimail');
  * @extends     Tine.widgets.dialog.EditDialog
  * 
  * <p>Account Edit Dialog</p>
- * <p></p>
+ * <p>
+ * TODO         add sieve settings
+ * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -28,7 +30,6 @@ Ext.namespace('Tine.Felamimail');
  * @constructor
  * Create a new Tine.Felamimail.AccountEditDialog
  * 
- * TODO         use tabs instead of accordion (see http://www.tine20.org/bugtracker/view.php?id=2592)
  */
 Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
@@ -100,9 +101,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         
         return {
-            layout: 'accordion',
-            animate: true,
-            border: true,
+            xtype: 'tabpanel',
+            deferredRender: false,
+            border: false,
+            activeTab: 0,
+            border: false,
             items: [{
                 title: this.app.i18n._('Account'),
                 autoScroll: true,
@@ -301,7 +304,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ['plain',  this.app.i18n._('Plain Text')]
                     ]
                 }]]
-            }]            
+            }]
         };
     }
 });
