@@ -30,9 +30,11 @@ class Felamimail_Backend_SieveFactory
      */
     static public function factory($_accountId)
     {
-        $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
+        $accountId = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId->getId() : $_accountId;
         
-        if (! isset(self::$_backends[$account->getId()])) {
+        if (! isset(self::$_backends[$accountId])) {
+            $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($accountId);
+                    
             // get imap config from account to connect with sieve server
             $sieveConfig = $account->getSieveConfig();
             
@@ -42,9 +44,9 @@ class Felamimail_Backend_SieveFactory
                 . ' (secure: ' . ((array_key_exists('ssl', $sieveConfig) && $sieveConfig['ssl'] !== FALSE) ? $sieveConfig['ssl'] : 'none') 
                 . ') with user ' . $sieveConfig['username']);
             
-            self::$_backends[$account->getId()] = new Felamimail_Backend_Sieve($sieveConfig);
+            self::$_backends[$accountId] = new Felamimail_Backend_Sieve($sieveConfig);
         }
         
-        return self::$_backends[$account->getId()];
+        return self::$_backends[$accountId];
     }
 }
