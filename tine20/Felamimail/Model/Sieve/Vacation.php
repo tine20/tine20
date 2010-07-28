@@ -76,8 +76,11 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
             ->setSubject($this->subject)
             ->setFrom($this->from)
             ->setReason($this->reason);
-        foreach ($this->addresses as $address) {
-            $fsv->addAddress($address);
+            
+        if (is_array($this->addresses)) {
+            foreach ($this->addresses as $address) {
+                $fsv->addAddress($address);
+            }
         }
         
         $this->vacationObject = $fsv;
