@@ -182,9 +182,12 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
-        // set ssl/smtp_ssl/display_format to default if not set
+        // set some fields to default if not set
         $this->_filters['ssl']              = new Zend_Filter_Empty('tls');
         $this->_filters['smtp_ssl']         = new Zend_Filter_Empty('tls');
+        $this->_filters['smtp_port']        = new Zend_Filter_Empty(NULL);
+        $this->_filters['sieve_ssl']        = new Zend_Filter_Empty(NULL);
+        $this->_filters['sieve_port']       = new Zend_Filter_Empty(NULL);
         $this->_filters['display_format']   = new Zend_Filter_Empty('html');
         
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
