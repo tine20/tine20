@@ -673,16 +673,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // get account
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
-        
         // set from
         $_mail->clearFrom();
         $from = (isset($account->from) && ! empty($account->from)) 
             ? $account->from 
             : Tinebase_Core::getUser()->accountFullName;
         $_mail->setFrom($account->email, $from);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' From: ' . $_mail->getFrom());
         
         // add user agent
         $_mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
@@ -691,8 +687,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (isset($account->organization) && ! empty($account->organization)) {
             $_mail->addHeader('Organization', $account->organization);
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
         
         // set transport + send mail
         $smtpConfig = $account->getSmtpConfig();
