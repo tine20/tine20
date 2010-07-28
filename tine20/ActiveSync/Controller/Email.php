@@ -253,7 +253,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         }
         
         if ($_neverTruncate === false) {
-            if ($_options['mimeTruncation'] < 8) {
+            if (isset($_options['mimeTruncation']) && $_options['mimeTruncation'] < 8) {
                 switch($_options['mimeTruncation']) {
                     case 0:
                         $truncateAt = 0;
