@@ -128,7 +128,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'smtp_password'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // sieve config
         'sieve_port'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 2000),
-        'sieve_host'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'sieve_hostname'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'sieve_ssl'=> array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => 'tls',
@@ -308,16 +308,12 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         $this->resolveCredentials(FALSE);
         
         $result = array(
-            'host'      => $this->sieve_host,
+            'host'      => $this->sieve_hostname,
             'port'      => $this->sieve_port, 
             'ssl'       => ($this->sieve_ssl && $this->sieve_ssl !== self::SECURE_NONE) ? $this->sieve_ssl : FALSE,
             'username'  => $this->user,
             'password'  => $this->password,
         );
-        
-        if ($this->type == self::TYPE_SYSTEM) {
-            $result = array_merge($result, Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SIEVE));
-        }
         
         return $result;
     }
