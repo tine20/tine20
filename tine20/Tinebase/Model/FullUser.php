@@ -18,8 +18,10 @@
  * 
  * @package     Tinebase
  * @property    string                  accountStatus
- * @property    Tinebase_Model_SAMUser  sambaSAM        object holding samba settings
- * @property    Zend_Date               accountExpires  date when account expires  
+ * @property    Tinebase_Model_SAMUser  sambaSAM            object holding samba settings
+ * @property    Zend_Date               accountExpires      date when account expires  
+ * @property    string                  accountFullName     fullname of the account
+ * @property    string                  accountDisplayName  displayname of the account
  * @subpackage  User
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User
