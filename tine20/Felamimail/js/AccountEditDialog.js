@@ -271,8 +271,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Port (Default: 2000)'),
                     name: 'sieve_port',
                     maxLength: 5,
-                    xtype:'numberfield',
-                    allowBlank: false
+                    xtype:'numberfield'
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
                     name: 'sieve_ssl',
