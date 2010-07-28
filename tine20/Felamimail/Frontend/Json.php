@@ -407,7 +407,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  string $id account id
      * @return array
      */
-    public function getSieveRules($id)
+    public function getRules($id)
     {
         $records = Felamimail_Controller_Sieve::getInstance()->getRules($accountId);
         
