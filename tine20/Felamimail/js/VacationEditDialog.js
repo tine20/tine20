@@ -90,7 +90,6 @@ Ext.namespace('Tine.Felamimail');
      * @return {Object}
      * @private
      * 
-     * TODO get css definitions from external stylesheet?
      */
     getFormItems: function() {
         
@@ -113,46 +112,71 @@ Ext.namespace('Tine.Felamimail');
         });
         
         return {
-            autoScroll: true,
+            xtype: 'tabpanel',
+            deferredRender: false,
             border: false,
-            frame: true,
-            xtype: 'columnform',
-            formDefaults: {
-                xtype:'textfield',
-                anchor: '100%',
-                labelSeparator: '',
-                columnWidth: 1
-            },
-            items: [[
-                {
-                    fieldLabel: this.app.i18n._('Status'),
-                    name: 'enabled',
-                    typeAhead     : false,
-                    triggerAction : 'all',
-                    lazyRender    : true,
-                    editable      : false,
-                    mode          : 'local',
-                    forceSelection: true,
-                    value: 0,
-                    xtype: 'combo',
-                    store: [
-                        [0, this.app.i18n._('I am available (vacation message disabled)')], 
-                        [1, this.app.i18n._('I am not available (vacation message enabled)')]
-                        //[0, Locale.getTranslationData('Question', 'no').replace(/:.*/, '')], 
-                        //[1, Locale.getTranslationData('Question', 'yes').replace(/:.*/, '')]
-                    ]
-                    // disable reason field?
-                    /*,
-                    listeners: {
-                        scope: this,
-                        select: function(field, record, index) {
-                            this.reasonEditor.setDisabled(index == 0);
-                        }
-                    }
-                    */
+            activeTab: 0,
+            items: [{
+                title: this.app.i18n._('General'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                xtype: 'columnform',
+                formDefaults: {
+                    anchor: '100%',
+                    labelSeparator: '',
+                    columnWidth: 1
                 },
-                this.reasonEditor
-            ]]
+                items: [[
+                    {
+                        fieldLabel: this.app.i18n._('Status'),
+                        name: 'enabled',
+                        typeAhead     : false,
+                        triggerAction : 'all',
+                        lazyRender    : true,
+                        editable      : false,
+                        mode          : 'local',
+                        forceSelection: true,
+                        value: 0,
+                        xtype: 'combo',
+                        store: [
+                            [0, this.app.i18n._('I am available (vacation message disabled)')], 
+                            [1, this.app.i18n._('I am not available (vacation message enabled)')]
+                            //[0, Locale.getTranslationData('Question', 'no').replace(/:.*/, '')], 
+                            //[1, Locale.getTranslationData('Question', 'yes').replace(/:.*/, '')]
+                        ]
+                        // disable reason field?
+                        /*,
+                        listeners: {
+                            scope: this,
+                            select: function(field, record, index) {
+                                this.reasonEditor.setDisabled(index == 0);
+                            }
+                        }
+                        */
+                    },
+                    this.reasonEditor
+                ]]
+            }, {
+                title: this.app.i18n._('Advanced'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                xtype: 'columnform',
+                formDefaults: {
+                    anchor: '100%',
+                    labelSeparator: '',
+                    columnWidth: 1
+                },
+                items: [[{
+                    fieldLabel: this.app.i18n._('Only send all X days to the same sender'),
+                    name: 'days',
+                    value: 7,
+                    xtype: 'numberfield',
+                    allowNegative: false,
+                    minValue: 1
+                }]]
+            }]
         };
     }
 });
