@@ -693,13 +693,13 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $index++;
         
         // body language
-        if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL') {
+        if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL' && ! is_array($_structure[$index])) {
             $structure['language'] = strtolower($_structure[$index]); 
         }
         $index++;
         
         // body location
-        if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL') {
+        if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL' && ! is_array($_structure[$index])) {
             $structure['location'] = strtolower($_structure[$index]); 
         }
         
