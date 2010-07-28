@@ -119,8 +119,17 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
         
         // check preference / config if we should add system account with tine user credentials or from config.inc.php
-        if (count($result) == 0 && ! $_onlyIds && $this->_useSystemAccount) { 
-            $result = $this->_addSystemAccount();
+        if ($this->_useSystemAccount && ! $_onlyIds) {
+            if (count($result) == 0) { 
+                $result = $this->_addSystemAccount();
+            } else {
+                // check if resultset contains system account and add config values
+                foreach($result as $account) {
+                    if ($account->type == Felamimail_Model_Account::TYPE_SYSTEM) {
+                        $this->_addSystemAccountConfigValues($account);
+                    }
+                }
+            }
         }
         
         return $result;
@@ -592,7 +601,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $this->_addConfigValuesToAccount($_account, $configKey, $values['keys'], $values['defaults']);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->toArray(), TRUE)); 
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->toArray(), TRUE)); 
     }
     
     /**
