@@ -27,6 +27,8 @@ Ext.namespace('Tine.Felamimail');
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Felamimail.AccountEditDialog
+ * 
+ * TODO         use tabs instead of accordion (see http://www.tine20.org/bugtracker/view.php?id=2592)
  */
 Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
