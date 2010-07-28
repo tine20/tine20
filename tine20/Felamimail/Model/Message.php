@@ -173,7 +173,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                 if ($field == 'from') {
                     // as we don't save the from field as array yet, we have to make sure that it is converted to a string
                     if (count($this->from) > 0 && array_key_exists('email', $this->from[0])) {
-                        $this->from = (array_key_exists('name', $this->from[0])) ? $this->from[0]['name'] . '<' . $this->from[0]['email'] . '>' : $this->from[0]['email'];
+                        $this->from = (array_key_exists('name', $this->from[0])) ? $this->from[0]['name'] . ' <' . $this->from[0]['email'] . '>' : $this->from[0]['email'];
                     } else {
                         $this->from = '';
                     }
