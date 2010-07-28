@@ -18,7 +18,6 @@ Ext.namespace('Tine.Felamimail');
  * 
  * <p>Account Edit Dialog</p>
  * <p>
- * TODO         add sieve settings
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -251,6 +250,42 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'smtp_password',
                     emptyText: 'password',
                     inputType: 'password'
+                }]]
+            }, {
+                title: this.app.i18n._('Sieve'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                xtype: 'columnform',
+                formDefaults: {
+                    xtype:'textfield',
+                    anchor: '90%',
+                    labelSeparator: '',
+                    maxLength: 256,
+                    columnWidth: 1
+                },
+                items: [[{
+                    fieldLabel: this.app.i18n._('Host'),
+                    name: 'sieve_hostname',
+                    maxLength: 64
+                }, {
+                    fieldLabel: this.app.i18n._('Port (Default: 2000)'),
+                    name: 'sieve_port',
+                    maxLength: 64
+                }, {
+                    fieldLabel: this.app.i18n._('Secure Connection'),
+                    name: 'sieve_ssl',
+                    typeAhead     : false,
+                    triggerAction : 'all',
+                    lazyRender    : true,
+                    editable      : false,
+                    mode          : 'local',
+                    value: 'none',
+                    xtype: 'combo',
+                    store: [
+                        ['none', this.app.i18n._('None')],
+                        ['tls',  this.app.i18n._('TLS')]
+                    ]
                 }]]
             }, {
                 title: this.app.i18n._('Other Settings'),
