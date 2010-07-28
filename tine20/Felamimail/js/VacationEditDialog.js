@@ -19,9 +19,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>Sieve Filter Dialog</p>
  * <p>This dialog is editing sieve filters (vacation and rules).</p>
  * <p>
- * TODO         make it work
- * TODO         add vacation
- * TODO         add title
+ * TODO         add more fields
  * TODO         add rules ? or another edit dlg for rules?
  * </p>
  * 
@@ -37,13 +35,18 @@ Ext.namespace('Tine.Felamimail');
  Tine.Felamimail.VacationEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     /**
+     * @cfg {Tine.Felamimail.Model.Account}
+     */
+    account: null,
+    
+    /**
      * @private
      */
     windowNamePrefix: 'VacationEditWindow_',
     appName: 'Felamimail',
     recordClass: Tine.Felamimail.Model.Vacation,
     recordProxy: Tine.Felamimail.vacationBackend,
-    loadRecord: false,
+    loadRecord: true,
     tbarItems: [],
     evalGrants: false,
     
@@ -56,15 +59,6 @@ Ext.namespace('Tine.Felamimail');
 
     },
     
-    /**
-     * @private
-     */
-    initRecord: function() {
-        if (! this.record) {
-            this.record = new this.recordClass(Tine.Felamimail.Model.Vacation.getDefaultData(), 0);
-        }
-    },
-
     /**
      * executed after record got updated from proxy
      * 
@@ -79,12 +73,11 @@ Ext.namespace('Tine.Felamimail');
         
         this.getForm().loadRecord(this.record);
         
-        Tine.log.debug(this.record);
+        //Tine.log.debug(this.record);
+        //Tine.log.debug(this.account);
         
-        //var title = this.app.i18n._('Vacation Message');
-        // TODO add account name
-        //    title = title + ' ' + accountname
-        //this.window.setTitle(title);
+        var title = String.format(this.app.i18n._('Vacation Message for {0}'), this.account.get('name'));
+        this.window.setTitle(title);
         
         this.loadMask.hide();
     },
@@ -119,16 +112,14 @@ Ext.namespace('Tine.Felamimail');
         });
         
         return {
-            //title: this.app.i18n._('Vacation'),
             autoScroll: true,
             border: false,
             frame: true,
             xtype: 'columnform',
             formDefaults: {
                 xtype:'textfield',
-                anchor: '90%',
+                anchor: '100%',
                 labelSeparator: '',
-                maxLength: 256,
                 columnWidth: 1
             },
             items: [[this.reasonEditor]]

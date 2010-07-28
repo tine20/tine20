@@ -583,7 +583,7 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
  */ 
 Tine.Felamimail.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
-    { name: 'account_id' },
+    { name: 'account' },
     { name: 'reason' },
     { name: 'enabled' },
     { name: 'days' }
@@ -591,7 +591,7 @@ Tine.Felamimail.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.Tinebase.
     appName: 'Felamimail',
     modelName: 'Vacation',
     idProperty: 'id',
-    titleProperty: 'name',
+    titleProperty: 'id',
     // ngettext('Vacation', 'Vacations', n);
     recordName: 'Vacation',
     recordsName: 'Vacations',

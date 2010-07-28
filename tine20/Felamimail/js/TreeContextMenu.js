@@ -149,28 +149,13 @@ Tine.Felamimail.setTreeContextMenus = function() {
         iconCls: 'action_email_replyAll',
         scope: this,
         handler: function() {
-            var record = this.accountStore.getById(this.ctxNode.attributes.account_id);
+            var accountId = this.ctxNode.attributes.account_id;
+            var account = this.accountStore.getById(accountId);
+            var record = new Tine.Felamimail.Model.Vacation({id: accountId}, accountId);
             
             var popupWindow = Tine.Felamimail.VacationEditDialog.openWindow({
+                account: account,
                 record: record
-                /*
-                listeners: {
-                    scope: this,
-                    'update': function(record) {
-                        var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
-                        
-                        // update tree node + store
-                        this.ctxNode.setText(account.get('name'));
-                        this.ctxNode.attributes.intelligent_folders = account.get('intelligent_folders');
-                        this.accountStore.reload();
-                        
-                        // reload tree node + remove all folders of this account from store ?
-                        this.folderStore.resetQueryAndRemoveRecords('parent_path', '/' + this.ctxNode.attributes.account_id);
-                        this.ctxNode.reload(function(callback) {
-                        });
-                    }
-                }
-                */
             });
         }
     };
