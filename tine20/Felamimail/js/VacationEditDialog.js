@@ -19,8 +19,8 @@ Ext.namespace('Tine.Felamimail');
  * <p>Sieve Filter Dialog</p>
  * <p>This dialog is editing sieve filters (vacation and rules).</p>
  * <p>
- * TODO         add more fields
  * TODO         add rules ? or another edit dlg for rules?
+ * TODO         add signature from account?
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -95,10 +95,11 @@ Ext.namespace('Tine.Felamimail');
     getFormItems: function() {
         
         this.reasonEditor = new Ext.form.HtmlEditor({
-            fieldLabel: this.app.i18n._('Reason'),
+            fieldLabel: this.app.i18n._('Incoming mails will be answered with this text:'),
             name: 'reason',
             allowBlank: true,
             height: 220,
+            disabled      : this.record.get('enabled'),
             /*
             getDocMarkup: function(){
                 var markup = '<span id="felamimail\-body\-signature">'
@@ -122,7 +123,36 @@ Ext.namespace('Tine.Felamimail');
                 labelSeparator: '',
                 columnWidth: 1
             },
-            items: [[this.reasonEditor]]
+            items: [[
+                {
+                    fieldLabel: this.app.i18n._('Status'),
+                    name: 'enabled',
+                    typeAhead     : false,
+                    triggerAction : 'all',
+                    lazyRender    : true,
+                    editable      : false,
+                    mode          : 'local',
+                    forceSelection: true,
+                    value: 0,
+                    xtype: 'combo',
+                    store: [
+                        [0, this.app.i18n._('I am available (vacation message disabled)')], 
+                        [1, this.app.i18n._('I am not available (vacation message enabled)')]
+                        //[0, Locale.getTranslationData('Question', 'no').replace(/:.*/, '')], 
+                        //[1, Locale.getTranslationData('Question', 'yes').replace(/:.*/, '')]
+                    ]
+                    // disable reason field?
+                    /*,
+                    listeners: {
+                        scope: this,
+                        select: function(field, record, index) {
+                            this.reasonEditor.setDisabled(index == 0);
+                        }
+                    }
+                    */
+                },
+                this.reasonEditor
+            ]]
         };
     }
 });
