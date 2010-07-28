@@ -336,11 +336,13 @@ Tine.Felamimail.Model.Account.getDefaultData = function() {
         port: (defaults.port) ? defaults.port : 143,
         smtp_hostname: (defaults.smtp && defaults.smtp.hostname) ? defaults.smtp.hostname : '',
         smtp_port: (defaults.smtp && defaults.smtp.port) ? defaults.smtp.port : 25,
+        smtp_ssl: (defaults.smtp && defaults.smtp.ssl) ? defaults.smtp.ssl : 'none',
+        sieve_port: 2000,
+        sieve_ssl: 'none',
         signature: 'Sent with love from the new tine 2.0 email client ...<br/>'
             + 'Please visit <a href="http://tine20.org">http://tine20.org</a>',
         sent_folder: (defaults.sent_folder) ? defaults.sent_folder : 'Sent',
-        trash_folder: (defaults.trash_folder) ? defaults.trash_folder : 'Trash',
-        smtp_ssl: (defaults.smtp && defaults.smtp.ssl) ? defaults.smtp.ssl : 'none'
+        trash_folder: (defaults.trash_folder) ? defaults.trash_folder : 'Trash'
     };
 };
 
