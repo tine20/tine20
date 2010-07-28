@@ -5,7 +5,7 @@
  * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * TODO         add pref description to input fields
@@ -124,7 +124,6 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 }
                 
                 if (this.adminMode) {
-                    Tine.log.debug(pref);
                 	// set lock (value forced => hiddenFieldData = '0')
                 	fieldDef.hiddenFieldData = (pref.get('type') == 'default') ? '1' : '0';
                 	fieldDef.hiddenFieldId = pref.get('name') + '_writable';
@@ -134,7 +133,6 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 	fieldDef.disabled = (pref.get('type') == 'forced');
                 }
                 
-                //console.log(fieldDef);
                 try {
                     var fieldObj = Ext.ComponentMgr.create(fieldDef);
                     this.items.push(fieldObj);
