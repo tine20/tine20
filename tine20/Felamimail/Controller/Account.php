@@ -156,7 +156,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $record = parent::get($_id, $_containerId);
         
         if ($record->type == Felamimail_Model_Account::TYPE_SYSTEM) {
-            $this->_addSystemAccountValues($record);
+            $this->_addSystemAccountConfigValues($record);
         }
         
         return $record;    
@@ -496,24 +496,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         // only create account if email address is set
         if ($email) {
-            $systemAccount = new Felamimail_Model_Account($this->_imapConfig, TRUE);
+            $systemAccount = new Felamimail_Model_Account(NULL, TRUE);
+            
+            $this->_addSystemAccountConfigValues($systemAccount);
+            
             $systemAccount->type = Felamimail_Model_Account::TYPE_SYSTEM;
             $systemAccount->user_id = $userId;
             $this->_addUserValues($systemAccount, $fullUser, $email);
-            
-            // sanitize port
-            if (empty($systemAccount->port)) {
-                $systemAccount->port = 143;
-            }
-
-            // add smtp server settings
-            $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
-            if (! empty($smtpConfig)) {
-                $systemAccount->smtp_port              = ((! empty($smtpConfig['port'])) ? $smtpConfig['port'] : 25);
-                $systemAccount->smtp_hostname          = $smtpConfig['hostname'];
-                $systemAccount->smtp_auth              = $smtpConfig['auth'];
-                $systemAccount->smtp_ssl               = $smtpConfig['ssl'];             
-            }
             
             // set some default settings if not set
             if (empty($systemAccount->sent_folder)) {
@@ -582,26 +571,48 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Account $_account
      * @return void
      */
-    protected function _addSystemAccountValues(Felamimail_Model_Account $_account)
+    protected function _addSystemAccountConfigValues(Felamimail_Model_Account $_account)
     {
-        // add imap settings
-        $imapKeysOverwrite = array('host', 'port', 'ssl');
-        foreach ($this->_imapConfig as $key => $value) {
-            if (in_array($key, $imapKeysOverwrite)) {
-                $_account->{$key} = $value;
-            }
+        $configs = array(
+            Tinebase_Model_Config::IMAP     => array(
+                'keys'      => array('host', 'port', 'ssl'),
+                'defaults'  => array('port' => 143),
+            ),
+            Tinebase_Model_Config::SMTP     => array(
+                'keys'      => array('hostname', 'port', 'ssl', 'auth'),
+                'defaults'  => array('port' => 25),
+            ),
+            Tinebase_Model_Config::SIEVE    => array(
+                'keys'      => array('hostname', 'port', 'ssl'),
+                'defaults'  => array(),
+            ),
+        );
+        
+        foreach ($configs as $configKey => $values) {
+            $this->_addConfigValuesToAccount($_account, $configKey, $values['keys'], $values['defaults']);
         }
         
-        // add smtp settings
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
-        $smtpKeysOverwrite = array();
-        foreach ($smtpConfig as $key => $value) {
-            if (in_array($key, $smtpKeysOverwrite)) {
-                $_account->{'smtp_' . $key} = $value;
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->toArray(), TRUE)); 
+    }
+    
+    /**
+     * add config values to account
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param string $_configKey for example Tinebase_Model_Config::IMAP for imap settings 
+     * @param array $_keysOverwrite keys to overwrite
+     * @param array $_defaults
+     */
+    protected function _addConfigValuesToAccount(Felamimail_Model_Account $_account, $_configKey, $_keysOverwrite = array(), $_defaults = array())
+    {
+        $config = ($_configKey == Tinebase_Model_Config::IMAP) ? $this->_imapConfig : Tinebase_Config::getInstance()->getConfigAsArray($_configKey, 'Tinebase', $_defaults);
+        $prefix = ($_configKey == Tinebase_Model_Config::IMAP) ? '' : strtolower($_configKey) . '_';
+        
+        foreach ($config as $key => $value) {
+            if (in_array($key, $_keysOverwrite)) {
+                $_account->{$prefix . $key} = $value;
             }
         }
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->toArray(), TRUE)); 
     }
     
     /**
