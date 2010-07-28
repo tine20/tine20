@@ -485,7 +485,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         Felamimail_Controller_Sieve::getInstance()->deleteScript($this->_account->getId());
         
         $vacationData = array(
-            'account_id'            => $this->_account->getId(),
+            'id'                    => $this->_account->getId(),
             'addresses'             => array(),
             'subject'               => 'unittest vacation subject',
             'from'                  => $this->_account->email,
@@ -493,12 +493,12 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'enabled'               => TRUE,
             'reason'                => 'unittest vacation message',
         );
-        $resultSet = $this->_json->setSieveVacation($this->_account->getId(), $vacationData);
+        $resultSet = $this->_json->saveVacation($vacationData);
         
         unset($resultSet['vacationObject']);
         $this->assertEquals($vacationData, $resultSet);
         
-        $resultGet = $this->_json->getSieveVacation($this->_account->getId());
+        $resultGet = $this->_json->getVacation($this->_account->getId());
 
         unset($resultGet['vacationObject']);
         $this->assertEquals($vacationData, $resultGet);

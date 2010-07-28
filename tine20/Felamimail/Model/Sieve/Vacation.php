@@ -41,8 +41,7 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), // account id
         'addresses'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
         'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),

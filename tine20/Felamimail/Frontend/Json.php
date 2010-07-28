@@ -375,12 +375,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * get sieve vacation for account 
      *
-     * @param  string $accountId
+     * @param  string $id account id
      * @return array
      */
-    public function getSieveVacation($accountId)
+    public function getVacation($id)
     {
-        $record = Felamimail_Controller_Sieve::getInstance()->getVacation($accountId);
+        $record = Felamimail_Controller_Sieve::getInstance()->getVacation($id);
         
         return $this->_recordToJson($record);
     }
@@ -388,16 +388,15 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * set sieve vacation for account 
      *
-     * @param  string $accountId
-     * @param  array $vacationData
+     * @param  array $recordData
      * @return array
      */
-    public function setSieveVacation($accountId, $vacationData)
+    public function saveVacation($recordData)
     {
         $record = new Felamimail_Model_Sieve_Vacation(array(), TRUE);
-        $record->setFromJsonInUsersTimezone($vacationData);
+        $record->setFromJsonInUsersTimezone($recordData);
         
-        $record = Felamimail_Controller_Sieve::getInstance()->setVacation($accountId, $record);
+        $record = Felamimail_Controller_Sieve::getInstance()->setVacation($record);
         
         return $this->_recordToJson($record);
     }
@@ -405,10 +404,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * get sieve rules for account 
      *
-     * @param  string $accountId
+     * @param  string $id account id
      * @return array
      */
-    public function getSieveRules($accountId)
+    public function getSieveRules($id)
     {
         $records = Felamimail_Controller_Sieve::getInstance()->getRules($accountId);
         
@@ -418,12 +417,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * set sieve rules for account 
      *
-     * @param  string $accountId
+     * @param  array $accountId
      * @return array
      * 
      * @todo add set from json?
      */
-    public function setSieveRules($accountId, $rulesData)
+    public function saveRules($rulesData)
     {
         $records = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_Rule', $rulesData);
         $records = Felamimail_Controller_Sieve::getInstance()->setRules($accountId, $records);

@@ -99,7 +99,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $script = $this->_getSieveScript($_accountId);
         
         $result = new Felamimail_Model_Sieve_Vacation(array(
-            'account_id'    => $_accountId
+            'id'    => $_accountId
         ));
             
         if ($script !== NULL) {
@@ -154,17 +154,16 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     /**
      * set vacation for account
      * 
-     * @param string $_accountId
      * @param Felamimail_Model_Sieve_Vacation $_vacation
      * @return Felamimail_Model_Sieve_Vacation
      */
-    public function setVacation($_accountId, Felamimail_Model_Sieve_Vacation $_vacation)
+    public function setVacation(Felamimail_Model_Sieve_Vacation $_vacation)
     {
-        $this->_setSieveBackendAndAuthenticate($_accountId);
+        $this->_setSieveBackendAndAuthenticate($_vacation->getId());
         
         $fsv = $_vacation->getFSV();
         
-        $script = $this->_getSieveScript($_accountId);
+        $script = $this->_getSieveScript($_vacation->getId());
         $fss = new Felamimail_Sieve_Script($script);
         $fss->setVacation($fsv);
         
@@ -174,7 +173,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         //echo $scriptToPut;
         $this->_backend->putScript($this->_scriptName, $scriptToPut);
         
-        return $this->getVacation($_accountId);
+        return $this->getVacation($_vacation->getId());
     }
 
     /**
