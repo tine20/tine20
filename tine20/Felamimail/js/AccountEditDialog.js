@@ -104,7 +104,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             deferredRender: false,
             border: false,
             activeTab: 0,
-            border: false,
             items: [{
                 title: this.app.i18n._('Account'),
                 autoScroll: true,
