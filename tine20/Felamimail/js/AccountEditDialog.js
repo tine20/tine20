@@ -353,7 +353,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 400,
-        height: 600,
+        height: 550,
         name: Tine.Felamimail.AccountEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Felamimail.AccountEditDialog',
         contentPanelConstructorConfig: config
