@@ -145,9 +145,14 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * init and connect to sieve backend + authenticate with imap user of account
      * 
      * @param string|Felamimail_Model_Account $_accountId
+     * @throws Felamimail_Exception
      */
     protected function _setSieveBackendAndAuthenticate($_accountId)
     {
+        if (empty($_accountId)) {
+            throw new Felamimail_Exception('No account id given.');
+        }
+        
         $this->_backend = Felamimail_Backend_SieveFactory::factory($_accountId);
     }
     
