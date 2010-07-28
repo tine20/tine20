@@ -112,7 +112,7 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
         $folderSync = $this->_outputDom->documentElement;
         
         if($this->_syncKey > '0' && $this->_controller->validateSyncKey($this->_device, $this->_syncKey, 'FolderSync') !== true) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " INVALID synckey");
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " INVALID synckey provided");
             $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_INVALID_SYNC_KEY));
         } else {
             $adds = array();
@@ -121,20 +121,24 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
             
             if($this->_syncKey == 0) {
                 $this->_folderStateBackend->resetState($this->_device);
-                
-                foreach($this->_classes as $class) {
-                    $dataController = ActiveSync_Controller::dataFactory($class, $this->_device, $this->_syncTimeStamp);
-                    foreach($dataController->getSupportedFolders() as $folderId => $folder) {
+            }
+            
+            foreach($this->_classes as $class) {
+                $dataController = ActiveSync_Controller::dataFactory($class, $this->_device, $this->_syncTimeStamp);
+
+                try {
+                    $folders = $dataController->getSupportedFolders();
+                } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to get folders for class $class. " . $e->getMessage());
+                    continue;
+                }
+
+                if($this->_syncKey == 0) {
+                    foreach($folders as $folderId => $folder) {
                         $adds[$class][$folderId] = $folder;
                         $count++;
                     }
-                }
-            } else {
-                // detect added folders
-                foreach($this->_classes as $class) {
-                    $dataController = ActiveSync_Controller::dataFactory($class, $this->_device, $this->_syncTimeStamp);
-                    
-                    $folders = $dataController->getSupportedFolders();
+                } else {
                     $allServerEntries = array_keys($folders);
                     $allClientEntries = $this->_folderStateBackend->getClientState($this->_device, $class);
                     
@@ -155,6 +159,7 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
                     }
                 }                
             }
+            
             
             if($count > 0) {
                 $newSyncKey = $this->_syncKey + 1;
