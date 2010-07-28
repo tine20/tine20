@@ -96,10 +96,10 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         $this->_setSieveBackendAndAuthenticate($_accountId);
         
-        $script = $this->_getSieveScript($_accountId);
+        $script = $this->_getSieveScript();
         
         $result = new Felamimail_Model_Sieve_Vacation(array(
-            'id'    => $_accountId
+            'id'    => ($_accountId instanceOf Felamimail_Model_Account) ? $_accountId->getId() : $_accountId
         ));
             
         if ($script !== NULL) {
@@ -112,10 +112,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     /**
      * get sieve script for account
      * 
-     * @param string $_accountId
      * @return NULL|Felamimail_Sieve_Script
      */
-    protected function _getSieveScript($_accountId)
+    protected function _getSieveScript()
     {
         $scripts = $this->_backend->listScripts();
 
@@ -164,11 +163,12 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     public function setVacation(Felamimail_Model_Sieve_Vacation $_vacation)
     {
-        $this->_setSieveBackendAndAuthenticate($_vacation->getId());
+        $accountId = $_vacation->getId();
+        $this->_setSieveBackendAndAuthenticate($accountId);
         
         $fsv = $_vacation->getFSV();
         
-        $script = $this->_getSieveScript($_vacation->getId());
+        $script = $this->_getSieveScript();
         if ($script === NULL) {
             $script = new Felamimail_Sieve_Script();
         }
@@ -178,11 +178,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         $scriptToPut = $script->getSieve();
         $this->_backend->putScript($this->_scriptName, $scriptToPut);
+        $this->activateScript($accountId);
         
-        // @todo activate!
-        //$this->_backend->setActive($this->_scriptName);
-        
-        return $this->getVacation($_vacation->getId());
+        return $this->getVacation($accountId);
     }
 
     /**
@@ -198,7 +196,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     /**
      * delete sieve script
      * 
-     * @param string $_accountId
+     * @param string|Felamimail_Model_Account $_accountId
      */
     public function deleteScript($_accountId)
     {
@@ -207,6 +205,44 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Delete SIEVE script ' . $this->_scriptName);
         
         $this->_backend->deleteScript($this->_scriptName);
+    }
+
+    /**
+     * activate sieve script
+     * 
+     * @param string|Felamimail_Model_Account $_accountId
+     */
+    public function activateScript($_accountId)
+    {
+        $this->_setSieveBackendAndAuthenticate($_accountId);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Activate vacation SIEVE script ' . $this->_scriptName);
+        $this->_backend->setActive($this->_scriptName);
+    }
+    
+    /**
+     * get name of active script for account
+     * 
+     * @param string|Felamimail_Model_Account $_accountId
+     * @return string|NULL
+     */
+    public function getActiveScriptName($_accountId)
+    {
+        $this->_setSieveBackendAndAuthenticate($_accountId);
+        
+        $scripts = $this->_backend->listScripts();
+        
+        $result = NULL;
+        foreach ($scripts as $scriptname => $values) {
+            if ($values['active'] == 1) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Found active script: ' . $scriptname);
+                $result = $scriptname;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Inactive script: ' . $scriptname);
+            }
+        }
+        
+        return $result;
     }
     
     /**
