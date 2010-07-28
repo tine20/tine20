@@ -540,7 +540,6 @@ Ext.namespace('Tine.Felamimail');
  * @return  {Ext.ux.Window}
  */
 Tine.Felamimail.MessageEditDialog.openWindow = function (config) {
-    //var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 700,
