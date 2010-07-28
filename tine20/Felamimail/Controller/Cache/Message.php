@@ -192,6 +192,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         if ($_folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE || $_folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
             $_folder->cache_job_actions_estimate = 0;
             $_folder->cache_job_actions_done     = 0;
+            $_folder->cache_job_startuid         = 0;
         }
         
         $_folder = Felamimail_Controller_Cache_Folder::getInstance()->getIMAPFolderCounter($_folder);
