@@ -169,13 +169,11 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $fsv = $_vacation->getFSV();
         
         $script = $this->_getSieveScript($_vacation->getId());
-        $fss = new Felamimail_Sieve_Script($script);
-        $fss->setVacation($fsv);
+        $script->setVacation($fsv);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Put updated vacation SIEVE script ' . $this->_scriptName);
         
-        $scriptToPut = $fss->getSieve();
-        //echo $scriptToPut;
+        $scriptToPut = $script->getSieve();
         $this->_backend->putScript($this->_scriptName, $scriptToPut);
         
         return $this->getVacation($_vacation->getId());
