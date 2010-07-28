@@ -62,6 +62,20 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     protected $_foldersToClear = array();
 
     /**
+     * active sieve script name to be restored
+     * 
+     * @var array
+     */
+    protected $_oldActiveSieveScriptName = NULL;
+
+    /**
+     * sieve script name to delete
+     * 
+     * @var array
+     */
+    protected $_testSieveScriptName = NULL;
+
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -118,6 +132,16 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $folderName);
                 Felamimail_Controller_Cache_Message::getInstance()->clear($folder);
             }
+        }
+        
+        // sieve cleanup
+        if ($this->_testSieveScriptName !== NULL) {
+            Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
+            Felamimail_Controller_Sieve::getInstance()->deleteScript($this->_account->getId());
+        }
+        if ($this->_oldActiveSieveScriptName !== NULL) {
+            Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_oldActiveSieveScriptName);
+            Felamimail_Controller_Sieve::getInstance()->activateScript($this->_account->getId());
         }
     }
 
@@ -478,11 +502,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSetVacation()
     {
-        // use another name for test script
-        Felamimail_Controller_Sieve::getInstance()->setScriptName('Felamimail_Unittest');
+        $this->_oldActiveSieveScriptName = Felamimail_Controller_Sieve::getInstance()->getActiveScriptName($this->_account->getId());
         
-        // delete script first
-        Felamimail_Controller_Sieve::getInstance()->deleteScript($this->_account->getId());
+        // use another name for test script
+        $this->_testSieveScriptName = 'Felamimail_Unittest';
+        Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
         
         $vacationData = array(
             'id'                    => $this->_account->getId(),
@@ -497,6 +521,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         unset($resultSet['vacationObject']);
         $this->assertEquals($vacationData, $resultSet);
+        
+        // check if script was activated
+        $activeScriptName = Felamimail_Controller_Sieve::getInstance()->getActiveScriptName($this->_account->getId());
+        $this->assertEquals($this->_testSieveScriptName, $activeScriptName);
         
         $resultGet = $this->_json->getVacation($this->_account->getId());
 
