@@ -403,7 +403,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         // we allways have a paging toolbar
         this.pagingToolbar = new Ext.ux.grid.PagingToolbar(Ext.apply({
-            pageSize: 50,
+            pageSize: this.defaultPaging && this.defaultPaging.limit ? this.defaultPaging.limit : 50,
             store: this.store,
             displayInfo: true,
             displayMsg: Tine.Tinebase.translation._('Displaying records {0} - {1} of {2}').replace(/records/, this.i18nRecordsName),
