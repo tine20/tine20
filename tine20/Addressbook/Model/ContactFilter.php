@@ -120,9 +120,11 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         foreach ($this->_customData as $customData) {
             switch($customData['field']) {
                 case 'type':
-                    $_select->where(
-                        $db->quoteInto("IF(ISNULL(account_id),'contact', 'user') = ?", $customData['value'])
-                    );
+                    $condition = $customData['value'] == 'user' ? 'NOT' : '';
+                	$_select->where('account_id IS ' . $condition .  ' NULL');
+//                  $_select->where(
+//                  	$db->quoteInto("IF(ISNULL(account_id),'contact', 'user') = ?", $customData['value'])
+//                 	);
                     break;
                 case 'user_status':
                     $status = explode(' ', $customData['value']);
