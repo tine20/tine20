@@ -68,6 +68,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Model_User')
     {        
         $select = $this->_getUserSelectObject()
+        	->where('account_id IS NOT NULL')
             ->limit($_limit, $_start);
             
         if($_sort !== NULL) {
