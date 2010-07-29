@@ -419,7 +419,7 @@ class Tinebase_Core
                     case 'File':
                         $backendOptions = array(
                             'cache_dir' => ($config->caching->path) ? $config->caching->path : Tinebase_Core::getTempDir(),
-                            'hashed_directory_level' => 2  
+                            'hashed_directory_level' => 4  
                         );
                         break;
                     case 'Memcached':
