@@ -502,12 +502,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSetVacation()
     {
-        $this->_oldActiveSieveScriptName = Felamimail_Controller_Sieve::getInstance()->getActiveScriptName($this->_account->getId());
-        
-        // use another name for test script
-        $this->_testSieveScriptName = 'Felamimail_Unittest';
-        Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
-        
         $vacationData = array(
             'id'                    => $this->_account->getId(),
             'addresses'             => array(),
@@ -516,20 +510,38 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'days'                  => 7,
             'enabled'               => TRUE,
             'reason'                => 'unittest vacation message',
+            'mime'                  => '',
         );
-        $resultSet = $this->_json->saveVacation($vacationData);
         
-        unset($resultSet['vacationObject']);
-        $this->assertEquals($vacationData, $resultSet);
+        $this->_vacationTestHelper($vacationData);
         
         // check if script was activated
         $activeScriptName = Felamimail_Controller_Sieve::getInstance()->getActiveScriptName($this->_account->getId());
         $this->assertEquals($this->_testSieveScriptName, $activeScriptName);
         
-        $resultGet = $this->_json->getVacation($this->_account->getId());
+        $result = $this->_json->getVacation($this->_account->getId());
 
-        unset($resultGet['vacationObject']);
-        $this->assertEquals($vacationData, $resultGet);
+        unset($result['vacationObject']);
+        $this->assertEquals($vacationData, $result);
+    }
+    
+    /**
+     * test mime vacation sieve script
+     */
+    public function testMimeVacation()
+    {
+        $vacationData = array(
+            'id'                    => $this->_account->getId(),
+            'addresses'             => array(),
+            'subject'               => 'unittest vacation subject',
+            'from'                  => $this->_account->email,
+            'days'                  => 7,
+            'enabled'               => TRUE,
+            'reason'                => '<html><body><h1>unittest vacation message</h1></body></html>',
+            'mime'                  => 'text/html',
+        );
+        
+        $this->_vacationTestHelper($vacationData);
     }
     
     /************************ protected functions ****************************/
@@ -673,5 +685,24 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(! empty($message), 'Message not found');
         
         return $message;
+    }
+    
+    /**
+     * vacation test helper
+     * 
+     * @param array $_vacationData
+     */
+    protected function _vacationTestHelper($_vacationData)
+    {
+        $this->_oldActiveSieveScriptName = Felamimail_Controller_Sieve::getInstance()->getActiveScriptName($this->_account->getId());
+        
+        // use another name for test script
+        $this->_testSieveScriptName = 'Felamimail_Unittest';
+        Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
+        
+        $resultSet = $this->_json->saveVacation($_vacationData);
+        
+        unset($resultSet['vacationObject']);
+        $this->assertEquals($_vacationData, $resultSet);
     }
 }
