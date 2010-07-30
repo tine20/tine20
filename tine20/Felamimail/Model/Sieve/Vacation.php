@@ -47,6 +47,7 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'days'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 7),
         'enabled'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'mime'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'reason'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'vacationObject'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
     );
@@ -75,6 +76,7 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
             ->setDays($this->days)
             ->setSubject($this->subject)
             ->setFrom($this->from)
+            ->setMime($this->mime)
             ->setReason($this->reason);
             
         if (is_array($this->addresses)) {

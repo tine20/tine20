@@ -58,19 +58,8 @@ class Felamimail_Sieve_Vacation
      * the mime type of the generated message
      * 
      * @var string
-     * 
-     * unused atm
      */
-    //protected $_mime;
-    
-    /**
-     * the unique identifier of the vacaction message
-     * 
-     * @var string
-     * 
-     * unused atm
-     */
-    //protected $_handle;
+    protected $_mime = NULL;
     
     /**
      * the subject for the vacation message
@@ -148,6 +137,19 @@ class Felamimail_Sieve_Vacation
         
         return $this;
     }
+
+    /**
+     * set mime type
+     * 
+     * @param   string  $reason     the mime type of the message
+     * @return  Felamimail_Sieve_Vacation
+     */
+    public function setMime($mime)
+    {
+        $this->_mime = $mime;
+        
+        return $this;
+    }
     
     /**
      * set status
@@ -183,18 +185,28 @@ class Felamimail_Sieve_Vacation
         $from      = !empty($this->_from) ? ":from {$this->_quoteString($this->_from)} " : null;
         $addresses = count($this->_addresses) > 0 ? ":addresses {$this->_quoteString($this->_addresses)} " : null;
         
-        if(!empty($this->_subject)) {
+        if (!empty($this->_subject)) {
             $subject = iconv_mime_encode(null, $this->_subject, array('scheme' => 'Q'));
             $subject = ':subject ' . $this->_quoteString(substr($subject, 2)) . ' ';
         } else {
             $subject = null;
         }
         
-        $vacation = sprintf("vacation %s%s%s%s text:\r\n%s\r\n.\r\n;",
+        if (!empty($this->_mime)) {
+            $mime = ':mime ';
+            $contentType = 'Content-Type: ' . $this->_mime . ";\r\n\r\n";
+        } else {
+            $mime = null;
+            $contentType = null;
+        }
+        
+        $vacation = sprintf("vacation %s%s%s%s%stext:\r\n%s%s\r\n.\r\n;",
             $days,
             $from,
             $addresses,
             $subject,
+            $mime,
+            $contentType,
             $this->_reason
         );
         
@@ -229,7 +241,8 @@ class Felamimail_Sieve_Vacation
             'from'                  => $this->_from,
             'days'                  => $this->_days,
             'enabled'               => $this->_enabled,
-            'reason'                => $this->_reason,        
+            'reason'                => $this->_reason,
+            'mime'                  => $this->_mime,
         );
     }
 }
