@@ -20,6 +20,7 @@ Ext.namespace('Tine.Timetracker');
  * 
  * <p>Timeaccount Grid Panel</p>
  * <p><pre>
+ * TODO         copy action needs to copy the acl too
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -41,6 +42,7 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         loadMask: true,
         autoExpandColumn: 'title'
     },
+    copyEditAction: true,
     
     initComponent: function() {
         this.recordProxy = Tine.Timetracker.timeaccountBackend;
