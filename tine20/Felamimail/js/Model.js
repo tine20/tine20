@@ -587,7 +587,8 @@ Tine.Felamimail.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.Tinebase.
     { name: 'id' },
     { name: 'reason' },
     { name: 'enabled', type: 'boolean'},
-    { name: 'days' }
+    { name: 'days' },
+    { name: 'mime' }
 ]), {
     appName: 'Felamimail',
     modelName: 'Vacation',
@@ -610,6 +611,7 @@ Tine.Felamimail.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.Tinebase.
 Tine.Felamimail.Model.Vacation.getDefaultData = function() { 
     return {
         days: 7
+        //mime: 'text/html'
     };
 };
 
