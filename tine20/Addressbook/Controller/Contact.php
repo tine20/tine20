@@ -194,27 +194,34 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             return;
         }
         
-        if(! empty($_record->adr_one_locality)) {
-            $nomination = new Zend_Service_Nominatim();
+        if (! empty($_record->adr_one_locality)) {
+            $nominatim = new Zend_Service_Nominatim();
             
-            $nomination->setVillage($_record->adr_one_locality);
+            $nominatim->setVillage($_record->adr_one_locality);
             
-            if(!empty($_record->adr_one_postalcode)) {
-                $nomination->setPostcode($_record->adr_one_postalcode);
+            if (!empty($_record->adr_one_postalcode)) {
+                $nominatim->setPostcode($_record->adr_one_postalcode);
             }
             
-            if(!empty($_record->adr_one_street)) {
-                $nomination->setStreet($_record->adr_one_street);
+            if (!empty($_record->adr_one_street)) {
+                $street = $_record->adr_one_street;
+                $number = $this->_splitNumberAndStreet($street);
+                $nominatim->setStreet($street);
+                if (! empty($number)) {
+                    // @todo fix this, it does not seem to work correctly
+                    // see http://www.tine20.org/bugtracker/view.php?id=2876
+                    $nominatim->setNumber($number);
+                }
             }
             
-            if(!empty($_record->adr_one_countryname)) {
-                $nomination->setCountry($_record->adr_one_countryname);
+            if (!empty($_record->adr_one_countryname)) {
+                $nominatim->setCountry($_record->adr_one_countryname);
             }
             
             try {            
-                $places = $nomination->search();
+                $places = $nominatim->search();
                 
-                if(count($places) > 0) {
+                if (count($places) > 0) {
                     $_record->lon = $places->current()->lon;
                     $_record->lat = $places->current()->lat;
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Place found: lon/lat ' . $_record->lon . ' / ' . $_record->lat);
@@ -230,5 +237,31 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No locality given: Do not search for geodata.');
         }
+    }
+    
+    /**
+     * get number from street (and remove it)
+     * 
+     * @param string $_street
+     * @return string
+     */
+    protected function _splitNumberAndStreet(&$_street)
+    {
+        $pattern = '([0-9]+)';
+        preg_match('/ ' . $pattern . '$/', $_street, $matches);
+        
+        if (empty($matches)) {
+            // look at the beginning
+            preg_match('/^' . $pattern . ' /', $_street, $matches);
+        }
+        
+        if (array_key_exists(1, $matches)) {
+            $result = $matches[1];
+            $_street = str_replace($matches[0], '', $_street);
+        } else {
+            $result = '';
+        }
+        
+        return $result;
     }
 }

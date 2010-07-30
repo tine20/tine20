@@ -259,10 +259,19 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $contact = $this->_addContact();
         
         $contact['n_family'] = 'PHPUNIT UPDATE';
+        $contact['adr_one_locality'] = 'Hamburg';
+        $contact['adr_one_street'] = 'Pickhuben 2';
         $updatedContact = $this->_instance->saveContact($contact);
+        
+        //print_r($updatedContact);
         
         $this->assertEquals($contact['id'], $updatedContact['id'], 'updated produced a new contact');
         $this->assertEquals('PHPUNIT UPDATE', $updatedContact['n_family'], 'updating data failed');
+        
+        // check geo data (@todo this has to be updated when the housenumber is working correctly)
+        // should be: 9.998689 / 53.543991 (see http://openrouteservice.org with search string: Hamburg Pickhuben 2)
+        $this->assertEquals('9.99489818142748', $updatedContact['lon'], 'wrong geodata (lon)');
+        $this->assertEquals('53.5444309689663', $updatedContact['lat'], 'wrong geodata (lat)');
     }
     
     /**
