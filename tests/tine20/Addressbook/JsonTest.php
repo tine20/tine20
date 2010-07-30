@@ -156,6 +156,23 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     
     
     /**
+     * try to get contacts by owner
+     *
+     */
+    public function testGetContactsByTelephone()
+    {
+        $this->_addContact();
+        
+        $paging = $this->objects['paging'];
+        
+        $filter = array(
+            array('field' => 'telephone', 'operator' => 'contains', 'value' => '+49TELCELLPRIVATE')
+        );
+        $contacts = $this->_instance->searchContacts($filter, $paging);
+        $this->assertEquals(1, $contacts['totalcount']);
+    }
+
+    /**
      * add a contact
      *
      * @return array contact data
@@ -182,23 +199,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         return $newContact;
     }
     
-    /**
-     * try to get contacts by owner
-     *
-     */
-    public function testGetContactsByTelephone()
-    {
-        $this->_addContact();
-        
-        $paging = $this->objects['paging'];
-        
-        $filter = array(
-            array('field' => 'telephone', 'operator' => 'contains', 'value' => '+49TELCELLPRIVATE')
-        );
-        $contacts = $this->_instance->searchContacts($filter, $paging);
-        $this->assertEquals(1, $contacts['totalcount']);
-    }
-
     /**
      * try to get contacts by owner
      *
@@ -268,10 +268,12 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($contact['id'], $updatedContact['id'], 'updated produced a new contact');
         $this->assertEquals('PHPUNIT UPDATE', $updatedContact['n_family'], 'updating data failed');
         
-        // check geo data (@todo this has to be updated when the housenumber is working correctly)
-        // should be: 9.998689 / 53.543991 (see http://openrouteservice.org with search string: Hamburg Pickhuben 2)
-        $this->assertEquals('9.99489818142748', $updatedContact['lon'], 'wrong geodata (lon)');
-        $this->assertEquals('53.5444309689663', $updatedContact['lat'], 'wrong geodata (lat)');
+        if (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, TRUE)->value) {
+            // check geo data (@todo this has to be updated when the housenumber is working correctly)
+            // should be: 9.998689 / 53.543991 (see http://openrouteservice.org with search string: Hamburg Pickhuben 2)
+            $this->assertEquals('9.99489818142748', $updatedContact['lon'], 'wrong geodata (lon)');
+            $this->assertEquals('53.5444309689663', $updatedContact['lat'], 'wrong geodata (lat)');
+        }
     }
     
     /**
