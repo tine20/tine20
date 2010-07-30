@@ -585,7 +585,6 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
  */ 
 Tine.Felamimail.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
-    { name: 'account' },
     { name: 'reason' },
     { name: 'enabled', type: 'boolean'},
     { name: 'days' }
