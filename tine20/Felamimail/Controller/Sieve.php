@@ -118,21 +118,19 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         $scripts = $this->_backend->listScripts();
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting list of SIEVE scripts.');
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($scripts, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting list of SIEVE scripts: ' . print_r($scripts, TRUE));
    
         if (count($scripts) > 0 && array_key_exists($this->_scriptName, $scripts)) {
         
             $scriptName = $scripts[$this->_scriptName]['name'];
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get Tine 2.0 script: ' . $scriptName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Get Tine 2.0 script: ' . $scriptName);
             
             $script = $this->_backend->getScript($scriptName);
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got sieve script: ' . $script);
             $result = new Felamimail_Sieve_Script($script);
             
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No Tine 2.0 SIEVE scripts found.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No Tine 2.0 SIEVE scripts found.');
             
             $result = NULL;
         }
@@ -174,9 +172,12 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         }
         $script->setVacation($fsv);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Put updated vacation SIEVE script ' . $this->_scriptName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Put updated vacation SIEVE script ' . $this->_scriptName);
         
         $scriptToPut = $script->getSieve();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $scriptToPut);
+        
         $this->_backend->putScript($this->_scriptName, $scriptToPut);
         $this->activateScript($accountId);
         
@@ -202,7 +203,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         $this->_setSieveBackendAndAuthenticate($_accountId);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Delete SIEVE script ' . $this->_scriptName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete SIEVE script ' . $this->_scriptName);
         
         $this->_backend->deleteScript($this->_scriptName);
     }
@@ -216,7 +217,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         $this->_setSieveBackendAndAuthenticate($_accountId);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Activate vacation SIEVE script ' . $this->_scriptName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Activate vacation SIEVE script ' . $this->_scriptName);
         $this->_backend->setActive($this->_scriptName);
     }
     
