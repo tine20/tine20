@@ -194,18 +194,18 @@ class Felamimail_Sieve_Vacation
         
         if (!empty($this->_mime)) {
             $mime = ':mime ';
-            $contentType = 'Content-Type: ' . $this->_mime . ";\r\n\r\n";
+            $contentType = 'Content-Type: ' . $this->_mime . "; charset=UTF-8\r\n\r\n";
         } else {
             $mime = null;
             $contentType = null;
         }
         
         $vacation = sprintf("vacation %s%s%s%s%stext:\r\n%s%s\r\n.\r\n;",
+            $mime,
             $days,
             $from,
             $addresses,
             $subject,
-            $mime,
             $contentType,
             $this->_reason
         );
