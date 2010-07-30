@@ -19,6 +19,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>Sieve Filter Dialog</p>
  * <p>This dialog is editing sieve filters (vacation and rules).</p>
  * <p>
+ * TODO         activate mime (text/html) vacation messages
  * TODO         add rules ? or another edit dlg for rules?
  * TODO         add signature from account?
  * </p>
@@ -71,6 +72,9 @@ Ext.namespace('Tine.Felamimail');
             return;
         }
         
+        // mime type is always text/html
+        //this.record.set('mime', 'text/html');
+
         this.getForm().loadRecord(this.record);
         
         //Tine.log.debug(this.record);
@@ -98,11 +102,10 @@ Ext.namespace('Tine.Felamimail');
             name: 'reason',
             allowBlank: true,
             height: 220,
-            disabled      : this.record.get('enabled'),
+            // do we need the markup here?
             /*
             getDocMarkup: function(){
-                var markup = '<span id="felamimail\-body\-signature">'
-                    + '</span>';
+                var markup = '<html><body></body></html>';
                 return markup;
             },
             */
@@ -145,15 +148,6 @@ Ext.namespace('Tine.Felamimail');
                             //[0, Locale.getTranslationData('Question', 'no').replace(/:.*/, '')], 
                             //[1, Locale.getTranslationData('Question', 'yes').replace(/:.*/, '')]
                         ]
-                        // disable reason field?
-                        /*,
-                        listeners: {
-                            scope: this,
-                            select: function(field, record, index) {
-                                this.reasonEditor.setDisabled(index == 0);
-                            }
-                        }
-                        */
                     },
                     this.reasonEditor
                 ]]
