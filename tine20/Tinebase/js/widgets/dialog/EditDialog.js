@@ -70,6 +70,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * text of save and close button
      */
     saveAndCloseButtonText: '',
+    /**
+     * @cfg {String} cancelButtonText
+     * text of cancel button
+     */
+    cancelButtonText: '',
 
     /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
@@ -181,7 +186,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         });
         
         this.action_cancel = new Ext.Action({
-            text: _('Cancel'),
+            text: (this.cancelButtonText != '') ? this.app.i18n._(this.cancelButtonText) : _('Cancel'),
             minWidth: 70,
             scope: this,
             handler: this.onCancel,
