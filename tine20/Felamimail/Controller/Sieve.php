@@ -124,13 +124,13 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
             $scriptName = $scripts[$this->_scriptName]['name'];
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Get Tine 2.0 script: ' . $scriptName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Get SIEVE script: ' . $scriptName);
             
             $script = $this->_backend->getScript($scriptName);
             $result = new Felamimail_Sieve_Script($script);
             
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No Tine 2.0 SIEVE scripts found.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No relevant SIEVE scripts found.');
             
             $result = NULL;
         }
