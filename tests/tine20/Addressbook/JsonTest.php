@@ -4,12 +4,11 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
- * @todo        fix some of the search tests ("this is not working with a new database")
- * @todo        add testSetImage
+ * @todo        add testSetImage (NOTE: we can't test the upload yet, so we needd to simulate the upload)
  */
 
 /**
@@ -34,9 +33,11 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     protected $_instance;
     
     /**
-     * @var bool allow the use of GLOBALS to exchange data between tests
+     * contacts that should be deleted later
+     * 
+     * @var array
      */
-    protected $backupGlobals = false;
+    protected $_contactIdsToDelete = array();
     
     /**
      * @var array test objects
@@ -72,9 +73,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $this->_instance = new Addressbook_Frontend_Json();
         
-        // initialise global for this test suite
-        $GLOBALS['Addressbook_JsonTest'] = array_key_exists('Addressbook_JsonTest', $GLOBALS) ? $GLOBALS['Addressbook_JsonTest'] : array();
-        
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
@@ -95,9 +93,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'sort' => 'n_fileas',
             'dir' => 'ASC',
         );
-
-        return;
-        
     }
 
     /**
@@ -108,7 +103,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+	   $this->_instance->deleteContacts($this->_contactIdsToDelete);
     }
     
     /**
@@ -161,10 +156,11 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     
     
     /**
-     * test to add a contact
+     * add a contact
      *
+     * @return array contact data
      */
-    public function testAddContact()
+    protected function _addContact()
     {
         $note = array(
             'note_type_id'      => 1,
@@ -181,7 +177,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $newContact = $this->_instance->saveContact($newContactData);
         $this->assertEquals($newContactData['n_family'], $newContact['n_family'], 'Adding contact failed');
         
-        $GLOBALS['Addressbook_JsonTest']['addedContactId'] = $newContact['id'];
+        $this->_contactIdsToDelete[] = $newContact['id'];
+        
+        return $newContact;
     }
     
     /**
@@ -190,6 +188,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContactsByTelephone()
     {
+        $this->_addContact();
+        
         $paging = $this->objects['paging'];
         
         $filter = array(
@@ -205,6 +205,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContactsByAddressbookId()
     {
+        $this->_addContact();
+        
         $paging = $this->objects['paging'];
         
         $filter = array(
@@ -222,6 +224,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContactsByOwner()
     {
+        $this->_addContact();
+        
         $paging = $this->objects['paging'];
         
         $filter = array(
@@ -232,67 +236,34 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }
-        
-    /**
-     * try to get shared contacts
-     *
-     */
-    public function testGetSharedContacts()
-    {
-        $paging = $this->objects['paging'];
-        
-        $filter = array(
-            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'shared'),
-        );
-        $contacts = $this->_instance->searchContacts($filter, $paging);
-        
-        // this is not working with a new database
-        #$this->assertGreaterThan(0, $contacts['totalcount']);
-    }
-    
-    
+
     /**
      * test getting contact
      *
      */
     public function testGetContact()
     {
-        $contactId = $GLOBALS['Addressbook_JsonTest']['addedContactId'];
+        $contact = $this->_addContact();
         
-        $contact = $this->_instance->getContact($contactId);
+        $contact = $this->_instance->getContact($contact['id']);
         
         $this->assertEquals('PHPUNIT', $contact['n_family'], 'getting contact failed');
     }
 
     /**
-     * test updateing of a contct
+     * test updating of a contact
      *
      */
     public function testUpdateContact()
     {
-        $contactId = $GLOBALS['Addressbook_JsonTest']['addedContactId'];
-        
-        $contact = $this->_instance->getContact($contactId);
+        $contact = $this->_addContact();
         
         $contact['n_family'] = 'PHPUNIT UPDATE';
         $updatedContact = $this->_instance->saveContact($contact);
         
-        $this->assertEquals($contactId, $updatedContact['id'], 'updated produced a new contact');
+        $this->assertEquals($contact['id'], $updatedContact['id'], 'updated produced a new contact');
         $this->assertEquals('PHPUNIT UPDATE', $updatedContact['n_family'], 'updating data failed');
-        
     }
-    
-    /**
-     * test setting a contact image
-     * 
-     * NOTE: we can't test the upload yet, so we needd to simulate the upload
-     *
-     *
-    public function testSetImage()
-    {
-        
-    }
-    */
     
     /**
      * test deleting contact
@@ -300,12 +271,12 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteContact()
     {
-        $contactId = $GLOBALS['Addressbook_JsonTest']['addedContactId'];
+        $contact = $this->_addContact();
         
-        $this->_instance->deleteContacts($contactId);
+        $this->_instance->deleteContacts($contact['id']);
         
         $this->setExpectedException('Exception');
-        $contact = $this->_instance->getContact($contactId);
+        $contact = $this->_instance->getContact($contact['id']);
     }
     
     /**
