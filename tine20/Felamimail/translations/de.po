@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-21 15:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2010-08-03 12:27+0100\n"
+"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,20 +28,26 @@ msgstr "Emailkonten hinzufügen"
 msgid "Create new email accounts"
 msgstr "Neue Emailkonten hinzufügen"
 
-#: Controller/Message.php:580 js/GridDetailsPanel.js:123 js/GridPanel.js:293
-#: js/GridPanel.js:403 js/MessageEditDialog.js:479
+#: Controller/Message.php:580
+#: js/GridDetailsPanel.js:123
+#: js/GridPanel.js:293
+#: js/GridPanel.js:403
+#: js/MessageEditDialog.js:479
 msgid "Subject"
 msgstr "Betreff"
 
-#: Controller/Message.php:580 js/MessageEditDialog.js:398
+#: Controller/Message.php:580
+#: js/MessageEditDialog.js:398
 msgid "Body"
 msgstr "Nachricht"
 
-#: js/AccountEditDialog.js:88 js/AccountEditDialog.js:137
+#: js/AccountEditDialog.js:88
+#: js/AccountEditDialog.js:137
 msgid "Signature"
 msgstr "Signatur"
 
-#: js/AccountEditDialog.js:108 js/Model.js:260
+#: js/AccountEditDialog.js:108
+#: js/Model.js:260
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Konto"
@@ -67,7 +73,8 @@ msgstr "Firma"
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/AccountEditDialog.js:157 js/AccountEditDialog.js:206
+#: js/AccountEditDialog.js:157
+#: js/AccountEditDialog.js:206
 #: js/AccountEditDialog.js:267
 msgid "Host"
 msgstr "Host"
@@ -76,22 +83,27 @@ msgstr "Host"
 msgid "Port (Default: 143 / SSL: 993)"
 msgstr "Port (Standard: 143 / SSL: 993)"
 
-#: js/AccountEditDialog.js:167 js/AccountEditDialog.js:215
+#: js/AccountEditDialog.js:167
+#: js/AccountEditDialog.js:215
 #: js/AccountEditDialog.js:276
 msgid "Secure Connection"
 msgstr "Sichere Verbindung"
 
-#: js/AccountEditDialog.js:178 js/AccountEditDialog.js:225
-#: js/AccountEditDialog.js:240 js/AccountEditDialog.js:286
+#: js/AccountEditDialog.js:178
+#: js/AccountEditDialog.js:225
+#: js/AccountEditDialog.js:240
+#: js/AccountEditDialog.js:286
 msgid "None"
 msgstr "Keine"
 
-#: js/AccountEditDialog.js:179 js/AccountEditDialog.js:226
+#: js/AccountEditDialog.js:179
+#: js/AccountEditDialog.js:226
 #: js/AccountEditDialog.js:287
 msgid "TLS"
 msgstr "TLS"
 
-#: js/AccountEditDialog.js:180 js/AccountEditDialog.js:227
+#: js/AccountEditDialog.js:180
+#: js/AccountEditDialog.js:227
 msgid "SSL"
 msgstr "SSL"
 
@@ -133,11 +145,11 @@ msgstr "Passwort (optional)"
 
 #: js/AccountEditDialog.js:254
 msgid "Sieve"
-msgstr ""
+msgstr "Sieve"
 
 #: js/AccountEditDialog.js:271
 msgid "Port (Default: 2000)"
-msgstr ""
+msgstr "Port (Standard: 2000)"
 
 #: js/AccountEditDialog.js:291
 msgid "Other Settings"
@@ -187,7 +199,9 @@ msgstr "Neue Emails"
 msgid "You got {0} new mail(s) in Folder {1}."
 msgstr "Sie haben {0} neue Nachricht(en) im Ordner {1}."
 
-#: js/GridDetailsPanel.js:124 js/GridPanel.js:294 js/GridPanel.js:409
+#: js/GridDetailsPanel.js:124
+#: js/GridPanel.js:294
+#: js/GridPanel.js:409
 #: js/MessageEditDialog.js:456
 msgid "From"
 msgstr "Von"
@@ -204,11 +218,13 @@ msgstr "Kontakt zum Adressbuch hinzufügen"
 msgid "Date"
 msgstr "Datum"
 
-#: js/GridDetailsPanel.js:129 js/GridDetailsPanel.js:358
+#: js/GridDetailsPanel.js:129
+#: js/GridDetailsPanel.js:358
 msgid "Show or hide header information"
 msgstr "Ein/Ausblenden der Header"
 
-#: js/GridDetailsPanel.js:220 js/MessageEditDialog.js:390
+#: js/GridDetailsPanel.js:220
+#: js/MessageEditDialog.js:390
 msgid "Attachments"
 msgstr "Anhänge"
 
@@ -220,15 +236,18 @@ msgstr "Keine Nachrichten gefunden oder Emailcache leer."
 msgid "Write"
 msgstr "Verfassen"
 
-#: js/GridPanel.js:176 js/MessageDisplayDialog.js:46
+#: js/GridPanel.js:176
+#: js/MessageDisplayDialog.js:46
 msgid "Reply"
 msgstr "Antworten"
 
-#: js/GridPanel.js:185 js/MessageDisplayDialog.js:53
+#: js/GridPanel.js:185
+#: js/MessageDisplayDialog.js:53
 msgid "Reply To All"
 msgstr "Allen antworten"
 
-#: js/GridPanel.js:194 js/MessageDisplayDialog.js:60
+#: js/GridPanel.js:194
+#: js/MessageDisplayDialog.js:60
 msgid "Forward"
 msgstr "Weiterleiten"
 
@@ -240,7 +259,9 @@ msgstr "Markieren"
 msgid "Mark read/unread"
 msgstr "(Un)gelesen markieren"
 
-#: js/GridPanel.js:221 js/GridPanel.js:222 js/GridPanel.js:224
+#: js/GridPanel.js:221
+#: js/GridPanel.js:222
+#: js/GridPanel.js:224
 #: js/MessageDisplayDialog.js:39
 msgid "Delete"
 msgstr "Löschen"
@@ -249,12 +270,16 @@ msgstr "Löschen"
 msgid "Add Account"
 msgstr "Konto hinzufügen"
 
-#: js/GridPanel.js:240 js/GridPanel.js:914 js/GridPanel.js:924
-#: js/GridPanel.js:928 js/MessageDisplayDialog.js:73
+#: js/GridPanel.js:240
+#: js/GridPanel.js:914
+#: js/GridPanel.js:924
+#: js/GridPanel.js:928
+#: js/MessageDisplayDialog.js:73
 msgid "Print Preview"
 msgstr "Druck Vorschau"
 
-#: js/GridPanel.js:248 js/MessageDisplayDialog.js:67
+#: js/GridPanel.js:248
+#: js/MessageDisplayDialog.js:67
 msgid "Print Message"
 msgstr "Nachricht drucken"
 
@@ -262,7 +287,8 @@ msgstr "Nachricht drucken"
 msgid "Subject/From"
 msgstr "Betreff/Von"
 
-#: js/GridPanel.js:295 js/GridPanel.js:415
+#: js/GridPanel.js:295
+#: js/GridPanel.js:415
 msgid "To"
 msgstr "An"
 
@@ -274,7 +300,8 @@ msgstr "Kopie"
 msgid "Bcc"
 msgstr "Blindkopie"
 
-#: js/GridPanel.js:298 js/GridPanel.js:430
+#: js/GridPanel.js:298
+#: js/GridPanel.js:430
 msgid "Received"
 msgstr "Empfangen"
 
@@ -282,7 +309,8 @@ msgstr "Empfangen"
 msgid "Id"
 msgstr "Id"
 
-#: js/GridPanel.js:422 js/Model.js:394
+#: js/GridPanel.js:422
+#: js/Model.js:394
 msgid "Sent"
 msgstr "Gesendet"
 
@@ -308,7 +336,7 @@ msgstr "Senden"
 
 #: js/MessageEditDialog.js:163
 msgid "wrote"
-msgstr "geschriebn"
+msgstr "geschrieben"
 
 #: js/MessageEditDialog.js:166
 msgid "Original message"
@@ -316,7 +344,7 @@ msgstr "Originalnachricht"
 
 #: js/MessageEditDialog.js:234
 msgid "Re:"
-msgstr ""
+msgstr "Aw:"
 
 #: js/MessageEditDialog.js:236
 msgid "Fwd:"
@@ -324,9 +352,10 @@ msgstr ""
 
 #: js/MessageEditDialog.js:239
 msgid "{0} Message"
-msgstr ""
+msgstr "{0} Nachricht"
 
-#: js/MessageEditDialog.js:282 js/MessageEditDialog.js:490
+#: js/MessageEditDialog.js:282
+#: js/MessageEditDialog.js:490
 msgid "Compose email:"
 msgstr "Email verfassen:"
 
@@ -358,20 +387,27 @@ msgstr "Empfänger"
 msgid "Save contact note"
 msgstr "Emailnotiz bei Kontakt speichern"
 
-#: js/Model.js:42 js/TreeContextMenu.js:29
+#: js/Model.js:42
+#: js/TreeContextMenu.js:29
 msgid "Message"
 msgid_plural "Messages"
 msgstr[0] "Nachricht"
 msgstr[1] "Nachrichten"
 
-#: js/Model.js:46 js/Model.js:400 js/TreeContextMenu.js:84
-#: js/TreeContextMenu.js:87 js/TreeContextMenu.js:90 js/TreeContextMenu.js:166
+#: js/Model.js:46
+#: js/Model.js:400
+#: js/TreeContextMenu.js:84
+#: js/TreeContextMenu.js:87
+#: js/TreeContextMenu.js:90
+#: js/TreeContextMenu.js:166
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] "Ordner"
 msgstr[1] "Ordner"
 
-#: js/Model.js:264 js/Model.js:403 js/Model.js:601
+#: js/Model.js:264
+#: js/Model.js:403
+#: js/Model.js:601
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "Nachrichtenliste"
@@ -397,7 +433,8 @@ msgstr "Unerwünschtes"
 msgid "Trash"
 msgstr "Mülleimer"
 
-#: js/Model.js:490 js/Model.js:530
+#: js/Model.js:490
+#: js/Model.js:530
 msgid "IMAP Error"
 msgstr "IMAP Fehler"
 
@@ -415,7 +452,7 @@ msgstr "Zugangsdaten"
 
 #: js/Model.js:531
 msgid "One of your folders was deleted from an other client, please reload you browser"
-msgstr ""
+msgstr "Ein Ordner wurde von einem anderen Klienten gelöscht. Bitte aktualisieren Sie Ihren Browser."
 
 #: js/Model.js:544
 msgid "SMTP Error"
@@ -428,18 +465,21 @@ msgstr "Keine Verbindung zum SMTP Server"
 #: js/Model.js:597
 msgid "Vacation"
 msgid_plural "Vacations"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Abwesenheitsnotiz"
+msgstr[1] "Abwesenheitsnotizen"
 
-#: js/RecipientGrid.js:153 js/RecipientGrid.js:174
+#: js/RecipientGrid.js:153
+#: js/RecipientGrid.js:174
 msgid "To:"
 msgstr "To:"
 
-#: js/RecipientGrid.js:156 js/RecipientGrid.js:175
+#: js/RecipientGrid.js:156
+#: js/RecipientGrid.js:175
 msgid "Cc:"
 msgstr "Cc:"
 
-#: js/RecipientGrid.js:159 js/RecipientGrid.js:176
+#: js/RecipientGrid.js:159
+#: js/RecipientGrid.js:176
 msgid "Bcc:"
 msgstr "Bcc:"
 
@@ -489,7 +529,7 @@ msgstr "Konto bearbeiten"
 
 #: js/TreeContextMenu.js:148
 msgid "Set Vacation Message"
-msgstr ""
+msgstr "Abwesenheitsnotiz setzen"
 
 #: js/TreeContextMenu.js:166
 msgid "Reload {0}"
@@ -497,7 +537,7 @@ msgstr "Aktualisiere {0}"
 
 #: js/TreeContextMenu.js:179
 msgid "Reload Folder List"
-msgstr ""
+msgstr "Ordnerliste neu laden"
 
 #: js/TreePanel.js:410
 msgid "Invalid drop target"
@@ -517,14 +557,15 @@ msgstr "Ungelesene Nachrichten:"
 
 #: js/TreePanel.js:560
 msgid "Name on Server:"
-msgstr ""
+msgstr "Name auf dem Server:"
 
 #: js/TreePanel.js:580
-#, fuzzy, python-format
 msgid "Fetching messages... ({0}% done)"
-msgstr "Hohle Nachrichten ({0}% erledigt)"
+msgstr "Nachrichten abholen... ({0}% erledigt)"
 
-#: js/TreePanel.js:649 js/TreePanel.js:654 js/TreePanel.js:665
+#: js/TreePanel.js:649
+#: js/TreePanel.js:654
+#: js/TreePanel.js:665
 msgid "Marked"
 msgstr "Markiert"
 
@@ -542,35 +583,35 @@ msgstr "Enthält ungelesene Nachrichten"
 
 #: js/VacationEditDialog.js:83
 msgid "Vacation Message for {0}"
-msgstr ""
+msgstr "Abwesenheitsnotiz für {0}"
 
 #: js/VacationEditDialog.js:101
 msgid "Incoming mails will be answered with this text:"
-msgstr ""
+msgstr "Eingehende Emails werden mit folgendem Text beantwortet:"
 
 #: js/VacationEditDialog.js:123
 msgid "General"
-msgstr ""
+msgstr "Allgemein"
 
 #: js/VacationEditDialog.js:135
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/VacationEditDialog.js:146
 msgid "I am available (vacation message disabled)"
-msgstr ""
+msgstr "Ich bin verfügbar (Abwesenheitsnotiz inaktiv)"
 
 #: js/VacationEditDialog.js:147
 msgid "I am not available (vacation message enabled)"
-msgstr ""
+msgstr "Ich bin nicht verfügbar (Abwesenheitsnotiz aktiv)"
 
 #: js/VacationEditDialog.js:155
 msgid "Advanced"
-msgstr ""
+msgstr "Erweitert"
 
 #: js/VacationEditDialog.js:166
 msgid "Only send all X days to the same sender"
-msgstr ""
+msgstr "Nur alle X Tage an den gleichen Absender schicken"
 
 #: Preference.php:97
 msgid "Default Email Account"
@@ -614,63 +655,44 @@ msgstr "Beim löschen von Nachrichten einen Bestätigungsdialog anzeigen."
 
 #~ msgid "Error"
 #~ msgstr "Fehler"
-
 #~ msgid "No Account configured"
 #~ msgstr "Kein Konto eingerichtet"
-
 #~ msgid "Re: "
 #~ msgstr "Aw: "
-
 #~ msgid "Original Message"
 #~ msgstr "Originalnachricht"
-
 #~ msgid "Fwd: "
 #~ msgstr "Fwd:"
-
 #~ msgid "Some error occured while trying to update the messages."
 #~ msgstr "Ein Fehler trat beim aktualisieren der Nachrichten auf."
-
 #~ msgid "Sort Folders"
 #~ msgstr "Ordner sortieren"
-
 #~ msgid "Totalcount"
 #~ msgstr "Anzahl"
-
 #~ msgid "Cache"
 #~ msgstr "Zwischenspeicher"
-
 #~ msgid "Supports \"has_children\""
 #~ msgstr "Unterstützt \"has_children\""
-
 #~ msgid "You got {0} new mail(s) in Folder "
 #~ msgstr "Sie haben {0} neue Email(s) im Ordner "
-
 #~ msgid "Create and edit email accounts"
 #~ msgstr "Erstellen und Bearbeiten von Emailkonten"
-
 #~ msgid "Upload Failed"
 #~ msgstr "Hochladen fehlgeschlagen"
-
 #~ msgid "Could not upload attachment. Filesize could be too big. Please notify your Administrator. Max upload size: "
 #~ msgstr "Konnte Anhang nicht hochladen. Die Datei könnte zu groß gewesen sein. Bitte kontaktieren Sie Ihren Administrator. Maximale Dateigröße für Uploads: "
-
 #~ msgid "Add Attachment"
 #~ msgstr "Anhang hinzufügen"
-
 #~ msgid "Remove Attachment"
 #~ msgstr "Anhang entfernen"
-
 #~ msgid "User Email Account"
 #~ msgstr "Benutzer Email Konto"
-
 #~ msgid "Use user credentials for IMAP email account."
 #~ msgstr "Verwende (Tine 2.0) Benutzer-Zugangsdaten um den Benutzer am Email Konto zu authentifizieren."
-
 #~ msgid "Sort Folders (experimental)"
 #~ msgstr "Ordner sortieren (experimentell)"
-
 #~ msgid "Update Cache"
 #~ msgstr "Cache aktualisieren"
-
 #~ msgid "Could not upload attachment. Filesize could be too big. Please notify your Administrator."
 #~ msgstr "Konnte Datei nicht hochladen. Eventuell war sie zu groß."
+
