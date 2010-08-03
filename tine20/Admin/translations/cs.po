@@ -6,7 +6,7 @@ msgstr ""
 "Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-Language: Czech\n"
@@ -355,11 +355,11 @@ msgstr "Název skupiny"
 
 #: js/Groups.js:534 js/RoleEditDialog.js:395 js/Tags.js:620
 msgid "Transfering {0}..."
-msgstr ""
+msgstr "Převádím {0}..."
 
 #: js/Groups.js:534
 msgid "Group"
-msgstr ""
+msgstr "Skupina"
 
 #: js/Groups.js:546
 msgid "Add new group"
@@ -403,7 +403,7 @@ msgstr "Čekejte prosím"
 
 #: js/RoleEditDialog.js:395
 msgid "Role"
-msgstr ""
+msgstr "Role"
 
 #: js/RoleEditDialog.js:405
 msgid "Add New Role"
@@ -522,7 +522,7 @@ msgstr "Načítám štítek..."
 
 #: js/Tags.js:620
 msgid "Tag"
-msgstr ""
+msgstr "Štítek"
 
 #: js/Tags.js:630
 msgid "Add New Tag"
@@ -613,7 +613,7 @@ msgstr "Čas automatického odhlášení"
 
 #: js/user/EditDialog.js:263
 msgid "Quota (MB)"
-msgstr ""
+msgstr "Kvóta (MB)"
 
 #: js/user/EditDialog.js:277
 msgid "Quota"
@@ -625,7 +625,7 @@ msgstr "Aktuální velikost zprávy"
 
 #: js/user/EditDialog.js:293
 msgid "Sieve Quota (MB)"
-msgstr ""
+msgstr "Sieve kvóta (MB)"
 
 #: js/user/EditDialog.js:307
 msgid "Sieve Quota"
@@ -633,7 +633,7 @@ msgstr "Sieve kvóta"
 
 #: js/user/EditDialog.js:315
 msgid "Sieve Size"
-msgstr ""
+msgstr "Velikost Sieve"
 
 #: js/user/EditDialog.js:323 js/user/EditDialog.js:612
 msgid "Information"
@@ -825,6 +825,21 @@ msgstr[0] "Uživatel emailu"
 msgstr[1] "Uživatelé emailu"
 msgstr[2] "Uživatelů emailu"
 
+#~ msgid "enter searchfilter"
+#~ msgstr "zadejte hledaný výraz"
+
+#~ msgid "Deleting group..."
+#~ msgstr "Mažu skupinu..."
+
+#~ msgid "Email UID"
+#~ msgstr "UID emailu"
+
+#~ msgid "Email GID"
+#~ msgstr "GID emailu"
+
+#~ msgid "Email Username"
+#~ msgstr "Uživatelské jméno pro email"
+
 #~ msgid "Do you really want to delete the selected account(s)?"
 #~ msgstr "Opravdu chcete smazat vybraný(é) účet(ty)?"
 
@@ -848,31 +863,6 @@ msgstr[2] "Uživatelů emailu"
 
 #~ msgid "delete account"
 #~ msgstr "smazat účet"
-
-#~ msgid "Deleting group..."
-#~ msgstr "Mažu skupinu..."
-
-#~ msgid "Email UID"
-#~ msgstr "UID emailu"
-
-#~ msgid "Email GID"
-#~ msgstr "GID emailu"
-
-#~ msgid "Email Username"
-#~ msgstr "Uživatelské jméno pro email"
-
-#~ msgid "Current Sieve Size"
-#~ msgstr "Aktuální velikost Sieve"
-
-#, fuzzy
-#~ msgid "Passwords don't match"
-#~ msgstr "Hesla se neshodují!"
-
-#~ msgid "Password again"
-#~ msgstr "Zopakovat heslo"
-
-#~ msgid "enter searchfilter"
-#~ msgstr "zadejte hledaný výraz"
 
 #~ msgid "remove account"
 #~ msgstr "odstranit účet"

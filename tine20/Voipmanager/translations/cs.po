@@ -60,7 +60,7 @@ msgstr "pin administrátora"
 
 #: js/Asterisk/SipPeerEditDialog.js:50
 msgid "Call Forwards"
-msgstr ""
+msgstr "Přesměrování hovorů"
 
 #: js/Asterisk/SipPeerEditDialog.js:61 js/Asterisk/VoicemailEditDialog.js:42
 msgid "General"
@@ -433,29 +433,29 @@ msgstr "Jméno a příjmení"
 
 #: js/CallForwardPanel.js:86
 msgid "Forward immediately"
-msgstr ""
+msgstr "Okamžitě přesměrovat"
 
 #: js/CallForwardPanel.js:96 js/CallForwardPanel.js:139
 #: js/CallForwardPanel.js:181
 msgid "Mode"
-msgstr ""
+msgstr "Režim"
 
 #: js/CallForwardPanel.js:120 js/CallForwardPanel.js:162
 #: js/CallForwardPanel.js:205
 msgid "Number"
-msgstr ""
+msgstr "Číslo"
 
 #: js/CallForwardPanel.js:129
 msgid "Forward busy"
-msgstr ""
+msgstr "Přesměrovat je-li obsazeno"
 
 #: js/CallForwardPanel.js:171
 msgid "Forward delayed"
-msgstr ""
+msgstr "Přesměrovat po prodlevě"
 
 #: js/CallForwardPanel.js:214
 msgid "Delay time"
-msgstr ""
+msgstr "Délka prodlevy"
 
 #: js/Models.js:79 js/Snom/PhoneEditDialog.js:263
 msgid "Phone"
@@ -1242,9 +1242,6 @@ msgstr "Šablony"
 
 #~ msgid "send HTTP Client Info"
 #~ msgstr "poslat HTTP Client Info"
-
-#~ msgid "Model"
-#~ msgstr "Model"
 
 #~ msgid "FW Status"
 #~ msgstr "URL konfiguračního souboru pro firmware"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Tinebase\n"
-"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: \n"
@@ -38,7 +38,7 @@ msgstr "Hlásit chyby"
 
 #: Acl/Rights.php:135
 msgid "Report bugs to the software vendor directly when they occur."
-msgstr ""
+msgstr "Hlásit chyby přímo prodejci softwaru jakmile k nim dojde."
 
 #: Acl/Rights.php:138
 msgid "Check version"
@@ -46,7 +46,7 @@ msgstr "Zkontrolovat verzi"
 
 #: Acl/Rights.php:139
 msgid "Check for new versions of this software."
-msgstr ""
+msgstr "Ověřit dostupnost nových verzí softwaru."
 
 #: Export/Ods.php:204
 msgid "Filter"
@@ -54,7 +54,7 @@ msgstr "Filtr"
 
 #: Export/Ods.php:289
 msgid "Data"
-msgstr ""
+msgstr "Data"
 
 #: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:58
 msgid "Tags"
@@ -86,7 +86,7 @@ msgstr "Došlo k chybě, program se neukončil korektně."
 
 #: js/AppManager.js:182
 msgid "Missing Applications"
-msgstr ""
+msgstr "Chybějící aplikace"
 
 #: js/AppManager.js:183
 msgid "There are no applications enabled for you. Please contact your administrator."
@@ -127,7 +127,7 @@ msgstr "{0} ostatních uživatelů"
 
 #: js/Container.js:146
 msgid "Internal {0}"
-msgstr ""
+msgstr "Interní {0}"
 
 #: js/Container.js:150
 msgid "My {0}"
@@ -231,11 +231,11 @@ msgstr "Někdo jiný záznam uložil v době, kdy jste editoval(a) údaje. Musí
 
 #: js/ExceptionHandler.js:176
 msgid "Service Unavailable"
-msgstr ""
+msgstr "Služba je nedostupná"
 
 #: js/ExceptionHandler.js:177
 msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
-msgstr ""
+msgstr "Server momentálně není schopen požadavek zpracovat kvůli dočasnému přetížení nebo údržbě serveru. Zkuste prosím znovu nebo kontaktujte svého administrátora."
 
 #: js/ExceptionHandler.js:184
 msgid "Connection lost, please check your network!"
@@ -243,27 +243,27 @@ msgstr "Spojení přerušeno, zkontrolujte prosím Vaší síť."
 
 #: js/ExceptionHandler.js:190
 msgid "Timeout"
-msgstr ""
+msgstr "Časový limit"
 
 #: js/ExceptionHandler.js:191
 msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
-msgstr ""
+msgstr "Lituji, ale během zpracování Vašeho požadavku vypršel časový limit. Spusťte prosím znovu prohlížeč a zopakujte operaci nebo kontaktujte svého administrátora."
 
 #: js/ExceptionHandler.js:200
 msgid "No Response"
-msgstr ""
+msgstr "Žádná odpověď"
 
 #: js/ExceptionHandler.js:201
 msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
-msgstr ""
+msgstr "Lituji, ale server nevrátil žádná data. Spusťte prosím znovu prohlížeč a zopakujte operaci nebo kontaktujte svého administrátora."
 
 #: js/ExceptionHandler.js:210
 msgid "No Role Memberships"
-msgstr ""
+msgstr "Žádná příslušnost k roli"
 
 #: js/ExceptionHandler.js:211
 msgid "Your user account has no role memberships. Please contact your administrator."
-msgstr ""
+msgstr "K Vašemu uživatelskému účtu nepřísluší žádná role. Kontaktujte prosím svého administrátora."
 
 #: js/LoginPanel.js:78 js/LoginPanel.js:110
 msgid "Login"
@@ -479,9 +479,9 @@ msgstr "Skupiny"
 #: js/Models.js:272
 msgid "Import"
 msgid_plural "Imports"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Import"
+msgstr[1] "Importy"
+msgstr[2] "Importů"
 
 #: js/Models.js:305
 msgid "Credentials"
@@ -548,7 +548,7 @@ msgstr "Načítám"
 
 #: js/ux/form/ImageField.js:71
 msgid "Click to edit"
-msgstr ""
+msgstr "Klikněte pro editaci"
 
 #: js/ux/form/ImageField.js:113
 msgid "Not An Image"
@@ -556,7 +556,7 @@ msgstr "Není obrázek"
 
 #: js/ux/form/ImageField.js:113
 msgid "Please select an image file (gif/png/jpeg)"
-msgstr ""
+msgstr "Vyberte prosím soubor s obrázkem (gif/png/jpeg)"
 
 #: js/ux/form/ImageField.js:147 js/widgets/grid/FileUploadGrid.js:85
 msgid "Upload Failed"
@@ -721,7 +721,7 @@ msgstr "vyberte jiné {0}..."
 
 #: js/widgets/container/ContainerSelect.js:112
 msgid "Select a {0}"
-msgstr ""
+msgstr "Vybrat {0}"
 
 #: js/widgets/container/ContainerSelect.js:132
 msgid "Recently used {0}:"
@@ -734,25 +734,25 @@ msgstr "vyberte prosím  {0}"
 #: js/widgets/container/ContainerTree.js:124
 msgid "container"
 msgid_plural "containers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "kontejner"
+msgstr[1] "kontejnery"
+msgstr[2] "kontejnerů"
 
 #: js/widgets/container/ContainerTree.js:412
 msgid "You are not allowed to select the {0} '{1}':"
-msgstr ""
+msgstr "Nemáte oprávnění vybrat {0} '{1}':"
 
 #: js/widgets/container/ContainerTree.js:413
 msgid "{0} grant is required for desired action"
-msgstr ""
+msgstr "Pro požadovanou akci je zapotřebí oprávnění {0}"
 
 #: js/widgets/container/ContainerTree.js:414
 msgid "Insufficient Grants"
-msgstr ""
+msgstr "Nedostatečná oprávnění"
 
 #: js/widgets/container/FilterModel.js:130
 msgid "is personal of"
-msgstr ""
+msgstr "je osobní od"
 
 #: js/widgets/container/FilterModel.js:130
 #: js/widgets/container/FilterModel.js:134 js/widgets/grid/FilterModel.js:155
@@ -761,7 +761,7 @@ msgstr "je roven"
 
 #: js/widgets/container/FilterModel.js:238
 msgid "Selected  {0}"
-msgstr ""
+msgstr "Vybráno {0}"
 
 #: js/widgets/container/GrantsDialog.js:54
 msgid "Folder"
@@ -773,11 +773,11 @@ msgstr "Číst"
 
 #: js/widgets/container/GrantsDialog.js:89
 msgid "The grant to read records of this container"
-msgstr ""
+msgstr "Oprávnění číst záznamy z tohoto kontejneru"
 
 #: js/widgets/container/GrantsDialog.js:95
 msgid "The grant to add records to this container"
-msgstr ""
+msgstr "Oprávnění přidat záznamy do tohoto kontejneru"
 
 #: js/widgets/container/GrantsDialog.js:100
 msgid "Edit"
@@ -785,7 +785,7 @@ msgstr "Editovat"
 
 #: js/widgets/container/GrantsDialog.js:101
 msgid "The grant to edit records in this container"
-msgstr ""
+msgstr "Oprávnění editovat záznamy v tomto kontejneru"
 
 #: js/widgets/container/GrantsDialog.js:106
 msgid "Delete"
@@ -793,39 +793,39 @@ msgstr "Smazat"
 
 #: js/widgets/container/GrantsDialog.js:107
 msgid "The grant to delete records in this container"
-msgstr ""
+msgstr "Oprávnění mazat záznamy v tomto kontejneru"
 
 #: js/widgets/container/GrantsDialog.js:112
 msgid "Export"
-msgstr ""
+msgstr "Exportovat"
 
 #: js/widgets/container/GrantsDialog.js:113
 msgid "The grant to export records from this container"
-msgstr ""
+msgstr "Oprávnění exportovat záznamy z tohoto kontejneru"
 
 #: js/widgets/container/GrantsDialog.js:118
 msgid "Sync"
-msgstr ""
+msgstr "Synchronizovat"
 
 #: js/widgets/container/GrantsDialog.js:119
 msgid "The grant to synchronise records with this container"
-msgstr ""
+msgstr "Oprávnění synchronizovat záznamy s tímto kontejnerem"
 
 #: js/widgets/container/GrantsDialog.js:130
 msgid "Free Busy"
-msgstr ""
+msgstr "Dostupnost"
 
 #: js/widgets/container/GrantsDialog.js:131
 msgid "The grant to access free busy information of events in this calendar"
-msgstr ""
+msgstr "Oprávnění přístupovat k informacím o dostupnosti u událostí v tomto kalendáři."
 
 #: js/widgets/container/GrantsDialog.js:138
 msgid "Private"
-msgstr ""
+msgstr "Soukromé"
 
 #: js/widgets/container/GrantsDialog.js:139
 msgid "The grant to access records marked as private in this container"
-msgstr ""
+msgstr "Oprávnění přístupovat k záznamům v tomto kontejneru, které jsou označeny jako soukromé"
 
 #: js/widgets/container/GrantsDialog.js:146
 msgid "Admin"
@@ -833,7 +833,7 @@ msgstr "Administrace"
 
 #: js/widgets/container/GrantsDialog.js:147
 msgid "The grant to administrate this container"
-msgstr ""
+msgstr "Oprávnění administrovat tento kontejner"
 
 #: js/widgets/container/GrantsDialog.js:169
 msgid "Updating Grants"
@@ -841,11 +841,11 @@ msgstr "Aktualizuji oprávnění"
 
 #: js/widgets/container/GrantsDialog.js:199
 msgid "Error"
-msgstr ""
+msgstr "Chyba"
 
 #: js/widgets/container/GrantsDialog.js:200
 msgid "You are not allowed to remove all admins for this container!"
-msgstr ""
+msgstr "Nemáte oprávnění odstranit všechny administrátory pro tento kontejner!"
 
 #: js/widgets/customfields/CustomfieldsPanel.js:64
 msgid "Custom Fields"
@@ -866,7 +866,7 @@ msgstr "Alarmy"
 
 #: js/widgets/dialog/AlarmPanel.js:42
 msgid "Custom Datetime"
-msgstr ""
+msgstr "Uživatelský čas"
 
 #: js/widgets/dialog/AlarmPanel.js:52
 msgid "Send Alarm"
@@ -902,7 +902,7 @@ msgstr "1 den před"
 
 #: js/widgets/dialog/AlarmPanel.js:69
 msgid "Custom datetime"
-msgstr ""
+msgstr "Uživatelský čas"
 
 #: js/widgets/dialog/EditDialog.js:181 js/widgets/EditRecord.js:128
 msgid "Apply"
@@ -949,43 +949,43 @@ msgstr "Nepodařilo se smazat {0}."
 
 #: js/widgets/dialog/ImportDialog.js:77
 msgid "Files"
-msgstr ""
+msgstr "Soubory"
 
 #: js/widgets/dialog/ImportDialog.js:97
 msgid "Import definition"
-msgstr ""
+msgstr "Importovat definici."
 
 #: js/widgets/dialog/ImportDialog.js:109
 msgid "Import into {0}"
-msgstr ""
+msgstr "Importovat do {0}"
 
 #: js/widgets/dialog/ImportDialog.js:120
 msgid "Dry run"
-msgstr ""
+msgstr "Zkouška nanečisto"
 
 #: js/widgets/dialog/ImportDialog.js:137
 msgid "No files added"
-msgstr ""
+msgstr "Nebyly přidány žádné soubory"
 
 #: js/widgets/dialog/ImportDialog.js:137
 msgid "You need to add files to import."
-msgstr ""
+msgstr "Musíte přidat soubory k importu."
 
 #: js/widgets/dialog/ImportDialog.js:167
 msgid "Dry run results"
-msgstr ""
+msgstr "Výsledky zkoušky na nečisto"
 
 #: js/widgets/dialog/ImportDialog.js:168
 msgid "Import test successful for {0} records, import test failed for {1} records."
-msgstr ""
+msgstr "Test importu úspěšně proběhl u {0} záznamů, selhal u {1} záznamů."
 
 #: js/widgets/dialog/ImportDialog.js:172
 msgid "Import results"
-msgstr ""
+msgstr "Výsledky importu"
 
 #: js/widgets/dialog/ImportDialog.js:173
 msgid "Import successful for {0} records / import failed for {1} records / {2} duplicates found"
-msgstr ""
+msgstr "Import úspěšně proběhl u {0} záznamů / selhal u {1} záznamů / bylo nalezeno {2} duplicit"
 
 #: js/widgets/dialog/LinkPanel.js:48
 msgid "Links"
@@ -994,12 +994,12 @@ msgstr "Odkazy"
 #: js/widgets/dialog/MultiOptionsDialog.js:28
 #: js/widgets/dialog/MultiOptionsDialog.js:75
 msgid "What would you like to do?"
-msgstr ""
+msgstr "Co si přejete udělat?"
 
 #: js/widgets/dialog/MultiOptionsDialog.js:32
 #: js/widgets/dialog/MultiOptionsDialog.js:134
 msgid "You need to select an option!"
-msgstr ""
+msgstr "Musíte vybrat některou z voleb!"
 
 #: js/widgets/dialog/PreferencesDialog.js:135
 msgid "Admin Mode"
@@ -1047,7 +1047,7 @@ msgstr "Uložit konfiguraci"
 
 #: js/widgets/form/ConfigPanel.js:239
 msgid "Reload config"
-msgstr ""
+msgstr "Znovu načíst konfiguraci"
 
 #: js/widgets/form/RecordPickerComboBox.js:59 js/widgets/tags/TagsPanel.js:469
 msgid "Searching..."
@@ -1055,15 +1055,15 @@ msgstr "Vyhledávám..."
 
 #: js/widgets/grid/FileUploadGrid.js:86
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
-msgstr ""
+msgstr "Nemohu uploadovat soubor. Možná je příliš velký. Upozorněte prosím svého administrátora. Maximální velikost uploadu:"
 
 #: js/widgets/grid/FileUploadGrid.js:110
 msgid "Add file"
-msgstr ""
+msgstr "Přidat soubor"
 
 #: js/widgets/grid/FileUploadGrid.js:121
 msgid "Remove file"
-msgstr ""
+msgstr "Odstranit soubor"
 
 #: js/widgets/grid/FileUploadGrid.js:165
 #, fuzzy
@@ -1101,7 +1101,7 @@ msgstr "jeden z"
 
 #: js/widgets/grid/FilterModel.js:160
 msgid "none of"
-msgstr ""
+msgstr "žádný z"
 
 #: js/widgets/grid/FilterModel.js:161
 msgid "is before"
@@ -1213,7 +1213,7 @@ msgstr "zahájit hledání"
 
 #: js/widgets/grid/FilterToolbar.js:147
 msgid "save as favorite"
-msgstr ""
+msgstr "uložit jako oblíbenou položku"
 
 #: js/widgets/grid/FilterToolbar.js:236
 msgid "select a field"
@@ -1233,7 +1233,7 @@ msgstr "Zobrazit"
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
 msgid "show details"
-msgstr ""
+msgstr "zobrazit detaily"
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:183
 msgid "Always show advanced filters"
@@ -1242,9 +1242,9 @@ msgstr "Vždy zobrazovat rozšířené filtry"
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:369
 msgid "Your view is limited by {0} criteria:"
 msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Vaše zobrazení je omezeno {0} kritériem:"
+msgstr[1] "Vaše zobrazení je omezeno {0} kritérii:"
+msgstr[2] "Vaše zobrazení je omezeno {0} kritérii:"
 
 #: js/widgets/grid/GridPanel.js:191
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
@@ -1256,7 +1256,7 @@ msgstr "Editovat {0}"
 
 #: js/widgets/grid/GridPanel.js:291
 msgid "Copy {0}"
-msgstr ""
+msgstr "Kopírovat {0}"
 
 #: js/widgets/grid/GridPanel.js:302 js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
@@ -1293,9 +1293,9 @@ msgstr "Nemáte oprávnění smazat všechny stránky najednou."
 #: js/widgets/grid/GridPanel.js:940
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "Opravdu chcete smazat vybraný záznam"
-msgstr[1] "Opravdu chcete smazat vybrané záznamy"
-msgstr[2] "Opravdu chcete smazat vybrané záznamy"
+msgstr[0] "Opravdu chcete smazat vybraný záznam?"
+msgstr[1] "Opravdu chcete smazat vybrané záznamy?"
+msgstr[2] "Opravdu chcete smazat vybrané záznamy?"
 
 #: js/widgets/grid/GridPanel.js:963
 msgid " ... This may take a long time!"
@@ -1303,11 +1303,11 @@ msgstr "... Toto může trvat dlouho!"
 
 #: js/widgets/grid/PickerGridPanel.js:117
 msgid "Remove record"
-msgstr ""
+msgstr "Odstranit záznam"
 
 #: js/widgets/grid/PickerGridPanel.js:185
 msgid "Search for records ..."
-msgstr ""
+msgstr "Hledat záznamy..."
 
 #: js/widgets/grid/QuickaddGridPanel.js:99
 msgid "Remove"
@@ -1328,66 +1328,66 @@ msgstr "Čekejte prosím"
 
 #: js/widgets/mainscreen/WestPanel.js:193
 msgid "containers"
-msgstr ""
+msgstr "kontejnery"
 
 #: js/widgets/mainscreen/WestPanel.js:220
 msgid "Favorites"
-msgstr ""
+msgstr "Oblíbené"
 
 #: js/widgets/mainscreen/WestPanel.js:228
 msgid "Save current view as favorite"
-msgstr ""
+msgstr "Uložit aktuální zobrazení jako oblíbené"
 
 #: js/widgets/persistentfilter/Model.js:40
 msgid "Favorite"
 msgid_plural "Favorites"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Oblíbený"
+msgstr[1] "Oblíbené"
+msgstr[2] "Oblíbených"
 
 #: js/widgets/persistentfilter/Model.js:40
 msgid "Events"
-msgstr ""
+msgstr "Události"
 
 #: js/widgets/persistentfilter/PickerPanel.js:59
 msgid "My favorites"
-msgstr ""
+msgstr "Moje oblíbené položky"
 
 #: js/widgets/persistentfilter/PickerPanel.js:180
 msgid "Delete Favorite"
-msgstr ""
+msgstr "Smazat oblíbenou položku"
 
 #: js/widgets/persistentfilter/PickerPanel.js:185
 msgid "Rename Favorite"
-msgstr ""
+msgstr "Přejmenovat oblíbenou položku"
 
 #: js/widgets/persistentfilter/PickerPanel.js:200
 msgid "Do you really want to delete the favorite \"{0}\"?"
-msgstr ""
+msgstr "Opravdu chcete smazat oblíbenou položku \"{0}\"?"
 
 #: js/widgets/persistentfilter/PickerPanel.js:202
 msgid "Deleting Favorite \"{0}\""
-msgstr ""
+msgstr "Mažu oblíbenou položku \"{0}\""
 
 #: js/widgets/persistentfilter/PickerPanel.js:225
 msgid "New Name"
-msgstr ""
+msgstr "Nový název"
 
 #: js/widgets/persistentfilter/PickerPanel.js:225
 msgid "Please enter the new name for favorite \"{0}\"?"
-msgstr ""
+msgstr "Zadejte prosím nový název pro oblíbenou položku \"{0}\"?"
 
 #: js/widgets/persistentfilter/PickerPanel.js:227
 msgid "Renaming Favorite \"{0}\""
-msgstr ""
+msgstr "Přejmenovávám oblíbenou položku \"{0}\""
 
 #: js/widgets/persistentfilter/PickerPanel.js:250
 msgid "Could not save Favorite"
-msgstr ""
+msgstr "Nepodařilo se uložit oblíbenou položku"
 
 #: js/widgets/persistentfilter/PickerPanel.js:250
 msgid "Your current view does not support favorites"
-msgstr ""
+msgstr "Vaše stávající zobrazení nepodporuje oblíbené položky"
 
 #: js/widgets/persistentfilter/PickerPanel.js:255
 msgid "save filter"
@@ -1395,29 +1395,29 @@ msgstr "uložit filtr"
 
 #: js/widgets/persistentfilter/PickerPanel.js:255
 msgid "Please enter a name for the favorite"
-msgstr ""
+msgstr "Zadejte prosím název pro oblíbenou položku"
 
 #: js/widgets/persistentfilter/PickerPanel.js:258
 #: js/widgets/persistentfilter/PickerPanel.js:261
 #: js/widgets/persistentfilter/PickerPanel.js:270
 msgid "Favorite not Saved"
-msgstr ""
+msgstr "Oblíbená položka nebyla uložena"
 
 #: js/widgets/persistentfilter/PickerPanel.js:258
 msgid "You have to supply a name for the favorite!"
-msgstr ""
+msgstr "Musíte zadat název pro oblíbenou položku!"
 
 #: js/widgets/persistentfilter/PickerPanel.js:261
 msgid "You have to supply a shorter name! Names of favorite can only be up to 40 characters long."
-msgstr ""
+msgstr "Musíte zadat kratší název! Názvy oblíbených položek smí být nejvýše 40 znaků dlouhé."
 
 #: js/widgets/persistentfilter/PickerPanel.js:264
 msgid "Saving favorite"
-msgstr ""
+msgstr "Ukládám oblíbenou položku"
 
 #: js/widgets/persistentfilter/PickerPanel.js:270
 msgid "Overwriteing system favorites is not yet supported"
-msgstr ""
+msgstr "Změna systémových oblíbených položek zatím není podporována"
 
 #: js/widgets/Priority.js:21
 msgid "low"
@@ -1693,11 +1693,11 @@ msgstr "Můžete si vybrat mezi okny ve stylu ExtJs a normálními vyskakovacím
 
 #: Preference.php:122
 msgid "Confirm Logout"
-msgstr ""
+msgstr "Potvrdit odhlášení"
 
 #: Preference.php:123
 msgid "Show confirmation dialog on logout."
-msgstr ""
+msgstr "Zobrazit potvrzovací dialog při odhlášení."
 
 #: Setup/setup.xml:2570
 msgid "note"
@@ -1739,47 +1739,14 @@ msgstr "změněno"
 msgid "record changed"
 msgstr "záznam byl změněn"
 
-#~ msgid "Please enter a name for the filter"
-#~ msgstr "Zadejte prosím název filtru"
-
-#~ msgid "Filter not Saved"
-#~ msgstr "Filtr nebyl uložen"
-
-#~ msgid "You have to supply a name for the filter!"
-#~ msgstr "Musíte zadat název filtru!"
-
-#~ msgid "You have to supply a shorter name! Names of saved filters can only be up to 40 characters long."
-#~ msgstr "Musíte zadat kratší název! Názvy uložených filtrů smí být nejvýše 40 znaků dlouhé."
-
-#~ msgid "Saving filter"
-#~ msgstr "Ukládám filtr"
-
-#~ msgid "My saved filters"
-#~ msgstr "Moje uložené filtry"
-
-#~ msgid "Delete Filter"
-#~ msgstr "Smazat filtr"
-
-#~ msgid "Do you really want to delete the Filter \"{0}\"?"
-#~ msgstr "Opravdu chcete smazat filtr \"{0}\"?"
-
-#~ msgid "Deleting Filter \"{0}\""
-#~ msgstr "Mažu filtr \"{0}\""
-
-#~ msgid "Saved filter"
-#~ msgstr "Uložený filtr"
-
-#~ msgid "Report bugs to tine20.org directly when they occur"
-#~ msgstr "Hlásit chyby přímo na tine20.org jakmile k nim dojde"
-
-#~ msgid "Check tine20.org for new versions"
-#~ msgstr "Ověřit dostupnost nových verzí na tine20.org"
-
 #~ msgid "Sorry"
 #~ msgstr "Lituji"
 
 #~ msgid "Remove account"
 #~ msgstr "Odstranit účet"
+
+#~ msgid "Saved filter"
+#~ msgstr "Uložený filtr"
 
 #~ msgid "shared"
 #~ msgstr "sdílené"
@@ -1793,49 +1760,20 @@ msgstr "záznam byl změněn"
 #~ msgid "is in"
 #~ msgstr "je v"
 
-#~ msgid "remove record"
-#~ msgstr "odstranit záznam"
-
 #~ msgid "Search"
 #~ msgstr "Hledat"
 
 #~ msgid "Browse"
 #~ msgstr "Procházet"
 
-#~ msgid "click to edit"
-#~ msgstr "klikněte pro editaci"
-
-#~ msgid "Plase select an image file (gif/png/jpeg)"
-#~ msgstr "Vyberte prosím soubor s obrázkem (gif/png/jpeg)"
-
 #~ msgid "Please Select a Group"
 #~ msgstr "Vyberte prosím skupinu"
-
-#, fuzzy
-#~ msgid "none"
-#~ msgstr "poznámka"
-
-#, fuzzy
-#~ msgid "Search: "
-#~ msgstr "Hledat"
 
 #~ msgid "Register"
 #~ msgstr "Registrovat"
 
-#~ msgid "The server did not respond to your request. Please check your network or contact your administrator."
-#~ msgstr "Server neodpověděl na Váš požadavek. Zkontrolujte prosím své síťové připojení nebo kontaktujte administrátora."
-
-#~ msgid "No response"
-#~ msgstr "Žádná odpověď"
-
 #~ msgid "We did not receive a response from the server. Your network could be down or a timeout occurred."
 #~ msgstr "Neobdrželi jsme žádnou odpověď ze serveru. Můžete mít problém na síti nebo byl překročen časový limit."
-
-#~ msgid "Permissions"
-#~ msgstr "Oprávnění"
-
-#~ msgid "Could not save {0}."
-#~ msgstr "Nepodařilo se uložit {0}."
 
 #~ msgid "add account"
 #~ msgstr "přidat účet"
@@ -1846,11 +1784,14 @@ msgstr "záznam byl změněn"
 #~ msgid "please select an account"
 #~ msgstr "vyberte prosím účet"
 
+#~ msgid "Permissions"
+#~ msgstr "Oprávnění"
+
+#~ msgid "Could not save {0}."
+#~ msgstr "Nepodařilo se uložit {0}."
+
 #~ msgid "loading new language..."
 #~ msgstr "nahrávám nový jazyk..."
-
-#~ msgid "Export Date"
-#~ msgstr "Datum exportu"
 
 #, fuzzy
 #~ msgid "Preference description"
@@ -2125,10 +2066,6 @@ msgstr "záznam byl změněn"
 #~ msgstr "Žádné štítky ke zobrazení"
 
 #, fuzzy
-#~ msgid "Updating Memberships"
-#~ msgstr "Aktualizuji oprávnění"
-
-#, fuzzy
 #~ msgid "Could not save group."
 #~ msgstr "Nepodařilo se vytvořit štítek."
 
@@ -2193,16 +2130,8 @@ msgstr "záznam byl změněn"
 #~ msgstr "Žádné poznámky ke zobrazení"
 
 #, fuzzy
-#~ msgid "Could not save role."
-#~ msgstr "Nepodařilo se vytvořit štítek."
-
-#, fuzzy
 #~ msgid "Deleting role..."
 #~ msgstr "Mažu"
-
-#, fuzzy
-#~ msgid "Role Name"
-#~ msgstr "Přejmenovat"
 
 #, fuzzy
 #~ msgid "Loading Role..."
@@ -2225,20 +2154,12 @@ msgstr "záznam byl změněn"
 #~ msgstr "zadejte hledaný výraz"
 
 #, fuzzy
-#~ msgid "Show details"
-#~ msgstr "Zobrazit detaily:"
-
-#, fuzzy
 #~ msgid "Displaying leads {0} - {1} of {2}"
 #~ msgstr "Zobrazuji poznámky {0} - {1} z {2}"
 
 #, fuzzy
 #~ msgid "Lead name"
 #~ msgstr "název štítku"
-
-#, fuzzy
-#~ msgid "Add lead"
-#~ msgstr "Přidat poznámku"
 
 #, fuzzy
 #~ msgid "Add new lead"

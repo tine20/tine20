@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-12-07 21:56+0100\n"
+"PO-Revision-Date: 2010-07-27 10:16+0100\n"
 "Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -22,11 +22,11 @@ msgstr "Vytvořit nové sdílené kalendáře"
 
 #: Acl/Rights.php:101
 msgid "manage shared calendars favorites"
-msgstr ""
+msgstr "spravovat sdílené oblíbené položky kalendáře"
 
 #: Acl/Rights.php:102
 msgid "Create or update shared calendars favorites"
-msgstr ""
+msgstr "Vytvořit nebo aktualizovat sdílené oblíbené položky kalendáře"
 
 #: Acl/Rights.php:105
 msgid "manage resources"
@@ -46,7 +46,7 @@ msgstr "Pozvánka na událost \"%1$s\" v %2$s"
 
 #: Controller/EventNotifications.php:263
 msgid "Event \"%1$s\" at %2$s has been canceled"
-msgstr ""
+msgstr "Událost \"%1$s\" v %2$s byla zrušena"
 
 #: Controller/EventNotifications.php:268
 msgid "Event \"%1$s\" at %2$s has been rescheduled"
@@ -92,7 +92,7 @@ msgstr "Účastníci"
 
 #: js/AttendeeFilterModel.js:104
 msgid "Select Attendee"
-msgstr ""
+msgstr "Vybrat účastníky"
 
 #: js/AttendeeGridPanel.js:103
 msgid "Role"
@@ -177,7 +177,7 @@ msgstr "Předběžná"
 
 #: js/AttendeeStatusFilterModel.js:33
 msgid "Attendee Status"
-msgstr ""
+msgstr "Stav účastníků"
 
 #: js/Calendar.js:36 js/Model.js:68 Setup/setup.xml:4
 msgid "Calendar"
@@ -285,7 +285,7 @@ msgstr "neblokující"
 
 #: js/EventEditDialog.js:157
 msgid "Private"
-msgstr ""
+msgstr "Soukromé"
 
 #: js/EventEditDialog.js:198 js/ResourceEditDialog.js:74 Model/Event.php:203
 msgid "Description"
@@ -360,7 +360,7 @@ msgstr[2] "Opravdu chcete smazat tyto události?"
 
 #: js/MainScreenWestPanel.js:32
 msgid "Mini Calendar"
-msgstr ""
+msgstr "Malý kalendář"
 
 #: js/MainScreenWestPanel.js:54 js/MonthView.js:87
 msgid "WK"
@@ -383,7 +383,7 @@ msgstr "Kalendáře"
 
 #: js/Model.js:171
 msgid "Quick search"
-msgstr ""
+msgstr "Rychlé hledání"
 
 #: js/Model.js:299
 msgid "Attender"
@@ -462,15 +462,15 @@ msgstr "Datum ukončení musí být po počátečním datu"
 
 #: js/RrulePanel.js:309
 msgid "Every {0}. Day"
-msgstr ""
+msgstr "Každý {0}. den"
 
 #: js/RrulePanel.js:339
 msgid "Every {0}. Week at"
-msgstr ""
+msgstr "Každý {0}. týden v"
 
 #: js/RrulePanel.js:408
 msgid "Every {0}. Month"
-msgstr ""
+msgstr "Každý {0}. měsíc"
 
 #: js/RrulePanel.js:414 js/RrulePanel.js:463 js/RrulePanel.js:594
 #: js/RrulePanel.js:644
@@ -499,7 +499,7 @@ msgstr "poslední"
 
 #: js/RrulePanel.js:587
 msgid "Every {0}. Year"
-msgstr ""
+msgstr "Každý {0}. rok"
 
 #: js/RrulePanel.js:684 js/RrulePanel.js:696
 msgid "of"
@@ -559,7 +559,7 @@ msgstr "Ne"
 
 #: Preference.php:34
 msgid "All my events"
-msgstr ""
+msgstr "Všechny mé události"
 
 #: Preference.php:84
 msgid "Default Calendar"
@@ -571,11 +571,11 @@ msgstr "Výchozí kalendář pro pozvání a nové události"
 
 #: Preference.php:88
 msgid "Default Favorite"
-msgstr ""
+msgstr "Výchozí oblíbené položky kalendáře"
 
 #: Preference.php:89
 msgid "The default favorite which is loaded on calendar startup"
-msgstr ""
+msgstr "Výchozí oblíbené položky, které jsou načteny při spuštění kalendáře"
 
 #: Preference.php:92
 msgid "Get Notification Emails"
@@ -595,7 +595,7 @@ msgstr "Dostávat e-maily s upozorněním na akce, které pořádám"
 
 #: Setup/Initialize.php:39 Setup/Update/Release3.php:165
 msgid "All events I attend"
-msgstr ""
+msgstr "Všechny události, kterých se účastním"
 
 #: views/eventNotification.php:13
 msgid "Updates"
@@ -633,21 +633,6 @@ msgstr "Žádná odpověď od %1$s"
 msgid "Event details"
 msgstr "Detaily události"
 
-#~ msgid "Event \"%1$s\" at %s has been canceled"
-#~ msgstr "Událost \"%1$s\" v %s byla zrušena"
-
-#~ msgid "Resources {0}"
-#~ msgstr "Zdroje {0}"
-
-#~ msgid "Show declined events"
-#~ msgstr "Zobrazit odmítnuté události"
-
-#~ msgid "Publish Free/Busy Information"
-#~ msgstr "Publikovat informace o zaneprázdněnosti"
-
-#~ msgid "Allow all users to view your free/busy information"
-#~ msgstr "Povolit všem uživatelům prohlížet informaci o Vaší zaneprázdněnosti"
-
 #~ msgid "Do you want to update the whole series, or just this event"
 #~ msgstr "Chete aktuaklizovat celou řadu nebo jen tuto událost"
 
@@ -656,6 +641,12 @@ msgstr "Detaily události"
 
 #~ msgid "Failed not update event"
 #~ msgstr "Pokus neaktualizovat událost se nezdařil"
+
+#~ msgid "Resources {0}"
+#~ msgstr "Zdroje {0}"
+
+#~ msgid "Show declined events"
+#~ msgstr "Zobrazit odmítnuté události"
 
 #~ msgid "Do you want to delete the whole series, this and all future events of this series, or just this event"
 #~ msgstr "Chcete smazat celou řadu, tuto a všechny budoucí události této řady, nebo jen tuto událost"
@@ -669,66 +660,14 @@ msgstr "Detaily události"
 #~ msgid ". Day"
 #~ msgstr ". den"
 
-#~ msgid ". Week at"
-#~ msgstr ". týden"
-
-#~ msgid ". Month"
-#~ msgstr ". měsíc"
-
 #~ msgid ". Year"
 #~ msgstr ". rok"
 
-#, fuzzy
-#~ msgid "calendar"
-#~ msgid_plural "calendars"
-#~ msgstr[0] "kalendáře"
-#~ msgstr[1] "kalendáře"
-#~ msgstr[2] "kalendáře"
+#~ msgid "Publish Free/Busy Information"
+#~ msgstr "Publikovat informace o zaneprázdněnosti"
 
-#~ msgid "calendars"
-#~ msgstr "kalendáře"
-
-#~ msgid "Do you realy want to update all events of this recuring event series?"
-#~ msgstr "Opravdu chcete aktualizovat všechny události z této řady opakovaných událostí?"
-
-#~ msgid "Your selection contains recuring events. Recuring events must be deleted seperatly!"
-#~ msgstr "Vás výběr obsahuje opakované události. Opakované události je nutné smazat zvlášť."
-
-#~ msgid "Do you realy want to delete all events of this recuring event series?"
-#~ msgstr "Opravdu chcete smazat všechny události této řady opakovaných událostí?"
-
-#~ msgid "No recuring rule defined"
-#~ msgstr "Žádné pravidlo opakování není definováno"
-
-#~ msgid "Alarm for event \"%s\" at %s"
-#~ msgstr "Alarm pro událost  \"%s\" v %s"
-
-#~ msgid "Event invitation \"%s\" at %s"
-#~ msgstr "Pozvánka na událost \"%s\" v %s"
-
-#~ msgid "Event \"%s\" at %s has been canceled"
-#~ msgstr "Událost \"%s\" v %s byla zrušena"
-
-#~ msgid "Event \"%s\" at %s has been rescheduled"
-#~ msgstr "Událost \"%s\" v %s byla přeplánována"
-
-#~ msgid "The following event has been rescheduled:"
-#~ msgstr "Následující událost byla přeplánována:"
-
-#~ msgid "Event \"%s\" at %s has been updated"
-#~ msgstr "Událost \"%s\" v %s byla zaktualizována"
-
-#~ msgid "The defualt calendar for invitations and new events"
-#~ msgstr "Výchozí kalendář pro pozvání a nové události"
-
-#~ msgid "Notification for Event "
-#~ msgstr "Upozornění na událost"
-
-#~ msgid "Ignore Scheduling Conflict?"
-#~ msgstr "Ignorovat konflikt plánování?"
-
-#~ msgid "Event description:<br/>"
-#~ msgstr "Popis události:<br/>"
+#~ msgid "Allow all users to view your free/busy information"
+#~ msgstr "Povolit všem uživatelům prohlížet informaci o Vaší zaneprázdněnosti"
 
 #~ msgid "Here is your requested alarm for to following event:"
 #~ msgstr "Zde je Váš požadovaný alarm pro následující událost:"
@@ -747,3 +686,9 @@ msgstr "Detaily události"
 
 #~ msgid "The following event has been updated:"
 #~ msgstr "Následující událost byla zaktualizována:"
+
+#~ msgid "Ignore Scheduling Conflict?"
+#~ msgstr "Ignorovat konflikt plánování?"
+
+#~ msgid "Event description:<br/>"
+#~ msgstr "Popis události:<br/>"

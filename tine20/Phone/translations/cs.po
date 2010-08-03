@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-05-31 10:56+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2010-07-27 11:31+0100\n"
+"Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,19 +16,18 @@ msgstr ""
 "X-Poedit-SearchPath-0: Phone\n"
 
 #: js/Models.js:70 js/Phone.js:58 js/Phone.js:253
-#, fuzzy
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
-msgstr[1] "Telefon"
-msgstr[2] "Telefon"
+msgstr[1] "Telefony"
+msgstr[2] "Telefonů"
 
 #: js/Models.js:74
 msgid "phones list"
 msgid_plural "phones lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "seznam telefonů"
+msgstr[1] "seznamy telefonů"
+msgstr[2] "seznamů telefonů"
 
 #: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
 msgid "Edit phone settings"
@@ -56,11 +55,11 @@ msgstr "Vytočit"
 
 #: js/Phone.js:324
 msgid "Error"
-msgstr ""
+msgstr "Chyba"
 
 #: js/Phone.js:325
 msgid "Not possible to dial."
-msgstr ""
+msgstr "Nelze vytočit."
 
 #: js/Phone.js:468
 msgid "Dial number"
@@ -137,9 +136,6 @@ msgstr "Vyzvání"
 #: js/Phone.js:700
 msgid "Call ID"
 msgstr "ID hovoru"
-
-#~ msgid "Dial phone number"
-#~ msgstr "Vytočit telefonní číslo"
 
 #~ msgid "Name"
 #~ msgstr "Název"
@@ -293,6 +289,9 @@ msgstr "ID hovoru"
 
 #~ msgid "Rights"
 #~ msgstr "Práva"
+
+#~ msgid "Dial phone number"
+#~ msgstr "Vytočit telefonní číslo"
 
 #~ msgid "enter searchfilter"
 #~ msgstr "zadejte hledaný výraz"

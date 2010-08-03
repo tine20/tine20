@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
-"POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-07 20:25+0100\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2010-07-27 11:51+0100\n"
 "Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -103,7 +103,7 @@ msgstr "Potvrzení hesla"
 
 #: js/AuthenticationPanel.js:268
 msgid "Try to split username"
-msgstr ""
+msgstr "Zkusit rozdělit uživatelské jméno"
 
 #: js/AuthenticationPanel.js:282 js/AuthenticationPanel.js:349
 msgid "Account canonical form"
@@ -111,11 +111,11 @@ msgstr "Kanonická forma účtu"
 
 #: js/AuthenticationPanel.js:286 js/AuthenticationPanel.js:353
 msgid "Account domain name "
-msgstr ""
+msgstr "Název domény"
 
 #: js/AuthenticationPanel.js:291 js/AuthenticationPanel.js:356
 msgid "Account domain short name"
-msgstr ""
+msgstr "Krátký název domény"
 
 #: js/AuthenticationPanel.js:306 js/AuthenticationPanel.js:416
 msgid "Host"
@@ -146,7 +146,7 @@ msgstr "Základní DN"
 
 #: js/AuthenticationPanel.js:337
 msgid "Search filter"
-msgstr ""
+msgstr "Vyhledávací filtr"
 
 #: js/AuthenticationPanel.js:364
 msgid "Accounts storage"
@@ -170,11 +170,11 @@ msgstr "DN uživatele"
 
 #: js/AuthenticationPanel.js:444
 msgid "User Filter"
-msgstr ""
+msgstr "Filtr uživatelů"
 
 #: js/AuthenticationPanel.js:456
 msgid "User Search Scope"
-msgstr ""
+msgstr "Oblast hledání uživatelů"
 
 #: js/AuthenticationPanel.js:460
 msgid "Groups DN"
@@ -182,11 +182,11 @@ msgstr "DN pro skupiny"
 
 #: js/AuthenticationPanel.js:463
 msgid "Group Filter"
-msgstr ""
+msgstr "Filtr skupin"
 
 #: js/AuthenticationPanel.js:475
 msgid "Group Search Scope"
-msgstr ""
+msgstr "Oblast hledání skupin"
 
 #: js/AuthenticationPanel.js:488
 msgid "Password encoding"
@@ -230,11 +230,11 @@ msgstr "Nastavení přesměrování"
 
 #: js/AuthenticationPanel.js:555
 msgid "Redirect Url (redirect to login screen if empty)"
-msgstr ""
+msgstr "URL pro přesměrování (ponecháte-li prázdné, přesměrovat na přihlašovací obrazovku)"
 
 #: js/AuthenticationPanel.js:567
 msgid "Redirect Always (if No, only redirect after logout)"
-msgstr ""
+msgstr "Vždy přesměrovat (pokud Ne, přesměrovat jen při odhlášení)"
 
 #: js/AuthenticationPanel.js:578
 msgid "Redirect to referring site, if exists"
@@ -256,7 +256,7 @@ msgstr "Hesla se neshodují"
 #: js/AuthenticationPanel.js:638 js/AuthenticationPanel.js:649
 #: js/AuthenticationPanel.js:659
 msgid "Should not be empty"
-msgstr ""
+msgstr "Nemělo by být prázdné"
 
 #: js/ConfigManagerPanel.js:60
 msgid "Informations"
@@ -332,23 +332,23 @@ msgstr "Cesta pro soubory relací"
 
 #: js/ConfigManagerPanel.js:181
 msgid "Addressbook Map panel"
-msgstr ""
+msgstr "Mapový panel v Adresáři"
 
 #: js/ConfigManagerPanel.js:184
 msgid "Map panel"
-msgstr ""
+msgstr "Mapový panel"
 
 #: js/ConfigManagerPanel.js:195
 msgid "disabled"
-msgstr ""
+msgstr "zakázáno"
 
 #: js/ConfigManagerPanel.js:195
 msgid "enabled"
-msgstr ""
+msgstr "povoleno"
 
 #: js/ConfigManagerPanel.js:206
 msgid "Config file is not writable"
-msgstr ""
+msgstr "Do konfiguračního souboru nelze zapisovat"
 
 #: js/ConfigManagerPanel.js:223
 msgid "Download config file"
@@ -392,11 +392,11 @@ msgstr "Ano"
 
 #: js/EmailPanel.js:230
 msgid "Use system account"
-msgstr ""
+msgstr "Použít systémový účet"
 
 #: js/EmailPanel.js:233
 msgid "Append domain to login name"
-msgstr ""
+msgstr "Připojit doménu k přihlašovacímu jménu"
 
 #: js/EmailPanel.js:271
 msgid "Smtp"
@@ -416,11 +416,11 @@ msgstr "Prosté"
 
 #: js/EmailPanel.js:319
 msgid "Primary Domain"
-msgstr ""
+msgstr "Primární doména"
 
 #: js/EmailPanel.js:323
 msgid "Secondary Domains (comma separated)"
-msgstr ""
+msgstr "Sekundární domény (oddělené čárkou)"
 
 #: js/EmailPanel.js:327
 msgid "Notifications service address"
@@ -428,11 +428,11 @@ msgstr "Adresa služby pro zasílání upozornění"
 
 #: js/EmailPanel.js:331
 msgid "Notification Username"
-msgstr ""
+msgstr "Uživatelské jméno pro upozornění"
 
 #: js/EmailPanel.js:335
 msgid "Notification Password"
-msgstr ""
+msgstr "Heslo pro upozornění"
 
 #: js/EmailPanel.js:395
 msgid "MySql Hostname"
@@ -533,20 +533,8 @@ msgstr "Ujednání o ochraně soukromí"
 msgid "Accept Terms and Conditions"
 msgstr "Přijmout podmínky"
 
-#~ msgid "Domain"
-#~ msgstr "Doména"
-
-#~ msgid "Use as default account"
-#~ msgstr "Používat jako výchozí účet"
-
 #~ msgid "Default account name"
 #~ msgstr "Název výchozího účtu"
-
-#~ msgid "Redirect Url (after Logout, redirect to login screen if empty)"
-#~ msgstr "URL pro přesměrování (ponecháte-li prázdné, bude uživatel po odhlášení vrácen na přihlašovací obrazovku)"
-
-#~ msgid "Invalid configuration"
-#~ msgstr "Neplatná konfigurace"
 
 #~ msgid "Shit"
 #~ msgstr "Zatraceně"

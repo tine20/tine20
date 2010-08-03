@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-12-07 20:33+0100\n"
+"PO-Revision-Date: 2010-07-27 12:24+0100\n"
 "Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -22,11 +22,11 @@ msgstr "Přidat, editovat a smazat časové fondy"
 
 #: Acl/Rights.php:103
 msgid "manage shared timetracker favorites"
-msgstr ""
+msgstr "Spravovat sdílené oblíbené položky sledování času"
 
 #: Acl/Rights.php:104
 msgid "Create or update shared timetracker favorites"
-msgstr ""
+msgstr "Vytvořit nebo aktualizovat sdílené oblíbené položky sledování času"
 
 #: js/DurationSlider.js:95
 msgid "{0}"
@@ -144,15 +144,15 @@ msgstr "Zaplaceno v"
 
 #: js/TimeaccountEditDialog.js:137
 msgid "Booking deadline"
-msgstr ""
+msgstr "Nejzazší termín rezervace"
 
 #: js/TimeaccountEditDialog.js:145
 msgid "none"
-msgstr ""
+msgstr "žádný"
 
 #: js/TimeaccountEditDialog.js:146
 msgid "last week"
-msgstr ""
+msgstr "minulý týden"
 
 #: js/TimeaccountEditDialog.js:150
 msgid "Timesheets are billable"
@@ -172,7 +172,7 @@ msgstr "Zakládat vlastní"
 
 #: js/TimeaccountEditDialog.js:225
 msgid "The grant to add Timesheets to this Timeaccount"
-msgstr ""
+msgstr "Oprávnění přidávat pracovní výkazy k tomuto časovému fondu"
 
 #: js/TimeaccountEditDialog.js:229
 msgid "View All"
@@ -180,7 +180,7 @@ msgstr "Prohlížet vše"
 
 #: js/TimeaccountEditDialog.js:230
 msgid "The grant to view Timesheets of other users"
-msgstr ""
+msgstr "Oprávnění prohlížet pracovní výkazy ostatních uživatelů"
 
 #: js/TimeaccountEditDialog.js:235
 msgid "Book All"
@@ -188,7 +188,7 @@ msgstr "Zakládat vše"
 
 #: js/TimeaccountEditDialog.js:236
 msgid "The grant to add Timesheets for other users"
-msgstr ""
+msgstr "Oprávnění přidávat pracovní výkazy ostatním uživatelům"
 
 #: js/TimeaccountEditDialog.js:241
 msgid "Manage Clearing"
@@ -196,7 +196,7 @@ msgstr "Spravovat platby"
 
 #: js/TimeaccountEditDialog.js:242
 msgid "The grant to manage clearing of Timesheets"
-msgstr ""
+msgstr "Oprávnění spravovat vyúčtování pracovních výkazů"
 
 #: js/TimeaccountEditDialog.js:247 js/TimeaccountGridPanel.js:140
 #: js/TimesheetGridPanel.js:471
@@ -205,7 +205,7 @@ msgstr "Exportovat"
 
 #: js/TimeaccountEditDialog.js:248
 msgid "The grant to export Timesheets of Timeaccount"
-msgstr ""
+msgstr "Oprávnění exportovat pracovní výkazy časového fondu"
 
 #: js/TimeaccountEditDialog.js:253
 msgid "Manage All"
@@ -213,7 +213,7 @@ msgstr "Spravovat vše"
 
 #: js/TimeaccountEditDialog.js:254
 msgid "Includes all other grants"
-msgstr ""
+msgstr "Zahrnuje všechna ostatní oprávnění"
 
 #: js/TimeaccountEditDialog.js:262
 msgid "Permissions"
@@ -294,15 +294,15 @@ msgstr "Zaplaceno"
 
 #: js/TimesheetEditDialog.js:265
 msgid "Failed"
-msgstr ""
+msgstr "Nezdařilo se"
 
 #: js/TimesheetEditDialog.js:266
 msgid "Could not save {0}."
-msgstr ""
+msgstr "Nepodařilo se uložit {0}."
 
 #: js/TimesheetEditDialog.js:267
 msgid "Booking deadline for this Timeaccount has been exceeded."
-msgstr ""
+msgstr "Nejzazší termín rezervace tohoto časového fondu byl překročen."
 
 #: js/TimesheetGridPanel.js:66
 msgid "Mass Update"
@@ -342,11 +342,11 @@ msgstr "Časový fond uzavřen"
 
 #: js/TimesheetGridPanel.js:262
 msgid "Creation Time"
-msgstr ""
+msgstr "Vytvořeno"
 
 #: js/TimesheetGridPanel.js:263
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Naposledy změněno"
 
 #: js/TimesheetGridPanel.js:315
 msgid "timeframe"
@@ -394,15 +394,15 @@ msgstr "Všechny časové fondy"
 
 #: Preference.php:65
 msgid "Timesheets ODS export configuration"
-msgstr ""
+msgstr "Konfigurace exportu pracovních výkazů do ODS"
 
 #: Preference.php:66
 msgid "Use this configuration for the timesheet ODS export."
-msgstr ""
+msgstr "Použít tuto konfiguraci pro export pracovních výkazů do ODS."
 
 #: Preference.php:117
 msgid "default"
-msgstr ""
+msgstr "výchozí"
 
 #: Setup/setup.xml:4
 msgid "Timetracker"
@@ -425,9 +425,6 @@ msgstr "Sledování času"
 
 #~ msgid "Staff Member"
 #~ msgstr "Člen týmu"
-
-#~ msgid "Creation Date"
-#~ msgstr "Datum vytvoření"
 
 #~ msgid "Open"
 #~ msgstr "Otevřený"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Addressbook\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: \n"
@@ -27,11 +27,11 @@ msgstr "Vytvořit nové sdílené složky adresáře"
 
 #: Acl/Rights.php:103
 msgid "manage shared addressbook favorites"
-msgstr ""
+msgstr "spravovat sdílené oblíbené položky adresáře"
 
 #: Acl/Rights.php:104
 msgid "Create or update shared addressbook favorites"
-msgstr ""
+msgstr "Vytvořit nebo aktualizovat sdílené oblíbené položky adresáře"
 
 #: Controller.php:96
 #, python-format
@@ -138,12 +138,11 @@ msgid "Job Title"
 msgstr "Povolání"
 
 #: js/Addressbook.js:29 js/Model.js:103
-#, fuzzy
 msgid "Addressbook"
 msgid_plural "Addressbooks"
 msgstr[0] "Adresář"
-msgstr[1] "Adresář"
-msgstr[2] "Adresář"
+msgstr[1] "Adresáře"
+msgstr[2] "Adresářů"
 
 #: js/Addressbook.js:54 Setup/setup.xml:546
 msgid "Internal Contacts"
@@ -381,11 +380,11 @@ msgstr "Exportovat do CSV"
 
 #: js/ContactGrid.js:173
 msgid "Export as ODS"
-msgstr ""
+msgstr "Exportovat do ODS"
 
 #: js/ContactGrid.js:180
 msgid "Export as XLS"
-msgstr ""
+msgstr "Exportovat do XLS"
 
 #: js/ContactGrid.js:196
 msgid "Call contact"
@@ -397,7 +396,7 @@ msgstr "Napsat email"
 
 #: js/ContactGrid.js:216
 msgid "Import contacts"
-msgstr ""
+msgstr "Importovat kontakty"
 
 #: js/ContactGrid.js:305
 msgid "Work"
@@ -444,7 +443,7 @@ msgstr[2] "Kontaktů"
 
 #: js/Model.js:103
 msgid "Addressbooks"
-msgstr ""
+msgstr "Adresáře"
 
 #: js/Model.js:144
 msgid "User Account"
@@ -456,15 +455,15 @@ msgstr "Rychlé hledání"
 
 #: js/Model.js:165
 msgid "Last modified"
-msgstr ""
+msgstr "Naposledy změněno"
 
 #: js/Model.js:166
 msgid "Last modifier"
-msgstr ""
+msgstr "Naposledy změnil(a)"
 
 #: js/Model.js:168
 msgid "Creator"
-msgstr ""
+msgstr "Vytvořil(a)"
 
 #: js/SearchCombo.js:92
 msgid "Searching..."
@@ -472,7 +471,7 @@ msgstr "Hledám..."
 
 #: Preference.php:34
 msgid "All contacts"
-msgstr ""
+msgstr "Všechny kontakty"
 
 #: Preference.php:71
 msgid "Default Addressbook"
@@ -484,15 +483,15 @@ msgstr "Výchozí adresář pro nové kontakty"
 
 #: Preference.php:75
 msgid "Default Favorite"
-msgstr ""
+msgstr "Výchozí oblíbené položky kontaktů"
 
 #: Preference.php:76
 msgid "The default favorite which is loaded on addressbook startup"
-msgstr ""
+msgstr "Výchozí oblíbené položky, které jsou načteny při spuštění adresáře"
 
 #: Setup/Initialize.php:51 Setup/Update/Release3.php:38
 msgid "All contacts I have read grants for"
-msgstr ""
+msgstr "Všechny kontakty, které jsem oprávněn číst"
 
 #: Setup/setup.xml:572
 msgid "Mr"
@@ -568,14 +567,11 @@ msgstr "Paní"
 #~ msgstr[1] "Odkazy [%d]"
 #~ msgstr[2] "Odkazů [%d]"
 
-#~ msgid "The defualt addressbook for new contacts"
-#~ msgstr "Výchozí adresář pro nové kontakty"
+#~ msgid "manage shared folders"
+#~ msgstr "spravovat sdílené složky"
 
 #~ msgid "Export"
 #~ msgstr "Exportovat"
-
-#~ msgid "manage shared folders"
-#~ msgstr "spravovat sdílené složky"
 
 #~ msgid "Are you Sure?"
 #~ msgstr "Jste si jistý(á)?"

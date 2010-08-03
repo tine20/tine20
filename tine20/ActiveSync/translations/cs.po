@@ -1,65 +1,64 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ActiveSync\n"
-"POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2010-07-27 09:35+0100\n"
+"Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Czech\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: js/Application.js:32
 msgid "Active Sync"
-msgstr ""
+msgstr "Active Sync"
 
 #: js/Application.js:48
 msgid "Select a Device"
-msgstr ""
+msgstr "Vybrat zařízení"
 
 #: js/Application.js:62
 msgid "No ActiveSync Device registered"
-msgstr ""
+msgstr "Žádná ActiveSync zařízení nejsou zaregistrována"
 
 #: js/Application.js:70
 msgid "Set as {0} Filter"
-msgstr ""
+msgstr "Nastavit jako filtr {0}"
 
 #: js/Application.js:95
 msgid "Resetted Sync Filter"
-msgstr ""
+msgstr "Resetován synchronizační filtr"
 
 #: js/Application.js:96 js/Application.js:108
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr ""
+msgstr "filtr {0} pro zařízení \"{1}\" je nyní \"{2}\""
 
 #: js/Application.js:99
 msgid "resetted"
-msgstr ""
+msgstr "resetován"
 
 #: js/Application.js:107
 msgid "Set Sync Filter"
-msgstr ""
+msgstr "Nastavit synchronizační filtr"
 
 #: js/Model.js:47
 msgid "Device"
 msgid_plural "Devices"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Zařízení"
+msgstr[1] "Zařízení"
+msgstr[2] "Zařízení"
 
 #: js/Model.js:47
 msgid "Devices"
-msgstr ""
+msgstr "Zařízení"
 
 #: Setup/setup.xml:465
 msgid "Default Policy"
-msgstr ""
+msgstr "Výchozí politika"
 
 #: Setup/setup.xml:470
 msgid "Default Policy installed during setup"
-msgstr ""
+msgstr "Výchozí politika nastavená během instalace"

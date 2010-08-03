@@ -25,11 +25,11 @@ msgstr "Vytvořit nové sdílené seznamy úkolů"
 
 #: Acl/Rights.php:94
 msgid "manage shared tasks favorites"
-msgstr ""
+msgstr "spravovat sdílené oblíbené položky úkolů"
 
 #: Acl/Rights.php:95
 msgid "Create or update shared tasks favorites"
-msgstr ""
+msgstr "Vytvořit nebo aktualizovat sdílené oblíbené položky úkolů"
 
 #: Controller/Task.php:166
 msgid "Notification for Task "
@@ -77,7 +77,7 @@ msgstr "Štítky"
 
 #: js/GridPanel.js:141 Model/Task.php:195
 msgid "Lead"
-msgstr ""
+msgstr "Lead"
 
 #: js/GridPanel.js:151
 msgid "Add a task..."
@@ -114,7 +114,7 @@ msgstr "ROZPRACOVANÝ"
 
 #: js/TaskEditDialog.js:142
 msgid "You have to supply a due date, because an alarm ist set!"
-msgstr ""
+msgstr "Musíte zadat termín dokončení, protože je nastaven alarm! "
 
 #: js/TaskEditDialog.js:186
 msgid "Due date"
@@ -172,27 +172,27 @@ msgstr "Popis"
 
 #: Model/Task.php:201
 msgid "Telephone"
-msgstr ""
+msgstr "Telefon"
 
 #: Model/Task.php:202
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 #: Preference.php:29
 msgid "All my tasks"
-msgstr ""
+msgstr "Všechny mé úkoly"
 
 #: Preference.php:65
 msgid "Default Favorite"
-msgstr ""
+msgstr "Výchozí oblíbené položky úkolů"
 
 #: Preference.php:66
 msgid "The default favorite which is loaded on Tasks startup"
-msgstr ""
+msgstr "Výchozí oblíbené položky, které jsou načteny při spuštění úkolů"
 
 #: Setup/Initialize.php:41 Setup/Update/Release3.php:66
 msgid "All tasks of my taskslists"
-msgstr ""
+msgstr "Všechny úkoly z mých seznamů"
 
 #: Setup/setup.xml:295
 msgid "NEEDS-ACTION"
@@ -219,9 +219,6 @@ msgstr "ZRUŠENÝ"
 
 #~ msgid "Edit task"
 #~ msgstr "Editovat úkol"
-
-#~ msgid "Add task"
-#~ msgstr "Přidat úkol"
 
 #~ msgid "Delete task"
 #~ msgid_plural "Delete tasks"

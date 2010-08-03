@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
-"POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-07 20:09+0100\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2010-07-27 11:08+0100\n"
 "Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -15,20 +15,19 @@ msgstr ""
 #: Controller.php:97
 #, python-format
 msgid "%s's personal example records"
-msgstr ""
+msgstr "Osobní ukázkové záznamy uživatele %s"
 
 #: js/ExampleApplication.js:27
 msgid "Example Application"
-msgstr ""
+msgstr "Ukázková aplikace"
 
 #: js/ExampleRecordEditDialog.js:89
-#, fuzzy
 msgid "ExampleRecord"
 msgstr "Ukázkový záznam"
 
 #: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
 msgid "Name"
-msgstr ""
+msgstr "Název"
 
 #: js/ExampleRecordGridPanel.js:77
 msgid "Quick search"
@@ -53,16 +52,16 @@ msgstr "Zobrazit uzavřené"
 #: js/Model.js:33
 msgid "example record"
 msgid_plural "example records"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "ukázkový záznam"
+msgstr[1] "ukázkové záznamy"
+msgstr[2] "ukázkových záznamů"
 
 #: js/Model.js:37
 msgid "example record list"
 msgid_plural "example record lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "seznam ukázkových záznamů"
+msgstr[1] "seznamy ukázkových záznamů"
+msgstr[2] "seznamů ukázkových záznamů"
 
 #: Setup/setup.xml:10
 msgid "ExampleApplication"
@@ -73,18 +72,6 @@ msgstr "Ukázková aplikace"
 
 #~ msgid "All ExampleRecords"
 #~ msgstr "Všechny ukázkové záznamy"
-
-#~ msgid "Description"
-#~ msgstr "Popis"
-
-#~ msgid "record list"
-#~ msgid_plural "record lists"
-#~ msgstr[0] "seznam záznamů"
-#~ msgstr[1] "seznamy záznamů"
-#~ msgstr[2] "seznamů záznamů"
-
-#~ msgid "Number"
-#~ msgstr "Počet"
 
 #~ msgid "Unit"
 #~ msgstr "Jednotka"
@@ -112,3 +99,6 @@ msgstr "Ukázková aplikace"
 
 #~ msgid "billed"
 #~ msgstr "účtovaný"
+
+#~ msgid "Description"
+#~ msgstr "Popis"
