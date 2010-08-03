@@ -24,8 +24,8 @@ msgstr "afegeix, edita i elimina productes"
 msgid "Title"
 msgstr "Títol"
 
-#: js/ContractEditDialog.js:109 js/ProductGridPanel.js:128
-#: js/ProductEditDialog.js:126
+#: js/ContractEditDialog.js:109 js/ProductEditDialog.js:126
+#: js/ProductGridPanel.js:128
 msgid "Description"
 msgstr "Descripció"
 
@@ -48,42 +48,6 @@ msgstr "Número de contracte"
 #: js/ContractGridPanel.js:119
 msgid "Status"
 msgstr "Estat"
-
-#: js/Sales.js:55
-msgid "Products"
-msgstr "Productes"
-
-#: js/Sales.js:60
-msgid "All Products"
-msgstr "Tots els productes"
-
-#: js/Sales.js:65
-msgid "Contracts"
-msgstr "Contractes"
-
-#: js/Sales.js:70 js/Sales.js:105
-msgid "All Contracts"
-msgstr "Tots els contractes"
-
-#: js/ProductGridPanel.js:124
-msgid "Tags"
-msgstr "Etiquetes"
-
-#: js/ProductGridPanel.js:125 js/ProductEditDialog.js:105
-msgid "Name"
-msgstr "Nom"
-
-#: js/ProductGridPanel.js:126 js/ProductEditDialog.js:118
-msgid "Manufacturer"
-msgstr "Fabricant"
-
-#: js/ProductGridPanel.js:127 js/ProductEditDialog.js:122
-msgid "Category"
-msgstr "Categoria"
-
-#: js/ProductGridPanel.js:129 js/ProductEditDialog.js:111
-msgid "Price"
-msgstr "Preu"
 
 #: js/Models.js:41
 msgid "Product"
@@ -112,6 +76,42 @@ msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] "llista de contractes"
 msgstr[1] "llistes de contractes"
+
+#: js/ProductEditDialog.js:105 js/ProductGridPanel.js:125
+msgid "Name"
+msgstr "Nom"
+
+#: js/ProductEditDialog.js:111 js/ProductGridPanel.js:129
+msgid "Price"
+msgstr "Preu"
+
+#: js/ProductEditDialog.js:118 js/ProductGridPanel.js:126
+msgid "Manufacturer"
+msgstr "Fabricant"
+
+#: js/ProductEditDialog.js:122 js/ProductGridPanel.js:127
+msgid "Category"
+msgstr "Categoria"
+
+#: js/ProductGridPanel.js:124
+msgid "Tags"
+msgstr "Etiquetes"
+
+#: js/Sales.js:55
+msgid "Products"
+msgstr "Productes"
+
+#: js/Sales.js:60
+msgid "All Products"
+msgstr "Tots els productes"
+
+#: js/Sales.js:65
+msgid "Contracts"
+msgstr "Contractes"
+
+#: js/Sales.js:70 js/Sales.js:105
+msgid "All Contracts"
+msgstr "Tots els contractes"
 
 #: Setup/setup.xml:243
 msgid "Shared Contracts"

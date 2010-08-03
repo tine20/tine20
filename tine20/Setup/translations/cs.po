@@ -12,136 +12,65 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: js/ConfigManagerPanel.js:60
-msgid "Informations"
-msgstr "Informace"
+#: js/ApplicationGridPanel.js:67
+msgid "Name"
+msgstr "Název"
 
-#: js/ConfigManagerPanel.js:64
-msgid "Setup Authentication"
-msgstr "Přihlášení do instalačního programu"
+#: js/ApplicationGridPanel.js:68
+msgid "Enabled"
+msgstr "Povoleno"
 
-#: js/ConfigManagerPanel.js:67 js/EmailPanel.js:192
-msgid "Username"
-msgstr "Uživatelské jméno"
+#: js/ApplicationGridPanel.js:69
+msgid "Order"
+msgstr "Pořadí"
 
-#: js/ConfigManagerPanel.js:77 js/ConfigManagerPanel.js:113
-#: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:424
-#: js/EmailPanel.js:196
-msgid "Password"
-msgstr "Heslo"
+#: js/ApplicationGridPanel.js:70
+msgid "Installed Version"
+msgstr "Nainstalovaná verze"
 
-#: js/ConfigManagerPanel.js:83 js/ConfigManagerPanel.js:103
-msgid "Database"
-msgstr "Databáze"
+#: js/ApplicationGridPanel.js:71
+msgid "Available Version"
+msgstr "Dostupná verze"
 
-#: js/ConfigManagerPanel.js:87
-msgid "Adapter"
-msgstr "Adaptér"
+#: js/ApplicationGridPanel.js:72
+msgid "Status"
+msgstr "Stav"
 
-#: js/ConfigManagerPanel.js:92 js/EmailPanel.js:188 js/EmailPanel.js:279
-msgid "Hostname"
-msgstr "Název nebo adresa počítače"
+#: js/ApplicationGridPanel.js:73
+msgid "Depends on"
+msgstr "Závisí na"
 
-#: js/ConfigManagerPanel.js:97 js/AuthenticationPanel.js:310
-#: js/EmailPanel.js:201 js/EmailPanel.js:283
-msgid "Port"
-msgstr "Port"
+#: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:207
+msgid "Install application"
+msgstr "Instalovat aplikaci"
 
-#: js/ConfigManagerPanel.js:108
-msgid "User"
-msgstr "Uživatel"
+#: js/ApplicationGridPanel.js:91
+msgid "Uninstall application"
+msgstr "Odinstalovat aplikaci"
 
-#: js/ConfigManagerPanel.js:118
-msgid "Prefix"
-msgstr "Prefix"
+#: js/ApplicationGridPanel.js:100
+msgid "Update application"
+msgstr "Aktualizovat aplikaci"
 
-#: js/ConfigManagerPanel.js:123
-msgid "Logging"
-msgstr "Logování"
+#: js/ApplicationGridPanel.js:109
+msgid "Go to {0} login"
+msgstr "Jít na příhlášení do {0}"
 
-#: js/ConfigManagerPanel.js:129
-msgid "Filename"
-msgstr "Název souboru"
+#: js/ApplicationGridPanel.js:172
+msgid "uninstall"
+msgstr "odinstalovat"
 
-#: js/ConfigManagerPanel.js:142
-msgid "Priority"
-msgstr "Priorita"
+#: js/ApplicationGridPanel.js:172
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Opravdu chcete aplikaci/e odinstalovat?"
 
-#: js/ConfigManagerPanel.js:146
-msgid "Caching"
-msgstr "Kešování"
+#: js/ApplicationGridPanel.js:232
+msgid "This may take a while"
+msgstr "Tato operace může chvíli trvat"
 
-#: js/ConfigManagerPanel.js:152
-msgid "Path"
-msgstr "Cesta"
-
-#: js/ConfigManagerPanel.js:156
-msgid "Lifetime (seconds)"
-msgstr "Životnost (v sekundách)"
-
-#: js/ConfigManagerPanel.js:163
-msgid "Temporary files"
-msgstr "Dočasné soubory"
-
-#: js/ConfigManagerPanel.js:168
-msgid "Temporary Files Path"
-msgstr "Cesta pro dočasné soubory"
-
-#: js/ConfigManagerPanel.js:172
-msgid "Session files"
-msgstr "Soubory relací"
-
-#: js/ConfigManagerPanel.js:177
-msgid "Session Files Path"
-msgstr "Cesta pro soubory relací"
-
-#: js/ConfigManagerPanel.js:181
-msgid "Addressbook Map panel"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:184
-msgid "Map panel"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:195
-msgid "disabled"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:195
-msgid "enabled"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:206
-msgid "Config file is not writable"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:208 js/AuthenticationPanel.js:593
-msgid "Save config"
-msgstr "Uložit konfiguraci"
-
-#: js/ConfigManagerPanel.js:223
-msgid "Download config file"
-msgstr "Stáhnout konfigurační soubor"
-
-#: js/TermsPanel.js:31
-msgid "I have read the license agreement and accept it"
-msgstr "Přečetl(a) jsem si licenční ujednání a souhlasím"
-
-#: js/TermsPanel.js:38
-msgid "License Agreement"
-msgstr "Licenční ujednání"
-
-#: js/TermsPanel.js:57
-msgid "I have read the privacy agreement and accept it"
-msgstr "Přečetl(a) jsem si ujednání o ochraně soukromí a souhlasím"
-
-#: js/TermsPanel.js:64
-msgid "Privacy Agreement"
-msgstr "Ujednání o ochraně soukromí"
-
-#: js/TermsPanel.js:81
-msgid "Accept Terms and Conditions"
-msgstr "Přijmout podmínky"
+#: js/ApplicationGridPanel.js:262
+msgid "Dependency Violation"
+msgstr "Porušení závislosti"
 
 #: js/AuthenticationPanel.js:123
 msgid "Delete all existing users and groups"
@@ -192,9 +121,20 @@ msgstr ""
 msgid "Host"
 msgstr "Server"
 
+#: js/AuthenticationPanel.js:310 js/ConfigManagerPanel.js:97
+#: js/EmailPanel.js:201 js/EmailPanel.js:283
+msgid "Port"
+msgstr "Port"
+
 #: js/AuthenticationPanel.js:314 js/AuthenticationPanel.js:421
 msgid "Login name"
 msgstr "Přihlašovací jméno"
+
+#: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:424
+#: js/ConfigManagerPanel.js:77 js/ConfigManagerPanel.js:113
+#: js/EmailPanel.js:196
+msgid "Password"
+msgstr "Heslo"
 
 #: js/AuthenticationPanel.js:330 js/AuthenticationPanel.js:437
 msgid "Bind requires DN"
@@ -304,6 +244,10 @@ msgstr "Přesměrovat na odkazovaný web, pokud existuje"
 msgid "Save config and install"
 msgstr "Uložit konfiguraci a instalovat"
 
+#: js/AuthenticationPanel.js:593 js/ConfigManagerPanel.js:208
+msgid "Save config"
+msgstr "Uložit konfiguraci"
+
 #: js/AuthenticationPanel.js:617
 msgid "Passwords don't match"
 msgstr "Hesla se neshodují"
@@ -314,124 +258,101 @@ msgstr "Hesla se neshodují"
 msgid "Should not be empty"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:67
-msgid "Name"
-msgstr "Název"
+#: js/ConfigManagerPanel.js:60
+msgid "Informations"
+msgstr "Informace"
 
-#: js/ApplicationGridPanel.js:68
-msgid "Enabled"
-msgstr "Povoleno"
+#: js/ConfigManagerPanel.js:64
+msgid "Setup Authentication"
+msgstr "Přihlášení do instalačního programu"
 
-#: js/ApplicationGridPanel.js:69
-msgid "Order"
-msgstr "Pořadí"
+#: js/ConfigManagerPanel.js:67 js/EmailPanel.js:192
+msgid "Username"
+msgstr "Uživatelské jméno"
 
-#: js/ApplicationGridPanel.js:70
-msgid "Installed Version"
-msgstr "Nainstalovaná verze"
+#: js/ConfigManagerPanel.js:83 js/ConfigManagerPanel.js:103
+msgid "Database"
+msgstr "Databáze"
 
-#: js/ApplicationGridPanel.js:71
-msgid "Available Version"
-msgstr "Dostupná verze"
+#: js/ConfigManagerPanel.js:87
+msgid "Adapter"
+msgstr "Adaptér"
 
-#: js/ApplicationGridPanel.js:72
-msgid "Status"
-msgstr "Stav"
+#: js/ConfigManagerPanel.js:92 js/EmailPanel.js:188 js/EmailPanel.js:279
+msgid "Hostname"
+msgstr "Název nebo adresa počítače"
 
-#: js/ApplicationGridPanel.js:73
-msgid "Depends on"
-msgstr "Závisí na"
+#: js/ConfigManagerPanel.js:108
+msgid "User"
+msgstr "Uživatel"
 
-#: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:207
-msgid "Install application"
-msgstr "Instalovat aplikaci"
+#: js/ConfigManagerPanel.js:118
+msgid "Prefix"
+msgstr "Prefix"
 
-#: js/ApplicationGridPanel.js:91
-msgid "Uninstall application"
-msgstr "Odinstalovat aplikaci"
+#: js/ConfigManagerPanel.js:123
+msgid "Logging"
+msgstr "Logování"
 
-#: js/ApplicationGridPanel.js:100
-msgid "Update application"
-msgstr "Aktualizovat aplikaci"
+#: js/ConfigManagerPanel.js:129
+msgid "Filename"
+msgstr "Název souboru"
 
-#: js/ApplicationGridPanel.js:109
-msgid "Go to {0} login"
-msgstr "Jít na příhlášení do {0}"
+#: js/ConfigManagerPanel.js:142
+msgid "Priority"
+msgstr "Priorita"
 
-#: js/ApplicationGridPanel.js:172
-msgid "uninstall"
-msgstr "odinstalovat"
+#: js/ConfigManagerPanel.js:146
+msgid "Caching"
+msgstr "Kešování"
 
-#: js/ApplicationGridPanel.js:172
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Opravdu chcete aplikaci/e odinstalovat?"
+#: js/ConfigManagerPanel.js:152
+msgid "Path"
+msgstr "Cesta"
 
-#: js/ApplicationGridPanel.js:232
-msgid "This may take a while"
-msgstr "Tato operace může chvíli trvat"
+#: js/ConfigManagerPanel.js:156
+msgid "Lifetime (seconds)"
+msgstr "Životnost (v sekundách)"
 
-#: js/ApplicationGridPanel.js:262
-msgid "Dependency Violation"
-msgstr "Porušení závislosti"
+#: js/ConfigManagerPanel.js:163
+msgid "Temporary files"
+msgstr "Dočasné soubory"
 
-#: js/Setup.js:55
-msgid "Terms and Conditions"
-msgstr "Podmínky a ujednání"
+#: js/ConfigManagerPanel.js:168
+msgid "Temporary Files Path"
+msgstr "Cesta pro dočasné soubory"
 
-#: js/Setup.js:60
-msgid "Setup Checks"
-msgstr "Instalační kontroly"
+#: js/ConfigManagerPanel.js:172
+msgid "Session files"
+msgstr "Soubory relací"
 
-#: js/Setup.js:66
-msgid "Config Manager"
-msgstr "Správce konfigurace"
+#: js/ConfigManagerPanel.js:177
+msgid "Session Files Path"
+msgstr "Cesta pro soubory relací"
 
-#: js/Setup.js:72
-msgid "Authentication/Accounts"
-msgstr "Autentikace/Účty"
+#: js/ConfigManagerPanel.js:181
+msgid "Addressbook Map panel"
+msgstr ""
 
-#: js/Setup.js:78
-msgid "Email"
-msgstr "Email"
+#: js/ConfigManagerPanel.js:184
+msgid "Map panel"
+msgstr ""
 
-#: js/Setup.js:84
-msgid "Application Manager"
-msgstr "Správce aplikací"
+#: js/ConfigManagerPanel.js:195
+msgid "disabled"
+msgstr ""
 
-#: js/Setup.js:187
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Aplikace"
-msgstr[1] "Aplikace"
-msgstr[2] "Aplikací"
+#: js/ConfigManagerPanel.js:195
+msgid "enabled"
+msgstr ""
 
-#: js/EnvCheckGridPanel.js:92
-msgid "Performing Environment Checks..."
-msgstr "Provádím test prostředí"
+#: js/ConfigManagerPanel.js:206
+msgid "Config file is not writable"
+msgstr ""
 
-#: js/EnvCheckGridPanel.js:133
-msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "Nenalezeno {0}. Zkuste prosím změnit kritéria filtru, volby zobrazení nebo {1} ve kterém hledáte."
-
-#: js/EnvCheckGridPanel.js:163
-msgid "Check"
-msgstr "Kontrola"
-
-#: js/EnvCheckGridPanel.js:164
-msgid "Result"
-msgstr "Výsledek"
-
-#: js/EnvCheckGridPanel.js:165
-msgid "Error"
-msgstr "Chyba"
-
-#: js/EnvCheckGridPanel.js:183
-msgid "Run setup tests"
-msgstr "Spustit instalační testy"
-
-#: js/EnvCheckGridPanel.js:192
-msgid "Ignore setup tests"
-msgstr "Ignorovat instalační testy"
+#: js/ConfigManagerPanel.js:223
+msgid "Download config file"
+msgstr "Stáhnout konfigurační soubor"
 
 #: js/EmailPanel.js:160
 msgid "Standard IMAP"
@@ -532,6 +453,85 @@ msgstr "Heslo k MySQL databázi"
 #: js/EmailPanel.js:408
 msgid "MySql Port"
 msgstr "Port MySQL"
+
+#: js/EnvCheckGridPanel.js:92
+msgid "Performing Environment Checks..."
+msgstr "Provádím test prostředí"
+
+#: js/EnvCheckGridPanel.js:133
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "Nenalezeno {0}. Zkuste prosím změnit kritéria filtru, volby zobrazení nebo {1} ve kterém hledáte."
+
+#: js/EnvCheckGridPanel.js:163
+msgid "Check"
+msgstr "Kontrola"
+
+#: js/EnvCheckGridPanel.js:164
+msgid "Result"
+msgstr "Výsledek"
+
+#: js/EnvCheckGridPanel.js:165
+msgid "Error"
+msgstr "Chyba"
+
+#: js/EnvCheckGridPanel.js:183
+msgid "Run setup tests"
+msgstr "Spustit instalační testy"
+
+#: js/EnvCheckGridPanel.js:192
+msgid "Ignore setup tests"
+msgstr "Ignorovat instalační testy"
+
+#: js/Setup.js:55
+msgid "Terms and Conditions"
+msgstr "Podmínky a ujednání"
+
+#: js/Setup.js:60
+msgid "Setup Checks"
+msgstr "Instalační kontroly"
+
+#: js/Setup.js:66
+msgid "Config Manager"
+msgstr "Správce konfigurace"
+
+#: js/Setup.js:72
+msgid "Authentication/Accounts"
+msgstr "Autentikace/Účty"
+
+#: js/Setup.js:78
+msgid "Email"
+msgstr "Email"
+
+#: js/Setup.js:84
+msgid "Application Manager"
+msgstr "Správce aplikací"
+
+#: js/Setup.js:187
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Aplikace"
+msgstr[1] "Aplikace"
+msgstr[2] "Aplikací"
+
+#: js/TermsPanel.js:31
+msgid "I have read the license agreement and accept it"
+msgstr "Přečetl(a) jsem si licenční ujednání a souhlasím"
+
+#: js/TermsPanel.js:38
+msgid "License Agreement"
+msgstr "Licenční ujednání"
+
+#: js/TermsPanel.js:57
+msgid "I have read the privacy agreement and accept it"
+msgstr "Přečetl(a) jsem si ujednání o ochraně soukromí a souhlasím"
+
+#: js/TermsPanel.js:64
+msgid "Privacy Agreement"
+msgstr "Ujednání o ochraně soukromí"
+
+#: js/TermsPanel.js:81
+msgid "Accept Terms and Conditions"
+msgstr "Přijmout podmínky"
 
 #~ msgid "Domain"
 #~ msgstr "Doména"

@@ -101,71 +101,129 @@ msgstr "vis datamaskiner"
 msgid "view computers list and details"
 msgstr "vis datamaskin lister og detaljer"
 
-#: js/SambaMachineGrid.js:68 js/SambaMachineEditDialog.js:43
-msgid "Computer Name"
-msgstr "PC Navn"
+#: js/Admin.js:20 js/user/GridPanel.js:100 js/user/Users.js:66
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Bruker"
+msgstr[1] "Brukere"
 
-#: js/SambaMachineGrid.js:69 js/SambaMachineGrid.js:99 js/Roles.js:240
-#: js/Groups.js:239 js/Groups.js:475 js/Tags.js:224 js/Tags.js:550
-#: js/user/GridPanel.js:101 js/RoleEditDialog.js:319
-msgid "Description"
-msgstr "Beskrivelse"
+#: js/Admin.js:33
+msgid "Groups"
+msgstr "Grupper"
 
-#: js/SambaMachineGrid.js:86 js/Roles.js:238 js/Groups.js:237
-#: js/user/GridPanel.js:159
-msgid "ID"
-msgstr "ID"
+#: js/Admin.js:46
+msgid "Roles"
+msgstr "Roller"
 
-#: js/SambaMachineGrid.js:93 js/Roles.js:239 js/Applications.js:286
-#: js/Groups.js:238 js/Tags.js:223 js/Admin.js:566
-msgid "Name"
-msgstr "Navn"
+#: js/Admin.js:58
+msgid "Computers"
+msgstr "Datamaskiner"
 
-#: js/Roles.js:48 js/Groups.js:54 js/Tags.js:62 js/Admin.js:264
+#: js/Admin.js:71
+msgid "Applications"
+msgstr "Programmer"
+
+#: js/Admin.js:84
+msgid "Access Log"
+msgstr "Tilgangs Logg"
+
+#: js/Admin.js:97
+msgid "Shared Tags"
+msgstr "Delte Emner"
+
+#: js/Admin.js:133
+msgid "Admin"
+msgstr "Administrator"
+
+#: js/Admin.js:264 js/Groups.js:54 js/Roles.js:48 js/Tags.js:62
 msgid "Confirm"
 msgstr "Bekreft"
 
-#: js/Roles.js:48
-msgid "Do you really want to delete the selected roles?"
-msgstr "Vil du virkelig slette valgte roller?"
+#: js/Admin.js:264
+msgid "Do you really want to delete the selected access log entries?"
+msgstr "Vil du virkelig slette valgte tilgangs logg poster?"
 
-#: js/Roles.js:65
-msgid "Deleting role(s)..."
-msgstr "Sletter rolle(r)..."
+#: js/Admin.js:383
+msgid "delete entry"
+msgstr "slett post"
 
-#: js/Roles.js:70 js/Groups.js:75 js/Groups.js:410 js/Tags.js:406
-#: js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
-msgid "Failed"
-msgstr "Feilet"
+#: js/Admin.js:384
+msgid "select all"
+msgstr "velg alle"
 
-#: js/Roles.js:70 js/RoleEditDialog.js:134
-msgid "Some error occurred while trying to delete the role."
-msgstr "En feil har oppstått ved forsøk på å slette rollen."
+#: js/Admin.js:428
+msgid "Display from:"
+msgstr "Vis fra:"
 
-#: js/Roles.js:103
-msgid "add role"
-msgstr "legg til rolle"
+#: js/Admin.js:432
+msgid "to:"
+msgstr "til:"
 
-#: js/Roles.js:111
-msgid "edit role"
-msgstr "rediger rolle"
-
-#: js/Roles.js:119
-msgid "delete role"
-msgstr "slett rolle"
-
-#: js/Roles.js:177 js/Applications.js:191 js/Groups.js:178 js/Tags.js:167
-#: js/Admin.js:437
+#: js/Admin.js:437 js/Applications.js:191 js/Groups.js:178 js/Roles.js:177
+#: js/Tags.js:167
 msgid "Search:"
 msgstr "Søk:"
 
-#: js/Roles.js:227
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Viser roller {0} - {1} of {2}"
+#: js/Admin.js:510
+msgid "invalid password"
+msgstr "ugyldig passord"
 
-#: js/Roles.js:228 js/Roles.js:283
-msgid "No roles to display"
-msgstr "Ingen roller å vise"
+#: js/Admin.js:514
+msgid "ambiguous username"
+msgstr "tvetydig brukernavn"
+
+#: js/Admin.js:518
+msgid "user not found"
+msgstr "bruker ikke funnet"
+
+#: js/Admin.js:522
+msgid "failure"
+msgstr "feil"
+
+#: js/Admin.js:526
+msgid "success"
+msgstr "vellykket"
+
+#: js/Admin.js:554
+msgid "Displaying access log entries {0} - {1} of {2}"
+msgstr "Viser tilgangs logg poster {0} - {1} of {2}"
+
+#: js/Admin.js:555
+msgid "No access log entries to display"
+msgstr "Ingen tilgangs logg poster å vise"
+
+#: js/Admin.js:564
+msgid "Session ID"
+msgstr "Sessjons ID"
+
+#: js/Admin.js:565 js/user/EditDialog.js:533
+msgid "Login Name"
+msgstr "Logg inn Navn"
+
+#: js/Admin.js:566 js/Applications.js:286 js/Groups.js:238 js/Roles.js:239
+#: js/SambaMachineGrid.js:93 js/Tags.js:223
+msgid "Name"
+msgstr "Navn"
+
+#: js/Admin.js:567
+msgid "IP Address"
+msgstr "IP Adresse"
+
+#: js/Admin.js:568
+msgid "Login Time"
+msgstr "Logg inn Tid"
+
+#: js/Admin.js:569
+msgid "Logout Time"
+msgstr "Logg ut Tid"
+
+#: js/Admin.js:570
+msgid "Account ID"
+msgstr "Konto ID"
+
+#: js/Admin.js:571
+msgid "Result"
+msgstr "Resultat"
 
 #: js/Applications.js:44
 msgid "{0} Settings"
@@ -207,7 +265,7 @@ msgstr "Ingen program å vise"
 msgid "Order"
 msgstr "Ordre"
 
-#: js/Applications.js:287 js/user/GridPanel.js:160 js/user/EditDialog.js:585
+#: js/Applications.js:287 js/user/EditDialog.js:585 js/user/GridPanel.js:160
 msgid "Status"
 msgstr "Status"
 
@@ -222,6 +280,11 @@ msgstr "Vil du virkelig slette valgte grupper?"
 #: js/Groups.js:70
 msgid "Deleting group(s)..."
 msgstr "Sletter gruppe(r)"
+
+#: js/Groups.js:75 js/Groups.js:410 js/RoleEditDialog.js:106
+#: js/RoleEditDialog.js:134 js/Roles.js:70 js/Tags.js:406
+msgid "Failed"
+msgstr "Feilet"
 
 #: js/Groups.js:75
 msgid "Some error occurred while trying to delete the group."
@@ -247,7 +310,18 @@ msgstr "Viser grupper  {0} - {1} of {2}"
 msgid "No groups to display"
 msgstr "Ingen grupper å vise"
 
-#: js/Groups.js:375 js/Tags.js:361 js/RoleEditDialog.js:69
+#: js/Groups.js:237 js/Roles.js:238 js/SambaMachineGrid.js:86
+#: js/user/GridPanel.js:159
+msgid "ID"
+msgstr "ID"
+
+#: js/Groups.js:239 js/Groups.js:475 js/RoleEditDialog.js:319 js/Roles.js:240
+#: js/SambaMachineGrid.js:69 js/SambaMachineGrid.js:99 js/Tags.js:224
+#: js/Tags.js:550 js/user/GridPanel.js:101
+msgid "Description"
+msgstr "Beskrivelse"
+
+#: js/Groups.js:375 js/RoleEditDialog.js:69 js/Tags.js:361
 msgid "Please wait"
 msgstr "Vennligst vent"
 
@@ -259,11 +333,11 @@ msgstr "Oppdaterer Medlemskap"
 msgid "Could not save group."
 msgstr "Klarte ikke å lagre gruppen."
 
-#: js/Groups.js:415 js/Tags.js:411 js/RoleEditDialog.js:113
+#: js/Groups.js:415 js/RoleEditDialog.js:113 js/Tags.js:411
 msgid "Errors"
 msgstr "Feil"
 
-#: js/Groups.js:415 js/Tags.js:411 js/RoleEditDialog.js:113
+#: js/Groups.js:415 js/RoleEditDialog.js:113 js/Tags.js:411
 msgid "Please fix the errors noted."
 msgstr "Vennligst rett felene listet."
 
@@ -275,7 +349,7 @@ msgstr "Gruppe Medlemmer"
 msgid "Group Name"
 msgstr "Gruppe Navn"
 
-#: js/Groups.js:534 js/Tags.js:620 js/RoleEditDialog.js:395
+#: js/Groups.js:534 js/RoleEditDialog.js:395 js/Tags.js:620
 msgid "Transfering {0}..."
 msgstr ""
 
@@ -290,6 +364,82 @@ msgstr "Legg til gruppe"
 #: js/Groups.js:548
 msgid "Edit Group \"{0}\""
 msgstr "Rediger Gruppe  \"{0}\""
+
+#: js/RoleEditDialog.js:106
+msgid "Could not save role."
+msgstr "Klarte ikke å lagre rolle."
+
+#: js/RoleEditDialog.js:126
+msgid "Deleting role..."
+msgstr "Sletter rolle..."
+
+#: js/RoleEditDialog.js:134 js/Roles.js:70
+msgid "Some error occurred while trying to delete the role."
+msgstr "En feil har oppstått ved forsøk på å slette rollen."
+
+#: js/RoleEditDialog.js:272
+msgid "Members"
+msgstr "Medlemmer"
+
+#: js/RoleEditDialog.js:281
+msgid "Rights"
+msgstr "Rettigheter"
+
+#: js/RoleEditDialog.js:311
+msgid "Role Name"
+msgstr "Rolle Navn"
+
+#: js/RoleEditDialog.js:351
+msgid "Loading Role..."
+msgstr "Laster Rolle..."
+
+#: js/RoleEditDialog.js:351 js/Tags.js:586
+msgid "Please Wait"
+msgstr "Vennligst Vent"
+
+#: js/RoleEditDialog.js:395
+msgid "Role"
+msgstr ""
+
+#: js/RoleEditDialog.js:405
+msgid "Add New Role"
+msgstr "Legg til Ny Rolle"
+
+#: js/RoleEditDialog.js:407
+msgid "Edit Role \"{0}\""
+msgstr "Rediger Rolle \"{0}\""
+
+#: js/Roles.js:48
+msgid "Do you really want to delete the selected roles?"
+msgstr "Vil du virkelig slette valgte roller?"
+
+#: js/Roles.js:65
+msgid "Deleting role(s)..."
+msgstr "Sletter rolle(r)..."
+
+#: js/Roles.js:103
+msgid "add role"
+msgstr "legg til rolle"
+
+#: js/Roles.js:111
+msgid "edit role"
+msgstr "rediger rolle"
+
+#: js/Roles.js:119
+msgid "delete role"
+msgstr "slett rolle"
+
+#: js/Roles.js:227
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Viser roller {0} - {1} of {2}"
+
+#: js/Roles.js:228 js/Roles.js:283
+msgid "No roles to display"
+msgstr "Ingen roller å vise"
+
+#: js/SambaMachineEditDialog.js:43 js/SambaMachineGrid.js:68
+msgid "Computer Name"
+msgstr "PC Navn"
 
 #: js/SambaMachineModel.js:40
 msgid "Computer"
@@ -365,10 +515,6 @@ msgstr "Overskrift Navn"
 msgid "Loading Tag..."
 msgstr "Laster Overskrift..."
 
-#: js/Tags.js:586 js/RoleEditDialog.js:351
-msgid "Please Wait"
-msgstr "Vennligst Vent"
-
 #: js/Tags.js:620
 msgid "Tag"
 msgstr ""
@@ -380,176 +526,6 @@ msgstr "Legg til Ny Overskrift"
 #: js/Tags.js:632
 msgid "Edit Tag \"{0}\""
 msgstr "Rediger Overskrift \"{0}\""
-
-#: js/Admin.js:20 js/user/GridPanel.js:100 js/user/Users.js:66
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Bruker"
-msgstr[1] "Brukere"
-
-#: js/Admin.js:33
-msgid "Groups"
-msgstr "Grupper"
-
-#: js/Admin.js:46
-msgid "Roles"
-msgstr "Roller"
-
-#: js/Admin.js:58
-msgid "Computers"
-msgstr "Datamaskiner"
-
-#: js/Admin.js:71
-msgid "Applications"
-msgstr "Programmer"
-
-#: js/Admin.js:84
-msgid "Access Log"
-msgstr "Tilgangs Logg"
-
-#: js/Admin.js:97
-msgid "Shared Tags"
-msgstr "Delte Emner"
-
-#: js/Admin.js:133
-msgid "Admin"
-msgstr "Administrator"
-
-#: js/Admin.js:264
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Vil du virkelig slette valgte tilgangs logg poster?"
-
-#: js/Admin.js:383
-msgid "delete entry"
-msgstr "slett post"
-
-#: js/Admin.js:384
-msgid "select all"
-msgstr "velg alle"
-
-#: js/Admin.js:428
-msgid "Display from:"
-msgstr "Vis fra:"
-
-#: js/Admin.js:432
-msgid "to:"
-msgstr "til:"
-
-#: js/Admin.js:510
-msgid "invalid password"
-msgstr "ugyldig passord"
-
-#: js/Admin.js:514
-msgid "ambiguous username"
-msgstr "tvetydig brukernavn"
-
-#: js/Admin.js:518
-msgid "user not found"
-msgstr "bruker ikke funnet"
-
-#: js/Admin.js:522
-msgid "failure"
-msgstr "feil"
-
-#: js/Admin.js:526
-msgid "success"
-msgstr "vellykket"
-
-#: js/Admin.js:554
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Viser tilgangs logg poster {0} - {1} of {2}"
-
-#: js/Admin.js:555
-msgid "No access log entries to display"
-msgstr "Ingen tilgangs logg poster å vise"
-
-#: js/Admin.js:564
-msgid "Session ID"
-msgstr "Sessjons ID"
-
-#: js/Admin.js:565 js/user/EditDialog.js:533
-msgid "Login Name"
-msgstr "Logg inn Navn"
-
-#: js/Admin.js:567
-msgid "IP Address"
-msgstr "IP Adresse"
-
-#: js/Admin.js:568
-msgid "Login Time"
-msgstr "Logg inn Tid"
-
-#: js/Admin.js:569
-msgid "Logout Time"
-msgstr "Logg ut Tid"
-
-#: js/Admin.js:570
-msgid "Account ID"
-msgstr "Konto ID"
-
-#: js/Admin.js:571
-msgid "Result"
-msgstr "Resultat"
-
-#: js/user/GridPanel.js:58
-msgid "enable account"
-msgstr "aktivere konto"
-
-#: js/user/GridPanel.js:68
-msgid "disable account"
-msgstr "deaktivere konto"
-
-#: js/user/GridPanel.js:78
-msgid "reset password"
-msgstr "nulstille passord"
-
-#: js/user/GridPanel.js:161
-msgid "Displayname"
-msgstr "Visnings navn"
-
-#: js/user/GridPanel.js:162
-msgid "Loginname"
-msgstr "Logg inn navn"
-
-#: js/user/GridPanel.js:163
-msgid "Last name"
-msgstr "Etter navn"
-
-#: js/user/GridPanel.js:164
-msgid "First name"
-msgstr "For navn"
-
-#: js/user/GridPanel.js:165
-msgid "Email"
-msgstr "E-post"
-
-#: js/user/GridPanel.js:166 js/user/EditDialog.js:573
-msgid "OpenID"
-msgstr "ÅpenID"
-
-#: js/user/GridPanel.js:167 js/user/EditDialog.js:628
-msgid "Last login at"
-msgstr "Siste logg inn kl"
-
-#: js/user/GridPanel.js:168 js/user/EditDialog.js:632
-msgid "Last login from"
-msgstr "Siste logg inn fra"
-
-#: js/user/GridPanel.js:169
-msgid "Password changed"
-msgstr "Passord endret"
-
-#: js/user/GridPanel.js:170 js/user/EditDialog.js:594
-msgid "Expires"
-msgstr "Utgår"
-
-#: js/user/GridPanel.js:224
-msgid "Set new password"
-msgstr "Sett nytt passord"
-
-#: js/user/GridPanel.js:224
-msgid "Please enter the new password:"
-msgstr "Vennligst skriv det nye passordet:"
 
 #: js/user/EditDialog.js:134
 msgid "Passwords do not match!"
@@ -730,6 +706,10 @@ msgstr "ingen passord er satt"
 msgid "Emailaddress"
 msgstr "Epost adresse"
 
+#: js/user/EditDialog.js:573 js/user/GridPanel.js:166
+msgid "OpenID"
+msgstr "ÅpenID"
+
 #: js/user/EditDialog.js:579
 msgid "Primary group"
 msgstr "Primær gruppe"
@@ -737,6 +717,10 @@ msgstr "Primær gruppe"
 #: js/user/EditDialog.js:591
 msgid "expired"
 msgstr "Utgått"
+
+#: js/user/EditDialog.js:594 js/user/GridPanel.js:170
+msgid "Expires"
+msgstr "Utgår"
 
 #: js/user/EditDialog.js:601
 msgid "Visibility"
@@ -750,9 +734,17 @@ msgstr "Vis i adressebok"
 msgid "Hide from addressbook"
 msgstr "Skjul fra adressebok"
 
+#: js/user/EditDialog.js:628 js/user/GridPanel.js:167
+msgid "Last login at"
+msgstr "Siste logg inn kl"
+
 #: js/user/EditDialog.js:630 js/user/EditDialog.js:634
 msgid "don't know"
 msgstr "vet ikke"
+
+#: js/user/EditDialog.js:632 js/user/GridPanel.js:168
+msgid "Last login from"
+msgstr "Siste logg inn fra"
 
 #: js/user/EditDialog.js:636
 msgid "Password set"
@@ -770,6 +762,50 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
+#: js/user/GridPanel.js:58
+msgid "enable account"
+msgstr "aktivere konto"
+
+#: js/user/GridPanel.js:68
+msgid "disable account"
+msgstr "deaktivere konto"
+
+#: js/user/GridPanel.js:78
+msgid "reset password"
+msgstr "nulstille passord"
+
+#: js/user/GridPanel.js:161
+msgid "Displayname"
+msgstr "Visnings navn"
+
+#: js/user/GridPanel.js:162
+msgid "Loginname"
+msgstr "Logg inn navn"
+
+#: js/user/GridPanel.js:163
+msgid "Last name"
+msgstr "Etter navn"
+
+#: js/user/GridPanel.js:164
+msgid "First name"
+msgstr "For navn"
+
+#: js/user/GridPanel.js:165
+msgid "Email"
+msgstr "E-post"
+
+#: js/user/GridPanel.js:169
+msgid "Password changed"
+msgstr "Passord endret"
+
+#: js/user/GridPanel.js:224
+msgid "Set new password"
+msgstr "Sett nytt passord"
+
+#: js/user/GridPanel.js:224
+msgid "Please enter the new password:"
+msgstr "Vennligst skriv det nye passordet:"
+
 #: js/user/Users.js:109
 msgid "Samba User"
 msgid_plural "Samba Users"
@@ -781,42 +817,6 @@ msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "E-post Bruker"
 msgstr[1] "E-Post Brukere"
-
-#: js/RoleEditDialog.js:106
-msgid "Could not save role."
-msgstr "Klarte ikke å lagre rolle."
-
-#: js/RoleEditDialog.js:126
-msgid "Deleting role..."
-msgstr "Sletter rolle..."
-
-#: js/RoleEditDialog.js:272
-msgid "Members"
-msgstr "Medlemmer"
-
-#: js/RoleEditDialog.js:281
-msgid "Rights"
-msgstr "Rettigheter"
-
-#: js/RoleEditDialog.js:311
-msgid "Role Name"
-msgstr "Rolle Navn"
-
-#: js/RoleEditDialog.js:351
-msgid "Loading Role..."
-msgstr "Laster Rolle..."
-
-#: js/RoleEditDialog.js:395
-msgid "Role"
-msgstr ""
-
-#: js/RoleEditDialog.js:405
-msgid "Add New Role"
-msgstr "Legg til Ny Rolle"
-
-#: js/RoleEditDialog.js:407
-msgid "Edit Role \"{0}\""
-msgstr "Rediger Rolle \"{0}\""
 
 #~ msgid "Do you really want to delete the selected account(s)?"
 #~ msgstr "Vil du virkelig slette den valgte kontoen(e)?"

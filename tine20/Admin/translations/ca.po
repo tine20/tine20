@@ -100,71 +100,129 @@ msgstr "visualitza els ordinadors"
 msgid "view computers list and details"
 msgstr "visualitza la llista i els detalls dels ordinadors"
 
-#: js/SambaMachineGrid.js:68 js/SambaMachineEditDialog.js:43
-msgid "Computer Name"
-msgstr "Nom de l'ordinador"
+#: js/Admin.js:20 js/user/GridPanel.js:100 js/user/Users.js:66
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Usuari"
+msgstr[1] "Usuaris"
 
-#: js/SambaMachineGrid.js:69 js/SambaMachineGrid.js:99 js/Roles.js:240
-#: js/Groups.js:239 js/Groups.js:475 js/Tags.js:224 js/Tags.js:550
-#: js/user/GridPanel.js:101 js/RoleEditDialog.js:319
-msgid "Description"
-msgstr "Descripció"
+#: js/Admin.js:33
+msgid "Groups"
+msgstr "Grups"
 
-#: js/SambaMachineGrid.js:86 js/Roles.js:238 js/Groups.js:237
-#: js/user/GridPanel.js:159
-msgid "ID"
-msgstr "Identificador"
+#: js/Admin.js:46
+msgid "Roles"
+msgstr "Rols"
 
-#: js/SambaMachineGrid.js:93 js/Roles.js:239 js/Applications.js:286
-#: js/Groups.js:238 js/Tags.js:223 js/Admin.js:566
-msgid "Name"
-msgstr "Nom"
+#: js/Admin.js:58
+msgid "Computers"
+msgstr "Ordinadors"
 
-#: js/Roles.js:48 js/Groups.js:54 js/Tags.js:62 js/Admin.js:264
+#: js/Admin.js:71
+msgid "Applications"
+msgstr "Aplicacions"
+
+#: js/Admin.js:84
+msgid "Access Log"
+msgstr "Registre d'accessos"
+
+#: js/Admin.js:97
+msgid "Shared Tags"
+msgstr "Etiquetes compartides"
+
+#: js/Admin.js:133
+msgid "Admin"
+msgstr "Administració"
+
+#: js/Admin.js:264 js/Groups.js:54 js/Roles.js:48 js/Tags.js:62
 msgid "Confirm"
 msgstr "Confirma"
 
-#: js/Roles.js:48
-msgid "Do you really want to delete the selected roles?"
-msgstr "Esteu segur que voleu eliminar els rols seleccionats?"
+#: js/Admin.js:264
+msgid "Do you really want to delete the selected access log entries?"
+msgstr "Esteu segur que voleu eliminar les entrades del registre d'accessos seleccionades?"
 
-#: js/Roles.js:65
-msgid "Deleting role(s)..."
-msgstr "Eliminant el(s) rol(s)..."
+#: js/Admin.js:383
+msgid "delete entry"
+msgstr "elimina entrada"
 
-#: js/Roles.js:70 js/Groups.js:75 js/Groups.js:410 js/Tags.js:406
-#: js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
-msgid "Failed"
-msgstr "Ha fallat"
+#: js/Admin.js:384
+msgid "select all"
+msgstr "elimina-ho tot"
 
-#: js/Roles.js:70 js/RoleEditDialog.js:134
-msgid "Some error occurred while trying to delete the role."
-msgstr "S'ha produït un error quan s'intentava eliminar el rol."
+#: js/Admin.js:428
+msgid "Display from:"
+msgstr "Mostra des de:"
 
-#: js/Roles.js:103
-msgid "add role"
-msgstr "afegeix un rol"
+#: js/Admin.js:432
+msgid "to:"
+msgstr "fins a:"
 
-#: js/Roles.js:111
-msgid "edit role"
-msgstr "edita rol"
-
-#: js/Roles.js:119
-msgid "delete role"
-msgstr "elimina rol"
-
-#: js/Roles.js:177 js/Applications.js:191 js/Groups.js:178 js/Tags.js:167
-#: js/Admin.js:437
+#: js/Admin.js:437 js/Applications.js:191 js/Groups.js:178 js/Roles.js:177
+#: js/Tags.js:167
 msgid "Search:"
 msgstr "Cerca:"
 
-#: js/Roles.js:227
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Es mostren els rols {0} - {1} de {2}"
+#: js/Admin.js:510
+msgid "invalid password"
+msgstr "contrasenya incorrecta"
 
-#: js/Roles.js:228 js/Roles.js:283
-msgid "No roles to display"
-msgstr "Cap rol a mostrar"
+#: js/Admin.js:514
+msgid "ambiguous username"
+msgstr "nom d'usuari ambigu"
+
+#: js/Admin.js:518
+msgid "user not found"
+msgstr "no s'ha trobat l'usuari"
+
+#: js/Admin.js:522
+msgid "failure"
+msgstr "errada"
+
+#: js/Admin.js:526
+msgid "success"
+msgstr "èxit"
+
+#: js/Admin.js:554
+msgid "Displaying access log entries {0} - {1} of {2}"
+msgstr "Es mostren les entrades del registre d'accessos {0} - {1} de {2}"
+
+#: js/Admin.js:555
+msgid "No access log entries to display"
+msgstr "Cap entrada del registre d'accessos a mostrar"
+
+#: js/Admin.js:564
+msgid "Session ID"
+msgstr "Identificador de sessió"
+
+#: js/Admin.js:565 js/user/EditDialog.js:533
+msgid "Login Name"
+msgstr "Nom d'usuari d'inici de sessió"
+
+#: js/Admin.js:566 js/Applications.js:286 js/Groups.js:238 js/Roles.js:239
+#: js/SambaMachineGrid.js:93 js/Tags.js:223
+msgid "Name"
+msgstr "Nom"
+
+#: js/Admin.js:567
+msgid "IP Address"
+msgstr "Adreça IP"
+
+#: js/Admin.js:568
+msgid "Login Time"
+msgstr "Hora de l'inici de sessió"
+
+#: js/Admin.js:569
+msgid "Logout Time"
+msgstr "Hora de la finalització de sessió"
+
+#: js/Admin.js:570
+msgid "Account ID"
+msgstr "Identificador de compte"
+
+#: js/Admin.js:571
+msgid "Result"
+msgstr "Resultat"
 
 #: js/Applications.js:44
 msgid "{0} Settings"
@@ -206,7 +264,7 @@ msgstr "Cap aplicació a mostrar"
 msgid "Order"
 msgstr "Ordre"
 
-#: js/Applications.js:287 js/user/GridPanel.js:160 js/user/EditDialog.js:585
+#: js/Applications.js:287 js/user/EditDialog.js:585 js/user/GridPanel.js:160
 msgid "Status"
 msgstr "Estat"
 
@@ -221,6 +279,11 @@ msgstr "Esteu segur que voleu eliminar els grups seleccionats?"
 #: js/Groups.js:70
 msgid "Deleting group(s)..."
 msgstr "Eliminant grup(s)..."
+
+#: js/Groups.js:75 js/Groups.js:410 js/RoleEditDialog.js:106
+#: js/RoleEditDialog.js:134 js/Roles.js:70 js/Tags.js:406
+msgid "Failed"
+msgstr "Ha fallat"
 
 #: js/Groups.js:75
 msgid "Some error occurred while trying to delete the group."
@@ -246,7 +309,18 @@ msgstr "Es mostren els grups {0} - {1} de {2}"
 msgid "No groups to display"
 msgstr "Cap grup a mostrar"
 
-#: js/Groups.js:375 js/Tags.js:361 js/RoleEditDialog.js:69
+#: js/Groups.js:237 js/Roles.js:238 js/SambaMachineGrid.js:86
+#: js/user/GridPanel.js:159
+msgid "ID"
+msgstr "Identificador"
+
+#: js/Groups.js:239 js/Groups.js:475 js/RoleEditDialog.js:319 js/Roles.js:240
+#: js/SambaMachineGrid.js:69 js/SambaMachineGrid.js:99 js/Tags.js:224
+#: js/Tags.js:550 js/user/GridPanel.js:101
+msgid "Description"
+msgstr "Descripció"
+
+#: js/Groups.js:375 js/RoleEditDialog.js:69 js/Tags.js:361
 msgid "Please wait"
 msgstr "Espereu"
 
@@ -258,11 +332,11 @@ msgstr "S'actualitzen les pertanyences com a membres"
 msgid "Could not save group."
 msgstr "No s'ha pogut desar el grup."
 
-#: js/Groups.js:415 js/Tags.js:411 js/RoleEditDialog.js:113
+#: js/Groups.js:415 js/RoleEditDialog.js:113 js/Tags.js:411
 msgid "Errors"
 msgstr "Errors"
 
-#: js/Groups.js:415 js/Tags.js:411 js/RoleEditDialog.js:113
+#: js/Groups.js:415 js/RoleEditDialog.js:113 js/Tags.js:411
 msgid "Please fix the errors noted."
 msgstr "Solventeu els errors citats."
 
@@ -274,7 +348,7 @@ msgstr "Membres de grup"
 msgid "Group Name"
 msgstr "Nom del grup"
 
-#: js/Groups.js:534 js/Tags.js:620 js/RoleEditDialog.js:395
+#: js/Groups.js:534 js/RoleEditDialog.js:395 js/Tags.js:620
 msgid "Transfering {0}..."
 msgstr "Transferint {0}..."
 
@@ -289,6 +363,82 @@ msgstr "Afegeix un nou grup"
 #: js/Groups.js:548
 msgid "Edit Group \"{0}\""
 msgstr "Edita el grup \"{0}\""
+
+#: js/RoleEditDialog.js:106
+msgid "Could not save role."
+msgstr "No s'ha pogut desar el rol."
+
+#: js/RoleEditDialog.js:126
+msgid "Deleting role..."
+msgstr "Eliminant el rol..."
+
+#: js/RoleEditDialog.js:134 js/Roles.js:70
+msgid "Some error occurred while trying to delete the role."
+msgstr "S'ha produït un error quan s'intentava eliminar el rol."
+
+#: js/RoleEditDialog.js:272
+msgid "Members"
+msgstr "Membres"
+
+#: js/RoleEditDialog.js:281
+msgid "Rights"
+msgstr "Permisos"
+
+#: js/RoleEditDialog.js:311
+msgid "Role Name"
+msgstr "Nom del rol"
+
+#: js/RoleEditDialog.js:351
+msgid "Loading Role..."
+msgstr "Carregant el rol..."
+
+#: js/RoleEditDialog.js:351 js/Tags.js:586
+msgid "Please Wait"
+msgstr "Espereu"
+
+#: js/RoleEditDialog.js:395
+msgid "Role"
+msgstr "Rol"
+
+#: js/RoleEditDialog.js:405
+msgid "Add New Role"
+msgstr "Afegeix un nou rol"
+
+#: js/RoleEditDialog.js:407
+msgid "Edit Role \"{0}\""
+msgstr "Edita el rol \"{0}\""
+
+#: js/Roles.js:48
+msgid "Do you really want to delete the selected roles?"
+msgstr "Esteu segur que voleu eliminar els rols seleccionats?"
+
+#: js/Roles.js:65
+msgid "Deleting role(s)..."
+msgstr "Eliminant el(s) rol(s)..."
+
+#: js/Roles.js:103
+msgid "add role"
+msgstr "afegeix un rol"
+
+#: js/Roles.js:111
+msgid "edit role"
+msgstr "edita rol"
+
+#: js/Roles.js:119
+msgid "delete role"
+msgstr "elimina rol"
+
+#: js/Roles.js:227
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Es mostren els rols {0} - {1} de {2}"
+
+#: js/Roles.js:228 js/Roles.js:283
+msgid "No roles to display"
+msgstr "Cap rol a mostrar"
+
+#: js/SambaMachineEditDialog.js:43 js/SambaMachineGrid.js:68
+msgid "Computer Name"
+msgstr "Nom de l'ordinador"
 
 #: js/SambaMachineModel.js:40
 msgid "Computer"
@@ -364,10 +514,6 @@ msgstr "Nom d'etiqueta"
 msgid "Loading Tag..."
 msgstr "Carregant etiqueta..."
 
-#: js/Tags.js:586 js/RoleEditDialog.js:351
-msgid "Please Wait"
-msgstr "Espereu"
-
 #: js/Tags.js:620
 msgid "Tag"
 msgstr "Etiqueta"
@@ -379,176 +525,6 @@ msgstr "Afegeix una nova etiqueta"
 #: js/Tags.js:632
 msgid "Edit Tag \"{0}\""
 msgstr "Edita l'etiqueta \"{0}\""
-
-#: js/Admin.js:20 js/user/GridPanel.js:100 js/user/Users.js:66
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Usuari"
-msgstr[1] "Usuaris"
-
-#: js/Admin.js:33
-msgid "Groups"
-msgstr "Grups"
-
-#: js/Admin.js:46
-msgid "Roles"
-msgstr "Rols"
-
-#: js/Admin.js:58
-msgid "Computers"
-msgstr "Ordinadors"
-
-#: js/Admin.js:71
-msgid "Applications"
-msgstr "Aplicacions"
-
-#: js/Admin.js:84
-msgid "Access Log"
-msgstr "Registre d'accessos"
-
-#: js/Admin.js:97
-msgid "Shared Tags"
-msgstr "Etiquetes compartides"
-
-#: js/Admin.js:133
-msgid "Admin"
-msgstr "Administració"
-
-#: js/Admin.js:264
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Esteu segur que voleu eliminar les entrades del registre d'accessos seleccionades?"
-
-#: js/Admin.js:383
-msgid "delete entry"
-msgstr "elimina entrada"
-
-#: js/Admin.js:384
-msgid "select all"
-msgstr "elimina-ho tot"
-
-#: js/Admin.js:428
-msgid "Display from:"
-msgstr "Mostra des de:"
-
-#: js/Admin.js:432
-msgid "to:"
-msgstr "fins a:"
-
-#: js/Admin.js:510
-msgid "invalid password"
-msgstr "contrasenya incorrecta"
-
-#: js/Admin.js:514
-msgid "ambiguous username"
-msgstr "nom d'usuari ambigu"
-
-#: js/Admin.js:518
-msgid "user not found"
-msgstr "no s'ha trobat l'usuari"
-
-#: js/Admin.js:522
-msgid "failure"
-msgstr "errada"
-
-#: js/Admin.js:526
-msgid "success"
-msgstr "èxit"
-
-#: js/Admin.js:554
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Es mostren les entrades del registre d'accessos {0} - {1} de {2}"
-
-#: js/Admin.js:555
-msgid "No access log entries to display"
-msgstr "Cap entrada del registre d'accessos a mostrar"
-
-#: js/Admin.js:564
-msgid "Session ID"
-msgstr "Identificador de sessió"
-
-#: js/Admin.js:565 js/user/EditDialog.js:533
-msgid "Login Name"
-msgstr "Nom d'usuari d'inici de sessió"
-
-#: js/Admin.js:567
-msgid "IP Address"
-msgstr "Adreça IP"
-
-#: js/Admin.js:568
-msgid "Login Time"
-msgstr "Hora de l'inici de sessió"
-
-#: js/Admin.js:569
-msgid "Logout Time"
-msgstr "Hora de la finalització de sessió"
-
-#: js/Admin.js:570
-msgid "Account ID"
-msgstr "Identificador de compte"
-
-#: js/Admin.js:571
-msgid "Result"
-msgstr "Resultat"
-
-#: js/user/GridPanel.js:58
-msgid "enable account"
-msgstr "habilita el compte"
-
-#: js/user/GridPanel.js:68
-msgid "disable account"
-msgstr "inhabilita el compte"
-
-#: js/user/GridPanel.js:78
-msgid "reset password"
-msgstr "reinicialitza la contrasenya"
-
-#: js/user/GridPanel.js:161
-msgid "Displayname"
-msgstr "Nom per a mostrar"
-
-#: js/user/GridPanel.js:162
-msgid "Loginname"
-msgstr "Nom d'usuari"
-
-#: js/user/GridPanel.js:163
-msgid "Last name"
-msgstr "Cognom"
-
-#: js/user/GridPanel.js:164
-msgid "First name"
-msgstr "Nom"
-
-#: js/user/GridPanel.js:165
-msgid "Email"
-msgstr "Correu electrònic"
-
-#: js/user/GridPanel.js:166 js/user/EditDialog.js:573
-msgid "OpenID"
-msgstr "OpenID"
-
-#: js/user/GridPanel.js:167 js/user/EditDialog.js:628
-msgid "Last login at"
-msgstr "Darrer inici de sessió a"
-
-#: js/user/GridPanel.js:168 js/user/EditDialog.js:632
-msgid "Last login from"
-msgstr "Darrer inici de sessió des de"
-
-#: js/user/GridPanel.js:169
-msgid "Password changed"
-msgstr "S'ha canviat la contrasenya"
-
-#: js/user/GridPanel.js:170 js/user/EditDialog.js:594
-msgid "Expires"
-msgstr "Caduca"
-
-#: js/user/GridPanel.js:224
-msgid "Set new password"
-msgstr "Estableix una nova contrasenya"
-
-#: js/user/GridPanel.js:224
-msgid "Please enter the new password:"
-msgstr "Introduïu la nova contrasenya:"
 
 #: js/user/EditDialog.js:134
 msgid "Passwords do not match!"
@@ -729,6 +705,10 @@ msgstr "no s'ha establert cap contrasenya"
 msgid "Emailaddress"
 msgstr "Adreça electrònica"
 
+#: js/user/EditDialog.js:573 js/user/GridPanel.js:166
+msgid "OpenID"
+msgstr "OpenID"
+
 #: js/user/EditDialog.js:579
 msgid "Primary group"
 msgstr "Grup primari"
@@ -736,6 +716,10 @@ msgstr "Grup primari"
 #: js/user/EditDialog.js:591
 msgid "expired"
 msgstr "caducat"
+
+#: js/user/EditDialog.js:594 js/user/GridPanel.js:170
+msgid "Expires"
+msgstr "Caduca"
 
 #: js/user/EditDialog.js:601
 msgid "Visibility"
@@ -749,9 +733,17 @@ msgstr "Mostra a la llibreta d'adreces"
 msgid "Hide from addressbook"
 msgstr "Amaga a la llibreta d'adreces"
 
+#: js/user/EditDialog.js:628 js/user/GridPanel.js:167
+msgid "Last login at"
+msgstr "Darrer inici de sessió a"
+
 #: js/user/EditDialog.js:630 js/user/EditDialog.js:634
 msgid "don't know"
 msgstr "no se sap"
+
+#: js/user/EditDialog.js:632 js/user/GridPanel.js:168
+msgid "Last login from"
+msgstr "Darrer inici de sessió des de"
 
 #: js/user/EditDialog.js:636
 msgid "Password set"
@@ -769,6 +761,50 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
+#: js/user/GridPanel.js:58
+msgid "enable account"
+msgstr "habilita el compte"
+
+#: js/user/GridPanel.js:68
+msgid "disable account"
+msgstr "inhabilita el compte"
+
+#: js/user/GridPanel.js:78
+msgid "reset password"
+msgstr "reinicialitza la contrasenya"
+
+#: js/user/GridPanel.js:161
+msgid "Displayname"
+msgstr "Nom per a mostrar"
+
+#: js/user/GridPanel.js:162
+msgid "Loginname"
+msgstr "Nom d'usuari"
+
+#: js/user/GridPanel.js:163
+msgid "Last name"
+msgstr "Cognom"
+
+#: js/user/GridPanel.js:164
+msgid "First name"
+msgstr "Nom"
+
+#: js/user/GridPanel.js:165
+msgid "Email"
+msgstr "Correu electrònic"
+
+#: js/user/GridPanel.js:169
+msgid "Password changed"
+msgstr "S'ha canviat la contrasenya"
+
+#: js/user/GridPanel.js:224
+msgid "Set new password"
+msgstr "Estableix una nova contrasenya"
+
+#: js/user/GridPanel.js:224
+msgid "Please enter the new password:"
+msgstr "Introduïu la nova contrasenya:"
+
 #: js/user/Users.js:109
 msgid "Samba User"
 msgid_plural "Samba Users"
@@ -780,39 +816,3 @@ msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "Usuari de correu electrònic"
 msgstr[1] "Usuaris de correu electrònic"
-
-#: js/RoleEditDialog.js:106
-msgid "Could not save role."
-msgstr "No s'ha pogut desar el rol."
-
-#: js/RoleEditDialog.js:126
-msgid "Deleting role..."
-msgstr "Eliminant el rol..."
-
-#: js/RoleEditDialog.js:272
-msgid "Members"
-msgstr "Membres"
-
-#: js/RoleEditDialog.js:281
-msgid "Rights"
-msgstr "Permisos"
-
-#: js/RoleEditDialog.js:311
-msgid "Role Name"
-msgstr "Nom del rol"
-
-#: js/RoleEditDialog.js:351
-msgid "Loading Role..."
-msgstr "Carregant el rol..."
-
-#: js/RoleEditDialog.js:395
-msgid "Role"
-msgstr "Rol"
-
-#: js/RoleEditDialog.js:405
-msgid "Add New Role"
-msgstr "Afegeix un nou rol"
-
-#: js/RoleEditDialog.js:407
-msgid "Edit Role \"{0}\""
-msgstr "Edita el rol \"{0}\""

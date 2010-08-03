@@ -13,11 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s's лични задачи"
-
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr "организира списък на задачи"
@@ -34,96 +29,14 @@ msgstr ""
 msgid "Create or update shared tasks favorites"
 msgstr ""
 
-#: Model/Task.php:183
-msgid "Due"
+#: Controller/Task.php:166
+msgid "Notification for Task "
 msgstr ""
 
-#: Model/Task.php:184
-msgid "Organizer"
-msgstr ""
-
-#: Model/Task.php:185
-#, fuzzy
-msgid "Description"
-msgstr "Напиши описание"
-
-#: Model/Task.php:186 js/TaskEditDialog.js:189 js/GridPanel.js:163
-msgid "Priority"
-msgstr "Приоритет"
-
-#: Model/Task.php:187 js/TaskEditDialog.js:209 js/GridPanel.js:190
-#: js/Status.js:33
-msgid "Status"
-msgstr "Статус"
-
-#: Model/Task.php:188 js/GridPanel.js:177
-msgid "Percent"
-msgstr "Процент"
-
-#: Model/Task.php:195 js/GridPanel.js:141
-msgid "Lead"
-msgstr ""
-
-#: Model/Task.php:201
-msgid "Telephone"
-msgstr ""
-
-#: Model/Task.php:202
-msgid "Email"
-msgstr ""
-
-#: js/Tasks.js:99
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Задачa"
-msgstr[1] "Задачи"
-
-#: js/Tasks.js:99
-msgid "Tasks"
-msgstr "Задачи"
-
-#: js/Tasks.js:103
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "списък със задачи"
-msgstr[1] "списъка със задачи"
-
-#: js/Tasks.js:103
-msgid "to do lists"
-msgstr "списъци със задачи"
-
-#: js/TaskEditDialog.js:142
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr ""
-
-#: js/TaskEditDialog.js:181 js/GridPanel.js:93 js/GridPanel.js:144
-msgid "Summary"
-msgstr "Общо"
-
-#: js/TaskEditDialog.js:186
-msgid "Due date"
-msgstr "Краен срок"
-
-#: js/TaskEditDialog.js:192
-#, fuzzy
-msgid "Add Responsible ..."
-msgstr "Отговорник"
-
-#: js/TaskEditDialog.js:199
-msgid "Notes"
-msgstr "Бележки"
-
-#: js/TaskEditDialog.js:200
-msgid "Enter description..."
-msgstr "Напиши описание"
-
-#: js/TaskEditDialog.js:205
-msgid "Percentage"
-msgstr "Процент"
-
-#: js/TaskEditDialog.js:213 js/GridPanel.js:211
-msgid "Completed"
-msgstr "Завършен"
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s's лични задачи"
 
 #: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
@@ -134,6 +47,10 @@ msgstr[1] "Наистина ли желаете да изтриете селек
 #: js/GridPanel.js:91
 msgid "Quick search"
 msgstr ""
+
+#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
+msgid "Summary"
+msgstr "Общо"
 
 #: js/GridPanel.js:94 js/GridPanel.js:155
 msgid "Due Date"
@@ -156,13 +73,34 @@ msgstr "Задачата не може да бъде запаметена."
 msgid "Tags"
 msgstr "Задачa"
 
+#: js/GridPanel.js:141 Model/Task.php:195
+msgid "Lead"
+msgstr ""
+
 #: js/GridPanel.js:151
 msgid "Add a task..."
 msgstr "Добави задача"
 
+#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
+msgid "Priority"
+msgstr "Приоритет"
+
+#: js/GridPanel.js:177 Model/Task.php:188
+msgid "Percent"
+msgstr "Процент"
+
+#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
+#: Model/Task.php:187
+msgid "Status"
+msgstr "Статус"
+
 #: js/GridPanel.js:204
 msgid "Creation Time"
 msgstr "Създаден на"
+
+#: js/GridPanel.js:211 js/TaskEditDialog.js:213
+msgid "Completed"
+msgstr "Завършен"
 
 #: js/GridPanel.js:267
 msgid "Show closed"
@@ -171,6 +109,72 @@ msgstr "Покажи приключени задачи"
 #: js/Status.js:187 Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "В ПРОЦЕС"
+
+#: js/TaskEditDialog.js:142
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr ""
+
+#: js/TaskEditDialog.js:186
+msgid "Due date"
+msgstr "Краен срок"
+
+#: js/TaskEditDialog.js:192
+#, fuzzy
+msgid "Add Responsible ..."
+msgstr "Отговорник"
+
+#: js/TaskEditDialog.js:199
+msgid "Notes"
+msgstr "Бележки"
+
+#: js/TaskEditDialog.js:200
+msgid "Enter description..."
+msgstr "Напиши описание"
+
+#: js/TaskEditDialog.js:205
+msgid "Percentage"
+msgstr "Процент"
+
+#: js/Tasks.js:99
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Задачa"
+msgstr[1] "Задачи"
+
+#: js/Tasks.js:99
+msgid "Tasks"
+msgstr "Задачи"
+
+#: js/Tasks.js:103
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "списък със задачи"
+msgstr[1] "списъка със задачи"
+
+#: js/Tasks.js:103
+msgid "to do lists"
+msgstr "списъци със задачи"
+
+#: Model/Task.php:183
+msgid "Due"
+msgstr ""
+
+#: Model/Task.php:184
+msgid "Organizer"
+msgstr ""
+
+#: Model/Task.php:185
+#, fuzzy
+msgid "Description"
+msgstr "Напиши описание"
+
+#: Model/Task.php:201
+msgid "Telephone"
+msgstr ""
+
+#: Model/Task.php:202
+msgid "Email"
+msgstr ""
 
 #: Preference.php:29
 msgid "All my tasks"
@@ -184,11 +188,7 @@ msgstr ""
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr ""
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr ""
-
-#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
 msgid "All tasks of my taskslists"
 msgstr ""
 

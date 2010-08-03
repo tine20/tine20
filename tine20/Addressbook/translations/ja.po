@@ -12,6 +12,23 @@ msgstr ""
 "X-Poedit-Language: Japanese\n"
 "X-Poedit-Country: JAPAN\n"
 
+#: Acl/Rights.php:99
+#, fuzzy
+msgid "manage shared addressbooks"
+msgstr "アドレス帳"
+
+#: Acl/Rights.php:100
+msgid "Create new shared addressbook folders"
+msgstr ""
+
+#: Acl/Rights.php:103
+msgid "manage shared addressbook favorites"
+msgstr ""
+
+#: Acl/Rights.php:104
+msgid "Create or update shared addressbook favorites"
+msgstr ""
+
 #: Controller.php:96
 #, python-format
 msgid "%s's personal addressbook"
@@ -77,8 +94,8 @@ msgstr "秘書の電話番号"
 msgid "Private Contact Data"
 msgstr "プライベートコンタクトデータ"
 
-#: Export/Pdf.php:89 js/Model.js:161 js/Model.js:162 js/Model.js:163
-#: js/ContactEditDialog.js:258
+#: Export/Pdf.php:89 js/ContactEditDialog.js:258 js/Model.js:161
+#: js/Model.js:162 js/Model.js:163
 msgid "Private Address"
 msgstr "自宅の住所"
 
@@ -106,32 +123,15 @@ msgstr "個人のURL"
 msgid "Other Data"
 msgstr "その他の情報"
 
-#: Export/Pdf.php:115 js/Model.js:157 js/ContactEditDialog.js:144
-#: js/ContactGrid.js:128
+#: Export/Pdf.php:115 js/ContactEditDialog.js:144 js/ContactGrid.js:128
+#: js/Model.js:157
 msgid "Birthday"
 msgstr "誕生日"
 
-#: Export/Pdf.php:118 js/Model.js:153 js/ContactEditDialog.js:139
-#: js/ContactGrid.js:100
+#: Export/Pdf.php:118 js/ContactEditDialog.js:139 js/ContactGrid.js:100
+#: js/Model.js:153
 msgid "Job Title"
 msgstr "役職"
-
-#: Acl/Rights.php:99
-#, fuzzy
-msgid "manage shared addressbooks"
-msgstr "アドレス帳"
-
-#: Acl/Rights.php:100
-msgid "Create new shared addressbook folders"
-msgstr ""
-
-#: Acl/Rights.php:103
-msgid "manage shared addressbook favorites"
-msgstr ""
-
-#: Acl/Rights.php:104
-msgid "Create or update shared addressbook favorites"
-msgstr ""
 
 #: js/Addressbook.js:29 js/Model.js:103
 #, fuzzy
@@ -142,131 +142,6 @@ msgstr[0] "アドレス帳"
 #: js/Addressbook.js:54 Setup/setup.xml:546
 msgid "Internal Contacts"
 msgstr "内部コンタクト"
-
-#: js/ContactGridDetailsPanel.js:63 js/Model.js:99
-msgid "Contacts"
-msgstr "コンタクト"
-
-#: js/ContactGridDetailsPanel.js:66
-msgid "Select contact"
-msgstr "コンタクトの選択"
-
-#: js/ContactGridDetailsPanel.js:132 js/Model.js:151
-#: js/ContactEditDialog.js:120 js/ContactEditDialog.js:385
-#: js/ContactGrid.js:98 Setup/setup.xml:608
-msgid "Company"
-msgstr "会社"
-
-#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
-#: js/Model.js:152 js/ContactEditDialog.js:168 js/ContactGrid.js:114
-msgid "Phone"
-msgstr "電話"
-
-#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
-#: js/ContactEditDialog.js:172 js/ContactGrid.js:115
-msgid "Mobile"
-msgstr "携帯電話"
-
-#: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
-#: js/ContactEditDialog.js:176 js/ContactGrid.js:116
-msgid "Fax"
-msgstr "FAX"
-
-#: js/ContactGridDetailsPanel.js:143 js/ContactGridDetailsPanel.js:167
-#: js/ContactEditDialog.js:192
-msgid "E-Mail"
-msgstr "Eメール"
-
-#: js/ContactGridDetailsPanel.js:145 js/ContactGridDetailsPanel.js:169
-#: js/ContactEditDialog.js:203 js/ContactGrid.js:123
-msgid "Web"
-msgstr "Web"
-
-#: js/ContactGridDetailsPanel.js:156
-#, fuzzy
-msgid "Private"
-msgstr "自宅の住所"
-
-#: js/ContactGridDetailsPanel.js:179
-msgid "Info"
-msgstr ""
-
-#: js/SearchCombo.js:92
-msgid "Searching..."
-msgstr ""
-
-#: js/Model.js:99 js/Model.js:144
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "コンタクト"
-
-#: js/Model.js:103
-msgid "Addressbooks"
-msgstr ""
-
-#: js/Model.js:144
-msgid "User Account"
-msgstr ""
-
-#: js/Model.js:147
-msgid "Quick search"
-msgstr ""
-
-#: js/Model.js:149 js/ContactEditDialog.js:104 js/ContactGrid.js:95
-msgid "First Name"
-msgstr "姓"
-
-#: js/Model.js:150 js/ContactEditDialog.js:112 js/ContactEditDialog.js:385
-#: js/ContactGrid.js:94
-msgid "Last Name"
-msgstr "名"
-
-#: js/Model.js:154 js/ContactEditDialog.js:152 js/ContactGrid.js:101
-msgid "Job Role"
-msgstr "仕事の役割"
-
-#: js/Model.js:155 js/ContactGrid.js:125
-msgid "Note"
-msgstr "ノート"
-
-#: js/Model.js:158 js/Model.js:161 js/ContactEditDialog.js:238
-#: js/ContactEditDialog.js:261 js/ContactGrid.js:103
-msgid "Street"
-msgstr "通り"
-
-#: js/Model.js:158 js/Model.js:159 js/Model.js:160 js/ContactEditDialog.js:235
-msgid "Company Address"
-msgstr "会社の住所"
-
-#: js/Model.js:159 js/Model.js:162 js/ContactEditDialog.js:247
-#: js/ContactEditDialog.js:270
-msgid "Postal Code"
-msgstr "郵便番号"
-
-#: js/Model.js:160 js/Model.js:163 js/ContactEditDialog.js:250
-#: js/ContactEditDialog.js:273 js/ContactGrid.js:104
-msgid "City"
-msgstr "市"
-
-#: js/Model.js:164 js/ContactGrid.js:92
-msgid "Type"
-msgstr "タイプ"
-
-#: js/Model.js:165
-msgid "Last modified"
-msgstr ""
-
-#: js/Model.js:166
-msgid "Last modifier"
-msgstr ""
-
-#: js/Model.js:167 js/ContactGrid.js:129
-msgid "Creation Time"
-msgstr ""
-
-#: js/Model.js:168
-msgid "Creator"
-msgstr ""
 
 #: js/ContactEditDialog.js:36 js/ContactEditDialog.js:43
 msgid "Map"
@@ -284,9 +159,24 @@ msgstr "敬称"
 msgid "Title"
 msgstr "タイトル"
 
+#: js/ContactEditDialog.js:104 js/ContactGrid.js:95 js/Model.js:149
+msgid "First Name"
+msgstr "姓"
+
 #: js/ContactEditDialog.js:108
 msgid "Middle Name"
 msgstr "ミドルネーム"
+
+#: js/ContactEditDialog.js:112 js/ContactEditDialog.js:385
+#: js/ContactGrid.js:94 js/Model.js:150
+msgid "Last Name"
+msgstr "名"
+
+#: js/ContactEditDialog.js:120 js/ContactEditDialog.js:385
+#: js/ContactGrid.js:98 js/ContactGridDetailsPanel.js:132 js/Model.js:151
+#: Setup/setup.xml:608
+msgid "Company"
+msgstr "会社"
 
 #: js/ContactEditDialog.js:125 js/ContactGrid.js:99
 msgid "Unit"
@@ -300,9 +190,29 @@ msgstr "表示名"
 msgid "Suffix"
 msgstr "サフィックス"
 
+#: js/ContactEditDialog.js:152 js/ContactGrid.js:101 js/Model.js:154
+msgid "Job Role"
+msgstr "仕事の役割"
+
 #: js/ContactEditDialog.js:163
 msgid "Contact Information"
 msgstr "コンタクト情報"
+
+#: js/ContactEditDialog.js:168 js/ContactGrid.js:114
+#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
+#: js/Model.js:152
+msgid "Phone"
+msgstr "電話"
+
+#: js/ContactEditDialog.js:172 js/ContactGrid.js:115
+#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
+msgid "Mobile"
+msgstr "携帯電話"
+
+#: js/ContactEditDialog.js:176 js/ContactGrid.js:116
+#: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
+msgid "Fax"
+msgstr "FAX"
 
 #: js/ContactEditDialog.js:180 js/ContactGrid.js:119
 msgid "Phone (private)"
@@ -316,9 +226,28 @@ msgstr "携帯電話(プライベート)"
 msgid "Fax (private)"
 msgstr "FAX(プライベート)"
 
+#: js/ContactEditDialog.js:192 js/ContactGridDetailsPanel.js:143
+#: js/ContactGridDetailsPanel.js:167
+msgid "E-Mail"
+msgstr "Eメール"
+
 #: js/ContactEditDialog.js:197
 msgid "E-Mail (private)"
 msgstr "Eメール (プライベート)"
+
+#: js/ContactEditDialog.js:203 js/ContactGrid.js:123
+#: js/ContactGridDetailsPanel.js:145 js/ContactGridDetailsPanel.js:169
+msgid "Web"
+msgstr "Web"
+
+#: js/ContactEditDialog.js:235 js/Model.js:158 js/Model.js:159 js/Model.js:160
+msgid "Company Address"
+msgstr "会社の住所"
+
+#: js/ContactEditDialog.js:238 js/ContactEditDialog.js:261
+#: js/ContactGrid.js:103 js/Model.js:158 js/Model.js:161
+msgid "Street"
+msgstr "通り"
 
 #: js/ContactEditDialog.js:241 js/ContactEditDialog.js:264
 msgid "Street 2"
@@ -328,6 +257,16 @@ msgstr "通り（２）"
 #: js/ContactGrid.js:105
 msgid "Region"
 msgstr "リージョン"
+
+#: js/ContactEditDialog.js:247 js/ContactEditDialog.js:270 js/Model.js:159
+#: js/Model.js:162
+msgid "Postal Code"
+msgstr "郵便番号"
+
+#: js/ContactEditDialog.js:250 js/ContactEditDialog.js:273
+#: js/ContactGrid.js:104 js/Model.js:160 js/Model.js:163
+msgid "City"
+msgstr "市"
 
 #: js/ContactEditDialog.js:254 js/ContactEditDialog.js:277
 #: js/ContactGrid.js:107
@@ -350,6 +289,10 @@ msgstr "PDFにエキスポートする"
 #: js/ContactEditDialog.js:385
 msgid "Either {0} or {1} must be given"
 msgstr ""
+
+#: js/ContactGrid.js:92 js/Model.js:164
+msgid "Type"
+msgstr "タイプ"
 
 #: js/ContactGrid.js:93
 msgid "Tags"
@@ -399,6 +342,10 @@ msgstr "Eメール(プライベート)"
 msgid "URL (private)"
 msgstr "URL（プライベート）"
 
+#: js/ContactGrid.js:125 js/Model.js:155
+msgid "Note"
+msgstr "ノート"
+
 #: js/ContactGrid.js:126
 msgid "Timezone"
 msgstr "タイムゾーン"
@@ -406,6 +353,10 @@ msgstr "タイムゾーン"
 #: js/ContactGrid.js:127
 msgid "Geo"
 msgstr "ジオ"
+
+#: js/ContactGrid.js:129 js/Model.js:167
+msgid "Creation Time"
+msgstr ""
 
 #: js/ContactGrid.js:130
 msgid "Last Modified Time"
@@ -466,6 +417,56 @@ msgstr "個人携帯"
 msgid "Internal Contact"
 msgstr "内部コンタクト"
 
+#: js/ContactGridDetailsPanel.js:63 js/Model.js:99
+msgid "Contacts"
+msgstr "コンタクト"
+
+#: js/ContactGridDetailsPanel.js:66
+msgid "Select contact"
+msgstr "コンタクトの選択"
+
+#: js/ContactGridDetailsPanel.js:156
+#, fuzzy
+msgid "Private"
+msgstr "自宅の住所"
+
+#: js/ContactGridDetailsPanel.js:179
+msgid "Info"
+msgstr ""
+
+#: js/Model.js:99 js/Model.js:144
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "コンタクト"
+
+#: js/Model.js:103
+msgid "Addressbooks"
+msgstr ""
+
+#: js/Model.js:144
+msgid "User Account"
+msgstr ""
+
+#: js/Model.js:147
+msgid "Quick search"
+msgstr ""
+
+#: js/Model.js:165
+msgid "Last modified"
+msgstr ""
+
+#: js/Model.js:166
+msgid "Last modifier"
+msgstr ""
+
+#: js/Model.js:168
+msgid "Creator"
+msgstr ""
+
+#: js/SearchCombo.js:92
+msgid "Searching..."
+msgstr ""
+
 #: Preference.php:34
 msgid "All contacts"
 msgstr ""
@@ -487,7 +488,7 @@ msgstr ""
 msgid "The default favorite which is loaded on addressbook startup"
 msgstr ""
 
-#: Setup/Update/Release3.php:38 Setup/Initialize.php:51
+#: Setup/Initialize.php:51 Setup/Update/Release3.php:38
 msgid "All contacts I have read grants for"
 msgstr ""
 

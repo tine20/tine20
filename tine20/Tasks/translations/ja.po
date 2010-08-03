@@ -12,11 +12,6 @@ msgstr ""
 "X-Poedit-Language: Japanese\n"
 "X-Poedit-Country: JAPAN\n"
 
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s のパーソナルタスク"
-
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr ""
@@ -33,94 +28,14 @@ msgstr ""
 msgid "Create or update shared tasks favorites"
 msgstr ""
 
-#: Model/Task.php:183
-msgid "Due"
+#: Controller/Task.php:166
+msgid "Notification for Task "
 msgstr ""
 
-#: Model/Task.php:184
-msgid "Organizer"
-msgstr ""
-
-#: Model/Task.php:185
-#, fuzzy
-msgid "Description"
-msgstr "説明を入力してください..."
-
-#: Model/Task.php:186 js/TaskEditDialog.js:189 js/GridPanel.js:163
-msgid "Priority"
-msgstr "重要度"
-
-#: Model/Task.php:187 js/TaskEditDialog.js:209 js/GridPanel.js:190
-#: js/Status.js:33
-msgid "Status"
-msgstr "ステータス"
-
-#: Model/Task.php:188 js/GridPanel.js:177
-msgid "Percent"
-msgstr "パーセント"
-
-#: Model/Task.php:195 js/GridPanel.js:141
-msgid "Lead"
-msgstr ""
-
-#: Model/Task.php:201
-msgid "Telephone"
-msgstr ""
-
-#: Model/Task.php:202
-msgid "Email"
-msgstr ""
-
-#: js/Tasks.js:99
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "タスク"
-
-#: js/Tasks.js:99
-msgid "Tasks"
-msgstr "タスク"
-
-#: js/Tasks.js:103
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "ToDoリスト"
-
-#: js/Tasks.js:103
-msgid "to do lists"
-msgstr "ToDoリスト"
-
-#: js/TaskEditDialog.js:142
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr ""
-
-#: js/TaskEditDialog.js:181 js/GridPanel.js:93 js/GridPanel.js:144
-msgid "Summary"
-msgstr "サマリー"
-
-#: js/TaskEditDialog.js:186
-msgid "Due date"
-msgstr "期日"
-
-#: js/TaskEditDialog.js:192
-#, fuzzy
-msgid "Add Responsible ..."
-msgstr "責任担当"
-
-#: js/TaskEditDialog.js:199
-msgid "Notes"
-msgstr "ノート"
-
-#: js/TaskEditDialog.js:200
-msgid "Enter description..."
-msgstr "説明を入力してください..."
-
-#: js/TaskEditDialog.js:205
-msgid "Percentage"
-msgstr "割合"
-
-#: js/TaskEditDialog.js:213 js/GridPanel.js:211
-msgid "Completed"
-msgstr "完了"
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s のパーソナルタスク"
 
 #: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
@@ -130,6 +45,10 @@ msgstr[0] "選択されたタスクを本当に削除しますか？"
 #: js/GridPanel.js:91
 msgid "Quick search"
 msgstr ""
+
+#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
+msgid "Summary"
+msgstr "サマリー"
 
 #: js/GridPanel.js:94 js/GridPanel.js:155
 msgid "Due Date"
@@ -152,13 +71,34 @@ msgstr "タスクの保存に失敗しました"
 msgid "Tags"
 msgstr "タスク"
 
+#: js/GridPanel.js:141 Model/Task.php:195
+msgid "Lead"
+msgstr ""
+
 #: js/GridPanel.js:151
 msgid "Add a task..."
 msgstr "タスクを追加しています..."
 
+#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
+msgid "Priority"
+msgstr "重要度"
+
+#: js/GridPanel.js:177 Model/Task.php:188
+msgid "Percent"
+msgstr "パーセント"
+
+#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
+#: Model/Task.php:187
+msgid "Status"
+msgstr "ステータス"
+
 #: js/GridPanel.js:204
 msgid "Creation Time"
 msgstr "作成時間"
+
+#: js/GridPanel.js:211 js/TaskEditDialog.js:213
+msgid "Completed"
+msgstr "完了"
 
 #: js/GridPanel.js:267
 msgid "Show closed"
@@ -167,6 +107,70 @@ msgstr "クローズされたものの表示"
 #: js/Status.js:187 Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "進行中"
+
+#: js/TaskEditDialog.js:142
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr ""
+
+#: js/TaskEditDialog.js:186
+msgid "Due date"
+msgstr "期日"
+
+#: js/TaskEditDialog.js:192
+#, fuzzy
+msgid "Add Responsible ..."
+msgstr "責任担当"
+
+#: js/TaskEditDialog.js:199
+msgid "Notes"
+msgstr "ノート"
+
+#: js/TaskEditDialog.js:200
+msgid "Enter description..."
+msgstr "説明を入力してください..."
+
+#: js/TaskEditDialog.js:205
+msgid "Percentage"
+msgstr "割合"
+
+#: js/Tasks.js:99
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "タスク"
+
+#: js/Tasks.js:99
+msgid "Tasks"
+msgstr "タスク"
+
+#: js/Tasks.js:103
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "ToDoリスト"
+
+#: js/Tasks.js:103
+msgid "to do lists"
+msgstr "ToDoリスト"
+
+#: Model/Task.php:183
+msgid "Due"
+msgstr ""
+
+#: Model/Task.php:184
+msgid "Organizer"
+msgstr ""
+
+#: Model/Task.php:185
+#, fuzzy
+msgid "Description"
+msgstr "説明を入力してください..."
+
+#: Model/Task.php:201
+msgid "Telephone"
+msgstr ""
+
+#: Model/Task.php:202
+msgid "Email"
+msgstr ""
 
 #: Preference.php:29
 msgid "All my tasks"
@@ -180,11 +184,7 @@ msgstr ""
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr ""
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr ""
-
-#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
 msgid "All tasks of my taskslists"
 msgstr ""
 

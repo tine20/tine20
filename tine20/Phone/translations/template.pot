@@ -1,12 +1,18 @@
-#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
-msgid "Edit phone settings"
-msgstr ""
-
-#: js/Phone.js:58 js/Phone.js:253 js/Models.js:70
+#: js/Models.js:70 js/Phone.js:58 js/Phone.js:253
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] ""
 msgstr[1] ""
+
+#: js/Models.js:74
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
+msgid "Edit phone settings"
+msgstr ""
 
 #: js/Phone.js:69
 msgid "Phones"
@@ -111,9 +117,3 @@ msgstr ""
 #: js/Phone.js:700
 msgid "Call ID"
 msgstr ""
-
-#: js/Models.js:74
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] ""
-msgstr[1] ""

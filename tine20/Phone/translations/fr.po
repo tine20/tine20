@@ -12,16 +12,22 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
-msgid "Edit phone settings"
-msgstr "Éditer les paramètres de téléphone"
-
-#: js/Phone.js:58 js/Phone.js:253 js/Models.js:70
+#: js/Models.js:70 js/Phone.js:58 js/Phone.js:253
 #, fuzzy
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Téléphone"
 msgstr[1] "Téléphone"
+
+#: js/Models.js:74
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
+msgid "Edit phone settings"
+msgstr "Éditer les paramètres de téléphone"
 
 #: js/Phone.js:69
 msgid "Phones"
@@ -126,12 +132,6 @@ msgstr "Appel"
 #: js/Phone.js:700
 msgid "Call ID"
 msgstr "ID d'appel"
-
-#: js/Models.js:74
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] ""
-msgstr[1] ""
 
 #~ msgid "Dial phone number"
 #~ msgstr "Composer un numéro"

@@ -13,11 +13,6 @@ msgstr ""
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "Tareas personales de %s"
-
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr "administrar lista de tareas compartidas"
@@ -34,94 +29,14 @@ msgstr ""
 msgid "Create or update shared tasks favorites"
 msgstr ""
 
-#: Model/Task.php:183
-msgid "Due"
-msgstr "Apta"
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Notificación por Tarea"
 
-#: Model/Task.php:184
-msgid "Organizer"
-msgstr "Organizador"
-
-#: Model/Task.php:185
-msgid "Description"
-msgstr "Descripción"
-
-#: Model/Task.php:186 js/TaskEditDialog.js:189 js/GridPanel.js:163
-msgid "Priority"
-msgstr "Prioridad"
-
-#: Model/Task.php:187 js/TaskEditDialog.js:209 js/GridPanel.js:190
-#: js/Status.js:33
-msgid "Status"
-msgstr "Estado"
-
-#: Model/Task.php:188 js/GridPanel.js:177
-msgid "Percent"
-msgstr "Porcentaje"
-
-#: Model/Task.php:195 js/GridPanel.js:141
-msgid "Lead"
-msgstr ""
-
-#: Model/Task.php:201
-msgid "Telephone"
-msgstr ""
-
-#: Model/Task.php:202
-msgid "Email"
-msgstr ""
-
-#: js/Tasks.js:99
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Tarea"
-msgstr[1] "Tareas"
-
-#: js/Tasks.js:99
-msgid "Tasks"
-msgstr "Tareas"
-
-#: js/Tasks.js:103
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "lista para hacer"
-msgstr[1] "listas para hacer"
-
-#: js/Tasks.js:103
-msgid "to do lists"
-msgstr "listas para hacer"
-
-#: js/TaskEditDialog.js:142
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr ""
-
-#: js/TaskEditDialog.js:181 js/GridPanel.js:93 js/GridPanel.js:144
-msgid "Summary"
-msgstr "Resumen"
-
-#: js/TaskEditDialog.js:186
-msgid "Due date"
-msgstr "Fecha apta"
-
-#: js/TaskEditDialog.js:192
-msgid "Add Responsible ..."
-msgstr "Agregar Responsable..."
-
-#: js/TaskEditDialog.js:199
-msgid "Notes"
-msgstr "Notas"
-
-#: js/TaskEditDialog.js:200
-msgid "Enter description..."
-msgstr "Escribir descripción..."
-
-#: js/TaskEditDialog.js:205
-msgid "Percentage"
-msgstr "Porcentaje"
-
-#: js/TaskEditDialog.js:213 js/GridPanel.js:211
-msgid "Completed"
-msgstr "Completado"
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "Tareas personales de %s"
 
 #: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
@@ -132,6 +47,10 @@ msgstr[1] "¿Realmente desea borrar las tareas seleccionadas?"
 #: js/GridPanel.js:91
 msgid "Quick search"
 msgstr "Búsqueda Rápida"
+
+#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
+msgid "Summary"
+msgstr "Resumen"
 
 #: js/GridPanel.js:94 js/GridPanel.js:155
 msgid "Due Date"
@@ -153,13 +72,34 @@ msgstr "No se pudo guardar la tarea."
 msgid "Tags"
 msgstr "Etiquetas"
 
+#: js/GridPanel.js:141 Model/Task.php:195
+msgid "Lead"
+msgstr ""
+
 #: js/GridPanel.js:151
 msgid "Add a task..."
 msgstr "Agregar una tarea..."
 
+#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
+msgid "Priority"
+msgstr "Prioridad"
+
+#: js/GridPanel.js:177 Model/Task.php:188
+msgid "Percent"
+msgstr "Porcentaje"
+
+#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
+#: Model/Task.php:187
+msgid "Status"
+msgstr "Estado"
+
 #: js/GridPanel.js:204
 msgid "Creation Time"
 msgstr "Fecha de Creación"
+
+#: js/GridPanel.js:211 js/TaskEditDialog.js:213
+msgid "Completed"
+msgstr "Completado"
 
 #: js/GridPanel.js:267
 msgid "Show closed"
@@ -168,6 +108,70 @@ msgstr "Visualización Cerrada"
 #: js/Status.js:187 Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "EN-PROCESO"
+
+#: js/TaskEditDialog.js:142
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr ""
+
+#: js/TaskEditDialog.js:186
+msgid "Due date"
+msgstr "Fecha apta"
+
+#: js/TaskEditDialog.js:192
+msgid "Add Responsible ..."
+msgstr "Agregar Responsable..."
+
+#: js/TaskEditDialog.js:199
+msgid "Notes"
+msgstr "Notas"
+
+#: js/TaskEditDialog.js:200
+msgid "Enter description..."
+msgstr "Escribir descripción..."
+
+#: js/TaskEditDialog.js:205
+msgid "Percentage"
+msgstr "Porcentaje"
+
+#: js/Tasks.js:99
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Tarea"
+msgstr[1] "Tareas"
+
+#: js/Tasks.js:99
+msgid "Tasks"
+msgstr "Tareas"
+
+#: js/Tasks.js:103
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "lista para hacer"
+msgstr[1] "listas para hacer"
+
+#: js/Tasks.js:103
+msgid "to do lists"
+msgstr "listas para hacer"
+
+#: Model/Task.php:183
+msgid "Due"
+msgstr "Apta"
+
+#: Model/Task.php:184
+msgid "Organizer"
+msgstr "Organizador"
+
+#: Model/Task.php:185
+msgid "Description"
+msgstr "Descripción"
+
+#: Model/Task.php:201
+msgid "Telephone"
+msgstr ""
+
+#: Model/Task.php:202
+msgid "Email"
+msgstr ""
 
 #: Preference.php:29
 msgid "All my tasks"
@@ -181,11 +185,7 @@ msgstr ""
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr ""
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Notificación por Tarea"
-
-#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
 msgid "All tasks of my taskslists"
 msgstr ""
 

@@ -16,11 +16,6 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: Tasks\n"
 
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s личные задания"
-
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr ""
@@ -37,43 +32,112 @@ msgstr ""
 msgid "Create or update shared tasks favorites"
 msgstr ""
 
-#: Model/Task.php:183
-msgid "Due"
+#: Controller/Task.php:166
+msgid "Notification for Task "
 msgstr ""
 
-#: Model/Task.php:184
-msgid "Organizer"
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s личные задания"
+
+#: js/GridPanel.js:56
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Вы действительно хотите удалить выбранное задание"
+msgstr[1] "Вы действительно хотите удалить выбранные задания"
+msgstr[2] "Вы действительно хотите удалить выбранных заданий"
+
+#: js/GridPanel.js:91
+msgid "Quick search"
 msgstr ""
 
-#: Model/Task.php:185
+#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
+msgid "Summary"
+msgstr "Сводка"
+
+#: js/GridPanel.js:94 js/GridPanel.js:155
+msgid "Due Date"
+msgstr "Дата завершения"
+
+#: js/GridPanel.js:96 js/GridPanel.js:218
+msgid "Responsible"
+msgstr "Ответственный"
+
+#: js/GridPanel.js:121
+msgid "Failed"
+msgstr "Сбой"
+
+#: js/GridPanel.js:121
+msgid "Could not save task."
+msgstr "Не удалось сохранить задание."
+
+#: js/GridPanel.js:140
 #, fuzzy
-msgid "Description"
-msgstr "Введите описание..."
+msgid "Tags"
+msgstr "Задание"
 
-#: Model/Task.php:186 js/TaskEditDialog.js:189 js/GridPanel.js:163
-msgid "Priority"
-msgstr "Приоритет"
-
-#: Model/Task.php:187 js/TaskEditDialog.js:209 js/GridPanel.js:190
-#: js/Status.js:33
-msgid "Status"
-msgstr "Статус"
-
-#: Model/Task.php:188 js/GridPanel.js:177
-msgid "Percent"
-msgstr "Процент"
-
-#: Model/Task.php:195 js/GridPanel.js:141
+#: js/GridPanel.js:141 Model/Task.php:195
 msgid "Lead"
 msgstr ""
 
-#: Model/Task.php:201
-msgid "Telephone"
+#: js/GridPanel.js:151
+msgid "Add a task..."
+msgstr "Добавить задание..."
+
+#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
+msgid "Priority"
+msgstr "Приоритет"
+
+#: js/GridPanel.js:177 Model/Task.php:188
+msgid "Percent"
+msgstr "Процент"
+
+#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
+#: Model/Task.php:187
+msgid "Status"
+msgstr "Статус"
+
+#: js/GridPanel.js:204
+msgid "Creation Time"
+msgstr "Время создания"
+
+#: js/GridPanel.js:211 js/TaskEditDialog.js:213
+msgid "Completed"
+msgstr "Закончено"
+
+#: js/GridPanel.js:267
+msgid "Show closed"
+msgstr "Показать закрытые"
+
+#: js/Status.js:187 Setup/setup.xml:339
+msgid "IN-PROCESS"
+msgstr "НЕЗАВЕРШЕННЫЙ"
+
+#: js/TaskEditDialog.js:142
+msgid "You have to supply a due date, because an alarm ist set!"
 msgstr ""
 
-#: Model/Task.php:202
-msgid "Email"
-msgstr ""
+#: js/TaskEditDialog.js:186
+msgid "Due date"
+msgstr "Дата завершения"
+
+#: js/TaskEditDialog.js:192
+#, fuzzy
+msgid "Add Responsible ..."
+msgstr "Ответственный"
+
+#: js/TaskEditDialog.js:199
+msgid "Notes"
+msgstr "Примечания"
+
+#: js/TaskEditDialog.js:200
+msgid "Enter description..."
+msgstr "Введите описание..."
+
+#: js/TaskEditDialog.js:205
+msgid "Percentage"
+msgstr "Процентное отношение"
 
 #: js/Tasks.js:99
 msgid "Task"
@@ -97,86 +161,26 @@ msgstr[2] "списков работ"
 msgid "to do lists"
 msgstr "списки работ"
 
-#: js/TaskEditDialog.js:142
-msgid "You have to supply a due date, because an alarm ist set!"
+#: Model/Task.php:183
+msgid "Due"
 msgstr ""
 
-#: js/TaskEditDialog.js:181 js/GridPanel.js:93 js/GridPanel.js:144
-msgid "Summary"
-msgstr "Сводка"
+#: Model/Task.php:184
+msgid "Organizer"
+msgstr ""
 
-#: js/TaskEditDialog.js:186
-msgid "Due date"
-msgstr "Дата завершения"
-
-#: js/TaskEditDialog.js:192
+#: Model/Task.php:185
 #, fuzzy
-msgid "Add Responsible ..."
-msgstr "Ответственный"
-
-#: js/TaskEditDialog.js:199
-msgid "Notes"
-msgstr "Примечания"
-
-#: js/TaskEditDialog.js:200
-msgid "Enter description..."
+msgid "Description"
 msgstr "Введите описание..."
 
-#: js/TaskEditDialog.js:205
-msgid "Percentage"
-msgstr "Процентное отношение"
-
-#: js/TaskEditDialog.js:213 js/GridPanel.js:211
-msgid "Completed"
-msgstr "Закончено"
-
-#: js/GridPanel.js:56
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Вы действительно хотите удалить выбранное задание"
-msgstr[1] "Вы действительно хотите удалить выбранные задания"
-msgstr[2] "Вы действительно хотите удалить выбранных заданий"
-
-#: js/GridPanel.js:91
-msgid "Quick search"
+#: Model/Task.php:201
+msgid "Telephone"
 msgstr ""
 
-#: js/GridPanel.js:94 js/GridPanel.js:155
-msgid "Due Date"
-msgstr "Дата завершения"
-
-#: js/GridPanel.js:96 js/GridPanel.js:218
-msgid "Responsible"
-msgstr "Ответственный"
-
-#: js/GridPanel.js:121
-msgid "Failed"
-msgstr "Сбой"
-
-#: js/GridPanel.js:121
-msgid "Could not save task."
-msgstr "Не удалось сохранить задание."
-
-#: js/GridPanel.js:140
-#, fuzzy
-msgid "Tags"
-msgstr "Задание"
-
-#: js/GridPanel.js:151
-msgid "Add a task..."
-msgstr "Добавить задание..."
-
-#: js/GridPanel.js:204
-msgid "Creation Time"
-msgstr "Время создания"
-
-#: js/GridPanel.js:267
-msgid "Show closed"
-msgstr "Показать закрытые"
-
-#: js/Status.js:187 Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "НЕЗАВЕРШЕННЫЙ"
+#: Model/Task.php:202
+msgid "Email"
+msgstr ""
 
 #: Preference.php:29
 msgid "All my tasks"
@@ -190,11 +194,7 @@ msgstr ""
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr ""
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr ""
-
-#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
 msgid "All tasks of my taskslists"
 msgstr ""
 
