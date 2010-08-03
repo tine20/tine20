@@ -188,6 +188,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         this.initTimeScale();
         this.initTemplates();
+        
+        Tine.Tinebase.appMgr.on('activate', this.onAppActivate, this);
     },
     
     /**
@@ -622,6 +624,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         //this.ds.fireEvent.call(this.ds, 'add', this.ds, [event], this.ds.indexOf(event));
     },
     
+    onAppActivate: function(app) {
+        if (app === this.app) {
+            this.scrollToNow();
+        }
+    },
     
     onResize: function(e) {
         // redraw whole day events
