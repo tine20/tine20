@@ -153,7 +153,28 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             access: 0,
             handler: this.updateAccessHandler
         });
-        return ['-', this.internetOnButton, this.internetOffButton, '-', this.fileserverOnButton, this.fileserverOffButton];
+        return [
+            Ext.apply(new Ext.Button(this.internetOnButton), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            }),
+            Ext.apply(new Ext.Button(this.internetOffButton), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            }),
+            Ext.apply(new Ext.Button(this.fileserverOnButton), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            }),
+            Ext.apply(new Ext.Button(this.fileserverOffButton), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            })
+        ];
     },
     
     /**

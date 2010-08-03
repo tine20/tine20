@@ -10,6 +10,10 @@
  */
  
 Ext.namespace('Tine.Courses');
+Tine.Courses.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
+    activeContentType: 'Course',
+    westPanelXType: 'tine.courses.treepanel'
+});
 
 Tine.Courses.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
     
@@ -65,27 +69,45 @@ Tine.Courses.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
     
     /**
      * returns a filter plugin to be used in a grid
-     * 
-     * ???
      */
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
             var scope = this;
-            this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
-                getValue: function() {
-                    var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
-                    return [
-                        //{field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
-                        //{field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
-                        //{field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
-                    ];
-                }
-            });
+            this.filterPlugin = new Tine.widgets.grid.FilterPlugin({});
         }
         
         return this.filterPlugin;
+    },
+    
+    getFavoritesPanel: function() {
+        return this;
     }
+    
+    /**
+     * returns a filter plugin to be used in a grid
+     * 
+     * ???
+     */
+//    getFilterPlugin: function() {
+//        if (!this.filterPlugin) {
+//            var scope = this;
+//            this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
+//                getValue: function() {
+//                    var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
+//                    return [
+//                        //{field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
+//                        //{field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
+//                        //{field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
+//                    ];
+//                }
+//            });
+//        }
+//        
+//        return this.filterPlugin;
+//    }
 });
+
+Ext.reg('tine.courses.treepanel', Tine.Courses.TreePanel);
 
 //Tine.Courses.FilterPanel = Tine.widgets.persistentfilter.PickerPanel
 
