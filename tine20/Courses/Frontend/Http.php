@@ -30,7 +30,6 @@ class Courses_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         return array(
             'Courses/js/Models.js',
             'Courses/js/Courses.js',
-            //'Courses/js/MainScreen.js',
             'Courses/js/CourseGridPanel.js',
             'Courses/js/CourseEditDialog.js',
         );
