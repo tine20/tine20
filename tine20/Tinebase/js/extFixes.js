@@ -1,4 +1,62 @@
 /**
+ * for some reasons the original fix insertes two <br>'s on enter for webkit. But this is one to much
+ */
+Ext.apply(Ext.form.HtmlEditor.prototype, {
+        fixKeys : function(){ // load time branching for fastest keydown performance
+        if(Ext.isIE){
+            return function(e){
+                var k = e.getKey(),
+                    doc = this.getDoc(),
+                        r;
+                if(k == e.TAB){
+                    e.stopEvent();
+                    r = doc.selection.createRange();
+                    if(r){
+                        r.collapse(true);
+                        r.pasteHTML('&nbsp;&nbsp;&nbsp;&nbsp;');
+                        this.deferFocus();
+                    }
+                }else if(k == e.ENTER){
+                    r = doc.selection.createRange();
+                    if(r){
+                        var target = r.parentElement();
+                        if(!target || target.tagName.toLowerCase() != 'li'){
+                            e.stopEvent();
+                            r.pasteHTML('<br />');
+                            r.collapse(false);
+                            r.select();
+                        }
+                    }
+                }
+            };
+        }else if(Ext.isOpera){
+            return function(e){
+                var k = e.getKey();
+                if(k == e.TAB){
+                    e.stopEvent();
+                    this.win.focus();
+                    this.execCmd('InsertHTML','&nbsp;&nbsp;&nbsp;&nbsp;');
+                    this.deferFocus();
+                }
+            };
+        }else if(Ext.isWebKit){
+            return function(e){
+                var k = e.getKey();
+                if(k == e.TAB){
+                    e.stopEvent();
+                    this.execCmd('InsertText','\t');
+                    this.deferFocus();
+                }else if(k == e.ENTER){
+                    e.stopEvent();
+                    this.execCmd('InsertHtml','<br />');
+                    this.deferFocus();
+                }
+             };
+        }
+    }()
+});
+
+/**
  * fix broken ext email validator
  * 
  * @type RegExp
