@@ -77,6 +77,12 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
     modelName: null,
     
     /**
+     * id of last transaction
+     * @property transId
+     */
+    transId: null,
+    
+    /**
      * Aborts any outstanding request.
      * @param {Number} transactionId (Optional) defaults to the last transaction
      */
@@ -399,7 +405,9 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
             requestOptions.timeout = options.timeout;
         }
         
-        return Ext.Ajax.request(requestOptions);
+        this.transId = Ext.Ajax.request(requestOptions);
+        
+        return this.transId;
     },
     
     /**
