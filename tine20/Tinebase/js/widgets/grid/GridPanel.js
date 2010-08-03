@@ -173,6 +173,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     getViewRowClass: null,
     
+    /**
+     * @property storeLoadTransactionId 
+     * @type String
+     */
+    storeLoadTransactionId: null,
+    
     layout: 'border',
     border: false,
     stateful: true,
@@ -536,7 +542,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }, this);
         }
         
+//        if (this.storeLoadTransactionId && ! this.recordProxy.isLoading(this.storeLoadTransactionId)) {
+//            this.recordProxy.abort(this.storeLoadTransactionId);
+//        }
+        
         this.store.load(opts);
+        
+//        this.storeLoadTransactionId = this.recordProxy.transId;
     },
     
     getActionToolbar: function() {
