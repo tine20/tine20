@@ -259,20 +259,6 @@ class Felamimail_Message extends Zend_Mail_Message
         
         return $result;
     }
-        
-    /**
-     * remove all html entities
-     *
-     * @param string $_content
-     * @return string
-     */
-    public static function removeHtml($_content)
-    {
-        $result = strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $_content));
-        $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
-        
-        return $result;
-    }
     
     /**
      * create Felamimail message from Zend_Mail_Message
