@@ -85,11 +85,17 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
         contentType = contentType || this.getActiveContentType();
         
         if (! this[contentType + this.centerPanelClassNameSuffix]) {
-            this[contentType + this.centerPanelClassNameSuffix] = new Tine[this.app.appName][contentType + this.centerPanelClassNameSuffix]({
-                app: this.app,
-                //plugins: [this.getContainerTreePanel().getFilterPlugin()]
-                plugins: [this.getWestPanel().getFilterPlugin(contentType)]
-            });
+            try {
+                this[contentType + this.centerPanelClassNameSuffix] = new Tine[this.app.appName][contentType + this.centerPanelClassNameSuffix]({
+                    app: this.app,
+                    //plugins: [this.getContainerTreePanel().getFilterPlugin()]
+                    plugins: [this.getWestPanel().getFilterPlugin(contentType)]
+                });
+            } catch (e) {
+                Tine.log.err('Could not create centerPanel "Tine.' + this.app.appName + '.' + contentType + this.centerPanelClassNameSuffix + '"');
+                Tine.log.err(e);
+                this[contentType + this.centerPanelClassNameSuffix] = new Ext.Panel({html: 'ERROR'});
+            }
         }
         
         return this[contentType + this.centerPanelClassNameSuffix];
@@ -117,7 +123,13 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
         contentType = contentType || this.getActiveContentType();
         
         if (! this[contentType + 'ActionToolbar']) {
-            this[contentType + 'ActionToolbar'] = this[contentType + this.centerPanelClassNameSuffix].getActionToolbar();
+            try {
+                this[contentType + 'ActionToolbar'] = this[contentType + this.centerPanelClassNameSuffix].getActionToolbar();
+            } catch (e) {
+                Tine.log.err('Could not create northPanel');
+                Tine.log.err(e);
+                this[contentType + 'ActionToolbar'] = new Ext.Panel({html: 'ERROR'});
+            }
         }
         
         return this[contentType + 'ActionToolbar'];
@@ -132,9 +144,15 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
      */
     getWestPanel: function() {
         if (! this.westPanel) {
-            this.westPanel = Ext.ComponentMgr.create({
-                app: this.app
-            }, this.westPanelXType);
+            try {
+                this.westPanel = Ext.ComponentMgr.create({
+                    app: this.app
+                }, this.westPanelXType);
+            } catch (e) {
+                Tine.log.err('Could not create westPanel');
+                Tine.log.err(e);
+                this.westPanel = new Ext.Panel({html: 'ERROR'});
+            }
         }
         
         return this.westPanel;
