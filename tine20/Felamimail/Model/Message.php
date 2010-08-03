@@ -66,6 +66,13 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     const EMAIL_ADDRESS_REGEXP = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i'; 
     
     /**
+     * quote string ("> ")
+     * 
+     * @var string
+     */
+    const QUOTE = '&gt; ';
+    
+    /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 
@@ -453,5 +460,85 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                 $recordData[$field] = array_unique($recipients);
             }
         }
+    }    
+
+    /**
+     * get body as plain text with replaced blockquotes, stripped tags and replaced <br>s
+     * 
+     * @return string
+     */
+    public function getPlainTextBody()
+    {
+        $result = '';
+        
+        // check if tidy is installed. if not just strip the tags and replace <br>s
+        if (extension_loaded('tidy')) {
+            $tidy = tidy_parse_string($this->body, array(), 'utf8');
+            $result = $this->_addQuotesAndStripTags($tidy->body());
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                . ' Extension "tidy" not found. You need to install/activate it to transform blockquotes in plaintext emails.');
+            $result = strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $this->body));
+        }
+        
+        $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
+        
+        return $result;
+    }
+    
+    /**
+     * convert blockquotes to quotes ("> ") and strip tags
+     * 
+     * this function uses tidy to recursivly walk the dom tree of the html mail
+     * @see http://php.net/manual/de/tidy.root.php
+     * 
+     * @param tidyNode $_node
+     * @param integer $_quoteIndent
+     * @return string
+     * 
+     * @todo we can transform more tags here, i.e. the <strong>BOLDTEXT</strong> tag could be replaced with *BOLDTEXT*
+     */
+    protected function _addQuotesAndStripTags($_node, $_quoteIndent = 0) {
+        
+        $result = '';
+        
+        if ($_node->hasChildren()) {
+            $quoted = FALSE;
+            $lastChild = NULL;
+            foreach ($_node->child as $child) {
+                if (! $child->name) { 
+                    // leaf -> add quotes and append to content string
+                    if ($_quoteIndent > 0) {
+                        $result .= str_repeat(self::QUOTE, $_quoteIndent);
+                        $quoted = TRUE;
+                    }
+                    $result .= $child->value;
+                    
+                } else if ($child->name == 'blockquote') {
+                    // new blockquote -> increase quote indention
+                    $_quoteIndent++;
+                    
+                } else if ($child->name == 'br') {
+                    // reset quoted state on newline
+                    if ($lastChild !== NULL && $lastChild->name == 'br') {
+                        // add quotes to repeating newlines
+                        $result .= str_repeat(self::QUOTE, $_quoteIndent);
+                    }
+                    $result .= "\n";
+                    $quoted = FALSE;
+                }
+                
+                $result .= $this->_addQuotesAndStripTags($child, $_quoteIndent);
+                
+                if ($child->name == 'blockquote') {
+                    // close blockquote -> decrease quote indention
+                    $_quoteIndent--;
+                }
+                
+                $lastChild = $child;
+            }
+        }
+        
+        return $result;
     }    
 }
