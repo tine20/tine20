@@ -250,26 +250,21 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     {
         $this->resolveCredentials(FALSE, TRUE, TRUE);
         
-        if ($this->type == self::TYPE_SYSTEM) {
-            // add values from config to empty fields
-            $result = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
-        }
-        
         if ($this->smtp_hostname) {
             $result['hostname'] = $this->smtp_hostname; 
         }
         
         if ($this->smtp_user) {
             $result['username'] = $this->smtp_user; 
-            
-            // add domain
-            if (isset($result['primarydomain']) && ! empty($result['primarydomain'])) {            
-                $result['username'] .= '@' . $result['primarydomain'];                
-            }
         }
         
         if ($this->smtp_password) {
             $result['password'] = $this->smtp_password; 
+        }
+        
+        if ($this->type == self::TYPE_SYSTEM) {
+            // add values from config to empty fields
+            $result = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
         }
         
         if ($this->smtp_auth) {
@@ -292,6 +287,11 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
 
         if ($this->smtp_port) {
             $result['port'] = $this->smtp_port; 
+        }
+        
+        // add domain
+        if (isset($result['primarydomain']) && ! empty($result['primarydomain'])) {            
+            $result['username'] .= '@' . $result['primarydomain'];                
         }
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
