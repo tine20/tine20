@@ -136,7 +136,8 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         this.action_showPreferencesDialog = new Ext.Action({
             text: _('Preferences'),
             disabled: false,
-            handler: this.onEditPreferences
+            handler: this.onEditPreferences,
+            iconCls: 'action_adminMode'
         });
         
         this.action_changePassword = new Ext.Action({
