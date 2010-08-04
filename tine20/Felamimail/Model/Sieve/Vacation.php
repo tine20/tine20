@@ -49,7 +49,6 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
         'enabled'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'mime'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'reason'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'vacationObject'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
     );
     
     /**
@@ -60,7 +59,6 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
     public function setFromFSV(Felamimail_Sieve_Vacation $fsv)
     {
         $this->setFromArray($fsv->toArray());
-        $this->vacationObject = $fsv;
     }
     
     /**
@@ -85,7 +83,6 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
             }
         }
         
-        $this->vacationObject = $fsv;
         return $fsv;
     }
 }
