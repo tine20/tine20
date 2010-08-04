@@ -151,7 +151,7 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
     },
     
     /**
-     * fetches body into given message
+     * fetches body and additional headers (which are needed for the preview panel) into given message
      * 
      * @param {Message} message
      */
