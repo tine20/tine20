@@ -144,4 +144,19 @@ class Felamimail_Sieve_Rule_Condition
             return '"' . str_replace('"', '\""', $string) . '"';
         }
     }
+    
+    /**
+     * return values as array
+     * 
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'test'            => $this->_test,
+            'comperator'      => $this->_comperator,
+            'header'          => $this->_header,
+            'key'             => $this->_key,
+        );
+    }
 }

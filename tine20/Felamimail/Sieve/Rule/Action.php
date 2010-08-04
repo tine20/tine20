@@ -101,4 +101,17 @@ class Felamimail_Sieve_Rule_Action
             return '"' . str_replace('"', '\""', $string) . '"';
         }
     }
+    
+/**
+     * return values as array
+     * 
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'type'            => $this->_type,
+            'argument'        => $this->_argument,
+        );
+    }
 }

@@ -156,4 +156,23 @@ class Felamimail_Sieve_Rule
         
         return $rule;
     }
+    
+    /**
+     * return values as array
+     * 
+     * @return array
+     */
+    public function toArray()
+    {
+        $conditions = array();
+        foreach ($this->_conditions as $condition) {
+            $conditions[] = $condition->toArray();
+        }
+        
+        return array(
+            'conditions'            => $conditions,
+            'action'                => $this->_action->toArray(),
+            'enabled'               => $this->_enabled,
+        );
+    }
 }
