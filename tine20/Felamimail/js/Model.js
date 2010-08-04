@@ -161,7 +161,7 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
             scope: this,
             callback: function(options, success, response) {
                 var msg = this.recordReader(response);
-                Ext.copyTo(message.data, msg.data, 'body');
+                Ext.copyTo(message.data, msg.data, 'body, headers');
                 if(Ext.isFunction(callback)){
                     callback(message);
                 } else{
