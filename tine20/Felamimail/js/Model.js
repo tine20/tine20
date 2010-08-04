@@ -158,9 +158,10 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
     fetchBody: function(message, callback) {
         return this.loadRecord(message, {
             timeout: 120000, // 2 minutes
+            scope: this,
             callback: function(options, success, response) {
-                var msgData = Ext.decode(response.responseText);
-                Ext.copyTo(message.data, msgData, Tine.Felamimail.Model.Message.getFieldNames() /*'body, flags, headers, attachments, to, cc, bcc, received'*/);
+                var msg = this.recordReader(response);
+                Ext.copyTo(message.data, msg.data, Tine.Felamimail.Model.Message.getFieldNames() /*'body, flags, headers, attachments, to, cc, bcc, received'*/);
                 if(Ext.isFunction(callback)){
                     callback(message);
                 } else{
