@@ -496,12 +496,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         $result = new Tinebase_Record_RecordSet('Felamimail_Model_Account');
         
-        // get user
         $userId = $this->_currentAccount->getId();
         $fullUser = Tinebase_User::getInstance()->getFullUserById($userId);
-        $email = ((! $fullUser->accountEmailAddress || empty($fullUser->accountEmailAddress)) && array_key_exists('user', $this->_imapConfig)) 
-            ? $this->_imapConfig['user']
-            : $fullUser->accountEmailAddress;
+        $email = $this->_getAccountEmail($fullUser);
         
         // only create account if email address is set
         if ($email) {
@@ -539,6 +536,25 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
                 
         return $result;
+    }
+    
+    /**
+     * returns email address used for the account by checking the user data and imap config
+     * 
+     * @param Tinebase_Model_FullUser $_user
+     * @return string
+     */
+    protected function _getAccountEmail(Tinebase_Model_FullUser $_user)
+    {
+        $email = ((! $_user->accountEmailAddress || empty($_user->accountEmailAddress)) && array_key_exists('user', $this->_imapConfig)) 
+            ? $this->_imapConfig['user']
+            : $_user->accountEmailAddress;
+            
+        if (! preg_match('/@/', $email)) {
+            $email .= '@' . $this->_imapConfig['host'];
+        }
+        
+        return $email;
     }
     
     /**
