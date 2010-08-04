@@ -614,7 +614,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $sentFolder = 'Sent';
             }
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to save message in sent folder ...');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to save message in sent folder (' . $sentFolder . ') ...');
             Felamimail_Backend_ImapFactory::factory($_account)->appendMessage($mailAsString, $sentFolder);
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
@@ -640,13 +640,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param Felamimail_Model_Account $_account
      * @return boolean
-     * 
-     * @todo add test for this
      */
     protected function _createFolderIfNotExists(Felamimail_Model_Account $_account, $folderName){
         $imap = Felamimail_Backend_ImapFactory::factory($_account);
-        if ($imap->getFolderStatus($folderName) === false){
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no Sent Folder, trying to add it.');
+        if ($imap->getFolderStatus($folderName) === false) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no Sent Folder (' . $folderName . '), trying to add it.');
             $Felamimail_Controller_Folder = Felamimail_Controller_Folder::getInstance()->create($_account->id, $folderName);
         }
     }
