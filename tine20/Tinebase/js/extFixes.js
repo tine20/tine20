@@ -46,10 +46,6 @@ Ext.apply(Ext.form.HtmlEditor.prototype, {
                     e.stopEvent();
                     this.execCmd('InsertText','\t');
                     this.deferFocus();
-                }else if(k == e.ENTER){
-                    e.stopEvent();
-                    this.execCmd('InsertHtml','<br />');
-                    this.deferFocus();
                 }
              };
         }
