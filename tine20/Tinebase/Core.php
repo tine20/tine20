@@ -575,19 +575,25 @@ class Tinebase_Core
                 define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
             }
 
-            $dbBackend = constant('self::' . strtoupper($dbConfig->get('adapter', self::PDO_MYSQL)));
+            $dbConfigArray = $dbConfig->toArray();
+            $constName = 'self::' . strtoupper($dbConfigArray['adapter']);
+            if (empty($dbConfigArray['adapter']) || ! defined($constName)) {
+                self::getLogger()->warn('Wrong db adapter configured (' . $dbConfigArray['adapter'] . '). Using default: ' . self::PDO_MYSQL);
+                $dbBackend = self::PDO_MYSQL;
+                $dbConfigArray['adapter'] = self::PDO_MYSQL;
+            } else {
+                $dbBackend = constant($constName);
+            }
 
             switch($dbBackend) {
                 case self::PDO_MYSQL:
-                    $config = $dbConfig->toArray();
-
                     // force some driver options
-                    $config['driver_options'] = array(
-                    PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
-                    // set utf8 charset
-                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES UTF8;",
+                    $dbConfigArray['driver_options'] = array(
+                        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
+                        // set utf8 charset
+                        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES UTF8;",
                     );
-                    $db = Zend_Db::factory('Pdo_Mysql', $config);
+                    $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
                     try {
                         // set mysql timezone to utc and activate strict mode
                         $db->query("SET time_zone ='+0:00';");
@@ -597,10 +603,10 @@ class Tinebase_Core
                     }
                     break;
                 case self::PDO_OCI:
-                    $db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
+                    $db = Zend_Db::factory('Pdo_Oci', $dbConfigArray);
                     break;
                 case self::ORACLE:
-                    $db = Zend_Db::factory(self::ORACLE, $dbConfig->toArray());
+                    $db = Zend_Db::factory(self::ORACLE, $dbConfigArray);
                     $db->supportPositionalParameters(true);
                     $db->setLobAsString(true);
                     break;
