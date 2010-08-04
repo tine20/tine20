@@ -13,7 +13,13 @@
 /**
  * class to hold Vacation data
  * 
- * @property  string  trash_folder
+ * @property    array  addresses
+ * @property    string  subject
+ * @property    string  from
+ * @property    string  mime
+ * @property    string  reason
+ * @property    integer  days
+ * @property    boolean  enabled
  * @package     Felamimail
  */
 class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
