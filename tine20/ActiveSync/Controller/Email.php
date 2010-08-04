@@ -157,7 +157,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         $file = $this->_contentController->getMessagePart($messageId, $partId);
         
         $_xmlNode->appendChild(new DOMElement('ContentType', $file->type, 'uri:AirSyncBase'));
-        $_xmlNode->appendChild(new DOMElement('Data', $file->getDecodedContent(), 'uri:ItemOperations'));  
+        $_xmlNode->appendChild(new DOMElement('Data', base64_encode($file->getDecodedContent()), 'uri:ItemOperations'));  
     }
     
     /**
