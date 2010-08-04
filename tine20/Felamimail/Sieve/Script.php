@@ -163,7 +163,7 @@ class Felamimail_Sieve_Script
             $rule->addCondition($condition);
         }
         
-        // actions
+        // action
         $action = new Felamimail_Sieve_Rule_Action();
         
         switch ($this->_unescapeChars($parts[6])) {
@@ -183,7 +183,7 @@ class Felamimail_Sieve_Script
                 $action->setType(Felamimail_Sieve_Rule_Action::DISCARD);
                 break;
         }
-        $rule->addAction($action);
+        $rule->setAction($action);
         
         //parts[8] == regex bit
         

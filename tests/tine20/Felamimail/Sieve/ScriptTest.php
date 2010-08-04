@@ -65,7 +65,7 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
             
         $rule->setEnabled(true)
             ->setId(12)
-            ->addAction($action)
+            ->setAction($action)
             ->addCondition($condition);
             
         $this->_serializedSieveRule = '#SieveRule' . serialize($rule);
@@ -101,7 +101,7 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
             
         $rule->setEnabled(true)
             ->setId(12)
-            ->addAction($action)
+            ->setAction($action)
             ->addCondition($condition);
         
         $script->addRule($rule);

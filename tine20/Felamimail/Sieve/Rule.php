@@ -34,11 +34,11 @@ class Felamimail_Sieve_Rule
     protected $_conditions = array();
     
     /**
-     * array of Felamimail_Sieve_Rule_Action
+     * the action to execute
      * 
-     * @var array
+     * @var Felamimail_Sieve_Rule_Action
      */
-    protected $_actions = array();
+    protected $_action = NULL;
     
     /**
      * status of rule (enabled or disabled)
@@ -66,9 +66,9 @@ class Felamimail_Sieve_Rule
      * @param   Felamimail_Sieve_Rule_Action    $action     the action to execute
      * @return  Felamimail_Sieve_Rule
      */
-    public function addAction(Felamimail_Sieve_Rule_Action $action)
+    public function setAction(Felamimail_Sieve_Rule_Action $action)
     {
-        $this->_actions[] = $action;
+        $this->_action = $action;
         
         return $this;
     }
@@ -132,15 +132,13 @@ class Felamimail_Sieve_Rule
     }
     
     /**
-     * return actions as Sieve formated string
+     * return action
      * 
-     * @return string
+     * @return Felamimail_Sieve_Rule_Action
      */
-    protected function _getSieveActions()
+    protected function _getSieveAction()
     {
-        $actions = implode("\n", $this->_actions);
-        
-        return $actions;
+        return $this->_action;
     }
     
     /**
@@ -153,7 +151,7 @@ class Felamimail_Sieve_Rule
         $rule = sprintf("%s (%s) {\r\n%s\r\n}\r\n",
             'allof',
             $this->_getSieveConditions(),
-            $this->_getSieveActions()
+            $this->_getSieveAction()
         );
         
         return $rule;
