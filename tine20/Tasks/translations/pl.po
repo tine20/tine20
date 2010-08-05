@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-11 22:24+0100\n"
+"PO-Revision-Date: 2010-08-05 22:10+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -37,7 +37,7 @@ msgstr "Powiadomienie o zadaniu"
 #: Controller.php:97
 #, python-format
 msgid "%s's personal tasks"
-msgstr "%s's zadań własnych"
+msgstr "%s zadania własne"
 
 #: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
@@ -50,15 +50,19 @@ msgstr[2] "Czy na pewno chcesz usunąć zaznaczone zadania?"
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
-#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
+#: js/GridPanel.js:93
+#: js/GridPanel.js:144
+#: js/TaskEditDialog.js:181
 msgid "Summary"
 msgstr "Streszczenie"
 
-#: js/GridPanel.js:94 js/GridPanel.js:155
+#: js/GridPanel.js:94
+#: js/GridPanel.js:155
 msgid "Due Date"
 msgstr "Data zakończenia"
 
-#: js/GridPanel.js:96 js/GridPanel.js:218
+#: js/GridPanel.js:96
+#: js/GridPanel.js:218
 msgid "Responsible"
 msgstr "Osoba odpowiedzialna"
 
@@ -74,7 +78,8 @@ msgstr "Zapisanie zadania było niemożliwe."
 msgid "Tags"
 msgstr "Znaczniki"
 
-#: js/GridPanel.js:141 Model/Task.php:195
+#: js/GridPanel.js:141
+#: Model/Task.php:195
 msgid "Lead"
 msgstr "Zapytanie wstępne"
 
@@ -82,15 +87,20 @@ msgstr "Zapytanie wstępne"
 msgid "Add a task..."
 msgstr "Dodaj zadanie..."
 
-#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
+#: js/GridPanel.js:163
+#: js/TaskEditDialog.js:189
+#: Model/Task.php:186
 msgid "Priority"
 msgstr "Priorytet"
 
-#: js/GridPanel.js:177 Model/Task.php:188
+#: js/GridPanel.js:177
+#: Model/Task.php:188
 msgid "Percent"
 msgstr "W procentach"
 
-#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
+#: js/GridPanel.js:190
+#: js/Status.js:33
+#: js/TaskEditDialog.js:209
 #: Model/Task.php:187
 msgid "Status"
 msgstr "Status"
@@ -99,7 +109,8 @@ msgstr "Status"
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/GridPanel.js:211 js/TaskEditDialog.js:213
+#: js/GridPanel.js:211
+#: js/TaskEditDialog.js:213
 msgid "Completed"
 msgstr "Zakończone dnia"
 
@@ -107,7 +118,8 @@ msgstr "Zakończone dnia"
 msgid "Show closed"
 msgstr "Pokaż zakończone"
 
-#: js/Status.js:187 Setup/setup.xml:339
+#: js/Status.js:187
+#: Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "W OPRACOWANIU"
 
@@ -189,7 +201,8 @@ msgstr "Domyślne ulubione"
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr "Domyślne ulubione zadanie ładowane przy uruchamianiu zadań"
 
-#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
+#: Setup/Initialize.php:41
+#: Setup/Update/Release3.php:66
 msgid "All tasks of my taskslists"
 msgstr "Wszystkie zadania z mojej listy zadań"
 
@@ -221,6 +234,7 @@ msgstr "ODWOŁANE"
 #~ msgstr "Dodaj zadanie"
 
 #~ msgid "Delete task"
+
 #~ msgid_plural "Delete tasks"
 #~ msgstr[0] "Usuń zadanie"
 #~ msgstr[1] "Usuń zadania"
