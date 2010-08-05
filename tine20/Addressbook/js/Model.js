@@ -16,49 +16,49 @@ Tine.Addressbook.Model.ContactArray = [
     {name: 'container_id'},
     {name: 'private'},
     {name: 'cat_id'},
-    {name: 'n_family'},
-    {name: 'n_given'},
-    {name: 'n_middle'},
-    {name: 'n_prefix'},
-    {name: 'n_suffix'},
-    {name: 'n_fn'},
-    {name: 'n_fileas'},
-    {name: 'bday', type: 'date', dateFormat: Date.patterns.ISO8601Long },
-    {name: 'org_name'},
-    {name: 'org_unit'},
-    {name: 'salutation_id'},
-    {name: 'title'},
-    {name: 'role'},
+    {name: 'n_family', label: 'Last Name' },//_('Last Name')
+    {name: 'n_given', label: 'First Name' }, //_('First Name')
+    {name: 'n_middle', label: 'Middle Name' }, //_('Middle Name')
+    {name: 'n_prefix', label: 'Title' }, //_('Title')
+    {name: 'n_suffix', label: 'Suffix' }, //_('Suffix')
+    {name: 'n_fn', label: 'Display Name' }, //_('Display Name')
+    {name: 'n_fileas' },
+    {name: 'bday', label: 'Birthday' , type: 'date', dateFormat: Date.patterns.ISO8601Long }, //_('Birthday')
+    {name: 'org_name', label: 'Company' }, //_('Company')
+    {name: 'org_unit', label: 'Unit' }, //_('Unit')
+    {name: 'salutation_id', label: 'Salutation' }, //_('Salutation')
+    {name: 'title', label: 'Job Title' }, //_('Job Title')
+    {name: 'role', label: 'Job Role' }, //_('Job Role')
     {name: 'assistent'},
-    {name: 'room'},
-    {name: 'adr_one_street'},
-    {name: 'adr_one_street2'},
-    {name: 'adr_one_locality'},
-    {name: 'adr_one_region'},
-    {name: 'adr_one_postalcode'},
-    {name: 'adr_one_countryname'},
+    {name: 'room', label: 'Room' }, //_('Room')
+    {name: 'adr_one_street', label: 'Street (Company Address)' }, //_('Street (Company Address)')
+    {name: 'adr_one_street2', label: 'Street 2 (Company Address)' }, //_('Street 2 (Company Address)')
+    {name: 'adr_one_locality', label: 'City (Company Address)' }, //_('City (Company Address)')
+    {name: 'adr_one_region', label: 'Region (Company Address)' }, //_('Region (Company Address)')
+    {name: 'adr_one_postalcode', label: 'Postal Code (Company Address)' }, //_('Postal Code (Company Address)')
+    {name: 'adr_one_countryname', label: 'Country (Company Address)' }, //_('Country (Company Address)')
     {name: 'label'},
-    {name: 'adr_two_street'},
-    {name: 'adr_two_street2'},
-    {name: 'adr_two_locality'},
-    {name: 'adr_two_region'},
-    {name: 'adr_two_postalcode'},
-    {name: 'adr_two_countryname'},
-    {name: 'tel_work'},
-    {name: 'tel_cell'},
-    {name: 'tel_fax'},
-    {name: 'tel_assistent'},
-    {name: 'tel_car'},
-    {name: 'tel_pager'},
-    {name: 'tel_home'},
-    {name: 'tel_fax_home'},
-    {name: 'tel_cell_private'},
-    {name: 'tel_other'},
+    {name: 'adr_two_street', label: 'Street (Private Address)' }, //_('Street (Private Address)')
+    {name: 'adr_two_street2', label: 'Street 2 (Private Address)' }, //_('Street 2 (Private Address)')
+    {name: 'adr_two_locality', label: 'City (Private Address)' }, //_('City (Private Address)')
+    {name: 'adr_two_region', label: 'Region (Private Address)' }, //_('Region (Private Address)')
+    {name: 'adr_two_postalcode', label: 'Postal Code (Private Address)' }, //_('Postal Code (Private Address)')
+    {name: 'adr_two_countryname', label: 'Country (Private Address)' }, //_('Country (Private Address)')
+    {name: 'tel_work', label: 'Phone' }, //_('Phone')
+    {name: 'tel_cell', label: 'Mobile' }, //_('Mobile')
+    {name: 'tel_fax', label: 'Fax' }, //_('Fax')
+    {name: 'tel_assistent' },
+    {name: 'tel_car' },
+    {name: 'tel_pager' },
+    {name: 'tel_home', label: 'Phone (private)' }, //_('Phone (private)')
+    {name: 'tel_fax_home', label: 'Fax (private)'}, //_('Fax (private)')
+    {name: 'tel_cell_private', label: 'Mobile (private)' }, //_('Mobile (private)')
+    {name: 'tel_other' },
     {name: 'tel_prefer'},
-    {name: 'email'},
-    {name: 'email_home'},
-    {name: 'url'},
-    {name: 'url_home'},
+    {name: 'email', label: 'E-Mail' }, //_('E-Mail')
+    {name: 'email_home', label: 'E-Mail (private)' }, //_('E-Mail (private)')
+    {name: 'url', label: 'Web'}, //_('Web')
+    {name: 'url_home', label: 'Web (private)' }, //_('Web (private)')
     {name: 'freebusy_uri'},
     {name: 'calendar_uri'},
     {name: 'note'},

@@ -70,17 +70,30 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
         var allApps = Tine.Tinebase.appMgr.getAll();
 
         // sort nodes by translated title (text property)
-        new Ext.tree.TreeSorter(this, {
-            folderSort: true,
-            dir: "asc"
-        });        
+//        new Ext.tree.TreeSorter(this, {
+//            folderSort: true,
+//            dir: "asc"
+//        });        
 
+        // add "My Profile"
+        if (Tine.Tinebase.common.hasRight('manage_own_profile', 'Tinebase')) {
+            var profileNode = new Ext.tree.TreeNode({
+                text: _('My Profile'),
+                cls: 'file',
+                iconCls: 'tinebase-accounttype-user',
+                id: 'Tinebase.UserProfile',
+                leaf: null
+            });
+            treeRoot.appendChild(profileNode);
+        }
+        
         // console.log(allApps);
         allApps.each(function(app) {
             var node = new Ext.tree.TreeNode({
                 text: app.getTitle(),
                 cls: 'file',
                 id: app.appName,
+                iconCls: app.appName + 'IconCls',
                 leaf: null
             });
     

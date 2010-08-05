@@ -459,6 +459,17 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      */
     showPrefsForApp: function(appName) {
         
+        // TODO: invent panel hooking approach here
+        if (appName === 'Tinebase.UserProfile') {
+            
+            if (! this.prefPanels[appName]) {
+                this.prefPanels[appName] = new Tine.Tinebase.UserProfilePanel({
+                    appName: appName
+                });
+                this.activateCard(this.prefPanels[appName], false);
+            } 
+        }
+            
     	var panel = (this.adminMode) ? this.adminPrefPanels[appName] : this.prefPanels[appName];
 
     	if (!this.adminMode) {

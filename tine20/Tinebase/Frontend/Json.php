@@ -688,6 +688,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = array();
         foreach ($decodedData as $applicationName => $data) {
             
+            if ($applicationName == 'Tinebase.UserProfile') {
+                $userProfileData = array();
+                foreach($data as $fieldName => $valueArray) {
+                    $userProfileData[$fieldName] = $valueArray['value'];
+                }
+                $this->updateUserPofile($userProfileData);
+                continue;
+            }
+            
             $backend = Tinebase_Core::getPreference($applicationName); 
             
             if (! $backend instanceof Tinebase_Preference_Abstract) {
@@ -738,6 +747,48 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'status'    => 'success',
             'results'   => $result
         );
+    }
+    
+    /**
+     * get profile of current user
+     * 
+     * @param string $userId
+     * @return array
+     */
+    public function getUserProfile($userId)
+    {
+        // NOTE: $userProfile is a contact where non readable fields are clearad out!
+        $userProfile = Tinebase_UserProfile::getInstance()->get($userId);
+        
+        // NOTE: This hurts! We don't have methods to call in our frontends yet which convert
+        //       a record to the json representaion :( Thus image link will be broken!
+        $userProfile->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        
+        return array(
+            'userProfile'      => $userProfile->toArray(),
+            'readableFields'   => Tinebase_UserProfile::getInstance()->getReadableFields(),
+            'updateableFields' => Tinebase_UserProfile::getInstance()->getUpdateableFields(),
+        );
+    }
+    
+    /**
+     * update user profile
+     * 
+     * @param  array $profileData
+     * @return array
+     */
+    public function updateUserPofile($profileData)
+    {
+        $contact = new Addressbook_Model_Contact(array(), TRUE);
+        $contact->setFromJsonInUsersTimezone($profileData);
+        
+        // NOTE: $userProfile is a contact where non readable fields are clearad out!
+        $userProfile = Tinebase_UserProfile::getInstance()->update($contact);
+        
+        // NOTE: This hurts! We don't have methods to call in our frontends yet which convert
+        //       a record to the json representaion :( Thus image link will be broken!
+        $userProfile->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        return $userProfile->toArray();
     }
     
     /************************ protected functions ***************************/

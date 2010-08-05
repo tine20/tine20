@@ -40,6 +40,12 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const CHECK_VERSION = 'check_version';
     
     /**
+     * the right to manage the own profile
+     * @staticvar string
+     */
+    const MANAGE_OWN_PROFILE = 'manage_own_profile';
+    
+    /**
      * account type anyone
      * @staticvar string
      */
@@ -109,7 +115,8 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         if ( $_application === NULL || $_application === 'Tinebase' ) {
             $addRights = array(
                 self::REPORT_BUGS,
-                self::CHECK_VERSION 
+                self::CHECK_VERSION,
+                self::MANAGE_OWN_PROFILE,
             );
         } else {
             $addRights = array();
@@ -137,6 +144,10 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::CHECK_VERSION  => array(
                 'text'          => $translate->_('Check version'),
                 'description'   => $translate->_('Check for new versions of this software.'),
+            ),
+            self::MANAGE_OWN_PROFILE  => array(
+                'text'          => $translate->_('Manage own profile'),
+                'description'   => $translate->_('The right to manage the own profile (selected contact data).'),
             ),
         );
         

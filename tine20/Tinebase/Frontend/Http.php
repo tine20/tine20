@@ -280,6 +280,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/MainMenu.js',
             'Tinebase/js/MainScreen.js',
             'Tinebase/js/LoginPanel.js',
+            //'Tinebase/js/AdminPanel.js',
+            'Tinebase/js/UserProfilePanel.js',
             'Tinebase/js/common.js',
         // Tine 2.0 specific widgets
             'Tinebase/js/widgets/LangChooser.js',
