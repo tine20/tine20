@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-05 21:54+0100\n"
+"PO-Revision-Date: 2010-08-05 22:01+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -237,7 +237,7 @@ msgstr "Brak wiadomości lub pusta pamięć podręczna"
 
 #: js/GridPanel.js:168
 msgid "Write"
-msgstr "Zapisz"
+msgstr "Napisz"
 
 #: js/GridPanel.js:176
 #: js/MessageDisplayDialog.js:46
