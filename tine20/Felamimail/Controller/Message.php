@@ -607,6 +607,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         try {
             $mailAsString = $_transport->getHeaders() . Zend_Mime::LINEEND . $_transport->getBody();
             
+            // convert \n to \r\n
+            $mailAsString = preg_replace("/(?<!\\r)\\n(?!\\r)/", "\r\n", $mailAsString);
+            
             if (($_account->sent_folder && ! empty($_account->sent_folder))) {
                 $sentFolder = $_account->sent_folder;
                 $this->_createFolderIfNotExists($_account, $sentFolder);
