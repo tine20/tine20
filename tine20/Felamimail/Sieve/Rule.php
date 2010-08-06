@@ -172,7 +172,8 @@ class Felamimail_Sieve_Rule
         return array(
             'conditions'            => $conditions,
             'action'                => $this->_action->toArray(),
-            'enabled'               => $this->_enabled,
+            'enabled'               => (integer) $this->_enabled,
+            'id'                    => $this->_id,
         );
     }
 }
