@@ -14,8 +14,8 @@
  * class to hold Rule data
  * 
  * @property    integer  order
- * @property    array  actions
- * @property    array  conditions
+ * @property    array  action       array('type', 'argument')
+ * @property    array  conditions   array( 0 => array('test', 'comperator', 'header', 'key'), 1 => (...))
  * @package     Felamimail
  */
 class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
@@ -63,20 +63,25 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
      * get sieve rule object
      * 
      * @return Felamimail_Sieve_Rule
-     * 
-     * @todo finish (add action + conditions)
      */
     public function getFSR()
     {
         $fsr = new Felamimail_Sieve_Rule();
         $fsr->setEnabled($this->enabled);
 
-        /*
-        $action = $this->action
-        foreach ($this->conditions as $conditions) {
-            
+        $fsra = new Felamimail_Sieve_Rule_Action();
+        $fsra->setType($this->action['type'])
+             ->setArgument($this->action['argument']);
+        $fsr->setAction($fsra);
+        
+        foreach ($this->conditions as $condition) {
+            $fsrc = new Felamimail_Sieve_Rule_Condition();
+            $fsrc->setTest($condition['test'])
+                 ->setComperator($condition['comperator'])
+                 ->setHeader($condition['header'])
+                 ->setKey($condition['key']);
+            $fsr->addCondition($fsrc);
         } 
-        */    
             
         return $fsr;
     }
