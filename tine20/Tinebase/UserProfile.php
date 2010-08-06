@@ -88,13 +88,6 @@ class Tinebase_UserProfile
     );
     
     /**
-     * contact backend
-     * 
-     * @var Addressbook_Backend_Sql
-     */
-    protected $_contactBackend = NULL;
-    
-    /**
      * holds the instance of the singleton
      *
      * @var Tinebase_UserProfile
@@ -111,7 +104,6 @@ class Tinebase_UserProfile
      */
     private function __construct()
     {
-        $this->_contactBackend = new Addressbook_Backend_Sql();
     }
     
     /**
@@ -155,16 +147,7 @@ class Tinebase_UserProfile
      */
     public function get($_userId)
     {
-        $this->_checkRights($_userId);
-        
-        $contact = $this->_contactBackend->getByUserId($_userId);
-        $userProfile = new Addressbook_Model_Contact(array(), TRUE);
-        
-        foreach($this->getReadableFields() as $fieldName) {
-            $userProfile->$fieldName = $contact->$fieldName;
-        }
-        
-        return $userProfile;
+        return Addressbook_Controller_Contact::getInstance()->getUserProfile($_userId);
     }
     
     /**
@@ -175,36 +158,21 @@ class Tinebase_UserProfile
      */
     public function update($_userProfile)
     {
-        $this->_checkRights($_userProfile->account_id);
-        
-        $contact = $this->_contactBackend->getByUserId($_userProfile->account_id);
-        $userProfile = clone $contact;
-        
-        foreach($this->getUpdateableFields() as $fieldName) {
-            $userProfile->$fieldName = $_userProfile->$fieldName;
-        }
-        
-        try {
-            $db = $this->_contactBackend->getAdapter();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-            
-            // we want to have modlog for profile info
-            $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
-            $modLog->setRecordMetaData($userProfile, 'update', $contact);
-            $currentMods = $modLog->writeModLog($userProfile, $contact, 'Addressbook_Model_Contact', 'Sql', $contact->getId());
-            Tinebase_Notes::getInstance()->addSystemNote($userProfile, Tinebase_Core::getUser()->getId(), 'changed', $currentMods);
-            
-            $contact = $this->_contactBackend->update($userProfile);
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw $e;
-        }
+        return Addressbook_Controller_Contact::getInstance()->updateUserProfile($_userProfile);
+    }
+    
+    /**
+     * return a profile only cleaned up copy of the given contact
+     * 
+     * @param  Addressbook_Model_Contact $_contact
+     * @return Addressbook_Model_Contact
+     */
+    public function doProfileCleanup($_contact)
+    {
         $userProfile = new Addressbook_Model_Contact(array(), TRUE);
         
         foreach($this->getReadableFields() as $fieldName) {
-            $userProfile->$fieldName = $contact->$fieldName;
+            $userProfile->$fieldName = $_contact->$fieldName;
         }
         
         return $userProfile;
@@ -216,7 +184,7 @@ class Tinebase_UserProfile
      * @param string $_userId
      * @throws Tasks_Exception_AccessDenied
      */
-    protected function _checkRights($_userId)
+    public function checkRight($_userId)
     {
         // check if user is permitted to update profile -> skip normal grant checking
         if (!Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::MANAGE_OWN_PROFILE)) {
@@ -227,6 +195,24 @@ class Tinebase_UserProfile
             // We might itroduce a MANAGE_OTHER_PROFILE ?
             throw new Tasks_Exception_AccessDenied('given profile does not belong to current user');
         }
+    }
+    
+    /**
+     * merges allowed fields from $userProfile into a clone of given $contact
+     * 
+     * @param  Addressbook_Model_Contact $contact
+     * @param  Addressbook_Model_Contact $userProfile
+     * @return Addressbook_Model_Contact
+     */
+    public function mergeProfileInfo($_contact, $_userProfile)
+    {
+        $contact = clone $_contact;
+        
+        foreach($this->getUpdateableFields() as $fieldName) {
+            $contact->$fieldName = $_userProfile->$fieldName;
+        }
+        
+        return $contact;
     }
 }
     
