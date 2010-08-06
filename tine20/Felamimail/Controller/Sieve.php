@@ -116,6 +116,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     protected function _getSieveScript()
     {
+        $result = NULL;
         $scripts = $this->_backend->listScripts();
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting list of SIEVE scripts: ' . print_r($scripts, TRUE));
@@ -127,12 +128,15 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Get SIEVE script: ' . $scriptName);
             
             $script = $this->_backend->getScript($scriptName);
-            $result = new Felamimail_Sieve_Script($script);
+            if ($script) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got SIEVE script: ' . $script);
+                $result = new Felamimail_Sieve_Script($script);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Could not get SIEVE script: ' . $scriptName);
+            }
             
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No relevant SIEVE scripts found.');
-            
-            $result = NULL;
         }
         
         return $result;
@@ -174,14 +178,25 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Put updated vacation SIEVE script ' . $this->_scriptName);
         
-        $scriptToPut = $script->getSieve();
+        $this->_putScript($accountId, $script);
+        
+        return $this->getVacation($accountId);
+    }
+    
+    /**
+     * put updated sieve script
+     * 
+     * @param string|Felamimail_Model_Account $_accountId
+     * @param Felamimail_Sieve_Script $_script
+     */
+    protected function _putScript($_accountId, $_script)
+    {
+        $scriptToPut = $_script->getSieve();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $scriptToPut);
         
         $this->_backend->putScript($this->_scriptName, $scriptToPut);
-        $this->activateScript($accountId);
-        
-        return $this->getVacation($accountId);
+        $this->activateScript($_accountId);
     }
 
     /**
@@ -251,12 +266,23 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * 
      * @param string $_accountId
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Sieve_Rule
-     * 
-     * @todo implement
      */
     public function getRules($_accountId)
     {
-        throw new Felamimail_Exception('not implemented yet.');
+        $result = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_Rule');
+        
+        $this->_setSieveBackendAndAuthenticate($_accountId);
+        
+        $script = $this->_getSieveScript();
+        if ($script !== NULL) {
+            foreach ($script->getRules() as $fsr) {
+                $rule = new Felamimail_Model_Sieve_Rule();
+                $rule->setFromFSR($fsr);
+                $result->addRecord($rule);
+            }
+        }
+        
+        return $result;
     }
     
     /**
@@ -265,11 +291,27 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * @param string $_accountId
      * @param Tinebase_Record_RecordSet $_rules (Felamimail_Model_Sieve_Rule)
      * @return Tinebase_Record_RecordSet
-     * 
-     * @todo implement
      */
     public function setRules($_accountId, Tinebase_Record_RecordSet $_rules)
     {
-        throw new Felamimail_Exception('not implemented yet.');
+        $this->_setSieveBackendAndAuthenticate($_accountId);
+        
+        $script = $this->_getSieveScript();
+        if ($script === NULL) {
+            $script = new Felamimail_Sieve_Script();
+        } else {
+            $script->clearRules();
+        }
+        
+        foreach ($_rules as $rule) {
+            $fsr = $rule->getFSR();
+            $script->addRule($fsr);
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Put updated rules SIEVE script ' . $this->_scriptName);
+        
+        $this->_putScript($_accountId, $script);
+        
+        return $this->getRules($_accountId);
     }
 }
