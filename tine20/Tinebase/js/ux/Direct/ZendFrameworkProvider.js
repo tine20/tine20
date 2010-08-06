@@ -56,7 +56,7 @@ Ext.ux.direct.ZendFrameworkProvider = Ext.extend(Ext.direct.RemotingProvider, {
         return {
             jsonrpc: '2.0',
             method: t.action + '.' + t.method,
-            params: t.data,
+            params: t.data || [],
             id: t.tid
         };
     },
