@@ -142,6 +142,51 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * gets profile portion of the requested user
+     * 
+     * @param string $_userId
+     * @return Addressbook_Model_Contact 
+     */
+    public function getUserProfile($_userId)
+    {
+        Tinebase_UserProfile::getInstance()->checkRight($_userId);
+        
+        $doContainerACLChecks = $this->_doContainerACLChecks;
+        $this->_doContainerACLChecks = FALSE;
+        
+        $contact = $this->getContactByUserId($_userId);
+        $userProfile = Tinebase_UserProfile::getInstance()->doProfileCleanup($contact);
+        
+        $this->_doContainerACLChecks = $doContainerACLChecks;
+        
+        return $userProfile;
+    }
+    /**
+     * update profile portion of given contact
+     * 
+     * @param  Addressbook_Model_Contact $_userProfile
+     * @return Addressbook_Model_Contact 
+     */
+    public function updateUserProfile($_userProfile)
+    {
+        Tinebase_UserProfile::getInstance()->checkRight($_userProfile->account_id);
+        
+        $doContainerACLChecks = $this->_doContainerACLChecks;
+        $this->_doContainerACLChecks = FALSE;
+        
+        $contact = $this->getContactByUserId($_userProfile->account_id);
+        $userProfile = Tinebase_UserProfile::getInstance()->mergeProfileInfo($contact, $_userProfile);
+        
+        $contact = $this->update($userProfile);
+        
+        $userProfile = Tinebase_UserProfile::getInstance()->doProfileCleanup($contact);
+
+        $this->_doContainerACLChecks = $doContainerACLChecks;
+        
+        return $userProfile;
+    }
+    
+    /**
      * delete one record
      * - don't delete if it belongs to an user account
      *
