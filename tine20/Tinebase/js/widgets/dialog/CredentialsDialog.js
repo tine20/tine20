@@ -33,16 +33,8 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
     tbarItems: [],
     evalGrants: false,
     sendRequest: true,
+    mode: 'local',
     
-    /**
-     * init record to edit
-     */
-    initRecord: function() {
-        if (this.record && typeof this.record.beginEdit != 'function') {
-            this.onRecordLoad();
-        }
-    },
-
     /**
      * returns dialog
      */
