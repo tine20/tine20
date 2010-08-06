@@ -388,5 +388,89 @@ Tine.Felamimail.getSignature = function(id) {
     }
     
     return result;
-}
+};
 
+/**
+ * generic exception handler for felamimail (used by folder and message backends and updateMessageCache)
+ * 
+ * TODO move all 902 exception handling here!
+ * TODO invent requery on 902 with cred. dialog
+ * 
+ * @param {Tine.Exception} exception
+ */
+Tine.Felamimail.handleRequestException = function(exception) {
+    Tine.log.warn('request exception :');
+    Tine.log.warn(exception);
+    
+    var app = Tine.Tinebase.appMgr.get('Felamimail');
+    
+    switch(exception.code) {
+        case 910: // Felamimail_Exception_IMAP
+        case 911: // Felamimail_Exception_IMAPServiceUnavailable
+            Ext.Msg.show({
+               title:   app.i18n._('IMAP Error'),
+               msg:     exception.message ? exception.message : app.i18n._('No connection to IMAP server.'),
+               icon:    Ext.MessageBox.ERROR,
+               buttons: Ext.Msg.OK
+            });
+            break;
+            
+        case 912: // Felamimail_Exception_IMAPInvalidCredentials
+            var accountId   = exception.account && exception.account.id ? exception.account.id : '',
+                account     = accountId ? Tine.Felamimail.loadAccountStore().getById(accountId): null,
+                imapStatus  = account ? account.get('imap_status') : null;
+                
+            if (account) {
+                Tine.Felamimail.credentialsDialog = Tine.widgets.dialog.CredentialsDialog.openWindow({
+                    title: String.format(app.i18n._('IMAP Credentials for {0}'), account.get('name')),
+                    appName: 'Felamimail',
+                    credentialsId: accountId,
+                    i18nRecordName: app.i18n._('Credentials'),
+                    recordClass: Tine.Tinebase.Model.Credentials,
+                    record: new Tine.Tinebase.Model.Credentials({
+                        id: account.id,
+                        username: exception.username ? exception.username : ''
+                    }),
+                    listeners: {
+                        scope: this,
+                        'update': function(data) {
+                            app.checkMailsDelayedTask.delay(0);
+                        }
+                    }
+                });
+            } else {
+                exception.code = 910;
+                return this.handleRequestException(exception);
+            }
+            break;
+            
+        case 913: // Felamimail_Exception_IMAPFolderNotFound
+            Ext.Msg.show({
+               title:   app.i18n._('IMAP Error'),
+               msg:     app.i18n._('One of your folders was deleted from an other client, please reload you browser'),
+               icon:    Ext.MessageBox.ERROR,
+               buttons: Ext.Msg.OK
+            });
+            break;
+            
+        case 404: 
+        case 914: // Felamimail_Exception_IMAPMessageNotFound
+            // do nothing, this exception is handled by Tine.Tinebase.ExceptionHandler.handleRequestException
+            exception.code = 404;
+            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+            break;
+            
+        case 920: // Felamimail_Exception_SMTP
+            Ext.Msg.show({
+               title:   app.i18n._('SMTP Error'),
+               msg:     exception.message ? exception.message : app.i18n._('No connection to SMTP server.'),
+               icon:    Ext.MessageBox.ERROR,
+               buttons: Ext.Msg.OK
+            });
+            break;
+            
+        default:
+            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+            break;
+    }
+};
