@@ -417,12 +417,11 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * set sieve rules for account 
      *
-     * @param  array $accountId
-     * @return array
-     * 
-     * @todo add set from json?
+     * @param   array $accountId
+     * @param   array $rulesData
+     * @return  array
      */
-    public function saveRules($rulesData)
+    public function saveRules($accountId, $rulesData)
     {
         $records = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_Rule', $rulesData);
         $records = Felamimail_Controller_Sieve::getInstance()->setRules($accountId, $records);
