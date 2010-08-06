@@ -511,7 +511,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'mime'                  => '',
         );
         
-        $this->_vacationTestHelper($vacationData);
+        $this->_sieveTestHelper($vacationData);
         
         // check if script was activated
         $activeScriptName = Felamimail_Controller_Sieve::getInstance()->getActiveScriptName($this->_account->getId());
@@ -519,7 +519,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $result = $this->_json->getVacation($this->_account->getId());
 
-        unset($result['vacationObject']);
         $this->assertEquals($vacationData, $result);
     }
     
@@ -539,7 +538,46 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'mime'                  => 'text/html',
         );
         
-        $this->_vacationTestHelper($vacationData);
+        $this->_sieveTestHelper($vacationData);
+    }
+    
+    /**
+     * test get/set of rules sieve script
+     */
+    public function testGetSetRules()
+    {
+        $ruleData = array(array(
+            'id'            => 1,
+            'action'        => array(
+                'type'          => Felamimail_Sieve_Rule_Action::FILEINTO, 
+                'argument'      => 'Junk'
+            ),
+            'conditions'    => array(array(
+                'test'          => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
+                'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
+                'header'        => 'From',
+                'key'           => 'info@example.com',
+            )),
+            'enabled'       => 1,
+        ), array(
+            'id'            => 2,
+            'action'        => array(
+                'type'          => Felamimail_Sieve_Rule_Action::FILEINTO, 
+                'argument'      => 'Junk'
+            ),
+            'conditions'    => array(array(
+                'test'          => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
+                'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
+                'header'        => 'From',
+                'key'           => 'info@example.org',
+            )),
+            'enabled'       => 0,
+        ));
+        
+        $this->_sieveTestHelper($ruleData);
+        
+        // @todo check getRules
+        //$result = $this->_json->getRules($this->_account->getId());
     }
     
     /************************ protected functions ****************************/
@@ -686,11 +724,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * vacation test helper
+     * sieve test helper
      * 
-     * @param array $_vacationData
+     * @param array $_sieveData
      */
-    protected function _vacationTestHelper($_vacationData)
+    protected function _sieveTestHelper($_sieveData)
     {
         $this->_oldActiveSieveScriptName = Felamimail_Controller_Sieve::getInstance()->getActiveScriptName($this->_account->getId());
         
@@ -698,9 +736,14 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_testSieveScriptName = 'Felamimail_Unittest';
         Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
         
-        $resultSet = $this->_json->saveVacation($_vacationData);
-        
-        unset($resultSet['vacationObject']);
-        $this->assertEquals($_vacationData, $resultSet);
+        // check which save fn to use
+        if (array_key_exists('reason', $_sieveData)) {
+            $resultSet = $this->_json->saveVacation($_sieveData);
+        } else if (array_key_exists('action', $_sieveData[0])) {
+            $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);
+            print_r($resultSet);
+        }
+    
+        $this->assertEquals($_sieveData, $resultSet);
     }
 }
