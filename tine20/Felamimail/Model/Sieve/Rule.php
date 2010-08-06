@@ -13,9 +13,11 @@
 /**
  * class to hold Rule data
  * 
- * @property    integer  order
- * @property    array  action       array('type', 'argument')
- * @property    array  conditions   array( 0 => array('test', 'comperator', 'header', 'key'), 1 => (...))
+ * @property    integer id
+ * @property    array   action       array('type', 'argument')
+ * @property    array   conditions   array( 0 => array('test', 'comperator', 'header', 'key'), 1 => (...))
+ * @property    boolean enabled
+ * 
  * @package     Felamimail
  */
 class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
@@ -43,10 +45,10 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), // account id
-        'order'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'action'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
-        'conditions'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'action'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),    
+        'conditions'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),    
+        'enabled'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),    
     );
     
     /**
@@ -56,7 +58,7 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
      */
     public function setFromFSR(Felamimail_Sieve_Rule $fsr)
     {
-        $this->setFromArray($fsv->toArray());
+        $this->setFromArray($fsr->toArray());
     }
     
     /**
@@ -67,7 +69,8 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
     public function getFSR()
     {
         $fsr = new Felamimail_Sieve_Rule();
-        $fsr->setEnabled($this->enabled);
+        $fsr->setEnabled($this->enabled)
+            ->setId($this->id);
 
         $fsra = new Felamimail_Sieve_Rule_Action();
         $fsra->setType($this->action['type'])
