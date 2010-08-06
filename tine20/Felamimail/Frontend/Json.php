@@ -442,8 +442,18 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
+        try {
+            $accounts = $this->searchAccounts('');
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get accounts: ' . $e->getMessage());
+            $accounts = array(
+                'results'       => array(),
+                'totalcount'    => 0,
+            );
+        }
+        
         $result = array(
-            'accounts'              => $this->searchAccounts('')
+            'accounts'              => $accounts
         );
         
         $defaults = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
