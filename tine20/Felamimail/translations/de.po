@@ -549,7 +549,7 @@ msgstr "Konnte Nachricht(en) nicht verschieben."
 
 #: js/TreePanel.js:552
 msgid "Total Messages:"
-msgstr "Nachrichten Insgesammt:"
+msgstr "Nachrichten insgesamt:"
 
 #: js/TreePanel.js:556
 msgid "Unread Messages:"
