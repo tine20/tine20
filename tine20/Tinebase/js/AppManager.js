@@ -173,7 +173,7 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
                 ? Tine.Tinebase.registry.get('preferences').get('defaultapp') 
                 : this.defaultAppName;
                 
-            this.defaultApp = this.get(defaultAppName) || this.apps.first();
+            this.defaultApp = this.get(defaultAppName) || this.apps.find(function(app) {return app.hasMainScreen});
             
             if (! this.defaultApp) {
                 // no global exception concept yet...
