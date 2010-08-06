@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-20210 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -27,6 +27,7 @@ class Felamimail_Backend_ImapFactory
      *
      * @param   string|Felamimail_Model_Account $_accountId
      * @return  Felamimail_Backend_ImapProxy
+     * @throws  Felamimail_Exception_IMAPInvalidCredentials
      */
     static public function factory($_accountId)
     {
@@ -34,11 +35,8 @@ class Felamimail_Backend_ImapFactory
         
         if (!isset(self::$_backends[$accountId])) {
             // get imap config from account
-            if ($_accountId instanceof Felamimail_Model_Account) {
-                $imapConfig = $_accountId->getImapConfig();
-            } else {
-                $imapConfig = Felamimail_Controller_Account::getInstance()->get($_accountId)->getImapConfig();
-            }
+            $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
+            $imapConfig = $account->getImapConfig();
             
             // we need to instantiate a new imap backend
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
@@ -46,7 +44,14 @@ class Felamimail_Backend_ImapFactory
                 . ' (' . ((array_key_exists('ssl', $imapConfig)) ? $imapConfig['ssl'] : 'none') . ')'
                 . ' with username ' . $imapConfig['user']);
             
-            self::$_backends[$accountId] = new Felamimail_Backend_ImapProxy($imapConfig);
+            try {
+                self::$_backends[$accountId] = new Felamimail_Backend_ImapProxy($imapConfig);
+            } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
+                // add account and username to Felamimail_Exception_IMAPInvalidCredentials
+                $feiic->setAccount($account)
+                      ->setUsername($imapConfig['user']);
+                throw $feiic;
+            }
         }
         
         return self::$_backends[$accountId];
