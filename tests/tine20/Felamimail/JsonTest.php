@@ -741,7 +741,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             $resultSet = $this->_json->saveVacation($_sieveData);
         } else if (array_key_exists('action', $_sieveData[0])) {
             $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);
-            print_r($resultSet);
         }
     
         $this->assertEquals($_sieveData, $resultSet);
