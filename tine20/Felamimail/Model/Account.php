@@ -250,50 +250,45 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     {
         $this->resolveCredentials(FALSE, TRUE, TRUE);
         
+        // get values from account
         if ($this->smtp_hostname) {
             $result['hostname'] = $this->smtp_hostname; 
         }
-        
         if ($this->smtp_user) {
             $result['username'] = $this->smtp_user; 
         }
-        
         if ($this->smtp_password) {
             $result['password'] = $this->smtp_password; 
         }
-        
-        if ($this->type == self::TYPE_SYSTEM) {
-            // add values from config to empty fields
-            $result = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
-        }
-        
-        if (isset($result['primarydomain']) && ! empty($result['primarydomain'])) {            
-            $result['username'] .= '@' . $result['primarydomain'];        
-        }        
-        
         if ($this->smtp_auth) {
-            if ( $this->smtp_auth == 'none') {
-                unset($result['username']);
-                unset($result['password']);
-                unset($result['auth']);
-            } else {
-                $result['auth'] = $this->smtp_auth;
-            }
+            $result['auth'] = $this->smtp_auth;
         }
-        
         if ($this->smtp_ssl) {
-            if ($this->smtp_ssl == 'none') {
-                unset($result['ssl']);
-            } else {
-                $result['ssl'] = $this->smtp_ssl;
-            } 
+            $result['ssl'] = $this->smtp_ssl;
         }
-
         if ($this->smtp_port) {
             $result['port'] = $this->smtp_port; 
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
+        // system account: overwriting with values from config if set
+        if ($this->type == self::TYPE_SYSTEM) {
+            $result = array_merge($result, Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP));
+        }
+        
+        // sanitizing some values
+        if (isset($result['primarydomain']) && ! empty($result['primarydomain'])) {            
+            $result['username'] .= '@' . $result['primarydomain'];        
+        }        
+        if ($result['auth'] == 'none') {
+            unset($result['username']);
+            unset($result['password']);
+            unset($result['auth']);
+        }
+        if ($result['ssl'] == 'none') {
+            unset($result['ssl']);
+        }
+        
+        // if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
         
         return $result;
     }
