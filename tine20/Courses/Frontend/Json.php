@@ -186,15 +186,20 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
-        $types = $this->_config->get('course_types', array());
-        $defaultType = (!empty($types)) ? array_shift(array_flip($types->toArray())) : '';
+        $courseTypes = Tinebase_Department::getInstance()->search(new Tinebase_Model_DepartmentFilter());
         
-        return array(
+        $defaultType = (!empty($courseTypes)) ? $courseTypes[0]->getId() : '';
+        
+        $result = array(
             'defaultType' => array(
                 'value' => $defaultType,
                 'records' => $this->searchCourseTypes(NULL, NULL)
             )
         );
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' result: ' . print_r($result, true));
+        
+        return $result;
     }
     
     /**
@@ -237,10 +242,12 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $group->setFromJsonInUsersTimezone($recordData);
         
         $i18n = Tinebase_Translation::getTranslation('Courses');
-        $groupNamePrefix = $i18n->_('Course') . '-';
-        $group->name = $groupNamePrefix . $course->name;
+        $groupNamePrefix = $i18n->_('Course');
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($group->toArray(), true));
+        $groupNamePrefix = is_array($groupNamePrefix) ? $groupNamePrefix[0] : $groupNamePrefix;
+        $group->name = $groupNamePrefix . '-' . $course->name;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($group->toArray(), true));
         
         if (empty($group->id)) {
             $savedGroup         = $this->_groupController->create($group);
@@ -341,13 +348,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchCourseTypes($filter, $paging)
     {
-        $result = array();
-        foreach ($this->_config->get('course_types', array()) as $id => $name) {
-            array_push($result, array(
-                'id'   => $id,
-                'name' => $name
-            ));
-        }
+        $result = Tinebase_Department::getInstance()->search(new Tinebase_Model_DepartmentFilter())->toArray();
         
         return array(
             'results'       => $result,
