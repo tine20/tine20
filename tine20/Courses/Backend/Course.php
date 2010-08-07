@@ -38,5 +38,5 @@ class Courses_Backend_Course extends Tinebase_Backend_Sql_Abstract
      *
      * @var boolean
      */
-    protected $_modlogActive = TRUE;
+    protected $_modlogActive = false;
 }
