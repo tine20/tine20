@@ -345,4 +345,90 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->_backend->alterCol('accounts', $declaration, 'last_login_from');
         $this->setApplicationVersion('Tinebase', '3.11');
     }
+    
+    /**
+     * update to 3.12
+     * - add department table
+     */
+    public function update_11()
+    {
+        $declaration = new Setup_Backend_Schema_Table_Xml('
+            <table>
+                <name>departments</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>name</name>
+                        <type>text</type>
+                        <length>128</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>description</name>
+                        <type>text</type>
+                        <length>254</length>
+                        <notnull>false</notnull>
+                    </field>
+                    <field>
+                        <name>created_by</name>
+                        <type>text</type>
+                        <length>40</length>
+                    </field>
+                    <field>
+                        <name>creation_time</name>
+                        <type>datetime</type>
+                    </field>
+                    <field>
+                        <name>last_modified_by</name>
+                        <type>text</type>
+                        <length>40</length>
+                    </field>
+                    <field>
+                        <name>last_modified_time</name>
+                        <type>datetime</type>
+                    </field>
+                    <field>
+                        <name>is_deleted</name>
+                        <type>boolean</type>
+                        <default>false</default>
+                    </field>
+                    <field>
+                        <name>deleted_by</name>
+                        <type>text</type>
+                        <length>40</length>
+                    </field>
+                    <field>
+                        <name>deleted_time</name>
+                        <type>datetime</type>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>name</name>
+                        <unique>true</unique>
+                        <length>40</length>
+                        <field>
+                            <name>name</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>'
+        );
+        $this->_backend->createTable($declaration);
+        
+        $this->setTableVersion('departments', '1');
+                
+        $this->setApplicationVersion('Tinebase', '3.12');
+    }
 }
