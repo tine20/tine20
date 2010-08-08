@@ -261,8 +261,8 @@ class Setup_Frontend_Cli
      */
     protected function _importAccounts(Zend_Console_Getopt $_opts)
     {
-        // disable timelimit during import
-        set_time_limit(0);
+        // disable timelimit during import of user accounts
+        Setup_Core::setExecutionLifeTime(0);
         
         // import groups
         Tinebase_Group::syncGroups();
