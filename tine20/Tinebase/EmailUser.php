@@ -49,7 +49,14 @@ class Tinebase_EmailUser
      * @staticvar string
      */
     const LDAP_SMTP      = 'Ldapsmtp';
-
+    
+    /**
+     * smtp ldap backend const
+     * 
+     * @staticvar string
+     */
+    const LDAP_SMTP_QMAIL      = 'Ldapsmtp_qmail';
+    
     /**
      * backend object instances
      * 
@@ -129,6 +136,12 @@ class Tinebase_EmailUser
                 }
                 break;
                 
+            case self::LDAP_SMTP_QMAIL:
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Tinebase_EmailUser_Smtp_LdapQmail();
+                }
+                break;
+                
             default:
                 throw new Tinebase_Exception_InvalidArgument("Backend type $_type not implemented.");
         }
@@ -167,6 +180,8 @@ class Tinebase_EmailUser
                         $result = self::POSTFIX;
                     } else if ($backend == self::LDAP_SMTP) {
                         $result = self::LDAP_SMTP;
+                    } else if ($backend == self::LDAP_SMTP_QMAIL) {
+                        $result = self::LDAP_SMTP_QMAIL;
                     }
                     break;
             }
