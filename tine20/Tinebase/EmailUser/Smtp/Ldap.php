@@ -15,7 +15,7 @@
 /**
  * class Tinebase_EmailUser
  * 
- * Email User Settings Managing for dbmail (+ ...) postfix attributes in ldap backend
+ * Email User Settings Managing for dbmail ldap schema (+ ...) postfix attributes in ldap backend
  * 
  * @package Tinebase
  * @subpackage Ldap
