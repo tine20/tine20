@@ -20,6 +20,22 @@
 class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
 {
     /**
+     * application name (is needed in checkRight())
+     *
+     * @var string
+     */
+    protected $_applicationName = 'Courses';
+    
+    /**
+     * Model name
+     *
+     * @var string
+     * 
+     * @todo perhaps we can remove that and build model name from name of the class (replace 'Controller' with 'Model')
+     */
+    protected $_modelName = 'Courses_Model_Course';
+    
+    /**
      * config of courses
      *
      * @var Zend_Config
@@ -27,17 +43,28 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     protected $_config = NULL;
     
     /**
+     * delete or just set is_delete=1 if record is going to be deleted
+     * - legacy code -> remove that when all backends/applications are using the history logging
+     *
+     * @var boolean
+     */
+    protected $_purgeRecords = TRUE;
+    
+    /**
+     * check for container ACLs?
+     *
+     * @var boolean
+     */
+    protected $_doContainerACLChecks = false;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
     private function __construct() {        
-        $this->_applicationName = 'Courses';
         $this->_backend = new Courses_Backend_Course();
-        $this->_modelName = 'Courses_Model_Course';
         $this->_currentAccount = Tinebase_Core::getUser();   
-        $this->_purgeRecords = FALSE;
-        $this->_doContainerACLChecks = FALSE;
         $this->_config = isset(Tinebase_Core::getConfig()->courses) ? Tinebase_Core::getConfig()->courses : new Zend_Config(array());
     }    
     
