@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-05 17:41+0100\n"
+"PO-Revision-Date: 2010-08-08 16:04+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -395,7 +395,7 @@ msgstr "Uczestnicy przypisani do grupy"
 
 #: js/Groups.js:468
 msgid "Group Name"
-msgstr "Nazwę grupy"
+msgstr "Nazwa grupy"
 
 #: js/Groups.js:534
 #: js/RoleEditDialog.js:395

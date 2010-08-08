@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-05 17:48+0100\n"
+"PO-Revision-Date: 2010-08-08 16:16+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1006,7 +1006,7 @@ msgstr "Importuj do {0}"
 
 #: js/widgets/dialog/ImportDialog.js:120
 msgid "Dry run"
-msgstr "Testuj"
+msgstr "Przetestuj"
 
 #: js/widgets/dialog/ImportDialog.js:137
 msgid "No files added"
@@ -1277,7 +1277,7 @@ msgstr "Wyświetl"
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
 msgid "show details"
-msgstr "pokaż / schowaj  szczegóły"
+msgstr "pokaż / ukryj  szczegóły"
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:183
 msgid "Always show advanced filters"
@@ -1763,7 +1763,7 @@ msgstr "Wyświetl okno dialogowe potwierdzające chęć wylogowania."
 
 #: Setup/setup.xml:2570
 msgid "note"
-msgstr "zwykła"
+msgstr "zwykłą"
 
 #: Setup/setup.xml:2575
 msgid "default note type"
