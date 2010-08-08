@@ -79,7 +79,10 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
     public function inspectAddUser(Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
         if(empty($_user->sambaSAM->acctFlags)) {
-            $_user->sambaSAM->acctFlags = '[U          ]';
+            // avoid Indirect modification of overloaded property
+            $sambaSam = $_user->sambaSAM;
+            $sambaSAM->acctFlags = '[U          ]';
+            $_user->sambaSAM = $sambaSam;
         }
         
         $_ldapData['objectclass'] = array_unique(array_merge($_ldapData['objectclass'], $this->_requiredObjectClass));
@@ -100,7 +103,10 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
         #$uidNumber = $ldapEntry['uidnumber'][0];
         
         if(empty($_user->sambaSAM->acctFlags)) {
-            $_user->sambaSAM->acctFlags = $ldapEntry['sambaacctflags'][0];
+            // avoid Indirect modification of overloaded property
+            $sambaSam = $_user->sambaSAM;
+            $sambaSAM->acctFlags = $ldapEntry['sambaacctflags'][0];
+            $_user->sambaSAM = $sambaSam;
         }
         
         $_ldapData['objectclass'] = array_unique(array_merge($ldapEntry['objectclass'], $this->_requiredObjectClass));
