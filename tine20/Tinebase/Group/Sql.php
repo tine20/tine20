@@ -199,11 +199,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $addGroupMemberships    = array_diff($_groupIds, $groupMemberships);
         
         foreach ($addGroupMemberships as $groupId) {
-            $this->addGroupMember($groupId, $userId);
+            $this->addGroupMemberInSqlBackend($groupId, $userId);
         }
         
         foreach ($removeGroupMemberships as $groupId) {
-            $this->removeGroupMember($groupId, $userId);
+            $this->removeGroupMemberFromSqlBackend($groupId, $userId);
         }
         
         return $this->getGroupMemberships($userId);
