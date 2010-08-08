@@ -43,7 +43,8 @@ class Courses_Model_Course extends Tinebase_Record_Abstract
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'group_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'type'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'type'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'internet'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'fileserver'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // modlog information
