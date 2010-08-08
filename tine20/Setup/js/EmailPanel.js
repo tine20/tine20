@@ -369,6 +369,16 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                         xtype: 'textfield'
                     },
                     items: []
+                }, {
+                    // postfix ldap qmail user schema config options
+                    id: this.smtpBackendIdPrefix + 'ldap_smtp_qmail',
+                    layout: 'form',
+                    autoHeight: 'auto',
+                    defaults: {
+                        width: 300,
+                        xtype: 'textfield'
+                    },
+                    items: []
                 }]
             }]
         }];
