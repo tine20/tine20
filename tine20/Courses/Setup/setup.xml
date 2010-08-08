@@ -2,7 +2,7 @@
 <application>
     <name>Courses</name>
     <!-- gettext('Courses') -->   
-    <version>3.0</version>
+    <version>3.1</version>
     <order>50</order>
     <status>disabled</status>
     <depends>
@@ -12,7 +12,7 @@
     <tables>
         <table>
             <name>courses</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -77,6 +77,10 @@
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>clob</type>
                 </field>
                 <index>
                     <name>id</name>
