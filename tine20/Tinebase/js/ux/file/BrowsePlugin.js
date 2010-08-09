@@ -73,8 +73,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
     init: function(cmp){
         this.originalHandler = cmp.handler || null;
         this.originalScope = cmp.scope || window;
-        this.handler = null;
-        this.scope = null;
+        cmp.handler = null;
+        cmp.scope = null;
         
         this.component = cmp;
         
