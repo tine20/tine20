@@ -25,16 +25,20 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Courses');
+        
+        this.action_import = new Ext.Action({
+            iconCls: 'action_import',
+            disabled: true,
+            text: this.app.i18n._('Import course members'),
+            plugins: [new Ext.ux.file.BrowsePlugin({})],
+            scope: this,
+            handler: this.onFileSelect
+        });
+        
         this.tbarItems = [
-            {xtype: 'widget-activitiesaddbutton'},
-            new Ext.ux.BrowseButton({
-            	id: 'ImportButton',
-            	iconCls: 'action_import',
-            	disabled: true,
-                text: this.app.i18n._('Import course members'),
-                scope: this,
-                handler: this.onFileSelect
-            })
+            this.action_import,
+            {xtype: 'widget-activitiesaddbutton'}
+            
         ];
         Tine.Courses.CourseEditDialog.superclass.initComponent.call(this);
     },
@@ -99,7 +103,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         // only activate import and ok buttons if editing existing course / user has the appropriate right
         var disabled = !this.record.get('id') || !Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts');
-        Ext.getCmp('ImportButton').setDisabled(disabled);
+        this.action_import.setDisabled(disabled);
         this.action_saveAndClose.setDisabled(!Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts'));
         
        	Tine.Courses.CourseEditDialog.superclass.onRecordLoad.call(this);        
