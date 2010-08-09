@@ -12,60 +12,71 @@
 class Tinebase_UserProfile
 {
     /**
+     * Config key for allowed userProfile fields
+     * @staticvar string
+     */
+    const USERPROFILEFIELDS = 'userProfileFields';
+    
+    /**
      * possible profile fields
      * @var array
      */
     protected $_possibleFields = array(
-        'adr_one_countryname', 'adr_one_locality', 'adr_one_postalcode', 'adr_one_region', 'adr_one_street', 'adr_one_street2',
-        'adr_two_countryname', 'adr_two_locality', 'adr_two_postalcode', 'adr_two_region', 'adr_two_street', 'adr_two_street2',
-        'assistent',
-        'bday',
-        'calendar_uri',
-        'email',
-        'email_home',
-        'jpegphoto',
-        'freebusy_uri',
-        'account_id',
-        'note',
-        'role',
-        'salutation_id',
-        'title',
-        'url',
-        'url_home',
-        'n_family',
+        'n_prefix',
         'n_given',
         'n_middle',
-        'n_prefix',
+        'n_family',
         'n_suffix',
+        //'bday',
         'org_name',
         'org_unit',
-        'pubkey',
+        'role',
+        'title',
         'room',
-        'tel_assistent',
-        'tel_car',
+        'email',
+        'email_home',    
         'tel_cell',
         'tel_cell_private',
         'tel_fax',
         'tel_fax_home',
         'tel_home',
-        'tel_pager',
         'tel_work',
-        'tz',
-        'lon',
-        'lat',
+        'url',
+        'adr_one_countryname', 'adr_one_locality', 'adr_one_postalcode', 'adr_one_region', 'adr_one_street', 'adr_one_street2',
+        'adr_two_countryname', 'adr_two_locality', 'adr_two_postalcode', 'adr_two_region', 'adr_two_street', 'adr_two_street2',
+        'note',
     );
     
     /**
-     * readable fields (stored in config later)
+     * fields readable per default
+     * 
      * @var array
      */
-    protected $_readableFields = array(
+    protected $_defaultReadableFields = array(
         'n_prefix', 'n_given', 'n_middle', 'n_family',
         'email_home',
         'tel_home', 'tel_cell_private', 'tel_fax_home', 
         'adr_two_street', 'adr_two_postalcode', 'adr_two_locality',
-        
-        // generics
+    );
+    
+    /**
+     * fields updateable per default
+     * 
+     * @var array
+     */
+    protected $_defaultUpdateableFields = array(
+        'n_prefix', 'n_given', 'n_middle', 'n_family',
+        'email_home',
+        'tel_home', 'tel_cell_private', 'tel_fax_home', 
+        'adr_two_street', 'adr_two_postalcode', 'adr_two_locality',
+    );
+    
+    /**
+     * generic fields the framework needs to function
+     * 
+     * @var array
+     */
+    protected $_genericFields = array(
         'account_id',
         'created_by',
         'creation_time',
@@ -73,19 +84,22 @@ class Tinebase_UserProfile
         'last_modified_time',
         'is_deleted',
         'deleted_time',
-        'deleted_by',
+        'deleted_by'
     );
     
     /**
-     * updateable fields (stored in config later)
+     * fields readable
+     * 
      * @var array
      */
-    protected $_updateableFields = array(
-        'n_prefix', 'n_given', 'n_middle', 'n_family',
-        'email_home',
-        'tel_home', 'tel_cell_private', 'tel_fax_home', 
-        'adr_two_street', 'adr_two_postalcode', 'adr_two_locality',
-    );
+    protected $_readableFields = array();
+    
+    /**
+     * fields updateable
+     * 
+     * @var array
+     */
+    protected $_updateableFields = array();
     
     /**
      * holds the instance of the singleton
@@ -104,6 +118,7 @@ class Tinebase_UserProfile
      */
     private function __construct()
     {
+        $this->_initConfig();
     }
     
     /**
@@ -137,6 +152,16 @@ class Tinebase_UserProfile
     public function getUpdateableFields()
     {
         return $this->_updateableFields;
+    }
+    
+    /**
+     * get list of possible fields from Addressbook_Model_Contact
+     * 
+     * @return array
+     */
+    public function getPossibleFields()
+    {
+        return $this->_possibleFields;
     }
     
     /**
@@ -213,6 +238,71 @@ class Tinebase_UserProfile
         }
         
         return $contact;
+    }
+    
+    /**
+     * set readable fields
+     * 
+     * @param array $_readableFields
+     */
+    public function setReadableFields($_readableFields)
+    {
+        Tinebase_Core::getLogger()->debug('setting userProfile readable fields to ' . print_r($_readableFields, TRUE));
+        if (!Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::ADMIN)) {
+            throw new Tasks_Exception_AccessDenied('No rights to set userProfile config');
+        }
+        
+        $this->_readableFields = $_readableFields;
+        $this->_setConfig();
+    }
+    
+    /**
+     * set updateable fields
+     * 
+     * @param array $_readableFields
+     */
+    public function setUpdateableFields($_updateableFields)
+    {
+        Tinebase_Core::getLogger()->debug('setting userProfile updateable fields to ' . print_r($_updateableFields, TRUE));
+        if (!Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::ADMIN)) {
+            throw new Tasks_Exception_AccessDenied('No rights to set userProfile config');
+        }
+        
+        $this->_updateableFields = $_updateableFields;
+        $this->_setConfig();
+    }
+    
+    /**
+     * saves userProfile config
+     */
+    public function _setConfig()
+    {
+        $config = array(
+            'readableFields'   => $this->_readableFields,
+            'updateableFields' => $this->_updateableFields
+        );
+        
+        Tinebase_Config::getInstance()->setConfigForApplication(self::USERPROFILEFIELDS, Zend_Json::encode($config));
+    }
+    
+    /**
+     * init the config
+     * 
+     */
+    protected function _initConfig()
+    {
+        $config = Tinebase_Config::getInstance()->getConfigAsArray(self::USERPROFILEFIELDS, 'Tinebase', array(
+            'readableFields'   => $this->_defaultReadableFields,
+            'updateableFields' => $this->_defaultUpdateableFields
+        ));
+        
+        // ensure generic fields are in readable fields
+        $this->_readableFields = array_merge(
+            $config['readableFields'], 
+            $this->_genericFields
+        );
+        
+        $this->_updateableFields = $config['updateableFields'];
     }
 }
     

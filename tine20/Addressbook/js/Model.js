@@ -61,7 +61,7 @@ Tine.Addressbook.Model.ContactArray = [
     {name: 'url_home', label: 'Web (private)' }, //_('Web (private)')
     {name: 'freebusy_uri'},
     {name: 'calendar_uri'},
-    {name: 'note'},
+    {name: 'note', label: 'Description' }, //_('Description')
     {name: 'tz'},
     {name: 'lon'},
     {name: 'lat'},

@@ -28,48 +28,24 @@ Ext.ns('Tine.Tinebase');
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Tinebase.AdminPanel
+ * @TODO        Invent some kind of registry for inner panels
  */
 Tine.Tinebase.AdminPanel = Ext.extend(Ext.TabPanel, {
-
-    activeTab: 0,
-
+    
+    activeItem: 0,
+    border: false,
+    
     /**
      * @private
      */
     initComponent: function() {
-        this.initProfileTable();
-        
-        this.items = [{
-            title: _('Profile Information'),
-            layout: 'fit',
-            items: []
-        }];
+        this.items = new Tine.Tinebase.Admin.UserProfileConfigPanel({});
         
         Tine.Tinebase.AdminPanel.superclass.initComponent.call(this);
-    },
-    
-    // NOTE we maintain a list of possible profile information here cause:
-    // - it's not clear if the addressbook app is installed -> model is present
-    // - we have no field names / translations in the models
-    initProfileTable: function() {
-        console.log(Tine.Addressbook.Model.Contact.getField('n_given').label);
-        /*
-        {name: 'n_family'},
-    {name: 'n_given'},
-    {name: 'n_middle'},
-    {name: 'n_prefix'},
-    {name: 'n_suffix'},
-    {name: 'n_fn'},
-    {name: 'n_fileas'},
-    {name: 'bday', type: 'date', dateFormat: Date.patterns.ISO8601Long },
-        this.profileTable = '';
-        */
-        //this.profileTable = {html: 'test'};
     }
     
-    
 });
-    
+
 /**
  * Tinebase Admin Panel Popup
  * 
@@ -85,3 +61,140 @@ Tine.Tinebase.AdminPanel.openWindow = function (config) {
         contentPanelConstructorConfig: config
     }); 
 };
+
+
+
+
+
+
+
+
+
+
+Ext.ns('Tine.Tinebase.Admin');
+Tine.Tinebase.Admin.UserProfileConfigPanel = Ext.extend(Ext.Panel, { // TODO: extend some kind of AppAdminPanel
+
+    layout: 'fit',
+    border: false,
+    
+    /**
+     * @private
+     */
+    initComponent: function() {
+        this.title = _('Profile Information');
+        this.items = [];
+        
+        this.applyAction = new Ext.Action({
+            text: _('Apply'),
+            disabled: true,
+            iconCls: 'action_applyChanges',
+            handler: this.applyConfig.createDelegate(this)
+        });
+        this.buttons = [this.applyAction];
+        
+        Tine.Tinebase.getUserProfileConfig(this.initProfileTable, this);
+        
+        this.supr().initComponent.call(this);
+    },
+    
+    afterRender: function() {
+        this.supr().afterRender.apply(this, arguments);
+        
+        this.loadMask = new Ext.LoadMask(this.getEl(), {msg: _('Please Wait')});
+        if (! this.store) {
+            this.loadMask.show();
+        }
+    },
+    
+    applyConfig: function() {
+        var userProfileConfig = {
+            readableFields: [],
+            updateableFields: []
+        };
+        
+        this.store.each(function(field) {
+            var fieldName = field.get('fieldName');
+            
+            if (field.get('readGrant')) {
+                userProfileConfig.readableFields.push(fieldName);
+            }
+            if (field.get('editGrant')) {
+                userProfileConfig.updateableFields.push(fieldName);
+            }
+        }, this);
+        
+        this.loadMask.show();
+        Tine.Tinebase.setUserProfileConfig(userProfileConfig, function() {
+            this.applyAction.setDisabled(true);
+            this.store.commitChanges();
+            this.loadMask.hide();
+        }, this);
+        
+    },
+    
+    initProfileTable: function(userProfileConfig) {
+        var adbI18n = new Locale.Gettext();
+        adbI18n.textdomain('Addressbook');
+        
+        var fieldData = [];
+        
+        Ext.each(userProfileConfig.possibleFields, function(fieldName) {
+            var fieldDefinition = Tine.Addressbook.Model.Contact.getField(fieldName);
+            fieldData.push([
+                fieldName,
+                adbI18n._hidden(fieldDefinition.label),
+                userProfileConfig.readableFields.indexOf(fieldName) >= 0,
+                userProfileConfig.updateableFields.indexOf(fieldName) >= 0
+            ]);
+        }, this);
+        
+        this.store = new Ext.data.ArrayStore({
+            autoDestroy: true,
+            fields: ['fieldName', 'fieldLabel', 'readGrant', 'editGrant'],
+            data: fieldData,
+            listeners: {
+                scope: this,
+                update: this.onStoreUpdate
+            }
+        });
+        
+        var cbs = [
+            new Ext.ux.grid.CheckColumn({
+                header: _('Read'),
+                tooltip: _('The field is readable part of the profile'),
+                dataIndex: 'readGrant',
+                width: 55
+            }), new Ext.ux.grid.CheckColumn({
+                header: _('Edit'),
+                tooltip: _('The field is editable part of the profile'),
+                dataIndex: 'editGrant',
+                width: 55
+            })
+        ];
+        
+        this.userProfileConfigGrid = new Ext.grid.EditorGridPanel({
+            layout: 'fit',
+            store: this.store,
+            autoExpandColumn: 'fieldName',
+            plugins: cbs,
+            columns: [{
+                id: 'fieldName',
+                header: _('Field Name'),
+                dataIndex: 'fieldLabel'
+            }].concat(cbs)
+        });
+        
+        this.add(this.userProfileConfigGrid);
+        this.doLayout();
+        
+        if (this.loadMask) {
+            this.loadMask.hide();
+        }
+    },
+    
+    onStoreUpdate: function() {
+        this.applyAction.setDisabled(false);
+    }
+    
+    
+});

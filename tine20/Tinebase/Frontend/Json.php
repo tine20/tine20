@@ -791,6 +791,31 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $userProfile->toArray();
     }
     
+    /**
+     * gets the userProfile config
+     * 
+     * @return @array
+     */
+    public function getUserProfileConfig()
+    {
+        return array(
+            'possibleFields'   => Tinebase_UserProfile::getInstance()->getPossibleFields(),
+            'readableFields'   => Tinebase_UserProfile::getInstance()->getReadableFields(),
+            'updateableFields' => Tinebase_UserProfile::getInstance()->getUpdateableFields(),
+        );
+    }
+    
+    /**
+     * saves userProfile config
+     * 
+     * @param array $configData
+     */
+    public function setUserProfileConfig($configData)
+    {
+        Tinebase_UserProfile::getInstance()->setReadableFields($configData['readableFields']);
+        Tinebase_UserProfile::getInstance()->setUpdateableFields($configData['updateableFields']);
+    }
+    
     /************************ protected functions ***************************/
     
     /**
