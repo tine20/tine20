@@ -188,7 +188,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $courseTypes = Tinebase_Department::getInstance()->search(new Tinebase_Model_DepartmentFilter());
         
-        $defaultType = (!empty($courseTypes)) ? $courseTypes[0]->getId() : '';
+        $defaultType = count($courseTypes) > 0 ? $courseTypes[0]->getId() : '';
         
         $result = array(
             'defaultType' => array(
