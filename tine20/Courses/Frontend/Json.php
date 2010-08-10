@@ -106,10 +106,10 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
             $typeIdx = $knownTypes->getIndexById($course['type']);
             if ($typeIdx !== FALSE) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($knownTypes[$typeIdx]->toArray(), true));
+                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($knownTypes[$typeIdx]->toArray(), true));
                 $course['type'] = $knownTypes[$typeIdx]->toArray();
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Course type with ID ' . $course['type'] . ' does not exist.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Department with ID ' . $course['type'] . ' does not exist.');
                 $course['type'] = array(
                     'id' => $course['type'], 
                     'name' => $course['type']
