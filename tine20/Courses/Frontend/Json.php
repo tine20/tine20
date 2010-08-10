@@ -290,7 +290,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteCourses($ids)
     {
-        $this->_delete($ids, $this->_controller);
+        return $this->_delete($ids, $this->_controller);
     }    
 
     /**
