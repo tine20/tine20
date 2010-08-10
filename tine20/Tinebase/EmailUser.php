@@ -56,6 +56,13 @@ class Tinebase_EmailUser
      * @staticvar string
      */
     const LDAP_SMTP_QMAIL      = 'Ldapsmtp_qmail';
+
+    /**
+     * cyrus backend const
+     * 
+     * @staticvar string
+     */
+    const CYRUS    = 'Cyrus';
     
     /**
      * backend object instances
@@ -124,6 +131,12 @@ class Tinebase_EmailUser
                 }
                 break;
             
+            case self::CYRUS:
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Tinebase_EmailUser_Imap_Cyrus();
+                }
+                break;
+                
             case self::POSTFIX:
                 if (!isset(self::$_backends[$_type])) {
                     self::$_backends[$_type] = new Tinebase_EmailUser_Smtp_Postfix();
@@ -173,6 +186,8 @@ class Tinebase_EmailUser
                         $result = self::DBMAIL;
                     } else if ($backend == self::LDAP_IMAP) {
                         $result = self::LDAP_IMAP;
+                    } else if ($backend == self::CYRUS) {
+                        $result = self::CYRUS;
                     }
                     break;
                 case Tinebase_Model_Config::SMTP:
@@ -185,7 +200,6 @@ class Tinebase_EmailUser
                     }
                     break;
             }
-            
         }
 
         if (empty($result)) {
