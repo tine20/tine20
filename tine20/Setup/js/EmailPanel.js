@@ -157,7 +157,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         }
         
         // imap combo
-        backendComboConfig.store = [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail  MySQL'], ['ldap_imap', 'DBmail Ldap']];
+        backendComboConfig.store = [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail  MySQL'], ['ldap_imap', 'DBmail Ldap'], ['cyrus', 'Cyrus']];
         backendComboConfig.name = 'imap_backend';
         backendComboConfig.listeners = {
             scope: this,
@@ -265,6 +265,23 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                         xtype: 'textfield'
                     },
                     items: []
+                }, {
+                    // cyrus config options
+                    id: this.imapBackendIdPrefix + 'cyrus',
+                    layout: 'form',
+                    autoHeight: 'auto',
+                    defaults: {
+                        width: 300,
+                        xtype: 'textfield'
+                    },
+                    items: [{
+                        name: 'imap_cyrus_admin',
+                        fieldLabel: this.app.i18n._('Cyrus Admin')
+                    }, {
+                        name: 'imap_cyrus_password',
+                        fieldLabel: this.app.i18n._('Cyrus Admin Password'),
+                        inputType: 'password'
+                    }]
                 }]
             }]
         }, {
