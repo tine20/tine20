@@ -529,7 +529,6 @@ Tine.Tinebase.tineInit = {
      */
     onPreferenceChange: function(key, oldValue, newValue) {
         switch (key) {
-            case 'appPickerStyle':
             case 'windowtype':
                 //console.log('hier');
                 //break;
@@ -639,12 +638,7 @@ Tine.Tinebase.tineInit = {
             Ext.ux.PopupWindowMgr.register({
                 name: window.name,
                 popup: window,
-                contentPanelConstructor: 'Tine.Tinebase.MainScreen',
-                contentPanelConstructorConfig: {
-                	appPickerStyle: (Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('appPickerStyle')) 
-			            ? Tine.Tinebase.registry.get('preferences').get('appPickerStyle') 
-			            : 'tabs' 
-                }
+                contentPanelConstructor: 'Tine.Tinebase.MainScreen'
             });
         }
     },
