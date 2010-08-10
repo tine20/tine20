@@ -316,9 +316,10 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             array(
                 'group_id'                  => $groupId,
                 'accountLoginNamePrefix'    => $course->name . '-',
+                'accountEmailDomain'        => (isset($this->_config->domain)) ? $this->_config->domain : '',
                 'password'                  => $course->name,
                 'course'                    => $course,
-                'encoding'                  => 'iso-8859-1'
+                'encoding'                  => 'iso-8859-1',
             )
         );
         $importer->import($tempFile->path);
