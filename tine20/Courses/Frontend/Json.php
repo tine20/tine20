@@ -5,8 +5,8 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Json.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  * 
  */
 
@@ -83,38 +83,44 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param Tinebase_Record_RecordSet $_records
      * @return array data
-     * 
-     * @todo add getMultiple to Group backends
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
     {
         $result = parent::_multipleRecordsToJson($_records, $_filter);
         
-        $knownTypes = Tinebase_Department::getInstance()->search(new Tinebase_Model_DepartmentFilter());
-        
-        // get groups and merge data
-        foreach ($result as &$course) {
-            $group = Tinebase_Group::getInstance()->getGroupById($course['group_id'])->toArray();
-            unset($group['id']);
-            $course = array_merge($group, $course);
-            
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($knownTypes[$knownTypes->getIndexById($course['type'])]->toArray(), true));
-
-            $course['type'] = $knownTypes->getIndexById($course['type']) !== false ? 
-                array('id' => $course['type'], 'name' => $knownTypes[$knownTypes->getIndexById($course['type'])]->toArray() ) : 
-                array('id' => $course['type'], 'name' => $course['type']);
-        }
-        
-        // use this when get multiple is implemented
-        /*
+        // get groups/types and merge data
         $groupIds = $_records->group_id;
         $groups = Tinebase_Group::getInstance()->getMultiple(array_unique(array_values($groupIds)));
+        $knownTypes = Tinebase_Department::getInstance()->search(new Tinebase_Model_DepartmentFilter());
+        
         foreach ($result as &$course) {
-            $group = $groups[$groups->getIndexById($course['group_id'])]->toArray();
-            unset($group['id']);
-            $course = array_merge($group, $course);
+            
+            $groupIdx = $groups->getIndexById($course['group_id']);
+            if ($groupIdx !== FALSE) {
+                $group = $groups[$groupIdx]->toArray();
+                unset($group['id']);
+                $course = array_merge($group, $course);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Group with ID ' . $course['group_id'] . ' does not exist.');
+            }
+            
+            $typeIdx = $knownTypes->getIndexById($course['type']);
+            if ($typeIdx !== FALSE) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($knownTypes[$typeIdx]->toArray(), true));
+                
+                $course['type'] = array(
+                    'id' => $course['type'], 
+                    'name' => $knownTypes[$typeIdx]->toArray()
+                );
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Course type with ID ' . $course['type'] . ' does not exist.');
+                
+                $course['type'] = array(
+                    'id' => $course['type'], 
+                    'name' => $course['type']
+                );
+            }
         }
-        */
         
         return $result;
     }
