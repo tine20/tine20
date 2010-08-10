@@ -34,16 +34,21 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         
             $record = new $this->_modelName($_recordData, TRUE);
             
-            // add prefix to login name if given or create valid login name
-            if (isset($record->accountLoginName)) {
-                if (isset($this->_options['accountLoginNamePrefix'])) {
-                    $record->accountLoginName = $this->_options['accountLoginNamePrefix'] . $record->accountLoginName;
-                }
-            } else {
+            // create valid login name
+            if (! isset($record->accountLoginName)) {
                 $record->accountLoginName = Tinebase_User::getInstance()->generateUserName($record);
             }
             
-            // fire 'before import' event
+            // add prefix to login name if given 
+            if (isset($this->_options['accountLoginNamePrefix'])) {
+                $record->accountLoginName = $this->_options['accountLoginNamePrefix'] . $record->accountLoginName;
+            }
+            
+            // create email address if accountEmailDomain if given
+            if (empty($record->accountEmailAddress) && isset($this->_options['accountEmailDomain']) && ! empty($this->_options['accountEmailDomain'])) {
+                $record->accountEmailAddress = $record->accountLoginName . '@' . $this->_options['accountEmailDomain'];
+            }
+            
             Tinebase_Event::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
