@@ -6,7 +6,7 @@
  * @subpackage  Log
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Gökmen Ciyiltepe <g.ciyiltepe@metaways.de>
+ * @author      GÃ¶kmen Ciyiltepe <g.ciyiltepe@metaways.de>
  * @version     $Id$
  * 
  */
@@ -40,7 +40,6 @@ class Tinebase_Log_Filter_User implements Zend_Log_Filter_Interface
         $this->_name = $name;
     }
     
-    
     /**
      * Returns TRUE to accept the message, FALSE to block it.
      *
@@ -53,4 +52,3 @@ class Tinebase_Log_Filter_User implements Zend_Log_Filter_Interface
         return strtolower($this->_name) == strtolower($username) ? true : false;    
     }
 }
-#EOF
