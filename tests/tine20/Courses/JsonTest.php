@@ -199,12 +199,12 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
                 <delimiter>;</delimiter>
                 <mapping>
                     <field>
-                        <source>firstname</source>
-                        <destination>accountFirstName</destination>
-                    </field>
-                    <field>
                         <source>lastname</source>
                         <destination>accountLastName</destination>
+                    </field>
+                    <field>
+                        <source>firstname</source>
+                        <destination>accountFirstName</destination>
                     </field>
                 </mapping>
             </config>')
@@ -215,6 +215,16 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         
         //print_r($result);
         $this->assertEquals(5, count($result['members']));
+        
+        // find philipp lahm
+        $lahm = array();
+        foreach ($result['members'] as $member) {
+            if ($member['name'] == 'Lahm, Philipp') {
+                $lahm = $member;
+            }
+        }
+        $this->assertTrue(! empty($lahm));
+        $this->assertEquals('plahm', $lahm['data']);
         
         // @todo get user and check email
     }
