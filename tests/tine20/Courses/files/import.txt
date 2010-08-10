@@ -1,0 +1,5 @@
+"Name";"Vorname";"Eintrittsd";"Geburtsdat";"Geburtsort";"Geschlecht";"Ort";"PLZ";"Straße"
+"Güstav";"David";"27.08.2009";"20.08.1994";"Hamburg";"männlich";"Hamburg";"22121";"Luruper Hauptstr. 21"
+"Boateng";"Kevin";"27.08.2009";"06.12.1993";"Hamburg";"männlich";"Hamburg";"24547";"Wagrierweg 243 D"
+"Lahm";"Philipp";"27.08.2009";"13.05.1992";"Berlin";"männlich";"Hamburg";"22733";"Georg-Wilhelm-Str. 41"
+"Dragomir";"Slavomir";"27.08.2009";"21.05.1991";"Jugoslavien";"männlich";"Hamburg";"21227";"Barnerstr. 21"

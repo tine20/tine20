@@ -165,15 +165,60 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     }
        
     /**
-     * test for import of members
+     * test for import of members (1)
      */
     public function testImportMembersIntoCourse1()
     {
-        $result = $this->_importHelper(dirname(dirname(__FILE__)) . '/Admin/files/testHeadline.csv', 'ISO8859-1');
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
+        $result = $this->_importHelper(dirname(dirname(__FILE__)) . '/Admin/files/testHeadline.csv', $definition);
+        //print_r($result);
 
         $this->assertEquals(4, count($result['members']));
     }
 
+    /**
+     * test for import of members (2)
+     */
+    public function testImportMembersIntoCourse2()
+    {
+        try {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('course_user_import_csv');
+        } catch (Tinebase_Exception_NotFound $e) {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->create(new Tinebase_Model_ImportExportDefinition(array(
+                    'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Admin')->getId(),
+                    'name'              => 'course_user_import_csv',
+                    'type'              => 'import',
+                    'model'             => 'Tinebase_Model_FullUser',
+                    'plugin'            => 'Admin_Import_Csv',
+                    'plugin_options'    => '<?xml version="1.0" encoding="UTF-8"?>
+            <config>
+                <headline>1</headline>
+                <use_headline>0</use_headline>
+                <dryrun>0</dryrun>
+                <encoding>UTF-8</encoding>
+                <delimiter>;</delimiter>
+                <mapping>
+                    <field>
+                        <source>firstname</source>
+                        <destination>accountFirstName</destination>
+                    </field>
+                    <field>
+                        <source>lastname</source>
+                        <destination>accountLastName</destination>
+                    </field>
+                </mapping>
+            </config>')
+            ));
+        }
+        
+        $result = $this->_importHelper(dirname(__FILE__) . '/files/import.txt', $definition);
+        
+        //print_r($result);
+        $this->assertEquals(5, count($result['members']));
+        
+        // @todo get user and check email
+    }
+    
     /************ protected helper funcs *************/
     
     /**
@@ -225,9 +270,10 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      * import file
      * 
      * @param string $_filename
+     * @param Tinebase_Model_ImportExportDefinition $_definition
      * @return array course data
      */
-    protected function _importHelper($_filename, $_encoding = 'UTF-8')
+    protected function _importHelper($_filename, Tinebase_Model_ImportExportDefinition $_definition)
     {
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse($course);
@@ -235,14 +281,12 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->_coursesToDelete[] = $courseData['id'];
         
         // import data
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
-        $importer = new $definition->plugin(
-            $definition, 
+        $importer = new $_definition->plugin(
+            $_definition, 
             Admin_Controller_User::getInstance(),
             array(
                 'group_id'                  => $courseData['group_id'],
                 'accountLoginNamePrefix'    => $courseData['name'] . '_',
-                'encoding'                  => $_encoding,            
             )
         );
         $importer->import($_filename);
