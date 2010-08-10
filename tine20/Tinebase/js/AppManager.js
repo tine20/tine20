@@ -45,7 +45,7 @@ Tine.Tinebase.AppManager = function() {
          * fired before an application gets deactivated. Retrun false to stop deactivation
          * @param {Tine.Aplication} app about to deactivate
          */
-        'beforeactivate',
+        'beforedeactivate',
         /**
          * @event deactivate
          * fired when an application gets deactivated
@@ -100,9 +100,9 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
             if (this.activeApp && (this.fireEvent('beforedeactivate', this.activeApp) === false || this.activeApp.onBeforeDeActivate() === false)) {
                 return false;
             }
-            var activeApp = this.activeApp;
+            
+            this.fireEvent('deactivate', this.activeApp);
             this.activeApp = null;
-            this.fireEvent('deactivate', activeApp);
             
             if (this.fireEvent('beforeactivate', app) === false || app.onBeforeActivate() === false) {
                 return false;
