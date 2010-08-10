@@ -4,9 +4,9 @@
  * 
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  */
 
@@ -28,6 +28,13 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      * @var Courses_Frontend_Json
      */
     protected $_json = array();
+    
+    /**
+     * courses to delete in tearDown
+     * 
+     * @var array
+     */
+    protected $_coursesToDelete = array(); 
     
     /**
      * Runs the test methods of this class.
@@ -59,7 +66,10 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {        
+    {
+        if (! empty($this->_coursesToDelete)) {
+            $this->_json->deleteCourses($this->_coursesToDelete);
+        }
     }
     
     /**
@@ -156,34 +166,14 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
        
     /**
      * test for import of members
-     *
      */
-    public function testImportMembersIntoCourse()
+    public function testImportMembersIntoCourse1()
     {
-        $course = $this->_getCourseData();
-        $courseData = $this->_json->saveCourse($course);
-        
-        // import data
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
-        $importer = new $definition->plugin(
-            $definition, 
-            Admin_Controller_User::getInstance(),
-            array(
-                'group_id'                  => $courseData['group_id'],
-                'accountLoginNamePrefix'    => $courseData['name'] . '_',
-                'encoding'                  => 'ISO8859-1'            
-            )
-        );
-        $importer->import(dirname(dirname(__FILE__)) . '/Admin/files/testHeadline.csv');
-        $courseData = $this->_json->getCourse($courseData['id']);
-        
-        // checks
-        $this->assertEquals(4, count($courseData['members']));
-        
-        // cleanup
-        $this->_json->deleteCourses($courseData['id']);
+        $result = $this->_importHelper(dirname(dirname(__FILE__)) . '/Admin/files/testHeadline.csv', 'ISO8859-1');
+
+        $this->assertEquals(4, count($result['members']));
     }
-    
+
     /************ protected helper funcs *************/
     
     /**
@@ -197,10 +187,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             'name'          => Tinebase_Record_Abstract::generateUID(),
             'description'   => 'blabla',
             'type'          => Tinebase_Record_Abstract::generateUID(),
-            /*'members'       => array(
-                Tinebase_Core::getUser()->getId(),
-            )
-            */
         );
     }
         
@@ -233,5 +219,35 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
                 'value' => $_courseName
             ),     
         );
+    }
+    
+    /**
+     * import file
+     * 
+     * @param string $_filename
+     * @return array course data
+     */
+    protected function _importHelper($_filename, $_encoding = 'UTF-8')
+    {
+        $course = $this->_getCourseData();
+        $courseData = $this->_json->saveCourse($course);
+        
+        $this->_coursesToDelete[] = $courseData['id'];
+        
+        // import data
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
+        $importer = new $definition->plugin(
+            $definition, 
+            Admin_Controller_User::getInstance(),
+            array(
+                'group_id'                  => $courseData['group_id'],
+                'accountLoginNamePrefix'    => $courseData['name'] . '_',
+                'encoding'                  => $_encoding,            
+            )
+        );
+        $importer->import($_filename);
+        $courseData = $this->_json->getCourse($courseData['id']);
+
+        return $courseData;
     }
 }
