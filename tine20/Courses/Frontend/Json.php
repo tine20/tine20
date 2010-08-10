@@ -90,10 +90,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $result = parent::_multipleRecordsToJson($_records, $_filter);
         
-        $knownTypes = $this->_config->get('course_types', array());
-        if (!is_array($knownTypes)) {
-            $knownTypes = $knownTypes->toArray();
-        }
+        $knownTypes = Tinebase_Department::getInstance()->search(new Tinebase_Model_DepartmentFilter());
         
         // get groups and merge data
         foreach ($result as &$course) {
@@ -101,8 +98,10 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             unset($group['id']);
             $course = array_merge($group, $course);
             
-            $course['type'] = array_key_exists($course['type'], $knownTypes) ? 
-                array('id' => $course['type'], 'name' => $knownTypes[$course['type']]) : 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($knownTypes[$knownTypes->getIndexById($course['type'])]->toArray(), true));
+
+            $course['type'] = $knownTypes->getIndexById($course['type']) !== false ? 
+                array('id' => $course['type'], 'name' => $knownTypes[$knownTypes->getIndexById($course['type'])]->toArray() ) : 
                 array('id' => $course['type'], 'name' => $course['type']);
         }
         
@@ -318,6 +317,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'accountLoginNamePrefix'    => $course->name . '-',
                 'password'                  => $course->name,
                 'course'                    => $course,
+                'encoding'                  => 'iso-8859-1'
             )
         );
         $importer->import($tempFile->path);
