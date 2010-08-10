@@ -27,6 +27,7 @@
  * <container_id>34</container_id>:     container id for imported records (required)
  * <encoding>UTF-8</encoding>:          encoding of input file
  * <duplicates>1<duplicates>:           check for duplicates
+ * <use_headline>0</use_headline>:      just remove the headline/first line but do not use it for mapping
  * 
  * <mapping><field> special tags:
  * <append>glue</append>:               value is appended to destination field with 'glue' as glue
@@ -154,6 +155,10 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         if (isset($this->_options['headline']) && $this->_options['headline']) {
             $headline = $this->_getRawData($_resource);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got headline: ' . implode(', ', $headline));
+            if (isset($this->_options['use_headline']) && $this->_options['use_headline'] == 0) {
+                // just read headline but do not use it
+                $headline = array();
+            }
         } else {
             $headline = array();
         }
