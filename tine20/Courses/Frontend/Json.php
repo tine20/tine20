@@ -88,7 +88,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $result = parent::_multipleRecordsToJson($_records, $_filter);
         
-        // get groups/types and merge data
+        // get groups + types (departments) and merge data
         $groupIds = $_records->group_id;
         $groups = Tinebase_Group::getInstance()->getMultiple(array_unique(array_values($groupIds)));
         $knownTypes = Tinebase_Department::getInstance()->search(new Tinebase_Model_DepartmentFilter());
@@ -107,14 +107,9 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $typeIdx = $knownTypes->getIndexById($course['type']);
             if ($typeIdx !== FALSE) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($knownTypes[$typeIdx]->toArray(), true));
-                
-                $course['type'] = array(
-                    'id' => $course['type'], 
-                    'name' => $knownTypes[$typeIdx]->toArray()
-                );
+                $course['type'] = $knownTypes[$typeIdx]->toArray();
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Course type with ID ' . $course['type'] . ' does not exist.');
-                
                 $course['type'] = array(
                     'id' => $course['type'], 
                     'name' => $course['type']
