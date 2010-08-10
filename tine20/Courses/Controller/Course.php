@@ -113,7 +113,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             'accountDisplayName'    => $record->name . ' ' .  $i18n->_('Teacher Account'),
             'accountFirstName'      => $record->name,
             'accountExpires'        => NULL,
-            'accountEmailAddress'   => NULL,
+            'accountEmailAddress'   => $loginname . '@g10.de'
         ));
         
         $event = new Courses_Event_BeforeAddTeacher($account, $record);
