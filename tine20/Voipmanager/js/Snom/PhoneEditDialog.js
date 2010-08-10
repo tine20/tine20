@@ -287,7 +287,8 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         triggerAction: 'all',
                         editable: false,
                         forceSelection: true,
-                        store: Tine.Voipmanager.Data.loadPhoneModelData()
+                        store: Tine.Voipmanager.Data.loadPhoneModelData(),
+                        allowBlank: false
                     }], [{
                         xtype: 'textfield',
                         fieldLabel: this.getTranslations()._('MAC Address'),
@@ -309,7 +310,8 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         listeners: {
                             scope: this,
                             select: this.onTemplateChange
-                        }
+                        },
+                        allowBlank: false
                     }], [{
                         xtype:'reccombo',
                         name: 'location_id',
@@ -321,7 +323,8 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             reader: Tine.Voipmanager.SnomLocationBackend.getReader(),
                             remoteSort: true,
                             sortInfo: {field: 'name', dir: 'ASC'}
-                        })
+                        }),
+                        allowBlank: false
                     }]
                 ]}, {
                     title: this.getTranslations()._('infos'),
