@@ -346,7 +346,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         }
         
         // loop subfolders (recursive) and replace new localname in globalname path
-        $subfolders = $this->getSubfolders($_accountId, $_oldGlobalName . $account->delimiter);
+        $subfolders = $this->getSubfolders($account, $_oldGlobalName);
         foreach ($subfolders as $subfolder) {
             if ($newGlobalName != $subfolder->globalname) {
                 $newSubfolderGlobalname = str_replace($_oldGlobalName, $newGlobalName, $subfolder->globalname);
@@ -484,15 +484,15 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
         
-        if ($_globalname !== '' || ! $account->has_children_support) {
+        if (! $account->has_children_support) {
             return NULL;
         }
 
         $folder = $this->getByBackendAndGlobalName($_accountId, $_globalname);
         if ($_value === NULL) {
             // check if folder has children by searching in db
-            $subfolders = $this->getSubfolders($_accountId, $_globalname);
-            $value = (count($subfolders) > 0);
+            $subfolders = $this->getSubfolders($account, $_globalname);
+            $value = (count($subfolders) > 0) ? 1 : 0;
         } else {
             $value = $_value;
         }
@@ -509,15 +509,15 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     /**
      * get subfolders
      * 
-     * @param string $_accountId
+     * @param Felamimail_Model_Account $_account
      * @param string $_globalname
      * @return Tinebase_Record_RecordSet
      */
-    public function getSubfolders($_accountId, $_globalname)
+    public function getSubfolders($_account, $_globalname)
     {
         $filter = new Felamimail_Model_FolderFilter(array(
-            array('field' => 'globalname', 'operator' => 'startswith',  'value' => $_globalname),
-            array('field' => 'account_id', 'operator' => 'equals',      'value' => $_accountId),
+            array('field' => 'globalname', 'operator' => 'startswith',  'value' => $_globalname . $_account->delimiter),
+            array('field' => 'account_id', 'operator' => 'equals',      'value' => $_account->getId()),
         ));
         
         return $this->_backend->search($filter);
