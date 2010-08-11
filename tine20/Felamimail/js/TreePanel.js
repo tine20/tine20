@@ -440,7 +440,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             if (selectedNode && selectedNode.id == record.id && (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done'))) {
                 var contentPanel = this.app.getMainScreen().getCenterPanel();
                 if (contentPanel) {
-                    //console.log('update grid');
                     // TODO do not update if multiple messages are selected (this does not work if messages are moved!)
                     // TODO do not reload details panel
                     contentPanel.loadData(true, true, true);
@@ -452,13 +451,28 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     },
     
     /**
-     * add new folder to the store
+     * add new folder to the store and update paths in node
      * 
      * @param {Object} folderData
      */
     onFolderAdd: function(folderData) {
         var recordData = Ext.copyTo({}, folderData, Tine.Felamimail.Model.Folder.getFieldNames());
         var newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: Ext.util.JSON.encode(recordData)});
+        
+        // add paths to node and record
+        var parent = this.folderStore.getParentByAccountIdAndGlobalname(newRecord.get('account_id'), newRecord.get('parent'));
+        if (parent) {
+            newRecord.set('parent_path', parent.get('path'));
+        } else {
+            newRecord.set('parent_path', '/' + newRecord.get('account_id'));
+        }
+        newRecord.set('path', newRecord.get('parent_path') + '/' + newRecord.id);
+        var node = this.getNodeById(newRecord.id);
+        node.attributes.path = newRecord.get('path');
+        node.attributes.parent_path = newRecord.get('parent_path');
+        
+        Tine.log.debug('Add new folder:' + newRecord.get('globalname'));
+        
         this.folderStore.add([newRecord]);
     },
 
@@ -526,11 +540,16 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         
         if (node && node.ui.rendered) {
             // update unreadcount
-            Ext.fly(Ext.DomQuery.selectNode('span[class=felamimail-node-statusbox-unread]', nodeEl)).update(unreadcount).setVisible(unreadcount > 0);
-            ui[unreadcount === 0 ? 'removeClass' : 'addClass']('felamimail-node-unread');
-            
-            // update progress
-            var pie = Ext.get(Ext.DomQuery.selectNode('img[class=felamimail-node-statusbox-progress]', nodeEl)).setStyle('background-position', progress + '%').setVisible(isSelected && cacheStatus !== 'complete' && cacheStatus !== 'disconnect' && progress !== 100 && lastCacheStatus !== 'complete');
+            var domNode = Ext.DomQuery.selectNode('span[class=felamimail-node-statusbox-unread]', nodeEl);
+            if (domNode) {
+                Ext.fly(domNode).update(unreadcount).setVisible(unreadcount > 0);
+                ui[unreadcount === 0 ? 'removeClass' : 'addClass']('felamimail-node-unread');
+                
+                // update progress
+                var pie = Ext.get(Ext.DomQuery.selectNode('img[class=felamimail-node-statusbox-progress]', nodeEl)).setStyle('background-position', progress + '%').setVisible(
+                    isSelected && cacheStatus !== 'complete' && cacheStatus !== 'disconnect' && progress !== 100 && lastCacheStatus !== 'complete'
+                );
+            }
         }
     },
     
