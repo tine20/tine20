@@ -61,7 +61,10 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
-        $this->_controller = Felamimail_Controller_Folder::getInstance();        
+        $this->_controller = Felamimail_Controller_Folder::getInstance();
+        
+        // fill folder cache first
+        $this->_controller->search($this->_getFolderFilter(''));
     }
 
     /**
@@ -113,13 +116,12 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateFolder()
     {
+        $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test';
         $newFolder = $this->_controller->create($this->_account->getId(), 'test', 'INBOX');
 
         // check returned data (id)
         $this->assertTrue(!empty($newFolder->id));
         $this->assertEquals('INBOX' . $this->_account->delimiter . 'test', $newFolder->globalname);
-        
-        $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test';
         
         // get inbox folder and do more checks -> inbox should have children now
         $result = $this->_controller->search($this->_getFolderFilter(''));
@@ -142,12 +144,13 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      */
     public function testRenameFolder()
     {
+        $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test';
         $this->_controller->create($this->_account->getId(), 'test', 'INBOX');
 
+        $this->_createdFolders = array('INBOX' . $this->_account->delimiter . 'test_renamed');
         $renamedFolder = $this->_controller->rename($this->_account->getId(), 'test_renamed', 'INBOX' . $this->_account->delimiter . 'test');
         
         $this->assertEquals('test_renamed', $renamedFolder->localname);
-        $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test_renamed';
         
         $resultInboxSub = $this->_controller->search($this->_getFolderFilter());
         $this->assertGreaterThan(0, count($resultInboxSub), 'No subfolders found.');
