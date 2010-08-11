@@ -19,7 +19,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>Sieve Filter Dialog</p>
  * <p>This dialog is editing sieve filters (rules).</p>
  * <p>
- * TODO         make it work
+ * TODO         add ok/cancel buttons
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -46,10 +46,9 @@ Tine.Felamimail.RulesDialog = Ext.extend(Ext.TabPanel, {
     initComponent: function() {
         
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
-        this.title = String.format(this.app.i18n._('Sieve Filter Rules for {0}'), this.account.get('name'));
         
         this.items = [new Tine.Felamimail.RulesGridPanel({
-            title: this.app.i18n._('Rules'),
+            title: String.format(this.app.i18n._('Sieve Filter Rules for {0}'), this.account.get('name')),
             account: this.account
         })];
         
