@@ -64,6 +64,8 @@ Tine.widgets.tree.ContextMenu = {
                                 var nodeData = Ext.util.JSON.decode(_result.responseText);
                                 var newNode = this.loader.createNode(nodeData);
                                 parentNode.appendChild(newNode);
+                                // TODO add + icon if it wasn't expandable before
+                                parentNode.expand();
                                 this.fireEvent('containeradd', nodeData);
                                 Ext.MessageBox.hide();
                             }
