@@ -3,7 +3,7 @@ Ext.ns('Ext.ux');
 /**
  * logging extension (only to console atm.)
  * 
- * NOTE: we extend the console objcect here so the console writer preserves 
+ * NOTE: we extend the console object here so the console writer preserves 
  *       line number and files in its logging output!
  *       
  * @namespace   Ext.ux.log
