@@ -546,9 +546,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 // add missing messages
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Retrieve message from {$_folder->imap_totalcount} to 1");
                 
-                $begin = $_folder->cache_job_lowestuid > 0 ? $_folder->cache_job_lowestuid : $this->_imapMessageSequence; 
+                $begin = $_folder->cache_job_lowestuid > 0 ? $_folder->cache_job_lowestuid : $this->_imapMessageSequence;
                 
-                for ($i=$begin; $i > 0; $i -= $this->_importCountPerStep) { 
+                for ($i = $begin; $i > 0; $i -= $this->_importCountPerStep) { 
                     
                     $messageSequenceStart = (($i - $this->_importCountPerStep) > 0 ) ? $i - $this->_importCountPerStep : 1;
                     
@@ -599,7 +599,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $_folder->cache_status);           
                 }
                 
-                if ($messageSequenceStart === 1) {
+                if (defined($messageSequenceStart) && $messageSequenceStart === 1) {
                     $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
                 }
             }
