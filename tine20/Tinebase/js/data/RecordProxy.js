@@ -128,7 +128,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
      * @param   {Object} paging
      * @param   {Object} options
      * @return  {Number} Ext.Ajax transaction id
-     * @success {Object} root:[recrods], totalcount: number
+     * @success {Object} root:[records], totalcount: number
      */
     searchRecords: function(filter, paging, options) {
         options = options || {};
