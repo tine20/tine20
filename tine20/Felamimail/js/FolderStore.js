@@ -180,6 +180,23 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
             folder.commit();
             return folder;
         }
+    },
+    
+    /**
+     * get by account id and globalname
+     * 
+     * @param {String} accountId
+     * @param {String} globalname
+     * @return {Tine.Felamimail.Model.Folder|null}
+     */
+    getParentByAccountIdAndGlobalname: function(accountId, globalname) {
+        var result = this.queryBy(function(record, id) {
+            if (record.get('account_id') == accountId && record.get('globalname') == globalname) {
+                return true;
+            }
+        });
+        
+        return result.first() || null;
     }
 });
 
