@@ -87,6 +87,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     defaultSortInfo: null,
     /**
+     * @cfg {Bool} usePagingToolbar 
+     */
+    usePagingToolbar: true,
+    /**
      * @cfg {Object} defaultPaging 
      */
     defaultPaging: null,
@@ -160,6 +164,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @property actionToolbar
      */
     actionToolbar: null,
+    
+    /**
+     * @type Ext.ux.grid.PagingToolbar
+     * @property pagingToolbar
+     */
+    pagingToolbar: null,
 
     /**
      * @type Ext.Menu
@@ -409,20 +419,21 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }
         }, this);
         
-        // we always have a paging toolbar
-        this.pagingToolbar = new Ext.ux.grid.PagingToolbar(Ext.apply({
-            pageSize: this.defaultPaging && this.defaultPaging.limit ? this.defaultPaging.limit : 50,
-            store: this.store,
-            displayInfo: true,
-            displayMsg: Tine.Tinebase.translation._('Displaying records {0} - {1} of {2}').replace(/records/, this.i18nRecordsName),
-            emptyMsg: String.format(Tine.Tinebase.translation._("No {0} to display"), this.i18nRecordsName),
-            displaySelectionHelper: true,
-            sm: this.selectionModel
-        }, this.pagingConfig));
-        // mark next grid refresh as paging-refresh
-        this.pagingToolbar.on('beforechange', function() {
-            this.grid.getView().isPagingRefresh = true;
-        }, this);
+        if (this.usePagingToolbar) {
+            this.pagingToolbar = new Ext.ux.grid.PagingToolbar(Ext.apply({
+                pageSize: this.defaultPaging && this.defaultPaging.limit ? this.defaultPaging.limit : 50,
+                store: this.store,
+                displayInfo: true,
+                displayMsg: Tine.Tinebase.translation._('Displaying records {0} - {1} of {2}').replace(/records/, this.i18nRecordsName),
+                emptyMsg: String.format(Tine.Tinebase.translation._("No {0} to display"), this.i18nRecordsName),
+                displaySelectionHelper: true,
+                sm: this.selectionModel
+            }, this.pagingConfig));
+            // mark next grid refresh as paging-refresh
+            this.pagingToolbar.on('beforechange', function() {
+                this.grid.getView().isPagingRefresh = true;
+            }, this);
+        }
         
         // init view
         var view =  new Ext.grid.GridView({
@@ -510,7 +521,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             scope: this
         };
         
-        if (preserveCursor) {
+        if (preserveCursor && this.usePagingToolbar) {
             opts.params = {
                 start: this.pagingToolbar.cursor
             };
@@ -991,26 +1002,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {msg: message});
                 }
                 this.deleteMask.show();
-            } else {
+            } else if (this.usePagingToolbar) {
                 this.pagingToolbar.refresh.disable();
             }
             
             var options = {
                 scope: this,
                 success: function() {
-                    if (this.showDeleteMask) {
-                        this.deleteMask.hide();
-                    } else {
-                        this.pagingToolbar.refresh.show();
-                    }
+                    this.refreshAfterDelete();
                     this.onAfterDelete();
                 },
                 failure: function () {
-                    if (this.showDeleteMask) {
-                        this.deleteMask.hide();
-                    } else {
-                        this.pagingToolbar.refresh.show();
-                    }
+                    this.refreshAfterDelete();
                     Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), i18nItems)); 
                 }
             };
@@ -1024,6 +1027,17 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             Ext.each(records, function(record) {
                 this.store.remove(record);
             });
+        }
+    },
+    
+    /**
+     * refresh after delete (hide delete mask or refresh paging toolbar)
+     */
+    refreshAfterDelete: function() {
+        if (this.showDeleteMask) {
+            this.deleteMask.hide();
+        } else if (this.usePagingToolbar) {
+            this.pagingToolbar.refresh.show();
         }
     },
     
