@@ -97,7 +97,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         $this->_delimiter = $account->delimiter;
         
         // try to get subfolders of $_folderName
-        if(empty($_folderName)) {
+        if (empty($_folderName)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Get subfolders of root for backend ' . $_accountId);
             $folders = $imap->getFolders('', '%');
             
@@ -134,14 +134,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             if (in_array($_folderName, array_keys($folders))) {
                 unset($folders[$_folderName]);
             }
-            
-            // update has children
-            $parentFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_accountId, $_folderName);
-            $hasChildren = (empty($folders)) ? 0 : 1;
-            if ($hasChildren != $parentFolder->has_children) {
-                $parentFolder->has_children = $hasChildren;
-                $this->_backend->update($parentFolder);
-            }
         }
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($account->toArray(), true));
@@ -149,6 +141,16 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         
         // get folder recordset and sort it
         $result = $this->_getOrCreateFolders($folders, $account, $_folderName);
+        
+        // update has children
+        if (! empty($_folderName)) {
+            $parentFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_accountId, $_folderName);
+            $hasChildren = (empty($folders) || count($folders) > 0 && count($result) == 0) ? 0 : 1;
+            if ($hasChildren != $parentFolder->has_children) {
+                $parentFolder->has_children = $hasChildren;
+                $this->_backend->update($parentFolder);
+            }
+        }
         
         return $result;
     }
