@@ -20,7 +20,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>This dialog is editing sieve filters (vacation and rules).</p>
  * <p>
  * TODO         activate mime (text/html) vacation messages
- * TODO         add rules ? or another edit dlg for rules?
  * TODO         add signature from account?
  * </p>
  * 
