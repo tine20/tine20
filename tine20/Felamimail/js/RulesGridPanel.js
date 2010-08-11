@@ -142,40 +142,12 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * generic edit in new window handler
+     * on update after edit
+     * 
+     * @param {Tine.Tinebase.data.Record} record
      */
-    onEditInNewWindow: function(button, event) {
-        
-        Tine.log.info('not yet implemented');
-        
-        /*
-        var record; 
-        if (button.actionType == 'edit') {
-            if (! this.action_editInNewWindow || this.action_editInNewWindow.isDisabled()) {
-                // if edit action is disabled or not available, we also don't open a new window
-                return false;
-            }
-            var selectedRows = this.grid.getSelectionModel().getSelections();
-            record = selectedRows[0];
-            
-        } else if (button.actionType == 'copy') {
-            var selectedRows = this.grid.getSelectionModel().getSelections();
-            record = this.copyRecord(selectedRows[0].data);
-
-        } else {
-            record = new this.recordClass(this.recordClass.getDefaultData(), 0);
-        }
-        
-        var popupWindow = Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow({
-            record: record,
-            listeners: {
-                scope: this,
-                'update': function(record) {
-                    // TODO add to store
-                }
-            }
-        });
-        */
+    onUpdateRecord: function(record) {
+        this.store.add([record]);
     },
     
     /**
