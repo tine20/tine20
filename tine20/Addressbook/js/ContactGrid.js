@@ -450,19 +450,5 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             il8n: this.app.i18n,
             felamimail: this.felamimail
         });
-    },
-    
-    /**
-     * copy record (and unset some fields)
-     * 
-     * @param {Object} recordData
-     * @return Record
-     */
-    copyRecord: function (recordData) {
-        // we need to unset account id because it is unique and linked to an user
-        delete recordData.account_id;
-        
-        var result = Tine.Addressbook.ContactGridPanel.superclass.copyRecord.call(this, recordData);
-        return result;
-    }   
+    }
 });
