@@ -160,6 +160,22 @@ Tine.Felamimail.setTreeContextMenus = function() {
         }
     };
     
+    var editRulesAction = {
+        text: this.app.i18n._('Set Filter Rules'),
+        iconCls: 'action_email_forward',
+        scope: this,
+        handler: function() {
+            var accountId = this.ctxNode.attributes.account_id;
+            var account = this.accountStore.getById(accountId);
+            //var record = new Tine.Felamimail.Model.Vacation({id: accountId}, accountId);
+            
+            var popupWindow = Tine.Felamimail.RulesDialog.openWindow({
+                account: account
+                //record: record
+            });
+        }
+    };
+
     // inactive
     /*
     var reloadFolderAction = {
@@ -206,8 +222,8 @@ Tine.Felamimail.setTreeContextMenus = function() {
             }
         }
     };
-    // mutual config options
     
+    // mutual config options
     var config = {
         nodeName: this.app.i18n.n_('Folder', 'Folders', 1),
         scope: this,
@@ -216,25 +232,21 @@ Tine.Felamimail.setTreeContextMenus = function() {
     };
     
     // system folder ctx menu
-
     config.actions = ['add'];
     this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // user folder ctx menu
-
     config.actions = ['add', 'rename', 'delete'];
     this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // trash ctx menu
-    
     config.actions = ['add', emptyFolderAction];
     this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // account ctx menu
-    
     this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
         nodeName: this.app.i18n.n_('Account', 'Accounts', 1),
-        actions: [editAccountAction, 'delete', addFolderToRootAction, reloadFolderCacheAction, editVacationAction],
+        actions: [editAccountAction, 'delete', addFolderToRootAction, reloadFolderCacheAction, editVacationAction, editRulesAction],
         scope: this,
         backend: 'Felamimail',
         backendModel: 'Account'
