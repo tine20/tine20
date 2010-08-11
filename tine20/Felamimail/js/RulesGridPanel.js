@@ -17,7 +17,6 @@ Ext.ns('Tine.Felamimail');
  * @extends   Tine.widgets.grid.GridPanel
  * Rules Grid Panel <br>
  * TODO         make buttons + save work
- * TODO         remove paging toolbar?
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
@@ -37,6 +36,7 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     // not yet
     evalGrants: false,
+    usePagingToolbar: false,
     
     //newRecordIcon: 'cal-resource',
     
