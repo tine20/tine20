@@ -6,6 +6,8 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * TODO         think about adding a generic felamimail backend with the exception handler
  */
 Ext.ns('Tine.Felamimail.Model');
 
@@ -613,6 +615,14 @@ Tine.Felamimail.rulesBackend = new Tine.Tinebase.data.RecordProxy({
         options.timeout = 60000;
         
         return this.doXHTTPRequest(options);
-    }
+    },
     
+    /**
+     * exception handler for this proxy
+     * 
+     * @param {Tine.Exception} exception
+     */
+    handleRequestException: function(exception) {
+        Tine.Felamimail.handleRequestException(exception);
+    }
 });

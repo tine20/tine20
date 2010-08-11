@@ -471,6 +471,15 @@ Tine.Felamimail.handleRequestException = function(exception) {
             });
             break;
             
+        case 930: // Felamimail_Exception_Sieve
+            Ext.Msg.show({
+               title:   app.i18n._('Sieve Error'),
+               msg:     exception.message ? exception.message : app.i18n._('No connection to Sieve server.'),
+               icon:    Ext.MessageBox.ERROR,
+               buttons: Ext.Msg.OK
+            });
+            break;
+
         default:
             Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
             break;
