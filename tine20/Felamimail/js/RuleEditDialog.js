@@ -19,6 +19,9 @@ Ext.namespace('Tine.Felamimail');
  * <p>Sieve Filter Dialog</p>
  * <p>This dialog is editing a filter rule.</p>
  * <p>
+ * TODO         add more form fields
+ * TODO         add conditions grid
+ * TODO         add title
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -65,6 +68,7 @@ Ext.namespace('Tine.Felamimail');
             return;
         }
         
+        //Tine.log.debug(this.record);
         this.getForm().loadRecord(this.record);
         
         this.loadMask.hide();
@@ -77,13 +81,35 @@ Ext.namespace('Tine.Felamimail');
      * 
      * @return {Object}
      * @private
-     * 
      */
     getFormItems: function() {
         
-        return {
-
-        };
+        return [{
+            title: this.app.i18n._('General'),
+            autoHeight: true,
+            xtype: 'fieldset',
+            //checkboxToggle: true,
+            layout: 'hfit',
+            items: [{
+                fieldLabel: this.app.i18n._('Enabled'),
+                name: 'enabled',
+                xtype:'checkbox'
+            }]
+        }, {
+            title: this.app.i18n._('Action'),
+            autoHeight: true,
+            xtype: 'fieldset',
+            //checkboxToggle: true,
+            layout: 'hfit',
+            items: []
+        }, {
+            title: this.app.i18n._('Conditions'),
+            autoHeight: true,
+            xtype: 'fieldset',
+            //checkboxToggle: true,
+            layout: 'hfit',
+            items: []
+        }];
     }
 });
 
