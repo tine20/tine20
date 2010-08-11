@@ -376,7 +376,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
     
     /**
-     * preform the initial load of grid data
+     * perform the initial load of grid data
      */
     initialLoad: function() {
         var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName);
@@ -407,7 +407,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }
         }, this);
         
-        // we allways have a paging toolbar
+        // we always have a paging toolbar
         this.pagingToolbar = new Ext.ux.grid.PagingToolbar(Ext.apply({
             pageSize: this.defaultPaging && this.defaultPaging.limit ? this.defaultPaging.limit : 50,
             store: this.store,
