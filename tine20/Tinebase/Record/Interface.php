@@ -139,7 +139,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @param  array                     $_toOmit fields to omit
      * @return bool
      */
-    public function isEqual($_record, array $_toOmmit = array());
+    public function isEqual($_record, array $_toOmit = array());
      
     /**
      * translate this records' fields

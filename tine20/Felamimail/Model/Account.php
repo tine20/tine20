@@ -159,11 +159,11 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     );
     
     /**
-     * name of fields that should be ommited from modlog
+     * name of fields that should be omited from modlog
      *
-     * @var array list of modlog ommit fields
+     * @var array list of modlog omit fields
      */
-    protected $_modlogOmmitFields = array(
+    protected $_modlogOmitFields = array(
         'user',
         'password',
         'smtp_user',

@@ -288,7 +288,7 @@ class Tinebase_Timemachine_ModificationLog
      * @param  Tinebase_Record_Abstract $_curRecord record from storage
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
      * 
-     * @todo move more 'toOmmit' fields to record
+     * @todo move more 'toOmit' fields to record
      */
     public function writeModLog($_newRecord, $_curRecord, $_model, $_backend, $_id)
     {
@@ -307,8 +307,8 @@ class Tinebase_Timemachine_ModificationLog
         
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         
-        // ommit second order records and jpegphoto for the moment
-        $toOmmit = array_merge($this->_metaProperties, array(
+        // omit second order records and jpegphoto for the moment
+        $toOmit = array_merge($this->_metaProperties, array(
             'tags',
             'relations',
             'notes',
@@ -320,10 +320,10 @@ class Tinebase_Timemachine_ModificationLog
             'attendee',
             'alarms'
         ));
-        $toOmmit = array_merge($toOmmit, $_curRecord->getModlogOmmitFields());
+        $toOmit = array_merge($toOmit, $_curRecord->getModlogOmitFields());
         
         foreach ($diffs as $field => $newValue) {
-            if(! in_array($field, $toOmmit)) {
+            if(! in_array($field, $toOmit)) {
                 $curValue = $_curRecord->$field;
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " field '$field' changed from '$curValue' to '$newValue'");
                 

@@ -104,7 +104,7 @@ class Tinebase_Relations
             $current = $currentRelations[$currentRelations->getIndexById($relationId)];
             $update = $relations[$relations->getIndexById($relationId)];
             
-            // @todo do we need to ommit so many fields?
+            // @todo do we need to omit so many fields?
             if (! $current->related_record->isEqual(
                 $update->related_record, 
                 array(

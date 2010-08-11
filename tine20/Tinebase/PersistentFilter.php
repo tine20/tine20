@@ -53,11 +53,11 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
     protected $_purgeRecords = FALSE;
     
     /**
-     * ommit mod log for this records
+     * omit mod log for this records
      * 
      * @var boolean
      */
-    protected $_ommitModLog = TRUE;
+    protected $_omitModLog = TRUE;
     
     /**
      * Model name

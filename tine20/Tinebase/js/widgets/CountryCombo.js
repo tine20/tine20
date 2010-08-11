@@ -88,7 +88,7 @@ Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
     },
     /**
      * @private
-     * expand after store load, as this is ommited by the initial load hack
+     * expand after store load, as this is omited by the initial load hack
      */
     onTriggerClick: function(){
         if (this.getCountryStore().getCount() == 0) {

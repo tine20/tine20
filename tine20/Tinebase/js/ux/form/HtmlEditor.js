@@ -549,7 +549,7 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
                             labelAlign: 'right',
                             items: [{
                                 xtype: 'label',
-                                html: 'Enter the width of the Rule in percentage<br/> followed by the % sign at the end, or to<br/> set a fixed width ommit the % symbol.<br/>&nbsp;'
+                                html: 'Enter the width of the Rule in percentage<br/> followed by the % sign at the end, or to<br/> set a fixed width omit the % symbol.<br/>&nbsp;'
                             }, {
                                 xtype: 'textfield',
                                 maskRe: /[0-9]|%/,
