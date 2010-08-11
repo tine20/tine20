@@ -516,7 +516,7 @@ Tine.Felamimail.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.Tinebase.
 });
 
 /**
- * get default data for account
+ * get default data for vacation
  * 
  * @return {Object}
  */
@@ -529,7 +529,7 @@ Tine.Felamimail.Model.Vacation.getDefaultData = function() {
 
 /**
  * @namespace Tine.Felamimail
- * @class Tine.Felamimail.accountBackend
+ * @class Tine.Felamimail.vacationBackend
  * @extends Tine.Tinebase.data.RecordProxy
  * 
  * Vacation Backend
@@ -540,4 +540,79 @@ Tine.Felamimail.vacationBackend = new Tine.Tinebase.data.RecordProxy({
     recordClass: Tine.Felamimail.Model.Vacation
 });
 
+/**
+ * @namespace Tine.Felamimail.Model
+ * @class Tine.Felamimail.Model.Rule
+ * @extends Tine.Tinebase.data.Record
+ * 
+ * Rule Record Definition
+ */ 
+Tine.Felamimail.Model.Rule = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+    { name: 'id' },
+    { name: 'action' },
+    { name: 'enabled', type: 'boolean'},
+    { name: 'conditions' }
+]), {
+    appName: 'Felamimail',
+    modelName: 'Rule',
+    idProperty: 'id',
+    titleProperty: 'id',
+    // ngettext('Rule', 'Rules', n);
+    recordName: 'Rule',
+    recordsName: 'Rules',
+    //containerProperty: 'container_id',
+    // ngettext('record list', 'record lists', n);
+    containerName: 'Rule list',
+    containersName: 'Rule lists'    
+});
 
+/**
+ * get default data for rules
+ * 
+ * @return {Object}
+ */
+Tine.Felamimail.Model.Rule.getDefaultData = function() { 
+    return {
+    };
+};
+
+/**
+ * @namespace Tine.Felamimail
+ * @class Tine.Felamimail.rulesBackend
+ * @extends Tine.Tinebase.data.RecordProxy
+ * 
+ * Rule Backend
+ */ 
+Tine.Felamimail.rulesBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Felamimail',
+    modelName: 'Rule',
+    recordClass: Tine.Felamimail.Model.Rule,
+    
+    /**
+     * searches all (lightweight) records matching filter
+     * 
+     * @param   {Object} filter accountId
+     * @param   {Object} paging
+     * @param   {Object} options
+     * @return  {Number} Ext.Ajax transaction id
+     * @success {Object} root:[records], totalcount: number
+     */
+    searchRecords: function(filter, paging, options) {
+        options = options || {};
+        options.params = options.params || {};
+        var p = options.params;
+        
+        p.method = this.appName + '.get' + this.modelName + 's';
+        p.accountId = filter;
+        
+        options.beforeSuccess = function(response) {
+            return [this.jsonReader.read(response)];
+        };
+        
+        // increase timeout as this can take a longer (1 minute)
+        options.timeout = 60000;
+        
+        return this.doXHTTPRequest(options);
+    }
+    
+});

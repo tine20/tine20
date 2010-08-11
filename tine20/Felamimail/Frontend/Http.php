@@ -24,9 +24,6 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * Returns all JS files which must be included for this app
      *
      * @return array Array of filenames
-     * 
-     * @todo add filename/content disposition
-     * @todo use stream?
      */
     public function getJsFilesToInclude()
     {
@@ -41,6 +38,8 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Felamimail/js/MessageDisplayDialog.js',
             'Felamimail/js/MessageEditDialog.js',
             'Felamimail/js/VacationEditDialog.js',
+            'Felamimail/js/RulesGridPanel.js',
+            'Felamimail/js/RulesDialog.js',
             'Felamimail/js/AccountEditDialog.js',
             'Addressbook/js/SearchCombo.js',
             'Felamimail/js/RecipientGrid.js',
