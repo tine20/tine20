@@ -87,6 +87,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     defaultSortInfo: null,
     /**
+     * @cfg {Object} storeRemoteSort
+     */
+    storeRemoteSort: true,
+    /**
      * @cfg {Bool} usePagingToolbar 
      */
     usePagingToolbar: true,
@@ -370,7 +374,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 fields: this.recordClass,
                 proxy: this.recordProxy,
                 reader: this.recordProxy.getReader(),
-                remoteSort: true,
+                remoteSort: this.storeRemoteSort,
                 sortInfo: this.defaultSortInfo,
                 listeners: {
                     scope: this,
