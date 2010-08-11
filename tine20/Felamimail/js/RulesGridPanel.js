@@ -16,7 +16,7 @@ Ext.ns('Tine.Felamimail');
  * @class     Tine.Felamimail.RulesGridPanel
  * @extends   Tine.widgets.grid.GridPanel
  * Rules Grid Panel <br>
- * TODO         make buttons + save work
+ * TODO         make it possible to determine order of rules
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
@@ -33,6 +33,7 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     // grid specific
     defaultSortInfo: {field: 'id', dir: 'ASC'},
+    storeRemoteSort: false,
     
     // not yet
     evalGrants: false,
@@ -58,7 +59,7 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             id: 'id',
             header: this.app.i18n._("ID"),
             width: 40,
-            sortable: false,
+            sortable: true,
             dataIndex: 'id'
         }, {
             id: 'conditions',
@@ -120,7 +121,7 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     actionRenderer: function(value) {
-        return value.type + ' ' + value.argument;
+        return (value) ? value.type + ' ' + value.argument : '';
     },
     
     /**
@@ -133,7 +134,7 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var result = '';
         
         // show only first condition
-        if (value.length > 0) {
+        if (value && value.length > 0) {
             var condition = value[0]; 
             result = '[' + condition.test + '] ' + condition.header + ' ' + condition.comperator + ' "' + condition.key + '"';
         }
@@ -144,10 +145,35 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * on update after edit
      * 
-     * @param {Tine.Tinebase.data.Record} record
+     * @param {String} encodedRecordData (json encoded)
+     * 
+     * TODO there must be a simpler way to do this!
      */
-    onUpdateRecord: function(record) {
+    onUpdateRecord: function(encodedRecordData) {
+        var recordData = Ext.util.JSON.decode(encodedRecordData);
+        if (! recordData.id) {
+            recordData.id = this.store.getCount()+1;
+        } else {
+            this.store.remove(this.store.getById(recordData.id));
+        }
+        
+        Tine.log.debug(recordData);
+        
+        this.store.loadData({
+            totalcount: 1,
+            results: [recordData]
+        }, true);
+        
+        /*
+        var recordData = Ext.util.JSON.decode(encodedRecordData),
+            id = this.store.getCount()+1;
+            
+        recordData.id = id;
+        var record = new this.recordClass(recordData, id);
+        
         this.store.add([record]);
+        */
+
     },
     
     /**
