@@ -906,9 +906,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             record: record,
             listeners: {
                 scope: this,
-                'update': function(record) {
-                    this.loadData(true, true, true);
-                }
+                'update': this.onUpdateRecord
             }
         });
     },
@@ -919,7 +917,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Object} recordData
      * @return Record
      */
-    copyRecord: function (recordData) {
+    copyRecord: function(recordData) {
         var omitFields = this.recordClass.getMeta('copyOmitFields') || [];
         // always omit id
         omitFields.push('id'); 
@@ -927,6 +925,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             delete recordData[omitFields[i]];
         }
         return new this.recordClass(recordData, 0);
+    },
+    
+    /**
+     * on update after edit
+     * 
+     * @param {Tine.Tinebase.data.Record} record
+     */
+    onUpdateRecord: function(record) {
+        this.loadData(true, true, true);
     },
     
     /**
