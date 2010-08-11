@@ -266,8 +266,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 listeners: {
                     scope: this,
                     afterlayout: function(ct) {
+                    	ct.suspendEvents();
                         ct.setHeight(this.filterToolbar.getHeight());
                         ct.ownerCt.layout.layout();
+                        ct.resumeEvents();
                     }
                 }
             });
