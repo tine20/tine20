@@ -58,7 +58,8 @@ Tine.Timetracker.Model.Timesheet = Tine.Tinebase.data.Record.create(Tine.Timetra
             }
             return timeaccount.getTitle();
         }
-    }
+    },
+    copyOmitFields: ['billed_in', 'is_cleared']
 });
 Tine.Timetracker.Model.Timesheet.getDefaultData = function() { 
     return {
