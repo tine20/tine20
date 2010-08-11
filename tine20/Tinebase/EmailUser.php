@@ -55,7 +55,7 @@ class Tinebase_EmailUser
      * 
      * @staticvar string
      */
-    const LDAP_SMTP_QMAIL      = 'Ldapsmtp_qmail';
+    const LDAP_SMTP_QMAIL      = 'Ldapsmtpqmail';
 
     /**
      * cyrus backend const
