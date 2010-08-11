@@ -16,7 +16,7 @@ Ext.ns('Tine.Felamimail');
  * @class     Tine.Felamimail.RulesGridPanel
  * @extends   Tine.widgets.grid.GridPanel
  * Rules Grid Panel <br>
- * TODO         finish
+ * TODO         make buttons + save work
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
@@ -42,27 +42,47 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         
-        this.gridConfig = {
-        };
-        
-        // TODO add more
-        this.gridConfig.columns = [{
-            id: 'id',
-            header: this.app.i18n._("ID"),
-            width: 150,
-            sortable: true,
-            dataIndex: 'name'
-        }, {
-            id: 'email',
-            header: this.app.i18n._("Action"),
-            width: 150,
-            sortable: true,
-            dataIndex: 'email'
-        }];
+        this.initColumns();
         
         this.supr().initComponent.call(this);
     },
     
+    /**
+     * init columns
+     */
+    initColumns: function() {
+        this.gridConfig = {};
+        
+        this.gridConfig.columns = [{
+            id: 'id',
+            header: this.app.i18n._("ID"),
+            width: 40,
+            sortable: true,
+            dataIndex: 'id'
+        }, {
+            id: 'conditions',
+            header: this.app.i18n._("Conditions"),
+            width: 200,
+            sortable: true,
+            dataIndex: 'conditions',
+            renderer: this.conditionsRenderer
+        }, {
+            id: 'action',
+            header: this.app.i18n._("Action"),
+            width: 120,
+            sortable: true,
+            dataIndex: 'action',
+            renderer: this.actionRenderer
+        }, new Ext.ux.grid.CheckColumn({
+            header: this.app.i18n._('Enabled'),
+            dataIndex: 'enabled',
+            width: 40
+        })];
+    },
+    
+    /**
+     * init layout
+     */
     initLayout: function() {
         this.supr().initLayout.call(this);
         
@@ -90,5 +110,33 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Felamimail.RulesGridPanel.superclass.onStoreBeforeload.call(this, store, options);
         
         options.params.filter = this.account.id;
+    },
+    
+    /**
+     * action renderer
+     * 
+     * @param {Object} value
+     * @return {String}
+     */
+    actionRenderer: function(value) {
+        return value.type + ' ' + value.argument;
+    },
+    
+    /**
+     * conditions renderer
+     * 
+     * @param {Object} value
+     * @return {String}
+     */
+    conditionsRenderer: function(value) {
+        var result = '';
+        
+        // show only first condition
+        if (value.length > 0) {
+            var condition = value[0]; 
+            result = '[' + condition.test + '] ' + condition.header + ' ' + condition.comperator + ' "' + condition.key + '"';
+        }
+        
+        return result;
     }
 });
