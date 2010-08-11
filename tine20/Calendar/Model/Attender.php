@@ -394,8 +394,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     /**
      * resolves given attendee for json representation
      *
-     * @param Tinebase_Record_RecordSet $_attendee 
-     * @param bool                      $_resolveDisplayContainers
+     * @param Tinebase_Record_RecordSet|array   $_eventAttendee 
+     * @param bool                              $_resolveDisplayContainers
      */
     public static function resolveAttendee($_eventAttendee, $_resolveDisplayContainers = TRUE) {
         $eventAttendee = $_eventAttendee instanceof Tinebase_Record_RecordSet ? array($_eventAttendee) : $_eventAttendee;
