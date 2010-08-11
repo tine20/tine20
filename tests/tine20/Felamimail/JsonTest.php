@@ -576,8 +576,9 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->_sieveTestHelper($ruleData);
         
-        // @todo check getRules
-        //$result = $this->_json->getRules($this->_account->getId());
+        // check getRules
+        $result = $this->_json->getRules($this->_account->getId());
+        $this->assertEquals($result['totalcount'], count($ruleData));
     }
     
     /************************ protected functions ****************************/
