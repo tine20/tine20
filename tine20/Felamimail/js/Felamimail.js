@@ -249,7 +249,9 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }
         }
         
-        Tine.log.info('background update failed (' + exception.message + ') -> will check mails again in "' + this.updateInterval/1000 + '" seconds');
+        Tine.log.info('Background update failed (' + exception.message + ') for folder ' + currentRequestFolder.get('globalname') 
+            + ' -> will check mails again in "' + this.updateInterval/1000 + '" seconds');
+        Tine.log.debug(exception);
         this.checkMailsDelayedTask.delay(this.updateInterval);
     },
     
@@ -271,7 +273,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      */
     onUpdateFolder: function(store, record, operation) {
         if (operation === Ext.data.Record.EDIT) {
-            Tine.log.info('folder "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
+            Tine.log.info('Folder "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
             
             // as soon as we get a folder with status != complete we need to trigger checkmail soon!
             if (['complete', 'pending'].indexOf(record.get('cache_status')) === -1) {
