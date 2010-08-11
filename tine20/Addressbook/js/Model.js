@@ -102,7 +102,8 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
     containerProperty: 'container_id',
     // ngettext('Addressbook', 'Addressbooks', n); gettext('Addressbooks');
     containerName: 'Addressbook',
-    containersName: 'Addressbooks'
+    containersName: 'Addressbooks',
+    copyOmitFields: ['account_id']
 });
 
 

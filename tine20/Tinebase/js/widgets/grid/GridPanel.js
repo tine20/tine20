@@ -918,7 +918,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return Record
      */
     copyRecord: function (recordData) {
-        delete recordData.id;
+        var omitFields = this.recordClass.getMeta('copyOmitFields') || [];
+        // always omit id
+        omitFields.push('id'); 
+        for (var i = 0; i < omitFields.length; i++) {
+            delete recordData[omitFields[i]];
+        }
         return new this.recordClass(recordData, 0);
     },
     
