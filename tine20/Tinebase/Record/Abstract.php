@@ -722,6 +722,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function offsetGet($_offset)
     {
+        if (! $this->offsetExists($_offset)) {
+            throw new Tinebase_Exception_Record_DefinitionFailure('Key ' . $_offset . ' does not exist.');
+        }
+        
         return $this->_properties[$_offset];
     }
     
@@ -890,7 +894,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         }
         
         // sanitize container id if it is an array
-        if ($this->has('container_id') && isset($recordData['container_id']) && is_array($recordData['container_id'])) {
+        if ($this->has('container_id') && isset($recordData['container_id']) && is_array($recordData['container_id']) && isset($recordData['container_id']['id']) ) {
             $recordData['container_id'] = $recordData['container_id']['id'];
         }
         
