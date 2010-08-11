@@ -17,6 +17,7 @@ Ext.ns('Tine.Felamimail');
  * @extends   Tine.widgets.grid.GridPanel
  * Rules Grid Panel <br>
  * TODO         make buttons + save work
+ * TODO         remove paging toolbar?
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
@@ -57,26 +58,26 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             id: 'id',
             header: this.app.i18n._("ID"),
             width: 40,
-            sortable: true,
+            sortable: false,
             dataIndex: 'id'
         }, {
             id: 'conditions',
             header: this.app.i18n._("Conditions"),
             width: 200,
-            sortable: true,
+            sortable: false,
             dataIndex: 'conditions',
             renderer: this.conditionsRenderer
         }, {
             id: 'action',
             header: this.app.i18n._("Action"),
             width: 120,
-            sortable: true,
+            sortable: false,
             dataIndex: 'action',
             renderer: this.actionRenderer
         }, new Ext.ux.grid.CheckColumn({
             header: this.app.i18n._('Enabled'),
             dataIndex: 'enabled',
-            width: 40
+            width: 55
         })];
     },
     
@@ -138,5 +139,53 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         return result;
+    },
+    
+    /**
+     * generic edit in new window handler
+     */
+    onEditInNewWindow: function(button, event) {
+        
+        Tine.log.info('not yet implemented');
+        
+        /*
+        var record; 
+        if (button.actionType == 'edit') {
+            if (! this.action_editInNewWindow || this.action_editInNewWindow.isDisabled()) {
+                // if edit action is disabled or not available, we also don't open a new window
+                return false;
+            }
+            var selectedRows = this.grid.getSelectionModel().getSelections();
+            record = selectedRows[0];
+            
+        } else if (button.actionType == 'copy') {
+            var selectedRows = this.grid.getSelectionModel().getSelections();
+            record = this.copyRecord(selectedRows[0].data);
+
+        } else {
+            record = new this.recordClass(this.recordClass.getDefaultData(), 0);
+        }
+        
+        var popupWindow = Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow({
+            record: record,
+            listeners: {
+                scope: this,
+                'update': function(record) {
+                    // TODO add to store
+                }
+            }
+        });
+        */
+    },
+    
+    /**
+     * generic delete handler
+     */
+    onDeleteRecords: function(btn, e) {
+        var sm = this.grid.getSelectionModel();
+        var records = sm.getSelections();
+        Ext.each(records, function(record) {
+            this.store.remove(record);
+        });
     }
 });
