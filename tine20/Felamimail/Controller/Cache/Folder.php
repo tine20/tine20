@@ -267,10 +267,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         
         // do some mapping and save folder in db (if it doesn't exist
         foreach ($_folders as $folderData) {
-            $folder->is_selectable = ($folderData['isSelectable'] == '1');
-            $folder->has_children = ($folderData['hasChildren'] == '1');
-                
-            if (! $folder->is_selectable) {
+            // @todo think about if we need unselectable folders in the folder cache / disabled them for the moment
+            if (! $folderData['isSelectable'] == '1') {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Do not add folder ' . $folderData['globalName'] 
                     . '. It is not selectable.');
                 continue;
@@ -285,6 +283,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 }
                 
                 $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_account->getId(), $folderData['globalName']);
+                $folder->is_selectable = ($folderData['isSelectable'] == '1');
+                $folder->has_children = ($folderData['hasChildren'] == '1');
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding cached folder ' . $folderData['globalName']);
                 
