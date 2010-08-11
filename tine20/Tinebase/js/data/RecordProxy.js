@@ -259,9 +259,9 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
     },
     
     /**
-     * reqired method for Ext.data.Proxy, used by store
+     * required method for Ext.data.Proxy, used by store
      * @todo read the specs and implement success/fail handling
-     * @todo move reqest to searchRecord
+     * @todo move request to searchRecord
      */
     load : function(params, reader, callback, scope, arg){
         if(this.fireEvent("beforeload", this, params) !== false){
