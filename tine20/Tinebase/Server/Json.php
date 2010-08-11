@@ -162,7 +162,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             $response->setVersion($version);
         }
     
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $exception);
+        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $exception);
         
         return $response;
     }
