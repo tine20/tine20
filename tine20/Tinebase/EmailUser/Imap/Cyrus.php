@@ -113,9 +113,11 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_EmailUser_Abstract
      */
     public function deleteUser($_userId)
     {
+        $user = ($_userId instanceof Tinebase_Model_FullUser) ? $_userId : Tinebase_User::getInstance()->getFullUserById($_userId);
+        
         $imap = $this->_getImapConnection();
         
-        $mailboxString = $this->_getUserMailbox($_user->accountLoginName);
+        $mailboxString = $this->_getUserMailbox($user->accountLoginName);
         
         $mailbox = $imap->listMailbox('', $mailboxString);
         
