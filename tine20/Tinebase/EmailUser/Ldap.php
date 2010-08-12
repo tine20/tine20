@@ -221,7 +221,10 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
      */
     protected function _ldap2User($_userData, $_accountClass = 'Tinebase_Model_EmailUser')
     {
-        $accountArray = array();
+        $accountArray = array(
+            'emailForwards' => array(),
+            'emailAliases'  => array()
+        );
         
         foreach ($_userData as $key => $value) {
             if (is_int($key)) {
