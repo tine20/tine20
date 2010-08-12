@@ -636,6 +636,44 @@ class Zend_Mail_Protocol_Imap
     }
     
     /**
+     * get server namespace
+     * 
+     * @return bool|array false if error, array with returned namespace information
+     */
+    public function getNamespace()
+    {
+        $this->sendRequest('NAMESPACE', array(), $tag);
+
+        $result = array();
+        while (!$this->readLine($tokens, $tag)) {
+            
+            $nsNames = array('personal', 'other', 'shared');
+            $index = 0;
+            
+            foreach ($tokens as $token) {
+                if (is_array($token)) {
+                    $result[$nsNames[$index]] = array(
+                        'name' => preg_replace('/"/', '', $token[0][0]), 
+                        'delimiter' => preg_replace('/"/', '', $token[0][1]),
+                    );
+                } else if ($token == 'NIL') {
+                    $result[$nsNames[$index]] = array('name' => 'NIL');
+                } else {
+                    continue;
+                }
+                $index++;
+            }
+        }
+
+        if ($tokens[0] != 'OK') {
+            return false;
+        }
+        
+        return $result;
+    }
+    
+    
+    /**
      * get mailbox list
      *
      * this method can't be named after the IMAP command 'LIST', as list is a reserved keyword
@@ -764,6 +802,11 @@ class Zend_Mail_Protocol_Imap
         return $this->requestAndResponse($uid ? 'UID COPY' : 'COPY', array($set, $this->escapeString($folder)), true);
     }
 
+    public function setACL($folder, $user, $acl)
+    {
+        return $this->requestAndResponse('SETACL', array($this->escapeString($folder), $this->escapeString($user), $this->escapeString($acl)), true);
+    }
+    
     /**
      * create a new folder (and parent folders if needed)
      *
