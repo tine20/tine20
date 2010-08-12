@@ -62,13 +62,13 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
         }
 
         $ldapOptions = Tinebase_User::getBackendConfiguration();
-        $imapConfig = Tinebase_EmailUser::getConfig(Tinebase_Model_Config::IMAP);
+        $imapConfig  = Tinebase_EmailUser::getConfig(Tinebase_Model_Config::IMAP);
         $this->_options = array_merge($ldapOptions, $imapConfig);
         
         // set emailGID
         $this->_options['emailGID'] = 1208394888;
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Binding to ldap server ' . $ldapOptions['host']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Binding to ldap server ' . $ldapOptions['host']);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($ldapOptions, TRUE));
         
         $this->_ldap = new Tinebase_Ldap($ldapOptions);
