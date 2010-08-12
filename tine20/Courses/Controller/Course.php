@@ -107,6 +107,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         
         $account = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => $loginname,
+            'accountLoginShell'     => '/bin/false',
             'accountStatus'         => 'enabled',
             'accountPrimaryGroup'   => $record->group_id,
             'accountLastName'       => $i18n->_('Teacher'),
@@ -114,10 +115,20 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             'accountFirstName'      => $record->name,
             'accountExpires'        => NULL,
             'accountEmailAddress'   => (isset($this->_config->domain)&& !empty($this->_config->domain)) ? $loginname . '@' . $this->_config->domain : '',
+            'accountHomeDirectory'  => '/storage/klassen/bs/gs91c/' . $loginname
         ));
         
-        $event = new Courses_Event_BeforeAddTeacher($account, $record);
-        Tinebase_Event::fireEvent($event);
+        $samUser = new Tinebase_Model_SAMUser(array(
+            'homePath' => '\\\\iserver2\\' . $account->accountLoginName,
+            'homeDrive' => 'U:',
+            'logonScript' => strtolower($record->name) . '.bat',
+            'profilePath' => '\\\\iserver2\\profiles\\bs\\gs91c\\' . $loginname
+        ));
+        
+        $account->sambaSAM = $samUser;
+        
+        #$event = new Courses_Event_BeforeAddTeacher($account, $record);
+        #Tinebase_Event::fireEvent($event);
         
         $password = $this->_config->get('teacher_password', $account->accountLoginName);
         $account = Admin_Controller_User::getInstance()->create($account, $password, $password);
@@ -125,6 +136,11 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         // add to teacher group if available
         if (isset($this->_config->teacher_group) && !empty($this->_config->teacher_group)) {
             Admin_Controller_Group::getInstance()->addGroupMember($this->_config->teacher_group, $account->getId());
+        }
+        
+        // add to students group if available
+        if (isset($this->_config->students_group) && !empty($this->_config->students_group)) {
+            Admin_Controller_Group::getInstance()->addGroupMember($this->_config->students_group, $account->getId());
         }
         
         return $record;
