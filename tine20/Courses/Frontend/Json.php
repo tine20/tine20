@@ -315,7 +315,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Admin_Controller_User::getInstance(),
             array(
                 'group_id'                  => $groupId,
-                'accountLoginNamePrefix'    => $course->name . '-',
+                //'accountLoginNamePrefix'    => $course->name . '-',
                 'accountEmailDomain'        => (isset($this->_config->domain)) ? $this->_config->domain : '',
                 'password'                  => $course->name,
                 'course'                    => $course,
