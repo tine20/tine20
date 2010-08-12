@@ -22,6 +22,7 @@
  * @property    Zend_Date               accountExpires      date when account expires  
  * @property    string                  accountFullName     fullname of the account
  * @property    string                  accountDisplayName  displayname of the account
+ * @property    string                  accountLoginName    account login name
  * @subpackage  User
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User
