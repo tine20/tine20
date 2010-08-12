@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * TODO         think about adding a generic felamimail backend with the exception handler
@@ -630,6 +630,28 @@ Tine.Felamimail.rulesBackend = new Tine.Tinebase.data.RecordProxy({
         
         return this.doXHTTPRequest(options);
     },
+    
+    /**
+     * save sieve rules
+     *
+     * @param  {String}     accountId
+     * @param  {Array}      rules
+     * @param  {Object}     options
+     */
+    saveRules: function(accountId, rules, options)
+    {
+        options = options || {};
+        options.params = options.params || {};
+        
+        var p = options.params;
+        
+        p.method = this.appName + '.saveRules';
+        p.accountId = accountId;
+        p.rulesData = rules;
+        
+        return this.doXHTTPRequest(options);
+    },
+
     
     /**
      * exception handler for this proxy
