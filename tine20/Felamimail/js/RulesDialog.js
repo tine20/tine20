@@ -17,9 +17,8 @@ Ext.namespace('Tine.Felamimail');
  * @extends     Tine.widgets.dialog.EditDialog
  * 
  * <p>Sieve Filter Dialog</p>
- * <p>This dialog is editing sieve filters (rules).</p>
+ * <p>This dialog is for editing sieve filters (rules).</p>
  * <p>
- * TODO         implement onApplyChanges
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -43,7 +42,6 @@ Tine.Felamimail.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     windowNamePrefix: 'VacationEditWindow_',
     appName: 'Felamimail',
-    //recordClass: Tine.Felamimail.Model.Rules,
     loadRecord: false,
     mode: 'local',
     tbarItems: [],
@@ -103,12 +101,16 @@ Tine.Felamimail.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
-     * generic apply changes handler
-     * 
-     * TODO get all rules from grid and send them to Felamimail.saveRules
+     * generic apply changes handler (get rules and send them to saveRules)
      */
     onApplyChanges: function(button, event, closeWindow) {
-        Tine.log.info('not yet implemented');
+        
+        var rules = [];
+        this.rulesGrid.store.each(function(record) {
+            rules.push(record.data);
+        });
+        
+        Tine.Felamimail.rulesBackend.saveRules(this.account.id, rules);
         
         if (closeWindow) {
             this.purgeListeners();
