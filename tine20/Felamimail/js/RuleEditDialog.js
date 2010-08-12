@@ -85,25 +85,14 @@ Ext.namespace('Tine.Felamimail');
     getFormItems: function() {
         
         return [{
-            title: this.app.i18n._('General'),
-            autoHeight: true,
-            xtype: 'fieldset',
-            //checkboxToggle: true,
-            layout: 'hfit',
-            items: [{
-                fieldLabel: this.app.i18n._('Enabled'),
-                name: 'enabled',
-                xtype:'checkbox'
-            }]
-        }, {
-            title: this.app.i18n._('Action'),
+            title: this.app.i18n._('Conditions'),
             autoHeight: true,
             xtype: 'fieldset',
             //checkboxToggle: true,
             layout: 'hfit',
             items: []
         }, {
-            title: this.app.i18n._('Conditions'),
+            title: this.app.i18n._('Action'),
             autoHeight: true,
             xtype: 'fieldset',
             //checkboxToggle: true,
