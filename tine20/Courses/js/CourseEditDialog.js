@@ -243,7 +243,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             var columns = [{
                 id: 'data',
                 header: this.app.i18n._("Login"),
-                width: 100,
+                width: 200,
                 dataIndex: 'data'
             }];
             
