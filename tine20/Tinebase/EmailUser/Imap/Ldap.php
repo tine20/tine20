@@ -34,11 +34,6 @@ class Tinebase_EmailUser_Imap_Ldap extends Tinebase_EmailUser_Ldap
     protected $_userPropertyNameMapping = array(
         'emailUID'          => 'dbmailuid', 
         'emailGID'          => 'dbmailgid', 
-        'emailMailQuota'    => 'mailquota',
-    /*
-        'emailUID'          => 'dbmailUID', 
-        'emailGID'          => 'dbmailGID', 
-        'emailMailQuota'    => 'mailQuota',
-        */
+        'emailMailQuota'    => 'mailquota'
     );
 }
