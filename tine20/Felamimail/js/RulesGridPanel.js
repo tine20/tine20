@@ -17,6 +17,7 @@ Ext.ns('Tine.Felamimail');
  * @extends   Tine.widgets.grid.GridPanel
  * Rules Grid Panel <br>
  * TODO         make it possible to determine order of rules
+ * TODO         add enable / disable buttons or make checkbox column work again (@see http://www.tine20.org/bugtracker/view.php?id=2918)
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
