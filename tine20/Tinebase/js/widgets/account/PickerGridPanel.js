@@ -89,6 +89,8 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
         this.recordClass = (this.recordClass !== null) ? this.recordClass : Tine.Tinebase.Model.Account;
         
         Tine.widgets.account.PickerGridPanel.superclass.initComponent.call(this);
+
+        this.store.sort(this.recordPrefix + 'name');
     },
 
     /**
