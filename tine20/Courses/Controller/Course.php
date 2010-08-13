@@ -117,18 +117,23 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             'accountDisplayName'    => $course->name . ' ' .  $i18n->_('Teacher Account'),
             'accountFirstName'      => $course->name,
             'accountExpires'        => NULL,
-            'accountEmailAddress'   => (isset($this->_config->domain)&& !empty($this->_config->domain)) ? $loginName . '@' . $this->_config->domain : '',
-            'accountHomeDirectory'  => '/storage/klassen/' . $schoolName . '/'. $courseName . '/' . $loginName
+            'accountEmailAddress'   => (isset($this->_config->domain) && !empty($this->_config->domain)) ? $loginName . '@' . $this->_config->domain : '',
+            'accountHomeDirectory'  => (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $courseName . '/' . $loginName : '',
         ));
         
-        $samUser = new Tinebase_Model_SAMUser(array(
-            'homePath'    => '\\\\iserver2\\' . $loginName,
-            'homeDrive'   => 'U:',
-            'logonScript' => $courseName . '-lehrer.bat',
-            'profilePath' => '\\\\iserver2\\profiles\\' . $schoolName . '\\' . $courseName . '\\' . $loginName
-        ));
+        if (isset($this->_config->samba)) {
+            $samUser = new Tinebase_Model_SAMUser(array(
+                'homePath'    => $this->_config->samba->basehomepath . $loginName,
+                'homeDrive'   => $this->_config->samba->homedrive,
+                'logonScript' => $courseName . $this->_config->samba->logonscript_postfix_teacher,
+                'profilePath' => $this->_config->samba->baseprofilepath . $schoolName . '\\' . $courseName . '\\' . $loginName
+            ));
+            
+            $account->sambaSAM = $samUser;
+        }
         
-        $account->sambaSAM = $samUser;
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created teacher account for course ' 
+            . $course->name . ': ' . print_r($account->toArray(), true));
         
         #$event = new Courses_Event_BeforeAddTeacher($account, $course);
         #Tinebase_Event::fireEvent($event);
