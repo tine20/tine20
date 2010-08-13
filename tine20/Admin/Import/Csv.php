@@ -44,9 +44,18 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
                 $record->accountLoginName = $this->_options['accountLoginNamePrefix'] . $record->accountLoginName;
             }
             
+            // add home dir if empty and prefix is given (append login name)
+            if (empty($record->accountHomeDirectory) && isset($this->_options['accountHomeDirectoryPrefix'])) {
+                $record->accountHomeDirectory = $this->_options['accountHomeDirectoryPrefix'] . $record->accountLoginName;
+            }
+            
             // create email address if accountEmailDomain if given
             if (empty($record->accountEmailAddress) && isset($this->_options['accountEmailDomain']) && ! empty($this->_options['accountEmailDomain'])) {
                 $record->accountEmailAddress = $record->accountLoginName . '@' . $this->_options['accountEmailDomain'];
+            }
+            
+            if (isset($this->_options['samba']) && ! empty($this->_options['samba'])) {
+                $this->_addSambaSettings($record);
             }
             
             Tinebase_Event::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
@@ -61,6 +70,8 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
             if (isset($_recordData['password']) && !empty($_recordData['password'])) {
                 $password = $_recordData['password'];
             }
+            
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding record: ' . print_r($record->toArray(), TRUE));
                 
             // try to create record with password
             if ($record->isValid()) {   
@@ -79,6 +90,25 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         }
         
         return $record;
+    }
+    
+    /**
+     * add samba settings to user
+     * 
+     * @param Tinebase_Model_FullUser $_record
+     */
+    protected function _addSambaSettings(Tinebase_Model_FullUser $_record)
+    {
+        $sambaConfig = $this->_options['samba'];
+        
+        $samUser = new Tinebase_Model_SAMUser(array(
+            'homePath'    => $sambaConfig['homePath'] . $_record->accountLoginName,
+            'homeDrive'   => $sambaConfig['homeDrive'],
+            'logonScript' => $sambaConfig['logonScript'],
+            'profilePath' => $sambaConfig['profilePath'] . $_record->accountLoginName
+        ));
+        
+        $_record->sambaSAM = $samUser;
     }
     
     /**
