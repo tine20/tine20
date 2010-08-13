@@ -37,6 +37,13 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     protected $_coursesToDelete = array(); 
     
     /**
+     * test department
+     * 
+     * @var Tinebase_Model_Department
+     */
+    protected $_department = NULL;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -56,7 +63,12 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_json = new Courses_Frontend_Json();        
+        $this->_json = new Courses_Frontend_Json();
+        
+        // create department
+        $this->_department = Tinebase_Department::getInstance()->create(new Tinebase_Model_Department(array(
+            'name'  => Tinebase_Record_Abstract::generateUID()
+        )));
     }
 
     /**
@@ -70,6 +82,9 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         if (! empty($this->_coursesToDelete)) {
             $this->_json->deleteCourses($this->_coursesToDelete);
         }
+        
+        // delete department
+         Tinebase_Department::getInstance()->delete($this->_department);
     }
     
     /**
@@ -245,7 +260,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         return array(
             'name'          => Tinebase_Record_Abstract::generateUID(),
             'description'   => 'blabla',
-            'type'          => Tinebase_Record_Abstract::generateUID(),
+            'type'          => $this->_department->getId(),
         );
     }
         
