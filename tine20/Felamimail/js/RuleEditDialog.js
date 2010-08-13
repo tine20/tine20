@@ -20,7 +20,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>This dialog is editing a filter rule.</p>
  * <p>
  * TODO         add more form fields
- * TODO         add conditions grid
  * TODO         add title
  * </p>
  * 
@@ -86,19 +85,39 @@ Ext.namespace('Tine.Felamimail');
         
         return [{
             title: this.app.i18n._('Conditions'),
-            autoHeight: true,
             xtype: 'fieldset',
-            //checkboxToggle: true,
-            layout: 'hfit',
-            items: []
+            autoHeight: true,
+            layout: 'form',
+            anchor: '90%',
+            defaults: {
+                xtype: 'textfield',
+                anchor: '90%'
+            },
+            items: [{
+                name: 'from_contains',
+                fieldLabel: this.app.i18n._('If "from" contains')
+            }, {
+                name: 'to_contains',
+                fieldLabel: this.app.i18n._('If "to" contains')
+            }, {
+                name: 'subject_contains',
+                fieldLabel: this.app.i18n._('If "subject" contains')
+            }]
         }, {
             title: this.app.i18n._('Action'),
-            autoHeight: true,
             xtype: 'fieldset',
-            //checkboxToggle: true,
-            layout: 'hfit',
-            items: []
-        }];
+            autoHeight: true,
+            layout: 'form',
+            anchor: '90%',
+            defaults: {
+                xtype: 'textfield',
+                anchor: '90%'
+            },
+            items: [{
+                name: 'action_argument',
+                fieldLabel: this.app.i18n._('Move to folder')
+            }]
+        }]
     }
 });
 
