@@ -306,19 +306,26 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $tempFile = $tempFileBackend->getTempFile($tempFileId);
         
         $course = $this->_controller->get($courseId);
+        $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name); 
         
         // get definition and start import with admin user import csv plugin
-        
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($this->_config->get('import_definition', 'admin_user_import_csv'));
         $importer = new $definition->plugin(
             $definition, 
             Admin_Controller_User::getInstance(),
             array(
-                'group_id'                  => $groupId,
+                'group_id'                      => $groupId,
                 //'accountLoginNamePrefix'    => $course->name . '-',
-                'accountEmailDomain'        => (isset($this->_config->domain)) ? $this->_config->domain : '',
-                'password'                  => $course->name,
-                'course'                    => $course,
+                'accountEmailDomain'            => (isset($this->_config->domain)) ? $this->_config->domain : '',
+                'accountHomeDirectoryPrefix'    => (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $course->name . '/' : '',
+                'password'                      => $course->name,
+                'course'                        => $course,
+                'samba'                         => (isset($this->_config->samba)) ? array(
+                    'homePath'    => $this->_config->samba->basehomepath,
+                    'homeDrive'   => $this->_config->samba->homedrive,
+                    'logonScript' => $course->name . $this->_config->samba->logonscript_postfix_member,
+                    'profilePath' => $this->_config->samba->baseprofilepath . $schoolName . '\\' . $course->name . '\\',
+                ) : array(),
             )
         );
         $importer->import($tempFile->path);
