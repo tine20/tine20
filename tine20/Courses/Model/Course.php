@@ -73,24 +73,6 @@ class Courses_Model_Course extends Tinebase_Record_Abstract
     );
     
     /**
-     * overwrite constructor to add more filters
-     *
-     * @param mixed $_data
-     * @param bool $_bypassFilters
-     * @param mixed $_convertDates
-     * @return void
-     */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        /*
-        $this->_filters['budget']  = array('Digits', new Zend_Filter_Empty(NULL));
-        $this->_filters['price'] = array(new Zend_Filter_PregReplace('/,/', '.'), new Zend_Filter_Empty(NULL));
-        $this->_filters['is_open'] = new Zend_Filter_Empty(0);
-        */
-        return parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
-
-    /**
      * fills a record from json data
      *
      * @param string $_data json encoded data
