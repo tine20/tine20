@@ -239,13 +239,14 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             }
         }
         $this->assertTrue(! empty($lahm));
-        $this->assertEquals($result['name'] . '-plahm', $lahm['data']);
+        $this->assertEquals('plahm', $lahm['data']);
         
         // get user and check email
         $user = Tinebase_User::getInstance()->getFullUserById($lahm['id']);
         //print_r($user->toArray());
-        $this->assertEquals($result['name'] . '-plahm', $user->accountLoginName);
-        $this->assertEquals($result['name'] . '-plahm@school.org', $user->accountEmailAddress);
+        $this->assertEquals('plahm', $user->accountLoginName);
+        $this->assertEquals('plahm@school.org', $user->accountEmailAddress);
+        $this->assertEquals('//base/school/' . $result['name'] . '/' . $user->accountLoginName, $user->accountHomeDirectory);
     }
     
     /************ protected helper funcs *************/
@@ -315,9 +316,16 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             Admin_Controller_User::getInstance(),
             array(
                 'group_id'                  => $courseData['group_id'],
-                'accountLoginNamePrefix'    => $courseData['name'] . '-',
+                #'accountLoginNamePrefix'    => $courseData['name'] . '-',
+                'accountHomeDirectoryPrefix' => '//base/school/' . $courseData['name'] . '/',
                 'accountEmailDomain'        => 'school.org',
                 'password'                  => $courseData['name'],
+                'samba'                     => array(
+                    'homePath'    => '//basehome/',
+                    'homeDrive'   => 'H:',
+                    'logonScript' => 'logon.bat',
+                    'profilePath' => '\\\\profile\\',
+                )
             )
         );
         $importer->import($_filename);
