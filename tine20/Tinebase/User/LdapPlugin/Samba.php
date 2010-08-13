@@ -80,7 +80,7 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
     {
         if(empty($_user->sambaSAM->acctFlags)) {
             // avoid Indirect modification of overloaded property
-            $sambaSam = $_user->sambaSAM;
+            $sambaSAM = $_user->sambaSAM;
             $sambaSAM->acctFlags = '[U          ]';
             $_user->sambaSAM = $sambaSam;
         }
@@ -104,7 +104,7 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
         
         if(empty($_user->sambaSAM->acctFlags)) {
             // avoid Indirect modification of overloaded property
-            $sambaSam = $_user->sambaSAM;
+            $sambaSAM = $_user->sambaSAM;
             $sambaSAM->acctFlags = $ldapEntry['sambaacctflags'][0];
             $_user->sambaSAM = $sambaSam;
         }
