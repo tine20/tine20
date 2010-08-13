@@ -176,6 +176,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n._('Description'),
                         grow: false,
                         preventScrollbars:false,
+                        xtype: 'textarea',
                         height: 60
                     }, {
                         hideLabel: true,
