@@ -253,38 +253,16 @@ function getCopyrightHeader()
 
 /*
  * code to build the html5 manfest
- *  
+ */  
 if ($opts->m) {
     $defaultFiles = "CACHE MANIFEST                                          
 # Build by $build                                                   
 CACHE:                                                  
-Tinebase/css/tine-all.css                               
-Tinebase/js/tine-all.js                                 
-
-library/ExtJS/ext-all.js
-library/ExtJS/adapter/ext/ext-base.js       
-library/ExtJS/resources/css/ext-all.css
-library/ExtJS/resources/css/xtheme-gray.css 
-    ";
+";
     
     $manifest = fopen($tine20path . '/tine20.manifest', 'w+');
     fwrite($manifest, $defaultFiles . "\n");
     
-    $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all.css');
-    preg_match_all('/url\(..\/..\/(images.*)\)/U', $tineCSS, $matches);
-    $oxygenImages = array_unique($matches[1]);
-    foreach($oxygenImages as $oxygenImage) {
-        fwrite($manifest, $oxygenImage . "\n");
-    }
-    
-    exec("cd $tine20path; find library/ExtJS/resources/images/ -type f", $extImages);
-    foreach($extImages as $extImage) {
-        fwrite($manifest, $extImage . "\n");
-    }
-    fclose($manifest);
-}*/
-
-if ($opts->a || $opts->m) {
     $files = array(
         'Tinebase/css/tine-all.css',                               
         'Tinebase/js/tine-all.js',
@@ -296,7 +274,7 @@ if ($opts->a || $opts->m) {
     );
     
     // no subdirs! => solaris does not know find -maxdeps 1
-    exec("cd $tine20path; ls images/* | grep images/ | egrep '\.png|\.gif|\.jpg'", $baseImages);
+    exec("cd \"$tine20path\"; ls images/* | grep images/ | egrep '\.png|\.gif|\.jpg'", $baseImages);
     $files = array_merge($files, $baseImages);
     
     $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all-debug.css');
@@ -323,9 +301,74 @@ if ($opts->a || $opts->m) {
     preg_match_all('/src=[\'|"](.*gif)/U', $tineJs, $matches);
     $files = array_merge($files, $matches[1]);
     
-    exec("cd $tine20path; find library/ExtJS/resources/images -type f -name *.gif", $extImages);
+    exec("cd \"$tine20path\"; find library/ExtJS/resources/images -type f -name *.gif", $extImages);
     $files = array_merge($files, $extImages);
-    exec("cd $tine20path; find library/ExtJS/resources/images -type f -name *.png", $extImages);
+    exec("cd \"$tine20path\"; find library/ExtJS/resources/images -type f -name *.png", $extImages);
+    $files = array_merge($files, $extImages);
+    
+    exec("cd \"$tine20path\"; find styles -type f", $tine20Styles);
+    $files = array_merge($files, $tine20Styles);
+    
+    $files = array_unique($files);
+    
+    foreach($files as $file) {
+        if (! is_file("$tine20path/$file")) {
+            echo "WARNING $file not found, removing it from manifest.\n";
+        } else if (substr(basename($file), 0, 1) == '.' || ! preg_match('/(js|css|gif|png|jpg)$/', $file))  {
+            echo "INFO $file is unwanted, removing it from manifest.\n";
+        } else {
+            fwrite($manifest, $file . "\n");
+        }
+    }
+    
+    fclose($manifest);
+}
+
+/*
+ * Google Gears code => dead
+ *
+if ($opts->a || $opts->m) {
+    $files = array(
+        'Tinebase/css/tine-all.css',                               
+        'Tinebase/js/tine-all.js',
+        'styles/tine20.css',                             
+        'library/ExtJS/ext-all.js',
+        'library/ExtJS/adapter/ext/ext-base.js',   
+        'library/ExtJS/resources/css/ext-all.css',
+        'images/oxygen/16x16/actions/knewstuff.png' // ???
+    );
+    
+    // no subdirs! => solaris does not know find -maxdeps 1
+    exec("cd \"$tine20path\"; ls images/* | grep images/ | egrep '\.png|\.gif|\.jpg'", $baseImages);
+    $files = array_merge($files, $baseImages);
+    
+    $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all-debug.css');
+    preg_match_all('/url\(..\/..\/(images.*)\)/U', $tineCSS, $matches);
+    $files = array_merge($files, $matches[1]);
+    
+    $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all-debug.css');
+    preg_match_all('/url\(..\/..\/(library.*)\)/U', $tineCSS, $matches);
+    $files = array_merge($files, $matches[1]);
+        
+    $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
+    preg_match_all('/labelIcon: [\'|"](.*png)/U', $tineJs, $matches);
+    $files = array_merge($files, $matches[1]);
+    
+    $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
+    preg_match_all('/labelIcon: [\'|"](.*gif)/U', $tineJs, $matches);
+    $files = array_merge($files, $matches[1]);
+    
+    $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
+    preg_match_all('/src=[\'|"](.*png)/U', $tineJs, $matches);
+    $files = array_merge($files, $matches[1]);
+    
+    $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
+    preg_match_all('/src=[\'|"](.*gif)/U', $tineJs, $matches);
+    $files = array_merge($files, $matches[1]);
+    
+    exec("cd \"$tine20path\"; find library/ExtJS/resources/images -type f -name *.gif", $extImages);
+    $files = array_merge($files, $extImages);
+    exec("cd \"$tine20path\"; find library/ExtJS/resources/images -type f -name *.png", $extImages);
     $files = array_merge($files, $extImages);
     
     $manifest = array(
@@ -357,13 +400,13 @@ if ($opts->a || $opts->m) {
     $fd = fopen($tine20path . '/Tinebase/js/tine20-manifest.js', 'w+');
     fwrite($fd, $jsonManifest);
     fclose($fd);
-}
+} */
 
 if ($opts->lint) {
     foreach ($includeFiles['js'] as $file) {
         list($filename) = explode('?', $file);
         if (file_exists("$tine20path/$filename")) {
-            $lint = `java -jar $jslintPath --laxbreak $tine20path/$filename`;
+            $lint = `java -jar $jslintPath --laxbreak "$tine20path/$filename"`;
             if ($lint) {
                 echo "$tine20path/$filename: \n";
                 echo "------------------------------------------------------------------\n";
@@ -391,7 +434,7 @@ if ($opts->a || $opts->t) {
         file_put_contents("$tine20path/Tinebase/js/Locale/build/$locale-all-debug.js", $jsTranslation);
 
         if (file_exists($yuiCompressorPath)) {
-            system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$locale-all.js $tine20path/Tinebase/js/Locale/build/$locale-all-debug.js");
+            system("java -jar $yuiCompressorPath --charset utf-8 -o \"$tine20path/Tinebase/js/Locale/build/$locale-all.js\" \"$tine20path/Tinebase/js/Locale/build/$locale-all-debug.js\"");
         } else {
             copy("$tine20path/Tinebase/js/Locale/build/$locale-all-debug.js","$tine20path/Tinebase/js/Locale/build/$locale-all.js");
         }
@@ -412,7 +455,7 @@ if ( $opts->z ) {
 	            if ( $opts->v ) {
 	                echo "compressing file generic-$locale.js\n";
 	            }
-	            system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/static/generic-$locale.js $tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js");
+	            system("java -jar $yuiCompressorPath --charset utf-8 -o \"$tine20path/Tinebase/js/Locale/static/generic-$locale.js\" \"$tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js\"");
 	        } else {
 	            copy("$tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js","$tine20path/Tinebase/js/Locale/static/generic-$locale.js");
 	        }
