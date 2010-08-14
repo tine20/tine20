@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-13 18:59+0100\n"
+"PO-Revision-Date: 2010-08-14 16:52+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -112,7 +112,7 @@ msgstr "wyświetlanie listy komputerów i szczegółów"
 #: js/user/Users.js:66
 msgid "User"
 msgid_plural "Users"
-msgstr[0] "Użytkownik"
+msgstr[0] "użytkownika"
 msgstr[1] "użytkowników"
 msgstr[2] "użytkowników"
 
@@ -578,7 +578,7 @@ msgstr "Ładowanie znacznika …"
 
 #: js/Tags.js:620
 msgid "Tag"
-msgstr "Znacznik"
+msgstr "znacznika"
 
 #: js/Tags.js:630
 msgid "Add New Tag"

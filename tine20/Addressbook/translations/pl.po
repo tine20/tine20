@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-13 18:58+0100\n"
+"PO-Revision-Date: 2010-08-14 17:32+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -486,7 +486,7 @@ msgstr "Kontakty wewnętrzne"
 #: js/ContactGridDetailsPanel.js:63
 #: js/Model.js:99
 msgid "Contacts"
-msgstr "Kontakty"
+msgstr "kontakty"
 
 #: js/ContactGridDetailsPanel.js:66
 msgid "Select contact"
@@ -504,9 +504,9 @@ msgstr "Informacja"
 #: js/Model.js:144
 msgid "Contact"
 msgid_plural "Contacts"
-msgstr[0] "Kontakt"
+msgstr[0] "kontakt"
 msgstr[1] "kontakty"
-msgstr[2] "kontaktów"
+msgstr[2] "kontakty"
 
 #: js/Model.js:103
 msgid "Addressbooks"
@@ -550,7 +550,7 @@ msgstr "Domyślna książka adresowa dla nowych kontaktów"
 
 #: Preference.php:75
 msgid "Default Favorite"
-msgstr "Domyślny ulubiony"
+msgstr "Domyślne ulubione"
 
 #: Preference.php:76
 msgid "The default favorite which is loaded on addressbook startup"

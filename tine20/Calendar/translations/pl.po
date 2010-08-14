@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-13 19:01+0100\n"
+"PO-Revision-Date: 2010-08-14 17:58+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -401,7 +401,7 @@ msgstr "TK"
 #: js/Model.js:303
 msgid "Event"
 msgid_plural "Events"
-msgstr[0] "Termin"
+msgstr[0] "termin"
 msgstr[1] "terminy"
 msgstr[2] "terminy"
 
@@ -614,7 +614,7 @@ msgstr "Domyślny kalendarz dla zaproszeń i nowych terminów"
 
 #: Preference.php:88
 msgid "Default Favorite"
-msgstr "Domyślny ulubiony"
+msgstr "Domyślne ulubione"
 
 #: Preference.php:89
 msgid "The default favorite which is loaded on calendar startup"

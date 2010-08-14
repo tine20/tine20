@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-13 19:04+0100\n"
+"PO-Revision-Date: 2010-08-14 18:17+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -166,7 +166,7 @@ msgstr "stracone"
 
 #: Controller.php:165
 msgid "Market"
-msgstr "Rynek"
+msgstr "Sklep"
 
 #: Controller.php:166
 #: Export/Pdf.php:218
@@ -334,7 +334,7 @@ msgstr "Brak uprawnień do uruchomienia aplikacji Sprzedaż albo jest ona nieakt
 #: js/Model.js:57
 msgid "Lead"
 msgid_plural "Leads"
-msgstr[0] "Zapytanie wstępne"
+msgstr[0] "zapytanie wstępne"
 msgstr[1] "zapytania wstępne"
 msgstr[2] "zapytania wstępne"
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Erp\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-13 19:08+0100\n"
+"PO-Revision-Date: 2010-08-14 18:29+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -111,7 +111,7 @@ msgstr "Znaczniki"
 
 #: js/Sales.js:55
 msgid "Products"
-msgstr "Produkty"
+msgstr "produkty"
 
 #: js/Sales.js:60
 msgid "All Products"
