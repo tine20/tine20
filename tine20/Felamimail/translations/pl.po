@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-05 22:01+0100\n"
+"PO-Revision-Date: 2010-08-13 19:06+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -51,8 +51,8 @@ msgstr "Podpis"
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Konto"
-msgstr[1] "Konta"
-msgstr[2] "Kont"
+msgstr[1] "konta"
+msgstr[2] "konta"
 
 #: js/AccountEditDialog.js:121
 msgid "Account Name"
@@ -417,9 +417,9 @@ msgstr[2] "Katalog"
 #: js/Model.js:601
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] "lista wiadomości"
+msgstr[0] "Lista wiadomości"
 msgstr[1] "listy wiadomości"
-msgstr[2] "list wiadomości"
+msgstr[2] "listy wiadomości"
 
 #: js/Model.js:394
 msgid "INBOX"
@@ -474,8 +474,8 @@ msgstr "Brak połączenia z serwerem SMTP"
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Urlop"
-msgstr[1] "Urlopy"
-msgstr[2] "Urlopy"
+msgstr[1] "urlopy"
+msgstr[2] "urlopy"
 
 #: js/RecipientGrid.js:153
 #: js/RecipientGrid.js:174

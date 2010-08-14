@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-07 19:57+0100\n"
+"PO-Revision-Date: 2010-08-14 10:06+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -485,7 +485,7 @@ msgstr "Przekaż natychmiast"
 #: js/CallForwardPanel.js:139
 #: js/CallForwardPanel.js:181
 msgid "Mode"
-msgstr "Tryb"
+msgstr "Stan"
 
 #: js/CallForwardPanel.js:120
 #: js/CallForwardPanel.js:162
@@ -511,12 +511,12 @@ msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
 msgstr[1] "telefony"
-msgstr[2] "telefonów"
+msgstr[2] "telefony"
 
 #: js/Models.js:83
 msgid "phones list"
 msgid_plural "phones lists"
-msgstr[0] "lista telefonów"
+msgstr[0] "Lista telefonów"
 msgstr[1] "listy telefonów"
 msgstr[2] "listy telefonów"
 
@@ -532,7 +532,7 @@ msgstr[2] "lokalizacje"
 #: js/Models.js:134
 msgid "locations list"
 msgid_plural "locations lists"
-msgstr[0] "lista lokalizacji"
+msgstr[0] "Lista lokalizacji"
 msgstr[1] "listy lokalizacji"
 msgstr[2] "listy lokalizacji"
 
@@ -558,12 +558,12 @@ msgid "Software"
 msgid_plural "Softwares"
 msgstr[0] "Oprogramowanie"
 msgstr[1] "programy"
-msgstr[2] "programów"
+msgstr[2] "programy"
 
 #: js/Models.js:209
 msgid "softwares list"
 msgid_plural "softwares lists"
-msgstr[0] "lista oprgramowania"
+msgstr[0] "Lista oprogramowania"
 msgstr[1] "listy oprogramowania"
 msgstr[2] "listy oprogramowania"
 
@@ -577,7 +577,7 @@ msgstr[2] "obrazy oprogramowania"
 #: js/Models.js:242
 msgid "softwareImages list"
 msgid_plural "softwareImages lists"
-msgstr[0] "lista obrazów oprogramowania"
+msgstr[0] "Lista obrazów oprogramowania"
 msgstr[1] "listy obrazów oprogramowania"
 msgstr[2] "listy obrazów oprogramowania"
 
@@ -587,12 +587,12 @@ msgid "Line"
 msgid_plural "Lines"
 msgstr[0] "Łącze"
 msgstr[1] "łącza"
-msgstr[2] "łączy"
+msgstr[2] "łącza"
 
 #: js/Models.js:283
 msgid "lines list"
 msgid_plural "lines lists"
-msgstr[0] "lista łączy"
+msgstr[0] "Lista łączy"
 msgstr[1] "listy łączy"
 msgstr[2] "listy łączy"
 
@@ -602,12 +602,12 @@ msgid "Setting"
 msgid_plural "Settings"
 msgstr[0] "Ustawienie"
 msgstr[1] "ustawienia"
-msgstr[2] "ustawień"
+msgstr[2] "ustawienia"
 
 #: js/Models.js:340
 msgid "setting list"
 msgid_plural "settings lists"
-msgstr[0] "lista ustawień"
+msgstr[0] "Lista ustawień"
 msgstr[1] "listy ustawień"
 msgstr[2] "listy ustawień"
 
@@ -622,14 +622,14 @@ msgstr[2] "urządzenia SIP"
 #: js/Models.js:435
 msgid "sipPeers list"
 msgid_plural "sipPeers lists"
-msgstr[0] "lista urządzeń SIP"
+msgstr[0] "Lista urządzeń SIP"
 msgstr[1] "listy urządzeń SIP"
 msgstr[2] "listy urządzeń SIP"
 
 #: js/Models.js:469
 msgid "contexts list"
 msgid_plural "contexts lists"
-msgstr[0] "lista kontekstów"
+msgstr[0] "Lista kontekstów"
 msgstr[1] "listy kontekstów"
 msgstr[2] "listy kontekstów"
 
@@ -644,7 +644,7 @@ msgstr[2] "wiadomości głosowych jako e-mail"
 #: js/Models.js:525
 msgid "voicemails list"
 msgid_plural "voicemails lists"
-msgstr[0] "lista wiadomości głosowych jako poczta"
+msgstr[0] "Lista wiadomości głosowych jako poczta"
 msgstr[1] "listy wiadomości głosowych jako poczta"
 msgstr[2] "list wiadomości głosowych jako poczta"
 
@@ -659,9 +659,9 @@ msgstr[2] "spotkania"
 #: js/Models.js:560
 msgid "meetmes list"
 msgid_plural "meetmes lists"
-msgstr[0] "lista spotkań"
+msgstr[0] "Lista spotkań"
 msgstr[1] "listy spotkań"
-msgstr[2] "list spotkań"
+msgstr[2] "listy spotkań"
 
 #: js/Snom/LineGridPanel.js:237
 msgid "Idle Text"
@@ -799,7 +799,7 @@ msgstr "Obecna wersja oprogramowania"
 
 #: js/Snom/PhoneEditDialog.js:364
 msgid "Settings Loaded at"
-msgstr "Ustawienia wczytane"
+msgstr "Ustawienia wczytano"
 
 #: js/Snom/PhoneEditDialog.js:384
 #: js/Snom/SettingEditDialog.js:92
@@ -870,7 +870,7 @@ msgstr "numer + nazwa"
 #: js/Snom/SettingEditDialog.js:191
 #: js/Snom/SettingGridPanel.js:165
 msgid "call_waiting"
-msgstr "Oczekujące połączenia"
+msgstr "Zakolejkowane połączenia"
 
 # Before you'll make any changes here, please see the german translation.
 # Bevor Du hier eine Aenderung machst, sieh Dir bitte die deutsche Uebersetuzng an.
@@ -961,13 +961,13 @@ msgstr "Przewijanie"
 #: js/Snom/SettingEditDialog.js:285
 #: js/Snom/SettingGridPanel.js:151
 msgid "show_local_line"
-msgstr "Pokaż mój numer"
+msgstr "Wyświetlaj mój numer"
 
 #: js/Snom/PhoneEditDialog.js:531
 #: js/Snom/SettingEditDialog.js:298
 #: js/Snom/SettingGridPanel.js:158
 msgid "show_call_status"
-msgstr "Pokaż status połączenia"
+msgstr "Wyświetlaj status połączenia"
 
 #: js/Snom/PhoneEditDialog.js:551
 msgid "Users"
@@ -1049,7 +1049,7 @@ msgstr "Schemat połączeń"
 
 #: js/Voipmanager.js:83
 msgid "Queues"
-msgstr "Kolejki"
+msgstr "Zakolejkowane"
 
 #: js/Voipmanager.js:99
 msgid "Snom"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-04-14 21:45+0100\n"
+"PO-Revision-Date: 2010-08-13 19:05+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,8 @@ msgstr "Przykładowa aplikacja"
 msgid "ExampleRecord"
 msgstr "Przykładowy wiersz"
 
-#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
+#: js/ExampleRecordEditDialog.js:106
+#: js/ExampleRecordGridPanel.js:105
 msgid "Name"
 msgstr "Nazwa"
 
@@ -52,14 +53,14 @@ msgstr "Pokaż zakończone"
 #: js/Model.js:33
 msgid "example record"
 msgid_plural "example records"
-msgstr[0] "przykładowy wiersz"
+msgstr[0] "Przykładowy wiersz"
 msgstr[1] "przykładowe wiersze"
 msgstr[2] "przykładowe wiersze"
 
 #: js/Model.js:37
 msgid "example record list"
 msgid_plural "example record lists"
-msgstr[0] "lista przykładowych wierszy"
+msgstr[0] "Lista przykładowych wierszy"
 msgstr[1] "listy przykładowych wierszy"
 msgstr[2] "listy przykładowych wierszy"
 
@@ -77,6 +78,7 @@ msgstr "Przykładowa aplikacja"
 #~ msgstr "Opis"
 
 #~ msgid "record list"
+
 #~ msgid_plural "record lists"
 #~ msgstr[0] "lista aplikacji"
 #~ msgstr[1] "listy aplikacji"

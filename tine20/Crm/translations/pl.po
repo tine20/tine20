@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-07 19:22+0100\n"
+"PO-Revision-Date: 2010-08-13 19:04+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -114,7 +114,7 @@ msgstr "Zapytanie %s zostało utworzone"
 #: Controller.php:113
 #, python-format
 msgid "%s's personal leads"
-msgstr "%s's zapytania osobiste"
+msgstr "%s zapytania osobiste"
 
 #: Controller.php:152
 #: js/Contact.js:169
@@ -334,7 +334,7 @@ msgstr "Brak uprawnień do uruchomienia aplikacji Sprzedaż albo jest ona nieakt
 #: js/Model.js:57
 msgid "Lead"
 msgid_plural "Leads"
-msgstr[0] "zapytanie wstępne"
+msgstr[0] "Zapytanie wstępne"
 msgstr[1] "zapytania wstępne"
 msgstr[2] "zapytania wstępne"
 
@@ -510,7 +510,7 @@ msgstr "Edytuj zaznaczone {0}"
 #: js/Model.js:61
 msgid "lead list"
 msgid_plural "lead lists"
-msgstr[0] "lista zapytań"
+msgstr[0] "Lista zapytań"
 msgstr[1] "listy zapytań"
 msgstr[2] "listy zapytań"
 
@@ -522,13 +522,13 @@ msgstr "listy zapytań"
 msgid "Settings"
 msgid_plural "Settings"
 msgstr[0] "Ustawienia"
-msgstr[1] "Ustawienia"
-msgstr[2] "Ustawienia"
+msgstr[1] "ustawienia"
+msgstr[2] "ustawienia"
 
 #: js/Model.js:128
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] "lista wierszy"
+msgstr[0] "Lista wierszy"
 msgstr[1] "listy wierszy"
 msgstr[2] "listy wierszy"
 
@@ -595,7 +595,7 @@ msgstr "Domyślne ulubione zapytanie ładowane przy uruchamianiu Crm"
 #: Setup/Initialize.php:48
 #: Setup/Update/Release3.php:38
 msgid "All leads I have read grants for"
-msgstr "Wszystkie zapytania, które wolno mi czytać"
+msgstr "Wszystkie zapytania, które mam prawo czytać"
 
 #~ msgid "Task"
 #~ msgstr "Zadanie"

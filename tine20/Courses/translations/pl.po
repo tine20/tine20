@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-11-22 15:57+0100\n"
+"PO-Revision-Date: 2010-08-13 19:02+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -24,12 +24,14 @@ msgstr "Nauczyciel"
 msgid "Teacher Account"
 msgstr "Konto nauczyciela"
 
-#: Frontend/Json.php:240 js/CourseEditDialog.js:134 js/Models.js:42
+#: Frontend/Json.php:240
+#: js/CourseEditDialog.js:134
+#: js/Models.js:42
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurs"
 msgstr[1] "kursy"
-msgstr[2] "kursów"
+msgstr[2] "kursy"
 
 #: js/CourseEditDialog.js:34
 msgid "Import course members"
@@ -39,7 +41,8 @@ msgstr "Importuj uczestników kursu"
 msgid "Course Name"
 msgstr "Nazwa kursu"
 
-#: js/CourseEditDialog.js:154 js/CourseEditDialog.js:161
+#: js/CourseEditDialog.js:154
+#: js/CourseEditDialog.js:161
 msgid "Course / School Type"
 msgstr "Kurs / Typ szkoły"
 
@@ -47,11 +50,13 @@ msgstr "Kurs / Typ szkoły"
 msgid "Description"
 msgstr "Opis"
 
-#: js/CourseEditDialog.js:178 js/CourseGridPanel.js:81
+#: js/CourseEditDialog.js:178
+#: js/CourseGridPanel.js:81
 msgid "Internet Access"
 msgstr "Internet"
 
-#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:88
+#: js/CourseEditDialog.js:184
+#: js/CourseGridPanel.js:88
 msgid "Fileserver Access"
 msgstr "Serwer plików"
 
@@ -111,7 +116,8 @@ msgstr "Błąd"
 msgid "Some error occured while trying to update the courses."
 msgstr "Podczas próby aktualizacji kursów wystąpił błąd."
 
-#: js/Courses.js:29 Setup/setup.xml:4
+#: js/Courses.js:29
+#: Setup/setup.xml:4
 msgid "Courses"
 msgstr "Kursy"
 
@@ -122,13 +128,14 @@ msgstr "Wszystkie kursy"
 #: js/Models.js:46
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] "lista kursów"
+msgstr[0] "Lista kursów"
 msgstr[1] "listy kursów"
-msgstr[2] "list kursów"
+msgstr[2] "listy kursów"
 
 #: js/Models.js:75
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Rodzaj kursu"
 msgstr[1] "rodzaje kursu"
-msgstr[2] "rodzajów kursu"
+msgstr[2] "rodzaje kursu"
+

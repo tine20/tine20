@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-08 16:16+0100\n"
+"PO-Revision-Date: 2010-08-14 10:13+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -141,14 +141,14 @@ msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Zadanie"
 msgstr[1] "zadania"
-msgstr[2] "zadań"
+msgstr[2] "zadania"
 
 #: js/data/Record.js:119
 msgid "to do list"
 msgid_plural "to do lists"
-msgstr[0] "lista zadań"
+msgstr[0] "Lista zadań"
 msgstr[1] "listy zadań"
-msgstr[2] "list zadań"
+msgstr[2] "listy zadań"
 
 #: js/ExceptionDialog.js:59
 #: js/MainMenu.js:236
@@ -505,8 +505,8 @@ msgstr "Grupy"
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] "Import"
-msgstr[1] "Import"
-msgstr[2] "Import"
+msgstr[1] "Importy"
+msgstr[2] "Importy"
 
 #: js/Models.js:305
 msgid "Credentials"
@@ -520,7 +520,7 @@ msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Relacja"
 msgstr[1] "Relacje"
-msgstr[2] "Relacji"
+msgstr[2] "Relacje"
 
 #: js/tineInit.js:586
 msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
@@ -1516,7 +1516,7 @@ msgstr "Dodaj nowy, osobisty znacznik"
 #: js/widgets/tags/TagsPanel.js:97
 #: js/widgets/tags/TagsPanel.js:122
 msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr "Pamiętaj proszę, że tworzysz nowy, osobisty znacznik. Tylko Ty będziesz go widzeć!"
+msgstr "Pamiętaj proszę, że tworzysz nowy, osobisty znacznik. Tylko Ty będziesz go widzieć!"
 
 #: js/widgets/tags/TagsPanel.js:97
 #: js/widgets/tags/TagsPanel.js:122
