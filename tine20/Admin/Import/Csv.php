@@ -102,10 +102,12 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         $sambaConfig = $this->_options['samba'];
         
         $samUser = new Tinebase_Model_SAMUser(array(
-            'homePath'    => $sambaConfig['homePath'] . $_record->accountLoginName,
-            'homeDrive'   => $sambaConfig['homeDrive'],
-            'logonScript' => $sambaConfig['logonScript'],
-            'profilePath' => $sambaConfig['profilePath'] . $_record->accountLoginName
+            'homePath'      => $sambaConfig['homePath'] . $_record->accountLoginName,
+            'homeDrive'     => $sambaConfig['homeDrive'],
+            'logonScript'   => $sambaConfig['logonScript'],
+            'profilePath'   => $sambaConfig['profilePath'] . $_record->accountLoginName,
+            'pwdCanChange'  => isset($sambaConfig['pwdCanChange'])  ? $sambaConfig['pwdCanChange']  : new Zend_Date(1, Zend_Date::TIMESTAMP),
+            'pwdMustChange' => isset($sambaConfig['pwdMustChange']) ? $sambaConfig['pwdMustChange'] : new Zend_Date(2147483647, Zend_Date::TIMESTAMP)
         ));
         
         $_record->sambaSAM = $samUser;
