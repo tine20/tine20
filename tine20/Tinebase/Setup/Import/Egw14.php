@@ -95,7 +95,7 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
             }
         
             // (re)set password
-            Tinebase_User::getInstance()->setPassword($account->account_lid, $account->account_pwd, FALSE);
+            Tinebase_User::getInstance()->setPassword($user, $account->account_pwd, FALSE);
             
             // plase user in his groups
             Tinebase_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
