@@ -105,7 +105,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $i18n = Tinebase_Translation::getTranslation('Courses');
         
         $courseName = strtolower($course->name);
-        $loginName  = strtolower($course->name . '-' . $i18n->_('teacher'));
+        $loginName  = strtolower($i18n->_('teacher') . '-' . $course->name);
         $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name); 
         
         $account = new Tinebase_Model_FullUser(array(
