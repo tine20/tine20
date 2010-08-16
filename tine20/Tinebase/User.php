@@ -457,9 +457,9 @@ class Tinebase_User
             $user = $userBackend->addUserInSqlBackend($user);
         }
         
-        Tinebase_Core::set('currentAccount', $user);
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
         // set the password for the account
-        Tinebase_User::getInstance()->setPassword($_options['adminLoginName'], $_options['adminPassword']);
+        Tinebase_User::getInstance()->setPassword(Tinebase_Core::getUser(), $_options['adminPassword']);
 
         // add the admin account to all groups
         Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
