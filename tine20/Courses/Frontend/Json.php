@@ -403,14 +403,14 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * reset password for given account
      * - call Admin_Frontend_Json::resetPassword()
      *
-     * @param  array  $account data of Tinebase_Model_FullUser or account id
-     * @param  string $password the new password
-     * @param  bool $mustChange
+     * @param  array   $account data of Tinebase_Model_FullUser or account id
+     * @param  string  $password the new password
+     * @param  bool    $mustChange
      * @return array
      */
     public function resetPassword($account, $password, $mustChange)
     {
         $adminJson = new Admin_Frontend_Json();
-        return $adminJson->resetPassword($account, $password, $mustChange);
+        return $adminJson->resetPassword($account, $password, (bool)$mustChange);
     }
 }
