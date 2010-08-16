@@ -318,10 +318,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      * @param   string  $_userId
      * @param   string  $_password
      * @param   bool    $_encrypt encrypt password
+     * @param   bool    $_mustChange
      * @return  void
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setPassword($_userId, $_password, $_encrypt = TRUE)
+    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = false)
     {
         $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($_userId);
 
@@ -335,7 +336,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         );
 
         foreach ($this->_plugins as $plugin) {
-            $plugin->inspectSetPassword($user, $_password, $_encrypt, false, $ldapData);
+            $plugin->inspectSetPassword($user, $_password, $_encrypt, $_mustChange, $ldapData);
         }
 
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);

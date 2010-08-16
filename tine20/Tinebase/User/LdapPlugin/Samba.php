@@ -166,18 +166,18 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
             $_ldapData['sambantpassword'] = Tinebase_User_Abstract::encryptPassword($_password, Tinebase_User_Abstract::ENCRYPT_NTPASSWORD);
             $_ldapData['sambalmpassword'] = Tinebase_User_Abstract::encryptPassword($_password, Tinebase_User_Abstract::ENCRYPT_LMPASSWORD);
             
-            if ($_userId instanceof Tinebase_Model_FullUser && 
+            if ($_mustChange !== false) {
+                $_ldapData['sambapwdmustchange'] = '1';
+                $_ldapData['sambapwdcanchange']  = '1';
+                $_ldapData['sambapwdlastset']    = array();
+                
+            } else if ($_userId instanceof Tinebase_Model_FullUser && 
                 isset($_userId->sambaSAM) && 
                 isset($_userId->sambaSAM->pwdMustChange) && 
                 isset($_userId->sambaSAM->pwdCanChange)) {
                     
                 $_ldapData['sambapwdmustchange'] = $_userId->sambaSAM->pwdMustChange->getTimestamp();
                 $_ldapData['sambapwdcanchange']  = $_userId->sambaSAM->pwdCanChange->getTimestamp();
-                $_ldapData['sambapwdlastset']    = array();
-                
-            } else if ($_mustChange !== false) {
-                $_ldapData['sambapwdmustchange'] = '1';
-                $_ldapData['sambapwdcanchange']  = '1';
                 $_ldapData['sambapwdlastset']    = array();
                 
             } else {
