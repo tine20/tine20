@@ -152,13 +152,13 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
     /**
      * inspect set password
      * 
-     * @param string   $_loginName
+     * @param string   $_userId
      * @param string   $_password
      * @param boolean  $_encrypt
      * @param boolean  $_mustChange
      * @param array    $_ldapData    the data to be written to ldap
      */
-    public function inspectSetPassword($_loginName, $_password, $_encrypt, $_mustChange, array &$_ldapData)
+    public function inspectSetPassword($_userId, $_password, $_encrypt, $_mustChange, array &$_ldapData)
     {
         if ($_encrypt !== true) {
             Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' can not transform crypted password into nt/lm samba password. Make sure to reset password for user ' . $_loginName);
@@ -167,7 +167,14 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
             $_ldapData['sambalmpassword'] = Tinebase_User_Abstract::encryptPassword($_password, Tinebase_User_Abstract::ENCRYPT_LMPASSWORD);
             $_ldapData['sambapwdlastset'] = Zend_Date::now()->getTimestamp();
             
-            if ($_mustChange !== false) {
+            if ($_userId instanceof Tinebase_Model_FullUser && 
+                isset($_userId->sambaSAM) && 
+                isset($_userId->sambaSAM->pwdMustChange) && 
+                isset($_userId->sambaSAM->pwdCanChange)) {
+                    
+                $_ldapData['sambapwdmustchange'] = $_userId->sambaSAM->pwdMustChange->getTimestamp();
+                $_ldapData['sambapwdcanchange']  = $_userId->sambaSAM->pwdCanChange->getTimestamp();
+            } else if ($_mustChange !== false) {
                 $_ldapData['sambapwdmustchange'] = '1';
                 $_ldapData['sambapwdcanchange'] = '1';
             } else {
@@ -324,11 +331,8 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
                         break;
                         
                     case 'pwdCanChange':
-                        $_ldapData[$this->_rowNameMapping[$key]]     = 1;
-                        break;
-                        
                     case 'pwdMustChange':
-                        $_ldapData[$this->_rowNameMapping[$key]]     = 2147483647;
+                        $_ldapData[$this->_rowNameMapping[$key]]     = $value->getTimestamp();
                         break;
                         
                     case 'acctFlags':

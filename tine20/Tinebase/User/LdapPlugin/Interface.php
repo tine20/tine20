@@ -69,13 +69,13 @@ interface Tinebase_User_LdapPlugin_Interface
     /**
      * inspect set password
      * 
-     * @param string   $_loginName
+     * @param string   $_userId
      * @param string   $_password
      * @param boolean  $_encrypt
      * @param boolean  $_mustChange
      * @param array    $_ldapData    the data to be written to ldap
      */
-    public function inspectSetPassword($_loginName, $_password, $_encrypt, $_mustChange, array &$_ldapData);
+    public function inspectSetPassword($_userId, $_password, $_encrypt, $_mustChange, array &$_ldapData);
     
     /**
      * inspect get user by property
