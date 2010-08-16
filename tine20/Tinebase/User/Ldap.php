@@ -315,19 +315,16 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     /**
      * set the password for given account
      *
-     * @param   int $_accountId
-     * @param   string $_password
-     * @param   bool $_encrypt encrypt password
+     * @param   string  $_userId
+     * @param   string  $_password
+     * @param   bool    $_encrypt encrypt password
      * @return  void
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setPassword($_loginName, $_password, $_encrypt = TRUE)
+    public function setPassword($_userId, $_password, $_encrypt = TRUE)
     {
-        if (empty($_loginName)) {
-            throw new Tinebase_Exception_InvalidArgument('$_loginName can not be empty');
-        }
+        $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($_userId);
 
-        $user = $this->getFullUserByLoginName($_loginName);
         $metaData = $this->_getMetaData($user);
 
         $encryptionType = isset($this->_options['pwEncType']) ? $this->_options['pwEncType'] : Tinebase_User_Abstract::ENCRYPT_SSHA;
@@ -338,7 +335,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         );
 
         foreach ($this->_plugins as $plugin) {
-            $plugin->inspectSetPassword($_loginName, $_password, $_encrypt, false, $ldapData);
+            $plugin->inspectSetPassword($user, $_password, $_encrypt, false, $ldapData);
         }
 
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
