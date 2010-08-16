@@ -286,7 +286,7 @@ abstract class Tinebase_User_Abstract
      * @param Tinebase_Model_FullUser $_account
      * @return string
      */
-    public function generateUserName($_account)
+    public function generateUserName_version1($_account)
     {
         if (! empty($_account->accountFirstName)) {
             
@@ -308,6 +308,40 @@ abstract class Tinebase_User_Abstract
             }
             $numSuffix++;
         }
+    }
+    
+    /**
+     * account name generation
+     *
+     * @param Tinebase_Model_FullUser $_account
+     * @return string
+     */
+    public function generateUserName($_account)
+    {
+        if (! empty($_account->accountFirstName)) {
+            $userName = strtolower(self::replaceSpechialChars(substr($_account->accountLastName, 0, 10) . substr($_account->accountFirstName, 0, 2)));
+        } else {
+            $userName = strtolower(self::replaceSpechialChars(substr($_account->accountLastName, 0, 10)));
+        }
+        
+        if ($this->userNameExists($userName)) {
+            $numSuffix = 0;
+            
+            while($numSuffix < 100) {
+                $suffix = sprintf('%02d', $numSuffix);
+                
+                if (! $this->userNameExists($userName . $suffix)) {
+                    $userName .= $suffix;
+                    break;
+                }
+                
+                $numSuffix++;
+            }
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName);
+        
+        return $userName;
     }
     
     /**
@@ -453,12 +487,12 @@ abstract class Tinebase_User_Abstract
     /**
      * setPassword() - sets / updates the password in the account backend
      *
-     * @param string $_loginName
-     * @param string $_password
-     * @param bool   $_encrypt encrypt password
+     * @param  string  $_userId
+     * @param  string  $_password
+     * @param  bool    $_encrypt encrypt password
      * @return void
      */
-    abstract public function setPassword($_loginName, $_password, $_encrypt = TRUE);
+    abstract public function setPassword($_userId, $_password, $_encrypt = TRUE);
     
     /**
      * update user status
