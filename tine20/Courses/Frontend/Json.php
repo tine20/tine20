@@ -254,21 +254,14 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $course->group_id   = $savedGroup->getId();
             $savedRecord        = $this->_controller->create($course);
         } else {
-            $currentMembers = $this->_groupController->getGroupMembers($course->group_id);
-            $addedMembers   = array_diff((array)$group->members, $currentMembers);
-            $removedMembers = array_diff($currentMembers, (array)$group->members);
-            $savedRecord    = $this->_controller->update($course);
+            $savedRecord      = $this->_controller->update($course);
             
-            $group->setId($course->group_id);
-            $this->_groupController->update($group);
+            $currentMembers   = $this->_groupController->getGroupMembers($course->group_id);
+
+            $newCourseMembers = array_diff((array)$group->members, $currentMembers);
+            $this->_controller->addCourseMembers($course, $newCourseMembers);
             
-            // add new members to students group
-            if (isset($this->_config->students_group) && !empty($this->_config->students_group)) {
-                foreach ($addedMembers as $member) {
-                    $this->_groupController->addGroupMember($this->_config->students_group, $member['id']);
-                }
-            }
-            
+            $deletedAccounts  = array_diff($currentMembers, (array)$group->members);
             // delete members wich got removed from course
             Admin_Controller_User::getInstance()->delete($removedMembers);
         }
