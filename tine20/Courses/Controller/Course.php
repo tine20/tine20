@@ -182,4 +182,50 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $userController->delete(array_unique($usersToDelete));
         $groupController->delete(array_unique($groupsToDelete));
     }
+    
+    /**
+     * add exitings accounts to course
+     * 
+     * @param  string  $_courseId
+     * @param  array   $_members
+     */
+    public function addCourseMembers($_courseId, array $_members = array())
+    {
+        $course = $_courseId instanceof Courses_Model_Course ? $_courseId : $this->get($_courseId);
+        
+        $tinebaseUser  = Tinebase_User::getInstance();
+        $tinebaseGroup = Tinebase_Group::getInstance();
+        
+        $courseName = strtolower($course->name);
+        $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name); 
+        
+        foreach ($_members as $userId) {
+            $user = $tinebaseUser->getFullUserById($userId);
+            
+            $tinebaseGroup->removeGroupMember($user->accountPrimaryGroup, $user);
+            
+            $user->accountPrimaryGroup  = $course->group_id;
+            $user->accountHomeDirectory = (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $courseName . '/' . $user->accountLoginName : '';
+            
+            if (isset($user->sambaSAM)) {
+                $sambaSAM = $user->sambaSAM;
+                
+                $sambaSAM->homePath    = $this->_config->samba->basehomepath . $user->accountLoginName;
+                $sambaSAM->logonScript = $courseName . $this->_config->samba->logonscript_postfix_member;
+                $sambaSAM->profilePath = $this->_config->samba->baseprofilepath . $schoolName . '\\' . $courseName . '\\' . $user->accountLoginName;
+                
+                $user->sambaSAM = $sambaSAM;
+            }
+            
+            $tinebaseUser->updateUser($user);
+            
+            $tinebaseGroup->addGroupMember($user->accountPrimaryGroup, $user);
+            
+            if (isset($this->_config->students_group) && !empty($this->_config->students_group)) {
+                $tinebaseGroup->addGroupMember($this->_config->students_group, $user);
+            }
+        }
+            
+        
+    }
 }
