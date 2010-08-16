@@ -192,7 +192,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             throw new Admin_Exception("Passwords don't match.");
         }
         
-        $this->_userBackend->setPassword($_account, $_password, $_mustChange);
+        $this->_userBackend->setPassword($_account, $_password, true, $_mustChange);
         
         Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . 
