@@ -13,6 +13,7 @@
 /**
  * class to hold Course data
  * 
+ * @property  string  $group_id
  * @package     Courses
  */
 class Courses_Model_Course extends Tinebase_Record_Abstract
