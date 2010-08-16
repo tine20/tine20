@@ -321,10 +321,12 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'password'                      => $course->name,
                 'course'                        => $course,
                 'samba'                         => (isset($this->_config->samba)) ? array(
-                    'homePath'    => $this->_config->samba->basehomepath,
-                    'homeDrive'   => $this->_config->samba->homedrive,
-                    'logonScript' => $course->name . $this->_config->samba->logonscript_postfix_member,
-                    'profilePath' => $this->_config->samba->baseprofilepath . $schoolName . '\\' . $course->name . '\\',
+                    'homePath'      => $this->_config->samba->basehomepath,
+                    'homeDrive'     => $this->_config->samba->homedrive,
+                    'logonScript'   => $course->name . $this->_config->samba->logonscript_postfix_member,
+                    'profilePath'   => $this->_config->samba->baseprofilepath . $schoolName . '\\' . $course->name . '\\',
+                    'pwdCanChange'  => new Zend_Date(1, Zend_Date::TIMESTAMP),
+                    'pwdMustChange' => new Zend_Date(1, Zend_Date::TIMESTAMP)
                 ) : array(),
             )
         );
