@@ -175,16 +175,16 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     /**
      * set the password for a given account
      *
-     * @param Tinebase_Model_FullUser $_account the account
-     * @param string $_password the new password
-     * @param string $_passwordRepeat the new password again
-     * @param bool $_mustChange
+     * @param  Tinebase_Model_FullUser  $_account the account
+     * @param  string                   $_password the new password
+     * @param  string                   $_passwordRepeat the new password again
+     * @param  bool                     $_mustChange
      * @return void
      * 
      * @todo add must change pwd info to normal tine user accounts
      * @todo add Admin_Event_ChangePassword?
      */
-    public function setAccountPassword(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat, $_mustChange = FALSE)
+    public function setAccountPassword(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat, $_mustChange = false)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -192,7 +192,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             throw new Admin_Exception("Passwords don't match.");
         }
         
-        $this->_userBackend->setPassword($_account, $_password);
+        $this->_userBackend->setPassword($_account, $_password, $_mustChange);
         
         Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . 
