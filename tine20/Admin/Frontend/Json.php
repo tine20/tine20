@@ -372,7 +372,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $controller = Admin_Controller_User::getInstance();
-        $controller->setAccountPassword($account, $password, $password, $mustChange);
+        $controller->setAccountPassword($account, $password, $password, (bool)$mustChange);
         
         $result = array(
             'success' => TRUE
