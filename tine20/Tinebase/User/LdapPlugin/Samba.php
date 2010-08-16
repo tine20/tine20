@@ -165,7 +165,6 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
         } else {
             $_ldapData['sambantpassword'] = Tinebase_User_Abstract::encryptPassword($_password, Tinebase_User_Abstract::ENCRYPT_NTPASSWORD);
             $_ldapData['sambalmpassword'] = Tinebase_User_Abstract::encryptPassword($_password, Tinebase_User_Abstract::ENCRYPT_LMPASSWORD);
-            $_ldapData['sambapwdlastset'] = Zend_Date::now()->getTimestamp();
             
             if ($_userId instanceof Tinebase_Model_FullUser && 
                 isset($_userId->sambaSAM) && 
@@ -174,12 +173,17 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
                     
                 $_ldapData['sambapwdmustchange'] = $_userId->sambaSAM->pwdMustChange->getTimestamp();
                 $_ldapData['sambapwdcanchange']  = $_userId->sambaSAM->pwdCanChange->getTimestamp();
+                $_ldapData['sambapwdlastset']    = array();
+                
             } else if ($_mustChange !== false) {
                 $_ldapData['sambapwdmustchange'] = '1';
-                $_ldapData['sambapwdcanchange'] = '1';
+                $_ldapData['sambapwdcanchange']  = '1';
+                $_ldapData['sambapwdlastset']    = array();
+                
             } else {
                 $_ldapData['sambapwdmustchange'] = '2147483647';
-                $_ldapData['sambapwdcanchange'] = '1';
+                $_ldapData['sambapwdcanchange']  = '1';
+                $_ldapData['sambapwdlastset']    = Zend_Date::now()->getTimestamp();
             }
         }
     }
