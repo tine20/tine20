@@ -281,6 +281,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             }
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No locality given: Do not search for geodata.');
+            
+            if (! empty($_record->lon) && ! empty($_record->lat)) {
+                // reset geodata
+                $_record->lon = NULL;
+                $_record->lat = NULL;
+            }
         }
     }
     
