@@ -118,7 +118,7 @@ Ext.namespace('Tine.Felamimail');
         this.initFrom();
         this.initRecipients();
         this.initSubject();
-        //this.initAttachements();
+        this.initAttachements();
         this.initBody();
         
         // legacy handling:...
@@ -132,8 +132,21 @@ Ext.namespace('Tine.Felamimail');
         
     },
     
+    /**
+     * init attachments when forwarding message
+     */
     initAttachements: function() {
-        
+        if (this.forwardMsgs) {
+            var fwdMessage = this.forwardMsgs[0];
+            if (fwdMessage.get('attachments').length > 0) {
+                this.record.set('attachments', [{
+                    name: fwdMessage.get('subject'),
+                    type: 'message/rfc822',
+                    size: fwdMessage.get('size'),
+                    id: fwdMessage.id
+                }]);
+            }
+        }
     },
     
     /**
