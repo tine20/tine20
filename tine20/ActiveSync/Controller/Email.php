@@ -287,6 +287,14 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             // getMessagePart will return Zend_Mime_Part
             $messageBody = $this->_contentController->getMessagePart($_serverId);
             $messageBody = stream_get_contents($messageBody->getRawStream()); 
+            
+            if (version_compare($this->_device->acsversion, '12.0', '<')) {
+                // if the email contains non 7bit ascii characters we can't transfer them via MIMEData xml and we need to fall back to plain text
+                if (preg_match('/(?:[^\x00-\x7F])/', $messageBody)) {
+                    $airSyncBaseType = 1;
+                    $messageBody     = $this->_contentController->getMessageBody($_serverId, null, Zend_Mime::TYPE_TEXT, true);
+                }
+            }
         } else {
             $messageBody = $this->_contentController->getMessageBody($_serverId, null, $airSyncBaseType == 2 ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT, true);
         }
