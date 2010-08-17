@@ -210,8 +210,6 @@ Ext.namespace('Tine.Felamimail');
             if (this.replyToAll) {
                 this.to = this.to.concat(this.replyTo.get('to'));
                 this.cc = this.replyTo.get('cc');
-            } else {
-                
             }
         }
         
