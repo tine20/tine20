@@ -198,7 +198,7 @@ Tine.Tinebase.tineInit = {
     renderWindow: function(){
         var mainCardPanel = Ext.getCmp('tine-viewport-maincardpanel');
         
-        // check if user is already loged in        
+        // check if user is already logged in        
         if (!Tine.Tinebase.registry.get('currentAccount')) {
             if (! Tine.loginPanel) {
                 Tine.loginPanel = new Tine.Tinebase.LoginPanel({
@@ -245,7 +245,7 @@ Tine.Tinebase.tineInit = {
         // set window title
         window.document.title = c.title ? c.title : window.document.title;
         
-        // finaly render the window contentes in a new card  
+        // finally render the window contents in a new card  
         var card = Tine.WindowFactory.getCenterPanel(c);
         mainCardPanel.add(card);
         mainCardPanel.layout.setActiveItem(card.id);
