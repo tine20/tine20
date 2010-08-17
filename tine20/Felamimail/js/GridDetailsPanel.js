@@ -269,31 +269,20 @@ Ext.namespace('Tine.Felamimail');
                     });
                     
                 } else {
+                    // remove part id if set (that is the case in message/rfc822 attachments)
+                    var messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.id;
+                    
                     // download attachment
                     new Ext.ux.file.Download({
                         params: {
                             requestType: 'HTTP',
                             method: 'Felamimail.downloadAttachment',
-                            messageId: this.record.id,
+                            messageId: messageId,
                             partId: attachment.partId
                         }
                     }).start();
                 }
                 
-                break;
-                
-            case 'span[class=tinebase-download-link]':
-                // download attachment
-                var partId = target.id.split(':')[1];
-                var downloader = new Ext.ux.file.Download({
-                    params: {
-                        requestType: 'HTTP',
-                        method: 'Felamimail.downloadAttachment',
-                        messageId: this.record.id,
-                        partId: partId
-                    }
-                });
-                downloader.start();
                 break;
                 
             case 'a[class=tinebase-email-link]':
