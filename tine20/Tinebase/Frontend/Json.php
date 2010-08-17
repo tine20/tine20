@@ -5,9 +5,9 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id: Json.php 5047 2008-10-22 10:51:07Z c.weiss@metaways.de $
+ * @version     $Id$
  * 
  */
 
@@ -509,9 +509,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'NoteTypes'         => $this->getNoteTypes(),
                 'stateInfo'         => Tinebase_State::getInstance()->loadStateInfo(),
                 'changepw'          => Tinebase_User::getBackendConfiguration('changepw', true),
+                'mustchangepw'      => $user->mustChangePassword(),
                 'mapPanel'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, TRUE)->value,
                 'confirmLogout'     => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
-                'persistentFilters' => Tinebase_Frontend_Json_PersistentFilter::getAllPersistentFilters()
+                'persistentFilters' => Tinebase_Frontend_Json_PersistentFilter::getAllPersistentFilters(),
             );
         }
         
@@ -531,7 +532,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (Tinebase_Core::getUser()) { 
             $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
             
-            foreach($userApplications as $application) {
+            foreach ($userApplications as $application) {
                 
                 $jsonAppName = $application->name . '_Frontend_Json';
                 
@@ -569,7 +570,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' returning registry data by dying to avoid servers success property to be part of the registry.');
         //die(Zend_Json::encode($registryData));
     }
-
 
     /**
      * search / get custom field values
