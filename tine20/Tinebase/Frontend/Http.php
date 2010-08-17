@@ -271,6 +271,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/StateProvider.js',
             'Tinebase/js/ExceptionHandler.js',
             'Tinebase/js/ExceptionDialog.js',
+            'Tinebase/js/PasswordChangeDialog.js',
             'Tinebase/js/Container.js',
             'Tinebase/js/Models.js',
             'Tinebase/js/Application.js',
