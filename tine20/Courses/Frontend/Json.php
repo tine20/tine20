@@ -263,7 +263,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
             $deletedAccounts  = array_diff($currentMembers, (array)$group->members);
             // delete members wich got removed from course
-            Admin_Controller_User::getInstance()->delete($removedMembers);
+            Admin_Controller_User::getInstance()->delete($deletedAccounts);
         }
         
         // add/remove members to/from internet/fileserver group
