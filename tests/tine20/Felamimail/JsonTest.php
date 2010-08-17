@@ -341,6 +341,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             if ($note->note_type_id == $emailNoteType->getId()) {
                 $this->assertEquals(1, preg_match('/' . $messageToSend['subject'] . '/', $note->note));
                 $this->assertEquals(Tinebase_Core::getUser()->getId(), $note->created_by);
+                $this->assertContains('aaaaaä', $note->note);
                 $emailNoteIds[] = $note->getId();
             }
         }
