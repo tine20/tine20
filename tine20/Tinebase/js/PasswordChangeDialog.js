@@ -113,11 +113,5 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
         });
         
         Tine.Tinebase.PasswordChangeDialog.superclass.initComponent.call(this);
-        /*
-        this.on('show', function() {
-            // fix layout issue
-            this.setHeight(this.getHeight() + 10);
-        }, this);
-        */
     }
 });
