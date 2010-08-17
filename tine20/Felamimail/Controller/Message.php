@@ -532,7 +532,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             // add email notes to contacts (only to/cc)
             if ($_message->note) {
-                $this->_addEmailNote($nonPrivateRecipients, $_message->subject, $mail->getBodyText(TRUE));
+                $this->_addEmailNote($nonPrivateRecipients, $_message->subject, $_message->getPlainTextBody());
             }
         
             // append mail to sent folder nonPrivateRecipients
