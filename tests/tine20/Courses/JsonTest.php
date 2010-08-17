@@ -239,13 +239,13 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             }
         }
         $this->assertTrue(! empty($lahm));
-        $this->assertEquals('plahm', $lahm['data']);
+        $this->assertEquals('lahmph', $lahm['data']);
         
         // get user and check email
         $user = Tinebase_User::getInstance()->getFullUserById($lahm['id']);
         //print_r($user->toArray());
-        $this->assertEquals('plahm', $user->accountLoginName);
-        $this->assertEquals('plahm@school.org', $user->accountEmailAddress);
+        $this->assertEquals('lahmph', $user->accountLoginName);
+        $this->assertEquals('lahmph@school.org', $user->accountEmailAddress);
         $this->assertEquals('//base/school/' . $result['name'] . '/' . $user->accountLoginName, $user->accountHomeDirectory);
     }
     
