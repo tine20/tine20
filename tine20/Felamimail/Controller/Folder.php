@@ -509,15 +509,17 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     /**
      * get subfolders
      * 
-     * @param Felamimail_Model_Account $_account
+     * @param string|Felamimail_Model_Account $_account
      * @param string $_globalname
      * @return Tinebase_Record_RecordSet
      */
     public function getSubfolders($_account, $_globalname)
     {
+        $account = ($_account instanceof Felamimail_Model_Account) ? $_account : Felamimail_Controller_Account::getInstance()->get($_account);
+        
         $filter = new Felamimail_Model_FolderFilter(array(
-            array('field' => 'globalname', 'operator' => 'startswith',  'value' => $_globalname . $_account->delimiter),
-            array('field' => 'account_id', 'operator' => 'equals',      'value' => $_account->getId()),
+            array('field' => 'globalname', 'operator' => 'startswith',  'value' => $_globalname . $account->delimiter),
+            array('field' => 'account_id', 'operator' => 'equals',      'value' => $account->getId()),
         ));
         
         return $this->_backend->search($filter);
