@@ -19,7 +19,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>Sieve Filter Dialog</p>
  * <p>This dialog is editing a filter rule.</p>
  * <p>
- * TODO         add more form fields
+ * TODO         add more form fields (action)
  * TODO         add title
  * </p>
  * 
@@ -32,7 +32,7 @@ Ext.namespace('Tine.Felamimail');
  * @constructor
  * Create a new RuleEditDialog
  */
- Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     /**
      * @private
@@ -73,6 +73,37 @@ Ext.namespace('Tine.Felamimail');
         this.loadMask.hide();
     },
         
+    /**
+     * @private
+     */
+    onRecordUpdate: function() {
+        Tine.Felamimail.RuleEditDialog.superclass.onRecordUpdate.call(this);
+        
+        var form = this.getForm();
+        
+        // set conditions
+        var conditions = [];
+        var conditionFields = ['from_contains', 'to_contains', 'subject_contains'];
+        var field, i, condition, parts;
+        for (i = 0; i < conditionFields.length; i++) {
+            field = form.findField(conditionFields[i]);
+            if (field.getValue() != '') {
+                parts = conditionFields[i].split('_');
+                condition = {
+                    // add key/values (split fieldname)
+                    test: 'address',
+                    header: parts[0],
+                    comperator: parts[1],
+                    key: field.getValue()
+                };
+                conditions.push(condition);
+            }
+        }
+        this.record.set('conditions', conditions);
+        
+        // TODO set action
+    },
+    
     /**
      * returns dialog
      * 
