@@ -183,6 +183,11 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         if (Tine.Tinebase.common.hasRight('check_version', 'Tinebase')) {
             Tine.widgets.VersionCheck();
         }
+        
+        if (Tine.Tinebase.registry.get('mustchangepw')) {
+            var passwordDialog = new Tine.Tinebase.PasswordChangeDialog();
+            passwordDialog.show();
+        }
     },
     
     /**
