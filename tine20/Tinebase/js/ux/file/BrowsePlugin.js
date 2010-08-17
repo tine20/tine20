@@ -108,7 +108,9 @@ Ext.ux.file.BrowsePlugin.prototype = {
         if (typeof cmp.destroy == 'function') {
             cmp.destroy = cmp.destroy.createSequence(function() {
                 var input_file = this.detachInputFile(true);
-                input_file.remove();
+                if (input_file) {
+                	input_file.remove();
+                }
                 input_file = null;
             }, this);
         }
@@ -227,13 +229,15 @@ Ext.ux.file.BrowsePlugin.prototype = {
         
         no_create = no_create || false;
         
-        if (typeof this.component.tooltip == 'object') {
-            Ext.QuickTips.unregister(this.input_file);
+        if (this.input_file) {
+	        if (typeof this.component.tooltip == 'object') {
+	            Ext.QuickTips.unregister(this.input_file);
+	        }
+	        else {
+	            this.input_file.dom[this.component.tooltipType] = null;
+	        }
+	        this.input_file.removeAllListeners();
         }
-        else {
-            this.input_file.dom[this.component.tooltipType] = null;
-        }
-        this.input_file.removeAllListeners();
         this.input_file = null;
         
         if (!no_create) {

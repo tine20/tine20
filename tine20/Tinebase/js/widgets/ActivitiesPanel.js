@@ -618,8 +618,10 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
                     listeners: {
                         scope: this,
                         afterlayout: function(ct) {
+                            ct.suspendEvents();
                             ct.setHeight(filterToolbar.getHeight());
                             ct.ownerCt.layout.layout();
+                            ct.resumeEvents();
                         }
                     }
                 }]
