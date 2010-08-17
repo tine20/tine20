@@ -120,5 +120,32 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     public function __toString()
     {
         return $this->accountLoginName;
-    }    
+    }
+    
+    /**
+     * returns TRUE if user has to change his/her password (compare sambaSAM->pwdMustChange with Zend_Date::now())
+     * NOTE: this only applies for user with samba settings atm
+     * 
+     * @return boolean
+     */
+    public function mustChangePassword()
+    {
+        $result = FALSE;
+        
+        if ($this->sambaSAM instanceof Tinebase_Model_SAMUser 
+            && isset($this->sambaSAM->pwdMustChange) 
+            && $this->sambaSAM->pwdMustChange instanceof Zend_Date) 
+        {
+            if ($this->sambaSAM->pwdMustChange->compare(Zend_Date::now()) < 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                    . ' User ' . $this->accountLoginName . ' has to change his pw: ' . $this->sambaSAM->pwdMustChange . ' < ' . Zend_Date::now());
+                    
+                $result = TRUE;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Password is up to date.');
+            }
+        }
+        
+        return $result;
+    }
 }
