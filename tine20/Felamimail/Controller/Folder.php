@@ -323,10 +323,11 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
         
-        // use delimiter to old globalname, remove old localname and build new globalname
+        // remove old localname and build new globalname
         $globalNameParts = explode($this->_delimiter, $_oldGlobalName);
         array_pop($globalNameParts);
-        $newGlobalName = implode($this->_delimiter, $globalNameParts) . $this->_delimiter . $_newLocalName;
+        array_push($globalNameParts, $_newLocalName);
+        $newGlobalName = implode($this->_delimiter, $globalNameParts);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $_oldGlobalName . ' -> ' . $newGlobalName);
         
