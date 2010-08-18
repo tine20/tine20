@@ -17,7 +17,6 @@ Ext.ns('Tine.Felamimail');
  * @extends   Tine.widgets.grid.GridPanel
  * Rules Grid Panel <br>
  * TODO         make it possible to determine order of rules
- * TODO         add enable / disable buttons or make checkbox column work again (@see http://www.tine20.org/bugtracker/view.php?id=2918)
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
@@ -55,6 +54,11 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initColumns: function() {
         this.gridConfig = {};
+        var cb = new Ext.ux.grid.CheckColumn({
+            header: this.app.i18n._('Enabled'),
+            dataIndex: 'enabled',
+            width: 55
+        });
         
         this.gridConfig.columns = [{
             id: 'id',
@@ -76,11 +80,9 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             sortable: false,
             dataIndex: 'action',
             renderer: this.actionRenderer
-        }, new Ext.ux.grid.CheckColumn({
-            header: this.app.i18n._('Enabled'),
-            dataIndex: 'enabled',
-            width: 55
-        })];
+        }, cb];
+        
+        this.gridConfig.plugins = [cb]; 
     },
     
     /**

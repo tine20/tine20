@@ -653,6 +653,19 @@ Tine.Felamimail.rulesBackend = new Tine.Tinebase.data.RecordProxy({
         return this.doXHTTPRequest(options);
     },
 
+    /**
+     * saves a single record
+     * 
+     * NOTE: Single rule records can't be saved
+     * 
+     * @param   {Ext.data.Record} record
+     * @param   {Object} options
+     * @return  {Number} Ext.Ajax transaction id
+     * @success {Ext.data.Record}
+     */
+    saveRecord: function(record, options, additionalArguments) {
+        // does nothing
+    },
     
     /**
      * exception handler for this proxy
