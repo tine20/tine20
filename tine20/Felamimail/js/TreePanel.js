@@ -156,6 +156,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.on('beforenodedrop', this.onBeforenodedrop, this);
         this.on('append', this.onAppend, this);
         this.on('containeradd', this.onFolderAdd, this);
+        this.on('containerrename', this.onFolderRename, this);
         this.on('containerdelete', this.onFolderDelete, this);
         this.folderStore.on('update', this.onUpdateFolderStore, this);
         
@@ -460,23 +461,21 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         var recordData = Ext.copyTo({}, folderData, Tine.Felamimail.Model.Folder.getFieldNames());
         var newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: Ext.util.JSON.encode(recordData)});
         
-        // add paths to node and record
-        var parent = this.folderStore.getParentByAccountIdAndGlobalname(newRecord.get('account_id'), newRecord.get('parent'));
-        if (parent) {
-            newRecord.set('parent_path', parent.get('path'));
-        } else {
-            newRecord.set('parent_path', '/' + newRecord.get('account_id'));
-        }
-        newRecord.set('path', newRecord.get('parent_path') + '/' + newRecord.id);
-        var node = this.getNodeById(newRecord.id);
-        node.attributes.path = newRecord.get('path');
-        node.attributes.parent_path = newRecord.get('parent_path');
-        
-        Tine.log.debug('Add new folder:' + newRecord.get('globalname'));
+        Tine.log.debug('Added new folder:' + newRecord.get('globalname'));
         
         this.folderStore.add([newRecord]);
     },
 
+    /**
+     * add new folder to the store and update paths in node
+     * 
+     * @param {Object} folderData
+     */
+    onFolderRename: function(folderData) {
+        // TODO update folder local/globalname in store
+        Tine.log.debug(recordData);
+    },
+        
     /**
      * remove deleted folder from the store
      * 
