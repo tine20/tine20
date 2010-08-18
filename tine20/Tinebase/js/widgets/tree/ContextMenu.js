@@ -48,13 +48,14 @@ Tine.widgets.tree.ContextMenu = {
                             name: _text
                         };
                         
-                        // TODO try to generalize this
+                        // TODO try to generalize this and move app specific stuff to app
                         if (config.backendModel == 'Container') {
                             params.application = this.app.appName || this.appName;
                             params.containerType = Tine.Tinebase.container.path2type(parentNode.attributes.path);
                         } else if (config.backendModel == 'Folder') {
-                            params.parent = parentNode.attributes.globalname;
-                            params.accountId = parentNode.attributes.account_id;
+                            var parentFolder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(parentNode.attributes.folder_id);
+                            params.parent = parentFolder.get('globalname');
+                            params.accountId = parentFolder.get('account_id');
                         }
                         
                         Ext.Ajax.request({
@@ -158,11 +159,9 @@ Tine.widgets.tree.ContextMenu = {
                                     params: params,
                                     scope: this,
                                     success: function(_result, _request){
-                                        var container = Ext.util.JSON.decode(_result.responseText);
+                                        var nodeData = Ext.util.JSON.decode(_result.responseText);
                                         node.setText(_text);
-                                        if (config.backendModel == 'Container') {
-                                            this.fireEvent('containerrename', container);
-                                        }
+                                        this.fireEvent('containerrename', nodeData);
                                         Ext.MessageBox.hide();
                                     }
                                 });
