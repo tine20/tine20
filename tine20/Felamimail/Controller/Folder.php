@@ -282,21 +282,21 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param string $_accountId
      * @param string $_folderName globalName (complete path) of folder to delete
      * @return void
-     * 
-     * @todo check if folder has subfolders
      */
     public function delete($_accountId, $_folderName)
     {
+        // check if folder has subfolders and throw exception if that is the case
+        // @todo this should not be a Tinebase_Exception_AccessDenied -> we have to create a new exception and call the fmail exception handler when deleting/adding/renaming folders
+        $subfolders = $this->getSubfolders($_accountId, $_folderName);
+        if (count($subfolders) > 0) {
+            throw new Tinebase_Exception_AccessDenied('Could not delete folder ' . $_folderName . ' because it has subfolders.');
+        }
+        
         try {
             $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
             $imap->removeFolder($_folderName);
         } catch (Zend_Mail_Storage_Exception $zmse) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' IMAP Error: ' . $zmse->getMessage() 
-                . '. Folder name: ' . $_folderName . ' - Did you delete the subfolders first?'
-            );
-            
-            //-- check if folders has subfolders and throw exception if that is the case
-            return;
+            throw new Felamimail_Exception_IMAP('Could not delete folder ' . $_folderName . '. IMAP Error: ' . $zmse->getMessage());
         }
         
         try {
