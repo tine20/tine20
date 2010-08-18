@@ -165,11 +165,13 @@ class Tinebase_Controller
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
             $currentAccount = Tinebase_Core::getUser();
     
-            Tinebase_AccessLog::getInstance()->addLogoutEntry(
-                session_id(),
-                $_ipAddress,
-                $currentAccount->accountId
-           );
+            if (is_object($currentAccount)) {
+                Tinebase_AccessLog::getInstance()->addLogoutEntry(
+                    session_id(),
+                    $_ipAddress,
+                    $currentAccount->accountId
+                );                
+            }
         }
         
         Zend_Session::destroy();
