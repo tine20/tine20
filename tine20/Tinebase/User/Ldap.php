@@ -322,7 +322,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      * @return  void
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = false)
+    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null)
     {
         $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($_userId);
 
