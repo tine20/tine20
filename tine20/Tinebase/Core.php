@@ -164,9 +164,18 @@ class Tinebase_Core
             $server = new Voipmanager_Server_Asterisk();
 
 
-            /**************************** ActiveSync API *****************************/
+            /**************************** ActiveSync API ****************************
+             * RewriteRule ^/Microsoft-Server-ActiveSync(.*) /index.php$1 [E=REDIRECT_ACTIVESYNC:true,E=REMOTE_USER:%{HTTP:Authorization},L]
+             */
         } elseif(isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') {
             $server = new ActiveSync_Server_Http();
+
+
+            /**************************** *DAV API ****************************
+             * RewriteRule ^/dav(.*) /index.php$1 [E=REDIRECT_DAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
+             */
+        } elseif(isset($_SERVER['REDIRECT_DAV']) && $_SERVER['REDIRECT_DAV'] == 'true') {
+            $server = new Tinebase_Server_WebDav();
 
 
             /**************************** CLI API *****************************/
