@@ -453,7 +453,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     },
     
     /**
-     * add new folder to the store and update paths in node
+     * add new folder to the store
      * 
      * @param {Object} folderData
      */
@@ -467,13 +467,16 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     },
 
     /**
-     * add new folder to the store and update paths in node
+     * rename folder in the store
      * 
      * @param {Object} folderData
      */
     onFolderRename: function(folderData) {
-        // TODO update folder local/globalname in store
-        Tine.log.debug(recordData);
+        var record = this.folderStore.getById(folderData.id);
+        record.set('globalname', folderData.globalname);
+        record.set('localname', folderData.localname);
+        
+        Tine.log.debug('Renamed folder:' + record.get('globalname'));
     },
         
     /**
