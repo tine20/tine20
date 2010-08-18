@@ -502,7 +502,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
             $registryData += array(    
                 'currentAccount'    => $user->toArray(),
-                'userContact'       => Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId())->toArray(),
+                'userContact'       => Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), TRUE)->toArray(),
                 'accountBackend'    => Tinebase_User::getConfiguredBackend(),
                 'jsonKey'           => Tinebase_Core::get('jsonKey'),
                 'userApplications'  => $user->getApplications()->toArray(),

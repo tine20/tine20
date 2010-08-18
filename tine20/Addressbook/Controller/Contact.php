@@ -118,13 +118,14 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * fetch one contact identified by $_userId
      *
      * @param   int $_userId
+     * @param   boolean $_ignoreACL don't check acl grants
      * @return  Addressbook_Model_Contact
      * @throws  Addressbook_Exception_AccessDenied if user has no read grant
      */
-    public function getContactByUserId($_userId)
+    public function getContactByUserId($_userId, $_ignoreACL = FALSE)
     {
         $contact = $this->_backend->getByUserId($_userId);
-        if (!$this->_currentAccount->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_READ)) {
+        if ($_ignoreACL === FALSE && !$this->_currentAccount->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_READ)) {
             throw new Addressbook_Exception_AccessDenied('read access to contact denied');
         }            
         return $contact;            
