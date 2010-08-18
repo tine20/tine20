@@ -185,6 +185,24 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(($testFolder->is_selectable == 1));
         $this->assertEquals('INBOX' . $this->_account->delimiter . 'test_renamed' . $this->_account->delimiter . 'testsub', $testFolder->globalname);
     }
+
+    /**
+     * rename mail folder on the server and create a subfolder afterwards
+     *
+     */
+    public function testRenameFolderAndCreateSubfolder()
+    {
+        $this->_controller->create($this->_account->getId(), 'test', 'INBOX');
+
+        $renamedFolder = $this->_controller->rename($this->_account->getId(), 'test_renamed', 'INBOX' . $this->_account->delimiter . 'test');
+
+        $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test_renamed' . $this->_account->delimiter . 'testsub';
+        $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test_renamed';
+
+        $subfolder = $this->_controller->create($this->_account->getId(), 'testsub', 'INBOX' . $this->_account->delimiter . 'test_renamed');
+        
+        $this->assertEquals('INBOX' . $this->_account->delimiter . 'test_renamed' . $this->_account->delimiter . 'testsub', $subfolder->globalname);
+    }
     
     /**
      * get folder filter
