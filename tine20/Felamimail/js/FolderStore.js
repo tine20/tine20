@@ -40,6 +40,7 @@ Tine.Felamimail.FolderStore = function(config) {
     Tine.Felamimail.FolderStore.superclass.constructor.call(this);
     
     this.on('load', this.onStoreLoad, this);
+    this.on('add', this.onStoreAdd, this);
 };
 
 Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
@@ -75,7 +76,7 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
             callback.apply(scope, args);
         } else if (store.queriesPending.indexOf(key) >= 0) {
             Tine.log.debug('result not in store yet, but async query already running -> wait a bit');
-            this.asyncQuery.defer(250, this, [field, value, callback, args, scope, store]);
+            this.asyncQuery.defer(2500, this, [field, value, callback, args, scope, store]);
         } else {
             Tine.log.debug('result is requested the first time -> fetch from server');
             var accountId = value.match(/^\/([a-z0-9]*)/i)[1],
@@ -121,22 +122,47 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
         return field + ' -> ' + value;
     },
     
-    
     /**
+     * load event handler
      * 
-     * @param {} store
-     * @param {} records
-     * @param {} success
+     * @param {Tine.Felamimail.FolderStore} store
+     * @param {Tine.Felamimail.Model.Folder} records
+     * @param {Object} options
      */
     onStoreLoad: function(store, records, options) {
+        this.computePaths(records, options.path);
+    },
+    
+    /**
+     * add event handler
+     * 
+     * @param {Tine.Felamimail.FolderStore} store
+     * @param {Tine.Felamimail.Model.Folder} records
+     * @param {Integer} index
+     */
+    onStoreAdd: function(store, records, index) {
+        this.computePaths(records, null);
+    },
+
+    /**
+     * compute paths for folder records
+     * 
+     * @param {Tine.Felamimail.Model.Folder} records
+     * @param {String|null} parentPath
+     */
+    computePaths: function(records, givenParentPath) {
         Ext.each(records, function(record) {
-            // compute paths
-            var parent_path = options.path;
+            if (givenParentPath === null) {
+                var parent = this.getParentByAccountIdAndGlobalname(record.get('account_id'), record.get('parent'));
+                parentPath = (parent) ? parent.get('path') : '/' + record.get('account_id');
+            } else {
+                parentPath = givenParentPath;
+            }
             record.beginEdit();
-            record.set('parent_path', parent_path);
-            record.set('path', parent_path + '/' + record.id);
+            record.set('parent_path', parentPath);
+            record.set('path', parentPath + '/' + record.id);
             record.endEdit();
-        }, this);
+        }, this);        
     },
     
     /**
