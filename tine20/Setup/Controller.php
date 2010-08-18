@@ -47,6 +47,13 @@ class Setup_Controller
     protected $_baseDir;
     
     /**
+     * the email configs to get/set
+     * 
+     * @var array
+     */
+    protected $_emailConfigs = array();
+    
+    /**
      * don't clone. Use the singleton.
      *
      */
@@ -850,20 +857,21 @@ class Setup_Controller
      */
     public function getEmailConfig()
     {
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP, 'Tinebase', array());
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP, 'Tinebase', array());
-        
-        if (! empty($imapConfig) && ! isset($imapConfig['active'])) {
-            $imapConfig['active'] = TRUE;
-        }
-        if (! empty($smtpConfig) && ! isset($smtpConfig['active'])) {
-            $smtpConfig['active'] = TRUE;
-        }
-        
-        $result = array(
-            'imap' => $imapConfig,
-            'smtp' => $smtpConfig
+        $configs = array(
+            'imap'  => Tinebase_Model_Config::IMAP,
+            'smtp'  => Tinebase_Model_Config::SMTP,
+            'sieve' => Tinebase_Model_Config::SIEVE,
         );
+        
+        $result = array();
+        
+        foreach ($configs as $configName => $configKey) {
+            $config = Tinebase_Config::getInstance()->getConfigAsArray($configKey, 'Tinebase', array());
+            if (! empty($config) && ! isset($config['active'])) {
+                $config['active'] = TRUE;
+            }
+            $result[$configName] = $config;
+        }
         
         return $result;
     }
@@ -876,10 +884,15 @@ class Setup_Controller
      */
     public function saveEmailConfig($_data)
     {
-        //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, TRUE)); 
-
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::IMAP, Zend_Json::encode($_data['imap']));
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::SMTP, Zend_Json::encode($_data['smtp']));
+        $configs = array(
+            'imap'  => Tinebase_Model_Config::IMAP,
+            'smtp'  => Tinebase_Model_Config::SMTP,
+            'sieve' => Tinebase_Model_Config::SIEVE,
+        );
+        
+        foreach ($configs as $configName => $configKey) {
+            Tinebase_Config::getInstance()->setConfigForApplication($configKey, Zend_Json::encode($_data[$configName]));
+        }
     }
     
     /**

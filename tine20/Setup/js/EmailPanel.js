@@ -398,6 +398,20 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     items: []
                 }]
             }]
+        }, {
+            title: this.app.i18n._('SIEVE'),
+            id: 'setup-sieve-group',
+            checkboxToggle:true,
+            collapsed: true,
+            items: [{
+                name: 'sieve_hostname',
+                fieldLabel: this.app.i18n._('Hostname'),
+                xtype: 'textfield'
+            }, {
+                name: 'sieve_port',
+                fieldLabel: this.app.i18n._('Port'),
+                xtype: 'numberfield'
+            }]
         }];
     },
     
