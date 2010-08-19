@@ -7,7 +7,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -41,6 +41,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Felamimail/js/RulesGridPanel.js',
             'Felamimail/js/RulesDialog.js',
             'Felamimail/js/RuleEditDialog.js',
+            'Felamimail/js/RuleConditionsPanel.js',
             'Felamimail/js/AccountEditDialog.js',
             'Addressbook/js/SearchCombo.js',
             'Felamimail/js/RecipientGrid.js',
