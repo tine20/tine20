@@ -24,6 +24,7 @@ Ext.namespace('Tine.Felamimail');
  *  value       -> key
  * </p>
  * <p>
+ * TODO         make this work with exts style windows
  * TODO         '+' needs to move down when new filter row is added
  * </p>
  * 
@@ -37,6 +38,9 @@ Ext.namespace('Tine.Felamimail');
  * Create a new RuleConditionsPanel
  */
 Tine.Felamimail.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterToolbar, {
+    // is this needed?
+    //frowIdPrefix: 'tw-ftb-frowidrule-',
+    
     defaultFilter: 'from',
     allowSaving: false,
     showSearchButton: false,
