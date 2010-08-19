@@ -19,8 +19,8 @@ Ext.namespace('Tine.Felamimail');
  * <p>Sieve Filter Dialog</p>
  * <p>This dialog is editing a filter rule.</p>
  * <p>
- * TODO         add more form fields (action)
- * TODO         add title
+ * TODO         make conditions panel work
+ * TODO         add more form fields (action comboboxes)
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -67,6 +67,11 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return;
         }
         
+        var title = this.app.i18n._('Edit Filter Rule');
+        this.window.setTitle(title);
+        
+        // TODO set conditions
+        
         //Tine.log.debug(this.record);
         this.getForm().loadRecord(this.record);
         
@@ -79,9 +84,14 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordUpdate: function() {
         Tine.Felamimail.RuleEditDialog.superclass.onRecordUpdate.call(this);
         
-        var form = this.getForm();
+        //var form = this.getForm();
         
-        // set conditions
+        // TODO get conditions
+
+        // NOTE: input field style
+        // @deprecated
+        /*
+        
         var conditions = [];
         var conditionFields = ['from_contains', 'to_contains', 'subject_contains'];
         var field, i, condition, parts;
@@ -100,8 +110,9 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
         this.record.set('conditions', conditions);
+        */
         
-        // TODO set action
+        // TODO get action
     },
     
     /**
@@ -114,7 +125,53 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getFormItems: function() {
         
+        this.conditionsPanel = new Tine.Felamimail.RuleConditionsPanel({
+            // TODO add preset filters
+            filters: []
+        });
+        
         return [{
+            xtype: 'panel',
+            layout: 'border',
+            items: [
+            {
+                region: 'north',
+                xtype: 'fieldset',
+                title: this.app.i18n._('Conditions'),
+                border: false,
+                items: this.conditionsPanel,
+                listeners: {
+                    scope: this,
+                    afterlayout: function(ct) {
+                        ct.suspendEvents();
+                        ct.setHeight(this.conditionsPanel.getHeight()+35);
+                        ct.ownerCt.layout.layout();
+                        ct.resumeEvents();
+                    }
+                }
+            }, {
+                region: 'center',
+                title: this.app.i18n._('Action'),
+                xtype: 'fieldset',
+                autoHeight: true,
+                layout: 'form',
+                border: false,
+                anchor: '90%',
+                defaults: {
+                    xtype: 'textfield',
+                    anchor: '90%'
+                },
+                items: [{
+                    name: 'action_argument',
+                    fieldLabel: this.app.i18n._('Move to folder')
+                }]
+            }]
+        }];
+        
+        // NOTE: input field style follows
+        // @deprecated
+        /*
+        {
             title: this.app.i18n._('Conditions'),
             xtype: 'fieldset',
             autoHeight: true,
@@ -133,22 +190,9 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, {
                 name: 'subject_contains',
                 fieldLabel: this.app.i18n._('If "subject" contains')
-            }]
-        }, {
-            title: this.app.i18n._('Action'),
-            xtype: 'fieldset',
-            autoHeight: true,
-            layout: 'form',
-            anchor: '90%',
-            defaults: {
-                xtype: 'textfield',
-                anchor: '90%'
-            },
-            items: [{
-                name: 'action_argument',
-                fieldLabel: this.app.i18n._('Move to folder')
-            }]
-        }]
+            }] 
+        }*/
+        
     }
 });
 
@@ -160,8 +204,8 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.Felamimail.RuleEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 640,
-        height: 480,
+        width: 800,
+        height: 400,
         name: Tine.Felamimail.RuleEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.RuleEditDialog',
         contentPanelConstructorConfig: config
