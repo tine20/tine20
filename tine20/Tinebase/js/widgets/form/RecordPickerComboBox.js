@@ -6,7 +6,9 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
- 
+
+/*global Ext, Tine*/
+
 Ext.ns('Tine.Tinebase.widgets.form');
 
 /**
@@ -50,7 +52,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
     minChars: 3,
     forceSelection: true,
     
-    initComponent: function() {
+    initComponent: function () {
         //this.appName = this.model.getMeta('appName');
         //this.modelName = this.model.getMeta('modelName');
         this.displayField = this.recordClass.getMeta('titleProperty');
@@ -71,7 +73,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
      * @param {Ext.data.Store} store
      * @param {Object} options
      */
-    onBeforeLoad: function(store, options) {
+    onBeforeLoad: function (store, options) {
         options.params.paging = {
             start: options.params.start,
             limit: options.params.limit
@@ -83,7 +85,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
      * 
      * @param {Object} qevent
      */
-    onBeforeQuery: function(qevent){
+    onBeforeQuery: function (qevent) {
         this.store.baseParams.filter = [
             {field: 'query', operator: 'contains', value: qevent.query }
         ];
@@ -95,7 +97,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
      * @param {Tine.Tinebase.data.Record} record
      * @param {Number} index
      */
-    onSelect : function(record, index){
+    onSelect: function (record, index) {
         this.selectedRecord = record;
         return this.supr().onSelect.call(this, record, index);
     },
@@ -106,8 +108,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
      * @param {Tine.Addressbook.SearchCombo} combo
      * @param {Event} event
      */ 
-    onSpecialkey: function(combo, event){
-        if(event.getKey() == event.ENTER){
+    onSpecialkey: function (combo, event) {
+        if (event.getKey() === event.ENTER) {
             var id = combo.getValue();
             var record = this.store.getById(id);
             this.onSelect(record);
@@ -119,9 +121,9 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
      * 
      * @param {mixed} value
      */
-    setValue: function(value){
+    setValue: function (value) {
         if (value) {
-            if(typeof(value.get) == 'function') {
+            if (typeof(value.get) === 'function') {
                 // value is a record
                 if (this.store.indexOf(value) < 0) {
                     this.store.addSorted(value);
@@ -141,3 +143,4 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
         return this.supr().setValue.call(this, value);
     }
 });
+Ext.reg('tinerecordpickercombobox', Tine.Tinebase.widgets.form.RecordPickerComboBox);
