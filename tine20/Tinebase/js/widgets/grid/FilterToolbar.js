@@ -17,9 +17,9 @@ Ext.ns('Tine.widgets.grid');
      <pre><code>
      tb = new Tine.widgets.grid.FilterToolbar({
          filterModels: [
-            {name: 'Full Name', field: 'n_fn', defaultOperator: 'contains'},
-            {name: 'Container', field: 'container_id', operatorRenderer: function() {...}, valueRenderer: function() {...}},
-            {name: 'Contact', field: 'quicksearch'}
+            {label: 'Full Name', field: 'n_fn', defaultOperator: 'contains'},
+            {label: 'Container', field: 'container_id', operatorRenderer: function() {...}, valueRenderer: function() {...}},
+            {label: 'Contact', field: 'quicksearch'}
          ],
          defaultFilter: 'quicksearch',
          filters: [
