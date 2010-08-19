@@ -61,6 +61,11 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @cfg {Bool} allowSaving (defaults to false)
      */
     allowSaving: false,
+
+    /**
+     * @cfg {Bool} showSearchButton (defaults to true)
+     */
+    showSearchButton: true,
     
     border: false,
     monitorResize: true,
@@ -298,7 +303,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 this.actions.addFilterRow.show();
                 // move start search button
                 tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.searchButtonWrap);
-                this.actions.startSearch.show();
+                if (this.showSearchButton) {
+                    this.actions.startSearch.show();
+                }
                 // move delete all filters
                 // tr.child('td[class=tw-ftb-frow-deleteallfilters]').insertFirst(this.actions.removeAllFilters.getEl());
                 this.actions.removeAllFilters.setVisible(numFilters > 1);
