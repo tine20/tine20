@@ -167,16 +167,12 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             results: [recordData]
         }, true);
         
+        // TODO it should be done like this:
         /*
-        var recordData = Ext.util.JSON.decode(encodedRecordData),
-            id = this.store.getCount()+1;
-            
-        recordData.id = id;
-        var record = new this.recordClass(recordData, id);
-        
-        this.store.add([record]);
+        var recordData = Ext.copyTo({}, folderData, Tine.Felamimail.Model.Folder.getFieldNames());
+        var newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: Ext.util.JSON.encode(recordData)});
+        this.folderStore.add([newRecord]);
         */
-
     },
     
     /**
