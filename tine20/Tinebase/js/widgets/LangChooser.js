@@ -8,6 +8,8 @@
  *
  */
 
+/*global Ext, Tine, google*/
+
 Ext.ns('Tine.widgets');
 
 /**
@@ -30,7 +32,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
     width: 100,
     listWidth: 200,
     
-    initComponent: function() {
+    initComponent: function () {
         this.value = Tine.Tinebase.registry.get('locale').language;
         this.fieldLabel = this.fieldLabel ? this.fieldLabel : _('Language');
         
@@ -39,8 +41,8 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
                 '<div class="x-combo-list-item">' +
                     '{language} <tpl if="region.length &gt; 1">{region}</tpl> [{locale}]' + 
                 '</div>' +
-            '</tpl>',{
-                encode: function(value) {
+            '</tpl>', {
+                encode: function (value) {
                     return Ext.util.Format.htmlEncode(value);
                 }
             }
@@ -60,11 +62,11 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
         this.on('select', this.onLangSelect, this);
     },
     
-    onLangSelect: function(combo, localeRecord, idx) {
+    onLangSelect: function (combo, localeRecord, idx) {
         var currentLocale = Tine.Tinebase.registry.get('locale').locale;
         var newLocale = localeRecord.get('locale');
         
-        if (newLocale != currentLocale) {
+        if (newLocale !== currentLocale) {
             Ext.MessageBox.wait(_('setting new language...'), _('Please Wait'));
             
             Ext.Ajax.request({
@@ -75,7 +77,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
                     saveaspreference: true,
                     setcookie: true
                 },
-                success: function(result, request){
+                success: function (result, request) {
                     if (window.google && google.gears && google.gears.localServer) {
                         var pkgStore = google.gears.localServer.openStore('tine20-package-store');
                         if (pkgStore) {
@@ -88,4 +90,5 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
         }
     }
 });
+Ext.reg('tinelangchooser', Tine.widgets.LangChooser);
 
