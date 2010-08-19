@@ -19,8 +19,9 @@ Ext.namespace('Tine.Felamimail');
  * <p>Sieve Filter Dialog</p>
  * <p>This dialog is editing a filter rule.</p>
  * <p>
- * TODO         make conditions panel work
+ * TODO         set conditions on init
  * TODO         add more form fields (action comboboxes)
+ * TODO         make action work
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -81,38 +82,68 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @private
      */
+    onSaveAndClose: function(button, event){
+        this.onApplyChanges(button, event, false);
+        this.fireEvent('saveAndClose');
+    },
+    
+    /**
+     * @private
+     */
     onRecordUpdate: function() {
         Tine.Felamimail.RuleEditDialog.superclass.onRecordUpdate.call(this);
         
-        //var form = this.getForm();
+        this.record.set('conditions', this.getConditions());
         
-        // TODO get conditions
+        Tine.log.debug(this.record);
 
-        // NOTE: input field style
-        // @deprecated
-        /*
-        
-        var conditions = [];
-        var conditionFields = ['from_contains', 'to_contains', 'subject_contains'];
-        var field, i, condition, parts;
-        for (i = 0; i < conditionFields.length; i++) {
-            field = form.findField(conditionFields[i]);
-            if (field.getValue() != '') {
-                parts = conditionFields[i].split('_');
-                condition = {
-                    // add key/values (split fieldname)
-                    test: 'address',
-                    header: parts[0],
-                    comperator: parts[1],
-                    key: field.getValue()
-                };
-                conditions.push(condition);
-            }
-        }
-        this.record.set('conditions', conditions);
-        */
-        
+        //var form = this.getForm();
         // TODO get action
+    },
+    
+    /**
+     * get conditions and do the mapping
+     * 
+     * @return {Array}
+     */
+    getConditions: function() {
+        var conditions = this.conditionsPanel.getAllFilterData();
+        var result = [],
+            i = 0, 
+            condition,
+            test,
+            comperator;
+            
+        for (i = 0; i < conditions.length; i++) {
+            switch (conditions[i].field) {
+                case 'from':
+                case 'to':
+                    test = 'address';
+                    break;
+                case 'size':
+                    test = 'size';
+                    break;
+                default:
+                    test = 'header';
+            }
+            switch (conditions[i].field) {
+                case 'size':
+                    comperator = (conditions[i].operator == 'greater') ? 'over' : 'under';
+                    break;
+                default:
+                    comperator = conditions[i].operator;
+            }
+            condition = {
+                test: test,
+                header: conditions[i].field,
+                comperator: comperator,
+                key: conditions[i].value
+            };
+            result.push(condition);            
+        }
+        //Tine.log.debug(result);
+        
+        return result;     
     },
     
     /**
@@ -167,32 +198,6 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }]
             }]
         }];
-        
-        // NOTE: input field style follows
-        // @deprecated
-        /*
-        {
-            title: this.app.i18n._('Conditions'),
-            xtype: 'fieldset',
-            autoHeight: true,
-            layout: 'form',
-            anchor: '90%',
-            defaults: {
-                xtype: 'textfield',
-                anchor: '90%'
-            },
-            items: [{
-                name: 'from_contains',
-                fieldLabel: this.app.i18n._('If "from" contains')
-            }, {
-                name: 'to_contains',
-                fieldLabel: this.app.i18n._('If "to" contains')
-            }, {
-                name: 'subject_contains',
-                fieldLabel: this.app.i18n._('If "subject" contains')
-            }] 
-        }*/
-        
     }
 });
 
