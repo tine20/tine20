@@ -82,10 +82,13 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @private
      */
+    // TODO for testing purposes. remove it later!
+    /*
     onSaveAndClose: function(button, event){
         this.onApplyChanges(button, event, false);
         this.fireEvent('saveAndClose');
     },
+    */
     
     /**
      * @private
