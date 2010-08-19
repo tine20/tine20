@@ -18,7 +18,13 @@ Ext.namespace('Tine.Felamimail');
  * 
  * <p>Sieve Filter Conditions Panel</p>
  * <p>
- * TODO         add more filter models
+ * mapping when getting filter values:
+ *  field       -> test_header or 'size'
+ *  operator    -> comperator
+ *  value       -> key
+ * </p>
+ * <p>
+ * TODO         '+' needs to move down when new filter row is added
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -34,19 +40,29 @@ Tine.Felamimail.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterToolbar
     defaultFilter: 'from',
     allowSaving: false,
     showSearchButton: false,
-     
+    
+    // unused fn
+    onFiltertrigger: Ext.emptyFn,
+    
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         
         this.filterModels = [
-            {label: this.app.i18n._('From'),     field: 'from',      operators: ['contains']},
-            {label: this.app.i18n._('To'),       field: 'to',        operators: ['contains']},
-            {label: this.app.i18n._('Subject'),  field: 'subject',   operators: ['contains']}
+            {label: this.app.i18n._('From'),     field: 'from',     operators: ['contains']},
+            {label: this.app.i18n._('To'),       field: 'to',       operators: ['contains']},
+            {label: this.app.i18n._('Subject'),  field: 'subject',  operators: ['contains']},
+            {label: this.app.i18n._('Size'),     field: 'size',     operators: ['greater', 'less'], valueType: 'number', defaultOperator: 'greater'}
         ];
         
         this.supr().initComponent.call(this);
     },
     
-    // unused fn
-    onFiltertrigger: Ext.emptyFn
+    /**
+     * gets filter data (use getValue() if we don't have a store/plugins)
+     * 
+     * @return {Array} of filter records
+     */
+    getAllFilterData: function() {
+        return this.getValue();
+    }
 });
