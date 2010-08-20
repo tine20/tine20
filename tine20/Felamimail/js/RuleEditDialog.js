@@ -19,7 +19,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>Sieve Filter Dialog</p>
  * <p>This dialog is editing a filter rule.</p>
  * <p>
- * TODO         set conditions on init
  * TODO         add more form fields (action comboboxes)
  * TODO         make action work
  * </p>
@@ -70,8 +69,6 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         var title = this.app.i18n._('Edit Filter Rule');
         this.window.setTitle(title);
-        
-        // TODO set conditions
         
         //Tine.log.debug(this.record);
         this.getForm().loadRecord(this.record);
@@ -150,6 +147,38 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * get conditions filter data (reverse of getConditions)
+     * 
+     * @return {Array}
+     */
+    getConditionsFilter: function() {
+        var conditions = this.record.get('conditions');
+        var result = [],
+            i = 0, 
+            filter,
+            operator;
+            
+        for (i = 0; i < conditions.length; i++) {
+            switch (conditions[i].header) {
+                case 'size':
+                    operator = (conditions[i].comperator == 'over') ? 'greater' : 'less';
+                    break;
+                default:
+                    operator = conditions[i].comperator;
+            }
+            filter = {
+                field: conditions[i].header,
+                operator: operator,
+                value: conditions[i].key
+            };
+            result.push(filter);            
+        }
+        //Tine.log.debug(result);
+        
+        return result;     
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
@@ -160,8 +189,7 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function() {
         
         this.conditionsPanel = new Tine.Felamimail.RuleConditionsPanel({
-            // TODO add preset filters
-            filters: []
+            filters: this.getConditionsFilter()
         });
         
         return [{
