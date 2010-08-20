@@ -12,7 +12,7 @@
 class Addressbook_Setup_Update_Release2 extends Setup_Update_Abstract
 {
     /**
-     * change all fields which store account ids from integer to string
+     * added lon & lat
      * 
      */
     public function update_0()
