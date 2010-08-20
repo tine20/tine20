@@ -191,8 +191,8 @@ Tine.Felamimail.setTreeContextMenus = function() {
     };
     */
 
-    var reloadFolderCacheAction = {
-        text: this.app.i18n._('Reload Folder List'),
+    var updateFolderCacheAction = {
+        text: this.app.i18n._('Update Folder List'),
         iconCls: 'action_update_cache',
         scope: this,
         handler: function() {
@@ -246,7 +246,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
     // account ctx menu
     this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
         nodeName: this.app.i18n.n_('Account', 'Accounts', 1),
-        actions: [editAccountAction, 'delete', addFolderToRootAction, reloadFolderCacheAction, editVacationAction, editRulesAction],
+        actions: [editAccountAction, 'delete', addFolderToRootAction, updateFolderCacheAction, editVacationAction, editRulesAction],
         scope: this,
         backend: 'Felamimail',
         backendModel: 'Account'
