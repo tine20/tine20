@@ -42,6 +42,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     protected $_account = NULL;
     
     /**
+     * imap backend
+
+     * @var Felamimail_Backend_ImapProxy
+     */
+    protected $_imap = NULL;
+    
+    /**
      * name of the folder to use for tests
      * @var string
      */
@@ -98,7 +105,15 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // get (or create) test accout
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         
-        $this->_json = new Felamimail_Frontend_Json();        
+        $this->_json = new Felamimail_Frontend_Json();
+        $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
+        
+        // create test folder if it does not exist
+        try {
+            $this->_imap->createFolder($this->_testFolderName, '', $this->_account->delimiter);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            // exists
+        }
     }
 
     /**
@@ -114,17 +129,15 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         }
         
         if (! empty($this->_foldersToClear)) {
-            $imap = Felamimail_Backend_ImapFactory::factory($this->_account);
-            
             foreach ($this->_foldersToClear as $folderName) {
                 // delete test messages from given folders on imap server (search by special header)
-                $imap->selectFolder($folderName);
-                $result = $imap->search(array(
+                $this->_imap->selectFolder($folderName);
+                $result = $this->_imap->search(array(
                     'HEADER X-Tine20TestMessage jsontest'
                 ));
                 //print_r($result);
                 foreach ($result as $messageUid) {
-                    $imap->removeMessage($messageUid);
+                    $this->_imap->removeMessage($messageUid);
                 }
                 
                 // clear message cache
@@ -201,21 +214,24 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateFolderCache()
     {
-        $imap = Felamimail_Backend_ImapFactory::factory($this->_account);
+        $result = $this->_json->updateFolderCache($this->_account->getId(), '');
         
         // create folder directly on imap server
-        $imap->createFolder('test', $this->_testFolderName, $this->_account->delimiter);
+        $this->_imap->createFolder('test', $this->_testFolderName, $this->_account->delimiter);
         // if something goes wrong, we need to delete this folder in tearDown
         $this->_createdFolders[] = $this->_testFolderName . $this->_account->delimiter . 'test';
         
         // update cache and check if folder is found
         $result = $this->_json->updateFolderCache($this->_account->getId(), $this->_testFolderName);
+        //print_r($result);
         $testfolder = $result[0];
         $this->assertGreaterThan(0, count($result));
         $this->assertEquals($this->_testFolderName . $this->_account->delimiter . 'test', $testfolder['globalname']);
+        //$testFolder = $this->_getFolder($this->_testFolderName);
+        //print_r($testfolder);
         
         // delete folder directly on imap server
-        $imap->removeFolder($this->_testFolderName . $this->_account->delimiter . 'test');
+        $this->_imap->removeFolder($this->_testFolderName . $this->_account->delimiter . 'test');
         $this->_createdFolders = array();
         
         // try to update message cache of nonexistant folder
@@ -225,6 +241,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // update cache and check if folder is deleted
         $result = $this->_json->updateFolderCache($this->_account->getId(), $this->_testFolderName);
         $this->assertEquals(0, count($result));
+        //$testFolder = $this->_getFolder($this->_testFolderName);
+        //print_r($testfolder->toArray());
     }
     
     /*********************** accounts tests **************************/
@@ -364,8 +382,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, preg_match('/aaaaaä/', $message['body']));
         
         // delete message on imap server and check if correct exception is thrown when trying to get it
-        $imap = Felamimail_Backend_ImapFactory::factory($this->_account);
-        $imap->removeMessage($message['messageuid']);
+        $this->_imap->removeMessage($message['messageuid']);
         Tinebase_Core::getCache()->clean();
         $this->setExpectedException('Felamimail_Exception_IMAPMessageNotFound');
         $message = $this->_json->getMessage($message['id']);
