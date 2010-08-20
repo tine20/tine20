@@ -118,7 +118,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function updateFolderCache($accountId, $folderName)
     {
-        $result = Felamimail_Controller_Cache_Folder::getInstance()->update($accountId, $folderName);
+        $result = Felamimail_Controller_Cache_Folder::getInstance()->update($accountId, $folderName, TRUE);
         return $this->_multipleRecordsToJson($result);
     }
     

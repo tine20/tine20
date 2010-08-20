@@ -81,9 +81,10 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      *
      * @param  mixed   $_accountId
      * @param  string  $_folderName global name
+     * @param  boolean $_recursive 
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      */
-    public function update($_accountId, $_folderName = '')
+    public function update($_accountId, $_folderName = '', $_recursive = FALSE)
     {
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         
@@ -147,8 +148,18 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             $parentFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_accountId, $_folderName);
             $hasChildren = (empty($folders) || count($folders) > 0 && count($result) == 0) ? 0 : 1;
             if ($hasChildren != $parentFolder->has_children) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update has_children = ' . $hasChildren . ' for folder ' . $parentFolder->globalname);
                 $parentFolder->has_children = $hasChildren;
                 $this->_backend->update($parentFolder);
+            }
+        }
+        
+        if ($_recursive) {
+            foreach ($result as $folder) {
+                if ($folder->has_children) {
+                    $subresult = $this->update($account, $folder->globalname, $_recursive);
+                }
+                $this->_backend->update($folder);
             }
         }
         
