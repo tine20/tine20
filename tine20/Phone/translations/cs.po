@@ -15,23 +15,16 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Phone\n"
 
-#: js/Models.js:70 js/Phone.js:58 js/Phone.js:253
+#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
+msgid "Edit phone settings"
+msgstr "Editovat nastavení telefonu"
+
+#: js/Phone.js:58 js/Phone.js:253 js/Models.js:70
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
 msgstr[1] "Telefony"
 msgstr[2] "Telefonů"
-
-#: js/Models.js:74
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "seznam telefonů"
-msgstr[1] "seznamy telefonů"
-msgstr[2] "seznamů telefonů"
-
-#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
-msgid "Edit phone settings"
-msgstr "Editovat nastavení telefonu"
 
 #: js/Phone.js:69
 msgid "Phones"
@@ -136,6 +129,13 @@ msgstr "Vyzvání"
 #: js/Phone.js:700
 msgid "Call ID"
 msgstr "ID hovoru"
+
+#: js/Models.js:74
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "seznam telefonů"
+msgstr[1] "seznamy telefonů"
+msgstr[2] "seznamů telefonů"
 
 #~ msgid "Name"
 #~ msgstr "Název"

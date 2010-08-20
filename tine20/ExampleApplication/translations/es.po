@@ -18,22 +18,17 @@ msgstr ""
 msgid "%s's personal example records"
 msgstr ""
 
-#: js/ExampleApplication.js:27
-msgid "Example Application"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:89
-#, fuzzy
-msgid "ExampleRecord"
-msgstr "RegistroDeEjemplo"
-
-#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
-msgid "Name"
-msgstr "Nombre"
+#: Setup/setup.xml:10
+msgid "ExampleApplication"
+msgstr "AplicaciónDeEjemplo"
 
 #: js/ExampleRecordGridPanel.js:77
 msgid "Quick search"
 msgstr "Búsqueda Rápida"
+
+#: js/ExampleRecordGridPanel.js:105 js/ExampleRecordEditDialog.js:106
+msgid "Name"
+msgstr "Nombre"
 
 #: js/ExampleRecordGridPanel.js:111
 msgid "Title"
@@ -51,6 +46,15 @@ msgstr "Presupuesto"
 msgid "Show closed"
 msgstr "Función Cerrada"
 
+#: js/ExampleRecordEditDialog.js:89
+#, fuzzy
+msgid "ExampleRecord"
+msgstr "RegistroDeEjemplo"
+
+#: js/ExampleApplication.js:27
+msgid "Example Application"
+msgstr ""
+
 #: js/Model.js:33
 msgid "example record"
 msgid_plural "example records"
@@ -62,10 +66,6 @@ msgid "example record list"
 msgid_plural "example record lists"
 msgstr[0] ""
 msgstr[1] ""
-
-#: Setup/setup.xml:10
-msgid "ExampleApplication"
-msgstr "AplicaciónDeEjemplo"
 
 #~ msgid "ExampleRecords"
 #~ msgstr "RegistrosDeEjemplo"

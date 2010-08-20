@@ -17,21 +17,17 @@ msgstr ""
 msgid "%s's personal example records"
 msgstr "Osobní ukázkové záznamy uživatele %s"
 
-#: js/ExampleApplication.js:27
-msgid "Example Application"
+#: Setup/setup.xml:10
+msgid "ExampleApplication"
 msgstr "Ukázková aplikace"
-
-#: js/ExampleRecordEditDialog.js:89
-msgid "ExampleRecord"
-msgstr "Ukázkový záznam"
-
-#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
-msgid "Name"
-msgstr "Název"
 
 #: js/ExampleRecordGridPanel.js:77
 msgid "Quick search"
 msgstr "Rychlé hledání"
+
+#: js/ExampleRecordGridPanel.js:105 js/ExampleRecordEditDialog.js:106
+msgid "Name"
+msgstr "Název"
 
 #: js/ExampleRecordGridPanel.js:111
 msgid "Title"
@@ -49,6 +45,14 @@ msgstr "Rozpočet"
 msgid "Show closed"
 msgstr "Zobrazit uzavřené"
 
+#: js/ExampleRecordEditDialog.js:89
+msgid "ExampleRecord"
+msgstr "Ukázkový záznam"
+
+#: js/ExampleApplication.js:27
+msgid "Example Application"
+msgstr "Ukázková aplikace"
+
 #: js/Model.js:33
 msgid "example record"
 msgid_plural "example records"
@@ -62,10 +66,6 @@ msgid_plural "example record lists"
 msgstr[0] "seznam ukázkových záznamů"
 msgstr[1] "seznamy ukázkových záznamů"
 msgstr[2] "seznamů ukázkových záznamů"
-
-#: Setup/setup.xml:10
-msgid "ExampleApplication"
-msgstr "Ukázková aplikace"
 
 #~ msgid "ExampleRecords"
 #~ msgstr "Ukázkové záznamy"

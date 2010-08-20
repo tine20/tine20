@@ -12,21 +12,15 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Models.js:70 js/Phone.js:58 js/Phone.js:253
+#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
+msgid "Edit phone settings"
+msgstr "Telefoneinstellungen bearbeiten"
+
+#: js/Phone.js:58 js/Phone.js:253 js/Models.js:70
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
 msgstr[1] "Telefone"
-
-#: js/Models.js:74
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "Telefonliste"
-msgstr[1] "Telefonlisten"
-
-#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
-msgid "Edit phone settings"
-msgstr "Telefoneinstellungen bearbeiten"
 
 #: js/Phone.js:69
 msgid "Phones"
@@ -131,6 +125,12 @@ msgstr "Klingeln"
 #: js/Phone.js:700
 msgid "Call ID"
 msgstr "Anruf-ID"
+
+#: js/Models.js:74
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "Telefonliste"
+msgstr[1] "Telefonlisten"
 
 #~ msgid "Dial phone number"
 #~ msgstr "Telefonnummer wählen"

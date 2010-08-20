@@ -12,6 +12,43 @@ msgstr ""
 "X-Poedit-Language: Japanese\n"
 "X-Poedit-Country: JAPAN\n"
 
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s のパーソナルタスク"
+
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr "要アクション"
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr "完了"
+
+#: Setup/setup.xml:339 js/Status.js:187
+msgid "IN-PROCESS"
+msgstr "進行中"
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr "キャンセル"
+
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+msgid "All tasks of my taskslists"
+msgstr ""
+
+#: Preference.php:29
+msgid "All my tasks"
+msgstr ""
+
+#: Preference.php:65
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:66
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr ""
+
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr ""
@@ -28,14 +65,10 @@ msgstr ""
 msgid "Create or update shared tasks favorites"
 msgstr ""
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr ""
-
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s のパーソナルタスク"
+#: js/Status.js:33 js/GridPanel.js:190 js/TaskEditDialog.js:209
+#: Model/Task.php:187
+msgid "Status"
+msgstr "ステータス"
 
 #: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
@@ -87,11 +120,6 @@ msgstr "重要度"
 msgid "Percent"
 msgstr "パーセント"
 
-#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
-#: Model/Task.php:187
-msgid "Status"
-msgstr "ステータス"
-
 #: js/GridPanel.js:204
 msgid "Creation Time"
 msgstr "作成時間"
@@ -103,10 +131,6 @@ msgstr "完了"
 #: js/GridPanel.js:267
 msgid "Show closed"
 msgstr "クローズされたものの表示"
-
-#: js/Status.js:187 Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "進行中"
 
 #: js/TaskEditDialog.js:142
 msgid "You have to supply a due date, because an alarm ist set!"
@@ -172,30 +196,6 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: Preference.php:29
-msgid "All my tasks"
+#: Controller/Task.php:166
+msgid "Notification for Task "
 msgstr ""
-
-#: Preference.php:65
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:66
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr ""
-
-#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
-msgid "All tasks of my taskslists"
-msgstr ""
-
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr "要アクション"
-
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr "完了"
-
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr "キャンセル"

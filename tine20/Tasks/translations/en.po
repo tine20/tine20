@@ -13,6 +13,43 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s's personal tasks"
+
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr "NEEDS-ACTION"
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr "COMPLETED"
+
+#: Setup/setup.xml:339 js/Status.js:187
+msgid "IN-PROCESS"
+msgstr "IN-PROCESS"
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr "CANCELLED"
+
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+msgid "All tasks of my taskslists"
+msgstr "All tasks of my taskslists"
+
+#: Preference.php:29
+msgid "All my tasks"
+msgstr "All my tasks"
+
+#: Preference.php:65
+msgid "Default Favorite"
+msgstr "Default Favorite"
+
+#: Preference.php:66
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "The default favorite which is loaded on Tasks startup"
+
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr "manage shared task lists"
@@ -29,14 +66,10 @@ msgstr "manage shared tasks favorites"
 msgid "Create or update shared tasks favorites"
 msgstr "Create or update shared tasks favorites"
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Notification for Task "
-
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s's personal tasks"
+#: js/Status.js:33 js/GridPanel.js:190 js/TaskEditDialog.js:209
+#: Model/Task.php:187
+msgid "Status"
+msgstr "Status"
 
 #: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
@@ -88,11 +121,6 @@ msgstr "Priority"
 msgid "Percent"
 msgstr "Percent"
 
-#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
-#: Model/Task.php:187
-msgid "Status"
-msgstr "Status"
-
 #: js/GridPanel.js:204
 msgid "Creation Time"
 msgstr "Creation Time"
@@ -104,10 +132,6 @@ msgstr "Completed"
 #: js/GridPanel.js:267
 msgid "Show closed"
 msgstr "Show closed"
-
-#: js/Status.js:187 Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "IN-PROCESS"
 
 #: js/TaskEditDialog.js:142
 msgid "You have to supply a due date, because an alarm ist set!"
@@ -173,30 +197,6 @@ msgstr "Telephone"
 msgid "Email"
 msgstr "Email"
 
-#: Preference.php:29
-msgid "All my tasks"
-msgstr "All my tasks"
-
-#: Preference.php:65
-msgid "Default Favorite"
-msgstr "Default Favorite"
-
-#: Preference.php:66
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "The default favorite which is loaded on Tasks startup"
-
-#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
-msgid "All tasks of my taskslists"
-msgstr "All tasks of my taskslists"
-
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr "NEEDS-ACTION"
-
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr "COMPLETED"
-
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr "CANCELLED"
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Notification for Task "

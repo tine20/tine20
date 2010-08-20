@@ -13,6 +13,43 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "Attività personali di %s"
+
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr "NECESSITA-AZIONE"
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr "COMPLETATA"
+
+#: Setup/setup.xml:339 js/Status.js:187
+msgid "IN-PROCESS"
+msgstr "IN-ESECUZIONE"
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr "CANCELLATA"
+
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+msgid "All tasks of my taskslists"
+msgstr ""
+
+#: Preference.php:29
+msgid "All my tasks"
+msgstr ""
+
+#: Preference.php:65
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:66
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr ""
+
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr "gestisci la lista di attività condivise"
@@ -29,14 +66,10 @@ msgstr ""
 msgid "Create or update shared tasks favorites"
 msgstr ""
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Notifica per Attività"
-
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "Attività personali di %s"
+#: js/Status.js:33 js/GridPanel.js:190 js/TaskEditDialog.js:209
+#: Model/Task.php:187
+msgid "Status"
+msgstr "Stato"
 
 #: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
@@ -88,11 +121,6 @@ msgstr "Priorità"
 msgid "Percent"
 msgstr "Percento"
 
-#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
-#: Model/Task.php:187
-msgid "Status"
-msgstr "Stato"
-
 #: js/GridPanel.js:204
 msgid "Creation Time"
 msgstr "Data di creazione"
@@ -104,10 +132,6 @@ msgstr "Completato"
 #: js/GridPanel.js:267
 msgid "Show closed"
 msgstr "Mostra completati"
-
-#: js/Status.js:187 Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "IN-ESECUZIONE"
 
 #: js/TaskEditDialog.js:142
 msgid "You have to supply a due date, because an alarm ist set!"
@@ -173,30 +197,6 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: Preference.php:29
-msgid "All my tasks"
-msgstr ""
-
-#: Preference.php:65
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:66
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr ""
-
-#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
-msgid "All tasks of my taskslists"
-msgstr ""
-
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr "NECESSITA-AZIONE"
-
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr "COMPLETATA"
-
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr "CANCELLATA"
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Notifica per Attività"

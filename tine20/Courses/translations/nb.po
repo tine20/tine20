@@ -13,67 +13,15 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller/Course.php:79
-msgid "teacher"
-msgstr "lærer"
-
-#: Controller/Course.php:85
-msgid "Teacher"
-msgstr "Lærer"
-
-#: Controller/Course.php:86
-msgid "Teacher Account"
-msgstr "Lærer Konto"
-
-#: Frontend/Json.php:240 js/CourseEditDialog.js:134 js/Models.js:42
+#: Frontend/Json.php:245 js/Models.js:42 js/CourseEditDialog.js:138
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurs"
 msgstr[1] "Kurs"
 
-#: js/CourseEditDialog.js:34
-msgid "Import course members"
-msgstr "Importer kurs medlemmer"
-
-#: js/CourseEditDialog.js:150
-msgid "Course Name"
-msgstr "Kurs Navn"
-
-#: js/CourseEditDialog.js:154 js/CourseEditDialog.js:161
-msgid "Course / School Type"
-msgstr "Kurs / Skole Type"
-
-#: js/CourseEditDialog.js:172
-msgid "Description"
-msgstr "Beskrivelse"
-
-#: js/CourseEditDialog.js:178 js/CourseGridPanel.js:81
-msgid "Internet Access"
-msgstr "Internett Tilgang"
-
-#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:88
-msgid "Fileserver Access"
-msgstr "Filserver Tilgang"
-
-#: js/CourseEditDialog.js:215
-msgid "Members"
-msgstr "Medlemmer"
-
-#: js/CourseEditDialog.js:241
-msgid "Login"
-msgstr "Logg inn"
-
-#: js/CourseEditDialog.js:247
-msgid "Reset Password"
-msgstr "Nullstill Passord"
-
-#: js/CourseEditDialog.js:265
-msgid "Set new password"
-msgstr "Sett nytt passord"
-
-#: js/CourseEditDialog.js:265
-msgid "Please enter the new password:"
-msgstr "Vennligst skriv inn det nye passordet:"
+#: Setup/setup.xml:4 js/Courses.js:33
+msgid "Courses"
+msgstr "Kurs"
 
 #: js/CourseGridPanel.js:51
 msgid "Quick search"
@@ -86,6 +34,14 @@ msgstr "Navn"
 #: js/CourseGridPanel.js:74
 msgid "Type"
 msgstr "Type"
+
+#: js/CourseGridPanel.js:81 js/CourseEditDialog.js:183
+msgid "Internet Access"
+msgstr "Internett Tilgang"
+
+#: js/CourseGridPanel.js:88 js/CourseEditDialog.js:189
+msgid "Fileserver Access"
+msgstr "Filserver Tilgang"
 
 #: js/CourseGridPanel.js:113
 msgid "Internet Access On"
@@ -103,21 +59,13 @@ msgstr "Filserver Tilgang På"
 msgid "Fileserver Access Off"
 msgstr "Filserver Tilgang Av"
 
-#: js/CourseGridPanel.js:188
+#: js/CourseGridPanel.js:209
 msgid "Failed"
 msgstr "Feilet"
 
-#: js/CourseGridPanel.js:189
+#: js/CourseGridPanel.js:210
 msgid "Some error occured while trying to update the courses."
 msgstr "En feil oppstod ved forsøk på å oppdatere kursene."
-
-#: js/Courses.js:29 Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurs"
-
-#: js/Courses.js:34
-msgid "All Courses"
-msgstr "Alle Kursene"
 
 #: js/Models.js:46
 msgid "record list"
@@ -130,3 +78,55 @@ msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Kurs Type"
 msgstr[1] "Kurs Typer"
+
+#: js/Courses.js:38
+msgid "All Courses"
+msgstr "Alle Kursene"
+
+#: js/CourseEditDialog.js:32
+msgid "Import course members"
+msgstr "Importer kurs medlemmer"
+
+#: js/CourseEditDialog.js:154
+msgid "Course Name"
+msgstr "Kurs Navn"
+
+#: js/CourseEditDialog.js:158 js/CourseEditDialog.js:165
+msgid "Course / School Type"
+msgstr "Kurs / Skole Type"
+
+#: js/CourseEditDialog.js:176
+msgid "Description"
+msgstr "Beskrivelse"
+
+#: js/CourseEditDialog.js:220
+msgid "Members"
+msgstr "Medlemmer"
+
+#: js/CourseEditDialog.js:246
+msgid "Login"
+msgstr "Logg inn"
+
+#: js/CourseEditDialog.js:252
+msgid "Reset Password"
+msgstr "Nullstill Passord"
+
+#: js/CourseEditDialog.js:270
+msgid "Set new password"
+msgstr "Sett nytt passord"
+
+#: js/CourseEditDialog.js:270
+msgid "Please enter the new password:"
+msgstr "Vennligst skriv inn det nye passordet:"
+
+#: Controller/Course.php:108
+msgid "teacher"
+msgstr "lærer"
+
+#: Controller/Course.php:116
+msgid "Teacher"
+msgstr "Lærer"
+
+#: Controller/Course.php:117
+msgid "Teacher Account"
+msgstr "Lærer Konto"

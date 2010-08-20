@@ -14,6 +14,43 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-Bookmarks: 0,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s zadania własne"
+
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr "WYMAGA DZIAŁANIA"
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr "ZAKOŃCZONE"
+
+#: Setup/setup.xml:339 js/Status.js:187
+msgid "IN-PROCESS"
+msgstr "W OPRACOWANIU"
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr "ODWOŁANE"
+
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+msgid "All tasks of my taskslists"
+msgstr "Wszystkie zadania z mojej listy zadań"
+
+#: Preference.php:29
+msgid "All my tasks"
+msgstr "Wszystkie moje zadania"
+
+#: Preference.php:65
+msgid "Default Favorite"
+msgstr "Domyślne ulubione"
+
+#: Preference.php:66
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Domyślne ulubione zadanie ładowane przy uruchamianiu zadań"
+
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr "edytowanie wspólnej listy zadań"
@@ -30,14 +67,10 @@ msgstr "zarządzanie ulubionymi ze wspólnych zadań"
 msgid "Create or update shared tasks favorites"
 msgstr "Utwórz albo uaktualnij ulubione ze wspólnych zadań"
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Powiadomienie o zadaniu"
-
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s zadania własne"
+#: js/Status.js:33 js/GridPanel.js:190 js/TaskEditDialog.js:209
+#: Model/Task.php:187
+msgid "Status"
+msgstr "Status"
 
 #: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
@@ -50,19 +83,15 @@ msgstr[2] "Czy na pewno chcesz usunąć zaznaczone zadania?"
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
-#: js/GridPanel.js:93
-#: js/GridPanel.js:144
-#: js/TaskEditDialog.js:181
+#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
 msgid "Summary"
 msgstr "Streszczenie"
 
-#: js/GridPanel.js:94
-#: js/GridPanel.js:155
+#: js/GridPanel.js:94 js/GridPanel.js:155
 msgid "Due Date"
 msgstr "Data zakończenia"
 
-#: js/GridPanel.js:96
-#: js/GridPanel.js:218
+#: js/GridPanel.js:96 js/GridPanel.js:218
 msgid "Responsible"
 msgstr "Osoba odpowiedzialna"
 
@@ -78,8 +107,7 @@ msgstr "Zapisanie zadania było niemożliwe."
 msgid "Tags"
 msgstr "Znaczniki"
 
-#: js/GridPanel.js:141
-#: Model/Task.php:195
+#: js/GridPanel.js:141 Model/Task.php:195
 msgid "Lead"
 msgstr "Zapytanie wstępne"
 
@@ -87,41 +115,25 @@ msgstr "Zapytanie wstępne"
 msgid "Add a task..."
 msgstr "Dodaj zadanie..."
 
-#: js/GridPanel.js:163
-#: js/TaskEditDialog.js:189
-#: Model/Task.php:186
+#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
 msgid "Priority"
 msgstr "Priorytet"
 
-#: js/GridPanel.js:177
-#: Model/Task.php:188
+#: js/GridPanel.js:177 Model/Task.php:188
 msgid "Percent"
 msgstr "W procentach"
-
-#: js/GridPanel.js:190
-#: js/Status.js:33
-#: js/TaskEditDialog.js:209
-#: Model/Task.php:187
-msgid "Status"
-msgstr "Status"
 
 #: js/GridPanel.js:204
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/GridPanel.js:211
-#: js/TaskEditDialog.js:213
+#: js/GridPanel.js:211 js/TaskEditDialog.js:213
 msgid "Completed"
 msgstr "Zakończone dnia"
 
 #: js/GridPanel.js:267
 msgid "Show closed"
 msgstr "Pokaż zakończone"
-
-#: js/Status.js:187
-#: Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "W OPRACOWANIU"
 
 #: js/TaskEditDialog.js:142
 msgid "You have to supply a due date, because an alarm ist set!"
@@ -189,34 +201,9 @@ msgstr "Telefon"
 msgid "Email"
 msgstr "E-mail"
 
-#: Preference.php:29
-msgid "All my tasks"
-msgstr "Wszystkie moje zadania"
-
-#: Preference.php:65
-msgid "Default Favorite"
-msgstr "Domyślne ulubione"
-
-#: Preference.php:66
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Domyślne ulubione zadanie ładowane przy uruchamianiu zadań"
-
-#: Setup/Initialize.php:41
-#: Setup/Update/Release3.php:66
-msgid "All tasks of my taskslists"
-msgstr "Wszystkie zadania z mojej listy zadań"
-
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr "WYMAGA DZIAŁANIA"
-
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr "ZAKOŃCZONE"
-
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr "ODWOŁANE"
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Powiadomienie o zadaniu"
 
 #~ msgid "to to list"
 #~ msgstr "Lista zadań"
@@ -234,7 +221,6 @@ msgstr "ODWOŁANE"
 #~ msgstr "Dodaj zadanie"
 
 #~ msgid "Delete task"
-
 #~ msgid_plural "Delete tasks"
 #~ msgstr[0] "Usuń zadanie"
 #~ msgstr[1] "Usuń zadania"

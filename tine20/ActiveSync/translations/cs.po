@@ -12,6 +12,25 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
+#: Setup/setup.xml:465
+msgid "Default Policy"
+msgstr "Výchozí politika"
+
+#: Setup/setup.xml:470
+msgid "Default Policy installed during setup"
+msgstr "Výchozí politika nastavená během instalace"
+
+#: js/Model.js:47
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Zařízení"
+msgstr[1] "Zařízení"
+msgstr[2] "Zařízení"
+
+#: js/Model.js:47
+msgid "Devices"
+msgstr "Zařízení"
+
 #: js/Application.js:32
 msgid "Active Sync"
 msgstr "Active Sync"
@@ -43,22 +62,3 @@ msgstr "resetován"
 #: js/Application.js:107
 msgid "Set Sync Filter"
 msgstr "Nastavit synchronizační filtr"
-
-#: js/Model.js:47
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Zařízení"
-msgstr[1] "Zařízení"
-msgstr[2] "Zařízení"
-
-#: js/Model.js:47
-msgid "Devices"
-msgstr "Zařízení"
-
-#: Setup/setup.xml:465
-msgid "Default Policy"
-msgstr "Výchozí politika"
-
-#: Setup/setup.xml:470
-msgid "Default Policy installed during setup"
-msgstr "Výchozí politika nastavená během instalace"

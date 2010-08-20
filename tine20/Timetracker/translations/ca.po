@@ -12,6 +12,37 @@ msgstr ""
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Setup/setup.xml:4
+msgid "Timetracker"
+msgstr "Rastrejador de temps"
+
+#: Setup/setup.xml:80 js/TimeaccountSelect.js:250
+#: js/TimeaccountEditDialog.js:126
+msgid "not yet billed"
+msgstr "no facturat encara"
+
+#: Setup/setup.xml:82 js/TimeaccountSelect.js:251
+#: js/TimeaccountEditDialog.js:127
+msgid "to bill"
+msgstr "a facturar"
+
+#: Setup/setup.xml:84 js/TimeaccountSelect.js:252
+#: js/TimeaccountEditDialog.js:128
+msgid "billed"
+msgstr "facturat"
+
+#: Preference.php:65
+msgid "Timesheets ODS export configuration"
+msgstr "Configuració de l'exportació a ODS dels fulls de temps"
+
+#: Preference.php:66
+msgid "Use this configuration for the timesheet ODS export."
+msgstr "Utilitza aquesta configuració per a l'exportació a ODS del full de temps."
+
+#: Preference.php:117
+msgid "default"
+msgstr "per defecte"
+
 #: Acl/Rights.php:99
 msgid "Manage timeaccounts"
 msgstr "Gestiona comptes de temps"
@@ -28,6 +59,199 @@ msgstr "gestiona els preferits del rastrejador de temps compartit"
 msgid "Create or update shared timetracker favorites"
 msgstr "Crea o actualitza preferits de rastrejador de temps compartit"
 
+#: js/TimesheetGridPanel.js:66
+msgid "Mass Update"
+msgstr "Actualització massiva"
+
+#: js/TimesheetGridPanel.js:72
+msgid "Update field:"
+msgstr "Actualitza el camp:"
+
+#: js/TimesheetGridPanel.js:74 js/TimesheetGridPanel.js:221
+#: js/TimesheetGridPanel.js:253 js/TimesheetEditDialog.js:193
+msgid "Billable"
+msgstr "Facturable"
+
+#: js/TimesheetGridPanel.js:79 js/TimesheetGridPanel.js:222
+#: js/TimesheetGridPanel.js:255 js/TimesheetEditDialog.js:200
+msgid "Cleared"
+msgstr "Comptabilitzat/Liquidat"
+
+#: js/TimesheetGridPanel.js:84 js/TimesheetGridPanel.js:257
+#: js/TimeaccountGridPanel.js:119
+msgid "Cleared in"
+msgstr "Comptabilitzat/Liquidat"
+
+#: js/TimesheetGridPanel.js:150
+msgid "Update {0} records"
+msgstr "Actualitza {0} registres"
+
+#: js/TimesheetGridPanel.js:160
+msgid "Cancel"
+msgstr "Cancel·la"
+
+#: js/TimesheetGridPanel.js:166
+msgid "Ok"
+msgstr "D'acord"
+
+#: js/TimesheetGridPanel.js:194
+msgid "Success"
+msgstr "Ha anat bé"
+
+#: js/TimesheetGridPanel.js:195
+msgid "Updated {0} records"
+msgstr "Actualitza {0} registres"
+
+#: js/TimesheetGridPanel.js:217 js/Models.js:131
+msgid "Quick search"
+msgstr "Cerca ràpida"
+
+#: js/TimesheetGridPanel.js:218 js/TimesheetGridPanel.js:258
+#: js/TimesheetEditDialog.js:187
+msgid "Account"
+msgstr "Compte"
+
+#: js/TimesheetGridPanel.js:219 js/TimesheetGridPanel.js:244
+#: js/TimesheetEditDialog.js:152
+msgid "Date"
+msgstr "Data"
+
+#: js/TimesheetGridPanel.js:220 js/TimesheetGridPanel.js:252
+#: js/TimesheetGridPanel.js:402 js/TimesheetEditDialog.js:174 js/Models.js:134
+#: js/TimeaccountEditDialog.js:93 js/TimeaccountEditDialog.js:169
+msgid "Description"
+msgstr "Descripció"
+
+#: js/TimesheetGridPanel.js:242 js/TimeaccountGridPanel.js:94
+msgid "Tags"
+msgstr "Etiquetes"
+
+#: js/TimesheetGridPanel.js:246
+msgid "Start time"
+msgstr "Hora d'inici"
+
+#: js/TimesheetGridPanel.js:248 js/TimesheetEditDialog.js:136
+#: js/TimeaccountSelect.js:169 js/Models.js:109 js/TimeaccountEditDialog.js:67
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] "Compte de temps"
+msgstr[1] "Comptes de temps"
+
+#: js/TimesheetGridPanel.js:250
+msgid "Time Account closed"
+msgstr "El compte de temps s'ha tancat"
+
+#: js/TimesheetGridPanel.js:260 js/TimesheetEditDialog.js:147
+msgid "Duration"
+msgstr "Durada"
+
+#: js/TimesheetGridPanel.js:262
+msgid "Creation Time"
+msgstr "Hora de creació"
+
+#: js/TimesheetGridPanel.js:263
+msgid "Last Modified Time"
+msgstr "Hora de la darrera modificació"
+
+#: js/TimesheetGridPanel.js:315
+msgid "timeframe"
+msgstr "calendari"
+
+#: js/TimesheetGridPanel.js:339
+msgid "summary"
+msgstr "resum"
+
+#: js/TimesheetGridPanel.js:342
+msgid "Total Timesheets"
+msgstr "Fulls de temps en total"
+
+#: js/TimesheetGridPanel.js:343
+msgid "Billable Timesheets"
+msgstr "Fulls de temps facturables"
+
+#: js/TimesheetGridPanel.js:344
+msgid "Total Time"
+msgstr "Temps en total"
+
+#: js/TimesheetGridPanel.js:345
+msgid "Time of Billable Timesheets"
+msgstr "Temps dels fulls de temps facturables"
+
+#: js/TimesheetGridPanel.js:416
+msgid "Detail"
+msgstr "Detall"
+
+#: js/TimesheetGridPanel.js:471 js/TimeaccountGridPanel.js:140
+#: js/TimeaccountEditDialog.js:247
+msgid "Export"
+msgstr "Exporta"
+
+#: js/TimesheetGridPanel.js:480 js/TimeaccountGridPanel.js:149
+msgid "Export as ODS"
+msgstr "Exporta com a ODS"
+
+#: js/TimesheetGridPanel.js:487 js/TimeaccountGridPanel.js:156
+msgid "Export as CSV"
+msgstr "Exporta com a CSV"
+
+#: js/TimesheetEditDialog.js:91 js/TimesheetEditDialog.js:92
+msgid "Billed in ..."
+msgstr "Facturat a ..."
+
+#: js/TimesheetEditDialog.js:119 js/Models.js:46
+msgid "Timesheet"
+msgid_plural "Timesheets"
+msgstr[0] "Full de temps"
+msgstr[1] "Fulls de temps"
+
+#: js/TimesheetEditDialog.js:137
+msgid "Select Time Account..."
+msgstr "Seleccioneu un compte de temps..."
+
+#: js/TimesheetEditDialog.js:138
+msgid "Searching..."
+msgstr "Cercant..."
+
+#: js/TimesheetEditDialog.js:157
+msgid "Start"
+msgstr "Inici"
+
+#: js/TimesheetEditDialog.js:158
+msgid "not set"
+msgstr "no s'ha establert"
+
+#: js/TimesheetEditDialog.js:175
+msgid "Enter description..."
+msgstr "Introduïu una descripció..."
+
+#: js/TimesheetEditDialog.js:210 js/TimeaccountEditDialog.js:132
+msgid "not cleared yet..."
+msgstr "no comptabilitzat/liquidat encara"
+
+#: js/TimesheetEditDialog.js:211 js/TimeaccountEditDialog.js:133
+msgid "Cleared In"
+msgstr "Comptabilitzat/Liquidat"
+
+#: js/TimesheetEditDialog.js:265
+msgid "Failed"
+msgstr "Ha fallat"
+
+#: js/TimesheetEditDialog.js:266
+msgid "Could not save {0}."
+msgstr "No s'ha pogut desar el {0}."
+
+#: js/TimesheetEditDialog.js:267
+msgid "Booking deadline for this Timeaccount has been exceeded."
+msgstr "El termini d'aquest compte de temps s'ha sobrepassat."
+
+#: js/TimeaccountSelect.js:79 js/TimeaccountEditDialog.js:116
+msgid "closed"
+msgstr "tancat"
+
+#: js/TimeaccountSelect.js:227
+msgid "Time Account - Status"
+msgstr "Compte de temps - Estat"
+
 #: js/DurationSlider.js:95
 msgid "{0}"
 msgstr "{0}"
@@ -36,60 +260,60 @@ msgstr "{0}"
 msgid "Not a valid time"
 msgstr "No és una hora vàlida"
 
-#: js/Models.js:46 js/TimesheetEditDialog.js:119
-msgid "Timesheet"
-msgid_plural "Timesheets"
-msgstr[0] "Full de temps"
-msgstr[1] "Fulls de temps"
-
 #: js/Models.js:50
 msgid "timesheets list"
 msgid_plural "timesheets lists"
 msgstr[0] "llista de fulls de temps"
 msgstr[1] "llistes de fulls de temps"
 
-#: js/Models.js:108 js/TimeaccountEditDialog.js:67 js/TimeaccountSelect.js:169
-#: js/TimesheetEditDialog.js:136 js/TimesheetGridPanel.js:248
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] "Compte de temps"
-msgstr[1] "Comptes de temps"
-
-#: js/Models.js:112
+#: js/Models.js:113
 msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] "llista de comptes de temps"
 msgstr[1] "llistes de comptes de temps"
 
-#: js/Models.js:130 js/TimesheetGridPanel.js:217
-msgid "Quick search"
-msgstr "Cerca ràpida"
-
-#: js/Models.js:131 js/TimeaccountEditDialog.js:83
-#: js/TimeaccountGridPanel.js:97
+#: js/Models.js:132 js/TimeaccountGridPanel.js:97
+#: js/TimeaccountEditDialog.js:83
 msgid "Number"
 msgstr "Número"
 
-#: js/Models.js:132 js/TimeaccountEditDialog.js:88
-#: js/TimeaccountGridPanel.js:102
+#: js/Models.js:133 js/TimeaccountGridPanel.js:102
+#: js/TimeaccountEditDialog.js:88
 msgid "Title"
 msgstr "Títol"
 
-#: js/Models.js:133 js/TimeaccountEditDialog.js:93
-#: js/TimeaccountEditDialog.js:169 js/TimesheetEditDialog.js:174
-#: js/TimesheetGridPanel.js:220 js/TimesheetGridPanel.js:252
-#: js/TimesheetGridPanel.js:402
-msgid "Description"
-msgstr "Descripció"
-
-#: js/Models.js:134
+#: js/Models.js:135
 msgid "Created By"
 msgstr "Creat per"
 
-#: js/Models.js:135 js/TimeaccountEditDialog.js:110
-#: js/TimeaccountGridPanel.js:107
+#: js/Models.js:136 js/TimeaccountGridPanel.js:107
+#: js/TimeaccountEditDialog.js:110
 msgid "Status"
 msgstr "Estat"
+
+#: js/TimeaccountGridPanel.js:113 js/TimeaccountEditDialog.js:107
+msgid "Budget"
+msgstr "Pressupost"
+
+#: js/TimeaccountGridPanel.js:167
+msgid "Show closed"
+msgstr "Mostra els tancats"
+
+#: js/Timetracker.js:55
+msgid "Timesheets"
+msgstr "Fulls de temps"
+
+#: js/Timetracker.js:60
+msgid "All Timesheets"
+msgstr "Tots els fulls de temps"
+
+#: js/Timetracker.js:65
+msgid "Timeaccounts"
+msgstr "Comptes de temps"
+
+#: js/Timetracker.js:70
+msgid "All Timeaccounts"
+msgstr "Tots els comptes de temps"
 
 #: js/TimeaccountEditDialog.js:98
 msgid "Unit"
@@ -99,14 +323,6 @@ msgstr "Unitat"
 msgid "Unit Price"
 msgstr "Preu unitari"
 
-#: js/TimeaccountEditDialog.js:107 js/TimeaccountGridPanel.js:113
-msgid "Budget"
-msgstr "Pressupost"
-
-#: js/TimeaccountEditDialog.js:116 js/TimeaccountSelect.js:79
-msgid "closed"
-msgstr "tancat"
-
 #: js/TimeaccountEditDialog.js:116
 msgid "open"
 msgstr "obert"
@@ -114,29 +330,6 @@ msgstr "obert"
 #: js/TimeaccountEditDialog.js:118
 msgid "Billed"
 msgstr "Facturat"
-
-#: js/TimeaccountEditDialog.js:126 js/TimeaccountSelect.js:250
-#: Setup/setup.xml:80
-msgid "not yet billed"
-msgstr "no facturat encara"
-
-#: js/TimeaccountEditDialog.js:127 js/TimeaccountSelect.js:251
-#: Setup/setup.xml:82
-msgid "to bill"
-msgstr "a facturar"
-
-#: js/TimeaccountEditDialog.js:128 js/TimeaccountSelect.js:252
-#: Setup/setup.xml:84
-msgid "billed"
-msgstr "facturat"
-
-#: js/TimeaccountEditDialog.js:132 js/TimesheetEditDialog.js:210
-msgid "not cleared yet..."
-msgstr "no comptabilitzat/liquidat encara"
-
-#: js/TimeaccountEditDialog.js:133 js/TimesheetEditDialog.js:211
-msgid "Cleared In"
-msgstr "Comptabilitzat/Liquidat"
 
 #: js/TimeaccountEditDialog.js:137
 msgid "Booking deadline"
@@ -194,11 +387,6 @@ msgstr "Gestiona la comptabilització/liquidació"
 msgid "The grant to manage clearing of Timesheets"
 msgstr "Permís per a gestionar la comptabilització/liquidació dels fulls de temps"
 
-#: js/TimeaccountEditDialog.js:247 js/TimeaccountGridPanel.js:140
-#: js/TimesheetGridPanel.js:471
-msgid "Export"
-msgstr "Exporta"
-
 #: js/TimeaccountEditDialog.js:248
 msgid "The grant to export Timesheets of Timeaccount"
 msgstr "Permís per a exportar fulls de temps del compte de temps"
@@ -214,192 +402,3 @@ msgstr "Inclou tots els demés permisos"
 #: js/TimeaccountEditDialog.js:262
 msgid "Permissions"
 msgstr "Permisos"
-
-#: js/TimeaccountGridPanel.js:94 js/TimesheetGridPanel.js:242
-msgid "Tags"
-msgstr "Etiquetes"
-
-#: js/TimeaccountGridPanel.js:119 js/TimesheetGridPanel.js:84
-#: js/TimesheetGridPanel.js:257
-msgid "Cleared in"
-msgstr "Comptabilitzat/Liquidat"
-
-#: js/TimeaccountGridPanel.js:149 js/TimesheetGridPanel.js:480
-msgid "Export as ODS"
-msgstr "Exporta com a ODS"
-
-#: js/TimeaccountGridPanel.js:156 js/TimesheetGridPanel.js:487
-msgid "Export as CSV"
-msgstr "Exporta com a CSV"
-
-#: js/TimeaccountGridPanel.js:167
-msgid "Show closed"
-msgstr "Mostra els tancats"
-
-#: js/TimeaccountSelect.js:227
-msgid "Time Account - Status"
-msgstr "Compte de temps - Estat"
-
-#: js/TimesheetEditDialog.js:91 js/TimesheetEditDialog.js:92
-msgid "Billed in ..."
-msgstr "Facturat a ..."
-
-#: js/TimesheetEditDialog.js:137
-msgid "Select Time Account..."
-msgstr "Seleccioneu un compte de temps..."
-
-#: js/TimesheetEditDialog.js:138
-msgid "Searching..."
-msgstr "Cercant..."
-
-#: js/TimesheetEditDialog.js:147 js/TimesheetGridPanel.js:260
-msgid "Duration"
-msgstr "Durada"
-
-#: js/TimesheetEditDialog.js:152 js/TimesheetGridPanel.js:219
-#: js/TimesheetGridPanel.js:244
-msgid "Date"
-msgstr "Data"
-
-#: js/TimesheetEditDialog.js:157
-msgid "Start"
-msgstr "Inici"
-
-#: js/TimesheetEditDialog.js:158
-msgid "not set"
-msgstr "no s'ha establert"
-
-#: js/TimesheetEditDialog.js:175
-msgid "Enter description..."
-msgstr "Introduïu una descripció..."
-
-#: js/TimesheetEditDialog.js:187 js/TimesheetGridPanel.js:218
-#: js/TimesheetGridPanel.js:258
-msgid "Account"
-msgstr "Compte"
-
-#: js/TimesheetEditDialog.js:193 js/TimesheetGridPanel.js:74
-#: js/TimesheetGridPanel.js:221 js/TimesheetGridPanel.js:253
-msgid "Billable"
-msgstr "Facturable"
-
-#: js/TimesheetEditDialog.js:200 js/TimesheetGridPanel.js:79
-#: js/TimesheetGridPanel.js:222 js/TimesheetGridPanel.js:255
-msgid "Cleared"
-msgstr "Comptabilitzat/Liquidat"
-
-#: js/TimesheetEditDialog.js:265
-msgid "Failed"
-msgstr "Ha fallat"
-
-#: js/TimesheetEditDialog.js:266
-msgid "Could not save {0}."
-msgstr "No s'ha pogut desar el {0}."
-
-#: js/TimesheetEditDialog.js:267
-msgid "Booking deadline for this Timeaccount has been exceeded."
-msgstr "El termini d'aquest compte de temps s'ha sobrepassat."
-
-#: js/TimesheetGridPanel.js:66
-msgid "Mass Update"
-msgstr "Actualització massiva"
-
-#: js/TimesheetGridPanel.js:72
-msgid "Update field:"
-msgstr "Actualitza el camp:"
-
-#: js/TimesheetGridPanel.js:150
-msgid "Update {0} records"
-msgstr "Actualitza {0} registres"
-
-#: js/TimesheetGridPanel.js:160
-msgid "Cancel"
-msgstr "Cancel·la"
-
-#: js/TimesheetGridPanel.js:166
-msgid "Ok"
-msgstr "D'acord"
-
-#: js/TimesheetGridPanel.js:194
-msgid "Success"
-msgstr "Ha anat bé"
-
-#: js/TimesheetGridPanel.js:195
-msgid "Updated {0} records"
-msgstr "Actualitza {0} registres"
-
-#: js/TimesheetGridPanel.js:246
-msgid "Start time"
-msgstr "Hora d'inici"
-
-#: js/TimesheetGridPanel.js:250
-msgid "Time Account closed"
-msgstr "El compte de temps s'ha tancat"
-
-#: js/TimesheetGridPanel.js:262
-msgid "Creation Time"
-msgstr "Hora de creació"
-
-#: js/TimesheetGridPanel.js:263
-msgid "Last Modified Time"
-msgstr "Hora de la darrera modificació"
-
-#: js/TimesheetGridPanel.js:315
-msgid "timeframe"
-msgstr "calendari"
-
-#: js/TimesheetGridPanel.js:339
-msgid "summary"
-msgstr "resum"
-
-#: js/TimesheetGridPanel.js:342
-msgid "Total Timesheets"
-msgstr "Fulls de temps en total"
-
-#: js/TimesheetGridPanel.js:343
-msgid "Billable Timesheets"
-msgstr "Fulls de temps facturables"
-
-#: js/TimesheetGridPanel.js:344
-msgid "Total Time"
-msgstr "Temps en total"
-
-#: js/TimesheetGridPanel.js:345
-msgid "Time of Billable Timesheets"
-msgstr "Temps dels fulls de temps facturables"
-
-#: js/TimesheetGridPanel.js:416
-msgid "Detail"
-msgstr "Detall"
-
-#: js/Timetracker.js:55
-msgid "Timesheets"
-msgstr "Fulls de temps"
-
-#: js/Timetracker.js:60
-msgid "All Timesheets"
-msgstr "Tots els fulls de temps"
-
-#: js/Timetracker.js:65
-msgid "Timeaccounts"
-msgstr "Comptes de temps"
-
-#: js/Timetracker.js:70
-msgid "All Timeaccounts"
-msgstr "Tots els comptes de temps"
-
-#: Preference.php:65
-msgid "Timesheets ODS export configuration"
-msgstr "Configuració de l'exportació a ODS dels fulls de temps"
-
-#: Preference.php:66
-msgid "Use this configuration for the timesheet ODS export."
-msgstr "Utilitza aquesta configuració per a l'exportació a ODS del full de temps."
-
-#: Preference.php:117
-msgid "default"
-msgstr "per defecte"
-
-#: Setup/setup.xml:4
-msgid "Timetracker"
-msgstr "Rastrejador de temps"

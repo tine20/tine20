@@ -12,68 +12,16 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: Controller/Course.php:79
-msgid "teacher"
-msgstr "lektor"
-
-#: Controller/Course.php:85
-msgid "Teacher"
-msgstr "Lektor"
-
-#: Controller/Course.php:86
-msgid "Teacher Account"
-msgstr "Účet lektora"
-
-#: Frontend/Json.php:240 js/CourseEditDialog.js:134 js/Models.js:42
+#: Frontend/Json.php:245 js/Models.js:42 js/CourseEditDialog.js:138
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurz"
 msgstr[1] "Kurzy"
 msgstr[2] "Kurzů"
 
-#: js/CourseEditDialog.js:34
-msgid "Import course members"
-msgstr "Importovat členy kurzu"
-
-#: js/CourseEditDialog.js:150
-msgid "Course Name"
-msgstr "Název kurzu"
-
-#: js/CourseEditDialog.js:154 js/CourseEditDialog.js:161
-msgid "Course / School Type"
-msgstr "Typ kurzu / školení"
-
-#: js/CourseEditDialog.js:172
-msgid "Description"
-msgstr "Popis"
-
-#: js/CourseEditDialog.js:178 js/CourseGridPanel.js:81
-msgid "Internet Access"
-msgstr "Přístup k Internetu"
-
-#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:88
-msgid "Fileserver Access"
-msgstr "Přístup k souborovému serveru"
-
-#: js/CourseEditDialog.js:215
-msgid "Members"
-msgstr "Členové"
-
-#: js/CourseEditDialog.js:241
-msgid "Login"
-msgstr "Přihlášení"
-
-#: js/CourseEditDialog.js:247
-msgid "Reset Password"
-msgstr "Resetovat heslo"
-
-#: js/CourseEditDialog.js:265
-msgid "Set new password"
-msgstr "Nastavit nové heslo"
-
-#: js/CourseEditDialog.js:265
-msgid "Please enter the new password:"
-msgstr "Zadejte prosím nové heslo:"
+#: Setup/setup.xml:4 js/Courses.js:33
+msgid "Courses"
+msgstr "Kurzy"
 
 #: js/CourseGridPanel.js:51
 msgid "Quick search"
@@ -86,6 +34,14 @@ msgstr "Název"
 #: js/CourseGridPanel.js:74
 msgid "Type"
 msgstr "Typ"
+
+#: js/CourseGridPanel.js:81 js/CourseEditDialog.js:183
+msgid "Internet Access"
+msgstr "Přístup k Internetu"
+
+#: js/CourseGridPanel.js:88 js/CourseEditDialog.js:189
+msgid "Fileserver Access"
+msgstr "Přístup k souborovému serveru"
 
 #: js/CourseGridPanel.js:113
 msgid "Internet Access On"
@@ -103,21 +59,13 @@ msgstr "Přístup k souborovému serveru povolen"
 msgid "Fileserver Access Off"
 msgstr "Přístup k souborovému serveru zakázán"
 
-#: js/CourseGridPanel.js:188
+#: js/CourseGridPanel.js:209
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/CourseGridPanel.js:189
+#: js/CourseGridPanel.js:210
 msgid "Some error occured while trying to update the courses."
 msgstr "Při aktualizaci kurzů došlo k chybě."
-
-#: js/Courses.js:29 Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurzy"
-
-#: js/Courses.js:34
-msgid "All Courses"
-msgstr "Všechny kurzy"
 
 #: js/Models.js:46
 msgid "record list"
@@ -132,3 +80,55 @@ msgid_plural "Course Types"
 msgstr[0] "Typ kurzu"
 msgstr[1] "Typy kurzů"
 msgstr[2] "Typů kurzů"
+
+#: js/Courses.js:38
+msgid "All Courses"
+msgstr "Všechny kurzy"
+
+#: js/CourseEditDialog.js:32
+msgid "Import course members"
+msgstr "Importovat členy kurzu"
+
+#: js/CourseEditDialog.js:154
+msgid "Course Name"
+msgstr "Název kurzu"
+
+#: js/CourseEditDialog.js:158 js/CourseEditDialog.js:165
+msgid "Course / School Type"
+msgstr "Typ kurzu / školení"
+
+#: js/CourseEditDialog.js:176
+msgid "Description"
+msgstr "Popis"
+
+#: js/CourseEditDialog.js:220
+msgid "Members"
+msgstr "Členové"
+
+#: js/CourseEditDialog.js:246
+msgid "Login"
+msgstr "Přihlášení"
+
+#: js/CourseEditDialog.js:252
+msgid "Reset Password"
+msgstr "Resetovat heslo"
+
+#: js/CourseEditDialog.js:270
+msgid "Set new password"
+msgstr "Nastavit nové heslo"
+
+#: js/CourseEditDialog.js:270
+msgid "Please enter the new password:"
+msgstr "Zadejte prosím nové heslo:"
+
+#: Controller/Course.php:108
+msgid "teacher"
+msgstr "lektor"
+
+#: Controller/Course.php:116
+msgid "Teacher"
+msgstr "Lektor"
+
+#: Controller/Course.php:117
+msgid "Teacher Account"
+msgstr "Účet lektora"

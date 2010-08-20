@@ -12,6 +12,43 @@ msgstr ""
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "tasques personals de %s"
+
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr "REQUEREIX-ACCIÓ"
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr "COMPLETADA"
+
+#: Setup/setup.xml:339 js/Status.js:187
+msgid "IN-PROCESS"
+msgstr "EN-PROCÉS"
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr "CANCEL·LADA"
+
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+msgid "All tasks of my taskslists"
+msgstr "Totes les tasques de les meves llistes de tasques"
+
+#: Preference.php:29
+msgid "All my tasks"
+msgstr "Totes les meves tasques"
+
+#: Preference.php:65
+msgid "Default Favorite"
+msgstr "Preferit per defecte"
+
+#: Preference.php:66
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "El preferit per defecte que es carrega a l'inici de Tasques"
+
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr "gestiona les llistes de tasques compartides"
@@ -28,14 +65,10 @@ msgstr "gestiona els preferits de les tasques compartides"
 msgid "Create or update shared tasks favorites"
 msgstr "Crea o actualitza preferits de tasques compartides"
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Notificació de tasca"
-
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "tasques personals de %s"
+#: js/Status.js:33 js/GridPanel.js:190 js/TaskEditDialog.js:209
+#: Model/Task.php:187
+msgid "Status"
+msgstr "Estat"
 
 #: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
@@ -87,11 +120,6 @@ msgstr "Prioritat"
 msgid "Percent"
 msgstr "Percentatge"
 
-#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
-#: Model/Task.php:187
-msgid "Status"
-msgstr "Estat"
-
 #: js/GridPanel.js:204
 msgid "Creation Time"
 msgstr "Data de creació"
@@ -103,10 +131,6 @@ msgstr "Completada"
 #: js/GridPanel.js:267
 msgid "Show closed"
 msgstr "Mostra les tancades"
-
-#: js/Status.js:187 Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "EN-PROCÉS"
 
 #: js/TaskEditDialog.js:142
 msgid "You have to supply a due date, because an alarm ist set!"
@@ -172,30 +196,6 @@ msgstr "Telèfon"
 msgid "Email"
 msgstr "Correu electrònic"
 
-#: Preference.php:29
-msgid "All my tasks"
-msgstr "Totes les meves tasques"
-
-#: Preference.php:65
-msgid "Default Favorite"
-msgstr "Preferit per defecte"
-
-#: Preference.php:66
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "El preferit per defecte que es carrega a l'inici de Tasques"
-
-#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
-msgid "All tasks of my taskslists"
-msgstr "Totes les tasques de les meves llistes de tasques"
-
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr "REQUEREIX-ACCIÓ"
-
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr "COMPLETADA"
-
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr "CANCEL·LADA"
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Notificació de tasca"

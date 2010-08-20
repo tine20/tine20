@@ -13,6 +13,43 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%ss persönliche Aufgaben"
+
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr "ZU BEARBEITEN"
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr "ERLEDIGT"
+
+#: Setup/setup.xml:339 js/Status.js:187
+msgid "IN-PROCESS"
+msgstr "IN BEARBEITUNG"
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr "ZURÜCKGESTELLT"
+
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+msgid "All tasks of my taskslists"
+msgstr "Alle Aufgaben auf meinen Aufgabenlisten"
+
+#: Preference.php:29
+msgid "All my tasks"
+msgstr "Alle meine Aufgaben"
+
+#: Preference.php:65
+msgid "Default Favorite"
+msgstr "Standard Favorit"
+
+#: Preference.php:66
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Der Standart Favorit der beim öffnen der Aufgabenlisten geladen wird"
+
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr "Gemeinsame Aufgabenlisten verwalten"
@@ -29,14 +66,10 @@ msgstr "Gemeinsame Aufgaben Favoriten verwalten"
 msgid "Create or update shared tasks favorites"
 msgstr "Gemeinsame Aufgaben Favoriten erstellen oder bearbeiten"
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Benachrichtigung für Aufgabe"
-
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%ss persönliche Aufgaben"
+#: js/Status.js:33 js/GridPanel.js:190 js/TaskEditDialog.js:209
+#: Model/Task.php:187
+msgid "Status"
+msgstr "Status"
 
 #: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
@@ -88,11 +121,6 @@ msgstr "Priorität"
 msgid "Percent"
 msgstr "Prozent"
 
-#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
-#: Model/Task.php:187
-msgid "Status"
-msgstr "Status"
-
 #: js/GridPanel.js:204
 msgid "Creation Time"
 msgstr "Angelegt am"
@@ -104,10 +132,6 @@ msgstr "Abgeschlossen"
 #: js/GridPanel.js:267
 msgid "Show closed"
 msgstr "Geschlossene Aufgaben anzeigen"
-
-#: js/Status.js:187 Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "IN BEARBEITUNG"
 
 #: js/TaskEditDialog.js:142
 msgid "You have to supply a due date, because an alarm ist set!"
@@ -173,30 +197,6 @@ msgstr "Telefon"
 msgid "Email"
 msgstr "Email"
 
-#: Preference.php:29
-msgid "All my tasks"
-msgstr "Alle meine Aufgaben"
-
-#: Preference.php:65
-msgid "Default Favorite"
-msgstr "Standard Favorit"
-
-#: Preference.php:66
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Der Standart Favorit der beim öffnen der Aufgabenlisten geladen wird"
-
-#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
-msgid "All tasks of my taskslists"
-msgstr "Alle Aufgaben auf meinen Aufgabenlisten"
-
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr "ZU BEARBEITEN"
-
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr "ERLEDIGT"
-
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr "ZURÜCKGESTELLT"
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Benachrichtigung für Aufgabe"

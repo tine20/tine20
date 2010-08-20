@@ -13,6 +13,25 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+#: Setup/setup.xml:465
+msgid "Default Policy"
+msgstr ""
+
+#: Setup/setup.xml:470
+msgid "Default Policy installed during setup"
+msgstr ""
+
+#: js/Model.js:47
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Model.js:47
+msgid "Devices"
+msgstr ""
+
 #: js/Application.js:32
 msgid "Active Sync"
 msgstr ""
@@ -43,23 +62,4 @@ msgstr ""
 
 #: js/Application.js:107
 msgid "Set Sync Filter"
-msgstr ""
-
-#: js/Model.js:47
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Model.js:47
-msgid "Devices"
-msgstr ""
-
-#: Setup/setup.xml:465
-msgid "Default Policy"
-msgstr ""
-
-#: Setup/setup.xml:470
-msgid "Default Policy installed during setup"
 msgstr ""

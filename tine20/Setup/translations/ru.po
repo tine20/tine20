@@ -12,6 +12,273 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+#: js/Setup.js:55
+msgid "Terms and Conditions"
+msgstr ""
+
+#: js/Setup.js:60
+msgid "Setup Checks"
+msgstr "Проверки установки "
+
+#: js/Setup.js:66
+msgid "Config Manager"
+msgstr "Управление конфигурацией"
+
+#: js/Setup.js:72
+#, fuzzy
+msgid "Authentication/Accounts"
+msgstr "Программа пользования"
+
+#: js/Setup.js:78
+msgid "Email"
+msgstr ""
+
+#: js/Setup.js:84
+msgid "Application Manager"
+msgstr "Управление приложениями"
+
+#: js/Setup.js:187
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Приложение"
+msgstr[1] "Приложения"
+msgstr[2] "Приложений"
+
+#: js/ConfigManagerPanel.js:60
+msgid "Informations"
+msgstr "Информация"
+
+#: js/ConfigManagerPanel.js:64
+msgid "Setup Authentication"
+msgstr "Аутентификация установки"
+
+#: js/ConfigManagerPanel.js:67 js/EmailPanel.js:192
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: js/ConfigManagerPanel.js:77 js/ConfigManagerPanel.js:113
+#: js/EmailPanel.js:196 js/AuthenticationPanel.js:317
+#: js/AuthenticationPanel.js:424
+msgid "Password"
+msgstr "Пароль"
+
+#: js/ConfigManagerPanel.js:83 js/ConfigManagerPanel.js:103
+msgid "Database"
+msgstr "База данных"
+
+#: js/ConfigManagerPanel.js:87
+msgid "Adapter"
+msgstr "Адаптер"
+
+#: js/ConfigManagerPanel.js:92 js/EmailPanel.js:188 js/EmailPanel.js:296
+#: js/EmailPanel.js:408
+msgid "Hostname"
+msgstr "Имя узла"
+
+#: js/ConfigManagerPanel.js:97 js/EmailPanel.js:201 js/EmailPanel.js:300
+#: js/EmailPanel.js:412 js/AuthenticationPanel.js:310
+#, fuzzy
+msgid "Port"
+msgstr "Приоритет"
+
+#: js/ConfigManagerPanel.js:108
+msgid "User"
+msgstr "Пользователь"
+
+#: js/ConfigManagerPanel.js:118
+msgid "Prefix"
+msgstr "Префикс"
+
+#: js/ConfigManagerPanel.js:123
+msgid "Logging"
+msgstr "Регистрация"
+
+#: js/ConfigManagerPanel.js:129
+msgid "Filename"
+msgstr "Имя файла"
+
+#: js/ConfigManagerPanel.js:142
+msgid "Priority"
+msgstr "Приоритет"
+
+#: js/ConfigManagerPanel.js:146
+msgid "Caching"
+msgstr "Кэширование"
+
+#: js/ConfigManagerPanel.js:152
+msgid "Path"
+msgstr "Путь"
+
+#: js/ConfigManagerPanel.js:156
+msgid "Lifetime (seconds)"
+msgstr "Время жизни (секунд)"
+
+#: js/ConfigManagerPanel.js:163
+msgid "Temporary files"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:168
+msgid "Temporary Files Path"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:172
+msgid "Session files"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:177
+msgid "Session Files Path"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:181
+msgid "Addressbook Map panel"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:184
+msgid "Map panel"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:195
+msgid "disabled"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:195
+msgid "enabled"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:206
+msgid "Config file is not writable"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:208 js/AuthenticationPanel.js:593
+msgid "Save config"
+msgstr "Сохранить конфигурацию"
+
+#: js/ConfigManagerPanel.js:223
+msgid "Download config file"
+msgstr "Загрузить файл конфигурации"
+
+#: js/EmailPanel.js:156 js/AuthenticationPanel.js:186
+#: js/AuthenticationPanel.js:207
+msgid "Backend"
+msgstr ""
+
+#: js/EmailPanel.js:160
+msgid "Standard IMAP"
+msgstr ""
+
+#: js/EmailPanel.js:170
+msgid "Standard SMTP"
+msgstr ""
+
+#: js/EmailPanel.js:180
+msgid "Imap"
+msgstr ""
+
+#: js/EmailPanel.js:204 js/EmailPanel.js:303
+msgid "Secure Connection"
+msgstr ""
+
+#: js/EmailPanel.js:215 js/EmailPanel.js:314 js/EmailPanel.js:330
+msgid "None"
+msgstr ""
+
+#: js/EmailPanel.js:216 js/EmailPanel.js:315
+msgid "TLS"
+msgstr ""
+
+#: js/EmailPanel.js:217 js/EmailPanel.js:316
+msgid "SSL"
+msgstr ""
+
+#: js/EmailPanel.js:228
+msgid "No"
+msgstr ""
+
+#: js/EmailPanel.js:228
+msgid "Yes"
+msgstr ""
+
+#: js/EmailPanel.js:230
+msgid "Use system account"
+msgstr ""
+
+#: js/EmailPanel.js:233
+msgid "Append domain to login name"
+msgstr ""
+
+#: js/EmailPanel.js:279
+msgid "Cyrus Admin"
+msgstr ""
+
+#: js/EmailPanel.js:282
+msgid "Cyrus Admin Password"
+msgstr ""
+
+#: js/EmailPanel.js:288
+msgid "Smtp"
+msgstr ""
+
+#: js/EmailPanel.js:319
+#, fuzzy
+msgid "Authentication"
+msgstr "Аутентификация установки"
+
+#: js/EmailPanel.js:331
+#, fuzzy
+msgid "Login"
+msgstr "Регистрация"
+
+#: js/EmailPanel.js:332
+msgid "Plain"
+msgstr ""
+
+#: js/EmailPanel.js:336
+msgid "Primary Domain"
+msgstr ""
+
+#: js/EmailPanel.js:340
+msgid "Secondary Domains (comma separated)"
+msgstr ""
+
+#: js/EmailPanel.js:344
+msgid "Notifications service address"
+msgstr ""
+
+#: js/EmailPanel.js:348
+msgid "Notification Username"
+msgstr ""
+
+#: js/EmailPanel.js:352
+msgid "Notification Password"
+msgstr ""
+
+#: js/EmailPanel.js:402
+msgid "SIEVE"
+msgstr ""
+
+#: js/EmailPanel.js:436
+#, fuzzy
+msgid "MySql Hostname"
+msgstr "Имя узла"
+
+#: js/EmailPanel.js:439
+#, fuzzy
+msgid "MySql Database"
+msgstr "База данных"
+
+#: js/EmailPanel.js:442
+msgid "MySql User"
+msgstr ""
+
+#: js/EmailPanel.js:445
+#, fuzzy
+msgid "MySql Password"
+msgstr "Пароль"
+
+#: js/EmailPanel.js:449
+msgid "MySql Port"
+msgstr ""
+
 #: js/ApplicationGridPanel.js:67
 msgid "Name"
 msgstr "Имя"
@@ -80,11 +347,6 @@ msgstr ""
 msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
 msgstr ""
 
-#: js/AuthenticationPanel.js:186 js/AuthenticationPanel.js:207
-#: js/EmailPanel.js:156
-msgid "Backend"
-msgstr ""
-
 #: js/AuthenticationPanel.js:220
 msgid "Authentication provider"
 msgstr ""
@@ -121,21 +383,9 @@ msgstr ""
 msgid "Host"
 msgstr ""
 
-#: js/AuthenticationPanel.js:310 js/ConfigManagerPanel.js:97
-#: js/EmailPanel.js:201 js/EmailPanel.js:283
-#, fuzzy
-msgid "Port"
-msgstr "Приоритет"
-
 #: js/AuthenticationPanel.js:314 js/AuthenticationPanel.js:421
 msgid "Login name"
 msgstr ""
-
-#: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:424
-#: js/ConfigManagerPanel.js:77 js/ConfigManagerPanel.js:113
-#: js/EmailPanel.js:196
-msgid "Password"
-msgstr "Пароль"
 
 #: js/AuthenticationPanel.js:330 js/AuthenticationPanel.js:437
 msgid "Bind requires DN"
@@ -246,10 +496,6 @@ msgstr ""
 msgid "Save config and install"
 msgstr "Сохранить конфигурацию"
 
-#: js/AuthenticationPanel.js:593 js/ConfigManagerPanel.js:208
-msgid "Save config"
-msgstr "Сохранить конфигурацию"
-
 #: js/AuthenticationPanel.js:617
 msgid "Passwords don't match"
 msgstr ""
@@ -258,207 +504,6 @@ msgstr ""
 #: js/AuthenticationPanel.js:638 js/AuthenticationPanel.js:649
 #: js/AuthenticationPanel.js:659
 msgid "Should not be empty"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:60
-msgid "Informations"
-msgstr "Информация"
-
-#: js/ConfigManagerPanel.js:64
-msgid "Setup Authentication"
-msgstr "Аутентификация установки"
-
-#: js/ConfigManagerPanel.js:67 js/EmailPanel.js:192
-msgid "Username"
-msgstr "Имя пользователя"
-
-#: js/ConfigManagerPanel.js:83 js/ConfigManagerPanel.js:103
-msgid "Database"
-msgstr "База данных"
-
-#: js/ConfigManagerPanel.js:87
-msgid "Adapter"
-msgstr "Адаптер"
-
-#: js/ConfigManagerPanel.js:92 js/EmailPanel.js:188 js/EmailPanel.js:279
-msgid "Hostname"
-msgstr "Имя узла"
-
-#: js/ConfigManagerPanel.js:108
-msgid "User"
-msgstr "Пользователь"
-
-#: js/ConfigManagerPanel.js:118
-msgid "Prefix"
-msgstr "Префикс"
-
-#: js/ConfigManagerPanel.js:123
-msgid "Logging"
-msgstr "Регистрация"
-
-#: js/ConfigManagerPanel.js:129
-msgid "Filename"
-msgstr "Имя файла"
-
-#: js/ConfigManagerPanel.js:142
-msgid "Priority"
-msgstr "Приоритет"
-
-#: js/ConfigManagerPanel.js:146
-msgid "Caching"
-msgstr "Кэширование"
-
-#: js/ConfigManagerPanel.js:152
-msgid "Path"
-msgstr "Путь"
-
-#: js/ConfigManagerPanel.js:156
-msgid "Lifetime (seconds)"
-msgstr "Время жизни (секунд)"
-
-#: js/ConfigManagerPanel.js:163
-msgid "Temporary files"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:168
-msgid "Temporary Files Path"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:172
-msgid "Session files"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:177
-msgid "Session Files Path"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:181
-msgid "Addressbook Map panel"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:184
-msgid "Map panel"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:195
-msgid "disabled"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:195
-msgid "enabled"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:206
-msgid "Config file is not writable"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:223
-msgid "Download config file"
-msgstr "Загрузить файл конфигурации"
-
-#: js/EmailPanel.js:160
-msgid "Standard IMAP"
-msgstr ""
-
-#: js/EmailPanel.js:170
-msgid "Standard SMTP"
-msgstr ""
-
-#: js/EmailPanel.js:180
-msgid "Imap"
-msgstr ""
-
-#: js/EmailPanel.js:204 js/EmailPanel.js:286
-msgid "Secure Connection"
-msgstr ""
-
-#: js/EmailPanel.js:215 js/EmailPanel.js:297 js/EmailPanel.js:313
-msgid "None"
-msgstr ""
-
-#: js/EmailPanel.js:216 js/EmailPanel.js:298
-msgid "TLS"
-msgstr ""
-
-#: js/EmailPanel.js:217 js/EmailPanel.js:299
-msgid "SSL"
-msgstr ""
-
-#: js/EmailPanel.js:228
-msgid "No"
-msgstr ""
-
-#: js/EmailPanel.js:228
-msgid "Yes"
-msgstr ""
-
-#: js/EmailPanel.js:230
-msgid "Use system account"
-msgstr ""
-
-#: js/EmailPanel.js:233
-msgid "Append domain to login name"
-msgstr ""
-
-#: js/EmailPanel.js:271
-msgid "Smtp"
-msgstr ""
-
-#: js/EmailPanel.js:302
-#, fuzzy
-msgid "Authentication"
-msgstr "Аутентификация установки"
-
-#: js/EmailPanel.js:314
-#, fuzzy
-msgid "Login"
-msgstr "Регистрация"
-
-#: js/EmailPanel.js:315
-msgid "Plain"
-msgstr ""
-
-#: js/EmailPanel.js:319
-msgid "Primary Domain"
-msgstr ""
-
-#: js/EmailPanel.js:323
-msgid "Secondary Domains (comma separated)"
-msgstr ""
-
-#: js/EmailPanel.js:327
-msgid "Notifications service address"
-msgstr ""
-
-#: js/EmailPanel.js:331
-msgid "Notification Username"
-msgstr ""
-
-#: js/EmailPanel.js:335
-msgid "Notification Password"
-msgstr ""
-
-#: js/EmailPanel.js:395
-#, fuzzy
-msgid "MySql Hostname"
-msgstr "Имя узла"
-
-#: js/EmailPanel.js:398
-#, fuzzy
-msgid "MySql Database"
-msgstr "База данных"
-
-#: js/EmailPanel.js:401
-msgid "MySql User"
-msgstr ""
-
-#: js/EmailPanel.js:404
-#, fuzzy
-msgid "MySql Password"
-msgstr "Пароль"
-
-#: js/EmailPanel.js:408
-msgid "MySql Port"
 msgstr ""
 
 #: js/EnvCheckGridPanel.js:92
@@ -488,38 +533,6 @@ msgstr "Запуск тестов установки"
 #: js/EnvCheckGridPanel.js:192
 msgid "Ignore setup tests"
 msgstr ""
-
-#: js/Setup.js:55
-msgid "Terms and Conditions"
-msgstr ""
-
-#: js/Setup.js:60
-msgid "Setup Checks"
-msgstr "Проверки установки "
-
-#: js/Setup.js:66
-msgid "Config Manager"
-msgstr "Управление конфигурацией"
-
-#: js/Setup.js:72
-#, fuzzy
-msgid "Authentication/Accounts"
-msgstr "Программа пользования"
-
-#: js/Setup.js:78
-msgid "Email"
-msgstr ""
-
-#: js/Setup.js:84
-msgid "Application Manager"
-msgstr "Управление приложениями"
-
-#: js/Setup.js:187
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Приложение"
-msgstr[1] "Приложения"
-msgstr[2] "Приложений"
 
 #: js/TermsPanel.js:31
 msgid "I have read the license agreement and accept it"

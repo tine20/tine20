@@ -12,21 +12,15 @@ msgstr ""
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Models.js:70 js/Phone.js:58 js/Phone.js:253
+#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
+msgid "Edit phone settings"
+msgstr "Edita la configuració de telèfon"
+
+#: js/Phone.js:58 js/Phone.js:253 js/Models.js:70
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telèfon"
 msgstr[1] "Telèfons"
-
-#: js/Models.js:74
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "llista de telèfons"
-msgstr[1] "llistes de telèfons"
-
-#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
-msgid "Edit phone settings"
-msgstr "Edita la configuració de telèfon"
 
 #: js/Phone.js:69
 msgid "Phones"
@@ -131,3 +125,9 @@ msgstr "Sonant"
 #: js/Phone.js:700
 msgid "Call ID"
 msgstr "Identificador de trucada"
+
+#: js/Models.js:74
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "llista de telèfons"
+msgstr[1] "llistes de telèfons"

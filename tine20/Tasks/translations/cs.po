@@ -15,6 +15,43 @@ msgstr ""
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: ../../\n"
 
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "osobní úkoly uživatele %s"
+
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr "VYŽADUJE ZÁSAH"
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr "DOKONČENÝ"
+
+#: Setup/setup.xml:339 js/Status.js:187
+msgid "IN-PROCESS"
+msgstr "ROZPRACOVANÝ"
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr "ZRUŠENÝ"
+
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+msgid "All tasks of my taskslists"
+msgstr "Všechny úkoly z mých seznamů"
+
+#: Preference.php:29
+msgid "All my tasks"
+msgstr "Všechny mé úkoly"
+
+#: Preference.php:65
+msgid "Default Favorite"
+msgstr "Výchozí oblíbené položky úkolů"
+
+#: Preference.php:66
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Výchozí oblíbené položky, které jsou načteny při spuštění úkolů"
+
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr "spravovat sdílené seznamy úkolů"
@@ -31,14 +68,10 @@ msgstr "spravovat sdílené oblíbené položky úkolů"
 msgid "Create or update shared tasks favorites"
 msgstr "Vytvořit nebo aktualizovat sdílené oblíbené položky úkolů"
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Upozornění na úkol"
-
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "osobní úkoly uživatele %s"
+#: js/Status.js:33 js/GridPanel.js:190 js/TaskEditDialog.js:209
+#: Model/Task.php:187
+msgid "Status"
+msgstr "Status"
 
 #: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
@@ -91,11 +124,6 @@ msgstr "Priorita"
 msgid "Percent"
 msgstr "Procent"
 
-#: js/GridPanel.js:190 js/Status.js:33 js/TaskEditDialog.js:209
-#: Model/Task.php:187
-msgid "Status"
-msgstr "Status"
-
 #: js/GridPanel.js:204
 msgid "Creation Time"
 msgstr "Čas vytvoření"
@@ -107,10 +135,6 @@ msgstr "Dokončený"
 #: js/GridPanel.js:267
 msgid "Show closed"
 msgstr "Zobrazit uzavřené"
-
-#: js/Status.js:187 Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "ROZPRACOVANÝ"
 
 #: js/TaskEditDialog.js:142
 msgid "You have to supply a due date, because an alarm ist set!"
@@ -178,33 +202,9 @@ msgstr "Telefon"
 msgid "Email"
 msgstr "E-mail"
 
-#: Preference.php:29
-msgid "All my tasks"
-msgstr "Všechny mé úkoly"
-
-#: Preference.php:65
-msgid "Default Favorite"
-msgstr "Výchozí oblíbené položky úkolů"
-
-#: Preference.php:66
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Výchozí oblíbené položky, které jsou načteny při spuštění úkolů"
-
-#: Setup/Initialize.php:41 Setup/Update/Release3.php:66
-msgid "All tasks of my taskslists"
-msgstr "Všechny úkoly z mých seznamů"
-
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr "VYŽADUJE ZÁSAH"
-
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr "DOKONČENÝ"
-
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr "ZRUŠENÝ"
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Upozornění na úkol"
 
 #, fuzzy
 #~ msgid "to to list"

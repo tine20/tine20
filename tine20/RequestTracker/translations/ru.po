@@ -12,12 +12,52 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+#: js/TreePanel.js:24
+msgid "All Queues"
+msgstr "Все очереди"
+
 #: js/Model.js:42 js/TicketGridPanel.js:43
 msgid "Ticket"
 msgid_plural "Tickets"
 msgstr[0] "Билет"
 msgstr[1] "Билета"
 msgstr[2] "Билетов"
+
+#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:69
+msgid "Ticket ID"
+msgstr "ID билета"
+
+#: js/TicketGridPanel.js:45 js/TicketGridPanel.js:72
+msgid "Queue"
+msgstr "Очередь"
+
+#: js/TicketGridPanel.js:46 js/TicketGridPanel.js:78
+msgid "Subject"
+msgstr "Тема"
+
+#: js/TicketGridPanel.js:47 js/TicketGridPanel.js:84
+msgid "Requestors"
+msgstr "Запрашивающие"
+
+#: js/TicketGridPanel.js:48 js/TicketGridPanel.js:90
+msgid "Owner"
+msgstr "Владелец"
+
+#: js/TicketGridPanel.js:50
+msgid "Description"
+msgstr "Описание"
+
+#: js/TicketGridPanel.js:96 js/StatusCombo.js:51
+msgid "Status"
+msgstr "Статус"
+
+#: js/TicketGridPanel.js:102
+msgid "Final Priority"
+msgstr "Финальный приоритет"
+
+#: js/TicketGridPanel.js:108
+msgid "Due"
+msgstr "Точно"
 
 #: js/StatusCombo.js:26
 msgid "New"
@@ -50,43 +90,3 @@ msgstr "Отвергнутый"
 #: js/StatusCombo.js:33
 msgid "Deleted"
 msgstr "Удалённый"
-
-#: js/StatusCombo.js:51 js/TicketGridPanel.js:96
-msgid "Status"
-msgstr "Статус"
-
-#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:69
-msgid "Ticket ID"
-msgstr "ID билета"
-
-#: js/TicketGridPanel.js:45 js/TicketGridPanel.js:72
-msgid "Queue"
-msgstr "Очередь"
-
-#: js/TicketGridPanel.js:46 js/TicketGridPanel.js:78
-msgid "Subject"
-msgstr "Тема"
-
-#: js/TicketGridPanel.js:47 js/TicketGridPanel.js:84
-msgid "Requestors"
-msgstr "Запрашивающие"
-
-#: js/TicketGridPanel.js:48 js/TicketGridPanel.js:90
-msgid "Owner"
-msgstr "Владелец"
-
-#: js/TicketGridPanel.js:50
-msgid "Description"
-msgstr "Описание"
-
-#: js/TicketGridPanel.js:102
-msgid "Final Priority"
-msgstr "Финальный приоритет"
-
-#: js/TicketGridPanel.js:108
-msgid "Due"
-msgstr "Точно"
-
-#: js/TreePanel.js:24
-msgid "All Queues"
-msgstr "Все очереди"
