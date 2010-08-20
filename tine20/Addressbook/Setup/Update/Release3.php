@@ -44,4 +44,29 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Addressbook', '3.2');
     }
+    
+    /**
+     * lat & lon can be negative (change fields to unsigned float)
+     */
+    public function update_2()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>lon</name>
+                <type>float</type>
+                <unsigned>false</unsigned>
+            </field>');
+        $this->_backend->alterCol('addressbook', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>lat</name>
+                <type>float</type>
+                <unsigned>false</unsigned>
+            </field>');
+        $this->_backend->alterCol('addressbook', $declaration);
+
+        $this->setTableVersion('addressbook', '8');
+        $this->setApplicationVersion('Addressbook', '3.3');
+    }
 }
