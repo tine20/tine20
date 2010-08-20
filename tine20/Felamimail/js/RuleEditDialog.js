@@ -21,6 +21,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>
  * TODO         add more form fields (action comboboxes)
  * TODO         make action work
+ * TODO         add conditions panel again
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -185,6 +186,9 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      * @return {Object}
      * @private
+     * 
+     * TODO add conditions panel again
+     * TODO switch action_argument input field if action_type combo changes (for example to the tree folder selection)
      */
     getFormItems: function() {
         
@@ -192,41 +196,108 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             filters: this.getConditionsFilter()
         });
         
+        this.actionTypeCombo = new Ext.form.ComboBox({
+            //fieldLabel: this.app.i18n._('Do this action:'),
+            hideLabel       : true,
+            name            : 'action_type',
+            typeAhead       : false,
+            triggerAction   : 'all',
+            lazyRender      : true,
+            editable        : false,
+            mode            : 'local',
+            forceSelection  : true,
+            value           : 'discard',
+            anchor          : '90%',
+            columnWidth     : 0.5,
+            store: [
+                ['discard',     this.app.i18n._('Discard mail')],
+                ['fileinto',    this.app.i18n._('Move mail to folder')]
+                // TODO activate more actions
+                //['keep',        this.app.i18n._('Keep mail')],
+                //['reject',      this.app.i18n._('Reject mail')],
+                //['redirect',    this.app.i18n._('Redirect mail')]
+            ]
+        });
+        
+        this.idPrefix = Ext.id();
+        
         return [{
             xtype: 'panel',
             layout: 'border',
             items: [
             {
+                title: this.app.i18n._('If all of the following conditions are met:'),
                 region: 'north',
-                xtype: 'fieldset',
-                title: this.app.i18n._('Conditions'),
                 border: false,
-                items: this.conditionsPanel,
+                items: [
+                    //this.conditionsPanel
+                ],
                 listeners: {
                     scope: this,
                     afterlayout: function(ct) {
                         ct.suspendEvents();
-                        ct.setHeight(this.conditionsPanel.getHeight()+35);
-                        ct.ownerCt.layout.layout();
+                        //ct.setHeight(this.conditionsPanel.getHeight()+30);
+                        ct.layout.layout();
                         ct.resumeEvents();
                     }
                 }
-            }, {
+            },
+            {
+                title: this.app.i18n._('Do this action:'),
                 region: 'center',
-                title: this.app.i18n._('Action'),
-                xtype: 'fieldset',
-                autoHeight: true,
-                layout: 'form',
                 border: false,
-                anchor: '90%',
-                defaults: {
-                    xtype: 'textfield',
-                    anchor: '90%'
+                autoHeight: true,
+                frame: true,
+                xtype: 'columnform',
+                formDefaults: {
+                    xtype:'textfield',
+                    anchor: '90%',
+                    labelSeparator: '',
+                    maxLength: 256,
+                    columnWidth: 0.5,
+                    hideLabel: true
                 },
-                items: [{
-                    name: 'action_argument',
-                    fieldLabel: this.app.i18n._('Move to folder')
-                }]
+                items: [[
+                    this.actionTypeCombo,
+                {
+                    xtype:'textfield',
+                    anchor: '90%',
+                    name: 'action_argument'
+                    //fieldLabel: this.app.i18n._('Move to folder')
+                }
+                
+                // TODO try to make this work
+                /*{
+                    id: this.idPrefix + 'ArgumentCardLayout',
+                    layout: 'card',
+                    activeItem: this.idPrefix + 'standard',
+                    border: false,
+                    width: '100%',
+                    defaults: {
+                        border: false
+                    },
+                    items: [{
+                        // nothing in here yet
+                        id: this.idPrefix + 'standard',
+                        layout: 'form',
+                        items: []
+                    }, {
+                        // fileinto config options
+                        id: this.idPrefix + 'fileinto',
+                        layout: 'form',
+                        autoHeight: 'auto',
+                        defaults: {
+                            width: 100,
+                            xtype: 'textfield'
+                        },
+                        items: [{
+                            // TODO folder selection combo
+                            name: 'action_argument'
+                        }]
+                    }]
+                }*/
+                
+                ]]
             }]
         }];
     }
