@@ -112,23 +112,12 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             
         } else {
             try {
-                
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . $this->_delimiter);
                 $folders = $imap->getFolders($_folderName . $this->_delimiter, '%');
                 
             } catch (Zend_Mail_Storage_Exception $zmse) {
-                
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage() .' - Trying again ...');
-                
-                // try again without delimiter
-                try {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName);
-                    $folders = $imap->getFolders($_folderName, '%');
-                    
-                } catch (Zend_Mail_Storage_Exception $zmse) {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage());
-                    $folders = array();
-                }
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage() .' No subfolders found.');
+                $folders = array();
             }
             
             // remove folder if self
@@ -299,7 +288,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 $folder->is_selectable = ($folderData['isSelectable'] == '1');
                 $folder->has_children = ($folderData['hasChildren'] == '1');
                 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding cached folder ' . $folderData['globalName']);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Update cached folder ' . $folderData['globalName']);
                 
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // create new folder
@@ -323,7 +312,9 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                         'delimiter'         => $folderData['delimiter']
                     ));
                     
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding new folder ' . $folderData['globalName'] . ' to cache.');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding new folder ' . $folderData['globalName'] . ' to cache.');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($folder->toArray(), true));
+                    
                     $folder = $this->_backend->create($folder);
                 }
             }
