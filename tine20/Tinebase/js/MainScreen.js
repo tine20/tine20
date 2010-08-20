@@ -185,7 +185,9 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         }
         
         if (Tine.Tinebase.registry.get('mustchangepw')) {
-            var passwordDialog = new Tine.Tinebase.PasswordChangeDialog();
+            var passwordDialog = new Tine.Tinebase.PasswordChangeDialog({
+                title: _('Your password expired. Please enter a new user password:')
+            });
             passwordDialog.show();
         }
     },

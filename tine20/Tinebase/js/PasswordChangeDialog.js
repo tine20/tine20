@@ -26,10 +26,11 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
     minHeight: 230,
     layout: 'fit',
     plain: true,
+    title: null,
 
     initComponent: function() {
         this.currentAccount = Tine.Tinebase.registry.get('currentAccount');
-        this.title = String.format(_('Change Password For "{0}"'), this.currentAccount.accountDisplayName),
+        this.title = (this.title !== null) ? this.title : String.format(_('Change Password For "{0}"'), this.currentAccount.accountDisplayName);
         
         this.items = new Ext.FormPanel({
             bodyStyle: 'padding:5px;',
