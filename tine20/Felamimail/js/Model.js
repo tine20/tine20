@@ -549,12 +549,11 @@ Tine.Felamimail.vacationBackend = new Tine.Tinebase.data.RecordProxy({
  * @extends Tine.Tinebase.data.Record
  * 
  * Rule Record Definition
- * 
- * TODO split action into action_type and action_argument
  */ 
 Tine.Felamimail.Model.Rule = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
-    { name: 'action' },
+    { name: 'action_type' },
+    { name: 'action_argument' },
     { name: 'enabled', type: 'boolean'},
     { name: 'conditions' }
 ]), {
@@ -586,10 +585,8 @@ Tine.Felamimail.Model.Rule.getDefaultData = function() {
             comperator: 'contains',
             key: 'test@example.org'
         }],
-        action: {
-            type: 'fileinto',
-            argument: 'Junk'            
-        }
+        action_type: 'fileinto',
+        action_argument: 'Junk'
     };
 };
 

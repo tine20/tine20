@@ -69,17 +69,24 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, {
             id: 'conditions',
             header: this.app.i18n._("Conditions"),
-            width: 200,
+            width: 250,
             sortable: false,
             dataIndex: 'conditions',
             renderer: this.conditionsRenderer
         }, {
             id: 'action',
-            header: this.app.i18n._("Action"),
-            width: 120,
+            header: this.app.i18n._("Action type"),
+            width: 100,
             sortable: false,
-            dataIndex: 'action',
-            renderer: this.actionRenderer
+            dataIndex: 'action_type'
+            //renderer: this.actionRenderer
+        }, {
+            id: 'action',
+            header: this.app.i18n._("Action argument"),
+            width: 100,
+            sortable: false,
+            dataIndex: 'action_argument'
+            //renderer: this.actionRenderer
         }, cb];
         
         this.gridConfig.plugins = [cb]; 
@@ -122,6 +129,8 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * 
      * @param {Object} value
      * @return {String}
+     * 
+     * TODO activate again? or remove ...
      */
     actionRenderer: function(value) {
         return (value) ? value.type + ' ' + value.argument : '';
