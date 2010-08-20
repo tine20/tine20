@@ -19,8 +19,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>Sieve Filter Dialog</p>
  * <p>This dialog is editing a filter rule.</p>
  * <p>
- * TODO         add more form fields (action comboboxes)
- * TODO         make action work
+ * TODO         make action combo work
  * TODO         add conditions panel again
  * </p>
  * 
@@ -76,17 +75,6 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.loadMask.hide();
     },
-        
-    /**
-     * @private
-     */
-    // TODO for testing purposes. remove it later!
-    /*
-    onSaveAndClose: function(button, event){
-        this.onApplyChanges(button, event, false);
-        this.fireEvent('saveAndClose');
-    },
-    */
     
     /**
      * @private
@@ -95,11 +83,6 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Felamimail.RuleEditDialog.superclass.onRecordUpdate.call(this);
         
         this.record.set('conditions', this.getConditions());
-        
-        Tine.log.debug(this.record);
-
-        //var form = this.getForm();
-        // TODO get action
     },
     
     /**
@@ -142,7 +125,6 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             };
             result.push(condition);            
         }
-        //Tine.log.debug(result);
         
         return result;     
     },
@@ -174,7 +156,6 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             };
             result.push(filter);            
         }
-        //Tine.log.debug(result);
         
         return result;     
     },
