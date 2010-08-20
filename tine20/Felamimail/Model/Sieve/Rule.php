@@ -46,7 +46,8 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'action'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),    
+        'action_type'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
+        'action_argument'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
         'conditions'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),    
         'enabled'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),    
     );
@@ -73,8 +74,8 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
             ->setId($this->id);
 
         $fsra = new Felamimail_Sieve_Rule_Action();
-        $fsra->setType($this->action['type'])
-             ->setArgument($this->action['argument']);
+        $fsra->setType($this->action_type)
+             ->setArgument($this->action_argument);
         $fsr->setAction($fsra);
         
         foreach ($this->conditions as $condition) {

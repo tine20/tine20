@@ -169,9 +169,12 @@ class Felamimail_Sieve_Rule
             $conditions[] = $condition->toArray();
         }
         
+        $action = $this->_action->toArray();
+        
         return array(
             'conditions'            => $conditions,
-            'action'                => $this->_action->toArray(),
+            'action_type'           => $action['type'],
+            'action_argument'       => $action['argument'],
             'enabled'               => (integer) $this->_enabled,
             'id'                    => $this->_id,
         );

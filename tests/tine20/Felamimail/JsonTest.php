@@ -613,10 +613,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     {
         $ruleData = array(array(
             'id'            => 1,
-            'action'        => array(
-                'type'          => Felamimail_Sieve_Rule_Action::FILEINTO, 
-                'argument'      => 'Junk'
-            ),
+            'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO, 
+            'action_argument' => 'Junk',
             'conditions'    => array(array(
                 'test'          => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
                 'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
@@ -626,10 +624,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'enabled'       => 1,
         ), array(
             'id'            => 2,
-            'action'        => array(
-                'type'          => Felamimail_Sieve_Rule_Action::FILEINTO, 
-                'argument'      => 'Junk'
-            ),
+            'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO, 
+            'action_argument' => 'Junk',
             'conditions'    => array(array(
                 'test'          => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
                 'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
@@ -805,7 +801,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // check which save fn to use
         if (array_key_exists('reason', $_sieveData)) {
             $resultSet = $this->_json->saveVacation($_sieveData);
-        } else if (array_key_exists('action', $_sieveData[0])) {
+        } else if (array_key_exists('action_type', $_sieveData[0])) {
             $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);
         }
     
