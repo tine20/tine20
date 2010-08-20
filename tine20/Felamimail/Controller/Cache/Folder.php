@@ -157,7 +157,9 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         if ($_recursive) {
             foreach ($result as $folder) {
                 if ($folder->has_children) {
-                    $subresult = $this->update($account, $folder->globalname, $_recursive);
+                    $this->update($account, $folder->globalname, $_recursive);
+                } else {
+                    $this->_removeNoLongerExistingFolders($account, $folder->globalname);
                 }
                 $this->_backend->update($folder);
             }
@@ -329,21 +331,31 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             $result->addRecord($folder);
         }
         
-        // remove folders that exist no longer on the imap server
-        // @todo move this to another place (async services? mark as deleted?)
+        $this->_removeNoLongerExistingFolders($_account, $_parentFolder, $result->getArrayOfIds());
+        
+        return $result;
+    }
+    
+    /**
+     * remove folders from cache that no longer exist on the imap server
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param string $_parentFolder
+     * @param array $_imapFolderIds if empty, remove all found cached folders
+     */
+    protected function _removeNoLongerExistingFolders(Felamimail_Model_Account $_account, $_parentFolder, $_imapFolderIds = array())
+    {
         $filter = new Felamimail_Model_FolderFilter(array(
             array('field' => 'parent',      'operator' => 'equals', 'value' => $_parentFolder),
             array('field' => 'account_id',  'operator' => 'equals', 'value' => $_account->getId()),
         ));
         $cachedFolderIds = $this->_backend->search($filter, NULL, TRUE);
-        if (count($cachedFolderIds) > count($result)) {
+        if (count($cachedFolderIds) > count($_imapFolderIds)) {
             // remove folders from cache
-            $noLongerExistingIds = array_diff($cachedFolderIds, $result->getArrayOfIds());
+            $noLongerExistingIds = array_diff($cachedFolderIds, $_imapFolderIds);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing ' . count($noLongerExistingIds) . ' no longer existing folder from cache.');
             $this->delete($noLongerExistingIds);
         }
-        
-        return $result;
     }
     
     /**
