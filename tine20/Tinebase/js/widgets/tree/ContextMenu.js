@@ -93,8 +93,9 @@ Tine.widgets.tree.ContextMenu = {
                             if (config.backendModel == 'Container') {
                                 params.containerId = node.attributes.container.id
                             } else if (config.backendModel == 'Folder') {
-                                params.folder = node.attributes.globalname;
-                                params.accountId = node.attributes.account_id;
+                                var folder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(node.attributes.folder_id);
+                                params.folder = folder.get('globalname');
+                                params.accountId = folder.get('account_id');
                             } else {
                                 // use default json api style
                                 params.ids = [node.id];
@@ -151,8 +152,9 @@ Tine.widgets.tree.ContextMenu = {
                                 if (config.backendModel == 'Container') {
                                     params.containerId = node.attributes.container.id;
                                 } else if (config.backendModel == 'Folder') {
-                                    params.oldGlobalName = node.attributes.globalname;
-                                    params.accountId = node.attributes.account_id;
+                                    var folder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(node.attributes.folder_id);
+                                    params.oldGlobalName = folder.get('globalname');
+                                    params.accountId = folder.get('account_id');
                                 }
                                 
                                 Ext.Ajax.request({
