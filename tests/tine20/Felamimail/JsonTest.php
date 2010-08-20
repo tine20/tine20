@@ -237,10 +237,12 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_imap->removeFolder($this->_testFolderName . $this->_account->delimiter . 'test' . $this->_account->delimiter . 'testsub');
         array_shift($this->_createdFolders);
         
-        // check if has_children got updated
+        // check if has_children got updated and folder is removed from cache
         $this->_json->updateFolderCache($this->_account->getId(), '');
         $testfolder = $this->_getFolder($this->_testFolderName . $this->_account->delimiter . 'test');
         $this->assertEquals(FALSE, (bool)$testfolder['has_children'], 'should have no children');
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $testfoldersub = $this->_getFolder($this->_testFolderName . $this->_account->delimiter . 'test' . $this->_account->delimiter . 'testsub');
 
         $this->_imap->removeFolder($this->_testFolderName . $this->_account->delimiter . 'test');
         array_shift($this->_createdFolders);
