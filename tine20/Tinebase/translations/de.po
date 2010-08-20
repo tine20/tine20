@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-31 20:42+0100\n"
-"PO-Revision-Date: 2010-08-04 15:35+0100\n"
+"PO-Revision-Date: 2010-08-20 11:02+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -133,11 +133,11 @@ msgstr "Prüfen, ob eine neuere Version dieser Software verfügbar ist."
 
 #: Acl/Rights.php:149
 msgid "Manage own profile"
-msgstr ""
+msgstr "Eigenes Profil bearbeiten"
 
 #: Acl/Rights.php:150
 msgid "The right to manage the own profile (selected contact data)."
-msgstr ""
+msgstr "Das Recht, das eigene Profil zu bearbeiten."
 
 #: Acl/Rights/Abstract.php:72
 msgid "admin"
@@ -145,7 +145,7 @@ msgstr "admin"
 
 #: Acl/Rights/Abstract.php:73
 msgid "admin right description"
-msgstr "das Admin-Recht erlaubt dem User, alles zu tun ..."
+msgstr "Das Admin-Recht erlaubt dem User, alles zu tun ..."
 
 #: Acl/Rights/Abstract.php:76
 msgid "run"
@@ -233,7 +233,7 @@ msgstr "Bitte warten!"
 
 #: js/AdminPanel.js:84
 msgid "Profile Information"
-msgstr ""
+msgstr "Profilinformation"
 
 #: js/AdminPanel.js:88 js/widgets/dialog/EditDialog.js:181
 #: js/widgets/EditRecord.js:128
@@ -251,7 +251,7 @@ msgstr "Lesen"
 
 #: js/AdminPanel.js:164
 msgid "The field is readable part of the profile"
-msgstr ""
+msgstr "Das Feld ist im Profil lesbar"
 
 #: js/AdminPanel.js:168 js/widgets/container/GrantsDialog.js:100
 msgid "Edit"
@@ -259,11 +259,11 @@ msgstr "Editieren"
 
 #: js/AdminPanel.js:169
 msgid "The field is editable part of the profile"
-msgstr ""
+msgstr "Das Feld kann im Profil bearbeitet werden"
 
 #: js/AdminPanel.js:182
 msgid "Field Name"
-msgstr ""
+msgstr "Feldname"
 
 #: js/widgets/form/RecordPickerComboBox.js:61 js/widgets/tags/TagsPanel.js:469
 msgid "Searching..."
@@ -518,7 +518,7 @@ msgstr "Generelle Einstellungen"
 
 #: js/widgets/dialog/PreferencesTreePanel.js:81
 msgid "My Profile"
-msgstr ""
+msgstr "Mein Profil"
 
 #: js/widgets/dialog/EditDialog.js:198 js/widgets/EditRecord.js:148
 msgid "delete"
@@ -1662,7 +1662,7 @@ msgstr "Sie haben alle benötigten Informationen eingegeben. Wenn Sie nun den Fe
 
 #: js/MainScreen.js:189
 msgid "Your password expired. Please enter a new user password:"
-msgstr ""
+msgstr "Ihr Passwort ist abgelaufen. Bitte setzen Sie ein neues Benutzer-Passwort:"
 
 #: js/ExceptionDialog.js:67
 msgid "Send Report"
