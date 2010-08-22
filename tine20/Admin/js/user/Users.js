@@ -21,7 +21,7 @@ Tine.Admin.user.show = function() {
         });
     }
     else {
-    	setTimeout ("Ext.getCmp('gridAdminUsers').getStore().load({ params: { start:0, limit:50 } })", 100);
+    	Tine.Admin.user.gridPanel.loadData.defer(100, Tine.Admin.user.gridPanel, [true, true, true]);
     }
     
     Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.Admin.user.gridPanel, true);
