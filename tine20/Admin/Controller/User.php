@@ -184,7 +184,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * @todo add must change pwd info to normal tine user accounts
      * @todo add Admin_Event_ChangePassword?
      */
-    public function setAccountPassword(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat, $_mustChange = false)
+    public function setAccountPassword(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat, $_mustChange = null)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
