@@ -19,8 +19,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>Sieve Filter Dialog</p>
  * <p>This dialog is editing a filter rule.</p>
  * <p>
- * TODO         make action combo work
- * TODO         add conditions panel again
+ * TODO         make action combo work / use cardlayout to switch between input fields 
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -168,7 +167,6 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Object}
      * @private
      * 
-     * TODO add conditions panel again
      * TODO switch action_argument input field if action_type combo changes (for example to the tree folder selection)
      */
     getFormItems: function() {
@@ -211,14 +209,15 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 region: 'north',
                 border: false,
                 items: [
-                    //this.conditionsPanel
+                    this.conditionsPanel
                 ],
+                xtype: 'panel',
                 listeners: {
                     scope: this,
-                    afterlayout: function(ct) {
+                    afterlayout: function(ct, layout) {
                         ct.suspendEvents();
-                        //ct.setHeight(this.conditionsPanel.getHeight()+30);
-                        ct.layout.layout();
+                        ct.setHeight(this.conditionsPanel.getHeight()+30);
+                        ct.ownerCt.layout.layout();
                         ct.resumeEvents();
                     }
                 }
@@ -227,9 +226,12 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 title: this.app.i18n._('Do this action:'),
                 region: 'center',
                 border: false,
-                autoHeight: true,
                 frame: true,
-                xtype: 'columnform',
+                layout: 'form',
+                //xtype: 'columnform',
+                //layout: 'fit',
+                /*
+                layout: 'column',
                 formDefaults: {
                     xtype:'textfield',
                     anchor: '90%',
@@ -238,12 +240,15 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     columnWidth: 0.5,
                     hideLabel: true
                 },
-                items: [[
+                */
+                items: [
                     this.actionTypeCombo,
                 {
-                    xtype:'textfield',
+                    xtype: 'textfield',
                     anchor: '90%',
-                    name: 'action_argument'
+                    name: 'action_argument',
+                    columnWidth: 0.5,
+                    hideLabel       : true
                     //fieldLabel: this.app.i18n._('Move to folder')
                 }
                 
@@ -277,8 +282,7 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }]
                     }]
                 }*/
-                
-                ]]
+                ]
             }]
         }];
     }
